@@ -25,6 +25,15 @@
 - [x] Safety branching checklist finalized
 - [x] Phase 0 runbook created
 
+## P2.5: Phase 0 Working Files
+
+- [x] Consultation cases working file created
+- [x] Judgment work table created
+- [x] Golden sample drafts file created
+- [x] External evaluator recruitment copy created
+- [x] Payment provider inquiry copy created
+- [x] Phase 0 decision log created
+
 ## P3: Phase 1 Validation Setup
 
 - [ ] Payment provider inquiry template created

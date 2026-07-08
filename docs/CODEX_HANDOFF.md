@@ -27,23 +27,27 @@ Current forbidden scope:
 - Native app
 - Subscription system
 - Coin/point system
+- Fabricating real consultation cases
+- Fabricating external evaluation results
 
 ## Current Task Status
 
-Phase 0 validation templates are being created.
+Phase 0 working files have been created.
 
-After this task, the project should move from documentation scaffolding to Phase 0 working files.
+Next step is not implementation.
 
-CodeX should still not implement the product.
+Next step is a human-led planning session to define:
 
-Next allowed work:
+- actual consultation case outlines
+- safety case outlines
+- judgment boundaries
+- golden sample directions
+- external evaluation setup
 
-- Create working files for actual consultation cases
-- Create judgment criteria working table
-- Draft golden samples
-- Draft external evaluator recruitment copy
-- Draft payment provider inquiry copy
+CodeX must not fabricate real consultation cases or external evaluation results.
+
+CodeX may only update working files after receiving explicit human-approved content.
 
 ## Next Expected Task
 
-Create Phase 0 working files.
+Human-led Phase 0 consultation case design.
