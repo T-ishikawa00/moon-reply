@@ -1,12 +1,12 @@
-﻿# CURRENT_FOCUS.md
+# CURRENT_FOCUS.md
 
 ## Current Phase
 
-Phase 0 preparation / Repository setup
+Phase 0 preparation / Product specification
 
 ## Current Task
 
-Create the initial Git/GitHub repository and documentation structure.
+Reflect the approved master product specification into `docs/PRODUCT_SPEC.md`.
 
 ## Do Not Do
 
@@ -15,7 +15,9 @@ Create the initial Git/GitHub repository and documentation structure.
 - Do not add payment implementation
 - Do not add AI API implementation
 - Do not add database or authentication
+- Do not create package.json
+- Do not run npm install
 
 ## Next Task
 
-Fill PRODUCT_SPEC.md based on the approved product master specification.
+Create `docs/DEVELOPMENT_FLOW.md` to define the concrete development flow from validation MVP to final ideal product.
