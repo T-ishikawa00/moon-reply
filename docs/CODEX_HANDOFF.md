@@ -1,21 +1,33 @@
-﻿# CODEX_HANDOFF.md
+# CODEX_HANDOFF.md
 
 ## Role
 
 CodeX is the implementation and repository operation agent.
 
-## Current Rule
+## Current Development Rule
 
-Do not implement the product yet.
+CodeX must not implement the product until validation criteria are met.
 
-## Current Allowed Scope
+Current allowed scope:
 
-- Repository setup
-- Documentation creation
-- Specification organization
-- Templates for validation
-- No app implementation
+- Documentation
+- Validation templates
+- Prompt specs
+- Safety specs
+- Evaluation sheets
+- LP copy drafts
+
+Current forbidden scope:
+
+- Web app implementation
+- Database implementation
+- Payment implementation
+- AI API implementation
+- Authentication
+- Native app
+- Subscription system
+- Coin/point system
 
 ## Next Expected Task
 
-Fill PRODUCT_SPEC.md using the approved master specification.
+Create Phase 0 validation templates.
