@@ -17,12 +17,13 @@
 
 ## P2: Phase 0 Assets
 
-- [ ] Initial consultation dataset template created
-- [ ] Judgment criteria table created
-- [ ] Golden sample format created
-- [ ] External evaluation sheet created
-- [ ] Forbidden copy checklist finalized
-- [ ] Safety branching checklist finalized
+- [x] Initial consultation dataset template created
+- [x] Judgment criteria table created
+- [x] Golden sample format created
+- [x] External evaluation sheet created
+- [x] Forbidden copy checklist finalized
+- [x] Safety branching checklist finalized
+- [x] Phase 0 runbook created
 
 ## P3: Phase 1 Validation Setup
 

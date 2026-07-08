@@ -28,6 +28,22 @@ Current forbidden scope:
 - Subscription system
 - Coin/point system
 
+## Current Task Status
+
+Phase 0 validation templates are being created.
+
+After this task, the project should move from documentation scaffolding to Phase 0 working files.
+
+CodeX should still not implement the product.
+
+Next allowed work:
+
+- Create working files for actual consultation cases
+- Create judgment criteria working table
+- Draft golden samples
+- Draft external evaluator recruitment copy
+- Draft payment provider inquiry copy
+
 ## Next Expected Task
 
-Create Phase 0 validation templates.
+Create Phase 0 working files.

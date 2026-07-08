@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-Phase 0 preparation / Development flow documentation
+Phase 0 preparation / Validation templates
 
 ## Current Task
 
-Create `docs/DEVELOPMENT_FLOW.md` and update roadmap/WBS to define the concrete development path from validation MVP to final ideal product.
+Create Phase 0 validation templates for consultation cases, judgment criteria, golden samples, external evaluation, forbidden copy, safety branching, and Phase 0 runbook.
 
 ## Do Not Do
 
@@ -20,19 +20,23 @@ Create `docs/DEVELOPMENT_FLOW.md` and update roadmap/WBS to define the concrete 
 
 ## Acceptance Criteria
 
-- `docs/DEVELOPMENT_FLOW.md` exists
-- `docs/ROADMAP.md` is updated
+- `docs/phase0/CONSULTATION_CASES_TEMPLATE.md` exists
+- `docs/phase0/JUDGMENT_CRITERIA.md` exists
+- `docs/phase0/GOLDEN_SAMPLE_FORMAT.md` exists
+- `docs/phase0/EXTERNAL_EVALUATION_SHEET.md` exists
+- `docs/phase0/FORBIDDEN_COPY_CHECKLIST.md` exists
+- `docs/phase0/SAFETY_BRANCHING_CHECKLIST.md` exists
+- `docs/phase0/PHASE0_RUNBOOK.md` exists
 - `docs/WBS.md` is updated
 - No app implementation files are added
 - Working tree is clean after commit/push
 
 ## Next Task
 
-Create Phase 0 validation templates:
+Create Phase 0 working files to start filling real validation data:
 
-- consultation dataset template
-- judgment criteria table
-- external evaluation sheet
-- golden sample format
-- forbidden copy checklist
-- safety branching checklist
+- consultation cases working file
+- judgment criteria working table
+- golden sample drafts
+- external evaluator recruitment copy
+- payment provider inquiry copy
