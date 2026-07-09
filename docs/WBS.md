@@ -127,9 +127,24 @@
 - [x] No backend/API integrations added
 - [x] Build passes
 
-## P4.2+: Do Not Start Until Approved
+## P4.2: Stage 2 Request Form UI
 
-- [ ] Stage 2 Request Form UI
+- [x] Stage 1 acceptance recorded
+- [x] `/request` page created
+- [x] Basic information fields added
+- [x] Relationship context fields added
+- [x] Message context fields added
+- [x] Emotion/outcome fields added
+- [x] Safety screening UI added
+- [x] Consent checkboxes added
+- [x] Client-side validation added
+- [x] Local-only confirmation state added
+- [x] LP CTA updated to `/request`
+- [x] No backend/API integrations added
+
+## P4.3+: Do Not Start Until Approved
+
+- [ ] Stage 3 Supabase Data Foundation
 - [ ] Database implementation
 - [ ] Payment implementation
 - [ ] AI API implementation

@@ -160,7 +160,7 @@ export default function Home() {
             </p>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
               <a
-                href="#request-placeholder"
+                href="/request"
                 className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#f0d992]/70 bg-[#e5c46d] px-6 py-3 text-base font-semibold text-[#181326] shadow-[0_14px_36px_rgba(229,196,109,0.25)] transition hover:bg-[#f1d789] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] focus:ring-offset-2 focus:ring-offset-[#111028]"
               >
                 今夜の返事を鑑定する
@@ -173,7 +173,7 @@ export default function Home() {
               </a>
             </div>
             <p className="mt-4 max-w-xl text-sm leading-7 text-[#d8cdbd]">
-              現在はMVP準備中です。次のStageで鑑定依頼フォームを実装します。
+              鑑定依頼フォームUIを実装しました。Stage 2ではまだ送信・保存・決済・AI生成は行いません。
             </p>
           </div>
 
@@ -274,7 +274,7 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section eyebrow="Flow" title="公開MVP予定フロー。Stage 1ではまだ実装しません。" tone="paper">
+      <Section eyebrow="Flow" title="公開MVP予定フロー。Stage 2ではまだ送信・保存・決済・AI生成は行いません。" tone="paper">
         <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {flowSteps.map((step, index) => (
             <li key={step} className="rounded-lg border border-[#d8c596] bg-[#fff8e9] p-5">
@@ -284,7 +284,7 @@ export default function Home() {
           ))}
         </ol>
         <p className="mt-6 max-w-3xl text-base leading-8 text-[#67596b]">
-          LP上では予定フローとして説明しています。フォーム、決済、AI生成、結果ページ、メール送信はStage 1の実装対象外です。
+          LP上では予定フローとして説明しています。フォームUIは実装済みですが、送信、保存、決済、AI生成、結果ページ、メール送信はStage 2の実装対象外です。
         </p>
       </Section>
 
@@ -309,14 +309,14 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section id="request-placeholder" eyebrow="Request" title="鑑定依頼フォームは次のStageで実装予定です。">
+      <Section id="request-placeholder" eyebrow="Request" title="鑑定依頼フォームUIを実装しました。">
         <div className="max-w-3xl rounded-lg border border-[#d6b86d]/40 bg-[#18152e] p-7">
           <p className="text-lg leading-9 text-[#efe5d0]">
-            このStageでは、LPの世界観・訴求・スマホ表示を先に検証します。
+            Stage 2ではまだ送信・保存・決済・AI生成は行いません。入力内容は外部送信されず、ブラウザ画面上の確認表示だけで完結します。
           </p>
-          <div aria-disabled="true" className="mt-6 inline-flex min-h-12 cursor-not-allowed items-center justify-center rounded-lg border border-[#d6b86d]/35 bg-[#2a2441] px-6 py-3 text-base font-semibold text-[#d8c596]">
-            Stage 2でフォーム実装予定
-          </div>
+          <a href="/request" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg border border-[#f0d992]/70 bg-[#e5c46d] px-6 py-3 text-base font-semibold text-[#181326] shadow-[0_14px_36px_rgba(229,196,109,0.25)] transition hover:bg-[#f1d789] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] focus:ring-offset-2 focus:ring-offset-[#111028]">
+            鑑定依頼フォームへ進む
+          </a>
         </div>
       </Section>
 

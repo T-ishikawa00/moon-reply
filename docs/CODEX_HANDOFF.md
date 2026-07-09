@@ -6,19 +6,19 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Stage 1 has been implemented and is awaiting Human review.
+Stage 2 has been implemented and is awaiting Human review.
 
-CodeX must not start Stage 2 until Stage 1 is accepted by Human.
+CodeX must not start Stage 3 until Stage 2 is accepted by Human.
 
-Current allowed scope before Stage 1 acceptance:
+Current allowed scope before Stage 2 acceptance:
 
-- Review Stage 1 implementation
-- Fix Stage 1 defects only
-- Validate build, static LP, and documentation status
+- Review Stage 2 implementation
+- Fix Stage 2 defects only
+- Validate build, request form UI, LP CTA, and documentation status
 
-Current forbidden scope before Stage 1 acceptance:
+Current forbidden scope before Stage 2 acceptance:
 
-- Request form implementation
+- Stage 3 implementation
 - Database implementation
 - Supabase integration
 - OpenAI API integration
@@ -33,31 +33,36 @@ Current forbidden scope before Stage 1 acceptance:
 
 ## Current Task Status
 
-Stage 1 implementation has been completed and is awaiting Human review.
+Stage 2 implementation has been completed and is awaiting Human review.
 
 Implemented:
 
-- Project Bootstrap
-- Static LP
-- Responsive layout
-- CTA placeholder
-- Safety/AI/refund notes
+- `/request` page
+- Self-hosted request form UI
+- Client-side validation
+- Safety screening question UI
+- Consent checkbox UI
+- Local-only confirmation state
+- LP CTA updated to `/request`
+- Stage 1 acceptance record
 
 Not implemented:
 
-- Request form
 - Database
 - Supabase
+- API routes
 - OpenAI API
 - Payment API
 - Email API
 - Login
 - User accounts
+- Result page
+- Feedback form
 - Subscription
 - Coin/point system
 
 Next step after Human approval:
 
-Stage 2 only: Self-hosted request form UI.
+Stage 3 only: Supabase Data Foundation.
 
-CodeX must not start Stage 2 until Stage 1 is accepted.
+CodeX must not start Stage 3 until Stage 2 is accepted.
