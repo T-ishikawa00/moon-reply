@@ -172,9 +172,23 @@
 - [x] RLS enabled without public policies
 - [x] No OpenAI/payment/email/API integration added
 
-## P4.5+: Do Not Start Until Approved
+## P4.5: Stage 4 Safety Screening Foundation
 
-- [ ] Stage 4 Safety Screening foundation
+- [x] Stage 3 acceptance recorded
+- [x] Safety types created
+- [x] Safety rule definitions created
+- [x] Deterministic safety classifier created
+- [x] User-facing safety messages created
+- [x] Request form uses local safety classification
+- [x] Rejected-level safety issues block local confirmation
+- [x] Needs-review issues show warning
+- [x] No DB persistence added
+- [x] No API route added
+- [x] No OpenAI/payment/email integration added
+
+## P4.6+: Do Not Start Until Approved
+
+- [ ] Stage 5 payment planning
 - [ ] Request form DB persistence
 - [ ] Payment implementation
 - [ ] AI API implementation

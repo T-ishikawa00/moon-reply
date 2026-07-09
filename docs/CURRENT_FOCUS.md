@@ -2,42 +2,40 @@
 
 ## Current Phase
 
-Phase 1 / Stage 3 implementation review
+Phase 1 / Stage 4 implementation review
 
 ## Current Task
 
-Review Stage 3 implementation: Supabase Data Foundation.
+Review Stage 4 implementation: Safety Screening foundation.
 
-Stage 3 should include only:
+Stage 4 should include only:
 
-- Supabase package
-- `.env.example`
-- Supabase helper files
-- Database migration
-- Data foundation tables
-- RLS enabled without public policies
-- No backend product flow integrations
+- Stage 3 acceptance record
+- Deterministic safety screening types
+- Safety rule definitions
+- Safety classifier
+- User-facing safety messages
+- Request form local safety classification UI
+- Rejected-level safety blocking in local confirmation
+- No DB/API/OpenAI/payment/email integrations
 
 ## Source Materials
 
-- `README.md`
-- `.env.example`
-- `lib/supabase/env.ts`
-- `lib/supabase/client.ts`
-- `lib/supabase/server.ts`
-- `lib/supabase/admin.ts`
-- `lib/supabase/types.ts`
-- `supabase/migrations/0001_stage3_data_foundation.sql`
-- `docs/phase1/STAGE3_DATA_FOUNDATION_SCOPE.md`
-- `docs/phase1/DATA_MODEL_DRAFT.md`
+- `docs/phase1/STAGE3_ACCEPTANCE_REVIEW.md`
+- `lib/safety/types.ts`
+- `lib/safety/rules.ts`
+- `lib/safety/classify.ts`
+- `lib/safety/messages.ts`
+- `components/request/RequestForm.tsx`
 - `docs/phase1/ACCEPTANCE_CRITERIA.md`
 
 ## Do Not Do
 
-Until Stage 3 is accepted:
+Until Stage 4 is accepted:
 
-- Do not start Stage 4
+- Do not start Stage 5
 - Do not wire `/request` to DB persistence
+- Do not insert `safety_checks`
 - Do not create API routes
 - Do not connect OpenAI API
 - Do not connect payment API
@@ -52,18 +50,22 @@ Until Stage 3 is accepted:
 
 ## Acceptance Criteria
 
-- Supabase package is added
-- `.env.example` exists without real secrets
-- Supabase helpers exist and do not break build without env vars
-- Migration defines Stage 3 data foundation tables
-- RLS is enabled without public policies
-- No fake data is inserted
-- No OpenAI/payment/email/API route integration exists
+- Safety classifier is deterministic
+- Safety classifier has no DB/API/network dependency
+- Reject-level flags classify as rejected
+- DV/abuse/fear classifies as needs_review
+- Contradictory safety selection blocks local confirmation
+- High-risk free text is detected conservatively
+- Request form shows safety classification
+- Rejected-level issues do not show normal local confirmation
+- Needs-review issues show warning
 - Build/typecheck/lint pass
-- Stage 3 can be reviewed by Human
+- Stage 4 can be reviewed by Human
 
 ## Next Task
 
-After Human accepts Stage 3:
+After Human accepts Stage 4:
 
-Stage 4 implementation: Safety Screening foundation.
+Stage 5 planning: Payment provider review and payment flow preparation.
+
+Note: Stage 5 should be planning/review first, not real payment implementation, unless Human explicitly approves.

@@ -41,12 +41,16 @@
 
 ## P4: Safety Screening
 
-- [ ] Implement safety flag detection
-- [ ] Add normal_allowed result
-- [ ] Add needs_review result
-- [ ] Add rejected result
-- [ ] Add rejected route
-- [ ] Ensure rejected cases do not proceed to payment
+- [x] Define safety classification types
+- [x] Define safety reason codes
+- [x] Define selected-flag rules
+- [x] Add conservative free-text risk scan
+- [x] Implement deterministic classifier
+- [x] Add user-facing safety messages
+- [x] Integrate classifier into request form UI
+- [x] Block local confirmation for rejected-level safety issues
+- [x] Show warning for needs-review issues
+- [x] Confirm no DB/API/OpenAI/payment/email integration
 
 ## P5: Payment
 

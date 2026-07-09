@@ -6,20 +6,21 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Stage 3 has been implemented and is awaiting Human review.
+Stage 4 has been implemented and is awaiting Human review.
 
-CodeX must not start Stage 4 until Stage 3 is accepted by Human.
+CodeX must not start Stage 5 until Stage 4 is accepted by Human.
 
-Current allowed scope before Stage 3 acceptance:
+Current allowed scope before Stage 4 acceptance:
 
-- Review Stage 3 Supabase Data Foundation implementation
-- Fix Stage 3 defects only
-- Validate build, typecheck, lint, migration presence, and repository status
+- Review Stage 4 Safety Screening foundation implementation
+- Fix Stage 4 defects only
+- Validate build, typecheck, lint, local safety classification, and repository status
 
-Current forbidden scope before Stage 3 acceptance:
+Current forbidden scope before Stage 4 acceptance:
 
-- Stage 4 implementation
+- Stage 5 implementation
 - Request form DB persistence
+- `safety_checks` inserts
 - API routes
 - OpenAI integration
 - payment integration
@@ -34,29 +35,22 @@ Current forbidden scope before Stage 3 acceptance:
 
 ## Current Task Status
 
-Stage 3 implementation has been completed and is awaiting Human review.
+Stage 4 implementation has been completed and is awaiting Human review.
 
 Implemented:
 
-- Supabase package
-- `.env.example`
-- Supabase helper files
-- Stage 3 data foundation migration
-- reading_requests
-- safety_checks
-- readings
-- purchases
-- credit_ledger
-- entitlements
-- provider_events
-- ai_generation_logs
-- email_deliveries
-- feedback
-- RLS enabled without public policies
+- Stage 3 acceptance record
+- Safety screening types
+- Safety rule definitions
+- Deterministic safety classifier
+- User-facing safety messages
+- Request form local safety classification UI
+- Rejected-level safety blocking
+- Needs-review warning
 
 Not implemented:
 
-- Request form persistence
+- Safety DB persistence
 - API routes
 - OpenAI API
 - Payment API
@@ -71,6 +65,6 @@ Not implemented:
 
 Next step after Human approval:
 
-Stage 4 only: Safety Screening foundation.
+Stage 5 planning only: Payment provider review and payment flow preparation.
 
-CodeX must not start Stage 4 until Stage 3 is accepted.
+CodeX must not start Stage 5 until Stage 4 is accepted.

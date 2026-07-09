@@ -58,14 +58,23 @@ Accepted when:
 
 ---
 
-## Stage 4: Safety Screening
+## Stage 4: Safety Screening Foundation
 
 Accepted when:
 
-- Dangerous cases are detected
-- Rejected cases do not proceed to payment
-- Normal cases can proceed
-- Safety results are stored
+- Safety classifier is deterministic
+- Safety classifier has no DB/API/network dependency
+- Selected safety flags map to expected classifications
+- Contradictory safety selection is blocked
+- DV/abuse/fear is needs_review
+- Self-harm, harm, stalking, ambush, threat, minor, doxxing, surveillance are rejected
+- Conservative free-text high-risk detection exists
+- Request form displays safety classification
+- Rejected-level issues block local confirmation
+- Needs-review issues show warning
+- No OpenAI API is used
+- No DB persistence is added
+- No API route is created
 
 ---
 

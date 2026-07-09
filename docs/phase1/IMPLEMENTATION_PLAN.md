@@ -142,18 +142,29 @@ Excludes:
 
 ---
 
-### Stage 4: Safety Screening
+### Stage 4: Safety Screening Foundation
 
 Goal:
 
-- Prevent dangerous cases from proceeding to normal paid diagnosis
+- Add deterministic safety screening foundation before payment or AI generation
 
 Includes:
 
-- deterministic safety flag checks
-- blocked/rejected flow
-- needs_review state if needed
-- no normal romantic diagnosis for rejected cases
+- safety reason codes
+- rule-based selected flag classification
+- conservative free-text high-risk keyword detection
+- normal_allowed / needs_review / rejected classification
+- user-facing safety messages
+- local request form UI integration
+
+Excludes:
+
+- OpenAI safety judge
+- DB persistence
+- API route
+- payment
+- email
+- result page
 
 ---
 

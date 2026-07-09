@@ -1,6 +1,12 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import {
+  classifySafetyInput,
+  NONE_SAFETY_FLAG,
+  SAFETY_SELECTED_FLAGS,
+} from "@/lib/safety";
+import type { SafetyResult } from "@/lib/safety";
 
 type FormState = {
   ageGroup: string;
@@ -84,20 +90,10 @@ const replyWaitOptions = [
 
 const sendTonightOptions = ["はい", "迷っている", "いいえ"];
 
-const safetyOptions = [
-  "自分を傷つけたい気持ちがある",
-  "相手を傷つけたい気持ちがある",
-  "相手の家や職場に行こうとしている",
-  "待ち伏せを考えている",
-  "相手を脅す文面を送りたい",
-  "DV/モラハラ/強い束縛/恐怖がある",
-  "未成年との恋愛・面会に関する相談である",
-  "実名や個人情報を晒したい",
-  "監視・ログイン確認・居場所確認をしたい",
-  "上記には当てはまらない",
-];
-
-const noneSafetyOption = "上記には当てはまらない";
+const safetyOptions = SAFETY_SELECTED_FLAGS;
+const noneSafetyOption = NONE_SAFETY_FLAG;
+const safetyBlockingError =
+  "安全確認の内容により、このStageでは通常鑑定の確認に進めません。";
 
 const consentOptions = [
   "AIを利用した鑑定であることを理解しました",
@@ -449,16 +445,69 @@ function RadioGroup({
   );
 }
 
+function getSafetyPanelClassName(result: SafetyResult) {
+  if (result.reasonCodes.includes("contradictory_selection")) {
+    return "rounded-lg border border-[#d06d5f] bg-[#fff1ea] p-5 leading-8 text-[#5b2520]";
+  }
+
+  if (result.classification === "rejected") {
+    return "rounded-lg border border-[#c45347] bg-[#fff1ea] p-5 leading-8 text-[#54211d]";
+  }
+
+  if (result.classification === "needs_review") {
+    return "rounded-lg border border-[#d6b86d] bg-[#fff8e1] p-5 leading-8 text-[#4c3b16]";
+  }
+
+  return "rounded-lg border border-[#c9b778] bg-[#fffaf0] p-5 leading-8 text-[#332715]";
+}
+
+function SafetyResultPanel({ result }: { result: SafetyResult }) {
+  const isAlert =
+    result.classification === "rejected" ||
+    result.reasonCodes.includes("contradictory_selection");
+
+  return (
+    <div
+      role={isAlert ? "alert" : "status"}
+      className={getSafetyPanelClassName(result)}
+    >
+      <h3 className="text-lg font-semibold">{result.userTitle}</h3>
+      <p className="mt-2">{result.userMessage}</p>
+      <p className="mt-3 text-sm font-semibold opacity-80">
+        判定コード: {result.reasonCodes.join(", ")}
+      </p>
+    </div>
+  );
+}
+
 export function RequestForm() {
   const [form, setForm] = useState<FormState>(initialFormState);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  const dangerousSelections = useMemo(
-    () => form.safetyFlags.filter((item) => item !== noneSafetyOption),
-    [form.safetyFlags],
+  const safetyResult = useMemo(
+    () =>
+      classifySafetyInput({
+        selectedFlags: form.safetyFlags,
+        draftMessage: form.draftMessage,
+        recentFlow: form.recentFlow,
+        mainConcern: form.mainConcern,
+        desiredAction: form.desiredAction,
+        mainQuestion: form.mainQuestion,
+      }),
+    [
+      form.safetyFlags,
+      form.draftMessage,
+      form.recentFlow,
+      form.mainConcern,
+      form.desiredAction,
+      form.mainQuestion,
+    ],
   );
-  const hasDangerousSelection = dangerousSelections.length > 0;
+  const shouldShowSafetyResult =
+    form.safetyFlags.length > 0 ||
+    safetyResult.reasonCodes.includes("free_text_high_risk") ||
+    safetyResult.classification !== "normal_allowed";
   const errorList = Object.values(errors);
 
   function updateField(field: keyof FormState, value: string) {
@@ -480,6 +529,9 @@ export function RequestForm() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validateForm(form);
+    if (safetyResult.shouldBlockNormalConfirmation) {
+      nextErrors.safetyBlocking = safetyBlockingError;
+    }
     setErrors(nextErrors);
     setIsConfirmed(Object.keys(nextErrors).length === 0);
   }
@@ -513,8 +565,19 @@ export function RequestForm() {
             </h2>
             <p className="mt-4 leading-8 text-[#efe5d0]">
               このStageでは、まだ送信・保存・決済・AI生成は行いません。
-              次のStage以降で、DB保存、安全チェック、決済、AI生成を段階的に実装します。
+              安全チェック分類はブラウザ内のルール判定のみで表示しています。
             </p>
+            <p className="mt-4 leading-8 text-[#efe5d0]">
+              安全チェック分類：
+              <span className="font-semibold text-[#f6de9f]">
+                {safetyResult.classification}
+              </span>
+            </p>
+            {safetyResult.classification === "needs_review" ? (
+              <p className="mt-3 leading-8 text-[#efe5d0]">
+                このStageでは確認UIまで表示しています。公開MVPでは追加確認または通常鑑定不可になる場合があります。
+              </p>
+            ) : null}
             <ul className="mt-5 grid gap-3 text-[#efe5d0] sm:grid-cols-3">
               <li className="rounded-lg border border-white/10 bg-white/5 p-4">
                 判定はまだ生成されません
@@ -647,15 +710,10 @@ export function RequestForm() {
             values={form.safetyFlags}
             onToggle={(value) => toggleArrayField("safetyFlags", value)}
             error={errors.safetyFlags}
-            note="このStageではUI上の確認だけを行います。バックエンドの安全チェックはまだ実装しません。"
+            note="このStageではブラウザ内のルール判定だけを行います。DB保存やAPI連携はまだ実装しません。"
           />
-          {hasDangerousSelection ? (
-            <div
-              role="alert"
-              className="rounded-lg border border-[#d06d5f] bg-[#fff1ea] p-5 leading-8 text-[#5b2520]"
-            >
-              この内容は通常鑑定として扱えない可能性があります。公開MVPでは安全チェック後、通常鑑定に進めない場合があります。
-            </div>
+          {shouldShowSafetyResult ? (
+            <SafetyResultPanel result={safetyResult} />
           ) : null}
         </SectionCard>
 
@@ -671,7 +729,7 @@ export function RequestForm() {
 
         <div className="rounded-lg border border-[#d6b86d]/40 bg-[#18152e] p-5 sm:p-7">
           <p className="leading-8 text-[#efe5d0]">
-            送信ボタンはStage 2の確認用です。入力内容は外部送信されず、ブラウザ画面上の確認表示だけに使われます。
+            送信ボタンはStage 4の確認用です。入力内容は外部送信されず、ブラウザ画面上の確認表示とローカル安全分類だけに使われます。
           </p>
           <button
             type="submit"

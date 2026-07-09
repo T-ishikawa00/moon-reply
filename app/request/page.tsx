@@ -5,7 +5,7 @@ import { RequestForm } from "@/components/request/RequestForm";
 export const metadata: Metadata = {
   title: "鑑定依頼フォーム | 月の返事",
   description:
-    "月の返事の鑑定依頼フォームUIです。Stage 2では送信・保存・決済・AI生成は行いません。",
+    "月の返事の鑑定依頼フォームUIです。Stage 4ではローカル安全分類を表示し、送信・保存・決済・AI生成は行いません。",
 };
 
 export default function RequestPage() {
@@ -30,10 +30,10 @@ export default function RequestPage() {
             鑑定依頼フォーム
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-9 text-[#efe5d0]">
-            送る前の言葉、今の関係、今夜の不安を入力してください。このStageでは、入力内容の確認UIまでを実装しています。
+            送る前の言葉、今の関係、今夜の不安を入力してください。このStageでは、入力内容の確認UIとローカル安全分類までを実装しています。
           </p>
           <div className="mt-6 rounded-lg border border-[#d6b86d]/35 bg-[#18152e]/80 p-5 leading-8 text-[#f5e8cc]">
-            Stage 2では、送信・保存・決済・AI生成は行いません。フォームの入力は外部送信されず、画面上の確認表示だけで完結します。
+            Stage 4では、送信・保存・決済・AI生成は行いません。フォームの入力は外部送信されず、画面上の確認表示と安全分類だけで完結します。
           </div>
         </div>
       </section>
