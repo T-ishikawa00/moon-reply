@@ -91,6 +91,18 @@
 - [x] Metrics template defined
 - [x] Phase 1 runbook defined
 
+## P3.2: Automated Public MVP Revision
+
+- [x] Phase 1 MVP corrected from semi-manual to automated public MVP
+- [x] Automated public MVP spec created
+- [x] Automation architecture created
+- [x] Draft data model created
+- [x] Development QA mode defined
+- [x] MVP scope updated
+- [x] Form/payment/delivery docs updated for automation
+- [x] Quality checklist updated for automation readiness
+- [x] Metrics updated for automation
+
 ## P4: Do Not Start Yet
 
 - [ ] Web app implementation

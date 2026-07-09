@@ -6,19 +6,26 @@ This document defines the Phase 1 diagnosis request form.
 
 The form should collect enough context to create a high-quality diagnosis while avoiding unnecessary personal information.
 
+The public MVP target is a self-hosted form, not Google Forms as the production tool.
+
 ---
 
-## 1. Form Tool
+## 1. Public MVP Form Tool
 
-Initial tool:
+Public MVP:
 
-- Google Forms
+- Self-hosted form inside the Next.js app
 
-Possible later tools:
+Development/QA:
 
-- Typeform
-- Tally
-- custom form
+- Mock form or temporary Google Forms may be used for copy/testing only
+
+Public submission flow:
+
+1. User submits request
+2. Safety screening runs
+3. If rejected, normal diagnosis does not proceed
+4. If allowed, user proceeds to payment
 
 ---
 
@@ -111,8 +118,9 @@ Ask yes/no:
 If any yes:
 
 - Do not provide normal diagnosis.
-- Human review required.
-- Refund may be required.
+- Route to rejected or needs_review.
+- Do not proceed to payment for normal diagnosis unless eligibility is cleared.
+- Refund may be required if payment already occurred due to an exceptional state.
 
 ---
 
@@ -129,12 +137,19 @@ Required checkboxes:
 
 ---
 
-## 3. Form Completion Message
+## 3. Form Completion Behavior
 
-After submission:
+If safety screening returns normal_allowed:
 
-鑑定依頼を受け付けました。
-内容と決済状況を確認後、鑑定書を作成します。
+- Show next step toward payment
+- Do not generate diagnosis before payment success
 
-危険相談に該当する場合、通常鑑定として提供できない場合があります。
-その場合は返金または別途ご案内します。
+If safety screening returns rejected:
+
+- Show cannot-provide-normal-diagnosis message
+- Do not send user to normal payment flow
+- Provide safety/refund guidance where applicable
+
+Development/QA may use mocked safety outcomes and placeholder payment routes, but the public MVP must keep the sequence:
+
+form submission → safety screening → payment → generation.

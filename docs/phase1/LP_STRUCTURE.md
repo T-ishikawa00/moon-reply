@@ -2,11 +2,11 @@
 
 ## 0. Purpose
 
-This document defines the one-page LP structure for the Phase 1 sales MVP.
+This document defines the one-page LP structure for the Phase 1 automated public MVP.
 
 The LP is not a full app.
 
-It is a sales page designed to test whether users will request a paid diagnosis.
+It is a sales page designed to convert visitors into paid diagnosis requests through the automated public MVP flow.
 
 ---
 
@@ -24,6 +24,7 @@ Secondary goals:
 - Reduce suspicion
 - Clarify safety and refund rules
 - Make the request flow simple
+- Route users to the self-hosted diagnosis request form
 
 ---
 
@@ -44,7 +45,23 @@ Secondary goals:
 
 ---
 
-## 3. Problem Section
+## 3. Public MVP CTA Behavior
+
+Public MVP CTA:
+
+- Opens self-hosted diagnosis request form
+
+Development placeholder:
+
+- May point to a placeholder route or mock form until implementation is complete
+
+Final public flow:
+
+LP CTA → request form → safety check → payment → generated result
+
+---
+
+## 4. Problem Section
 
 Use emotional but non-fear-based copy.
 
@@ -66,7 +83,7 @@ Do not use:
 
 ---
 
-## 4. Service Explanation
+## 5. Service Explanation
 
 月の返事 is:
 
@@ -88,7 +105,7 @@ Not:
 
 ---
 
-## 5. What You Receive
+## 6. What You Receive
 
 User receives:
 
@@ -108,14 +125,16 @@ User receives:
 
 ---
 
-## 6. Judgment Labels
+## 7. Judgment Labels
 
-The diagnosis will include one of four judgment labels:
+The diagnosis will include one of four normal judgment labels:
 
 - 送っていい
 - 軽く送るならあり
 - 今夜は待つ
 - 今日は送らない方がいい
+
+Safety screening may also route a request to 通常鑑定不可.
 
 Explain:
 
@@ -124,7 +143,7 @@ It is the final label inside a full diagnosis note.
 
 ---
 
-## 7. Sample Section
+## 8. Sample Section
 
 Use approved G001/G002/G003 snippets.
 
@@ -152,7 +171,7 @@ G003:
 
 ---
 
-## 8. Price Section
+## 9. Price Section
 
 Price:
 
@@ -165,34 +184,39 @@ Copy:
 
 ---
 
-## 9. Flow Section
+## 10. Flow Section
 
-Order flow:
+Public MVP order flow:
 
 1. 鑑定依頼フォームに入力
-2. 決済
-3. 内容確認
-4. 鑑定書作成
-5. 品質チェック
-6. メールまたは専用URLで納品
-7. 任意で感想回答
+2. 安全チェック
+3. 通常鑑定OKの場合のみ決済
+4. 決済成功確認
+5. AI判定
+6. AI鑑定書生成
+7. 結果ページ作成
+8. メールで結果URL通知
+9. 任意で感想回答
+
+Development may use placeholder routes, mock payment, mock AI generation, or logged email while implementation is incomplete.
 
 ---
 
-## 10. Delivery Window
+## 11. Delivery Window
 
 Initial SLA:
 
-- 21:00〜24:00受付：原則1時間以内
-- その他の時間帯：翌日12:00まで
+- 決済成功後、原則1時間以内
 
 If difficult operationally, use:
 
 - 原則24時間以内
 
+The public MVP target is automatic result page generation and email notification after payment success.
+
 ---
 
-## 11. Safety Notes
+## 12. Safety Notes
 
 Must include:
 
@@ -205,13 +229,14 @@ Must include:
 
 ---
 
-## 12. FAQ
+## 13. FAQ
 
 Include:
 
 ### Q. AIですか？
 
-はい。AIを活用し、人間が品質を確認したうえで鑑定書としてお返しします。
+はい。AIを活用し、品質基準に沿って鑑定書としてお返しします。
+開発中または管理されたベータでは、人間が品質確認する場合があります。
 
 ### Q. 相手の本心は分かりますか？
 
@@ -233,7 +258,7 @@ Include:
 
 ---
 
-## 13. CTA
+## 14. CTA
 
 Primary CTA:
 

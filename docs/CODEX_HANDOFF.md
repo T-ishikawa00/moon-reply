@@ -6,7 +6,7 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-CodeX must not implement the full product until validation criteria are met.
+CodeX must not implement the product until the implementation plan is approved.
 
 Current allowed scope:
 
@@ -20,13 +20,20 @@ Current allowed scope:
 - Evaluation package templates
 - Formatting real evaluator responses provided by Human
 - One-page LP implementation plan
+- Automated MVP foundation implementation plan
+- File structure proposal
+- Environment variable plan
+- Staged implementation WBS
 
 Current forbidden scope:
 
+- package.json creation until approved
+- src/, app/, or pages/ creation until approved
 - Full app implementation
 - Database implementation
 - Payment API implementation
 - AI API implementation
+- Email API implementation
 - Authentication
 - Native app
 - Subscription system
@@ -40,26 +47,28 @@ Current forbidden scope:
 
 ## Current Task Status
 
-Phase 1 sales MVP specs have been prepared.
+Phase 1 MVP direction has been corrected.
 
-The project is moving from documentation validation to minimal sales MVP preparation.
+The MVP is not semi-manual at public launch.
 
-External evaluation has not been executed. This transition is a Founder Override, not a claim that external validation was completed.
+Development may use manual/mock/QA modes, but the public MVP target is automated normal diagnosis flow.
 
-Next step is not a full app.
+Public MVP target:
 
-Next step is a one-page LP implementation plan.
+LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
 
-CodeX must not implement login, database, AI API, payment API, subscription, or user dashboard yet.
+Next step is an implementation plan, not immediate coding.
 
-Allowed next implementation direction:
+CodeX must not create package.json, src/, app/, pages/, database, API integrations, login, or payment implementation until the implementation plan is approved.
 
-- one-page LP only
-- static content
-- external form link
-- external payment link placeholder
-- manual delivery described in copy
+Allowed next scope:
+
+- one-page LP implementation plan
+- automated MVP foundation implementation plan
+- file structure proposal
+- environment variable plan
+- staged implementation WBS
 
 ## Next Expected Task
 
-Prepare one-page LP implementation plan.
+Create implementation plan for the one-page LP and automated MVP foundation.

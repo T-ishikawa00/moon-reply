@@ -2,22 +2,28 @@
 
 ## 0. Purpose
 
-This document defines the manual delivery workflow for Phase 1 MVP.
+This document defines the automated public delivery workflow for the Phase 1 MVP.
+
+Manual delivery may be used during development only.
+
+The public MVP target is automatic result page generation and email notification after payment success.
 
 ---
 
-## 1. Workflow
+## 1. Corrected Public Delivery Workflow
 
-1. Receive form submission
-2. Check safety screening
-3. Check payment status
-4. Decide whether normal diagnosis is allowed
-5. Generate diagnosis draft using approved style
-6. Human quality check
-7. Prepare saveable card copy
-8. Deliver by email or private URL
-9. Ask for feedback
-10. Record metrics
+Public MVP delivery flow:
+
+1. Payment success is confirmed
+2. AI judgment is generated
+3. AI full diagnosis is generated
+4. Diagnosis result is saved
+5. Result page URL is created
+6. Result URL is sent by email
+7. User opens result page
+8. Feedback request is shown
+
+Manual delivery may be used during development only.
 
 ---
 
@@ -28,7 +34,8 @@ If dangerous content is detected:
 - Do not generate normal romantic diagnosis
 - Do not provide message wording that enables harm, stalking, coercion, or manipulation
 - Use safety response
-- Refund if payment already happened
+- Do not proceed to normal payment flow when detected before payment
+- Refund if payment already happened due to an exceptional state
 - Record as safety-rejected case
 
 Danger types:
@@ -72,22 +79,19 @@ Diagnosis must include:
 
 ## 4. Delivery Format
 
-Initial delivery options:
+Public MVP delivery:
 
-- Email body
-- Google Docs private link
-- PDF later if needed
+- Result page protected by an unguessable token or equivalent
+- Email notification containing the result URL
+- Disclaimer and feedback link included in the email or result page
 
-Recommended first delivery:
+Development delivery options:
 
-- Email body + Google Docs link
+- Email logged to console or development logs
+- Result page preview using fixture data
+- Manual QA review before test delivery
 
-Reason:
-
-- Easy to deliver
-- Easy to edit before sending
-- Easy to preserve formatting
-- No app required
+The normal public path should not require manual copy/paste delivery for every order.
 
 ---
 
@@ -105,7 +109,7 @@ Body:
 
 今回の鑑定書を以下にお届けします。
 
-[鑑定書URL or 本文]
+[鑑定書URL]
 
 この鑑定は、AIを活用した占い/エンタメ/感情整理目的の内容です。
 医療・診断・カウンセリングではなく、相手の本心・返信・復縁を保証するものではありません。

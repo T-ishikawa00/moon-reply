@@ -2,7 +2,7 @@
 
 ## 0. Purpose
 
-This checklist must be used before delivering any Phase 1 diagnosis.
+This checklist must be used before public release and before generated Phase 1 diagnosis results are accepted.
 
 ---
 
@@ -23,8 +23,8 @@ This checklist must be used before delivering any Phase 1 diagnosis.
 
 - [ ] Does not guarantee reply
 - [ ] Does not guarantee reconciliation
-- [ ] Does not state partner’s true feelings as fact
-- [ ] Does not say “he/she definitely loves you”
+- [ ] Does not state partner's true feelings as fact
+- [ ] Does not say "he/she definitely loves you"
 - [ ] Does not create fear-based urgency
 - [ ] Does not imply payment prevents bad outcome
 - [ ] Does not provide medical/diagnostic/counseling claims
@@ -47,7 +47,7 @@ This checklist must be used before delivering any Phase 1 diagnosis.
 
 - [ ] Judgment label is clear
 - [ ] Message suggestion is usable
-- [ ] “Do not do” section is clear
+- [ ] "Do not do" section is clear
 - [ ] 3-day policy is included
 - [ ] Saveable memo is included
 - [ ] Emotional tag is included
@@ -61,3 +61,17 @@ This checklist must be used before delivering any Phase 1 diagnosis.
 - [ ] Gives emotional relief
 - [ ] Gives concrete next action
 - [ ] Feels more like a diagnosis note than AI chat
+
+---
+
+## 6. Automation Readiness Check
+
+- [ ] Safety rejected cases do not proceed to payment
+- [ ] Payment success is required before generation
+- [ ] AI judgment is generated before full diagnosis
+- [ ] Result page is created after generation
+- [ ] Result URL is protected by an unguessable token or equivalent
+- [ ] Email notification is sent or logged in development
+- [ ] Dangerous cases are not given normal romantic diagnosis
+- [ ] Failed generation is handled safely
+- [ ] No test data appears in public

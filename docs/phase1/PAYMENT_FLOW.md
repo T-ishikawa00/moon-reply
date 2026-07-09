@@ -2,11 +2,11 @@
 
 ## 0. Purpose
 
-This document defines payment flow candidates for Phase 1 sales MVP.
+This document defines the payment flow for the Phase 1 automated public MVP.
 
-No payment API implementation is planned in this phase.
+No payment API implementation is included in this document.
 
-Use external payment links or simple storefront tools where possible.
+The public MVP requires payment success verification before AI judgment or diagnosis generation.
 
 ---
 
@@ -36,38 +36,54 @@ Need confirmation:
 - PayPay availability
 - credit card availability
 - platform rules around fortune-telling/counseling-like services
+- webhook or success verification support
 
 ---
 
-## 3. Preferred Phase 1 Flow
+## 3. Required Public MVP Sequence
 
-Preferred:
+Required sequence:
 
 1. User submits diagnosis request form
-2. User pays via external payment link
-3. Payment confirmation is manually checked
-4. Diagnosis is delivered manually
+2. Safety screening runs
+3. User proceeds to payment only if normal diagnosis is allowed
+4. Payment provider confirms success
+5. System triggers AI judgment and diagnosis generation
+6. Result page is created
+7. Result URL is sent by email
 
-Alternative:
-
-1. User pays first
-2. User receives order form link
-3. User fills order form
-4. Diagnosis is delivered manually
-
-Recommended initial flow:
-
-- Form first, then payment
+The form first → safety check → payment order must be maintained.
 
 Reason:
 
 - Safety screening can happen before payment
 - Dangerous or unsupported cases can be rejected before payment
 - Reduces refund burden
+- Prevents generation without verified payment
 
 ---
 
-## 4. Payment Provider Inquiry Copy
+## 4. Public MVP Payment Automation
+
+Public MVP payment flow:
+
+1. User passes safety screening
+2. User starts payment
+3. Payment provider confirms success
+4. System marks request as paid
+5. System triggers AI judgment and diagnosis generation
+6. Result page is created
+7. Result URL is sent by email
+
+Manual payment confirmation is not the target public flow.
+
+Manual payment confirmation may be used only during development, QA, or emergency incident handling.
+
+Payment provider webhook or success verification is required before public release.
+
+---
+
+## 5. Payment Provider Inquiry Copy
 
 Inquiry message:
 
@@ -83,11 +99,15 @@ Inquiry message:
 
 このようなAIを活用した恋愛鑑定/占い寄りのデジタルサービスで、決済利用は可能でしょうか？
 また、利用にあたって必要な注意書きや制限があれば教えてください。
+
+公開MVPでは、フォーム送信後に安全チェックを行い、通常鑑定が可能な場合のみ決済へ進みます。
+決済成功後に鑑定書生成と結果URL通知を自動化する予定です。
+Webhookまたは決済成功確認の利用可否も確認したいです。
 ```
 
 ---
 
-## 5. Refund Policy Draft
+## 6. Refund Policy Draft
 
 Refund allowed:
 

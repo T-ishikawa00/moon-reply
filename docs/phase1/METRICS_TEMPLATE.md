@@ -2,7 +2,7 @@
 
 ## 0. Purpose
 
-This template records Phase 1 sales MVP metrics.
+This template records Phase 1 automated public MVP metrics.
 
 Do not fill fake numbers.
 
@@ -28,28 +28,53 @@ Do not fill fake numbers.
 | CTA clicks | TBD |
 | Form starts | TBD |
 | Form submissions | TBD |
+| Safety checks run | TBD |
 | Safety rejected cases | TBD |
-| Payment link opens | TBD |
-| Paid orders | TBD |
-| Delivered diagnoses | TBD |
+| Payment starts | TBD |
+| Payment successes | TBD |
+| Payment failures | TBD |
+| AI judgment generations | TBD |
+| AI diagnosis generations | TBD |
+| Result pages created | TBD |
+| Result emails sent | TBD |
 | Refunds | TBD |
 | Feedback responses | TBD |
 
 ---
 
-## 3. Conversion Rates
+## 3. Automation Metrics
+
+| Metric | Count |
+|---|---:|
+| Safety checks run | TBD |
+| Safety rejected | TBD |
+| Payment successes | TBD |
+| AI judgment generations | TBD |
+| AI diagnosis generations | TBD |
+| Generation failures | TBD |
+| Result pages created | TBD |
+| Result emails sent | TBD |
+| Result email failures | TBD |
+| Feedback submissions | TBD |
+
+---
+
+## 4. Conversion Rates
 
 | Metric | Rate |
 |---|---:|
 | CTA click rate | TBD |
 | Form completion rate | TBD |
+| Safety rejection rate | TBD |
 | Payment conversion rate | TBD |
+| Generation failure rate | TBD |
+| Result email failure rate | TBD |
 | Refund rate | TBD |
 | Feedback response rate | TBD |
 
 ---
 
-## 4. Qualitative Signals
+## 5. Qualitative Signals
 
 | Signal | Count / Notes |
 |---|---|
@@ -66,7 +91,7 @@ Do not fill fake numbers.
 
 ---
 
-## 5. Decision
+## 6. Decision
 
 Decision:
 

@@ -2,20 +2,22 @@
 
 ## Current Phase
 
-Phase 1 / Sales MVP preparation
+Phase 1 / Automated Public MVP preparation
 
 ## Current Task
 
-Prepare implementation-ready specs for the Phase 1 sales MVP.
+Prepare implementation plan for the automated public MVP.
 
-The MVP is not a full app.
-It is a minimal sales validation flow:
+The product should support manual/mock behavior during development, but the public MVP target is automated normal diagnosis flow:
 
-LP → request form → payment link → manual diagnosis → delivery → feedback.
+LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
 
 ## Source Materials
 
-- `docs/phase0/external/PHASE0_FOUNDER_OVERRIDE_DECISION.md`
+- `docs/phase1/AUTOMATED_PUBLIC_MVP_SPEC.md`
+- `docs/phase1/AUTOMATION_ARCHITECTURE.md`
+- `docs/phase1/DATA_MODEL_DRAFT.md`
+- `docs/phase1/DEVELOPMENT_QA_MODE.md`
 - `docs/phase1/MVP_SCOPE.md`
 - `docs/phase1/LP_STRUCTURE.md`
 - `docs/phase1/ORDER_FORM_SPEC.md`
@@ -27,27 +29,29 @@ LP → request form → payment link → manual diagnosis → delivery → feedb
 
 ## Do Not Do
 
-- Do not implement the full app
+- Do not implement yet in this task
+- Do not create package.json yet
+- Do not create src/, app/, pages/ yet
+- Do not create database yet
+- Do not connect OpenAI API yet
+- Do not connect payment API yet
+- Do not connect email API yet
 - Do not create login
 - Do not create user accounts
-- Do not create database
-- Do not implement AI API
-- Do not implement payment API
 - Do not create subscription
 - Do not create coin/point system
-- Do not fabricate external evaluation results
 - Do not fabricate sales results
 - Do not add raw LINE screenshots
 - Do not add real names or personal identifiers
 
 ## Acceptance Criteria
 
-- Phase 1 specs are complete
-- MVP boundaries are clear
-- Next implementation can be limited to a one-page LP
-- Form/payment/delivery remain external or manual
-- No full app implementation has been added
+- Automated public MVP direction is documented
+- Manual/mock development mode is clearly separated from public MVP behavior
+- Public MVP flow is clear
+- Next task can create a one-page LP + automated MVP implementation plan
+- No implementation files are added
 
 ## Next Task
 
-Prepare one-page LP implementation plan.
+Create implementation plan for the one-page LP and automated MVP foundation.
