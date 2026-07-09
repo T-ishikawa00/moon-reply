@@ -32,22 +32,16 @@ Current forbidden scope:
 
 ## Current Task Status
 
-Phase 0 working files have been created.
+Human-approved Phase 0 consultation cases and judgment boundaries have been reflected.
 
 Next step is not implementation.
 
-Next step is a human-led planning session to define:
+Next step is a human-led golden sample preparation session.
 
-- actual consultation case outlines
-- safety case outlines
-- judgment boundaries
-- golden sample directions
-- external evaluation setup
+CodeX must not create golden diagnosis body text without explicit human-approved content.
 
-CodeX must not fabricate real consultation cases or external evaluation results.
-
-CodeX may only update working files after receiving explicit human-approved content.
+CodeX may only update `GOLDEN_SAMPLE_DRAFTS.md` after receiving approved drafts from Human + ChatGPT.
 
 ## Next Expected Task
 
-Human-led Phase 0 consultation case design.
+Human-led golden sample preparation.

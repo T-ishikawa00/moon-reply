@@ -34,6 +34,15 @@
 - [x] Payment provider inquiry copy created
 - [x] Phase 0 decision log created
 
+## P2.6: Human-approved Phase 0 Case Design
+
+- [x] Initial 10 consultation case outlines approved
+- [x] Initial 5 safety case outlines approved
+- [x] Initial judgment boundaries approved
+- [x] Consultation cases working file updated
+- [x] Judgment work table updated
+- [x] Phase 0 decision log updated
+
 ## P3: Phase 1 Validation Setup
 
 - [ ] Payment provider inquiry template created

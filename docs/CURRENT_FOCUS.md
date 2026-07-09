@@ -2,13 +2,13 @@
 
 ## Current Phase
 
-Phase 0 / Human-led validation content
+Phase 0 / Golden sample preparation
 
 ## Current Task
 
-Human + ChatGPT should define the actual initial consultation cases, judgment boundaries, safety boundaries, golden sample direction, and external evaluation setup.
+Human + ChatGPT should define the golden sample directions and then draft the first three golden diagnosis samples.
 
-CodeX should not generate or fill real consultation content without explicit instruction.
+The approved consultation case outlines and initial judgment boundaries have been reflected into the working files.
 
 ## Do Not Do
 
@@ -19,24 +19,23 @@ CodeX should not generate or fill real consultation content without explicit ins
 - Do not add database or authentication
 - Do not create package.json
 - Do not run npm install
-- Do not fabricate real consultation cases
+- Do not add raw LINE screenshots
+- Do not add real names or personal identifiers
 - Do not fabricate external evaluation results
 
 ## Acceptance Criteria
 
-- Human has reviewed the initial case distribution
-- Human has defined at least 10 consultation case outlines
-- Human has defined 5 safety case outlines
-- Judgment boundaries are reviewed by Human + ChatGPT
-- Golden sample directions are approved
-- External evaluation setup is approved
+- Golden sample directions are reviewed by Human + ChatGPT
+- G001, G002, G003 source case IDs are selected
+- Drafts are created only after human approval
+- No app implementation files are added
 
 ## Next Task
 
 Human + ChatGPT discussion:
 
-1. Define initial 10 consultation case outlines
-2. Define 5 safety case outlines
-3. Define judgment boundaries
-4. Define golden sample directions
-5. Decide external evaluation setup
+1. Select source cases for G001, G002, G003
+2. Define tone and length of golden diagnosis samples
+3. Draft G001: 返信待ち
+4. Draft G002: 追いメッセージ
+5. Draft G003: 曖昧な関係
