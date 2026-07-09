@@ -18,6 +18,7 @@ Current allowed scope:
 - LP copy drafts
 - Forms and questionnaires
 - Evaluation package templates
+- Formatting real evaluator responses provided by Human
 
 Current forbidden scope:
 
@@ -32,19 +33,26 @@ Current forbidden scope:
 - Fabricating real consultation cases
 - Fabricating external evaluation results
 - Fabricating evaluator feedback
+- Filling evaluation results without real responses
 
 ## Current Task Status
 
-G001/G002/G003 golden samples have been approved and documented.
+External evaluation package has been prepared.
 
-Next step is external evaluation preparation.
+Next step is human-led external evaluation execution.
 
-CodeX must not fabricate evaluator feedback.
+CodeX must not fabricate evaluator feedback or fill evaluation results without real responses.
 
-CodeX may prepare forms, questionnaires, and evaluation package templates.
+CodeX may help format real evaluator responses after Human provides them.
 
 CodeX must not implement the app yet.
 
+Allowed next update:
+
+- Update `EVALUATION_RESULTS_TEMPLATE.md` only after Human provides actual evaluator responses
+- Prepare summary tables from real responses
+- Prepare Go / Iterate / No-Go decision memo from real responses
+
 ## Next Expected Task
 
-External evaluation package and recruitment message preparation.
+Human-led external evaluation execution.

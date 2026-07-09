@@ -63,6 +63,14 @@
 - [x] G003 saveable image card copy approved and documented
 - [x] G003 LP/X sample copy approved and documented
 
+## P2.9: External Evaluation Package
+
+- [x] Evaluator package created
+- [x] Evaluation form questions created
+- [x] Evaluation results template created
+- [x] Recruitment message created
+- [x] Phase 0 external decision rule created
+
 ## P3: Phase 1 Validation Setup
 
 - [ ] Payment provider inquiry template created

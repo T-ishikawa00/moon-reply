@@ -2,13 +2,21 @@
 
 ## Current Phase
 
-Phase 0 / External evaluation preparation
+Phase 0 / External evaluation execution
 
 ## Current Task
 
-Prepare external evaluation materials using approved G001/G002/G003 golden samples.
+Run external evaluation using the approved G001/G002/G003 golden samples and the prepared evaluation package.
 
-The approved golden samples are documented in `docs/phase0/work/GOLDEN_SAMPLE_DRAFTS.md` and should be used as the source material for evaluator-facing assets.
+## Source Materials
+
+- `docs/phase0/work/GOLDEN_SAMPLE_DRAFTS.md`
+- `docs/RESULT_PRESENTATION_SPEC.md`
+- `docs/phase0/external/EVALUATOR_PACKAGE.md`
+- `docs/phase0/external/EVALUATION_FORM_QUESTIONS.md`
+- `docs/phase0/external/EVALUATION_RESULTS_TEMPLATE.md`
+- `docs/phase0/external/RECRUITMENT_MESSAGE.md`
+- `docs/phase0/external/PHASE0_EXTERNAL_DECISION_RULE.md`
 
 ## Do Not Do
 
@@ -27,11 +35,18 @@ The approved golden samples are documented in `docs/phase0/work/GOLDEN_SAMPLE_DR
 
 ## Acceptance Criteria
 
-- External evaluator package is prepared
-- G001/G002/G003 can be shown to evaluators
-- Feedback questions are aligned with RESULT_PRESENTATION_SPEC.md
-- No app implementation files are added
+- At least 5 external evaluators are recruited
+- External evaluators review G001/G002/G003
+- Evaluation answers are collected without fabrication
+- Results are summarized in `EVALUATION_RESULTS_TEMPLATE.md`
+- Go / Iterate / No-Go is judged using `PHASE0_EXTERNAL_DECISION_RULE.md`
 
 ## Next Task
 
-Create external evaluation package and recruitment message.
+Human task:
+
+1. Recruit external evaluators
+2. Share evaluator package/form
+3. Collect responses
+4. Summarize actual responses
+5. Decide Go / Iterate / No-Go
