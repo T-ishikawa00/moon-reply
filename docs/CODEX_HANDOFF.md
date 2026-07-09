@@ -16,6 +16,8 @@ Current allowed scope:
 - Safety specs
 - Evaluation sheets
 - LP copy drafts
+- Forms and questionnaires
+- Evaluation package templates
 
 Current forbidden scope:
 
@@ -29,25 +31,20 @@ Current forbidden scope:
 - Coin/point system
 - Fabricating real consultation cases
 - Fabricating external evaluation results
+- Fabricating evaluator feedback
 
 ## Current Task Status
 
-Result presentation policy has been defined.
+G001/G002/G003 golden samples have been approved and documented.
 
-Next step is not implementation.
+Next step is external evaluation preparation.
 
-Next step is human-led G001 golden sample drafting.
+CodeX must not fabricate evaluator feedback.
 
-CodeX must not generate image files or implement UI.
+CodeX may prepare forms, questionnaires, and evaluation package templates.
 
-CodeX must not create golden diagnosis body text without approved Human + ChatGPT content.
-
-Allowed next update:
-
-- Update `GOLDEN_SAMPLE_DRAFTS.md` after G001 full diagnosis draft is approved
-- Update G001 saveable image card copy after approval
-- Update G001 LP/X sample copy after approval
+CodeX must not implement the app yet.
 
 ## Next Expected Task
 
-Human-led golden sample preparation.
+External evaluation package and recruitment message preparation.

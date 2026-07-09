@@ -2,17 +2,13 @@
 
 ## Current Phase
 
-Phase 0 / Golden sample drafting
+Phase 0 / External evaluation preparation
 
 ## Current Task
 
-Human + ChatGPT should finalize G001 tone and draft the first golden diagnosis sample.
+Prepare external evaluation materials using approved G001/G002/G003 golden samples.
 
-The result presentation policy has been defined:
-
-- diagnosis page as paid main content
-- saveable image card as summary artifact
-- LP/X sample image as acquisition artifact
+The approved golden samples are documented in `docs/phase0/work/GOLDEN_SAMPLE_DRAFTS.md` and should be used as the source material for evaluator-facing assets.
 
 ## Do Not Do
 
@@ -26,21 +22,16 @@ The result presentation policy has been defined:
 - Do not add raw LINE screenshots
 - Do not add real names or personal identifiers
 - Do not fabricate external evaluation results
+- Do not fabricate evaluator feedback
 - Do not generate image files yet
 
 ## Acceptance Criteria
 
-- G001 tone is approved
-- G001 full diagnosis draft is approved
-- G001 saveable image card copy is approved
-- G001 LP/X sample copy is approved
+- External evaluator package is prepared
+- G001/G002/G003 can be shown to evaluators
+- Feedback questions are aligned with RESULT_PRESENTATION_SPEC.md
 - No app implementation files are added
 
 ## Next Task
 
-Human + ChatGPT discussion:
-
-1. Finalize G001 full diagnosis draft
-2. Finalize G001 saveable image card copy
-3. Finalize G001 LP/X sample copy
-4. Prepare approved content for CodeX to update `GOLDEN_SAMPLE_DRAFTS.md`
+Create external evaluation package and recruitment message.

@@ -51,6 +51,18 @@
 - [x] LP/X sample image direction defined
 - [x] G001 presentation notes added
 
+## P2.8: Approved Golden Samples
+
+- [x] G001 full diagnosis approved and documented
+- [x] G001 saveable image card copy approved and documented
+- [x] G001 LP/X sample copy approved and documented
+- [x] G002 full diagnosis approved and documented
+- [x] G002 saveable image card copy approved and documented
+- [x] G002 LP/X sample copy approved and documented
+- [x] G003 full diagnosis approved and documented
+- [x] G003 saveable image card copy approved and documented
+- [x] G003 LP/X sample copy approved and documented
+
 ## P3: Phase 1 Validation Setup
 
 - [ ] Payment provider inquiry template created
