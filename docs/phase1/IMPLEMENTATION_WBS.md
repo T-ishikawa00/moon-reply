@@ -26,12 +26,18 @@
 - [ ] Create `.env.example`
 - [ ] Add Supabase client/server plan
 - [ ] Create table migration plan
-- [ ] Add diagnosis_requests
+- [ ] Add reading_requests
 - [ ] Add safety_checks
-- [ ] Add payments
-- [ ] Add diagnosis_results
+- [ ] Add readings
+- [ ] Add purchases
+- [ ] Add credit_ledger
+- [ ] Add entitlements
+- [ ] Add provider_events
+- [ ] Add ai_generation_logs
 - [ ] Add email_deliveries
 - [ ] Add feedback
+- [ ] Confirm no OpenAI/payment/email integration
+- [ ] Confirm no login/user account implementation
 
 ## P4: Safety Screening
 

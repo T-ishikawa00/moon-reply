@@ -39,8 +39,22 @@ Accepted when:
 
 - `.env.example` exists
 - Supabase configuration is documented
-- Draft tables can be created
+- Data model supports no-login one-shot diagnosis
+- Tables or migrations exist for:
+  - reading_requests
+  - safety_checks
+  - readings
+  - purchases
+  - credit_ledger
+  - entitlements
+  - provider_events
+  - ai_generation_logs
+  - email_deliveries
+  - feedback
+- External provider source-of-truth policy is documented
 - No user account/login is created
+- No OpenAI/payment/email integration is implemented
+- No fake purchase/customer data is inserted
 
 ---
 

@@ -142,7 +142,18 @@
 - [x] LP CTA updated to `/request`
 - [x] No backend/API integrations added
 
-## P4.3+: Do Not Start Until Approved
+## P4.3: Stage 3 Data Foundation Revision
+
+- [x] Stage 2 acceptance recorded
+- [x] Payment provider risk note created
+- [x] Provider sync/source-of-truth policy created
+- [x] Stage 3 data foundation scope created
+- [x] Data model strengthened for purchases, credits, entitlements, provider events, and AI logs
+- [x] Stage 3 implementation plan updated
+- [x] Stage 3 WBS updated
+- [x] Stage 3 acceptance criteria updated
+
+## P4.4+: Do Not Start Until Approved
 
 - [ ] Stage 3 Supabase Data Foundation
 - [ ] Database implementation

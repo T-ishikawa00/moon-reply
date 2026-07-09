@@ -109,22 +109,36 @@ Excludes:
 
 Goal:
 
-- Add minimal data persistence
+- Add minimal but future-safe data persistence foundation
 
 Includes draft tables:
 
-- diagnosis_requests
+- reading_requests
 - safety_checks
-- payments
-- diagnosis_results
+- readings
+- purchases
+- credit_ledger
+- entitlements
+- provider_events
+- ai_generation_logs
 - email_deliveries
 - feedback
+
+Important principles:
+
+- External providers are proof sources
+- Our DB is the business source of truth
+- Do not treat Stripe, RevenueCat, Apple, Google, or any payment provider as the only purchase database
+- Do not implement real payment, AI, or email in Stage 3
 
 Excludes:
 
 - authentication
 - user account
 - full admin panel
+- OpenAI API
+- payment API
+- email API
 
 ---
 
