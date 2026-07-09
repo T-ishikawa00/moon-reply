@@ -113,9 +113,23 @@
 - [x] Implementation WBS created
 - [x] Acceptance criteria created
 
-## P4: Do Not Start Yet
+## P4: Implementation Stages
 
-- [ ] Web app implementation
+## P4.1: Stage 1 Project Bootstrap + Static LP
+
+- [x] Next.js project foundation created
+- [x] TypeScript configured
+- [x] Tailwind CSS configured
+- [x] Static LP implemented at `/`
+- [x] Responsive layout added
+- [x] CTA placeholder added
+- [x] Safety/AI/refund notes displayed
+- [x] No backend/API integrations added
+- [x] Build passes
+
+## P4.2+: Do Not Start Until Approved
+
+- [ ] Stage 2 Request Form UI
 - [ ] Database implementation
 - [ ] Payment implementation
 - [ ] AI API implementation

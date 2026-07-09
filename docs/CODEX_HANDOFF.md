@@ -6,78 +6,58 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-CodeX must not implement before implementation plan approval.
+Stage 1 has been implemented and is awaiting Human review.
 
-Current allowed scope:
+CodeX must not start Stage 2 until Stage 1 is accepted by Human.
 
-- Documentation
-- Validation templates
-- Prompt specs
-- Safety specs
-- Evaluation sheets
-- LP copy drafts
-- Forms and questionnaires
-- Evaluation package templates
-- Formatting real evaluator responses provided by Human
-- One-page LP implementation plan
-- Automated MVP foundation implementation plan
-- File structure proposal
-- Environment variable plan
-- Staged implementation WBS
+Current allowed scope before Stage 1 acceptance:
 
-Current forbidden scope before approval:
+- Review Stage 1 implementation
+- Fix Stage 1 defects only
+- Validate build, static LP, and documentation status
 
-- package.json creation
-- src/, app/, or pages/ creation
-- Full app implementation
+Current forbidden scope before Stage 1 acceptance:
+
+- Request form implementation
 - Database implementation
 - Supabase integration
-- Payment API implementation
-- AI API implementation
-- Email API implementation
-- Authentication
-- Native app
+- OpenAI API integration
+- Payment API integration
+- Email API integration
+- API route implementation
+- Authentication or login
+- User accounts
 - Subscription system
 - Coin/point system
-- User dashboard
-- Fabricating real consultation cases
-- Fabricating external evaluation results
-- Fabricating evaluator feedback
-- Fabricating sales results
-- Filling evaluation results without real responses
+- My page, history, result page, or feedback form
 
 ## Current Task Status
 
-README and automated MVP implementation plan have been prepared.
+Stage 1 implementation has been completed and is awaiting Human review.
 
-No implementation has started yet.
-
-Next step is human approval of Stage 1.
-
-After approval, CodeX may start Stage 1 only:
+Implemented:
 
 - Project Bootstrap
 - Static LP
 - Responsive layout
 - CTA placeholder
-- No backend integrations
+- Safety/AI/refund notes
 
-CodeX must not start Stage 2+ until Stage 1 is accepted.
+Not implemented:
 
-Forbidden before approval:
+- Request form
+- Database
+- Supabase
+- OpenAI API
+- Payment API
+- Email API
+- Login
+- User accounts
+- Subscription
+- Coin/point system
 
-- package.json creation
-- src/, app/, pages/ creation
-- DB implementation
-- Supabase integration
-- OpenAI integration
-- payment integration
-- email integration
-- login
-- user accounts
-- subscription
-- coin/point system
+Next step after Human approval:
 
-## Next Expected Task
+Stage 2 only: Self-hosted request form UI.
 
-After human approval, start Stage 1 implementation: Project Bootstrap + Static LP only.
+CodeX must not start Stage 2 until Stage 1 is accepted.

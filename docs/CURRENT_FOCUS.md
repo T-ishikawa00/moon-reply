@@ -2,55 +2,60 @@
 
 ## Current Phase
 
-Phase 1 / Automated MVP implementation planning
+Phase 1 / Stage 1 implementation review
 
 ## Current Task
 
-Review and approve the implementation plan for the automated public MVP.
+Review Stage 1 implementation: Project Bootstrap + Static LP.
 
-No implementation has started yet.
+Stage 1 should include only:
+
+- Next.js project foundation
+- Static one-page LP
+- Responsive layout
+- CTA placeholder
+- No backend/API integrations
 
 ## Source Materials
 
 - `README.md`
-- `docs/phase1/IMPLEMENTATION_PLAN.md`
-- `docs/phase1/ROUTE_STRUCTURE.md`
-- `docs/phase1/ENVIRONMENT_VARIABLES.md`
-- `docs/phase1/INTEGRATION_STAGING_PLAN.md`
-- `docs/phase1/IMPLEMENTATION_WBS.md`
+- `app/page.tsx`
+- `app/layout.tsx`
+- `app/globals.css`
+- `package.json`
 - `docs/phase1/ACCEPTANCE_CRITERIA.md`
-- `docs/phase1/AUTOMATED_PUBLIC_MVP_SPEC.md`
-- `docs/phase1/AUTOMATION_ARCHITECTURE.md`
-- `docs/phase1/DATA_MODEL_DRAFT.md`
-- `docs/phase1/DEVELOPMENT_QA_MODE.md`
+- `docs/phase1/IMPLEMENTATION_PLAN.md`
+- `docs/phase1/LP_STRUCTURE.md`
 
 ## Do Not Do
 
-- Do not implement before implementation plan approval
-- Do not create package.json yet
-- Do not create src/, app/, pages/ yet
-- Do not create database yet
-- Do not connect OpenAI API yet
-- Do not connect payment API yet
-- Do not connect email API yet
+Until Stage 1 is accepted:
+
+- Do not start Stage 2
+- Do not implement `/request`
+- Do not implement form persistence
+- Do not create database
+- Do not add Supabase
+- Do not connect OpenAI API
+- Do not connect payment API
+- Do not connect email API
 - Do not create login
 - Do not create user accounts
 - Do not create subscription
 - Do not create coin/point system
-- Do not fabricate sales results
-- Do not add raw LINE screenshots
-- Do not add real names or personal identifiers
 
 ## Acceptance Criteria
 
-- Implementation plan is reviewed
-- Stage 1 scope is approved
-- Next task can start Project Bootstrap + Static LP
-- Implementation remains staged
-- No full app scope creep
+- LP renders at `/`
+- LP is responsive
+- CTA placeholder exists
+- Safety/AI/refund notes are visible
+- No backend integrations exist
+- Build passes
+- Stage 1 can be reviewed by Human
 
 ## Next Task
 
-After approval:
+After Human accepts Stage 1:
 
-Stage 1 implementation: Project Bootstrap + Static LP.
+Stage 2 implementation: Self-hosted request form UI.

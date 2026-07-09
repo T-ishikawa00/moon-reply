@@ -1,4 +1,4 @@
-﻿# OS
+# OS
 .DS_Store
 Thumbs.db
 
@@ -32,3 +32,4 @@ venv/
 # Misc
 .tmp/
 tmp/
+*.tsbuildinfo
