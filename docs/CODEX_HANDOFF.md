@@ -6,7 +6,7 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-CodeX must not implement the product until the implementation plan is approved.
+CodeX must not implement before implementation plan approval.
 
 Current allowed scope:
 
@@ -25,12 +25,13 @@ Current allowed scope:
 - Environment variable plan
 - Staged implementation WBS
 
-Current forbidden scope:
+Current forbidden scope before approval:
 
-- package.json creation until approved
-- src/, app/, or pages/ creation until approved
+- package.json creation
+- src/, app/, or pages/ creation
 - Full app implementation
 - Database implementation
+- Supabase integration
 - Payment API implementation
 - AI API implementation
 - Email API implementation
@@ -47,28 +48,36 @@ Current forbidden scope:
 
 ## Current Task Status
 
-Phase 1 MVP direction has been corrected.
+README and automated MVP implementation plan have been prepared.
 
-The MVP is not semi-manual at public launch.
+No implementation has started yet.
 
-Development may use manual/mock/QA modes, but the public MVP target is automated normal diagnosis flow.
+Next step is human approval of Stage 1.
 
-Public MVP target:
+After approval, CodeX may start Stage 1 only:
 
-LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
+- Project Bootstrap
+- Static LP
+- Responsive layout
+- CTA placeholder
+- No backend integrations
 
-Next step is an implementation plan, not immediate coding.
+CodeX must not start Stage 2+ until Stage 1 is accepted.
 
-CodeX must not create package.json, src/, app/, pages/, database, API integrations, login, or payment implementation until the implementation plan is approved.
+Forbidden before approval:
 
-Allowed next scope:
-
-- one-page LP implementation plan
-- automated MVP foundation implementation plan
-- file structure proposal
-- environment variable plan
-- staged implementation WBS
+- package.json creation
+- src/, app/, pages/ creation
+- DB implementation
+- Supabase integration
+- OpenAI integration
+- payment integration
+- email integration
+- login
+- user accounts
+- subscription
+- coin/point system
 
 ## Next Expected Task
 
-Create implementation plan for the one-page LP and automated MVP foundation.
+After human approval, start Stage 1 implementation: Project Bootstrap + Static LP only.

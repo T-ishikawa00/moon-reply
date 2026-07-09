@@ -2,34 +2,31 @@
 
 ## Current Phase
 
-Phase 1 / Automated Public MVP preparation
+Phase 1 / Automated MVP implementation planning
 
 ## Current Task
 
-Prepare implementation plan for the automated public MVP.
+Review and approve the implementation plan for the automated public MVP.
 
-The product should support manual/mock behavior during development, but the public MVP target is automated normal diagnosis flow:
-
-LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
+No implementation has started yet.
 
 ## Source Materials
 
+- `README.md`
+- `docs/phase1/IMPLEMENTATION_PLAN.md`
+- `docs/phase1/ROUTE_STRUCTURE.md`
+- `docs/phase1/ENVIRONMENT_VARIABLES.md`
+- `docs/phase1/INTEGRATION_STAGING_PLAN.md`
+- `docs/phase1/IMPLEMENTATION_WBS.md`
+- `docs/phase1/ACCEPTANCE_CRITERIA.md`
 - `docs/phase1/AUTOMATED_PUBLIC_MVP_SPEC.md`
 - `docs/phase1/AUTOMATION_ARCHITECTURE.md`
 - `docs/phase1/DATA_MODEL_DRAFT.md`
 - `docs/phase1/DEVELOPMENT_QA_MODE.md`
-- `docs/phase1/MVP_SCOPE.md`
-- `docs/phase1/LP_STRUCTURE.md`
-- `docs/phase1/ORDER_FORM_SPEC.md`
-- `docs/phase1/PAYMENT_FLOW.md`
-- `docs/phase1/DELIVERY_WORKFLOW.md`
-- `docs/phase1/QUALITY_CHECKLIST.md`
-- `docs/phase1/METRICS_TEMPLATE.md`
-- `docs/phase1/PHASE1_RUNBOOK.md`
 
 ## Do Not Do
 
-- Do not implement yet in this task
+- Do not implement before implementation plan approval
 - Do not create package.json yet
 - Do not create src/, app/, pages/ yet
 - Do not create database yet
@@ -46,12 +43,14 @@ LP → self-hosted request form → safety check → payment → AI judgment →
 
 ## Acceptance Criteria
 
-- Automated public MVP direction is documented
-- Manual/mock development mode is clearly separated from public MVP behavior
-- Public MVP flow is clear
-- Next task can create a one-page LP + automated MVP implementation plan
-- No implementation files are added
+- Implementation plan is reviewed
+- Stage 1 scope is approved
+- Next task can start Project Bootstrap + Static LP
+- Implementation remains staged
+- No full app scope creep
 
 ## Next Task
 
-Create implementation plan for the one-page LP and automated MVP foundation.
+After approval:
+
+Stage 1 implementation: Project Bootstrap + Static LP.
