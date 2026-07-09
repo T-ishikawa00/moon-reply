@@ -32,15 +32,21 @@ Current forbidden scope:
 
 ## Current Task Status
 
-Human-approved Phase 0 consultation cases and judgment boundaries have been reflected.
+Result presentation policy has been defined.
 
 Next step is not implementation.
 
-Next step is a human-led golden sample preparation session.
+Next step is human-led G001 golden sample drafting.
 
-CodeX must not create golden diagnosis body text without explicit human-approved content.
+CodeX must not generate image files or implement UI.
 
-CodeX may only update `GOLDEN_SAMPLE_DRAFTS.md` after receiving approved drafts from Human + ChatGPT.
+CodeX must not create golden diagnosis body text without approved Human + ChatGPT content.
+
+Allowed next update:
+
+- Update `GOLDEN_SAMPLE_DRAFTS.md` after G001 full diagnosis draft is approved
+- Update G001 saveable image card copy after approval
+- Update G001 LP/X sample copy after approval
 
 ## Next Expected Task
 

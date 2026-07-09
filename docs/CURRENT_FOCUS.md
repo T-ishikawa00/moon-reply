@@ -2,13 +2,17 @@
 
 ## Current Phase
 
-Phase 0 / Golden sample preparation
+Phase 0 / Golden sample drafting
 
 ## Current Task
 
-Human + ChatGPT should define the golden sample directions and then draft the first three golden diagnosis samples.
+Human + ChatGPT should finalize G001 tone and draft the first golden diagnosis sample.
 
-The approved consultation case outlines and initial judgment boundaries have been reflected into the working files.
+The result presentation policy has been defined:
+
+- diagnosis page as paid main content
+- saveable image card as summary artifact
+- LP/X sample image as acquisition artifact
 
 ## Do Not Do
 
@@ -22,20 +26,21 @@ The approved consultation case outlines and initial judgment boundaries have bee
 - Do not add raw LINE screenshots
 - Do not add real names or personal identifiers
 - Do not fabricate external evaluation results
+- Do not generate image files yet
 
 ## Acceptance Criteria
 
-- Golden sample directions are reviewed by Human + ChatGPT
-- G001, G002, G003 source case IDs are selected
-- Drafts are created only after human approval
+- G001 tone is approved
+- G001 full diagnosis draft is approved
+- G001 saveable image card copy is approved
+- G001 LP/X sample copy is approved
 - No app implementation files are added
 
 ## Next Task
 
 Human + ChatGPT discussion:
 
-1. Select source cases for G001, G002, G003
-2. Define tone and length of golden diagnosis samples
-3. Draft G001: 返信待ち
-4. Draft G002: 追いメッセージ
-5. Draft G003: 曖昧な関係
+1. Finalize G001 full diagnosis draft
+2. Finalize G001 saveable image card copy
+3. Finalize G001 LP/X sample copy
+4. Prepare approved content for CodeX to update `GOLDEN_SAMPLE_DRAFTS.md`

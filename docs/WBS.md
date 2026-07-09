@@ -43,6 +43,14 @@
 - [x] Judgment work table updated
 - [x] Phase 0 decision log updated
 
+## P2.7: Result Presentation Spec
+
+- [x] Result presentation spec created
+- [x] Diagnosis page structure defined
+- [x] Saveable image card structure defined
+- [x] LP/X sample image direction defined
+- [x] G001 presentation notes added
+
 ## P3: Phase 1 Validation Setup
 
 - [ ] Payment provider inquiry template created
