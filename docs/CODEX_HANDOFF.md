@@ -6,49 +6,42 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Stage 2 has been accepted.
+Stage 3 has been implemented and is awaiting Human review.
 
-Stage 3 data foundation planning has been revised and is awaiting Human review before implementation.
+CodeX must not start Stage 4 until Stage 3 is accepted by Human.
 
-Current allowed scope before this revision is accepted:
+Current allowed scope before Stage 3 acceptance:
 
-- Review Stage 3 data foundation planning documents
-- Fix documentation defects only
-- Validate build, typecheck, lint, and repository status
+- Review Stage 3 Supabase Data Foundation implementation
+- Fix Stage 3 defects only
+- Validate build, typecheck, lint, migration presence, and repository status
 
-Current forbidden scope before Stage 3 implementation approval:
+Current forbidden scope before Stage 3 acceptance:
 
-- Supabase implementation
-- package.json changes
-- database migrations
+- Stage 4 implementation
+- Request form DB persistence
 - API routes
 - OpenAI integration
 - payment integration
 - email integration
-- login
-- user accounts
 - result page
 - feedback form
+- login
+- user accounts
 - subscription
 - coin/point system
+- fake sales/customer data
 
 ## Current Task Status
 
-Stage 2 has been accepted.
+Stage 3 implementation has been completed and is awaiting Human review.
 
-Stage 3 data foundation planning has been revised before implementation.
+Implemented:
 
-Key decisions:
-
-- Do not assume Stripe as the default payment provider
-- Payment provider must be selected after category/rules review
-- RevenueCat may be used later as an app purchase helper
-- RevenueCat is not the business source of truth
-- External providers are proof sources
-- Own DB is the business source of truth
-
-Planned Stage 3 data foundation tables:
-
+- Supabase package
+- `.env.example`
+- Supabase helper files
+- Stage 3 data foundation migration
 - reading_requests
 - safety_checks
 - readings
@@ -59,25 +52,25 @@ Planned Stage 3 data foundation tables:
 - ai_generation_logs
 - email_deliveries
 - feedback
+- RLS enabled without public policies
+
+Not implemented:
+
+- Request form persistence
+- API routes
+- OpenAI API
+- Payment API
+- Email API
+- Result page
+- Feedback form
+- Login
+- User accounts
+- Subscription
+- Coin/point system
+- Fake sales/customer data
 
 Next step after Human approval:
 
-Stage 3 only: Supabase Data Foundation.
+Stage 4 only: Safety Screening foundation.
 
-CodeX must not start Stage 3 implementation until this revision is accepted.
-
-Forbidden before approval:
-
-- Supabase implementation
-- package.json changes
-- database migrations
-- API routes
-- OpenAI integration
-- payment integration
-- email integration
-- login
-- user accounts
-- result page
-- feedback form
-- subscription
-- coin/point system
+CodeX must not start Stage 4 until Stage 3 is accepted.

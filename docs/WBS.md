@@ -153,10 +153,29 @@
 - [x] Stage 3 WBS updated
 - [x] Stage 3 acceptance criteria updated
 
-## P4.4+: Do Not Start Until Approved
+## P4.4: Stage 3 Supabase Data Foundation
 
-- [ ] Stage 3 Supabase Data Foundation
-- [ ] Database implementation
+- [x] Supabase package added
+- [x] `.env.example` created
+- [x] Supabase helper files created
+- [x] Stage 3 migration created
+- [x] reading_requests table defined
+- [x] safety_checks table defined
+- [x] readings table defined
+- [x] purchases table defined
+- [x] credit_ledger table defined
+- [x] entitlements table defined
+- [x] provider_events table defined
+- [x] ai_generation_logs table defined
+- [x] email_deliveries table defined
+- [x] feedback table defined
+- [x] RLS enabled without public policies
+- [x] No OpenAI/payment/email/API integration added
+
+## P4.5+: Do Not Start Until Approved
+
+- [ ] Stage 4 Safety Screening foundation
+- [ ] Request form DB persistence
 - [ ] Payment implementation
 - [ ] AI API implementation
 - [ ] Authentication implementation

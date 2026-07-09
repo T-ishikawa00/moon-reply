@@ -2,70 +2,68 @@
 
 ## Current Phase
 
-Phase 1 / Stage 3 data foundation planning
+Phase 1 / Stage 3 implementation review
 
 ## Current Task
 
-Review Stage 3 data foundation revision before Supabase implementation.
+Review Stage 3 implementation: Supabase Data Foundation.
 
-Stage 2 has been accepted.
+Stage 3 should include only:
 
-Stage 3 should create the Supabase-backed data foundation only.
-
-The DB design must support:
-
-- no-login one-shot diagnosis
-- safety screening
-- purchase history
-- credit ledger
-- entitlement state
-- provider event deduplication
-- AI generation logs
-- email delivery logs
-- feedback
+- Supabase package
+- `.env.example`
+- Supabase helper files
+- Database migration
+- Data foundation tables
+- RLS enabled without public policies
+- No backend product flow integrations
 
 ## Source Materials
 
-- `docs/phase1/STAGE2_ACCEPTANCE_REVIEW.md`
+- `README.md`
+- `.env.example`
+- `lib/supabase/env.ts`
+- `lib/supabase/client.ts`
+- `lib/supabase/server.ts`
+- `lib/supabase/admin.ts`
+- `lib/supabase/types.ts`
+- `supabase/migrations/0001_stage3_data_foundation.sql`
 - `docs/phase1/STAGE3_DATA_FOUNDATION_SCOPE.md`
 - `docs/phase1/DATA_MODEL_DRAFT.md`
-- `docs/phase1/PAYMENT_PROVIDER_RISK_NOTE.md`
-- `docs/phase1/PROVIDER_SYNC_AND_SOURCE_OF_TRUTH.md`
-- `docs/phase1/IMPLEMENTATION_PLAN.md`
-- `docs/phase1/IMPLEMENTATION_WBS.md`
 - `docs/phase1/ACCEPTANCE_CRITERIA.md`
 
 ## Do Not Do
 
-Until Stage 3 implementation is explicitly approved:
+Until Stage 3 is accepted:
 
-- Do not implement Supabase yet
-- Do not create database migrations yet
-- Do not change package.json
-- Do not add Supabase packages
+- Do not start Stage 4
+- Do not wire `/request` to DB persistence
 - Do not create API routes
 - Do not connect OpenAI API
 - Do not connect payment API
 - Do not connect email API
-- Do not create login
-- Do not create user accounts
 - Do not create result page
 - Do not create feedback form
+- Do not create login
+- Do not create user accounts
 - Do not create subscription
 - Do not create coin/point system
+- Do not insert fake sales/customer data
 
 ## Acceptance Criteria
 
-- Stage 2 acceptance is recorded
-- Stage 3 data foundation scope is clear
-- Data model supports purchases/credits/entitlements/provider events/AI logs
-- Stripe is not assumed as default provider
-- RevenueCat is treated as helper, not source of truth
-- Next task can start Stage 3 Supabase implementation
-- No implementation files are added
+- Supabase package is added
+- `.env.example` exists without real secrets
+- Supabase helpers exist and do not break build without env vars
+- Migration defines Stage 3 data foundation tables
+- RLS is enabled without public policies
+- No fake data is inserted
+- No OpenAI/payment/email/API route integration exists
+- Build/typecheck/lint pass
+- Stage 3 can be reviewed by Human
 
 ## Next Task
 
-After Human accepts this revision:
+After Human accepts Stage 3:
 
-Stage 3 implementation: Supabase Data Foundation.
+Stage 4 implementation: Safety Screening foundation.
