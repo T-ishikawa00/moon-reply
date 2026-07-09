@@ -6,7 +6,7 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-CodeX must not implement the product until validation criteria are met.
+CodeX must not implement the full product until validation criteria are met.
 
 Current allowed scope:
 
@@ -19,40 +19,47 @@ Current allowed scope:
 - Forms and questionnaires
 - Evaluation package templates
 - Formatting real evaluator responses provided by Human
+- One-page LP implementation plan
 
 Current forbidden scope:
 
-- Web app implementation
+- Full app implementation
 - Database implementation
-- Payment implementation
+- Payment API implementation
 - AI API implementation
 - Authentication
 - Native app
 - Subscription system
 - Coin/point system
+- User dashboard
 - Fabricating real consultation cases
 - Fabricating external evaluation results
 - Fabricating evaluator feedback
+- Fabricating sales results
 - Filling evaluation results without real responses
 
 ## Current Task Status
 
-External evaluation package has been prepared.
+Phase 1 sales MVP specs have been prepared.
 
-Next step is human-led external evaluation execution.
+The project is moving from documentation validation to minimal sales MVP preparation.
 
-CodeX must not fabricate evaluator feedback or fill evaluation results without real responses.
+External evaluation has not been executed. This transition is a Founder Override, not a claim that external validation was completed.
 
-CodeX may help format real evaluator responses after Human provides them.
+Next step is not a full app.
 
-CodeX must not implement the app yet.
+Next step is a one-page LP implementation plan.
 
-Allowed next update:
+CodeX must not implement login, database, AI API, payment API, subscription, or user dashboard yet.
 
-- Update `EVALUATION_RESULTS_TEMPLATE.md` only after Human provides actual evaluator responses
-- Prepare summary tables from real responses
-- Prepare Go / Iterate / No-Go decision memo from real responses
+Allowed next implementation direction:
+
+- one-page LP only
+- static content
+- external form link
+- external payment link placeholder
+- manual delivery described in copy
 
 ## Next Expected Task
 
-Human-led external evaluation execution.
+Prepare one-page LP implementation plan.

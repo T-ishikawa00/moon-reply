@@ -79,6 +79,18 @@
 - [ ] Feedback form draft created
 - [ ] Delivery template draft created
 
+## P3.1: Phase 1 Sales MVP Specs
+
+- [x] Phase 0 Founder Override decision recorded
+- [x] MVP scope defined
+- [x] LP structure defined
+- [x] Order form spec defined
+- [x] Payment flow defined
+- [x] Delivery workflow defined
+- [x] Quality checklist defined
+- [x] Metrics template defined
+- [x] Phase 1 runbook defined
+
 ## P4: Do Not Start Yet
 
 - [ ] Web app implementation
