@@ -139,6 +139,24 @@ Accepted when:
 
 ---
 
+## Task 18C-R1: Age Eligibility Policy Alignment
+
+Accepted when:
+
+- Age-group selection remains required
+- Only `18〜24歳`, `25〜29歳`, `30〜34歳`, `35〜39歳`, and `40歳以上` are available
+- `回答しない` is not available in the request-form age-group field
+- The request form clearly states that the service is for users aged 18 or older
+- No separate 18-or-older checkbox exists
+- No date of birth or identity document is collected
+- The payment confirmation specification displays and permits correction of the selected age group
+- Production server validation of the allowed age-group value is recorded as required but remains unimplemented
+- Current specifications no longer require a separate age checkbox
+- No provider inquiry is sent
+- No payment/API/OpenAI/email implementation is added
+
+---
+
 ## Stage 5: Payment
 
 Accepted when:

@@ -218,7 +218,19 @@
 - [x] No provider selected
 - [x] No payment implementation started
 
-## P4.9+: Do Not Start Until Approved
+## P4.9: Task 18C-R1 Age Eligibility Policy Alignment
+
+- [x] `回答しない` removed from request-form age choices
+- [x] Required 18-or-older age-group gate aligned across current specifications
+- [x] 18-or-older notice added near the age field
+- [x] Separate age checkbox rejected by policy
+- [x] Date-of-birth and identity-document collection excluded
+- [x] Future production server validation requirement recorded
+- [x] No provider inquiry sent
+- [x] No payment/API/OpenAI/email implementation added
+- [ ] Human acceptance of Task 18C-R1
+
+## P4.10+: Do Not Start Until Approved
 
 - [ ] Stage 5 payment planning
 - [ ] Request form DB persistence

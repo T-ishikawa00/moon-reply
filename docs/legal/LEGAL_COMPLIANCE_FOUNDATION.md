@@ -53,7 +53,16 @@ The service must not claim knowledge of another person's true feelings or guaran
 - No automatic renewal
 - No free trial with automatic billing
 
-The initial MVP must use a separate and explicit 18-or-older confirmation.
+Age eligibility policy for the initial MVP:
+
+- The initial MVP is for users aged 18 or older
+- Age-group selection is required
+- Only 18-or-older age-group values are offered
+- No separate age checkbox is required
+- No date of birth or identity document is collected
+- The production server flow must validate the allowed age-group value before payment
+
+This is a required self-declared age-group gate, not strict identity verification.
 
 ---
 

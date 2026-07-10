@@ -6,43 +6,36 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Task 18C is docs-only and is awaiting Human review.
+Task 18C-R1 is limited to repository-wide alignment of the approved 18+ self-declared age-group policy and is awaiting Human review.
 
-Until Task 18C is accepted, CodeX may review or correct the internal preparation documents only. CodeX must not enter operator personal information, publish legal pages, create routes, send provider inquiries, select or implement a payment provider, or add OpenAI/email/application integration.
+Until Task 18C-R1 is accepted, CodeX must not send provider inquiries, select or implement a payment provider, add identity verification, connect OpenAI/email, create API routes or server actions, or begin Task 18D.
 
 ## Current Task Status
 
-Task 18C operator-decision and provider-inquiry preparation has been completed and is awaiting Human review.
+Task 18C-R1 age-policy alignment has been implemented and is awaiting Human review.
 
-Created:
+Aligned policy:
 
-- Task 18B acceptance record
-- Decided/undecided overview
-- Operator decision guide
-- Operator decision worksheet
-- PAY.JP inquiry draft
-- KOMOJU inquiry draft
-- STORES inquiry draft
-- Generic provider inquiry template
-- Submission checklist
-- Evidence log
-- Provider decision scorecard
-- Provider decision gate
+- Initial MVP is for users aged 18 or older
+- Age-group selection is required
+- Only `18〜24歳`, `25〜29歳`, `30〜34歳`, `35〜39歳`, and `40歳以上` are offered
+- `回答しない` is not offered
+- The request form displays the 18-or-older service notice near the age field
+- No separate 18-or-older checkbox is used
+- No date of birth or identity document is collected
+- Production server validation of the allowed age-group value is required in a future authorized task and is not implemented
 
 Not completed:
 
-- Human operator answers
-- Operator personal information
-- Provider inquiries
-- Provider responses
-- Provider selection
-- Legal professional review
+- Human acceptance of Task 18C-R1
+- Production server age-group validation
 - Payment implementation
-- Public legal pages
+- Provider inquiry submission or provider selection
 - OpenAI/email integration
+- API route or server action implementation
 
 Next after Human approval:
 
-Task 18D only: Human decisions and explicit provider inquiry submission.
+Accept Task 18C and proceed to Task 18D only.
 
 Payment implementation remains prohibited.

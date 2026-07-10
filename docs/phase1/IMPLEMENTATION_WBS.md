@@ -102,6 +102,19 @@
 - [x] No inquiry sent
 - [x] No payment implementation started
 
+## P4.8: Task 18C-R1 Age Eligibility Policy Alignment
+
+- [x] Remove `回答しない` from the request-form age-group choices
+- [x] Keep age-group selection required
+- [x] Offer only 18-or-older age-group choices
+- [x] Display the 18-or-older service notice near the age field
+- [x] Confirm no separate age checkbox exists
+- [x] Confirm no date of birth or identity document is collected
+- [x] Record production server validation as a future requirement
+- [ ] Implement production server validation in an authorized future task
+- [x] No provider inquiry sent
+- [x] No payment/API/OpenAI/email implementation started
+
 ## P5: Payment
 
 - [ ] Choose provider

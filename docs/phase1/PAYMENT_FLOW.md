@@ -45,14 +45,15 @@ Need confirmation:
 Required sequence:
 
 1. User submits diagnosis request form
-2. Safety screening runs
-3. User proceeds to payment only if normal diagnosis is allowed
-4. Payment provider confirms success
-5. System triggers AI judgment and diagnosis generation
-6. Result page is created
-7. Result URL is sent by email
+2. Server validates that the required age-group value is one of the allowed 18-or-older values
+3. Safety screening runs
+4. User proceeds to payment only if age eligibility is valid and normal diagnosis is allowed
+5. Payment provider confirms success
+6. System triggers AI judgment and diagnosis generation
+7. Result page is created
+8. Result URL is sent by email
 
-The form first → safety check → payment order must be maintained.
+The form → server-side age-group validation → safety check → payment order must be maintained in the public flow.
 
 Reason:
 
@@ -67,13 +68,17 @@ Reason:
 
 Public MVP payment flow:
 
-1. User passes safety screening
-2. User starts payment
-3. Payment provider confirms success
-4. System marks request as paid
-5. System triggers AI judgment and diagnosis generation
-6. Result page is created
-7. Result URL is sent by email
+1. User passes safety screening and reaches the final confirmation screen
+2. User reviews or corrects the selected age group
+3. Server confirms that the final required age-group value is one of the allowed 18-or-older values
+4. User starts payment
+5. Payment provider confirms success
+6. System marks request as paid
+7. System triggers AI judgment and diagnosis generation
+8. Result page is created
+9. Result URL is sent by email
+
+The production server validation described above is required before public release and is not implemented by Task 18C-R1. The age gate uses the required age-group selection; it does not use a separate age checkbox, date of birth, or identity document.
 
 Manual payment confirmation is not the target public flow.
 

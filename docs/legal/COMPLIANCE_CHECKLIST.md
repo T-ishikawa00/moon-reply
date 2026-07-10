@@ -19,7 +19,12 @@ Never mark an item complete without evidence.
 ## Must Before Paid Launch
 
 - [ ] 18+ product policy implemented
-- [ ] Age confirmation is separate and explicit
+- [ ] Age-group selection is required
+- [ ] Only 18-or-older age-group options are available
+- [ ] No `回答しない` option permits bypassing the age policy
+- [ ] The form clearly states that the service is for users aged 18 or older
+- [ ] The server validates an allowed 18-or-older age-group value before payment
+- [ ] No identity document or date of birth is collected for the initial MVP
 - [ ] Terms of Service published
 - [ ] Privacy Policy published
 - [ ] 特商法 disclosure published

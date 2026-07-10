@@ -2,48 +2,33 @@
 
 ## Current Phase
 
-Phase 1 / Task 18C review
+Phase 1 / Task 18C-R1 age-policy alignment review
 
 ## Current Task
 
-Review operator decision guidance and payment-provider inquiry preparation.
+Review the repository-wide alignment of the approved 18+ self-declared age-group policy.
 
-## What Is Already Decided
+## Approved Policy
 
-- 18+ one-shot JPY 980 MVP
-- Safety before payment
-- rejected and needs_review cannot reach payment
-- no subscription/coins/tickets
-- AI and non-guarantee disclosure
-- no fear-based selling or fake social proof
-- no direct identifiers in AI payload
-
-## What Is Not Decided
-
-- operator identity/disclosure method
-- support channels
-- payment provider
-- payment methods
-- provider approval
-- AI/email providers
-- retention periods
-- legal professional review
+- Initial MVP is 18+
+- Required age-group selection
+- Only 18+ age-group choices
+- No `回答しない`
+- No separate 18+ checkbox
+- No date of birth or identity documents
+- Future production server validation required
 
 ## Do Not Do
 
-Until Task 18C is accepted:
-
 - Do not send provider inquiries
-- Do not enter operator personal data
 - Do not select a payment provider
 - Do not implement payment
-- Do not publish legal pages
-- Do not add SDKs
+- Do not add identity verification
 - Do not connect OpenAI/email
-- Do not change application code
+- Do not begin Task 18D
 
 ## Next Task
 
-After Human accepts Task 18C:
+After Human accepts Task 18C-R1:
 
-Task 18D: Human decisions and explicit provider inquiry submission.
+Accept Task 18C and proceed to Task 18D.

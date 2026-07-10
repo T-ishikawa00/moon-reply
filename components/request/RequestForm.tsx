@@ -54,7 +54,6 @@ const ageOptions = [
   "30〜34歳",
   "35〜39歳",
   "40歳以上",
-  "回答しない",
 ];
 
 const relationshipOptions = [
@@ -325,18 +324,21 @@ function SelectField({
   options,
   onChange,
   error,
+  note,
 }: {
   id: keyof FormState;
   value: string;
   options: string[];
   onChange: (field: keyof FormState, value: string) => void;
   error?: string;
+  note?: string;
 }) {
   return (
     <div>
       <FieldLabel htmlFor={id} required>
         {fieldLabels[id]}
       </FieldLabel>
+      {note ? <p className="mt-1 text-sm leading-6 text-[#67596b]">{note}</p> : null}
       <select
         id={id}
         name={id}
@@ -599,6 +601,7 @@ export function RequestForm() {
             options={ageOptions}
             onChange={updateField}
             error={errors.ageGroup}
+            note="月の返事は18歳以上の方を対象としています。"
           />
           <TextInput
             id="nickname"

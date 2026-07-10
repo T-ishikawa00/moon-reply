@@ -43,7 +43,7 @@ Payment Confirmation Screen、LP、Request Form、Result PageおよびEmailへ�
 | 商品定義 | AIを活用した占い・エンタメ・感情整理目的の恋愛メッセージ鑑定書 | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 内部基準のみ |
 | 税込価格 | 税込980円 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Email: Future implementation | 固定 |
 | 数量 | 1購入 = 1相談 = 1鑑定書 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
-| 18歳以上 | 初期MVPは18歳以上のみ | Terms / Privacy / Tokushoho / Unsupported Cases | Payment Confirmation Screen / LP / Request Form: Future implementation | 内部基準のみ |
+| 18歳以上 | 必須の年齢層選択。18歳以上の許可値のみ、`回答しない`なし、専用チェックボックスなし。公開フローではserver-side再検証 | Terms / Privacy / Tokushoho / Unsupported Cases | Payment Confirmation Screen / LP: Future implementation。Request Form: local UI implemented、server-side未実装 | 必須の自己申告型年齢ゲート。生年月日・身分証は収集しない |
 | AI利用 | AI利用を明示 | Terms / Privacy / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | provider未定 |
 | 非保証 | 本心・返信・復縁・未来・関係改善を保証しない | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 医療等ではない | 医療・心理・法律・調査サービスではない | Terms / Tokushoho / AI Disclosure / Unsupported Cases / Contact | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |

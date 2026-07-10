@@ -21,6 +21,8 @@ This is a specification, not an implemented screen.
 Show together and clearly:
 
 - Product: 月の返事 単発鑑定
+- Service eligibility: 月の返事は18歳以上を対象とする
+- Age group selected on the request form
 - Quantity: 1 consultation / 1 reading
 - Total price: 税込980円
 - Additional charges: none, unless objectively applicable
@@ -45,9 +47,8 @@ Displayed facts must match the final provider contract, operator disclosures, an
 
 ## 2. Required Confirmations
 
-Separate required confirmations:
+Required confirmations:
 
-- 18歳以上です
 - AIを利用した鑑定であることを理解しました
 - 医療・心理・法律サービスではないことを理解しました
 - 結果を保証しないことを理解しました
@@ -85,6 +86,7 @@ Final button wording must be checked against the implemented purchase flow and c
 Before payment, the user must be able to:
 
 - return and revise request content
+- review and correct the age group selected on the request form
 - correct email address
 - review safety classification
 - review purchase conditions
@@ -92,7 +94,19 @@ Before payment, the user must be able to:
 
 ---
 
-## 5. Safety Gate
+## 5. Age Eligibility Gate
+
+- Do not use a dedicated `18歳以上です` checkbox.
+- Use the required age-group selection made on the request form.
+- Offer only the allowed 18-or-older age-group values.
+- In the production flow, the server must validate an allowed age-group value before payment.
+- Do not collect a date of birth or identity document for the initial MVP.
+
+The initial MVP uses a required self-declared age-group gate, not strict identity verification.
+
+---
+
+## 6. Safety Gate
 
 A rejected request must never reach this screen.
 

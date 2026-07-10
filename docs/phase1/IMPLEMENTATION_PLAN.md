@@ -92,6 +92,8 @@ Goal:
 Includes:
 
 - form page
+- required age-group selection with only 18-or-older choices
+- visible 18-or-older service notice near the age field
 - relationship/context fields
 - message fields
 - safety screening questions
@@ -102,6 +104,7 @@ Excludes:
 - real DB persistence initially
 - payment
 - AI generation
+- separate age checkbox, date of birth, or identity-document collection
 
 ---
 
@@ -258,6 +261,28 @@ Excludes:
 - operator personal information
 - payment implementation
 - public legal pages
+
+### Task 18C-R1: Age Eligibility Policy Alignment
+
+Goal:
+
+- Align the repository to the approved required self-declared age-group gate for the 18+ initial MVP
+
+Includes:
+
+- Required age-group selection
+- Only 18-or-older age-group choices
+- No `回答しない`
+- Visible 18-or-older service notice near the age field
+- No separate age checkbox
+- No date-of-birth or identity-document collection
+- Production server validation of the allowed age-group value as a future implementation requirement
+
+Excludes:
+
+- API or server implementation
+- Strict identity verification
+- Provider inquiry or payment implementation
 
 ### Task 18D: Human Decisions and Provider Inquiry Submission
 
