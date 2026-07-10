@@ -1,0 +1,58 @@
+# PROVIDER_DECISION_SCORECARD.md
+
+> **INTERNAL DECISION SUPPORT**
+>
+> **NOT SCORED**
+>
+> **NO PROVIDER IS APPROVED OR SELECTED**
+
+## 0. Hard gate
+
+No written category acceptance = provider cannot be selected.
+
+Written acceptance must address the honestly described 月の返事 service. A generic marketing page, feature page, application form, verbal statement, or silence is not category approval.
+
+Conditional acceptance is not unconditional acceptance. Every condition must be recorded in `PROVIDER_INQUIRY_EVIDENCE_LOG.md` and reflected in the comparison before scoring.
+
+---
+
+## 1. Weighted factors
+
+| Factor | Weight | Evidence required before scoring |
+| --- | ---: | --- |
+| Written category acceptance | 30 | Written response that matches the actual service description and records all conditions |
+| Account freeze/termination risk | 15 | Contract/restriction terms and written clarification of reserve, freeze, termination and unsettled funds |
+| Webhook and idempotency support | 15 | Current official documentation for events, signatures, retries and duplicate handling |
+| Test/sandbox environment | 10 | Current official documentation or account evidence for a usable test process |
+| Payment-method fit | 10 | Written or official account/category evidence for each intended payment method |
+| Fees and settlement | 10 | Applicable fee schedule, settlement cycle and withholding/adjustment conditions |
+| Individual/sole-proprietor eligibility | 5 | Applicable application requirements or written provider confirmation |
+| Documentation/support quality | 5 | Current documentation coverage and evidenced support response quality |
+| **Total** | **100** | — |
+
+## 2. Scoring rules
+
+- Scoring starts only after evidence exists.
+- Unknown is not a positive score and must not be converted into an optimistic assumption.
+- Each score must cite the evidence location and checked date.
+- Written category acceptance is both a weighted factor and a mandatory gate.
+- A conditional acceptance must list every condition and score only the service that complies with those conditions.
+- Human makes the final provider decision.
+- The highest score does not automatically authorize selection or implementation.
+- Selection does not authorize sandbox implementation; that requires a separate task.
+
+## 3. Initial provider status
+
+| Provider | Inquiry status | Category status | Score | Evidence | Selection status |
+| --- | --- | --- | --- | --- | --- |
+| PAY.JP | Not sent | Not approved | Not scored | Evidence required | Not selected |
+| KOMOJU | Not sent | Not approved | Not scored | Evidence required | Not selected |
+| STORES | Not sent | Not approved | Not scored | Evidence required | Not selected |
+
+## 4. Evidence-based scoring worksheet
+
+Use one row per provider and factor only after evidence exists.
+
+| Provider | Factor | Raw assessment | Weight | Weighted score | Evidence location | Checked date | Conditions/notes |
+| --- | --- | --- | ---: | ---: | --- | --- | --- |
+| [[PROVIDER_TBD]] | [[FACTOR_TBD]] | [[NOT_SCORED]] | [[WEIGHT_TBD]] | [[NOT_SCORED]] | [[EVIDENCE_REQUIRED]] | [[DATE_TBD]] | [[CONDITIONS_TBD]] |

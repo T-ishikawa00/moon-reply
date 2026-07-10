@@ -21,6 +21,21 @@
 - `[ ]`を`[x]`へ変更する場合は、判断者、確認日、証拠および反映先を記録する
 - 本ゲートの完了は、決済実装を自動的に承認するものではない
 - 決済実装は引き続き禁止します（Payment implementation remains prohibited.）
+- Task 18Cは判断ガイドとprovider照会準備を作成するだけであり、本ゲートのチェックを完了しない
+
+## Task 18C supporting documents
+
+- Operator decision guide: `OPERATOR_DECISION_GUIDE.md`
+- Operator worksheet: `OPERATOR_DECISION_WORKSHEET.md`
+- Provider comparison: `../payment/PROVIDER_COMPARISON.md`
+- PAY.JP inquiry draft: `../payment/PAYJP_INQUIRY_DRAFT.md`
+- KOMOJU inquiry draft: `../payment/KOMOJU_INQUIRY_DRAFT.md`
+- STORES inquiry draft: `../payment/STORES_INQUIRY_DRAFT.md`
+- Inquiry evidence log: `../payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
+- Provider scorecard: `../payment/PROVIDER_DECISION_SCORECARD.md`
+- Provider selection gate: `../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
+
+PAY.JP、KOMOJU、STORESはいずれもNot sent、Not approved、Not selected、Not scoredである。
 
 ## 1. Operator completion
 
@@ -49,7 +64,7 @@
 - [ ] 支払時期を確定
 - [ ] 提供時間を確定
 - [ ] 返金処理時間を確定
-- [ ] `needs_review`の本番運用を承認
+- [ ] 初期MVP後に`needs_review`を扱う場合の本番運用を別途承認（初期MVPは決済不可・通常鑑定なしで内部決定済み）
 - [ ] 誤ったメールアドレスへの訂正・再送方法を確定
 - [ ] 結果URLの失効・再発行方法を確定
 

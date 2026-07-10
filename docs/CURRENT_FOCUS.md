@@ -2,45 +2,48 @@
 
 ## Current Phase
 
-Phase 1 / Task 18B legal draft review
+Phase 1 / Task 18C review
 
 ## Current Task
 
-Review internal Japanese legal-page drafts and unresolved operator decisions.
+Review operator decision guidance and payment-provider inquiry preparation.
 
-Task 18B is docs-only.
+## What Is Already Decided
 
-## Review Files
+- 18+ one-shot JPY 980 MVP
+- Safety before payment
+- rejected and needs_review cannot reach payment
+- no subscription/coins/tickets
+- AI and non-guarantee disclosure
+- no fear-based selling or fake social proof
+- no direct identifiers in AI payload
 
-- `docs/legal/TERMS_OF_SERVICE_DRAFT.md`
-- `docs/legal/PRIVACY_POLICY_DRAFT.md`
-- `docs/legal/TOKUSHOHO_DRAFT.md`
-- `docs/legal/REFUND_POLICY_DRAFT.md`
-- `docs/legal/AI_DISCLOSURE_DRAFT.md`
-- `docs/legal/UNSUPPORTED_CASES_PUBLIC_DRAFT.md`
-- `docs/legal/CONTACT_PAGE_DRAFT.md`
-- `docs/legal/OPERATOR_DECISION_REGISTER.md`
-- `docs/legal/LEGAL_DRAFT_CONSISTENCY_MATRIX.md`
-- `docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md`
+## What Is Not Decided
+
+- operator identity/disclosure method
+- support channels
+- payment provider
+- payment methods
+- provider approval
+- AI/email providers
+- retention periods
+- legal professional review
 
 ## Do Not Do
 
-Until Task 18B is accepted:
+Until Task 18C is accepted:
 
-- Do not publish legal pages
-- Do not create legal-page routes
-- Do not fill operator identity with invented information
-- Do not select a payment provider
-- Do not claim provider approval
 - Do not send provider inquiries
-- Do not implement checkout
+- Do not enter operator personal data
+- Do not select a payment provider
+- Do not implement payment
+- Do not publish legal pages
 - Do not add SDKs
-- Do not connect OpenAI or email
+- Do not connect OpenAI/email
 - Do not change application code
-- Do not claim legal review is complete
 
 ## Next Task
 
-After Human accepts Task 18B:
+After Human accepts Task 18C:
 
-Task 18C: Operator decisions and payment-provider inquiry preparation.
+Task 18D: Human decisions and explicit provider inquiry submission.

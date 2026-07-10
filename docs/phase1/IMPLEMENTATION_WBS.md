@@ -85,6 +85,23 @@
 - [x] All drafts retain non-public draft labels
 - [x] No application implementation changed
 
+## P4.7: Operator Decisions and Provider Inquiry Preparation
+
+- [x] Task 18B acceptance recorded
+- [x] Decided/undecided overview created
+- [x] Operator decision guide created
+- [x] Operator worksheet created
+- [x] PAY.JP inquiry draft created
+- [x] KOMOJU inquiry draft created
+- [x] STORES inquiry draft created
+- [x] Generic inquiry template created
+- [x] Submission checklist created
+- [x] Evidence log created
+- [x] Provider scorecard created
+- [x] Provider decision gate created
+- [x] No inquiry sent
+- [x] No payment implementation started
+
 ## P5: Payment
 
 - [ ] Choose provider

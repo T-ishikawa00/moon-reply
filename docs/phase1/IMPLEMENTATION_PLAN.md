@@ -233,9 +233,42 @@ Excludes:
 
 Goal:
 
-- Resolve operator-owned placeholders where possible
-- Prepare provider-specific inquiry messages and evidence folders
-- Do not implement payment yet
+- Explain resolved and unresolved operator decisions
+- Prepare honest provider-specific inquiry drafts
+- Create evidence and decision gates
+
+Includes:
+
+- Human-readable decision overview
+- Operator decision guide
+- Operator worksheet
+- PAY.JP inquiry draft
+- KOMOJU inquiry draft
+- STORES inquiry draft
+- Generic inquiry template
+- Submission checklist
+- Evidence log
+- Provider scorecard
+- Provider decision gate
+
+Excludes:
+
+- sending inquiries
+- provider approval
+- operator personal information
+- payment implementation
+- public legal pages
+
+### Task 18D: Human Decisions and Provider Inquiry Submission
+
+Goal:
+
+- Human answers priority operator questions
+- Human explicitly approves provider inquiry messages
+- Inquiries are sent through approved channels
+- Responses are recorded as evidence
+
+Payment implementation remains prohibited.
 
 ### Stage 5B: Payment Provider Decision
 

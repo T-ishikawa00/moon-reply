@@ -207,7 +207,18 @@
 - [x] No legal draft published
 - [x] No payment implementation started
 
-## P4.8+: Do Not Start Until Approved
+## P4.8: Provider Inquiry Preparation
+
+- [x] Operator decisions explained
+- [x] Provider inquiry drafts prepared
+- [x] Evidence logging prepared
+- [x] Provider scorecard prepared
+- [x] Provider selection gate prepared
+- [x] No inquiry sent
+- [x] No provider selected
+- [x] No payment implementation started
+
+## P4.9+: Do Not Start Until Approved
 
 - [ ] Stage 5 payment planning
 - [ ] Request form DB persistence

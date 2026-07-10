@@ -121,6 +121,24 @@ Accepted when:
 
 ---
 
+## Task 18C: Operator Decisions and Provider Inquiry Preparation
+
+Accepted when:
+
+- Approved product decisions are clearly distinguished from unresolved decisions
+- Human/operator decisions are explained in plain Japanese
+- Evidence-required decisions are separated
+- Professional-review decisions are separated
+- Provider inquiry drafts honestly describe the service
+- No provider feature or approval is invented
+- Provider inquiry evidence log exists
+- Provider decision scorecard exists
+- Written category acceptance is mandatory
+- All providers remain not sent/not approved/not selected
+- No application code/package/migration is changed
+
+---
+
 ## Stage 5: Payment
 
 Accepted when:

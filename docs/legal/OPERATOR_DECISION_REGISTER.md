@@ -19,8 +19,18 @@
 - `Not decided`: 運営者による判断が未完了
 - `Evidence required`: 公式情報、契約、設定、実装その他の証拠が必要
 - `Professional review required`: 専門家確認が必要
+- `Internally decided`: Human承認済みの内部方針。外部承認または実装完了を意味しない
 
-Task 18Bでは、次の判断事項を一つも完了扱いにしません。担当および期限も未決定であり、`[[OPERATOR_DECISION_REQUIRED]]`を維持します。
+Task 18Bでは判断事項を一つも完了扱いにしませんでした。Task 18Cでは、すでにHuman承認済みの初期MVP方針と一致するOP-034のみを`Internally decided`として記録します。その他の担当、期限、実情報および外部証拠は未決定であり、placeholderを維持します。
+
+## 判断・証拠管理の関連文書
+
+- 分かりやすい全体整理：`WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md`
+- 判断方法と選択肢：`OPERATOR_DECISION_GUIDE.md`
+- Human回答欄：`OPERATOR_DECISION_WORKSHEET.md`
+- provider事実の比較：`../payment/PROVIDER_COMPARISON.md`
+- provider照会証拠：`../payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
+- provider選定ゲート：`../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
 
 | Decision ID | 項目 | 現在値 | 必要な判断・証拠 | 担当 | 期限 | 状態 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -57,7 +67,7 @@ Task 18Bでは、次の判断事項を一つも完了扱いにしません。担
 | OP-031 | trademark search | 未実施 | J-PlatPat検索日、区分、結果、証拠 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
 | OP-032 | professional legal review | 未実施 | reviewer、対象文書、指摘、対応記録 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Professional review required |
 | OP-033 | public support-resource verification | 未確認 | 公式source、jurisdiction、用途、確認日 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
-| OP-034 | `needs_review` production treatment | [[OPERATOR_DECISION_REQUIRED]] | server-side処理、Human review、返金・停止条件 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
+| OP-034 | `needs_review` production treatment | 初期MVPは決済不可。通常の恋愛鑑定書・メッセージ案を生成しない。将来の取扱いは別途承認 | 初期MVP方針はHuman承認済み。将来運用にはserver-side処理、Human review、返金・停止条件の別承認と実装証拠が必要 | Human | 初期MVP方針は決定済み / 将来取扱いは未定 | Internally decided |
 | OP-035 | user sharing/quotation rules for readings | [[OPERATOR_DECISION_REQUIRED]] | 個人的利用、引用、一部共有、公開範囲 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Professional review required |
 
 ## 更新規則
@@ -66,3 +76,4 @@ Task 18Bでは、次の判断事項を一つも完了扱いにしません。担
 - providerのマーケティングページだけでカテゴリ承認と扱わない
 - 専門家確認は対象文書、確認者、確認日および対応結果を記録する
 - 値を確定した場合は、整合性表に従ってすべての関連文書・画面へ反映する
+- Human承認済みの初期MVP方針を、将来運用が未決定であることを理由に未決定へ戻さない
