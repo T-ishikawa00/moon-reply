@@ -6,46 +6,42 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Task 18A is docs-only and is awaiting Human review.
+Task 18B is docs-only and is awaiting Human review.
 
-Until Task 18A is accepted, CodeX must not create public legal pages, send provider inquiries, select or implement a payment provider, or add OpenAI/email/application integration.
+Until Task 18B is accepted, CodeX may review or correct the internal drafts only. CodeX must not publish legal pages, create routes, send provider inquiries, select or implement a payment provider, or add OpenAI/email/application integration.
 
 ## Current Task Status
 
-Task 18A Legal / Compliance Foundation has been completed and is awaiting Human review.
+Task 18B legal-page drafts have been completed and are awaiting Human review.
 
-Implemented as documentation:
+Created:
 
-- Stage 4 acceptance record
-- Legal source register
-- Legal compliance foundation
-- Compliance checklist
-- Prohibited expressions
-- Unsupported-case policy
-- Input validation specification
-- AI prompt guardrails
-- AI data minimization
-- Data retention planning
-- Payment provider inquiry plan
-- Provider comparison
-- Payment confirmation screen specification
-- Legal page requirements
+- Terms draft
+- Privacy draft
+- 特商法 draft
+- Refund draft
+- AI disclosure draft
+- Unsupported-cases draft
+- Contact-page draft
+- Operator decision register
+- Consistency matrix
+- Publication gate
 
-Not implemented:
+Not completed:
 
+- Operator identity decisions
+- Address/phone disclosure decision
+- Payment provider approval
+- AI/email provider finalization
+- Retention periods
+- Professional legal review
+- Trademark search
 - Public legal pages
-- Legal professional review
-- Provider inquiry responses
-- Provider approval
-- Payment SDK
-- Checkout
-- Webhook
-- OpenAI API
-- Email API
-- Application code changes
+- Application routes
+- Payment/OpenAI/email integration
 
-Next step after Human approval:
+Next after Human approval:
 
-Task 18B only: Draft legal pages and operator decision placeholders.
+Task 18C only: Operator decisions and payment-provider inquiry preparation.
 
-CodeX must not begin payment implementation.
+Payment implementation remains prohibited.

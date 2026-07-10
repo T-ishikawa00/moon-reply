@@ -199,14 +199,43 @@ Excludes:
 - OpenAI integration
 - email integration
 
-### Stage 5A: Legal Page Drafts and Provider Inquiry
+### Task 18B: Legal Page Drafts and Operator Decisions
 
 Goal:
 
-- Draft legal pages
-- Complete operator placeholders
-- Send honest category inquiries
-- Record written responses
+- Convert approved compliance requirements into internally reviewable Japanese legal-page drafts
+- Make every unknown operator/provider decision explicit
+- Define the publication approval gate
+
+Includes:
+
+- Terms draft
+- Privacy draft
+- 特商法 draft
+- Refund draft
+- AI disclosure
+- Unsupported-case public explanation
+- Contact-page draft
+- Operator decision register
+- Consistency matrix
+- Publication gate
+
+Excludes:
+
+- publication
+- application routes
+- provider inquiry
+- provider approval
+- payment implementation
+- professional legal approval
+
+### Task 18C: Operator Decisions and Provider Inquiry Preparation
+
+Goal:
+
+- Resolve operator-owned placeholders where possible
+- Prepare provider-specific inquiry messages and evidence folders
+- Do not implement payment yet
 
 ### Stage 5B: Payment Provider Decision
 

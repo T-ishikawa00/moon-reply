@@ -70,6 +70,21 @@
 - [x] Legal page requirements specified
 - [x] No implementation code changed
 
+## P4.6: Legal Page Drafts
+
+- [x] Terms of Service draft created
+- [x] Privacy Policy draft created
+- [x] 特商法 draft created
+- [x] Refund Policy draft created
+- [x] AI disclosure draft created
+- [x] Unsupported-cases public draft created
+- [x] Contact-page draft created
+- [x] Operator decision register created
+- [x] Consistency matrix created
+- [x] Publication gate created
+- [x] All drafts retain non-public draft labels
+- [x] No application implementation changed
+
 ## P5: Payment
 
 - [ ] Choose provider

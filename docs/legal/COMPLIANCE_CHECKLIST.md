@@ -72,3 +72,20 @@ Never mark an item complete without evidence.
 - [ ] App-store billing review
 
 Do not mark uncompleted items as completed.
+
+---
+
+## Internal Draft Preparation
+
+- [x] Terms draft created
+- [x] Privacy draft created
+- [x] 特商法 draft created
+- [x] Refund draft created
+- [x] AI disclosure draft created
+- [x] Unsupported-cases public draft created
+- [x] Contact-page draft created
+- [x] Operator decision register created
+- [x] Cross-document consistency matrix created
+- [x] Publication gate created
+
+These checks mean internal drafts exist. They do not mean publication approval.

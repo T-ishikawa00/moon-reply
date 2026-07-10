@@ -198,7 +198,16 @@
 - [x] Legal page requirements documented
 - [x] No payment implementation started
 
-## P4.7+: Do Not Start Until Approved
+## P4.7: Legal Page Drafts and Operator Decisions
+
+- [x] Japanese legal-page drafts created
+- [x] Operator placeholders created
+- [x] Unknown provider facts remain TBD
+- [x] Publication gate created
+- [x] No legal draft published
+- [x] No payment implementation started
+
+## P4.8+: Do Not Start Until Approved
 
 - [ ] Stage 5 payment planning
 - [ ] Request form DB persistence

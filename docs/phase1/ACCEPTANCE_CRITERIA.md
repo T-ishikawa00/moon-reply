@@ -99,6 +99,28 @@ Accepted when:
 
 ---
 
+## Task 18B: Legal Page Drafts
+
+Accepted when:
+
+- All required draft files exist
+- Drafts are written in Japanese
+- Draft warning labels remain visible
+- No fictional operator details are used
+- Unknown fields use explicit placeholders
+- Terms accurately describe the initial one-shot MVP
+- Privacy draft excludes fixed unverified provider claims
+- 特商法 draft contains all required decision placeholders
+- Refund draft distinguishes major failure cases
+- AI disclosure clearly states uncertainty and non-guarantee
+- Unsupported-case draft is safety-first and non-judgmental
+- Operator decision register captures unresolved decisions
+- Cross-document consistency requirements are documented
+- Publication gate marks all external approvals as incomplete
+- No application code/package/migration is changed
+
+---
+
 ## Stage 5: Payment
 
 Accepted when:

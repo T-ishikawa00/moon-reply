@@ -123,3 +123,22 @@ Required sections:
 - Support contact
 
 The page must not disguise the service category or claim that AI output reveals another person's true feelings.
+
+---
+
+## Task 18B Draft Status
+
+The following internal drafts now exist:
+
+- TERMS_OF_SERVICE_DRAFT.md
+- PRIVACY_POLICY_DRAFT.md
+- TOKUSHOHO_DRAFT.md
+- REFUND_POLICY_DRAFT.md
+- AI_DISCLOSURE_DRAFT.md
+- UNSUPPORTED_CASES_PUBLIC_DRAFT.md
+- CONTACT_PAGE_DRAFT.md
+- OPERATOR_DECISION_REGISTER.md
+- LEGAL_DRAFT_CONSISTENCY_MATRIX.md
+- LEGAL_DRAFT_PUBLICATION_GATE.md
+
+Their existence does not mean they are approved for publication.
