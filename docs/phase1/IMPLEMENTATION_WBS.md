@@ -52,6 +52,24 @@
 - [x] Show warning for needs-review issues
 - [x] Confirm no DB/API/OpenAI/payment/email integration
 
+## P4.5: Legal / Compliance Foundation
+
+- [x] Stage 4 acceptance recorded
+- [x] Legal source register created
+- [x] Legal compliance foundation created
+- [x] Compliance checklist created
+- [x] Prohibited expressions created
+- [x] Unsupported-case policy created
+- [x] Input validation specification created
+- [x] AI prompt guardrails created
+- [x] AI data minimization policy created
+- [x] Data retention planning created
+- [x] Payment provider inquiry plan created
+- [x] Provider comparison template created
+- [x] Final payment confirmation screen specified
+- [x] Legal page requirements specified
+- [x] No implementation code changed
+
 ## P5: Payment
 
 - [ ] Choose provider

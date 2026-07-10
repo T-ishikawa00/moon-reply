@@ -186,7 +186,19 @@
 - [x] No API route added
 - [x] No OpenAI/payment/email integration added
 
-## P4.6+: Do Not Start Until Approved
+## P4.6: Legal / Compliance Foundation
+
+- [x] Stage 4 acceptance recorded
+- [x] Compliance decision framework documented
+- [x] Prohibited copy documented
+- [x] Safety and input rules documented
+- [x] AI data minimization documented
+- [x] Provider inquiry process documented
+- [x] Payment confirmation screen specified
+- [x] Legal page requirements documented
+- [x] No payment implementation started
+
+## P4.7+: Do Not Start Until Approved
 
 - [ ] Stage 5 payment planning
 - [ ] Request form DB persistence

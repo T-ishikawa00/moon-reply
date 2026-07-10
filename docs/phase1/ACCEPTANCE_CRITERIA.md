@@ -78,6 +78,27 @@ Accepted when:
 
 ---
 
+## Stage 4.5: Legal / Compliance Foundation
+
+Accepted when:
+
+- Stage 4 acceptance is recorded
+- Internal documents are clearly labeled as drafts/not legal advice
+- Consumer-protection rules prohibit fear-based selling
+- Outcome guarantees are prohibited
+- Fake reviews and fake metrics are prohibited
+- 18+ initial MVP policy is recorded
+- Safety screening is required before payment
+- Direct identifiers are excluded from future AI payloads
+- Marketing consent is separate from result delivery
+- Provider inquiry is required before SDK implementation
+- No provider is falsely marked approved
+- Final payment confirmation requirements are specified
+- Legal page requirements are specified
+- No application code/package/migration is changed
+
+---
+
 ## Stage 5: Payment
 
 Accepted when:

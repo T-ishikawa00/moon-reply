@@ -2,70 +2,56 @@
 
 ## Current Phase
 
-Phase 1 / Stage 4 implementation review
+Phase 1 / Legal and compliance foundation review
 
 ## Current Task
 
-Review Stage 4 implementation: Safety Screening foundation.
+Review Task 18A Legal / Compliance Foundation.
 
-Stage 4 should include only:
+This task is docs-only.
 
-- Stage 3 acceptance record
-- Deterministic safety screening types
-- Safety rule definitions
-- Safety classifier
-- User-facing safety messages
-- Request form local safety classification UI
-- Rejected-level safety blocking in local confirmation
-- No DB/API/OpenAI/payment/email integrations
+It defines:
 
-## Source Materials
-
-- `docs/phase1/STAGE3_ACCEPTANCE_REVIEW.md`
-- `lib/safety/types.ts`
-- `lib/safety/rules.ts`
-- `lib/safety/classify.ts`
-- `lib/safety/messages.ts`
-- `components/request/RequestForm.tsx`
-- `docs/phase1/ACCEPTANCE_CRITERIA.md`
+- legal source register
+- consumer protection rules
+- prohibited expressions
+- unsupported-case policy
+- input privacy rules
+- AI prompt guardrails
+- AI data minimization
+- data retention planning
+- payment provider inquiry process
+- payment confirmation screen
+- legal page requirements
 
 ## Do Not Do
 
-Until Stage 4 is accepted:
+Until Task 18A is accepted:
 
-- Do not start Stage 5
-- Do not wire `/request` to DB persistence
-- Do not insert `safety_checks`
-- Do not create API routes
-- Do not connect OpenAI API
-- Do not connect payment API
-- Do not connect email API
-- Do not create result page
-- Do not create feedback form
-- Do not create login
-- Do not create user accounts
-- Do not create subscription
-- Do not create coin/point system
-- Do not insert fake sales/customer data
+- Do not create public legal pages
+- Do not start payment implementation
+- Do not add payment SDKs
+- Do not send provider inquiries and claim approval
+- Do not create checkout
+- Do not create webhooks
+- Do not connect OpenAI
+- Do not connect email
+- Do not alter application code
+- Do not add unverified hotline information
+- Do not claim legal review has been completed
 
 ## Acceptance Criteria
 
-- Safety classifier is deterministic
-- Safety classifier has no DB/API/network dependency
-- Reject-level flags classify as rejected
-- DV/abuse/fear classifies as needs_review
-- Contradictory safety selection blocks local confirmation
-- High-risk free text is detected conservatively
-- Request form shows safety classification
-- Rejected-level issues do not show normal local confirmation
-- Needs-review issues show warning
+- All Task 18A documents exist
+- Draft/internal status is explicit
+- Legal uncertainties remain marked for professional review
+- No provider is marked approved
+- No implementation files changed
 - Build/typecheck/lint pass
-- Stage 4 can be reviewed by Human
+- Task 18B can draft legal pages from the approved requirements
 
 ## Next Task
 
-After Human accepts Stage 4:
+After Human accepts Task 18A:
 
-Stage 5 planning: Payment provider review and payment flow preparation.
-
-Note: Stage 5 should be planning/review first, not real payment implementation, unless Human explicitly approves.
+Task 18B: Draft legal pages and operator decision placeholders.

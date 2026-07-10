@@ -168,25 +168,57 @@ Excludes:
 
 ---
 
-### Stage 5: Payment Flow
+### Stage 4.5: Legal / Compliance Foundation
 
 Goal:
 
-- Only normal_allowed requests proceed to payment
-- Payment success is verified before generation
+- Define the legal, consumer-protection, privacy, AI, safety, and payment-review rules before paid implementation
 
 Includes:
 
-- payment provider selection
-- checkout/session creation
-- payment success verification
-- webhook or verified callback design
+- legal source register
+- compliance checklist
+- prohibited expression policy
+- unsupported-case policy
+- input validation specification
+- AI prompt guardrails
+- AI data minimization
+- retention planning
+- payment provider inquiry plan
+- provider comparison
+- final payment confirmation screen specification
+- legal page requirements
 
 Excludes:
 
-- subscription
-- coin/point system
-- multi-item checkout
+- final legal advice
+- publication-ready legal pages
+- payment SDK
+- checkout
+- webhook
+- OpenAI integration
+- email integration
+
+### Stage 5A: Legal Page Drafts and Provider Inquiry
+
+Goal:
+
+- Draft legal pages
+- Complete operator placeholders
+- Send honest category inquiries
+- Record written responses
+
+### Stage 5B: Payment Provider Decision
+
+Goal:
+
+- Select a provider only after written evidence and Human approval
+
+### Stage 5C: Sandbox Payment Implementation
+
+Goal:
+
+- Implement the approved provider in test mode only
 
 ---
 
