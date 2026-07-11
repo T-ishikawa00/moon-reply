@@ -2,9 +2,9 @@
 
 ## 0. Status and Execution Rule
 
-- Planning output for Task M1-P1
+- Planning output for Task M1-P1, aligned by Task M1-P1-R1
 - No slice is authorized by this document
-- Human acceptance of Task M1-P1 is required before any slice starts
+- Human acceptance of Task M1-P1 and Task M1-P1-R1, plus separate explicit authorization of M1-I1, is required before any slice starts
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
@@ -23,14 +23,15 @@ Every slice prohibits:
 - real operator personal information;
 - package additions;
 - changes to production age or safety logic unless separately authorized;
-- fake users, reviews, purchases, metrics, provider responses, or delivery evidence; and
-- subscription, login, account, coins, points, or native-app scope.
+- fake users, reviews, purchases, metrics, provider responses, or delivery evidence;
+- subscription, login, account, coins, points, or native-app scope; and
+- file/image upload, OCR, image analysis, PDF/image generation, download/copy/share behavior, advertising, or a free-complete-reading path unless separately authorized by a later task.
 
 ## M1-I1: Route Shell and Review Navigation
 
 ### Goal
 
-Create the shared review-mode shell, route index, global navigation, footer, and unmistakable review boundary without implementing request outcomes, purchase confirmation, reports, or legal page bodies.
+Create the vertical LP/navigation foundation, shared review-mode shell, route index, global navigation, footer, and unmistakable two-level review boundary without implementing request outcomes, purchase confirmation, reports, or legal page bodies.
 
 ### Expected files/routes
 
@@ -51,10 +52,15 @@ Routes completed:
 ### Allowed changes
 
 - Replace stale Stage 2/4 copy with truthful Milestone 1 review copy.
+- Establish the approved vertical LP order with one value per section, wide spacing, product-preview placeholders, and a separate `/request` CTA; do not embed the full form.
+- Present 税込980円, one request/one report, one-shot purchase, and no automatic renewal clearly.
 - Add global header/footer and legal/sample/contact/review links.
-- Add persistent review banner for `/review/**` shell.
+- Add the Human-approved two-level review banner for `/review/**` shell.
+- Include review-hub link metadata for the Web鑑定ノート and 保存用鑑定書 previews, clearly labeled as later M1-I4 scope.
 - Add static route/state inventory with `not implemented in this slice` labels.
 - Preserve the existing `/request` route and behavior.
+- Do not commit final font/color choices; fixed mobile CTA remains an M1-I6 decision candidate.
+- Keep any LP input preview non-interactive and non-collecting. Every active request-start CTA goes directly to `/request`.
 
 ### Prohibited changes
 
@@ -70,12 +76,15 @@ None. The review hub uses static route metadata only and must not claim that fix
 
 ### Acceptance criteria
 
-- `/` describes the product, 税込980円, one report, AI use, safety-before-payment, limitations, and payment-unavailable status.
+- `/` follows the approved vertical hierarchy and describes the product, 税込980円, one report, one-shot/no-renewal conditions, AI use, safety-before-payment, separate Web/save outputs, limitations, and payment-unavailable status.
+- The first view shows product purpose, 税込980円, one request/one report, one-shot/no-renewal conditions, and an active CTA to `/request`.
+- At least one mid-page CTA and the final CTA also go to `/request`; M1-I1 does not add a fixed/sticky CTA.
 - `/review` clearly identifies itself as a review index.
 - The review banner uses the Human-approved wording.
 - Header/footer navigation is keyboard accessible and contains no dead link presented as complete; unavailable slices are labeled.
 - No login/account or active-purchase control appears.
 - Existing `/request` remains local-only.
+- LP and `/request` remain separate, and mobile has no horizontal scrolling or forced alternating-column layout.
 
 ### Validation commands
 
@@ -101,7 +110,7 @@ Revert only the M1-I1 commit. `/request`, safety logic, Supabase foundation, and
 
 ### Dependency
 
-Task M1-P1 Human acceptance.
+Human acceptance of Task M1-P1 and Task M1-P1-R1, plus explicit authorization of M1-I1.
 
 ### Next Human gate
 
@@ -111,7 +120,7 @@ Human accepts M1-I1 before M1-I2 starts.
 
 ### Goal
 
-Align the review experience with the approved safety rule: only `normal_allowed` reaches request confirmation; `needs_review`, `rejected`, invalid age, missing consent, contradictory input, and unknown/error states stop safely and remain deterministically inspectable.
+Align the text-only request and review experience with the approved safety rule: only `normal_allowed` reaches request confirmation; `needs_review`, `rejected`, invalid age, missing consent, contradictory input, and unknown/error states stop safely and remain deterministically inspectable.
 
 ### Expected files/routes
 
@@ -138,6 +147,9 @@ Routes completed:
 ### Allowed changes
 
 - Preserve deterministic local classification while changing M1 review copy and navigation.
+- Organize at least current situation, actual conversation, and planned message as understandable text-input regions.
+- Add conversation copy/paste guidance and anonymization guidance near the relevant field.
+- Keep one-page versus multi-step layout behind a pre-implementation Human decision.
 - Add typed deterministic fixtures under `fixtures/review/`.
 - Add review-only route allowlist and unknown-state failure.
 - Add request summary and correction links for the normal fixture.
@@ -149,6 +161,7 @@ Routes completed:
 - Add server validation, persistence, API routes, server actions, or network calls.
 - Add payment or ordinary report links to non-normal states.
 - Present fixtures as actual submissions.
+- Add file/image input, screenshot upload, OCR, image analysis/storage, or automatic masking.
 
 ### Fixture requirements
 
@@ -167,6 +180,8 @@ Routes completed:
 - State meaning is conveyed without color alone.
 - Review labels and fixture IDs are visible.
 - No external send or persistence occurs.
+- The form is text-only, explains necessary-excerpt paste/anonymization, and contains no file input.
+- Evidence records the Human decision for one-page versus multi-step layout before final component shaping.
 
 ### Validation commands
 
@@ -192,7 +207,7 @@ Revert M1-I2; the M1-I1 shell remains. Existing Stage 4 classifier files remain 
 
 ### Dependency
 
-Human-accepted M1-I1.
+Human-accepted M1-I1 plus an explicit Human decision on one-page versus multi-step form layout. M1-I2 must not start while that layout gate is unresolved.
 
 ### Next Human gate
 
@@ -218,6 +233,7 @@ Route completed:
 ### Allowed changes
 
 - Display product, official description, 税込980円, quantity, allowed age group, fixture email, request summary, intended delivery method, unresolved delivery/payment-provider conditions, AI use, non-guarantee, draft refund summary, future required confirmations, safety status, and legal/contact links.
+- State one-shot purchase and no automatic renewal; do not present a free/ad-supported alternative.
 - Add correction links.
 - Add disabled or non-button purchase-unavailable control and explanatory copy.
 
@@ -244,6 +260,7 @@ Route completed:
 - Primary control reads `購入機能は現在準備中です` and cannot transact.
 - Direct blocked-state access is rejected.
 - No payment-related network or storage activity occurs.
+- No free-complete, ad-supported, subscription, or automatic-renewal path is present.
 
 ### Validation commands
 
@@ -279,15 +296,18 @@ Human accepts M1-I3 before M1-I4 starts.
 
 ### Goal
 
-Implement two deliberately separate artifacts: a fictional marketing sample and a production-shaped fixture result for UI/delivery review.
+Implement three deliberately differentiated review presentations: a fictional marketing sample, a production-shaped long Web鑑定ノート fixture, and an A4-oriented 保存用鑑定書 fixture preview derived from the same structured result.
 
 ### Expected files/routes
 
 - `app/sample-report/page.tsx`
+- `app/page.tsx` only for replacing M1-I1 output-preview placeholders with accepted, non-interactive sample/Web/save preview components
 - `app/review/result/[fixtureId]/page.tsx`
+- `app/review/save-report/[fixtureId]/page.tsx`
 - `app/review/error/missing-fixture/page.tsx`
 - `app/review/error/unavailable-report/page.tsx`
 - report/sample components under `components/report/` or `components/review/`
+- save-report presentation components under the same bounded review component area
 - future `fixtures/review/reports.ts`
 - future `fixtures/review/errors.ts`
 
@@ -295,33 +315,43 @@ Routes completed:
 
 - `/sample-report`
 - `/review/result/result-normal-001`
+- `/review/save-report/result-normal-001`
 - `/review/error/missing-fixture`
 - `/review/error/unavailable-report`
 
 ### Allowed changes
 
 - Render approved report hierarchy and deterministic content.
+- Render a save-oriented summary/recomposition from the same structured fixture without changing its judgment.
+- Replace the LP's M1-I1 output-preview placeholders with concrete, deterministic Web鑑定ノート and 保存用鑑定書 previews; do not add an embedded form or a new submission path.
 - Add sample/fixture labels and fixed disclaimers.
 - Add missing fixture, loading placeholder, and unavailable report previews.
-- Add links for sample/result comparison and return navigation.
+- Add three-way sample/Web/save comparison and return navigation.
 
 ### Prohibited changes
 
 - OpenAI calls, prompt execution, DB lookup, real result token, email send, PDF/image generation, feedback persistence, or purchase claim.
+- Download, browser-print implementation, save button, copy/share, generated-file claim, or Web-result screenshot reuse.
 - Testimonials, ratings, or implied sales.
 - Reuse of a sample as a supposedly delivered report.
 
 ### Fixture requirements
 
 - `sample-report-g001`: 700–1,000-character fictional marketing sample.
-- `result-normal-001`: 1,800–2,400-character production-shaped nine-section fixture.
+- `result-normal-001`: 1,800–2,400-character production-shaped nine-section Web鑑定ノート fixture with the fixed normal judgment `今日は送らない方がいい` and its complete recommendation content.
+- `/review/save-report/result-normal-001`: A4-oriented readable presentation of the same structured fixture, with conclusion, reason summary, review timing, change conditions, message draft when applicable, three-day direction, and fixed cautions.
+- For wait/do-not-send outcomes, the save presentation's three-day direction and cautions preserve the waiting action, no-contact next option, later-message direction, and explicit uncertainty from the Web result.
 - Fixed labels and disclaimer from the M1 spec.
 - No real name, direct identifier, copied message, purchase date, provider ID, or token.
 
 ### Acceptance criteria
 
-- Sample and fixture result have different routes, labels, purpose, and content length.
+- Sample, Web result, and save report have different routes, labels, purposes, and information density.
+- The LP shows concrete, non-interactive previews of both future paid presentations and links to the applicable review/sample destinations without claiming purchase or generation.
 - Result contains all nine required sections and fixed disclaimer.
+- The fixed `今日は送らない方がいい` fixture includes reason, review timing, change conditions, interim action, no-contact option, later message draft when applicable, and uncertainty. The shared schema/prompt contract applies the same completeness rule to every approved send/light-send/wait/do-not-send label; a single fixture does not contain multiple mutually exclusive judgments.
+- Save report agrees with the Web judgment, is readable as a quick-reference surface, and is neither a screenshot nor a compressed full Web report.
+- No PDF/image/download/copy/share function or generated-file claim exists.
 - Fixture ID is visible and readable, not token-like.
 - Unknown fixture ID fails safely without fallback.
 - Long Japanese text is phone-readable and desktop line length is controlled.
@@ -334,14 +364,15 @@ npm.cmd run typecheck
 npm.cmd run lint
 npm.cmd run build
 git diff --check
-rg -n "架空ケース|実在の相談者|審査用fixture|今夜の結論|この分析の限界" app components fixtures
+rg -n "架空ケース|実在の相談者|審査用fixture|今夜の結論|この分析の限界|保存用鑑定書|再判断" app components fixtures
 rg -n "openai|generate|supabase|result token|send email|fetch\(" app components fixtures
 ```
 
 ### Manual review evidence
 
-- Phone/desktop screenshots of sample, fixture result, missing fixture, loading, and unavailable states.
+- Phone/desktop screenshots of sample, Web fixture result, save-report fixture, missing fixture, loading, and unavailable states.
 - Character-count record for sample and fixture report.
+- Side-by-side content audit proving the Web and save presentations share one judgment but use different hierarchy/layout.
 - URL/direct-navigation test for allowlisted and invalid fixture IDs.
 - Network capture proving local deterministic rendering only.
 
@@ -379,6 +410,7 @@ Create truthful review representations of legal, AI, safety, refund, Tokushoho, 
 ### Allowed changes
 
 - Render fixed approved product facts.
+- Keep `月の返事 鑑定ノート` / `保存用鑑定書` terminology, two-level review banner, and Web/save/legal/contact navigation consistent.
 - Show review/draft/publication status and unresolved-decision rows.
 - Withhold fictional/unresolved operator values.
 - Add global footer, confirmation, result, and safety links.
@@ -389,6 +421,7 @@ Create truthful review representations of legal, AI, safety, refund, Tokushoho, 
 - Real or invented operator name, address, phone, email, form URL, response SLA, provider, payment method, delivery time, retention period, or effective date.
 - Active form, `mailto:`, database write, email send, or legal-publication claim.
 - Editing the legal draft substance to disguise unresolved issues.
+- Expanding legal substance solely to implement Task M1-P1-R1; this slice's R1 impact is terminology and navigation/banner consistency only.
 
 ### Fixture requirements
 
@@ -403,6 +436,7 @@ No customer fixture. Page status metadata may be static and must identify unreso
 - Tokushoho cannot be mistaken for a complete purchase disclosure.
 - Contact is visibly inactive and sends nothing.
 - Safety and AI pages contain no false guarantee or unverified emergency information.
+- Web/save-report links and the two-level review boundary remain consistent without implying a generated file or purchase.
 
 ### Validation commands
 
@@ -454,10 +488,12 @@ All M1 routes are in scope for review; no route is newly authorized by this slic
 - Focus, contrast, touch-target, label/error association, heading, reduced-motion, responsive overflow, long-text measure, and visual-consistency fixes.
 - Broken internal link corrections.
 - Copy correction only when required for approved review labels/boundaries.
+- Evaluate the mobile fixed-CTA candidate through a Human-approved Visual QA variant. No fixed CTA is committed unless the Human explicitly authorizes adoption within M1-I6 after reviewing interference evidence; otherwise the non-fixed CTA design remains.
 
 ### Prohibited changes
 
-- Redesigning product strategy, adding pages/features, altering fixture meaning, enabling integrations, or deciding operator facts.
+- Redesigning product strategy, adding pages/features beyond the explicitly gated fixed-CTA decision above, altering fixture meaning, enabling integrations, or deciding operator facts.
+- Adding a fixed CTA without the M1-I6 Human gate or using it to change the `/request` destination/product flow.
 - Hiding legal/safety/AI limitations to improve visual polish.
 - Browser-specific hacks without documented evidence.
 
@@ -476,6 +512,12 @@ Reuse the accepted fixture set unchanged. A fixture-content change requires expl
 - All M1 routes and links work.
 - Review labels remain visible and no runtime integration exists.
 - Design critique confirms the result is specific to 月の返事.
+- UX review records whether the experience reduces anxiety or amplifies it and whether the user retains agency.
+- Long Web鑑定ノート reading and 保存用鑑定書 quick-reference readability are evaluated separately.
+- Night-sky atmosphere and paper surfaces remain balanced without occult or cheap fortune-telling appearance.
+- The implementation satisfies the generalized hierarchy principles while avoiding any reference-site-specific look, copy, image, circular-chart, color/font, distinctive shape, or exact-layout resemblance.
+- Mobile fixed-CTA interference is evaluated against long-reading, viewport obstruction, keyboard/focus, and user-agency evidence. The acceptance record states `adopted`, `rejected`, or `deferred`; adoption requires explicit Human authorization and remains limited to the existing `/request` CTA.
+- The complete experience does not resemble a generic AI product.
 
 ### Validation commands
 
@@ -513,7 +555,7 @@ Human acceptance of M1-I6 closes Milestone 1 implementation/validation only afte
 ## Final Sequence
 
 ```text
-Task M1-P1 Human acceptance
+Task M1-P1 + Task M1-P1-R1 Human acceptance
   → M1-I1 Human acceptance
   → M1-I2 Human acceptance
   → M1-I3 Human acceptance
@@ -523,4 +565,4 @@ Task M1-P1 Human acceptance
   → Milestone 1 completion review
 ```
 
-The next task after Task M1-P1 acceptance is M1-I1 only, subject to explicit Human authorization.
+The next task after Task M1-P1 and Task M1-P1-R1 acceptance is M1-I1 only, subject to separate explicit Human authorization.

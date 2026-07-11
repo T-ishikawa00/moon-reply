@@ -231,6 +231,38 @@ Accepted when:
 
 ---
 
+## Task M1-P1-R1: UI/UX Decision Alignment
+
+Accepted when:
+
+- the emotional objective includes reducing anxiety and restoring user agency
+- vertical-scroll LP direction and section order are documented
+- LP and request form remain separate
+- CTA, price, one-shot and no-auto-renew clarity are required
+- initial MVP input is text-only
+- conversation copy-paste and anonymization guidance are specified
+- image upload is explicitly post-MVP
+- free full reading and ad-supported free reading are excluded from the initial MVP
+- sample report is the primary free experience
+- send, light-send, wait and do-not-send outputs include timing, conditions and interim action
+- Web鑑定ノート and 保存用鑑定書 are separate presentation products
+- `/review/save-report/result-normal-001` is included in planning
+- save preview is not a screenshot or compressed full Web report
+- exact file format and page count remain deferred
+- Safety before payment remains controlling
+- post-payment unfulfillable states require future refund/operator handling
+- no provider refund capability is invented
+- the review banner uses the approved two-level wording
+- The Pattern is recorded as UX inspiration only, without copying
+- M1-I1 through M1-I6 are aligned but remain unauthorized
+- no application implementation is added
+- package files remain unchanged
+- next task after acceptance remains M1-I1 only after separate Human authorization
+
+Task M1-P1 and Task M1-P1-R1 require final Human acceptance together. Completion of documentation alignment does not satisfy that acceptance gate by itself.
+
+---
+
 ## Historical Stage 5–8 Criteria — Superseded as Current Sequencing
 
 The criteria below are preserved as historical implementation-planning records. They do not authorize work and do not override the Milestone 1–9 order in `docs/ROADMAP.md` and `docs/phase1/IMPLEMENTATION_WBS.md`.

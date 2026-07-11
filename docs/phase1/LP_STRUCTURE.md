@@ -2,11 +2,11 @@
 
 ## 0. Purpose
 
-This document defines the one-page LP structure for the Phase 1 automated public MVP.
+This document defines the vertically scrolling LP direction for the initial paid Web MVP and its Milestone 1 review representation.
 
 The LP is not a full app.
 
-It is a sales page designed to convert visitors into paid diagnosis requests through the automated public MVP flow.
+It explains the product, forms realistic expectations, shows the future outputs, and helps a visitor decide whether to begin at the independent `/request` page. Task M1-P1-R1 changes documentation only and does not authorize an LP implementation.
 
 ---
 
@@ -14,7 +14,8 @@ It is a sales page designed to convert visitors into paid diagnosis requests thr
 
 Primary goal:
 
-- Convert visitors into paid diagnosis requests.
+- Reduce relationship-message anxiety enough for the visitor to understand the service and choose the next action without pressure.
+- Support an informed start of the independent request flow.
 
 Secondary goals:
 
@@ -25,6 +26,27 @@ Secondary goals:
 - Clarify safety and refund rules
 - Make the request flow simple
 - Route users to the self-hosted diagnosis request form
+
+The LP must not amplify anxiety, rush or blame the visitor, claim another person's true feelings, or imply that purchase controls fate. It must preserve user agency.
+
+### Approved section order
+
+The LP uses one primary value per section, a large heading, concise explanation, generous spacing, and concrete UI/deliverable previews.
+
+1. ファーストビュー
+2. どんな悩みに向いているか
+3. 月の返事が整理する内容
+4. Web鑑定ノートのプレビュー
+5. 保存用鑑定書のプレビュー
+6. 利用の流れ
+7. サンプル鑑定書
+8. 料金と商品条件
+9. AI利用・非保証・Safety
+10. FAQ
+11. 最終CTA
+12. 法務・安全・問い合わせnavigation
+
+On wider screens, explanation and preview may alternate left/right between sections. Mobile keeps a single logical reading order with no horizontal scrolling. A full request form is not embedded in the LP; a form preview may explain the future input experience, and the CTA leads to `/request`.
 
 ---
 
@@ -41,7 +63,16 @@ Secondary goals:
 
 ### CTA
 
-今夜の返事を鑑定する
+鑑定ノートを依頼する
+
+The first view must also show, without requiring later-section reading:
+
+- AI-assisted relationship-message analysis and decision support;
+- `月の返事 鑑定ノート` is returned;
+- `税込980円`;
+- `1相談につき1鑑定ノート`;
+- one-shot purchase; and
+- no automatic renewal.
 
 ---
 
@@ -49,11 +80,14 @@ Secondary goals:
 
 Public MVP CTA:
 
-- Opens self-hosted diagnosis request form
+- Opens the independent self-hosted diagnosis request form at `/request`
+- Does not embed or expand the full form inside the LP
 
-Development placeholder:
+Milestone 1 review rule:
 
-- May point to a placeholder route or mock form until implementation is complete
+- Every active LP request CTA points to the existing `/request` route.
+- Any LP form/input preview is non-interactive, collects nothing, and exists only to explain where and how input begins.
+- Do not add an LP mock form, partial submission, placeholder destination, or alternative input path.
 
 Final public flow:
 
@@ -108,25 +142,14 @@ Not:
 
 ## 6. What You Receive
 
-User receives:
+The LP separately previews two future paid presentation products:
 
-- 今夜の結論
-- 今の関係の整理
-- 相手側にあり得る受け止め方
-- あなたが不安になっている核心
-- この文面がどう伝わる可能性があるか
-- 今夜の推奨アクション
-- 送る場合の文面案
-- 3日間の行動プラン
-- この分析の限界と注意点
-- 今やると逆効果なこと
-- 今夜の判定
-- 送るならこの一文
-- 送らない場合の過ごし方
-- 3日以内の方針
-- 月からの一言
-- 保存用メモ
-- 感情タグ
+- `月の返事 鑑定ノート`: a chaptered, vertically read Web experience with the conclusion first, reasoning, message analysis/draft, a three-day plan, and limitations.
+- `保存用鑑定書`: a quick-reference, A4-oriented direction that recomposes the conclusion, reason summary, review timing, change conditions, message draft, three-day direction, and fixed cautions.
+
+The 保存用鑑定書 is not a screenshot of the Web鑑定ノート and must not compress the full Web text into small type. Exact page count, PDF/image format, download, print, copy/share, and file details remain deferred.
+
+Every normal result must go beyond the judgment label. Send, light-send, wait, and do-not-send outputs include a reason, review timing, conditions that change the direction, an interim action, a no-contact next option, a later message draft when applicable, and explicit limits.
 
 ---
 
@@ -150,7 +173,11 @@ It is the final label inside a full diagnosis note.
 
 ## 8. Sample Section
 
-Use approved G001/G002/G003 snippets.
+The fictional `/sample-report` is the primary free experience. It must be labeled as a fictional service-explanation sample and must not imply a real customer, purchase, review, AI generation record, or testimonial.
+
+Short LP excerpts and Web/save-report previews support this sample. The initial MVP does not provide a free complete first reading, ad-supported complete reading, advertising, free tickets, free coins/points, or repeatable first-free use.
+
+Use approved G001/G002/G003 snippets only within the applicable fictional-sample boundary.
 
 Recommended snippets:
 
@@ -180,7 +207,9 @@ G003:
 
 Price:
 
-- 単発鑑定 ¥980
+- 単発鑑定 税込¥980
+- 1相談につき1鑑定ノート
+- 自動更新なし
 
 Copy:
 
@@ -209,15 +238,9 @@ Development may use placeholder routes, mock payment, mock AI generation, or log
 
 ## 11. Delivery Window
 
-Initial SLA:
+Delivery timing is unresolved in Milestone 1 review content. Do not present `1時間以内`, `24時間以内`, or any other SLA as an approved purchase condition.
 
-- 決済成功後、原則1時間以内
-
-If difficult operationally, use:
-
-- 原則24時間以内
-
-The public MVP target is automatic result page generation and email notification after payment success.
+The later public-MVP target is automatic result-page generation and result-URL email notification after payment success, but provider, delivery timing, and runtime behavior require later Human-approved planning and implementation.
 
 ---
 
@@ -230,8 +253,11 @@ Must include:
 - タロット、占星術、霊感その他の占術・超自然的手法は使用しません
 - 医療/診断/カウンセリングではありません
 - 自傷、DV、ストーカー、脅迫、未成年絡みなどは通常鑑定できません
-- 危険相談の場合は通常鑑定を提供せず、返金対象とします
+- Safetyは決済前に行い、`normal_allowed`のみ将来の購入フローへ進めます
+- 例外的な決済後の提供不能は、将来の`refund_required`およびoperator対応要件として扱います
 - 実名や個人情報は入力しないでください
+
+The LP must not claim automatic refunds, provider refund API capability, fee reimbursement, refund timing, or a concrete operator procedure.
 
 ---
 
@@ -260,7 +286,7 @@ Include:
 ### Q. 返金できますか？
 
 デジタル鑑定書のため納品後は原則返金不可です。
-ただし、重複決済、提供不能、危険相談で通常鑑定不可の場合は返金対象です。
+Safetyは原則として決済前に確認します。重複決済または例外的な決済後の提供不能は将来の全額返金候補ですが、具体的な返金手段、期限、反映時期は決済事業者選定後に確定します。
 
 ---
 
@@ -268,8 +294,24 @@ Include:
 
 Primary CTA:
 
-- 今夜の返事を鑑定する
+- 鑑定ノートを依頼する
 
 Secondary CTA:
 
 - 鑑定サンプルを見る
+
+A clear primary CTA appears at least once mid-page and again near the end. M1-I1 uses non-fixed CTAs. A mobile fixed CTA is a candidate only; M1-I6 evaluates a Human-approved variant against reading, viewport obstruction, keyboard/focus, and user agency, then records `adopted`, `rejected`, or `deferred`. It is not committed without explicit Human adoption.
+
+## 15. Legal, safety and contact navigation
+
+The final area links to legal information, AI/non-guarantee disclosure, unsupported cases, privacy information, refund information, and contact review. Unresolved operator/provider facts remain review-labeled and must not be invented.
+
+## 16. External UX reference boundary
+
+The Pattern is a structural UX reference only.
+
+Adopt: vertical reading, one section/one value, large heading plus short explanation plus UI preview, generous whitespace, wider-screen left/right alternation, concrete output previews, and clear mid/final CTAs.
+
+Transform: chart/content previews become moonlight, Web鑑定ノート, 保存用鑑定書, tonight's conclusion, a three-day plan, relationship context, copied conversation, planned message, and the user's question.
+
+Reject: astrology, natal charts, zodiac symbols, birth-data analysis, fate or life claims, circular-chart imitation, reference copy/assets/exact layout, copied colors/fonts, horizontal scrolling, and unnatural Japanese line breaks. External screenshots are not repository assets.

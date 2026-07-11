@@ -2,11 +2,11 @@
 
 ## 0. Status
 
-- Input authority: Human-accepted Task 18C-R3 and `docs/ROADMAP.md`
-- Current task: Task M1-P1 Reviewable Web MVP Planning and Specification
-- Status: planning only; awaiting Human review
+- Input authority: Human-accepted Task 18C-R3, the Task M1-P1-R1 Human UX decisions, and `docs/ROADMAP.md`
+- Current task: Task M1-P1 plus Task M1-P1-R1 UI/UX Decision Alignment
+- Status: Task M1-P1-R1 documentation alignment completed; both planning tasks await final Human review
 - Implementation is not authorized by this document
-- Real payment, OpenAI, real email, public database writes, deployment, operator personal information, and package changes are prohibited
+- Real payment/refunds, OpenAI, real email, public database writes, image/file input, PDF/image generation, deployment, operator personal information, and package changes are prohibited
 
 This specification defines Milestone 1 only: a payment-free, externally reviewable representation of the intended purchase and delivery experience. It does not claim that the production flow exists.
 
@@ -15,6 +15,8 @@ This specification defines Milestone 1 only: a payment-free, externally reviewab
 ### Primary user
 
 Women around ages 25–34 who are experiencing reply waiting, follow-up-message anxiety, or an ambiguous relationship and want calm, specific decision support before sending a message.
+
+The Human-approved emotional objective is not merely to return an answer. The experience should make the user's feelings slightly lighter, help them leave an isolated loop of overthinking, and restore a state in which they can choose the next action themselves. Anxiety amplification, pressure, blame, and claims about another person's true feelings are UX failures.
 
 The user must understand that 月の返事 is:
 
@@ -36,17 +38,28 @@ The user must understand that 月の返事 is:
 
 The complete review journey is:
 
-1. Open `/` and understand the product, JPY 980 one-shot price, AI use, limits, and expected output.
+1. Open `/` and follow a vertical, one-value-per-section explanation of the product, JPY 980 one-shot price, AI use, limits, Web鑑定ノート, 保存用鑑定書, and expected output.
 2. Open `/sample-report` to inspect a clearly fictional marketing sample.
 3. Open `/request` and inspect the actual request fields, required 18+ age-group selection, consent requirements, and local safety classification.
 4. Open `/review` to access deterministic review states without inventing customer activity.
 5. Inspect `normal_allowed`, `needs_review`, `rejected`, contradictory/invalid input, invalid age, missing consent, and unknown/error states.
 6. From the normal fixture only, inspect request confirmation and the payment-free final purchase confirmation.
-7. Inspect the production-shaped fixture result without a real token, AI call, email, purchase, or database record.
-8. Inspect the legal-information index, review-labeled legal pages, unsupported-cases page, and contact review page.
-9. Confirm that every review page clearly states which parts are fixtures, unavailable, unresolved, or reserved for later milestones.
+7. Inspect the production-shaped Web鑑定ノート fixture without a real token, AI call, email, purchase, or database record.
+8. Compare the separate A4-oriented 保存用鑑定書 fixture preview without PDF/image generation, download, or a claim that a file exists.
+9. Inspect the legal-information index, review-labeled legal pages, unsupported-cases page, and contact review page.
+10. Confirm that every review page clearly states which parts are fixtures, unavailable, unresolved, or reserved for later milestones.
 
 The review flow must not imply that payment, delivery, operator support, or production data processing is active.
+
+### Request input boundary
+
+The initial paid Web MVP is text-only. `/request` may accept the current situation, necessary copied conversation excerpts, the planned message, relationship/context selections, and the user's question. It must visibly guide the user to replace names with `相手`, `自分`, or `Aさん` and remove real names, phone numbers, addresses, workplaces, and other identifiers.
+
+Image/file input, screenshots, OCR, image AI analysis, image storage, and automatic masking are out of scope. One-page versus multi-step form layout remains a Human gate before M1-I2; this specification does not resolve it.
+
+### Free and advertising boundary
+
+The initial MVP has no free complete first reading, ad-supported complete reading, ads, free tickets, free coins/points, or repeatable first-free path. The fictional `/sample-report`, short LP excerpts, output previews, input example, and usage flow are the free experience.
 
 ## 3. Exact Route Inventory
 
@@ -72,6 +85,7 @@ All `/review/**` screens must share the same visible review banner and link back
 | `/review/purchase/confirmation/normal-001` | Production-shaped final confirmation with payment unavailable | Normal request fixture plus mock purchase metadata | Review content, correct request/email/age, open legal pages | Checkout, provider widget, payment event | In: request confirmation, `/review`; Out: edit links, legal/contact, `/review` | Yes; disabled/preparation-only action required | M1-I3 |
 | `/sample-report` | Marketing and expectation-setting sample | `sample-report-g001` fixture derived from approved sample direction | Read, return to LP/request | Imply real customer, purchase, testimonial, real AI run | In: `/`, `/review`; Out: `/`, `/request`, fixture-result explanation | Yes with fictional-sample label | M1-I4 |
 | `/review/result/result-normal-001` | Review the final report UI and delivery shape | `result-normal-001` deterministic fixture | Read sections, inspect disclaimer, return to review hub | Real token, personalization claim, email send, database lookup | In: `/review`, sample comparison; Out: `/review`, `/sample-report`, legal/contact | Yes with fixture and not-purchased labels | M1-I4 |
+| `/review/save-report/result-normal-001` | Review the separate 保存用鑑定書 hierarchy and readability | Save-presentation view of `result-normal-001`; deterministic fixture only | Read quick-reference sections, compare Web/sample, return to review hub | PDF/image generation, download, copy/share, file claim, Web screenshot, purchase/AI claim | In: `/review`, Web-result comparison; Out: `/review`, `/review/result/result-normal-001`, `/sample-report`, legal/contact | Yes with fixture and not-generated labels | M1-I4 |
 | `/legal` | Legal/support navigation index | Static route metadata and draft-status summaries | Open every legal/contact review page | Claim publication approval | In: global footer, confirmation, result; Out: all legal pages and `/contact` | Yes with review status | M1-I5 |
 | `/legal/terms` | Review presentation of Terms | Review-safe rendering based on `TERMS_OF_SERVICE_DRAFT.md` | Read, navigate back | Show unresolved operator/provider facts as final | In: footer, confirmation, `/legal`; Out: `/legal`, `/contact` | Yes only with draft/review label | M1-I5; M2 must complete facts before publication readiness |
 | `/legal/privacy` | Review presentation of Privacy | Review-safe rendering based on `PRIVACY_POLICY_DRAFT.md` | Read, navigate | Assert unverified providers/retention | Same as Terms | Yes only with draft/review label | M1-I5; M2/M5 facts remain unresolved |
@@ -101,6 +115,7 @@ Milestone 1 does not authorize production request IDs, checkout sessions, or res
 | Purchase/final confirmation | Own `/review/purchase/confirmation/...` route | Contractual information needs a stable, auditable page | Inline accordion on request confirmation obscures conditions |
 | Sample report | Public `/sample-report` | Marketing/expectation purpose differs from delivery review | Reusing result route could imply a customer purchase |
 | Production-shaped fixture result | `/review/result/[fixtureId]` | Clearly review-only and deterministic | Token-looking public route risks implying production security |
+| Save-report fixture preview | `/review/save-report/[fixtureId]` | Separates quick-reference presentation from the long Web report while reusing one structured fixture | A Web screenshot or compressed full report defeats the approved presentation split |
 | Legal/contact | Own stable routes | Must be linkable from footer and confirmation | Modals are hard to reference, print, and review |
 | Loading/error/empty | Review-only preview routes and inline skeleton where relevant | Reviewer can inspect deterministic states without network | Fake delays or network calls add no M1 value |
 
@@ -118,6 +133,22 @@ Milestone 1 does not authorize production request IDs, checkout sessions, or res
 
 No state may claim that an emergency exists merely from a rule match. No unverified hotline, agency, phone number, or jurisdiction-specific direction may be shown. 月の返事 is not an emergency service.
 
+### Future post-payment failure requirement
+
+Safety before payment remains controlling, but later milestones must handle an exceptional block or unrecoverable failure after payment:
+
+```text
+payment_succeeded
+  -> fulfillment_blocked or fulfillment_failed
+  -> refund_required
+  -> operator_attention_required
+  -> refunded
+```
+
+A Safety-blocked fulfillment does not produce a normal report. Recoverable technical failures may be retried; unrecoverable/unfulfillable service is a full-refund candidate. Future design must prevent duplicate refunds, record reasons/states, notify an operator, and communicate result/refund status to the user.
+
+Automatic refunds, provider refund API capability, fee reimbursement, refund deadlines, reflection timing, and operator-console procedures remain unresolved. M1 implements none of these states.
+
 ## 6. Final Confirmation Specification
 
 Route: `/review/purchase/confirmation/normal-001`.
@@ -128,6 +159,7 @@ Route: `/review/purchase/confirmation/normal-001`.
 - Official description: `AIによる恋愛メッセージ分析・判断支援デジタルレポート`
 - Price: `税込980円`
 - Quantity: `1相談 / 1鑑定書`
+- Purchase condition: one-shot, no automatic renewal, no free/ad-supported alternative
 - Selected allowed age group
 - Fixture email address, clearly labeled; use a reserved domain such as `sample@example.invalid`
 - Request summary: relationship, reply-wait status, draft-message summary, main concern, desired action, and main question
@@ -153,7 +185,7 @@ The primary control must be non-transactional and visually unmistakable:
 
 Do not show a provider logo, card fields, mock authorization, fake success state, or active checkout wording.
 
-## 7. Sample Report vs Production-Shaped Fixture Result
+## 7. Sample Report vs Web鑑定ノート vs 保存用鑑定書
 
 ### Sample report
 
@@ -177,7 +209,7 @@ Requirements:
 
 Route: `/review/result/result-normal-001`.
 
-Purpose: UI, hierarchy, readability, delivery, and legal/disclosure review. It may imitate the final 1,800–2,400-character report shape but must not claim that it was purchased, generated, stored, or emailed.
+Purpose: review the long-form Web鑑定ノート UI, hierarchy, readability, delivery shape, and legal/disclosure treatment. It may imitate the final 1,800–2,400-character report shape but must not claim that it was purchased, generated, stored, or emailed.
 
 Required report sections:
 
@@ -191,11 +223,38 @@ Required report sections:
 8. 3日間の行動プラン
 9. この分析の限界と注意点
 
+The shared result contract requires every approved send, light-send, wait, and do-not-send outcome to communicate the judgment reason, review timing, conditions that change the direction, action while waiting, next option if no contact arrives, a later message draft when applicable, and what cannot be concluded. A single reading contains one judgment, not all mutually exclusive labels. `result-normal-001` is fixed to `今日は送らない方がいい` and must demonstrate the complete contract without inventing an unsupported exact time.
+
 Required fixed disclaimer:
 
 > このレポートは、入力された情報をもとにAIが整理・分析する予定の判断材料を、審査用fixtureで再現したものです。実在の相談者、購入、AI生成または納品記録ではありません。相手の本心や将来の出来事を断定・保証せず、医療・心理・法律上の助言ではありません。
 
 It must use a readable fixture ID, not a random-looking result token, and must contain no real personal information, AI call, database lookup, email action, or purchased-state badge.
+
+### 保存用鑑定書 fixture preview
+
+Route: `/review/save-report/result-normal-001`.
+
+Purpose: review whether a separate quick-reference presentation can be understood and saved without rereading the full Web鑑定ノート.
+
+Required content direction:
+
+1. title;
+2. fixture creation/reading date label that cannot imply a real purchase;
+3. 今夜の結論;
+4. judgment-reason summary;
+5. approved send/light-send/wait/do-not-send status;
+6. review timing;
+7. conditions that change the direction;
+8. message draft when applicable;
+9. three-day direction, including the waiting action and no-contact next option when applicable; and
+10. fixed cautions, including explicit uncertainty and what cannot be concluded.
+
+The save preview derives from the same `result-normal-001` structured fixture and must not introduce a different judgment or unsupported inference. It uses a separate layout and information priority from the Web result. It is not a screenshot and must not shrink the full Web report into an A4 surface.
+
+M1-I4 direction is an A4-oriented readable fixture preview. A4 one/multiple pages, PDF/image/both, real download, browser print, smartphone-long version, save button, copy/share, file name, margins, and exact text volume remain deferred. No file is generated by M1-I4 unless a later task separately authorizes generation.
+
+The preview must show the same two-level review banner, fixture ID, fictional/not-purchased status, and fixed AI/non-guarantee boundary. It contains no real customer, AI call, database lookup, email delivery, purchase, download, or generated-file claim.
 
 ## 8. Fixture and Mock Strategy
 
@@ -213,12 +272,13 @@ Recommended future files:
 - `fixtures/review/reports.ts`
 - `fixtures/review/errors.ts`
 
-No fixture file is created by Task M1-P1.
+No fixture file is created by Task M1-P1 or Task M1-P1-R1.
 
 ### Naming
 
 - Request fixtures: `request-<state>-NNN`, for example `request-normal-001`
 - Report fixtures: `result-<state>-NNN`, for example `result-normal-001`
+- Save-report previews reuse the matching report fixture ID under `/review/save-report/`; they do not create an independent judgment fixture
 - Sample fixtures: `sample-report-<approved-direction>`, for example `sample-report-g001`
 - Error fixtures: `error-<condition>`, for example `error-missing-fixture`
 
@@ -228,6 +288,7 @@ No fixture file is created by Task M1-P1.
 - Do not copy real conversations, names, handles, workplaces, locations, email addresses, or support data.
 - Fictional contexts must be deliberately composed, non-identifying, and labeled as fixtures.
 - Output is deterministic: the same fixture ID always returns the same content.
+- The Web and save presentations use the same structured judgment; presentation-specific fields may summarize or reorder but may not disagree.
 - Fixtures are imported locally; no fetch, server action, API route, public database read/write, analytics write, email, or AI call.
 - Fixture IDs are allowlisted. Unknown IDs render the missing-fixture state and never fall back to a different record.
 - Review fixtures must be structurally separated from future production repositories/data access.
@@ -276,16 +337,22 @@ Operator-information completion remains Milestone 2. Final publication readiness
 
 ### Persistent review banner
 
-Recommended wording:
+Human-approved two-level wording:
 
-`審査用プレビュー｜fixture表示｜決済・送信・AI生成・メール配信・DB保存は動作しません`
+Always-visible short banner:
+
+`審査用プレビュー｜実際の決済・送信は行われません`
+
+Accessible detail:
+
+`この画面は架空データを使用しています。AI生成、メール配信、データ保存も動作しません。`
 
 The banner must:
 
 - appear at the top of every `/review/**` page and the review hub;
 - remain visible before the primary action;
 - use text and icon, not color alone;
-- link to `/review` and explain unresolved operator/legal facts;
+- expose the detailed explanation and link to `/review` for the review boundary and unresolved operator/legal facts;
 - never resemble a success/purchase badge.
 
 ### Production-shaped versus active production
@@ -320,6 +387,33 @@ Calm, private, emotionally safe, quietly decisive, and realistic. The design may
 - Paper/note surfaces should make long Japanese reading comfortable.
 - Review banners and safety notices must remain operationally clear within the poetic brand.
 
+### LP hierarchy and form separation
+
+- Use a vertical LP with one primary value per section, large headings, short explanations, wide spacing, and concrete product previews.
+- Approved order: first view; relevant concerns; what 月の返事 organizes; Web鑑定ノート preview; 保存用鑑定書 preview; usage flow; fictional sample; price/product conditions; AI/non-guarantee/Safety; FAQ; final CTA; legal/safety/contact navigation.
+- Place a clear CTA mid-page and near the end.
+- M1-I1 uses non-fixed CTAs. A mobile fixed CTA may be evaluated in M1-I6 only through the explicit Human gate and evidence rules in `M1_IMPLEMENTATION_SLICES.md`.
+- On wider screens, explanation and preview may alternate left/right. Mobile keeps one logical vertical order and never uses horizontal scrolling.
+- The LP is for understanding and expectation formation. `/request` is the independent, input-focused experience; do not embed the full form in the LP.
+
+### External UX reference boundary
+
+The Pattern is an inspiration for UX hierarchy only.
+
+Adopt:
+
+- vertical reading;
+- one section/one value;
+- large heading plus concise explanation plus real-product preview;
+- generous spacing and clear section boundaries;
+- wider-screen left/right alternation;
+- concrete Web/save/input previews; and
+- clear mid/final CTA and request starting point.
+
+Transform its chart/screen/input roles into moonlight, tonight's conclusion, the three-day plan, Web鑑定ノート, 保存用鑑定書, relationship situation, conversation paste, planned message, and the user's question.
+
+Reject astrology, natal charts, zodiac symbols, birth-data analysis, fate/life/true-feeling claims, circular-chart imitation (including a moon-themed reskin), proprietary copy/images/distinctive shapes/exact layout, copied colors/fonts, horizontal scrolling, and unnatural Japanese line breaks. External screenshots are not repository assets.
+
 ### Typography
 
 - Japanese body text prioritizes system sans-serif readability and stable rendering.
@@ -328,7 +422,7 @@ Calm, private, emotionally safe, quietly decisive, and realistic. The design may
 
 ### Spacing and layout
 
-- Phone-first single-column reading.
+- Phone-first single-column reading; wider-screen LP sections may alternate columns while preserving the same DOM/reading order.
 - 16–20 px page gutters on small screens; 24–32 px on wider layouts.
 - 44–48 px minimum control height and generous section separation.
 - Desktop uses centered content, not a dashboard; report content max width approximately 720–800 px.
@@ -396,7 +490,8 @@ If the answer is “it could be reused unchanged,” the implementation fails th
 - Purchase confirmation: correction links return to request confirmation/form; no blocked state may link forward.
 - Safety stop states: primary action returns to the relevant request section; secondary links open unsupported cases/contact review.
 - Sample report: links back to LP and request explanation.
-- Result fixture: links to review hub and sample comparison, not purchase.
+- Web result fixture: links to review hub, fictional sample, and save-report comparison, not purchase.
+- Save-report fixture: links to review hub, Web result, and fictional sample; no download/copy/share control is active.
 - All review-only state pages link back to `/review`.
 
 ## 14. Analytics Boundary
@@ -428,17 +523,21 @@ No event is emitted by Milestone 1 unless a later task separately authorizes ana
 | Broken contact path | Explain contact is inactive and M2-owned | Legal index/home | Invented email/form |
 | General review error | Conservative error; no assumption of safety/payment success | Retry locally, review hub | Continue to purchase or report |
 
-## 16. Planning Decisions Requiring Human Approval
+## 16. Planning Decisions and Remaining Human Gates
+
+Task M1-P1-R1 supplies Human-approved decision inputs for the emotional objective, LP structure, input modality, report split, and two-level banner. The aligned Task M1-P1 package still requires final Human acceptance, and no row authorizes implementation.
 
 | Decision | Recommended option | Alternatives | Reason | Consequence | Blocks implementation |
 | --- | --- | --- | --- | --- | --- |
 | Review route namespace | Dedicated `/review/**` routes | Query parameters on public routes; separate build | Clear boundary and deterministic inspection without duplicate deployment | Establishes route shell and fixture lookup | Yes: M1-I1 |
 | Safety-state ownership | Inline validation plus separate review-only stop previews | All inline; separate public pages | Real correction stays local while reviewers can inspect every state | M1-I2 route/component shape | Yes: M1-I2 |
-| Review banner wording | Use the wording in section 10 | Short “demo” badge; modal notice | Full wording prevents false activation claims | Affects every review page | Yes: M1-I1 |
+| Review banner wording | Use the Human-approved two-level wording in section 10 | Short “demo” badge; long always-visible technical sentence | Short constant boundary plus accessible detail prevents false activation claims without overwhelming the page | Affects every review page | Yes: M1-I1 after planning acceptance |
 | Sample entry point | `/sample-report` linked from LP and review hub | LP-only excerpts; result-route reuse | Stable marketing sample without implying purchase | M1-I4 route and navigation | Yes: M1-I4 |
 | Incomplete legal fields | Withhold values and show review-status rows | Render raw TBD tokens; hide legal pages | Truthful and inspectable without fictional facts | M1-I5 content model; M2 still required | Yes: M1-I5 |
 | Contact review behavior | Non-functional page with supported categories and “not active” status | `mailto:`; inactive form | No real address or sending is authorized | M1-I5 route only, no handler | Yes: M1-I5 |
 | Fixture result identifier | Readable `result-normal-001` under `/review/result/` | Random token-looking value; query parameter | Avoids false security/purchase impression | M1-I4 fixture and error handling | Yes: M1-I4 |
+| Save-report preview | `/review/save-report/result-normal-001`, derived from the same structured fixture | Web screenshot; compressed Web report; omit save review | Preserves the approved two-presentation experience and makes quick-reference readability reviewable | M1-I4 route, fixture view, and comparison navigation | Yes: M1-I4 |
+| Request-form layout | Human gate before M1-I2; keep one-page vs multi-step unresolved | Decide in R1 docs | Input burden and mobile flow require visual/prototype evidence | M1-I2 component/layout shape | Yes: M1-I2 |
 | Review-site indexing posture | Reserve `/review/**` for `noindex`; final site-level decision in M3 | Index all; password protect | Review fixtures should not be search results; deployment method is not yet selected | No code in M1-P1; becomes M3 gate | No for M1-I1, yes before M3 deployment |
 | Delivery timing in confirmation | Show “未確定” review status | Use 1 hour; use 24 hours | Both SLA values remain unresolved operator facts | Prevents false purchase condition | Yes: M1-I3 copy |
 
@@ -449,14 +548,20 @@ No unresolved operator fact is decided by the recommendations above.
 Milestone 1 is acceptable only when a reviewer can understand:
 
 - what 月の返事 analyzes and what the user enters;
+- the emotional goal of reducing anxiety and restoring user agency;
+- the vertical LP hierarchy and why the LP remains separate from `/request`;
 - the intended JPY 980 one-shot product and one-request/one-report quantity;
+- that there is no initial free-complete/ad-supported route and `/sample-report` is the primary free experience;
 - age, consent, safety, and correction behavior;
 - why `needs_review` and `rejected` cannot reach purchase;
 - the payment-free final confirmation and unavailable action;
-- the difference between a fictional sample and production-shaped fixture result;
+- the difference among a fictional sample, the long Web鑑定ノート fixture, and the separate 保存用鑑定書 fixture preview;
+- that a save preview is not a Web screenshot or generated/downloadable file and its exact format remains deferred;
+- that every approved send, light-send, wait, and do-not-send recommendation includes timing, conditions, interim action, next options, and limits;
+- the two-level review-banner wording;
 - expected report structure, AI use, limits, and non-guarantee;
 - legal, refund, unsupported-case, and contact structure;
 - which operator/provider/data facts remain unresolved; and
-- that payment, AI, email, database writes, provider inquiry, and deployment are not active.
+- that payment, AI, email, database writes, PDF/image generation, refunds, provider inquiry, and deployment are not active.
 
-Milestone 1 implementation may begin only after Human accepts Task M1-P1 and separately authorizes the first implementation slice.
+Milestone 1 implementation may begin only after Human accepts Task M1-P1 and Task M1-P1-R1 together and separately authorizes M1-I1.

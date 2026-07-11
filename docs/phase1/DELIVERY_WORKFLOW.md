@@ -8,6 +8,8 @@ Manual delivery may be used during development only.
 
 The public MVP target is automatic result page generation and email notification after payment success.
 
+Task M1-P1-R1 records future requirements only. It does not authorize AI generation, storage, result routes, file generation, email, payment, refund, or operator workflow implementation.
+
 ---
 
 ## 1. Corrected Public Delivery Workflow
@@ -17,11 +19,13 @@ Public MVP delivery flow:
 1. Payment success is confirmed
 2. AI judgment is generated
 3. AI full diagnosis is generated
-4. Diagnosis result is saved
-5. Result page URL is created
-6. Result URL is sent by email
-7. User opens result page
-8. Feedback request is shown
+4. Output Safety and schema checks run
+5. If allowed, the structured result is saved
+6. Web鑑定ノート URL is created
+7. 保存用鑑定書 presentation data is prepared from the same structured result
+8. Result URL is sent by email
+9. User opens the Web鑑定ノート and may review the save presentation
+10. Feedback request is shown
 
 Manual delivery may be used during development only.
 
@@ -35,7 +39,7 @@ If dangerous content is detected:
 - Do not provide message wording that enables harm, stalking, coercion, or manipulation
 - Use safety response
 - Do not proceed to normal payment flow when detected before payment
-- Refund if payment already happened due to an exceptional state
+- If payment already succeeded in an exceptional state, do not deliver a normal report and enter the future downstream failure/refund workflow
 - Record as safety-rejected case
 
 Danger types:
@@ -48,6 +52,18 @@ Danger types:
 - monitoring/surveillance
 - minor-related romantic/meeting request
 - doxxing or personal information exposure
+
+Future downstream sequence for an exceptional post-payment Safety block or unrecoverable technical failure:
+
+```text
+payment_succeeded
+  -> fulfillment_blocked or fulfillment_failed
+  -> refund_required
+  -> operator_attention_required
+  -> refunded
+```
+
+Recoverable technical failure may be retried. Unrecoverable or unfulfillable service is a full-refund candidate. Later implementation must prevent duplicate refunds, record the reason and state, notify an operator, and let the user receive a result or refund-status explanation. Automatic refund capability, provider API support, fees, deadlines, reflection timing, and operator-console steps remain unresolved.
 
 ---
 
@@ -79,15 +95,35 @@ Diagnosis must include:
 - 保存用メモ
 - 感情タグ
 
+For `送っていい`, `軽く送るならあり`, `今夜は待つ`, and `今日は送らない方がいい`, the result must also make the recommendation complete:
+
+- current judgment and reason;
+- when to review it again;
+- conditions that change the direction;
+- what to do while waiting;
+- the next option if no contact arrives;
+- a later message draft when appropriate; and
+- what cannot be concluded.
+
+Do not invent unsupported precision such as an exact reply or review time.
+
 ---
 
 ## 4. Delivery Format
 
 Public MVP delivery:
 
-- Result page protected by an unguessable token or equivalent
-- Email notification containing the result URL
+- Web鑑定ノート result page protected by an unguessable token or equivalent
+- Separate 保存用鑑定書 presentation derived from the same structured result
+- Email notification containing the Web result URL
 - Disclaimer and feedback link included in the email or result page
+
+Presentation rules:
+
+- Web鑑定ノート is the long, chaptered reading experience.
+- 保存用鑑定書 is a quick-reference recomposition, not a screenshot or compressed full Web report.
+- Exact page count, PDF/image format, download, print, copy/share, filename, margins, and exact text volume remain deferred.
+- M1-I4 may implement fixture previews only after authorization; no real file generation is authorized in M1.
 
 Development delivery options:
 

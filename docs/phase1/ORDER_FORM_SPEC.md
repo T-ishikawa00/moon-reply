@@ -10,6 +10,8 @@ The form should collect enough context to create a high-quality diagnosis while 
 
 The public MVP target is a self-hosted form, not Google Forms as the production tool.
 
+Task M1-P1-R1 aligns documentation only. It does not authorize a form redesign, file input, route change, submission, persistence, or other implementation.
+
 ---
 
 ## 1. Public MVP Form Tool
@@ -32,6 +34,10 @@ Public submission flow:
 ---
 
 ## 2. Form Sections
+
+These are logical information groups, not a decision that the UI must use one page or six visible steps. One-page versus multi-step layout remains a Human gate before M1-I2.
+
+The initial paid Web MVP is text-only. No image/file input, LINE screenshot upload, OCR, image AI analysis, image storage, or automatic personal-information masking is included.
 
 ### Section 1: Basic Information
 
@@ -94,12 +100,20 @@ Fields:
 
 Fields:
 
+- 現在の状況
+- 実際のやり取り（LINE等から必要部分をコピーして貼り付け可能）
 - 最後に相手から来たメッセージ
 - 最後に自分が送ったメッセージ
-- 今送ろうとしているメッセージ
+- 送ろうとしている文面
 - いつから返事がないか
 - 直近のやり取りの流れ
 - スクショではなく、必要な範囲で文章として入力してもらう
+
+Required guidance direction near the conversation field:
+
+> LINEなどのやり取りは、必要な部分だけコピーして貼り付けられます。名前は「相手」「自分」「Aさん」などに置き換え、実名・電話番号・住所・勤務先などは削除してください。
+
+The guidance must not request an entire conversation. The information architecture must make at least `現在の状況`, `実際のやり取り`, and `送ろうとしている文面` understandable even if the eventual UI groups or progressively discloses fields differently.
 
 ---
 
@@ -146,7 +160,7 @@ Required checkboxes:
 - 医療/診断/カウンセリングではないことを理解しました
 - 相手の本心・返信・復縁を保証するものではないことを理解しました
 - 実名・住所・電話番号など不要な個人情報を入力しません
-- 危険相談の場合、通常鑑定ではなく返金または案内になる可能性を理解しました
+- 危険相談は原則として決済前に通常鑑定を停止し、例外的な決済後の提供不能は将来の返金/operator対応対象になり得ることを理解しました
 - 納品後は原則返金不可であることを理解しました
 
 ---
@@ -163,6 +177,14 @@ If safety screening returns rejected:
 - Show cannot-provide-normal-diagnosis message
 - Do not send user to normal payment flow
 - Provide safety/refund guidance where applicable
+
+If safety screening returns needs_review:
+
+- Stop the initial-MVP purchase flow.
+- Do not show an ordinary report or normal message suggestion.
+- Offer return/edit and review-safe unsupported-case/contact information only.
+
+Refund guidance applies only to an exceptional state in which payment already succeeded before later fulfillment became blocked or failed. No provider capability, automatic refund, timing, or operator procedure is claimed by this form specification.
 
 Development/QA may use mocked safety outcomes and placeholder payment routes, but the public MVP must keep the sequence:
 

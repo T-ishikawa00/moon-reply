@@ -6,7 +6,7 @@ Internal prompt-policy draft.
 
 This is not legal advice, medical advice, psychological advice, or safety advice and is not approved for publication.
 
-No OpenAI API or AI-generation implementation is authorized by Task 18C-R2.
+No OpenAI API or AI-generation implementation is authorized by Task M1-P1-R1. This is documentation alignment only.
 
 ---
 
@@ -28,6 +28,7 @@ The AI must not:
 - claim access to hidden information
 - use tarot, astrology, birth dates, numerology, psychic readings, spiritual powers, or supernatural prediction
 - state that a prediction or recommendation is certain
+- invent a precise reply time, contact time, or review time without evidence
 - pressure additional payment
 - create artificial urgency
 - advise stalking, surveillance, coercion, threats, or ambush
@@ -47,8 +48,11 @@ The AI must:
 - identify material missing information
 - present possible interpretations rather than hidden facts
 - explain why a recommendation is made
-- present send, wait, revise, or do-not-send as decision options
+- present the approved send, light-send, wait, or do-not-send outcome and its concrete action
 - state limitations and non-guarantee language
+- preserve the approved user-facing judgment labels; use revision as a concrete action rather than silently adding a new display label
+- for every approved send, light-send, wait, and do-not-send outcome, include the judgment reason, review timing, change conditions, action while waiting, next option if contact does not arrive, a later message draft when appropriate, and what cannot be concluded
+- keep the Web鑑定ノート and 保存用鑑定書 consistent by deriving both from the same structured judgment
 
 ---
 
@@ -59,6 +63,7 @@ The AI must:
 - avoid escalating anxiety
 - stop impulsive long messages and coercive contact
 - provide concrete, low-pressure next steps
+- provide useful but uncertainty-aware timing and conditions for the next review
 - preserve the user’s dignity
 - include non-guarantee language
 - maintain the 月の返事 world without making supernatural factual claims
@@ -72,6 +77,9 @@ Prohibited wording includes:
 - `3日以内に返信が来ます`
 - `二人は結ばれます`
 - `霊視した結果`
+- `明日18時に返信が来ます`
+
+The 保存用鑑定書 may summarize and recompose the Web鑑定ノート for quick reference, but it must not create a new judgment, new factual claim, or stronger certainty.
 
 ---
 

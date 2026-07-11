@@ -237,7 +237,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Documentation-only boundary preserved
 - [x] Human acceptance of Task 18C-R3
 
-## P4.12: Current Task — Task M1-P1 Reviewable Web MVP Planning and Specification
+## P4.12: Pending Human Acceptance — Task M1-P1 Reviewable Web MVP Planning and Specification
 
 - [x] Exact route inventory and review journey specified
 - [x] Route, inline-state, fixture-route, and review-preview ownership specified
@@ -253,6 +253,23 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Documentation-only boundary preserved
 - [x] Milestone 1 implementation not started
 - [ ] Human acceptance of Task M1-P1
+
+## P4.13: Current Task — Task M1-P1-R1 UI/UX Decision Alignment
+
+- [x] Human-approved emotional objective documented
+- [x] Vertical LP order, LP/`/request` separation, CTA and price clarity aligned
+- [x] Text-only input, conversation paste/anonymization, and image-upload deferral aligned
+- [x] Initial free/ad exclusions and `/sample-report` free-experience role aligned
+- [x] Complete recommendation requirements aligned for all approved send/light-send/wait/do-not-send labels
+- [x] Web鑑定ノート and 保存用鑑定書 separated
+- [x] `/review/save-report/result-normal-001` added to planning only
+- [x] Safety-before-payment and future post-payment refund/operator state requirement aligned
+- [x] Two-level review banner aligned
+- [x] The Pattern adopt/transform/reject boundary recorded without adding reference assets
+- [x] M1-I1 through M1-I6 planning aligned without authorization
+- [x] Documentation-only boundary preserved
+- [x] Milestone 1 implementation not started
+- [ ] Human acceptance of Task M1-P1 and Task M1-P1-R1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -270,4 +287,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-Until Task M1-P1 is accepted and M1-I1 is separately authorized, Milestone 1 implementation is blocked. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.
+Until Task M1-P1 and Task M1-P1-R1 are both accepted and M1-I1 is separately authorized, Milestone 1 implementation is blocked. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.

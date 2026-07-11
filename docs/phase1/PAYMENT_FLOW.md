@@ -14,7 +14,11 @@ The public MVP requires payment success verification before AI judgment or diagn
 
 Initial price:
 
-- ¥980 per diagnosis
+- 税込¥980 per request / one 鑑定ノート
+- one-shot purchase
+- no automatic renewal
+
+The initial MVP has no free complete reading, ad-supported reading, advertising, free ticket/coin/point, subscription, or repeatable first-free path.
 
 ---
 
@@ -62,6 +66,8 @@ Reason:
 - Reduces refund burden
 - Prevents generation without verified payment
 
+`needs_review`, `rejected`, invalid age, missing consent, contradictory input, and unknown/error states never reach purchase confirmation or checkout.
+
 ---
 
 ## 4. Public MVP Payment Automation
@@ -85,6 +91,24 @@ Manual payment confirmation is not the target public flow.
 Manual payment confirmation may be used only during development, QA, or emergency incident handling.
 
 Payment provider webhook or success verification is required before public release.
+
+### Exceptional post-payment fulfillment failure
+
+Safety-before-payment remains the controlling design, but later milestones must handle an exceptional failure after confirmed payment, including server-side reclassification, output-Safety failure, repeated AI-generation failure, or a system outage.
+
+Required future state sequence:
+
+```text
+payment_succeeded
+  -> fulfillment_blocked or fulfillment_failed
+  -> refund_required
+  -> operator_attention_required
+  -> refunded
+```
+
+Do not deliver a normal report when fulfillment is Safety-blocked. Retry only technically recoverable failures. Treat unrecoverable/unfulfillable service as a full-refund candidate, prevent duplicate refunds, record reasons and state transitions, support operator notification, and communicate result/refund status to the user.
+
+No payment, webhook, generation, refund, notification, or state-machine implementation is authorized by Task M1-P1-R1.
 
 ---
 
@@ -114,11 +138,11 @@ Webhookまたは決済成功確認の利用可否も確認したいです。
 
 ## 6. Refund Policy Draft
 
-Refund allowed:
+Future full-refund eligibility candidates:
 
 - duplicate payment
 - payment completed but service cannot be delivered
-- dangerous consultation that cannot be handled as normal diagnosis
+- exceptional post-payment Safety block that cannot be handled as a normal diagnosis
 - system/operator error
 
 Refund not generally allowed:
@@ -128,7 +152,9 @@ Refund not generally allowed:
 - user did not get desired reply from partner
 - partner reaction was different from expectation
 
-Required wording:
+Internal draft direction, not publication-ready wording:
 
 デジタル鑑定書の性質上、納品後の返金は原則できません。
-ただし、重複決済、提供不能、危険相談により通常鑑定を提供できない場合は返金対象となります。
+ただし、重複決済または決済後の提供不能が確認された場合は、全額返金の対象候補となります。具体的な返金方法・条件・時期は決済事業者選定後に確定します。
+
+Do not claim automatic refund execution, provider refund API support, fee reimbursement, a refund deadline, reflection timing, or a concrete operator-console procedure before provider selection and later specification.

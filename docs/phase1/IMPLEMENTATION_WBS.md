@@ -39,11 +39,14 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Planning/spec: create `M1_UI_STATE_MATRIX.md`
 - [x] Planning/spec: create `M1_IMPLEMENTATION_SLICES.md`
 - [x] Planning/spec: create Task M1-P1 review record
-- [ ] Human acceptance of Milestone 1 planning/specification
+- [x] Task M1-P1-R1 docs: align emotional objective, LP, CTA/price, text-only input, anonymization, image deferral, free/ad policy, complete recommendations for all four normal labels, report split, Safety/refund requirement, review banner, and UX reference boundary
+- [x] Task M1-P1-R1 docs: add `/review/save-report/result-normal-001` to route/state/slice planning
+- [x] Task M1-P1-R1 docs: create decision register and R1 review record
+- [ ] Human acceptance of Task M1-P1 and Task M1-P1-R1 planning/specification
 - [ ] Implementation: complete `/` and `/request` review flow
 - [ ] Implementation: add reviewable confirmation and safety states
 - [ ] Implementation: add purchase/final-confirmation screen with disabled or preparation-only action
-- [ ] Implementation: add sample report and production-shaped fixture result page
+- [ ] Implementation: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
 - [ ] Implementation: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
 - [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
 - [ ] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
