@@ -41,11 +41,13 @@ Priority is for inquiry sequencing only; it is not a provider recommendation or 
 
 Use:
 
-`恋愛メッセージに関するAI鑑定ノートサービスです。18歳以上の利用者を対象に、返信待ち、追いメッセージ、曖昧な関係等について、AIを活用し、占い・エンタメ・感情整理目的のデジタル鑑定書を1相談につき税込980円の単発決済で提供する予定です。サブスクリプション、コイン、ポイント、回数券、自動更新はありません。医療、診断、心理カウンセリング、法律相談、相手の本心断定、復縁・返信・未来・関係改善の保証は行いません。自傷、他害、DV、待ち伏せ、脅迫、監視、不正ログイン、個人情報晒し、未成年に関する不適切な相談等は決済前の安全チェックで通常鑑定を停止し、鑑定書やメッセージ案を生成しません。`
+`利用者が、恋愛関係の状況、返信状況、送信予定のメッセージ等を入力し、AIがその内容を整理・分析したうえで、文面が相手に与えうる印象、送る・待つ・修正するといった判断材料、メッセージ案および短期的な行動案を、デジタルレポートとして提供するサービスです。18歳以上を対象とし、1相談につき税込980円の単発決済です。ユーザー向けの商品表現として「恋のメッセージ鑑定ノート」「鑑定ノート」「鑑定書」を使用します。タロット、占星術、生年月日、数秘術、霊感その他の超自然的な占術は使用せず、相手の本心や未来の出来事を断定・保証しません。サブスクリプション、コイン、ポイント、回数券、自動更新はありません。医療、診断、心理カウンセリング、法律相談または調査は行いません。自傷、他害、DV、待ち伏せ、脅迫、監視、不正ログイン、個人情報晒し、未成年に関する不適切な相談等は決済前の安全チェックで通常鑑定を停止し、鑑定書やメッセージ案を生成しません。`
 
 Do not disguise the service category.
 
-Do not omit the AI, fortune-telling/entertainment, digital-delivery, or safety-gate characteristics to obtain approval.
+Do not omit the AI use, user-facing `鑑定` terminology, actual analysis flow, digital delivery, methods not used, non-guarantee, or safety-gate characteristics to obtain approval.
+
+Do not claim this wording settles the provider category. Ask each provider to determine its applicable business or product category from the complete functional description.
 
 ---
 
@@ -54,7 +56,7 @@ Do not omit the AI, fortune-telling/entertainment, digital-delivery, or safety-g
 Ask each provider:
 
 1. Is this service category accepted?
-2. Is AI-generated fortune-telling/entertainment digital content accepted?
+2. Which business/product category does the provider apply to the disclosed functions and user-facing terminology?
 3. Is a one-shot JPY 980 digital delivery product accepted?
 4. Can an individual sole proprietor apply?
 5. What public pages are required before review?
@@ -68,6 +70,9 @@ Ask each provider:
 13. What happens to unsettled funds if the category is later rejected?
 14. Are reserves or additional chargeback controls applied?
 15. What wording or business practices are prohibited?
+16. Is sole-proprietor registration required, or can an individual apply?
+17. Is a completed public site required before review?
+18. Are there fees, reserves, fund holds, or digital-content-specific requirements?
 
 ---
 

@@ -20,7 +20,8 @@ This is a specification, not an implemented screen.
 
 Show together and clearly:
 
-- Product: 月の返事 単発鑑定
+- Product: 月の返事 単発鑑定ノート
+- Product description: AIによる恋愛メッセージ分析・判断支援デジタルレポート
 - Service eligibility: 月の返事は18歳以上を対象とする
 - Age group selected on the request form
 - Quantity: 1 consultation / 1 reading
@@ -31,7 +32,8 @@ Show together and clearly:
 - Expected delivery timing
 - Delivery method
 - AI use
-- Entertainment / emotional-organization purpose
+- Entertainment / information / emotional-organization purpose
+- No tarot, astrology, birth-date, psychic, spiritual, or supernatural method
 - No outcome guarantee
 - Refund/cancellation summary
 - Unsupported-case handling
@@ -49,7 +51,7 @@ Displayed facts must match the final provider contract, operator disclosures, an
 
 Required confirmations:
 
-- AIを利用した鑑定であることを理解しました
+- AIが入力内容を整理・分析する鑑定ノートであることを理解しました
 - 医療・心理・法律サービスではないことを理解しました
 - 結果を保証しないことを理解しました
 - 返金条件を確認しました

@@ -230,7 +230,21 @@
 - [x] No payment/API/OpenAI/email implementation added
 - [ ] Human acceptance of Task 18C-R1
 
-## P4.10+: Do Not Start Until Approved
+## P4.10: Task 18C-R2 Service Positioning and Classification Alignment
+
+- [x] Canonical service-positioning document created
+- [x] Product and README definitions aligned
+- [x] Public copy and metadata aligned without UI redesign
+- [x] Result presentation and AI guardrails aligned
+- [x] Legal/compliance drafts aligned
+- [x] Provider inquiry drafts aligned with honest category-disclosure rule
+- [x] Historical Phase 0 evidence preserved and classified
+- [x] No provider inquiry sent
+- [x] No provider approved or selected
+- [x] No payment/OpenAI/email/API/server-action implementation added
+- [ ] Human acceptance of Task 18C-R2
+
+## P4.11+: Do Not Start Until Approved
 
 - [ ] Stage 5 payment planning
 - [ ] Request form DB persistence

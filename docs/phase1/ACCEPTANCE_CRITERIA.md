@@ -157,6 +157,26 @@ Accepted when:
 
 ---
 
+## Task 18C-R2: Service Positioning and Classification Alignment
+
+Accepted when:
+
+- A canonical service-positioning document exists
+- Official business/legal/provider copy uses AI relationship-message analysis and decision-support wording
+- User-facing brand may retain `鑑定ノート` and `鑑定書`
+- No current controlling document self-defines the service as AI fortune-telling
+- No supernatural method is implied
+- No provider classification or legal exemption is claimed
+- Provider inquiries disclose the user-facing `鑑定` terminology
+- Provider inquiries ask the provider to determine category treatment
+- Result output distinguishes facts, inference and uncertainty
+- Historical evidence has not been falsified
+- No provider inquiry has been sent
+- No provider has been approved or selected
+- No payment/OpenAI/email/API implementation has been added
+
+---
+
 ## Stage 5: Payment
 
 Accepted when:

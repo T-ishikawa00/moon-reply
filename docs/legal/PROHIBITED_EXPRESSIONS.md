@@ -98,9 +98,29 @@ unless objectively true, approved, and documented.
 
 Preferred:
 
-- 占い・エンタメ・感情整理目的
-- AIを活用した恋愛メッセージ鑑定ノート
+- AI恋愛メッセージ分析
+- 判断材料
+- デジタルレポート
+- メッセージ案
+- 状況整理
+- 考えられる可能性
+- エンターテインメントおよび情報提供目的
+- 恋のメッセージ鑑定ノート（ユーザー向けブランド表現）
 - 医療・心理・法律サービスではありません
+
+Do not self-define the service as:
+
+- AI占いサービス
+- 占いアプリ
+- AI占い師
+- 未来予測サービス
+
+Do not imply supernatural methods or certainty:
+
+- 月が未来を教えます
+- 月が示しています
+- 運命が決まっています
+- 霊視した結果
 
 ---
 

@@ -284,6 +284,28 @@ Excludes:
 - Strict identity verification
 - Provider inquiry or payment implementation
 
+### Task 18C-R2: Service Positioning and Classification Alignment
+
+Goal:
+
+- Align current controlling documents and public copy to the approved service positioning
+- Preserve `鑑定ノート` and `鑑定書` as user-facing report-format and brand terms
+- Require providers to determine category treatment from an honest functional description
+
+Includes:
+
+- Canonical `docs/SERVICE_POSITIONING.md`
+- Product, README, public metadata/copy, result-presentation, and AI-instruction alignment
+- Legal/compliance and payment/provider inquiry alignment
+- Repository-wide classification audit separating current, brand, prohibition/comparison, and historical uses
+
+Excludes:
+
+- Provider inquiry submission
+- Provider approval or selection
+- Payment, OpenAI, email, API route, or server-action implementation
+- UI redesign, safety-logic changes, or age-policy changes
+
 ### Task 18D: Human Decisions and Provider Inquiry Submission
 
 Goal:

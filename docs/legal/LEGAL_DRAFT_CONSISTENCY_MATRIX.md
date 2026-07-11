@@ -40,7 +40,8 @@ Payment Confirmation Screen、LP、Request Form、Result PageおよびEmailへ�
 | 項目 | 基準値またはplaceholder | 同期が必要なドラフト・仕様 | 未実装画面・配信面 | 現在の状態 |
 | --- | --- | --- | --- | --- |
 | サービス名 | 月の返事 | Terms / Privacy / Tokushoho / Refund / AI Disclosure / Unsupported Cases / Contact | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
-| 商品定義 | AIを活用した占い・エンタメ・感情整理目的の恋愛メッセージ鑑定書 | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 内部基準のみ |
+| 商品定義 | AIを活用した恋愛メッセージ分析・判断支援デジタルレポート。利用者向け名称は恋のメッセージ鑑定ノート | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | Human approved internal positioning。provider分類ではない |
+| 分析方法 | 利用者入力のみを根拠とし、占術・超自然的手法・外部調査を使用しない | Terms / Privacy / AI Disclosure | LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 税込価格 | 税込980円 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Email: Future implementation | 固定 |
 | 数量 | 1購入 = 1相談 = 1鑑定書 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 18歳以上 | 必須の年齢層選択。18歳以上の許可値のみ、`回答しない`なし、専用チェックボックスなし。公開フローではserver-side再検証 | Terms / Privacy / Tokushoho / Unsupported Cases | Payment Confirmation Screen / LP: Future implementation。Request Form: local UI implemented、server-side未実装 | 必須の自己申告型年齢ゲート。生年月日・身分証は収集しない |
@@ -72,6 +73,7 @@ Payment Confirmation Screen、LP、Request Form、Result PageおよびEmailへ�
 
 - 基準値またはplaceholderを変更した場合、同じ行に記載した全ドラフト・仕様・画面・メールを確認する
 - providerまたはoperatorの未決定事項を一つの文書だけで確定しない
+- Providerまたは第三者による業種区分は未確定であり、実際の機能と表示を提示して判断を求める
 - Future implementationの画面・配信面は、実装時に本表と照合する
 - LP、AI prompt、鑑定結果およびEmailは`docs/legal/PROHIBITED_EXPRESSIONS.md`を共通の禁止表現source of truthとする
 - 公開前にリンク、日付、価格、数量、支払、提供、返金および問い合わせ先を実画面で照合する

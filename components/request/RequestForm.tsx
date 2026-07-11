@@ -95,7 +95,7 @@ const safetyBlockingError =
   "安全確認の内容により、このStageでは通常鑑定の確認に進めません。";
 
 const consentOptions = [
-  "AIを利用した鑑定であることを理解しました",
+  "AIが入力内容を整理・分析する鑑定ノートであることを理解しました",
   "医療/診断/カウンセリングではないことを理解しました",
   "相手の本心・返信・復縁を保証するものではないことを理解しました",
   "実名・住所・電話番号など不要な個人情報を入力しません",
@@ -130,7 +130,7 @@ const fieldLabels: Record<keyof FormState, string> = {
   recentFlow: "直近のやり取りの流れ",
   mainConcern: "今いちばん不安なこと",
   desiredAction: "本当はどうしたいか",
-  mainQuestion: "鑑定で一番知りたいこと",
+  mainQuestion: "鑑定ノートで一番整理したいこと",
   sendTonight: "今夜中に送ろうとしているか",
   safetyFlags: "安全確認",
   consents: "同意事項",

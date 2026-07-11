@@ -10,6 +10,8 @@ All unverified fields remain `TBD`.
 
 PAY.JP、KOMOJU、STORESはTask 18C時点で、すべてNot sent、Not approved、Not selected、Not scoredである。
 
+Task 18C-R2の公式な内部ポジショニングは「AIを活用した恋愛メッセージ分析・判断支援デジタルレポート」である。これはproviderの業種区分、取扱可否または承認を決定しない。各providerには実際の機能、`鑑定ノート`・`鑑定書`というユーザー向け表現、使用しない手法および非保証を開示し、カテゴリ判断を求める。
+
 ---
 
 | Provider | Category status | Written inquiry status | One-shot digital content | Credit card | PayPay | Webhook | Test environment | Individual proprietor | Required public pages | Refund requirements | Chargeback handling | Settlement cycle | Fees | Freeze/termination risk | Implementation fit | Evidence | Decision |

@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "月の返事 | 恋のメッセージ鑑定ノート",
   description:
-    "返信待ち、追いメッセージ、曖昧な関係で不安になる夜に。送る前に読む、恋のメッセージ鑑定ノート。",
+    "AIが恋愛メッセージと関係状況を整理し、次の一手の判断材料を鑑定ノート形式で返すサービス。",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

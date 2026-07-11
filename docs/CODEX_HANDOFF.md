@@ -6,36 +6,41 @@ CodeX is the implementation and repository operation agent.
 
 ## Current Development Rule
 
-Task 18C-R1 is limited to repository-wide alignment of the approved 18+ self-declared age-group policy and is awaiting Human review.
+Task 18C-R2 is limited to repository-wide alignment of the Human-approved service positioning and is completed in the repository pending Human review.
 
-Until Task 18C-R1 is accepted, CodeX must not send provider inquiries, select or implement a payment provider, add identity verification, connect OpenAI/email, create API routes or server actions, or begin Task 18D.
+Until Human accepts Task 18C-R2, CodeX must not send provider inquiries, claim a legal or provider classification conclusion, select or implement a payment provider, publish legal pages, connect OpenAI/email, create API routes or server actions, alter safety or age logic, or begin Task 18D.
 
 ## Current Task Status
 
-Task 18C-R1 age-policy alignment has been implemented and is awaiting Human review.
+Task 18C-R2 service-positioning alignment is completed and awaiting Human review.
 
-Aligned policy:
+Canonical official definition:
 
-- Initial MVP is for users aged 18 or older
-- Age-group selection is required
-- Only `18〜24歳`, `25〜29歳`, `30〜34歳`, `35〜39歳`, and `40歳以上` are offered
-- `回答しない` is not offered
-- The request form displays the 18-or-older service notice near the age field
-- No separate 18-or-older checkbox is used
-- No date of birth or identity document is collected
-- Production server validation of the allowed age-group value is required in a future authorized task and is not implemented
+AIを活用した恋愛メッセージ分析・判断支援デジタルレポート
 
-Not completed:
+Canonical user-facing definition:
 
-- Human acceptance of Task 18C-R1
-- Production server age-group validation
-- Payment implementation
-- Provider inquiry submission or provider selection
-- OpenAI/email integration
-- API route or server action implementation
+恋のメッセージ鑑定ノート
+
+Key boundaries:
+
+- `鑑定` is a user-facing brand and report-format term
+- No tarot, astrology, birth-date, psychic, spiritual, supernatural, or other divination method is used
+- No true feelings, reply, reconciliation, future event, or relationship outcome is guaranteed
+- Provider classification remains unknown
+- Wording changes are not legal advice, provider approval, or a classification exemption
+- Historical Phase 0 evidence remains historical and has not been rewritten as current positioning
+
+Provider/payment status:
+
+- No inquiry sent
+- No response received
+- No provider approved
+- No provider selected
+- No payment implementation added
 
 Next after Human approval:
 
-Accept Task 18C and proceed to Task 18D only.
+Roadmap Reset: re-evaluate and authorize the next delivery lane before Task 18D or any implementation begins.
 
 Payment implementation remains prohibited.

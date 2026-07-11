@@ -4,6 +4,8 @@
 
 This document defines the Phase 1 diagnosis request form.
 
+The product is `月の返事 単発鑑定ノート`: an AI-assisted relationship-message analysis and decision-support digital report. `鑑定ノート` is a user-facing report-format and brand term; the service does not use divination or supernatural methods.
+
 The form should collect enough context to create a high-quality diagnosis while avoiding unnecessary personal information.
 
 The public MVP target is a self-hosted form, not Google Forms as the production tool.

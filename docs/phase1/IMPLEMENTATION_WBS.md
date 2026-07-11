@@ -115,6 +115,19 @@
 - [x] No provider inquiry sent
 - [x] No payment/API/OpenAI/email implementation started
 
+## P4.9: Task 18C-R2 Service Positioning and Classification Alignment
+
+- [x] Create canonical service-positioning document
+- [x] Align official business/legal/provider wording to AI relationship-message analysis and decision support
+- [x] Retain `鑑定ノート` and `鑑定書` as user-facing brand/report terms
+- [x] Remove current self-definitions as AI fortune-telling
+- [x] Align result structure, uncertainty, facts/inference, and disclaimer
+- [x] Align AI prompt guardrails without implementing an AI API
+- [x] Align provider inquiry drafts and require provider category determination
+- [x] Preserve and classify historical Phase 0 evidence
+- [x] Confirm no inquiry sent and no provider approved or selected
+- [x] Confirm no payment/API/OpenAI/email/server-action implementation added
+
 ## P5: Payment
 
 - [ ] Choose provider

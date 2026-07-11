@@ -2,33 +2,41 @@
 
 ## Current Phase
 
-Phase 1 / Task 18C-R1 age-policy alignment review
+Phase 1 / Task 18C-R2 service-positioning review
 
 ## Current Task
 
-Review the repository-wide alignment of the approved 18+ self-declared age-group policy.
+Review repository-wide alignment of the approved service positioning.
 
-## Approved Policy
+## Approved Official Positioning
 
-- Initial MVP is 18+
-- Required age-group selection
-- Only 18+ age-group choices
-- No `回答しない`
-- No separate 18+ checkbox
-- No date of birth or identity documents
-- Future production server validation required
+AIを活用した恋愛メッセージ分析・判断支援デジタルレポート
+
+## Approved User-Facing Positioning
+
+恋のメッセージ鑑定ノート
+
+## Important Boundary
+
+- `鑑定` remains a brand and report-format term
+- No tarot, astrology, psychic or supernatural method is used
+- No true feelings or future outcome is guaranteed
+- Provider category treatment remains unknown
+- This wording change is not provider approval
 
 ## Do Not Do
 
 - Do not send provider inquiries
+- Do not claim the service is definitively outside a fortune-telling category
 - Do not select a payment provider
 - Do not implement payment
-- Do not add identity verification
+- Do not publish legal pages
 - Do not connect OpenAI/email
-- Do not begin Task 18D
+- Do not add API routes or server actions
+- Do not redesign the UI
 
 ## Next Task
 
-After Human accepts Task 18C-R1:
+After Human accepts Task 18C-R2:
 
-Accept Task 18C and proceed to Task 18D.
+Roadmap Reset: re-evaluate and authorize the next delivery lane before Task 18D or any implementation begins.
