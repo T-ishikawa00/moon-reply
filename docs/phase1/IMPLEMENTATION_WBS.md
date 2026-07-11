@@ -28,13 +28,17 @@ Milestones are ordered dependencies. No implementation task starts until its pla
 
 ## Milestone 1: Reviewable Web MVP
 
-Dependency: Task 18C-R3 Human acceptance.
+Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 
-- [ ] Planning/spec: define route inventory
-- [ ] Planning/spec: define request, confirmation, blocked, needs-review, purchase-confirmation, sample-report, and result fixture states
-- [ ] Planning/spec: define fixture/mock strategy and prohibit public writes
-- [ ] Planning/spec: define legal-page presentation and truthful-placeholder handling
-- [ ] Planning/spec: define design brief, acceptance criteria, and bounded implementation slices
+- [x] Planning/spec: define route inventory
+- [x] Planning/spec: define request, confirmation, blocked, needs-review, purchase-confirmation, sample-report, and result fixture states
+- [x] Planning/spec: define fixture/mock strategy and prohibit public writes
+- [x] Planning/spec: define legal-page presentation and truthful-placeholder handling
+- [x] Planning/spec: define design brief, acceptance criteria, and bounded implementation slices
+- [x] Planning/spec: create `M1_REVIEWABLE_WEB_MVP_SPEC.md`
+- [x] Planning/spec: create `M1_UI_STATE_MATRIX.md`
+- [x] Planning/spec: create `M1_IMPLEMENTATION_SLICES.md`
+- [x] Planning/spec: create Task M1-P1 review record
 - [ ] Human acceptance of Milestone 1 planning/specification
 - [ ] Implementation: complete `/` and `/request` review flow
 - [ ] Implementation: add reviewable confirmation and safety states

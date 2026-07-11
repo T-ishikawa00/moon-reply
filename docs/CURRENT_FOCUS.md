@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task 18C-R3 Roadmap Reset review
+Phase 1 / Task M1-P1 Reviewable Web MVP planning/specification review
 
 ## Completed Through
 
@@ -15,10 +15,23 @@ Phase 1 / Task 18C-R3 Roadmap Reset review
 - Provider-inquiry preparation
 - 18+ policy alignment
 - Service-positioning alignment
+- Task 18C-R3 Roadmap Reset accepted by Human
 
 ## Current Task
 
-Align every controlling roadmap, plan and WBS to one approved delivery path ending at the first verified real purchase.
+Task M1-P1 planning/specification is completed in the repository and awaiting Human review.
+
+Planning outputs define:
+
+- exact routes and review journey
+- UI and safety-state ownership
+- payment-free final confirmation
+- sample versus production-shaped fixture result
+- fixture/mock boundaries
+- legal/contact review presentation
+- 月の返事-specific design and accessibility requirements
+- M1-I1 through M1-I6 one-commit implementation slices
+- material Human decisions and blockers
 
 ## Initial Web MVP Completion Point
 
@@ -37,8 +50,10 @@ The first verified real unknown-customer purchase completes the initial paid Web
 - No payment implementation
 - No package changes
 
+Milestone 1 implementation has not started.
+
 ## Next Task After Human Acceptance
 
-Milestone 1 planning/specification:
+M1-I1 Route Shell and Review Navigation only, after separate explicit Human authorization.
 
-Define the route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria and implementation slices for the payment-free Reviewable Web MVP.
+M1-I2 through M1-I6 and all later milestones remain unauthorized.

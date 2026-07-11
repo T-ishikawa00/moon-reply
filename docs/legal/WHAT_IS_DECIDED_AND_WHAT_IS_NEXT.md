@@ -109,12 +109,14 @@
 
 ## 次の順番
 
-1. 決済事業者への照会準備
-2. Humanによる運営者判断
-3. 決済事業者へ照会
-4. 書面回答を比較
-5. Humanがproviderを選定
-6. 法務・運営情報を完成
-7. Sandbox決済実装
+現在の実行順序は `docs/ROADMAP.md` が制御する。法務・provider準備文書の旧Task順序は、現行Milestoneを上書きしない。
 
-Payment implementation must not begin before step 5 is explicitly approved.
+1. Task M1-P1で決済なしのReviewable Web MVPを仕様化し、Humanが受け入れる
+2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
+3. Milestone 2で運営者情報と公開条件を完成する
+4. Milestone 3で決済なしの審査用サイトをデプロイする
+5. Milestone 4で決済事業者へ照会し、書面回答を比較してHumanがproviderを選定する
+6. Milestone 5で実決済を除くBackend・Safety・AI・メールを完成する
+7. Milestone 6で選定済みproviderのSandbox決済を実装する
+
+Provider inquiry must not begin before Milestone 3 is accepted. Provider-specific payment implementation must not begin before Human selects the provider in Milestone 4.

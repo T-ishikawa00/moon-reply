@@ -2,7 +2,9 @@
 
 ## Status
 
-Awaiting Human review.
+Accepted by Human.
+
+Accepted commit: `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`
 
 ## Base
 
@@ -105,8 +107,6 @@ No production runtime integration is inferred from these foundations.
 
 ## Next
 
-After Human acceptance:
+At acceptance, the next authorized task was Task M1-P1 planning/specification for the payment-free Reviewable Web MVP.
 
-Milestone 1 planning/specification for the payment-free Reviewable Web MVP.
-
-No implementation is authorized by this Roadmap Reset commit.
+Task M1-P1 is now completed in the repository and awaiting Human review. No implementation was authorized by the Roadmap Reset commit.

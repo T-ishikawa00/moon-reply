@@ -11,7 +11,8 @@ Earlier documents considered semi-manual validation, semi-manual Web delivery, a
 Current status:
 
 - Milestone 0 is completed.
-- Task 18C-R3 aligns the controlling documents and is awaiting Human review.
+- Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
+- Task M1-P1 planning/specification is completed in the repository and awaiting Human review.
 - Milestone 1 implementation has not started.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.

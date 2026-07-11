@@ -4,7 +4,9 @@
 
 This document aligns implementation planning with the authoritative `docs/ROADMAP.md` delivery sequence.
 
-Task 18C-R3 is planning/documentation only. It does not authorize any implementation. The next authorized task after Human accepts Task 18C-R3 is Milestone 1 planning/specification only.
+Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
+
+Task M1-P1 planning/specification is completed in the repository and awaiting Human review. It does not authorize implementation.
 
 ## 1. Product and Delivery Boundary
 
@@ -33,7 +35,8 @@ Stages 1–4.5 and Tasks 18B–18C-R2 are completed foundations:
 - Task 18B: legal-page drafts and publication/operator decision gates;
 - Task 18C: operator-decision and provider-inquiry preparation;
 - Task 18C-R1: required 18-or-older age-policy alignment; and
-- Task 18C-R2: canonical service-positioning alignment, accepted by Human.
+- Task 18C-R2: canonical service-positioning alignment, accepted by Human; and
+- Task 18C-R3: roadmap reset and delivery-lane alignment, accepted by Human.
 
 These completed foundations do not include production server validation, public DB writes, payment, OpenAI, email, deployment, provider inquiry, provider selection, legal-page publication, or production operations.
 
@@ -135,10 +138,10 @@ Provider inquiry is not the immediate next task. Provider-specific payment imple
 - No unrelated feature creep is allowed.
 - Technical availability of a later integration does not authorize skipping dependencies.
 
-## 7. Next Authorized Task
+## 7. Current Gate and Next Task
 
-After Human accepts Task 18C-R3, the next task is:
+Task M1-P1 defines the route inventory, UI states, fixture strategy, legal/contact presentation, design brief, acceptance criteria, and implementation slices for the payment-free Reviewable Web MVP.
 
-Milestone 1 planning/specification for the payment-free Reviewable Web MVP.
+Until Human accepts Task M1-P1, no Milestone 1 implementation is authorized.
 
-It may define route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria, and implementation slices. It may not implement routes, pages, APIs, persistence, payment, OpenAI, email, deployment, or package changes. Implementation remains unauthorized until the Milestone 1 planning/specification task is accepted by Human.
+After acceptance, the next task is M1-I1 Route Shell and Review Navigation only, subject to separate explicit Human authorization. M1-I2 through M1-I6, Milestone 2, APIs, persistence, payment, OpenAI, email, deployment, and package changes remain unauthorized.

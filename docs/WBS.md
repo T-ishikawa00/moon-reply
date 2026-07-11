@@ -235,7 +235,24 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Current focus, handoff, and review record aligned
 - [x] Stale controlling statements classified and corrected
 - [x] Documentation-only boundary preserved
-- [ ] Human acceptance of Task 18C-R3
+- [x] Human acceptance of Task 18C-R3
+
+## P4.12: Current Task — Task M1-P1 Reviewable Web MVP Planning and Specification
+
+- [x] Exact route inventory and review journey specified
+- [x] Route, inline-state, fixture-route, and review-preview ownership specified
+- [x] Safety, invalid-age, missing-consent, and error states specified
+- [x] Payment-free final confirmation specified
+- [x] Sample report and production-shaped fixture result separated
+- [x] Fixture/mock data boundary specified
+- [x] Legal/contact review presentation specified without fictional operator facts
+- [x] 月の返事-specific design brief specified
+- [x] Accessibility, responsive, navigation, analytics, and error requirements specified
+- [x] Milestone 1 implementation divided into M1-I1 through M1-I6 one-commit slices
+- [x] Material Human decisions and slice blockers recorded
+- [x] Documentation-only boundary preserved
+- [x] Milestone 1 implementation not started
+- [ ] Human acceptance of Task M1-P1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -253,4 +270,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-Until Task 18C-R3 is accepted, even Milestone 1 planning/specification is not authorized. Milestone 1 implementation, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.
+Until Task M1-P1 is accepted and M1-I1 is separately authorized, Milestone 1 implementation is blocked. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.

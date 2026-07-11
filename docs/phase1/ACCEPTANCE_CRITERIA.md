@@ -183,6 +183,8 @@ Accepted when:
 
 ## Task 18C-R3: Roadmap Reset and Delivery Lane Alignment
 
+Status: accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
+
 Accepted when:
 
 - `docs/ROADMAP.md` defines one authoritative path to the first paid public Web MVP
@@ -201,6 +203,31 @@ Accepted when:
 - no provider inquiry is sent
 - no provider is approved or selected
 - the next task is Milestone 1 planning/specification only
+
+---
+
+## Task M1-P1: Reviewable Web MVP Planning and Specification
+
+Accepted when:
+
+- exact route inventory exists
+- every route has purpose, data source, actions and boundaries
+- `normal_allowed`, `needs_review` and `rejected` are specified
+- invalid age and consent states are specified
+- `needs_review` and `rejected` cannot reach purchase
+- final confirmation content is fully specified
+- sample report and fixture result are distinguished
+- fixture strategy prevents real personal information and fake evidence
+- legal/contact review presentation is truthful
+- design brief is specific to 月の返事
+- accessibility and responsive requirements exist
+- implementation is split into bounded one-commit slices
+- material Human decisions are explicit
+- no route, page, component, API or integration is implemented
+- no provider inquiry is sent
+- no operator personal information is added
+- package files remain unchanged
+- next task after acceptance is the first approved M1 implementation slice only
 
 ---
 
