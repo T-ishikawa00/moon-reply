@@ -2,9 +2,9 @@
 
 ## Status
 
-Task M1-P1-R1 documentation alignment is completed and awaiting Human review.
+Accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`.
 
-Task M1-P1 remains pending final Human acceptance. The two planning tasks are to be reviewed together. Milestone 1 implementation has not started, and M1-I1 is not authorized.
+Task M1-P1 was accepted by Human at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`. Human then separately authorized M1-I1. M1-I1 is implemented and awaiting Human review; M1-I2 remains unauthorized.
 
 ## Base Commit
 
@@ -124,8 +124,8 @@ Reject astrology, natal charts, zodiac symbols, birth-data analysis, fate or min
 - No provider inquiry was sent, no provider was selected, and no deployment was performed.
 - No operator personal information, provider-inquiry body text, Safety implementation, or age implementation was changed.
 
-## Next after Human acceptance
+## Current follow-up gate
 
-After Human accepts both Task M1-P1 and Task M1-P1-R1, the next possible task is M1-I1 Route Shell and Review Navigation only, and only after separate explicit Human authorization.
+M1-I1 Route Shell and Review Navigation was separately authorized and is implemented for Human review.
 
-M1-I2 through M1-I6 and all later milestones remain unauthorized.
+M1-I2 through M1-I6 and all later milestones remain unauthorized. M1-I2 may begin only after Human accepts M1-I1 and separately authorizes M1-I2.

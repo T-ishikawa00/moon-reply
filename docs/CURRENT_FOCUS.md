@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task M1-P1 + Task M1-P1-R1 planning/specification final Human review
+Phase 1 / Task M1-I1 Route Shell and Review Navigation — implementation completed, awaiting Human review
 
 ## Completed Through
 
@@ -10,60 +10,41 @@ Phase 1 / Task M1-P1 + Task M1-P1-R1 planning/specification final Human review
 - Stage 2 request-form UI
 - Stage 3 Supabase schema foundation
 - Stage 4 deterministic safety foundation
-- Legal/compliance foundation
-- Legal-page drafts
+- Legal/compliance foundation and legal-page drafts
 - Provider-inquiry preparation
-- 18+ policy alignment
-- Service-positioning alignment
+- 18+ policy and service-positioning alignment
 - Task 18C-R3 Roadmap Reset accepted by Human
-- Task M1-P1-R1 documentation alignment completed and awaiting Human review
+- Task M1-P1 accepted by Human at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`
+- Task M1-P1-R1 accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`
+- Task M1-I1 explicitly authorized by Human and implemented
 
 ## Current Task
 
-Task M1-P1 planning/specification and Task M1-P1-R1 UI/UX alignment are completed in the repository and awaiting final Human review together. Task M1-P1 is not yet Human accepted.
+Task M1-I1 establishes only:
 
-Planning outputs define:
+- the accepted vertical LP at `/`;
+- a shared responsive site header and footer;
+- the `/review/**` shell with the accepted two-level review banner;
+- the static `/review` route inventory;
+- truthful active navigation to `/`, `/request`, and `/review`; and
+- non-clickable preparation status for unimplemented Milestone 1 destinations.
 
-- exact routes and review journey
-- UI and safety-state ownership
-- payment-free final confirmation
-- sample versus production-shaped fixture result
-- fixture/mock boundaries
-- legal/contact review presentation
-- 月の返事-specific design and accessibility requirements
-- M1-I1 through M1-I6 one-commit implementation slices
-- material Human decisions and blockers
-- anxiety reduction and user-agency objective
-- vertical LP hierarchy with a separate `/request` form experience
-- text-only input, conversation-paste/anonymization, and image-upload deferral
-- no initial free-complete/ad-supported path
-- complete recommendations for every approved send/light-send/wait/do-not-send label
-- separate Web鑑定ノート and 保存用鑑定書 previews, including planned `/review/save-report/result-normal-001`
-- Safety-before-payment and future `refund_required`/operator handling
-- two-level review banner and The Pattern inspiration-without-imitation boundary
+Task M1-I1 is awaiting Human review after implementation. It adds no runtime integration and does not implement M1-I2 through M1-I6.
+
+## Runtime Boundary
+
+- `/request` remains browser-local.
+- No request submission or persistence is added.
+- No database read/write connection is added.
+- No payment, refund, OpenAI, email, API route, server action, analytics, fixture, PDF/image generation, copy/download/share, or deployment work is added.
+- Existing age choices and deterministic Safety behavior remain unchanged.
 
 ## Initial Web MVP Completion Point
 
 The first verified real unknown-customer purchase completes the initial paid Web MVP only when payment, generation, result access, email delivery and internal traceability are confirmed.
 
-## Current Restrictions
+## Next Gate
 
-- No new application implementation
-- No provider inquiry
-- No provider selection
-- No legal-page publication
-- No deployment
-- No database-write connection
-- No OpenAI connection
-- No email connection
-- No payment implementation
-- No package changes
-- No file upload, OCR, PDF/image generation, download/copy/share, free/ad, or refund implementation
-
-Milestone 1 implementation has not started.
-
-## Next Task After Human Acceptance
-
-M1-I1 Route Shell and Review Navigation only, after Human accepts both Task M1-P1 and Task M1-P1-R1 and then separately authorizes M1-I1.
+Human acceptance of Task M1-I1 is required before M1-I2 may be authorized.
 
 M1-I2 through M1-I6 and all later milestones remain unauthorized.

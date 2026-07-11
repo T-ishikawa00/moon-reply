@@ -2,11 +2,9 @@
 
 ## Status
 
-Awaiting Human review.
+Accepted by Human at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`.
 
-Task M1-P1 is planning/documentation only. Milestone 1 implementation has not started.
-
-Task M1-P1-R1 UI/UX Decision Alignment has completed its documentation changes and also awaits Human review. Task M1-P1 and Task M1-P1-R1 are to be accepted together; neither status authorizes implementation.
+Task M1-P1-R1 was accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`. Human then separately authorized M1-I1. M1-I1 is implemented and awaiting Human review; M1-I2 remains unauthorized.
 
 ## Base Commit
 
@@ -186,8 +184,8 @@ This is the historical Task M1-P1 file list. The exact 20-file Task M1-P1-R1 cha
 - No age or safety logic changed.
 - No legal draft substance changed; only the obsolete execution-order note in a planning/status document is aligned to the accepted roadmap.
 
-## Next After Human Acceptance
+## Current Follow-up Gate
 
-M1-I1 Route Shell and Review Navigation only, after Human accepts both Task M1-P1 and Task M1-P1-R1 and separately authorizes M1-I1.
+M1-I1 Route Shell and Review Navigation was separately authorized and is implemented for Human review.
 
-M1-I2 through M1-I6 and later milestones remain unauthorized.
+M1-I2 through M1-I6 and later milestones remain unauthorized. M1-I2 may begin only after Human accepts M1-I1 and separately authorizes M1-I2.

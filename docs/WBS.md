@@ -237,7 +237,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Documentation-only boundary preserved
 - [x] Human acceptance of Task 18C-R3
 
-## P4.12: Pending Human Acceptance — Task M1-P1 Reviewable Web MVP Planning and Specification
+## P4.12: Human Accepted — Task M1-P1 Reviewable Web MVP Planning and Specification
 
 - [x] Exact route inventory and review journey specified
 - [x] Route, inline-state, fixture-route, and review-preview ownership specified
@@ -251,10 +251,10 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Milestone 1 implementation divided into M1-I1 through M1-I6 one-commit slices
 - [x] Material Human decisions and slice blockers recorded
 - [x] Documentation-only boundary preserved
-- [x] Milestone 1 implementation not started
-- [ ] Human acceptance of Task M1-P1
+- [x] Milestone 1 implementation remained unstarted during planning
+- [x] Human acceptance of Task M1-P1 at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`
 
-## P4.13: Current Task — Task M1-P1-R1 UI/UX Decision Alignment
+## P4.13: Human Accepted — Task M1-P1-R1 UI/UX Decision Alignment
 
 - [x] Human-approved emotional objective documented
 - [x] Vertical LP order, LP/`/request` separation, CTA and price clarity aligned
@@ -268,8 +268,20 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] The Pattern adopt/transform/reject boundary recorded without adding reference assets
 - [x] M1-I1 through M1-I6 planning aligned without authorization
 - [x] Documentation-only boundary preserved
-- [x] Milestone 1 implementation not started
-- [ ] Human acceptance of Task M1-P1 and Task M1-P1-R1
+- [x] Milestone 1 implementation remained unstarted during planning
+- [x] Human acceptance of Task M1-P1-R1 at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`
+
+## P4.14: Current Task — M1-I1 Route Shell and Review Navigation
+
+- [x] Human explicitly authorized M1-I1
+- [x] Refreshed vertical LP implemented at `/`
+- [x] Shared responsive header and footer implemented
+- [x] Shared two-level `/review/**` banner implemented
+- [x] Static `/review` route/status inventory implemented
+- [x] Unimplemented routes shown only as non-clickable preparation items
+- [x] Existing `/request` behavior, age choices, and Safety implementation preserved
+- [x] No fixture or runtime integration added
+- [ ] Human acceptance of Task M1-I1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -287,4 +299,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-Until Task M1-P1 and Task M1-P1-R1 are both accepted and M1-I1 is separately authorized, Milestone 1 implementation is blocked. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.
+M1-I2 remains blocked until Human accepts M1-I1 and separately authorizes the next slice. M1-I3 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates.

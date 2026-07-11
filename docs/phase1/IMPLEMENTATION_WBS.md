@@ -42,12 +42,15 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Task M1-P1-R1 docs: align emotional objective, LP, CTA/price, text-only input, anonymization, image deferral, free/ad policy, complete recommendations for all four normal labels, report split, Safety/refund requirement, review banner, and UX reference boundary
 - [x] Task M1-P1-R1 docs: add `/review/save-report/result-normal-001` to route/state/slice planning
 - [x] Task M1-P1-R1 docs: create decision register and R1 review record
-- [ ] Human acceptance of Task M1-P1 and Task M1-P1-R1 planning/specification
-- [ ] Implementation: complete `/` and `/request` review flow
-- [ ] Implementation: add reviewable confirmation and safety states
-- [ ] Implementation: add purchase/final-confirmation screen with disabled or preparation-only action
-- [ ] Implementation: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
-- [ ] Implementation: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
+- [x] Human acceptance of Task M1-P1 and Task M1-P1-R1 planning/specification
+- [x] M1-I1: implement vertical `/` LP, shared header/footer, `/review/**` shell, and static `/review` inventory
+- [x] M1-I1: preserve `/request`, age choices, Safety behavior, and local-only runtime boundary
+- [ ] Human acceptance of M1-I1
+- [ ] M1-I2: add reviewable request confirmation and Safety states
+- [ ] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action
+- [ ] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
+- [ ] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
+- [ ] M1-I6: complete responsive, accessibility, and visual QA hardening
 - [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
 - [ ] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
 - [ ] Validation: verify offer, JPY 980 price, flow, safety, output, and legal/support clarity
