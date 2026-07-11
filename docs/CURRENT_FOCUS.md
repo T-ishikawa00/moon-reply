@@ -2,41 +2,43 @@
 
 ## Current Phase
 
-Phase 1 / Task 18C-R2 service-positioning review
+Phase 1 / Task 18C-R3 Roadmap Reset review
+
+## Completed Through
+
+- Stage 1 project foundation and static LP
+- Stage 2 request-form UI
+- Stage 3 Supabase schema foundation
+- Stage 4 deterministic safety foundation
+- Legal/compliance foundation
+- Legal-page drafts
+- Provider-inquiry preparation
+- 18+ policy alignment
+- Service-positioning alignment
 
 ## Current Task
 
-Review repository-wide alignment of the approved service positioning.
+Align every controlling roadmap, plan and WBS to one approved delivery path ending at the first verified real purchase.
 
-## Approved Official Positioning
+## Initial Web MVP Completion Point
 
-AIを活用した恋愛メッセージ分析・判断支援デジタルレポート
+The first verified real unknown-customer purchase completes the initial paid Web MVP only when payment, generation, result access, email delivery and internal traceability are confirmed.
 
-## Approved User-Facing Positioning
+## Current Restrictions
 
-恋のメッセージ鑑定ノート
+- No new application implementation
+- No provider inquiry
+- No provider selection
+- No legal-page publication
+- No deployment
+- No database-write connection
+- No OpenAI connection
+- No email connection
+- No payment implementation
+- No package changes
 
-## Important Boundary
+## Next Task After Human Acceptance
 
-- `鑑定` remains a brand and report-format term
-- No tarot, astrology, psychic or supernatural method is used
-- No true feelings or future outcome is guaranteed
-- Provider category treatment remains unknown
-- This wording change is not provider approval
+Milestone 1 planning/specification:
 
-## Do Not Do
-
-- Do not send provider inquiries
-- Do not claim the service is definitively outside a fortune-telling category
-- Do not select a payment provider
-- Do not implement payment
-- Do not publish legal pages
-- Do not connect OpenAI/email
-- Do not add API routes or server actions
-- Do not redesign the UI
-
-## Next Task
-
-After Human accepts Task 18C-R2:
-
-Roadmap Reset: re-evaluate and authorize the next delivery lane before Task 18D or any implementation begins.
+Define the route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria and implementation slices for the payment-free Reviewable Web MVP.

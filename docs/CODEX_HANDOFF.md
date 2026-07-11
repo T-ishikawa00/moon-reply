@@ -2,45 +2,37 @@
 
 ## Role
 
-CodeX is the implementation and repository operation agent.
+CodeX is the implementation and repository operation agent. It must follow the current Human-approved milestone and the scope of the current task.
 
-## Current Development Rule
+## Current Authority
 
-Task 18C-R2 is limited to repository-wide alignment of the Human-approved service positioning and is completed in the repository pending Human review.
+- Task 18C-R1 is accepted by Human.
+- Task 18C-R2 is accepted by Human at commit `24ca0f43f262f3fbe03d412460571ac9daf7956c`.
+- Task 18C-R3 Roadmap Reset is completed in the repository and awaiting Human review.
+- `docs/ROADMAP.md` is the authoritative high-level roadmap.
 
-Until Human accepts Task 18C-R2, CodeX must not send provider inquiries, claim a legal or provider classification conclusion, select or implement a payment provider, publish legal pages, connect OpenAI/email, create API routes or server actions, alter safety or age logic, or begin Task 18D.
+The canonical service is an `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`, presented to users as `恋のメッセージ鑑定ノート`: one report, not chat; JPY 980 one-shot; 18+; safety before payment.
 
-## Current Task Status
+## Current Status
 
-Task 18C-R2 service-positioning alignment is completed and awaiting Human review.
+Completed foundations include the Next.js/static LP, request-form UI, Supabase schema foundation, deterministic local safety foundation, legal/compliance foundation, legal-page drafts, provider-inquiry preparation, age-policy alignment, and service-positioning alignment.
 
-Canonical official definition:
+Runtime and external status:
 
-AIを活用した恋愛メッセージ分析・判断支援デジタルレポート
+- No provider inquiry sent.
+- No provider response received.
+- No provider approved or selected.
+- No legal page published.
+- No review site deployed.
+- No production database-write connection.
+- No payment, OpenAI, email, API-route, or server-action implementation.
 
-Canonical user-facing definition:
+## Current Restriction
 
-恋のメッセージ鑑定ノート
+Task 18C-R3 is documentation-only. It does not authorize routes, UI, legal publication, operator data, deployment, inquiry submission, provider selection, persistence, payment, AI, email, package changes, or other implementation.
 
-Key boundaries:
+## Next After Human Acceptance
 
-- `鑑定` is a user-facing brand and report-format term
-- No tarot, astrology, birth-date, psychic, spiritual, supernatural, or other divination method is used
-- No true feelings, reply, reconciliation, future event, or relationship outcome is guaranteed
-- Provider classification remains unknown
-- Wording changes are not legal advice, provider approval, or a classification exemption
-- Historical Phase 0 evidence remains historical and has not been rewritten as current positioning
+The next task is Milestone 1 planning/specification for the payment-free Reviewable Web MVP only. It must define the route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria, and bounded implementation slices.
 
-Provider/payment status:
-
-- No inquiry sent
-- No response received
-- No provider approved
-- No provider selected
-- No payment implementation added
-
-Next after Human approval:
-
-Roadmap Reset: re-evaluate and authorize the next delivery lane before Task 18D or any implementation begins.
-
-Payment implementation remains prohibited.
+Milestone 1 implementation is not authorized until that planning/specification task is itself accepted by Human.

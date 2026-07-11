@@ -1,5 +1,9 @@
 # WBS.md
 
+## Status Rule
+
+Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
+
 ## P0: Repository Setup
 
 - [x] Git repository initialized
@@ -9,9 +13,9 @@
 
 ## P1: Product Spec
 
-- [x] PRODUCT_SPEC.md finalized
-- [x] DEVELOPMENT_FLOW.md created
-- [x] ROADMAP.md updated
+- [x] PRODUCT_SPEC.md finalized for its historical phase
+- [x] DEVELOPMENT_FLOW.md created as historical planning context
+- [x] ROADMAP.md created
 - [ ] GO_NO_GO.md finalized
 - [ ] VALIDATION_PLAN.md finalized
 
@@ -71,18 +75,20 @@
 - [x] Recruitment message created
 - [x] Phase 0 external decision rule created
 
-## P3: Phase 1 Validation Setup
+## P3: Historical Phase 1 Validation Setup — Superseded as Current Sequence
 
-- [ ] Payment provider inquiry template created
-- [ ] LP copy draft created
-- [ ] 鑑定依頼シート draft created
-- [ ] Feedback form draft created
-- [ ] Delivery template draft created
+These items record early setup ideas. They do not control the Milestone 1–9 sequence.
 
-## P3.1: Phase 1 Sales MVP Specs
+- [x] Payment provider inquiry templates created later under P4.8
+- [x] LP copy/static LP completed later under P4.1
+- [x] Request-form draft/UI completed later under P4.2
+- [ ] Feedback form draft; remapped to Milestone 1 review planning and Milestone 5 persistence
+- [ ] Delivery template draft; remapped to Milestone 1 sample output and Milestone 5 delivery
+
+## P3.1: Historical Phase 1 Sales MVP Specs
 
 - [x] Phase 0 Founder Override decision recorded
-- [x] MVP scope defined
+- [x] MVP scope defined for the historical plan
 - [x] LP structure defined
 - [x] Order form spec defined
 - [x] Payment flow defined
@@ -91,21 +97,25 @@
 - [x] Metrics template defined
 - [x] Phase 1 runbook defined
 
-## P3.2: Automated Public MVP Revision
+## P3.2: Historical Automated Public MVP Revision
 
-- [x] Phase 1 MVP corrected from semi-manual to automated public MVP
+Completed planning record; current sequencing is superseded by `docs/ROADMAP.md`.
+
+- [x] Phase 1 MVP corrected from semi-manual to automated public MVP at that time
 - [x] Automated public MVP spec created
 - [x] Automation architecture created
 - [x] Draft data model created
 - [x] Development QA mode defined
-- [x] MVP scope updated
+- [x] Historical MVP scope updated
 - [x] Form/payment/delivery docs updated for automation
 - [x] Quality checklist updated for automation readiness
 - [x] Metrics updated for automation
 
-## P3.3: Automated MVP Implementation Plan
+## P3.3: Historical Automated MVP Implementation Plan
 
-- [x] README updated for automated public MVP direction
+Completed planning record; it does not authorize implementation outside Milestones 1–9.
+
+- [x] README updated for automated public MVP direction at that time
 - [x] Implementation plan created
 - [x] Route structure created
 - [x] Environment variable plan created
@@ -113,9 +123,9 @@
 - [x] Implementation WBS created
 - [x] Acceptance criteria created
 
-## P4: Implementation Stages
+## P4: Completed Foundations
 
-## P4.1: Stage 1 Project Bootstrap + Static LP
+### P4.1: Stage 1 Project Bootstrap + Static LP
 
 - [x] Next.js project foundation created
 - [x] TypeScript configured
@@ -125,100 +135,76 @@
 - [x] CTA placeholder added
 - [x] Safety/AI/refund notes displayed
 - [x] No backend/API integrations added
-- [x] Build passes
+- [x] Build passed at Stage 1 acceptance
 
-## P4.2: Stage 2 Request Form UI
+### P4.2: Stage 2 Request Form UI
 
 - [x] Stage 1 acceptance recorded
 - [x] `/request` page created
 - [x] Basic information fields added
-- [x] Relationship context fields added
-- [x] Message context fields added
+- [x] Relationship and message-context fields added
 - [x] Emotion/outcome fields added
-- [x] Safety screening UI added
+- [x] Safety-screening UI added
 - [x] Consent checkboxes added
 - [x] Client-side validation added
 - [x] Local-only confirmation state added
 - [x] LP CTA updated to `/request`
 - [x] No backend/API integrations added
 
-## P4.3: Stage 3 Data Foundation Revision
+### P4.3: Stage 3 Data Foundation Revision
 
 - [x] Stage 2 acceptance recorded
-- [x] Payment provider risk note created
+- [x] Payment-provider risk note created
 - [x] Provider sync/source-of-truth policy created
-- [x] Stage 3 data foundation scope created
+- [x] Stage 3 data-foundation scope created
 - [x] Data model strengthened for purchases, credits, entitlements, provider events, and AI logs
-- [x] Stage 3 implementation plan updated
-- [x] Stage 3 WBS updated
-- [x] Stage 3 acceptance criteria updated
+- [x] Stage 3 plan, WBS, and acceptance criteria updated
 
-## P4.4: Stage 3 Supabase Data Foundation
+### P4.4: Stage 3 Supabase Data Foundation
 
 - [x] Supabase package added
 - [x] `.env.example` created
 - [x] Supabase helper files created
 - [x] Stage 3 migration created
-- [x] reading_requests table defined
-- [x] safety_checks table defined
-- [x] readings table defined
-- [x] purchases table defined
-- [x] credit_ledger table defined
-- [x] entitlements table defined
-- [x] provider_events table defined
-- [x] ai_generation_logs table defined
-- [x] email_deliveries table defined
-- [x] feedback table defined
+- [x] `reading_requests`, `safety_checks`, `readings`, `purchases`, `credit_ledger`, `entitlements`, `provider_events`, `ai_generation_logs`, `email_deliveries`, and `feedback` tables defined
 - [x] RLS enabled without public policies
 - [x] No OpenAI/payment/email/API integration added
+- [ ] Production request persistence/public database-write connection; deferred to Milestone 5
 
-## P4.5: Stage 4 Safety Screening Foundation
+### P4.5: Stage 4 Deterministic Safety Foundation
 
 - [x] Stage 3 acceptance recorded
-- [x] Safety types created
-- [x] Safety rule definitions created
-- [x] Deterministic safety classifier created
-- [x] User-facing safety messages created
+- [x] Safety types, reason codes, and deterministic rules created
 - [x] Request form uses local safety classification
-- [x] Rejected-level safety issues block local confirmation
+- [x] Rejected-level issues block local confirmation
 - [x] Needs-review issues show warning
-- [x] No DB persistence added
-- [x] No API route added
-- [x] No OpenAI/payment/email integration added
+- [x] No DB persistence, API route, OpenAI, payment, or email added
+- [ ] Production server safety enforcement; deferred to Milestone 5
 
-## P4.6: Legal / Compliance Foundation
+### P4.6: Legal / Compliance Foundation
 
 - [x] Stage 4 acceptance recorded
-- [x] Compliance decision framework documented
-- [x] Prohibited copy documented
-- [x] Safety and input rules documented
-- [x] AI data minimization documented
-- [x] Provider inquiry process documented
-- [x] Payment confirmation screen specified
-- [x] Legal page requirements documented
+- [x] Compliance, prohibited-copy, safety, input, AI-minimization, provider-inquiry, payment-confirmation, and legal-page requirements documented
 - [x] No payment implementation started
 
-## P4.7: Legal Page Drafts and Operator Decisions
+### P4.7: Legal Page Drafts and Operator Decisions
 
 - [x] Japanese legal-page drafts created
-- [x] Operator placeholders created
-- [x] Unknown provider facts remain TBD
+- [x] Operator placeholders and decision register created
+- [x] Unknown provider facts remain explicit
 - [x] Publication gate created
 - [x] No legal draft published
-- [x] No payment implementation started
 
-## P4.8: Provider Inquiry Preparation
+### P4.8: Provider Inquiry Preparation
 
 - [x] Operator decisions explained
 - [x] Provider inquiry drafts prepared
-- [x] Evidence logging prepared
-- [x] Provider scorecard prepared
-- [x] Provider selection gate prepared
+- [x] Evidence log, scorecard, and provider-selection gate prepared
 - [x] No inquiry sent
 - [x] No provider selected
 - [x] No payment implementation started
 
-## P4.9: Task 18C-R1 Age Eligibility Policy Alignment
+### P4.9: Task 18C-R1 Age Eligibility Policy Alignment
 
 - [x] `回答しない` removed from request-form age choices
 - [x] Required 18-or-older age-group gate aligned across current specifications
@@ -226,29 +212,45 @@
 - [x] Separate age checkbox rejected by policy
 - [x] Date-of-birth and identity-document collection excluded
 - [x] Future production server validation requirement recorded
-- [x] No provider inquiry sent
-- [x] No payment/API/OpenAI/email implementation added
-- [ ] Human acceptance of Task 18C-R1
+- [x] No provider inquiry or payment/API/OpenAI/email implementation added
+- [x] Human acceptance of Task 18C-R1
 
-## P4.10: Task 18C-R2 Service Positioning and Classification Alignment
+### P4.10: Task 18C-R2 Service Positioning and Classification Alignment
 
 - [x] Canonical service-positioning document created
-- [x] Product and README definitions aligned
-- [x] Public copy and metadata aligned without UI redesign
-- [x] Result presentation and AI guardrails aligned
-- [x] Legal/compliance drafts aligned
-- [x] Provider inquiry drafts aligned with honest category-disclosure rule
+- [x] Product, public copy, result, AI, legal/compliance, and provider-inquiry language aligned
 - [x] Historical Phase 0 evidence preserved and classified
 - [x] No provider inquiry sent
 - [x] No provider approved or selected
 - [x] No payment/OpenAI/email/API/server-action implementation added
-- [ ] Human acceptance of Task 18C-R2
+- [x] Human acceptance of Task 18C-R2
 
-## P4.11+: Do Not Start Until Approved
+## P4.11: Current Task — Task 18C-R3 Roadmap Reset and Delivery Lane Alignment
 
-- [ ] Stage 5 payment planning
-- [ ] Request form DB persistence
-- [ ] Payment implementation
-- [ ] AI API implementation
-- [ ] Authentication implementation
-- [ ] Native app implementation
+- [x] `docs/ROADMAP.md` reset as authoritative Milestone 1–9 roadmap
+- [x] Initial MVP completion fixed at first verified real purchase
+- [x] Completed foundations separated from runtime integrations
+- [x] Implementation plan and implementation WBS aligned
+- [x] Parent WBS and acceptance criteria aligned
+- [x] Current focus, handoff, and review record aligned
+- [x] Stale controlling statements classified and corrected
+- [x] Documentation-only boundary preserved
+- [ ] Human acceptance of Task 18C-R3
+
+## P5: Approved Remaining Delivery Sequence — Not Yet Complete
+
+Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
+
+- [ ] Milestone 1: Reviewable Web MVP
+- [ ] Milestone 2: Operator Information and Publication Readiness
+- [ ] Milestone 3: Review Site Deployment
+- [ ] Milestone 4: Payment Provider Inquiry and Selection
+- [ ] Milestone 5: Core Backend, Safety, AI and Email
+- [ ] Milestone 6: Approved Provider Sandbox Payment
+- [ ] Milestone 7: E2E, Safety and Failure Operations
+- [ ] Milestone 8: Production Application and Soft Launch
+- [ ] Milestone 9: First Real Purchase Verification
+
+## Blocked Future Work
+
+Until Task 18C-R3 is accepted, even Milestone 1 planning/specification is not authorized. Milestone 1 implementation, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, production launch, accounts, subscription, and native-app work remain blocked by their respective planning, dependency, validation, and Human acceptance gates.

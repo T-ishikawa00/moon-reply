@@ -141,6 +141,8 @@ Accepted when:
 
 ## Task 18C-R1: Age Eligibility Policy Alignment
 
+Status: accepted by Human.
+
 Accepted when:
 
 - Age-group selection remains required
@@ -158,6 +160,8 @@ Accepted when:
 ---
 
 ## Task 18C-R2: Service Positioning and Classification Alignment
+
+Status: accepted by Human at commit `24ca0f43f262f3fbe03d412460571ac9daf7956c`.
 
 Accepted when:
 
@@ -177,7 +181,34 @@ Accepted when:
 
 ---
 
-## Stage 5: Payment
+## Task 18C-R3: Roadmap Reset and Delivery Lane Alignment
+
+Accepted when:
+
+- `docs/ROADMAP.md` defines one authoritative path to the first paid public Web MVP
+- the initial Web MVP completion point is the first verified real purchase
+- completed foundations are accurately recorded without claiming runtime integrations
+- stale claims that Stage 1 is next are removed
+- the payment-free Reviewable Web MVP precedes provider inquiry
+- operator/publication decisions precede review-site deployment
+- review-site deployment precedes provider inquiry
+- provider selection precedes provider-specific payment implementation
+- backend fulfillment can be tested before real payment integration
+- sandbox payment precedes production payment
+- E2E and failure-operation evidence precede soft launch
+- subscription, accounts and native apps remain post-MVP candidates
+- no code, route, API, payment, AI, email or deployment implementation is added
+- no provider inquiry is sent
+- no provider is approved or selected
+- the next task is Milestone 1 planning/specification only
+
+---
+
+## Historical Stage 5–8 Criteria — Superseded as Current Sequencing
+
+The criteria below are preserved as historical implementation-planning records. They do not authorize work and do not override the Milestone 1–9 order in `docs/ROADMAP.md` and `docs/phase1/IMPLEMENTATION_WBS.md`.
+
+### Historical Stage 5: Payment
 
 Accepted when:
 
@@ -189,7 +220,7 @@ Accepted when:
 
 ---
 
-## Stage 6: AI Generation
+### Historical Stage 6: AI Generation
 
 Accepted when:
 
@@ -201,7 +232,7 @@ Accepted when:
 
 ---
 
-## Stage 7: Result Page + Email
+### Historical Stage 7: Result Page + Email
 
 Accepted when:
 
@@ -213,7 +244,7 @@ Accepted when:
 
 ---
 
-## Stage 8: Feedback + Metrics
+### Historical Stage 8: Feedback + Metrics
 
 Accepted when:
 
@@ -224,7 +255,7 @@ Accepted when:
 
 ---
 
-## Public MVP Launch Gate
+### Historical Public MVP Launch Gate
 
 Accepted when:
 

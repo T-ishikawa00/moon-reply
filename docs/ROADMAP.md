@@ -1,128 +1,194 @@
 # ROADMAP.md
 
-## Overview
+## 1. Status and Authority
 
-月の返事は、検証MVPから段階的に開発する。
+This document is the authoritative high-level delivery roadmap for the initial paid Web MVP of 月の返事.
 
-いきなり本番Webアプリやネイティブアプリを作らない。
-Phase 0〜Phase 1で需要と鑑定品質を検証し、Go条件を満たした場合のみWeb MVP実装へ進む。
+The canonical service is an `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`, presented to users as `恋のメッセージ鑑定ノート`. It is one report, not chat, sold as a JPY 980 one-shot service for users aged 18 or older. Safety enforcement must occur before payment.
 
-## Phase 0: AI鑑定品質ラボ
+Earlier documents considered semi-manual validation, semi-manual Web delivery, automated Web, subscription, and native-app alternatives. Those records remain historical context but do not control the current delivery sequence. Where another planning document conflicts with this roadmap, this roadmap controls until Human approves a documented change.
 
-目的：鑑定書そのものが課金に値するか検証する。
+Current status:
 
-作るもの：
+- Milestone 0 is completed.
+- Task 18C-R3 aligns the controlling documents and is awaiting Human review.
+- Milestone 1 implementation has not started.
+- No payment provider has been selected.
+- No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.
 
-- 相談ケース10〜15件
-- 危険系ケース3〜5件
-- 4判定基準表
-- ゴールド鑑定書3本
-- プロンプトv1
-- 禁止表現リスト
-- 外部評価シート
+## 2. Initial Web MVP Completion Definition
 
-Go条件：
+The initial paid Web MVP is complete only at Milestone 9, when a first real unknown customer can and does:
 
-- 外部評価5人中2人以上が「保存したい」
-- 1人以上が「¥980なら払う可能性あり」
-- 危険ケースで安全分岐できる
-- 判定が安定している
+1. open the public LP;
+2. submit a reading request;
+3. pass production server-side age and safety validation;
+4. pay JPY 980 once;
+5. trigger AI analysis and report generation;
+6. open the result through an unguessable URL;
+7. receive the result URL by email; and
+8. submit feedback or provide traceable support follow-up.
 
-## Phase 1: 半自動¥980有料検証
+The operator must be able to identify the order, payment state, generation state, and delivery state; handle failures and refund/escalation cases; and stop new paid orders when necessary.
 
-目的：見知らぬ人が¥980払うか検証する。
+Completion is not established by a deployed review site, a provider application, a sandbox payment, or a successful internal E2E run alone.
 
-作るもの：
+## 3. Current Completed Foundations — Milestone 0
 
-- LP
-- 決済導線
-- 鑑定依頼シート
-- AI生成 + 人間確認
-- メール or 専用URL納品
-- フィードバック回収
+Status: completed.
 
-価格：
+Completed foundations:
 
-- 1鑑定¥980
+- product concept and JPY 980 one-shot model;
+- Next.js, TypeScript, and Tailwind project foundation;
+- static LP;
+- request-form UI;
+- required 18-or-older age-group selection and client-side validation;
+- deterministic local safety foundation;
+- Supabase schema foundation;
+- legal/compliance foundation;
+- legal-page drafts;
+- provider-inquiry preparation; and
+- canonical service positioning.
 
-## Phase 1.5: 半自動Web納品MVP
+These foundations do not mean that production request persistence, production server validation, provider approval, payment, AI generation, email delivery, public legal pages, or deployment is complete.
 
-目的：手動負荷を減らしつつ品質確認を残す。
+## 4. Milestone 1: Reviewable Web MVP
 
-作るもの：
+Goal: create a payment-free, externally reviewable representation of the complete purchase and delivery experience.
 
-- 管理画面
-- 相談一覧
-- AI生成ボタン
-- 鑑定書編集
-- 鑑定書URL発行
+Required reviewable routes or screens:
 
-## Phase 2: 自動Web MVP
+- `/`;
+- `/request`;
+- request confirmation;
+- safety blocked state;
+- safety needs-review state;
+- purchase/final-confirmation screen;
+- sample report page;
+- production-shaped result page using fixture data;
+- legal-information index or navigation;
+- Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages.
 
-目的：入力→決済→AI生成→鑑定書表示を自動化する。
+Allowed: fixture data, mock request/payment state, sample report content, and a disabled or preparation-only purchase action.
 
-作るもの：
+Prohibited: real payment, OpenAI API, real email sending, public database writes, fake customer reviews, fake purchase counts, and fictional operator information presented as real.
 
-- LP
-- 鑑定依頼シート
-- 決済
-- AI安全判定
-- AI構造化
-- 4判定
-- 鑑定書生成
-- 鑑定書表示
-- 保存用URL
-- 管理ログ
+Exit criterion: a reviewer can understand what is sold, the price, input flow, safety boundaries, final confirmation, expected output, and legal/support information without real payment or AI integration.
 
-## Phase 3: 相手別ノート
+## 5. Milestone 2: Operator Information and Publication Readiness
 
-目的：単発課金から継続利用へ進める。
+Goal: resolve the Human/operator decisions required for a truthful review site.
 
-作るもの：
+Includes operating status, operator-name treatment, business name if any, contact email and method, address/phone display decisions, response-time policy, delivery timing, result URL lifetime, refund/reissue operation, privacy contact, retention/deletion decisions, and removal of public-facing TBD or fictional placeholders.
 
-- ログイン
-- partner_id
-- 相手別ノート
-- 過去鑑定一覧
-- 3日後フォロー
-- 前回からの変化分析
+Exit criterion: no public review page presents invented operator facts or unresolved placeholders as completed information.
 
-## Phase 4: 低額サブスク
+## 6. Milestone 3: Review Site Deployment
 
-目的：月額¥980〜1,500の継続収益を検証する。
+Goal: deploy the payment-free Reviewable Web MVP to a stable external URL.
 
-価値：
+Includes hosting deployment, stable review URL, mobile and desktop review, navigation and broken-link review, contact receipt review, clear notice that payment is unavailable, and an appropriate indexing/privacy decision for the review stage.
 
-- 月3〜5回鑑定
-- 相手別ノート1人
-- 過去ログ保存
-- 3日後フォロー
-- 保存無制限
-- 広告なし
+Exit criterion: an external reviewer or payment provider can inspect the service at a stable URL.
 
-## Phase 5: ネイティブアプリ
+## 7. Milestone 4: Payment Provider Inquiry and Selection
 
-目的：Webで継続需要が見えた後に、スマホ体験を強化する。
+Goal: use the real review URL and an honest service description to obtain written provider evidence and a Human selection.
 
-作るもの：
+Sequence:
 
-- Expo React Native app
-- App Store IAP
-- Push通知
-- ノートUI
-- 鑑定書保存
+1. Human approves the final PAY.JP inquiry.
+2. The inquiry is sent through a verified official channel.
+3. The response is recorded verbatim as evidence.
+4. If PAY.JP is unavailable or unsuitable, proceed to KOMOJU.
+5. STORES or another provider is considered only when authorized.
+6. Written conditions are compared.
+7. Human selects the provider.
 
-## Phase 6: 月額4,000円級プレミアム
+A generic support response, invitation to apply, silence, or SDK availability is not provider approval.
 
-目的：高頻度ユーザーに恋愛ノートOSとして売る。
+Exit criterion: Human selects a provider using written evidence, and the required application and site conditions are known.
 
-価値：
+## 8. Milestone 5: Core Backend, Safety, AI and Email
 
-- 1日1回まで通常鑑定
-- 月4回の深層鑑定
-- 相手別ノート5人
-- 関係変化レポート
-- 3日後/7日後フォロー
-- 入力履歴に基づく週間分析レポート
-- 保存用鑑定書
-- 優先生成
+Goal: complete the fulfillment flow using mock-paid or test-paid state before real payment integration.
+
+Includes request submission and Supabase persistence; production server validation of allowed age-group values; production enforcement of `normal_allowed`, `needs_review`, and `rejected`; no payment path for `needs_review` or `rejected`; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence.
+
+Exit criterion: excluding real card payment, one request can move from submission to stored result and delivery in a controlled test environment.
+
+## 9. Milestone 6: Approved Provider Sandbox Payment
+
+Goal: connect only the Human-approved provider in test or sandbox mode.
+
+Includes checkout creation, provider-event and webhook-signature verification, idempotency, duplicate-payment prevention, purchase state machine, payment-success requirement before generation, failure/cancellation handling, refund foundation, and provider-event evidence retention.
+
+Exit criterion: one sandbox/test payment triggers exactly one fulfillment flow and produces exactly one accessible result.
+
+## 10. Milestone 7: E2E, Safety and Failure Operations
+
+Goal: prove normal and failure paths before accepting real payment.
+
+Includes normal E2E; invalid age; rejected and needs-review cases; duplicate webhook; payment success plus AI failure; email failure; token access protection; rate limiting; abuse/spam controls; retry/manual recovery; refund/reissue; retention/deletion; mobile and desktop UI review; legal/publication final review; and production-stop procedure.
+
+Exit criterion: normal, dangerous, and failure cases have evidence, expected outcomes, and operator procedures.
+
+## 11. Milestone 8: Production Application and Soft Launch
+
+Goal: obtain production approval, configure production systems, and release intentionally to a limited audience.
+
+Includes provider production review/application, production keys and secrets, production domain, monitoring/logging, limited traffic, manual observation of initial orders, and an emergency purchase stop.
+
+Exit criterion: production payment is authorized and the service is intentionally open to a limited audience.
+
+## 12. Milestone 9: First Real Purchase Verification
+
+Goal: verify the first real unknown-customer order from payment through feedback or support follow-up.
+
+Required evidence:
+
+- payment evidence;
+- internal purchase record;
+- exactly one generation;
+- exactly one result token;
+- successful result access;
+- email delivery;
+- support traceability;
+- no exposed personal information; and
+- no unhandled failure.
+
+Exit criterion: all evidence above is confirmed for the first real unknown-customer order. This is the initial paid Web MVP completion point.
+
+## 13. Explicit Initial-MVP Out of Scope
+
+- login;
+- user account or my page;
+- partner-specific notebook;
+- diagnosis history or saved reports;
+- subscription, coins, points, or recurring billing;
+- native application or push notifications;
+- full admin dashboard; and
+- unapproved provider-specific implementation.
+
+## 14. Post-MVP Candidates
+
+Only after initial paid Web MVP completion and real demand evidence may Human consider:
+
+- operator/admin tools;
+- improved refund and regeneration operations;
+- saved reports;
+- user accounts;
+- partner-specific notebooks;
+- previous-reading comparison;
+- follow-up analysis;
+- subscription evaluation; and
+- native-app evaluation.
+
+These are candidates, not approved immediate tasks.
+
+## 15. Change-Control Rule
+
+No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins.
+
+Each milestone must be planned, implemented where applicable, validated, committed as bounded work, and accepted by Human. A roadmap update does not itself authorize implementation. Changes to milestone order, completion definition, price, age policy, safety-before-payment rule, provider choice, or MVP scope require explicit Human approval and an update to the controlling documents.

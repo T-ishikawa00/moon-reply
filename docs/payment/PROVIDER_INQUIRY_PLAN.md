@@ -114,7 +114,7 @@ Verbal guidance, marketing copy, or an application form alone is not sufficient 
 
 1. Verify the provider's current official inquiry channel and restricted-business information.
 2. Human completes real operator contact information and approves the exact message.
-3. Send only in Task 18D after explicit approval.
+3. Send only in Milestone 4, after Human acceptance of Milestones 1–3 and explicit approval of the exact inquiry.
 4. Preserve the exact sent text, timestamp, channel, reference, and complete response.
 5. Update the evidence log and provider comparison without optimistic assumptions.
 6. Score only after evidence exists.

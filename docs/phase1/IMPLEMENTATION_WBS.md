@@ -1,178 +1,167 @@
 # IMPLEMENTATION_WBS.md
 
-## P1: Bootstrap + Static LP
+## Status and Dependency Rule
 
-- [ ] Create Next.js project foundation
-- [ ] Configure TypeScript
-- [ ] Configure Tailwind
-- [ ] Create one-page LP
-- [ ] Add responsive layout
-- [ ] Add CTA to request placeholder
-- [ ] Add safety/AI/refund notes
-- [ ] Confirm no backend/API integrations
+This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
-## P2: Request Form UI
+Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-- [ ] Create `/request`
-- [ ] Add relationship fields
-- [ ] Add message context fields
-- [ ] Add emotion/outcome fields
-- [ ] Add safety screening fields
-- [ ] Add consent checkboxes
-- [ ] Add client-side validation
+## Milestone 0: Completed Foundations
 
-## P3: Supabase Foundation
+- [x] Next.js project foundation
+- [x] TypeScript configuration
+- [x] Tailwind configuration
+- [x] Static responsive LP at `/`
+- [x] Request-form UI at `/request`
+- [x] Client-side required-field validation
+- [x] Required 18-or-older age-group choices and notice
+- [x] Deterministic local safety classifier and UI states
+- [x] Supabase schema/migration foundation
+- [x] RLS enabled without public policies
+- [x] Legal/compliance foundation
+- [x] Legal-page drafts and publication gate
+- [x] Provider-inquiry drafts, evidence log, scorecard, and selection gate prepared
+- [x] Canonical service positioning aligned
+- [x] Task 18C-R1 accepted by Human
+- [x] Task 18C-R2 accepted by Human
+- [x] Confirm no production DB writes, payment, OpenAI, email, API, deployment, provider inquiry, or provider selection completed
 
-- [ ] Create `.env.example`
-- [ ] Add Supabase client/server plan
-- [ ] Create table migration plan
-- [ ] Add reading_requests
-- [ ] Add safety_checks
-- [ ] Add readings
-- [ ] Add purchases
-- [ ] Add credit_ledger
-- [ ] Add entitlements
-- [ ] Add provider_events
-- [ ] Add ai_generation_logs
-- [ ] Add email_deliveries
-- [ ] Add feedback
-- [ ] Confirm no OpenAI/payment/email integration
-- [ ] Confirm no login/user account implementation
+## Milestone 1: Reviewable Web MVP
 
-## P4: Safety Screening
+Dependency: Task 18C-R3 Human acceptance.
 
-- [x] Define safety classification types
-- [x] Define safety reason codes
-- [x] Define selected-flag rules
-- [x] Add conservative free-text risk scan
-- [x] Implement deterministic classifier
-- [x] Add user-facing safety messages
-- [x] Integrate classifier into request form UI
-- [x] Block local confirmation for rejected-level safety issues
-- [x] Show warning for needs-review issues
-- [x] Confirm no DB/API/OpenAI/payment/email integration
+- [ ] Planning/spec: define route inventory
+- [ ] Planning/spec: define request, confirmation, blocked, needs-review, purchase-confirmation, sample-report, and result fixture states
+- [ ] Planning/spec: define fixture/mock strategy and prohibit public writes
+- [ ] Planning/spec: define legal-page presentation and truthful-placeholder handling
+- [ ] Planning/spec: define design brief, acceptance criteria, and bounded implementation slices
+- [ ] Human acceptance of Milestone 1 planning/specification
+- [ ] Implementation: complete `/` and `/request` review flow
+- [ ] Implementation: add reviewable confirmation and safety states
+- [ ] Implementation: add purchase/final-confirmation screen with disabled or preparation-only action
+- [ ] Implementation: add sample report and production-shaped fixture result page
+- [ ] Implementation: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
+- [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
+- [ ] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
+- [ ] Validation: verify offer, JPY 980 price, flow, safety, output, and legal/support clarity
+- [ ] Human acceptance of Milestone 1
 
-## P4.5: Legal / Compliance Foundation
+## Milestone 2: Operator Information and Publication Readiness
 
-- [x] Stage 4 acceptance recorded
-- [x] Legal source register created
-- [x] Legal compliance foundation created
-- [x] Compliance checklist created
-- [x] Prohibited expressions created
-- [x] Unsupported-case policy created
-- [x] Input validation specification created
-- [x] AI prompt guardrails created
-- [x] AI data minimization policy created
-- [x] Data retention planning created
-- [x] Payment provider inquiry plan created
-- [x] Provider comparison template created
-- [x] Final payment confirmation screen specified
-- [x] Legal page requirements specified
-- [x] No implementation code changed
+Dependency: Milestone 1 Human acceptance.
 
-## P4.6: Legal Page Drafts
+- [ ] Planning/spec: enumerate operator, contact, disclosure, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions
+- [ ] Human acceptance of Milestone 2 planning/specification
+- [ ] Operator decisions: resolve individual/sole-proprietor status and name/business-name treatment
+- [ ] Operator decisions: resolve contact email/method, address, phone, response time, and privacy contact
+- [ ] Operator decisions: resolve delivery timing, result URL lifetime, refund/reissue, retention, and deletion
+- [ ] Implementation/content: remove or withhold public-facing TBD and fictional placeholders
+- [ ] Validation: verify public review content contains no invented or falsely completed operator facts
+- [ ] Human acceptance of Milestone 2
 
-- [x] Terms of Service draft created
-- [x] Privacy Policy draft created
-- [x] 特商法 draft created
-- [x] Refund Policy draft created
-- [x] AI disclosure draft created
-- [x] Unsupported-cases public draft created
-- [x] Contact-page draft created
-- [x] Operator decision register created
-- [x] Consistency matrix created
-- [x] Publication gate created
-- [x] All drafts retain non-public draft labels
-- [x] No application implementation changed
+## Milestone 3: Review Site Deployment
 
-## P4.7: Operator Decisions and Provider Inquiry Preparation
+Dependency: Milestone 2 Human acceptance.
 
-- [x] Task 18B acceptance recorded
-- [x] Decided/undecided overview created
-- [x] Operator decision guide created
-- [x] Operator worksheet created
-- [x] PAY.JP inquiry draft created
-- [x] KOMOJU inquiry draft created
-- [x] STORES inquiry draft created
-- [x] Generic inquiry template created
-- [x] Submission checklist created
-- [x] Evidence log created
-- [x] Provider scorecard created
-- [x] Provider decision gate created
-- [x] No inquiry sent
-- [x] No payment implementation started
+- [ ] Planning/spec: define hosting, stable review URL, indexing/privacy posture, device review, contact test, and rollback/removal
+- [ ] Human acceptance of Milestone 3 planning/specification
+- [ ] Implementation: deploy payment-free review site
+- [ ] Implementation: show clear payment-unavailable status
+- [ ] Validation: stable external URL
+- [ ] Validation: mobile and desktop review
+- [ ] Validation: navigation and broken links
+- [ ] Validation: contact receipt and indexing/privacy decision
+- [ ] Human acceptance of Milestone 3
 
-## P4.8: Task 18C-R1 Age Eligibility Policy Alignment
+## Milestone 4: Payment Provider Inquiry and Selection
 
-- [x] Remove `回答しない` from the request-form age-group choices
-- [x] Keep age-group selection required
-- [x] Offer only 18-or-older age-group choices
-- [x] Display the 18-or-older service notice near the age field
-- [x] Confirm no separate age checkbox exists
-- [x] Confirm no date of birth or identity document is collected
-- [x] Record production server validation as a future requirement
-- [ ] Implement production server validation in an authorized future task
-- [x] No provider inquiry sent
-- [x] No payment/API/OpenAI/email implementation started
+Dependency: Milestone 3 Human acceptance.
 
-## P4.9: Task 18C-R2 Service Positioning and Classification Alignment
+- [ ] Planning/spec: freeze truthful inquiry content, verified channel, evidence format, fallback order, comparison criteria, and Human gates
+- [ ] Human acceptance of Milestone 4 planning/specification and final PAY.JP inquiry
+- [ ] External inquiry: send PAY.JP inquiry through verified official channel
+- [ ] Evidence: record PAY.JP response verbatim
+- [ ] External inquiry: if required and authorized, send KOMOJU inquiry and record response verbatim
+- [ ] External inquiry: consider STORES/other provider only when authorized
+- [ ] Validation: distinguish written acceptance/conditions from generic support, invitation, silence, or SDK availability
+- [ ] Validation: compare written conditions and required application/site changes
+- [ ] Human provider selection
+- [ ] Human acceptance of Milestone 4
 
-- [x] Create canonical service-positioning document
-- [x] Align official business/legal/provider wording to AI relationship-message analysis and decision support
-- [x] Retain `鑑定ノート` and `鑑定書` as user-facing brand/report terms
-- [x] Remove current self-definitions as AI fortune-telling
-- [x] Align result structure, uncertainty, facts/inference, and disclaimer
-- [x] Align AI prompt guardrails without implementing an AI API
-- [x] Align provider inquiry drafts and require provider category determination
-- [x] Preserve and classify historical Phase 0 evidence
-- [x] Confirm no inquiry sent and no provider approved or selected
-- [x] Confirm no payment/API/OpenAI/email/server-action implementation added
+## Milestone 5: Core Backend, Safety, AI and Email
 
-## P5: Payment
+Dependency: Milestone 4 Human acceptance. Production server age validation remains incomplete until this milestone.
 
-- [ ] Choose provider
-- [ ] Add payment environment variables
-- [ ] Add mock payment mode
-- [ ] Add real payment create flow
-- [ ] Add payment success verification
-- [ ] Add webhook handling
-- [ ] Ensure payment success required before generation
+- [ ] Planning/spec: request endpoint, persistence, state machine, access, recovery, and evidence boundaries
+- [ ] Planning/spec: allowed age values and production server safety enforcement
+- [ ] Planning/spec: AI payload minimization, judgment/report schemas, validation, retries, and failure handling
+- [ ] Planning/spec: result token, email test/log mode, feedback persistence, and operations
+- [ ] Human acceptance of Milestone 5 planning/specification
+- [ ] Implementation: request submission endpoint and Supabase request persistence
+- [ ] Implementation: production server validation of allowed age-group values
+- [ ] Implementation: production enforcement of `normal_allowed`, `needs_review`, and `rejected`
+- [ ] Implementation: prohibit payment path for `needs_review` and `rejected`
+- [ ] Implementation: minimized structured AI judgment and full report generation
+- [ ] Implementation: output validation, retries, and failure handling
+- [ ] Implementation: result token generation, persistence, protected result page, and feedback persistence
+- [ ] Implementation: email delivery or approved test/log mode
+- [ ] Validation: controlled request reaches stored result and delivery with mock-paid/test-paid state
+- [ ] Validation: no real card payment integration
+- [ ] Human acceptance of Milestone 5
 
-## P6: AI Generation
+## Milestone 6: Approved Provider Sandbox Payment
 
-- [ ] Add OpenAI environment variables
-- [ ] Add judgment prompt
-- [ ] Add judgment schema
-- [ ] Add full diagnosis prompt
-- [ ] Add output validation
-- [ ] Add failure handling
-- [ ] Add golden sample quality anchors
+Dependency: Milestone 5 Human acceptance and Human-selected provider from Milestone 4.
 
-## P7: Result Page + Email
+- [ ] Planning/spec: approved-provider checkout, events, webhook signature, idempotency, purchase states, failure/cancellation, refund, and evidence
+- [ ] Human acceptance of Milestone 6 planning/specification
+- [ ] Implementation: approved-provider sandbox/test checkout
+- [ ] Implementation: event and webhook-signature verification
+- [ ] Implementation: idempotency and duplicate-payment prevention
+- [ ] Implementation: payment-success gate before generation
+- [ ] Implementation: failure, cancellation, refund foundation, and evidence retention
+- [ ] Validation: one sandbox payment triggers exactly one fulfillment and one result
+- [ ] Human acceptance of Milestone 6
 
-- [ ] Create `/result/[token]`
-- [ ] Add token protection
-- [ ] Render markdown diagnosis
-- [ ] Show saveable memo/card copy
-- [ ] Show emotional tags
-- [ ] Add email log mode
-- [ ] Add real email provider
-- [ ] Send result URL by email
+## Milestone 7: E2E, Safety and Failure Operations
 
-## P8: Feedback + Metrics
+Dependency: Milestone 6 Human acceptance.
 
-- [ ] Create `/feedback/[token]`
-- [ ] Add feedback fields
-- [ ] Store feedback
-- [ ] Add metrics tracking
-- [ ] Add validation summary process
+- [ ] Planning/spec: normal, safety, abuse, duplicate, failure, recovery, refund, deletion, device, legal, and stop evidence matrix
+- [ ] Human acceptance of Milestone 7 planning/specification
+- [ ] Implementation: accepted rate limiting, abuse/spam controls, recovery, and production-stop controls
+- [ ] Validation: normal E2E and invalid age
+- [ ] Validation: `rejected` and `needs_review`
+- [ ] Validation: duplicate webhook
+- [ ] Validation: payment success plus AI failure and email failure
+- [ ] Validation: token access protection, rate limiting, and abuse/spam controls
+- [ ] Validation: retry/manual recovery and refund/reissue
+- [ ] Validation: retention/deletion and mobile/desktop UI
+- [ ] Validation: legal/publication final review and production-stop procedure
+- [ ] Human acceptance of Milestone 7
 
-## P9: Public Launch Gate
+## Milestone 8: Production Application and Soft Launch
 
-- [ ] Run safety test cases
-- [ ] Run payment test
-- [ ] Run AI generation test
-- [ ] Run email test
-- [ ] Run privacy review
-- [ ] Run mobile UI review
-- [ ] Confirm no fake metrics
+Dependency: Milestone 7 Human acceptance.
+
+- [ ] Planning/spec: production application, secrets/domain, monitoring/logging, limited traffic, observation, and emergency stop
+- [ ] Human acceptance of Milestone 8 planning/specification
+- [ ] External/application: obtain provider production authorization
+- [ ] Implementation/configuration: production keys, secrets, domain, monitoring, and logging
+- [ ] Implementation/operation: limited traffic and manual observation of initial orders
+- [ ] Validation: emergency purchase stop works
+- [ ] Validation: production authorization and intentional limited opening are evidenced
+- [ ] Human acceptance of Milestone 8
+
+## Milestone 9: First Real Purchase Verification
+
+Dependency: Milestone 8 Human acceptance.
+
+- [ ] Planning/spec: define privacy-safe first-order observation and evidence checklist
+- [ ] Human acceptance of Milestone 9 verification plan
+- [ ] Validation: real payment evidence and internal purchase record
+- [ ] Validation: exactly one generation and one result token
+- [ ] Validation: successful result access and email delivery
+- [ ] Validation: feedback or support follow-up and support traceability
+- [ ] Validation: no exposed personal information and no unhandled failure
+- [ ] Human acceptance of Milestone 9 and initial paid Web MVP completion

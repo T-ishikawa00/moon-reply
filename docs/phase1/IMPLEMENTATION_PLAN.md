@@ -1,425 +1,144 @@
 # IMPLEMENTATION_PLAN.md
 
-## 0. Purpose
+## 0. Status and Purpose
 
-This document defines the implementation plan for the Phase 1 automated public MVP.
+This document aligns implementation planning with the authoritative `docs/ROADMAP.md` delivery sequence.
 
-This is not implementation.
+Task 18C-R3 is planning/documentation only. It does not authorize any implementation. The next authorized task after Human accepts Task 18C-R3 is Milestone 1 planning/specification only.
 
-The next implementation must be staged and must not accidentally become a full app.
+## 1. Product and Delivery Boundary
 
----
+Canonical service:
 
-## 1. MVP Goal
+- official: `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`;
+- user-facing: `恋のメッセージ鑑定ノート`;
+- one report, not chat;
+- JPY 980 one-shot;
+- users aged 18 or older;
+- safety enforcement before payment;
+- no provider selected; and
+- no payment implementation yet.
 
-Build an automated one-shot paid diagnosis MVP.
+The initial paid Web MVP completes only after Milestone 9 verifies the first real unknown-customer purchase through payment, generation, result access, email delivery, and internal traceability.
 
-Target public flow:
+## 2. Completed Foundations
 
-LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
+Stages 1–4.5 and Tasks 18B–18C-R2 are completed foundations:
 
----
+- Stage 1: Next.js/TypeScript/Tailwind foundation and static LP;
+- Stage 2: request-form UI and client-side validation;
+- Stage 3: Supabase schema foundation;
+- Stage 4: deterministic local safety foundation;
+- Stage 4.5: legal/compliance foundation;
+- Task 18B: legal-page drafts and publication/operator decision gates;
+- Task 18C: operator-decision and provider-inquiry preparation;
+- Task 18C-R1: required 18-or-older age-policy alignment; and
+- Task 18C-R2: canonical service-positioning alignment, accepted by Human.
 
-## 2. Development Principle
+These completed foundations do not include production server validation, public DB writes, payment, OpenAI, email, deployment, provider inquiry, provider selection, legal-page publication, or production operations.
 
-Development may use:
+The former statement that Stage 1 is the next implementation task is obsolete and removed from current authority.
 
-- mock payment
-- mock AI
-- email logging
-- fixture data
-- manual QA
+## 3. Work-Type Separation
 
-Public MVP target:
+The remaining delivery lane separates work that must not be collapsed into one task:
 
-- normal diagnosis flow is automated
-- dangerous cases are blocked or routed away
-- payment success triggers diagnosis generation
-- result page is created automatically
-- result URL is sent by email
+| Work type | Primary milestone | Boundary |
+| --- | --- | --- |
+| Planning/specification | Every milestone, beginning with Milestone 1 | Defines scope and acceptance; does not authorize implementation by itself |
+| UI/review implementation | Milestone 1 | Payment-free, fixture/mock based, no public writes or runtime integrations |
+| Operator decisions | Milestone 2 | Human facts and policies; no fictional public facts |
+| Deployment for review | Milestone 3 | Stable review URL with payment unavailable |
+| External inquiry and selection | Milestone 4 | Written evidence and Human provider selection required |
+| Backend/AI/email implementation | Milestone 5 | Mock-paid/test-paid fulfillment before real payment integration |
+| Payment implementation | Milestone 6 | Human-approved provider, sandbox/test mode only |
+| E2E and operations | Milestone 7 | Normal, safety, abuse, failure, refund, recovery, and stop procedures |
+| Production application and launch | Milestone 8 | Production approval and limited soft launch |
+| Real purchase verification | Milestone 9 | First verified unknown-customer order completes the MVP |
 
----
+## 4. Approved Milestone Sequence
 
-## 3. Recommended Stack
+### Milestone 1: Reviewable Web MVP
 
-- Next.js
-- TypeScript
-- Tailwind CSS
-- Supabase
-- OpenAI API
-- Payment provider
-- Email sending service
-- Vercel
+Planning/specification must define the route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria, and bounded implementation slices.
 
----
+Implementation, only after that plan is accepted, may create the payment-free review experience described in `docs/ROADMAP.md`. It must use fixtures or mock state and must not add real payment, OpenAI, email sending, public database writes, fake social proof, or fictional operator facts.
 
-## 4. Staged Implementation Overview
+Validation must prove that a reviewer can understand the offer, price, input flow, safety boundaries, final confirmation, expected report, and legal/support information. Human acceptance closes the milestone.
 
-### Stage 1: Project Bootstrap + Static LP
+### Milestone 2: Operator Information and Publication Readiness
 
-Goal:
+Planning/specification must enumerate every unresolved operator/publication decision and its evidence owner. Human supplies or approves truthful operator facts and operational policies. Public-facing TBD and fictional placeholders must be removed or withheld before publication.
 
-- Create Next.js project foundation
-- Build one-page LP
-- No DB/API/payment/AI yet
+Validation confirms that no public review page presents invented or unresolved information as complete. Human acceptance closes the milestone.
 
-Includes:
+### Milestone 3: Review Site Deployment
 
-- package.json
-- app route structure
-- Tailwind setup
-- static LP sections
-- CTA route placeholder
+Planning/specification must define hosting, review URL, indexing/privacy posture, contact receipt test, device coverage, and rollback/removal procedure.
 
-Excludes:
+Implementation deploys only the payment-free review site. Validation covers stable URL access, mobile/desktop presentation, navigation, broken links, contact receipt, and a clear payment-unavailable notice. Human acceptance closes the milestone.
 
-- Supabase
-- OpenAI
-- Payment
-- Email
-- Database
+### Milestone 4: Payment Provider Inquiry and Selection
 
----
+Planning/specification must freeze the truthful service description, verified inquiry channel, evidence format, provider fallback order, comparison criteria, and Human decision gate.
 
-### Stage 2: Self-hosted Request Form
+External inquiry occurs only after Milestones 1–3 are accepted. PAY.JP is first; KOMOJU follows only if needed; STORES or another provider requires authorization. Responses are retained verbatim. Generic support, an invitation to apply, silence, or SDK availability is not approval.
 
-Goal:
+Validation confirms written evidence and known application/site conditions. Human selects the provider and accepts the milestone.
 
-- Build diagnosis request form UI
-- Validate required fields client-side
-- Display consent checkboxes
+### Milestone 5: Core Backend, Safety, AI and Email
 
-Includes:
+Planning/specification must define API/persistence boundaries, allowed age values, safety enforcement, state transitions, AI payload minimization, structured schemas, retry/failure behavior, tokens, email test/log mode, feedback persistence, and recovery evidence.
 
-- form page
-- required age-group selection with only 18-or-older choices
-- visible 18-or-older service notice near the age field
-- relationship/context fields
-- message fields
-- safety screening questions
-- consent fields
+Implementation connects the request-to-delivery flow using mock-paid or test-paid state. `needs_review` and `rejected` must have no payment path. Real provider card integration is excluded.
 
-Excludes:
+Validation proves one controlled request can move from submission through stored result and delivery without real card payment. Human acceptance closes the milestone.
 
-- real DB persistence initially
-- payment
-- AI generation
-- separate age checkbox, date of birth, or identity-document collection
+### Milestone 6: Approved Provider Sandbox Payment
 
----
+Planning/specification must be provider-specific and based on Milestone 4 written evidence. It must define checkout, event verification, webhook signatures, idempotency, duplicate prevention, purchase state machine, cancellation/failure, refunds, and evidence retention.
 
-### Stage 3: Supabase Data Foundation
+Implementation connects only the Human-approved provider in test/sandbox mode. Validation proves one sandbox payment triggers exactly one fulfillment and one accessible result. Human acceptance closes the milestone.
 
-Goal:
+### Milestone 7: E2E, Safety and Failure Operations
 
-- Add minimal but future-safe data persistence foundation
+Planning/specification must define the evidence matrix and operator runbooks for normal, dangerous, abusive, duplicated, and failed paths.
 
-Includes draft tables:
+Implementation may add only the controls and recovery paths accepted in the plan. Validation covers invalid age, `rejected`, `needs_review`, duplicate webhook, AI/email failure, token protection, rate limits, spam/abuse, manual recovery, refund/reissue, retention/deletion, device UI, legal/publication review, and production stop. Human acceptance closes the milestone.
 
-- reading_requests
-- safety_checks
-- readings
-- purchases
-- credit_ledger
-- entitlements
-- provider_events
-- ai_generation_logs
-- email_deliveries
-- feedback
+### Milestone 8: Production Application and Soft Launch
 
-Important principles:
+Planning/specification must define production application evidence, secrets/domain setup, monitoring/logging, limited traffic, order observation, and emergency purchase stop.
 
-- External providers are proof sources
-- Our DB is the business source of truth
-- Do not treat Stripe, RevenueCat, Apple, Google, or any payment provider as the only purchase database
-- Do not implement real payment, AI, or email in Stage 3
+Implementation/configuration occurs only after provider production authorization. Validation proves intentional limited availability and operable monitoring/stop controls. Human acceptance closes the milestone.
 
-Excludes:
+### Milestone 9: First Real Purchase Verification
 
-- authentication
-- user account
-- full admin panel
-- OpenAI API
-- payment API
-- email API
+Planning/specification must define the first-order observation and evidence checklist without exposing customer personal information.
 
----
+Verification confirms payment evidence, internal purchase record, exactly one generation, exactly one result token, result access, email delivery, support traceability, no personal-information exposure, and no unhandled failure. Human acceptance records initial paid Web MVP completion.
 
-### Stage 4: Safety Screening Foundation
+## 5. Dependency Ordering
 
-Goal:
+The dependency chain is strict:
 
-- Add deterministic safety screening foundation before payment or AI generation
+`M1 review experience → M2 truthful operator/publication facts → M3 stable review deployment → M4 written provider evidence and Human selection → M5 backend fulfillment without real card payment → M6 approved-provider sandbox payment → M7 E2E/failure operations → M8 production approval and soft launch → M9 first real purchase verification`
 
-Includes:
+Provider inquiry is not the immediate next task. Provider-specific payment implementation cannot precede Human provider selection. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
 
-- safety reason codes
-- rule-based selected flag classification
-- conservative free-text high-risk keyword detection
-- normal_allowed / needs_review / rejected classification
-- user-facing safety messages
-- local request form UI integration
+## 6. One-Task / One-Commit / Human-Review Rule
 
-Excludes:
+- Do not combine milestones or implementation slices into one task.
+- Every task must state scope, exclusions, acceptance criteria, and evidence.
+- Each accepted task is one intentional commit unless Human explicitly authorizes otherwise.
+- Human review is required before the next task or milestone begins.
+- No unrelated feature creep is allowed.
+- Technical availability of a later integration does not authorize skipping dependencies.
 
-- OpenAI safety judge
-- DB persistence
-- API route
-- payment
-- email
-- result page
+## 7. Next Authorized Task
 
----
+After Human accepts Task 18C-R3, the next task is:
 
-### Stage 4.5: Legal / Compliance Foundation
+Milestone 1 planning/specification for the payment-free Reviewable Web MVP.
 
-Goal:
-
-- Define the legal, consumer-protection, privacy, AI, safety, and payment-review rules before paid implementation
-
-Includes:
-
-- legal source register
-- compliance checklist
-- prohibited expression policy
-- unsupported-case policy
-- input validation specification
-- AI prompt guardrails
-- AI data minimization
-- retention planning
-- payment provider inquiry plan
-- provider comparison
-- final payment confirmation screen specification
-- legal page requirements
-
-Excludes:
-
-- final legal advice
-- publication-ready legal pages
-- payment SDK
-- checkout
-- webhook
-- OpenAI integration
-- email integration
-
-### Task 18B: Legal Page Drafts and Operator Decisions
-
-Goal:
-
-- Convert approved compliance requirements into internally reviewable Japanese legal-page drafts
-- Make every unknown operator/provider decision explicit
-- Define the publication approval gate
-
-Includes:
-
-- Terms draft
-- Privacy draft
-- 特商法 draft
-- Refund draft
-- AI disclosure
-- Unsupported-case public explanation
-- Contact-page draft
-- Operator decision register
-- Consistency matrix
-- Publication gate
-
-Excludes:
-
-- publication
-- application routes
-- provider inquiry
-- provider approval
-- payment implementation
-- professional legal approval
-
-### Task 18C: Operator Decisions and Provider Inquiry Preparation
-
-Goal:
-
-- Explain resolved and unresolved operator decisions
-- Prepare honest provider-specific inquiry drafts
-- Create evidence and decision gates
-
-Includes:
-
-- Human-readable decision overview
-- Operator decision guide
-- Operator worksheet
-- PAY.JP inquiry draft
-- KOMOJU inquiry draft
-- STORES inquiry draft
-- Generic inquiry template
-- Submission checklist
-- Evidence log
-- Provider scorecard
-- Provider decision gate
-
-Excludes:
-
-- sending inquiries
-- provider approval
-- operator personal information
-- payment implementation
-- public legal pages
-
-### Task 18C-R1: Age Eligibility Policy Alignment
-
-Goal:
-
-- Align the repository to the approved required self-declared age-group gate for the 18+ initial MVP
-
-Includes:
-
-- Required age-group selection
-- Only 18-or-older age-group choices
-- No `回答しない`
-- Visible 18-or-older service notice near the age field
-- No separate age checkbox
-- No date-of-birth or identity-document collection
-- Production server validation of the allowed age-group value as a future implementation requirement
-
-Excludes:
-
-- API or server implementation
-- Strict identity verification
-- Provider inquiry or payment implementation
-
-### Task 18C-R2: Service Positioning and Classification Alignment
-
-Goal:
-
-- Align current controlling documents and public copy to the approved service positioning
-- Preserve `鑑定ノート` and `鑑定書` as user-facing report-format and brand terms
-- Require providers to determine category treatment from an honest functional description
-
-Includes:
-
-- Canonical `docs/SERVICE_POSITIONING.md`
-- Product, README, public metadata/copy, result-presentation, and AI-instruction alignment
-- Legal/compliance and payment/provider inquiry alignment
-- Repository-wide classification audit separating current, brand, prohibition/comparison, and historical uses
-
-Excludes:
-
-- Provider inquiry submission
-- Provider approval or selection
-- Payment, OpenAI, email, API route, or server-action implementation
-- UI redesign, safety-logic changes, or age-policy changes
-
-### Task 18D: Human Decisions and Provider Inquiry Submission
-
-Goal:
-
-- Human answers priority operator questions
-- Human explicitly approves provider inquiry messages
-- Inquiries are sent through approved channels
-- Responses are recorded as evidence
-
-Payment implementation remains prohibited.
-
-### Stage 5B: Payment Provider Decision
-
-Goal:
-
-- Select a provider only after written evidence and Human approval
-
-### Stage 5C: Sandbox Payment Implementation
-
-Goal:
-
-- Implement the approved provider in test mode only
-
----
-
-### Stage 6: AI Judgment + Diagnosis Generation
-
-Goal:
-
-- Generate structured judgment first
-- Generate full diagnosis second
-
-Includes:
-
-- AI judgment prompt
-- AI diagnosis prompt
-- output validation
-- failure handling
-- quality guardrails based on golden samples
-
----
-
-### Stage 7: Result Page + Email
-
-Goal:
-
-- Automatically display and deliver result
-
-Includes:
-
-- result page with unguessable token
-- full diagnosis markdown rendering
-- saveable memo/card copy display
-- emotional tags
-- email notification with result URL
-- feedback CTA
-
----
-
-### Stage 8: Feedback + Metrics
-
-Goal:
-
-- Collect feedback and validation data
-
-Includes:
-
-- feedback form
-- satisfaction
-- save intent
-- repeat intent
-- price value
-- ChatGPT comparison
-- basic metrics logging
-
----
-
-## 5. Implementation Rule
-
-Do not implement all stages in one task.
-
-Each stage must have:
-
-- clear scope
-- acceptance criteria
-- no unrelated feature creep
-- commit after completion
-- human review before proceeding
-
----
-
-## 6. First Implementation Task
-
-The first implementation task after this plan should be:
-
-Stage 1: Project Bootstrap + Static LP
-
-Allowed:
-
-- create Next.js app foundation
-- create one-page LP
-- static content only
-- no DB
-- no API integrations
-- no payment
-- no AI
-- no email
-
-Not allowed:
-
-- login
-- database
-- payment API
-- OpenAI API
-- email API
-- subscription
-- dashboard
+It may define route inventory, UI states, fixture strategy, legal-page presentation, design brief, acceptance criteria, and implementation slices. It may not implement routes, pages, APIs, persistence, payment, OpenAI, email, deployment, or package changes. Implementation remains unauthorized until the Milestone 1 planning/specification task is accepted by Human.

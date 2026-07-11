@@ -2,7 +2,9 @@
 
 ## Status
 
-Awaiting Human review.
+Accepted by Human.
+
+Accepted commit: `24ca0f43f262f3fbe03d412460571ac9daf7956c`
 
 ## Approved Positioning
 
@@ -76,11 +78,8 @@ Current positioning is controlled by `docs/SERVICE_POSITIONING.md`.
 - No response received
 - No provider approved
 - No provider selected
+- No payment implementation added
 
 ## Next
 
-After Human acceptance:
-
-Roadmap Reset: re-evaluate and authorize the next delivery lane before Task 18D or any implementation begins.
-
-Payment implementation remains prohibited.
+Task 18C-R3 Roadmap Reset aligns the controlling delivery sequence before any inquiry or implementation begins.
