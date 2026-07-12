@@ -55,8 +55,13 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Human authorization of M1-I3
 - [x] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action
 - [x] M1-I3: validate allowlisted normal-only access, unknown/non-normal failure, and absence of transaction behavior
-- [ ] Human visual review and acceptance of M1-I3
-- [ ] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
+- [x] Human visual review and acceptance of M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
+- [x] Human authorization of M1-I4
+- [x] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
+- [x] M1-I4: derive Web/save from one shared `result-normal-001` object referencing `request-normal-001`
+- [x] M1-I4: add missing/unavailable/loading states, unknown-ID fail-closed behavior, LP excerpts, and comparison navigation
+- [x] M1-I4: validate sample/Web character counts, typecheck, lint, build, HTTP routes, content boundaries, and prohibited scope
+- [ ] Human Visual QA and acceptance of M1-I4
 - [ ] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
 - [ ] M1-I6: complete responsive, accessibility, and visual QA hardening
 - [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes

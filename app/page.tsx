@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { PUBLIC_SAMPLE_REPORT, REPORT_FIXTURES } from "@/fixtures/review/reports";
+
+const resultPreview = REPORT_FIXTURES["result-normal-001"];
 
 const concerns = [
   "返事が来ないだけで、心が何度も画面に戻ってしまう",
@@ -57,13 +60,13 @@ export default function Home() {
             <p className="hero__status"><span aria-hidden="true">●</span> サービス審査・準備中のため、現在は決済できません。</p>
           </div>
 
-          <div className="hero-note" aria-label="Web鑑定ノートの準備中プレビュー">
+          <div className="hero-note" aria-label="Web鑑定ノートの架空内容プレビュー">
             <div className="hero-note__top"><span>月の返事</span><span>PREVIEW</span></div>
             <p className="hero-note__label">今夜の結論</p>
-            <p className="hero-note__conclusion">今夜は、送る言葉の温度を少しだけ見直す夜。</p>
-            <p className="hero-note__body">不安を否定せず、入力された状況と文面から、考えられる可能性と次の選択肢を整理します。</p>
+            <p className="hero-note__conclusion">{resultPreview.judgmentLabel}</p>
+            <p className="hero-note__body">{resultPreview.conclusionReasonSummary}</p>
             <div className="hero-note__rule" />
-            <p className="hero-note__caption">構成イメージ · 実在の鑑定結果ではありません</p>
+            <p className="hero-note__caption">固定の架空データによる内容見本 · 購入・AI生成・納品実績ではありません</p>
           </div>
         </div>
       </section>
@@ -104,15 +107,16 @@ export default function Home() {
             <p className="eyebrow">Web reading note</p>
             <h2 id="web-note-title">理由まで深く読む、Web鑑定ノート。</h2>
             <p>結論だけで終わらず、今の関係、文面の印象、推奨アクション、文面案、3日間の方向、分析の限界まで章立てで確認する長文のWeb版です。</p>
-            <span className="preview-boundary">準備段階の構成プレビュー</span>
+            <span className="preview-boundary">固定の架空データによる内容見本</span>
+            <div className="mt-6"><Link href="/review/result/result-normal-001" className="button button--primary">Web鑑定ノートの審査用見本を見る</Link></div>
           </div>
           <div className="web-note-preview" aria-label="Web鑑定ノートの構成プレビュー">
             <div className="preview-heading"><span>月の返事 鑑定ノート</span><span>PREVIEW</span></div>
-            <div className="conclusion-card"><span>01 · 今夜の結論</span><strong>今日は送らず、気持ちと言葉を分けておく。</strong></div>
+            <div className="conclusion-card"><span>01 · 今夜の結論</span><strong>{resultPreview.judgmentLabel}</strong></div>
             <div className="preview-chapters">
               <span>02 今の関係の整理</span><span>03 受け止められ方</span><span>04 不安の核心</span><span>05 文面の印象</span><span>06 推奨アクション</span><span>07 文面案</span><span>08 3日間の方向</span><span>09 限界と注意点</span>
             </div>
-            <p>構成を示す静的な見本です。AI生成・購入・納品された鑑定結果ではありません。</p>
+            <p>{resultPreview.reasonPoints[0]} 固定の架空データによる抜粋で、AI生成・購入・納品された鑑定結果ではありません。</p>
           </div>
         </div>
       </section>
@@ -122,19 +126,20 @@ export default function Home() {
           <div className="section-copy">
             <p className="eyebrow">Quick-reference report</p>
             <h2 id="save-note-title">あとで迷ったときに開く、保存用鑑定書。</h2>
-            <p>Web版とは別に、結論、再判断の目安、方針を変える条件、文面案を短時間で見返すための表示を準備しています。</p>
+            <p>Web版と同じ固定の構造化結果から、結論、再判断の目安、方針を変える条件、文面案を短時間で見返すために再構成した審査用見本です。</p>
             <ul className="boundary-list">
               <li>Web鑑定ノートのスクリーンショットではありません</li>
               <li>Web全文を小さく圧縮したものではありません</li>
               <li>PDF・画像・ダウンロードはまだ利用できません</li>
             </ul>
+            <div className="mt-6"><Link href="/review/save-report/result-normal-001" className="button button--primary">保存用鑑定書の審査用見本を見る</Link></div>
           </div>
           <div className="save-note-preview" aria-label="保存用鑑定書の準備中プレビュー">
             <div className="save-note-preview__header"><span>保存用鑑定書</span><span>PREVIEW</span></div>
             <p className="save-note-preview__label">今夜の方向</p>
-            <strong>今日は送らない方がいい</strong>
-            <dl><div><dt>再判断の目安</dt><dd>状況に変化があったとき</dd></div><div><dt>今できること</dt><dd>下書きを閉じ、明日の自分に残す</dd></div><div><dt>断定できないこと</dt><dd>相手の本心や今後の返信</dd></div></dl>
-            <p>保存向けに再構成した見本 · ファイルは生成されません</p>
+            <strong>{resultPreview.judgmentLabel}</strong>
+            <dl><div><dt>再判断の目安</dt><dd>{resultPreview.reviewTiming}</dd></div><div><dt>今できること</dt><dd>{resultPreview.waitingAction[0]}</dd></div><div><dt>断定できないこと</dt><dd>{resultPreview.materialUnknowns[0]}</dd></div></dl>
+            <p>{resultPreview.presentationMetadata.save.label} · ファイルは生成されません</p>
           </div>
         </div>
       </section>
@@ -156,10 +161,10 @@ export default function Home() {
           <div className="section-copy">
             <p className="eyebrow">Fictional sample</p>
             <h2 id="sample-title">文章の温度を知る、架空サンプル。</h2>
-            <p>実在の相談者、購入、レビュー、AI生成実績ではない架空サンプル鑑定書は、現在準備中です。</p>
-            <span className="disabled-action" aria-disabled="true">サンプル鑑定書 · 準備中</span>
+            <p>実在の相談者、購入、レビュー、AI生成実績ではない架空サンプルで、文章の温度と不確実性の扱いを確認できます。</p>
+            <div className="mt-6"><Link href="/sample-report" className="button button--primary">サンプル鑑定書を見る</Link></div>
           </div>
-          <blockquote className="sample-quote"><span>架空ケースの短い抜粋</span><p>返事が来ない夜、<br />その沈黙を「嫌われた」と決めるには<br />まだ月明かりが足りません。</p><footer>— サービス説明用プレビュー</footer></blockquote>
+          <blockquote className="sample-quote"><span>架空サンプルの短い抜粋</span><p>{PUBLIC_SAMPLE_REPORT.sections[0].paragraphs[0]}</p><footer>— {PUBLIC_SAMPLE_REPORT.judgmentLabel} · サービス説明用</footer></blockquote>
         </div>
       </section>
 

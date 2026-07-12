@@ -301,7 +301,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Typecheck, lint, build, static scope audit, required-route HTTP checks, and unknown-ID fail-closed checks
 - [x] Human visual review and acceptance of M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
 
-## P4.16: Human Review In Progress — M1-I3 Final Purchase Confirmation Without Payment
+## P4.16: Human Accepted — M1-I3 Final Purchase Confirmation Without Payment
 
 - [x] Human explicitly authorized M1-I3
 - [x] Typed `normal-001` purchase fixture references accepted `request-normal-001`
@@ -312,7 +312,21 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Legal/contact destinations remain truthful non-clickable preparation items
 - [x] Payment provider remains unselected; no payment, persistence, network, AI, or email behavior implemented
 - [x] Typecheck, lint, build, required-route HTTP, content, fail-closed, and prohibited-scope checks completed
-- [ ] Human visual review and acceptance of M1-I3
+- [x] Human visual review and acceptance of M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
+
+## P4.17: Human Review In Progress — M1-I4 Sample Report and Fixture Result Experience
+
+- [x] Human explicitly authorized M1-I4
+- [x] Public `/sample-report` implemented with `sample-report-g001` and explicit fictional/non-purchase/non-review/non-AI-generation labels
+- [x] Shared typed `result-normal-001` references `request-normal-001`
+- [x] Nine-section Web鑑定ノート implemented with fixed `今日は送らない方がいい` judgment and complete recommendation coverage
+- [x] A4-oriented 保存用鑑定書 implemented by selecting and recomposing the same structured result
+- [x] Missing-fixture, unavailable-report, static loading, and unknown-ID fail-closed states implemented
+- [x] LP output previews and sample/Web/save comparison navigation updated without redesigning unrelated sections
+- [x] Sample 840-character and Web 1,973-character counts verified
+- [x] Typecheck, lint, build, required-route HTTP, content, fail-closed, and prohibited-scope checks completed
+- [x] No AI, payment, email, DB, API, file generation, download/copy/share, package, Safety, age, or legal-publication work added
+- [ ] Human Visual QA and acceptance of M1-I4
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -330,4 +344,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-I4 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.
+M1-I5 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.

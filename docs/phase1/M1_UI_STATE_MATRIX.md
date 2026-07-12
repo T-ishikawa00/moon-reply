@@ -2,12 +2,13 @@
 
 ## 0. Status and Rules
 
-- Task M1-P1 planning artifact aligned by Task M1-P1-R1; both await final Human review
-- Implementation not authorized
+- Task M1-P1 and Task M1-P1-R1 are Human-accepted; M1-I1 through M1-I3 are Human-accepted
+- Task M1-I4 is implemented and automatically validated under explicit Human authorization; Human Visual QA remains
+- M1-I5 and M1-I6 remain unauthorized
 - All review data is deterministic fixture/mock data
 - `needs_review` and `rejected` cannot reach purchase or an ordinary report
 - Unknown/error states fail closed
-- No state sends, saves, pays, calls AI, sends email, or writes analytics
+- No state sends, saves, pays, calls AI, sends email, writes analytics, or generates a file
 - Every `/review/**` state shows `審査用プレビュー｜実際の決済・送信は行われません` with accessible detail `この画面は架空データを使用しています。AI生成、メール配信、データ保存も動作しません。`
 
 ## 1. State Matrix
@@ -32,8 +33,8 @@
 | M1-S15 | `/legal` and `/legal/*` review state | Legal/footer/confirmation link | Review-safe representation of internal drafts | `審査用ドラフト表示・公開承認前` | Open selected legal page | Return to previous page | Navigation only | No | N/A | Direct links and review hub | Unresolved facts withheld/status-labeled; raw TBD not presented as final | M1-I5 |
 | M1-S16 | `/contact` review state | Contact/legal/safety link | Contact draft structure only | `お問い合わせ機能と連絡先はMilestone 2で確定します` | Return to legal index | Return home/review hub | Navigation only | No | N/A | Direct route | No form, `mailto:`, invented address, SLA, or data collection | M1-I5 |
 | M1-S17 | `/review/error/missing-fixture` | Unknown fixture ID | Static error metadata | `指定された審査用fixtureは存在しません` | Return to review hub | Return home | No | No | No | Enter invalid allowlist slug | Do not reflect unsafe raw ID or silently substitute data | M1-I4 |
-| M1-S18 | Loading placeholder within review result | Component preview only | Static skeleton | `審査用表示を準備しています` | None | Return to review hub | N/A | No | No until static preview ends | Review hub component/state link | No artificial network delay or hidden fetch | M1-I4 |
-| M1-S19 | `/review/error/unavailable-report` | Explicit unavailable fixture state | Static error metadata | `審査用レポートを表示できません` | Return to review hub | Contact review | No | No | No | Review hub link | Do not claim retry job, AI failure record, or email delivery | M1-I4 |
+| M1-S18 | Loading placeholder within review result | Component preview only | Static skeleton | `審査用表示を準備しています` | None | Return to review hub | N/A | No | No; static preview intentionally does not transition | Review hub component/state link | No artificial network delay, hidden fetch, or production loading contract | M1-I4 |
+| M1-S19 | `/review/error/unavailable-report` | Explicit unavailable fixture state | Static error metadata | `審査用レポートを表示できません` | Return to review hub | Return home | No | No | No | Review hub link | Do not claim retry job, AI failure record, email delivery, refund, or operator notification | M1-I4 |
 | M1-S20 | `/review/request/unknown-error` / general review error | Missing/unknown state or local exception preview | `request-error-001` or static error metadata | `状態を確認できません。購入には進めません` | Retry locally / return to form | Review hub | No forward continuation | No | No | Review hub link | Fail closed; never infer `normal_allowed` | M1-I2 / M1-I6 |
 
 ## 2. Route Transition Rules

@@ -2,7 +2,11 @@
 
 ## Status
 
-Task M1-I3 Final Purchase Confirmation Without Payment is implemented and automatically validated. Human Visual QA remains required.
+Task M1-I3 Final Purchase Confirmation Without Payment is implemented, automatically validated, and Human-accepted.
+
+## Human acceptance of M1-I3
+
+Human visually reviewed and accepted Task M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`, then explicitly authorized Task M1-I4 only.
 
 ## Base commit
 
@@ -110,8 +114,8 @@ No real payment, provider selection/integration, payment method, checkout, webho
 
 ## Remaining Human checks
 
-Human must visually inspect approximately 320 px, 390 px, tablet, and desktop layouts; long Japanese wrapping; hierarchy; contrast; keyboard order; focus; touch targets; disabled-control clarity; and whether the result feels like a calm final notebook-order review. The task prohibited CodeX from using the in-app browser, so Human Visual QA remains explicit.
+Resolved by Human acceptance at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`. At implementation completion, the recorded Human checks were approximately 320 px, 390 px, tablet, and desktop layouts; long Japanese wrapping; hierarchy; contrast; keyboard order; focus; touch targets; disabled-control clarity; and whether the result felt like a calm final notebook-order review. This historical evidence is retained.
 
 ## Next gate
 
-Human acceptance of M1-I3. M1-I4 remains unauthorized. The payment provider remains unselected, no actual transaction behavior exists, and mobile-heading polish plus favicon remain deferred to M1-I6.
+Satisfied: Human accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` and explicitly authorized M1-I4. The payment provider remains unselected, no actual transaction behavior exists, and mobile-heading polish plus favicon remain deferred to M1-I6.

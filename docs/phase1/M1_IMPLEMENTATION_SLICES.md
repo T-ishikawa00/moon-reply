@@ -5,7 +5,7 @@
 - Planning output for Task M1-P1, aligned by Task M1-P1-R1
 - No slice is authorized by this document
 - Human acceptance of the planning package and the preceding slice, plus separate explicit authorization, is required before each slice starts
-- Human accepted M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1` and explicitly authorized M1-I3; M1-I4 through M1-I6 remain unauthorized
+- Human accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` and explicitly authorized M1-I4; M1-I5 and M1-I6 remain unauthorized
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
@@ -292,9 +292,11 @@ Human-accepted M1-I2 — satisfied at commit `de332b9f7911cb09ca2e3f7b26ef24c692
 
 ### Next Human gate
 
-Human accepts M1-I3 before M1-I4 starts.
+Satisfied: Human accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` and separately authorized M1-I4.
 
 ## M1-I4: Sample Report and Fixture Result Experience
+
+Implementation status: implemented and automatically validated; awaiting Human Visual QA and acceptance.
 
 ### Goal
 
@@ -310,8 +312,8 @@ Implement three deliberately differentiated review presentations: a fictional ma
 - `app/review/error/unavailable-report/page.tsx`
 - report/sample components under `components/report/` or `components/review/`
 - save-report presentation components under the same bounded review component area
-- future `fixtures/review/reports.ts`
-- future `fixtures/review/errors.ts`
+- `fixtures/review/reports.ts`
+- `fixtures/review/errors.ts`
 
 Routes completed:
 
@@ -384,7 +386,7 @@ Revert M1-I4; earlier request and purchase-confirmation previews remain.
 
 ### Dependency
 
-Human-accepted M1-I3.
+Human-accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` plus explicit Human authorization of M1-I4 — satisfied.
 
 ### Next Human gate
 
@@ -567,4 +569,4 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → Milestone 1 completion review
 ```
 
-The next task after Task M1-P1 and Task M1-P1-R1 acceptance is M1-I1 only, subject to separate explicit Human authorization.
+Current state: M1-I4 is implemented and automatically validated, awaiting Human Visual QA. M1-I5 is the only possible next slice and remains unauthorized until Human accepts M1-I4 and separately authorizes M1-I5.

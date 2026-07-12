@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ReportComparisonNavigation } from "@/components/report/ReportComparisonNavigation";
+import { ReviewLoadingPlaceholder } from "@/components/report/ReviewLoadingPlaceholder";
 
 export const metadata: Metadata = {
   title: "審査用プレビュー一覧 | 月の返事",
@@ -9,6 +11,11 @@ export const metadata: Metadata = {
 const availableRoutes = [
   { route: "/", title: "ランディングページ", description: "商品、価格、出力、AI利用と安全範囲を確認できます。" },
   { route: "/request", title: "3ステップ鑑定依頼フォーム", description: "入力、ローカル安全確認、単一の必須同意、通常確認を確認できます。" },
+  { route: "/sample-report", title: "架空サンプル鑑定書", description: "購入検討と期待形成のための、実在相談・購入・レビュー・AI生成実績ではない文章見本です。" },
+  { route: "/review/result/result-normal-001", title: "Web鑑定ノート fixture", description: "固定された一つの判定を九つの章で深く読む、本番形状の長文審査用見本です。" },
+  { route: "/review/save-report/result-normal-001", title: "保存用鑑定書 fixture", description: "Web版と同じ構造化結果を、後で短時間に見返す目的で再構成した見本です。" },
+  { route: "/review/error/missing-fixture", title: "fixtureなし", description: "許可リスト外IDを通常結果へ置き換えず、安全に停止する固定状態です。" },
+  { route: "/review/error/unavailable-report", title: "レポート表示不可", description: "外部処理や購入の失敗を装わない、固定された表示不可状態です。" },
   { route: "/review/request/normal-allowed", title: "通常確認可能", description: "normal_allowed だけが依頼内容確認へ進めます。" },
   { route: "/review/request/needs-review", title: "慎重な確認が必要", description: "通常確認・購入・通常レポートへ進まない停止状態です。" },
   { route: "/review/request/rejected", title: "通常鑑定対象外", description: "非難や未確認の緊急案内を行わない停止状態です。" },
@@ -21,9 +28,6 @@ const availableRoutes = [
 ];
 
 const plannedRoutes = [
-  { title: "架空サンプル鑑定書", route: "/sample-report", slice: "M1-I4" },
-  { title: "Web鑑定ノート fixture", route: "/review/result/result-normal-001", slice: "M1-I4" },
-  { title: "保存用鑑定書 fixture", route: "/review/save-report/result-normal-001", slice: "M1-I4" },
   { title: "法務・お問い合わせ審査ページ", route: "/legal/** ・ /contact", slice: "M1-I5" },
   { title: "レスポンシブ・アクセシビリティ・Visual QA", route: "Milestone 1 全画面", slice: "M1-I6" },
 ];
@@ -31,13 +35,93 @@ const plannedRoutes = [
 export default function ReviewIndexPage() {
   return (
     <main className="review-hub">
-      <section className="review-hub__hero"><div className="page-shell"><p className="eyebrow">Milestone 1 review</p><h1>審査用プレビュー一覧</h1><p className="review-hub__intro">月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。M1-I2 の依頼・Safety 状態と M1-I3 の購入前確認を固定fixtureで確認できます。</p><div className="review-hub__boundary" role="note"><strong>ここで確認できるのは表示とローカル UI です。</strong><span>決済、外部送信、AI生成、メール配信、データ保存は動作しません。</span></div></div></section>
+      <section className="review-hub__hero">
+        <div className="page-shell">
+          <p className="eyebrow">Milestone 1 review</p>
+          <h1>審査用プレビュー一覧</h1>
+          <p className="review-hub__intro">
+            月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用鑑定書、エラー状態を固定fixtureで確認できます。
+          </p>
+          <div className="review-hub__boundary" role="note">
+            <strong>ここで確認できるのは表示とローカル UI です。</strong>
+            <span>決済、外部送信、AI生成、メール配信、データ保存、ファイル生成は動作しません。</span>
+          </div>
+        </div>
+      </section>
 
-      <section className="review-hub__section" aria-labelledby="available-heading"><div className="page-shell"><div className="section-heading-row"><div><p className="eyebrow">Available now</p><h2 id="available-heading">現在確認できる画面</h2></div><span className="status-chip status-chip--available">実装済み</span></div><div className="review-route-grid">{availableRoutes.map((item) => <Link key={item.route} href={item.route} className="review-route-card review-route-card--available"><span className="review-route-card__status">利用可能</span><code>{item.route}</code><h3>{item.title}</h3><p>{item.description}</p><span className="review-route-card__action">画面を開く <span aria-hidden="true">→</span></span></Link>)}</div></div></section>
+      <section className="review-hub__section" aria-labelledby="available-heading">
+        <div className="page-shell">
+          <div className="section-heading-row">
+            <div><p className="eyebrow">Available now</p><h2 id="available-heading">現在確認できる画面</h2></div>
+            <span className="status-chip status-chip--available">実装済み</span>
+          </div>
+          <div className="review-route-grid">
+            {availableRoutes.map((item) => (
+              <Link key={item.route} href={item.route} className="review-route-card review-route-card--available">
+                <span className="review-route-card__status">利用可能</span>
+                <code>{item.route}</code>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <span className="review-route-card__action">画面を開く <span aria-hidden="true">→</span></span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <section className="review-hub__section review-hub__section--paper" aria-labelledby="planned-heading"><div className="page-shell"><div className="section-heading-row"><div><p className="eyebrow">Planned later in Milestone 1</p><h2 id="planned-heading">後続 slice の審査項目</h2></div><span className="status-chip">未実装</span></div><p className="review-hub__section-copy">以下は route inventory です。リンク、route body、fixture はまだ存在しません。</p><ul className="planned-route-list">{plannedRoutes.map((item) => <li key={`${item.slice}-${item.route}`} className="planned-route-card"><div><span className="planned-route-card__status">未実装 · 後続 slice</span><h3>{item.title}</h3><code>{item.route}</code></div><span className="planned-route-card__slice">{item.slice}</span></li>)}</ul></div></section>
+      <section className="review-hub__section review-hub__section--paper" aria-labelledby="comparison-heading">
+        <div className="page-shell">
+          <div className="section-heading-row">
+            <div><p className="eyebrow">Sample / Web / Save</p><h2 id="comparison-heading">三つの結果体験を比較する</h2></div>
+            <span className="status-chip status-chip--available">固定表示</span>
+          </div>
+          <div className="mt-10"><ReportComparisonNavigation /></div>
+        </div>
+      </section>
 
-      <section className="review-hub__next"><div className="page-shell review-hub__next-inner"><div><p className="eyebrow">Current gate</p><h2>M1-I3 の Human review 待ち</h2><p>M1-I4 以降は未認可です。購入確認には実取引機能を含みません。</p></div><Link href="/review/purchase/confirmation/normal-001" className="button button--secondary">購入前確認を開く</Link></div></section>
+      <section className="review-hub__section" aria-labelledby="loading-heading">
+        <div className="page-shell">
+          <div className="section-heading-row">
+            <div><p className="eyebrow">Static state</p><h2 id="loading-heading">ローディング状態の固定見本</h2></div>
+            <span className="status-chip status-chip--available">静的</span>
+          </div>
+          <p className="review-hub__section-copy">本番の通信契約を定義せず、待機中の表示だけを審査するコンポーネントです。</p>
+          <div className="mt-8"><ReviewLoadingPlaceholder /></div>
+        </div>
+      </section>
+
+      <section className="review-hub__section review-hub__section--paper" aria-labelledby="planned-heading">
+        <div className="page-shell">
+          <div className="section-heading-row">
+            <div><p className="eyebrow">Planned later in Milestone 1</p><h2 id="planned-heading">後続 slice の審査項目</h2></div>
+            <span className="status-chip">未実装</span>
+          </div>
+          <p className="review-hub__section-copy">以下は後続の route / QA inventory です。M1-I5 と M1-I6 はまだ実装・開始していません。</p>
+          <ul className="planned-route-list">
+            {plannedRoutes.map((item) => (
+              <li key={item.slice + "-" + item.route} className="planned-route-card">
+                <div>
+                  <span className="planned-route-card__status">未実装 · 後続 slice</span>
+                  <h3>{item.title}</h3>
+                  <code>{item.route}</code>
+                </div>
+                <span className="planned-route-card__slice">{item.slice}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="review-hub__next">
+        <div className="page-shell review-hub__next-inner">
+          <div>
+            <p className="eyebrow">Current gate</p>
+            <h2>M1-I4 の Human Visual QA 待ち</h2>
+            <p>M1-I5 以降は未認可です。結果見本にも購入、AI生成、メール、保存、ファイル生成は含みません。</p>
+          </div>
+          <Link href="/review/result/result-normal-001" className="button button--secondary">Web鑑定ノートを開く</Link>
+        </div>
+      </section>
     </main>
   );
 }

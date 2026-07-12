@@ -2,13 +2,14 @@ import Link from "next/link";
 
 const availableLinks = [
   { href: "/request", label: "鑑定ノートを依頼する" },
+  { href: "/sample-report", label: "架空サンプル鑑定書" },
   { href: "/review", label: "公開準備プレビュー" },
   { href: "/#service", label: "鑑定ノートについて" },
   { href: "/#safety", label: "AI利用・安全範囲" },
   { href: "/#faq", label: "FAQ" },
 ];
 
-const futureItems = ["サンプル鑑定書", "法務情報", "お問い合わせ"];
+const futureItems = ["法務情報", "お問い合わせ"];
 
 export function SiteFooter() {
   return (

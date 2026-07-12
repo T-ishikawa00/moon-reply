@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task M1-I3 Final Purchase Confirmation Without Payment — implemented and automatically validated, awaiting Human visual review
+Phase 1 / Task M1-I4 Sample Report and Fixture Result Experience — implemented and automatically validated, awaiting Human Visual QA
 
 ## Completed Through
 
@@ -18,36 +18,40 @@ Phase 1 / Task M1-I3 Final Purchase Confirmation Without Payment — implemented
 - Task M1-P1-R1 accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`
 - Task M1-I1 accepted by Human at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
 - Task M1-I2 accepted by Human at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
-- Task M1-I3 explicitly authorized by Human
+- Task M1-I3 accepted by Human at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
+- Task M1-I4 explicitly authorized by Human
 - Human selected a three-step request flow and a unified required acknowledgement
 
 ## Current Task
 
-Task M1-I3 implements:
+Task M1-I4 implements:
 
-- the production-shaped review route `/review/purchase/confirmation/normal-001`;
-- a typed purchase fixture that references accepted `request-normal-001` rather than duplicating request data;
-- product, 税込980円, quantity, one-shot/no-renewal, request summary, delivery plan, AI use, non-guarantee, refund draft boundary, and legal/contact preparation status;
-- a native disabled control labeled `購入機能は現在準備中です`;
-- review metadata fixed to `normal_allowed`, `not_started`, `unselected`, and `unresolved`;
-- correction links to the real `/request#step-1`, `#step-2`, and `#step-3` destinations; and
-- fail-closed handling for unknown and non-normal purchase fixture IDs without fallback.
+- public fictional `/sample-report` using `sample-report-g001`;
+- production-shaped `/review/result/result-normal-001` with the fixed judgment `今日は送らない方がいい` and all nine current report sections;
+- A4-oriented `/review/save-report/result-normal-001` derived from the same structured result;
+- typed `fixtures/review/reports.ts` and `fixtures/review/errors.ts`;
+- fail-closed unknown result/save IDs and the two required error routes;
+- a static loading-state preview with no delay, fetch, or transition;
+- deterministic LP excerpts and truthful sample/Web/save links; and
+- available-route and comparison navigation on `/review`.
+
+The measured substantive text is 840 characters for `sample-report-g001` and 1,973 characters for the Web `result-normal-001` report.
 
 ## Runtime Boundary
 
-- The M1-I3 purchase display is deterministic, local fixture rendering only. It creates no transaction, result, email, or saved data.
-- No request submission, persistence, localStorage, sessionStorage, cookie, database read/write, API route, server action, payment, refund execution, OpenAI, email, analytics, file/image upload, OCR, or deployment work is added.
-- Existing age choices and deterministic Safety severity remain unchanged.
-- The payment provider remains unselected. Payment method, payment timing, exact delivery timing, and transaction-specific conditions remain unresolved.
-- Refund conditions are presented only as a preparation boundary; no refund checkbox or acceptance record exists.
-- Marketing/newsletter consent is absent.
+- All M1-I4 displays are deterministic local fixture rendering.
+- `result-normal-001` references `request-normal-001`. Web and save presentations read the same judgment, reasons, timing, change conditions, waiting actions, no-contact option, later draft, three-day plan, and uncertainty fields.
+- Unknown IDs never fall back to the normal result and do not reflect arbitrary raw input.
+- No request submission, persistence, localStorage, sessionStorage, cookie, database read/write, API route, server action, payment, refund execution, OpenAI, email, analytics, file generation, download, print, copy/share, or deployment work is added.
+- Existing age choices, deterministic Safety severity, request form, and purchase confirmation remain unchanged.
 
 ## Deferred Work
 
+- M1-I5 legal/contact route bodies remain unauthorized.
+- M1-I6 final responsive/accessibility/Visual QA hardening remains unauthorized.
 - Mobile heading polish and favicon remain deferred to M1-I6.
-- M1-I4 report/sample pages, M1-I5 legal bodies, and M1-I6 final QA remain unauthorized.
-- Human visual inspection remains required; the task explicitly prohibited CodeX from using the in-app browser.
+- Human must judge detailed copy, spacing, information density, long-Web reading, and save-page length. CodeX did not use the in-app browser.
 
 ## Next Gate
 
-Human reviews and accepts M1-I3. M1-I4 and all later slices remain unauthorized until separately gated.
+Human reviews and accepts Task M1-I4. M1-I5 and later work remain unauthorized until separately gated.
