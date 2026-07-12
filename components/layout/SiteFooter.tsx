@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const availableLinks = [
   { href: "/request", label: "鑑定ノートを依頼する" },
-  { href: "/review", label: "審査用プレビュー一覧" },
+  { href: "/review", label: "公開準備プレビュー" },
   { href: "/#service", label: "鑑定ノートについて" },
   { href: "/#safety", label: "AI利用・安全範囲" },
   { href: "/#faq", label: "FAQ" },
@@ -37,7 +37,7 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <p className="site-footer__heading">今後の審査ページ</p>
+          <p className="site-footer__heading">今後公開予定のページ</p>
           <ul className="site-footer__future">
             {futureItems.map((item) => (
               <li key={item}>

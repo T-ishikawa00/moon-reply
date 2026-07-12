@@ -12,13 +12,15 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - Task M1-P1 is accepted by Human at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`.
 - Task M1-P1-R1 is accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`.
 - Human explicitly authorized Task M1-I1 Route Shell and Review Navigation.
+- Human approved the M1-I1 desktop visual direction.
+- Task M1-I1-R1 User-facing Copy Cleanup is completed and awaiting Human review.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
 
 The canonical service is an `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`, presented to users as `恋のメッセージ鑑定ノート`: one report, not chat; JPY 980 one-shot; 18+; Safety before payment.
 
 ## Current Status
 
-Task M1-I1 is implemented and awaiting Human review.
+Task M1-I1-R1 public-copy cleanup is completed and awaiting Human review. M1-I1 is not yet finally accepted; mobile, `/request`, and `/review` Human review remain.
 
 Implemented in this slice:
 
@@ -45,4 +47,4 @@ M1-I2 through M1-I6 are not authorized. Do not implement request confirmation or
 
 ## Next Gate
 
-Human reviews and accepts M1-I1. Only then may Human separately authorize M1-I2 Request Confirmation and Safety Review States.
+Human confirms the mobile LP, `/request`, `/review`, and M1-I1-R1 copy cleanup, then may finally accept M1-I1. Only after that may Human separately authorize M1-I2 Request Confirmation and Safety Review States.

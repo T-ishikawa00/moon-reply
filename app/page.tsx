@@ -134,7 +134,7 @@ export default function Home() {
             <p className="save-note-preview__label">今夜の方向</p>
             <strong>今日は送らない方がいい</strong>
             <dl><div><dt>再判断の目安</dt><dd>状況に変化があったとき</dd></div><div><dt>今できること</dt><dd>下書きを閉じ、明日の自分に残す</dd></div><div><dt>断定できないこと</dt><dd>相手の本心や今後の返信</dd></div></dl>
-            <p>別 presentation の構成見本 · ファイルは生成されません</p>
+            <p>保存向けに再構成した見本 · ファイルは生成されません</p>
           </div>
         </div>
       </section>
@@ -181,7 +181,7 @@ export default function Home() {
 
       <section className="final-cta" aria-labelledby="final-cta-title"><div className="final-cta__moon" aria-hidden="true" /><div className="page-shell final-cta__inner"><p className="eyebrow">Your next step</p><h2 id="final-cta-title">答えを急ぐ前に、言葉と気持ちを一度ノートへ。</h2><p>入力はまだ外部へ送られません。現在の鑑定依頼フォームとローカル確認 UI を試せます。</p><RequestCta /></div></section>
 
-      <section className="lp-navigation" aria-labelledby="navigation-title"><div className="page-shell"><div className="section-copy section-copy--center"><p className="eyebrow">Information</p><h2 id="navigation-title">法務・安全・お問い合わせ</h2><p>現在確認できる情報と、準備中の情報を明確に分けています。</p></div><div className="information-grid"><Link href="/#safety"><span>利用可能</span><strong>AI利用・非保証・Safety</strong><small>このページ内の説明へ</small></Link><Link href="/review"><span>利用可能</span><strong>審査用プレビュー一覧</strong><small>実装状況を確認</small></Link><div><span>準備中</span><strong>法務情報・お問い合わせ</strong><small>公開に向けて準備中</small></div></div></div></section>
+      <section className="lp-navigation" aria-labelledby="navigation-title"><div className="page-shell"><div className="section-copy section-copy--center"><p className="eyebrow">Information</p><h2 id="navigation-title">法務・安全・お問い合わせ</h2><p>現在確認できる情報と、準備中の情報を明確に分けています。</p></div><div className="information-grid"><Link href="/#safety"><span>利用可能</span><strong>AI利用・非保証・Safety</strong><small>このページ内の説明へ</small></Link><Link href="/review"><span>利用可能</span><strong>公開準備プレビュー</strong><small>準備状況を確認</small></Link><div><span>準備中</span><strong>法務情報・お問い合わせ</strong><small>公開に向けて準備中</small></div></div></div></section>
     </main>
   );
 }

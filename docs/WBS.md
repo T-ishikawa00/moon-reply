@@ -271,7 +271,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Milestone 1 implementation remained unstarted during planning
 - [x] Human acceptance of Task M1-P1-R1 at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`
 
-## P4.14: Current Task — M1-I1 Route Shell and Review Navigation
+## P4.14: Human Review In Progress — M1-I1 Route Shell and Review Navigation
 
 - [x] Human explicitly authorized M1-I1
 - [x] Refreshed vertical LP implemented at `/`
@@ -281,6 +281,10 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Unimplemented routes shown only as non-clickable preparation items
 - [x] Existing `/request` behavior, age choices, and Safety implementation preserved
 - [x] No fixture or runtime integration added
+- [x] Desktop visual direction approved by Human
+- [x] M1-I1-R1 internal terminology removed from the ordinary LP
+- [x] M1-I1-R1 completed and awaiting Human review
+- [ ] Human review of mobile LP, `/request`, and `/review`
 - [ ] Human acceptance of Task M1-I1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete

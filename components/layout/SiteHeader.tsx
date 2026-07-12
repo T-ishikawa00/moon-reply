@@ -27,7 +27,7 @@ export function SiteHeader() {
             ))}
           </div>
           <Link href="/review" className="site-nav__link site-nav__review">
-            審査用一覧
+            公開準備
           </Link>
           <Link href="/request" className="site-nav__cta">
             鑑定ノートを依頼する

@@ -45,6 +45,9 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Human acceptance of Task M1-P1 and Task M1-P1-R1 planning/specification
 - [x] M1-I1: implement vertical `/` LP, shared header/footer, `/review/**` shell, and static `/review` inventory
 - [x] M1-I1: preserve `/request`, age choices, Safety behavior, and local-only runtime boundary
+- [x] M1-I1 desktop visual direction approved by Human
+- [x] M1-I1-R1: remove internal terminology from ordinary LP copy without design changes
+- [ ] Human review of mobile LP, `/request`, and `/review`
 - [ ] Human acceptance of M1-I1
 - [ ] M1-I2: add reviewable request confirmation and Safety states
 - [ ] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action

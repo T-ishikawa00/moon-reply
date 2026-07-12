@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementation completed. Awaiting Human review.
+Implementation and M1-I1-R1 public-copy cleanup completed. Desktop visual direction is Human-approved. M1-I1 is not yet finally accepted; mobile, `/request`, and `/review` Human review remain.
 
 ## Base commit
 
@@ -65,6 +65,8 @@ The planned routes `/review/result/result-normal-001` and `/review/save-report/r
 ## Visual direction
 
 The implementation uses the accepted night, moonlight, letter, notebook, deep navy, muted purple, pale gold, warm ivory, and off-white paper direction. Preview surfaces are explicitly static preparation-stage representations rather than generated reports.
+
+Human approved the M1-I1 desktop visual direction. M1-I1-R1 changes copy only and does not alter the approved visual direction.
 
 No external image, font, copied reference asset, astrology chart, zodiac symbol, magic circle, generic chatbot UI, or excessive glass effect was added.
 
@@ -134,4 +136,4 @@ Browser-network inspection was not performed because browser use was prohibited.
 
 ## Next gate
 
-Human acceptance of M1-I1 is required before M1-I2 may be authorized. M1-I2 remains unauthorized.
+Human confirmation of the mobile LP, `/request`, `/review`, and M1-I1-R1 copy cleanup is required before final acceptance of M1-I1. M1-I2 remains unauthorized.
