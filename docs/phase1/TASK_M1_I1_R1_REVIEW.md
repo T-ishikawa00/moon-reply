@@ -74,4 +74,8 @@ No section, color, font, heading size, spacing, layout, CTA position, English ey
 
 ## Next Human gate
 
-Human confirms the M1-I1-R1 copy cleanup, mobile LP, `/request`, and `/review` before finally accepting M1-I1. M1-I2 remains unauthorized.
+Historical next gate at completion: Human confirmation of the M1-I1-R1 copy cleanup, mobile LP, `/request`, and `/review` was required before final acceptance of M1-I1.
+
+## Subsequent Human decision
+
+Human accepted M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560` and explicitly authorized M1-I2. This note records the later gate transition without changing the historical R1 review evidence.

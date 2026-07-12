@@ -136,4 +136,8 @@ Browser-network inspection was not performed because browser use was prohibited.
 
 ## Next gate
 
-Human confirmation of the mobile LP, `/request`, `/review`, and M1-I1-R1 copy cleanup is required before final acceptance of M1-I1. M1-I2 remains unauthorized.
+Historical next gate at completion: Human confirmation of the mobile LP, `/request`, `/review`, and M1-I1-R1 copy cleanup was required before final acceptance of M1-I1.
+
+## Subsequent Human decision
+
+Human accepted M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560` and explicitly authorized M1-I2. This note records the later gate transition without rewriting the historical M1-I1 implementation evidence.

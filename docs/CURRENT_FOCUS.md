@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task M1-I1-R1 User-facing Copy Cleanup — completed, awaiting Human review; M1-I1 is not yet finally accepted
+Phase 1 / Task M1-I2 Request Confirmation and Safety Review States — implemented and validated, awaiting Human review
 
 ## Completed Through
 
@@ -16,39 +16,36 @@ Phase 1 / Task M1-I1-R1 User-facing Copy Cleanup — completed, awaiting Human r
 - Task 18C-R3 Roadmap Reset accepted by Human
 - Task M1-P1 accepted by Human at commit `05c02efeb90a53caaf603f7a4e983a7bc5c7914b`
 - Task M1-P1-R1 accepted by Human at commit `479f3b9610ed93be921c5b844dff03d6f1c16f31`
-- Task M1-I1 explicitly authorized by Human and implemented
-- M1-I1 desktop visual direction approved by Human
-- Task M1-I1-R1 public-copy cleanup completed
+- Task M1-I1 accepted by Human at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
+- Task M1-I2 explicitly authorized by Human
+- Human selected a three-step request flow and a unified required acknowledgement
 
 ## Current Task
 
-Task M1-I1-R1 removes internal task, slice, presentation, implementation-status, and internal-review wording from the ordinary LP while preserving the approved design and `/review` terminology.
+Task M1-I2 implements:
 
-Task M1-I1 establishes only:
-
-- the accepted vertical LP at `/`;
-- a shared responsive site header and footer;
-- the `/review/**` shell with the accepted two-level review banner;
-- the static `/review` route inventory;
-- truthful active navigation to `/`, `/request`, and `/review`; and
-- non-clickable preparation status for unimplemented Milestone 1 destinations.
-
-Task M1-I1-R1 is completed and awaiting Human review. M1-I1 is not yet finally accepted. It adds no runtime integration and does not implement M1-I2 through M1-I6.
+- the three-step public request flow at `/request`;
+- current-step validation with in-memory value preservation;
+- one visible five-item acknowledgement list followed by exactly one required checkbox;
+- local confirmation available only to `normal_allowed`;
+- deterministic stop states for `needs_review`, `rejected`, contradictory Safety selection, invalid age, missing consent, and unknown/error;
+- typed fictional `.invalid` fixtures;
+- all required `/review/request/**` routes; and
+- a production-shaped, payment-free local request confirmation.
 
 ## Runtime Boundary
 
-- `/request` remains browser-local.
-- No request submission or persistence is added.
-- No database read/write connection is added.
-- No payment, refund, OpenAI, email, API route, server action, analytics, fixture, PDF/image generation, copy/download/share, or deployment work is added.
-- Existing age choices and deterministic Safety behavior remain unchanged.
+- State is browser-memory-only. Refresh may reset it.
+- No request submission, persistence, localStorage, sessionStorage, cookie, URL-query persistence, database read/write, API route, server action, payment, refund, OpenAI, email, analytics, file/image upload, OCR, or deployment work is added.
+- Existing age choices and deterministic Safety severity remain unchanged.
+- Refund conditions, delivery-completion treatment, and transaction-specific acceptance are not defined here.
+- Marketing/newsletter consent is absent. Any future consent remains separate, optional, and unchecked.
 
-## Initial Web MVP Completion Point
+## Deferred Work
 
-The first verified real unknown-customer purchase completes the initial paid Web MVP only when payment, generation, result access, email delivery and internal traceability are confirmed.
+- Mobile heading polish and favicon remain deferred to M1-I6.
+- Human visual inspection remains required; CodeX browser validation is not part of this task.
 
 ## Next Gate
 
-Human confirmation of the mobile LP, `/request`, `/review`, and this copy cleanup is required before final acceptance of Task M1-I1. Desktop visual direction is already Human-approved.
-
-M1-I2 through M1-I6 and all later milestones remain unauthorized.
+Human reviews and accepts M1-I2. M1-I3 purchase confirmation and all later slices remain unauthorized.

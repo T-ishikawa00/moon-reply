@@ -47,9 +47,11 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I1: preserve `/request`, age choices, Safety behavior, and local-only runtime boundary
 - [x] M1-I1 desktop visual direction approved by Human
 - [x] M1-I1-R1: remove internal terminology from ordinary LP copy without design changes
-- [ ] Human review of mobile LP, `/request`, and `/review`
-- [ ] Human acceptance of M1-I1
-- [ ] M1-I2: add reviewable request confirmation and Safety states
+- [x] Human review and acceptance of M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
+- [x] Human authorization of M1-I2 and selection of a three-step request flow
+- [x] M1-I2: add reviewable request confirmation and Safety states
+- [x] M1-I2: use one unified required acknowledgement after a visible five-item list; exclude refund and marketing consent
+- [ ] Human visual review and acceptance of M1-I2
 - [ ] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action
 - [ ] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
 - [ ] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages

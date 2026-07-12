@@ -149,7 +149,8 @@ Routes completed:
 - Preserve deterministic local classification while changing M1 review copy and navigation.
 - Organize at least current situation, actual conversation, and planned message as understandable text-input regions.
 - Add conversation copy/paste guidance and anonymization guidance near the relevant field.
-- Keep one-page versus multi-step layout behind a pre-implementation Human decision.
+- Implement the Human-selected three-step layout: Step 1 situation, Step 2 messages/concern, and Step 3 email/Safety/unified acknowledgement.
+- Display the five acknowledgement meanings as a readable list followed by exactly one required unchecked checkbox; do not include refund conditions or marketing consent.
 - Add typed deterministic fixtures under `fixtures/review/`.
 - Add review-only route allowlist and unknown-state failure.
 - Add request summary and correction links for the normal fixture.
@@ -181,7 +182,7 @@ Routes completed:
 - Review labels and fixture IDs are visible.
 - No external send or persistence occurs.
 - The form is text-only, explains necessary-excerpt paste/anonymization, and contains no file input.
-- Evidence records the Human decision for one-page versus multi-step layout before final component shaping.
+- Evidence records the Human-selected three-step layout and unified required acknowledgement.
 
 ### Validation commands
 

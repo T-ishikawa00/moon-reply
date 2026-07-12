@@ -285,7 +285,21 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] M1-I1-R1 internal terminology removed from the ordinary LP
 - [x] M1-I1-R1 completed and awaiting Human review
 - [ ] Human review of mobile LP, `/request`, and `/review`
-- [ ] Human acceptance of Task M1-I1
+- [x] Human acceptance of Task M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
+
+## P4.15: Human Review In Progress — M1-I2 Request Confirmation and Safety Review States
+
+- [x] Human explicitly authorized M1-I2
+- [x] Human selected a three-step request flow
+- [x] Human selected one unified required acknowledgement after a visible five-item list
+- [x] Three-step `/request` flow and in-memory navigation implemented
+- [x] `normal_allowed`-only local request confirmation implemented
+- [x] Deterministic typed fixtures and all required request review routes implemented
+- [x] `needs_review`, `rejected`, contradictory selection, invalid age, missing consent, and unknown/error fail closed
+- [x] Refund and transaction-specific acceptance kept outside M1-I2
+- [x] Marketing/newsletter consent not added
+- [x] Typecheck, lint, build, static scope audit, required-route HTTP checks, and unknown-ID fail-closed checks
+- [ ] Human visual review and acceptance of M1-I2
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -303,4 +317,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-I2 remains blocked until Human accepts M1-I1 and separately authorizes the next slice. M1-I3 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates.
+M1-I3 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.
