@@ -33,11 +33,22 @@
 - Result Page
 - Email
 
-Payment Confirmation Screen、LP、Request Form、Result PageおよびEmailへのTask 18B文面反映は未実装であり、以下では`Future implementation`と記載します。
+Task 18B時点の`Future implementation`表記は成立時点の履歴です。M1-I1からM1-I5でLP、Request Form、Payment Confirmation Screen、Result Pageおよび法務・問い合わせ審査表示が段階的に実装されましたが、いずれもreview-onlyです。Emailとproductionの契約・決済・AI・保存・配信処理は未実装です。
 
-## 2. 整合性マトリクス
+## 1.1 M1-I5 review-screen implementation status
 
-| 項目 | 基準値またはplaceholder | 同期が必要なドラフト・仕様 | 未実装画面・配信面 | 現在の状態 |
+- `/legal`, `/legal/terms`, `/legal/privacy`, `/legal/tokushoho`, `/legal/refund`, `/legal/ai-disclosure`, `/legal/unsupported-cases`, `/contact`は審査用表示として実装済み
+- 全ページが`審査用ドラフト表示`、`公開承認前・運営者情報未完了`、`法的助言ではありません`を共有
+- 固定事実は通常表示し、未確定値はraw placeholder、空欄、架空値にせず、Human承認済みの日本語statusとreview-only Decision IDで表示
+- 施行日と最終更新日は未確定のまま表示し、実装日を代用しない
+- `/contact`には受付form、メール、外部送信、active contactを設けない
+- Purchase Confirmation Screenからのlinkは審査表示であり、同意を記録しない
+- publication gateのcheckboxと`OPERATOR_DECISION_REGISTER.md`のDecision stateは変更しない
+- この実装statusは法務文書の公開承認、専門家確認、運営者・provider決定、販売開始を意味しない
+
+## 2. 整合性マトリクス（Task 18B時点の履歴）
+
+| 項目 | 基準値またはplaceholder | 同期が必要なドラフト・仕様 | Task 18B時点の未実装画面・配信面 | 現在の状態 |
 | --- | --- | --- | --- | --- |
 | サービス名 | 月の返事 | Terms / Privacy / Tokushoho / Refund / AI Disclosure / Unsupported Cases / Contact | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 商品定義 | AIを活用した恋愛メッセージ分析・判断支援デジタルレポート。利用者向け名称は恋のメッセージ鑑定ノート | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | Human approved internal positioning。provider分類ではない |

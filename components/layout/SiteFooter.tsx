@@ -9,7 +9,12 @@ const availableLinks = [
   { href: "/#faq", label: "FAQ" },
 ];
 
-const futureItems = ["法務情報", "お問い合わせ"];
+const legalReviewLinks = [
+  { href: "/legal", label: "法務情報", status: "審査用" },
+  { href: "/legal/ai-disclosure", label: "AI利用説明", status: "審査用" },
+  { href: "/legal/unsupported-cases", label: "通常鑑定対象外", status: "審査用" },
+  { href: "/contact", label: "お問い合わせ", status: "受付準備中" },
+] as const;
 
 export function SiteFooter() {
   return (
@@ -37,17 +42,17 @@ export function SiteFooter() {
           </ul>
         </nav>
 
-        <div>
-          <p className="site-footer__heading">今後公開予定のページ</p>
+        <nav aria-label="法務・お問い合わせ審査ページ">
+          <p className="site-footer__heading">法務・お問い合わせ</p>
           <ul className="site-footer__future">
-            {futureItems.map((item) => (
-              <li key={item}>
-                <span>{item}</span>
-                <span className="status-chip">準備中</span>
+            {legalReviewLinks.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href}>{item.label}</Link>
+                <span className="status-chip">{item.status}</span>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
       </div>
       <div className="site-footer__bottom">
         <span>月の返事</span>

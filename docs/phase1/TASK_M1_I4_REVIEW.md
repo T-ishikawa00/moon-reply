@@ -2,7 +2,7 @@
 
 ## Status
 
-Task M1-I4 Sample Report and Fixture Result Experience is implemented and automatically validated. Human Visual QA remains required. Task M1-I5 and later slices remain unauthorized.
+Task M1-I4 Sample Report and Fixture Result Experience was visually reviewed and accepted by Human at commit `620792e61b002190aff100fd145e986b5ae4c89b`. Human then explicitly authorized Task M1-I5 only. M1-I6 and later work remain unauthorized.
 
 ## Base commit
 
@@ -223,8 +223,8 @@ No M1-I5 legal page body, operator fact, payment/provider SDK, checkout, webhook
 
 ## Remaining Human checks
 
-Human Visual QA must inspect the sample, Web, save, missing, loading, and unavailable states at approximately 320px, 390px, tablet, and desktop. Required judgments include copy quality, section density, spacing, long-Web reading fatigue, save-page length, A4 grouping, contrast, focus order, touch targets, and whether the three experiences are unmistakably different. Mobile heading polish and favicon remain deferred to M1-I6.
+Completed: Human visually reviewed and accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`. Mobile heading polish and favicon remain deferred to M1-I6 and were not pulled into M1-I5.
 
 ## Next gate
 
-Human accepts or requests corrections to Task M1-I4. Task M1-I5 remains unauthorized until explicit Human acceptance and separate authorization. No later slice begins automatically.
+Satisfied: Human accepted Task M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b` and separately authorized M1-I5. Task M1-I5 has its own review record; M1-I6 remains unauthorized and does not begin automatically.

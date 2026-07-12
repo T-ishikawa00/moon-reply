@@ -25,10 +25,17 @@ const availableRoutes = [
   { route: "/review/request/unknown-error", title: "不明・エラー", description: "不明状態を通常扱いせず、安全に停止します。" },
   { route: "/review/request/confirmation/normal-001", title: "依頼内容確認", description: "3ステップ別の本番相当ローカル確認です。購入前プレビューへ進めますが、取引は行いません。" },
   { route: "/review/purchase/confirmation/normal-001", title: "購入前の最終確認", description: "税込980円の商品・相談・受け取り条件を、取引なしで最終確認します。" },
+  { route: "/legal", title: "法務・開示 審査ハブ", description: "固定事実、全ページ一覧、公開準備の未完了カテゴリを確認します。" },
+  { route: "/legal/terms", title: "利用規約 審査表示", description: "規約ドラフトの条項順序とDecision状態を、拘束力のある条件に見せず確認します。" },
+  { route: "/legal/privacy", title: "プライバシー 審査表示", description: "将来のdata planと現在の非送信挙動を区別して確認します。" },
+  { route: "/legal/tokushoho", title: "特商法表記 審査表示", description: "固定値と未確定開示項目を、完成表示に見せず確認します。" },
+  { route: "/legal/refund", title: "返金方針 審査表示", description: "ケース別の現時点の方針案と未確定条件を確認します。" },
+  { route: "/legal/ai-disclosure", title: "AI利用説明 審査表示", description: "AIの予定役割、限界、payload最小化、現在の非稼働を確認します。" },
+  { route: "/legal/unsupported-cases", title: "通常鑑定対象外 審査表示", description: "Safety-firstの停止境界とM1のblocked状態を確認します。" },
+  { route: "/contact", title: "お問い合わせ 準備表示", description: "受付機能なしで、予定カテゴリと未決定の運用項目を確認します。" },
 ];
 
 const plannedRoutes = [
-  { title: "法務・お問い合わせ審査ページ", route: "/legal/** ・ /contact", slice: "M1-I5" },
   { title: "レスポンシブ・アクセシビリティ・Visual QA", route: "Milestone 1 全画面", slice: "M1-I6" },
 ];
 
@@ -40,7 +47,7 @@ export default function ReviewIndexPage() {
           <p className="eyebrow">Milestone 1 review</p>
           <h1>審査用プレビュー一覧</h1>
           <p className="review-hub__intro">
-            月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用鑑定書、エラー状態を固定fixtureで確認できます。
+            月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用鑑定書、エラー状態、法務・開示・お問い合わせ構成を確認できます。
           </p>
           <div className="review-hub__boundary" role="note">
             <strong>ここで確認できるのは表示とローカル UI です。</strong>
@@ -96,7 +103,7 @@ export default function ReviewIndexPage() {
             <div><p className="eyebrow">Planned later in Milestone 1</p><h2 id="planned-heading">後続 slice の審査項目</h2></div>
             <span className="status-chip">未実装</span>
           </div>
-          <p className="review-hub__section-copy">以下は後続の route / QA inventory です。M1-I5 と M1-I6 はまだ実装・開始していません。</p>
+          <p className="review-hub__section-copy">以下は後続のQA inventoryです。M1-I6は計画のみで、実装・開始していません。</p>
           <ul className="planned-route-list">
             {plannedRoutes.map((item) => (
               <li key={item.slice + "-" + item.route} className="planned-route-card">
@@ -116,8 +123,8 @@ export default function ReviewIndexPage() {
         <div className="page-shell review-hub__next-inner">
           <div>
             <p className="eyebrow">Current gate</p>
-            <h2>M1-I4 の Human Visual QA 待ち</h2>
-            <p>M1-I5 以降は未認可です。結果見本にも購入、AI生成、メール、保存、ファイル生成は含みません。</p>
+            <h2>M1-I5 の Human review 待ち</h2>
+            <p>M1-I5は表示と導線の自動検証段階です。法務ページは公開未承認で、お問い合わせ受付も稼働していません。M1-I6は未認可です。</p>
           </div>
           <Link href="/review/result/result-normal-001" className="button button--secondary">Web鑑定ノートを開く</Link>
         </div>

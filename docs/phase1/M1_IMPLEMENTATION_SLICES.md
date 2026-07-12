@@ -5,7 +5,7 @@
 - Planning output for Task M1-P1, aligned by Task M1-P1-R1
 - No slice is authorized by this document
 - Human acceptance of the planning package and the preceding slice, plus separate explicit authorization, is required before each slice starts
-- Human accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` and explicitly authorized M1-I4; M1-I5 and M1-I6 remain unauthorized
+- Human accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`, explicitly authorized M1-I5, and approved the incomplete-field presentation rule; M1-I6 remains unauthorized
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
@@ -296,7 +296,7 @@ Satisfied: Human accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4d
 
 ## M1-I4: Sample Report and Fixture Result Experience
 
-Implementation status: implemented and automatically validated; awaiting Human Visual QA and acceptance.
+Implementation status: implemented, automatically validated, visually reviewed, and accepted by Human at commit `620792e61b002190aff100fd145e986b5ae4c89b`.
 
 ### Goal
 
@@ -390,9 +390,11 @@ Human-accepted M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25` plus e
 
 ### Next Human gate
 
-Human accepts M1-I4 before M1-I5 starts.
+Satisfied: Human accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b` and separately authorized M1-I5.
 
 ## M1-I5: Legal, Disclosure and Contact Review Pages
+
+Implementation status: implemented and automatically validated under explicit Human authorization; awaiting Human review and acceptance.
 
 ### Goal
 
@@ -467,7 +469,7 @@ Revert M1-I5; report and flow previews remain, but legal/contact destinations re
 
 ### Dependency
 
-Human-accepted M1-I4 and Human-approved incomplete-field presentation decision.
+Human-accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b` and Human-approved incomplete-field presentation decision — satisfied.
 
 ### Next Human gate
 
@@ -569,4 +571,4 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → Milestone 1 completion review
 ```
 
-Current state: M1-I4 is implemented and automatically validated, awaiting Human Visual QA. M1-I5 is the only possible next slice and remains unauthorized until Human accepts M1-I4 and separately authorizes M1-I5.
+Current state: M1-I5 is implemented and automatically validated, awaiting Human review. M1-I6 remains unauthorized and cannot start until Human accepts M1-I5 and separately authorizes M1-I6.

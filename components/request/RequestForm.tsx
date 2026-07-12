@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   classifySafetyInput,
@@ -375,7 +376,8 @@ function StepCard({ step, children }: { step: StepNumber; children: React.ReactN
 }
 
 function SafetyResultPanel({ result, stop = false }: { result: SafetyResult; stop?: boolean }) {
-  const copy = result.reasonCodes.includes("contradictory_selection")
+  const isContradictory = result.reasonCodes.includes("contradictory_selection");
+  const copy = isContradictory
     ? {
         title: "安全確認の選択を見直してください",
         message:
@@ -407,6 +409,11 @@ function SafetyResultPanel({ result, stop = false }: { result: SafetyResult; sto
       <h3 className="mt-1 text-lg font-semibold">{copy.title}</h3>
       <p className="mt-2">{copy.message}</p>
       {stop ? <p className="mt-3 font-semibold">安全確認の結果によっては、通常鑑定へ進めない場合があります。</p> : null}
+      {stop && !isContradictory && (result.classification === "needs_review" || result.classification === "rejected") ? (
+        <Link href="/legal/unsupported-cases" className="mt-4 inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] bg-[#fffaf0] px-4 py-2 font-semibold underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
+          通常鑑定として扱わない相談の審査説明を見る
+        </Link>
+      ) : null}
     </div>
   );
 }

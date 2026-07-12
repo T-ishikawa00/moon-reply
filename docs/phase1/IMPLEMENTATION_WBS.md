@@ -61,8 +61,13 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I4: derive Web/save from one shared `result-normal-001` object referencing `request-normal-001`
 - [x] M1-I4: add missing/unavailable/loading states, unknown-ID fail-closed behavior, LP excerpts, and comparison navigation
 - [x] M1-I4: validate sample/Web character counts, typecheck, lint, build, HTTP routes, content boundaries, and prohibited scope
-- [ ] Human Visual QA and acceptance of M1-I4
-- [ ] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
+- [x] Human Visual QA and acceptance of M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`
+- [x] Human authorization of M1-I5 and approval of the incomplete-field presentation rule
+- [x] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and inactive contact pages
+- [x] M1-I5: add shared review boundary, noindex/nofollow, fixed facts, unresolved Decision status, and responsive disclosure rows
+- [x] M1-I5: integrate footer, purchase confirmation, blocked Safety views, report/footer access, and `/review` without runtime behavior
+- [x] M1-I5: validate typecheck, lint, build, HTTP routes, labels, placeholders, active-runtime absence, and prohibited scope
+- [ ] Human Visual QA and acceptance of M1-I5
 - [ ] M1-I6: complete responsive, accessibility, and visual QA hardening
 - [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
 - [ ] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts

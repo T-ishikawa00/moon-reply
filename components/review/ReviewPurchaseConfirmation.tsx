@@ -16,14 +16,14 @@ function excerpt(value: string) {
   return trimmed.length > 120 ? `${trimmed.slice(0, 120)}…` : trimmed;
 }
 
-const legalPreparationItems = [
-  "利用規約",
-  "プライバシーポリシー",
-  "特定商取引法に基づく表記",
-  "返金方針",
-  "AI利用説明",
-  "対応できない相談",
-  "お問い合わせ",
+const legalReviewItems = [
+  { label: "利用規約", href: "/legal/terms" },
+  { label: "プライバシーポリシー", href: "/legal/privacy" },
+  { label: "特定商取引法に基づく表記", href: "/legal/tokushoho" },
+  { label: "返金方針", href: "/legal/refund" },
+  { label: "AI利用説明", href: "/legal/ai-disclosure" },
+  { label: "対応できない相談", href: "/legal/unsupported-cases" },
+  { label: "お問い合わせ", href: "/contact" },
 ] as const;
 
 const futureConfirmationItems = [
@@ -199,14 +199,16 @@ export function ReviewPurchaseConfirmation({ data }: { data: ResolvedReviewPurch
               <p className="text-sm font-bold tracking-[0.14em] text-[#80652d]">LEGAL &amp; CONTACT</p>
               <h2 id="legal-heading" className="mt-2 font-serif text-2xl font-semibold leading-[1.45]">公開情報の準備状況</h2>
             </div>
-            <span className="rounded-full border border-[#9b7b3a] bg-[#f5ead2] px-3 py-2 text-sm font-bold">M1-I5 で後続審査</span>
+            <span className="rounded-full border border-[#9b7b3a] bg-[#f5ead2] px-3 py-2 text-sm font-bold">審査用ドラフト・公開未承認</span>
           </div>
-          <p className="mt-4 leading-8 text-[#67596b]">以下は必要な公開先の一覧です。現時点では最終本文・運営者情報・問い合わせ先を公開済みとは扱いません。</p>
+          <p className="mt-4 leading-8 text-[#67596b]">以下は公開前の構成確認リンクです。開いても同意は記録されず、最終本文・運営者情報・問い合わせ先を公開済みとは扱いません。</p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {legalPreparationItems.map((item) => (
-              <li key={item} className="flex min-h-20 flex-col justify-center rounded-lg border border-[#d8c596] bg-[#fffdf5] px-4 py-3">
-                <strong>{item}</strong>
-                <span className="mt-1 text-sm text-[#67596b]">公開準備中・リンク未提供</span>
+            {legalReviewItems.map((item) => (
+              <li key={item.href} className="min-w-0">
+                <Link href={item.href} className="flex min-h-20 min-w-0 flex-col justify-center rounded-lg border border-[#d8c596] bg-[#fffdf5] px-4 py-3 transition hover:bg-[#f5ead2] focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2 motion-reduce:transition-none">
+                  <strong className="break-words">{item.label}</strong>
+                  <span className="mt-1 text-sm text-[#67596b]">審査用表示を確認・同意は未記録</span>
+                </Link>
               </li>
             ))}
           </ul>

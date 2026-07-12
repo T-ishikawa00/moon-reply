@@ -314,7 +314,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Typecheck, lint, build, required-route HTTP, content, fail-closed, and prohibited-scope checks completed
 - [x] Human visual review and acceptance of M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
 
-## P4.17: Human Review In Progress — M1-I4 Sample Report and Fixture Result Experience
+## P4.17: Human Accepted — M1-I4 Sample Report and Fixture Result Experience
 
 - [x] Human explicitly authorized M1-I4
 - [x] Public `/sample-report` implemented with `sample-report-g001` and explicit fictional/non-purchase/non-review/non-AI-generation labels
@@ -326,7 +326,18 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Sample 840-character and Web 1,973-character counts verified
 - [x] Typecheck, lint, build, required-route HTTP, content, fail-closed, and prohibited-scope checks completed
 - [x] No AI, payment, email, DB, API, file generation, download/copy/share, package, Safety, age, or legal-publication work added
-- [ ] Human Visual QA and acceptance of M1-I4
+- [x] Human Visual QA and acceptance of M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`
+
+## P4.18: Human Review In Progress — M1-I5 Legal, Disclosure and Contact Review Pages
+
+- [x] Human explicitly authorized M1-I5 and approved the incomplete-field presentation rule
+- [x] `/legal`, Terms, Privacy, Tokushoho, Refund, AI disclosure, Unsupported Cases, and inactive Contact routes implemented
+- [x] Shared draft/publication/legal-advice boundary, legal navigation, fixed-fact rows, and unresolved Decision status cards implemented
+- [x] Every legal/contact route marked noindex/nofollow
+- [x] Footer, purchase confirmation, blocked Safety states, and `/review` integrated without changing transaction or Safety logic
+- [x] No raw placeholder, invented operator/provider/contact value, active contact, legal acceptance, payment, AI, email, DB/API, package, Supabase, or Safety change added
+- [x] Typecheck, lint, build, HTTP, required-label, placeholder, runtime, and prohibited-scope checks completed
+- [ ] Human Visual QA and acceptance of M1-I5
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -344,4 +355,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-I5 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.
+M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.

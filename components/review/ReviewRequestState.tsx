@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReviewSafetyState } from "@/fixtures/review/safety-states";
 
 export function ReviewRequestState({ state }: { state: ReviewSafetyState }) {
+  const showsUnsupportedCasesLink = state.stateName === "needs_review" || state.stateName === "rejected";
   return (
     <main className="min-h-screen bg-[#f4ead7] px-4 py-12 text-[#2b2335] sm:px-8 sm:py-16">
       <article className="mx-auto max-w-4xl rounded-xl border border-[#cdbb91] bg-[#fff8e9] p-5 shadow-[0_1.5rem_4rem_rgba(39,31,52,.12)] sm:p-9">
@@ -30,6 +31,16 @@ export function ReviewRequestState({ state }: { state: ReviewSafetyState }) {
             {state.allowedAction.label}
           </Link>
         </section>
+
+        {showsUnsupportedCasesLink ? (
+          <section aria-labelledby="unsupported-explanation-heading" className="mt-7 rounded-lg border border-[#d8c596] bg-[#fffdf5] p-5">
+            <h2 id="unsupported-explanation-heading" className="text-xl font-semibold">停止理由の審査説明</h2>
+            <p className="mt-3 leading-7 text-[#67596b]">通常鑑定対象外の範囲と、Safetyを決済より前に確認する方針を確認できます。</p>
+            <Link href="/legal/unsupported-cases" className="mt-4 inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
+              通常鑑定として扱わない相談の審査説明を見る
+            </Link>
+          </section>
+        ) : null}
 
         <section aria-labelledby="prohibited-heading" className="mt-7">
           <h2 id="prohibited-heading" className="text-xl font-semibold">禁止される次の操作</h2>

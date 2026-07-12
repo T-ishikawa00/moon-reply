@@ -178,6 +178,8 @@ summary::marker {
 .site-footer__links a:hover { color: #fff8e8; }
 .site-footer__future { display: grid; gap: 0.65rem; }
 .site-footer__future li { display: flex; min-height: 2.75rem; align-items: center; justify-content: space-between; gap: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.site-footer__future a { display: inline-flex; min-height: 2.75rem; align-items: center; text-decoration: underline; text-decoration-color: rgba(229,196,109,0.45); text-underline-offset: 0.3rem; }
+.site-footer__future a:hover { color: #fff8e8; }
 .status-chip { display: inline-flex; align-items: center; border: 1px solid #a89bb2; border-radius: 999px; padding: 0.22rem 0.6rem; color: #594f64; background: #eee8ef; font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
 .site-footer .status-chip { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #d8cebd; }
 .status-chip--available { border-color: #8fae96; background: #e7f1e9; color: #31553b; }

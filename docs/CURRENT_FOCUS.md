@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task M1-I4 Sample Report and Fixture Result Experience — implemented and automatically validated, awaiting Human Visual QA
+Phase 1 / Task M1-I5 Legal, Disclosure and Contact Review Pages — implemented and automatically validated, awaiting Human review
 
 ## Completed Through
 
@@ -19,39 +19,41 @@ Phase 1 / Task M1-I4 Sample Report and Fixture Result Experience — implemented
 - Task M1-I1 accepted by Human at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
 - Task M1-I2 accepted by Human at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
 - Task M1-I3 accepted by Human at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
-- Task M1-I4 explicitly authorized by Human
-- Human selected a three-step request flow and a unified required acknowledgement
+- Task M1-I4 accepted by Human at commit `620792e61b002190aff100fd145e986b5ae4c89b`
+- Task M1-I5 explicitly authorized by Human
+- Human approved the incomplete-field presentation rule used by M1-I5
 
 ## Current Task
 
-Task M1-I4 implements:
+Task M1-I5 implements review-only representations at:
 
-- public fictional `/sample-report` using `sample-report-g001`;
-- production-shaped `/review/result/result-normal-001` with the fixed judgment `今日は送らない方がいい` and all nine current report sections;
-- A4-oriented `/review/save-report/result-normal-001` derived from the same structured result;
-- typed `fixtures/review/reports.ts` and `fixtures/review/errors.ts`;
-- fail-closed unknown result/save IDs and the two required error routes;
-- a static loading-state preview with no delay, fetch, or transition;
-- deterministic LP excerpts and truthful sample/Web/save links; and
-- available-route and comparison navigation on `/review`.
+- `/legal`
+- `/legal/terms`
+- `/legal/privacy`
+- `/legal/tokushoho`
+- `/legal/refund`
+- `/legal/ai-disclosure`
+- `/legal/unsupported-cases`
+- `/contact`
 
-The measured substantive text is 840 characters for `sample-report-g001` and 1,973 characters for the Web `result-normal-001` report.
+All eight routes share the required draft/publication/legal-advice boundary, legal navigation, related review links, responsive status cards, and structured unresolved-decision treatment. Fixed facts are rendered normally; unresolved operator, provider, commercial, privacy, date, and professional-review facts are withheld and replaced by approved Japanese status categories and review-only Decision IDs.
 
 ## Runtime Boundary
 
-- All M1-I4 displays are deterministic local fixture rendering.
-- `result-normal-001` references `request-normal-001`. Web and save presentations read the same judgment, reasons, timing, change conditions, waiting actions, no-contact option, later draft, three-day plan, and uncertainty fields.
-- Unknown IDs never fall back to the normal result and do not reflect arbitrary raw input.
-- No request submission, persistence, localStorage, sessionStorage, cookie, database read/write, API route, server action, payment, refund execution, OpenAI, email, analytics, file generation, download, print, copy/share, or deployment work is added.
-- Existing age choices, deterministic Safety severity, request form, and purchase confirmation remain unchanged.
+- Legal/contact content is deterministic static review content with no customer fixture.
+- Every legal route and `/contact` has `noindex, nofollow` metadata.
+- `/contact` has no form, input, textarea, submit control, server action, `mailto:`, support email, or external submission link.
+- Current M1 form data is not persisted or transmitted; legal pages add no DB, Supabase, AI, payment, email, analytics, API, or external behavior.
+- Existing `lib/safety` classification and vocabulary remain unchanged.
+- Publication-gate checkboxes and OP decision states remain unchanged.
 
 ## Deferred Work
 
-- M1-I5 legal/contact route bodies remain unauthorized.
-- M1-I6 final responsive/accessibility/Visual QA hardening remains unauthorized.
+- Human Visual QA must still inspect approximately 320px, 390px, tablet, and desktop layouts.
 - Mobile heading polish and favicon remain deferred to M1-I6.
-- Human must judge detailed copy, spacing, information density, long-Web reading, and save-page length. CodeX did not use the in-app browser.
+- M1-I6 responsive/accessibility/Visual QA hardening remains unauthorized.
+- Operator/provider/commercial/privacy completion, active contact, legal acceptance, payment, AI, email, DB/API integration, deployment, and publication remain outside M1-I5.
 
 ## Next Gate
 
-Human reviews and accepts Task M1-I4. M1-I5 and later work remain unauthorized until separately gated.
+Human reviews and accepts or requests corrections to Task M1-I5. M1-I6 does not begin without separate authorization.

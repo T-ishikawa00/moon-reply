@@ -2,9 +2,10 @@
 
 ## 0. Status and Rules
 
-- Task M1-P1 and Task M1-P1-R1 are Human-accepted; M1-I1 through M1-I3 are Human-accepted
-- Task M1-I4 is implemented and automatically validated under explicit Human authorization; Human Visual QA remains
-- M1-I5 and M1-I6 remain unauthorized
+- Task M1-P1 and Task M1-P1-R1 are Human-accepted; M1-I1 through M1-I4 are Human-accepted
+- Task M1-I4 was accepted at commit `620792e61b002190aff100fd145e986b5ae4c89b`
+- Task M1-I5 is implemented and automatically validated under explicit Human authorization; Human review remains
+- M1-I6 remains unauthorized
 - All review data is deterministic fixture/mock data
 - `needs_review` and `rejected` cannot reach purchase or an ordinary report
 - Unknown/error states fail closed
@@ -30,8 +31,8 @@
 | M1-S13 | `/sample-report` | LP or review-hub link | `sample-report-g001` | `架空ケースによるサービス説明用サンプル` | Return to request explanation | Compare fixture result | Yes, navigation only | No | Sample only | Direct route | No real customer, purchase, testimonial, or AI run | M1-I4 |
 | M1-S14 | `/review/result/result-normal-001` | Fixture result selected | `result-normal-001`, fixed judgment `今日は送らない方がいい` | `審査用fixture`; production-shaped Web鑑定ノート with one complete do-not-send recommendation | Return to review hub | Compare save report / sample / legal info | Navigation only | No | Yes, fixture only | Review hub link | One fixed normal label; readable fixture ID; no token, PII, DB, AI, purchase, email | M1-I4 |
 | M1-S21 | `/review/save-report/result-normal-001` | Save presentation selected for the normal result fixture | Save view of `result-normal-001`, same fixed judgment | `審査用fixture`; A4-oriented 保存用鑑定書 preview; no generated file | Return to review hub | Compare Web result / sample / legal info | Navigation only | No | Yes, fixture preview only | Review hub and M1-S14 link | Same one judgment as Web; not screenshot/compressed Web; no PDF/image/download/copy/share/DB/AI/purchase/email | M1-I4 |
-| M1-S15 | `/legal` and `/legal/*` review state | Legal/footer/confirmation link | Review-safe representation of internal drafts | `審査用ドラフト表示・公開承認前` | Open selected legal page | Return to previous page | Navigation only | No | N/A | Direct links and review hub | Unresolved facts withheld/status-labeled; raw TBD not presented as final | M1-I5 |
-| M1-S16 | `/contact` review state | Contact/legal/safety link | Contact draft structure only | `お問い合わせ機能と連絡先はMilestone 2で確定します` | Return to legal index | Return home/review hub | Navigation only | No | N/A | Direct route | No form, `mailto:`, invented address, SLA, or data collection | M1-I5 |
+| M1-S15 | `/legal` and `/legal/*` review state | Legal/footer/confirmation link | Review-safe representation of internal drafts | `審査用ドラフト表示` / `公開承認前・運営者情報未完了` / `法的助言ではありません` | Open selected legal page | Return to related review page | Navigation only | No | N/A | Direct links and review hub | Unresolved facts withheld/status-labeled; no raw placeholder presented as final; noindex/nofollow | M1-I5 |
+| M1-S16 | `/contact` review state | Contact/legal/safety link | Contact draft structure only | `お問い合わせ受付機能は現在準備中です` | Return to legal index | Return home/review hub | Navigation only | No | N/A | Direct route | No form, `mailto:`, invented address, SLA, or data collection; noindex/nofollow | M1-I5 |
 | M1-S17 | `/review/error/missing-fixture` | Unknown fixture ID | Static error metadata | `指定された審査用fixtureは存在しません` | Return to review hub | Return home | No | No | No | Enter invalid allowlist slug | Do not reflect unsafe raw ID or silently substitute data | M1-I4 |
 | M1-S18 | Loading placeholder within review result | Component preview only | Static skeleton | `審査用表示を準備しています` | None | Return to review hub | N/A | No | No; static preview intentionally does not transition | Review hub component/state link | No artificial network delay, hidden fetch, or production loading contract | M1-I4 |
 | M1-S19 | `/review/error/unavailable-report` | Explicit unavailable fixture state | Static error metadata | `審査用レポートを表示できません` | Return to review hub | Return home | No | No | No | Review hub link | Do not claim retry job, AI failure record, email delivery, refund, or operator notification | M1-I4 |
