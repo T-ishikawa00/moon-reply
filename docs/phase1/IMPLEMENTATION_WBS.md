@@ -51,8 +51,11 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Human authorization of M1-I2 and selection of a three-step request flow
 - [x] M1-I2: add reviewable request confirmation and Safety states
 - [x] M1-I2: use one unified required acknowledgement after a visible five-item list; exclude refund and marketing consent
-- [ ] Human visual review and acceptance of M1-I2
-- [ ] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action
+- [x] Human visual review and acceptance of M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
+- [x] Human authorization of M1-I3
+- [x] M1-I3: add purchase/final-confirmation screen with disabled or preparation-only action
+- [x] M1-I3: validate allowlisted normal-only access, unknown/non-normal failure, and absence of transaction behavior
+- [ ] Human visual review and acceptance of M1-I3
 - [ ] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
 - [ ] M1-I5: add legal-information navigation and Terms, Privacy, Tokushoho, Refund, AI disclosure, unsupported-cases, and contact pages
 - [ ] M1-I6: complete responsive, accessibility, and visual QA hardening

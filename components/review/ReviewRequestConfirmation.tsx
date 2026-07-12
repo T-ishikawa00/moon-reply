@@ -29,7 +29,10 @@ export function ReviewRequestConfirmation({ fixture }: { fixture: ReviewRequestF
         </div>
 
         <div className="mt-8 rounded-lg border border-[#d6b86d]/40 bg-[#18152e] p-5 text-[#efe5d0]">
-          <p className="leading-8">購入確認はこのタスクの範囲外です。ここから先へ進む操作、決済リンク、レポートリンクはありません。</p>
+          <p className="leading-8">この normal_allowed fixture から、決済機能のない購入前の最終確認プレビューを確認できます。実際の購入、外部送信、保存、レポート生成は行われません。</p>
+          <Link href="/review/purchase/confirmation/normal-001" className="mt-4 inline-flex min-h-12 items-center rounded-lg border border-[#f0d992]/70 bg-[#e5c46d] px-5 py-3 font-semibold text-[#181326] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] focus:ring-offset-2 focus:ring-offset-[#18152e]">
+            購入前の最終確認を確認する
+          </Link>
         </div>
         <div className="mt-7 flex flex-wrap gap-3"><Link href="/review/request/normal-allowed" className="inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold">通常状態へ戻る</Link><Link href="/review" className="inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold">審査用一覧へ</Link></div>
       </article>

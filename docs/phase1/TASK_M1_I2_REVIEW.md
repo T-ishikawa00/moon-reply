@@ -2,7 +2,7 @@
 
 ## Status
 
-Task M1-I2 Request Confirmation and Safety Review States is implemented and automatically validated. Human visual review remains pending.
+Task M1-I2 Request Confirmation and Safety Review States was implemented, automatically validated, and accepted by Human at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`.
 
 ## Base commit
 
@@ -13,6 +13,10 @@ The task started from a clean working tree with `HEAD` and `origin/main` equal t
 ## Human acceptance of M1-I1
 
 Human accepted M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560` and explicitly authorized M1-I2.
+
+## Human acceptance of M1-I2
+
+Human visually reviewed and accepted M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`, then explicitly authorized M1-I3 Final Purchase Confirmation Without Payment. M1-I4 remains unauthorized.
 
 ## Human three-step decision
 
@@ -119,12 +123,12 @@ The flow uses single-column mobile layouts, full-width mobile controls, wrapping
 
 ## Prohibited work confirmed
 
-No M1-I3 purchase confirmation, payment/provider control, checkout/webhook/card field, AI/OpenAI call, email sending, Supabase read/write, API route, server action, analytics, deployment, package change, price change, age-choice change, Safety severity change, file/image upload, OCR, automatic masking, report/PDF/image/download/copy/share function, account, subscription, coin/point, or advertising implementation is authorized or intended.
+M1-I2 added no purchase confirmation, payment/provider control, checkout/webhook/card field, AI/OpenAI call, email sending, Supabase read/write, API route, server action, analytics, deployment, package change, price change, age-choice change, Safety severity change, file/image upload, OCR, automatic masking, report/PDF/image/download/copy/share function, account, subscription, coin/point, or advertising implementation.
 
 ## Remaining Human checks
 
-Human must visually inspect phone, tablet, and desktop widths; keyboard order and focus; touch targets; copy; and all stop/confirmation states. CodeX visual browser validation is explicitly not performed.
+Human completed the M1-I2 visual review and accepted the slice. CodeX visual browser validation was not performed as part of M1-I2.
 
 ## Next gate
 
-Human acceptance of M1-I2. M1-I3 purchase confirmation remains unauthorized. Mobile heading polish and favicon remain deferred to M1-I6.
+M1-I2 is accepted and M1-I3 is explicitly authorized. M1-I4 remains unauthorized. Mobile heading polish and favicon remain deferred to M1-I6.

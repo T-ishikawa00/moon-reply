@@ -287,7 +287,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [ ] Human review of mobile LP, `/request`, and `/review`
 - [x] Human acceptance of Task M1-I1 at commit `dd031183dd347493fd5619f1b0d8bb355fc93560`
 
-## P4.15: Human Review In Progress — M1-I2 Request Confirmation and Safety Review States
+## P4.15: Human Accepted — M1-I2 Request Confirmation and Safety Review States
 
 - [x] Human explicitly authorized M1-I2
 - [x] Human selected a three-step request flow
@@ -299,7 +299,20 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Refund and transaction-specific acceptance kept outside M1-I2
 - [x] Marketing/newsletter consent not added
 - [x] Typecheck, lint, build, static scope audit, required-route HTTP checks, and unknown-ID fail-closed checks
-- [ ] Human visual review and acceptance of M1-I2
+- [x] Human visual review and acceptance of M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
+
+## P4.16: Human Review In Progress — M1-I3 Final Purchase Confirmation Without Payment
+
+- [x] Human explicitly authorized M1-I3
+- [x] Typed `normal-001` purchase fixture references accepted `request-normal-001`
+- [x] `normal_allowed`-only purchase confirmation route implemented
+- [x] Product, 税込980円, quantity, request summary, delivery plan, AI/non-guarantee, and draft transaction boundaries displayed
+- [x] Native disabled purchase control implemented with no transaction handler
+- [x] Unknown and non-normal purchase IDs fail closed without fallback
+- [x] Legal/contact destinations remain truthful non-clickable preparation items
+- [x] Payment provider remains unselected; no payment, persistence, network, AI, or email behavior implemented
+- [x] Typecheck, lint, build, required-route HTTP, content, fail-closed, and prohibited-scope checks completed
+- [ ] Human visual review and acceptance of M1-I3
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -317,4 +330,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-I3 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.
+M1-I4 through M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.

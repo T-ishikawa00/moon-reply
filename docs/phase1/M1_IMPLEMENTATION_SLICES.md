@@ -4,7 +4,8 @@
 
 - Planning output for Task M1-P1, aligned by Task M1-P1-R1
 - No slice is authorized by this document
-- Human acceptance of Task M1-P1 and Task M1-P1-R1, plus separate explicit authorization of M1-I1, is required before any slice starts
+- Human acceptance of the planning package and the preceding slice, plus separate explicit authorization, is required before each slice starts
+- Human accepted M1-I2 at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1` and explicitly authorized M1-I3; M1-I4 through M1-I6 remain unauthorized
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
@@ -287,7 +288,7 @@ Revert M1-I3; request/safety review states remain available and stop at request 
 
 ### Dependency
 
-Human-accepted M1-I2.
+Human-accepted M1-I2 — satisfied at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1` — plus explicit Human authorization of M1-I3.
 
 ### Next Human gate
 
