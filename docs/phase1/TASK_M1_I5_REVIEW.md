@@ -2,7 +2,7 @@
 
 ## Status
 
-Task M1-I5 Legal, Disclosure and Contact Review Pages is implemented and automatically validated. Human Visual QA and acceptance remain required. M1-I6 and all later milestones remain unauthorized.
+Human visually reviewed Task M1-I5 and accepted its overall page structure and direction at commit `6d8001c5c6068a9493e68791f0468e5b5766f038`. Human identified one legal-navigation active-state defect and authorized only Task M1-I5-R1 to correct it. The correction is implemented and automatically validated; final Human acceptance remains required. M1-I6 and all later milestones remain unauthorized.
 
 ## Base commit
 
@@ -13,6 +13,19 @@ The task started from a clean `main` working tree with `HEAD` and `origin/main` 
 ## Human acceptance of M1-I4
 
 Human visually reviewed and accepted Task M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`, then explicitly authorized Task M1-I5 only.
+
+## Human review of M1-I5 and authorized correction
+
+Human accepted the overall M1-I5 page structure and direction at commit `6d8001c5c6068a9493e68791f0468e5b5766f038` but found that the current item in shared legal navigation looked blacked out, disabled, visually heavy, and difficult to read.
+
+Task M1-I5-R1 changes only that shared active state:
+
+- the current card uses a warm pale-gold background, dark readable text, a stronger gold border, and a subtle inset-left gold accent;
+- `現在` is a compact dark navy/purple badge with warm-white text;
+- `aria-current="page"`, visible `現在` text, keyboard focus, touch target size, and narrow-screen wrapping are preserved; and
+- legal substance, routes, Decision IDs and statuses, publication-gate state, request/Safety behavior, purchase confirmation, reports, and fixed product facts are unchanged.
+
+M1-I5 still requires final Human acceptance after this correction. M1-I6 remains unauthorized. The correction record is `docs/phase1/TASK_M1_I5_R1_REVIEW.md`.
 
 ## Human incomplete-field presentation decision
 

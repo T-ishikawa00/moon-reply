@@ -337,6 +337,9 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Footer, purchase confirmation, blocked Safety states, and `/review` integrated without changing transaction or Safety logic
 - [x] No raw placeholder, invented operator/provider/contact value, active contact, legal acceptance, payment, AI, email, DB/API, package, Supabase, or Safety change added
 - [x] Typecheck, lint, build, HTTP, required-label, placeholder, runtime, and prohibited-scope checks completed
+- [x] Human accepted the overall M1-I5 page structure and direction and authorized only the M1-I5-R1 active-state correction
+- [x] M1-I5-R1 replaced the blacked-out legal-navigation current item with a warm, readable card and visible compact `現在` badge while preserving `aria-current="page"`
+- [x] M1-I5-R1 typecheck, lint, build, eight-route HTTP, rendered current-marker/navigation, and prohibited-scope checks completed
 - [ ] Human Visual QA and acceptance of M1-I5
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete

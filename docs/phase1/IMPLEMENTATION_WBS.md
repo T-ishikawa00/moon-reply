@@ -67,6 +67,9 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I5: add shared review boundary, noindex/nofollow, fixed facts, unresolved Decision status, and responsive disclosure rows
 - [x] M1-I5: integrate footer, purchase confirmation, blocked Safety views, report/footer access, and `/review` without runtime behavior
 - [x] M1-I5: validate typecheck, lint, build, HTTP routes, labels, placeholders, active-runtime absence, and prohibited scope
+- [x] Human accepted the overall M1-I5 page structure and direction and authorized only the M1-I5-R1 legal-navigation active-state correction
+- [x] M1-I5-R1: replace the blacked-out current item with a warm pale-gold card, dark readable text, stronger gold boundary, and compact visible `現在` badge while preserving accessibility behavior
+- [x] M1-I5-R1: validate typecheck, lint, build, all eight HTTP routes, one rendered `aria-current="page"` and visible `現在` per route, complete legal navigation, and prohibited scope
 - [ ] Human Visual QA and acceptance of M1-I5
 - [ ] M1-I6: complete responsive, accessibility, and visual QA hardening
 - [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes

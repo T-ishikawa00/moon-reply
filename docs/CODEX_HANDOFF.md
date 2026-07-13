@@ -14,6 +14,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - Task M1-I3 is accepted by Human at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`.
 - Task M1-I4 is accepted by Human at commit `620792e61b002190aff100fd145e986b5ae4c89b`.
 - Human explicitly authorized Task M1-I5 Legal, Disclosure and Contact Review Pages and approved its incomplete-field presentation rule.
+- Human accepted the overall M1-I5 page structure and direction at commit `6d8001c5c6068a9493e68791f0468e5b5766f038`, identified only the blacked-out legal-navigation active state, and authorized Task M1-I5-R1 to correct it.
 - M1-I6 and all later milestones remain unauthorized.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
 
@@ -21,11 +22,11 @@ The canonical service is an `AIを活用した恋愛メッセージ分析・判�
 
 ## Current Status
 
-Task M1-I5 is implemented and automatically validated, awaiting Human review.
+Task M1-I5-R1 is implemented and automatically validated, awaiting final Human acceptance of M1-I5.
 
 Implemented:
 
-- shared legal review boundary, legal navigation, related review navigation, fixed-fact rows, responsive decision cards, and review-only Decision metadata;
+- shared legal review boundary, legal navigation with a warm pale-gold current-page card and compact dark `現在` badge, related review navigation, fixed-fact rows, responsive decision cards, and review-only Decision metadata;
 - `/legal`, Terms, Privacy, Tokushoho, Refund, AI disclosure, Unsupported Cases, and inactive Contact routes;
 - noindex/nofollow metadata on every legal/contact route;
 - active but truthfully labeled footer links;
@@ -48,4 +49,4 @@ M1-I6 is not authorized. Do not perform final QA hardening, mobile-heading polis
 
 ## Next Gate
 
-Human reviews and accepts or requests corrections to Task M1-I5. M1-I6 may begin only after separate authorization following that acceptance.
+Human visually confirms and accepts or requests another correction to Task M1-I5 after M1-I5-R1. M1-I6 may begin only after separate authorization following that acceptance.

@@ -67,14 +67,23 @@ export function LegalNavigation({ currentPath }: { currentPath: string }) {
                   <Link
                     href={item.href}
                     aria-current={isCurrent ? "page" : undefined}
-                    className={`flex min-h-12 min-w-0 items-center justify-between gap-3 rounded-lg border px-4 py-3 font-semibold leading-6 transition focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2 motion-reduce:transition-none ${
+                    className={`flex min-h-12 min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-lg border px-4 py-3 font-semibold leading-6 transition focus:outline-none focus:ring-2 focus:ring-[#55416f] focus:ring-offset-2 focus:ring-offset-[#fff8e9] motion-reduce:transition-none ${
                       isCurrent
-                        ? "border-[#80652d] bg-[#2a2440] text-[#fff8e8]"
+                        ? "border-[#80652d] bg-[#f1dfb0] text-[#2b2335] shadow-[inset_4px_0_0_#80652d] hover:bg-[#f1dfb0]"
                         : "border-[#d8c596] bg-[#fffdf5] hover:bg-[#f5ead2]"
                     }`}
                   >
-                    <span className="min-w-0 break-words">{item.label}</span>
-                    <span className="shrink-0 text-xs font-bold" aria-hidden={isCurrent ? undefined : "true"}>{isCurrent ? "現在" : "→"}</span>
+                    <span className="min-w-0 flex-1 basis-40 break-words">{item.label}</span>
+                    <span
+                      className={`shrink-0 whitespace-nowrap text-xs font-bold ${
+                        isCurrent
+                          ? "inline-flex min-h-7 items-center rounded-full bg-[#2a2440] px-2.5 py-1 leading-none text-[#fff8e8]"
+                          : ""
+                      }`}
+                      aria-hidden={isCurrent ? undefined : "true"}
+                    >
+                      {isCurrent ? "現在" : "→"}
+                    </span>
                   </Link>
                 </li>
               );
