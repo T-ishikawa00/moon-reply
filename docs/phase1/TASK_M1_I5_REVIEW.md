@@ -2,7 +2,7 @@
 
 ## Status
 
-Human visually reviewed Task M1-I5 and accepted its overall page structure and direction at commit `6d8001c5c6068a9493e68791f0468e5b5766f038`. Human identified one legal-navigation active-state defect and authorized only Task M1-I5-R1 to correct it. The correction is implemented and automatically validated; final Human acceptance remains required. M1-I6 and all later milestones remain unauthorized.
+Human visually reviewed and accepted Task M1-I5 and Task M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`. Human then explicitly authorized only M1-I6. Milestone 2 and all later milestones remain unauthorized.
 
 ## Base commit
 
@@ -25,7 +25,7 @@ Task M1-I5-R1 changes only that shared active state:
 - `aria-current="page"`, visible `現在` text, keyboard focus, touch target size, and narrow-screen wrapping are preserved; and
 - legal substance, routes, Decision IDs and statuses, publication-gate state, request/Safety behavior, purchase confirmation, reports, and fixed product facts are unchanged.
 
-M1-I5 still requires final Human acceptance after this correction. M1-I6 remains unauthorized. The correction record is `docs/phase1/TASK_M1_I5_R1_REVIEW.md`.
+Human subsequently accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391` and authorized M1-I6. The correction record is `docs/phase1/TASK_M1_I5_R1_REVIEW.md`.
 
 ## Human incomplete-field presentation decision
 
@@ -257,20 +257,10 @@ Human Visual QA at approximately 320px, 390px, tablet, and desktop remains requi
 
 No M1-I6 work, legal-substance rewrite, publication-gate checkbox, professional-review completion, operator identity, trade name, responsible person, address, phone, support email, contact URL, response SLA, payment provider/method/timing, delivery timing, refund timing, AI provider, email provider, storage region, retention duration, effective/update date, verified-emergency-resource claim, active contact form, `mailto:`, external submission, API route, server action, database access, Supabase read/write, AI/OpenAI call, email sending, payment, analytics, deployment configuration, package, external asset/font, price change, age-choice change, Safety logic change, legal acceptance checkbox, or accepted-flow redesign was added.
 
-## Remaining Human checks
+## Human acceptance result
 
-Human should inspect all eight routes at approximately 320px, 390px, tablet, and desktop for:
-
-- early visibility and unmistakability of the review boundary;
-- legal-document readability, heading order, line length, and density;
-- Tokushoho/refund row wrapping without horizontal overflow;
-- navigation current-state visibility, keyboard order, focus, and touch size;
-- clear separation of fixed facts, candidate policy, unresolved status, and review metadata;
-- no impression of publication approval, active contact, legal acceptance, or completed operator/provider decisions; and
-- continued 月の返事 visual character without government-like, generic-admin, or fake-official treatment.
-
-Mobile heading polish and favicon remain deferred to M1-I6.
+Human completed the M1-I5/M1-I5-R1 visual review and accepted both tasks at commit `7a232b8feef446200cde5425cb3a98eb683b4391`. Mobile heading polish and favicon work remained outside M1-I5 and were separately authorized under M1-I6.
 
 ## Next gate
 
-Human accepts or requests corrections to Task M1-I5. M1-I6 remains unauthorized and does not begin automatically.
+Task M1-I5 is accepted. The next gate is Human Visual QA and acceptance of the separately authorized M1-I6. Milestone 2 remains unauthorized.

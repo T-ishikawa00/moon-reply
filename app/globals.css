@@ -44,6 +44,18 @@ a {
   text-decoration: none;
 }
 
+h1,
+h2,
+h3 {
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
 :focus-visible {
   outline: 3px solid #f4d98d;
   outline-offset: 3px;
@@ -367,7 +379,9 @@ summary::marker {
   .site-nav { display:grid; grid-template-columns:minmax(0,.75fr) minmax(0,1.4fr); width:100%; }
   .site-nav__link, .site-nav__cta { width:100%; justify-content:center; margin:0; padding-inline:.55rem; font-size:.78rem; }
   .hero__grid { padding-block:4.5rem 5rem; }
+  .hero h1 { font-size:clamp(2.2rem,9.8vw,2.75rem); letter-spacing:-.025em; line-height:1.42; }
   .hero h1 br { display:none; }
+  .section-copy h2, .review-hub h1, .review-hub h2, .final-cta h2 { font-size:clamp(1.8rem,7.6vw,2.35rem); line-height:1.55; }
   .hero__offer { grid-template-columns:1fr; }
   .hero__offer div { padding: .8rem 0; }
   .hero__offer div + div { border-top:1px solid rgba(238,216,153,.18); border-left:0; padding-left:0; }

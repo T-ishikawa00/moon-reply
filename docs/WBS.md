@@ -328,7 +328,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] No AI, payment, email, DB, API, file generation, download/copy/share, package, Safety, age, or legal-publication work added
 - [x] Human Visual QA and acceptance of M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`
 
-## P4.18: Human Review In Progress — M1-I5 Legal, Disclosure and Contact Review Pages
+## P4.18: Human Accepted — M1-I5 Legal, Disclosure and Contact Review Pages
 
 - [x] Human explicitly authorized M1-I5 and approved the incomplete-field presentation rule
 - [x] `/legal`, Terms, Privacy, Tokushoho, Refund, AI disclosure, Unsupported Cases, and inactive Contact routes implemented
@@ -340,7 +340,20 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Human accepted the overall M1-I5 page structure and direction and authorized only the M1-I5-R1 active-state correction
 - [x] M1-I5-R1 replaced the blacked-out legal-navigation current item with a warm, readable card and visible compact `現在` badge while preserving `aria-current="page"`
 - [x] M1-I5-R1 typecheck, lint, build, eight-route HTTP, rendered current-marker/navigation, and prohibited-scope checks completed
-- [ ] Human Visual QA and acceptance of M1-I5
+- [x] Human Visual QA and acceptance of M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`
+
+## P4.19: Human Review In Progress — M1-I6 Responsive, Accessibility and Visual QA Hardening
+
+- [x] Human explicitly authorized M1-I6 after accepting M1-I5 and M1-I5-R1
+- [x] Human fixed-mobile-CTA decision recorded as `rejected for Milestone 1`; non-fixed CTA preserved
+- [x] Responsive Japanese heading wrapping and mobile type scales hardened without changing desktop hierarchy
+- [x] Original local crescent icon added through `app/icon.svg`
+- [x] Customer-facing raw `none`, public/review terminology, sample metadata hierarchy, and comparison-count mismatch corrected
+- [x] `/review/**` centrally marked `noindex, nofollow`; legal/contact boundary preserved
+- [x] Typecheck, lint, build, 30-route HTTP/rendered checks, 25-link integrity checks, and five fail-closed checks completed
+- [x] No fixture, Safety, price, legal substance, Decision state, package, Supabase, or runtime integration change added
+- [ ] Human Visual QA and acceptance of M1-I6
+- [ ] Human acceptance of Milestone 1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -358,4 +371,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-I6, operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, and native-app work remain blocked by their respective dependency, validation, and Human acceptance gates. Mobile heading polish and favicon remain deferred to M1-I6.
+Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. M1-I6 is implemented but remains Human-review pending.

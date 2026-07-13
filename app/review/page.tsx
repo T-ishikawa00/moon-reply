@@ -5,7 +5,7 @@ import { ReviewLoadingPlaceholder } from "@/components/report/ReviewLoadingPlace
 
 export const metadata: Metadata = {
   title: "審査用プレビュー一覧 | 月の返事",
-  description: "月の返事 Milestone 1 の実装済み審査画面と後続予定を確認する静的な一覧です。",
+  description: "月の返事 Milestone 1 の実装済み審査画面と最終QA状況を確認する静的な一覧です。",
 };
 
 const availableRoutes = [
@@ -35,9 +35,11 @@ const availableRoutes = [
   { route: "/contact", title: "お問い合わせ 準備表示", description: "受付機能なしで、予定カテゴリと未決定の運用項目を確認します。" },
 ];
 
-const plannedRoutes = [
-  { title: "レスポンシブ・アクセシビリティ・Visual QA", route: "Milestone 1 全画面", slice: "M1-I6" },
-];
+const finalQaStatus = {
+  title: "レスポンシブ・アクセシビリティ・Visual QA",
+  route: "Milestone 1 全画面",
+  slice: "M1-I6",
+};
 
 export default function ReviewIndexPage() {
   return (
@@ -97,24 +99,22 @@ export default function ReviewIndexPage() {
         </div>
       </section>
 
-      <section className="review-hub__section review-hub__section--paper" aria-labelledby="planned-heading">
+      <section className="review-hub__section review-hub__section--paper" aria-labelledby="qa-heading">
         <div className="page-shell">
           <div className="section-heading-row">
-            <div><p className="eyebrow">Planned later in Milestone 1</p><h2 id="planned-heading">後続 slice の審査項目</h2></div>
-            <span className="status-chip">未実装</span>
+            <div><p className="eyebrow">M1-I6 final QA</p><h2 id="qa-heading">最終QAの確認状況</h2></div>
+            <span className="status-chip">Human確認待ち</span>
           </div>
-          <p className="review-hub__section-copy">以下は後続のQA inventoryです。M1-I6は計画のみで、実装・開始していません。</p>
+          <p className="review-hub__section-copy">ソース監査、自動検証、静的なrendered HTML検証を行いました。端末上の最終Visual QAはHuman確認待ちです。</p>
           <ul className="planned-route-list">
-            {plannedRoutes.map((item) => (
-              <li key={item.slice + "-" + item.route} className="planned-route-card">
-                <div>
-                  <span className="planned-route-card__status">未実装 · 後続 slice</span>
-                  <h3>{item.title}</h3>
-                  <code>{item.route}</code>
-                </div>
-                <span className="planned-route-card__slice">{item.slice}</span>
-              </li>
-            ))}
+            <li className="planned-route-card">
+              <div>
+                <span className="planned-route-card__status">自動検証済み · Human Visual QA待ち</span>
+                <h3>{finalQaStatus.title}</h3>
+                <code>{finalQaStatus.route}</code>
+              </div>
+              <span className="planned-route-card__slice">{finalQaStatus.slice}</span>
+            </li>
           </ul>
         </div>
       </section>
@@ -123,8 +123,8 @@ export default function ReviewIndexPage() {
         <div className="page-shell review-hub__next-inner">
           <div>
             <p className="eyebrow">Current gate</p>
-            <h2>M1-I5 の Human review 待ち</h2>
-            <p>M1-I5は表示と導線の自動検証段階です。法務ページは公開未承認で、お問い合わせ受付も稼働していません。M1-I6は未認可です。</p>
+            <h2>M1-I6 の Human Visual QA 待ち</h2>
+            <p>M1-I5とM1-I5-R1はHuman受入済みです。Milestone 1は最終受入前で、法務ページは公開未承認、お問い合わせ受付も非稼働です。Milestone 2は未認可です。</p>
           </div>
           <Link href="/review/result/result-normal-001" className="button button--secondary">Web鑑定ノートを開く</Link>
         </div>

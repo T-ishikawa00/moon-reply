@@ -16,6 +16,10 @@ function excerpt(value: string) {
   return trimmed.length > 120 ? `${trimmed.slice(0, 120)}…` : trimmed;
 }
 
+function localizeCustomerAbsence(value: string) {
+  return value === "none" ? "なし" : value;
+}
+
 const legalReviewItems = [
   { label: "利用規約", href: "/legal/terms" },
   { label: "プライバシーポリシー", href: "/legal/privacy" },
@@ -74,8 +78,8 @@ export function ReviewPurchaseConfirmation({ data }: { data: ResolvedReviewPurch
             <SummaryRow label="数量" value={purchase.product.quantity} />
             <SummaryRow label="購入形態" value={purchase.product.purchaseType} />
             <SummaryRow label="更新" value={purchase.product.renewal} />
-            <SummaryRow label="サブスクリプション" value={purchase.product.subscription} />
-            <SummaryRow label="コイン・ポイント・チケット" value={purchase.product.coinsPointsTickets} />
+            <SummaryRow label="サブスクリプション：" value={localizeCustomerAbsence(purchase.product.subscription)} />
+            <SummaryRow label="コイン・ポイント・チケット：" value={localizeCustomerAbsence(purchase.product.coinsPointsTickets)} />
           </dl>
         </article>
 

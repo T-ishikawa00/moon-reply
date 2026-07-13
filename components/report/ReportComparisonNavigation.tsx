@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const comparisonItems = [
+const reviewComparisonItems = [
   {
     href: "/sample-report",
     label: "架空サンプル",
@@ -16,14 +16,29 @@ const comparisonItems = [
     label: "保存用鑑定書・審査用見本",
     purpose: "結論、再判断、文面、短期方針を後で短時間に見返す表示形です。",
   },
+] as const;
+
+const publicComparisonItems = [
   {
-    href: "/review",
-    label: "審査用プレビュー一覧",
-    purpose: "決済や外部処理が動作しない審査境界と、利用できる固定状態を確認します。",
+    href: "/sample-report",
+    label: "架空サンプル",
+    purpose: "購入前に、文章の温度とサービス方針を確かめるための無料見本です。",
+  },
+  {
+    href: "/review/result/result-normal-001",
+    label: "Web鑑定ノートの見本",
+    purpose: "理由と九つの章を通して、判断材料を深く読む長文の見本です。",
+  },
+  {
+    href: "/review/save-report/result-normal-001",
+    label: "保存用鑑定書の見本",
+    purpose: "結論、再判断、文面、短期方針を後で短時間に見返す表示の見本です。",
   },
 ] as const;
 
-export function ReportComparisonNavigation() {
+export function ReportComparisonNavigation({ audience = "review" }: { audience?: "public" | "review" }) {
+  const comparisonItems = audience === "public" ? publicComparisonItems : reviewComparisonItems;
+
   return (
     <nav aria-labelledby="report-comparison-heading" className="rounded-xl border border-[#cdbb91] bg-[#fff8e9] p-5 text-[#2b2335] sm:p-8">
       <p className="m-0 text-sm font-bold tracking-[0.14em] text-[#80652d]">COMPARE THE EXPERIENCES</p>
@@ -31,7 +46,9 @@ export function ReportComparisonNavigation() {
         目的の違う三つの表示を比べる
       </h2>
       <p className="mt-4 max-w-3xl leading-8 text-[#67596b]">
-        サンプルは購入検討用、Web版は深く読む成果物の形、保存版は短時間で見返す形です。審査用routeを開いても購入や生成は発生しません。
+        {audience === "public"
+          ? "サンプルは購入検討用、Web版は深く読む形、保存版は短時間で見返す形です。見本を開いても購入、AI生成、メール送信、保存は発生しません。"
+          : "サンプルは購入検討用、Web版は深く読む成果物の形、保存版は短時間で見返す形です。審査用routeを開いても購入や生成は発生しません。"}
       </p>
       <ul className="mt-6 grid gap-3 p-0 lg:grid-cols-2">
         {comparisonItems.map((item) => (
@@ -49,6 +66,11 @@ export function ReportComparisonNavigation() {
           </li>
         ))}
       </ul>
+      {audience === "review" ? (
+        <Link href="/review" className="mt-5 inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
+          審査用プレビュー一覧へ戻る
+        </Link>
+      ) : null}
     </nav>
   );
 }

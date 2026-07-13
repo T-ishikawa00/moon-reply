@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Task M1-I5-R1 Legal Navigation Active-state Polish — implemented and automatically validated, awaiting final Human acceptance
+Phase 1 / Task M1-I6 Responsive, Accessibility and Visual QA Hardening — implemented and automatically validated, awaiting Human Visual QA and final acceptance
 
 ## Completed Through
 
@@ -20,44 +20,49 @@ Phase 1 / Task M1-I5-R1 Legal Navigation Active-state Polish — implemented and
 - Task M1-I2 accepted by Human at commit `de332b9f7911cb09ca2e3f7b26ef24c692dc2ae1`
 - Task M1-I3 accepted by Human at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
 - Task M1-I4 accepted by Human at commit `620792e61b002190aff100fd145e986b5ae4c89b`
-- Task M1-I5 explicitly authorized by Human
-- Human approved the incomplete-field presentation rule used by M1-I5
-- Human accepted the overall M1-I5 page structure and direction at commit `6d8001c5c6068a9493e68791f0468e5b5766f038`
-- Human explicitly authorized only the M1-I5-R1 legal-navigation active-state correction
+- Tasks M1-I5 and M1-I5-R1 accepted by Human at commit `7a232b8feef446200cde5425cb3a98eb683b4391`
+- Task M1-I6 explicitly authorized by Human
 
 ## Current Task
 
-Task M1-I5-R1 changes only the shared `LegalNavigation` current-page treatment from a nearly black filled card to a warm pale-gold card with dark text, a stronger gold boundary and inset-left accent, and a compact dark `現在` badge. `aria-current="page"`, visible text, keyboard focus, touch size, and narrow-screen wrapping remain part of the current-state treatment.
+Task M1-I6 hardens the accepted Milestone 1 review experience without adding product scope. Implemented corrections are:
 
-The underlying M1-I5 review-only representations remain available at:
+- balanced, strict Japanese heading wrapping and narrower mobile heading scales;
+- original local crescent icon at `app/icon.svg`;
+- centralized `/review/**` `noindex, nofollow` metadata;
+- customer-facing `none` localization to `なし`;
+- a less developer-oriented public sample with `sample ID` moved into collapsed review metadata;
+- separate public/review comparison labels and customer-readable LP example links; and
+- an accurate M1-I6 Human Visual QA gate on `/review`.
 
-- `/legal`
-- `/legal/terms`
-- `/legal/privacy`
-- `/legal/tokushoho`
-- `/legal/refund`
-- `/legal/ai-disclosure`
-- `/legal/unsupported-cases`
-- `/contact`
+The Human decision for a fixed mobile CTA is `rejected for Milestone 1`. Existing non-fixed CTAs and destinations are preserved.
 
-All eight routes share the required draft/publication/legal-advice boundary, legal navigation, related review links, responsive status cards, and structured unresolved-decision treatment. Fixed facts are rendered normally; unresolved operator, provider, commercial, privacy, date, and professional-review facts are withheld and replaced by approved Japanese status categories and review-only Decision IDs.
+## Automated QA Status
+
+- Typecheck, lint, and production build passed.
+- The build generated 28 static/SSG pages, including `/icon.svg`.
+- All 30 documented primary and fail-closed URLs returned HTTP 200 and exactly one `h1`.
+- All 25 distinct rendered active internal link targets returned HTTP 200.
+- All 19 audited `/review/**` URLs rendered the review banner and `noindex, nofollow`.
+- Eight legal/contact routes retained their review boundary, one `aria-current="page"`, visible `現在`, and `noindex, nofollow`.
+- All five explicit unknown/non-allowlisted routes passed negative-content fail-closed assertions.
+- Human visual, complete keyboard, and final visual-contrast checks remain pending.
 
 ## Runtime Boundary
 
-- Legal/contact content is deterministic static review content with no customer fixture.
-- Every legal route and `/contact` has `noindex, nofollow` metadata.
-- `/contact` has no form, input, textarea, submit control, server action, `mailto:`, support email, or external submission link.
-- Current M1 form data is not persisted or transmitted; legal pages add no DB, Supabase, AI, payment, email, analytics, API, or external behavior.
-- Existing `lib/safety` classification and vocabulary remain unchanged.
-- Publication-gate checkboxes and OP decision states remain unchanged.
+- Current M1 data remains deterministic fixture/mock or browser-memory-only data.
+- No form state is persisted or transmitted.
+- No DB, Supabase, AI, payment, email, analytics, API, server action, external asset, file generation, clipboard, share, print, upload, OCR, or deployment behavior was added.
+- Existing `lib/safety` classification and vocabulary, fixtures, price, judgment, legal substance, Decision states, and publication-gate checkboxes remain unchanged.
+- Legal/contact content remains review-only and contact remains inactive.
 
 ## Deferred Work
 
-- Human final Visual QA must inspect the corrected navigation at approximately 320px, 390px, tablet, and desktop layouts.
-- Mobile heading polish and favicon remain deferred to M1-I6.
-- M1-I6 responsive/accessibility/Visual QA hardening remains unauthorized.
-- Operator/provider/commercial/privacy completion, active contact, legal acceptance, payment, AI, email, DB/API integration, deployment, and publication remain outside M1-I5.
+- Human final Visual QA at approximately 320px, 390px, 768px/tablet, and desktop.
+- Complete keyboard-only walkthrough and final device/browser focus and contrast review.
+- Operator/provider/commercial/privacy completion, active contact, legal acceptance, payment, AI, email, DB/API integration, deployment, and publication.
+- Milestone 2 and all later milestones remain unauthorized.
 
 ## Next Gate
 
-Human visually confirms and accepts or requests another correction to Task M1-I5 after M1-I5-R1. M1-I6 does not begin without separate authorization.
+Human visually reviews representative M1 routes and either accepts Task M1-I6 or requests a bounded correction. Milestone 1 remains incomplete until Human acceptance. Acceptance of M1-I6 does not automatically authorize Milestone 2.

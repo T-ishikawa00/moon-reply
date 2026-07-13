@@ -2,7 +2,7 @@
 
 ## Status
 
-Human visually reviewed Task M1-I5 and accepted its overall page structure and direction. Task M1-I5-R1 is the only authorized correction. It is implemented and automatically validated; final Human acceptance remains required. M1-I6 remains unauthorized.
+Human visually reviewed and accepted Task M1-I5 and Task M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`. Human then separately authorized only M1-I6. Milestone 2 and all later milestones remain unauthorized.
 
 ## Base commit
 
@@ -25,7 +25,7 @@ Only `LegalNavigation` in `components/legal/LegalReview.tsx` changes:
 - active hover: retains the warm current-page appearance; and
 - keyboard focus: a separate purple `#55416f` ring with an ivory offset remains visibly distinct from the current state.
 
-The link uses wrapping flex layout, a shrinkable and breakable label, and a non-breaking compact badge so the longest legal label and `現在` marker are designed to remain contained at a 320px viewport. Rendered containment-class assertions passed; final visual confirmation at 320px remains a Human check.
+The link uses wrapping flex layout, a shrinkable and breakable label, and a non-breaking compact badge so the longest legal label and `現在` marker are designed to remain contained at a 320px viewport. Rendered containment-class assertions passed, and Human subsequently accepted the corrected treatment at commit `7a232b8feef446200cde5425cb3a98eb683b4391`.
 
 ## Accessibility preservation
 
@@ -56,4 +56,4 @@ No legal text, Decision ID, unresolved status, legal-page route, review-boundary
 
 ## Next gate
 
-Human visually confirms the corrected current-page treatment and either accepts Task M1-I5 or requests another correction. M1-I6 does not begin automatically and remains unauthorized.
+Task M1-I5-R1 is accepted. The next gate is Human Visual QA and acceptance of the separately authorized M1-I6. Milestone 2 remains unauthorized.

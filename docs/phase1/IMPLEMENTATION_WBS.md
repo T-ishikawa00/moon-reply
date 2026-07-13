@@ -70,11 +70,13 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Human accepted the overall M1-I5 page structure and direction and authorized only the M1-I5-R1 legal-navigation active-state correction
 - [x] M1-I5-R1: replace the blacked-out current item with a warm pale-gold card, dark readable text, stronger gold boundary, and compact visible `現在` badge while preserving accessibility behavior
 - [x] M1-I5-R1: validate typecheck, lint, build, all eight HTTP routes, one rendered `aria-current="page"` and visible `現在` per route, complete legal navigation, and prohibited scope
-- [ ] Human Visual QA and acceptance of M1-I5
-- [ ] M1-I6: complete responsive, accessibility, and visual QA hardening
-- [ ] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
-- [ ] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
-- [ ] Validation: verify offer, JPY 980 price, flow, safety, output, and legal/support clarity
+- [x] Human Visual QA and acceptance of M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`
+- [x] Human authorization of M1-I6 and rejection of a fixed/sticky mobile CTA for Milestone 1
+- [x] M1-I6: complete responsive, accessibility, terminology, icon, link, fail-closed, and indexing-boundary hardening
+- [x] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
+- [x] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
+- [x] Validation: verify offer, JPY 980 price, flow, safety, output, legal/support clarity, 30 documented routes, and 25 active link targets
+- [ ] Human Visual QA and acceptance of M1-I6
 - [ ] Human acceptance of Milestone 1
 
 ## Milestone 2: Operator Information and Publication Readiness

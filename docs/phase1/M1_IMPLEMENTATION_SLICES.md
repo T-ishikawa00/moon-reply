@@ -5,7 +5,7 @@
 - Planning output for Task M1-P1, aligned by Task M1-P1-R1
 - No slice is authorized by this document
 - Human acceptance of the planning package and the preceding slice, plus separate explicit authorization, is required before each slice starts
-- Human accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b`, explicitly authorized M1-I5, and approved the incomplete-field presentation rule; M1-I6 remains unauthorized
+- Human accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`, explicitly authorized M1-I6, and rejected a fixed/sticky mobile CTA for Milestone 1; M1-I6 is implemented and automatically validated, awaiting Human Visual QA
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
@@ -60,7 +60,7 @@ Routes completed:
 - Include review-hub link metadata for the Web鑑定ノート and 保存用鑑定書 previews, clearly labeled as later M1-I4 scope.
 - Add static route/state inventory with `not implemented in this slice` labels.
 - Preserve the existing `/request` route and behavior.
-- Do not commit final font/color choices; fixed mobile CTA remains an M1-I6 decision candidate.
+- At M1-I1 time, final font/color choices and the fixed mobile CTA were deferred; Human later rejected the fixed/sticky CTA for Milestone 1 before authorizing M1-I6.
 - Keep any LP input preview non-interactive and non-collecting. Every active request-start CTA goes directly to `/request`.
 
 ### Prohibited changes
@@ -394,7 +394,7 @@ Satisfied: Human accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c
 
 ## M1-I5: Legal, Disclosure and Contact Review Pages
 
-Implementation status: implemented and automatically validated under explicit Human authorization; awaiting Human review and acceptance.
+Implementation status: Human-accepted with M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`.
 
 ### Goal
 
@@ -473,9 +473,11 @@ Human-accepted M1-I4 at commit `620792e61b002190aff100fd145e986b5ae4c89b` and Hu
 
 ### Next Human gate
 
-Human accepts M1-I5 before M1-I6 starts.
+Satisfied: Human accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391` and separately authorized M1-I6.
 
 ## M1-I6: Responsive, Accessibility and Visual QA Hardening
+
+Implementation status: implemented and automatically validated under explicit Human authorization; awaiting Human Visual QA and acceptance.
 
 ### Goal
 
@@ -494,12 +496,12 @@ All M1 routes are in scope for review; no route is newly authorized by this slic
 - Focus, contrast, touch-target, label/error association, heading, reduced-motion, responsive overflow, long-text measure, and visual-consistency fixes.
 - Broken internal link corrections.
 - Copy correction only when required for approved review labels/boundaries.
-- Evaluate the mobile fixed-CTA candidate through a Human-approved Visual QA variant. No fixed CTA is committed unless the Human explicitly authorizes adoption within M1-I6 after reviewing interference evidence; otherwise the non-fixed CTA design remains.
+- Preserve the existing non-fixed CTA design. Human decided the mobile fixed/sticky CTA is `rejected for Milestone 1`.
 
 ### Prohibited changes
 
-- Redesigning product strategy, adding pages/features beyond the explicitly gated fixed-CTA decision above, altering fixture meaning, enabling integrations, or deciding operator facts.
-- Adding a fixed CTA without the M1-I6 Human gate or using it to change the `/request` destination/product flow.
+- Redesigning product strategy, adding pages/features, altering fixture meaning, enabling integrations, or deciding operator facts.
+- Adding a fixed/sticky CTA or using CTA polish to change the `/request` destination or product flow.
 - Hiding legal/safety/AI limitations to improve visual polish.
 - Browser-specific hacks without documented evidence.
 
@@ -552,7 +554,7 @@ Revert M1-I6 only; accepted functional slices M1-I1 through M1-I5 remain unchang
 
 ### Dependency
 
-Human-accepted M1-I5.
+Human-accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`, plus explicit Human authorization of M1-I6 — satisfied.
 
 ### Next Human gate
 
@@ -571,4 +573,4 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → Milestone 1 completion review
 ```
 
-Current state: M1-I5 is implemented and automatically validated, awaiting Human review. M1-I6 remains unauthorized and cannot start until Human accepts M1-I5 and separately authorizes M1-I6.
+Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 is implemented and automatically validated under explicit authorization, with Human Visual QA and acceptance still pending. Milestone 1 is not complete, and Milestone 2 remains unauthorized.

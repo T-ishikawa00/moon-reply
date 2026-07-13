@@ -108,7 +108,7 @@ export default function Home() {
             <h2 id="web-note-title">理由まで深く読む、Web鑑定ノート。</h2>
             <p>結論だけで終わらず、今の関係、文面の印象、推奨アクション、文面案、3日間の方向、分析の限界まで章立てで確認する長文のWeb版です。</p>
             <span className="preview-boundary">固定の架空データによる内容見本</span>
-            <div className="mt-6"><Link href="/review/result/result-normal-001" className="button button--primary">Web鑑定ノートの審査用見本を見る</Link></div>
+            <div className="mt-6"><Link href="/review/result/result-normal-001" className="button button--primary">Web鑑定ノートの見本を見る</Link></div>
           </div>
           <div className="web-note-preview" aria-label="Web鑑定ノートの構成プレビュー">
             <div className="preview-heading"><span>月の返事 鑑定ノート</span><span>PREVIEW</span></div>
@@ -132,7 +132,7 @@ export default function Home() {
               <li>Web全文を小さく圧縮したものではありません</li>
               <li>PDF・画像・ダウンロードはまだ利用できません</li>
             </ul>
-            <div className="mt-6"><Link href="/review/save-report/result-normal-001" className="button button--primary">保存用鑑定書の審査用見本を見る</Link></div>
+            <div className="mt-6"><Link href="/review/save-report/result-normal-001" className="button button--primary">保存用鑑定書の見本を見る</Link></div>
           </div>
           <div className="save-note-preview" aria-label="保存用鑑定書の準備中プレビュー">
             <div className="save-note-preview__header"><span>保存用鑑定書</span><span>PREVIEW</span></div>

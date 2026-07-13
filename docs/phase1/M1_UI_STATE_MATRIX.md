@@ -3,14 +3,15 @@
 ## 0. Status and Rules
 
 - Task M1-P1 and Task M1-P1-R1 are Human-accepted; M1-I1 through M1-I4 are Human-accepted
-- Task M1-I4 was accepted at commit `620792e61b002190aff100fd145e986b5ae4c89b`
-- Task M1-I5 is implemented and automatically validated under explicit Human authorization; Human review remains
-- M1-I6 remains unauthorized
+- Task M1-I5 and M1-I5-R1 were accepted at commit `7a232b8feef446200cde5425cb3a98eb683b4391`
+- M1-I6 is implemented and automatically validated under explicit Human authorization; Human Visual QA remains
+- Milestone 1 is not finally accepted, and Milestone 2 remains unauthorized
 - All review data is deterministic fixture/mock data
 - `needs_review` and `rejected` cannot reach purchase or an ordinary report
 - Unknown/error states fail closed
 - No state sends, saves, pays, calls AI, sends email, writes analytics, or generates a file
 - Every `/review/**` state shows `審査用プレビュー｜実際の決済・送信は行われません` with accessible detail `この画面は架空データを使用しています。AI生成、メール配信、データ保存も動作しません。`
+- Every `/review/**` state centrally inherits `noindex, nofollow`; legal/contact retain their separate review metadata boundary
 
 ## 1. State Matrix
 
@@ -28,7 +29,7 @@
 | M1-S10 | `/review/request/confirmation/normal-001` | Normal fixture after valid form/safety state | `request-normal-001` | `入力内容を確認してください`; fixture/non-send notice | Continue to review purchase confirmation | Edit request/age/email | Yes | Not yet; next is payment-free confirmation | No | Review hub / M1-S04 | Blocked fixture IDs are rejected before render | M1-I2 |
 | M1-S11 | `/review/purchase/confirmation/normal-001` | Normal confirmed fixture | Request fixture plus mock purchase metadata | Product, 税込980円, quantity, AI, limits, safety, delivery timing unresolved | Review unavailable purchase status | Edit / legal links | No transaction | Screen only; no payment action | No | Review hub / M1-S10 | Uses `.invalid` email; no provider/card fields | M1-I3 |
 | M1-S12 | Purchase-unavailable panel on M1-S11 | Confirmation page rendered in M1 | Static review metadata | `購入機能は現在準備中です` | Return to request/review hub | Open legal/support info | No | No | No | Visible on M1-S11 | Disabled/non-button; no handler, success, event, or mock charge | M1-I3 |
-| M1-S13 | `/sample-report` | LP or review-hub link | `sample-report-g001` | `架空ケースによるサービス説明用サンプル` | Return to request explanation | Compare fixture result | Yes, navigation only | No | Sample only | Direct route | No real customer, purchase, testimonial, or AI run | M1-I4 |
+| M1-S13 | `/sample-report` | LP or review-hub link | `sample-report-g001` | Primary `架空サンプル`; one sentence states no real customer, purchase/review, or AI-generation evidence; sample ID is collapsed review metadata | Return to request explanation | Compare Web/save examples | Yes, navigation only | No | Sample only | Direct route | No real customer, purchase, testimonial, or AI run; public comparison copy is customer-readable | M1-I4 / M1-I6 |
 | M1-S14 | `/review/result/result-normal-001` | Fixture result selected | `result-normal-001`, fixed judgment `今日は送らない方がいい` | `審査用fixture`; production-shaped Web鑑定ノート with one complete do-not-send recommendation | Return to review hub | Compare save report / sample / legal info | Navigation only | No | Yes, fixture only | Review hub link | One fixed normal label; readable fixture ID; no token, PII, DB, AI, purchase, email | M1-I4 |
 | M1-S21 | `/review/save-report/result-normal-001` | Save presentation selected for the normal result fixture | Save view of `result-normal-001`, same fixed judgment | `審査用fixture`; A4-oriented 保存用鑑定書 preview; no generated file | Return to review hub | Compare Web result / sample / legal info | Navigation only | No | Yes, fixture preview only | Review hub and M1-S14 link | Same one judgment as Web; not screenshot/compressed Web; no PDF/image/download/copy/share/DB/AI/purchase/email | M1-I4 |
 | M1-S15 | `/legal` and `/legal/*` review state | Legal/footer/confirmation link | Review-safe representation of internal drafts | `審査用ドラフト表示` / `公開承認前・運営者情報未完了` / `法的助言ではありません` | Open selected legal page | Return to related review page | Navigation only | No | N/A | Direct links and review hub | Unresolved facts withheld/status-labeled; no raw placeholder presented as final; noindex/nofollow | M1-I5 |
