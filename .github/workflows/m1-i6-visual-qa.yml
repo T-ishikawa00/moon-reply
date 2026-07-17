@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - qa/m1-i6-visual-20260717
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
