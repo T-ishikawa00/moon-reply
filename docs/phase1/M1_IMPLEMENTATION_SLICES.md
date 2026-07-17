@@ -2,14 +2,20 @@
 
 ## 0. Status and Execution Rule
 
-- Planning output for Task M1-P1, aligned by Task M1-P1-R1
+- Original planning output for Task M1-P1, aligned by Task M1-P1-R1, with the current M1-P2 revision registry appended below
 - No slice is authorized by this document
-- Human acceptance of the planning package and the preceding slice, plus separate explicit authorization, is required before each slice starts
-- Human accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`, explicitly authorized M1-I6, and rejected a fixed/sticky mobile CTA for Milestone 1; M1-I6 is implemented and automatically validated, awaiting Human Visual QA
+- Human acceptance of the applicable planning package and the dependency stated for that slice, plus separate explicit authorization, is required before each slice starts
+- Human accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`, explicitly authorized M1-I6, and rejected a fixed/sticky mobile CTA for Milestone 1; M1-I6 was implemented and automatically validated, was not accepted by Human, and is formally closed as superseded by M1-P2
+- M1-I6 implementation and evidence remain historical records; known M1-I6 and contemplated M1-I6-R1 defects are carried into M1-I7 through M1-I12 and final M1-I12 QA, with no later M1-I6 Human Visual QA or disposition gate
+- M1-P2 documentation is accepted by Human but does not authorize implementation; proposed M1-I7 through M1-I12 each require separate explicit Human authorization and acceptance
+- Milestone 1 remains incomplete, and Milestone 2 and every later milestone remain unauthorized
+- Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review is performed only by Human in ordinary external Microsoft Edge
 - Each slice is one bounded task, one commit, validation evidence, and one Human gate
 - A later slice must not be pulled into an earlier commit because a shared component is convenient
 
-The proposed six-slice structure is retained. Repository inspection supports it because the current app has only `/`, `/request`, and one request-form component. Separating route/navigation, safety/confirmation, purchase confirmation, report fixtures, legal/contact pages, and QA prevents a large unverifiable page bundle and preserves the approved dependency chain.
+The Human-directed M1-P2 revision does not treat M1-I6 as accepted. M1-I6 is already formally closed as superseded, and that closure does not complete Milestone 1. Human acceptance of M1-P2 is satisfied, but M1-I7 may start only after Human separately authorizes M1-I7; M1-I8 through M1-I12 additionally require Human acceptance of the preceding M1-P2 slice.
+
+The original M1-I1 through M1-I6 structure remains the historical implementation record. The current M1-P2 proposal adds six separately gated revision slices, M1-I7 through M1-I12, without changing fixed product, Safety, fail-closed, or runtime boundaries and without authorizing implementation.
 
 ## Shared Prohibitions for M1-I1 through M1-I6
 
@@ -477,7 +483,7 @@ Satisfied: Human accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425
 
 ## M1-I6: Responsive, Accessibility and Visual QA Hardening
 
-Implementation status: implemented and automatically validated under explicit Human authorization; awaiting Human Visual QA and acceptance.
+Implementation status: implemented and automatically validated under explicit Human authorization; not accepted by Human and formally closed as superseded by M1-P2.
 
 ### Goal
 
@@ -556,9 +562,90 @@ Revert M1-I6 only; accepted functional slices M1-I1 through M1-I5 remain unchang
 
 Human-accepted M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`, plus explicit Human authorization of M1-I6 — satisfied.
 
-### Next Human gate
+### Formal disposition and carried-forward boundary
 
-Human acceptance of M1-I6 closes Milestone 1 implementation/validation only after the complete Milestone 1 exit evidence is reviewed. It does not authorize Milestone 2 automatically.
+M1-I6 was not accepted by Human and is formally closed as superseded by M1-P2. Its implementation and evidence remain historical records. Its known defects are carried into M1-I7 through M1-I12 and final M1-I12 QA. This is not M1-I6 acceptance and does not complete Milestone 1. M1-P2 is accepted; the immediate gate is separate explicit Human authorization of M1-I7, not another M1-I6 Human Visual QA, disposition gate, or opportunistic M1-I6-R1 correction.
+
+## M1-P2 Revision Slice Registry
+
+Detailed direction and acceptance criteria are controlled by `M1_P2_EXPERIENCE_REVISION_PLAN.md`.
+
+Repository-wide inspection at base commit `38319adbe019826180db71e0b32302a000cc4a02` found no existing M1-P2 or M1-I7 through M1-I12 IDs. The IDs below therefore do not conflict. If a later conflict appears, stop and report it; do not rename an ID without Human direction.
+
+### Shared M1-P2 boundaries
+
+Every proposed slice M1-I7 through M1-I12 must preserve:
+
+- the canonical product definition, `税込980円`, one-shot/no-renewal model, 18+ policy, AI disclosure, non-guarantee, and Safety-before-payment order;
+- the 18+ restriction, Safety-before-payment order, `normal_allowed`-only continuation, acknowledgement meaning, and fail-closed handling for every blocked, invalid, contradictory, missing-consent, and unknown state;
+- Safety fixtures, classification meaning, fail-closed behavior, the fixed result judgment, recommendation meaning, core scenario facts, Safety vocabulary, severity, and branching;
+- presentation fixtures and schemas may be extended or reorganized only inside the separately authorized relevant slice, require Human review, and must not activate runtime behavior;
+- deterministic fixture/mock or browser-memory-only operation with no transmission or persistence;
+- the Milestone 1 rejection of a fixed/sticky mobile CTA;
+- no real AI, DB/Supabase runtime, payment, email, active contact, API, server action, analytics, deployment, or file generation;
+- no package, external design dependency, upload, OCR, copy, share, print, or download addition;
+- clear public/review and draft/publication boundaries; and
+- Human-only manual visual review in ordinary external Microsoft Edge, with no CodeX/agent Browser use, in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, or screenshot acquisition.
+
+### M1-I7: Brand Foundation
+
+Status: proposed; unauthorized.
+
+Goal: establish the shared 月の返事 visual system—token roles, typography hierarchy, spacing rhythm, surface roles, focus, contrast, and motion rules—without changing product content or behavior.
+
+Dependency: Human acceptance of M1-P2 — satisfied — plus separate explicit authorization of M1-I7 — pending.
+
+Acceptance boundary: Human accepts representative brand, paper-note, worksheet, status, caution, and legal-document surfaces before M1-I8 can be authorized. The result must be specific to 月の返事 and must not resemble a generic AI dashboard, chat product, or cheap fortune-telling UI.
+
+### M1-I8: Reading Note Product Redesign
+
+Status: proposed; unauthorized.
+
+Goal: redesign the Web鑑定ノート and 保存用鑑定書 as the central product artifact using the accepted M1-I7 foundation.
+
+Dependency: Human acceptance of M1-I7 plus separate explicit authorization of M1-I8.
+
+Acceptance boundary: the Web note follows the Human-approved 14-part structure in `M1_P2_EXPERIENCE_REVISION_PLAN.md`; scenario facts, fixed normal judgment, recommendation meaning, uncertainty/non-guarantee, and Safety/limitation meaning remain intact. M1-I8 may change section count, names, order, customer-facing copy, hierarchy, visual composition, and presentation fixture/schema with Human review. The save-oriented note prioritizes tonight's answer, do/do-not guidance, message draft, next decision date, change conditions, and one remembered sentence; it is not a shortened Web-note duplicate. Human reviews both presentations before M1-I9 can be authorized.
+
+### M1-I9: LP Redesign
+
+Status: proposed; unauthorized.
+
+Goal: redesign the LP hierarchy and product story around the accepted reading-note artifact while preserving the offer, price, limitations, and request destination.
+
+Dependency: Human acceptance of M1-I8 plus separate explicit authorization of M1-I9.
+
+Acceptance boundary: the LP follows the approved sequence—Hero, three answers, empathy/problem framing, Reading Note preview, three-step service flow, fictional sample, price, can/cannot-do, FAQ, final CTA—with the Reading Note as primary value proof. The first view shows purpose, `税込980円`, one consultation/one note, one-shot/no-renewal terms, and a non-fixed `/request` CTA. Repeated cards/explanations, oversized headings, excessive whitespace, technical/review terms, and excessive English eyebrows are reduced. No fake evidence, embedded full form, hidden limitation, or fixed/sticky mobile CTA is introduced. Human acceptance is required before M1-I10 can be authorized.
+
+### M1-I10: Request Sheet Redesign
+
+Status: proposed; unauthorized.
+
+Goal: redesign the request experience as a calm guided worksheet around one large current-situation free-text field, relationship and what-to-know chips, 18+, Safety, one required acknowledgement, privacy guidance, and post-Safety email timing.
+
+Dependency: Human acceptance of M1-I9 plus separate explicit authorization of M1-I10.
+
+Acceptance boundary: required input is the 18+ self-declaration, one large current-situation free-text field, relationship chips, what-to-know chips, Safety confirmation, and one required acknowledgement. Nickname, actual partner message, intended message, and urgency are optional as defined by the plan. The UI warns against real names, addresses, phone numbers, employer/school details, and account IDs. Email appears after request/Safety confirmation and before purchase confirmation. M1-I10 may change the visible field set, grouping, step count, order, age-band UI, confirmation composition, and presentation fixture schema with Human review. `このように受け取りました` may be shown only as a truthful fixture/review representation; no AI is executed or implied. Only `normal_allowed` continues; all blocked and unknown states remain fail closed; no persistence, transmission, real AI, payment, or Safety change is added. Human acceptance is required before M1-I11 can be authorized.
+
+### M1-I11: Legal Review Redesign
+
+Status: proposed; unauthorized.
+
+Goal: redesign legal/contact review presentation as coherent draft documents while preserving legal substance, unresolved decisions, inactive contact, and indexing boundaries.
+
+Dependency: Human acceptance of M1-I10 plus separate explicit authorization of M1-I11.
+
+Acceptance boundary: legal/support screens use three layers—user-readable document body; publication-readiness checklist and unresolved Human decisions; collapsed review-only metadata such as Decision ID and source references. Each page has one primary status, Decision IDs do not repeat through the reading flow, `/legal` uses a document-index list rather than a repeated card grid, and metadata remains subordinate. Review mode and future Public mode are defined separately. Legal substance and unresolved operator facts remain unchanged; no fact is invented and no limitation is demoted. Human acceptance is required before M1-I12 can be authorized.
+
+### M1-I12: Responsive, Accessibility and Final QA
+
+Status: proposed; unauthorized.
+
+Goal: perform evidence-led cross-surface responsive/accessibility hardening, reconcile the held defect inventory, and prepare the final Milestone 1 acceptance package without introducing a new design direction.
+
+Dependency: Human acceptance of M1-I11 plus separate explicit authorization of M1-I12.
+
+Acceptance boundary: Human performs manual external-Edge review at approximately 320px, 390px, 768px/tablet, and desktop, including keyboard/focus and final contrast review. Automated evidence remains non-browser and separate. M1-I12 reconciles the carried M1-I6/M1-I6-R1 defect inventory but does not reopen or accept M1-I6 and does not itself complete Milestone 1.
 
 ## Final Sequence
 
@@ -569,8 +656,15 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → M1-I3 Human acceptance
   → M1-I4 Human acceptance
   → M1-I5 Human acceptance
-  → M1-I6 Human acceptance
-  → Milestone 1 completion review
+  → M1-I6 not accepted / formally closed as superseded by M1-P2
+  → M1-P2 Human acceptance
+  → separately authorized and accepted M1-I7
+  → separately authorized and accepted M1-I8
+  → separately authorized and accepted M1-I9
+  → separately authorized and accepted M1-I10
+  → separately authorized and accepted M1-I11
+  → separately authorized and accepted M1-I12
+  → final Milestone 1 completion review
 ```
 
-Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 is implemented and automatically validated under explicit authorization, with Human Visual QA and acceptance still pending. Milestone 1 is not complete, and Milestone 2 remains unauthorized.
+Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical. M1-P2 documentation is Human-accepted but authorizes no implementation. M1-I7 is not yet authorized or implemented, and M1-I7 through M1-I12 remain proposals only. Milestone 1 is not complete, Milestone 2 remains unauthorized, and CodeX/agent Browser use and screenshots are prohibited.

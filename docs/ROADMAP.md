@@ -12,8 +12,13 @@ Current status:
 
 - Milestone 0 is completed.
 - Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
-- Task M1-P1 planning/specification is completed in the repository and awaiting Human review.
-- Milestone 1 implementation has not started.
+- Tasks M1-P1 and M1-P1-R1 are accepted by Human.
+- Tasks M1-I1 through M1-I5 and M1-I5-R1 are accepted by Human.
+- Task M1-I6 was not accepted by Human and is formally closed as superseded by M1-P2. Its implementation and evidence remain historical records, and its known defects are carried into M1-I7 through M1-I12 and final M1-I12 QA. This is not M1-I6 acceptance; Milestone 1 remains incomplete.
+- Task M1-P2 Experience & Visual Direction Revision is accepted by Human. It documents the broader revision inside Milestone 1; no later M1-I6 Human Visual QA or disposition gate is required.
+- M1-P2 is a planning task. Its acceptance is not implementation authorization, and each proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization.
+- The next Human gate is a separate explicit authorization decision for M1-I7 Brand Foundation. M1-I7 is not yet authorized or implemented.
+- Milestone 2 and every later milestone remain unauthorized.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.
 

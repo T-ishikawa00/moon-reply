@@ -6,6 +6,8 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. M1-P2 acceptance does not authorize implementation, M1-I7 is not yet authorized, every proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization and acceptance, and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+
 ## Milestone 0: Completed Foundations
 
 - [x] Next.js project foundation
@@ -76,12 +78,35 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Validation: verify fixture/mock-only behavior and no real payment/OpenAI/email/public DB writes
 - [x] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
 - [x] Validation: verify offer, JPY 980 price, flow, safety, output, legal/support clarity, 30 documented routes, and 25 active link targets
-- [ ] Human Visual QA and acceptance of M1-I6
+- [x] Partial Human visual review in external Edge identified unresolved visual/accessibility defects and broader product-experience concerns; full cross-width and keyboard QA was not completed
+- [x] Human decision: M1-I6 was not accepted and is formally closed as superseded by M1-P2; this is not acceptance and does not complete Milestone 1
+- [x] Preserve M1-I6 implementation/automated evidence as history and carry known M1-I6/M1-I6-R1 defects into M1-I7 through M1-I12 and final M1-I12 QA; no later M1-I6 gate
+- [x] M1-P2 planning: confirm no M1-P2 or M1-I7 through M1-I12 ID conflict
+- [x] M1-P2 planning: create `M1_P2_EXPERIENCE_REVISION_PLAN.md`
+- [x] M1-P2 planning: define the approved 14-part Reading Note and distinct save-oriented note, ten-part LP sequence, free-text/chip Request Sheet, and three-layer Legal Review
+- [x] M1-P2 planning: preserve product definition, JPY 980 price, 18+ policy, Safety/classification meaning, fixed judgment, core scenario facts, runtime boundary, and non-fixed mobile CTA decision
+- [x] M1-P2 planning: keep Safety fixtures and fail-closed behavior fixed; permit presentation fixture/schema changes only inside the separately authorized relevant slice with Human review and no runtime activation
+- [x] M1-P2 planning: define Human-only external-Edge Visual QA and prohibit CodeX/agent browser use and screenshots
+- [x] Human acceptance of M1-P2 planning; documentation acceptance does not authorize implementation
+- [ ] Separate Human authorization of M1-I7 Brand Foundation
+- [ ] M1-I7 Brand Foundation implementation and Human acceptance
+- [ ] Separate Human authorization of M1-I8 Reading Note Product Redesign
+- [ ] M1-I8 Reading Note Product Redesign implementation and Human acceptance
+- [ ] Separate Human authorization of M1-I9 LP Redesign
+- [ ] M1-I9 LP Redesign implementation and Human acceptance
+- [ ] Separate Human authorization of M1-I10 Request Sheet Redesign
+- [ ] M1-I10 Request Sheet Redesign implementation and Human acceptance
+- [ ] Separate Human authorization of M1-I11 Legal Review Redesign
+- [ ] M1-I11 Legal Review Redesign implementation and Human acceptance
+- [ ] Separate Human authorization of M1-I12 Responsive, Accessibility and Final QA
+- [ ] M1-I12 Responsive, Accessibility and Final QA implementation and Human acceptance
 - [ ] Human acceptance of Milestone 1
 
 ## Milestone 2: Operator Information and Publication Readiness
 
 Dependency: Milestone 1 Human acceptance.
+
+Current authority: unauthorized. M1-P2 is an internal Milestone 1 revision and does not satisfy or bypass this dependency.
 
 - [ ] Planning/spec: enumerate operator, contact, disclosure, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions
 - [ ] Human acceptance of Milestone 2 planning/specification

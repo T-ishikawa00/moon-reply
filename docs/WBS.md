@@ -4,6 +4,8 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-P2 acceptance is not implementation authorization; M1-I6 was not accepted and is formally closed as superseded by M1-P2, M1-I7 is not yet authorized, every proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization, and Milestone 2 remains unauthorized.
+
 ## P0: Repository Setup
 
 - [x] Git repository initialized
@@ -342,7 +344,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] M1-I5-R1 typecheck, lint, build, eight-route HTTP, rendered current-marker/navigation, and prohibited-scope checks completed
 - [x] Human Visual QA and acceptance of M1-I5 and M1-I5-R1 at commit `7a232b8feef446200cde5425cb3a98eb683b4391`
 
-## P4.19: Human Review In Progress — M1-I6 Responsive, Accessibility and Visual QA Hardening
+## P4.19: Closed Unaccepted — M1-I6 Responsive, Accessibility and Visual QA Hardening
 
 - [x] Human explicitly authorized M1-I6 after accepting M1-I5 and M1-I5-R1
 - [x] Human fixed-mobile-CTA decision recorded as `rejected for Milestone 1`; non-fixed CTA preserved
@@ -352,7 +354,41 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] `/review/**` centrally marked `noindex, nofollow`; legal/contact boundary preserved
 - [x] Typecheck, lint, build, 30-route HTTP/rendered checks, 25-link integrity checks, and five fail-closed checks completed
 - [x] No fixture, Safety, price, legal substance, Decision state, package, Supabase, or runtime integration change added
-- [ ] Human Visual QA and acceptance of M1-I6
+- [x] Partial Human visual review performed manually in external Edge; unresolved visual/accessibility defects and broader product-experience concerns identified
+- [x] Full cross-width and keyboard QA recorded as incomplete historical review work
+- [x] M1-I6 not accepted by Human and formally closed as superseded by M1-P2
+- [x] M1-I6 implementation and evidence retained as historical records
+- [x] Known M1-I6/M1-I6-R1 defects carried into M1-I7 through M1-I12 and final M1-I12 QA
+- [ ] Human acceptance of Milestone 1
+
+This closure is not M1-I6 acceptance and does not complete Milestone 1. No further M1-I6 Human Visual QA or disposition gate is required.
+
+## P4.20: Accepted — M1-P2 Experience & Visual Direction Revision Planning
+
+- [x] Confirm clean base state at `38319adbe019826180db71e0b32302a000cc4a02`
+- [x] Confirm no existing M1-P2 or M1-I7 through M1-I12 ID conflict
+- [x] Create `docs/phase1/M1_P2_EXPERIENCE_REVISION_PLAN.md`
+- [x] Document the approved 14-part Reading Note structure and distinct save-oriented note purpose
+- [x] Document the approved free-text/chip Request Sheet input, privacy warning, email timing, and truthful no-AI fixture representation
+- [x] Document the approved ten-part LP sequence with the Reading Note artifact as primary value proof
+- [x] Document the approved three-layer Legal Review architecture
+- [x] Preserve product definition, JPY 980 price, 18+ policy, Safety/classification meaning, fixed judgment, core scenario facts, and runtime boundaries
+- [x] Preserve the Milestone 1 rejection of a fixed/sticky mobile CTA
+- [x] Propose M1-I7 Brand Foundation
+- [x] Propose M1-I8 Reading Note Product Redesign
+- [x] Propose M1-I9 LP Redesign
+- [x] Propose M1-I10 Request Sheet Redesign
+- [x] Propose M1-I11 Legal Review Redesign
+- [x] Propose M1-I12 Responsive, Accessibility and Final QA
+- [x] Record that every implementation slice requires separate explicit Human authorization and acceptance
+- [x] Record that Safety fixtures, classification meaning, fail-closed behavior, fixed judgment, and core scenario facts remain fixed
+- [x] Allow presentation fixture/schema extension or reorganization only inside the separately authorized relevant slice, with Human review and no runtime activation
+- [x] Record that real AI, DB, payment, email, API, deployment, and Safety changes remain prohibited
+- [x] Record the Browser-use and screenshot prohibition; visual checks belong only to Human in ordinary external Microsoft Edge
+- [x] Preserve documentation-only scope with no product-code or package change
+- [x] Human acceptance of Task M1-P2; documentation acceptance does not authorize implementation
+- [ ] Separate Human authorization of M1-I7
+- [ ] M1-I7 through M1-I12 implementation and Human acceptance; proposed only, currently unauthorized
 - [ ] Human acceptance of Milestone 1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
@@ -371,4 +407,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. M1-I6 is implemented but remains Human-review pending.
+M1-P2 is Human-accepted documentation and does not authorize implementation. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. M1-I7 is not yet authorized, and M1-I7 through M1-I12 remain proposals only. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
