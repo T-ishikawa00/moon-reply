@@ -1,0 +1,72 @@
+name: M1-I6 Visual QA
+
+on:
+  push:
+    branches:
+      - qa/m1-i6-visual-20260717
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout QA branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install application dependencies
+        run: npm ci
+
+      - name: Install temporary browser QA dependencies
+        run: npm install --no-save --package-lock=false playwright@1.54.1 @axe-core/playwright@4.10.2
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start production server
+        shell: bash
+        run: |
+          npm run start -- -p 3010 > server.log 2>&1 &
+          echo $! > server.pid
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent --show-error http://127.0.0.1:3010/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat server.log
+          exit 1
+
+      - name: Capture visual and keyboard QA evidence
+        env:
+          BASE_URL: http://127.0.0.1:3010
+        run: node scripts/m1-i6-visual-qa.mjs
+
+      - name: Preserve server log
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p qa-artifacts
+          cp server.log qa-artifacts/server.log || true
+
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m1-i6-visual-qa-${{ github.sha }}
+          path: qa-artifacts
+          if-no-files-found: warn
+          retention-days: 7
