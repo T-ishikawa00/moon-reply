@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is authorized for documentation/design work only and remains unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
 
 ## Milestone 0: Completed Foundations
 
@@ -105,7 +105,8 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-P2-R1-R1: correct only the LP Night-background contrast defect and `/sample-report` separate-case comparison boundary
 - [x] Human acceptance of M1-I7 through M1-I11 plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline
 - [x] Human authorization of M1-P3 Reading Note Visual Excellence Specification for documentation/design work only
-- [ ] M1-P3: prepare/review content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, and implementation plan
+- [x] M1-P3: prepare the content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, implementation plan, and review record
+- [ ] M1-P3: Human and ChatGPT review of the draft package
 - [ ] Human acceptance of M1-P3
 - [ ] Separate Human authorization of M1-I8-R1; remains unauthorized and unimplemented
 - [ ] Separate Human authorization of M1-I9-R1; remains unauthorized and unimplemented

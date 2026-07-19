@@ -14,8 +14,8 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - Human initially authorized M1-I7, then explicitly authorized a one-time integrated M1-I7 through M1-I11 implementation batch. For this batch only, internal checkpoints replaced the normal Human acceptance pause between slices.
 - M1-I7 through M1-I11 are implemented and automatically validated from base commit `923d43057178da070a72f380d7054d60efca7daf`. Human accepted the current integrated result as the next-stage baseline; this is one integrated baseline decision, not five independent acceptance records and not final Milestone 1 acceptance.
 - M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction are Human-accepted as part of that baseline.
-- M1-P3 Reading Note Visual Excellence Specification is Human-authorized for documentation/design work only and remains unstarted. M1-I8-R1 and M1-I9-R1 remain unauthorized and unimplemented.
-- M1-I12 remains unauthorized. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
+- M1-P3 Reading Note Visual Excellence Specification has a completed documentation/design draft; Human and ChatGPT review is pending. M1-I8-R1 and M1-I9-R1 remain unauthorized and unimplemented.
+- M1-I12 remains unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -70,7 +70,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 
 - Task ID: `M1-P3`.
 - Task name: `Reading Note Visual Excellence Specification`.
-- Status: `Human-authorized; documentation/design only; not implementation authorization`.
+- Status: `Draft completed; Human and ChatGPT review pending; documentation/design only; not implementation authorization`.
 
 Purpose:
 
@@ -109,10 +109,10 @@ Controlling Human design decisions:
 
 ## Current Restriction
 
-The only commit/push authority attached to this decision is the validated baseline-closure commit containing this document. It grants no later implementation authority. Do not start M1-I8-R1, M1-I9-R1, or M1-I12 without separate explicit Human authorization. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The only commit/push authority attached to M1-P3 is the validated documentation-only draft commit on `design/m1-p3-reading-note-visual-excellence`. It grants no implementation authority. Do not start M1-I8-R1, M1-I9-R1, or M1-I12 without separate explicit Human authorization. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance.
 
 ## Next Gate
 
-With the baseline closure commit and clean working tree established, Human and ChatGPT prepare/review the M1-P3 design specification. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human and ChatGPT review the committed M1-P3 draft package and decide acceptance or revision. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

@@ -19,7 +19,7 @@ Current status:
 - M1-P2 is a planning task. Its acceptance did not itself authorize implementation. Human subsequently authorized M1-I7, then explicitly authorized a one-time integrated M1-I7 through M1-I11 implementation batch that replaced the normal prior-slice acceptance pauses for this batch only.
 - Human accepted the integrated M1-I7 through M1-I11 redesign as the baseline for the next planning stage. This is one integrated baseline decision, not independent acceptance records for each slice and not final Milestone 1 acceptance.
 - Human also accepted M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction. The accepted baseline contains separate wait/send/stop-additional-contact public fictional cases while preserving `result-normal-001`, Safety, and runtime boundaries.
-- Task M1-P3 Reading Note Visual Excellence Specification is Human-authorized as documentation/design work only and is not started. It does not authorize implementation.
+- Task M1-P3 Reading Note Visual Excellence Specification has a completed documentation/design draft. Human and ChatGPT review is pending. It does not authorize implementation.
 - M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete.
 - The controlling artifact names are `恋のメッセージ鑑定ノート` for the product, `Web鑑定ノート` for the long presentation, and `保存用判断カード` for the short presentation. Residual application copy such as `保存用鑑定書` is a known deferred M1-I8-R1 alignment item and is not changed by baseline closure.
 - Milestone 2 and every later milestone remain unauthorized.

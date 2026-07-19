@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is authorized for documentation/design work only and remains unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 ## P0: Repository Setup
 
@@ -437,12 +437,13 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 - [ ] M1-I12 authorization; remains outside this correction
 - [ ] Human acceptance of Milestone 1
 
-## P4.24: Human-Authorized, Not Started — M1-P3 Reading Note Visual Excellence Specification
+## P4.24: Draft Completed — Human and ChatGPT Review Pending — M1-P3 Reading Note Visual Excellence Specification
 
 - [x] Human authorization limited to documentation/design work
 - [x] Record the formal names `恋のメッセージ鑑定ノート`, `Web鑑定ノート`, and `保存用判断カード`
 - [x] Record residual application use of `保存用鑑定書` as a deferred M1-I8-R1 alignment item
-- [ ] Prepare and review the fixed-content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, and implementation plan
+- [x] Prepare the fixed-content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, implementation plan, and review record
+- [ ] Human and ChatGPT review of the M1-P3 draft package
 - [ ] Human acceptance of the M1-P3 design specification
 - [ ] Separate Human authorization of M1-I8-R1; currently unauthorized
 - [ ] Separate Human authorization of M1-I9-R1; currently unauthorized
@@ -466,4 +467,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is authorized for documentation/design only and is unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
+M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.

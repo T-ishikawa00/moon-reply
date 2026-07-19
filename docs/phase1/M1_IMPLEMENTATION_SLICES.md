@@ -10,7 +10,7 @@
 - M1-P2 documentation is accepted by Human but did not itself authorize implementation; Human subsequently authorized M1-I7 and then the one-time integrated M1-I7 through M1-I11 batch
 - M1-I7 through M1-I11 are implemented, automatically validated, and Human-accepted together as the integrated next-stage baseline; no standalone acceptance record is inferred for an individual slice
 - M1-P2-R1 public-sample conclusion diversification and the bounded M1-P2-R1-R1 correction are Human-accepted as part of that baseline
-- M1-P3 Reading Note Visual Excellence Specification is authorized for documentation/design work only and remains unstarted; M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented
+- M1-P3 Reading Note Visual Excellence Specification has a completed documentation/design draft and awaits Human and ChatGPT review; M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented
 - Milestone 1 remains incomplete, and Milestone 2 and every later milestone remain unauthorized
 - Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review is performed only by Human in ordinary external Microsoft Edge
 - The normal rule is one bounded slice, validation evidence, one commit, and one Human gate; the Human-authorized integrated batch is a documented exception now closed through one integrated Human baseline decision and one honest baseline commit
@@ -644,7 +644,7 @@ Acceptance boundary: legal/support screens use three layers—user-readable docu
 
 ### M1-P3: Reading Note Visual Excellence Specification
 
-Status: Human-authorized; documentation/design only; not implementation authorization; not started.
+Status: Draft completed; Human and ChatGPT review pending; documentation/design only; not implementation authorization.
 
 Purpose: lock the fixed Reading Note content and define information hierarchy, Figma/design handoff, typography, chapter archetypes, component anatomy, tokens, PC/390px-centered responsive specification with 768px reflow and 320px fallback, acceptance criteria, and implementation plan without changing content or judgment.
 
@@ -652,7 +652,7 @@ Dependencies: current integrated redesign baseline closure commit, clean working
 
 Out of scope: implementation, product facts, price, fixture judgment, Safety, request/legal redesign, real AI, DB, payment, email, API, deployment, external fonts, Storybook, visual regression tooling, PDF, download, share, print, or persistence.
 
-Next gate: Human and ChatGPT prepare/review the M1-P3 design specification. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized.
+Next gate: Human and ChatGPT review the committed M1-P3 draft package and decide acceptance or revision. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized.
 
 ### M1-I12: Responsive, Accessibility and Final QA
 
@@ -677,10 +677,10 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → M1-P2 Human acceptance
   → one-time integrated M1-I7 through M1-I11 implementation authorization
   → M1-I7 through M1-I11 plus bounded public-sample corrections accepted as one integrated baseline
-  → M1-P3 documentation/design specification (authorized; current next gate)
+  → M1-P3 documentation/design draft (completed; Human and ChatGPT review pending)
   → separately authorized follow-up implementation only after its applicable specification gate
   → separately authorized and accepted M1-I12
   → final Milestone 1 completion review
 ```
 
-Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical. M1-P2 documentation is Human-accepted. Human accepted the one-time M1-I7 through M1-I11 batch plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline. M1-P3 is authorized for documentation/design only and remains unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 is not complete, Milestone 2 remains unauthorized, and CodeX/agent Browser use and screenshots are prohibited.
+Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical. M1-P2 documentation is Human-accepted. Human accepted the one-time M1-I7 through M1-I11 batch plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 is not complete, Milestone 2 remains unauthorized, and CodeX/agent Browser use and screenshots are prohibited.

@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 integrated redesign baseline established — M1-P3 authorized for documentation/design only and not started
+Phase 1 / Milestone 1 — M1-P3 draft completed; Human and ChatGPT review pending
 
 ## Completed Through
 
@@ -21,12 +21,13 @@ Phase 1 / Milestone 1 integrated redesign baseline established — M1-P3 authori
 - Task M1-P2 Experience & Visual Direction Revision accepted by Human
 - Tasks M1-I7 through M1-I11 implemented, automatically validated, and Human-accepted together as the integrated next-stage baseline
 - Task M1-P2-R1 public-sample conclusion diversification and the bounded M1-P2-R1-R1 contrast/comparison-boundary correction Human-accepted as part of that baseline
+- Task M1-P3 Reading Note Visual Excellence Specification draft completed on a documentation/design-only branch; Human and ChatGPT review pending
 
 ## Current Task
 
-The baseline-closure commit containing this document records the existing M1-I7 through M1-I11 integrated redesign, M1-P2-R1 public-sample conclusion diversification, and M1-P2-R1-R1 bounded correction as one honest baseline. The application, component, fixture, Safety, and runtime implementation is preserved exactly; baseline closure adds only status/governance documentation.
+The current task is the completed M1-P3 documentation/design draft: visual-excellence specification, deterministic content-lock matrix, Figma handoff specification, checkpointed implementation plan, and review record. The application, component, fixture, Safety, package, configuration, and runtime implementation remains unchanged.
 
-Human accepted the current integrated result as the baseline for the next planning stage. This decision does not independently accept each historical slice, does not authorize M1-I12, and does not complete Milestone 1.
+Human and ChatGPT review is pending. Draft completion is not acceptance, does not authorize M1-I8-R1, M1-I9-R1, or M1-I12, and does not complete Milestone 1.
 
 Accepted public fictional conclusions in the baseline are:
 
@@ -59,9 +60,9 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - Human accepted the current M1-I7 through M1-I11 integrated redesign as a single next-stage baseline.
 - Human accepted M1-P2-R1 and the bounded M1-P2-R1-R1 correction as part of that baseline.
 - This baseline decision is not final Milestone 1 acceptance.
-- M1-P3 Reading Note Visual Excellence Specification is Human-authorized for documentation/design work only and remains unstarted.
+- M1-P3 Reading Note Visual Excellence Specification draft is complete; Human and ChatGPT review is pending; authority remains documentation/design only.
 - M1-I8-R1 and M1-I9-R1 remain unauthorized and unimplemented.
-- M1-I12 Responsive, Accessibility and Final QA remains unauthorized.
+- M1-I12 Responsive, Accessibility and Final QA remains unauthorized and unimplemented.
 - M1-I6 remains formally closed as superseded without acceptance; its historical evidence and carried defect inventory remain intact.
 - Product definition, JPY 980 price, 18+ policy, Safety/classification meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
@@ -91,11 +92,11 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 
 - Task ID: `M1-P3`
 - Task name: `Reading Note Visual Excellence Specification`
-- Status: `Human-authorized; documentation/design only; not implementation authorization`
+- Status: `Draft completed; Human and ChatGPT review pending; documentation/design only; not implementation authorization`
 - Purpose: polish the `税込980円` Reading Note product without changing content or judgment; define content lock, information hierarchy, component anatomy, tokens, typography, chapter archetypes, Figma/design handoff, responsive behavior for desktop/390px with 768px reflow and 320px fallback, acceptance criteria, and implementation plan.
 - Dependencies: current integrated redesign baseline closure commit; clean working tree; Human decisions recorded.
 - Out of scope: implementation; product facts or price; fixture judgment or Safety; request/legal redesign; real AI, DB, payment, email, API, deployment; external fonts; Storybook; visual-regression tooling; PDF, download, share, print, or persistence.
 
 ## Next Gate
 
-Human and ChatGPT prepare and review the M1-P3 design specification. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized. M1-I9-R1 and M1-I12 also remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human and ChatGPT review the committed M1-P3 draft package and decide acceptance or revision. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized. M1-I9-R1 and M1-I12 also remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
