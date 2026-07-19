@@ -1,92 +1,167 @@
 import Link from "next/link";
-import type { PublicSampleReportFixture } from "@/fixtures/review/reports";
+import { EditorialDivider } from "@/components/brand/EditorialDivider";
+import { LunarArc } from "@/components/brand/LunarArc";
+import { MoonSeal } from "@/components/brand/MoonSeal";
+import type { PublicSampleReportCase } from "@/fixtures/public/public-sample-cases";
 import { ReportComparisonNavigation } from "./ReportComparisonNavigation";
 
-export function PublicSampleReport({ sample }: { sample: PublicSampleReportFixture }) {
+export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase }) {
+  const { report } = sample;
+
   return (
-    <main className="bg-[#10132b] text-[#fff8e8]">
-      <section className="bg-[radial-gradient(circle_at_75%_12%,rgba(229,196,109,.18),transparent_22rem),linear-gradient(145deg,#0c1128,#2a203e)] px-4 py-16 sm:px-8 sm:py-24">
-        <div className="mx-auto max-w-5xl">
-          <div className="flex flex-wrap gap-2" aria-label="サンプルの状態">
-            <span className="rounded-full border border-[#d7bd77]/55 bg-[#fff8e8]/5 px-3 py-2 text-sm font-bold text-[#f2d98f]">
-              {sample.visibleLabels[0]}
-            </span>
+    <main className="public-sample-page">
+      <section className="public-sample-intro" aria-labelledby="sample-page-title">
+        <div className="page-shell public-sample-intro__inner">
+          <div>
+            <span className="status-label status-label--review">架空ケース</span>
+            <h1 id="sample-page-title">{report.title}</h1>
+            <p>
+              この全文見本は、文章の雰囲気と鑑定ノートの構成をご確認いただくための固定架空ケースです。
+              実在の相談者・購入者の事例でも、AI生成実績でもありません。
+            </p>
           </div>
-          <p className="mt-8 text-sm font-bold tracking-[0.16em] text-[#d9bb75]">FICTIONAL WRITING SAMPLE</p>
-          <h1 className="mt-3 max-w-4xl break-words font-serif text-4xl font-semibold leading-[1.45] sm:text-6xl">
-            {sample.title}
-          </h1>
-          <p className="mt-6 max-w-3xl text-base leading-9 text-[#ded3c2] sm:text-lg">
-            購入前に文章の温度と、月の返事がどのように不確実性を扱うかを確認するための架空ケースです。これは実在相談者の事例ではなく、実際の購入・レビューやAI生成実績を示すものではありません。
-          </p>
-          <dl className="mt-8 grid max-w-4xl gap-3 rounded-xl border border-[#d6b86d]/35 bg-[#fff8e8]/5 p-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:p-7">
-            <dt className="font-bold text-[#d9bb75]">相談テーマ</dt>
-            <dd className="m-0 break-words leading-8">{sample.consultationTheme}</dd>
-          </dl>
+          <Link href="/request" className="button button--primary">鑑定ノートを依頼する</Link>
         </div>
       </section>
 
-      <section className="bg-[#f2e7d4] px-4 py-12 text-[#2b2335] sm:px-8 sm:py-20">
-        <article className="mx-auto max-w-[50rem] overflow-hidden rounded-sm border border-[#cdbb91] bg-[#fffaf0] shadow-[0_2rem_5rem_rgba(31,24,43,.14)]">
-          <header className="border-b border-[#d9caa8] px-5 py-8 sm:px-10 sm:py-12">
-            <p className="m-0 text-sm font-bold tracking-[0.16em] text-[#80652d]">月の返事・架空サンプル</p>
-            <p className="mt-5 text-sm font-bold text-[#765e2d]">今夜の方向</p>
-            <p className="mt-2 break-words font-serif text-3xl font-semibold leading-[1.5] sm:text-4xl">{sample.judgmentLabel}</p>
+      <div className="public-sample-stage">
+        <article className="public-sample-note paper-grain">
+          <header className="public-sample-note__cover">
+            <LunarArc tone="night" position="top-right" />
+            <div className="public-sample-note__brand"><MoonSeal size="medium" /><span>月の返事</span></div>
+            <p>恋のメッセージ鑑定ノート・架空の全文見本</p>
+            <h2>{sample.relationshipContext}</h2>
+            <EditorialDivider variant="night" />
+            <span>{report.coverLine}</span>
           </header>
 
-          <div className="space-y-10 px-5 py-9 sm:px-10 sm:py-12">
-            {sample.sections.map((section) => (
-              <section key={section.heading} aria-labelledby={"sample-" + section.heading}>
-                <h2 id={"sample-" + section.heading} className="font-serif text-2xl font-semibold leading-[1.5] text-[#3d3045]">
-                  {section.heading}
-                </h2>
-                <div className="mt-4 space-y-4">
-                  {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph} className="m-0 break-words leading-9 text-[#564b5d]">{paragraph}</p>
-                  ))}
-                </div>
-              </section>
-            ))}
+          <section className="public-sample-answer" aria-labelledby="public-sample-answer-heading">
+            <p>今夜の答え</p>
+            <h2 id="public-sample-answer-heading">{sample.conclusion}</h2>
+          </section>
 
-            <section aria-labelledby="sample-message-heading" className="rounded-xl border border-[#b99a4f] bg-[#f5ead2] p-5 sm:p-7">
-              <h2 id="sample-message-heading" className="font-serif text-2xl font-semibold leading-[1.5]">後で送るなら、このくらいの温度で</h2>
-              <blockquote className="mt-5 border-l-4 border-[#8a6d2e] bg-[#fffdf5] p-5 text-lg leading-9">
-                {sample.laterMessageDraft}
-              </blockquote>
-              <p className="mt-4 leading-8 text-[#67596b]">返信を強制せず、説明を求めず、送った後に重ねて確認しない方向の文面例です。</p>
+          <div className="public-sample-note__body">
+            <section aria-labelledby="sample-section-1">
+              <span aria-hidden="true">01</span>
+              <h2 id="sample-section-1">月の返事からの短い手紙</h2>
+              <div>{report.shortLetter.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
             </section>
 
-            <aside aria-labelledby="sample-limitation-heading" className="border-t border-[#d9caa8] pt-7">
-              <h2 id="sample-limitation-heading" className="text-base font-bold text-[#765e2d]">サービスの固定注意</h2>
-              <p className="mt-3 break-words leading-8 text-[#67596b]">{sample.fixedLimitationDisclaimer}</p>
-            </aside>
+            <section aria-labelledby="sample-section-2">
+              <span aria-hidden="true">02</span>
+              <h2 id="sample-section-2">判断を分けた事実</h2>
+              <div>
+                <p>{sample.relationshipContext}</p>
+                <dl className="public-sample-fact-list">
+                  <div>
+                    <dt>相手の最後の文面</dt>
+                    <dd>「{sample.lastReceivedMessage}」</dd>
+                  </div>
+                  <div>
+                    <dt>今夜返す文面案</dt>
+                    <dd>「{sample.intendedMessage}」</dd>
+                  </div>
+                </dl>
+                <ul className="public-sample-detail-list">
+                  {sample.confirmedFacts.map((fact) => <li key={fact}>{fact}</li>)}
+                </ul>
+              </div>
+            </section>
 
-            <details className="border-t border-[#d9caa8] pt-4 text-[#67596b]">
-              <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-[#765e2d]">
-                審査専用メタデータ
-              </summary>
-              <dl className="grid min-w-0 gap-2 rounded-lg border border-dashed border-[#bca66f] bg-[#f8f0e2] p-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
-                <dt className="font-semibold">sample ID</dt>
-                <dd className="m-0 min-w-0 break-words font-mono text-sm">{sample.id}</dd>
-              </dl>
-            </details>
+            <section aria-labelledby="sample-section-3">
+              <span aria-hidden="true">03</span>
+              <h2 id="sample-section-3">この鑑定の理由</h2>
+              <div>
+                <ul className="public-sample-detail-list">
+                  {sample.reason.map((reason) => <li key={reason}>{reason}</li>)}
+                </ul>
+              </div>
+            </section>
+
+            <section className="public-sample-temperature" aria-labelledby="sample-section-4">
+              <span aria-hidden="true">04</span>
+              <h2 id="sample-section-4">文面の温度</h2>
+              <div>
+                <blockquote>「{report.messageTemperature.quote}」</blockquote>
+                <dl>
+                  {report.messageTemperature.readings.map((reading) => (
+                    <div key={reading.label}>
+                      <dt>{reading.label}</dt>
+                      <dd>{reading.text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </section>
+
+            <section aria-labelledby="sample-section-5">
+              <span aria-hidden="true">05</span>
+              <h2 id="sample-section-5">今夜の行動案</h2>
+              <div>
+                <ul className="public-sample-detail-list">
+                  {sample.immediateAction.map((action) => <li key={action}>{action}</li>)}
+                </ul>
+              </div>
+            </section>
+
+            <section aria-labelledby="sample-section-6">
+              <span aria-hidden="true">06</span>
+              <h2 id="sample-section-6">3日間の方向</h2>
+              <div>
+                <ol className="public-sample-plan">
+                  {report.threeDayDirection.map((day) => (
+                    <li key={day.label}>
+                      <strong>{day.label}</strong>
+                      <p>{day.direction}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </section>
+
+            <section aria-labelledby="sample-section-7">
+              <span aria-hidden="true">07</span>
+              <h2 id="sample-section-7">次に判断を見直す条件</h2>
+              <div>
+                <ul className="public-sample-detail-list">
+                  {sample.nextReviewCondition.map((condition) => <li key={condition}>{condition}</li>)}
+                </ul>
+              </div>
+            </section>
+
+            <section aria-labelledby="sample-section-8">
+              <span aria-hidden="true">08</span>
+              <h2 id="sample-section-8">まだ断定できないこと</h2>
+              <div>
+                <ul className="public-sample-detail-list">
+                  {sample.uncertaintyLimitation.map((limitation) => <li key={limitation}>{limitation}</li>)}
+                </ul>
+              </div>
+            </section>
+
+            <blockquote className="public-sample-closing">{report.closingLine}</blockquote>
+
+            <aside className="public-sample-limitation" aria-label="見本の固定注意">
+              <strong>この見本で断定しないこと</strong>
+              <p>
+                相手の本心、返信の有無や時期、交際結果、将来を断定・保証しません。
+                医療・心理・法律上の助言でもありません。
+              </p>
+              <p>{report.fixedDisclosure}</p>
+            </aside>
           </div>
         </article>
 
-        <div className="mx-auto mt-10 flex max-w-[50rem] flex-col gap-4 rounded-xl border border-[#cdbb91] bg-[#fff8e9] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-          <div>
-            <strong className="text-lg">自分の相談を入力する画面を確認できます。</strong>
-            <p className="mt-2 leading-7 text-[#67596b]">現在はローカル確認のみで、決済・AI生成・メール送信・保存は行われません。</p>
-          </div>
-          <Link href="/request" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-lg bg-[#2a2440] px-5 py-3 font-bold text-[#fff8e8] focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
-            鑑定依頼フォームを見る
-          </Link>
-        </div>
+        <details className="public-sample-metadata">
+          <summary>審査メタデータを表示</summary>
+          <dl><dt>sample ID</dt><dd>{sample.id}</dd></dl>
+          <p>公開表示専用の固定架空データです。Safety fixture、結果 fixture、購入・レビュー・AI生成実績ではありません。</p>
+        </details>
 
-        <div className="mx-auto mt-10 max-w-5xl">
+        <div className="public-sample-stage__navigation">
           <ReportComparisonNavigation audience="public" />
         </div>
-      </section>
+      </div>
     </main>
   );
 }

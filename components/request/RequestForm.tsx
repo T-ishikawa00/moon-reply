@@ -10,167 +10,68 @@ import {
 import type { SafetyResult } from "@/lib/safety";
 
 export type RequestFormData = {
-  ageGroup: string;
+  adultConfirmed: boolean;
   nickname: string;
   relationship: string;
-  relationshipStatus: string[];
-  replyWait: string;
-  lastPartnerMessage: string;
-  lastOwnMessage: string;
+  whatToKnow: string[];
+  currentSituation: string;
+  partnerMessage: string;
   draftMessage: string;
-  recentFlow: string;
-  mainConcern: string;
-  desiredAction: string;
-  mainQuestion: string;
-  sendTonight: string;
   email: string;
   safetyFlags: string[];
   acknowledged: boolean;
 };
 
-type StepNumber = 1 | 2 | 3;
+type Phase = 1 | 2 | 3 | 4;
 type ErrorKey = keyof RequestFormData | "safetyBlocking";
 type ValidationErrors = Partial<Record<ErrorKey, string>>;
 
 const initialFormState: RequestFormData = {
-  ageGroup: "",
+  adultConfirmed: false,
   nickname: "",
   relationship: "",
-  relationshipStatus: [],
-  replyWait: "",
-  lastPartnerMessage: "",
-  lastOwnMessage: "",
+  whatToKnow: [],
+  currentSituation: "",
+  partnerMessage: "",
   draftMessage: "",
-  recentFlow: "",
-  mainConcern: "",
-  desiredAction: "",
-  mainQuestion: "",
-  sendTonight: "",
   email: "",
   safetyFlags: [],
   acknowledged: false,
 };
 
-const ageOptions = ["18〜24歳", "25〜29歳", "30〜34歳", "35〜39歳", "40歳以上"];
-
 const relationshipOptions = [
   "付き合う前",
   "交際中",
+  "曖昧な関係",
   "元恋人",
   "マッチングアプリ",
-  "職場/学校/趣味の知り合い",
-  "曖昧な関係",
+  "職場・学校・知人",
   "その他",
 ];
 
-const relationshipStatusOptions = [
-  "最近出会った",
-  "何度か会っている",
-  "毎日連絡している",
-  "最近返信が遅い",
-  "既読/未読のまま止まっている",
-  "断られた/予定が流れた",
-  "復縁未満",
-  "その他",
+const whatToKnowOptions = [
+  "送るか待つか決めたい",
+  "この文面がどう届くか知りたい",
+  "送る文章を整えたい",
+  "相手との関係を整理したい",
+  "これから3日どう動くか知りたい",
+  "不安を整理したい",
 ];
-
-const replyWaitOptions = [
-  "まだ返事待ちではない",
-  "数時間",
-  "半日",
-  "1日",
-  "2〜3日",
-  "4日以上",
-  "その他",
-];
-
-const sendTonightOptions = ["はい", "迷っている", "いいえ"];
-const safetyOptions = SAFETY_SELECTED_FLAGS;
-const noneSafetyOption = NONE_SAFETY_FLAG;
 
 const acknowledgementItems = [
-  "AIが入力内容を整理・分析する鑑定ノートであること",
-  "医療・診断・カウンセリングではないこと",
-  "相手の本心・返信・復縁・将来などを保証しないこと",
-  "実名・住所・電話番号・アカウントIDなど不要な個人情報を入力しないこと",
-  "Safety確認の結果によっては通常鑑定へ進めない場合があること",
+  "AIを利用して、入力された情報を整理・分析する予定です。",
+  "相手の本心や返信、復縁、交際、将来の結果を保証しません。",
+  "医療、診断、心理カウンセリング、法律相談を代替するものではありません。",
+  "Safety確認の結果によっては、通常鑑定へ進めない場合があります。",
+  "実名など、鑑定に不要な個人情報を入力しません。",
 ];
 
-const stepTitles: Record<StepNumber, string> = {
-  1: "あなたと相手の状況",
-  2: "実際のやり取りと今夜の相談",
-  3: "受け取り・安全確認・同意",
+const phaseTitles: Record<Phase, string> = {
+  1: "相談を書く",
+  2: "Safetyを確認",
+  3: "依頼メモを確認",
+  4: "受取メール",
 };
-
-const fieldLabels: Record<keyof RequestFormData, string> = {
-  ageGroup: "年齢層",
-  nickname: "呼ばれたい名前・ニックネーム",
-  relationship: "相手との関係",
-  relationshipStatus: "相手との状況",
-  replyWait: "いつから返事がないか",
-  lastPartnerMessage: "最後に相手から来たメッセージ",
-  lastOwnMessage: "最後に自分が送ったメッセージ",
-  draftMessage: "今送ろうとしているメッセージ",
-  recentFlow: "直近のやり取りの流れ",
-  mainConcern: "今いちばん不安なこと",
-  desiredAction: "本当はどうしたいか",
-  mainQuestion: "鑑定ノートで一番整理したいこと",
-  sendTonight: "今夜中に送ろうとしているか",
-  email: "鑑定結果の受け取りメールアドレス",
-  safetyFlags: "安全確認",
-  acknowledged: "同意事項",
-};
-
-const requiredByStep: Record<StepNumber, Array<keyof RequestFormData>> = {
-  1: ["ageGroup", "nickname", "relationship", "replyWait"],
-  2: [
-    "draftMessage",
-    "recentFlow",
-    "mainConcern",
-    "desiredAction",
-    "mainQuestion",
-    "sendTonight",
-  ],
-  3: ["email"],
-};
-
-function validateStep(form: RequestFormData, step: StepNumber) {
-  const errors: ValidationErrors = {};
-
-  for (const field of requiredByStep[step]) {
-    if (typeof form[field] === "string" && !form[field].trim()) {
-      errors[field] = `${fieldLabels[field]}を入力してください。`;
-    }
-  }
-
-  if (step === 1) {
-    if (form.ageGroup && !ageOptions.includes(form.ageGroup)) {
-      errors.ageGroup = "月の返事は18歳以上の方を対象としています。";
-    }
-    if (form.relationshipStatus.length === 0) {
-      errors.relationshipStatus = "相手との状況を1つ以上選択してください。";
-    }
-  }
-
-  if (step === 3) {
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      errors.email = "メールアドレスの形式を確認してください。";
-    }
-    if (form.safetyFlags.length === 0) {
-      errors.safetyFlags = "安全確認を選択してください。";
-    }
-    const dangerItems = form.safetyFlags.filter((item) => item !== noneSafetyOption);
-    if (dangerItems.length > 0 && form.safetyFlags.includes(noneSafetyOption)) {
-      errors.safetyFlags =
-        "危険項目と「上記には当てはまらない」は同時に選択できません。";
-    }
-    if (!form.acknowledged) {
-      errors.acknowledged = "上記の内容を確認し、同意してください。";
-    }
-  }
-
-  return errors;
-}
 
 function toggleValue(values: string[], value: string) {
   return values.includes(value)
@@ -178,461 +79,821 @@ function toggleValue(values: string[], value: string) {
     : [...values, value];
 }
 
-function RequiredMark() {
-  return <span className="ml-2 text-sm font-semibold text-[#9a5d22]">必須</span>;
+function excerpt(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return "未入力（任意）";
+  return trimmed.length > 180 ? `${trimmed.slice(0, 180)}…` : trimmed;
+}
+
+function validateSheet(form: RequestFormData) {
+  const errors: ValidationErrors = {};
+  if (!form.adultConfirmed) {
+    errors.adultConfirmed = "18歳以上であることを確認してください。";
+  }
+  if (!relationshipOptions.includes(form.relationship)) {
+    errors.relationship = "今の関係を1つ選んでください。";
+  }
+  if (form.whatToKnow.length === 0) {
+    errors.whatToKnow = "今夜知りたいことを1つ以上選んでください。";
+  } else if (form.whatToKnow.length > 2) {
+    errors.whatToKnow = "今夜知りたいことは2つまで選べます。";
+  }
+  if (!form.currentSituation.trim()) {
+    errors.currentSituation = "今の状況を入力してください。";
+  }
+  return errors;
+}
+
+function validateSafety(form: RequestFormData) {
+  const errors: ValidationErrors = {};
+  if (form.safetyFlags.length === 0) {
+    errors.safetyFlags = "当てはまる内容を選択してください。";
+  }
+  const dangerItems = form.safetyFlags.filter(
+    (item) => item !== NONE_SAFETY_FLAG,
+  );
+  if (
+    dangerItems.length > 0 &&
+    form.safetyFlags.includes(NONE_SAFETY_FLAG)
+  ) {
+    errors.safetyFlags =
+      "危険項目と「上記には当てはまらない」は同時に選択できません。";
+  }
+  if (!form.acknowledged) {
+    errors.acknowledged =
+      "「上記を確認し、鑑定依頼を続けます」にチェックしてください。";
+  }
+  return errors;
+}
+
+function validateEmail(form: RequestFormData) {
+  const errors: ValidationErrors = {};
+  if (!form.email.trim()) {
+    errors.email = "受け取りメールアドレスを入力してください。";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = "メールアドレスの形式を確認してください。";
+  }
+  return errors;
 }
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} role="alert" className="mt-2 text-sm font-semibold leading-6 text-[#8f2f2a]">
+    <p id={id} className="request-field-error" role="alert">
       {message}
     </p>
   );
 }
 
-function FieldLabel({
-  htmlFor,
-  children,
-  required,
+function SafetyResultPanel({
+  result,
+  blocking = false,
 }: {
-  htmlFor: string;
-  children: React.ReactNode;
-  required?: boolean;
+  result: SafetyResult;
+  blocking?: boolean;
 }) {
-  return (
-    <label htmlFor={htmlFor} className="block text-base font-semibold leading-7">
-      {children}
-      {required ? <RequiredMark /> : null}
-    </label>
-  );
-}
+  const normal = result.classification === "normal_allowed";
+  const shouldStop = blocking || !normal;
 
-function TextInput({
-  id,
-  value,
-  onChange,
-  type = "text",
-  note,
-  error,
-}: {
-  id: keyof RequestFormData;
-  value: string;
-  onChange: (field: keyof RequestFormData, value: string) => void;
-  type?: "text" | "email";
-  note?: string;
-  error?: string;
-}) {
   return (
-    <div>
-      <FieldLabel htmlFor={id} required>{fieldLabels[id]}</FieldLabel>
-      {note ? <p className="mt-1 text-sm leading-6 text-[#67596b]">{note}</p> : null}
-      <input
-        id={id}
-        name={id}
-        type={type}
-        value={value}
-        onChange={(event) => onChange(id, event.target.value)}
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className="mt-3 min-h-12 w-full rounded-lg border border-[#d8c596] bg-[#fffcf4] px-4 py-3 text-base text-[#271f34] outline-none transition focus:border-[#9a7c3e] focus:ring-2 focus:ring-[#e5c46d]/45"
-      />
-      <FieldError id={`${id}-error`} message={error} />
-    </div>
-  );
-}
-
-function TextArea({
-  id,
-  value,
-  onChange,
-  required,
-  error,
-}: {
-  id: keyof RequestFormData;
-  value: string;
-  onChange: (field: keyof RequestFormData, value: string) => void;
-  required?: boolean;
-  error?: string;
-}) {
-  return (
-    <div>
-      <FieldLabel htmlFor={id} required={required}>{fieldLabels[id]}</FieldLabel>
-      <textarea
-        id={id}
-        name={id}
-        value={value}
-        onChange={(event) => onChange(id, event.target.value)}
-        rows={5}
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className="mt-3 w-full rounded-lg border border-[#d8c596] bg-[#fffcf4] px-4 py-3 text-base leading-8 text-[#271f34] outline-none transition focus:border-[#9a7c3e] focus:ring-2 focus:ring-[#e5c46d]/45"
-      />
-      <FieldError id={`${id}-error`} message={error} />
-    </div>
-  );
-}
-
-function SelectField({
-  id,
-  value,
-  options,
-  onChange,
-  note,
-  error,
-}: {
-  id: keyof RequestFormData;
-  value: string;
-  options: string[];
-  onChange: (field: keyof RequestFormData, value: string) => void;
-  note?: string;
-  error?: string;
-}) {
-  return (
-    <div>
-      <FieldLabel htmlFor={id} required>{fieldLabels[id]}</FieldLabel>
-      {note ? <p className="mt-1 text-sm leading-6 text-[#67596b]">{note}</p> : null}
-      <select
-        id={id}
-        name={id}
-        value={value}
-        onChange={(event) => onChange(id, event.target.value)}
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className="mt-3 min-h-12 w-full rounded-lg border border-[#d8c596] bg-[#fffcf4] px-4 py-3 text-base text-[#271f34] outline-none transition focus:border-[#9a7c3e] focus:ring-2 focus:ring-[#e5c46d]/45"
-      >
-        <option value="">選択してください</option>
-        {options.map((option) => <option key={option} value={option}>{option}</option>)}
-      </select>
-      <FieldError id={`${id}-error`} message={error} />
-    </div>
-  );
-}
-
-function CheckboxGroup({
-  id,
-  legend,
-  options,
-  values,
-  onToggle,
-  note,
-  error,
-}: {
-  id: string;
-  legend: string;
-  options: string[];
-  values: string[];
-  onToggle: (value: string) => void;
-  note?: string;
-  error?: string;
-}) {
-  return (
-    <fieldset id={id} tabIndex={-1} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined}>
-      <legend className="text-base font-semibold leading-7">{legend}<RequiredMark /></legend>
-      {note ? <p className="mt-1 text-sm leading-6 text-[#67596b]">{note}</p> : null}
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        {options.map((option) => (
-          <label key={option} className="flex min-h-12 cursor-pointer items-start gap-3 rounded-lg border border-[#d8c596] bg-[#fffcf4] px-4 py-3 leading-7">
-            <input
-              type="checkbox"
-              checked={values.includes(option)}
-              onChange={() => onToggle(option)}
-              className="mt-1 h-5 w-5 flex-none accent-[#6f5a9a]"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
-      </div>
-      <FieldError id={`${id}-error`} message={error} />
-    </fieldset>
-  );
-}
-
-function RadioGroup({ value, onChange, error }: { value: string; onChange: (value: string) => void; error?: string }) {
-  return (
-    <fieldset id="sendTonight" tabIndex={-1} aria-invalid={Boolean(error)} aria-describedby={error ? "sendTonight-error" : undefined}>
-      <legend className="text-base font-semibold leading-7">{fieldLabels.sendTonight}<RequiredMark /></legend>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        {sendTonightOptions.map((option) => (
-          <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border border-[#d8c596] bg-[#fffcf4] px-4 py-3 leading-7">
-            <input type="radio" name="sendTonight" value={option} checked={value === option} onChange={(event) => onChange(event.target.value)} className="h-5 w-5 accent-[#6f5a9a]" />
-            <span>{option}</span>
-          </label>
-        ))}
-      </div>
-      <FieldError id="sendTonight-error" message={error} />
-    </fieldset>
-  );
-}
-
-function StepCard({ step, children }: { step: StepNumber; children: React.ReactNode }) {
-  return (
-    <section id={`step-${step}`} aria-labelledby={`step-${step}-title`} className="rounded-xl border border-[#d8c596]/70 bg-[#fff8e9] p-5 text-[#271f34] shadow-[0_18px_50px_rgba(20,15,35,0.16)] sm:p-8">
-      <p className="text-sm font-semibold tracking-[0.14em] text-[#8c6a29]">{step} / 3</p>
-      <h2 id={`step-${step}-title`} className="mt-2 font-serif text-2xl font-semibold leading-[1.45] sm:text-3xl">{stepTitles[step]}</h2>
-      <div className="mt-7 space-y-7">{children}</div>
-    </section>
-  );
-}
-
-function SafetyResultPanel({ result, stop = false }: { result: SafetyResult; stop?: boolean }) {
-  const isContradictory = result.reasonCodes.includes("contradictory_selection");
-  const copy = isContradictory
-    ? {
-        title: "安全確認の選択を見直してください",
-        message:
-          "危険項目と「上記には当てはまらない」は同時に選択できません。これは緊急状態の判定ではなく、修正が必要な入力矛盾です。",
-      }
-    : result.classification === "normal_allowed"
-      ? {
-          title: "通常鑑定の確認に進める内容です",
-          message:
-            "現在の入力内容では通常鑑定として扱える範囲に見えます。これは相手の本心・返信・復縁・将来などを保証する判定ではありません。",
-        }
-      : result.classification === "needs_review"
-        ? {
-            title: "通常鑑定の前に慎重な確認が必要です",
-            message:
-              "不安を煽ったり危険な関係を美化したりしないため、この状態では通常鑑定の確認に進めません。",
-          }
-        : {
-            title: "月の返事の通常鑑定として扱えません",
-            message:
-              "安全を優先し、この内容を恋愛鑑定として後押しすることはできません。",
-          };
-  const tone = result.classification === "normal_allowed"
-    ? "border-[#a89350] bg-[#fffaf0] text-[#332715]"
-    : "border-[#c99f4b] bg-[#fff5d8] text-[#4c3514]";
-  return (
-    <div id={stop ? "safety-stop" : "safety-result"} tabIndex={-1} role={stop ? "alert" : "status"} className={`rounded-lg border p-5 leading-8 ${tone}`}>
-      <p className="text-sm font-bold tracking-[0.08em]">{stop ? "ここで停止します" : "安全確認の結果"}</p>
-      <h3 className="mt-1 text-lg font-semibold">{copy.title}</h3>
-      <p className="mt-2">{copy.message}</p>
-      {stop ? <p className="mt-3 font-semibold">安全確認の結果によっては、通常鑑定へ進めない場合があります。</p> : null}
-      {stop && !isContradictory && (result.classification === "needs_review" || result.classification === "rejected") ? (
-        <Link href="/legal/unsupported-cases" className="mt-4 inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] bg-[#fffaf0] px-4 py-2 font-semibold underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
-          通常鑑定として扱わない相談の審査説明を見る
-        </Link>
+    <section
+      id={shouldStop ? "safetyBlocking" : "safety-result"}
+      tabIndex={-1}
+      role={shouldStop ? "alert" : "status"}
+      className={`request-safety-result ${
+        shouldStop ? "request-safety-result--stop" : ""
+      }`}
+      aria-labelledby="safety-result-title"
+    >
+      <p>{shouldStop ? "ここで停止します" : "Safety確認の結果"}</p>
+      <h3 id="safety-result-title">{result.userTitle}</h3>
+      <span>{result.userMessage}</span>
+      {shouldStop ? (
+        <>
+          <strong>
+            normal_allowed 以外は、入力確認・購入確認・通常レポートへ進めません。
+          </strong>
+          <Link href="/legal/unsupported-cases" className="text-link">
+            通常鑑定として扱わない相談を確認する
+          </Link>
+        </>
       ) : null}
-    </div>
-  );
-}
-
-function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="grid gap-1 border-t border-[#d9caa8] py-3 sm:grid-cols-[12rem_1fr] sm:gap-4">
-      <dt className="font-semibold text-[#765e2d]">{label}</dt>
-      <dd className="m-0 whitespace-pre-wrap break-words leading-7">{value || "未入力"}</dd>
-    </div>
-  );
-}
-
-function excerpt(value: string) {
-  const trimmed = value.trim();
-  if (!trimmed) return "未入力（任意）";
-  return trimmed.length > 120 ? `${trimmed.slice(0, 120)}…` : trimmed;
-}
-
-function Confirmation({ form, onEdit }: { form: RequestFormData; onEdit: (step: StepNumber) => void }) {
-  return (
-    <section aria-labelledby="confirmation-title" className="rounded-xl border border-[#d6b86d]/60 bg-[#fff8e9] p-5 text-[#271f34] shadow-[0_18px_50px_rgba(0,0,0,0.22)] sm:p-8">
-      <p className="text-sm font-semibold tracking-[0.14em] text-[#8c6a29]">LOCAL CONFIRMATION</p>
-      <h2 id="confirmation-title" tabIndex={-1} className="mt-2 font-serif text-3xl font-semibold leading-[1.45]">入力内容を確認してください</h2>
-      <div className="mt-5 rounded-lg border border-[#b99a4f] bg-[#f5e8bd] p-4 leading-7">
-        これは審査段階のローカル確認です。外部送信、データ保存、決済開始、AI生成は行われていません。
-      </div>
-
-      <div className="mt-8 space-y-8">
-        <section aria-labelledby="summary-step-1"><div className="flex flex-wrap items-center justify-between gap-3"><h3 id="summary-step-1" className="text-xl font-semibold">Step 1・あなたと相手の状況</h3><button type="button" onClick={() => onEdit(1)} className="min-h-11 rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-[#8a6d2e]">Step 1を修正</button></div><dl className="mt-3"><SummaryRow label="年齢層" value={form.ageGroup} /><SummaryRow label="ニックネーム" value={form.nickname} /><SummaryRow label="相手との関係" value={form.relationship} /><SummaryRow label="相手との状況" value={form.relationshipStatus.join("、")} /><SummaryRow label="返信待ち期間" value={form.replyWait} /></dl></section>
-        <section aria-labelledby="summary-step-2"><div className="flex flex-wrap items-center justify-between gap-3"><h3 id="summary-step-2" className="text-xl font-semibold">Step 2・実際のやり取りと今夜の相談</h3><button type="button" onClick={() => onEdit(2)} className="min-h-11 rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-[#8a6d2e]">Step 2を修正</button></div><dl className="mt-3"><SummaryRow label="相手の最後の文面" value={excerpt(form.lastPartnerMessage)} /><SummaryRow label="自分の最後の文面" value={excerpt(form.lastOwnMessage)} /><SummaryRow label="送信予定の文面" value={excerpt(form.draftMessage)} /><SummaryRow label="直近の流れ" value={excerpt(form.recentFlow)} /><SummaryRow label="主な不安" value={excerpt(form.mainConcern)} /><SummaryRow label="希望する行動" value={excerpt(form.desiredAction)} /><SummaryRow label="一番の質問" value={excerpt(form.mainQuestion)} /><SummaryRow label="今夜送る意向" value={form.sendTonight} /></dl></section>
-        <section aria-labelledby="summary-step-3"><div className="flex flex-wrap items-center justify-between gap-3"><h3 id="summary-step-3" className="text-xl font-semibold">Step 3・受け取り・安全確認・同意</h3><button type="button" onClick={() => onEdit(3)} className="min-h-11 rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-[#8a6d2e]">Step 3を修正</button></div><dl className="mt-3"><SummaryRow label="メールアドレス" value={form.email} /><SummaryRow label="安全確認" value="通常鑑定の確認に進める内容" /><SummaryRow label="同意事項" value="確認済み" /></dl><p className="mt-4 font-semibold">同意事項：確認済み</p></section>
-      </div>
-
-      <div className="mt-8 rounded-lg border border-[#d6b86d]/40 bg-[#18152e] p-5 text-[#efe5d0]">
-        <p className="leading-8">ここから先の送信・購入・鑑定生成は実装されていません。入力内容はこの画面を閉じたり再読み込みしたりすると失われます。</p>
-      </div>
     </section>
+  );
+}
+
+function MemoRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  );
+}
+
+function RequestMemo({
+  form,
+  onEdit,
+  onContinue,
+}: {
+  form: RequestFormData;
+  onEdit: (phase: Phase) => void;
+  onContinue: () => void;
+}) {
+  return (
+    <article className="request-memo" aria-labelledby="request-memo-title">
+      <header>
+        <p>このように受け取りました</p>
+        <h2 id="request-memo-title" tabIndex={-1}>
+          あなたの鑑定依頼メモ
+        </h2>
+        <span>
+          入力内容をローカルで並べ直した表示です。AI処理、外部送信、保存は行っていません。
+        </span>
+      </header>
+
+      <section aria-labelledby="memo-consultation-title">
+        <div className="request-memo__heading">
+          <h3 id="memo-consultation-title">あなたの相談</h3>
+          <button type="button" onClick={() => onEdit(1)}>
+            相談を修正
+          </button>
+        </div>
+        <dl>
+          <MemoRow label="今の状況" value={form.currentSituation} />
+          <MemoRow label="今の関係" value={form.relationship} />
+          <MemoRow
+            label="今夜知りたいこと"
+            value={form.whatToKnow.join("、")}
+          />
+          <MemoRow label="ニックネーム" value={excerpt(form.nickname)} />
+        </dl>
+      </section>
+
+      <section aria-labelledby="memo-message-title">
+        <div className="request-memo__heading">
+          <h3 id="memo-message-title">実際の文面</h3>
+          <button type="button" onClick={() => onEdit(1)}>
+            文面を修正
+          </button>
+        </div>
+        <dl>
+          <MemoRow
+            label="相手から届いた文面"
+            value={excerpt(form.partnerMessage)}
+          />
+          <MemoRow
+            label="自分が送ろうとしている文面"
+            value={excerpt(form.draftMessage)}
+          />
+        </dl>
+      </section>
+
+      <section aria-labelledby="memo-safety-title">
+        <div className="request-memo__heading">
+          <h3 id="memo-safety-title">Safety確認</h3>
+          <button type="button" onClick={() => onEdit(2)}>
+            Safetyを修正
+          </button>
+        </div>
+        <p className="request-memo__safety">
+          通常鑑定の確認に進める内容 / 必須確認済み
+        </p>
+      </section>
+
+      <footer className="request-phase-actions">
+        <button type="button" className="button button--secondary" onClick={() => onEdit(2)}>
+          戻る
+        </button>
+        <button type="button" className="button button--primary" onClick={onContinue}>
+          受け取りメールへ
+        </button>
+      </footer>
+    </article>
   );
 }
 
 export function RequestForm() {
   const [form, setForm] = useState<RequestFormData>(initialFormState);
-  const [step, setStep] = useState<StepNumber>(1);
+  const [phase, setPhase] = useState<Phase>(1);
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isConfirmed, setIsConfirmed] = useState(false);
-  const [showSafetyStop, setShowSafetyStop] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    function applyHashStep() {
-      const match = window.location.hash.match(/^#step-([123])$/);
-      if (match) setStep(Number(match[1]) as StepNumber);
+    const hashPhases: Record<string, Phase> = {
+      "#sheet": 1,
+      "#step-1": 1,
+      "#safety": 2,
+      "#step-2": 2,
+      "#step-3": 2,
+      "#email": 4,
+    };
+
+    function applyHashPhase() {
+      const nextPhase = hashPhases[window.location.hash];
+      if (nextPhase) setPhase(nextPhase);
     }
 
-    const frameId = window.requestAnimationFrame(applyHashStep);
-    window.addEventListener("hashchange", applyHashStep);
+    const frameId = window.requestAnimationFrame(applyHashPhase);
+    window.addEventListener("hashchange", applyHashPhase);
     return () => {
       window.cancelAnimationFrame(frameId);
-      window.removeEventListener("hashchange", applyHashStep);
+      window.removeEventListener("hashchange", applyHashPhase);
     };
   }, []);
 
-  const safetyResult = useMemo(() => classifySafetyInput({
-    selectedFlags: form.safetyFlags,
-    draftMessage: form.draftMessage,
-    recentFlow: form.recentFlow,
-    mainConcern: form.mainConcern,
-    desiredAction: form.desiredAction,
-    mainQuestion: form.mainQuestion,
-  }), [form.safetyFlags, form.draftMessage, form.recentFlow, form.mainConcern, form.desiredAction, form.mainQuestion]);
+  const safetyResult = useMemo(
+    () =>
+      classifySafetyInput({
+        selectedFlags: form.safetyFlags,
+        draftMessage: form.draftMessage,
+        recentFlow: [form.currentSituation, form.partnerMessage].join("\n"),
+        mainConcern: form.currentSituation,
+        desiredAction: form.whatToKnow.join("、"),
+        mainQuestion: form.whatToKnow.join("、"),
+      }),
+    [
+      form.safetyFlags,
+      form.draftMessage,
+      form.currentSituation,
+      form.partnerMessage,
+      form.whatToKnow,
+    ],
+  );
 
   function focusFirstError(nextErrors: ValidationErrors) {
     const firstKey = Object.keys(nextErrors)[0];
     if (!firstKey) return;
     window.setTimeout(() => {
-      const target = document.getElementById(firstKey === "safetyBlocking" ? "safety-stop" : firstKey);
+      const target = document.getElementById(firstKey);
       target?.focus();
-      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      target?.scrollIntoView({ block: "center" });
     }, 0);
   }
 
-  function updateField(field: keyof RequestFormData, value: string | boolean) {
+  function clearFieldError(field: ErrorKey) {
+    setErrors((current) => {
+      const next = { ...current };
+      delete next[field];
+      delete next.safetyBlocking;
+      return next;
+    });
+  }
+
+  function updateString(field: keyof RequestFormData, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
-    setErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      delete next.safetyBlocking;
-      return next;
-    });
-    setShowSafetyStop(false);
-    setIsConfirmed(false);
+    clearFieldError(field);
+    setCompleted(false);
   }
 
-  function toggleArrayField(field: "relationshipStatus" | "safetyFlags", value: string) {
-    setForm((current) => ({ ...current, [field]: toggleValue(current[field], value) }));
-    setErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      delete next.safetyBlocking;
-      return next;
-    });
-    setShowSafetyStop(false);
-    setIsConfirmed(false);
+  function updateBoolean(field: "adultConfirmed" | "acknowledged", value: boolean) {
+    setForm((current) => ({ ...current, [field]: value }));
+    clearFieldError(field);
+    setCompleted(false);
   }
 
-  function moveToStep(nextStep: StepNumber) {
-    setStep(nextStep);
+  function toggleWhatToKnow(value: string) {
+    if (!form.whatToKnow.includes(value) && form.whatToKnow.length >= 2) {
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        whatToKnow: "今夜知りたいことは2つまで選べます。",
+      }));
+      return;
+    }
+    setForm((current) => ({
+      ...current,
+      whatToKnow: toggleValue(current.whatToKnow, value),
+    }));
+    clearFieldError("whatToKnow");
+    setCompleted(false);
+  }
+
+  function toggleSafetyFlag(value: string) {
+    setForm((current) => ({
+      ...current,
+      safetyFlags: toggleValue(current.safetyFlags, value),
+    }));
+    clearFieldError("safetyFlags");
+    setCompleted(false);
+  }
+
+  function moveToPhase(nextPhase: Phase) {
+    setPhase(nextPhase);
     setErrors({});
-    setShowSafetyStop(false);
-    window.setTimeout(() => document.getElementById(`step-${nextStep}-title`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
+    window.setTimeout(() => {
+      document.getElementById(`request-phase-${nextPhase}`)?.scrollIntoView({
+        block: "start",
+      });
+    }, 0);
   }
 
-  function handleNext() {
-    const nextErrors = validateStep(form, step);
+  function continueFromSheet() {
+    const nextErrors = validateSheet(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       focusFirstError(nextErrors);
       return;
     }
-    moveToStep((step + 1) as StepNumber);
+    moveToPhase(2);
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const validationByStep = ([1, 2, 3] as StepNumber[]).map((item) => ({
-      step: item,
-      errors: validateStep(form, item),
-    }));
-    const firstInvalidStep = validationByStep.find(
-      (item) => Object.keys(item.errors).length > 0,
-    );
-    if (firstInvalidStep) {
-      setStep(firstInvalidStep.step);
-      setErrors(firstInvalidStep.errors);
-      setShowSafetyStop(false);
-      focusFirstError(firstInvalidStep.errors);
+  function continueFromSafety() {
+    const sheetErrors = validateSheet(form);
+    if (Object.keys(sheetErrors).length > 0) {
+      setPhase(1);
+      setErrors(sheetErrors);
+      focusFirstError(sheetErrors);
       return;
     }
+
+    const safetyErrors = validateSafety(form);
+    if (Object.keys(safetyErrors).length > 0) {
+      setErrors(safetyErrors);
+      focusFirstError(safetyErrors);
+      return;
+    }
+
     if (safetyResult.classification !== "normal_allowed") {
       const blockedErrors: ValidationErrors = {
-        safetyBlocking: "安全確認の結果によっては、通常鑑定へ進めない場合があります。",
+        safetyBlocking:
+          "Safety確認の結果により、通常鑑定の入力確認へは進めません。",
       };
       setErrors(blockedErrors);
-      setShowSafetyStop(true);
       focusFirstError(blockedErrors);
       return;
     }
+
+    moveToPhase(3);
+  }
+
+  function continueFromMemo() {
+    const allPriorErrors = {
+      ...validateSheet(form),
+      ...validateSafety(form),
+    };
+    if (Object.keys(allPriorErrors).length > 0) {
+      const nextPhase = Object.keys(validateSheet(form)).length > 0 ? 1 : 2;
+      setPhase(nextPhase);
+      setErrors(allPriorErrors);
+      focusFirstError(allPriorErrors);
+      return;
+    }
+    if (safetyResult.classification !== "normal_allowed") {
+      setPhase(2);
+      const blockedErrors: ValidationErrors = {
+        safetyBlocking:
+          "Safety確認の結果により、受け取りメール入力へは進めません。",
+      };
+      setErrors(blockedErrors);
+      focusFirstError(blockedErrors);
+      return;
+    }
+    moveToPhase(4);
+  }
+
+  function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const sheetErrors = validateSheet(form);
+    const safetyErrors = validateSafety(form);
+    const emailErrors = validateEmail(form);
+
+    if (Object.keys(sheetErrors).length > 0) {
+      setPhase(1);
+      setErrors(sheetErrors);
+      focusFirstError(sheetErrors);
+      return;
+    }
+    if (
+      Object.keys(safetyErrors).length > 0 ||
+      safetyResult.classification !== "normal_allowed"
+    ) {
+      const nextErrors =
+        Object.keys(safetyErrors).length > 0
+          ? safetyErrors
+          : {
+              safetyBlocking:
+                "Safety確認の結果により、購入前確認へは進めません。",
+            };
+      setPhase(2);
+      setErrors(nextErrors);
+      focusFirstError(nextErrors);
+      return;
+    }
+    if (Object.keys(emailErrors).length > 0) {
+      setErrors(emailErrors);
+      focusFirstError(emailErrors);
+      return;
+    }
+
     setErrors({});
-    setShowSafetyStop(false);
-    setIsConfirmed(true);
-    window.setTimeout(() => document.getElementById("confirmation-title")?.focus(), 0);
+    setCompleted(true);
+    window.setTimeout(() => {
+      document.getElementById("request-local-complete")?.focus();
+    }, 0);
+  }
+
+  if (completed) {
+    return (
+      <section className="request-sheet-wrap">
+        <article
+          id="request-local-complete"
+          tabIndex={-1}
+          className="request-local-complete"
+          aria-labelledby="request-local-complete-title"
+        >
+          <p>ローカル確認完了</p>
+          <h2 id="request-local-complete-title">
+            購入前の最終確認へ進むための入力がそろいました。
+          </h2>
+          <span>
+            ただし、現在は入力内容の外部送信、保存、メール送信、決済、鑑定生成を行いません。
+          </span>
+          <dl>
+            <MemoRow label="今の関係" value={form.relationship} />
+            <MemoRow label="今夜知りたいこと" value={form.whatToKnow.join("、")} />
+            <MemoRow label="受け取りメール" value={form.email} />
+            <MemoRow label="Safety" value="normal_allowed / 通常確認可能" />
+          </dl>
+          <button type="button" disabled aria-disabled="true">
+            購入機能は現在準備中です
+          </button>
+          <button
+            type="button"
+            className="text-link"
+            onClick={() => {
+              setCompleted(false);
+              moveToPhase(4);
+            }}
+          >
+            メールアドレスを修正する
+          </button>
+        </article>
+      </section>
+    );
   }
 
   const errorList = Object.entries(errors);
-  const visibleSafetyResult = form.safetyFlags.length > 0;
-
-  if (isConfirmed) {
-    return <section className="mx-auto max-w-5xl px-4 py-12 sm:px-8 sm:py-16"><Confirmation form={form} onEdit={(editStep) => { setIsConfirmed(false); moveToStep(editStep); }} /></section>;
-  }
+  const dangerSafetyOptions = SAFETY_SELECTED_FLAGS.filter(
+    (item) => item !== NONE_SAFETY_FLAG,
+  );
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-12 sm:px-8 sm:py-16">
-      <nav aria-label="入力ステップ" className="mb-7 grid grid-cols-3 gap-2 text-center text-sm">
-        {([1, 2, 3] as StepNumber[]).map((item) => <span key={item} aria-current={item === step ? "step" : undefined} className={`rounded-lg border px-2 py-3 font-semibold ${item === step ? "border-[#e5c46d] bg-[#e5c46d] text-[#181326]" : "border-white/20 bg-white/5 text-[#efe5d0]"}`}>{item} / 3<span className="hidden sm:inline">・{stepTitles[item]}</span></span>)}
+    <section className="request-sheet-wrap">
+      <nav className="request-progress" aria-label="鑑定依頼シートの進行状況">
+        {([1, 2, 3, 4] as Phase[]).map((item) => (
+          <span key={item} aria-current={phase === item ? "step" : undefined}>
+            <small>{item}</small>
+            {phaseTitles[item]}
+          </span>
+        ))}
       </nav>
 
-      <form noValidate onSubmit={handleSubmit}>
-        {errorList.length > 0 ? (
-          <div role="alert" aria-live="assertive" className="mb-7 rounded-lg border border-[#c87864] bg-[#fff1ea] p-5 text-[#5b2520]">
-            <h2 className="text-xl font-semibold">入力内容を確認してください</h2>
-            <ul className="mt-3 list-disc space-y-2 pl-5 leading-7">{errorList.map(([key, message]) => <li key={key}>{message}</li>)}</ul>
-          </div>
-        ) : null}
-
-        {step === 1 ? <StepCard step={1}>
-          <SelectField id="ageGroup" value={form.ageGroup} options={ageOptions} onChange={updateField} note="月の返事は18歳以上の方を対象としています。生年月日や本人確認書類の入力は不要です。" error={errors.ageGroup} />
-          <TextInput id="nickname" value={form.nickname} onChange={updateField} note="実名は使わず、呼ばれたいニックネームを入力してください。" error={errors.nickname} />
-          <SelectField id="relationship" value={form.relationship} options={relationshipOptions} onChange={updateField} error={errors.relationship} />
-          <CheckboxGroup id="relationshipStatus" legend="相手との状況" options={relationshipStatusOptions} values={form.relationshipStatus} onToggle={(value) => toggleArrayField("relationshipStatus", value)} error={errors.relationshipStatus} />
-          <SelectField id="replyWait" value={form.replyWait} options={replyWaitOptions} onChange={updateField} error={errors.replyWait} />
-        </StepCard> : null}
-
-        {step === 2 ? <StepCard step={2}>
-          <div className="rounded-lg border border-[#d8c596] bg-[#f5ead2] p-4 text-sm leading-7 text-[#5b4f58]">
-            LINEなどから必要な部分だけコピーできます。スクリーンショットや画像のアップロードには対応していません。名前は「相手」「自分」などに置き換え、実名・住所・電話番号・アカウントID・勤務先・学校名など不要な情報を削除してください。このサービスは文章を自動で匿名化・マスクしません。
-          </div>
-          <TextArea id="lastPartnerMessage" value={form.lastPartnerMessage} onChange={updateField} />
-          <TextArea id="lastOwnMessage" value={form.lastOwnMessage} onChange={updateField} />
-          <TextArea id="draftMessage" value={form.draftMessage} onChange={updateField} required error={errors.draftMessage} />
-          <TextArea id="recentFlow" value={form.recentFlow} onChange={updateField} required error={errors.recentFlow} />
-          <TextArea id="mainConcern" value={form.mainConcern} onChange={updateField} required error={errors.mainConcern} />
-          <TextArea id="desiredAction" value={form.desiredAction} onChange={updateField} required error={errors.desiredAction} />
-          <TextArea id="mainQuestion" value={form.mainQuestion} onChange={updateField} required error={errors.mainQuestion} />
-          <RadioGroup value={form.sendTonight} onChange={(value) => updateField("sendTonight", value)} error={errors.sendTonight} />
-        </StepCard> : null}
-
-        {step === 3 ? <StepCard step={3}>
-          <TextInput id="email" value={form.email} onChange={updateField} type="email" note="将来、鑑定結果URLの受け取りに使用する予定です。現在は送信も保存もされません。" error={errors.email} />
-          <CheckboxGroup id="safetyFlags" legend="当てはまる項目を選択してください" options={safetyOptions} values={form.safetyFlags} onToggle={(value) => toggleArrayField("safetyFlags", value)} note="入力内容をこのブラウザ内の決定的なルールで確認します。安全確認は将来の決済より前に行います。" error={errors.safetyFlags} />
-          {visibleSafetyResult && !showSafetyStop ? <SafetyResultPanel result={safetyResult} /> : null}
-          {showSafetyStop ? <SafetyResultPanel result={safetyResult} stop /> : null}
-          <fieldset id="acknowledged" tabIndex={-1} aria-invalid={Boolean(errors.acknowledged)} aria-describedby={errors.acknowledged ? "acknowledged-error" : "acknowledgement-description"}>
-            <legend className="text-base font-semibold leading-7">確認・同意事項<RequiredMark /></legend>
-            <div id="acknowledgement-description" className="mt-3 rounded-lg border border-[#d8c596] bg-[#f5ead2] p-4">
-              <ol className="list-decimal space-y-2 pl-6 leading-7">{acknowledgementItems.map((item) => <li key={item}>{item}</li>)}</ol>
-            </div>
-            <label htmlFor="acknowledgement-checkbox" className="mt-4 flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border border-[#b49242] bg-[#fffcf4] px-4 py-3 font-semibold leading-7">
-              <input id="acknowledgement-checkbox" name="acknowledged" type="checkbox" required checked={form.acknowledged} onChange={(event) => updateField("acknowledged", event.target.checked)} className="h-6 w-6 flex-none accent-[#6f5a9a]" />
-              <span>上記の内容をすべて確認し、同意します</span>
-            </label>
-            <FieldError id="acknowledged-error" message={errors.acknowledged} />
-          </fieldset>
-        </StepCard> : null}
-
-        <div className="mt-7 flex flex-col-reverse gap-3 rounded-lg border border-[#d6b86d]/40 bg-[#18152e] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-          <div>{step > 1 ? <button type="button" onClick={() => moveToStep((step - 1) as StepNumber)} className="min-h-12 w-full rounded-lg border border-[#f0d992]/50 px-6 py-3 font-semibold text-[#fff7e8] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] sm:w-auto">戻る</button> : <p className="text-sm leading-7 text-[#d5cab9]">入力内容はこのブラウザのメモリ内だけに保持されます。</p>}</div>
-          {step < 3 ? <button type="button" onClick={handleNext} className="min-h-12 w-full rounded-lg border border-[#f0d992]/70 bg-[#e5c46d] px-6 py-3 font-semibold text-[#181326] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] sm:w-auto">次へ</button> : <button type="submit" className="min-h-12 w-full rounded-lg border border-[#f0d992]/70 bg-[#e5c46d] px-6 py-3 font-semibold text-[#181326] focus:outline-none focus:ring-2 focus:ring-[#f6de9f] sm:w-auto">入力内容を確認する</button>}
+      {errorList.length > 0 ? (
+        <div className="request-error-summary" role="alert" aria-live="assertive">
+          <h2>入力内容を確認してください</h2>
+          <ul>
+            {errorList.map(([key, message]) => (
+              <li key={key}>{message}</li>
+            ))}
+          </ul>
         </div>
-      </form>
+      ) : null}
+
+      {phase === 1 ? (
+        <article
+          id="request-phase-1"
+          className="request-sheet"
+          aria-labelledby="request-phase-1-title"
+        >
+          <header className="request-sheet__heading">
+            <p>01 / 相談入力</p>
+            <h2 id="request-phase-1-title">今の状況を、そのまま置いてください。</h2>
+            <span>短くても、まとまっていなくても大丈夫です。</span>
+          </header>
+
+          <div className="request-field request-field--choice">
+            <label id="adultConfirmed" tabIndex={-1}>
+              <input
+                type="checkbox"
+                checked={form.adultConfirmed}
+                onChange={(event) =>
+                  updateBoolean("adultConfirmed", event.target.checked)
+                }
+              />
+              <span>私は18歳以上です</span>
+              <small>必須 / 生年月日や本人確認書類は入力しません</small>
+            </label>
+            <FieldError
+              id="adultConfirmed-error"
+              message={errors.adultConfirmed}
+            />
+          </div>
+
+          <fieldset
+            id="relationship"
+            tabIndex={-1}
+            className="request-field"
+            aria-describedby={
+              errors.relationship ? "relationship-error" : undefined
+            }
+          >
+            <legend>今の関係 <span>必須</span></legend>
+            <div className="request-chip-group">
+              {relationshipOptions.map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="relationship"
+                    value={option}
+                    checked={form.relationship === option}
+                    onChange={(event) =>
+                      updateString("relationship", event.target.value)
+                    }
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            <FieldError id="relationship-error" message={errors.relationship} />
+          </fieldset>
+
+          <fieldset
+            id="whatToKnow"
+            tabIndex={-1}
+            className="request-field"
+            aria-describedby="what-to-know-note whatToKnow-error"
+          >
+            <legend>今夜、知りたいこと <span>必須</span></legend>
+            <p id="what-to-know-note">1つまたは2つ選んでください。</p>
+            <div className="request-chip-group">
+              {whatToKnowOptions.map((option) => (
+                <label key={option}>
+                  <input
+                    type="checkbox"
+                    checked={form.whatToKnow.includes(option)}
+                    onChange={() => toggleWhatToKnow(option)}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            <FieldError id="whatToKnow-error" message={errors.whatToKnow} />
+          </fieldset>
+
+          <div className="request-field request-field--situation">
+            <label htmlFor="currentSituation">
+              今の状況を教えてください <span>必須</span>
+            </label>
+            <p id="current-situation-note">
+              相手との関係、最近あったこと、返事を待っている期間、気になっていることなどを自由に書いてください。
+            </p>
+            <textarea
+              id="currentSituation"
+              name="currentSituation"
+              rows={9}
+              value={form.currentSituation}
+              onChange={(event) =>
+                updateString("currentSituation", event.target.value)
+              }
+              aria-invalid={Boolean(errors.currentSituation)}
+              aria-describedby="current-situation-note privacy-note currentSituation-error"
+              placeholder="例：二度会ったあと、昨日から返事を待っています。追い連絡をすると急かすように見えないか気になっています。"
+            />
+            <aside id="privacy-note" className="request-privacy-note" role="note">
+              <strong>入力しない情報</strong>
+              <span>
+                実名、住所、電話番号、勤務先、学校名、SNSアカウントID、顔写真、身分証明書、第三者の秘密情報
+              </span>
+            </aside>
+            <FieldError
+              id="currentSituation-error"
+              message={errors.currentSituation}
+            />
+          </div>
+
+          <div className="request-field">
+            <label htmlFor="nickname">
+              ニックネーム <small>任意</small>
+            </label>
+            <p>実名ではなく、鑑定ノート内で呼ばれたい名前を入力できます。</p>
+            <input
+              id="nickname"
+              name="nickname"
+              type="text"
+              value={form.nickname}
+              onChange={(event) => updateString("nickname", event.target.value)}
+            />
+          </div>
+
+          <details className="request-message-details">
+            <summary>実際のメッセージを追加する <span>任意</span></summary>
+            <div>
+              <label htmlFor="partnerMessage">相手から届いた文面</label>
+              <textarea
+                id="partnerMessage"
+                name="partnerMessage"
+                rows={4}
+                value={form.partnerMessage}
+                onChange={(event) =>
+                  updateString("partnerMessage", event.target.value)
+                }
+              />
+              <label htmlFor="draftMessage">自分が送ろうとしている文面</label>
+              <textarea
+                id="draftMessage"
+                name="draftMessage"
+                rows={4}
+                value={form.draftMessage}
+                onChange={(event) =>
+                  updateString("draftMessage", event.target.value)
+                }
+              />
+            </div>
+          </details>
+
+          <footer className="request-phase-actions request-phase-actions--end">
+            <button
+              type="button"
+              className="button button--primary"
+              onClick={continueFromSheet}
+            >
+              Safety確認へ
+            </button>
+          </footer>
+        </article>
+      ) : null}
+
+      {phase === 2 ? (
+        <article
+          id="request-phase-2"
+          className="request-sheet request-sheet--safety"
+          aria-labelledby="request-phase-2-title"
+        >
+          <header className="request-sheet__heading">
+            <p>02 / Safetyと確認</p>
+            <h2 id="request-phase-2-title">通常鑑定として扱える内容か確認します。</h2>
+            <span>この確認は、将来も必ず決済より前に行います。</span>
+          </header>
+
+          <fieldset
+            id="safetyFlags"
+            tabIndex={-1}
+            className="request-field request-safety-field"
+            aria-describedby="safety-note safetyFlags-error"
+          >
+            <legend>当てはまる内容を選択してください <span>必須</span></legend>
+            <p id="safety-note">
+              通常の恋愛相談は、まず「上記には当てはまらない」を選べます。
+            </p>
+            <label className="request-safety-normal">
+              <input
+                type="checkbox"
+                checked={form.safetyFlags.includes(NONE_SAFETY_FLAG)}
+                onChange={() => toggleSafetyFlag(NONE_SAFETY_FLAG)}
+              />
+              <span>{NONE_SAFETY_FLAG}</span>
+            </label>
+            <details>
+              <summary>当てはまる可能性がある項目を確認する</summary>
+              <div className="request-safety-options">
+                {dangerSafetyOptions.map((option) => (
+                  <label key={option}>
+                    <input
+                      type="checkbox"
+                      checked={form.safetyFlags.includes(option)}
+                      onChange={() => toggleSafetyFlag(option)}
+                    />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </details>
+            <FieldError id="safetyFlags-error" message={errors.safetyFlags} />
+          </fieldset>
+
+          {form.safetyFlags.length > 0 && !errors.safetyFlags ? (
+            <SafetyResultPanel
+              result={safetyResult}
+              blocking={Boolean(errors.safetyBlocking)}
+            />
+          ) : null}
+
+          <fieldset
+            id="acknowledged"
+            tabIndex={-1}
+            className="request-field request-acknowledgement"
+            aria-describedby="acknowledgement-list acknowledged-error"
+          >
+            <legend>依頼前の確認 <span>必須</span></legend>
+            <ol id="acknowledgement-list">
+              {acknowledgementItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+            <label>
+              <input
+                type="checkbox"
+                checked={form.acknowledged}
+                onChange={(event) =>
+                  updateBoolean("acknowledged", event.target.checked)
+                }
+              />
+              <span>上記を確認し、鑑定依頼を続けます</span>
+            </label>
+            <FieldError
+              id="acknowledged-error"
+              message={errors.acknowledged}
+            />
+          </fieldset>
+
+          <footer className="request-phase-actions">
+            <button
+              type="button"
+              className="button button--secondary"
+              onClick={() => moveToPhase(1)}
+            >
+              戻る
+            </button>
+            <button
+              type="button"
+              className="button button--primary"
+              onClick={continueFromSafety}
+            >
+              依頼メモを確認する
+            </button>
+          </footer>
+        </article>
+      ) : null}
+
+      {phase === 3 ? (
+        <div id="request-phase-3">
+          <RequestMemo
+            form={form}
+            onEdit={moveToPhase}
+            onContinue={continueFromMemo}
+          />
+        </div>
+      ) : null}
+
+      {phase === 4 ? (
+        <article
+          id="request-phase-4"
+          className="request-sheet request-sheet--email"
+          aria-labelledby="request-phase-4-title"
+        >
+          <header className="request-sheet__heading">
+            <p>04 / 受け取り</p>
+            <h2 id="request-phase-4-title">最後に、受け取り先を入力します。</h2>
+            <span>相談入力とSafety確認が終わった後にだけ伺います。</span>
+          </header>
+          <form noValidate onSubmit={handleEmailSubmit}>
+            <div className="request-field">
+              <label htmlFor="email">
+                受け取りメールアドレス <span>必須</span>
+              </label>
+              <p id="email-note">
+                鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。
+                現在は送信も保存もされません。
+              </p>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={(event) => updateString("email", event.target.value)}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby="email-note email-error"
+              />
+              <FieldError id="email-error" message={errors.email} />
+            </div>
+            <div className="request-runtime-note" role="note">
+              <strong>現在はローカル確認だけです。</strong>
+              <span>
+                送信、永続保存、メール配信、決済、AI生成は行われません。最終操作時にも、相談入力・Safety・必須確認をすべて再検証します。
+              </span>
+            </div>
+            <footer className="request-phase-actions">
+              <button
+                type="button"
+                className="button button--secondary"
+                onClick={() => moveToPhase(3)}
+              >
+                依頼メモへ戻る
+              </button>
+              <button type="submit" className="button button--primary">
+                購入前の内容を確認する
+              </button>
+            </footer>
+          </form>
+        </article>
+      ) : null}
     </section>
   );
 }

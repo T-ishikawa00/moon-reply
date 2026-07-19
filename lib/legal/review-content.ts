@@ -414,14 +414,11 @@ export const contactUnresolvedRows: readonly ReviewDecision[] = [
 ];
 
 export const plannedContactCategories = [
-  "決済状況",
-  "重複決済",
-  "鑑定ノートの生成失敗",
-  "結果URLの紛失・再発行",
-  "結果通知メールアドレスの訂正",
-  "個人情報の取扱い",
-  "開示・訂正・削除の依頼",
-  "法務文書に関する質問",
+  "結果URLが開けない",
+  "メールが届かない",
+  "決済や返金",
+  "入力内容の削除",
+  "その他の利用相談",
 ] as const;
 
 export const contactDoNotSend = [

@@ -26,6 +26,15 @@ export type ReviewReportFixture = {
   judgmentLabel: string;
   reportTitle: string;
   consultationTheme: string;
+  clientNickname: string;
+  readingDateLabel: string;
+  coverLine: string;
+  shortLetter: readonly string[];
+  readingGuide: readonly {
+    label: string;
+    explanation: string;
+  }[];
+  relationshipTimeline: readonly string[];
   currentConclusion: readonly string[];
   conclusionReasonSummary: string;
   reasonPoints: readonly string[];
@@ -34,9 +43,19 @@ export type ReviewReportFixture = {
   materialUnknowns: readonly string[];
   anxietyCore: readonly string[];
   plannedMessageAnalysis: readonly string[];
+  messageTemperature: {
+    quote: string;
+    softness: string;
+    affection: string;
+    pressure: string;
+    adjustment: string;
+  };
   recommendedAction: readonly string[];
+  tonightActions: readonly string[];
+  notTonightActions: readonly string[];
   reviewTiming: string;
   recommendationChangeConditions: readonly string[];
+  holdDirectionConditions: readonly string[];
   waitingAction: readonly string[];
   noContactNextOption: string;
   laterMessageDraft: string;
@@ -44,28 +63,11 @@ export type ReviewReportFixture = {
     label: string;
     direction: string;
   }[];
+  reportCapabilities: readonly string[];
+  rememberTonight: string;
+  closingLetter: readonly string[];
   fixedLimitationDisclaimer: string;
   presentationMetadata: ReviewPresentationMetadata;
-};
-
-export type PublicSampleReportFixture = {
-  id: string;
-  fictionalReviewStatus: {
-    fictional: true;
-    purchased: false;
-    reviewedByCustomer: false;
-    aiGenerated: false;
-  };
-  visibleLabels: readonly string[];
-  title: string;
-  consultationTheme: string;
-  judgmentLabel: string;
-  sections: readonly {
-    heading: string;
-    paragraphs: readonly string[];
-  }[];
-  laterMessageDraft: string;
-  fixedLimitationDisclaimer: string;
 };
 
 const resultNormal001 = {
@@ -82,6 +84,27 @@ const resultNormal001 = {
   judgmentLabel: "今日は送らない方がいい",
   reportTitle: "月の返事 鑑定ノート",
   consultationTheme: "二度会った相手へ、返信を待つ今夜に追加のメッセージを送るか",
+  clientNickname: "みな",
+  readingDateLabel: "2026年7月17日・審査用固定日",
+  coverLine: "今夜は、答えを急ぐ前に、言葉と気持ちを一度ほどいてみましょう。",
+  shortLetter: [
+    "返事を待つ一日は、時計の針より長く感じられるものです。",
+    "だからこそ今夜は、相手の沈黙に急いで意味を与えず、確認できることから静かに見ていきます。",
+    "事実と想像を分けたうえで、あなたが後悔しにくい次の一手を一緒に整えます。",
+    "長い説明の前に、まず今夜の答えからお伝えします。",
+  ],
+  readingGuide: [
+    { label: "確認できること", explanation: "入力された出来事や文面を、起きた事実として扱います。" },
+    { label: "考えられる可能性", explanation: "一つに断定せず、複数あり得る受け止め方を示します。" },
+    { label: "月の返事の推奨", explanation: "今夜の負担と関係への圧力を抑える現実的な行動案です。" },
+    { label: "まだ分からないこと", explanation: "相手の本心、返信の時期、将来など、入力だけでは確認できない範囲です。" },
+  ],
+  relationshipTimeline: [
+    "二度会った",
+    "会話はお礼で自然に終了",
+    "相手から「落ち着いたら連絡する」",
+    "現在は1日返信待ち",
+  ],
   currentConclusion: [
     "この審査用ケースの結論は「今日は送らない方がいい」です。今夜は新しい文面を重ねず、すでに交わした言葉と今の不安をいったん分けて扱う方が安全です。",
     "送らないことは関係を諦める判断ではありません。返信を急かさず、自分の言葉を落ち着いた状態で選び直すための一時停止です。",
@@ -115,16 +138,38 @@ const resultNormal001 = {
     "下書きの「また都合のよい日に話せたらうれしいです」は穏やかで、非難も要求もありません。文面単体では強い圧力のある内容ではありません。",
     "一方、相手が次の連絡に触れた直後に送ると、文章の柔らかさよりも、返事を待てずに再確認したタイミングが目立つ可能性があります。今夜は内容より送信時機を見直す場面です。",
   ],
+  messageTemperature: {
+    quote: "自分：昨日はありがとう。また都合のよい日に話せたらうれしいです。",
+    softness: "責める言葉や期限がなく、語調は穏やかです。",
+    affection: "また話したい気持ちは、率直で押しつけの少ない形で伝わります。",
+    pressure: "相手が次の連絡に触れた直後なので、内容より送信のタイミングが催促に見える可能性があります。",
+    adjustment: "今夜は送らず、後で使うなら冒頭の重なりを減らし、返信を急がない一文を残します。",
+  },
   recommendedAction: [
     "今夜は下書きを送らず、送信画面から離してください。削除する必要はなく、落ち着いたときに読み直せる形で残して構いません。",
     "相手の最終文面、あなたの返信、今送ろうとしている目的を三つに分けてメモすると、事実と不安を混同しにくくなります。",
     "返信があれば、その内容に合わせて一度だけ返します。新しい必要事項が生じた場合も、目的を一つに絞って再判断します。",
+  ],
+  tonightActions: [
+    "下書きを送信画面から閉じ、削除せずに一度離れる。",
+    "相手の最後の文面・自分の返信・送りたい目的を三つに分けてメモする。",
+    "通知を確認する時間を決め、それ以外は今夜の予定へ戻る。",
+  ],
+  notTonightActions: [
+    "返信がない理由を尋ねる追いメッセージを送る。",
+    "安心できる言葉を引き出すために文面を重ねる。",
+    "返信の有無を自分の価値や関係の結論として決める。",
   ],
   reviewTiming: "一度気持ちが落ち着いてから、翌日以降に状況を見直してください。相手から返信があった場合や、予定調整など連絡する実用的な理由が生じた場合は、その時点で方針を再判断できます。",
   recommendationChangeConditions: [
     "相手から返信があり、会話を続けられる具体的な内容が届いたとき。",
     "予定変更など、相手に伝える必要のある新しい事実が生じたとき。",
     "不安の確認ではなく、短い挨拶を一度送る目的に整理できたとき。",
+  ],
+  holdDirectionConditions: [
+    "相手から新しい連絡がなく、伝える必要のある事実も増えていないとき。",
+    "送りたい主な目的が、相手の気持ちを今すぐ確かめることになっているとき。",
+    "不安が強く、送った後にさらに確認を重ねそうだと感じるとき。",
   ],
   waitingAction: [
     "通知や画面を確認する回数を自分で決め、それ以外の時間は別の予定へ戻る。",
@@ -137,6 +182,17 @@ const resultNormal001 = {
     { label: "1日目", direction: "今夜は送らず、下書きを閉じます。確認できる事実と不安からの推測を分け、画面を見続ける時間を減らします。" },
     { label: "2日目", direction: "相手から連絡があれば内容に沿って短く返します。連絡がなければ、下書きの目的と圧力の有無を落ち着いて見直します。" },
     { label: "3日目", direction: "状況が変わらなければ、一度だけ低圧で送るか、距離を置いて待つかを自分の負担も含めて選びます。返信時期の予測はしません。" },
+  ],
+  reportCapabilities: [
+    "入力された事実と、不安から生まれた推測を分けること。",
+    "文面の柔らかさ、好意、圧力になり得る点を整理すること。",
+    "今夜から3日間に取れる現実的な選択肢を示すこと。",
+  ],
+  rememberTonight: "返信がない一日は、関係の結論ではありません。",
+  closingLetter: [
+    "今夜送らないことは、気持ちをなかったことにする判断ではありません。",
+    "少し落ち着いた自分に、言葉を選ぶ権利を返すための一晩です。",
+    "次に状況が動いたとき、また事実から方針を見直しましょう。",
   ],
   fixedLimitationDisclaimer: "このレポートは、入力された情報をもとにAIが整理・分析した判断材料です。相手の本心や将来の出来事を断定・保証するものではありません。医療・心理・法律上の助言ではありません。",
   presentationMetadata: {
@@ -154,62 +210,6 @@ const resultNormal001 = {
   },
 } as const satisfies ReviewReportFixture;
 
-export const PUBLIC_SAMPLE_REPORT = {
-  id: "sample-report-g001",
-  fictionalReviewStatus: {
-    fictional: true,
-    purchased: false,
-    reviewedByCustomer: false,
-    aiGenerated: false,
-  },
-  visibleLabels: [
-    "架空サンプル",
-    "実在の相談者ではありません",
-    "実際の購入・レビューではありません",
-    "AI生成実績ではありません",
-  ],
-  title: "返事を待つ夜に、もう一通送る前の小さな整理",
-  consultationTheme: "返事がまだない相手へ「忙しい？」と追加で送りたくなっている架空ケース",
-  judgmentLabel: "今夜は待つ",
-  sections: [
-    {
-      heading: "今夜の整理",
-      paragraphs: [
-        "返事が届かない時間は、実際より長く感じられることがあります。画面を開くたびに「嫌われたのかも」と考えてしまう夜ほど、もう一通送って確かめたくなるのは自然な反応です。",
-        "この架空ケースでは、今夜は追加の文面を送らずに待つ方向を勧めます。待つことは気持ちを我慢して消すことではなく、相手の沈黙に急いで意味を与えず、自分で次の一手を選ぶ余白を戻すための判断です。",
-      ],
-    },
-    {
-      heading: "確認できることと、分からないこと",
-      paragraphs: [
-        "確認できるのは、最後のメッセージに質問が一つ含まれていること、まだ返事がないこと、追加で「忙しい？」と送りたくなっていることです。返事がない理由や相手の気持ちは入力だけでは分かりません。",
-        "忙しい、返信内容を考えている、連絡のペースが違う、少し距離を見ているなど、複数の可能性があります。どれかを事実として選ぶ材料はないため、今夜の不安だけで関係の結論にしないことが大切です。",
-      ],
-    },
-    {
-      heading: "待つことが役立つ理由",
-      paragraphs: [
-        "「忙しい？」という短い一言でも、返答を求められているように伝わる可能性があります。すでに質問を送っている場面では、内容よりも連絡が重なること自体が圧力として受け取られる場合があります。",
-        "今夜いったん止めると、安心を確かめるための文面と、本当に相手へ伝えたい言葉を分けられます。通知を見る回数を決め、下書きは送信せずメモへ置き、今夜の予定に意識を戻してください。",
-      ],
-    },
-    {
-      heading: "後で送る場合",
-      paragraphs: [
-        "気持ちが落ち着いてから状況を見直し、それでも一度連絡したい場合は、返事の説明を求めず、会話の入口だけを作る短い文面にします。送るか、さらに待つか、距離を置くかはあなたが選べます。",
-      ],
-    },
-    {
-      heading: "残る不確実性",
-      paragraphs: [
-        "この判断から、相手の好意、返信の有無や時期、今後の関係は断定できません。返事が来ない状態が続く場合は、追加連絡だけでなく、自分が無理なく待てる関係かを見直すことも次の選択肢です。",
-      ],
-    },
-  ],
-  laterMessageDraft: "最近どう？　落ち着いたときに、また話せたらうれしいです。返信は急がなくて大丈夫です。",
-  fixedLimitationDisclaimer: "月の返事は、入力された情報をAIで整理・分析し、判断材料を返す設計です。相手の本心や返信、将来の出来事を断定・保証せず、医療・心理・法律上の助言ではありません。",
-} as const satisfies PublicSampleReportFixture;
-
 export const REPORT_FIXTURES = {
   "result-normal-001": resultNormal001,
 } satisfies Record<string, ReviewReportFixture>;
@@ -226,13 +226,11 @@ function countSubstantiveCharacters(segments: readonly string[]) {
   return segments.join("").replace(/\s/gu, "").length;
 }
 
-const sampleSubstantiveSegments = [
-  ...PUBLIC_SAMPLE_REPORT.sections.flatMap((section) => section.paragraphs),
-  PUBLIC_SAMPLE_REPORT.laterMessageDraft,
-  PUBLIC_SAMPLE_REPORT.fixedLimitationDisclaimer,
-];
-
 const webSubstantiveSegments = [
+  resultNormal001.coverLine,
+  ...resultNormal001.shortLetter,
+  ...resultNormal001.readingGuide.map((item) => item.explanation),
+  ...resultNormal001.relationshipTimeline,
   ...resultNormal001.currentConclusion,
   resultNormal001.conclusionReasonSummary,
   ...resultNormal001.reasonPoints,
@@ -240,16 +238,26 @@ const webSubstantiveSegments = [
   ...resultNormal001.possibleInterpretations,
   ...resultNormal001.anxietyCore,
   ...resultNormal001.plannedMessageAnalysis,
+  resultNormal001.messageTemperature.quote,
+  resultNormal001.messageTemperature.softness,
+  resultNormal001.messageTemperature.affection,
+  resultNormal001.messageTemperature.pressure,
+  resultNormal001.messageTemperature.adjustment,
   ...resultNormal001.recommendedAction,
+  ...resultNormal001.tonightActions,
+  ...resultNormal001.notTonightActions,
   resultNormal001.reviewTiming,
   ...resultNormal001.recommendationChangeConditions,
+  ...resultNormal001.holdDirectionConditions,
   ...resultNormal001.waitingAction,
   resultNormal001.noContactNextOption,
   resultNormal001.laterMessageDraft,
   ...resultNormal001.threeDayPlan.map((item) => item.direction),
   ...resultNormal001.materialUnknowns,
+  ...resultNormal001.reportCapabilities,
+  resultNormal001.rememberTonight,
+  ...resultNormal001.closingLetter,
   resultNormal001.fixedLimitationDisclaimer,
 ];
 
-export const SAMPLE_REPORT_SUBSTANTIVE_CHARACTER_COUNT = countSubstantiveCharacters(sampleSubstantiveSegments);
 export const RESULT_NORMAL_WEB_SUBSTANTIVE_CHARACTER_COUNT = countSubstantiveCharacters(webSubstantiveSegments);

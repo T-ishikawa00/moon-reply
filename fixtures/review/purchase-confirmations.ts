@@ -11,10 +11,11 @@ export type ReviewPurchaseConfirmationFixture = {
     userFacingLabel: string;
     price: "税込980円";
     quantity: "1相談 / 1鑑定ノート";
-    purchaseType: "一度きりの購入";
+    purchaseType: "都度払い";
     renewal: "自動更新なし";
     subscription: "none";
     coinsPointsTickets: "none";
+    included: readonly ["Web鑑定ノート", "保存用判断カード"];
   };
   transactionState: "not_started";
   provider: "unselected";
@@ -31,10 +32,11 @@ const normalPurchaseConfirmation: ReviewPurchaseConfirmationFixture = {
     userFacingLabel: "恋のメッセージ鑑定ノート",
     price: "税込980円",
     quantity: "1相談 / 1鑑定ノート",
-    purchaseType: "一度きりの購入",
+    purchaseType: "都度払い",
     renewal: "自動更新なし",
     subscription: "none",
     coinsPointsTickets: "none",
+    included: ["Web鑑定ノート", "保存用判断カード"],
   },
   transactionState: "not_started",
   provider: "unselected",
@@ -52,11 +54,6 @@ export type ResolvedReviewPurchaseConfirmation = {
   request: ReviewRequestFixture;
 };
 
-function hasAdultAgeGroup(ageGroup: string) {
-  const leadingAge = Number.parseInt(ageGroup.match(/^\d+/)?.[0] ?? "", 10);
-  return Number.isFinite(leadingAge) && leadingAge >= 18;
-}
-
 export function getPurchaseConfirmationFixture(id: string): ResolvedReviewPurchaseConfirmation | undefined {
   if (!Object.prototype.hasOwnProperty.call(PURCHASE_CONFIRMATION_FIXTURES, id)) return undefined;
 
@@ -73,7 +70,7 @@ export function getPurchaseConfirmationFixture(id: string): ResolvedReviewPurcha
     || allowedState.fixtureId !== purchase.requestFixtureId
     || !allowedState.canReachConfirmation
     || !request.acknowledged
-    || !hasAdultAgeGroup(request.ageGroup)
+    || !request.adultConfirmed
     || !request.email.endsWith(".invalid")
     || request.safetyFlags.length !== 1
     || request.safetyFlags[0] !== "上記には当てはまらない"

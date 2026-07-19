@@ -1,192 +1,405 @@
 import Link from "next/link";
-import { PUBLIC_SAMPLE_REPORT, REPORT_FIXTURES } from "@/fixtures/review/reports";
+import { EditorialDivider } from "@/components/brand/EditorialDivider";
+import { LunarArc } from "@/components/brand/LunarArc";
+import { MoonSeal } from "@/components/brand/MoonSeal";
+import { PUBLIC_SAMPLE_CASES } from "@/fixtures/public/public-sample-cases";
+import { REPORT_FIXTURES } from "@/fixtures/review/reports";
 
-const resultPreview = REPORT_FIXTURES["result-normal-001"];
+const preview = REPORT_FIXTURES["result-normal-001"];
 
-const concerns = [
-  "返事が来ないだけで、心が何度も画面に戻ってしまう",
-  "送りたいけれど、重いと思われたくない",
-  "追いメッセージをしたいけれど、後悔しそうで怖い",
-  "曖昧な関係に、どこまで時間を使っていいか分からない",
-];
-
-const organizedItems = [
-  { number: "01", title: "状況を分ける", text: "入力された事実、考えられる可能性、まだ分からないことを混ぜずに整理します。" },
-  { number: "02", title: "言葉の温度を見る", text: "送ろうとしている文面が、どのように受け取られる可能性があるかを確認します。" },
-  { number: "03", title: "次の一手を選ぶ", text: "送る、軽く送る、待つ、今日は送らないの判断材料と短期的な行動案を示します。" },
+const threeAnswers = [
+  {
+    number: "01",
+    title: "今夜の答え",
+    text: "短く返す、今夜は待つ、追加連絡を止める。相談事実に応じた方向を最初に示します。",
+  },
+  {
+    number: "02",
+    title: "送る場合の文面",
+    text: "今の距離感に合わせて、重さを調整した文面案をまとめます。",
+  },
+  {
+    number: "03",
+    title: "3日間の方向",
+    text: "今夜だけで終わらせず、次に見直す条件まで短期の方針にします。",
+  },
 ];
 
 const flowSteps = [
-  { number: "01", title: "依頼内容を入力", text: "関係状況、必要なやり取り、送ろうとしている文面をテキストで入力します。" },
-  { number: "02", title: "Safetyを確認", text: "通常鑑定として扱える内容か、将来は決済前に確認します。" },
-  { number: "03", title: "単発で購入", text: "通常鑑定OKの場合のみ、税込980円の一度きりの購入へ進む予定です。" },
-  { number: "04", title: "鑑定ノートを読む", text: "将来はWeb結果ページと結果URLのメールで受け取る計画です。" },
+  {
+    number: "1",
+    title: "状況を書く",
+    text: "うまくまとめなくても大丈夫。今起きていることを、自分の言葉で書きます。",
+  },
+  {
+    number: "2",
+    title: "安全確認を行う",
+    text: "通常鑑定として扱える相談かを、必ず決済より前に確認します。",
+  },
+  {
+    number: "3",
+    title: "鑑定ノートを受け取る",
+    text: "今夜の答え、文面案、3日間の行動方針を一冊の形で受け取る計画です。",
+  },
 ];
 
 const faqs = [
-  { question: "AIですか？", answer: "はい。AIが入力された恋愛関係の状況やメッセージを整理・分析し、判断材料を鑑定ノートとしてまとめます。現在はサービス準備中で、AI生成は動作しません。" },
-  { question: "相手の本心は分かりますか？", answer: "相手の本心を断定するものではありません。入力された状況や文面から、考えられる可能性と次の一手を整理します。" },
-  { question: "必ず返信が来ますか？", answer: "返信や復縁、将来の結果を保証するものではありません。" },
-  { question: "どんな相談でもできますか？", answer: "自傷、DV、ストーカー、脅迫、未成年が関係する危険相談などは通常鑑定として扱いません。Safetyは原則として決済前に確認します。" },
-  { question: "返金できますか？", answer: "納品後の取扱いを含む返金条件は、まだ確定していません。重複決済や例外的な提供不能時の対応方針は、決済事業者の選定後に確定します。現在は決済機能を利用できません。" },
+  {
+    question: "相手の本心は分かりますか？",
+    answer:
+      "相手の本心を断定するものではありません。確認できる事実と考えられる可能性を分け、次の行動を選ぶための判断材料を示します。",
+  },
+  {
+    question: "必ず返信が来たり、復縁できたりしますか？",
+    answer:
+      "返信、復縁、交際、将来の結果は保証しません。結果を約束するのではなく、今ある状況と言葉を現実的に整理するサービスです。",
+  },
+  {
+    question: "AIや占いを使いますか？",
+    answer:
+      "入力された情報の整理にはAIを使用する予定です。タロット、占星術、霊感などの占術・超自然的手法は使いません。現在はAI生成機能は動作していません。",
+  },
+  {
+    question: "どんな相談でも依頼できますか？",
+    answer:
+      "自傷、DV、ストーカー、脅迫、未成年が関係する危険相談などは通常鑑定として扱いません。Safety確認で通常鑑定OKとなった場合だけ先へ進みます。",
+  },
+  {
+    question: "料金と返金条件は決まっていますか？",
+    answer:
+      "料金は1相談・1鑑定ノートにつき税込980円の都度払いです。返金条件の未確定事項は決済事業者の選定後に確定します。現在は決済できません。",
+  },
 ];
 
 function RequestCta({ label = "鑑定ノートを依頼する" }: { label?: string }) {
-  return <Link href="/request" className="button button--primary">{label}</Link>;
+  return (
+    <Link href="/request" className="button button--primary">
+      {label}
+    </Link>
+  );
 }
 
 export default function Home() {
   return (
-    <main className="lp">
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="hero__glow" aria-hidden="true" />
-        <div className="page-shell hero__grid">
-          <div className="hero__copy">
-            <p className="eyebrow">AI-assisted relationship-message analysis</p>
-            <h1 id="hero-title">送る前に読む、<br />恋のメッセージ鑑定ノート。</h1>
-            <p className="hero__lead">
-              返信待ち、追いメッセージ、曖昧な関係で不安になる夜に。
-              関係状況やメッセージをAIが整理・分析し、送る・待つ・修正するための判断材料を一冊の鑑定ノートとしてお返しします。
+    <main className="lp-home">
+      <section className="lp-home-hero" aria-labelledby="lp-hero-title">
+        <LunarArc tone="night" position="top-right" />
+        <div className="page-shell lp-home-hero__grid">
+          <div className="lp-home-hero__copy">
+            <p className="lp-kicker">恋のメッセージ鑑定ノート</p>
+            <h1 id="lp-hero-title">
+              返事がこない夜に、<br />
+              送るか、待つかを決めるための一冊。
+            </h1>
+            <p className="lp-home-hero__lead">
+              相手の本心を断定するのではなく、実際の文面と状況を整理し、
+              今夜の答え・送る文面・3日間の行動をまとめた鑑定ノートをお届けする計画です。
             </p>
-            <div className="hero__offer" aria-label="商品条件">
-              <div><strong>税込980円</strong><span>単発購入</span></div>
-              <div><strong>1相談</strong><span>1鑑定ノート</span></div>
-              <div><strong>自動更新なし</strong><span>追加課金なし</span></div>
-            </div>
-            <div className="hero__actions">
+
+            <dl className="lp-home-hero__facts" aria-label="商品条件">
+              <div>
+                <dt>料金</dt>
+                <dd>税込980円</dd>
+              </div>
+              <div>
+                <dt>支払い</dt>
+                <dd>都度払い</dd>
+              </div>
+              <div>
+                <dt>対象</dt>
+                <dd>18歳以上</dd>
+              </div>
+              <div>
+                <dt>内容</dt>
+                <dd>1相談 / 1鑑定ノート</dd>
+              </div>
+            </dl>
+
+            <div className="lp-home-hero__actions">
               <RequestCta />
-              <Link href="#web-note" className="button button--secondary">鑑定ノートを見る</Link>
+              <Link href="/sample-report" className="button button--secondary">
+                架空の見本を読む
+              </Link>
             </div>
-            <p className="hero__status"><span aria-hidden="true">●</span> サービス審査・準備中のため、現在は決済できません。</p>
+            <p className="lp-home-status">
+              サービス準備中のため、現在は購入・生成・メール送信を利用できません。
+            </p>
           </div>
 
-          <div className="hero-note" aria-label="Web鑑定ノートの架空内容プレビュー">
-            <div className="hero-note__top"><span>月の返事</span><span>PREVIEW</span></div>
-            <p className="hero-note__label">今夜の結論</p>
-            <p className="hero-note__conclusion">{resultPreview.judgmentLabel}</p>
-            <p className="hero-note__body">{resultPreview.conclusionReasonSummary}</p>
-            <div className="hero-note__rule" />
-            <p className="hero-note__caption">固定の架空データによる内容見本 · 購入・AI生成・納品実績ではありません</p>
-          </div>
+          <article className="lp-note-cover" aria-label="恋のメッセージ鑑定ノートの表紙見本">
+            <div className="lp-note-cover__brand">
+              <MoonSeal size="medium" />
+              <span>月の返事</span>
+            </div>
+            <div className="lp-note-cover__title">
+              <p>恋のメッセージ鑑定ノート</p>
+              <h2>今夜の答えを、<br />一冊の中へ。</h2>
+            </div>
+            <EditorialDivider variant="night" />
+            <ul>
+              <li>今夜の答え</li>
+              <li>送る場合の文面</li>
+              <li>3日間の行動方針</li>
+            </ul>
+            <p className="lp-note-cover__sample">架空の内容見本</p>
+          </article>
         </div>
       </section>
 
-      <section className="lp-section lp-section--paper" aria-labelledby="concerns-title">
-        <div className="page-shell split-layout">
-          <div className="section-copy">
-            <p className="eyebrow">For your quiet night</p>
-            <h2 id="concerns-title">ひとりで答えを急がなくていい夜があります。</h2>
-            <p>不安を大きくするためではなく、何度も考え続ける状態から少し離れ、自分で次の行動を選ぶためのサービスです。</p>
-          </div>
-          <ul className="concern-list">
-            {concerns.map((concern) => <li key={concern}><span aria-hidden="true">—</span>{concern}</li>)}
-          </ul>
-        </div>
-      </section>
-
-      <section id="service" className="lp-section lp-section--night" aria-labelledby="service-title">
+      <section className="lp-home-section lp-home-section--paper" aria-labelledby="answers-title">
         <div className="page-shell">
-          <div className="section-copy section-copy--center">
-            <p className="eyebrow">What we organize</p>
-            <h2 id="service-title">気持ちを決めつけず、状況と言葉をほどいていく。</h2>
-            <p>月の返事は占術や未来予測ではありません。入力された情報だけを基に、恋愛メッセージの受け取られ方と次の一手を整理します。</p>
+          <div className="lp-section-heading lp-section-heading--compact">
+            <p className="lp-kicker">一冊で受け取るもの</p>
+            <h2 id="answers-title">迷いを、三つの答えに整理します。</h2>
           </div>
-          <div className="organize-grid">
-            {organizedItems.map((item) => (
-              <article key={item.number} className="organize-card">
-                <span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p>
-              </article>
+          <ol className="lp-answer-list">
+            {threeAnswers.map((answer) => (
+              <li key={answer.number}>
+                <span>{answer.number}</span>
+                <h3>{answer.title}</h3>
+                <p>{answer.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="lp-home-section lp-home-section--wash" aria-labelledby="empathy-title">
+        <div className="page-shell lp-empathy">
+          <div>
+            <p className="lp-kicker">返事を待つ夜に</p>
+            <h2 id="empathy-title">不安が、まだ分からないことを答えにしてしまう前に。</h2>
+          </div>
+          <div className="lp-empathy__body">
+            <ul>
+              <li>嫌われたのかもしれない</li>
+              <li>追い連絡した方がいいかもしれない</li>
+              <li>文面が重かったのかもしれない</li>
+            </ul>
+            <p>
+              月の返事が行うのは、気持ちを煽ることではありません。
+              <strong>確認できる事実と、不安から生まれた想像を分けること。</strong>
+              そこから、自分で今夜の行動を選べる状態へ戻します。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="note" className="lp-home-section lp-home-section--night" aria-labelledby="artifact-title">
+        <div className="page-shell">
+          <div className="lp-section-heading lp-section-heading--night">
+            <p className="lp-kicker">同一ケースの表示形式</p>
+            <h2 id="artifact-title">同じ鑑定を、三つの表示で比べる。</h2>
+            <p>
+              ここで比べるのは、同じ「今日は送らない方がいい」という架空の鑑定です。
+              短い見本、長く読むWeb鑑定ノート、後から短時間で見返す保存用判断カードで、表示目的と情報量だけを変えています。
+              三つの異なる判断例ではありません。
+            </p>
+          </div>
+
+          <div className="lp-artifact" aria-label="同じ架空鑑定の三つの表示形式比較">
+            <article className="lp-artifact__main">
+              <header>
+                <div><MoonSeal /><span>月の返事</span></div>
+                <small>同じ架空ケースの短い見本</small>
+              </header>
+              <section className="lp-artifact__answer">
+                <p>今夜の答え</p>
+                <h3>{preview.judgmentLabel}</h3>
+                <span>{preview.conclusionReasonSummary}</span>
+              </section>
+              <section className="lp-artifact__temperature">
+                <div>
+                  <p>文面の温度</p>
+                  <blockquote>「{preview.messageTemperature.quote}」</blockquote>
+                </div>
+                <dl>
+                  <div><dt>やわらかさ</dt><dd>{preview.messageTemperature.softness}</dd></div>
+                  <div><dt>圧の見え方</dt><dd>{preview.messageTemperature.pressure}</dd></div>
+                </dl>
+              </section>
+              <section className="lp-artifact__plan">
+                <p>3日間の月明かりプラン</p>
+                <ol>
+                  {preview.threeDayPlan.map((day, index) => (
+                    <li key={day.label}><span>0{index + 1}</span><strong>{day.label}</strong><p>{day.direction}</p></li>
+                  ))}
+                </ol>
+              </section>
+            </article>
+
+            <aside className="lp-artifact__aside">
+              <div className="lp-artifact__index">
+                <p>Web鑑定ノート</p>
+                <strong>理由まで理解し、判断に納得するための本編。</strong>
+                <span>表紙から短い手紙、文面、行動、限界まで14部構成。</span>
+              </div>
+              <div className="lp-decision-card">
+                <p>保存用判断カード</p>
+                <span>30秒で見返す</span>
+                <strong>{preview.judgmentLabel}</strong>
+                <dl>
+                  <div><dt>今やること</dt><dd>{preview.tonightActions[0]}</dd></div>
+                  <div><dt>次の判断</dt><dd>翌日以降、または状況が動いた時</dd></div>
+                </dl>
+              </div>
+            </aside>
+          </div>
+          <p className="lp-artifact__note">
+            三つの表示はすべて同じ固定架空ケースの文章・構成見本です。購入、AI生成、納品、保存機能の実績ではありません。
+          </p>
+        </div>
+      </section>
+
+      <section id="flow" className="lp-home-section lp-home-section--paper" aria-labelledby="flow-title">
+        <div className="page-shell">
+          <div className="lp-section-heading">
+            <p className="lp-kicker">利用の流れ</p>
+            <h2 id="flow-title">依頼から受け取りまで、三つの段階。</h2>
+            <p>通常鑑定OKの場合だけ先へ進む設計です。Safety確認は必ず決済より前に行います。</p>
+          </div>
+          <ol className="lp-flow-list">
+            {flowSteps.map((step) => (
+              <li key={step.number}>
+                <span>{step.number}</span>
+                <div><h3>{step.title}</h3><p>{step.text}</p></div>
+              </li>
+            ))}
+          </ol>
+          <p className="lp-flow-status">
+            現在利用できるのはローカルの依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
+          </p>
+        </div>
+      </section>
+
+      <section className="lp-home-section lp-home-section--sample" aria-labelledby="sample-title">
+        <div className="page-shell">
+          <div className="lp-section-heading lp-section-heading--night">
+            <p className="lp-kicker">異なる相談ケースの判断比較</p>
+            <h2 id="sample-title">相談内容によって、今夜の答えは変わります。</h2>
+            <p>
+              同じ「返信がない」相談でも、交わされた文面や、すでに送った回数によって整理すべき答えは異なります。
+              以下はすべて、判断の違いを示すための固定された架空ケースです。
+            </p>
+          </div>
+
+          <ol className="lp-sample-cases">
+            {PUBLIC_SAMPLE_CASES.map((sampleCase, index) => (
+              <li key={sampleCase.id}>
+                <div className="lp-sample-case__heading">
+                  <span aria-hidden="true">0{index + 1}</span>
+                  <p>架空ケース</p>
+                </div>
+                <h3>{sampleCase.caseLabel}</h3>
+                <strong>{sampleCase.conclusion}</strong>
+                <p className="lp-sample-case__context">{sampleCase.relationshipContext}</p>
+                <div className="lp-sample-case__facts">
+                  <p>判断を分けた事実</p>
+                  <ul>
+                    {sampleCase.confirmedFacts.slice(0, 3).map((fact) => <li key={fact}>{fact}</li>)}
+                  </ul>
+                </div>
+                <p className="lp-sample-case__review">
+                  <span>次の見直し</span>
+                  {sampleCase.nextReviewCondition[0]}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="lp-sample-cases__footer">
+            <p>実在相談、購入者事例、レビュー、AI生成実績ではありません。</p>
+            <Link href="/sample-report" className="button button--secondary">
+              「送る」ケースの全文見本を読む
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section id="price" className="lp-home-section lp-home-section--paper" aria-labelledby="price-title">
+        <div className="page-shell lp-price">
+          <div className="lp-section-heading">
+            <p className="lp-kicker">料金</p>
+            <h2 id="price-title">一度きりの、税込980円。</h2>
+            <p>サブスクリプションやコインではなく、1相談ごとの都度払いです。</p>
+          </div>
+          <article className="lp-price__sheet">
+            <p>月の返事</p>
+            <h3>恋のメッセージ鑑定ノート</h3>
+            <strong><small>税込</small>980<small>円</small></strong>
+            <ul>
+              <li>Web鑑定ノート</li>
+              <li>保存用判断カード</li>
+              <li>今夜の答え・文面案・3日間の行動方針</li>
+              <li>1相談 / 1鑑定ノート</li>
+              <li>自動更新なし</li>
+            </ul>
+            <p className="lp-price__status">審査・準備中のため、現在は購入できません。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="boundaries" className="lp-home-section lp-home-section--wash" aria-labelledby="boundaries-title">
+        <div className="page-shell">
+          <div className="lp-section-heading">
+            <p className="lp-kicker">約束する範囲</p>
+            <h2 id="boundaries-title">できることと、できないことを曖昧にしません。</h2>
+          </div>
+          <div className="lp-boundaries">
+            <section>
+              <p>できること</p>
+              <ul>
+                <li>事実と推測を分ける</li>
+                <li>文面の印象を整理する</li>
+                <li>現実的な行動案を示す</li>
+              </ul>
+            </section>
+            <section>
+              <p>できないこと</p>
+              <ul>
+                <li>相手の本心を断定する</li>
+                <li>返信、復縁、交際、将来を保証する</li>
+                <li>医療、診断、心理カウンセリング、法律相談を代替する</li>
+              </ul>
+            </section>
+          </div>
+          <p className="lp-boundaries__safety">
+            自傷、DV、ストーカー、脅迫、未成年が関係する危険相談などは通常鑑定として扱いません。
+          </p>
+        </div>
+      </section>
+
+      <section id="faq" className="lp-home-section lp-home-section--paper" aria-labelledby="faq-title">
+        <div className="page-shell lp-faq">
+          <div className="lp-section-heading lp-section-heading--compact">
+            <p className="lp-kicker">FAQ</p>
+            <h2 id="faq-title">依頼前に、知っておいてほしいこと。</h2>
+          </div>
+          <div className="lp-faq__list">
+            {faqs.map((faq) => (
+              <details key={faq.question}>
+                <summary>{faq.question}</summary>
+                <p>{faq.answer}</p>
+              </details>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="web-note" className="lp-section lp-section--ivory" aria-labelledby="web-note-title">
-        <div className="page-shell split-layout split-layout--preview">
-          <div className="section-copy">
-            <p className="eyebrow">Web reading note</p>
-            <h2 id="web-note-title">理由まで深く読む、Web鑑定ノート。</h2>
-            <p>結論だけで終わらず、今の関係、文面の印象、推奨アクション、文面案、3日間の方向、分析の限界まで章立てで確認する長文のWeb版です。</p>
-            <span className="preview-boundary">固定の架空データによる内容見本</span>
-            <div className="mt-6"><Link href="/review/result/result-normal-001" className="button button--primary">Web鑑定ノートの見本を見る</Link></div>
+      <section className="lp-final" aria-labelledby="final-title">
+        <LunarArc tone="night" position="bottom-left" />
+        <div className="page-shell lp-final__inner">
+          <MoonSeal size="medium" />
+          <p className="lp-kicker">月の返事</p>
+          <h2 id="final-title">今夜の迷いを、明日の後悔にしないために。</h2>
+          <p>状況と言葉を一度ノートへ。通常鑑定OKの場合だけ、次の段階へ進みます。</p>
+          <div className="lp-final__actions">
+            <RequestCta />
+            <Link href="/sample-report" className="button button--secondary">架空の見本を読む</Link>
           </div>
-          <div className="web-note-preview" aria-label="Web鑑定ノートの構成プレビュー">
-            <div className="preview-heading"><span>月の返事 鑑定ノート</span><span>PREVIEW</span></div>
-            <div className="conclusion-card"><span>01 · 今夜の結論</span><strong>{resultPreview.judgmentLabel}</strong></div>
-            <div className="preview-chapters">
-              <span>02 今の関係の整理</span><span>03 受け止められ方</span><span>04 不安の核心</span><span>05 文面の印象</span><span>06 推奨アクション</span><span>07 文面案</span><span>08 3日間の方向</span><span>09 限界と注意点</span>
-            </div>
-            <p>{resultPreview.reasonPoints[0]} 固定の架空データによる抜粋で、AI生成・購入・納品された鑑定結果ではありません。</p>
-          </div>
+          <p className="lp-home-status">現在はローカル確認のみで、購入・生成・送信はできません。</p>
         </div>
       </section>
-
-      <section className="lp-section lp-section--purple" aria-labelledby="save-note-title">
-        <div className="page-shell split-layout split-layout--preview split-layout--reverse">
-          <div className="section-copy">
-            <p className="eyebrow">Quick-reference report</p>
-            <h2 id="save-note-title">あとで迷ったときに開く、保存用鑑定書。</h2>
-            <p>Web版と同じ固定の構造化結果から、結論、再判断の目安、方針を変える条件、文面案を短時間で見返すために再構成した審査用見本です。</p>
-            <ul className="boundary-list">
-              <li>Web鑑定ノートのスクリーンショットではありません</li>
-              <li>Web全文を小さく圧縮したものではありません</li>
-              <li>PDF・画像・ダウンロードはまだ利用できません</li>
-            </ul>
-            <div className="mt-6"><Link href="/review/save-report/result-normal-001" className="button button--primary">保存用鑑定書の見本を見る</Link></div>
-          </div>
-          <div className="save-note-preview" aria-label="保存用鑑定書の準備中プレビュー">
-            <div className="save-note-preview__header"><span>保存用鑑定書</span><span>PREVIEW</span></div>
-            <p className="save-note-preview__label">今夜の方向</p>
-            <strong>{resultPreview.judgmentLabel}</strong>
-            <dl><div><dt>再判断の目安</dt><dd>{resultPreview.reviewTiming}</dd></div><div><dt>今できること</dt><dd>{resultPreview.waitingAction[0]}</dd></div><div><dt>断定できないこと</dt><dd>{resultPreview.materialUnknowns[0]}</dd></div></dl>
-            <p>{resultPreview.presentationMetadata.save.label} · ファイルは生成されません</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="flow" className="lp-section lp-section--paper" aria-labelledby="flow-title">
-        <div className="page-shell">
-          <div className="section-copy">
-            <p className="eyebrow">How it works</p>
-            <h2 id="flow-title">入力から鑑定ノートまで、迷わない4つの段階。</h2>
-            <p>現在利用できるのはローカルの依頼フォームまでです。決済、AI生成、保存、メール配信はまだ動作しません。</p>
-          </div>
-          <ol className="flow-grid">{flowSteps.map((step) => <li key={step.number}><span>{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
-          <div className="mid-cta"><div><strong>今の入力画面を確認できます。</strong><p>入力は外部送信されず、ブラウザ内の確認表示とローカル安全分類だけで完結します。</p></div><RequestCta /></div>
-        </div>
-      </section>
-
-      <section className="lp-section lp-section--night sample-section" aria-labelledby="sample-title">
-        <div className="page-shell split-layout">
-          <div className="section-copy">
-            <p className="eyebrow">Fictional sample</p>
-            <h2 id="sample-title">文章の温度を知る、架空サンプル。</h2>
-            <p>実在の相談者、購入、レビュー、AI生成実績ではない架空サンプルで、文章の温度と不確実性の扱いを確認できます。</p>
-            <div className="mt-6"><Link href="/sample-report" className="button button--primary">サンプル鑑定書を見る</Link></div>
-          </div>
-          <blockquote className="sample-quote"><span>架空サンプルの短い抜粋</span><p>{PUBLIC_SAMPLE_REPORT.sections[0].paragraphs[0]}</p><footer>— {PUBLIC_SAMPLE_REPORT.judgmentLabel} · サービス説明用</footer></blockquote>
-        </div>
-      </section>
-
-      <section className="lp-section lp-section--ivory" aria-labelledby="price-title">
-        <div className="page-shell price-layout">
-          <div className="section-copy"><p className="eyebrow">Simple price</p><h2 id="price-title">一度きりの、税込980円。</h2><p>1相談につき1鑑定ノート。自動更新、サブスクリプション、コイン、追加課金による引き延ばしはありません。</p></div>
-          <div className="price-card"><span>月の返事 単発鑑定ノート</span><strong><small>税込</small>980<small>円</small></strong><ul><li>1相談 / 1鑑定ノート</li><li>一度きりの購入</li><li>自動更新なし</li></ul><p>審査・準備中のため、現在は購入できません。</p></div>
-        </div>
-      </section>
-
-      <section id="safety" className="lp-section lp-section--night" aria-labelledby="safety-title">
-        <div className="page-shell safety-layout">
-          <div className="section-copy"><p className="eyebrow">AI, limits &amp; safety</p><h2 id="safety-title">AIを使うことも、できないことも、先に伝えます。</h2><p>入力された情報をAIで整理・分析する予定です。タロット、占星術、霊感などの占術・超自然的手法は使いません。</p></div>
-          <div className="safety-grid"><article><span>AI利用</span><h3>判断材料を整理</h3><p>状況、文面の印象、短期的な行動案をレポートにまとめます。</p></article><article><span>非保証</span><h3>本心や未来は断定しない</h3><p>返信、復縁、期待する結果を保証するサービスではありません。</p></article><article><span>Safety</span><h3>原則として決済前に確認</h3><p>自傷、DV、ストーカー、脅迫、未成年が関係する危険相談などは通常鑑定として扱いません。</p></article><article><span>返金方針</span><h3>事業者選定後に確定</h3><p>例外的な提供不能時の手段、期限、反映時期などはまだ確定していません。</p></article></div>
-        </div>
-      </section>
-
-      <section id="faq" className="lp-section lp-section--paper" aria-labelledby="faq-title"><div className="page-shell faq-layout"><div className="section-copy"><p className="eyebrow">FAQ</p><h2 id="faq-title">依頼前に知ってほしいこと。</h2></div><div className="faq-list">{faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div></div></section>
-
-      <section className="final-cta" aria-labelledby="final-cta-title"><div className="final-cta__moon" aria-hidden="true" /><div className="page-shell final-cta__inner"><p className="eyebrow">Your next step</p><h2 id="final-cta-title">答えを急ぐ前に、言葉と気持ちを一度ノートへ。</h2><p>入力はまだ外部へ送られません。現在の鑑定依頼フォームとローカル確認 UI を試せます。</p><RequestCta /></div></section>
-
-      <section className="lp-navigation" aria-labelledby="navigation-title"><div className="page-shell"><div className="section-copy section-copy--center"><p className="eyebrow">Information</p><h2 id="navigation-title">法務・安全・お問い合わせ</h2><p>現在確認できる情報と、準備中の情報を明確に分けています。</p></div><div className="information-grid"><Link href="/#safety"><span>利用可能</span><strong>AI利用・非保証・Safety</strong><small>このページ内の説明へ</small></Link><Link href="/review"><span>利用可能</span><strong>公開準備プレビュー</strong><small>準備状況を確認</small></Link><div><span>準備中</span><strong>法務情報・お問い合わせ</strong><small>公開に向けて準備中</small></div></div></div></section>
     </main>
   );
 }

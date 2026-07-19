@@ -8,17 +8,21 @@ import {
   type ReviewStatusCategory,
 } from "@/lib/legal/review-content";
 
+type LegalDisplayMode = "review" | "public";
+
 export function LegalReviewScaffold({
   currentPath,
   children,
+  mode = "review",
 }: {
   currentPath: string;
   children: ReactNode;
+  mode?: LegalDisplayMode;
 }) {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f3ead8] text-[#2b2335]">
-      <LegalReviewBoundary />
-      <LegalNavigation currentPath={currentPath} />
+    <main className="legal-review-scaffold" data-legal-mode={mode}>
+      {mode === "review" ? <LegalReviewBoundary /> : null}
+      {mode === "review" ? <LegalNavigation currentPath={currentPath} /> : null}
       {children}
     </main>
   );
@@ -26,28 +30,12 @@ export function LegalReviewScaffold({
 
 export function LegalReviewBoundary() {
   return (
-    <aside
-      aria-label="法務ページの審査境界"
-      className="border-b border-[#e0c987]/35 bg-[#12142b] text-[#fff8e8]"
-    >
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-8">
-        <div className="flex flex-wrap gap-2" aria-label="審査状態">
-          {[
-            "審査用ドラフト表示",
-            "公開承認前・運営者情報未完了",
-            "法的助言ではありません",
-          ].map((label) => (
-            <strong
-              key={label}
-              className="inline-flex min-h-11 items-center rounded-full border border-[#e4c875]/55 bg-white/5 px-4 py-2 text-sm leading-6 text-[#f5df9d]"
-            >
-              {label}
-            </strong>
-          ))}
-        </div>
-        <p className="mt-4 max-w-4xl border-l-4 border-[#e4c875] pl-4 leading-8 text-[#eee5d6]">
-          この画面は公開前の構成確認用です。現在の利用契約条件または正式な法務表示ではありません。
-        </p>
+    <aside className="legal-review-boundary" aria-label="公開前の審査境界">
+      <div className="page-shell">
+        <strong>公開前の Review mode</strong>
+        <span>
+          構成と未確定事項を確認する表示です。現在の利用契約条件、正式な法務表示、公開承認ではありません。
+        </span>
       </div>
     </aside>
   );
@@ -55,62 +43,37 @@ export function LegalReviewBoundary() {
 
 export function LegalNavigation({ currentPath }: { currentPath: string }) {
   return (
-    <div className="border-b border-[#cdbb91] bg-[#fff8e9]">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-8">
-        <nav aria-label="法務・開示ページ間ナビゲーション">
-          <p className="text-sm font-bold tracking-[0.14em] text-[#80652d]">LEGAL REVIEW PAGES</p>
-          <ul className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {legalNavigationItems.map((item) => {
-              const isCurrent = currentPath === item.href;
-              return (
-                <li key={item.href} className="min-w-0">
-                  <Link
-                    href={item.href}
-                    aria-current={isCurrent ? "page" : undefined}
-                    className={`flex min-h-12 min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-lg border px-4 py-3 font-semibold leading-6 transition focus:outline-none focus:ring-2 focus:ring-[#55416f] focus:ring-offset-2 focus:ring-offset-[#fff8e9] motion-reduce:transition-none ${
-                      isCurrent
-                        ? "border-[#80652d] bg-[#f1dfb0] text-[#2b2335] shadow-[inset_4px_0_0_#80652d] hover:bg-[#f1dfb0]"
-                        : "border-[#d8c596] bg-[#fffdf5] hover:bg-[#f5ead2]"
-                    }`}
-                  >
-                    <span className="min-w-0 flex-1 basis-40 break-words">{item.label}</span>
-                    <span
-                      className={`shrink-0 whitespace-nowrap text-xs font-bold ${
-                        isCurrent
-                          ? "inline-flex min-h-7 items-center rounded-full bg-[#2a2440] px-2.5 py-1 leading-none text-[#fff8e8]"
-                          : ""
-                      }`}
-                      aria-hidden={isCurrent ? undefined : "true"}
-                    >
-                      {isCurrent ? "現在" : "→"}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <nav aria-label="関連する審査画面" className="mt-6 border-t border-[#d9caa8] pt-5">
-          <p className="text-sm font-semibold text-[#67596b]">関連する審査画面</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {reviewContextLinks.map((item) => (
+    <nav className="legal-document-nav" aria-label="法務・Safety文書ナビゲーション">
+      <div className="page-shell">
+        <p>文書を移動</p>
+        <ul>
+          {legalNavigationItems.map((item) => {
+            const isCurrent = currentPath === item.href;
+            return (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="inline-flex min-h-11 items-center rounded-lg border border-[#bca66f] bg-[#fffdf5] px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2"
-                >
-                  {item.label}
+                <Link href={item.href} aria-current={isCurrent ? "page" : undefined}>
+                  <span>{item.label}</span>
+                  <small>{isCurrent ? "現在の文書" : "→"}</small>
                 </Link>
               </li>
+            );
+          })}
+        </ul>
+        <details>
+          <summary>関連する審査画面</summary>
+          <div>
+            {reviewContextLinks.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
             ))}
-          </ul>
-          <p className="mt-3 text-sm leading-7 text-[#67596b]">
-            これらのページを開いても、購入、同意、公開承認、問い合わせ送信は発生しません。
+          </div>
+          <p>
+            開いても、購入、同意、公開承認、問い合わせ送信は発生しません。
           </p>
-        </nav>
+        </details>
       </div>
-    </div>
+    </nav>
   );
 }
 
@@ -119,22 +82,27 @@ export function LegalPageHeader({
   title,
   description,
   showDates = false,
+  status = "公開前・審査用ドラフト",
 }: {
   eyebrow: string;
   title: string;
   description: string;
   showDates?: boolean;
+  status?: string;
 }) {
   return (
-    <header className="border-b border-[#d8c596]/30 bg-[radial-gradient(circle_at_82%_16%,rgba(229,196,109,0.18),transparent_20rem),linear-gradient(145deg,#0d1127,#29203e)] text-[#fff8e8]">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
-        <p className="text-sm font-bold tracking-[0.18em] text-[#d9bb75]">{eyebrow}</p>
-        <h1 className="mt-4 max-w-4xl break-words font-serif text-3xl font-semibold leading-[1.45] sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-[#e6dccb] sm:text-lg sm:leading-9">
-          {description}
-        </p>
+    <header className="legal-page-header" data-review-label={eyebrow}>
+      <div className="legal-page-header__inner">
+        <nav aria-label="パンくず">
+          <ol>
+            <li><Link href="/">月の返事</Link></li>
+            <li><Link href="/legal">法務・Safety</Link></li>
+            <li aria-current="page">{title}</li>
+          </ol>
+        </nav>
+        <span className="legal-page-status">{status}</span>
+        <h1>{title}</h1>
+        <p>{description}</p>
         {showDates ? <ReviewDates /> : null}
       </div>
     </header>
@@ -143,17 +111,10 @@ export function LegalPageHeader({
 
 export function ReviewDates() {
   return (
-    <div className="mt-7 grid max-w-3xl gap-3 sm:grid-cols-2" aria-label="未確定の日付">
-      {[
-        "施行日：未確定",
-        "最終更新日：未確定",
-      ].map((label) => (
-        <div key={label} className="rounded-lg border border-[#e4c875]/45 bg-white/5 p-4">
-          <strong className="block">{label}</strong>
-          <span className="mt-1 block text-sm text-[#d9ccba]">Status: 運営者判断待ち</span>
-        </div>
-      ))}
-    </div>
+    <dl className="legal-review-dates" aria-label="未確定の日付">
+      <div><dt>施行日</dt><dd>未確定</dd></div>
+      <div><dt>最終更新日</dt><dd>未確定</dd></div>
+    </dl>
   );
 }
 
@@ -170,96 +131,126 @@ export function ContentSection({
   children: ReactNode;
   tone?: "paper" | "ivory" | "night";
 }) {
-  const toneClass = tone === "night"
-    ? "border-[#d6b86d]/40 bg-[#18152e] text-[#efe5d0]"
-    : tone === "ivory"
-      ? "border-[#cdbb91] bg-[#fffdf5]"
-      : "border-[#cdbb91] bg-[#fff8e9]";
   return (
-    <section className={`rounded-xl border p-5 shadow-[0_1rem_3rem_rgba(39,31,52,.08)] sm:p-8 ${toneClass}`}>
-      {eyebrow ? <p className={`text-sm font-bold tracking-[0.14em] ${tone === "night" ? "text-[#d9bb75]" : "text-[#80652d]"}`}>{eyebrow}</p> : null}
-      <h2 className={`mt-2 font-serif text-2xl font-semibold leading-[1.45] sm:text-3xl ${tone === "night" ? "text-[#fff8e8]" : ""}`}>{title}</h2>
-      {intro ? <p className={`mt-4 max-w-4xl leading-8 ${tone === "night" ? "text-[#d5cab9]" : "text-[#67596b]"}`}>{intro}</p> : null}
-      <div className="mt-6">{children}</div>
+    <section
+      className={`legal-content-section legal-content-section--${tone}`}
+      data-review-section={eyebrow}
+    >
+      <h2>{title}</h2>
+      {intro ? <p className="legal-content-section__intro">{intro}</p> : null}
+      <div className="legal-content-section__body">{children}</div>
     </section>
   );
 }
 
 export function StatusPill({ status }: { status: ReviewStatusCategory }) {
-  return (
-    <span className="inline-flex min-h-9 items-center rounded-full border border-[#9b7b3a] bg-[#f5ead2] px-3 py-1 text-xs font-bold leading-5 text-[#493a20]">
-      Status: {status}
-    </span>
-  );
+  return <span className="legal-decision-status">{status}</span>;
 }
 
 export function DecisionCard({ decision }: { decision: ReviewDecision }) {
   return (
-    <article className="min-w-0 rounded-lg border border-[#d8c596] bg-[#fffdf5] p-4 sm:p-5">
-      <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-        <h3 className="min-w-0 break-words text-lg font-semibold leading-7">{decision.label}</h3>
+    <article className="legal-decision-row">
+      <div>
+        <h3>{decision.label}</h3>
         <StatusPill status={decision.status} />
       </div>
-      <p className="mt-3 break-words leading-7 text-[#5f5363]">{decision.summary}</p>
+      <p>{decision.summary}</p>
       {decision.decisionIds?.length ? (
-        <div className="mt-4 rounded-md border border-dashed border-[#bca66f] bg-[#f8f0e2] p-3 text-sm leading-6">
-          <span className="block font-semibold text-[#765e2d]">審査専用メタデータ</span>
-          <span className="mt-1 block break-words font-mono">Decision: {decision.decisionIds.join(" / ")}</span>
-        </div>
+        <details>
+          <summary>審査メタデータを表示</summary>
+          <dl>
+            <div><dt>Decision ID</dt><dd>{decision.decisionIds.join(" / ")}</dd></div>
+            <div><dt>Status</dt><dd>{decision.status}</dd></div>
+            <div><dt>Publication gate</dt><dd>未通過</dd></div>
+          </dl>
+        </details>
       ) : null}
     </article>
   );
 }
 
-export function DecisionGrid({ decisions }: { decisions: readonly ReviewDecision[] }) {
+export function DecisionGrid({
+  decisions,
+}: {
+  decisions: readonly ReviewDecision[];
+}) {
   return (
-    <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+    <div className="legal-decision-list">
       {decisions.map((decision) => (
-        <DecisionCard key={`${decision.label}-${decision.decisionIds?.join("-") ?? decision.status}`} decision={decision} />
+        <DecisionCard
+          key={`${decision.label}-${
+            decision.decisionIds?.join("-") ?? decision.status
+          }`}
+          decision={decision}
+        />
       ))}
     </div>
   );
 }
 
-export function FactRows({ facts }: { facts: readonly { label: string; value: string }[] }) {
+export function FactRows({
+  facts,
+}: {
+  facts: readonly { label: string; value: string }[];
+}) {
   return (
-    <dl className="grid min-w-0 gap-3">
+    <dl className="legal-fact-rows">
       {facts.map((fact) => (
-        <div key={fact.label} className="grid min-w-0 gap-2 rounded-lg border border-[#d8c596] bg-[#fffdf5] p-4 sm:grid-cols-[12rem_minmax(0,1fr)] sm:gap-5">
-          <dt className="font-semibold text-[#765e2d]">{fact.label}</dt>
-          <dd className="m-0 min-w-0 break-words leading-7">{fact.value}</dd>
+        <div key={fact.label}>
+          <dt>{fact.label}</dt>
+          <dd>{fact.value}</dd>
         </div>
       ))}
     </dl>
   );
 }
 
-export function LegalSectionList({ sections }: { sections: readonly LegalReviewSection[] }) {
+export function LegalSectionList({
+  sections,
+}: {
+  sections: readonly LegalReviewSection[];
+}) {
   return (
-    <div className="space-y-6">
-      {sections.map((section) => (
-        <section key={section.title} className="rounded-xl border border-[#cdbb91] bg-[#fff8e9] p-5 sm:p-8">
-          <h2 className="font-serif text-2xl font-semibold leading-[1.45]">{section.title}</h2>
-          <div className="mt-5 space-y-4 leading-8 text-[#4e4353]">
-            {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          </div>
-          {section.bullets?.length ? (
-            <ul className="mt-5 list-disc space-y-2 pl-6 leading-8">
-              {section.bullets.map((item) => <li key={item}>{item}</li>)}
-            </ul>
-          ) : null}
-          {section.decisions?.length ? <div className="mt-6"><DecisionGrid decisions={section.decisions} /></div> : null}
-        </section>
-      ))}
-    </div>
+    <article className="legal-section-list" aria-label="文書本文">
+      {sections.map((section, index) => {
+        const headingId = `legal-section-${index + 1}`;
+        return (
+          <section key={section.title} aria-labelledby={headingId}>
+            <div className="legal-section-list__heading">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h2 id={headingId}>{section.title}</h2>
+            </div>
+            <div className="legal-section-list__copy">
+              {section.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+            {section.bullets?.length ? (
+              <ul>
+                {section.bullets.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            ) : null}
+            {section.decisions?.length ? (
+              <DecisionGrid decisions={section.decisions} />
+            ) : null}
+          </section>
+        );
+      })}
+    </article>
   );
 }
 
-export function ReviewCallout({ children, strong }: { children: ReactNode; strong?: string }) {
+export function ReviewCallout({
+  children,
+  strong,
+}: {
+  children: ReactNode;
+  strong?: string;
+}) {
   return (
-    <div className="rounded-lg border border-[#b49242] bg-[#f5ead2] p-5 leading-8" role="note">
-      {strong ? <strong className="block text-lg">{strong}</strong> : null}
-      <div className={strong ? "mt-2" : ""}>{children}</div>
-    </div>
+    <aside className="legal-review-callout" role="note">
+      {strong ? <strong>{strong}</strong> : null}
+      <div>{children}</div>
+    </aside>
   );
 }

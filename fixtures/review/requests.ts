@@ -1,18 +1,12 @@
 export type ReviewRequestFixture = {
   id: string;
-  ageGroup: string;
+  adultConfirmed: boolean;
   nickname: string;
   relationship: string;
-  relationshipStatus: string[];
-  replyWait: string;
-  lastPartnerMessage: string;
-  lastOwnMessage: string;
+  whatToKnow: string[];
+  currentSituation: string;
+  partnerMessage: string;
   draftMessage: string;
-  recentFlow: string;
-  mainConcern: string;
-  desiredAction: string;
-  mainQuestion: string;
-  sendTonight: string;
   email: string;
   safetyFlags: string[];
   acknowledged: boolean;
@@ -20,19 +14,18 @@ export type ReviewRequestFixture = {
 
 const normalRequest: ReviewRequestFixture = {
   id: "request-normal-001",
-  ageGroup: "25〜29歳",
+  adultConfirmed: true,
   nickname: "みな",
   relationship: "付き合う前",
-  relationshipStatus: ["何度か会っている", "最近返信が遅い"],
-  replyWait: "1日",
-  lastPartnerMessage: "相手：今日はありがとう。また落ち着いたら連絡するね。",
-  lastOwnMessage: "自分：こちらこそありがとう。楽しかったです。",
-  draftMessage: "自分：昨日はありがとう。また都合のよい日に話せたらうれしいです。",
-  recentFlow: "二度会ったあと、相手の返信間隔が少し長くなりました。",
-  mainConcern: "急かす印象にならないか不安です。",
-  desiredAction: "落ち着いて一度だけ連絡し、その後は待ちたいです。",
-  mainQuestion: "今夜送る場合の文面と、待つ場合の判断材料を整理したいです。",
-  sendTonight: "迷っている",
+  whatToKnow: [
+    "送るか待つか決めたい",
+    "この文面がどう届くか知りたい",
+  ],
+  currentSituation:
+    "二度会ったあと、相手の返信間隔が少し長くなりました。昨日から返事を待っています。急かす印象にならないよう、落ち着いて一度だけ連絡するか、今夜は待つかを決めたいです。",
+  partnerMessage: "相手：今日はありがとう。また落ち着いたら連絡するね。",
+  draftMessage:
+    "自分：昨日はありがとう。また都合のよい日に話せたらうれしいです。",
   email: "mina@example.invalid",
   safetyFlags: ["上記には当てはまらない"],
   acknowledged: true,
@@ -45,7 +38,8 @@ export const REQUEST_FIXTURES = {
     id: "request-needs-review-001",
     nickname: "あお",
     email: "ao@example.invalid",
-    mainConcern: "強い束縛を感じており、通常の相談として扱えるか確認したいです。",
+    currentSituation:
+      "強い束縛を感じており、通常の相談として扱えるか確認したいです。",
     safetyFlags: ["DV/モラハラ/強い束縛/恐怖がある"],
   },
   "request-rejected-001": {
@@ -53,7 +47,8 @@ export const REQUEST_FIXTURES = {
     id: "request-rejected-001",
     nickname: "はる",
     email: "haru@example.invalid",
-    desiredAction: "相手を待ち伏せすることを考えています。",
+    currentSituation: "返事がなく、相手を待ち伏せすることを考えています。",
+    draftMessage: "",
     safetyFlags: ["待ち伏せを考えている"],
   },
   "request-contradictory-001": {
@@ -66,7 +61,7 @@ export const REQUEST_FIXTURES = {
   "request-invalid-age-001": {
     ...normalRequest,
     id: "request-invalid-age-001",
-    ageGroup: "17歳",
+    adultConfirmed: false,
     nickname: "そら",
     email: "sora@example.invalid",
   },

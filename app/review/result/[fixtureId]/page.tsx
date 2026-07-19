@@ -6,8 +6,8 @@ import { getRequestFixture } from "@/fixtures/review/requests";
 import { getReportFixture, REPORT_FIXTURES } from "@/fixtures/review/reports";
 
 export const metadata: Metadata = {
-  title: "Web鑑定ノート（審査用fixture） | 月の返事",
-  description: "固定fixtureから表示する、購入・AI生成・保存・メール送信のない長文Web鑑定ノートの審査用見本です。",
+  title: "Web鑑定ノート（審査用見本） | 月の返事",
+  description: "固定架空ケースを14部構成で表示する、購入・AI生成・保存・メール送信のないWeb鑑定ノートの審査用見本です。",
 };
 
 export function generateStaticParams() {

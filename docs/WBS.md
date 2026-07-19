@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-P2 acceptance is not implementation authorization; M1-I6 was not accepted and is formally closed as superseded by M1-P2, M1-I7 is not yet authorized, every proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization, and Milestone 2 remains unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is authorized for documentation/design work only and remains unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 ## P0: Repository Setup
 
@@ -263,7 +263,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Text-only input, conversation paste/anonymization, and image-upload deferral aligned
 - [x] Initial free/ad exclusions and `/sample-report` free-experience role aligned
 - [x] Complete recommendation requirements aligned for all approved send/light-send/wait/do-not-send labels
-- [x] Web鑑定ノート and 保存用鑑定書 separated
+- [x] Web鑑定ノート and the then-named 保存用鑑定書 separated; the current formal short-presentation name is 保存用判断カード
 - [x] `/review/save-report/result-normal-001` added to planning only
 - [x] Safety-before-payment and future post-payment refund/operator state requirement aligned
 - [x] Two-level review banner aligned
@@ -322,7 +322,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 - [x] Public `/sample-report` implemented with `sample-report-g001` and explicit fictional/non-purchase/non-review/non-AI-generation labels
 - [x] Shared typed `result-normal-001` references `request-normal-001`
 - [x] Nine-section Web鑑定ノート implemented with fixed `今日は送らない方がいい` judgment and complete recommendation coverage
-- [x] A4-oriented 保存用鑑定書 implemented by selecting and recomposing the same structured result
+- [x] A4-oriented short presentation implemented by selecting and recomposing the same structured result; its current formal name is 保存用判断カード
 - [x] Missing-fixture, unavailable-report, static loading, and unknown-ID fail-closed states implemented
 - [x] LP output previews and sample/Web/save comparison navigation updated without redesigning unrelated sections
 - [x] Sample 840-character and Web 1,973-character counts verified
@@ -387,9 +387,68 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 - [x] Record the Browser-use and screenshot prohibition; visual checks belong only to Human in ordinary external Microsoft Edge
 - [x] Preserve documentation-only scope with no product-code or package change
 - [x] Human acceptance of Task M1-P2; documentation acceptance does not authorize implementation
-- [ ] Separate Human authorization of M1-I7
-- [ ] M1-I7 through M1-I12 implementation and Human acceptance; proposed only, currently unauthorized
+- [x] Separate Human authorization and implementation of M1-I7
+- [x] One-time Human batch authorization of M1-I7 through M1-I11
+- [x] M1-I7 through M1-I11 implementation and automated validation under internal checkpoints
+- [x] Human acceptance of M1-I7 through M1-I11 plus M1-P2-R1 and bounded M1-P2-R1-R1 as one integrated next-stage baseline
+- [ ] Separate Human authorization, implementation, and acceptance of M1-I12; currently unauthorized
 - [ ] Human acceptance of Milestone 1
+
+## P4.21: Human-Accepted as Part of the Integrated Baseline — M1-I7 Brand Foundation
+
+- [x] Human initially authorized only M1-I7 Brand Foundation from base commit `923d43057178da070a72f380d7054d60efca7daf`; later integrated authorization is recorded below
+- [x] Role-based night, moon-gold, paper, ink, state, layout, typography, border, shadow, focus, and motion tokens added
+- [x] OS-font typography roles and corrected Japanese wrapping foundation with scoped `phrase-keep` utility added
+- [x] `surface-brand`, `surface-paper`, `surface-worksheet`, `surface-answer`, `surface-caution`, and `surface-legal` roles added without applying later page redesigns
+- [x] Original `MoonSeal`, `LunarArc`, and `EditorialDivider` components plus CSS-only `SoftGlow` and `PaperGrain` primitives added
+- [x] Shared primary/secondary CTA, text-link, status, focus, contrast, touch-target, and reduced-motion foundations added
+- [x] Review-only Brand Foundation preview added inside existing `/review`; no new route added
+- [x] Stale M1-I6 review-gate copy corrected to the M1-I7 Human Visual QA gate
+- [x] Typecheck, lint, build, raw HTTP/rendered-text, prohibited-scope, and diff validation completed without Browser use
+- [x] No package, fixture, Safety, Supabase, AI, DB, payment, email, API, server action, analytics, deployment, or external asset change added
+- [x] Human acceptance as part of the integrated M1-I7 through M1-I11 baseline, including the bounded public-sample corrections
+- [x] M1-I8 through M1-I11 authorized and implemented under the one-time integrated batch; no standalone acceptance recorded
+
+## P4.22: Human-Accepted Integrated Baseline — M1-I7 through M1-I11
+
+- [x] Preserve inherited M1-I7 work from base commit `923d43057178da070a72f380d7054d60efca7daf`
+- [x] Complete M1-I7 bounded Brand Foundation corrections
+- [x] Implement M1-I8 14-part Reading Note, distinct saved decision card, and fictional public sample
+- [x] Implement M1-I9 approved ten-part LP
+- [x] Implement M1-I10 free-text Request Sheet, deterministic Safety gate, Request Memo, post-Safety email, and preparation-only purchase confirmation
+- [x] Implement M1-I11 document-first Legal Review, readiness hierarchy, Unsupported cases, and inactive Contact
+- [x] Complete per-slice typecheck, lint, build, `git diff --check`, and required raw HTTP/rendered-text checks without Browser use
+- [x] Preserve product facts, fixed judgment, core scenario, `lib/safety/**`, fail-closed behavior, runtime inactivity, non-fixed CTAs, and legal facts
+- [x] Human acceptance of M1-I7 through M1-I11 as one integrated next-stage baseline
+- [ ] M1-I12 authorization; remains outside this batch
+- [ ] Human acceptance of Milestone 1
+
+## P4.23: Human-Accepted as Part of the Integrated Baseline — M1-P2-R1 and M1-P2-R1-R1
+
+- [x] Preserve the inherited uncommitted M1-I7 through M1-I11 integrated redesign
+- [x] Add separate public-only static cases for wait, send, and stop additional contact
+- [x] Show the three different-case conclusions and their distinguishing facts on the LP
+- [x] Change `/sample-report` to the complete `sample-send-001` fictional example
+- [x] Separate same-case LP/Web/save format comparison from different-case conclusion comparison
+- [x] Preserve `result-normal-001`, Safety fixtures, `lib/safety/**`, packages, and runtime boundaries
+- [x] Complete typecheck, lint, build, `git diff --check`, and static boundary checks without Browser use
+- [x] Correct the bounded M1-P2-R1-R1 LP contrast and separate-case comparison-boundary defects
+- [x] Human acceptance with the integrated M1-I7 through M1-I11 baseline
+- [ ] M1-I12 authorization; remains outside this correction
+- [ ] Human acceptance of Milestone 1
+
+## P4.24: Human-Authorized, Not Started — M1-P3 Reading Note Visual Excellence Specification
+
+- [x] Human authorization limited to documentation/design work
+- [x] Record the formal names `恋のメッセージ鑑定ノート`, `Web鑑定ノート`, and `保存用判断カード`
+- [x] Record residual application use of `保存用鑑定書` as a deferred M1-I8-R1 alignment item
+- [ ] Prepare and review the fixed-content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, and implementation plan
+- [ ] Human acceptance of the M1-P3 design specification
+- [ ] Separate Human authorization of M1-I8-R1; currently unauthorized
+- [ ] Separate Human authorization of M1-I9-R1; currently unauthorized
+- [ ] Separate Human authorization of M1-I12; currently unauthorized
+
+M1-P3 is not implementation authorization. It may not change product facts, price, fixture judgment, Safety, request/legal behavior, or runtime scope.
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -407,4 +466,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is Human-accepted documentation and does not authorize implementation. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. M1-I7 is not yet authorized, and M1-I7 through M1-I12 remain proposals only. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
+M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is authorized for documentation/design only and is unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.

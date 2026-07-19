@@ -16,8 +16,12 @@ Current status:
 - Tasks M1-I1 through M1-I5 and M1-I5-R1 are accepted by Human.
 - Task M1-I6 was not accepted by Human and is formally closed as superseded by M1-P2. Its implementation and evidence remain historical records, and its known defects are carried into M1-I7 through M1-I12 and final M1-I12 QA. This is not M1-I6 acceptance; Milestone 1 remains incomplete.
 - Task M1-P2 Experience & Visual Direction Revision is accepted by Human. It documents the broader revision inside Milestone 1; no later M1-I6 Human Visual QA or disposition gate is required.
-- M1-P2 is a planning task. Its acceptance is not implementation authorization, and each proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization.
-- The next Human gate is a separate explicit authorization decision for M1-I7 Brand Foundation. M1-I7 is not yet authorized or implemented.
+- M1-P2 is a planning task. Its acceptance did not itself authorize implementation. Human subsequently authorized M1-I7, then explicitly authorized a one-time integrated M1-I7 through M1-I11 implementation batch that replaced the normal prior-slice acceptance pauses for this batch only.
+- Human accepted the integrated M1-I7 through M1-I11 redesign as the baseline for the next planning stage. This is one integrated baseline decision, not independent acceptance records for each slice and not final Milestone 1 acceptance.
+- Human also accepted M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction. The accepted baseline contains separate wait/send/stop-additional-contact public fictional cases while preserving `result-normal-001`, Safety, and runtime boundaries.
+- Task M1-P3 Reading Note Visual Excellence Specification is Human-authorized as documentation/design work only and is not started. It does not authorize implementation.
+- M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete.
+- The controlling artifact names are `恋のメッセージ鑑定ノート` for the product, `Web鑑定ノート` for the long presentation, and `保存用判断カード` for the short presentation. Residual application copy such as `保存用鑑定書` is a known deferred M1-I8-R1 alignment item and is not changed by baseline closure.
 - Milestone 2 and every later milestone remain unauthorized.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.

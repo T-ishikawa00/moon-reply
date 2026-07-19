@@ -2,63 +2,85 @@ import Link from "next/link";
 import type { ReviewSafetyState } from "@/fixtures/review/safety-states";
 
 export function ReviewRequestState({ state }: { state: ReviewSafetyState }) {
-  const showsUnsupportedCasesLink = state.stateName === "needs_review" || state.stateName === "rejected";
+  const isNormal = state.stateName === "normal_allowed";
+  const showsUnsupportedCasesLink =
+    state.stateName === "needs_review" || state.stateName === "rejected";
+
   return (
-    <main className="min-h-screen bg-[#f4ead7] px-4 py-12 text-[#2b2335] sm:px-8 sm:py-16">
-      <article className="mx-auto max-w-4xl rounded-xl border border-[#cdbb91] bg-[#fff8e9] p-5 shadow-[0_1.5rem_4rem_rgba(39,31,52,.12)] sm:p-9">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#d9caa8] pb-5">
-          <div>
-            <p className="text-sm font-bold tracking-[0.14em] text-[#80652d]">REQUEST SAFETY STATE</p>
-            <h1 className="mt-2 font-serif text-3xl font-semibold leading-[1.45] sm:text-4xl">{state.userTitle}</h1>
-          </div>
-          <span className="rounded-full border border-[#8a6d2e] bg-[#f5e8bd] px-3 py-2 text-sm font-bold">{state.stateName}</span>
-        </div>
+    <main className="request-state-page">
+      <article
+        className={`request-state-note ${
+          isNormal ? "request-state-note--normal" : "request-state-note--stop"
+        }`}
+        aria-labelledby="request-state-title"
+      >
+        <header>
+          <p>Safety確認</p>
+          <span className="status-label status-label--review">
+            {isNormal ? "通常確認可能" : "ここで停止"}
+          </span>
+          <h1 id="request-state-title">{state.userTitle}</h1>
+          <p>{state.userMessage}</p>
+        </header>
 
-        <dl className="mt-6 grid gap-3 rounded-lg border border-[#d8c596] bg-[#fffcf4] p-4 sm:grid-cols-[9rem_1fr]">
-          <dt className="font-bold text-[#765e2d]">状態名</dt><dd className="m-0 break-words">{state.stateName}</dd>
-          <dt className="font-bold text-[#765e2d]">fixture ID</dt><dd className="m-0 break-words font-mono text-sm">{state.fixtureId}</dd>
-          <dt className="font-bold text-[#765e2d]">確認到達</dt><dd className="m-0">{state.canReachConfirmation ? "可能（normal_allowed のみ）" : "不可・ここで停止"}</dd>
-        </dl>
-
-        <section aria-labelledby="result-heading" className="mt-6 rounded-lg border border-[#b49242] bg-[#f5ead2] p-5">
-          <h2 id="result-heading" className="text-xl font-semibold">利用者向け結果</h2>
-          <p className="mt-3 leading-8">{state.userMessage}</p>
-        </section>
-
-        <section aria-labelledby="allowed-heading" className="mt-7">
-          <h2 id="allowed-heading" className="text-xl font-semibold">許可された次の操作</h2>
-          <Link href={state.allowedAction.href} className="mt-3 inline-flex min-h-12 items-center justify-center rounded-lg bg-[#2a2440] px-5 py-3 font-semibold text-[#fff8e8] focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
+        <section aria-labelledby="request-state-next-title">
+          <h2 id="request-state-next-title">次にできること</h2>
+          <Link href={state.allowedAction.href} className="button button--primary">
             {state.allowedAction.label}
           </Link>
+          {!isNormal ? (
+            <p>
+              normal_allowed 以外は、依頼メモ、購入確認、決済、通常レポートへ進めません。
+            </p>
+          ) : null}
         </section>
 
         {showsUnsupportedCasesLink ? (
-          <section aria-labelledby="unsupported-explanation-heading" className="mt-7 rounded-lg border border-[#d8c596] bg-[#fffdf5] p-5">
-            <h2 id="unsupported-explanation-heading" className="text-xl font-semibold">停止理由の審査説明</h2>
-            <p className="mt-3 leading-7 text-[#67596b]">通常鑑定対象外の範囲と、Safetyを決済より前に確認する方針を確認できます。</p>
-            <Link href="/legal/unsupported-cases" className="mt-4 inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-[#8a6d2e] focus:ring-offset-2">
-              通常鑑定として扱わない相談の審査説明を見る
+          <section aria-labelledby="request-state-unsupported-title">
+            <h2 id="request-state-unsupported-title">通常鑑定として扱わない理由</h2>
+            <p>
+              危険を恋愛として美化せず、Safetyを決済より前に確認する方針を説明しています。
+            </p>
+            <Link href="/legal/unsupported-cases" className="text-link">
+              通常鑑定として扱わない相談を確認する
             </Link>
           </section>
         ) : null}
 
-        <section aria-labelledby="prohibited-heading" className="mt-7">
-          <h2 id="prohibited-heading" className="text-xl font-semibold">禁止される次の操作</h2>
-          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-            {state.prohibitedActions.map((action) => <li key={action} className="rounded-lg border border-[#cdbb91] bg-[#fffdf5] px-4 py-3"><span aria-hidden="true">×</span> {action}</li>)}
+        <section aria-labelledby="request-state-prohibited-title">
+          <h2 id="request-state-prohibited-title">この状態から行わないこと</h2>
+          <ul>
+            {state.prohibitedActions.map((action) => (
+              <li key={action}>{action}</li>
+            ))}
           </ul>
         </section>
 
         {state.correctionDestination ? (
-          <p className="mt-7 border-l-4 border-[#8a6d2e] bg-[#f8f0e2] p-4 leading-7">
-            <strong>修正先：</strong> <Link className="font-semibold underline underline-offset-4" href={state.correctionDestination.href}>{state.correctionDestination.label}</Link>
+          <p className="request-state-note__correction">
+            修正先：
+            <Link href={state.correctionDestination.href}>
+              {state.correctionDestination.label}
+            </Link>
           </p>
         ) : null}
 
-        <div className="mt-8 flex flex-wrap gap-3 border-t border-[#d9caa8] pt-5">
-          <Link href="/review" className="inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold">審査用一覧へ</Link>
-          <Link href="/request" className="inline-flex min-h-11 items-center rounded-lg border border-[#8a6d2e] px-4 py-2 font-semibold">入力画面へ</Link>
-        </div>
+        <details className="request-review-metadata">
+          <summary>審査用fixture情報</summary>
+          <dl>
+            <div><dt>state</dt><dd>{state.stateName}</dd></div>
+            <div><dt>fixture ID</dt><dd>{state.fixtureId}</dd></div>
+            <div>
+              <dt>依頼メモ到達</dt>
+              <dd>{state.canReachConfirmation ? "allowed" : "denied"}</dd>
+            </div>
+          </dl>
+        </details>
+
+        <nav className="request-review-links" aria-label="審査用ナビゲーション">
+          <Link href="/review">審査用一覧へ</Link>
+          <Link href="/request">鑑定依頼シートへ</Link>
+        </nav>
       </article>
     </main>
   );
@@ -70,10 +92,16 @@ export function UnknownReviewRequestState() {
     stateName: "unknown_error",
     fixtureId: "request-error-001",
     userTitle: "状態を確認できません",
-    userMessage: "指定された状態は許可リストにありません。安全のため通常状態へ置き換えず、確認・購入・レポートには進めません。",
+    userMessage:
+      "指定された状態は許可リストにありません。安全のため通常状態へ置き換えず、依頼メモ・購入確認・通常レポートには進めません。",
     allowedAction: { label: "審査用一覧へ戻る", href: "/review" },
-    prohibitedActions: ["最初のfixtureへの代替", "通常確認への続行", "購入", "通常レポート"],
-    correctionDestination: { label: "審査用一覧", href: "/review" },
+    prohibitedActions: [
+      "最初のfixtureへの代替",
+      "通常確認への続行",
+      "購入",
+      "通常レポート",
+    ],
+    correctionDestination: { label: "鑑定依頼シート", href: "/request" },
     canReachConfirmation: false,
   };
   return <ReviewRequestState state={state} />;

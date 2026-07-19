@@ -1,8 +1,9 @@
 import Link from "next/link";
 
 const inPageLinks = [
-  { href: "/#service", label: "鑑定ノート" },
+  { href: "/#note", label: "鑑定ノート" },
   { href: "/#flow", label: "利用の流れ" },
+  { href: "/#price", label: "料金" },
   { href: "/#faq", label: "FAQ" },
 ];
 
@@ -26,8 +27,8 @@ export function SiteHeader() {
               </Link>
             ))}
           </div>
-          <Link href="/review" className="site-nav__link site-nav__review">
-            公開準備
+          <Link href="/sample-report" className="site-nav__link site-nav__sample">
+            架空の見本
           </Link>
           <Link href="/request" className="site-nav__cta">
             鑑定ノートを依頼する

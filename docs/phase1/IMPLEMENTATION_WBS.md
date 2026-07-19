@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. M1-P2 acceptance does not authorize implementation, M1-I7 is not yet authorized, every proposed M1-I7 through M1-I12 slice requires separate explicit Human authorization and acceptance, and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is authorized for documentation/design work only and remains unstarted. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
 
 ## Milestone 0: Completed Foundations
 
@@ -59,7 +59,7 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I3: validate allowlisted normal-only access, unknown/non-normal failure, and absence of transaction behavior
 - [x] Human visual review and acceptance of M1-I3 at commit `5cec9ea7ae0525a125ac8c3a8d90b48cefc4df25`
 - [x] Human authorization of M1-I4
-- [x] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate 保存用鑑定書 fixture preview
+- [x] M1-I4: add fictional sample, production-shaped Web鑑定ノート fixture, and separate short-presentation fixture preview, now formally named 保存用判断カード
 - [x] M1-I4: derive Web/save from one shared `result-normal-001` object referencing `request-normal-001`
 - [x] M1-I4: add missing/unavailable/loading states, unknown-ID fail-closed behavior, LP excerpts, and comparison navigation
 - [x] M1-I4: validate sample/Web character counts, typecheck, lint, build, HTTP routes, content boundaries, and prohibited scope
@@ -88,16 +88,27 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-P2 planning: keep Safety fixtures and fail-closed behavior fixed; permit presentation fixture/schema changes only inside the separately authorized relevant slice with Human review and no runtime activation
 - [x] M1-P2 planning: define Human-only external-Edge Visual QA and prohibit CodeX/agent browser use and screenshots
 - [x] Human acceptance of M1-P2 planning; documentation acceptance does not authorize implementation
-- [ ] Separate Human authorization of M1-I7 Brand Foundation
-- [ ] M1-I7 Brand Foundation implementation and Human acceptance
-- [ ] Separate Human authorization of M1-I8 Reading Note Product Redesign
-- [ ] M1-I8 Reading Note Product Redesign implementation and Human acceptance
-- [ ] Separate Human authorization of M1-I9 LP Redesign
-- [ ] M1-I9 LP Redesign implementation and Human acceptance
-- [ ] Separate Human authorization of M1-I10 Request Sheet Redesign
-- [ ] M1-I10 Request Sheet Redesign implementation and Human acceptance
-- [ ] Separate Human authorization of M1-I11 Legal Review Redesign
-- [ ] M1-I11 Legal Review Redesign implementation and Human acceptance
+- [x] Separate Human authorization of M1-I7 Brand Foundation
+- [x] M1-I7: implement role-based tokens, typography and Japanese wrapping roles, shared surface vocabulary, restrained decoration primitives, and shared CTA/link/focus/status/motion foundations
+- [x] M1-I7: add the review-only Brand Foundation preview inside existing `/review` and correct the stale review gate without adding a route or redesigning later product surfaces
+- [x] M1-I7: validate typecheck, lint, build, raw HTTP/rendered text, review robots, one-`h1`, purchase/contact boundaries, prohibited scope, and diff hygiene without Browser use
+- [x] One-time Human batch authorization of M1-I7 through M1-I11, replacing prior-slice Human pauses for implementation only
+- [x] M1-I8 Reading Note Product Redesign implementation and automated validation
+- [x] M1-I9 LP Redesign implementation and automated validation
+- [x] M1-I10 Request Sheet Redesign implementation and automated validation
+- [x] M1-I11 Legal Review Redesign implementation and automated validation
+- [x] Integrated per-slice raw HTTP/rendered-text and prohibited-scope validation without Browser use
+- [x] M1-P2-R1: add separate wait/send/stop-additional-contact public cases and expose their distinguishing facts on the LP
+- [x] M1-P2-R1: change `/sample-report` to `sample-send-001` and align its conclusion, letter, message temperature, actions, three-day direction, review conditions, and limitations
+- [x] M1-P2-R1: distinguish same-case three-format comparison from different-case three-conclusion comparison
+- [x] M1-P2-R1: preserve `result-normal-001`, Safety fixtures, `lib/safety/**`, packages, and runtime boundaries
+- [x] M1-P2-R1-R1: correct only the LP Night-background contrast defect and `/sample-report` separate-case comparison boundary
+- [x] Human acceptance of M1-I7 through M1-I11 plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline
+- [x] Human authorization of M1-P3 Reading Note Visual Excellence Specification for documentation/design work only
+- [ ] M1-P3: prepare/review content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, and implementation plan
+- [ ] Human acceptance of M1-P3
+- [ ] Separate Human authorization of M1-I8-R1; remains unauthorized and unimplemented
+- [ ] Separate Human authorization of M1-I9-R1; remains unauthorized and unimplemented
 - [ ] Separate Human authorization of M1-I12 Responsive, Accessibility and Final QA
 - [ ] M1-I12 Responsive, Accessibility and Final QA implementation and Human acceptance
 - [ ] Human acceptance of Milestone 1

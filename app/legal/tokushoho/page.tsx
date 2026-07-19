@@ -23,9 +23,9 @@ export default function TokushohoReviewPage() {
       <LegalPageHeader
         eyebrow="COMMERCIAL DISCLOSURE REVIEW"
         title="特定商取引法に基づく表記 審査表示"
-        description="固定済みの商品事実と、公開前に実情報・外部証拠・専門家確認が必要な項目を、phoneでも横scrollなしで確認する構成です。"
+        description="固定済みの商品事実と、公開前に実情報・外部証拠・専門家確認が必要な項目を、スマートフォンでも横スクロールなく確認する構成です。"
       />
-      <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-8 sm:py-14">
+      <div className="legal-document-body">
         <ReviewCallout strong="この画面は、完成した特定商取引法に基づく表記ではありません。">
           運営者情報、連絡先、支払条件、提供時期、返金条件その他の必須項目が未完成です。購入時の正式表示として使用できません。
         </ReviewCallout>

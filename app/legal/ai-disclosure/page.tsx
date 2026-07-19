@@ -20,7 +20,7 @@ export default function AiDisclosureReviewPage() {
         title="AI利用説明 審査表示"
         description="AIが将来行う予定の整理・分析と、AIができないこと、現在のM1 reviewで実際に動作していないことを区別します。"
       />
-      <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-8 sm:py-14">
+      <div className="legal-document-body">
         <ReviewCallout strong="現在のM1ページは決定的なfixture dataを表示し、AI APIを呼び出しません。">
           表示中のサンプルと審査用結果は固定データです。実際のAI生成、外部事業者処理、外部送信、学習実績、納品実績を示しません。
         </ReviewCallout>

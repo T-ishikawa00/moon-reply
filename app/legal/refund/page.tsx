@@ -21,7 +21,7 @@ export default function RefundReviewPage() {
         title="返金方針 審査表示"
         description="ケースごとの候補対応を確認するための現時点の方針案です。自動返金、固定期限、確定済み返金条件を示すページではありません。"
       />
-      <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-8 sm:py-14">
+      <div className="legal-document-body">
         <ReviewCallout strong="決済事業者・専門家確認待ち">
           返金条件は外部事業者の仕様、実装、利用者表示、適用法令の確認前です。「いかなる場合も返金しない」とするものではなく、法令上の権利を制限しません。
         </ReviewCallout>

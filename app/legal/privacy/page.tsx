@@ -83,7 +83,7 @@ export default function PrivacyReviewPage() {
         description="将来の本番設計案と、現在のM1 review環境で実際に起きていることを混同しないための構成確認です。"
         showDates
       />
-      <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-8 sm:py-14">
+      <div className="legal-document-body">
         <ReviewCallout strong="現在のM1 review環境は、フォームデータを永続化・外部送信しません。">
           入力はブラウザメモリ内のローカルUI確認に限られ、再読み込みでリセットされます。本番の取得、保存、AI、決済、メール、問い合わせ処理が稼働している証拠ではありません。
         </ReviewCallout>

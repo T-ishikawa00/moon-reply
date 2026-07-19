@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ReportComparisonNavigation } from "@/components/report/ReportComparisonNavigation";
 import { ReviewLoadingPlaceholder } from "@/components/report/ReviewLoadingPlaceholder";
+import { BrandFoundationPreview } from "@/components/review/BrandFoundationPreview";
 
 export const metadata: Metadata = {
   title: "審査用プレビュー一覧 | 月の返事",
-  description: "月の返事 Milestone 1 の実装済み審査画面と最終QA状況を確認する静的な一覧です。",
+  description: "月の返事 Milestone 1 のM1-I7〜M1-I11統合実装を確認する静的な審査用一覧です。",
 };
 
 const availableRoutes = [
   { route: "/", title: "ランディングページ", description: "商品、価格、出力、AI利用と安全範囲を確認できます。" },
-  { route: "/request", title: "3ステップ鑑定依頼フォーム", description: "入力、ローカル安全確認、単一の必須同意、通常確認を確認できます。" },
-  { route: "/sample-report", title: "架空サンプル鑑定書", description: "購入検討と期待形成のための、実在相談・購入・レビュー・AI生成実績ではない文章見本です。" },
-  { route: "/review/result/result-normal-001", title: "Web鑑定ノート fixture", description: "固定された一つの判定を九つの章で深く読む、本番形状の長文審査用見本です。" },
-  { route: "/review/save-report/result-normal-001", title: "保存用鑑定書 fixture", description: "Web版と同じ構造化結果を、後で短時間に見返す目的で再構成した見本です。" },
+  { route: "/request", title: "鑑定依頼シート", description: "大きな自由文、関係と知りたいことのチップ、Safety、依頼メモ、受取メールの順序を確認できます。" },
+  { route: "/sample-report", title: "架空の鑑定ノート見本", description: "文章の雰囲気と鑑定ノートの構成を確認する、実在相談・購入・レビュー・AI生成実績ではない架空ケースです。" },
+  { route: "/review/result/result-normal-001", title: "Web鑑定ノート fixture", description: "固定された一つの判定を14部構成で読み進める、本番形状の長文審査用見本です。" },
+  { route: "/review/save-report/result-normal-001", title: "保存用判断カード fixture", description: "Web版と同じ固定判断を、迷った時に30秒で見返す目的へ再構成した見本です。" },
   { route: "/review/error/missing-fixture", title: "fixtureなし", description: "許可リスト外IDを通常結果へ置き換えず、安全に停止する固定状態です。" },
   { route: "/review/error/unavailable-report", title: "レポート表示不可", description: "外部処理や購入の失敗を装わない、固定された表示不可状態です。" },
   { route: "/review/request/normal-allowed", title: "通常確認可能", description: "normal_allowed だけが依頼内容確認へ進めます。" },
@@ -21,9 +22,9 @@ const availableRoutes = [
   { route: "/review/request/rejected", title: "通常鑑定対象外", description: "非難や未確認の緊急案内を行わない停止状態です。" },
   { route: "/review/request/contradictory-selection", title: "Safety選択の矛盾", description: "危険項目と非該当の同時選択を修正する状態です。" },
   { route: "/review/request/invalid-age", title: "対象年齢外", description: "18歳以上を確認できない場合に fail closed します。" },
-  { route: "/review/request/missing-consent", title: "必須同意なし", description: "単一の必須チェックがない場合に Step 3へ戻します。" },
+  { route: "/review/request/missing-consent", title: "必須確認なし", description: "単一の必須チェックがない場合に Safety確認へ戻します。" },
   { route: "/review/request/unknown-error", title: "不明・エラー", description: "不明状態を通常扱いせず、安全に停止します。" },
-  { route: "/review/request/confirmation/normal-001", title: "依頼内容確認", description: "3ステップ別の本番相当ローカル確認です。購入前プレビューへ進めますが、取引は行いません。" },
+  { route: "/review/request/confirmation/normal-001", title: "鑑定依頼メモ", description: "「このように受け取りました」と相談・関係・知りたいこと・文面・Safetyを一枚で確認します。" },
   { route: "/review/purchase/confirmation/normal-001", title: "購入前の最終確認", description: "税込980円の商品・相談・受け取り条件を、取引なしで最終確認します。" },
   { route: "/legal", title: "法務・開示 審査ハブ", description: "固定事実、全ページ一覧、公開準備の未完了カテゴリを確認します。" },
   { route: "/legal/terms", title: "利用規約 審査表示", description: "規約ドラフトの条項順序とDecision状態を、拘束力のある条件に見せず確認します。" },
@@ -35,10 +36,10 @@ const availableRoutes = [
   { route: "/contact", title: "お問い合わせ 準備表示", description: "受付機能なしで、予定カテゴリと未決定の運用項目を確認します。" },
 ];
 
-const finalQaStatus = {
-  title: "レスポンシブ・アクセシビリティ・Visual QA",
-  route: "Milestone 1 全画面",
-  slice: "M1-I6",
+const brandFoundationStatus = {
+  title: "Brand Foundation の実装と自動検証",
+  route: "/review 内 Brand Foundation preview",
+  slice: "M1-I7",
 };
 
 export default function ReviewIndexPage() {
@@ -49,7 +50,7 @@ export default function ReviewIndexPage() {
           <p className="eyebrow">Milestone 1 review</p>
           <h1>審査用プレビュー一覧</h1>
           <p className="review-hub__intro">
-            月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用鑑定書、エラー状態、法務・開示・お問い合わせ構成を確認できます。
+            月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用判断カード、エラー状態、法務・開示・お問い合わせ構成を確認できます。
           </p>
           <div className="review-hub__boundary" role="note">
             <strong>ここで確認できるのは表示とローカル UI です。</strong>
@@ -57,6 +58,8 @@ export default function ReviewIndexPage() {
           </div>
         </div>
       </section>
+
+      <BrandFoundationPreview />
 
       <section className="review-hub__section" aria-labelledby="available-heading">
         <div className="page-shell">
@@ -81,7 +84,7 @@ export default function ReviewIndexPage() {
       <section className="review-hub__section review-hub__section--paper" aria-labelledby="comparison-heading">
         <div className="page-shell">
           <div className="section-heading-row">
-            <div><p className="eyebrow">Sample / Web / Save</p><h2 id="comparison-heading">三つの結果体験を比較する</h2></div>
+            <div><p className="eyebrow">Sample / Web / Save</p><h2 id="comparison-heading"><span className="phrase-keep">三つの結果体験</span>を比較する</h2></div>
             <span className="status-chip status-chip--available">固定表示</span>
           </div>
           <div className="mt-10"><ReportComparisonNavigation /></div>
@@ -91,7 +94,7 @@ export default function ReviewIndexPage() {
       <section className="review-hub__section" aria-labelledby="loading-heading">
         <div className="page-shell">
           <div className="section-heading-row">
-            <div><p className="eyebrow">Static state</p><h2 id="loading-heading">ローディング状態の固定見本</h2></div>
+            <div><p className="eyebrow">Static state</p><h2 id="loading-heading"><span className="phrase-keep">ローディング状態</span>の固定見本</h2></div>
             <span className="status-chip status-chip--available">静的</span>
           </div>
           <p className="review-hub__section-copy">本番の通信契約を定義せず、待機中の表示だけを審査するコンポーネントです。</p>
@@ -102,18 +105,18 @@ export default function ReviewIndexPage() {
       <section className="review-hub__section review-hub__section--paper" aria-labelledby="qa-heading">
         <div className="page-shell">
           <div className="section-heading-row">
-            <div><p className="eyebrow">M1-I6 final QA</p><h2 id="qa-heading">最終QAの確認状況</h2></div>
+            <div><p className="eyebrow">M1-I7 Brand Foundation</p><h2 id="qa-heading">Brand Foundationの確認状況</h2></div>
             <span className="status-chip">Human確認待ち</span>
           </div>
-          <p className="review-hub__section-copy">ソース監査、自動検証、静的なrendered HTML検証を行いました。端末上の最終Visual QAはHuman確認待ちです。</p>
+          <p className="review-hub__section-copy">M1-I7は明示認可の下で実装しました。ソース監査と自動検証後も、端末上のVisual QAと受入はHuman確認待ちです。</p>
           <ul className="planned-route-list">
             <li className="planned-route-card">
               <div>
                 <span className="planned-route-card__status">自動検証済み · Human Visual QA待ち</span>
-                <h3>{finalQaStatus.title}</h3>
-                <code>{finalQaStatus.route}</code>
+                <h3>{brandFoundationStatus.title}</h3>
+                <code>{brandFoundationStatus.route}</code>
               </div>
-              <span className="planned-route-card__slice">{finalQaStatus.slice}</span>
+              <span className="planned-route-card__slice">{brandFoundationStatus.slice}</span>
             </li>
           </ul>
         </div>
@@ -123,10 +126,10 @@ export default function ReviewIndexPage() {
         <div className="page-shell review-hub__next-inner">
           <div>
             <p className="eyebrow">Current gate</p>
-            <h2>M1-I6 の Human Visual QA 待ち</h2>
-            <p>M1-I5とM1-I5-R1はHuman受入済みです。Milestone 1は最終受入前で、法務ページは公開未承認、お問い合わせ受付も非稼働です。Milestone 2は未認可です。</p>
+            <h2>M1-I7〜M1-I11 の統合 Human Visual QA 待ち</h2>
+            <p>M1-I6はHuman未受入のままM1-P2によりsupersededとして正式終了し、M1-P2はHuman受入済みです。Humanが一度限りの統合バッチとして明示認可したM1-I7〜M1-I11は実装・自動検証済みで、統合Human Visual QAと受入待ちです。M1-I12は未認可です。Milestone 1は未完了で、Milestone 2は未認可です。</p>
           </div>
-          <Link href="/review/result/result-normal-001" className="button button--secondary">Web鑑定ノートを開く</Link>
+          <Link href="/review/result/result-normal-001" className="button button--secondary"><span className="phrase-keep">Web鑑定ノート</span>を開く</Link>
         </div>
       </section>
     </main>

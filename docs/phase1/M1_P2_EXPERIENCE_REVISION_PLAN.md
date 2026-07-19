@@ -1,5 +1,7 @@
 # M1-P2 Experience & Visual Direction Revision Plan
 
+> **Historical planning artifact — not the authoritative source for current status.** This file preserves the M1-P2 plan and its historical gate language as written. Current status is controlled by `docs/CURRENT_FOCUS.md`, `docs/CODEX_HANDOFF.md`, and `docs/ROADMAP.md`. Human has since accepted the integrated M1-I7 through M1-I11 redesign plus the bounded M1-P2-R1 and M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is authorized for documentation/design work only and remains unstarted; M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete; Milestone 2 remains unauthorized. Current formal artifact terms are `恋のメッセージ鑑定ノート`, `Web鑑定ノート`, and `保存用判断カード`. Historical references below to `保存用鑑定書` do not control current naming; application-copy alignment is deferred to a separately authorized M1-I8-R1.
+
 ## 1. Status and authority
 
 - Task: `M1-P2 Experience & Visual Direction Revision`.
