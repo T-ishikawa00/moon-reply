@@ -4,7 +4,7 @@
 
 - Task ID: `M1-P3`
 - Task name: `Reading Note Visual Excellence Specification`
-- Status: `Draft completed; Human and ChatGPT review pending`
+- Status: `Human and ChatGPT accepted`
 - Scope: documentation/design-only
 - Base commit: `7e02c5f38c37f0249b7b732fb1fc740a806f0562`
 - Implementation authority: none
@@ -809,8 +809,8 @@ Web, save, and public report components remain separate compositions. They may s
 
 ## 43. Implementation checkpoints
 
-- Checkpoint A: after explicit M1-P3 documentation acceptance and separate Checkpoint A authorization, M1-I8-R1 technical preparation may begin before an actual Figma file exists. It is limited to visually neutral content-lock and CSS/style-boundary preparation.
-- Checkpoint B: separately authorized M1-I8-R1 Visual Excellence implementation for Web, save, public sample, wrapper, comparison, error/loading, and the manifest-bounded formal-name alignment. Its design dependencies are all of the following:
+- Checkpoint A: M1-P3 documentation acceptance is satisfied, but Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented. It may begin only after separate explicit Human authorization, may run before an actual Figma file exists, and is limited to visually neutral content-lock and CSS/style-boundary preparation.
+- Checkpoint B: Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented. It is blocked until the complete Human-approved Figma design gate below exists and separate explicit implementation authorization is recorded. When authorized, its scope is Web, save, public sample, wrapper, comparison, error/loading, and the manifest-bounded formal-name alignment. Its design dependencies are all of the following:
   - Human-approved Figma file exists;
   - Web鑑定ノート desktop and 390px complete frames accepted;
   - 保存用判断カード desktop and 390px frames accepted;
@@ -819,8 +819,8 @@ Web, save, and public report components remain separate compositions. They may s
   - typography, spacing, color, and component anatomy accepted;
   - 768px reflow and 320px fallback annotations accepted; and
   - Review wrapper treatment accepted.
-- Checkpoint C: separately authorized M1-I9-R1 LP preview alignment. Its design dependencies are Human-approved LP-preview desktop and 390px frames, the same-case/different-case boundary annotation, and the accepted M1-I8-R1 artifact grammar.
-- Checkpoint D: separately authorized M1-I12 final responsive/accessibility QA and acceptance package.
+- Checkpoint C: M1-I9-R1 LP preview alignment remains unauthorized and unimplemented. Its design dependencies are Human-approved LP-preview desktop and 390px frames, the same-case/different-case boundary annotation, the accepted M1-I8-R1 artifact grammar, and separate explicit Human authorization.
+- Checkpoint D: M1-I12 final responsive/accessibility QA and acceptance package remains unauthorized and unimplemented and requires separate explicit Human authorization.
 
 Each checkpoint has its own allowed files, validation, rollback, commit, and Human gate in `M1_P3_IMPLEMENTATION_PLAN.md`. Documentation alone cannot start Checkpoint B or C. Figma-file acceptance is a design dependency, not implementation authorization. Completion or acceptance of one dependency or checkpoint does not authorize the next.
 
@@ -942,6 +942,6 @@ Technical:
 
 ## 49. Next gate
 
-The next gate is Human and ChatGPT review of this corrected draft, the content-lock matrix, Figma handoff specification, implementation plan, and review record.
+M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The next Human gate is production and Human acceptance of the actual Figma design based on this canonical package: Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Actual Figma production has not started.
 
-Draft completion does not authorize M1-I8-R1. After explicit M1-P3 documentation acceptance, Human may separately authorize Checkpoint A or another precisely bounded visually neutral task; an actual Figma file is not required for Checkpoint A. Checkpoint B remains blocked until the complete Human-approved Figma design gate and separate implementation authorization both exist. Checkpoint C additionally requires the accepted LP-preview frames, boundary annotation, accepted M1-I8-R1 artifact grammar, and separate implementation authorization. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
+M1-P3 acceptance and later Figma acceptance are not application implementation authorization. Checkpoint A remains unauthorized and unimplemented; an actual Figma file is not required for A, but its own separate explicit Human authorization is required. Checkpoint B remains unauthorized and unimplemented and blocked until the complete Human-approved Figma design gate and its own separate explicit implementation authorization both exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.

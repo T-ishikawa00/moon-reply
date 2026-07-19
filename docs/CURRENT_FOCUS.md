@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 — M1-P3 draft completed; Human and ChatGPT review pending
+Phase 1 / Milestone 1 — M1-P3 Human and ChatGPT accepted; actual Figma production is the next design gate
 
 ## Completed Through
 
@@ -21,13 +21,13 @@ Phase 1 / Milestone 1 — M1-P3 draft completed; Human and ChatGPT review pendin
 - Task M1-P2 Experience & Visual Direction Revision accepted by Human
 - Tasks M1-I7 through M1-I11 implemented, automatically validated, and Human-accepted together as the integrated next-stage baseline
 - Task M1-P2-R1 public-sample conclusion diversification and the bounded M1-P2-R1-R1 contrast/comparison-boundary correction Human-accepted as part of that baseline
-- Task M1-P3 Reading Note Visual Excellence Specification draft completed on a documentation/design-only branch; Human and ChatGPT review pending
+- Task M1-P3 Reading Note Visual Excellence Specification Human and ChatGPT accepted as the authoritative documentation/design specification
 
 ## Current Task
 
-The current task is the completed M1-P3 documentation/design draft: visual-excellence specification, deterministic content-lock matrix, Figma handoff specification, checkpointed implementation plan, and review record. The application, component, fixture, Safety, package, configuration, and runtime implementation remains unchanged.
+The accepted M1-P3 documentation/design package is the authoritative visual-excellence specification: visual-excellence specification, deterministic content-lock matrix, Figma handoff specification, checkpointed implementation plan, and review record. The application, component, fixture, Safety, package, configuration, and runtime implementation remains unchanged.
 
-Human and ChatGPT review is pending. Draft completion is not acceptance, does not authorize M1-I8-R1, M1-I9-R1, or M1-I12, and does not complete Milestone 1.
+Human and ChatGPT acceptance is recorded. Documentation/design specification is complete, but acceptance does not authorize implementation. Actual Figma production has not started. Checkpoint A and Checkpoint B remain unauthorized and unimplemented; Checkpoint B is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded. M1-I9-R1 and M1-I12 remain unauthorized, and Milestone 1 remains incomplete.
 
 Accepted public fictional conclusions in the baseline are:
 
@@ -60,8 +60,11 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - Human accepted the current M1-I7 through M1-I11 integrated redesign as a single next-stage baseline.
 - Human accepted M1-P2-R1 and the bounded M1-P2-R1-R1 correction as part of that baseline.
 - This baseline decision is not final Milestone 1 acceptance.
-- M1-P3 Reading Note Visual Excellence Specification draft is complete; Human and ChatGPT review is pending; authority remains documentation/design only.
-- M1-I8-R1 and M1-I9-R1 remain unauthorized and unimplemented.
+- M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted and authoritative; the documentation/design specification is complete and grants no implementation authorization.
+- Actual Figma production has not started and is the next design gate.
+- Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented.
+- Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; it is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
+- M1-I9-R1 remains unauthorized and unimplemented.
 - M1-I12 Responsive, Accessibility and Final QA remains unauthorized and unimplemented.
 - M1-I6 remains formally closed as superseded without acceptance; its historical evidence and carried defect inventory remain intact.
 - Product definition, JPY 980 price, 18+ policy, Safety/classification meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed.
@@ -81,7 +84,7 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 ## Current Restrictions
 
 - Do not reinterpret the integrated baseline decision as separate slice acceptance or final Milestone 1 acceptance.
-- M1-P3 permits documentation/design specification only. Do not implement Visual Excellence under M1-P3.
+- M1-P3 acceptance grants no implementation authority. Do not implement Visual Excellence under M1-P3.
 - Do not start M1-I8-R1, M1-I9-R1, or M1-I12 without separate explicit Human authorization after the applicable specification/acceptance gate.
 - Do not publish, deploy, activate runtime integrations, complete operator facts, or start Milestone 2+ under baseline closure.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
@@ -92,11 +95,11 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 
 - Task ID: `M1-P3`
 - Task name: `Reading Note Visual Excellence Specification`
-- Status: `Draft completed; Human and ChatGPT review pending; documentation/design only; not implementation authorization`
+- Status: `Human and ChatGPT accepted; documentation/design specification complete; not implementation authorization`
 - Purpose: polish the `税込980円` Reading Note product without changing content or judgment; define content lock, information hierarchy, component anatomy, tokens, typography, chapter archetypes, Figma/design handoff, responsive behavior for desktop/390px with 768px reflow and 320px fallback, acceptance criteria, and implementation plan.
 - Dependencies: current integrated redesign baseline closure commit; clean working tree; Human decisions recorded.
 - Out of scope: implementation; product facts or price; fixture judgment or Safety; request/legal redesign; real AI, DB, payment, email, API, deployment; external fonts; Storybook; visual-regression tooling; PDF, download, share, print, or persistence.
 
 ## Next Gate
 
-Human and ChatGPT review the committed M1-P3 draft package and decide acceptance or revision. M1-I8-R1 remains unauthorized until M1-P3 is explicitly accepted and M1-I8-R1 is separately authorized. M1-I9-R1 and M1-I12 also remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Using the accepted M1-P3 canonical package, produce and obtain Human acceptance of the actual Figma design for Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Figma production and Human acceptance are not application implementation authorization. Checkpoint A or Checkpoint B may begin only after its own separate explicit Human authorization. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

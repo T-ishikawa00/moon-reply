@@ -3,9 +3,10 @@
 ## 1. Status and execution boundary
 
 - Task: `M1-P3 Reading Note Visual Excellence Specification`
-- Status: `Draft completed; Human and ChatGPT review pending`
+- Status: `Human and ChatGPT accepted`
 - Scope: documentation/design-only
 - Figma file creation or mutation in M1-P3: prohibited
+- Actual Figma production: not started; next design gate
 - Implementation authority: none
 
 This is a production brief for a future Figma author. It defines what to draw and annotate without changing current fixture content. The author must use the current Japanese source text. Lorem Ipsum, invented substitute copy, translated placeholder text, AI-generated filler, shortened legal meaning, and fabricated product facts are prohibited.
@@ -745,8 +746,8 @@ For the later Checkpoint C design gate, after the M1-I8-R1 artifact grammar is a
 
 ## 21. Acceptance and next gate
 
-This handoff document is accepted only as part of explicit M1-P3 Human acceptance. Its acceptance makes visually neutral Checkpoint A eligible for a separate exact-manifest authorization; an actual Figma file is not a Checkpoint A dependency.
+This handoff document is Human and ChatGPT accepted as part of the authoritative M1-P3 documentation/design specification. Actual Figma production has not started. The next Human gate is production and Human acceptance of every Checkpoint B frame, sheet, annotation, and Review-wrapper item in Section 20, plus the listed LP-preview deliverables. This design gate is based on the accepted M1-P3 canonical package.
 
-Checkpoint B cannot begin from documentation alone. Its formal design dependency is a Human-approved Figma file satisfying every Checkpoint B frame, sheet, annotation, and Review-wrapper item explicitly listed in Section 20. Checkpoint C separately requires the Section 20 LP-preview desktop and 390px frames, the same-case / different-case boundary annotation, and the accepted M1-I8-R1 artifact grammar.
+Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented. An actual Figma file is not a Checkpoint A dependency, but A still requires its own separate explicit Human authorization and exact mutation manifest. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented and cannot begin from documentation alone. Its formal design dependency is a Human-approved Figma file satisfying every Checkpoint B frame, sheet, annotation, and Review-wrapper item explicitly listed in Section 20, plus its own separate explicit implementation authorization. Checkpoint C / M1-I9-R1 separately requires the Section 20 LP-preview desktop and 390px frames, the same-case / different-case boundary annotation, the accepted M1-I8-R1 artifact grammar, and separate explicit Human authorization. M1-I12 remains separately unauthorized.
 
-Figma-file acceptance itself is not application implementation authorization. Checkpoint B / M1-I8-R1, Checkpoint C / M1-I9-R1, and M1-I12 each require a separate explicit Human authorization and exact mutation manifest.
+Figma production and Human acceptance are not application implementation authorization. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 each require a separate explicit Human authorization and exact mutation manifest. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.

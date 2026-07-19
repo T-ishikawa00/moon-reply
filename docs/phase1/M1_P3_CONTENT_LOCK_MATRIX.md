@@ -3,7 +3,7 @@
 ## 1. Status and authority
 
 - Task: `M1-P3 Reading Note Visual Excellence Specification`
-- Status: `Draft completed; Human and ChatGPT review pending`
+- Status: `Human and ChatGPT accepted`
 - Base commit: `7e02c5f38c37f0249b7b732fb1fc740a806f0562`
 - Scope: documentation/design-only
 
@@ -124,4 +124,4 @@ The script prints `CONTENT_LOCK_GATE: PASS` only when `EXACT_LOCKS: PASS` and `S
 
 ## 7. Current gate
 
-These locks are draft review material. Human and ChatGPT must accept M1-P3 before any implementation task may consume them. Acceptance of the matrix still does not authorize M1-I8-R1, M1-I9-R1, or M1-I12.
+These locks are Human and ChatGPT accepted as part of the authoritative M1-P3 documentation/design specification. Acceptance of the matrix does not authorize Checkpoint A, Checkpoint B, M1-I9-R1, or M1-I12. Actual Figma production has not started and is the next design gate; Checkpoint B remains blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.

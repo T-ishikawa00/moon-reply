@@ -2,10 +2,13 @@
 
 ## 1. Status
 
-- Status: **Draft completed; Human and ChatGPT review pending**
+- Status: **Human and ChatGPT accepted**
 - Authority: documentation and design planning only
 - This document does **not** authorize application implementation, Figma production, package changes, runtime changes, Browser use, screenshots, pull requests, or merges.
-- `M1-I8-R1`, `M1-I9-R1`, and `M1-I12` remain unauthorized until each named Human gate is passed separately.
+- Actual Figma production has not started and is the next design gate.
+- Checkpoint A / `M1-I8-R1` Technical Preparation remains unauthorized and unimplemented.
+- Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented, and is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
+- `M1-I9-R1` and `M1-I12` remain unauthorized and unimplemented until each named Human gate is passed separately.
 - Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
 
 ## 2. Objective
@@ -66,6 +69,8 @@ Stop the checkpoint without broadening scope if any of the following occurs:
 - Human review identifies a content or safety issue rather than a visual defect.
 
 ## 5. Checkpoint A — M1-I8-R1 Technical Preparation
+
+Current status: unauthorized and not implemented.
 
 ### 5.1 Purpose
 
@@ -146,6 +151,8 @@ Revert the single checkpoint commit. Because fixtures, safety, packages, routes,
 Human accepts Checkpoint A and separately authorizes **Checkpoint B / M1-I8-R1 Visual Excellence** with its exact file manifest. Acceptance of A alone does not authorize B.
 
 ## 6. Checkpoint B — M1-I8-R1 Visual Excellence
+
+Current status: unauthorized and not implemented; blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
 
 ### 6.1 Purpose
 
@@ -252,6 +259,8 @@ Human accepts M1-I8-R1 visual evidence and separately authorizes **Checkpoint C 
 
 ## 7. Checkpoint C — M1-I9-R1 Preview Alignment
 
+Current status: unauthorized and not implemented.
+
 ### 7.1 Purpose
 
 Align the landing-page product preview, public-case comparison, and artifact entry links to the accepted reading-note visual grammar without changing their content or purpose.
@@ -332,6 +341,8 @@ Revert the Checkpoint C commit. The accepted M1-I8-R1 canonical report remains u
 Human accepts M1-I9-R1 comparison evidence and separately authorizes **Checkpoint D / M1-I12 Final QA**. M1-I12 remains unauthorized until that decision is recorded.
 
 ## 8. Checkpoint D — M1-I12 Final Responsive and Accessibility QA
+
+Current status: unauthorized and not implemented.
 
 ### 8.1 Purpose
 
@@ -429,4 +440,6 @@ An incomplete record is a hard stop.
 
 ## 10. Completion definition for this plan
 
-This plan is complete when Human and ChatGPT have reviewed it together with the visual specification, content-lock matrix, Figma handoff specification, and M1-P3 review record. Completion of this document is not implementation acceptance and does not change the authorization status of M1-I8-R1, M1-I9-R1, M1-I12, Milestone 1, or Milestone 2.
+Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, Figma handoff specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. Its acceptance is not implementation acceptance and does not change the authorization status of Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12, Milestone 1, or Milestone 2.
+
+The next Human gate is production and Human acceptance of the actual Figma design based on the accepted M1-P3 canonical package: Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Figma production and Human acceptance are not application implementation authorization. Checkpoint A or Checkpoint B may begin only after its own separate explicit Human authorization.

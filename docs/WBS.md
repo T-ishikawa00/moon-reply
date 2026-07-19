@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification; it grants no implementation authority. Actual Figma production has not started and is the next design gate. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Checkpoint B is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded. Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 ## P0: Repository Setup
 
@@ -437,19 +437,21 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 - [ ] M1-I12 authorization; remains outside this correction
 - [ ] Human acceptance of Milestone 1
 
-## P4.24: Draft Completed — Human and ChatGPT Review Pending — M1-P3 Reading Note Visual Excellence Specification
+## P4.24: Human and ChatGPT Accepted — M1-P3 Reading Note Visual Excellence Specification
 
 - [x] Human authorization limited to documentation/design work
 - [x] Record the formal names `恋のメッセージ鑑定ノート`, `Web鑑定ノート`, and `保存用判断カード`
 - [x] Record residual application use of `保存用鑑定書` as a deferred M1-I8-R1 alignment item
 - [x] Prepare the fixed-content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, implementation plan, and review record
-- [ ] Human and ChatGPT review of the M1-P3 draft package
-- [ ] Human acceptance of the M1-P3 design specification
-- [ ] Separate Human authorization of M1-I8-R1; currently unauthorized
+- [x] Human and ChatGPT review of the M1-P3 package
+- [x] Human acceptance of the five M1-P3 documents as the authoritative Visual Excellence design specification
+- [ ] Actual Figma production and Human acceptance as the next design gate
+- [ ] Separate Human authorization of Checkpoint A / M1-I8-R1 Technical Preparation; currently unauthorized and unimplemented
+- [ ] Separate Human authorization of Checkpoint B / M1-I8-R1 Visual Excellence; currently unauthorized and unimplemented, and blocked until a Human-approved Figma file exists
 - [ ] Separate Human authorization of M1-I9-R1; currently unauthorized
 - [ ] Separate Human authorization of M1-I12; currently unauthorized
 
-M1-P3 is not implementation authorization. It may not change product facts, price, fixture judgment, Safety, request/legal behavior, or runtime scope.
+M1-P3 acceptance is not implementation authorization. Figma production and Human acceptance are also not application implementation authorization. It may not change product facts, price, fixture judgment, Safety, request/legal behavior, or runtime scope.
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -467,4 +469,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. The M1-P3 documentation/design draft is complete and awaits Human and ChatGPT review. M1-I8-R1, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
+M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification and grants no implementation authority. Actual Figma production has not started and is the next design gate. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized; Checkpoint B is blocked until a Human-approved Figma file and separate explicit implementation authorization exist. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.

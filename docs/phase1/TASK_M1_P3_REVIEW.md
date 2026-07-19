@@ -4,14 +4,21 @@
 
 - Task ID: `M1-P3`
 - Task name: `Reading Note Visual Excellence Specification`
-- Status: **Draft completed; Human and ChatGPT review pending**
+- Status: **Human and ChatGPT accepted**
 - Authority used: documentation and design planning only
 - Starting base: `7e02c5f38c37f0249b7b732fb1fc740a806f0562`
 - Working branch: `design/m1-p3-reading-note-visual-excellence`
 - Implementation authorization: **none**
 - Figma mutation authorization: **none**
+- Actual Figma production: **not started; next design gate**
+- Checkpoint A / M1-I8-R1 Technical Preparation: **unauthorized and not implemented**
+- Checkpoint B / M1-I8-R1 Visual Excellence: **unauthorized and not implemented; blocked until a Human-approved Figma file and separate explicit implementation authorization exist**
+- M1-I9-R1: **unauthorized and not implemented**
+- M1-I12: **unauthorized and not implemented**
 
-This review record documents the draft package. It does not accept the package, authorize `M1-I8-R1`, `M1-I9-R1`, or `M1-I12`, complete Milestone 1, or authorize Milestone 2.
+This review record records Human and ChatGPT acceptance of the five M1-P3 documents as the authoritative, complete Visual Excellence documentation/design specification. Acceptance does not authorize application implementation, any checkpoint, `M1-I9-R1`, or `M1-I12`, complete Milestone 1, or authorize Milestone 2.
+
+Sections 2 through 16 preserve the historical preflight, branch, draft-production, correction, validation, commit, push, and explicit non-action evidence. Those historical statements remain unchanged and do not describe the later acceptance-synchronization task.
 
 ## 2. Preflight evidence
 
@@ -260,6 +267,6 @@ Expected correction total: exactly 5 `docs/**` files and zero non-document files
 
 ## 17. Next Human gate
 
-Human sends only the completion report to ChatGPT. ChatGPT reviews the committed branch directly. The next decision is acceptance or revision of the corrected five-document M1-P3 draft package.
+Using the accepted M1-P3 canonical package, the next Human gate is production and Human acceptance of the actual Figma design for Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview.
 
-Even after documentation acceptance, only visually neutral Checkpoint A becomes eligible for a separate explicit Human authorization with an exact file manifest. Actual Figma production has not started. Checkpoint B / `M1-I8-R1` remains blocked until both its complete Human-approved Figma design gate and a separate explicit implementation authorization exist. Checkpoint C / `M1-I9-R1` additionally requires its LP-preview design dependencies and separate authorization. M1-I12 remains further downstream and separately unauthorized.
+Actual Figma production has not started. Figma production and Human acceptance are not application implementation authorization. Checkpoint A / `M1-I8-R1` Technical Preparation remains unauthorized and unimplemented; it requires its own separate explicit Human authorization and exact mutation manifest. Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented and blocked until both its complete Human-approved Figma design gate and its own separate explicit implementation authorization exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
