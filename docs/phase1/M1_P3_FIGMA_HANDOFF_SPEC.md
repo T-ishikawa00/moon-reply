@@ -24,14 +24,15 @@ The future Figma file must contain all of the following:
 8. 公開全文見本 — 390px complete-length frame.
 9. LP product-preview alignment — desktop context frame.
 10. LP product-preview alignment — 390px context frame.
-11. Review route wrapper treatment.
-12. Future product-reader mode treatment.
-13. Six chapter-archetype sheets.
-14. Shared component anatomy sheet.
-15. Typography sheet.
-16. Spacing and vertical-rhythm sheet.
-17. Color and surface sheet.
-18. Content-lock and accessibility annotation sheet.
+11. LP same-case / different-case boundary annotation.
+12. Review route wrapper treatment.
+13. Future product-reader mode treatment.
+14. Six chapter-archetype sheets.
+15. Shared component anatomy sheet.
+16. Typography sheet.
+17. Spacing and vertical-rhythm sheet.
+18. Color and surface sheet.
+19. Content-lock and accessibility annotation sheet.
 
 Every complete-length frame uses `Hug contents` vertically. Reference viewport rectangles are annotations only and must not clip the artifact.
 
@@ -107,10 +108,12 @@ Frame names use slash-separated semantics, for example `Web/1440/Complete`, `Web
 | Intermediate desktop/tablet | 961–1280 | 12 | 48 | 20 | maximums above, fluid below |
 | Tablet | 768 | 8 | 32 | 20 | Web up to 704 |
 | 641–760 | target frame as needed | 8 | 24 | 16 | fluid single column |
-| Primary mobile | 390 | 4 | 16 | 12 | stage/artifact 366 with 12px stage inset where specified |
-| QA fallback | 320 | 4 | 12 | 8 | stage/artifact 296–304 depending on 8–12px inset |
+| Primary mobile | 390 | 4 | 16 | 12 | standard route content 358; Reading Note artifact stage 366 via its limited 12px inset |
+| QA fallback | 320 | 4 | 12 | 8 | artifact stage 296–304 via 8–12px inset; artifact internal padding 18–20 |
 
 The artifact itself is an editorial column, not a 12-column card grid. Frame grids govern route alignment and annotation only.
+
+At 390px, `16px` is the standard route-shell outer padding. The `12px` artifact-stage inset is a deliberate wide treatment limited to Reading Note artifacts and produces the `366px` available artifact width. It is not a replacement margin for LP body content, the public intro, or a general route shell.
 
 ### 4.2 Spacing scale
 
@@ -164,8 +167,8 @@ Every Figma color style description contains the token name, intended role, and 
 - `761–960px`: narrower desktop/tablet; three columns collapse; route wrapper may stack.
 - `641–760px`: one-column artifact; 24px route margins; 36–44px artifact padding.
 - `<= 640px`: mobile composition; 16px route margin; no interior columns.
-- `390px`: primary mobile frame, 24px artifact section padding.
-- `320px`: 18–20px artifact padding, 16px body, reduced/removed shadow and arc before content shrink.
+- `390px`: primary mobile frame; 16px standard route-shell padding, 12px Reading Note artifact-stage inset, 366px artifact width, and 24px artifact internal section padding.
+- `320px`: 8–12px artifact-stage inset, 18–20px artifact internal padding, 16px body, and reduced/removed shadow and arc before content shrink.
 
 No breakpoint changes fixed content order.
 
@@ -180,7 +183,7 @@ No breakpoint changes fixed content order.
 - **Reference viewport height:** `900px` desktop, `844px` mobile; complete frame uses content height
 - **Content width:** artifact `840px` target / `864px` max desktop; `366px` artifact at 390
 - **Grid:** route 12-column desktop; artifact single editorial column
-- **Outer padding:** stage 72px desktop route alignment, 32px at 768, 12px at 390, 8–12px at 320
+- **Outer padding:** stage 72px desktop route alignment, 32px at 768, 16px standard route shell at 390 with the Reading Note artifact stage widened to a 12px inset, and 8–12px artifact-stage inset at 320
 - **Spacing scale:** shared `space-1` through `space-9`; chapters use 48–96px thresholds
 
 - **Typography:** exact M1-P3 roles; Mincho for cover/answer/chapter titles, Gothic for body/control/meta
@@ -241,7 +244,7 @@ No breakpoint changes fixed content order.
 - **Reference viewport height:** `900px`, `844px`; content height grows naturally
 - **Content width:** decision artifact `720px` max; `366px` at 390
 - **Grid:** route grid only; artifact single column with one true do/do-not pair on desktop
-- **Outer padding:** 72px desktop alignment; 12px at 390
+- **Outer padding:** 72px desktop alignment; 16px standard route shell at 390 with a limited 12px Reading Note artifact-stage inset
 - **Spacing scale:** shared scale; 32–64px major zones
 
 - **Typography:** same roles; answer statement remains the strongest type
@@ -302,7 +305,7 @@ No breakpoint changes fixed content order.
 - **Reference viewport height:** `900px`, `844px`; complete content height
 - **Content width:** artifact `800px` max; intro content `1152px`; `366px` artifact at 390
 - **Grid:** route 12-column; artifact single column
-- **Outer padding:** shared route margins; 12px artifact-stage inset at 390
+- **Outer padding:** shared route margins; public intro retains 16px standard route-shell padding at 390, while only the Reading Note artifact stage uses the limited 12px inset
 - **Spacing scale:** same artifact scale
 
 - **Typography:** same artifact roles; page intro h1 and artifact internal title h2
@@ -637,6 +640,8 @@ Show:
 - paragraph/list/subsection/chapter gaps;
 - cover zone spacing;
 - desktop/768/390/320 artifact padding;
+- 390px standard route-shell padding `16px` versus the Reading Note-only artifact-stage inset `12px`, resulting artifact width `366px`, and artifact internal padding `24px`;
+- 320px artifact-stage inset `8–12px` and artifact internal padding `18–20px`;
 - comparison navigation separation after closing;
 - correct sparse chapter thresholds; and
 - an anti-example where excessive whitespace simulates luxury without hierarchy.
@@ -704,13 +709,21 @@ Use these sources directly:
 - Product facts: `fixtures/review/purchase-confirmations.ts` and `lib/legal/review-content.ts`.
 - Error: `fixtures/review/errors.ts`.
 
+The formal short-presentation label in Figma is `保存用判断カード`. Any later source alignment from residual `保存用鑑定書` is limited to Checkpoint B / M1-I8-R1, the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact. The actual mutation files must be listed in Checkpoint B's exact manifest; fixture judgments, the product name, unrelated body copy, and purchase/legal/request copy remain locked.
+
 The exact expected hashes are in `M1_P3_CONTENT_LOCK_MATRIX.md`. If a source or hash differs at Figma-production start, stop and request a new Human instruction. Do not silently update text in Figma.
 
 ## 20. Human review checklist for the Figma gate
 
-Human and ChatGPT review the future Figma file for:
+For the Checkpoint B design gate, Human and ChatGPT review the future Figma file for:
 
-- all required frames and sheets present;
+- Web鑑定ノート desktop and 390px complete frames accepted;
+- 保存用判断カード desktop and 390px frames accepted;
+- 公開全文見本 desktop and 390px complete frames accepted;
+- six archetype sheets accepted;
+- typography, spacing, color, and component-anatomy sheets accepted;
+- 768px reflow and 320px fallback annotations accepted;
+- Review wrapper treatment accepted;
 - current Japanese fixture text used with no Lorem Ipsum;
 - exact fixed judgment and disclosure values;
 - cover immediate answer before the letter/detail flow;
@@ -718,13 +731,22 @@ Human and ChatGPT review the future Figma file for:
 - product ownership and JPY 980 credibility;
 - no AI-dashboard or fortune-telling cues;
 - Web/save/public purposes visibly distinct;
-- LP proof aligned to artifact grammar;
 - Review wrapper subordinate and removable;
 - desktop/768/390/320 behavior explicit;
 - typography/measure/wrapping credible with real Japanese text;
 - accessibility/redline annotations complete; and
 - no Figma decision implying implementation authorization.
 
+For the later Checkpoint C design gate, after the M1-I8-R1 artifact grammar is accepted, Human and ChatGPT separately accept:
+
+- LP-preview desktop frame;
+- LP-preview 390px frame; and
+- same-case / different-case boundary annotation.
+
 ## 21. Acceptance and next gate
 
-This handoff document is accepted only as part of explicit M1-P3 Human acceptance. A future Figma file is a separate Human design gate. Neither this document nor a Figma file authorizes application implementation. M1-I8-R1, M1-I9-R1, and M1-I12 each require separate explicit authorization.
+This handoff document is accepted only as part of explicit M1-P3 Human acceptance. Its acceptance makes visually neutral Checkpoint A eligible for a separate exact-manifest authorization; an actual Figma file is not a Checkpoint A dependency.
+
+Checkpoint B cannot begin from documentation alone. Its formal design dependency is a Human-approved Figma file satisfying every Checkpoint B frame, sheet, annotation, and Review-wrapper item explicitly listed in Section 20. Checkpoint C separately requires the Section 20 LP-preview desktop and 390px frames, the same-case / different-case boundary annotation, and the accepted M1-I8-R1 artifact grammar.
+
+Figma-file acceptance itself is not application implementation authorization. Checkpoint B / M1-I8-R1, Checkpoint C / M1-I9-R1, and M1-I12 each require a separate explicit Human authorization and exact mutation manifest.

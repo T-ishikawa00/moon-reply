@@ -536,9 +536,10 @@ The artifact is not vertically centered in a fake application panel and does not
 
 Reference viewport: `390px × 844px`.
 
-- stage outer padding: `12px`;
+- standard route-shell outer padding: `16px`;
+- Reading Note artifact-stage outer inset: `12px`;
 - artifact available width: `366px`;
-- section inline padding: `24px`;
+- artifact internal section padding: `24px`;
 - no interior multi-column layout;
 - answer, message draft, timeline, conditions, and limitations retain distinct sequencing through spacing and rules;
 - Header and route boundary wrap before the artifact and are not sticky;
@@ -549,6 +550,8 @@ Reference viewport: `390px × 844px`.
 - body remains at least `16px`.
 
 Mobile is not a stack of desktop cards. It is one continuous publication with deliberate chapter thresholds.
+
+The `12px` inset is a limited wide treatment for a Reading Note artifact stage. It must not be applied indiscriminately to LP body content, the public intro, or a general route shell; those retain the standard `16px` route-shell padding at 390px.
 
 ## 26. 768px tablet reflow
 
@@ -579,8 +582,8 @@ Reference viewport: `768px × 1024px`.
 
 Reference viewport: `320px × 568px`.
 
-- stage padding: `8–12px`;
-- artifact edge padding: `18–20px`;
+- artifact-stage inset: `8–12px`;
+- artifact internal padding: `18–20px`;
 - body: `16px`, line height at least `1.9`;
 - answer: minimum `30px`, natural two-line wrap allowed;
 - all controls and links: minimum `44px` principal target;
@@ -615,7 +618,9 @@ The cover answer and detailed answer use the same fixed judgment. The detailed s
 ## 30. 保存用判断カード specification
 
 - Formal visible title: `保存用判断カード`.
-- Existing `保存用鑑定書` copy must be replaced only in a separately authorized implementation checkpoint.
+- Existing `保存用鑑定書` copy is aligned only in Checkpoint B / M1-I8-R1 and only within that checkpoint's exact mutation manifest.
+- The permitted alignment surfaces are the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact.
+- Other body-copy editing, fixture-judgment changes, product-name changes, and unrelated purchase/legal/request copy changes are prohibited.
 - Purpose: retrieve the decision in approximately 30 seconds.
 - Required order: identity; consultation theme; answer; do; do not; message draft conditions; next judgment time; change conditions; remembered line; fixed limitation.
 - It remains a screen artifact, not A4, PDF, print, image, or downloadable file.
@@ -734,18 +739,21 @@ End:
 
 Before any implementation mutation:
 
-1. Recompute every expected lock in `M1_P3_CONTENT_LOCK_MATRIX.md`.
-2. Stop if any baseline value differs.
-3. Record exact source commit and lock output.
+1. Recompute every exact scalar UTF-8 hash and exact source-slice LF-normalized hash in `M1_P3_CONTENT_LOCK_MATRIX.md`.
+2. Verify every named exact fixture/object diff and exact rendered string.
+3. Evaluate every semantic behavior assertion against its named source files and behavior owners.
+4. Stop if any exact lock or semantic behavior assertion differs.
+5. Record exact source commit and separate `Exact locks` and `Semantic behavior assertions` output sections.
 
 After each checkpoint:
 
-1. Recompute locks.
-2. Compare against the M1-P3 expected values.
-3. Verify fixture files, `lib/safety/**`, product facts, and semantic values have no diff.
-4. Treat a mismatch as a hard failure; do not “update” expected hashes inside an implementation task.
+1. Recompute exact locks and re-evaluate semantic behavior assertions.
+2. Compare exact values against the M1-P3 expected values.
+3. Verify `fixtures/**`, `lib/safety/**`, product facts, and semantic behavior owners have no unauthorized diff.
+4. Require `EXACT_LOCKS: PASS`, `SEMANTIC_ASSERTIONS: PASS`, and then `CONTENT_LOCK_GATE: PASS`.
+5. Treat a mismatch as a hard failure; do not “update” expected hashes or rewrite an assertion inside an implementation task.
 
-Cover summary validation must prove the displayed string equals the source judgment exactly.
+Cover summary validation must prove the displayed string equals the source judgment exactly. A hash of a summary sentence is never sufficient evidence for Safety order, fail-closed behavior, AI/non-guarantee meaning, purchase disablement, or runtime inactivity.
 
 ## 40. Technical preparation requirements
 
@@ -758,7 +766,7 @@ Checkpoint A must be separately authorized and should remain visually neutral. R
 - separate active artifact styles from obsolete LP/report style inventory;
 - order media queries broad-to-narrow and document ownership of `960`, `760`, `640`, and optional `360` thresholds;
 - establish an `artifact-*` style boundary and small explicit visual primitives;
-- prepare formal-name alignment from `保存用鑑定書` to `保存用判断カード`; and
+- prepare an exact-manifest formal-name alignment map from residual `保存用鑑定書` to `保存用判断カード` without changing customer-facing copy in Checkpoint A; and
 - produce a no-visual-change or explicitly documented delta audit before Checkpoint B.
 
 No package or external asset is required.
@@ -801,29 +809,39 @@ Web, save, and public report components remain separate compositions. They may s
 
 ## 43. Implementation checkpoints
 
-- Checkpoint A: M1-I8-R1 technical preparation, visually neutral, content locks and CSS/style boundary.
-- Checkpoint B: separately authorized M1-I8-R1 Visual Excellence implementation for Web, save, public sample, wrapper, comparison, and error/loading alignment.
-- Checkpoint C: separately authorized M1-I9-R1 LP preview alignment.
+- Checkpoint A: after explicit M1-P3 documentation acceptance and separate Checkpoint A authorization, M1-I8-R1 technical preparation may begin before an actual Figma file exists. It is limited to visually neutral content-lock and CSS/style-boundary preparation.
+- Checkpoint B: separately authorized M1-I8-R1 Visual Excellence implementation for Web, save, public sample, wrapper, comparison, error/loading, and the manifest-bounded formal-name alignment. Its design dependencies are all of the following:
+  - Human-approved Figma file exists;
+  - Web鑑定ノート desktop and 390px complete frames accepted;
+  - 保存用判断カード desktop and 390px frames accepted;
+  - 公開全文見本 desktop and 390px complete frames accepted;
+  - six archetype sheets accepted;
+  - typography, spacing, color, and component anatomy accepted;
+  - 768px reflow and 320px fallback annotations accepted; and
+  - Review wrapper treatment accepted.
+- Checkpoint C: separately authorized M1-I9-R1 LP preview alignment. Its design dependencies are Human-approved LP-preview desktop and 390px frames, the same-case/different-case boundary annotation, and the accepted M1-I8-R1 artifact grammar.
 - Checkpoint D: separately authorized M1-I12 final responsive/accessibility QA and acceptance package.
 
-Each checkpoint has its own allowed files, validation, rollback, commit, and Human gate in `M1_P3_IMPLEMENTATION_PLAN.md`. Completion of one checkpoint does not authorize the next.
+Each checkpoint has its own allowed files, validation, rollback, commit, and Human gate in `M1_P3_IMPLEMENTATION_PLAN.md`. Documentation alone cannot start Checkpoint B or C. Figma-file acceptance is a design dependency, not implementation authorization. Completion or acceptance of one dependency or checkpoint does not authorize the next.
 
 ## 44. Human Visual QA criteria
 
-Human reviews in ordinary external Microsoft Edge. Required evidence:
+Human reviews in ordinary external Microsoft Edge. Checkpoint B uses this route/viewport matrix:
 
-- Cover reads as a product and immediate answer is visible without technical context.
-- The artifact plausibly carries JPY 980 ownership value through editing and material discipline.
-- It does not resemble pasted AI output, a blog post, a dashboard, or a cheap fortune-telling site.
-- The answer is findable quickly and the rationale remains readable to the end.
-- Six archetypes are distinguishable without fourteen unrelated designs.
-- Message draft is immediately usable and clearly conditioned.
-- Three-day time sequence is unambiguous.
-- Closing retains emotional aftertaste after the fixed disclaimer.
-- ReviewBanner, route boundary, comparison navigation, Header, and Footer remain subordinate.
-- Desktop, 768px, 390px, and 320px have no overflow, clipping, awkward single-character wraps, or fixed CTA.
-- Keyboard, focus, 200% zoom, contrast, reduced motion, and error/loading states are verified.
-- Web, save, public, and LP preview visibly share one grammar but retain distinct purposes.
+| Surface | Desktop | 768px | 390px | 320px |
+| --- | --- | --- | --- | --- |
+| Web鑑定ノート | full visual review | reflow review | full visual review | overflow / wrap / focus fallback review |
+| 保存用判断カード | full visual review | reflow review | full visual review | full fallback review |
+| 公開全文見本 | full visual review | reflow review | full visual review | overflow / wrap fallback review |
+
+Additional Checkpoint B coverage:
+
+- Review wrapper: desktop and 390px.
+- Error/loading: representative desktop and representative 390px.
+- Common checks: answer discoverability, Japanese wrapping, horizontal overflow, focus visibility, keyboard order, contrast, 200% zoom, reduced motion, route-chrome subordination, and reading-end aftertaste.
+- Product-quality checks: the artifact carries plausible JPY 980 ownership value, does not resemble pasted AI output/a blog/dashboard/cheap fortune-telling site, keeps six archetypes distinguishable, makes the message draft usable, makes the three-day sequence unambiguous, and preserves the closing aftertaste.
+
+M1-I12 repeats the applicable checks and adds full-route regression. Web, save, public, and LP preview must share one grammar while retaining distinct purposes.
 
 Human observations and automated checks must be recorded separately.
 
@@ -831,7 +849,9 @@ Human observations and automated checks must be recorded separately.
 
 Required for future implementation checkpoints:
 
-- content-lock script PASS;
+- exact-lock output section PASS;
+- semantic-behavior-assertion output section PASS;
+- combined content-lock gate PASS only after both sections pass;
 - undefined custom properties: zero real undefined references; intentional dynamic properties explicitly allowlisted;
 - `npm.cmd run typecheck` PASS;
 - `npm.cmd run lint` PASS with zero warnings;
@@ -912,7 +932,8 @@ Technical:
 
 - zero real undefined CSS custom properties;
 - no proliferation of raw colors;
-- fixture content hashes match;
+- exact fixture/scalar/source-slice/rendered-string locks match;
+- semantic behavior assertions pass independently of those hashes;
 - `lib/safety/**` unchanged;
 - package files unchanged;
 - no runtime addition;
@@ -921,6 +942,6 @@ Technical:
 
 ## 49. Next gate
 
-The next gate is Human and ChatGPT review of this draft, the content-lock matrix, Figma handoff specification, implementation plan, and review record.
+The next gate is Human and ChatGPT review of this corrected draft, the content-lock matrix, Figma handoff specification, implementation plan, and review record.
 
-Draft completion does not authorize M1-I8-R1. After explicit M1-P3 acceptance, Human must separately authorize Checkpoint A or another precisely bounded implementation task. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
+Draft completion does not authorize M1-I8-R1. After explicit M1-P3 documentation acceptance, Human may separately authorize Checkpoint A or another precisely bounded visually neutral task; an actual Figma file is not required for Checkpoint A. Checkpoint B remains blocked until the complete Human-approved Figma design gate and separate implementation authorization both exist. Checkpoint C additionally requires the accepted LP-preview frames, boundary annotation, accepted M1-I8-R1 artifact grammar, and separate implementation authorization. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.

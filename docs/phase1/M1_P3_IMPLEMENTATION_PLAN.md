@@ -41,7 +41,10 @@ If implementation convenience conflicts with a content lock or an authorization 
 - Do not introduce persistence, API routes, OpenAI calls, payment processing, email delivery, analytics, or new integrations.
 - Do not add or change dependencies, lockfiles, build tooling, external fonts, or externally hosted design assets.
 - Do not create a universal report renderer. Shared extraction is limited to stable visual primitives with clear consumers.
-- Do not rename the product in application copy during these checkpoints. Residual `保存用鑑定書` cleanup belongs only to a separately authorized naming pass.
+- Keep the product name, fixture judgments, and Content Lock Matrix formal-name locks unchanged.
+- Formal display-name alignment from residual `保存用鑑定書` to `保存用判断カード` is permitted only in Checkpoint B / M1-I8-R1, only for the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact, and only in files named by that checkpoint's exact mutation manifest. Unrelated copy editing remains prohibited.
+- Treat exact locks and semantic behavior assertions as independent gates. An exact scalar or source-slice hash proves equality only; it does not prove Safety order, fail-closed behavior, disclosure meaning, purchase disablement, or runtime inactivity.
+- The M1-I8-R1 content-lock verifier must output separate `Exact locks` and `Semantic behavior assertions` sections. Both sections and the combined gate must report PASS; any failure stops the checkpoint without refreshing an expected value.
 
 ### 4.2 Verification ownership
 
@@ -54,6 +57,8 @@ If implementation convenience conflicts with a content lock or an authorization 
 Stop the checkpoint without broadening scope if any of the following occurs:
 
 - a content-lock hash changes;
+- an exact fixture/object or rendered-string equality fails;
+- a semantic behavior assertion fails even when every exact hash still matches;
 - a fixture or `lib/safety/**` change appears;
 - a package or lockfile change appears;
 - a required visual result would need new product behavior;
@@ -80,7 +85,7 @@ The final authorization must replace this candidate list with an exact file mani
 
 ### 5.3 Prohibited files and changes
 
-- `lib/fixtures/**`
+- `fixtures/**`
 - `lib/safety/**`
 - `package.json` and all lockfiles
 - route behavior, request flow, purchase flow, API routes, persistence, integrations, and runtime configuration
@@ -91,13 +96,14 @@ The final authorization must replace this candidate list with an exact file mani
 ### 5.4 Dependencies
 
 - Human and ChatGPT acceptance of the five M1-P3 draft documents
+- Checkpoint A may run before an actual Figma file exists or is accepted; it is limited to visually neutral technical preparation
 - explicit Human authorization of Checkpoint A with an exact mutation manifest
 - clean branch based on the accepted documentation commit
 - current content-lock matrix verified against source
 
 ### 5.5 Implementation sequence
 
-1. Add a deterministic content-lock verifier for the recorded scalar values and source slices.
+1. Add a deterministic content-lock verifier that evaluates exact scalar/source-slice/object/rendered-string locks separately from semantic behavior assertions, prints both sections, and fails unless both sections PASS.
 2. Resolve undefined CSS token references `--violet-600`, `--ink-400`, and `--moon-700` by mapping them to approved existing palette values; do not invent a parallel palette.
 3. Give paper-grain pseudo-elements an explicit positioned and isolated containing block.
 4. Reorder responsive rules broad-to-narrow without changing intended rendering.
@@ -110,7 +116,9 @@ The final authorization must replace this candidate list with an exact file mani
 
 ### 5.6 Automated checks
 
-- content-lock verifier passes with zero drift
+- exact-lock section passes with zero scalar, source-slice, fixture/object, or rendered-string drift
+- semantic-assertion section passes for every recorded behavior contract
+- combined content-lock gate reports PASS only after both sections pass
 - `npm run typecheck`
 - `npm run lint`
 - `npm run build`
@@ -150,6 +158,7 @@ Implement the approved reading-note visual hierarchy for the canonical Web repor
 - approved `components/brand/**` primitives
 - `components/review/ReviewBanner.tsx` only for wrapper compatibility
 - canonical review report, review save-report, and public sample page files under `app/**`, including their existing error/loading files
+- exact LP-preview label-owner files only when the mutation manifest names them for the bounded `保存用判断カード` display-name alignment; no LP layout or behavior change
 - `app/globals.css`
 - `docs/phase1/TASK_M1_I8_R1_REVIEW.md`
 - current-status documentation required to record the checkpoint result
@@ -158,19 +167,32 @@ The authorization must enumerate the exact route and component files before impl
 
 ### 6.3 Prohibited files and changes
 
-- all fixture and safety files
+- `fixtures/**` and `lib/safety/**`
 - request, purchase, legal, and public-route behavior
 - package and lockfiles
 - new dependencies, external fonts, externally hosted assets, or new integrations
-- copy editing, judgment changes, and naming cleanup
+- all copy editing outside the exact formal-name alignment boundary in Section 4.1; all fixture-judgment, product-name, purchase/legal/request, and unrelated copy changes
 - Browser tooling, screenshots, or agent-authored visual acceptance claims
 
 ### 6.4 Dependencies
 
 - accepted Checkpoint A
-- explicit Human authorization of Checkpoint B
-- passing content-lock verifier
+- Human-approved Figma file exists
+- Web鑑定ノート desktop complete frame accepted
+- Web鑑定ノート 390px complete frame accepted
+- 保存用判断カード desktop frame accepted
+- 保存用判断カード 390px frame accepted
+- 公開全文見本 desktop complete frame accepted
+- 公開全文見本 390px complete frame accepted
+- six archetype sheets accepted
+- typography / spacing / color / component anatomy accepted
+- 768px reflow and 320px fallback annotations accepted
+- Review wrapper treatment accepted
+- explicit Human authorization of Checkpoint B with an exact mutation manifest
+- `EXACT_LOCKS: PASS`, `SEMANTIC_ASSERTIONS: PASS`, and `CONTENT_LOCK_GATE: PASS`
 - approved archetype, typography, spacing, and responsive rules from the M1-P3 specification
+
+The documentation specification alone cannot satisfy these Figma dependencies. Acceptance of the Figma file is a design gate, not implementation authorization; Checkpoint B still requires the separate explicit Human authorization above.
 
 ### 6.5 Implementation sequence
 
@@ -179,14 +201,15 @@ The authorization must enumerate the exact route and component files before impl
 3. Apply letter/narrative, evidence/interpretation, action/time, and limits/closing archetypes to the existing report sections.
 4. Align save-report presentation to the same visual grammar without making it a pixel-identical Web report.
 5. Align the public full sample as the approved shorter edited artifact without expanding it to fourteen chapters.
-6. Align comparison navigation, error/loading presentation, and review boundaries while keeping them subordinate to the artifact.
-7. Apply desktop, 390px, 768px, and 320px rules from the specification.
-8. Verify focus, landmarks, heading order, contrast, overflow, and reduced-motion behavior.
-9. Run automated checks and submit the review artifact for Human visual validation.
+6. Within the exact mutation manifest, align only the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact to the formal display name `保存用判断カード`.
+7. Align comparison navigation, error/loading presentation, and review boundaries while keeping them subordinate to the artifact.
+8. Apply desktop, 390px, 768px, and 320px rules from the specification.
+9. Verify focus, landmarks, heading order, contrast, overflow, and reduced-motion behavior.
+10. Run automated checks and submit the review artifact for Human visual validation.
 
 ### 6.6 Automated checks
 
-- content-lock verifier passes before and after implementation
+- exact-lock and semantic-assertion sections both pass before and after implementation
 - `npm run typecheck`
 - `npm run lint`
 - `npm run build`
@@ -195,19 +218,25 @@ The authorization must enumerate the exact route and component files before impl
 - semantic heading/landmark inspection
 - narrow-width code inspection at 390px, 768px, and 320px breakpoints
 - no fixture, safety, package, lockfile, external-font, or external-asset diff
+- formal-name audit is limited to the exact mutation manifest and reports no unrelated copy change
 
 ### 6.7 Human checks
 
-In external Microsoft Edge, Human verifies:
+In external Microsoft Edge, Human uses this Checkpoint B matrix:
 
-- canonical Web report at desktop and 390px
-- save report at 768px and 320px
-- public full sample at desktop and 390px
-- judgment dominance and scan order
-- typography, density, paper texture, dividers, metadata, and whitespace
-- long Japanese text wrapping and absence of horizontal overflow
-- focus visibility and keyboard reading order
-- error/loading state coherence where reachable
+| Surface | Desktop | 768px | 390px | 320px |
+| --- | --- | --- | --- | --- |
+| Web鑑定ノート | full visual review | reflow review | full visual review | overflow / wrap / focus fallback review |
+| 保存用判断カード | full visual review | reflow review | full visual review | full fallback review |
+| 公開全文見本 | full visual review | reflow review | full visual review | overflow / wrap fallback review |
+
+Additional coverage:
+
+- Review wrapper: desktop and 390px
+- Error/loading: representative desktop and representative 390px
+- Common checks: answer discoverability, Japanese wrapping, horizontal overflow, focus visibility, keyboard order, contrast, 200% zoom, reduced motion, route-chrome subordination, and reading-end aftertaste
+
+M1-I12 repeats the applicable checks and adds full-route regression; Checkpoint B does not replace that downstream gate.
 
 ### 6.8 Rollback strategy
 
@@ -241,7 +270,7 @@ The authorization must provide the exact manifest and identify every permitted r
 
 ### 7.3 Prohibited files and changes
 
-- `lib/fixtures/**` and `lib/safety/**`
+- `fixtures/**` and `lib/safety/**`
 - request and purchase flows
 - package and lockfiles
 - sample-case copy, fixed judgment copy, price, age, product facts, disclosure, or unsupported-case rules
@@ -250,10 +279,15 @@ The authorization must provide the exact manifest and identify every permitted r
 
 ### 7.4 Dependencies
 
-- accepted M1-I8-R1 visual implementation
-- explicit Human authorization of M1-I9-R1
-- accepted current content-lock hashes
+- accepted M1-I8-R1 artifact grammar
+- Human-approved LP preview desktop frame
+- Human-approved LP preview 390px frame
+- accepted same-case / different-case boundary annotation
+- explicit Human authorization of M1-I9-R1 with an exact mutation manifest
+- accepted current exact-lock and semantic-assertion baseline
 - final Human decision on which shared primitives are stable across canonical and preview consumers
+
+The accepted LP-preview frames and boundary annotation are design dependencies, not implementation authorization. Checkpoint C remains blocked until its separate explicit Human authorization is recorded.
 
 ### 7.5 Implementation sequence
 
@@ -266,7 +300,7 @@ The authorization must provide the exact manifest and identify every permitted r
 
 ### 7.6 Automated checks
 
-- content-lock verifier passes
+- exact-lock and semantic-assertion sections both pass, followed by the combined gate
 - `npm run typecheck`
 - `npm run lint`
 - `npm run build`
@@ -315,7 +349,7 @@ The final authorization must list each defect, evidence reference, and exact fil
 
 ### 8.3 Prohibited files and changes
 
-- fixtures, safety logic, product facts, legal wording, price, age requirement, judgment output, or route behavior
+- `fixtures/**`, `lib/safety/**`, product facts, legal wording, price, age requirement, judgment output, or route behavior
 - packages, lockfiles, build tooling, runtime configuration, APIs, persistence, or integrations
 - speculative polish without documented evidence
 - new feature work, new sample cases, or universal renderer work
@@ -334,12 +368,12 @@ The final authorization must list each defect, evidence reference, and exact fil
 2. Reject observations that require content, behavior, or unauthorized feature changes and route them to a separate decision.
 3. Fix defects one class at a time: overflow/layout, typography, focus/keyboard, contrast, error/loading coherence.
 4. Check link integrity and run the full authorized-route regression set without expanding product behavior.
-5. Re-run content locks and full automated validation after each defect class.
+5. Re-run exact locks, semantic behavior assertions, and full automated validation after each defect class.
 6. Prepare the Milestone 1 acceptance package, final Human verification checklist, and closure record without declaring Milestone 1 complete before Human decision.
 
 ### 8.6 Automated checks
 
-- content-lock verifier passes
+- exact-lock and semantic-assertion sections both pass, followed by the combined gate
 - `npm run typecheck`
 - `npm run lint`
 - `npm run build`

@@ -26,6 +26,16 @@ Before branch creation:
 
 The required preflight matched exactly, so the dedicated documentation branch was created from that commit.
 
+Bounded-correction preflight on the existing design branch:
+
+- current branch: `design/m1-p3-reading-note-visual-excellence`
+- working tree: clean
+- `HEAD`: `1155508d2293eb6d3cd4f5a2c3c5ea023ad325b0`
+- `origin/design/m1-p3-reading-note-visual-excellence`: `1155508d2293eb6d3cd4f5a2c3c5ea023ad325b0`
+- `git diff --check`: PASS, no output
+
+All required values matched before this correction. No mutation began before the match was confirmed.
+
 ## 3. Authoritative documents reviewed in full
 
 - `docs/ROADMAP.md`
@@ -75,12 +85,14 @@ The draft preserves these decisions without reopening them:
 - long display name: `Web鑑定ノート`
 - short display name: `保存用判断カード`
 - `保存用鑑定書` is not adopted as the formal name
+- Checkpoint B / M1-I8-R1 aligns residual `保存用鑑定書` only for the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact, and only through its exact mutation manifest; unrelated copy remains locked
 - canonical report order remains fixed, with the conclusion available immediately after the cover
 - fixture judgments, consultation facts, safety meaning, uncertainty, non-guarantee meaning, chapter purpose, price, one-consultation/one-note rule, age, Safety-before-payment rule, `normal_allowed` continuation rule, and fail-closed behavior are content locks
 - changeable scope is presentation only: order within the approved semantic structure, placement, short summaries, whitespace, rules, grouping, typography, hierarchy, archetypes, decoration strength, responsive structure, and review metadata treatment
 - primary mobile design width: `390px`
+- at 390px, standard route-shell outer padding is `16px`; only a Reading Note artifact stage uses the limited `12px` inset, producing a `366px` artifact with `24px` internal section padding
 - tablet reflow: `768px`
-- QA fallback: `320px`
+- QA fallback: `320px`, with an `8–12px` artifact-stage inset and `18–20px` artifact internal padding
 - external fonts: prohibited
 - public sample: a shorter edited edition using the same visual grammar, not a forced fourteen-chapter copy
 - primary quality subject: the reading-note artifact; shared chrome must not damage its first impression, reading start, reading completion, or aftertaste
@@ -94,6 +106,8 @@ The draft preserves these decisions without reopening them:
 5. `TASK_M1_P3_REVIEW.md`
 
 Six current-status documents are synchronized separately with minimal edits. No historical M1-P2 artifact is changed.
+
+The bounded review correction updates only these five draft-package documents. It adds the actual-Figma design dependencies for Checkpoints B/C, formal-name alignment boundary, corrected `fixtures/**` path, independent exact-lock/semantic-assertion gates, unambiguous 390px spacing, and the full Checkpoint B Human QA matrix. Current status and authorization do not change, so no current-status document requires mutation.
 
 ## 7. Chapter archetype recommendation
 
@@ -142,13 +156,13 @@ Read-only inspection identified future Checkpoint A work:
 - media queries should be ordered broad-to-narrow with clear ownership
 - obsolete LP/report selectors require consumer audit before deletion
 - shared artifact primitives should remain narrow
-- naming alignment requires preparation but no copy change in this task
+- Checkpoint A prepares only the exact-manifest name-alignment map; the actual bounded customer-facing alignment belongs to separately authorized Checkpoint B / M1-I8-R1
 
 These are planning findings, not completed fixes.
 
 ## 12. Content-lock evidence
 
-The lock matrix records exact UTF-8 SHA-256 values for scalars and normalized-LF declaration slices. It covers:
+The lock matrix now separates exact equality from semantic behavior. Exact locks retain the existing UTF-8 SHA-256 scalar values and normalized-LF declaration-slice hashes, and add explicit fixture/object-diff and rendered-string equality forms. They cover:
 
 - `result-normal-001`
 - public wait, send, and distance cases
@@ -157,15 +171,21 @@ The lock matrix records exact UTF-8 SHA-256 values for scalars and normalized-LF
 - price, age, product identity, one-consultation/one-note rule, and purchase confirmation
 - non-guarantee, AI disclosure, and unsupported-case meaning
 
-The fixture declarations themselves remain unchanged. Future implementation must verify the recorded markers and hashes before and after mutation.
+Independent semantic behavior assertions name the source files, exact field/exported value/behavior owner, required assertion, prohibited condition, validation method, and expected PASS output for Safety-before-payment, normal-only continuation, fail-closed handling, AI disclosure, non-guarantee, unsupported cases, disabled purchase, and inactive runtime.
+
+The fixture declarations themselves remain unchanged. Future M1-I8-R1 content-lock output must print separate `Exact locks` and `Semantic behavior assertions` sections and report `CONTENT_LOCK_GATE: PASS` only when both pass. A summary-string hash is not accepted as proof of behavior or meaning.
 
 ## 13. Figma handoff conclusion
 
 The handoff specification defines required pages, frames, archetype sheets, tokens, component anatomy, responsive annotations, state treatment, accessibility requirements, fixed content, implementation mapping, and acceptance criteria. It requires current Japanese fixture copy and prohibits Lorem Ipsum.
 
+Checkpoint A may be separately authorized after M1-P3 documentation acceptance without an actual Figma file and remains visually neutral. Checkpoint B requires a Human-approved Figma file with accepted Web/save/public desktop and 390px frames, six archetype sheets, typography/spacing/color/component anatomy, 768px/320px annotations, and Review-wrapper treatment. Checkpoint C additionally requires accepted LP-preview desktop/390px frames, the same-case/different-case boundary annotation, and accepted M1-I8-R1 artifact grammar. Figma acceptance is a design dependency, not implementation authorization.
+
 No Figma file was created or mutated in this task.
 
 ## 14. Validation evidence
+
+### Original draft validation
 
 Validation after the complete documentation diff was frozen:
 
@@ -179,7 +199,22 @@ Validation after the complete documentation diff was frozen:
 
 No Browser, GUI browser, browser automation, screenshot, server startup, or package installation was used for validation.
 
+### Bounded correction validation
+
+- existing exact-lock values: PASS — all 26 recorded SHA-256 occurrences remain unchanged as a multiset
+- `npm.cmd run typecheck`: PASS — `tsc --noEmit`, exit 0
+- `npm.cmd run lint`: PASS — `eslint . --max-warnings=0`, exit 0, zero warnings
+- `npm.cmd run build`: PASS — Next.js production build and 28/28 static pages, exit 0
+- `git diff --check`: PASS — exit 0
+- documentation scope: PASS — exactly the 5 bounded-correction `docs/**` files and no current-status or non-document file
+- non-document fingerprint comparison: PASS — 71 tracked non-document files before and after; aggregate SHA-256 `5bc508bd7f4ff6467b9443e511957c5e41637ea3ba4b06f586692c781c5517d8`
+- prohibited-scope audit: PASS — no application, component, fixture, `lib/safety/**`, package, configuration, runtime, Figma, font, or asset mutation
+
+No Browser, GUI browser, browser automation, screenshot, server startup, Figma mutation, or package installation was used for the bounded correction.
+
 ## 15. Expected documentation-only file set
+
+### Original draft package
 
 New:
 
@@ -200,6 +235,16 @@ Minimally synchronized:
 
 Expected total: 11 documentation files and zero non-document files.
 
+### Bounded correction package
+
+- `docs/phase1/M1_P3_READING_NOTE_VISUAL_EXCELLENCE_SPEC.md`
+- `docs/phase1/M1_P3_CONTENT_LOCK_MATRIX.md`
+- `docs/phase1/M1_P3_FIGMA_HANDOFF_SPEC.md`
+- `docs/phase1/M1_P3_IMPLEMENTATION_PLAN.md`
+- `docs/phase1/TASK_M1_P3_REVIEW.md`
+
+Expected correction total: exactly 5 `docs/**` files and zero non-document files. No current-status document is changed because the task state and authorization boundary remain unchanged.
+
 ## 16. Explicit non-actions
 
 - no application implementation
@@ -215,6 +260,6 @@ Expected total: 11 documentation files and zero non-document files.
 
 ## 17. Next Human gate
 
-Human sends only the completion report to ChatGPT. ChatGPT reviews the committed branch directly. The next decision is acceptance or revision of the five-document M1-P3 draft package.
+Human sends only the completion report to ChatGPT. ChatGPT reviews the committed branch directly. The next decision is acceptance or revision of the corrected five-document M1-P3 draft package.
 
-Even after documentation acceptance, `M1-I8-R1` requires a separate explicit Human authorization with an exact file manifest. M1-I9-R1 and M1-I12 remain further downstream and separately unauthorized.
+Even after documentation acceptance, only visually neutral Checkpoint A becomes eligible for a separate explicit Human authorization with an exact file manifest. Actual Figma production has not started. Checkpoint B / `M1-I8-R1` remains blocked until both its complete Human-approved Figma design gate and a separate explicit implementation authorization exist. Checkpoint C / `M1-I9-R1` additionally requires its LP-preview design dependencies and separate authorization. M1-I12 remains further downstream and separately unauthorized.
