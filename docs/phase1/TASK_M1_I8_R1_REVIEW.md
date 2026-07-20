@@ -1,4 +1,4 @@
-# Task M1-I8-R1 Checkpoint A Acceptance and Checkpoint B Visual Excellence Review
+# Task M1-I8-R1 Checkpoint A and Checkpoint B Acceptance Record
 
 ## 1. Status and authority
 
@@ -13,16 +13,18 @@
 - Checkpoint A commit: `refactor: prepare M1-I8-R1 reading note visual system`
 - Checkpoint B base: `79011f274c35a0cf80f68af845ffaca95e8884c9`
 - Checkpoint B branch: `feat/m1-i8-r1-checkpoint-b-lunar-contrast`
-- Checkpoint B status: **implemented and automatically validated; B — `Lunar Contrast Edition` controlling; Human Visual QA pending; not merged to `main`**
-- Checkpoint B expected commit: `feat: implement M1-I8-R1 reading note visual excellence`
+- Checkpoint B status: **Human-accepted; implementation and automated validation complete; primary desktop and 390px Visual QA complete; B — `Lunar Contrast Edition` canonical; fast-forward to `main` authorized**
+- Checkpoint B implementation commit: `d2de554` — `feat: implement M1-I8-R1 reading note visual excellence`
+- Checkpoint B accepted implementation-and-polish commit: `bb2079aafb3666562e2876ead4c24a5c933bea8a`
 - Prototype reference: `d5095ec3c7cf14a9646cb621a64b88d970e908bc`; read-only inspection only, with no merge, cherry-pick, or rebase
-- M1-I9-R1 and M1-I12: **unauthorized and unimplemented**
+- M1-I9-R1: **Human-authorized and not yet implemented**
+- M1-I12: **unauthorized and unimplemented**
 - Milestone 1: **incomplete**
 - Milestone 2 and later: **unauthorized**
 - Figma: optional and non-authoritative; not used
 - Browser or screenshot use by CodeX/agents: prohibited; none used
 
-Human accepted Checkpoint A at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; the accepted state and documentation are fast-forwarded to `main` at `79011f274c35a0cf80f68af845ffaca95e8884c9`. The separate Checkpoint B authorization is now implemented and automatically validated only within its exact manifest on the dedicated branch. Automated evidence is not Human visual acceptance of the canonical Reading Note.
+Human accepted Checkpoint A at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; the accepted state and documentation are fast-forwarded to `main` at `79011f274c35a0cf80f68af845ffaca95e8884c9`. Human subsequently accepted Checkpoint B at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` after primary desktop and 390px Visual QA, authorized fast-forward-only synchronization to `main`, and separately authorized M1-I9-R1 Reading Note Preview Alignment. M1-I12 remains unauthorized.
 
 ## 2. Exact mutation manifest
 
@@ -264,10 +266,10 @@ The public sample continues to use `PUBLIC_SAMPLE_SEND_CASE`, exact conclusion `
 
 | Target | Implemented source rule | Human status |
 | --- | --- | --- |
-| Desktop | Web target approximately `840px` within `864px`; public approximately `800px`; save approximately `720px` | pending visual review |
-| 768px | comparison/action layouts collapse; review chrome remains subordinate | pending visual review |
-| 390px | `12px` stage inset yields approximately `366px`; `24px` internal inset; body text at least `16px`; answer remains near the entry viewport | pending visual review |
-| 320px | `8–12px` stage inset; `18–20px` internal inset; no deliberate clipping or overflow masking; formal save title is allowed to wrap and must not truncate | pending visual review |
+| Desktop | Web target approximately `840px` within `864px`; public approximately `800px`; save approximately `720px` | Human-accepted |
+| 768px | comparison/action layouts collapse; review chrome remains subordinate | automated reflow evidence; final route regression remains M1-I12 |
+| 390px | `12px` stage inset yields approximately `366px`; `24px` internal inset; body text at least `16px`; answer remains near the entry viewport | Human-accepted |
+| 320px | `8–12px` stage inset; `18–20px` internal inset; no deliberate clipping or overflow masking; formal save title is allowed to wrap and must not truncate | deferred to M1-I12 |
 
 Source and rendered-markup checks confirm one `h1`, ordered headings, DOM/visual-order parity, caller-owned semantics, decorative `aria-hidden` treatment, at least `3px` focus treatment, at least `44px` interactive targets, static reduced-motion-compatible behavior, short-heading-only balance, left-aligned Japanese body copy, and no long-body Mincho role. Actual 200% zoom, keyboard/focus, wrapping, clipping, and visual contrast require Human review.
 
@@ -309,19 +311,19 @@ Raw HTTP coverage:
 
 The production review server runs on `127.0.0.1:3017`. It was started without stopping or modifying any existing process on port `3016`.
 
-## 17. Human Visual QA matrix and hard stop
+## 17. Human Visual QA acceptance matrix and downstream hold
 
 | Surface | Desktop | 768px | 390px | 320px |
 | --- | --- | --- | --- | --- |
-| Web鑑定ノート | Pending | Pending | Pending | Pending |
-| 保存用判断カード | Pending | Pending | Pending | Pending |
-| 公開全文見本 | Pending | Pending | Pending | Pending |
-| Review wrapper | Pending | Pending | Pending | Pending |
-| Error/loading | Pending | Pending | Pending | Pending |
+| Web鑑定ノート | Accepted | Automated reflow evidence | Accepted | Deferred to M1-I12 |
+| 保存用判断カード | Accepted | Automated reflow evidence | Accepted | Deferred to M1-I12 |
+| 公開全文見本 | Accepted | Automated reflow evidence | Accepted | Deferred to M1-I12 |
+| Review wrapper | Accepted | Automated reflow evidence | Accepted | Deferred to M1-I12 |
+| Error/loading | Accepted with Checkpoint B | Automated source/HTTP evidence | Accepted with Checkpoint B | Deferred to M1-I12 |
 
-Human must inspect answer discoverability, Japanese wrapping, horizontal overflow, formal-name wrapping, focus visibility, keyboard order, contrast, 200% zoom, reduced motion, route-chrome subordination, and closing aftertaste in ordinary external Microsoft Edge. CodeX/agents used no Browser, browser automation, GUI control, or screenshots and make no visual-acceptance claim.
+Human completed and accepted the primary desktop and 390px visual review, including answer discoverability, Japanese wrapping, contrast, route-chrome subordination, and reading-end aftertaste. The final 320px, 200% zoom, keyboard/focus, and all-route regression checks remain assigned to M1-I12. CodeX/agents used no Browser, browser automation, GUI control, or screenshots; the visual-acceptance decision is Human evidence.
 
-The next and only current gate is Human Visual QA and acceptance of Checkpoint B. Checkpoint B must not merge to `main`. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized. No PR is authorized or created.
+Checkpoint B is accepted and authorized for fast-forward-only synchronization to `main`. M1-I9-R1 is separately Human-authorized and must remain off `main` after implementation pending Human Visual QA. M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized. No PR is authorized or created.
 
 ## 18. M1-I8-R1-R1 First Viewport & Readability Polish
 
@@ -393,12 +395,12 @@ Primary Paper prose contrast:
 
 | Target | Correction source intent | Human status |
 | --- | --- | --- |
-| Desktop review chrome | `ReviewBanner` `44px` minimum + artifact boundary `44px` minimum; combined closed height approximately `88px` | pending visual review |
-| Desktop Web | stage top padding `32–44px`; cover minimum height `34rem`; cover top padding `3rem`; reduced type/title/facts/divider rhythm; answer remains normal flow | pending visual review |
-| Desktop Save | stage top padding `32–40px`; header vertical padding `2.5rem`; title maximum `2.6rem` at `1.45` line-height; reduced subtitle/divider/metadata rhythm | pending visual review |
-| 390px Web | stage top padding `24px`; cover top padding `28px`; title remains untruncated at `1.9–2.1rem`; metadata becomes readable label/value rows; answer remains normal flow | pending visual review |
-| 390px Save | header vertical padding `24px`; formal name retained; consultation theme remains untruncated; metadata becomes readable label/value rows; answer label and judgment remain the next normal-flow section | pending visual review |
-| 320px | existing `8px` stage inset and `18px` internal inset remain controlling; no clipping, overflow masking, or truncation was introduced; formal name and title may wrap naturally | pending visual review |
+| Desktop review chrome | `ReviewBanner` `44px` minimum + artifact boundary `44px` minimum; combined closed height approximately `88px` | Human-accepted |
+| Desktop Web | stage top padding `32–44px`; cover minimum height `34rem`; cover top padding `3rem`; reduced type/title/facts/divider rhythm; answer remains normal flow | Human-accepted |
+| Desktop Save | stage top padding `32–40px`; header vertical padding `2.5rem`; title maximum `2.6rem` at `1.45` line-height; reduced subtitle/divider/metadata rhythm | Human-accepted |
+| 390px Web | stage top padding `24px`; cover top padding `28px`; title remains untruncated at `1.9–2.1rem`; metadata becomes readable label/value rows; answer remains normal flow | Human-accepted |
+| 390px Save | header vertical padding `24px`; formal name retained; consultation theme remains untruncated; metadata becomes readable label/value rows; answer label and judgment remain the next normal-flow section | Human-accepted |
+| 320px | existing `8px` stage inset and `18px` internal inset remain controlling; no clipping, overflow masking, or truncation was introduced; formal name and title may wrap naturally | Deferred to M1-I12 |
 
 Body copy remains at least the global `1rem` (`16px`). No sticky/fixed positioning, absolute answer overlay, CSS `order`, `overflow-x:hidden`, animation, or parallax was added.
 
@@ -452,4 +454,4 @@ Raw HTTP evidence after that clean build:
 | `git diff --check` | PASS |
 | Browser/screenshots | not used |
 
-Human Visual QA remains pending for desktop, 390px, 320px, keyboard/focus, 200% zoom, Japanese wrapping, answer discoverability, and review-chrome subordination. Checkpoint B remains unaccepted and unmerged. `main` is unchanged. M1-I9-R1 and M1-I12 remain unauthorized; Milestone 1 remains incomplete. No PR was created.
+Human accepted Checkpoint B at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` after primary desktop and 390px Visual QA of Web鑑定ノート, 保存用判断カード, 公開全文見本, and review-chrome subordination. Fast-forward to `main` is authorized. M1-I9-R1 is separately authorized and not yet implemented. M1-I12 remains unauthorized and retains the final 320px, 200% zoom, keyboard/focus, and all-route regression checks. Milestone 1 remains incomplete. No PR was created.
