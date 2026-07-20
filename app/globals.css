@@ -3415,6 +3415,34 @@ summary::marker {
 }
 
 @media (max-width: 640px) {
+  .lp-artifact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lp-artifact > * {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-inline-size: 0;
+  }
+
+  .lp-artifact__main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lp-artifact__aside {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lp-artifact__index,
+  .lp-decision-card {
+    width: 100%;
+    min-width: 0;
+  }
+
   .lp-note-cover {
     width: 100%;
     min-height: 31rem;

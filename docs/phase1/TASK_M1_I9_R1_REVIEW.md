@@ -88,9 +88,9 @@ The three public cases retain all content and become one continuous Paper editor
 | Target | Source result |
 | --- | --- |
 | Desktop | Hero copy and compact cover remain a balanced two-column composition; `#note` is an asymmetric main/aside composition; Web and save links are visible. |
-| 768px | Existing 960px reflow places the preview after Hero copy and the aside after the main artifact; the final M1-I9 override makes the aside a single column without changing DOM order. |
-| 390px | Hero cover uses full available width; explicit title line break remains balanced; answer threshold remains normal flow; `#note` and public cases are one column; links retain at least `2.75rem` height; no fixed/sticky CTA is added. |
-| 320px | Formal names remain in source; global body remains `16px`; decorative arcs and added shadows are removed first; no overflow masking is added. Final Human confirmation remains M1-I12 work. |
+| 768px | This bounded correction does not alter 768px: the later M1-I9 outer grid remains controlling, while the final 960px override keeps the aside itself to one column. DOM order remains unchanged. |
+| 390px | Hero cover uses full available width; explicit title line break remains balanced; answer threshold remains normal flow. M1-I9-R1-R1 re-establishes the intended one-column `#note` cascade after the late desktop override; public cases remain one column; links retain at least `2.75rem` height; no fixed/sticky CTA is added. |
+| 320px | The M1-I9-R1-R1 one-column `#note` rules remain controlling; formal names remain in source; global body remains `16px`; internal artifact padding is `1.125rem` / 18px; decorative arcs and added shadows are removed first; no overflow masking is added. Final Human confirmation remains pending. |
 
 ## 10. Accessibility
 
@@ -187,3 +187,18 @@ Human should compare the LP preview against the accepted canonical Web and save 
 - Milestone 2: unauthorized.
 
 The only next gate is Human Visual QA and acceptance of M1-I9-R1. Do not merge this branch to `main`, create a PR, or start M1-I12 without a later explicit Human decision.
+
+## 22. M1-I9-R1-R1 bounded mobile reflow correction
+
+- Correction task ID: `M1-I9-R1-R1`.
+- Human Visual QA found a release-blocking defect at 390px: the short sample was compressed into an extremely narrow column while the Web note and save card remained in the adjacent column.
+- Static cascade audit identified the cause: the M1-I9 desktop `.lp-artifact` declaration appears after the original 960px media query and therefore restored `minmax(0, 1.18fr) minmax(18rem, 0.82fr)` below 960px. The later 640px media query did not reset the outer grid or its child minimum sizes.
+- The bounded correction adds a final 640px rule that restores `minmax(0, 1fr)`, constrains every direct child to the available width, clears automatic minimum inline sizing, and keeps `.lp-artifact__aside`, `.lp-artifact__index`, and `.lp-decision-card` within one column.
+- The 320px fallback inherits the same one-column structure and retains the existing 18px panel padding, decoration reduction, and shadow removal.
+- DOM order, content, links, judgment data, fixed cases, Hero, desktop `#note`, public sample, canonical reports, Header, Footer, and all other LP sections are unchanged.
+- No CSS `order`, horizontal-overflow masking, `writing-mode`, truncation, fixed/sticky positioning, or animation is added.
+- `LP_MOBILE_REFLOW_GATE: PASS` from static source assertions at both 390px and 320px.
+- Post-correction `EXACT_LOCKS`, `SEMANTIC_ASSERTIONS`, `SAFETY_POLICY_GATE`, and `CONTENT_LOCK_GATE`: PASS.
+- Post-correction typecheck, lint with zero warnings, clean production build with 28 generated pages, and `git diff --check`: PASS.
+- Post-correction raw-HTTP asset verification: `/` returned 200; both stylesheet hrefs returned 200 with non-empty bodies; all 14 served mobile-correction declarations were present; `CSS_ASSET_GATE: PASS`.
+- Human Visual QA remains pending. M1-I9-R1 remains unmerged and unaccepted; M1-I12 remains unauthorized; Milestone 1 remains incomplete.
