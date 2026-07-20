@@ -81,7 +81,7 @@ The three public cases retain all content and become one continuous Paper editor
 - no sequence of three Night cards and no gold body text;
 - conclusions remain before context, facts, and review conditions in the DOM;
 - shared rules and a restrained middle-column Paper tint preserve comparison without making each case a mini report; and
-- the existing single-column reflow remains controlling below 960px, including 390px.
+- the R2 correction makes the single-column reflow controlling at and below 760px, including 390px and 320px, while preserving the editorial three-column comparison above 760px.
 
 ## 9. Responsive
 
@@ -175,7 +175,7 @@ Human should compare the LP preview against the accepted canonical Web and save 
 - Automated and raw-HTTP evidence does not establish visual quality or device rendering.
 - No Browser, screenshot, viewport automation, Playwright, CDP, Puppeteer, Selenium, or GUI browser control was used.
 - Primary desktop and 390px Human Visual QA of M1-I9-R1 remains pending.
-- Final 320px, 200% zoom, keyboard/focus, and all-route regression remain held for M1-I12.
+- Final 320px Human review of the three public decision cases is now part of M1-I9-R1-R2; 200% zoom, keyboard/focus, and all-route regression remain held for M1-I12.
 - No runtime feature, file generation, download, persistence, purchase, AI generation, or delivery capability was added.
 
 ## 21. Next gate
@@ -202,3 +202,22 @@ The only next gate is Human Visual QA and acceptance of M1-I9-R1. Do not merge t
 - Post-correction typecheck, lint with zero warnings, clean production build with 28 generated pages, and `git diff --check`: PASS.
 - Post-correction raw-HTTP asset verification: `/` returned 200; both stylesheet hrefs returned 200 with non-empty bodies; all 14 served mobile-correction declarations were present; `CSS_ASSET_GATE: PASS`.
 - Human Visual QA remains pending. M1-I9-R1 remains unmerged and unaccepted; M1-I12 remains unauthorized; Milestone 1 remains incomplete.
+
+## 23. M1-I9-R1-R2 different-case mobile reflow correction
+
+- Correction task ID: `M1-I9-R1-R2`.
+- Human Visual QA confirmed a second, separate release-blocking defect: the three cases under `相談内容によって、今夜の答えは変わります。` remained in three narrow columns at 390px, producing one-character-wide Japanese wrapping.
+- Static cascade audit identified the cause: the late M1-I9 `.lp-sample-cases` desktop declaration restored the non-equal three-column grid after the original 960px single-column rule. The later media rule reset only case borders and padding, not the comparison grid itself.
+- Exact R2 mutation manifest: `app/globals.css` and this review document. No component, fixture, Safety owner, canonical report, script, package, dependency, or runtime file is changed.
+- Above 760px, the existing `minmax(0, 0.82fr) minmax(0, 1.16fr) minmax(0, 0.94fr)` editorial comparison remains unchanged.
+- At and below 760px, the comparison grid is one `minmax(0, 1fr)` column. Each case is full width; each case and every direct child clears its automatic minimum inline size; desktop grid placement and vertical separators are reset; horizontal separators preserve case boundaries.
+- The disclosure and `「送る」ケースの全文見本を読む` link become full-width normal-flow content. The link retains the global `2.75rem` / 44px minimum target.
+- DOM and visual order remain the source order: `01 今夜は待つ`, `02 今夜は短く返信してよい`, `03 こちらからの追加連絡を止める`. No CSS `order` is introduced.
+- The 320px fallback inherits the same one-column grid and keeps the existing 18px case padding. No `writing-mode`, horizontal-overflow masking, truncation, transform correction, fixed/sticky positioning, or animation is added.
+- Static source verification: 15 responsive/cascade/order assertions passed; `LP_MOBILE_REFLOW_GATE: PASS`.
+- Content and Safety verification: `EXACT_LOCKS`, `SEMANTIC_ASSERTIONS`, `UNSUPPORTED_CASES_EXACT_LOCK`, `SAFETY_POLICY_GATE`, and `CONTENT_LOCK_GATE`: PASS.
+- Typecheck, lint with zero warnings, clean production build with 28 generated pages, and `git diff --check`: PASS.
+- Raw HTTP on the new production server: `/`, `/sample-report`, `/review/result/result-normal-001`, and `/review/save-report/result-normal-001` returned 200.
+- CSS asset integrity: two stylesheet assets returned 200 with non-empty bodies; 11 served-CSS desktop/mobile assertions passed; `CSS_ASSET_GATE: PASS`.
+- Human review remains limited to: the heading and case 01 at 390px; cases 02 and 03 plus the lower disclosure/link at 390px; and the complete single-column sequence at 320px.
+- Human Visual QA remains pending. M1-I9-R1 remains unmerged and unaccepted; no PR is created; M1-I12 remains unauthorized; Milestone 1 remains incomplete.
