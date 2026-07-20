@@ -73,6 +73,7 @@ export type FreeTextRiskRule = {
   classification: Exclude<SafetyClassification, "normal_allowed">;
   reasonCode: Exclude<SafetyReasonCode, "free_text_high_risk" | "normal">;
   keywords: string[];
+  excludedPhrases?: string[];
 };
 
 export const FREE_TEXT_RISK_RULES: FreeTextRiskRule[] = [
@@ -91,16 +92,24 @@ export const FREE_TEXT_RISK_RULES: FreeTextRiskRule[] = [
     classification: "rejected",
     reasonCode: "harm_others",
     keywords: ["殺したい", "傷つけたい"],
+    excludedPhrases: ["自分を傷つけたい"],
   },
   {
     classification: "rejected",
     reasonCode: "threat_or_coercion",
-    keywords: ["脅す"],
+    keywords: ["脅す", "脅迫", "強要", "従わせる", "言うことを聞かせる"],
   },
   {
     classification: "rejected",
     reasonCode: "doxxing",
-    keywords: ["ばらす", "晒す"],
+    keywords: [
+      "晒す",
+      "晒そう",
+      "ばらす",
+      "個人情報を公開する",
+      "本名を公開する",
+      "住所を公開する",
+    ],
   },
   {
     classification: "rejected",
@@ -110,7 +119,29 @@ export const FREE_TEXT_RISK_RULES: FreeTextRiskRule[] = [
   {
     classification: "rejected",
     reasonCode: "stalking_or_visit",
-    keywords: ["家に行く", "職場に行く"],
+    keywords: [
+      "家に行く",
+      "家へ行く",
+      "家に行こう",
+      "家へ行こう",
+      "職場に行く",
+      "職場へ行く",
+      "職場に行こう",
+      "職場へ行こう",
+      "家や職場に行こう",
+      "家や職場へ行こう",
+      "押しかける",
+      "押しかけよう",
+    ],
+    excludedPhrases: [
+      "家に行く予定はありません",
+      "家へ行く予定はありません",
+      "職場に行く予定はありません",
+      "職場へ行く予定はありません",
+      "家や職場に行く予定はありません",
+      "家や職場へ行く予定はありません",
+      "押しかけるつもりはありません",
+    ],
   },
   {
     classification: "rejected",
@@ -126,5 +157,28 @@ export const FREE_TEXT_RISK_RULES: FreeTextRiskRule[] = [
     classification: "needs_review",
     reasonCode: "dv_abuse_fear",
     keywords: ["DV", "モラハラ", "強い束縛", "暴力", "殴られ"],
+  },
+  {
+    classification: "rejected",
+    reasonCode: "illegal_conduct",
+    keywords: [
+      "違法行為を含む",
+      "違法行為を含み",
+      "違法行為を助長する",
+      "違法な方法を使う",
+      "犯罪を手伝う",
+      "犯罪を助ける",
+    ],
+  },
+  {
+    classification: "rejected",
+    reasonCode: "third_party_secret",
+    keywords: [
+      "第三者の秘密情報を含む",
+      "第三者の秘密情報を使う",
+      "他人の秘密情報を含む",
+      "他人の秘密情報を使う",
+      "機密情報を使う",
+    ],
   },
 ];

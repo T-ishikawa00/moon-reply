@@ -15,6 +15,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - M1-I7 through M1-I11 are implemented and automatically validated from base commit `923d43057178da070a72f380d7054d60efca7daf`. Human accepted the current integrated result as the next-stage baseline; this is one integrated baseline decision, not five independent acceptance records and not final Milestone 1 acceptance.
 - M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction are Human-accepted as part of that baseline.
 - M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its five documentation/design documents are authoritative, and acceptance grants no implementation authority. Actual Figma production has not started and is the next design gate.
+- Human authorized M1-I2-R1 as a bounded Safety enforcement correction after the M1-P3-R1 preflight found `SEM-UNSUPPORTED-CASES` failures. M1-P3-R1 remains stopped before prototype implementation until Human accepts the correction.
 - Checkpoint A / M1-I8-R1 Technical Preparation and Checkpoint B / M1-I8-R1 Visual Excellence remain unauthorized and unimplemented. Checkpoint B is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
@@ -23,6 +24,10 @@ CodeX is the implementation and repository operation agent. It must follow the c
 The canonical service is an `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`, presented to users as `恋のメッセージ鑑定ノート`: 1相談 / 1鑑定ノート, 税込980円, 都度払い, no automatic renewal, 18+, AI disclosed, and Safety before payment.
 
 ## Current Status
+
+M1-I2-R1 is implemented and automatically validated on `fix/m1-i2-r1-safety-policy-alignment`. All 13 locked unsupported-case labels now classify to the required fail-closed state/reason. The five confirmed free-text gaps are covered through NFKC/whitespace normalization, targeted phrases, and bounded negation guards. `illegal_conduct` and `third_party_secret` are added without changing existing reason-code meaning or structured-flag classification/severity. The permanent verifier executes the real classifier and the real category export, preserves the locked source hash, and reports `SEM-UNSUPPORTED-CASES: PASS` without waiver.
+
+M1-P3-R1 coded visual prototype implementation remains zero. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, packages, Supabase, and runtime integrations were not changed.
 
 The integrated batch implemented:
 
@@ -52,7 +57,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - Reading Note: approved 14-part Web structure; distinct save-oriented decision card; fixed judgment, scenario, uncertainty, non-guarantee, and limitations preserved.
 - LP: approved ten-part sequence with the Reading Note artifact as primary value proof.
 - Request Sheet: 18+ self-declaration, one large current-situation field, relationship/what-to-know chips, Safety, one acknowledgement, privacy guidance, Request Memo, then email and purchase confirmation.
-- Safety: existing deterministic vocabulary and classification meaning are unchanged. Only `normal_allowed` continues; needs_review, rejected, contradictory, invalid-age, missing-confirmation, and unknown states fail closed.
+- Safety: existing structured vocabulary, classification, severity, and reason-code meanings remain intact; M1-I2-R1 adds only `illegal_conduct`, `third_party_secret`, targeted free-text coverage, normalization, bounded negation guards, and truthful non-normal blocking. Only `normal_allowed` continues; needs_review, rejected, contradictory, invalid-age, missing-confirmation, and unknown states fail closed.
 - Legal Review: user-readable body, publication decisions, and collapsed review metadata are separate. Legal substance and unresolved operator facts remain unchanged; Contact is inactive.
 - Presentation fixtures/schemas were reorganized only inside M1-I8 and M1-I10 and do not activate runtime behavior.
 - M1-P2-R1 public cases are static presentation data under `fixtures/public/`; they are not Safety fixtures, result fixtures, real consultations, purchaser examples, reviews, or AI-generation evidence.
@@ -63,7 +68,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - No legal page is publication-approved and no review site is deployed.
 - No active contact channel or legal acceptance exists.
 - No production database connection, payment/refund, AI call, prompt execution, email, API route, server action, analytics, authentication, external form/asset, persistence, file generation, or deployment was added.
-- No package, `supabase`, or `lib/safety/**` change was made.
+- No package or `supabase` change was made. `lib/safety/**` changed only inside the authorized M1-I2-R1 correction.
 - No real or invented operator, provider, address, telephone, email, contact URL, response time, storage region, retention period, effective date, or updated date was added.
 
 ## M1-P3 Record
@@ -96,6 +101,16 @@ Out of scope:
 - external fonts, Storybook, or visual regression tooling; and
 - PDF, download, share, print, or actual persistence.
 
+## M1-I2-R1 Record
+
+- Task ID: `M1-I2-R1`.
+- Task name: `Safety Policy Enforcement Alignment`.
+- Base commit: `6858352ceccc266c4e4e939507575cabbda49fc0`.
+- Status: implementation and automated validation complete; Human review pending.
+- Review record: `docs/phase1/TASK_M1_I2_R1_SAFETY_POLICY_ALIGNMENT_REVIEW.md`.
+- Required gate: all 13 exact locked unsupported-case categories fail closed; `needs_review` and `rejected` both block ordinary confirmation.
+- Validation: permanent Safety verifier, typecheck, lint, production build, exact-lock check, `git diff --check`, and prohibited-scope audit pass without Browser or screenshot use.
+
 Controlling Human design decisions:
 
 - The product artifact is `恋のメッセージ鑑定ノート`; the long presentation is `Web鑑定ノート`; the short presentation is `保存用判断カード`.
@@ -109,10 +124,10 @@ Controlling Human design decisions:
 
 ## Current Restriction
 
-The accepted M1-P3 package is the authoritative Visual Excellence documentation/design specification. It grants no implementation authority. Actual Figma production has not started. Do not start Checkpoint A / M1-I8-R1 Technical Preparation, Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without the applicable separate explicit Human authorization. Checkpoint B additionally remains blocked until a Human-approved Figma file exists. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-I2-R1 does not amend its visual specification or authorize visual implementation. Do not resume M1-P3-R1 coded visual prototype work before Human acceptance of M1-I2-R1. Do not start Checkpoint A / M1-I8-R1 Technical Preparation, Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without the applicable separate explicit Human authorization. Checkpoint B additionally remains blocked until a Human-approved Figma file exists. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance.
 
 ## Next Gate
 
-Using the accepted M1-P3 canonical package, produce and obtain Human acceptance of the actual Figma design for Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Figma production and Human acceptance are not application implementation authorization. Checkpoint A or Checkpoint B may begin only after its own separate explicit Human authorization. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human reviews and explicitly accepts M1-I2-R1. After acceptance, the previously stopped M1-P3-R1 coded visual prototype may resume from implementation zero under its own scope. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

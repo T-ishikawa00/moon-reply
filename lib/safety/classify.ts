@@ -25,7 +25,7 @@ function uniqueReasonCodes(reasonCodes: SafetyReasonCode[]) {
 }
 
 function normalizeText(value: string) {
-  return value.toLowerCase().replace(/\s+/g, "");
+  return value.normalize("NFKC").toLowerCase().replace(/\s+/gu, "");
 }
 
 function isKnownSafetyFlag(flag: string): flag is SafetySelectedFlag {
@@ -50,8 +50,12 @@ function scanFreeText(input: SafetyInput) {
   let hasReviewRisk = false;
 
   for (const rule of FREE_TEXT_RISK_RULES) {
+    const searchableText = (rule.excludedPhrases ?? []).reduce(
+      (text, phrase) => text.split(normalizeText(phrase)).join(""),
+      normalizedText,
+    );
     const hasKeyword = rule.keywords.some((keyword) =>
-      normalizedText.includes(normalizeText(keyword)),
+      searchableText.includes(normalizeText(keyword)),
     );
 
     if (!hasKeyword) {
@@ -95,7 +99,7 @@ function buildResult(
     classification,
     severity,
     reasonCodes: uniqueReasonCodes(reasonCodes),
-    shouldBlockNormalConfirmation: severity === "reject",
+    shouldBlockNormalConfirmation: severity !== "normal",
     userTitle: message.userTitle,
     userMessage: message.userMessage,
   };

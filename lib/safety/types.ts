@@ -13,6 +13,8 @@ export type SafetyReasonCode =
   | "minor_related"
   | "doxxing"
   | "surveillance"
+  | "illegal_conduct"
+  | "third_party_secret"
   | "none_selected"
   | "contradictory_selection"
   | "free_text_high_risk"
