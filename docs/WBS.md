@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The M1-P3-R1 preflight stopped before prototype implementation on `SEM-UNSUPPORTED-CASES`; Human authorized the bounded M1-I2-R1 Safety correction, which is implemented and automatically validated but awaits Human acceptance. M1-P3-R1 remains unimplemented until that acceptance. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The M1-P3-R1 preflight stopped before prototype implementation on `SEM-UNSUPPORTED-CASES`; the bounded M1-I2-R1 Safety correction is now Human-accepted at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, implemented, and automatically validated without waiver. The previous hard stop is resolved, and M1-P3-R1 may resume from implementation zero. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 ## P0: Repository Setup
 
@@ -453,7 +453,7 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 
 M1-P3 acceptance is not implementation authorization. Figma production and Human acceptance are also not application implementation authorization. It may not change product facts, price, fixture judgment, Safety, request/legal behavior, or runtime scope.
 
-## P4.25: Human Review Pending — M1-I2-R1 Safety Policy Enforcement Alignment
+## P4.25: Human Accepted — M1-I2-R1 Safety Policy Enforcement Alignment
 
 - [x] Stop M1-P3-R1 before coded visual prototype implementation when `SEM-UNSUPPORTED-CASES` fails
 - [x] Human authorization of only the bounded M1-I2-R1 Safety correction
@@ -464,7 +464,8 @@ M1-P3 acceptance is not implementation authorization. Figma production and Human
 - [x] Add `scripts/verify-m1-safety-policy.mjs` using the real classifier, real category export, existing TypeScript compiler, OS temp directory, and exact lock
 - [x] Pass exact-category, natural-language, benign-control, structured-flag, normal, contradictory-selection, `SEM-UNSUPPORTED-CASES`, and aggregate Safety gates
 - [x] Pass typecheck, lint, production build, `git diff --check`, and prohibited-scope audit without Browser or screenshots
-- [ ] Human review and acceptance of M1-I2-R1; M1-P3-R1 remains stopped and unimplemented until acceptance
+- [x] Human review and acceptance of M1-I2-R1 at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`; `SEM-UNSUPPORTED-CASES` PASS without waiver
+- [x] Resolve the previous M1-P3-R1 hard stop; coded visual prototype implementation may resume and remains zero before that work starts
 
 This correction does not authorize canonical UI or Reading Note changes, Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 acceptance, or Milestone 2.
 
@@ -484,4 +485,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 automated validation does not authorize M1-P3-R1 resumption; Human acceptance is still required and prototype implementation remains zero. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
+M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted, and the previous M1-P3-R1 hard stop is resolved; coded visual prototype implementation may resume from zero. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.

@@ -6,8 +6,9 @@
 - Task name: `Safety Policy Enforcement Alignment`
 - Base commit: `6858352ceccc266c4e4e939507575cabbda49fc0`
 - Branch: `fix/m1-i2-r1-safety-policy-alignment`
-- Status: implementation and automated validation complete; Human review pending
-- Prototype status: M1-P3-R1 coded visual prototype remains stopped before implementation; implementation is still zero
+- Status: Human-accepted; implementation and automated validation complete
+- Accepted implementation commit: `23ee6f3b98837e48628b59b41eab811da627e730`
+- Prototype status: the previous M1-P3-R1 hard stop is resolved; coded visual prototype implementation may resume and is still zero before that work starts
 
 ## 2. Triggering semantic failure
 
@@ -28,7 +29,7 @@ This is an implementation coverage gap, not a defect in the accepted inspection 
 
 ## 4. Human authorization
 
-Human authorized only this bounded Safety correction, its permanent regression verifier, the named status/review documents, one dedicated-branch commit, and push to that branch. Human did not authorize M1-P3-R1 prototype implementation, canonical UI or Reading Note changes, Checkpoint A, Checkpoint B, M1-I12, Milestone 2, merge, main push, or PR creation.
+Human originally authorized only this bounded Safety correction, its permanent regression verifier, the named status/review documents, one dedicated-branch commit, and push to that branch. Human subsequently accepted implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, authorized fast-forward synchronization to `main`, and continued the separate M1-P3-R1 coded visual prototype authorization. Canonical UI or Reading Note changes, Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 acceptance, and Milestone 2 remain unauthorized.
 
 ## 5. Required 13-category mapping
 
@@ -158,10 +159,10 @@ This task does not claim to rerun unrelated M1-P3 semantic assertions.
 - Canonical UI, Reading Note, LP, Request Form UI, Legal UI, Figma, and prototype route: no change
 - Browser and screenshot use: none
 
-## 18. Human review requirement
+## 18. Human acceptance
 
-Automated PASS does not accept this correction. Human must review the dedicated branch and explicitly accept M1-I2-R1 before M1-P3-R1 prototype work resumes. No visual acceptance is claimed because no visual surface changed and Browser/screenshot use was prohibited.
+Human accepted M1-I2-R1 at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. Automated evidence remains distinct from that Human decision. No visual acceptance is claimed because no visual surface changed and Browser/screenshot use was prohibited.
 
 ## 19. Next gate
 
-Human review and acceptance of M1-I2-R1 is the next gate. After acceptance, the separately governed M1-P3-R1 coded visual prototype may resume from its prior stopped state. Checkpoint A, Checkpoint B, M1-I12, Milestone 1 acceptance, and Milestone 2 remain unauthorized.
+The separately governed M1-P3-R1 coded visual prototype may resume from its prior stopped state and implementation zero. Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 acceptance, and Milestone 2 remain unauthorized.
