@@ -1228,6 +1228,7 @@ summary::marker {
 .request-page__boundary { max-width: 52rem; margin-top: var(--space-6); border-left: 3px solid var(--moon-400); background: color-mix(in srgb, var(--paper-50) 5%, transparent); padding: var(--space-4); color: var(--paper-200); font-size: 0.82rem; line-height: 1.85; }
 
 .request-sheet-wrap { width: min(100% - 2.5rem, 58rem); margin-inline: auto; padding-block: clamp(2.5rem, 6vw, 5rem); }
+.request-fragment-target { display: block; block-size: 0; scroll-margin-top: 6rem; }
 .request-progress { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: var(--space-5); border-block: 1px solid var(--border-paper); }
 .request-progress span { min-width: 0; padding: var(--space-3); color: var(--ink-600); font-size: 0.76rem; font-weight: 800; text-align: center; }
 .request-progress span + span { border-left: 1px solid var(--border-paper); }

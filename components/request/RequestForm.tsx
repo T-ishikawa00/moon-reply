@@ -279,6 +279,16 @@ function RequestMemo({
   );
 }
 
+function RequestFragmentTargets() {
+  return (
+    <>
+      <span id="sheet" className="request-fragment-target" aria-hidden="true" />
+      <span id="safety" className="request-fragment-target" aria-hidden="true" />
+      <span id="email" className="request-fragment-target" aria-hidden="true" />
+    </>
+  );
+}
+
 export function RequestForm() {
   const [form, setForm] = useState<RequestFormData>(initialFormState);
   const [phase, setPhase] = useState<Phase>(1);
@@ -501,6 +511,7 @@ export function RequestForm() {
   if (completed) {
     return (
       <section className="request-sheet-wrap">
+        <RequestFragmentTargets />
         <article
           id="request-local-complete"
           tabIndex={-1}
@@ -545,6 +556,7 @@ export function RequestForm() {
 
   return (
     <section className="request-sheet-wrap">
+      <RequestFragmentTargets />
       <nav className="request-progress" aria-label="鑑定依頼シートの進行状況">
         {([1, 2, 3, 4] as Phase[]).map((item) => (
           <span key={item} aria-current={phase === item ? "step" : undefined}>
@@ -854,7 +866,7 @@ export function RequestForm() {
           </header>
           <form noValidate onSubmit={handleEmailSubmit}>
             <div className="request-field">
-              <label htmlFor="email">
+              <label htmlFor="request-email">
                 受け取りメールアドレス <span>必須</span>
               </label>
               <p id="email-note">
@@ -862,7 +874,7 @@ export function RequestForm() {
                 現在は送信も保存もされません。
               </p>
               <input
-                id="email"
+                id="request-email"
                 name="email"
                 type="email"
                 autoComplete="email"
