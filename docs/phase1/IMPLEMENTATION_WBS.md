@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-P3-R1 preflight stopped before coded visual prototype implementation when `SEM-UNSUPPORTED-CASES` failed. The bounded M1-I2-R1 Safety correction and permanent verifier are implemented, automatically validated, and Human-accepted at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`; the gate passes without waiver. The previous hard stop is resolved, and M1-P3-R1 may resume from implementation zero. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The bounded M1-I2-R1 Safety correction and permanent verifier are implemented, automatically validated, Human-accepted at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, and synchronized to `main`; the gate passes without waiver. M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated, and Human design selection remains pending. Figma is optional and non-authoritative. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
 
 ## Milestone 0: Completed Foundations
 
@@ -108,15 +108,18 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-P3: prepare the content lock, information hierarchy, Figma/design handoff, typography, chapter archetypes, responsive specification, acceptance criteria, implementation plan, and review record
 - [x] M1-P3: Human and ChatGPT review of the package
 - [x] Human acceptance of the five M1-P3 documents as the authoritative Visual Excellence design specification
-- [x] M1-P3-R1 preflight: stop before coded visual prototype implementation on `SEM-UNSUPPORTED-CASES`; prototype implementation remains zero
+- [x] Historical M1-P3-R1 preflight: stopped before coded visual prototype implementation on `SEM-UNSUPPORTED-CASES`; prototype implementation was zero at that gate
 - [x] Human authorization of M1-I2-R1 as a bounded Safety correction only
 - [x] M1-I2-R1: align all 13 locked unsupported-case categories, add the two missing reason codes, preserve structured classification/severity, avoid named benign overmatching, and keep every non-normal state fail closed
 - [x] M1-I2-R1: add and pass the permanent real-classifier verifier, exact unsupported-case lock, typecheck, lint, production build, `git diff --check`, and prohibited-scope audit
 - [x] Human review and acceptance of M1-I2-R1 at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`; `SEM-UNSUPPORTED-CASES` PASS without waiver
-- [x] Previous M1-P3-R1 hard stop resolved; coded visual prototype implementation may resume and remains zero before that work starts
-- [ ] Actual Figma production and Human acceptance as the next design gate
+- [x] Previous M1-P3-R1 hard stop resolved; release from implementation zero recorded before coded visual prototype work started
+- [x] Replace the former required-Figma gate with a Human-approved coded visual prototype gate; Figma is optional and non-authoritative
+- [x] M1-P3-R1: implement isolated A/B review routes from the same fixed `result-normal-001` source and semantic order
+- [x] M1-P3-R1: pass exact locks, semantic assertions, Safety verifier, typecheck, lint, build, raw HTTP/rendered checks, prohibited-scope audit, and `git diff --check`
+- [ ] Human selection and acceptance of A, B, or an explicitly recorded combination
 - [ ] Separate Human authorization of Checkpoint A / M1-I8-R1 Technical Preparation; remains unauthorized and unimplemented
-- [ ] Separate Human authorization of Checkpoint B / M1-I8-R1 Visual Excellence; remains unauthorized and unimplemented, and blocked until a Human-approved Figma file exists
+- [ ] Separate Human authorization of Checkpoint B / M1-I8-R1 Visual Excellence; remains unauthorized and unimplemented, and blocked until Human selects the coded prototype direction
 - [ ] Separate Human authorization of M1-I9-R1; remains unauthorized and unimplemented
 - [ ] Separate Human authorization of M1-I12 Responsive, Accessibility and Final QA
 - [ ] M1-I12 Responsive, Accessibility and Final QA implementation and Human acceptance

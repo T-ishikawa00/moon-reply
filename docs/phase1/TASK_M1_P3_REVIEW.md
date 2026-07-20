@@ -10,15 +10,16 @@
 - Working branch: `design/m1-p3-reading-note-visual-excellence`
 - Implementation authorization: **none**
 - Figma mutation authorization: **none**
-- Actual Figma production: **not started; next design gate**
+- Figma: **optional, non-authoritative reference; not required for the design gate**
 - Checkpoint A / M1-I8-R1 Technical Preparation: **unauthorized and not implemented**
-- Checkpoint B / M1-I8-R1 Visual Excellence: **unauthorized and not implemented; blocked until a Human-approved Figma file and separate explicit implementation authorization exist**
+- M1-P3-R1 coded visual prototype gate: **A/B implemented and automatically validated; Human selection pending**
+- Checkpoint B / M1-I8-R1 Visual Excellence: **unauthorized and not implemented; blocked until coded-prototype selection and separate explicit implementation authorization exist**
 - M1-I9-R1: **unauthorized and not implemented**
 - M1-I12: **unauthorized and not implemented**
 
 This review record records Human and ChatGPT acceptance of the five M1-P3 documents as the authoritative, complete Visual Excellence documentation/design specification. Acceptance does not authorize application implementation, any checkpoint, `M1-I9-R1`, or `M1-I12`, complete Milestone 1, or authorize Milestone 2.
 
-Sections 2 through 16 preserve the historical preflight, branch, draft-production, correction, validation, commit, push, and explicit non-action evidence. Those historical statements remain unchanged and do not describe the later acceptance-synchronization task.
+Sections 2 through 16 preserve the historical preflight, branch, draft-production, correction, validation, commit, push, and explicit non-action evidence except where the former required-Figma gate is explicitly marked superseded. They do not describe M1-P3-R1 implementation evidence; that evidence is recorded in `TASK_M1_P3_R1_CODED_VISUAL_PROTOTYPE_REVIEW.md`.
 
 ## 2. Preflight evidence
 
@@ -114,7 +115,7 @@ The draft preserves these decisions without reopening them:
 
 Six current-status documents are synchronized separately with minimal edits. No historical M1-P2 artifact is changed.
 
-The bounded review correction updates only these five draft-package documents. It adds the actual-Figma design dependencies for Checkpoints B/C, formal-name alignment boundary, corrected `fixtures/**` path, independent exact-lock/semantic-assertion gates, unambiguous 390px spacing, and the full Checkpoint B Human QA matrix. Current status and authorization do not change, so no current-status document requires mutation.
+Historical note: the bounded review correction updated only these five draft-package documents and, at that time, added actual-Figma design dependencies for Checkpoints B/C, the formal-name alignment boundary, corrected `fixtures/**` path, independent exact-lock/semantic-assertion gates, unambiguous 390px spacing, and the full Checkpoint B Human QA matrix. The actual-Figma dependency is now superseded by the coded-prototype gate; the lock, boundary, spacing, and QA evidence remains historical input.
 
 ## 7. Chapter archetype recommendation
 
@@ -182,13 +183,13 @@ Independent semantic behavior assertions name the source files, exact field/expo
 
 The fixture declarations themselves remain unchanged. Future M1-I8-R1 content-lock output must print separate `Exact locks` and `Semantic behavior assertions` sections and report `CONTENT_LOCK_GATE: PASS` only when both pass. A summary-string hash is not accepted as proof of behavior or meaning.
 
-## 13. Figma handoff conclusion
+## 13. Figma handoff conclusion and supersession
 
-The handoff specification defines required pages, frames, archetype sheets, tokens, component anatomy, responsive annotations, state treatment, accessibility requirements, fixed content, implementation mapping, and acceptance criteria. It requires current Japanese fixture copy and prohibits Lorem Ipsum.
+The handoff specification remains useful only as optional, non-authoritative reference guidance. If used, it defines frame, archetype, token, component-anatomy, responsive, state, accessibility, fixed-content, and annotation expectations with current Japanese fixture copy and no Lorem Ipsum.
 
-Checkpoint A may be separately authorized after M1-P3 documentation acceptance without an actual Figma file and remains visually neutral. Checkpoint B requires a Human-approved Figma file with accepted Web/save/public desktop and 390px frames, six archetype sheets, typography/spacing/color/component anatomy, 768px/320px annotations, and Review-wrapper treatment. Checkpoint C additionally requires accepted LP-preview desktop/390px frames, the same-case/different-case boundary annotation, and accepted M1-I8-R1 artifact grammar. Figma acceptance is a design dependency, not implementation authorization.
+The former Human-approved-Figma dependency is superseded. The controlling design gate is Human selection and acceptance of coded prototype A, B, or an explicitly recorded combination. Figma is not required and does not authorize Checkpoint A, Checkpoint B, or Checkpoint C.
 
-No Figma file was created or mutated in this task.
+No Figma file was created or mutated in M1-P3 or M1-P3-R1.
 
 ## 14. Validation evidence
 
@@ -267,6 +268,6 @@ Expected correction total: exactly 5 `docs/**` files and zero non-document files
 
 ## 17. Next Human gate
 
-Using the accepted M1-P3 canonical package, the next Human gate is production and Human acceptance of the actual Figma design for Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview.
+Using the accepted M1-P3 canonical package, Human compares the implemented M1-P3-R1 coded visual prototypes in ordinary external Microsoft Edge and selects A — `Quiet Editorial Letter`, B — `Lunar Contrast Edition`, or an explicitly recorded combination.
 
-Actual Figma production has not started. Figma production and Human acceptance are not application implementation authorization. Checkpoint A / `M1-I8-R1` Technical Preparation remains unauthorized and unimplemented; it requires its own separate explicit Human authorization and exact mutation manifest. Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented and blocked until both its complete Human-approved Figma design gate and its own separate explicit implementation authorization exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
+Figma is optional and non-authoritative. Prototype selection is not application implementation authorization. Checkpoint A / `M1-I8-R1` Technical Preparation remains unauthorized and unimplemented and requires its own separate explicit Human authorization and exact mutation manifest. Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented and blocked until both coded-prototype selection and its own separate explicit implementation authorization exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.

@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 — M1-I2-R1 Safety Policy Enforcement Alignment Human-accepted; M1-P3-R1 coded visual prototype may resume from implementation zero
+Phase 1 / Milestone 1 — M1-P3-R1 coded A/B visual prototypes implemented and automatically validated; Human design selection pending
 
 ## Completed Through
 
@@ -23,13 +23,14 @@ Phase 1 / Milestone 1 — M1-I2-R1 Safety Policy Enforcement Alignment Human-acc
 - Task M1-P2-R1 public-sample conclusion diversification and the bounded M1-P2-R1-R1 contrast/comparison-boundary correction Human-accepted as part of that baseline
 - Task M1-P3 Reading Note Visual Excellence Specification Human and ChatGPT accepted as the authoritative documentation/design specification
 - Task M1-I2-R1 Human-accepted at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`; `SEM-UNSUPPORTED-CASES` passed without waiver
-- Task M1-P3-R1 preflight stop resolved by the accepted Safety correction; prototype implementation may resume and remains zero before that work starts
+- Task M1-P3-R1 preflight stop resolved by the accepted Safety correction
+- Task M1-P3-R1 review-only A/B coded visual prototypes implemented from the same fixed `result-normal-001` source; Human design selection pending
 
 ## Current Task
 
-M1-I2-R1 is the accepted bounded Safety correction. It aligns the real deterministic classifier with all 13 exact locked `unsupportedCaseCategories`, adds the missing `illegal_conduct` and `third_party_secret` reason codes, applies NFKC plus whitespace normalization, adds targeted phrase coverage and bounded negation guards, and permanently verifies the gate through `scripts/verify-m1-safety-policy.mjs`.
+M1-P3-R1 is the current bounded coded visual prototype gate. It compares A — `Quiet Editorial Letter` and B — `Lunar Contrast Edition` on isolated `/review/visual-excellence/**` routes using the same exported resolver, fixed `result-normal-001` fixture, content subset, and semantic order.
 
-Implementation and automated validation are complete on `fix/m1-i2-r1-safety-policy-alignment`, and Human accepted implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver and the locked category source/hash is unchanged. The previous M1-P3-R1 hard stop is resolved; coded visual prototype implementation may resume and remains zero before that work starts. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, packages, and runtime integrations were not changed. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
+M1-I2-R1 implementation and automated validation are complete, Human accepted implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, and the accepted Safety correction is synchronized to `main`. `SEM-UNSUPPORTED-CASES` passes without waiver. The M1-P3-R1 A/B prototypes are implemented and automatically validated; Human must now select A, B, or an explicit combination. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, Safety, packages, and runtime integrations were not changed by the prototype. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 Accepted public fictional conclusions in the baseline are:
 
@@ -52,7 +53,8 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - The public full sample is a shorter edited artifact using the same visual grammar as the full product; it does not need to expand to the same fourteen chapters.
 - The primary mobile design width is 390px. 320px is a QA fallback.
 - External fonts are prohibited.
-- Figma/design handoff is the formal Human design gate.
+- The formal Human design gate is selection and acceptance of a coded visual prototype: A, B, or an explicitly recorded combination.
+- Figma is optional, non-authoritative reference material and is not required for the gate.
 - The primary first-impression evaluation target is the Reading Note artifact itself. Header, ReviewBanner, and the whole review route must not obstruct the artifact's impression, reading entry, or closing aftertaste.
 
 ## Current Human Decisions
@@ -64,10 +66,11 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - This baseline decision is not final Milestone 1 acceptance.
 - M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted and authoritative; the documentation/design specification is complete and grants no implementation authorization.
 - Human accepted M1-I2-R1 as the bounded Safety coverage correction and permanent regression-verifier task at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`.
-- The previous M1-P3-R1 hard stop is resolved; coded visual prototype implementation may resume from implementation zero under its continuing Human authorization.
-- Actual Figma production has not started and is the next design gate.
+- The previous M1-P3-R1 hard stop is resolved; review-only A/B coded visual prototypes are implemented and automatically validated under the continuing Human authorization.
+- Human design selection is pending. Prototype acceptance does not authorize canonical implementation.
+- Figma is optional and non-authoritative; an existing or future Figma file has no implementation-gate authority.
 - Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented.
-- Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; it is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
+- Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; it is blocked until Human selects the coded prototype direction and separately records explicit implementation authorization.
 - M1-I9-R1 remains unauthorized and unimplemented.
 - M1-I12 Responsive, Accessibility and Final QA remains unauthorized and unimplemented.
 - M1-I6 remains formally closed as superseded without acceptance; its historical evidence and carried defect inventory remain intact.
@@ -88,7 +91,8 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 ## Current Restrictions
 
 - Do not reinterpret the integrated baseline decision as separate slice acceptance or final Milestone 1 acceptance.
-- M1-P3 acceptance alone grants no implementation authority; only the separately continued M1-P3-R1 coded visual prototype authorization may now be exercised.
+- M1-P3 acceptance and M1-P3-R1 prototype implementation do not grant canonical implementation authority.
+- Do not treat Figma as a required or authoritative gate. Human selection of A, B, or a recorded combination is the controlling design decision.
 - Do not start M1-I8-R1, M1-I9-R1, or M1-I12 without separate explicit Human authorization after the applicable specification/acceptance gate.
 - Do not publish, deploy, activate runtime integrations, complete operator facts, or start Milestone 2+ under baseline closure.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
@@ -114,6 +118,16 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - Scope: align all 13 locked unsupported-case labels to fail-closed classification, correct the five confirmed free-text gaps, add `illegal_conduct` and `third_party_secret`, preserve existing structured flag classification/severity, avoid the named benign false positives, and add a permanent verifier.
 - Evidence: `EXACT_CATEGORY_CASES`, `NATURAL_LANGUAGE_CASES`, `BENIGN_CONTROLS`, `STRUCTURED_FLAGS`, `NORMAL_CONTROL`, `CONTRADICTORY_SELECTION`, `SEM-UNSUPPORTED-CASES`, and `SAFETY_POLICY_GATE` all PASS; typecheck, lint, build, and `git diff --check` pass.
 
+## M1-P3-R1 Record
+
+- Task ID: `M1-P3-R1`
+- Task name: `Coded Visual Prototype Gate`
+- Status: A/B prototypes implemented and automatically validated; Human design selection pending
+- Branch: `design/m1-p3-coded-visual-prototype`
+- Routes: `/review/visual-excellence`, `/review/visual-excellence/a`, `/review/visual-excellence/b`
+- Fixed source: `getReportFixture("result-normal-001")`; fixture, Safety, canonical report components, package files, and runtime behavior unchanged
+- Gate: Human selects A, B, or an explicit combination. Prototype acceptance is not canonical implementation authorization.
+
 ## Next Gate
 
-M1-I2-R1 is Human-accepted, so the previously stopped M1-P3-R1 coded visual prototype may resume from implementation zero under its own controlling scope. This Safety acceptance does not authorize canonical UI or Reading Note changes, Checkpoint A, Checkpoint B, M1-I9-R1, or M1-I12. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human reviews A and B in ordinary external Microsoft Edge and selects A, B, or an explicitly recorded combination. Figma is optional and non-authoritative. Checkpoint A remains unauthorized. Checkpoint B remains unauthorized and additionally requires separate explicit implementation authorization after the coded-prototype selection. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

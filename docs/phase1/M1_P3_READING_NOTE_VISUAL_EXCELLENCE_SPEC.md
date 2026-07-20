@@ -5,11 +5,11 @@
 - Task ID: `M1-P3`
 - Task name: `Reading Note Visual Excellence Specification`
 - Status: `Human and ChatGPT accepted`
-- Scope: documentation/design-only
+- Scope: canonical documentation/design specification plus the recorded M1-P3-R1 coded-prototype gate correction
 - Base commit: `7e02c5f38c37f0249b7b732fb1fc740a806f0562`
-- Implementation authority: none
+- Canonical implementation authority: none; M1-P3-R1 review-only coded prototype authority is separate and bounded
 
-This document specifies the next visual-quality target for the Reading Note artifacts. It does not authorize application, CSS, component, fixture, Safety, package, runtime, Figma-file, or deployment changes.
+This document specifies the next visual-quality target for the Reading Note artifacts. It does not authorize canonical application implementation, fixture, Safety, package, runtime, or deployment changes. Human separately authorized only M1-P3-R1 review-only coded A/B prototypes; that prototype authority does not authorize Checkpoint A or Checkpoint B.
 
 Authority order:
 
@@ -17,7 +17,7 @@ Authority order:
 2. Current Human-fixed decisions in this document control M1-P3 visual design.
 3. `M1_P3_CONTENT_LOCK_MATRIX.md` controls fixed content and semantic values.
 4. This document controls visual grammar and acceptance targets.
-5. `M1_P3_FIGMA_HANDOFF_SPEC.md` translates this document into Figma-ready frames and component anatomy.
+5. `M1_P3_FIGMA_HANDOFF_SPEC.md` is optional, non-authoritative Figma reference material.
 6. `M1_P3_IMPLEMENTATION_PLAN.md` describes possible future checkpoints but grants no authority to execute them.
 
 If these artifacts conflict, implementation must stop and the conflict must be returned to Human. No agent may resolve a conflict by editing fixed fixture content or changing a Human-fixed decision.
@@ -40,6 +40,9 @@ The following decisions are closed and must not be returned as open questions:
 - External fonts are prohibited.
 - The public full sample is a shorter edited artifact using the same visual grammar; it is not expanded to fourteen chapters.
 - The artifact is the primary product-quality target. Header, ReviewBanner, route boundary, comparison navigation, and Footer must not damage its first impression, reading entry, or closing aftertaste.
+- The required design gate is Human selection and acceptance of a coded visual prototype: A, B, or an explicitly recorded combination.
+- Figma is optional, non-authoritative reference material. A Figma file is not required and has no independent implementation-gate authority.
+- Prototype acceptance selects design direction only; it does not authorize canonical implementation or any checkpoint.
 
 ## 3. Product objective
 
@@ -809,20 +812,13 @@ Web, save, and public report components remain separate compositions. They may s
 
 ## 43. Implementation checkpoints
 
-- Checkpoint A: M1-P3 documentation acceptance is satisfied, but Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented. It may begin only after separate explicit Human authorization, may run before an actual Figma file exists, and is limited to visually neutral content-lock and CSS/style-boundary preparation.
-- Checkpoint B: Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented. It is blocked until the complete Human-approved Figma design gate below exists and separate explicit implementation authorization is recorded. When authorized, its scope is Web, save, public sample, wrapper, comparison, error/loading, and the manifest-bounded formal-name alignment. Its design dependencies are all of the following:
-  - Human-approved Figma file exists;
-  - Web鑑定ノート desktop and 390px complete frames accepted;
-  - 保存用判断カード desktop and 390px frames accepted;
-  - 公開全文見本 desktop and 390px complete frames accepted;
-  - six archetype sheets accepted;
-  - typography, spacing, color, and component anatomy accepted;
-  - 768px reflow and 320px fallback annotations accepted; and
-  - Review wrapper treatment accepted.
-- Checkpoint C: M1-I9-R1 LP preview alignment remains unauthorized and unimplemented. Its design dependencies are Human-approved LP-preview desktop and 390px frames, the same-case/different-case boundary annotation, the accepted M1-I8-R1 artifact grammar, and separate explicit Human authorization.
+- M1-P3-R1 coded visual prototype gate: separately Human-authorized review-only A/B prototypes are implemented and automatically validated on isolated `/review/visual-excellence/**` routes. Both use the same fixed `result-normal-001` content subset and semantic order. Human selection of A, B, or an explicitly recorded combination remains pending. This is design evidence, not canonical implementation.
+- Checkpoint A: M1-P3 documentation acceptance is satisfied, but Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented. It may begin only after separate explicit Human authorization and is limited to visually neutral content-lock and CSS/style-boundary preparation.
+- Checkpoint B: Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented. It is blocked until Human selects and accepts the M1-P3-R1 coded prototype direction and separately records explicit canonical implementation authorization with an exact mutation manifest. Figma is optional and is not a dependency. When authorized, Checkpoint B's scope remains Web, save, public sample, wrapper, comparison, error/loading, and the manifest-bounded formal-name alignment.
+- Checkpoint C: M1-I9-R1 LP preview alignment remains unauthorized and unimplemented. Its dependencies are an accepted M1-I8-R1 artifact grammar, an explicit same-case/different-case boundary decision, and separate Human authorization. Optional Figma reference frames do not authorize it.
 - Checkpoint D: M1-I12 final responsive/accessibility QA and acceptance package remains unauthorized and unimplemented and requires separate explicit Human authorization.
 
-Each checkpoint has its own allowed files, validation, rollback, commit, and Human gate in `M1_P3_IMPLEMENTATION_PLAN.md`. Documentation alone cannot start Checkpoint B or C. Figma-file acceptance is a design dependency, not implementation authorization. Completion or acceptance of one dependency or checkpoint does not authorize the next.
+Each checkpoint has its own allowed files, validation, rollback, commit, and Human gate in `M1_P3_IMPLEMENTATION_PLAN.md`. Documentation, prototype selection, or optional Figma material cannot start a checkpoint without its separate explicit Human authorization. Completion or acceptance of one dependency or checkpoint does not authorize the next.
 
 ## 44. Human Visual QA criteria
 
@@ -942,6 +938,6 @@ Technical:
 
 ## 49. Next gate
 
-M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The next Human gate is production and Human acceptance of the actual Figma design based on this canonical package: Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Actual Figma production has not started.
+M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-P3-R1 A/B coded visual prototypes are implemented and automatically validated. The next Human gate is external-Edge comparison and selection of A — `Quiet Editorial Letter`, B — `Lunar Contrast Edition`, or an explicitly recorded combination.
 
-M1-P3 acceptance and later Figma acceptance are not application implementation authorization. Checkpoint A remains unauthorized and unimplemented; an actual Figma file is not required for A, but its own separate explicit Human authorization is required. Checkpoint B remains unauthorized and unimplemented and blocked until the complete Human-approved Figma design gate and its own separate explicit implementation authorization both exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
+Figma is optional and non-authoritative. Prototype selection does not authorize canonical implementation. Checkpoint A remains unauthorized and unimplemented. Checkpoint B remains unauthorized and unimplemented and is blocked until both the coded-prototype selection and its own separate explicit implementation authorization exist. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
