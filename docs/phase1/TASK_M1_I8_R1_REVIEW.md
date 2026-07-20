@@ -1,23 +1,28 @@
-# Task M1-I8-R1 Checkpoint A Technical Preparation Review
+# Task M1-I8-R1 Checkpoint A Acceptance and Checkpoint B Visual Excellence Review
 
 ## 1. Status and authority
 
 - Task ID: `M1-I8-R1`
-- Checkpoint: `A — Technical Preparation`
+- Checkpoints: `A — Technical Preparation` and `B — Visual Excellence`
 - Base / accepted documentation commit: `d6a9f111a2e15c54e9f250a2126d64abfacdefd0`
 - Accepted locked-source base: `84edb93c6e098c65ae2e180478827033c25d488a`
-- Branch: `feat/m1-i8-r1-checkpoint-a`
-- Status: **Human-accepted; implementation and automated validation complete**
-- Accepted implementation commit: `7977f09eca733168c8bac3ae20670c21fa00cbda`
-- Expected commit: `refactor: prepare M1-I8-R1 reading note visual system`
-- Checkpoint B / M1-I8-R1 Visual Excellence: **Human-authorized; implementation not yet started; B — `Lunar Contrast Edition` controlling**
+- Checkpoint A branch: `feat/m1-i8-r1-checkpoint-a`
+- Checkpoint A status: **Human-accepted; implementation and automated validation complete**
+- Checkpoint A accepted implementation commit: `7977f09eca733168c8bac3ae20670c21fa00cbda`
+- Checkpoint A acceptance-synchronization commit and final `main` base: `79011f274c35a0cf80f68af845ffaca95e8884c9`
+- Checkpoint A commit: `refactor: prepare M1-I8-R1 reading note visual system`
+- Checkpoint B base: `79011f274c35a0cf80f68af845ffaca95e8884c9`
+- Checkpoint B branch: `feat/m1-i8-r1-checkpoint-b-lunar-contrast`
+- Checkpoint B status: **implemented and automatically validated; B — `Lunar Contrast Edition` controlling; Human Visual QA pending; not merged to `main`**
+- Checkpoint B expected commit: `feat: implement M1-I8-R1 reading note visual excellence`
+- Prototype reference: `d5095ec3c7cf14a9646cb621a64b88d970e908bc`; read-only inspection only, with no merge, cherry-pick, or rebase
 - M1-I9-R1 and M1-I12: **unauthorized and unimplemented**
 - Milestone 1: **incomplete**
 - Milestone 2 and later: **unauthorized**
 - Figma: optional and non-authoritative; not used
 - Browser or screenshot use by CodeX/agents: prohibited; none used
 
-The earlier Human instruction authorized only Checkpoint A within the exact manifest below. The current Human decision accepts that implementation at commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and separately authorizes Checkpoint B within its own exact manifest. This remains technical acceptance, not Human visual acceptance of the canonical Reading Note.
+Human accepted Checkpoint A at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; the accepted state and documentation are fast-forwarded to `main` at `79011f274c35a0cf80f68af845ffaca95e8884c9`. The separate Checkpoint B authorization is now implemented and automatically validated only within its exact manifest on the dedicated branch. Automated evidence is not Human visual acceptance of the canonical Reading Note.
 
 ## 2. Exact mutation manifest
 
@@ -119,17 +124,17 @@ They use normal element attributes, existing global tokens, and one paper/night 
 
 No canonical or review-only screen imports the new boundary in Checkpoint A. Adoption and any visual composition remain deferred to a separately authorized exact manifest. This is not a universal report renderer.
 
-## 6. Formal-name alignment map — change deferred
+## 6. Formal-name alignment map — Checkpoint B disposition
 
 The controlling short-artifact name remains `保存用判断カード`. A targeted source audit found exactly three residual `保存用鑑定書` occurrences:
 
-| Source | Current label | Proposed formal alignment | Checkpoint A disposition |
+| Source | Checkpoint A label | Formal alignment | Checkpoint B disposition |
 | --- | --- | --- | --- |
-| `components/report/ReviewSaveReport.tsx` | `保存用鑑定書` | `保存用判断カード` | direct saved-artifact title candidate; defer to separately authorized Checkpoint B manifest |
-| `components/review/BrandFoundationPreview.tsx` | `保存用鑑定書` | `保存用判断カード` | review-preview label candidate; defer to separately authorized exact manifest |
-| `lib/legal/review-content.ts` | `保存用鑑定書見本` | `保存用判断カード見本` | outside an automatic sweep; requires explicit file authority and scope eligibility before change |
+| `components/report/ReviewSaveReport.tsx` | `保存用鑑定書` | `保存用判断カード` | aligned within the exact manifest |
+| `components/review/BrandFoundationPreview.tsx` | `保存用鑑定書` | `保存用判断カード` | aligned within the exact manifest |
+| `lib/legal/review-content.ts` | `保存用鑑定書見本` | `保存用判断カード見本` | deliberately unchanged; outside the exact manifest and deferred |
 
-Checkpoint A changes none of these strings. It does not edit customer-facing copy, the Content Lock Matrix, formal-name locks, or unrelated labels.
+Checkpoint A changed none of these strings. Checkpoint B changes only the two authorized labels. It does not edit the Content Lock Matrix, formal-name locks, legal owner, or unrelated labels.
 
 ## 7. Bounded visual-delta audit
 
@@ -190,6 +195,130 @@ The prototype directories remain absent from `main` and this branch. No API rout
 - [x] Confirmed the bounded CSS corrections are acceptable.
 - [x] Checkpoint A accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`.
 
-## 11. Stop boundary and next gate
+## 11. Checkpoint A closure and transition
 
-The current Human decision authorizes Checkpoint A fast-forward to `main`, then Checkpoint B implementation on `feat/m1-i8-r1-checkpoint-b-lunar-contrast` within its exact mutation manifest. Checkpoint B must not merge to `main` before Human Visual QA. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
+Checkpoint A was accepted, its eight-document acceptance synchronization was committed as `docs: accept M1-I8-R1 checkpoint A`, and `main` was fast-forwarded without a merge commit to `79011f274c35a0cf80f68af845ffaca95e8884c9`. Checkpoint B was then branched from that exact `main` state. The prototype commit remained read-only reference evidence.
+
+## 12. Checkpoint B exact mutation manifest
+
+Application / presentation files:
+
+- `app/globals.css`
+- `components/artifact/ArtifactComposition.tsx`
+- `components/artifact/ArtifactComposition.module.css`
+- `components/artifact/index.ts`
+- `components/report/PublicSampleReport.tsx`
+- `components/report/ReportComparisonNavigation.tsx`
+- `components/report/ReviewLoadingPlaceholder.tsx`
+- `components/report/ReviewReportError.tsx`
+- `components/report/ReviewSaveReport.tsx`
+- `components/report/ReviewWebReport.tsx`
+- `components/review/BrandFoundationPreview.tsx`
+- `components/review/ReviewBanner.tsx`
+
+Status / evidence documents:
+
+- `docs/ROADMAP.md`
+- `docs/CURRENT_FOCUS.md`
+- `docs/CODEX_HANDOFF.md`
+- `docs/WBS.md`
+- `docs/phase1/IMPLEMENTATION_WBS.md`
+- `docs/phase1/M1_IMPLEMENTATION_SLICES.md`
+- `docs/phase1/M1_P3_IMPLEMENTATION_PLAN.md`
+- `docs/phase1/TASK_M1_I8_R1_REVIEW.md`
+
+Final manifest: `20` files. Authorized but unnecessary `ArtifactPrimitives` files remain unchanged. No fixture, Safety, legal, script, package, route resolver, request/purchase owner, prototype surface, or runtime owner is changed.
+
+## 13. Shared artifact architecture
+
+Checkpoint B adds nine presentation-only composition boundaries: `ArtifactShell`, `ArtifactCover`, `ArtifactAnswer`, `ArtifactLetter`, `ArtifactTimeline`, `ArtifactComparison`, `ArtifactMessageDraft`, `ArtifactLimitation`, and `ArtifactClosing`.
+
+- Callers supply all content and choose semantic elements through the explicit `as` prop.
+- DOM order remains the caller's visual order; no CSS `order` is introduced.
+- Variants and classes are visual only.
+- There is no fixture/schema renderer, route-conditional universal renderer, resolver, state, hidden behavior, or runtime integration.
+- The three canonical compositions remain separate. Every shared boundary is used by at least two of Web, save, and public surfaces.
+
+## 14. Surface implementation
+
+### 14.1 Web鑑定ノート
+
+The Web note uses a strong Night cover, an in-cover answer band with exact judgment `今日は送らない方がいい`, a Night-to-Paper transition, restrained `MoonSeal`/`LunarArc`, Paper long-form body, deep-Ink emphasis for the important answer and message, restrained lunar phases, and a Night closing. The reading order is cover, in-cover answer, short letter, detailed same answer, reading guide, relationship, interpretations, anxiety, temperature, actions, message, three-day plan, change conditions, limitations, and closing. Content and recommendation meaning are unchanged; the CTA remains ordinary document flow.
+
+### 14.2 保存用判断カード
+
+The save artifact displays the exact formal name `保存用判断カード`, repeats the same fixed judgment, and uses a distinct compact approximately-30-second decision-card composition rather than a shortened Web note. Its maximum width is approximately `720px`; the message is a deep-Ink anchor. It adds no file, PDF, download, persistence, print, or share behavior.
+
+### 14.3 公開全文見本
+
+The public sample continues to use `PUBLIC_SAMPLE_SEND_CASE`, exact conclusion `今夜は短く返信してよい`, the existing exact disclosure, and the existing eight-part content structure. It adds no prose. The public intro owns the sole page `h1`; the artifact uses `h2`/`h3`. It shares the Lunar Contrast grammar while remaining a shorter edited artifact with its own Night closing.
+
+### 14.4 Navigation, review wrapper, error, and loading
+
+- Comparison navigation remains an editorial list, not an equal-card grid. Targets remain at least `44px`, with one-column mobile reflow and no purchase, generation, or save implication.
+- `ReviewBanner` is neutral, non-sticky, collapsed by default, and subordinate to the artifact. Decision IDs remain inside `details`; its explicit no-purchase/no-AI/no-email/no-save statement is preserved.
+- Error pages use approved tokens, keep one `h1`, fail closed without a fallback report, do not expose an arbitrary fixture ID in visible markup, and provide safe return links.
+- Loading is static `role="status"` content without spinner, shimmer, pulse, progress, fetch, timer, or automatic transition.
+
+## 15. Responsive and accessibility source evidence
+
+| Target | Implemented source rule | Human status |
+| --- | --- | --- |
+| Desktop | Web target approximately `840px` within `864px`; public approximately `800px`; save approximately `720px` | pending visual review |
+| 768px | comparison/action layouts collapse; review chrome remains subordinate | pending visual review |
+| 390px | `12px` stage inset yields approximately `366px`; `24px` internal inset; body text at least `16px`; answer remains near the entry viewport | pending visual review |
+| 320px | `8–12px` stage inset; `18–20px` internal inset; no deliberate clipping or overflow masking; formal save title is allowed to wrap and must not truncate | pending visual review |
+
+Source and rendered-markup checks confirm one `h1`, ordered headings, DOM/visual-order parity, caller-owned semantics, decorative `aria-hidden` treatment, at least `3px` focus treatment, at least `44px` interactive targets, static reduced-motion-compatible behavior, short-heading-only balance, left-aligned Japanese body copy, and no long-body Mincho role. Actual 200% zoom, keyboard/focus, wrapping, clipping, and visual contrast require Human review.
+
+## 16. Checkpoint B automated and raw-HTTP evidence
+
+| Check | Result |
+| --- | --- |
+| `EXACT_LOCKS` | PASS |
+| `SEMANTIC_ASSERTIONS` | PASS |
+| `SAFETY_POLICY_GATE` | PASS |
+| `CONTENT_LOCK_GATE` | PASS |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS with zero warnings |
+| `npm run build` | PASS; 28 static/SSG pages generated |
+| required raw-HTTP routes | PASS; HTTP 200 |
+| one `h1` and heading order | PASS on required and unknown-fixture surfaces |
+| exact Web judgment in cover and detailed answer | PASS |
+| exact same save judgment and formal name | PASS |
+| exact public conclusion and disclosure | PASS |
+| unknown result/save IDs | PASS; fail closed, no normal fallback, no visible raw arbitrary ID |
+| exact 20-file mutation manifest | PASS |
+| protected/prohibited-scope audit | PASS |
+| external fonts/assets/packages and runtime behavior | absent |
+| fixed/sticky CTA and horizontal-overflow masking | absent |
+| `git diff --check` | PASS |
+| Browser/screenshots | not used |
+
+Raw HTTP coverage:
+
+- `/`
+- `/review`
+- `/review/result/result-normal-001`
+- `/review/save-report/result-normal-001`
+- `/sample-report`
+- `/review/error/missing-fixture`
+- `/review/error/unavailable-report`
+- an unknown result-fixture route
+- an unknown save-fixture route
+
+The production review server runs on `127.0.0.1:3017`. It was started without stopping or modifying any existing process on port `3016`.
+
+## 17. Human Visual QA matrix and hard stop
+
+| Surface | Desktop | 768px | 390px | 320px |
+| --- | --- | --- | --- | --- |
+| Web鑑定ノート | Pending | Pending | Pending | Pending |
+| 保存用判断カード | Pending | Pending | Pending | Pending |
+| 公開全文見本 | Pending | Pending | Pending | Pending |
+| Review wrapper | Pending | Pending | Pending | Pending |
+| Error/loading | Pending | Pending | Pending | Pending |
+
+Human must inspect answer discoverability, Japanese wrapping, horizontal overflow, formal-name wrapping, focus visibility, keyboard order, contrast, 200% zoom, reduced motion, route-chrome subordination, and closing aftertaste in ordinary external Microsoft Edge. CodeX/agents used no Browser, browser automation, GUI control, or screenshots and make no visual-acceptance claim.
+
+The next and only current gate is Human Visual QA and acceptance of Checkpoint B. Checkpoint B must not merge to `main`. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized. No PR is authorized or created.

@@ -6,10 +6,13 @@ export function ReviewBanner() {
       <div className="review-banner__inner">
         <div className="review-banner__lead">
           <span className="review-banner__icon" aria-hidden="true">i</span>
-          <strong>審査用プレビュー｜実際の決済・送信は行われません</strong>
+          <span>
+            <strong>審査用プレビュー</strong>
+            <small>実際の決済・送信は行われません</small>
+          </span>
         </div>
         <details className="review-banner__details">
-          <summary>審査条件の詳細</summary>
+          <summary>実行境界</summary>
           <p>この画面は架空データを使用しています。AI生成、メール配信、データ保存も動作しません。</p>
           <Link href="/review">審査用プレビュー一覧へ</Link>
         </details>

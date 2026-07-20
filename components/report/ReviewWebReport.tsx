@@ -1,5 +1,18 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import {
+  ArtifactAnswer,
+  ArtifactClosing,
+  ArtifactComparison,
+  ArtifactCover,
+  ArtifactLetter,
+  ArtifactLimitation,
+  ArtifactMessageDraft,
+  ArtifactMetadata,
+  ArtifactSectionLabel,
+  ArtifactShell,
+  ArtifactTimeline,
+} from "@/components/artifact";
 import { EditorialDivider } from "@/components/brand/EditorialDivider";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
@@ -26,7 +39,7 @@ function NoteSection({
       aria-labelledby={headingId}
     >
       <div className="reading-note-section__heading">
-        <span aria-hidden="true">{number}</span>
+        <ArtifactSectionLabel aria-hidden="true">{number}</ArtifactSectionLabel>
         <h2 id={headingId}>{title}</h2>
       </div>
       <div className="reading-note-section__body">{children}</div>
@@ -54,14 +67,15 @@ function ReviewBoundary({
   return (
     <aside className="artifact-review-boundary" aria-label="審査用表示の実行境界">
       <div className="artifact-review-boundary__inner">
-        <div>
-          <strong>審査用の固定架空ケース</strong>
+        <div className="artifact-review-boundary__lead">
+          <strong>固定架空ケースの審査表示</strong>
+          <span>購入・AI生成・メール送信・データ保存なし</span>
+        </div>
+        <details>
+          <summary>実行境界とfixture</summary>
           <p>
             表示を開いても、購入・AI実行・メール送信・データ保存・納品は発生しません。
           </p>
-        </div>
-        <details>
-          <summary>審査メタデータを表示</summary>
           <dl>
             <div><dt>result fixture</dt><dd>{report.id}</dd></div>
             <div><dt>request fixture</dt><dd>{request.id}</dd></div>
@@ -87,8 +101,8 @@ export function ReviewWebReport({
       <ReviewBoundary report={report} request={request} />
 
       <div className="reading-note-stage">
-        <article className="reading-note paper-grain">
-          <header className="reading-note-cover">
+        <ArtifactShell as="article" className="reading-note paper-grain">
+          <ArtifactCover as="header" className="reading-note-cover">
             <LunarArc tone="night" position="top-right" />
             <div className="reading-note-cover__brand">
               <MoonSeal size="medium" />
@@ -96,21 +110,26 @@ export function ReviewWebReport({
             </div>
             <p className="reading-note-cover__type">恋のメッセージ鑑定ノート</p>
             <h1>{report.consultationTheme}</h1>
-            <dl className="reading-note-cover__facts">
+            <ArtifactMetadata className="reading-note-cover__facts">
               <div><dt>相談者</dt><dd>{report.clientNickname}さん</dd></div>
               <div><dt>鑑定日</dt><dd>{report.readingDateLabel}</dd></div>
-            </dl>
+            </ArtifactMetadata>
             <EditorialDivider variant="night" />
             <p className="reading-note-cover__line">{report.coverLine}</p>
-          </header>
+            <ArtifactAnswer className="reading-note-cover__answer" aria-label="今夜の答え">
+              <ArtifactSectionLabel>今夜の答え</ArtifactSectionLabel>
+              <strong>{report.judgmentLabel}</strong>
+            </ArtifactAnswer>
+          </ArtifactCover>
 
           <NoteSection number="02" title="月の返事からの短い手紙" className="reading-note-letter">
-            {report.shortLetter.map((line) => <p key={line}>{line}</p>)}
+            <ArtifactLetter className="reading-note-letter__body">
+              {report.shortLetter.map((line) => <p key={line}>{line}</p>)}
+            </ArtifactLetter>
           </NoteSection>
 
           <NoteSection number="03" title="今夜の答え" className="reading-note-answer-section">
-            <div className="reading-note-answer surface-answer soft-glow">
-              <LunarArc tone="night" position="bottom-left" />
+            <ArtifactAnswer className="reading-note-answer">
               <p className="reading-note-answer__label">結論</p>
               <p className="reading-note-answer__judgment">{report.judgmentLabel}</p>
               <p className="reading-note-answer__reason">{report.conclusionReasonSummary}</p>
@@ -118,7 +137,7 @@ export function ReviewWebReport({
                 <div><span>今夜やること</span><strong>{report.tonightActions[0]}</strong></div>
                 <div><span>次に見直す時期</span><strong>{report.reviewTiming}</strong></div>
               </div>
-            </div>
+            </ArtifactAnswer>
             <p className="reading-note-answer__context">{report.currentConclusion[1]}</p>
           </NoteSection>
 
@@ -134,10 +153,10 @@ export function ReviewWebReport({
           </NoteSection>
 
           <NoteSection number="05" title="今の関係をほどく">
-            <ol className="relationship-timeline" aria-label="現在までの短い流れ">
+            <ArtifactTimeline as="ol" className="relationship-timeline" aria-label="現在までの短い流れ">
               {report.relationshipTimeline.map((item) => <li key={item}>{item}</li>)}
-            </ol>
-            <div className="reading-note-split">
+            </ArtifactTimeline>
+            <ArtifactComparison className="reading-note-split">
               <section aria-labelledby="confirmed-facts-heading">
                 <h3 id="confirmed-facts-heading">確認できること</h3>
                 <NoteList items={report.observedFacts} />
@@ -146,7 +165,7 @@ export function ReviewWebReport({
                 <h3 id="relationship-unknown-heading">まだ分からないこと</h3>
                 <NoteList items={report.materialUnknowns.slice(0, 2)} />
               </section>
-            </div>
+            </ArtifactComparison>
           </NoteSection>
 
           <NoteSection number="06" title="相手にどう届く可能性があるか">
@@ -191,7 +210,7 @@ export function ReviewWebReport({
           </NoteSection>
 
           <NoteSection number="09" title="今夜の推奨アクション">
-            <div className="action-columns">
+            <ArtifactComparison className="action-columns">
               <section>
                 <h3><span aria-hidden="true">○</span> 今夜やること</h3>
                 <NoteList items={report.tonightActions} />
@@ -200,13 +219,13 @@ export function ReviewWebReport({
                 <h3><span aria-hidden="true">—</span> 今夜やらないこと</h3>
                 <NoteList items={report.notTonightActions} />
               </section>
-            </div>
+            </ArtifactComparison>
           </NoteSection>
 
           <NoteSection number="10" title="送る場合の文面案">
-            <div className="message-letter">
+            <ArtifactMessageDraft as="blockquote" className="message-letter">
               <p>{report.laterMessageDraft}</p>
-            </div>
+            </ArtifactMessageDraft>
             <ul className="message-letter__conditions">
               <li>今夜送る文面ではありません。</li>
               <li>明日以降、落ち着いて再判断した場合の候補です。</li>
@@ -215,7 +234,7 @@ export function ReviewWebReport({
           </NoteSection>
 
           <NoteSection number="11" title="3日間の月明かりプラン">
-            <ol className="lunar-plan">
+            <ArtifactTimeline as="ol" className="lunar-plan">
               {report.threeDayPlan.map((item, index) => (
                 <li key={item.label}>
                   <span className={`lunar-plan__moon lunar-plan__moon--${index + 1}`} aria-hidden="true" />
@@ -223,11 +242,11 @@ export function ReviewWebReport({
                   <p>{item.direction}</p>
                 </li>
               ))}
-            </ol>
+            </ArtifactTimeline>
           </NoteSection>
 
           <NoteSection number="12" title="方針を変える条件">
-            <div className="condition-columns">
+            <ArtifactComparison className="condition-columns">
               <section>
                 <h3>送る方向へ変えてよい条件</h3>
                 <NoteList items={report.recommendationChangeConditions} />
@@ -236,11 +255,11 @@ export function ReviewWebReport({
                 <h3>送らない方がよい条件</h3>
                 <NoteList items={report.holdDirectionConditions} />
               </section>
-            </div>
+            </ArtifactComparison>
           </NoteSection>
 
           <NoteSection number="13" title="まだ断定できないこと">
-            <div className="capability-columns">
+            <ArtifactComparison className="capability-columns">
               <section>
                 <h3>この鑑定で分からないこと</h3>
                 <NoteList items={report.materialUnknowns} />
@@ -249,23 +268,33 @@ export function ReviewWebReport({
                 <h3>この鑑定でできること</h3>
                 <NoteList items={report.reportCapabilities} />
               </section>
-            </div>
-            <aside className="reading-note-fixed-caution" aria-label="鑑定ノートの固定注意">
+            </ArtifactComparison>
+            <ArtifactLimitation as="aside" className="reading-note-fixed-caution" aria-label="鑑定ノートの固定注意">
               {report.fixedLimitationDisclaimer}
-            </aside>
+            </ArtifactLimitation>
           </NoteSection>
 
-          <NoteSection number="14" title="月の返事からの締め" className="reading-note-closing">
-            <blockquote>{report.rememberTonight}</blockquote>
-            <div className="reading-note-closing__letter">
-              {report.closingLetter.map((line) => <p key={line}>{line}</p>)}
+          <ArtifactClosing
+            as="section"
+            className="reading-note-closing"
+            aria-labelledby="reading-note-section-14"
+          >
+            <div className="reading-note-section__heading">
+              <ArtifactSectionLabel aria-hidden="true">14</ArtifactSectionLabel>
+              <h2 id="reading-note-section-14">月の返事からの締め</h2>
             </div>
-            <p className="reading-note-closing__timing"><strong>次に判断する条件：</strong>{report.reviewTiming}</p>
-            <Link href={`/review/save-report/${report.id}`} className="button button--primary">
-              保存用判断カードの見本を開く
-            </Link>
-          </NoteSection>
-        </article>
+            <div className="reading-note-section__body">
+              <blockquote>{report.rememberTonight}</blockquote>
+              <div className="reading-note-closing__letter">
+                {report.closingLetter.map((line) => <p key={line}>{line}</p>)}
+              </div>
+              <p className="reading-note-closing__timing"><strong>次に判断する条件：</strong>{report.reviewTiming}</p>
+              <Link href={`/review/save-report/${report.id}`} className="button button--secondary">
+                保存用判断カードの見本を開く
+              </Link>
+            </div>
+          </ArtifactClosing>
+        </ArtifactShell>
 
         <div className="reading-note-stage__navigation">
           <ReportComparisonNavigation />

@@ -46,7 +46,7 @@ const colorGroups = [
 const phraseSamples = [
   "月の返事",
   "Web鑑定ノート",
-  "保存用鑑定書",
+  "保存用判断カード",
   "恋のメッセージ鑑定ノート",
   "架空サンプル",
 ] as const;

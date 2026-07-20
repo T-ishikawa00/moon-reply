@@ -17,7 +17,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its documentation/design package remains authoritative, and acceptance grants no canonical implementation authority. The required design gate is now a Human-approved coded visual prototype; Figma is optional and non-authoritative.
 - Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and the accepted correction is synchronized to `main`.
 - M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated on `design/m1-p3-coded-visual-prototype`. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance is not canonical visual implementation authorization.
-- Checkpoint A / M1-I8-R1 Technical Preparation is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation are complete. Checkpoint B / M1-I8-R1 Visual Excellence is Human-authorized but not yet implemented; B — `Lunar Contrast Edition` is the controlling design direction. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
+- Checkpoint A / M1-I8-R1 Technical Preparation is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and synchronized to `main` at `79011f274c35a0cf80f68af845ffaca95e8884c9`. Checkpoint B / M1-I8-R1 Visual Excellence is implemented and automatically validated on `feat/m1-i8-r1-checkpoint-b-lunar-contrast` using B — `Lunar Contrast Edition`; Human Visual QA is pending and merge to `main` is prohibited. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -29,6 +29,8 @@ The canonical service is an `AIを活用した恋愛メッセージ分析・判�
 M1-I2-R1 is Human-accepted, implemented, and automatically validated on `fix/m1-i2-r1-safety-policy-alignment`; the accepted implementation commit is `23ee6f3b98837e48628b59b41eab811da627e730`. All 13 locked unsupported-case labels now classify to the required fail-closed state/reason. The five confirmed free-text gaps are covered through NFKC/whitespace normalization, targeted phrases, and bounded negation guards. `illegal_conduct` and `third_party_secret` are added without changing existing reason-code meaning or structured-flag classification/severity. The permanent verifier executes the real classifier and the real category export, preserves the locked source hash, and reports `SEM-UNSUPPORTED-CASES: PASS` without waiver.
 
 The previous M1-P3-R1 hard stop is resolved. A — `Quiet Editorial Letter` and B — `Lunar Contrast Edition` are implemented only on `/review/visual-excellence/**`. Both use `getReportFixture("result-normal-001")`, the same content subset, and the same semantic order. Human selected B and rejected A. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, Safety, packages, Supabase, and runtime integrations were not changed, and the prototype routes/components are not merged into `main`.
+
+Checkpoint B independently implements the selected Lunar Contrast direction on the authorized Web note, saved decision card, public sample, comparison navigation, error/loading, and review-boundary surfaces. It uses shared presentation-only artifact compositions, preserves every locked judgment and disclosure, keeps unknown IDs fail closed, and adds no runtime behavior. Automated content, Safety, typecheck, lint, build, source, manifest, and raw-HTTP checks pass. Browser evidence and Human visual acceptance do not yet exist.
 
 The integrated batch implemented:
 
@@ -51,7 +53,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - Product: `恋のメッセージ鑑定ノート`.
 - Long presentation: `Web鑑定ノート`.
 - Short presentation: `保存用判断カード`.
-- `保存用鑑定書` is not the current formal name. Checkpoint A records the residual-source alignment map but does not change application copy; customer-facing replacement remains deferred to a separately authorized Checkpoint B manifest.
+- `保存用鑑定書` is not the current formal name. Checkpoint B changes the authorized saved-artifact and Brand Foundation labels to `保存用判断カード`; the out-of-manifest `lib/legal/review-content.ts` label `保存用鑑定書見本` remains a documented deferred residual.
 
 ## Preserved Product and Safety Boundaries
 
@@ -127,10 +129,10 @@ Controlling Human design decisions:
 
 ## Current Restriction
 
-The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A / M1-I8-R1 Technical Preparation is Human-accepted. Checkpoint B / M1-I8-R1 Visual Excellence is explicitly Human-authorized only within its exact manifest and must remain on its dedicated branch until Human Visual QA. Do not start M1-I9-R1 or M1-I12 without separate explicit Human authorization. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A / M1-I8-R1 Technical Preparation is Human-accepted. Checkpoint B / M1-I8-R1 Visual Excellence is implemented only within its exact manifest and must remain on its dedicated branch until Human Visual QA. Do not merge it, start M1-I9-R1 or M1-I12, or start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work without separate explicit Human authorization.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance.
 
 ## Next Gate
 
-Implement and automatically validate Checkpoint B / M1-I8-R1 Visual Excellence on `feat/m1-i8-r1-checkpoint-b-lunar-contrast` from the accepted `main`, using B — `Lunar Contrast Edition` and the exact Human-authorized manifest. Keep the prototype branch read-only, keep Checkpoint B off `main`, and leave Human Visual QA pending. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human Visual QA of the implemented Checkpoint B / M1-I8-R1 Visual Excellence on `feat/m1-i8-r1-checkpoint-b-lunar-contrast` is the next and only current gate. Keep the prototype branch read-only and Checkpoint B off `main`. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

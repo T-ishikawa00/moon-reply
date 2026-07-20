@@ -1,3 +1,12 @@
+import {
+  ArtifactAnswer,
+  ArtifactComparison,
+  ArtifactCover,
+  ArtifactLimitation,
+  ArtifactMessageDraft,
+  ArtifactMetadata,
+  ArtifactShell,
+} from "@/components/artifact";
 import { EditorialDivider } from "@/components/brand/EditorialDivider";
 import { MoonSeal } from "@/components/brand/MoonSeal";
 import type { ReviewReportFixture } from "@/fixtures/review/reports";
@@ -16,12 +25,13 @@ export function ReviewSaveReport({ report }: { report: ReviewReportFixture }) {
     <main className="save-decision-page">
       <aside className="artifact-review-boundary" aria-label="保存用表示の審査境界">
         <div className="artifact-review-boundary__inner">
-          <div>
-            <strong>保存向けに再構成した審査用見本</strong>
-            <p>固定架空データの画面表示です。ファイル生成・保存・ダウンロード・印刷・共有は行いません。</p>
+          <div className="artifact-review-boundary__lead">
+            <strong>保存向け固定表示の審査見本</strong>
+            <span>購入・AI生成・メール送信・ファイル保存なし</span>
           </div>
           <details>
-            <summary>審査メタデータを表示</summary>
+            <summary>実行境界とfixture</summary>
+            <p>固定架空データの画面表示です。ファイル生成・保存・ダウンロード・印刷・共有は行いません。</p>
             <dl>
               <div><dt>fixture</dt><dd>{report.id}</dd></div>
               <div><dt>購入・AI実行</dt><dd>なし</dd></div>
@@ -32,28 +42,28 @@ export function ReviewSaveReport({ report }: { report: ReviewReportFixture }) {
       </aside>
 
       <div className="save-decision-stage">
-        <article className="save-decision-note paper-grain">
-          <header className="save-decision-note__header">
+        <ArtifactShell as="article" className="save-decision-note paper-grain">
+          <ArtifactCover as="header" className="save-decision-note__header">
             <div className="save-decision-note__brand">
               <MoonSeal size="small" />
-              <div><span>月の返事</span><strong>保存用鑑定書</strong></div>
+              <div><span>月の返事</span><strong>保存用判断カード</strong></div>
             </div>
             <p>迷った時に30秒で見返す、今夜の判断カード</p>
             <h1>{report.consultationTheme}</h1>
-            <EditorialDivider variant="paper" />
-            <dl>
+            <EditorialDivider variant="night" />
+            <ArtifactMetadata>
               <div><dt>相談者</dt><dd>{report.clientNickname}さん</dd></div>
               <div><dt>次の判断</dt><dd>翌日以降、または状況が動いた時</dd></div>
-            </dl>
-          </header>
+            </ArtifactMetadata>
+          </ArtifactCover>
 
-          <section className="save-decision-answer" aria-labelledby="save-answer-heading">
+          <ArtifactAnswer as="section" className="save-decision-answer" aria-labelledby="save-answer-heading">
             <p>今夜の答え</p>
             <h2 id="save-answer-heading">{report.judgmentLabel}</h2>
             <span>{report.conclusionReasonSummary}</span>
-          </section>
+          </ArtifactAnswer>
 
-          <div className="save-decision-actions">
+          <ArtifactComparison className="save-decision-actions">
             <section aria-labelledby="save-do-heading">
               <h2 id="save-do-heading">今やること</h2>
               <CompactList items={report.tonightActions} />
@@ -62,16 +72,16 @@ export function ReviewSaveReport({ report }: { report: ReviewReportFixture }) {
               <h2 id="save-dont-heading">やらないこと</h2>
               <CompactList items={report.notTonightActions} />
             </section>
-          </div>
+          </ArtifactComparison>
 
-          <section className="save-decision-message" aria-labelledby="save-message-heading">
+          <ArtifactMessageDraft as="section" className="save-decision-message" aria-labelledby="save-message-heading">
             <div>
               <p>明日以降、再判断した場合の候補</p>
               <h2 id="save-message-heading">送る場合の文面案</h2>
             </div>
             <blockquote>{report.laterMessageDraft}</blockquote>
             <small>今夜は送らない／相手から連絡が来た場合は使わない</small>
-          </section>
+          </ArtifactMessageDraft>
 
           <section className="save-decision-next" aria-labelledby="save-next-heading">
             <div>
@@ -91,11 +101,11 @@ export function ReviewSaveReport({ report }: { report: ReviewReportFixture }) {
             <p>{report.rememberTonight}</p>
           </blockquote>
 
-          <footer className="save-decision-note__footer">
+          <ArtifactLimitation as="footer" className="save-decision-note__footer">
             <strong>このカードで断定しないこと</strong>
             <p>{report.fixedLimitationDisclaimer}</p>
-          </footer>
-        </article>
+          </ArtifactLimitation>
+        </ArtifactShell>
 
         <div className="save-decision-stage__navigation">
           <ReportComparisonNavigation />

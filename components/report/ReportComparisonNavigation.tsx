@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArtifactSectionLabel } from "@/components/artifact";
 
 const comparisonItems = [
   {
@@ -26,7 +27,9 @@ export function ReportComparisonNavigation({ audience = "review" }: { audience?:
 
   return (
     <nav aria-labelledby="report-comparison-heading" className="report-comparison">
-      <p className="report-comparison__label">{isPublic ? "別ケースによる表示形式の比較" : "表示形式の比較"}</p>
+      <ArtifactSectionLabel className="report-comparison__label">
+        {isPublic ? "別ケースによる表示形式の比較" : "表示形式の比較"}
+      </ArtifactSectionLabel>
       <h2 id="report-comparison-heading">
         {isPublic ? (
           <>別の固定ケースで、三つの表示形式を比べる</>

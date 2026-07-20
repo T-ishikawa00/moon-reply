@@ -1,4 +1,15 @@
 import Link from "next/link";
+import {
+  ArtifactAnswer,
+  ArtifactClosing,
+  ArtifactCover,
+  ArtifactLetter,
+  ArtifactLimitation,
+  ArtifactMessageDraft,
+  ArtifactShell,
+  ArtifactStamp,
+  ArtifactTimeline,
+} from "@/components/artifact";
 import { EditorialDivider } from "@/components/brand/EditorialDivider";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
@@ -25,26 +36,26 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
       </section>
 
       <div className="public-sample-stage">
-        <article className="public-sample-note paper-grain">
-          <header className="public-sample-note__cover">
+        <ArtifactShell as="article" className="public-sample-note paper-grain">
+          <ArtifactCover as="header" className="public-sample-note__cover">
             <LunarArc tone="night" position="top-right" />
             <div className="public-sample-note__brand"><MoonSeal size="medium" /><span>月の返事</span></div>
-            <p>恋のメッセージ鑑定ノート・架空の全文見本</p>
+            <ArtifactStamp>架空の全文見本</ArtifactStamp>
+            <p>恋のメッセージ鑑定ノート</p>
             <h2>{sample.relationshipContext}</h2>
             <EditorialDivider variant="night" />
             <span>{report.coverLine}</span>
-          </header>
-
-          <section className="public-sample-answer" aria-labelledby="public-sample-answer-heading">
-            <p>今夜の答え</p>
-            <h2 id="public-sample-answer-heading">{sample.conclusion}</h2>
-          </section>
+            <ArtifactAnswer className="public-sample-answer" aria-labelledby="public-sample-answer-heading">
+              <p>今夜の答え</p>
+              <h2 id="public-sample-answer-heading">{sample.conclusion}</h2>
+            </ArtifactAnswer>
+          </ArtifactCover>
 
           <div className="public-sample-note__body">
             <section aria-labelledby="sample-section-1">
               <span aria-hidden="true">01</span>
               <h2 id="sample-section-1">月の返事からの短い手紙</h2>
-              <div>{report.shortLetter.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+              <ArtifactLetter>{report.shortLetter.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ArtifactLetter>
             </section>
 
             <section aria-labelledby="sample-section-2">
@@ -82,7 +93,7 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
               <span aria-hidden="true">04</span>
               <h2 id="sample-section-4">文面の温度</h2>
               <div>
-                <blockquote>「{report.messageTemperature.quote}」</blockquote>
+                <ArtifactMessageDraft as="blockquote">「{report.messageTemperature.quote}」</ArtifactMessageDraft>
                 <dl>
                   {report.messageTemperature.readings.map((reading) => (
                     <div key={reading.label}>
@@ -108,14 +119,18 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
               <span aria-hidden="true">06</span>
               <h2 id="sample-section-6">3日間の方向</h2>
               <div>
-                <ol className="public-sample-plan">
-                  {report.threeDayDirection.map((day) => (
+                <ArtifactTimeline as="ol" className="public-sample-plan">
+                  {report.threeDayDirection.map((day, index) => (
                     <li key={day.label}>
+                      <span
+                        className={`public-sample-plan__moon public-sample-plan__moon--${index + 1}`}
+                        aria-hidden="true"
+                      />
                       <strong>{day.label}</strong>
                       <p>{day.direction}</p>
                     </li>
                   ))}
-                </ol>
+                </ArtifactTimeline>
               </div>
             </section>
 
@@ -136,21 +151,22 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
                 <ul className="public-sample-detail-list">
                   {sample.uncertaintyLimitation.map((limitation) => <li key={limitation}>{limitation}</li>)}
                 </ul>
+                <ArtifactLimitation as="aside" className="public-sample-limitation" aria-label="見本の固定注意">
+                  <strong>この見本で断定しないこと</strong>
+                  <p>
+                    相手の本心、返信の有無や時期、交際結果、将来を断定・保証しません。
+                    医療・心理・法律上の助言でもありません。
+                  </p>
+                  <p>{report.fixedDisclosure}</p>
+                </ArtifactLimitation>
               </div>
             </section>
 
-            <blockquote className="public-sample-closing">{report.closingLine}</blockquote>
-
-            <aside className="public-sample-limitation" aria-label="見本の固定注意">
-              <strong>この見本で断定しないこと</strong>
-              <p>
-                相手の本心、返信の有無や時期、交際結果、将来を断定・保証しません。
-                医療・心理・法律上の助言でもありません。
-              </p>
-              <p>{report.fixedDisclosure}</p>
-            </aside>
+            <ArtifactClosing as="blockquote" className="public-sample-closing">
+              {report.closingLine}
+            </ArtifactClosing>
           </div>
-        </article>
+        </ArtifactShell>
 
         <details className="public-sample-metadata">
           <summary>審査メタデータを表示</summary>
