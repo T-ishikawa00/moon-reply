@@ -13,13 +13,13 @@
 - M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted as the authoritative, complete documentation/design specification and grants no implementation authority
 - M1-P3-R1 preflight stopped before coded visual prototype implementation on `SEM-UNSUPPORTED-CASES`; the bounded M1-I2-R1 Safety correction is implemented, automatically validated, Human-accepted at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, and synchronized to `main`, resolving the previous hard stop
 - M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated; Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`
-- The coded-prototype design gate is complete. Figma is optional and non-authoritative. Checkpoint A is implemented and automatically validated; Human acceptance is pending. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; the completed B selection and Checkpoint A implementation do not authorize Checkpoint B
+- The coded-prototype design gate is complete. Figma is optional and non-authoritative. Checkpoint A is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation are complete. Checkpoint B is Human-authorized but not yet implemented. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented
 - Milestone 1 remains incomplete, and Milestone 2 and every later milestone remain unauthorized
 - Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review is performed only by Human in ordinary external Microsoft Edge
 - The normal rule is one bounded slice, validation evidence, one commit, and one Human gate; the Human-authorized integrated batch is a documented exception now closed through one integrated Human baseline decision and one honest baseline commit
 - Outside the documented exception, a later slice must not be pulled into an earlier commit because a shared component is convenient
 
-The Human-directed M1-P2 revision does not treat M1-I6 as accepted. M1-I6 is already formally closed as superseded, and that closure does not complete Milestone 1. Human acceptance of M1-P2, integrated implementation authorization, and integrated baseline acceptance of M1-I7 through M1-I11 plus the bounded public-sample corrections are satisfied. M1-I2-R1 is a separately authorized and Human-accepted Safety enforcement correction whose automated gates pass without waiver. M1-P3-R1 A/B coded prototypes are implemented and automatically validated; Human selected B and rejected A, completing the design-selection gate. Checkpoint A is separately authorized, implemented, and automatically validated; Human acceptance is pending. M1-I12 still requires separate explicit authorization and remains unimplemented.
+The Human-directed M1-P2 revision does not treat M1-I6 as accepted. M1-I6 is already formally closed as superseded, and that closure does not complete Milestone 1. Human acceptance of M1-P2, integrated implementation authorization, and integrated baseline acceptance of M1-I7 through M1-I11 plus the bounded public-sample corrections are satisfied. M1-I2-R1 is a separately authorized and Human-accepted Safety enforcement correction whose automated gates pass without waiver. M1-P3-R1 A/B coded prototypes are implemented and automatically validated; Human selected B and rejected A, completing the design-selection gate. Checkpoint A is separately authorized, implemented, automatically validated, and Human-accepted. Checkpoint B is separately Human-authorized but not yet implemented. M1-I12 still requires separate explicit authorization and remains unimplemented.
 
 The original M1-I1 through M1-I6 structure remains the historical implementation record. The M1-P2 registry adds six revision slices, M1-I7 through M1-I12, without changing fixed product, Safety, fail-closed, or runtime boundaries. The one-time integrated authorization applies only to implementation and automated validation of M1-I7 through M1-I11.
 
@@ -263,7 +263,7 @@ Make the actual deterministic classifier enforce the exact locked 13 unsupported
 
 ### Acceptance outcome
 
-Human accepted M1-I2-R1, resolving the previous M1-P3-R1 hard stop. At that acceptance handoff, prototype implementation was still zero. M1-P3-R1 A/B coded prototypes are now implemented and automatically validated. Human subsequently selected and accepted B — `Lunar Contrast Edition` and rejected A — `Quiet Editorial Letter`. Checkpoint A is separately authorized, implemented, and automatically validated; Human acceptance is pending. Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 acceptance, and Milestone 2 remain unauthorized.
+Human accepted M1-I2-R1, resolving the previous M1-P3-R1 hard stop. At that acceptance handoff, prototype implementation was still zero. M1-P3-R1 A/B coded prototypes are now implemented and automatically validated. Human subsequently selected and accepted B — `Lunar Contrast Edition` and rejected A — `Quiet Editorial Letter`. Checkpoint A is separately authorized, implemented, automatically validated, and Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`. Checkpoint B is separately Human-authorized but not yet implemented. M1-I9-R1, M1-I12, Milestone 1 acceptance, and Milestone 2 remain unauthorized.
 
 ## M1-I3: Final Purchase Confirmation Without Payment
 
@@ -651,7 +651,7 @@ Goal: redesign the Web鑑定ノート and short presentation, now formally named
 
 Dependency: the normal M1-I7 acceptance pause was replaced for implementation only by the explicit integrated M1-I7 through M1-I11 batch authorization.
 
-Acceptance boundary: the Web note follows the Human-approved 14-part structure in `M1_P2_EXPERIENCE_REVISION_PLAN.md`; scenario facts, fixed normal judgment, recommendation meaning, uncertainty/non-guarantee, and Safety/limitation meaning remain intact. The 保存用判断カード prioritizes tonight's answer, do/do-not guidance, message draft, next decision date, change conditions, and one remembered sentence; it is not a shortened Web-note duplicate. Human accepted both presentations as part of the integrated baseline. M1-I8-R1 Checkpoint A technical preparation is implemented and automatically validated but not yet Human-accepted; Checkpoint B remains separately unauthorized.
+Acceptance boundary: the Web note follows the Human-approved 14-part structure in `M1_P2_EXPERIENCE_REVISION_PLAN.md`; scenario facts, fixed normal judgment, recommendation meaning, uncertainty/non-guarantee, and Safety/limitation meaning remain intact. The 保存用判断カード prioritizes tonight's answer, do/do-not guidance, message draft, next decision date, change conditions, and one remembered sentence; it is not a shortened Web-note duplicate. Human accepted both presentations as part of the integrated baseline. M1-I8-R1 Checkpoint A technical preparation is Human-accepted; Checkpoint B is separately Human-authorized but not yet implemented.
 
 ### M1-I9: LP Redesign
 
@@ -693,7 +693,7 @@ Dependencies: current integrated redesign baseline closure commit, clean working
 
 Out of scope: implementation, product facts, price, fixture judgment, Safety, request/legal redesign, real AI, DB, payment, email, API, deployment, external fonts, Storybook, visual regression tooling, PDF, download, share, print, or persistence.
 
-Design-gate outcome: Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Figma is optional non-authoritative reference material and is not required. Prototype acceptance is not canonical visual implementation authorization. A separate Human instruction authorized only Checkpoint A technical preparation, which is now implemented and automatically validated with Human acceptance pending; Checkpoint B still requires its own separate explicit authorization.
+Design-gate outcome: Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Figma is optional non-authoritative reference material and is not required. Prototype acceptance alone is not canonical visual implementation authorization. The current separate Human instruction accepts Checkpoint A at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and explicitly authorizes Checkpoint B within its exact manifest; Checkpoint B implementation has not yet started.
 
 ### M1-P3-R1: Coded Visual Prototype Gate
 
@@ -703,7 +703,7 @@ Goal: compare two real coded treatments of the same fixed `result-normal-001` su
 
 Routes: `/review/visual-excellence`, `/review/visual-excellence/a`, and `/review/visual-excellence/b`. The existing `/review/**` noindex/nofollow boundary remains controlling. A uses quiet editorial paper/typography; B uses a restrained Night/Paper contrast. Both demonstrate Identity/Cover, Decision/Answer, Letter/Narrative, Evidence/Interpretation, Action/Time, and Limits/Closing.
 
-Next Human gate: review and accept or reject the implemented and automatically validated Checkpoint A / M1-I8-R1 Technical Preparation. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized. The prototype routes/components remain review-only and are not merged into `main`.
+Next Human gate: review Checkpoint B / M1-I8-R1 Visual Excellence after implementation and automated validation on its dedicated branch. Checkpoint B must not merge to `main` before Human Visual QA. M1-I9-R1 and M1-I12 remain unauthorized. The prototype routes/components remain review-only and are not merged into `main`.
 
 ### M1-I12: Responsive, Accessibility and Final QA
 
@@ -735,9 +735,9 @@ Task M1-P1 + Task M1-P1-R1 Human acceptance
   → M1-P3-R1 coded A/B prototypes implemented and automatically validated
   → Human selects and accepts B — Lunar Contrast Edition; A — Quiet Editorial Letter rejected; Figma optional and non-authoritative
   → Checkpoint A Technical Preparation separately authorized and implemented only within its exact manifest
-  → Checkpoint A Human acceptance; Checkpoint B remains separately unauthorized until an explicit later decision
+  → Checkpoint A Human acceptance; Checkpoint B separately Human-authorized within its exact manifest
   → separately authorized and accepted M1-I12
   → final Milestone 1 completion review
 ```
 
-Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical. M1-P2 documentation is Human-accepted. Human accepted the one-time M1-I7 through M1-I11 batch plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is implemented, automatically validated, Human-accepted, and synchronized to `main`. M1-P3-R1 A/B coded visual prototypes are implemented and automatically validated; B — `Lunar Contrast Edition` is Human-selected and accepted, A — `Quiet Editorial Letter` is rejected, and Figma is optional/non-authoritative. Checkpoint A is implemented and automatically validated, with Human acceptance pending. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented. The canonical Reading Note UI is unchanged and the prototype UI is not merged into `main`. Milestone 1 is not complete, Milestone 2 remains unauthorized, and CodeX/agent Browser use and screenshots are prohibited.
+Current state: M1-I5 and M1-I5-R1 are Human-accepted. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical. M1-P2 documentation is Human-accepted. Human accepted the one-time M1-I7 through M1-I11 batch plus M1-P2-R1 and M1-P2-R1-R1 as one integrated next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is implemented, automatically validated, Human-accepted, and synchronized to `main`. M1-P3-R1 A/B coded visual prototypes are implemented and automatically validated; B — `Lunar Contrast Edition` is Human-selected and accepted, A — `Quiet Editorial Letter` is rejected, and Figma is optional/non-authoritative. Checkpoint A is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`. Checkpoint B is Human-authorized but not yet implemented. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. The canonical Reading Note UI is unchanged and the prototype UI is not merged into `main`. Milestone 1 is not complete, Milestone 2 remains unauthorized, and CodeX/agent Browser use and screenshots are prohibited.

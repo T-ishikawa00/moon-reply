@@ -7,16 +7,17 @@
 - Base / accepted documentation commit: `d6a9f111a2e15c54e9f250a2126d64abfacdefd0`
 - Accepted locked-source base: `84edb93c6e098c65ae2e180478827033c25d488a`
 - Branch: `feat/m1-i8-r1-checkpoint-a`
-- Status: **implemented and automatically validated; Human acceptance pending**
+- Status: **Human-accepted; implementation and automated validation complete**
+- Accepted implementation commit: `7977f09eca733168c8bac3ae20670c21fa00cbda`
 - Expected commit: `refactor: prepare M1-I8-R1 reading note visual system`
-- Checkpoint B / M1-I8-R1 Visual Excellence: **unauthorized and unimplemented**
+- Checkpoint B / M1-I8-R1 Visual Excellence: **Human-authorized; implementation not yet started; B — `Lunar Contrast Edition` controlling**
 - M1-I9-R1 and M1-I12: **unauthorized and unimplemented**
 - Milestone 1: **incomplete**
 - Milestone 2 and later: **unauthorized**
 - Figma: optional and non-authoritative; not used
 - Browser or screenshot use by CodeX/agents: prohibited; none used
 
-The Human instruction authorized only Checkpoint A within the exact manifest below. This record is automated technical evidence, not Human visual acceptance and not canonical Reading Note implementation authority.
+The earlier Human instruction authorized only Checkpoint A within the exact manifest below. The current Human decision accepts that implementation at commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and separately authorizes Checkpoint B within its own exact manifest. This remains technical acceptance, not Human visual acceptance of the canonical Reading Note.
 
 ## 2. Exact mutation manifest
 
@@ -181,14 +182,14 @@ The prototype directories remain absent from `main` and this branch. No API rout
 | Legacy-selector consumer audit | PASS |
 | Browser/screenshots | not used |
 
-## 10. Human acceptance checklist
+## 10. Human acceptance record
 
-- [ ] Confirm this is technical preparation, not canonical visual implementation or visual acceptance.
-- [ ] Confirm no product wording, fixed judgment, fixture, Safety meaning, behavior, or information hierarchy changed.
-- [ ] Confirm the five artifact primitives are narrow presentation units and not a universal renderer.
-- [ ] Confirm the bounded CSS corrections are acceptable.
-- [ ] Accept or reject Checkpoint A.
+- [x] Confirmed this is technical preparation, not canonical visual implementation or visual acceptance.
+- [x] Confirmed no product wording, fixed judgment, fixture, Safety meaning, behavior, or information hierarchy changed.
+- [x] Confirmed the five artifact primitives are narrow presentation units and not a universal renderer.
+- [x] Confirmed the bounded CSS corrections are acceptable.
+- [x] Checkpoint A accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`.
 
 ## 11. Stop boundary and next gate
 
-Work stops after the Checkpoint A commit and branch push. Checkpoint A must not be merged into `main` before the next Human decision. Checkpoint B does not start automatically after implementation or Human acceptance. It requires a separate explicit Human authorization and exact mutation manifest. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
+The current Human decision authorizes Checkpoint A fast-forward to `main`, then Checkpoint B implementation on `feat/m1-i8-r1-checkpoint-b-lunar-contrast` within its exact mutation manifest. Checkpoint B must not merge to `main` before Human Visual QA. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.

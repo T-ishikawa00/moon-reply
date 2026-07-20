@@ -2,12 +2,12 @@
 
 ## 1. Status
 
-- Status: **Human and ChatGPT accepted; B selected; Checkpoint A implemented and automatically validated with Human acceptance pending**
-- Authority: the Human decision selects B — `Lunar Contrast Edition` as the canonical design direction and separately authorizes only Checkpoint A / `M1-I8-R1` Technical Preparation within the exact manifest below
-- This document does **not** authorize Checkpoint B canonical visual implementation, package changes, runtime changes, Browser use, screenshots, pull requests, or merges.
+- Status: **Human and ChatGPT accepted; B selected; Checkpoint A Human-accepted; Checkpoint B Human-authorized and not yet implemented**
+- Authority: the current Human decision accepts Checkpoint A / `M1-I8-R1` Technical Preparation at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and separately authorizes Checkpoint B / `M1-I8-R1` Visual Excellence within its exact mutation manifest
+- This document does **not** authorize package changes, runtime changes, Browser use, screenshots, pull requests, Checkpoint B merge, `M1-I9-R1`, or `M1-I12`.
 - The required coded-prototype design gate is complete: B is selected and accepted, A — `Quiet Editorial Letter` is rejected, and Figma is optional and non-authoritative.
-- Checkpoint A / `M1-I8-R1` Technical Preparation is implemented and automatically validated within the exact manifest below; Human acceptance is pending.
-- Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency.
+- Checkpoint A / `M1-I8-R1` Technical Preparation is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation are complete.
+- Checkpoint B / `M1-I8-R1` Visual Excellence is Human-authorized but not yet implemented; B — `Lunar Contrast Edition` is the controlling design direction.
 - `M1-I9-R1` and `M1-I12` remain unauthorized and unimplemented until each named Human gate is passed separately.
 - Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
 
@@ -70,7 +70,7 @@ Stop the checkpoint without broadening scope if any of the following occurs:
 
 ## 5. Checkpoint A — M1-I8-R1 Technical Preparation
 
-Current status: implemented and automatically validated within the exact mutation manifest; Human acceptance pending.
+Current status: Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation complete.
 
 ### 5.1 Purpose
 
@@ -159,17 +159,17 @@ Revert the single checkpoint commit. Because fixtures, safety, packages, routes,
 
 ### 5.10 Next authorization gate
 
-Human accepts Checkpoint A and separately authorizes **Checkpoint B / M1-I8-R1 Visual Excellence** with its exact file manifest. Acceptance of A alone does not authorize B.
+Satisfied: Human accepted Checkpoint A and separately authorized **Checkpoint B / M1-I8-R1 Visual Excellence** with its exact file manifest. Checkpoint B implementation and automated validation are the next work; Human Visual QA remains a later gate.
 
 ### 5.11 Implementation result
 
-Checkpoint A was implemented on `feat/m1-i8-r1-checkpoint-a` from accepted documentation commit `d6a9f111a2e15c54e9f250a2126d64abfacdefd0`. The complete implementation, protected-scope audit, bounded visual-delta audit, formal-name alignment map, and automated evidence are recorded in `TASK_M1_I8_R1_REVIEW.md`.
+Checkpoint A was implemented on `feat/m1-i8-r1-checkpoint-a` from accepted documentation commit `d6a9f111a2e15c54e9f250a2126d64abfacdefd0` and Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`. The complete implementation, protected-scope audit, bounded visual-delta audit, formal-name alignment map, and automated evidence are recorded in `TASK_M1_I8_R1_REVIEW.md`.
 
 The implementation adds no current consumer of the artifact primitives and changes no fixture, Safety owner, package file, route, customer-facing wording, runtime integration, canonical report component, or review-only prototype surface. Automated validation is not Human visual acceptance.
 
 ## 6. Checkpoint B — M1-I8-R1 Visual Excellence
 
-Current status: unauthorized and not implemented. Human selected B — `Lunar Contrast Edition`, satisfying the design-direction dependency, but no separate Checkpoint B implementation authorization exists.
+Current status: Human-authorized and not yet implemented. B — `Lunar Contrast Edition` is the controlling design direction. Implementation is restricted to the separately recorded exact mutation manifest and dedicated branch; merge to `main` remains prohibited pending Human Visual QA.
 
 ### 6.1 Purpose
 
@@ -207,7 +207,7 @@ The authorization must enumerate the exact route and component files before impl
 - `EXACT_LOCKS: PASS`, `SEMANTIC_ASSERTIONS: PASS`, and `CONTENT_LOCK_GATE: PASS`
 - approved archetype, typography, spacing, and responsive rules from the M1-P3 specification
 
-The documentation specification, prototype selection, and any optional Figma reference are not implementation authorization. Checkpoint B still requires the separate explicit Human authorization above. Figma is not a dependency.
+The documentation specification, prototype selection, and any optional Figma reference were not implementation authorization by themselves. The current separate Human instruction satisfies the explicit Checkpoint B authorization dependency. Figma is not a dependency.
 
 ### 6.5 Implementation sequence
 
@@ -448,6 +448,6 @@ An incomplete record is a hard stop.
 
 ## 10. Completion definition for this plan
 
-Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, optional Figma reference specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. A later explicit Human decision selected B — `Lunar Contrast Edition` and authorized only Checkpoint A Technical Preparation within its exact manifest. Checkpoint A is implemented and automatically validated, with Human acceptance pending. Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
+Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, optional Figma reference specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. A later explicit Human decision selected B — `Lunar Contrast Edition` and authorized Checkpoint A Technical Preparation within its exact manifest. The current Human decision accepts Checkpoint A at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda` and separately authorizes Checkpoint B within its exact manifest. Checkpoint B is not yet implemented. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
 
-The next Human gate is acceptance of the implemented and automatically validated Checkpoint A. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and must not begin automatically after Checkpoint A; it requires its own separate explicit Human authorization and exact mutation manifest. M1-I9-R1 and M1-I12 remain unauthorized.
+The next implementation gate is Checkpoint B on its dedicated branch, followed by Human Visual QA before any merge to `main`. Figma is optional and non-authoritative. M1-I9-R1 and M1-I12 remain unauthorized.
