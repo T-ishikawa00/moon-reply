@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestones 1–9 remain incomplete until their stated validation and Human acceptance gates are satisfied.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The bounded M1-I2-R1 Safety correction is Human-accepted and passes `SEM-UNSUPPORTED-CASES` without waiver. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction. Checkpoint A and Checkpoint B are Human-accepted; Checkpoint B was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, and primary desktop/390px Visual QA are complete, and fast-forward to `main` is authorized. M1-I12 is Human-authorized and not yet completed. Milestone 1 remains incomplete pending M1-I12 and Milestone 2 remains unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. This is not final Milestone 1 acceptance. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. The bounded M1-I2-R1 Safety correction is Human-accepted and passes `SEM-UNSUPPORTED-CASES` without waiver. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction. Checkpoint A and Checkpoint B are Human-accepted; Checkpoint B was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted and synchronized to `main`. M1-I12-R1 passed and was fast-forwarded to `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`. M1-I12 automated final QA is complete on the dedicated QA branch; Human final QA and acceptance remain pending. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
 
 ## P0: Repository Setup
 
@@ -392,7 +392,9 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 - [x] M1-I7 through M1-I11 implementation and automated validation under internal checkpoints
 - [x] Human acceptance of M1-I7 through M1-I11 plus M1-P2-R1 and bounded M1-P2-R1-R1 as one integrated next-stage baseline
 - [x] Separate Human authorization of M1-I12 Final QA & Milestone 1 Acceptance Package
-- [ ] M1-I12 automated final QA and Human final acceptance
+- [x] M1-I12-R1 correction, fast-forward-only `main` integration, and main revalidation
+- [x] M1-I12 automated final QA and dedicated QA-branch acceptance package
+- [ ] M1-I12 Human final QA and acceptance
 - [ ] Human acceptance of Milestone 1
 
 ## P4.21: Human-Accepted as Part of the Integrated Baseline — M1-I7 Brand Foundation
@@ -457,7 +459,7 @@ This closure is not M1-I6 acceptance and does not complete Milestone 1. No furth
 - [x] Checkpoint B Human Visual QA and acceptance for the primary desktop and 390px targets at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a`; fast-forward to `main` authorized
 - [x] Separate Human authorization of M1-I9-R1 Reading Note Preview Alignment
 - [x] M1-I9-R1 implementation and automated validation within its exact mutation manifest on `feat/m1-i9-r1-reading-note-preview-alignment`
-- [x] M1-I9-R1 primary desktop/390px Human Visual QA and acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; fast-forward to `main` authorized
+- [x] M1-I9-R1 primary desktop/390px Human Visual QA and acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; synchronized to `main`
 - [x] Separate Human authorization of M1-I12 Final QA & Milestone 1 Acceptance Package
 
 M1-P3 acceptance and M1-P3-R1 prototype acceptance are not canonical implementation authorization. Figma is optional and non-authoritative. Neither prototype selection nor optional Figma material may change product facts, price, fixture judgment, Safety, request/legal behavior, or runtime scope.
@@ -522,7 +524,7 @@ Checkpoint A acceptance is technical acceptance, not visual acceptance. Its foll
 - [x] Human Visual QA for the primary desktop and 390px targets, including Web鑑定ノート, 保存用判断カード, 公開全文見本, and review-chrome subordination
 - [x] Human acceptance at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` and separate fast-forward-only merge authorization
 
-Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3`; primary desktop/390px Visual QA is complete and fast-forward to `main` is authorized. M1-I12 owns the final 320px, 200% zoom, keyboard/focus, reduced-motion, reading-quality, and all-route regression checks and is separately Human-authorized but not completed. Milestone 1 completion and Milestone 2 remain unauthorized.
+Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3` and synchronized to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12 automated all-route regression checks and acceptance package are complete. Human 320px, 200% zoom, keyboard/focus, reduced-motion, reading-quality, contrast, and final acceptance remain pending. Milestone 1 completion and Milestone 2 remain unauthorized.
 
 ## P4.29: Human-Accepted — M1-I9-R1 Reading Note Preview Alignment
 
@@ -535,7 +537,19 @@ Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `0
 - [x] Human Visual QA at primary desktop and 390px, including the corrected mobile one-character wrapping defect
 - [x] Human acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3` and separate fast-forward-only merge authorization
 
-M1-I9-R1 remains on its feature branch only until the authorized fast-forward to `main` is completed. M1-I12 is Human-authorized and not yet completed. Milestone 1 completion and Milestone 2 remain unauthorized.
+M1-I9-R1 is synchronized to `main`. M1-I12-R1 is fast-forwarded to `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`, and M1-I12 automated final QA is complete on its dedicated QA branch. Human final QA remains pending. Milestone 1 completion and Milestone 2 remain unauthorized.
+
+## P4.30: Automated Final QA Complete — M1-I12
+
+- [x] Correct missing `/request#sheet`, `/request#safety`, and `/request#email` targets without changing hrefs, hash mapping, visible copy, fixtures, Safety, Legal, packages, or runtime behavior
+- [x] Fast-forward M1-I12-R1 to `main` without a merge commit and revalidate all correction gates
+- [x] Update the existing `qa/m1-i12-final-acceptance` branch to final `main`
+- [x] Pass content locks, Safety, typecheck, lint warning 0, clean production build, and `git diff --check`
+- [x] Pass 25-route HTTP, 404, unknown-ID fail-closed, internal-link, fragment, heading, noindex, CSS-asset, and prohibited-scope audits
+- [x] Prepare `TASK_M1_I12_FINAL_QA.md` and synchronize exactly seven documentation files
+- [ ] Human 320px, keyboard/focus, 200% zoom, reduced-motion, reading-quality, and final contrast review
+- [ ] Human acceptance of M1-I12
+- [ ] Human acceptance of Milestone 1
 
 ## P5: Approved Remaining Delivery Sequence — Not Yet Complete
 
@@ -553,4 +567,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted. Human selected and accepted B — `Lunar Contrast Edition`; Checkpoint A and Checkpoint B are Human-accepted, and Checkpoint B is on `main`. M1-I9-R1 is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3`, with implementation, automated validation, and primary desktop/390px Visual QA complete; fast-forward to `main` is authorized. M1-I12 is Human-authorized and not yet completed. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
+M1-P2 is Human-accepted planning. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical, and no later M1-I6 gate exists. The current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections are the Human-accepted next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted. Human selected and accepted B — `Lunar Contrast Edition`; Checkpoint A, Checkpoint B, and M1-I9-R1 are Human-accepted and synchronized to `main`. M1-I12-R1 is on `main`, and M1-I12 automated final QA is complete on its QA branch. Human final QA and acceptance remain pending. Operator-information completion, deployment, provider inquiry, provider selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every Milestone 2+ task remain blocked by their dependency, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents are prohibited; Human performs visual review manually in ordinary external Microsoft Edge.
