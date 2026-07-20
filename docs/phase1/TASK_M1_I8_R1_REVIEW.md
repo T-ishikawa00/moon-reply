@@ -322,3 +322,134 @@ The production review server runs on `127.0.0.1:3017`. It was started without st
 Human must inspect answer discoverability, Japanese wrapping, horizontal overflow, formal-name wrapping, focus visibility, keyboard order, contrast, 200% zoom, reduced motion, route-chrome subordination, and closing aftertaste in ordinary external Microsoft Edge. CodeX/agents used no Browser, browser automation, GUI control, or screenshots and make no visual-acceptance claim.
 
 The next and only current gate is Human Visual QA and acceptance of Checkpoint B. Checkpoint B must not merge to `main`. M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized. No PR is authorized or created.
+
+## 18. M1-I8-R1-R1 First Viewport & Readability Polish
+
+### 18.1 Human defect findings and bounded corrections
+
+| Human finding | Bounded correction |
+| --- | --- |
+| Web鑑定ノートの長い Night cover により、desktop 初期 viewport で「今夜の答え」を発見できない | stage 上余白、cover minimum height、cover 内の見出し・metadata・divider 間隔を圧縮し、answer band は DOM・normal flow・独立した Night band のまま維持 |
+| 保存用判断カードで判断までの距離が長く、30秒で見返す用途の hierarchy が弱い | stage と header の余白、title size/line-height、subtitle・divider・metadata rhythm を限定的に圧縮し、answer の DOM 順序と独立性を維持 |
+| `ReviewBanner` と artifact review boundary の二段表示が商品 artifact を押し下げる | closed 時の各帯を `44px` minimum、合計約 `88px` に圧縮し、details、文言、fixture ID、`44px` summary target を維持 |
+| Paper 本文の一部が淡く、長文可読性が不足する | 主要 prose のみ `var(--ink-800)` へ一段濃くし、metadata、eyebrow、fixture details、補足 label、Night 面を変更しない |
+
+This correction changes no content, component JSX, fixture, route, behavior, artifact primitive, Safety, Legal, package, prototype, price, age, judgment, or public conclusion.
+
+### 18.2 Exact CSS selectors changed
+
+Review chrome:
+
+- `.review-banner__inner`
+- `.review-banner__lead`
+- `.artifact-review-boundary__inner`
+
+Web first viewport and responsive flow:
+
+- `.reading-note-stage`
+- `.reading-note-cover`
+- `.reading-note-cover__type`
+- `.reading-note-cover h1`
+- `.reading-note-cover__facts`
+- `.reading-note-cover__facts div`
+- `.reading-note-cover__facts dd`
+- `.reading-note-cover .editorial-divider`
+- `.reading-note-cover__line`
+- `.reading-note-cover__answer`
+- `.reading-note-cover__answer strong`
+
+Save first viewport and responsive flow:
+
+- `.save-decision-stage`
+- `.save-decision-note__header`
+- `.save-decision-note__header > p`
+- `.save-decision-note__header h1`
+- `.save-decision-note__header .editorial-divider`
+- `.save-decision-note__header dl`
+- `.save-decision-note__header dl div`
+- `.save-decision-note__header dd`
+- `.save-decision-answer`
+- `.save-decision-answer h2`
+
+Primary Paper prose contrast:
+
+- `.reading-note-section__body > p`
+- `.reading-note-letter__body p`
+- `.reading-guide-grid dd`
+- `.reading-note-list li`
+- `.possibility-list p`
+- `.anxiety-grid p`
+- `.message-temperature__notes dd`
+- `.lunar-plan p`
+- `.save-decision-list li`
+- `.save-decision-next > p`
+- `.save-decision-note__footer p`
+- `.public-sample-note__body > section > div p`
+- `.public-sample-detail-list li`
+- `.public-sample-temperature dd`
+- `.public-sample-limitation p`
+
+### 18.3 First-viewport source intent
+
+| Target | Correction source intent | Human status |
+| --- | --- | --- |
+| Desktop review chrome | `ReviewBanner` `44px` minimum + artifact boundary `44px` minimum; combined closed height approximately `88px` | pending visual review |
+| Desktop Web | stage top padding `32–44px`; cover minimum height `34rem`; cover top padding `3rem`; reduced type/title/facts/divider rhythm; answer remains normal flow | pending visual review |
+| Desktop Save | stage top padding `32–40px`; header vertical padding `2.5rem`; title maximum `2.6rem` at `1.45` line-height; reduced subtitle/divider/metadata rhythm | pending visual review |
+| 390px Web | stage top padding `24px`; cover top padding `28px`; title remains untruncated at `1.9–2.1rem`; metadata becomes readable label/value rows; answer remains normal flow | pending visual review |
+| 390px Save | header vertical padding `24px`; formal name retained; consultation theme remains untruncated; metadata becomes readable label/value rows; answer label and judgment remain the next normal-flow section | pending visual review |
+| 320px | existing `8px` stage inset and `18px` internal inset remain controlling; no clipping, overflow masking, or truncation was introduced; formal name and title may wrap naturally | pending visual review |
+
+Body copy remains at least the global `1rem` (`16px`). No sticky/fixed positioning, absolute answer overlay, CSS `order`, `overflow-x:hidden`, animation, or parallax was added.
+
+### 18.4 Paper prose contrast treatment
+
+The named primary Paper prose selectors use `var(--ink-800)`. Static token contrast is:
+
+| Pair | Contrast |
+| --- | ---: |
+| `ink-800` / `paper-50` | `13.53:1` |
+| `ink-800` / `paper-100` | `13.02:1` |
+| `ink-800` / `paper-200` | `11.54:1` |
+| `ink-800` / `paper-300` | `10.16:1` |
+
+The minimum measured Paper pairing is `10.16:1`, above the required `4.5:1`. Secondary metadata and supporting review copy remain `var(--ink-600)`. The Save answer reason remains `var(--paper-200)` on its approved Night answer surface because this correction does not recolor Night surfaces.
+
+### 18.5 CSS asset failure prevention and HTTP evidence
+
+The prior Human-review failure mode was a stale `.next` / served CSS asset mismatch: generated HTML referenced CSS that was not being served from the matching clean build, producing unstyled HTML and an oversized black `MoonSeal`. For this correction, port `3017` was confirmed without an existing listener, `C:\projects\moon-reply\.next` was removed, a clean production build was generated, and one `next start -p 3017` server was launched for this worktree.
+
+Raw HTTP evidence after that clean build:
+
+- Web route: HTTP `200`
+- Save route: HTTP `200`
+- Public route: HTTP `200`
+- CSS hrefs extracted from all three HTML responses: `2`
+- every extracted CSS URL: HTTP `200`
+- every extracted CSS body: non-empty
+- `.reading-note-cover`: present
+- `.save-decision-note`: present
+- `.public-sample-note`: present
+- `.review-banner`: present
+- `.artifact-review-boundary`: present
+- `CSS_ASSET_GATE: PASS`
+
+### 18.6 Automated validation and hard stop
+
+| Check | Result |
+| --- | --- |
+| `EXACT_LOCKS` | PASS |
+| `SEMANTIC_ASSERTIONS` | PASS |
+| `SAFETY_POLICY_GATE` | PASS |
+| `CONTENT_LOCK_GATE` | PASS |
+| `npm.cmd run typecheck` | PASS |
+| `npm.cmd run lint` | PASS with zero warnings |
+| `npm.cmd run build` | PASS; 28 static/SSG pages generated |
+| protected-scope diff | PASS; zero |
+| exact mutation manifest | PASS; `app/globals.css` and this review record only |
+| fixed/sticky addition | zero |
+| horizontal-overflow masking addition | zero |
+| `git diff --check` | PASS |
+| Browser/screenshots | not used |
+
+Human Visual QA remains pending for desktop, 390px, 320px, keyboard/focus, 200% zoom, Japanese wrapping, answer discoverability, and review-chrome subordination. Checkpoint B remains unaccepted and unmerged. `main` is unchanged. M1-I9-R1 and M1-I12 remain unauthorized; Milestone 1 remains incomplete. No PR was created.
