@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted and its gate passes without waiver. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction. Checkpoint A and Checkpoint B are Human-accepted; Checkpoint B was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is implemented and automatically validated on `feat/m1-i9-r1-reading-note-preview-alignment`; Human Visual QA is pending and merge to `main` is unauthorized. M1-I12 remains unauthorized and unimplemented. The prototype UI is not merged into `main`. Milestone 1 remains incomplete and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted and its gate passes without waiver. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction. Checkpoint A and Checkpoint B are Human-accepted; Checkpoint B was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, and primary desktop/390px Visual QA are complete, and fast-forward to `main` is authorized. M1-I12 is Human-authorized and not yet completed. The prototype UI is not merged into `main`. Milestone 1 remains incomplete pending M1-I12 and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
 
 ## Milestone 0: Completed Foundations
 
@@ -129,9 +129,9 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Separate Human authorization of M1-I9-R1 Reading Note Preview Alignment
 - [x] M1-I9-R1 implementation and automated validation within the exact manifest on `feat/m1-i9-r1-reading-note-preview-alignment`
 - [x] M1-I9-R1 content locks, Safety, typecheck, lint, build, HTTP, CSS asset, source structure, manifest, prohibited-scope, and diff-hygiene checks without Browser or screenshots
-- [ ] M1-I9-R1 Human Visual QA and acceptance; merge to `main` remains unauthorized
-- [ ] Separate Human authorization of M1-I12 Responsive, Accessibility and Final QA
-- [ ] M1-I12 Responsive, Accessibility and Final QA implementation and Human acceptance
+- [x] M1-I9-R1 primary desktop/390px Human Visual QA and acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; fast-forward to `main` authorized
+- [x] Separate Human authorization of M1-I12 Final QA & Milestone 1 Acceptance Package
+- [ ] M1-I12 automated final QA and Human final acceptance
 - [ ] Human acceptance of Milestone 1
 
 ## Milestone 2: Operator Information and Publication Readiness

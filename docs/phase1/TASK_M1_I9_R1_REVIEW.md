@@ -4,11 +4,11 @@
 
 - Task ID: `M1-I9-R1`
 - Task name: `Reading Note Preview Alignment`
-- Human authority: Checkpoint B / M1-I8-R1 is accepted; fast-forward to `main` and this bounded LP-preview alignment are explicitly authorized.
+- Human authority: Checkpoint B / M1-I8-R1 and M1-I9-R1 are accepted; fast-forward of this accepted branch to `main` and M1-I12 Final QA are explicitly authorized.
 - Branch: `feat/m1-i9-r1-reading-note-preview-alignment`
 - Expected commit: `feat: align LP previews with Lunar Contrast artifacts`
 - Browser, browser automation, GUI control, and screenshots by CodeX/agents: prohibited and not used.
-- Merge of this branch to `main`, M1-I12, Milestone 1 completion, and Milestone 2: unauthorized.
+- Fast-forward of this branch to `main`: authorized. M1-I12: Human-authorized and not yet completed. Milestone 1 completion and Milestone 2: unauthorized.
 
 ## 2. Base commit
 
@@ -163,30 +163,30 @@ The review routes remain display-only: opening them does not purchase, generate,
 
 | Surface | Desktop | 768px | 390px | 320px |
 | --- | --- | --- | --- | --- |
-| Hero cover preview | Pending | Source reflow validated | Pending | Deferred to M1-I12 |
-| Same-case product proof | Pending | Source reflow validated | Pending | Deferred to M1-I12 |
-| Web/save direct links | Pending | Source target/order validated | Pending | Deferred to M1-I12 |
-| Different-case public comparison | Pending | Source reflow validated | Pending | Deferred to M1-I12 |
+| Hero cover preview | Human-accepted | Source reflow validated | Human-accepted | Deferred to M1-I12 |
+| Same-case product proof | Human-accepted | Source reflow validated | Human-accepted | Deferred to M1-I12 |
+| Web/save direct links | Human-accepted | Source target/order validated | Human-accepted | Deferred to M1-I12 |
+| Different-case public comparison | Human-accepted | Source reflow validated | Human-accepted | Deferred to M1-I12 |
 
-Human should compare the LP preview against the accepted canonical Web and save artifacts in ordinary external Microsoft Edge, focusing on hierarchy, answer discoverability, boundary clarity, Japanese wrapping, and link visibility. CodeX/agents make no visual-acceptance claim.
+Human completed primary desktop/390px comparison of the LP preview against the accepted canonical Web and save artifacts in ordinary external Microsoft Edge, including hierarchy, answer discoverability, boundary clarity, Japanese wrapping, and link visibility. This acceptance is Human evidence; CodeX/agents make no independent visual-acceptance claim.
 
 ## 20. Limitations
 
 - Automated and raw-HTTP evidence does not establish visual quality or device rendering.
 - No Browser, screenshot, viewport automation, Playwright, CDP, Puppeteer, Selenium, or GUI browser control was used.
-- Primary desktop and 390px Human Visual QA of M1-I9-R1 remains pending.
-- Final 320px Human review of the three public decision cases is now part of M1-I9-R1-R2; 200% zoom, keyboard/focus, and all-route regression remain held for M1-I12.
+- Primary desktop and 390px Human Visual QA of M1-I9-R1 is complete and accepted.
+- Final 320px Human review, 200% zoom, keyboard/focus, reduced-motion, reading-quality, and all-route regression remain held for M1-I12.
 - No runtime feature, file generation, download, persistence, purchase, AI generation, or delivery capability was added.
 
 ## 21. Next gate
 
 - M1-I8-R1: Human-accepted and merged to `main` by fast-forward.
-- M1-I9-R1: implemented and automatically validated on its dedicated branch; Human Visual QA pending; not merged to `main`.
-- M1-I12: unauthorized.
-- Milestone 1: incomplete.
+- M1-I9-R1: Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, and primary desktop/390px Visual QA complete; fast-forward to `main` authorized.
+- M1-I12: Human-authorized; not yet completed.
+- Milestone 1: incomplete pending M1-I12.
 - Milestone 2: unauthorized.
 
-The only next gate is Human Visual QA and acceptance of M1-I9-R1. Do not merge this branch to `main`, create a PR, or start M1-I12 without a later explicit Human decision.
+The next gate is acceptance synchronization, authorized fast-forward of M1-I9-R1 to `main`, and execution of the separately authorized M1-I12 validation/documentation-only final QA. Do not create a PR, merge commit, or start Milestone 2.
 
 ## 22. M1-I9-R1-R1 bounded mobile reflow correction
 
@@ -201,7 +201,7 @@ The only next gate is Human Visual QA and acceptance of M1-I9-R1. Do not merge t
 - Post-correction `EXACT_LOCKS`, `SEMANTIC_ASSERTIONS`, `SAFETY_POLICY_GATE`, and `CONTENT_LOCK_GATE`: PASS.
 - Post-correction typecheck, lint with zero warnings, clean production build with 28 generated pages, and `git diff --check`: PASS.
 - Post-correction raw-HTTP asset verification: `/` returned 200; both stylesheet hrefs returned 200 with non-empty bodies; all 14 served mobile-correction declarations were present; `CSS_ASSET_GATE: PASS`.
-- Human Visual QA remains pending. M1-I9-R1 remains unmerged and unaccepted; M1-I12 remains unauthorized; Milestone 1 remains incomplete.
+- Human primary desktop/390px Visual QA is complete and M1-I9-R1 is accepted at `82600df57481cae2c61d370288083a61f0c719c3`; M1-I12 is Human-authorized and not yet completed; Milestone 1 remains incomplete pending M1-I12.
 
 ## 23. M1-I9-R1-R2 different-case mobile reflow correction
 
@@ -219,5 +219,16 @@ The only next gate is Human Visual QA and acceptance of M1-I9-R1. Do not merge t
 - Typecheck, lint with zero warnings, clean production build with 28 generated pages, and `git diff --check`: PASS.
 - Raw HTTP on the new production server: `/`, `/sample-report`, `/review/result/result-normal-001`, and `/review/save-report/result-normal-001` returned 200.
 - CSS asset integrity: two stylesheet assets returned 200 with non-empty bodies; 11 served-CSS desktop/mobile assertions passed; `CSS_ASSET_GATE: PASS`.
-- Human review remains limited to: the heading and case 01 at 390px; cases 02 and 03 plus the lower disclosure/link at 390px; and the complete single-column sequence at 320px.
-- Human Visual QA remains pending. M1-I9-R1 remains unmerged and unaccepted; no PR is created; M1-I12 remains unauthorized; Milestone 1 remains incomplete.
+- Human completed and accepted the heading, cases 01 through 03, and lower disclosure/link at 390px; the complete single-column sequence at 320px remains held for M1-I12.
+- M1-I9-R1 is Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; fast-forward to `main` is authorized; no PR is created; M1-I12 is Human-authorized and not yet completed; Milestone 1 remains incomplete pending M1-I12.
+
+## 24. Human acceptance
+
+- Human accepted M1-I9-R1 Reading Note Preview Alignment.
+- Accepted final implementation commit: `82600df57481cae2c61d370288083a61f0c719c3`.
+- Implementation and automated validation are complete.
+- Primary desktop/390px Visual QA is complete for the Hero, same-case three-format presentation, and different-case three-case comparison.
+- The mobile one-character wrapping defect is resolved.
+- Fast-forward to `main` is authorized.
+- M1-I12 Final QA & Milestone 1 Acceptance Package is Human-authorized and not yet completed.
+- Milestone 1 remains incomplete pending M1-I12. Milestone 2 remains unauthorized.
