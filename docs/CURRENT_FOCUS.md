@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 — M1-P3-R1 B — `Lunar Contrast Edition` selected and accepted; Checkpoint A / M1-I8-R1 Technical Preparation authorized and not yet implemented
+Phase 1 / Milestone 1 — Checkpoint A / M1-I8-R1 Technical Preparation implemented and automatically validated; Human acceptance pending
 
 ## Completed Through
 
@@ -28,9 +28,9 @@ Phase 1 / Milestone 1 — M1-P3-R1 B — `Lunar Contrast Edition` selected and a
 
 ## Current Task
 
-Checkpoint A / M1-I8-R1 Technical Preparation is the current authorized task. Its exact mutation manifest is recorded in `M1_P3_IMPLEMENTATION_PLAN.md`; it is visually neutral preparation and does not authorize Checkpoint B or canonical visual implementation.
+Checkpoint A / M1-I8-R1 Technical Preparation is implemented and automatically validated within the exact mutation manifest in `M1_P3_IMPLEMENTATION_PLAN.md`. The current gate is Human acceptance of Checkpoint A. This does not authorize Checkpoint B or canonical visual implementation.
 
-M1-I2-R1 implementation and automated validation are complete, Human accepted implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, and the accepted Safety correction is synchronized to `main`. `SEM-UNSUPPORTED-CASES` passes without waiver. The M1-P3-R1 A/B prototypes are implemented and automatically validated. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, Safety, packages, and runtime integrations were not changed by the prototype, and the prototype UI remains review-only and outside `main`. Checkpoint A is explicitly authorized and not yet implemented. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
+M1-I2-R1 implementation and automated validation are complete, Human accepted implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`, and the accepted Safety correction is synchronized to `main`. `SEM-UNSUPPORTED-CASES` passes without waiver. The M1-P3-R1 A/B prototypes are implemented and automatically validated. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, Safety, packages, and runtime integrations were not changed by the prototype, and the prototype UI remains review-only and outside `main`. Checkpoint A is now implemented and automatically validated; Human acceptance is pending. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized and unimplemented; Milestone 1 remains incomplete and Milestone 2 remains unauthorized.
 
 Accepted public fictional conclusions in the baseline are:
 
@@ -44,7 +44,7 @@ The authoritative artifact names are:
 - long presentation: `Web鑑定ノート`; and
 - short presentation: `保存用判断カード`.
 
-Residual application copy such as `保存用鑑定書` is a known deferred M1-I8-R1 alignment item. Baseline closure does not change application copy.
+Residual application copy such as `保存用鑑定書` is inventoried in the Checkpoint A review record. Checkpoint A does not change application copy; customer-facing alignment remains deferred to a separately authorized Checkpoint B manifest.
 
 ## Human Design Decisions for M1-P3
 
@@ -69,7 +69,7 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 - The previous M1-P3-R1 hard stop is resolved; review-only A/B coded visual prototypes are implemented and automatically validated under the completed prototype authorization.
 - Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance does not authorize canonical visual implementation.
 - Figma is optional and non-authoritative; an existing or future Figma file has no implementation-gate authority.
-- Checkpoint A / M1-I8-R1 Technical Preparation is explicitly Human-authorized and not yet implemented; its exact manifest is controlling.
+- Checkpoint A / M1-I8-R1 Technical Preparation is implemented and automatically validated within its exact manifest; Human acceptance is pending.
 - Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency, not its separate implementation-authorization gate.
 - M1-I9-R1 remains unauthorized and unimplemented.
 - M1-I12 Responsive, Accessibility and Final QA remains unauthorized and unimplemented.
@@ -130,4 +130,4 @@ Residual application copy such as `保存用鑑定書` is a known deferred M1-I8
 
 ## Next Gate
 
-Implement and automatically validate only Checkpoint A / M1-I8-R1 Technical Preparation on its dedicated branch, then stop for Human acceptance. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and unimplemented despite the completed B selection. M1-I9-R1 and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human reviews Checkpoint A / M1-I8-R1 Technical Preparation using `TASK_M1_I8_R1_REVIEW.md`. Figma is optional and non-authoritative. Do not start Checkpoint B after acceptance unless Human separately authorizes it with an exact manifest. Checkpoint B, M1-I9-R1, and M1-I12 remain unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

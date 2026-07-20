@@ -1,0 +1,60 @@
+.surface {
+  --artifact-border: var(--border-paper);
+  --artifact-muted: var(--ink-600);
+  --artifact-accent: var(--focus-ring-paper);
+
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--artifact-border);
+  background: var(--paper-50);
+  color: var(--ink-950);
+}
+
+.surfaceNight {
+  --artifact-border: var(--border-night);
+  --artifact-muted: var(--paper-300);
+  --artifact-accent: var(--moon-400);
+
+  background: var(--night-800);
+  color: var(--paper-50);
+}
+
+.rule {
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--artifact-border, var(--border-paper));
+}
+
+.metadata {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--artifact-muted, var(--ink-600));
+  font-size: var(--type-metadata);
+  line-height: 1.7;
+}
+
+.stamp {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 1.8rem;
+  align-items: center;
+  border: 1px solid var(--artifact-accent, var(--focus-ring-paper));
+  border-radius: var(--radius-round);
+  padding: var(--space-1) var(--space-3);
+  color: var(--artifact-accent, var(--focus-ring-paper));
+  font-size: var(--type-metadata);
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.sectionLabel {
+  display: inline-flex;
+  width: fit-content;
+  color: var(--artifact-accent, var(--focus-ring-paper));
+  font-size: var(--type-metadata);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+}

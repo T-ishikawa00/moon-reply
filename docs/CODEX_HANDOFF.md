@@ -17,7 +17,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its documentation/design package remains authoritative, and acceptance grants no canonical implementation authority. The required design gate is now a Human-approved coded visual prototype; Figma is optional and non-authoritative.
 - Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and the accepted correction is synchronized to `main`.
 - M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated on `design/m1-p3-coded-visual-prototype`. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance is not canonical visual implementation authorization.
-- Checkpoint A / M1-I8-R1 Technical Preparation is explicitly Human-authorized and not yet implemented. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency, not its separate implementation-authorization gate. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
+- Checkpoint A / M1-I8-R1 Technical Preparation is implemented and automatically validated on `feat/m1-i8-r1-checkpoint-a`; Human acceptance is pending. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency, not its separate implementation-authorization gate. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -51,7 +51,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - Product: `恋のメッセージ鑑定ノート`.
 - Long presentation: `Web鑑定ノート`.
 - Short presentation: `保存用判断カード`.
-- `保存用鑑定書` is not the current formal name. Residual application copy using that label is a known deferred M1-I8-R1 item; baseline closure must not change application copy.
+- `保存用鑑定書` is not the current formal name. Checkpoint A records the residual-source alignment map but does not change application copy; customer-facing replacement remains deferred to a separately authorized Checkpoint B manifest.
 
 ## Preserved Product and Safety Boundaries
 
@@ -127,10 +127,10 @@ Controlling Human design decisions:
 
 ## Current Restriction
 
-The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A / M1-I8-R1 Technical Preparation is authorized only within its exact manifest. Do not start Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without separate explicit Human authorization. The completed B selection does not authorize Checkpoint B. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A / M1-I8-R1 Technical Preparation is implemented and automatically validated only within its exact manifest; Human acceptance is pending. Do not start Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without separate explicit Human authorization. The completed B selection and Checkpoint A implementation do not authorize Checkpoint B. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance.
 
 ## Next Gate
 
-Implement and automatically validate only Checkpoint A / M1-I8-R1 Technical Preparation on `feat/m1-i8-r1-checkpoint-a`, then stop for Human acceptance. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and unimplemented and requires its own separate explicit Human authorization. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Human reviews and either accepts or rejects the implemented and automatically validated Checkpoint A / M1-I8-R1 Technical Preparation using `docs/phase1/TASK_M1_I8_R1_REVIEW.md`. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and unimplemented and requires its own separate explicit Human authorization and exact manifest even after Checkpoint A acceptance. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
