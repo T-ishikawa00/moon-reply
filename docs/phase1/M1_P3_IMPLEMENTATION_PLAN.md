@@ -2,13 +2,13 @@
 
 ## 1. Status
 
-- Status: **Human and ChatGPT accepted; B selected; Checkpoint A Human-accepted; Checkpoint B Human-accepted; M1-I9-R1 Human-authorized and not yet implemented**
-- Authority: the current Human decision accepts Checkpoint B / `M1-I8-R1` Visual Excellence at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a`, authorizes its fast-forward-only synchronization to `main`, and separately authorizes `M1-I9-R1` Reading Note Preview Alignment within its exact mutation manifest
+- Status: **Human and ChatGPT accepted; B selected; Checkpoint A and Checkpoint B Human-accepted; M1-I9-R1 implemented and automatically validated; Human Visual QA pending**
+- Authority: Human accepted Checkpoint B / `M1-I8-R1` at `bb2079aafb3666562e2876ead4c24a5c933bea8a`, authorized its fast-forward-only synchronization to `main`, and separately authorized `M1-I9-R1` Reading Note Preview Alignment within its exact mutation manifest
 - This document does **not** authorize package changes, runtime changes, Browser use, screenshots, pull requests, M1-I9-R1 merge to `main`, or `M1-I12`.
 - The required coded-prototype design gate is complete: B is selected and accepted, A — `Quiet Editorial Letter` is rejected, and Figma is optional and non-authoritative.
 - Checkpoint A / `M1-I8-R1` Technical Preparation is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation are complete.
-- Checkpoint B / `M1-I8-R1` Visual Excellence is Human-accepted at `bb2079aafb3666562e2876ead4c24a5c933bea8a`; implementation and automated validation are complete, primary desktop and 390px Visual QA is complete, B — `Lunar Contrast Edition` is the canonical design, and fast-forward to `main` is authorized.
-- `M1-I9-R1` is Human-authorized and not yet implemented. `M1-I12` remains unauthorized and unimplemented.
+- Checkpoint B / `M1-I8-R1` Visual Excellence is Human-accepted and fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`; B — `Lunar Contrast Edition` is the canonical design.
+- `M1-I9-R1` is implemented and automatically validated on `feat/m1-i9-r1-reading-note-preview-alignment`; Human Visual QA is pending and merge to `main` is unauthorized. `M1-I12` remains unauthorized and unimplemented.
 - Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
 
 ## 2. Objective
@@ -159,7 +159,7 @@ Revert the single checkpoint commit. Because fixtures, safety, packages, routes,
 
 ### 5.10 Next authorization gate
 
-Satisfied: Human accepted Checkpoint A, separately authorized **Checkpoint B / M1-I8-R1 Visual Excellence** with its exact file manifest, then accepted Checkpoint B at `bb2079aafb3666562e2876ead4c24a5c933bea8a`. Fast-forward synchronization to `main` and the bounded M1-I9-R1 task are now separately authorized.
+Satisfied: Human accepted Checkpoint A and Checkpoint B, then Checkpoint B was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. The separately authorized M1-I9-R1 task is implemented and automatically validated on its dedicated branch.
 
 ### 5.11 Implementation result
 
@@ -169,7 +169,7 @@ The implementation adds no current consumer of the artifact primitives and chang
 
 ## 6. Checkpoint B — M1-I8-R1 Visual Excellence
 
-Current status: Human-accepted at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a`. Implementation and automated validation are complete, primary desktop and 390px Visual QA is complete, B — `Lunar Contrast Edition` is the canonical design, and fast-forward-only synchronization to `main` is authorized.
+Current status: Human-accepted at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` and fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. B — `Lunar Contrast Edition` is the canonical design.
 
 ### 6.1 Purpose
 
@@ -275,23 +275,26 @@ Content locks, semantic assertions, the permanent Safety gate, typecheck, lint, 
 
 ## 7. Checkpoint C — M1-I9-R1 Preview Alignment
 
-Current status: Human-authorized and not yet implemented.
+Current status: implemented and automatically validated on `feat/m1-i9-r1-reading-note-preview-alignment`; Human Visual QA pending; not merged to `main`.
 
 ### 7.1 Purpose
 
 Align the landing-page product preview, public-case comparison, and artifact entry links to the accepted reading-note visual grammar without changing their content or purpose.
 
-### 7.2 Allowed files
+### 7.2 Exact mutation manifest
 
 - `app/page.tsx`
-- existing LP-specific presentation components only if the exact authorization identifies them
-- approved shared primitives under `components/artifact/**`
-- approved existing primitives under `components/brand/**`
 - `app/globals.css`
+- `docs/ROADMAP.md`
+- `docs/CURRENT_FOCUS.md`
+- `docs/CODEX_HANDOFF.md`
+- `docs/WBS.md`
+- `docs/phase1/IMPLEMENTATION_WBS.md`
+- `docs/phase1/M1_IMPLEMENTATION_SLICES.md`
+- `docs/phase1/M1_P3_IMPLEMENTATION_PLAN.md`
 - `docs/phase1/TASK_M1_I9_R1_REVIEW.md`
-- current-status documentation required to record the checkpoint result
 
-The authorization must provide the exact manifest and identify every permitted route file.
+Existing `components/artifact/**` and `components/brand/**` exports may be imported and used but must not be changed. No route file other than `app/page.tsx` is permitted.
 
 ### 7.3 Prohibited files and changes
 
@@ -318,7 +321,7 @@ The accepted LP-preview frames and boundary annotation are design dependencies. 
 
 1. Align the LP product-preview shell and fixed `result-normal-001` judgment hierarchy while retaining its conversion-oriented context.
 2. Align the separate wait/send/distance public-case comparison without presenting those cases as formats of one result.
-3. Align links into the public full sample and request flow without changing destinations, CTA behavior, or fixed/sticky policy.
+3. Add clear LP links to the canonical Web review, save review, and separate public full sample without changing any route behavior or fixed/sticky policy.
 4. Preserve the semantic distinction between LP excerpt, public case comparison, public full sample, canonical Web report, and save report.
 5. Verify desktop and 390px behavior plus content-lock stability.
 6. Submit Human comparison evidence for desktop and 390px.
@@ -326,10 +329,12 @@ The accepted LP-preview frames and boundary annotation are design dependencies. 
 ### 7.6 Automated checks
 
 - exact-lock and semantic-assertion sections both pass, followed by the combined gate
-- `npm run typecheck`
-- `npm run lint`
-- `npm run build`
+- `npm.cmd run typecheck`
+- `npm.cmd run lint`
+- `npm.cmd run build`
 - `git diff --check`
+- raw HTTP checks for LP, public full sample, canonical Web, and save routes
+- served CSS asset and required-selector integrity gate
 - exact file-manifest audit
 - no fixture, safety, package, lockfile, font, asset, or route-expansion diff
 - static comparison of component consumers to prevent accidental universal-renderer coupling
@@ -355,6 +360,14 @@ Revert the Checkpoint C commit. The accepted M1-I8-R1 canonical report remains u
 ### 7.10 Next authorization gate
 
 Human accepts M1-I9-R1 comparison evidence and separately authorizes **Checkpoint D / M1-I12 Final QA**. M1-I12 remains unauthorized until that decision is recorded.
+
+### 7.11 Implementation result
+
+M1-I9-R1 is implemented from accepted Checkpoint B `main` commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. It changes only `app/page.tsx`, `app/globals.css`, the seven current-status documents, and `TASK_M1_I9_R1_REVIEW.md`.
+
+The Hero uses the accepted cover/answer grammar as a compact fictional product cover. `#note` preserves short/Web/save DOM order, reads every fixed judgment directly from `preview`, exposes clear Web/save/public links, and explicitly separates one same-case format comparison from the three different public cases. The public cases retain `PUBLIC_SAMPLE_CASES` and become one Paper editorial comparison instead of three equal Night cards. Existing artifact and brand components are reused without modification.
+
+Content locks, semantic assertions, Safety, typecheck, lint, production build, required raw-HTTP assertions, served CSS assets/selectors, exact manifest, protected-scope audit, and `git diff --check` pass without Browser or screenshots. Human Visual QA at primary desktop and 390px remains pending. Full 320px, 200% zoom, keyboard/focus, and all-route regression remain M1-I12 work.
 
 ## 8. Checkpoint D — M1-I12 Final Responsive and Accessibility QA
 
@@ -456,6 +469,6 @@ An incomplete record is a hard stop.
 
 ## 10. Completion definition for this plan
 
-Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, optional Figma reference specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. Later explicit Human decisions selected B — `Lunar Contrast Edition`, accepted Checkpoint A Technical Preparation, authorized and accepted Checkpoint B at `bb2079aafb3666562e2876ead4c24a5c933bea8a`, authorized its fast-forward to `main`, and authorized M1-I9-R1 within its exact manifest. M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
+Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, optional Figma reference specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. Later explicit Human decisions selected B — `Lunar Contrast Edition`, accepted Checkpoint A and Checkpoint B, synchronized Checkpoint B to `main`, and authorized M1-I9-R1 within its exact manifest. M1-I9-R1 is implemented and automatically validated on its dedicated branch. M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
 
-The next execution sequence is Checkpoint B acceptance synchronization, fast-forward-only integration to `main`, and bounded M1-I9-R1 implementation from latest `main`. Figma is optional and non-authoritative. M1-I9-R1 must remain off `main` pending Human Visual QA; M1-I12 remains unauthorized.
+The next gate is Human Visual QA and acceptance of M1-I9-R1 at primary desktop and 390px. Figma is optional and non-authoritative. M1-I9-R1 must remain off `main`; M1-I12 remains unauthorized.

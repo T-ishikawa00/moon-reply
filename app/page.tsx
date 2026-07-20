@@ -1,4 +1,9 @@
 import Link from "next/link";
+import {
+  ArtifactAnswer,
+  ArtifactCover,
+  ArtifactShell,
+} from "@/components/artifact";
 import { EditorialDivider } from "@/components/brand/EditorialDivider";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
@@ -126,23 +131,40 @@ export default function Home() {
             </p>
           </div>
 
-          <article className="lp-note-cover" aria-label="恋のメッセージ鑑定ノートの表紙見本">
-            <div className="lp-note-cover__brand">
-              <MoonSeal size="medium" />
-              <span>月の返事</span>
+          <ArtifactCover
+            as="article"
+            className="lp-note-cover"
+            aria-label="恋のメッセージ鑑定ノートの架空の表紙見本"
+          >
+            <LunarArc tone="night" position="top-right" />
+            <div className="lp-note-cover__brand-row">
+              <div className="lp-note-cover__brand">
+                <MoonSeal size="medium" />
+                <span>月の返事</span>
+              </div>
+              <p className="lp-note-cover__sample">架空の内容見本</p>
             </div>
             <div className="lp-note-cover__title">
               <p>恋のメッセージ鑑定ノート</p>
               <h2>今夜の答えを、<br />一冊の中へ。</h2>
             </div>
-            <EditorialDivider variant="night" />
-            <ul>
-              <li>今夜の答え</li>
-              <li>送る場合の文面</li>
-              <li>3日間の行動方針</li>
-            </ul>
-            <p className="lp-note-cover__sample">架空の内容見本</p>
-          </article>
+            <div className="lp-note-cover__contents">
+              <EditorialDivider variant="night" />
+              <ul>
+                <li>今夜の答え</li>
+                <li>送る場合の文面</li>
+                <li>3日間の行動方針</li>
+              </ul>
+            </div>
+            <ArtifactAnswer
+              as="section"
+              className="lp-note-cover__answer"
+              aria-label="固定架空ケースの今夜の答え"
+            >
+              <span>今夜の答え</span>
+              <strong>{preview.judgmentLabel}</strong>
+            </ArtifactAnswer>
+          </ArtifactCover>
         </div>
       </section>
 
@@ -197,17 +219,18 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="lp-artifact" aria-label="同じ架空鑑定の三つの表示形式比較">
-            <article className="lp-artifact__main">
-              <header>
-                <div><MoonSeal /><span>月の返事</span></div>
-                <small>同じ架空ケースの短い見本</small>
-              </header>
-              <section className="lp-artifact__answer">
+          <div className="lp-artifact" aria-label="同じ固定架空ケースの三つの表示形式比較">
+            <ArtifactShell as="article" className="lp-artifact__main paper-grain">
+              <ArtifactCover as="header" className="lp-artifact__cover">
+                <LunarArc tone="night" position="top-right" />
+                <div className="lp-artifact__brand"><MoonSeal /><span>月の返事</span></div>
+                <small><span aria-hidden="true">01</span> 短い見本</small>
+              </ArtifactCover>
+              <ArtifactAnswer as="section" className="lp-artifact__answer">
                 <p>今夜の答え</p>
                 <h3>{preview.judgmentLabel}</h3>
                 <span>{preview.conclusionReasonSummary}</span>
-              </section>
+              </ArtifactAnswer>
               <section className="lp-artifact__temperature">
                 <div>
                   <p>文面の温度</p>
@@ -226,28 +249,57 @@ export default function Home() {
                   ))}
                 </ol>
               </section>
-            </article>
+            </ArtifactShell>
 
             <aside className="lp-artifact__aside">
-              <div className="lp-artifact__index">
-                <p>Web鑑定ノート</p>
-                <strong>理由まで理解し、判断に納得するための本編。</strong>
-                <span>表紙から短い手紙、文面、行動、限界まで14部構成。</span>
-              </div>
-              <div className="lp-decision-card">
-                <p>保存用判断カード</p>
+              <section className="lp-artifact__index" aria-labelledby="lp-web-preview-title">
+                <div className="lp-artifact__index-heading">
+                  <span aria-hidden="true">02</span>
+                  <p>Web鑑定ノート</p>
+                </div>
+                <ArtifactCover className="lp-artifact__web-cover">
+                  <LunarArc tone="night" position="top-right" />
+                  <div className="lp-artifact__brand"><MoonSeal /><span>月の返事</span></div>
+                  <h3 id="lp-web-preview-title">深く読む一冊</h3>
+                  <ArtifactAnswer className="lp-artifact__web-answer">
+                    <span>今夜の答え</span>
+                    <strong>{preview.judgmentLabel}</strong>
+                  </ArtifactAnswer>
+                </ArtifactCover>
+                <strong className="lp-artifact__purpose">理由まで理解し、判断に納得するための本編。</strong>
+                <span className="lp-artifact__detail">表紙から短い手紙、文面、行動、限界まで14部構成。</span>
+                <Link href="/review/result/result-normal-001" className="lp-artifact__link">
+                  Web鑑定ノートの見本を読む
+                </Link>
+              </section>
+              <ArtifactShell as="article" className="lp-decision-card" aria-labelledby="lp-save-preview-title">
+                <div className="lp-decision-card__heading">
+                  <span aria-hidden="true">03</span>
+                  <h3 id="lp-save-preview-title">保存用判断カード</h3>
+                </div>
                 <span>30秒で見返す</span>
-                <strong>{preview.judgmentLabel}</strong>
+                <ArtifactAnswer as="section" className="lp-decision-card__answer">
+                  <p>今夜の答え</p>
+                  <strong>{preview.judgmentLabel}</strong>
+                </ArtifactAnswer>
                 <dl>
                   <div><dt>今やること</dt><dd>{preview.tonightActions[0]}</dd></div>
                   <div><dt>次の判断</dt><dd>翌日以降、または状況が動いた時</dd></div>
                 </dl>
-              </div>
+                <Link href="/review/save-report/result-normal-001" className="lp-artifact__link">
+                  保存用判断カードの見本を読む
+                </Link>
+              </ArtifactShell>
             </aside>
           </div>
-          <p className="lp-artifact__note">
-            三つの表示はすべて同じ固定架空ケースの文章・構成見本です。購入、AI生成、納品、保存機能の実績ではありません。
-          </p>
+          <div className="lp-artifact__footer">
+            <p className="lp-artifact__note">
+              上の三つは、すべて同じ固定架空ケースの表示です。三つの異なる判断ではありません。購入、AI生成、納品、保存機能の実績ではありません。
+            </p>
+            <Link href="/sample-report" className="lp-artifact__link lp-artifact__link--public">
+              別の「送る」ケースの公開全文見本を読む
+            </Link>
+          </div>
         </div>
       </section>
 
