@@ -2,12 +2,12 @@
 
 ## 1. Status
 
-- Status: **Human and ChatGPT accepted**
-- Authority: documentation and design planning only
-- This document does **not** authorize application implementation, Figma production, package changes, runtime changes, Browser use, screenshots, pull requests, or merges.
-- Actual Figma production has not started and is the next design gate.
-- Checkpoint A / `M1-I8-R1` Technical Preparation remains unauthorized and unimplemented.
-- Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented, and is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
+- Status: **Human and ChatGPT accepted; B selection and Checkpoint A authorization recorded**
+- Authority: the Human decision selects B — `Lunar Contrast Edition` as the canonical design direction and separately authorizes only Checkpoint A / `M1-I8-R1` Technical Preparation within the exact manifest below
+- This document does **not** authorize Checkpoint B canonical visual implementation, package changes, runtime changes, Browser use, screenshots, pull requests, or merges.
+- The required coded-prototype design gate is complete: B is selected and accepted, A — `Quiet Editorial Letter` is rejected, and Figma is optional and non-authoritative.
+- Checkpoint A / `M1-I8-R1` Technical Preparation is explicitly authorized and not yet implemented.
+- Checkpoint B / `M1-I8-R1` Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency.
 - `M1-I9-R1` and `M1-I12` remain unauthorized and unimplemented until each named Human gate is passed separately.
 - Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
 
@@ -28,7 +28,7 @@ No checkpoint may be treated as implicit authorization for the next checkpoint.
 
 - `docs/phase1/M1_P3_READING_NOTE_VISUAL_EXCELLENCE_SPEC.md`
 - `docs/phase1/M1_P3_CONTENT_LOCK_MATRIX.md`
-- `docs/phase1/M1_P3_FIGMA_HANDOFF_SPEC.md`
+- `docs/phase1/M1_P3_FIGMA_HANDOFF_SPEC.md` — optional, non-authoritative reference only
 - `docs/phase1/TASK_M1_P3_REVIEW.md`
 - `docs/phase1/TASK_M1_I7_I11_INTEGRATED_REVIEW.md`
 - `docs/phase1/TASK_M1_I7_REVIEW.md`
@@ -70,23 +70,34 @@ Stop the checkpoint without broadening scope if any of the following occurs:
 
 ## 5. Checkpoint A — M1-I8-R1 Technical Preparation
 
-Current status: unauthorized and not implemented.
+Current status: explicitly Human-authorized and not yet implemented.
 
 ### 5.1 Purpose
 
 Create an explicit, mechanically checkable foundation for M1-I8-R1 before visual implementation begins. This checkpoint resolves known CSS ambiguity and introduces only the smallest reusable artifact primitives needed by more than one approved consumer.
 
-### 5.2 Allowed files
+### 5.2 Exact mutation manifest
+
+Application / technical files:
 
 - `app/globals.css`
-- new narrowly scoped files under `components/artifact/**`
-- existing `components/brand/**` files only when a neutral adapter is required
-- existing report components only for mechanical primitive adoption with no visible redesign
-- a new content-lock verification script under `scripts/**`
-- `docs/phase1/TASK_M1_I8_R1_REVIEW.md`
-- current-status documentation required to record the checkpoint result
+- `components/artifact/ArtifactPrimitives.tsx`
+- `components/artifact/ArtifactPrimitives.module.css`
+- `components/artifact/index.ts`
+- `scripts/verify-m1-content-locks.mjs`
 
-The final authorization must replace this candidate list with an exact file manifest before mutation.
+Review / status documents:
+
+- `docs/ROADMAP.md`
+- `docs/CURRENT_FOCUS.md`
+- `docs/CODEX_HANDOFF.md`
+- `docs/WBS.md`
+- `docs/phase1/IMPLEMENTATION_WBS.md`
+- `docs/phase1/M1_IMPLEMENTATION_SLICES.md`
+- `docs/phase1/M1_P3_IMPLEMENTATION_PLAN.md`
+- `docs/phase1/TASK_M1_I8_R1_REVIEW.md`
+
+No other file may be mutated. If this exact manifest cannot safely implement the checkpoint, stop without widening it.
 
 ### 5.3 Prohibited files and changes
 
@@ -101,8 +112,8 @@ The final authorization must replace this candidate list with an exact file mani
 ### 5.4 Dependencies
 
 - Human and ChatGPT acceptance of the five M1-P3 draft documents
-- Checkpoint A may run before an actual Figma file exists or is accepted; it is limited to visually neutral technical preparation
-- explicit Human authorization of Checkpoint A with an exact mutation manifest
+- Checkpoint A has no Figma dependency and is limited to visually neutral technical preparation
+- explicit Human authorization of Checkpoint A with the exact mutation manifest above — satisfied by the recorded Human instruction
 - clean branch based on the accepted documentation commit
 - current content-lock matrix verified against source
 
@@ -152,7 +163,7 @@ Human accepts Checkpoint A and separately authorizes **Checkpoint B / M1-I8-R1 V
 
 ## 6. Checkpoint B — M1-I8-R1 Visual Excellence
 
-Current status: unauthorized and not implemented; blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded.
+Current status: unauthorized and not implemented. Human selected B — `Lunar Contrast Edition`, satisfying the design-direction dependency, but no separate Checkpoint B implementation authorization exists.
 
 ### 6.1 Purpose
 
@@ -184,22 +195,13 @@ The authorization must enumerate the exact route and component files before impl
 ### 6.4 Dependencies
 
 - accepted Checkpoint A
-- Human-approved Figma file exists
-- Web鑑定ノート desktop complete frame accepted
-- Web鑑定ノート 390px complete frame accepted
-- 保存用判断カード desktop frame accepted
-- 保存用判断カード 390px frame accepted
-- 公開全文見本 desktop complete frame accepted
-- 公開全文見本 390px complete frame accepted
-- six archetype sheets accepted
-- typography / spacing / color / component anatomy accepted
-- 768px reflow and 320px fallback annotations accepted
-- Review wrapper treatment accepted
+- Human selection and acceptance of coded prototype A, B, or an explicitly recorded combination
+- the selection record identifies the chosen cover, answer, letter, evidence, message, action/time, limits/closing, responsive, and review-wrapper direction
 - explicit Human authorization of Checkpoint B with an exact mutation manifest
 - `EXACT_LOCKS: PASS`, `SEMANTIC_ASSERTIONS: PASS`, and `CONTENT_LOCK_GATE: PASS`
 - approved archetype, typography, spacing, and responsive rules from the M1-P3 specification
 
-The documentation specification alone cannot satisfy these Figma dependencies. Acceptance of the Figma file is a design gate, not implementation authorization; Checkpoint B still requires the separate explicit Human authorization above.
+The documentation specification, prototype selection, and any optional Figma reference are not implementation authorization. Checkpoint B still requires the separate explicit Human authorization above. Figma is not a dependency.
 
 ### 6.5 Implementation sequence
 
@@ -440,6 +442,6 @@ An incomplete record is a hard stop.
 
 ## 10. Completion definition for this plan
 
-Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, Figma handoff specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. Its acceptance is not implementation acceptance and does not change the authorization status of Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12, Milestone 1, or Milestone 2.
+Human and ChatGPT have reviewed and accepted this plan together with the visual specification, content-lock matrix, optional Figma reference specification, and M1-P3 review record. The documentation/design specification is complete and authoritative. A later explicit Human decision selected B — `Lunar Contrast Edition` and authorized only Checkpoint A Technical Preparation within its exact manifest. Checkpoint B, M1-I9-R1, M1-I12, Milestone 1 completion, and Milestone 2 remain unauthorized.
 
-The next Human gate is production and Human acceptance of the actual Figma design based on the accepted M1-P3 canonical package: Web鑑定ノート desktop/390px, 保存用判断カード desktop/390px, 公開全文見本 desktop/390px, 768px reflow, 320px fallback, six archetype sheets, typography/spacing/color/component anatomy, the Review wrapper, and the LP preview. Figma production and Human acceptance are not application implementation authorization. Checkpoint A or Checkpoint B may begin only after its own separate explicit Human authorization.
+The next Human gate is acceptance of the implemented and automatically validated Checkpoint A. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and must not begin automatically after Checkpoint A; it requires its own separate explicit Human authorization and exact mutation manifest. M1-I9-R1 and M1-I12 remain unauthorized.

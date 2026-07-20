@@ -14,9 +14,10 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - Human initially authorized M1-I7, then explicitly authorized a one-time integrated M1-I7 through M1-I11 implementation batch. For this batch only, internal checkpoints replaced the normal Human acceptance pause between slices.
 - M1-I7 through M1-I11 are implemented and automatically validated from base commit `923d43057178da070a72f380d7054d60efca7daf`. Human accepted the current integrated result as the next-stage baseline; this is one integrated baseline decision, not five independent acceptance records and not final Milestone 1 acceptance.
 - M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction are Human-accepted as part of that baseline.
-- M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its five documentation/design documents are authoritative, and acceptance grants no implementation authority. Actual Figma production has not started and is the next design gate.
-- Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and coded visual prototype implementation may resume from zero under its continuing Human authorization.
-- Checkpoint A / M1-I8-R1 Technical Preparation and Checkpoint B / M1-I8-R1 Visual Excellence remain unauthorized and unimplemented. Checkpoint B is blocked until a Human-approved Figma file exists and separate explicit implementation authorization is recorded. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
+- M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its documentation/design package remains authoritative, and acceptance grants no canonical implementation authority. The required design gate is now a Human-approved coded visual prototype; Figma is optional and non-authoritative.
+- Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and the accepted correction is synchronized to `main`.
+- M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated on `design/m1-p3-coded-visual-prototype`. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance is not canonical visual implementation authorization.
+- Checkpoint A / M1-I8-R1 Technical Preparation is explicitly Human-authorized and not yet implemented. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented; the B selection satisfies only its design-direction dependency, not its separate implementation-authorization gate. M1-I9-R1 and M1-I12 remain unauthorized and unimplemented. Milestone 1 remains incomplete. Milestone 2 and every later milestone remain unauthorized.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -27,7 +28,7 @@ The canonical service is an `AIを活用した恋愛メッセージ分析・判�
 
 M1-I2-R1 is Human-accepted, implemented, and automatically validated on `fix/m1-i2-r1-safety-policy-alignment`; the accepted implementation commit is `23ee6f3b98837e48628b59b41eab811da627e730`. All 13 locked unsupported-case labels now classify to the required fail-closed state/reason. The five confirmed free-text gaps are covered through NFKC/whitespace normalization, targeted phrases, and bounded negation guards. `illegal_conduct` and `third_party_secret` are added without changing existing reason-code meaning or structured-flag classification/severity. The permanent verifier executes the real classifier and the real category export, preserves the locked source hash, and reports `SEM-UNSUPPORTED-CASES: PASS` without waiver.
 
-The previous M1-P3-R1 hard stop is resolved. Coded visual prototype implementation may resume and remains zero before that work starts. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, packages, Supabase, and runtime integrations were not changed by the Safety correction or its acceptance synchronization.
+The previous M1-P3-R1 hard stop is resolved. A — `Quiet Editorial Letter` and B — `Lunar Contrast Edition` are implemented only on `/review/visual-excellence/**`. Both use `getReportFixture("result-normal-001")`, the same content subset, and the same semantic order. Human selected B and rejected A. Canonical UI, Reading Note, LP, Request Form UI, Legal UI, fixtures, Safety, packages, Supabase, and runtime integrations were not changed, and the prototype routes/components are not merged into `main`.
 
 The integrated batch implemented:
 
@@ -120,15 +121,16 @@ Controlling Human design decisions:
 - The public full sample uses the same visual grammar as a shorter edited artifact and need not mirror all fourteen chapters.
 - 390px is the primary mobile design width; 320px is a QA fallback; 768px is a reflow target.
 - No external font may be used.
-- Figma/design handoff is the formal Human design gate.
+- The formal Human design gate is complete: B — `Lunar Contrast Edition` is selected and accepted as the canonical design direction; A — `Quiet Editorial Letter` is rejected.
+- Figma is optional, non-authoritative reference material and is not required for the gate.
 - The Reading Note artifact is the primary first-impression target; Header, ReviewBanner, and the route-level review boundary must not interfere with its impression, reading entry, or closing aftertaste.
 
 ## Current Restriction
 
-The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-I2-R1 does not amend that visual specification. M1-P3-R1 coded visual prototype work may resume only under its separately continued Human authorization; this is not Checkpoint A or Checkpoint B authorization. Do not start Checkpoint A / M1-I8-R1 Technical Preparation, Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without the applicable separate explicit Human authorization. Checkpoint B additionally remains blocked under the current gate wording. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A / M1-I8-R1 Technical Preparation is authorized only within its exact manifest. Do not start Checkpoint B / M1-I8-R1 Visual Excellence, M1-I9-R1, or M1-I12 without separate explicit Human authorization. The completed B selection does not authorize Checkpoint B. Do not start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance.
 
 ## Next Gate
 
-M1-I2-R1 is Human-accepted. The previously stopped M1-P3-R1 coded visual prototype may resume from implementation zero under its own scope. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.
+Implement and automatically validate only Checkpoint A / M1-I8-R1 Technical Preparation on `feat/m1-i8-r1-checkpoint-a`, then stop for Human acceptance. Figma is optional and non-authoritative. Checkpoint B remains unauthorized and unimplemented and requires its own separate explicit Human authorization. M1-I9-R1 and M1-I12 remain separately unauthorized. Milestone 1 remains incomplete, and Milestone 2 remains unauthorized.

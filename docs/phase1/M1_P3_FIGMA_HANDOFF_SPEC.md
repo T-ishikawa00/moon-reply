@@ -3,17 +3,18 @@
 ## 1. Status and execution boundary
 
 - Task: `M1-P3 Reading Note Visual Excellence Specification`
-- Status: `Human and ChatGPT accepted`
+- Status: `Human and ChatGPT accepted as optional non-authoritative reference material`
 - Scope: documentation/design-only
 - Figma file creation or mutation in M1-P3: prohibited
-- Actual Figma production: not started; next design gate
-- Implementation authority: none
+- Actual Figma production: optional; not required for the design gate
+- Implementation authority: none; a Figma file has no independent gate authority
+- Canonical design direction: B — `Lunar Contrast Edition` Human-selected and accepted; A — `Quiet Editorial Letter` rejected
 
-This is a production brief for a future Figma author. It defines what to draw and annotate without changing current fixture content. The author must use the current Japanese source text. Lorem Ipsum, invented substitute copy, translated placeholder text, AI-generated filler, shortened legal meaning, and fabricated product facts are prohibited.
+This is optional reference guidance for a future Figma author. It is not a required deliverable or a source of canonical implementation authority. The coded-prototype selection is complete; any optional future Figma reference must follow B — `Lunar Contrast Edition`, must not revive A, and must not create an A/B hybrid. If used, it defines what to draw and annotate without changing current fixture content. The author must use the current Japanese source text. Lorem Ipsum, invented substitute copy, translated placeholder text, AI-generated filler, shortened legal meaning, and fabricated product facts are prohibited.
 
-## 2. Required Figma deliverables
+## 2. Optional Figma reference deliverables
 
-The future Figma file must contain all of the following:
+If Human elects to create a Figma reference file, the following B-aligned frames and sheets are recommended for completeness. None is required for implementation, and none grants implementation authority:
 
 1. Web鑑定ノート — desktop complete-length frame.
 2. Web鑑定ノート — 390px complete-length frame.
@@ -712,11 +713,11 @@ Use these sources directly:
 
 The formal short-presentation label in Figma is `保存用判断カード`. Any later source alignment from residual `保存用鑑定書` is limited to Checkpoint B / M1-I8-R1, the saved-artifact title, report-comparison labels, Reading Note LP-preview labels, and customer-facing labels directly attached to a Reading Note artifact. The actual mutation files must be listed in Checkpoint B's exact manifest; fixture judgments, the product name, unrelated body copy, and purchase/legal/request copy remain locked.
 
-The exact expected hashes are in `M1_P3_CONTENT_LOCK_MATRIX.md`. If a source or hash differs at Figma-production start, stop and request a new Human instruction. Do not silently update text in Figma.
+The exact expected hashes are in `M1_P3_CONTENT_LOCK_MATRIX.md`. If an optional Figma effort starts and a source or hash differs, stop and request a new Human instruction. Do not silently update text in Figma.
 
-## 20. Human review checklist for the Figma gate
+## 20. Optional Figma reference review checklist
 
-For the Checkpoint B design gate, Human and ChatGPT review the future Figma file for:
+If an optional Figma reference file is produced, Human and ChatGPT may review it for:
 
 - Web鑑定ノート desktop and 390px complete frames accepted;
 - 保存用判断カード desktop and 390px frames accepted;
@@ -738,7 +739,7 @@ For the Checkpoint B design gate, Human and ChatGPT review the future Figma file
 - accessibility/redline annotations complete; and
 - no Figma decision implying implementation authorization.
 
-For the later Checkpoint C design gate, after the M1-I8-R1 artifact grammar is accepted, Human and ChatGPT separately accept:
+If optional LP-preview Figma references are produced after the M1-I8-R1 artifact grammar is accepted, Human and ChatGPT may separately review:
 
 - LP-preview desktop frame;
 - LP-preview 390px frame; and
@@ -746,8 +747,8 @@ For the later Checkpoint C design gate, after the M1-I8-R1 artifact grammar is a
 
 ## 21. Acceptance and next gate
 
-This handoff document is Human and ChatGPT accepted as part of the authoritative M1-P3 documentation/design specification. Actual Figma production has not started. The next Human gate is production and Human acceptance of every Checkpoint B frame, sheet, annotation, and Review-wrapper item in Section 20, plus the listed LP-preview deliverables. This design gate is based on the accepted M1-P3 canonical package.
+This handoff document remains available only as optional, non-authoritative reference material inside the M1-P3 package. Existing or future Figma work is not required and does not control implementation. The coded-prototype gate is complete: Human selected and accepted B — `Lunar Contrast Edition` and rejected A — `Quiet Editorial Letter`.
 
-Checkpoint A / M1-I8-R1 Technical Preparation remains unauthorized and unimplemented. An actual Figma file is not a Checkpoint A dependency, but A still requires its own separate explicit Human authorization and exact mutation manifest. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented and cannot begin from documentation alone. Its formal design dependency is a Human-approved Figma file satisfying every Checkpoint B frame, sheet, annotation, and Review-wrapper item explicitly listed in Section 20, plus its own separate explicit implementation authorization. Checkpoint C / M1-I9-R1 separately requires the Section 20 LP-preview desktop and 390px frames, the same-case / different-case boundary annotation, the accepted M1-I8-R1 artifact grammar, and separate explicit Human authorization. M1-I12 remains separately unauthorized.
+Checkpoint A / M1-I8-R1 Technical Preparation is explicitly Human-authorized and not yet implemented, within its exact mutation manifest. Checkpoint B / M1-I8-R1 Visual Excellence remains unauthorized and unimplemented and cannot begin from documentation, prototype acceptance, or optional Figma material alone. The B selection satisfies only its design-direction dependency; its own separate explicit implementation authorization is still required. M1-I9-R1 and M1-I12 remain separately unauthorized.
 
-Figma production and Human acceptance are not application implementation authorization. Checkpoint A, Checkpoint B, M1-I9-R1, and M1-I12 each require a separate explicit Human authorization and exact mutation manifest. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
+Figma production does not authorize application implementation. The separate Human instruction authorizes only Checkpoint A technical preparation. Milestone 1 remains incomplete. Milestone 2 remains unauthorized.
