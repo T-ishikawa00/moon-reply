@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 — M1-I9-R1 Human-accepted; M1-I12 Final QA & Milestone 1 Acceptance Package Human-authorized and not yet completed
+Phase 1 / Milestone 1 — M1-I12-R3 automated final QA complete against corrected main; Human final QA and acceptance pending
 
 ## Completed Through
 
@@ -27,13 +27,16 @@ Phase 1 / Milestone 1 — M1-I9-R1 Human-accepted; M1-I12 Final QA & Milestone 1
 - Task M1-P3-R1 review-only A/B coded visual prototypes implemented from the same fixed `result-normal-001` source; B — `Lunar Contrast Edition` Human-selected and accepted, A — `Quiet Editorial Letter` rejected
 - Checkpoint A acceptance synchronized to `main` at `79011f274c35a0cf80f68af845ffaca95e8884c9`
 - Checkpoint B Human-accepted at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` and fast-forwarded to `main` through acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`
-- M1-I9-R1 Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, and primary desktop/390px Visual QA complete; fast-forward to `main` authorized
+- M1-I9-R1 Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, primary desktop/390px Visual QA, and synchronization to `main` complete
+- M1-I12-R1 request-fragment correction passed and was fast-forwarded to `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`
+- M1-I12-R2 review-status consistency correction Human-accepted and synchronized to corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`
+- M1-I12-R3 automated final QA complete against corrected main on `qa/m1-i12-final-acceptance-r2`; Human final QA pending
 
 ## Current Task
 
 Checkpoint A / M1-I8-R1 Technical Preparation and Checkpoint B / M1-I8-R1 Visual Excellence are Human-accepted. Checkpoint B is on `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`; B — `Lunar Contrast Edition` is the canonical design.
 
-M1-I9-R1 aligns only the Hero cover preview, the `#note` same-case product proof and direct artifact links, and the different-case public comparison. It reuses accepted artifact and brand components without changing them, reads the fixed judgment from `preview`, preserves `PUBLIC_SAMPLE_CASES`, and changes no fixture, Safety, package, request/purchase/legal behavior, report route/component, or runtime integration. Automated content, Safety, typecheck, lint, build, raw-HTTP, CSS asset, source-structure, exact-manifest, and prohibited-scope checks pass. Human accepted the final implementation commit after primary desktop/390px Visual QA. M1-I12 is Human-authorized and not yet completed; Milestone 1 remains incomplete pending M1-I12, and Milestone 2 remains unauthorized.
+M1-I12-R3 rebuilt and revalidated the complete reviewable Web MVP from corrected main `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. Content locks, Safety, typecheck, lint warning 0, clean build, 25-route HTTP, unknown-ID fail-closed, internal-link, fragment, heading, noindex, review-status, CSS-asset, exact-manifest, and prohibited-scope gates pass. The historical pre-R2 QA branch remains immutable. Human 320px, keyboard/focus, 200% zoom, reduced-motion, reading-quality, contrast, and final acceptance remain pending. Milestone 1 remains incomplete pending Human acceptance, and Milestone 2 remains unauthorized.
 
 Accepted public fictional conclusions in the baseline are:
 
@@ -74,8 +77,8 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Figma is optional and non-authoritative; an existing or future Figma file has no implementation-gate authority.
 - Checkpoint A / M1-I8-R1 Technical Preparation is Human-accepted at implementation commit `7977f09eca733168c8bac3ae20670c21fa00cbda`; implementation and automated validation are complete.
 - Checkpoint B / M1-I8-R1 Visual Excellence is Human-accepted and fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`; B — `Lunar Contrast Edition` is the canonical design.
-- M1-I9-R1 Reading Note Preview Alignment is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, and primary desktop/390px Visual QA are complete; fast-forward to `main` is authorized.
-- M1-I12 Final QA & Milestone 1 Acceptance Package is Human-authorized and not yet completed.
+- M1-I9-R1 Reading Note Preview Alignment is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3`; implementation, automated validation, primary desktop/390px Visual QA, and synchronization to `main` are complete.
+- M1-I12-R1 and Human-accepted M1-I12-R2 are on corrected `main`; M1-I12-R3 automated final QA is complete on `qa/m1-i12-final-acceptance-r2`, while Human final QA and acceptance remain pending.
 - M1-I6 remains formally closed as superseded without acceptance; its historical evidence and carried defect inventory remain intact.
 - Product definition, JPY 980 price, 18+ policy, existing Safety classification/severity meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed; M1-I2-R1 adds only missing reason codes and coverage needed to enforce the accepted fail-closed policy.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
@@ -96,11 +99,11 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Do not reinterpret the integrated baseline decision as separate slice acceptance or final Milestone 1 acceptance.
 - M1-P3 acceptance and M1-P3-R1 prototype implementation did not grant canonical visual implementation authority; later separate Human decisions accepted Checkpoint A, authorized and accepted the now-complete Checkpoint B visual work within its exact manifest, accepted the bounded M1-I9-R1 result, and authorized M1-I12.
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
-- Fast-forward M1-I9-R1 to `main` only through the separately authorized `--ff-only` path; do not create a PR or merge commit. Keep M1-I12 validation/documentation-only and within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
+- Keep the historical pre-R2 QA branch immutable. Keep the corrected M1-I12-R3 package on `qa/m1-i12-final-acceptance-r2`, do not merge it to `main`, and keep it within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
 - Do not publish, deploy, activate runtime integrations, complete operator facts, or start Milestone 2+ under baseline closure.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
-- Complete 320px cross-route, keyboard/focus, and final visual/contrast acceptance remain M1-I12 work.
+- Human 320px cross-route, keyboard/focus, 200% zoom, reduced-motion, reading-quality, and final visual/contrast acceptance remain pending.
 
 ## M1-P3 Record
 
@@ -133,4 +136,4 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Gate
 
-Synchronize the M1-I9-R1 Human acceptance record, fast-forward the accepted branch to `main`, and execute the separately authorized M1-I12 Final QA & Milestone 1 Acceptance Package from the resulting `main`. M1-I12 owns the final non-browser automated route/link/heading/noindex/CSS/prohibited-scope audits and records 320px, 200% zoom, keyboard/focus, reduced-motion, and reading-quality checks as Human-pending. Milestone 1 remains incomplete pending M1-I12 Human acceptance, and Milestone 2 remains unauthorized.
+Use `docs/phase1/TASK_M1_I12_FINAL_QA.md` as the corrected-main acceptance package and review the production server on `127.0.0.1:3020` in ordinary external Microsoft Edge. Human records 320px, keyboard/focus, 200% zoom, reduced-motion, reading-quality, contrast, and final acceptance observations. Until that decision, do not merge the QA branch or complete Milestone 1. Milestone 2 remains unauthorized.
