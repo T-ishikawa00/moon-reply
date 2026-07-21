@@ -6,7 +6,7 @@ import { BrandFoundationPreview } from "@/components/review/BrandFoundationPrevi
 
 export const metadata: Metadata = {
   title: "審査用プレビュー一覧 | 月の返事",
-  description: "月の返事 Milestone 1 のM1-I7〜M1-I11統合実装を確認する静的な審査用一覧です。",
+  description: "月の返事 Milestone 1 の現在の受入状況とHuman final QA gateを確認する静的な審査用一覧です。",
 };
 
 const availableRoutes = [
@@ -36,10 +36,10 @@ const availableRoutes = [
   { route: "/contact", title: "お問い合わせ 準備表示", description: "受付機能なしで、予定カテゴリと未決定の運用項目を確認します。" },
 ];
 
-const brandFoundationStatus = {
-  title: "Brand Foundation の実装と自動検証",
-  route: "/review 内 Brand Foundation preview",
-  slice: "M1-I7",
+const milestoneStatus = {
+  title: "M1-I12 Final QA & Milestone 1 Acceptance Package",
+  gate: "Milestone 1: incomplete pending Human final acceptance",
+  slice: "M1-I12",
 };
 
 export default function ReviewIndexPage() {
@@ -105,18 +105,18 @@ export default function ReviewIndexPage() {
       <section className="review-hub__section review-hub__section--paper" aria-labelledby="qa-heading">
         <div className="page-shell">
           <div className="section-heading-row">
-            <div><p className="eyebrow">M1-I7 Brand Foundation</p><h2 id="qa-heading">Brand Foundationの確認状況</h2></div>
-            <span className="status-chip">Human確認待ち</span>
+            <div><p className="eyebrow">Milestone 1 status</p><h2 id="qa-heading">現在の受入状況</h2></div>
+            <span className="status-chip">Human final QA pending</span>
           </div>
-          <p className="review-hub__section-copy">M1-I7は明示認可の下で実装しました。ソース監査と自動検証後も、端末上のVisual QAと受入はHuman確認待ちです。</p>
+          <p className="review-hub__section-copy">M1-P2はHuman acceptedです。M1-P3はHuman acceptedで、Lunar Contrast Editionが選定済みです。M1-I7〜M1-I11はHuman acceptedかつmain反映済みで、M1-I8-R1のCheckpoint A・BとM1-I9-R1もHuman acceptedかつmain反映済みです。</p>
           <ul className="planned-route-list">
             <li className="planned-route-card">
               <div>
-                <span className="planned-route-card__status">自動検証済み · Human Visual QA待ち</span>
-                <h3>{brandFoundationStatus.title}</h3>
-                <code>{brandFoundationStatus.route}</code>
+                <span className="planned-route-card__status">automated final QA complete · Human final QA pending</span>
+                <h3>{milestoneStatus.title}</h3>
+                <code>{milestoneStatus.gate}</code>
               </div>
-              <span className="planned-route-card__slice">{brandFoundationStatus.slice}</span>
+              <span className="planned-route-card__slice">{milestoneStatus.slice}</span>
             </li>
           </ul>
         </div>
@@ -126,8 +126,8 @@ export default function ReviewIndexPage() {
         <div className="page-shell review-hub__next-inner">
           <div>
             <p className="eyebrow">Current gate</p>
-            <h2>M1-I7〜M1-I11 の統合 Human Visual QA 待ち</h2>
-            <p>M1-I6はHuman未受入のままM1-P2によりsupersededとして正式終了し、M1-P2はHuman受入済みです。Humanが一度限りの統合バッチとして明示認可したM1-I7〜M1-I11は実装・自動検証済みで、統合Human Visual QAと受入待ちです。M1-I12は未認可です。Milestone 1は未完了で、Milestone 2は未認可です。</p>
+            <h2>M1-I12 Human final QA pending</h2>
+            <p>M1-I7〜M1-I11の個別待機ゲートは、統合Human受入により該当範囲でsupersededです。M1-I12 automated final QA is complete; Human final QA remains pending. Milestone 1 is incomplete pending Human final acceptance. Milestone 2 is unauthorized.</p>
           </div>
           <Link href="/review/result/result-normal-001" className="button button--secondary"><span className="phrase-keep">Web鑑定ノート</span>を開く</Link>
         </div>

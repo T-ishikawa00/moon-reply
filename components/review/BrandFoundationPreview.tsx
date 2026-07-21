@@ -219,7 +219,7 @@ export function BrandFoundationPreview() {
             <span className="status-label status-label--success"><span aria-hidden="true">✓</span> 成功：確認可能</span>
             <span className="status-label status-label--caution"><span aria-hidden="true">!</span> 注意：慎重な確認が必要</span>
             <span className="status-label status-label--danger"><span aria-hidden="true">×</span> 停止：続行できません</span>
-            <span className="status-label status-label--review"><span aria-hidden="true">i</span> 審査：Human確認待ち</span>
+            <span className="status-label status-label--review"><span aria-hidden="true">i</span> 審査：Human final QA pending</span>
           </div>
           <p className="type-small brand-foundation-preview__a11y-note">
             Focusは3px、主要操作は44px以上。hover/focus transitionは160〜220ms・最大1px移動で、reduced motionでは即時化します。
