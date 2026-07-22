@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is Human-accepted inside Milestone 1. M1-I6 was not accepted and is formally closed as superseded by M1-P2; its implementation and evidence remain historical records. Human accepted the current M1-I7 through M1-I11 integrated redesign plus M1-P2-R1 and bounded M1-P2-R1-R1 corrections as the next-stage baseline. M1-P3 is Human and ChatGPT accepted as the authoritative, complete documentation/design specification. M1-I2-R1 is Human-accepted and its gate passes without waiver. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction. Checkpoint A, Checkpoint B, and M1-I9-R1 are Human-accepted and synchronized to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12-R3 automated final QA is complete on `qa/m1-i12-final-acceptance-r2`; Human final QA remains pending. The prototype UI is not merged into `main`. Milestone 1 remains incomplete pending Human acceptance and Milestone 2 remains unauthorized. Browser use and screenshot acquisition by CodeX/agents are prohibited; visual review belongs only to Human in ordinary external Microsoft Edge.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Milestone 2 remains unauthorized and not started. Browser use and screenshot acquisition by CodeX/agents remain prohibited; the completed visual and interaction QA is Human observational evidence.
 
 ## Milestone 0: Completed Foundations
 
@@ -28,7 +28,9 @@ Current state: M1-P2 Experience & Visual Direction Revision planning is Human-ac
 - [x] Task 18C-R2 accepted by Human
 - [x] Confirm no production DB writes, payment, OpenAI, email, API, deployment, provider inquiry, or provider selection completed
 
-## Milestone 1: Reviewable Web MVP
+## Milestone 1: Reviewable Web MVP — Human Accepted, Complete, Closed
+
+Accepted boundary: fixed-fixture review experience only; no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation.
 
 Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 
@@ -79,7 +81,7 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] Validation: verify no fake reviews, fake purchase counts, or fictional operator facts
 - [x] Validation: verify offer, JPY 980 price, flow, safety, output, legal/support clarity, 30 documented routes, and 25 active link targets
 - [x] Partial Human visual review in external Edge identified unresolved visual/accessibility defects and broader product-experience concerns; full cross-width and keyboard QA was not completed
-- [x] Human decision: M1-I6 was not accepted and is formally closed as superseded by M1-P2; this is not acceptance and does not complete Milestone 1
+- [x] Human decision: M1-I6 was not accepted and is formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept M1-I6
 - [x] Preserve M1-I6 implementation/automated evidence as history and carry known M1-I6/M1-I6-R1 defects into M1-I7 through M1-I12 and final M1-I12 QA; no later M1-I6 gate
 - [x] M1-P2 planning: confirm no M1-P2 or M1-I7 through M1-I12 ID conflict
 - [x] M1-P2 planning: create `M1_P2_EXPERIENCE_REVISION_PLAN.md`
@@ -132,14 +134,19 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I9-R1 primary desktop/390px Human Visual QA and acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`; fast-forward to `main` authorized
 - [x] Separate Human authorization of M1-I12 Final QA & Milestone 1 Acceptance Package
 - [x] M1-I12-R3 automated final QA against corrected main
-- [ ] M1-I12 Human final QA and acceptance
-- [ ] Human acceptance of Milestone 1
+- [x] Human 320px responsive QA
+- [x] Human keyboard/focus QA
+- [x] Human 200% zoom QA
+- [x] Human reduced-motion QA
+- [x] Human reading-quality/contrast QA; no release-blocking visual defect reported
+- [x] M1-I12 Human final QA and acceptance
+- [x] Human acceptance and closure of Milestone 1
 
 ## Milestone 2: Operator Information and Publication Readiness
 
 Dependency: Milestone 1 Human acceptance.
 
-Current authority: unauthorized. M1-P2 is an internal Milestone 1 revision and does not satisfy or bypass this dependency.
+Current authority: unauthorized; not started. Milestone 1 acceptance satisfies the predecessor dependency but does not authorize Milestone 2 planning or implementation. Next work requires a separate Milestone 2 planning and Human authorization gate.
 
 - [ ] Planning/spec: enumerate operator, contact, disclosure, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions
 - [ ] Human acceptance of Milestone 2 planning/specification

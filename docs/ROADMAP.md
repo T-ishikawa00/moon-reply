@@ -14,19 +14,19 @@ Current status:
 - Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 - Tasks M1-P1 and M1-P1-R1 are accepted by Human.
 - Tasks M1-I1 through M1-I5 and M1-I5-R1 are accepted by Human.
-- Task M1-I6 was not accepted by Human and is formally closed as superseded by M1-P2. Its implementation and evidence remain historical records, and its known defects are carried into M1-I7 through M1-I12 and final M1-I12 QA. This is not M1-I6 acceptance; Milestone 1 remains incomplete.
-- Task M1-P2 Experience & Visual Direction Revision is accepted by Human. It documents the broader revision inside Milestone 1; no later M1-I6 Human Visual QA or disposition gate is required.
+- Task M1-I6 was not accepted by Human and is formally closed as superseded by M1-P2. Its implementation and evidence remain historical records, and its known defects were carried into M1-I7 through M1-I12 and final M1-I12 QA. Milestone 1's later acceptance does not retroactively accept M1-I6.
+- Task M1-P2 Experience & Visual Direction Revision is complete and accepted by Human. It documents the broader revision inside Milestone 1; no later M1-I6 Human Visual QA or disposition gate is required.
 - M1-P2 is a planning task. Its acceptance did not itself authorize implementation. Human subsequently authorized M1-I7, then explicitly authorized a one-time integrated M1-I7 through M1-I11 implementation batch that replaced the normal prior-slice acceptance pauses for this batch only.
-- Human accepted the integrated M1-I7 through M1-I11 redesign as the baseline for the next planning stage. This is one integrated baseline decision, not independent acceptance records for each slice and not final Milestone 1 acceptance.
+- Human accepted the integrated M1-I7 through M1-I11 redesign as the baseline for the next planning stage. This was one integrated baseline decision, not independent acceptance records for each slice; by itself it did not constitute final Milestone 1 acceptance, which was recorded later through M1-I12.
 - Human also accepted M1-P2-R1 Public Sample Conclusion Diversification and the subsequent bounded M1-P2-R1-R1 contrast/comparison-boundary correction. The accepted baseline contains separate wait/send/stop-additional-contact public fictional cases while preserving `result-normal-001`, Safety, and runtime boundaries.
-- Task M1-P3 Reading Note Visual Excellence Specification is Human and ChatGPT accepted. Its documentation/design package remains the authoritative Visual Excellence specification. The specification is complete; its acceptance does not authorize canonical implementation.
+- Task M1-P3 Reading Note Visual Excellence Specification is complete and Human and ChatGPT accepted. Its documentation/design package remains the authoritative Visual Excellence specification, and B — `Lunar Contrast Edition` is the selected canonical design direction. The specification's acceptance did not itself authorize canonical implementation.
 - Task M1-I2-R1 Safety Policy Enforcement Alignment is Human-accepted and synchronized to `main`. `SEM-UNSUPPORTED-CASES` passes without waiver, and the previous M1-P3-R1 hard stop is resolved.
 - M1-P3-R1 implements two isolated, review-only coded visual prototypes using the same fixed `result-normal-001` content and semantic order. Automated validation is complete. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`; the Human design-selection gate is complete.
 - The required M1-P3 coded-prototype design gate is satisfied by the B selection. Figma remains optional, non-authoritative reference material and is not required for implementation. Prototype acceptance is design-direction evidence, not canonical visual implementation authorization.
-- Checkpoint A / M1-I8-R1 Technical Preparation and Checkpoint B / M1-I8-R1 Visual Excellence are Human-accepted. Checkpoint B's accepted implementation-and-polish commit is `bb2079aafb3666562e2876ead4c24a5c933bea8a`; its acceptance synchronization was fast-forwarded to `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. B — `Lunar Contrast Edition` is the canonical design. M1-I9-R1 Reading Note Preview Alignment is Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3` and synchronized to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12-R3 automated final QA is complete against that corrected main on `qa/m1-i12-final-acceptance-r2`. Human final QA remains pending, and Milestone 1 remains incomplete pending Human acceptance.
-- The accepted Checkpoint B and M1-I9-R1 canonical surfaces are on `main`. The historical pre-R2 QA branch `qa/m1-i12-final-acceptance` remains preserved and non-authoritative for corrected main. The corrected QA package is isolated on `qa/m1-i12-final-acceptance-r2`. The read-only prototype routes/components remain isolated on `design/m1-p3-coded-visual-prototype`; no prototype commit was merged, cherry-picked, or rebased into Checkpoint B, M1-I9-R1, or `main`.
+- M1-I8-R1 is complete, Human-accepted, and merged to `main`; Checkpoint B's accepted implementation-and-polish commit is `bb2079aafb3666562e2876ead4c24a5c933bea8a`, and its acceptance synchronization is on `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12-R3 automated final QA and Human final QA are complete. M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed.
+- The accepted Checkpoint B and M1-I9-R1 canonical surfaces are on `main`. The historical pre-R2 QA branch `qa/m1-i12-final-acceptance` remains preserved and non-authoritative for corrected main. The corrected QA package on `qa/m1-i12-final-acceptance-r2` is the Milestone 1 closure package and is authorized for fast-forward-only synchronization to `main`. The read-only prototype routes/components remain isolated on `design/m1-p3-coded-visual-prototype`; no prototype commit was merged, cherry-picked, or rebased into Checkpoint B, M1-I9-R1, or `main`.
 - The controlling artifact names are `恋のメッセージ鑑定ノート` for the product, `Web鑑定ノート` for the long presentation, and `保存用判断カード` for the short presentation. Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels. The out-of-manifest `lib/legal/review-content.ts` residual `保存用鑑定書見本` remains deliberately deferred.
-- Milestone 2 and every later milestone remain unauthorized.
+- Milestone 2 and every later milestone remain unauthorized and not started.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.
 
@@ -69,7 +69,11 @@ These foundations do not mean that production request persistence, production se
 
 ## 4. Milestone 1: Reviewable Web MVP
 
+Status: Human-accepted, complete, and closed.
+
 Goal: create a payment-free, externally reviewable representation of the complete purchase and delivery experience.
+
+Accepted boundary: a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. This is not the production-ready or payment-ready paid Web MVP defined for Milestone 9.
 
 Required reviewable routes or screens:
 
@@ -91,6 +95,8 @@ Prohibited: real payment, OpenAI API, real email sending, public database writes
 Exit criterion: a reviewer can understand what is sold, the price, input flow, safety boundaries, final confirmation, expected output, and legal/support information without real payment or AI integration.
 
 ## 5. Milestone 2: Operator Information and Publication Readiness
+
+Status: unauthorized; not started.
 
 Goal: resolve the Human/operator decisions required for a truthful review site.
 

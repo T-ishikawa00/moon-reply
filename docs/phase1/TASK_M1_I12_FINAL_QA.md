@@ -6,18 +6,23 @@
 - Task name: `Corrected Main Final QA Package`
 - Base: corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`
 - Branch: `qa/m1-i12-final-acceptance-r2`
-- Commit message: `docs: prepare corrected M1-I12 final QA package`
+- Preparation commit message: `docs: prepare corrected M1-I12 final QA package`
+- Acceptance synchronization commit message: `docs: accept M1-I12 and close Milestone 1`
 - Scope: validation/documentation-only.
-- Authorized outcome: rerun M1-I12 automated final QA from corrected main, record the results in the exact seven-document manifest, then commit and push the corrected QA package if every gate passes.
-- Not authorized: merge to `main`, PR creation, application changes, Milestone 1 completion, or Milestone 2 work.
+- Initial R3 authority: rerun M1-I12 automated final QA from corrected main, record the results in the exact seven-document manifest, then commit and push the corrected QA package if every gate passes; merge and Milestone 1 completion were held for Human final acceptance.
+- Subsequent Human authority: record the completed Human Final QA, accept and complete M1-I12, close Milestone 1, push the acceptance synchronization commit to `qa/m1-i12-final-acceptance-r2`, and fast-forward that branch to `main` if every required gate passes.
+- Still not authorized: PR creation, merge commits, application changes, or Milestone 2 planning or implementation.
 - Browser, browser automation, GUI browser control, and screenshots by CodeX/agents were prohibited and were not used.
 
 Current state:
 
 - M1-I12 automated final QA is complete against corrected main.
-- Human final QA and M1-I12 acceptance remain pending.
-- Milestone 1 remains incomplete pending Human final acceptance.
-- Milestone 2 remains unauthorized.
+- Human final QA is complete.
+- M1-I12 is Human-accepted and complete.
+- Milestone 1 is Human-accepted, complete, and closed.
+- Milestone 2 remains unauthorized and not started.
+
+The accepted deliverable is a fixed-fixture Reviewable Web MVP. It has no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation and is not production-ready or payment-ready.
 
 ## 2. Corrected main base SHA
 
@@ -104,6 +109,27 @@ The package preserves the recorded decisions:
 - M1-I9-R1: Human-accepted and synchronized to `main`;
 - M1-I12-R1: correction passed and synchronized to `main`;
 - M1-I12-R2: Human-accepted and synchronized to corrected `main`.
+
+### 7.1 Human Final QA and formal acceptance
+
+Human observational evidence:
+
+- 320px responsive QA: **PASS**;
+- keyboard/focus QA: **PASS**;
+- 200% zoom QA: **PASS**;
+- reduced-motion QA: **PASS**;
+- reading-quality/contrast QA: **PASS**;
+- Human-reported release-blocking visual defect: **none**.
+
+Formal Human decisions:
+
+- Human Visual QA completed;
+- Human interaction QA completed;
+- Human accessibility spot-check completed;
+- M1-I12 Human-accepted and complete;
+- Milestone 1 Human-accepted, complete, and closed.
+
+These results are Human observational evidence. They do not convert the automated QA results in Sections 8–22 into browser, visual, interaction, or accessibility observations.
 
 ## 8. Route inventory
 
@@ -263,7 +289,7 @@ This is rendered metadata evidence, not proof that any external index cache has 
 
 Corrected `/review` returned HTTP 200 with one `h1`, no heading skip, and `noindex, nofollow`.
 
-Current assertions present:
+Automated assertions present at the R3 evidence run before Human final acceptance:
 
 - M1-P2 accepted;
 - M1-P3 accepted;
@@ -272,8 +298,8 @@ Current assertions present:
 - M1-I8-R1 accepted and on `main`;
 - M1-I9-R1 accepted and on `main`;
 - M1-I12 automated final QA complete;
-- Human final QA pending;
-- Milestone 1 incomplete pending Human final acceptance;
+- pre-acceptance Human final-QA hold state present;
+- pre-acceptance Milestone 1 hold state present;
 - Milestone 2 unauthorized.
 
 Results:
@@ -281,6 +307,8 @@ Results:
 - `REVIEW_STATUS_CURRENT: PASS`
 - `REVIEW_STATUS_STALE_COPY_ZERO: PASS`
 - `REVIEW_STATUS_GATE: PASS`
+
+This section preserves the timestamped automated R3 evidence. The current canonical documentation status is the later Human acceptance recorded in Section 7.1.
 
 ## 21. CSS asset gate
 
@@ -332,71 +360,55 @@ Relative to corrected main, the QA package is restricted to the exact seven-docu
 
 Automated source, build, HTTP, markup, and CSS evidence does not establish visual acceptance.
 
-| Surface | Human status | Observation | Acceptance |
+| Human evidence scope | Human status | Observation | Acceptance |
 | --- | --- | --- | --- |
-| LP complete vertical sequence | `NOT_RUN` / pending | — | pending |
-| Request Sheet all phases and completion | `NOT_RUN` / pending | — | pending |
-| Review hub / Brand preview | `NOT_RUN` / pending | — | pending |
-| Web鑑定ノート | `NOT_RUN` / pending | — | pending |
-| 保存用判断カード | `NOT_RUN` / pending | — | pending |
-| Public sample | `NOT_RUN` / pending | — | pending |
-| Error and blocked states | `NOT_RUN` / pending | — | pending |
-| Legal and Contact | `NOT_RUN` / pending | — | pending |
+| LP, Request Sheet, review hub, Brand preview, Web鑑定ノート, 保存用判断カード, public sample, error/blocked states, Legal, and Contact at 320px | `PASS` | Human reported category-level PASS; no release-blocking visual defect reported | accepted |
+
+No narrower surface-specific observation was supplied; none is inferred from the category-level Human decision.
 
 ## 24. Human keyboard/focus matrix
 
-| Flow | Human status | Observation | Acceptance |
+| Human evidence scope | Human status | Observation | Acceptance |
 | --- | --- | --- | --- |
-| shared Header and Footer navigation | `NOT_RUN` / pending | — | pending |
-| Request phases, validation focus, and controls | `NOT_RUN` / pending | — | pending |
-| fragment entry and subsequent tab order | `NOT_RUN` / pending | — | pending |
-| review hub and Safety-state navigation | `NOT_RUN` / pending | — | pending |
-| Web/save/sample links and details | `NOT_RUN` / pending | — | pending |
-| Legal navigation and disclosure controls | `NOT_RUN` / pending | — | pending |
+| Shared navigation, Request phases and controls, fragment entry/tab order, review and Safety-state navigation, Web/save/sample links and details, and Legal disclosure controls | `PASS` | Human reported keyboard/focus QA PASS; no release-blocking interaction defect reported | accepted |
+
+This is Human interaction evidence, not an automated tab-order claim.
 
 ## 25. Human 200% zoom matrix
 
-| Surface | Human status | Observation | Acceptance |
+| Human evidence scope | Human status | Observation | Acceptance |
 | --- | --- | --- | --- |
-| LP and price/CTA content | `NOT_RUN` / pending | — | pending |
-| Request Sheet | `NOT_RUN` / pending | — | pending |
-| Review hub / Brand preview | `NOT_RUN` / pending | — | pending |
-| Web and save artifacts | `NOT_RUN` / pending | — | pending |
-| Public sample and errors | `NOT_RUN` / pending | — | pending |
-| Legal and Contact | `NOT_RUN` / pending | — | pending |
+| LP and price/CTA content, Request Sheet, review hub and Brand preview, Web/save artifacts, public sample/errors, Legal, and Contact at 200% zoom | `PASS` | Human reported category-level PASS; no release-blocking zoom defect reported | accepted |
+
+No narrower surface-specific observation was supplied; none is inferred from the category-level Human decision.
 
 ## 26. Human reduced-motion matrix
 
-Served CSS contains the reduced-motion rule, but actual preference behavior remains Human-observed.
+Served CSS contains the reduced-motion rule; actual preference behavior was separately evaluated by Human.
 
-| Surface | Human status | Observation | Acceptance |
+| Human evidence scope | Human status | Observation | Acceptance |
 | --- | --- | --- | --- |
-| LP and shared navigation | `NOT_RUN` / pending | — | pending |
-| Request Sheet | `NOT_RUN` / pending | — | pending |
-| Review hub and states | `NOT_RUN` / pending | — | pending |
-| Web/save/sample artifacts | `NOT_RUN` / pending | — | pending |
-| Legal and Contact | `NOT_RUN` / pending | — | pending |
+| LP/shared navigation, Request Sheet, review hub/states, Web/save/sample artifacts, Legal, and Contact under reduced-motion preference | `PASS` | Human reported reduced-motion QA PASS; no release-blocking motion defect reported | accepted |
+
+The CSS rule is automated evidence; the PASS decision is Human observational evidence.
 
 ## 27. Reading-quality matrix
 
-| Surface | Human status | Observation | Acceptance |
+| Human evidence scope | Human status | Observation | Acceptance |
 | --- | --- | --- | --- |
-| LP first impression and decision flow | `NOT_RUN` / pending | — | pending |
-| Request Sheet calmness and clarity | `NOT_RUN` / pending | — | pending |
-| Web鑑定ノート long-form rhythm | `NOT_RUN` / pending | — | pending |
-| 保存用判断カード 30-second recall | `NOT_RUN` / pending | — | pending |
-| public sample distinction and disclosure | `NOT_RUN` / pending | — | pending |
-| review status and error-state clarity | `NOT_RUN` / pending | — | pending |
-| final contrast perception | `NOT_RUN` / pending | — | pending |
+| LP decision flow, Request Sheet clarity, Web鑑定ノート reading rhythm, 保存用判断カード recall, public-sample distinction/disclosure, review and error-state clarity, and final contrast perception | `PASS` | Human reported reading-quality/contrast QA PASS; no release-blocking visual defect reported | accepted |
+
+No qualitative sub-score or narrower surface-specific note was supplied; none is invented.
 
 ## 28. Known limitations
 
 - No Browser, browser automation, GUI browser control, or screenshot was used.
-- Automated evidence establishes source, build, HTTP, markup, asset, and boundary integrity; it does not establish visual appearance, reading quality, perceived contrast, clipping, focus visibility, or actual interaction at 320px or 200% zoom.
-- Human must perform the pending matrices in ordinary external Microsoft Edge.
-- The production server is local-only on `127.0.0.1:3020`; no deployment or public review URL is authorized.
+- Automated evidence establishes source, build, HTTP, markup, asset, and boundary integrity; it does not establish visual appearance, reading quality, perceived contrast, clipping, focus visibility, or actual interaction at 320px or 200% zoom. Those acceptance results are attributed only to Human.
+- Human reported category-level PASS decisions; no additional surface-specific narrative or measurement was supplied.
+- The review server was local-only on `127.0.0.1:3020` and is stopped before branch switching; no deployment or public review URL is authorized.
 - The historical pre-R2 QA package remains audit history and is not authoritative for corrected main.
-- No PR was created and the corrected QA package must not be merged to `main` before Human final acceptance.
+- No PR is created. The corrected QA package is synchronized to `main` only through the authorized fast-forward-only path.
+- The accepted deliverable remains a fixed-fixture Reviewable Web MVP. It is not production-ready or payment-ready and has no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation.
 
 ## 29. Milestone 1 acceptance checklist
 
@@ -408,44 +420,16 @@ Served CSS contains the reduced-motion rule, but actual preference behavior rema
 - [x] Typecheck, lint warning 0, clean build, and `git diff --check` pass.
 - [x] Route, HTTP, unknown-ID, internal-link, fragment, heading, noindex, review-status, CSS-asset, and prohibited-scope audits pass.
 - [x] Corrected M1-I12 automated final QA package prepared on the dedicated QA branch.
-- [ ] Human 320px final QA.
-- [ ] Human keyboard/focus final QA.
-- [ ] Human 200% zoom final QA.
-- [ ] Human reduced-motion final QA.
-- [ ] Human reading-quality and final contrast acceptance.
-- [ ] Human acceptance of M1-I12.
-- [ ] Human completion of Milestone 1.
+- [x] Human 320px final QA.
+- [x] Human keyboard/focus final QA.
+- [x] Human 200% zoom final QA.
+- [x] Human reduced-motion final QA.
+- [x] Human reading-quality and final contrast acceptance.
+- [x] Human acceptance and completion of M1-I12.
+- [x] Human acceptance, completion, and closure of Milestone 1.
 
-Milestone 1 is incomplete. Milestone 2 and all later milestones remain unauthorized.
+Milestone 1 is Human-accepted, complete, and closed. Milestone 2 and all later milestones remain unauthorized and not started.
 
-## 30. Next Human gate
+## 30. Next authorization gate
 
-The clean production server is running on port 3020 for Human review. Primary URLs:
-
-- `http://127.0.0.1:3020/`
-- `http://127.0.0.1:3020/request`
-- `http://127.0.0.1:3020/review`
-- `http://127.0.0.1:3020/review/result/result-normal-001`
-- `http://127.0.0.1:3020/review/save-report/result-normal-001`
-- `http://127.0.0.1:3020/sample-report`
-- `http://127.0.0.1:3020/review/error/missing-fixture`
-
-PowerShell commands:
-
-```powershell
-Start-Process msedge.exe "http://127.0.0.1:3020/"
-Start-Process msedge.exe "http://127.0.0.1:3020/request"
-Start-Process msedge.exe "http://127.0.0.1:3020/review"
-Start-Process msedge.exe "http://127.0.0.1:3020/review/result/result-normal-001"
-Start-Process msedge.exe "http://127.0.0.1:3020/review/save-report/result-normal-001"
-Start-Process msedge.exe "http://127.0.0.1:3020/sample-report"
-Start-Process msedge.exe "http://127.0.0.1:3020/review/error/missing-fixture"
-```
-
-Human records actual observations and the acceptance decision. Until then:
-
-- M1-I12 automated final QA is complete against corrected main;
-- Human final QA remains pending;
-- Milestone 1 remains incomplete;
-- Milestone 2 remains unauthorized; and
-- the corrected QA branch must not be merged to `main`.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. Milestone 2 remains unauthorized and not started. Any next work requires a separate Milestone 2 planning and Human authorization gate. This acceptance does not authorize Milestone 2 implementation, operator-information completion, publication, deployment, provider inquiry, payment, AI, DB, email, account, analytics, or PDF/download/share work.
