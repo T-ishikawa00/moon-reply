@@ -6,7 +6,8 @@
 - Name: `Foundation Successor Local Tool Allowlist Correction`
 - Branch: `design/m2-p2-a-zero-cost-estimator`
 - Base SHA: `e673d015ea7da1f6f1d6f00457014f07072d3011`
-- State: correction implemented; all required automated validation passes; isolated correction commit boundary defined
+- State: correction implemented; all required automated validation passes; Human / ChatGPT accepted and complete
+- Accepted correction commit: `deff429e45a411f0d6c6d5bd3f199adca994ebb5`
 
 ## 2. Triggering failure
 
@@ -14,7 +15,7 @@ The accepted M2-P1 foundation verifier passed every historical, dataset, Prompt,
 
 ## 3. Human authorization
 
-Human / ChatGPT authorized preservation of the complete M2-P2-A 16-file working tree and authorized a bounded verifier amendment. The amendment may allow only three named local tools and does not authorize API execution, provider integration, model selection, runtime implementation, M2-P2-B, main merge, or PR creation.
+At correction implementation time, Human / ChatGPT authorized preservation of the complete M2-P2-A 16-file working tree and authorized a bounded verifier amendment. The amendment may allow only three named local tools and does not authorize API execution, provider integration, model selection, runtime implementation, M2-P2-B, a merge commit, or PR creation. The later formal acceptance decision accepts the correction and separately authorizes only fast-forward synchronization to `main`.
 
 ## 4. Preserved 16-file working tree
 
@@ -115,8 +116,10 @@ Required commit message: `fix: allow approved M2 successor local tools`.
 
 ## 14. M2-P2-A resume condition
 
-M2-P2-A may resume only after both successor gates and the complete M2 foundation gate pass, the correction is committed independently, and the preserved original 16-file task scope remains the only remaining working-tree mutation set.
+This condition is satisfied: both successor gates and the complete M2 foundation gate pass, the correction is committed independently at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`, and M2-P2-A subsequently completed at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`.
 
 ## 15. API/runtime prohibition
 
-API and external network calls, provider invocation, secret access, database, authentication, payment, email, API route, server action, UI, and application/runtime implementation remain prohibited. API spend remains USD 0. M2-P2-B remains unauthorized.
+API and external network calls, provider invocation, secret access, database, authentication, payment, email, API route, server action, UI, and application/runtime implementation remain prohibited. API spend remains USD 0. No model is selected. Runtime remains disabled. M2-P2-B remains unauthorized and not started.
+
+M2-P2-A-R1 is Human / ChatGPT accepted and complete. Its acceptance does not widen the exact three-path allowlist or authorize any provider or runtime capability.

@@ -8,7 +8,8 @@
 - Base SHA: `e673d015ea7da1f6f1d6f00457014f07072d3011`
 - Expected commit message: `feat: add zero-cost M2 token estimator`
 - Predecessor correction: `M2-P2-A-R1` at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`
-- State: estimator implemented and static estimate generated; all required automated gates and ChatGPT implementation review pass; Human acceptance pending
+- State: estimator implemented and static estimate generated; all required automated gates and Human / ChatGPT review pass; accepted and complete
+- Accepted estimator implementation commit: `2e2e0cc4c57c46320d56aa986055f65187aa6aee`
 
 ## 2. Authority
 
@@ -23,6 +24,9 @@ Authorized:
 - permanent zero-cost estimator verifier;
 - four status-document updates;
 - one task commit and normal feature-branch push.
+- acceptance synchronization limited to the exact eight approved documents;
+- one acceptance commit and normal feature-branch push; and
+- fast-forward-only synchronization to `main` followed by a normal `main` push.
 
 Not authorized:
 
@@ -31,7 +35,8 @@ Not authorized:
 - database, authentication, payment, email, API route, server action, UI, or runtime implementation;
 - accepted M2-P1 asset changes;
 - M2-P2-B;
-- main mutation, merge, rebase, force push, or PR creation.
+- API spend or model selection;
+- merge commit, rebase, force push, or PR creation.
 
 ## 3. Exact mutation manifest
 
@@ -60,6 +65,19 @@ Allowed status updates:
 No package or dependency change is allowed.
 
 The separately committed M2-P2-A-R1 correction files are not part of this 16-file manifest. `M2_P2_A_EXACT_SCOPE_GATE` excludes exactly those two fixed correction paths and requires this original manifest without wildcard expansion.
+
+The acceptance synchronization commit may change only:
+
+- `docs/ROADMAP.md`;
+- `docs/CURRENT_FOCUS.md`;
+- `docs/CODEX_HANDOFF.md`;
+- `docs/WBS.md`;
+- `docs/phase2/M2_P2_A_ZERO_COST_ESTIMATOR_SPEC.md`;
+- `docs/phase2/M2_P2_A_STATIC_ESTIMATE_REPORT.md`;
+- `docs/phase2/TASK_M2_P2_A_REVIEW.md`; and
+- `docs/phase2/TASK_M2_P2_A_R1_SUCCESSOR_TOOL_ALLOWLIST.md`.
+
+Estimator scripts, generated JSON, configs, catalogs, M2-P1 assets, application/runtime files, and package files remain unchanged by acceptance synchronization.
 
 ## 4. Review checklist
 
@@ -146,7 +164,7 @@ Final results are recorded after the exact validation sequence:
 | build | `PASS` — 28 static/SSG pages generated |
 | `git diff --check` | `PASS` |
 
-Automated PASS is not Human / ChatGPT review or model-quality acceptance.
+Automated PASS is not Human / ChatGPT review or model-quality acceptance. The separate explicit Human / ChatGPT decision accepts M2-P2-A without creating model-quality evidence.
 
 ## 6. Resolved successor-tool boundary
 
@@ -171,6 +189,8 @@ The accepted historical M2-P1 manifest and commit-range checks are unchanged and
 
 ## 8. Review outcome
 
-Current outcome: **implementation and ChatGPT review complete; automated gates pass; Human acceptance pending**.
+Current outcome: **M2-P2-A-R1 and M2-P2-A are Human / ChatGPT accepted and complete; automated gates pass**.
 
-M2-P2-A implementation does not authorize M2-P2-B. The first paid calibration remains capped at USD 1 total and requires separate Human approval.
+Accepted correction commit: `deff429e45a411f0d6c6d5bd3f199adca994ebb5`. Accepted estimator implementation commit: `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. Accepted generated-report hash: `0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f`.
+
+M2-P2-A implementation does not authorize M2-P2-B. Development-70 is evaluation cost, not one customer report cost. The first possible paid calibration requires separate Human approval and is limited to one case, one model, no repair, one execution, and an absolute future spend ceiling of USD 1. Static token and cost values remain estimates; actual tokenizer usage, reasoning tokens, latency, API cost, provider validation, and model quality remain unknown.

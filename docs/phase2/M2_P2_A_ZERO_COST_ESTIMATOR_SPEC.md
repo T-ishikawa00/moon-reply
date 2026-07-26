@@ -4,7 +4,9 @@
 
 - Task ID: `M2-P2-A`
 - Task name: `Zero-Cost Token & Cost Estimator Foundation`
-- State: local estimator implementation and static report generated; automated validation and ChatGPT implementation review complete; Human acceptance pending
+- State: local estimator implementation and static report generated; automated validation and Human / ChatGPT review complete; accepted and complete
+- Accepted correction commit: `deff429e45a411f0d6c6d5bd3f199adca994ebb5`
+- Accepted estimator implementation commit: `2e2e0cc4c57c46320d56aa986055f65187aa6aee`
 - Foundation SHA: `e673d015ea7da1f6f1d6f00457014f07072d3011`
 - Runtime authority: none
 
@@ -265,20 +267,21 @@ Static estimation cannot establish:
 
 ## 19. M2-P2-B calibration plan
 
-M2-P2-B remains not started. After separate Human approval:
+M2-P2-B remains not started and unauthorized. After separate Human approval:
 
 1. recheck official pricing;
-2. select the smallest representative calibration case;
-3. keep total first paid calibration spend at or below USD 1;
-4. record actual input, cached-input, output, reasoning, and total usage fields;
-5. compare actual values with LOW/CENTRAL/HIGH and output profiles; and
-6. stop before any expansion unless Human separately approves it.
+2. select one representative case and one model;
+3. run exactly one full-pipeline execution with no repair;
+4. keep total first paid calibration spend at or below USD 1;
+5. record actual input, cached-input, output, reasoning, and total usage fields;
+6. compare actual values with LOW/CENTRAL/HIGH and output profiles; and
+7. stop before any expansion unless Human separately approves it.
 
-This plan is not execution authorization.
+Single-case full-pipeline is the relevant initial calibration unit. Development-70 cost is evaluation cost, not one customer report cost. No 14-case or 70-case API execution is authorized. This plan is not execution or spend authorization.
 
 ## 20. Acceptance boundary
 
-M2-P2-A completes only when:
+M2-P2-A acceptance is established by the explicit Human / ChatGPT decision after:
 
 - all named estimator gates pass;
 - the accepted M2-P1 foundation verifier still passes;
@@ -286,6 +289,6 @@ M2-P2-A completes only when:
 - typecheck, lint, build, and `git diff --check` pass;
 - `M2_P2_A_EXACT_SCOPE_GATE` confirms exactly the original authorized 16 files after excluding the separately committed two-file M2-P2-A-R1 correction;
 - the branch is committed and normally pushed; and
-- Human acceptance remains explicitly pending.
+- Human / ChatGPT review and acceptance are explicitly recorded.
 
-No budget is authorized. No API cost was incurred. No model is selected. Runtime remains disabled.
+All completion conditions are satisfied. The accepted generated-report hash is `0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f`. No budget is authorized. No API cost was incurred. No model is selected. Runtime remains disabled.
