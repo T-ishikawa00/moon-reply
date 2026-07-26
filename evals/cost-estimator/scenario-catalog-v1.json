@@ -1,0 +1,160 @@
+{
+  "schema_version": "moon-reply-cost-scenario-catalog-v1",
+  "catalog_version": "scenario-catalog-v1.0.0",
+  "scenarios": [
+    {
+      "scenario_id": "single-case-full-pipeline",
+      "case_ids": [
+        "WAIT-003"
+      ],
+      "stage_routing": {
+        "kind": "explicit",
+        "stages": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ]
+      },
+      "repair": "none",
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "screening-14-functional",
+      "case_ids": [
+        "REPLY-001",
+        "REPLY-008",
+        "SEND-002",
+        "SEND-004",
+        "WAIT-003",
+        "WAIT-010",
+        "PAUSE-001",
+        "PAUSE-003",
+        "INFO-001",
+        "INFO-007",
+        "SAFETY-001",
+        "SAFETY-005",
+        "BENIGN-005",
+        "BENIGN-007"
+      ],
+      "stage_routing": {
+        "kind": "oracle_controller_only",
+        "ready_or_benign": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04"
+        ],
+        "information": [
+          "PB-01",
+          "PB-02",
+          "PB-03"
+        ],
+        "safety": [
+          "PB-01",
+          "PB-02"
+        ],
+        "oracle_enters_rendered_payload": false
+      },
+      "repair": "none",
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "screening-4-writing",
+      "case_ids": [
+        "REPLY-008",
+        "SEND-002",
+        "WAIT-003",
+        "PAUSE-003"
+      ],
+      "stage_routing": {
+        "kind": "explicit_with_synthetic_validated_upstream",
+        "stages": [
+          "PB-05",
+          "PB-06"
+        ]
+      },
+      "repair": "none",
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "development-70-no-repair",
+      "case_ids": "all_development_70_in_index_order",
+      "stage_routing": {
+        "kind": "oracle_controller_only",
+        "ready_decision_or_benign": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "information": [
+          "PB-01",
+          "PB-02",
+          "PB-03"
+        ],
+        "safety": [
+          "PB-01",
+          "PB-02"
+        ],
+        "oracle_enters_rendered_payload": false
+      },
+      "repair": "none",
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "development-70-repair-stress",
+      "case_ids": "all_development_70_in_index_order",
+      "stage_routing": {
+        "kind": "development_70_base_plus_content_candidate_stress",
+        "base_scenario": "development-70-no-repair",
+        "eligible_content_candidate_path": [
+          {
+            "candidate": 1,
+            "mode": "initial_generation",
+            "stages_in_base": [
+              "PB-05",
+              "PB-06"
+            ]
+          },
+          {
+            "candidate": 2,
+            "mode": "targeted_repair",
+            "additional_stages": [
+              "PB-07",
+              "PB-06"
+            ]
+          },
+          {
+            "candidate": 3,
+            "mode": "full_regeneration",
+            "additional_stages": [
+              "PB-07",
+              "PB-06"
+            ]
+          }
+        ],
+        "fourth_candidate": false,
+        "repair_of_repair": false
+      },
+      "repair": "stress_ceiling_one_targeted_repair_then_one_full_regeneration",
+      "expected_operating_cost": false,
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "screening-14-five-run-reference",
+      "case_ids": "screening-14-functional-times-5",
+      "stage_routing": {
+        "kind": "multiply_reference",
+        "base_scenario": "screening-14-functional",
+        "runs": 5
+      },
+      "repair": "none",
+      "execution_authorized": false
+    }
+  ]
+}

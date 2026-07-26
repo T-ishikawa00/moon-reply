@@ -1,0 +1,79 @@
+{
+  "schema_version": "moon-reply-stage-size-profiles-v1",
+  "profile_version": "stage-size-profiles-v1.0.0",
+  "synthetic_profiles": {
+    "minimum": {
+      "description": "Smallest deterministic Schema-shaped upstream artifacts used only for lower-bound request sizing.",
+      "synthetic": true,
+      "actual_model_output": false,
+      "text_scale": 1,
+      "collection_scale": 1
+    },
+    "nominal": {
+      "description": "Deterministic representative Schema-shaped upstream artifacts used for ordinary static planning.",
+      "synthetic": true,
+      "actual_model_output": false,
+      "text_scale": 2,
+      "collection_scale": 2
+    },
+    "conservative": {
+      "description": "Deterministic larger Schema-shaped upstream artifacts used for conservative input sizing.",
+      "synthetic": true,
+      "actual_model_output": false,
+      "text_scale": 4,
+      "collection_scale": 4
+    }
+  },
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "nominal_output_tokens": 1200,
+      "conservative_output_tokens": 2400,
+      "configured_output_cap_tokens": 4000,
+      "source_reference": "ai/schemas/structured-intake.schema.json collection and string bounds; ai/prompts/structure/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-02",
+      "nominal_output_tokens": 200,
+      "conservative_output_tokens": 400,
+      "configured_output_cap_tokens": 800,
+      "source_reference": "ai/schemas/safety-assessment.schema.json#/$defs/model_result; ai/prompts/safety-semantic/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-03",
+      "nominal_output_tokens": 180,
+      "conservative_output_tokens": 350,
+      "configured_output_cap_tokens": 700,
+      "source_reference": "ai/schemas/eligibility-result.schema.json; at most three approved question codes"
+    },
+    {
+      "stage_id": "PB-04",
+      "nominal_output_tokens": 1400,
+      "conservative_output_tokens": 2800,
+      "configured_output_cap_tokens": 4500,
+      "source_reference": "ai/schemas/decision-plan.schema.json; exactly three day-plan entries and bounded copy arrays"
+    },
+    {
+      "stage_id": "PB-05",
+      "nominal_output_tokens": 2500,
+      "conservative_output_tokens": 5000,
+      "configured_output_cap_tokens": 8000,
+      "source_reference": "ai/schemas/report-content.schema.json and ai/prompts/shared/report-field-constraints-v1.json"
+    },
+    {
+      "stage_id": "PB-06",
+      "nominal_output_tokens": 500,
+      "conservative_output_tokens": 1200,
+      "configured_output_cap_tokens": 2500,
+      "source_reference": "ai/schemas/validation-result.schema.json semantic_findings_only mode"
+    },
+    {
+      "stage_id": "PB-07",
+      "nominal_output_tokens": 2500,
+      "conservative_output_tokens": 5000,
+      "configured_output_cap_tokens": 8000,
+      "inherits_from_stage": "PB-05",
+      "source_reference": "PB-07 returns a complete report-content object and inherits the PB-05 cap"
+    }
+  ]
+}

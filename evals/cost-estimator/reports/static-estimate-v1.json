@@ -1,0 +1,2539 @@
+{
+  "schema_version": "moon-reply-static-estimate-report-v1",
+  "report_version": "static-estimate-v1.0.0",
+  "task_id": "M2-P2-A",
+  "generated_at": "2026-07-26T00:00:00+09:00",
+  "foundation": {
+    "git_sha": "e673d015ea7da1f6f1d6f00457014f07072d3011",
+    "dataset_version": "eval-development-v1.0.0",
+    "dataset_sha256": "9960f91c0e4eb0009bca6be7834437d56195c0e5682f5e679530cdb7df64d0e8",
+    "prompt_bundle_version": "prompt-bundle-v1.0.0",
+    "prompt_bundle_manifest_sha256": "abcc37aac3d461ff2fc310c08708a3e26c5d658eb081cf2f4241529ca4accdb0",
+    "prompt_assets_aggregate_sha256": "4a8467c5448d01f69bb4518798ad74fd71b6d5f2919c3e9c53990f305b3e5b58",
+    "pipeline_schema_version": "pipeline-schema-v1.0.0",
+    "schema_set_sha256": "1bdb2a124d00fdb094296099d6cf5e9a3493910083f648cd804021ac64f22818",
+    "schema_files": [
+      "ai/schemas/decision-plan.schema.json",
+      "ai/schemas/eligibility-result.schema.json",
+      "ai/schemas/report-content.schema.json",
+      "ai/schemas/safety-assessment.schema.json",
+      "ai/schemas/structured-intake.schema.json",
+      "ai/schemas/validation-result.schema.json"
+    ]
+  },
+  "estimator": {
+    "estimator_version": "m2-zero-cost-estimator-v1.0.0",
+    "estimate_method": "configurable_utf8_byte_division_bands",
+    "token_profiles": {
+      "LOW": {
+        "formula": "ceil(UTF8 bytes / 4)",
+        "utf8_bytes_per_token": 4
+      },
+      "CENTRAL": {
+        "formula": "ceil(UTF8 bytes / 3)",
+        "utf8_bytes_per_token": 3
+      },
+      "HIGH": {
+        "formula": "ceil(UTF8 bytes / 2)",
+        "utf8_bytes_per_token": 2
+      }
+    },
+    "exact_tokenizer_used": false,
+    "price_catalog_version": "price-catalog-v1.0.0",
+    "price_catalog_timestamp": "2026-07-26T00:00:00+09:00",
+    "currency": "USD",
+    "model_placeholder": "MODEL_UNSELECTED_PLACEHOLDER",
+    "model_selected": false,
+    "reasoning_tokens_separately_estimated": false
+  },
+  "declarations": {
+    "no_network": true,
+    "no_api_key_required": true,
+    "no_api_call_made": true,
+    "api_spend_usd": 0,
+    "estimates_not_actual_usage": true,
+    "provider_validated_request": false,
+    "runtime_enabled": false,
+    "m2_p2_b_authorized": false,
+    "paid_calibration_cap_usd": 1,
+    "budget_authorized": false
+  },
+  "hashes": {
+    "price_catalog_sha256": "731b7ae22346149c49bf7c792d99bcb70c87d0af7739a5a12670b0330d16c430",
+    "estimator_config_sha256": "306ae2cf17e338903bf303848423da2ae6e7801c07483bf988e3884eea64d7e3",
+    "scenario_catalog_sha256": "eb4dc84c375796ea5537d79fbeadf4090d8e49e244c6aa7fa2cfcc3b6c91aae9",
+    "stage_size_profiles_sha256": "b95f51f51a96b9ad8716246e8ada9241285ad720262fe624fa911db075bcef44",
+    "estimator_script_sha256": "b92dffba49832c6cc0e914890c4f61cb693536e0ba8ffb034b54dcc792682e2b",
+    "generated_report_hash_algorithm": "sha256 of compact canonical JSON with hashes.generated_report_sha256 set to null",
+    "generated_report_sha256": "0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f"
+  },
+  "static_stage_estimates": [
+    {
+      "stage_id": "PB-01",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-01",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 1823,
+        "shared_prompt_bytes": 13896,
+        "static_prompt_bytes": 15719,
+        "static_prompt_unicode_code_points": 15717,
+        "static_prompt_line_count": 437,
+        "schema_bytes": 4593,
+        "schema_source_file_bytes": 7871,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 2,
+        "stage_input_payload_bytes": 485,
+        "request_serialized": {
+          "utf8_bytes": 22724,
+          "unicode_code_points": 22508,
+          "characters": 22508,
+          "line_count": 1,
+          "serialized_json_characters": 22508
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 23193,
+          "unicode_code_points": 22977,
+          "characters": 22977,
+          "line_count": 1,
+          "serialized_json_characters": 22977
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 5681,
+        "central_tokens": 7575,
+        "high_tokens": 11362,
+        "configured_output_cap_tokens": 4000,
+        "nominal_output_tokens": 1200,
+        "conservative_output_tokens": 2400
+      },
+      "output_assumption_source": "ai/schemas/structured-intake.schema.json collection and string bounds; ai/prompts/structure/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-01",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-01",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 1823,
+        "shared_prompt_bytes": 13896,
+        "static_prompt_bytes": 15719,
+        "static_prompt_unicode_code_points": 15717,
+        "static_prompt_line_count": 437,
+        "schema_bytes": 4593,
+        "schema_source_file_bytes": 7871,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 2,
+        "stage_input_payload_bytes": 485,
+        "request_serialized": {
+          "utf8_bytes": 22724,
+          "unicode_code_points": 22508,
+          "characters": 22508,
+          "line_count": 1,
+          "serialized_json_characters": 22508
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 23193,
+          "unicode_code_points": 22977,
+          "characters": 22977,
+          "line_count": 1,
+          "serialized_json_characters": 22977
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 5681,
+        "central_tokens": 7575,
+        "high_tokens": 11362,
+        "configured_output_cap_tokens": 4000,
+        "nominal_output_tokens": 1200,
+        "conservative_output_tokens": 2400
+      },
+      "output_assumption_source": "ai/schemas/structured-intake.schema.json collection and string bounds; ai/prompts/structure/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-01",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-01",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 1823,
+        "shared_prompt_bytes": 13896,
+        "static_prompt_bytes": 15719,
+        "static_prompt_unicode_code_points": 15717,
+        "static_prompt_line_count": 437,
+        "schema_bytes": 4593,
+        "schema_source_file_bytes": 7871,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 2,
+        "stage_input_payload_bytes": 485,
+        "request_serialized": {
+          "utf8_bytes": 22724,
+          "unicode_code_points": 22508,
+          "characters": 22508,
+          "line_count": 1,
+          "serialized_json_characters": 22508
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 23198,
+          "unicode_code_points": 22982,
+          "characters": 22982,
+          "line_count": 1,
+          "serialized_json_characters": 22982
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 5681,
+        "central_tokens": 7575,
+        "high_tokens": 11362,
+        "configured_output_cap_tokens": 4000,
+        "nominal_output_tokens": 1200,
+        "conservative_output_tokens": 2400
+      },
+      "output_assumption_source": "ai/schemas/structured-intake.schema.json collection and string bounds; ai/prompts/structure/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-02",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-02",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 1620,
+        "shared_prompt_bytes": 16474,
+        "static_prompt_bytes": 18094,
+        "static_prompt_unicode_code_points": 18092,
+        "static_prompt_line_count": 524,
+        "schema_bytes": 469,
+        "schema_source_file_bytes": 4244,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 951,
+        "stage_input_payload_bytes": 1386,
+        "request_serialized": {
+          "utf8_bytes": 22478,
+          "unicode_code_points": 22420,
+          "characters": 22420,
+          "line_count": 1,
+          "serialized_json_characters": 22420
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 22946,
+          "unicode_code_points": 22888,
+          "characters": 22888,
+          "line_count": 1,
+          "serialized_json_characters": 22888
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 5620,
+        "central_tokens": 7493,
+        "high_tokens": 11239,
+        "configured_output_cap_tokens": 800,
+        "nominal_output_tokens": 200,
+        "conservative_output_tokens": 400
+      },
+      "output_assumption_source": "ai/schemas/safety-assessment.schema.json#/$defs/model_result; ai/prompts/safety-semantic/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-02",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-02",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 1620,
+        "shared_prompt_bytes": 16474,
+        "static_prompt_bytes": 18094,
+        "static_prompt_unicode_code_points": 18092,
+        "static_prompt_line_count": 524,
+        "schema_bytes": 469,
+        "schema_source_file_bytes": 4244,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 1804,
+        "stage_input_payload_bytes": 2238,
+        "request_serialized": {
+          "utf8_bytes": 23416,
+          "unicode_code_points": 23166,
+          "characters": 23166,
+          "line_count": 1,
+          "serialized_json_characters": 23166
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 23884,
+          "unicode_code_points": 23634,
+          "characters": 23634,
+          "line_count": 1,
+          "serialized_json_characters": 23634
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 5854,
+        "central_tokens": 7806,
+        "high_tokens": 11708,
+        "configured_output_cap_tokens": 800,
+        "nominal_output_tokens": 200,
+        "conservative_output_tokens": 400
+      },
+      "output_assumption_source": "ai/schemas/safety-assessment.schema.json#/$defs/model_result; ai/prompts/safety-semantic/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-02",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-02",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 1620,
+        "shared_prompt_bytes": 16474,
+        "static_prompt_bytes": 18094,
+        "static_prompt_unicode_code_points": 18092,
+        "static_prompt_line_count": 524,
+        "schema_bytes": 469,
+        "schema_source_file_bytes": 4244,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 4150,
+        "stage_input_payload_bytes": 4582,
+        "request_serialized": {
+          "utf8_bytes": 25932,
+          "unicode_code_points": 24890,
+          "characters": 24890,
+          "line_count": 1,
+          "serialized_json_characters": 24890
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 26405,
+          "unicode_code_points": 25363,
+          "characters": 25363,
+          "line_count": 1,
+          "serialized_json_characters": 25363
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6483,
+        "central_tokens": 8644,
+        "high_tokens": 12966,
+        "configured_output_cap_tokens": 800,
+        "nominal_output_tokens": 200,
+        "conservative_output_tokens": 400
+      },
+      "output_assumption_source": "ai/schemas/safety-assessment.schema.json#/$defs/model_result; ai/prompts/safety-semantic/v1.0.0.developer.md"
+    },
+    {
+      "stage_id": "PB-03",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-03",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 1466,
+        "shared_prompt_bytes": 18219,
+        "static_prompt_bytes": 19685,
+        "static_prompt_unicode_code_points": 18313,
+        "static_prompt_line_count": 529,
+        "schema_bytes": 2605,
+        "schema_source_file_bytes": 4194,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 951,
+        "stage_input_payload_bytes": 1460,
+        "request_serialized": {
+          "utf8_bytes": 26259,
+          "unicode_code_points": 24831,
+          "characters": 24831,
+          "line_count": 1,
+          "serialized_json_characters": 24831
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 26727,
+          "unicode_code_points": 25299,
+          "characters": 25299,
+          "line_count": 1,
+          "serialized_json_characters": 25299
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6565,
+        "central_tokens": 8753,
+        "high_tokens": 13130,
+        "configured_output_cap_tokens": 700,
+        "nominal_output_tokens": 180,
+        "conservative_output_tokens": 350
+      },
+      "output_assumption_source": "ai/schemas/eligibility-result.schema.json; at most three approved question codes"
+    },
+    {
+      "stage_id": "PB-03",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-03",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 1466,
+        "shared_prompt_bytes": 18219,
+        "static_prompt_bytes": 19685,
+        "static_prompt_unicode_code_points": 18313,
+        "static_prompt_line_count": 529,
+        "schema_bytes": 2605,
+        "schema_source_file_bytes": 4194,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 1804,
+        "stage_input_payload_bytes": 2312,
+        "request_serialized": {
+          "utf8_bytes": 27197,
+          "unicode_code_points": 25577,
+          "characters": 25577,
+          "line_count": 1,
+          "serialized_json_characters": 25577
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 27665,
+          "unicode_code_points": 26045,
+          "characters": 26045,
+          "line_count": 1,
+          "serialized_json_characters": 26045
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6800,
+        "central_tokens": 9066,
+        "high_tokens": 13599,
+        "configured_output_cap_tokens": 700,
+        "nominal_output_tokens": 180,
+        "conservative_output_tokens": 350
+      },
+      "output_assumption_source": "ai/schemas/eligibility-result.schema.json; at most three approved question codes"
+    },
+    {
+      "stage_id": "PB-03",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-03",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 1466,
+        "shared_prompt_bytes": 18219,
+        "static_prompt_bytes": 19685,
+        "static_prompt_unicode_code_points": 18313,
+        "static_prompt_line_count": 529,
+        "schema_bytes": 2605,
+        "schema_source_file_bytes": 4194,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 4150,
+        "stage_input_payload_bytes": 4656,
+        "request_serialized": {
+          "utf8_bytes": 29713,
+          "unicode_code_points": 27301,
+          "characters": 27301,
+          "line_count": 1,
+          "serialized_json_characters": 27301
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 30186,
+          "unicode_code_points": 27774,
+          "characters": 27774,
+          "line_count": 1,
+          "serialized_json_characters": 27774
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 7429,
+        "central_tokens": 9905,
+        "high_tokens": 14857,
+        "configured_output_cap_tokens": 700,
+        "nominal_output_tokens": 180,
+        "conservative_output_tokens": 350
+      },
+      "output_assumption_source": "ai/schemas/eligibility-result.schema.json; at most three approved question codes"
+    },
+    {
+      "stage_id": "PB-04",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-04",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 2213,
+        "shared_prompt_bytes": 16317,
+        "static_prompt_bytes": 18530,
+        "static_prompt_unicode_code_points": 17914,
+        "static_prompt_line_count": 534,
+        "schema_bytes": 4048,
+        "schema_source_file_bytes": 7760,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 1162,
+        "stage_input_payload_bytes": 2049,
+        "request_serialized": {
+          "utf8_bytes": 27216,
+          "unicode_code_points": 26544,
+          "characters": 26544,
+          "line_count": 1,
+          "serialized_json_characters": 26544
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 27684,
+          "unicode_code_points": 27012,
+          "characters": 27012,
+          "line_count": 1,
+          "serialized_json_characters": 27012
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6804,
+        "central_tokens": 9072,
+        "high_tokens": 13608,
+        "configured_output_cap_tokens": 4500,
+        "nominal_output_tokens": 1400,
+        "conservative_output_tokens": 2800
+      },
+      "output_assumption_source": "ai/schemas/decision-plan.schema.json; exactly three day-plan entries and bounded copy arrays"
+    },
+    {
+      "stage_id": "PB-04",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-04",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 2213,
+        "shared_prompt_bytes": 16317,
+        "static_prompt_bytes": 18530,
+        "static_prompt_unicode_code_points": 17914,
+        "static_prompt_line_count": 534,
+        "schema_bytes": 4048,
+        "schema_source_file_bytes": 7760,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 2015,
+        "stage_input_payload_bytes": 2901,
+        "request_serialized": {
+          "utf8_bytes": 28154,
+          "unicode_code_points": 27290,
+          "characters": 27290,
+          "line_count": 1,
+          "serialized_json_characters": 27290
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 28622,
+          "unicode_code_points": 27758,
+          "characters": 27758,
+          "line_count": 1,
+          "serialized_json_characters": 27758
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 7039,
+        "central_tokens": 9385,
+        "high_tokens": 14077,
+        "configured_output_cap_tokens": 4500,
+        "nominal_output_tokens": 1400,
+        "conservative_output_tokens": 2800
+      },
+      "output_assumption_source": "ai/schemas/decision-plan.schema.json; exactly three day-plan entries and bounded copy arrays"
+    },
+    {
+      "stage_id": "PB-04",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-04",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 2213,
+        "shared_prompt_bytes": 16317,
+        "static_prompt_bytes": 18530,
+        "static_prompt_unicode_code_points": 17914,
+        "static_prompt_line_count": 534,
+        "schema_bytes": 4048,
+        "schema_source_file_bytes": 7760,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 4361,
+        "stage_input_payload_bytes": 5245,
+        "request_serialized": {
+          "utf8_bytes": 30670,
+          "unicode_code_points": 29014,
+          "characters": 29014,
+          "line_count": 1,
+          "serialized_json_characters": 29014
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 31143,
+          "unicode_code_points": 29487,
+          "characters": 29487,
+          "line_count": 1,
+          "serialized_json_characters": 29487
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 7668,
+        "central_tokens": 10224,
+        "high_tokens": 15335,
+        "configured_output_cap_tokens": 4500,
+        "nominal_output_tokens": 1400,
+        "conservative_output_tokens": 2800
+      },
+      "output_assumption_source": "ai/schemas/decision-plan.schema.json; exactly three day-plan entries and bounded copy arrays"
+    },
+    {
+      "stage_id": "PB-05",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-05",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 1766,
+        "shared_prompt_bytes": 18352,
+        "static_prompt_bytes": 20118,
+        "static_prompt_unicode_code_points": 19618,
+        "static_prompt_line_count": 578,
+        "schema_bytes": 2726,
+        "schema_source_file_bytes": 4178,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 1918,
+        "stage_input_payload_bytes": 2238,
+        "request_serialized": {
+          "utf8_bytes": 27894,
+          "unicode_code_points": 27170,
+          "characters": 27170,
+          "line_count": 1,
+          "serialized_json_characters": 27170
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 28362,
+          "unicode_code_points": 27638,
+          "characters": 27638,
+          "line_count": 1,
+          "serialized_json_characters": 27638
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6974,
+        "central_tokens": 9298,
+        "high_tokens": 13947,
+        "configured_output_cap_tokens": 8000,
+        "nominal_output_tokens": 2500,
+        "conservative_output_tokens": 5000
+      },
+      "output_assumption_source": "ai/schemas/report-content.schema.json and ai/prompts/shared/report-field-constraints-v1.json"
+    },
+    {
+      "stage_id": "PB-05",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-05",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 1766,
+        "shared_prompt_bytes": 18352,
+        "static_prompt_bytes": 20118,
+        "static_prompt_unicode_code_points": 19618,
+        "static_prompt_line_count": 578,
+        "schema_bytes": 2726,
+        "schema_source_file_bytes": 4178,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 3510,
+        "stage_input_payload_bytes": 3829,
+        "request_serialized": {
+          "utf8_bytes": 29607,
+          "unicode_code_points": 28347,
+          "characters": 28347,
+          "line_count": 1,
+          "serialized_json_characters": 28347
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 30075,
+          "unicode_code_points": 28815,
+          "characters": 28815,
+          "line_count": 1,
+          "serialized_json_characters": 28815
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 7402,
+        "central_tokens": 9869,
+        "high_tokens": 14804,
+        "configured_output_cap_tokens": 8000,
+        "nominal_output_tokens": 2500,
+        "conservative_output_tokens": 5000
+      },
+      "output_assumption_source": "ai/schemas/report-content.schema.json and ai/prompts/shared/report-field-constraints-v1.json"
+    },
+    {
+      "stage_id": "PB-05",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-05",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 1766,
+        "shared_prompt_bytes": 18352,
+        "static_prompt_bytes": 20118,
+        "static_prompt_unicode_code_points": 19618,
+        "static_prompt_line_count": 578,
+        "schema_bytes": 2726,
+        "schema_source_file_bytes": 4178,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 8156,
+        "stage_input_payload_bytes": 8473,
+        "request_serialized": {
+          "utf8_bytes": 34507,
+          "unicode_code_points": 31287,
+          "characters": 31287,
+          "line_count": 1,
+          "serialized_json_characters": 31287
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 34980,
+          "unicode_code_points": 31760,
+          "characters": 31760,
+          "line_count": 1,
+          "serialized_json_characters": 31760
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 8627,
+        "central_tokens": 11503,
+        "high_tokens": 17254,
+        "configured_output_cap_tokens": 8000,
+        "nominal_output_tokens": 2500,
+        "conservative_output_tokens": 5000
+      },
+      "output_assumption_source": "ai/schemas/report-content.schema.json and ai/prompts/shared/report-field-constraints-v1.json"
+    },
+    {
+      "stage_id": "PB-06",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "minimum",
+      "sizes": {
+        "stage_id": "PB-06",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "minimum",
+        "developer_prompt_bytes": 2026,
+        "shared_prompt_bytes": 15633,
+        "static_prompt_bytes": 17659,
+        "static_prompt_unicode_code_points": 17159,
+        "static_prompt_line_count": 509,
+        "schema_bytes": 2766,
+        "schema_source_file_bytes": 4994,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 3355,
+        "stage_input_payload_bytes": 4242,
+        "request_serialized": {
+          "utf8_bytes": 27259,
+          "unicode_code_points": 25971,
+          "characters": 25971,
+          "line_count": 1,
+          "serialized_json_characters": 25971
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 27727,
+          "unicode_code_points": 26439,
+          "characters": 26439,
+          "line_count": 1,
+          "serialized_json_characters": 26439
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 6815,
+        "central_tokens": 9087,
+        "high_tokens": 13630,
+        "configured_output_cap_tokens": 2500,
+        "nominal_output_tokens": 500,
+        "conservative_output_tokens": 1200
+      },
+      "output_assumption_source": "ai/schemas/validation-result.schema.json semantic_findings_only mode"
+    },
+    {
+      "stage_id": "PB-06",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "nominal",
+      "sizes": {
+        "stage_id": "PB-06",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "nominal",
+        "developer_prompt_bytes": 2026,
+        "shared_prompt_bytes": 15633,
+        "static_prompt_bytes": 17659,
+        "static_prompt_unicode_code_points": 17159,
+        "static_prompt_line_count": 509,
+        "schema_bytes": 2766,
+        "schema_source_file_bytes": 4994,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 5229,
+        "stage_input_payload_bytes": 6115,
+        "request_serialized": {
+          "utf8_bytes": 29270,
+          "unicode_code_points": 27296,
+          "characters": 27296,
+          "line_count": 1,
+          "serialized_json_characters": 27296
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 29738,
+          "unicode_code_points": 27764,
+          "characters": 27764,
+          "line_count": 1,
+          "serialized_json_characters": 27764
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 7318,
+        "central_tokens": 9757,
+        "high_tokens": 14635,
+        "configured_output_cap_tokens": 2500,
+        "nominal_output_tokens": 500,
+        "conservative_output_tokens": 1200
+      },
+      "output_assumption_source": "ai/schemas/validation-result.schema.json semantic_findings_only mode"
+    },
+    {
+      "stage_id": "PB-06",
+      "reference_case_id": "WAIT-003",
+      "synthetic_profile": "conservative",
+      "sizes": {
+        "stage_id": "PB-06",
+        "case_id": "WAIT-003",
+        "synthetic_profile": "conservative",
+        "developer_prompt_bytes": 2026,
+        "shared_prompt_bytes": 15633,
+        "static_prompt_bytes": 17659,
+        "static_prompt_unicode_code_points": 17159,
+        "static_prompt_line_count": 509,
+        "schema_bytes": 2766,
+        "schema_source_file_bytes": 4994,
+        "fixture_request_input_bytes": 454,
+        "synthetic_upstream_bytes": 12561,
+        "stage_input_payload_bytes": 13445,
+        "request_serialized": {
+          "utf8_bytes": 36898,
+          "unicode_code_points": 31322,
+          "characters": 31322,
+          "line_count": 1,
+          "serialized_json_characters": 31322
+        },
+        "full_serialized_envelope": {
+          "utf8_bytes": 37371,
+          "unicode_code_points": 31795,
+          "characters": 31795,
+          "line_count": 1,
+          "serialized_json_characters": 31795
+        }
+      },
+      "token_estimate": {
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 9225,
+        "central_tokens": 12300,
+        "high_tokens": 18449,
+        "configured_output_cap_tokens": 2500,
+        "nominal_output_tokens": 500,
+        "conservative_output_tokens": 1200
+      },
+      "output_assumption_source": "ai/schemas/validation-result.schema.json semantic_findings_only mode"
+    }
+  ],
+  "synthetic_assumptions": [
+    {
+      "profile_name": "minimum",
+      "synthetic": true,
+      "actual_model_output": false,
+      "oracle_derived": false,
+      "deterministic": true,
+      "personal_data": false,
+      "holdout_data": false,
+      "description": "Smallest deterministic Schema-shaped upstream artifacts used only for lower-bound request sizing."
+    },
+    {
+      "profile_name": "nominal",
+      "synthetic": true,
+      "actual_model_output": false,
+      "oracle_derived": false,
+      "deterministic": true,
+      "personal_data": false,
+      "holdout_data": false,
+      "description": "Deterministic representative Schema-shaped upstream artifacts used for ordinary static planning."
+    },
+    {
+      "profile_name": "conservative",
+      "synthetic": true,
+      "actual_model_output": false,
+      "oracle_derived": false,
+      "deterministic": true,
+      "personal_data": false,
+      "holdout_data": false,
+      "description": "Deterministic larger Schema-shaped upstream artifacts used for conservative input sizing."
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "single-case-full-pipeline",
+      "case_count": 1,
+      "call_count": 6,
+      "repair": "none",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 6,
+        "request_bytes": 160368,
+        "full_envelope_bytes": 163177,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 40094,
+        "central_tokens": 53458,
+        "high_tokens": 80185,
+        "nominal_output_tokens": 5980,
+        "conservative_output_tokens": 12150,
+        "configured_output_cap_tokens": 20500,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 1,
+            "request_bytes": 22724,
+            "high_input_tokens": 11362
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 1,
+            "request_bytes": 23416,
+            "high_input_tokens": 11708
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 1,
+            "request_bytes": 27197,
+            "high_input_tokens": 13599
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 1,
+            "request_bytes": 28154,
+            "high_input_tokens": 14077
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 1,
+            "request_bytes": 29607,
+            "high_input_tokens": 14804
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 1,
+            "request_bytes": 29270,
+            "high_input_tokens": 14635
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 6,
+        "request_bytes": 180444,
+        "full_envelope_bytes": 183283,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 45113,
+        "central_tokens": 60151,
+        "high_tokens": 90223,
+        "nominal_output_tokens": 5980,
+        "conservative_output_tokens": 12150,
+        "configured_output_cap_tokens": 20500,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 1,
+            "request_bytes": 22724,
+            "high_input_tokens": 11362
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 1,
+            "request_bytes": 25932,
+            "high_input_tokens": 12966
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 1,
+            "request_bytes": 29713,
+            "high_input_tokens": 14857
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 1,
+            "request_bytes": 30670,
+            "high_input_tokens": 15335
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 1,
+            "request_bytes": 34507,
+            "high_input_tokens": 17254
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 1,
+            "request_bytes": 36898,
+            "high_input_tokens": 18449
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 40094,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.20047,
+            "estimated_output_cost_usd": 0.1794,
+            "estimated_total_cost_usd": 0.37987
+          },
+          "standard_central": {
+            "estimated_input_tokens": 53458,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.26729,
+            "estimated_output_cost_usd": 0.1794,
+            "estimated_total_cost_usd": 0.44669
+          },
+          "standard_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.400925,
+            "estimated_output_cost_usd": 0.1794,
+            "estimated_total_cost_usd": 0.580325
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.451115,
+            "estimated_output_cost_usd": 0.3645,
+            "estimated_total_cost_usd": 0.815615
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 20500,
+            "estimated_input_cost_usd": 0.451115,
+            "estimated_output_cost_usd": 0.615,
+            "estimated_total_cost_usd": 1.066115
+          },
+          "batch_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.2004625,
+            "estimated_output_cost_usd": 0.0897,
+            "estimated_total_cost_usd": 0.2901625
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.2255575,
+            "estimated_output_cost_usd": 0.18225,
+            "estimated_total_cost_usd": 0.4078075
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 40094,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.100235,
+            "estimated_output_cost_usd": 0.0897,
+            "estimated_total_cost_usd": 0.189935
+          },
+          "standard_central": {
+            "estimated_input_tokens": 53458,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.133645,
+            "estimated_output_cost_usd": 0.0897,
+            "estimated_total_cost_usd": 0.223345
+          },
+          "standard_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.2004625,
+            "estimated_output_cost_usd": 0.0897,
+            "estimated_total_cost_usd": 0.2901625
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.2255575,
+            "estimated_output_cost_usd": 0.18225,
+            "estimated_total_cost_usd": 0.4078075
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 20500,
+            "estimated_input_cost_usd": 0.2255575,
+            "estimated_output_cost_usd": 0.3075,
+            "estimated_total_cost_usd": 0.5330575
+          },
+          "batch_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.10023125,
+            "estimated_output_cost_usd": 0.04485,
+            "estimated_total_cost_usd": 0.14508125
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.11277875,
+            "estimated_output_cost_usd": 0.091125,
+            "estimated_total_cost_usd": 0.20390375
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 40094,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.040094,
+            "estimated_output_cost_usd": 0.03588,
+            "estimated_total_cost_usd": 0.075974
+          },
+          "standard_central": {
+            "estimated_input_tokens": 53458,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.053458,
+            "estimated_output_cost_usd": 0.03588,
+            "estimated_total_cost_usd": 0.089338
+          },
+          "standard_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.080185,
+            "estimated_output_cost_usd": 0.03588,
+            "estimated_total_cost_usd": 0.116065
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.090223,
+            "estimated_output_cost_usd": 0.0729,
+            "estimated_total_cost_usd": 0.163123
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 20500,
+            "estimated_input_cost_usd": 0.090223,
+            "estimated_output_cost_usd": 0.123,
+            "estimated_total_cost_usd": 0.213223
+          },
+          "batch_high": {
+            "estimated_input_tokens": 80185,
+            "estimated_output_tokens": 5980,
+            "estimated_input_cost_usd": 0.0400925,
+            "estimated_output_cost_usd": 0.01794,
+            "estimated_total_cost_usd": 0.0580325
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 90223,
+            "estimated_output_tokens": 12150,
+            "estimated_input_cost_usd": 0.0451115,
+            "estimated_output_cost_usd": 0.03645,
+            "estimated_total_cost_usd": 0.0815615
+          }
+        }
+      ]
+    },
+    {
+      "scenario_id": "screening-14-functional",
+      "case_count": 14,
+      "call_count": 50,
+      "repair": "none",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 50,
+        "request_bytes": 1252717,
+        "full_envelope_bytes": 1276021,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 313198,
+        "central_tokens": 417596,
+        "high_tokens": 626368,
+        "nominal_output_tokens": 35760,
+        "conservative_output_tokens": 71400,
+        "configured_output_cap_tokens": 120600,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 14,
+            "request_bytes": 316989,
+            "high_input_tokens": 158498
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 14,
+            "request_bytes": 327824,
+            "high_input_tokens": 163912
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 12,
+            "request_bytes": 326364,
+            "high_input_tokens": 163188
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 10,
+            "request_bytes": 281540,
+            "high_input_tokens": 140770
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 50,
+        "request_bytes": 1343293,
+        "full_envelope_bytes": 1366847,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 335842,
+        "central_tokens": 447786,
+        "high_tokens": 671656,
+        "nominal_output_tokens": 35760,
+        "conservative_output_tokens": 71400,
+        "configured_output_cap_tokens": 120600,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 14,
+            "request_bytes": 316989,
+            "high_input_tokens": 158498
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 14,
+            "request_bytes": 363048,
+            "high_input_tokens": 181524
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 12,
+            "request_bytes": 356556,
+            "high_input_tokens": 178284
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 10,
+            "request_bytes": 306700,
+            "high_input_tokens": 153350
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 313198,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 1.56599,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 2.63879
+          },
+          "standard_central": {
+            "estimated_input_tokens": 417596,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 2.08798,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 3.16078
+          },
+          "standard_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 3.13184,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 4.20464
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 3.35828,
+            "estimated_output_cost_usd": 2.142,
+            "estimated_total_cost_usd": 5.50028
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 120600,
+            "estimated_input_cost_usd": 3.35828,
+            "estimated_output_cost_usd": 3.618,
+            "estimated_total_cost_usd": 6.97628
+          },
+          "batch_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 1.56592,
+            "estimated_output_cost_usd": 0.5364,
+            "estimated_total_cost_usd": 2.10232
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 1.67914,
+            "estimated_output_cost_usd": 1.071,
+            "estimated_total_cost_usd": 2.75014
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 313198,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.782995,
+            "estimated_output_cost_usd": 0.5364,
+            "estimated_total_cost_usd": 1.319395
+          },
+          "standard_central": {
+            "estimated_input_tokens": 417596,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 1.04399,
+            "estimated_output_cost_usd": 0.5364,
+            "estimated_total_cost_usd": 1.58039
+          },
+          "standard_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 1.56592,
+            "estimated_output_cost_usd": 0.5364,
+            "estimated_total_cost_usd": 2.10232
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 1.67914,
+            "estimated_output_cost_usd": 1.071,
+            "estimated_total_cost_usd": 2.75014
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 120600,
+            "estimated_input_cost_usd": 1.67914,
+            "estimated_output_cost_usd": 1.809,
+            "estimated_total_cost_usd": 3.48814
+          },
+          "batch_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.78296,
+            "estimated_output_cost_usd": 0.2682,
+            "estimated_total_cost_usd": 1.05116
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 0.83957,
+            "estimated_output_cost_usd": 0.5355,
+            "estimated_total_cost_usd": 1.37507
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 313198,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.313198,
+            "estimated_output_cost_usd": 0.21456,
+            "estimated_total_cost_usd": 0.527758
+          },
+          "standard_central": {
+            "estimated_input_tokens": 417596,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.417596,
+            "estimated_output_cost_usd": 0.21456,
+            "estimated_total_cost_usd": 0.632156
+          },
+          "standard_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.626368,
+            "estimated_output_cost_usd": 0.21456,
+            "estimated_total_cost_usd": 0.840928
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 0.671656,
+            "estimated_output_cost_usd": 0.4284,
+            "estimated_total_cost_usd": 1.100056
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 120600,
+            "estimated_input_cost_usd": 0.671656,
+            "estimated_output_cost_usd": 0.7236,
+            "estimated_total_cost_usd": 1.395256
+          },
+          "batch_high": {
+            "estimated_input_tokens": 626368,
+            "estimated_output_tokens": 35760,
+            "estimated_input_cost_usd": 0.313184,
+            "estimated_output_cost_usd": 0.10728,
+            "estimated_total_cost_usd": 0.420464
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 671656,
+            "estimated_output_tokens": 71400,
+            "estimated_input_cost_usd": 0.335828,
+            "estimated_output_cost_usd": 0.2142,
+            "estimated_total_cost_usd": 0.550028
+          }
+        }
+      ]
+    },
+    {
+      "scenario_id": "screening-4-writing",
+      "case_count": 4,
+      "call_count": 8,
+      "repair": "none",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 8,
+        "request_bytes": 235508,
+        "full_envelope_bytes": 239208,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 58880,
+        "central_tokens": 78504,
+        "high_tokens": 117756,
+        "nominal_output_tokens": 12000,
+        "conservative_output_tokens": 24800,
+        "configured_output_cap_tokens": 42000,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-05",
+            "call_count": 4,
+            "request_bytes": 118428,
+            "high_input_tokens": 59216
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 4,
+            "request_bytes": 117080,
+            "high_input_tokens": 58540
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 8,
+        "request_bytes": 285620,
+        "full_envelope_bytes": 289360,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 71408,
+        "central_tokens": 95212,
+        "high_tokens": 142812,
+        "nominal_output_tokens": 12000,
+        "conservative_output_tokens": 24800,
+        "configured_output_cap_tokens": 42000,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-05",
+            "call_count": 4,
+            "request_bytes": 138028,
+            "high_input_tokens": 69016
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 4,
+            "request_bytes": 147592,
+            "high_input_tokens": 73796
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 58880,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.2944,
+            "estimated_output_cost_usd": 0.36,
+            "estimated_total_cost_usd": 0.6544
+          },
+          "standard_central": {
+            "estimated_input_tokens": 78504,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.39252,
+            "estimated_output_cost_usd": 0.36,
+            "estimated_total_cost_usd": 0.75252
+          },
+          "standard_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.58878,
+            "estimated_output_cost_usd": 0.36,
+            "estimated_total_cost_usd": 0.94878
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.71406,
+            "estimated_output_cost_usd": 0.744,
+            "estimated_total_cost_usd": 1.45806
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 42000,
+            "estimated_input_cost_usd": 0.71406,
+            "estimated_output_cost_usd": 1.26,
+            "estimated_total_cost_usd": 1.97406
+          },
+          "batch_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.29439,
+            "estimated_output_cost_usd": 0.18,
+            "estimated_total_cost_usd": 0.47439
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.35703,
+            "estimated_output_cost_usd": 0.372,
+            "estimated_total_cost_usd": 0.72903
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 58880,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.1472,
+            "estimated_output_cost_usd": 0.18,
+            "estimated_total_cost_usd": 0.3272
+          },
+          "standard_central": {
+            "estimated_input_tokens": 78504,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.19626,
+            "estimated_output_cost_usd": 0.18,
+            "estimated_total_cost_usd": 0.37626
+          },
+          "standard_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.29439,
+            "estimated_output_cost_usd": 0.18,
+            "estimated_total_cost_usd": 0.47439
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.35703,
+            "estimated_output_cost_usd": 0.372,
+            "estimated_total_cost_usd": 0.72903
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 42000,
+            "estimated_input_cost_usd": 0.35703,
+            "estimated_output_cost_usd": 0.63,
+            "estimated_total_cost_usd": 0.98703
+          },
+          "batch_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.147195,
+            "estimated_output_cost_usd": 0.09,
+            "estimated_total_cost_usd": 0.237195
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.178515,
+            "estimated_output_cost_usd": 0.186,
+            "estimated_total_cost_usd": 0.364515
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 58880,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.05888,
+            "estimated_output_cost_usd": 0.072,
+            "estimated_total_cost_usd": 0.13088
+          },
+          "standard_central": {
+            "estimated_input_tokens": 78504,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.078504,
+            "estimated_output_cost_usd": 0.072,
+            "estimated_total_cost_usd": 0.150504
+          },
+          "standard_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.117756,
+            "estimated_output_cost_usd": 0.072,
+            "estimated_total_cost_usd": 0.189756
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.142812,
+            "estimated_output_cost_usd": 0.1488,
+            "estimated_total_cost_usd": 0.291612
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 42000,
+            "estimated_input_cost_usd": 0.142812,
+            "estimated_output_cost_usd": 0.252,
+            "estimated_total_cost_usd": 0.394812
+          },
+          "batch_high": {
+            "estimated_input_tokens": 117756,
+            "estimated_output_tokens": 12000,
+            "estimated_input_cost_usd": 0.058878,
+            "estimated_output_cost_usd": 0.036,
+            "estimated_total_cost_usd": 0.094878
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 142812,
+            "estimated_output_tokens": 24800,
+            "estimated_input_cost_usd": 0.071406,
+            "estimated_output_cost_usd": 0.0744,
+            "estimated_total_cost_usd": 0.145806
+          }
+        }
+      ]
+    },
+    {
+      "scenario_id": "development-70-no-repair",
+      "case_count": 70,
+      "call_count": 344,
+      "repair": "none",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 344,
+        "request_bytes": 9038342,
+        "full_envelope_bytes": 9198996,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 2259713,
+        "central_tokens": 3012914,
+        "high_tokens": 4519240,
+        "nominal_output_tokens": 323860,
+        "conservative_output_tokens": 656950,
+        "configured_output_cap_tokens": 1110900,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584474,
+            "high_input_tokens": 792253
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1639120,
+            "high_input_tokens": 819560
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 57,
+            "request_bytes": 1550229,
+            "high_input_tokens": 775143
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 49,
+            "request_bytes": 1379546,
+            "high_input_tokens": 689773
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 49,
+            "request_bytes": 1450743,
+            "high_input_tokens": 725396
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 49,
+            "request_bytes": 1434230,
+            "high_input_tokens": 717115
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 344,
+        "request_bytes": 10095030,
+        "full_envelope_bytes": 10257404,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 2523885,
+        "central_tokens": 3365181,
+        "high_tokens": 5047584,
+        "nominal_output_tokens": 323860,
+        "conservative_output_tokens": 656950,
+        "configured_output_cap_tokens": 1110900,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584474,
+            "high_input_tokens": 792253
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1815240,
+            "high_input_tokens": 907620
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 57,
+            "request_bytes": 1693641,
+            "high_input_tokens": 846849
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 49,
+            "request_bytes": 1502830,
+            "high_input_tokens": 751415
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 49,
+            "request_bytes": 1690843,
+            "high_input_tokens": 845446
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 49,
+            "request_bytes": 1808002,
+            "high_input_tokens": 904001
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 2259713,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 11.298565,
+            "estimated_output_cost_usd": 9.7158,
+            "estimated_total_cost_usd": 21.014365
+          },
+          "standard_central": {
+            "estimated_input_tokens": 3012914,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 15.06457,
+            "estimated_output_cost_usd": 9.7158,
+            "estimated_total_cost_usd": 24.78037
+          },
+          "standard_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 22.5962,
+            "estimated_output_cost_usd": 9.7158,
+            "estimated_total_cost_usd": 32.312
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 25.23792,
+            "estimated_output_cost_usd": 19.7085,
+            "estimated_total_cost_usd": 44.94642
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 1110900,
+            "estimated_input_cost_usd": 25.23792,
+            "estimated_output_cost_usd": 33.327,
+            "estimated_total_cost_usd": 58.56492
+          },
+          "batch_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 11.2981,
+            "estimated_output_cost_usd": 4.8579,
+            "estimated_total_cost_usd": 16.156
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 12.61896,
+            "estimated_output_cost_usd": 9.85425,
+            "estimated_total_cost_usd": 22.47321
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 2259713,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 5.6492825,
+            "estimated_output_cost_usd": 4.8579,
+            "estimated_total_cost_usd": 10.5071825
+          },
+          "standard_central": {
+            "estimated_input_tokens": 3012914,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 7.532285,
+            "estimated_output_cost_usd": 4.8579,
+            "estimated_total_cost_usd": 12.390185
+          },
+          "standard_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 11.2981,
+            "estimated_output_cost_usd": 4.8579,
+            "estimated_total_cost_usd": 16.156
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 12.61896,
+            "estimated_output_cost_usd": 9.85425,
+            "estimated_total_cost_usd": 22.47321
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 1110900,
+            "estimated_input_cost_usd": 12.61896,
+            "estimated_output_cost_usd": 16.6635,
+            "estimated_total_cost_usd": 29.28246
+          },
+          "batch_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 5.64905,
+            "estimated_output_cost_usd": 2.42895,
+            "estimated_total_cost_usd": 8.078
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 6.30948,
+            "estimated_output_cost_usd": 4.927125,
+            "estimated_total_cost_usd": 11.236605
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 2259713,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 2.259713,
+            "estimated_output_cost_usd": 1.94316,
+            "estimated_total_cost_usd": 4.202873
+          },
+          "standard_central": {
+            "estimated_input_tokens": 3012914,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 3.012914,
+            "estimated_output_cost_usd": 1.94316,
+            "estimated_total_cost_usd": 4.956074
+          },
+          "standard_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 4.51924,
+            "estimated_output_cost_usd": 1.94316,
+            "estimated_total_cost_usd": 6.4624
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 5.047584,
+            "estimated_output_cost_usd": 3.9417,
+            "estimated_total_cost_usd": 8.989284
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 1110900,
+            "estimated_input_cost_usd": 5.047584,
+            "estimated_output_cost_usd": 6.6654,
+            "estimated_total_cost_usd": 11.712984
+          },
+          "batch_high": {
+            "estimated_input_tokens": 4519240,
+            "estimated_output_tokens": 323860,
+            "estimated_input_cost_usd": 2.25962,
+            "estimated_output_cost_usd": 0.97158,
+            "estimated_total_cost_usd": 3.2312
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 5047584,
+            "estimated_output_tokens": 656950,
+            "estimated_input_cost_usd": 2.523792,
+            "estimated_output_cost_usd": 1.97085,
+            "estimated_total_cost_usd": 4.494642
+          }
+        }
+      ]
+    },
+    {
+      "scenario_id": "development-70-repair-stress",
+      "case_count": 70,
+      "call_count": 540,
+      "repair": "stress_ceiling_one_targeted_repair_then_one_full_regeneration",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 540,
+        "request_bytes": 15135020,
+        "full_envelope_bytes": 15394810,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 3783956,
+        "central_tokens": 5045189,
+        "high_tokens": 7567579,
+        "nominal_output_tokens": 617860,
+        "conservative_output_tokens": 1264550,
+        "configured_output_cap_tokens": 2139900,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584474,
+            "high_input_tokens": 792253
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1639120,
+            "high_input_tokens": 819560
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 57,
+            "request_bytes": 1550229,
+            "high_input_tokens": 775143
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 49,
+            "request_bytes": 1379546,
+            "high_input_tokens": 689773
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 49,
+            "request_bytes": 1450743,
+            "high_input_tokens": 725396
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 147,
+            "request_bytes": 4302690,
+            "high_input_tokens": 2151345
+          },
+          {
+            "stage_id": "PB-07",
+            "call_count": 98,
+            "request_bytes": 3228218,
+            "high_input_tokens": 1614109
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 540,
+        "request_bytes": 17686796,
+        "full_envelope_bytes": 17949286,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 4421900,
+        "central_tokens": 5895884,
+        "high_tokens": 8843467,
+        "nominal_output_tokens": 617860,
+        "conservative_output_tokens": 1264550,
+        "configured_output_cap_tokens": 2139900,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584474,
+            "high_input_tokens": 792253
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1815240,
+            "high_input_tokens": 907620
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 57,
+            "request_bytes": 1693641,
+            "high_input_tokens": 846849
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 49,
+            "request_bytes": 1502830,
+            "high_input_tokens": 751415
+          },
+          {
+            "stage_id": "PB-05",
+            "call_count": 49,
+            "request_bytes": 1690843,
+            "high_input_tokens": 845446
+          },
+          {
+            "stage_id": "PB-06",
+            "call_count": 147,
+            "request_bytes": 5424006,
+            "high_input_tokens": 2712003
+          },
+          {
+            "stage_id": "PB-07",
+            "call_count": 98,
+            "request_bytes": 3975762,
+            "high_input_tokens": 1987881
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 3783956,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 18.91978,
+            "estimated_output_cost_usd": 18.5358,
+            "estimated_total_cost_usd": 37.45558
+          },
+          "standard_central": {
+            "estimated_input_tokens": 5045189,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 25.225945,
+            "estimated_output_cost_usd": 18.5358,
+            "estimated_total_cost_usd": 43.761745
+          },
+          "standard_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 37.837895,
+            "estimated_output_cost_usd": 18.5358,
+            "estimated_total_cost_usd": 56.373695
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 44.217335,
+            "estimated_output_cost_usd": 37.9365,
+            "estimated_total_cost_usd": 82.153835
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 2139900,
+            "estimated_input_cost_usd": 44.217335,
+            "estimated_output_cost_usd": 64.197,
+            "estimated_total_cost_usd": 108.414335
+          },
+          "batch_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 18.9189475,
+            "estimated_output_cost_usd": 9.2679,
+            "estimated_total_cost_usd": 28.1868475
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 22.1086675,
+            "estimated_output_cost_usd": 18.96825,
+            "estimated_total_cost_usd": 41.0769175
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 3783956,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 9.45989,
+            "estimated_output_cost_usd": 9.2679,
+            "estimated_total_cost_usd": 18.72779
+          },
+          "standard_central": {
+            "estimated_input_tokens": 5045189,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 12.6129725,
+            "estimated_output_cost_usd": 9.2679,
+            "estimated_total_cost_usd": 21.8808725
+          },
+          "standard_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 18.9189475,
+            "estimated_output_cost_usd": 9.2679,
+            "estimated_total_cost_usd": 28.1868475
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 22.1086675,
+            "estimated_output_cost_usd": 18.96825,
+            "estimated_total_cost_usd": 41.0769175
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 2139900,
+            "estimated_input_cost_usd": 22.1086675,
+            "estimated_output_cost_usd": 32.0985,
+            "estimated_total_cost_usd": 54.2071675
+          },
+          "batch_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 9.45947375,
+            "estimated_output_cost_usd": 4.63395,
+            "estimated_total_cost_usd": 14.09342375
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 11.05433375,
+            "estimated_output_cost_usd": 9.484125,
+            "estimated_total_cost_usd": 20.53845875
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 3783956,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 3.783956,
+            "estimated_output_cost_usd": 3.70716,
+            "estimated_total_cost_usd": 7.491116
+          },
+          "standard_central": {
+            "estimated_input_tokens": 5045189,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 5.045189,
+            "estimated_output_cost_usd": 3.70716,
+            "estimated_total_cost_usd": 8.752349
+          },
+          "standard_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 7.567579,
+            "estimated_output_cost_usd": 3.70716,
+            "estimated_total_cost_usd": 11.274739
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 8.843467,
+            "estimated_output_cost_usd": 7.5873,
+            "estimated_total_cost_usd": 16.430767
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 2139900,
+            "estimated_input_cost_usd": 8.843467,
+            "estimated_output_cost_usd": 12.8394,
+            "estimated_total_cost_usd": 21.682867
+          },
+          "batch_high": {
+            "estimated_input_tokens": 7567579,
+            "estimated_output_tokens": 617860,
+            "estimated_input_cost_usd": 3.7837895,
+            "estimated_output_cost_usd": 1.85358,
+            "estimated_total_cost_usd": 5.6373695
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 8843467,
+            "estimated_output_tokens": 1264550,
+            "estimated_input_cost_usd": 4.4217335,
+            "estimated_output_cost_usd": 3.79365,
+            "estimated_total_cost_usd": 8.2153835
+          }
+        }
+      ]
+    },
+    {
+      "scenario_id": "screening-14-five-run-reference",
+      "case_count": 70,
+      "call_count": 250,
+      "repair": "none",
+      "execution_authorized": false,
+      "nominal_request_estimate": {
+        "synthetic_profile": "nominal",
+        "call_count": 250,
+        "request_bytes": 6263585,
+        "full_envelope_bytes": 6386105,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 1565990,
+        "central_tokens": 2087980,
+        "high_tokens": 3131840,
+        "nominal_output_tokens": 178800,
+        "conservative_output_tokens": 357000,
+        "configured_output_cap_tokens": 603000,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584945,
+            "high_input_tokens": 792490
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1639120,
+            "high_input_tokens": 819560
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 60,
+            "request_bytes": 1631820,
+            "high_input_tokens": 815940
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 50,
+            "request_bytes": 1407700,
+            "high_input_tokens": 703850
+          }
+        ]
+      },
+      "conservative_request_estimate": {
+        "synthetic_profile": "conservative",
+        "call_count": 250,
+        "request_bytes": 6716465,
+        "full_envelope_bytes": 6840235,
+        "estimate_method": "configurable_utf8_byte_division_bands",
+        "low_tokens": 1679210,
+        "central_tokens": 2238930,
+        "high_tokens": 3358280,
+        "nominal_output_tokens": 178800,
+        "conservative_output_tokens": 357000,
+        "configured_output_cap_tokens": 603000,
+        "stage_contributions": [
+          {
+            "stage_id": "PB-01",
+            "call_count": 70,
+            "request_bytes": 1584945,
+            "high_input_tokens": 792490
+          },
+          {
+            "stage_id": "PB-02",
+            "call_count": 70,
+            "request_bytes": 1815240,
+            "high_input_tokens": 907620
+          },
+          {
+            "stage_id": "PB-03",
+            "call_count": 60,
+            "request_bytes": 1782780,
+            "high_input_tokens": 891420
+          },
+          {
+            "stage_id": "PB-04",
+            "call_count": 50,
+            "request_bytes": 1533500,
+            "high_input_tokens": 766750
+          }
+        ]
+      },
+      "model_costs": [
+        {
+          "model_id": "gpt-5.6-sol",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 5,
+          "output_price_per_million_usd": 30,
+          "standard_low": {
+            "estimated_input_tokens": 1565990,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 7.82995,
+            "estimated_output_cost_usd": 5.364,
+            "estimated_total_cost_usd": 13.19395
+          },
+          "standard_central": {
+            "estimated_input_tokens": 2087980,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 10.4399,
+            "estimated_output_cost_usd": 5.364,
+            "estimated_total_cost_usd": 15.8039
+          },
+          "standard_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 15.6592,
+            "estimated_output_cost_usd": 5.364,
+            "estimated_total_cost_usd": 21.0232
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 16.7914,
+            "estimated_output_cost_usd": 10.71,
+            "estimated_total_cost_usd": 27.5014
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 603000,
+            "estimated_input_cost_usd": 16.7914,
+            "estimated_output_cost_usd": 18.09,
+            "estimated_total_cost_usd": 34.8814
+          },
+          "batch_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 7.8296,
+            "estimated_output_cost_usd": 2.682,
+            "estimated_total_cost_usd": 10.5116
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 8.3957,
+            "estimated_output_cost_usd": 5.355,
+            "estimated_total_cost_usd": 13.7507
+          }
+        },
+        {
+          "model_id": "gpt-5.6-terra",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 2.5,
+          "output_price_per_million_usd": 15,
+          "standard_low": {
+            "estimated_input_tokens": 1565990,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 3.914975,
+            "estimated_output_cost_usd": 2.682,
+            "estimated_total_cost_usd": 6.596975
+          },
+          "standard_central": {
+            "estimated_input_tokens": 2087980,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 5.21995,
+            "estimated_output_cost_usd": 2.682,
+            "estimated_total_cost_usd": 7.90195
+          },
+          "standard_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 7.8296,
+            "estimated_output_cost_usd": 2.682,
+            "estimated_total_cost_usd": 10.5116
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 8.3957,
+            "estimated_output_cost_usd": 5.355,
+            "estimated_total_cost_usd": 13.7507
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 603000,
+            "estimated_input_cost_usd": 8.3957,
+            "estimated_output_cost_usd": 9.045,
+            "estimated_total_cost_usd": 17.4407
+          },
+          "batch_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 3.9148,
+            "estimated_output_cost_usd": 1.341,
+            "estimated_total_cost_usd": 5.2558
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 4.19785,
+            "estimated_output_cost_usd": 2.6775,
+            "estimated_total_cost_usd": 6.87535
+          }
+        },
+        {
+          "model_id": "gpt-5.6-luna",
+          "selected_for_runtime": false,
+          "input_price_per_million_usd": 1,
+          "output_price_per_million_usd": 6,
+          "standard_low": {
+            "estimated_input_tokens": 1565990,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 1.56599,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 2.63879
+          },
+          "standard_central": {
+            "estimated_input_tokens": 2087980,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 2.08798,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 3.16078
+          },
+          "standard_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 3.13184,
+            "estimated_output_cost_usd": 1.0728,
+            "estimated_total_cost_usd": 4.20464
+          },
+          "standard_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 3.35828,
+            "estimated_output_cost_usd": 2.142,
+            "estimated_total_cost_usd": 5.50028
+          },
+          "standard_hard_cap_ceiling": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 603000,
+            "estimated_input_cost_usd": 3.35828,
+            "estimated_output_cost_usd": 3.618,
+            "estimated_total_cost_usd": 6.97628
+          },
+          "batch_high": {
+            "estimated_input_tokens": 3131840,
+            "estimated_output_tokens": 178800,
+            "estimated_input_cost_usd": 1.56592,
+            "estimated_output_cost_usd": 0.5364,
+            "estimated_total_cost_usd": 2.10232
+          },
+          "batch_conservative": {
+            "estimated_input_tokens": 3358280,
+            "estimated_output_tokens": 357000,
+            "estimated_input_cost_usd": 1.67914,
+            "estimated_output_cost_usd": 1.071,
+            "estimated_total_cost_usd": 2.75014
+          }
+        }
+      ]
+    }
+  ],
+  "largest_cost_contributors": [
+    {
+      "stage_id": "PB-02",
+      "call_count": 70,
+      "request_bytes": 1639120,
+      "high_input_tokens": 819560,
+      "share_of_nominal_request_bytes": 0.181352
+    },
+    {
+      "stage_id": "PB-01",
+      "call_count": 70,
+      "request_bytes": 1584474,
+      "high_input_tokens": 792253,
+      "share_of_nominal_request_bytes": 0.175306
+    },
+    {
+      "stage_id": "PB-03",
+      "call_count": 57,
+      "request_bytes": 1550229,
+      "high_input_tokens": 775143,
+      "share_of_nominal_request_bytes": 0.171517
+    },
+    {
+      "stage_id": "PB-05",
+      "call_count": 49,
+      "request_bytes": 1450743,
+      "high_input_tokens": 725396,
+      "share_of_nominal_request_bytes": 0.16051
+    },
+    {
+      "stage_id": "PB-06",
+      "call_count": 49,
+      "request_bytes": 1434230,
+      "high_input_tokens": 717115,
+      "share_of_nominal_request_bytes": 0.158683
+    },
+    {
+      "stage_id": "PB-04",
+      "call_count": 49,
+      "request_bytes": 1379546,
+      "high_input_tokens": 689773,
+      "share_of_nominal_request_bytes": 0.152633
+    }
+  ],
+  "uncertainty_sources": [
+    "The byte-division bands are project heuristics, not tokenizer output.",
+    "Japanese text and JSON punctuation can tokenize differently by model and tokenizer revision.",
+    "Actual model outputs can be shorter or longer than the nominal and conservative profiles.",
+    "Reasoning behavior is unknown and is treated as unknown output usage rather than a separate static billable category.",
+    "Provider-side request normalization, cached-input accounting, refusals, retries, and Batch eligibility are unknown.",
+    "The price catalog is a versioned planning snapshot and must be rechecked before paid calibration."
+  ],
+  "cannot_be_known_statically": [
+    "actual input, cached input, output, reasoning, and total usage tokens",
+    "returned model identifier",
+    "latency, refusal behavior, and provider validation outcome",
+    "actual retry frequency and repair frequency",
+    "actual prompt-cache savings",
+    "actual output quality or M2-P1 quality-gate performance"
+  ],
+  "m2_p2_b_calibration_plan": {
+    "status": "not_started",
+    "authorization_required": "separate Human approval",
+    "maximum_total_spend_usd": 1,
+    "first_step": "After separate approval, run the smallest representative case and record provider usage fields before expanding.",
+    "required_comparison": "Compare actual input, cached input, output, reasoning, and total usage fields with the static bands.",
+    "current_task_authorizes_execution": false
+  },
+  "authorization_statement": "This report does not authorize a budget, API experiment, model selection, provider integration, or runtime implementation."
+}

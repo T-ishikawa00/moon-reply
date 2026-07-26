@@ -1,0 +1,48 @@
+{
+  "schema_version": "moon-reply-zero-cost-estimator-config-v1",
+  "estimator_version": "m2-zero-cost-estimator-v1.0.0",
+  "foundation_sha": "e673d015ea7da1f6f1d6f00457014f07072d3011",
+  "generated_at_source": "evals/cost-estimator/price-catalog-v1.json#checked_at",
+  "model_placeholder": "MODEL_UNSELECTED_PLACEHOLDER",
+  "provider_validated_request": false,
+  "store": false,
+  "tools": [],
+  "network_allowed": false,
+  "api_key_required": false,
+  "token_estimate": {
+    "estimate_method": "configurable_utf8_byte_division_bands",
+    "profiles": {
+      "LOW": {
+        "formula": "ceil(UTF8 bytes / 4)",
+        "utf8_bytes_per_token": 4
+      },
+      "CENTRAL": {
+        "formula": "ceil(UTF8 bytes / 3)",
+        "utf8_bytes_per_token": 3
+      },
+      "HIGH": {
+        "formula": "ceil(UTF8 bytes / 2)",
+        "utf8_bytes_per_token": 2
+      }
+    },
+    "exact_tokenizer_claimed": false
+  },
+  "approval_baseline": {
+    "pricing": "standard",
+    "input_band": "HIGH",
+    "upstream_profile": "conservative",
+    "output_profile": "conservative",
+    "cache_discount": false
+  },
+  "optional_reference_scenarios": {
+    "batch": true,
+    "prompt_cache_savings": false
+  },
+  "first_paid_calibration_cap_usd": 1,
+  "report_paths": {
+    "json": "evals/cost-estimator/reports/static-estimate-v1.json",
+    "markdown": "docs/phase2/M2_P2_A_STATIC_ESTIMATE_REPORT.md"
+  },
+  "canonical_hash_algorithm": "sha256-utf8-lf",
+  "generated_report_hash_algorithm": "sha256 of compact canonical JSON with hashes.generated_report_sha256 set to null"
+}

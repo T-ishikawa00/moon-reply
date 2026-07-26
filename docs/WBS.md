@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and automatically validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2 planning has not started; Milestone 2 runtime and all implementation work beyond M2-P1 remain unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and automatically validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2-A zero-cost static estimation is implemented, automatically validated, and ChatGPT-reviewed; Human acceptance is pending. M2-P2-B and Milestone 2 runtime remain unauthorized and not started.
 
 ## P0: Repository Setup
 
@@ -582,12 +582,34 @@ M2-P1 acceptance is foundation-contract acceptance. It is not AI runtime authori
 
 The accepted development graph has 42 contrast sets, 130 memberships, and 7 connected components; the largest component contains 51 cases. Development cases must not be randomly split into holdout. The future 15-case holdout must be independently authored and must not share counterfactual or contrast-set relationships with the 70 development cases.
 
+## P5.1: M2-P2-A Zero-Cost Token & Cost Estimator Foundation
+
+- [x] Clean exact base and dedicated feature branch
+- [x] Canonical local request-envelope renderer for PB-01 through PB-06
+- [x] PB-07 isolated to the repair-stress scenario
+- [x] Oracle excluded from rendered request payloads
+- [x] Deterministic minimum, nominal, and conservative Schema-shaped upstream profiles
+- [x] Exact byte, code-point, JSON-character, and line metrics
+- [x] Configurable LOW, CENTRAL, and HIGH offline token bands
+- [x] Separate nominal, conservative, and configured-cap output profiles
+- [x] Versioned USD price catalog with every model unselected
+- [x] Six exact static planning scenarios
+- [x] Standard, conservative, hard-cap, and Batch reference formulas
+- [x] Deterministic JSON and Markdown reports
+- [x] Local-only permanent verifier with Node built-ins and exact sibling-tool imports
+- [x] OpenAI API calls: zero; API spend: USD 0
+- [x] ChatGPT implementation review and automated validation
+- [ ] Human acceptance
+- [ ] Separate Human authorization for M2-P2-B paid calibration, capped initially at USD 1 total
+
+M2-P2-A estimates are not actual usage. It adds no provider, model selection, database, authentication, payment, email, API route, server action, UI, or runtime implementation.
+
 ## P6: Future Delivery Sequence Status
 
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 foundation accepted and complete; M2-P2 planning not started; runtime unauthorized
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 foundation accepted and complete; M2-P2-A Human acceptance pending; M2-P2-B and runtime unauthorized
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -598,4 +620,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 and M2-P1-R1 are Human / ChatGPT accepted and complete; M2-P1-R2 manifest-boundary correction is implemented and validated. M2-P2 planning has not started. Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 and M2-P1-R1 are Human / ChatGPT accepted and complete; M2-P1-R2 manifest-boundary correction is implemented and validated. M2-P2-A implementation, automated validation, and ChatGPT review are complete with Human acceptance pending. M2-P2-B, Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.

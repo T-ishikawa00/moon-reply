@@ -1,0 +1,39 @@
+{
+  "schema_version": "moon-reply-price-catalog-v1",
+  "catalog_version": "price-catalog-v1.0.0",
+  "checked_at": "2026-07-26T00:00:00+09:00",
+  "currency": "USD",
+  "official_source": [
+    {
+      "label": "OpenAI API pricing",
+      "url": "https://openai.com/api/pricing/",
+      "verification_note": "Task-supplied planning snapshot. Recheck the official source before any separately authorized paid calibration."
+    }
+  ],
+  "batch_multiplier": 0.5,
+  "models": [
+    {
+      "model_id": "gpt-5.6-sol",
+      "standard_input_per_million": 5,
+      "standard_output_per_million": 30,
+      "batch_multiplier": 0.5,
+      "selected_for_runtime": false
+    },
+    {
+      "model_id": "gpt-5.6-terra",
+      "standard_input_per_million": 2.5,
+      "standard_output_per_million": 15,
+      "batch_multiplier": 0.5,
+      "selected_for_runtime": false
+    },
+    {
+      "model_id": "gpt-5.6-luna",
+      "standard_input_per_million": 1,
+      "standard_output_per_million": 6,
+      "batch_multiplier": 0.5,
+      "selected_for_runtime": false
+    }
+  ],
+  "live_exchange_rate_included": false,
+  "cache_discount_in_approval_baseline": false
+}
