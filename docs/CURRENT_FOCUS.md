@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P1-R1 Evaluation Foundation Integrity Hardening
+Phase 2 / Milestone 2 — M2-P1 complete; M2-P2 planning gate pending
 
 ## Completed Through
 
@@ -31,28 +31,32 @@ Phase 2 / Milestone 2 — M2-P1-R1 Evaluation Foundation Integrity Hardening
 - M1-I12-R2 review-status consistency correction Human-accepted and synchronized to corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`
 - M1-I12-R3 automated final QA and Human final QA complete; M1-I12 Human-accepted and complete
 - Milestone 1 Human-accepted, complete, and closed
-- M2-P1 Human-authorized as a bounded documentation/evaluation foundation task
-- Exactly 70 development fixtures materialized; holdout remains external-only
-- Nine Draft 2020-12 schemas, seven stage prompts, and nine shared prompt assets drafted
-- Scoring, versioning, contamination, decision, and evaluation policies drafted
-- M2-P1-R1 adds strict counterfactual IDs, 42 contrast sets with 130 memberships covering all 70 cases, and connected-component contamination controls
+- M2-P1 foundation implemented and M2-P1-R1 integrity hardening implemented
+- M2-P1 automated gates complete; Human / ChatGPT final review complete; M2-P1 and M2-P1-R1 accepted and complete
+- Accepted foundation implementation commit: `c56f597d0491482995c4afa6fb64cf148dd66345`
+- M2-P1-R2 Acceptance Manifest Boundary Correction implemented, automatically validated, and pushed at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d`; accepted dataset, Schemas, Prompt assets, hashes, and policies unchanged
+- Canonical development set: exactly 70 cases in the 10/10/10/10/8/13/9 distribution; holdout contents committed: zero
+- Canonical contrast graph: 42 sets, 130 memberships, and 7 connected components; largest component: 51 cases
 - Exact 20-case Human-review sample pre-registered in stable order
-- Bounded retry policy and seven-stage responsibility contracts made machine-readable
-- All eight declared runtime capabilities explicitly disabled
-- Permanent M2 foundation verifier extended and passing
+- Nine JSON Schemas and PB-01 through PB-07 accepted as foundation contracts; 16 prompt assets accepted as foundation assets
+- Scoring, retry, versioning, contamination, Human-review-sample, and stage-contract policies accepted
+- All eight declared runtime capabilities explicitly disabled; permanent M2 foundation verifier passing
 
 ## Current Task
 
-`M2-P1-R1 Evaluation Foundation Integrity Hardening`
+`M2-P1 complete / M2-P2 planning gate pending`
 
 State:
 
-- bounded foundation integrity hardening and automated validation complete on the dedicated branch;
-- Human / ChatGPT review and acceptance pending;
+- M2-P1 foundation and M2-P1-R1 hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete;
+- M2-P1-R2 manifest-boundary correction is implemented and validated; the immutable R1 42-file historical snapshot is anchored to `432dbc76b79483616ee5fa4364e7bbc4d5d1dee7..c56f597d0491482995c4afa6fb64cf148dd66345`;
+- the accepted foundation defines evaluation data, Schemas, Prompt-stage contracts, scoring, retry, versioning, contamination controls, and Human review sampling;
+- the future 15-case holdout must be authored independently and must not share counterfactual or contrast-set relationships with the development dataset;
+- the next activity requires a separate M2-P2 planning gate; M2-P2 planning has not started and implementation is unauthorized;
 - no model selected or benchmarked;
 - no OpenAI API call;
 - no AI runtime, database, payment, email, authentication, API route, server action, UI, or deployment authorization; and
-- no Milestone 2 work beyond this bounded foundation task.
+- no Milestone 2 runtime work authorized.
 
 ## Preserved Milestone 1 Baseline
 
@@ -102,7 +106,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Product definition, JPY 980 price, 18+ policy, existing Safety classification/severity meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed; M1-I2-R1 adds only missing reason codes and coverage needed to enforce the accepted fail-closed policy.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
 - A fixed/sticky mobile CTA remains `rejected for Milestone 1`; all CTAs remain non-fixed.
-- Milestone 1 is Human-accepted, complete, and closed. Human authorized M2-P1 foundation only; Milestone 2 runtime, every later M2 task, and all later milestones remain unauthorized and not started.
+- Milestone 1 is Human-accepted, complete, and closed. Human / ChatGPT accepted M2-P1 and M2-P1-R1 at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 later corrected only the historical manifest verification boundary. M2-P2 planning has not started, and Milestone 2 runtime, every later M2 implementation task, and all later milestones remain unauthorized and not started.
 
 ## Runtime Boundary
 
@@ -112,7 +116,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - No real AI, DB/Supabase runtime, payment, email delivery, production analytics, API, server action, active contact, account system, PDF/download/share implementation, upload, OCR, or deployment was added. The product is not production-ready or payment-ready.
 - `lib/safety/**` now includes the bounded M1-I2-R1 reason-code, normalization, targeted phrase, negation-guard, and non-normal blocking correction. Only `normal_allowed` continues; `needs_review`, `rejected`, contradictory, invalid, missing, and unknown states remain fail closed.
 - Legal/contact content remains Review mode only, and Contact remains inactive.
-- M2-P1-R1 assets under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are repository-only foundation data and are not imported by the application.
+- Accepted M2-P1-R1 assets under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are repository-only foundation data and are not imported by the application.
 - No M2-P1 provider call, model selection, database connection, persistence, runtime prompt, or result rendering exists.
 
 ## Current Restrictions
@@ -121,8 +125,8 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - M1-P3 acceptance and M1-P3-R1 prototype implementation did not grant canonical visual implementation authority; later separate Human decisions accepted Checkpoint A, authorized and accepted the now-complete Checkpoint B visual work within its exact manifest, accepted the bounded M1-I9-R1 result, and authorized M1-I12.
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
 - Keep the historical pre-R2 QA branch immutable. The corrected M1-I12-R3 package may be synchronized to `main` only by the expressly authorized fast-forward-only path and must remain within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
-- Do not publish, deploy, activate runtime integrations, complete operator facts, execute the draft prompt bundle, select a model, connect a database, or start any Milestone 2 task beyond M2-P1.
-- Do not treat automated foundation PASS as Human / ChatGPT acceptance or model-quality evidence.
+- Do not publish, deploy, activate runtime integrations, complete operator facts, execute the accepted foundation prompt assets, select a model, connect a database, or start M2-P2 planning or any Milestone 2 runtime task without separate explicit authorization.
+- Automated foundation PASS alone is not Human / ChatGPT acceptance or model-quality evidence. M2-P1 acceptance is established by the separate explicit final decision; no model-quality result is claimed.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
 - Human 320px cross-route, keyboard/focus, 200% zoom, reduced-motion, reading-quality, contrast, and final acceptance are complete and recorded as Human observational evidence.
@@ -158,4 +162,4 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Authorization Gate
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1-R1 integrity hardening is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact hardened foundation package. No API connection, model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P1-R1 are Human / ChatGPT accepted and complete; M2-P1-R2 historical-manifest boundary correction is implemented and validated without changing the accepted foundation. The next activity requires a separate M2-P2 planning gate; that planning has not started, and no provider or runtime implementation is authorized. No API connection, model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.

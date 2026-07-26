@@ -4,9 +4,9 @@
 
 - Task ID: `M2-P1`
 - Task name: `AI Quality Specification & Evaluation Foundation`
-- Foundation version: `v1.0.0` draft
-- Authority: Human-authorized planning/foundation work only
-- Current state: documentation, development evaluation data, schemas, draft prompts, manifests, and permanent validation are implemented on the dedicated task branch; M2-P1-R1 integrity hardening is implemented; Human / ChatGPT final review is pending
+- Foundation version: `v1.0.0` accepted foundation
+- Authority: Human / ChatGPT accepted planning/foundation contract only
+- Current state: M2-P1 foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 historical-manifest boundary correction is implemented and validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing any accepted foundation contract
 - Runtime authority: none
 
 This document is the canonical AI-quality design contract for M2-P1. It does not authorize an OpenAI call, model selection, model benchmark, database use, UI change, API route, server action, payment, email, authentication, deployment, or delivery.
@@ -32,7 +32,7 @@ M2-P1 excludes:
 - payment, email, login, magic link, account, history, and deployment;
 - production Safety templates or renderer implementation;
 - holdout case content; and
-- Human acceptance claims.
+- model-quality, runtime-readiness, or Human product-quality scoring claims.
 
 ## 4. Product responsibility boundary
 
@@ -78,7 +78,7 @@ The future logical pipeline is:
 13. renderer-owned assembly of variable and fixed copy; and
 14. delivery only after a final complete validation pass.
 
-M2-P1 creates draft assets for stages 2, 3, 5, 7, 8, 10, and 12. It implements none of the runtime stages.
+M2-P1 creates accepted foundation assets for stages 2, 3, 5, 7, 8, 10, and 12. It implements none of the runtime stages.
 
 ## 7. Eligibility states
 
@@ -257,7 +257,7 @@ Development cases support prompt improvement and continuous regression. The 15-c
 
 Oracle content is evaluation-only and excluded from model input.
 
-Each case has one or more `contrast_set_ids`. The machine-readable catalog groups cases that vary the same decision-material fact across decision categories, information resolutions, PAUSE/Safety boundaries, and affirmative-versus-negated Safety meanings. Counterfactual-group and contrast-set edges form contamination connected components; a component cannot be divided between development and holdout.
+Each case has one or more `contrast_set_ids`. The machine-readable catalog groups cases that vary the same decision-material fact across decision categories, information resolutions, PAUSE/Safety boundaries, and affirmative-versus-negated Safety meanings. The accepted graph contains 42 contrast sets, 130 memberships, and 7 connected components; the largest component contains 51 cases. Counterfactual-group and contrast-set edges form indivisible contamination components.
 
 ## 22. Human quality evaluation
 
@@ -294,7 +294,7 @@ Model alias requested and model ID returned are run metadata, not prompt-bundle 
 
 ## 24. Holdout isolation
 
-The holdout contains 15 external-only cases. Case content is not committed and is not routinely shown to prompt authors or CodeX. A future authorized runner may receive an external path. Exposure retires the case. Counterfactual groups and contrast-set connected components never cross development and holdout.
+The future holdout contains 15 external-only cases that must be independently authored. Holdout cases must not be extracted or randomly split from the 70 development cases, and they must not share counterfactual or contrast-set relationships with the development dataset. Case content is not committed and is not routinely shown to prompt authors or CodeX. A future authorized runner may receive an external path. Exposure retires the case.
 
 The repository may retain only version, expected count, and an external aggregate hash. It must not retain raw holdout input or oracle data.
 
@@ -314,35 +314,39 @@ M2-P1-R1 additionally requires all named integrity gates for counterfactual IDs,
 
 ## 26. Implementation sequence
 
-1. Complete and automatically validate M2-P1 foundation assets.
-2. Human / ChatGPT review the specifications, oracles, schemas, prompts, and gates.
-3. Record acceptance or bounded corrections.
+1. Complete and automatically validate M2-P1 foundation assets. **Complete.**
+2. Human / ChatGPT review the specifications, oracles, schemas, prompts, and gates. **Complete.**
+3. Record acceptance or bounded corrections. **Accepted and complete.**
+   M2-P1-R2 subsequently corrected only the historical exact-manifest verification boundary. **Complete.**
 4. Separately authorize application-owned policy and validation code.
 5. Separately authorize an offline development-evaluation runner.
 6. Select a model only after a model-evaluation task is explicitly authorized.
 7. Require development, holdout, stability, and Human quality evidence before any internal automatic-delivery slice.
 8. Authorize real AI, DB, renderer, and internal UI integration as separately bounded work.
 
-Only step 1 is in M2-P1.
+Steps 1 through 3 are complete for M2-P1. M2-P2 planning has not started, and steps 4 through 8 remain unauthorized.
 
 ## 27. Out of scope
 
 Out of scope includes every runtime and external operation listed in Section 3, plus production delivery, payment acceptance, real email, public launch, operator-information completion, legal publication, and general Milestone 2 implementation.
 
-## 28. Next Human gate
+## 28. Acceptance outcome and next authorization gate
 
-Human / ChatGPT must review:
+Human / ChatGPT final review is complete. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 Evaluation Foundation Integrity Hardening are accepted and complete. The accepted foundation implementation commit is `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 later anchored the immutable R1 42-file manifest to the historical range ending at that commit; it changed no dataset, Schema, Prompt asset, Prompt hash, version manifest, or policy.
 
-- the 70-case oracle and counterfactual design;
-- the nine schemas;
-- the seven stage prompts and shared assets;
-- the decision, scoring, versioning, and contamination policies;
-- the formal machine-readable retry policy;
-- the PB-01 through PB-07 machine-readable stage contracts;
-- the frozen 20-case Human review sample;
-- the contrast-set catalog and contamination connected components;
-- the exact 52-file original-manifest reconciliation and final Git manifest;
-- the permanent verifier output; and
-- the exact task diff.
+The canonical accepted foundation is:
 
-Until that review is accepted, no API, database, model-selection, benchmark, UI, renderer, or runtime task is authorized.
+- exactly 70 development cases in the 10/10/10/10/8/13/9 distribution;
+- 42 contrast sets, 130 contrast memberships, and 7 connected components;
+- largest development contrast component: 51 cases;
+- exact pre-registered Human sample: 20 cases;
+- JSON Schemas: 9;
+- Prompt stages: PB-01 through PB-07;
+- prompt assets: 16;
+- scoring, retry, versioning, contamination, Human-review-sample, and stage-contract policies accepted;
+- holdout contents committed: zero; and
+- all eight runtime capability flags: `false`.
+
+Foundation acceptance is not model-quality acceptance, Human product-quality scoring, holdout performance, or runtime readiness. The future 15-case holdout must be independently authored and must not share counterfactual or contrast-set relationships with the development dataset.
+
+The next activity requires a separate M2-P2 planning gate. M2-P2 planning has not started. No API, database, model selection, benchmark, UI, renderer, provider, or runtime task is authorized.

@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation; M2-P1-R1 integrity hardening and automated validation are complete on the dedicated branch, with Human / ChatGPT review pending. Milestone 2 runtime and all work beyond M2-P1 remain unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and automatically validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2 planning has not started; Milestone 2 runtime and all implementation work beyond M2-P1 remain unauthorized.
 
 ## P0: Repository Setup
 
@@ -553,7 +553,7 @@ M1-I9-R1 is synchronized to `main`. M1-I12 automated final QA and Human final QA
 
 Human observational evidence is recorded separately from automated QA evidence. No application implementation was changed by the acceptance synchronization.
 
-## P5: M2-P1-R1 Evaluation Foundation Integrity Hardening
+## P5: Human / ChatGPT Accepted — M2-P1 AI Quality & Evaluation Foundation
 
 - [x] Human authorization limited to M2-P1 foundation
 - [x] Exact clean base and dedicated branch
@@ -561,7 +561,7 @@ Human observational evidence is recorded separately from automated QA evidence. 
 - [x] Exactly 70 development cases in the required 10/10/10/10/8/13/9 distribution
 - [x] External-only 15-case holdout contract with no case data committed
 - [x] Nine Draft 2020-12 JSON Schemas
-- [x] Seven draft stage prompts and nine shared prompt assets
+- [x] PB-01 through PB-07 and nine shared prompt assets accepted as foundation assets
 - [x] Strict counterfactual-group identifiers
 - [x] 42 explicit contrast sets with 130 memberships covering all 70 development cases
 - [x] Connected-component contamination split enforcement
@@ -573,17 +573,21 @@ Human observational evidence is recorded separately from automated QA evidence. 
 - [x] Evaluation version, per-file hash, and aggregate hash manifest
 - [x] Node-built-ins-only permanent foundation verifier
 - [x] M2 foundation, M1 content-lock, M1 Safety, typecheck, lint, build, and diff gates
-- [ ] Human / ChatGPT review and acceptance
-- [ ] Separate authorization for any model selection, API, database, UI, or runtime work
+- [x] Human / ChatGPT final review and acceptance of M2-P1 and M2-P1-R1
+- [x] M2-P1 marked accepted and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`
+- [x] M2-P1-R2 anchors the immutable 42-file R1 manifest to its accepted historical commit range; correction commit `e859b4cdfc0efa03d3372784ea34f4abb61bee9d`
+- [ ] Separate M2-P2 planning and Human authorization for any model selection, API, database, UI, or runtime work
 
-M2-P1 is not AI runtime authorization, model-quality acceptance, holdout execution, DB authorization, or general Milestone 2 authorization.
+M2-P1 acceptance is foundation-contract acceptance. It is not AI runtime authorization, model-quality acceptance, holdout execution, DB authorization, or general Milestone 2 authorization.
+
+The accepted development graph has 42 contrast sets, 130 memberships, and 7 connected components; the largest component contains 51 cases. Development cases must not be randomly split into holdout. The future 15-case holdout must be independently authored and must not share counterfactual or contrast-set relationships with the 70 development cases.
 
 ## P6: Future Delivery Sequence Status
 
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — only M2-P1 foundation authorized; runtime unauthorized
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 foundation accepted and complete; M2-P2 planning not started; runtime unauthorized
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -594,4 +598,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 foundation alone is implemented and automatically validated; Human / ChatGPT review remains pending. Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 and M2-P1-R1 are Human / ChatGPT accepted and complete; M2-P1-R2 manifest-boundary correction is implemented and validated. M2-P2 planning has not started. Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.
