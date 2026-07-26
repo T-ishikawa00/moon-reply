@@ -37,9 +37,13 @@ On exposure:
 4. ensure the replacement has a new never-reused ID; and
 5. update external version/count/hash metadata after Human review.
 
-## Counterfactual isolation
+## Counterfactual and contrast-set isolation
 
 A counterfactual group cannot cross development and holdout. If one member is development-visible, every member of that group belongs outside the active holdout.
+
+Every case also belongs to one or more machine-readable contrast sets. Build an undirected graph in which cases are connected when they share either a counterfactual group ID or a contrast-set ID. Split assignment is atomic at the resulting connected-component level. A connected component cannot cross development and holdout.
+
+The repository catalog contains development identities only. External holdout curation must reject any reused case ID, group ID, contrast-set ID, or externally known component membership that connects to development.
 
 ## Oracle protection
 
@@ -51,7 +55,7 @@ The provider-facing projection excludes:
 - required and forbidden assessment meanings;
 - question expectations;
 - material gap codes; and
-- counterfactual metadata.
+- counterfactual and contrast-set metadata.
 
 Prompts must not contain case IDs, case titles, source consultation bodies, reference drafts, or case-specific expected outputs. The permanent verifier checks the committed prompt bundle for leakage.
 

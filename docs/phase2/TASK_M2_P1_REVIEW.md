@@ -1,13 +1,16 @@
-# Task M2-P1 Review Record
+# Task M2-P1 / M2-P1-R1 Review Record
 
 ## 1. Task identity
 
 - Task ID: `M2-P1`
 - Task: `AI Quality Specification & Evaluation Foundation`
+- Hardening Task ID: `M2-P1-R1`
+- Hardening Task: `Evaluation Foundation Integrity Hardening`
 - Branch: `design/m2-p1-ai-quality-evaluation-foundation`
 - Base: `617aca826612f58adb4b3f0d113ff1a89c36016a`
-- Intended commit: `docs: draft M2-P1 AI quality evaluation foundation`
-- State: implemented and automatically validated; Human / ChatGPT review pending
+- Original commit: `432dbc76b79483616ee5fa4364e7bbc4d5d1dee7` (`docs: draft M2-P1 AI quality evaluation foundation`)
+- R1 intended commit: `docs: harden M2-P1 evaluation foundation`
+- State: foundation and R1 hardening implemented and automatically validated; Human / ChatGPT final review pending
 
 ## 2. Authority
 
@@ -17,8 +20,12 @@ Authorized:
 - 70 development evaluation fixtures;
 - external-only holdout contract;
 - nine JSON Schemas;
-- seven draft stage prompts and shared assets;
+- seven draft stage prompts and nine shared assets;
 - hash/version manifests;
+- contrast-set catalog and frozen Human review sample;
+- machine-readable retry policy and stage contracts;
+- all-disabled runtime capability declaration;
+- exact Git mutation manifest and original-count reconciliation;
 - permanent foundation verifier; and
 - minimal status synchronization.
 
@@ -43,7 +50,21 @@ Not authorized:
 - `scripts/verify-m2-eval-foundation.mjs`
 - minimal historical/status references in `docs/phase1/IMPLEMENTATION_WBS.md` and `docs/phase1/M1_IMPLEMENTATION_SLICES.md` only if required for consistency
 
-## 4. Review checklist
+## 4. Original manifest reconciliation
+
+Git is authoritative. `git diff --name-status origin/main...432dbc76b79483616ee5fa4364e7bbc4d5d1dee7`, `git diff --stat`, and `git show --stat --oneline 432dbc76b79483616ee5fa4364e7bbc4d5d1dee7` all establish:
+
+- authoritative changed-file count: 52;
+- added: 46;
+- modified: 6;
+- deleted: 0;
+- root counts: `ai` 24, `docs` 16, `evals` 11, `scripts` 1.
+
+The reported `44 files edited` value is absent from Git evidence and the prior execution log. Its origin cannot be established. It is a non-authoritative UI count and must not be used for acceptance or audit.
+
+`M2_P1_EXACT_MUTATION_MANIFEST.json` is the machine-readable final-manifest owner and includes both the original reconciliation and the final `origin/main...HEAD` manifest.
+
+## 5. Review checklist
 
 ### Product and policy
 
@@ -65,6 +86,11 @@ Not authorized:
 - [ ] Exact case ID set and stable order.
 - [ ] Appendix content preserved without paraphrase.
 - [ ] Counterfactual groups preserved.
+- [ ] Counterfactual group IDs are strict and contain no whitespace.
+- [ ] Every case has one or more unique valid contrast-set IDs.
+- [ ] Every documented relationship has 100% shared-set coverage.
+- [ ] Counterfactual/contrast connected components do not cross split boundaries.
+- [ ] The exact 20-case Human review sample is pre-registered and immutable.
 - [ ] Oracle projection is excluded from model input.
 - [ ] No holdout case data committed.
 
@@ -81,6 +107,8 @@ Not authorized:
 ### Prompt bundle
 
 - [ ] Seven stage prompts remain stage-bounded.
+- [ ] PB-01 through PB-07 machine-readable stage contracts have no missing output schema or responsibility overlap.
+- [ ] Retry semantics are machine-readable, capped at three valid candidates, and prohibit repair-of-repair.
 - [ ] Shared contract treats input as untrusted data.
 - [ ] JSON-only and no-private-chain-of-thought rules are explicit.
 - [ ] No tools, web, file search, or oracle access.
@@ -95,6 +123,8 @@ Not authorized:
 - [ ] Five-run stability rules are accepted.
 - [ ] Development and holdout split rules are accepted.
 - [ ] Oracle-change protocol is accepted.
+- [ ] Runtime capability flags are all false.
+- [ ] Git manifest and machine-readable exact manifest match.
 
 ### Repository boundary
 
@@ -104,14 +134,26 @@ Not authorized:
 - [ ] No Browser or screenshot.
 - [ ] Main unchanged and no PR.
 
-## 5. Automated evidence
+## 6. Automated evidence
 
 Executed on 2026-07-26 from the dedicated task branch. These results are automated evidence only:
 
 | Gate | Result |
 | --- | --- |
-| Appendix A semantic comparison | `PASS` — 70/70 and SHA-256 `107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6` |
-| M2 foundation verifier | `PASS` — all 13 named gates |
+| Appendix A protected semantic comparison | `PASS` — 70/70; every pre-R1 field remains at SHA-256 `107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6` |
+| M2 foundation verifier | `PASS` — all 22 named gates |
+| `M2_COUNTERFACTUAL_ID_GATE` | `PASS` — 70 valid, whitespace-free IDs; 61 groups; 7 multi-case groups |
+| `M2_COUNTERFACTUAL_COVERAGE_GATE` | `PASS` — all 42 canonical documented relationships covered |
+| `M2_CONTRAST_SET_GATE` | `PASS` — 42 sets, 130 unique memberships, all 70 cases covered |
+| `M2_CONTAMINATION_COMPONENT_GATE` | `PASS` — 7 indivisible components; sizes `51, 7, 4, 2, 2, 2, 2` |
+| `M2_HUMAN_REVIEW_SAMPLE_GATE` | `PASS` — exact immutable 20-case sample, 5 per decision category |
+| `M2_RETRY_POLICY_GATE` | `PASS` — transport retry separate; maximum 3 content candidates; no fourth candidate or repair-of-repair |
+| `M2_PROMPT_SCHEMA_CONTRACT_GATE` | `PASS` — PB-01–PB-07 inputs/outputs resolve; no missing schema or oracle exposure |
+| `M2_STAGE_RESPONSIBILITY_GATE` | `PASS` — exclusive capability owners and stage prohibitions match |
+| `M2_RUNTIME_CAPABILITY_GATE` | `PASS` — all eight capabilities are `false` |
+| `M2_EXACT_MANIFEST_GATE` | `PASS` — final 57 files (`A` 51, `M` 6, `D` 0); R1 42 files (`A` 5, `M` 37, `D` 0) |
+| Dataset hash | `PASS` — aggregate SHA-256 `9960f91c0e4eb0009bca6be7834437d56195c0e5682f5e679530cdb7df64d0e8` |
+| Prompt hashes | `PASS` — 16/16 assets; retry policy `7c1ba5aafa58f4e67b08a8c6bfe4a9a2ea54ba5636520b69b016bcb2b9d672b7`; stage contracts `244aef17b168228198774a252c705f1d71206dcd364765b5198bc23e30e6223d` |
 | M1 content locks | `PASS` — `CONTENT_LOCK_GATE` |
 | M1 Safety policy | `PASS` — `SAFETY_POLICY_GATE` |
 | typecheck | `PASS` |
@@ -122,17 +164,17 @@ Executed on 2026-07-26 from the dedicated task branch. These results are automat
 
 Automated evidence does not establish Human quality, prompt acceptance, model quality, holdout performance, or runtime readiness.
 
-## 6. Known limitations
+## 7. Known limitations
 
 - No provider or model has been exercised.
 - No schema has been used in runtime structured output.
 - No development, holdout, stability, or Human product-quality model run exists.
 - Holdout content is intentionally unavailable.
 - Draft prompts require Human / ChatGPT review before any execution authorization.
-- The retry baseline is a draft decision awaiting review.
+- The formal retry policy and stage contracts remain draft assets awaiting Human / ChatGPT final review.
 - Foundation integrity does not establish JPY 980 product value.
 
-## 7. Review outcome
+## 8. Review outcome
 
 Current outcome: **Human / ChatGPT review pending**.
 

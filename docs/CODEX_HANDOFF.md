@@ -18,7 +18,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and the accepted correction is synchronized to `main`.
 - M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated on `design/m1-p3-coded-visual-prototype`. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance is not canonical visual implementation authorization.
 - M1-I8-R1 Checkpoints A and B are complete, Human-accepted, and merged to `main`; Checkpoint B's acceptance synchronization is `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed.
-- Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation. The foundation is implemented and automatically validated on `design/m2-p1-ai-quality-evaluation-foundation`; Human / ChatGPT review remains pending. This authority includes no provider call, model selection, database, runtime, payment, email, authentication, UI, API, server action, deployment, or later Milestone 2 task.
+- Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation. M2-P1-R1 integrity hardening is implemented and automatically validated on `design/m2-p1-ai-quality-evaluation-foundation`; Human / ChatGPT review remains pending. This authority includes no provider call, model selection, database, runtime, payment, email, authentication, UI, API, server action, deployment, or later Milestone 2 task.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -29,9 +29,9 @@ The accepted Milestone 1 deliverable is a fixed-fixture Reviewable Web MVP. It h
 
 ## Current Status
 
-Current task: `M2-P1 AI Quality Specification & Evaluation Foundation`.
+Current task: `M2-P1-R1 Evaluation Foundation Integrity Hardening`.
 
-M2-P1 materializes exactly 70 development cases, keeps the expected 15-case holdout external, drafts nine Draft 2020-12 schemas, drafts seven stage prompts plus shared policy assets, records prompt and evaluation hashes, and adds a Node-built-ins-only permanent foundation verifier. Foundation gates pass automatically. This is data/specification integrity evidence only; it is not model-quality evidence or Human acceptance.
+M2-P1-R1 preserves the exact 70 development cases and external-only 15-case holdout while adding 42 contrast sets with 130 memberships, connected-component contamination controls, an exact frozen 20-case Human-review sample, machine-readable bounded retry semantics, and machine-readable contracts for all seven prompt stages. The prompt bundle now contains seven stage prompts plus nine shared assets. All eight runtime capability flags remain false, and the Node-built-ins-only permanent verifier enforces these contracts. Foundation gates pass automatically. This is data/specification integrity evidence only; it is not model-quality evidence or Human acceptance.
 
 M1-I12 Human Final QA is complete. Human reported PASS for 320px responsive QA, keyboard/focus QA, 200% zoom QA, reduced-motion QA, and reading-quality/contrast QA, with no release-blocking visual defect. These are Human observational results and remain distinct from the automated QA evidence. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed.
 
@@ -84,7 +84,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - No production database connection, payment/refund, AI call, prompt execution, email, API route, server action, analytics, authentication, external form/asset, persistence, file generation, or deployment was added.
 - No package or `supabase` change was made. `lib/safety/**` changed only inside the authorized M1-I2-R1 correction.
 - No real or invented operator, provider, address, telephone, email, contact URL, response time, storage region, retention period, effective date, or updated date was added.
-- M2-P1 files under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are draft repository assets only and are not imported or executed by runtime.
+- M2-P1-R1 files under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are draft repository assets only and are not imported or executed by runtime.
 - No OpenAI API call was made, no model was selected, no holdout case was accessed, and no database was connected.
 
 ## M1-P3 Record
@@ -148,4 +148,4 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Authorization Gate
 
-Milestone 1 is closed. M2-P1 foundation is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact foundation package. API connection, model selection, database, runtime, and every later task require separate explicit authorization.
+Milestone 1 is closed. M2-P1-R1 integrity hardening is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact hardened foundation package. API connection, model selection, database, runtime, and every later task require separate explicit authorization.

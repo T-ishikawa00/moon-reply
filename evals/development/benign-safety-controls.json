@@ -61,6 +61,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-BUSY-CADENCE-01",
+      "CS-WORKPLACE-VISIT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-WORKPLACE-01",
       "changed_variable": null
@@ -125,6 +129,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PRIVACY-INTENT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-PRIVACY-01",
       "changed_variable": null
@@ -192,6 +199,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ILLEGAL-INTENT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-ILLEGAL-CONCERN-01",
       "changed_variable": null
@@ -257,6 +267,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-THIRD-PARTY-SECRET-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-THIRD-PARTY-SECRET-01",
       "changed_variable": null
@@ -322,6 +335,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-VISIT-NEGATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-VISIT-01",
       "changed_variable": null
@@ -387,6 +403,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ADDRESS-SEEKING-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-ADDRESS-01",
       "changed_variable": null
@@ -454,6 +473,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SURVEILLANCE-INTENT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SURVEILLANCE-SOCIAL-01",
       "changed_variable": null
@@ -518,6 +540,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-AGE-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BENIGN-ADULTS-01",
       "changed_variable": null
@@ -585,6 +610,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-CIRCUMVENTION-ROUTE-01",
+      "CS-BLOCK-CIRCUMVENTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BLOCKED-01",
       "changed_variable": null

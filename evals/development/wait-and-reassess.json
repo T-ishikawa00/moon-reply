@@ -65,6 +65,15 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-DELAY-VS-MEANING-01",
+      "CS-LOW-PRESSURE-FREQUENCY-01",
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-INFO-GENERIC-RESOLUTION-01",
+      "CS-INFO-SENDER-RESOLUTION-01",
+      "CS-INFO-TIMELINE-RESOLUTION-01",
+      "CS-INFO-COUNT-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-USUAL-CADENCE-01",
       "changed_variable": null
@@ -134,6 +143,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-INCOMING-CHECKIN-01",
+      "CS-BUSY-CADENCE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-WORK-HOURS-01",
       "changed_variable": null
@@ -202,6 +215,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-EMOTIONAL-FOLLOWUP-01",
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-INFO-DRAFT-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-EMOTIONAL-FOLLOWUP-01",
       "changed_variable": null
@@ -270,6 +288,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-APOLOGY-STATE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-APOLOGY-01",
       "changed_variable": null
@@ -337,6 +358,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-FIRST-DATE-FOLLOWUP-01",
+      "CS-THANK-YOU-STATUS-01"
+    ],
     "counterfactual": {
       "group_id": "CF-FIRST-DATE-01",
       "changed_variable": null
@@ -403,6 +428,12 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-URGENCY-01",
+      "CS-PRACTICAL-CONTACT-01",
+      "CS-PROMISED-INFORMATION-01",
+      "CS-INFO-DEADLINE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-WAIT-01",
       "changed_variable": null
@@ -471,6 +502,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-MATCHING-MESSAGE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-MATCHING-APP-01",
       "changed_variable": null
@@ -536,6 +570,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-BUSY-CADENCE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-KNOWN-BUSY-01",
       "changed_variable": null
@@ -604,6 +641,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-CONFLICT-PURPOSE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-CONFLICT-NIGHT-01",
       "changed_variable": null
@@ -672,6 +712,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-DIRECT-MESSAGE-SIGNAL-01",
+      "CS-INFO-LAST-MESSAGE-RESOLUTION-01",
+      "CS-INFO-SOCIAL-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SOCIAL-SIGNAL-01",
       "changed_variable": null

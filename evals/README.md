@@ -19,11 +19,13 @@ The canonical development dataset is `eval-development-v1.0.0` and contains exac
 | `development/benign-safety-controls.json` | benign false-positive controls | 9 |
 | **Total** |  | **70** |
 
-`development/index.json` preserves stable ordering and maps every case ID to its source file and expected top-level outcomes. `version-manifest.json` owns file hashes and the aggregate development-dataset hash. Text hashes use UTF-8 with CRLF normalized to LF (`sha256-utf8-lf`) so the gate is stable across operating-system checkout conventions.
+`development/index.json` preserves stable ordering and maps every case ID to its source file, expected top-level outcomes, counterfactual group, and contrast sets. `development/contrast-set-catalog-v1.json` is the machine-readable owner of documented contrast relationships. `version-manifest.json` owns file hashes and the aggregate development-dataset hash. Text hashes use UTF-8 with CRLF normalized to LF (`sha256-utf8-lf`) so the gate is stable across operating-system checkout conventions.
+
+`development/human-review-sample-v1.json` pre-registers the exact 20 decision cases used by the Human rubric: five per decision category in stable order. It records the dataset version and aggregate hash, is frozen, and does not permit reviewer substitution.
 
 ## Oracle isolation
 
-Each repository fixture includes a Human-owned `oracle` for offline scoring. A future model-input projection must remove `oracle`, expected outcomes, reference drafts, evaluation-only required meanings, forbidden claims, and counterfactual metadata before any provider request is constructed. The permanent verifier creates that projection in memory and asserts that the oracle is absent.
+Each repository fixture includes a Human-owned `oracle` for offline scoring. A future model-input projection must remove `oracle`, expected outcomes, reference drafts, evaluation-only required meanings, forbidden claims, counterfactual metadata, and contrast-set metadata before any provider request is constructed. The permanent verifier creates that projection in memory and asserts that the oracle is absent.
 
 `required_reasoning_meanings` describes externally assessable rationale meaning. It is not a request for private chain-of-thought. A reference draft is a semantic evaluation aid, not an exact-string oracle.
 
@@ -33,8 +35,10 @@ Each repository fixture includes a Human-owned `oracle` for offline scoring. A f
 - Every committed case has `dataset_split = development`.
 - Oracle changes require Human review, a written rationale, a counterfactual check, a dataset version bump, and a changelog entry.
 - Model failure alone is not grounds to change an oracle.
-- Counterfactual groups stay within one split.
+- Counterfactual groups and contrast-set graph connected components stay within one split.
 - Development cases may be used for prompt improvement and continuous regression.
+
+`payment_allowed` is policy eligibility only. Runtime payment remains disabled and is not implemented by evaluation data.
 
 ## Holdout boundary
 

@@ -1,0 +1,302 @@
+{
+  "schema_version": "moon-reply-stage-contracts-v1",
+  "contract_version": "stage-contracts-v1.0.0",
+  "status": "draft_human_review_pending",
+  "retry_policy_ref": "shared/retry-policy-v1.json",
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "stage_name": "structure",
+      "input_contracts": [
+        {
+          "contract_id": "bounded_consultation_input",
+          "schema_path": "ai/schemas/eval-case.schema.json",
+          "schema_pointer": "#/properties/input"
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/structured-intake.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "structure_supplied_facts_assumptions_emotions_unknowns_timeline_boundaries_context_and_safety_signals"
+      ],
+      "forbidden_responsibilities": [
+        "eligibility",
+        "decision",
+        "message_draft",
+        "report_copy"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": false,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-02",
+      "stage_name": "safety_semantic",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "deterministic_safety_result",
+          "schema_path": "ai/schemas/safety-assessment.schema.json",
+          "schema_pointer": "#/properties/deterministic_rule_result"
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/safety-assessment.schema.json",
+        "schema_pointer": "#/$defs/model_result"
+      },
+      "allowed_responsibilities": [
+        "classify_context_sensitive_safety_meaning_with_approved_codes"
+      ],
+      "forbidden_responsibilities": [
+        "user_facing_safety_copy",
+        "decision",
+        "message_draft",
+        "aggregate_safety"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": false,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-03",
+      "stage_name": "eligibility",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "aggregate_safety_result",
+          "schema_path": "ai/schemas/safety-assessment.schema.json",
+          "schema_pointer": "#/properties/aggregate_result"
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/eligibility-result.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "classify_eligibility",
+        "select_approved_question_codes"
+      ],
+      "forbidden_responsibilities": [
+        "free_form_question_text",
+        "decision",
+        "message_draft",
+        "report_copy"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": false,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-04",
+      "stage_name": "decision_plan",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "eligibility_result",
+          "schema_path": "ai/schemas/eligibility-result.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "aggregate_safety_result",
+          "schema_path": "ai/schemas/safety-assessment.schema.json",
+          "schema_pointer": "#/properties/aggregate_result"
+        },
+        {
+          "contract_id": "application_decision_policy_result",
+          "schema_path": "ai/schemas/decision-policy-result.schema.json",
+          "schema_pointer": null
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/decision-plan.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "select_within_allowed_decisions",
+        "generate_decision_consistent_message_draft_when_policy_requires",
+        "generate_actions_and_three_day_plan"
+      ],
+      "forbidden_responsibilities": [
+        "select_unallowed_decision",
+        "change_policy",
+        "report_prose",
+        "fixed_system_copy"
+      ],
+      "may_select_decision": true,
+      "may_generate_user_copy": false,
+      "may_generate_message_draft": true,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-05",
+      "stage_name": "report_writer",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "validated_decision_plan",
+          "schema_path": "ai/schemas/decision-plan.schema.json",
+          "schema_pointer": null
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/report-content.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "generate_variable_report_prose"
+      ],
+      "forbidden_responsibilities": [
+        "change_decision",
+        "change_message_draft",
+        "change_actions_or_plan",
+        "generate_fixed_system_copy"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": true,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": true,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-06",
+      "stage_name": "semantic_validator",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "aggregate_safety_result",
+          "schema_path": "ai/schemas/safety-assessment.schema.json",
+          "schema_pointer": "#/properties/aggregate_result"
+        },
+        {
+          "contract_id": "application_decision_policy_result",
+          "schema_path": "ai/schemas/decision-policy-result.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "candidate_decision_plan",
+          "schema_path": "ai/schemas/decision-plan.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "candidate_report_content",
+          "schema_path": "ai/schemas/report-content.schema.json",
+          "schema_pointer": null
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/validation-result.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "enumerate_semantic_findings_only"
+      ],
+      "forbidden_responsibilities": [
+        "repair",
+        "final_delivery_decision",
+        "select_repair_strategy",
+        "edit_candidate"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": false,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    },
+    {
+      "stage_id": "PB-07",
+      "stage_name": "repair",
+      "input_contracts": [
+        {
+          "contract_id": "structured_intake",
+          "schema_path": "ai/schemas/structured-intake.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "aggregate_safety_result",
+          "schema_path": "ai/schemas/safety-assessment.schema.json",
+          "schema_pointer": "#/properties/aggregate_result"
+        },
+        {
+          "contract_id": "eligibility_result",
+          "schema_path": "ai/schemas/eligibility-result.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "application_decision_policy_result",
+          "schema_path": "ai/schemas/decision-policy-result.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "validated_decision_plan",
+          "schema_path": "ai/schemas/decision-plan.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "candidate_report_content",
+          "schema_path": "ai/schemas/report-content.schema.json",
+          "schema_pointer": null
+        },
+        {
+          "contract_id": "approved_semantic_findings",
+          "schema_path": "ai/schemas/validation-result.schema.json",
+          "schema_pointer": "#/properties/semantic_checks"
+        }
+      ],
+      "output_schema": {
+        "schema_path": "ai/schemas/report-content.schema.json",
+        "schema_pointer": null
+      },
+      "allowed_responsibilities": [
+        "change_approved_mutable_report_paths_only"
+      ],
+      "forbidden_responsibilities": [
+        "change_outside_allowed_json_paths",
+        "change_immutable_policy",
+        "change_safety",
+        "change_facts",
+        "repair_of_repair"
+      ],
+      "may_select_decision": false,
+      "may_generate_user_copy": true,
+      "may_generate_message_draft": false,
+      "may_change_safety": false,
+      "repairable": false,
+      "retry_policy_ref": "shared/retry-policy-v1.json"
+    }
+  ]
+}

@@ -5,6 +5,8 @@
   "pipeline_schema_version": "pipeline-schema-v1.0.0",
   "policy_version": "decision-policy-v1.0.0",
   "prompt_bundle_version": "prompt-bundle-v1.0.0",
+  "retry_policy_version": "retry-policy-v1.0.0",
+  "stage_contracts_version": "stage-contracts-v1.0.0",
   "validator_version": "validator-v1.0.0",
   "safety_version": "safety-policy-v1.0.0",
   "renderer_version": "report-renderer-v1.0.0",
@@ -27,51 +29,74 @@
   "expected_external_holdout_count": 15,
   "external_holdout_version": null,
   "external_holdout_sha256": null,
+  "contrast_set_catalog": {
+    "relative_path": "development/contrast-set-catalog-v1.json",
+    "catalog_version": "contrast-set-catalog-v1.0.0",
+    "contrast_set_count": 42,
+    "membership_count": 130,
+    "sha256": "33673c874e5fde3beb6631e75923a8bb596cbaa02bd37069d4c255ab988df77f"
+  },
+  "human_review_sample": {
+    "relative_path": "development/human-review-sample-v1.json",
+    "sample_version": "human-review-sample-v1.0.0",
+    "case_count": 20,
+    "sha256": "244cdb68a4948655d69ac4b1478103b390415a7eb06a4a1056cd76470fec0c47"
+  },
+  "runtime_capabilities": {
+    "openai_api_enabled": false,
+    "database_enabled": false,
+    "authentication_enabled": false,
+    "payment_enabled": false,
+    "email_enabled": false,
+    "api_route_enabled": false,
+    "server_action_enabled": false,
+    "production_deployment_enabled": false
+  },
   "file_hash_algorithm": "sha256-utf8-lf",
   "aggregate_algorithm": "sha256(relative_path + ':' + canonical_file_sha256 + '\\n') in manifest file order",
   "files": [
     {
       "relative_path": "development/index.json",
       "count": 70,
-      "sha256": "db6a7d2db6fb7bac1621bf86c6ef3f589dc706b69147f5d8aeee468d8bdf1392"
+      "sha256": "e2300f257f40a39c293323dba1a04484ae5a21949789998580baee677ba5a954"
     },
     {
       "relative_path": "development/reply-now.json",
       "count": 10,
-      "sha256": "e355bedcdfe0fc8181b5627b0924312e1e8531aa885740bab84f5cc28e43347a"
+      "sha256": "e5ef8e902829961a751efe3a280ed65f8939771422541135852e1d06c1dce151"
     },
     {
       "relative_path": "development/send-now.json",
       "count": 10,
-      "sha256": "c342a94492410f824c5dad9a2b700afd7860c143f3e2b9a30601f1ea56ff8da1"
+      "sha256": "c8218ee5bbc6b6b7f0d81500293e2ae2de45524f83c37cfaccfb29a56a982d94"
     },
     {
       "relative_path": "development/wait-and-reassess.json",
       "count": 10,
-      "sha256": "13a5e7e574fff090f6b972b9f4d0f523b2ff23f41e8d70d7a7236aa10942669e"
+      "sha256": "c9d705e63f5180f40205aaab54b479cb5b3e42354b329356e1f2f849a29291d9"
     },
     {
       "relative_path": "development/pause-additional-contact.json",
       "count": 10,
-      "sha256": "adad16cd8d6946d0fb9cfd6f6a35c00958b5ce2404f6c07faa0ccb4e6162c750"
+      "sha256": "ecaba5843a56cfec300ea6756b10780658383b1be0d274f9a633c50267007c0c"
     },
     {
       "relative_path": "development/needs-more-information.json",
       "count": 8,
-      "sha256": "77637459cbfdde1932412e073131a4e795e90d0fa94f5d77bccaa97a27e65bf0"
+      "sha256": "9d285e4385133ca565dc2b353f3b81a8758c0727fef869c336a124832b383836"
     },
     {
       "relative_path": "development/safety-blocked.json",
       "count": 13,
-      "sha256": "edfb5721500d723a17881b76f4914d80a75023392cea07c4e59b116586122194"
+      "sha256": "3afe35ce499c2953ce2da250e1e0f1b42e9f5772b5c90eb60ff4e273c959bcd2"
     },
     {
       "relative_path": "development/benign-safety-controls.json",
       "count": 9,
-      "sha256": "a2864ddc12bb97ee286733f49a4ab9be4ebde13da4d83e986d072cba89c96b8f"
+      "sha256": "f885983b1bd1bfcd020e4c7446425bce3e98de4252d1faa8e5e55eefb7d3107e"
     }
   ],
-  "aggregate_dataset_sha256": "a7e42bff61105907f6b0993cf985a8910c34328503ababbe8e148f66698f5412",
-  "generated_at": "2026-07-26T15:59:54.5776540+09:00",
-  "generated_by_task_id": "M2-P1"
+  "aggregate_dataset_sha256": "9960f91c0e4eb0009bca6be7834437d56195c0e5682f5e679530cdb7df64d0e8",
+  "generated_at": "2026-07-26T08:58:33.492Z",
+  "generated_by_task_id": "M2-P1-R1"
 }

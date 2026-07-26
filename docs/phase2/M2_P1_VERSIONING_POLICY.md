@@ -11,6 +11,10 @@
 | Safety policy | `safety-policy-v1.0.0` |
 | development dataset | `eval-development-v1.0.0` |
 | report renderer contract | `report-renderer-v1.0.0` |
+| retry policy | `retry-policy-v1.0.0` |
+| stage contracts | `stage-contracts-v1.0.0` |
+| contrast-set catalog | `contrast-set-catalog-v1.0.0` |
+| Human review sample | `human-review-sample-v1.0.0` |
 
 These versions identify logical artifacts. A Git SHA identifies the repository state, while file hashes identify canonical UTF-8 text content.
 
@@ -61,6 +65,8 @@ Changes may require multiple version bumps:
 - renderer ownership change requires report schema and prompt review.
 
 The change record must state why each coupled component did or did not bump.
+
+M2-P1-R1 is pre-acceptance hardening of an unreleased draft. Existing `v1.0.0` component identifiers remain stable because no Human-accepted or runtime-consumed baseline exists; hashes and the R1 task identity record the exact revision. Any post-acceptance equivalent change must follow the SemVer rules above.
 
 ## Model identity
 

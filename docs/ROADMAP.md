@@ -26,7 +26,7 @@ Current status:
 - M1-I8-R1 is complete, Human-accepted, and merged to `main`; Checkpoint B's accepted implementation-and-polish commit is `bb2079aafb3666562e2876ead4c24a5c933bea8a`, and its acceptance synchronization is on `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12-R3 automated final QA and Human final QA are complete. M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed.
 - The accepted Checkpoint B and M1-I9-R1 canonical surfaces are on `main`. The historical pre-R2 QA branch `qa/m1-i12-final-acceptance` remains preserved and non-authoritative for corrected main. The corrected QA package on `qa/m1-i12-final-acceptance-r2` is the Milestone 1 closure package and is authorized for fast-forward-only synchronization to `main`. The read-only prototype routes/components remain isolated on `design/m1-p3-coded-visual-prototype`; no prototype commit was merged, cherry-picked, or rebased into Checkpoint B, M1-I9-R1, or `main`.
 - The controlling artifact names are `恋のメッセージ鑑定ノート` for the product, `Web鑑定ノート` for the long presentation, and `保存用判断カード` for the short presentation. Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels. The out-of-manifest `lib/legal/review-content.ts` residual `保存用鑑定書見本` remains deliberately deferred.
-- Human authorized only Task M2-P1 AI Quality Specification & Evaluation Foundation. Its documentation, 70-case development dataset, nine schemas, seven-stage draft prompt bundle, policies, manifests, and permanent verifier are implemented on a dedicated branch and automatically validated; Human / ChatGPT review remains pending.
+- Human authorized only Task M2-P1 AI Quality Specification & Evaluation Foundation. M2-P1-R1 hardens that same bounded foundation with strict counterfactual IDs, 42 explicit contrast sets covering all 70 development cases, connected-component contamination controls, an exact 20-case frozen Human-review sample, machine-readable bounded retry and seven-stage responsibility contracts, and explicit disabled-runtime capability declarations. Automated validation is complete on the dedicated branch; Human / ChatGPT review remains pending.
 - Milestone 2 runtime and every Milestone 2 task beyond M2-P1 remain unauthorized and not started. M2-P1 adds no AI call, model selection, database, payment, email, authentication, UI, API, server action, or deployment.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.
@@ -97,7 +97,7 @@ Exit criterion: a reviewer can understand what is sold, the price, input flow, s
 
 ## 5. Milestone 2: Internal Automated AI / DB Vertical Slice
 
-Status: M2-P1 foundation only is Human-authorized, implemented on its dedicated branch, and automatically validated; Human / ChatGPT review pending. Milestone 2 runtime is unauthorized and not started.
+Status: M2-P1 foundation only is Human-authorized. M2-P1-R1 integrity hardening is implemented on its dedicated branch and automatically validated; Human / ChatGPT review pending. Milestone 2 runtime is unauthorized and not started.
 
 Future goal: in an internal environment, connect real AI and a real database so one consultation can move automatically from input through eligibility, Safety, decision, validated report generation, and result display.
 
@@ -109,7 +109,7 @@ Milestone 2 target exclusions:
 - no public release; and
 - no unconditional display of AI output.
 
-Current authorized M2-P1 scope is limited to the AI-quality specification, exact 70-case development dataset, external-only holdout contract, schemas, draft prompts, evaluation/scoring/versioning/contamination policies, manifests, and foundation verifier. It calls no provider, selects no model, connects no database, and changes no UI or runtime.
+Current authorized M2-P1 scope is limited to the AI-quality specification, exact 70-case development dataset, 42-set contrast graph, exact frozen 20-case Human-review sample, external-only holdout contract, schemas, seven draft stage prompts plus nine shared prompt assets, evaluation/scoring/versioning/contamination policies, manifests, and foundation verifier. All eight declared runtime capabilities remain disabled. It calls no provider, selects no model, connects no database, and changes no UI or runtime.
 
 Future Milestone 2 runtime requires separate bounded authorization after Human / ChatGPT accepts the M2-P1 foundation. Its exit criterion will require a fully automatic internal input-to-display slice that fails closed for Safety, insufficient information, invalid output, exhausted retries, and terminal failure.
 

@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation; its foundation implementation and automated validation are complete on the dedicated branch, with Human / ChatGPT review pending. Milestone 2 runtime and all work beyond M2-P1 remain unauthorized.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation; M2-P1-R1 integrity hardening and automated validation are complete on the dedicated branch, with Human / ChatGPT review pending. Milestone 2 runtime and all work beyond M2-P1 remain unauthorized.
 
 ## P0: Repository Setup
 
@@ -553,7 +553,7 @@ M1-I9-R1 is synchronized to `main`. M1-I12 automated final QA and Human final QA
 
 Human observational evidence is recorded separately from automated QA evidence. No application implementation was changed by the acceptance synchronization.
 
-## P5: M2-P1 AI Quality Specification & Evaluation Foundation
+## P5: M2-P1-R1 Evaluation Foundation Integrity Hardening
 
 - [x] Human authorization limited to M2-P1 foundation
 - [x] Exact clean base and dedicated branch
@@ -561,7 +561,14 @@ Human observational evidence is recorded separately from automated QA evidence. 
 - [x] Exactly 70 development cases in the required 10/10/10/10/8/13/9 distribution
 - [x] External-only 15-case holdout contract with no case data committed
 - [x] Nine Draft 2020-12 JSON Schemas
-- [x] Seven draft stage prompts and seven shared prompt assets
+- [x] Seven draft stage prompts and nine shared prompt assets
+- [x] Strict counterfactual-group identifiers
+- [x] 42 explicit contrast sets with 130 memberships covering all 70 development cases
+- [x] Connected-component contamination split enforcement
+- [x] Exact 20-case Human-review sample pre-registered in stable order
+- [x] Machine-readable bounded retry policy
+- [x] Machine-readable responsibility contracts for all seven prompt stages
+- [x] Eight runtime capability declarations fixed to `false`
 - [x] Prompt SHA-256 manifest
 - [x] Evaluation version, per-file hash, and aggregate hash manifest
 - [x] Node-built-ins-only permanent foundation verifier

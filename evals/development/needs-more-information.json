@@ -61,6 +61,9 @@
       "elapsed_time_missing",
       "unanswered_count_missing"
     ],
+    "contrast_set_ids": [
+      "CS-INFO-GENERIC-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-INFO-GENERIC-01",
       "changed_variable": null
@@ -125,6 +128,10 @@
       "last_message_missing",
       "reply_status_unknown",
       "user_goal_missing"
+    ],
+    "contrast_set_ids": [
+      "CS-MATCHING-MESSAGE-01",
+      "CS-INFO-LAST-MESSAGE-RESOLUTION-01"
     ],
     "counterfactual": {
       "group_id": "CF-INFO-EXACT-MESSAGE-01",
@@ -192,6 +199,9 @@
       "last_sender_missing",
       "user_goal_missing"
     ],
+    "contrast_set_ids": [
+      "CS-INFO-SENDER-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-INFO-TIMELINE-01",
       "changed_variable": null
@@ -258,6 +268,10 @@
       "unanswered_count_missing",
       "active_deadline_missing"
     ],
+    "contrast_set_ids": [
+      "CS-BUSY-CADENCE-01",
+      "CS-INFO-TIMELINE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-INFO-ELAPSED-01",
       "changed_variable": null
@@ -322,6 +336,10 @@
       "unanswered_count_missing",
       "contact_timeline_missing",
       "explicit_boundary_unknown"
+    ],
+    "contrast_set_ids": [
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-INFO-COUNT-RESOLUTION-01"
     ],
     "counterfactual": {
       "group_id": "CF-INFO-COUNT-01",
@@ -391,6 +409,9 @@
       "explicit_boundary_unknown",
       "user_goal_missing"
     ],
+    "contrast_set_ids": [
+      "CS-INFO-DRAFT-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-INFO-DRAFT-ONLY-01",
       "changed_variable": null
@@ -458,6 +479,10 @@
       "unanswered_count_missing",
       "explicit_boundary_unknown"
     ],
+    "contrast_set_ids": [
+      "CS-DIRECT-MESSAGE-SIGNAL-01",
+      "CS-INFO-SOCIAL-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-INFO-SOCIAL-SIGNAL-01",
       "changed_variable": null
@@ -523,6 +548,11 @@
       "usual_cadence_missing",
       "unanswered_count_missing",
       "active_deadline_missing"
+    ],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-URGENCY-01",
+      "CS-PROMISED-INFORMATION-01",
+      "CS-INFO-DEADLINE-RESOLUTION-01"
     ],
     "counterfactual": {
       "group_id": "CF-INFO-DEADLINE-01",

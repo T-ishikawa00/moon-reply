@@ -26,7 +26,9 @@ Schema validity is necessary but not sufficient for delivery. Cross-object polic
 
 ### `eval-case.schema.json`
 
-Owns the full committed evaluation case, including input, evaluation-only oracle, assessment meanings, question expectations, and counterfactual metadata. It encodes eligibility, decision, draft, Safety, split, and case-type enums plus key wait/pause/information invariants.
+Owns the full committed evaluation case, including input, evaluation-only oracle, assessment meanings, question expectations, a strict counterfactual group ID, and one or more unique `contrast_set_ids`. Contrast-set IDs match `CS-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{2}`. It encodes eligibility, decision, draft, Safety, split, and case-type enums plus key wait/pause/information invariants.
+
+`payment_allowed` is described as policy eligibility only. Neither `eval-case.schema.json` nor `eligibility-result.schema.json` enables runtime payment or represents payment capability.
 
 ### `structured-intake.schema.json`
 

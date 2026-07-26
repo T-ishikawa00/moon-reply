@@ -63,6 +63,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-HARM-TARGET-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SELF-HARM-01",
       "changed_variable": null
@@ -131,6 +134,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-HARM-TARGET-01"
+    ],
     "counterfactual": {
       "group_id": "CF-HARM-OTHERS-01",
       "changed_variable": null
@@ -201,6 +207,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ABUSE-COERCION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-DV-FEAR-01",
       "changed_variable": null
@@ -268,6 +277,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-INFO-COUNT-RESOLUTION-01",
+      "CS-PAUSE-SAFETY-ESCALATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-WAITING-AMBUSH-01",
       "changed_variable": null
@@ -334,6 +347,11 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-WORKPLACE-VISIT-01",
+      "CS-VISIT-NEGATION-01",
+      "CS-PAUSE-SAFETY-ESCALATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-VISIT-01",
       "changed_variable": null
@@ -401,6 +419,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ABUSE-COERCION-01",
+      "CS-CONTACT-COERCION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-COERCION-01",
       "changed_variable": null
@@ -468,6 +490,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SURVEILLANCE-INTENT-01",
+      "CS-DIGITAL-INTRUSION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SURVEILLANCE-SOCIAL-01",
       "changed_variable": null
@@ -535,6 +561,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-DIGITAL-INTRUSION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-UNAUTHORIZED-LOGIN-01",
       "changed_variable": null
@@ -601,6 +630,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ADDRESS-SEEKING-01",
+      "CS-DIGITAL-INTRUSION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-LOCATION-TRACKING-01",
       "changed_variable": null
@@ -669,6 +702,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PRIVACY-INTENT-01",
+      "CS-ADDRESS-SEEKING-01"
+    ],
     "counterfactual": {
       "group_id": "CF-DOXXING-01",
       "changed_variable": null
@@ -738,6 +775,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-AGE-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-MINOR-01",
       "changed_variable": null
@@ -806,6 +846,9 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-ILLEGAL-INTENT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-ILLEGAL-CONDUCT-01",
       "changed_variable": null
@@ -874,6 +917,10 @@
     ],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-THIRD-PARTY-SECRET-01",
+      "CS-CONTACT-COERCION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-THIRD-PARTY-SECRET-01",
       "changed_variable": null

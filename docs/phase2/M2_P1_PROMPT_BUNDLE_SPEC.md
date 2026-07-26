@@ -3,7 +3,7 @@
 ## Status
 
 - Bundle: `prompt-bundle-v1.0.0`
-- State: draft assets created and hashed; Human / ChatGPT review pending
+- State: draft assets created, M2-P1-R1 contracts added, and hashes synchronized; Human / ChatGPT final review pending
 - Execution: none
 - Runtime import: prohibited
 
@@ -20,6 +20,8 @@ The bundle is a design artifact under `ai/prompts/**`. M2-P1 makes no provider c
 | `safety-reason-codes-v1.json` | current Safety reason vocabulary, response modes, and strictest aggregate rule |
 | `question-library-v1.json` | approved concrete questions with `分からない` and privacy boundary |
 | `report-field-constraints-v1.json` | variable-copy limits and renderer ownership |
+| `retry-policy-v1.json` | transport retry, three-candidate ceiling, defect routing, and recursive-repair prohibition |
+| `stage-contracts-v1.json` | PB-01 through PB-07 inputs, output schemas, permissions, prohibitions, and retry reference |
 
 ## PB-01 Structure
 
@@ -125,11 +127,31 @@ Input: immutable source artifacts, candidate report, approved findings, repair m
 
 Output: a complete repaired `report-content.schema.json` object.
 
-It may change only approved mutable variable-copy fields. Safety, eligibility, policy, decision, facts, draft policy, fixed copy, and non-allowlisted paths remain immutable. It cannot create an internal retry loop.
+It may change only approved mutable variable-copy fields. Safety, eligibility, policy, decision, facts, draft policy, fixed copy, and non-allowlisted paths remain immutable. It cannot create an internal retry loop, repair a repair output, or use targeted repair for a critical defect.
+
+## Machine-readable stage contracts
+
+`shared/stage-contracts-v1.json` owns the stage boundary:
+
+- PB-01 structures input only; decision, draft, and report copy are forbidden.
+- PB-02 classifies semantic Safety only; user-facing Safety copy and decision are forbidden.
+- PB-03 selects approved question codes only; free-form question text and decision are forbidden.
+- PB-04 selects only within allowed decisions and may create an eligible message draft; report prose is forbidden.
+- PB-05 writes variable report prose without changing decision, draft, actions, plan, or fixed copy.
+- PB-06 emits findings only; repair and final delivery disposition are forbidden.
+- PB-07 changes approved JSON paths only; policy, Safety, facts, decision, and repair-of-repair remain immutable.
+
+Every input contract references an existing schema and pointer. Evaluation oracle and expected-result fields are absent from model input contracts. Only PB-04 may select a decision or generate a message draft; PB-05 generates original variable report copy and PB-07 may only repair approved variable-copy paths. No stage may change application-owned Safety.
+
+## Machine-readable retry policy
+
+`shared/retry-policy-v1.json` separates transport retrieval from content attempts. Transport/API/schema retrieval permits an initial call plus one identical retry and does not consume a content candidate. Schema-valid content is capped at three candidates: one initial generation, no more than one targeted repair, and no more than one full regeneration. A fourth candidate and repair-of-repair are prohibited.
+
+Safety regression stops immediately. An unallowed decision regenerates the owning stage, fact hallucination requires full regeneration, and failure of the third valid candidate becomes `terminal_failure`.
 
 ## Manifest contract
 
-`prompt-bundle.manifest.json` contains every shared and stage asset:
+`prompt-bundle.manifest.json` contains exactly nine shared assets and seven stage assets:
 
 - asset ID and kind;
 - asset version;

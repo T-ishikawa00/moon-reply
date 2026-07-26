@@ -13,25 +13,42 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const baseCommit = "617aca826612f58adb4b3f0d113ff1a89c36016a";
+const r1StartingCommit = "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7";
 const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
+const canonicalContrastCatalogHash =
+  "97458b7f9a6f7d15f48290ade8355fecdc33d8ce3824f42d1be8c9bc5f68cf89";
 
 const gateOrder = [
   "M2_CASE_COUNT_GATE",
   "M2_CASE_ID_GATE",
   "M2_DISTRIBUTION_GATE",
   "M2_ORACLE_GATE",
+  "M2_COUNTERFACTUAL_ID_GATE",
+  "M2_COUNTERFACTUAL_COVERAGE_GATE",
+  "M2_CONTRAST_SET_GATE",
+  "M2_CONTAMINATION_COMPONENT_GATE",
   "M2_SCHEMA_PARSE_GATE",
   "M2_SCHEMA_POLICY_GATE",
   "M2_PROMPT_MANIFEST_GATE",
+  "M2_RETRY_POLICY_GATE",
+  "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+  "M2_STAGE_RESPONSIBILITY_GATE",
   "M2_DATASET_HASH_GATE",
+  "M2_HUMAN_REVIEW_SAMPLE_GATE",
   "M2_HOLDOUT_ISOLATION_GATE",
   "M2_ORACLE_LEAKAGE_GATE",
   "M2_RUNTIME_ISOLATION_GATE",
+  "M2_RUNTIME_CAPABILITY_GATE",
+  "M2_EXACT_MANIFEST_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
 const failures = new Map(gateOrder.map((gate) => [gate, []]));
+let contaminationComponentMetric = {
+  count: 0,
+  sizes: [],
+};
 
 const developmentFiles = [
   {
@@ -105,6 +122,8 @@ const promptAssetPaths = [
   "shared/safety-reason-codes-v1.json",
   "shared/question-library-v1.json",
   "shared/report-field-constraints-v1.json",
+  "shared/retry-policy-v1.json",
+  "shared/stage-contracts-v1.json",
   "structure/v1.0.0.developer.md",
   "safety-semantic/v1.0.0.developer.md",
   "eligibility/v1.0.0.developer.md",
@@ -135,6 +154,158 @@ const expectedQuestionCodes = [
   "Q_RELATIONSHIP_END_BOUNDARY",
   "Q_USUAL_CONTACT_CADENCE",
 ];
+
+const expectedHumanReviewSampleIds = [
+  "REPLY-001",
+  "REPLY-002",
+  "REPLY-004",
+  "REPLY-008",
+  "REPLY-009",
+  "SEND-002",
+  "SEND-004",
+  "SEND-005",
+  "SEND-006",
+  "SEND-009",
+  "WAIT-001",
+  "WAIT-003",
+  "WAIT-004",
+  "WAIT-008",
+  "WAIT-010",
+  "PAUSE-001",
+  "PAUSE-003",
+  "PAUSE-004",
+  "PAUSE-008",
+  "PAUSE-010",
+];
+
+const expectedRuntimeCapabilities = [
+  "openai_api_enabled",
+  "database_enabled",
+  "authentication_enabled",
+  "payment_enabled",
+  "email_enabled",
+  "api_route_enabled",
+  "server_action_enabled",
+  "production_deployment_enabled",
+];
+
+const expectedStageResponsibilities = new Map([
+  [
+    "PB-01",
+    {
+      name: "structure",
+      selectDecision: false,
+      userCopy: false,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: false,
+      forbidden: ["eligibility", "decision", "message_draft", "report_copy"],
+    },
+  ],
+  [
+    "PB-02",
+    {
+      name: "safety_semantic",
+      selectDecision: false,
+      userCopy: false,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: false,
+      forbidden: [
+        "user_facing_safety_copy",
+        "decision",
+        "message_draft",
+        "aggregate_safety",
+      ],
+    },
+  ],
+  [
+    "PB-03",
+    {
+      name: "eligibility",
+      selectDecision: false,
+      userCopy: false,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: false,
+      forbidden: [
+        "free_form_question_text",
+        "decision",
+        "message_draft",
+        "report_copy",
+      ],
+    },
+  ],
+  [
+    "PB-04",
+    {
+      name: "decision_plan",
+      selectDecision: true,
+      userCopy: false,
+      messageDraft: true,
+      changeSafety: false,
+      repairable: false,
+      forbidden: [
+        "select_unallowed_decision",
+        "change_policy",
+        "report_prose",
+        "fixed_system_copy",
+      ],
+    },
+  ],
+  [
+    "PB-05",
+    {
+      name: "report_writer",
+      selectDecision: false,
+      userCopy: true,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: true,
+      forbidden: [
+        "change_decision",
+        "change_message_draft",
+        "change_actions_or_plan",
+        "generate_fixed_system_copy",
+      ],
+    },
+  ],
+  [
+    "PB-06",
+    {
+      name: "semantic_validator",
+      selectDecision: false,
+      userCopy: false,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: false,
+      forbidden: [
+        "repair",
+        "final_delivery_decision",
+        "select_repair_strategy",
+        "edit_candidate",
+      ],
+    },
+  ],
+  [
+    "PB-07",
+    {
+      name: "repair",
+      selectDecision: false,
+      userCopy: true,
+      messageDraft: false,
+      changeSafety: false,
+      repairable: false,
+      forbidden: [
+        "change_outside_allowed_json_paths",
+        "change_immutable_policy",
+        "change_safety",
+        "change_facts",
+        "repair_of_repair",
+      ],
+    },
+  ],
+]);
 
 const decisions = new Set([
   "reply_now",
@@ -279,6 +450,7 @@ const rootCaseKeys = [
   "safe_response_requirements",
   "additional_question_expectations",
   "material_gap_codes",
+  "contrast_set_ids",
   "counterfactual",
 ];
 const inputKeys = [
@@ -311,6 +483,8 @@ const draftConstraintKeys = [
   "max_questions",
 ];
 const counterfactualKeys = ["group_id", "changed_variable"];
+const counterfactualIdPattern = /^CF-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{2}$/u;
+const contrastSetIdPattern = /^CS-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{2}$/u;
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
@@ -763,6 +937,27 @@ function validateCaseShape(entry, file) {
   ]) {
     assertStringArray(gate, file, caseId, `$.${key}`, entry[key]);
   }
+  assertStringArray(
+    gate,
+    file,
+    caseId,
+    "$.contrast_set_ids",
+    entry.contrast_set_ids,
+  );
+  if (
+    !Array.isArray(entry.contrast_set_ids) ||
+    entry.contrast_set_ids.length === 0 ||
+    entry.contrast_set_ids.some((item) => !contrastSetIdPattern.test(item))
+  ) {
+    fail(gate, {
+      file,
+      caseId,
+      pathName: "$.contrast_set_ids",
+      invariant: "one or more strict contrast-set IDs",
+      expected: "unique CS-...-NN identifiers",
+      actual: entry.contrast_set_ids,
+    });
+  }
   if (
     !Array.isArray(entry.additional_question_expectations) ||
     entry.additional_question_expectations.some(
@@ -812,16 +1007,479 @@ function validateCaseShape(entry, file) {
   if (
     !entry.counterfactual ||
     typeof entry.counterfactual.group_id !== "string" ||
-    !/^CF-[A-Z0-9-]+$/u.test(entry.counterfactual.group_id)
+    !counterfactualIdPattern.test(entry.counterfactual.group_id)
   ) {
     fail(gate, {
       file,
       caseId,
       pathName: "$.counterfactual.group_id",
-      invariant: "counterfactual group ID",
-      expected: "CF-*",
+      invariant: "strict counterfactual group ID",
+      expected: "CF-...-NN",
       actual: entry.counterfactual?.group_id,
     });
+  }
+}
+
+function verifyCounterfactualAndContrast(allCases) {
+  const catalogPath = "evals/development/contrast-set-catalog-v1.json";
+  const datasetSpecPath = "docs/phase2/M2_P1_EVALUATION_DATASET_SPEC.md";
+  const caseById = new Map(allCases.map((item) => [item.case_id, item]));
+  const groups = new Map();
+
+  for (const item of allCases) {
+    const groupId = item.counterfactual?.group_id;
+    if (
+      typeof groupId !== "string" ||
+      groupId !== groupId.trim() ||
+      /\s/u.test(groupId) ||
+      !counterfactualIdPattern.test(groupId)
+    ) {
+      fail("M2_COUNTERFACTUAL_ID_GATE", {
+        file: "evals/development",
+        caseId: item.case_id,
+        pathName: "$.counterfactual.group_id",
+        invariant: "strict whitespace-free counterfactual group ID",
+        expected: "CF-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{2}",
+        actual: groupId,
+      });
+      continue;
+    }
+    if (!groups.has(groupId)) groups.set(groupId, []);
+    groups.get(groupId).push(item.case_id);
+
+    const changedVariable = item.counterfactual.changed_variable;
+    if (
+      changedVariable !== null &&
+      (typeof changedVariable !== "string" ||
+        changedVariable.trim().length === 0 ||
+        changedVariable !== changedVariable.trim())
+    ) {
+      fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+        file: "evals/development",
+        caseId: item.case_id,
+        pathName: "$.counterfactual.changed_variable",
+        invariant: "counterfactual changed variable is null or a trimmed string",
+        expected: "null or non-empty trimmed string",
+        actual: changedVariable,
+      });
+    }
+
+    const contrastIds = item.contrast_set_ids;
+    if (
+      !Array.isArray(contrastIds) ||
+      contrastIds.length === 0 ||
+      new Set(contrastIds).size !== contrastIds.length ||
+      contrastIds.some(
+        (contrastId) =>
+          typeof contrastId !== "string" ||
+          contrastId !== contrastId.trim() ||
+          /\s/u.test(contrastId) ||
+          !contrastSetIdPattern.test(contrastId),
+      )
+    ) {
+      fail("M2_CONTRAST_SET_GATE", {
+        file: "evals/development",
+        caseId: item.case_id,
+        pathName: "$.contrast_set_ids",
+        invariant:
+          "one or more unique strict whitespace-free contrast-set IDs",
+        expected: "unique CS-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{2}",
+        actual: contrastIds,
+      });
+    }
+  }
+
+  const multiCaseGroups = [...groups.values()].filter(
+    (memberIds) => memberIds.length > 1,
+  );
+  if (
+    groups.size !== 61 ||
+    [...groups.values()].reduce(
+      (count, memberIds) => count + memberIds.length,
+      0,
+    ) !== 70 ||
+    multiCaseGroups.length !== 7
+  ) {
+    fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+      file: "evals/development",
+      pathName: "$[*].counterfactual.group_id",
+      invariant: "canonical counterfactual group coverage",
+      expected: {
+        cases: 70,
+        groups: 61,
+        multi_case_groups: 7,
+      },
+      actual: {
+        cases: [...groups.values()].reduce(
+          (count, memberIds) => count + memberIds.length,
+          0,
+        ),
+        groups: groups.size,
+        multi_case_groups: multiCaseGroups.length,
+      },
+    });
+  }
+
+  const catalog = readJson(catalogPath, "M2_CONTRAST_SET_GATE");
+  if (!catalog) return;
+  exactObjectKeys({
+    gate: "M2_CONTRAST_SET_GATE",
+    file: catalogPath,
+    caseId: "-",
+    pathName: "$",
+    value: catalog,
+    expected: [
+      "schema_version",
+      "catalog_version",
+      "dataset_version",
+      "status",
+      "contrast_sets",
+    ],
+  });
+  if (
+    catalog.schema_version !== "moon-reply-contrast-set-catalog-v1" ||
+    catalog.catalog_version !== "contrast-set-catalog-v1.0.0" ||
+    catalog.dataset_version !== "eval-development-v1.0.0" ||
+    catalog.status !== "pre_registered_human_review_pending" ||
+    !Array.isArray(catalog.contrast_sets)
+  ) {
+    fail("M2_CONTRAST_SET_GATE", {
+      file: catalogPath,
+      pathName: "$",
+      invariant: "canonical contrast catalog identity",
+      expected:
+        "v1 catalog for eval-development-v1.0.0, pre-registered and pending Human review",
+      actual: catalog,
+    });
+    return;
+  }
+
+  const actualCatalogSemanticHash = sha256(
+    Buffer.from(JSON.stringify(catalog), "utf8"),
+  );
+  if (actualCatalogSemanticHash !== canonicalContrastCatalogHash) {
+    fail("M2_CONTRAST_SET_GATE", {
+      file: catalogPath,
+      pathName: "$",
+      invariant: "canonical documented contrast mapping semantic hash",
+      expected: canonicalContrastCatalogHash,
+      actual: actualCatalogSemanticHash,
+    });
+  }
+
+  const expectedMemberships = new Map(
+    allCases.map((item) => [item.case_id, []]),
+  );
+  const setIds = new Set();
+  const membershipPairs = new Set();
+  const allowedSourceBasis = new Set([
+    "decision_counterfactual_table",
+    "information_resolution",
+    "negation_conflict_gate",
+    "safety_semantic_boundary",
+    "pause_safety_boundary",
+  ]);
+  const sourceBasisCounts = {};
+  let membershipCount = 0;
+
+  for (const contrastSet of catalog.contrast_sets) {
+    const contrastSetId =
+      contrastSet && typeof contrastSet === "object"
+        ? contrastSet.contrast_set_id
+        : "<missing>";
+    exactObjectKeys({
+      gate: "M2_CONTRAST_SET_GATE",
+      file: catalogPath,
+      caseId: contrastSetId,
+      pathName: `$.contrast_sets[${contrastSetId}]`,
+      value: contrastSet,
+      expected: [
+        "contrast_set_id",
+        "decision_variable",
+        "source_basis",
+        "member_case_ids",
+      ],
+    });
+    if (
+      typeof contrastSetId !== "string" ||
+      contrastSetId !== contrastSetId.trim() ||
+      /\s/u.test(contrastSetId) ||
+      !contrastSetIdPattern.test(contrastSetId) ||
+      setIds.has(contrastSetId)
+    ) {
+      fail("M2_CONTRAST_SET_GATE", {
+        file: catalogPath,
+        caseId: contrastSetId,
+        pathName: "$.contrast_sets[*].contrast_set_id",
+        invariant: "unique strict contrast-set ID",
+        expected: "unique CS-...-NN",
+        actual: contrastSetId,
+      });
+    }
+    setIds.add(contrastSetId);
+    if (
+      typeof contrastSet.decision_variable !== "string" ||
+      contrastSet.decision_variable.trim().length === 0 ||
+      contrastSet.decision_variable !== contrastSet.decision_variable.trim()
+    ) {
+      fail("M2_CONTRAST_SET_GATE", {
+        file: catalogPath,
+        caseId: contrastSetId,
+        pathName: "$.contrast_sets[*].decision_variable",
+        invariant: "non-empty trimmed decision variable",
+        expected: "non-empty trimmed string",
+        actual: contrastSet.decision_variable,
+      });
+    }
+    if (!allowedSourceBasis.has(contrastSet.source_basis)) {
+      fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+        file: catalogPath,
+        caseId: contrastSetId,
+        pathName: "$.contrast_sets[*].source_basis",
+        invariant: "canonical documented mapping source",
+        expected: [...allowedSourceBasis],
+        actual: contrastSet.source_basis,
+      });
+    } else {
+      sourceBasisCounts[contrastSet.source_basis] =
+        (sourceBasisCounts[contrastSet.source_basis] ?? 0) + 1;
+    }
+    const memberIds = contrastSet.member_case_ids;
+    if (
+      !Array.isArray(memberIds) ||
+      memberIds.length < 2 ||
+      new Set(memberIds).size !== memberIds.length
+    ) {
+      fail("M2_CONTRAST_SET_GATE", {
+        file: catalogPath,
+        caseId: contrastSetId,
+        pathName: "$.contrast_sets[*].member_case_ids",
+        invariant: "at least two unique case memberships",
+        expected: "unique case ID array with length >= 2",
+        actual: memberIds,
+      });
+      continue;
+    }
+    for (const caseId of memberIds) {
+      const pair = `${contrastSetId}\u0000${caseId}`;
+      if (membershipPairs.has(pair)) {
+        fail("M2_CONTRAST_SET_GATE", {
+          file: catalogPath,
+          caseId,
+          pathName: `$.contrast_sets[${contrastSetId}].member_case_ids`,
+          invariant: "duplicate contrast-set membership zero",
+          expected: "unique membership",
+          actual: "duplicate",
+        });
+      }
+      membershipPairs.add(pair);
+      membershipCount += 1;
+      if (!caseById.has(caseId)) {
+        fail("M2_CONTRAST_SET_GATE", {
+          file: catalogPath,
+          caseId,
+          pathName: `$.contrast_sets[${contrastSetId}].member_case_ids`,
+          invariant: "catalog membership resolves to a development case",
+          expected: "known case ID",
+          actual: caseId,
+        });
+        continue;
+      }
+      expectedMemberships.get(caseId).push(contrastSetId);
+    }
+  }
+
+  const expectedSourceBasisCounts = {
+    decision_counterfactual_table: 20,
+    information_resolution: 8,
+    negation_conflict_gate: 9,
+    safety_semantic_boundary: 3,
+    pause_safety_boundary: 2,
+  };
+  if (
+    catalog.contrast_sets.length !== 42 ||
+    setIds.size !== 42 ||
+    membershipCount !== 130 ||
+    JSON.stringify(sourceBasisCounts) !==
+      JSON.stringify(expectedSourceBasisCounts)
+  ) {
+    fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+      file: catalogPath,
+      pathName: "$.contrast_sets",
+      invariant: "canonical documented mapping coverage",
+      expected: {
+        contrast_sets: 42,
+        memberships: 130,
+        source_basis_counts: expectedSourceBasisCounts,
+      },
+      actual: {
+        contrast_sets: catalog.contrast_sets.length,
+        unique_contrast_sets: setIds.size,
+        memberships: membershipCount,
+        source_basis_counts: sourceBasisCounts,
+      },
+    });
+  }
+
+  for (const item of allCases) {
+    const expected = expectedMemberships.get(item.case_id) ?? [];
+    if (
+      expected.length === 0 ||
+      JSON.stringify(item.contrast_set_ids) !== JSON.stringify(expected)
+    ) {
+      fail("M2_CONTRAST_SET_GATE", {
+        file: "evals/development",
+        caseId: item.case_id,
+        pathName: "$.contrast_set_ids",
+        invariant: "case membership exactly matches canonical catalog order",
+        expected,
+        actual: item.contrast_set_ids,
+      });
+    }
+  }
+
+  for (const memberIds of multiCaseGroups) {
+    const coveredTogether = catalog.contrast_sets.some((contrastSet) =>
+      memberIds.every((caseId) =>
+        contrastSet.member_case_ids.includes(caseId),
+      ),
+    );
+    if (!coveredTogether) {
+      fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+        file: catalogPath,
+        pathName: "$.contrast_sets",
+        invariant:
+          "every existing multi-case counterfactual group is co-covered by a contrast set",
+        expected: memberIds,
+        actual: "no common contrast set",
+      });
+    }
+  }
+
+  const datasetSpec = existsSync(absolute(datasetSpecPath))
+    ? readFileSync(absolute(datasetSpecPath), "utf8")
+    : "";
+  const datasetSpecLines = datasetSpec.split(/\r?\n/u);
+  for (const contrastSet of catalog.contrast_sets) {
+    const documentedRows = datasetSpecLines.filter(
+      (line) =>
+        line.trimStart().startsWith("|") &&
+        line.includes(`\`${contrastSet.contrast_set_id}\``),
+    );
+    const completeRows = documentedRows.filter((line) =>
+      contrastSet.member_case_ids.every((caseId) =>
+        line.includes(`\`${caseId}\``),
+      ),
+    );
+    if (completeRows.length !== 1) {
+      fail("M2_COUNTERFACTUAL_COVERAGE_GATE", {
+        file: datasetSpecPath,
+        caseId: contrastSet.contrast_set_id,
+        pathName: "$.canonical_contrast_mapping_table",
+        invariant: "documented counterfactual mapping coverage is exactly one row",
+        expected: contrastSet.member_case_ids,
+        actual: documentedRows,
+      });
+    }
+  }
+
+  const parent = new Map(allCases.map((item) => [item.case_id, item.case_id]));
+  const findRoot = (caseId) => {
+    let current = caseId;
+    while (parent.get(current) !== current) {
+      parent.set(current, parent.get(parent.get(current)));
+      current = parent.get(current);
+    }
+    return current;
+  };
+  const unite = (left, right) => {
+    const leftRoot = findRoot(left);
+    const rightRoot = findRoot(right);
+    if (leftRoot !== rightRoot) parent.set(rightRoot, leftRoot);
+  };
+  for (const memberIds of groups.values()) {
+    for (let index = 1; index < memberIds.length; index += 1) {
+      unite(memberIds[0], memberIds[index]);
+    }
+  }
+  for (const contrastSet of catalog.contrast_sets) {
+    for (let index = 1; index < contrastSet.member_case_ids.length; index += 1) {
+      unite(contrastSet.member_case_ids[0], contrastSet.member_case_ids[index]);
+    }
+  }
+  const components = new Map();
+  for (const item of allCases) {
+    const root = findRoot(item.case_id);
+    if (!components.has(root)) components.set(root, []);
+    components.get(root).push(item);
+  }
+  const componentSizes = [...components.values()]
+    .map((component) => component.length)
+    .sort((left, right) => right - left);
+  contaminationComponentMetric = {
+    count: components.size,
+    sizes: componentSizes,
+  };
+  if (
+    components.size !== 7 ||
+    JSON.stringify(componentSizes) !== JSON.stringify([51, 7, 4, 2, 2, 2, 2])
+  ) {
+    fail("M2_CONTAMINATION_COMPONENT_GATE", {
+      file: catalogPath,
+      pathName: "$.contrast_sets",
+      invariant: "canonical counterfactual and contrast graph components",
+      expected: {
+        count: 7,
+        sizes: [51, 7, 4, 2, 2, 2, 2],
+      },
+      actual: contaminationComponentMetric,
+    });
+  }
+  for (const component of components.values()) {
+    const splits = new Set(component.map((item) => item.dataset_split));
+    if (splits.size !== 1) {
+      fail("M2_CONTAMINATION_COMPONENT_GATE", {
+        file: "evals/development",
+        pathName: "$[*].dataset_split",
+        invariant:
+          "counterfactual and contrast connected component is indivisible across splits",
+        expected: "one split",
+        actual: {
+          case_ids: component.map((item) => item.case_id),
+          splits: [...splits],
+        },
+      });
+    }
+  }
+  const contaminationPolicy = existsSync(
+    absolute("docs/phase2/M2_P1_CONTAMINATION_POLICY.md"),
+  )
+    ? readFileSync(
+        absolute("docs/phase2/M2_P1_CONTAMINATION_POLICY.md"),
+        "utf8",
+      )
+    : "";
+  const holdoutContract = existsSync(absolute("evals/holdout/README.md"))
+    ? readFileSync(absolute("evals/holdout/README.md"), "utf8")
+    : "";
+  for (const [file, source] of [
+    ["docs/phase2/M2_P1_CONTAMINATION_POLICY.md", contaminationPolicy],
+    ["evals/holdout/README.md", holdoutContract],
+  ]) {
+    if (
+      !/connected component/iu.test(source) ||
+      !/(?:atomic|indivisible|must not be split|same split|cannot cross)/iu.test(
+        source,
+      )
+    ) {
+      fail("M2_CONTAMINATION_COMPONENT_GATE", {
+        file,
+        pathName: "$",
+        invariant: "connected-component split contract is explicit",
+        expected: "connected component plus indivisible split rule",
+        actual: "required statement missing",
+      });
+    }
   }
 }
 
@@ -984,7 +1642,7 @@ function verifyPromptBundle(allCases) {
       file: manifestPath,
       pathName: "$.assets",
       invariant: "prompt asset array",
-      expected: 14,
+      expected: 16,
       actual: manifest.assets,
     });
     return;
@@ -1000,12 +1658,15 @@ function verifyPromptBundle(allCases) {
       actual: actualPaths,
     });
   }
-  if (new Set(manifest.assets.map((asset) => asset.asset_id)).size !== 14) {
+  if (
+    manifest.assets.length !== 16 ||
+    new Set(manifest.assets.map((asset) => asset.asset_id)).size !== 16
+  ) {
     fail("M2_PROMPT_MANIFEST_GATE", {
       file: manifestPath,
       pathName: "$.assets[*].asset_id",
-      invariant: "14 unique prompt asset IDs",
-      expected: 14,
+      invariant: "16 exact prompt assets with unique IDs",
+      expected: 16,
       actual: manifest.assets.map((asset) => asset.asset_id),
     });
   }
@@ -1222,6 +1883,8 @@ function verifyDatasetHashes() {
     manifest.pipeline_schema_version === "pipeline-schema-v1.0.0" &&
     manifest.policy_version === "decision-policy-v1.0.0" &&
     manifest.prompt_bundle_version === "prompt-bundle-v1.0.0" &&
+    manifest.retry_policy_version === "retry-policy-v1.0.0" &&
+    manifest.stage_contracts_version === "stage-contracts-v1.0.0" &&
     manifest.validator_version === "validator-v1.0.0" &&
     manifest.safety_version === "safety-policy-v1.0.0" &&
     manifest.renderer_version === "report-renderer-v1.0.0" &&
@@ -1230,7 +1893,7 @@ function verifyDatasetHashes() {
     manifest.expected_external_holdout_count === 15 &&
     manifest.external_holdout_version === null &&
     manifest.external_holdout_sha256 === null &&
-    manifest.generated_by_task_id === "M2-P1";
+    manifest.generated_by_task_id === "M2-P1-R1";
   if (!manifestPolicyPass) {
     fail("M2_DATASET_HASH_GATE", {
       file: manifestPath,
@@ -1239,6 +1902,804 @@ function verifyDatasetHashes() {
       expected: "canonical component versions, 70 development, 15 external holdout, no holdout data",
       actual: manifest,
     });
+  }
+}
+
+function verifyHumanReviewSample(allCases) {
+  const samplePath = "evals/development/human-review-sample-v1.json";
+  const manifestPath = "evals/version-manifest.json";
+  const scoringPath = "docs/phase2/M2_P1_SCORING_AND_ACCEPTANCE.md";
+  const sample = readJson(samplePath, "M2_HUMAN_REVIEW_SAMPLE_GATE");
+  const manifest = readJson(manifestPath, "M2_HUMAN_REVIEW_SAMPLE_GATE");
+  if (!sample || !manifest) return;
+
+  exactObjectKeys({
+    gate: "M2_HUMAN_REVIEW_SAMPLE_GATE",
+    file: samplePath,
+    caseId: "-",
+    pathName: "$",
+    value: sample,
+    expected: [
+      "schema_version",
+      "sample_version",
+      "status",
+      "dataset_version",
+      "dataset_sha256",
+      "selection_policy",
+      "case_ids",
+    ],
+  });
+  exactObjectKeys({
+    gate: "M2_HUMAN_REVIEW_SAMPLE_GATE",
+    file: samplePath,
+    caseId: "-",
+    pathName: "$.selection_policy",
+    value: sample.selection_policy,
+    expected: [
+      "frozen",
+      "replacement_allowed",
+      "case_type",
+      "decision_category_count",
+      "cases_per_decision_category",
+      "total_count",
+    ],
+  });
+  const identityPass =
+    sample.schema_version === "moon-reply-human-review-sample-v1" &&
+    sample.sample_version === "human-review-sample-v1.0.0" &&
+    sample.status === "pre_registered" &&
+    sample.dataset_version === "eval-development-v1.0.0" &&
+    sample.dataset_sha256 === manifest.aggregate_dataset_sha256 &&
+    sample.selection_policy?.frozen === true &&
+    sample.selection_policy?.replacement_allowed === false &&
+    sample.selection_policy?.case_type === "decision" &&
+    sample.selection_policy?.decision_category_count === 4 &&
+    sample.selection_policy?.cases_per_decision_category === 5 &&
+    sample.selection_policy?.total_count === 20;
+  if (!identityPass) {
+    fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+      file: samplePath,
+      pathName: "$",
+      invariant:
+        "frozen non-replaceable 20-case sample is bound to the dataset aggregate hash",
+      expected: {
+        sample_version: "human-review-sample-v1.0.0",
+        dataset_version: "eval-development-v1.0.0",
+        dataset_sha256: manifest.aggregate_dataset_sha256,
+        selection_policy: {
+          frozen: true,
+          replacement_allowed: false,
+          case_type: "decision",
+          decision_category_count: 4,
+          cases_per_decision_category: 5,
+          total_count: 20,
+        },
+      },
+      actual: sample,
+    });
+  }
+  if (
+    !Array.isArray(sample.case_ids) ||
+    new Set(sample.case_ids).size !== 20 ||
+    JSON.stringify(sample.case_ids) !==
+      JSON.stringify(expectedHumanReviewSampleIds)
+  ) {
+    fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+      file: samplePath,
+      pathName: "$.case_ids",
+      invariant: "exact stable pre-registered Human-review sample",
+      expected: expectedHumanReviewSampleIds,
+      actual: sample.case_ids,
+    });
+  }
+
+  const caseById = new Map(allCases.map((item) => [item.case_id, item]));
+  for (const caseId of sample.case_ids ?? []) {
+    const item = caseById.get(caseId);
+    if (!item || item.case_type !== "decision") {
+      fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+        file: samplePath,
+        caseId,
+        pathName: "$.case_ids",
+        invariant: "sample ID exists and is a decision case",
+        expected: "existing decision case",
+        actual: item?.case_type ?? "missing",
+      });
+    }
+  }
+  const categoryCounts = Object.fromEntries(
+    ["REPLY", "SEND", "WAIT", "PAUSE"].map((prefix) => [
+      prefix,
+      (sample.case_ids ?? []).filter((caseId) =>
+        caseId.startsWith(`${prefix}-`),
+      ).length,
+    ]),
+  );
+  if (
+    JSON.stringify(categoryCounts) !==
+    JSON.stringify({ REPLY: 5, SEND: 5, WAIT: 5, PAUSE: 5 })
+  ) {
+    fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+      file: samplePath,
+      pathName: "$.case_ids",
+      invariant: "exactly five cases per decision category",
+      expected: { REPLY: 5, SEND: 5, WAIT: 5, PAUSE: 5 },
+      actual: categoryCounts,
+    });
+  }
+
+  const sampleMetadata = manifest.human_review_sample;
+  const actualSampleHash = sha256(canonicalTextBytes(samplePath));
+  if (
+    sampleMetadata?.relative_path !==
+      "development/human-review-sample-v1.json" ||
+    sampleMetadata?.sample_version !== "human-review-sample-v1.0.0" ||
+    sampleMetadata?.case_count !== 20 ||
+    sampleMetadata?.sha256 !== actualSampleHash
+  ) {
+    fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+      file: manifestPath,
+      pathName: "$.human_review_sample",
+      invariant: "version manifest binds the exact frozen sample asset",
+      expected: {
+        relative_path: "development/human-review-sample-v1.json",
+        sample_version: "human-review-sample-v1.0.0",
+        case_count: 20,
+        sha256: actualSampleHash,
+      },
+      actual: sampleMetadata,
+    });
+  }
+
+  const scoringPolicy = existsSync(absolute(scoringPath))
+    ? readFileSync(absolute(scoringPath), "utf8")
+    : "";
+  for (const statement of [
+    "evals/development/human-review-sample-v1.json",
+    "exactly the 20",
+    "cannot be replaced",
+  ]) {
+    if (!scoringPolicy.includes(statement)) {
+      fail("M2_HUMAN_REVIEW_SAMPLE_GATE", {
+        file: scoringPath,
+        pathName: "$",
+        invariant: "Human rubric is bound to the frozen sample",
+        expected: statement,
+        actual: "missing",
+      });
+    }
+  }
+}
+
+function verifyRetryPolicy() {
+  const retryPath = "ai/prompts/shared/retry-policy-v1.json";
+  const manifestPath = "ai/prompts/prompt-bundle.manifest.json";
+  const versionManifestPath = "evals/version-manifest.json";
+  const retry = readJson(retryPath, "M2_RETRY_POLICY_GATE");
+  const promptManifest = readJson(
+    manifestPath,
+    "M2_RETRY_POLICY_GATE",
+  );
+  const versionManifest = readJson(
+    versionManifestPath,
+    "M2_RETRY_POLICY_GATE",
+  );
+  if (!retry || !promptManifest || !versionManifest) return;
+
+  exactObjectKeys({
+    gate: "M2_RETRY_POLICY_GATE",
+    file: retryPath,
+    caseId: "-",
+    pathName: "$",
+    value: retry,
+    expected: [
+      "schema_version",
+      "policy_version",
+      "status",
+      "transport_api_schema_retrieval",
+      "schema_valid_content_candidates",
+      "targeted_repair",
+      "critical_handling",
+    ],
+  });
+  const expectedTransport = {
+    initial_call_count: 1,
+    identical_retry_count: 1,
+    maximum_call_count: 2,
+    retry_must_be_identical: true,
+    counts_toward_content_candidates: false,
+    failure_after_exhaustion: "stage_failure",
+  };
+  const expectedCandidates = {
+    maximum_candidates: 3,
+    initial_generation_count: 1,
+    maximum_targeted_repairs: 1,
+    maximum_full_regenerations: 1,
+    targeted_repair_precedes_full_regeneration_when_both_are_used: true,
+    forbidden_repair_may_skip_directly_to_full_regeneration: true,
+    fourth_candidate_allowed: false,
+    third_valid_candidate_failure: "terminal_failure",
+  };
+  const expectedTargetedRepair = {
+    allowed_defects: [
+      "missing_optional_copy_field",
+      "missing_required_copy_field",
+      "minor_length_violation",
+      "repetition",
+      "local_wording_defect",
+    ],
+    forbidden_defects: [
+      "safety_regression",
+      "unallowed_decision",
+      "fact_hallucination",
+      "assumption_promoted_to_fact",
+      "decision_message_contradiction",
+      "policy_engine_violation",
+    ],
+    approved_json_paths_required: true,
+    repair_output_may_receive_targeted_repair: false,
+    repair_of_repair_allowed: false,
+  };
+  const expectedCriticalHandling = [
+    { defect: "safety_regression", action: "immediate_stop" },
+    {
+      defect: "unallowed_decision",
+      action: "discard_and_regenerate_owning_stage",
+    },
+    { defect: "fact_hallucination", action: "full_regeneration" },
+    {
+      defect: "third_valid_candidate_failure",
+      action: "terminal_failure",
+    },
+  ];
+  if (
+    retry.schema_version !== "moon-reply-retry-policy-v1" ||
+    retry.policy_version !== "retry-policy-v1.0.0" ||
+    retry.status !== "draft_human_review_pending" ||
+    JSON.stringify(retry.transport_api_schema_retrieval) !==
+      JSON.stringify(expectedTransport) ||
+    JSON.stringify(retry.schema_valid_content_candidates) !==
+      JSON.stringify(expectedCandidates) ||
+    JSON.stringify(retry.targeted_repair) !==
+      JSON.stringify(expectedTargetedRepair) ||
+    JSON.stringify(retry.critical_handling) !==
+      JSON.stringify(expectedCriticalHandling)
+  ) {
+    fail("M2_RETRY_POLICY_GATE", {
+      file: retryPath,
+      pathName: "$",
+      invariant:
+        "canonical transport, three-candidate, defect-routing, and no-recursion retry policy",
+      expected: {
+        identity: [
+          "moon-reply-retry-policy-v1",
+          "retry-policy-v1.0.0",
+          "draft_human_review_pending",
+        ],
+        transport: expectedTransport,
+        candidates: expectedCandidates,
+        targeted_repair: expectedTargetedRepair,
+        critical_handling: expectedCriticalHandling,
+      },
+      actual: retry,
+    });
+  }
+
+  const retryAsset = promptManifest.assets?.find(
+    (asset) => asset.asset_id === "SHARED-RETRY-POLICY",
+  );
+  const actualRetryHash = sha256(canonicalTextBytes(retryPath));
+  if (
+    retryAsset?.relative_path !== "shared/retry-policy-v1.json" ||
+    retryAsset?.asset_version !== "retry-policy-v1.0.0" ||
+    retryAsset?.sha256 !== actualRetryHash ||
+    versionManifest.retry_policy_version !== "retry-policy-v1.0.0"
+  ) {
+    fail("M2_RETRY_POLICY_GATE", {
+      file: manifestPath,
+      pathName: "$.assets[SHARED-RETRY-POLICY]",
+      invariant: "prompt and version manifests bind the retry policy",
+      expected: {
+        relative_path: "shared/retry-policy-v1.json",
+        asset_version: "retry-policy-v1.0.0",
+        sha256: actualRetryHash,
+        version_manifest: "retry-policy-v1.0.0",
+      },
+      actual: {
+        prompt_asset: retryAsset,
+        version_manifest: versionManifest.retry_policy_version,
+      },
+    });
+  }
+
+  const requiredDocumentStatements = new Map([
+    [
+      "docs/phase2/M2_P1_AI_QUALITY_SPEC.md",
+      ["retry-policy-v1.json", "fourth candidate", "repair-of-repair"],
+    ],
+    [
+      "docs/phase2/M2_P1_PROMPT_BUNDLE_SPEC.md",
+      ["retry-policy-v1.json", "fourth candidate", "repair-of-repair"],
+    ],
+    [
+      "docs/phase2/M2_P1_SCORING_AND_ACCEPTANCE.md",
+      ["retry-policy-v1.json", "fourth candidate", "repair output"],
+    ],
+    [
+      "ai/prompts/repair/v1.0.0.developer.md",
+      ["retry-policy-v1.json", "repair-of-repair", "targeted repair"],
+    ],
+  ]);
+  for (const [file, statements] of requiredDocumentStatements) {
+    const source = existsSync(absolute(file))
+      ? readFileSync(absolute(file), "utf8")
+      : "";
+    for (const statement of statements) {
+      if (!source.toLowerCase().includes(statement.toLowerCase())) {
+        fail("M2_RETRY_POLICY_GATE", {
+          file,
+          pathName: "$",
+          invariant: "retry policy is synchronized to canonical policy text",
+          expected: statement,
+          actual: "missing",
+        });
+      }
+    }
+  }
+}
+
+function resolveJsonPointer(document, pointer) {
+  if (pointer === null) return document;
+  if (typeof pointer !== "string" || !pointer.startsWith("#/")) {
+    return undefined;
+  }
+  let current = document;
+  for (const encodedPart of pointer.slice(2).split("/")) {
+    const part = encodedPart.replaceAll("~1", "/").replaceAll("~0", "~");
+    if (
+      !current ||
+      typeof current !== "object" ||
+      !Object.hasOwn(current, part)
+    ) {
+      return undefined;
+    }
+    current = current[part];
+  }
+  return current;
+}
+
+function schemaPropertyKeys(schema) {
+  const keys = new Set();
+  const visit = (value) => {
+    if (!value || typeof value !== "object") return;
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+    if (value.properties && typeof value.properties === "object") {
+      Object.keys(value.properties).forEach((key) => keys.add(key));
+    }
+    Object.values(value).forEach(visit);
+  };
+  visit(schema);
+  return keys;
+}
+
+function verifyStageContracts() {
+  const contractsPath = "ai/prompts/shared/stage-contracts-v1.json";
+  const promptManifestPath = "ai/prompts/prompt-bundle.manifest.json";
+  const versionManifestPath = "evals/version-manifest.json";
+  const contracts = readJson(
+    contractsPath,
+    "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+  );
+  const promptManifest = readJson(
+    promptManifestPath,
+    "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+  );
+  const versionManifest = readJson(
+    versionManifestPath,
+    "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+  );
+  if (!contracts || !promptManifest || !versionManifest) return;
+
+  exactObjectKeys({
+    gate: "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+    file: contractsPath,
+    caseId: "-",
+    pathName: "$",
+    value: contracts,
+    expected: [
+      "schema_version",
+      "contract_version",
+      "status",
+      "retry_policy_ref",
+      "stages",
+    ],
+  });
+  const stageIds = Array.isArray(contracts.stages)
+    ? contracts.stages.map((stage) => stage.stage_id)
+    : [];
+  const expectedStageIds = [...expectedStageResponsibilities.keys()];
+  if (
+    contracts.schema_version !== "moon-reply-stage-contracts-v1" ||
+    contracts.contract_version !== "stage-contracts-v1.0.0" ||
+    contracts.status !== "draft_human_review_pending" ||
+    contracts.retry_policy_ref !== "shared/retry-policy-v1.json" ||
+    JSON.stringify(stageIds) !== JSON.stringify(expectedStageIds) ||
+    new Set(stageIds).size !== 7
+  ) {
+    fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+      file: contractsPath,
+      pathName: "$",
+      invariant: "PB-01 through PB-07 exist exactly once in stable order",
+      expected: {
+        schema_version: "moon-reply-stage-contracts-v1",
+        contract_version: "stage-contracts-v1.0.0",
+        retry_policy_ref: "shared/retry-policy-v1.json",
+        stage_ids: expectedStageIds,
+      },
+      actual: {
+        schema_version: contracts.schema_version,
+        contract_version: contracts.contract_version,
+        retry_policy_ref: contracts.retry_policy_ref,
+        stage_ids: stageIds,
+      },
+    });
+  }
+
+  const stageContractAsset = promptManifest.assets?.find(
+    (asset) => asset.asset_id === "SHARED-STAGE-CONTRACTS",
+  );
+  const actualContractsHash = sha256(canonicalTextBytes(contractsPath));
+  if (
+    stageContractAsset?.relative_path !== "shared/stage-contracts-v1.json" ||
+    stageContractAsset?.asset_version !== "stage-contracts-v1.0.0" ||
+    stageContractAsset?.sha256 !== actualContractsHash ||
+    versionManifest.stage_contracts_version !== "stage-contracts-v1.0.0"
+  ) {
+    fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+      file: promptManifestPath,
+      pathName: "$.assets[SHARED-STAGE-CONTRACTS]",
+      invariant: "prompt and version manifests bind the stage contracts",
+      expected: {
+        relative_path: "shared/stage-contracts-v1.json",
+        asset_version: "stage-contracts-v1.0.0",
+        sha256: actualContractsHash,
+        version_manifest: "stage-contracts-v1.0.0",
+      },
+      actual: {
+        prompt_asset: stageContractAsset,
+        version_manifest: versionManifest.stage_contracts_version,
+      },
+    });
+  }
+
+  const exclusiveOwners = {
+    may_select_decision: [],
+    may_generate_user_copy: [],
+    may_generate_message_draft: [],
+    may_change_safety: [],
+    repairable: [],
+  };
+  const allowedResponsibilityOwners = new Map();
+  const forbiddenInputKeys = new Set([
+    "oracle",
+    "expected",
+    "expected_result",
+    "confidence",
+    "probability",
+  ]);
+
+  for (const stage of contracts.stages ?? []) {
+    const stageId = stage?.stage_id ?? "<missing>";
+    exactObjectKeys({
+      gate: "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+      file: contractsPath,
+      caseId: stageId,
+      pathName: `$.stages[${stageId}]`,
+      value: stage,
+      expected: [
+        "stage_id",
+        "stage_name",
+        "input_contracts",
+        "output_schema",
+        "allowed_responsibilities",
+        "forbidden_responsibilities",
+        "may_select_decision",
+        "may_generate_user_copy",
+        "may_generate_message_draft",
+        "may_change_safety",
+        "repairable",
+        "retry_policy_ref",
+      ],
+    });
+
+    const expectedResponsibility = expectedStageResponsibilities.get(stageId);
+    if (!expectedResponsibility) continue;
+    const responsibilityPass =
+      stage.stage_name === expectedResponsibility.name &&
+      stage.retry_policy_ref === "shared/retry-policy-v1.json" &&
+      stage.may_select_decision === expectedResponsibility.selectDecision &&
+      stage.may_generate_user_copy === expectedResponsibility.userCopy &&
+      stage.may_generate_message_draft ===
+        expectedResponsibility.messageDraft &&
+      stage.may_change_safety === expectedResponsibility.changeSafety &&
+      stage.repairable === expectedResponsibility.repairable &&
+      Array.isArray(stage.allowed_responsibilities) &&
+      stage.allowed_responsibilities.length > 0 &&
+      new Set(stage.allowed_responsibilities).size ===
+        stage.allowed_responsibilities.length &&
+      Array.isArray(stage.forbidden_responsibilities) &&
+      sameSet(
+        stage.forbidden_responsibilities,
+        expectedResponsibility.forbidden,
+      );
+    if (!responsibilityPass) {
+      fail("M2_STAGE_RESPONSIBILITY_GATE", {
+        file: contractsPath,
+        caseId: stageId,
+        pathName: `$.stages[${stageId}]`,
+        invariant: "canonical stage responsibility and prohibition matrix",
+        expected: expectedResponsibility,
+        actual: stage,
+      });
+    }
+
+    for (const key of Object.keys(exclusiveOwners)) {
+      if (stage[key] === true) exclusiveOwners[key].push(stageId);
+    }
+    for (const responsibility of stage.allowed_responsibilities ?? []) {
+      if (!allowedResponsibilityOwners.has(responsibility)) {
+        allowedResponsibilityOwners.set(responsibility, []);
+      }
+      allowedResponsibilityOwners.get(responsibility).push(stageId);
+    }
+
+    if (!Array.isArray(stage.input_contracts) || stage.input_contracts.length === 0) {
+      fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+        file: contractsPath,
+        caseId: stageId,
+        pathName: `$.stages[${stageId}].input_contracts`,
+        invariant: "at least one input contract",
+        expected: "non-empty array",
+        actual: stage.input_contracts,
+      });
+    }
+    for (const inputContract of stage.input_contracts ?? []) {
+      exactObjectKeys({
+        gate: "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+        file: contractsPath,
+        caseId: stageId,
+        pathName: `$.stages[${stageId}].input_contracts`,
+        value: inputContract,
+        expected: ["contract_id", "schema_path", "schema_pointer"],
+      });
+      const schema = readJson(
+        inputContract.schema_path,
+        "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+      );
+      const resolved = schema
+        ? resolveJsonPointer(schema, inputContract.schema_pointer)
+        : undefined;
+      if (!resolved) {
+        fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+          file: contractsPath,
+          caseId: stageId,
+          pathName: `$.stages[${stageId}].input_contracts[${inputContract.contract_id}]`,
+          invariant: "referenced input schema and pointer resolve",
+          expected: {
+            schema_path: inputContract.schema_path,
+            schema_pointer: inputContract.schema_pointer,
+          },
+          actual: "missing schema or pointer",
+        });
+        continue;
+      }
+      const exposedKeys = schemaPropertyKeys(resolved);
+      const forbiddenExposed = [...exposedKeys].filter(
+        (key) =>
+          forbiddenInputKeys.has(key) ||
+          key.startsWith("expected_") ||
+          key.endsWith("_confidence") ||
+          key.endsWith("_probability"),
+      );
+      if (forbiddenExposed.length > 0) {
+        fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+          file: inputContract.schema_path,
+          caseId: stageId,
+          pathName: inputContract.schema_pointer ?? "#",
+          invariant:
+            "model input contract excludes oracle, expected-result, confidence, and probability fields",
+          expected: "zero forbidden fields",
+          actual: forbiddenExposed,
+        });
+      }
+    }
+
+    exactObjectKeys({
+      gate: "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+      file: contractsPath,
+      caseId: stageId,
+      pathName: `$.stages[${stageId}].output_schema`,
+      value: stage.output_schema,
+      expected: ["schema_path", "schema_pointer"],
+    });
+    const outputSchema = readJson(
+      stage.output_schema?.schema_path,
+      "M2_PROMPT_SCHEMA_CONTRACT_GATE",
+    );
+    const resolvedOutput = outputSchema
+      ? resolveJsonPointer(outputSchema, stage.output_schema.schema_pointer)
+      : undefined;
+    if (!resolvedOutput) {
+      fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+        file: contractsPath,
+        caseId: stageId,
+        pathName: `$.stages[${stageId}].output_schema`,
+        invariant: "referenced output schema and pointer resolve",
+        expected: stage.output_schema,
+        actual: "missing schema or pointer",
+      });
+    }
+
+    const stageAsset = promptManifest.assets?.find(
+      (asset) => asset.asset_id === stageId && asset.kind === "stage",
+    );
+    if (
+      !stageAsset ||
+      stageAsset.output_schema_path !== stage.output_schema.schema_path ||
+      stageAsset.output_schema_pointer !== stage.output_schema.schema_pointer
+    ) {
+      fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+        file: promptManifestPath,
+        caseId: stageId,
+        pathName: "$.assets",
+        invariant: "prompt manifest output schema matches stage contract",
+        expected: stage.output_schema,
+        actual: stageAsset,
+      });
+    }
+    if (stageAsset) {
+      const promptPath = `ai/prompts/${stageAsset.relative_path}`;
+      const promptSource = existsSync(absolute(promptPath))
+        ? readFileSync(absolute(promptPath), "utf8")
+        : "";
+      for (const reference of [
+        `\`${stageId}\` entry in \`shared/stage-contracts-v1.json\``,
+        "shared/retry-policy-v1.json",
+      ]) {
+        if (!promptSource.includes(reference)) {
+          fail("M2_PROMPT_SCHEMA_CONTRACT_GATE", {
+            file: promptPath,
+            caseId: stageId,
+            pathName: "$",
+            invariant: "stage prompt references machine-readable contracts",
+            expected: reference,
+            actual: "missing",
+          });
+        }
+      }
+    }
+  }
+
+  const expectedExclusiveOwners = {
+    may_select_decision: ["PB-04"],
+    may_generate_user_copy: ["PB-05", "PB-07"],
+    may_generate_message_draft: ["PB-04"],
+    may_change_safety: [],
+    repairable: ["PB-05"],
+  };
+  if (
+    JSON.stringify(exclusiveOwners) !==
+    JSON.stringify(expectedExclusiveOwners)
+  ) {
+    fail("M2_STAGE_RESPONSIBILITY_GATE", {
+      file: contractsPath,
+      pathName: "$.stages",
+      invariant: "exclusive stage capability ownership",
+      expected: expectedExclusiveOwners,
+      actual: exclusiveOwners,
+    });
+  }
+  const duplicatedResponsibilities = [...allowedResponsibilityOwners]
+    .filter(([, owners]) => owners.length > 1)
+    .map(([responsibility, owners]) => ({ responsibility, owners }));
+  if (duplicatedResponsibilities.length > 0) {
+    fail("M2_STAGE_RESPONSIBILITY_GATE", {
+      file: contractsPath,
+      pathName: "$.stages[*].allowed_responsibilities",
+      invariant: "allowed responsibility labels have one owner",
+      expected: "no duplicate responsibility labels",
+      actual: duplicatedResponsibilities,
+    });
+  }
+}
+
+function verifyRuntimeCapabilities() {
+  const manifestPath = "evals/version-manifest.json";
+  const manifest = readJson(manifestPath, "M2_RUNTIME_CAPABILITY_GATE");
+  if (!manifest) return;
+  const capabilities = manifest.runtime_capabilities;
+  const actualKeys =
+    capabilities && typeof capabilities === "object"
+      ? Object.keys(capabilities).sort()
+      : [];
+  if (
+    JSON.stringify(actualKeys) !==
+      JSON.stringify([...expectedRuntimeCapabilities].sort()) ||
+    expectedRuntimeCapabilities.some((key) => capabilities?.[key] !== false)
+  ) {
+    fail("M2_RUNTIME_CAPABILITY_GATE", {
+      file: manifestPath,
+      pathName: "$.runtime_capabilities",
+      invariant: "exact runtime capability set is explicitly disabled",
+      expected: Object.fromEntries(
+        expectedRuntimeCapabilities.map((key) => [key, false]),
+      ),
+      actual: capabilities,
+    });
+  }
+
+  const evalCaseSchema = readJson(
+    "ai/schemas/eval-case.schema.json",
+    "M2_RUNTIME_CAPABILITY_GATE",
+  );
+  const eligibilitySchema = readJson(
+    "ai/schemas/eligibility-result.schema.json",
+    "M2_RUNTIME_CAPABILITY_GATE",
+  );
+  const descriptions = [
+    [
+      "ai/schemas/eval-case.schema.json",
+      evalCaseSchema?.properties?.oracle?.properties?.payment_allowed
+        ?.description,
+    ],
+    [
+      "ai/schemas/eligibility-result.schema.json",
+      eligibilitySchema?.properties?.payment_allowed?.description,
+    ],
+  ];
+  for (const [file, description] of descriptions) {
+    if (
+      typeof description !== "string" ||
+      !/policy eligibility only/iu.test(description) ||
+      !/does not enable runtime payment/iu.test(description)
+    ) {
+      fail("M2_RUNTIME_CAPABILITY_GATE", {
+        file,
+        pathName: "$..payment_allowed.description",
+        invariant:
+          "payment_allowed is policy eligibility and cannot enable runtime payment",
+        expected:
+          "description contains policy eligibility only and does not enable runtime payment",
+        actual: description,
+      });
+    }
+  }
+
+  for (const file of [
+    "docs/phase2/M2_P1_AI_QUALITY_SPEC.md",
+    "docs/phase2/M2_P1_DECISION_POLICY.md",
+    "docs/phase2/M2_P1_SCHEMA_SPEC.md",
+  ]) {
+    const source = existsSync(absolute(file))
+      ? readFileSync(absolute(file), "utf8")
+      : "";
+    if (
+      !source.includes("payment_allowed") ||
+      !/policy(?:-| )eligibility|policy eligibility/iu.test(source) ||
+      !/runtime payment/iu.test(source)
+    ) {
+      fail("M2_RUNTIME_CAPABILITY_GATE", {
+        file,
+        pathName: "$",
+        invariant: "canonical payment capability boundary is documented",
+        expected:
+          "payment_allowed is policy eligibility only and runtime payment remains disabled",
+        actual: "required statement missing",
+      });
+    }
   }
 }
 
@@ -1266,6 +2727,297 @@ function runGit(args) {
       encoding: "utf8",
     },
   );
+}
+
+function parseNameStatus(output) {
+  const entries = [];
+  for (const line of output.split(/\r?\n/u).filter(Boolean)) {
+    const parts = line.split("\t");
+    const status = parts[0].slice(0, 1);
+    const itemPath = (status === "R" || status === "C"
+      ? parts.at(-1)
+      : parts[1]
+    )?.replaceAll("\\", "/");
+    if (itemPath) entries.push({ status, path: itemPath });
+  }
+  return entries;
+}
+
+function mutationSummary(entries) {
+  const sortedEntries = [...entries].sort((left, right) =>
+    left.path.localeCompare(right.path, "en"),
+  );
+  const rootCounts = {};
+  for (const entry of sortedEntries) {
+    const root = entry.path.split("/")[0];
+    rootCounts[root] = (rootCounts[root] ?? 0) + 1;
+  }
+  return {
+    changed_file_count: sortedEntries.length,
+    added_count: sortedEntries.filter((entry) => entry.status === "A").length,
+    modified_count: sortedEntries.filter((entry) => entry.status === "M").length,
+    deleted_count: sortedEntries.filter((entry) => entry.status === "D").length,
+    root_counts: Object.fromEntries(
+      Object.entries(rootCounts).sort(([left], [right]) =>
+        left.localeCompare(right, "en"),
+      ),
+    ),
+    entries: sortedEntries,
+  };
+}
+
+function collectGitMutationManifest(fromRef, toRef = null) {
+  const args = toRef
+    ? ["diff", "--name-status", fromRef, toRef, "--"]
+    : ["diff", "--name-status", fromRef, "--"];
+  const diff = runGit(args);
+  if (diff.status !== 0) {
+    fail("M2_EXACT_MANIFEST_GATE", {
+      file: "<git>",
+      pathName: "$",
+      invariant: "Git name-status manifest is readable",
+      expected: "git exit 0",
+      actual: diff.stderr || diff.stdout,
+    });
+    return mutationSummary([]);
+  }
+  const byPath = new Map(
+    parseNameStatus(diff.stdout).map((entry) => [entry.path, entry]),
+  );
+  if (toRef === null) {
+    const status = runGit([
+      "status",
+      "--porcelain=v1",
+      "--untracked-files=all",
+    ]);
+    if (status.status !== 0) {
+      fail("M2_EXACT_MANIFEST_GATE", {
+        file: "<git>",
+        pathName: "$",
+        invariant: "Git untracked manifest is readable",
+        expected: "git exit 0",
+        actual: status.stderr || status.stdout,
+      });
+    } else {
+      for (const line of status.stdout.split(/\r?\n/u).filter(Boolean)) {
+        if (!line.startsWith("?? ")) continue;
+        const itemPath = line.slice(3).trim().replaceAll("\\", "/");
+        if (!byPath.has(itemPath)) {
+          byPath.set(itemPath, { status: "A", path: itemPath });
+        }
+      }
+    }
+  }
+  for (const entry of byPath.values()) {
+    if (!["A", "M", "D"].includes(entry.status)) {
+      fail("M2_EXACT_MANIFEST_GATE", {
+        file: entry.path,
+        pathName: "$",
+        invariant: "mutation status is add, modify, or delete only",
+        expected: ["A", "M", "D"],
+        actual: entry.status,
+      });
+    }
+  }
+  return mutationSummary([...byPath.values()]);
+}
+
+function normalizeDeclaredManifest(section) {
+  const rootCounts =
+    section?.root_counts && typeof section.root_counts === "object"
+      ? Object.fromEntries(
+          Object.entries(section.root_counts).sort(([left], [right]) =>
+            left.localeCompare(right, "en"),
+          ),
+        )
+      : section?.root_counts;
+  const entries = Array.isArray(section?.entries)
+    ? [...section.entries]
+        .map((entry) => ({ status: entry.status, path: entry.path }))
+        .sort((left, right) => left.path.localeCompare(right.path, "en"))
+    : section?.entries;
+  return {
+    changed_file_count: section?.changed_file_count,
+    added_count: section?.added_count,
+    modified_count: section?.modified_count,
+    deleted_count: section?.deleted_count,
+    root_counts: rootCounts,
+    entries,
+  };
+}
+
+function verifyExactMutationManifest() {
+  const manifestPath = "docs/phase2/M2_P1_EXACT_MUTATION_MANIFEST.json";
+  const manifest = readJson(manifestPath, "M2_EXACT_MANIFEST_GATE");
+  if (!manifest) return;
+  exactObjectKeys({
+    gate: "M2_EXACT_MANIFEST_GATE",
+    file: manifestPath,
+    caseId: "-",
+    pathName: "$",
+    value: manifest,
+    expected: [
+      "schema_version",
+      "base_commit",
+      "r1_starting_commit",
+      "comparison",
+      "original_manifest_reconciliation",
+      "authoritative_manifest",
+      "r1_manifest",
+    ],
+  });
+  if (
+    manifest.schema_version !==
+      "moon-reply-m2-p1-exact-mutation-manifest-v1" ||
+    manifest.base_commit !== baseCommit ||
+    manifest.r1_starting_commit !== r1StartingCommit ||
+    manifest.comparison !== "origin/main...final_HEAD"
+  ) {
+    fail("M2_EXACT_MANIFEST_GATE", {
+      file: manifestPath,
+      pathName: "$",
+      invariant: "exact manifest identity and Git comparison",
+      expected: {
+        schema_version: "moon-reply-m2-p1-exact-mutation-manifest-v1",
+        base_commit: baseCommit,
+        r1_starting_commit: r1StartingCommit,
+        comparison: "origin/main...final_HEAD",
+      },
+      actual: manifest,
+    });
+  }
+
+  const original = collectGitMutationManifest(
+    baseCommit,
+    r1StartingCommit,
+  );
+  const originalReconciliation = manifest.original_manifest_reconciliation;
+  const originalExpected = {
+    authoritative_changed_file_count: original.changed_file_count,
+    added_count: original.added_count,
+    modified_count: original.modified_count,
+    deleted_count: original.deleted_count,
+    root_counts: original.root_counts,
+  };
+  const originalActual = {
+    authoritative_changed_file_count:
+      originalReconciliation?.authoritative_changed_file_count,
+    added_count: originalReconciliation?.added_count,
+    modified_count: originalReconciliation?.modified_count,
+    deleted_count: originalReconciliation?.deleted_count,
+    root_counts: originalReconciliation?.root_counts,
+  };
+  if (
+    JSON.stringify(originalActual) !== JSON.stringify(originalExpected) ||
+    original.changed_file_count !== 52 ||
+    original.added_count !== 46 ||
+    original.modified_count !== 6 ||
+    original.deleted_count !== 0 ||
+    JSON.stringify(original.root_counts) !==
+      JSON.stringify({ ai: 24, docs: 16, evals: 11, scripts: 1 }) ||
+    originalReconciliation?.reported_ui_count !== 44 ||
+    originalReconciliation?.reported_ui_count_authoritative !== false ||
+    originalReconciliation?.reported_ui_count_origin_identified !== false ||
+    !/non-authoritative|unverified UI count/iu.test(
+      originalReconciliation?.finding ?? "",
+    )
+  ) {
+    fail("M2_EXACT_MANIFEST_GATE", {
+      file: manifestPath,
+      pathName: "$.original_manifest_reconciliation",
+      invariant:
+        "original 52-file Git manifest and non-authoritative 44-file UI count are reconciled",
+      expected: {
+        git: {
+          changed_file_count: 52,
+          added_count: 46,
+          modified_count: 6,
+          deleted_count: 0,
+          root_counts: { ai: 24, docs: 16, evals: 11, scripts: 1 },
+        },
+        ui_count: {
+          value: 44,
+          authoritative: false,
+          origin_identified: false,
+        },
+      },
+      actual: {
+        git: original,
+        reconciliation: originalReconciliation,
+      },
+    });
+  }
+
+  const authoritative = collectGitMutationManifest(baseCommit);
+  const r1 = collectGitMutationManifest(r1StartingCommit);
+  for (const [pathName, declared, actual] of [
+    [
+      "$.authoritative_manifest",
+      normalizeDeclaredManifest(manifest.authoritative_manifest),
+      authoritative,
+    ],
+    [
+      "$.r1_manifest",
+      normalizeDeclaredManifest(manifest.r1_manifest),
+      r1,
+    ],
+  ]) {
+    if (JSON.stringify(declared) !== JSON.stringify(actual)) {
+      fail("M2_EXACT_MANIFEST_GATE", {
+        file: manifestPath,
+        pathName,
+        invariant: "declared mutation manifest exactly matches Git",
+        expected: actual,
+        actual: declared,
+      });
+    }
+  }
+
+  const expectedFinalSummary = {
+    changed_file_count: 57,
+    added_count: 51,
+    modified_count: 6,
+    deleted_count: 0,
+    root_counts: { ai: 26, docs: 17, evals: 13, scripts: 1 },
+  };
+  const actualFinalSummary = {
+    changed_file_count: authoritative.changed_file_count,
+    added_count: authoritative.added_count,
+    modified_count: authoritative.modified_count,
+    deleted_count: authoritative.deleted_count,
+    root_counts: authoritative.root_counts,
+  };
+  const expectedR1AddedPaths = [
+    "ai/prompts/shared/retry-policy-v1.json",
+    "ai/prompts/shared/stage-contracts-v1.json",
+    "docs/phase2/M2_P1_EXACT_MUTATION_MANIFEST.json",
+    "evals/development/contrast-set-catalog-v1.json",
+    "evals/development/human-review-sample-v1.json",
+  ];
+  const actualR1AddedPaths = r1.entries
+    .filter((entry) => entry.status === "A")
+    .map((entry) => entry.path);
+  if (
+    JSON.stringify(actualFinalSummary) !==
+      JSON.stringify(expectedFinalSummary) ||
+    JSON.stringify(actualR1AddedPaths) !==
+      JSON.stringify(expectedR1AddedPaths)
+  ) {
+    fail("M2_EXACT_MANIFEST_GATE", {
+      file: manifestPath,
+      pathName: "$.authoritative_manifest",
+      invariant:
+        "R1 adds exactly five assets and final aggregate remains within the reconciled 57-file manifest",
+      expected: {
+        final: expectedFinalSummary,
+        r1_added_paths: expectedR1AddedPaths,
+      },
+      actual: {
+        final: actualFinalSummary,
+        r1_added_paths: actualR1AddedPaths,
+      },
+    });
+  }
 }
 
 function currentTaskPaths() {
@@ -1490,6 +3242,7 @@ function verifyOracleProjection(allCases) {
     "safe_response_requirements",
     "additional_question_expectations",
     "material_gap_codes",
+    "contrast_set_ids",
     "counterfactual",
   ]);
   for (const item of allCases) {
@@ -1594,6 +3347,7 @@ function verifyIndex(allCases) {
       expected_safety_classification: source.oracle.safety_classification,
       expected_decision: source.oracle.primary_decision,
       counterfactual_group: source.counterfactual.group_id,
+      contrast_set_ids: source.contrast_set_ids,
     };
     if (JSON.stringify(entry) !== JSON.stringify(expected)) {
       fail("M2_CASE_ID_GATE", {
@@ -1842,14 +3596,20 @@ function verifyCases(allCases, casesByFile) {
     }
   }
 
+  const protectedOriginalCases = allCases.map((item) => {
+    const projected = structuredClone(item);
+    delete projected.contrast_set_ids;
+    return projected;
+  });
   const actualCanonicalHash = sha256(
-    Buffer.from(JSON.stringify(allCases), "utf8"),
+    Buffer.from(JSON.stringify(protectedOriginalCases), "utf8"),
   );
   if (actualCanonicalHash !== canonicalContentHash) {
     fail("M2_ORACLE_GATE", {
       file: "evals/development",
       pathName: "$",
-      invariant: "canonical Appendix A semantic content hash",
+      invariant:
+        "canonical Appendix A semantic content excluding additive contrast metadata",
       expected: canonicalContentHash,
       actual: actualCanonicalHash,
     });
@@ -1879,6 +3639,9 @@ function printResults() {
   for (const gate of gateOrder) {
     console.log(`${gate}: ${results.get(gate) ? "PASS" : "FAIL"}`);
   }
+  console.log(
+    `M2_CONTAMINATION_COMPONENT_SUMMARY: count=${contaminationComponentMetric.count}; sizes=${contaminationComponentMetric.sizes.join(",")}`,
+  );
   const overall = [...results.values()].every(Boolean);
   console.log(`M2_EVAL_FOUNDATION_GATE: ${overall ? "PASS" : "FAIL"}`);
   return overall;
@@ -1912,13 +3675,19 @@ try {
   );
 
   verifyCases(allCases, casesByFile);
+  verifyCounterfactualAndContrast(allCases);
   verifyIndex(allCases);
   verifySchemas();
   verifyPromptBundle(allCases);
+  verifyRetryPolicy();
+  verifyStageContracts();
   verifyDatasetHashes();
+  verifyHumanReviewSample(allCases);
   verifyHoldoutIsolation(allCases);
   verifyOracleProjection(allCases);
   verifyRuntimeIsolation();
+  verifyRuntimeCapabilities();
+  verifyExactMutationManifest();
   verifyScopeAndProhibitedImplementation();
 
   completed = printResults();

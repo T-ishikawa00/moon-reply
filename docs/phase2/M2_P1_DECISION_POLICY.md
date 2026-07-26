@@ -3,7 +3,7 @@
 ## Status
 
 - Version: `decision-policy-v1.0.0`
-- State: draft foundation; Human / ChatGPT review pending
+- State: draft foundation with M2-P1-R1 integrity hardening; Human / ChatGPT final review pending
 - Owner: 月の返事 application policy
 - Runtime implementation: not authorized
 
@@ -17,6 +17,8 @@ Decision policy runs only when:
 - aggregate Safety is `normal_allowed`.
 
 For `needs_more_information` or `safety_blocked`, `primary_decision` is null, the draft is not allowed, payment is false, and report generation is prohibited.
+
+`payment_allowed` means policy eligibility only. It does not enable runtime payment, a checkout, a provider call, or a charge. Runtime payment remains disabled in the canonical version manifest.
 
 ## Fixed decisions
 
@@ -130,7 +132,9 @@ The model receives this result and must:
 
 ## Counterfactual review
 
-Cases sharing a counterfactual group must differ only through their supplied facts, not through policy drift. Review checks whether the changed fact moves the allowed decision in the expected direction. A model miss does not justify changing the oracle.
+Cases sharing a counterfactual group must differ only through their supplied facts, not through policy drift. `contrast_set_ids` add a many-to-many layer for documented decision variables that cannot be represented by one group ID. Review checks whether the changed fact moves the allowed decision in the expected direction. A model miss does not justify changing the oracle.
+
+Development and holdout assignment occurs at the connected-component level after adding both counterfactual-group and contrast-set edges. No component may cross the split boundary.
 
 ## Change control
 

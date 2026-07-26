@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P1 AI Quality Specification & Evaluation Foundation
+Phase 2 / Milestone 2 — M2-P1-R1 Evaluation Foundation Integrity Hardening
 
 ## Completed Through
 
@@ -33,17 +33,21 @@ Phase 2 / Milestone 2 — M2-P1 AI Quality Specification & Evaluation Foundation
 - Milestone 1 Human-accepted, complete, and closed
 - M2-P1 Human-authorized as a bounded documentation/evaluation foundation task
 - Exactly 70 development fixtures materialized; holdout remains external-only
-- Nine Draft 2020-12 schemas and seven stage prompt assets drafted
+- Nine Draft 2020-12 schemas, seven stage prompts, and nine shared prompt assets drafted
 - Scoring, versioning, contamination, decision, and evaluation policies drafted
-- Permanent M2 foundation verifier implemented and passing
+- M2-P1-R1 adds strict counterfactual IDs, 42 contrast sets with 130 memberships covering all 70 cases, and connected-component contamination controls
+- Exact 20-case Human-review sample pre-registered in stable order
+- Bounded retry policy and seven-stage responsibility contracts made machine-readable
+- All eight declared runtime capabilities explicitly disabled
+- Permanent M2 foundation verifier extended and passing
 
 ## Current Task
 
-`M2-P1 AI Quality Specification & Evaluation Foundation`
+`M2-P1-R1 Evaluation Foundation Integrity Hardening`
 
 State:
 
-- foundation implementation and automated validation complete on the dedicated branch;
+- bounded foundation integrity hardening and automated validation complete on the dedicated branch;
 - Human / ChatGPT review and acceptance pending;
 - no model selected or benchmarked;
 - no OpenAI API call;
@@ -108,7 +112,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - No real AI, DB/Supabase runtime, payment, email delivery, production analytics, API, server action, active contact, account system, PDF/download/share implementation, upload, OCR, or deployment was added. The product is not production-ready or payment-ready.
 - `lib/safety/**` now includes the bounded M1-I2-R1 reason-code, normalization, targeted phrase, negation-guard, and non-normal blocking correction. Only `normal_allowed` continues; `needs_review`, `rejected`, contradictory, invalid, missing, and unknown states remain fail closed.
 - Legal/contact content remains Review mode only, and Contact remains inactive.
-- M2-P1 assets under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are repository-only foundation data and are not imported by the application.
+- M2-P1-R1 assets under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are repository-only foundation data and are not imported by the application.
 - No M2-P1 provider call, model selection, database connection, persistence, runtime prompt, or result rendering exists.
 
 ## Current Restrictions
@@ -154,4 +158,4 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Authorization Gate
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 foundation is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact foundation package. No API connection, model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1-R1 integrity hardening is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact hardened foundation package. No API connection, model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.

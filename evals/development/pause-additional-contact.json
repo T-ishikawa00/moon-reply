@@ -61,6 +61,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-EXPLICIT-BOUNDARY-01",
+      "CS-INFO-LAST-MESSAGE-RESOLUTION-01",
+      "CS-INFO-DRAFT-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-EXPLICIT-BOUNDARY-01",
       "changed_variable": null
@@ -129,6 +134,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-REOPEN-PERMISSION-01",
+      "CS-EXPLICIT-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-DISTANCE-REQUEST-01",
       "changed_variable": null
@@ -197,6 +206,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-CIRCUMVENTION-ROUTE-01",
+      "CS-BLOCK-CIRCUMVENTION-01",
+      "CS-PAUSE-SAFETY-ESCALATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-BLOCKED-01",
       "changed_variable": null
@@ -265,6 +279,13 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-LOW-PRESSURE-FREQUENCY-01",
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-INFO-GENERIC-RESOLUTION-01",
+      "CS-INFO-COUNT-RESOLUTION-01",
+      "CS-INFO-DEADLINE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-REPEATED-UNANSWERED-01",
       "changed_variable": null
@@ -333,6 +354,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-APOLOGY-STATE-01",
+      "CS-EMOTIONAL-FOLLOWUP-01"
+    ],
     "counterfactual": {
       "group_id": "CF-APOLOGY-REPEATED-01",
       "changed_variable": null
@@ -400,6 +425,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-INFO-TIMELINE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-PROLONGED-NONRESPONSE-01",
       "changed_variable": null
@@ -467,6 +496,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-EXPLICIT-BOUNDARY-01",
+      "CS-INFO-SOCIAL-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-RELATIONSHIP-CLOSED-01",
       "changed_variable": null
@@ -536,6 +569,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-EMOTIONAL-FOLLOWUP-01",
+      "CS-CONTACT-ACCUMULATION-01",
+      "CS-PAUSE-SAFETY-ESCALATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-MULTICHANNEL-CONTACT-01",
       "changed_variable": null
@@ -603,6 +641,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-CIRCUMVENTION-ROUTE-01",
+      "CS-CONTACT-COERCION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-THIRD-PARTY-CONTACT-01",
       "changed_variable": null
@@ -670,6 +712,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-RESTART-AUTHORITY-01",
+      "CS-REOPEN-PERMISSION-01",
+      "CS-EXPLICIT-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-OTHER-CONTROLS-RESTART-01",
       "changed_variable": null

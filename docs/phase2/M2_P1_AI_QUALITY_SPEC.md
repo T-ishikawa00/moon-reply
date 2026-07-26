@@ -6,7 +6,7 @@
 - Task name: `AI Quality Specification & Evaluation Foundation`
 - Foundation version: `v1.0.0` draft
 - Authority: Human-authorized planning/foundation work only
-- Current state: documentation, development evaluation data, schemas, draft prompts, manifests, and permanent validation are implemented on the dedicated task branch; Human / ChatGPT review is pending
+- Current state: documentation, development evaluation data, schemas, draft prompts, manifests, and permanent validation are implemented on the dedicated task branch; M2-P1-R1 integrity hardening is implemented; Human / ChatGPT final review is pending
 - Runtime authority: none
 
 This document is the canonical AI-quality design contract for M2-P1. It does not authorize an OpenAI call, model selection, model benchmark, database use, UI change, API route, server action, payment, email, authentication, deployment, or delivery.
@@ -50,6 +50,8 @@ M2-P1 excludes:
 |  | product facts, Legal copy, fixed disclaimer, chapter ownership, and renderer copy |
 
 No model output can override an application-owned result.
+
+`payment_allowed` is a policy-eligibility field only. It does not enable a payment provider, checkout, charge, settlement, or any runtime payment capability. The canonical version manifest keeps `payment_enabled` false.
 
 ## 5. Automatic-delivery principle
 
@@ -198,15 +200,21 @@ Every entry states an action and an action to avoid. The plan must remain consis
 
 ## 17. Retry and terminal failure
 
-The retry ceiling is application-owned. The M2-P1 draft baseline is one initial generation plus at most two repair or regeneration attempts, for three total provider attempts. Human review must accept or revise this value before runtime implementation.
+`ai/prompts/shared/retry-policy-v1.json` is the machine-readable owner.
 
-Repair modes are:
+Transport, API, or structured-output retrieval failure permits the initial call plus one identical retry. If valid structured output is still unavailable, the stage fails. These calls do not count as schema-valid content candidates.
 
-- `targeted_repair`: only approved findings and allowlisted JSON paths;
-- `full_regeneration`: regenerate variable copy while preserving immutable inputs; and
-- `stop`: no further generation.
+Schema-valid content is limited to three candidates total: one initial generation, at most one targeted repair, and at most one full regeneration. A fourth candidate is prohibited. A targeted-repair slot may be skipped when repair is forbidden; when both repair modes are used, targeted repair precedes full regeneration.
 
-Safety, eligibility, policy, decision, facts, draft policy, and fixed copy are immutable during repair. A failed final attempt becomes `terminal_failure`. The system does not deliver partial or last-known-bad content.
+Targeted repair is limited to an approved JSON-path allowlist for a missing copy field, minor length violation, repetition, or local wording defect. It is prohibited for Safety regression, unallowed decision, fact hallucination, assumption-as-fact, decision/message contradiction, or policy-engine violation.
+
+- Safety regression stops immediately.
+- An unallowed decision is discarded and the owning stage is regenerated.
+- Fact hallucination requires full regeneration.
+- Failure of the third valid candidate becomes `terminal_failure`.
+- A repair output cannot receive another targeted repair; repair-of-repair is prohibited.
+
+Safety, eligibility, policy, decision, facts, draft policy, and fixed copy remain immutable. The system never delivers partial or last-known-bad content.
 
 ## 18. Site-history future requirement
 
@@ -249,9 +257,13 @@ Development cases support prompt improvement and continuous regression. The 15-c
 
 Oracle content is evaluation-only and excluded from model input.
 
+Each case has one or more `contrast_set_ids`. The machine-readable catalog groups cases that vary the same decision-material fact across decision categories, information resolutions, PAUSE/Safety boundaries, and affirmative-versus-negated Safety meanings. Counterfactual-group and contrast-set edges form contamination connected components; a component cannot be divided between development and holdout.
+
 ## 22. Human quality evaluation
 
-Human evaluation uses 20 representative cases and a five-point rubric:
+Human evaluation uses the pre-registered 20-case sample in `evals/development/human-review-sample-v1.json`. It is frozen at exactly five cases per decision category; reviewers cannot replace cases for convenience. The sample records the canonical dataset version and aggregate hash.
+
+The five-point rubric is:
 
 - input fidelity: 5 required;
 - Safety: 5 required;
@@ -282,7 +294,7 @@ Model alias requested and model ID returned are run metadata, not prompt-bundle 
 
 ## 24. Holdout isolation
 
-The holdout contains 15 external-only cases. Case content is not committed and is not routinely shown to prompt authors or CodeX. A future authorized runner may receive an external path. Exposure retires the case. Counterfactual groups never cross development and holdout.
+The holdout contains 15 external-only cases. Case content is not committed and is not routinely shown to prompt authors or CodeX. A future authorized runner may receive an external path. Exposure retires the case. Counterfactual groups and contrast-set connected components never cross development and holdout.
 
 The repository may retain only version, expected count, and an external aggregate hash. It must not retain raw holdout input or oracle data.
 
@@ -297,6 +309,8 @@ The repository may retain only version, expected count, and an external aggregat
 - Stability: five consistent runs under the clear/boundary rules.
 
 Foundation integrity passing does not establish model-quality acceptance.
+
+M2-P1-R1 additionally requires all named integrity gates for counterfactual IDs, documented contrast coverage, contrast-set membership, contamination components, the frozen Human sample, retry policy, prompt-schema stage contracts, stage responsibility separation, runtime capabilities, and the exact Git mutation manifest.
 
 ## 26. Implementation sequence
 
@@ -323,7 +337,11 @@ Human / ChatGPT must review:
 - the nine schemas;
 - the seven stage prompts and shared assets;
 - the decision, scoring, versioning, and contamination policies;
-- the retry draft value;
+- the formal machine-readable retry policy;
+- the PB-01 through PB-07 machine-readable stage contracts;
+- the frozen 20-case Human review sample;
+- the contrast-set catalog and contamination connected components;
+- the exact 52-file original-manifest reconciliation and final Git manifest;
 - the permanent verifier output; and
 - the exact task diff.
 

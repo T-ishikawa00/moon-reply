@@ -8,6 +8,9 @@ Status: holdout data is intentionally absent from the repository.
 - Holdout content is not routinely disclosed to prompt authors, CodeX, or agents working on development prompts.
 - An exposed holdout case is retired and replaced with a previously unseen case.
 - A counterfactual group must not cross the development and holdout splits.
+- A contrast-set ID must not cross the development and holdout splits.
+- Split assignment is atomic for every connected component formed by counterfactual-group and contrast-set edges.
+- External curation must reject a case that connects to a development component.
 - The repository may retain only holdout version metadata, expected count, and an external dataset hash after a separately authorized run.
 - The repository must never retain raw holdout consultation text, oracle content, or case-level holdout payloads.
 

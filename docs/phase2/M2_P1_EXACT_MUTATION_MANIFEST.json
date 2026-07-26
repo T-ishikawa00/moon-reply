@@ -1,0 +1,446 @@
+{
+  "schema_version": "moon-reply-m2-p1-exact-mutation-manifest-v1",
+  "base_commit": "617aca826612f58adb4b3f0d113ff1a89c36016a",
+  "r1_starting_commit": "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7",
+  "comparison": "origin/main...final_HEAD",
+  "original_manifest_reconciliation": {
+    "authoritative_changed_file_count": 52,
+    "added_count": 46,
+    "modified_count": 6,
+    "deleted_count": 0,
+    "root_counts": {
+      "ai": 24,
+      "docs": 16,
+      "evals": 11,
+      "scripts": 1
+    },
+    "reported_ui_count": 44,
+    "reported_ui_count_authoritative": false,
+    "reported_ui_count_origin_identified": false,
+    "finding": "The 44-file display does not appear in Git name-status, Git stat, commit stat, or the prior execution log. Its origin is unidentified, so it is recorded only as a non-authoritative UI count."
+  },
+  "authoritative_manifest": {
+    "changed_file_count": 57,
+    "added_count": 51,
+    "modified_count": 6,
+    "deleted_count": 0,
+    "root_counts": {
+      "ai": 26,
+      "docs": 17,
+      "evals": 13,
+      "scripts": 1
+    },
+    "entries": [
+      {
+        "status": "A",
+        "path": "ai/prompts/decision-plan/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/eligibility/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/prompt-bundle.manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/repair/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/report-writer/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/safety-semantic/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/semantic-validator/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/brand-voice-v1.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/common-stage-contract.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/decision-labels-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/forbidden-claims-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/question-library-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/report-field-constraints-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/retry-policy-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/safety-reason-codes-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/stage-contracts-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/structure/v1.0.0.developer.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/decision-plan.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/decision-policy-result.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/eligibility-result.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/eval-case.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/eval-run-manifest.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/report-content.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/safety-assessment.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/structured-intake.schema.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/schemas/validation-result.schema.json"
+      },
+      {
+        "status": "M",
+        "path": "docs/CODEX_HANDOFF.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/CURRENT_FOCUS.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase1/IMPLEMENTATION_WBS.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase1/M1_IMPLEMENTATION_SLICES.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_AI_QUALITY_SPEC.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_CONTAMINATION_POLICY.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_DECISION_POLICY.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_EVALUATION_DATASET_SPEC.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_EXACT_MUTATION_MANIFEST.json"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_IMPLEMENTATION_PLAN.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_PROMPT_BUNDLE_SPEC.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_SCHEMA_SPEC.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_SCORING_AND_ACCEPTANCE.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_VERSIONING_POLICY.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/TASK_M2_P1_REVIEW.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/ROADMAP.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/WBS.md"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/benign-safety-controls.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/contrast-set-catalog-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/human-review-sample-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/index.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/needs-more-information.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/pause-additional-contact.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/reply-now.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/safety-blocked.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/send-now.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/wait-and-reassess.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/holdout/README.md"
+      },
+      {
+        "status": "A",
+        "path": "evals/README.md"
+      },
+      {
+        "status": "A",
+        "path": "evals/version-manifest.json"
+      },
+      {
+        "status": "A",
+        "path": "scripts/verify-m2-eval-foundation.mjs"
+      }
+    ]
+  },
+  "r1_manifest": {
+    "changed_file_count": 42,
+    "added_count": 5,
+    "modified_count": 37,
+    "deleted_count": 0,
+    "root_counts": {
+      "ai": 13,
+      "docs": 15,
+      "evals": 13,
+      "scripts": 1
+    },
+    "entries": [
+      {
+        "status": "M",
+        "path": "ai/prompts/decision-plan/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/eligibility/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/prompt-bundle.manifest.json"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/repair/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/report-writer/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/safety-semantic/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/semantic-validator/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/shared/common-stage-contract.md"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/retry-policy-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "ai/prompts/shared/stage-contracts-v1.json"
+      },
+      {
+        "status": "M",
+        "path": "ai/prompts/structure/v1.0.0.developer.md"
+      },
+      {
+        "status": "M",
+        "path": "ai/schemas/eligibility-result.schema.json"
+      },
+      {
+        "status": "M",
+        "path": "ai/schemas/eval-case.schema.json"
+      },
+      {
+        "status": "M",
+        "path": "docs/CODEX_HANDOFF.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/CURRENT_FOCUS.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_AI_QUALITY_SPEC.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_CONTAMINATION_POLICY.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_DECISION_POLICY.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_EVALUATION_DATASET_SPEC.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/phase2/M2_P1_EXACT_MUTATION_MANIFEST.json"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_IMPLEMENTATION_PLAN.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_PROMPT_BUNDLE_SPEC.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_SCHEMA_SPEC.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_SCORING_AND_ACCEPTANCE.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/M2_P1_VERSIONING_POLICY.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/phase2/TASK_M2_P1_REVIEW.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/ROADMAP.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/WBS.md"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/benign-safety-controls.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/contrast-set-catalog-v1.json"
+      },
+      {
+        "status": "A",
+        "path": "evals/development/human-review-sample-v1.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/index.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/needs-more-information.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/pause-additional-contact.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/reply-now.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/safety-blocked.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/send-now.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/development/wait-and-reassess.json"
+      },
+      {
+        "status": "M",
+        "path": "evals/holdout/README.md"
+      },
+      {
+        "status": "M",
+        "path": "evals/README.md"
+      },
+      {
+        "status": "M",
+        "path": "evals/version-manifest.json"
+      },
+      {
+        "status": "M",
+        "path": "scripts/verify-m2-eval-foundation.mjs"
+      }
+    ]
+  }
+}

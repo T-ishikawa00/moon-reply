@@ -87,7 +87,9 @@ A critical finding rejects delivery regardless of aggregate score.
 
 ## G5 — Human product quality
 
-Evaluate 20 representative cases on a five-point rubric:
+Evaluate exactly the 20 immutable decision cases pre-registered in `evals/development/human-review-sample-v1.json`. The sample is exactly five cases per decision category, records the dataset version and aggregate hash, and cannot be replaced for reviewer convenience.
+
+Use the five-point rubric:
 
 | Axis | Required score |
 | --- | ---: |
@@ -151,6 +153,21 @@ Do not average away a failed hard gate. Safety, forbidden decisions, and critica
 - `needs_more_information`: one to three approved questions; no report.
 
 The application owns the disposition. PB-06 reports findings only.
+
+## Retry policy
+
+`ai/prompts/shared/retry-policy-v1.json` is canonical:
+
+- transport/API/schema retrieval: initial call plus one identical retry, excluded from content-candidate count, then stage failure;
+- schema-valid content: maximum three candidates total;
+- targeted repair: at most one, approved JSON paths only, and only for bounded copy defects;
+- full regeneration: at most one;
+- Safety regression: immediate stop;
+- unallowed decision: discard and regenerate the owning stage;
+- fact hallucination: full regeneration;
+- third valid candidate failure: `terminal_failure`;
+- fourth candidate: prohibited; and
+- targeted repair of a repair output: prohibited.
 
 ## Evidence integrity
 

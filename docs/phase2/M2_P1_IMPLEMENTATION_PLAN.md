@@ -2,7 +2,7 @@
 
 ## Status
 
-M2-P1 foundation implementation is complete on its dedicated branch when all automated gates pass. Human / ChatGPT review remains pending. This plan does not authorize any later step.
+M2-P1 foundation implementation and M2-P1-R1 integrity hardening are complete on the dedicated branch when all automated gates pass. Human / ChatGPT final review remains pending. This plan does not authorize any later step.
 
 ## Completed M2-P1 scope
 
@@ -11,7 +11,7 @@ M2-P1 foundation implementation is complete on its dedicated branch when all aut
 3. Materialize the canonical 70 development cases into seven files.
 4. Create a stable case index and external-only holdout contract.
 5. Draft nine JSON Schema 2020-12 files.
-6. Draft seven stage prompts and seven shared prompt assets.
+6. Draft seven stage prompts and nine shared prompt assets.
 7. Compute prompt hashes and record the bundle manifest.
 8. Draft decision, dataset, schema, prompt, scoring, versioning, and contamination policies.
 9. Create an evaluation version manifest with per-file and aggregate hashes.
@@ -19,12 +19,16 @@ M2-P1 foundation implementation is complete on its dedicated branch when all aut
 11. Synchronize current status without changing Milestone 1 closure.
 12. Run all required M2, M1, typecheck, lint, build, diff, and prohibited-scope gates.
 13. Commit and push only after every required gate passes.
+14. Add strict counterfactual IDs and many-to-many contrast sets without changing any pre-existing input or oracle value.
+15. Pre-register the immutable 20-case Human review sample.
+16. Make retry semantics and PB-01 through PB-07 stage contracts machine-readable.
+17. Record all-disabled runtime capabilities and reconcile the authoritative Git mutation manifest.
 
 ## Candidate future sequence — not authorized
 
 ### A. Human foundation review
 
-Review the 70 oracles, counterfactual groups, schemas, prompts, gates, retry draft, manifests, and exact diff. Record corrections or acceptance.
+Review the 70 oracles, counterfactual/contrast graph, frozen Human sample, schemas, prompts, formal retry policy, stage contracts, gates, manifests, and exact diff. Record corrections or acceptance.
 
 ### B. Application-owned policy implementation
 

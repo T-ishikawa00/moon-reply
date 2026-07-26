@@ -1,0 +1,61 @@
+{
+  "schema_version": "moon-reply-retry-policy-v1",
+  "policy_version": "retry-policy-v1.0.0",
+  "status": "draft_human_review_pending",
+  "transport_api_schema_retrieval": {
+    "initial_call_count": 1,
+    "identical_retry_count": 1,
+    "maximum_call_count": 2,
+    "retry_must_be_identical": true,
+    "counts_toward_content_candidates": false,
+    "failure_after_exhaustion": "stage_failure"
+  },
+  "schema_valid_content_candidates": {
+    "maximum_candidates": 3,
+    "initial_generation_count": 1,
+    "maximum_targeted_repairs": 1,
+    "maximum_full_regenerations": 1,
+    "targeted_repair_precedes_full_regeneration_when_both_are_used": true,
+    "forbidden_repair_may_skip_directly_to_full_regeneration": true,
+    "fourth_candidate_allowed": false,
+    "third_valid_candidate_failure": "terminal_failure"
+  },
+  "targeted_repair": {
+    "allowed_defects": [
+      "missing_optional_copy_field",
+      "missing_required_copy_field",
+      "minor_length_violation",
+      "repetition",
+      "local_wording_defect"
+    ],
+    "forbidden_defects": [
+      "safety_regression",
+      "unallowed_decision",
+      "fact_hallucination",
+      "assumption_promoted_to_fact",
+      "decision_message_contradiction",
+      "policy_engine_violation"
+    ],
+    "approved_json_paths_required": true,
+    "repair_output_may_receive_targeted_repair": false,
+    "repair_of_repair_allowed": false
+  },
+  "critical_handling": [
+    {
+      "defect": "safety_regression",
+      "action": "immediate_stop"
+    },
+    {
+      "defect": "unallowed_decision",
+      "action": "discard_and_regenerate_owning_stage"
+    },
+    {
+      "defect": "fact_hallucination",
+      "action": "full_regeneration"
+    },
+    {
+      "defect": "third_valid_candidate_failure",
+      "action": "terminal_failure"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "moon-reply-human-review-sample-v1",
+  "sample_version": "human-review-sample-v1.0.0",
+  "status": "pre_registered",
+  "dataset_version": "eval-development-v1.0.0",
+  "dataset_sha256": "9960f91c0e4eb0009bca6be7834437d56195c0e5682f5e679530cdb7df64d0e8",
+  "selection_policy": {
+    "frozen": true,
+    "replacement_allowed": false,
+    "case_type": "decision",
+    "decision_category_count": 4,
+    "cases_per_decision_category": 5,
+    "total_count": 20
+  },
+  "case_ids": [
+    "REPLY-001",
+    "REPLY-002",
+    "REPLY-004",
+    "REPLY-008",
+    "REPLY-009",
+    "SEND-002",
+    "SEND-004",
+    "SEND-005",
+    "SEND-006",
+    "SEND-009",
+    "WAIT-001",
+    "WAIT-003",
+    "WAIT-004",
+    "WAIT-008",
+    "WAIT-010",
+    "PAUSE-001",
+    "PAUSE-003",
+    "PAUSE-004",
+    "PAUSE-008",
+    "PAUSE-010"
+  ]
+}

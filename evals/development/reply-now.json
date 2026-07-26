@@ -59,6 +59,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-SENDER-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-01",
       "changed_variable": null
@@ -124,6 +127,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-APOLOGY-STATE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-APOLOGY-01",
       "changed_variable": null
@@ -188,6 +194,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-MATCHING-MESSAGE-01",
+      "CS-INFO-GENERIC-RESOLUTION-01",
+      "CS-INFO-LAST-MESSAGE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-CONVERSATION-01",
       "changed_variable": null
@@ -251,6 +262,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-FIRST-DATE-FOLLOWUP-01"
+    ],
     "counterfactual": {
       "group_id": "CF-FIRST-DATE-01",
       "changed_variable": null
@@ -314,6 +328,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-INCOMING-CHECKIN-01"
+    ],
     "counterfactual": {
       "group_id": "CF-CHECK-IN-01",
       "changed_variable": null
@@ -377,6 +394,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-URGENCY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-02",
       "changed_variable": null
@@ -440,6 +460,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-DIRECT-MESSAGE-SIGNAL-01",
+      "CS-INFO-SENDER-RESOLUTION-01",
+      "CS-INFO-SOCIAL-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-CONVERSATION-02",
       "changed_variable": null
@@ -504,6 +529,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-RESTART-AUTHORITY-01",
+      "CS-EXPLICIT-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-REOPEN-CONTACT-01",
       "changed_variable": null
@@ -569,6 +598,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-DELAY-VS-MEANING-01"
+    ],
     "counterfactual": {
       "group_id": "CF-DELAYED-REPLY-01",
       "changed_variable": null
@@ -632,6 +664,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PRACTICAL-CONTACT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-03",
       "changed_variable": null

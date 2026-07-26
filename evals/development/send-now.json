@@ -61,6 +61,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-SENDER-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-01",
       "changed_variable": null
@@ -126,6 +129,10 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-APOLOGY-STATE-01",
+      "CS-CONFLICT-PURPOSE-01"
+    ],
     "counterfactual": {
       "group_id": "CF-APOLOGY-01",
       "changed_variable": null
@@ -189,6 +196,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PROMISED-INFORMATION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-PROMISED-SHARE-01",
       "changed_variable": null
@@ -253,6 +263,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PRACTICAL-CONTACT-01",
+      "CS-INFO-TIMELINE-RESOLUTION-01",
+      "CS-INFO-DEADLINE-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-CORRECTION-01",
       "changed_variable": null
@@ -318,6 +333,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-FIRST-DATE-FOLLOWUP-01"
+    ],
     "counterfactual": {
       "group_id": "CF-FIRST-DATE-01",
       "changed_variable": null
@@ -383,6 +401,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-LOW-PRESSURE-FREQUENCY-01",
+      "CS-INFO-GENERIC-RESOLUTION-01",
+      "CS-INFO-DRAFT-RESOLUTION-01"
+    ],
     "counterfactual": {
       "group_id": "CF-LOW-PRESSURE-INVITE-01",
       "changed_variable": null
@@ -446,6 +469,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-THANK-YOU-STATUS-01"
+    ],
     "counterfactual": {
       "group_id": "CF-THANK-YOU-01",
       "changed_variable": null
@@ -510,6 +536,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-PRACTICAL-CONTACT-01"
+    ],
     "counterfactual": {
       "group_id": "CF-PRACTICAL-CONTACT-01",
       "changed_variable": null
@@ -576,6 +605,11 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-RESTART-AUTHORITY-01",
+      "CS-REOPEN-PERMISSION-01",
+      "CS-EXPLICIT-BOUNDARY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-REOPEN-CONTACT-02",
       "changed_variable": null
@@ -640,6 +674,9 @@
     "safe_response_requirements": [],
     "additional_question_expectations": [],
     "material_gap_codes": [],
+    "contrast_set_ids": [
+      "CS-SCHEDULE-URGENCY-01"
+    ],
     "counterfactual": {
       "group_id": "CF-SCHEDULE-02",
       "changed_variable": null

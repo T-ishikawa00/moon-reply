@@ -43,7 +43,8 @@
       "type": "boolean"
     },
     "payment_allowed": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Policy eligibility only. This field does not enable runtime payment or any payment capability."
     },
     "report_generation": {
       "enum": [
