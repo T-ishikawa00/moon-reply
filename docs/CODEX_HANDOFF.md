@@ -17,7 +17,8 @@ CodeX is the implementation and repository operation agent. It must follow the c
 - M1-P3 Reading Note Visual Excellence Specification is complete and Human and ChatGPT accepted. Its documentation/design package remains authoritative, B — `Lunar Contrast Edition` is selected, and specification acceptance did not itself grant canonical implementation authority. Figma is optional and non-authoritative.
 - Human accepted the bounded M1-I2-R1 Safety enforcement correction at implementation commit `23ee6f3b98837e48628b59b41eab811da627e730`. `SEM-UNSUPPORTED-CASES` passes without waiver, the previous M1-P3-R1 hard stop is resolved, and the accepted correction is synchronized to `main`.
 - M1-P3-R1 review-only A/B coded visual prototypes are implemented and automatically validated on `design/m1-p3-coded-visual-prototype`. Human selected and accepted B — `Lunar Contrast Edition` as the canonical design direction and rejected A — `Quiet Editorial Letter`. Prototype acceptance is not canonical visual implementation authorization.
-- M1-I8-R1 Checkpoints A and B are complete, Human-accepted, and merged to `main`; Checkpoint B's acceptance synchronization is `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. Milestone 2 and every later milestone remain unauthorized and not started.
+- M1-I8-R1 Checkpoints A and B are complete, Human-accepted, and merged to `main`; Checkpoint B's acceptance synchronization is `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed.
+- Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation. The foundation is implemented and automatically validated on `design/m2-p1-ai-quality-evaluation-foundation`; Human / ChatGPT review remains pending. This authority includes no provider call, model selection, database, runtime, payment, email, authentication, UI, API, server action, deployment, or later Milestone 2 task.
 - Human rejected a fixed/sticky mobile CTA for Milestone 1; non-fixed CTA behavior is controlling.
 - Browser use and screenshot acquisition by CodeX/agents are prohibited. Human alone performs visual review manually in ordinary external Microsoft Edge.
 - `docs/ROADMAP.md` remains the authoritative high-level roadmap.
@@ -27,6 +28,10 @@ The canonical service is an `AIを活用した恋愛メッセージ分析・判�
 The accepted Milestone 1 deliverable is a fixed-fixture Reviewable Web MVP. It has no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation and is not production-ready or payment-ready.
 
 ## Current Status
+
+Current task: `M2-P1 AI Quality Specification & Evaluation Foundation`.
+
+M2-P1 materializes exactly 70 development cases, keeps the expected 15-case holdout external, drafts nine Draft 2020-12 schemas, drafts seven stage prompts plus shared policy assets, records prompt and evaluation hashes, and adds a Node-built-ins-only permanent foundation verifier. Foundation gates pass automatically. This is data/specification integrity evidence only; it is not model-quality evidence or Human acceptance.
 
 M1-I12 Human Final QA is complete. Human reported PASS for 320px responsive QA, keyboard/focus QA, 200% zoom QA, reduced-motion QA, and reading-quality/contrast QA, with no release-blocking visual defect. These are Human observational results and remain distinct from the automated QA evidence. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed.
 
@@ -79,6 +84,8 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - No production database connection, payment/refund, AI call, prompt execution, email, API route, server action, analytics, authentication, external form/asset, persistence, file generation, or deployment was added.
 - No package or `supabase` change was made. `lib/safety/**` changed only inside the authorized M1-I2-R1 correction.
 - No real or invented operator, provider, address, telephone, email, contact URL, response time, storage region, retention period, effective date, or updated date was added.
+- M2-P1 files under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are draft repository assets only and are not imported or executed by runtime.
+- No OpenAI API call was made, no model was selected, no holdout case was accessed, and no database was connected.
 
 ## M1-P3 Record
 
@@ -135,10 +142,10 @@ Controlling Human design decisions:
 
 ## Current Restriction
 
-The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12-R1, and M1-I12-R2 are on corrected `main`. Keep the historical pre-R2 QA branch immutable. M1-I12-R3 remains validation/documentation-only and may be synchronized from `qa/m1-i12-final-acceptance-r2` to `main` only by the expressly authorized fast-forward-only path. Do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files. Do not create a PR or start operator completion, publication, deployment, provider inquiry, payment, AI, email, DB/API integration, or Milestone 2+ work.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. M1-P3-R1 coded prototypes are review-only design evidence, not canonical implementation. Do not treat Figma as a required or authoritative gate. Checkpoint A, Checkpoint B, M1-I9-R1, M1-I12-R1, and M1-I12-R2 are on corrected `main`. Keep the historical pre-R2 QA branch immutable. M2-P1 may change only its authorized foundation roots and minimal status references. Do not change application, component, CSS, existing fixture, Safety, Legal, package, or runtime files. Do not create a PR, execute the draft prompts, select a model, connect AI or DB, or start operator completion, publication, deployment, provider inquiry, payment, email, authentication, API integration, or any Milestone 2 work beyond M2-P1. Automated foundation PASS is not Human / ChatGPT acceptance.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance; the completed visual and interaction acceptance is recorded separately as Human observational evidence.
 
 ## Next Authorization Gate
 
-Milestone 1 is closed. Milestone 2 is unauthorized and not started. Next work requires a separate Milestone 2 planning and Human authorization gate; closure of Milestone 1 does not authorize Milestone 2 implementation.
+Milestone 1 is closed. M2-P1 foundation is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact foundation package. API connection, model selection, database, runtime, and every later task require separate explicit authorization.

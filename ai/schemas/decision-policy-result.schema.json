@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/decision-policy-result.schema.json",
+  "title": "Moon Reply Decision Policy Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "allowed_decisions",
+    "disallowed_decisions",
+    "follow_up_exception",
+    "message_draft_policy",
+    "later_draft_mode",
+    "pause_reason_code",
+    "resume_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v1.0.0"
+    },
+    "policy_version": {
+      "const": "decision-policy-v1.0.0"
+    },
+    "allowed_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "disallowed_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision",
+          "reason_codes"
+        ],
+        "properties": {
+          "decision": {
+            "$ref": "#/$defs/decision"
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/disallow_reason"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "follow_up_exception": {
+      "enum": [
+        "none",
+        "material_factual_correction",
+        "same_day_schedule_change",
+        "next_day_schedule_change",
+        "promised_required_information",
+        "safety_necessary_contact"
+      ]
+    },
+    "message_draft_policy": {
+      "enum": [
+        "required_now",
+        "later_only",
+        "not_allowed"
+      ]
+    },
+    "later_draft_mode": {
+      "oneOf": [
+        {
+          "enum": [
+            "candidate_can_be_prepared",
+            "defer_until_reassessment"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pause_reason_code": {
+      "oneOf": [
+        {
+          "enum": [
+            "explicit_no_contact",
+            "temporary_distance_requested",
+            "blocked_or_restricted",
+            "repeated_unanswered_contact",
+            "repeated_apology_or_explanation",
+            "prolonged_nonresponse_with_followups",
+            "relationship_closed",
+            "repeated_multichannel_contact",
+            "third_party_circumvention",
+            "other_controls_restart"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resume_policy": {
+      "oneOf": [
+        {
+          "enum": [
+            "explicit_permission_required",
+            "other_initiated_only"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "decision": {
+      "enum": [
+        "reply_now",
+        "send_now",
+        "wait_and_reassess",
+        "pause_additional_contact"
+      ]
+    },
+    "disallow_reason": {
+      "enum": [
+        "safety_blocked",
+        "insufficient_information",
+        "explicit_boundary",
+        "repeated_unanswered_contact",
+        "unanswered_meaningful_message",
+        "clear_low_pressure_reason",
+        "waiting_preferred",
+        "follow_up_exception_required",
+        "decision_not_applicable"
+      ]
+    }
+  }
+}

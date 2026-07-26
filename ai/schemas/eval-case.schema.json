@@ -1,0 +1,586 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/eval-case.schema.json",
+  "title": "Moon Reply Evaluation Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "dataset_split",
+    "case_type",
+    "title",
+    "tags",
+    "input",
+    "oracle",
+    "required_extractions",
+    "required_reasoning_meanings",
+    "forbidden_extractions",
+    "forbidden_claims",
+    "message_draft_constraints",
+    "safe_response_requirements",
+    "additional_question_expectations",
+    "material_gap_codes",
+    "counterfactual"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-eval-case-v1"
+    },
+    "case_id": {
+      "type": "string",
+      "pattern": "^(REPLY|SEND|WAIT|PAUSE|INFO|SAFETY|BENIGN)-[0-9]{3}$"
+    },
+    "dataset_split": {
+      "$ref": "#/$defs/dataset_split"
+    },
+    "case_type": {
+      "$ref": "#/$defs/case_type"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "tags": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "difficulty": {
+          "enum": [
+            "clear",
+            "boundary"
+          ]
+        },
+        "stability_profile": {
+          "enum": [
+            "clear",
+            "boundary"
+          ]
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "current_situation",
+        "message_draft",
+        "relationship_chip",
+        "question_chips",
+        "safety_flags",
+        "followup_answers"
+      ],
+      "properties": {
+        "current_situation": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "message_draft": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1200
+        },
+        "relationship_chip": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 80
+        },
+        "question_chips": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "uniqueItems": true,
+          "maxItems": 8
+        },
+        "safety_flags": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "none",
+              "self_harm",
+              "harm_others",
+              "dv_abuse_fear",
+              "stalking_or_visit",
+              "waiting_or_ambush",
+              "threat_or_coercion",
+              "minor_related",
+              "doxxing",
+              "surveillance",
+              "illegal_conduct",
+              "third_party_secret"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "followup_answers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "question_code",
+              "answer"
+            ],
+            "properties": {
+              "question_code": {
+                "$ref": "#/$defs/question_code"
+              },
+              "answer": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 1200
+              }
+            }
+          },
+          "maxItems": 3
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "current_situation": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "message_draft": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibility",
+        "safety_classification",
+        "safety_reason_codes",
+        "primary_decision",
+        "allowed_alternate_decisions",
+        "message_draft_policy",
+        "later_draft_mode",
+        "normal_flow_allowed",
+        "payment_allowed",
+        "report_generation",
+        "response_mode",
+        "pause_reason_code",
+        "resume_policy"
+      ],
+      "properties": {
+        "eligibility": {
+          "$ref": "#/$defs/eligibility"
+        },
+        "safety_classification": {
+          "$ref": "#/$defs/safety_classification"
+        },
+        "safety_reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/risk_reason_code"
+          },
+          "uniqueItems": true
+        },
+        "primary_decision": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/decision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allowed_alternate_decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decision"
+          },
+          "uniqueItems": true
+        },
+        "message_draft_policy": {
+          "$ref": "#/$defs/message_draft_policy"
+        },
+        "later_draft_mode": {
+          "oneOf": [
+            {
+              "enum": [
+                "candidate_can_be_prepared",
+                "defer_until_reassessment"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "normal_flow_allowed": {
+          "type": "boolean"
+        },
+        "payment_allowed": {
+          "type": "boolean"
+        },
+        "report_generation": {
+          "enum": [
+            "allowed",
+            "prohibited"
+          ]
+        },
+        "response_mode": {
+          "enum": [
+            "none",
+            "urgent_self_safety",
+            "urgent_other_safety",
+            "abuse_safety_support",
+            "unsafe_contact_stop",
+            "privacy_protection",
+            "minor_safeguarding",
+            "lawful_alternative"
+          ]
+        },
+        "pause_reason_code": {
+          "oneOf": [
+            {
+              "enum": [
+                "explicit_no_contact",
+                "temporary_distance_requested",
+                "blocked_or_restricted",
+                "repeated_unanswered_contact",
+                "repeated_apology_or_explanation",
+                "prolonged_nonresponse_with_followups",
+                "relationship_closed",
+                "repeated_multichannel_contact",
+                "third_party_circumvention",
+                "other_controls_restart"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resume_policy": {
+          "oneOf": [
+            {
+              "enum": [
+                "explicit_permission_required",
+                "other_initiated_only"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "required_extractions": {
+      "$ref": "#/$defs/string_array"
+    },
+    "required_reasoning_meanings": {
+      "$ref": "#/$defs/string_array"
+    },
+    "forbidden_extractions": {
+      "$ref": "#/$defs/string_array"
+    },
+    "forbidden_claims": {
+      "$ref": "#/$defs/string_array"
+    },
+    "message_draft_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_draft",
+        "must_include_meaning",
+        "must_avoid_meaning",
+        "max_questions"
+      ],
+      "properties": {
+        "reference_draft": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1200
+        },
+        "must_include_meaning": {
+          "$ref": "#/$defs/string_array"
+        },
+        "must_avoid_meaning": {
+          "$ref": "#/$defs/string_array"
+        },
+        "max_questions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      }
+    },
+    "safe_response_requirements": {
+      "$ref": "#/$defs/string_array"
+    },
+    "additional_question_expectations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/question_code"
+      },
+      "uniqueItems": true,
+      "maxItems": 3
+    },
+    "material_gap_codes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "active_deadline_missing",
+          "contact_timeline_missing",
+          "contradictory_timeline",
+          "elapsed_time_missing",
+          "explicit_boundary_unknown",
+          "last_message_missing",
+          "last_sender_missing",
+          "relationship_stage_missing",
+          "reply_status_unknown",
+          "social_signal_only",
+          "unanswered_count_missing",
+          "user_goal_missing",
+          "usual_cadence_missing"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "counterfactual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_id",
+        "changed_variable"
+      ],
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "pattern": "^CF-[A-Z0-9-]+$"
+        },
+        "changed_variable": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 120
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "oracle": {
+            "properties": {
+              "eligibility": {
+                "const": "needs_more_information"
+              }
+            },
+            "required": [
+              "eligibility"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "additional_question_expectations": {
+            "minItems": 1,
+            "maxItems": 3
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "additional_question_expectations": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "oracle": {
+            "properties": {
+              "primary_decision": {
+                "const": "wait_and_reassess"
+              }
+            },
+            "required": [
+              "primary_decision"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "oracle": {
+            "properties": {
+              "message_draft_policy": {
+                "const": "later_only"
+              },
+              "later_draft_mode": {
+                "enum": [
+                  "candidate_can_be_prepared",
+                  "defer_until_reassessment"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "oracle": {
+            "properties": {
+              "primary_decision": {
+                "const": "pause_additional_contact"
+              }
+            },
+            "required": [
+              "primary_decision"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "oracle": {
+            "properties": {
+              "message_draft_policy": {
+                "const": "not_allowed"
+              },
+              "later_draft_mode": {
+                "type": "null"
+              }
+            }
+          },
+          "message_draft_constraints": {
+            "properties": {
+              "reference_draft": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "dataset_split": {
+      "enum": [
+        "development",
+        "holdout",
+        "retired",
+        "production_regression"
+      ]
+    },
+    "case_type": {
+      "enum": [
+        "decision",
+        "information",
+        "safety",
+        "benign_safety_control"
+      ]
+    },
+    "eligibility": {
+      "enum": [
+        "ready",
+        "needs_more_information",
+        "safety_blocked"
+      ]
+    },
+    "decision": {
+      "enum": [
+        "reply_now",
+        "send_now",
+        "wait_and_reassess",
+        "pause_additional_contact"
+      ]
+    },
+    "message_draft_policy": {
+      "enum": [
+        "required_now",
+        "later_only",
+        "not_allowed"
+      ]
+    },
+    "safety_classification": {
+      "enum": [
+        "normal_allowed",
+        "needs_review",
+        "rejected"
+      ]
+    },
+    "risk_reason_code": {
+      "enum": [
+        "self_harm",
+        "harm_others",
+        "dv_abuse_fear",
+        "stalking_or_visit",
+        "waiting_or_ambush",
+        "threat_or_coercion",
+        "minor_related",
+        "doxxing",
+        "surveillance",
+        "illegal_conduct",
+        "third_party_secret"
+      ]
+    },
+    "question_code": {
+      "enum": [
+        "Q_RELATIONSHIP_STAGE",
+        "Q_LAST_MESSAGE_TIMELINE",
+        "Q_UNANSWERED_COUNT_AND_TIME",
+        "Q_EXACT_MESSAGE",
+        "Q_ALREADY_REPLIED",
+        "Q_USER_GOAL",
+        "Q_RECENT_MESSAGE_SEQUENCE",
+        "Q_UNANSWERED_USER_MESSAGE",
+        "Q_LAST_CONTACT_TIME",
+        "Q_UNANSWERED_COUNT_AND_DEADLINE",
+        "Q_UNANSWERED_COUNT",
+        "Q_CONTACT_TIME_RANGE",
+        "Q_EXPLICIT_BOUNDARY",
+        "Q_RELATIONSHIP_AND_LAST_CONTACT",
+        "Q_LAST_MESSAGE_STATE",
+        "Q_BOUNDARY_AND_GOAL",
+        "Q_LAST_DIRECT_CONTACT",
+        "Q_RELATIONSHIP_END_BOUNDARY",
+        "Q_USUAL_CONTACT_CADENCE"
+      ]
+    },
+    "string_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1200
+      },
+      "uniqueItems": true
+    }
+  }
+}

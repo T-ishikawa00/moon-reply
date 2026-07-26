@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1 / Milestone 1 — Human-accepted, complete, and closed
+Phase 2 / Milestone 2 — M2-P1 AI Quality Specification & Evaluation Foundation
 
 ## Completed Through
 
@@ -31,10 +31,26 @@ Phase 1 / Milestone 1 — Human-accepted, complete, and closed
 - M1-I12-R2 review-status consistency correction Human-accepted and synchronized to corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`
 - M1-I12-R3 automated final QA and Human final QA complete; M1-I12 Human-accepted and complete
 - Milestone 1 Human-accepted, complete, and closed
+- M2-P1 Human-authorized as a bounded documentation/evaluation foundation task
+- Exactly 70 development fixtures materialized; holdout remains external-only
+- Nine Draft 2020-12 schemas and seven stage prompt assets drafted
+- Scoring, versioning, contamination, decision, and evaluation policies drafted
+- Permanent M2 foundation verifier implemented and passing
 
 ## Current Task
 
-Milestone 1 is closed. The fixed-fixture Reviewable Web MVP baseline is accepted. No Milestone 2 implementation is authorized. Next work requires a separate Milestone 2 planning and authorization gate.
+`M2-P1 AI Quality Specification & Evaluation Foundation`
+
+State:
+
+- foundation implementation and automated validation complete on the dedicated branch;
+- Human / ChatGPT review and acceptance pending;
+- no model selected or benchmarked;
+- no OpenAI API call;
+- no AI runtime, database, payment, email, authentication, API route, server action, UI, or deployment authorization; and
+- no Milestone 2 work beyond this bounded foundation task.
+
+## Preserved Milestone 1 Baseline
 
 M1-I12-R3 rebuilt and revalidated the complete Reviewable Web MVP from corrected main `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. Content locks, Safety, typecheck, lint warning 0, clean build, 25-route HTTP, unknown-ID fail-closed, internal-link, fragment, heading, noindex, review-status, CSS-asset, exact-manifest, and prohibited-scope gates passed as automated evidence. Human subsequently reported PASS for 320px responsive QA, keyboard/focus QA, 200% zoom QA, reduced-motion QA, and reading-quality/contrast QA, with no release-blocking visual defect. The historical pre-R2 QA branch remains immutable.
 
@@ -82,7 +98,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Product definition, JPY 980 price, 18+ policy, existing Safety classification/severity meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed; M1-I2-R1 adds only missing reason codes and coverage needed to enforce the accepted fail-closed policy.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
 - A fixed/sticky mobile CTA remains `rejected for Milestone 1`; all CTAs remain non-fixed.
-- Milestone 1 is Human-accepted, complete, and closed. Milestone 2 and all later milestones remain unauthorized and not started.
+- Milestone 1 is Human-accepted, complete, and closed. Human authorized M2-P1 foundation only; Milestone 2 runtime, every later M2 task, and all later milestones remain unauthorized and not started.
 
 ## Runtime Boundary
 
@@ -92,6 +108,8 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - No real AI, DB/Supabase runtime, payment, email delivery, production analytics, API, server action, active contact, account system, PDF/download/share implementation, upload, OCR, or deployment was added. The product is not production-ready or payment-ready.
 - `lib/safety/**` now includes the bounded M1-I2-R1 reason-code, normalization, targeted phrase, negation-guard, and non-normal blocking correction. Only `normal_allowed` continues; `needs_review`, `rejected`, contradictory, invalid, missing, and unknown states remain fail closed.
 - Legal/contact content remains Review mode only, and Contact remains inactive.
+- M2-P1 assets under `docs/phase2/**`, `evals/**`, `ai/prompts/**`, and `ai/schemas/**` are repository-only foundation data and are not imported by the application.
+- No M2-P1 provider call, model selection, database connection, persistence, runtime prompt, or result rendering exists.
 
 ## Current Restrictions
 
@@ -99,7 +117,8 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - M1-P3 acceptance and M1-P3-R1 prototype implementation did not grant canonical visual implementation authority; later separate Human decisions accepted Checkpoint A, authorized and accepted the now-complete Checkpoint B visual work within its exact manifest, accepted the bounded M1-I9-R1 result, and authorized M1-I12.
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
 - Keep the historical pre-R2 QA branch immutable. The corrected M1-I12-R3 package may be synchronized to `main` only by the expressly authorized fast-forward-only path and must remain within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
-- Do not publish, deploy, activate runtime integrations, complete operator facts, or start Milestone 2+ under baseline closure.
+- Do not publish, deploy, activate runtime integrations, complete operator facts, execute the draft prompt bundle, select a model, connect a database, or start any Milestone 2 task beyond M2-P1.
+- Do not treat automated foundation PASS as Human / ChatGPT acceptance or model-quality evidence.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
 - Human 320px cross-route, keyboard/focus, 200% zoom, reduced-motion, reading-quality, contrast, and final acceptance are complete and recorded as Human observational evidence.
@@ -135,4 +154,4 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Authorization Gate
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. Milestone 2 is unauthorized and not started. Any next work requires a separate Milestone 2 planning and Human authorization gate; this closure does not authorize implementation, publication, deployment, provider inquiry, payment, AI, DB, email, account, analytics, or PDF/download/share work.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 foundation is implemented and automatically validated on its dedicated branch. The next gate is Human / ChatGPT review of the exact foundation package. No API connection, model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.

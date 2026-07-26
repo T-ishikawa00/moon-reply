@@ -1,0 +1,648 @@
+[
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-001",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "翌日の予約内容を共有する",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。明日の夜に会う約束をしていて、私がお店を予約して連絡することになっていました。さっき19時で予約が取れました。相手から未返信のメッセージはありません。今夜連絡して大丈夫ですか。",
+      "message_draft": "予約取れたよ！",
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "翌日に会う約束",
+      "本人が予約結果を伝える約束",
+      "予約時刻確定",
+      "未返信追撃ではない",
+      "期限あり"
+    ],
+    "required_reasoning_meanings": [
+      "約束した必要情報の共有",
+      "今夜送る合理的理由",
+      "返信を迫らない",
+      "相手が予定確認できる"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手は楽しみにしている",
+      "デートは必ず成功",
+      "すぐ返信が来る",
+      "返信がなければ再確認"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "明日のお店、19時で予約できたよ。場所は〇〇です。よろしくね。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-SCHEDULE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-002",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "まだ送っていない短い謝罪",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。昨日の電話で、私が相手の仕事についてきつい言い方をしてしまいました。電話のあと、こちらからは何も送っていません。今考えると傷つけたと思うので、短く謝りたいです。",
+      "message_draft": "昨日はごめん。そんなつもりじゃなかった。",
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "本人がきつい言い方",
+      "相手を傷つけた可能性を本人が認識",
+      "まだ謝罪していない",
+      "未返信追撃ではない",
+      "目的は謝罪"
+    ],
+    "required_reasoning_meanings": [
+      "一度目の謝罪を送る理由",
+      "言い訳を増やさず行為を謝れる",
+      "許しや返信を求めなければ低圧"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手も悪い",
+      "謝れば必ず仲直り",
+      "相手は謝罪を待っている",
+      "今日中に話し合う"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "昨日の言い方、きつくなってしまってごめん。嫌な気持ちにさせたと思います。返事は急がなくて大丈夫です。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-APOLOGY-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-003",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "約束した情報を送る",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手と昨日おすすめのお店の話をしていて、私があとでURLを送ると言いました。まだ送っていません。相手から未返信のメッセージはありません。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "本人が情報を送ると約束",
+      "まだ送っていない",
+      "返信待ち追撃ではない",
+      "目的が具体的"
+    ],
+    "required_reasoning_meanings": [
+      "約束した内容を実行",
+      "反応を迫らない",
+      "一通で完結"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "URLで会う流れになる",
+      "相手が行きたがっている",
+      "会話再開の駆け引き"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "昨日話していたお店、ここです。時間がある時に見てみてください。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-PROMISED-SHARE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-004",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "待ち合わせ時刻の訂正",
+    "tags": {},
+    "input": {
+      "current_situation": "明日会う予定です。さっき相手に「18時集合」と送りましたが、予約を確認したら正しくは19時でした。相手からはまだ返信がありません。間違いだけすぐ訂正したいです。",
+      "message_draft": null,
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "誤った時刻を伝えた",
+      "正しくは19時",
+      "予定は翌日",
+      "相手は未返信",
+      "重大な事実訂正"
+    ],
+    "required_reasoning_meanings": [
+      "誤情報放置で不利益",
+      "例外的フォローが必要",
+      "訂正だけなら低圧"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手が怒っている",
+      "返信がないから確認を重ねる",
+      "訂正以外の追撃を正当化"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "ごめん、さっき18時と送ったけど、正しくは19時でした。間違えて伝えてしまってごめんね。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-CORRECTION-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-005",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "初デート後、双方まだ送っていない",
+    "tags": {},
+    "input": {
+      "current_situation": "今日、付き合う前の相手と初めて二人で食事をしました。別れてから3時間ほど経っています。雰囲気は悪くなかったと思いますが、お互いまだ何も送っていません。短くお礼を送りたいです。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "初デート後",
+      "双方未送信",
+      "感謝を伝えたい",
+      "追撃ではない",
+      "3時間経過"
+    ],
+    "required_reasoning_meanings": [
+      "短いお礼は自然",
+      "関係の結論を迫らない",
+      "目的が明確"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "雰囲気が良いので脈あり",
+      "相手も同じ気持ち",
+      "今夜中に次を確定",
+      "返信速度で好意判断"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "今日はありがとうございました。いろいろ話せて楽しかったです。気をつけて休んでください。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-FIRST-DATE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-006",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "普段の頻度に合う低圧な誘い",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手です。普段は週に2〜3回くらい連絡しています。最後の会話は3日前に自然に終わっていて、未返信のメッセージはありません。来週の展示に誘いたいです。",
+      "message_draft": "来週展示行かない？",
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "普段週2〜3回",
+      "会話は自然終了",
+      "未返信なし",
+      "誘いの対象と時期が具体的"
+    ],
+    "required_reasoning_meanings": [
+      "頻度から不自然でない",
+      "新しい目的の一通",
+      "断る余地",
+      "催促でない"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手も行きたがっている",
+      "断られたら脈なし",
+      "翌日に再送",
+      "同時に関係確認"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "来週〇〇の展示を見に行こうと思っているんだけど、都合が合えば一緒にどうですか？",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-LOW-PRESSURE-INVITE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-007",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "助けてもらったお礼",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。今日、相手が私の荷物を運ぶのを手伝ってくれました。その場でもお礼は言いましたが、帰宅後に短くもう一度感謝を伝えたいです。未返信の連絡はありません。",
+      "message_draft": null,
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "相手が具体的に手伝った",
+      "その場でもお礼",
+      "追加で短い感謝",
+      "未返信でない"
+    ],
+    "required_reasoning_meanings": [
+      "追加のお礼は自然",
+      "返信不要で成立",
+      "目的明確で低圧"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "手伝いが愛情の証明",
+      "相手は尽くすタイプ",
+      "感謝を関係確認へつなげる"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "今日は荷物を手伝ってくれてありがとう。本当に助かりました。ゆっくり休んでね。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-THANK-YOU-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-008",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "借りた物を返す日程確認",
+    "tags": {},
+    "input": {
+      "current_situation": "以前からの友人に本を借りています。返す約束をしていて、今週中に日程を決める必要があります。最後の会話は一週間前に自然に終わっています。未返信のメッセージはありません。",
+      "message_draft": null,
+      "relationship_chip": "友人",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "友人",
+      "本人が物を借りている",
+      "返却必要",
+      "今週中の期限",
+      "未返信なし"
+    ],
+    "required_reasoning_meanings": [
+      "実務的連絡",
+      "期限があり今送る合理性",
+      "恋愛感情確認不要"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "返却を口実に関係進展",
+      "会えることが好意",
+      "相手都合を無視して決定"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "借りている本を返したいのですが、今週だと木曜か土曜は都合どうですか？",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-PRACTICAL-CONTACT-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-009",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "「落ち着いたら連絡して」と言われていた",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手です。私が仕事で余裕がなくなり、2週間ほど連絡を休むことになりました。その時、相手から「仕事が落ち着いたらまた連絡して」と言われています。仕事が一段落し、前回の会話から3週間経ちました。未返信メッセージはありません。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "連絡休止理由は本人の仕事",
+      "相手が再連絡条件を明示",
+      "条件が満たされた",
+      "3週間経過",
+      "未返信なし"
+    ],
+    "required_reasoning_meanings": [
+      "相手の再連絡条件に沿う",
+      "条件成立",
+      "短く近況を伝えられる",
+      "過去会話と連続性"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手はずっと待っていた",
+      "今も好意がある",
+      "3週間だから必ず送る",
+      "返事がなければ説明追加"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "前に言ってくれていた通り、仕事がやっと少し落ち着きました。〇〇さんは最近どうしていますか？",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-REOPEN-CONTACT-02",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "SEND-010",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "翌日の予定変更を伝える",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。明日18時に会う予定でしたが、仕事の都合で19時以降でないと間に合わなくなりました。まだ相手には変更を伝えていません。相手から未返信のメッセージはありません。",
+      "message_draft": null,
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "send_now",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "required_now",
+      "later_draft_mode": null,
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "翌日に会う予定",
+      "時刻変更必要",
+      "未連絡",
+      "未返信状態でない",
+      "相手の予定に影響"
+    ],
+    "required_reasoning_meanings": [
+      "早めに共有すべき変更",
+      "今夜送る必要",
+      "一通で確認可能"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手は受け入れるはず",
+      "仕事理由なら問題ない",
+      "返信まで繰り返し確認"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "明日のことなんだけど、仕事の都合で19時以降になりそうです。時間をずらしても大丈夫でしょうか。急な変更でごめんね。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 1
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-SCHEDULE-02",
+      "changed_variable": null
+    }
+  }
+]

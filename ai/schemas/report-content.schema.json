@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/report-content.schema.json",
+  "title": "Moon Reply AI-Generated Report Content",
+  "description": "AI-generated variable copy only. Product, brand, labels, chapter titles, metadata, fixed disclaimers, Safety copy, Legal copy, and save-card naming are renderer-owned.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cover_line",
+    "short_letter",
+    "decision_reason_summary",
+    "relationship_summary",
+    "observed_fact_commentary",
+    "possible_interpretations",
+    "anxiety_reframe",
+    "message_temperature",
+    "action_rationales",
+    "message_draft_context",
+    "three_day_plan_commentary",
+    "change_condition_commentary",
+    "unknowns_commentary",
+    "closing_lines"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v1.0.0"
+    },
+    "cover_line": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "short_letter": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 2,
+      "maxItems": 5
+    },
+    "decision_reason_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "relationship_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 700
+    },
+    "observed_fact_commentary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fact_id",
+          "commentary"
+        ],
+        "properties": {
+          "fact_id": {
+            "type": "string",
+            "pattern": "^F[0-9]{3}$"
+          },
+          "commentary": {
+            "$ref": "#/$defs/paragraph"
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 12
+    },
+    "possible_interpretations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 2,
+      "maxItems": 5
+    },
+    "anxiety_reframe": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 3
+    },
+    "message_temperature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "softness",
+        "affection",
+        "pressure",
+        "adjustment"
+      ],
+      "properties": {
+        "softness": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "affection": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "pressure": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "adjustment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    },
+    "action_rationales": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 6
+    },
+    "message_draft_context": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 400
+    },
+    "three_day_plan_commentary": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/paragraph"
+        },
+        {
+          "$ref": "#/$defs/paragraph"
+        },
+        {
+          "$ref": "#/$defs/paragraph"
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "change_condition_commentary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 6
+    },
+    "unknowns_commentary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 6
+    },
+    "closing_lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 2,
+      "maxItems": 5
+    }
+  },
+  "$defs": {
+    "paragraph": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 700
+    }
+  }
+}

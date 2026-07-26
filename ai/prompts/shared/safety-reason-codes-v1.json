@@ -1,0 +1,107 @@
+{
+  "version": "safety-policy-v1.0.0",
+  "aggregation_rule": "strictest_classification_wins",
+  "reason_codes": [
+    {
+      "code": "self_harm",
+      "classification": "rejected",
+      "response_mode": "urgent_self_safety",
+      "kind": "risk"
+    },
+    {
+      "code": "harm_others",
+      "classification": "rejected",
+      "response_mode": "urgent_other_safety",
+      "kind": "risk"
+    },
+    {
+      "code": "dv_abuse_fear",
+      "classification": "needs_review",
+      "response_mode": "abuse_safety_support",
+      "kind": "risk"
+    },
+    {
+      "code": "stalking_or_visit",
+      "classification": "rejected",
+      "response_mode": "unsafe_contact_stop",
+      "kind": "risk"
+    },
+    {
+      "code": "waiting_or_ambush",
+      "classification": "rejected",
+      "response_mode": "unsafe_contact_stop",
+      "kind": "risk"
+    },
+    {
+      "code": "threat_or_coercion",
+      "classification": "rejected",
+      "response_mode": "unsafe_contact_stop",
+      "kind": "risk"
+    },
+    {
+      "code": "minor_related",
+      "classification": "rejected",
+      "response_mode": "minor_safeguarding",
+      "kind": "risk"
+    },
+    {
+      "code": "doxxing",
+      "classification": "rejected",
+      "response_mode": "privacy_protection",
+      "kind": "risk"
+    },
+    {
+      "code": "surveillance",
+      "classification": "rejected",
+      "response_mode": "unsafe_contact_stop",
+      "kind": "risk"
+    },
+    {
+      "code": "illegal_conduct",
+      "classification": "rejected",
+      "response_mode": "lawful_alternative",
+      "kind": "risk"
+    },
+    {
+      "code": "third_party_secret",
+      "classification": "rejected",
+      "response_mode": "privacy_protection",
+      "kind": "risk"
+    },
+    {
+      "code": "none_selected",
+      "classification": "needs_review",
+      "response_mode": "none",
+      "kind": "control"
+    },
+    {
+      "code": "contradictory_selection",
+      "classification": "rejected",
+      "response_mode": "none",
+      "kind": "control"
+    },
+    {
+      "code": "free_text_high_risk",
+      "classification": "rejected",
+      "response_mode": "none",
+      "kind": "control"
+    },
+    {
+      "code": "normal",
+      "classification": "normal_allowed",
+      "response_mode": "none",
+      "kind": "control"
+    }
+  ],
+  "response_modes": [
+    "none",
+    "urgent_self_safety",
+    "urgent_other_safety",
+    "abuse_safety_support",
+    "unsafe_contact_stop",
+    "privacy_protection",
+    "minor_safeguarding",
+    "lawful_alternative"
+  ],
+  "user_facing_copy_owner": "application_template"
+}

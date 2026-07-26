@@ -1,0 +1,378 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/decision-plan.schema.json",
+  "title": "Moon Reply Decision Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "selected_decision",
+    "decision_reason_fact_ids",
+    "possible_interpretations",
+    "actions_to_take",
+    "actions_to_avoid",
+    "message_draft",
+    "three_day_plan",
+    "change_conditions",
+    "review_timing",
+    "material_unknowns",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v1.0.0"
+    },
+    "selected_decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "decision_reason_fact_ids": {
+      "$ref": "#/$defs/fact_ids"
+    },
+    "possible_interpretations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statement",
+          "supporting_fact_ids",
+          "epistemic_status"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "supporting_fact_ids": {
+            "$ref": "#/$defs/fact_ids"
+          },
+          "epistemic_status": {
+            "const": "possibility_only"
+          }
+        }
+      },
+      "maxItems": 5
+    },
+    "actions_to_take": {
+      "$ref": "#/$defs/action_array"
+    },
+    "actions_to_avoid": {
+      "$ref": "#/$defs/action_array"
+    },
+    "message_draft": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/message_draft"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "three_day_plan": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/tonight_plan"
+        },
+        {
+          "$ref": "#/$defs/next_day_plan"
+        },
+        {
+          "$ref": "#/$defs/day_three_plan"
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "change_conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "condition",
+          "resulting_direction"
+        ],
+        "properties": {
+          "condition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "resulting_direction": {
+            "$ref": "#/$defs/decision"
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "review_timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "when",
+        "trigger_fact_ids"
+      ],
+      "properties": {
+        "when": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "trigger_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        }
+      }
+    },
+    "material_unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "uniqueItems": true,
+      "maxItems": 12
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 8
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "enum": [
+              "reply_now",
+              "send_now"
+            ]
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "message_draft": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/message_draft"
+              },
+              {
+                "properties": {
+                  "policy": {
+                    "const": "required_now"
+                  },
+                  "use_timing": {
+                    "const": "now"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "const": "pause_additional_contact"
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "message_draft": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "const": "wait_and_reassess"
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "message_draft": {
+            "oneOf": [
+              {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/message_draft"
+                  },
+                  {
+                    "properties": {
+                      "policy": {
+                        "const": "later_only"
+                      },
+                      "use_timing": {
+                        "const": "later"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "decision": {
+      "enum": [
+        "reply_now",
+        "send_now",
+        "wait_and_reassess",
+        "pause_additional_contact"
+      ]
+    },
+    "fact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^F[0-9]{3}$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "action_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 8
+    },
+    "message_draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "policy",
+        "use_timing"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "policy": {
+          "enum": [
+            "required_now",
+            "later_only"
+          ]
+        },
+        "use_timing": {
+          "enum": [
+            "now",
+            "later"
+          ]
+        }
+      }
+    },
+    "plan_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "day",
+        "action",
+        "avoid"
+      ],
+      "properties": {
+        "day": {
+          "enum": [
+            "tonight",
+            "next_day",
+            "day_three"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "avoid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        }
+      }
+    },
+    "tonight_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/plan_entry"
+        },
+        {
+          "properties": {
+            "day": {
+              "const": "tonight"
+            }
+          }
+        }
+      ]
+    },
+    "next_day_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/plan_entry"
+        },
+        {
+          "properties": {
+            "day": {
+              "const": "next_day"
+            }
+          }
+        }
+      ]
+    },
+    "day_three_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/plan_entry"
+        },
+        {
+          "properties": {
+            "day": {
+              "const": "day_three"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

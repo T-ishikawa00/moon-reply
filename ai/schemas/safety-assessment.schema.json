@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/safety-assessment.schema.json",
+  "title": "Moon Reply Safety Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "deterministic_rule_result",
+    "model_semantic_result",
+    "moderation_result",
+    "aggregate_result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v1.0.0"
+    },
+    "deterministic_rule_result": {
+      "$ref": "#/$defs/classification_result"
+    },
+    "model_semantic_result": {
+      "$ref": "#/$defs/model_result"
+    },
+    "moderation_result": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/moderation_result"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregate_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "reason_codes",
+        "response_mode",
+        "aggregation_rule",
+        "normal_flow_allowed"
+      ],
+      "properties": {
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reason_codes"
+        },
+        "response_mode": {
+          "$ref": "#/$defs/response_mode"
+        },
+        "aggregation_rule": {
+          "const": "strictest_classification_wins"
+        },
+        "normal_flow_allowed": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "classification": {
+      "enum": [
+        "normal_allowed",
+        "needs_review",
+        "rejected"
+      ]
+    },
+    "reason_code": {
+      "enum": [
+        "self_harm",
+        "harm_others",
+        "dv_abuse_fear",
+        "stalking_or_visit",
+        "waiting_or_ambush",
+        "threat_or_coercion",
+        "minor_related",
+        "doxxing",
+        "surveillance",
+        "illegal_conduct",
+        "third_party_secret",
+        "none_selected",
+        "contradictory_selection",
+        "free_text_high_risk",
+        "normal"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      },
+      "uniqueItems": true
+    },
+    "response_mode": {
+      "enum": [
+        "none",
+        "urgent_self_safety",
+        "urgent_other_safety",
+        "abuse_safety_support",
+        "unsafe_contact_stop",
+        "privacy_protection",
+        "minor_safeguarding",
+        "lawful_alternative"
+      ]
+    },
+    "classification_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "reason_codes",
+        "response_mode"
+      ],
+      "properties": {
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reason_codes"
+        },
+        "response_mode": {
+          "$ref": "#/$defs/response_mode"
+        }
+      }
+    },
+    "model_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "reason_codes",
+        "response_mode",
+        "evidence_refs",
+        "ambiguity_present"
+      ],
+      "properties": {
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reason_codes"
+        },
+        "response_mode": {
+          "$ref": "#/$defs/response_mode"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(input|followup):[A-Za-z0-9_.-]+$"
+          },
+          "uniqueItems": true
+        },
+        "ambiguity_present": {
+          "type": "boolean"
+        }
+      }
+    },
+    "moderation_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flagged",
+        "categories"
+      ],
+      "properties": {
+        "flagged": {
+          "type": "boolean"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_/-]+$"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

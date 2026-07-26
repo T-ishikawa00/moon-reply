@@ -1,0 +1,25 @@
+{
+  "version": "decision-policy-v1.0.0",
+  "decisions": [
+    {
+      "code": "reply_now",
+      "label_ja": "今夜は短く返信してよい",
+      "message_draft_policy": "required_now"
+    },
+    {
+      "code": "send_now",
+      "label_ja": "文面を整えて、今夜送ってよい",
+      "message_draft_policy": "required_now"
+    },
+    {
+      "code": "wait_and_reassess",
+      "label_ja": "今夜は送らず、明日以降に再判断する",
+      "message_draft_policy": "later_only"
+    },
+    {
+      "code": "pause_additional_contact",
+      "label_ja": "こちらからの追加連絡を一度止める",
+      "message_draft_policy": "not_allowed"
+    }
+  ]
+}

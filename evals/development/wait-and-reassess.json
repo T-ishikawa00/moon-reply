@@ -1,0 +1,680 @@
+[
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-001",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "普段の返信範囲内",
+    "tags": {},
+    "input": {
+      "current_situation": "交際して4か月です。昨夜22時ごろ、私から「今週末どこかで会える？」と送りました。既読にはなっていますが、まだ返信はありません。普段も翌日の昼や夜に返ってくることが多いです。もう一度送った方がいいでしょうか。",
+      "message_draft": "忙しい？週末難しそう？",
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "candidate_can_be_prepared",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "本人が最後に送信",
+      "未返信1通",
+      "週末予定確認",
+      "既読",
+      "普段翌日返信",
+      "通常範囲内",
+      "期限は迫っていない",
+      "境界なし"
+    ],
+    "required_reasoning_meanings": [
+      "既読だけで拒否判断不可",
+      "普段のペース内",
+      "追加確認理由なし",
+      "追撃で催促化"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "既読無視",
+      "相手が冷めた",
+      "わざと返信しない",
+      "SNS確認",
+      "駆け引き"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "週末の予定を決めたいので、難しそうならまた別の日でも大丈夫です。都合が分かったら教えてください。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-USUAL-CADENCE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-002",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "仕事中の未読6時間",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手です。平日の12時ごろに「今度おすすめのお店に行かない？」と送りました。今は18時で、まだ未読です。相手は平日は仕事が忙しいと言っていました。もう一度送った方がいいですか。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "defer_until_reassessment",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際前",
+      "本人が最後",
+      "未返信1通",
+      "平日勤務時間",
+      "6時間",
+      "未読",
+      "相手は平日忙しい",
+      "誘いは緊急でない"
+    ],
+    "required_reasoning_meanings": [
+      "未読は未確認の可能性",
+      "勤務中で遅れる理由",
+      "同日追撃不要",
+      "同じ依頼を重ねる"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "未読だから避けられている",
+      "仕事は嘘",
+      "SNSオンラインなら送る",
+      "別話題で通知増加"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-WORK-HOURS-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-003",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "長文送信2時間後の不安追撃",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。2時間前に、最近寂しいと感じていることを長めのメッセージで送りました。まだ返信はありません。「怒ってる？重かった？」と送りたくなっています。",
+      "message_draft": "怒ってる？さっきの重かったよね、ごめん。何か言ってほしい。",
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "defer_until_reassessment",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "2時間前に長い感情文",
+      "未返信",
+      "目的は不安解消",
+      "予定文面に複数質問と返答要求",
+      "未返信1通"
+    ],
+    "required_reasoning_meanings": [
+      "読む時間が必要かもしれない",
+      "2時間で拒否判断不可",
+      "追加が回答圧力",
+      "謝罪と質問で負担増"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手は重いと思っている",
+      "相手は怒っている",
+      "追加謝罪で安心",
+      "送信取消し",
+      "返事まで説明追加"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-EMOTIONAL-FOLLOWUP-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-004",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "喧嘩後、本人はすでに一度謝罪済み",
+    "tags": {},
+    "input": {
+      "current_situation": "昨日、恋人と喧嘩しました。私も言い過ぎたと思い、昨夜「昨日は言い方がきつくなってごめん。落ち着いたら話したい」と一度送りました。12時間返信がありません。さらに詳しく説明した方がいいでしょうか。",
+      "message_draft": null,
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "defer_until_reassessment",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "前日に口論",
+      "本人は一度謝罪済み",
+      "落ち着いたら話したいと送信",
+      "12時間返信なし",
+      "追加説明したい",
+      "境界なし"
+    ],
+    "required_reasoning_meanings": [
+      "必要な謝罪は送済み",
+      "追加説明は即時反応圧力",
+      "12時間で拒否判断不可",
+      "相手が落ち着く時間"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "謝罪が拒否された",
+      "相手も悪いと説明",
+      "今夜中に解決",
+      "長文で全経緯"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-APOLOGY-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-005",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "初デート後、すでにお礼を送っている",
+    "tags": {},
+    "input": {
+      "current_situation": "今日、付き合う前の相手と初めて食事をしました。帰宅後に私から「今日はありがとう。楽しかったです」と送りました。18時間返信がありません。もう一度「また行きたい」と送ろうか迷っています。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "candidate_can_be_prepared",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "初デート後",
+      "本人はお礼送信済み",
+      "楽しかった旨",
+      "18時間返信なし",
+      "再会希望を追加したい",
+      "未返信1通"
+    ],
+    "required_reasoning_meanings": [
+      "必要なお礼は完了",
+      "相手返信前に話を進める",
+      "18時間で評価断定不可",
+      "返信後に次へ"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "18時間で脈なし",
+      "楽しかったなら即返信",
+      "再会希望追加で伝わる",
+      "SNS反応で評価"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-FIRST-DATE-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-006",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "期限に余裕がある日程候補",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。3時間前に「来週なら火曜か木曜が空いてるよ」と送りました。会う予定を決めるのは今週中で大丈夫です。まだ返信がないので、「どっちがいい？」と追加で送りたいです。",
+      "message_draft": null,
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "candidate_can_be_prepared",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "3時間前に日程候補",
+      "火曜木曜",
+      "期限今週中",
+      "緊急性なし",
+      "予定文面は催促"
+    ],
+    "required_reasoning_meanings": [
+      "確認時間十分",
+      "今夜追加不要",
+      "重ねると催促",
+      "期限近くで確認"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "会いたくないから返さない",
+      "今夜確定",
+      "候補追加し続ける"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "予定を決めたいので、火曜か木曜のどちらが都合よさそうか、分かった時に教えてください。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-SCHEDULE-WAIT-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-007",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "マッチングアプリ最初の未返信12時間",
+    "tags": {},
+    "input": {
+      "current_situation": "マッチングアプリで数日やり取りしている相手です。昨日の夜、私から「休みの日は何してることが多い？」と送りました。12時間返信がありません。別の話題を送った方がいいですか。",
+      "message_draft": null,
+      "relationship_chip": "マッチングアプリ",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "defer_until_reassessment",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "マッチングアプリ",
+      "数日やり取り",
+      "本人が最後",
+      "未返信1通",
+      "自然な質問",
+      "12時間",
+      "別話題追撃を検討"
+    ],
+    "required_reasoning_meanings": [
+      "最初の未返信",
+      "12時間で終了断定不可",
+      "別話題は通知増",
+      "待って次へ"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "他の相手を優先",
+      "即レスが普通",
+      "追加で目立つ",
+      "写真で反応"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-MATCHING-APP-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-008",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "試験・繁忙期であることが確認されている",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手です。今週は資格試験前で返信が遅くなると言われています。昨日の夜に私から一通送り、まだ返信はありません。応援メッセージを追加した方がいいでしょうか。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "candidate_can_be_prepared",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "相手は試験前",
+      "相手本人から返信遅れる説明",
+      "昨夜一通",
+      "未返信1通",
+      "応援追加希望"
+    ],
+    "required_reasoning_meanings": [
+      "遅れる理由確認済み",
+      "通知増加",
+      "余白を保つ",
+      "試験後再判断"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "応援で好印象",
+      "忙しいは口実",
+      "SNSで確認"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "試験お疲れさまでした。少し落ち着けていますか？",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-KNOWN-BUSY-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-009",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "喧嘩直後の深夜に関係確認を送りたい",
+    "tags": {},
+    "input": {
+      "current_situation": "交際中です。今夜23時ごろ電話で喧嘩になり、電話を切ってから30分しか経っていません。「私たちのこと本当はどう思ってるの？」と長文で聞きたくなっています。",
+      "message_draft": "私たちのこと本当はどう思ってる？もう好きじゃないなら言って。ずっと不安だった。",
+      "relationship_chip": "交際中",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "candidate_can_be_prepared",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際中",
+      "30分前に口論",
+      "深夜",
+      "感情が高ぶっている",
+      "予定文面は関係全体の回答要求",
+      "複数の重い問い",
+      "境界なし"
+    ],
+    "required_reasoning_meanings": [
+      "双方落ち着いていない可能性",
+      "深夜の結論要求は高圧",
+      "今夜必要なし",
+      "一晩で整理"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "相手は別れたい",
+      "今夜確認しないと悪化",
+      "返信なしで関係終了",
+      "長文で全部説明"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": "昨日は感情的になってしまったので、落ち着いて話したいです。時間を取れそうな時を教えてください。",
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-CONFLICT-NIGHT-01",
+      "changed_variable": null
+    }
+  },
+  {
+    "schema_version": "moon-reply-eval-case-v1",
+    "case_id": "WAIT-010",
+    "dataset_split": "development",
+    "case_type": "decision",
+    "title": "SNSオンラインだけを新事実にしない",
+    "tags": {},
+    "input": {
+      "current_situation": "付き合う前の相手です。昨日、私から食事のお誘いを送り、まだ返信がありません。相手がSNSには何度かオンラインになっているのを見ました。メッセージも見られるはずなので、もう一度送るべきでしょうか。",
+      "message_draft": null,
+      "relationship_chip": "付き合う前",
+      "question_chips": [],
+      "safety_flags": [
+        "none"
+      ],
+      "followup_answers": []
+    },
+    "oracle": {
+      "eligibility": "ready",
+      "safety_classification": "normal_allowed",
+      "safety_reason_codes": [],
+      "primary_decision": "wait_and_reassess",
+      "allowed_alternate_decisions": [],
+      "message_draft_policy": "later_only",
+      "later_draft_mode": "defer_until_reassessment",
+      "normal_flow_allowed": true,
+      "payment_allowed": true,
+      "report_generation": "allowed",
+      "response_mode": "none",
+      "pause_reason_code": null,
+      "resume_policy": null
+    },
+    "required_extractions": [
+      "交際前",
+      "本人が食事へ誘った",
+      "未返信1通",
+      "約1日",
+      "SNSオンライン確認",
+      "実返信なし",
+      "境界なし"
+    ],
+    "required_reasoning_meanings": [
+      "SNSオンラインは読了証拠でない",
+      "返信意思推測不可",
+      "一通目への時間",
+      "追加は圧力"
+    ],
+    "forbidden_extractions": [],
+    "forbidden_claims": [
+      "オンラインなのに返信しないのは意図的",
+      "他の相手と話している",
+      "SNSで別反応",
+      "投稿で存在アピール"
+    ],
+    "message_draft_constraints": {
+      "reference_draft": null,
+      "must_include_meaning": [],
+      "must_avoid_meaning": [],
+      "max_questions": 0
+    },
+    "safe_response_requirements": [],
+    "additional_question_expectations": [],
+    "material_gap_codes": [],
+    "counterfactual": {
+      "group_id": "CF-SOCIAL-SIGNAL-01",
+      "changed_variable": null
+    }
+  }
+]

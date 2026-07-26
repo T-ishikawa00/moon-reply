@@ -2,9 +2,9 @@
 
 ## Status Rule
 
-Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete and unauthorized until their own gates are satisfied.
+Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Milestone 2 remains unauthorized and not started.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation; its foundation implementation and automated validation are complete on the dedicated branch, with Human / ChatGPT review pending. Milestone 2 runtime and all work beyond M2-P1 remain unauthorized.
 
 ## P0: Repository Setup
 
@@ -523,7 +523,7 @@ Checkpoint A acceptance is technical acceptance, not visual acceptance. Its foll
 - [x] Human Visual QA for the primary desktop and 390px targets, including Web鑑定ノート, 保存用判断カード, 公開全文見本, and review-chrome subordination
 - [x] Human acceptance at implementation-and-polish commit `bb2079aafb3666562e2876ead4c24a5c933bea8a` and separate fast-forward-only merge authorization
 
-Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3` and synchronized to `main`. M1-I12-R1 and Human-accepted M1-I12-R2 are on corrected `main`; M1-I12-R3 completed the non-browser all-route regression gates. Human 320px, 200% zoom, keyboard/focus, reduced-motion, reading-quality, and contrast QA passed with no reported release blocker. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. Milestone 2 remains unauthorized and not started.
+Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is Human-accepted at `82600df57481cae2c61d370288083a61f0c719c3` and synchronized to `main`. M1-I12-R1 and Human-accepted M1-I12-R2 are on corrected `main`; M1-I12-R3 completed the non-browser all-route regression gates. Human 320px, 200% zoom, keyboard/focus, reduced-motion, reading-quality, and contrast QA passed with no reported release blocker. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. At that closure checkpoint, Milestone 2 was unauthorized and not started.
 
 ## P4.29: Human-Accepted — M1-I9-R1 Reading Note Preview Alignment
 
@@ -536,7 +536,7 @@ Checkpoint B is fast-forwarded to `main` at acceptance synchronization commit `0
 - [x] Human Visual QA at primary desktop and 390px, including the corrected mobile one-character wrapping defect
 - [x] Human acceptance at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3` and separate fast-forward-only merge authorization
 
-M1-I9-R1 is synchronized to `main`. M1-I12 automated final QA and Human final QA are complete, and M1-I12 is Human-accepted. The historical pre-R2 QA branch remains immutable. Milestone 1 is complete and closed. Milestone 2 remains unauthorized and not started.
+M1-I9-R1 is synchronized to `main`. M1-I12 automated final QA and Human final QA are complete, and M1-I12 is Human-accepted. The historical pre-R2 QA branch remains immutable. Milestone 1 is complete and closed. At that closure checkpoint, Milestone 2 was unauthorized and not started.
 
 ## P4.30: Human Accepted — M1-I12 Final QA and Milestone 1 Closure
 
@@ -549,16 +549,34 @@ M1-I9-R1 is synchronized to `main`. M1-I12 automated final QA and Human final QA
 - [x] Human-reported release-blocking visual defect: none
 - [x] M1-I12 Human-accepted and complete
 - [x] Milestone 1 Human-accepted, complete, and closed
-- [x] Milestone 2 remains unauthorized and not started
+- [x] At Milestone 1 closure, Milestone 2 was unauthorized and not started
 
 Human observational evidence is recorded separately from automated QA evidence. No application implementation was changed by the acceptance synchronization.
 
-## P5: Approved Delivery Sequence Status
+## P5: M2-P1 AI Quality Specification & Evaluation Foundation
+
+- [x] Human authorization limited to M2-P1 foundation
+- [x] Exact clean base and dedicated branch
+- [x] Ten Phase 2 specification, policy, plan, and review documents
+- [x] Exactly 70 development cases in the required 10/10/10/10/8/13/9 distribution
+- [x] External-only 15-case holdout contract with no case data committed
+- [x] Nine Draft 2020-12 JSON Schemas
+- [x] Seven draft stage prompts and seven shared prompt assets
+- [x] Prompt SHA-256 manifest
+- [x] Evaluation version, per-file hash, and aggregate hash manifest
+- [x] Node-built-ins-only permanent foundation verifier
+- [x] M2 foundation, M1 content-lock, M1 Safety, typecheck, lint, build, and diff gates
+- [ ] Human / ChatGPT review and acceptance
+- [ ] Separate authorization for any model selection, API, database, UI, or runtime work
+
+M2-P1 is not AI runtime authorization, model-quality acceptance, holdout execution, DB authorization, or general Milestone 2 authorization.
+
+## P6: Future Delivery Sequence Status
 
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: Operator Information and Publication Readiness
+- [ ] Milestone 2: internal automated AI / DB vertical slice — only M2-P1 foundation authorized; runtime unauthorized
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -569,4 +587,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. Milestone 2 is unauthorized and not started; operator-information completion, publication, deployment, provider inquiry or selection, production DB writes, OpenAI, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 foundation alone is implemented and automatically validated; Human / ChatGPT review remains pending. Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.

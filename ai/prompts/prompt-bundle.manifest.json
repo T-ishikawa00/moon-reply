@@ -1,0 +1,140 @@
+{
+  "schema_version": "moon-reply-prompt-manifest-v1",
+  "bundle_version": "prompt-bundle-v1.0.0",
+  "status": "draft_human_review_pending",
+  "hash_algorithm": "sha256-utf8-lf",
+  "execution_profile": {
+    "profile": "abstract_internal_pipeline",
+    "store": false,
+    "tools": [],
+    "streaming": false
+  },
+  "assets": [
+    {
+      "asset_id": "SHARED-COMMON",
+      "kind": "shared",
+      "asset_version": "v1.0.0",
+      "relative_path": "shared/common-stage-contract.md",
+      "sha256": "c7d6100f71d97ff3ccd4dd9cd24d0536baaf533a965a140d627ff57f3cc907d7",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-BRAND-VOICE",
+      "kind": "shared",
+      "asset_version": "v1.0.0",
+      "relative_path": "shared/brand-voice-v1.md",
+      "sha256": "0803e860249b0eff05cb99f9bd822cb025f86354e4932567bef4189d34aa0e80",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-DECISIONS",
+      "kind": "shared",
+      "asset_version": "decision-policy-v1.0.0",
+      "relative_path": "shared/decision-labels-v1.json",
+      "sha256": "764c33b47ca832a893e6c431cf429dbc952e7dd6003a26f628e3fece31ed0ad3",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-FORBIDDEN-CLAIMS",
+      "kind": "shared",
+      "asset_version": "v1.0.0",
+      "relative_path": "shared/forbidden-claims-v1.json",
+      "sha256": "5a14e12d5ae1c83ee9187f85445b5c4f3089a97e063d82e71866d05ad35d2d71",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-SAFETY",
+      "kind": "shared",
+      "asset_version": "safety-policy-v1.0.0",
+      "relative_path": "shared/safety-reason-codes-v1.json",
+      "sha256": "a11e37a527b3b433ccbe5b1fb07a77412465fe5f3c7e8904e52bbc1daaeb37e4",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-QUESTIONS",
+      "kind": "shared",
+      "asset_version": "v1.0.0",
+      "relative_path": "shared/question-library-v1.json",
+      "sha256": "9f0d117ada96e5ec2f75fc910eb505d6a19aa01b6000bc811d0a53da1c18ee3d",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "SHARED-REPORT-CONSTRAINTS",
+      "kind": "shared",
+      "asset_version": "v1.0.0",
+      "relative_path": "shared/report-field-constraints-v1.json",
+      "sha256": "774be234b4cf7a5e3a78cf5e83371a275173019e73b1713e7070c3aec9fc609c",
+      "output_schema_path": null,
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-01",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "structure/v1.0.0.developer.md",
+      "sha256": "1e8f0dae782656582441892e38ed47322274e2cfbec1e42a09fde13b4f16fc17",
+      "output_schema_path": "ai/schemas/structured-intake.schema.json",
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-02",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "safety-semantic/v1.0.0.developer.md",
+      "sha256": "3903da98e1d73692980be562c3f7985924cf297b1d4340a1230fe619fe02ed51",
+      "output_schema_path": "ai/schemas/safety-assessment.schema.json",
+      "output_schema_pointer": "#/$defs/model_result"
+    },
+    {
+      "asset_id": "PB-03",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "eligibility/v1.0.0.developer.md",
+      "sha256": "37d95c46d30a99789aed3cf3fbe9a658267e87196d00ec4ed650c238dc9b3418",
+      "output_schema_path": "ai/schemas/eligibility-result.schema.json",
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-04",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "decision-plan/v1.0.0.developer.md",
+      "sha256": "afb2900f13c0d8ce033c15a85c02d50598bd31f6cdc1a320b0d51ac92361ec08",
+      "output_schema_path": "ai/schemas/decision-plan.schema.json",
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-05",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "report-writer/v1.0.0.developer.md",
+      "sha256": "2cad3b1587195e6acc087cb12080fc4166442cc3d86cceba93d229942fea7b01",
+      "output_schema_path": "ai/schemas/report-content.schema.json",
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-06",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "semantic-validator/v1.0.0.developer.md",
+      "sha256": "9deb98f19a344621a69ae256e229dbacda2d6bfbd3106b441c1088eeb32beab0",
+      "output_schema_path": "ai/schemas/validation-result.schema.json",
+      "output_schema_pointer": null
+    },
+    {
+      "asset_id": "PB-07",
+      "kind": "stage",
+      "asset_version": "v1.0.0",
+      "relative_path": "repair/v1.0.0.developer.md",
+      "sha256": "87b1148a1e4237e6ee742f657ae0627fea48044a4116bdcf721f1ab9e8a802a9",
+      "output_schema_path": "ai/schemas/report-content.schema.json",
+      "output_schema_pointer": null
+    }
+  ]
+}

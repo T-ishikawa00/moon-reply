@@ -6,7 +6,7 @@ This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Milestone 2 remains unauthorized and not started. Browser use and screenshot acquisition by CodeX/agents remain prohibited; the completed visual and interaction QA is Human observational evidence.
+Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. Human authorized only M2-P1 AI Quality Specification & Evaluation Foundation; its foundation implementation and automated validation are complete, with Human / ChatGPT review pending. Milestone 2 runtime and all work beyond M2-P1 remain unauthorized. Browser use and screenshot acquisition by CodeX/agents remain prohibited; the completed visual and interaction QA is Human observational evidence.
 
 ## Milestone 0: Completed Foundations
 
@@ -142,20 +142,22 @@ Dependency: Task 18C-R3 Human acceptance — satisfied at commit `54e5f2dba518eb
 - [x] M1-I12 Human final QA and acceptance
 - [x] Human acceptance and closure of Milestone 1
 
-## Milestone 2: Operator Information and Publication Readiness
+## Milestone 2: Internal Automated AI / DB Vertical Slice
 
 Dependency: Milestone 1 Human acceptance.
 
-Current authority: unauthorized; not started. Milestone 1 acceptance satisfies the predecessor dependency but does not authorize Milestone 2 planning or implementation. Next work requires a separate Milestone 2 planning and Human authorization gate.
+Current authority: M2-P1 foundation only is Human-authorized, implemented, and automatically validated; Human / ChatGPT review is pending. Milestone 1 acceptance satisfies the predecessor dependency but does not authorize AI, DB, UI, API, authentication, payment, email, deployment, or any runtime implementation.
 
-- [ ] Planning/spec: enumerate operator, contact, disclosure, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions
-- [ ] Human acceptance of Milestone 2 planning/specification
-- [ ] Operator decisions: resolve individual/sole-proprietor status and name/business-name treatment
-- [ ] Operator decisions: resolve contact email/method, address, phone, response time, and privacy contact
-- [ ] Operator decisions: resolve delivery timing, result URL lifetime, refund/reissue, retention, and deletion
-- [ ] Implementation/content: remove or withhold public-facing TBD and fictional placeholders
-- [ ] Validation: verify public review content contains no invented or falsely completed operator facts
+- [x] M2-P1 Human authorization limited to documentation and evaluation foundation
+- [x] M2-P1: specifications, exact 70-case development dataset, external-only holdout contract, schemas, draft prompts, policies, manifests, and permanent verifier
+- [x] M2-P1: automated foundation, M1 regression, typecheck, lint, build, diff, and prohibited-scope gates
+- [ ] Human / ChatGPT acceptance of M2-P1
+- [ ] Separate planning and Human authorization for a bounded internal AI / DB runtime slice
+- [ ] Internal-only automatic input-to-display flow with no production payment, production email, authentication, or public release
+- [ ] Fail-closed delivery for Safety, insufficient information, invalid output, exhausted retries, and terminal failure
 - [ ] Human acceptance of Milestone 2
+
+Operator identity, contact, publication, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions remain deferred prerequisites for any later public review or sale.
 
 ## Milestone 3: Review Site Deployment
 

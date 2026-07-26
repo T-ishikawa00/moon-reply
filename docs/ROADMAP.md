@@ -26,7 +26,8 @@ Current status:
 - M1-I8-R1 is complete, Human-accepted, and merged to `main`; Checkpoint B's accepted implementation-and-polish commit is `bb2079aafb3666562e2876ead4c24a5c933bea8a`, and its acceptance synchronization is on `main` at `06c20f71c21d7968a97aa78dbe12f480c1abf7c5`. M1-I9-R1 is complete, Human-accepted at final implementation commit `82600df57481cae2c61d370288083a61f0c719c3`, and merged to `main`. M1-I12-R1 is on `main` at `8b35fbe24a1d32f2cf827874231ce76eb237ad07`; M1-I12-R2 is Human-accepted and on corrected `main` at `cf05dbca2bbc6ce75f2eeed69d606b5a00a07d82`. M1-I12-R3 automated final QA and Human final QA are complete. M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed.
 - The accepted Checkpoint B and M1-I9-R1 canonical surfaces are on `main`. The historical pre-R2 QA branch `qa/m1-i12-final-acceptance` remains preserved and non-authoritative for corrected main. The corrected QA package on `qa/m1-i12-final-acceptance-r2` is the Milestone 1 closure package and is authorized for fast-forward-only synchronization to `main`. The read-only prototype routes/components remain isolated on `design/m1-p3-coded-visual-prototype`; no prototype commit was merged, cherry-picked, or rebased into Checkpoint B, M1-I9-R1, or `main`.
 - The controlling artifact names are `恋のメッセージ鑑定ノート` for the product, `Web鑑定ノート` for the long presentation, and `保存用判断カード` for the short presentation. Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels. The out-of-manifest `lib/legal/review-content.ts` residual `保存用鑑定書見本` remains deliberately deferred.
-- Milestone 2 and every later milestone remain unauthorized and not started.
+- Human authorized only Task M2-P1 AI Quality Specification & Evaluation Foundation. Its documentation, 70-case development dataset, nine schemas, seven-stage draft prompt bundle, policies, manifests, and permanent verifier are implemented on a dedicated branch and automatically validated; Human / ChatGPT review remains pending.
+- Milestone 2 runtime and every Milestone 2 task beyond M2-P1 remain unauthorized and not started. M2-P1 adds no AI call, model selection, database, payment, email, authentication, UI, API, server action, or deployment.
 - No payment provider has been selected.
 - No provider inquiry, production backend, payment, OpenAI, email, or deployment work has started.
 
@@ -94,15 +95,25 @@ Prohibited: real payment, OpenAI API, real email sending, public database writes
 
 Exit criterion: a reviewer can understand what is sold, the price, input flow, safety boundaries, final confirmation, expected output, and legal/support information without real payment or AI integration.
 
-## 5. Milestone 2: Operator Information and Publication Readiness
+## 5. Milestone 2: Internal Automated AI / DB Vertical Slice
 
-Status: unauthorized; not started.
+Status: M2-P1 foundation only is Human-authorized, implemented on its dedicated branch, and automatically validated; Human / ChatGPT review pending. Milestone 2 runtime is unauthorized and not started.
 
-Goal: resolve the Human/operator decisions required for a truthful review site.
+Future goal: in an internal environment, connect real AI and a real database so one consultation can move automatically from input through eligibility, Safety, decision, validated report generation, and result display.
 
-Includes operating status, operator-name treatment, business name if any, contact email and method, address/phone display decisions, response-time policy, delivery timing, result URL lifetime, refund/reissue operation, privacy contact, retention/deletion decisions, and removal of public-facing TBD or fictional placeholders.
+Milestone 2 target exclusions:
 
-Exit criterion: no public review page presents invented operator facts or unresolved placeholders as completed information.
+- no production payment;
+- no production email;
+- no Google login or other authentication;
+- no public release; and
+- no unconditional display of AI output.
+
+Current authorized M2-P1 scope is limited to the AI-quality specification, exact 70-case development dataset, external-only holdout contract, schemas, draft prompts, evaluation/scoring/versioning/contamination policies, manifests, and foundation verifier. It calls no provider, selects no model, connects no database, and changes no UI or runtime.
+
+Future Milestone 2 runtime requires separate bounded authorization after Human / ChatGPT accepts the M2-P1 foundation. Its exit criterion will require a fully automatic internal input-to-display slice that fails closed for Safety, insufficient information, invalid output, exhausted retries, and terminal failure.
+
+Operator identity, contact, publication, delivery, URL-lifetime, refund/reissue, privacy, retention, and deletion decisions remain deferred prerequisites for any later public review or sale. M2-P1 does not resolve or implement them.
 
 ## 6. Milestone 3: Review Site Deployment
 
@@ -133,6 +144,8 @@ Exit criterion: Human selects a provider using written evidence, and the require
 ## 8. Milestone 5: Core Backend, Safety, AI and Email
 
 Goal: complete the fulfillment flow using mock-paid or test-paid state before real payment integration.
+
+This is future production-path hardening and delivery work. It is distinct from the internal-only Milestone 2 target and remains unauthorized.
 
 Includes request submission and Supabase persistence; production server validation of allowed age-group values; production enforcement of `normal_allowed`, `needs_review`, and `rejected`; no payment path for `needs_review` or `rejected`; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence.
 

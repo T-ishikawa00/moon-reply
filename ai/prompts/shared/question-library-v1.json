@@ -1,0 +1,103 @@
+{
+  "version": "question-library-v1.0.0",
+  "maximum_questions": 3,
+  "unknown_option": "分からない",
+  "questions": [
+    {
+      "code": "Q_RELATIONSHIP_STAGE",
+      "text_ja": "今の関係に最も近いものを教えてください。",
+      "answer_kind": "relationship_stage"
+    },
+    {
+      "code": "Q_LAST_MESSAGE_TIMELINE",
+      "text_ja": "最後のメッセージは、どちらから、いつ、どのような内容を送りましたか。",
+      "answer_kind": "message_timeline"
+    },
+    {
+      "code": "Q_UNANSWERED_COUNT_AND_TIME",
+      "text_ja": "返事がない状態で、こちらから何通送り、最後の送信からどのくらい経っていますか。",
+      "answer_kind": "count_and_elapsed_time"
+    },
+    {
+      "code": "Q_EXACT_MESSAGE",
+      "text_ja": "判断に必要な範囲で、最後のメッセージ本文を個人情報を除いて教えてください。",
+      "answer_kind": "message_excerpt"
+    },
+    {
+      "code": "Q_ALREADY_REPLIED",
+      "text_ja": "相手の最後のメッセージに、あなたはすでに返信しましたか。",
+      "answer_kind": "yes_no_unknown"
+    },
+    {
+      "code": "Q_USER_GOAL",
+      "text_ja": "今夜いちばん決めたいことは、返信、こちらからの送信、待つこと、連絡を止めることのどれですか。",
+      "answer_kind": "user_goal"
+    },
+    {
+      "code": "Q_RECENT_MESSAGE_SEQUENCE",
+      "text_ja": "直近のやり取りを、送った順番が分かる範囲で教えてください。",
+      "answer_kind": "message_sequence"
+    },
+    {
+      "code": "Q_UNANSWERED_USER_MESSAGE",
+      "text_ja": "相手がまだ返していない、あなたからのメッセージはありますか。",
+      "answer_kind": "yes_no_unknown"
+    },
+    {
+      "code": "Q_LAST_CONTACT_TIME",
+      "text_ja": "最後に直接メッセージを交わしたのは、いつごろですか。",
+      "answer_kind": "time_range"
+    },
+    {
+      "code": "Q_UNANSWERED_COUNT_AND_DEADLINE",
+      "text_ja": "返事がない状態で送った通数と、今伝える必要がある期限を教えてください。",
+      "answer_kind": "count_and_deadline"
+    },
+    {
+      "code": "Q_UNANSWERED_COUNT",
+      "text_ja": "相手から返事がない間に、こちらから何通送りましたか。",
+      "answer_kind": "count"
+    },
+    {
+      "code": "Q_CONTACT_TIME_RANGE",
+      "text_ja": "最後の連絡は、今日、昨日、数日前、それより前のどれに近いですか。",
+      "answer_kind": "time_range"
+    },
+    {
+      "code": "Q_EXPLICIT_BOUNDARY",
+      "text_ja": "相手から、連絡を控えてほしい、距離を置きたい、こちらから連絡すると言われていますか。",
+      "answer_kind": "boundary_state"
+    },
+    {
+      "code": "Q_RELATIONSHIP_AND_LAST_CONTACT",
+      "text_ja": "今の関係と、最後に直接連絡を交わした時期を教えてください。",
+      "answer_kind": "relationship_and_time"
+    },
+    {
+      "code": "Q_LAST_MESSAGE_STATE",
+      "text_ja": "最後のメッセージは、相手からの質問、あなたの未返信、あなたからの未返信待ちのどれに近いですか。",
+      "answer_kind": "message_state"
+    },
+    {
+      "code": "Q_BOUNDARY_AND_GOAL",
+      "text_ja": "相手から示された連絡上の境界と、今夜あなたが決めたいことを教えてください。",
+      "answer_kind": "boundary_and_goal"
+    },
+    {
+      "code": "Q_LAST_DIRECT_CONTACT",
+      "text_ja": "SNSの反応ではなく、最後の直接のメッセージはどちらから、いつ届きましたか。",
+      "answer_kind": "direct_contact"
+    },
+    {
+      "code": "Q_RELATIONSHIP_END_BOUNDARY",
+      "text_ja": "関係を終える話の中で、今後の連絡について相手から明確な希望は示されましたか。",
+      "answer_kind": "relationship_end_boundary"
+    },
+    {
+      "code": "Q_USUAL_CONTACT_CADENCE",
+      "text_ja": "普段は、どのくらいの間隔で返信が来ることが多いですか。",
+      "answer_kind": "usual_cadence"
+    }
+  ],
+  "privacy_rule": "実名、住所、勤務先、学校名、電話番号、メールアドレス、SNSアカウントIDは質問しない"
+}

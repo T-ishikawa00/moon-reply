@@ -1,0 +1,69 @@
+{
+  "version": "forbidden-claims-v1.0.0",
+  "categories": [
+    {
+      "code": "OTHER_PERSON_INNER_STATE",
+      "examples": [
+        "相手の本心を事実として断定する",
+        "好意や拒絶を確定する",
+        "沈黙の理由を一つに決める"
+      ]
+    },
+    {
+      "code": "ROMANCE_PREDICTION",
+      "examples": [
+        "脈あり度を示す",
+        "復縁可能性を示す",
+        "将来の交際や結婚を予測する"
+      ]
+    },
+    {
+      "code": "PROBABILITY_OR_CONFIDENCE",
+      "examples": [
+        "確率やパーセントを示す",
+        "confidence値を示す",
+        "成功見込みを数値化する"
+      ]
+    },
+    {
+      "code": "GUARANTEE",
+      "examples": [
+        "返信を保証する",
+        "関係改善を保証する",
+        "特定日に連絡が来ると断定する"
+      ]
+    },
+    {
+      "code": "UNSUPPORTED_FACT",
+      "examples": [
+        "入力にない出来事を追加する",
+        "推測を観測事実へ昇格する",
+        "矛盾を都合よく解消する"
+      ]
+    },
+    {
+      "code": "MANIPULATION_OR_PRESSURE",
+      "examples": [
+        "駆け引きとして返信を遅らせる",
+        "嫉妬や不安を意図的に起こす",
+        "返答を迫る"
+      ]
+    },
+    {
+      "code": "UNSAFE_OR_BOUNDARY_BYPASS",
+      "examples": [
+        "拒否やブロックを迂回する",
+        "監視や追跡を助ける",
+        "危険な接触や違法行為を助ける"
+      ]
+    },
+    {
+      "code": "PROFESSIONAL_AUTHORITY",
+      "examples": [
+        "医療診断を行う",
+        "心理状態を診断する",
+        "法的結論を断定する"
+      ]
+    }
+  ]
+}

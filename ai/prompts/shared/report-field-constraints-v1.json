@@ -1,0 +1,55 @@
+{
+  "version": "report-field-constraints-v1.0.0",
+  "variable_copy_limits": {
+    "cover_line": {
+      "min_characters": 20,
+      "max_characters": 120
+    },
+    "short_letter_item": {
+      "min_characters": 20,
+      "max_characters": 220
+    },
+    "decision_reason_summary": {
+      "min_characters": 40,
+      "max_characters": 500
+    },
+    "relationship_summary": {
+      "min_characters": 60,
+      "max_characters": 700
+    },
+    "possible_interpretation_item": {
+      "min_characters": 20,
+      "max_characters": 500
+    },
+    "message_temperature_item": {
+      "min_characters": 15,
+      "max_characters": 300
+    },
+    "commentary_item": {
+      "min_characters": 20,
+      "max_characters": 700
+    }
+  },
+  "renderer_owned_fields": [
+    "product_name",
+    "brand_name",
+    "decision_label",
+    "chapter_titles",
+    "client_nickname",
+    "reading_date",
+    "fixed_disclaimer",
+    "safety_copy",
+    "legal_copy",
+    "save_card_formal_name"
+  ],
+  "prohibited_output_content": [
+    "Markdown",
+    "emoji",
+    "occult_language",
+    "probability",
+    "confidence",
+    "romance_prediction",
+    "new_fact",
+    "fixed_product_copy"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "moon-reply-eval-version-manifest-v1",
+  "dataset_version": "eval-development-v1.0.0",
+  "eval_case_schema_version": "moon-reply-eval-case-v1",
+  "pipeline_schema_version": "pipeline-schema-v1.0.0",
+  "policy_version": "decision-policy-v1.0.0",
+  "prompt_bundle_version": "prompt-bundle-v1.0.0",
+  "validator_version": "validator-v1.0.0",
+  "safety_version": "safety-policy-v1.0.0",
+  "renderer_version": "report-renderer-v1.0.0",
+  "development_count": 70,
+  "category_counts": {
+    "reply_now": 10,
+    "send_now": 10,
+    "wait_and_reassess": 10,
+    "pause_additional_contact": 10,
+    "needs_more_information": 8,
+    "safety_blocked": 13,
+    "benign_safety_controls": 9
+  },
+  "case_type_counts": {
+    "decision": 40,
+    "information": 8,
+    "safety": 13,
+    "benign_safety_control": 9
+  },
+  "expected_external_holdout_count": 15,
+  "external_holdout_version": null,
+  "external_holdout_sha256": null,
+  "file_hash_algorithm": "sha256-utf8-lf",
+  "aggregate_algorithm": "sha256(relative_path + ':' + canonical_file_sha256 + '\\n') in manifest file order",
+  "files": [
+    {
+      "relative_path": "development/index.json",
+      "count": 70,
+      "sha256": "db6a7d2db6fb7bac1621bf86c6ef3f589dc706b69147f5d8aeee468d8bdf1392"
+    },
+    {
+      "relative_path": "development/reply-now.json",
+      "count": 10,
+      "sha256": "e355bedcdfe0fc8181b5627b0924312e1e8531aa885740bab84f5cc28e43347a"
+    },
+    {
+      "relative_path": "development/send-now.json",
+      "count": 10,
+      "sha256": "c342a94492410f824c5dad9a2b700afd7860c143f3e2b9a30601f1ea56ff8da1"
+    },
+    {
+      "relative_path": "development/wait-and-reassess.json",
+      "count": 10,
+      "sha256": "13a5e7e574fff090f6b972b9f4d0f523b2ff23f41e8d70d7a7236aa10942669e"
+    },
+    {
+      "relative_path": "development/pause-additional-contact.json",
+      "count": 10,
+      "sha256": "adad16cd8d6946d0fb9cfd6f6a35c00958b5ce2404f6c07faa0ccb4e6162c750"
+    },
+    {
+      "relative_path": "development/needs-more-information.json",
+      "count": 8,
+      "sha256": "77637459cbfdde1932412e073131a4e795e90d0fa94f5d77bccaa97a27e65bf0"
+    },
+    {
+      "relative_path": "development/safety-blocked.json",
+      "count": 13,
+      "sha256": "edfb5721500d723a17881b76f4914d80a75023392cea07c4e59b116586122194"
+    },
+    {
+      "relative_path": "development/benign-safety-controls.json",
+      "count": 9,
+      "sha256": "a2864ddc12bb97ee286733f49a4ab9be4ebde13da4d83e986d072cba89c96b8f"
+    }
+  ],
+  "aggregate_dataset_sha256": "a7e42bff61105907f6b0993cf985a8910c34328503ababbe8e148f66698f5412",
+  "generated_at": "2026-07-26T15:59:54.5776540+09:00",
+  "generated_by_task_id": "M2-P1"
+}
