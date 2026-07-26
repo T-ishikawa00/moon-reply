@@ -6,6 +6,7 @@ import {
   readFileSync,
   statSync,
 } from "node:fs";
+import { builtinModules } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -20,6 +21,17 @@ const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
 const canonicalContrastCatalogHash =
   "97458b7f9a6f7d15f48290ade8355fecdc33d8ce3824f42d1be8c9bc5f68cf89";
+const successorLocalToolPaths = new Set([
+  "scripts/render-m2-dry-run-requests.mjs",
+  "scripts/estimate-m2-static-costs.mjs",
+  "scripts/verify-m2-zero-cost-estimator.mjs",
+]);
+const nodeBuiltinSpecifiers = new Set(
+  builtinModules.flatMap((specifier) => [
+    specifier,
+    specifier.startsWith("node:") ? specifier : `node:${specifier}`,
+  ]),
+);
 
 const gateOrder = [
   "M2_CASE_COUNT_GATE",
@@ -45,6 +57,8 @@ const gateOrder = [
   "M2_EXACT_MANIFEST_SCOPE_GATE",
   "M2_EXACT_MANIFEST_HISTORY_GATE",
   "M2_EXACT_MANIFEST_GATE",
+  "M2_SUCCESSOR_LOCAL_TOOL_PATH_GATE",
+  "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
@@ -3231,6 +3245,169 @@ function currentTaskPaths() {
   return [...paths].sort();
 }
 
+function moduleSpecifiers(source) {
+  const specifiers = [];
+  const patterns = [
+    /(?:^|\n)\s*(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"'\r\n]+)["']/gu,
+    /\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu,
+    /\brequire\s*\(\s*["']([^"']+)["']\s*\)/gu,
+  ];
+  for (const pattern of patterns) {
+    for (const match of source.matchAll(pattern)) {
+      specifiers.push(match[1]);
+    }
+  }
+  return [...new Set(specifiers)];
+}
+
+function resolveSuccessorLocalImport(fromFile, specifier) {
+  if (!specifier.startsWith(".")) return null;
+  return path.posix.normalize(
+    path.posix.join(path.posix.dirname(fromFile), specifier),
+  );
+}
+
+function verifySuccessorLocalTools(paths) {
+  const historicalScriptPaths = new Set([
+    "scripts/verify-m2-eval-foundation.mjs",
+  ]);
+  for (const item of paths.filter((candidate) =>
+    candidate.startsWith("scripts/"),
+  )) {
+    if (
+      !historicalScriptPaths.has(item) &&
+      !successorLocalToolPaths.has(item)
+    ) {
+      fail("M2_SUCCESSOR_LOCAL_TOOL_PATH_GATE", {
+        file: item,
+        pathName: "$",
+        invariant: "successor local tool path is exactly Human-authorized",
+        expected: [...successorLocalToolPaths],
+        actual: item,
+      });
+    }
+  }
+
+  const forbiddenNetworkBuiltins = new Set([
+    "http",
+    "http2",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dgram",
+    "node:http",
+    "node:http2",
+    "node:https",
+    "node:net",
+    "node:tls",
+    "node:dns",
+    "node:dgram",
+  ]);
+  const xmlHttpRequestInvocation = new RegExp(
+    "\\bnew\\s+XML" + "HttpRequest\\s*\\(",
+    "u",
+  );
+  const webSocketInvocation = new RegExp(
+    "\\bnew\\s+Web" + "Socket\\s*\\(",
+    "u",
+  );
+  const isolationPatterns = [
+    ["network fetch", /\bfetch\s*\(/u],
+    ["browser request invocation", xmlHttpRequestInvocation],
+    ["socket client invocation", webSocketInvocation],
+    [
+      "network shell command",
+      /\b(?:exec|execSync)\s*\(\s*["'`][^"'`]*(?:curl|wget|powershell|pwsh|Invoke-WebRequest)\b/iu,
+    ],
+    [
+      "network process command",
+      /\b(?:spawn|spawnSync|execFile|execFileSync)\s*\(\s*["'`](?:curl|wget|powershell|pwsh)["'`]/iu,
+    ],
+    ["environment secret access", /\bprocess\.env(?:\.|\[)/u],
+    ["Deno environment access", /\bDeno\.env\b/u],
+    ["Bun environment access", /\bBun\.env\b/u],
+    ["environment getenv access", /\bgetenv\s*\(/u],
+    ["OpenAI SDK invocation", /\bnew\s+OpenAI\s*\(/u],
+    ["OpenAI Responses invocation", /\bresponses\.create\s*\(/u],
+    [
+      "provider SDK invocation",
+      /\bnew\s+(?:Anthropic|GoogleGenerativeAI|CohereClient|MistralClient)\s*\(/u,
+    ],
+    ["database client invocation", /\bcreateClient\s*\(/u],
+    [
+      "auth client invocation",
+      /\b(?:authenticateUser|signIn|signUp|createAuthClient)\s*\(/u,
+    ],
+    [
+      "payment client invocation",
+      /\b(?:createPayment|createCheckoutSession|paymentIntents\.create)\s*\(/u,
+    ],
+    [
+      "email client invocation",
+      /\b(?:sendEmail|sendMail|emails\.send)\s*\(/u,
+    ],
+    ["server action directive", /^\s*["']use server["'];?\s*$/mu],
+    ["API route wiring", /["'`](?:\.?\.?\/)*app\/api\//u],
+  ];
+  const secretPatterns = [
+    /\bsk-[A-Za-z0-9_-]{16,}\b/u,
+    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
+    /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
+  ];
+
+  for (const file of successorLocalToolPaths) {
+    if (!existsSync(absolute(file))) continue;
+    const source = readFileSync(absolute(file), "utf8");
+    for (const specifier of moduleSpecifiers(source)) {
+      if (nodeBuiltinSpecifiers.has(specifier)) {
+        if (forbiddenNetworkBuiltins.has(specifier)) {
+          fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+            file,
+            pathName: "$.imports",
+            invariant: "network built-in import is absent",
+            expected: "non-network Node built-in",
+            actual: specifier,
+          });
+        }
+        continue;
+      }
+      const localImport = resolveSuccessorLocalImport(file, specifier);
+      if (localImport && successorLocalToolPaths.has(localImport)) continue;
+      fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+        file,
+        pathName: "$.imports",
+        invariant:
+          "imports are Node built-ins or exact successor local-tool peers only",
+        expected: "Node built-in or exact authorized successor tool path",
+        actual: specifier,
+      });
+    }
+    for (const [label, pattern] of isolationPatterns) {
+      if (pattern.test(source)) {
+        fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+          file,
+          pathName: "$",
+          invariant: `${label} absent`,
+          expected: "absent",
+          actual: pattern.source,
+        });
+      }
+    }
+    for (const pattern of secretPatterns) {
+      if (pattern.test(source)) {
+        fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+          file,
+          pathName: "$",
+          invariant: "key or secret material absent",
+          expected: "absent",
+          actual: pattern.source,
+        });
+      }
+    }
+  }
+}
+
 function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
   const exactAllowed = new Set([
@@ -3248,9 +3425,11 @@ function verifyScopeAndProhibitedImplementation() {
     "ai/prompts/",
     "ai/schemas/",
   ];
+  verifySuccessorLocalTools(paths);
   for (const item of paths) {
     if (
       !exactAllowed.has(item) &&
+      !successorLocalToolPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -3330,6 +3509,20 @@ function verifyScopeAndProhibitedImplementation() {
           actual: pattern.source,
         });
       }
+    }
+  }
+  for (const gate of [
+    "M2_SUCCESSOR_LOCAL_TOOL_PATH_GATE",
+    "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE",
+  ]) {
+    if (failures.get(gate).length > 0) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: "scripts/verify-m2-eval-foundation.mjs",
+        pathName: "$",
+        invariant: `${gate} is required by the parent implementation boundary`,
+        expected: "PASS",
+        actual: "FAIL",
+      });
     }
   }
 }
