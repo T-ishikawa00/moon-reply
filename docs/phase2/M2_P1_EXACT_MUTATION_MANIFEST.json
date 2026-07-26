@@ -3,6 +3,13 @@
   "base_commit": "617aca826612f58adb4b3f0d113ff1a89c36016a",
   "r1_starting_commit": "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7",
   "comparison": "origin/main...final_HEAD",
+  "verification_scope": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7",
+    "end_commit_sha": "c56f597d0491482995c4afa6fb64cf148dd66345",
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
   "original_manifest_reconciliation": {
     "authoritative_changed_file_count": 52,
     "added_count": 46,

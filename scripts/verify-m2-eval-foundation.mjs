@@ -14,6 +14,8 @@ const repositoryRoot = path.resolve(scriptDirectory, "..");
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const baseCommit = "617aca826612f58adb4b3f0d113ff1a89c36016a";
 const r1StartingCommit = "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7";
+const r1AcceptedImplementationCommit =
+  "c56f597d0491482995c4afa6fb64cf148dd66345";
 const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
 const canonicalContrastCatalogHash =
@@ -40,6 +42,8 @@ const gateOrder = [
   "M2_ORACLE_LEAKAGE_GATE",
   "M2_RUNTIME_ISOLATION_GATE",
   "M2_RUNTIME_CAPABILITY_GATE",
+  "M2_EXACT_MANIFEST_SCOPE_GATE",
+  "M2_EXACT_MANIFEST_HISTORY_GATE",
   "M2_EXACT_MANIFEST_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
@@ -2766,13 +2770,17 @@ function mutationSummary(entries) {
   };
 }
 
-function collectGitMutationManifest(fromRef, toRef = null) {
+function collectGitMutationManifest(
+  fromRef,
+  toRef = null,
+  gate = "M2_EXACT_MANIFEST_GATE",
+) {
   const args = toRef
     ? ["diff", "--name-status", fromRef, toRef, "--"]
     : ["diff", "--name-status", fromRef, "--"];
   const diff = runGit(args);
   if (diff.status !== 0) {
-    fail("M2_EXACT_MANIFEST_GATE", {
+    fail(gate, {
       file: "<git>",
       pathName: "$",
       invariant: "Git name-status manifest is readable",
@@ -2791,7 +2799,7 @@ function collectGitMutationManifest(fromRef, toRef = null) {
       "--untracked-files=all",
     ]);
     if (status.status !== 0) {
-      fail("M2_EXACT_MANIFEST_GATE", {
+      fail(gate, {
         file: "<git>",
         pathName: "$",
         invariant: "Git untracked manifest is readable",
@@ -2810,7 +2818,7 @@ function collectGitMutationManifest(fromRef, toRef = null) {
   }
   for (const entry of byPath.values()) {
     if (!["A", "M", "D"].includes(entry.status)) {
-      fail("M2_EXACT_MANIFEST_GATE", {
+      fail(gate, {
         file: entry.path,
         pathName: "$",
         invariant: "mutation status is add, modify, or delete only",
@@ -2846,12 +2854,39 @@ function normalizeDeclaredManifest(section) {
   };
 }
 
+function gitCommitExists(commitSha) {
+  const result = runGit(["cat-file", "-e", `${commitSha}^{commit}`]);
+  return {
+    pass: result.status === 0,
+    detail: result.stderr || result.stdout || `exit ${String(result.status)}`,
+  };
+}
+
+function gitAncestorCheck(ancestor, descendant) {
+  const result = runGit(["merge-base", "--is-ancestor", ancestor, descendant]);
+  return {
+    pass: result.status === 0,
+    detail: result.stderr || result.stdout || `exit ${String(result.status)}`,
+  };
+}
+
 function verifyExactMutationManifest() {
   const manifestPath = "docs/phase2/M2_P1_EXACT_MUTATION_MANIFEST.json";
-  const manifest = readJson(manifestPath, "M2_EXACT_MANIFEST_GATE");
-  if (!manifest) return;
-  exactObjectKeys({
-    gate: "M2_EXACT_MANIFEST_GATE",
+  const scopeGate = "M2_EXACT_MANIFEST_SCOPE_GATE";
+  const historyGate = "M2_EXACT_MANIFEST_HISTORY_GATE";
+  const manifest = readJson(manifestPath, scopeGate);
+  if (!manifest) {
+    fail(historyGate, {
+      file: manifestPath,
+      pathName: "$",
+      invariant: "historical manifest validation requires a readable scope",
+      expected: "valid canonical exact manifest",
+      actual: "unavailable",
+    });
+    return;
+  }
+  const rootShapePass = exactObjectKeys({
+    gate: scopeGate,
     file: manifestPath,
     caseId: "-",
     pathName: "$",
@@ -2861,6 +2896,7 @@ function verifyExactMutationManifest() {
       "base_commit",
       "r1_starting_commit",
       "comparison",
+      "verification_scope",
       "original_manifest_reconciliation",
       "authoritative_manifest",
       "r1_manifest",
@@ -2873,7 +2909,7 @@ function verifyExactMutationManifest() {
     manifest.r1_starting_commit !== r1StartingCommit ||
     manifest.comparison !== "origin/main...final_HEAD"
   ) {
-    fail("M2_EXACT_MANIFEST_GATE", {
+    fail(scopeGate, {
       file: manifestPath,
       pathName: "$",
       invariant: "exact manifest identity and Git comparison",
@@ -2887,9 +2923,131 @@ function verifyExactMutationManifest() {
     });
   }
 
+  const verificationScope = manifest.verification_scope;
+  const scopeShapePass = exactObjectKeys({
+    gate: scopeGate,
+    file: manifestPath,
+    caseId: "-",
+    pathName: "$.verification_scope",
+    value: verificationScope,
+    expected: [
+      "type",
+      "base_commit_sha",
+      "end_commit_sha",
+      "include_working_tree",
+      "immutable_snapshot",
+    ],
+  });
+  const expectedScope = {
+    type: "historical_commit_range",
+    base_commit_sha: r1StartingCommit,
+    end_commit_sha: r1AcceptedImplementationCommit,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const actualScope = {
+    type: verificationScope?.type,
+    base_commit_sha: verificationScope?.base_commit_sha,
+    end_commit_sha: verificationScope?.end_commit_sha,
+    include_working_tree: verificationScope?.include_working_tree,
+    immutable_snapshot: verificationScope?.immutable_snapshot,
+  };
+  if (JSON.stringify(actualScope) !== JSON.stringify(expectedScope)) {
+    fail(scopeGate, {
+      file: manifestPath,
+      pathName: "$.verification_scope",
+      invariant:
+        "R1 verification scope is the immutable accepted historical commit range",
+      expected: expectedScope,
+      actual: actualScope,
+    });
+  }
+
+  const fullCommitShaPattern = /^[0-9a-f]{40}$/u;
+  const scopedCommits = [
+    ["base_commit_sha", verificationScope?.base_commit_sha],
+    ["end_commit_sha", verificationScope?.end_commit_sha],
+  ];
+  const existingCommits = new Map();
+  for (const [field, commitSha] of scopedCommits) {
+    if (
+      typeof commitSha !== "string" ||
+      !fullCommitShaPattern.test(commitSha)
+    ) {
+      fail(scopeGate, {
+        file: manifestPath,
+        pathName: `$.verification_scope.${field}`,
+        invariant: "full lowercase Git commit SHA",
+        expected: "40 lowercase hexadecimal characters",
+        actual: commitSha,
+      });
+      existingCommits.set(field, false);
+      continue;
+    }
+    const existence = gitCommitExists(commitSha);
+    existingCommits.set(field, existence.pass);
+    if (!existence.pass) {
+      fail(scopeGate, {
+        file: manifestPath,
+        pathName: `$.verification_scope.${field}`,
+        invariant: "scoped Git commit exists",
+        expected: "existing commit object",
+        actual: existence.detail,
+      });
+    }
+  }
+
+  if (
+    existingCommits.get("base_commit_sha") &&
+    existingCommits.get("end_commit_sha")
+  ) {
+    const rangeAncestry = gitAncestorCheck(
+      verificationScope.base_commit_sha,
+      verificationScope.end_commit_sha,
+    );
+    if (!rangeAncestry.pass) {
+      fail(scopeGate, {
+        file: manifestPath,
+        pathName: "$.verification_scope",
+        invariant: "R1 base commit is an ancestor of R1 end commit",
+        expected: `${verificationScope.base_commit_sha} ancestor of ${verificationScope.end_commit_sha}`,
+        actual: rangeAncestry.detail,
+      });
+    }
+    const headAncestry = gitAncestorCheck(
+      verificationScope.end_commit_sha,
+      "HEAD",
+    );
+    if (!headAncestry.pass) {
+      fail(scopeGate, {
+        file: manifestPath,
+        pathName: "$.verification_scope.end_commit_sha",
+        invariant: "R1 accepted end commit is an ancestor of current HEAD",
+        expected: `${verificationScope.end_commit_sha} ancestor of HEAD`,
+        actual: headAncestry.detail,
+      });
+    }
+  }
+
+  const scopeValid =
+    rootShapePass &&
+    scopeShapePass &&
+    failures.get(scopeGate).length === 0;
+  if (!scopeValid) {
+    fail(historyGate, {
+      file: manifestPath,
+      pathName: "$.verification_scope",
+      invariant: "historical manifest comparison uses a validated scope",
+      expected: expectedScope,
+      actual: actualScope,
+    });
+    return;
+  }
+
   const original = collectGitMutationManifest(
     baseCommit,
     r1StartingCommit,
+    historyGate,
   );
   const originalReconciliation = manifest.original_manifest_reconciliation;
   const originalExpected = {
@@ -2922,7 +3080,7 @@ function verifyExactMutationManifest() {
       originalReconciliation?.finding ?? "",
     )
   ) {
-    fail("M2_EXACT_MANIFEST_GATE", {
+    fail(historyGate, {
       file: manifestPath,
       pathName: "$.original_manifest_reconciliation",
       invariant:
@@ -2948,8 +3106,16 @@ function verifyExactMutationManifest() {
     });
   }
 
-  const authoritative = collectGitMutationManifest(baseCommit);
-  const r1 = collectGitMutationManifest(r1StartingCommit);
+  const authoritative = collectGitMutationManifest(
+    baseCommit,
+    verificationScope.end_commit_sha,
+    historyGate,
+  );
+  const r1 = collectGitMutationManifest(
+    verificationScope.base_commit_sha,
+    verificationScope.end_commit_sha,
+    historyGate,
+  );
   for (const [pathName, declared, actual] of [
     [
       "$.authoritative_manifest",
@@ -2963,10 +3129,11 @@ function verifyExactMutationManifest() {
     ],
   ]) {
     if (JSON.stringify(declared) !== JSON.stringify(actual)) {
-      fail("M2_EXACT_MANIFEST_GATE", {
+      fail(historyGate, {
         file: manifestPath,
         pathName,
-        invariant: "declared mutation manifest exactly matches Git",
+        invariant:
+          "declared historical mutation manifest exactly matches committed Git history",
         expected: actual,
         actual: declared,
       });
@@ -2997,23 +3164,40 @@ function verifyExactMutationManifest() {
   const actualR1AddedPaths = r1.entries
     .filter((entry) => entry.status === "A")
     .map((entry) => entry.path);
+  const expectedR1Summary = {
+    changed_file_count: 42,
+    added_count: 5,
+    modified_count: 37,
+    deleted_count: 0,
+    root_counts: { ai: 13, docs: 15, evals: 13, scripts: 1 },
+  };
+  const actualR1Summary = {
+    changed_file_count: r1.changed_file_count,
+    added_count: r1.added_count,
+    modified_count: r1.modified_count,
+    deleted_count: r1.deleted_count,
+    root_counts: r1.root_counts,
+  };
   if (
     JSON.stringify(actualFinalSummary) !==
       JSON.stringify(expectedFinalSummary) ||
+    JSON.stringify(actualR1Summary) !== JSON.stringify(expectedR1Summary) ||
     JSON.stringify(actualR1AddedPaths) !==
       JSON.stringify(expectedR1AddedPaths)
   ) {
-    fail("M2_EXACT_MANIFEST_GATE", {
+    fail(historyGate, {
       file: manifestPath,
-      pathName: "$.authoritative_manifest",
+      pathName: "$.authoritative_manifest|$.r1_manifest",
       invariant:
-        "R1 adds exactly five assets and final aggregate remains within the reconciled 57-file manifest",
+        "R1 remains the fixed 42-file snapshot with five additions and the accepted foundation remains the reconciled 57-file snapshot",
       expected: {
         final: expectedFinalSummary,
+        r1: expectedR1Summary,
         r1_added_paths: expectedR1AddedPaths,
       },
       actual: {
         final: actualFinalSummary,
+        r1: actualR1Summary,
         r1_added_paths: actualR1AddedPaths,
       },
     });
@@ -3635,6 +3819,12 @@ function printResults() {
   }
   const results = new Map(
     gateOrder.map((gate) => [gate, failures.get(gate).length === 0]),
+  );
+  results.set(
+    "M2_EXACT_MANIFEST_GATE",
+    results.get("M2_EXACT_MANIFEST_SCOPE_GATE") &&
+      results.get("M2_EXACT_MANIFEST_HISTORY_GATE") &&
+      results.get("M2_EXACT_MANIFEST_GATE"),
   );
   for (const gate of gateOrder) {
     console.log(`${gate}: ${results.get(gate) ? "PASS" : "FAIL"}`);
