@@ -5,10 +5,10 @@
 - Task: `M2-P2-B0 One-Case Paid Calibration Contract Foundation`
 - Branch: `design/m2-p2-b0-calibration-contract`
 - Base main SHA: `cadd019303247310623f582a505d5745c0186b30`
-- Successor-tool correction commit: `a757e7f28affe29a423ff817872a1a7f650a7fd2`
-- Required implementation commit: `docs: define one-case paid calibration contract`
-- Historical boundary correction commit: `88b456622950622c35510f4b3b9d19abbd9ec8da`
-- State: full automated validation passes; exact B0 implementation commit and normal feature-branch push pending; Human / ChatGPT acceptance pending
+- Accepted successor-tool correction commit: `a757e7f28affe29a423ff817872a1a7f650a7fd2`
+- Accepted historical boundary correction commit: `88b456622950622c35510f4b3b9d19abbd9ec8da`
+- Accepted implementation commit: `cf75679f2d116132f7519256cd762ba1a51a0af9`
+- State: implementation and automated validation complete; Human / ChatGPT final review complete; accepted and complete
 
 ## 2. Authority
 
@@ -155,11 +155,11 @@ B0 remains independently bounded. Its exact-scope gate filters only the fixed R2
 - Static byte/token estimates are not actual tokenizer or provider usage.
 - Actual input, cached input, output, reasoning, total usage, latency, refusal, and returned model ID remain unknown.
 - USD values are estimates, not final billed cost.
-- No model-quality, development, holdout, stability, or Human product-quality result exists.
+- No live model-quality, development-run, holdout, stability, or Human product-quality result exists.
 
-## 9. Next Human gate
+## 9. Acceptance decision and next authorization gate
 
-Commit and normally push the exact B0 18-file implementation manifest. After that mechanical publication step, the next gate is Human / ChatGPT review and acceptance of the fixed B0 contract. Automated PASS is not provider validation, model-quality evidence, live authorization, or Human acceptance.
+Human / ChatGPT final review accepts M2-P2-B0-R1, M2-P2-B0-R2, and the fixed B0 contract as complete. The accepted M2-P2-A historical scope remains exactly 16 files between `deff429e45a411f0d6c6d5bd3f199adca994ebb5` and `2e2e0cc4c57c46320d56aa986055f65187aa6aee`; the independent accepted B0 implementation scope remains exactly 18 files. Later lifecycle documents do not mutate either historical evidence set, and no wildcard, prefix, or self-authorizing scope exists.
 
 Any future B1 still requires a new, separately committed Human approval binding the exact approved contract hash, `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, and the USD 1 absolute ceiling.
 

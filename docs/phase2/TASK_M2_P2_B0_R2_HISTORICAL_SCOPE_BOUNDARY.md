@@ -2,7 +2,7 @@
 
 ## 1. Status
 
-`AUTOMATED_PASS_PENDING_COMMIT`. M2-P2-B0-R2 corrects only the historical M2-P2-A exact-scope boundary. It does not authorize live execution, M2-P2-B1, API spend, main merge, or a pull request.
+`HUMAN_CHATGPT_ACCEPTED_COMPLETE` at correction commit `88b456622950622c35510f4b3b9d19abbd9ec8da`. M2-P2-B0-R2 corrects only the historical M2-P2-A exact-scope boundary. Its acceptance does not authorize live execution, M2-P2-B1, API spend, a merge commit, or a pull request.
 
 ## 2. Triggering failure
 
@@ -109,11 +109,11 @@ The correction commit is limited to:
 - `docs/phase2/M2_P2_A_HISTORICAL_SCOPE.json`
 - `docs/phase2/TASK_M2_P2_B0_R2_HISTORICAL_SCOPE_BOUNDARY.md`
 
-The commit message is `fix: anchor M2-P2-A exact scope verification`. The B0 18 files must remain unstaged and uncommitted during this commit.
+The accepted correction commit is `88b456622950622c35510f4b3b9d19abbd9ec8da` with message `fix: anchor M2-P2-A exact scope verification`. It contains exactly the three files above and remains independent from the accepted 18-file B0 implementation commit.
 
-## 16. B0 resume condition
+## 16. Acceptance outcome
 
-B0 may resume only after all correction and predecessor gates pass with the preserved B0 contract hash, hard-cap estimate, exact case/model/stage policy, zero external execution, zero secret read, and USD 0 spend. B0 remains a separate exact 18-file commit.
+All correction and predecessor gates pass with the preserved B0 contract hash, hard-cap estimate, exact case/model/stage policy, zero external execution, zero secret read, and USD 0 spend. M2-P2-B0-R2 and the separate exact 18-file B0 contract are Human / ChatGPT accepted and complete.
 
 ## 17. API/runtime prohibition
 

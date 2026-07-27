@@ -2,6 +2,8 @@
 
 ## 1. Current authorization
 
+M2-P2-B0 is Human / ChatGPT accepted and complete at implementation commit `cf75679f2d116132f7519256cd762ba1a51a0af9`. Acceptance does not authorize live execution or M2-P2-B1.
+
 | Control | Value |
 | --- | ---: |
 | current task spend authorized | USD 0.00 |

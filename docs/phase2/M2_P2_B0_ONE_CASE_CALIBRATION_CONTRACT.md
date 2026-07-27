@@ -5,7 +5,8 @@
 - Task: `M2-P2-B0 One-Case Paid Calibration Contract Foundation`
 - Foundation main SHA: `cadd019303247310623f582a505d5745c0186b30`
 - Contract version: `one-case-calibration-contract-v1.0.0`
-- State: contract implementation in progress; automated validation and Human / ChatGPT review pending
+- Accepted implementation commit: `cf75679f2d116132f7519256cd762ba1a51a0af9`
+- State: contract implemented; automated validation and Human / ChatGPT final review complete; accepted and complete
 - Current API spend authorization: USD 0
 - Live execution: unauthorized
 - M2-P2-B1: unauthorized and not started
@@ -203,4 +204,4 @@ The contract hash is the SHA-256 of the fixed ordered sequence `relative_path + 
 
 ## 12. Boundary
 
-M2-P2-B0 creates a reviewable contract only. Automated PASS does not establish provider compatibility, model quality, actual token usage, actual cost, Human product quality, or live readiness.
+M2-P2-B0 creates an accepted contract only. Contract acceptance does not establish provider compatibility, model quality, actual token usage, actual API cost, Human product quality, or live readiness. `USD 0.213223` remains a deterministic static hard-cap estimate, not actual spend.
