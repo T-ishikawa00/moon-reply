@@ -25,6 +25,8 @@ const successorLocalToolPaths = new Set([
   "scripts/render-m2-dry-run-requests.mjs",
   "scripts/estimate-m2-static-costs.mjs",
   "scripts/verify-m2-zero-cost-estimator.mjs",
+  "scripts/prepare-m2-p2-b0-calibration-contract.mjs",
+  "scripts/verify-m2-p2-b0-calibration-contract.mjs",
 ]);
 const nodeBuiltinSpecifiers = new Set(
   builtinModules.flatMap((specifier) => [
