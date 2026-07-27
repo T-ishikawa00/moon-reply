@@ -1,0 +1,220 @@
+{
+  "schema_version": "moon-reply-calibration-contract-preview-v1",
+  "preview_version": "contract-preview-v1.0.0",
+  "foundation_main_sha": "cadd019303247310623f582a505d5745c0186b30",
+  "contract_version": "one-case-calibration-contract-v1.0.0",
+  "contract_hash": {
+    "algorithm": "sha256(relative_path + ':' + canonical_file_sha256 + '\\n') in fixed source-path order",
+    "sha256": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+  },
+  "case": {
+    "case_id": "WAIT-003",
+    "case_sha256": "578e02bbdc20542ea4e2aeb274ac78901d0240e3ac0cee66d13148741b89a2c2",
+    "dataset_split": "development"
+  },
+  "dataset": {
+    "version": "eval-development-v1.0.0",
+    "sha256": "9960f91c0e4eb0009bca6be7834437d56195c0e5682f5e679530cdb7df64d0e8"
+  },
+  "prompt_bundle": {
+    "version": "prompt-bundle-v1.0.0",
+    "manifest_sha256": "abcc37aac3d461ff2fc310c08708a3e26c5d658eb081cf2f4241529ca4accdb0"
+  },
+  "schema_set": {
+    "version": "pipeline-schema-v1.0.0",
+    "sha256": "1bdb2a124d00fdb094296099d6cf5e9a3493910083f648cd804021ac64f22818"
+  },
+  "estimator_report": {
+    "path": "evals/cost-estimator/reports/static-estimate-v1.json",
+    "file_sha256": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+    "generated_projection_sha256": "0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f"
+  },
+  "price_snapshot": {
+    "path": "evals/cost-estimator/price-catalog-v1.json",
+    "sha256": "731b7ae22346149c49bf7c792d99bcb70c87d0af7739a5a12670b0330d16c430",
+    "standard_input_per_million": 1,
+    "standard_output_per_million": 6
+  },
+  "candidate": {
+    "provider": "openai",
+    "endpoint": "responses",
+    "requested_model": "gpt-5.6-luna",
+    "model_role": "cost_and_plumbing_calibration_candidate",
+    "selected_for_product": false,
+    "selected_for_baseline": false,
+    "availability_verified": false,
+    "fallback_model": null
+  },
+  "stage_sequence": [
+    {
+      "order": 1,
+      "step_id": "PB-01",
+      "name": "Structure",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    },
+    {
+      "order": 2,
+      "step_id": "PB-02",
+      "name": "Safety Semantic",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    },
+    {
+      "order": 3,
+      "step_id": "PB-03",
+      "name": "Eligibility",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    },
+    {
+      "order": 4,
+      "step_id": "LOCAL-SAFETY-AGGREGATION",
+      "name": "local deterministic Safety aggregation",
+      "kind": "local_deterministic",
+      "provider_call": false,
+      "maximum_executions": 1
+    },
+    {
+      "order": 5,
+      "step_id": "LOCAL-DECISION-POLICY",
+      "name": "local deterministic Decision Policy",
+      "kind": "local_deterministic",
+      "provider_call": false,
+      "maximum_executions": 1
+    },
+    {
+      "order": 6,
+      "step_id": "PB-04",
+      "name": "Decision Planning",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    },
+    {
+      "order": 7,
+      "step_id": "LOCAL-PLAN-VALIDATION",
+      "name": "deterministic plan validation",
+      "kind": "local_deterministic",
+      "provider_call": false,
+      "maximum_executions": 1
+    },
+    {
+      "order": 8,
+      "step_id": "PB-05",
+      "name": "Report Writing",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    },
+    {
+      "order": 9,
+      "step_id": "LOCAL-REPORT-VALIDATION",
+      "name": "deterministic report validation",
+      "kind": "local_deterministic",
+      "provider_call": false,
+      "maximum_executions": 1
+    },
+    {
+      "order": 10,
+      "step_id": "PB-06",
+      "name": "Semantic Validation",
+      "kind": "provider",
+      "provider_call": true,
+      "maximum_executions": 1
+    }
+  ],
+  "provider_call_count": 6,
+  "local_step_count": 4,
+  "stage_reasoning_effort": "low",
+  "stage_output_caps": {
+    "PB-01": 4000,
+    "PB-02": 800,
+    "PB-03": 700,
+    "PB-04": 4500,
+    "PB-05": 8000,
+    "PB-06": 2500
+  },
+  "total_provider_output_cap_tokens": 20500,
+  "static_estimate": {
+    "estimate_method": "configurable_utf8_byte_division_bands",
+    "nominal_request_bytes": 160368,
+    "nominal_full_envelope_bytes": 163177,
+    "conservative_request_bytes": 180444,
+    "conservative_full_envelope_bytes": 183283,
+    "low_input_tokens": 40094,
+    "central_input_tokens": 53458,
+    "high_input_tokens": 80185,
+    "conservative_high_input_tokens": 90223,
+    "conservative_output_tokens": 12150,
+    "configured_output_cap_tokens": 20500,
+    "expected_static_conservative_usd": 0.163123,
+    "recomputed_hard_cap_standard_usd": 0.213223
+  },
+  "budget": {
+    "current_task_spend_authorized_usd": 0,
+    "future_human_approval_ceiling_usd": 1,
+    "preflight_contract_ceiling_usd": 0.3,
+    "preflight_budget_eligible": true,
+    "live_execution_eligible": false,
+    "batch_reliance": false,
+    "cache_savings_reliance": false
+  },
+  "controls": {
+    "transport_retry": false,
+    "schema_retry": false,
+    "repair": false,
+    "fallback": false,
+    "automatic_continuation_after_failed_stage": false,
+    "live_execution_authorized": false,
+    "paid_run_completed": false,
+    "api_spend_usd": 0,
+    "b1_status": "unauthorized_not_started"
+  },
+  "security_requirements": {
+    "b0_api_key_read_allowed": false,
+    "b0_network_allowed": false,
+    "b0_provider_execution_allowed": false,
+    "future_process_environment_only": true,
+    "authorization_header_logging_allowed": false,
+    "holdout_data_allowed": false,
+    "real_user_data_allowed": false
+  },
+  "artifact_requirements": {
+    "repository_storage_default": false,
+    "default_conceptual_location": "%LOCALAPPDATA%\\moon-reply\\calibration-runs\\<run_id>\\",
+    "required_files": [
+      "run-manifest.json",
+      "stage-records.json",
+      "gate-results.json",
+      "cost-summary.json",
+      "calibration-summary.md",
+      "outputs/PB-01.json",
+      "outputs/PB-02.json",
+      "outputs/PB-03.json",
+      "outputs/PB-04.json",
+      "outputs/PB-05.json",
+      "outputs/PB-06.json"
+    ],
+    "cost_term": "usage-derived cost estimate",
+    "reasoning_text_allowed": false
+  },
+  "stop_conditions": [
+    "api_or_transport_failure",
+    "timeout",
+    "incomplete_response",
+    "refusal",
+    "missing_usage",
+    "invalid_json",
+    "schema_failure",
+    "safety_failure",
+    "oracle_leakage",
+    "unallowed_decision",
+    "hallucinated_fact",
+    "stage_gate_failure",
+    "budget_guard_failure"
+  ]
+}

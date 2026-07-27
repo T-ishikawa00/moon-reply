@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/one-case-calibration-contract.schema.json",
+  "title": "Moon Reply One-Case Calibration Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "task_id",
+    "task_name",
+    "foundation_main_sha",
+    "purpose",
+    "case",
+    "candidate",
+    "references",
+    "budget",
+    "authorization_lock",
+    "execution_prohibitions",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-one-case-calibration-contract-v1"
+    },
+    "contract_version": {
+      "const": "one-case-calibration-contract-v1.0.0"
+    },
+    "task_id": {
+      "const": "M2-P2-B0"
+    },
+    "task_name": {
+      "const": "One-Case Paid Calibration Contract Foundation"
+    },
+    "foundation_main_sha": {
+      "const": "cadd019303247310623f582a505d5745c0186b30"
+    },
+    "purpose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_quality_benchmark",
+        "calibrate_static_token_and_cost_estimates",
+        "calibrate_provider_compatibility",
+        "calibrate_usage_reporting",
+        "calibrate_stage_plumbing"
+      ],
+      "properties": {
+        "model_quality_benchmark": {
+          "const": false
+        },
+        "calibrate_static_token_and_cost_estimates": {
+          "const": true
+        },
+        "calibrate_provider_compatibility": {
+          "const": true
+        },
+        "calibrate_usage_reporting": {
+          "const": true
+        },
+        "calibrate_stage_plumbing": {
+          "const": true
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "source_path",
+        "dataset_split",
+        "dataset_version",
+        "dataset_sha256",
+        "case_hash_algorithm",
+        "case_sha256",
+        "oracle_local_only",
+        "holdout_data_used",
+        "real_user_data_used"
+      ],
+      "properties": {
+        "case_id": {
+          "const": "WAIT-003"
+        },
+        "source_path": {
+          "const": "evals/development/wait-and-reassess.json"
+        },
+        "dataset_split": {
+          "const": "development"
+        },
+        "dataset_version": {
+          "const": "eval-development-v1.0.0"
+        },
+        "dataset_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "case_hash_algorithm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "case_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "oracle_local_only": {
+          "const": true
+        },
+        "holdout_data_used": {
+          "const": false
+        },
+        "real_user_data_used": {
+          "const": false
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "endpoint",
+        "requested_model",
+        "model_role",
+        "selected_for_product",
+        "selected_for_baseline",
+        "live_execution_authorized",
+        "local_project_availability_verified",
+        "stop_if_unavailable_or_unauthorized",
+        "fallback_model",
+        "automatic_switch_to_terra_or_sol",
+        "returned_model_id_recording_required",
+        "alias_or_snapshot_behavior_assumed"
+      ],
+      "properties": {
+        "provider": {
+          "const": "openai"
+        },
+        "endpoint": {
+          "const": "responses"
+        },
+        "requested_model": {
+          "const": "gpt-5.6-luna"
+        },
+        "model_role": {
+          "const": "cost_and_plumbing_calibration_candidate"
+        },
+        "selected_for_product": {
+          "const": false
+        },
+        "selected_for_baseline": {
+          "const": false
+        },
+        "live_execution_authorized": {
+          "const": false
+        },
+        "local_project_availability_verified": {
+          "const": false
+        },
+        "stop_if_unavailable_or_unauthorized": {
+          "const": true
+        },
+        "fallback_model": {
+          "type": "null"
+        },
+        "automatic_switch_to_terra_or_sol": {
+          "const": false
+        },
+        "returned_model_id_recording_required": {
+          "const": true
+        },
+        "alias_or_snapshot_behavior_assumed": {
+          "const": false
+        }
+      }
+    },
+    "references": {
+      "$ref": "#/$defs/closed_nonempty_object"
+    },
+    "budget": {
+      "$ref": "#/$defs/closed_nonempty_object"
+    },
+    "authorization_lock": {
+      "$ref": "#/$defs/closed_nonempty_object"
+    },
+    "execution_prohibitions": {
+      "$ref": "#/$defs/closed_nonempty_object"
+    },
+    "integrity": {
+      "$ref": "#/$defs/closed_nonempty_object"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "closed_nonempty_object": {
+      "type": "object"
+    }
+  }
+}

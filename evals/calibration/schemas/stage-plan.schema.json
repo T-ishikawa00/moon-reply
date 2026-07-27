@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/calibration-stage-plan.schema.json",
+  "title": "Moon Reply Calibration Stage Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_version",
+    "case_id",
+    "each_stage_maximum_executions",
+    "maximum_provider_calls",
+    "local_deterministic_step_count",
+    "pb_07_included",
+    "retry_policy",
+    "provider_request_defaults",
+    "stage_sequence",
+    "total_provider_output_cap_tokens",
+    "stage_cap_borrowing_allowed",
+    "max_output_tokens_includes_reasoning_usage",
+    "preflight_requirements",
+    "post_stage_requirements",
+    "stop_conditions",
+    "failure_disposition"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-calibration-stage-plan-v1"
+    },
+    "plan_version": {
+      "const": "calibration-stage-plan-v1.0.0"
+    },
+    "case_id": {
+      "const": "WAIT-003"
+    },
+    "each_stage_maximum_executions": {
+      "const": 1
+    },
+    "maximum_provider_calls": {
+      "const": 6
+    },
+    "local_deterministic_step_count": {
+      "const": 4
+    },
+    "pb_07_included": {
+      "const": false
+    },
+    "retry_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transport_retry_allowed",
+        "schema_retry_allowed",
+        "repair_allowed",
+        "fallback_allowed",
+        "automatic_continuation_after_failed_stage"
+      ],
+      "properties": {
+        "transport_retry_allowed": {
+          "const": false
+        },
+        "schema_retry_allowed": {
+          "const": false
+        },
+        "repair_allowed": {
+          "const": false
+        },
+        "fallback_allowed": {
+          "const": false
+        },
+        "automatic_continuation_after_failed_stage": {
+          "const": false
+        }
+      }
+    },
+    "provider_request_defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "endpoint",
+        "store",
+        "tools",
+        "stream",
+        "background",
+        "service_tier",
+        "truncation",
+        "reasoning",
+        "text_format_type",
+        "strict_schema_adherence",
+        "forbidden_request_fields"
+      ],
+      "properties": {
+        "endpoint": {
+          "const": "/v1/responses"
+        },
+        "store": {
+          "const": false
+        },
+        "tools": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "stream": {
+          "const": false
+        },
+        "background": {
+          "const": false
+        },
+        "service_tier": {
+          "const": "default"
+        },
+        "truncation": {
+          "const": "disabled"
+        },
+        "reasoning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "effort",
+            "summary_requested"
+          ],
+          "properties": {
+            "effort": {
+              "const": "low"
+            },
+            "summary_requested": {
+              "const": false
+            }
+          }
+        },
+        "text_format_type": {
+          "const": "json_schema"
+        },
+        "strict_schema_adherence": {
+          "const": true
+        },
+        "forbidden_request_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "stage_sequence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stage"
+      },
+      "minItems": 10,
+      "maxItems": 10
+    },
+    "total_provider_output_cap_tokens": {
+      "const": 20500
+    },
+    "stage_cap_borrowing_allowed": {
+      "const": false
+    },
+    "max_output_tokens_includes_reasoning_usage": {
+      "const": true
+    },
+    "preflight_requirements": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "post_stage_requirements": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "stop_conditions": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "failure_disposition": {
+      "const": "stop_immediately_without_retry_repair_fallback_or_synthetic_continuation"
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "step_id",
+        "name",
+        "kind",
+        "provider_call",
+        "maximum_executions",
+        "max_output_tokens",
+        "output_schema_path",
+        "output_schema_pointer",
+        "request_contract_ref",
+        "owning_gate"
+      ],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "step_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "provider",
+            "local_deterministic"
+          ]
+        },
+        "provider_call": {
+          "type": "boolean"
+        },
+        "maximum_executions": {
+          "const": 1
+        },
+        "max_output_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "output_schema_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output_schema_pointer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "request_contract_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owning_gate": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "unique_string_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/calibration-artifact-contract.schema.json",
+  "title": "Moon Reply Calibration Artifact Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "repository_storage_default",
+    "b0_creates_paid_run_directory",
+    "default_conceptual_location",
+    "required_files",
+    "allowed_evidence_fields",
+    "prohibited_evidence",
+    "cost_term",
+    "final_billed_cost_claim_allowed",
+    "reasoning_usage_numbers_allowed",
+    "reasoning_text_allowed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-calibration-artifact-contract-v1"
+    },
+    "contract_version": {
+      "const": "calibration-artifact-contract-v1.0.0"
+    },
+    "repository_storage_default": {
+      "const": false
+    },
+    "b0_creates_paid_run_directory": {
+      "const": false
+    },
+    "default_conceptual_location": {
+      "const": "%LOCALAPPDATA%\\moon-reply\\calibration-runs\\<run_id>\\"
+    },
+    "required_files": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "allowed_evidence_fields": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "prohibited_evidence": {
+      "$ref": "#/$defs/unique_string_array"
+    },
+    "cost_term": {
+      "const": "usage-derived cost estimate"
+    },
+    "final_billed_cost_claim_allowed": {
+      "const": false
+    },
+    "reasoning_usage_numbers_allowed": {
+      "const": true
+    },
+    "reasoning_text_allowed": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "unique_string_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

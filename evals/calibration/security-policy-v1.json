@@ -1,0 +1,44 @@
+{
+  "schema_version": "moon-reply-calibration-security-policy-v1",
+  "policy_version": "calibration-security-policy-v1.0.0",
+  "b0": {
+    "api_key_read_allowed": false,
+    "network_allowed": false,
+    "provider_execution_allowed": false,
+    "secret_value_display_allowed": false,
+    "api_spend_authorized_usd": 0
+  },
+  "future_b1_key_policy": {
+    "process_environment_only": true,
+    "repository_storage_allowed": false,
+    "command_line_argument_allowed": false,
+    "json_config_allowed": false,
+    "run_artifact_allowed": false,
+    "authorization_header_logging_allowed": false,
+    "environment_dump_allowed": false,
+    "substring_or_prefix_logging_allowed": false,
+    "value_length_logging_allowed": false,
+    "client_side_exposure_allowed": false,
+    "committed_env_file_allowed": false,
+    "ephemeral_shell_environment_preferred": true
+  },
+  "data_policy": {
+    "fixture_case_id": "WAIT-003",
+    "development_fixture_only": true,
+    "oracle_provider_access_allowed": false,
+    "holdout_data_allowed": false,
+    "real_user_data_allowed": false
+  },
+  "verifier_requirements": {
+    "b0_secret_read_absent": true,
+    "generated_artifact_api_key_variable_name_absent": true,
+    "secret_shaped_value_absent": true,
+    "authorization_header_absent": true,
+    "gitignore_explicit_env_unignore_absent": true
+  },
+  "gitignore_policy": {
+    "modify_only_if_concrete_unsafe_rule_found": true,
+    "unsafe_rule_found": false,
+    "modified_in_b0": false
+  }
+}
