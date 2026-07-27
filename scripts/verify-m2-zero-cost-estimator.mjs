@@ -20,6 +20,12 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const foundationSha = "e673d015ea7da1f6f1d6f00457014f07072d3011";
+const historicalScopePath =
+  "docs/phase2/M2_P2_A_HISTORICAL_SCOPE.json";
+const historicalBaseSha =
+  "deff429e45a411f0d6c6d5bd3f199adca994ebb5";
+const historicalEndSha =
+  "2e2e0cc4c57c46320d56aa986055f65187aa6aee";
 
 const gateOrder = [
   "M2_ZERO_NETWORK_GATE",
@@ -36,6 +42,8 @@ const gateOrder = [
   "M2_REPAIR_STRESS_GATE",
   "M2_ESTIMATOR_DETERMINISM_GATE",
   "M2_REPORT_HASH_GATE",
+  "M2_P2_A_HISTORICAL_SCOPE_CONTRACT_GATE",
+  "M2_P2_A_HISTORICAL_SCOPE_HISTORY_GATE",
   "M2_P2_A_EXACT_SCOPE_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
@@ -55,13 +63,6 @@ const newFiles = [
   "scripts/render-m2-dry-run-requests.mjs",
   "scripts/estimate-m2-static-costs.mjs",
   "scripts/verify-m2-zero-cost-estimator.mjs",
-];
-
-const statusFiles = [
-  "docs/ROADMAP.md",
-  "docs/CURRENT_FOCUS.md",
-  "docs/CODEX_HANDOFF.md",
-  "docs/WBS.md",
 ];
 
 const r1CorrectionFiles = [
@@ -137,6 +138,217 @@ function runGit(args) {
 
 function source(relativePath) {
   return readFileSync(absolute(relativePath), "utf8");
+}
+
+function normalizedMutationEntries(entries) {
+  return entries
+    .map((entry) => ({
+      file: entry.file.replaceAll("\\", "/"),
+      status: entry.status,
+    }))
+    .sort((left, right) => left.file.localeCompare(right.file, "en"));
+}
+
+function rootBreakdown(entries) {
+  return Object.fromEntries(
+    [...entries.reduce((counts, entry) => {
+      const root = entry.file.split("/")[0];
+      counts.set(root, (counts.get(root) ?? 0) + 1);
+      return counts;
+    }, new Map())].sort(([left], [right]) =>
+      left.localeCompare(right, "en"),
+    ),
+  );
+}
+
+function parseHistoricalNameStatus(output) {
+  const entries = [];
+  for (const line of output.split(/\r?\n/u).filter(Boolean)) {
+    const [rawStatus, ...parts] = line.split("\t");
+    const status = rawStatus[0];
+    const file = parts.at(-1)?.replaceAll("\\", "/");
+    if (
+      !["A", "M", "D"].includes(status) ||
+      parts.length !== 1 ||
+      !file
+    ) {
+      fail(
+        "M2_P2_A_HISTORICAL_SCOPE_HISTORY_GATE",
+        `unsupported historical name-status entry: ${line}`,
+      );
+      continue;
+    }
+    entries.push({ file, status });
+  }
+  return normalizedMutationEntries(entries);
+}
+
+function verifyHistoricalScope() {
+  const contractGate =
+    "M2_P2_A_HISTORICAL_SCOPE_CONTRACT_GATE";
+  const historyGate = "M2_P2_A_HISTORICAL_SCOPE_HISTORY_GATE";
+  let contract;
+  try {
+    contract = JSON.parse(source(historicalScopePath));
+  } catch (error) {
+    fail(
+      contractGate,
+      `${historicalScopePath} could not be parsed: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+
+  const fullShaPattern = /^[0-9a-f]{40}$/u;
+  const expectedFiles = Array.isArray(contract?.expected_files)
+    ? contract.expected_files
+    : [];
+  const expectedEntries = [];
+  const seenPaths = new Set();
+  let expectedFilesValid = Array.isArray(contract?.expected_files);
+  for (const [index, entry] of expectedFiles.entries()) {
+    const file = entry?.path;
+    const status = entry?.status;
+    const valid =
+      typeof file === "string" &&
+      file.length > 0 &&
+      !/[*?[\]]/u.test(file) &&
+      !file.includes("\\") &&
+      ["A", "M", "D"].includes(status) &&
+      !seenPaths.has(file);
+    if (!valid) {
+      expectedFilesValid = false;
+      fail(
+        contractGate,
+        `expected_files[${index}] is not a unique exact A/M/D path`,
+      );
+      continue;
+    }
+    seenPaths.add(file);
+    expectedEntries.push({ file, status });
+  }
+
+  assert(
+    contractGate,
+    contract?.scope_version === "m2-p2-a-historical-scope-v1" &&
+      contract?.scope_type === "historical_commit_range" &&
+      contract?.base_commit_sha === historicalBaseSha &&
+      contract?.end_commit_sha === historicalEndSha &&
+      contract?.include_head_after_end === false &&
+      contract?.include_index === false &&
+      contract?.include_working_tree === false &&
+      contract?.immutable_snapshot === true &&
+      contract?.expected_total_files === 16,
+    "historical scope metadata or fixed commit anchors differ",
+  );
+  assert(
+    contractGate,
+    fullShaPattern.test(contract?.base_commit_sha ?? "") &&
+      fullShaPattern.test(contract?.end_commit_sha ?? ""),
+    "historical base or end SHA is not a full lowercase 40-character SHA",
+  );
+  assert(
+    contractGate,
+    expectedFilesValid &&
+      expectedEntries.length === contract?.expected_total_files,
+    `historical expected file count differs: ${expectedEntries.length}`,
+  );
+  assert(
+    contractGate,
+    deepEqual(contract?.expected_root_breakdown, {
+      docs: 7,
+      evals: 6,
+      scripts: 3,
+    }),
+    "historical expected root breakdown differs",
+  );
+
+  const baseExists = runGit([
+    "cat-file",
+    "-e",
+    `${historicalBaseSha}^{commit}`,
+  ]);
+  const endExists = runGit([
+    "cat-file",
+    "-e",
+    `${historicalEndSha}^{commit}`,
+  ]);
+  assert(
+    historyGate,
+    baseExists.status === 0 && endExists.status === 0,
+    `historical commit object is missing: ${baseExists.stderr}${endExists.stderr}`,
+  );
+
+  if (baseExists.status === 0 && endExists.status === 0) {
+    const baseBeforeEnd = runGit([
+      "merge-base",
+      "--is-ancestor",
+      historicalBaseSha,
+      historicalEndSha,
+    ]);
+    const endBeforeHead = runGit([
+      "merge-base",
+      "--is-ancestor",
+      historicalEndSha,
+      "HEAD",
+    ]);
+    assert(
+      historyGate,
+      baseBeforeEnd.status === 0,
+      "historical base is not an ancestor of historical end",
+    );
+    assert(
+      historyGate,
+      endBeforeHead.status === 0,
+      "historical end is not an ancestor of current HEAD",
+    );
+  }
+
+  const historicalDiff = runGit([
+    "diff",
+    "--name-status",
+    historicalBaseSha,
+    historicalEndSha,
+    "--",
+  ]);
+  assert(
+    historyGate,
+    historicalDiff.status === 0,
+    `historical diff failed: ${historicalDiff.stderr}`,
+  );
+  if (historicalDiff.status === 0) {
+    const actualEntries = parseHistoricalNameStatus(
+      historicalDiff.stdout,
+    );
+    const normalizedExpected = normalizedMutationEntries(
+      expectedEntries,
+    );
+    assert(
+      historyGate,
+      actualEntries.length === contract?.expected_total_files,
+      `historical diff count differs: ${actualEntries.length}`,
+    );
+    assert(
+      historyGate,
+      deepEqual(actualEntries, normalizedExpected),
+      `historical 16-file manifest differs: ${JSON.stringify(actualEntries)}`,
+    );
+    assert(
+      historyGate,
+      deepEqual(
+        rootBreakdown(actualEntries),
+        contract?.expected_root_breakdown,
+      ),
+      `historical root breakdown differs: ${JSON.stringify(rootBreakdown(actualEntries))}`,
+    );
+  }
+
+  assert(
+    "M2_P2_A_EXACT_SCOPE_GATE",
+    failures.get(contractGate).length === 0 &&
+      failures.get(historyGate).length === 0,
+    "historical scope contract or fixed commit-range history gate failed",
+  );
 }
 
 function verifyZeroExternalAccess() {
@@ -697,18 +909,6 @@ function verifyProhibitedImplementation() {
   const correctionMutations = allMutations.filter((entry) =>
     correctionPaths.has(entry.file),
   );
-  const mutations = allMutations.filter(
-    (entry) => !correctionPaths.has(entry.file),
-  );
-  const expected = [
-    ...newFiles.map((file) => ({ file, status: "A" })),
-    ...statusFiles.map((file) => ({ file, status: "M" })),
-  ].sort((left, right) => left.file.localeCompare(right.file, "en"));
-  assert(
-    "M2_P2_A_EXACT_SCOPE_GATE",
-    deepEqual(mutations, expected),
-    `exact original 16-file mutation manifest differs: ${JSON.stringify(mutations)}`,
-  );
   assert(
     "M2_PROHIBITED_IMPLEMENTATION_GATE",
     correctionMutations.length === 0 ||
@@ -819,6 +1019,7 @@ try {
   verifyTokenBandsAndLabels(artifacts);
   verifyCostFormulas(artifacts.report);
   verifyRepairStress(foundation);
+  verifyHistoricalScope();
   verifyProhibitedImplementation();
   passed = printResults();
   if (!passed) process.exitCode = 1;

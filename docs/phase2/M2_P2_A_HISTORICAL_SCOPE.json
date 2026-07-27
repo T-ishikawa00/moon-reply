@@ -1,0 +1,82 @@
+{
+  "scope_version": "m2-p2-a-historical-scope-v1",
+  "scope_type": "historical_commit_range",
+  "base_commit_sha": "deff429e45a411f0d6c6d5bd3f199adca994ebb5",
+  "end_commit_sha": "2e2e0cc4c57c46320d56aa986055f65187aa6aee",
+  "include_head_after_end": false,
+  "include_index": false,
+  "include_working_tree": false,
+  "immutable_snapshot": true,
+  "expected_total_files": 16,
+  "expected_root_breakdown": {
+    "docs": 7,
+    "evals": 6,
+    "scripts": 3
+  },
+  "expected_files": [
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_A_STATIC_ESTIMATE_REPORT.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_A_ZERO_COST_ESTIMATOR_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_A_REVIEW.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/estimator-config-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/price-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/reports/static-estimate-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/scenario-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/cost-estimator/stage-size-profiles-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "scripts/estimate-m2-static-costs.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/render-m2-dry-run-requests.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-zero-cost-estimator.mjs"
+    }
+  ]
+}
