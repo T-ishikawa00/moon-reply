@@ -1,5 +1,9 @@
 # M2-P2-B1-A State Machine and Stop Policy
 
+## Acceptance status
+
+M2-P2-B1-A-R1 correction commit `22bbf6f69ad2e21d3d43808e3518970eb1dc48e7` and M2-P2-B1-A implementation commit `630cde811d63e0304ed528dc2e426400e81506a6` are Human / ChatGPT accepted and complete. This acceptance does not authorize M2-P2-B1-B1 live transport planning/implementation or M2-P2-B1-B2 paid calibration execution; both remain unauthorized and not started.
+
 ## State contract
 
 Canonical states are `created`, `preflight_validating`, `preflight_passed`, `stage_pending`, `stage_replaying`, `stage_output_validating`, `stage_completed`, `local_step_running`, `local_step_completed`, `completed_offline`, and `stopped`.
@@ -31,3 +35,7 @@ PB-07 is absent. Each replay Stage occurs once. Every replay receipt must be syn
 ## Failure policy
 
 The exact 20-case catalog covers identity, CLI, approval-lock, budget, Stage order, incomplete/refusal/usage, invalid JSON, Schema, Safety, decision, fact fidelity, and cumulative budget failure. All failures retain actual provider calls 0 and API spend USD 0. The matrix records the expected code, actual code, last completed Stage, terminal state, and one-stop invariant.
+
+## Immutable execution boundary
+
+The accepted machine contract remains unchanged: `offline_replay`, `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, six simulated provider stages, actual provider calls 0, API spend USD 0, and live authorization false. PB-07, retry, Repair, fallback, automatic continuation, 14-case, 70-case, holdout, and real-user execution have no permitted transition. Product and baseline models remain unselected.
