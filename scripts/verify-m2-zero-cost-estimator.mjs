@@ -62,12 +62,27 @@ const b1b2aSuccessorLocalToolPaths = new Set([
   "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
   "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
 ]);
+const b1b2b0SuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-b0-execution-package.mjs",
+  "scripts/run-m2-p2-b1-b2-b0-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-b0-execution-package.mjs",
+  "scripts/run-m2-p2-b1-b2-b-paid-once.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-approval-record.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-paid-cli.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-price-snapshot.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-external-paths.mjs",
+]);
 const b1b2aCapabilityPaths = Object.freeze({
   environment:
     "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
   https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
   childProcess:
     "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const b1b2b0CapabilityPaths = Object.freeze({
+  localFileSystem:
+    "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs",
 });
 const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
 const nodeBuiltinSpecifiers = new Set(
@@ -101,6 +116,8 @@ const gateOrder = [
   "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
   "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
   "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B2_B0_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_B0_SUCCESSOR_ISOLATION_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
@@ -233,6 +250,16 @@ function verifySuccessorTools({
     "node:dns",
     "node:dgram",
   ]);
+  const localFileSystemBuiltins = new Set([
+    "fs",
+    "fs/promises",
+    "path",
+    "os",
+    "node:fs",
+    "node:fs/promises",
+    "node:path",
+    "node:os",
+  ]);
   const isolationPatterns = [
     ["network invocation", /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(/u],
     ["environment access", /\bprocess\.env(?:\.|\[)|\bDeno\.env\b|\bBun\.env\b|\bgetenv\s*\(/u],
@@ -265,7 +292,12 @@ function verifySuccessorTools({
   );
   const candidates = listed.stdout
     .split(/\r?\n/u)
-    .filter((file) => file.includes(pathToken));
+    .filter(
+      (file) =>
+        file.includes(pathToken) ||
+        (boundaryLabel === "B1-B2-B0" &&
+          file.includes("m2-p2-b1-b2-b-paid")),
+    );
   assert(
     pathGate,
     candidates.every((file) => paths.has(file)),
@@ -274,7 +306,13 @@ function verifySuccessorTools({
   const allowedLocalPaths =
     boundaryLabel === "B1-B2-A"
       ? new Set([...b1b1SuccessorLocalToolPaths, ...paths])
-      : paths;
+      : boundaryLabel === "B1-B2-B0"
+        ? new Set([
+            ...b1b1SuccessorLocalToolPaths,
+            ...b1b2aSuccessorLocalToolPaths,
+            ...paths,
+          ])
+        : paths;
   for (const file of paths) {
     if (!existsSync(absolute(file))) continue;
     if (!paths.has(file)) {
@@ -299,13 +337,27 @@ function verifySuccessorTools({
           specifier === "node:child_process";
         const allowedChildProcess =
           boundaryLabel === "B1-B2-A"
-            ? file === b1b2aCapabilityPaths.childProcess &&
+            ? (file === b1b2aCapabilityPaths.childProcess ||
+                file ===
+                  "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs") &&
               specifier === "node:child_process"
             : file === verifierPath;
         assert(
           isolationGate,
           !childProcess || allowedChildProcess,
           `${file}: child_process is verifier-only`,
+        );
+        assert(
+          isolationGate,
+          boundaryLabel !== "B1-B2-B0" ||
+            !localFileSystemBuiltins.has(specifier) ||
+            file === b1b2b0CapabilityPaths.localFileSystem,
+          `${file}: ${specifier} is confined to the exact local-filesystem owner`,
+        );
+        assert(
+          isolationGate,
+          boundaryLabel !== "B1-B2-B0" || !childProcess,
+          `${file}: B1-B2-B0 has no direct child-process capability`,
         );
         continue;
       }
@@ -348,6 +400,13 @@ function verifySuccessorTools({
         `${file}: ${openAiApiKeyVariableName} is confined to the exact environment provider`,
       );
     }
+    if (boundaryLabel === "B1-B2-B0") {
+      assert(
+        isolationGate,
+        !text.includes(openAiApiKeyVariableName),
+        `${file}: B1-B2-B0 may not directly name or read the environment secret`,
+      );
+    }
   }
 }
 
@@ -375,6 +434,14 @@ function verifyAuthorizedSuccessorTools() {
     verifierPath: null,
     boundaryLabel: "B1-B2-A",
     pathToken: "m2-p2-b1-b2-a",
+  });
+  verifySuccessorTools({
+    paths: b1b2b0SuccessorLocalToolPaths,
+    pathGate: "M2_B1_B2_B0_SUCCESSOR_PATH_GATE",
+    isolationGate: "M2_B1_B2_B0_SUCCESSOR_ISOLATION_GATE",
+    verifierPath: null,
+    boundaryLabel: "B1-B2-B0",
+    pathToken: "m2-p2-b1-b2-b0",
   });
 }
 

@@ -1,0 +1,187 @@
+{
+  "scope_version": "m2-p2-b1-b2-a-historical-scope-v1",
+  "scope_type": "historical_commit_range",
+  "base_commit_sha": "fa222917f0e6ff4a4e25d11da239717c062af6d0",
+  "end_commit_sha": "76ceb4a25cc565e84b9537bd25dbe703f87bd342",
+  "include_head_after_end": false,
+  "include_index": false,
+  "include_working_tree": false,
+  "immutable_snapshot": true,
+  "expected_total_files": 41,
+  "expected_status_breakdown": {
+    "A": 37,
+    "M": 4,
+    "D": 0
+  },
+  "expected_root_breakdown": {
+    "docs": 8,
+    "evals": 21,
+    "scripts": 12
+  },
+  "expected_files": [
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_API_PROJECT_AND_KEY_HANDOFF.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_DORMANT_LIVE_BINDING_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_EXECUTION_SECURITY_AND_BUDGET_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_B2_A_REVIEW.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/artifact-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/https-executor-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/human-approval-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/live-binding-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/one-time-run-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/dormant-live-binding-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/executor-binding-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/failure-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/live-preflight-preview-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/secret-boundary-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/artifact-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/https-executor-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/human-approval-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/live-binding-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/one-time-run-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/secret-provider-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/secret-provider-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs"
+    }
+  ]
+}

@@ -60,12 +60,27 @@ const b1b2aSuccessorScriptPaths = new Set([
   "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
   "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
 ]);
+const b1b2b0SuccessorScriptPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-b0-execution-package.mjs",
+  "scripts/run-m2-p2-b1-b2-b0-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-b0-execution-package.mjs",
+  "scripts/run-m2-p2-b1-b2-b-paid-once.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-approval-record.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-paid-cli.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-price-snapshot.mjs",
+  "scripts/lib/m2-p2-b1-b2-b0-external-paths.mjs",
+]);
 const b1b2aCapabilityPaths = Object.freeze({
   environment:
     "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
   https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
   childProcess:
     "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const b1b2b0CapabilityPaths = Object.freeze({
+  localFileSystem:
+    "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs",
 });
 const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
 
@@ -75,6 +90,8 @@ const gateOrder = [
   "M2_B1_B1_EXACT_SCOPE_GATE",
   "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
   "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B2_B0_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_B0_SUCCESSOR_ISOLATION_GATE",
   "M2_B1_B1_CONTRACT_LINK_GATE",
   "M2_B1_B1_CASE_GATE",
   "M2_B1_B1_MODEL_CANDIDATE_GATE",
@@ -430,9 +447,11 @@ function verifyB1b2aSuccessorTools() {
         assert(
           "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
           !childProcess ||
-            (file === b1b2aCapabilityPaths.childProcess &&
+            ((file === b1b2aCapabilityPaths.childProcess ||
+              file ===
+                "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs") &&
               specifier === "node:child_process"),
-          `${file}: child_process is confined to the exact execution guard`,
+          `${file}: child_process is confined to the exact execution guard or historical verifier`,
         );
         continue;
       }
@@ -458,6 +477,156 @@ function verifyB1b2aSuccessorTools() {
       !text.includes(openAiApiKeyVariableName) ||
         file === b1b2aCapabilityPaths.environment,
       `${file}: ${openAiApiKeyVariableName} is confined to the exact environment provider`,
+    );
+  }
+}
+
+function verifyB1b2b0SuccessorTools() {
+  const pathGate = "M2_B1_B2_B0_SUCCESSOR_PATH_GATE";
+  const isolationGate = "M2_B1_B2_B0_SUCCESSOR_ISOLATION_GATE";
+  const listed = runGit([
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+    "scripts",
+  ]);
+  assert(
+    pathGate,
+    listed.status === 0,
+    `successor path inventory failed: ${listed.stderr}`,
+  );
+  const candidates = listed.stdout
+    .split(/\r?\n/u)
+    .filter(
+      (file) =>
+        file.includes("m2-p2-b1-b2-b0") ||
+        file.includes("m2-p2-b1-b2-b-paid"),
+    );
+  assert(
+    pathGate,
+    candidates.every((file) => b1b2b0SuccessorScriptPaths.has(file)),
+    `non-exact B1-B2-B0 successor path found: ${JSON.stringify(candidates)}`,
+  );
+
+  const builtins = new Set(
+    builtinModules.flatMap((name) => [
+      name,
+      name.startsWith("node:") ? name : `node:${name}`,
+    ]),
+  );
+  const forbiddenNetworkBuiltins = new Set([
+    "http",
+    "http2",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dgram",
+    "node:http",
+    "node:http2",
+    "node:https",
+    "node:net",
+    "node:tls",
+    "node:dns",
+    "node:dgram",
+  ]);
+  const localFileSystemBuiltins = new Set([
+    "fs",
+    "fs/promises",
+    "path",
+    "os",
+    "node:fs",
+    "node:fs/promises",
+    "node:path",
+    "node:os",
+  ]);
+  const isolationPatterns = [
+    ["network invocation", /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(/u],
+    [
+      "environment access",
+      /\bprocess\.env(?:\.|\[)|\bDeno\.env\b|\bBun\.env\b|\bgetenv\s*\(/u,
+    ],
+    [
+      "environment enumeration",
+      /\bObject\.(?:keys|values|entries)\s*\(\s*process\b/u,
+    ],
+    [
+      "provider SDK",
+      /\bnew\s+(?:OpenAI|Anthropic|GoogleGenerativeAI|CohereClient|MistralClient)\s*\(/u,
+    ],
+    [
+      "database SDK",
+      /@supabase\/supabase-js|from\s+["'](?:pg|mysql2|sqlite3)["']/u,
+    ],
+    [
+      "auth, payment, or email SDK",
+      /from\s+["'](?:next-auth|stripe|nodemailer|@sendgrid\/mail)["']/u,
+    ],
+    [
+      "application import",
+      /from\s+["'](?:@\/|\.\.?\/)+(?:app|components|lib\/(?:safety|legal|supabase))\//u,
+    ],
+  ];
+  const secretPatterns = [
+    /\bsk-[A-Za-z0-9_-]{16,}\b/u,
+    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
+    /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
+  ];
+  const allowedLocalPaths = new Set([
+    ...authorizedSuccessorScriptPaths,
+    ...b1b2aSuccessorScriptPaths,
+    ...b1b2b0SuccessorScriptPaths,
+  ]);
+  for (const file of b1b2b0SuccessorScriptPaths) {
+    if (!existsSync(absolute(file))) continue;
+    const text = canonicalText(file);
+    for (const specifier of moduleSpecifiers(text)) {
+      if (builtins.has(specifier)) {
+        assert(
+          isolationGate,
+          !forbiddenNetworkBuiltins.has(specifier),
+          `${file}: forbidden network built-in ${specifier}`,
+        );
+        assert(
+          isolationGate,
+          !localFileSystemBuiltins.has(specifier) ||
+            file === b1b2b0CapabilityPaths.localFileSystem,
+          `${file}: ${specifier} is confined to the exact local-filesystem owner`,
+        );
+        assert(
+          isolationGate,
+          specifier !== "child_process" &&
+            specifier !== "node:child_process",
+          `${file}: B1-B2-B0 has no direct child-process capability`,
+        );
+        continue;
+      }
+      const resolved = specifier.startsWith(".")
+        ? path.posix.normalize(
+            path.posix.join(path.posix.dirname(file), specifier),
+          )
+        : null;
+      assert(
+        isolationGate,
+        resolved !== null && allowedLocalPaths.has(resolved),
+        `${file}: import is not an exact B1-B2-B0, B1-B2-A, or B1-B1 peer: ${specifier}`,
+      );
+    }
+    for (const [label, pattern] of isolationPatterns) {
+      assert(isolationGate, !pattern.test(text), `${file}: ${label}`);
+    }
+    for (const pattern of secretPatterns) {
+      assert(
+        isolationGate,
+        !pattern.test(text),
+        `${file}: key-like literal`,
+      );
+    }
+    assert(
+      isolationGate,
+      !text.includes(openAiApiKeyVariableName),
+      `${file}: B1-B2-B0 may not directly name or read the environment secret`,
     );
   }
 }
@@ -1034,6 +1203,7 @@ try {
   const manifest = readJson("evals/calibration/b1b1/report-manifest-v1.json");
   verifyExactScope(manifest);
   verifyB1b2aSuccessorTools();
+  verifyB1b2b0SuccessorTools();
   const contracts = verifyContracts(evidence);
   verifyRequests(evidence, contracts.requestProfile);
   verifyResponses(evidence);
