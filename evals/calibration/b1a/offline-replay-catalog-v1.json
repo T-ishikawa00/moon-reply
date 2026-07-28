@@ -1,0 +1,368 @@
+{
+  "schema_version": "moon-reply-b1a-offline-replay-catalog-v1",
+  "catalog_version": "offline-replay-catalog-v1.0.0",
+  "synthetic": true,
+  "actual_provider_output": false,
+  "model_quality_evidence": false,
+  "case_id": "WAIT-003",
+  "requested_model": "gpt-5.6-luna",
+  "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json",
+  "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+  "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2",
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "output_schema_ref": {
+        "path": "ai/schemas/structured-intake.schema.json",
+        "pointer": null
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "schema_version": "pipeline-schema-v1.0.0",
+        "relationship_stage": "in_relationship",
+        "user_goal": "decide_send_or_wait",
+        "timeline": [
+          {
+            "event_id": "E001",
+            "sequence": 1,
+            "actor": "user",
+            "statement": "本人が2時間前に長めの感情メッセージを送信した",
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          {
+            "event_id": "E002",
+            "sequence": 2,
+            "actor": "other_person",
+            "statement": "現時点で返信はない",
+            "source_refs": [
+              "input:current_situation"
+            ]
+          }
+        ],
+        "boundaries": [],
+        "context": [
+          {
+            "context_id": "C001",
+            "kind": "message_state",
+            "statement": "追加候補文には複数質問と返答要求がある",
+            "source_refs": [
+              "input:message_draft"
+            ]
+          },
+          {
+            "context_id": "C002",
+            "kind": "relationship",
+            "statement": "交際中である",
+            "source_refs": [
+              "input:relationship_chip"
+            ]
+          }
+        ],
+        "observed_facts": [
+          {
+            "fact_id": "F001",
+            "statement": "交際中である",
+            "source_refs": [
+              "input:relationship_chip"
+            ],
+            "support": "explicit"
+          },
+          {
+            "fact_id": "F002",
+            "statement": "2時間前に長めのメッセージを送った",
+            "source_refs": [
+              "input:current_situation"
+            ],
+            "support": "explicit"
+          },
+          {
+            "fact_id": "F003",
+            "statement": "まだ返信はない",
+            "source_refs": [
+              "input:current_situation"
+            ],
+            "support": "explicit"
+          },
+          {
+            "fact_id": "F004",
+            "statement": "追加候補文は返答を求めている",
+            "source_refs": [
+              "input:message_draft"
+            ],
+            "support": "normalized"
+          }
+        ],
+        "user_assumptions": [
+          {
+            "item_id": "A001",
+            "statement": "相手が怒ったか、重いと感じたかもしれない",
+            "source_refs": [
+              "input:message_draft"
+            ]
+          }
+        ],
+        "user_emotions": [
+          {
+            "item_id": "M001",
+            "statement": "返信がないことへの不安がある",
+            "source_refs": [
+              "input:current_situation"
+            ]
+          }
+        ],
+        "material_unknowns": [],
+        "safety_signals": [],
+        "untrusted_embedded_instructions_detected": false
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 11362,
+        "synthetic_output_tokens": 1200,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.018562,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    {
+      "stage_id": "PB-02",
+      "output_schema_ref": {
+        "path": "ai/schemas/safety-assessment.schema.json",
+        "pointer": "#/$defs/model_result"
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "classification": "normal_allowed",
+        "reason_codes": [
+          "normal"
+        ],
+        "response_mode": "none",
+        "evidence_refs": [],
+        "ambiguity_present": false
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 11708,
+        "synthetic_output_tokens": 200,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.012908,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    {
+      "stage_id": "PB-03",
+      "output_schema_ref": {
+        "path": "ai/schemas/eligibility-result.schema.json",
+        "pointer": null
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "schema_version": "pipeline-schema-v1.0.0",
+        "eligibility": "ready",
+        "question_codes": [],
+        "material_gap_codes": [],
+        "normal_flow_allowed": true,
+        "payment_allowed": true,
+        "report_generation": "allowed"
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 13599,
+        "synthetic_output_tokens": 180,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.014679,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    {
+      "stage_id": "PB-04",
+      "output_schema_ref": {
+        "path": "ai/schemas/decision-plan.schema.json",
+        "pointer": null
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "schema_version": "pipeline-schema-v1.0.0",
+        "selected_decision": "wait_and_reassess",
+        "decision_reason_fact_ids": [
+          "F002",
+          "F003",
+          "F004"
+        ],
+        "possible_interpretations": [
+          {
+            "statement": "相手には長いメッセージを読む時間が必要な可能性がある",
+            "supporting_fact_ids": [
+              "F002",
+              "F003"
+            ],
+            "epistemic_status": "possibility_only"
+          }
+        ],
+        "actions_to_take": [
+          "今夜は追加送信せず、相手が読む時間を確保する"
+        ],
+        "actions_to_avoid": [
+          "怒っているかを問い、即時の返答を求める"
+        ],
+        "message_draft": null,
+        "three_day_plan": [
+          {
+            "day": "tonight",
+            "action": "追加送信せずに待つ",
+            "avoid": "不安を理由に質問を重ねる"
+          },
+          {
+            "day": "next_day",
+            "action": "返信の有無と自分の目的を再確認する",
+            "avoid": "相手の気持ちを断定する"
+          },
+          {
+            "day": "day_three",
+            "action": "必要なら低圧な確認が適切か再判断する",
+            "avoid": "反応がないまま説明を追加し続ける"
+          }
+        ],
+        "change_conditions": [
+          {
+            "condition": "相手から返信が届いた場合",
+            "resulting_direction": "reply_now"
+          }
+        ],
+        "review_timing": {
+          "when": "翌日以降、返信または状況変化が確認できた時",
+          "trigger_fact_ids": [
+            "F002",
+            "F003"
+          ]
+        },
+        "material_unknowns": [
+          "相手がメッセージを読める状況かは不明"
+        ],
+        "limitations": [
+          "相手の感情や今後の返信を断定しない"
+        ]
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 14077,
+        "synthetic_output_tokens": 1400,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.022477,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    {
+      "stage_id": "PB-05",
+      "output_schema_ref": {
+        "path": "ai/schemas/report-content.schema.json",
+        "pointer": null
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "schema_version": "pipeline-schema-v1.0.0",
+        "cover_line": "今夜は送らず、読む時間を渡す",
+        "short_letter": [
+          "2時間前に長い気持ちを伝えた直後です。",
+          "今は答えを急がせず、追加連絡を置かない判断が整合します。"
+        ],
+        "decision_reason_summary": "短時間の未返信だけでは拒否を判断できず、追加質問は返答圧力を高めるためです。",
+        "relationship_summary": "交際中で、本人から長い感情メッセージを送った後の未返信状態です。",
+        "observed_fact_commentary": [
+          {
+            "fact_id": "F002",
+            "commentary": "長い内容には読む時間と整理する時間が必要になる可能性があります。"
+          },
+          {
+            "fact_id": "F003",
+            "commentary": "2時間時点の未返信は、相手の感情を確定する材料ではありません。"
+          }
+        ],
+        "possible_interpretations": [
+          "まだ内容を十分に読めていない可能性があります。",
+          "読んだ後に返信内容を考えている可能性があります。"
+        ],
+        "anxiety_reframe": [
+          "返答がない時間と、拒否されたという結論は分けて扱えます。"
+        ],
+        "message_temperature": {
+          "softness": "追加送信を止めることで柔らかさを保ちます。",
+          "affection": "伝えた気持ちはすでに届く形になっています。",
+          "pressure": "複数質問と返答要求は圧力を上げます。",
+          "adjustment": "今夜は文面を増やさない調整が適切です。"
+        },
+        "action_rationales": [
+          "追加送信を置かないことで、相手が読む時間を確保できます。"
+        ],
+        "message_draft_context": null,
+        "three_day_plan_commentary": [
+          "今夜は送信を止めます。",
+          "翌日に返信や状況変化を確認します。",
+          "三日目は必要性と圧力の低さを再評価します。"
+        ],
+        "change_condition_commentary": [
+          "相手から返信が来た場合は、その内容に沿った返信判断へ移れます。"
+        ],
+        "unknowns_commentary": [
+          "相手が今すぐ読める状況かは分かりません。"
+        ],
+        "closing_lines": [
+          "不安を消すための追送より、今は間を置く方が一貫しています。",
+          "次の判断は、返信か時間経過という新しい事実が出てからで十分です。"
+        ]
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 14804,
+        "synthetic_output_tokens": 2500,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.029804,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    {
+      "stage_id": "PB-06",
+      "output_schema_ref": {
+        "path": "ai/schemas/validation-result.schema.json",
+        "pointer": null
+      },
+      "synthetic_response_status": "completed",
+      "synthetic_output": {
+        "schema_version": "pipeline-schema-v1.0.0",
+        "validation_mode": "semantic_findings_only",
+        "deterministic_checks": [],
+        "semantic_checks": [],
+        "final_disposition": null,
+        "repair_strategy": null,
+        "failed_codes": []
+      },
+      "synthetic_usage_reference": {
+        "synthetic_input_tokens": 14635,
+        "synthetic_output_tokens": 500,
+        "synthetic_reasoning_tokens": "unknown",
+        "synthetic_usage_cost_reference_usd": 0.017635,
+        "profile": "nominal",
+        "input_band": "HIGH",
+        "source_estimator_path": "evals/cost-estimator/reports/static-estimate-v1.json"
+      },
+      "source_estimator_hash": "847750046139642988b5f230d717b36c0384b4ca7715c6b30af1886ce3ede771",
+      "source_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    }
+  ]
+}

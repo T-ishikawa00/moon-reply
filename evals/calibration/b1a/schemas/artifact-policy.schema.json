@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1a/artifact-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "repository_reports",
+    "repository_report_count",
+    "future_paid_run_location_created",
+    "future_paid_run_location",
+    "byte_identical_repeated_runs_required",
+    "prohibited_content",
+    "actual_usage_label",
+    "synthetic_usage_must_not_be_labeled_actual"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-b1a-artifact-policy-v1"
+    },
+    "policy_version": {
+      "const": "offline-artifact-policy-v1.0.0"
+    },
+    "repository_reports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^evals/calibration/b1a/reports/"
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "repository_report_count": {
+      "const": 3
+    },
+    "future_paid_run_location_created": {
+      "const": false
+    },
+    "future_paid_run_location": {
+      "type": "string",
+      "minLength": 1
+    },
+    "byte_identical_repeated_runs_required": {
+      "const": true
+    },
+    "prohibited_content": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 13,
+      "uniqueItems": true
+    },
+    "actual_usage_label": {
+      "const": "unavailable"
+    },
+    "synthetic_usage_must_not_be_labeled_actual": {
+      "const": true
+    }
+  }
+}

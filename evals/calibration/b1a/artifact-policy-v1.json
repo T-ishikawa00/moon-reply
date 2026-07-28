@@ -1,0 +1,30 @@
+{
+  "schema_version": "moon-reply-b1a-artifact-policy-v1",
+  "policy_version": "offline-artifact-policy-v1.0.0",
+  "repository_reports": [
+    "evals/calibration/b1a/reports/offline-happy-path-v1.json",
+    "evals/calibration/b1a/reports/offline-failure-matrix-v1.json",
+    "evals/calibration/b1a/reports/offline-runner-summary-v1.md"
+  ],
+  "repository_report_count": 3,
+  "future_paid_run_location_created": false,
+  "future_paid_run_location": "%LOCALAPPDATA%\\moon-reply\\calibration-runs\\",
+  "byte_identical_repeated_runs_required": true,
+  "prohibited_content": [
+    "api_key",
+    "authorization_header",
+    "environment_value",
+    "real_user_data",
+    "holdout_data",
+    "internal_reasoning_text",
+    "chain_of_thought",
+    "unrelated_machine_information",
+    "volatile_timestamp",
+    "absolute_local_path",
+    "username",
+    "hostname",
+    "process_id"
+  ],
+  "actual_usage_label": "unavailable",
+  "synthetic_usage_must_not_be_labeled_actual": true
+}

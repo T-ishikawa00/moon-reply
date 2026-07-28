@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1a/state-machine.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state_machine_version",
+    "initial_state",
+    "states",
+    "terminal_success_states",
+    "terminal_failure_states",
+    "allowed_transitions",
+    "workflow",
+    "retry_transition_exists",
+    "repair_transition_exists",
+    "fallback_transition_exists",
+    "transition_from_stopped_exists",
+    "transition_from_completed_offline_exists",
+    "failure_transition_count_per_run"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-b1a-state-machine-v1"
+    },
+    "state_machine_version": {
+      "const": "offline-runner-state-machine-v1.0.0"
+    },
+    "initial_state": {
+      "const": "created"
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true
+    },
+    "terminal_success_states": {
+      "type": "array",
+      "items": {
+        "const": "completed_offline"
+      },
+      "minItems": 1,
+      "maxItems": 1
+    },
+    "terminal_failure_states": {
+      "type": "array",
+      "items": {
+        "const": "stopped"
+      },
+      "minItems": 1,
+      "maxItems": 1
+    },
+    "allowed_transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "workflow": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 17,
+      "maxItems": 17,
+      "uniqueItems": true
+    },
+    "retry_transition_exists": {
+      "const": false
+    },
+    "repair_transition_exists": {
+      "const": false
+    },
+    "fallback_transition_exists": {
+      "const": false
+    },
+    "transition_from_stopped_exists": {
+      "const": false
+    },
+    "transition_from_completed_offline_exists": {
+      "const": false
+    },
+    "failure_transition_count_per_run": {
+      "const": 1
+    }
+  }
+}

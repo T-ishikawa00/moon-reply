@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1a/failure-injection-catalog.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "catalog_version",
+    "scenario_count",
+    "scenarios"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-b1a-failure-injection-catalog-v1"
+    },
+    "catalog_version": {
+      "const": "offline-failure-injection-v1.0.0"
+    },
+    "scenario_count": {
+      "const": 20
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scenario_id",
+          "injected_mutation",
+          "expected_stop_state",
+          "expected_stop_code",
+          "expected_last_completed_stage",
+          "provider_calls",
+          "api_spend_usd"
+        ],
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]+$"
+          },
+          "injected_mutation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_stop_state": {
+            "const": "stopped"
+          },
+          "expected_stop_code": {
+            "type": "string",
+            "pattern": "^B1A_[A-Z0-9_]+$"
+          },
+          "expected_last_completed_stage": {
+            "oneOf": [
+              {
+                "enum": [
+                  "PB-01",
+                  "PB-02",
+                  "PB-03",
+                  "PB-04",
+                  "PB-05",
+                  "PB-06"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider_calls": {
+            "const": 0
+          },
+          "api_spend_usd": {
+            "const": 0
+          }
+        }
+      },
+      "minItems": 20,
+      "maxItems": 20,
+      "uniqueItems": true
+    }
+  }
+}

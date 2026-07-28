@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P2-B0 Human / ChatGPT accepted and complete; M2-P2-B1 unauthorized
+Phase 2 / Milestone 2 — M2-P2-B1-A offline Runner implemented and automated-green; Human / ChatGPT review pending; B1-B unauthorized
 
 ## Completed Through
 
@@ -64,7 +64,8 @@ State:
 - M2-P2-B0 is a zero-cost contract task: live execution is false, API spend authorization is USD 0, product-model selection is false, and OpenAI API/network/provider execution remains prohibited;
 - R2 fixes M2-P2-A exact-scope verification to the immutable accepted historical commit range; both historical sub-gates, `M2_P2_A_EXACT_SCOPE_GATE`, and the estimator aggregate pass;
 - `M2_B0_EXACT_SCOPE_GATE`, all B0 gates, M2 foundation, M1 locks/Safety, typecheck, lint, build, and diff checks pass; automated validation and Human / ChatGPT final review are complete, and B0 is accepted and complete;
-- M2-P2-B1 live measurement has not started, remains unauthorized, and requires a new separately committed Human approval;
+- M2-P2-B1-A deterministic offline replay Runner is implemented with automated validation complete, zero actual calls, and USD 0 spend; Human / ChatGPT review is pending;
+- M2-P2-B1-B live provider implementation and execution have not started, remain unauthorized, and require a new separate Human decision;
 - Development-70 is an evaluation-cost scenario, not the cost of one customer report, and no 14-case or 70-case API execution is authorized;
 - no product or baseline model selected and no model benchmark performed;
 - no OpenAI API call;

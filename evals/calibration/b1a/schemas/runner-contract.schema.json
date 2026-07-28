@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1a/runner-contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "task_id",
+    "execution_mode",
+    "run_kind",
+    "case_id",
+    "requested_model",
+    "product_model_selected",
+    "baseline_model_selected",
+    "live_execution_authorized",
+    "actual_provider_calls",
+    "simulated_provider_stages",
+    "api_spend_usd",
+    "source_b0_contract_hash",
+    "transport_interface",
+    "accepted_transport_kinds",
+    "stage_ids",
+    "pb_07_included",
+    "maximum_future_provider_calls",
+    "static_hard_cap_usd",
+    "preflight_ceiling_usd",
+    "future_human_ceiling_usd",
+    "retry_allowed",
+    "repair_allowed",
+    "fallback_allowed",
+    "automatic_transition_to_b1_b",
+    "synthetic_usage_source"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-b1a-runner-contract-v1"
+    },
+    "contract_version": {
+      "const": "offline-runner-contract-v1.0.0"
+    },
+    "task_id": {
+      "const": "M2-P2-B1-A"
+    },
+    "execution_mode": {
+      "const": "offline_replay"
+    },
+    "run_kind": {
+      "const": "calibration_plumbing_preview"
+    },
+    "case_id": {
+      "const": "WAIT-003"
+    },
+    "requested_model": {
+      "const": "gpt-5.6-luna"
+    },
+    "product_model_selected": {
+      "const": false
+    },
+    "baseline_model_selected": {
+      "const": false
+    },
+    "live_execution_authorized": {
+      "const": false
+    },
+    "actual_provider_calls": {
+      "const": 0
+    },
+    "simulated_provider_stages": {
+      "const": 6
+    },
+    "api_spend_usd": {
+      "const": 0
+    },
+    "source_b0_contract_hash": {
+      "const": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    "transport_interface": {
+      "const": "transport.invoke(stage_request) -> transport_receipt"
+    },
+    "accepted_transport_kinds": {
+      "type": "array",
+      "items": {
+        "const": "offline_replay"
+      },
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true
+    },
+    "stage_ids": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ]
+      },
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true
+    },
+    "pb_07_included": {
+      "const": false
+    },
+    "maximum_future_provider_calls": {
+      "const": 6
+    },
+    "static_hard_cap_usd": {
+      "const": 0.213223
+    },
+    "preflight_ceiling_usd": {
+      "const": 0.3
+    },
+    "future_human_ceiling_usd": {
+      "const": 1
+    },
+    "retry_allowed": {
+      "const": false
+    },
+    "repair_allowed": {
+      "const": false
+    },
+    "fallback_allowed": {
+      "const": false
+    },
+    "automatic_transition_to_b1_b": {
+      "const": false
+    },
+    "synthetic_usage_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "file_sha256",
+        "projection_sha256",
+        "profile",
+        "input_reference",
+        "output_reference",
+        "reasoning_reference"
+      ],
+      "properties": {
+        "path": {
+          "const": "evals/cost-estimator/reports/static-estimate-v1.json"
+        },
+        "file_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "projection_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "profile": {
+          "const": "nominal"
+        },
+        "input_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasoning_reference": {
+          "const": "unknown"
+        }
+      }
+    }
+  }
+}

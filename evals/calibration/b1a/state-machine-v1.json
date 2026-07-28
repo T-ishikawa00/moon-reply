@@ -1,0 +1,135 @@
+{
+  "schema_version": "moon-reply-b1a-state-machine-v1",
+  "state_machine_version": "offline-runner-state-machine-v1.0.0",
+  "initial_state": "created",
+  "states": [
+    "created",
+    "preflight_validating",
+    "preflight_passed",
+    "stage_pending",
+    "stage_replaying",
+    "stage_output_validating",
+    "stage_completed",
+    "local_step_running",
+    "local_step_completed",
+    "completed_offline",
+    "stopped"
+  ],
+  "terminal_success_states": [
+    "completed_offline"
+  ],
+  "terminal_failure_states": [
+    "stopped"
+  ],
+  "allowed_transitions": [
+    {
+      "from": "created",
+      "to": "preflight_validating"
+    },
+    {
+      "from": "preflight_validating",
+      "to": "preflight_passed"
+    },
+    {
+      "from": "preflight_passed",
+      "to": "stage_pending"
+    },
+    {
+      "from": "stage_pending",
+      "to": "stage_replaying"
+    },
+    {
+      "from": "stage_replaying",
+      "to": "stage_output_validating"
+    },
+    {
+      "from": "stage_output_validating",
+      "to": "stage_completed"
+    },
+    {
+      "from": "stage_completed",
+      "to": "stage_pending"
+    },
+    {
+      "from": "stage_completed",
+      "to": "local_step_running"
+    },
+    {
+      "from": "local_step_running",
+      "to": "local_step_completed"
+    },
+    {
+      "from": "local_step_completed",
+      "to": "local_step_running"
+    },
+    {
+      "from": "local_step_completed",
+      "to": "stage_pending"
+    },
+    {
+      "from": "local_step_completed",
+      "to": "completed_offline"
+    },
+    {
+      "from": "created",
+      "to": "stopped"
+    },
+    {
+      "from": "preflight_validating",
+      "to": "stopped"
+    },
+    {
+      "from": "preflight_passed",
+      "to": "stopped"
+    },
+    {
+      "from": "stage_pending",
+      "to": "stopped"
+    },
+    {
+      "from": "stage_replaying",
+      "to": "stopped"
+    },
+    {
+      "from": "stage_output_validating",
+      "to": "stopped"
+    },
+    {
+      "from": "stage_completed",
+      "to": "stopped"
+    },
+    {
+      "from": "local_step_running",
+      "to": "stopped"
+    },
+    {
+      "from": "local_step_completed",
+      "to": "stopped"
+    }
+  ],
+  "workflow": [
+    "PB-01 replay",
+    "PB-01 Schema validation",
+    "PB-02 replay",
+    "PB-02 Schema validation",
+    "PB-03 replay",
+    "PB-03 Schema validation",
+    "local Safety aggregation",
+    "local eligibility assertion",
+    "local Decision Policy",
+    "PB-04 replay",
+    "PB-04 Schema and plan validation",
+    "PB-05 replay",
+    "PB-05 Schema and report validation",
+    "PB-06 replay",
+    "PB-06 Schema and semantic-validation checks",
+    "final contract/budget/artifact checks",
+    "completed_offline"
+  ],
+  "retry_transition_exists": false,
+  "repair_transition_exists": false,
+  "fallback_transition_exists": false,
+  "transition_from_stopped_exists": false,
+  "transition_from_completed_offline_exists": false,
+  "failure_transition_count_per_run": 1
+}

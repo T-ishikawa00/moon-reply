@@ -1,0 +1,14 @@
+{
+  "schema_version": "moon-reply-b1a-approval-lock-v1",
+  "lock_version": "offline-approval-lock-v1.0.0",
+  "live_execution_authorized": false,
+  "paid_run_authorized": false,
+  "paid_run_completed": false,
+  "api_spend_usd": 0,
+  "authorized_case": "WAIT-003",
+  "authorized_model_candidate": "gpt-5.6-luna",
+  "authorized_provider_stage_count": 6,
+  "offline_confirmation": "MOON_REPLY_B1_A_OFFLINE_REPLAY_ONLY",
+  "b1_b_authorized": false,
+  "mutation_to_live_authorization_supported": false
+}

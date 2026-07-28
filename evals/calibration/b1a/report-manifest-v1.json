@@ -1,0 +1,139 @@
+{
+  "schema_version": "moon-reply-b1a-report-manifest-v1",
+  "manifest_version": "offline-report-manifest-v1.0.0",
+  "source_b0_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2",
+  "approval_lock_path": "evals/calibration/b1a/approval-lock-v1.json",
+  "approval_lock_sha256": "be3a9feff7add81af3d0c98c8cb947675c319501c1604fe8b8ee39cf768b9d2f",
+  "report_paths": [
+    "evals/calibration/b1a/reports/offline-happy-path-v1.json",
+    "evals/calibration/b1a/reports/offline-failure-matrix-v1.json",
+    "evals/calibration/b1a/reports/offline-runner-summary-v1.md"
+  ],
+  "report_count": 3,
+  "implementation_manifest": [
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_A_OFFLINE_RUNNER_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_A_STATE_MACHINE_AND_STOP_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_A_ARTIFACT_AND_SECURITY_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_A_REVIEW.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/runner-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/state-machine-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/offline-replay-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/artifact-policy-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/approval-lock-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/schemas/runner-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/schemas/state-machine.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/schemas/failure-injection-catalog.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/schemas/artifact-policy.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/reports/offline-happy-path-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/reports/offline-failure-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1a/reports/offline-runner-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-a-offline-runner.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-a-offline.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-a-offline-runner.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-a-contract.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-a-runner-core.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-a-offline-replay-transport.mjs"
+    }
+  ],
+  "implementation_file_count": 30,
+  "added_file_count": 26,
+  "modified_file_count": 4,
+  "deleted_file_count": 0
+}

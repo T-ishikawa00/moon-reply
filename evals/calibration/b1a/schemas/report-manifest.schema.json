@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1a/report-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_version",
+    "source_b0_contract_hash",
+    "approval_lock_path",
+    "approval_lock_sha256",
+    "report_paths",
+    "report_count",
+    "implementation_manifest",
+    "implementation_file_count",
+    "added_file_count",
+    "modified_file_count",
+    "deleted_file_count"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "moon-reply-b1a-report-manifest-v1"
+    },
+    "manifest_version": {
+      "const": "offline-report-manifest-v1.0.0"
+    },
+    "source_b0_contract_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approval_lock_path": {
+      "const": "evals/calibration/b1a/approval-lock-v1.json"
+    },
+    "approval_lock_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "report_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^evals/calibration/b1a/reports/"
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "report_count": {
+      "const": 3
+    },
+    "implementation_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "path"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "A",
+              "M"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 30,
+      "maxItems": 30,
+      "uniqueItems": true
+    },
+    "implementation_file_count": {
+      "const": 30
+    },
+    "added_file_count": {
+      "const": 26
+    },
+    "modified_file_count": {
+      "const": 4
+    },
+    "deleted_file_count": {
+      "const": 0
+    }
+  }
+}
