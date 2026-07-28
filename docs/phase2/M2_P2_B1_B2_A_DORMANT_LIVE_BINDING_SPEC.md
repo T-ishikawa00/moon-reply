@@ -3,6 +3,10 @@
 ## Authority and status
 
 - Task: `M2-P2-B1-B2-A`
+- R1 correction: Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`
+- Dormant live-binding implementation: Human / ChatGPT accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`
+- Automated validation: complete
+- Human / ChatGPT final review: complete
 - Case: `WAIT-003`
 - Calibration candidate: `gpt-5.6-luna`
 - Product/baseline model selected: no
@@ -37,6 +41,8 @@ B1-B2-A stops at step 2 with `HUMAN_APPROVAL_MISSING`. Its blocked command uses 
 The accepted B1-B1 request builder is imported unchanged. The fixed request body uses `store: false`, no tools, no streaming, no background execution, default service tier, disabled truncation, low reasoning effort, and strict JSON Schema output. It has no previous response, conversation, Batch, prompt-cache assumption, oracle, holdout, or real-user content.
 
 Stage caps remain PB-01 4000, PB-02 800, PB-03 700, PB-04 4500, PB-05 8000, and PB-06 2500. Registered request hashes remain owned by B1-B1.
+
+The accepted historical static hard cap remains USD 0.213223. The cache-write-protected live execution guard is USD 0.26079625, below the USD 0.30 preflight ceiling and the future USD 1.00 absolute Human ceiling. USD 0.26079625 is a conservative preflight estimate, not actual usage or billed cost.
 
 ## Evidence interpretation
 

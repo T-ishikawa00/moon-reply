@@ -1,5 +1,9 @@
 # M2-P2-B1-B2-A Execution Security and Budget Policy
 
+## Accepted status
+
+M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`. The dormant live-binding implementation is Human / ChatGPT accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. Acceptance does not create a paid approval, activate a binding, authorize B1-B2-B, select a model, or authorize Project, billing, key, secret, or API operations.
+
 ## Approval boundary
 
 B1-B2-A defines the future approval Schema but creates no approval record. The current state fixes `approval_record_present`, `live_execution_authorized`, `paid_run_authorized`, and `paid_run_completed` to false and spend to USD 0. No CLI flag, environment value, or config edit can create approval.
@@ -25,6 +29,8 @@ HTTP 200 is the only success. Redirects, 400, 401, 403, 404, 429, 5xx, network e
 The accepted historical static hard cap remains USD 0.213223. The separate live guard uses the 2026-07-28 planning snapshot: USD 1.25 per million input tokens for cache-write protection and USD 6.00 per million configured output-cap tokens. Cached-read discounts are not used and reasoning tokens are not double-counted.
 
 Each exact registered request body is bounded conservatively at one token per two UTF-8 bytes. Every Stage must remain below 272000 input tokens. The recomputed live guard must remain at or below USD 0.30.
+
+The accepted recomputed cache-write-protected live execution guard is USD 0.26079625. It is a conservative preflight protection value, not actual token usage, actual spend, or billed cost.
 
 Before each future provider call:
 

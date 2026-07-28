@@ -2,17 +2,21 @@
 
 ## Current task state
 
+- M2-P2-B1-B2-A-R1: Human / ChatGPT accepted and complete
+- M2-P2-B1-B2-A: Human / ChatGPT final review complete; accepted and complete
 - OpenAI Project for calibration: not configured
 - Billing: not configured
 - API key: not created or configured
-- Real environment secret read: no
+- Actual process environment reads: zero
+- Actual secret resolutions: zero
+- Actual HTTPS requests: zero
 - OpenAI API request: no
 - Provider call: no
 - API spend: USD 0
 - Paid Human approval record: absent
 - M2-P2-B1-B2-B: unauthorized and not started
 
-The HTTPS executor and environment-secret provider exist as dormant code but are unreachable from the accepted B1-B2-A command because the Human approval validator stops with `HUMAN_APPROVAL_MISSING`.
+The HTTPS executor and environment-secret provider exist as accepted dormant code but are unreachable from the accepted B1-B2-A command because the Human approval validator stops with `HUMAN_APPROVAL_MISSING`. Acceptance is dormant protocol and binding evidence only; it is not evidence of an actual OpenAI connection, API-key validity, Project model availability, token usage, latency, billed cost, or model quality.
 
 ## Future Human gate
 

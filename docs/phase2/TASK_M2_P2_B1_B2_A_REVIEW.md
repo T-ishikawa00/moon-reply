@@ -2,19 +2,21 @@
 
 ## Review status
 
-- Dormant live-binding implementation: complete locally
+- R1 scope/live-binding correction: Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`
+- Dormant live-binding implementation: Human / ChatGPT accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`
 - Automated validation: complete
-- Human / ChatGPT review: pending
-- Acceptance: pending
+- Human / ChatGPT final review: complete
+- Acceptance: complete
+- Main synchronization: authorized by fast-forward only
 - M2-P2-B1-B2-B: unauthorized and not started
 
 ## Exact implementation manifest
 
 The implementation commit is limited to 41 paths: 37 additions, 4 lifecycle-document modifications, and 0 deletions. It contains no package/dependency, application/UI, API route, server action, database, auth, payment, email, accepted M2 machine-asset, holdout, or real-user change. The preceding seven-file scope correction is excluded.
 
-## Review evidence
+## Accepted review evidence
 
-The review must confirm:
+The final review confirmed:
 
 - exact B1-B1 historical scope remains 39 files from `2f9fa4f2…` through `efdf1006…`;
 - the twelve successor scripts are exact full paths;
@@ -28,7 +30,7 @@ The review must confirm:
 - repeated evidence generation is byte-identical; and
 - actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend are all zero.
 
-Automated PASS does not create Human acceptance, a paid approval, an API key, billing authorization, a model selection, or permission to begin B1-B2-B.
+Automated PASS remained separate from the explicit Human / ChatGPT acceptance decision. Acceptance does not create a paid approval, an API key, billing authorization, a model selection, or permission to begin B1-B2-B.
 
 ## Automated result
 
