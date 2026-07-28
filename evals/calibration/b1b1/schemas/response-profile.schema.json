@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1b1/response-profile.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_version",
+    "accepted_object",
+    "accepted_status",
+    "required_error",
+    "required_incomplete_details",
+    "assistant_message_count",
+    "output_text_item_count",
+    "refusal_allowed",
+    "usage_required",
+    "returned_model_must_match_requested",
+    "retry_on_failure",
+    "repair_on_failure",
+    "fallback_on_failure",
+    "terminal_status_stop_codes",
+    "required_usage_fields"
+  ],
+  "properties": {
+    "schema_version": {"const": "moon-reply-b1b1-response-profile-v1"},
+    "profile_version": {"const": "strict-responses-parser-v1.0.0"},
+    "accepted_object": {"const": "response"},
+    "accepted_status": {"const": "completed"},
+    "required_error": {"type": "null"},
+    "required_incomplete_details": {"type": "null"},
+    "assistant_message_count": {"const": 1},
+    "output_text_item_count": {"const": 1},
+    "refusal_allowed": {"const": false},
+    "usage_required": {"const": true},
+    "returned_model_must_match_requested": {"const": true},
+    "retry_on_failure": {"const": false},
+    "repair_on_failure": {"const": false},
+    "fallback_on_failure": {"const": false},
+    "terminal_status_stop_codes": {"type": "object"},
+    "required_usage_fields": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    }
+  }
+}

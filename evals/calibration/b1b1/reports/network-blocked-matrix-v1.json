@@ -1,0 +1,16 @@
+{
+  "schema_version": "moon-reply-b1b1-network-blocked-matrix-v1",
+  "task_id": "M2-P2-B1-B1",
+  "execution_mode": "network_blocked_provider_adapter_test",
+  "scenarios": [
+    {
+      "scenario_id": "approval_false",
+      "stopped": true,
+      "stop_code": "LIVE_EXECUTION_NOT_AUTHORIZED",
+      "secret_provider_invocations": 0,
+      "request_executor_invocations": 0,
+      "actual_provider_calls": 0,
+      "api_spend_usd": 0
+    }
+  ]
+}

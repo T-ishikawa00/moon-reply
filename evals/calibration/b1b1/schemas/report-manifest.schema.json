@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1b1/report-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_version",
+    "report_paths",
+    "report_hashes",
+    "implementation_file_count",
+    "added_file_count",
+    "modified_file_count",
+    "deleted_file_count",
+    "implementation_manifest"
+  ],
+  "properties": {
+    "schema_version": {"const": "moon-reply-b1b1-report-manifest-v1"},
+    "manifest_version": {"const": "provider-adapter-report-manifest-v1.0.0"},
+    "report_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "report_hashes": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "implementation_file_count": {"const": 39},
+    "added_file_count": {"const": 35},
+    "modified_file_count": {"const": 4},
+    "deleted_file_count": {"const": 0},
+    "implementation_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "path"],
+        "properties": {
+          "status": {"enum": ["A", "M"]},
+          "path": {"type": "string", "minLength": 1}
+        }
+      },
+      "minItems": 39,
+      "maxItems": 39,
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": "moon-reply-b1b1-response-profile-v1",
+  "profile_version": "strict-responses-parser-v1.0.0",
+  "accepted_object": "response",
+  "accepted_status": "completed",
+  "required_error": null,
+  "required_incomplete_details": null,
+  "assistant_message_count": 1,
+  "output_text_item_count": 1,
+  "refusal_allowed": false,
+  "usage_required": true,
+  "returned_model_must_match_requested": true,
+  "retry_on_failure": false,
+  "repair_on_failure": false,
+  "fallback_on_failure": false,
+  "terminal_status_stop_codes": {
+    "failed": "RESPONSE_STATUS_FAILED",
+    "incomplete": "RESPONSE_STATUS_INCOMPLETE",
+    "queued": "RESPONSE_STATUS_QUEUED",
+    "in_progress": "RESPONSE_STATUS_IN_PROGRESS",
+    "cancelled": "RESPONSE_STATUS_CANCELLED"
+  },
+  "required_usage_fields": [
+    "input_tokens",
+    "input_tokens_details.cached_tokens",
+    "output_tokens",
+    "output_tokens_details.reasoning_tokens",
+    "total_tokens"
+  ]
+}

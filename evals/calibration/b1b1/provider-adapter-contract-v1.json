@@ -1,0 +1,53 @@
+{
+  "schema_version": "moon-reply-b1b1-provider-adapter-contract-v1",
+  "contract_version": "network-disabled-provider-adapter-v1.0.0",
+  "task_id": "M2-P2-B1-B1",
+  "execution_mode": "network_blocked_provider_adapter_test",
+  "case_id": "WAIT-003",
+  "requested_model": "gpt-5.6-luna",
+  "model_role": "cost_and_plumbing_calibration_candidate",
+  "selected_for_product": false,
+  "selected_for_baseline": false,
+  "source_b0_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2",
+  "endpoint_path": "/v1/responses",
+  "endpoint_host_bound": false,
+  "stage_ids": [
+    "PB-01",
+    "PB-02",
+    "PB-03",
+    "PB-04",
+    "PB-05",
+    "PB-06"
+  ],
+  "maximum_future_provider_calls": 6,
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0,
+  "live_execution_authorized": false,
+  "paid_run_authorized": false,
+  "http_executor_implemented": false,
+  "environment_secret_provider_implemented": false,
+  "provider_sdk_used": false,
+  "global_fetch_used": false,
+  "interfaces": {
+    "provider_adapter": "invoke({stageRequest, approvalProof, secretProvider, requestExecutor, timeoutController}) -> providerReceipt",
+    "secret_provider": "resolveSecret() -> secretReceipt",
+    "request_executor": "execute({endpointPath, headers, body, signal}) -> rawResponseReceipt"
+  },
+  "pre_secret_check_order": [
+    "request_contract",
+    "approval",
+    "network_interlock",
+    "budget"
+  ],
+  "required_network_blocked_stop_code": "LIVE_EXECUTION_NOT_AUTHORIZED",
+  "retry_allowed": false,
+  "repair_allowed": false,
+  "fallback_allowed": false,
+  "batch_allowed": false,
+  "pb_07_included": false,
+  "fourteen_case_execution_allowed": false,
+  "seventy_case_execution_allowed": false,
+  "holdout_execution_allowed": false,
+  "real_user_execution_allowed": false,
+  "b1_b2_authorized": false
+}

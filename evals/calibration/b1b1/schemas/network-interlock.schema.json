@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1b1/network-interlock.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lock_version",
+    "execution_mode",
+    "live_execution_authorized",
+    "paid_run_authorized",
+    "network_executor_bound",
+    "secret_provider_bound",
+    "actual_provider_calls",
+    "api_spend_usd",
+    "required_stop_code",
+    "cli_override_allowed",
+    "config_override_allowed",
+    "environment_override_allowed",
+    "file_approval_override_allowed"
+  ],
+  "properties": {
+    "schema_version": {"const": "moon-reply-b1b1-network-interlock-v1"},
+    "lock_version": {"const": "network-disabled-interlock-v1.0.0"},
+    "execution_mode": {"const": "network_blocked_provider_adapter_test"},
+    "live_execution_authorized": {"const": false},
+    "paid_run_authorized": {"const": false},
+    "network_executor_bound": {"const": false},
+    "secret_provider_bound": {"const": false},
+    "actual_provider_calls": {"const": 0},
+    "api_spend_usd": {"const": 0},
+    "required_stop_code": {"const": "LIVE_EXECUTION_NOT_AUTHORIZED"},
+    "cli_override_allowed": {"const": false},
+    "config_override_allowed": {"const": false},
+    "environment_override_allowed": {"const": false},
+    "file_approval_override_allowed": {"const": false}
+  }
+}

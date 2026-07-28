@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and automatically validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2-A-R1 successor-tool correction is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`. M2-P2-A zero-cost static estimation is implemented, automatically validated, Human / ChatGPT accepted, and complete at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. M2-P2-B0-R1, M2-P2-B0-R2, and the M2-P2-B0 one-case contract are Human / ChatGPT accepted and complete. M2-P2-B1-A-R1 successor-tool correction is Human / ChatGPT accepted and complete at `22bbf6f69ad2e21d3d43808e3518970eb1dc48e7`. M2-P2-B1-A offline replay Runner has completed automated validation and Human / ChatGPT final review and is accepted and complete at `630cde811d63e0304ed528dc2e426400e81506a6`. M2-P2-B1-B1 live transport planning/implementation, M2-P2-B1-B2 paid calibration execution, and Milestone 2 runtime remain unauthorized and not started.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1, M2-P2-A, M2-P2-B0, and M2-P2-B1-A are Human / ChatGPT accepted and complete at their recorded commits. M2-P2-B1-B1 network-disabled provider adapter implementation and automated validation are complete with Human / ChatGPT final review pending. It implements no HTTP executor or environment secret provider and makes zero secret-resolution, executor, or provider calls with USD 0 spend. M2-P2-B1-B2 paid calibration execution and Milestone 2 runtime remain unauthorized and not started.
 
 ## P0: Repository Setup
 
@@ -602,7 +602,7 @@ The accepted development graph has 42 contrast sets, 130 memberships, and 7 conn
 - [x] M2-P2-A-R1 Human / ChatGPT acceptance and completion at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`
 - [x] M2-P2-A Human / ChatGPT acceptance and completion at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`
 - [x] Complete M2-P2-B1-A deterministic offline replay acceptance with zero provider calls and USD 0 spend
-- [ ] Separately authorize M2-P2-B1-B1 live transport planning/implementation
+- [x] Implement and automatically validate M2-P2-B1-B1 network-disabled provider protocol foundation; Human / ChatGPT final review pending
 - [ ] Separately authorize M2-P2-B1-B2 paid calibration execution, capped initially at USD 1 total
 
 M2-P2-A estimates are not actual usage or guaranteed API cost. Actual tokenizer usage, reasoning tokens, latency, API cost, and provider validation remain unknown. No product-quality evidence was produced, and the price catalog is a versioned planning snapshot. Development-70 represents evaluation cost, not one customer report cost. No 14-case or 70-case API execution is authorized. Any first M2-P2-B calibration requires separate authorization and is limited to one case, one model, no repair, one execution, and an absolute future ceiling of USD 1. M2-P2-A adds no provider, model selection, database, authentication, payment, email, API route, server action, UI, or runtime implementation.
@@ -628,7 +628,7 @@ M2-P2-A estimates are not actual usage or guaranteed API cost. Actual tokenizer 
 - [x] Complete M2-P2-B1-A automated validation
 - [x] Complete M2-P2-B1-A Human / ChatGPT final review and acceptance at implementation commit `630cde811d63e0304ed528dc2e426400e81506a6`
 - [x] Mark M2-P2-B1-A accepted and complete
-- [ ] Separately authorize M2-P2-B1-B1 live transport planning/implementation before any provider network access or key/environment read
+- [x] Implement M2-P2-B1-B1 with immutable network/secret interlocks, synthetic receipts, zero provider calls, and USD 0 spend
 - [ ] Separately authorize M2-P2-B1-B2 paid calibration execution before any actual provider call or spend
 
 M2-P2-B0 is zero-cost contract work only. It does not call the OpenAI API, read an API key, implement a network/provider executor, select a product model, or authorize B1. The only possible future path is `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, no retry/Repair/fallback, and six provider calls maximum.
@@ -642,7 +642,7 @@ B1-A acceptance boundary: execution mode `offline_replay`, `WAIT-003`, `gpt-5.6-
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 foundation, M2-P2-A, M2-P2-B0, and M2-P2-B1-A accepted and complete; M2-P2-B1-B1, M2-P2-B1-B2, and runtime unauthorized
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 through B1-A accepted; B1-B1 automated implementation complete and Human review pending; B1-B2 and runtime unauthorized
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -653,4 +653,4 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and on `main`. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP with no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation. It is not production-ready or payment-ready. M2-P1 and M2-P1-R1 are Human / ChatGPT accepted and complete; M2-P1-R2 manifest-boundary correction is implemented and validated. M2-P2-A-R1, M2-P2-A, M2-P2-B0-R1, M2-P2-B0-R2, M2-P2-B0, M2-P2-B1-A-R1, and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1, M2-P2-B1-B2, Milestone 2 runtime, model selection, API connection, DB work, operator-information completion, publication, deployment, provider inquiry or selection, email, payment, refund implementation, production launch, accounts, subscription, native-app work, and every later task remain blocked by their own planning, authorization, validation, and Human acceptance gates. Browser use and screenshot acquisition by CodeX/agents remain prohibited.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 through M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1 network-disabled protocol implementation and automated validation are complete with Human / ChatGPT final review pending. M2-P2-B1-B2, live HTTP/secret binding, paid execution, Milestone 2 runtime, model selection, API connection, DB work, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.

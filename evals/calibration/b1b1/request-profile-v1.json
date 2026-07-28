@@ -1,0 +1,60 @@
+{
+  "schema_version": "moon-reply-b1b1-request-profile-v1",
+  "profile_version": "responses-request-profile-v1.0.0",
+  "method": "POST",
+  "endpoint_path": "/v1/responses",
+  "model": "gpt-5.6-luna",
+  "store": false,
+  "tools": [],
+  "stream": false,
+  "background": false,
+  "service_tier": "default",
+  "truncation": "disabled",
+  "reasoning_effort": "low",
+  "text_format_type": "json_schema",
+  "text_format_strict": true,
+  "forbidden_request_properties": [
+    "previous_response_id",
+    "conversation",
+    "tool_choice",
+    "prompt_cache_key",
+    "prompt_cache_retention",
+    "user",
+    "safety_identifier"
+  ],
+  "stage_output_caps": {
+    "PB-01": 4000,
+    "PB-02": 800,
+    "PB-03": 700,
+    "PB-04": 4500,
+    "PB-05": 8000,
+    "PB-06": 2500
+  },
+  "hash_algorithm": "sha256 of compact JSON with UTF-8",
+  "registered_request_hashes": {
+    "PB-01": {
+      "request_body_sha256": "3b7102770f8098e9d5670db851a3326368cca250b57f1bc54ac2f8e2e5cd6bd3",
+      "request_contract_sha256": "79c73d2d9b7a2802a70167dd4ebd71760a0afae1d2005cec356785271280dfcb"
+    },
+    "PB-02": {
+      "request_body_sha256": "b72b8c73146761a7a14c785552052b00fbafbabc071238cac78471071d4e0e45",
+      "request_contract_sha256": "cf9ac5ac5d116ab6bbf456354bce8616112f23f9ac7968fd8663293d02dc437e"
+    },
+    "PB-03": {
+      "request_body_sha256": "4bf61d835d087f219f839175f1fddc6bf88cc4b59d3a1a34561535784b449944",
+      "request_contract_sha256": "af772d560f7d0fc9ffb07ecae6292dfa6ae57a5640900b896d9caa11a665f829"
+    },
+    "PB-04": {
+      "request_body_sha256": "225f3fcbbe4680a7fa641314bb70e85591bbbd8128002b9b2c30e3c7cc3fc67a",
+      "request_contract_sha256": "018a5d32c44b11e9be28ec6dd19f0e87dfb9ba7460bbccc269b07c904345fe2e"
+    },
+    "PB-05": {
+      "request_body_sha256": "927d6a2fef2531351f9f7a5309322e6b2b5ab5cbe6b5e434d5772b40fac9b637",
+      "request_contract_sha256": "7cb417c7bf1775f6e62dc5746da77d8329717b772f2d778408abd94ea815dd34"
+    },
+    "PB-06": {
+      "request_body_sha256": "93e841f202b7c6a0ef85efad00a81d231da33e09dc605008ba875f03ccfbbd5d",
+      "request_contract_sha256": "defb993ac1ccc9641809b048edd44ebbd189359e5974dbcfec9aeddc93a8fa01"
+    }
+  }
+}

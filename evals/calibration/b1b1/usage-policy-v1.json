@@ -1,0 +1,37 @@
+{
+  "schema_version": "moon-reply-b1b1-usage-policy-v1",
+  "policy_version": "usage-ledger-v1.0.0",
+  "currency": "USD",
+  "cost_term": "usage-derived conservative cost estimate",
+  "final_billed_cost_claim_allowed": false,
+  "standard_input_per_million_usd": 1,
+  "standard_output_per_million_usd": 6,
+  "cached_discount_used_for_approval": false,
+  "all_input_priced_as_uncached": true,
+  "reasoning_tokens_already_within_output_tokens": true,
+  "static_hard_cap_usd": 0.213223,
+  "preflight_ceiling_usd": 0.3,
+  "future_human_ceiling_usd": 1,
+  "current_task_spend_authorized_usd": 0,
+  "stage_hard_caps_usd": {
+    "PB-01": 0.035362,
+    "PB-02": 0.017766,
+    "PB-03": 0.019057,
+    "PB-04": 0.042335,
+    "PB-05": 0.065254,
+    "PB-06": 0.033449
+  },
+  "budget_guard_formula": "cumulative_usage_derived_cost + remaining_registered_stage_hard_caps <= future_human_ceiling_usd",
+  "recorded_fields": [
+    "input_tokens",
+    "cached_tokens",
+    "uncached_input_tokens",
+    "output_tokens",
+    "reasoning_tokens",
+    "total_tokens",
+    "requested_model",
+    "returned_model",
+    "stage_id",
+    "response_id"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "moon-reply-b1b1-network-interlock-v1",
+  "lock_version": "network-disabled-interlock-v1.0.0",
+  "execution_mode": "network_blocked_provider_adapter_test",
+  "live_execution_authorized": false,
+  "paid_run_authorized": false,
+  "network_executor_bound": false,
+  "secret_provider_bound": false,
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0,
+  "required_stop_code": "LIVE_EXECUTION_NOT_AUTHORIZED",
+  "cli_override_allowed": false,
+  "config_override_allowed": false,
+  "environment_override_allowed": false,
+  "file_approval_override_allowed": false
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1b1/usage-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "currency",
+    "cost_term",
+    "final_billed_cost_claim_allowed",
+    "standard_input_per_million_usd",
+    "standard_output_per_million_usd",
+    "cached_discount_used_for_approval",
+    "all_input_priced_as_uncached",
+    "reasoning_tokens_already_within_output_tokens",
+    "static_hard_cap_usd",
+    "preflight_ceiling_usd",
+    "future_human_ceiling_usd",
+    "current_task_spend_authorized_usd",
+    "stage_hard_caps_usd",
+    "budget_guard_formula",
+    "recorded_fields"
+  ],
+  "properties": {
+    "schema_version": {"const": "moon-reply-b1b1-usage-policy-v1"},
+    "policy_version": {"const": "usage-ledger-v1.0.0"},
+    "currency": {"const": "USD"},
+    "cost_term": {"const": "usage-derived conservative cost estimate"},
+    "final_billed_cost_claim_allowed": {"const": false},
+    "standard_input_per_million_usd": {"const": 1},
+    "standard_output_per_million_usd": {"const": 6},
+    "cached_discount_used_for_approval": {"const": false},
+    "all_input_priced_as_uncached": {"const": true},
+    "reasoning_tokens_already_within_output_tokens": {"const": true},
+    "static_hard_cap_usd": {"const": 0.213223},
+    "preflight_ceiling_usd": {"const": 0.3},
+    "future_human_ceiling_usd": {"const": 1},
+    "current_task_spend_authorized_usd": {"const": 0},
+    "stage_hard_caps_usd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+      "properties": {
+        "PB-01": {"const": 0.035362},
+        "PB-02": {"const": 0.017766},
+        "PB-03": {"const": 0.019057},
+        "PB-04": {"const": 0.042335},
+        "PB-05": {"const": 0.065254},
+        "PB-06": {"const": 0.033449}
+      }
+    },
+    "budget_guard_formula": {"type": "string", "minLength": 1},
+    "recorded_fields": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 10,
+      "maxItems": 10,
+      "uniqueItems": true
+    }
+  }
+}

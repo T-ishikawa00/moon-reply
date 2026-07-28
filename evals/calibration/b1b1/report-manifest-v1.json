@@ -1,0 +1,180 @@
+{
+  "schema_version": "moon-reply-b1b1-report-manifest-v1",
+  "manifest_version": "provider-adapter-report-manifest-v1.0.0",
+  "report_paths": [
+    "evals/calibration/b1b1/reports/request-preview-v1.json",
+    "evals/calibration/b1b1/reports/response-parser-matrix-v1.json",
+    "evals/calibration/b1b1/reports/network-blocked-matrix-v1.json",
+    "evals/calibration/b1b1/reports/failure-matrix-v1.json",
+    "evals/calibration/b1b1/reports/provider-adapter-summary-v1.md"
+  ],
+  "report_hashes": {
+    "evals/calibration/b1b1/reports/request-preview-v1.json": "9663f59a7d753af955e788176bce3d1193d80aa731b783d0c3fb92334c88e32d",
+    "evals/calibration/b1b1/reports/response-parser-matrix-v1.json": "9eb9ced819335c5b0898fb101641e9c62f1f540fbf88da77f84e4ef3dc7feba8",
+    "evals/calibration/b1b1/reports/network-blocked-matrix-v1.json": "eae1c5cb8d20040b230537dca55fd5692ed37ea30bcc491490c53ed26dad9fe3",
+    "evals/calibration/b1b1/reports/failure-matrix-v1.json": "6268553a0cc81166e933a2e4ca6dbfcaf48e03486d81127d7181edabfd98fc0c",
+    "evals/calibration/b1b1/reports/provider-adapter-summary-v1.md": "99b4c6d3be8fc6437ff66888b690063124162d2a1949d623567a9d39808c3ad3"
+  },
+  "implementation_file_count": 39,
+  "added_file_count": 35,
+  "modified_file_count": 4,
+  "deleted_file_count": 0,
+  "implementation_manifest": [
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_PROVIDER_ADAPTER_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_REQUEST_AND_RESPONSE_CONTRACT.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_NETWORK_SECRET_AND_REDACTION_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_B1_REVIEW.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/provider-adapter-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/request-profile-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/response-profile-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/usage-policy-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/network-interlock-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/secret-boundary-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/approval-lock-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/provider-adapter-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/request-profile.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/response-profile.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/usage-policy.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/network-interlock.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/request-preview-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/response-parser-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/network-blocked-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/failure-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/provider-adapter-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-b1-provider-adapter.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b1-network-blocked.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-b1-provider-adapter.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-request-builder.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-response-parser.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-usage-ledger.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-provider-adapter.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-network-interlock.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-secret-provider-contract.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-redaction.mjs"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "moon-reply-b1b1-approval-lock-v1",
+  "lock_version": "network-disabled-approval-lock-v1.0.0",
+  "live_execution_authorized": false,
+  "paid_run_authorized": false,
+  "network_executor_bound": false,
+  "secret_provider_bound": false,
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0,
+  "authorized_case": "WAIT-003",
+  "authorized_model_candidate": "gpt-5.6-luna",
+  "authorized_stage_ids": [
+    "PB-01",
+    "PB-02",
+    "PB-03",
+    "PB-04",
+    "PB-05",
+    "PB-06"
+  ],
+  "source_b0_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2",
+  "confirmation": "MOON_REPLY_B1_B1_NETWORK_DISABLED",
+  "b1_b2_authorized": false,
+  "mutation_to_live_authorization_supported": false
+}

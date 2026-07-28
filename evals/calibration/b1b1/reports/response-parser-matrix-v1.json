@@ -1,0 +1,273 @@
+{
+  "schema_version": "moon-reply-b1b1-response-parser-matrix-v1",
+  "task_id": "M2-P2-B1-B1",
+  "synthetic_only": true,
+  "happy_path_count": 6,
+  "happy_paths": [
+    {
+      "stage_id": "PB-01",
+      "response_id": "resp_synthetic_pb_01",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 11362,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 11362,
+        "output_tokens": 1200,
+        "reasoning_tokens": 120,
+        "total_tokens": 12562
+      }
+    },
+    {
+      "stage_id": "PB-02",
+      "response_id": "resp_synthetic_pb_02",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 11708,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 11708,
+        "output_tokens": 200,
+        "reasoning_tokens": 20,
+        "total_tokens": 11908
+      }
+    },
+    {
+      "stage_id": "PB-03",
+      "response_id": "resp_synthetic_pb_03",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 13599,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 13599,
+        "output_tokens": 180,
+        "reasoning_tokens": 18,
+        "total_tokens": 13779
+      }
+    },
+    {
+      "stage_id": "PB-04",
+      "response_id": "resp_synthetic_pb_04",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 14077,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14077,
+        "output_tokens": 1400,
+        "reasoning_tokens": 140,
+        "total_tokens": 15477
+      }
+    },
+    {
+      "stage_id": "PB-05",
+      "response_id": "resp_synthetic_pb_05",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 14804,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14804,
+        "output_tokens": 2500,
+        "reasoning_tokens": 250,
+        "total_tokens": 17304
+      }
+    },
+    {
+      "stage_id": "PB-06",
+      "response_id": "resp_synthetic_pb_06",
+      "requested_model": "gpt-5.6-luna",
+      "returned_model": "gpt-5.6-luna",
+      "response_status": "completed",
+      "schema_valid": true,
+      "usage": {
+        "input_tokens": 14635,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14635,
+        "output_tokens": 500,
+        "reasoning_tokens": 50,
+        "total_tokens": 15135
+      }
+    }
+  ],
+  "malformed": [
+    {
+      "scenario_id": "failed",
+      "stopped": true,
+      "stop_code": "RESPONSE_STATUS_FAILED",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "incomplete",
+      "stopped": true,
+      "stop_code": "RESPONSE_STATUS_INCOMPLETE",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "queued",
+      "stopped": true,
+      "stop_code": "RESPONSE_STATUS_QUEUED",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "in_progress",
+      "stopped": true,
+      "stop_code": "RESPONSE_STATUS_IN_PROGRESS",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "cancelled",
+      "stopped": true,
+      "stop_code": "RESPONSE_STATUS_CANCELLED",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "refusal",
+      "stopped": true,
+      "stop_code": "RESPONSE_REFUSAL",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "usage_missing",
+      "stopped": true,
+      "stop_code": "RESPONSE_USAGE_MISSING",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "output_text_missing",
+      "stopped": true,
+      "stop_code": "RESPONSE_OUTPUT_TEXT_MISSING",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "invalid_json",
+      "stopped": true,
+      "stop_code": "RESPONSE_JSON_INVALID",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "schema_failure",
+      "stopped": true,
+      "stop_code": "RESPONSE_SCHEMA_INVALID",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "response_id_missing",
+      "stopped": true,
+      "stop_code": "RESPONSE_ID_MISSING",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "returned_model_missing",
+      "stopped": true,
+      "stop_code": "RESPONSE_MODEL_MISSING",
+      "receipt_recorded": false
+    },
+    {
+      "scenario_id": "usage_inconsistent",
+      "stopped": true,
+      "stop_code": "RESPONSE_USAGE_INCONSISTENT",
+      "receipt_recorded": false
+    }
+  ],
+  "usage_ledger": {
+    "currency": "USD",
+    "cost_term": "usage-derived conservative cost estimate",
+    "entries": [
+      {
+        "stage_id": "PB-01",
+        "response_id": "resp_synthetic_pb_01",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 11362,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 11362,
+        "output_tokens": 1200,
+        "reasoning_tokens": 120,
+        "total_tokens": 12562,
+        "usage_derived_conservative_cost_estimate_usd": 0.018562
+      },
+      {
+        "stage_id": "PB-02",
+        "response_id": "resp_synthetic_pb_02",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 11708,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 11708,
+        "output_tokens": 200,
+        "reasoning_tokens": 20,
+        "total_tokens": 11908,
+        "usage_derived_conservative_cost_estimate_usd": 0.012908
+      },
+      {
+        "stage_id": "PB-03",
+        "response_id": "resp_synthetic_pb_03",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 13599,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 13599,
+        "output_tokens": 180,
+        "reasoning_tokens": 18,
+        "total_tokens": 13779,
+        "usage_derived_conservative_cost_estimate_usd": 0.014679
+      },
+      {
+        "stage_id": "PB-04",
+        "response_id": "resp_synthetic_pb_04",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 14077,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14077,
+        "output_tokens": 1400,
+        "reasoning_tokens": 140,
+        "total_tokens": 15477,
+        "usage_derived_conservative_cost_estimate_usd": 0.022477
+      },
+      {
+        "stage_id": "PB-05",
+        "response_id": "resp_synthetic_pb_05",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 14804,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14804,
+        "output_tokens": 2500,
+        "reasoning_tokens": 250,
+        "total_tokens": 17304,
+        "usage_derived_conservative_cost_estimate_usd": 0.029804
+      },
+      {
+        "stage_id": "PB-06",
+        "response_id": "resp_synthetic_pb_06",
+        "requested_model": "gpt-5.6-luna",
+        "returned_model": "gpt-5.6-luna",
+        "input_tokens": 14635,
+        "cached_tokens": 0,
+        "uncached_input_tokens": 14635,
+        "output_tokens": 500,
+        "reasoning_tokens": 50,
+        "total_tokens": 15135,
+        "usage_derived_conservative_cost_estimate_usd": 0.017635
+      }
+    ],
+    "cumulative_usage_derived_cost_usd": 0.116065,
+    "actual_provider_calls": 0,
+    "actual_api_spend_usd": 0
+  },
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0
+}

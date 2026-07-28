@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/b1b1/request-profile.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_version",
+    "method",
+    "endpoint_path",
+    "model",
+    "store",
+    "tools",
+    "stream",
+    "background",
+    "service_tier",
+    "truncation",
+    "reasoning_effort",
+    "text_format_type",
+    "text_format_strict",
+    "forbidden_request_properties",
+    "stage_output_caps",
+    "hash_algorithm",
+    "registered_request_hashes"
+  ],
+  "properties": {
+    "schema_version": {"const": "moon-reply-b1b1-request-profile-v1"},
+    "profile_version": {"const": "responses-request-profile-v1.0.0"},
+    "method": {"const": "POST"},
+    "endpoint_path": {"const": "/v1/responses"},
+    "model": {"const": "gpt-5.6-luna"},
+    "store": {"const": false},
+    "tools": {"type": "array", "maxItems": 0},
+    "stream": {"const": false},
+    "background": {"const": false},
+    "service_tier": {"const": "default"},
+    "truncation": {"const": "disabled"},
+    "reasoning_effort": {"const": "low"},
+    "text_format_type": {"const": "json_schema"},
+    "text_format_strict": {"const": true},
+    "forbidden_request_properties": {"$ref": "#/$defs/unique_strings"},
+    "stage_output_caps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+      "properties": {
+        "PB-01": {"const": 4000},
+        "PB-02": {"const": 800},
+        "PB-03": {"const": 700},
+        "PB-04": {"const": 4500},
+        "PB-05": {"const": 8000},
+        "PB-06": {"const": 2500}
+      }
+    },
+    "hash_algorithm": {"type": "string", "minLength": 1},
+    "registered_request_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+      "properties": {
+        "PB-01": {"$ref": "#/$defs/hash_pair"},
+        "PB-02": {"$ref": "#/$defs/hash_pair"},
+        "PB-03": {"$ref": "#/$defs/hash_pair"},
+        "PB-04": {"$ref": "#/$defs/hash_pair"},
+        "PB-05": {"$ref": "#/$defs/hash_pair"},
+        "PB-06": {"$ref": "#/$defs/hash_pair"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hash_pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request_body_sha256", "request_contract_sha256"],
+      "properties": {
+        "request_body_sha256": {"$ref": "#/$defs/sha256"},
+        "request_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "unique_strings": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  }
+}
