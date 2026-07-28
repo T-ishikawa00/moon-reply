@@ -42,6 +42,35 @@ const b1b1SuccessorLocalToolPaths = new Set([
   "scripts/lib/m2-p2-b1-b1-redaction.mjs",
   "scripts/lib/m2-p2-b1-b1-artifact-sanitizer.mjs",
 ]);
+const b1b2aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+]);
+const b1b2aCapabilityPaths = Object.freeze({
+  environment:
+    "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  childProcess:
+    "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
+const b1b2aBoundaryDocumentPaths = new Set([
+  "docs/phase2/TASK_M2_P2_B1_B2_A_R1_SCOPE_AND_LIVE_BINDING_BOUNDARY.md",
+  "docs/phase2/M2_P2_B1_B2_A_DORMANT_LIVE_BINDING_SPEC.md",
+  "docs/phase2/M2_P2_B1_B2_A_EXECUTION_SECURITY_AND_BUDGET_POLICY.md",
+  "docs/phase2/M2_P2_B1_B2_A_API_PROJECT_AND_KEY_HANDOFF.md",
+  "docs/phase2/TASK_M2_P2_B1_B2_A_REVIEW.md",
+]);
 const successorLocalToolPaths = new Set([
   "scripts/render-m2-dry-run-requests.mjs",
   "scripts/estimate-m2-static-costs.mjs",
@@ -50,6 +79,7 @@ const successorLocalToolPaths = new Set([
   "scripts/verify-m2-p2-b0-calibration-contract.mjs",
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
+  ...b1b2aSuccessorLocalToolPaths,
 ]);
 const nodeBuiltinSpecifiers = new Set(
   builtinModules.flatMap((specifier) => [
@@ -88,6 +118,8 @@ const gateOrder = [
   "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
   "M2_B1_B1_SUCCESSOR_PATH_GATE",
   "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
@@ -3328,6 +3360,18 @@ function verifySuccessorLocalTools(paths) {
       });
     }
     if (
+      item.includes("m2-p2-b1-b2-a") &&
+      !b1b2aSuccessorLocalToolPaths.has(item)
+    ) {
+      fail("M2_B1_B2_A_SUCCESSOR_PATH_GATE", {
+        file: item,
+        pathName: "$",
+        invariant: "B1-B2-A successor path is one exact Human-authorized path",
+        expected: [...b1b2aSuccessorLocalToolPaths],
+        actual: item,
+      });
+    }
+    if (
       !historicalScriptPaths.has(item) &&
       !successorLocalToolPaths.has(item)
     ) {
@@ -3415,11 +3459,19 @@ function verifySuccessorLocalTools(paths) {
       ? "M2_B1_A_SUCCESSOR_ISOLATION_GATE"
       : b1b1SuccessorLocalToolPaths.has(file)
         ? "M2_B1_B1_SUCCESSOR_ISOLATION_GATE"
-        : "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE";
+        : b1b2aSuccessorLocalToolPaths.has(file)
+          ? "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE"
+          : "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE";
     const source = readFileSync(absolute(file), "utf8");
     for (const specifier of moduleSpecifiers(source)) {
       if (nodeBuiltinSpecifiers.has(specifier)) {
-        if (forbiddenNetworkBuiltins.has(specifier)) {
+        const allowedNetworkBuiltin =
+          file === b1b2aCapabilityPaths.https &&
+          (specifier === "node:https" || specifier === "node:tls");
+        if (
+          forbiddenNetworkBuiltins.has(specifier) &&
+          !allowedNetworkBuiltin
+        ) {
           fail(isolationGate, {
             file,
             pathName: "$.imports",
@@ -3442,7 +3494,10 @@ function verifySuccessorLocalTools(paths) {
       });
     }
     for (const [label, pattern] of isolationPatterns) {
-      if (pattern.test(source)) {
+      const allowedCapabilityReference =
+        label === "environment secret access" &&
+        file === b1b2aCapabilityPaths.environment;
+      if (pattern.test(source) && !allowedCapabilityReference) {
         fail(isolationGate, {
           file,
           pathName: "$",
@@ -3495,6 +3550,36 @@ function verifySuccessorLocalTools(paths) {
         invariant: "child_process is confined to the exact B1-B1 verifier",
         expected: "no child_process import",
         actual: "child_process import",
+      });
+    }
+    if (
+      b1b2aSuccessorLocalToolPaths.has(file) &&
+      file !== b1b2aCapabilityPaths.childProcess &&
+      moduleSpecifiers(source).some(
+        (specifier) =>
+          specifier === "child_process" ||
+          specifier === "node:child_process",
+      )
+    ) {
+      fail("M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE", {
+        file,
+        pathName: "$.imports",
+        invariant: "child_process is confined to the exact execution guard",
+        expected: "no child_process import",
+        actual: "child_process import",
+      });
+    }
+    if (
+      b1b2aSuccessorLocalToolPaths.has(file) &&
+      source.includes(openAiApiKeyVariableName) &&
+      file !== b1b2aCapabilityPaths.environment
+    ) {
+      fail("M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE", {
+        file,
+        pathName: "$",
+        invariant: `${openAiApiKeyVariableName} is confined to the exact environment provider`,
+        expected: b1b2aCapabilityPaths.environment,
+        actual: file,
       });
     }
   }
@@ -3592,7 +3677,10 @@ function verifyScopeAndProhibitedImplementation() {
       }
     }
     for (const [label, pattern] of invocationPatterns) {
-      if (pattern.test(source)) {
+      const allowedBoundaryDeclaration =
+        label === "environment secret access" &&
+        b1b2aBoundaryDocumentPaths.has(file);
+      if (pattern.test(source) && !allowedBoundaryDeclaration) {
         fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
           file,
           pathName: "$",
@@ -3610,6 +3698,8 @@ function verifyScopeAndProhibitedImplementation() {
     "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
     "M2_B1_B1_SUCCESSOR_PATH_GATE",
     "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
+    "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
   ]) {
     if (failures.get(gate).length > 0) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {

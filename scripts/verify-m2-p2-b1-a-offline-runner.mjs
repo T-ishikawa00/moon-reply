@@ -50,6 +50,28 @@ const b1b1SuccessorLocalToolPaths = new Set([
   "scripts/lib/m2-p2-b1-b1-redaction.mjs",
   "scripts/lib/m2-p2-b1-b1-artifact-sanitizer.mjs",
 ]);
+const b1b2aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+]);
+const b1b2aCapabilityPaths = Object.freeze({
+  environment:
+    "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  childProcess:
+    "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
 
 const gateOrder = [
   "M2_B1_A_HISTORICAL_SCOPE_CONTRACT_GATE",
@@ -85,6 +107,8 @@ const gateOrder = [
   "M2_B1_A_REPORT_HASH_GATE",
   "M2_B1_B1_SUCCESSOR_PATH_GATE",
   "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
 ];
 const failures = new Map(gateOrder.map((gate) => [gate, []]));
 const overallFailures = [];
@@ -281,6 +305,146 @@ function verifyB1b1SuccessorTools() {
         `${file}: key-like literal`,
       );
     }
+  }
+}
+
+function verifyB1b2aSuccessorTools() {
+  const listed = runGit([
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+    "scripts",
+  ]);
+  assert(
+    "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    listed.status === 0,
+    `successor path inventory failed: ${listed.stderr}`,
+  );
+  const candidates = listed.stdout
+    .split(/\r?\n/u)
+    .filter((file) => file.includes("m2-p2-b1-b2-a"));
+  assert(
+    "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    candidates.every((file) => b1b2aSuccessorLocalToolPaths.has(file)),
+    `non-exact B1-B2-A successor path found: ${JSON.stringify(candidates)}`,
+  );
+
+  const builtins = new Set(
+    builtinModules.flatMap((name) => [
+      name,
+      name.startsWith("node:") ? name : `node:${name}`,
+    ]),
+  );
+  const forbiddenBuiltins = new Set([
+    "http",
+    "http2",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dgram",
+    "node:http",
+    "node:http2",
+    "node:https",
+    "node:net",
+    "node:tls",
+    "node:dns",
+    "node:dgram",
+  ]);
+  const isolationPatterns = [
+    ["network invocation", /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(/u],
+    ["environment access", /\bprocess\.env(?:\.|\[)|\bDeno\.env\b|\bBun\.env\b|\bgetenv\s*\(/u],
+    ["environment enumeration", /\bObject\.(?:keys|values|entries)\s*\(\s*process\b/u],
+    ["authorization header", /\bAuthorization\s*:/iu],
+    ["provider SDK", /\bnew\s+(?:OpenAI|Anthropic|GoogleGenerativeAI|CohereClient|MistralClient)\s*\(/u],
+    ["database SDK", /@supabase\/supabase-js|from\s+["'](?:pg|mysql2|sqlite3)["']/u],
+    ["auth, payment, or email SDK", /from\s+["'](?:next-auth|stripe|nodemailer|@sendgrid\/mail)["']/u],
+    ["application import", /from\s+["'](?:@\/|\.\.?\/)+(?:app|components|lib\/(?:safety|legal|supabase))\//u],
+    [
+      "network shell client",
+      new RegExp(
+        `\\b(?:${[
+          ["cu", "rl"].join(""),
+          ["wg", "et"].join(""),
+          ["Invoke", "WebRequest"].join("-"),
+          ["Invoke", "RestMethod"].join("-"),
+        ].join("|")})\\b`,
+        "iu",
+      ),
+    ],
+  ];
+  const secretPatterns = [
+    /\bsk-[A-Za-z0-9_-]{16,}\b/u,
+    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
+    /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
+  ];
+  const allowedLocalPaths = new Set([
+    ...b1b1SuccessorLocalToolPaths,
+    ...b1b2aSuccessorLocalToolPaths,
+  ]);
+  for (const file of b1b2aSuccessorLocalToolPaths) {
+    if (!existsSync(absolute(file))) continue;
+    const text = canonicalText(file);
+    for (const specifier of moduleSpecifiers(text)) {
+      if (builtins.has(specifier)) {
+        const allowedNetworkBuiltin =
+          file === b1b2aCapabilityPaths.https &&
+          (specifier === "node:https" || specifier === "node:tls");
+        assert(
+          "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+          !forbiddenBuiltins.has(specifier) ||
+            allowedNetworkBuiltin,
+          `${file}: forbidden built-in ${specifier}`,
+        );
+        const childProcess =
+          specifier === "child_process" ||
+          specifier === "node:child_process";
+        assert(
+          "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+          !childProcess ||
+            (file === b1b2aCapabilityPaths.childProcess &&
+              specifier === "node:child_process"),
+          `${file}: child_process is confined to the exact execution guard`,
+        );
+        continue;
+      }
+      const resolved = specifier.startsWith(".")
+        ? path.posix.normalize(
+            path.posix.join(path.posix.dirname(file), specifier),
+          )
+        : null;
+      assert(
+        "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+        resolved !== null && allowedLocalPaths.has(resolved),
+        `${file}: import is not an exact B1-B2-A or B1-B1 peer: ${specifier}`,
+      );
+    }
+    for (const [label, pattern] of isolationPatterns) {
+      const allowedCapabilityReference =
+        (label === "environment access" &&
+          file === b1b2aCapabilityPaths.environment) ||
+        (label === "authorization header" &&
+          file === b1b2aCapabilityPaths.https);
+      assert(
+        "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+        allowedCapabilityReference || !pattern.test(text),
+        `${file}: ${label}`,
+      );
+    }
+    for (const pattern of secretPatterns) {
+      assert(
+        "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+        !pattern.test(text),
+        `${file}: key-like literal`,
+      );
+    }
+    assert(
+      "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+      !text.includes(openAiApiKeyVariableName) ||
+        file === b1b2aCapabilityPaths.environment,
+      `${file}: ${openAiApiKeyVariableName} is confined to the exact environment provider`,
+    );
   }
 }
 
@@ -968,6 +1132,7 @@ try {
   verifyContracts(assets);
   verifyIsolation();
   verifyB1b1SuccessorTools();
+  verifyB1b2aSuccessorTools();
   verifySchemaContracts(assets);
   verifySequenceAndState(assets, happy);
   verifyDataAndLabels(assets);

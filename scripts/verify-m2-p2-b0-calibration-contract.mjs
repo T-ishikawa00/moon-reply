@@ -41,6 +41,28 @@ const b1b1SuccessorLocalToolPaths = new Set([
   "scripts/lib/m2-p2-b1-b1-redaction.mjs",
   "scripts/lib/m2-p2-b1-b1-artifact-sanitizer.mjs",
 ]);
+const b1b2aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+]);
+const b1b2aCapabilityPaths = Object.freeze({
+  environment:
+    "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  childProcess:
+    "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
 const nodeBuiltinSpecifiers = new Set(
   builtinModules.flatMap((specifier) => [
     specifier,
@@ -84,6 +106,8 @@ const gateOrder = [
   "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
   "M2_B1_B1_SUCCESSOR_PATH_GATE",
   "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
 ];
 
 const failures = new Map(gateOrder.map((gate) => [gate, []]));
@@ -320,9 +344,11 @@ function moduleSpecifiers(text) {
 
 function verifySuccessorTools({
   paths,
+  pathGate,
   isolationGate,
   verifierPath,
   boundaryLabel,
+  pathToken,
 }) {
   const forbiddenBuiltins = new Set([
     "http",
@@ -358,21 +384,56 @@ function verifySuccessorTools({
     /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
     /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
   ];
+  const listed = runGit([
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+    "scripts",
+  ]);
+  assert(
+    pathGate,
+    listed.status === 0,
+    `successor path inventory failed: ${listed.stderr}`,
+  );
+  const candidates = listed.stdout
+    .split(/\r?\n/u)
+    .filter((file) => file.includes(pathToken));
+  assert(
+    pathGate,
+    candidates.every((file) => paths.has(file)),
+    `non-exact ${boundaryLabel} successor path found: ${JSON.stringify(candidates)}`,
+  );
+  const allowedLocalPaths =
+    boundaryLabel === "B1-B2-A"
+      ? new Set([...b1b1SuccessorLocalToolPaths, ...paths])
+      : paths;
   for (const file of paths) {
     if (!existsSync(absolute(file))) continue;
     const text = source(file);
     for (const specifier of moduleSpecifiers(text)) {
       if (nodeBuiltinSpecifiers.has(specifier)) {
+        const allowedNetworkBuiltin =
+          boundaryLabel === "B1-B2-A" &&
+          file === b1b2aCapabilityPaths.https &&
+          (specifier === "node:https" || specifier === "node:tls");
         assert(
           isolationGate,
-          !forbiddenBuiltins.has(specifier),
+          !forbiddenBuiltins.has(specifier) ||
+            allowedNetworkBuiltin,
           `${file}: forbidden built-in ${specifier}`,
         );
+        const childProcess =
+          specifier === "child_process" ||
+          specifier === "node:child_process";
+        const allowedChildProcess =
+          boundaryLabel === "B1-B2-A"
+            ? file === b1b2aCapabilityPaths.childProcess &&
+              specifier === "node:child_process"
+            : file === verifierPath;
         assert(
           isolationGate,
-          file === verifierPath ||
-            (specifier !== "child_process" &&
-              specifier !== "node:child_process"),
+          !childProcess || allowedChildProcess,
           `${file}: child_process is verifier-only`,
         );
         continue;
@@ -384,14 +445,20 @@ function verifySuccessorTools({
         : null;
       assert(
         isolationGate,
-        resolved !== null && paths.has(resolved),
+        resolved !== null && allowedLocalPaths.has(resolved),
         `${file}: import is not an exact ${boundaryLabel} peer: ${specifier}`,
       );
     }
     for (const [label, pattern] of isolationPatterns) {
+      const allowedCapabilityReference =
+        boundaryLabel === "B1-B2-A" &&
+        ((label === "environment access" &&
+          file === b1b2aCapabilityPaths.environment) ||
+          (label === "authorization header" &&
+            file === b1b2aCapabilityPaths.https));
       assert(
         isolationGate,
-        !pattern.test(text),
+        allowedCapabilityReference || !pattern.test(text),
         `${file}: ${label}`,
       );
     }
@@ -402,21 +469,41 @@ function verifySuccessorTools({
         `${file}: key-like literal`,
       );
     }
+    if (boundaryLabel === "B1-B2-A") {
+      assert(
+        isolationGate,
+        !text.includes(openAiApiKeyVariableName) ||
+          file === b1b2aCapabilityPaths.environment,
+        `${file}: ${openAiApiKeyVariableName} is confined to the exact environment provider`,
+      );
+    }
   }
 }
 
 function verifyAuthorizedSuccessorTools() {
   verifySuccessorTools({
     paths: b1aSuccessorLocalToolPaths,
+    pathGate: "M2_B1_A_SUCCESSOR_PATH_GATE",
     isolationGate: "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
     verifierPath: "scripts/verify-m2-p2-b1-a-offline-runner.mjs",
     boundaryLabel: "B1-A",
+    pathToken: "m2-p2-b1-a",
   });
   verifySuccessorTools({
     paths: b1b1SuccessorLocalToolPaths,
+    pathGate: "M2_B1_B1_SUCCESSOR_PATH_GATE",
     isolationGate: "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
     verifierPath: "scripts/verify-m2-p2-b1-b1-provider-adapter.mjs",
     boundaryLabel: "B1-B1",
+    pathToken: "m2-p2-b1-b1",
+  });
+  verifySuccessorTools({
+    paths: b1b2aSuccessorLocalToolPaths,
+    pathGate: "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    isolationGate: "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+    verifierPath: null,
+    boundaryLabel: "B1-B2-A",
+    pathToken: "m2-p2-b1-b2-a",
   });
 }
 

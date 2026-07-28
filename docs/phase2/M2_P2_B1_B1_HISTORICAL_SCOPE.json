@@ -1,0 +1,179 @@
+{
+  "scope_version": "m2-p2-b1-b1-historical-scope-v1",
+  "scope_type": "historical_commit_range",
+  "base_commit_sha": "2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e",
+  "end_commit_sha": "efdf10067fb3c1b4072c891ab5f3f1d2c949de55",
+  "include_head_after_end": false,
+  "include_index": false,
+  "include_working_tree": false,
+  "immutable_snapshot": true,
+  "expected_total_files": 39,
+  "expected_status_breakdown": {
+    "A": 35,
+    "M": 4,
+    "D": 0
+  },
+  "expected_root_breakdown": {
+    "docs": 8,
+    "evals": 21,
+    "scripts": 10
+  },
+  "expected_files": [
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_NETWORK_SECRET_AND_REDACTION_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_PROVIDER_ADAPTER_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B1_REQUEST_AND_RESPONSE_CONTRACT.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_B1_REVIEW.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/approval-lock-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/network-interlock-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/provider-adapter-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/failure-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/network-blocked-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/provider-adapter-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/request-preview-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/reports/response-parser-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/request-profile-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/response-profile-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/network-interlock.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/provider-adapter-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/request-profile.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/response-profile.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/schemas/usage-policy.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/secret-boundary-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b1/usage-policy-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-network-interlock.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-provider-adapter.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-redaction.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-request-builder.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-response-parser.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-secret-provider-contract.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b1-usage-ledger.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-b1-provider-adapter.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b1-network-blocked.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-b1-provider-adapter.mjs"
+    }
+  ]
+}

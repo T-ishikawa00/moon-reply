@@ -23,7 +23,12 @@ import {
 } from "./prepare-m2-p2-b1-b1-provider-adapter.mjs";
 import { parseNetworkBlockedArguments } from "./run-m2-p2-b1-b1-network-blocked.mjs";
 
-const correctionCommit = "2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e";
+const historicalScopePath =
+  "docs/phase2/M2_P2_B1_B1_HISTORICAL_SCOPE.json";
+const historicalBaseSha =
+  "2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e";
+const historicalEndSha =
+  "efdf10067fb3c1b4072c891ab5f3f1d2c949de55";
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const tenImplementationScriptPaths = [
   "scripts/prepare-m2-p2-b1-b1-provider-adapter.mjs",
@@ -41,9 +46,35 @@ const authorizedSuccessorScriptPaths = new Set([
   ...tenImplementationScriptPaths,
   "scripts/lib/m2-p2-b1-b1-artifact-sanitizer.mjs",
 ]);
+const b1b2aSuccessorScriptPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs",
+  "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+]);
+const b1b2aCapabilityPaths = Object.freeze({
+  environment:
+    "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs",
+  https: "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs",
+  childProcess:
+    "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs",
+});
+const openAiApiKeyVariableName = ["OPENAI", "API", "KEY"].join("_");
 
 const gateOrder = [
+  "M2_B1_B1_HISTORICAL_SCOPE_CONTRACT_GATE",
+  "M2_B1_B1_HISTORICAL_SCOPE_HISTORY_GATE",
   "M2_B1_B1_EXACT_SCOPE_GATE",
+  "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
   "M2_B1_B1_CONTRACT_LINK_GATE",
   "M2_B1_B1_CASE_GATE",
   "M2_B1_B1_MODEL_CANDIDATE_GATE",
@@ -109,33 +140,44 @@ function normalized(entries) {
     .sort((left, right) => left.file.localeCompare(right.file, "en"));
 }
 
-function taskMutations() {
-  const diff = runGit(["diff", "--name-status", correctionCommit, "--"]);
-  const status = runGit([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ]);
-  if (diff.status !== 0 || status.status !== 0) {
-    fail(
-      "M2_B1_B1_EXACT_SCOPE_GATE",
-      `Git audit failed: ${diff.stderr}${status.stderr}`,
-    );
-    return [];
-  }
-  const entries = new Map();
-  for (const line of diff.stdout.split(/\r?\n/u).filter(Boolean)) {
-    const [rawStatus, ...parts] = line.split("\t");
-    entries.set(parts.at(-1).replaceAll("\\", "/"), rawStatus[0]);
-  }
-  for (const line of status.stdout.split(/\r?\n/u).filter(Boolean)) {
-    if (line.startsWith("?? ")) {
-      entries.set(line.slice(3).trim().replaceAll("\\", "/"), "A");
-    }
-  }
-  return normalized(
-    [...entries].map(([file, status]) => ({ file, status })),
+function rootBreakdown(entries) {
+  return Object.fromEntries(
+    [...entries.reduce((counts, entry) => {
+      const root = entry.file.split("/")[0];
+      counts.set(root, (counts.get(root) ?? 0) + 1);
+      return counts;
+    }, new Map())].sort(([left], [right]) =>
+      left.localeCompare(right, "en"),
+    ),
   );
+}
+
+function statusBreakdown(entries) {
+  return Object.fromEntries(
+    ["A", "M", "D"].map((status) => [
+      status,
+      entries.filter((entry) => entry.status === status).length,
+    ]),
+  );
+}
+
+function parseHistoricalNameStatus(output, historyGate) {
+  const entries = [];
+  for (const line of output.split(/\r?\n/u).filter(Boolean)) {
+    const [rawStatus, ...parts] = line.split("\t");
+    const status = rawStatus[0];
+    const file = parts.at(-1)?.replaceAll("\\", "/");
+    if (
+      !["A", "M", "D"].includes(status) ||
+      parts.length !== 1 ||
+      !file
+    ) {
+      fail(historyGate, `unsupported historical name-status entry: ${line}`);
+      continue;
+    }
+    entries.push({ file, status });
+  }
+  return normalized(entries);
 }
 
 function moduleSpecifiers(text) {
@@ -152,22 +194,175 @@ function moduleSpecifiers(text) {
 }
 
 function verifyExactScope(manifest) {
-  const expected = normalized(
+  const contractGate = "M2_B1_B1_HISTORICAL_SCOPE_CONTRACT_GATE";
+  const historyGate = "M2_B1_B1_HISTORICAL_SCOPE_HISTORY_GATE";
+  let contract;
+  try {
+    contract = readJson(historicalScopePath);
+  } catch (error) {
+    fail(
+      contractGate,
+      `${historicalScopePath} could not be parsed: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+
+  const fullShaPattern = /^[0-9a-f]{40}$/u;
+  const expectedFiles = Array.isArray(contract?.expected_files)
+    ? contract.expected_files
+    : [];
+  const expectedEntries = [];
+  const seenPaths = new Set();
+  let expectedFilesValid = Array.isArray(contract?.expected_files);
+  for (const [index, entry] of expectedFiles.entries()) {
+    const file = entry?.path;
+    const status = entry?.status;
+    const valid =
+      typeof file === "string" &&
+      file.length > 0 &&
+      !/[*?[\]]/u.test(file) &&
+      !file.includes("\\") &&
+      ["A", "M", "D"].includes(status) &&
+      !seenPaths.has(file);
+    if (!valid) {
+      expectedFilesValid = false;
+      fail(
+        contractGate,
+        `expected_files[${index}] is not a unique exact A/M/D path`,
+      );
+      continue;
+    }
+    seenPaths.add(file);
+    expectedEntries.push({ file, status });
+  }
+  const expected = normalized(expectedEntries);
+  const implementationExpected = normalized(
     implementationManifest.map((entry) => ({
       file: entry.path,
       status: entry.status,
     })),
   );
-  const actual = taskMutations();
+  const manifestExpected = normalized(
+    manifest.implementation_manifest.map((entry) => ({
+      file: entry.path,
+      status: entry.status,
+    })),
+  );
+
+  assert(
+    contractGate,
+    contract?.scope_version === "m2-p2-b1-b1-historical-scope-v1" &&
+      contract?.scope_type === "historical_commit_range" &&
+      contract?.base_commit_sha === historicalBaseSha &&
+      contract?.end_commit_sha === historicalEndSha &&
+      contract?.include_head_after_end === false &&
+      contract?.include_index === false &&
+      contract?.include_working_tree === false &&
+      contract?.immutable_snapshot === true &&
+      contract?.expected_total_files === 39,
+    "historical scope metadata or fixed commit anchors differ",
+  );
+  assert(
+    contractGate,
+    fullShaPattern.test(contract?.base_commit_sha ?? "") &&
+      fullShaPattern.test(contract?.end_commit_sha ?? ""),
+    "historical base or end SHA is not a full lowercase 40-character SHA",
+  );
+  assert(
+    contractGate,
+    expectedFilesValid &&
+      expected.length === 39 &&
+      deepEqual(contract?.expected_status_breakdown, {
+        A: 35,
+        M: 4,
+        D: 0,
+      }) &&
+      deepEqual(contract?.expected_root_breakdown, {
+        docs: 8,
+        evals: 21,
+        scripts: 10,
+      }) &&
+      deepEqual(expected, implementationExpected) &&
+      deepEqual(expected, manifestExpected),
+    "historical expected files, counts, roots, or accepted manifests differ",
+  );
+
+  const baseExists = runGit([
+    "cat-file",
+    "-e",
+    `${historicalBaseSha}^{commit}`,
+  ]);
+  const endExists = runGit([
+    "cat-file",
+    "-e",
+    `${historicalEndSha}^{commit}`,
+  ]);
+  assert(
+    historyGate,
+    baseExists.status === 0 && endExists.status === 0,
+    `historical commit object is missing: ${baseExists.stderr}${endExists.stderr}`,
+  );
+  if (baseExists.status === 0 && endExists.status === 0) {
+    assert(
+      historyGate,
+      runGit([
+        "merge-base",
+        "--is-ancestor",
+        historicalBaseSha,
+        historicalEndSha,
+      ]).status === 0,
+      "historical base is not an ancestor of historical end",
+    );
+    assert(
+      historyGate,
+      runGit([
+        "merge-base",
+        "--is-ancestor",
+        historicalEndSha,
+        "HEAD",
+      ]).status === 0,
+      "historical end is not an ancestor of current HEAD",
+    );
+  }
+
+  const historicalDiff = runGit([
+    "diff",
+    "--name-status",
+    historicalBaseSha,
+    historicalEndSha,
+    "--",
+  ]);
+  assert(
+    historyGate,
+    historicalDiff.status === 0,
+    `historical diff failed: ${historicalDiff.stderr}`,
+  );
+  const actual =
+    historicalDiff.status === 0
+      ? parseHistoricalNameStatus(historicalDiff.stdout, historyGate)
+      : [];
+  assert(
+    historyGate,
+    deepEqual(actual, expected),
+    `historical 39-file manifest differs: ${JSON.stringify(actual)}`,
+  );
+  assert(
+    historyGate,
+    actual.length === 39 &&
+      deepEqual(statusBreakdown(actual), { A: 35, M: 4, D: 0 }) &&
+      deepEqual(rootBreakdown(actual), {
+        docs: 8,
+        evals: 21,
+        scripts: 10,
+      }),
+    "historical A/M/D counts or root breakdown differ",
+  );
   assert(
     "M2_B1_B1_EXACT_SCOPE_GATE",
-    deepEqual(manifest.implementation_manifest, implementationManifest) &&
-      deepEqual(actual, expected) &&
-      actual.length === 39 &&
-      actual.filter((entry) => entry.status === "A").length === 35 &&
-      actual.filter((entry) => entry.status === "M").length === 4 &&
-      actual.filter((entry) => entry.status === "D").length === 0,
-    `exact 39-file manifest differs: ${JSON.stringify(actual)}`,
+    failures.get(contractGate).length === 0 &&
+      failures.get(historyGate).length === 0,
+    "historical scope contract or fixed commit-range history gate failed",
   );
   assert(
     "M2_B1_B1_EXACT_SCOPE_GATE",
@@ -176,6 +371,95 @@ function verifyExactScope(manifest) {
     ),
     "artifact sanitizer must remain inside redaction.mjs",
   );
+}
+
+function verifyB1b2aSuccessorTools() {
+  const listed = runGit([
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+    "scripts",
+  ]);
+  assert(
+    "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    listed.status === 0,
+    `successor path inventory failed: ${listed.stderr}`,
+  );
+  const candidates = listed.stdout
+    .split(/\r?\n/u)
+    .filter((file) => file.includes("m2-p2-b1-b2-a"));
+  assert(
+    "M2_B1_B2_A_SUCCESSOR_PATH_GATE",
+    candidates.every((file) => b1b2aSuccessorScriptPaths.has(file)),
+    `non-exact B1-B2-A successor path found: ${JSON.stringify(candidates)}`,
+  );
+
+  const builtins = new Set(
+    builtinModules.flatMap((name) => [
+      name,
+      name.startsWith("node:") ? name : `node:${name}`,
+    ]),
+  );
+  const forbiddenNetworkBuiltins = new Set(
+    ["http", "http2", "https", "net", "tls", "dns", "dgram"].flatMap(
+      (name) => [name, `node:${name}`],
+    ),
+  );
+  const allowedLocalPaths = new Set([
+    ...authorizedSuccessorScriptPaths,
+    ...b1b2aSuccessorScriptPaths,
+  ]);
+  for (const file of b1b2aSuccessorScriptPaths) {
+    if (!existsSync(absolute(file))) continue;
+    const text = canonicalText(file);
+    for (const specifier of moduleSpecifiers(text)) {
+      if (builtins.has(specifier)) {
+        const allowedNetworkBuiltin =
+          file === b1b2aCapabilityPaths.https &&
+          (specifier === "node:https" || specifier === "node:tls");
+        assert(
+          "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+          !forbiddenNetworkBuiltins.has(specifier) ||
+            allowedNetworkBuiltin,
+          `${file}: forbidden network built-in ${specifier}`,
+        );
+        const childProcess =
+          specifier === "child_process" ||
+          specifier === "node:child_process";
+        assert(
+          "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+          !childProcess ||
+            (file === b1b2aCapabilityPaths.childProcess &&
+              specifier === "node:child_process"),
+          `${file}: child_process is confined to the exact execution guard`,
+        );
+        continue;
+      }
+      const resolved = specifier.startsWith(".")
+        ? path.posix.normalize(
+            path.posix.join(path.posix.dirname(file), specifier),
+          )
+        : null;
+      assert(
+        "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+        resolved !== null && allowedLocalPaths.has(resolved),
+        `${file}: import is not an exact B1-B2-A or B1-B1 peer: ${specifier}`,
+      );
+    }
+    assert(
+      "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+      !/\bprocess\.env(?:\.|\[)/u.test(text) ||
+        file === b1b2aCapabilityPaths.environment,
+      `${file}: environment access is confined to the exact environment provider`,
+    );
+    assert(
+      "M2_B1_B2_A_SUCCESSOR_ISOLATION_GATE",
+      !text.includes(openAiApiKeyVariableName) ||
+        file === b1b2aCapabilityPaths.environment,
+      `${file}: ${openAiApiKeyVariableName} is confined to the exact environment provider`,
+    );
+  }
 }
 
 function verifyContracts(evidence) {
@@ -749,6 +1033,7 @@ try {
   const evidence = await buildProviderAdapterEvidence();
   const manifest = readJson("evals/calibration/b1b1/report-manifest-v1.json");
   verifyExactScope(manifest);
+  verifyB1b2aSuccessorTools();
   const contracts = verifyContracts(evidence);
   verifyRequests(evidence, contracts.requestProfile);
   verifyResponses(evidence);
