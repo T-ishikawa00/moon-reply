@@ -152,3 +152,18 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 ## Next Authorization Gate
 
 Milestone 1 is closed. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, and M2-P2-B1-B1 are Human / ChatGPT accepted and complete. The next authorization gates are M2-P2-B1-B2-A live HTTP executor/environment secret binding and, separately, M2-P2-B1-B2-B paid one-case calibration execution. Both remain unauthorized and not started. Until separately authorized, no API call, provider execution, environment-secret read, spend, product or baseline model selection, database, or runtime work is authorized. Development-70 cost is evaluation cost, not one customer report cost; no 14-case or 70-case API execution is authorized.
+# M2-P2-B1-B2-A handoff
+
+- Branch: `design/m2-p2-b1-b2-a-live-bindings`
+- Correction commit: `fa222917f0e6ff4a4e25d11da239717c062af6d0`
+- Implementation scope: exact 41 paths, A37/M4/D0
+- Blocked stop: `HUMAN_APPROVAL_MISSING`
+- Case/model/stages: `WAIT-003` / `gpt-5.6-luna` / PB-01 through PB-06
+- Historical static cap: USD 0.213223
+- Live guard: recompute from exact registered B1-B1 envelopes; must be at or below USD 0.30
+- Future Human ceiling: USD 1.00
+- Current actual counts: environment reads 0, secret resolutions 0, HTTPS requests 0, provider calls 0, API spend USD 0
+- Automated validation: complete, including 40/40 deterministic failure scenarios and repeated byte-identical evidence generation
+- Review/acceptance: Human / ChatGPT review pending; acceptance pending
+
+M2-P2-B1-B2-B is not authorized. Do not create or configure an API key, Project, billing, or true approval record; do not execute the API; do not merge main or create a PR under this task.

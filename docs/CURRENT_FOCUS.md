@@ -181,3 +181,10 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 ## Next Authorization Gate
 
 Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, and M2-P2-B1-B1 are Human / ChatGPT accepted and complete. Accepted B1-B1 provides network-disabled local provider-protocol evidence for `WAIT-003`, `gpt-5.6-luna`, and PB-01 through PB-06 only; request previews are not API requests, synthetic Responses are not provider Responses, parsed usage is synthetic, and cost examples are not billed cost. Provider compatibility, model availability, actual input/output/reasoning tokens, latency, billing, and model quality remain unknown. Actual secret resolutions, executor calls, provider calls, and API spend remain zero. No HTTP executor or environment secret provider exists. The next authorization gates are M2-P2-B1-B2-A live executor/secret binding and, separately, M2-P2-B1-B2-B paid one-case calibration; both are unauthorized and not started. No API connection, spend, environment-secret read, product-model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.
+# Current focus: M2-P2-B1-B2-A review
+
+The active bounded slice is Human / ChatGPT review of the automated-green dormant live-binding foundation. The exact implementation scope is 41 files (A37/M4/D0) after the separate seven-file historical-scope correction.
+
+The only runnable B1-B2-A command is the dormant preflight. It stops with `HUMAN_APPROVAL_MISSING` and reports zero real environment reads, secret resolutions, HTTPS requests, provider calls, child-process calls, and spend. All required automated gates are green; this does not constitute Human / ChatGPT acceptance.
+
+Do not begin M2-P2-B1-B2-B, create/configure an API key, configure Project/billing, execute the OpenAI API, select a product/baseline model, or widen into retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, or real-user execution.

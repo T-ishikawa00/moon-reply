@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-a/live-binding-contract.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "source_b0_contract_hash",
+    "case_id",
+    "model",
+    "product_or_baseline_model_selected",
+    "provider_stages",
+    "approval_state",
+    "actual_execution",
+    "required_blocked_stop_code"
+  ],
+  "properties": {
+    "schema_version": { "const": "m2-p2-b1-b2-a-live-binding-contract-v1" },
+    "task_id": { "const": "M2-P2-B1-B2-A" },
+    "task_name": { "type": "string" },
+    "source_b0_contract_hash": { "const": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2" },
+    "accepted_provider_adapter_task": { "const": "M2-P2-B1-B1" },
+    "case_id": { "const": "WAIT-003" },
+    "model": { "const": "gpt-5.6-luna" },
+    "model_role": { "const": "calibration_candidate_only" },
+    "product_or_baseline_model_selected": { "const": false },
+    "provider_stages": {
+      "const": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
+    },
+    "maximum_future_provider_calls": { "const": 6 },
+    "approval_state": {
+      "type": "object",
+      "required": ["approval_record_present", "live_execution_authorized", "paid_run_authorized", "paid_run_completed"],
+      "properties": {
+        "approval_record_present": { "const": false },
+        "live_execution_authorized": { "const": false },
+        "paid_run_authorized": { "const": false },
+        "paid_run_completed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "actual_execution": {
+      "type": "object",
+      "required": ["environment_reads", "secret_resolutions", "https_requests", "provider_calls", "api_spend_usd"],
+      "properties": {
+        "environment_reads": { "const": 0 },
+        "secret_resolutions": { "const": 0 },
+        "https_requests": { "const": 0 },
+        "provider_calls": { "const": 0 },
+        "api_spend_usd": { "const": 0 }
+      },
+      "additionalProperties": false
+    },
+    "required_blocked_stop_code": { "const": "HUMAN_APPROVAL_MISSING" },
+    "automatic_transition_to_b1_b2_b": { "const": false },
+    "retry_allowed": { "const": false },
+    "repair_allowed": { "const": false },
+    "fallback_allowed": { "const": false },
+    "batch_allowed": { "const": false },
+    "pb_07_allowed": { "const": false },
+    "holdout_execution_allowed": { "const": false },
+    "real_user_execution_allowed": { "const": false }
+  },
+  "additionalProperties": false
+}

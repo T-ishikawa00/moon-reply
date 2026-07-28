@@ -230,3 +230,10 @@ These are candidates, not approved immediate tasks.
 No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins.
 
 Each milestone must be planned, implemented where applicable, validated, committed as bounded work, and accepted by Human. A roadmap update does not itself authorize implementation. Changes to milestone order, completion definition, price, age policy, safety-before-payment rule, provider choice, or MVP scope require explicit Human approval and an update to the controlling documents.
+# M2-P2-B1-B2-A dormant live-binding checkpoint (2026-07-28)
+
+- Dormant OpenAI HTTPS, environment-secret, Human approval, one-time authorization, artifact, Git, redaction, and live-budget bindings are implemented on `design/m2-p2-b1-b2-a-live-bindings`.
+- `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, the B0 hash, and the six-call maximum remain fixed. No product or baseline model is selected.
+- Live and paid authorization remain false. The accepted blocked result is `HUMAN_APPROVAL_MISSING`; actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero.
+- Automated validation is complete; Human / ChatGPT review and acceptance remain pending.
+- M2-P2-B1-B2-B, OpenAI Project/billing/key setup, paid execution, retry, Repair, fallback, Batch, PB-07, holdout, and real-user execution remain unauthorized.

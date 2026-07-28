@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-a/one-time-run-contract.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "future_location_type",
+    "marker_bound_to_approval_id",
+    "atomic_create_before_first_https_request",
+    "existing_marker_stop_code",
+    "b1_b2_a_filesystem",
+    "real_marker_created"
+  ],
+  "properties": {
+    "schema_version": { "const": "m2-p2-b1-b2-a-one-time-run-contract-v1" },
+    "future_location_type": { "const": "outside_repository" },
+    "marker_bound_to_approval_id": { "const": true },
+    "atomic_create_before_first_https_request": { "const": true },
+    "existing_marker_stop_code": { "const": "AUTHORIZATION_ALREADY_CONSUMED" },
+    "deletion_or_reuse_during_run_allowed": { "const": false },
+    "crash_requires_new_human_approval": { "const": true },
+    "retry_under_same_approval_allowed": { "const": false },
+    "marker_allowed_fields": {
+      "const": ["approval_id", "approval_hash", "runner_commit_sha", "confirmation_hash", "status"]
+    },
+    "api_key_in_marker_allowed": { "const": false },
+    "consultation_content_in_marker_allowed": { "const": false },
+    "b1_b2_a_filesystem": { "const": "in_memory" },
+    "real_marker_created": { "const": false }
+  },
+  "additionalProperties": false
+}

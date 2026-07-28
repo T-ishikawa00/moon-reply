@@ -1,0 +1,31 @@
+{
+  "schema_version": "m2-p2-b1-b2-a-executor-binding-matrix-v1",
+  "binding": {
+    "protocol": "https:",
+    "host": "api.openai.com",
+    "port": 443,
+    "method": "POST",
+    "path": "/v1/responses",
+    "minimum_tls": "TLSv1.2",
+    "redirects_allowed": false,
+    "proxy_environment_used": false,
+    "connection_reuse": false,
+    "timeout_ms": 180000,
+    "maximum_request_body_bytes": 2097152,
+    "maximum_response_body_bytes": 4194304,
+    "successful_status": 200
+  },
+  "injected_fake_request_implementation": true,
+  "authorization_construction_confined_to_executor": true,
+  "fake_result_status_code": 200,
+  "fake_metrics": {
+    "fake_request_invocations": 1,
+    "actual_https_requests": 0
+  },
+  "actual_metrics": {
+    "actual_https_requests": 0
+  },
+  "caller_overrides_allowed": false,
+  "retry_allowed": false,
+  "fallback_allowed": false
+}

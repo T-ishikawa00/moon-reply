@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-a/artifact-contract.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "future_location",
+    "b1_b2_a_filesystem",
+    "real_directory_created",
+    "future_files",
+    "fail_closed_redaction",
+    "prohibited_content"
+  ],
+  "properties": {
+    "schema_version": { "const": "m2-p2-b1-b2-a-artifact-contract-v1" },
+    "future_location": { "type": "string" },
+    "b1_b2_a_filesystem": { "const": "in_memory" },
+    "real_directory_created": { "const": false },
+    "future_files": { "type": "array", "minItems": 11, "maxItems": 11, "uniqueItems": true },
+    "fail_closed_redaction": { "const": true },
+    "secret_policy_stop_code": { "const": "ARTIFACT_SECRET_POLICY_VIOLATION" },
+    "prohibited_content": { "type": "array", "minItems": 13, "maxItems": 13, "uniqueItems": true }
+  },
+  "additionalProperties": false
+}

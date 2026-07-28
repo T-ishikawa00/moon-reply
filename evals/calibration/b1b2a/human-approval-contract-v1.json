@@ -1,0 +1,52 @@
+{
+  "schema_version": "m2-p2-b1-b2-a-human-approval-contract-v1",
+  "current_state": {
+    "approval_record_present": false,
+    "live_execution_authorized": false,
+    "paid_run_authorized": false,
+    "paid_run_completed": false,
+    "api_spend_usd": 0
+  },
+  "future_b1_b2_b_required_fields": [
+    "approval_id",
+    "live_execution_authorized",
+    "paid_run_authorized",
+    "one_time_only",
+    "approved_runner_commit_sha",
+    "approved_contract_hash",
+    "approved_case",
+    "approved_model",
+    "approved_stages",
+    "max_provider_calls",
+    "absolute_ceiling_usd",
+    "preflight_ceiling_usd",
+    "exact_request_hashes",
+    "price_snapshot_verified_at",
+    "approval_created_at",
+    "approval_expires_at",
+    "one_time_confirmation_hash",
+    "human_chatgpt_decision_reference"
+  ],
+  "fixed_future_values": {
+    "live_execution_authorized": true,
+    "paid_run_authorized": true,
+    "one_time_only": true,
+    "approved_contract_hash": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2",
+    "approved_case": "WAIT-003",
+    "approved_model": "gpt-5.6-luna",
+    "approved_stages": [
+      "PB-01",
+      "PB-02",
+      "PB-03",
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "max_provider_calls": 6,
+    "absolute_ceiling_usd": 1,
+    "preflight_ceiling_usd": 0.3
+  },
+  "cli_flag_can_create_approval": false,
+  "environment_value_can_create_approval": false,
+  "config_edit_can_create_approval": false
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "m2-p2-b1-b2-a-artifact-contract-v1",
+  "future_location": "%LOCALAPPDATA%/moon-reply/calibration-runs/<run_id>/",
+  "b1_b2_a_filesystem": "in_memory",
+  "real_directory_created": false,
+  "future_files": [
+    "run-manifest.json",
+    "stage-records.json",
+    "gate-results.json",
+    "cost-summary.json",
+    "calibration-summary.md",
+    "outputs/PB-01.json",
+    "outputs/PB-02.json",
+    "outputs/PB-03.json",
+    "outputs/PB-04.json",
+    "outputs/PB-05.json",
+    "outputs/PB-06.json"
+  ],
+  "fail_closed_redaction": true,
+  "secret_policy_stop_code": "ARTIFACT_SECRET_POLICY_VIOLATION",
+  "prohibited_content": [
+    "api_key",
+    "authorization_header",
+    "environment_dump",
+    "raw_secret_handle",
+    "raw_http_error_body",
+    "internal_reasoning_text",
+    "chain_of_thought",
+    "holdout_data",
+    "real_user_data",
+    "absolute_repository_path",
+    "username",
+    "hostname",
+    "pid"
+  ]
+}

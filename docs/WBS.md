@@ -660,3 +660,17 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 ## Blocked Future Work
 
 M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 through M2-P2-B1-B1 are Human / ChatGPT accepted and complete. M2-P2-B1-B2-A live HTTP/secret binding, M2-P2-B1-B2-B paid execution, Milestone 2 runtime, model selection, API connection, DB work, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.
+# M2-P2-B1-B2-A Dormant Live Binding Foundation
+
+- [x] Freeze accepted B1-B1 to exact historical 39-file scope.
+- [x] Register exact twelve successor script paths and three capability owners.
+- [x] Define dormant live-binding, approval, secret, HTTPS, one-time, artifact, Git, redaction, and budget contracts.
+- [x] Implement fixture/in-memory bindings with no import-time side effects.
+- [x] Fix live and paid authorization to false and block on `HUMAN_APPROVAL_MISSING`.
+- [x] Define exact 40 failure-injection scenarios.
+- [x] Run B1-B2-A, predecessor M2, M1, typecheck, lint, build, and diff gates.
+- [ ] Commit/push the exact 41-file implementation manifest.
+- [ ] Complete independent Human / ChatGPT review and acceptance.
+- [ ] Separately authorize M2-P2-B1-B2-B, if ever approved.
+
+OpenAI Project/billing/key setup, API execution, retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, real-user execution, and product/baseline model selection are outside this WBS slice.

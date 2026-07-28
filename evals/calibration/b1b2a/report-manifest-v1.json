@@ -1,0 +1,198 @@
+{
+  "schema_version": "m2-p2-b1-b2-a-report-manifest-v1",
+  "task_id": "M2-P2-B1-B2-A",
+  "implementation_manifest": [
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_DORMANT_LIVE_BINDING_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_EXECUTION_SECURITY_AND_BUDGET_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_A_API_PROJECT_AND_KEY_HANDOFF.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_B2_A_REVIEW.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/live-binding-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/secret-provider-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/https-executor-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/human-approval-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/one-time-run-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/artifact-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/live-binding-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/secret-provider-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/https-executor-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/human-approval-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/one-time-run-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/artifact-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/live-preflight-preview-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/secret-boundary-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/executor-binding-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/failure-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2a/reports/dormant-live-binding-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-b2-a-live-bindings.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b2-a-preflight-blocked.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-b2-a-live-bindings.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-live-runner.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-human-approval.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-env-secret-provider.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-https-executor.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-one-time-authorization.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-artifact-bundle.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-runtime-redaction.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-budget-guard.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-a-execution-guard.mjs"
+    }
+  ],
+  "reports": [
+    {
+      "path": "evals/calibration/b1b2a/reports/live-preflight-preview-v1.json",
+      "sha256": "07f38d8241c67b00b65ebfbbb209d285673968a27caa22a61b1f0323490e0b8d"
+    },
+    {
+      "path": "evals/calibration/b1b2a/reports/secret-boundary-matrix-v1.json",
+      "sha256": "a9cfaf89976c25fc7a7428b2bc012e7ec6a497a006066d91d8d116c2cbdba2b1"
+    },
+    {
+      "path": "evals/calibration/b1b2a/reports/executor-binding-matrix-v1.json",
+      "sha256": "c09ff6bb1f648b5c06e6af7acecaf03f9a15aa63618f95f03f322bbddf6e720c"
+    },
+    {
+      "path": "evals/calibration/b1b2a/reports/failure-matrix-v1.json",
+      "sha256": "80128d32c5819576b68ddabb050c7caa62c63ae2c75c9aace1615ee2e2addfcb"
+    },
+    {
+      "path": "evals/calibration/b1b2a/reports/dormant-live-binding-summary-v1.md",
+      "sha256": "cad75aeb8d99d4acd311a4baf35a95a7eb4aad32ec5c6c6381da8f8172936b4e"
+    }
+  ],
+  "deterministic": true,
+  "actual_environment_reads": 0,
+  "actual_secret_resolutions": 0,
+  "actual_https_requests": 0,
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0
+}

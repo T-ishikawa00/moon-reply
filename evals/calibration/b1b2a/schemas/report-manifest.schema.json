@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-a/report-manifest.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "implementation_manifest",
+    "reports",
+    "deterministic",
+    "actual_environment_reads",
+    "actual_secret_resolutions",
+    "actual_https_requests",
+    "actual_provider_calls",
+    "api_spend_usd"
+  ],
+  "properties": {
+    "schema_version": { "const": "m2-p2-b1-b2-a-report-manifest-v1" },
+    "task_id": { "const": "M2-P2-B1-B2-A" },
+    "implementation_manifest": {
+      "type": "array",
+      "minItems": 41,
+      "maxItems": 41,
+      "items": {
+        "type": "object",
+        "required": ["status", "path"],
+        "properties": {
+          "status": { "enum": ["A", "M"] },
+          "path": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reports": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "deterministic": { "const": true },
+    "actual_environment_reads": { "const": 0 },
+    "actual_secret_resolutions": { "const": 0 },
+    "actual_https_requests": { "const": 0 },
+    "actual_provider_calls": { "const": 0 },
+    "api_spend_usd": { "const": 0 }
+  },
+  "additionalProperties": false
+}

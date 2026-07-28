@@ -1,0 +1,21 @@
+{
+  "schema_version": "m2-p2-b1-b2-a-one-time-run-contract-v1",
+  "future_location_type": "outside_repository",
+  "marker_bound_to_approval_id": true,
+  "atomic_create_before_first_https_request": true,
+  "existing_marker_stop_code": "AUTHORIZATION_ALREADY_CONSUMED",
+  "deletion_or_reuse_during_run_allowed": false,
+  "crash_requires_new_human_approval": true,
+  "retry_under_same_approval_allowed": false,
+  "marker_allowed_fields": [
+    "approval_id",
+    "approval_hash",
+    "runner_commit_sha",
+    "confirmation_hash",
+    "status"
+  ],
+  "api_key_in_marker_allowed": false,
+  "consultation_content_in_marker_allowed": false,
+  "b1_b2_a_filesystem": "in_memory",
+  "real_marker_created": false
+}

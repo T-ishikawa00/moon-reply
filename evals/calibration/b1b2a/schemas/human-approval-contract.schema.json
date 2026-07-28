@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b/future-human-approval.schema.json",
+  "title": "Future M2-P2-B1-B2-B one-time paid approval record",
+  "type": "object",
+  "required": [
+    "approval_id",
+    "live_execution_authorized",
+    "paid_run_authorized",
+    "one_time_only",
+    "approved_runner_commit_sha",
+    "approved_contract_hash",
+    "approved_case",
+    "approved_model",
+    "approved_stages",
+    "max_provider_calls",
+    "absolute_ceiling_usd",
+    "preflight_ceiling_usd",
+    "exact_request_hashes",
+    "price_snapshot_verified_at",
+    "approval_created_at",
+    "approval_expires_at",
+    "one_time_confirmation_hash",
+    "human_chatgpt_decision_reference"
+  ],
+  "properties": {
+    "approval_id": { "type": "string", "minLength": 1 },
+    "live_execution_authorized": { "const": true },
+    "paid_run_authorized": { "const": true },
+    "one_time_only": { "const": true },
+    "approved_runner_commit_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "approved_contract_hash": { "const": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2" },
+    "approved_case": { "const": "WAIT-003" },
+    "approved_model": { "const": "gpt-5.6-luna" },
+    "approved_stages": { "const": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"] },
+    "max_provider_calls": { "const": 6 },
+    "absolute_ceiling_usd": { "const": 1 },
+    "preflight_ceiling_usd": { "const": 0.3 },
+    "exact_request_hashes": {
+      "type": "object",
+      "required": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+      "properties": {
+        "PB-01": { "$ref": "#/$defs/request_hash_pair" },
+        "PB-02": { "$ref": "#/$defs/request_hash_pair" },
+        "PB-03": { "$ref": "#/$defs/request_hash_pair" },
+        "PB-04": { "$ref": "#/$defs/request_hash_pair" },
+        "PB-05": { "$ref": "#/$defs/request_hash_pair" },
+        "PB-06": { "$ref": "#/$defs/request_hash_pair" }
+      },
+      "additionalProperties": false
+    },
+    "price_snapshot_verified_at": { "type": "string", "format": "date-time" },
+    "approval_created_at": { "type": "string", "format": "date-time" },
+    "approval_expires_at": { "type": "string", "format": "date-time" },
+    "one_time_confirmation_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "human_chatgpt_decision_reference": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "request_hash_pair": {
+      "type": "object",
+      "required": [
+        "request_body_sha256",
+        "request_contract_sha256"
+      ],
+      "properties": {
+        "request_body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "request_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
