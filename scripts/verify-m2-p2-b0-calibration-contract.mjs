@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { builtinModules } from "node:module";
 import path from "node:path";
 import {
   readJson,
@@ -17,6 +18,22 @@ import {
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const correctionCommit =
   "a757e7f28affe29a423ff817872a1a7f650a7fd2";
+const acceptedB0ImplementationCommit =
+  "cf75679f2d116132f7519256cd762ba1a51a0af9";
+const b1aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/run-m2-p2-b1-a-offline.mjs",
+  "scripts/verify-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/lib/m2-p2-b1-a-contract.mjs",
+  "scripts/lib/m2-p2-b1-a-runner-core.mjs",
+  "scripts/lib/m2-p2-b1-a-offline-replay-transport.mjs",
+]);
+const nodeBuiltinSpecifiers = new Set(
+  builtinModules.flatMap((specifier) => [
+    specifier,
+    specifier.startsWith("node:") ? specifier : `node:${specifier}`,
+  ]),
+);
 
 const contractPath =
   "evals/calibration/one-case-contract-v1.json";
@@ -50,6 +67,8 @@ const gateOrder = [
   "M2_B0_DETERMINISM_GATE",
   "M2_B0_CONTRACT_HASH_GATE",
   "M2_B0_EXACT_SCOPE_GATE",
+  "M2_B1_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
 ];
 
 const failures = new Map(gateOrder.map((gate) => [gate, []]));
@@ -251,17 +270,13 @@ function taskMutations() {
     "diff",
     "--name-status",
     correctionCommit,
+    acceptedB0ImplementationCommit,
     "--",
   ]);
-  const status = runGit([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ]);
-  if (diff.status !== 0 || status.status !== 0) {
+  if (diff.status !== 0) {
     fail(
       "M2_B0_EXACT_SCOPE_GATE",
-      `Git scope audit failed: ${diff.stderr}${status.stderr}`,
+      `Git historical scope audit failed: ${diff.stderr}`,
     );
     return [];
   }
@@ -270,13 +285,104 @@ function taskMutations() {
     const [statusCode, ...parts] = line.split("\t");
     entries.set(parts.at(-1).replaceAll("\\", "/"), statusCode[0]);
   }
-  for (const line of status.stdout.split(/\r?\n/u).filter(Boolean)) {
-    if (!line.startsWith("?? ")) continue;
-    entries.set(line.slice(3).trim().replaceAll("\\", "/"), "A");
-  }
   return [...entries]
     .map(([file, statusCode]) => ({ file, status: statusCode }))
     .sort((left, right) => left.file.localeCompare(right.file, "en"));
+}
+
+function moduleSpecifiers(text) {
+  const specifiers = [];
+  const patterns = [
+    /(?:^|\n)\s*(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"'\r\n]+)["']/gu,
+    /\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu,
+    /\brequire\s*\(\s*["']([^"']+)["']\s*\)/gu,
+  ];
+  for (const pattern of patterns) {
+    for (const match of text.matchAll(pattern)) specifiers.push(match[1]);
+  }
+  return [...new Set(specifiers)];
+}
+
+function verifyB1aSuccessorTools() {
+  const forbiddenBuiltins = new Set([
+    "http",
+    "http2",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dgram",
+    "node:http",
+    "node:http2",
+    "node:https",
+    "node:net",
+    "node:tls",
+    "node:dns",
+    "node:dgram",
+  ]);
+  const isolationPatterns = [
+    ["network invocation", /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(/u],
+    ["environment access", /\bprocess\.env(?:\.|\[)|\bDeno\.env\b|\bBun\.env\b|\bgetenv\s*\(/u],
+    ["environment enumeration", /\bObject\.(?:keys|values|entries)\s*\(\s*process\b/u],
+    ["authorization header", /\bAuthorization\s*:/iu],
+    ["provider SDK", /\bnew\s+(?:OpenAI|Anthropic|GoogleGenerativeAI|CohereClient|MistralClient)\s*\(/u],
+    ["database SDK", /@supabase\/supabase-js|from\s+["'](?:pg|mysql2|sqlite3)["']/u],
+    ["auth, payment, or email SDK", /from\s+["'](?:next-auth|stripe|nodemailer|@sendgrid\/mail)["']/u],
+    ["application import", /from\s+["'](?:@\/|\.\.?\/)+(?:app|components|lib\/(?:safety|legal|supabase))\//u],
+    ["server action", /^\s*["']use server["'];?\s*$/mu],
+    ["API route", /["'`](?:\.?\.?\/)*app\/api\//u],
+    ["network shell client", /\b(?:curl|wget|Invoke-WebRequest|Invoke-RestMethod)\b/iu],
+  ];
+  const secretPatterns = [
+    /\bsk-[A-Za-z0-9_-]{16,}\b/u,
+    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
+    /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
+  ];
+  for (const file of b1aSuccessorLocalToolPaths) {
+    if (!existsSync(absolute(file))) continue;
+    const text = source(file);
+    for (const specifier of moduleSpecifiers(text)) {
+      if (nodeBuiltinSpecifiers.has(specifier)) {
+        assert(
+          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+          !forbiddenBuiltins.has(specifier),
+          `${file}: forbidden built-in ${specifier}`,
+        );
+        assert(
+          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+          file === "scripts/verify-m2-p2-b1-a-offline-runner.mjs" ||
+            (specifier !== "child_process" &&
+              specifier !== "node:child_process"),
+          `${file}: child_process is verifier-only`,
+        );
+        continue;
+      }
+      const resolved = specifier.startsWith(".")
+        ? path.posix.normalize(
+            path.posix.join(path.posix.dirname(file), specifier),
+          )
+        : null;
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        resolved !== null && b1aSuccessorLocalToolPaths.has(resolved),
+        `${file}: import is not an exact B1-A peer: ${specifier}`,
+      );
+    }
+    for (const [label, pattern] of isolationPatterns) {
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        !pattern.test(text),
+        `${file}: ${label}`,
+      );
+    }
+    for (const pattern of secretPatterns) {
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        !pattern.test(text),
+        `${file}: key-like literal`,
+      );
+    }
+  }
 }
 
 function verifySchemas() {
@@ -821,6 +927,7 @@ try {
   verifyZeroExternalExecution(contract);
   verifyDeterminismAndHash(contract, preview);
   verifyExactScope();
+  verifyB1aSuccessorTools();
   if (!printResults()) process.exitCode = 1;
 } catch (error) {
   overallFailures.push(

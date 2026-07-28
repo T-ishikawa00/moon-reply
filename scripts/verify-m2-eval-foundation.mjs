@@ -21,12 +21,21 @@ const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
 const canonicalContrastCatalogHash =
   "97458b7f9a6f7d15f48290ade8355fecdc33d8ce3824f42d1be8c9bc5f68cf89";
+const b1aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/run-m2-p2-b1-a-offline.mjs",
+  "scripts/verify-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/lib/m2-p2-b1-a-contract.mjs",
+  "scripts/lib/m2-p2-b1-a-runner-core.mjs",
+  "scripts/lib/m2-p2-b1-a-offline-replay-transport.mjs",
+]);
 const successorLocalToolPaths = new Set([
   "scripts/render-m2-dry-run-requests.mjs",
   "scripts/estimate-m2-static-costs.mjs",
   "scripts/verify-m2-zero-cost-estimator.mjs",
   "scripts/prepare-m2-p2-b0-calibration-contract.mjs",
   "scripts/verify-m2-p2-b0-calibration-contract.mjs",
+  ...b1aSuccessorLocalToolPaths,
 ]);
 const nodeBuiltinSpecifiers = new Set(
   builtinModules.flatMap((specifier) => [
@@ -61,6 +70,8 @@ const gateOrder = [
   "M2_EXACT_MANIFEST_GATE",
   "M2_SUCCESSOR_LOCAL_TOOL_PATH_GATE",
   "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE",
+  "M2_B1_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
@@ -3277,6 +3288,18 @@ function verifySuccessorLocalTools(paths) {
     candidate.startsWith("scripts/"),
   )) {
     if (
+      item.includes("m2-p2-b1-a") &&
+      !b1aSuccessorLocalToolPaths.has(item)
+    ) {
+      fail("M2_B1_A_SUCCESSOR_PATH_GATE", {
+        file: item,
+        pathName: "$",
+        invariant: "B1-A successor path is one exact Human-authorized path",
+        expected: [...b1aSuccessorLocalToolPaths],
+        actual: item,
+      });
+    }
+    if (
       !historicalScriptPaths.has(item) &&
       !successorLocalToolPaths.has(item)
     ) {
@@ -3360,11 +3383,14 @@ function verifySuccessorLocalTools(paths) {
 
   for (const file of successorLocalToolPaths) {
     if (!existsSync(absolute(file))) continue;
+    const isolationGate = b1aSuccessorLocalToolPaths.has(file)
+      ? "M2_B1_A_SUCCESSOR_ISOLATION_GATE"
+      : "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE";
     const source = readFileSync(absolute(file), "utf8");
     for (const specifier of moduleSpecifiers(source)) {
       if (nodeBuiltinSpecifiers.has(specifier)) {
         if (forbiddenNetworkBuiltins.has(specifier)) {
-          fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+          fail(isolationGate, {
             file,
             pathName: "$.imports",
             invariant: "network built-in import is absent",
@@ -3376,7 +3402,7 @@ function verifySuccessorLocalTools(paths) {
       }
       const localImport = resolveSuccessorLocalImport(file, specifier);
       if (localImport && successorLocalToolPaths.has(localImport)) continue;
-      fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+      fail(isolationGate, {
         file,
         pathName: "$.imports",
         invariant:
@@ -3387,7 +3413,7 @@ function verifySuccessorLocalTools(paths) {
     }
     for (const [label, pattern] of isolationPatterns) {
       if (pattern.test(source)) {
-        fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+        fail(isolationGate, {
           file,
           pathName: "$",
           invariant: `${label} absent`,
@@ -3398,7 +3424,7 @@ function verifySuccessorLocalTools(paths) {
     }
     for (const pattern of secretPatterns) {
       if (pattern.test(source)) {
-        fail("M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE", {
+        fail(isolationGate, {
           file,
           pathName: "$",
           invariant: "key or secret material absent",
@@ -3406,6 +3432,23 @@ function verifySuccessorLocalTools(paths) {
           actual: pattern.source,
         });
       }
+    }
+    if (
+      b1aSuccessorLocalToolPaths.has(file) &&
+      file !== "scripts/verify-m2-p2-b1-a-offline-runner.mjs" &&
+      moduleSpecifiers(source).some(
+        (specifier) =>
+          specifier === "child_process" ||
+          specifier === "node:child_process",
+      )
+    ) {
+      fail("M2_B1_A_SUCCESSOR_ISOLATION_GATE", {
+        file,
+        pathName: "$.imports",
+        invariant: "child_process is confined to the exact B1-A verifier",
+        expected: "no child_process import",
+        actual: "child_process import",
+      });
     }
   }
 }
@@ -3516,6 +3559,8 @@ function verifyScopeAndProhibitedImplementation() {
   for (const gate of [
     "M2_SUCCESSOR_LOCAL_TOOL_PATH_GATE",
     "M2_SUCCESSOR_LOCAL_TOOL_ISOLATION_GATE",
+    "M2_B1_A_SUCCESSOR_PATH_GATE",
+    "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
   ]) {
     if (failures.get(gate).length > 0) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {

@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { builtinModules } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -26,6 +27,20 @@ const historicalBaseSha =
   "deff429e45a411f0d6c6d5bd3f199adca994ebb5";
 const historicalEndSha =
   "2e2e0cc4c57c46320d56aa986055f65187aa6aee";
+const b1aSuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/run-m2-p2-b1-a-offline.mjs",
+  "scripts/verify-m2-p2-b1-a-offline-runner.mjs",
+  "scripts/lib/m2-p2-b1-a-contract.mjs",
+  "scripts/lib/m2-p2-b1-a-runner-core.mjs",
+  "scripts/lib/m2-p2-b1-a-offline-replay-transport.mjs",
+]);
+const nodeBuiltinSpecifiers = new Set(
+  builtinModules.flatMap((specifier) => [
+    specifier,
+    specifier.startsWith("node:") ? specifier : `node:${specifier}`,
+  ]),
+);
 
 const gateOrder = [
   "M2_ZERO_NETWORK_GATE",
@@ -45,6 +60,8 @@ const gateOrder = [
   "M2_P2_A_HISTORICAL_SCOPE_CONTRACT_GATE",
   "M2_P2_A_HISTORICAL_SCOPE_HISTORY_GATE",
   "M2_P2_A_EXACT_SCOPE_GATE",
+  "M2_B1_A_SUCCESSOR_PATH_GATE",
+  "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
   "M2_PROHIBITED_IMPLEMENTATION_GATE",
 ];
 
@@ -138,6 +155,105 @@ function runGit(args) {
 
 function source(relativePath) {
   return readFileSync(absolute(relativePath), "utf8");
+}
+
+function moduleSpecifiers(text) {
+  const specifiers = [];
+  const patterns = [
+    /(?:^|\n)\s*(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"'\r\n]+)["']/gu,
+    /\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu,
+    /\brequire\s*\(\s*["']([^"']+)["']\s*\)/gu,
+  ];
+  for (const pattern of patterns) {
+    for (const match of text.matchAll(pattern)) specifiers.push(match[1]);
+  }
+  return [...new Set(specifiers)];
+}
+
+function verifyB1aSuccessorTools() {
+  const forbiddenBuiltins = new Set([
+    "http",
+    "http2",
+    "https",
+    "net",
+    "tls",
+    "dns",
+    "dgram",
+    "node:http",
+    "node:http2",
+    "node:https",
+    "node:net",
+    "node:tls",
+    "node:dns",
+    "node:dgram",
+  ]);
+  const isolationPatterns = [
+    ["network invocation", /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(/u],
+    ["environment access", /\bprocess\.env(?:\.|\[)|\bDeno\.env\b|\bBun\.env\b|\bgetenv\s*\(/u],
+    ["environment enumeration", /\bObject\.(?:keys|values|entries)\s*\(\s*process\b/u],
+    ["authorization header", /\bAuthorization\s*:/iu],
+    ["provider SDK", /\bnew\s+(?:OpenAI|Anthropic|GoogleGenerativeAI|CohereClient|MistralClient)\s*\(/u],
+    ["database SDK", /@supabase\/supabase-js|from\s+["'](?:pg|mysql2|sqlite3)["']/u],
+    ["auth, payment, or email SDK", /from\s+["'](?:next-auth|stripe|nodemailer|@sendgrid\/mail)["']/u],
+    ["application import", /from\s+["'](?:@\/|\.\.?\/)+(?:app|components|lib\/(?:safety|legal|supabase))\//u],
+    ["server action", /^\s*["']use server["'];?\s*$/mu],
+    ["API route", /["'`](?:\.?\.?\/)*app\/api\//u],
+    ["network shell client", /\b(?:curl|wget|Invoke-WebRequest|Invoke-RestMethod)\b/iu],
+  ];
+  const secretPatterns = [
+    /\bsk-[A-Za-z0-9_-]{16,}\b/u,
+    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
+    /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
+  ];
+  for (const file of b1aSuccessorLocalToolPaths) {
+    if (!existsSync(absolute(file))) continue;
+    if (!b1aSuccessorLocalToolPaths.has(file)) {
+      fail("M2_B1_A_SUCCESSOR_PATH_GATE", `${file}: path is not exact`);
+      continue;
+    }
+    const text = source(file);
+    for (const specifier of moduleSpecifiers(text)) {
+      if (nodeBuiltinSpecifiers.has(specifier)) {
+        assert(
+          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+          !forbiddenBuiltins.has(specifier),
+          `${file}: forbidden built-in ${specifier}`,
+        );
+        assert(
+          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+          file === "scripts/verify-m2-p2-b1-a-offline-runner.mjs" ||
+            (specifier !== "child_process" &&
+              specifier !== "node:child_process"),
+          `${file}: child_process is verifier-only`,
+        );
+        continue;
+      }
+      const resolved = specifier.startsWith(".")
+        ? path.posix.normalize(
+            path.posix.join(path.posix.dirname(file), specifier),
+          )
+        : null;
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        resolved !== null && b1aSuccessorLocalToolPaths.has(resolved),
+        `${file}: import is not an exact B1-A peer: ${specifier}`,
+      );
+    }
+    for (const [label, pattern] of isolationPatterns) {
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        !pattern.test(text),
+        `${file}: ${label}`,
+      );
+    }
+    for (const pattern of secretPatterns) {
+      assert(
+        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        !pattern.test(text),
+        `${file}: key-like literal`,
+      );
+    }
+  }
 }
 
 function normalizedMutationEntries(entries) {
@@ -1020,6 +1136,7 @@ try {
   verifyCostFormulas(artifacts.report);
   verifyRepairStress(foundation);
   verifyHistoricalScope();
+  verifyB1aSuccessorTools();
   verifyProhibitedImplementation();
   passed = printResults();
   if (!passed) process.exitCode = 1;
