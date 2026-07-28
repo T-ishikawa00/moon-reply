@@ -28,6 +28,19 @@ const b1aSuccessorLocalToolPaths = new Set([
   "scripts/lib/m2-p2-b1-a-runner-core.mjs",
   "scripts/lib/m2-p2-b1-a-offline-replay-transport.mjs",
 ]);
+const b1b1SuccessorLocalToolPaths = new Set([
+  "scripts/prepare-m2-p2-b1-b1-provider-adapter.mjs",
+  "scripts/run-m2-p2-b1-b1-network-blocked.mjs",
+  "scripts/verify-m2-p2-b1-b1-provider-adapter.mjs",
+  "scripts/lib/m2-p2-b1-b1-request-builder.mjs",
+  "scripts/lib/m2-p2-b1-b1-response-parser.mjs",
+  "scripts/lib/m2-p2-b1-b1-usage-ledger.mjs",
+  "scripts/lib/m2-p2-b1-b1-provider-adapter.mjs",
+  "scripts/lib/m2-p2-b1-b1-network-interlock.mjs",
+  "scripts/lib/m2-p2-b1-b1-secret-provider-contract.mjs",
+  "scripts/lib/m2-p2-b1-b1-redaction.mjs",
+  "scripts/lib/m2-p2-b1-b1-artifact-sanitizer.mjs",
+]);
 const nodeBuiltinSpecifiers = new Set(
   builtinModules.flatMap((specifier) => [
     specifier,
@@ -69,6 +82,8 @@ const gateOrder = [
   "M2_B0_EXACT_SCOPE_GATE",
   "M2_B1_A_SUCCESSOR_PATH_GATE",
   "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+  "M2_B1_B1_SUCCESSOR_PATH_GATE",
+  "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
 ];
 
 const failures = new Map(gateOrder.map((gate) => [gate, []]));
@@ -303,7 +318,12 @@ function moduleSpecifiers(text) {
   return [...new Set(specifiers)];
 }
 
-function verifyB1aSuccessorTools() {
+function verifySuccessorTools({
+  paths,
+  isolationGate,
+  verifierPath,
+  boundaryLabel,
+}) {
   const forbiddenBuiltins = new Set([
     "http",
     "http2",
@@ -338,19 +358,19 @@ function verifyB1aSuccessorTools() {
     /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/u,
     /\bBearer\s+[A-Za-z0-9._-]{20,}\b/u,
   ];
-  for (const file of b1aSuccessorLocalToolPaths) {
+  for (const file of paths) {
     if (!existsSync(absolute(file))) continue;
     const text = source(file);
     for (const specifier of moduleSpecifiers(text)) {
       if (nodeBuiltinSpecifiers.has(specifier)) {
         assert(
-          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+          isolationGate,
           !forbiddenBuiltins.has(specifier),
           `${file}: forbidden built-in ${specifier}`,
         );
         assert(
-          "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
-          file === "scripts/verify-m2-p2-b1-a-offline-runner.mjs" ||
+          isolationGate,
+          file === verifierPath ||
             (specifier !== "child_process" &&
               specifier !== "node:child_process"),
           `${file}: child_process is verifier-only`,
@@ -363,26 +383,41 @@ function verifyB1aSuccessorTools() {
           )
         : null;
       assert(
-        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
-        resolved !== null && b1aSuccessorLocalToolPaths.has(resolved),
-        `${file}: import is not an exact B1-A peer: ${specifier}`,
+        isolationGate,
+        resolved !== null && paths.has(resolved),
+        `${file}: import is not an exact ${boundaryLabel} peer: ${specifier}`,
       );
     }
     for (const [label, pattern] of isolationPatterns) {
       assert(
-        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        isolationGate,
         !pattern.test(text),
         `${file}: ${label}`,
       );
     }
     for (const pattern of secretPatterns) {
       assert(
-        "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+        isolationGate,
         !pattern.test(text),
         `${file}: key-like literal`,
       );
     }
   }
+}
+
+function verifyAuthorizedSuccessorTools() {
+  verifySuccessorTools({
+    paths: b1aSuccessorLocalToolPaths,
+    isolationGate: "M2_B1_A_SUCCESSOR_ISOLATION_GATE",
+    verifierPath: "scripts/verify-m2-p2-b1-a-offline-runner.mjs",
+    boundaryLabel: "B1-A",
+  });
+  verifySuccessorTools({
+    paths: b1b1SuccessorLocalToolPaths,
+    isolationGate: "M2_B1_B1_SUCCESSOR_ISOLATION_GATE",
+    verifierPath: "scripts/verify-m2-p2-b1-b1-provider-adapter.mjs",
+    boundaryLabel: "B1-B1",
+  });
 }
 
 function verifySchemas() {
@@ -927,7 +962,7 @@ try {
   verifyZeroExternalExecution(contract);
   verifyDeterminismAndHash(contract, preview);
   verifyExactScope();
-  verifyB1aSuccessorTools();
+  verifyAuthorizedSuccessorTools();
   if (!printResults()) process.exitCode = 1;
 } catch (error) {
   overallFailures.push(
