@@ -1,5 +1,7 @@
 # M2-P2-B1-B1 Network, Secret, and Redaction Policy
 
+Status: Human / ChatGPT accepted and complete at implementation commit `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A live HTTP executor/environment secret binding and M2-P2-B1-B2-B paid execution remain unauthorized and not started.
+
 ## Immutable network lock
 
 The fixed B1-B1 state is:
@@ -40,3 +42,5 @@ No paid-run directory under the future local application-data location is create
 ## Dependency isolation
 
 The ten implementation scripts use Node built-ins and exact B1-B1 peers only. Network built-ins, global network clients, provider/database/auth/payment/email SDKs, application/UI imports, API routes, and server actions are prohibited.
+
+Acceptance preserves the fixed state: no HTTP executor, environment secret provider, global fetch, or direct network client exists; actual secret-resolution, executor, and provider calls remain zero; API spend remains USD 0; and live authorization remains false.

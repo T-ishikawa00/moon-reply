@@ -6,8 +6,21 @@
 - Starting main: `3370fdb3f1629f747d5fdd53adc1da9091ef6536`
 - Scope correction commit: `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`
 - Scope correction message: `fix: prepare historical scope for provider adapter`
+- Implementation commit: `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`
 - Implementation message: `feat: add network-disabled OpenAI provider adapter`
-- Current state: implementation and automated validation complete; Human / ChatGPT final review pending
+- Current state: implementation, automated validation, and Human / ChatGPT final review complete; accepted and complete
+
+## Formal acceptance
+
+- M2-P2-B1-B1-R1 historical-scope and successor-boundary correction: accepted and complete
+- M2-P2-B1-B1 Network-Disabled OpenAI Provider Adapter: accepted and complete
+- OpenAI API calls: 0
+- secret-resolution calls: 0
+- executor calls: 0
+- provider calls: 0
+- API spend: USD 0
+- product model: unselected
+- baseline model: unselected
 
 ## Implemented boundary
 
@@ -35,6 +48,16 @@ No HTTP executor, endpoint host, environment secret provider, live approval, glo
 
 Synthetic receipts are offline protocol evidence only. They do not establish provider availability or compatibility, actual token/reasoning usage, latency, billed cost, refusal behavior, model quality, stability, or Human product quality. Luna remains a calibration candidate only and is not selected as product or baseline.
 
-## Next Human gate
+Request previews are not actual API requests. Synthetic Responses are not provider Responses. Parsed usage is synthetic evidence, and usage-derived cost examples are not billed cost. Model availability and actual input/output/reasoning tokens remain unknown.
 
-Human / ChatGPT review and acceptance of this exact implementation commit is required. M2-P2-B1-B2 would require a separate later authorization covering one reviewed HTTP executor, one reviewed environment secret provider, a separately committed Human approval record, and any paid execution. B1-B2 remains unauthorized and not started.
+## Historical-scope preservation
+
+- B1-A historical scope: `22bbf6f69ad2e21d3d43808e3518970eb1dc48e7..630cde811d63e0304ed528dc2e426400e81506a6`, exactly 30 files, A26/M4/D0
+- B1-B1 implementation scope: exactly 39 files, A35/M4/D0
+- The scopes remain independent.
+- Later acceptance-document changes do not mutate implementation evidence.
+- No wildcard, prefix, or self-authorizing scope exists.
+
+## Next authorization gates
+
+M2-P2-B1-B2-A would require a separate later authorization covering one reviewed HTTP executor, one reviewed environment secret provider, and a separately committed Human approval record. M2-P2-B1-B2-B paid one-case calibration execution requires a further separate authorization. Both remain unauthorized and not started.

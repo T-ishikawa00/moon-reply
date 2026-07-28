@@ -12,8 +12,12 @@
 - Actual executor calls: 0
 - Actual provider calls: 0
 - API spend: USD 0
-- Human / ChatGPT final review: pending
-- M2-P2-B1-B2: unauthorized and not started
+- Human / ChatGPT final review: complete
+- Acceptance: accepted and complete
+- Accepted correction commit: `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`
+- Accepted implementation commit: `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`
+- M2-P2-B1-B2-A live HTTP executor/environment secret binding: unauthorized and not started
+- M2-P2-B1-B2-B paid one-case calibration execution: unauthorized and not started
 
 This task implements provider protocol logic only. It includes no endpoint host, HTTP executor, environment secret provider, provider SDK, live approval, API call, paid run, application runtime, database, authentication, payment, email, API route, server action, or UI integration.
 
@@ -59,3 +63,5 @@ Request-contract validation, approval validation, the immutable network interloc
 ## Evidence meaning
 
 Checked-in evidence uses synthetic raw Response objects. It proves deterministic request construction, strict response parsing, usage-ledger arithmetic, budget guard behavior, redaction, artifact rejection, and fail-closed adapter sequencing. It does not prove provider availability, compatibility, actual usage, latency, billed cost, model quality, or runtime readiness.
+
+Formal acceptance does not change that interpretation: request previews are not actual API requests, synthetic Responses are not provider Responses, parsed usage is synthetic evidence, and usage-derived cost examples are not billed cost. Model availability and actual input, output, and reasoning-token usage also remain unknown.

@@ -1,5 +1,7 @@
 # M2-P2-B1-B1 Request and Response Contract
 
+Status: Human / ChatGPT accepted and complete at implementation commit `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. This acceptance does not authorize M2-P2-B1-B2-A or M2-P2-B1-B2-B.
+
 ## Deterministic request construction
 
 For PB-01 through PB-06, the builder reads the accepted developer Prompt, all accepted shared Prompt assets, the accepted Stage input projection, the accepted output Schema, and the B0 Stage cap. It excludes the oracle, holdout data, real-user data, PB-07, tools, conversation state, previous response state, prompt-cache assumptions, and safety/user identifiers.
@@ -53,3 +55,7 @@ USD 1.00
 ```
 
 The original USD 0.213223 static hard cap must also remain at or below USD 0.30. B1-B1 uses synthetic receipts only and actual spend remains USD 0.
+
+## Accepted evidence interpretation
+
+This contract proves deterministic local request construction and synthetic response handling only. Request previews are not actual API requests, synthetic Responses are not provider Responses, parsed usage is synthetic evidence, and usage-derived cost examples are not billed cost. Provider compatibility, model availability, actual input/output/reasoning tokens, actual latency, actual billing, and model quality remain unknown.
