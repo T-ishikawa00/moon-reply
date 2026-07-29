@@ -2,7 +2,7 @@
 
 ## 1. Classification
 
-The M2-P3-A runtime is an internal development capability for synthetic data. It is not a public data-processing service and is not authorized for real-user or real-person information. M2-P3-A and M2-P3-A-R1 Runtime Security and Transaction Hardening are Human / ChatGPT accepted and complete.
+The M2-P3-A runtime is an internal development capability for synthetic data. It is not a public data-processing service and is not authorized for real-user or real-person information. M2-P3-A and M2-P3-A-R1 Runtime Security and Transaction Hardening are Human / ChatGPT accepted and complete. The local synthetic development environment is in a Human-confirmed configured operational state; no secret value is recorded in this policy.
 
 ## 2. Environment and secret boundary
 
@@ -55,11 +55,11 @@ OpenAI Responses requests use:
 - no `previous_response_id`;
 - no conversation object.
 
-Only the current Stage input and canonical developer Prompt are transmitted when a separately configured development runtime is actually enabled. M2-P3-A automated validation does not transmit either.
+Only the current Stage input and canonical developer Prompt are transmitted in the bounded Human-configured development runtime. M2-P3-A task-time automated validation does not transmit either.
 
 ## 5. Database access
 
-The Supabase binding uses the server-only secret key and disables auth persistence, URL session detection, and token refresh. All four runtime tables enable RLS. No `anon` or `authenticated` policy is created. Browser access is therefore not a supported path; all application access is through the internal Next.js server.
+The Supabase binding uses the server-only secret key and disables auth persistence, URL session detection, and token refresh. Human confirms `moon-reply-dev` has migrations `0002` and `0003` applied, archived `0001` unapplied, migration repair unused, RLS enabled on all four runtime tables, and no `anon` or `authenticated` policy. Browser database access is therefore not a supported path; all application access is through the internal Next.js server.
 
 ## 6. Persisted data
 
@@ -84,6 +84,8 @@ Prohibited:
 - raw provider error bodies;
 - raw request headers or stack traces.
 
+Bounded synthetic records from the successful post-acceptance live E2E exist in the development project. Real-user records and holdout use remain `0`. Live usage is nonzero, but exact aggregate tokens, cost, and call count have not been calculated.
+
 ## 7. Failure behavior
 
 There is no automatic retry, Repair, PB-07, or fallback model. Schema error, model mismatch, semantic rejection, provider error, or persistence error stops the run. A later Stage is never invoked after a failed Stage.
@@ -101,4 +103,4 @@ Final success is atomic. Report insertion, decision-card persistence, run comple
 
 ## 9. Retention and deletion
 
-No production retention policy is authorized. Before any development project is populated, Human must define synthetic-data retention and deletion operations. Public retention, user deletion, access requests, and production privacy operations remain later milestones.
+No production retention policy is authorized or defined. The current bounded follow-up is successful-run DB integrity verification; this reference does not authorize this documentation task to query or mutate the database. Synthetic-data cleanup and retention remain Human-controlled development operations. Public retention, user deletion, access requests, and production privacy operations remain later milestones.

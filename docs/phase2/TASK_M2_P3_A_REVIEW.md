@@ -7,6 +7,7 @@
 - Branch: `feature/m2-p3-a-runtime-vertical-slice`
 - Accepted implementation commit: `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`
 - Accepted R1 commit: `3f1123439dcbc724c70505956aa81fa03a9246ad`
+- Current `main` baseline: `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`
 - Acceptance state: M2-P3-A and M2-P3-A-R1 Human / ChatGPT accepted and complete; Human Visual QA complete
 
 ## Product-path transition
@@ -32,6 +33,8 @@ The active development path is now the real website shape:
 - M2-P3 successor capability manifest.
 
 ## Automated scenario matrix
+
+This is accepted task-time Fake evidence only (`accepted_fake_validation_only`). It is not a statement that post-acceptance live usage remained zero.
 
 The accepted dedicated-verifier evidence covers:
 
@@ -100,8 +103,18 @@ No correction task is created by this acceptance.
 
 ## Prohibited-scope review
 
-Not implemented: payment, RevenueCat, authentication, email, public production release, real-user processing, analytics, download/PDF/share/print, background queue, cron, mobile API, public history, retry, Repair/PB-07, fallback model, Supabase Project setup, API-key creation, or PR creation.
+Not implemented by M2-P3-A: payment, RevenueCat, authentication, email, public production release, real-user processing, analytics, download/PDF/share/print, background queue, cron, mobile API, public history, retry, Repair/PB-07, fallback model, Supabase Project setup, API-key creation, or PR creation. The later Human-operated development setup below is a separate post-acceptance record.
 
-## Human setup gate
+## Post-acceptance Human-configured live E2E record
 
-Human must separately configure server secrets, apply both migrations to a dedicated development project, confirm RLS/no-policy and RPC privilege state, authorize a synthetic-only smoke test, and define cleanup. Until then, live OpenAI and Supabase bindings remain unconfigured. Actual OpenAI calls are zero, actual Supabase calls are zero, API spend is USD 0, and real-user/holdout data counts are zero.
+- Human-confirmed local development operational state on current `main` `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
+- dedicated Supabase project `moon-reply-dev` created;
+- migrations `0002` and `0003` applied; `0001` archived and unapplied; migration repair not used;
+- persistent OpenAI development key configured server-side, internal runtime enabled, and model fixed to `gpt-5.6-luna`;
+- following the R1/R2 Structured Outputs corrections, the synthetic live E2E completed PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display successfully;
+- live OpenAI/Supabase usage is nonzero, but exact aggregate tokens, cost, and call count have not been calculated;
+- real-user records and holdout use remain `0`;
+- M2-P3 Runtime Vertical Slice is accepted and complete; Milestone 2 remains incomplete; and
+- current work is successful-run DB integrity verification, followed by M2-P4 quality evaluation planning.
+
+This post-acceptance Human record is separate from the task-time Fake zero-call/zero-spend evidence. CodeX did not revalidate secret values or query the development database for this documentation synchronization.

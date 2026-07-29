@@ -137,7 +137,15 @@ Accepted automated validation uses only the fake transport and fake repository. 
 - persistence before provider execution;
 - PB-05 failure proving PB-06 is not called.
 
-The verifier records zero actual OpenAI calls, zero actual Supabase calls, USD 0 API spend, and zero real-user records. Live bindings exist structurally but remain unconfigured.
+The verifier records zero actual OpenAI calls, zero actual Supabase calls, USD 0 API spend, and zero real-user records. This remains accepted task-time Fake evidence only (`accepted_fake_validation_only`) and is not a statement about later live usage.
+
+## 9A. Post-acceptance Human-configured live E2E
+
+In a separate Human-confirmed local development operational state, the server-only OpenAI and Supabase bindings were configured for bounded synthetic development use with model `gpt-5.6-luna`; migrations `0002` and `0003` were applied to `moon-reply-dev`, while archived `0001` remained unapplied and migration repair was not used.
+
+After the R1/R2 Structured Outputs corrections, one synthetic live E2E completed PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display successfully. Live OpenAI/Supabase usage is nonzero, but exact aggregate tokens, cost, and call count have not been calculated. Real-user records and holdout use remain zero.
+
+This later record does not change the runtime contract: retry, Repair/PB-07, and fallback remain excluded. M2-P3 Runtime Vertical Slice is accepted and complete, while Milestone 2 remains incomplete.
 
 ## 10. Human Visual QA
 
@@ -158,4 +166,4 @@ Mobile-width QA was intentionally omitted because this route is internal desktop
 
 ## 11. Explicit exclusions
 
-M2-P3-A does not authorize payment, RevenueCat, authentication, email, production/public release, real-user processing, analytics, PDF/download/share/print, background work, queue, cron, mobile API, public history, retry, PB-07/Repair, fallback model, Supabase project setup, API-key creation, or deployment.
+M2-P3-A does not authorize payment, RevenueCat, authentication, email, production/public release, real-user processing, analytics, PDF/download/share/print, background work, queue, cron, mobile API, public history, retry, PB-07/Repair, fallback model, or deployment. Project/key setup was not performed by the M2-P3-A implementation task; the later Human-configured development state is recorded separately above and grants no continuing CodeX authority.

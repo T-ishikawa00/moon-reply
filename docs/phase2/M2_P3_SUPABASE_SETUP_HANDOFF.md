@@ -10,26 +10,20 @@ archived only as historical design evidence and is not an active migration.
 Archiving it does not mark it as applied, and `supabase migration repair` was
 not used.
 
-M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete. The accepted code contains the server repository binding, the four-table migration, and the atomic-finalization migration. No Supabase Project was created, no migration was applied, no secret was created or read, and no Supabase request was made.
+M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete. The accepted code contains the server repository binding, the four-table migration, and the atomic-finalization migration.
 
-## Next Human setup gate
+The following is a Human-confirmed local development operational state, not a CodeX secret or database revalidation:
 
-1. Create or select a dedicated non-production Supabase project approved for synthetic development data.
-2. Review `supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql`.
-3. Review `supabase/migrations/0003_m2_p3_atomic_finalization.sql`.
-4. Apply both migrations in order through the project's controlled migration process.
-5. Confirm all four tables exist:
-   - `assessment_requests`;
-   - `assessment_runs`;
-   - `assessment_stage_runs`;
-   - `assessment_reports`.
-6. Confirm RLS is enabled on all four tables.
-7. Confirm no `anon` or `authenticated` policy exists.
-8. Confirm `public.finalize_completed_assessment` is `SECURITY INVOKER`, uses an empty `search_path`, has no `PUBLIC`/`anon`/`authenticated` execute grant, and is executable only by `service_role`.
-9. Store `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in the server-only local secret mechanism. Do not put values in Git or a `NEXT_PUBLIC_` variable.
-10. Store the separately approved OpenAI development key and `OPENAI_MODEL=gpt-5.6-luna` server-side.
-11. Set `M2_INTERNAL_RUNTIME_ENABLED=true` only for a bounded local development smoke test.
-12. Use synthetic/test content only.
+- dedicated non-production project: `moon-reply-dev`;
+- migrations `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql`: applied;
+- archived `0001_stage3_data_foundation.sql`: unapplied;
+- migration repair: not used;
+- RLS: enabled on all four runtime tables;
+- public `anon` / `authenticated` policies: none;
+- OpenAI and Supabase server-only local development configuration: completed without recording secret values here;
+- model: `gpt-5.6-luna`;
+- internal runtime: enabled for the bounded local development run; and
+- data scope: synthetic/test only.
 
 ## Migration review points
 
@@ -45,14 +39,14 @@ M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete. The accepted c
 - report, decision card, run completion, request completion, completion timestamp, final decision, and usage totals finalize in one transaction; and
 - report-insert or run-update failure rolls back the entire finalization.
 
-## Development smoke-test gate
+## Post-acceptance synthetic live E2E
 
-A live development smoke test requires a separate Human action after review. Before enabling:
+Human confirms that the bounded synthetic live E2E succeeded through PB-01 to PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display.
 
-- verify the page is not reachable in production;
-- verify the origin and idempotency checks;
-- verify no real-user records exist;
-- define a synthetic record cleanup step;
-- capture actual provider/Supabase call counts and spend separately from the M2-P3-A zero-network automated evidence.
+This is separate from the accepted M2-P3-A task-time automated evidence, which used deterministic fakes and remains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`. Post-acceptance live usage is nonzero; exact aggregate tokens, cost, and call count have not been calculated. Real-user records and holdout use remain `0`.
+
+## Current work handoff
+
+Current work is DB integrity verification for the existing successful run. The next work after that is M2-P4 quality evaluation planning. This documentation synchronization performs no DB operation, does not apply or repair a migration, and does not authorize a new migration or run.
 
 Payment, authentication, email, deployment, public release, and real-user processing remain unauthorized.

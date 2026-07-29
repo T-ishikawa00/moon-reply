@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p3-runtime-capabilities-v1",
   "task_id": "M2-P3-A",
-  "status": "implemented_pending_human_setup_and_review",
+  "status": "m2_p3_accepted_complete",
   "baseline": {
     "branch": "main",
     "commit": "72d4121ff4ad0682bcafbeed4f72f6491e697ffa"
@@ -111,6 +111,8 @@
     "production_disabled_by_default": true
   },
   "task_execution_evidence": {
+    "scope": "accepted_fake_validation_only",
+    "meaning": "Task-time automated evidence uses FakeAiStageTransport and FakeAssessmentRepository only; it does not describe post-acceptance live usage.",
     "openai_calls": 0,
     "supabase_calls": 0,
     "api_spend_usd": 0,
@@ -118,5 +120,53 @@
     "live_provider_configured": false,
     "live_database_configured": false
   },
-  "next_human_gate": "Review code, create server-side secrets outside the repository, apply the SQL migration to a dedicated development Supabase project, and authorize a synthetic-only development smoke test."
+  "post_acceptance_live_e2e": {
+    "confirmation_source": "human_confirmed_local_development_operational_state",
+    "scope": "synthetic_only",
+    "current_main_commit": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
+    "supabase_project": "moon-reply-dev",
+    "migrations": {
+      "applied": [
+        "0002_m2_p3_runtime_vertical_slice.sql",
+        "0003_m2_p3_atomic_finalization.sql"
+      ],
+      "archived_unapplied": [
+        "0001_stage3_data_foundation.sql"
+      ],
+      "repair_used": false
+    },
+    "configuration": {
+      "persistent_openai_development_key_configured": true,
+      "internal_runtime_enabled": true,
+      "model": "gpt-5.6-luna"
+    },
+    "outcome": {
+      "status": "succeeded",
+      "stages_completed": [
+        "PB-01",
+        "PB-02",
+        "PB-03",
+        "PB-04",
+        "PB-05",
+        "PB-06"
+      ],
+      "provider_structured_outputs": "succeeded",
+      "canonical_ajv_validation": "succeeded",
+      "supabase_stage_persistence": "succeeded",
+      "atomic_finalization": "succeeded",
+      "usage_totals_persistence": "succeeded",
+      "assessment_note_display": "succeeded"
+    },
+    "live_usage": "nonzero_exact_total_not_aggregated",
+    "real_user_records": 0,
+    "holdout_usage": 0
+  },
+  "milestone_state": {
+    "milestone": 2,
+    "status": "incomplete"
+  },
+  "next_work": {
+    "current": "successful_run_db_integrity_verification",
+    "after": "m2_p4_quality_evaluation_planning"
+  }
 }

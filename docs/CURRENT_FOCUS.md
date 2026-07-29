@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P3-A Internal AI Assessment Runtime Vertical Slice accepted and complete; live OpenAI/Supabase setup pending a separate Human gate
+Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice accepted and complete; Milestone 2 remains incomplete
 
 ## Completed Through
 
@@ -58,24 +58,26 @@ Phase 2 / Milestone 2 — M2-P3-A Internal AI Assessment Runtime Vertical Slice 
 - M2-P3-A-R1 Runtime Security and Transaction Hardening Human / ChatGPT accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`
 - M2-P3-A automated validation, dependency review, atomic-finalization evidence, and Human desktop Visual QA complete
 
-## Current Task
+## Current Work
 
-`M2-P3-A Internal AI Assessment Runtime Vertical Slice`
+Successful-run DB integrity verification
 
 State:
 
-- the active initial runtime migrations are `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql`; the archived `0001_stage3_data_foundation.sql` was never applied to `moon-reply-dev` and must not be copied into a live database;
+- the current synchronized `main` / `origin/main` baseline is `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
+- the active initial runtime migrations `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql` are Human-confirmed applied to `moon-reply-dev`; the archived `0001_stage3_data_foundation.sql` remains unapplied historical design evidence, and migration repair was not used;
 - M2-P1 and M2-P2-A are accepted and complete;
 - M2-P2-B0 through M2-P2-B1-B2-B0 remain present as paused internal QA tooling and are not the active product path;
 - M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete;
 - the active product-development path is `/review/runtime` -> `/api/internal/assessments` -> PB-01 through PB-06 -> Stage persistence -> assessment-note rendering;
-- the OpenAI Responses and Supabase repository bindings are server-only and remain unconfigured;
-- accepted automated validation uses `FakeAiStageTransport` and `FakeAssessmentRepository` only;
+- the local development OpenAI and Supabase bindings are in a Human-confirmed local development operational state: a persistent development key is configured server-side, `M2_INTERNAL_RUNTIME_ENABLED=true`, and the model is `gpt-5.6-luna`;
+- accepted task-time automated validation uses `FakeAiStageTransport` and `FakeAssessmentRepository` only and retains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`;
+- a separate post-acceptance Human-configured synthetic live E2E completed PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display successfully;
 - atomic finalization commits the report, decision card, run/request completion state, completion timestamp, final decision, and usage totals in one Postgres transaction;
 - M2-P3 has no retry, Repair/PB-07, fallback, queue, cron, payment, authentication, email, analytics, public history, download, or production/public release capability;
-- actual OpenAI calls are zero, actual Supabase calls are zero, API spend is USD 0, and no real-user data is processed;
+- post-acceptance live OpenAI/Supabase usage is nonzero, but aggregate tokens, cost, and call count have not been calculated; real-user records and holdout use remain `0`;
 - the new `evals/runtime/m2-p3-runtime-capabilities-v1.json` is the successor capability boundary; the M2-P1 and M2-P2 historical snapshots are unchanged; and
-- the next gate is separate Human server-secret configuration and migration application for a separately authorized synthetic-only development smoke test.
+- the current work is successful-run DB integrity verification, followed by M2-P4 quality evaluation planning; Milestone 2 remains incomplete.
 
 ## Preserved Milestone 1 Baseline
 
@@ -127,18 +129,18 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Product definition, JPY 980 price, 18+ policy, existing Safety classification/severity meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed; M1-I2-R1 adds only missing reason codes and coverage needed to enforce the accepted fail-closed policy.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
 - A fixed/sticky mobile CTA remains `rejected for Milestone 1`; all CTAs remain non-fixed.
-- Milestone 1 is Human-accepted, complete, and closed. Human / ChatGPT accepted M2-P1 and M2-P1-R1 at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 later corrected only the historical manifest verification boundary. M2-P2-A-R1 is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`; M2-P2-A is Human / ChatGPT accepted and complete at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. M2-P2-B0 through M2-P2-B1-B2-B0 remain accepted historical work but are retained as paused internal QA tooling. M2-P3-A is Human / ChatGPT accepted and complete at `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; M2-P3-A-R1 is accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`. M2-P2-B1-B2-B1, live OpenAI/Supabase setup, every later M2 implementation task, and all later milestones remain unauthorized and not started.
+- Milestone 1 is Human-accepted, complete, and closed. Human / ChatGPT accepted M2-P1 and M2-P1-R1 at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 later corrected only the historical manifest verification boundary. M2-P2-A-R1 is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`; M2-P2-A is Human / ChatGPT accepted and complete at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. M2-P2-B0 through M2-P2-B1-B2-B0 remain accepted historical work but are retained as paused internal QA tooling. M2-P3-A is Human / ChatGPT accepted and complete at `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; M2-P3-A-R1 is accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`. Post-acceptance local development setup and synthetic live E2E are Human-confirmed complete. M2-P2-B1-B2-B1, every later implementation task, production/payment/email/public release work, and all later milestones remain unauthorized and not started.
 
 ## Runtime Boundary
 
 - The accepted Milestone 1 deliverable remains a fixed-fixture Reviewable Web MVP; M1 data remains deterministic fixture/mock or browser-memory-only data.
 - The three M1-P2-R1 cases are static public-display data under `fixtures/public/` and are separate from Safety and fixed result fixtures.
 - M2-P3-A adds a separate internal, synthetic-only request sheet and server route; it does not change the public M1 request behavior.
-- No live OpenAI request, live Supabase request, payment, email delivery, production analytics, active contact, account system, PDF/download/share implementation, upload, OCR, or deployment was activated. The product is not production-ready or payment-ready.
+- No production OpenAI/Supabase connection, payment, email delivery, production analytics, active contact, account system, PDF/download/share implementation, upload, OCR, public release, or deployment was activated. The bounded synthetic local development connection does not make the product production-ready or payment-ready.
 - `lib/safety/**` now includes the bounded M1-I2-R1 reason-code, normalization, targeted phrase, negation-guard, and non-normal blocking correction. Only `normal_allowed` continues; `needs_review`, `rejected`, contradictory, invalid, missing, and unknown states remain fail closed.
 - Legal/contact content remains Review mode only, and Contact remains inactive.
 - Accepted M2-P1-R1 assets remain immutable historical inputs. M2-P3-A reads the accepted Prompt and Schema assets server-side without rewriting the historical snapshots.
-- M2-P3-A provides internal server-only provider/database structure, Stage persistence, and result rendering, but live bindings remain unconfigured and actual provider/database calls remain zero.
+- M2-P3-A provides internal server-only provider/database structure, Stage persistence, and result rendering. Its accepted task-time Fake evidence remains zero-call/zero-spend; the separate post-acceptance Human-configured synthetic live E2E has nonzero usage whose exact aggregate has not been calculated.
 - Accepted M2-P2-A estimator assets remain local planning evidence only. Token counts, reasoning tokens, latency, API cost, and provider validation are unknown; no product-quality evidence is produced, and the price catalog remains a versioned planning snapshot.
 
 ## Current Restrictions
@@ -147,8 +149,8 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - M1-P3 acceptance and M1-P3-R1 prototype implementation did not grant canonical visual implementation authority; later separate Human decisions accepted Checkpoint A, authorized and accepted the now-complete Checkpoint B visual work within its exact manifest, accepted the bounded M1-I9-R1 result, and authorized M1-I12.
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
 - Keep the historical pre-R2 QA branch immutable. The corrected M1-I12-R3 package may be synchronized to `main` only by the expressly authorized fast-forward-only path and must remain within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
-- Do not publish, deploy, configure live OpenAI or Supabase bindings, complete operator facts, create or read secrets, apply migrations, execute accepted prompts against an API, connect a live database, widen accepted M2-P2 tooling, or start M2-P2-B1-B2-B1 or any later runtime task without separate explicit authorization.
-- Automated PASS alone is not Human / ChatGPT acceptance or model-quality evidence. M2-P3-A acceptance is established by the separate explicit Human / ChatGPT decision and Human Visual QA record; no live-provider compatibility, model-quality result, or guaranteed API cost is claimed.
+- Do not publish, deploy, expose or read secrets, apply new migrations, execute new API/DB operations, widen accepted M2-P2 tooling, or start M2-P2-B1-B2-B1 or any later implementation task without separate explicit authorization.
+- Automated PASS alone is not Human / ChatGPT acceptance or model-quality evidence. M2-P3 task-time automated evidence is Fake-only and zero-call/zero-spend; the separate Human-confirmed live E2E establishes bounded synthetic local operability, not M2-P4 quality acceptance or a guaranteed API cost.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
 - Human 320px cross-route, keyboard/focus, 200% zoom, reduced-motion, reading-quality, contrast, and final acceptance are complete and recorded as Human observational evidence.
@@ -182,9 +184,9 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Fixed source: `getReportFixture("result-normal-001")`; fixture, Safety, canonical report components, package files, and runtime behavior unchanged
 - Selection: B is the canonical design direction. Prototype acceptance is not canonical visual implementation authorization, and prototype routes/components are not merged into `main`.
 
-## Next Authorization Gate
+## Next Work
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete, and the internal website runtime is the active product path. Live OpenAI remains unconfigured, live Supabase remains unconfigured, actual provider and database calls are zero, API spend is USD 0, and no real-user or holdout data was processed. The next Human gate is server-secret configuration, controlled migration application, RLS/no-public-policy confirmation, synthetic-data cleanup definition, and separate authorization for one synthetic-only development smoke test. M2-P2-B1-B2-B1 paid execution remains unauthorized and paused.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice and its post-acceptance Human-configured synthetic live E2E are complete, while Milestone 2 remains incomplete. The current work is successful-run DB integrity verification. After that, proceed to M2-P4 quality evaluation planning. M2-P2-B1-B2-B1 paid execution, production/payment/email/public release work, and later milestones remain unauthorized and paused.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 
