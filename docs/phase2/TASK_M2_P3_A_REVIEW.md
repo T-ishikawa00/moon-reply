@@ -7,7 +7,7 @@
 - Branch: `feature/m2-p3-a-runtime-vertical-slice`
 - Accepted implementation commit: `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`
 - Accepted R1 commit: `3f1123439dcbc724c70505956aa81fa03a9246ad`
-- Current `main` baseline: `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`
+- Live E2E code commit: `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`
 - Acceptance state: M2-P3-A and M2-P3-A-R1 Human / ChatGPT accepted and complete; Human Visual QA complete
 
 ## Product-path transition
@@ -107,7 +107,7 @@ Not implemented by M2-P3-A: payment, RevenueCat, authentication, email, public p
 
 ## Post-acceptance Human-configured live E2E record
 
-- Human-confirmed local development operational state on current `main` `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
+- Human-confirmed local development live E2E executed against code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
 - dedicated Supabase project `moon-reply-dev` created;
 - migrations `0002` and `0003` applied; `0001` archived and unapplied; migration repair not used;
 - persistent OpenAI development key configured server-side, internal runtime enabled, and model fixed to `gpt-5.6-luna`;

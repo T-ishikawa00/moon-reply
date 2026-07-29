@@ -34,7 +34,7 @@ The accepted Milestone 1 deliverable is a fixed-fixture Reviewable Web MVP. It h
 
 The active Supabase migration sequence begins with `0002_m2_p3_runtime_vertical_slice.sql` and continues with `0003_m2_p3_atomic_finalization.sql`; archived migration `0001_stage3_data_foundation.sql` is outside the live migration sequence.
 
-Current repository baseline: `main` / `origin/main` / `HEAD` at `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
+The post-acceptance synthetic live E2E ran against code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
 
 Current state: M2-P3 Runtime Vertical Slice is accepted and complete; Milestone 2 remains incomplete. The accepted implementation provides `/review/runtime`, `POST /api/internal/assessments`, PB-01 through PB-06, deterministic application policy, persistence-before-provider, atomic Postgres finalization, assessment-note rendering, deterministic fakes, and dedicated verification. Human desktop Visual QA and interaction QA are complete. Separately, Human confirms the local development OpenAI/Supabase setup, migrations, and bounded synthetic live E2E are complete with `gpt-5.6-luna` and the internal runtime enabled.
 

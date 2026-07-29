@@ -64,7 +64,7 @@ Successful-run DB integrity verification
 
 State:
 
-- the current synchronized `main` / `origin/main` baseline is `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
+- the post-acceptance synthetic live E2E evidence is anchored to code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
 - the active initial runtime migrations `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql` are Human-confirmed applied to `moon-reply-dev`; the archived `0001_stage3_data_foundation.sql` remains unapplied historical design evidence, and migration repair was not used;
 - M2-P1 and M2-P2-A are accepted and complete;
 - M2-P2-B0 through M2-P2-B1-B2-B0 remain present as paused internal QA tooling and are not the active product path;

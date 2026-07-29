@@ -123,7 +123,7 @@
   "post_acceptance_live_e2e": {
     "confirmation_source": "human_confirmed_local_development_operational_state",
     "scope": "synthetic_only",
-    "current_main_commit": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
+    "live_e2e_code_commit": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
     "supabase_project": "moon-reply-dev",
     "migrations": {
       "applied": [
