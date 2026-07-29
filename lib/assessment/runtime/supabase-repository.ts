@@ -13,10 +13,10 @@ import type {
   CreateRunRecord,
   FailRunRecord,
   FailStageRecord,
+  FinalizeCompletedAssessmentRecord,
   PersistedAssessmentRequest,
   RelationshipValue,
   RequestedTopic,
-  SaveReportRecord,
   StartStageRecord,
 } from "./types.ts";
 
@@ -103,7 +103,24 @@ type RuntimeDatabase = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      finalize_completed_assessment: {
+        Args: {
+          p_report_id: string;
+          p_run_id: string;
+          p_request_id: string;
+          p_returned_model: string | null;
+          p_decision: string;
+          p_report_json: unknown;
+          p_decision_card_json: unknown;
+          p_total_input_tokens: number;
+          p_total_cached_tokens: number;
+          p_total_output_tokens: number;
+          p_total_reasoning_tokens: number;
+          p_usage_derived_cost_usd: number;
+          p_completed_at: string;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;
@@ -116,6 +133,21 @@ type RuntimeDatabase = {
 
 function databaseFailure() {
   return new M2RuntimeError("M2_DATABASE_OPERATION_FAILED");
+}
+
+function isIdempotencyConflict(
+  error: {
+    code?: string;
+    details?: string;
+    message?: string;
+  } | null,
+) {
+  return (
+    error?.code === "23505" &&
+    `${error.details ?? ""} ${error.message ?? ""}`.includes(
+      "idempotency_key",
+    )
+  );
 }
 
 function mapRequest(row: RequestRow): PersistedAssessmentRequest {
@@ -165,6 +197,9 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       })
       .select("*")
       .single();
+    if (isIdempotencyConflict(error)) {
+      throw new M2RuntimeError("M2_IDEMPOTENCY_CONFLICT", 409);
+    }
     if (error || !data) throw databaseFailure();
     return mapRequest(data as RequestRow);
   }
@@ -281,7 +316,8 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         completed_at: record.completedAt,
         error_code: null,
       })
-      .eq("id", record.runId);
+      .eq("id", record.runId)
+      .eq("status", "processing");
     if (runError) throw databaseFailure();
     const { error: requestError } = await this.client
       .from("assessment_requests")
@@ -289,7 +325,8 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         status: "completed",
         updated_at: record.completedAt,
       })
-      .eq("id", record.requestId);
+      .eq("id", record.requestId)
+      .eq("status", "processing");
     if (requestError) throw databaseFailure();
   }
 
@@ -307,7 +344,8 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         completed_at: record.completedAt,
         error_code: record.errorCode,
       })
-      .eq("id", record.runId);
+      .eq("id", record.runId)
+      .eq("status", "processing");
     if (runError) throw databaseFailure();
     const { error: requestError } = await this.client
       .from("assessment_requests")
@@ -315,17 +353,26 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         status: "failed",
         updated_at: record.completedAt,
       })
-      .eq("id", record.requestId);
+      .eq("id", record.requestId)
+      .eq("status", "processing");
     if (requestError) throw databaseFailure();
   }
 
-  async saveReport(record: SaveReportRecord) {
-    const { error } = await this.client.from("assessment_reports").insert({
-      id: record.id,
-      run_id: record.runId,
-      report_json: record.reportJson,
-      decision_card_json: record.decisionCardJson,
-      created_at: record.createdAt,
+  async finalizeCompletedAssessment(record: FinalizeCompletedAssessmentRecord) {
+    const { error } = await this.client.rpc("finalize_completed_assessment", {
+      p_report_id: record.reportId,
+      p_run_id: record.runId,
+      p_request_id: record.requestId,
+      p_returned_model: record.returnedModel,
+      p_decision: record.decision,
+      p_report_json: record.reportJson,
+      p_decision_card_json: record.decisionCardJson,
+      p_total_input_tokens: record.totalInputTokens,
+      p_total_cached_tokens: record.totalCachedTokens,
+      p_total_output_tokens: record.totalOutputTokens,
+      p_total_reasoning_tokens: record.totalReasoningTokens,
+      p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+      p_completed_at: record.completedAt,
     });
     if (error) throw databaseFailure();
   }

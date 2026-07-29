@@ -35,6 +35,14 @@ const gateOrder = [
   "M2_P3_ZERO_LIVE_NETWORK_GATE",
   "M2_P3_ZERO_SPEND_GATE",
   "M2_P3_PUBLIC_PRODUCT_UNCHANGED_GATE",
+  "M2_P3_DEPENDENCY_AUDIT_GATE",
+  "M2_P3_PRODUCTION_VULNERABILITY_GATE",
+  "M2_P3_SUPABASE_DEPENDENCY_GATE",
+  "M2_P3_ATOMIC_FINALIZATION_GATE",
+  "M2_P3_FINALIZATION_ROLLBACK_GATE",
+  "M2_P3_CONCURRENT_IDEMPOTENCY_GATE",
+  "M2_P3_PERSIST_BEFORE_PROVIDER_GATE",
+  "M2_P3_R1_RUNTIME_HARDENING_GATE",
 ];
 
 for (const gateName of gateOrder) failures.set(gateName, []);
@@ -73,8 +81,8 @@ function gitText(args) {
   );
 }
 
-function deterministicUuidFactory() {
-  let sequence = 0;
+function deterministicUuidFactory(initialSequence = 0) {
+  let sequence = initialSequence;
   return () => {
     sequence += 1;
     return `00000000-0000-4000-8000-${String(sequence).padStart(12, "0")}`;
@@ -113,6 +121,7 @@ function makeApplication({
   repository = new FakeAssessmentRepository(),
   transportOptions = {},
   trace = [],
+  uuid = deterministicUuidFactory(),
 } = {}) {
   const transport = new FakeAiStageTransport({
     outputs: outputs ?? wait003StageOutputs(),
@@ -127,7 +136,7 @@ function makeApplication({
     definitions: catalog.definitions,
     observe: (event) => trace.push(event),
     now: () => "2026-07-29T00:00:00.000Z",
-    uuid: deterministicUuidFactory(),
+    uuid,
   });
   return { application, repository, transport, trace };
 }
@@ -231,8 +240,122 @@ await expectSafeFailure(
   "70000000-0000-4000-8000-000000000001",
 );
 
+const reportInsertFailure = makeApplication({
+  repository: new FakeAssessmentRepository({
+    failOnceAt: "finalizeCompletedAssessment:reportInsert",
+  }),
+});
+await expectSafeFailure(
+  reportInsertFailure.application,
+  "M2_FINALIZATION_PERSISTENCE_FAILED",
+  "71000000-0000-4000-8000-000000000001",
+);
+
+const runUpdateFailure = makeApplication({
+  repository: new FakeAssessmentRepository({
+    failOnceAt: "finalizeCompletedAssessment:runUpdate",
+  }),
+});
+await expectSafeFailure(
+  runUpdateFailure.application,
+  "M2_FINALIZATION_PERSISTENCE_FAILED",
+  "72000000-0000-4000-8000-000000000001",
+);
+
+const finalizedRecord = [...happy.repository.reports.values()][0];
+assert.ok(finalizedRecord);
+let duplicateFinalizationCode = null;
+try {
+  await happy.repository.finalizeCompletedAssessment(finalizedRecord);
+} catch (error) {
+  duplicateFinalizationCode = error?.safeCode ?? null;
+}
+
+const concurrent = makeApplication();
+const concurrentResults = await Promise.allSettled([
+  concurrent.application.submit(
+    wait003Input,
+    "73000000-0000-4000-8000-000000000001",
+  ),
+  concurrent.application.submit(
+    wait003Input,
+    "73000000-0000-4000-8000-000000000001",
+  ),
+]);
+
+const createRequestFailure = makeApplication({
+  repository: new FakeAssessmentRepository({
+    failOnceAt: "createRequest",
+  }),
+});
+await expectSafeFailure(
+  createRequestFailure.application,
+  "M2_FAKE_DATABASE_WRITE_FAILED",
+  "74000000-0000-4000-8000-000000000001",
+);
+
+const createRunFailure = makeApplication({
+  repository: new FakeAssessmentRepository({
+    failOnceAt: "createRun",
+  }),
+});
+await expectSafeFailure(
+  createRunFailure.application,
+  "M2_FAKE_DATABASE_WRITE_FAILED",
+  "75000000-0000-4000-8000-000000000001",
+);
+
+const firstStageStartFailure = makeApplication({
+  repository: new FakeAssessmentRepository({
+    failOnceAt: "startStage:PB-01",
+  }),
+});
+await expectSafeFailure(
+  firstStageStartFailure.application,
+  "M2_FAKE_DATABASE_WRITE_FAILED",
+  "76000000-0000-4000-8000-000000000001",
+);
+
+const resubmissionRepository = new FakeAssessmentRepository();
+const failedSubmission = makeApplication({
+  repository: resubmissionRepository,
+  transportOptions: { failAtStage: "PB-05" },
+  uuid: deterministicUuidFactory(100),
+});
+await expectSafeFailure(
+  failedSubmission.application,
+  "M2_FAKE_STAGE_FAILURE",
+  "77000000-0000-4000-8000-000000000001",
+);
+const sameKeyAfterFailure = makeApplication({
+  repository: resubmissionRepository,
+  uuid: deterministicUuidFactory(200),
+});
+await expectSafeFailure(
+  sameKeyAfterFailure.application,
+  "M2_DUPLICATE_SUBMISSION",
+  "77000000-0000-4000-8000-000000000001",
+);
+const deliberateResubmission = makeApplication({
+  repository: resubmissionRepository,
+  uuid: deterministicUuidFactory(300),
+});
+const deliberateResubmissionResult =
+  await deliberateResubmission.application.submit(
+    wait003Input,
+    "78000000-0000-4000-8000-000000000001",
+  );
+
 const runtimeManifest = json(
   "evals/runtime/m2-p3-runtime-capabilities-v1.json",
+);
+const dependencyAuditSummary = json(
+  "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
+);
+const packageManifest = json("package.json");
+const packageLock = json("package-lock.json");
+const dependencyReviewSource = source(
+  "docs/phase2/M2_P3_A_DEPENDENCY_SECURITY_REVIEW.md",
 );
 const routeSource = source("app/api/internal/assessments/route.ts");
 const pageSource = source("app/review/runtime/page.tsx");
@@ -249,6 +372,12 @@ const policySource = source("lib/assessment/runtime/policy.ts");
 const fakeSource = source("lib/assessment/runtime/fakes.ts");
 const migrationSource = source(
   "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
+);
+const atomicMigrationSource = source(
+  "supabase/migrations/0003_m2_p3_atomic_finalization.sql",
+);
+const runtimePackageSource = source(
+  "lib/assessment/runtime/package.json",
 );
 gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
   check(
@@ -572,6 +701,15 @@ gate("M2_P3_ZERO_LIVE_NETWORK_GATE", () => {
     modelMismatch,
     databaseFailure,
     pb05Failure,
+    reportInsertFailure,
+    runUpdateFailure,
+    concurrent,
+    createRequestFailure,
+    createRunFailure,
+    firstStageStartFailure,
+    failedSubmission,
+    sameKeyAfterFailure,
+    deliberateResubmission,
   ];
   check(
     "M2_P3_ZERO_LIVE_NETWORK_GATE",
@@ -618,6 +756,285 @@ gate("M2_P3_PUBLIC_PRODUCT_UNCHANGED_GATE", () => {
         "M2-P3 internal development runtime. No public navigation entry.",
       ),
     `public product diff is not isolated: ${publicDiff}`,
+  );
+});
+
+gate("M2_P3_DEPENDENCY_AUDIT_GATE", () => {
+  const requiredCommands = [
+    "npm.cmd audit --omit=dev --json",
+    "npm.cmd audit --json",
+    "npm.cmd ls --depth=0",
+  ];
+  const requiredPackages = [
+    "openai",
+    "ajv",
+    "@supabase/supabase-js",
+    "next",
+    "react",
+  ];
+  const permittedClassifications = new Set([
+    "production-reachable",
+    "production-installed but not runtime-reachable",
+    "development-only",
+    "false positive / not applicable",
+  ]);
+  const highOrCritical = dependencyAuditSummary.findings.filter((finding) =>
+    ["high", "critical"].includes(finding.severity),
+  );
+  check(
+    "M2_P3_DEPENDENCY_AUDIT_GATE",
+    dependencyAuditSummary.schema_version ===
+      "m2-p3-a-dependency-audit-summary-v1" &&
+      JSON.stringify(dependencyAuditSummary.commands) ===
+        JSON.stringify(requiredCommands) &&
+      requiredPackages.every(
+        (packageName) =>
+          typeof dependencyAuditSummary.installed_packages[packageName]
+            ?.version === "string",
+      ) &&
+      highOrCritical.length >= 4 &&
+      highOrCritical.every(
+        (finding) =>
+          typeof finding.package === "string" &&
+          typeof finding.direct === "boolean" &&
+          ["production", "development"].includes(finding.dependency_scope) &&
+          Array.isArray(finding.dependency_paths) &&
+          finding.dependency_paths.length > 0 &&
+          typeof finding.affected_version === "string" &&
+          typeof finding.patched_version_availability === "string" &&
+          permittedClassifications.has(finding.runtime_classification) &&
+          typeof finding.runtime_reachability_evidence === "string" &&
+          typeof finding.proposed_safe_remediation === "string" &&
+          typeof finding.remediation_breaking === "boolean" &&
+          typeof finding.resolved === "boolean",
+      ) &&
+      dependencyReviewSource.includes("MODULE_TYPELESS_PACKAGE_JSON"),
+    "dependency evidence, classification, or warning review is incomplete",
+  );
+});
+
+gate("M2_P3_PRODUCTION_VULNERABILITY_GATE", () => {
+  const unresolvedProductionReachable =
+    dependencyAuditSummary.findings.filter(
+      (finding) =>
+        !finding.resolved &&
+        ["high", "critical"].includes(finding.severity) &&
+        finding.runtime_classification === "production-reachable",
+    );
+  check(
+    "M2_P3_PRODUCTION_VULNERABILITY_GATE",
+    unresolvedProductionReachable.length === 0 &&
+      dependencyAuditSummary.decision
+        .unresolved_production_reachable_high_or_critical === 0 &&
+      dependencyAuditSummary.decision.r1_automated_gate === "pass" &&
+      dependencyReviewSource.includes(
+        "Human / ChatGPT acceptance remains on hold",
+      ),
+    "an unresolved production-reachable high/critical finding remains",
+  );
+});
+
+gate("M2_P3_SUPABASE_DEPENDENCY_GATE", () => {
+  const baselinePackage = JSON.parse(
+    gitText(["show", `${baselineSha}:package.json`]),
+  );
+  const installed = dependencyAuditSummary.installed_packages;
+  check(
+    "M2_P3_SUPABASE_DEPENDENCY_GATE",
+    installed["@supabase/supabase-js"].version ===
+      packageLock.packages["node_modules/@supabase/supabase-js"].version &&
+      installed["@supabase/supabase-js"].dependency_status ===
+        "direct production dependency" &&
+      installed["@supabase/supabase-js"].introduction === "pre-existing" &&
+      typeof baselinePackage.dependencies["@supabase/supabase-js"] ===
+        "string" &&
+      installed.openai.version ===
+        packageLock.packages["node_modules/openai"].version &&
+      installed.ajv.version === packageLock.packages["node_modules/ajv"].version &&
+      installed.next.version ===
+        packageLock.packages["node_modules/next"].version &&
+      installed.react.version ===
+        packageLock.packages["node_modules/react"].version &&
+      packageManifest.dependencies["@supabase/supabase-js"] !== undefined,
+    "required dependency versions or Supabase provenance differ",
+  );
+});
+
+gate("M2_P3_ATOMIC_FINALIZATION_GATE", () => {
+  const originalMigrationDiff = gitText([
+    "diff",
+    "--name-only",
+    "HEAD",
+    "--",
+    "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
+  ]).trim();
+  for (const required of [
+    "create function public.finalize_completed_assessment(",
+    "p_report_id uuid",
+    "p_run_id uuid",
+    "p_request_id uuid",
+    "p_report_json jsonb",
+    "p_decision_card_json jsonb",
+    "security invoker",
+    "set search_path = ''",
+    "insert into public.assessment_reports",
+    "update public.assessment_runs",
+    "update public.assessment_requests",
+    "from public",
+    "from anon",
+    "from authenticated",
+    "to service_role",
+  ]) {
+    check(
+      "M2_P3_ATOMIC_FINALIZATION_GATE",
+      atomicMigrationSource.includes(required),
+      `atomic migration is missing ${required}`,
+    );
+  }
+  check(
+    "M2_P3_ATOMIC_FINALIZATION_GATE",
+    repositorySource.includes(
+      'this.client.rpc("finalize_completed_assessment"',
+    ) &&
+      !repositorySource.includes(
+        'this.client.from("assessment_reports").insert',
+      ) &&
+      pipelineSource.includes(
+        "this.repository.finalizeCompletedAssessment",
+      ) &&
+      !pipelineSource.includes("this.repository.saveReport") &&
+      !/\bexecute\s+(format|immediate)\b/iu.test(atomicMigrationSource) &&
+      originalMigrationDiff === "" &&
+      [
+        "assessment_requests",
+        "assessment_runs",
+        "assessment_stage_runs",
+        "assessment_reports",
+      ].every((table) =>
+        migrationSource.includes(
+          `alter table public.${table} enable row level security`,
+        ),
+      ),
+    "final writes are not isolated to one fixed, server-only transaction",
+  );
+});
+
+gate("M2_P3_FINALIZATION_ROLLBACK_GATE", () => {
+  const happyRun = happy.repository.runs.get(happyResult.runId);
+  const happyRequest = happy.repository.requests.get(happyResult.requestId);
+  const rollbackRuntimes = [reportInsertFailure, runUpdateFailure];
+  check(
+    "M2_P3_FINALIZATION_ROLLBACK_GATE",
+    happy.repository.reports.size === 1 &&
+      happyRun?.status === "completed" &&
+      happyRun?.decision === happyResult.decision &&
+      happyRequest?.status === "completed" &&
+      happy.repository.events.includes("finalizeCompletedAssessment"),
+    "successful final writes did not commit together",
+  );
+  check(
+    "M2_P3_FINALIZATION_ROLLBACK_GATE",
+    rollbackRuntimes.every(
+      (runtime) =>
+        runtime.repository.reports.size === 0 &&
+        [...runtime.repository.runs.values()].every(
+          (run) => run.status === "failed" && run.decision === undefined,
+        ) &&
+        runtime.repository.events.includes(
+          "finalizeCompletedAssessment:rollback",
+        ) &&
+        runtime.transport.calls.length === 6,
+    ),
+    "a finalization failure left a partial report/run state",
+  );
+  check(
+    "M2_P3_FINALIZATION_ROLLBACK_GATE",
+    duplicateFinalizationCode === "M2_FINALIZATION_STATE_CONFLICT" &&
+      happy.repository.reports.size === 1,
+    "duplicate finalization was not rejected without a duplicate report",
+  );
+});
+
+gate("M2_P3_CONCURRENT_IDEMPOTENCY_GATE", () => {
+  const fulfilled = concurrentResults.filter(
+    (result) => result.status === "fulfilled",
+  );
+  const rejected = concurrentResults.filter(
+    (result) => result.status === "rejected",
+  );
+  check(
+    "M2_P3_CONCURRENT_IDEMPOTENCY_GATE",
+    fulfilled.length === 1 &&
+      rejected.length === 1 &&
+      rejected[0]?.reason?.safeCode === "M2_DUPLICATE_SUBMISSION" &&
+      concurrent.repository.requests.size === 1 &&
+      concurrent.repository.runs.size === 1 &&
+      concurrent.repository.reports.size === 1 &&
+      concurrent.transport.calls.length === 6 &&
+      repositorySource.includes('error?.code === "23505"') &&
+      repositorySource.includes('"M2_IDEMPOTENCY_CONFLICT"') &&
+      applicationSource.includes(
+        'error.safeCode === "M2_IDEMPOTENCY_CONFLICT"',
+      ) &&
+      sameKeyAfterFailure.transport.calls.length === 0 &&
+      deliberateResubmissionResult.eligibility === "ready" &&
+      deliberateResubmission.transport.calls.length === 6 &&
+      resubmissionRepository.requests.size === 2,
+    "concurrent submissions can create duplicate requests or provider runs",
+  );
+});
+
+gate("M2_P3_PERSIST_BEFORE_PROVIDER_GATE", () => {
+  const startWriteIndex = pipelineSource.indexOf(
+    "await this.repository.startStage",
+  );
+  const providerCallIndex = pipelineSource.indexOf(
+    "response = await this.transport.invoke",
+  );
+  const persistedStageIds = [...happy.repository.stageRuns.values()].map(
+    (stage) => stage.stageId,
+  );
+  check(
+    "M2_P3_PERSIST_BEFORE_PROVIDER_GATE",
+    createRequestFailure.transport.calls.length === 0 &&
+      createRunFailure.transport.calls.length === 0 &&
+      firstStageStartFailure.transport.calls.length === 0 &&
+      startWriteIndex >= 0 &&
+      providerCallIndex > startWriteIndex &&
+      happy.transport.calls.every((stageId) =>
+        persistedStageIds.includes(stageId),
+      ),
+    "provider execution can occur before request/run/Stage start persistence",
+  );
+  check(
+    "M2_P3_PERSIST_BEFORE_PROVIDER_GATE",
+    !pb05Failure.transport.calls.includes("PB-06") &&
+      needsMore.repository.reports.size === 0 &&
+      safetyBlocked.repository.reports.size === 0,
+    "a failed or unauthorized path reached PB-06/final report persistence",
+  );
+});
+
+gate("M2_P3_R1_RUNTIME_HARDENING_GATE", () => {
+  const prerequisiteGates = [
+    "M2_P3_DEPENDENCY_AUDIT_GATE",
+    "M2_P3_PRODUCTION_VULNERABILITY_GATE",
+    "M2_P3_SUPABASE_DEPENDENCY_GATE",
+    "M2_P3_ATOMIC_FINALIZATION_GATE",
+    "M2_P3_FINALIZATION_ROLLBACK_GATE",
+    "M2_P3_CONCURRENT_IDEMPOTENCY_GATE",
+    "M2_P3_PERSIST_BEFORE_PROVIDER_GATE",
+  ];
+  check(
+    "M2_P3_R1_RUNTIME_HARDENING_GATE",
+    prerequisiteGates.every(
+      (gateName) => failures.get(gateName).length === 0,
+    ) &&
+      JSON.parse(runtimePackageSource).type === "module" &&
+      dependencyAuditSummary.execution_evidence.openai_calls === 0 &&
+      dependencyAuditSummary.execution_evidence.supabase_calls === 0 &&
+      dependencyAuditSummary.execution_evidence.api_spend_usd === 0,
+    "one or more R1 hardening prerequisites failed",
   );
 });
 

@@ -17,10 +17,12 @@
     "docs/CURRENT_FOCUS.md",
     "docs/ROADMAP.md",
     "docs/WBS.md",
+    "docs/phase2/M2_P3_A_DEPENDENCY_SECURITY_REVIEW.md",
     "docs/phase2/M2_P3_RUNTIME_SECURITY_AND_DATA_POLICY.md",
     "docs/phase2/M2_P3_RUNTIME_VERTICAL_SLICE_SPEC.md",
     "docs/phase2/M2_P3_SUPABASE_SETUP_HANDOFF.md",
     "docs/phase2/TASK_M2_P3_A_REVIEW.md",
+    "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
     "evals/runtime/m2-p3-runtime-capabilities-v1.json",
     "lib/assessment/runtime/application.ts",
     "lib/assessment/runtime/cost.ts",
@@ -29,6 +31,7 @@
     "lib/assessment/runtime/fakes.ts",
     "lib/assessment/runtime/hash.ts",
     "lib/assessment/runtime/openai-transport.ts",
+    "lib/assessment/runtime/package.json",
     "lib/assessment/runtime/pipeline.ts",
     "lib/assessment/runtime/policy.ts",
     "lib/assessment/runtime/schema-catalog.ts",
@@ -44,6 +47,7 @@
     "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
     "scripts/verify-m2-zero-cost-estimator.mjs",
     "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
+    "supabase/migrations/0003_m2_p3_atomic_finalization.sql",
     "tsconfig.json"
   ],
   "historical_snapshots": [

@@ -1,0 +1,303 @@
+{
+  "schema_version": "m2-p3-a-dependency-audit-summary-v1",
+  "generated_at": "2026-07-29T11:54:03+09:00",
+  "task_id": "M2-P3-A-R1",
+  "commands": [
+    "npm.cmd audit --omit=dev --json",
+    "npm.cmd audit --json",
+    "npm.cmd ls --depth=0"
+  ],
+  "installed_packages": {
+    "openai": {
+      "version": "7.1.0",
+      "dependency_status": "direct production dependency",
+      "introduction": "added by M2-P3-A"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "dependency_status": "direct production dependency",
+      "introduction": "added by M2-P3-A"
+    },
+    "@supabase\u002fsupabase-js": {
+      "version": "2.110.2",
+      "dependency_status": "direct production dependency",
+      "introduction": "pre-existing"
+    },
+    "next": {
+      "version": "16.2.12",
+      "dependency_status": "direct production dependency",
+      "introduction": "pre-existing; patched from 16.2.10 by M2-P3-A-R1"
+    },
+    "react": {
+      "version": "19.2.7",
+      "dependency_status": "direct production dependency",
+      "introduction": "pre-existing"
+    }
+  },
+  "audit_results": {
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 3,
+      "critical": 0,
+      "total": 3
+    },
+    "all_dependencies": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 12,
+      "critical": 0,
+      "total": 12
+    }
+  },
+  "remediated_findings": [
+    {
+      "package": "next",
+      "severity": "high",
+      "advisory": "GHSA-6gpp-xcg3-4w24",
+      "affected_version": "16.2.10",
+      "patched_version": "16.2.11 or later",
+      "resolved_version": "16.2.12",
+      "runtime_reachability": "No middleware or proxy file and no i18n configuration exist."
+    },
+    {
+      "package": "next",
+      "severity": "high",
+      "advisory": "GHSA-m99w-x7hq-7vfj",
+      "affected_version": "16.2.10",
+      "patched_version": "16.2.11 or later",
+      "resolved_version": "16.2.12",
+      "runtime_reachability": "No Server Action or use-server implementation exists."
+    },
+    {
+      "package": "next",
+      "severity": "high",
+      "advisory": "GHSA-89xv-2m56-2m9x",
+      "affected_version": "16.2.10",
+      "patched_version": "16.2.11 or later",
+      "resolved_version": "16.2.12",
+      "runtime_reachability": "No custom Next.js server or Server Action exists."
+    },
+    {
+      "package": "next",
+      "severity": "high",
+      "advisory": "GHSA-p9j2-gv94-2wf4",
+      "affected_version": "16.2.10",
+      "patched_version": "16.2.11 or later",
+      "resolved_version": "16.2.12",
+      "runtime_reachability": "next.config.ts defines no rewrites."
+    }
+  ],
+  "findings": [
+    {
+      "package": "@eslint/config-array",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint > @eslint/config-array > minimatch > brace-expansion"
+      ],
+      "affected_version": "0.21.2 through affected minimatch/brace-expansion",
+      "patched_version_availability": "npm proposes eslint 10.8.0, a semver-major change",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "Loaded by the lint toolchain only; it is not imported by the Next.js or M2 runtime.",
+      "proposed_safe_remediation": "Adopt a compatible ESLint 10 and Next lint-config pair only in a separately validated tooling upgrade.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "@eslint/eslintrc",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint > @eslint/eslintrc > minimatch > brace-expansion"
+      ],
+      "affected_version": "3.3.5 through affected minimatch/brace-expansion",
+      "patched_version_availability": "npm proposes eslint 10.8.0, a semver-major change",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "Loaded by the lint toolchain only; it is absent from application and M2 runtime imports.",
+      "proposed_safe_remediation": "Upgrade the coordinated ESLint toolchain after compatibility validation.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "brace-expansion",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint > minimatch@3.1.5 > brace-expansion@1.1.16",
+        "moon-reply > eslint-config-next > typescript-eslint > @typescript-eslint/typescript-estree > minimatch@10.2.5 > brace-expansion@5.0.7"
+      ],
+      "affected_version": "1.1.16 and 5.0.7",
+      "patched_version_availability": "5.0.8 exists for the 5.x path; no patched 1.x release is available and npm proposes ESLint 10.8.0",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "Only lint and TypeScript-ESLint dependency paths reach brace expansion; no untrusted glob expression is accepted by the application.",
+      "proposed_safe_remediation": "Wait for coordinated parent-package updates or perform a separately scoped ESLint 10 migration; do not force a cross-major override.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "eslint",
+      "severity": "high",
+      "direct": true,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint > minimatch > brace-expansion"
+      ],
+      "affected_version": "9.39.4 through transitive minimatch/brace-expansion",
+      "patched_version_availability": "npm proposes eslint 10.8.0, a semver-major change",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "Declared in devDependencies and executed only by npm run lint.",
+      "proposed_safe_remediation": "Schedule a coordinated ESLint 10 compatibility change with lint, typecheck, build, and historical-gate validation.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "eslint-config-next",
+      "severity": "high",
+      "direct": true,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint-config-next > eslint-plugin-import|eslint-plugin-jsx-a11y|eslint-plugin-react > minimatch > brace-expansion"
+      ],
+      "affected_version": "16.2.12 through transitive lint plugins",
+      "patched_version_availability": "npm proposes eslint-config-next 0.2.4, an incompatible downgrade",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "Declared in devDependencies and loaded only by ESLint.",
+      "proposed_safe_remediation": "Reject the audit-proposed downgrade and wait for a compatible current-line lint dependency update.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "eslint-plugin-import",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint-config-next > eslint-plugin-import > minimatch > brace-expansion"
+      ],
+      "affected_version": "2.32.0 through minimatch 3.1.5",
+      "patched_version_availability": "npm reports a fix but does not identify a compatible leaf update beyond the installed current package",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "ESLint plugin code is not bundled into or imported by the application runtime.",
+      "proposed_safe_remediation": "Consume a compatible eslint-config-next dependency refresh rather than force-overriding minimatch.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "eslint-plugin-jsx-a11y",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint-config-next > eslint-plugin-jsx-a11y > minimatch > brace-expansion"
+      ],
+      "affected_version": "6.10.2 through minimatch 3.1.5",
+      "patched_version_availability": "npm proposes eslint-config-next 0.2.4, an incompatible downgrade",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "ESLint plugin code runs only during lint validation.",
+      "proposed_safe_remediation": "Wait for a compatible current-line eslint-config-next refresh.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "eslint-plugin-react",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint-config-next > eslint-plugin-react > minimatch > brace-expansion"
+      ],
+      "affected_version": "7.37.5 through minimatch 3.1.5",
+      "patched_version_availability": "npm proposes eslint-config-next 0.2.4, an incompatible downgrade",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "ESLint plugin code runs only during lint validation.",
+      "proposed_safe_remediation": "Wait for a compatible current-line eslint-config-next refresh.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "minimatch",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "development",
+      "dependency_paths": [
+        "moon-reply > eslint and lint plugins > minimatch@3.1.5 > brace-expansion@1.1.16",
+        "moon-reply > eslint-config-next > typescript-eslint > minimatch@10.2.5 > brace-expansion@5.0.7"
+      ],
+      "affected_version": "3.1.5 and 10.2.5 through brace-expansion",
+      "patched_version_availability": "npm proposes eslint 10.8.0; the nested 10.x path can receive brace-expansion 5.0.8 only through a compatible parent resolution",
+      "runtime_classification": "development-only",
+      "runtime_reachability_evidence": "All installed paths are owned by ESLint or TypeScript-ESLint.",
+      "proposed_safe_remediation": "Use coordinated parent upgrades; do not override minimatch across incompatible majors.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "next",
+      "severity": "high",
+      "direct": true,
+      "dependency_scope": "production",
+      "dependency_paths": [
+        "moon-reply > next@16.2.12 > postcss@8.4.31",
+        "moon-reply > next@16.2.12 > sharp@0.34.5"
+      ],
+      "affected_version": "16.2.12 only as an aggregate parent of affected postcss and sharp",
+      "patched_version_availability": "npm proposes next 9.3.3, a semver-major downgrade; no safe supported 16.2.x release currently removes both affected children",
+      "runtime_classification": "production-installed but not runtime-reachable",
+      "runtime_reachability_evidence": "The M2 route does not accept CSS, source maps, images, or image URLs; the repository has no next/image import, image configuration, middleware, custom server, Server Action, or rewrites.",
+      "proposed_safe_remediation": "Keep 16.2.12 and adopt a supported Next release that updates PostCSS and sharp after full regression validation.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "postcss",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "production",
+      "dependency_paths": [
+        "moon-reply > next@16.2.12 > postcss@8.4.31",
+        "moon-reply > @tailwindcss/postcss@4.3.2 > postcss@8.5.16"
+      ],
+      "affected_version": "8.4.31 for GHSA-6g55-p6wh-862q; 8.4.31 and 8.5.16 for GHSA-r28c-9q8g-f849",
+      "patched_version_availability": "8.5.12 or later addresses GHSA-6g55-p6wh-862q and 8.5.18 or later addresses GHSA-r28c-9q8g-f849; Next pins 8.4.31",
+      "runtime_classification": "production-installed but not runtime-reachable",
+      "runtime_reachability_evidence": "PostCSS processes repository-owned CSS at build time. No request field, M2 Stage output, uploaded file, or runtime API supplies CSS or sourceMappingURL content.",
+      "proposed_safe_remediation": "Update the development Tailwind path when lockfile scope is separately authorized and wait for Next to declare a patched PostCSS dependency; do not force-override Next's exact dependency.",
+      "remediation_breaking": true,
+      "resolved": false
+    },
+    {
+      "package": "sharp",
+      "severity": "high",
+      "direct": false,
+      "dependency_scope": "production",
+      "dependency_paths": [
+        "moon-reply > next@16.2.12 > sharp@0.34.5"
+      ],
+      "affected_version": "0.34.5",
+      "patched_version_availability": "0.35.0 or later; this is outside Next 16.2.12's declared ^0.34.5 range",
+      "runtime_classification": "production-installed but not runtime-reachable",
+      "runtime_reachability_evidence": "The repository has no next/image import, image optimization configuration, image source, upload, or M2 image input.",
+      "proposed_safe_remediation": "Adopt a supported Next release whose declared sharp range includes 0.35.x; do not force an unsupported 0.x minor override.",
+      "remediation_breaking": true,
+      "resolved": false
+    }
+  ],
+  "decision": {
+    "unresolved_production_reachable_high_or_critical": 0,
+    "unresolved_production_installed_not_runtime_reachable_high": 3,
+    "unresolved_development_only_high": 9,
+    "r1_automated_gate": "pass",
+    "acceptance": "on_hold"
+  },
+  "execution_evidence": {
+    "openai_calls": 0,
+    "supabase_calls": 0,
+    "api_spend_usd": 0
+  }
+}

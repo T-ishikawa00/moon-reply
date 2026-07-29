@@ -33,33 +33,49 @@ export class AssessmentApplication {
     this.uuid = options.uuid ?? randomUUID;
   }
 
+  private async existingResult(idempotencyKey: string) {
+    const existing =
+      await this.options.repository.findByIdempotencyKey(idempotencyKey);
+    if (!existing) return null;
+    if (existing.status === "completed") {
+      const completed =
+        await this.options.repository.getCompletedAssessment(existing.id);
+      if (completed) {
+        return { ...completed, duplicate: true } as AssessmentExecutionResult;
+      }
+    }
+    throw new M2RuntimeError("M2_DUPLICATE_SUBMISSION", 409);
+  }
+
   async submit(
     input: AssessmentInput,
     idempotencyKey: string,
   ): Promise<AssessmentExecutionResult> {
-    const existing =
-      await this.options.repository.findByIdempotencyKey(idempotencyKey);
-    if (existing) {
-      if (existing.status === "completed") {
-        const completed =
-          await this.options.repository.getCompletedAssessment(existing.id);
-        if (completed) {
-          return { ...completed, duplicate: true };
-        }
-      }
-      throw new M2RuntimeError("M2_DUPLICATE_SUBMISSION", 409);
-    }
+    const existing = await this.existingResult(idempotencyKey);
+    if (existing) return existing;
 
     const now = this.now();
     const requestId = this.uuid();
     const runId = this.uuid();
-    await this.options.repository.createRequest({
-      id: requestId,
-      idempotencyKey,
-      source: "internal_review_runtime",
-      ...input,
-      now,
-    });
+    try {
+      await this.options.repository.createRequest({
+        id: requestId,
+        idempotencyKey,
+        source: "internal_review_runtime",
+        ...input,
+        now,
+      });
+    } catch (error) {
+      if (
+        error instanceof M2RuntimeError &&
+        error.safeCode === "M2_IDEMPOTENCY_CONFLICT"
+      ) {
+        const concurrentResult = await this.existingResult(idempotencyKey);
+        if (concurrentResult) return concurrentResult;
+        throw new M2RuntimeError("M2_DUPLICATE_SUBMISSION", 409);
+      }
+      throw error;
+    }
 
     const pipeline = new AssessmentPipeline({
       repository: this.options.repository,

@@ -186,12 +186,16 @@ export type FailRunRecord = UsageTotals & {
   completedAt: string;
 };
 
-export type SaveReportRecord = {
-  id: string;
+export type FinalizeCompletedAssessmentRecord = UsageTotals & {
+  reportId: string;
   runId: string;
+  requestId: string;
+  returnedModel: string | null;
+  eligibility: "ready";
+  decision: Decision;
   reportJson: RuntimeReport;
   decisionCardJson: DecisionCard;
-  createdAt: string;
+  completedAt: string;
 };
 
 export type DecisionPlan = {
@@ -302,7 +306,9 @@ export interface AssessmentRepository {
   failStage(record: FailStageRecord): Promise<void>;
   completeRun(record: CompleteRunRecord): Promise<void>;
   failRun(record: FailRunRecord): Promise<void>;
-  saveReport(record: SaveReportRecord): Promise<void>;
+  finalizeCompletedAssessment(
+    record: FinalizeCompletedAssessmentRecord,
+  ): Promise<void>;
   getCompletedAssessment(
     requestId: string,
   ): Promise<CompletedAssessment | null>;

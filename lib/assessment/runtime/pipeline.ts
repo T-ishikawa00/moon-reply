@@ -385,23 +385,23 @@ export class AssessmentPipeline {
       const report = buildRuntimeReport(decisionPlan, reportContent);
       const decisionCard = buildDecisionCard(decisionPlan, reportContent);
       this.emit("SAVE_FINAL_REPORT");
-      await this.repository.saveReport({
-        id: this.uuid(),
-        runId: runContext.runId,
-        reportJson: report,
-        decisionCardJson: decisionCard,
-        createdAt: this.now(),
-      });
       this.emit("COMPLETE_RUN");
-      await this.repository.completeRun({
-        runId: runContext.runId,
-        requestId: runContext.requestId,
-        returnedModel: this.returnedModel,
-        eligibility,
-        decision: decisionPlan.selected_decision,
-        completedAt: this.now(),
-        ...this.usage,
-      });
+      try {
+        await this.repository.finalizeCompletedAssessment({
+          reportId: this.uuid(),
+          runId: runContext.runId,
+          requestId: runContext.requestId,
+          returnedModel: this.returnedModel,
+          eligibility: "ready",
+          decision: decisionPlan.selected_decision,
+          reportJson: report,
+          decisionCardJson: decisionCard,
+          completedAt: this.now(),
+          ...this.usage,
+        });
+      } catch {
+        throw new M2RuntimeError("M2_FINALIZATION_PERSISTENCE_FAILED");
+      }
 
       return {
         requestId: runContext.requestId,

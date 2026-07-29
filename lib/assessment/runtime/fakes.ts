@@ -9,10 +9,10 @@ import type {
   CreateRunRecord,
   FailRunRecord,
   FailStageRecord,
+  FinalizeCompletedAssessmentRecord,
   JsonObject,
   M2StageId,
   PersistedAssessmentRequest,
-  SaveReportRecord,
   StageRequest,
   StartStageRecord,
 } from "./types.ts";
@@ -29,7 +29,13 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   readonly actualSupabaseCalls = 0;
   readonly requests = new Map<string, PersistedAssessmentRequest>();
   readonly requestsByIdempotencyKey = new Map<string, string>();
-  readonly runs = new Map<string, CreateRunRecord & Partial<CompleteRunRecord>>();
+  readonly runs = new Map<
+    string,
+    CreateRunRecord &
+      Partial<CompleteRunRecord> & {
+        status: "processing" | "completed" | "failed";
+      }
+  >();
   readonly stageRuns = new Map<
     string,
     StartStageRecord & {
@@ -38,7 +44,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
       failure?: FailStageRecord;
     }
   >();
-  readonly reports = new Map<string, SaveReportRecord>();
+  readonly reports = new Map<string, FinalizeCompletedAssessmentRecord>();
   readonly events: string[] = [];
   private failOnceAt?: string;
 
@@ -84,7 +90,10 @@ export class FakeAssessmentRepository implements AssessmentRepository {
 
   async createRun(record: CreateRunRecord) {
     this.maybeFail("createRun");
-    this.runs.set(record.id, clone(record));
+    this.runs.set(record.id, {
+      ...clone(record),
+      status: "processing",
+    });
     this.events.push("createRun");
   }
 
@@ -121,6 +130,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     const request = this.requests.get(record.requestId);
     if (!run || !request) throw new M2RuntimeError("M2_FAKE_RUN_NOT_FOUND");
     Object.assign(run, clone(record));
+    run.status = "completed";
     request.status = "completed";
     request.updatedAt = record.completedAt;
     this.events.push("completeRun");
@@ -131,16 +141,66 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     const run = this.runs.get(record.runId);
     const request = this.requests.get(record.requestId);
     if (!run || !request) throw new M2RuntimeError("M2_FAKE_RUN_NOT_FOUND");
+    if (run.status !== "processing" || request.status !== "processing") {
+      throw new M2RuntimeError("M2_FAKE_RUN_STATE_CONFLICT", 409);
+    }
     Object.assign(run, clone(record));
+    run.status = "failed";
     request.status = "failed";
     request.updatedAt = record.completedAt;
     this.events.push("failRun");
   }
 
-  async saveReport(record: SaveReportRecord) {
-    this.maybeFail("saveReport");
-    this.reports.set(record.runId, clone(record));
-    this.events.push("saveReport");
+  async finalizeCompletedAssessment(record: FinalizeCompletedAssessmentRecord) {
+    const run = this.runs.get(record.runId);
+    const request = this.requests.get(record.requestId);
+    if (!run || !request || run.requestId !== record.requestId) {
+      throw new M2RuntimeError("M2_FAKE_RUN_NOT_FOUND");
+    }
+    if (
+      run.status !== "processing" ||
+      request.status !== "processing" ||
+      this.reports.has(record.runId)
+    ) {
+      throw new M2RuntimeError("M2_FINALIZATION_STATE_CONFLICT", 409);
+    }
+
+    const runBefore = clone(run);
+    const requestBefore = clone(request);
+    const reportBefore = this.reports.get(record.runId);
+    try {
+      this.maybeFail("finalizeCompletedAssessment:reportInsert");
+      this.reports.set(record.runId, clone(record));
+      this.maybeFail("finalizeCompletedAssessment:runUpdate");
+      Object.assign(run, {
+        runId: record.runId,
+        requestId: record.requestId,
+        returnedModel: record.returnedModel,
+        eligibility: record.eligibility,
+        decision: record.decision,
+        completedAt: record.completedAt,
+        totalInputTokens: record.totalInputTokens,
+        totalCachedTokens: record.totalCachedTokens,
+        totalOutputTokens: record.totalOutputTokens,
+        totalReasoningTokens: record.totalReasoningTokens,
+        usageDerivedCostUsd: record.usageDerivedCostUsd,
+      });
+      run.status = "completed";
+      this.maybeFail("finalizeCompletedAssessment:requestUpdate");
+      request.status = "completed";
+      request.updatedAt = record.completedAt;
+      this.events.push("finalizeCompletedAssessment");
+    } catch (error) {
+      this.runs.set(record.runId, runBefore);
+      this.requests.set(record.requestId, requestBefore);
+      if (reportBefore) {
+        this.reports.set(record.runId, reportBefore);
+      } else {
+        this.reports.delete(record.runId);
+      }
+      this.events.push("finalizeCompletedAssessment:rollback");
+      throw error;
+    }
   }
 
   async getCompletedAssessment(requestId: string) {
