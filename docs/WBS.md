@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 through M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete at their recorded commits. No true external approval exists, the paid CLI has not run, actual environment reads, secret resolutions, HTTPS requests, provider calls, and spend remain zero. M2-P2-B1-B2-B1 paid execution and Milestone 2 runtime remain unauthorized and not started.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 through M2-P2-B1-B2-B0 remain accepted historical foundations. M2-P3-A is the authorized active internal runtime candidate. The paid CLI remains unexecuted, paused internal QA tooling; actual OpenAI/Supabase calls and spend for M2-P3-A validation remain zero.
 
 ## P0: Repository Setup
 
@@ -650,7 +650,7 @@ B1-B1 acceptance boundary: local provider-protocol handling only for `WAIT-003`,
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P1 through B1-B2-B0 accepted and complete; B1-B2-B1 and runtime unauthorized
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3-A runtime structure implemented as an automated review candidate; Human setup/acceptance remain
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 through M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete. M2-P2-B1-B2-B1 paid execution, Milestone 2 runtime, model selection, API connection, DB work, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 through M2-P2-B1-B2-B0 are frozen historical foundations. M2-P3-A authorizes only the internal development runtime structure and deterministic fake validation. Live secret setup, Supabase migration application, live smoke testing, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -697,3 +697,19 @@ OpenAI Project/billing/key setup, API execution, retry, Repair, fallback, Batch,
 - [ ] Separately authorize M2-P2-B1-B2-B1 true approval creation and one-time paid execution.
 
 The paid entrypoint exists but was not executed. No true external approval record, marker, or run directory was created. Automated PASS alone was not Human / ChatGPT acceptance; the separate final decision accepted B0. That acceptance is not model-quality evidence and does not authorize M2-P2-B1-B2-B1.
+
+# M2-P3-A Internal AI Assessment Runtime Vertical Slice
+
+- [x] Preserve all M2-P1/M2-P2 historical capability snapshots and add an explicit M2-P3 successor manifest.
+- [x] Reclassify the paid-once runner as paused internal QA tooling without deleting it.
+- [x] Implement development-only `/review/runtime` with synthetic-data warning and no public navigation.
+- [x] Implement Node `POST /api/internal/assessments` with origin, strict-body, privacy, length, UUID, and idempotency checks.
+- [x] Implement OpenAI Responses and Supabase server-only bindings with fail-closed environment configuration.
+- [x] Implement PB-01 through PB-06, deterministic Safety/eligibility/decision policy, per-Stage persistence, and report rendering.
+- [x] Add the four-table versioned SQL migration with RLS and no public policies.
+- [x] Add fake transport/repository scenarios and the dedicated M2-P3 verifier.
+- [ ] Complete the final exact sequential validation command set and record the implementation commit/push.
+- [ ] Complete code review and Human acceptance.
+- [ ] Human applies the migration and configures secrets for a separately authorized synthetic-only development smoke test.
+
+Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

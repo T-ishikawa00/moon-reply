@@ -27,6 +27,10 @@ const historicalBaseSha =
   "deff429e45a411f0d6c6d5bd3f199adca994ebb5";
 const historicalEndSha =
   "2e2e0cc4c57c46320d56aa986055f65187aa6aee";
+const m2p3BaselineCommit =
+  "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const m2p3CapabilityManifestPath =
+  "evals/runtime/m2-p3-runtime-capabilities-v1.json";
 const b1aSuccessorLocalToolPaths = new Set([
   "scripts/prepare-m2-p2-b1-a-offline-runner.mjs",
   "scripts/run-m2-p2-b1-a-offline.mjs",
@@ -1225,6 +1229,7 @@ function verifyProhibitedImplementation() {
     "diff",
     "--exit-code",
     foundationSha,
+    historicalEndSha,
     "--",
     "package.json",
     "package-lock.json",
@@ -1258,6 +1263,7 @@ function verifyProhibitedImplementation() {
     "diff",
     "--exit-code",
     foundationSha,
+    historicalEndSha,
     "--",
     "app",
     "components",
@@ -1270,6 +1276,35 @@ function verifyProhibitedImplementation() {
     "M2_PROHIBITED_IMPLEMENTATION_GATE",
     runtimeDiff.status === 0,
     "runtime, UI, fixture, Safety, public, or database path changed",
+  );
+
+  const successorManifest = readJson(
+    m2p3CapabilityManifestPath,
+  );
+  assert(
+    "M2_PROHIBITED_IMPLEMENTATION_GATE",
+    successorManifest?.task_id === "M2-P3-A" &&
+      successorManifest?.baseline?.commit === m2p3BaselineCommit &&
+      successorManifest?.historical_snapshots?.some(
+        (snapshot) =>
+          snapshot.path === historicalScopePath,
+      ),
+    "M2-P3 explicit successor capability boundary differs",
+  );
+  const foundationDiff = runGit([
+    "diff",
+    "--exit-code",
+    m2p3BaselineCommit,
+    "--",
+    "ai/prompts",
+    "ai/schemas",
+    "evals/development",
+    "evals/version-manifest.json",
+  ]);
+  assert(
+    "M2_PROHIBITED_IMPLEMENTATION_GATE",
+    foundationDiff.status === 0,
+    "M2-P3 changed an accepted M2 foundation asset",
   );
 
   const implementationPatterns = [

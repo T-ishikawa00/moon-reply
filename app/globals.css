@@ -3612,3 +3612,81 @@ summary::marker {
     padding-left: 1.125rem;
   }
 }
+
+/* M2-P3 internal development runtime. No public navigation entry. */
+.runtime-review-page {
+  min-height: 100vh;
+  padding-bottom: clamp(4rem, 10vw, 8rem);
+  background: var(--paper-200);
+}
+
+.runtime-test-warning {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  border: 2px solid var(--state-danger-border);
+  background: var(--state-danger-background);
+  padding: var(--space-5);
+  color: var(--state-danger-foreground);
+}
+
+.runtime-test-warning strong {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+}
+
+.runtime-test-warning span {
+  color: inherit;
+  line-height: 1.8;
+}
+
+.runtime-sheet-wrap {
+  margin-top: clamp(-2rem, -3vw, -1rem);
+}
+
+.runtime-sheet {
+  overflow: clip;
+  box-shadow: var(--shadow-paper);
+}
+
+.runtime-sheet .request-field {
+  margin-inline: clamp(1.5rem, 5vw, 3rem);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--border-paper);
+}
+
+.runtime-sheet textarea {
+  width: 100%;
+  margin-top: var(--space-3);
+  resize: vertical;
+}
+
+.runtime-processing,
+.runtime-stop-result {
+  margin: var(--space-5) clamp(1.5rem, 5vw, 3rem);
+  border-left: 4px solid var(--moon-600);
+  background: var(--paper-200);
+  padding: var(--space-4);
+  color: var(--ink-700);
+  line-height: 1.8;
+}
+
+.runtime-stop-result {
+  border-left-color: var(--state-danger-border);
+  background: var(--state-danger-background);
+  color: var(--state-danger-foreground);
+}
+
+.runtime-stop-result p {
+  margin: var(--space-2) 0 0;
+}
+
+.runtime-result {
+  padding-top: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .runtime-sheet-wrap {
+    margin-top: 0;
+  }
+}

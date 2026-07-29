@@ -1,0 +1,118 @@
+{
+  "schema_version": "m2-p3-runtime-capabilities-v1",
+  "task_id": "M2-P3-A",
+  "status": "implemented_pending_human_setup_and_review",
+  "baseline": {
+    "branch": "main",
+    "commit": "72d4121ff4ad0682bcafbeed4f72f6491e697ffa"
+  },
+  "implementation_paths": [
+    ".env.example",
+    "app/api/internal/assessments/route.ts",
+    "app/globals.css",
+    "app/review/runtime/page.tsx",
+    "components/runtime/RuntimeAssessmentForm.tsx",
+    "components/runtime/RuntimeAssessmentNote.tsx",
+    "docs/CODEX_HANDOFF.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/ROADMAP.md",
+    "docs/WBS.md",
+    "docs/phase2/M2_P3_RUNTIME_SECURITY_AND_DATA_POLICY.md",
+    "docs/phase2/M2_P3_RUNTIME_VERTICAL_SLICE_SPEC.md",
+    "docs/phase2/M2_P3_SUPABASE_SETUP_HANDOFF.md",
+    "docs/phase2/TASK_M2_P3_A_REVIEW.md",
+    "evals/runtime/m2-p3-runtime-capabilities-v1.json",
+    "lib/assessment/runtime/application.ts",
+    "lib/assessment/runtime/cost.ts",
+    "lib/assessment/runtime/environment.ts",
+    "lib/assessment/runtime/errors.ts",
+    "lib/assessment/runtime/fakes.ts",
+    "lib/assessment/runtime/hash.ts",
+    "lib/assessment/runtime/openai-transport.ts",
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/policy.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/supabase-repository.ts",
+    "lib/assessment/runtime/types.ts",
+    "lib/assessment/runtime/validation.ts",
+    "package-lock.json",
+    "package.json",
+    "scripts/verify-m1-content-locks.mjs",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p2-b0-calibration-contract.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "scripts/verify-m2-zero-cost-estimator.mjs",
+    "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
+    "tsconfig.json"
+  ],
+  "historical_snapshots": [
+    {
+      "path": "evals/version-manifest.json",
+      "meaning": "M2-P1 foundation capability snapshot remains immutable"
+    },
+    {
+      "path": "docs/phase2/M2_P2_A_HISTORICAL_SCOPE.json",
+      "meaning": "M2-P2-A exact historical scope remains immutable"
+    },
+    {
+      "path": "docs/phase2/M2_P2_B1_B2_A_HISTORICAL_SCOPE.json",
+      "meaning": "M2-P2-B1-B2-A exact historical scope remains immutable"
+    }
+  ],
+  "enabled_capabilities": {
+    "internal_server_openai_runtime_structure": true,
+    "internal_supabase_persistence_structure": true,
+    "internal_review_ui": true,
+    "server_side_environment_configuration": true,
+    "development_only_runtime_execution": true
+  },
+  "disabled_capabilities": {
+    "production_public_runtime": false,
+    "payment": false,
+    "revenuecat": false,
+    "authentication": false,
+    "email_delivery": false,
+    "analytics": false,
+    "download_pdf_share_print": false,
+    "background_queue": false,
+    "cron": false,
+    "mobile_api": false,
+    "public_history": false,
+    "retry": false,
+    "repair_pb_07": false,
+    "fallback_model": false,
+    "real_user_processing": false
+  },
+  "runtime_contract": {
+    "model_allowlist": [
+      "gpt-5.6-luna"
+    ],
+    "stages": [
+      "PB-01",
+      "PB-02",
+      "PB-03",
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "provider_api": "OpenAI Responses API",
+    "provider_store": false,
+    "provider_tools": [],
+    "provider_stream": false,
+    "provider_background": false,
+    "database": "Supabase Postgres",
+    "route": "/api/internal/assessments",
+    "review_page": "/review/runtime",
+    "production_disabled_by_default": true
+  },
+  "task_execution_evidence": {
+    "openai_calls": 0,
+    "supabase_calls": 0,
+    "api_spend_usd": 0,
+    "real_user_records": 0,
+    "live_provider_configured": false,
+    "live_database_configured": false
+  },
+  "next_human_gate": "Review code, create server-side secrets outside the repository, apply the SQL migration to a dedicated development Supabase project, and authorize a synthetic-only development smoke test."
+}

@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package Human / ChatGPT accepted and complete; M2-P2-B1-B2-B1 external approval creation and paid execution unauthorized and not started
+Phase 2 / Milestone 2 — M2-P3-A Internal AI Assessment Runtime Vertical Slice implementation and automated review candidate
 
 ## Completed Through
 
@@ -53,32 +53,23 @@ Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package Human / ChatGPT accep
 - M2-P2-B1-B2-A-R1 and M2-P2-B1-B2-A dormant live bindings Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0` and `76ceb4a25cc565e84b9537bd25dbe703f87bd342`
 - M2-P2-B1-B2-B0-R1 historical-scope and execution-boundary correction Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f`
 - M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package Human / ChatGPT accepted and complete at `e8b369baa14ff417fed19d75f31c733dd5c8d240`
+- M2-P3-A authorized from clean `main` / `origin/main` baseline `72d4121ff4ad0682bcafbeed4f72f6491e697ffa`
 
 ## Current Task
 
-`M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package / Human / ChatGPT accepted and complete`
+`M2-P3-A Internal AI Assessment Runtime Vertical Slice`
 
 State:
 
-- M2-P1 foundation and M2-P1-R1 hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete;
-- M2-P1-R2 manifest-boundary correction is implemented and validated; the immutable R1 42-file historical snapshot is anchored to `432dbc76b79483616ee5fa4364e7bbc4d5d1dee7..c56f597d0491482995c4afa6fb64cf148dd66345`;
-- the accepted foundation defines evaluation data, Schemas, Prompt-stage contracts, scoring, retry, versioning, contamination controls, and Human review sampling;
-- the future 15-case holdout must be authored independently and must not share counterfactual or contrast-set relationships with the development dataset;
-- M2-P2-A is a local planning/tooling slice only; its estimates are not actual usage, and its implementation, automated validation, Human / ChatGPT review, acceptance, and completion are recorded;
-- M2-P2-B0 fixes the only possible future calibration path to development case `WAIT-003`, candidate `gpt-5.6-luna`, PB-01 through PB-06, six provider calls maximum, four local deterministic steps, no retry/Repair/fallback, a USD 0.30 preflight ceiling, and a USD 1 future absolute Human ceiling;
-- M2-P2-B0 is a zero-cost contract task: live execution is false, API spend authorization is USD 0, product-model selection is false, and OpenAI API/network/provider execution remains prohibited;
-- R2 fixes M2-P2-A exact-scope verification to the immutable accepted historical commit range; both historical sub-gates, `M2_P2_A_EXACT_SCOPE_GATE`, and the estimator aggregate pass;
-- `M2_B0_EXACT_SCOPE_GATE`, all B0 gates, M2 foundation, M1 locks/Safety, typecheck, lint, build, and diff checks pass; automated validation and Human / ChatGPT final review are complete, and B0 is accepted and complete;
-- M2-P2-B1-A-R1 successor-tool correction is Human / ChatGPT accepted and complete at `22bbf6f69ad2e21d3d43808e3518970eb1dc48e7`;
-- M2-P2-B1-A deterministic offline replay Runner is implemented, automated validation is complete, Human / ChatGPT final review is complete, and the task is accepted and complete at `630cde811d63e0304ed528dc2e426400e81506a6`;
-- M2-P2-B1-B1 implements network-disabled provider protocol logic only; automated validation and Human / ChatGPT final review are complete, and the task is accepted and complete at `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`;
-- M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A dormant OpenAI live bindings completed automated validation and final review and are accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`;
-- M2-P2-B1-B2-B0-R1 and M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f` and `e8b369baa14ff417fed19d75f31c733dd5c8d240`; M2-P2-B1-B2-B1 remains unauthorized and not started;
-- Development-70 is an evaluation-cost scenario, not the cost of one customer report, and no 14-case or 70-case API execution is authorized;
-- no product or baseline model selected and no model benchmark performed;
-- no OpenAI API call;
-- no AI runtime, database, payment, email, authentication, API route, server action, UI, or deployment authorization; and
-- no Milestone 2 runtime work authorized.
+- M2-P1 through M2-P2-B1-B2-B0 remain frozen historical foundations at their accepted commits;
+- the paid-once runner remains present, paused, and classified as internal QA tooling; it is not required for M2-P3 acceptance and no additional paid-once execution is planned now;
+- the active product-development path is `/review/runtime` -> `/api/internal/assessments` -> PB-01 through PB-06 -> Stage persistence -> assessment-note rendering;
+- the OpenAI Responses and Supabase repository bindings are server-only and remain unconfigured;
+- automated validation uses `FakeAiStageTransport` and `FakeAssessmentRepository` only;
+- M2-P3 has no retry, Repair/PB-07, fallback, queue, cron, payment, authentication, email, analytics, public history, download, or production/public release capability;
+- actual OpenAI calls are zero, actual Supabase calls are zero, API spend is USD 0, and no real-user data is processed;
+- the new `evals/runtime/m2-p3-runtime-capabilities-v1.json` is the successor capability boundary; the M2-P1 and M2-P2 historical snapshots are unchanged; and
+- the next gate is final automated validation, code review, then separate Human server-secret/migration setup for a synthetic-only development smoke test.
 
 ## Preserved Milestone 1 Baseline
 

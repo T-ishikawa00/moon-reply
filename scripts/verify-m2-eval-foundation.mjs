@@ -17,6 +17,12 @@ const baseCommit = "617aca826612f58adb4b3f0d113ff1a89c36016a";
 const r1StartingCommit = "432dbc76b79483616ee5fa4364e7bbc4d5d1dee7";
 const r1AcceptedImplementationCommit =
   "c56f597d0491482995c4afa6fb64cf148dd66345";
+const m2p3BaselineCommit =
+  "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const m2p3CapabilityManifestPath =
+  "evals/runtime/m2-p3-runtime-capabilities-v1.json";
+const m2p3VerifierPath =
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs";
 const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
 const canonicalContrastCatalogHash =
@@ -3351,9 +3357,11 @@ function resolveSuccessorLocalImport(fromFile, specifier) {
   );
 }
 
-function verifySuccessorLocalTools(paths) {
+function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
   const historicalScriptPaths = new Set([
     "scripts/verify-m2-eval-foundation.mjs",
+    m2p3VerifierPath,
+    ...m2p3ScriptPaths,
   ]);
   for (const item of paths.filter((candidate) =>
     candidate.startsWith("scripts/"),
@@ -3678,6 +3686,82 @@ function verifySuccessorLocalTools(paths) {
 
 function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
+  const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
+  const m2p3ImplementationPaths = new Set(
+    m2p3Manifest?.implementation_paths ?? [],
+  );
+  if (
+    m2p3Manifest?.task_id !== "M2-P3-A" ||
+    m2p3Manifest?.baseline?.commit !== m2p3BaselineCommit ||
+    !m2p3Manifest?.historical_snapshots?.some(
+      (snapshot) => snapshot.path === "evals/version-manifest.json",
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$",
+      invariant:
+        "M2-P3 is an explicit successor boundary over immutable M2-P1 history",
+      expected: {
+        task_id: "M2-P3-A",
+        baseline: m2p3BaselineCommit,
+        historical_snapshot: "evals/version-manifest.json",
+      },
+      actual: m2p3Manifest,
+    });
+  }
+  const m2p3Diff = runGit([
+    "diff",
+    "--name-only",
+    m2p3BaselineCommit,
+    "--",
+  ]);
+  const untracked = runGit([
+    "ls-files",
+    "--others",
+    "--exclude-standard",
+  ]);
+  const actualM2p3Paths = [
+    ...new Set(
+      `${m2p3Diff.stdout}\n${untracked.stdout}`
+        .split(/\r?\n/u)
+        .map((item) => item.trim().replaceAll("\\", "/"))
+        .filter(Boolean),
+    ),
+  ].sort();
+  const expectedM2p3Paths = [...m2p3ImplementationPaths].sort();
+  if (
+    m2p3Diff.status !== 0 ||
+    untracked.status !== 0 ||
+    JSON.stringify(actualM2p3Paths) !== JSON.stringify(expectedM2p3Paths)
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.implementation_paths",
+      invariant: "M2-P3 successor path list is exact",
+      expected: expectedM2p3Paths,
+      actual: actualM2p3Paths,
+    });
+  }
+  const foundationDiff = runGit([
+    "diff",
+    "--exit-code",
+    m2p3BaselineCommit,
+    "--",
+    "ai/prompts",
+    "ai/schemas",
+    "evals/development",
+    "evals/version-manifest.json",
+  ]);
+  if (foundationDiff.status !== 0) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.historical_snapshots",
+      invariant: "accepted M2-P1 foundation assets remain unchanged",
+      expected: "zero diff from M2-P3 baseline",
+      actual: foundationDiff.stderr || foundationDiff.stdout,
+    });
+  }
   const exactAllowed = new Set([
     "docs/ROADMAP.md",
     "docs/CURRENT_FOCUS.md",
@@ -3693,11 +3777,17 @@ function verifyScopeAndProhibitedImplementation() {
     "ai/prompts/",
     "ai/schemas/",
   ];
-  verifySuccessorLocalTools(paths);
+  const m2p3ScriptPaths = new Set(
+    [...m2p3ImplementationPaths].filter((item) =>
+      item.startsWith("scripts/"),
+    ),
+  );
+  verifySuccessorLocalTools(paths, m2p3ScriptPaths);
   for (const item of paths) {
     if (
       !exactAllowed.has(item) &&
       !successorLocalToolPaths.has(item) &&
+      !m2p3ImplementationPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -3724,6 +3814,7 @@ function verifyScopeAndProhibitedImplementation() {
   for (const item of paths.filter((candidate) =>
     protectedPatterns.some((pattern) => pattern.test(candidate)),
   )) {
+    if (m2p3ImplementationPaths.has(item)) continue;
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
       file: item,
       pathName: "$",

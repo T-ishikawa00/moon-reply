@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
@@ -15,6 +15,9 @@ const require = createRequire(import.meta.url);
 
 const LOCK_VERSION = "M1-P3-lock-v1";
 const ACCEPTED_SOURCE_BASE = "84edb93c6e098c65ae2e180478827033c25d488a";
+const M2_P3_BASE = "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const M2_P3_ROUTE = "app/api/internal/assessments/route.ts";
+const M2_P3_REVIEW_PAGE = "app/review/runtime/page.tsx";
 
 const sourceLocks = [
   {
@@ -125,6 +128,53 @@ function sha256(value) {
 
 function readSource(relativePath) {
   return readFileSync(path.join(repositoryRoot, relativePath), "utf8").replace(/\r\n?/gu, "\n");
+}
+
+function listRelativeFiles(relativeDirectory) {
+  const absoluteDirectory = path.join(repositoryRoot, relativeDirectory);
+  if (!existsSync(absoluteDirectory)) return [];
+  return readdirSync(absoluteDirectory, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => path.join(relativeDirectory, entry.parentPath.slice(absoluteDirectory.length + 1), entry.name).replaceAll("\\", "/"))
+    .sort();
+}
+
+function hasApprovedM2RuntimeSuccessor() {
+  try {
+    const manifest = JSON.parse(readSource("evals/runtime/m2-p3-runtime-capabilities-v1.json"));
+    const routeSource = readSource(M2_P3_ROUTE);
+    const reviewPageSource = readSource(M2_P3_REVIEW_PAGE);
+    const environmentSource = readSource("lib/assessment/runtime/environment.ts");
+    const apiFiles = listRelativeFiles("app/api");
+
+    return manifest.schema_version === "m2-p3-runtime-capabilities-v1"
+      && manifest.task_id === "M2-P3-A"
+      && manifest.baseline?.commit === M2_P3_BASE
+      && manifest.runtime_contract?.route === "/api/internal/assessments"
+      && manifest.runtime_contract?.review_page === "/review/runtime"
+      && manifest.runtime_contract?.production_disabled_by_default === true
+      && manifest.enabled_capabilities?.development_only_runtime_execution === true
+      && manifest.disabled_capabilities?.production_public_runtime === false
+      && manifest.disabled_capabilities?.real_user_processing === false
+      && isDeepStrictEqual(apiFiles, [M2_P3_ROUTE])
+      && includesAll(routeSource, [
+        "isInternalRuntimeAvailable()",
+        'export const runtime = "nodejs"',
+        '"X-Robots-Tag": "noindex, nofollow"',
+      ])
+      && includesAll(reviewPageSource, [
+        'process.env.NODE_ENV === "production"',
+        'process.env.M2_INTERNAL_RUNTIME_ENABLED !== "true"',
+        "notFound()",
+        "実在人物、実ユーザー、個人情報、機密情報を入力しないでください。",
+      ])
+      && includesAll(environmentSource, [
+        'process.env.NODE_ENV !== "production"',
+        'process.env.M2_INTERNAL_RUNTIME_ENABLED === "true"',
+      ]);
+  } catch {
+    return false;
+  }
 }
 
 function countOccurrences(source, value) {
@@ -488,12 +538,17 @@ function evaluateSemanticAssertions(results, current, safetyRun) {
   ].join("\n");
   const runtimeCallPattern = /\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\b|@supabase\/|\bcreateClient\s*\(|\bopenai\b|\bstripe\b|\bnodemailer\b|\bsendgrid\b|\bwriteFile\s*\(|\bcreateObjectURL\s*\(|navigator\.share|window\.print/u;
   const runtimeInactive =
-    !existsSync(path.join(repositoryRoot, "app", "api"))
+    (!existsSync(path.join(repositoryRoot, "app", "api")) || hasApprovedM2RuntimeSuccessor())
     && !runtimeCallPattern.test(runtimeSources)
     && includesAll(requestPageSource, ["入力内容は外部へ送信・保存されず", "決済、AI生成、メール送信も行われません"])
     && includesAll(reviewBannerSource, ["実際の決済・送信は行われません", "AI生成、メール配信、データ保存も動作しません"])
     && includesAll(reviewIndexSource, ["決済、外部送信、AI生成、メール配信、データ保存、ファイル生成は動作しません"]);
-  record(results, "SEM-RUNTIME-INACTIVE", runtimeInactive, "no API route or external runtime owner exists and all named surfaces state inactivity");
+  record(
+    results,
+    "SEM-RUNTIME-INACTIVE",
+    runtimeInactive,
+    "M1 public surfaces remain inactive; only the exact dev-only M2-P3 internal successor route may exist",
+  );
 }
 
 function runSafetyVerifier() {

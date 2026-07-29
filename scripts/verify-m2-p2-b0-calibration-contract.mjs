@@ -20,6 +20,10 @@ const correctionCommit =
   "a757e7f28affe29a423ff817872a1a7f650a7fd2";
 const acceptedB0ImplementationCommit =
   "cf75679f2d116132f7519256cd762ba1a51a0af9";
+const m2p3BaselineCommit =
+  "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const m2p3CapabilityManifestPath =
+  "evals/runtime/m2-p3-runtime-capabilities-v1.json";
 const b1aSuccessorLocalToolPaths = new Set([
   "scripts/prepare-m2-p2-b1-a-offline-runner.mjs",
   "scripts/run-m2-p2-b1-a-offline.mjs",
@@ -1063,15 +1067,46 @@ function verifyExactScope() {
       "diff",
       "--exit-code",
       correctionCommit,
+      acceptedB0ImplementationCommit,
       "--",
       ...paths,
     ]);
     assert(
       "M2_B0_EXACT_SCOPE_GATE",
       result.status === 0,
-      `protected diff is not zero for ${paths.join(", ")}`,
+      `historical protected diff is not zero for ${paths.join(", ")}`,
     );
   }
+
+  const successorManifest = readJson(
+    m2p3CapabilityManifestPath,
+  );
+  assert(
+    "M2_B0_EXACT_SCOPE_GATE",
+    successorManifest?.task_id === "M2-P3-A" &&
+      successorManifest?.baseline?.commit === m2p3BaselineCommit &&
+      successorManifest?.historical_snapshots?.some(
+        (snapshot) =>
+          snapshot.path ===
+          "docs/phase2/M2_P2_A_HISTORICAL_SCOPE.json",
+      ),
+    "M2-P3 explicit successor capability boundary differs",
+  );
+  const foundationDiff = runGit([
+    "diff",
+    "--exit-code",
+    m2p3BaselineCommit,
+    "--",
+    "ai/prompts",
+    "ai/schemas",
+    "evals/development",
+    "evals/version-manifest.json",
+  ]);
+  assert(
+    "M2_B0_EXACT_SCOPE_GATE",
+    foundationDiff.status === 0,
+    "M2-P3 changed an accepted M2 foundation asset",
+  );
 }
 
 function printResults() {
