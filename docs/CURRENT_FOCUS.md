@@ -8,7 +8,7 @@ Phase 2 / Milestone 2 — M2-P3-A Internal AI Assessment Runtime Vertical Slice 
 
 - Stage 1 project foundation and static LP
 - Stage 2 request-form UI
-- Stage 3 Supabase schema foundation
+- Obsolete Stage 3 Supabase schema concept preserved under `supabase/archive/` as historical design evidence only; it is not an active migration
 - Stage 4 deterministic safety foundation
 - Legal/compliance foundation and legal-page drafts
 - Provider-inquiry preparation
@@ -64,6 +64,7 @@ Phase 2 / Milestone 2 — M2-P3-A Internal AI Assessment Runtime Vertical Slice 
 
 State:
 
+- the active initial runtime migrations are `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql`; the archived `0001_stage3_data_foundation.sql` was never applied to `moon-reply-dev` and must not be copied into a live database;
 - M2-P1 and M2-P2-A are accepted and complete;
 - M2-P2-B0 through M2-P2-B1-B2-B0 remain present as paused internal QA tooling and are not the active product path;
 - M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete;

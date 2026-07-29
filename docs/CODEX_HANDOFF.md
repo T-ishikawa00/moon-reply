@@ -6,6 +6,7 @@ CodeX is the implementation and repository operation agent. It must follow the c
 
 ## Current Authority
 
+- Migration authority is limited to the active initial runtime migrations `supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql` and `supabase/migrations/0003_m2_p3_atomic_finalization.sql`. The obsolete `0001_stage3_data_foundation.sql` was never applied to `moon-reply-dev` and is preserved under `supabase/archive/` only as historical design evidence; it is not an active migration and must not be copied into a live database. Archiving it does not mark it as applied, and `supabase migration repair` was not used.
 - Task 18C-R3 Roadmap Reset is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 - Tasks M1-P1 and M1-P1-R1 are accepted by Human at their recorded commits.
 - Tasks M1-I1 through M1-I5 and M1-I5-R1 are accepted by Human at their recorded commits.
@@ -30,6 +31,8 @@ The canonical service is an `AIを活用した恋愛メッセージ分析・判�
 The accepted Milestone 1 deliverable is a fixed-fixture Reviewable Web MVP. It has no real AI, runtime DB, payment, email delivery, deployment, production analytics, account system, or PDF/download/share implementation and is not production-ready or payment-ready.
 
 ## Current Status
+
+The active Supabase migration sequence begins with `0002_m2_p3_runtime_vertical_slice.sql` and continues with `0003_m2_p3_atomic_finalization.sql`; archived migration `0001_stage3_data_foundation.sql` is outside the live migration sequence.
 
 Current state: `M2-P3-A Internal AI Assessment Runtime Vertical Slice` and M2-P3-A-R1 are Human / ChatGPT accepted and complete. The accepted implementation provides `/review/runtime`, `POST /api/internal/assessments`, PB-01 through PB-06, deterministic application policy, persistence-before-provider, atomic Postgres finalization, assessment-note rendering, deterministic fakes, and dedicated verification. Human desktop Visual QA and interaction QA are complete. Live OpenAI and Supabase configuration is absent. No PR, real API call, Supabase Project setup, migration application, or real-user processing is authorized by acceptance.
 

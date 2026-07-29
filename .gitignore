@@ -33,3 +33,6 @@ venv/
 .tmp/
 tmp/
 *.tsbuildinfo
+
+# Supabase CLI
+supabase/.temp/

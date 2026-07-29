@@ -2,6 +2,14 @@
 
 ## Current state
 
+The active initial runtime migrations are
+`supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql` and
+`supabase/migrations/0003_m2_p3_atomic_finalization.sql`. The obsolete
+`0001_stage3_data_foundation.sql` was never applied to `moon-reply-dev`; it is
+archived only as historical design evidence and is not an active migration.
+Archiving it does not mark it as applied, and `supabase migration repair` was
+not used.
+
 M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete. The accepted code contains the server repository binding, the four-table migration, and the atomic-finalization migration. No Supabase Project was created, no migration was applied, no secret was created or read, and no Supabase request was made.
 
 ## Next Human setup gate
