@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice accepted and complete; Milestone 2 remains incomplete
+Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice fully complete; Milestone 2 remains incomplete
 
 ## Completed Through
 
@@ -57,10 +57,11 @@ Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice accepted and complete; Mi
 - M2-P3-A implementation Human / ChatGPT accepted and complete at `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`
 - M2-P3-A-R1 Runtime Security and Transaction Hardening Human / ChatGPT accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`
 - M2-P3-A automated validation, dependency review, atomic-finalization evidence, and Human desktop Visual QA complete
+- M2-P3 successful-run DB integrity verification PASS and complete against the existing synthetic live E2E records
 
 ## Current Work
 
-Successful-run DB integrity verification
+M2-P4 quality evaluation planning
 
 State:
 
@@ -74,10 +75,13 @@ State:
 - accepted task-time automated validation uses `FakeAiStageTransport` and `FakeAssessmentRepository` only and retains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`;
 - a separate post-acceptance Human-configured synthetic live E2E completed PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display successfully;
 - atomic finalization commits the report, decision card, run/request completion state, completion timestamp, final decision, and usage totals in one Postgres transaction;
+- the subsequent successful-run DB integrity verification used server-side SELECT only against existing records and passed Request, Run, Stage cardinality/order, Stage persistence, usage-total, report, atomic-timestamp, mixed-state, and global-anomaly checks;
+- the verified target prefixes are run `b91f8927` and request `972bfdd1`; the scan found requests `3`, runs `3`, stages `8`, reports `1`, completed-ready runs `1`, failed runs `2` with safe error code `M2_STAGE_PROVIDER_FAILED` twice, processing rows `0`, and integrity anomalies `0`;
+- verification activity was OpenAI API calls `0`, DB writes `0`, and migration operations `0`; the temporary inspection file was deleted;
 - M2-P3 has no retry, Repair/PB-07, fallback, queue, cron, payment, authentication, email, analytics, public history, download, or production/public release capability;
 - post-acceptance live OpenAI/Supabase usage is nonzero, but aggregate tokens, cost, and call count have not been calculated; real-user records and holdout use remain `0`;
 - the new `evals/runtime/m2-p3-runtime-capabilities-v1.json` is the successor capability boundary; the M2-P1 and M2-P2 historical snapshots are unchanged; and
-- the current work is successful-run DB integrity verification, followed by M2-P4 quality evaluation planning; Milestone 2 remains incomplete.
+- M2-P3 Runtime Vertical Slice is fully complete; current work is M2-P4 quality evaluation planning, quality evaluation execution has not started, and Milestone 2 remains incomplete.
 
 ## Preserved Milestone 1 Baseline
 
@@ -186,7 +190,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice and its post-acceptance Human-configured synthetic live E2E are complete, while Milestone 2 remains incomplete. The current work is successful-run DB integrity verification. After that, proceed to M2-P4 quality evaluation planning. M2-P2-B1-B2-B1 paid execution, production/payment/email/public release work, and later milestones remain unauthorized and paused.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice, its post-acceptance Human-configured synthetic live E2E, and successful-run DB integrity verification are complete; M2-P3 is fully complete while Milestone 2 remains incomplete. Current work is M2-P4 quality evaluation planning. Quality evaluation execution has not started. M2-P2-B1-B2-B1 paid execution, production/payment/email/public release work, and later milestones remain unauthorized and paused.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

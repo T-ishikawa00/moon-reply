@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is accepted and complete; Milestone 2 remains incomplete. Its accepted task-time Fake evidence remains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`. A separate post-acceptance Human-configured synthetic live E2E succeeded with nonzero usage whose exact aggregate has not been calculated.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification passed; Milestone 2 remains incomplete. Its accepted task-time Fake evidence remains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`. The separate post-acceptance Human-configured synthetic live E2E retains nonzero usage whose exact aggregate has not been calculated. Current work is M2-P4 quality evaluation planning; quality evaluation execution has not started.
 
 ## P0: Repository Setup
 
@@ -650,7 +650,7 @@ B1-B1 acceptance boundary: local provider-protocol handling only for `WAIT-003`,
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, Human setup, migrations, and synthetic live E2E complete; Milestone 2 remains incomplete; next sequence is successful-run DB integrity verification, then M2-P4 quality evaluation planning
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, Human setup, migrations, synthetic live E2E, and successful-run DB integrity verification complete; M2-P3 is fully complete, Milestone 2 remains incomplete, and current work is M2-P4 quality evaluation planning
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, and bounded synthetic live E2E are complete. Current work is successful-run DB integrity verification, followed by M2-P4 quality evaluation planning. Publication, deployment, provider inquiry or selection, production connections, email, payment, authentication, and every later implementation task remain blocked by their existing authorization and acceptance boundaries.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, and successful-run DB integrity verification are complete. Current work is M2-P4 quality evaluation planning; quality evaluation execution has not started. Publication, deployment, provider inquiry or selection, production connections, email, payment, authentication, and every later implementation task remain blocked by their existing authorization and acceptance boundaries.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -718,7 +718,9 @@ The paid entrypoint exists but was not executed. No true external approval recor
 - [x] Human applies migrations `0002` and `0003`; `0001` remains archived and unapplied, and migration repair is not used.
 - [x] Complete the post-acceptance Human-configured synthetic live E2E through PB-01 to PB-06, Structured Outputs, canonical AJV validation, Stage persistence, atomic finalization, usage-total persistence, and assessment-note display.
 - [x] Preserve the accepted task-time Fake zero-call/zero-spend evidence separately from nonzero post-acceptance live usage with no inferred aggregate.
-- [ ] Current work: verify DB integrity for the existing successful run.
-- [ ] Next: plan M2-P4 quality evaluation.
+- [x] Complete read-only successful-run DB integrity verification through server-side SELECT only: all target integrity checks PASS; processing rows `0`; integrity anomalies `0`; OpenAI API calls `0`; DB writes `0`; migration operations `0`.
+- [x] Confirm two failed runs with safe code `M2_STAGE_PROVIDER_FAILED` do not mix with the successful request and leave no orphan or processing state.
+- [ ] Current work: plan M2-P4 quality evaluation.
+- [ ] Quality evaluation execution: not started.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

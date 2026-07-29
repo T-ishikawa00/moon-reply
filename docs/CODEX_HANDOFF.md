@@ -36,9 +36,11 @@ The active Supabase migration sequence begins with `0002_m2_p3_runtime_vertical_
 
 The post-acceptance synthetic live E2E ran against code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
 
-Current state: M2-P3 Runtime Vertical Slice is accepted and complete; Milestone 2 remains incomplete. The accepted implementation provides `/review/runtime`, `POST /api/internal/assessments`, PB-01 through PB-06, deterministic application policy, persistence-before-provider, atomic Postgres finalization, assessment-note rendering, deterministic fakes, and dedicated verification. Human desktop Visual QA and interaction QA are complete. Separately, Human confirms the local development OpenAI/Supabase setup, migrations, and bounded synthetic live E2E are complete with `gpt-5.6-luna` and the internal runtime enabled.
+Current state: M2-P3 Runtime Vertical Slice is fully complete; Milestone 2 remains incomplete. The accepted implementation provides `/review/runtime`, `POST /api/internal/assessments`, PB-01 through PB-06, deterministic application policy, persistence-before-provider, atomic Postgres finalization, assessment-note rendering, deterministic fakes, and dedicated verification. Human desktop Visual QA and interaction QA are complete. Separately, Human confirms the local development OpenAI/Supabase setup, migrations, and bounded synthetic live E2E are complete with `gpt-5.6-luna` and the internal runtime enabled.
 
 Evidence remains two-layered: task-time automated validation used `FakeAiStageTransport` and `FakeAssessmentRepository` only and retains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`; the post-acceptance Human-configured synthetic live E2E has nonzero usage, while exact aggregate tokens, cost, and call count have not been calculated. Real-user records and holdout use remain `0`.
+
+The subsequent successful-run DB integrity verification is a separate read-only inspection record. It used server-side SELECT only against existing records and made OpenAI API calls `0`, DB writes `0`, and migration operations `0`. Target prefixes were run `b91f8927` and request `972bfdd1`. Request, Run, Stage cardinality/order, Stage persistence, usage totals, report, atomic timestamp, no-mixed-state, and global-anomaly checks passed. The database summary was requests `3`, runs `3`, stages `8`, reports `1`, and completed-ready runs `1`; two failed runs both used safe code `M2_STAGE_PROVIDER_FAILED`, with processing rows `0`, integrity anomalies `0`, and no mixed success/failure, orphan, or in-progress residue. The temporary inspection file was deleted.
 
 Human Visual QA accepted initial rendering, request-sheet interaction, required selections and acknowledgement behavior, configuration-missing fail-closed behavior, and safe `M2_RUNTIME_CONFIGURATION_INVALID` display. No stack trace or secret leakage was observed. Mobile-width QA was intentionally omitted because the route is internal desktop-only tooling. The truncated `実行境` label and weak disabled-submit distinction are non-blocking backlog items; this acceptance creates no correction task.
 
@@ -162,7 +164,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice and the post-acceptance Human-configured synthetic live E2E are complete; Milestone 2 remains incomplete. Current work is successful-run DB integrity verification. After that, proceed to M2-P4 quality evaluation planning. True paid approval/CLI execution remains paused and is not the active product path.
+Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice, the post-acceptance Human-configured synthetic live E2E, and successful-run DB integrity verification are complete; M2-P3 is fully complete while Milestone 2 remains incomplete. Current work is M2-P4 quality evaluation planning. Quality evaluation execution has not started. True paid approval/CLI execution remains paused and is not the active product path.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

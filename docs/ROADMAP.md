@@ -100,9 +100,11 @@ Exit criterion: a reviewer can understand what is sold, the price, input flow, s
 
 ## 5. Milestone 2: Internal Automated AI / DB Vertical Slice
 
-Status: M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is accepted and complete, including the separate post-acceptance Human-configured synthetic live E2E; Milestone 2 remains incomplete. The next sequence is successful-run DB integrity verification, then M2-P4 quality evaluation planning. M2-P2-B1-B2-B1 external approval creation and actual paid execution remain paused and unauthorized.
+Status: M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete, including the separate post-acceptance Human-configured synthetic live E2E and successful-run DB integrity verification; Milestone 2 remains incomplete. Current work is M2-P4 quality evaluation planning, and quality evaluation execution has not started. M2-P2-B1-B2-B1 external approval creation and actual paid execution remain paused and unauthorized.
 
 Accepted internal boundary: in a Human-confirmed local development operational state, one bounded synthetic consultation moved from the request sheet through the internal Next.js server route, eligibility, Safety, PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note rendering. This synthetic development connection is explicitly distinct from a production connection.
+
+The completed DB integrity verification inspected existing records through server-side SELECT only. Request, Run, Stage cardinality/order, Stage persistence, usage totals, report, atomic timestamp, mixed success/failure, and global anomaly checks passed. Processing rows and integrity anomalies were `0`; two failed runs both carried safe code `M2_STAGE_PROVIDER_FAILED`, with no mixed success/failure under a request, orphan, or in-progress residue. Verification made OpenAI API calls `0`, DB writes `0`, and migration operations `0`. Historical task-time Fake zero evidence and post-acceptance live nonzero evidence remain separate and unchanged.
 
 Milestone 2 target exclusions:
 

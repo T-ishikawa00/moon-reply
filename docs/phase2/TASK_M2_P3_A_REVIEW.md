@@ -114,7 +114,32 @@ Not implemented by M2-P3-A: payment, RevenueCat, authentication, email, public p
 - following the R1/R2 Structured Outputs corrections, the synthetic live E2E completed PB-01 through PB-06, Provider Structured Outputs, canonical AJV validation, Supabase Stage persistence, atomic finalization, usage-total persistence, and assessment-note display successfully;
 - live OpenAI/Supabase usage is nonzero, but exact aggregate tokens, cost, and call count have not been calculated;
 - real-user records and holdout use remain `0`;
-- M2-P3 Runtime Vertical Slice is accepted and complete; Milestone 2 remains incomplete; and
-- current work is successful-run DB integrity verification, followed by M2-P4 quality evaluation planning.
+- M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification; Milestone 2 remains incomplete; and
+- current work is M2-P4 quality evaluation planning; quality evaluation execution has not started.
 
 This post-acceptance Human record is separate from the task-time Fake zero-call/zero-spend evidence. CodeX did not revalidate secret values or query the development database for this documentation synchronization.
+
+## Successful-run DB integrity verification
+
+The existing synthetic live E2E records were inspected read-only through server-side SELECT only. The target identifiers are recorded only as run prefix `b91f8927` and request prefix `972bfdd1`; no full UUID or request, report, or Stage output body is recorded.
+
+- overall DB integrity: PASS;
+- Request integrity: PASS;
+- Run integrity: PASS;
+- Stage cardinality/order: PASS;
+- Stage persistence: PASS;
+- Usage totals: PASS;
+- Report integrity: PASS;
+- Atomic timestamp consistency: PASS;
+- No mixed success/failure under request: PASS;
+- Global anomaly scan: PASS;
+- database counts: requests `3`, runs `3`, stages `8`, reports `1`, completed-ready runs `1`;
+- failed runs: `2`, both with safe error code `M2_STAGE_PROVIDER_FAILED`;
+- processing rows: `0`;
+- integrity anomalies: `0`;
+- OpenAI API calls during verification: `0`;
+- DB writes during verification: `0`;
+- migration operations during verification: `0`; and
+- temporary inspection file: deleted.
+
+The two failed runs are retained historical operational records and do not mix with the verified successful request. No orphan or in-progress residue was found. Historical task-time Fake zero-call/zero-spend evidence and post-acceptance live nonzero evidence remain separate and unchanged.

@@ -161,12 +161,46 @@
     "real_user_records": 0,
     "holdout_usage": 0
   },
+  "db_integrity_verification": {
+    "status": "passed",
+    "mode": "server_side_select_only",
+    "target_run_prefix": "b91f8927",
+    "target_request_prefix": "972bfdd1",
+    "checks": {
+      "request_integrity": "passed",
+      "run_integrity": "passed",
+      "stage_cardinality_order": "passed",
+      "stage_persistence": "passed",
+      "usage_totals": "passed",
+      "report_integrity": "passed",
+      "atomic_timestamp_consistency": "passed",
+      "no_mixed_success_failure": "passed",
+      "global_anomaly_scan": "passed"
+    },
+    "database_counts": {
+      "requests": 3,
+      "runs": 3,
+      "stages": 8,
+      "reports": 1
+    },
+    "completed_ready_runs": 1,
+    "failed_runs": 2,
+    "failed_run_error_codes": {
+      "M2_STAGE_PROVIDER_FAILED": 2
+    },
+    "processing_rows": 0,
+    "integrity_anomalies": 0,
+    "openai_calls": 0,
+    "database_writes": 0,
+    "migration_operations": 0,
+    "temporary_inspection_file": "deleted"
+  },
   "milestone_state": {
     "milestone": 2,
     "status": "incomplete"
   },
   "next_work": {
-    "current": "successful_run_db_integrity_verification",
-    "after": "m2_p4_quality_evaluation_planning"
+    "current": "m2_p4_quality_evaluation_planning",
+    "quality_evaluation_execution": "not_started"
   }
 }
