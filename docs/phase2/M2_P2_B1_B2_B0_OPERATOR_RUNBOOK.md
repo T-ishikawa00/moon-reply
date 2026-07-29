@@ -2,7 +2,7 @@
 
 ## 1. Current B0 instruction
 
-Do not execute `scripts/run-m2-p2-b1-b2-b-paid-once.mjs` during M2-P2-B1-B2-B0 implementation, validation, review, or acceptance synchronization.
+M2-P2-B1-B2-B0 Human / ChatGPT final review is complete, and the execution package is accepted and complete. Do not execute `scripts/run-m2-p2-b1-b2-b-paid-once.mjs` during acceptance synchronization or afterward unless M2-P2-B1-B2-B1 receives separate explicit authorization.
 
 The sole runnable B0 preflight is the fixed blocked command:
 
@@ -69,3 +69,19 @@ If any credential exposure or unexpected provider activity is suspected, termina
 ## 6. B0 evidence boundary
 
 The deterministic B0 blocked preflight and failure matrix are not proof that a future provider call will succeed. Provider compatibility, availability, billing, latency, actual usage, and output quality remain unknown.
+
+## 7. Accepted B0 status
+
+- Accepted correction commit: `30c05ca2c383641676a3c1fde680e2e83d44397f`
+- Accepted implementation commit: `e8b369baa14ff417fed19d75f31c733dd5c8d240`
+- Repository approval template: non-executable
+- True external approval: absent
+- One-time marker: absent
+- Calibration run artifacts: absent
+- Paid CLI: not executed
+- OPENAI_API_KEY reads: 0
+- Actual provider calls: 0
+- API spend: USD 0
+- Product model: unselected
+- Baseline model: unselected
+- M2-P2-B1-B2-B1: unauthorized and not started

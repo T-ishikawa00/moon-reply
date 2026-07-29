@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package implemented and automated validation complete; Human / ChatGPT review pending; B1 actual paid execution unauthorized and not started
+Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package Human / ChatGPT accepted and complete; M2-P2-B1-B2-B1 external approval creation and paid execution unauthorized and not started
 
 ## Completed Through
 
@@ -50,10 +50,13 @@ Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package implemented and autom
 - M2-P2-B0 exact 18-file contract implementation at `cf75679f2d116132f7519256cd762ba1a51a0af9` completed automated validation and Human / ChatGPT final review and is accepted and complete
 - M2-P2-B1-B1-R1 historical-scope and successor-boundary correction Human / ChatGPT accepted and complete at `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`
 - M2-P2-B1-B1 network-disabled provider adapter Human / ChatGPT accepted and complete at `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`
+- M2-P2-B1-B2-A-R1 and M2-P2-B1-B2-A dormant live bindings Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0` and `76ceb4a25cc565e84b9537bd25dbe703f87bd342`
+- M2-P2-B1-B2-B0-R1 historical-scope and execution-boundary correction Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f`
+- M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package Human / ChatGPT accepted and complete at `e8b369baa14ff417fed19d75f31c733dd5c8d240`
 
 ## Current Task
 
-`M2-P2-B1-B1 Network-Disabled OpenAI Provider Adapter / Human / ChatGPT accepted and complete`
+`M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package / Human / ChatGPT accepted and complete`
 
 State:
 
@@ -69,7 +72,8 @@ State:
 - M2-P2-B1-A-R1 successor-tool correction is Human / ChatGPT accepted and complete at `22bbf6f69ad2e21d3d43808e3518970eb1dc48e7`;
 - M2-P2-B1-A deterministic offline replay Runner is implemented, automated validation is complete, Human / ChatGPT final review is complete, and the task is accepted and complete at `630cde811d63e0304ed528dc2e426400e81506a6`;
 - M2-P2-B1-B1 implements network-disabled provider protocol logic only; automated validation and Human / ChatGPT final review are complete, and the task is accepted and complete at `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`;
-- M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A dormant OpenAI live bindings completed automated validation and final review and are accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`; B1-B2-B remains unauthorized and not started;
+- M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A dormant OpenAI live bindings completed automated validation and final review and are accepted and complete at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`;
+- M2-P2-B1-B2-B0-R1 and M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f` and `e8b369baa14ff417fed19d75f31c733dd5c8d240`; M2-P2-B1-B2-B1 remains unauthorized and not started;
 - Development-70 is an evaluation-cost scenario, not the cost of one customer report, and no 14-case or 70-case API execution is authorized;
 - no product or baseline model selected and no model benchmark performed;
 - no OpenAI API call;
@@ -124,7 +128,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Product definition, JPY 980 price, 18+ policy, existing Safety classification/severity meaning, fixed judgment, core scenario facts, legal substance, and runtime boundaries remain fixed; M1-I2-R1 adds only missing reason codes and coverage needed to enforce the accepted fail-closed policy.
 - Presentation fixture/schema changes in M1-I8 and M1-I10 are deterministic, presentation-only, and require Human review.
 - A fixed/sticky mobile CTA remains `rejected for Milestone 1`; all CTAs remain non-fixed.
-- Milestone 1 is Human-accepted, complete, and closed. Human / ChatGPT accepted M2-P1 and M2-P1-R1 at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 later corrected only the historical manifest verification boundary. M2-P2-A-R1 is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`; M2-P2-A is Human / ChatGPT accepted and complete at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. M2-P2-B0-R1, M2-P2-B0-R2, and M2-P2-B0 are accepted and complete. M2-P2-B1-A-R1 and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1-R1 and M2-P2-B1-B1 are Human / ChatGPT accepted and complete at `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e` and `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A-R1 and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0` and `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. M2-P2-B1-B2-B, Milestone 2 runtime, every later M2 implementation task, and all later milestones remain unauthorized and not started.
+- Milestone 1 is Human-accepted, complete, and closed. Human / ChatGPT accepted M2-P1 and M2-P1-R1 at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`; M2-P1-R2 later corrected only the historical manifest verification boundary. M2-P2-A-R1 is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`; M2-P2-A is Human / ChatGPT accepted and complete at `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. M2-P2-B0-R1, M2-P2-B0-R2, and M2-P2-B0 are accepted and complete. M2-P2-B1-A-R1 and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1-R1 and M2-P2-B1-B1 are Human / ChatGPT accepted and complete at `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e` and `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A-R1 and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at `fa222917f0e6ff4a4e25d11da239717c062af6d0` and `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. M2-P2-B1-B2-B0-R1 and M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f` and `e8b369baa14ff417fed19d75f31c733dd5c8d240`. M2-P2-B1-B2-B1, Milestone 2 runtime, every later M2 implementation task, and all later milestones remain unauthorized and not started.
 
 ## Runtime Boundary
 
@@ -144,7 +148,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - M1-P3 acceptance and M1-P3-R1 prototype implementation did not grant canonical visual implementation authority; later separate Human decisions accepted Checkpoint A, authorized and accepted the now-complete Checkpoint B visual work within its exact manifest, accepted the bounded M1-I9-R1 result, and authorized M1-I12.
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
 - Keep the historical pre-R2 QA branch immutable. The corrected M1-I12-R3 package may be synchronized to `main` only by the expressly authorized fast-forward-only path and must remain within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
-- Do not publish, deploy, activate the accepted dormant live bindings, complete operator facts, execute the accepted foundation prompts against an API, select a model, connect a database, widen accepted M2-P2-B1-B2-A beyond its exact accepted scope, or start M2-P2-B1-B2-B or any Milestone 2 runtime task without separate explicit authorization.
+- Do not publish, deploy, activate the accepted dormant live bindings, complete operator facts, execute the accepted foundation prompts against an API, select a model, connect a database, widen accepted M2-P2-B1-B2-A or B0 beyond their exact accepted scopes, or start M2-P2-B1-B2-B1 or any Milestone 2 runtime task without separate explicit authorization.
 - Automated PASS alone is not Human / ChatGPT acceptance or model-quality evidence. M2-P1, M2-P2-A, M2-P2-B0, and M2-P2-B1-B1 acceptance are established by separate explicit final decisions; no model-quality result or guaranteed API cost is claimed.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
@@ -181,12 +185,12 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Authorization Gate
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete. Accepted B1-B2-A provides dormant local protocol and binding evidence for `WAIT-003`, `gpt-5.6-luna`, and PB-01 through PB-06 only. M2-P2-B1-B2-B0 now adds the final one-time execution package with automated validation complete and Human / ChatGPT review pending. Provider compatibility, model availability, credential validity, actual input/output/reasoning tokens, latency, billing, and model quality remain unknown. Actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero. The next gate is independent Human / ChatGPT review of the exact B0 implementation commit; M2-P2-B1-B2-B1 true approval creation and paid execution remain unauthorized and not started.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, M2-P2-B1-B2-A, M2-P2-B1-B2-B0-R1, and M2-P2-B1-B2-B0 are Human / ChatGPT accepted and complete. Accepted B0 provides execution-package behavior evidence for `WAIT-003`, `gpt-5.6-luna`, and PB-01 through PB-06 only. Provider compatibility, model availability, credential validity, actual input/output/reasoning tokens, latency, billing, and model quality remain unknown. Actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero. M2-P2-B1-B2-B1 true approval creation and paid execution are the next possible Human gate but remain unauthorized and not started.
 
-# Current focus: M2-P2-B1-B2-B0 execution-package review candidate
+# Current focus: M2-P2-B1-B2-B0 accepted execution package
 
 The active bounded slice is exactly 34 files (A30/M4/D0) after the separate unchanged eight-file correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f`.
 
 The sole Task-time B0 runner is the blocked preflight. It stops with `EXTERNAL_APPROVAL_NOT_PRESENT` and reports zero real environment reads, secret resolutions, HTTPS requests, provider calls, child-process calls, external directories, and spend. The repository approval template remains non-executable, no true external approval exists, and the paid CLI was not executed.
 
-Automated validation is complete. Human / ChatGPT final review and acceptance remain pending. Do not create a true approval record, execute the paid CLI or OpenAI API, access the Human-controlled credential, select a product/baseline model, merge to main, create a PR, or widen into retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, or real-user execution.
+Automated validation and Human / ChatGPT final review are complete; M2-P2-B1-B2-B0 is accepted and complete. Fast-forward-only synchronization to `main` is authorized. Do not create a true approval record, execute the paid CLI or OpenAI API, access the Human-controlled credential, select a product/baseline model, create a merge commit or PR, or widen into retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, or real-user execution.

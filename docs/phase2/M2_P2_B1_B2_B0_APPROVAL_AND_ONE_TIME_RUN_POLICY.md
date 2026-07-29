@@ -70,4 +70,6 @@ Future artifacts are written only outside the repository through the accepted B1
 
 ## 7. Current status
 
-No true approval file, authorization marker, or run directory is created by this Task. The paid CLI is not executed, no secret is accessed, no provider is called, and API spend remains USD 0.
+M2-P2-B1-B2-B0 Human / ChatGPT final review is complete, and the execution package is accepted and complete. The repository approval template remains draft, absent, and non-executable.
+
+No true approval file, authorization marker, or run directory was created. The paid CLI was not executed, `OPENAI_API_KEY` was not read, no secret was resolved, no HTTPS or provider call occurred, and API spend remains USD 0. The product and baseline models remain unselected. M2-P2-B1-B2-B1 external approval creation and paid execution remain unauthorized and not started.

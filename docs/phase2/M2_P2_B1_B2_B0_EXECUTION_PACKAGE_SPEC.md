@@ -4,7 +4,7 @@
 
 M2-P2-B1-B2-B0 is the zero-network, zero-spend execution package between the accepted dormant B1-B2-A bindings and a possible future M2-P2-B1-B2-B1 one-time paid calibration. The historical B1-B2-A scope remains frozen at `fa222917f0e6ff4a4e25d11da239717c062af6d0..76ceb4a25cc565e84b9537bd25dbe703f87bd342`. The separate correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f` is unchanged.
 
-This package does not authorize an approval record or paid run. Human / ChatGPT review and acceptance remain pending.
+The correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f` and implementation commit `e8b369baa14ff417fed19d75f31c733dd5c8d240` completed Human / ChatGPT final review and are accepted and complete. This acceptance authorizes fast-forward-only synchronization to `main`; it does not authorize a true approval record, paid run, API-key access, provider call, or model selection. M2-P2-B1-B2-B1 remains unauthorized and not started.
 
 ## 2. Fixed calibration target
 
