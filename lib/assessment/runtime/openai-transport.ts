@@ -3,7 +3,11 @@ import { performance } from "node:perf_hooks";
 import OpenAI from "openai";
 import { M2RuntimeError } from "./errors.ts";
 import { logDevelopmentOpenAiProviderFailure } from "./openai-diagnostics.ts";
-import { toOpenAiStructuredOutputSchema } from "./openai-schema.ts";
+import {
+  assertOpenAIStructuredOutputSchema,
+  logDevelopmentOpenAIStructuredOutputSchemaFailure,
+  toOpenAiStructuredOutputSchema,
+} from "./openai-schema.ts";
 import type { AiStageTransport, JsonObject, StageRequest } from "./types.ts";
 
 export class OpenAiResponsesTransport implements AiStageTransport {
@@ -14,6 +18,15 @@ export class OpenAiResponsesTransport implements AiStageTransport {
   }
 
   async invoke(stageRequest: StageRequest) {
+    const providerSchema = toOpenAiStructuredOutputSchema(
+      stageRequest.outputSchema,
+    );
+    try {
+      assertOpenAIStructuredOutputSchema(providerSchema);
+    } catch (error) {
+      logDevelopmentOpenAIStructuredOutputSchemaFailure(error);
+      throw new M2RuntimeError("M2_STAGE_PROVIDER_FAILED");
+    }
     const startedAt = performance.now();
     try {
       const response = await this.client.responses.create({
@@ -52,9 +65,7 @@ export class OpenAiResponsesTransport implements AiStageTransport {
             type: "json_schema",
             name: stageRequest.schemaName,
             strict: true,
-            schema: toOpenAiStructuredOutputSchema(
-              stageRequest.outputSchema,
-            ),
+            schema: providerSchema,
           },
         },
       });

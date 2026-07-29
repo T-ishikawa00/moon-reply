@@ -14,6 +14,7 @@ type OpenAiProviderFailureDiagnostic = {
   openaiErrorType: string | null;
   openaiErrorCode: string | null;
   openaiErrorParam: string | null;
+  openaiErrorMessage: string | null;
   requestId: string | null;
   failureClassification: ProviderFailureClassification;
 };
@@ -21,6 +22,17 @@ type OpenAiProviderFailureDiagnostic = {
 function safeProviderField(value: string | null | undefined) {
   if (!value) return null;
   return value.replace(/[\u0000-\u001f\u007f]/gu, "?").slice(0, 200);
+}
+
+function safeOpenAiErrorMessage(error: unknown) {
+  if (!(error instanceof OpenAI.OpenAIError) || !error.message) return null;
+  return error.message
+    .replace(
+      /(?:\bsk-[^\s"'`,;)\]}]+|\bsb_secret_[^\s"'`,;)\]}]+|\bBearer(?:\s+[^\s"'`,;)\]}]+)?)/giu,
+      "[REDACTED]",
+    )
+    .replace(/[\u0000-\u001f\u007f]/gu, "?")
+    .slice(0, 1000);
 }
 
 function classifyProviderFailure(
@@ -55,6 +67,7 @@ export function createOpenAiProviderFailureDiagnostic(
     openaiErrorType: safeProviderField(apiError?.type),
     openaiErrorCode: safeProviderField(apiError?.code),
     openaiErrorParam: safeProviderField(apiError?.param),
+    openaiErrorMessage: safeOpenAiErrorMessage(error),
     requestId: safeProviderField(apiError?.requestID),
     failureClassification: classifyProviderFailure(error),
   };

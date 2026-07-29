@@ -107,6 +107,9 @@ const [
   },
   {
     OPENAI_UNSUPPORTED_SCHEMA_KEYWORDS,
+    OPENAI_NULLABLE_FIELD_MAPPINGS,
+    OpenAIStructuredOutputSchemaError,
+    assertOpenAIStructuredOutputSchema,
     toOpenAiStructuredOutputSchema,
   },
 ] = await Promise.all([
@@ -506,12 +509,184 @@ gate("M2_P3_OPENAI_REQUEST_CONTRACT_GATE", () => {
 });
 
 gate("M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE", () => {
-  const projectedSchemas = catalog.definitions.map((definition) =>
-    toOpenAiStructuredOutputSchema(definition.outputSchema),
-  );
+  const projectedSchemas = catalog.definitions.map((definition) => ({
+    stageId: definition.stageId,
+    schema: toOpenAiStructuredOutputSchema(definition.outputSchema),
+  }));
   const projectedJson = JSON.stringify(projectedSchemas);
   const canonicalJson = JSON.stringify(
     catalog.definitions.map((definition) => definition.outputSchema),
+  );
+
+  const validRoot = (properties = {}) => ({
+    type: "object",
+    properties,
+    additionalProperties: false,
+    required: Object.keys(properties),
+  });
+  const schemaViolation = (schema) => {
+    try {
+      assertOpenAIStructuredOutputSchema(schema);
+      return null;
+    } catch (error) {
+      return error;
+    }
+  };
+  const expectViolation = (schema, schemaPath, violatedRule) => {
+    const error = schemaViolation(schema);
+    return (
+      error instanceof OpenAIStructuredOutputSchemaError &&
+      error.schemaPath === schemaPath &&
+      error.violatedRule === violatedRule &&
+      error.message === `${schemaPath}: ${violatedRule}` &&
+      Object.keys(error).every((key) =>
+        ["name", "schemaPath", "violatedRule"].includes(key),
+      )
+    );
+  };
+
+  const nestedObjectWithoutAdditionalProperties = validRoot({
+    nested: {
+      type: "object",
+      properties: { value: { type: "string" } },
+      required: ["value"],
+    },
+  });
+  const nestedObjectWithIncompleteRequired = validRoot({
+    nested: {
+      type: "object",
+      properties: {
+        first: { type: "string" },
+        second: { type: "string" },
+      },
+      additionalProperties: false,
+      required: ["first"],
+    },
+  });
+  const objectWithExtraRequiredKey = {
+    type: "object",
+    properties: { value: { type: "string" } },
+    additionalProperties: false,
+    required: ["value", "not_a_property"],
+  };
+  const rootAnyOf = {
+    ...validRoot(),
+    anyOf: [validRoot()],
+  };
+  const nestedAllOf = validRoot({
+    value: { allOf: [{ type: "string" }] },
+  });
+  const nestedOneOf = validRoot({
+    value: { oneOf: [{ type: "string" }, { type: "null" }] },
+  });
+  const arrayWithUniqueItems = validRoot({
+    values: {
+      type: "array",
+      items: { type: "string" },
+      uniqueItems: true,
+    },
+  });
+  const arrayWithPrefixItems = validRoot({
+    values: {
+      type: "array",
+      items: { type: "string" },
+      prefixItems: [{ type: "string" }],
+    },
+  });
+  const validNestedAnyOf = validRoot({
+    value: {
+      anyOf: [{ type: "string" }, { type: "null" }],
+    },
+  });
+  const validDefinitionReference = {
+    ...validRoot({
+      item: { $ref: "#/$defs/item" },
+    }),
+    $defs: {
+      item: {
+        type: "object",
+        properties: { value: { type: "string" } },
+        additionalProperties: false,
+        required: ["value"],
+      },
+    },
+  };
+  const invalidReferenceSibling = {
+    ...validRoot({
+      item: {
+        $ref: "#/$defs/item",
+        type: "object",
+      },
+    }),
+    $defs: {
+      item: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+        required: [],
+      },
+    },
+  };
+
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    expectViolation(
+      nestedObjectWithoutAdditionalProperties,
+      "#/properties/nested/additionalProperties",
+      "object additionalProperties must be false",
+    ) &&
+      expectViolation(
+        nestedObjectWithIncompleteRequired,
+        "#/properties/nested/required",
+        "object required must contain every properties key",
+      ) &&
+      expectViolation(
+        objectWithExtraRequiredKey,
+        "#/required",
+        "object required must contain no extra keys",
+      ) &&
+      expectViolation(
+        rootAnyOf,
+        "#/anyOf",
+        "root schema must not use anyOf",
+      ) &&
+      expectViolation(
+        nestedAllOf,
+        "#/properties/value/allOf",
+        "allOf is prohibited",
+      ) &&
+      expectViolation(
+        nestedOneOf,
+        "#/properties/value/oneOf",
+        "oneOf is prohibited",
+      ) &&
+      expectViolation(
+        arrayWithUniqueItems,
+        "#/properties/values/uniqueItems",
+        "uniqueItems is prohibited",
+      ) &&
+      expectViolation(
+        arrayWithPrefixItems,
+        "#/properties/values/prefixItems",
+        "prefixItems is prohibited",
+      ),
+    "provider schema validator missed a prohibited schema shape",
+  );
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    schemaViolation(validNestedAnyOf) === null &&
+      schemaViolation(validDefinitionReference) === null &&
+      expectViolation(
+        invalidReferenceSibling,
+        "#/properties/item/type",
+        "$ref must not have sibling validation keywords",
+      ),
+    "provider schema validator rejected a valid anyOf/ref or allowed ref siblings",
+  );
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    projectedSchemas.every(({ schema }) => schemaViolation(schema) === null),
+    "an actual PB-01 through PB-06 provider schema is invalid",
   );
   check(
     "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
@@ -527,22 +702,65 @@ gate("M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE", () => {
     transportSource.includes(
       "toOpenAiStructuredOutputSchema(",
     ) &&
+      transportSource.includes("assertOpenAIStructuredOutputSchema(") &&
+      transportSource.indexOf("assertOpenAIStructuredOutputSchema(") <
+        transportSource.indexOf("this.client.responses.create") &&
+      transportSource.includes(
+        "logDevelopmentOpenAIStructuredOutputSchemaFailure(error)",
+      ) &&
+      transportSource.includes(
+        'throw new M2RuntimeError("M2_STAGE_PROVIDER_FAILED")',
+      ) &&
+      source("lib/assessment/runtime/openai-schema.ts").includes(
+        '"M2_OPENAI_SCHEMA_CONFIGURATION_INVALID"',
+      ) &&
+      source("lib/assessment/runtime/openai-schema.ts").includes(
+        "schemaPath: error.schemaPath",
+      ) &&
+      source("lib/assessment/runtime/openai-schema.ts").includes(
+        "violatedRule: error.violatedRule",
+      ) &&
       source("lib/assessment/runtime/validation.ts").includes(
         "ajv.compile(definition.outputSchema)",
       ),
     "provider projection or canonical AJV validation is missing",
   );
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    JSON.stringify(OPENAI_NULLABLE_FIELD_MAPPINGS.map(
+      ({ stageId, schemaPath }) => [stageId, schemaPath],
+    )) ===
+      JSON.stringify([
+        ["PB-04", "#/properties/message_draft"],
+        ["PB-05", "#/properties/message_draft_context"],
+        ["PB-06", "#/properties/final_disposition"],
+        ["PB-06", "#/properties/repair_strategy"],
+        [
+          "PB-06",
+          "#/$defs/deterministic_check/properties/json_path",
+        ],
+      ]) &&
+      OPENAI_NULLABLE_FIELD_MAPPINGS.every(
+        (mapping) =>
+          mapping.providerRepresentation.startsWith("required ") &&
+          mapping.canonicalHandling ===
+            "canonical schema accepts null directly",
+      ),
+    "nullable provider-field mappings are incomplete or imply adapter repair",
+  );
 });
 
 gate("M2_P3_PROVIDER_DIAGNOSTIC_GATE", () => {
   const rawBodySentinel = "RAW_PROVIDER_BODY_MUST_NOT_BE_LOGGED";
+  const exactSchemaContext = "Invalid schema context at properties.timeline";
   const apiError = new OpenAI.APIError(
     400,
     {
       type: "invalid_request_error",
       code: "invalid_json_schema",
       param: "text.format.schema",
-      message: rawBodySentinel,
+      message: `${exactSchemaContext}\u0000 sk-test-secret sb_secret_test Bearer test-token ${"x".repeat(1200)}`,
+      raw_body_sentinel: rawBodySentinel,
     },
     undefined,
     new Headers({ "x-request-id": "req_sanitized_test" }),
@@ -557,6 +775,7 @@ gate("M2_P3_PROVIDER_DIAGNOSTIC_GATE", () => {
       "failureClassification",
       "httpStatus",
       "openaiErrorCode",
+      "openaiErrorMessage",
       "openaiErrorParam",
       "openaiErrorType",
       "requestId",
@@ -567,9 +786,19 @@ gate("M2_P3_PROVIDER_DIAGNOSTIC_GATE", () => {
       diagnostic.openaiErrorType === "invalid_request_error" &&
       diagnostic.openaiErrorCode === "invalid_json_schema" &&
       diagnostic.openaiErrorParam === "text.format.schema" &&
+      diagnostic.openaiErrorMessage?.includes(exactSchemaContext) &&
+      diagnostic.openaiErrorMessage.length <= 1000 &&
+      !/[\u0000-\u001f\u007f]/u.test(diagnostic.openaiErrorMessage) &&
+      !diagnostic.openaiErrorMessage.includes("sk-test-secret") &&
+      !diagnostic.openaiErrorMessage.includes("sb_secret_test") &&
+      !diagnostic.openaiErrorMessage.includes("Bearer") &&
       diagnostic.requestId === "req_sanitized_test" &&
       diagnostic.failureClassification === "openai_api_error" &&
-      !JSON.stringify(diagnostic).includes(rawBodySentinel),
+      !JSON.stringify(diagnostic).includes(rawBodySentinel) &&
+      createOpenAiProviderFailureDiagnostic(
+        "PB-01",
+        new Error("not an OpenAI SDK error"),
+      ).openaiErrorMessage === null,
     "provider diagnostic fields are incomplete or unsafe",
   );
   check(
