@@ -2,7 +2,7 @@
 
 ## 1. Classification
 
-The M2-P3-A runtime is an internal development capability for synthetic data. It is not a public data-processing service and is not authorized for real-user or real-person information.
+The M2-P3-A runtime is an internal development capability for synthetic data. It is not a public data-processing service and is not authorized for real-user or real-person information. M2-P3-A and M2-P3-A-R1 Runtime Security and Transaction Hardening are Human / ChatGPT accepted and complete.
 
 ## 2. Environment and secret boundary
 
@@ -88,6 +88,17 @@ Prohibited:
 
 There is no automatic retry, Repair, PB-07, or fallback model. Schema error, model mismatch, semantic rejection, provider error, or persistence error stops the run. A later Stage is never invoked after a failed Stage.
 
-## 8. Retention and deletion
+Final success is atomic. Report insertion, decision-card persistence, run completion, request completion, completion timestamp, final decision, and usage totals are committed in one fixed-parameter Postgres transaction. Report-insert or run-update failure rolls back every provisional success write. Duplicate finalization and concurrent idempotency conflicts fail safely. Request/run persistence occurs before PB-01, and every provider invocation is preceded by a persisted Stage-start row.
+
+## 8. Dependency security status
+
+- production-reachable high/critical vulnerabilities: `0`;
+- direct Next.js high findings resolved by updating to `16.2.12`;
+- remaining production-installed findings: `3`, classified as not reachable from M2 Runtime;
+- remaining development-only findings: `9`;
+- npm audit findings are documented rather than silently ignored; and
+- no `npm audit fix --force` was used.
+
+## 9. Retention and deletion
 
 No production retention policy is authorized. Before any development project is populated, Human must define synthetic-data retention and deletion operations. Public retention, user deletion, access requests, and production privacy operations remain later milestones.

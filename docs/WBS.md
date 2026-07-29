@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 through M2-P2-B1-B2-B0 remain accepted historical foundations. M2-P3-A is the authorized active internal runtime candidate. The paid CLI remains unexecuted, paused internal QA tooling; actual OpenAI/Supabase calls and spend for M2-P3-A validation remain zero.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete; the internal website runtime is the active product path. Actual OpenAI/Supabase calls and M2-P3-A API spend remain zero.
 
 ## P0: Repository Setup
 
@@ -650,7 +650,7 @@ B1-B1 acceptance boundary: local provider-protocol handling only for `WAIT-003`,
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3-A runtime structure implemented as an automated review candidate; Human setup/acceptance remain
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3-A and R1 Human / ChatGPT accepted and complete; live Human setup remains a separate gate
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 through M2-P2-B1-B2-B0 are frozen historical foundations. M2-P3-A authorizes only the internal development runtime structure and deterministic fake validation. Live secret setup, Supabase migration application, live smoke testing, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3-A and M2-P3-A-R1 are Human / ChatGPT accepted and complete. Live secret setup, Supabase migration application, live smoke testing, publication, deployment, provider inquiry or selection, email, payment, authentication, and every later task remain blocked by separate authorization and acceptance gates.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -708,8 +708,12 @@ The paid entrypoint exists but was not executed. No true external approval recor
 - [x] Implement PB-01 through PB-06, deterministic Safety/eligibility/decision policy, per-Stage persistence, and report rendering.
 - [x] Add the four-table versioned SQL migration with RLS and no public policies.
 - [x] Add fake transport/repository scenarios and the dedicated M2-P3 verifier.
-- [ ] Complete the final exact sequential validation command set and record the implementation commit/push.
-- [ ] Complete code review and Human acceptance.
+- [x] Complete the final exact sequential validation command set and record accepted implementation commit `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`.
+- [x] Complete M2-P3-A-R1 dependency security and transaction hardening at accepted commit `3f1123439dcbc724c70505956aa81fa03a9246ad`.
+- [x] Confirm zero production-reachable high/critical vulnerabilities; classify three remaining production-installed findings as not reachable from M2 Runtime and nine findings as development-only.
+- [x] Accept atomic report/decision-card/run/request finalization, rollback, duplicate-finalization, concurrent-idempotency, persistence-before-provider, and provider-stop evidence.
+- [x] Complete Human desktop Visual QA and interaction QA with no observed stack trace or secret leakage; mobile-width QA intentionally omitted for the internal desktop-only route.
+- [x] Complete code review and Human / ChatGPT acceptance; mark M2-P3-A complete.
 - [ ] Human applies the migration and configures secrets for a separately authorized synthetic-only development smoke test.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

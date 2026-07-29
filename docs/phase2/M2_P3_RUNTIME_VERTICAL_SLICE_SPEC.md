@@ -6,9 +6,11 @@ Task `M2-P3-A` authorizes an internal, development-only AI assessment runtime st
 
 The active path is:
 
-`request sheet -> internal Next.js route -> PB-01..PB-06 -> Stage persistence -> assessment-note rendering`
+`request sheet -> internal Next.js server route -> PB-01..PB-06 -> Supabase persistence -> assessment-note rendering`
 
-The paid-once runner remains frozen as paused internal QA tooling. It is not required for M2-P3 acceptance, and no additional paid-once execution is currently planned.
+M2-P3-A is Human / ChatGPT accepted and complete at implementation commit `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`. M2-P3-A-R1 Runtime Security and Transaction Hardening is accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`.
+
+M2-P2-B0 through M2-P2-B1-B2-B0 remain frozen as paused internal QA tooling. They are not the active product path, and no additional paid-once execution is currently planned.
 
 ## 2. Runtime boundary
 
@@ -53,7 +55,7 @@ Bindings:
 - `FakeAssessmentRepository`;
 - `FakeAiStageTransport`.
 
-The application layer owns idempotency and server-generated request/run UUIDs. The pipeline owns Stage ordering, local policy, persistence, stopping, usage accumulation, report saving, and run completion.
+The application layer owns idempotency and server-generated request/run UUIDs. The pipeline owns Stage ordering, local policy, persistence, stopping, usage accumulation, atomic report finalization, and run completion.
 
 Product runtime code does not import the historical calibration scripts. Canonical Prompt and Schema assets are loaded from `ai/`, their hashes are verified, and only their versions/hashes—not complete Prompt text—are persisted.
 
@@ -109,7 +111,9 @@ Every Stage has a row before provider invocation. Completion or failure persists
 - output JSON, including invalid output needed to diagnose a Schema failure;
 - safe error code.
 
-The run records aggregate usage, usage-derived cost estimate, eligibility, decision, returned model, completion/failure, and safe error code. The repository never stores API keys, Authorization headers, raw environment state, internal reasoning text, chain of thought, raw provider error bodies, or full Prompt text.
+The run records aggregate usage, usage-derived cost estimate, eligibility, decision, returned model, completion/failure, and safe error code. Final success commits the report, decision card, run completion, request completion, completion timestamp, final decision, and usage totals through one fixed-parameter Postgres transaction. Any finalization exception rolls back all provisional success writes. Duplicate and concurrent finalization are rejected safely.
+
+The repository never stores API keys, Authorization headers, raw environment state, internal reasoning text, chain of thought, raw provider error bodies, or full Prompt text.
 
 ## 8. Usage-derived cost estimate
 
@@ -117,7 +121,7 @@ The run records aggregate usage, usage-derived cost estimate, eligibility, decis
 
 ## 9. M2-P3-A validation mode
 
-Automated validation uses only the fake transport and fake repository. It covers:
+Accepted automated validation uses only the fake transport and fake repository. It covers:
 
 - development fixture `WAIT-003`;
 - a `needs_more_information` case;
@@ -125,11 +129,33 @@ Automated validation uses only the fake transport and fake repository. It covers
 - Stage Schema failure;
 - returned-model mismatch;
 - duplicate idempotency submission;
+- concurrent idempotency behavior;
 - database write failure;
+- report-insert rollback;
+- run-update rollback;
+- duplicate-finalization conflict;
+- persistence before provider execution;
 - PB-05 failure proving PB-06 is not called.
 
 The verifier records zero actual OpenAI calls, zero actual Supabase calls, USD 0 API spend, and zero real-user records. Live bindings exist structurally but remain unconfigured.
 
-## 10. Explicit exclusions
+## 10. Human Visual QA
+
+Human desktop Visual QA accepted:
+
+- prominent internal-only warning;
+- primary free-text situation field and clear optional-message field;
+- relationship and requested-topic chips;
+- privacy acknowledgement;
+- required-input and selection interaction;
+- submit availability after required state is complete;
+- configuration-missing fail-closed behavior;
+- safe `M2_RUNTIME_CONFIGURATION_INVALID` display;
+- no observed stack trace or secret leakage; and
+- continued visual consistency with 月の返事.
+
+Mobile-width QA was intentionally omitted because this route is internal desktop-only Human-operator tooling. The truncated `実行境` label and insufficient disabled-submit distinction are non-blocking internal-tool backlog items. Acceptance does not create a correction task.
+
+## 11. Explicit exclusions
 
 M2-P3-A does not authorize payment, RevenueCat, authentication, email, production/public release, real-user processing, analytics, PDF/download/share/print, background work, queue, cron, mobile API, public history, retry, PB-07/Repair, fallback model, Supabase project setup, API-key creation, or deployment.

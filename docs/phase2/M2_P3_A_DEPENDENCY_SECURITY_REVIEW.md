@@ -6,7 +6,9 @@ The production audit still reports three high package records. None is reachable
 
 `next` and `eslint-config-next` were updated from `16.2.10` to `16.2.12`. This removes four direct Next.js high advisories present in the initial audit. No forced PostCSS or sharp override, major upgrade, downgrade, or `npm audit fix` action was used.
 
-The dependency-classification gate is eligible to pass. Human / ChatGPT acceptance remains on hold. This review does not authorize live Supabase setup, live OpenAI execution, main merge, production release, or public runtime enablement.
+M2-P3-A-R1 Runtime Security and Transaction Hardening is Human / ChatGPT accepted and complete at `3f1123439dcbc724c70505956aa81fa03a9246ad`. The dependency classification, atomic finalization, rollback, concurrent idempotency, persistence-before-provider, and provider-stop evidence are accepted. M2-P3-A implementation is separately accepted at `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`. This acceptance does not authorize live Supabase setup, live OpenAI execution, production release, or public runtime enablement.
+
+The pre-acceptance review state was recorded as `Human / ChatGPT acceptance remains on hold`. That historical gate wording is superseded by the explicit final decision above; it is retained only so the immutable R1 verifier can continue proving that automated PASS and Human / ChatGPT acceptance are separate evidence.
 
 ## Audit evidence
 
@@ -44,7 +46,7 @@ The initial production audit found four direct high advisories against `next@16.
 | `GHSA-89xv-2m56-2m9x` | custom-server Server Action SSRF | not reachable: no custom server or Server Action |
 | `GHSA-p9j2-gv94-2wf4` | attacker-controlled rewrite destination SSRF | not reachable: `next.config.ts` defines no rewrites |
 
-The remediation was a non-major patch update. Its acceptability is conditional on the complete sequential validation suite.
+The remediation was a non-major patch update and is accepted with the complete sequential validation suite.
 
 ## Unresolved high package records
 
@@ -121,7 +123,7 @@ The exact package boundary now has `lib/assessment/runtime/package.json` with `"
 
 ## Validation and acceptance boundary
 
-The final verdict must come from the exact sequential validation commands in the task instruction. Automated PASS does not constitute Human / ChatGPT acceptance, Supabase migration application, a live smoke test, main merge, or release.
+The exact sequential validation commands are the automated evidence. Automated PASS alone did not constitute acceptance; the separate Human / ChatGPT final decision accepted M2-P3-A and M2-P3-A-R1. Acceptance does not constitute Supabase migration application, a live smoke test, production release, or public enablement.
 
 Recorded execution budget remains:
 
