@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b0/execution-package-contract.schema.json",
+  "title": "M2-P2-B1-B2-B0 execution-package contract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "source_b0_contract_hash",
+    "case_id",
+    "calibration_candidate",
+    "provider_stages",
+    "maximum_provider_calls",
+    "repository_approval_template_executable",
+    "true_external_approval_created",
+    "paid_cli_executed_in_task",
+    "actual_provider_calls",
+    "api_spend_usd"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p2-b1-b2-b0-execution-package-contract-v1"
+    },
+    "task_id": { "const": "M2-P2-B1-B2-B0" },
+    "source_b0_contract_hash": {
+      "const": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    "case_id": { "const": "WAIT-003" },
+    "calibration_candidate": { "const": "gpt-5.6-luna" },
+    "provider_stages": {
+      "const": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
+    },
+    "maximum_provider_calls": { "const": 6 },
+    "repository_approval_template_executable": { "const": false },
+    "true_external_approval_created": { "const": false },
+    "paid_cli_executed_in_task": { "const": false },
+    "actual_provider_calls": { "const": 0 },
+    "api_spend_usd": { "const": 0 }
+  },
+  "additionalProperties": true
+}

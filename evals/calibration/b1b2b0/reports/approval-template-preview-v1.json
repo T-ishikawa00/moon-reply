@@ -1,0 +1,13 @@
+{
+  "schema_version": "m2-p2-b1-b2-b0-approval-template-preview-v1",
+  "task_id": "M2-P2-B1-B2-B0",
+  "approval_status": "draft",
+  "approval_record_present": false,
+  "live_execution_authorized": false,
+  "paid_run_authorized": false,
+  "paid_run_completed": false,
+  "approved_runner_commit_sha": "TO_BE_BOUND_AFTER_MAIN_ACCEPTANCE",
+  "repository_template_can_authorize_execution": false,
+  "true_external_approval_created": false,
+  "price_snapshot_sha256": "b34a2796e6fc08fe2de65ee4ad0555348e0040c79dcd4e0ccf7b1de7d0cb5f76"
+}

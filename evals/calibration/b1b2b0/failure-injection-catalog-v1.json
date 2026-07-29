@@ -1,0 +1,41 @@
+{
+  "schema_version": "m2-p2-b1-b2-b0-failure-injection-catalog-v1",
+  "task_id": "M2-P2-B1-B2-B0",
+  "scenario_count": 24,
+  "scenarios": [
+    "external_approval_missing",
+    "repository_template_used_as_approval",
+    "approval_status_not_approved",
+    "live_authorization_false",
+    "paid_authorization_false",
+    "runner_sha_placeholder",
+    "runner_sha_mismatch",
+    "origin_main_mismatch",
+    "wrong_branch",
+    "dirty_worktree",
+    "untracked_file_present",
+    "contract_hash_mismatch",
+    "case_mismatch",
+    "model_mismatch",
+    "stage_list_mismatch",
+    "call_limit_mismatch",
+    "preflight_ceiling_mismatch",
+    "absolute_ceiling_mismatch",
+    "price_snapshot_stale",
+    "request_hash_mismatch",
+    "approval_expired",
+    "confirmation_hash_mismatch",
+    "authorization_already_consumed",
+    "approval_path_outside_fixed_root"
+  ],
+  "common_expected_result": {
+    "status": "stopped",
+    "before_secret_resolution": true,
+    "before_https": true,
+    "provider_calls": 0,
+    "api_spend_usd": 0,
+    "retry_attempted": false,
+    "repair_attempted": false,
+    "fallback_attempted": false
+  }
+}

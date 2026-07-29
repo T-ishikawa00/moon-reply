@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P2-B1-B2-A dormant OpenAI live bindings Human / ChatGPT accepted and complete; B1-B2-B unauthorized and not started
+Phase 2 / Milestone 2 — M2-P2-B1-B2-B0 execution package implemented and automated validation complete; Human / ChatGPT review pending; B1 actual paid execution unauthorized and not started
 
 ## Completed Through
 
@@ -181,11 +181,12 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Authorization Gate
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete. Accepted B1-B2-A provides dormant local protocol and binding evidence for `WAIT-003`, `gpt-5.6-luna`, and PB-01 through PB-06 only. The HTTPS executor and environment-secret provider exist but remain unreachable without a future paid approval record. Provider compatibility, model availability, API-key validity, actual input/output/reasoning tokens, latency, billing, and model quality remain unknown. Actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero. The next authorization gate is M2-P2-B1-B2-B paid one-case calibration; it is unauthorized and not started. No API connection, spend, environment-secret read, product-model selection, database, runtime, publication, deployment, provider inquiry, payment, email, authentication, analytics, or PDF/download/share work is authorized.
-# Current focus: M2-P2-B1-B2-A acceptance synchronization
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete. Accepted B1-B2-A provides dormant local protocol and binding evidence for `WAIT-003`, `gpt-5.6-luna`, and PB-01 through PB-06 only. M2-P2-B1-B2-B0 now adds the final one-time execution package with automated validation complete and Human / ChatGPT review pending. Provider compatibility, model availability, credential validity, actual input/output/reasoning tokens, latency, billing, and model quality remain unknown. Actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero. The next gate is independent Human / ChatGPT review of the exact B0 implementation commit; M2-P2-B1-B2-B1 true approval creation and paid execution remain unauthorized and not started.
 
-The active bounded slice records completed Human / ChatGPT review and acceptance of the automated-green dormant live-binding foundation. The accepted exact implementation scope is 41 files (A37/M4/D0) after the accepted separate seven-file historical-scope correction.
+# Current focus: M2-P2-B1-B2-B0 execution-package review candidate
 
-The only runnable B1-B2-A command is the dormant preflight. It stops with `HUMAN_APPROVAL_MISSING` and reports zero real environment reads, secret resolutions, HTTPS requests, provider calls, child-process calls, and spend. All required automated gates and Human / ChatGPT final review are complete; B1-B2-A is accepted and complete.
+The active bounded slice is exactly 34 files (A30/M4/D0) after the separate unchanged eight-file correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f`.
 
-Do not begin M2-P2-B1-B2-B, create/configure an API key, configure Project/billing, create a true paid approval record, execute the OpenAI API, select a product/baseline model, or widen into retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, or real-user execution.
+The sole Task-time B0 runner is the blocked preflight. It stops with `EXTERNAL_APPROVAL_NOT_PRESENT` and reports zero real environment reads, secret resolutions, HTTPS requests, provider calls, child-process calls, external directories, and spend. The repository approval template remains non-executable, no true external approval exists, and the paid CLI was not executed.
+
+Automated validation is complete. Human / ChatGPT final review and acceptance remain pending. Do not create a true approval record, execute the paid CLI or OpenAI API, access the Human-controlled credential, select a product/baseline model, merge to main, create a PR, or widen into retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, or real-user execution.

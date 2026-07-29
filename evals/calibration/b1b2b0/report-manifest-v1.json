@@ -1,0 +1,235 @@
+{
+  "schema_version": "m2-p2-b1-b2-b0-report-manifest-v1",
+  "task_id": "M2-P2-B1-B2-B0",
+  "implementation_manifest": [
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_B0_EXECUTION_PACKAGE_SPEC.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_B0_APPROVAL_AND_ONE_TIME_RUN_POLICY.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/M2_P2_B1_B2_B0_OPERATOR_RUNBOOK.md"
+    },
+    {
+      "status": "A",
+      "path": "docs/phase2/TASK_M2_P2_B1_B2_B0_REVIEW.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/ROADMAP.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CURRENT_FOCUS.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/CODEX_HANDOFF.md"
+    },
+    {
+      "status": "M",
+      "path": "docs/WBS.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/README.md"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/execution-package-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/approval-template-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/price-snapshot-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/paid-cli-contract-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/artifact-policy-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/failure-injection-catalog-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/report-manifest-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/schemas/execution-package-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/schemas/approval-record.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/schemas/paid-cli-contract.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/schemas/artifact-policy.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/schemas/report-manifest.schema.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/reports/preflight-blocked-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/reports/approval-template-preview-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/reports/cli-rejection-matrix-v1.json"
+    },
+    {
+      "status": "A",
+      "path": "evals/calibration/b1b2b0/reports/execution-package-summary-v1.md"
+    },
+    {
+      "status": "A",
+      "path": "scripts/prepare-m2-p2-b1-b2-b0-execution-package.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b2-b0-preflight-blocked.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verify-m2-p2-b1-b2-b0-execution-package.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/run-m2-p2-b1-b2-b-paid-once.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-b0-approval-record.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-b0-paid-cli.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-b0-price-snapshot.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/lib/m2-p2-b1-b2-b0-external-paths.mjs"
+    }
+  ],
+  "implementation_scope": {
+    "total": 34,
+    "added": 30,
+    "modified": 4,
+    "deleted": 0
+  },
+  "reports": [
+    {
+      "path": "evals/calibration/b1b2b0/approval-template-v1.json",
+      "sha256": "24e4e4108cd028c453c06c54bf548bc7e35cf5d54974cc1284b365b8fa46cf3b"
+    },
+    {
+      "path": "evals/calibration/b1b2b0/reports/preflight-blocked-v1.json",
+      "sha256": "1a120f21d4974947d548a3233c75d18d8bddf1745b8012f6c27a21f191a1e906"
+    },
+    {
+      "path": "evals/calibration/b1b2b0/reports/approval-template-preview-v1.json",
+      "sha256": "7d3e58c7123a1f7840f3777cf3edb4260c90e9129d2244a91ebb961e2aa2fc8f"
+    },
+    {
+      "path": "evals/calibration/b1b2b0/reports/cli-rejection-matrix-v1.json",
+      "sha256": "e24f2b0a7aa89ca16f941fad39ce86fca4e52bdd976c8d737213984fb492974a"
+    },
+    {
+      "path": "evals/calibration/b1b2b0/reports/execution-package-summary-v1.md",
+      "sha256": "8effa9f59cf0a02912faac4bdd6056185c54dd9d33022e6a65838f496afad929"
+    }
+  ],
+  "registered_paths": [
+    "docs/phase2/M2_P2_B1_B2_B0_EXECUTION_PACKAGE_SPEC.md",
+    "docs/phase2/M2_P2_B1_B2_B0_APPROVAL_AND_ONE_TIME_RUN_POLICY.md",
+    "docs/phase2/M2_P2_B1_B2_B0_OPERATOR_RUNBOOK.md",
+    "docs/phase2/TASK_M2_P2_B1_B2_B0_REVIEW.md",
+    "docs/ROADMAP.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/CODEX_HANDOFF.md",
+    "docs/WBS.md",
+    "evals/calibration/b1b2b0/README.md",
+    "evals/calibration/b1b2b0/execution-package-contract-v1.json",
+    "evals/calibration/b1b2b0/approval-template-v1.json",
+    "evals/calibration/b1b2b0/price-snapshot-v1.json",
+    "evals/calibration/b1b2b0/paid-cli-contract-v1.json",
+    "evals/calibration/b1b2b0/artifact-policy-v1.json",
+    "evals/calibration/b1b2b0/failure-injection-catalog-v1.json",
+    "evals/calibration/b1b2b0/report-manifest-v1.json",
+    "evals/calibration/b1b2b0/schemas/execution-package-contract.schema.json",
+    "evals/calibration/b1b2b0/schemas/approval-record.schema.json",
+    "evals/calibration/b1b2b0/schemas/paid-cli-contract.schema.json",
+    "evals/calibration/b1b2b0/schemas/artifact-policy.schema.json",
+    "evals/calibration/b1b2b0/schemas/report-manifest.schema.json",
+    "evals/calibration/b1b2b0/reports/preflight-blocked-v1.json",
+    "evals/calibration/b1b2b0/reports/approval-template-preview-v1.json",
+    "evals/calibration/b1b2b0/reports/cli-rejection-matrix-v1.json",
+    "evals/calibration/b1b2b0/reports/execution-package-summary-v1.md",
+    "scripts/prepare-m2-p2-b1-b2-b0-execution-package.mjs",
+    "scripts/run-m2-p2-b1-b2-b0-preflight-blocked.mjs",
+    "scripts/verify-m2-p2-b1-b2-b0-execution-package.mjs",
+    "scripts/run-m2-p2-b1-b2-b-paid-once.mjs",
+    "scripts/lib/m2-p2-b1-b2-b0-approval-record.mjs",
+    "scripts/lib/m2-p2-b1-b2-b0-paid-cli.mjs",
+    "scripts/lib/m2-p2-b1-b2-b0-local-filesystem.mjs",
+    "scripts/lib/m2-p2-b1-b2-b0-price-snapshot.mjs",
+    "scripts/lib/m2-p2-b1-b2-b0-external-paths.mjs"
+  ],
+  "price_snapshot_sha256": "b34a2796e6fc08fe2de65ee4ad0555348e0040c79dcd4e0ccf7b1de7d0cb5f76",
+  "price_snapshot": {
+    "schema_version": "m2-p2-b1-b2-b0-price-snapshot-v1",
+    "model": "gpt-5.6-luna",
+    "checked_at": "2026-07-29",
+    "standard_input_per_million": 1,
+    "cached_input_per_million": 0.1,
+    "cache_write_multiplier": 1.25,
+    "standard_output_per_million": 6,
+    "long_input_threshold_tokens": 272000,
+    "long_input_input_multiplier": 2,
+    "long_input_output_multiplier": 1.5,
+    "approval_uses_cached_discount": false,
+    "maximum_snapshot_age_for_paid_run_hours": 24
+  },
+  "budget_evidence": {
+    "historical_static_cap_usd": 0.213223,
+    "live_guard_cost_usd": 0.26079625,
+    "preflight_ceiling_usd": 0.3,
+    "absolute_ceiling_usd": 1,
+    "long_input_guard_passed": true,
+    "maximum_provider_calls": 6
+  },
+  "deterministic": true,
+  "actual_environment_reads": 0,
+  "actual_secret_resolutions": 0,
+  "actual_https_requests": 0,
+  "actual_provider_calls": 0,
+  "api_spend_usd": 0
+}

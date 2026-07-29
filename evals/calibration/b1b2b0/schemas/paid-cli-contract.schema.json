@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b0/paid-cli-contract.schema.json",
+  "title": "M2-P2-B1-B2-B0 paid CLI contract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "entrypoint",
+    "executed_in_this_task",
+    "exact_flags",
+    "fixed_values",
+    "pre_network_sequence",
+    "secret_resolution_step",
+    "first_provider_request_step"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p2-b1-b2-b0-paid-cli-contract-v1"
+    },
+    "entrypoint": {
+      "const": "scripts/run-m2-p2-b1-b2-b-paid-once.mjs"
+    },
+    "executed_in_this_task": { "const": false },
+    "exact_flags": {
+      "const": ["mode", "case", "model", "contract-hash", "approval-file", "confirm"]
+    },
+    "fixed_values": { "type": "object" },
+    "pre_network_sequence": {
+      "type": "array",
+      "minItems": 23,
+      "maxItems": 23,
+      "uniqueItems": true
+    },
+    "secret_resolution_step": { "const": 22 },
+    "first_provider_request_step": { "const": 23 }
+  },
+  "additionalProperties": true
+}

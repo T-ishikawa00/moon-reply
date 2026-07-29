@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at their recorded commits. Accepted B1-B2-A implements dormant HTTPS and environment-secret bindings but makes zero actual environment reads, secret resolutions, HTTPS requests, or provider calls with USD 0 spend. M2-P2-B1-B2-B paid calibration execution and Milestone 2 runtime remain unauthorized and not started.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 through M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at their recorded commits. M2-P2-B1-B2-B0 execution-package implementation and automated validation are complete with Human / ChatGPT review pending. No true external approval exists, the paid CLI has not run, actual environment reads, secret resolutions, HTTPS requests, provider calls, and spend remain zero. M2-P2-B1-B2-B1 paid execution and Milestone 2 runtime remain unauthorized and not started.
 
 ## P0: Repository Setup
 
@@ -604,7 +604,8 @@ The accepted development graph has 42 contrast sets, 130 memberships, and 7 conn
 - [x] Complete M2-P2-B1-A deterministic offline replay acceptance with zero provider calls and USD 0 spend
 - [x] Implement, automatically validate, Human / ChatGPT accept, and complete M2-P2-B1-B1 network-disabled provider protocol foundation at `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`
 - [x] Human / ChatGPT accept and complete M2-P2-B1-B2-A-R1 at `fa222917f0e6ff4a4e25d11da239717c062af6d0` and M2-P2-B1-B2-A at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`
-- [ ] Separately authorize M2-P2-B1-B2-B paid one-case calibration execution, capped initially at USD 1 total
+- [x] Implement and automatically validate M2-P2-B1-B2-B0 one-time paid-calibration execution package with Human / ChatGPT review pending
+- [ ] Separately authorize M2-P2-B1-B2-B1 external approval creation and paid one-case calibration execution, capped at USD 1 total
 
 M2-P2-A estimates are not actual usage or guaranteed API cost. Actual tokenizer usage, reasoning tokens, latency, API cost, and provider validation remain unknown. No product-quality evidence was produced, and the price catalog is a versioned planning snapshot. Development-70 represents evaluation cost, not one customer report cost. No 14-case or 70-case API execution is authorized. Any first M2-P2-B calibration requires separate authorization and is limited to one case, one model, no repair, one execution, and an absolute future ceiling of USD 1. M2-P2-A adds no provider, model selection, database, authentication, payment, email, API route, server action, UI, or runtime implementation.
 
@@ -633,7 +634,8 @@ M2-P2-A estimates are not actual usage or guaranteed API cost. Actual tokenizer 
 - [x] Implement M2-P2-B1-B1 with immutable network/secret interlocks, synthetic receipts, zero provider calls, and USD 0 spend
 - [x] Complete M2-P2-B1-B1 automated validation, Human / ChatGPT final review, acceptance, and completion at `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`
 - [x] Implement, automatically validate, Human / ChatGPT accept, and complete M2-P2-B1-B2-A dormant live bindings with zero actual calls and USD 0 spend
-- [ ] Separately authorize M2-P2-B1-B2-B before any actual provider call or spend
+- [x] Implement and automatically validate M2-P2-B1-B2-B0 before any actual provider call or spend; Human / ChatGPT review pending
+- [ ] Separately authorize M2-P2-B1-B2-B1 before any actual provider call or spend
 
 M2-P2-B0 is zero-cost contract work only. It does not call the OpenAI API, read an API key, implement a network/provider executor, select a product model, or authorize B1. The only possible future path is `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, no retry/Repair/fallback, and six provider calls maximum.
 
@@ -672,6 +674,24 @@ M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remain
 - [x] Run B1-B2-A, predecessor M2, M1, typecheck, lint, build, and diff gates.
 - [x] Commit/push the exact 41-file implementation manifest at `76ceb4a25cc565e84b9537bd25dbe703f87bd342`.
 - [x] Complete independent Human / ChatGPT final review, acceptance, and completion.
-- [ ] Separately authorize M2-P2-B1-B2-B, if ever approved.
+- [x] Implement and automatically validate the exact B0 execution package without a true approval, provider call, or spend; Human / ChatGPT review pending.
+- [ ] Separately authorize M2-P2-B1-B2-B1, if ever approved.
 
 OpenAI Project/billing/key setup, API execution, retry, Repair, fallback, Batch, PB-07, 14-case, 70-case, holdout, real-user execution, and product/baseline model selection are outside this WBS slice.
+
+# M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package
+
+- [x] Preserve the accepted B1-B2-A historical scope and the pushed correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f`.
+- [x] Implement the exact 34-file manifest (A30/M4/D0) without dependency, application, UI, database, auth, payment, email, API route, or server-action changes.
+- [x] Keep the repository approval template draft, absent, and non-executable.
+- [x] Bind future approval to exact final `main`, `origin/main`, B0 contract, request hashes, price snapshot, 30-minute expiry, and Human decision reference.
+- [x] Fix `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, six calls, and the USD 0.30/USD 1.00 ceilings.
+- [x] Enforce exact external approval, marker, and artifact roots with traversal/UNC/reparse escape rejection.
+- [x] Atomically consume the one-time marker before secret resolution and prohibit reuse after a crash.
+- [x] Generate deterministic template, blocked-preflight, approval-preview, 24-scenario rejection matrix, summary, and report hashes.
+- [x] Run the blocked preflight only; confirm `EXTERNAL_APPROVAL_NOT_PRESENT`, zero external directories, zero secret/network/provider activity, and USD 0 spend.
+- [x] Complete automated validation.
+- [ ] Complete independent Human / ChatGPT final review and acceptance.
+- [ ] Separately authorize M2-P2-B1-B2-B1 true approval creation and one-time paid execution.
+
+The paid entrypoint exists but was not executed. No true external approval record, marker, or run directory was created. Automated PASS is not Human / ChatGPT acceptance or model-quality evidence.

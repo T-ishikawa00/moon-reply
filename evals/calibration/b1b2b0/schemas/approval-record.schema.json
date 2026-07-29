@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b0/approval-record.schema.json",
+  "title": "M2-P2-B1-B2-B0 repository template and future external approval",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "approval_id",
+    "approval_status",
+    "approval_record_present",
+    "live_execution_authorized",
+    "paid_run_authorized",
+    "paid_run_completed",
+    "one_time_only",
+    "approved_runner_commit_sha",
+    "approved_origin_main_sha",
+    "approved_contract_hash",
+    "approved_case",
+    "approved_model",
+    "approved_stages",
+    "max_provider_calls",
+    "absolute_ceiling_usd",
+    "preflight_ceiling_usd",
+    "historical_static_cap_usd",
+    "live_guard_cost_usd",
+    "exact_request_hashes",
+    "price_snapshot_sha256",
+    "price_snapshot_checked_at",
+    "price_snapshot_verified_at",
+    "approval_created_at",
+    "approval_expires_at",
+    "confirmation_phrase_sha256",
+    "one_time_confirmation_hash",
+    "human_chatgpt_decision_reference",
+    "approval_record_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p2-b1-b2-b0-approval-record-v1"
+    },
+    "record_type": {
+      "enum": [
+        "repository_non_executable_template",
+        "external_human_approval"
+      ]
+    },
+    "approval_id": { "type": "string", "minLength": 1 },
+    "approval_status": { "enum": ["draft", "approved", "denied"] },
+    "approval_record_present": { "type": "boolean" },
+    "live_execution_authorized": { "type": "boolean" },
+    "paid_run_authorized": { "type": "boolean" },
+    "paid_run_completed": { "type": "boolean" },
+    "one_time_only": { "const": true },
+    "approved_runner_commit_sha": {
+      "anyOf": [
+        { "const": "TO_BE_BOUND_AFTER_MAIN_ACCEPTANCE" },
+        { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      ]
+    },
+    "approved_origin_main_sha": {
+      "anyOf": [
+        { "const": "TO_BE_BOUND_AFTER_MAIN_ACCEPTANCE" },
+        { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      ]
+    },
+    "approved_contract_hash": {
+      "const": "c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2"
+    },
+    "approved_case": { "const": "WAIT-003" },
+    "approved_model": { "const": "gpt-5.6-luna" },
+    "approved_stages": {
+      "const": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
+    },
+    "max_provider_calls": { "const": 6 },
+    "absolute_ceiling_usd": { "const": 1 },
+    "preflight_ceiling_usd": { "const": 0.3 },
+    "historical_static_cap_usd": { "const": 0.213223 },
+    "live_guard_cost_usd": { "const": 0.26079625 },
+    "exact_request_hashes": {
+      "type": "object",
+      "required": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+      "additionalProperties": { "$ref": "#/$defs/request_hash_pair" }
+    },
+    "price_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "price_snapshot_checked_at": { "const": "2026-07-29" },
+    "price_snapshot_verified_at": {
+      "type": ["string", "null"]
+    },
+    "approval_created_at": { "type": ["string", "null"] },
+    "approval_expires_at": { "type": ["string", "null"] },
+    "confirmation_phrase_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "one_time_confirmation_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "human_chatgpt_decision_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval_record_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "request_hash_pair": {
+      "type": "object",
+      "required": [
+        "request_body_sha256",
+        "request_contract_sha256"
+      ],
+      "properties": {
+        "request_body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "request_contract_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

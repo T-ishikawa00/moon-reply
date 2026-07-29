@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b0/artifact-policy.schema.json",
+  "title": "M2-P2-B1-B2-B0 external artifact policy",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "storage_root",
+    "repository_storage_allowed",
+    "future_files",
+    "forbidden_persistence",
+    "accepted_b1_b2_a_artifact_sanitizer_required",
+    "write_once"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p2-b1-b2-b0-artifact-policy-v1"
+    },
+    "storage_root": { "type": "string" },
+    "repository_storage_allowed": { "const": false },
+    "future_files": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true
+    },
+    "forbidden_persistence": {
+      "type": "array",
+      "minItems": 14,
+      "uniqueItems": true
+    },
+    "accepted_b1_b2_a_artifact_sanitizer_required": {
+      "const": true
+    },
+    "write_once": { "const": true }
+  },
+  "additionalProperties": false
+}

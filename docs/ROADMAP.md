@@ -98,7 +98,7 @@ Exit criterion: a reviewer can understand what is sold, the price, input flow, s
 
 ## 5. Milestone 2: Internal Automated AI / DB Vertical Slice
 
-Status: M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at their recorded commits. M2-P2-B1-B2-B paid calibration execution and Milestone 2 runtime remain unauthorized and not started.
+Status: M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete at their recorded commits. M2-P2-B1-B2-B0 one-time paid-calibration execution-package implementation and automated validation are complete with Human / ChatGPT review pending. M2-P2-B1-B2-B1 external approval creation and actual paid execution remain unauthorized and not started.
 
 Future goal: in an internal environment, connect real AI and a real database so one consultation can move automatically from input through eligibility, Safety, decision, validated report generation, and result display.
 
@@ -238,3 +238,12 @@ Each milestone must be planned, implemented where applicable, validated, committ
 - Automated validation and Human / ChatGPT final review are complete; M2-P2-B1-B2-A is accepted and complete.
 - The accepted evidence is dormant protocol and binding evidence only. It is not evidence of an actual OpenAI connection, API-key validity, Project model availability, token usage, latency, billed cost, or model quality.
 - M2-P2-B1-B2-B, OpenAI Project/billing/key setup, paid execution, retry, Repair, fallback, Batch, PB-07, holdout, and real-user execution remain unauthorized.
+
+# M2-P2-B1-B2-B0 one-time paid-calibration execution-package checkpoint (2026-07-29)
+
+- The separate correction commit `30c05ca2c383641676a3c1fde680e2e83d44397f` freezes the accepted B1-B2-A historical scope and exact nine successor paths; it is unchanged by this implementation.
+- B0 implements an exact 34-file package (A30/M4/D0): non-executable repository approval template, external approval policy, fixed paid CLI, price snapshot, external-path confinement, atomic one-time marker, sanitized artifact policy, 24 deterministic failure scenarios, and deterministic evidence generation.
+- The Task-time blocked preflight stops with `EXTERNAL_APPROVAL_NOT_PRESENT`. The true external approval does not exist, the paid CLI is not executed, actual environment reads, secret resolutions, HTTPS requests, provider calls, and API spend remain zero, and no external approval/marker/run directory is created.
+- `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, six calls, USD 0.213223 static cap, USD 0.26079625 live guard, USD 0.30 preflight ceiling, and USD 1.00 absolute Human ceiling remain fixed. No product or baseline model is selected.
+- Automated validation is complete. Human / ChatGPT final review and acceptance are pending.
+- M2-P2-B1-B2-B1 true approval creation and one-time paid execution remain unauthorized and not started. No main merge or PR is authorized by this checkpoint.

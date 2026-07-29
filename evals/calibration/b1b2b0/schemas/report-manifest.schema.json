@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "moon-reply://m2-p2-b1-b2-b0/report-manifest.schema.json",
+  "title": "M2-P2-B1-B2-B0 deterministic report manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "implementation_manifest",
+    "implementation_scope",
+    "reports",
+    "registered_paths",
+    "price_snapshot_sha256",
+    "deterministic",
+    "actual_environment_reads",
+    "actual_secret_resolutions",
+    "actual_https_requests",
+    "actual_provider_calls",
+    "api_spend_usd"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p2-b1-b2-b0-report-manifest-v1"
+    },
+    "task_id": { "const": "M2-P2-B1-B2-B0" },
+    "implementation_manifest": {
+      "type": "array",
+      "minItems": 34,
+      "maxItems": 34
+    },
+    "implementation_scope": {
+      "type": "object",
+      "properties": {
+        "total": { "const": 34 },
+        "added": { "const": 30 },
+        "modified": { "const": 4 },
+        "deleted": { "const": 0 }
+      },
+      "required": ["total", "added", "modified", "deleted"],
+      "additionalProperties": false
+    },
+    "reports": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "registered_paths": {
+      "type": "array",
+      "minItems": 34,
+      "maxItems": 34,
+      "uniqueItems": true
+    },
+    "price_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "deterministic": { "const": true },
+    "actual_environment_reads": { "const": 0 },
+    "actual_secret_resolutions": { "const": 0 },
+    "actual_https_requests": { "const": 0 },
+    "actual_provider_calls": { "const": 0 },
+    "api_spend_usd": { "const": 0 }
+  },
+  "additionalProperties": true
+}

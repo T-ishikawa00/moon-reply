@@ -1,0 +1,36 @@
+{
+  "schema_version": "m2-p2-b1-b2-b0-artifact-policy-v1",
+  "storage_root": "%LOCALAPPDATA%\\moon-reply\\calibration-runs\\<approval_id>\\",
+  "repository_storage_allowed": false,
+  "future_files": [
+    "run-manifest.json",
+    "stage-records.json",
+    "gate-results.json",
+    "cost-summary.json",
+    "calibration-summary.md",
+    "outputs/PB-01.json",
+    "outputs/PB-02.json",
+    "outputs/PB-03.json",
+    "outputs/PB-04.json",
+    "outputs/PB-05.json",
+    "outputs/PB-06.json"
+  ],
+  "forbidden_persistence": [
+    "api_key",
+    "authorization_header",
+    "environment_dump",
+    "raw_request_headers",
+    "secret_handle",
+    "raw_provider_error_body",
+    "chain_of_thought",
+    "internal_reasoning_text",
+    "holdout_data",
+    "real_user_data",
+    "username",
+    "hostname",
+    "pid",
+    "repository_absolute_path"
+  ],
+  "accepted_b1_b2_a_artifact_sanitizer_required": true,
+  "write_once": true
+}

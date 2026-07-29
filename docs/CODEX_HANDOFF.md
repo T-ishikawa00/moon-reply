@@ -29,7 +29,7 @@ The accepted Milestone 1 deliverable is a fixed-fixture Reviewable Web MVP. It h
 
 ## Current Status
 
-Current task: `M2-P2-B1-B2-A Acceptance Synchronization`. M2-P2-B1-B2-A-R1 correction commit `fa222917f0e6ff4a4e25d11da239717c062af6d0` and M2-P2-B1-B2-A implementation commit `76ceb4a25cc565e84b9537bd25dbe703f87bd342` are Human / ChatGPT accepted and complete. Acceptance synchronization is limited to the eight authorized documents and is authorized for fast-forward-only integration to `main`.
+Current task: `M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package`. The prior correction is complete and pushed at `30c05ca2c383641676a3c1fde680e2e83d44397f`. The exact 34-file B0 implementation and automated validation are complete on `design/m2-p2-b1-b2-b0-paid-execution-package`; Human / ChatGPT final review and acceptance are pending. No main merge or PR is authorized.
 
 The accepted B1-A Runner fixes execution mode `offline_replay`, `WAIT-003`, candidate `gpt-5.6-luna`, PB-01 through PB-06 synthetic replay, six simulated stages, B0 contract hash `c3dfdc5ec6cb503a8d91ed4080c8734c9af9c7bf944e1bb6b5798536bb6c38e2`, and deterministic local policy checks. Accepted B1-B1 adds network-disabled request, parser, ledger, adapter-interface, interlock, and sanitization protocol evidence. Accepted B1-B2-A adds only dormant fixed-endpoint HTTPS, environment-secret, approval, one-time authorization, artifact, Git, redaction, and live-budget bindings. Retry, Repair, fallback, automatic continuation, PB-07, Batch, 14-case, 70-case, holdout, and real-user execution are prohibited. The static hard cap is USD 0.213223; the cache-write-protected live guard is USD 0.26079625 and is not actual or billed cost; the preflight ceiling is USD 0.30 and the future absolute Human ceiling is USD 1.00. Actual environment reads, secret resolutions, HTTPS requests, and provider calls are zero, spend is USD 0, the approval record is absent, and live and paid authorization are false. Provider compatibility, API-key validity, model availability, actual token usage, latency, billing, and model quality remain unknown. M2-P2-B1-B2-B paid calibration execution remains unauthorized and not started.
 
@@ -151,7 +151,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Authorization Gate
 
-Milestone 1 is closed. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P2-B1-B1-R1, M2-P2-B1-B1, M2-P2-B1-B2-A-R1, and M2-P2-B1-B2-A are Human / ChatGPT accepted and complete. The next authorization gate is M2-P2-B1-B2-B paid one-case calibration execution; it remains unauthorized and not started. Until separately authorized, no Project/billing/key configuration, paid approval, API call, provider execution, environment-secret read, spend, product or baseline model selection, database, or runtime work is authorized. Development-70 cost is evaluation cost, not one customer report cost; no 14-case or 70-case API execution is authorized.
+Milestone 1 is closed. M2-P1 through M2-P2-B1-B2-A are Human / ChatGPT accepted and complete. M2-P2-B1-B2-B0 execution-package implementation and automated validation are complete, while Human / ChatGPT final review and acceptance remain pending. The next gate is exact-commit B0 review. M2-P2-B1-B2-B1 external approval creation and actual paid execution remain unauthorized and not started. Until separately authorized, no true paid approval, paid CLI execution, provider call, credential access, spend, product or baseline model selection, database, or runtime work is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`
@@ -167,3 +167,23 @@ Milestone 1 is closed. M2-P1, M2-P2-A, M2-P2-B0, M2-P2-B1-A-R1, M2-P2-B1-A, M2-P
 - Review/acceptance: Human / ChatGPT final review complete; accepted and complete
 
 M2-P2-B1-B2-B is not authorized. Do not create or configure an API key, Project, billing, or true approval record; do not execute the API or create a PR.
+
+# M2-P2-B1-B2-B0 handoff
+
+- Branch: `design/m2-p2-b1-b2-b0-paid-execution-package`
+- Correction commit: `30c05ca2c383641676a3c1fde680e2e83d44397f` (unchanged)
+- Implementation scope: exact 34 paths, A30/M4/D0
+- Repository approval: draft, absent, live false, paid false, non-executable
+- Future true approval: fixed external path, exact final-main binding, maximum 30-minute validity, not created
+- Price snapshot: 2026-07-29, maximum age 24 hours
+- Fixed target: `WAIT-003`, `gpt-5.6-luna`, PB-01 through PB-06, maximum six calls
+- Budget boundaries: USD 0.213223 static cap, USD 0.26079625 live guard, USD 0.30 preflight, USD 1.00 Human ceiling
+- Task-time runner: blocked preflight only; expected `EXTERNAL_APPROVAL_NOT_PRESENT`
+- Paid entrypoint: implemented for future separate authorization, not executed
+- Failure matrix: exact 24 scenarios, all stop before secret/HTTPS
+- Current actual counts: environment reads 0, secret resolutions 0, HTTPS requests 0, provider calls 0, API spend USD 0
+- External state created: approval files 0, markers 0, run directories 0
+- Automated validation: complete
+- Review/acceptance: Human / ChatGPT final review pending
+
+M2-P2-B1-B2-B1 remains unauthorized and not started. Do not create a true approval, run the paid entrypoint, access the Human-controlled credential, merge to main, or create a PR.
