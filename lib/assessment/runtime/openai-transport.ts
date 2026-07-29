@@ -2,6 +2,8 @@ import "server-only";
 import { performance } from "node:perf_hooks";
 import OpenAI from "openai";
 import { M2RuntimeError } from "./errors.ts";
+import { logDevelopmentOpenAiProviderFailure } from "./openai-diagnostics.ts";
+import { toOpenAiStructuredOutputSchema } from "./openai-schema.ts";
 import type { AiStageTransport, JsonObject, StageRequest } from "./types.ts";
 
 export class OpenAiResponsesTransport implements AiStageTransport {
@@ -50,7 +52,9 @@ export class OpenAiResponsesTransport implements AiStageTransport {
             type: "json_schema",
             name: stageRequest.schemaName,
             strict: true,
-            schema: stageRequest.outputSchema,
+            schema: toOpenAiStructuredOutputSchema(
+              stageRequest.outputSchema,
+            ),
           },
         },
       });
@@ -86,6 +90,7 @@ export class OpenAiResponsesTransport implements AiStageTransport {
       };
     } catch (error) {
       if (error instanceof M2RuntimeError) throw error;
+      logDevelopmentOpenAiProviderFailure(stageRequest.stageId, error);
       throw new M2RuntimeError("M2_STAGE_PROVIDER_FAILED");
     }
   }

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import OpenAI from "openai";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,6 +18,8 @@ const gateOrder = [
   "M2_P3_PRODUCTION_DISABLE_GATE",
   "M2_P3_SERVER_SECRET_BOUNDARY_GATE",
   "M2_P3_OPENAI_REQUEST_CONTRACT_GATE",
+  "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+  "M2_P3_PROVIDER_DIAGNOSTIC_GATE",
   "M2_P3_STORE_FALSE_GATE",
   "M2_P3_SUPABASE_SERVER_ONLY_GATE",
   "M2_P3_RLS_GATE",
@@ -99,10 +102,19 @@ const [
     wait003StageOutputs,
   },
   { loadCanonicalStageCatalog },
+  {
+    createOpenAiProviderFailureDiagnostic,
+  },
+  {
+    OPENAI_UNSUPPORTED_SCHEMA_KEYWORDS,
+    toOpenAiStructuredOutputSchema,
+  },
 ] = await Promise.all([
   import("../lib/assessment/runtime/application.ts"),
   import("../lib/assessment/runtime/fakes.ts"),
   import("../lib/assessment/runtime/schema-catalog.ts"),
+  import("../lib/assessment/runtime/openai-diagnostics.ts"),
+  import("../lib/assessment/runtime/openai-schema.ts"),
 ]);
 
 const catalog = await loadCanonicalStageCatalog();
@@ -363,6 +375,9 @@ const environmentSource = source("lib/assessment/runtime/environment.ts");
 const transportSource = source(
   "lib/assessment/runtime/openai-transport.ts",
 );
+const diagnosticSource = source(
+  "lib/assessment/runtime/openai-diagnostics.ts",
+);
 const repositorySource = source(
   "lib/assessment/runtime/supabase-repository.ts",
 );
@@ -487,6 +502,86 @@ gate("M2_P3_OPENAI_REQUEST_CONTRACT_GATE", () => {
     !transportSource.includes("previous_response_id") &&
       !transportSource.includes("conversation:"),
     "stateful Responses field is present",
+  );
+});
+
+gate("M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE", () => {
+  const projectedSchemas = catalog.definitions.map((definition) =>
+    toOpenAiStructuredOutputSchema(definition.outputSchema),
+  );
+  const projectedJson = JSON.stringify(projectedSchemas);
+  const canonicalJson = JSON.stringify(
+    catalog.definitions.map((definition) => definition.outputSchema),
+  );
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    canonicalJson.includes('"uniqueItems":true') &&
+      !OPENAI_UNSUPPORTED_SCHEMA_KEYWORDS.some((keyword) =>
+        projectedJson.includes(`${JSON.stringify(keyword)}:`),
+      ) &&
+      !projectedJson.includes('"items":false'),
+    "provider schemas contain an unsupported Structured Outputs keyword",
+  );
+  check(
+    "M2_P3_OPENAI_SCHEMA_COMPATIBILITY_GATE",
+    transportSource.includes(
+      "toOpenAiStructuredOutputSchema(",
+    ) &&
+      source("lib/assessment/runtime/validation.ts").includes(
+        "ajv.compile(definition.outputSchema)",
+      ),
+    "provider projection or canonical AJV validation is missing",
+  );
+});
+
+gate("M2_P3_PROVIDER_DIAGNOSTIC_GATE", () => {
+  const rawBodySentinel = "RAW_PROVIDER_BODY_MUST_NOT_BE_LOGGED";
+  const apiError = new OpenAI.APIError(
+    400,
+    {
+      type: "invalid_request_error",
+      code: "invalid_json_schema",
+      param: "text.format.schema",
+      message: rawBodySentinel,
+    },
+    undefined,
+    new Headers({ "x-request-id": "req_sanitized_test" }),
+  );
+  const diagnostic = createOpenAiProviderFailureDiagnostic(
+    "PB-01",
+    apiError,
+  );
+  check(
+    "M2_P3_PROVIDER_DIAGNOSTIC_GATE",
+    assert.deepEqual(Object.keys(diagnostic).sort(), [
+      "failureClassification",
+      "httpStatus",
+      "openaiErrorCode",
+      "openaiErrorParam",
+      "openaiErrorType",
+      "requestId",
+      "stageId",
+    ].sort()) === undefined &&
+      diagnostic.stageId === "PB-01" &&
+      diagnostic.httpStatus === 400 &&
+      diagnostic.openaiErrorType === "invalid_request_error" &&
+      diagnostic.openaiErrorCode === "invalid_json_schema" &&
+      diagnostic.openaiErrorParam === "text.format.schema" &&
+      diagnostic.requestId === "req_sanitized_test" &&
+      diagnostic.failureClassification === "openai_api_error" &&
+      !JSON.stringify(diagnostic).includes(rawBodySentinel),
+    "provider diagnostic fields are incomplete or unsafe",
+  );
+  check(
+    "M2_P3_PROVIDER_DIAGNOSTIC_GATE",
+    diagnosticSource.includes(
+      'process.env.NODE_ENV !== "development"',
+    ) &&
+      diagnosticSource.includes('console.error(') &&
+      transportSource.includes(
+        "logDevelopmentOpenAiProviderFailure(stageRequest.stageId, error)",
+      ),
+    "development-only provider diagnostic logging is missing",
   );
 });
 
