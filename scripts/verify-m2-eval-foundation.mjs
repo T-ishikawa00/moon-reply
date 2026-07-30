@@ -26,6 +26,39 @@ const m2p3CapabilityManifestPath =
   "evals/runtime/m2-p3-runtime-capabilities-v1.json";
 const m2p3VerifierPath =
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs";
+const m2p4I1bBaselineCommit =
+  "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
+const m2p4I1bCapabilityManifestPath =
+  "evals/runtime/m2-p4-i1-b-runtime-capabilities-v1.json";
+const m2p4I1bVerifierPath =
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs";
+const m2p4I1bVerifierImportPaths = new Set([
+  "lib/assessment/runtime/application.ts",
+  "lib/assessment/runtime/fakes.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/openai-schema.ts",
+  "lib/assessment/runtime/policy-v2.ts",
+  "lib/assessment/runtime/validation.ts",
+  "evals/quality/m2-p4-i1/decision-policy-v2.mjs",
+]);
+const m2p4I1bImplementationPaths = new Set([
+  "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v2.json",
+  "lib/assessment/runtime/policy-v2.ts",
+  m2p4I1bVerifierPath,
+  "evals/runtime/m2-p4-i1-b-runtime-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I1_B_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/types.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 const canonicalContentHash =
   "107dba9592cc07f87eb35ee4e42ec6526780d6ecc4405fd0dad46f9dbc5d6bb6";
 const canonicalContrastCatalogHash =
@@ -106,6 +139,7 @@ const successorLocalToolPaths = new Set([
   "scripts/verify-m2-zero-cost-estimator.mjs",
   "scripts/prepare-m2-p2-b0-calibration-contract.mjs",
   "scripts/verify-m2-p2-b0-calibration-contract.mjs",
+  m2p4I1bVerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3571,6 +3605,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       }
       const localImport = resolveSuccessorLocalImport(file, specifier);
       if (localImport && successorLocalToolPaths.has(localImport)) continue;
+      if (
+        file === m2p4I1bVerifierPath &&
+        localImport &&
+        m2p4I1bVerifierImportPaths.has(localImport)
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -3690,6 +3731,94 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
 function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
+  const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
+  const declaredM2p4I1bPaths = Array.isArray(
+    m2p4I1bManifest?.implementation_paths,
+  )
+    ? m2p4I1bManifest.implementation_paths
+    : [];
+  const expectedM2p4I1bPaths = [...m2p4I1bImplementationPaths].sort();
+  const actualDeclaredM2p4I1bPaths = [
+    ...new Set(declaredM2p4I1bPaths),
+  ].sort();
+  if (
+    m2p4I1bManifest?.task_id !== "M2-P4-I1-B" ||
+    m2p4I1bManifest?.status !==
+      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1bManifest?.baseline?.commit !== m2p4I1bBaselineCommit ||
+    declaredM2p4I1bPaths.length !== 16 ||
+    JSON.stringify(actualDeclaredM2p4I1bPaths) !==
+      JSON.stringify(expectedM2p4I1bPaths) ||
+    declaredM2p4I1bPaths.some(
+      (item) =>
+        typeof item !== "string" ||
+        item.length === 0 ||
+        item.includes("*") ||
+        item.endsWith("/"),
+    ) ||
+    m2p4I1bManifest?.task_execution_evidence?.openai_live_calls !== 0 ||
+    m2p4I1bManifest?.task_execution_evidence?.database_operations !== 0 ||
+    m2p4I1bManifest?.task_execution_evidence?.migrations !== 0 ||
+    m2p4I1bManifest?.task_execution_evidence?.holdout_use !== 0 ||
+    m2p4I1bManifest?.task_execution_evidence?.real_user_data !== 0
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1bCapabilityManifestPath,
+      pathName: "$",
+      invariant:
+        "M2-P4-I1-B successor manifest declares exactly 16 literal paths and zero external execution",
+      expected: {
+        task_id: "M2-P4-I1-B",
+        status: "implementation_pending_human_chatgpt_review",
+        baseline: m2p4I1bBaselineCommit,
+        implementation_paths: expectedM2p4I1bPaths,
+        external_execution: 0,
+      },
+      actual: m2p4I1bManifest,
+    });
+  }
+
+  const actualM2p4I1bMutation = collectGitMutationManifest(
+    m2p4I1bBaselineCommit,
+    null,
+    "M2_PROHIBITED_IMPLEMENTATION_GATE",
+  );
+  const actualM2p4I1bPaths = actualM2p4I1bMutation.entries
+    .map((entry) => entry.path)
+    .sort();
+  if (
+    actualM2p4I1bMutation.changed_file_count !== 16 ||
+    JSON.stringify(actualM2p4I1bPaths) !==
+      JSON.stringify(expectedM2p4I1bPaths)
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1bCapabilityManifestPath,
+      pathName: "$.implementation_paths",
+      invariant:
+        "working-tree successor mutation exactly matches the M2-P4-I1-B manifest",
+      expected: expectedM2p4I1bPaths,
+      actual: actualM2p4I1bPaths,
+    });
+  }
+
+  const i1aHistoricalDiff = runGit([
+    "diff",
+    "--exit-code",
+    m2p4I1bBaselineCommit,
+    "--",
+    "evals/quality/m2-p4-i1",
+    "docs/phase2/TASK_M2_P4_I1_A_REVIEW.md",
+  ]);
+  if (i1aHistoricalDiff.status !== 0) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "evals/quality/m2-p4-i1",
+      pathName: "$",
+      invariant:
+        "accepted M2-P4-I1-A assets remain unchanged during M2-P4-I1-B",
+      expected: "zero diff from the accepted I1-B baseline",
+      actual: i1aHistoricalDiff.stderr || i1aHistoricalDiff.stdout,
+    });
+  }
   const declaredM2p3ImplementationPaths = Array.isArray(
     m2p3Manifest?.implementation_paths,
   )
@@ -3942,6 +4071,7 @@ function verifyScopeAndProhibitedImplementation() {
       !exactAllowed.has(item) &&
       !successorLocalToolPaths.has(item) &&
       !m2p3ImplementationPaths.has(item) &&
+      !m2p4I1bImplementationPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -3968,7 +4098,12 @@ function verifyScopeAndProhibitedImplementation() {
   for (const item of paths.filter((candidate) =>
     protectedPatterns.some((pattern) => pattern.test(candidate)),
   )) {
-    if (m2p3ImplementationPaths.has(item)) continue;
+    if (
+      m2p3ImplementationPaths.has(item) ||
+      m2p4I1bImplementationPaths.has(item)
+    ) {
+      continue;
+    }
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
       file: item,
       pathName: "$",

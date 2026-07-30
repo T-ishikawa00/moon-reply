@@ -1,0 +1,94 @@
+{
+  "schema_version": "m2-p4-runtime-stage-catalog-v1",
+  "catalog_version": "runtime-stage-catalog-v2.0.0",
+  "prompt_bundle_version": "prompt-bundle-runtime-v2.0.0",
+  "schema_set_version": "pipeline-schema-runtime-v2.0.0",
+  "baseline": "554d2cb5a2f816ac82edf3cc247458fe34a4a74c",
+  "hash_algorithm": "sha256-utf8-lf",
+  "common_prompt": {
+    "inherited_from": "ai/prompts/prompt-bundle.manifest.json#SHARED-COMMON",
+    "prompt_version": "v1.0.0",
+    "prompt_path": "ai/prompts/shared/common-stage-contract.md",
+    "prompt_sha256": "218ebd586906c47910c7436874a13d2aa4ca6d6cef4df55dbfacff0ecb168fbf"
+  },
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "sequence_number": 1,
+      "source": "m2-p4-runtime-successor",
+      "prompt_version": "v2.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
+      "prompt_sha256": "045b72052a0e92672b5f79b9898f16df93ec8bd00ac235a17cf8f7b0f43175f4",
+      "schema_version": "pipeline-schema-v2.0.0",
+      "schema_name": "pb_01_structure_v2",
+      "schema_path": "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "7711b311bb110244bea79566742a6648d8327132c18dec2ab5cb0fec1a19012c"
+    },
+    {
+      "stage_id": "PB-02",
+      "sequence_number": 2,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/safety-semantic/v1.0.0.developer.md",
+      "prompt_sha256": "8d8ebc98b75bad52df3324f53085aefec3c848f5d7d21e180e914c0c6b498091",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_02_safety_semantic_v1",
+      "schema_path": "ai/schemas/safety-assessment.schema.json",
+      "schema_pointer": "#/$defs/model_result",
+      "schema_sha256": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    {
+      "stage_id": "PB-03",
+      "sequence_number": 3,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/eligibility/v1.0.0.developer.md",
+      "prompt_sha256": "1e23c2178b50f20fc929b07ca3093f7a8a0e605bebf301cb2a518cabeb7870d7",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_03_eligibility_v1",
+      "schema_path": "ai/schemas/eligibility-result.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "c8042690b277b5a2871647ff6647ed2e1a971df816f3f77d3132fa4189e8e4e9"
+    },
+    {
+      "stage_id": "PB-04",
+      "sequence_number": 4,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/decision-plan/v1.0.0.developer.md",
+      "prompt_sha256": "94f2eec0c342ba5623be4829382cc7832a046ddd7acc0c509ab9e674784032f9",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_04_decision_plan_v1",
+      "schema_path": "ai/schemas/decision-plan.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "d50352be0b41b6b2949b0524cffa3f48f42ca47c50d7fdcd2366fa1cb6353417"
+    },
+    {
+      "stage_id": "PB-05",
+      "sequence_number": 5,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/report-writer/v1.0.0.developer.md",
+      "prompt_sha256": "9347e0d371af260b50f0b24a44abde775cf07abd3b90b232b971c4453389d25f",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_05_report_writing_v1",
+      "schema_path": "ai/schemas/report-content.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "41d7fbeb3210bee7ceb1184295e9e64b8fbf2316d4082ab4c15390d55ba0cc8c"
+    },
+    {
+      "stage_id": "PB-06",
+      "sequence_number": 6,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/semantic-validator/v1.0.0.developer.md",
+      "prompt_sha256": "2265962f2116cb4fa14c576f1a8d4d535836b83b23750158432db6b86967071e",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_06_semantic_validation_v1",
+      "schema_path": "ai/schemas/validation-result.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  ]
+}

@@ -4,11 +4,14 @@ import { asM2RuntimeError, M2RuntimeError } from "./errors.ts";
 import { hashJson } from "./hash.ts";
 import {
   aggregateSafety,
-  buildDecisionPolicy,
   deterministicSafetyResult,
-  validateDecisionPlanAgainstPolicy,
 } from "./policy.ts";
-import type { DecisionPolicyResult, SafetyResult } from "./policy.ts";
+import type { SafetyResult } from "./policy.ts";
+import {
+  buildDecisionPolicyV2,
+  requireDecisionFacts,
+  validateDecisionPlanAgainstPolicyV2,
+} from "./policy-v2.ts";
 import type {
   AiStageTransport,
   AssessmentExecutionResult,
@@ -319,7 +322,8 @@ export class AssessmentPipeline {
       }
 
       this.emit("LOCAL_DECISION_POLICY");
-      const decisionPolicy = buildDecisionPolicy(request, structuredIntake);
+      const decisionFacts = requireDecisionFacts(structuredIntake);
+      const decisionPolicy = buildDecisionPolicyV2(decisionFacts);
       const decisionPlan = (await this.invokeStage(
         runContext,
         {
@@ -333,9 +337,9 @@ export class AssessmentPipeline {
         },
         "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
         (output) =>
-          validateDecisionPlanAgainstPolicy(
+          validateDecisionPlanAgainstPolicyV2(
             output as unknown as DecisionPlan,
-            decisionPolicy as DecisionPolicyResult,
+            decisionPolicy,
           ),
       )) as unknown as DecisionPlan;
 

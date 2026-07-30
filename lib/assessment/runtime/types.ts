@@ -43,6 +43,137 @@ export type Decision =
   | "wait_and_reassess"
   | "pause_additional_contact";
 
+export const DECISION_FACTS_RELATIONSHIP_STAGES = [
+  "dating",
+  "in_relationship",
+  "ambiguous",
+  "former_partner",
+  "matching_app",
+  "friend",
+  "work_or_school",
+  "other",
+  "unknown",
+] as const;
+
+export type DecisionFactsRelationshipStage =
+  (typeof DECISION_FACTS_RELATIONSHIP_STAGES)[number];
+
+export type DecisionFactsV1 = {
+  schema_version: "m2-p4-decision-facts-v1";
+  relationship_stage: DecisionFactsRelationshipStage;
+  selected_requests: RequestedTopic[];
+  latest_direct_message: {
+    sender: "user" | "other_person" | "none" | "unknown";
+    kind:
+      | "question"
+      | "schedule_coordination"
+      | "apology"
+      | "thanks_or_followup"
+      | "practical_information"
+      | "invitation"
+      | "closure_or_boundary"
+      | "social_acknowledgement"
+      | "other"
+      | "none"
+      | "unknown";
+    response_expectation: "reasonable" | "optional" | "none" | "unknown";
+    user_reply_state: "not_replied" | "replied" | "not_applicable" | "unknown";
+    sns_signal_only: boolean;
+  };
+  contact_state: {
+    unanswered_user_message_count: number | null;
+    elapsed_since_latest_user_message_minutes: number | null;
+    usual_cadence_relation:
+      | "within_usual"
+      | "beyond_usual"
+      | "unknown"
+      | "not_applicable";
+    proposed_message_present: boolean;
+  };
+  boundary_state: {
+    kind:
+      | "none"
+      | "no_contact"
+      | "temporary_distance"
+      | "blocked_or_restricted"
+      | "relationship_closed"
+      | "unknown";
+    status: "none" | "explicit" | "unknown";
+    repeated_unanswered_contact: boolean;
+  };
+  practical_reason: {
+    kind:
+      | "none"
+      | "schedule_coordination"
+      | "factual_correction"
+      | "promised_information"
+      | "logistics"
+      | "thank_you"
+      | "initial_apology"
+      | "single_invitation"
+      | "unknown";
+    active: boolean;
+    deadline: "none" | "same_day" | "next_day" | "later" | "unknown";
+  };
+  information_state: {
+    complete_for_decision: true;
+  };
+};
+
+export type StructuredIntakeV2 = {
+  schema_version: "pipeline-schema-v2.0.0";
+  relationship_stage: DecisionFactsRelationshipStage;
+  user_goal:
+    | "decide_send_or_wait"
+    | "reply_to_message"
+    | "prepare_message"
+    | "organize_relationship"
+    | "plan_next_three_days"
+    | "organize_emotions"
+    | "unknown";
+  timeline: JsonObject[];
+  boundaries: JsonObject[];
+  context: JsonObject[];
+  observed_facts: JsonObject[];
+  user_assumptions: JsonObject[];
+  user_emotions: JsonObject[];
+  material_unknowns: JsonObject[];
+  safety_signals: JsonObject[];
+  untrusted_embedded_instructions_detected: boolean;
+  decision_facts: DecisionFactsV1 | null;
+};
+
+export type DecisionPolicyResultV2 = {
+  schema_version: "pipeline-schema-v2.0.0";
+  policy_version: "decision-policy-v2.0.0";
+  allowed_decisions: [Decision];
+  disallowed_decisions: Array<{
+    decision: Decision;
+    reason_codes: string[];
+  }>;
+  follow_up_exception:
+    | "none"
+    | "material_factual_correction"
+    | "same_day_schedule_change"
+    | "next_day_schedule_change"
+    | "promised_required_information"
+    | "safety_necessary_contact";
+  message_draft_policy: "required_now" | "later_only" | "not_allowed";
+  later_draft_mode:
+    | "candidate_can_be_prepared"
+    | "defer_until_reassessment"
+    | null;
+  pause_reason_code:
+    | "explicit_no_contact"
+    | "temporary_distance_requested"
+    | "blocked_or_restricted"
+    | "relationship_closed"
+    | "repeated_unanswered_contact"
+    | null;
+  resume_policy: "explicit_permission_required" | "other_initiated_only" | null;
+  reason_codes: string[];
+};
+
 export type JsonValue =
   | string
   | number

@@ -101,7 +101,7 @@ const [
     safetyBlockedStageOutputs,
     wait003StageOutputs,
   },
-  { loadCanonicalStageCatalog },
+  { loadCanonicalStageCatalog, loadM2P4RuntimeStageCatalog },
   {
     createOpenAiProviderFailureDiagnostic,
   },
@@ -120,7 +120,39 @@ const [
   import("../lib/assessment/runtime/openai-schema.ts"),
 ]);
 
-const catalog = await loadCanonicalStageCatalog();
+const canonicalCatalog = await loadCanonicalStageCatalog();
+const catalog = await loadM2P4RuntimeStageCatalog();
+const waitDecisionFacts = {
+  schema_version: "m2-p4-decision-facts-v1",
+  relationship_stage: "in_relationship",
+  selected_requests: ["decide_send_or_wait", "message_impact"],
+  latest_direct_message: {
+    sender: "user",
+    kind: "other",
+    response_expectation: "optional",
+    user_reply_state: "not_applicable",
+    sns_signal_only: false,
+  },
+  contact_state: {
+    unanswered_user_message_count: 1,
+    elapsed_since_latest_user_message_minutes: 120,
+    usual_cadence_relation: "within_usual",
+    proposed_message_present: true,
+  },
+  boundary_state: {
+    kind: "none",
+    status: "none",
+    repeated_unanswered_contact: false,
+  },
+  practical_reason: {
+    kind: "none",
+    active: false,
+    deadline: "none",
+  },
+  information_state: {
+    complete_for_decision: true,
+  },
+};
 const wait003Input = {
   currentSituation:
     "交際中です。2時間前に、最近寂しいと感じていることを長めのメッセージで送りました。まだ返信はありません。",
@@ -131,6 +163,29 @@ const wait003Input = {
   privacyAcknowledged: true,
 };
 
+function asM2P4RuntimeOutputs(outputs) {
+  const runtimeOutputs = structuredClone(outputs);
+  const structuredIntake = runtimeOutputs["PB-01"];
+  if (
+    !structuredIntake ||
+    Object.keys(structuredIntake).length === 1
+  ) {
+    runtimeOutputs["PB-01"] = {
+      schema_version: "pipeline-schema-v2.0.0",
+    };
+    return runtimeOutputs;
+  }
+  const ordinaryReady =
+    runtimeOutputs["PB-03"]?.eligibility === "ready" &&
+    runtimeOutputs["PB-02"]?.classification === "normal_allowed";
+  runtimeOutputs["PB-01"] = {
+    ...structuredIntake,
+    schema_version: "pipeline-schema-v2.0.0",
+    decision_facts: ordinaryReady ? waitDecisionFacts : null,
+  };
+  return runtimeOutputs;
+}
+
 function makeApplication({
   outputs,
   repository = new FakeAssessmentRepository(),
@@ -139,7 +194,7 @@ function makeApplication({
   uuid = deterministicUuidFactory(),
 } = {}) {
   const transport = new FakeAiStageTransport({
-    outputs: outputs ?? wait003StageOutputs(),
+    outputs: asM2P4RuntimeOutputs(outputs ?? wait003StageOutputs()),
     ...transportOptions,
   });
   const application = new AssessmentApplication({
@@ -364,6 +419,9 @@ const deliberateResubmissionResult =
 const runtimeManifest = json(
   "evals/runtime/m2-p3-runtime-capabilities-v1.json",
 );
+const i1bRuntimeManifest = json(
+  "evals/runtime/m2-p4-i1-b-runtime-capabilities-v1.json",
+);
 const dependencyAuditSummary = json(
   "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
 );
@@ -387,6 +445,7 @@ const repositorySource = source(
 const pipelineSource = source("lib/assessment/runtime/pipeline.ts");
 const applicationSource = source("lib/assessment/runtime/application.ts");
 const policySource = source("lib/assessment/runtime/policy.ts");
+const policyV2Source = source("lib/assessment/runtime/policy-v2.ts");
 const fakeSource = source("lib/assessment/runtime/fakes.ts");
 const migrationSource = source(
   "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
@@ -412,6 +471,26 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
     "M2_P3_RUNTIME_CAPABILITY_GATE",
     runtimeManifest.historical_snapshots.length >= 3,
     "historical capability snapshots are not preserved explicitly",
+  );
+  check(
+    "M2_P3_RUNTIME_CAPABILITY_GATE",
+    canonicalCatalog.promptBundleVersion === "prompt-bundle-v1.0.0" &&
+      canonicalCatalog.schemaSetVersion === "pipeline-schema-v1.0.0" &&
+      catalog.promptBundleVersion === "prompt-bundle-runtime-v2.0.0" &&
+      catalog.schemaSetVersion === "pipeline-schema-runtime-v2.0.0" &&
+      i1bRuntimeManifest.task_id === "M2-P4-I1-B" &&
+      i1bRuntimeManifest.baseline.commit ===
+        "554d2cb5a2f816ac82edf3cc247458fe34a4a74c" &&
+      i1bRuntimeManifest.implementation_paths.length === 16 &&
+      new Set(i1bRuntimeManifest.implementation_paths).size === 16 &&
+      i1bRuntimeManifest.implementation_paths.every(
+        (item) =>
+          typeof item === "string" &&
+          item.length > 0 &&
+          !item.includes("*") &&
+          !item.endsWith("/"),
+      ),
+    "M2-P4-I1-B successor boundary is not exact or historical catalog changed",
   );
 });
 
@@ -918,8 +997,12 @@ gate("M2_P3_DECISION_POLICY_GATE", () => {
     "M2_P3_DECISION_POLICY_GATE",
     policySource.includes("buildDecisionPolicy") &&
       policySource.includes("allowed_decisions: [selected]") &&
+      policyV2Source.includes("buildDecisionPolicyV2") &&
+      pipelineSource.includes("requireDecisionFacts(structuredIntake)") &&
+      pipelineSource.includes("buildDecisionPolicyV2(decisionFacts)") &&
+      !pipelineSource.includes("buildDecisionPolicy(request") &&
       happyResult.decision === "wait_and_reassess",
-    "system-owned decision policy differs",
+    "historical policy or active typed-facts decision policy differs",
   );
 });
 
