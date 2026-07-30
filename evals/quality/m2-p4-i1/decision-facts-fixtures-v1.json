@@ -1,0 +1,602 @@
+[
+  {
+    "case_id": "REPLY-001",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "other_person", "kind": "schedule_coordination", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-002",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "apology", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-003",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "matching_app",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-004",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "thanks_or_followup", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-005",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-006",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "schedule_coordination", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-007",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-008",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-009",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "REPLY-010",
+    "source_file": "evals/development/reply-now.json",
+    "expected_decision": "reply_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "schedule_coordination", "response_expectation": "reasonable", "user_reply_state": "not_replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-001",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "schedule_coordination", "active": true, "deadline": "next_day"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-002",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "initial_apology", "active": true, "deadline": "later"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-003",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "promised_information", "active": true, "deadline": "later"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-004",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "schedule_coordination", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 0, "usual_cadence_relation": "within_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "factual_correction", "active": true, "deadline": "next_day"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-005",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "thank_you", "active": true, "deadline": "same_day"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-006",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "within_usual", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "single_invitation", "active": true, "deadline": "later"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-007",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "thank_you", "active": true, "deadline": "same_day"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-008",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "friend",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "logistics", "active": true, "deadline": "later"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-009",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "optional", "user_reply_state": "replied", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "single_invitation", "active": true, "deadline": "later"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "SEND-010",
+    "source_file": "evals/development/send-now.json",
+    "expected_decision": "send_now",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "schedule_coordination", "active": true, "deadline": "next_day"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-001",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "user", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 720, "usual_cadence_relation": "within_usual", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-002",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "invitation", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 360, "usual_cadence_relation": "within_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-003",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message", "organize_emotions"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 120, "usual_cadence_relation": "within_usual", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-004",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "apology", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 720, "usual_cadence_relation": "unknown", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-005",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "thanks_or_followup", "response_expectation": "optional", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 1080, "usual_cadence_relation": "unknown", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-006",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "schedule_coordination", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 180, "usual_cadence_relation": "within_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-007",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "matching_app",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "question", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 720, "usual_cadence_relation": "within_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-008",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "optional", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 720, "usual_cadence_relation": "within_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-009",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait", "draft_message", "relationship", "organize_emotions"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": true},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "WAIT-010",
+    "source_file": "evals/development/wait-and-reassess.json",
+    "expected_decision": "wait_and_reassess",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "none", "kind": "none", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": true},
+      "contact_state": {"unanswered_user_message_count": 1, "elapsed_since_latest_user_message_minutes": 1440, "usual_cadence_relation": "unknown", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-001",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "former_partner",
+      "selected_requests": ["decide_send_or_wait", "draft_message"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": true},
+      "boundary_state": {"kind": "no_contact", "status": "explicit", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-002",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "temporary_distance", "status": "explicit", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-003",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "former_partner",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "blocked_or_restricted", "status": "explicit", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-004",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 3, "elapsed_since_latest_user_message_minutes": 0, "usual_cadence_relation": "beyond_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": true},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-005",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "apology", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 4, "elapsed_since_latest_user_message_minutes": 0, "usual_cadence_relation": "beyond_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": true},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-006",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 4, "elapsed_since_latest_user_message_minutes": 4320, "usual_cadence_relation": "beyond_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": true},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-007",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "former_partner",
+      "selected_requests": ["decide_send_or_wait", "relationship"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "relationship_closed", "status": "explicit", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-008",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 2, "elapsed_since_latest_user_message_minutes": 0, "usual_cadence_relation": "beyond_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": true},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-009",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "dating",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "user", "kind": "other", "response_expectation": "reasonable", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 2, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "beyond_usual", "proposed_message_present": false},
+      "boundary_state": {"kind": "none", "status": "none", "repeated_unanswered_contact": true},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  },
+  {
+    "case_id": "PAUSE-010",
+    "source_file": "evals/development/pause-additional-contact.json",
+    "expected_decision": "pause_additional_contact",
+    "facts": {
+      "schema_version": "m2-p4-decision-facts-v1",
+      "relationship_stage": "in_relationship",
+      "selected_requests": ["decide_send_or_wait"],
+      "latest_direct_message": {"sender": "other_person", "kind": "closure_or_boundary", "response_expectation": "none", "user_reply_state": "not_applicable", "sns_signal_only": false},
+      "contact_state": {"unanswered_user_message_count": 0, "elapsed_since_latest_user_message_minutes": null, "usual_cadence_relation": "not_applicable", "proposed_message_present": false},
+      "boundary_state": {"kind": "temporary_distance", "status": "explicit", "repeated_unanswered_contact": false},
+      "practical_reason": {"kind": "none", "active": false, "deadline": "none"},
+      "information_state": {"complete_for_decision": true}
+    }
+  }
+]

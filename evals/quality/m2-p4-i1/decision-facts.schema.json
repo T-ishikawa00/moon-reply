@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/m2-p4-decision-facts-v1.schema.json",
+  "title": "M2-P4 Decision-Material Facts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "relationship_stage",
+    "selected_requests",
+    "latest_direct_message",
+    "contact_state",
+    "boundary_state",
+    "practical_reason",
+    "information_state"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "m2-p4-decision-facts-v1"
+    },
+    "relationship_stage": {
+      "enum": [
+        "dating",
+        "in_relationship",
+        "ambiguous",
+        "former_partner",
+        "matching_app",
+        "friend",
+        "work_or_school",
+        "other",
+        "unknown"
+      ]
+    },
+    "selected_requests": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "decide_send_or_wait",
+          "message_impact",
+          "draft_message",
+          "relationship",
+          "next_three_days",
+          "organize_emotions"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "latest_direct_message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sender",
+        "kind",
+        "response_expectation",
+        "user_reply_state",
+        "sns_signal_only"
+      ],
+      "properties": {
+        "sender": {
+          "enum": [
+            "user",
+            "other_person",
+            "none",
+            "unknown"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "question",
+            "schedule_coordination",
+            "apology",
+            "thanks_or_followup",
+            "practical_information",
+            "invitation",
+            "closure_or_boundary",
+            "social_acknowledgement",
+            "other",
+            "none",
+            "unknown"
+          ]
+        },
+        "response_expectation": {
+          "enum": [
+            "reasonable",
+            "optional",
+            "none",
+            "unknown"
+          ]
+        },
+        "user_reply_state": {
+          "enum": [
+            "not_replied",
+            "replied",
+            "not_applicable",
+            "unknown"
+          ]
+        },
+        "sns_signal_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "contact_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unanswered_user_message_count",
+        "elapsed_since_latest_user_message_minutes",
+        "usual_cadence_relation",
+        "proposed_message_present"
+      ],
+      "properties": {
+        "unanswered_user_message_count": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 20
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "elapsed_since_latest_user_message_minutes": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "usual_cadence_relation": {
+          "enum": [
+            "within_usual",
+            "beyond_usual",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "proposed_message_present": {
+          "type": "boolean"
+        }
+      }
+    },
+    "boundary_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "status",
+        "repeated_unanswered_contact"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "none",
+            "no_contact",
+            "temporary_distance",
+            "blocked_or_restricted",
+            "relationship_closed",
+            "unknown"
+          ]
+        },
+        "status": {
+          "enum": [
+            "none",
+            "explicit",
+            "unknown"
+          ]
+        },
+        "repeated_unanswered_contact": {
+          "type": "boolean"
+        }
+      }
+    },
+    "practical_reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "active",
+        "deadline"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "none",
+            "schedule_coordination",
+            "factual_correction",
+            "promised_information",
+            "logistics",
+            "thank_you",
+            "initial_apology",
+            "single_invitation",
+            "unknown"
+          ]
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "deadline": {
+          "enum": [
+            "none",
+            "same_day",
+            "next_day",
+            "later",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "information_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete_for_decision"
+      ],
+      "properties": {
+        "complete_for_decision": {
+          "const": true
+        }
+      }
+    }
+  }
+}
