@@ -6,7 +6,8 @@
 - Main baseline: `3ae93c0d3d9af3e1eccc0b5e53d9b2bca5b93c42`.
 - Branch: `feat/m2-p4-i1-a-typed-decision-policy`.
 - Implementation and automated validation: complete.
-- Human / ChatGPT acceptance: pending.
+- Accepted implementation commit: `27752471caa644b569a08a4587ddf677195c203a`.
+- Human / ChatGPT acceptance: accepted and complete.
 - Milestone 2: incomplete.
 
 ## Authorized Scope
@@ -91,6 +92,10 @@ holdout_use: 0
 
 Required regression validation passed for the M2 evaluation foundation, the M2-P3 Runtime Vertical Slice, both new JSON files, protected-asset diff `0`, the exact eight-file scope, and `git diff --check`.
 
+## Final Disposition
+
+M2-P4-I1-A only is Human / ChatGPT accepted and complete at accepted implementation commit `27752471caa644b569a08a4587ddf677195c203a`. The typed facts contract, pure deterministic reference policy, Human-owned 40-case projection, exact decision result 40/40, each category 10/10, allowed-set violations `0`, forbidden decisions `0`, case-specific matching `0`, OpenAI calls `0`, and DB operations `0` are accepted.
+
 ## Boundaries and Acceptance Meaning
 
 - Live runtime: unchanged.
@@ -103,6 +108,6 @@ Required regression validation passed for the M2 evaluation foundation, the M2-P
 - Frozen G5 sample: unchanged.
 - Existing development cases and their oracles: unchanged.
 
-Exact 40/40 offline decision proof establishes the typed policy reference only. It does not establish runtime extraction/integration, provider-backed quality, Human G5 scoring, holdout quality, production readiness, or Milestone 2 completion.
+Acceptance proves the reference policy. Actual app behavior is not changed yet, and provider/model quality is not proven. The exact 40/40 offline decision proof does not establish runtime extraction/integration, Human G5 scoring, holdout quality, production readiness, or Milestone 2 completion.
 
-After separate acceptance, the next candidate is `M2-P4-I1-B Runtime Extraction/Integration Design`. I1-B is not authorized and has not started.
+The next candidate is `M2-P4-I1-B Runtime Extraction/Integration Design`. I1-B remains unauthorized and not started; runtime integration and all API, DB, Prompt, and Schema work remain not started. No new implementation authority is active.
