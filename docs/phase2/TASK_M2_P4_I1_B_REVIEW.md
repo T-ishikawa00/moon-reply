@@ -5,8 +5,10 @@
 - Task ID: `M2-P4-I1-B`.
 - Baseline SHA: `554d2cb5a2f816ac82edf3cc247458fe34a4a74c`.
 - Branch: `feat/m2-p4-i1-b-runtime-typed-facts`.
-- Implementation: complete within the authorized slice.
-- Human / ChatGPT acceptance: pending.
+- Implementation: accepted and complete within the authorized slice.
+- Human / ChatGPT acceptance: accepted.
+- Accepted implementation commit: `9588c8fd6ab47c265f5f661d4473a29d73885427`.
+- Historical implementation snapshot: `554d2cb5a2f816ac82edf3cc247458fe34a4a74c..9588c8fd6ab47c265f5f661d4473a29d73885427`.
 - Milestone 2: incomplete.
 
 ## Exact authorized scope
@@ -77,6 +79,8 @@ holdout_use: 0
 
 The 40 I1-A fixtures match the accepted reference decision, message-draft policy, later-draft mode, follow-up exception, and pause/resume semantics. The Fake `M2P4-LIVE-001` equivalent carries an unanswered meaningful incoming direct message, gives PB-04 `allowed_decisions=["reply_now"]`, and finalizes both the report and decision card as `reply_now`.
 
+The Fake baseline `reply_now` result is Human / ChatGPT accepted as I1-B offline integration evidence. It is not live-provider evidence.
+
 `ready` plus null or malformed facts fails closed as `M2_DECISION_FACTS_INCOMPLETE`, does not execute PB-04, and persists no partial report. `needs_more_information` and `safety_blocked` accept null facts and stop normally before PB-04.
 
 The I1-A verifier, M2 evaluation foundation verifier, M2-P3 verifier with every existing Gate retained, typecheck, lint, build, JSON parsing, protected-diff audit, exact-scope audit, and `git diff --check` pass.
@@ -92,6 +96,8 @@ The I1-A verifier, M2 evaluation foundation verifier, M2-P3 verifier with every 
 - PB-04 through PB-06 Prompt quality: unchanged.
 - Renderer: unchanged.
 - Live synthetic smoke: not executed.
-- Human / ChatGPT acceptance: pending.
+- Human / ChatGPT acceptance: accepted.
+- PB-04/PB-05/PB-06 prose-quality improvement: not started.
+- Milestone 2: incomplete.
 
-After acceptance, the next candidate is one synthetic `M2P4-LIVE-001` live smoke. It is not authorized by this implementation, was not executed, and must not start automatically. PB-04/PB-05/PB-06 prose-quality improvement has not started. No further work is self-authorized.
+The next candidate is one synthetic `M2P4-LIVE-001` live smoke. It requires separate explicit authorization, was not executed, and must not start automatically. No active implementation authority or further work is self-authorized.

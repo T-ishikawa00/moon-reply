@@ -10,6 +10,8 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baselineSha = "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
+const acceptedImplementationSha =
+  "9588c8fd6ab47c265f5f661d4473a29d73885427";
 const exactImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -74,22 +76,15 @@ function gitText(args) {
   );
 }
 
-function currentTaskPaths() {
-  const paths = new Set(
-    gitText(["diff", "--name-only", baselineSha, "--"])
-      .split(/\r?\n/gu)
-      .map((item) => item.trim().replaceAll("\\", "/"))
-      .filter(Boolean),
+function historicalImplementationPaths(baseSha, endSha) {
+  return sorted(
+    new Set(
+      gitText(["diff", "--name-only", baseSha, endSha, "--"])
+        .split(/\r?\n/gu)
+        .map((item) => item.trim().replaceAll("\\", "/"))
+        .filter(Boolean),
+    ),
   );
-  for (const line of gitText([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ]).split(/\r?\n/gu)) {
-    if (!line.startsWith("?? ")) continue;
-    paths.add(line.slice(3).trim().replaceAll("\\", "/"));
-  }
-  return sorted(paths);
 }
 
 function deterministicUuidFactory() {
@@ -645,9 +640,51 @@ const capabilityManifest = json(
 assert.equal(capabilityManifest.task_id, "M2-P4-I1-B");
 assert.equal(
   capabilityManifest.status,
-  "implementation_pending_human_chatgpt_review",
+  "human_chatgpt_accepted_complete",
+);
+assert.equal(
+  capabilityManifest.accepted_implementation_commit,
+  acceptedImplementationSha,
 );
 assert.equal(capabilityManifest.baseline.commit, baselineSha);
+assert.deepEqual(capabilityManifest.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  include_working_tree: false,
+  immutable_snapshot: true,
+});
+const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
+assert.match(
+  capabilityManifest.implementation_snapshot.base_commit_sha,
+  lowercaseShaPattern,
+);
+assert.match(
+  capabilityManifest.implementation_snapshot.end_commit_sha,
+  lowercaseShaPattern,
+);
+assert.doesNotThrow(() =>
+  gitText(["cat-file", "-e", `${baselineSha}^{commit}`]),
+);
+assert.doesNotThrow(() =>
+  gitText(["cat-file", "-e", `${acceptedImplementationSha}^{commit}`]),
+);
+assert.doesNotThrow(() =>
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    baselineSha,
+    acceptedImplementationSha,
+  ]),
+);
+assert.doesNotThrow(() =>
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    acceptedImplementationSha,
+    "HEAD",
+  ]),
+);
 assert.deepEqual(
   sorted(capabilityManifest.implementation_paths),
   sorted(exactImplementationPaths),
@@ -658,7 +695,10 @@ assert.ok(
     (item) => !item.includes("*") && !item.endsWith("/"),
   ),
 );
-assert.deepEqual(currentTaskPaths(), sorted(exactImplementationPaths));
+assert.deepEqual(
+  historicalImplementationPaths(baselineSha, acceptedImplementationSha),
+  sorted(exactImplementationPaths),
+);
 assert.deepEqual(capabilityManifest.task_execution_evidence, {
   openai_live_calls: 0,
   database_operations: 0,

@@ -10,6 +10,10 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baselineSha = "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const i1bBaselineSha =
+  "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
+const i1bAcceptedImplementationSha =
+  "9588c8fd6ab47c265f5f661d4473a29d73885427";
 const failures = new Map();
 
 const gateOrder = [
@@ -457,6 +461,34 @@ const runtimePackageSource = source(
   "lib/assessment/runtime/package.json",
 );
 gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
+  const i1bSnapshot = i1bRuntimeManifest.implementation_snapshot;
+  const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
+  const declaredI1bPaths = [...i1bRuntimeManifest.implementation_paths].sort();
+  const historicalI1bPaths = gitText([
+    "diff",
+    "--name-only",
+    i1bSnapshot.base_commit_sha,
+    i1bSnapshot.end_commit_sha,
+    "--",
+  ])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort();
+  gitText(["cat-file", "-e", `${i1bSnapshot.base_commit_sha}^{commit}`]);
+  gitText(["cat-file", "-e", `${i1bSnapshot.end_commit_sha}^{commit}`]);
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    i1bSnapshot.base_commit_sha,
+    i1bSnapshot.end_commit_sha,
+  ]);
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    i1bSnapshot.end_commit_sha,
+    "HEAD",
+  ]);
   check(
     "M2_P3_RUNTIME_CAPABILITY_GATE",
     runtimeManifest.task_id === "M2-P3-A" &&
@@ -479,8 +511,20 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
       catalog.promptBundleVersion === "prompt-bundle-runtime-v2.0.0" &&
       catalog.schemaSetVersion === "pipeline-schema-runtime-v2.0.0" &&
       i1bRuntimeManifest.task_id === "M2-P4-I1-B" &&
-      i1bRuntimeManifest.baseline.commit ===
-        "554d2cb5a2f816ac82edf3cc247458fe34a4a74c" &&
+      i1bRuntimeManifest.status === "human_chatgpt_accepted_complete" &&
+      i1bRuntimeManifest.accepted_implementation_commit ===
+        i1bAcceptedImplementationSha &&
+      i1bRuntimeManifest.baseline.commit === i1bBaselineSha &&
+      JSON.stringify(i1bSnapshot) ===
+        JSON.stringify({
+          type: "historical_commit_range",
+          base_commit_sha: i1bBaselineSha,
+          end_commit_sha: i1bAcceptedImplementationSha,
+          include_working_tree: false,
+          immutable_snapshot: true,
+        }) &&
+      lowercaseShaPattern.test(i1bSnapshot.base_commit_sha) &&
+      lowercaseShaPattern.test(i1bSnapshot.end_commit_sha) &&
       i1bRuntimeManifest.implementation_paths.length === 16 &&
       new Set(i1bRuntimeManifest.implementation_paths).size === 16 &&
       i1bRuntimeManifest.implementation_paths.every(
@@ -489,7 +533,9 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
           item.length > 0 &&
           !item.includes("*") &&
           !item.endsWith("/"),
-      ),
+      ) &&
+      JSON.stringify(historicalI1bPaths) ===
+        JSON.stringify(declaredI1bPaths),
     "M2-P4-I1-B successor boundary is not exact or historical catalog changed",
   );
 });

@@ -28,6 +28,8 @@ const m2p3VerifierPath =
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs";
 const m2p4I1bBaselineCommit =
   "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
+const m2p4I1bAcceptedImplementationCommit =
+  "9588c8fd6ab47c265f5f661d4473a29d73885427";
 const m2p4I1bCapabilityManifestPath =
   "evals/runtime/m2-p4-i1-b-runtime-capabilities-v1.json";
 const m2p4I1bVerifierPath =
@@ -3743,8 +3745,9 @@ function verifyScopeAndProhibitedImplementation() {
   ].sort();
   if (
     m2p4I1bManifest?.task_id !== "M2-P4-I1-B" ||
-    m2p4I1bManifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1bManifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1bManifest?.accepted_implementation_commit !==
+      m2p4I1bAcceptedImplementationCommit ||
     m2p4I1bManifest?.baseline?.commit !== m2p4I1bBaselineCommit ||
     declaredM2p4I1bPaths.length !== 16 ||
     JSON.stringify(actualDeclaredM2p4I1bPaths) !==
@@ -3769,7 +3772,9 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-B successor manifest declares exactly 16 literal paths and zero external execution",
       expected: {
         task_id: "M2-P4-I1-B",
-        status: "implementation_pending_human_chatgpt_review",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I1bAcceptedImplementationCommit,
         baseline: m2p4I1bBaselineCommit,
         implementation_paths: expectedM2p4I1bPaths,
         external_execution: 0,
@@ -3778,9 +3783,143 @@ function verifyScopeAndProhibitedImplementation() {
     });
   }
 
+  const m2p4I1bImplementationSnapshot =
+    m2p4I1bManifest?.implementation_snapshot;
+  const m2p4I1bSnapshotShapePass = exactObjectKeys({
+    gate: "M2_PROHIBITED_IMPLEMENTATION_GATE",
+    file: m2p4I1bCapabilityManifestPath,
+    caseId: "-",
+    pathName: "$.implementation_snapshot",
+    value: m2p4I1bImplementationSnapshot,
+    expected: [
+      "type",
+      "base_commit_sha",
+      "end_commit_sha",
+      "include_working_tree",
+      "immutable_snapshot",
+    ],
+  });
+  const m2p4I1bSnapshotValuesPass =
+    m2p4I1bSnapshotShapePass &&
+    m2p4I1bImplementationSnapshot.type === "historical_commit_range" &&
+    m2p4I1bImplementationSnapshot.base_commit_sha ===
+      m2p4I1bBaselineCommit &&
+    m2p4I1bImplementationSnapshot.end_commit_sha ===
+      m2p4I1bAcceptedImplementationCommit &&
+    m2p4I1bImplementationSnapshot.include_working_tree === false &&
+    m2p4I1bImplementationSnapshot.immutable_snapshot === true;
+  if (!m2p4I1bSnapshotValuesPass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1bCapabilityManifestPath,
+      pathName: "$.implementation_snapshot",
+      invariant: "M2-P4-I1-B historical implementation snapshot is exact",
+      expected: {
+        type: "historical_commit_range",
+        base_commit_sha: m2p4I1bBaselineCommit,
+        end_commit_sha: m2p4I1bAcceptedImplementationCommit,
+        include_working_tree: false,
+        immutable_snapshot: true,
+      },
+      actual: m2p4I1bImplementationSnapshot,
+    });
+  }
+
+  const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
+  const m2p4I1bSnapshotBaseSha =
+    m2p4I1bImplementationSnapshot?.base_commit_sha;
+  const m2p4I1bSnapshotEndSha =
+    m2p4I1bImplementationSnapshot?.end_commit_sha;
+  const m2p4I1bSnapshotBaseShaPass =
+    typeof m2p4I1bSnapshotBaseSha === "string" &&
+    lowercaseShaPattern.test(m2p4I1bSnapshotBaseSha);
+  const m2p4I1bSnapshotEndShaPass =
+    typeof m2p4I1bSnapshotEndSha === "string" &&
+    lowercaseShaPattern.test(m2p4I1bSnapshotEndSha);
+  for (const [pathName, value, pass] of [
+    [
+      "$.implementation_snapshot.base_commit_sha",
+      m2p4I1bSnapshotBaseSha,
+      m2p4I1bSnapshotBaseShaPass,
+    ],
+    [
+      "$.implementation_snapshot.end_commit_sha",
+      m2p4I1bSnapshotEndSha,
+      m2p4I1bSnapshotEndShaPass,
+    ],
+  ]) {
+    if (!pass) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: m2p4I1bCapabilityManifestPath,
+        pathName,
+        invariant: "historical boundary is a 40-character lowercase Git SHA",
+        expected: "^[0-9a-f]{40}$",
+        actual: value,
+      });
+    }
+  }
+
+  const m2p4I1bSnapshotBaseExists = m2p4I1bSnapshotBaseShaPass
+    ? gitCommitExists(m2p4I1bSnapshotBaseSha)
+    : { pass: false, detail: "invalid base SHA" };
+  const m2p4I1bSnapshotEndExists = m2p4I1bSnapshotEndShaPass
+    ? gitCommitExists(m2p4I1bSnapshotEndSha)
+    : { pass: false, detail: "invalid end SHA" };
+  for (const [pathName, value, result] of [
+    [
+      "$.implementation_snapshot.base_commit_sha",
+      m2p4I1bSnapshotBaseSha,
+      m2p4I1bSnapshotBaseExists,
+    ],
+    [
+      "$.implementation_snapshot.end_commit_sha",
+      m2p4I1bSnapshotEndSha,
+      m2p4I1bSnapshotEndExists,
+    ],
+  ]) {
+    if (!result.pass) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: m2p4I1bCapabilityManifestPath,
+        pathName,
+        invariant: "historical boundary commit exists",
+        expected: "Git commit object",
+        actual: `${String(value)}: ${result.detail}`,
+      });
+    }
+  }
+
+  const m2p4I1bBaseIsAncestor =
+    m2p4I1bSnapshotBaseExists.pass && m2p4I1bSnapshotEndExists.pass
+      ? gitAncestorCheck(
+          m2p4I1bSnapshotBaseSha,
+          m2p4I1bSnapshotEndSha,
+        )
+      : { pass: false, detail: "historical commits unavailable" };
+  if (!m2p4I1bBaseIsAncestor.pass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1bCapabilityManifestPath,
+      pathName: "$.implementation_snapshot",
+      invariant: "historical base is an ancestor of historical end",
+      expected: `${String(m2p4I1bSnapshotBaseSha)} ancestor of ${String(m2p4I1bSnapshotEndSha)}`,
+      actual: m2p4I1bBaseIsAncestor.detail,
+    });
+  }
+
+  const m2p4I1bEndIsCurrentAncestor = m2p4I1bSnapshotEndExists.pass
+    ? gitAncestorCheck(m2p4I1bSnapshotEndSha, "HEAD")
+    : { pass: false, detail: "historical end commit unavailable" };
+  if (!m2p4I1bEndIsCurrentAncestor.pass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1bCapabilityManifestPath,
+      pathName: "$.implementation_snapshot.end_commit_sha",
+      invariant: "historical end is an ancestor of current HEAD",
+      expected: `${String(m2p4I1bSnapshotEndSha)} ancestor of HEAD`,
+      actual: m2p4I1bEndIsCurrentAncestor.detail,
+    });
+  }
+
   const actualM2p4I1bMutation = collectGitMutationManifest(
-    m2p4I1bBaselineCommit,
-    null,
+    m2p4I1bSnapshotBaseSha,
+    m2p4I1bSnapshotEndSha,
     "M2_PROHIBITED_IMPLEMENTATION_GATE",
   );
   const actualM2p4I1bPaths = actualM2p4I1bMutation.entries
@@ -3795,7 +3934,7 @@ function verifyScopeAndProhibitedImplementation() {
       file: m2p4I1bCapabilityManifestPath,
       pathName: "$.implementation_paths",
       invariant:
-        "working-tree successor mutation exactly matches the M2-P4-I1-B manifest",
+        "historical successor mutation exactly matches the M2-P4-I1-B manifest",
       expected: expectedM2p4I1bPaths,
       actual: actualM2p4I1bPaths,
     });
@@ -3886,7 +4025,6 @@ function verifyScopeAndProhibitedImplementation() {
     });
   }
 
-  const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
   const snapshotBaseSha = implementationSnapshot?.base_commit_sha;
   const snapshotEndSha = implementationSnapshot?.end_commit_sha;
   const snapshotBaseShaPass =

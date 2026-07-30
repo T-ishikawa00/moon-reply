@@ -1,10 +1,18 @@
 {
   "schema_version": "m2-p4-i1-b-runtime-capabilities-v1",
   "task_id": "M2-P4-I1-B",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "accepted_implementation_commit": "9588c8fd6ab47c265f5f661d4473a29d73885427",
   "baseline": {
     "branch": "main",
     "commit": "554d2cb5a2f816ac82edf3cc247458fe34a4a74c"
+  },
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "554d2cb5a2f816ac82edf3cc247458fe34a4a74c",
+    "end_commit_sha": "9588c8fd6ab47c265f5f661d4473a29d73885427",
+    "include_working_tree": false,
+    "immutable_snapshot": true
   },
   "implementation_paths": [
     "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -42,5 +50,5 @@
     "historical M2-P1 Prompt and Schema assets",
     "database schema"
   ],
-  "next": "one synthetic M2P4-LIVE-001 live smoke after Human and ChatGPT acceptance only"
+  "next": "one synthetic M2P4-LIVE-001 live smoke after separate authorization"
 }
