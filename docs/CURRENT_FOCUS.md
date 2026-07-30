@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice fully complete; M2-P4 quality evaluation planning in progress; Milestone 2 remains incomplete
+Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice fully complete; M2-P4 Quality Evaluation Planning Package Human / ChatGPT accepted and complete; Milestone 2 remains incomplete
 
 ## Completed Through
 
@@ -61,12 +61,12 @@ Phase 2 / Milestone 2 — M2-P3 Runtime Vertical Slice fully complete; M2-P4 qua
 
 ## Current Work
 
-M2-P4 quality evaluation planning
+M2-P4 Quality Evaluation Planning Package — Human / ChatGPT accepted and complete
 
 State:
 
-- the M2-P4 planning package was revalidated against base commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`; the M2-P3 historical-boundary correction is anchored at that commit, the package is prepared, and Human / ChatGPT review remains pending;
-- current authority is limited to the eight-file M2-P4 Quality Evaluation Planning Package; quality evaluation execution is not authorized and has not started;
+- the M2-P4 planning package was revalidated against base commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2` and is Human / ChatGPT accepted and complete at accepted planning content commit `34e2b1592428517564aeff95f2b7e40527f42a9e`; the M2-P3 historical-boundary correction remains anchored at the revalidated base commit;
+- there is no active implementation authority; quality evaluation execution is not authorized and has not started;
 - this planning task makes OpenAI calls `0` and DB operations `0`;
 - the post-acceptance synthetic live E2E evidence is anchored to code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
 - the active initial runtime migrations `0002_m2_p3_runtime_vertical_slice.sql` and `0003_m2_p3_atomic_finalization.sql` are Human-confirmed applied to `moon-reply-dev`; the archived `0001_stage3_data_foundation.sql` remains unapplied historical design evidence, and migration repair was not used;
@@ -85,9 +85,9 @@ State:
 - post-acceptance live OpenAI/Supabase usage is nonzero, but aggregate tokens, cost, and call count have not been calculated; real-user records and holdout use remain `0`;
 - the new `evals/runtime/m2-p3-runtime-capabilities-v1.json` is the successor capability boundary; the M2-P1 and M2-P2 historical snapshots are unchanged; and
 - the confirmed primary M2-P4 root cause is runtime decision-policy divergence: `lib/assessment/runtime/policy.ts` can force a singleton `wait_and_reassess` allowed set from a keyword match before applying the accepted unanswered-meaningful-message `reply_now` rule;
-- `M2P4-LIVE-001`, the exact 12-case diagnostic sample, and the five-point product rubric are fixed as planning assets; the diagnostic sample does not replace the immutable 20-case G5 Human-review sample, and holdout remains external and untouched;
-- M2-P3 Runtime Vertical Slice is fully complete; current work is the M2-P4 planning package only, quality evaluation execution has not started, and Milestone 2 remains incomplete; and
-- after separate Human / ChatGPT planning acceptance, the next candidate slice is `M2-P4-I1 Decision Policy Runtime Alignment`; it must use application-owned typed decision-material facts rather than raw-prose keyword or regex classification, and an insufficient current contract must cause a stop and bounded successor-contract proposal with no heuristic workaround; I1 remains unauthorized and not started, its execution boundary fixes OpenAI calls `0` and DB operations `0`, and no API, runtime, Prompt, or Schema modification is authorized by this planning task.
+- `M2P4-LIVE-001`, its exact synthetic reproduction fixture, the exact 12-case diagnostic sample, and the five-point product rubric are accepted planning assets; the diagnostic sample does not replace the immutable 20-case G5 Human-review sample, and holdout remains external and untouched;
+- M2-P3 Runtime Vertical Slice is fully complete; M2-P4 planning is accepted and complete, quality evaluation execution has not started, and Milestone 2 remains incomplete; and
+- the next candidate slice is `M2-P4-I1 Decision Policy Runtime Alignment`; it requires separate explicit Human authorization, must use application-owned typed decision-material facts rather than raw-prose keyword or regex classification, and an insufficient current contract must cause a stop and bounded successor-contract proposal with no heuristic workaround; I1 remains unauthorized and not started, its execution boundary fixes OpenAI calls `0` and DB operations `0`, and no API, runtime, Prompt, or Schema modification is authorized.
 
 ## Preserved Milestone 1 Baseline
 
@@ -197,7 +197,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice, its post-acceptance Human-configured synthetic live E2E, and successful-run DB integrity verification are complete; M2-P3 is fully complete while Milestone 2 remains incomplete. Current work is the M2-P4 Quality Evaluation Planning Package only. Quality execution has not started; this task has OpenAI calls `0` and DB operations `0`. The confirmed primary root cause is runtime decision-policy divergence. After planning acceptance, `M2-P4-I1 Decision Policy Runtime Alignment` is the next candidate for separate authorization; no API, runtime, Prompt, or Schema modification is authorized yet. M2-P2-B1-B2-B1 paid execution, production/payment/email/public release work, and later milestones remain unauthorized and paused.
+Milestone 1 is closed and the Reviewable Web MVP baseline is accepted. M2-P1 and M2-P2-A are Human / ChatGPT accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice, its post-acceptance Human-configured synthetic live E2E, and successful-run DB integrity verification are complete; M2-P3 is fully complete while Milestone 2 remains incomplete. The M2-P4 Quality Evaluation Planning Package is Human / ChatGPT accepted and complete. Quality execution has not started; there is no active implementation authority. `M2-P4-I1 Decision Policy Runtime Alignment` is the next candidate only, requires separate explicit authorization, and has not started; no API, runtime, Prompt, Schema, OpenAI, or DB work is authorized. M2-P2-B1-B2-B1 paid execution, production/payment/email/public release work, and later milestones remain unauthorized and paused.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

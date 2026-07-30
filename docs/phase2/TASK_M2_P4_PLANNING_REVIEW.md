@@ -5,10 +5,11 @@
 - Task: `M2-P4 Quality Evaluation Planning Package`
 - Original draft preflight commit: `40cce204d865b02a58ccea20c9516b581773487a`
 - Revalidated base commit: `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`
+- Accepted planning content commit: `34e2b1592428517564aeff95f2b7e40527f42a9e`
 - Branch: `docs/m2-p4-quality-evaluation-plan`
 - Task type: planning only
-- Package state: prepared for Human / ChatGPT review
-- Human / ChatGPT acceptance: pending
+- Package state: Human / ChatGPT accepted and complete
+- Human / ChatGPT acceptance: accepted
 - Quality execution: not started
 - OpenAI calls for this task: `0`
 - DB operations for this task: `0`
@@ -38,7 +39,7 @@ Every other path must remain unchanged.
 - The M2-P3 historical-boundary correction is anchored at commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`.
 - No waiver was used.
 - The restored package was revalidated against that base commit without redesigning its planning content.
-- Human / ChatGPT planning acceptance remains pending.
+- Human / ChatGPT planning acceptance is complete at accepted planning content commit `34e2b1592428517564aeff95f2b7e40527f42a9e`.
 
 ## Review finding 1 — primary root cause
 
@@ -50,7 +51,7 @@ The confirmed live case matched that keyword condition. PB-04 could not select `
 
 Reviewer decision:
 
-- [ ] accept the root-cause diagnosis;
+- [x] accept the root-cause diagnosis;
 - [ ] request a planning correction; or
 - [ ] reject the diagnosis with a concrete conflicting Repo fact.
 
@@ -73,7 +74,7 @@ The exact fixture makes the same case reproducible in a separately authorized E1
 
 Reviewer decision:
 
-- [ ] accept `M2P4-LIVE-001` as the fixed M2-P4 quality baseline; or
+- [x] accept `M2P4-LIVE-001`, including its exact synthetic reproduction fixture, as the fixed M2-P4 quality baseline; or
 - [ ] request a bounded baseline correction.
 
 ## Review finding 3 — diagnostic sample boundary
@@ -97,9 +98,9 @@ This is a ten-ready-case plus two-control diagnostic sample. It is not the forma
 
 Reviewer decision:
 
-- [ ] accept the fixed diagnostic sample;
-- [ ] confirm `evals/development/human-review-sample-v1.json` remains the immutable formal 20-case G5 sample; and
-- [ ] confirm holdout remains external, unused, and untouched.
+- [x] accept the fixed diagnostic sample;
+- [x] confirm `evals/development/human-review-sample-v1.json` remains the immutable formal 20-case G5 sample; and
+- [x] confirm holdout remains external, unused, and untouched.
 
 ## Review finding 4 — rubric and future gate
 
@@ -118,9 +119,9 @@ The rubric has eleven unique hard-fail codes and eleven unique five-point produc
 
 Reviewer decision:
 
-- [ ] accept the hard-fail catalog;
-- [ ] accept the five-point axes and scoring rules; and
-- [ ] accept the future representative-run gate without treating it as achieved.
+- [x] accept the hard-fail catalog;
+- [x] accept the five-point axes and scoring rules; and
+- [x] accept the future representative-run gate without treating it as achieved.
 
 ## Review finding 5 — renderer disposition gate
 
@@ -138,7 +139,7 @@ The current report-content Schema requires seven fields that `RuntimeAssessmentN
 
 Reviewer decision:
 
-- [ ] accept the visibility-gap diagnosis and the future disposition gate.
+- [x] accept the visibility-gap diagnosis and the future disposition gate.
 
 ## Review finding 6 — I1 anti-overfit and typed decision-material facts
 
@@ -152,9 +153,9 @@ The I1 execution boundary is OpenAI API calls `0`, DB operations `0`, migration 
 
 Reviewer decision:
 
-- [ ] accept the anti-overfit prohibitions;
-- [ ] accept the typed decision-material-fact requirement and current-contract stop rule; and
-- [ ] accept the zero-call/zero-DB execution boundary and exact decision targets.
+- [x] accept the anti-overfit prohibitions;
+- [x] accept the typed decision-material-fact requirement and current-contract stop rule; and
+- [x] accept the zero-call/zero-DB execution boundary and exact decision targets.
 
 ## Unauthorised future sequence
 
@@ -166,7 +167,7 @@ Planning acceptance does not authorize:
 - `M2-P4-E1` 12-case diagnostic execution; or
 - `M2-P4-E2` 70-case regression and frozen 20-case Human review.
 
-After planning acceptance, `M2-P4-I1` is the next candidate for separate authorization. It must align deterministic allowed-set construction to the accepted M2-P1 policy through typed decision-material facts, satisfy Review finding 6, and make no Prompt change.
+With planning acceptance complete, `M2-P4-I1` is only the next candidate for separate authorization and remains not started. It must align deterministic allowed-set construction to the accepted M2-P1 policy through typed decision-material facts, satisfy Review finding 6, and make no Prompt change.
 
 ## Prohibited-scope confirmation
 
@@ -192,12 +193,12 @@ Run sequentially before commit:
 6. `git diff --name-only`
 7. `git status --short`
 
-Automated PASS is repository evidence only. It does not substitute for the pending Human / ChatGPT review and does not authorize quality execution.
+Automated PASS is repository evidence only. The recorded acceptance is a separate Human / ChatGPT decision and does not authorize quality execution.
 
 ## Final review disposition
 
-- [ ] Accept the M2-P4 planning package only.
+- [x] Accept the M2-P4 planning package only.
 - [ ] Request bounded corrections within the same eight-file manifest.
 - [ ] Reject and preserve M2-P3 as the last accepted state.
 
-Until one option is explicitly selected, M2-P4 planning acceptance remains pending, quality execution remains not started, and no API or Prompt modification is authorized.
+M2-P4 planning acceptance is complete, quality execution remains not started, and no API or Prompt modification is authorized. Planning acceptance does not authorize `M2-P4-I1`, `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, or `M2-P4-E2`.

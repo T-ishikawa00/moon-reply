@@ -5,16 +5,17 @@
 - Plan version: `m2-p4-quality-evaluation-plan-v1.0.0`
 - Original draft preflight commit: `40cce204d865b02a58ccea20c9516b581773487a`
 - Revalidated base commit: `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`
+- Accepted planning content commit: `34e2b1592428517564aeff95f2b7e40527f42a9e`
 - Planning branch: `docs/m2-p4-quality-evaluation-plan`
-- State: planning package in progress; Human / ChatGPT review pending
+- State: Human / ChatGPT accepted; planning complete
 - Quality execution: not started
 - OpenAI calls for this planning task: `0`
 - DB operations for this planning task: `0`
 - Achieved quality score claimed by this task: none
 
-This task is planning only. It authorizes the five new planning/evaluation assets and the three current-state document updates in its exact mutation manifest. It does not authorize or perform runtime implementation, Prompt change, Schema change, verifier or package creation, API execution, DB access, migration work, model execution, or holdout use.
+This accepted task is planning only. It authorizes the five new planning/evaluation assets and the three current-state document updates in its exact mutation manifest. It does not authorize or perform runtime implementation, Prompt change, Schema change, verifier or package creation, API execution, DB access, migration work, model execution, or holdout use.
 
-Planning acceptance will accept only the diagnosis, baseline, sample, rubric, and bounded future sequence. It will not authorize any future slice. After planning acceptance, the next candidate slice is `M2-P4-I1 Decision Policy Runtime Alignment`, subject to separate explicit authorization.
+Human / ChatGPT planning acceptance covers the root-cause diagnosis, Baseline-001 and its exact synthetic reproduction fixture, the fixed diagnostic sample and preserved G5/holdout boundaries, the rubric and unachieved future gate, the renderer visibility-gap diagnosis, the I1 anti-overfit and typed-fact contract, and the bounded future sequence. It accepts only the plan and authorizes no future slice. It claims no achieved quality score, representative-case execution, 70-case regression, Human G5 scoring, product-quality pass, or Milestone 2 completion. Milestone 2 remains incomplete; `M2-P4-I1 Decision Policy Runtime Alignment` remains not started and is only the next candidate, subject to separate explicit authorization.
 
 ## 2. Purpose and product direction
 
