@@ -35,9 +35,9 @@ Every other path must remain unchanged.
 ## Revalidation after historical-boundary correction
 
 - The initial verifier failure was a structural successor-boundary defect in the M2-P3 historical verifier, not a failure of the M2-P4 planning content.
-- The M2-P3 historical verifier boundary is corrected in current `main` at `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`.
+- The M2-P3 historical-boundary correction is anchored at commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`.
 - No waiver was used.
-- The restored package is revalidated on that corrected base without redesigning its planning content.
+- The restored package was revalidated against that base commit without redesigning its planning content.
 - Human / ChatGPT planning acceptance remains pending.
 
 ## Review finding 1 — primary root cause
@@ -62,13 +62,14 @@ Reviewer decision:
 - matching-app context and two meetings;
 - incoming message `今日は楽しかった。また都合が合えば行こう`;
 - user not yet replied;
-- proposed reply exists;
+- exact Human-approved synthetic reproduction input at `evals/quality/m2-p4-baseline-001.json#/synthetic_reproduction_input`;
+- proposed reply text included in that fixture;
 - requested topics are decision timing and draft message;
 - observed decision `wait_and_reassess`;
 - expected decision `reply_now`; and
 - the nine fixed quality-defect codes.
 
-The baseline contains summary-only evidence, no full DB UUID, no run/request prefix, no raw DB content, no raw provider payload, and no secret.
+The exact fixture makes the same case reproducible in a separately authorized E1. It is a Human-provided synthetic case, not a raw DB export or a claim that the exact input was retrieved from the DB. The baseline contains no full DB UUID, no run/request prefix, no raw DB content, no raw provider payload, and no secret.
 
 Reviewer decision:
 
@@ -139,6 +140,22 @@ Reviewer decision:
 
 - [ ] accept the visibility-gap diagnosis and the future disposition gate.
 
+## Review finding 6 — I1 anti-overfit and typed decision-material facts
+
+Future `M2-P4-I1` must not classify decisions directly from raw consultation prose by keyword or regular-expression matching. Case-ID branches, exact fixture-phrase matching, embedded oracle wording, and a lookup table fitted only to the 40 decision cases are prohibited.
+
+I1 must explicitly define or identify application-owned typed decision-material facts covering relationship stage, latest meaningful direct sender, exact incoming/outgoing message state, whether the user already replied, unanswered user-message count, elapsed time and usual cadence, explicit boundary, practical deadline or promised information, the user's immediate goal, and whether the signal is only an SNS reaction.
+
+At I1 start, the current validated Structured Intake contract must be checked for deterministic and stable sufficiency. If it cannot provide the required facts, I1 must stop and return a bounded proposal for a versioned successor decision-fact contract; no heuristic workaround and no unauthorized Prompt or Schema change are allowed.
+
+The I1 execution boundary is OpenAI API calls `0`, DB operations `0`, migration operations `0`, Prompt modifications `0`, and holdout use `0`. Its acceptance target is exact decision `40/40`, each category `10/10`, allowed-set violations `0`, forbidden decisions `0`, case-specific matching `0`, and relevant counterfactual or contrast-direction regressions `0`.
+
+Reviewer decision:
+
+- [ ] accept the anti-overfit prohibitions;
+- [ ] accept the typed decision-material-fact requirement and current-contract stop rule; and
+- [ ] accept the zero-call/zero-DB execution boundary and exact decision targets.
+
 ## Unauthorised future sequence
 
 Planning acceptance does not authorize:
@@ -149,7 +166,7 @@ Planning acceptance does not authorize:
 - `M2-P4-E1` 12-case diagnostic execution; or
 - `M2-P4-E2` 70-case regression and frozen 20-case Human review.
 
-After planning acceptance, `M2-P4-I1` is the next candidate for separate authorization. It must align deterministic allowed-set construction to the accepted M2-P1 policy, remove keyword-only forced waiting, validate all 40 decision cases, and make no Prompt change.
+After planning acceptance, `M2-P4-I1` is the next candidate for separate authorization. It must align deterministic allowed-set construction to the accepted M2-P1 policy through typed decision-material facts, satisfy Review finding 6, and make no Prompt change.
 
 ## Prohibited-scope confirmation
 

@@ -6,12 +6,22 @@
   "quality_execution_status": "not_started",
   "score_claimed": false,
   "provenance": {
-    "source": "post_acceptance_synthetic_live_e2e",
+    "source": "human_provided_synthetic_case",
     "source_code_commit": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
-    "recording_scope": "summary_only",
+    "recording_scope": "human_approved_synthetic_reproduction_fixture",
     "full_database_uuids_included": false,
     "run_or_request_prefixes_included": false,
     "raw_database_contents_included": false
+  },
+  "synthetic_reproduction_input": {
+    "currentSituation": "これは開発確認用の架空ケースです。架空人物Aと架空人物Bはマッチングアプリで知り合い、これまで2回会いました。昨日の夜、AからBへ「今日は楽しかった。また都合が合えば行こう」と連絡がありました。Bはまだ返信しておらず、今夜返信するか、明日まで待つか迷っています。トラブルや危険な事情はありません。",
+    "optionalMessage": "私も楽しかったです。また都合が合う日にごはんへ行きましょう。",
+    "relationship": "matching_app",
+    "requestedTopics": [
+      "decide_send_or_wait",
+      "draft_message"
+    ],
+    "privacyAcknowledged": true
   },
   "input_summary": {
     "relationship_context": "matching_app",
@@ -19,7 +29,7 @@
     "other_person_message": "今日は楽しかった。また都合が合えば行こう",
     "user_has_replied": false,
     "proposed_reply_exists": true,
-    "proposed_reply_text_included": false,
+    "proposed_reply_text_included": true,
     "requested_topics": [
       "decide_send_or_wait",
       "draft_message"
@@ -59,6 +69,6 @@
     "raw_report_included": false,
     "provider_payload_included": false,
     "secrets_included": false,
-    "note": "Defect codes preserve the confirmed quality diagnosis. This baseline does not reproduce raw report or database contents and does not claim a completed rubric score."
+    "note": "Defect codes preserve the confirmed quality diagnosis. The exact reproduction input is a Human-approved synthetic fixture, not a raw database export, and no completed rubric score is claimed."
   }
 }

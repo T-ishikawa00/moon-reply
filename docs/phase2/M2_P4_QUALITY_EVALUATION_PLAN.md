@@ -108,10 +108,11 @@ This planning package does not select those dispositions and does not change the
 
 - ID: `M2P4-LIVE-001`;
 - source code commit: `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
+- exact synthetic reproduction input: `evals/quality/m2-p4-baseline-001.json#/synthetic_reproduction_input`;
 - context: matching app, met twice;
 - incoming message: `今日は楽しかった。また都合が合えば行こう`;
 - user reply state: not replied;
-- proposed reply: exists, text intentionally not reproduced;
+- proposed reply: included in the synthetic reproduction fixture;
 - selected requests: decide send or wait, and draft message;
 - observed decision: `wait_and_reassess`; and
 - expected decision: `reply_now`.
@@ -128,7 +129,7 @@ The fixed defect inventory is:
 - `BRAND_VOICE_TOO_CLINICAL`
 - `JPY_980_VALUE_INSUFFICIENT`
 
-The baseline is summary-only. It contains no full DB UUID, run/request prefix, raw DB content, raw provider payload, secret, or achieved rubric score.
+Baseline-001 contains the exact Human-approved synthetic reproduction input so a separately authorized E1 can rerun the same case. The fixture is a Human-provided synthetic case, not a raw DB export or a claim that the exact input was retrieved from the DB. It contains no full DB UUID, run/request prefix, raw DB content, raw provider payload, secret, or achieved rubric score.
 
 ## 5. Representative diagnostic sample
 
@@ -207,9 +208,48 @@ The following slices are documented but not authorized:
 ### M2-P4-I1 — Decision Policy Runtime Alignment
 
 - align runtime allowed-set construction to the accepted M2-P1 policy;
-- remove keyword-only forced waiting;
-- validate against all 40 decision cases; and
-- make no Prompt change in this slice.
+- remove keyword-only forced waiting; and
+- remain unauthorized and not started until separately approved.
+
+Prohibited implementation approaches:
+
+- do not classify the decision directly from raw consultation prose, including `currentSituation`, by simple keyword or regular-expression matching;
+- do not branch on case ID;
+- do not match exact fixture phrases;
+- do not embed oracle wording; and
+- do not build a lookup table fitted only to the 40 decision cases.
+
+I1 must explicitly define or identify application-owned typed decision-material facts. At minimum, those facts must represent:
+
+- relationship stage;
+- latest meaningful direct sender;
+- exact incoming and outgoing message state;
+- whether the user already replied;
+- unanswered user-message count;
+- elapsed time and usual cadence;
+- explicit boundary;
+- practical deadline or promised information;
+- the user's immediate goal; and
+- whether the signal is only an SNS reaction.
+
+At I1 start, the implementer must verify whether the current validated Structured Intake contract can provide those facts deterministically and stably. If it cannot, I1 must stop: it must not fill the gap heuristically, must not change Prompt or Schema without authority, and must return a bounded design proposal for a versioned successor decision-fact contract to Human / ChatGPT.
+
+I1 execution boundary:
+
+- OpenAI API calls: `0`;
+- DB operations: `0`;
+- migration operations: `0`;
+- Prompt modifications: `0`; and
+- holdout use: `0`.
+
+I1 acceptance target:
+
+- exact decision across all 40 decision cases: `40/40`;
+- exact decision in each category: `10/10`;
+- allowed-set violations: `0`;
+- forbidden decisions: `0`;
+- case-specific matching: `0`; and
+- relevant counterfactual or contrast-direction regressions: `0`.
 
 ### M2-P4-I2 — Report Information Architecture and Intent Fulfillment
 

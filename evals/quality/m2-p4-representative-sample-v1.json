@@ -25,6 +25,8 @@
       "case_id": "M2P4-LIVE-001",
       "source_kind": "confirmed_live_quality_baseline",
       "source_file": "evals/quality/m2-p4-baseline-001.json",
+      "exact_execution_input_source": "evals/quality/m2-p4-baseline-001.json#/synthetic_reproduction_input",
+      "reproducible_input_available": true,
       "expected_eligibility": "ready",
       "expected_decision": "reply_now"
     },

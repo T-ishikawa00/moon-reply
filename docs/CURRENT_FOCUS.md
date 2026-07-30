@@ -65,7 +65,7 @@ M2-P4 quality evaluation planning
 
 State:
 
-- current `main` and the M2-P4 planning-package revalidation base are `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`; the M2-P3 historical verifier successor-boundary correction is integrated, the package is prepared, and Human / ChatGPT review remains pending;
+- the M2-P4 planning package was revalidated against base commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`; the M2-P3 historical-boundary correction is anchored at that commit, the package is prepared, and Human / ChatGPT review remains pending;
 - current authority is limited to the eight-file M2-P4 Quality Evaluation Planning Package; quality evaluation execution is not authorized and has not started;
 - this planning task makes OpenAI calls `0` and DB operations `0`;
 - the post-acceptance synthetic live E2E evidence is anchored to code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`;
@@ -87,7 +87,7 @@ State:
 - the confirmed primary M2-P4 root cause is runtime decision-policy divergence: `lib/assessment/runtime/policy.ts` can force a singleton `wait_and_reassess` allowed set from a keyword match before applying the accepted unanswered-meaningful-message `reply_now` rule;
 - `M2P4-LIVE-001`, the exact 12-case diagnostic sample, and the five-point product rubric are fixed as planning assets; the diagnostic sample does not replace the immutable 20-case G5 Human-review sample, and holdout remains external and untouched;
 - M2-P3 Runtime Vertical Slice is fully complete; current work is the M2-P4 planning package only, quality evaluation execution has not started, and Milestone 2 remains incomplete; and
-- after separate Human / ChatGPT planning acceptance, the next candidate slice is `M2-P4-I1 Decision Policy Runtime Alignment`; it is not yet authorized, and no API, runtime, Prompt, or Schema modification is authorized by this planning task.
+- after separate Human / ChatGPT planning acceptance, the next candidate slice is `M2-P4-I1 Decision Policy Runtime Alignment`; it must use application-owned typed decision-material facts rather than raw-prose keyword or regex classification, and an insufficient current contract must cause a stop and bounded successor-contract proposal with no heuristic workaround; I1 remains unauthorized and not started, its execution boundary fixes OpenAI calls `0` and DB operations `0`, and no API, runtime, Prompt, or Schema modification is authorized by this planning task.
 
 ## Preserved Milestone 1 Baseline
 
