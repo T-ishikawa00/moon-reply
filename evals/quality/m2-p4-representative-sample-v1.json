@@ -1,0 +1,127 @@
+{
+  "schema_version": "moon-reply-quality-diagnostic-sample-v1",
+  "sample_version": "m2-p4-representative-sample-v1.0.0",
+  "status": "diagnostic_only_not_executed",
+  "execution_authorized": false,
+  "total_count": 12,
+  "ready_case_count": 10,
+  "control_case_count": 2,
+  "case_ids": [
+    "M2P4-LIVE-001",
+    "REPLY-004",
+    "REPLY-002",
+    "REPLY-003",
+    "SEND-002",
+    "SEND-004",
+    "WAIT-001",
+    "WAIT-003",
+    "PAUSE-001",
+    "PAUSE-004",
+    "INFO-001",
+    "SAFETY-001"
+  ],
+  "cases": [
+    {
+      "case_id": "M2P4-LIVE-001",
+      "source_kind": "confirmed_live_quality_baseline",
+      "source_file": "evals/quality/m2-p4-baseline-001.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "reply_now"
+    },
+    {
+      "case_id": "REPLY-004",
+      "source_kind": "development_case",
+      "source_file": "evals/development/reply-now.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "reply_now"
+    },
+    {
+      "case_id": "REPLY-002",
+      "source_kind": "development_case",
+      "source_file": "evals/development/reply-now.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "reply_now"
+    },
+    {
+      "case_id": "REPLY-003",
+      "source_kind": "development_case",
+      "source_file": "evals/development/reply-now.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "reply_now"
+    },
+    {
+      "case_id": "SEND-002",
+      "source_kind": "development_case",
+      "source_file": "evals/development/send-now.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "send_now"
+    },
+    {
+      "case_id": "SEND-004",
+      "source_kind": "development_case",
+      "source_file": "evals/development/send-now.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "send_now"
+    },
+    {
+      "case_id": "WAIT-001",
+      "source_kind": "development_case",
+      "source_file": "evals/development/wait-and-reassess.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "wait_and_reassess"
+    },
+    {
+      "case_id": "WAIT-003",
+      "source_kind": "development_case",
+      "source_file": "evals/development/wait-and-reassess.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "wait_and_reassess"
+    },
+    {
+      "case_id": "PAUSE-001",
+      "source_kind": "development_case",
+      "source_file": "evals/development/pause-additional-contact.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "pause_additional_contact"
+    },
+    {
+      "case_id": "PAUSE-004",
+      "source_kind": "development_case",
+      "source_file": "evals/development/pause-additional-contact.json",
+      "expected_eligibility": "ready",
+      "expected_decision": "pause_additional_contact"
+    },
+    {
+      "case_id": "INFO-001",
+      "source_kind": "development_control",
+      "source_file": "evals/development/needs-more-information.json",
+      "expected_eligibility": "needs_more_information",
+      "expected_decision": null
+    },
+    {
+      "case_id": "SAFETY-001",
+      "source_kind": "development_control",
+      "source_file": "evals/development/safety-blocked.json",
+      "expected_eligibility": "safety_blocked",
+      "expected_decision": null
+    }
+  ],
+  "formal_g5_boundary": {
+    "sample_file": "evals/development/human-review-sample-v1.json",
+    "frozen": true,
+    "replacement_allowed": false,
+    "formal_sample_count": 20,
+    "this_sample_replaces_formal_g5_sample": false,
+    "this_sample_mutates_formal_g5_sample": false
+  },
+  "holdout_boundary": {
+    "status": "external_and_untouched",
+    "use_authorized": false,
+    "case_data_committed": 0
+  },
+  "acceptance_boundary": {
+    "purpose": "diagnosis_and_revision_feedback_only",
+    "achieved_score_claimed": false,
+    "future_execution_requires_separate_authorization": true
+  }
+}

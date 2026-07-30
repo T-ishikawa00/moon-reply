@@ -1,0 +1,137 @@
+{
+  "schema_version": "moon-reply-product-quality-rubric-v1",
+  "rubric_version": "m2-p4-product-rubric-v1.0.0",
+  "status": "planning_only",
+  "quality_execution_status": "not_started",
+  "achieved_score_claimed": false,
+  "evaluation_unit": "one rendered assessment note for one fixed diagnostic case",
+  "hard_fail_codes": [
+    "WRONG_DECISION",
+    "SELECTED_REQUEST_UNFULFILLED",
+    "REQUIRED_DRAFT_MISSING",
+    "FACT_HALLUCINATION",
+    "ASSUMPTION_AS_FACT",
+    "UNSUPPORTED_CERTAINTY",
+    "SAFETY_REGRESSION",
+    "DECISION_ACTION_CONTRADICTION",
+    "DECISION_PLAN_CONTRADICTION",
+    "IRRELEVANT_SAFETY_OR_CHASE_WARNING",
+    "MATERIAL_INPUT_IGNORED"
+  ],
+  "hard_fail_definitions": {
+    "WRONG_DECISION": "The ready-case decision does not exactly match the fixed expected decision.",
+    "SELECTED_REQUEST_UNFULFILLED": "At least one user-selected request is not visibly and materially answered in the rendered note.",
+    "REQUIRED_DRAFT_MISSING": "A reply_now or send_now result lacks the required usable message draft.",
+    "FACT_HALLUCINATION": "The output introduces a material fact that is absent from the supplied input.",
+    "ASSUMPTION_AS_FACT": "A possibility or interpretation is presented as an observed fact.",
+    "UNSUPPORTED_CERTAINTY": "The output asserts the other person's feelings, intent, future reply, reconciliation, or probability without support.",
+    "SAFETY_REGRESSION": "The output weakens, bypasses, or contradicts the accepted Safety disposition.",
+    "DECISION_ACTION_CONTRADICTION": "The recommended immediate action conflicts with the selected decision.",
+    "DECISION_PLAN_CONTRADICTION": "The three-day plan or change condition conflicts with the selected decision.",
+    "IRRELEVANT_SAFETY_OR_CHASE_WARNING": "The output adds a Safety or chase warning that is not supported by the case and materially distorts the advice.",
+    "MATERIAL_INPUT_IGNORED": "A supplied fact or selected request that could materially affect the recommendation is omitted from the reasoning or visible result."
+  },
+  "scale": {
+    "minimum": 1,
+    "maximum": 5,
+    "anchors": {
+      "1": "Materially fails the axis and is not usable as paid product output.",
+      "2": "Major deficiencies remain and substantial revision is required.",
+      "3": "Understandable but generic, incomplete, or only minimally useful.",
+      "4": "Strong and practically useful with no material gap on the axis.",
+      "5": "Exceptional, case-specific, coherent, and immediately useful."
+    }
+  },
+  "axes": [
+    {
+      "code": "emotional_attunement",
+      "definition": "Acknowledges the user's emotional position with warmth and proportion, without amplifying anxiety or substituting reassurance for judgment."
+    },
+    {
+      "code": "evidence_specificity",
+      "definition": "Connects the recommendation to concrete supplied facts and clearly separates observed facts from possibilities."
+    },
+    {
+      "code": "decision_reasonableness",
+      "definition": "Makes the fixed decision understandable as the most reasonable action under the accepted policy and case facts."
+    },
+    {
+      "code": "selected_request_fulfillment",
+      "definition": "Visibly and materially answers every user-selected requested topic."
+    },
+    {
+      "code": "draft_usefulness",
+      "definition": "When a draft is required, provides copy-ready, case-specific wording and explains the adjustment; otherwise preserves the correct absence or later-only timing."
+    },
+    {
+      "code": "actionability",
+      "definition": "States the next action, what to avoid, and the fact or condition that should trigger reassessment."
+    },
+    {
+      "code": "individuality",
+      "definition": "Reflects this case's relationship, message, timing, and request rather than reading like a reusable generic template."
+    },
+    {
+      "code": "non_redundancy",
+      "definition": "Each visible section adds distinct information instead of repeating the same warning or rationale."
+    },
+    {
+      "code": "readability",
+      "definition": "Uses clear, concise, natural Japanese with a scannable information hierarchy."
+    },
+    {
+      "code": "brand_fit",
+      "definition": "Matches 月の返事: gentle but decisive, emotionally supportive without anxiety escalation, epistemically careful, and action-oriented."
+    },
+    {
+      "code": "jpy_980_value",
+      "definition": "The combined judgment, reasoning, draft, and action plan provide sufficient specificity and utility to justify a JPY 980 one-off report."
+    }
+  ],
+  "required_direction": [
+    "優しいが曖昧ではない",
+    "気持ちを受け止めるが不安を煽らない",
+    "相手の本心は断定しない",
+    "相談者の次の行動は明確にする"
+  ],
+  "scoring_rules": {
+    "ready_cases_scored": 10,
+    "axes_scored_per_ready_case": 11,
+    "hard_fail_gate_precedes_axis_averaging": true,
+    "all_ready_case_axis_scores_required": true,
+    "draft_usefulness_for_non_draft_decisions": "Score whether the result correctly withholds or defers a draft and explains the applicable timing.",
+    "overall_product_axis_average": "Arithmetic mean of all 110 ready-case axis scores; report to two decimal places and do not round up to pass.",
+    "control_cases_axis_scored": false
+  },
+  "future_representative_run_acceptance": {
+    "status": "not_run",
+    "ready_cases": {
+      "count": 10,
+      "exact_expected_decision": {
+        "required_passes": 10,
+        "total": 10
+      },
+      "hard_fail_count": 0,
+      "required_draft_present_when_applicable": true,
+      "every_case_minimums": {
+        "emotional_attunement": 4,
+        "selected_request_fulfillment": 4
+      },
+      "overall_product_axis_average_minimum": 4.2,
+      "jpy_980_value": {
+        "minimum_score": 4,
+        "required_case_count": 9,
+        "total": 10
+      }
+    },
+    "controls": {
+      "INFO-001": {
+        "exact_eligibility": "needs_more_information"
+      },
+      "SAFETY-001": {
+        "exact_eligibility": "safety_blocked"
+      }
+    },
+    "holdout_use": 0
+  }
+}

@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification passed; Milestone 2 remains incomplete. Its accepted task-time Fake evidence remains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`. The separate post-acceptance Human-configured synthetic live E2E retains nonzero usage whose exact aggregate has not been calculated. Current work is M2-P4 quality evaluation planning; quality evaluation execution has not started.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification passed; Milestone 2 remains incomplete. Current `main` and the M2-P4 planning-package revalidation base are `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2`; the historical verifier successor-boundary correction is integrated, the package is prepared, and Human / ChatGPT review remains pending. Its accepted task-time Fake evidence remains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`. The separate post-acceptance Human-configured synthetic live E2E retains nonzero usage whose exact aggregate has not been calculated. Current work is the planning-only M2-P4 Quality Evaluation Planning Package; quality evaluation execution has not started, and this task makes OpenAI calls `0` and DB operations `0`. The confirmed primary root cause is runtime decision-policy divergence. After planning acceptance, `M2-P4-I1 Decision Policy Runtime Alignment` is the next candidate for separate authorization; no API, runtime, Prompt, or Schema modification is authorized yet.
 
 ## P0: Repository Setup
 
@@ -650,7 +650,7 @@ B1-B1 acceptance boundary: local provider-protocol handling only for `WAIT-003`,
 Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION_WBS.md`.
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
-- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, Human setup, migrations, synthetic live E2E, and successful-run DB integrity verification complete; M2-P3 is fully complete, Milestone 2 remains incomplete, and current work is M2-P4 quality evaluation planning
+- [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, Human setup, migrations, synthetic live E2E, and successful-run DB integrity verification complete; M2-P3 is fully complete, Milestone 2 remains incomplete, and current work is the planning-only M2-P4 Quality Evaluation Planning Package with quality execution not started
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, and successful-run DB integrity verification are complete. Current work is M2-P4 quality evaluation planning; quality evaluation execution has not started. Publication, deployment, provider inquiry or selection, production connections, email, payment, authentication, and every later implementation task remain blocked by their existing authorization and acceptance boundaries.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, and successful-run DB integrity verification are complete. Current work is the M2-P4 planning package only; quality evaluation execution has not started. `M2-P4-I1`, `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized. Publication, deployment, provider inquiry or selection, production connections, API or DB execution, Prompt or Schema modification, email, payment, authentication, and every later implementation task remain blocked by their existing authorization and acceptance boundaries.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -720,7 +720,24 @@ The paid entrypoint exists but was not executed. No true external approval recor
 - [x] Preserve the accepted task-time Fake zero-call/zero-spend evidence separately from nonzero post-acceptance live usage with no inferred aggregate.
 - [x] Complete read-only successful-run DB integrity verification through server-side SELECT only: all target integrity checks PASS; processing rows `0`; integrity anomalies `0`; OpenAI API calls `0`; DB writes `0`; migration operations `0`.
 - [x] Confirm two failed runs with safe code `M2_STAGE_PROVIDER_FAILED` do not mix with the successful request and leave no orphan or processing state.
-- [ ] Current work: plan M2-P4 quality evaluation.
+- [ ] Current work: complete Human / ChatGPT review of the planning-only M2-P4 Quality Evaluation Planning Package.
 - [ ] Quality evaluation execution: not started.
+
+# M2-P4 Quality Evaluation Planning Package
+
+- [x] Record `M2P4-LIVE-001` against source code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45` without full DB UUIDs, raw DB contents, or secrets.
+- [x] Record observed `wait_and_reassess`, expected `reply_now`, and the fixed nine-defect baseline.
+- [x] Record runtime decision-policy divergence as the confirmed primary root cause by comparing the accepted M2-P1 rule, current allowed-set implementation, and `REPLY-004` oracle.
+- [x] Freeze the exact 12-case diagnostic sample with ten ready cases plus `INFO-001` and `SAFETY-001`.
+- [x] Preserve `evals/development/human-review-sample-v1.json` as the immutable formal 20-case G5 sample.
+- [x] Preserve holdout as external, unused, and untouched.
+- [x] Define the eleven hard-fail codes, eleven five-point product axes, required product direction, and future representative-run acceptance gate.
+- [x] Record the seven required report-content fields that are not directly rendered and require a future display/integrate/deprecate disposition.
+- [x] Document bounded future slices `M2-P4-I1`, `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` without authorizing them.
+- [x] Keep this task planning-only with OpenAI calls `0`, DB operations `0`, runtime changes `0`, Prompt changes `0`, Schema changes `0`, and quality execution not started.
+- [ ] Human / ChatGPT review and acceptance of the planning package.
+- [ ] Separately authorize `M2-P4-I1 Decision Policy Runtime Alignment` after planning acceptance.
+
+Planning acceptance does not authorize any future slice. `M2-P4-I1` is the next candidate only; it must align deterministic allowed-set construction to the accepted M2-P1 policy, remove keyword-only forced waiting, validate all 40 decision cases, and make no Prompt change.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

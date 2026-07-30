@@ -1,0 +1,64 @@
+{
+  "schema_version": "moon-reply-quality-baseline-v1",
+  "baseline_version": "m2-p4-baseline-001",
+  "baseline_id": "M2P4-LIVE-001",
+  "status": "confirmed_quality_baseline",
+  "quality_execution_status": "not_started",
+  "score_claimed": false,
+  "provenance": {
+    "source": "post_acceptance_synthetic_live_e2e",
+    "source_code_commit": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
+    "recording_scope": "summary_only",
+    "full_database_uuids_included": false,
+    "run_or_request_prefixes_included": false,
+    "raw_database_contents_included": false
+  },
+  "input_summary": {
+    "relationship_context": "matching_app",
+    "meetings_count": 2,
+    "other_person_message": "今日は楽しかった。また都合が合えば行こう",
+    "user_has_replied": false,
+    "proposed_reply_exists": true,
+    "proposed_reply_text_included": false,
+    "requested_topics": [
+      "decide_send_or_wait",
+      "draft_message"
+    ]
+  },
+  "decision_result": {
+    "observed_decision": "wait_and_reassess",
+    "expected_decision": "reply_now"
+  },
+  "expected_decision_basis": {
+    "accepted_policy": "docs/phase2/M2_P1_DECISION_POLICY.md#4-unanswered-meaningful-message-from-the-other-person",
+    "canonical_oracle_file": "evals/development/reply-now.json",
+    "canonical_oracle_case_id": "REPLY-004",
+    "required_reasoning_meanings": [
+      "感謝に応答する自然な場面",
+      "短く好意的に返せる",
+      "返信を遅らせる合理的理由がない"
+    ]
+  },
+  "confirmed_primary_root_cause": {
+    "code": "RUNTIME_DECISION_POLICY_DIVERGENCE",
+    "source": "lib/assessment/runtime/policy.ts",
+    "summary": "currentSituation に返信、未読、既読、待、時間前、昨日、今夜のいずれかが含まれるだけで wait_and_reassess を単独許可するため、PB-04 は accepted M2-P1 policy と canonical oracle が要求する reply_now を選択できなかった。"
+  },
+  "defect_codes": [
+    "WRONG_DECISION",
+    "EMOTIONAL_ATTUNEMENT_WEAK",
+    "REQUESTED_DRAFT_UNFULFILLED",
+    "EVIDENCE_TO_DECISION_WEAK",
+    "IRRELEVANT_CHASE_WARNING",
+    "REPETITIVE_GENERIC_REASONING",
+    "ACTION_PLAN_LOW_INFORMATION_GAIN",
+    "BRAND_VOICE_TOO_CLINICAL",
+    "JPY_980_VALUE_INSUFFICIENT"
+  ],
+  "evidence_boundary": {
+    "raw_report_included": false,
+    "provider_payload_included": false,
+    "secrets_included": false,
+    "note": "Defect codes preserve the confirmed quality diagnosis. This baseline does not reproduce raw report or database contents and does not claim a completed rubric score."
+  }
+}
