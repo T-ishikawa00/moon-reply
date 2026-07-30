@@ -19,6 +19,9 @@ const r1AcceptedImplementationCommit =
   "c56f597d0491482995c4afa6fb64cf148dd66345";
 const m2p3BaselineCommit =
   "72d4121ff4ad0682bcafbeed4f72f6491e697ffa";
+const m2p3HistoricalEndCommit =
+  "66ab02c566d61d0c563e26e3d2c5fb23f6500d45";
+const m2p3HistoricalImplementationPathCount = 47;
 const m2p3CapabilityManifestPath =
   "evals/runtime/m2-p3-runtime-capabilities-v1.json";
 const m2p3VerifierPath =
@@ -3687,8 +3690,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
 function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
+  const declaredM2p3ImplementationPaths = Array.isArray(
+    m2p3Manifest?.implementation_paths,
+  )
+    ? m2p3Manifest.implementation_paths
+    : [];
   const m2p3ImplementationPaths = new Set(
-    m2p3Manifest?.implementation_paths ?? [],
+    declaredM2p3ImplementationPaths,
   );
   if (
     m2p3Manifest?.task_id !== "M2-P3-A" ||
@@ -3710,20 +3718,167 @@ function verifyScopeAndProhibitedImplementation() {
       actual: m2p3Manifest,
     });
   }
-  const m2p3Diff = runGit([
-    "diff",
-    "--name-only",
-    m2p3BaselineCommit,
-    "--",
-  ]);
-  const untracked = runGit([
-    "ls-files",
-    "--others",
-    "--exclude-standard",
-  ]);
+
+  const implementationSnapshot = m2p3Manifest?.implementation_snapshot;
+  const snapshotShapePass = exactObjectKeys({
+    gate: "M2_PROHIBITED_IMPLEMENTATION_GATE",
+    file: m2p3CapabilityManifestPath,
+    caseId: "-",
+    pathName: "$.implementation_snapshot",
+    value: implementationSnapshot,
+    expected: [
+      "type",
+      "base_commit_sha",
+      "end_commit_sha",
+      "include_working_tree",
+      "immutable_snapshot",
+    ],
+  });
+  const snapshotValuesPass =
+    snapshotShapePass &&
+    implementationSnapshot.type === "historical_commit_range" &&
+    implementationSnapshot.base_commit_sha === m2p3BaselineCommit &&
+    implementationSnapshot.end_commit_sha === m2p3HistoricalEndCommit &&
+    implementationSnapshot.include_working_tree === false &&
+    implementationSnapshot.immutable_snapshot === true;
+  if (!snapshotValuesPass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.implementation_snapshot",
+      invariant: "M2-P3 historical implementation snapshot is exact",
+      expected: {
+        type: "historical_commit_range",
+        base_commit_sha: m2p3BaselineCommit,
+        end_commit_sha: m2p3HistoricalEndCommit,
+        include_working_tree: false,
+        immutable_snapshot: true,
+      },
+      actual: implementationSnapshot,
+    });
+  }
+
+  const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
+  const snapshotBaseSha = implementationSnapshot?.base_commit_sha;
+  const snapshotEndSha = implementationSnapshot?.end_commit_sha;
+  const snapshotBaseShaPass =
+    typeof snapshotBaseSha === "string" &&
+    lowercaseShaPattern.test(snapshotBaseSha);
+  const snapshotEndShaPass =
+    typeof snapshotEndSha === "string" &&
+    lowercaseShaPattern.test(snapshotEndSha);
+  for (const [pathName, value, pass] of [
+    ["$.implementation_snapshot.base_commit_sha", snapshotBaseSha, snapshotBaseShaPass],
+    ["$.implementation_snapshot.end_commit_sha", snapshotEndSha, snapshotEndShaPass],
+  ]) {
+    if (!pass) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: m2p3CapabilityManifestPath,
+        pathName,
+        invariant: "historical boundary is a 40-character lowercase Git SHA",
+        expected: "^[0-9a-f]{40}$",
+        actual: value,
+      });
+    }
+  }
+
+  const snapshotBaseExists = snapshotBaseShaPass
+    ? gitCommitExists(snapshotBaseSha)
+    : { pass: false, detail: "invalid base SHA" };
+  const snapshotEndExists = snapshotEndShaPass
+    ? gitCommitExists(snapshotEndSha)
+    : { pass: false, detail: "invalid end SHA" };
+  for (const [pathName, value, result] of [
+    [
+      "$.implementation_snapshot.base_commit_sha",
+      snapshotBaseSha,
+      snapshotBaseExists,
+    ],
+    [
+      "$.implementation_snapshot.end_commit_sha",
+      snapshotEndSha,
+      snapshotEndExists,
+    ],
+  ]) {
+    if (!result.pass) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: m2p3CapabilityManifestPath,
+        pathName,
+        invariant: "historical boundary commit exists",
+        expected: "Git commit object",
+        actual: `${String(value)}: ${result.detail}`,
+      });
+    }
+  }
+
+  const baseIsAncestor =
+    snapshotBaseExists.pass && snapshotEndExists.pass
+      ? gitAncestorCheck(snapshotBaseSha, snapshotEndSha)
+      : { pass: false, detail: "historical commits unavailable" };
+  if (!baseIsAncestor.pass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.implementation_snapshot",
+      invariant: "historical base is an ancestor of historical end",
+      expected: `${String(snapshotBaseSha)} ancestor of ${String(snapshotEndSha)}`,
+      actual: baseIsAncestor.detail,
+    });
+  }
+
+  const endIsCurrentAncestor = snapshotEndExists.pass
+    ? gitAncestorCheck(snapshotEndSha, "HEAD")
+    : { pass: false, detail: "historical end commit unavailable" };
+  if (!endIsCurrentAncestor.pass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.implementation_snapshot.end_commit_sha",
+      invariant: "historical end is an ancestor of current HEAD",
+      expected: `${String(snapshotEndSha)} ancestor of HEAD`,
+      actual: endIsCurrentAncestor.detail,
+    });
+  }
+
+  if (
+    declaredM2p3ImplementationPaths.length !==
+      m2p3HistoricalImplementationPathCount ||
+    m2p3ImplementationPaths.size !== m2p3HistoricalImplementationPathCount ||
+    declaredM2p3ImplementationPaths.some(
+      (item) => typeof item !== "string" || item.length === 0,
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p3CapabilityManifestPath,
+      pathName: "$.implementation_paths",
+      invariant: "M2-P3 historical path list has exactly 47 unique paths",
+      expected: {
+        count: m2p3HistoricalImplementationPathCount,
+        unique: m2p3HistoricalImplementationPathCount,
+      },
+      actual: {
+        count: declaredM2p3ImplementationPaths.length,
+        unique: m2p3ImplementationPaths.size,
+      },
+    });
+  }
+
+  const m2p3Diff =
+    snapshotBaseExists.pass &&
+    snapshotEndExists.pass &&
+    baseIsAncestor.pass
+      ? runGit([
+          "diff",
+          "--name-only",
+          snapshotBaseSha,
+          snapshotEndSha,
+          "--",
+        ])
+      : {
+          status: 1,
+          stdout: "",
+          stderr: "historical snapshot boundary is unavailable",
+        };
   const actualM2p3Paths = [
     ...new Set(
-      `${m2p3Diff.stdout}\n${untracked.stdout}`
+      m2p3Diff.stdout
         .split(/\r?\n/u)
         .map((item) => item.trim().replaceAll("\\", "/"))
         .filter(Boolean),
@@ -3732,13 +3887,12 @@ function verifyScopeAndProhibitedImplementation() {
   const expectedM2p3Paths = [...m2p3ImplementationPaths].sort();
   if (
     m2p3Diff.status !== 0 ||
-    untracked.status !== 0 ||
     JSON.stringify(actualM2p3Paths) !== JSON.stringify(expectedM2p3Paths)
   ) {
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
       file: m2p3CapabilityManifestPath,
       pathName: "$.implementation_paths",
-      invariant: "M2-P3 successor path list is exact",
+      invariant: "M2-P3 historical implementation path list is exact",
       expected: expectedM2p3Paths,
       actual: actualM2p3Paths,
     });

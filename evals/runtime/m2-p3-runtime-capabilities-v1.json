@@ -6,8 +6,16 @@
     "branch": "main",
     "commit": "72d4121ff4ad0682bcafbeed4f72f6491e697ffa"
   },
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "72d4121ff4ad0682bcafbeed4f72f6491e697ffa",
+    "end_commit_sha": "66ab02c566d61d0c563e26e3d2c5fb23f6500d45",
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
   "implementation_paths": [
     ".env.example",
+    ".gitignore",
     "app/api/internal/assessments/route.ts",
     "app/globals.css",
     "app/review/runtime/page.tsx",
@@ -30,6 +38,8 @@
     "lib/assessment/runtime/errors.ts",
     "lib/assessment/runtime/fakes.ts",
     "lib/assessment/runtime/hash.ts",
+    "lib/assessment/runtime/openai-diagnostics.ts",
+    "lib/assessment/runtime/openai-schema.ts",
     "lib/assessment/runtime/openai-transport.ts",
     "lib/assessment/runtime/package.json",
     "lib/assessment/runtime/pipeline.ts",
@@ -46,6 +56,8 @@
     "scripts/verify-m2-p2-b0-calibration-contract.mjs",
     "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
     "scripts/verify-m2-zero-cost-estimator.mjs",
+    "supabase/archive/0001_stage3_data_foundation.sql",
+    "supabase/archive/README.md",
     "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql",
     "supabase/migrations/0003_m2_p3_atomic_finalization.sql",
     "tsconfig.json"

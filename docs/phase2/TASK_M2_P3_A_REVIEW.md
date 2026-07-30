@@ -119,6 +119,18 @@ Not implemented by M2-P3-A: payment, RevenueCat, authentication, email, public p
 
 This post-acceptance Human record is separate from the task-time Fake zero-call/zero-spend evidence. CodeX did not revalidate secret values or query the development database for this documentation synchronization.
 
+## Historical implementation snapshot boundary correction
+
+- The M2-P3 exact-path check incorrectly mixed current `HEAD` and untracked successor work into the historical M2-P3 scope.
+- The accepted historical code range is fixed from `72d4121ff4ad0682bcafbeed4f72f6491e697ffa` through `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
+- The exact historical path set contains `47` unique paths.
+- The manifest is synchronized with the five previously omitted paths: `.gitignore`, `lib/assessment/runtime/openai-diagnostics.ts`, `lib/assessment/runtime/openai-schema.ts`, `supabase/archive/0001_stage3_data_foundation.sql`, and `supabase/archive/README.md`.
+- Current and untracked successor work is excluded from the immutable M2-P3 implementation snapshot.
+- M2-P1 historical assets remain unchanged.
+- Product runtime, Prompt, Schema, policy, dataset, DB state, OpenAI configuration, and migration contents are unchanged by this boundary correction.
+- This correction does not accept the contents of the M2-P4 Planning Package.
+- The M2-P4 work is preserved in a stash and will be revalidated after this boundary correction; the stash is not applied, popped, or dropped by this task.
+
 ## Successful-run DB integrity verification
 
 The existing synthetic live E2E records were inspected read-only through server-side SELECT only. The target identifiers are recorded only as run prefix `b91f8927` and request prefix `972bfdd1`; no full UUID or request, report, or Stage output body is recorded.
