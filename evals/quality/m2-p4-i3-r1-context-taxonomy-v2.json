@@ -1,0 +1,654 @@
+{
+  "schema_version": "m2-p4-i3-r1-context-taxonomy-v2",
+  "task_id": "M2-P4-I3-R1-FINAL-PLAN",
+  "status": "final_planning_only",
+  "baseline": "ec7cd53884ab4056c78d2596c609baef5701274a",
+  "layer_1_foundation": {
+    "commit": "ec7cd53884ab4056c78d2596c609baef5701274a",
+    "relationship_taxonomy": "evals/quality/m2-p4-i3-r1-relationship-taxonomy-v1.json",
+    "preserved": true
+  },
+  "product_boundary": {
+    "runtime_change_authorized": false,
+    "prompt_change_authorized": false,
+    "schema_change_authorized": false,
+    "ui_change_authorized": false,
+    "policy_change_authorized": false,
+    "confidence_field_allowed": false,
+    "raw_pii_allowed": false
+  },
+  "evidence_state_contract": {
+    "states": [
+      "explicit",
+      "inferred",
+      "unresolved"
+    ],
+    "rule": "Every populated context fact distinguishes explicit, inferred, and unresolved state and carries typed source_refs. Numeric or prose confidence is prohibited."
+  },
+  "relationship_effect_classes": {
+    "writing_only": "May adjust wording, register, distance, length, or presentation but may not choose or override a decision.",
+    "decision_material": "May be proposed as typed input to a future application-owned decision contract; it does not independently select a decision.",
+    "safety_material": "Must be handled by a future application-owned Safety or boundary contract before ordinary writing optimization.",
+    "anti_collapse_rule": "Relationship context is not globally writing-only. Explicit no-contact, authority, minor status, professional boundaries, coercion, block/restriction, and explicit relationship ending require typed decision or Safety treatment."
+  },
+  "relationship_dimensions": {
+    "romantic_stage": {
+      "definition": "The explicitly supported romantic stage between the user and the other person, independent of social role or familiarity.",
+      "allowed_values": {
+        "none": "No romantic frame is supplied or applicable.",
+        "new_acquaintance": "The parties have only recently met in a potentially romantic context.",
+        "dating_before_relationship": "They are meeting romantically but no relationship is established.",
+        "ambiguous": "A romantic possibility is raised but the stage is explicitly unclear.",
+        "partner": "An established partner relationship is explicitly supplied.",
+        "former_partner": "A former romantic relationship is explicitly supplied.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit user statement about current or former relationship status",
+        "an application-owned broad relationship chip",
+        "a typed fact with source references that unambiguously states the stage"
+      ],
+      "prohibited_inference": [
+        "inferring a relationship from affectionate wording alone",
+        "inferring reconciliation intent from former-partner status",
+        "inferring exclusivity, commitment, or mutual romantic interest without explicit evidence"
+      ],
+      "effect_on_wording": [
+        "calibrate affection and invitation strength",
+        "set an evidence-based ceiling on romantic certainty",
+        "increase boundary care for former or ambiguous stages"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and use candidate voice, incoming register, purpose, and a neutral fallback without inventing romance.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "ordinary established-partner conversation",
+            "early acquaintance where no boundary or risk fact is present"
+          ],
+          "decision_material": [
+            "explicit relationship ending that changes whether contact is appropriate"
+          ],
+          "safety_material": [
+            "explicit no-contact direction or coercive romantic access"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    },
+    "social_role": {
+      "definition": "The non-romantic social role that best describes how the parties know each other.",
+      "allowed_values": {
+        "stranger": "No prior relationship is supplied.",
+        "acquaintance": "They know each other lightly but are not described as friends.",
+        "friend": "A friendship is explicitly supplied.",
+        "close_friend": "An established close friendship is explicitly supplied.",
+        "work_contact": "Their relationship materially involves work.",
+        "school_contact": "Their relationship materially involves school or study.",
+        "other": "A supported role exists outside the listed values.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit description of how the parties know each other",
+        "a broad relationship chip",
+        "typed work or school context tied to source references"
+      ],
+      "prohibited_inference": [
+        "treating frequent contact as close friendship",
+        "treating work contact as formal hierarchy",
+        "treating a broad romantic chip as a complete social role"
+      ],
+      "effect_on_wording": [
+        "calibrate social distance and topic framing",
+        "avoid business-letter tone for a close friend",
+        "avoid unsupported personal warmth in work or school contexts"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and do not manufacture a role; prefer observed register and neutral distance.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "close friend",
+            "ordinary acquaintance"
+          ],
+          "decision_material": [
+            "role carrying an explicit reply duty or professional constraint"
+          ],
+          "safety_material": [
+            "minor or protected-party role when contact would create a safety issue"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    },
+    "hierarchy": {
+      "definition": "The explicitly supported relative seniority or authority relevant to wording.",
+      "allowed_values": {
+        "user_is_junior": "The user is junior or subordinate in the relevant context.",
+        "peer": "No material hierarchy is supplied between the parties.",
+        "user_is_senior": "The user is senior or has greater authority in the relevant context.",
+        "none": "Hierarchy is not applicable to this relationship.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "explicit senior, junior, manager, report, teacher, student, or cohort wording",
+        "an application-owned typed role fact with source references",
+        "a directly stated peer relationship"
+      ],
+      "prohibited_inference": [
+        "inferring hierarchy from age, gender, or writing confidence",
+        "inferring hierarchy from work context alone",
+        "inferring rigid honorific language when established communication is casual"
+      ],
+      "effect_on_wording": [
+        "calibrate deference, concision, and request softness",
+        "avoid pressure when the user has greater authority",
+        "avoid sudden casual speech when the user is junior unless candidate and observed register support it"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown; do not guess status. Use candidate and observed register, then neutral polite wording if evidence is absent.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "ordinary senior or junior wording without authority over outcomes"
+          ],
+          "decision_material": [
+            "manager/direct-report evaluation authority",
+            "teacher/student authority"
+          ],
+          "safety_material": [
+            "authority used to obtain private contact, affection, or compliance"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    },
+    "familiarity": {
+      "definition": "How established the relationship and its communication patterns are, independent of romance and hierarchy.",
+      "allowed_values": {
+        "first_contact": "This is the first known direct contact or meeting.",
+        "early": "Only limited prior interaction is supplied.",
+        "developing": "Repeated interaction exists but the pattern is not fully established.",
+        "established": "A stable communication relationship is explicitly supported.",
+        "former": "The prior relationship is no longer current.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "explicit first-contact or first-meeting statements",
+        "a supplied duration or repeated-contact description",
+        "a stated prior relationship that has ended"
+      ],
+      "prohibited_inference": [
+        "equating message frequency with emotional closeness",
+        "equating a long acquaintance with permission for intimacy",
+        "equating former familiarity with current access or consent"
+      ],
+      "effect_on_wording": [
+        "calibrate assumed shared context",
+        "control explanation length and conversational shorthand",
+        "reduce unsupported familiarity in early or former relationships"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and avoid both artificial distance and invented shared history.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "first meeting",
+            "established ordinary contact"
+          ],
+          "decision_material": [
+            "explicit relationship end or materially changed access"
+          ],
+          "safety_material": [
+            "former access treated as ongoing consent"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    },
+    "communication_context": {
+      "definition": "The channel or setting that materially constrains how the message should sound.",
+      "allowed_values": {
+        "matching_app": "The exchange occurs in a matching application.",
+        "private": "The exchange is a private personal message.",
+        "work": "The exchange materially concerns or occurs through work.",
+        "school": "The exchange materially concerns or occurs through school or study.",
+        "mixed": "More than one context materially applies.",
+        "other": "A supported context exists outside the listed values.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit channel or setting statement",
+        "the application-owned broad relationship chip",
+        "typed work, school, or matching-app context with source references"
+      ],
+      "prohibited_inference": [
+        "inferring private intimacy from a private channel",
+        "inferring formality from a work channel without observing register",
+        "inferring romantic intent from a matching-app context"
+      ],
+      "effect_on_wording": [
+        "calibrate practical detail and channel-appropriate length",
+        "avoid excessive personal warmth in work contexts",
+        "avoid stiff institutional language in ordinary private exchanges"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and avoid channel-specific assumptions.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "ordinary LINE or matching-app length calibration"
+          ],
+          "decision_material": [
+            "work-only or school-only contact boundary"
+          ],
+          "safety_material": [
+            "private contact prohibited by a professional boundary"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    },
+    "observed_register": {
+      "definition": "The register directly observed in the candidate and incoming message, without treating consultation prose as messaging style.",
+      "allowed_values": {
+        "polite": "Consistently polite or honorific messaging is observed.",
+        "neutral_polite": "Ordinary polite messaging without strong formality is observed.",
+        "casual": "Consistently casual messaging is observed.",
+        "mixed": "Polite and casual forms are materially mixed.",
+        "unknown": "No reliable messaging sample supports a value."
+      },
+      "permitted_evidence": [
+        "user_supplied_optional_message",
+        "the actual incoming message",
+        "an explicit statement about usual messaging style"
+      ],
+      "prohibited_inference": [
+        "using the consultation narrative's explanatory register",
+        "deriving register from relationship chip alone",
+        "normalizing mixed or casual evidence into generic polite prose"
+      ],
+      "effect_on_wording": [
+        "preserve polite, casual, or mixed speech when supported",
+        "match sentence endings and conversational distance",
+        "break ties between broad relationship expectations and actual messaging evidence"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Use the candidate if present, otherwise match the incoming message conservatively, then fall back to neutral polite wording.",
+      "effect_class": {
+        "allowed_values": [
+          "writing_only",
+          "decision_material",
+          "safety_material"
+        ],
+        "assignment_unit": "typed_fact",
+        "rule": "Assign from explicit material and source references. A dimension has no permanent class, and a broad relationship chip alone cannot create decision or Safety authority.",
+        "examples": {
+          "writing_only": [
+            "polite, casual, or mixed register"
+          ],
+          "decision_material": [],
+          "safety_material": [
+            "register evidence combined with threats or coercion is not a style trait to preserve"
+          ]
+        }
+      },
+      "explicit_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Record only evidence directly stated or selected by the user."
+      },
+      "inferred_evidence": {
+        "type": "source_ref_array",
+        "default": [],
+        "rule": "Keep bounded inference separate from explicit evidence and never infer authority, consent, age, or relationship status from style alone."
+      },
+      "unresolved": {
+        "type": "boolean",
+        "default": true,
+        "rule": "Use true when available evidence does not support a single typed value."
+      },
+      "source_refs": {
+        "type": "typed_source_ref_array",
+        "default": [],
+        "rule": "References point to typed evidence locations, never case IDs, expected outputs, or raw database records."
+      }
+    }
+  },
+  "message_ownership": {
+    "fields": {
+      "message_id": "stable synthetic or request-local identifier; never a database UUID copied into planning evidence",
+      "author": {
+        "allowed_values": [
+          "user",
+          "other_person",
+          "third_party",
+          "unknown"
+        ]
+      },
+      "status": {
+        "allowed_values": [
+          "incoming",
+          "sent_by_user",
+          "unsent_candidate",
+          "quoted_history",
+          "consultation_narrative",
+          "unknown"
+        ]
+      },
+      "sequence": "nonnegative integer or unknown, ordered within the supplied conversation only",
+      "evidence_state": {
+        "allowed_values": [
+          "explicit",
+          "inferred",
+          "unresolved"
+        ]
+      },
+      "source_refs": "typed source references"
+    },
+    "invariants": [
+      "Do not treat an unsent candidate as already sent.",
+      "Do not treat the other person's message as the user's voice sample.",
+      "Do not treat consultation narrative as a messaging-style sample.",
+      "Do not merge quoted history into the current incoming turn.",
+      "Confidence expressions are prohibited."
+    ]
+  },
+  "dialogue_act": {
+    "allowed_values": [
+      "answer",
+      "question",
+      "thanks",
+      "apology",
+      "invitation",
+      "schedule_coordination",
+      "practical_notice",
+      "affection_expression",
+      "boundary",
+      "decline",
+      "hold",
+      "conversation_closure",
+      "promised_future_contact",
+      "other",
+      "unknown"
+    ],
+    "fields": {
+      "unanswered_obligations": "typed dialogue-act references requiring a response",
+      "practical_requirements": "dates, choices, confirmations, or other explicit practical needs without invented values",
+      "closure_signal": "explicit, inferred, unresolved, or none",
+      "response_expectation": "required, reasonable, optional, absent, or unknown",
+      "source_refs": "typed source references"
+    }
+  },
+  "candidate_communicative_intent": {
+    "scale_values": [
+      "none",
+      "low",
+      "medium",
+      "high",
+      "unknown"
+    ],
+    "fields": {
+      "gratitude_strength": "scale",
+      "apology_strength": "scale",
+      "question_count": "nonnegative integer or unknown",
+      "invitation_presence": "true, false, or unknown",
+      "invitation_specificity": "none, vague, bounded, specific, or unknown",
+      "affection_strength": "scale",
+      "commitment_strength": "scale",
+      "response_pressure": "scale",
+      "boundary_strength": "scale",
+      "conversation_closure": "true, false, or unknown",
+      "practical_requirement": "typed requirement array or unknown"
+    },
+    "rule": "Preserve candidate meaning and interpersonal load unless a higher-precedence Safety, explicit boundary, user constraint, or required answer demands a material correction."
+  },
+  "user_goal_detail": {
+    "allowed_values": [
+      "respond_politely",
+      "move_closer",
+      "maintain_distance",
+      "schedule_only",
+      "apologize",
+      "repair_conflict",
+      "decline_without_false_hope",
+      "end_contact",
+      "express_affection",
+      "clarify_relationship",
+      "other",
+      "unknown"
+    ],
+    "rule": "The goal guides wording and fulfillment but cannot override Safety, explicit boundaries, or the application-owned decision."
+  },
+  "user_constraints": {
+    "known_values": [
+      "no_emoji",
+      "no_self_invitation",
+      "no_late_night_send",
+      "no_phone_call",
+      "no_private_contact_at_work",
+      "no_followup_message",
+      "keep_polite_register",
+      "keep_casual_register",
+      "custom_explicit_constraint"
+    ],
+    "fields": {
+      "constraint_id": "request-local identifier",
+      "value": "known value or bounded custom explicit constraint",
+      "evidence_state": "explicit, inferred, or unresolved",
+      "source_refs": "typed source references"
+    },
+    "rule": "Only explicit constraints are enforceable as user constraints; general advice is not converted into a constraint."
+  },
+  "communication_pattern": {
+    "fields": {
+      "usual_register": "polite, neutral_polite, casual, mixed, or unknown",
+      "usual_length": "terse, short, medium, long, or unknown",
+      "usual_emoji_pattern": "none, restrained, frequent, or unknown",
+      "usual_response_cadence": "explicit bounded description or unknown",
+      "usual_initiator": "user, other_person, reciprocal, variable, or unknown",
+      "reciprocal_style": "explicit bounded description or unknown",
+      "pattern_evidence": "typed source references",
+      "unresolved_fields": "field-name array"
+    },
+    "rule": "Reflect a pattern only when explicitly supplied. Do not fill missing patterns from general relationship assumptions."
+  },
+  "channel_and_timing": {
+    "channel": {
+      "allowed_values": [
+        "line",
+        "instagram_dm",
+        "matching_app",
+        "sms",
+        "work_chat",
+        "email",
+        "other",
+        "unknown"
+      ]
+    },
+    "relative_timing": {
+      "allowed_values": [
+        "immediate",
+        "same_day",
+        "late_night",
+        "next_day",
+        "delayed",
+        "unknown"
+      ]
+    },
+    "exact_time_rule": "Do not fabricate an exact time unless explicitly supplied.",
+    "decision_rule": "Channel or relative timing alone does not force send, wait, or do-not-send."
+  },
+  "language_and_expression": {
+    "fields": {
+      "primary_language": "language tag or unknown",
+      "mixed_language": "explicit language-tag array or none",
+      "dialect_or_regional_expression": "typed expression profile without storing a real user's raw corpus",
+      "established_shared_expression": "typed bounded description or none",
+      "intentional_nonstandard_expression": "typed bounded description or none",
+      "possible_typo": "typed location reference or none",
+      "unresolved": "field-name array"
+    },
+    "rule": "Do not normalize established dialect, mixed language, or intentional idiolect into generic standard Japanese; do not preserve probable typos as identity."
+  },
+  "repeat_consultation_state": {
+    "allowed_values": [
+      "first_assessment",
+      "repeated_without_material_change",
+      "repeated_with_material_change",
+      "unknown"
+    ],
+    "fields": {
+      "state": "one allowed value",
+      "changed_fact_ids": "typed fact-id array",
+      "unchanged_since_prior": "boolean or unknown"
+    },
+    "rule": "Reassess only material changed facts. Repetition without change must not produce stronger reassurance, worse prediction, or escalating advice."
+  },
+  "privacy_markers": {
+    "allowed_values": [
+      "names",
+      "phone",
+      "email",
+      "account_identifier",
+      "workplace",
+      "school",
+      "address",
+      "third_party_sensitive_detail",
+      "none"
+    ],
+    "storage_rule": "Record marker categories only. Raw PII is prohibited in planning assets, logs, errors, inspection artifacts, and persistent style profiles.",
+    "minimization_rule": "Do not reproduce a marked value in a draft or report unless strictly required for the user's explicit communicative purpose."
+  },
+  "unknown_rule": "When a field is not supplied, keep it unknown. Do not complete context from stereotypes or general relationship advice."
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "m2-p4-i3-r1-schema-successor-plan-v1",
+  "task_id": "M2-P4-I3-R1-FINAL-PLAN",
+  "status": "final_planning_only",
+  "current_schema": {
+    "changed_in_this_task": false,
+    "known_structural_pressure": [
+      "minimum item counts can force unnecessary possibilities",
+      "minimum item counts can force heavy or irrelevant change conditions",
+      "required fields can repeat limitations and disclaimers",
+      "fixed three-day structures can fabricate a Day 3 action",
+      "minimum closing content can produce a long repetitive ending"
+    ],
+    "conclusion": "The current Schema remains immutable here. A successor contract is required before final quality implementation."
+  },
+  "future_decision_plan_successor_proposal": {
+    "recommended_message_draft": {
+      "cardinality": "zero_or_one",
+      "rule": "Exactly one when the decision and selected request require a draft; absent for a send-nothing result."
+    },
+    "message_draft_edit_metadata": {
+      "cardinality": "zero_or_one",
+      "fields": [
+        "source_status",
+        "preserved_meaning",
+        "style_delta",
+        "communicative_intent_delta",
+        "change_reasons"
+      ],
+      "rule": "Present only when a draft exists."
+    },
+    "aftercare_plan": {
+      "cardinality": "one_to_three",
+      "phase_allowed_values": [
+        "tonight",
+        "next",
+        "reassessment_condition"
+      ],
+      "fixed_day_three_required": false,
+      "rule": "Each item must add distinct action value."
+    },
+    "change_conditions": {
+      "cardinality": "zero_to_four",
+      "rule": "Include only material facts that could change the application-owned recommendation."
+    },
+    "material_unknowns": {
+      "cardinality": "zero_to_four",
+      "rule": "Include only unknowns that matter to the decision or safe execution."
+    },
+    "model_generated_limitations": {
+      "cardinality": "zero_to_two",
+      "rule": "Do not repeat the fixed general limitation."
+    },
+    "fixed_general_limitation": {
+      "owner": "renderer",
+      "remains_required": true
+    }
+  },
+  "future_report_content_successor_proposal": {
+    "short_letter": {
+      "cardinality": "one_to_three",
+      "topic_dependency": "Full depth only when organize_emotions is selected; otherwise minimum useful content."
+    },
+    "possible_interpretations": {
+      "cardinality": "zero_to_three",
+      "rule": "Evidence-bounded readings only; no hidden-mind assertion."
+    },
+    "anxiety_reframe": {
+      "cardinality": "zero_to_two",
+      "rule": "Must not obscure the action."
+    },
+    "action_rationales": {
+      "cardinality": "zero_to_four",
+      "rule": "Align to distinct action items."
+    },
+    "message_draft_context": {
+      "cardinality": "zero_or_one",
+      "required_when": "recommended_message_draft exists",
+      "absent_when": "recommended_message_draft is absent"
+    },
+    "aftercare_commentary": {
+      "cardinality": "zero_to_three",
+      "alignment": "index-aligned with aftercare_plan"
+    },
+    "change_condition_commentary": {
+      "cardinality": "zero_to_four",
+      "alignment": "index-aligned with change_conditions"
+    },
+    "unknowns_commentary": {
+      "disposition": "remove"
+    },
+    "closing_lines": {
+      "cardinality": "one_to_two",
+      "rule": "No repeated disclaimer or summary padding."
+    },
+    "topic_dependent_sections": {
+      "empty_array_or_null_allowed": true,
+      "selected_request_fulfillment_mandatory": true
+    }
+  },
+  "cross_contract_invariants": [
+    "One recommended draft is the standard.",
+    "Draft voice and report voice remain separate.",
+    "Optional generated prose cannot create a mandatory section through renderer fallback.",
+    "Selected request fulfillment remains mandatory even when topic-dependent sections may be empty.",
+    "Safety, decision, user constraints, and candidate communicative intent remain application-owned or typed boundaries.",
+    "No runtime, Prompt, Schema, UI, Policy, provider, or database change is authorized by this proposal."
+  ],
+  "implementation_task_required": true,
+  "implementation_authorized": false
+}

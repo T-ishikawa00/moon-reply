@@ -1,0 +1,453 @@
+{
+  "schema_version": "m2-p4-i3-r1-style-intent-rubric-v2",
+  "task_id": "M2-P4-I3-R1-FINAL-PLAN",
+  "status": "final_planning_only",
+  "baseline": "ec7cd53884ab4056c78d2596c609baef5701274a",
+  "layer_1_foundation": {
+    "source": "evals/quality/m2-p4-i3-r1-style-preservation-rubric-v1.json",
+    "candidate_style_dimensions_preserved": 10,
+    "hard_fail_codes_preserved": 10
+  },
+  "voice_separation": {
+    "draft_voice": "the user's own messaging persona",
+    "report_voice": "the calm adult polite voice of 月の返事",
+    "invariant": "The report may use composed adult polite Japanese. The draft must not be normalized into the report's voice."
+  },
+  "candidate_source": "user_supplied_optional_message_only",
+  "excluded_style_source": "consultation narrative prose",
+  "surface_voice_dimensions": [
+    {
+      "code": "register",
+      "allowed_values": [
+        "polite",
+        "neutral_polite",
+        "casual",
+        "mixed"
+      ],
+      "preservation_rule": "Do not change polite speech to casual speech or casual speech to polite speech without concrete relationship or comprehension evidence."
+    },
+    {
+      "code": "sentence_length",
+      "allowed_values": [
+        "terse",
+        "short",
+        "medium",
+        "long"
+      ],
+      "preservation_rule": "Keep the user's usual compactness or elaboration, trimming only material over-explanation or adding only content required to answer the incoming message."
+    },
+    {
+      "code": "sentence_ending",
+      "allowed_values": [
+        "formal",
+        "neutral",
+        "soft",
+        "playful",
+        "mixed"
+      ],
+      "preservation_rule": "Keep recognizable sentence-ending energy unless it creates unsupported intimacy, hierarchy mismatch, or pressure."
+    },
+    {
+      "code": "punctuation",
+      "allowed_values": [
+        "sparse",
+        "standard",
+        "expressive"
+      ],
+      "preservation_rule": "Do not materially increase or flatten punctuation energy."
+    },
+    {
+      "code": "emoji_usage",
+      "allowed_values": [
+        "none",
+        "restrained",
+        "frequent"
+      ],
+      "preservation_rule": "Do not add emoji when absent and do not mechanically remove supported restrained or frequent usage."
+    },
+    {
+      "code": "exclamation_usage",
+      "allowed_values": [
+        "none",
+        "restrained",
+        "frequent"
+      ],
+      "preservation_rule": "Preserve the candidate's level unless it materially creates pressure or relationship mismatch."
+    },
+    {
+      "code": "softness",
+      "allowed_values": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "preservation_rule": "Do not raise or lower warmth without evidence; reduce only softness that obscures purpose or becomes excessive apology."
+    },
+    {
+      "code": "directness",
+      "allowed_values": [
+        "indirect",
+        "balanced",
+        "direct"
+      ],
+      "preservation_rule": "Preserve the user's directness while removing coercion and answering any concrete incoming question."
+    },
+    {
+      "code": "invitation_style",
+      "allowed_values": [
+        "none",
+        "tentative",
+        "direct",
+        "practical"
+      ],
+      "preservation_rule": "Do not invent, suppress, or escalate an invitation without purpose and relationship evidence."
+    },
+    {
+      "code": "reply_pressure",
+      "allowed_values": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "preservation_rule": "Pressure is not a protected persona trait; reduce high pressure to the minimum level consistent with the user's purpose."
+    }
+  ],
+  "style_delta": {
+    "comparison": "user_supplied_optional_message_to_recommended_draft",
+    "dimensions": [
+      "register",
+      "sentence_length",
+      "sentence_ending",
+      "punctuation",
+      "emoji_usage",
+      "exclamation_usage",
+      "softness",
+      "directness",
+      "invitation_style",
+      "reply_pressure"
+    ],
+    "rule": "Record each material surface change, its typed reason, and whether a higher-precedence requirement authorized it."
+  },
+  "communicative_intent_delta": {
+    "delta_values": [
+      "decreased",
+      "unchanged",
+      "increased",
+      "unresolved"
+    ],
+    "fields": {
+      "gratitude_change": "delta value",
+      "apology_change": "delta value",
+      "question_count_delta": "integer or unresolved",
+      "invitation_presence_delta": "removed, unchanged_absent, unchanged_present, added, or unresolved",
+      "invitation_specificity_delta": "delta value",
+      "affection_strength_delta": "delta value",
+      "commitment_strength_delta": "delta value",
+      "response_pressure_delta": "delta value",
+      "boundary_strength_delta": "delta value",
+      "closure_intent_delta": "removed, unchanged_absent, unchanged_present, added, or unresolved",
+      "practical_requirement_fulfillment": "fulfilled, partially_fulfilled, unfulfilled, not_applicable, or unresolved"
+    },
+    "materiality_rule": "Candidate meaning, promises, invitation, affection, apology, boundary, closure, practical duties, and interpersonal pressure are protected independently from surface style."
+  },
+  "mechanically_checkable_signals": [
+    {
+      "code": "character_length_ratio",
+      "comparison": "draft characters divided by candidate characters",
+      "note": "Signal only; no universal pass threshold."
+    },
+    {
+      "code": "sentence_count",
+      "comparison": "candidate and draft counts"
+    },
+    {
+      "code": "question_mark_count",
+      "comparison": "candidate and draft counts"
+    },
+    {
+      "code": "emoji_count",
+      "comparison": "candidate and draft counts"
+    },
+    {
+      "code": "exclamation_mark_count",
+      "comparison": "candidate and draft counts"
+    },
+    {
+      "code": "register_level",
+      "comparison": "candidate and draft typed register"
+    },
+    {
+      "code": "invitation_presence",
+      "comparison": "candidate and draft boolean"
+    },
+    {
+      "code": "apology_presence",
+      "comparison": "candidate and draft boolean"
+    },
+    {
+      "code": "commitment_added",
+      "comparison": "candidate false to draft true"
+    },
+    {
+      "code": "affection_added",
+      "comparison": "candidate none to draft non-none or material strength increase"
+    },
+    {
+      "code": "reply_pressure_added",
+      "comparison": "candidate and draft typed pressure"
+    }
+  ],
+  "preservation_principles": [
+    "Do not automatically convert casual speech to polite speech.",
+    "Do not automatically convert polite speech to casual speech.",
+    "Do not add emoji without evidence.",
+    "Do not mechanically delete all emoji.",
+    "Do not materially change punctuation or exclamation patterns.",
+    "Do not raise the candidate's emotional temperature without support.",
+    "Do not weaken expressed interest or invitation without support.",
+    "Lightly reduce over-explanation, excessive apology, or pressure when needed.",
+    "Do not preserve typos or unnatural phrasing as persona.",
+    "Preserve the candidate's communicative meaning and interpersonal load, not only surface style.",
+    "Do not imitate the other person's style by changing the user's persona.",
+    "Do not strengthen coercion, threat, manipulation, deception, or unsafe boundary crossing as style."
+  ],
+  "score_scale": {
+    "minimum": 1,
+    "maximum": 5,
+    "anchors": {
+      "1": "Material failure; unusable and inconsistent with supplied relationship or persona evidence.",
+      "2": "Major correction required; recognizable evidence is overridden or important content is missed.",
+      "3": "Understandable but generic, uneven, or only partially faithful.",
+      "4": "Strong, natural, and practically usable with no material fidelity gap.",
+      "5": "Exceptional fidelity and usefulness; the result sounds recognizably like the user while fitting the relationship and purpose."
+    }
+  },
+  "evaluation_axes": [
+    {
+      "code": "relationship_fit",
+      "definition": "Wording fits the supplied relationship dimensions without relying on a stereotype."
+    },
+    {
+      "code": "persona_preservation",
+      "definition": "The draft remains recognizably continuous with the candidate's voice after necessary corrections."
+    },
+    {
+      "code": "incoming_message_fit",
+      "definition": "The draft answers the actual content, question, temperature, and response obligation of the incoming message."
+    },
+    {
+      "code": "hierarchy_fit",
+      "definition": "Register, request form, and pressure fit the explicitly supported hierarchy."
+    },
+    {
+      "code": "intimacy_control",
+      "definition": "The draft neither inflates nor suppresses intimacy without evidence."
+    },
+    {
+      "code": "purpose_fulfillment",
+      "definition": "The draft materially accomplishes the user's stated immediate sending purpose."
+    },
+    {
+      "code": "candidate_meaning_fidelity",
+      "definition": "The candidate's intended meaning, interest, boundaries, and ask survive the edit."
+    },
+    {
+      "code": "naturalness",
+      "definition": "The Japanese reads as a plausible personal message rather than an AI template or business report."
+    },
+    {
+      "code": "copy_meaning_fidelity",
+      "definition": "The copy-ready draft is semantically consistent with the recommended decision and the explanation of why it should be sent."
+    },
+    {
+      "code": "copy_readiness",
+      "definition": "The draft can be copied with no missing answer, placeholder, meta-instruction, or AI-facing text."
+    },
+    {
+      "code": "non_stereotyping",
+      "definition": "The output does not derive register, intimacy, reconciliation, or authority from a coarse relationship label."
+    },
+    {
+      "code": "jpy_980_value",
+      "definition": "The relationship-aware reasoning, faithful edit, and usable copy provide specific value appropriate to a JPY 980 one-off report."
+    }
+  ],
+  "hard_fail_codes": [
+    "UNJUSTIFIED_REGISTER_SHIFT",
+    "PERSONA_DISCONTINUITY",
+    "HIERARCHY_MISMATCH",
+    "UNSUPPORTED_INTIMACY_INCREASE",
+    "UNSUPPORTED_INTIMACY_DECREASE",
+    "CANDIDATE_MEANING_CHANGED",
+    "RELATIONSHIP_STEREOTYPE",
+    "INCOMING_QUESTION_UNANSWERED",
+    "RELATIONSHIP_ONLY_WRONG_DECISION",
+    "OPTIONAL_MESSAGE_IGNORED",
+    "MESSAGE_OWNER_CONFUSION",
+    "SENT_UNSENT_STATUS_CONFUSION",
+    "CONVERSATION_ORDER_CONFUSION",
+    "DIALOGUE_ACT_UNFULFILLED",
+    "USER_CONSTRAINT_VIOLATED",
+    "UNSUPPORTED_QUESTION_ADDED",
+    "UNSUPPORTED_INVITATION_ADDED",
+    "UNSUPPORTED_INVITATION_STRENGTHENED",
+    "UNSUPPORTED_AFFECTION_STRENGTHENED",
+    "UNSUPPORTED_COMMITMENT_ADDED",
+    "MANIPULATIVE_TACTIC_AMPLIFIED",
+    "PII_REPRODUCED_UNNECESSARILY",
+    "DIALECT_OR_IDIOLECT_ERASED",
+    "REPEAT_CONSULTATION_ESCALATION",
+    "DIRECT_SEND_WITHOUT_USER_CONFIRMATION"
+  ],
+  "hard_fail_count": 25,
+  "hard_fail_definitions": {
+    "UNJUSTIFIED_REGISTER_SHIFT": {
+      "preserved_v1_definition": "The draft changes the candidate's supported register without a concrete need.",
+      "material_trigger": "The draft crosses polite/casual or materially changes honorific level without higher-precedence evidence.",
+      "explicit_non_trigger": "Minor natural Japanese cleanup within the same register is not a trigger."
+    },
+    "PERSONA_DISCONTINUITY": {
+      "preserved_v1_definition": "The edited draft no longer sounds recognizably continuous with the candidate.",
+      "material_trigger": "Multiple supported voice markers are replaced so the draft is no longer recognizably continuous with the user candidate or explicit communication pattern.",
+      "explicit_non_trigger": "A typo correction or one localized readability edit is not a trigger."
+    },
+    "HIERARCHY_MISMATCH": {
+      "preserved_v1_definition": "The draft ignores or reverses an explicitly supported hierarchy constraint.",
+      "material_trigger": "The draft creates material disrespect, undue deference, or authority pressure contrary to an explicit hierarchy fact.",
+      "explicit_non_trigger": "Ordinary wording preference within a safe hierarchy range is not a trigger."
+    },
+    "UNSUPPORTED_INTIMACY_INCREASE": {
+      "preserved_v1_definition": "The draft adds closeness, affection, certainty, invitation strength, or familiarity without support.",
+      "material_trigger": "The draft materially adds affection, certainty, nickname use, invitation strength, or assumed shared closeness absent typed support.",
+      "explicit_non_trigger": "A neutral softener that does not change relationship meaning is not a trigger."
+    },
+    "UNSUPPORTED_INTIMACY_DECREASE": {
+      "preserved_v1_definition": "The draft unnecessarily removes supported warmth, interest, invitation, or established familiarity.",
+      "material_trigger": "The draft materially removes supported warmth, affection, invitation, or established closeness and thereby changes the user's intended meaning.",
+      "explicit_non_trigger": "Removing pressure, coercion, or an unsafe intimacy cue is not a trigger."
+    },
+    "CANDIDATE_MEANING_CHANGED": {
+      "preserved_v1_definition": "The edit materially changes the candidate's intended meaning, boundary, interest, or ask.",
+      "material_trigger": "The draft changes a material promise, invitation, apology, affection, boundary, refusal, question, or practical commitment in the candidate.",
+      "explicit_non_trigger": "Surface paraphrase with the same communicative force is not a trigger."
+    },
+    "RELATIONSHIP_STEREOTYPE": {
+      "preserved_v1_definition": "The draft relies on a coarse label, such as partner, former partner, or senior, instead of supplied evidence.",
+      "material_trigger": "A coarse chip or demographic assumption supplies register, intimacy, reconciliation, consent, or authority not present in typed evidence.",
+      "explicit_non_trigger": "A chip used only as a low-priority wording fallback is not a trigger."
+    },
+    "INCOMING_QUESTION_UNANSWERED": {
+      "preserved_v1_definition": "The incoming message contains a concrete answerable question that the draft does not answer.",
+      "material_trigger": "A concrete answerable incoming question with a current response obligation is omitted from the recommended draft.",
+      "explicit_non_trigger": "A rhetorical question or question already answered in the supplied sequence is not a trigger."
+    },
+    "RELATIONSHIP_ONLY_WRONG_DECISION": {
+      "preserved_v1_definition": "Changing only relationship context changes the application-owned expected decision.",
+      "material_trigger": "Changing only writing-only relationship context changes the application-owned expected decision.",
+      "explicit_non_trigger": "A separately typed decision_material or safety_material fact may legitimately enter its owning policy in a future authorized implementation."
+    },
+    "OPTIONAL_MESSAGE_IGNORED": {
+      "preserved_v1_definition": "A supplied candidate is replaced by generic prose rather than used as the primary persona source.",
+      "material_trigger": "A usable unsent candidate is replaced wholesale by generic prose without preserving its meaning and recognizable voice.",
+      "explicit_non_trigger": "A minimal Safety or explicit-boundary correction is not a trigger."
+    },
+    "MESSAGE_OWNER_CONFUSION": {
+      "preserved_v1_definition": null,
+      "material_trigger": "Content authored by the other person or a third party is attributed to the user and materially shapes the draft or report.",
+      "explicit_non_trigger": "Explicitly labeled quotation for context is not a trigger."
+    },
+    "SENT_UNSENT_STATUS_CONFUSION": {
+      "preserved_v1_definition": null,
+      "material_trigger": "An unsent candidate is described as already sent, or a sent user message is offered again as a new draft, changing guidance.",
+      "explicit_non_trigger": "A clearly labeled comparison between sent and unsent text is not a trigger."
+    },
+    "CONVERSATION_ORDER_CONFUSION": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The response addresses an obsolete turn, reverses sequence, or ignores a later closure/boundary because turns were ordered incorrectly.",
+      "explicit_non_trigger": "Summarizing earlier context while answering the latest turn is not a trigger."
+    },
+    "DIALOGUE_ACT_UNFULFILLED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "A material answer, schedule confirmation, decline, apology, boundary, or closure required by the current dialogue act is absent.",
+      "explicit_non_trigger": "Optional social ornament is not required."
+    },
+    "USER_CONSTRAINT_VIOLATED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The draft violates an explicit request-local constraint such as no emoji, no invitation, register, channel, or follow-up restriction.",
+      "explicit_non_trigger": "An inferred preference that was never explicit is not an enforceable hard fail."
+    },
+    "UNSUPPORTED_QUESTION_ADDED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The draft adds a question that creates a new response obligation or reopens a closing conversation without user purpose or practical need.",
+      "explicit_non_trigger": "A punctuation change that does not create a question is not a trigger."
+    },
+    "UNSUPPORTED_INVITATION_ADDED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The draft introduces an invitation where neither candidate meaning nor explicit user goal authorizes one.",
+      "explicit_non_trigger": "Answering the other person's invitation without adding a new invitation is not a trigger."
+    },
+    "UNSUPPORTED_INVITATION_STRENGTHENED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "A vague or tentative invitation becomes specific, direct, or self-inviting without support.",
+      "explicit_non_trigger": "Clarifying logistics already requested by the other person is not a trigger."
+    },
+    "UNSUPPORTED_AFFECTION_STRENGTHENED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "Affection moves materially above candidate and explicit-goal strength, including romantic certainty or pet names.",
+      "explicit_non_trigger": "Preserving supported affection at the same strength is not a trigger."
+    },
+    "UNSUPPORTED_COMMITMENT_ADDED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The draft creates a promise, exclusivity, future-contact commitment, attendance commitment, or availability not supplied by the user.",
+      "explicit_non_trigger": "Repeating an explicit existing commitment is not a trigger."
+    },
+    "MANIPULATIVE_TACTIC_AMPLIFIED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The draft strengthens guilt, jealousy testing, deception, threat, coercion, monitoring, or strategic withholding.",
+      "explicit_non_trigger": "Removing or neutralizing manipulation is permitted even when it changes surface voice."
+    },
+    "PII_REPRODUCED_UNNECESSARILY": {
+      "preserved_v1_definition": null,
+      "material_trigger": "A name, phone, email, account, workplace, school, address, or third-party sensitive detail is repeated without communicative necessity.",
+      "explicit_non_trigger": "A required practical identifier explicitly approved by the user is not automatically a trigger."
+    },
+    "DIALECT_OR_IDIOLECT_ERASED": {
+      "preserved_v1_definition": null,
+      "material_trigger": "Supported dialect, mixed language, shared expression, or intentional nonstandard style is materially normalized away without a higher-precedence reason.",
+      "explicit_non_trigger": "Correcting a probable typo or unsafe wording is not a trigger."
+    },
+    "REPEAT_CONSULTATION_ESCALATION": {
+      "preserved_v1_definition": null,
+      "material_trigger": "With no material changed fact, the output increases reassurance, negative prediction, urgency, intimacy advice, or action intensity.",
+      "explicit_non_trigger": "Briefly maintaining the prior decision and naming the absence of new material is not a trigger."
+    },
+    "DIRECT_SEND_WITHOUT_USER_CONFIRMATION": {
+      "preserved_v1_definition": null,
+      "material_trigger": "The system represents that it sent, will send, or may autonomously send the draft to an external service without the user's final act.",
+      "explicit_non_trigger": "Providing copy-ready text for the user to review, edit, copy, and send is not a trigger."
+    }
+  },
+  "hard_fail_application_rule": {
+    "trigger": "Apply only when meaning, persona, relationship fit, dialogue obligation, explicit constraint, privacy, or Safety is materially changed or violated.",
+    "non_trigger": "A superficial paraphrase, small naturalness preference, or subjective prose-quality difference alone is not a hard fail.",
+    "evidence_required": "Every hard fail cites typed source_refs and the before/after material delta. Case ID, fixture name, or exact-wording lookup is not evidence."
+  },
+  "evaluator_disposition_boundary": {
+    "subjective_quality": "PB-06-style prose quality scores and ordinary genericity, brand tone, or repetition findings are QA evidence and not terminal by themselves.",
+    "user_unusable_or_unsafe": "Material hard fails and application-owned blocking consistency findings remain blocking.",
+    "achieved_score_claimed": false
+  },
+  "future_acceptance_proposal": {
+    "status": "not_run",
+    "hard_fail_count": 0,
+    "relationship_fit_minimum_for_every_relationship_contrast_case": 4,
+    "persona_preservation_minimum_for_every_candidate_present_case": 4,
+    "candidate_meaning_fidelity_minimum_for_every_candidate_present_case": 4,
+    "hierarchy_fit_minimum_for_every_hierarchy_case": 4,
+    "overall_average_minimum": 4.2,
+    "round_up_to_pass": false,
+    "exact_expected_decision_for_all_decision_scored_cases": true,
+    "holdout_use": 0,
+    "canonical_suite_cases": 64
+  }
+}

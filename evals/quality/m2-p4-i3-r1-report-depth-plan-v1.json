@@ -1,0 +1,134 @@
+{
+  "schema_version": "m2-p4-i3-r1-report-depth-plan-v1",
+  "task_id": "M2-P4-I3-R1-FINAL-PLAN",
+  "status": "final_planning_only",
+  "implementation_authorized": false,
+  "product_decisions": {
+    "standard_recommended_draft_count": 1,
+    "user_initiated_adjustment_limit_per_purchase": 1,
+    "fixed_three_day_plan_required_for_every_report": false,
+    "report_depth_is_topic_dependent": true,
+    "direct_external_send": false
+  },
+  "voice_separation": {
+    "draft_voice": "the user's messaging persona",
+    "report_voice": "月の返事の calm adult polite voice",
+    "invariant": "A calm polite report must not normalize the recommended draft into the same report voice."
+  },
+  "always_prominent": [
+    {
+      "section": "今夜の答え",
+      "required": true
+    },
+    {
+      "section": "おすすめ返信案または送らない判断",
+      "required": true
+    },
+    {
+      "section": "送る前の確認",
+      "required": true
+    },
+    {
+      "section": "送った直後または今夜の代替行動",
+      "required": true
+    },
+    {
+      "section": "今夜やらないこと",
+      "required": true
+    }
+  ],
+  "topic_dependent_depth": {
+    "decide_send_or_wait": [
+      "answer",
+      "reason",
+      "tonight_actions",
+      "reassessment_condition"
+    ],
+    "draft_message": [
+      "one_recommended_draft",
+      "edit_explanation",
+      "message_temperature",
+      "before_and_after_send"
+    ],
+    "message_impact": [
+      "wording_effect",
+      "softness_affection_pressure",
+      "possible_readings"
+    ],
+    "relationship": [
+      "relationship_summary",
+      "evidence_backed_current_reading",
+      "no_hidden_mind_assertion"
+    ],
+    "next_three_days": [
+      "full_aftercare_plan"
+    ],
+    "organize_emotions": [
+      "short_letter",
+      "anxiety_reframe",
+      "action_remains_clear"
+    ]
+  },
+  "flexible_aftercare_plan": {
+    "future_section_name_candidate": "今夜のあと",
+    "when_next_three_days_selected": {
+      "depth": "full",
+      "phases": [
+        "今夜",
+        "次",
+        "判断を見直す観測条件"
+      ],
+      "fixed_calendar_day_three_required": false
+    },
+    "when_not_selected": {
+      "depth": "compact",
+      "items": "one_or_two_only_when_each_has_distinct_value",
+      "omission_allowed": true,
+      "omission_condition": "No distinct aftercare value beyond the always-prominent actions."
+    },
+    "anti_repetition_rule": "Do not repeat the same disclaimer, change condition, or action merely to fill a minimum item count."
+  },
+  "recommended_draft": {
+    "standard_count": 1,
+    "rule": "Do not create new indecision by presenting several near-duplicate drafts.",
+    "minimal_edit_rule": "When the supplied candidate is already good, keep it largely unchanged.",
+    "value_explanation_rule": "Explain why preserving the original was the higher-value edit decision.",
+    "future_display_candidate": [
+      "before",
+      "after",
+      "change_reason"
+    ],
+    "direct_send": false
+  },
+  "one_user_initiated_adjustment": {
+    "adoption": "future_product_candidate",
+    "limit_per_purchased_result": 1,
+    "allowed_adjustments": [
+      "もう少し短く",
+      "もう少しやわらかく",
+      "もう少し明るく",
+      "敬語を少しやわらげる",
+      "明示された範囲で絵文字調整"
+    ],
+    "immutable_during_adjustment": [
+      "decision",
+      "purpose",
+      "invitation_presence",
+      "affection_strength",
+      "commitment",
+      "reply_pressure",
+      "boundary",
+      "Safety"
+    ],
+    "execution_boundary": "This is a user-initiated revision, not automatic Provider retry, Repair, fallback, or continuation.",
+    "ui_implementation_in_this_task": false
+  },
+  "user_confirmation_flow": [
+    "AI does not send to an external service.",
+    "The user reads the recommended draft.",
+    "The user may manually edit it.",
+    "The user copies it.",
+    "The user personally sends it."
+  ],
+  "direct_send_without_confirmation_hard_fail": "DIRECT_SEND_WITHOUT_USER_CONFIRMATION"
+}

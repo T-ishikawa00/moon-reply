@@ -1,0 +1,245 @@
+{
+  "schema_version": "m2-p4-i3-r1-quality-gate-plan-v1",
+  "task_id": "M2-P4-I3-R1-FINAL-PLAN",
+  "status": "final_planning_only",
+  "gate_owner": "application",
+  "achieved_score": null,
+  "implementation_authorized": false,
+  "pb06_boundary": {
+    "subjective_prose_quality": "PB-06 may report prose-quality evidence, but subjective wording preferences do not independently define terminal product availability.",
+    "user_unusable_or_unsafe": "Application-owned deterministic and material semantic checks define blocking disposition.",
+    "invariant": "A model-provided major label cannot make TEMPLATE_GENERICITY, BRAND_TONE, or REPETITION terminal by itself."
+  },
+  "always_nonblocking_qa_findings": {
+    "codes": [
+      "TEMPLATE_GENERICITY",
+      "BRAND_TONE",
+      "REPETITION"
+    ],
+    "disposition": "qa_log_and_future_improvement",
+    "terminal_stop": false
+  },
+  "blocking_when_materially_present": {
+    "codes": [
+      "FACT_FIDELITY",
+      "ASSUMPTION_AS_FACT",
+      "DECISION_ALLOWED",
+      "SAFETY_REGRESSION",
+      "UNSUPPORTED_CERTAINTY",
+      "ACTION_CONSISTENCY",
+      "THREE_DAY_PLAN_CONSISTENCY",
+      "MESSAGE_POLICY_CONSISTENCY",
+      "REVIEW_CONDITION_PRESENT"
+    ],
+    "rule": "Block only on a cited material defect that makes the report factually wrong, policy-inconsistent, unsafe, internally contradictory, or unusable."
+  },
+  "conditional_dispositions": {
+    "REQUIRED_SECTION_MEANING": {
+      "blocking": "The selected user request is substantively unanswered.",
+      "nonblocking": "The answer is present and usable but could be warmer, more specific, or more polished."
+    },
+    "MESSAGE_POLICY_CONSISTENCY": {
+      "nonblocking": "The draft is usable and semantically consistent but slightly stiff or stylistically imperfect.",
+      "blocking_conditions": [
+        "draft is not copy-ready",
+        "candidate meaning is materially changed",
+        "draft contradicts the application-owned decision",
+        "an explicit user constraint is violated"
+      ]
+    }
+  },
+  "deterministic_check_candidates": [
+    {
+      "code": "optional_message_present_but_draft_absent",
+      "evidence": "typed candidate status and draft presence",
+      "proposed_disposition": "blocking_when_selected_request_requires_draft"
+    },
+    {
+      "code": "message_owner_or_status_mismatch",
+      "evidence": "message_id, author, status, sequence, and source_refs",
+      "proposed_disposition": "blocking"
+    },
+    {
+      "code": "added_question",
+      "evidence": "question count delta and user goal",
+      "proposed_disposition": "blocking_when_unsupported"
+    },
+    {
+      "code": "added_invitation",
+      "evidence": "invitation presence delta and user goal",
+      "proposed_disposition": "blocking_when_unsupported"
+    },
+    {
+      "code": "added_emoji",
+      "evidence": "emoji count delta and explicit constraints or pattern evidence",
+      "proposed_disposition": "blocking_when_explicit_no_emoji_or_unsupported_material_shift"
+    },
+    {
+      "code": "register_shift",
+      "evidence": "candidate and draft register",
+      "proposed_disposition": "blocking_when_material_and_unjustified"
+    },
+    {
+      "code": "large_length_ratio",
+      "evidence": "character length ratio",
+      "proposed_disposition": "qa_signal_only_until_contextual_threshold_is_validated"
+    },
+    {
+      "code": "invitation_strength_increase",
+      "evidence": "typed invitation specificity delta",
+      "proposed_disposition": "blocking_when_unsupported"
+    },
+    {
+      "code": "commitment_increase",
+      "evidence": "typed commitment strength delta",
+      "proposed_disposition": "blocking_when_unsupported"
+    },
+    {
+      "code": "explicit_constraint_violation",
+      "evidence": "explicit constraint and draft feature",
+      "proposed_disposition": "blocking"
+    },
+    {
+      "code": "decision_draft_consistency",
+      "evidence": "application-owned decision and recommended draft presence or action",
+      "proposed_disposition": "blocking"
+    }
+  ],
+  "evaluation_strategy": {
+    "canonical_structural_suite": {
+      "cases": 64,
+      "categories": 8,
+      "cases_per_category": 8,
+      "execution_in_this_task": false
+    },
+    "provider_diagnostic_proposal": {
+      "cases": 16,
+      "separately_authorized_execution_required": true,
+      "distribution": {
+        "relationship": 3,
+        "candidate_style": 3,
+        "incoming_message": 2,
+        "precedence": 2,
+        "purpose_or_constraint": 2,
+        "pattern_channel_language": 1,
+        "ownership_dialogue_act": 1,
+        "power_safety_privacy_repeat": 2
+      }
+    },
+    "stability_proposal": {
+      "representative_input_count": "six_to_eight",
+      "runs_per_input": 3,
+      "compare": [
+        "decision",
+        "register_level",
+        "question_count",
+        "invitation_strength",
+        "affection_strength",
+        "message_length",
+        "hard_fail_count"
+      ],
+      "execution_in_this_task": false
+    },
+    "blind_human_review": {
+      "source_and_version_hidden": true,
+      "variants": [
+        "current_I3",
+        "future_R1",
+        "original_candidate"
+      ],
+      "questions": [
+        "本人が送りそうか",
+        "関係に合うか",
+        "人格が急に変わっていないか",
+        "そのまま送れるか",
+        "相手への負担が過剰でないか",
+        "今夜の判断へ納得できるか",
+        "JPY 980価値があるか"
+      ],
+      "execution_in_this_task": false
+    },
+    "primary_success_metrics": [
+      "自分らしい",
+      "関係性に合う",
+      "そのまま送れる",
+      "判断に納得できる",
+      "送ったあと落ち着ける",
+      "不要な圧力をかけない"
+    ],
+    "prohibited_outcome_labels": [
+      "相手から返信が来た",
+      "会えた",
+      "復縁した"
+    ]
+  },
+  "privacy_plan": {
+    "unnecessary_pii_reproduction": "prohibited",
+    "raw_candidate_in_docs_console_error_inspection": "prohibited_for_real_user_material",
+    "raw_candidate_in_persistent_style_profile": "prohibited",
+    "persistent_other_person_profile": "prohibited",
+    "raw_message_retention": "future_minimization_requirement",
+    "explicit_deletion": "future_release_requirement",
+    "repeated_raw_candidate_across_stages": "must_be_reconsidered",
+    "future_stage_minimization_candidate": {
+      "raw_candidate_stages": [
+        "PB-01",
+        "PB-04"
+      ],
+      "typed_only_stages": [
+        "PB-05",
+        "PB-06"
+      ],
+      "typed_material": [
+        "style_profile",
+        "edit_metadata",
+        "style_delta",
+        "communicative_intent_delta"
+      ]
+    },
+    "prompt_injection_treatment": "untrusted_data",
+    "decision_evidence_preservation": "Privacy reduction must retain sufficient typed decision evidence."
+  },
+  "repeat_consultation_plan": {
+    "without_material_change": [
+      "do not add interpretations",
+      "do not strengthen reassurance",
+      "do not worsen predictions",
+      "state briefly that no new material supports changing the prior decision",
+      "keep any action or aftercare proportionate"
+    ],
+    "with_material_change": "Reevaluate only the changed typed facts and their consequences.",
+    "future_product_policy_candidates": [
+      "repeat_charge_control",
+      "repeat_generation_control",
+      "dependency_prevention"
+    ],
+    "history_or_database_implementation_in_this_task": false
+  },
+  "version_drift_plan": {
+    "minimum_success_run_record": [
+      "model_version",
+      "prompt_bundle_version",
+      "schema_version",
+      "quality_suite_version",
+      "application_policy_version"
+    ],
+    "representative_regression_required_when_changed": [
+      "model",
+      "Prompt",
+      "Schema",
+      "Policy",
+      "grounding",
+      "validator",
+      "renderer_information_hierarchy"
+    ],
+    "invariant": "One 64-case pass is not a permanent guarantee."
+  },
+  "task_execution_boundary": {
+    "openai_calls": 0,
+    "db_operations": 0,
+    "migrations": 0,
+    "holdout_use": 0,
+    "external_evaluation_use": 0,
+    "real_user_data": 0
+  }
+}
