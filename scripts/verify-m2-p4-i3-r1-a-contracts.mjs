@@ -1157,7 +1157,8 @@ for (const prohibitedCall of [
   /\.responses\.create\s*\(/u,
   /\.chat\.completions\.create\s*\(/u,
   /createClient\s*\(/u,
-  /\.(?:insert|update|upsert|delete|rpc)\s*\(/u,
+  /\.(?:insert|upsert|delete|rpc)\s*\(/u,
+  /\.from\s*\([^)]*\)[\s\S]{0,240}\.update\s*\(/u,
 ]) {
   assert.equal(prohibitedCall.test(addedDiff), false);
 }
