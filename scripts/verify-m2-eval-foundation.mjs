@@ -193,6 +193,10 @@ const m2p4I1cAcceptanceSyncPaths = new Set([
 ]);
 const m2p4I2BaselineCommit =
   "20d4178e3a63026128f3a25d052196c7161e7e27";
+const m2p4I2AcceptedImplementationCommit =
+  "410714875903ae61b5bcdc6cce90030f5679b3b3";
+const m2p4I2CapabilityManifestPath =
+  "evals/runtime/m2-p4-i2-capabilities-v1.json";
 const m2p4I2VerifierPath =
   "scripts/verify-m2-p4-i2-report-ia.mjs";
 const m2p4I2ExactPaths = new Set([
@@ -212,6 +216,16 @@ const m2p4I2ExactPaths = new Set([
   "docs/CODEX_HANDOFF.md",
   m2p4I1bVerifierPath,
   m2p4I1cVerifierPath,
+]);
+const m2p4I2AcceptanceSyncPaths = new Set([
+  m2p4I2CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  m2p4I2VerifierPath,
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -4002,9 +4016,28 @@ function verifyScopeAndProhibitedImplementation() {
           .sort()
       : [];
   const m2p4I2TaskPaths = currentTaskPaths(m2p4I2BaselineCommit);
+  const m2p4I2ImplementationDiff = runGit([
+    "diff",
+    "--name-only",
+    m2p4I2BaselineCommit,
+    m2p4I2AcceptedImplementationCommit,
+    "--",
+  ]);
+  const m2p4I2ImplementationPaths =
+    m2p4I2ImplementationDiff.status === 0
+      ? m2p4I2ImplementationDiff.stdout
+          .split(/\r?\n/u)
+          .map((item) => item.trim().replaceAll("\\", "/"))
+          .filter(Boolean)
+          .sort()
+      : [];
+  const m2p4I2AcceptanceSyncTaskPaths = currentTaskPaths(
+    m2p4I2AcceptedImplementationCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
+  const m2p4I2Manifest = readJson(m2p4I2CapabilityManifestPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4421,6 +4454,76 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I2 changes exactly 16 literal allowlisted paths without prefix or future-path authorization",
       expected: expectedM2p4I2TaskPaths,
       actual: m2p4I2TaskPaths,
+    });
+  }
+  if (
+    m2p4I2ImplementationDiff.status !== 0 ||
+    m2p4I2ImplementationPaths.length !== 16 ||
+    JSON.stringify(m2p4I2ImplementationPaths) !==
+      JSON.stringify(expectedM2p4I2TaskPaths)
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i2_implementation_snapshot",
+      invariant:
+        "accepted M2-P4-I2 historical implementation snapshot is exactly 16 literal paths",
+      expected: expectedM2p4I2TaskPaths,
+      actual: m2p4I2ImplementationPaths,
+    });
+  }
+  const expectedM2p4I2AcceptanceSyncPaths = [
+    ...m2p4I2AcceptanceSyncPaths,
+  ].sort();
+  if (
+    m2p4I2AcceptanceSyncTaskPaths.length !== 8 ||
+    new Set(m2p4I2AcceptanceSyncTaskPaths).size !== 8 ||
+    JSON.stringify(m2p4I2AcceptanceSyncTaskPaths) !==
+      JSON.stringify(expectedM2p4I2AcceptanceSyncPaths) ||
+    m2p4I2AcceptanceSyncTaskPaths.some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i2_acceptance_sync",
+      invariant:
+        "M2-P4-I2 acceptance sync changes exactly eight literal allowlisted paths",
+      expected: expectedM2p4I2AcceptanceSyncPaths,
+      actual: m2p4I2AcceptanceSyncTaskPaths,
+    });
+  }
+  const expectedM2p4I2Snapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: m2p4I2BaselineCommit,
+    end_commit_sha: m2p4I2AcceptedImplementationCommit,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  if (
+    m2p4I2Manifest?.task_id !== "M2-P4-I2" ||
+    m2p4I2Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I2Manifest?.accepted_implementation_commit !==
+      m2p4I2AcceptedImplementationCommit ||
+    m2p4I2Manifest?.baseline !== m2p4I2BaselineCommit ||
+    JSON.stringify(m2p4I2Manifest?.implementation_snapshot) !==
+      JSON.stringify(expectedM2p4I2Snapshot) ||
+    JSON.stringify(m2p4I2Manifest?.exact_mutation_paths) !==
+      JSON.stringify([...m2p4I2ExactPaths]) ||
+    m2p4I2Manifest?.i3_status !== "not_started"
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I2CapabilityManifestPath,
+      pathName: "$",
+      invariant:
+        "M2-P4-I2 is accepted complete with an immutable exact 16-path snapshot and I3 not started",
+      expected: {
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit: m2p4I2AcceptedImplementationCommit,
+        implementation_snapshot: expectedM2p4I2Snapshot,
+        exact_mutation_paths: [...m2p4I2ExactPaths],
+        i3_status: "not_started",
+      },
+      actual: m2p4I2Manifest,
     });
   }
   const declaredM2p4I1bPaths = Array.isArray(

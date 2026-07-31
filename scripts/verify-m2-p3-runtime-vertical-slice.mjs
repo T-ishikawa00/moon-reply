@@ -20,6 +20,8 @@ const i1cAcceptedImplementationSha =
   "b523349ec33c36a90c645d4a1b7a6d37832af151";
 const i2BaselineSha =
   "20d4178e3a63026128f3a25d052196c7161e7e27";
+const i2AcceptedImplementationSha =
+  "410714875903ae61b5bcdc6cce90030f5679b3b3";
 const i2ExactPaths = [
   "app/review/runtime/i2/page.tsx",
   "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
@@ -37,6 +39,16 @@ const i2ExactPaths = [
   "docs/CODEX_HANDOFF.md",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
+const i2AcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
@@ -531,6 +543,9 @@ const i1bRuntimeManifest = json(
 );
 const i1cRuntimeManifest = json(
   "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+);
+const i2RuntimeManifest = json(
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
 );
 const dependencyAuditSummary = json(
   "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
@@ -1404,6 +1419,24 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const expectedI2Paths = [...i2ExactPaths].sort((left, right) =>
     left.localeCompare(right, "en"),
   );
+  const historicalI2Paths = gitText([
+    "diff",
+    "--name-only",
+    i2BaselineSha,
+    i2AcceptedImplementationSha,
+    "--",
+  ])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right, "en"));
+  const actualI2AcceptanceSyncPaths = currentTaskPaths(
+    i2AcceptedImplementationSha,
+  );
+  const expectedI2AcceptanceSyncPaths = [...i2AcceptanceSyncPaths].sort(
+    (left, right) => left.localeCompare(right, "en"),
+  );
+  const i2Snapshot = i2RuntimeManifest.implementation_snapshot;
   const protectedI2Diff = gitText([
     "diff",
     "--name-only",
@@ -1436,6 +1469,38 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         (item) => !item.includes("*") && !item.endsWith("/"),
       ),
     `I2 exact renderer/static-preview scope differs: ${actualI2Paths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    JSON.stringify(historicalI2Paths) === JSON.stringify(expectedI2Paths) &&
+      actualI2AcceptanceSyncPaths.length === 8 &&
+      new Set(actualI2AcceptanceSyncPaths).size === 8 &&
+      JSON.stringify(actualI2AcceptanceSyncPaths) ===
+        JSON.stringify(expectedI2AcceptanceSyncPaths) &&
+      actualI2AcceptanceSyncPaths.every(
+        (item) => !item.includes("*") && !item.endsWith("/"),
+      ),
+    `I2 accepted snapshot or exact acceptance-sync scope differs: ${actualI2AcceptanceSyncPaths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    i2RuntimeManifest.task_id === "M2-P4-I2" &&
+      i2RuntimeManifest.status === "human_chatgpt_accepted_complete" &&
+      i2RuntimeManifest.accepted_implementation_commit ===
+        i2AcceptedImplementationSha &&
+      i2RuntimeManifest.baseline === i2BaselineSha &&
+      JSON.stringify(i2Snapshot) ===
+        JSON.stringify({
+          type: "historical_commit_range",
+          base_commit_sha: i2BaselineSha,
+          end_commit_sha: i2AcceptedImplementationSha,
+          include_working_tree: false,
+          immutable_snapshot: true,
+        }) &&
+      JSON.stringify(i2RuntimeManifest.exact_mutation_paths) ===
+        JSON.stringify(i2ExactPaths) &&
+      i2RuntimeManifest.i3_status === "not_started",
+    "I2 accepted renderer-only successor manifest differs",
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

@@ -9,6 +9,8 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
+const acceptedImplementationSha =
+  "410714875903ae61b5bcdc6cce90030f5679b3b3";
 const exactPaths = [
   "app/review/runtime/i2/page.tsx",
   "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
@@ -32,6 +34,16 @@ const exactRendererPaths = [
   "app/globals.css",
   "components/runtime/RuntimeAssessmentForm.tsx",
   "components/runtime/RuntimeAssessmentNote.tsx",
+];
+const exactAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ];
 const sectionOrder = [
   "tonight-action",
@@ -100,9 +112,9 @@ function sorted(items) {
   return [...items].sort((left, right) => left.localeCompare(right, "en"));
 }
 
-function currentTaskPaths() {
+function currentTaskPaths(startSha = baselineSha) {
   const paths = new Set(
-    gitText(["diff", "--name-only", baselineSha, "--"])
+    gitText(["diff", "--name-only", startSha, "--"])
       .split(/\r?\n/gu)
       .map((item) => item.trim().replaceAll("\\", "/"))
       .filter(Boolean),
@@ -121,7 +133,29 @@ function currentTaskPaths() {
   return sorted(paths);
 }
 
+function historicalPaths(startSha, endSha) {
+  return sorted(
+    gitText(["diff", "--name-only", startSha, endSha, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
+}
+
 gitText(["cat-file", "-e", `${baselineSha}^{commit}`]);
+gitText(["cat-file", "-e", `${acceptedImplementationSha}^{commit}`]);
+gitText([
+  "merge-base",
+  "--is-ancestor",
+  baselineSha,
+  acceptedImplementationSha,
+]);
+gitText([
+  "merge-base",
+  "--is-ancestor",
+  acceptedImplementationSha,
+  "HEAD",
+]);
 gitText(["merge-base", "--is-ancestor", baselineSha, "HEAD"]);
 
 const actualPaths = currentTaskPaths();
@@ -130,6 +164,20 @@ assert.equal(exactPaths.length, 16);
 assert.equal(new Set(exactPaths).size, 16);
 assert.equal(exactPaths.some((item) => item.includes("*")), false);
 assert.equal(exactPaths.some((item) => item.endsWith("/")), false);
+assert.deepEqual(
+  historicalPaths(baselineSha, acceptedImplementationSha),
+  sorted(exactPaths),
+);
+const acceptanceSyncPaths = currentTaskPaths(acceptedImplementationSha);
+assert.deepEqual(acceptanceSyncPaths, sorted(exactAcceptanceSyncPaths));
+assert.equal(exactAcceptanceSyncPaths.length, 8);
+assert.equal(new Set(exactAcceptanceSyncPaths).size, 8);
+assert.equal(
+  exactAcceptanceSyncPaths.some(
+    (item) => item.includes("*") || item.endsWith("/"),
+  ),
+  false,
+);
 
 const protectedDiff = gitResult([
   "diff",
@@ -239,14 +287,42 @@ assert.equal(
 );
 assert.equal(
   capabilities.status,
-  "implementation_pending_human_chatgpt_review",
+  "human_chatgpt_accepted_complete",
+);
+assert.equal(
+  capabilities.accepted_implementation_commit,
+  acceptedImplementationSha,
 );
 assert.equal(capabilities.baseline, baselineSha);
+assert.deepEqual(capabilities.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  include_working_tree: false,
+  immutable_snapshot: true,
+});
 assert.deepEqual(capabilities.exact_mutation_paths, exactPaths);
 assert.equal(capabilities.field_disposition_asset,
   "evals/runtime/m2-p4-i2-field-disposition-v1.json");
 assert.equal(capabilities.selected_intent_mappings, 6);
 assert.equal(capabilities.static_preview_route, "/review/runtime/i2");
+assert.deepEqual(capabilities.human_visual_qa, {
+  desktop: "pass",
+  mobile: "pass",
+  mobile_width_px: 399,
+  horizontal_overflow: 0,
+  content_clipping: 0,
+  tonight_answer_visible: true,
+  draft_prioritized: true,
+  action_sections_readable: true,
+  three_day_timeline_responsive: true,
+  footer_rendered: true,
+});
+assert.deepEqual(capabilities.non_blocking_backlog, [
+  "mobile tonight-action heading wrap",
+  "slightly tall cover",
+  "intent-link affordance",
+]);
 for (const key of [
   "openai_calls",
   "db_operations",
@@ -399,6 +475,11 @@ for (const forbidden of [
 }
 
 console.log("M2_P4_I2_REPORT_INFORMATION_ARCHITECTURE: PASS");
+console.log("accepted_implementation_commit: 410714875903ae61b5bcdc6cce90030f5679b3b3");
+console.log("implementation_snapshot: 16/16");
+console.log("acceptance_sync_scope: 8/8");
+console.log("desktop_visual_qa: PASS");
+console.log("mobile_399px_visual_qa: PASS");
 console.log("exact_scope: 16/16");
 console.log("renderer_exceptions: 4/4");
 console.log("unauthorized_renderer_regressions: PASS");
