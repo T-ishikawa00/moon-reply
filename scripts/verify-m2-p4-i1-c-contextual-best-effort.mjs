@@ -12,6 +12,7 @@ const repositoryRoot = path.resolve(
 const i1cBaselineSha = "c27120eea067f91c5e9ef4447e382f55a329e158";
 const r1BaselineSha = "da520621b6569ff65ae652fb75945ed923b4fc3b";
 const r2BaselineSha = "bee69d1cf0f1792786eccc6508fb5e7184ad6241";
+const r3BaselineSha = "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
 const r1ExactPaths = [
   "lib/assessment/runtime/contextual-integrity-v3.ts",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -37,6 +38,17 @@ const r2ExactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
   "scripts/verify-m2-eval-foundation.mjs",
+];
+const r3ExactPaths = [
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
 ];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
@@ -133,6 +145,7 @@ const [
   },
   { aggregateSafetyV3 },
   { buildRelationshipSummaryV3, groundReportContentV3 },
+  { groundStructuredIntakeV3 },
   { validateStageOutput },
 ] = await Promise.all([
   import("../lib/assessment/runtime/application.ts"),
@@ -143,6 +156,7 @@ const [
   import("../lib/assessment/runtime/eligibility-v3.ts"),
   import("../lib/assessment/runtime/safety-aggregation-v3.ts"),
   import("../lib/assessment/runtime/report-grounding-v3.ts"),
+  import("../lib/assessment/runtime/structured-intake-grounding-v3.ts"),
   import("../lib/assessment/runtime/validation.ts"),
 ]);
 
@@ -157,6 +171,18 @@ const r1CommittedPaths = gitText([
   .map((item) => item.trim().replaceAll("\\", "/"))
   .filter(Boolean);
 assert.deepEqual(sorted(r1CommittedPaths), sorted(r1ExactPaths));
+
+const r2CommittedPaths = gitText([
+  "diff",
+  "--name-only",
+  r2BaselineSha,
+  r3BaselineSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.deepEqual(sorted(r2CommittedPaths), sorted(r2ExactPaths));
 
 const protectedHistoricalPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -559,6 +585,150 @@ for (const intake of [
   assert.doesNotThrow(() => validateContextualIntakeIntegrityV3(intake));
 }
 
+const applicationOwnedRequest = {
+  currentSituation: "Sanitized ordinary consultation input.",
+  optionalMessage: "Sanitized proposed reply.",
+  relationship: "matching_app",
+  requestedTopics: ["decide_send_or_wait", "draft_message"],
+  privacyAcknowledged: true,
+};
+
+const liveFailureEquivalentRawIntake = structuredClone(baselineIntake);
+liveFailureEquivalentRawIntake.relationship_stage = "other";
+liveFailureEquivalentRawIntake.decision_facts.relationship_stage = "ambiguous";
+liveFailureEquivalentRawIntake.decision_facts.selected_requests = ["relationship"];
+liveFailureEquivalentRawIntake.decision_facts.contact_state.proposed_message_present =
+  false;
+liveFailureEquivalentRawIntake.decision_facts.information_state.unresolved_fields.push(
+  "relationship_stage",
+  "contact_state.proposed_message_present",
+);
+liveFailureEquivalentRawIntake.context_inferences.push(
+  {
+    inference_id: "I005",
+    field_path: "contact_state.proposed_message_present",
+    supporting_fact_ids: ["F001"],
+    source_refs: ["input:current_situation"],
+    rationale_summary: "The raw output treated proposal presence as inferred.",
+  },
+  {
+    inference_id: "I006",
+    field_path: "relationship_stage",
+    supporting_fact_ids: ["F001"],
+    source_refs: ["followup:relationship"],
+    rationale_summary: "The raw output cited mismatched relationship metadata.",
+  },
+);
+assertCanonicalAndProviderPass(liveFailureEquivalentRawIntake);
+expectIntegrityInvalid(liveFailureEquivalentRawIntake);
+const rawLiveFailureSnapshot = structuredClone(liveFailureEquivalentRawIntake);
+const groundedLiveFailureIntake = groundStructuredIntakeV3(
+  applicationOwnedRequest,
+  liveFailureEquivalentRawIntake,
+);
+assert.deepEqual(liveFailureEquivalentRawIntake, rawLiveFailureSnapshot);
+assert.equal(groundedLiveFailureIntake.relationship_stage, "matching_app");
+assert.equal(
+  groundedLiveFailureIntake.decision_facts.relationship_stage,
+  "matching_app",
+);
+assert.deepEqual(
+  groundedLiveFailureIntake.decision_facts.selected_requests,
+  applicationOwnedRequest.requestedTopics,
+);
+assert.equal(
+  groundedLiveFailureIntake.decision_facts.contact_state.proposed_message_present,
+  true,
+);
+assert.deepEqual(
+  groundedLiveFailureIntake.context_inferences.map(
+    (inference) => inference.inference_id,
+  ),
+  ["I001", "I002", "I003", "I004"],
+);
+assert.ok(
+  groundedLiveFailureIntake.decision_facts.information_state.unresolved_fields.every(
+    (fieldPath) =>
+      fieldPath !== "relationship_stage" &&
+      fieldPath !== "contact_state.proposed_message_present",
+  ),
+);
+assert.doesNotThrow(() =>
+  validateContextualIntakeIntegrityV3(groundedLiveFailureIntake),
+);
+
+const relationshipOnlyRaw = structuredIntake(
+  decisionFacts({
+    relationship_stage: "ambiguous",
+    information_state: { used_context_inference: true },
+  }),
+  ["relationship_stage"],
+);
+const relationshipOnlyGrounded = groundStructuredIntakeV3(
+  applicationOwnedRequest,
+  relationshipOnlyRaw,
+);
+assert.deepEqual(relationshipOnlyGrounded.context_inferences, []);
+assert.equal(
+  relationshipOnlyGrounded.decision_facts.information_state
+    .used_context_inference,
+  false,
+);
+assert.doesNotThrow(() =>
+  validateContextualIntakeIntegrityV3(relationshipOnlyGrounded),
+);
+
+for (const [optionalMessage, expected] of [
+  ["Use this reply.", true],
+  [null, false],
+  ["   ", false],
+]) {
+  const proposedRaw = structuredIntake(
+    decisionFacts({
+      contact_state: { proposed_message_present: !expected },
+      information_state: { used_context_inference: true },
+    }),
+    ["contact_state.proposed_message_present"],
+  );
+  const proposedGrounded = groundStructuredIntakeV3(
+    { ...applicationOwnedRequest, optionalMessage },
+    proposedRaw,
+  );
+  assert.equal(
+    proposedGrounded.decision_facts.contact_state.proposed_message_present,
+    expected,
+  );
+  assert.deepEqual(proposedGrounded.context_inferences, []);
+  assert.equal(
+    proposedGrounded.decision_facts.information_state.used_context_inference,
+    false,
+  );
+  assert.doesNotThrow(() =>
+    validateContextualIntakeIntegrityV3(proposedGrounded),
+  );
+}
+
+const sourceMismatchRaw = structuredClone(baselineIntake);
+sourceMismatchRaw.observed_facts.push({
+  ...structuredClone(sourceMismatchRaw.observed_facts[0]),
+  fact_id: "F002",
+  source_refs: ["followup:relationship", "input:current_situation"],
+});
+sourceMismatchRaw.context_inferences[0].supporting_fact_ids = ["F002", "F001"];
+sourceMismatchRaw.context_inferences[0].source_refs = ["input:optional_message"];
+expectIntegrityInvalid(sourceMismatchRaw);
+const sourceMismatchGrounded = groundStructuredIntakeV3(
+  applicationOwnedRequest,
+  sourceMismatchRaw,
+);
+assert.deepEqual(sourceMismatchGrounded.context_inferences[0].source_refs, [
+  "followup:relationship",
+  "input:current_situation",
+]);
+assert.doesNotThrow(() =>
+  validateContextualIntakeIntegrityV3(sourceMismatchGrounded),
+);
+
 const legalPracticalFacts = [
   explicitOnlyFacts,
   decisionFacts({
@@ -716,14 +886,28 @@ duplicateUnresolvedField.decision_facts.information_state.unresolved_fields.push
   "practical_reason.kind",
 );
 expectIntegrityInvalid(duplicateUnresolvedField);
-const integrityInvalidIntakes = [
+const invalidGroundedEvidenceIntakes = [
+  nonexistentFact,
+  duplicateInferenceId,
+  duplicateInferenceField,
+  inferredBoundary,
+  inferredAndUnresolved,
+];
+for (const intake of invalidGroundedEvidenceIntakes) {
+  const grounded = groundStructuredIntakeV3(applicationOwnedRequest, intake);
+  assertCanonicalAndProviderPass(grounded);
+  expectIntegrityInvalid(grounded);
+}
+for (const intake of [inferenceFlagFalse, emptyInferenceFlagTrue]) {
+  const grounded = groundStructuredIntakeV3(applicationOwnedRequest, intake);
+  assert.doesNotThrow(() => validateContextualIntakeIntegrityV3(grounded));
+}
+
+const runtimeIntegrityInvalidIntakes = [
   nonexistentFact,
   duplicateFactId,
   duplicateInferenceId,
   duplicateInferenceField,
-  unsupportedInferenceSource,
-  inferenceFlagFalse,
-  emptyInferenceFlagTrue,
   inferredAndUnresolved,
   inferredUnknown,
   inferredBoundary,
@@ -1087,11 +1271,17 @@ async function expectPb01IntegrityRejection(intake, index) {
   }
   assert.deepEqual(transport.calls, ["PB-01"]);
   assert.equal(repository.reports.size, 0);
+  const rawPb01Stage = [...repository.stageRuns.values()].find(
+    (stage) => stage.stageId === "PB-01",
+  );
+  assert.equal(rawPb01Stage?.status, "completed");
+  assert.deepEqual(rawPb01Stage?.completion?.outputJson, intake);
+  assert.equal(rawPb01Stage?.failure, undefined);
   assert.equal(transport.actualProviderCalls, 0);
   assert.equal(repository.actualSupabaseCalls, 0);
 }
 
-for (const [index, intake] of integrityInvalidIntakes.entries()) {
+for (const [index, intake] of runtimeIntegrityInvalidIntakes.entries()) {
   await expectPb01IntegrityRejection(intake, index);
 }
 
@@ -1174,6 +1364,60 @@ assert.equal(
 assert.equal(
   baselinePb06.input.report_content.relationship_summary,
   incomingGroundedSummary,
+);
+
+const liveFailureEquivalentOutputs = runtimeOutputs({
+  facts: baselineFacts,
+  inferredFields: baselineInferenceFields,
+  expectedDecision: "reply_now",
+});
+liveFailureEquivalentOutputs["PB-01"] = liveFailureEquivalentRawIntake;
+const liveFailureEquivalentRuntime = await runWithOutputs(
+  liveFailureEquivalentOutputs,
+  201,
+);
+assert.equal(liveFailureEquivalentRuntime.result.eligibility, "ready");
+assert.equal(liveFailureEquivalentRuntime.result.decision, "reply_now");
+assert.notEqual(
+  liveFailureEquivalentRuntime.result.report.decisionPlan.message_draft,
+  null,
+);
+assert.equal(liveFailureEquivalentRuntime.repository.reports.size, 1);
+assert.equal(
+  liveFailureEquivalentRuntime.result.report.content.relationship_summary,
+  incomingGroundedSummary,
+);
+const liveRawPb01Stage = [
+  ...liveFailureEquivalentRuntime.repository.stageRuns.values(),
+].find((stage) => stage.stageId === "PB-01");
+assert.equal(liveRawPb01Stage?.status, "completed");
+assert.deepEqual(
+  liveRawPb01Stage?.completion?.outputJson,
+  liveFailureEquivalentRawIntake,
+);
+const livePb02Request = liveFailureEquivalentRuntime.transport.requests.find(
+  (request) => request.stageId === "PB-02",
+);
+assert.deepEqual(
+  livePb02Request.input.structured_intake,
+  groundedLiveFailureIntake,
+);
+assert.notDeepEqual(
+  livePb02Request.input.structured_intake,
+  liveFailureEquivalentRawIntake,
+);
+for (const stageId of ["PB-03", "PB-04", "PB-05", "PB-06"]) {
+  const request = liveFailureEquivalentRuntime.transport.requests.find(
+    (candidate) => candidate.stageId === stageId,
+  );
+  assert.deepEqual(request.input.structured_intake, groundedLiveFailureIntake);
+}
+const livePb06Output = liveFailureEquivalentOutputs["PB-06"];
+assert.equal(
+  livePb06Output.semantic_checks.filter((finding) =>
+    ["major", "critical"].includes(finding.severity),
+  ).length,
+  0,
 );
 
 const reversedRelationshipSummary =
@@ -1349,9 +1593,26 @@ assert.deepEqual(capabilityManifest.r2_successor, {
     live_rerun_executed: false,
   },
 });
+assert.deepEqual(capabilityManifest.r3_successor, {
+  task_id: "M2-P4-I1-C-R3",
+  title: "PB-01 Evidence Canonicalization",
+  status: "implementation_pending_human_chatgpt_review",
+  baseline: {
+    commit: r3BaselineSha,
+  },
+  exact_mutation_paths: r3ExactPaths,
+  task_execution_evidence: {
+    openai_live_calls: 0,
+    database_operations: 0,
+    migrations: 0,
+    holdout_use: 0,
+    real_user_data: 0,
+    live_rerun_executed: false,
+  },
+});
 
 const changedPaths = new Set(
-  gitText(["diff", "--name-only", r2BaselineSha, "--"])
+  gitText(["diff", "--name-only", r3BaselineSha, "--"])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean),
@@ -1361,7 +1622,7 @@ for (const line of gitText(["status", "--porcelain=v1", "--untracked-files=all"]
   .filter(Boolean)) {
   changedPaths.add(line.slice(3).trim().replaceAll("\\", "/"));
 }
-assert.deepEqual(sorted(changedPaths), sorted(r2ExactPaths));
+assert.deepEqual(sorted(changedPaths), sorted(r3ExactPaths));
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("normal_information_gate_terminal: 0");
@@ -1373,7 +1634,9 @@ console.log("inferred_unresolved_exclusion: PASS");
 console.log("decision_facts_non_null: PASS");
 console.log("sparse_normal_cases_ready: 11/11");
 console.log("safety_blocked_cases: 1/1");
-console.log("integrity_invalid_runtime_cases: 12/12");
+console.log(
+  `integrity_invalid_runtime_cases: ${runtimeIntegrityInvalidIntakes.length}/${runtimeIntegrityInvalidIntakes.length}`,
+);
 console.log("duplicate_unresolved_integrity_case: 1/1");
 console.log("practical_schema_states: 3/3");
 console.log("invalid_practical_combinations: 3/3");
@@ -1393,10 +1656,21 @@ console.log("pb06_input_grounded: PASS");
 console.log("final_report_grounded: PASS");
 console.log("pb06_fail_closed_major_critical: 2/2");
 console.log("live_failure_equivalent_pb06_safety_regressions: 0");
+console.log("application_owned_intake_fields: PASS");
+console.log("inference_source_canonicalization: PASS");
+console.log("live_failure_equivalent_grounding: PASS");
+console.log("raw_pb01_evidence_preserved: PASS");
+console.log("downstream_grounded_intake: PASS");
+console.log(
+  `invalid_grounded_evidence_rejections: ${invalidGroundedEvidenceIntakes.length}/${invalidGroundedEvidenceIntakes.length}`,
+);
+console.log("full_fake_grounded_decision: reply_now");
+console.log("full_fake_grounded_report: 1");
 console.log("policy_parity: 40/40");
 console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
 console.log("protected_diff: 0");
 console.log("r1_historical_exact_scope: 12/12");
-console.log("exact_scope: 10/10");
+console.log("r2_historical_exact_scope: 10/10");
+console.log("exact_scope: 9/9");

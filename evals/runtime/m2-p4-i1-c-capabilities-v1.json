@@ -111,5 +111,32 @@
       "live_rerun_executed": false
     }
   },
+  "r3_successor": {
+    "task_id": "M2-P4-I1-C-R3",
+    "title": "PB-01 Evidence Canonicalization",
+    "status": "implementation_pending_human_chatgpt_review",
+    "baseline": {
+      "commit": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c"
+    },
+    "exact_mutation_paths": [
+      "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+      "lib/assessment/runtime/pipeline.ts",
+      "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+      "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+      "scripts/verify-m2-eval-foundation.mjs",
+      "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md"
+    ],
+    "task_execution_evidence": {
+      "openai_live_calls": 0,
+      "database_operations": 0,
+      "migrations": 0,
+      "holdout_use": 0,
+      "real_user_data": 0,
+      "live_rerun_executed": false
+    }
+  },
   "next": "one separately authorized synthetic live rerun after acceptance"
 }

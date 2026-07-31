@@ -171,3 +171,29 @@ Exact R2 mutation scope is 10 literal paths:
 10. `scripts/verify-m2-eval-foundation.mjs`
 
 The original I1-C 21-path and R1 12-path records remain immutable. The R2 verifier covers six Safety aggregation cases, four report-direction states, deliberately reversed PB-05 raw output, grounded PB-06 input and final report, major/critical PB-06 fail-closed behavior, the live-failure equivalent `normal_allowed -> none -> reply_now -> non-null draft -> report 1`, policy parity `40/40`, exact R2 scope `10/10`, protected diff `0`, and zero external execution. Automated PASS does not constitute Human / ChatGPT acceptance or provider-backed prose-quality evidence.
+
+## R3 PB-01 Evidence Canonicalization Successor
+
+- Task: `M2-P4-I1-C-R3`
+- Baseline: `2659c14d82fe2589d2e1cfc655c52c13b878dc7c`
+- Branch: `fix/m2-p4-i1-c-r3-intake-evidence-grounding`
+- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
+- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+
+R3 preserves Provider PB-01 output unchanged as Stage evidence, then deep-clones it for downstream grounding. The application makes request `relationship`, exact `requestedTopics`, and trimmed `optionalMessage` presence authoritative; removes contextual inferences and unresolved markers for `relationship_stage` and `contact_state.proposed_message_present`; rebuilds every remaining inference `source_refs` as a stable unique union of its existing supporting facts; and derives `used_context_inference` from the remaining inference count. It neither invents facts nor changes supporting IDs, inferred values, rationale, Schema, Prompt, catalog, or hash.
+
+The grounded object is revalidated against the canonical PB-01 Schema and the unchanged strict Contextual Integrity validator before PB-02. Missing supporting facts, duplicate inference IDs, duplicate inferred fields, forbidden boundary inference, and inferred/unresolved collisions remain rejected. Raw PB-01 evidence stays separate from the grounded object supplied to PB-02 through PB-06.
+
+Exact R3 mutation scope is 9 literal paths:
+
+1. `lib/assessment/runtime/structured-intake-grounding-v3.ts`
+2. `lib/assessment/runtime/pipeline.ts`
+3. `scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs`
+4. `evals/runtime/m2-p4-i1-c-capabilities-v1.json`
+5. `scripts/verify-m2-eval-foundation.mjs`
+6. `docs/phase2/TASK_M2_P4_I1_C_REVIEW.md`
+7. `docs/CURRENT_FOCUS.md`
+8. `docs/WBS.md`
+9. `docs/CODEX_HANDOFF.md`
+
+The original I1-C 21-path, R1 12-path, and R2 10-path records remain immutable. R3 regression evidence covers the `2026-07-31` live-failure equivalent, application-owned field correction, stable source-ref union, relationship-only inference removal, proposed-message true/false derivation, raw Stage evidence preservation, grounded PB-02-through-PB-06 input, full Fake `ready -> reply_now -> non-null draft -> report 1`, PB-06 major/critical fail-closed behavior, policy parity `40/40`, exact scope `9/9`, protected diff `0`, and zero external execution. Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed quality evidence, live execution, merge, release, or Milestone 2 completion.

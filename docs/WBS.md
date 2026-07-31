@@ -812,4 +812,19 @@ R1 does not authorize OpenAI live calls, DB operations, migrations, holdout use,
 
 R2 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, broader prose-quality work, or release.
 
+# M2-P4-I1-C-R3 PB-01 Evidence Canonicalization
+
+- [x] Preserve the original I1-C exact 21-path, R1 exact 12-path, and R2 exact 10-path histories unchanged.
+- [x] Freeze R3 baseline at `2659c14d82fe2589d2e1cfc655c52c13b878dc7c` and declare a separate exact 9-path successor without wildcard, prefix, or future-path authorization.
+- [x] Make request relationship, exact requested topics, and trimmed optional-message presence authoritative in a deep-cloned downstream PB-01 intake.
+- [x] Remove contextual inference and unresolved markers for application-owned relationship and proposed-message fields.
+- [x] Canonicalize remaining inference source refs from the stable unique union of existing supporting-fact source refs without inventing facts or changing supporting IDs.
+- [x] Preserve raw PB-01 Provider output as Stage evidence; revalidate and integrity-check only the grounded downstream object.
+- [x] Prove the `2026-07-31` live-failure equivalent reaches `ready -> reply_now -> non-null draft -> report 1`, while named invalid evidence remains rejected.
+- [x] Preserve policy parity `40/40`, sparse and Safety cases, PB-06 fail-closed behavior, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R3 scope `9/9`.
+- [ ] Human / ChatGPT review and acceptance.
+- [ ] After acceptance only: separately authorize one synthetic live rerun.
+
+R3 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, Schema/Prompt/catalog/hash changes, broader prose-quality work, or release.
+
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.
