@@ -255,6 +255,7 @@
           "value": "schedule_only",
           "evidence_state": "explicit",
           "source_refs": [
+            "input:current_situation",
             "input:requested_topics"
           ]
         },
@@ -523,6 +524,7 @@
           "value": "schedule_only",
           "evidence_state": "explicit",
           "source_refs": [
+            "input:current_situation",
             "input:requested_topics"
           ]
         },
@@ -561,7 +563,9 @@
           "intentional_nonstandard_expression": "absent",
           "possible_typo": "absent",
           "evidence_state": "explicit",
-          "source_refs": [],
+          "source_refs": [
+            "input:current_situation"
+          ],
           "unresolved_fields": [
             "established_shared_expression"
           ]
@@ -823,7 +827,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "b8dce0dd55ac98bd5162d09d201f3c72df953aeb5eb3c175d3968ad31b98ef8b",
+        "sha256_json": "1ac2638135d5f6c9109d464c2511608b838736ff976f2fbf464e7ff799d44ca6",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -867,7 +871,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "96a4f343f79a3a96c717c3a008024e9c39000167ead554d69b8103478dcdbe3c",
+        "sha256_json": "7bdc3aa14b4dabbece57aeb26fad3471c4557acbad875f4d3e90f81b08c54b5c",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -906,7 +910,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "9fbfcf6b65f4cf6b81f504182b0f0f776f344cd642ede6aa22848012e4f34957",
+        "sha256_json": "188b89ced6c431ac8c238ccccec4049c2cf7aa0a7a9efd36cb4b7dfc052be6d4",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -957,7 +961,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "88e45e30d614d80b4bba941c56f4a015a075a1215425f19fcc85d7f790dca74c",
+        "sha256_json": "abd386b925a284d1a943e9840ce626968777a43c696545e9cc1d87774e5ea386",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1008,7 +1012,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "ff41790c299327e6da15e4e170259da8f6f05ecd587aaac2751a5545b8e4696f",
+        "sha256_json": "9e1122c9a332707ea17022a221a3d196c9a3cbc10d51878c6d49629868c1cb30",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1059,7 +1063,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "c4dc6addf9ea8a0a06c70cfcdc36eebc3ffc3724f7a1186a5f39532cb9e67aaa",
+        "sha256_json": "aab58c709599cd48b7b3dc51003546e3e0c5890b63e9b7453c0079177042dcc4",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1115,7 +1119,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "eb0e58525f62ef360805ae0b1f31487cae1d618aed293cf3419e687f1c175c4e",
+        "sha256_json": "14152e1a88237d8bfac86bc26940d5d4262da8fcf43bfed1290d28f028c25432",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1195,7 +1199,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "be0a3851bd8125830bfb0e289afe9ffcbe60002bbeaf94f5d92cf49a109c0b3a",
+        "sha256_json": "a659ffc116af13b9e33bcd98a95f75026eb079adcd7ed549c180f27cc6aa7165",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1265,7 +1269,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "5d9540e80e276d3217fad1e777733add7564894f213b8e76bec24621ef46bed0",
+        "sha256_json": "803f0b4a541cb13047f49db00ad23b1022737f1f22852f521958bb9678c9901a",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1326,7 +1330,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "8bf6faba3a110cbe869d2a81d50629b0c28b09e9b63fed9be8728b51549c5e74",
+        "sha256_json": "af76ad2c449cd209ea50a261cf46317471713276f193dba403b8a1b3b159bca9",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1377,7 +1381,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "d82ace187cc9664ff0768ccc961d1f72f51dc973c5400189286b91ca0fc63a06",
+        "sha256_json": "d6ec3d8fab8d6f7c468eb15d737e40e20656016e0b0a7769143958b65352deaf",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1425,7 +1429,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "40b8f6040b5fa9f4d2fc0e8034b5f979ac1969f92c03577ea80661ebf4d2fa65",
+        "sha256_json": "6e032834599a03c7057547069cefab122fc972d690a120871e843a32c659c8f1",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1473,7 +1477,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "a52e57b3cdf7b1f5faddb063c15c92a4e0aee4340962639423b9bc2a5f903603",
+        "sha256_json": "d329010cee353caaa38badd1a76712c4a75fd955fb7174ee5a59a18b86586e01",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1512,7 +1516,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "051752e4e5ab6c59f70e74e294c4810856d1bbea81862ff9f9df2b45ccd4e92e",
+        "sha256_json": "da7466214fca9a9d66ea583f5efeb6d5c008f56d4952b5291e8e92624e035e5d",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1554,7 +1558,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "2365baa767c60f64d89c8affd4431c5938e236a3eeac9bde1ca0e77f0e126d9c",
+        "sha256_json": "9d398766300c7c487bfbb6297452e34cc82268ec397ca0dcab98d79f7cdf31fc",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1593,7 +1597,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "4a1e15a116b89a461b7d63911e6427a5b9efd180718b483ebe3d5b7f3bf2ea98",
+        "sha256_json": "45b3787cb3f868be127c300c370cca57b9e1efde19b99c14d34ed81d3aaf9cbb",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1635,7 +1639,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "f78b655240744e1b8c011bc953025e48e1311288ae7b14ef95eb13538eb9b215",
+        "sha256_json": "145f7b09d8dbfba449910b560b7152148eb72ec263a9f3699975e5a31112be40",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1679,7 +1683,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "027c582d3e461f2934c471fe03db9e5cd5f0e20a1255778aad26eed3bdb58355",
+        "sha256_json": "27e9c57d0af77447cba64489857d9ab2af5e0b873432766cbdb59ffb77ddeffb",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -1754,7 +1758,7 @@
       },
       "expected_grounded_result": {
         "status": "pass",
-        "sha256_json": "360599a6ce9b98fa8a1e693662137271b47f0e9db6af3bf32077496421aa3a51",
+        "sha256_json": "d4df322327af50ef3d6684166c4dc049e07c28c8f8c36196ada08114d13fe5a9",
         "schema_version": "pipeline-schema-v4.0.0",
         "writing_context_integrity": "pass",
         "decision_facts_v3_parity": true,
@@ -2260,6 +2264,148 @@
       },
       "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
       "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-017",
+      "scenario": "incoming ownership sourced from optional message",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership/0/source_refs",
+            "value": [
+              "input:optional_message"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4",
+      "owner": "application_integrity",
+      "runtime_case_lookup_authority": false
+    },
+    {
+      "case_id": "GROUND-I-018",
+      "scenario": "incoming profile sourced from optional message",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/source_refs",
+            "value": [
+              "input:optional_message"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4",
+      "owner": "application_integrity",
+      "runtime_case_lookup_authority": false
+    },
+    {
+      "case_id": "GROUND-I-019",
+      "scenario": "no-emoji constraint sourced from optional message",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate without emoji.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/explicit_user_constraints",
+            "value": [
+              {
+                "constraint_id": "UC001",
+                "kind": "no_emoji",
+                "bounded_summary": null,
+                "source_refs": [
+                  "input:optional_message"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4",
+      "owner": "application_integrity",
+      "runtime_case_lookup_authority": false
+    },
+    {
+      "case_id": "GROUND-I-020",
+      "scenario": "user goal detail sourced only from relationship and optional message",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic affectionate unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/user_goal_detail",
+            "value": {
+              "value": "express_affection",
+              "evidence_state": "explicit",
+              "source_refs": [
+                "input:optional_message",
+                "input:relationship"
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/source_refs",
+            "value": [
+              "input:current_situation",
+              "input:optional_message",
+              "input:relationship",
+              "input:requested_topics"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4",
+      "owner": "application_integrity",
+      "runtime_case_lookup_authority": false
     }
   ]
 }

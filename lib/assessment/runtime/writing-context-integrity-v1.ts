@@ -26,6 +26,18 @@ const forbiddenSourceTarget =
 const fullUuid =
   /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/iu;
 
+const currentSituationSource = "input:current_situation";
+const relationshipSource = "input:relationship";
+const requestedTopicsSource = "input:requested_topics";
+const optionalMessageSource = "input:optional_message";
+
+const conversationOwnedStatuses = new Set([
+  "incoming",
+  "sent_by_user",
+  "quoted_history",
+  "consultation_narrative",
+]);
+
 function invalid(): never {
   throw new M2RuntimeError("M2_WRITING_CONTEXT_INVALID");
 }
@@ -208,6 +220,16 @@ function verifyMessageOwnership(writingContext: Record<string, unknown>) {
     ids.add(item.message_id);
     sequences.add(item.sequence);
     byId.set(item.message_id, item);
+    const refs = strings(item.source_refs);
+    if (item.status !== "unsent_candidate" && refs.includes(optionalMessageSource)) {
+      invalid();
+    }
+    if (
+      conversationOwnedStatuses.has(String(item.status)) &&
+      !refs.includes(currentSituationSource)
+    ) {
+      invalid();
+    }
     if (item.status === "incoming" && item.author !== "other_person") invalid();
     if (
       (item.status === "sent_by_user" || item.status === "unsent_candidate") &&
@@ -218,6 +240,7 @@ function verifyMessageOwnership(writingContext: Record<string, unknown>) {
   }
 
   const incomingId = incomingProfile.message_id;
+  const incomingRefs = strings(incomingProfile.source_refs);
   if (incomingId !== null) {
     if (typeof incomingId !== "string") invalid();
     const target = byId.get(incomingId);
@@ -225,6 +248,19 @@ function verifyMessageOwnership(writingContext: Record<string, unknown>) {
       !target ||
       target.author !== "other_person" ||
       target.status !== "incoming"
+    ) {
+      invalid();
+    }
+    if (
+      !sameStrings(incomingRefs, [currentSituationSource]) ||
+      !sameStrings(strings(target.source_refs), incomingRefs)
+    ) {
+      invalid();
+    }
+  } else {
+    if (
+      incomingProfile.evidence_state !== "unresolved" ||
+      incomingRefs.length !== 0
     ) {
       invalid();
     }
@@ -341,7 +377,7 @@ function verifyConstraints(writingContext: Record<string, unknown>) {
     }
     ids.add(constraint.constraint_id);
     const refs = strings(constraint.source_refs);
-    if (refs.length === 0) invalid();
+    if (!sameStrings(refs, [currentSituationSource])) invalid();
     if (constraint.kind === "custom_explicit_constraint") {
       if (
         typeof constraint.bounded_summary !== "string" ||
@@ -352,6 +388,81 @@ function verifyConstraints(writingContext: Record<string, unknown>) {
     } else if (constraint.bounded_summary !== null) {
       invalid();
     }
+  }
+}
+
+function verifyFieldSpecificProvenance(
+  request: AssessmentInput,
+  writingContext: Record<string, unknown>,
+) {
+  const goal = writingContext.user_goal_detail;
+  const communication = writingContext.communication_pattern;
+  const repeat = writingContext.repeat_consultation_state;
+  const channel = writingContext.channel_and_timing;
+  const language = writingContext.language_and_expression;
+  if (
+    !isObject(goal) ||
+    !isObject(communication) ||
+    !isObject(repeat) ||
+    !isObject(channel) ||
+    !isObject(language)
+  ) {
+    invalid();
+  }
+
+  const goalRefs = strings(goal.source_refs);
+  if (
+    goalRefs.some(
+      (ref) =>
+        ref !== currentSituationSource && ref !== requestedTopicsSource,
+    )
+  ) {
+    invalid();
+  }
+  // RequestedTopic values describe requested report outputs, not an exact
+  // communication goal. A resolved goal therefore needs consultation evidence.
+  if (
+    goal.value !== "unknown" &&
+    goal.evidence_state !== "unresolved" &&
+    !goalRefs.includes(currentSituationSource)
+  ) {
+    invalid();
+  }
+
+  for (const currentSituationOwned of [communication, repeat]) {
+    const refs = strings(currentSituationOwned.source_refs);
+    if (
+      refs.some((ref) => ref !== currentSituationSource) ||
+      (currentSituationOwned.evidence_state !== "unresolved" &&
+        !sameStrings(refs, [currentSituationSource]))
+    ) {
+      invalid();
+    }
+  }
+
+  const channelRefs = strings(channel.source_refs);
+  const relationshipChannelAllowed =
+    request.relationship === "matching_app" && channel.channel === "matching_app";
+  if (
+    channelRefs.some(
+      (ref) =>
+        ref !== currentSituationSource &&
+        !(relationshipChannelAllowed && ref === relationshipSource),
+    ) ||
+    (channel.evidence_state !== "unresolved" && channelRefs.length === 0)
+  ) {
+    invalid();
+  }
+
+  const languageRefs = strings(language.source_refs);
+  if (
+    languageRefs.some(
+      (ref) =>
+        ref !== currentSituationSource && ref !== optionalMessageSource,
+    ) ||
+    (language.evidence_state !== "unresolved" && languageRefs.length === 0)
+  ) {
+    invalid();
   }
 }
 
@@ -526,6 +637,7 @@ export function validateWritingContextIntegrityV1(
   verifyMessageOwnership(writingContext);
   verifyRelationship(request, writingContext);
   verifyConstraints(writingContext);
+  verifyFieldSpecificProvenance(request, writingContext);
   verifyRepeatState(writingContext, structuredIntake);
   verifyNestedUnresolved(writingContext);
   verifyTopUnresolved(writingContext);

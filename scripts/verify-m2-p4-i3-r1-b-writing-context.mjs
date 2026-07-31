@@ -8,6 +8,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const baselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
+const reviewCorrectionBase = "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
 const stageIds = ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
 const exactPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
@@ -29,6 +30,17 @@ const exactPaths = [
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const reviewCorrectionPaths = [
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
@@ -91,9 +103,9 @@ function historicalPaths(start, end) {
   return sorted(normalizedPaths(git(["diff", "--name-only", start, end, "--"])));
 }
 
-function currentTaskPaths() {
+function currentTaskPaths(base) {
   const result = new Set(
-    normalizedPaths(git(["diff", "--name-only", baselineSha, "--"])),
+    normalizedPaths(git(["diff", "--name-only", base, "--"])),
   );
   for (const line of git([
     "status",
@@ -119,7 +131,9 @@ function assertLiteralSet(actual, expected) {
 
 assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", baselineSha, "HEAD"]));
 assert.equal(exactPaths.length, 22);
-assertLiteralSet(currentTaskPaths(), exactPaths);
+assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
+assert.equal(reviewCorrectionPaths.length, 9);
+assertLiteralSet(currentTaskPaths(reviewCorrectionBase), reviewCorrectionPaths);
 
 const protectedPaths = [
   "lib/assessment/runtime/service.ts",
@@ -150,7 +164,7 @@ for (const protectedPath of protectedPaths) {
   );
 }
 assert.equal(
-  currentTaskPaths().some((item) =>
+  currentTaskPaths(baselineSha).some((item) =>
     /^(app|components|supabase|evals\/(development|holdout))\//u.test(item),
   ),
   false,
@@ -205,6 +219,11 @@ for (const check of snapshotChecks) {
 const capabilities = json("evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json");
 assert.equal(capabilities.task_id, "M2-P4-I3-R1-B");
 assert.equal(capabilities.status, "implementation_pending_human_chatgpt_review");
+assert.equal(capabilities.review_correction_required, true);
+assert.equal(capabilities.review_correction_base, reviewCorrectionBase);
+assert.equal(capabilities.provenance_ownership_matrix_implemented, true);
+assert.equal(capabilities.invalid_grounding_cases, 20);
+assert.equal(capabilities.full_downstream_input_parity, true);
 assert.equal(capabilities.exact_mutation_path_count, 22);
 assertLiteralSet(capabilities.exact_mutation_paths, exactPaths);
 for (const field of [
@@ -225,6 +244,11 @@ assert.equal(capabilities.next_candidate_authorized, false);
 
 const runtimeContract = json("evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json");
 assert.equal(runtimeContract.baseline, baselineSha);
+assert.equal(runtimeContract.review_correction_required, true);
+assert.equal(runtimeContract.review_correction_base, reviewCorrectionBase);
+assert.equal(runtimeContract.provenance_ownership_matrix_implemented, true);
+assert.equal(runtimeContract.invalid_grounding_cases, 20);
+assert.equal(runtimeContract.full_downstream_input_parity, true);
 assert.equal(runtimeContract.accepted_r1_a_commit, "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd");
 assert.equal(runtimeContract.r1_a_acceptance_commit, baselineSha);
 assert.equal(runtimeContract.candidate_catalog, "runtime-stage-catalog-v5.0.0");
@@ -374,15 +398,26 @@ assert.equal(groundingCases.holdout_material, false);
 assert.equal(groundingCases.template_resolution.runtime_authority, false);
 assert.equal(groundingCases.template_resolution.case_id_lookup_in_runtime, false);
 assert.equal(groundingCases.valid_cases.length, 20);
-assert.equal(groundingCases.invalid_cases.length, 16);
+assert.equal(groundingCases.invalid_cases.length, 20);
 assert.equal(
   new Set(groundingCases.valid_cases.map((item) => item.case_id)).size,
   20,
 );
 assert.equal(
   new Set(groundingCases.invalid_cases.map((item) => item.case_id)).size,
-  16,
+  20,
 );
+const reviewCorrectionInvalidCases = groundingCases.invalid_cases.filter(
+  (item) => ["GROUND-I-017", "GROUND-I-018", "GROUND-I-019", "GROUND-I-020"].includes(
+    item.case_id,
+  ),
+);
+assert.equal(reviewCorrectionInvalidCases.length, 4);
+for (const item of reviewCorrectionInvalidCases) {
+  assert.equal(item.expected_failure_code, "M2_WRITING_CONTEXT_INVALID");
+  assert.equal(item.owner, "application_integrity");
+  assert.equal(item.runtime_case_lookup_authority, false);
+}
 
 let validGroundingCases = 0;
 for (const item of groundingCases.valid_cases) {
@@ -428,6 +463,83 @@ for (const item of groundingCases.invalid_cases) {
   );
   invalidGroundingCases += 1;
 }
+
+const provenanceInput = groundingCases.valid_cases.find(
+  (item) => item.case_id === "GROUND-V-002",
+).synthetic_assessment_input;
+const provenanceInvalidMutations = [
+  {
+    path: "/writing_context/message_ownership/0/source_refs",
+    value: ["input:requested_topics"],
+  },
+  {
+    path: "/writing_context/communication_pattern/source_refs",
+    value: ["input:optional_message"],
+  },
+  {
+    path: "/writing_context/repeat_consultation_state/source_refs",
+    value: ["input:optional_message"],
+  },
+  {
+    path: "/writing_context/channel_and_timing/source_refs",
+    value: ["input:requested_topics"],
+  },
+  {
+    path: "/writing_context/language_and_expression/source_refs",
+    value: ["input:requested_topics"],
+  },
+  {
+    path: "/writing_context/user_goal_detail/source_refs",
+    value: ["input:requested_topics"],
+  },
+];
+let provenanceOwnershipMatrixChecks = 0;
+for (const mutation of provenanceInvalidMutations) {
+  const raw = materialize(groundingCases, {
+    template_id: "VALID-CANDIDATE",
+    mutations: [{ op: "set", ...mutation }],
+  });
+  assert.throws(
+    () => validateWritingContextIntegrityV1(provenanceInput, raw),
+    (error) => error?.safeCode === "M2_WRITING_CONTEXT_INVALID",
+  );
+  provenanceOwnershipMatrixChecks += 1;
+}
+
+const matchingAppChannelInput = {
+  ...groundingCases.valid_cases.find((item) => item.case_id === "GROUND-V-007")
+    .synthetic_assessment_input,
+  relationship: "matching_app",
+};
+const matchingAppChannel = materialize(groundingCases, {
+  template_id: "VALID-NO-CANDIDATE",
+  mutations: [
+    {
+      op: "set",
+      path: "/writing_context/channel_and_timing",
+      value: {
+        channel: "matching_app",
+        relative_timing: "same_day",
+        evidence_state: "explicit",
+        source_refs: ["input:relationship"],
+      },
+    },
+    {
+      op: "set",
+      path: "/writing_context/source_refs",
+      value: [
+        "input:current_situation",
+        "input:relationship",
+        "input:requested_topics",
+      ],
+    },
+  ],
+});
+assert.doesNotThrow(() =>
+  validateWritingContextIntegrityV1(matchingAppChannelInput, matchingAppChannel),
+);
+provenanceOwnershipMatrixChecks += 1;
+assert.equal(provenanceOwnershipMatrixChecks, 7);
 
 const productionGroundingSources = [
   source("lib/assessment/runtime/structured-intake-grounding-v4.ts"),
@@ -622,6 +734,7 @@ const pipelineCases = [
 ];
 
 let fakePipelineParity = 0;
+let fullDownstreamInputParity = 0;
 let downstreamWritingContextLeakage = 0;
 for (const [index, item] of pipelineCases.entries()) {
   const candidateGrounded = groundStructuredIntakeV4(item.input, item.raw);
@@ -642,6 +755,7 @@ for (const [index, item] of pipelineCases.entries()) {
   assert.equal(candidate.result.decision, item.decision, item.name);
   assert.equal(baseline.result.decision, item.decision, item.name);
   assert.equal(candidate.result.eligibility, baseline.result.eligibility);
+  assert.equal(candidate.result.decision, baseline.result.decision);
   assert.deepEqual(candidate.result.report, baseline.result.report);
   assert.deepEqual(candidate.result.decisionCard, baseline.result.decisionCard);
   assert.equal(candidate.transport.actualProviderCalls, 0);
@@ -653,18 +767,42 @@ for (const [index, item] of pipelineCases.entries()) {
   assert.equal(pb01Request.schemaName, "pb_01_structure_v4");
   assert.equal(pb01Request.schemaVersion, "pipeline-schema-v4.0.0");
   assert.equal(pb01Request.promptVersion, "v4.0.0");
-  for (const request of candidate.transport.requests.slice(1)) {
-    const intake = request.input.structured_intake;
-    assert.ok(intake && typeof intake === "object");
-    assert.equal(intake.schema_version, "pipeline-schema-v3.0.0");
-    if ("writing_context" in intake) downstreamWritingContextLeakage += 1;
+  for (let stageIndex = 1; stageIndex < stageIds.length; stageIndex += 1) {
+    const candidateRequest = candidate.transport.requests[stageIndex];
+    const baselineRequest = baseline.transport.requests[stageIndex];
+    assert.equal(candidateRequest.stageId, stageIds[stageIndex]);
+    assert.equal(baselineRequest.stageId, stageIds[stageIndex]);
+    const candidateIntake = candidateRequest.input.structured_intake;
+    const baselineIntake = baselineRequest.input.structured_intake;
+    assert.ok(candidateIntake && typeof candidateIntake === "object");
+    assert.ok(baselineIntake && typeof baselineIntake === "object");
+    assert.deepEqual(candidateIntake, baselineIntake);
+    assert.equal(candidateIntake.schema_version, "pipeline-schema-v3.0.0");
+    assert.equal(baselineIntake.schema_version, "pipeline-schema-v3.0.0");
+    assert.deepEqual(candidateIntake.decision_facts, baselineIntake.decision_facts);
+    if ("writing_context" in candidateIntake) downstreamWritingContextLeakage += 1;
+    if ("writing_context" in baselineIntake) downstreamWritingContextLeakage += 1;
+    assert.deepEqual(candidateRequest.input, baselineRequest.input);
+    fullDownstreamInputParity += 1;
   }
-  const candidatePb02Intake = candidate.transport.requests[1].input.structured_intake;
-  const baselinePb02Intake = baseline.transport.requests[1].input.structured_intake;
-  assert.deepEqual(candidatePb02Intake.decision_facts, baselinePb02Intake.decision_facts);
+  const candidatePb04Input = candidate.transport.requests[3].input;
+  const baselinePb04Input = baseline.transport.requests[3].input;
+  assert.deepEqual(
+    candidatePb04Input.aggregate_safety_result,
+    baselinePb04Input.aggregate_safety_result,
+  );
+  assert.deepEqual(
+    candidatePb04Input.eligibility_result,
+    baselinePb04Input.eligibility_result,
+  );
+  assert.deepEqual(
+    candidatePb04Input.decision_policy_result,
+    baselinePb04Input.decision_policy_result,
+  );
   fakePipelineParity += 1;
 }
 assert.equal(fakePipelineParity, 3);
+assert.equal(fullDownstreamInputParity, 15);
 assert.equal(downstreamWritingContextLeakage, 0);
 
 const serviceSource = source("lib/assessment/runtime/service.ts");
@@ -692,11 +830,21 @@ for (const verifierPath of [
 }
 
 console.log("M2_P4_I3_R1_B_WRITING_CONTEXT: PASS");
+console.log("review_correction_scope: 9/9");
+console.log("cumulative_r1_b_scope: 22/22");
+console.log(
+  `provenance_ownership_matrix: PASS (${provenanceOwnershipMatrixChecks}/7)`,
+);
 console.log(`valid_grounding_cases: ${validGroundingCases}/20`);
-console.log(`invalid_grounding_cases: ${invalidGroundingCases}/16`);
+console.log(`invalid_grounding_cases: ${invalidGroundingCases}/20`);
 console.log(`fake_pipeline_parity: ${fakePipelineParity}/3`);
+console.log(
+  `full_downstream_input_parity: ${fullDownstreamInputParity}/15 (5 stages x 3 cases)`,
+);
 console.log(`downstream_writing_context_leakage: ${downstreamWritingContextLeakage}`);
 console.log("decision_facts_parity: PASS");
+console.log("downstream_safety_input_parity: PASS");
+console.log("protected_diff: 0");
 console.log("active_runtime_changed: false");
 console.log("openai_calls: 0");
 console.log("db_operations: 0");

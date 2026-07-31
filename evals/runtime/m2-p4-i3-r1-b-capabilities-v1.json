@@ -4,6 +4,11 @@
   "title": "PB-01 v4 Writing Context Extraction and Grounding",
   "status": "implementation_pending_human_chatgpt_review",
   "baseline": "2381312ced5fc726dfa245632c25da6bb68a376f",
+  "review_correction_required": true,
+  "review_correction_base": "0ccf59114fe4079e0a5513fef3faf1b9fade11e7",
+  "provenance_ownership_matrix_implemented": true,
+  "invalid_grounding_cases": 20,
+  "full_downstream_input_parity": true,
   "exact_mutation_paths": [
     "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
     "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
