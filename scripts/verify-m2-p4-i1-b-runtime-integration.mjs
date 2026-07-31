@@ -13,11 +13,33 @@ const baselineSha = "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
 const acceptedImplementationSha =
   "9588c8fd6ab47c265f5f661d4473a29d73885427";
 const i2BaselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
+const i3BaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactI2RendererPaths = [
   "app/review/runtime/i2/page.tsx",
   "app/globals.css",
   "components/runtime/RuntimeAssessmentForm.tsx",
   "components/runtime/RuntimeAssessmentNote.tsx",
+];
+const exactI3Paths = [
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "evals/runtime/m2-p4-i3-quality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "docs/phase2/TASK_M2_P4_I3_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
 ];
 const exactImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -121,6 +143,15 @@ function isExactI2RendererEvolution(paths) {
     new Set(paths).size === exactI2RendererPaths.length &&
     JSON.stringify(sorted(paths)) ===
       JSON.stringify(sorted(exactI2RendererPaths))
+  );
+}
+
+function isExactI3Successor(paths) {
+  return (
+    paths.length === exactI3Paths.length &&
+    new Set(paths).size === exactI3Paths.length &&
+    paths.every((item) => !item.includes("*") && !item.endsWith("/")) &&
+    JSON.stringify(sorted(paths)) === JSON.stringify(sorted(exactI3Paths))
   );
 }
 
@@ -257,10 +288,15 @@ assert.equal(canonicalCatalog.definitions[0].schemaVersion, "pipeline-schema-v1.
 
 const serviceSource = source("lib/assessment/runtime/service.ts");
 const catalogSource = source("lib/assessment/runtime/schema-catalog.ts");
-assert.ok(serviceSource.includes("loadM2P4RuntimeStageCatalog"));
+assert.ok(serviceSource.includes("loadM2P4ProductQualityRuntimeStageCatalog"));
 assert.ok(!serviceSource.includes("loadCanonicalStageCatalog"));
 assert.ok(catalogSource.includes("export async function loadCanonicalStageCatalog"));
 assert.ok(catalogSource.includes("export async function loadM2P4RuntimeStageCatalog"));
+assert.ok(
+  catalogSource.includes(
+    "export async function loadM2P4ProductQualityRuntimeStageCatalog",
+  ),
+);
 
 const structuredSchema = json(
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -806,6 +842,20 @@ for (const unauthorizedPath of [
 const rendererAuthorizationSource = isExactI2RendererEvolution.toString();
 assert.equal(rendererAuthorizationSource.includes("startsWith"), false);
 assert.equal(rendererAuthorizationSource.includes("*"), false);
+const currentI3Paths = currentChangedPaths(i3BaselineSha);
+assert.equal(isExactI3Successor(currentI3Paths), true);
+for (const unauthorizedPath of [
+  "ai/schemas/unauthorized.schema.json",
+  "components/runtime/UnauthorizedComponent.tsx",
+  "app/unauthorized/page.tsx",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/contracts/unlisted-runtime.json",
+]) {
+  assert.equal(isExactI3Successor([...exactI3Paths, unauthorizedPath]), false);
+}
+const i3AuthorizationSource = isExactI3Successor.toString();
+assert.equal(i3AuthorizationSource.includes("startsWith"), false);
+assert.equal(i3AuthorizationSource.includes("*"), true);
 assert.equal(baselineRuntime.transport.actualProviderCalls, 0);
 assert.equal(baselineRuntime.repository.actualSupabaseCalls, 0);
 assert.equal(informationNull.transport.actualProviderCalls, 0);
@@ -816,6 +866,7 @@ assert.equal(safetyNull.repository.actualSupabaseCalls, 0);
 console.log("M2_P4_I1_B_RUNTIME_INTEGRATION: PASS");
 console.log("historical_snapshot: PASS");
 console.log("i2_renderer_exceptions: 4/4");
+console.log("i3_successor_exact_scope: 19/19");
 console.log("unauthorized_app_components_regressions: 4/4");
 console.log("reference_decisions: 40/40");
 console.log(`reply_now: ${categoryPasses.get("reply_now")}/10`);

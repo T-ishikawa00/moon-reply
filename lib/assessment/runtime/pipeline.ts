@@ -280,6 +280,8 @@ export class AssessmentPipeline {
       const deterministicSafety = deterministicSafetyResult(request);
       const contextualRuntime =
         runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0";
+      const productQualityRuntime =
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v4.0.0";
       const rawStructuredIntake = await this.invokeStage(
         runContext,
         {
@@ -408,6 +410,12 @@ export class AssessmentPipeline {
             aggregate_safety_result: aggregate,
             eligibility_result: eligibilityResult,
             decision_policy_result: decisionPolicy,
+            ...(productQualityRuntime
+              ? {
+                  user_supplied_optional_message: request.optionalMessage,
+                  requested_topics: request.requestedTopics,
+                }
+              : {}),
           }),
         },
         "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
@@ -428,6 +436,12 @@ export class AssessmentPipeline {
           input: asJsonObject({
             structured_intake: structuredIntake,
             decision_plan: decisionPlan,
+            ...(productQualityRuntime
+              ? {
+                  user_supplied_optional_message: request.optionalMessage,
+                  requested_topics: request.requestedTopics,
+                }
+              : {}),
           }),
         },
         "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
@@ -455,6 +469,12 @@ export class AssessmentPipeline {
             decision_policy_result: decisionPolicy,
             decision_plan: decisionPlan,
             report_content: reportContent,
+            ...(productQualityRuntime
+              ? {
+                  user_supplied_optional_message: request.optionalMessage,
+                  requested_topics: request.requestedTopics,
+                }
+              : {}),
           }),
         },
         "LOCAL_SEMANTIC_DISPOSITION",

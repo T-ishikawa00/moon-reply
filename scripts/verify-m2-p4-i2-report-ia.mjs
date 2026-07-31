@@ -11,6 +11,7 @@ const repositoryRoot = path.resolve(
 const baselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
 const acceptedImplementationSha =
   "410714875903ae61b5bcdc6cce90030f5679b3b3";
+const i3BaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactPaths = [
   "app/review/runtime/i2/page.tsx",
   "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
@@ -28,6 +29,27 @@ const exactPaths = [
   "docs/CODEX_HANDOFF.md",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
+const exactI3Paths = [
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "evals/runtime/m2-p4-i3-quality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "docs/phase2/TASK_M2_P4_I3_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
 ];
 const exactRendererPaths = [
   "app/review/runtime/i2/page.tsx",
@@ -158,7 +180,7 @@ gitText([
 ]);
 gitText(["merge-base", "--is-ancestor", baselineSha, "HEAD"]);
 
-const actualPaths = currentTaskPaths();
+const actualPaths = historicalPaths(baselineSha, acceptedImplementationSha);
 assert.deepEqual(actualPaths, sorted(exactPaths));
 assert.equal(exactPaths.length, 16);
 assert.equal(new Set(exactPaths).size, 16);
@@ -168,7 +190,10 @@ assert.deepEqual(
   historicalPaths(baselineSha, acceptedImplementationSha),
   sorted(exactPaths),
 );
-const acceptanceSyncPaths = currentTaskPaths(acceptedImplementationSha);
+const acceptanceSyncPaths = historicalPaths(
+  acceptedImplementationSha,
+  i3BaselineSha,
+);
 assert.deepEqual(acceptanceSyncPaths, sorted(exactAcceptanceSyncPaths));
 assert.equal(exactAcceptanceSyncPaths.length, 8);
 assert.equal(new Set(exactAcceptanceSyncPaths).size, 8);
@@ -183,6 +208,7 @@ const protectedDiff = gitResult([
   "diff",
   "--exit-code",
   baselineSha,
+  acceptedImplementationSha,
   "--",
   "ai/prompts",
   "ai/schemas",
@@ -200,6 +226,26 @@ const protectedDiff = gitResult([
   "package-lock.json",
 ]);
 assert.equal(protectedDiff.status, 0, protectedDiff.stdout || protectedDiff.stderr);
+const currentI3Paths = currentTaskPaths(i3BaselineSha);
+assert.deepEqual(currentI3Paths, sorted(exactI3Paths));
+assert.equal(exactI3Paths.length, 19);
+assert.equal(new Set(exactI3Paths).size, 19);
+assert.equal(
+  exactI3Paths.some((item) => item.includes("*") || item.endsWith("/")),
+  false,
+);
+for (const unauthorizedPath of [
+  "ai/schemas/unauthorized.schema.json",
+  "components/runtime/UnauthorizedComponent.tsx",
+  "app/unauthorized/page.tsx",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/contracts/unlisted-runtime.json",
+]) {
+  assert.notDeepEqual(
+    sorted([...exactI3Paths, unauthorizedPath]),
+    sorted(exactI3Paths),
+  );
+}
 
 const i1cManifest = json("evals/runtime/m2-p4-i1-c-capabilities-v1.json");
 const i1cSnapshot = i1cManifest.implementation_snapshot;
@@ -477,6 +523,7 @@ for (const forbidden of [
 console.log("M2_P4_I2_REPORT_INFORMATION_ARCHITECTURE: PASS");
 console.log("accepted_implementation_commit: 410714875903ae61b5bcdc6cce90030f5679b3b3");
 console.log("implementation_snapshot: 16/16");
+console.log("i3_successor_exact_scope: 19/19");
 console.log("acceptance_sync_scope: 8/8");
 console.log("desktop_visual_qa: PASS");
 console.log("mobile_399px_visual_qa: PASS");

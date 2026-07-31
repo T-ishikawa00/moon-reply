@@ -227,6 +227,39 @@ const m2p4I2AcceptanceSyncPaths = new Set([
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ]);
+const m2p4I3BaselineCommit =
+  "61e33a10e195fad17e253a6b9719217e1992f273";
+const m2p4I3CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-capabilities-v1.json";
+const m2p4I3VerifierPath =
+  "scripts/verify-m2-p4-i3-product-quality.mjs";
+const m2p4I3VerifierImportPaths = new Set([
+  "lib/assessment/runtime/application.ts",
+  "lib/assessment/runtime/fakes.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/openai-schema.ts",
+]);
+const m2p4I3ExactPaths = new Set([
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "evals/runtime/m2-p4-i3-quality-contract-v1.json",
+  m2p4I3CapabilityManifestPath,
+  m2p4I3VerifierPath,
+  "docs/phase2/TASK_M2_P4_I3_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -328,6 +361,7 @@ const successorLocalToolPaths = new Set([
   m2p4I1bVerifierPath,
   m2p4I1cVerifierPath,
   m2p4I2VerifierPath,
+  m2p4I3VerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3807,6 +3841,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        file === m2p4I3VerifierPath &&
+        localImport &&
+        m2p4I3VerifierImportPaths.has(localImport)
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4015,7 +4056,6 @@ function verifyScopeAndProhibitedImplementation() {
           .filter(Boolean)
           .sort()
       : [];
-  const m2p4I2TaskPaths = currentTaskPaths(m2p4I2BaselineCommit);
   const m2p4I2ImplementationDiff = runGit([
     "diff",
     "--name-only",
@@ -4031,13 +4071,28 @@ function verifyScopeAndProhibitedImplementation() {
           .filter(Boolean)
           .sort()
       : [];
-  const m2p4I2AcceptanceSyncTaskPaths = currentTaskPaths(
+  const m2p4I2TaskPaths = [...m2p4I2ImplementationPaths];
+  const m2p4I2AcceptanceSyncDiff = runGit([
+    "diff",
+    "--name-only",
     m2p4I2AcceptedImplementationCommit,
-  );
+    m2p4I3BaselineCommit,
+    "--",
+  ]);
+  const m2p4I2AcceptanceSyncTaskPaths =
+    m2p4I2AcceptanceSyncDiff.status === 0
+      ? m2p4I2AcceptanceSyncDiff.stdout
+          .split(/\r?\n/u)
+          .map((item) => item.trim().replaceAll("\\", "/"))
+          .filter(Boolean)
+          .sort()
+      : [];
+  const m2p4I3TaskPaths = currentTaskPaths(m2p4I3BaselineCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
   const m2p4I2Manifest = readJson(m2p4I2CapabilityManifestPath);
+  const m2p4I3Manifest = readJson(m2p4I3CapabilityManifestPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4136,6 +4191,67 @@ function verifyScopeAndProhibitedImplementation() {
         external_execution: 0,
       },
       actual: m2p4I1cManifest,
+    });
+  }
+  const expectedM2p4I3TaskPaths = [...m2p4I3ExactPaths].sort();
+  if (
+    m2p4I3TaskPaths.length !== 19 ||
+    new Set(m2p4I3TaskPaths).size !== 19 ||
+    JSON.stringify(m2p4I3TaskPaths) !==
+      JSON.stringify(expectedM2p4I3TaskPaths) ||
+    m2p4I3TaskPaths.some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i3_exact_scope",
+      invariant:
+        "M2-P4-I3 changes exactly 19 literal allowlisted paths without prefix or future-path authorization",
+      expected: expectedM2p4I3TaskPaths,
+      actual: m2p4I3TaskPaths,
+    });
+  }
+  if (
+    m2p4I3Manifest?.task_id !== "M2-P4-I3" ||
+    m2p4I3Manifest?.title !==
+      "PB-04 / PB-05 / PB-06 Product Quality Revision" ||
+    m2p4I3Manifest?.status !==
+      "implementation_pending_human_chatgpt_review" ||
+    m2p4I3Manifest?.baseline !== m2p4I3BaselineCommit ||
+    JSON.stringify(m2p4I3Manifest?.exact_mutation_paths) !==
+      JSON.stringify([...m2p4I3ExactPaths]) ||
+    m2p4I3Manifest?.prompt_bundle_version !==
+      "prompt-bundle-runtime-v4.0.0" ||
+    m2p4I3Manifest?.schema_set_version !==
+      "pipeline-schema-runtime-v3.0.0" ||
+    m2p4I3Manifest?.schema_mutations !== 0 ||
+    m2p4I3Manifest?.ui_mutations !== 0 ||
+    m2p4I3Manifest?.policy_mutations !== 0 ||
+    m2p4I3Manifest?.openai_calls !== 0 ||
+    m2p4I3Manifest?.db_operations !== 0 ||
+    m2p4I3Manifest?.migrations !== 0 ||
+    m2p4I3Manifest?.holdout_use !== 0 ||
+    m2p4I3Manifest?.real_user_data !== 0 ||
+    m2p4I3Manifest?.provider_backed_quality_result !== "not_run" ||
+    m2p4I3Manifest?.achieved_rubric_score !== null ||
+    m2p4I3Manifest?.e1_status !== "not_started"
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I3CapabilityManifestPath,
+      pathName: "$",
+      invariant:
+        "M2-P4-I3 declares the exact 19-path runtime-v4 successor and zero external execution",
+      expected: {
+        task_id: "M2-P4-I3",
+        status: "implementation_pending_human_chatgpt_review",
+        baseline: m2p4I3BaselineCommit,
+        exact_mutation_paths: [...m2p4I3ExactPaths],
+        prompt_bundle_version: "prompt-bundle-runtime-v4.0.0",
+        schema_set_version: "pipeline-schema-runtime-v3.0.0",
+        external_execution: 0,
+      },
+      actual: m2p4I3Manifest,
     });
   }
   const m2p4I1cR1Manifest = m2p4I1cManifest?.r1_successor;
@@ -5008,6 +5124,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p4I1cR3ImplementationPaths.has(item) &&
       !m2p4I1cR4ImplementationPaths.has(item) &&
       !m2p4I2ExactPaths.has(item) &&
+      !m2p4I3ExactPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -5042,7 +5159,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I1cR2ImplementationPaths.has(item) ||
       m2p4I1cR3ImplementationPaths.has(item) ||
       m2p4I1cR4ImplementationPaths.has(item) ||
-      m2p4I2ExactPaths.has(item)
+      m2p4I2ExactPaths.has(item) ||
+      m2p4I3ExactPaths.has(item)
     ) {
       continue;
     }

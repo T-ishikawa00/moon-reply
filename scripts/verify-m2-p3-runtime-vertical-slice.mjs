@@ -22,6 +22,8 @@ const i2BaselineSha =
   "20d4178e3a63026128f3a25d052196c7161e7e27";
 const i2AcceptedImplementationSha =
   "410714875903ae61b5bcdc6cce90030f5679b3b3";
+const i3BaselineSha =
+  "61e33a10e195fad17e253a6b9719217e1992f273";
 const i2ExactPaths = [
   "app/review/runtime/i2/page.tsx",
   "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
@@ -49,6 +51,27 @@ const i2AcceptanceSyncPaths = [
   "scripts/verify-m2-p4-i2-report-ia.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+];
+const i3ExactPaths = [
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "evals/runtime/m2-p4-i3-quality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "docs/phase2/TASK_M2_P4_I3_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
 ];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
@@ -546,6 +569,9 @@ const i1cRuntimeManifest = json(
 );
 const i2RuntimeManifest = json(
   "evals/runtime/m2-p4-i2-capabilities-v1.json",
+);
+const i3RuntimeManifest = json(
+  "evals/runtime/m2-p4-i3-capabilities-v1.json",
 );
 const dependencyAuditSummary = json(
   "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
@@ -1415,7 +1441,6 @@ gate("M2_P3_PUBLIC_PRODUCT_UNCHANGED_GATE", () => {
 });
 
 gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
-  const actualI2Paths = currentTaskPaths(i2BaselineSha);
   const expectedI2Paths = [...i2ExactPaths].sort((left, right) =>
     left.localeCompare(right, "en"),
   );
@@ -1430,9 +1455,18 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean)
     .sort((left, right) => left.localeCompare(right, "en"));
-  const actualI2AcceptanceSyncPaths = currentTaskPaths(
+  const actualI2Paths = [...historicalI2Paths];
+  const actualI2AcceptanceSyncPaths = gitText([
+    "diff",
+    "--name-only",
     i2AcceptedImplementationSha,
-  );
+    i3BaselineSha,
+    "--",
+  ])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right, "en"));
   const expectedI2AcceptanceSyncPaths = [...i2AcceptanceSyncPaths].sort(
     (left, right) => left.localeCompare(right, "en"),
   );
@@ -1441,6 +1475,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     "diff",
     "--name-only",
     i2BaselineSha,
+    i2AcceptedImplementationSha,
     "--",
     "lib/assessment/runtime/pipeline.ts",
     "lib/assessment/runtime/types.ts",
@@ -1455,6 +1490,10 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     "evals/development",
     "evals/holdout",
   ]).trim();
+  const actualI3Paths = currentTaskPaths(i3BaselineSha);
+  const expectedI3Paths = [...i3ExactPaths].sort((left, right) =>
+    left.localeCompare(right, "en"),
+  );
   const i2ExecutionSources = [
     i2PageSource,
     i2FixtureSource,
@@ -1501,6 +1540,25 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         JSON.stringify(i2ExactPaths) &&
       i2RuntimeManifest.i3_status === "not_started",
     "I2 accepted renderer-only successor manifest differs",
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    actualI3Paths.length === 19 &&
+      new Set(actualI3Paths).size === 19 &&
+      JSON.stringify(actualI3Paths) === JSON.stringify(expectedI3Paths) &&
+      actualI3Paths.every(
+        (item) => !item.includes("*") && !item.endsWith("/"),
+      ) &&
+      i3RuntimeManifest.task_id === "M2-P4-I3" &&
+      i3RuntimeManifest.status ===
+        "implementation_pending_human_chatgpt_review" &&
+      i3RuntimeManifest.baseline === i3BaselineSha &&
+      JSON.stringify(i3RuntimeManifest.exact_mutation_paths) ===
+        JSON.stringify(i3ExactPaths) &&
+      i3RuntimeManifest.schema_mutations === 0 &&
+      i3RuntimeManifest.ui_mutations === 0 &&
+      i3RuntimeManifest.policy_mutations === 0,
+    `I3 exact 19-path successor differs: ${actualI3Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

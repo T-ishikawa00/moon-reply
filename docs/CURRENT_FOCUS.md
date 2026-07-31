@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Human / ChatGPT accepted and complete; Milestone 2 remains incomplete
+Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Human / ChatGPT accepted; I3 implementation review pending; Milestone 2 remains incomplete
 
 ## Completed Through
 
@@ -62,18 +62,23 @@ Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Hum
 - M2-P4-I1-B Runtime Typed-Facts Integration Human / ChatGPT accepted and complete at accepted implementation commit `9588c8fd6ab47c265f5f661d4473a29d73885427`; its immutable historical implementation snapshot is `554d2cb5a2f816ac82edf3cc247458fe34a4a74c..9588c8fd6ab47c265f5f661d4473a29d73885427`
 - M2-P4-I1-C and R1 through R4 Human / ChatGPT accepted and complete; accepted stack commit `b523349ec33c36a90c645d4a1b7a6d37832af151`; immutable historical snapshot `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`; exact accepted stack `27/27`
 - M2-P4-I2 Human / ChatGPT accepted and complete at implementation commit `410714875903ae61b5bcdc6cce90030f5679b3b3`; immutable historical snapshot `20d4178e3a63026128f3a25d052196c7161e7e27..410714875903ae61b5bcdc6cce90030f5679b3b3`; exact implementation scope `16/16`
+- M2-P4-I3 explicitly authorized from baseline `61e33a10e195fad17e253a6b9719217e1992f273`; exact 19-path implementation complete with Human / ChatGPT review pending
 
 ## Current Work
 
-M2-P4-I2 Report Information Architecture and Intent Fulfillment — Human / ChatGPT accepted and complete
+M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision — implementation complete; Human / ChatGPT review pending
 
 State:
 
+- M2-P4-I3 is implemented on `feat/m2-p4-i3-product-quality-revision` from exact baseline `61e33a10e195fad17e253a6b9719217e1992f273` within the exact authorized 19 paths; its capability status is `implementation_pending_human_chatgpt_review`;
+- runtime v4 advances only PB-04 to v3, PB-05 to v3, and PB-06 to v2; output Schemas remain unchanged under `pipeline-schema-runtime-v3.0.0`, and PB-01 through PB-03, decision Policy, Safety, I2 renderer, API, Supabase, migrations, development/holdout datasets, and package files remain unchanged;
+- v4 alone passes the raw unsent optional candidate and selected topics directly to PB-04/PB-05/PB-06. PB-04 preserves user wording through the smallest useful copy-ready edit and case-specific before-send/send/after-send planning; PB-05 assigns distinct field responsibilities with a calm adult consultation voice; PB-06 keeps material major/critical defects fail-closed while defaulting ordinary tone/genericity/repetition findings to nonblocking minor;
+- task-time OpenAI calls, DB operations, migrations, holdout use, real-user data, and paid execution are `0`. Provider-backed quality is not run, achieved rubric score is none, E1 is not started, and Milestone 2 remains incomplete;
 - M2-P4-I2 is accepted at `410714875903ae61b5bcdc6cce90030f5679b3b3` with the immutable exact 16-path renderer/internal-static-preview and historical-verifier compatibility snapshot `20d4178e3a63026128f3a25d052196c7161e7e27..410714875903ae61b5bcdc6cce90030f5679b3b3`; its status is `human_chatgpt_accepted_complete`;
 - I2 makes the selected `form.requestedTopics` visible in input order, prioritizes the cover answer followed by draft and tonight actions, integrates six hidden fields, records `unknowns_commentary` only as a versioned successor-Schema deprecation candidate, and removes renderer-only duplicate conclusion/temperature sections;
 - `/review/runtime/i2` is a production-disabled, environment-gated, noindex/nofollow fictional fixed preview. Desktop and 399px mobile Human Visual QA passed with horizontal overflow `0`, content clipping `0`, tonight-answer visibility, draft priority, tonight-action hierarchy, selected-intent visibility, responsive three-day timeline, and footer rendering all confirmed. OpenAI calls, DB operations, migrations, holdout use, and real-user data remain `0`;
 - PB-01 through PB-06, Prompt, Schema, decision Policy, pipeline, API route, Supabase, runtime catalog/hash, accepted I1-C historical snapshots, development/holdout datasets, and provider-generated prose remain unchanged;
-- the accepted field disposition is `7/7`, intent mapping is `6/6`, and exact implementation scope is `16/16`; the non-blocking backlog is the mobile tonight-action heading wrap, slightly tall cover, and intent-link affordance. Provider-backed quality evaluation has not been performed, M2-P4-I3 is not started, and Milestone 2 remains incomplete;
+- the accepted field disposition is `7/7`, intent mapping is `6/6`, and exact implementation scope is `16/16`; the non-blocking backlog is the mobile tonight-action heading wrap, slightly tall cover, and intent-link affordance. Provider-backed quality evaluation has not been performed and Milestone 2 remains incomplete;
 - the M2-P4 planning package was revalidated against base commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2` and is Human / ChatGPT accepted and complete at accepted planning content commit `34e2b1592428517564aeff95f2b7e40527f42a9e`; the M2-P3 historical-boundary correction remains anchored at the revalidated base commit;
 - Human / ChatGPT accepted and completed the exact eight-file M2-P4-I1-A sub-slice at accepted implementation commit `27752471caa644b569a08a4587ddf677195c203a`;
 - the typed decision-material facts contract, pure deterministic reference policy, Human-owned 40-case projection, exact decision result 40/40, each category 10/10, allowed-set violations `0`, forbidden decisions `0`, and case-specific matching `0` are accepted;
@@ -113,7 +118,7 @@ State:
 - Tonight action: make `送る前`, `送る文面`, `送った直後`, `今夜やらないこと`, and `明日以降` case-specific rather than saying only “返信する”.
 - Safety: 都合の良い断定はしない。ただし、通常の情報不足を理由に相談回答を止めない。Safety問題時も、可能な範囲で安全な次の一歩を返す。
 - Current: `M2-P4-I2 Report Information Architecture and Intent Fulfillment` is Human / ChatGPT accepted and complete at `410714875903ae61b5bcdc6cce90030f5679b3b3`. It classifies the seven generated but hidden fields as display, integrate, or successor-Schema deprecate; visibly fulfills selected intent; prioritizes tonight's answer/draft/action; removes renderer duplication; and adds a fixed no-network review route. Desktop and 399px mobile Human Visual QA passed.
-- After I2: `M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision` targets emotional attunement, warm adult voice, case-specific draft editing, concrete tonight action, post-send guidance, individuality, non-redundancy, and JPY 980 value. I3 is not started.
+- After I2: `M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision` is explicitly authorized and implemented for review. It targets emotional attunement, warm adult voice, case-specific draft editing, concrete tonight action, post-send guidance, individuality, non-redundancy, and JPY 980 value without a Schema, UI, Policy, Safety, API, or DB mutation.
 
 ## Preserved Milestone 1 Baseline
 
@@ -187,7 +192,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 - Do not treat Figma as a required or authoritative gate. B — `Lunar Contrast Edition` is the controlling canonical design direction; do not mix in A — `Quiet Editorial Letter` components as a compromise direction.
 - Keep the historical pre-R2 QA branch immutable. The corrected M1-I12-R3 package may be synchronized to `main` only by the expressly authorized fast-forward-only path and must remain within its exact seven-file documentation manifest; do not change application, component, CSS, fixture, Safety, Legal, package, or runtime files.
 - Do not publish, deploy, expose or read secrets, apply new migrations, execute new API/DB operations, widen accepted M2-P2 tooling, or start M2-P2-B1-B2-B1 or any later implementation task without separate explicit authorization.
-- The accepted M2-P4-I1-C stack remains fixed to its immutable exact 27-path snapshot; the historical I1-C/R1/R2/R3/R4 21/12/10/9/10-path records remain unchanged. I2 authorization is confined to its exact 16-path renderer/internal-static-preview and historical-verifier compatibility scope; app/components evolution is limited to the exact four declared renderer paths. Do not modify historical M2-P1/I1-A/I1-B Prompt/Schema/policy assets, Prompt, Schema, runtime pipeline, catalog/hash, current `policy.ts`, or accepted historical snapshots; use holdout or real-user data; make new OpenAI calls, DB writes, or migrations; or start `M2-P4-I3`, `M2-P4-E1`, or `M2-P4-E2` without separate explicit authorization.
+- The accepted M2-P4-I1-C stack remains fixed to its immutable exact 27-path snapshot; the historical I1-C/R1/R2/R3/R4 21/12/10/9/10-path records remain unchanged. I2 remains confined to its exact historical 16-path snapshot. I3 authority is confined to its exact 19 literal paths and versioned runtime-v4 successors; it does not authorize historical Prompt/Schema/catalog mutation, UI, current decision Policy, holdout or real-user use, OpenAI calls, DB operations, migrations, E1, E2, or release.
 - Automated PASS alone is not Human / ChatGPT acceptance or model-quality evidence. M2-P3 task-time automated evidence is Fake-only and zero-call/zero-spend; the separate Human-confirmed live E2E establishes bounded synthetic local operability, not M2-P4 quality acceptance or a guaranteed API cost.
 - Browser use, the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browser control, and screenshot acquisition by CodeX/agents are prohibited.
 - CodeX/agents must not claim visual evidence. Human performs screen review manually in ordinary external Microsoft Edge.
@@ -224,7 +229,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Milestone 1 is closed and M2-P3 is complete; Milestone 2 remains incomplete. M2-P4 planning and I1-A through I2 are Human / ChatGPT accepted and complete. I1-C remains the immutable exact 27-path snapshot ending at `b523349ec33c36a90c645d4a1b7a6d37832af151`; I2 is the immutable exact 16-path snapshot ending at `410714875903ae61b5bcdc6cce90030f5679b3b3`. The successful synthetic run retains separate SELECT-only integrity evidence with zero verification calls/writes/migrations. The next candidate, `M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision`, remains not started and unauthorized; E1/E2 and release also remain unauthorized.
+Milestone 1 is closed and M2-P3 is complete; Milestone 2 remains incomplete. M2-P4 planning and I1-A through I2 are Human / ChatGPT accepted and complete. I1-C remains the immutable exact 27-path snapshot ending at `b523349ec33c36a90c645d4a1b7a6d37832af151`; I2 is the immutable exact 16-path snapshot ending at `410714875903ae61b5bcdc6cce90030f5679b3b3`. I3's exact 19-path implementation is complete with Human / ChatGPT review pending. Provider-backed quality, a rubric score, synthetic live smoke, DB SELECT verification, E1/E2, and release remain unperformed or unauthorized as separately stated.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

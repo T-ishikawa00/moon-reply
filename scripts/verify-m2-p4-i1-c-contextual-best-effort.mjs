@@ -16,6 +16,9 @@ const r3BaselineSha = "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
 const r4BaselineSha = "e4e844cbaa8534c68a0d87d5831d04b5afe676a1";
 const acceptedEndSha = "b523349ec33c36a90c645d4a1b7a6d37832af151";
 const i2BaselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
+const i2AcceptedImplementationSha =
+  "410714875903ae61b5bcdc6cce90030f5679b3b3";
+const i3BaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactI2RendererPaths = [
   "app/review/runtime/i2/page.tsx",
   "app/globals.css",
@@ -39,6 +42,27 @@ const exactI2Paths = [
   "docs/CODEX_HANDOFF.md",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
+const exactI3Paths = [
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "evals/runtime/m2-p4-i3-quality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "docs/phase2/TASK_M2_P4_I3_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
 ];
 const acceptedSliceCommits = {
   "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
@@ -2226,13 +2250,37 @@ assert.deepEqual(
   sorted(historicalAcceptanceSyncPaths),
   sorted(acceptanceSyncPaths),
 );
-const currentI2Paths = currentChangedPaths(i2BaselineSha);
-assert.equal(isExactPathSet(currentI2Paths, exactI2Paths), true);
+const historicalI2Paths = gitText([
+  "diff",
+  "--name-only",
+  i2BaselineSha,
+  i2AcceptedImplementationSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.equal(isExactPathSet(historicalI2Paths, exactI2Paths), true);
+const currentI3Paths = currentChangedPaths(i3BaselineSha);
+assert.equal(isExactPathSet(currentI3Paths, exactI3Paths), true);
+for (const unauthorizedPath of [
+  "ai/schemas/unauthorized.schema.json",
+  "components/runtime/UnauthorizedComponent.tsx",
+  "app/unauthorized/page.tsx",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/contracts/unlisted-runtime.json",
+]) {
+  assert.equal(
+    isExactPathSet([...exactI3Paths, unauthorizedPath], exactI3Paths),
+    false,
+  );
+}
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("historical_snapshot: PASS");
 console.log("accepted_stack: 27/27");
 console.log("i2_renderer_exceptions: 4/4");
+console.log("i3_successor_exact_scope: 19/19");
 console.log("unauthorized_app_components_regressions: 4/4");
 console.log("normal_information_gate_terminal: 0");
 console.log("needs_more_information_runtime_path: 0");
@@ -2296,4 +2344,4 @@ console.log("r3_historical_exact_scope: 9/9");
 console.log("r4_historical_exact_scope: 10/10");
 console.log("accepted_stack_scope: 27/27");
 console.log("acceptance_sync_exact_scope: 8/8");
-console.log("quality_i2_i3_started: 0");
+console.log("quality_i3_implementation_review_pending: PASS");
