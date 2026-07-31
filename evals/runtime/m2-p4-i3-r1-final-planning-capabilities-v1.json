@@ -2,11 +2,22 @@
   "schema_version": "m2-p4-i3-r1-final-planning-capabilities-v1",
   "task_id": "M2-P4-I3-R1-FINAL-PLAN",
   "title": "Interaction, Relationship & Voice Fidelity Final Planning Package",
-  "status": "final_planning_pending_human_chatgpt_review",
-  "review_correction_required": true,
+  "status": "human_chatgpt_accepted_complete",
+  "accepted_planning_commit": "3c64e5e2179b4c03979119068716326337a002c6",
+  "review_correction_required": false,
+  "review_correction_status": "resolved",
+  "review_correction_commit": "3c64e5e2179b4c03979119068716326337a002c6",
   "review_correction_base": "3bfd436dec7edf150408533a610f359035c218a9",
   "baseline": "ec7cd53884ab4056c78d2596c609baef5701274a",
   "prior_planning_commit": "ec7cd53884ab4056c78d2596c609baef5701274a",
+  "planning_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "ec7cd53884ab4056c78d2596c609baef5701274a",
+    "end_commit_sha": "3c64e5e2179b4c03979119068716326337a002c6",
+    "exact_paths": 12,
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
   "exact_mutation_paths": [
     "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
     "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
@@ -45,5 +56,6 @@
   "external_evaluation_use": 0,
   "real_user_data": 0,
   "achieved_score": null,
-  "runtime_implementation_authorized": false
+  "runtime_implementation_authorized": false,
+  "next_candidate": "M2-P4-I3-R1-A Successor Schemas and Typed Writing Context Contracts"
 }

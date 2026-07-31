@@ -5,8 +5,10 @@
 - Task ID: `M2-P4-I3-R1-FINAL-PLAN`
 - Baseline / prior planning commit: `ec7cd53884ab4056c78d2596c609baef5701274a`
 - Final planning review correction base: `3bfd436dec7edf150408533a610f359035c218a9`
+- Accepted planning commit / resolved review correction commit: `3c64e5e2179b4c03979119068716326337a002c6`
+- Immutable planning snapshot: `ec7cd53884ab4056c78d2596c609baef5701274a..3c64e5e2179b4c03979119068716326337a002c6` (`12/12` exact paths)
 - Branch: `docs/m2-p4-i3-r1-final-planning`
-- Status: final planning pending Human / ChatGPT review
+- Status: Human / ChatGPT accepted complete
 - Task type: planning finalization only
 - Runtime implementation authorized: no
 - Achieved quality score: none
@@ -14,7 +16,7 @@
 
 The I3 implementation is offline accepted at `c85d6d122ad71569532a55887b9a3b6d93f8a288`. One separately Human-authorized synthetic live smoke succeeded. Final I3 acceptance and merge to `main` remain pending. This package does not change or authorize Runtime, Prompt, Schema, UI, application-owned Policy, Safety, Supabase, migrations, provider execution, holdout work, or E1.
 
-Acceptance of this package finalizes the planning boundary only. A future Runtime implementation may be considered only in a separately authorized task after this package is accepted.
+Acceptance of this package finalizes the planning boundary only. The next candidate is `M2-P4-I3-R1-A Successor Schemas and Typed Writing Context Contracts`, but R1-A must not start before a separate Human instruction. Runtime implementation remains unauthorized.
 
 ## 2. Scope and Layer 1 preservation
 
@@ -329,17 +331,22 @@ Representative regression becomes mandatory after changes to model, Prompt, Sche
 
 ## 16. Acceptance and next authority boundary
 
-Planning acceptance checks, including the review correction, are:
+Final Planning is Human / ChatGPT accepted complete. The review correction is resolved at accepted planning commit `3c64e5e2179b4c03979119068716326337a002c6`, and the immutable historical planning snapshot is the exact `12/12` path range `ec7cd53884ab4056c78d2596c609baef5701274a..3c64e5e2179b4c03979119068716326337a002c6`.
 
-- the three corrected planning JSON files parse `3/3`, and the corrected capability JSON parses separately;
+Accepted planning checks are:
+
+- all six quality planning JSON files and the capability JSON parse `7/7`;
+- all six quality planning JSON files are unchanged from the accepted planning commit, while the capability asset changes acceptance metadata only;
 - exact category counts are `8 / 8 / 8 / 8 / 8 / 8 / 8 / 8`;
 - Layer 1 is `32`, Layer 2 is `32`, total is `64`;
 - v2 Layer 1 category objects are deep-equal to the v1 source;
 - duplicate IDs, missing expected behavior, real-person/user data, database records, full UUIDs, and external evaluation case material are zero;
 - case-ID routing and exact-wording lookup authority are false;
 - prior v1 assets and all protected Runtime, Prompt, Schema, UI, Policy, Supabase, package, snapshot, I3, development, and external-evaluation paths have zero diff;
-- baseline `ec7cd538...` final mutation scope remains `12/12`, while this correction commit is exactly `6/6`;
+- the immutable final planning snapshot remains `12/12`, the resolved review correction is exactly `6/6`, and the acceptance synchronization is exactly `6/6`;
 - aftercare zero, conditional `next_three_days` minimum, Structured Intake separation, 25-owner coverage, old/new aftercare mapping, and adjustment commercial boundaries are present; and
 - `git diff --check` passes.
 
-Acceptance does not accept I3 finally, merge anything to `main`, authorize Runtime implementation, start E1, authorize provider execution, or complete Milestone 2.
+The accepted Canonical Suite is `64/64`: Layer 1 `32/32`, Layer 2 `32/32`, and eight categories of eight, with Layer 1 deep equality preserved. Final precedence, flexible aftercare, `pre_action_check`, Structured Intake successor `writing_context`, all 25 hard-fail owners, quality-gate disposition, Privacy, repeat-consultation, version-drift plans, one recommended draft, and one user-initiated adjustment included in JPY 980 are accepted.
+
+The next candidate is `M2-P4-I3-R1-A Successor Schemas and Typed Writing Context Contracts`. It must not start before a separate Human instruction. This acceptance does not accept I3 finally, merge anything to `main`, authorize Runtime implementation, start a Provider diagnostic or E1, authorize provider execution, or complete Milestone 2. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
