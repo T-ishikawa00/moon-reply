@@ -268,6 +268,12 @@ const m2p4I3R1AcceptedPlanningCommit =
   "3c64e5e2179b4c03979119068716326337a002c6";
 const m2p4I3R1ABaselineCommit =
   "e5cfd903740267db6d070964a9ec72a7d823f310";
+const m2p4I3R1AFirstImplementationCommit =
+  "3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a";
+const m2p4I3R1AAcceptedImplementationCommit =
+  "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
+const m2p4I3R1ACapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json";
 const m2p4I3R1PlanningCapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json";
 const m2p4I3R1FinalPlanningCapabilityManifestPath =
@@ -300,6 +306,16 @@ const m2p4I3R1AExactPaths = new Set([
   "scripts/verify-m2-p4-i2-report-ia.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1AAcceptanceSyncPaths = new Set([
+  m2p4I3R1ACapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  m2p4I3R1AVerifierPath,
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -4201,7 +4217,17 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1AcceptedPlanningCommit,
     m2p4I3R1ABaselineCommit,
   );
-  const m2p4I3R1ATaskPaths = currentTaskPaths(m2p4I3R1ABaselineCommit);
+  const m2p4I3R1AImplementationPaths = historicalTaskPaths(
+    m2p4I3R1ABaselineCommit,
+    m2p4I3R1AAcceptedImplementationCommit,
+  );
+  const m2p4I3R1ASelfCorrectionPaths = historicalTaskPaths(
+    m2p4I3R1AFirstImplementationCommit,
+    m2p4I3R1AAcceptedImplementationCommit,
+  );
+  const m2p4I3R1AAcceptanceSyncTaskPaths = currentTaskPaths(
+    m2p4I3R1AAcceptedImplementationCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4213,6 +4239,7 @@ function verifyScopeAndProhibitedImplementation() {
   const m2p4I3R1FinalPlanningManifest = readJson(
     m2p4I3R1FinalPlanningCapabilityManifestPath,
   );
+  const m2p4I3R1AManifest = readJson(m2p4I3R1ACapabilityManifestPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4395,14 +4422,70 @@ function verifyScopeAndProhibitedImplementation() {
       actual: "accepted",
     });
   }
-  if (!isExactLiteralPathSet(m2p4I3R1ATaskPaths, m2p4I3R1AExactPaths)) {
+  const expectedM2p4I3R1ASnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: m2p4I3R1ABaselineCommit,
+    end_commit_sha: m2p4I3R1AAcceptedImplementationCommit,
+    exact_paths: 18,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const expectedM2p4I3R1ASelfCorrection = {
+    required: true,
+    status: "resolved",
+    commit: m2p4I3R1AAcceptedImplementationCommit,
+    changed_paths: [m2p4I3R1AVerifierPath],
+    scope_expansion: false,
+    force_push: false,
+  };
+  if (
+    !isExactLiteralPathSet(
+      m2p4I3R1AImplementationPaths,
+      m2p4I3R1AExactPaths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1AAcceptanceSyncTaskPaths,
+      m2p4I3R1AAcceptanceSyncPaths,
+    ) ||
+    !isExactLiteralPathSet(m2p4I3R1ASelfCorrectionPaths, [m2p4I3R1AVerifierPath]) ||
+    m2p4I3R1AManifest?.task_id !== "M2-P4-I3-R1-A" ||
+    m2p4I3R1AManifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I3R1AManifest?.accepted_implementation_commit !==
+      m2p4I3R1AAcceptedImplementationCommit ||
+    JSON.stringify(m2p4I3R1AManifest?.implementation_commits) !==
+      JSON.stringify([
+        m2p4I3R1AFirstImplementationCommit,
+        m2p4I3R1AAcceptedImplementationCommit,
+      ]) ||
+    JSON.stringify(m2p4I3R1AManifest?.implementation_snapshot) !==
+      JSON.stringify(expectedM2p4I3R1ASnapshot) ||
+    JSON.stringify(m2p4I3R1AManifest?.self_correction) !==
+      JSON.stringify(expectedM2p4I3R1ASelfCorrection) ||
+    m2p4I3R1AManifest?.active_runtime_changed !== false ||
+    m2p4I3R1AManifest?.next_candidate !==
+      "M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding" ||
+    m2p4I3R1AManifest?.next_candidate_authorized !== false
+  ) {
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
-      file: "<git>",
-      pathName: "$.m2_p4_i3_r1_a_exact_scope",
+      file: m2p4I3R1ACapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_a_acceptance",
       invariant:
-        "M2-P4-I3-R1-A changes exactly 18 literal paths without prefix or future-path authorization",
-      expected: [...m2p4I3R1AExactPaths].sort(),
-      actual: m2p4I3R1ATaskPaths,
+        "accepted M2-P4-I3-R1-A keeps the immutable 18-path implementation snapshot, exact 8-path acceptance sync, resolved one-path correction, inactive Runtime, and unauthorized R1-B",
+      expected: {
+        status: "human_chatgpt_accepted_complete",
+        implementation_snapshot: expectedM2p4I3R1ASnapshot,
+        implementation_paths: [...m2p4I3R1AExactPaths].sort(),
+        acceptance_sync_paths: [...m2p4I3R1AAcceptanceSyncPaths].sort(),
+        self_correction: expectedM2p4I3R1ASelfCorrection,
+        active_runtime_changed: false,
+        next_candidate_authorized: false,
+      },
+      actual: {
+        manifest: m2p4I3R1AManifest,
+        implementation_paths: m2p4I3R1AImplementationPaths,
+        acceptance_sync_paths: m2p4I3R1AAcceptanceSyncTaskPaths,
+        self_correction_paths: m2p4I3R1ASelfCorrectionPaths,
+      },
     });
   }
   for (const unauthorizedPath of [

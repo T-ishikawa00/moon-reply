@@ -2,8 +2,31 @@
   "schema_version": "m2-p4-i3-r1-a-capabilities-v1",
   "task_id": "M2-P4-I3-R1-A",
   "title": "Successor Schemas and Typed Writing Context Contracts",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "accepted_implementation_commit": "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd",
+  "implementation_commits": [
+    "3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a",
+    "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd"
+  ],
   "baseline": "e5cfd903740267db6d070964a9ec72a7d823f310",
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "e5cfd903740267db6d070964a9ec72a7d823f310",
+    "end_commit_sha": "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd",
+    "exact_paths": 18,
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
+  "self_correction": {
+    "required": true,
+    "status": "resolved",
+    "commit": "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd",
+    "changed_paths": [
+      "scripts/verify-m2-p4-i3-r1-a-contracts.mjs"
+    ],
+    "scope_expansion": false,
+    "force_push": false
+  },
   "exact_mutation_paths": [
     "lib/assessment/runtime/contracts/writing-context-v1.ts",
     "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",

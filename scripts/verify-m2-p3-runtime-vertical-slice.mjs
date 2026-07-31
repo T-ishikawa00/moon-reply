@@ -77,6 +77,10 @@ const i3ImplementationSha = "c85d6d122ad71569532a55887b9a3b6d93f8a288";
 const layer1PlanningSha = "ec7cd53884ab4056c78d2596c609baef5701274a";
 const acceptedPlanningSha = "3c64e5e2179b4c03979119068716326337a002c6";
 const r1aBaselineSha = "e5cfd903740267db6d070964a9ec72a7d823f310";
+const r1aFirstImplementationSha =
+  "3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a";
+const r1aAcceptedImplementationSha =
+  "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
 const exactPlanningAcceptanceSyncPaths = [
   "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
   "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
@@ -99,6 +103,16 @@ const exactR1APaths = [
   "scripts/verify-m2-p4-i2-report-ia.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1AAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1555,6 +1569,9 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const finalPlanningManifest = json(
     "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
   );
+  const r1aManifest = json(
+    "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  );
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1567,7 +1584,33 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     acceptedPlanningSha,
     r1aBaselineSha,
   );
-  const actualR1APaths = currentTaskPaths(r1aBaselineSha);
+  const actualR1AImplementationPaths = historicalPaths(
+    r1aBaselineSha,
+    r1aAcceptedImplementationSha,
+  );
+  const actualR1ASelfCorrectionPaths = historicalPaths(
+    r1aFirstImplementationSha,
+    r1aAcceptedImplementationSha,
+  );
+  const actualR1AAcceptanceSyncPaths = currentTaskPaths(
+    r1aAcceptedImplementationSha,
+  );
+  const expectedR1ASnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1aBaselineSha,
+    end_commit_sha: r1aAcceptedImplementationSha,
+    exact_paths: 18,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const expectedR1ASelfCorrection = {
+    required: true,
+    status: "resolved",
+    commit: r1aAcceptedImplementationSha,
+    changed_paths: ["scripts/verify-m2-p4-i3-r1-a-contracts.mjs"],
+    scope_expansion: false,
+    force_push: false,
+  };
   const i2ExecutionSources = [
     i2PageSource,
     i2FixtureSource,
@@ -1651,8 +1694,32 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         actualPlanningAcceptanceSyncPaths,
         exactPlanningAcceptanceSyncPaths,
       ) &&
-      isExactLiteralSet(actualR1APaths, exactR1APaths),
-    `R1 planning/R1-A exact successor boundaries differ: ${actualR1APaths.join(",")}`,
+      isExactLiteralSet(actualR1AImplementationPaths, exactR1APaths) &&
+      isExactLiteralSet(
+        actualR1AAcceptanceSyncPaths,
+        exactR1AAcceptanceSyncPaths,
+      ) &&
+      isExactLiteralSet(actualR1ASelfCorrectionPaths, [
+        "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+      ]) &&
+      r1aManifest.task_id === "M2-P4-I3-R1-A" &&
+      r1aManifest.status === "human_chatgpt_accepted_complete" &&
+      r1aManifest.accepted_implementation_commit ===
+        r1aAcceptedImplementationSha &&
+      JSON.stringify(r1aManifest.implementation_commits) ===
+        JSON.stringify([
+          r1aFirstImplementationSha,
+          r1aAcceptedImplementationSha,
+        ]) &&
+      JSON.stringify(r1aManifest.implementation_snapshot) ===
+        JSON.stringify(expectedR1ASnapshot) &&
+      JSON.stringify(r1aManifest.self_correction) ===
+        JSON.stringify(expectedR1ASelfCorrection) &&
+      r1aManifest.active_runtime_changed === false &&
+      r1aManifest.next_candidate ===
+        "M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding" &&
+      r1aManifest.next_candidate_authorized === false,
+    `R1 planning/R1-A accepted successor boundaries differ: implementation=${actualR1AImplementationPaths.join(",")}; acceptance=${actualR1AAcceptanceSyncPaths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

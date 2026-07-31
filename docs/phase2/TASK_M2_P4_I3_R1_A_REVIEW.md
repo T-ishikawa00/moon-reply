@@ -6,16 +6,21 @@
 - Task ID: `M2-P4-I3-R1-A`
 - Baseline: `e5cfd903740267db6d070964a9ec72a7d823f310`
 - Branch: `feat/m2-p4-i3-r1-a-schema-contracts`
-- Status: `implementation_pending_human_chatgpt_review`
+- Status: `human_chatgpt_accepted_complete`
+- Accepted implementation commit: `8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd`
+- Implementation commits: `3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a`, `8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd`
+- Immutable implementation snapshot: `e5cfd903740267db6d070964a9ec72a7d823f310..8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd` (`18/18` exact paths; working tree excluded)
+- Verifier self-correction: resolved at `8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd`; exactly `scripts/verify-m2-p4-i3-r1-a-contracts.mjs`; no scope expansion; no force push
 - Accepted planning commit: `3c64e5e2179b4c03979119068716326337a002c6`
 - Accepted planning snapshot: `ec7cd53884ab4056c78d2596c609baef5701274a..3c64e5e2179b4c03979119068716326337a002c6` (`12/12` exact paths)
 - Candidate schema set: `pipeline-schema-runtime-v4.0.0`
 - Active Runtime changed: false
 - Provider diagnostic: not started
+- E1: not started
 - Achieved score: none
 - Final I3 acceptance: pending
 - Milestone 2: incomplete
-- `main`: `61e33a10e195fad17e253a6b9719217e1992f273`
+- `main`: unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`
 - Next candidate: `M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding`
 - Next candidate authorized: false
 
@@ -43,6 +48,21 @@ Exactly 18 literal paths are authorized:
 18. `docs/CODEX_HANDOFF.md`
 
 No wildcard, prefix authorization, or future-path authority is implied. Current v3 Schemas, current Decision / Report Schemas, validation-result Schema, Prompt, Runtime catalog, Pipeline, Service, schema catalog, runtime types, Policy, Safety, eligibility, grounding, disposition, app, components, CSS, Supabase, package files, development data, holdout, and accepted snapshots are protected.
+
+## Exact acceptance-sync manifest
+
+This acceptance synchronization changes exactly eight existing paths:
+
+1. `evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-a-contracts.mjs`
+4. `scripts/verify-m2-eval-foundation.mjs`
+5. `scripts/verify-m2-p3-runtime-vertical-slice.mjs`
+6. `docs/CURRENT_FOCUS.md`
+7. `docs/WBS.md`
+8. `docs/CODEX_HANDOFF.md`
+
+It does not extend the immutable `18/18` implementation snapshot. Candidate Schemas, the TypeScript contract module, fixtures, schema-contract manifest, and every other historical verifier remain content-fixed to accepted implementation commit `8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd`; canonical LF comparison excludes checkout-only CRLF normalization.
 
 ## Candidate contract set
 
@@ -92,6 +112,7 @@ Fixtures contain no real person, real user, PII value, full UUID, holdout materi
 - [x] ESLint
 - [x] Production build
 - [x] JSON parse, exact scope `18/18`, protected diff `0`, Provider projection, valid/invalid fixtures, cross-contract checks, Canonical Suite `64/64`, and `git diff --check`
+- [x] Acceptance synchronization exact scope `8/8`; immutable implementation snapshot `18/18`; candidate Schema hashes and fixtures unchanged
 
 ## Capability boundary
 
@@ -107,19 +128,22 @@ Fixtures contain no real person, real user, PII value, full UUID, holdout materi
 - Runtime activation: none
 - PR / main merge / release: none
 
-## Human / ChatGPT review questions
+## Human / ChatGPT review result
 
-- [ ] Does the pure TypeScript contract exactly match every writing-context Schema enum?
-- [ ] Does Structured Intake v4 preserve v3 and keep `decision_facts` deep-equal?
-- [ ] Are candidate presence, message ownership, source references, explicit constraints, Privacy markers, and unresolved writing fields represented without raw text or PII values?
-- [ ] Do Decision Plan v2 conditionals reject invalid decision/draft/metadata combinations without forcing redundant prose?
-- [ ] Do Report Content v2 and application-owned cross-contract checks prevent stale draft context and count mismatches?
-- [ ] Do canonical AJV and Provider projection both pass without activating Runtime?
-- [ ] Are historical snapshots immutable and the R1-A successor allowlist exactly 18 literal paths?
-- [ ] Is R1-B still not started and not authorized?
+- [x] The pure TypeScript contract exactly matches every writing-context Schema enum.
+- [x] Structured Intake v4 preserves v3 and keeps `decision_facts` deep-equal.
+- [x] Candidate presence, message ownership, source references, explicit constraints, Privacy markers, and unresolved writing fields are represented without raw text or PII values.
+- [x] Decision Plan v2 conditionals reject invalid decision/draft/metadata combinations without forcing redundant prose.
+- [x] Report Content v2 and application-owned cross-contract checks prevent stale draft context and count mismatches.
+- [x] Canonical AJV and Provider projection pass without activating Runtime.
+- [x] Historical snapshots are immutable and the R1-A successor allowlist is exactly 18 literal paths.
+- [x] The verifier-only self-correction is accepted with no scope expansion and no force push.
+- [x] R1-B is still not started and not authorized.
+
+R1-A is Human / ChatGPT accepted complete. Structured Intake v4, the `writing_context` TypeScript contract, Decision Plan v2, Report Content v2, Provider projection, six valid fixtures, and ten invalid fixtures are accepted. The Canonical Suite remains `64/64`, decision Policy remains `40/40`, the candidate schema set remains inactive, and active Runtime remains on v3.
 
 ## Evidence boundary
 
 Automated validation can establish Schema syntax, canonical AJV behavior, projected Provider compatibility, enum parity, v3 preservation, synthetic fixture outcomes, cross-contract invariants, historical snapshot preservation, exact mutation scope, and protected-diff absence. It cannot establish Provider model quality, a Human prose-quality decision, final I3 acceptance, release readiness, or Milestone 2 completion.
 
-This task makes no live OpenAI call, database operation, Supabase operation, migration, holdout access, real-user-data access, Provider diagnostic, E1 execution, Runtime activation, PR, or `main` merge. R1-B remains not started and not authorized.
+This task makes no live OpenAI call, database operation, Supabase operation, migration, holdout access, real-user-data access, Provider diagnostic, E1 execution, Runtime activation, PR, or `main` merge. R1-B remains the next candidate but is not started and not authorized. Final I3 acceptance remains pending, `main` remains unchanged, and Milestone 2 remains incomplete.

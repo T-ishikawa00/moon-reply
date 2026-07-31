@@ -11,6 +11,14 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baselineSha = "e5cfd903740267db6d070964a9ec72a7d823f310";
+const firstImplementationSha =
+  "3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a";
+const acceptedImplementationSha =
+  "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
+const implementationCommits = [
+  firstImplementationSha,
+  acceptedImplementationSha,
+];
 const i3BaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const i3ImplementationSha = "c85d6d122ad71569532a55887b9a3b6d93f8a288";
 const layer1PlanningSha = "ec7cd53884ab4056c78d2596c609baef5701274a";
@@ -36,7 +44,7 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
-const exactAcceptanceSyncPaths = [
+const exactPlanningAcceptanceSyncPaths = [
   "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
   "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
   "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
@@ -44,6 +52,19 @@ const exactAcceptanceSyncPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const exactR1AAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const immutableImplementationPaths = exactPaths.filter(
+  (item) => !exactR1AAcceptanceSyncPaths.includes(item),
+);
 const schemaPaths = {
   structured_intake_v4:
     "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
@@ -565,6 +586,8 @@ function collectReachablePropertyNames(rootSchema, startSchema) {
 
 for (const sha of [
   baselineSha,
+  firstImplementationSha,
+  acceptedImplementationSha,
   i3BaselineSha,
   i3ImplementationSha,
   layer1PlanningSha,
@@ -577,6 +600,45 @@ for (const sha of [
 assert.equal(exactPaths.length, 18);
 assert.equal(new Set(exactPaths).size, 18);
 assert.equal(isExactLiteralSet(currentTaskPaths(baselineSha), exactPaths), true);
+assert.equal(
+  gitText(["rev-parse", `${firstImplementationSha}^`]).trim(),
+  baselineSha,
+);
+assert.equal(
+  gitText(["rev-parse", `${acceptedImplementationSha}^`]).trim(),
+  firstImplementationSha,
+);
+assert.deepEqual(
+  normalizedPaths(
+    gitText(["rev-list", "--reverse", `${baselineSha}..${acceptedImplementationSha}`]),
+  ),
+  implementationCommits,
+);
+assert.deepEqual(
+  historicalPaths(baselineSha, acceptedImplementationSha),
+  sorted(exactPaths),
+);
+assert.deepEqual(
+  historicalPaths(firstImplementationSha, acceptedImplementationSha),
+  ["scripts/verify-m2-p4-i3-r1-a-contracts.mjs"],
+);
+assert.equal(
+  isExactLiteralSet(
+    currentTaskPaths(acceptedImplementationSha),
+    exactR1AAcceptanceSyncPaths,
+  ),
+  true,
+);
+assert.equal(immutableImplementationPaths.length, 10);
+for (const immutablePath of immutableImplementationPaths) {
+  assert.equal(
+    canonicalText(source(immutablePath)),
+    canonicalText(
+      gitText(["show", `${acceptedImplementationSha}:${immutablePath}`]),
+    ),
+    `${immutablePath} changed after accepted implementation`,
+  );
+}
 for (const unauthorizedPath of [
   "lib/assessment/runtime/pipeline.ts",
   "lib/assessment/runtime/service.ts",
@@ -654,17 +716,18 @@ assert.deepEqual(
 );
 assert.deepEqual(
   historicalPaths(acceptedPlanningSha, baselineSha),
-  sorted(exactAcceptanceSyncPaths),
+  sorted(exactPlanningAcceptanceSyncPaths),
 );
-assert.equal(exactAcceptanceSyncPaths.length, 6);
+assert.equal(exactPlanningAcceptanceSyncPaths.length, 6);
 for (const paths of [
   i1cCapabilities.accepted_stack_paths,
   i2Capabilities.exact_mutation_paths,
   i3Capabilities.exact_mutation_paths,
   layer1Capabilities.exact_mutation_paths,
   finalPlanningCapabilities.exact_mutation_paths,
-  exactAcceptanceSyncPaths,
+  exactPlanningAcceptanceSyncPaths,
   exactPaths,
+  exactR1AAcceptanceSyncPaths,
 ]) {
   assert.equal(
     paths.some((item) => item.includes("*") || item.endsWith("/")),
@@ -746,9 +809,30 @@ assert.equal(
 );
 assert.equal(
   capabilities.status,
-  "implementation_pending_human_chatgpt_review",
+  "human_chatgpt_accepted_complete",
 );
+assert.equal(
+  capabilities.accepted_implementation_commit,
+  acceptedImplementationSha,
+);
+assert.deepEqual(capabilities.implementation_commits, implementationCommits);
 assert.equal(capabilities.baseline, baselineSha);
+assert.deepEqual(capabilities.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  exact_paths: 18,
+  include_working_tree: false,
+  immutable_snapshot: true,
+});
+assert.deepEqual(capabilities.self_correction, {
+  required: true,
+  status: "resolved",
+  commit: acceptedImplementationSha,
+  changed_paths: ["scripts/verify-m2-p4-i3-r1-a-contracts.mjs"],
+  scope_expansion: false,
+  force_push: false,
+});
 assert.equal(isExactLiteralSet(capabilities.exact_mutation_paths, exactPaths), true);
 assert.equal(capabilities.exact_mutation_path_count, 18);
 assert.equal(capabilities.candidate_schema_set, "pipeline-schema-runtime-v4.0.0");
@@ -769,6 +853,10 @@ for (const key of [
 }
 assert.equal(capabilities.provider_diagnostic, "not_started");
 assert.equal(capabilities.achieved_score, null);
+assert.equal(
+  capabilities.next_candidate,
+  "M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding",
+);
 assert.equal(capabilities.next_candidate_authorized, false);
 
 for (const [schemaPath, expectedHash] of Object.entries(
@@ -1034,8 +1122,8 @@ const fixtures = json(
 assert.equal(fixtures.synthetic_only, true);
 assert.equal(fixtures.real_user_data, false);
 assert.equal(fixtures.holdout_material, false);
-assert.ok(fixtures.valid_sets.length >= 6);
-assert.ok(fixtures.invalid_sets.length >= 8);
+assert.equal(fixtures.valid_sets.length, 6);
+assert.equal(fixtures.invalid_sets.length, 10);
 assert.equal(new Set(fixtures.valid_sets.map((item) => item.set_id)).size, fixtures.valid_sets.length);
 assert.equal(new Set(fixtures.invalid_sets.map((item) => item.set_id)).size, fixtures.invalid_sets.length);
 
@@ -1168,6 +1256,11 @@ assert.equal(
 );
 
 console.log("M2_P4_I3_R1_A_CONTRACTS: PASS");
+console.log(`accepted_implementation_commit: ${acceptedImplementationSha}`);
+console.log("implementation_commits: 2/2");
+console.log("implementation_snapshot: 18/18");
+console.log("acceptance_sync_scope: 8/8");
+console.log("self_correction: resolved");
 console.log("candidate_schema_set: pipeline-schema-runtime-v4.0.0");
 console.log("active_runtime_changed: false");
 console.log("structured_intake_v4: PASS");
@@ -1175,9 +1268,13 @@ console.log("writing_context_contract: PASS");
 console.log("decision_plan_v2: PASS");
 console.log("report_content_v2: PASS");
 console.log("provider_schema_compatibility: PASS");
-console.log("fixtures_valid: PASS");
-console.log("fixtures_invalid: PASS");
+console.log("schema_hashes_unchanged: PASS");
+console.log("fixtures_unchanged: PASS");
+console.log("fixtures_valid: 6/6");
+console.log("fixtures_invalid: 10/10");
 console.log("canonical_suite: 64/64");
+console.log("protected_diff: 0");
+console.log("r1_b_authorized: false");
 console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
