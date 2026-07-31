@@ -105,6 +105,307 @@
       "proposed_disposition": "blocking"
     }
   ],
+    "hard_fail_ownership": {
+      "allowed_owners": [
+        "application_deterministic",
+        "semantic_validator_with_application_disposition",
+        "provider_diagnostic_only",
+        "human_review_only"
+      ],
+      "deterministic_feasibility_values": [
+        "high",
+        "partial",
+        "low"
+      ],
+      "principles": [
+        "Subjective persona or dialect quality alone is never terminal.",
+        "Material fact, Safety, decision, explicit-constraint, ownership, privacy, or unsupported semantic-addition failures are runtime-blocking candidates only through application disposition.",
+        "PB-06 severity alone never determines the final terminal disposition.",
+        "runtime_blocking_candidate records planning eligibility and does not authorize implementation."
+      ]
+    },
+    "hard_fail_ownership_matrix": {
+      "UNJUSTIFIED_REGISTER_SHIFT": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "human_review_only",
+        "runtime_blocking_candidate": false,
+        "required_evidence": [
+          "candidate and draft typed register",
+          "explicit register constraint or authorized change reason",
+          "source_refs for the reason"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "PERSONA_DISCONTINUITY": {
+        "primary_owner": "human_review_only",
+        "secondary_owner": "provider_diagnostic_only",
+        "runtime_blocking_candidate": false,
+        "required_evidence": [
+          "supported candidate voice markers",
+          "draft comparison",
+          "blind Human review evidence"
+        ],
+        "deterministic_feasibility": "low"
+      },
+      "HIERARCHY_MISMATCH": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "explicit hierarchy or authority fact",
+          "source_refs",
+          "draft register, request form, and pressure"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "UNSUPPORTED_INTIMACY_INCREASE": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed candidate and draft intimacy, affection, and invitation levels",
+          "supporting goal and relationship source_refs"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "UNSUPPORTED_INTIMACY_DECREASE": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "human_review_only",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed candidate and draft intimacy, affection, and invitation levels",
+          "evidence that removed warmth was supported and material"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "CANDIDATE_MEANING_CHANGED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate status and source_refs",
+          "communicative-intent delta",
+          "draft edit metadata"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "RELATIONSHIP_STEREOTYPE": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "human_review_only",
+        "runtime_blocking_candidate": false,
+        "required_evidence": [
+          "coarse relationship input",
+          "unsupported inferred relationship property",
+          "absence of typed supporting source_refs"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "INCOMING_QUESTION_UNANSWERED": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed unanswered obligation",
+          "incoming question source_ref",
+          "draft answer coverage"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "RELATIONSHIP_ONLY_WRONG_DECISION": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "paired inputs with identical decision_facts",
+          "relationship effect_class",
+          "selected decisions"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "OPTIONAL_MESSAGE_IGNORED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "unsent candidate presence",
+          "candidate meaning and style profile",
+          "recommended draft and edit metadata"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "MESSAGE_OWNER_CONFUSION": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "message_id, author, status, sequence, and source_refs",
+          "output attribution"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "SENT_UNSENT_STATUS_CONFUSION": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed sent_by_user and unsent_candidate statuses",
+          "message sequence",
+          "draft source status"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "CONVERSATION_ORDER_CONFUSION": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "ordered message sequence",
+          "current-turn identifier",
+          "output obligation and closure target"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "DIALOGUE_ACT_UNFULFILLED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed dialogue act",
+          "unanswered obligations or practical requirements",
+          "draft fulfillment evidence"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "USER_CONSTRAINT_VIOLATED": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "explicit user constraint",
+          "constraint source_ref",
+          "corresponding draft feature"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "UNSUPPORTED_QUESTION_ADDED": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate and draft question counts",
+          "typed user goal",
+          "practical requirement evidence"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "UNSUPPORTED_INVITATION_ADDED": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate and draft invitation presence",
+          "typed user goal",
+          "incoming invitation and source_refs"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "UNSUPPORTED_INVITATION_STRENGTHENED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate and draft invitation specificity",
+          "user goal",
+          "relationship and incoming source_refs"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "UNSUPPORTED_AFFECTION_STRENGTHENED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "human_review_only",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate and draft affection strength",
+          "explicit affection goal or relationship evidence",
+          "source_refs"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "UNSUPPORTED_COMMITMENT_ADDED": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "candidate and draft commitment presence and strength",
+          "explicit availability or promise evidence",
+          "source_refs"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "MANIPULATIVE_TACTIC_AMPLIFIED": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "human_review_only",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "typed manipulation or coercion marker",
+          "candidate-to-draft tactic delta",
+          "Safety and boundary source_refs"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "PII_REPRODUCED_UNNECESSARILY": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "privacy marker categories",
+          "draft or report reproduction locations",
+          "communicative necessity disposition"
+        ],
+        "deterministic_feasibility": "high"
+      },
+      "DIALECT_OR_IDIOLECT_ERASED": {
+        "primary_owner": "human_review_only",
+        "secondary_owner": "provider_diagnostic_only",
+        "runtime_blocking_candidate": false,
+        "required_evidence": [
+          "explicit established dialect or idiolect evidence",
+          "candidate-to-draft comparison",
+          "Human fidelity judgment"
+        ],
+        "deterministic_feasibility": "low"
+      },
+      "REPEAT_CONSULTATION_ESCALATION": {
+        "primary_owner": "semantic_validator_with_application_disposition",
+        "secondary_owner": "application_deterministic",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "repeat_consultation_state",
+          "changed_fact_ids",
+          "prior and current decision, certainty, and action deltas"
+        ],
+        "deterministic_feasibility": "partial"
+      },
+      "DIRECT_SEND_WITHOUT_USER_CONFIRMATION": {
+        "primary_owner": "application_deterministic",
+        "secondary_owner": "semantic_validator_with_application_disposition",
+        "runtime_blocking_candidate": true,
+        "required_evidence": [
+          "external-send action state",
+          "user confirmation state",
+          "copy and send ownership record"
+        ],
+        "deterministic_feasibility": "high"
+      }
+    },
+    "aftercare_consistency_compatibility": {
+      "current_runtime_compatibility_code": "THREE_DAY_PLAN_CONSISTENCY",
+      "successor_candidate_code": "AFTERCARE_PLAN_CONSISTENCY",
+      "mapping_rule": "Until a separately authorized validation-result Schema successor exists, flexible aftercare consistency maps to the current THREE_DAY_PLAN_CONSISTENCY code.",
+      "plan_zero_rule": "When aftercare_plan has zero items, aftercare commentary must also have zero items and the result is consistent.",
+      "validation_result_schema_change_in_this_task": false,
+      "implementation_authorized": false
+    },
   "evaluation_strategy": {
     "canonical_structural_suite": {
       "cases": 64,

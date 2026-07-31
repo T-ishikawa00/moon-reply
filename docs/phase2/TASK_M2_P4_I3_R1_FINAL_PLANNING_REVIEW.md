@@ -5,6 +5,7 @@
 - Task: `Interaction, Relationship & Voice Fidelity Final Planning Package`
 - Task ID: `M2-P4-I3-R1-FINAL-PLAN`
 - Baseline / prior planning commit: `ec7cd53884ab4056c78d2596c609baef5701274a`
+- Final planning review correction base: `3bfd436dec7edf150408533a610f359035c218a9`
 - Branch: `docs/m2-p4-i3-r1-final-planning`
 - Status: final planning pending Human / ChatGPT review
 - Runtime implementation authorized: no
@@ -32,6 +33,19 @@ Exactly 12 paths are authorized:
 
 No wildcard or successor-path authority is implied. The six dedicated v1 plan/review/JSON/capability assets are protected; the prior commit's three rolling status documents may change only because they are literal paths 10–12 above. `lib/**`, `app/**`, `components/**`, `ai/**`, `scripts/**`, package files, Supabase, migrations, `evals/development/**`, `evals/holdout/**`, accepted I1-C/I2 snapshots, current I3 implementation, `runtime-stage-catalog-v4.json`, Prompt, Schema, Policy, and UI are protected.
 
+### Exact review-correction manifest
+
+This correction updates exactly six existing paths and creates no file:
+
+1. `docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md`
+2. `docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md`
+3. `evals/quality/m2-p4-i3-r1-report-depth-plan-v1.json`
+4. `evals/quality/m2-p4-i3-r1-schema-successor-plan-v1.json`
+5. `evals/quality/m2-p4-i3-r1-quality-gate-plan-v1.json`
+6. `evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json`
+
+The final scope from baseline `ec7cd53884ab4056c78d2596c609baef5701274a` remains the original exact `12/12`. The other six final-planning paths are immutable in this correction.
+
 ## Human / ChatGPT review questions
 
 - [ ] Is the product principle the user's own voice plus preserved communicative meaning, not generic polished prose?
@@ -50,21 +64,29 @@ No wildcard or successor-path authority is implied. The six dedicated v1 plan/re
 - [ ] Does the suite avoid real data, case-ID routing, fixture/oracle matching, and verbatim lookup?
 - [ ] Is one recommended draft the standard?
 - [ ] Is one future user-initiated adjustment bounded so it cannot change decision, meaning, pressure, boundary, or Safety?
+- [ ] Is that adjustment included in JPY 980 at no additional charge, consumed only after success, idempotent, and not consumed by Provider or technical failure?
 - [ ] Is report depth topic-dependent with flexible aftercare rather than a forced Day 3?
+- [ ] Does aftercare allow zero items when no distinct value exists while requiring at least one item when `next_three_days` is selected?
+- [ ] Does `pre_action_check` use a decision-specific label and content consistent with `reply_now / send_now / wait_and_reassess / pause_additional_contact`?
 - [ ] Does the Successor Schema remove forced filler while preserving selected-request fulfillment?
+- [ ] Does the Structured Intake successor require `writing_context` while keeping it separate from `decision_facts`?
 - [ ] Are PB-06 subjective prose QA and application-owned blocking failures separated?
+- [ ] Do all 25 hard fails have explicit ownership, evidence, feasibility, and runtime-blocking-candidate records?
+- [ ] Is `THREE_DAY_PLAN_CONSISTENCY` mapped to the future `AFTERCARE_PLAN_CONSISTENCY` without changing the validation-result Schema?
 - [ ] Are Privacy, repeat consultation, prompt injection, and version drift included?
 - [ ] Is Runtime implementation deferred until a separately authorized post-acceptance task?
 
 ## Required machine checks
 
-- [ ] New JSON parse: `7/7`.
+- [ ] Corrected planning JSON parse: `3/3`.
+- [ ] Corrected capability JSON parse: `1/1`.
 - [ ] Categories: `8/8`.
 - [ ] Every category: `8/8`.
 - [ ] Layer 1: `32/32`.
 - [ ] Layer 2: `32/32`.
 - [ ] Canonical total: `64/64`.
 - [ ] v2 Layer 1 category deep equality with v1: `4/4`.
+- [ ] Canonical suite, Context taxonomy, and Style/Intent rubric are unchanged from correction base.
 - [ ] Duplicate case IDs: `0`.
 - [ ] Missing expected behavior: `0`.
 - [ ] Real-person or real-user case data: `0`.
@@ -76,7 +98,12 @@ No wildcard or successor-path authority is implied. The six dedicated v1 plan/re
 - [ ] Runtime / Prompt / Schema / UI / Policy diff: `0`.
 - [ ] Supabase / package-file diff: `0`.
 - [ ] Accepted snapshot / current I3 / prior v1 planning asset diff: `0`.
-- [ ] Exact mutation scope: `12/12`.
+- [ ] Baseline final mutation scope: `12/12`.
+- [ ] Correction commit mutation scope: `6/6`.
+- [ ] Aftercare zero allowed; selected `next_three_days` minimum present.
+- [ ] Structured Intake successor and `writing_context / decision_facts` separation present.
+- [ ] All 25 hard fails have owners; old/new aftercare consistency mapping present.
+- [ ] Adjustment is included in JPY 980 and technical failure does not consume it.
 - [ ] `git diff --check`: PASS.
 - [ ] OpenAI calls / DB operations / migrations / holdout use / external evaluation material: `0 / 0 / 0 / 0 / 0`.
 - [ ] Working tree clean after commit and push.

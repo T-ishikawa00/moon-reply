@@ -25,8 +25,16 @@
       "required": true
     },
     {
-      "section": "送る前の確認",
-      "required": true
+      "section": "pre_action_check",
+      "internal_concept": "pre_action_check",
+      "display_label_by_decision": {
+        "reply_now": "送る前の確認",
+        "send_now": "送る前の確認",
+        "wait_and_reassess": "今夜は送らないための確認",
+        "pause_additional_contact": "連絡を止めておくための確認"
+      },
+      "required": true,
+      "content_rule": "Show only checks that are semantically consistent with the selected application-owned decision."
     },
     {
       "section": "送った直後または今夜の代替行動",
@@ -71,6 +79,22 @@
   },
   "flexible_aftercare_plan": {
     "future_section_name_candidate": "今夜のあと",
+    "cardinality": "zero_to_three",
+    "conditional_cardinality": {
+      "next_three_days_selected": {
+        "min_items": 1,
+        "normal_items": "two_to_three",
+        "max_items": 3
+      },
+      "next_three_days_not_selected": {
+        "min_items": 0,
+        "max_items": 2
+      },
+      "no_distinct_value": {
+        "min_items": 0,
+        "max_items": 0
+      }
+    },
     "when_next_three_days_selected": {
       "depth": "full",
       "phases": [
@@ -78,15 +102,18 @@
         "次",
         "判断を見直す観測条件"
       ],
+      "minimum_items": 1,
+      "normal_item_count": "two_to_three",
       "fixed_calendar_day_three_required": false
     },
     "when_not_selected": {
       "depth": "compact",
-      "items": "one_or_two_only_when_each_has_distinct_value",
+      "items": "zero_to_two_only_when_each_has_distinct_value",
       "omission_allowed": true,
       "omission_condition": "No distinct aftercare value beyond the always-prominent actions."
     },
-    "anti_repetition_rule": "Do not repeat the same disclaimer, change condition, or action merely to fill a minimum item count."
+    "anti_repetition_rule": "Do not repeat the same disclaimer, change condition, or action merely to fill a minimum item count.",
+    "filler_generation_prohibited": true
   },
   "recommended_draft": {
     "standard_count": 1,
@@ -103,6 +130,12 @@
   "one_user_initiated_adjustment": {
     "adoption": "future_product_candidate",
     "limit_per_purchased_result": 1,
+    "included_in_jpy_980_purchase": true,
+    "additional_charge_jpy": 0,
+    "successful_adjustment_consumes_allowance": true,
+    "provider_or_technical_failure_consumes_allowance": false,
+    "idempotent_consumption_required": true,
+    "manual_edit_limit": "none",
     "allowed_adjustments": [
       "もう少し短く",
       "もう少しやわらかく",
@@ -120,6 +153,17 @@
       "boundary",
       "Safety"
     ],
+    "semantic_immutable_fields": [
+      "decision",
+      "purpose",
+      "invitation_presence",
+      "affection_strength",
+      "commitment",
+      "reply_pressure",
+      "boundary",
+      "Safety"
+    ],
+    "semantic_immutability_rule": "The adjustment cannot change any semantic_immutable_fields.",
     "execution_boundary": "This is a user-initiated revision, not automatic Provider retry, Repair, fallback, or continuation.",
     "ui_implementation_in_this_task": false
   },

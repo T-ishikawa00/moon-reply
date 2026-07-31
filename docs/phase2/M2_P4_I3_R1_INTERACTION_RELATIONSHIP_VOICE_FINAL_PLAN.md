@@ -4,6 +4,7 @@
 
 - Task ID: `M2-P4-I3-R1-FINAL-PLAN`
 - Baseline / prior planning commit: `ec7cd53884ab4056c78d2596c609baef5701274a`
+- Final planning review correction base: `3bfd436dec7edf150408533a610f359035c218a9`
 - Branch: `docs/m2-p4-i3-r1-final-planning`
 - Status: final planning pending Human / ChatGPT review
 - Task type: planning finalization only
@@ -210,17 +211,19 @@ Every report prominently shows:
 
 - 今夜の答え
 - おすすめ返信案または送らない判断
-- 送る前の確認
+- decision-consistent `pre_action_check`
 - 送った直後または今夜の代替行動
 - 今夜やらないこと
 
+`pre_action_check` is the internal semantic slot. Its label is `送る前の確認` for `reply_now / send_now`, `今夜は送らないための確認` for `wait_and_reassess`, and `連絡を止めておくための確認` for `pause_additional_contact`. It may contain only checks consistent with the selected application-owned decision.
+
 Depth then follows the selected topic. Decision requests receive answer, reason, tonight actions, and reassessment condition. Draft requests receive one recommended draft, edit explanation, message temperature, and before/after-send guidance. Message-impact requests receive wording, softness/affection/pressure, and possible-reading analysis. Relationship analysis is evidence-backed and never asserts hidden thoughts. Emotion organization retains a short letter and reframe without obscuring the action.
 
-The three-day function remains, but a fixed Day 3 is not forced. When `next_three_days` is selected, the detailed phases are 今夜, 次, and 判断を見直す観測条件. Otherwise, `今夜のあと` may show one or two compact items only when each adds distinct value; omission is allowed.
+The three-day function remains, but a fixed Day 3 is not forced. The successor aftercare cardinality is `0–3`. When `next_three_days` is selected, at least one item is required and two or three are normal across 今夜, 次, and 判断を見直す観測条件. When it is not selected, zero to two compact items are allowed. When no item adds distinct value, zero is correct; filler generation is prohibited.
 
 The standard is one recommended draft. Several near-duplicate drafts must not create new indecision. If the user's original is already good, minimal or no change is valuable and the report explains why.
 
-One future user-initiated adjustment per purchased result is adopted as a product candidate. Allowed adjustments are shorter, softer, brighter, slightly softer honorifics, or explicitly bounded emoji changes. The adjustment cannot change decision, purpose, invitation presence, affection, commitment, pressure, boundary, or Safety. It is not automatic retry, Repair, or fallback, and no UI is implemented here.
+One future user-initiated adjustment per purchased result is adopted as a product candidate and is included in the JPY 980 purchase at additional charge JPY 0. A successful adjustment consumes the single allowance idempotently; Provider or technical failure does not consume it. Manual user editing has no limit. Allowed AI adjustments are shorter, softer, brighter, slightly softer honorifics, or explicitly bounded emoji changes. The adjustment cannot change decision, purpose, invitation presence, affection, commitment, pressure, boundary, or Safety. It is not automatic retry, Repair, or fallback, and no UI is implemented here.
 
 The AI never sends externally. The user reads, optionally edits, copies, and personally sends the draft.
 
@@ -232,7 +235,7 @@ The future Decision Plan proposal allows:
 
 - one recommended draft when applicable;
 - draft-edit metadata only with a draft;
-- aftercare plan: 1–3 items across `tonight / next / reassessment_condition`;
+- aftercare plan: 0–3 items across `tonight / next / reassessment_condition`, with minimum 1 and normally 2–3 only when `next_three_days` is selected, 0–2 otherwise, and 0 when no distinct value exists;
 - change conditions: 0–4;
 - material unknowns: 0–4;
 - model-generated limitations: 0–2; and
@@ -245,11 +248,13 @@ The future Report Content proposal allows:
 - anxiety reframe: 0–2;
 - action rationales: 0–4;
 - draft context only when a draft exists;
-- aftercare commentary: 0–3, index-aligned with the plan;
+- aftercare commentary: 0–3, exactly index-aligned with the plan; plan 0 requires commentary 0;
 - change-condition commentary: 0–4;
 - `unknowns_commentary`: removed;
 - closing lines: 1–2; and
 - topic-dependent empty arrays or null while selected-request fulfillment remains mandatory.
+
+The future Structured Intake successor candidate is `pipeline-schema-v4.0.0` and requires top-level `writing_context`. Its fields are relationship dimensions, message ownership, incoming profile, candidate style and communicative intent, user goal and explicit constraints, communication pattern, channel/timing, language/expression, repeat state, privacy markers, unresolved writing fields, and source references. `writing_context` remains separate from `decision_facts` and cannot select a decision by itself. Consultation narrative is not candidate-style evidence; explicit/inferred/unresolved remain separate; raw PII and raw candidate text are not copied into profiles; source references never point to case IDs or oracles.
 
 Implementation requires a separate task.
 
@@ -264,6 +269,10 @@ Material `FACT_FIDELITY`, `ASSUMPTION_AS_FACT`, `DECISION_ALLOWED`, `SAFETY_REGR
 `REQUIRED_SECTION_MEANING` blocks when the selected request is substantively unanswered; weaker warmth or specificity is nonblocking. `MESSAGE_POLICY_CONSISTENCY` is nonblocking when usable but slightly stiff, and blocking when not copy-ready, candidate meaning changes, the decision is contradicted, or an explicit constraint is violated.
 
 Deterministic candidates cover absent draft, owner/status mismatch, added question/invitation/emoji, register shift, length ratio, invitation/commitment increase, explicit-constraint violation, and decision/draft consistency. This task does not implement them.
+
+All 25 hard fails now have a planning ownership record with primary owner, secondary owner, runtime-blocking candidacy, required evidence, and deterministic feasibility. Allowed owners are application deterministic checks, semantic validators with application disposition, Provider diagnostics only, and Human review only. Subjective persona or dialect quality alone is not terminal. Fact, Safety, decision, explicit-constraint, privacy, ownership, and unsupported semantic additions may be blocking candidates, but PB-06 severity alone never determines final disposition.
+
+The current compatibility code remains `THREE_DAY_PLAN_CONSISTENCY`. `AFTERCARE_PLAN_CONSISTENCY` is the successor candidate, mapped to the current code until a separately authorized validation-result Schema task changes that contract.
 
 ## 12. Evaluation strategy
 
@@ -320,16 +329,17 @@ Representative regression becomes mandatory after changes to model, Prompt, Sche
 
 ## 16. Acceptance and next authority boundary
 
-Planning acceptance checks are:
+Planning acceptance checks, including the review correction, are:
 
-- seven new JSON files parse;
+- the three corrected planning JSON files parse `3/3`, and the corrected capability JSON parses separately;
 - exact category counts are `8 / 8 / 8 / 8 / 8 / 8 / 8 / 8`;
 - Layer 1 is `32`, Layer 2 is `32`, total is `64`;
 - v2 Layer 1 category objects are deep-equal to the v1 source;
 - duplicate IDs, missing expected behavior, real-person/user data, database records, full UUIDs, and external evaluation case material are zero;
 - case-ID routing and exact-wording lookup authority are false;
 - prior v1 assets and all protected Runtime, Prompt, Schema, UI, Policy, Supabase, package, snapshot, I3, development, and external-evaluation paths have zero diff;
-- exact mutation scope is `12/12`; and
+- baseline `ec7cd538...` final mutation scope remains `12/12`, while this correction commit is exactly `6/6`;
+- aftercare zero, conditional `next_three_days` minimum, Structured Intake separation, 25-owner coverage, old/new aftercare mapping, and adjustment commercial boundaries are present; and
 - `git diff --check` passes.
 
 Acceptance does not accept I3 finally, merge anything to `main`, authorize Runtime implementation, start E1, authorize provider execution, or complete Milestone 2.

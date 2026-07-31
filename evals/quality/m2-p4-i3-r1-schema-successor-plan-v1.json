@@ -30,14 +30,29 @@
       "rule": "Present only when a draft exists."
     },
     "aftercare_plan": {
-      "cardinality": "one_to_three",
+      "cardinality": "zero_to_three",
       "phase_allowed_values": [
         "tonight",
         "next",
         "reassessment_condition"
       ],
+      "conditional_cardinality": {
+        "next_three_days_selected": {
+          "min_items": 1,
+          "normal_items": "two_to_three",
+          "max_items": 3
+        },
+        "next_three_days_not_selected": {
+          "min_items": 0,
+          "max_items": 2
+        },
+        "no_distinct_value": {
+          "min_items": 0,
+          "max_items": 0
+        }
+      },
       "fixed_day_three_required": false,
-      "rule": "Each item must add distinct action value."
+      "rule": "Each item must add distinct action value. Generating filler to satisfy a fixed item count is prohibited."
     },
     "change_conditions": {
       "cardinality": "zero_to_four",
@@ -80,7 +95,8 @@
     },
     "aftercare_commentary": {
       "cardinality": "zero_to_three",
-      "alignment": "index-aligned with aftercare_plan"
+      "alignment": "exact index alignment with aftercare_plan",
+      "when_aftercare_plan_is_zero": "aftercare_commentary must also contain zero items"
     },
     "change_condition_commentary": {
       "cardinality": "zero_to_four",
@@ -97,6 +113,40 @@
       "empty_array_or_null_allowed": true,
       "selected_request_fulfillment_mandatory": true
     }
+  },
+  "future_structured_intake_successor_proposal": {
+    "candidate_schema_version": "pipeline-schema-v4.0.0",
+    "required_top_level": [
+      "writing_context"
+    ],
+    "writing_context": {
+      "required_fields": [
+        "relationship_dimensions",
+        "message_ownership",
+        "incoming_message_profile",
+        "candidate_style_profile",
+        "candidate_communicative_intent",
+        "user_goal_detail",
+        "explicit_user_constraints",
+        "communication_pattern",
+        "channel_and_timing",
+        "language_and_expression",
+        "repeat_consultation_state",
+        "privacy_markers",
+        "unresolved_writing_fields",
+        "source_refs"
+      ]
+    },
+    "invariants": [
+      "writing_context remains separate from decision_facts",
+      "writing_context alone never selects or overrides a decision",
+      "consultation narrative is never used as candidate style evidence",
+      "explicit, inferred, and unresolved evidence remain separate",
+      "raw PII is not copied into writing_context",
+      "raw candidate text is not stored in candidate_style_profile or another profile",
+      "source_refs never reference case IDs, fixtures, expected outputs, or oracles"
+    ],
+    "implementation_authorized": false
   },
   "cross_contract_invariants": [
     "One recommended draft is the standard.",
