@@ -83,6 +83,43 @@ const exactR1APaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1aAcceptedImplementationSha =
+  "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
+const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
+const exactR1AAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1BPaths = [
+  "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const exactRendererPaths = [
   "app/review/runtime/i2/page.tsx",
   "app/globals.css",
@@ -331,9 +368,35 @@ assert.equal(
   true,
 );
 assert.equal(
-  isExactLiteralSet(currentTaskPaths(r1aBaselineSha), exactR1APaths),
+  isExactLiteralSet(
+    historicalPaths(r1aBaselineSha, r1aAcceptedImplementationSha),
+    exactR1APaths,
+  ),
   true,
 );
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(r1aAcceptedImplementationSha, r1bBaselineSha),
+    exactR1AAcceptanceSyncPaths,
+  ),
+  true,
+);
+assert.equal(isExactLiteralSet(currentTaskPaths(r1bBaselineSha), exactR1BPaths), true);
+assert.equal(exactR1BPaths.length, 22);
+for (const unauthorizedPath of [
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/policy-v3.ts",
+  "components/runtime/Unauthorized.tsx",
+]) {
+  assert.equal(
+    isExactLiteralSet([...exactR1BPaths, unauthorizedPath], exactR1BPaths),
+    false,
+  );
+}
 for (const unauthorizedPath of [
   "lib/assessment/runtime/pipeline.ts",
   "lib/assessment/runtime/service.ts",

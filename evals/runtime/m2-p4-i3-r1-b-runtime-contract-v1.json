@@ -1,0 +1,37 @@
+{
+  "schema_version": "m2-p4-i3-r1-b-runtime-contract-v1",
+  "task_id": "M2-P4-I3-R1-B",
+  "baseline": "2381312ced5fc726dfa245632c25da6bb68a376f",
+  "accepted_r1_a_commit": "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd",
+  "r1_a_acceptance_commit": "2381312ced5fc726dfa245632c25da6bb68a376f",
+  "candidate_catalog": "runtime-stage-catalog-v5.0.0",
+  "candidate_prompt_bundle": "prompt-bundle-runtime-v5.0.0",
+  "transitional_schema_set": "pipeline-schema-runtime-v3.1.0",
+  "full_successor_schema_set": "pipeline-schema-runtime-v4.0.0",
+  "full_successor_remains_inactive": true,
+  "active_runtime_unchanged": true,
+  "active_runtime": {
+    "catalog": "runtime-stage-catalog-v4.0.0",
+    "prompt_bundle": "prompt-bundle-runtime-v4.0.0",
+    "schema_set": "pipeline-schema-runtime-v3.0.0"
+  },
+  "downstream_compatibility": "structured-intake-v3 legacy view",
+  "pb_01_raw_output": "Structured Intake v4",
+  "downstream_pb_02_through_pb_06": "exact v4 catalog assets",
+  "hash_algorithm": "sha256-utf8-lf",
+  "hashes": {
+    "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md": "0ee689a8e4037b288086933c007f1536c0a5b986df5f362b81efdb8ad2951967",
+    "lib/assessment/runtime/contracts/structured-intake-v4.schema.json": "080de1b798d5abb91a85eb1b22e42bf4d862664fc8d6469f140c43d8622601d7",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json": "9a4b57a14eae71c6d560a177387ab55b159ac2f5bb23291149b82821d64d68c3"
+  },
+  "provider_diagnostic": "not_started",
+  "provider_execution": {
+    "openai_calls": 0,
+    "paid_execution": 0,
+    "real_database_operations": 0,
+    "supabase_operations": 0,
+    "migrations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0
+  }
+}

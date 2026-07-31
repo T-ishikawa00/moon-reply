@@ -272,8 +272,12 @@ const m2p4I3R1AFirstImplementationCommit =
   "3ba1d2aab4d3af5cb30e95b5c5c12c0f0eb2e19a";
 const m2p4I3R1AAcceptedImplementationCommit =
   "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
+const m2p4I3R1BBaselineCommit =
+  "2381312ced5fc726dfa245632c25da6bb68a376f";
 const m2p4I3R1ACapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json";
+const m2p4I3R1BCapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json";
 const m2p4I3R1PlanningCapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json";
 const m2p4I3R1FinalPlanningCapabilityManifestPath =
@@ -321,6 +325,43 @@ const m2p4I3R1AAcceptanceSyncPaths = new Set([
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1BVerifierPath =
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs";
+const exactR1BPaths = new Set([
+  "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  m2p4I3R1BCapabilityManifestPath,
+  m2p4I3R1BVerifierPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1BVerifierImportPaths = new Set([
+  "lib/assessment/runtime/application.ts",
+  "lib/assessment/runtime/fakes.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/openai-schema.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
 ]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -425,6 +466,7 @@ const successorLocalToolPaths = new Set([
   m2p4I2VerifierPath,
   m2p4I3VerifierPath,
   m2p4I3R1AVerifierPath,
+  m2p4I3R1BVerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3962,6 +4004,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        file === m2p4I3R1BVerifierPath &&
+        ((localImport && m2p4I3R1BVerifierImportPaths.has(localImport)) ||
+          specifier === "ajv/dist/2020.js")
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4225,9 +4274,11 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1AFirstImplementationCommit,
     m2p4I3R1AAcceptedImplementationCommit,
   );
-  const m2p4I3R1AAcceptanceSyncTaskPaths = currentTaskPaths(
+  const m2p4I3R1AAcceptanceSyncTaskPaths = historicalTaskPaths(
     m2p4I3R1AAcceptedImplementationCommit,
+    m2p4I3R1BBaselineCommit,
   );
+  const m2p4I3R1BTaskPaths = currentTaskPaths(m2p4I3R1BBaselineCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4240,6 +4291,7 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1FinalPlanningCapabilityManifestPath,
   );
   const m2p4I3R1AManifest = readJson(m2p4I3R1ACapabilityManifestPath);
+  const m2p4I3R1BManifest = readJson(m2p4I3R1BCapabilityManifestPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4510,6 +4562,83 @@ function verifyScopeAndProhibitedImplementation() {
         file: unauthorizedPath,
         pathName: "$.m2_p4_i3_r1_a_negative_scope",
         invariant: "R1-A rejects every non-manifest path",
+        expected: "rejected",
+        actual: "accepted",
+      });
+    }
+  }
+  if (
+    !isExactLiteralPathSet(m2p4I3R1BTaskPaths, exactR1BPaths) ||
+    m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
+    m2p4I3R1BManifest?.title !==
+      "PB-01 v4 Writing Context Extraction and Grounding" ||
+    m2p4I3R1BManifest?.status !==
+      "implementation_pending_human_chatgpt_review" ||
+    m2p4I3R1BManifest?.baseline !== m2p4I3R1BBaselineCommit ||
+    !isExactLiteralPathSet(
+      [...(m2p4I3R1BManifest?.exact_mutation_paths ?? [])].sort(),
+      exactR1BPaths,
+    ) ||
+    m2p4I3R1BManifest?.exact_mutation_path_count !== 22 ||
+    m2p4I3R1BManifest?.candidate_catalog !==
+      "runtime-stage-catalog-v5.0.0" ||
+    m2p4I3R1BManifest?.candidate_prompt_bundle !==
+      "prompt-bundle-runtime-v5.0.0" ||
+    m2p4I3R1BManifest?.transitional_schema_set !==
+      "pipeline-schema-runtime-v3.1.0" ||
+    m2p4I3R1BManifest?.active_runtime_changed !== false ||
+    m2p4I3R1BManifest?.service_mutations !== 0 ||
+    m2p4I3R1BManifest?.downstream_prompt_mutations !== 0 ||
+    m2p4I3R1BManifest?.ui_mutations !== 0 ||
+    m2p4I3R1BManifest?.policy_mutations !== 0 ||
+    m2p4I3R1BManifest?.openai_calls !== 0 ||
+    m2p4I3R1BManifest?.db_operations !== 0 ||
+    m2p4I3R1BManifest?.migrations !== 0 ||
+    m2p4I3R1BManifest?.provider_diagnostic !== "not_started" ||
+    m2p4I3R1BManifest?.next_candidate !==
+      "M2-P4-I3-R1-C PB-01 v4 Provider Diagnostic and Runtime Activation" ||
+    m2p4I3R1BManifest?.next_candidate_authorized !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I3R1BCapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_b",
+      invariant:
+        "R1-B is the exact 22-path offline-integrated candidate with inactive active Runtime and unauthorized R1-C",
+      expected: {
+        status: "implementation_pending_human_chatgpt_review",
+        baseline: m2p4I3R1BBaselineCommit,
+        exact_mutation_paths: [...exactR1BPaths].sort(),
+        active_runtime_changed: false,
+        service_mutations: 0,
+        provider_diagnostic: "not_started",
+        next_candidate_authorized: false,
+      },
+      actual: {
+        manifest: m2p4I3R1BManifest,
+        task_paths: m2p4I3R1BTaskPaths,
+      },
+    });
+  }
+  for (const unauthorizedPath of [
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+    "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+    "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+    "lib/assessment/runtime/contracts/pb-04-decision-v3.developer.md",
+    "lib/assessment/runtime/policy.ts",
+    "components/runtime/UnauthorizedComponent.tsx",
+    "app/unauthorized/page.tsx",
+  ]) {
+    if (
+      isExactLiteralPathSet(
+        [...exactR1BPaths, unauthorizedPath].sort(),
+        exactR1BPaths,
+      )
+    ) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: unauthorizedPath,
+        pathName: "$.m2_p4_i3_r1_b_negative_scope",
+        invariant: "R1-B rejects every non-manifest path",
         expected: "rejected",
         actual: "accepted",
       });
@@ -5429,6 +5558,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p4I2ExactPaths.has(item) &&
       !m2p4I3ExactPaths.has(item) &&
       !m2p4I3R1AExactPaths.has(item) &&
+      !exactR1BPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -5465,7 +5595,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I1cR4ImplementationPaths.has(item) ||
       m2p4I2ExactPaths.has(item) ||
       m2p4I3ExactPaths.has(item) ||
-      m2p4I3R1AExactPaths.has(item)
+      m2p4I3R1AExactPaths.has(item) ||
+      exactR1BPaths.has(item)
     ) {
       continue;
     }

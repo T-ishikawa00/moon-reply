@@ -62,8 +62,33 @@ const exactR1AAcceptanceSyncPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
+const exactR1BPaths = [
+  "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const immutableImplementationPaths = exactPaths.filter(
-  (item) => !exactR1AAcceptanceSyncPaths.includes(item),
+  (item) => !exactR1BPaths.includes(item),
 );
 const schemaPaths = {
   structured_intake_v4:
@@ -592,6 +617,7 @@ for (const sha of [
   i3ImplementationSha,
   layer1PlanningSha,
   acceptedPlanningSha,
+  r1bBaselineSha,
 ]) {
   gitText(["cat-file", "-e", `${sha}^{commit}`]);
   gitText(["merge-base", "--is-ancestor", sha, "HEAD"]);
@@ -599,7 +625,13 @@ for (const sha of [
 
 assert.equal(exactPaths.length, 18);
 assert.equal(new Set(exactPaths).size, 18);
-assert.equal(isExactLiteralSet(currentTaskPaths(baselineSha), exactPaths), true);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(baselineSha, acceptedImplementationSha),
+    exactPaths,
+  ),
+  true,
+);
 assert.equal(
   gitText(["rev-parse", `${firstImplementationSha}^`]).trim(),
   baselineSha,
@@ -624,19 +656,39 @@ assert.deepEqual(
 );
 assert.equal(
   isExactLiteralSet(
-    currentTaskPaths(acceptedImplementationSha),
+    historicalPaths(acceptedImplementationSha, r1bBaselineSha),
     exactR1AAcceptanceSyncPaths,
   ),
   true,
 );
-assert.equal(immutableImplementationPaths.length, 10);
+assert.equal(isExactLiteralSet(currentTaskPaths(r1bBaselineSha), exactR1BPaths), true);
+assert.equal(exactR1BPaths.length, 22);
+for (const unauthorizedPath of [
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/policy-v3.ts",
+  "components/runtime/Unauthorized.tsx",
+]) {
+  assert.equal(
+    isExactLiteralSet([...exactR1BPaths, unauthorizedPath], exactR1BPaths),
+    false,
+  );
+}
+assert.equal(
+  isExactLiteralSet([...exactPaths, exactR1BPaths[0]], exactPaths),
+  false,
+);
+assert.equal(immutableImplementationPaths.length, 8);
 for (const immutablePath of immutableImplementationPaths) {
   assert.equal(
     canonicalText(source(immutablePath)),
     canonicalText(
-      gitText(["show", `${acceptedImplementationSha}:${immutablePath}`]),
+      gitText(["show", `${r1bBaselineSha}:${immutablePath}`]),
     ),
-    `${immutablePath} changed after accepted implementation`,
+    `${immutablePath} changed after R1-A acceptance sync`,
   );
 }
 for (const unauthorizedPath of [
@@ -781,6 +833,7 @@ const protectedDiff = gitResult([
   "diff",
   "--exit-code",
   baselineSha,
+  acceptedImplementationSha,
   "--",
   ...protectedPaths,
 ]);
@@ -1260,6 +1313,7 @@ console.log(`accepted_implementation_commit: ${acceptedImplementationSha}`);
 console.log("implementation_commits: 2/2");
 console.log("implementation_snapshot: 18/18");
 console.log("acceptance_sync_scope: 8/8");
+console.log("r1_b_successor_exact_scope: 22/22");
 console.log("self_correction: resolved");
 console.log("candidate_schema_set: pipeline-schema-runtime-v4.0.0");
 console.log("active_runtime_changed: false");

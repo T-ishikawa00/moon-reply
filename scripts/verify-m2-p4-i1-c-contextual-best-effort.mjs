@@ -96,6 +96,43 @@ const exactR1APaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1aAcceptedImplementationSha =
+  "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
+const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
+const exactR1AAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1BPaths = [
+  "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const acceptedSliceCommits = {
   "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
   "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
@@ -2354,11 +2391,37 @@ assert.equal(
   true,
 );
 assert.equal(
-  isExactPathSet(currentChangedPaths(r1aBaselineSha), exactR1APaths),
+  isExactPathSet(
+    historicalPaths(r1aBaselineSha, r1aAcceptedImplementationSha),
+    exactR1APaths,
+  ),
   true,
 );
 assert.equal(exactR1APaths.some((item) => item.includes("*")), false);
 assert.equal(exactR1APaths.some((item) => item.endsWith("/")), false);
+assert.equal(
+  isExactPathSet(
+    historicalPaths(r1aAcceptedImplementationSha, r1bBaselineSha),
+    exactR1AAcceptanceSyncPaths,
+  ),
+  true,
+);
+assert.equal(isExactPathSet(currentChangedPaths(r1bBaselineSha), exactR1BPaths), true);
+assert.equal(exactR1BPaths.length, 22);
+for (const unauthorizedPath of [
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+  "lib/assessment/runtime/policy-v3.ts",
+  "components/runtime/Unauthorized.tsx",
+]) {
+  assert.equal(
+    isExactPathSet([...exactR1BPaths, unauthorizedPath], exactR1BPaths),
+    false,
+  );
+}
 for (const unauthorizedPath of [
   "lib/assessment/runtime/pipeline.ts",
   "lib/assessment/runtime/service.ts",
@@ -2385,6 +2448,7 @@ console.log("i3_successor_exact_scope: 19/19");
 console.log("accepted_planning_snapshot: 12/12");
 console.log("planning_acceptance_sync_scope: 6/6");
 console.log("r1_a_successor_exact_scope: 18/18");
+console.log("r1_b_successor_exact_scope: 22/22");
 console.log("unauthorized_app_components_regressions: 4/4");
 console.log("normal_information_gate_terminal: 0");
 console.log("needs_more_information_runtime_path: 0");

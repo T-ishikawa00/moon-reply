@@ -18,6 +18,8 @@ import { groundReportContentV3 } from "./report-grounding-v3.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
+import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
+import { buildStructuredIntakeLegacyViewV3 } from "./structured-intake-legacy-view-v3.ts";
 import {
   buildDecisionPolicyV2,
   requireDecisionFacts,
@@ -47,6 +49,7 @@ import type {
   UsageTotals,
 } from "./types.ts";
 import { validateStageOutput } from "./validation.ts";
+import { validateWritingContextIntegrityV1 } from "./writing-context-integrity-v1.ts";
 
 export type AssessmentRunContext = {
   requestId: string;
@@ -278,10 +281,14 @@ export class AssessmentPipeline {
 
     try {
       const deterministicSafety = deterministicSafetyResult(request);
+      const writingContextRuntime =
+        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.1.0";
       const contextualRuntime =
-        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0";
+        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0" ||
+        writingContextRuntime;
       const productQualityRuntime =
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v4.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v4.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v5.0.0";
       const rawStructuredIntake = await this.invokeStage(
         runContext,
         {
@@ -295,11 +302,23 @@ export class AssessmentPipeline {
         },
         "LOCAL_SCHEMA_PB-01",
       );
-      const structuredIntake = contextualRuntime
-        ? groundStructuredIntakeV3(request, rawStructuredIntake)
-        : rawStructuredIntake;
+      const groundedStructuredIntake = writingContextRuntime
+        ? groundStructuredIntakeV4(request, rawStructuredIntake)
+        : contextualRuntime
+          ? groundStructuredIntakeV3(request, rawStructuredIntake)
+          : rawStructuredIntake;
       if (contextualRuntime) {
-        validateStageOutput(this.definition("PB-01"), structuredIntake);
+        validateStageOutput(this.definition("PB-01"), groundedStructuredIntake);
+        if (writingContextRuntime) {
+          validateWritingContextIntegrityV1(request, groundedStructuredIntake);
+        } else {
+          validateContextualIntakeIntegrityV3(groundedStructuredIntake);
+        }
+      }
+      const structuredIntake = writingContextRuntime
+        ? buildStructuredIntakeLegacyViewV3(groundedStructuredIntake)
+        : groundedStructuredIntake;
+      if (writingContextRuntime) {
         validateContextualIntakeIntegrityV3(structuredIntake);
       }
 

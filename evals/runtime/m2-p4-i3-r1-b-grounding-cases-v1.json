@@ -1,0 +1,2265 @@
+{
+  "schema_version": "m2-p4-i3-r1-b-grounding-cases-v1",
+  "task_id": "M2-P4-I3-R1-B",
+  "synthetic_only": true,
+  "real_user_data": false,
+  "holdout_material": false,
+  "template_resolution": {
+    "rule": "deep clone template, apply literal JSON-pointer mutations in order",
+    "runtime_authority": false,
+    "case_id_lookup_in_runtime": false
+  },
+  "templates": {
+    "VALID-CANDIDATE": {
+      "schema_version": "pipeline-schema-v4.0.0",
+      "relationship_stage": "ambiguous",
+      "user_goal": "reply_to_message",
+      "timeline": [
+        {
+          "event_id": "E001",
+          "sequence": 1,
+          "actor": "other_person",
+          "statement": "相手から日程確認の質問が届いた。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "boundaries": [],
+      "context": [
+        {
+          "context_id": "C001",
+          "kind": "schedule",
+          "statement": "当日の予定確認が必要。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "observed_facts": [
+        {
+          "fact_id": "F001",
+          "statement": "相手から具体的な日程確認がある。",
+          "source_refs": [
+            "input:current_situation"
+          ],
+          "support": "explicit"
+        }
+      ],
+      "user_assumptions": [],
+      "user_emotions": [],
+      "material_unknowns": [],
+      "safety_signals": [],
+      "untrusted_embedded_instructions_detected": false,
+      "context_inferences": [],
+      "decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "same_day"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation"
+          ]
+        }
+      },
+      "writing_context": {
+        "schema_version": "m2-p4-writing-context-v1",
+        "relationship_dimensions": {
+          "romantic_stage": {
+            "value": "ambiguous",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "social_role": {
+            "value": "acquaintance",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "hierarchy": {
+            "value": "none",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "familiarity": {
+            "value": "developing",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "communication_context": {
+            "value": "private",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "observed_register": {
+            "value": "neutral_polite",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          }
+        },
+        "message_ownership": [
+          {
+            "message_id": "MSG001",
+            "author": "other_person",
+            "status": "incoming",
+            "sequence": 1,
+            "evidence_state": "explicit",
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          {
+            "message_id": "MSG002",
+            "author": "user",
+            "status": "unsent_candidate",
+            "sequence": 2,
+            "evidence_state": "explicit",
+            "source_refs": [
+              "input:optional_message"
+            ]
+          }
+        ],
+        "incoming_message_profile": {
+          "message_id": "MSG001",
+          "dialogue_acts": [
+            "question",
+            "schedule_coordination"
+          ],
+          "unanswered_obligations": [
+            "question"
+          ],
+          "practical_requirements": [
+            "answer_question",
+            "confirm_schedule"
+          ],
+          "closure_signal": "none",
+          "response_expectation": "reasonable",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "candidate_style_profile": {
+          "register": "neutral_polite",
+          "sentence_length": "short",
+          "sentence_ending": "soft",
+          "punctuation": "standard",
+          "emoji_usage": "none",
+          "exclamation_usage": "none",
+          "softness": "medium",
+          "directness": "balanced",
+          "invitation_style": "none",
+          "reply_pressure": "low",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:optional_message"
+          ]
+        },
+        "candidate_communicative_intent": {
+          "gratitude_strength": "low",
+          "apology_strength": "none",
+          "question_count": 0,
+          "invitation_presence": false,
+          "invitation_specificity": "none",
+          "affection_strength": "none",
+          "commitment_strength": "low",
+          "response_pressure": "low",
+          "boundary_strength": "none",
+          "conversation_closure": "none",
+          "practical_requirement": [
+            "answer_question"
+          ],
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:optional_message"
+          ]
+        },
+        "user_goal_detail": {
+          "value": "schedule_only",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:requested_topics"
+          ]
+        },
+        "explicit_user_constraints": [],
+        "communication_pattern": {
+          "usual_register": "unknown",
+          "usual_length": "unknown",
+          "usual_emoji_pattern": "unknown",
+          "usual_response_cadence_summary": null,
+          "usual_initiator": "unknown",
+          "reciprocal_style_summary": null,
+          "evidence_state": "unresolved",
+          "source_refs": [],
+          "unresolved_fields": [
+            "reciprocal_style_summary",
+            "usual_emoji_pattern",
+            "usual_initiator",
+            "usual_length",
+            "usual_register",
+            "usual_response_cadence_summary"
+          ]
+        },
+        "channel_and_timing": {
+          "channel": "line",
+          "relative_timing": "same_day",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "language_and_expression": {
+          "primary_language": "ja",
+          "mixed_languages": [],
+          "dialect_or_regional_expression": "absent",
+          "established_shared_expression": "unknown",
+          "intentional_nonstandard_expression": "absent",
+          "possible_typo": "absent",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:optional_message"
+          ],
+          "unresolved_fields": [
+            "established_shared_expression"
+          ]
+        },
+        "repeat_consultation_state": {
+          "state": "first_assessment",
+          "changed_fact_ids": [],
+          "unchanged_since_prior": null,
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "privacy_markers": [],
+        "unresolved_writing_fields": [
+          "communication_pattern",
+          "language_and_expression"
+        ],
+        "source_refs": [
+          "input:current_situation",
+          "input:optional_message",
+          "input:requested_topics"
+        ]
+      }
+    },
+    "VALID-NO-CANDIDATE": {
+      "schema_version": "pipeline-schema-v4.0.0",
+      "relationship_stage": "ambiguous",
+      "user_goal": "reply_to_message",
+      "timeline": [
+        {
+          "event_id": "E001",
+          "sequence": 1,
+          "actor": "other_person",
+          "statement": "相手から日程確認の質問が届いた。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "boundaries": [],
+      "context": [
+        {
+          "context_id": "C001",
+          "kind": "schedule",
+          "statement": "当日の予定確認が必要。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "observed_facts": [
+        {
+          "fact_id": "F001",
+          "statement": "相手から具体的な日程確認がある。",
+          "source_refs": [
+            "input:current_situation"
+          ],
+          "support": "explicit"
+        }
+      ],
+      "user_assumptions": [],
+      "user_emotions": [],
+      "material_unknowns": [],
+      "safety_signals": [],
+      "untrusted_embedded_instructions_detected": false,
+      "context_inferences": [],
+      "decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "same_day"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation"
+          ]
+        }
+      },
+      "writing_context": {
+        "schema_version": "m2-p4-writing-context-v1",
+        "relationship_dimensions": {
+          "romantic_stage": {
+            "value": "ambiguous",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "social_role": {
+            "value": "acquaintance",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "hierarchy": {
+            "value": "none",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "familiarity": {
+            "value": "developing",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "communication_context": {
+            "value": "private",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          },
+          "observed_register": {
+            "value": "neutral_polite",
+            "effect_class": "writing_only",
+            "evidence_state": "explicit",
+            "explicit_source_refs": [
+              "input:current_situation"
+            ],
+            "inferred_source_refs": [],
+            "unresolved": false,
+            "source_refs": [
+              "input:current_situation"
+            ]
+          }
+        },
+        "message_ownership": [
+          {
+            "message_id": "MSG001",
+            "author": "other_person",
+            "status": "incoming",
+            "sequence": 1,
+            "evidence_state": "explicit",
+            "source_refs": [
+              "input:current_situation"
+            ]
+          }
+        ],
+        "incoming_message_profile": {
+          "message_id": "MSG001",
+          "dialogue_acts": [
+            "question",
+            "schedule_coordination"
+          ],
+          "unanswered_obligations": [
+            "question"
+          ],
+          "practical_requirements": [
+            "answer_question",
+            "confirm_schedule"
+          ],
+          "closure_signal": "none",
+          "response_expectation": "reasonable",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "candidate_style_profile": null,
+        "candidate_communicative_intent": null,
+        "user_goal_detail": {
+          "value": "schedule_only",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:requested_topics"
+          ]
+        },
+        "explicit_user_constraints": [],
+        "communication_pattern": {
+          "usual_register": "unknown",
+          "usual_length": "unknown",
+          "usual_emoji_pattern": "unknown",
+          "usual_response_cadence_summary": null,
+          "usual_initiator": "unknown",
+          "reciprocal_style_summary": null,
+          "evidence_state": "unresolved",
+          "source_refs": [],
+          "unresolved_fields": [
+            "reciprocal_style_summary",
+            "usual_emoji_pattern",
+            "usual_initiator",
+            "usual_length",
+            "usual_register",
+            "usual_response_cadence_summary"
+          ]
+        },
+        "channel_and_timing": {
+          "channel": "line",
+          "relative_timing": "same_day",
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "language_and_expression": {
+          "primary_language": "ja",
+          "mixed_languages": [],
+          "dialect_or_regional_expression": "absent",
+          "established_shared_expression": "unknown",
+          "intentional_nonstandard_expression": "absent",
+          "possible_typo": "absent",
+          "evidence_state": "explicit",
+          "source_refs": [],
+          "unresolved_fields": [
+            "established_shared_expression"
+          ]
+        },
+        "repeat_consultation_state": {
+          "state": "first_assessment",
+          "changed_fact_ids": [],
+          "unchanged_since_prior": null,
+          "evidence_state": "explicit",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        },
+        "privacy_markers": [],
+        "unresolved_writing_fields": [
+          "communication_pattern",
+          "language_and_expression"
+        ],
+        "source_refs": [
+          "input:current_situation",
+          "input:requested_topics"
+        ]
+      }
+    }
+  },
+  "valid_cases": [
+    {
+      "case_id": "GROUND-V-001",
+      "scenario": "no candidate / unknown writing context",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation with no candidate and no usable writing detail.",
+        "optionalMessage": null,
+        "relationship": "other",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions",
+            "value": {
+              "romantic_stage": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              },
+              "social_role": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              },
+              "hierarchy": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              },
+              "familiarity": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              },
+              "communication_context": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              },
+              "observed_register": {
+                "value": "unknown",
+                "effect_class": "writing_only",
+                "evidence_state": "unresolved",
+                "explicit_source_refs": [],
+                "inferred_source_refs": [],
+                "unresolved": true,
+                "source_refs": []
+              }
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership",
+            "value": []
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile",
+            "value": {
+              "message_id": null,
+              "dialogue_acts": [],
+              "unanswered_obligations": [],
+              "practical_requirements": [],
+              "closure_signal": "unknown",
+              "response_expectation": "unknown",
+              "evidence_state": "unresolved",
+              "source_refs": []
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/user_goal_detail",
+            "value": {
+              "value": "unknown",
+              "evidence_state": "unresolved",
+              "source_refs": []
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/communication_pattern",
+            "value": {
+              "usual_register": "unknown",
+              "usual_length": "unknown",
+              "usual_emoji_pattern": "unknown",
+              "usual_response_cadence_summary": null,
+              "usual_initiator": "unknown",
+              "reciprocal_style_summary": null,
+              "evidence_state": "unresolved",
+              "source_refs": [],
+              "unresolved_fields": [
+                "reciprocal_style_summary",
+                "usual_emoji_pattern",
+                "usual_initiator",
+                "usual_length",
+                "usual_register",
+                "usual_response_cadence_summary"
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/channel_and_timing",
+            "value": {
+              "channel": "unknown",
+              "relative_timing": "unknown",
+              "evidence_state": "unresolved",
+              "source_refs": []
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/language_and_expression",
+            "value": {
+              "primary_language": "unknown",
+              "mixed_languages": [],
+              "dialect_or_regional_expression": "unknown",
+              "established_shared_expression": "unknown",
+              "intentional_nonstandard_expression": "unknown",
+              "possible_typo": "unknown",
+              "evidence_state": "unresolved",
+              "source_refs": [],
+              "unresolved_fields": [
+                "dialect_or_regional_expression",
+                "established_shared_expression",
+                "intentional_nonstandard_expression",
+                "mixed_languages",
+                "possible_typo",
+                "primary_language"
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/repeat_consultation_state",
+            "value": {
+              "state": "unknown",
+              "changed_fact_ids": [],
+              "unchanged_since_prior": null,
+              "evidence_state": "unresolved",
+              "source_refs": []
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/unresolved_writing_fields",
+            "value": [
+              "channel_and_timing",
+              "communication_pattern",
+              "incoming_message_profile",
+              "language_and_expression",
+              "relationship_dimensions.communication_context",
+              "relationship_dimensions.familiarity",
+              "relationship_dimensions.hierarchy",
+              "relationship_dimensions.observed_register",
+              "relationship_dimensions.romantic_stage",
+              "relationship_dimensions.social_role",
+              "repeat_consultation_state",
+              "user_goal_detail"
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "c4c6c11a6977cc23265ba338099bccc13044a3bdba2f64f50f370308bb5d6110",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "35f234ee22cdf9e64c873fad10c84b64dcab9c7195eef7921fe8f0931c5a3489",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-002",
+      "scenario": "polite candidate",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "ご連絡ありがとうございます。19時でよければ伺えます。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/register",
+            "value": "polite"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/sentence_ending",
+            "value": "formal"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "b8dce0dd55ac98bd5162d09d201f3c72df953aeb5eb3c175d3968ad31b98ef8b",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-003",
+      "scenario": "casual short candidate",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "了解、またね。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/register",
+            "value": "casual"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/sentence_length",
+            "value": "short"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "96a4f343f79a3a96c717c3a008024e9c39000167ead554d69b8103478dcdbe3c",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-004",
+      "scenario": "restrained emoji candidate",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "ありがとう。では当日よろしくね🙂",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/emoji_usage",
+            "value": "restrained"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "9fbfcf6b65f4cf6b81f504182b0f0f776f344cd642ede6aa22848012e4f34957",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-005",
+      "scenario": "matching app chip grounding",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "マッチありがとうございます。まずはこちらで話しませんか。",
+        "relationship": "matching_app",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/communication_context",
+            "value": {
+              "value": "matching_app",
+              "effect_class": "writing_only",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:relationship"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:relationship"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "88e45e30d614d80b4bba941c56f4a015a075a1215425f19fcc85d7f790dca74c",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "f29192c0e2a2ac6e23f3f33ee302ce178fb6b91d620ee1c35d38e79fe45bab87",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-006",
+      "scenario": "established partner chip grounding",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "帰ったら話そう。",
+        "relationship": "in_relationship",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage",
+            "value": {
+              "value": "partner",
+              "effect_class": "writing_only",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:relationship"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:relationship"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "ff41790c299327e6da15e4e170259da8f6f05ecd587aaac2751a5545b8e4696f",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "8e33b50bc0112229d64c14f7c05546c4490d1e014be6d2fa607e2371d937b49c",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-007",
+      "scenario": "former partner without reconciliation inference",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic former-partner consultation with no stated reconciliation intent.",
+        "optionalMessage": null,
+        "relationship": "former_partner",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage",
+            "value": {
+              "value": "former_partner",
+              "effect_class": "writing_only",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:relationship"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:relationship"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "c4dc6addf9ea8a0a06c70cfcdc36eebc3ffc3724f7a1186a5f39532cb9e67aaa",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "122607bcf06d505f12bfe0f87bff3a575d3dd2e5e05cd8227d3486a537164db4",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-008",
+      "scenario": "explicit work senior hierarchy",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic work consultation explicitly states that the user reports to the other person.",
+        "optionalMessage": "承知しました。確認して明日ご報告します。",
+        "relationship": "work_or_school",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/hierarchy",
+            "value": {
+              "value": "user_is_junior",
+              "effect_class": "writing_only",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:current_situation"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:current_situation"
+              ]
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/communication_context/value",
+            "value": "work"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "eb0e58525f62ef360805ae0b1f31487cae1d618aed293cf3419e687f1c175c4e",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "3f7da3c58aa2c91b5936f39f3ceb342b29239986bab6cb17f05235c7a776ae22",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-009",
+      "scenario": "multiple quoted messages with owners",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "二人の予定を確認してから返します。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership",
+            "value": [
+              {
+                "message_id": "MSG001",
+                "author": "other_person",
+                "status": "incoming",
+                "sequence": 1,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              },
+              {
+                "message_id": "MSG002",
+                "author": "third_party",
+                "status": "quoted_history",
+                "sequence": 2,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              },
+              {
+                "message_id": "MSG003",
+                "author": "user",
+                "status": "sent_by_user",
+                "sequence": 3,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              },
+              {
+                "message_id": "MSG004",
+                "author": "user",
+                "status": "unsent_candidate",
+                "sequence": 4,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:optional_message"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "be0a3851bd8125830bfb0e289afe9ffcbe60002bbeaf94f5d92cf49a109c0b3a",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-010",
+      "scenario": "sent message versus unsent candidate",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "では、土曜の午後にしましょう。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership",
+            "value": [
+              {
+                "message_id": "MSG001",
+                "author": "other_person",
+                "status": "incoming",
+                "sequence": 1,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              },
+              {
+                "message_id": "MSG002",
+                "author": "user",
+                "status": "sent_by_user",
+                "sequence": 2,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              },
+              {
+                "message_id": "MSG003",
+                "author": "user",
+                "status": "unsent_candidate",
+                "sequence": 3,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:optional_message"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "5d9540e80e276d3217fad1e777733add7564894f213b8e76bec24621ef46bed0",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-011",
+      "scenario": "direct incoming question",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "はい、18時なら大丈夫です。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/dialogue_acts",
+            "value": [
+              "question",
+              "schedule_coordination"
+            ]
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/unanswered_obligations",
+            "value": [
+              "answer"
+            ]
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/practical_requirements",
+            "value": [
+              "answer_question"
+            ]
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/response_expectation",
+            "value": "reasonable"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "8bf6faba3a110cbe869d2a81d50629b0c28b09e9b63fed9be8728b51549c5e74",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-012",
+      "scenario": "closure signal",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic incoming message explicitly closes the conversation.",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/closure_signal",
+            "value": "explicit"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/response_expectation",
+            "value": "none"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/dialogue_acts",
+            "value": [
+              "conversation_closure"
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "d82ace187cc9664ff0768ccc961d1f72f51dc973c5400189286b91ca0fc63a06",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "93341a80e6abf5a78c1f8f456268acacf8db24f5e650775863a9e0c43490153f",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-013",
+      "scenario": "explicit no emoji",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation explicitly requests no emoji.",
+        "optionalMessage": "絵文字は使わず、短くお礼だけ伝えます。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/explicit_user_constraints",
+            "value": [
+              {
+                "constraint_id": "UC001",
+                "kind": "no_emoji",
+                "bounded_summary": null,
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "40b8f6040b5fa9f4d2fc0e8034b5f979ac1969f92c03577ea80661ebf4d2fa65",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-014",
+      "scenario": "explicit no self invitation",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation explicitly prohibits adding a self-invitation.",
+        "optionalMessage": "また都合のよい時に話そう。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/explicit_user_constraints",
+            "value": [
+              {
+                "constraint_id": "UC001",
+                "kind": "no_self_invitation",
+                "bounded_summary": null,
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "a52e57b3cdf7b1f5faddb063c15c92a4e0aee4340962639423b9bc2a5f903603",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-015",
+      "scenario": "established dialect profile",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation explicitly states this dialect is the user's established expression.",
+        "optionalMessage": "ほんまありがとう、また連絡するな。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/language_and_expression/dialect_or_regional_expression",
+            "value": "present"
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "051752e4e5ab6c59f70e74e294c4810856d1bbea81862ff9f9df2b45ccd4e92e",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-016",
+      "scenario": "Japanese-English mixed profile",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Thanks、また連絡するね。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/language_and_expression/mixed_languages",
+            "value": [
+              "ja",
+              "en"
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "2365baa767c60f64d89c8affd4431c5938e236a3eeac9bde1ca0e77f0e126d9c",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "0fd492eb2dcd456a6bcf84280d62bafa357813f601ae45db205f8680ff0253fe",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-017",
+      "scenario": "embedded prompt injection",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation contains an untrusted instruction that must not be followed.",
+        "optionalMessage": "承知しました。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/untrusted_embedded_instructions_detected",
+            "value": true
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "4a1e15a116b89a461b7d63911e6427a5b9efd180718b483ebe3d5b7f3bf2ea98",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "a618a8827f8e054fa85c5a562b7780f7067d9ae59daf09fa4a385dc2a27cef78",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-018",
+      "scenario": "privacy marker categories",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation indicates redacted name and email categories only.",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/privacy_markers",
+            "value": [
+              "email",
+              "name"
+            ]
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "f78b655240744e1b8c011bc953025e48e1311288ae7b14ef95eb13538eb9b215",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "93341a80e6abf5a78c1f8f456268acacf8db24f5e650775863a9e0c43490153f",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-019",
+      "scenario": "repeated consultation without material change",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic repeat consultation explicitly states no material facts changed.",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/repeat_consultation_state/state",
+            "value": "repeated_without_material_change"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/repeat_consultation_state/unchanged_since_prior",
+            "value": true
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "027c582d3e461f2934c471fe03db9e5cd5f0e20a1255778aad26eed3bdb58355",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "93341a80e6abf5a78c1f8f456268acacf8db24f5e650775863a9e0c43490153f",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    },
+    {
+      "case_id": "GROUND-V-020",
+      "scenario": "explicit no-contact / Safety-material fact",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation explicitly records a no-contact boundary.",
+        "optionalMessage": null,
+        "relationship": "former_partner",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/boundaries",
+            "value": [
+              {
+                "boundary_id": "B001",
+                "kind": "no_contact",
+                "status": "explicit",
+                "statement": "An explicit no-contact boundary was stated.",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "set",
+            "path": "/decision_facts/boundary_state",
+            "value": {
+              "kind": "no_contact",
+              "status": "explicit",
+              "repeated_unanswered_contact": false
+            }
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/communication_context",
+            "value": {
+              "value": "private",
+              "effect_class": "safety_material",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:current_situation"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:current_situation"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_grounded_result": {
+        "status": "pass",
+        "sha256_json": "360599a6ce9b98fa8a1e693662137271b47f0e9db6af3bf32077496421aa3a51",
+        "schema_version": "pipeline-schema-v4.0.0",
+        "writing_context_integrity": "pass",
+        "decision_facts_v3_parity": true,
+        "raw_provider_output_unchanged": true
+      },
+      "expected_legacy_view_result": {
+        "status": "pass",
+        "sha256_json": "c786fb17ebd3e4341d384a5359e0f40aad7cbd2f7a27cc612f0d2a40714eef82",
+        "schema_version": "pipeline-schema-v3.0.0",
+        "writing_context_present": false,
+        "all_other_fields_deep_equal": true
+      }
+    }
+  ],
+  "invalid_cases": [
+    {
+      "case_id": "GROUND-I-001",
+      "scenario": "unsupported source ref",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/source_refs",
+            "value": [
+              "input:unsupported"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-002",
+      "scenario": "followup source ref without followup input",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/user_goal_detail/source_refs",
+            "value": [
+              "followup:answer"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-003",
+      "scenario": "candidate present but style null",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile",
+            "value": null
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-004",
+      "scenario": "candidate present but intent null",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_communicative_intent",
+            "value": null
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-005",
+      "scenario": "candidate present but no unsent ownership item",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership",
+            "value": [
+              {
+                "message_id": "MSG001",
+                "author": "other_person",
+                "status": "incoming",
+                "sequence": 1,
+                "evidence_state": "explicit",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-006",
+      "scenario": "candidate absent with candidate profile",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-NO-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile",
+            "value": {
+              "register": "neutral_polite",
+              "sentence_length": "short",
+              "sentence_ending": "soft",
+              "punctuation": "standard",
+              "emoji_usage": "none",
+              "exclamation_usage": "none",
+              "softness": "medium",
+              "directness": "balanced",
+              "invitation_style": "none",
+              "reply_pressure": "low",
+              "evidence_state": "explicit",
+              "source_refs": [
+                "input:current_situation"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-007",
+      "scenario": "candidate style sourced from current situation",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/candidate_style_profile/source_refs",
+            "value": [
+              "input:current_situation"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-008",
+      "scenario": "duplicate message ID",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership/1/message_id",
+            "value": "MSG001"
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-009",
+      "scenario": "duplicate sequence",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/message_ownership/1/sequence",
+            "value": 1
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-010",
+      "scenario": "incoming message ID missing from ownership",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/incoming_message_profile/message_id",
+            "value": "MSG999"
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-011",
+      "scenario": "chip-only safety material",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage",
+            "value": {
+              "value": "ambiguous",
+              "effect_class": "safety_material",
+              "evidence_state": "explicit",
+              "explicit_source_refs": [
+                "input:relationship"
+              ],
+              "inferred_source_refs": [],
+              "unresolved": false,
+              "source_refs": [
+                "input:relationship"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-012",
+      "scenario": "unresolved false with unknown value",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage/value",
+            "value": "unknown"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage/unresolved",
+            "value": false
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-013",
+      "scenario": "inferred state without inferred refs",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage/evidence_state",
+            "value": "inferred"
+          },
+          {
+            "op": "set",
+            "path": "/writing_context/relationship_dimensions/romantic_stage/inferred_source_refs",
+            "value": []
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-014",
+      "scenario": "non-custom constraint with summary",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/explicit_user_constraints",
+            "value": [
+              {
+                "constraint_id": "UC001",
+                "kind": "no_emoji",
+                "bounded_summary": "Do not add emoji.",
+                "source_refs": [
+                  "input:current_situation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-015",
+      "scenario": "repeated-with-change using missing fact ID",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/repeat_consultation_state",
+            "value": {
+              "state": "repeated_with_material_change",
+              "changed_fact_ids": [
+                "F999"
+              ],
+              "unchanged_since_prior": false,
+              "evidence_state": "explicit",
+              "source_refs": [
+                "input:current_situation"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    },
+    {
+      "case_id": "GROUND-I-016",
+      "scenario": "top-level source-ref union mismatch",
+      "synthetic_assessment_input": {
+        "currentSituation": "Synthetic consultation: an incoming message requires a bounded response.",
+        "optionalMessage": "Synthetic unsent candidate.",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "privacyAcknowledged": true
+      },
+      "raw_structured_intake_v4": {
+        "template_id": "VALID-CANDIDATE",
+        "mutations": [
+          {
+            "op": "set",
+            "path": "/writing_context/source_refs",
+            "value": [
+              "input:current_situation"
+            ]
+          }
+        ]
+      },
+      "expected_failure_code": "M2_WRITING_CONTEXT_INVALID",
+      "validation_target": "raw_structured_intake_v4"
+    }
+  ]
+}
