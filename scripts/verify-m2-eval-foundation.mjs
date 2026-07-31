@@ -45,6 +45,8 @@ const m2p4I1bVerifierImportPaths = new Set([
 ]);
 const m2p4I1cBaselineCommit =
   "c27120eea067f91c5e9ef4447e382f55a329e158";
+const m2p4I1cR1BaselineCommit =
+  "da520621b6569ff65ae652fb75945ed923b4fc3b";
 const m2p4I1cCapabilityManifestPath =
   "evals/runtime/m2-p4-i1-c-capabilities-v1.json";
 const m2p4I1cVerifierPath =
@@ -80,6 +82,20 @@ const m2p4I1cImplementationPaths = new Set([
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I1cR1ImplementationPaths = new Set([
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  m2p4I1cVerifierPath,
+  m2p4I1cCapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "scripts/verify-m2-eval-foundation.mjs",
 ]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -3386,8 +3402,8 @@ function verifyExactMutationManifest() {
   }
 }
 
-function currentTaskPaths() {
-  const diff = runGit(["diff", "--name-only", baseCommit, "--"]);
+function currentTaskPaths(startCommit = baseCommit) {
+  const diff = runGit(["diff", "--name-only", startCommit, "--"]);
   const status = runGit(["status", "--porcelain=v1", "--untracked-files=all"]);
   if (diff.status !== 0 || status.status !== 0) {
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -3778,6 +3794,7 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
 
 function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
+  const r1Paths = currentTaskPaths(m2p4I1cR1BaselineCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -3814,6 +3831,74 @@ function verifyScopeAndProhibitedImplementation() {
         external_execution: 0,
       },
       actual: m2p4I1cManifest,
+    });
+  }
+  const m2p4I1cR1Manifest = m2p4I1cManifest?.r1_successor;
+  const declaredM2p4I1cR1Paths = Array.isArray(
+    m2p4I1cR1Manifest?.exact_mutation_paths,
+  )
+    ? m2p4I1cR1Manifest.exact_mutation_paths
+    : [];
+  const expectedM2p4I1cR1Paths = [...m2p4I1cR1ImplementationPaths].sort();
+  const actualDeclaredM2p4I1cR1Paths = [
+    ...new Set(declaredM2p4I1cR1Paths),
+  ].sort();
+  const expectedM2p4I1cR1CatalogMutation = {
+    path: "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+    stage_id: "PB-01",
+    field: "schema_sha256",
+    value: "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8",
+  };
+  if (
+    m2p4I1cR1Manifest?.task_id !== "M2-P4-I1-C-R1" ||
+    m2p4I1cR1Manifest?.status !==
+      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cR1Manifest?.baseline?.commit !== m2p4I1cR1BaselineCommit ||
+    declaredM2p4I1cR1Paths.length !== 12 ||
+    JSON.stringify(actualDeclaredM2p4I1cR1Paths) !==
+      JSON.stringify(expectedM2p4I1cR1Paths) ||
+    declaredM2p4I1cR1Paths.some(
+      (item) =>
+        typeof item !== "string" ||
+        item.length === 0 ||
+        item.includes("*") ||
+        item.endsWith("/"),
+    ) ||
+    JSON.stringify(m2p4I1cR1Manifest?.catalog_mutation) !==
+      JSON.stringify(expectedM2p4I1cR1CatalogMutation) ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.openai_live_calls !== 0 ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.database_operations !== 0 ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.migrations !== 0 ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.holdout_use !== 0 ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.real_user_data !== 0 ||
+    m2p4I1cR1Manifest?.task_execution_evidence?.live_rerun_executed !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1cCapabilityManifestPath,
+      pathName: "$.r1_successor",
+      invariant:
+        "M2-P4-I1-C-R1 declares exactly 12 literal successor paths and zero external execution",
+      expected: {
+        task_id: "M2-P4-I1-C-R1",
+        baseline: m2p4I1cR1BaselineCommit,
+        exact_mutation_paths: expectedM2p4I1cR1Paths,
+        catalog_mutation: expectedM2p4I1cR1CatalogMutation,
+        external_execution: 0,
+      },
+      actual: m2p4I1cR1Manifest,
+    });
+  }
+  if (
+    r1Paths.length !== 12 ||
+    JSON.stringify([...r1Paths].sort()) !==
+      JSON.stringify(expectedM2p4I1cR1Paths)
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1cCapabilityManifestPath,
+      pathName: "$.r1_successor.exact_mutation_paths",
+      invariant: "M2-P4-I1-C-R1 mutates exactly its 12 literal paths",
+      expected: expectedM2p4I1cR1Paths,
+      actual: r1Paths,
     });
   }
   const declaredM2p4I1bPaths = Array.isArray(
@@ -4293,6 +4378,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p3ImplementationPaths.has(item) &&
       !m2p4I1bImplementationPaths.has(item) &&
       !m2p4I1cImplementationPaths.has(item) &&
+      !m2p4I1cR1ImplementationPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -4322,7 +4408,8 @@ function verifyScopeAndProhibitedImplementation() {
     if (
       m2p3ImplementationPaths.has(item) ||
       m2p4I1bImplementationPaths.has(item) ||
-      m2p4I1cImplementationPaths.has(item)
+      m2p4I1cImplementationPaths.has(item) ||
+      m2p4I1cR1ImplementationPaths.has(item)
     ) {
       continue;
     }

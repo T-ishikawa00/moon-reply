@@ -23,7 +23,7 @@
       "schema_name": "pb_01_structure_v3",
       "schema_path": "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
       "schema_pointer": null,
-      "schema_sha256": "008e80c0767956687c94f8bdd7b4196cccda7069eff6d15f72be70a45766c777"
+      "schema_sha256": "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8"
     },
     {
       "stage_id": "PB-02",

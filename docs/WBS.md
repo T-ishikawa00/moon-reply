@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning acceptance, M2-P4-I1-A acceptance, and M2-P4-I1-B acceptance are complete. M2-P4-I1-C is explicitly authorized and implemented pending acceptance. The one synthetic live rerun requires separate authorization. `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized and not started. Publication, deployment, production connections, live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and later implementation remain blocked.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning acceptance, M2-P4-I1-A acceptance, and M2-P4-I1-B acceptance are complete. M2-P4-I1-C is implemented pending acceptance; its R1 contextual-integrity successor is implemented and offline-validated pending acceptance. The one synthetic live rerun requires separate authorization. `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized and not started. Publication, deployment, production connections, live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and later implementation remain blocked.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -781,5 +781,20 @@ M2-P4-I1-B is accepted and complete. Its v2 catalog and policy remain immutable 
 - [ ] After acceptance only: separately authorize one synthetic live rerun.
 
 Milestone 2 remains incomplete. I1-C does not authorize live OpenAI/Supabase execution, migration, secret access, PR, merge to `main`, I2/I3/E1/E2, representative quality execution, or release.
+
+# M2-P4-I1-C-R1 Contextual Integrity Hardening
+
+- [x] Preserve the original I1-C baseline and exact 21-path historical `implementation_paths` record.
+- [x] Freeze the R1 baseline at `da520621b6569ff65ae652fb75945ed923b4fc3b` and declare a separate exact 12-path successor record with no wildcard or prefix authorization.
+- [x] Add deterministic PB-01 contextual integrity checks for identifiers, supporting facts/source references, inference-used state, inferred/unresolved exclusion, and unresolved actual values.
+- [x] Prohibit inferred boundary/repeated-contact fields and reject invalid contextual intake before PB-02 with `M2_CONTEXTUAL_INFERENCE_INVALID`.
+- [x] Fix practical reason and boundary state to three legal canonical/provider Schema branches and conservatively project unresolved practical reason without terminating consultation.
+- [x] Limit the runtime catalog change to the new PB-01 Structured Intake Schema SHA-256.
+- [x] Preserve the I1-B v2 runtime path and leave `scripts/verify-m2-p3-runtime-vertical-slice.mjs` unchanged.
+- [x] Run the required sequential offline verifier, typecheck, lint, build, exact-scope, protected-diff, and `git diff --check` gates.
+- [ ] Human / ChatGPT review and acceptance.
+- [ ] After acceptance only: separately authorize one synthetic live rerun.
+
+R1 does not authorize OpenAI live calls, DB operations, migrations, holdout use, real-user data, retry, Repair/PB-07, fallback, PR creation, merge to `main`, or release.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

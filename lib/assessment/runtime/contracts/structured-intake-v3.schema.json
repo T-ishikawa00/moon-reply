@@ -560,71 +560,151 @@
           }
         },
         "boundary_state": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "kind",
-            "status",
-            "repeated_unanswered_contact"
-          ],
-          "properties": {
-            "kind": {
-              "enum": [
-                "none",
-                "no_contact",
-                "temporary_distance",
-                "blocked_or_restricted",
-                "relationship_closed",
-                "unknown"
-              ]
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "status",
+                "repeated_unanswered_contact"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "none"
+                },
+                "status": {
+                  "const": "none"
+                },
+                "repeated_unanswered_contact": {
+                  "type": "boolean"
+                }
+              }
             },
-            "status": {
-              "enum": [
-                "none",
-                "explicit",
-                "unknown"
-              ]
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "status",
+                "repeated_unanswered_contact"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "no_contact",
+                    "temporary_distance",
+                    "blocked_or_restricted",
+                    "relationship_closed"
+                  ]
+                },
+                "status": {
+                  "const": "explicit"
+                },
+                "repeated_unanswered_contact": {
+                  "type": "boolean"
+                }
+              }
             },
-            "repeated_unanswered_contact": {
-              "type": "boolean"
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "status",
+                "repeated_unanswered_contact"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "unknown"
+                },
+                "status": {
+                  "const": "unknown"
+                },
+                "repeated_unanswered_contact": {
+                  "const": false
+                }
+              }
             }
-          }
+          ]
         },
         "practical_reason": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "kind",
-            "active",
-            "deadline"
-          ],
-          "properties": {
-            "kind": {
-              "enum": [
-                "none",
-                "schedule_coordination",
-                "factual_correction",
-                "promised_information",
-                "logistics",
-                "thank_you",
-                "initial_apology",
-                "single_invitation",
-                "unknown"
-              ]
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "active",
+                "deadline"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "none"
+                },
+                "active": {
+                  "const": false
+                },
+                "deadline": {
+                  "const": "none"
+                }
+              }
             },
-            "active": {
-              "type": "boolean"
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "active",
+                "deadline"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "schedule_coordination",
+                    "factual_correction",
+                    "promised_information",
+                    "logistics",
+                    "thank_you",
+                    "initial_apology",
+                    "single_invitation"
+                  ]
+                },
+                "active": {
+                  "const": true
+                },
+                "deadline": {
+                  "enum": [
+                    "none",
+                    "same_day",
+                    "next_day",
+                    "later",
+                    "unknown"
+                  ]
+                }
+              }
             },
-            "deadline": {
-              "enum": [
-                "none",
-                "same_day",
-                "next_day",
-                "later",
-                "unknown"
-              ]
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "active",
+                "deadline"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "unknown"
+                },
+                "active": {
+                  "const": false
+                },
+                "deadline": {
+                  "const": "unknown"
+                }
+              }
             }
-          }
+          ]
         },
         "information_state": {
           "type": "object",

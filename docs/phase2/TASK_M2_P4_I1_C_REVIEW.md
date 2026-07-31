@@ -40,7 +40,7 @@ The diagnosed run prefix is `64ef40a2`. The failure was safe: PB-01 non-inferenc
 - PB-04 receives the application-owned local eligibility object, not provider-owned flags.
 - Historical v2 catalog execution remains available for accepted offline replay; the service selects only the v3 catalog.
 
-## Exact Implementation Scope
+## Original I1-C Exact Implementation Scope
 
 Exactly 21 paths:
 
@@ -67,6 +67,53 @@ Exactly 21 paths:
 21. `docs/CODEX_HANDOFF.md`
 
 Accepted I1-A/I1-B assets, historical `ai/prompts/**`, historical `ai/schemas/**`, development data, holdout, app, components, Supabase, packages, `next-env.d.ts`, UI, and renderer remain protected.
+
+## R1 Contextual Integrity Successor
+
+- Task: `M2-P4-I1-C-R1`
+- Baseline: `da520621b6569ff65ae652fb75945ed923b4fc3b`
+- Branch: `fix/m2-p4-i1-c-r1-contextual-integrity`
+- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
+- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+
+R1 preserves the contextual best-effort and Safety-only terminal policy while adding deterministic post-schema PB-01 integrity validation. `observed_facts.fact_id`, `context_inferences.inference_id`, and inferred `field_path` values must be unique. Every cited fact must exist, and every inference source reference must be supported by the cited facts. The runtime also enforces the inference-used flag equivalence, inferred/unresolved exclusion, unresolved uniqueness and actual-value consistency, non-null/non-unknown inferred values, and the prohibition on inferred boundary or repeated-contact facts. Violations fail before PB-02 as `M2_CONTEXTUAL_INFERENCE_INVALID`.
+
+Practical reason and boundary state are each fixed to three canonical/provider Schema branches. Unresolved practical reason projects conservatively to inactive `none`; unresolved boundary does not create a pause. Both unresolved states remain ordinary `normal_allowed -> ready` consultations and continue through PB-04 to PB-06 with one report.
+
+Exact R1 mutation scope is 12 literal paths:
+
+1. `lib/assessment/runtime/contextual-integrity-v3.ts`
+2. `lib/assessment/runtime/contracts/structured-intake-v3.schema.json`
+3. `lib/assessment/runtime/policy-v3.ts`
+4. `lib/assessment/runtime/pipeline.ts`
+5. `scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs`
+6. `evals/runtime/m2-p4-i1-c-capabilities-v1.json`
+7. `docs/phase2/TASK_M2_P4_I1_C_REVIEW.md`
+8. `docs/CURRENT_FOCUS.md`
+9. `docs/WBS.md`
+10. `docs/CODEX_HANDOFF.md`
+11. `lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json`
+12. `scripts/verify-m2-eval-foundation.mjs`
+
+The catalog mutation is limited to PB-01 `schema_sha256 = 40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8`, matching the changed Structured Intake v3 Schema. The original I1-C 21-path manifest and baseline remain unchanged; R1 is recorded separately as a successor. `scripts/verify-m2-p3-runtime-vertical-slice.mjs` is unchanged.
+
+## R1 Validation Evidence
+
+Recorded sequential offline evidence before commit:
+
+- I1-C verifier: PASS; contextual-reference integrity, state consistency, inferred/unresolved exclusion, and duplicate-unresolved checks PASS
+- contextual-integrity runtime rejections: `12/12`; invalid practical combinations: `3/3`; invalid boundary combinations: `3/3`
+- legal practical states: `3/3`; legal boundary states: `3/3`; Provider Schema and canonical Schema: PASS
+- valid unresolved practical/boundary normal flow: `2/2`, each `ready -> wait_and_reassess -> report 1`
+- I1-B verifier: PASS, `40/40`; I1-A verifier: PASS, `40/40`; policy parity: `40/40`
+- foundation verifier including `M2_PROHIBITED_IMPLEMENTATION_GATE`: PASS
+- unchanged M2-P3 verifier: PASS
+- typecheck / lint / build: PASS / PASS / PASS
+- exact R1 scope: `12/12`; protected diff: `0`; `git diff --check`: PASS
+- OpenAI calls / DB operations / migrations / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
+- live rerun: not executed
+
+Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed model-quality evidence, live execution, merge, release, or Milestone 2 completion.
 
 ## Offline Validation Evidence
 

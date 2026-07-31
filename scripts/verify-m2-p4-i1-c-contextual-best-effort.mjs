@@ -9,8 +9,23 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const baselineSha = "c27120eea067f91c5e9ef4447e382f55a329e158";
+const i1cBaselineSha = "c27120eea067f91c5e9ef4447e382f55a329e158";
+const r1BaselineSha = "da520621b6569ff65ae652fb75945ed923b4fc3b";
 const exactPaths = [
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "scripts/verify-m2-eval-foundation.mjs",
+];
+const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
   "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
@@ -96,6 +111,7 @@ const [
     buildContextualDecisionPolicyV3,
     projectDecisionFactsV2ToV1,
     requireContextualDecisionFactsV3,
+    validateContextualIntakeIntegrityV3,
   },
   {
     buildLocalEligibilityResultV3,
@@ -134,18 +150,32 @@ const protectedHistoricalPaths = [
   "next-env.d.ts",
 ];
 assert.equal(
-  gitText(["diff", "--name-only", baselineSha, "--", ...protectedHistoricalPaths]).trim(),
+  gitText(["diff", "--name-only", r1BaselineSha, "--", ...protectedHistoricalPaths]).trim(),
   "",
 );
 
 const manifest = json(
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
 );
+const baselineCatalog = JSON.parse(
+  gitText([
+    "show",
+    `${r1BaselineSha}:lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json`,
+  ]),
+);
+const expectedCatalog = structuredClone(baselineCatalog);
+const expectedPb01CatalogStage = expectedCatalog.stages.find(
+  (stage) => stage.stage_id === "PB-01",
+);
+assert.ok(expectedPb01CatalogStage);
+expectedPb01CatalogStage.schema_sha256 =
+  "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8";
+assert.deepEqual(manifest, expectedCatalog);
 assert.equal(manifest.schema_version, "m2-p4-runtime-stage-catalog-v1");
 assert.equal(manifest.catalog_version, "runtime-stage-catalog-v3.0.0");
 assert.equal(manifest.prompt_bundle_version, "prompt-bundle-runtime-v3.0.0");
 assert.equal(manifest.schema_set_version, "pipeline-schema-runtime-v3.0.0");
-assert.equal(manifest.baseline, baselineSha);
+assert.equal(manifest.baseline, i1cBaselineSha);
 assert.deepEqual(manifest.stages.map((stage) => stage.stage_id), stageIds);
 for (const stage of manifest.stages) {
   assert.equal(hashText(source(stage.prompt_path)), stage.prompt_sha256);
@@ -159,6 +189,13 @@ for (const definition of catalog.definitions) {
   const providerSchema = toOpenAiStructuredOutputSchema(definition.outputSchema);
   assert.doesNotThrow(() => assertOpenAIStructuredOutputSchema(providerSchema));
 }
+const providerPb01Definition = {
+  ...catalog.definitions[0],
+  schemaHash: "m2-p4-i1-c-r1-provider-pb01",
+  outputSchema: toOpenAiStructuredOutputSchema(
+    catalog.definitions[0].outputSchema,
+  ),
+};
 
 const structuredSchema = json(
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -190,6 +227,14 @@ assert.deepEqual(
   sorted(Object.keys(structuredSchema.$defs.context_inference.properties)),
 );
 assert.ok(!Object.hasOwn(structuredSchema, "anyOf"));
+assert.equal(
+  structuredSchema.$defs.decision_facts.properties.practical_reason.anyOf.length,
+  3,
+);
+assert.equal(
+  structuredSchema.$defs.decision_facts.properties.boundary_state.anyOf.length,
+  3,
+);
 assert.ok(!projectionSchema.properties.acknowledged_eligibility.enum.includes("needs_more_information"));
 assert.deepEqual(projectionSchema.properties.acknowledged_eligibility.enum, [
   "ready",
@@ -367,9 +412,259 @@ const baselineInferenceFields = [
   "latest_direct_message.user_reply_state",
 ];
 const baselineIntake = structuredIntake(baselineFacts, baselineInferenceFields);
-assert.doesNotThrow(() => validateStageOutput(catalog.definitions[0], baselineIntake));
+function assertCanonicalAndProviderPass(intake) {
+  assert.doesNotThrow(() => validateStageOutput(catalog.definitions[0], intake));
+  assert.doesNotThrow(() => validateStageOutput(providerPb01Definition, intake));
+}
+
+function assertCanonicalAndProviderFail(intake) {
+  for (const definition of [catalog.definitions[0], providerPb01Definition]) {
+    assert.throws(
+      () => validateStageOutput(definition, intake),
+      (error) => error?.safeCode === "M2_STAGE_SCHEMA_INVALID",
+    );
+  }
+}
+
+function expectIntegrityInvalid(intake) {
+  assert.throws(
+    () => validateContextualIntakeIntegrityV3(intake),
+    (error) => error?.safeCode === "M2_CONTEXTUAL_INFERENCE_INVALID",
+  );
+}
+
+const explicitOnlyFacts = decisionFacts({
+  latest_direct_message: {
+    sender: "none",
+    kind: "none",
+    response_expectation: "none",
+    user_reply_state: "not_applicable",
+    sns_signal_only: false,
+  },
+  contact_state: {
+    unanswered_user_message_count: 0,
+    elapsed_since_latest_user_message_minutes: null,
+    usual_cadence_relation: "not_applicable",
+    proposed_message_present: false,
+  },
+});
+const explicitOnlyIntake = structuredIntake(explicitOnlyFacts);
+const unresolvedPracticalFacts = decisionFacts({
+  practical_reason: {
+    kind: "unknown",
+    active: false,
+    deadline: "unknown",
+  },
+  information_state: {
+    unresolved_fields: [
+      "practical_reason.kind",
+      "practical_reason.deadline",
+    ],
+  },
+});
+const unresolvedPracticalIntake = structuredIntake(
+  unresolvedPracticalFacts,
+);
+const unresolvedBoundaryFacts = decisionFacts({
+  boundary_state: {
+    kind: "unknown",
+    status: "unknown",
+    repeated_unanswered_contact: false,
+  },
+  information_state: {
+    unresolved_fields: ["boundary_state.kind", "boundary_state.status"],
+  },
+});
+const unresolvedBoundaryIntake = structuredIntake(unresolvedBoundaryFacts);
+
+for (const intake of [
+  explicitOnlyIntake,
+  baselineIntake,
+  unresolvedPracticalIntake,
+  unresolvedBoundaryIntake,
+]) {
+  assertCanonicalAndProviderPass(intake);
+  assert.doesNotThrow(() => validateContextualIntakeIntegrityV3(intake));
+}
+
+const legalPracticalFacts = [
+  explicitOnlyFacts,
+  decisionFacts({
+    practical_reason: {
+      kind: "schedule_coordination",
+      active: true,
+      deadline: "next_day",
+    },
+  }),
+  unresolvedPracticalFacts,
+];
+const legalBoundaryFacts = [
+  explicitOnlyFacts,
+  decisionFacts({
+    boundary_state: {
+      kind: "no_contact",
+      status: "explicit",
+      repeated_unanswered_contact: false,
+    },
+  }),
+  unresolvedBoundaryFacts,
+];
+for (const facts of [...legalPracticalFacts, ...legalBoundaryFacts]) {
+  assertCanonicalAndProviderPass(structuredIntake(facts));
+}
+
+const invalidPracticalFacts = [
+  decisionFacts({
+    practical_reason: { kind: "none", active: true, deadline: "none" },
+  }),
+  decisionFacts({
+    practical_reason: {
+      kind: "schedule_coordination",
+      active: false,
+      deadline: "next_day",
+    },
+  }),
+  decisionFacts({
+    practical_reason: {
+      kind: "unknown",
+      active: false,
+      deadline: "none",
+    },
+  }),
+];
+const invalidBoundaryFacts = [
+  decisionFacts({
+    boundary_state: {
+      kind: "none",
+      status: "explicit",
+      repeated_unanswered_contact: false,
+    },
+  }),
+  decisionFacts({
+    boundary_state: {
+      kind: "no_contact",
+      status: "none",
+      repeated_unanswered_contact: false,
+    },
+  }),
+  decisionFacts({
+    boundary_state: {
+      kind: "unknown",
+      status: "unknown",
+      repeated_unanswered_contact: true,
+    },
+  }),
+];
+for (const facts of invalidPracticalFacts) {
+  const intake = structuredIntake(facts);
+  assertCanonicalAndProviderFail(intake);
+  assert.throws(
+    () => requireContextualDecisionFactsV3(intake),
+    (error) => error?.safeCode === "M2_DECISION_FACTS_INCOMPLETE",
+  );
+}
+for (const facts of invalidBoundaryFacts) {
+  const intake = structuredIntake(facts);
+  assertCanonicalAndProviderFail(intake);
+  assert.throws(
+    () => requireContextualDecisionFactsV3(intake),
+    (error) => error?.safeCode === "M2_DECISION_FACTS_INCOMPLETE",
+  );
+}
+
+const nonexistentFact = structuredClone(baselineIntake);
+nonexistentFact.context_inferences[0].supporting_fact_ids = ["F999"];
+expectIntegrityInvalid(nonexistentFact);
+
+const duplicateFactId = structuredClone(baselineIntake);
+duplicateFactId.observed_facts.push(structuredClone(duplicateFactId.observed_facts[0]));
+expectIntegrityInvalid(duplicateFactId);
+
+const duplicateInferenceId = structuredClone(baselineIntake);
+duplicateInferenceId.context_inferences[1].inference_id =
+  duplicateInferenceId.context_inferences[0].inference_id;
+expectIntegrityInvalid(duplicateInferenceId);
+
+const duplicateInferenceField = structuredClone(baselineIntake);
+duplicateInferenceField.context_inferences[1].field_path =
+  duplicateInferenceField.context_inferences[0].field_path;
+expectIntegrityInvalid(duplicateInferenceField);
+
+const unsupportedInferenceSource = structuredClone(baselineIntake);
+unsupportedInferenceSource.context_inferences[0].source_refs = [
+  "input:optional_message",
+];
+expectIntegrityInvalid(unsupportedInferenceSource);
+
+const inferenceFlagFalse = structuredClone(baselineIntake);
+inferenceFlagFalse.decision_facts.information_state.used_context_inference = false;
+expectIntegrityInvalid(inferenceFlagFalse);
+
+const emptyInferenceFlagTrue = structuredClone(explicitOnlyIntake);
+emptyInferenceFlagTrue.decision_facts.information_state.used_context_inference = true;
+expectIntegrityInvalid(emptyInferenceFlagTrue);
+
+const inferredAndUnresolved = structuredClone(baselineIntake);
+inferredAndUnresolved.decision_facts.information_state.unresolved_fields.push(
+  "latest_direct_message.sender",
+);
+expectIntegrityInvalid(inferredAndUnresolved);
+
+const inferredUnknown = structuredClone(baselineIntake);
+inferredUnknown.decision_facts.latest_direct_message.sender = "unknown";
+expectIntegrityInvalid(inferredUnknown);
+
+const inferredBoundary = structuredClone(explicitOnlyIntake);
+inferredBoundary.context_inferences = [
+  {
+    inference_id: "I001",
+    field_path: "boundary_state.kind",
+    supporting_fact_ids: ["F001"],
+    source_refs: ["input:current_situation"],
+    rationale_summary: "入力全体から境界を分類した。",
+  },
+];
+inferredBoundary.decision_facts.information_state.used_context_inference = true;
+expectIntegrityInvalid(inferredBoundary);
+
+const unresolvedBoolean = structuredClone(explicitOnlyIntake);
+unresolvedBoolean.decision_facts.information_state.unresolved_fields = [
+  "latest_direct_message.sns_signal_only",
+];
+expectIntegrityInvalid(unresolvedBoolean);
+
+const unresolvedResolvedValue = structuredClone(explicitOnlyIntake);
+unresolvedResolvedValue.decision_facts.latest_direct_message.sender = "user";
+unresolvedResolvedValue.decision_facts.information_state.unresolved_fields = [
+  "latest_direct_message.sender",
+];
+expectIntegrityInvalid(unresolvedResolvedValue);
+const duplicateUnresolvedField = structuredClone(unresolvedPracticalIntake);
+duplicateUnresolvedField.decision_facts.information_state.unresolved_fields.push(
+  "practical_reason.kind",
+);
+expectIntegrityInvalid(duplicateUnresolvedField);
+const integrityInvalidIntakes = [
+  nonexistentFact,
+  duplicateFactId,
+  duplicateInferenceId,
+  duplicateInferenceField,
+  unsupportedInferenceSource,
+  inferenceFlagFalse,
+  emptyInferenceFlagTrue,
+  inferredAndUnresolved,
+  inferredUnknown,
+  inferredBoundary,
+  unresolvedBoolean,
+  unresolvedResolvedValue,
+];
+
 assert.equal(requireContextualDecisionFactsV3(baselineIntake), baselineFacts);
 assert.equal(projectDecisionFactsV2ToV1(baselineFacts).information_state.complete_for_decision, true);
+assert.deepEqual(
+  projectDecisionFactsV2ToV1(unresolvedPracticalFacts).practical_reason,
+  { kind: "none", active: false, deadline: "none" },
+);
 
 assert.equal(deriveRuntimeEligibilityV3({ classification: "normal_allowed" }), "ready");
 assert.equal(deriveRuntimeEligibilityV3({ classification: "needs_review" }), "safety_blocked");
@@ -617,6 +912,43 @@ async function runCase(testCase, index) {
   return { result, trace, repository, transport };
 }
 
+async function expectPb01IntegrityRejection(intake, index) {
+  const outputs = runtimeOutputs({
+    facts: explicitOnlyFacts,
+    expectedDecision: "wait_and_reassess",
+  });
+  outputs["PB-01"] = intake;
+  const repository = new FakeAssessmentRepository();
+  const transport = new OfflineFakeTransport(outputs);
+  const application = new AssessmentApplication({
+    repository,
+    transport,
+    model: "gpt-5.6-luna",
+    promptBundleVersion: catalog.promptBundleVersion,
+    schemaSetVersion: catalog.schemaSetVersion,
+    definitions: catalog.definitions,
+    now: () => "2026-07-31T00:00:00.000Z",
+    uuid: deterministicUuidFactory(),
+  });
+  try {
+    await application.submit(
+      syntheticInput,
+      `70000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+    );
+    assert.fail("expected PB-01 contextual integrity rejection");
+  } catch (error) {
+    assert.equal(error?.safeCode, "M2_CONTEXTUAL_INFERENCE_INVALID");
+  }
+  assert.deepEqual(transport.calls, ["PB-01"]);
+  assert.equal(repository.reports.size, 0);
+  assert.equal(transport.actualProviderCalls, 0);
+  assert.equal(repository.actualSupabaseCalls, 0);
+}
+
+for (const [index, intake] of integrityInvalidIntakes.entries()) {
+  await expectPb01IntegrityRejection(intake, index);
+}
+
 const caseResults = [];
 for (const [index, testCase] of testCases.entries()) {
   const runtime = await runCase(testCase, index);
@@ -634,6 +966,26 @@ for (const [index, testCase] of testCases.entries()) {
   }
   assert.equal(runtime.transport.actualProviderCalls, 0);
   assert.equal(runtime.repository.actualSupabaseCalls, 0);
+}
+
+const unresolvedNormalCases = [
+  {
+    id: "R1-UNRESOLVED-PRACTICAL",
+    facts: unresolvedPracticalFacts,
+    expectedDecision: "wait_and_reassess",
+  },
+  {
+    id: "R1-UNRESOLVED-BOUNDARY",
+    facts: unresolvedBoundaryFacts,
+    expectedDecision: "wait_and_reassess",
+  },
+];
+for (const [index, testCase] of unresolvedNormalCases.entries()) {
+  const runtime = await runCase(testCase, index + 100);
+  assert.equal(runtime.result.eligibility, "ready");
+  assert.equal(runtime.result.decision, "wait_and_reassess");
+  assert.deepEqual(runtime.transport.calls, stageIds);
+  assert.equal(runtime.repository.reports.size, 1);
 }
 
 const baselineRuntime = await runCase(
@@ -701,8 +1053,8 @@ const capabilityManifest = json(
 );
 assert.equal(capabilityManifest.task_id, "M2-P4-I1-C");
 assert.equal(capabilityManifest.status, "implementation_pending_human_chatgpt_review");
-assert.equal(capabilityManifest.baseline.commit, baselineSha);
-assert.deepEqual(capabilityManifest.implementation_paths, exactPaths);
+assert.equal(capabilityManifest.baseline.commit, i1cBaselineSha);
+assert.deepEqual(capabilityManifest.implementation_paths, i1cImplementationPaths);
 assert.deepEqual(capabilityManifest.task_execution_evidence, {
   openai_live_calls: 0,
   database_operations: 0,
@@ -711,9 +1063,32 @@ assert.deepEqual(capabilityManifest.task_execution_evidence, {
   real_user_data: 0,
   live_rerun_executed: false,
 });
+assert.deepEqual(capabilityManifest.r1_successor, {
+  task_id: "M2-P4-I1-C-R1",
+  title: "Contextual Integrity Hardening",
+  status: "implementation_pending_human_chatgpt_review",
+  baseline: {
+    commit: r1BaselineSha,
+  },
+  exact_mutation_paths: exactPaths,
+  catalog_mutation: {
+    path: "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+    stage_id: "PB-01",
+    field: "schema_sha256",
+    value: "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8",
+  },
+  task_execution_evidence: {
+    openai_live_calls: 0,
+    database_operations: 0,
+    migrations: 0,
+    holdout_use: 0,
+    real_user_data: 0,
+    live_rerun_executed: false,
+  },
+});
 
 const changedPaths = new Set(
-  gitText(["diff", "--name-only", baselineSha, "--"])
+  gitText(["diff", "--name-only", r1BaselineSha, "--"])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean),
@@ -729,12 +1104,26 @@ console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("normal_information_gate_terminal: 0");
 console.log("needs_more_information_runtime_path: 0");
 console.log("contextual_inference_supported: PASS");
+console.log("contextual_reference_integrity: PASS");
+console.log("contextual_state_consistency: PASS");
+console.log("inferred_unresolved_exclusion: PASS");
 console.log("decision_facts_non_null: PASS");
 console.log("sparse_normal_cases_ready: 11/11");
 console.log("safety_blocked_cases: 1/1");
+console.log("integrity_invalid_runtime_cases: 12/12");
+console.log("duplicate_unresolved_integrity_case: 1/1");
+console.log("practical_schema_states: 3/3");
+console.log("invalid_practical_combinations: 3/3");
+console.log("boundary_schema_states: 3/3");
+console.log("invalid_boundary_combinations: 3/3");
+console.log("unresolved_normal_flow_reports: 2/2");
+console.log("provider_schema_integrity: PASS");
+console.log("canonical_schema_integrity: PASS");
 console.log("baseline_fake_decision: reply_now");
 console.log("baseline_fake_report: 1");
 console.log("policy_parity: 40/40");
 console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
+console.log("protected_diff: 0");
+console.log("exact_scope: 12/12");

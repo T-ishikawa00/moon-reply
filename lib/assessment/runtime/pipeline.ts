@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { validateContextualIntakeIntegrityV3 } from "./contextual-integrity-v3.ts";
 import { addUsage, emptyUsageTotals } from "./cost.ts";
 import {
   buildLocalEligibilityResultV3,
@@ -264,6 +265,8 @@ export class AssessmentPipeline {
 
     try {
       const deterministicSafety = deterministicSafetyResult(request);
+      const contextualRuntime =
+        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0";
       const structuredIntake = await this.invokeStage(
         runContext,
         {
@@ -276,6 +279,9 @@ export class AssessmentPipeline {
           }),
         },
         "LOCAL_SCHEMA_PB-01",
+        contextualRuntime
+          ? (output) => validateContextualIntakeIntegrityV3(output)
+          : undefined,
       );
 
       const modelSafety = await this.invokeStage(
@@ -290,8 +296,6 @@ export class AssessmentPipeline {
         "LOCAL_SCHEMA_PB-02",
       );
 
-      const contextualRuntime =
-        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0";
       let aggregate: SafetyResult;
       let modelEligibility: JsonObject;
       let eligibility: Eligibility;

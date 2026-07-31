@@ -19,6 +19,8 @@ import type {
   JsonObject,
 } from "./types.ts";
 
+export { validateContextualIntakeIntegrityV3 } from "./contextual-integrity-v3.ts";
+
 const messageSenders = new Set(["user", "other_person", "none", "unknown"]);
 const messageKinds = new Set([
   "question",
@@ -70,6 +72,15 @@ const practicalReasonKinds = new Set([
   "initial_apology",
   "single_invitation",
   "unknown",
+]);
+const clearPracticalReasonKinds = new Set([
+  "schedule_coordination",
+  "factual_correction",
+  "promised_information",
+  "logistics",
+  "thank_you",
+  "initial_apology",
+  "single_invitation",
 ]);
 const practicalDeadlines = new Set([
   "none",
@@ -177,14 +188,19 @@ function isDecisionFactsV2(value: unknown): value is DecisionFactsV2 {
     ]) ||
     !boundaryKinds.has(String(boundary.kind)) ||
     !boundaryStatuses.has(String(boundary.status)) ||
-    typeof boundary.repeated_unanswered_contact !== "boolean" ||
-    (boundary.status === "explicit" &&
-      (boundary.kind === "none" || boundary.kind === "unknown")) ||
-    (boundary.status === "none" && boundary.kind !== "none") ||
-    (boundary.status === "unknown" && boundary.kind !== "unknown")
+    typeof boundary.repeated_unanswered_contact !== "boolean"
   ) {
     return false;
   }
+  const legalBoundaryState =
+    (boundary.kind === "none" && boundary.status === "none") ||
+    (boundary.status === "explicit" &&
+      boundary.kind !== "none" &&
+      boundary.kind !== "unknown") ||
+    (boundary.kind === "unknown" &&
+      boundary.status === "unknown" &&
+      boundary.repeated_unanswered_contact === false);
+  if (!legalBoundaryState) return false;
 
   const practical = value.practical_reason;
   if (
@@ -192,13 +208,20 @@ function isDecisionFactsV2(value: unknown): value is DecisionFactsV2 {
     !hasExactKeys(practical, ["kind", "active", "deadline"]) ||
     !practicalReasonKinds.has(String(practical.kind)) ||
     typeof practical.active !== "boolean" ||
-    !practicalDeadlines.has(String(practical.deadline)) ||
-    (practical.active
-      ? practical.kind === "none" || practical.kind === "unknown"
-      : practical.kind !== "none" || practical.deadline !== "none")
+    !practicalDeadlines.has(String(practical.deadline))
   ) {
     return false;
   }
+  const legalPracticalReason =
+    (practical.kind === "none" &&
+      practical.active === false &&
+      practical.deadline === "none") ||
+    (clearPracticalReasonKinds.has(String(practical.kind)) &&
+      practical.active === true) ||
+    (practical.kind === "unknown" &&
+      practical.active === false &&
+      practical.deadline === "unknown");
+  if (!legalPracticalReason) return false;
 
   const information = value.information_state;
   return (
@@ -232,6 +255,14 @@ export function requireContextualDecisionFactsV3(
 export function projectDecisionFactsV2ToV1(
   facts: DecisionFactsV2,
 ): DecisionFactsV1 {
+  const practicalReason =
+    facts.practical_reason.kind === "unknown"
+      ? {
+          kind: "none" as const,
+          active: false,
+          deadline: "none" as const,
+        }
+      : { ...facts.practical_reason };
   return {
     schema_version: "m2-p4-decision-facts-v1",
     relationship_stage: facts.relationship_stage,
@@ -239,7 +270,7 @@ export function projectDecisionFactsV2ToV1(
     latest_direct_message: { ...facts.latest_direct_message },
     contact_state: { ...facts.contact_state },
     boundary_state: { ...facts.boundary_state },
-    practical_reason: { ...facts.practical_reason },
+    practical_reason: practicalReason,
     information_state: { complete_for_decision: true },
   };
 }
