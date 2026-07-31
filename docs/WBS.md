@@ -4,7 +4,7 @@
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
 
-Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification passed; Milestone 2 remains incomplete. The M2-P4 planning package was revalidated against base commit `5dcfbf6a693345832e15ebd61f9d0fc7c989e5c2` and is Human / ChatGPT accepted and complete at accepted planning content commit `34e2b1592428517564aeff95f2b7e40527f42a9e`. M2-P4-I1-A is Human / ChatGPT accepted and complete at accepted implementation commit `27752471caa644b569a08a4587ddf677195c203a`. M2-P4-I1-B Runtime Typed-Facts Integration is Human / ChatGPT accepted and complete at accepted implementation commit `9588c8fd6ab47c265f5f661d4473a29d73885427`, anchored to historical snapshot `554d2cb5a2f816ac82edf3cc247458fe34a4a74c..9588c8fd6ab47c265f5f661d4473a29d73885427`. OpenAI live verification and DB verification were not executed; OpenAI live calls and DB operations are `0`. UI, renderer, PB-04/PB-05/PB-06 quality prose, current `policy.ts`, historical Prompt/Schema assets, and holdout remain unchanged.
+Current state: Milestone 1 is Human-accepted, complete, and closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling. M2-P3 Runtime Vertical Slice is fully complete after successful-run DB integrity verification passed; Milestone 2 remains incomplete. The M2-P4 planning package and I1-A through I1-C-R4 are Human / ChatGPT accepted and complete. I1-C's accepted implementation stack is the immutable exact 27-path range `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`. The `2026-07-31T22:20:38+09:00` Human-executed synthetic run passed SELECT-only integrity verification with OpenAI calls `0`, DB writes `0`, migrations `0`, and anomalies `0`. UI, renderer, PB-04/PB-05/PB-06 quality prose, current `policy.ts`, historical Prompt/Schema assets, and holdout remain unchanged. I2 is the next candidate and remains not started.
 
 ## P0: Repository Setup
 
@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning acceptance, M2-P4-I1-A acceptance, and M2-P4-I1-B acceptance are complete. M2-P4-I1-C is implemented pending acceptance; its R1 contextual-integrity successor is implemented and offline-validated pending acceptance. The one synthetic live rerun requires separate authorization. `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized and not started. Publication, deployment, production connections, live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and later implementation remain blocked.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning, and M2-P4-I1-A through M2-P4-I1-C-R4 are Human / ChatGPT accepted and complete. The accepted I1-C stack is the immutable exact 27-path range `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`. `M2-P4-I2 Report Information Architecture and Intent Fulfillment` is the next candidate, followed by `M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision`; both remain unauthorized and not started. `M2-P4-E1` and `M2-P4-E2` also remain unauthorized and not started. Publication, deployment, production connections, new live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and later implementation remain blocked.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -766,7 +766,7 @@ M2-P4-I1-A is Human / ChatGPT accepted and complete. The typed facts contract, p
 - [x] Human / ChatGPT review and acceptance; accepted implementation commit `9588c8fd6ab47c265f5f661d4473a29d73885427`.
 - [ ] After acceptance only: separately authorize and execute one synthetic `M2P4-LIVE-001` live smoke candidate.
 
-M2-P4-I1-B is accepted and complete. Its v2 catalog and policy remain immutable historical assets. M2-P4-I1-C is the authorized successor: the active service uses PB-01/PB-03/PB-04/PB-05 successor contracts, application-owned Safety-only eligibility, non-null DecisionFactsV2, and accepted v2 policy through a safe adapter. UI and renderer are unchanged; full prose-quality improvement has not started. OpenAI calls and DB operations are `0`; the live rerun was not executed.
+M2-P4-I1-B is accepted and complete. Its v2 catalog and policy remain immutable historical assets. M2-P4-I1-C and R1 through R4 are also Human / ChatGPT accepted and complete: the active service uses PB-01/PB-03/PB-04/PB-05 successor contracts, application-owned Safety-only eligibility, non-null DecisionFactsV2, and accepted v2 policy through a safe adapter. UI and renderer are unchanged; full prose-quality improvement has not started. The acceptance verification used SELECT only and made OpenAI calls `0`, DB writes `0`, and migrations `0`.
 
 # M2-P4-I1-C Contextual Best-Effort Consultation
 
@@ -777,10 +777,10 @@ M2-P4-I1-B is accepted and complete. Its v2 catalog and policy remain immutable 
 - [x] Advance the active pipeline through PB-04 for all normal consultations, including sparse and largely unknown inputs.
 - [x] Preserve accepted I1-A/I1-B and historical Prompt/Schema assets, UI, renderer, packages, development data, and holdout.
 - [x] Prove 11/11 normal sparse cases ready with reports, 1/1 Safety case blocked without report, sanitized baseline `reply_now`, and zero external execution.
-- [ ] Human / ChatGPT review and acceptance.
-- [ ] After acceptance only: separately authorize one synthetic live rerun.
+- [x] Human / ChatGPT review and acceptance at initial implementation commit `da520621b6569ff65ae652fb75945ed923b4fc3b` and accepted stack commit `b523349ec33c36a90c645d4a1b7a6d37832af151`.
+- [x] Human executed one synthetic live run; complete SELECT-only integrity verification with OpenAI calls `0`, DB writes `0`, and migrations `0`.
 
-Milestone 2 remains incomplete. I1-C does not authorize live OpenAI/Supabase execution, migration, secret access, PR, merge to `main`, I2/I3/E1/E2, representative quality execution, or release.
+Milestone 2 remains incomplete. I1-C acceptance does not authorize new live OpenAI/Supabase execution, migration, secret access, I2/I3/E1/E2 implementation, representative quality execution, or release.
 
 # M2-P4-I1-C-R1 Contextual Integrity Hardening
 
@@ -792,8 +792,8 @@ Milestone 2 remains incomplete. I1-C does not authorize live OpenAI/Supabase exe
 - [x] Limit the runtime catalog change to the new PB-01 Structured Intake Schema SHA-256.
 - [x] Preserve the I1-B v2 runtime path and leave `scripts/verify-m2-p3-runtime-vertical-slice.mjs` unchanged.
 - [x] Run the required sequential offline verifier, typecheck, lint, build, exact-scope, protected-diff, and `git diff --check` gates.
-- [ ] Human / ChatGPT review and acceptance.
-- [ ] After acceptance only: separately authorize one synthetic live rerun.
+- [x] Human / ChatGPT review and acceptance at implementation commit `bee69d1cf0f1792786eccc6508fb5e7184ad6241`.
+- [x] Preserve the separate Human-executed synthetic live and SELECT-only integrity evidence without changing task-time offline evidence.
 
 R1 does not authorize OpenAI live calls, DB operations, migrations, holdout use, real-user data, retry, Repair/PB-07, fallback, PR creation, merge to `main`, or release.
 
@@ -807,10 +807,10 @@ R1 does not authorize OpenAI live calls, DB operations, migrations, holdout use,
 - [x] Supply grounded report content to PB-06 and persist it in the final report without retry, Repair, PB-07, or fallback.
 - [x] Prove four report-direction states, reversed-summary correction, PB-06 input/final grounding, and major/critical PB-06 fail-closed behavior.
 - [x] Preserve policy parity `40/40`, sparse `11/11`, Safety `1/1`, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R2 scope `10/10`.
-- [ ] Human / ChatGPT review and acceptance.
-- [ ] After acceptance only: separately authorize one synthetic live rerun.
+- [x] Human / ChatGPT review and acceptance at implementation commit `2659c14d82fe2589d2e1cfc655c52c13b878dc7c`.
+- [x] Preserve the separate Human-executed synthetic live and SELECT-only integrity evidence without changing task-time offline evidence.
 
-R2 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, broader prose-quality work, or release.
+R2 task-time evidence uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; its task-time live rerun was not executed. The later Human-executed synthetic run and SELECT-only integrity verification are recorded separately. R2 alone did not authorize a PR, merge to `main`, broader prose-quality work, or release.
 
 # M2-P4-I1-C-R3 PB-01 Evidence Canonicalization
 
@@ -822,10 +822,10 @@ R2 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, an
 - [x] Preserve raw PB-01 Provider output as Stage evidence; revalidate and integrity-check only the grounded downstream object.
 - [x] Prove the `2026-07-31` live-failure equivalent reaches `ready -> reply_now -> non-null draft -> report 1`, while named invalid evidence remains rejected.
 - [x] Preserve policy parity `40/40`, sparse and Safety cases, PB-06 fail-closed behavior, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R3 scope `9/9`.
-- [ ] Human / ChatGPT review and acceptance.
-- [ ] After acceptance only: separately authorize one synthetic live rerun.
+- [x] Human / ChatGPT review and acceptance at implementation commit `e4e844cbaa8534c68a0d87d5831d04b5afe676a1`.
+- [x] Preserve the separate Human-executed synthetic live and SELECT-only integrity evidence without changing task-time offline evidence.
 
-R3 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, Schema/Prompt/catalog/hash changes, broader prose-quality work, or release.
+R3 task-time evidence uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; its task-time live rerun was not executed. The later Human-executed synthetic run and SELECT-only integrity verification are recorded separately. R3 alone did not authorize a PR, merge to `main`, Schema/Prompt/catalog/hash changes, broader prose-quality work, or release.
 
 # M2-P4-I1-C-R4 Temporal Change-Condition Semantics
 
@@ -837,9 +837,23 @@ R3 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, an
 - [x] Preserve selected-decision, message-draft, action, three-day-plan, fact, assumption, Safety, certainty, mismatched-commentary, and all other major/critical fail-closed behavior.
 - [x] Prove the four-finding live-failure equivalent is temporal false positives `4`, blocking `0`, final report `1`, with raw Stage evidence and relationship grounding preserved.
 - [x] Preserve policy parity `40/40`, sparse and Safety cases, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R4 scope `10/10`.
-- [ ] Human / ChatGPT review and acceptance.
-- [ ] After acceptance only: separately authorize one synthetic live rerun.
+- [x] Human / ChatGPT review and acceptance at implementation commit `b523349ec33c36a90c645d4a1b7a6d37832af151`.
+- [x] Complete exact accepted stack audit `27/27`, exact acceptance-sync scope `8/8`, protected historical diff `0`, and SELECT-only live integrity verification.
 
-R4 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, Prompt/Schema/catalog/hash changes, broader prose-quality work, or release.
+R4 task-time evidence remains OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`. Separately, the Human-executed synthetic run at `2026-07-31T22:20:38+09:00` passed read-only integrity verification for request prefix `dd1e4da8` / run prefix `ae3562b6`: `completed / ready / reply_now`, six ordered completed Stages, draft present, report `1`, `normal_allowed / none`, matching nonzero usage, processing residue `0`, mixed state `0`, and integrity anomalies `0`. Verification made OpenAI calls `0`, DB writes `0`, and migrations `0`.
+
+# M2-P4-I2 / I3 Human Product Direction
+
+- [x] Fix the target: 恋愛の悩みを毎回友人へ相談しづらくなり、ひとりで考えすぎてしまう夜の相談相手を必要とする30代前後の女性。
+- [x] Fix the product position: 月の返事は恋の正解や未来を断定するサービスではない。相談者の気持ちを受け止め、状況を整理し、今夜の一歩を一緒に決める相談相手である。
+- [x] Fix the desired after-feeling as `分かってもらえた` -> `納得できた` -> `動けそう`.
+- [x] Fix the voice: 優しいが曖昧ではない。親身だが馴れ馴れしすぎない。大人の利用者を子ども扱いしない。相手の本心は断定しない。相談者の次の行動は明確にする。不安を受け止めるが、不安を増幅しない。業務レポート調、AI免責の反復、過度な占い師口調を避ける。
+- [x] Fix the hierarchy with `今夜の答え`, `そのまま使える返信案`, and `今夜の具体的な動き方` above reasons, readable facts, non-assertable matters, tomorrow onward, and change conditions.
+- [x] Require case-specific `送る前`, `送る文面`, `送った直後`, `今夜やらないこと`, and `明日以降` guidance rather than only “返信する”.
+- [x] Preserve Safety: 都合の良い断定はしない。ただし、通常の情報不足を理由に相談回答を止めない。Safety問題時も、可能な範囲で安全な次の一歩を返す。
+- [ ] M2-P4-I2 Report Information Architecture and Intent Fulfillment: classify seven generated but hidden fields as display, integrate, or successor-Schema deprecate; fulfill selected intent visibly; prioritize tonight's answer/draft/action; reduce duplicate chapters/explanations; organize UI information priority.
+- [ ] M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision after I2: emotional attunement, warm adult consultation voice, case-specific draft editing, concrete tonight action, useful post-send guidance, individuality, non-redundancy, and JPY 980 value.
+
+I2 and I3 are recorded candidates only. This acceptance sync does not start quality implementation.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

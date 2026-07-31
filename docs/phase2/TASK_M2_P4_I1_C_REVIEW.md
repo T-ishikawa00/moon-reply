@@ -4,11 +4,12 @@
 
 - Task: `M2-P4-I1-C`
 - Baseline: `c27120eea067f91c5e9ef4447e382f55a329e158`
-- Branch: `feat/m2-p4-i1-c-contextual-best-effort`
-- Status: implementation complete; Human / ChatGPT acceptance pending
-- Live rerun: not executed and not authorized by this task
-- OpenAI calls: `0`
-- DB operations: `0`
+- Branch: `fix/m2-p4-i1-c-r4-temporal-change-semantics`
+- Status: Human / ChatGPT accepted and complete
+- Accepted implementation commit: `b523349ec33c36a90c645d4a1b7a6d37832af151`
+- Immutable implementation snapshot: `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`
+- Accepted stack: exact `27/27` literal paths
+- Acceptance live verification: Human-executed synthetic run verified read-only; OpenAI calls `0`; DB writes `0`
 - migrations: `0`
 - holdout use: `0`
 - real-user data: `0`
@@ -73,8 +74,8 @@ Accepted I1-A/I1-B assets, historical `ai/prompts/**`, historical `ai/schemas/**
 - Task: `M2-P4-I1-C-R1`
 - Baseline: `da520621b6569ff65ae652fb75945ed923b4fc3b`
 - Branch: `fix/m2-p4-i1-c-r1-contextual-integrity`
-- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
-- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+- Status: Human / ChatGPT accepted and complete at `bee69d1cf0f1792786eccc6508fb5e7184ad6241`
+- Task-time external execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
 
 R1 preserves the contextual best-effort and Safety-only terminal policy while adding deterministic post-schema PB-01 integrity validation. `observed_facts.fact_id`, `context_inferences.inference_id`, and inferred `field_path` values must be unique. Every cited fact must exist, and every inference source reference must be supported by the cited facts. The runtime also enforces the inference-used flag equivalence, inferred/unresolved exclusion, unresolved uniqueness and actual-value consistency, non-null/non-unknown inferred values, and the prohibition on inferred boundary or repeated-contact facts. Violations fail before PB-02 as `M2_CONTEXTUAL_INFERENCE_INVALID`.
 
@@ -111,7 +112,7 @@ Recorded sequential offline evidence before commit:
 - typecheck / lint / build: PASS / PASS / PASS
 - exact R1 scope: `12/12`; protected diff: `0`; `git diff --check`: PASS
 - OpenAI calls / DB operations / migrations / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
-- live rerun: not executed
+- task-time live rerun: not executed
 
 Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed model-quality evidence, live execution, merge, release, or Milestone 2 completion.
 
@@ -141,17 +142,19 @@ Recorded offline evidence before commit:
 
 Automated PASS does not constitute provider-backed prose-quality acceptance, Human review, live execution, DB verification, release, or Milestone 2 completion.
 
-## Acceptance and Next Gate
+## Acceptance and Live Evidence
 
-Human / ChatGPT acceptance is pending. After acceptance, the only named next candidate is one separately authorized synthetic live rerun. This review does not authorize API/DB access, secret access, migration work, retry, Repair, fallback, PB-07, PR creation, merge to `main`, or full PB-04 through PB-06 prose-quality improvement.
+M2-P4-I1-C and R1 through R4 are Human / ChatGPT accepted and complete. The accepted implementation stack is the immutable historical range `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`, exactly 27 literal paths with no wildcard, prefix, or future-path authorization. The original I1-C 21-path and R1/R2/R3/R4 12/10/9/10-path records remain unchanged.
+
+The `2026-07-31T22:20:38+09:00` Human-executed synthetic run was verified using Supabase SELECT only. Request prefix `dd1e4da8` and run prefix `ae3562b6` are `completed`; eligibility is `ready`; decision is `reply_now`; PB-01 through PB-06 are six ordered completed Stage rows with null error codes; PB-04 has a non-null draft; aggregate Safety is `normal_allowed` with response mode `none`; exactly one final report and a `reply_now` decision card exist; the application-owned relationship summary preserves the incoming/unreplied meaning; Stage usage sums match nonzero Run totals; processing residue and integrity anomalies are `0`. Verification made OpenAI calls `0`, DB writes `0`, and migrations `0`. No raw consultation text, raw Provider output, full UUID, Provider payload, or secret is recorded.
 
 ## R2 Safety Aggregation & Report Direction Grounding Successor
 
 - Task: `M2-P4-I1-C-R2`
 - Baseline: `bee69d1cf0f1792786eccc6508fb5e7184ad6241`
 - Branch: `fix/m2-p4-i1-c-r2-safety-report-grounding`
-- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
-- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+- Status: Human / ChatGPT accepted and complete at `2659c14d82fe2589d2e1cfc655c52c13b878dc7c`
+- Task-time external execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
 
 R2 corrects two independently observed fail-closed findings without weakening PB-06. Contextual runtime now derives aggregate `response_mode` from the strictest classification and application-owned reason-code mapping. `normal_allowed` always yields `none`, including `reason_codes=["normal"]` and an empty list. Non-normal aggregation removes only a mixed `normal` code, maps known high-risk codes to the required specialized response, and uses `unsafe_contact_stop` only for the named contact-risk codes or when no specialized non-normal mapping exists. Historical `policy.ts` and `aggregateSafety()` remain unchanged for legacy runtime.
 
@@ -177,8 +180,8 @@ The original I1-C 21-path and R1 12-path records remain immutable. The R2 verifi
 - Task: `M2-P4-I1-C-R3`
 - Baseline: `2659c14d82fe2589d2e1cfc655c52c13b878dc7c`
 - Branch: `fix/m2-p4-i1-c-r3-intake-evidence-grounding`
-- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
-- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+- Status: Human / ChatGPT accepted and complete at `e4e844cbaa8534c68a0d87d5831d04b5afe676a1`
+- Task-time external execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
 
 R3 preserves Provider PB-01 output unchanged as Stage evidence, then deep-clones it for downstream grounding. The application makes request `relationship`, exact `requestedTopics`, and trimmed `optionalMessage` presence authoritative; removes contextual inferences and unresolved markers for `relationship_stage` and `contact_state.proposed_message_present`; rebuilds every remaining inference `source_refs` as a stable unique union of its existing supporting facts; and derives `used_context_inference` from the remaining inference count. It neither invents facts nor changes supporting IDs, inferred values, rationale, Schema, Prompt, catalog, or hash.
 
@@ -203,8 +206,8 @@ The original I1-C 21-path, R1 12-path, and R2 10-path records remain immutable. 
 - Task: `M2-P4-I1-C-R4`
 - Baseline: `e4e844cbaa8534c68a0d87d5831d04b5afe676a1`
 - Branch: `fix/m2-p4-i1-c-r4-temporal-change-semantics`
-- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
-- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+- Status: Human / ChatGPT accepted and complete at `b523349ec33c36a90c645d4a1b7a6d37832af151`
+- Task-time external execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
 
 R4 separates the current application-owned decision policy from future change conditions. Contextual runtime deterministically replaces PB-05 `change_condition_commentary` in PB-04 `change_conditions` order. Each application-owned sentence states an observable future condition and only then describes the direction to reconsider; it never converts a future `wait_and_reassess` or `pause_additional_contact` branch into a current instruction. Raw PB-05 output remains Stage evidence. The relationship-grounded and change-condition-grounded projection is revalidated against the unchanged PB-05 Schema, supplied to PB-06, and persisted in the final report.
 
@@ -224,3 +227,19 @@ Exact R4 mutation scope is 10 literal paths:
 10. `docs/CODEX_HANDOFF.md`
 
 The original I1-C 21-path, R1 12-path, R2 10-path, and R3 9-path records remain immutable. R4 regression evidence covers all four future directions, both exact JSON-path forms, the four-finding `2026-07-31` live-failure equivalent as temporal false positives `4` / blocking `0` / final report `1`, raw PB-05 and PB-06 Stage evidence, grounded PB-06 input and final report, preserved relationship grounding, selected-decision/draft/fact/Safety blocking cases, mismatched-commentary blocking, policy parity `40/40`, exact R4 scope `10/10`, protected diff `0`, and zero external execution. Prompt, Schema, catalog, hash, legacy runtime, and normal PB-06 major/critical fail-closed behavior are unchanged. Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed quality evidence, live execution, merge, release, or Milestone 2 completion.
+
+## Human Product Direction for I2 and I3
+
+Targetは、恋愛の悩みを毎回友人へ相談しづらくなり、ひとりで考えすぎてしまう夜の相談相手を必要とする30代前後の女性。月の返事は恋の正解や未来を断定するサービスではない。相談者の気持ちを受け止め、状況を整理し、今夜の一歩を一緒に決める相談相手である。鑑定後に残す感覚は、`分かってもらえた`、`納得できた`、`動けそう`の順とする。
+
+Voiceは、優しいが曖昧ではない、親身だが馴れ馴れしすぎない、大人の利用者を子ども扱いしない、相手の本心は断定しない、相談者の次の行動は明確にする、不安を受け止めるが不安を増幅しない、業務レポート調・AI免責の反復・過度な占い師口調を避ける、を固定する。
+
+The upper information hierarchy is `今夜の答え`, `そのまま使える返信案`, and `今夜の具体的な動き方`. The lower hierarchy is `判断理由`, `文面から読み取れること`, `断定できないこと`, `明日以降`, and `判断が変わる条件`. Tonight's action must be case-specific across `送る前`, `送る文面`, `送った直後`, `今夜やらないこと`, and `明日以降`, not merely “返信する”.
+
+Safetyは、都合の良い断定をしない。ただし、通常の情報不足を理由に相談回答を止めない。Safety問題時も、可能な範囲で安全な次の一歩を返す。
+
+## Next Sequence
+
+The next candidate is `M2-P4-I2 Report Information Architecture and Intent Fulfillment`: classify each of the seven generated but hidden fields as display, integrate, or successor-Schema deprecate; visibly fulfill the selected consultation intent; prioritize tonight's answer, draft, and action; remove duplicate chapters/explanations; and organize UI information priority. I2 is not started.
+
+After I2, the candidate is `M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision`, focused on emotional attunement, warm adult consultation voice, case-specific draft editing, concrete tonight action, useful post-send guidance, individuality, non-redundancy, and JPY 980 value. I3 and the quality revision itself are not started by this acceptance sync.

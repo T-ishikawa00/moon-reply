@@ -14,6 +14,14 @@ const r1BaselineSha = "da520621b6569ff65ae652fb75945ed923b4fc3b";
 const r2BaselineSha = "bee69d1cf0f1792786eccc6508fb5e7184ad6241";
 const r3BaselineSha = "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
 const r4BaselineSha = "e4e844cbaa8534c68a0d87d5831d04b5afe676a1";
+const acceptedEndSha = "b523349ec33c36a90c645d4a1b7a6d37832af151";
+const acceptedSliceCommits = {
+  "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
+  "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
+  "M2-P4-I1-C-R2": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c",
+  "M2-P4-I1-C-R3": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1",
+  "M2-P4-I1-C-R4": acceptedEndSha,
+};
 const r1ExactPaths = [
   "lib/assessment/runtime/contextual-integrity-v3.ts",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -85,6 +93,45 @@ const i1cImplementationPaths = [
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+];
+const acceptedStackPaths = [
+  "docs/CODEX_HANDOFF.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "lib/assessment/runtime/change-condition-grounding-v3.ts",
+  "lib/assessment/runtime/contextual-inference-v3.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/report-grounding-v3.ts",
+  "lib/assessment/runtime/safety-aggregation-v3.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/semantic-disposition-v3.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
+const acceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ];
 const stageIds = ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
 const decisionNames = [
@@ -215,6 +262,30 @@ const r3CommittedPaths = gitText([
   .map((item) => item.trim().replaceAll("\\", "/"))
   .filter(Boolean);
 assert.deepEqual(sorted(r3CommittedPaths), sorted(r3ExactPaths));
+
+const r4CommittedPaths = gitText([
+  "diff",
+  "--name-only",
+  r4BaselineSha,
+  acceptedEndSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.deepEqual(sorted(r4CommittedPaths), sorted(r4ExactPaths));
+
+const acceptedStackCommittedPaths = gitText([
+  "diff",
+  "--name-only",
+  i1cBaselineSha,
+  acceptedEndSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.deepEqual(sorted(acceptedStackCommittedPaths), sorted(acceptedStackPaths));
 
 const protectedHistoricalPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -1862,9 +1933,19 @@ const capabilityManifest = json(
   "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
 );
 assert.equal(capabilityManifest.task_id, "M2-P4-I1-C");
-assert.equal(capabilityManifest.status, "implementation_pending_human_chatgpt_review");
+assert.equal(capabilityManifest.status, "human_chatgpt_accepted_complete");
+assert.equal(capabilityManifest.accepted_implementation_commit, acceptedEndSha);
+assert.deepEqual(capabilityManifest.accepted_slice_commits, acceptedSliceCommits);
+assert.deepEqual(capabilityManifest.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: i1cBaselineSha,
+  end_commit_sha: acceptedEndSha,
+  include_working_tree: false,
+  immutable_snapshot: true,
+});
 assert.equal(capabilityManifest.baseline.commit, i1cBaselineSha);
 assert.deepEqual(capabilityManifest.implementation_paths, i1cImplementationPaths);
+assert.deepEqual(capabilityManifest.accepted_stack_paths, acceptedStackPaths);
 assert.deepEqual(capabilityManifest.task_execution_evidence, {
   openai_live_calls: 0,
   database_operations: 0,
@@ -1873,10 +1954,34 @@ assert.deepEqual(capabilityManifest.task_execution_evidence, {
   real_user_data: 0,
   live_rerun_executed: false,
 });
+assert.deepEqual(capabilityManifest.acceptance_live_evidence, {
+  human_executed: true,
+  synthetic_only: true,
+  executed_at_jst: "2026-07-31T22:20:38+09:00",
+  run_prefix: "ae3562b6",
+  request_prefix: "dd1e4da8",
+  stages_completed: 6,
+  expected_stage_order: stageIds,
+  eligibility: "ready",
+  decision: "reply_now",
+  message_draft_present: true,
+  report_count: 1,
+  safety_classification: "normal_allowed",
+  safety_response_mode: "none",
+  usage: "nonzero",
+  processing_residue: 0,
+  integrity_anomalies: 0,
+  real_user_data: 0,
+  holdout_use: 0,
+  verification_openai_calls: 0,
+  verification_db_writes: 0,
+  verification_migrations: 0,
+});
 assert.deepEqual(capabilityManifest.r1_successor, {
   task_id: "M2-P4-I1-C-R1",
   title: "Contextual Integrity Hardening",
-  status: "implementation_pending_human_chatgpt_review",
+  status: "human_chatgpt_accepted_complete",
+  accepted_implementation_commit: acceptedSliceCommits["M2-P4-I1-C-R1"],
   baseline: {
     commit: r1BaselineSha,
   },
@@ -1899,7 +2004,8 @@ assert.deepEqual(capabilityManifest.r1_successor, {
 assert.deepEqual(capabilityManifest.r2_successor, {
   task_id: "M2-P4-I1-C-R2",
   title: "Safety Aggregation & Report Direction Grounding",
-  status: "implementation_pending_human_chatgpt_review",
+  status: "human_chatgpt_accepted_complete",
+  accepted_implementation_commit: acceptedSliceCommits["M2-P4-I1-C-R2"],
   baseline: {
     commit: r2BaselineSha,
   },
@@ -1916,7 +2022,8 @@ assert.deepEqual(capabilityManifest.r2_successor, {
 assert.deepEqual(capabilityManifest.r3_successor, {
   task_id: "M2-P4-I1-C-R3",
   title: "PB-01 Evidence Canonicalization",
-  status: "implementation_pending_human_chatgpt_review",
+  status: "human_chatgpt_accepted_complete",
+  accepted_implementation_commit: acceptedSliceCommits["M2-P4-I1-C-R3"],
   baseline: {
     commit: r3BaselineSha,
   },
@@ -1933,7 +2040,8 @@ assert.deepEqual(capabilityManifest.r3_successor, {
 assert.deepEqual(capabilityManifest.r4_successor, {
   task_id: "M2-P4-I1-C-R4",
   title: "Temporal Change-Condition Semantics",
-  status: "implementation_pending_human_chatgpt_review",
+  status: "human_chatgpt_accepted_complete",
+  accepted_implementation_commit: acceptedSliceCommits["M2-P4-I1-C-R4"],
   baseline: {
     commit: r4BaselineSha,
   },
@@ -1947,9 +2055,50 @@ assert.deepEqual(capabilityManifest.r4_successor, {
     live_rerun_executed: false,
   },
 });
+assert.deepEqual(capabilityManifest.next_sequence, {
+  next: "M2-P4-I2 Report Information Architecture and Intent Fulfillment",
+  i2_status: "not_started",
+  after_i2: "M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision",
+  i3_status: "not_started",
+});
+
+for (const item of [
+  ...capabilityManifest.implementation_paths,
+  ...capabilityManifest.accepted_stack_paths,
+  ...capabilityManifest.r1_successor.exact_mutation_paths,
+  ...capabilityManifest.r2_successor.exact_mutation_paths,
+  ...capabilityManifest.r3_successor.exact_mutation_paths,
+  ...capabilityManifest.r4_successor.exact_mutation_paths,
+]) {
+  assert.equal(typeof item, "string");
+  assert.ok(item.length > 0 && !item.includes("*") && !item.endsWith("/"));
+}
+
+for (const documentPath of [
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]) {
+  const document = source(documentPath);
+  for (const requiredProductDirection of [
+    "30代前後の女性",
+    "月の返事は恋の正解や未来を断定するサービスではない",
+    "分かってもらえた",
+    "優しいが曖昧ではない",
+    "今夜の答え",
+    "送った直後",
+    "通常の情報不足を理由に相談回答を止めない",
+    "M2-P4-I2 Report Information Architecture and Intent Fulfillment",
+    "M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision",
+  ]) {
+    assert.ok(document.includes(requiredProductDirection));
+  }
+  assert.ok(document.includes("not started") || document.includes("not_started"));
+}
 
 const changedPaths = new Set(
-  gitText(["diff", "--name-only", r4BaselineSha, "--"])
+  gitText(["diff", "--name-only", acceptedEndSha, "HEAD", "--"])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean),
@@ -1959,7 +2108,7 @@ for (const line of gitText(["status", "--porcelain=v1", "--untracked-files=all"]
   .filter(Boolean)) {
   changedPaths.add(line.slice(3).trim().replaceAll("\\", "/"));
 }
-assert.deepEqual(sorted(changedPaths), sorted(r4ExactPaths));
+assert.deepEqual(sorted(changedPaths), sorted(acceptanceSyncPaths));
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("normal_information_gate_terminal: 0");
@@ -2021,4 +2170,7 @@ console.log("protected_diff: 0");
 console.log("r1_historical_exact_scope: 12/12");
 console.log("r2_historical_exact_scope: 10/10");
 console.log("r3_historical_exact_scope: 9/9");
-console.log("exact_scope: 10/10");
+console.log("r4_historical_exact_scope: 10/10");
+console.log("accepted_stack_scope: 27/27");
+console.log("acceptance_sync_exact_scope: 8/8");
+console.log("quality_i2_i3_started: 0");

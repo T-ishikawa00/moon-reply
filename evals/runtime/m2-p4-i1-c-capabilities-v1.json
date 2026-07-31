@@ -2,7 +2,22 @@
   "schema_version": "m2-p4-runtime-capabilities-v1",
   "task_id": "M2-P4-I1-C",
   "title": "Contextual Best-Effort Consultation",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "accepted_implementation_commit": "b523349ec33c36a90c645d4a1b7a6d37832af151",
+  "accepted_slice_commits": {
+    "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
+    "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
+    "M2-P4-I1-C-R2": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c",
+    "M2-P4-I1-C-R3": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1",
+    "M2-P4-I1-C-R4": "b523349ec33c36a90c645d4a1b7a6d37832af151"
+  },
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "c27120eea067f91c5e9ef4447e382f55a329e158",
+    "end_commit_sha": "b523349ec33c36a90c645d4a1b7a6d37832af151",
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
   "baseline": {
     "commit": "c27120eea067f91c5e9ef4447e382f55a329e158"
   },
@@ -39,6 +54,35 @@
     "docs/WBS.md",
     "docs/CODEX_HANDOFF.md"
   ],
+  "accepted_stack_paths": [
+    "docs/CODEX_HANDOFF.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+    "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+    "lib/assessment/runtime/change-condition-grounding-v3.ts",
+    "lib/assessment/runtime/contextual-inference-v3.ts",
+    "lib/assessment/runtime/contextual-integrity-v3.ts",
+    "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+    "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+    "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+    "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+    "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+    "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+    "lib/assessment/runtime/eligibility-v3.ts",
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/policy-v3.ts",
+    "lib/assessment/runtime/report-grounding-v3.ts",
+    "lib/assessment/runtime/safety-aggregation-v3.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/semantic-disposition-v3.ts",
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs"
+  ],
   "task_execution_evidence": {
     "openai_live_calls": 0,
     "database_operations": 0,
@@ -47,10 +91,41 @@
     "real_user_data": 0,
     "live_rerun_executed": false
   },
+  "acceptance_live_evidence": {
+    "human_executed": true,
+    "synthetic_only": true,
+    "executed_at_jst": "2026-07-31T22:20:38+09:00",
+    "run_prefix": "ae3562b6",
+    "request_prefix": "dd1e4da8",
+    "stages_completed": 6,
+    "expected_stage_order": [
+      "PB-01",
+      "PB-02",
+      "PB-03",
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "eligibility": "ready",
+    "decision": "reply_now",
+    "message_draft_present": true,
+    "report_count": 1,
+    "safety_classification": "normal_allowed",
+    "safety_response_mode": "none",
+    "usage": "nonzero",
+    "processing_residue": 0,
+    "integrity_anomalies": 0,
+    "real_user_data": 0,
+    "holdout_use": 0,
+    "verification_openai_calls": 0,
+    "verification_db_writes": 0,
+    "verification_migrations": 0
+  },
   "r1_successor": {
     "task_id": "M2-P4-I1-C-R1",
     "title": "Contextual Integrity Hardening",
-    "status": "implementation_pending_human_chatgpt_review",
+    "status": "human_chatgpt_accepted_complete",
+    "accepted_implementation_commit": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
     "baseline": {
       "commit": "da520621b6569ff65ae652fb75945ed923b4fc3b"
     },
@@ -86,7 +161,8 @@
   "r2_successor": {
     "task_id": "M2-P4-I1-C-R2",
     "title": "Safety Aggregation & Report Direction Grounding",
-    "status": "implementation_pending_human_chatgpt_review",
+    "status": "human_chatgpt_accepted_complete",
+    "accepted_implementation_commit": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c",
     "baseline": {
       "commit": "bee69d1cf0f1792786eccc6508fb5e7184ad6241"
     },
@@ -114,7 +190,8 @@
   "r3_successor": {
     "task_id": "M2-P4-I1-C-R3",
     "title": "PB-01 Evidence Canonicalization",
-    "status": "implementation_pending_human_chatgpt_review",
+    "status": "human_chatgpt_accepted_complete",
+    "accepted_implementation_commit": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1",
     "baseline": {
       "commit": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c"
     },
@@ -141,7 +218,8 @@
   "r4_successor": {
     "task_id": "M2-P4-I1-C-R4",
     "title": "Temporal Change-Condition Semantics",
-    "status": "implementation_pending_human_chatgpt_review",
+    "status": "human_chatgpt_accepted_complete",
+    "accepted_implementation_commit": "b523349ec33c36a90c645d4a1b7a6d37832af151",
     "baseline": {
       "commit": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1"
     },
@@ -166,5 +244,10 @@
       "live_rerun_executed": false
     }
   },
-  "next": "one separately authorized synthetic live rerun after acceptance"
+  "next_sequence": {
+    "next": "M2-P4-I2 Report Information Architecture and Intent Fulfillment",
+    "i2_status": "not_started",
+    "after_i2": "M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision",
+    "i3_status": "not_started"
+  }
 }

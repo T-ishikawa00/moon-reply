@@ -16,6 +16,60 @@ const i1bAcceptedImplementationSha =
   "9588c8fd6ab47c265f5f661d4473a29d73885427";
 const i1cBaselineSha =
   "c27120eea067f91c5e9ef4447e382f55a329e158";
+const i1cAcceptedImplementationSha =
+  "b523349ec33c36a90c645d4a1b7a6d37832af151";
+const i1cImplementationPaths = [
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+  "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "lib/assessment/runtime/contextual-inference-v3.ts",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const i1cAcceptedStackPaths = [
+  "docs/CODEX_HANDOFF.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "lib/assessment/runtime/change-condition-grounding-v3.ts",
+  "lib/assessment/runtime/contextual-inference-v3.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/report-grounding-v3.ts",
+  "lib/assessment/runtime/safety-aggregation-v3.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/semantic-disposition-v3.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
 const failures = new Map();
 
 const gateOrder = [
@@ -472,6 +526,7 @@ const runtimePackageSource = source(
 );
 gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
   const i1bSnapshot = i1bRuntimeManifest.implementation_snapshot;
+  const i1cSnapshot = i1cRuntimeManifest.implementation_snapshot;
   const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
   const declaredI1bPaths = [...i1bRuntimeManifest.implementation_paths].sort();
   const historicalI1bPaths = gitText([
@@ -497,6 +552,35 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
     "merge-base",
     "--is-ancestor",
     i1bSnapshot.end_commit_sha,
+    "HEAD",
+  ]);
+  const declaredI1cPaths = [...i1cRuntimeManifest.implementation_paths].sort();
+  const declaredI1cAcceptedStackPaths = [
+    ...i1cRuntimeManifest.accepted_stack_paths,
+  ].sort();
+  const historicalI1cAcceptedStackPaths = gitText([
+    "diff",
+    "--name-only",
+    i1cSnapshot.base_commit_sha,
+    i1cSnapshot.end_commit_sha,
+    "--",
+  ])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort();
+  gitText(["cat-file", "-e", `${i1cSnapshot.base_commit_sha}^{commit}`]);
+  gitText(["cat-file", "-e", `${i1cSnapshot.end_commit_sha}^{commit}`]);
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    i1cSnapshot.base_commit_sha,
+    i1cSnapshot.end_commit_sha,
+  ]);
+  gitText([
+    "merge-base",
+    "--is-ancestor",
+    i1cSnapshot.end_commit_sha,
     "HEAD",
   ]);
   check(
@@ -525,11 +609,44 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
       contextualCatalog.schemaSetVersion ===
         "pipeline-schema-runtime-v3.0.0" &&
       i1cRuntimeManifest.task_id === "M2-P4-I1-C" &&
-      i1cRuntimeManifest.status ===
-        "implementation_pending_human_chatgpt_review" &&
+      i1cRuntimeManifest.status === "human_chatgpt_accepted_complete" &&
+      i1cRuntimeManifest.accepted_implementation_commit ===
+        i1cAcceptedImplementationSha &&
       i1cRuntimeManifest.baseline.commit === i1cBaselineSha &&
+      JSON.stringify(i1cSnapshot) ===
+        JSON.stringify({
+          type: "historical_commit_range",
+          base_commit_sha: i1cBaselineSha,
+          end_commit_sha: i1cAcceptedImplementationSha,
+          include_working_tree: false,
+          immutable_snapshot: true,
+        }) &&
+      lowercaseShaPattern.test(i1cSnapshot.base_commit_sha) &&
+      lowercaseShaPattern.test(i1cSnapshot.end_commit_sha) &&
       i1cRuntimeManifest.implementation_paths.length === 21 &&
       new Set(i1cRuntimeManifest.implementation_paths).size === 21 &&
+      i1cRuntimeManifest.implementation_paths.every(
+        (item) =>
+          typeof item === "string" &&
+          item.length > 0 &&
+          !item.includes("*") &&
+          !item.endsWith("/"),
+      ) &&
+      JSON.stringify(declaredI1cPaths) ===
+        JSON.stringify([...i1cImplementationPaths].sort()) &&
+      i1cRuntimeManifest.accepted_stack_paths.length === 27 &&
+      new Set(i1cRuntimeManifest.accepted_stack_paths).size === 27 &&
+      i1cRuntimeManifest.accepted_stack_paths.every(
+        (item) =>
+          typeof item === "string" &&
+          item.length > 0 &&
+          !item.includes("*") &&
+          !item.endsWith("/"),
+      ) &&
+      JSON.stringify(declaredI1cAcceptedStackPaths) ===
+        JSON.stringify([...i1cAcceptedStackPaths].sort()) &&
+      JSON.stringify(historicalI1cAcceptedStackPaths) ===
+        JSON.stringify(declaredI1cAcceptedStackPaths) &&
       Object.values(i1cRuntimeManifest.task_execution_evidence).every(
         (value) => value === 0 || value === false,
       ) &&
@@ -559,7 +676,7 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
       ) &&
       JSON.stringify(historicalI1bPaths) ===
         JSON.stringify(declaredI1bPaths),
-    "M2-P4-I1-B successor boundary is not exact or historical catalog changed",
+    "M2-P4 I1-B/I1-C successor boundaries are not exact or a historical catalog changed",
   );
 });
 

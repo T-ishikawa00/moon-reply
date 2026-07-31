@@ -53,6 +53,15 @@ const m2p4I1cR3BaselineCommit =
   "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
 const m2p4I1cR4BaselineCommit =
   "e4e844cbaa8534c68a0d87d5831d04b5afe676a1";
+const m2p4I1cAcceptedEndCommit =
+  "b523349ec33c36a90c645d4a1b7a6d37832af151";
+const m2p4I1cAcceptedSliceCommits = {
+  "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
+  "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
+  "M2-P4-I1-C-R2": "2659c14d82fe2589d2e1cfc655c52c13b878dc7c",
+  "M2-P4-I1-C-R3": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1",
+  "M2-P4-I1-C-R4": m2p4I1cAcceptedEndCommit,
+};
 const m2p4I1cCapabilityManifestPath =
   "evals/runtime/m2-p4-i1-c-capabilities-v1.json";
 const m2p4I1cVerifierPath =
@@ -142,6 +151,45 @@ const m2p4I1cR4ImplementationPaths = new Set([
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I1cAcceptedStackPaths = new Set([
+  "docs/CODEX_HANDOFF.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  m2p4I1cCapabilityManifestPath,
+  "lib/assessment/runtime/change-condition-grounding-v3.ts",
+  "lib/assessment/runtime/contextual-inference-v3.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/report-grounding-v3.ts",
+  "lib/assessment/runtime/safety-aggregation-v3.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/semantic-disposition-v3.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  m2p4I1cVerifierPath,
+]);
+const m2p4I1cAcceptanceSyncPaths = new Set([
+  m2p4I1cCapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  m2p4I1cVerifierPath,
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -3885,7 +3933,37 @@ function verifyScopeAndProhibitedImplementation() {
           .filter(Boolean)
           .sort()
       : [];
-  const r4Paths = currentTaskPaths(m2p4I1cR4BaselineCommit);
+  const r4Diff = runGit([
+    "diff",
+    "--name-only",
+    m2p4I1cR4BaselineCommit,
+    m2p4I1cAcceptedEndCommit,
+    "--",
+  ]);
+  const r4Paths =
+    r4Diff.status === 0
+      ? r4Diff.stdout
+          .split(/\r?\n/u)
+          .map((item) => item.trim().replaceAll("\\", "/"))
+          .filter(Boolean)
+          .sort()
+      : [];
+  const acceptedStackDiff = runGit([
+    "diff",
+    "--name-only",
+    m2p4I1cBaselineCommit,
+    m2p4I1cAcceptedEndCommit,
+    "--",
+  ]);
+  const acceptedStackPaths =
+    acceptedStackDiff.status === 0
+      ? acceptedStackDiff.stdout
+          .split(/\r?\n/u)
+          .map((item) => item.trim().replaceAll("\\", "/"))
+          .filter(Boolean)
+          .sort()
+      : [];
+  const acceptanceSyncPaths = currentTaskPaths(m2p4I1cAcceptedEndCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -3894,15 +3972,77 @@ function verifyScopeAndProhibitedImplementation() {
   )
     ? m2p4I1cManifest.implementation_paths
     : [];
+  const declaredM2p4I1cAcceptedStackPaths = Array.isArray(
+    m2p4I1cManifest?.accepted_stack_paths,
+  )
+    ? m2p4I1cManifest.accepted_stack_paths
+    : [];
+  const expectedM2p4I1cAcceptedStackPaths = [
+    ...m2p4I1cAcceptedStackPaths,
+  ].sort();
+  const expectedM2p4I1cSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: m2p4I1cBaselineCommit,
+    end_commit_sha: m2p4I1cAcceptedEndCommit,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const expectedM2p4I1cLiveEvidence = {
+    human_executed: true,
+    synthetic_only: true,
+    executed_at_jst: "2026-07-31T22:20:38+09:00",
+    run_prefix: "ae3562b6",
+    request_prefix: "dd1e4da8",
+    stages_completed: 6,
+    expected_stage_order: ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+    eligibility: "ready",
+    decision: "reply_now",
+    message_draft_present: true,
+    report_count: 1,
+    safety_classification: "normal_allowed",
+    safety_response_mode: "none",
+    usage: "nonzero",
+    processing_residue: 0,
+    integrity_anomalies: 0,
+    real_user_data: 0,
+    holdout_use: 0,
+    verification_openai_calls: 0,
+    verification_db_writes: 0,
+    verification_migrations: 0,
+  };
   if (
     m2p4I1cManifest?.task_id !== "M2-P4-I1-C" ||
-    m2p4I1cManifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cManifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1cManifest?.accepted_implementation_commit !==
+      m2p4I1cAcceptedEndCommit ||
+    JSON.stringify(m2p4I1cManifest?.accepted_slice_commits) !==
+      JSON.stringify(m2p4I1cAcceptedSliceCommits) ||
+    JSON.stringify(m2p4I1cManifest?.implementation_snapshot) !==
+      JSON.stringify(expectedM2p4I1cSnapshot) ||
     m2p4I1cManifest?.baseline?.commit !== m2p4I1cBaselineCommit ||
     declaredM2p4I1cPaths.length !== 21 ||
     new Set(declaredM2p4I1cPaths).size !== 21 ||
     JSON.stringify([...declaredM2p4I1cPaths].sort()) !==
       JSON.stringify([...m2p4I1cImplementationPaths].sort()) ||
+    declaredM2p4I1cAcceptedStackPaths.length !== 27 ||
+    new Set(declaredM2p4I1cAcceptedStackPaths).size !== 27 ||
+    JSON.stringify([...declaredM2p4I1cAcceptedStackPaths].sort()) !==
+      JSON.stringify(expectedM2p4I1cAcceptedStackPaths) ||
+    declaredM2p4I1cAcceptedStackPaths.some(
+      (item) =>
+        typeof item !== "string" ||
+        item.length === 0 ||
+        item.includes("*") ||
+        item.endsWith("/"),
+    ) ||
+    JSON.stringify(m2p4I1cManifest?.acceptance_live_evidence) !==
+      JSON.stringify(expectedM2p4I1cLiveEvidence) ||
+    m2p4I1cManifest?.next_sequence?.next !==
+      "M2-P4-I2 Report Information Architecture and Intent Fulfillment" ||
+    m2p4I1cManifest?.next_sequence?.i2_status !== "not_started" ||
+    m2p4I1cManifest?.next_sequence?.after_i2 !==
+      "M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision" ||
+    m2p4I1cManifest?.next_sequence?.i3_status !== "not_started" ||
     m2p4I1cManifest?.task_execution_evidence?.openai_live_calls !== 0 ||
     m2p4I1cManifest?.task_execution_evidence?.database_operations !== 0 ||
     m2p4I1cManifest?.task_execution_evidence?.migrations !== 0 ||
@@ -3914,11 +4054,14 @@ function verifyScopeAndProhibitedImplementation() {
       file: m2p4I1cCapabilityManifestPath,
       pathName: "$",
       invariant:
-        "M2-P4-I1-C declares exactly 21 literal paths and zero external execution",
+        "accepted M2-P4-I1-C keeps 21 historical paths, declares the immutable 27-path stack, and separates non-secret live evidence",
       expected: {
         task_id: "M2-P4-I1-C",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit: m2p4I1cAcceptedEndCommit,
         baseline: m2p4I1cBaselineCommit,
         implementation_paths: [...m2p4I1cImplementationPaths],
+        accepted_stack_paths: expectedM2p4I1cAcceptedStackPaths,
         external_execution: 0,
       },
       actual: m2p4I1cManifest,
@@ -3942,8 +4085,9 @@ function verifyScopeAndProhibitedImplementation() {
   };
   if (
     m2p4I1cR1Manifest?.task_id !== "M2-P4-I1-C-R1" ||
-    m2p4I1cR1Manifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cR1Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1cR1Manifest?.accepted_implementation_commit !==
+      m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R1"] ||
     m2p4I1cR1Manifest?.baseline?.commit !== m2p4I1cR1BaselineCommit ||
     declaredM2p4I1cR1Paths.length !== 12 ||
     JSON.stringify(actualDeclaredM2p4I1cR1Paths) !==
@@ -3971,6 +4115,9 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-C-R1 declares exactly 12 literal successor paths and zero external execution",
       expected: {
         task_id: "M2-P4-I1-C-R1",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R1"],
         baseline: m2p4I1cR1BaselineCommit,
         exact_mutation_paths: expectedM2p4I1cR1Paths,
         catalog_mutation: expectedM2p4I1cR1CatalogMutation,
@@ -4005,8 +4152,9 @@ function verifyScopeAndProhibitedImplementation() {
   ].sort();
   if (
     m2p4I1cR2Manifest?.task_id !== "M2-P4-I1-C-R2" ||
-    m2p4I1cR2Manifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cR2Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1cR2Manifest?.accepted_implementation_commit !==
+      m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R2"] ||
     m2p4I1cR2Manifest?.baseline?.commit !== m2p4I1cR2BaselineCommit ||
     declaredM2p4I1cR2Paths.length !== 10 ||
     JSON.stringify(actualDeclaredM2p4I1cR2Paths) !==
@@ -4032,6 +4180,9 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-C-R2 declares exactly 10 literal successor paths and zero external execution",
       expected: {
         task_id: "M2-P4-I1-C-R2",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R2"],
         baseline: m2p4I1cR2BaselineCommit,
         exact_mutation_paths: expectedM2p4I1cR2Paths,
         external_execution: 0,
@@ -4065,8 +4216,9 @@ function verifyScopeAndProhibitedImplementation() {
   ].sort();
   if (
     m2p4I1cR3Manifest?.task_id !== "M2-P4-I1-C-R3" ||
-    m2p4I1cR3Manifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cR3Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1cR3Manifest?.accepted_implementation_commit !==
+      m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R3"] ||
     m2p4I1cR3Manifest?.baseline?.commit !== m2p4I1cR3BaselineCommit ||
     declaredM2p4I1cR3Paths.length !== 9 ||
     JSON.stringify(actualDeclaredM2p4I1cR3Paths) !==
@@ -4092,6 +4244,9 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-C-R3 declares exactly 9 literal successor paths and zero external execution",
       expected: {
         task_id: "M2-P4-I1-C-R3",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R3"],
         baseline: m2p4I1cR3BaselineCommit,
         exact_mutation_paths: expectedM2p4I1cR3Paths,
         external_execution: 0,
@@ -4125,8 +4280,9 @@ function verifyScopeAndProhibitedImplementation() {
   ].sort();
   if (
     m2p4I1cR4Manifest?.task_id !== "M2-P4-I1-C-R4" ||
-    m2p4I1cR4Manifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cR4Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I1cR4Manifest?.accepted_implementation_commit !==
+      m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R4"] ||
     m2p4I1cR4Manifest?.baseline?.commit !== m2p4I1cR4BaselineCommit ||
     declaredM2p4I1cR4Paths.length !== 10 ||
     JSON.stringify(actualDeclaredM2p4I1cR4Paths) !==
@@ -4152,6 +4308,9 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-C-R4 declares exactly 10 literal successor paths and zero external execution",
       expected: {
         task_id: "M2-P4-I1-C-R4",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I1cAcceptedSliceCommits["M2-P4-I1-C-R4"],
         baseline: m2p4I1cR4BaselineCommit,
         exact_mutation_paths: expectedM2p4I1cR4Paths,
         external_execution: 0,
@@ -4160,6 +4319,7 @@ function verifyScopeAndProhibitedImplementation() {
     });
   }
   if (
+    r4Diff.status !== 0 ||
     r4Paths.length !== 10 ||
     JSON.stringify([...r4Paths].sort()) !==
       JSON.stringify(expectedM2p4I1cR4Paths)
@@ -4170,6 +4330,39 @@ function verifyScopeAndProhibitedImplementation() {
       invariant: "M2-P4-I1-C-R4 mutates exactly its 10 literal paths",
       expected: expectedM2p4I1cR4Paths,
       actual: r4Paths,
+    });
+  }
+  if (
+    acceptedStackDiff.status !== 0 ||
+    acceptedStackPaths.length !== 27 ||
+    JSON.stringify(acceptedStackPaths) !==
+      JSON.stringify(expectedM2p4I1cAcceptedStackPaths)
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1cCapabilityManifestPath,
+      pathName: "$.accepted_stack_paths",
+      invariant:
+        "accepted M2-P4-I1-C historical stack is exactly 27 literal paths",
+      expected: expectedM2p4I1cAcceptedStackPaths,
+      actual: acceptedStackPaths,
+    });
+  }
+  const expectedAcceptanceSyncPaths = [...m2p4I1cAcceptanceSyncPaths].sort();
+  if (
+    acceptanceSyncPaths.length !== 8 ||
+    JSON.stringify(acceptanceSyncPaths) !==
+      JSON.stringify(expectedAcceptanceSyncPaths) ||
+    acceptanceSyncPaths.some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i1_c_acceptance_sync",
+      invariant:
+        "M2-P4-I1-C acceptance sync changes exactly eight literal allowlisted paths",
+      expected: expectedAcceptanceSyncPaths,
+      actual: acceptanceSyncPaths,
     });
   }
   const declaredM2p4I1bPaths = Array.isArray(
