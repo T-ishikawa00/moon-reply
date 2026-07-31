@@ -144,3 +144,30 @@ Automated PASS does not constitute provider-backed prose-quality acceptance, Hum
 ## Acceptance and Next Gate
 
 Human / ChatGPT acceptance is pending. After acceptance, the only named next candidate is one separately authorized synthetic live rerun. This review does not authorize API/DB access, secret access, migration work, retry, Repair, fallback, PB-07, PR creation, merge to `main`, or full PB-04 through PB-06 prose-quality improvement.
+
+## R2 Safety Aggregation & Report Direction Grounding Successor
+
+- Task: `M2-P4-I1-C-R2`
+- Baseline: `bee69d1cf0f1792786eccc6508fb5e7184ad6241`
+- Branch: `fix/m2-p4-i1-c-r2-safety-report-grounding`
+- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
+- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+
+R2 corrects two independently observed fail-closed findings without weakening PB-06. Contextual runtime now derives aggregate `response_mode` from the strictest classification and application-owned reason-code mapping. `normal_allowed` always yields `none`, including `reason_codes=["normal"]` and an empty list. Non-normal aggregation removes only a mixed `normal` code, maps known high-risk codes to the required specialized response, and uses `unsafe_contact_stop` only for the named contact-risk codes or when no specialized non-normal mapping exists. Historical `policy.ts` and `aggregateSafety()` remain unchanged for legacy runtime.
+
+After PB-05, contextual runtime deterministically replaces only `relationship_summary` from DecisionFactsV2. Incoming/unreplied, outgoing/reply-wait, no-direct-message, and unknown-sender states each have an application-owned description that adds no inner state, romantic interest, or future claim. PB-05 raw output remains Stage evidence; the grounded projection is supplied to PB-06 and persisted in the final report. This is not retry, Repair, PB-07, or fallback.
+
+Exact R2 mutation scope is 10 literal paths:
+
+1. `lib/assessment/runtime/safety-aggregation-v3.ts`
+2. `lib/assessment/runtime/report-grounding-v3.ts`
+3. `lib/assessment/runtime/pipeline.ts`
+4. `scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs`
+5. `evals/runtime/m2-p4-i1-c-capabilities-v1.json`
+6. `docs/phase2/TASK_M2_P4_I1_C_REVIEW.md`
+7. `docs/CURRENT_FOCUS.md`
+8. `docs/WBS.md`
+9. `docs/CODEX_HANDOFF.md`
+10. `scripts/verify-m2-eval-foundation.mjs`
+
+The original I1-C 21-path and R1 12-path records remain immutable. The R2 verifier covers six Safety aggregation cases, four report-direction states, deliberately reversed PB-05 raw output, grounded PB-06 input and final report, major/critical PB-06 fail-closed behavior, the live-failure equivalent `normal_allowed -> none -> reply_now -> non-null draft -> report 1`, policy parity `40/40`, exact R2 scope `10/10`, protected diff `0`, and zero external execution. Automated PASS does not constitute Human / ChatGPT acceptance or provider-backed prose-quality evidence.

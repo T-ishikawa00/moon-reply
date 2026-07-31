@@ -83,5 +83,33 @@
       "live_rerun_executed": false
     }
   },
+  "r2_successor": {
+    "task_id": "M2-P4-I1-C-R2",
+    "title": "Safety Aggregation & Report Direction Grounding",
+    "status": "implementation_pending_human_chatgpt_review",
+    "baseline": {
+      "commit": "bee69d1cf0f1792786eccc6508fb5e7184ad6241"
+    },
+    "exact_mutation_paths": [
+      "lib/assessment/runtime/safety-aggregation-v3.ts",
+      "lib/assessment/runtime/report-grounding-v3.ts",
+      "lib/assessment/runtime/pipeline.ts",
+      "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+      "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+      "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md",
+      "scripts/verify-m2-eval-foundation.mjs"
+    ],
+    "task_execution_evidence": {
+      "openai_live_calls": 0,
+      "database_operations": 0,
+      "migrations": 0,
+      "holdout_use": 0,
+      "real_user_data": 0,
+      "live_rerun_executed": false
+    }
+  },
   "next": "one separately authorized synthetic live rerun after acceptance"
 }

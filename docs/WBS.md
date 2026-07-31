@@ -797,4 +797,19 @@ Milestone 2 remains incomplete. I1-C does not authorize live OpenAI/Supabase exe
 
 R1 does not authorize OpenAI live calls, DB operations, migrations, holdout use, real-user data, retry, Repair/PB-07, fallback, PR creation, merge to `main`, or release.
 
+# M2-P4-I1-C-R2 Safety Aggregation & Report Direction Grounding
+
+- [x] Preserve the original I1-C exact 21-path history and R1 exact 12-path successor history unchanged.
+- [x] Freeze R2 baseline at `bee69d1cf0f1792786eccc6508fb5e7184ad6241` and declare a separate exact 10-path successor without wildcard, prefix, or future-path authorization.
+- [x] Add contextual Safety aggregation with strictest classification, `normal_allowed -> none`, specialized non-normal response modes, and mixed `normal` removal.
+- [x] Preserve legacy `policy.ts` and `aggregateSafety()` unchanged.
+- [x] Ground only `relationship_summary` from typed sender/reply state after PB-05 while retaining raw PB-05 Stage evidence.
+- [x] Supply grounded report content to PB-06 and persist it in the final report without retry, Repair, PB-07, or fallback.
+- [x] Prove four report-direction states, reversed-summary correction, PB-06 input/final grounding, and major/critical PB-06 fail-closed behavior.
+- [x] Preserve policy parity `40/40`, sparse `11/11`, Safety `1/1`, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R2 scope `10/10`.
+- [ ] Human / ChatGPT review and acceptance.
+- [ ] After acceptance only: separately authorize one synthetic live rerun.
+
+R2 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, broader prose-quality work, or release.
+
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

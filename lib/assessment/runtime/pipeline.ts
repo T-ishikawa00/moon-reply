@@ -13,6 +13,8 @@ import {
   deterministicSafetyResult,
 } from "./policy.ts";
 import type { SafetyResult } from "./policy.ts";
+import { groundReportContentV3 } from "./report-grounding-v3.ts";
+import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import {
   buildDecisionPolicyV2,
   requireDecisionFacts,
@@ -303,7 +305,7 @@ export class AssessmentPipeline {
 
       if (contextualRuntime) {
         this.emit("LOCAL_SAFETY_AGGREGATION");
-        aggregate = aggregateSafety(deterministicSafety, modelSafety);
+        aggregate = aggregateSafetyV3(deterministicSafety, modelSafety);
         const applicationEligibility = deriveRuntimeEligibilityV3(aggregate);
         modelEligibility = await this.invokeStage(
           runContext,
@@ -370,12 +372,14 @@ export class AssessmentPipeline {
       }
 
       this.emit("LOCAL_DECISION_POLICY");
+      const contextualDecisionFacts = contextualRuntime
+        ? requireContextualDecisionFactsV3(structuredIntake)
+        : null;
       let decisionPolicy: DecisionPolicyResultV2;
-      if (contextualRuntime) {
-        const decisionFacts = requireContextualDecisionFactsV3(
-          structuredIntake,
+      if (contextualDecisionFacts) {
+        decisionPolicy = buildContextualDecisionPolicyV3(
+          contextualDecisionFacts,
         );
-        decisionPolicy = buildContextualDecisionPolicyV3(decisionFacts);
       } else {
         const decisionFacts = requireDecisionFacts(structuredIntake);
         decisionPolicy = buildDecisionPolicyV2(decisionFacts);
@@ -402,7 +406,7 @@ export class AssessmentPipeline {
         },
       )) as unknown as DecisionPlan;
 
-      const reportContent = (await this.invokeStage(
+      const generatedReportContent = (await this.invokeStage(
         runContext,
         {
           definition: this.definition("PB-05"),
@@ -413,6 +417,12 @@ export class AssessmentPipeline {
         },
         "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
       )) as unknown as ReportContent;
+      const reportContent = contextualDecisionFacts
+        ? groundReportContentV3(
+            contextualDecisionFacts,
+            generatedReportContent,
+          )
+        : generatedReportContent;
 
       await this.invokeStage(
         runContext,

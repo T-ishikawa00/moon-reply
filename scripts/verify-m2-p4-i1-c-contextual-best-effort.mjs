@@ -11,7 +11,8 @@ const repositoryRoot = path.resolve(
 );
 const i1cBaselineSha = "c27120eea067f91c5e9ef4447e382f55a329e158";
 const r1BaselineSha = "da520621b6569ff65ae652fb75945ed923b4fc3b";
-const exactPaths = [
+const r2BaselineSha = "bee69d1cf0f1792786eccc6508fb5e7184ad6241";
+const r1ExactPaths = [
   "lib/assessment/runtime/contextual-integrity-v3.ts",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
   "lib/assessment/runtime/policy-v3.ts",
@@ -23,6 +24,18 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "scripts/verify-m2-eval-foundation.mjs",
+];
+const r2ExactPaths = [
+  "lib/assessment/runtime/safety-aggregation-v3.ts",
+  "lib/assessment/runtime/report-grounding-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
   "scripts/verify-m2-eval-foundation.mjs",
 ];
 const i1cImplementationPaths = [
@@ -118,6 +131,8 @@ const [
     deriveRuntimeEligibilityV3,
     validateEligibilityProjectionV3,
   },
+  { aggregateSafetyV3 },
+  { buildRelationshipSummaryV3, groundReportContentV3 },
   { validateStageOutput },
 ] = await Promise.all([
   import("../lib/assessment/runtime/application.ts"),
@@ -126,8 +141,22 @@ const [
   import("../lib/assessment/runtime/openai-schema.ts"),
   import("../lib/assessment/runtime/policy-v3.ts"),
   import("../lib/assessment/runtime/eligibility-v3.ts"),
+  import("../lib/assessment/runtime/safety-aggregation-v3.ts"),
+  import("../lib/assessment/runtime/report-grounding-v3.ts"),
   import("../lib/assessment/runtime/validation.ts"),
 ]);
+
+const r1CommittedPaths = gitText([
+  "diff",
+  "--name-only",
+  r1BaselineSha,
+  r2BaselineSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.deepEqual(sorted(r1CommittedPaths), sorted(r1ExactPaths));
 
 const protectedHistoricalPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -412,6 +441,49 @@ const baselineInferenceFields = [
   "latest_direct_message.user_reply_state",
 ];
 const baselineIntake = structuredIntake(baselineFacts, baselineInferenceFields);
+const generatedReportForGrounding = wait003StageOutputs()["PB-05"];
+const incomingGroundedSummary = buildRelationshipSummaryV3(baselineFacts);
+assert.ok(incomingGroundedSummary.includes("相手から届いた"));
+assert.ok(incomingGroundedSummary.includes("あなたがまだ返信していない"));
+
+const outgoingFacts = decisionFacts({
+  latest_direct_message: {
+    sender: "user",
+    kind: "question",
+    response_expectation: "reasonable",
+    user_reply_state: "not_applicable",
+    sns_signal_only: false,
+  },
+});
+const outgoingGroundedSummary = buildRelationshipSummaryV3(outgoingFacts);
+assert.ok(outgoingGroundedSummary.includes("あなたが最後に送った"));
+assert.ok(outgoingGroundedSummary.includes("相手の返信を待っている"));
+
+const noDirectMessageSummary = buildRelationshipSummaryV3(
+  decisionFacts({
+    latest_direct_message: {
+      sender: "none",
+      kind: "none",
+      response_expectation: "none",
+      user_reply_state: "not_applicable",
+      sns_signal_only: false,
+    },
+  }),
+);
+assert.ok(noDirectMessageSummary.includes("直接メッセージが確認できない"));
+
+const unknownDirectionSummary = buildRelationshipSummaryV3(decisionFacts());
+assert.ok(unknownDirectionSummary.includes("最後の送信者は断定せず"));
+assert.ok(!unknownDirectionSummary.includes("相手から届いた"));
+assert.ok(!unknownDirectionSummary.includes("あなたが最後に送った"));
+
+assert.deepEqual(
+  groundReportContentV3(baselineFacts, generatedReportForGrounding),
+  {
+    ...generatedReportForGrounding,
+    relationship_summary: incomingGroundedSummary,
+  },
+);
 function assertCanonicalAndProviderPass(intake) {
   assert.doesNotThrow(() => validateStageOutput(catalog.definitions[0], intake));
   assert.doesNotThrow(() => validateStageOutput(providerPb01Definition, intake));
@@ -682,6 +754,68 @@ assert.throws(
   (error) => error?.safeCode === "M2_ELIGIBILITY_PROJECTION_MISMATCH",
 );
 
+const normalDeterministicSafety = {
+  classification: "normal_allowed",
+  reason_codes: [],
+  response_mode: "none",
+};
+assert.deepEqual(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "normal_allowed",
+    reason_codes: ["normal"],
+    response_mode: "none",
+  }),
+  {
+    classification: "normal_allowed",
+    reason_codes: ["normal"],
+    response_mode: "none",
+  },
+);
+assert.deepEqual(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "normal_allowed",
+    reason_codes: [],
+    response_mode: "none",
+  }),
+  {
+    classification: "normal_allowed",
+    reason_codes: [],
+    response_mode: "none",
+  },
+);
+assert.equal(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "needs_review",
+    reason_codes: ["dv_abuse_fear"],
+    response_mode: "abuse_safety_support",
+  }).response_mode,
+  "abuse_safety_support",
+);
+assert.equal(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "rejected",
+    reason_codes: ["stalking_or_visit"],
+    response_mode: "unsafe_contact_stop",
+  }).response_mode,
+  "unsafe_contact_stop",
+);
+assert.equal(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "rejected",
+    reason_codes: ["harm_others"],
+    response_mode: "urgent_other_safety",
+  }).response_mode,
+  "urgent_other_safety",
+);
+assert.deepEqual(
+  aggregateSafetyV3(normalDeterministicSafety, {
+    classification: "rejected",
+    reason_codes: ["normal", "stalking_or_visit"],
+    response_mode: "unsafe_contact_stop",
+  }).reason_codes,
+  ["stalking_or_visit"],
+);
+
 class OfflineFakeTransport {
   actualProviderCalls = 0;
   calls = [];
@@ -726,6 +860,14 @@ function runtimeOutputs(testCase) {
   const outputs = testCase.safetyBlocked
     ? safetyBlockedStageOutputs()
     : wait003StageOutputs();
+  if (!testCase.safetyBlocked) {
+    outputs["PB-02"] = {
+      ...outputs["PB-02"],
+      classification: "normal_allowed",
+      reason_codes: ["normal"],
+      response_mode: "none",
+    };
+  }
   outputs["PB-01"] = structuredIntake(testCase.facts, testCase.inferredFields ?? []);
   outputs["PB-03"] = {
     schema_version: "pipeline-schema-v3.0.0",
@@ -890,10 +1032,10 @@ const syntheticInput = {
   privacyAcknowledged: true,
 };
 
-async function runCase(testCase, index) {
+async function runWithOutputs(outputs, index) {
   const trace = [];
   const repository = new FakeAssessmentRepository();
-  const transport = new OfflineFakeTransport(runtimeOutputs(testCase));
+  const transport = new OfflineFakeTransport(outputs);
   const application = new AssessmentApplication({
     repository,
     transport,
@@ -910,6 +1052,10 @@ async function runCase(testCase, index) {
     `90000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
   );
   return { result, trace, repository, transport };
+}
+
+async function runCase(testCase, index) {
+  return runWithOutputs(runtimeOutputs(testCase), index);
 }
 
 async function expectPb01IntegrityRejection(intake, index) {
@@ -1008,6 +1154,106 @@ assert.equal(
 );
 assert.equal(baselinePb04.input.eligibility_result.eligibility, "ready");
 assert.ok(!Object.hasOwn(baselinePb04.input, "application_eligibility_expectation"));
+assert.equal(
+  baselinePb04.input.aggregate_safety_result.classification,
+  "normal_allowed",
+);
+assert.equal(baselinePb04.input.aggregate_safety_result.response_mode, "none");
+assert.equal(baselineRuntime.result.report.decisionPlan.message_draft === null, false);
+assert.equal(
+  baselineRuntime.result.report.content.relationship_summary,
+  incomingGroundedSummary,
+);
+const baselinePb06 = baselineRuntime.transport.requests.find(
+  (request) => request.stageId === "PB-06",
+);
+assert.equal(
+  baselinePb06.input.aggregate_safety_result.response_mode,
+  "none",
+);
+assert.equal(
+  baselinePb06.input.report_content.relationship_summary,
+  incomingGroundedSummary,
+);
+
+const reversedRelationshipSummary =
+  "現在は相手からの返信を待っている状態です。";
+const reversedOutputs = runtimeOutputs({
+  facts: baselineFacts,
+  inferredFields: baselineInferenceFields,
+  expectedDecision: "reply_now",
+});
+reversedOutputs["PB-05"] = {
+  ...reversedOutputs["PB-05"],
+  relationship_summary: reversedRelationshipSummary,
+};
+const reversedRuntime = await runWithOutputs(reversedOutputs, 200);
+const rawPb05Stage = [...reversedRuntime.repository.stageRuns.values()].find(
+  (stage) => stage.stageId === "PB-05",
+);
+assert.ok(rawPb05Stage?.completion);
+assert.equal(
+  rawPb05Stage.completion.outputJson.relationship_summary,
+  reversedRelationshipSummary,
+);
+const reversedPb06 = reversedRuntime.transport.requests.find(
+  (request) => request.stageId === "PB-06",
+);
+assert.equal(
+  reversedPb06.input.report_content.relationship_summary,
+  incomingGroundedSummary,
+);
+assert.equal(
+  reversedRuntime.result.report.content.relationship_summary,
+  incomingGroundedSummary,
+);
+assert.equal(reversedRuntime.repository.reports.size, 1);
+
+async function expectPb06FailClosed(severity, index) {
+  const outputs = runtimeOutputs({
+    facts: baselineFacts,
+    inferredFields: baselineInferenceFields,
+    expectedDecision: "reply_now",
+  });
+  outputs["PB-06"] = {
+    ...outputs["PB-06"],
+    semantic_checks: [
+      {
+        finding_code: "FACT_FIDELITY",
+        severity,
+        json_path: "$.report_content.relationship_summary",
+        evidence_refs: ["F001"],
+        detail: "決定的な事実忠実性 finding を検出した。",
+      },
+    ],
+  };
+  const repository = new FakeAssessmentRepository();
+  const transport = new OfflineFakeTransport(outputs);
+  const application = new AssessmentApplication({
+    repository,
+    transport,
+    model: "gpt-5.6-luna",
+    promptBundleVersion: catalog.promptBundleVersion,
+    schemaSetVersion: catalog.schemaSetVersion,
+    definitions: catalog.definitions,
+    now: () => "2026-07-31T00:00:00.000Z",
+    uuid: deterministicUuidFactory(),
+  });
+  await assert.rejects(
+    application.submit(
+      syntheticInput,
+      `60000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ),
+    (error) => error?.safeCode === "M2_SEMANTIC_VALIDATION_FAILED",
+  );
+  assert.deepEqual(transport.calls, stageIds);
+  assert.equal(repository.reports.size, 0);
+  assert.equal(transport.actualProviderCalls, 0);
+  assert.equal(repository.actualSupabaseCalls, 0);
+}
+
+await expectPb06FailClosed("major", 1);
+await expectPb06FailClosed("critical", 2);
 
 const fixtures = json(
   "evals/quality/m2-p4-i1/decision-facts-fixtures-v1.json",
@@ -1070,7 +1316,7 @@ assert.deepEqual(capabilityManifest.r1_successor, {
   baseline: {
     commit: r1BaselineSha,
   },
-  exact_mutation_paths: exactPaths,
+  exact_mutation_paths: r1ExactPaths,
   catalog_mutation: {
     path: "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
     stage_id: "PB-01",
@@ -1086,9 +1332,26 @@ assert.deepEqual(capabilityManifest.r1_successor, {
     live_rerun_executed: false,
   },
 });
+assert.deepEqual(capabilityManifest.r2_successor, {
+  task_id: "M2-P4-I1-C-R2",
+  title: "Safety Aggregation & Report Direction Grounding",
+  status: "implementation_pending_human_chatgpt_review",
+  baseline: {
+    commit: r2BaselineSha,
+  },
+  exact_mutation_paths: r2ExactPaths,
+  task_execution_evidence: {
+    openai_live_calls: 0,
+    database_operations: 0,
+    migrations: 0,
+    holdout_use: 0,
+    real_user_data: 0,
+    live_rerun_executed: false,
+  },
+});
 
 const changedPaths = new Set(
-  gitText(["diff", "--name-only", r1BaselineSha, "--"])
+  gitText(["diff", "--name-only", r2BaselineSha, "--"])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean),
@@ -1098,7 +1361,7 @@ for (const line of gitText(["status", "--porcelain=v1", "--untracked-files=all"]
   .filter(Boolean)) {
   changedPaths.add(line.slice(3).trim().replaceAll("\\", "/"));
 }
-assert.deepEqual(sorted(changedPaths), sorted(exactPaths));
+assert.deepEqual(sorted(changedPaths), sorted(r2ExactPaths));
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("normal_information_gate_terminal: 0");
@@ -1121,9 +1384,19 @@ console.log("provider_schema_integrity: PASS");
 console.log("canonical_schema_integrity: PASS");
 console.log("baseline_fake_decision: reply_now");
 console.log("baseline_fake_report: 1");
+console.log("normal_safety_response_mode: none");
+console.log("nonnormal_response_mode_cases: 3/3");
+console.log("nonnormal_normal_code_filter: PASS");
+console.log("report_grounding_states: 4/4");
+console.log("reversed_pb05_summary_grounded: PASS");
+console.log("pb06_input_grounded: PASS");
+console.log("final_report_grounded: PASS");
+console.log("pb06_fail_closed_major_critical: 2/2");
+console.log("live_failure_equivalent_pb06_safety_regressions: 0");
 console.log("policy_parity: 40/40");
 console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
 console.log("protected_diff: 0");
-console.log("exact_scope: 12/12");
+console.log("r1_historical_exact_scope: 12/12");
+console.log("exact_scope: 10/10");
