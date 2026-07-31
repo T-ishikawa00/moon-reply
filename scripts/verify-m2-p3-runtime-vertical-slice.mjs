@@ -14,6 +14,8 @@ const i1bBaselineSha =
   "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
 const i1bAcceptedImplementationSha =
   "9588c8fd6ab47c265f5f661d4473a29d73885427";
+const i1cBaselineSha =
+  "c27120eea067f91c5e9ef4447e382f55a329e158";
 const failures = new Map();
 
 const gateOrder = [
@@ -105,7 +107,11 @@ const [
     safetyBlockedStageOutputs,
     wait003StageOutputs,
   },
-  { loadCanonicalStageCatalog, loadM2P4RuntimeStageCatalog },
+  {
+    loadCanonicalStageCatalog,
+    loadM2P4ContextualRuntimeStageCatalog,
+    loadM2P4RuntimeStageCatalog,
+  },
   {
     createOpenAiProviderFailureDiagnostic,
   },
@@ -126,6 +132,7 @@ const [
 
 const canonicalCatalog = await loadCanonicalStageCatalog();
 const catalog = await loadM2P4RuntimeStageCatalog();
+const contextualCatalog = await loadM2P4ContextualRuntimeStageCatalog();
 const waitDecisionFacts = {
   schema_version: "m2-p4-decision-facts-v1",
   relationship_stage: "in_relationship",
@@ -426,6 +433,9 @@ const runtimeManifest = json(
 const i1bRuntimeManifest = json(
   "evals/runtime/m2-p4-i1-b-runtime-capabilities-v1.json",
 );
+const i1cRuntimeManifest = json(
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+);
 const dependencyAuditSummary = json(
   "evals/runtime/m2-p3-a-dependency-audit-summary-v1.json",
 );
@@ -510,6 +520,19 @@ gate("M2_P3_RUNTIME_CAPABILITY_GATE", () => {
       canonicalCatalog.schemaSetVersion === "pipeline-schema-v1.0.0" &&
       catalog.promptBundleVersion === "prompt-bundle-runtime-v2.0.0" &&
       catalog.schemaSetVersion === "pipeline-schema-runtime-v2.0.0" &&
+      contextualCatalog.promptBundleVersion ===
+        "prompt-bundle-runtime-v3.0.0" &&
+      contextualCatalog.schemaSetVersion ===
+        "pipeline-schema-runtime-v3.0.0" &&
+      i1cRuntimeManifest.task_id === "M2-P4-I1-C" &&
+      i1cRuntimeManifest.status ===
+        "implementation_pending_human_chatgpt_review" &&
+      i1cRuntimeManifest.baseline.commit === i1cBaselineSha &&
+      i1cRuntimeManifest.implementation_paths.length === 21 &&
+      new Set(i1cRuntimeManifest.implementation_paths).size === 21 &&
+      Object.values(i1cRuntimeManifest.task_execution_evidence).every(
+        (value) => value === 0 || value === false,
+      ) &&
       i1bRuntimeManifest.task_id === "M2-P4-I1-B" &&
       i1bRuntimeManifest.status === "human_chatgpt_accepted_complete" &&
       i1bRuntimeManifest.accepted_implementation_commit ===

@@ -43,6 +43,44 @@ const m2p4I1bVerifierImportPaths = new Set([
   "lib/assessment/runtime/validation.ts",
   "evals/quality/m2-p4-i1/decision-policy-v2.mjs",
 ]);
+const m2p4I1cBaselineCommit =
+  "c27120eea067f91c5e9ef4447e382f55a329e158";
+const m2p4I1cCapabilityManifestPath =
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json";
+const m2p4I1cVerifierPath =
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs";
+const m2p4I1cVerifierImportPaths = new Set([
+  "lib/assessment/runtime/application.ts",
+  "lib/assessment/runtime/fakes.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/openai-schema.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/validation.ts",
+]);
+const m2p4I1cImplementationPaths = new Set([
+  "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+  "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+  "lib/assessment/runtime/contracts/pb-04-decision-plan-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-report-writer-v2.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+  "lib/assessment/runtime/contextual-inference-v3.ts",
+  "lib/assessment/runtime/eligibility-v3.ts",
+  "lib/assessment/runtime/policy-v3.ts",
+  m2p4I1cVerifierPath,
+  m2p4I1cCapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -142,6 +180,7 @@ const successorLocalToolPaths = new Set([
   "scripts/prepare-m2-p2-b0-calibration-contract.mjs",
   "scripts/verify-m2-p2-b0-calibration-contract.mjs",
   m2p4I1bVerifierPath,
+  m2p4I1cVerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3614,6 +3653,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        file === m2p4I1cVerifierPath &&
+        localImport &&
+        m2p4I1cVerifierImportPaths.has(localImport)
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -3734,6 +3780,42 @@ function verifyScopeAndProhibitedImplementation() {
   const paths = currentTaskPaths();
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
+  const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
+  const declaredM2p4I1cPaths = Array.isArray(
+    m2p4I1cManifest?.implementation_paths,
+  )
+    ? m2p4I1cManifest.implementation_paths
+    : [];
+  if (
+    m2p4I1cManifest?.task_id !== "M2-P4-I1-C" ||
+    m2p4I1cManifest?.status !==
+      "implementation_pending_human_chatgpt_review" ||
+    m2p4I1cManifest?.baseline?.commit !== m2p4I1cBaselineCommit ||
+    declaredM2p4I1cPaths.length !== 21 ||
+    new Set(declaredM2p4I1cPaths).size !== 21 ||
+    JSON.stringify([...declaredM2p4I1cPaths].sort()) !==
+      JSON.stringify([...m2p4I1cImplementationPaths].sort()) ||
+    m2p4I1cManifest?.task_execution_evidence?.openai_live_calls !== 0 ||
+    m2p4I1cManifest?.task_execution_evidence?.database_operations !== 0 ||
+    m2p4I1cManifest?.task_execution_evidence?.migrations !== 0 ||
+    m2p4I1cManifest?.task_execution_evidence?.holdout_use !== 0 ||
+    m2p4I1cManifest?.task_execution_evidence?.real_user_data !== 0 ||
+    m2p4I1cManifest?.task_execution_evidence?.live_rerun_executed !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I1cCapabilityManifestPath,
+      pathName: "$",
+      invariant:
+        "M2-P4-I1-C declares exactly 21 literal paths and zero external execution",
+      expected: {
+        task_id: "M2-P4-I1-C",
+        baseline: m2p4I1cBaselineCommit,
+        implementation_paths: [...m2p4I1cImplementationPaths],
+        external_execution: 0,
+      },
+      actual: m2p4I1cManifest,
+    });
+  }
   const declaredM2p4I1bPaths = Array.isArray(
     m2p4I1bManifest?.implementation_paths,
   )
@@ -4210,6 +4292,7 @@ function verifyScopeAndProhibitedImplementation() {
       !successorLocalToolPaths.has(item) &&
       !m2p3ImplementationPaths.has(item) &&
       !m2p4I1bImplementationPaths.has(item) &&
+      !m2p4I1cImplementationPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -4238,7 +4321,8 @@ function verifyScopeAndProhibitedImplementation() {
   )) {
     if (
       m2p3ImplementationPaths.has(item) ||
-      m2p4I1bImplementationPaths.has(item)
+      m2p4I1bImplementationPaths.has(item) ||
+      m2p4I1cImplementationPaths.has(item)
     ) {
       continue;
     }

@@ -2,7 +2,7 @@ import "server-only";
 import { AssessmentApplication } from "./application.ts";
 import { readM2RuntimeEnvironment } from "./environment.ts";
 import { OpenAiResponsesTransport } from "./openai-transport.ts";
-import { loadM2P4RuntimeStageCatalog } from "./schema-catalog.ts";
+import { loadM2P4ContextualRuntimeStageCatalog } from "./schema-catalog.ts";
 import { SupabaseAssessmentRepository } from "./supabase-repository.ts";
 import type { AssessmentInput } from "./types.ts";
 
@@ -11,7 +11,8 @@ export async function executeInternalAssessment(
   idempotencyKey: string,
 ) {
   const environment = readM2RuntimeEnvironment();
-  const catalog = await loadM2P4RuntimeStageCatalog();
+  // loadM2P4RuntimeStageCatalog remains available only for historical v2 replay.
+  const catalog = await loadM2P4ContextualRuntimeStageCatalog();
   const application = new AssessmentApplication({
     repository: new SupabaseAssessmentRepository(
       environment.supabaseUrl,

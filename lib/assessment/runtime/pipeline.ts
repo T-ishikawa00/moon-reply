@@ -1,5 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { addUsage, emptyUsageTotals } from "./cost.ts";
+import {
+  buildLocalEligibilityResultV3,
+  deriveRuntimeEligibilityV3,
+  validateEligibilityProjectionV3,
+} from "./eligibility-v3.ts";
 import { asM2RuntimeError, M2RuntimeError } from "./errors.ts";
 import { hashJson } from "./hash.ts";
 import {
@@ -12,6 +17,11 @@ import {
   requireDecisionFacts,
   validateDecisionPlanAgainstPolicyV2,
 } from "./policy-v2.ts";
+import {
+  buildContextualDecisionPolicyV3,
+  requireContextualDecisionFactsV3,
+  validateContextualDecisionPlanV3,
+} from "./policy-v3.ts";
 import type {
   AiStageTransport,
   AssessmentExecutionResult,
@@ -19,6 +29,7 @@ import type {
   AssessmentRepository,
   DecisionCard,
   DecisionPlan,
+  DecisionPolicyResultV2,
   Eligibility,
   JsonObject,
   M2StageId,
@@ -279,23 +290,56 @@ export class AssessmentPipeline {
         "LOCAL_SCHEMA_PB-02",
       );
 
-      const modelEligibility = await this.invokeStage(
-        runContext,
-        {
-          definition: this.definition("PB-03"),
-          input: asJsonObject({
-            structured_intake: structuredIntake,
-            deterministic_rule_result: deterministicSafety,
-            model_semantic_result: modelSafety,
-          }),
-        },
-        "LOCAL_SCHEMA_PB-03",
-      );
+      const contextualRuntime =
+        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0";
+      let aggregate: SafetyResult;
+      let modelEligibility: JsonObject;
+      let eligibility: Eligibility;
+      let eligibilityResult: JsonObject;
 
-      this.emit("LOCAL_SAFETY_AGGREGATION");
-      const aggregate = aggregateSafety(deterministicSafety, modelSafety);
-      this.emit("LOCAL_ELIGIBILITY_GATE");
-      const eligibility = eligibilityFrom(aggregate, modelEligibility);
+      if (contextualRuntime) {
+        this.emit("LOCAL_SAFETY_AGGREGATION");
+        aggregate = aggregateSafety(deterministicSafety, modelSafety);
+        const applicationEligibility = deriveRuntimeEligibilityV3(aggregate);
+        modelEligibility = await this.invokeStage(
+          runContext,
+          {
+            definition: this.definition("PB-03"),
+            input: asJsonObject({
+              structured_intake: structuredIntake,
+              deterministic_rule_result: deterministicSafety,
+              model_semantic_result: modelSafety,
+              application_eligibility_expectation: applicationEligibility,
+            }),
+          },
+          "LOCAL_SCHEMA_PB-03",
+          (output) =>
+            validateEligibilityProjectionV3(output, applicationEligibility),
+        );
+        this.emit("LOCAL_ELIGIBILITY_GATE");
+        eligibility = applicationEligibility;
+        eligibilityResult = asJsonObject(
+          buildLocalEligibilityResultV3(applicationEligibility),
+        );
+      } else {
+        modelEligibility = await this.invokeStage(
+          runContext,
+          {
+            definition: this.definition("PB-03"),
+            input: asJsonObject({
+              structured_intake: structuredIntake,
+              deterministic_rule_result: deterministicSafety,
+              model_semantic_result: modelSafety,
+            }),
+          },
+          "LOCAL_SCHEMA_PB-03",
+        );
+        this.emit("LOCAL_SAFETY_AGGREGATION");
+        aggregate = aggregateSafety(deterministicSafety, modelSafety);
+        this.emit("LOCAL_ELIGIBILITY_GATE");
+        eligibility = eligibilityFrom(aggregate, modelEligibility);
+        eligibilityResult = modelEligibility;
+      }
 
       if (eligibility !== "ready") {
         this.emit("COMPLETE_RUN");
@@ -322,8 +366,16 @@ export class AssessmentPipeline {
       }
 
       this.emit("LOCAL_DECISION_POLICY");
-      const decisionFacts = requireDecisionFacts(structuredIntake);
-      const decisionPolicy = buildDecisionPolicyV2(decisionFacts);
+      let decisionPolicy: DecisionPolicyResultV2;
+      if (contextualRuntime) {
+        const decisionFacts = requireContextualDecisionFactsV3(
+          structuredIntake,
+        );
+        decisionPolicy = buildContextualDecisionPolicyV3(decisionFacts);
+      } else {
+        const decisionFacts = requireDecisionFacts(structuredIntake);
+        decisionPolicy = buildDecisionPolicyV2(decisionFacts);
+      }
       const decisionPlan = (await this.invokeStage(
         runContext,
         {
@@ -331,16 +383,19 @@ export class AssessmentPipeline {
           input: asJsonObject({
             structured_intake: structuredIntake,
             aggregate_safety_result: aggregate,
-            eligibility_result: modelEligibility,
+            eligibility_result: eligibilityResult,
             decision_policy_result: decisionPolicy,
           }),
         },
         "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
-        (output) =>
-          validateDecisionPlanAgainstPolicyV2(
-            output as unknown as DecisionPlan,
-            decisionPolicy,
-          ),
+        (output) => {
+          const plan = output as unknown as DecisionPlan;
+          if (contextualRuntime) {
+            validateContextualDecisionPlanV3(plan, decisionPolicy);
+          } else {
+            validateDecisionPlanAgainstPolicyV2(plan, decisionPolicy);
+          }
+        },
       )) as unknown as DecisionPlan;
 
       const reportContent = (await this.invokeStage(

@@ -661,7 +661,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 ## Blocked Future Work
 
-M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning acceptance, M2-P4-I1-A acceptance, and M2-P4-I1-B acceptance are complete. There is no active implementation authority; the one synthetic `M2P4-LIVE-001` live smoke requires separate explicit authorization. `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized and not started. Publication, deployment, provider inquiry or selection, production connections, live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and every later implementation task remain blocked pending explicit Human instruction.
+M1-P2 is complete and Human-accepted planning. M1-I6 was not accepted and remains formally closed as superseded by M1-P2; later Milestone 1 acceptance does not retroactively accept it. M1-I12 and Milestone 1 are Human-accepted and complete; Milestone 1 is closed. M2-P1 and M2-P2-A are accepted and complete. M2-P2-B0 through M2-P2-B1-B2-B0 are paused internal QA tooling. M2-P3 Runtime Vertical Slice, Human setup, migration application, bounded synthetic live E2E, successful-run DB integrity verification, M2-P4 planning acceptance, M2-P4-I1-A acceptance, and M2-P4-I1-B acceptance are complete. M2-P4-I1-C is explicitly authorized and implemented pending acceptance. The one synthetic live rerun requires separate authorization. `M2-P4-I2`, `M2-P4-I3`, `M2-P4-E1`, and `M2-P4-E2` remain unauthorized and not started. Publication, deployment, production connections, live API or DB execution, historical Prompt or Schema modification, email, payment, authentication, and later implementation remain blocked.
 # M2-P2-B1-B2-A Dormant Live Binding Foundation
 
 - [x] Freeze accepted B1-B1 to exact historical 39-file scope.
@@ -766,6 +766,20 @@ M2-P4-I1-A is Human / ChatGPT accepted and complete. The typed facts contract, p
 - [x] Human / ChatGPT review and acceptance; accepted implementation commit `9588c8fd6ab47c265f5f661d4473a29d73885427`.
 - [ ] After acceptance only: separately authorize and execute one synthetic `M2P4-LIVE-001` live smoke candidate.
 
-M2-P4-I1-B is accepted and complete. The actual active runtime uses PB-01 v2 typed facts, and the old raw-prose decision builder is excluded from the active path. UI, renderer, and PB-04/PB-05/PB-06 quality prose are unchanged. OpenAI live verification and DB verification were not executed. The live smoke was not executed and requires separate explicit authorization; PB-04/PB-05/PB-06 prose-quality improvement has not started, Milestone 2 remains incomplete, no active implementation authority exists, and no further work is self-authorized.
+M2-P4-I1-B is accepted and complete. Its v2 catalog and policy remain immutable historical assets. M2-P4-I1-C is the authorized successor: the active service uses PB-01/PB-03/PB-04/PB-05 successor contracts, application-owned Safety-only eligibility, non-null DecisionFactsV2, and accepted v2 policy through a safe adapter. UI and renderer are unchanged; full prose-quality improvement has not started. OpenAI calls and DB operations are `0`; the live rerun was not executed.
+
+# M2-P4-I1-C Contextual Best-Effort Consultation
+
+- [x] Confirm clean fixed baseline `c27120eea067f91c5e9ef4447e382f55a329e158` and create `feat/m2-p4-i1-c-contextual-best-effort`.
+- [x] Add Structured Intake v3 with non-null DecisionFactsV2, strict traceable `context_inferences`, best-effort information state, and unresolved decision-field paths.
+- [x] Add application-owned Safety-only runtime eligibility and PB-03 acknowledgement-only projection with no `needs_more_information` path.
+- [x] Add strict v3 facts validation and safe v2 policy projection while retaining I1-A parity 40/40.
+- [x] Advance the active pipeline through PB-04 for all normal consultations, including sparse and largely unknown inputs.
+- [x] Preserve accepted I1-A/I1-B and historical Prompt/Schema assets, UI, renderer, packages, development data, and holdout.
+- [x] Prove 11/11 normal sparse cases ready with reports, 1/1 Safety case blocked without report, sanitized baseline `reply_now`, and zero external execution.
+- [ ] Human / ChatGPT review and acceptance.
+- [ ] After acceptance only: separately authorize one synthetic live rerun.
+
+Milestone 2 remains incomplete. I1-C does not authorize live OpenAI/Supabase execution, migration, secret access, PR, merge to `main`, I2/I3/E1/E2, representative quality execution, or release.
 
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/eligibility-projection-v3.schema.json",
+  "title": "Moon Reply Runtime Eligibility Projection v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "acknowledged_eligibility"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v3.0.0"
+    },
+    "acknowledged_eligibility": {
+      "enum": [
+        "ready",
+        "safety_blocked"
+      ]
+    }
+  }
+}
