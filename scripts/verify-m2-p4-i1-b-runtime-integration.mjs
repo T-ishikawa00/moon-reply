@@ -12,6 +12,13 @@ const repositoryRoot = path.resolve(
 const baselineSha = "554d2cb5a2f816ac82edf3cc247458fe34a4a74c";
 const acceptedImplementationSha =
   "9588c8fd6ab47c265f5f661d4473a29d73885427";
+const i2BaselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
+const exactI2RendererPaths = [
+  "app/review/runtime/i2/page.tsx",
+  "app/globals.css",
+  "components/runtime/RuntimeAssessmentForm.tsx",
+  "components/runtime/RuntimeAssessmentNote.tsx",
+];
 const exactImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -84,6 +91,46 @@ function historicalImplementationPaths(baseSha, endSha) {
         .map((item) => item.trim().replaceAll("\\", "/"))
         .filter(Boolean),
     ),
+  );
+}
+
+function currentChangedPaths(baseSha) {
+  const paths = new Set(
+    gitText(["diff", "--name-only", baseSha, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
+  for (const line of gitText([
+    "status",
+    "--porcelain=v1",
+    "--untracked-files=all",
+  ])
+    .split(/\r?\n/gu)
+    .filter(Boolean)) {
+    let item = line.slice(3).trim();
+    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
+    paths.add(item.replaceAll("\\", "/"));
+  }
+  return sorted(paths);
+}
+
+function isExactI2RendererEvolution(paths) {
+  return (
+    paths.length === exactI2RendererPaths.length &&
+    new Set(paths).size === exactI2RendererPaths.length &&
+    JSON.stringify(sorted(paths)) ===
+      JSON.stringify(sorted(exactI2RendererPaths))
+  );
+}
+
+function isAcceptedHistoricalSnapshot(snapshot) {
+  return (
+    snapshot?.type === "historical_commit_range" &&
+    snapshot?.base_commit_sha === baselineSha &&
+    snapshot?.end_commit_sha === acceptedImplementationSha &&
+    snapshot?.include_working_tree === false &&
+    snapshot?.immutable_snapshot === true
   );
 }
 
@@ -654,6 +701,17 @@ assert.deepEqual(capabilityManifest.implementation_snapshot, {
   include_working_tree: false,
   immutable_snapshot: true,
 });
+assert.equal(
+  isAcceptedHistoricalSnapshot(capabilityManifest.implementation_snapshot),
+  true,
+);
+assert.equal(
+  isAcceptedHistoricalSnapshot({
+    ...capabilityManifest.implementation_snapshot,
+    end_commit_sha: baselineSha,
+  }),
+  false,
+);
 const lowercaseShaPattern = /^[0-9a-f]{40}$/u;
 assert.match(
   capabilityManifest.implementation_snapshot.base_commit_sha,
@@ -707,10 +765,11 @@ assert.deepEqual(capabilityManifest.task_execution_evidence, {
   real_user_data: 0,
 });
 
-const protectedDiff = gitText([
+const protectedHistoricalDiff = gitText([
   "diff",
   "--name-only",
   baselineSha,
+  acceptedImplementationSha,
   "--",
   "ai/prompts",
   "ai/schemas",
@@ -724,7 +783,29 @@ const protectedDiff = gitText([
   "package-lock.json",
   "lib/assessment/runtime/policy.ts",
 ]).trim();
-assert.equal(protectedDiff, "");
+assert.equal(protectedHistoricalDiff, "");
+
+const postAcceptanceRendererPaths = currentChangedPaths(i2BaselineSha).filter(
+  (item) => /^(?:app|components)\//u.test(item),
+);
+assert.equal(isExactI2RendererEvolution(postAcceptanceRendererPaths), true);
+for (const unauthorizedPath of [
+  "app/review/runtime/unauthorized/page.tsx",
+  "components/runtime/UnauthorizedComponent.tsx",
+  ["app", "api", "internal", "assessments", "route.ts"].join("/"),
+  "components/public/PublicComponent.tsx",
+]) {
+  assert.equal(
+    isExactI2RendererEvolution([
+      ...exactI2RendererPaths,
+      unauthorizedPath,
+    ]),
+    false,
+  );
+}
+const rendererAuthorizationSource = isExactI2RendererEvolution.toString();
+assert.equal(rendererAuthorizationSource.includes("startsWith"), false);
+assert.equal(rendererAuthorizationSource.includes("*"), false);
 assert.equal(baselineRuntime.transport.actualProviderCalls, 0);
 assert.equal(baselineRuntime.repository.actualSupabaseCalls, 0);
 assert.equal(informationNull.transport.actualProviderCalls, 0);
@@ -733,6 +814,9 @@ assert.equal(safetyNull.transport.actualProviderCalls, 0);
 assert.equal(safetyNull.repository.actualSupabaseCalls, 0);
 
 console.log("M2_P4_I1_B_RUNTIME_INTEGRATION: PASS");
+console.log("historical_snapshot: PASS");
+console.log("i2_renderer_exceptions: 4/4");
+console.log("unauthorized_app_components_regressions: 4/4");
 console.log("reference_decisions: 40/40");
 console.log(`reply_now: ${categoryPasses.get("reply_now")}/10`);
 console.log(`send_now: ${categoryPasses.get("send_now")}/10`);

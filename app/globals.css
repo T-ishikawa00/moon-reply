@@ -3690,3 +3690,198 @@ summary::marker {
     margin-top: 0;
   }
 }
+
+/* M2-P4-I2 report information architecture and fixed internal preview. */
+.runtime-i2-preview {
+  min-height: 100vh;
+}
+
+.runtime-i2-preview__label {
+  margin: 0;
+  background: var(--night-800);
+  padding: var(--space-3) 1rem 0;
+  color: var(--moon-400);
+  font-size: var(--type-small);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.reading-note-intent-nav {
+  margin: var(--space-5) 0 var(--space-6);
+  border-top: 1px solid var(--border-night-strong);
+  padding-top: var(--space-4);
+}
+
+.reading-note-intent-nav > p {
+  margin: 0;
+  color: var(--moon-400);
+  font-size: var(--type-small);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.reading-note-intent-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reading-note-intent-nav a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--paper-50);
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration-color: color-mix(in srgb, var(--moon-400) 72%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.32em;
+}
+
+.reading-note-intent-nav a:hover {
+  color: var(--moon-400);
+}
+
+.reading-note-intent-nav a:focus-visible {
+  border-radius: 0.15rem;
+  outline: 3px solid var(--moon-400);
+  outline-offset: 0.25rem;
+}
+
+#tonight-action,
+#message-draft,
+#short-letter,
+#decision-reason,
+#message-reading,
+#three-day-plan,
+#change-conditions,
+#closing {
+  scroll-margin-top: var(--space-6);
+}
+
+.reading-note-draft > h3,
+.reading-note-support-block > h3,
+.reading-note-support-block > h4,
+.reading-note-anxiety-reframe > h3,
+.reading-note-facts > h3,
+.reading-note-interpretations > h3 {
+  margin: 0;
+  color: var(--ink-800);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.reading-note-draft .message-letter {
+  margin-top: var(--space-4);
+}
+
+.reading-note-draft__absence {
+  margin: var(--space-4) 0 0;
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-100);
+  padding: var(--space-4);
+  color: var(--ink-800);
+  line-height: 1.9;
+}
+
+.reading-note-support-block {
+  margin-top: var(--space-5);
+  border-top: 1px solid var(--border-paper);
+  padding-top: var(--space-4);
+}
+
+.reading-note-support-block > p {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-800);
+  line-height: 1.9;
+}
+
+.reading-note-actions {
+  margin-top: var(--space-7);
+}
+
+.reading-note-anxiety-reframe {
+  max-width: 40rem;
+  margin: var(--space-7) 0 0 4rem;
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-100);
+  padding: var(--space-5);
+}
+
+.reading-note-anxiety-reframe p {
+  margin: var(--space-3) 0 0;
+  color: var(--ink-800);
+  line-height: 1.9;
+}
+
+.reading-note-decision-summary {
+  color: var(--ink-950) !important;
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+}
+
+.reading-note-facts,
+.reading-note-interpretations {
+  margin-top: var(--space-7);
+}
+
+.reading-note-interpretations .possibility-list {
+  margin-top: var(--space-4);
+}
+
+.reading-note-data-note {
+  margin: 0 0 var(--space-5) !important;
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-100);
+  padding: var(--space-4);
+}
+
+.lunar-plan__avoid,
+.lunar-plan__commentary {
+  margin-top: var(--space-4) !important;
+  border-top: 1px solid var(--border-paper-subtle);
+  padding-top: var(--space-3);
+}
+
+.lunar-plan__avoid > span {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--focus-ring-paper);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.lunar-plan__commentary {
+  color: var(--ink-600) !important;
+  font-size: var(--type-small);
+}
+
+.lunar-plan__commentary--missing {
+  font-style: italic;
+}
+
+.reading-note-change-conditions {
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 760px) {
+  .reading-note-anxiety-reframe {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .reading-note-intent-nav ul {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .reading-note-intent-nav a {
+    width: 100%;
+  }
+}

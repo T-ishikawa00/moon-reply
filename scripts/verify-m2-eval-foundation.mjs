@@ -191,6 +191,28 @@ const m2p4I1cAcceptanceSyncPaths = new Set([
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
 ]);
+const m2p4I2BaselineCommit =
+  "20d4178e3a63026128f3a25d052196c7161e7e27";
+const m2p4I2VerifierPath =
+  "scripts/verify-m2-p4-i2-report-ia.mjs";
+const m2p4I2ExactPaths = new Set([
+  "app/review/runtime/i2/page.tsx",
+  "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
+  "evals/runtime/m2-p4-i2-field-disposition-v1.json",
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
+  m2p4I2VerifierPath,
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "components/runtime/RuntimeAssessmentForm.tsx",
+  "components/runtime/RuntimeAssessmentNote.tsx",
+  "app/globals.css",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  m2p4I1bVerifierPath,
+  m2p4I1cVerifierPath,
+]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -291,6 +313,7 @@ const successorLocalToolPaths = new Set([
   "scripts/verify-m2-p2-b0-calibration-contract.mjs",
   m2p4I1bVerifierPath,
   m2p4I1cVerifierPath,
+  m2p4I2VerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3963,7 +3986,22 @@ function verifyScopeAndProhibitedImplementation() {
           .filter(Boolean)
           .sort()
       : [];
-  const acceptanceSyncPaths = currentTaskPaths(m2p4I1cAcceptedEndCommit);
+  const acceptanceSyncDiff = runGit([
+    "diff",
+    "--name-only",
+    m2p4I1cAcceptedEndCommit,
+    m2p4I2BaselineCommit,
+    "--",
+  ]);
+  const acceptanceSyncPaths =
+    acceptanceSyncDiff.status === 0
+      ? acceptanceSyncDiff.stdout
+          .split(/\r?\n/u)
+          .map((item) => item.trim().replaceAll("\\", "/"))
+          .filter(Boolean)
+          .sort()
+      : [];
+  const m2p4I2TaskPaths = currentTaskPaths(m2p4I2BaselineCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4349,6 +4387,7 @@ function verifyScopeAndProhibitedImplementation() {
   }
   const expectedAcceptanceSyncPaths = [...m2p4I1cAcceptanceSyncPaths].sort();
   if (
+    acceptanceSyncDiff.status !== 0 ||
     acceptanceSyncPaths.length !== 8 ||
     JSON.stringify(acceptanceSyncPaths) !==
       JSON.stringify(expectedAcceptanceSyncPaths) ||
@@ -4363,6 +4402,25 @@ function verifyScopeAndProhibitedImplementation() {
         "M2-P4-I1-C acceptance sync changes exactly eight literal allowlisted paths",
       expected: expectedAcceptanceSyncPaths,
       actual: acceptanceSyncPaths,
+    });
+  }
+  const expectedM2p4I2TaskPaths = [...m2p4I2ExactPaths].sort();
+  if (
+    m2p4I2TaskPaths.length !== 16 ||
+    new Set(m2p4I2TaskPaths).size !== 16 ||
+    JSON.stringify(m2p4I2TaskPaths) !==
+      JSON.stringify(expectedM2p4I2TaskPaths) ||
+    m2p4I2TaskPaths.some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i2_exact_scope",
+      invariant:
+        "M2-P4-I2 changes exactly 16 literal allowlisted paths without prefix or future-path authorization",
+      expected: expectedM2p4I2TaskPaths,
+      actual: m2p4I2TaskPaths,
     });
   }
   const declaredM2p4I1bPaths = Array.isArray(
@@ -4846,6 +4904,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p4I1cR2ImplementationPaths.has(item) &&
       !m2p4I1cR3ImplementationPaths.has(item) &&
       !m2p4I1cR4ImplementationPaths.has(item) &&
+      !m2p4I2ExactPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -4879,7 +4938,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I1cR1ImplementationPaths.has(item) ||
       m2p4I1cR2ImplementationPaths.has(item) ||
       m2p4I1cR3ImplementationPaths.has(item) ||
-      m2p4I1cR4ImplementationPaths.has(item)
+      m2p4I1cR4ImplementationPaths.has(item) ||
+      m2p4I2ExactPaths.has(item)
     ) {
       continue;
     }

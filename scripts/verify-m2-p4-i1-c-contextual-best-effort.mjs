@@ -15,6 +15,31 @@ const r2BaselineSha = "bee69d1cf0f1792786eccc6508fb5e7184ad6241";
 const r3BaselineSha = "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
 const r4BaselineSha = "e4e844cbaa8534c68a0d87d5831d04b5afe676a1";
 const acceptedEndSha = "b523349ec33c36a90c645d4a1b7a6d37832af151";
+const i2BaselineSha = "20d4178e3a63026128f3a25d052196c7161e7e27";
+const exactI2RendererPaths = [
+  "app/review/runtime/i2/page.tsx",
+  "app/globals.css",
+  "components/runtime/RuntimeAssessmentForm.tsx",
+  "components/runtime/RuntimeAssessmentNote.tsx",
+];
+const exactI2Paths = [
+  "app/review/runtime/i2/page.tsx",
+  "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
+  "evals/runtime/m2-p4-i2-field-disposition-v1.json",
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "components/runtime/RuntimeAssessmentForm.tsx",
+  "components/runtime/RuntimeAssessmentNote.tsx",
+  "app/globals.css",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
 const acceptedSliceCommits = {
   "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
   "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
@@ -179,6 +204,45 @@ function gitText(args) {
   );
 }
 
+function currentChangedPaths(baseSha) {
+  const paths = new Set(
+    gitText(["diff", "--name-only", baseSha, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
+  for (const line of gitText([
+    "status",
+    "--porcelain=v1",
+    "--untracked-files=all",
+  ])
+    .split(/\r?\n/gu)
+    .filter(Boolean)) {
+    let item = line.slice(3).trim();
+    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
+    paths.add(item.replaceAll("\\", "/"));
+  }
+  return sorted(paths);
+}
+
+function isExactPathSet(paths, exactPaths) {
+  return (
+    paths.length === exactPaths.length &&
+    new Set(paths).size === exactPaths.length &&
+    JSON.stringify(sorted(paths)) === JSON.stringify(sorted(exactPaths))
+  );
+}
+
+function isAcceptedHistoricalSnapshot(snapshot) {
+  return (
+    snapshot?.type === "historical_commit_range" &&
+    snapshot?.base_commit_sha === i1cBaselineSha &&
+    snapshot?.end_commit_sha === acceptedEndSha &&
+    snapshot?.include_working_tree === false &&
+    snapshot?.immutable_snapshot === true
+  );
+}
+
 function deterministicUuidFactory() {
   let sequence = 0;
   return () => {
@@ -286,6 +350,14 @@ const acceptedStackCommittedPaths = gitText([
   .map((item) => item.trim().replaceAll("\\", "/"))
   .filter(Boolean);
 assert.deepEqual(sorted(acceptedStackCommittedPaths), sorted(acceptedStackPaths));
+assert.equal(isExactPathSet(acceptedStackCommittedPaths, acceptedStackPaths), true);
+assert.equal(
+  isExactPathSet(
+    [...acceptedStackCommittedPaths, exactI2RendererPaths[0]],
+    acceptedStackPaths,
+  ),
+  false,
+);
 
 const protectedHistoricalPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -308,9 +380,41 @@ const protectedHistoricalPaths = [
   "next-env.d.ts",
 ];
 assert.equal(
-  gitText(["diff", "--name-only", r1BaselineSha, "--", ...protectedHistoricalPaths]).trim(),
+  gitText([
+    "diff",
+    "--name-only",
+    r1BaselineSha,
+    acceptedEndSha,
+    "--",
+    ...protectedHistoricalPaths,
+  ]).trim(),
   "",
 );
+
+const postAcceptanceRendererPaths = currentChangedPaths(i2BaselineSha).filter(
+  (item) => /^(?:app|components)\//u.test(item),
+);
+assert.equal(
+  isExactPathSet(postAcceptanceRendererPaths, exactI2RendererPaths),
+  true,
+);
+for (const unauthorizedPath of [
+  "app/review/runtime/unauthorized/page.tsx",
+  "components/runtime/UnauthorizedComponent.tsx",
+  ["app", "api", "internal", "assessments", "route.ts"].join("/"),
+  "components/public/PublicComponent.tsx",
+]) {
+  assert.equal(
+    isExactPathSet(
+      [...exactI2RendererPaths, unauthorizedPath],
+      exactI2RendererPaths,
+    ),
+    false,
+  );
+}
+const rendererAuthorizationSource = isExactPathSet.toString();
+assert.equal(rendererAuthorizationSource.includes("startsWith"), false);
+assert.equal(rendererAuthorizationSource.includes("*"), false);
 
 const manifest = json(
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
@@ -1943,6 +2047,17 @@ assert.deepEqual(capabilityManifest.implementation_snapshot, {
   include_working_tree: false,
   immutable_snapshot: true,
 });
+assert.equal(
+  isAcceptedHistoricalSnapshot(capabilityManifest.implementation_snapshot),
+  true,
+);
+assert.equal(
+  isAcceptedHistoricalSnapshot({
+    ...capabilityManifest.implementation_snapshot,
+    base_commit_sha: acceptedEndSha,
+  }),
+  false,
+);
 assert.equal(capabilityManifest.baseline.commit, i1cBaselineSha);
 assert.deepEqual(capabilityManifest.implementation_paths, i1cImplementationPaths);
 assert.deepEqual(capabilityManifest.accepted_stack_paths, acceptedStackPaths);
@@ -2097,20 +2212,28 @@ for (const documentPath of [
   assert.ok(document.includes("not started") || document.includes("not_started"));
 }
 
-const changedPaths = new Set(
-  gitText(["diff", "--name-only", acceptedEndSha, "HEAD", "--"])
+const historicalAcceptanceSyncPaths = gitText([
+  "diff",
+  "--name-only",
+  acceptedEndSha,
+  i2BaselineSha,
+  "--",
+])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
-    .filter(Boolean),
+    .filter(Boolean);
+assert.deepEqual(
+  sorted(historicalAcceptanceSyncPaths),
+  sorted(acceptanceSyncPaths),
 );
-for (const line of gitText(["status", "--porcelain=v1", "--untracked-files=all"])
-  .split(/\r?\n/gu)
-  .filter(Boolean)) {
-  changedPaths.add(line.slice(3).trim().replaceAll("\\", "/"));
-}
-assert.deepEqual(sorted(changedPaths), sorted(acceptanceSyncPaths));
+const currentI2Paths = currentChangedPaths(i2BaselineSha);
+assert.equal(isExactPathSet(currentI2Paths, exactI2Paths), true);
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
+console.log("historical_snapshot: PASS");
+console.log("accepted_stack: 27/27");
+console.log("i2_renderer_exceptions: 4/4");
+console.log("unauthorized_app_components_regressions: 4/4");
 console.log("normal_information_gate_terminal: 0");
 console.log("needs_more_information_runtime_path: 0");
 console.log("contextual_inference_supported: PASS");

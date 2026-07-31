@@ -1,0 +1,33 @@
+{
+  "task_id": "M2-P4-I2",
+  "title": "Report Information Architecture and Intent Fulfillment",
+  "status": "implementation_pending_human_chatgpt_review",
+  "baseline": "20d4178e3a63026128f3a25d052196c7161e7e27",
+  "exact_mutation_paths": [
+    "app/review/runtime/i2/page.tsx",
+    "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
+    "evals/runtime/m2-p4-i2-field-disposition-v1.json",
+    "evals/runtime/m2-p4-i2-capabilities-v1.json",
+    "scripts/verify-m2-p4-i2-report-ia.mjs",
+    "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+    "components/runtime/RuntimeAssessmentForm.tsx",
+    "components/runtime/RuntimeAssessmentNote.tsx",
+    "app/globals.css",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md",
+    "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+    "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs"
+  ],
+  "field_disposition_asset": "evals/runtime/m2-p4-i2-field-disposition-v1.json",
+  "selected_intent_mappings": 6,
+  "static_preview_route": "/review/runtime/i2",
+  "openai_calls": 0,
+  "db_operations": 0,
+  "migrations": 0,
+  "holdout_use": 0,
+  "real_user_data": 0,
+  "i3_status": "not_started"
+}

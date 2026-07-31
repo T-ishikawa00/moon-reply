@@ -157,7 +157,12 @@ export function RuntimeAssessmentForm() {
   }
 
   if (requestState.status === "success" && isCompleted(requestState.result)) {
-    return <RuntimeAssessmentNote assessment={requestState.result} />;
+    return (
+      <RuntimeAssessmentNote
+        assessment={requestState.result}
+        requestedTopics={form.requestedTopics}
+      />
+    );
   }
 
   return (

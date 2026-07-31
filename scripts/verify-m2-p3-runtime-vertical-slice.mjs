@@ -18,6 +18,26 @@ const i1cBaselineSha =
   "c27120eea067f91c5e9ef4447e382f55a329e158";
 const i1cAcceptedImplementationSha =
   "b523349ec33c36a90c645d4a1b7a6d37832af151";
+const i2BaselineSha =
+  "20d4178e3a63026128f3a25d052196c7161e7e27";
+const i2ExactPaths = [
+  "app/review/runtime/i2/page.tsx",
+  "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
+  "evals/runtime/m2-p4-i2-field-disposition-v1.json",
+  "evals/runtime/m2-p4-i2-capabilities-v1.json",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "docs/phase2/TASK_M2_P4_I2_REVIEW.md",
+  "components/runtime/RuntimeAssessmentForm.tsx",
+  "components/runtime/RuntimeAssessmentNote.tsx",
+  "app/globals.css",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -98,6 +118,7 @@ const gateOrder = [
   "M2_P3_ZERO_LIVE_NETWORK_GATE",
   "M2_P3_ZERO_SPEND_GATE",
   "M2_P3_PUBLIC_PRODUCT_UNCHANGED_GATE",
+  "M2_P3_I2_RENDERER_ONLY_GATE",
   "M2_P3_DEPENDENCY_AUDIT_GATE",
   "M2_P3_PRODUCTION_VULNERABILITY_GATE",
   "M2_P3_SUPABASE_DEPENDENCY_GATE",
@@ -142,6 +163,27 @@ function gitText(args) {
       stdio: ["ignore", "pipe", "pipe"],
     },
   );
+}
+
+function currentTaskPaths(startCommit) {
+  const paths = new Set(
+    gitText(["diff", "--name-only", startCommit, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
+  for (const line of gitText([
+    "status",
+    "--porcelain=v1",
+    "--untracked-files=all",
+  ])
+    .split(/\r?\n/gu)
+    .filter(Boolean)) {
+    let item = line.slice(3).trim();
+    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
+    paths.add(item.replaceAll("\\", "/"));
+  }
+  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
 }
 
 function deterministicUuidFactory(initialSequence = 0) {
@@ -500,6 +542,11 @@ const dependencyReviewSource = source(
 );
 const routeSource = source("app/api/internal/assessments/route.ts");
 const pageSource = source("app/review/runtime/page.tsx");
+const i2PageSource = source("app/review/runtime/i2/page.tsx");
+const i2FixtureSource = source(
+  "lib/assessment/runtime/review/m2-p4-i2-review-fixture.ts",
+);
+const i2NoteSource = source("components/runtime/RuntimeAssessmentNote.tsx");
 const environmentSource = source("lib/assessment/runtime/environment.ts");
 const transportSource = source(
   "lib/assessment/runtime/openai-transport.ts",
@@ -1349,6 +1396,68 @@ gate("M2_P3_PUBLIC_PRODUCT_UNCHANGED_GATE", () => {
         "M2-P3 internal development runtime. No public navigation entry.",
       ),
     `public product diff is not isolated: ${publicDiff}`,
+  );
+});
+
+gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
+  const actualI2Paths = currentTaskPaths(i2BaselineSha);
+  const expectedI2Paths = [...i2ExactPaths].sort((left, right) =>
+    left.localeCompare(right, "en"),
+  );
+  const protectedI2Diff = gitText([
+    "diff",
+    "--name-only",
+    i2BaselineSha,
+    "--",
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/types.ts",
+    "lib/assessment/runtime/policy.ts",
+    "lib/assessment/runtime/policy-v2.ts",
+    "lib/assessment/runtime/policy-v3.ts",
+    "lib/assessment/runtime/contracts",
+    "app/api",
+    "supabase",
+    "ai/prompts",
+    "ai/schemas",
+    "evals/development",
+    "evals/holdout",
+  ]).trim();
+  const i2ExecutionSources = [
+    i2PageSource,
+    i2FixtureSource,
+    i2NoteSource,
+  ].join("\n");
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    actualI2Paths.length === 16 &&
+      new Set(actualI2Paths).size === 16 &&
+      JSON.stringify(actualI2Paths) === JSON.stringify(expectedI2Paths) &&
+      actualI2Paths.every(
+        (item) => !item.includes("*") && !item.endsWith("/"),
+      ),
+    `I2 exact renderer/static-preview scope differs: ${actualI2Paths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    protectedI2Diff === "",
+    `I2 changed protected runtime/API/DB/Prompt/Schema paths: ${protectedI2Diff}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    i2PageSource.includes('process.env.NODE_ENV === "production"') &&
+      i2PageSource.includes(
+        'process.env.M2_INTERNAL_RUNTIME_ENABLED !== "true"',
+      ) &&
+      i2PageSource.includes("notFound()") &&
+      i2PageSource.includes("index: false") &&
+      i2PageSource.includes("follow: false") &&
+      !i2PageSource.includes("/api/internal/assessments") &&
+      !i2ExecutionSources.includes("fetch(") &&
+      !i2ExecutionSources.includes('from "openai"') &&
+      !i2ExecutionSources.includes("@supabase/supabase-js") &&
+      !i2ExecutionSources.includes("createClient(") &&
+      !i2ExecutionSources.includes(".rpc("),
+    "I2 fixed preview is not production-disabled and zero-execution",
   );
 });
 

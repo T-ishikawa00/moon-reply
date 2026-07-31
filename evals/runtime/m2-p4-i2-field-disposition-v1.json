@@ -1,0 +1,46 @@
+{
+  "schema_version": "m2-p4-i2-field-disposition-v1",
+  "entries": [
+    {
+      "field": "observed_fact_commentary",
+      "disposition": "integrate",
+      "target": "decision-reason",
+      "rule": "decision_reason_fact_idsに含まれるfactだけ表示"
+    },
+    {
+      "field": "anxiety_reframe",
+      "disposition": "display",
+      "target": "short-letter",
+      "label": "不安を少しほどくために"
+    },
+    {
+      "field": "action_rationales",
+      "disposition": "integrate",
+      "target": "tonight-action",
+      "label": "この動き方をすすめる理由"
+    },
+    {
+      "field": "message_draft_context",
+      "disposition": "display",
+      "target": "message-draft",
+      "label": "この文面に整えた理由"
+    },
+    {
+      "field": "three_day_plan_commentary",
+      "disposition": "integrate",
+      "target": "three-day-plan",
+      "rule": "day indexと同じindexへ統合"
+    },
+    {
+      "field": "change_condition_commentary",
+      "disposition": "display",
+      "target": "change-conditions"
+    },
+    {
+      "field": "unknowns_commentary",
+      "disposition": "deprecate_in_successor_schema",
+      "target": "none",
+      "rationale": "possible_interpretations、change conditions、fixed limitationとの意味重複が強く、現画面へ追加すると免責と不明点の反復になるため"
+    }
+  ]
+}
