@@ -1,0 +1,469 @@
+{
+  "schema_version": "m2-p4-i3-r1-contrast-suite-v1",
+  "task_id": "M2-P4-I3-R1-PLAN",
+  "status": "planning_only",
+  "decision_policy_version": "decision-policy-v2.0.0",
+  "data_policy": {
+    "synthetic_cases_only": true,
+    "real_people": 0,
+    "real_users": 0,
+    "database_records": 0,
+    "full_uuid_values": 0,
+    "external_evaluation_cases": 0
+  },
+  "implementation_constraints": [
+    "derive behavior from typed decision and writing material",
+    "case identifiers must never be runtime inputs",
+    "verbatim message-to-output mapping is prohibited",
+    "relationship dimensions must not override application-owned decisions"
+  ],
+  "declared_counts": {
+    "relationship_only": 8,
+    "candidate_style_only": 8,
+    "incoming_message_only": 8,
+    "precedence_intersection": 8,
+    "total": 32
+  },
+  "categories": {
+    "RELATIONSHIP_ONLY": {
+      "control": {
+        "incoming_message": "今日はありがとう。来週の土曜、またごはんに行かない？",
+        "incoming_state": "meaningful_unanswered_direct_message_with_reasonable_response_expectation",
+        "consultation_purpose": "相手への返信文を整える",
+        "user_supplied_optional_message": null,
+        "safety": "normal_allowed",
+        "boundary": "none"
+      },
+      "cases": [
+        {
+          "case_id": "I3R1-REL-01",
+          "label": "matching_app_early",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "new_acquaintance",
+            "social_role": "acquaintance",
+            "hierarchy": "peer",
+            "familiarity": "early",
+            "communication_context": "matching_app",
+            "observed_register": "neutral_polite"
+          },
+          "required_writing_traits": ["neutral polite register", "light warmth", "one low-pressure acceptance", "concise wording"],
+          "forbidden_writing_traits": ["relationship certainty", "pet name", "exclusive implication", "intimacy inflation"],
+          "human_review_questions": ["Does the message answer the invitation without sounding already partnered?", "Is the warmth proportionate to an early matching-app exchange?"]
+        },
+        {
+          "case_id": "I3R1-REL-02",
+          "label": "partner_established",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "partner",
+            "social_role": "other",
+            "hierarchy": "none",
+            "familiarity": "established",
+            "communication_context": "private",
+            "observed_register": "casual"
+          },
+          "required_writing_traits": ["natural established familiarity", "casual register", "direct acceptance", "no needless explanation"],
+          "forbidden_writing_traits": ["first-date distance", "business tone", "generic politeness", "invented affection"],
+          "human_review_questions": ["Does it sound like an established exchange rather than a new acquaintance?", "Does it avoid adding affection that was not supplied?"]
+        },
+        {
+          "case_id": "I3R1-REL-03",
+          "label": "former_partner",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "former_partner",
+            "social_role": "other",
+            "hierarchy": "none",
+            "familiarity": "former",
+            "communication_context": "private",
+            "observed_register": "neutral_polite"
+          },
+          "required_writing_traits": ["purpose clarity", "boundary awareness", "measured warmth", "no reconciliation assumption"],
+          "forbidden_writing_traits": ["romantic certainty", "automatic invitation escalation", "nostalgic intimacy inflation", "relationship repair claim"],
+          "human_review_questions": ["Does the reply stay within the invitation actually received?", "Is past intimacy prevented from becoming a reconciliation narrative?"]
+        },
+        {
+          "case_id": "I3R1-REL-04",
+          "label": "close_friend",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "none",
+            "social_role": "close_friend",
+            "hierarchy": "peer",
+            "familiarity": "established",
+            "communication_context": "private",
+            "observed_register": "casual"
+          },
+          "required_writing_traits": ["natural wording", "low formality", "established familiarity", "short direct acceptance"],
+          "forbidden_writing_traits": ["business-letter tone", "unnecessary distancing language", "romantic framing", "over-explanation"],
+          "human_review_questions": ["Could a close friend plausibly send this without editing?", "Does the message avoid both stiffness and romantic overreading?"]
+        },
+        {
+          "case_id": "I3R1-REL-05",
+          "label": "work_senior",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "none",
+            "social_role": "work_contact",
+            "hierarchy": "user_is_junior",
+            "familiarity": "established",
+            "communication_context": "work",
+            "observed_register": "polite"
+          },
+          "required_writing_traits": ["respectful", "concise", "clear availability response", "no unsupported intimacy"],
+          "forbidden_writing_traits": ["sudden casual speech", "excessive personal warmth", "schedule pressure", "ceremonial business letter"],
+          "human_review_questions": ["Is the hierarchy respected without becoming rigid?", "Does the reply avoid pressure around the proposed date?"]
+        },
+        {
+          "case_id": "I3R1-REL-06",
+          "label": "work_peer",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "none",
+            "social_role": "work_contact",
+            "hierarchy": "peer",
+            "familiarity": "established",
+            "communication_context": "work",
+            "observed_register": "neutral_polite"
+          },
+          "required_writing_traits": ["neutral polite register", "practical clarity", "friendly restraint", "brief response"],
+          "forbidden_writing_traits": ["subordinate deference", "managerial authority", "private intimacy", "long rationale"],
+          "human_review_questions": ["Does the reply sound peer-to-peer?", "Is it friendly without changing a work exchange into a personal relationship?"]
+        },
+        {
+          "case_id": "I3R1-REL-07",
+          "label": "work_junior",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "none",
+            "social_role": "work_contact",
+            "hierarchy": "user_is_senior",
+            "familiarity": "established",
+            "communication_context": "work",
+            "observed_register": "polite"
+          },
+          "required_writing_traits": ["respectful equality", "low pressure", "clear response", "no authority leverage"],
+          "forbidden_writing_traits": ["patronizing casualness", "command tone", "obligation pressure", "status display"],
+          "human_review_questions": ["Does the senior user avoid making attendance feel mandatory?", "Is the junior contact addressed as an adult peer in the conversation?"]
+        },
+        {
+          "case_id": "I3R1-REL-08",
+          "label": "first_meeting_acquaintance",
+          "expected_decision": "reply_now",
+          "expected_relationship_dimensions": {
+            "romantic_stage": "none",
+            "social_role": "acquaintance",
+            "hierarchy": "peer",
+            "familiarity": "first_contact",
+            "communication_context": "private",
+            "observed_register": "neutral_polite"
+          },
+          "required_writing_traits": ["neutral polite register", "clear thanks", "measured acceptance", "limited assumed context"],
+          "forbidden_writing_traits": ["inside-joke familiarity", "nickname", "intimacy inflation", "overly formal salutation"],
+          "human_review_questions": ["Does the reply fit a first meeting?", "Is it warm enough to answer without claiming familiarity?"]
+        }
+      ]
+    },
+    "CANDIDATE_STYLE_ONLY": {
+      "control": {
+        "relationship_dimensions": {
+          "romantic_stage": "none",
+          "social_role": "close_friend",
+          "hierarchy": "peer",
+          "familiarity": "established",
+          "communication_context": "private",
+          "observed_register": "mixed"
+        },
+        "incoming_message": "今日はありがとう。また近いうちにごはん行こう",
+        "incoming_state": "meaningful_unanswered_direct_message_with_reasonable_response_expectation",
+        "consultation_purpose": "感謝して、また行きたい意思を返す",
+        "safety": "normal_allowed",
+        "boundary": "none",
+        "fixed_candidate_meaning": "感謝し、また一緒に食事へ行きたいと伝える"
+      },
+      "cases": [
+        {
+          "case_id": "I3R1-STY-01",
+          "label": "polite_measured",
+          "candidate": "こちらこそありがとうございました。またぜひ行きたいです。",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "polite", "sentence_length": "short", "sentence_ending": "formal", "punctuation": "standard", "emoji_usage": "none", "exclamation_usage": "none", "softness": "medium", "directness": "balanced", "invitation_style": "tentative", "reply_pressure": "low"},
+          "required_preservation": ["polite register", "measured warmth", "no emoji", "tentative invitation"],
+          "minimal_correction_target": "none beyond natural copy editing",
+          "forbidden_result": ["automatic casualization", "added emoji", "stronger invitation"]
+        },
+        {
+          "case_id": "I3R1-STY-02",
+          "label": "casual_short",
+          "candidate": "こちらこそありがと！また行こ",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "casual", "sentence_length": "short", "sentence_ending": "playful", "punctuation": "expressive", "emoji_usage": "none", "exclamation_usage": "restrained", "softness": "medium", "directness": "direct", "invitation_style": "direct", "reply_pressure": "low"},
+          "required_preservation": ["casual register", "short length", "single exclamation energy", "direct invitation"],
+          "minimal_correction_target": "retain colloquial wording unless readability requires a tiny adjustment",
+          "forbidden_result": ["generic polite prose", "long explanation", "added emoji"]
+        },
+        {
+          "case_id": "I3R1-STY-03",
+          "label": "restrained_emoji",
+          "candidate": "こちらこそありがとう。また行こうね🙂",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "casual", "sentence_length": "short", "sentence_ending": "soft", "punctuation": "sparse", "emoji_usage": "restrained", "exclamation_usage": "none", "softness": "high", "directness": "balanced", "invitation_style": "tentative", "reply_pressure": "low"},
+          "required_preservation": ["one restrained emoji", "soft ending", "casual warmth", "short length"],
+          "minimal_correction_target": "none beyond natural copy editing",
+          "forbidden_result": ["mechanical emoji deletion", "emoji multiplication", "formalization"]
+        },
+        {
+          "case_id": "I3R1-STY-04",
+          "label": "expressive_exclamation",
+          "candidate": "こちらこそありがとう！！また絶対行こう！",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "casual", "sentence_length": "short", "sentence_ending": "playful", "punctuation": "expressive", "emoji_usage": "none", "exclamation_usage": "frequent", "softness": "medium", "directness": "direct", "invitation_style": "direct", "reply_pressure": "medium"},
+          "required_preservation": ["bright energy", "casual register", "direct interest", "expressive punctuation"],
+          "minimal_correction_target": "reduce only the pressure created by absolute wording or repeated marks",
+          "forbidden_result": ["flat polite prose", "removal of all excitement", "added emotional claims"]
+        },
+        {
+          "case_id": "I3R1-STY-05",
+          "label": "terse_low_punctuation",
+          "candidate": "ありがと また行こ",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "casual", "sentence_length": "terse", "sentence_ending": "neutral", "punctuation": "sparse", "emoji_usage": "none", "exclamation_usage": "none", "softness": "low", "directness": "direct", "invitation_style": "direct", "reply_pressure": "low"},
+          "required_preservation": ["terse length", "sparse punctuation", "casual wording", "directness"],
+          "minimal_correction_target": "correct only if spacing materially harms readability",
+          "forbidden_result": ["added sentence", "added emoji", "polite normalization"]
+        },
+        {
+          "case_id": "I3R1-STY-06",
+          "label": "warm_soft",
+          "candidate": "こちらこそありがとう。ゆっくり話せてうれしかった。また行けたらいいな",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "casual", "sentence_length": "medium", "sentence_ending": "soft", "punctuation": "standard", "emoji_usage": "none", "exclamation_usage": "none", "softness": "high", "directness": "indirect", "invitation_style": "tentative", "reply_pressure": "low"},
+          "required_preservation": ["soft warmth", "medium length", "tentative ending", "specific positive feeling"],
+          "minimal_correction_target": "none beyond natural copy editing",
+          "forbidden_result": ["cold shortening", "direct scheduling pressure", "generic replacement"]
+        },
+        {
+          "case_id": "I3R1-STY-07",
+          "label": "long_overexplained",
+          "candidate": "こちらこそありがとう。今日は話せて楽しかったし、いろいろ考えたんだけど、もし迷惑じゃなくて予定も大丈夫なら、またごはんに行けたらと思っています。",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "neutral_polite", "sentence_length": "long", "sentence_ending": "soft", "punctuation": "standard", "emoji_usage": "none", "exclamation_usage": "none", "softness": "high", "directness": "indirect", "invitation_style": "tentative", "reply_pressure": "low"},
+          "required_preservation": ["polite-soft voice", "interest in meeting again", "careful invitation", "no emoji"],
+          "minimal_correction_target": "trim redundant hedges and explanation while retaining careful warmth",
+          "forbidden_result": ["complete rewrite into a terse template", "loss of interest", "new pressure"]
+        },
+        {
+          "case_id": "I3R1-STY-08",
+          "label": "apology_heavy",
+          "candidate": "返信遅くなって本当にごめんね。こんなに遅くなって申し訳ないんだけど、こちらこそありがとう。また行けたらうれしいです。",
+          "expected_decision": "reply_now",
+          "candidate_style_profile": {"register": "mixed", "sentence_length": "long", "sentence_ending": "soft", "punctuation": "standard", "emoji_usage": "none", "exclamation_usage": "none", "softness": "high", "directness": "indirect", "invitation_style": "tentative", "reply_pressure": "low"},
+          "required_preservation": ["soft tone", "acknowledgement of delay", "gratitude", "interest in meeting again"],
+          "minimal_correction_target": "reduce duplicate apology without deleting the supported acknowledgement",
+          "forbidden_result": ["preserving repeated self-blame", "removing the invitation", "uniform formal rewrite"]
+        }
+      ]
+    },
+    "INCOMING_MESSAGE_ONLY": {
+      "control": {
+        "relationship_dimensions": {
+          "romantic_stage": "new_acquaintance",
+          "social_role": "acquaintance",
+          "hierarchy": "peer",
+          "familiarity": "early",
+          "communication_context": "matching_app",
+          "observed_register": "neutral_polite"
+        },
+        "candidate": "ありがとうございます。またお会いできたらうれしいです。",
+        "candidate_style_profile": "polite_measured",
+        "consultation_purpose": "相手の文面に合う返信を整える",
+        "user_availability": "来週火曜と木曜の夜",
+        "safety": "normal_allowed",
+        "boundary": "none"
+      },
+      "cases": [
+        {
+          "case_id": "I3R1-INC-01",
+          "label": "また行こう",
+          "incoming_message": "また行こう",
+          "expected_decision": "reply_now",
+          "response_obligation": "reasonable acknowledgement of a direct invitation",
+          "invitation_specificity": "open but direct",
+          "expected_draft_behavior": "Accept with measured warmth and preserve the candidate's polite voice without forcing a date.",
+          "forbidden_overreading": ["confirmed plan", "relationship progression", "romantic certainty"]
+        },
+        {
+          "case_id": "I3R1-INC-02",
+          "label": "また都合が合えば行こう",
+          "incoming_message": "また都合が合えば行こう",
+          "expected_decision": "reply_now",
+          "response_obligation": "reasonable acknowledgement of a conditional invitation",
+          "invitation_specificity": "conditional and non-urgent",
+          "expected_draft_behavior": "Acknowledge positively without turning the conditional invitation into immediate scheduling pressure.",
+          "forbidden_overreading": ["firm commitment", "rejection", "demand for dates"]
+        },
+        {
+          "case_id": "I3R1-INC-03",
+          "label": "また機会があれば",
+          "incoming_message": "また機会があれば",
+          "expected_decision": "wait_and_reassess",
+          "response_obligation": "no reasonable response obligation; soft closing statement",
+          "invitation_specificity": "noncommittal",
+          "expected_draft_behavior": "Do not send the fixed candidate tonight; if a later candidate is prepared, keep it non-pursuing and do not convert the phrase into an invitation.",
+          "forbidden_overreading": ["active invitation", "hidden romantic interest", "need for reassurance"]
+        },
+        {
+          "case_id": "I3R1-INC-04",
+          "label": "来週空いてる",
+          "incoming_message": "来週空いてる？",
+          "expected_decision": "reply_now",
+          "response_obligation": "direct answer required",
+          "invitation_specificity": "concrete availability question",
+          "expected_draft_behavior": "Answer with the supplied Tuesday and Thursday availability, then retain the candidate's measured warmth.",
+          "forbidden_overreading": ["confirmed date", "unavailable times", "romantic certainty"]
+        },
+        {
+          "case_id": "I3R1-INC-05",
+          "label": "今日はありがとう楽しかった",
+          "incoming_message": "今日はありがとう。楽しかった",
+          "expected_decision": "reply_now",
+          "response_obligation": "reasonable reciprocal acknowledgement",
+          "invitation_specificity": "none",
+          "expected_draft_behavior": "Return thanks and proportionate warmth; keep the candidate's interest tentative rather than claiming a plan.",
+          "forbidden_overreading": ["invitation already made", "romantic confession", "guaranteed next meeting"]
+        },
+        {
+          "case_id": "I3R1-INC-06",
+          "label": "また連絡するね",
+          "incoming_message": "また連絡するね",
+          "expected_decision": "wait_and_reassess",
+          "response_obligation": "no reasonable response obligation; the other person states the next-contact action",
+          "invitation_specificity": "none",
+          "expected_draft_behavior": "Do not send the fixed candidate tonight and do not turn the other person's next action into a user-led follow-up.",
+          "forbidden_overreading": ["promise of a date", "permission to chase", "rejection", "explicit no-contact boundary"]
+        },
+        {
+          "case_id": "I3R1-INC-07",
+          "label": "明るい絵文字感嘆符を含む誘い",
+          "incoming_message": "またごはん行こう！😊",
+          "expected_decision": "reply_now",
+          "response_obligation": "reasonable acknowledgement of an expressive invitation",
+          "invitation_specificity": "open and direct",
+          "expected_draft_behavior": "Answer the invitation warmly while preserving the candidate's no-emoji style unless the user supplied emoji evidence elsewhere.",
+          "forbidden_overreading": ["emoji mirroring requirement", "relationship certainty", "higher intimacy than the words support"]
+        },
+        {
+          "case_id": "I3R1-INC-08",
+          "label": "短く事務的な予定確認",
+          "incoming_message": "来週火曜19時で大丈夫ですか？",
+          "expected_decision": "reply_now",
+          "response_obligation": "direct practical answer required",
+          "invitation_specificity": "specific schedule confirmation",
+          "expected_draft_behavior": "Confirm Tuesday at 19:00 directly and concisely; do not append an unrelated emotional paragraph.",
+          "forbidden_overreading": ["coldness", "loss of interest", "need for emotional reassurance"]
+        }
+      ]
+    },
+    "PRECEDENCE_INTERSECTION": {
+      "control": {
+        "incoming_message": "今日はありがとう。来週もまたごはんに行かない？",
+        "incoming_state": "meaningful_unanswered_direct_message_with_reasonable_response_expectation",
+        "consultation_purpose": "相手への返信文を整える",
+        "safety": "normal_allowed",
+        "boundary": "none",
+        "expected_decision": "reply_now"
+      },
+      "cases": [
+        {
+          "case_id": "I3R1-PRI-01",
+          "label": "work_senior_plus_casual_candidate",
+          "relationship_dimensions": {"romantic_stage": "none", "social_role": "work_contact", "hierarchy": "user_is_junior", "familiarity": "developing", "communication_context": "work", "observed_register": "mixed"},
+          "candidate": "ありがとう！また行こう！",
+          "candidate_style_focus": ["short", "bright", "casual"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve brevity and bright energy", "make only the register adjustment justified by explicit hierarchy and observed mixed speech", "keep invitation low pressure"],
+          "forbidden_resolution": ["rigid business letter", "unchanged hierarchy-breaking casualness", "added personal intimacy"],
+          "human_review_questions": ["Is the register correction narrowly justified?", "Does the result still resemble the candidate?"]
+        },
+        {
+          "case_id": "I3R1-PRI-02",
+          "label": "partner_plus_polite_candidate",
+          "relationship_dimensions": {"romantic_stage": "partner", "social_role": "other", "hierarchy": "none", "familiarity": "established", "communication_context": "private", "observed_register": "polite"},
+          "candidate": "こちらこそありがとうございました。またぜひ行きたいです。",
+          "candidate_style_focus": ["polite", "measured", "no emoji"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve polite register", "retain measured warmth", "use established context without casualizing"],
+          "forbidden_resolution": ["partner-equals-casual rewrite", "invented pet name", "affection inflation"],
+          "human_review_questions": ["Does the output respect the couple's observed polite style?", "Is partner status used only for distance calibration?"]
+        },
+        {
+          "case_id": "I3R1-PRI-03",
+          "label": "former_partner_plus_restrained_emoji_candidate",
+          "relationship_dimensions": {"romantic_stage": "former_partner", "social_role": "other", "hierarchy": "none", "familiarity": "former", "communication_context": "private", "observed_register": "casual"},
+          "candidate": "こちらこそありがとう。また行けたらうれしい🙂",
+          "candidate_style_focus": ["casual", "soft", "one emoji"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve restrained emoji if otherwise safe", "retain tentative interest", "keep purpose and boundaries clear"],
+          "forbidden_resolution": ["reconciliation implication", "nostalgic escalation", "mechanical emoji deletion"],
+          "human_review_questions": ["Is the emoji treated as style rather than reconciliation evidence?", "Does the reply stay within the received invitation?"]
+        },
+        {
+          "case_id": "I3R1-PRI-04",
+          "label": "close_friend_plus_formal_candidate",
+          "relationship_dimensions": {"romantic_stage": "none", "social_role": "close_friend", "hierarchy": "peer", "familiarity": "established", "communication_context": "private", "observed_register": "mixed"},
+          "candidate": "本日はありがとうございました。また機会を設けられれば幸いです。",
+          "candidate_style_focus": ["formal", "longer ending", "no emoji"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve intentional formality if it is the supplied persona", "lightly remove only unnatural business stiffness", "retain gratitude and invitation"],
+          "forbidden_resolution": ["automatic casual rewrite", "business memo expansion", "romantic framing"],
+          "human_review_questions": ["Can the candidate remain formally playful or idiosyncratic?", "Was only genuine unnaturalness corrected?"]
+        },
+        {
+          "case_id": "I3R1-PRI-05",
+          "label": "matching_app_plus_apology_heavy_candidate",
+          "relationship_dimensions": {"romantic_stage": "new_acquaintance", "social_role": "acquaintance", "hierarchy": "peer", "familiarity": "early", "communication_context": "matching_app", "observed_register": "neutral_polite"},
+          "candidate": "遅くなって本当にすみません。申し訳ないのですが、こちらこそありがとうございました。また行けたらうれしいです。",
+          "candidate_style_focus": ["polite", "soft", "apology heavy"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["retain one proportionate delay acknowledgement", "preserve polite softness", "keep tentative interest"],
+          "forbidden_resolution": ["duplicate self-blame", "cold deletion of all warmth", "immediate scheduling pressure"],
+          "human_review_questions": ["Was the defect reduced without erasing the user's careful tone?", "Does the early-stage distance remain appropriate?"]
+        },
+        {
+          "case_id": "I3R1-PRI-06",
+          "label": "first_meeting_plus_expressive_candidate",
+          "relationship_dimensions": {"romantic_stage": "none", "social_role": "acquaintance", "hierarchy": "peer", "familiarity": "first_contact", "communication_context": "private", "observed_register": "mixed"},
+          "candidate": "今日はありがとう！！めっちゃ楽しかった！また絶対行こう！",
+          "candidate_style_focus": ["expressive", "casual", "direct"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve brightness and casual energy", "reduce only absolute pressure", "keep the invitation proportionate to a first meeting"],
+          "forbidden_resolution": ["flat formal rewrite", "multiple new intimacy signals", "certainty about future meeting"],
+          "human_review_questions": ["Does it still sound lively?", "Was pressure lowered without treating expressiveness as a defect?"]
+        },
+        {
+          "case_id": "I3R1-PRI-07",
+          "label": "work_junior_plus_polite_candidate",
+          "relationship_dimensions": {"romantic_stage": "none", "social_role": "work_contact", "hierarchy": "user_is_senior", "familiarity": "developing", "communication_context": "work", "observed_register": "polite"},
+          "candidate": "こちらこそありがとうございました。ご都合が合えば、またぜひお願いします。",
+          "candidate_style_focus": ["polite", "tentative", "low pressure"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve polite register", "retain low pressure", "avoid using seniority to make the invitation obligatory"],
+          "forbidden_resolution": ["patronizing casualization", "command form", "status-based warmth"],
+          "human_review_questions": ["Does the user avoid authority pressure?", "Is the candidate's own polite style preserved rather than corrected away?"]
+        },
+        {
+          "case_id": "I3R1-PRI-08",
+          "label": "ambiguous_relationship_plus_flirty_candidate",
+          "relationship_dimensions": {"romantic_stage": "ambiguous", "social_role": "friend", "hierarchy": "peer", "familiarity": "developing", "communication_context": "private", "observed_register": "casual"},
+          "candidate": "昨日すごく楽しかった！またすぐ会いたいな☺️",
+          "candidate_style_focus": ["casual", "flirty", "one emoji", "direct interest"],
+          "expected_decision": "reply_now",
+          "required_resolution": ["preserve playful interest and one emoji", "avoid converting interest into mutual romantic certainty", "keep the invitation low pressure"],
+          "forbidden_resolution": ["erasing all flirtation", "declaring mutual feelings", "relationship-label certainty"],
+          "human_review_questions": ["Is the user allowed to sound interested without the system inventing reciprocity?", "Does ambiguity cap certainty rather than erase persona?"]
+        }
+      ]
+    }
+  }
+}

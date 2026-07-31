@@ -1,0 +1,188 @@
+{
+  "schema_version": "m2-p4-i3-r1-relationship-taxonomy-v1",
+  "task_id": "M2-P4-I3-R1-PLAN",
+  "status": "planning_only",
+  "purpose": "Represent wording-relevant relationship context without allowing relationship labels to choose or override an application-owned decision.",
+  "decision_policy_boundary": "Relationship dimensions may adjust wording only. They must not select, widen, narrow, or override the application-owned decision Policy.",
+  "wording_effects": [
+    "register",
+    "distance",
+    "intimacy",
+    "affection_display",
+    "invitation_strength",
+    "question_addition",
+    "boundary_caution"
+  ],
+  "axes": {
+    "romantic_stage": {
+      "definition": "The explicitly supported romantic stage between the user and the other person, independent of social role or familiarity.",
+      "allowed_values": {
+        "none": "No romantic frame is supplied or applicable.",
+        "new_acquaintance": "The parties have only recently met in a potentially romantic context.",
+        "dating_before_relationship": "They are meeting romantically but no relationship is established.",
+        "ambiguous": "A romantic possibility is raised but the stage is explicitly unclear.",
+        "partner": "An established partner relationship is explicitly supplied.",
+        "former_partner": "A former romantic relationship is explicitly supplied.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit user statement about current or former relationship status",
+        "an application-owned broad relationship chip",
+        "a typed fact with source references that unambiguously states the stage"
+      ],
+      "prohibited_inference": [
+        "inferring a relationship from affectionate wording alone",
+        "inferring reconciliation intent from former-partner status",
+        "inferring exclusivity, commitment, or mutual romantic interest without explicit evidence"
+      ],
+      "effect_on_wording": [
+        "calibrate affection and invitation strength",
+        "set an evidence-based ceiling on romantic certainty",
+        "increase boundary care for former or ambiguous stages"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and use candidate voice, incoming register, purpose, and a neutral fallback without inventing romance."
+    },
+    "social_role": {
+      "definition": "The non-romantic social role that best describes how the parties know each other.",
+      "allowed_values": {
+        "stranger": "No prior relationship is supplied.",
+        "acquaintance": "They know each other lightly but are not described as friends.",
+        "friend": "A friendship is explicitly supplied.",
+        "close_friend": "An established close friendship is explicitly supplied.",
+        "work_contact": "Their relationship materially involves work.",
+        "school_contact": "Their relationship materially involves school or study.",
+        "other": "A supported role exists outside the listed values.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit description of how the parties know each other",
+        "a broad relationship chip",
+        "typed work or school context tied to source references"
+      ],
+      "prohibited_inference": [
+        "treating frequent contact as close friendship",
+        "treating work contact as formal hierarchy",
+        "treating a broad romantic chip as a complete social role"
+      ],
+      "effect_on_wording": [
+        "calibrate social distance and topic framing",
+        "avoid business-letter tone for a close friend",
+        "avoid unsupported personal warmth in work or school contexts"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and do not manufacture a role; prefer observed register and neutral distance."
+    },
+    "hierarchy": {
+      "definition": "The explicitly supported relative seniority or authority relevant to wording.",
+      "allowed_values": {
+        "user_is_junior": "The user is junior or subordinate in the relevant context.",
+        "peer": "No material hierarchy is supplied between the parties.",
+        "user_is_senior": "The user is senior or has greater authority in the relevant context.",
+        "none": "Hierarchy is not applicable to this relationship.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "explicit senior, junior, manager, report, teacher, student, or cohort wording",
+        "an application-owned typed role fact with source references",
+        "a directly stated peer relationship"
+      ],
+      "prohibited_inference": [
+        "inferring hierarchy from age, gender, or writing confidence",
+        "inferring hierarchy from work context alone",
+        "inferring rigid honorific language when established communication is casual"
+      ],
+      "effect_on_wording": [
+        "calibrate deference, concision, and request softness",
+        "avoid pressure when the user has greater authority",
+        "avoid sudden casual speech when the user is junior unless candidate and observed register support it"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown; do not guess status. Use candidate and observed register, then neutral polite wording if evidence is absent."
+    },
+    "familiarity": {
+      "definition": "How established the relationship and its communication patterns are, independent of romance and hierarchy.",
+      "allowed_values": {
+        "first_contact": "This is the first known direct contact or meeting.",
+        "early": "Only limited prior interaction is supplied.",
+        "developing": "Repeated interaction exists but the pattern is not fully established.",
+        "established": "A stable communication relationship is explicitly supported.",
+        "former": "The prior relationship is no longer current.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "explicit first-contact or first-meeting statements",
+        "a supplied duration or repeated-contact description",
+        "a stated prior relationship that has ended"
+      ],
+      "prohibited_inference": [
+        "equating message frequency with emotional closeness",
+        "equating a long acquaintance with permission for intimacy",
+        "equating former familiarity with current access or consent"
+      ],
+      "effect_on_wording": [
+        "calibrate assumed shared context",
+        "control explanation length and conversational shorthand",
+        "reduce unsupported familiarity in early or former relationships"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and avoid both artificial distance and invented shared history."
+    },
+    "communication_context": {
+      "definition": "The channel or setting that materially constrains how the message should sound.",
+      "allowed_values": {
+        "matching_app": "The exchange occurs in a matching application.",
+        "private": "The exchange is a private personal message.",
+        "work": "The exchange materially concerns or occurs through work.",
+        "school": "The exchange materially concerns or occurs through school or study.",
+        "mixed": "More than one context materially applies.",
+        "other": "A supported context exists outside the listed values.",
+        "unknown": "The available evidence does not support a value."
+      },
+      "permitted_evidence": [
+        "an explicit channel or setting statement",
+        "the application-owned broad relationship chip",
+        "typed work, school, or matching-app context with source references"
+      ],
+      "prohibited_inference": [
+        "inferring private intimacy from a private channel",
+        "inferring formality from a work channel without observing register",
+        "inferring romantic intent from a matching-app context"
+      ],
+      "effect_on_wording": [
+        "calibrate practical detail and channel-appropriate length",
+        "avoid excessive personal warmth in work contexts",
+        "avoid stiff institutional language in ordinary private exchanges"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Retain unknown and avoid channel-specific assumptions."
+    },
+    "observed_register": {
+      "definition": "The register directly observed in the candidate and incoming message, without treating consultation prose as messaging style.",
+      "allowed_values": {
+        "polite": "Consistently polite or honorific messaging is observed.",
+        "neutral_polite": "Ordinary polite messaging without strong formality is observed.",
+        "casual": "Consistently casual messaging is observed.",
+        "mixed": "Polite and casual forms are materially mixed.",
+        "unknown": "No reliable messaging sample supports a value."
+      },
+      "permitted_evidence": [
+        "user_supplied_optional_message",
+        "the actual incoming message",
+        "an explicit statement about usual messaging style"
+      ],
+      "prohibited_inference": [
+        "using the consultation narrative's explanatory register",
+        "deriving register from relationship chip alone",
+        "normalizing mixed or casual evidence into generic polite prose"
+      ],
+      "effect_on_wording": [
+        "preserve polite, casual, or mixed speech when supported",
+        "match sentence endings and conversational distance",
+        "break ties between broad relationship expectations and actual messaging evidence"
+      ],
+      "must_not_affect": "The application-owned decision Policy or its allowed decision set.",
+      "unknown_handling": "Use the candidate if present, otherwise match the incoming message conservatively, then fall back to neutral polite wording."
+    }
+  }
+}

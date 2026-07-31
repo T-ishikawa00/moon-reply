@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Human / ChatGPT accepted; I3 implementation review pending; Milestone 2 remains incomplete
+Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Human / ChatGPT accepted; I3 offline implementation accepted and one synthetic live smoke succeeded, while final I3 acceptance / main merge remain pending; I3-R1 planning authorized; Milestone 2 remains incomplete
 
 ## Completed Through
 
@@ -62,18 +62,21 @@ Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Hum
 - M2-P4-I1-B Runtime Typed-Facts Integration Human / ChatGPT accepted and complete at accepted implementation commit `9588c8fd6ab47c265f5f661d4473a29d73885427`; its immutable historical implementation snapshot is `554d2cb5a2f816ac82edf3cc247458fe34a4a74c..9588c8fd6ab47c265f5f661d4473a29d73885427`
 - M2-P4-I1-C and R1 through R4 Human / ChatGPT accepted and complete; accepted stack commit `b523349ec33c36a90c645d4a1b7a6d37832af151`; immutable historical snapshot `c27120eea067f91c5e9ef4447e382f55a329e158..b523349ec33c36a90c645d4a1b7a6d37832af151`; exact accepted stack `27/27`
 - M2-P4-I2 Human / ChatGPT accepted and complete at implementation commit `410714875903ae61b5bcdc6cce90030f5679b3b3`; immutable historical snapshot `20d4178e3a63026128f3a25d052196c7161e7e27..410714875903ae61b5bcdc6cce90030f5679b3b3`; exact implementation scope `16/16`
-- M2-P4-I3 explicitly authorized from baseline `61e33a10e195fad17e253a6b9719217e1992f273`; exact 19-path implementation complete with Human / ChatGPT review pending
+- M2-P4-I3 explicitly authorized from baseline `61e33a10e195fad17e253a6b9719217e1992f273`; exact 19-path implementation offline accepted at `c85d6d122ad71569532a55887b9a3b6d93f8a288`; one separately Human-authorized synthetic live smoke succeeded; final I3 acceptance and merge to `main` remain pending
+- M2-P4-I3-R1 Relationship & Voice Fidelity planning explicitly authorized from `c85d6d122ad71569532a55887b9a3b6d93f8a288`; implementation is not authorized
 
 ## Current Work
 
-M2-P4-I3 PB-04 / PB-05 / PB-06 Product Quality Revision — implementation complete; Human / ChatGPT review pending
+M2-P4-I3-R1 Relationship & Voice Fidelity Planning Package — planning in progress; Human / ChatGPT planning review pending
 
 State:
 
-- M2-P4-I3 is implemented on `feat/m2-p4-i3-product-quality-revision` from exact baseline `61e33a10e195fad17e253a6b9719217e1992f273` within the exact authorized 19 paths; its capability status is `implementation_pending_human_chatgpt_review`;
+- M2-P4-I3 is implemented on `feat/m2-p4-i3-product-quality-revision` from exact baseline `61e33a10e195fad17e253a6b9719217e1992f273` within the exact authorized 19 paths and is offline accepted at `c85d6d122ad71569532a55887b9a3b6d93f8a288`; its immutable capability record remains `implementation_pending_human_chatgpt_review` because final I3 acceptance and merge to `main` are still pending;
 - runtime v4 advances only PB-04 to v3, PB-05 to v3, and PB-06 to v2; output Schemas remain unchanged under `pipeline-schema-runtime-v3.0.0`, and PB-01 through PB-03, decision Policy, Safety, I2 renderer, API, Supabase, migrations, development/holdout datasets, and package files remain unchanged;
 - v4 alone passes the raw unsent optional candidate and selected topics directly to PB-04/PB-05/PB-06. PB-04 preserves user wording through the smallest useful copy-ready edit and case-specific before-send/send/after-send planning; PB-05 assigns distinct field responsibilities with a calm adult consultation voice; PB-06 keeps material major/critical defects fail-closed while defaulting ordinary tone/genericity/repetition findings to nonblocking minor;
-- task-time OpenAI calls, DB operations, migrations, holdout use, real-user data, and paid execution are `0`. Provider-backed quality is not run, achieved rubric score is none, E1 is not started, and Milestone 2 remains incomplete;
+- I3 task-time OpenAI calls, DB operations, migrations, holdout use, real-user data, and paid execution were `0`. Separately, one Human-authorized synthetic live smoke succeeded and showed major improvement; it is not a rubric run or final I3 acceptance, and its nonzero provider usage is not aggregated here;
+- remaining live-output issues are repetition, irrelevant heavy change conditions, AI-facing user actions, insufficient explanation of candidate-edit value, persona preservation, relationship-aware wording, and nuance contrast coverage;
+- I3-R1 planning is explicitly authorized to fix the relationship and voice-fidelity evaluation boundary, exact 32-case synthetic contrast suite, and proposed typed `writing_context`; Runtime, Prompt, Schema, Policy, UI, provider execution, E1, and holdout work remain unauthorized;
 - M2-P4-I2 is accepted at `410714875903ae61b5bcdc6cce90030f5679b3b3` with the immutable exact 16-path renderer/internal-static-preview and historical-verifier compatibility snapshot `20d4178e3a63026128f3a25d052196c7161e7e27..410714875903ae61b5bcdc6cce90030f5679b3b3`; its status is `human_chatgpt_accepted_complete`;
 - I2 makes the selected `form.requestedTopics` visible in input order, prioritizes the cover answer followed by draft and tonight actions, integrates six hidden fields, records `unknowns_commentary` only as a versioned successor-Schema deprecation candidate, and removes renderer-only duplicate conclusion/temperature sections;
 - `/review/runtime/i2` is a production-disabled, environment-gated, noindex/nofollow fictional fixed preview. Desktop and 399px mobile Human Visual QA passed with horizontal overflow `0`, content clipping `0`, tonight-answer visibility, draft priority, tonight-action hierarchy, selected-intent visibility, responsive three-day timeline, and footer rendering all confirmed. OpenAI calls, DB operations, migrations, holdout use, and real-user data remain `0`;
@@ -229,7 +232,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Milestone 1 is closed and M2-P3 is complete; Milestone 2 remains incomplete. M2-P4 planning and I1-A through I2 are Human / ChatGPT accepted and complete. I1-C remains the immutable exact 27-path snapshot ending at `b523349ec33c36a90c645d4a1b7a6d37832af151`; I2 is the immutable exact 16-path snapshot ending at `410714875903ae61b5bcdc6cce90030f5679b3b3`. I3's exact 19-path implementation is complete with Human / ChatGPT review pending. Provider-backed quality, a rubric score, synthetic live smoke, DB SELECT verification, E1/E2, and release remain unperformed or unauthorized as separately stated.
+Milestone 1 is closed and M2-P3 is complete; Milestone 2 remains incomplete. M2-P4 planning and I1-A through I2 are Human / ChatGPT accepted and complete. I1-C remains the immutable exact 27-path snapshot ending at `b523349ec33c36a90c645d4a1b7a6d37832af151`; I2 is the immutable exact 16-path snapshot ending at `410714875903ae61b5bcdc6cce90030f5679b3b3`. I3's exact 19-path implementation is offline accepted at `c85d6d122ad71569532a55887b9a3b6d93f8a288`, and one synthetic live smoke succeeded with major improvement, but final I3 acceptance and merge to `main` remain pending. The active authorized slice is I3-R1 planning only. Runtime implementation, a scored provider diagnostic, E1/E2, holdout, release, and Milestone 2 completion remain unauthorized or incomplete as separately stated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

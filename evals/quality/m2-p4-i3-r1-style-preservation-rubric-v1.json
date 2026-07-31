@@ -1,0 +1,168 @@
+{
+  "schema_version": "m2-p4-i3-r1-style-preservation-rubric-v1",
+  "task_id": "M2-P4-I3-R1-PLAN",
+  "status": "planning_only",
+  "achieved_score_claimed": false,
+  "candidate_source": "user_supplied_optional_message_only",
+  "excluded_style_source": "consultation narrative prose",
+  "candidate_style_dimensions": [
+    {
+      "code": "register",
+      "allowed_values": ["polite", "neutral_polite", "casual", "mixed"],
+      "preservation_rule": "Do not change polite speech to casual speech or casual speech to polite speech without concrete relationship or comprehension evidence."
+    },
+    {
+      "code": "sentence_length",
+      "allowed_values": ["terse", "short", "medium", "long"],
+      "preservation_rule": "Keep the user's usual compactness or elaboration, trimming only material over-explanation or adding only content required to answer the incoming message."
+    },
+    {
+      "code": "sentence_ending",
+      "allowed_values": ["formal", "neutral", "soft", "playful", "mixed"],
+      "preservation_rule": "Keep recognizable sentence-ending energy unless it creates unsupported intimacy, hierarchy mismatch, or pressure."
+    },
+    {
+      "code": "punctuation",
+      "allowed_values": ["sparse", "standard", "expressive"],
+      "preservation_rule": "Do not materially increase or flatten punctuation energy."
+    },
+    {
+      "code": "emoji_usage",
+      "allowed_values": ["none", "restrained", "frequent"],
+      "preservation_rule": "Do not add emoji when absent and do not mechanically remove supported restrained or frequent usage."
+    },
+    {
+      "code": "exclamation_usage",
+      "allowed_values": ["none", "restrained", "frequent"],
+      "preservation_rule": "Preserve the candidate's level unless it materially creates pressure or relationship mismatch."
+    },
+    {
+      "code": "softness",
+      "allowed_values": ["low", "medium", "high"],
+      "preservation_rule": "Do not raise or lower warmth without evidence; reduce only softness that obscures purpose or becomes excessive apology."
+    },
+    {
+      "code": "directness",
+      "allowed_values": ["indirect", "balanced", "direct"],
+      "preservation_rule": "Preserve the user's directness while removing coercion and answering any concrete incoming question."
+    },
+    {
+      "code": "invitation_style",
+      "allowed_values": ["none", "tentative", "direct", "practical"],
+      "preservation_rule": "Do not invent, suppress, or escalate an invitation without purpose and relationship evidence."
+    },
+    {
+      "code": "reply_pressure",
+      "allowed_values": ["low", "medium", "high"],
+      "preservation_rule": "Pressure is not a protected persona trait; reduce high pressure to the minimum level consistent with the user's purpose."
+    }
+  ],
+  "preservation_principles": [
+    "Do not automatically convert casual speech to polite speech.",
+    "Do not automatically convert polite speech to casual speech.",
+    "Do not add emoji without evidence.",
+    "Do not mechanically delete all emoji.",
+    "Do not materially change punctuation or exclamation patterns.",
+    "Do not raise the candidate's emotional temperature without support.",
+    "Do not weaken expressed interest or invitation without support.",
+    "Lightly reduce over-explanation, excessive apology, or pressure when needed.",
+    "Do not preserve typos or unnatural phrasing as persona."
+  ],
+  "score_scale": {
+    "minimum": 1,
+    "maximum": 5,
+    "anchors": {
+      "1": "Material failure; unusable and inconsistent with supplied relationship or persona evidence.",
+      "2": "Major correction required; recognizable evidence is overridden or important content is missed.",
+      "3": "Understandable but generic, uneven, or only partially faithful.",
+      "4": "Strong, natural, and practically usable with no material fidelity gap.",
+      "5": "Exceptional fidelity and usefulness; the result sounds recognizably like the user while fitting the relationship and purpose."
+    }
+  },
+  "evaluation_axes": [
+    {
+      "code": "relationship_fit",
+      "definition": "Wording fits the supplied relationship dimensions without relying on a stereotype."
+    },
+    {
+      "code": "persona_preservation",
+      "definition": "The draft remains recognizably continuous with the candidate's voice after necessary corrections."
+    },
+    {
+      "code": "incoming_message_fit",
+      "definition": "The draft answers the actual content, question, temperature, and response obligation of the incoming message."
+    },
+    {
+      "code": "hierarchy_fit",
+      "definition": "Register, request form, and pressure fit the explicitly supported hierarchy."
+    },
+    {
+      "code": "intimacy_control",
+      "definition": "The draft neither inflates nor suppresses intimacy without evidence."
+    },
+    {
+      "code": "purpose_fulfillment",
+      "definition": "The draft materially accomplishes the user's stated immediate sending purpose."
+    },
+    {
+      "code": "candidate_meaning_fidelity",
+      "definition": "The candidate's intended meaning, interest, boundaries, and ask survive the edit."
+    },
+    {
+      "code": "naturalness",
+      "definition": "The Japanese reads as a plausible personal message rather than an AI template or business report."
+    },
+    {
+      "code": "copy_meaning_fidelity",
+      "definition": "The copy-ready draft is semantically consistent with the recommended decision and the explanation of why it should be sent."
+    },
+    {
+      "code": "copy_readiness",
+      "definition": "The draft can be copied with no missing answer, placeholder, meta-instruction, or AI-facing text."
+    },
+    {
+      "code": "non_stereotyping",
+      "definition": "The output does not derive register, intimacy, reconciliation, or authority from a coarse relationship label."
+    },
+    {
+      "code": "jpy_980_value",
+      "definition": "The relationship-aware reasoning, faithful edit, and usable copy provide specific value appropriate to a JPY 980 one-off report."
+    }
+  ],
+  "hard_fail_codes": [
+    "UNJUSTIFIED_REGISTER_SHIFT",
+    "PERSONA_DISCONTINUITY",
+    "HIERARCHY_MISMATCH",
+    "UNSUPPORTED_INTIMACY_INCREASE",
+    "UNSUPPORTED_INTIMACY_DECREASE",
+    "CANDIDATE_MEANING_CHANGED",
+    "RELATIONSHIP_STEREOTYPE",
+    "INCOMING_QUESTION_UNANSWERED",
+    "RELATIONSHIP_ONLY_WRONG_DECISION",
+    "OPTIONAL_MESSAGE_IGNORED"
+  ],
+  "hard_fail_definitions": {
+    "UNJUSTIFIED_REGISTER_SHIFT": "The draft changes the candidate's supported register without a concrete need.",
+    "PERSONA_DISCONTINUITY": "The edited draft no longer sounds recognizably continuous with the candidate.",
+    "HIERARCHY_MISMATCH": "The draft ignores or reverses an explicitly supported hierarchy constraint.",
+    "UNSUPPORTED_INTIMACY_INCREASE": "The draft adds closeness, affection, certainty, invitation strength, or familiarity without support.",
+    "UNSUPPORTED_INTIMACY_DECREASE": "The draft unnecessarily removes supported warmth, interest, invitation, or established familiarity.",
+    "CANDIDATE_MEANING_CHANGED": "The edit materially changes the candidate's intended meaning, boundary, interest, or ask.",
+    "RELATIONSHIP_STEREOTYPE": "The draft relies on a coarse label, such as partner, former partner, or senior, instead of supplied evidence.",
+    "INCOMING_QUESTION_UNANSWERED": "The incoming message contains a concrete answerable question that the draft does not answer.",
+    "RELATIONSHIP_ONLY_WRONG_DECISION": "Changing only relationship context changes the application-owned expected decision.",
+    "OPTIONAL_MESSAGE_IGNORED": "A supplied candidate is replaced by generic prose rather than used as the primary persona source."
+  },
+  "future_acceptance_proposal": {
+    "status": "not_run",
+    "hard_fail_count": 0,
+    "relationship_fit_minimum_for_every_relationship_contrast_case": 4,
+    "persona_preservation_minimum_for_every_candidate_present_case": 4,
+    "candidate_meaning_fidelity_minimum_for_every_candidate_present_case": 4,
+    "hierarchy_fit_minimum_for_every_hierarchy_case": 4,
+    "overall_average_minimum": 4.2,
+    "round_up_to_pass": false,
+    "exact_expected_decision_for_all_decision_scored_cases": true,
+    "holdout_use": 0
+  }
+}
