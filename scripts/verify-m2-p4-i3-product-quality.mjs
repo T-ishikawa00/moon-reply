@@ -31,6 +31,39 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const acceptedImplementationSha =
+  "c85d6d122ad71569532a55887b9a3b6d93f8a288";
+const layer1PlanningSha = "ec7cd53884ab4056c78d2596c609baef5701274a";
+const acceptedPlanningSha = "3c64e5e2179b4c03979119068716326337a002c6";
+const r1aBaselineSha = "e5cfd903740267db6d070964a9ec72a7d823f310";
+const exactPlanningAcceptanceSyncPaths = [
+  "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1APaths = [
+  "lib/assessment/runtime/contracts/writing-context-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+  "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+  "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+  "evals/runtime/m2-p4-i3-r1-a-schema-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-contract-fixtures-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const stageIds = ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
 const promptPaths = {
   "PB-04":
@@ -138,7 +171,72 @@ gitText(["cat-file", "-e", `${baselineSha}^{commit}`]);
 gitText(["merge-base", "--is-ancestor", baselineSha, "HEAD"]);
 assert.equal(exactPaths.length, 19);
 assert.equal(new Set(exactPaths).size, 19);
-assert.equal(isExactLiteralSet(currentTaskPaths(), exactPaths), true);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(baselineSha, acceptedImplementationSha),
+    exactPaths,
+  ),
+  true,
+);
+const layer1PlanningManifest = json(
+  "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json",
+);
+const finalPlanningManifest = json(
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(acceptedImplementationSha, layer1PlanningSha),
+    layer1PlanningManifest.exact_mutation_paths,
+  ),
+  true,
+);
+assert.equal(layer1PlanningManifest.exact_mutation_path_count, 9);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(layer1PlanningSha, acceptedPlanningSha),
+    finalPlanningManifest.exact_mutation_paths,
+  ),
+  true,
+);
+assert.equal(finalPlanningManifest.planning_snapshot.exact_paths, 12);
+assert.equal(finalPlanningManifest.planning_snapshot.immutable_snapshot, true);
+assert.equal(
+  isExactLiteralSet(
+    [...finalPlanningManifest.exact_mutation_paths, exactR1APaths[0]],
+    finalPlanningManifest.exact_mutation_paths,
+  ),
+  false,
+);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(acceptedPlanningSha, r1aBaselineSha),
+    exactPlanningAcceptanceSyncPaths,
+  ),
+  true,
+);
+assert.equal(
+  isExactLiteralSet(currentTaskPaths(r1aBaselineSha), exactR1APaths),
+  true,
+);
+assert.equal(exactR1APaths.length, 18);
+for (const unauthorizedPath of [
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "ai/schemas/unauthorized.schema.json",
+  "ai/prompts/unauthorized.developer.md",
+  "components/Unauthorized.tsx",
+  "app/unauthorized/page.tsx",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+]) {
+  assert.equal(
+    isExactLiteralSet([...exactR1APaths, unauthorizedPath], exactR1APaths),
+    false,
+  );
+}
 assert.equal(
   isExactLiteralSet([...exactPaths, "ai/schemas/unauthorized.schema.json"], exactPaths),
   false,
@@ -823,6 +921,9 @@ assert.equal(serviceSource.includes("model: environment.openAiModel"), true);
 assert.equal(environmentSource.includes('model !== "gpt-5.6-luna"'), true);
 
 console.log("M2_P4_I3_PRODUCT_QUALITY: PASS");
+console.log("accepted_planning_snapshot: 12/12");
+console.log("planning_acceptance_sync_scope: 6/6");
+console.log("r1_a_successor_exact_scope: 18/18");
 console.log("prompt_bundle: runtime-v4");
 console.log("schemas_changed: 0");
 console.log("ui_changed: 0");

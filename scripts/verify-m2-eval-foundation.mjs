@@ -260,6 +260,52 @@ const m2p4I3ExactPaths = new Set([
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ]);
+const m2p4I3ImplementationCommit =
+  "c85d6d122ad71569532a55887b9a3b6d93f8a288";
+const m2p4I3R1Layer1PlanningCommit =
+  "ec7cd53884ab4056c78d2596c609baef5701274a";
+const m2p4I3R1AcceptedPlanningCommit =
+  "3c64e5e2179b4c03979119068716326337a002c6";
+const m2p4I3R1ABaselineCommit =
+  "e5cfd903740267db6d070964a9ec72a7d823f310";
+const m2p4I3R1PlanningCapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json";
+const m2p4I3R1FinalPlanningCapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json";
+const m2p4I3R1PlanningAcceptanceSyncPaths = new Set([
+  "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
+  m2p4I3R1FinalPlanningCapabilityManifestPath,
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1AVerifierPath =
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs";
+const m2p4I3R1AVerifierImportPaths = new Set([
+  "lib/assessment/runtime/contracts/writing-context-v1.ts",
+  "lib/assessment/runtime/openai-schema.ts",
+]);
+const m2p4I3R1AExactPaths = new Set([
+  "lib/assessment/runtime/contracts/writing-context-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+  "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+  "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+  "evals/runtime/m2-p4-i3-r1-a-schema-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-contract-fixtures-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  m2p4I3R1AVerifierPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 const m2p4I1bImplementationPaths = new Set([
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -362,6 +408,7 @@ const successorLocalToolPaths = new Set([
   m2p4I1cVerifierPath,
   m2p4I2VerifierPath,
   m2p4I3VerifierPath,
+  m2p4I3R1AVerifierPath,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -3594,6 +3641,50 @@ function currentTaskPaths(startCommit = baseCommit) {
   return [...paths].sort();
 }
 
+function historicalTaskPaths(startCommit, endCommit) {
+  const diff = runGit([
+    "diff",
+    "--name-only",
+    startCommit,
+    endCommit,
+    "--",
+  ]);
+  if (diff.status !== 0) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$",
+      invariant: "historical mutation audit is readable",
+      expected: "git exit 0",
+      actual: diff.stderr || diff.stdout,
+    });
+    return [];
+  }
+  return [
+    ...new Set(
+      diff.stdout
+        .split(/\r?\n/u)
+        .map((item) => item.trim().replaceAll("\\", "/"))
+        .filter(Boolean),
+    ),
+  ].sort();
+}
+
+function isExactLiteralPathSet(paths, expectedPaths) {
+  const expected = [...expectedPaths].sort();
+  return (
+    paths.length === expected.length &&
+    new Set(paths).size === expected.length &&
+    paths.every(
+      (item) =>
+        typeof item === "string" &&
+        item.length > 0 &&
+        !item.includes("*") &&
+        !item.endsWith("/"),
+    ) &&
+    JSON.stringify(paths) === JSON.stringify(expected)
+  );
+}
+
 function moduleSpecifiers(source) {
   const specifiers = [];
   const patterns = [
@@ -3848,6 +3939,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        file === m2p4I3R1AVerifierPath &&
+        ((localImport && m2p4I3R1AVerifierImportPaths.has(localImport)) ||
+          specifier === "ajv/dist/2020.js")
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4087,12 +4185,34 @@ function verifyScopeAndProhibitedImplementation() {
           .filter(Boolean)
           .sort()
       : [];
-  const m2p4I3TaskPaths = currentTaskPaths(m2p4I3BaselineCommit);
+  const m2p4I3TaskPaths = historicalTaskPaths(
+    m2p4I3BaselineCommit,
+    m2p4I3ImplementationCommit,
+  );
+  const m2p4I3R1Layer1PlanningPaths = historicalTaskPaths(
+    m2p4I3ImplementationCommit,
+    m2p4I3R1Layer1PlanningCommit,
+  );
+  const m2p4I3R1FinalPlanningPaths = historicalTaskPaths(
+    m2p4I3R1Layer1PlanningCommit,
+    m2p4I3R1AcceptedPlanningCommit,
+  );
+  const m2p4I3R1PlanningAcceptanceSyncTaskPaths = historicalTaskPaths(
+    m2p4I3R1AcceptedPlanningCommit,
+    m2p4I3R1ABaselineCommit,
+  );
+  const m2p4I3R1ATaskPaths = currentTaskPaths(m2p4I3R1ABaselineCommit);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
   const m2p4I2Manifest = readJson(m2p4I2CapabilityManifestPath);
   const m2p4I3Manifest = readJson(m2p4I3CapabilityManifestPath);
+  const m2p4I3R1Layer1PlanningManifest = readJson(
+    m2p4I3R1PlanningCapabilityManifestPath,
+  );
+  const m2p4I3R1FinalPlanningManifest = readJson(
+    m2p4I3R1FinalPlanningCapabilityManifestPath,
+  );
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4211,6 +4331,106 @@ function verifyScopeAndProhibitedImplementation() {
       expected: expectedM2p4I3TaskPaths,
       actual: m2p4I3TaskPaths,
     });
+  }
+  const declaredLayer1PlanningPaths = Array.isArray(
+    m2p4I3R1Layer1PlanningManifest?.exact_mutation_paths,
+  )
+    ? m2p4I3R1Layer1PlanningManifest.exact_mutation_paths
+    : [];
+  const declaredFinalPlanningPaths = Array.isArray(
+    m2p4I3R1FinalPlanningManifest?.exact_mutation_paths,
+  )
+    ? m2p4I3R1FinalPlanningManifest.exact_mutation_paths
+    : [];
+  const acceptedPlanningBoundariesPass =
+    m2p4I3R1Layer1PlanningManifest?.exact_mutation_path_count === 9 &&
+    isExactLiteralPathSet(
+      m2p4I3R1Layer1PlanningPaths,
+      declaredLayer1PlanningPaths,
+    ) &&
+    m2p4I3R1FinalPlanningManifest?.status ===
+      "human_chatgpt_accepted_complete" &&
+    m2p4I3R1FinalPlanningManifest?.accepted_planning_commit ===
+      m2p4I3R1AcceptedPlanningCommit &&
+    m2p4I3R1FinalPlanningManifest?.planning_snapshot?.exact_paths === 12 &&
+    m2p4I3R1FinalPlanningManifest?.planning_snapshot?.immutable_snapshot ===
+      true &&
+    isExactLiteralPathSet(
+      m2p4I3R1FinalPlanningPaths,
+      declaredFinalPlanningPaths,
+    ) &&
+    isExactLiteralPathSet(
+      m2p4I3R1PlanningAcceptanceSyncTaskPaths,
+      m2p4I3R1PlanningAcceptanceSyncPaths,
+    );
+  if (!acceptedPlanningBoundariesPass) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I3R1FinalPlanningCapabilityManifestPath,
+      pathName: "$.accepted_planning_boundaries",
+      invariant:
+        "M2-P4-I3-R1 planning keeps exact 9-path and 12-path snapshots plus exact 6-path acceptance sync",
+      expected: {
+        layer_1_planning: 9,
+        final_planning: 12,
+        acceptance_sync: 6,
+      },
+      actual: {
+        layer_1_planning: m2p4I3R1Layer1PlanningPaths,
+        final_planning: m2p4I3R1FinalPlanningPaths,
+        acceptance_sync: m2p4I3R1PlanningAcceptanceSyncTaskPaths,
+      },
+    });
+  }
+  if (
+    isExactLiteralPathSet(
+      [...declaredFinalPlanningPaths, m2p4I3R1AExactPaths[0]].sort(),
+      declaredFinalPlanningPaths,
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: m2p4I3R1FinalPlanningCapabilityManifestPath,
+      pathName: "$.planning_snapshot_r1_a_contamination_regression",
+      invariant: "Final Planning rejects every R1-A successor path",
+      expected: "rejected",
+      actual: "accepted",
+    });
+  }
+  if (!isExactLiteralPathSet(m2p4I3R1ATaskPaths, m2p4I3R1AExactPaths)) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "<git>",
+      pathName: "$.m2_p4_i3_r1_a_exact_scope",
+      invariant:
+        "M2-P4-I3-R1-A changes exactly 18 literal paths without prefix or future-path authorization",
+      expected: [...m2p4I3R1AExactPaths].sort(),
+      actual: m2p4I3R1ATaskPaths,
+    });
+  }
+  for (const unauthorizedPath of [
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+    "ai/schemas/unauthorized.schema.json",
+    "ai/prompts/unauthorized.developer.md",
+    "components/runtime/UnauthorizedComponent.tsx",
+    "app/unauthorized/page.tsx",
+    "lib/assessment/runtime/policy-v3.ts",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  ]) {
+    if (
+      isExactLiteralPathSet(
+        [...m2p4I3R1AExactPaths, unauthorizedPath].sort(),
+        m2p4I3R1AExactPaths,
+      )
+    ) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: unauthorizedPath,
+        pathName: "$.m2_p4_i3_r1_a_negative_scope",
+        invariant: "R1-A rejects every non-manifest path",
+        expected: "rejected",
+        actual: "accepted",
+      });
+    }
   }
   if (
     m2p4I3Manifest?.task_id !== "M2-P4-I3" ||
@@ -5125,6 +5345,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p4I1cR4ImplementationPaths.has(item) &&
       !m2p4I2ExactPaths.has(item) &&
       !m2p4I3ExactPaths.has(item) &&
+      !m2p4I3R1AExactPaths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -5160,7 +5381,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I1cR3ImplementationPaths.has(item) ||
       m2p4I1cR4ImplementationPaths.has(item) ||
       m2p4I2ExactPaths.has(item) ||
-      m2p4I3ExactPaths.has(item)
+      m2p4I3ExactPaths.has(item) ||
+      m2p4I3R1AExactPaths.has(item)
     ) {
       continue;
     }

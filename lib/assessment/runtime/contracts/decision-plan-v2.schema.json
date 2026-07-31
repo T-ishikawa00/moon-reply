@@ -1,0 +1,618 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/decision-plan-v2.schema.json",
+  "title": "Moon Reply Decision Plan v2 Candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "selected_decision",
+    "decision_reason_fact_ids",
+    "possible_interpretations",
+    "pre_action_check",
+    "actions_to_take",
+    "actions_to_avoid",
+    "recommended_message_draft",
+    "message_draft_edit_metadata",
+    "aftercare_plan",
+    "change_conditions",
+    "review_timing",
+    "material_unknowns",
+    "model_generated_limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v2.0.0"
+    },
+    "selected_decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "decision_reason_fact_ids": {
+      "$ref": "#/$defs/required_fact_ids"
+    },
+    "possible_interpretations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/possible_interpretation"
+      },
+      "maxItems": 3
+    },
+    "pre_action_check": {
+      "$ref": "#/$defs/pre_action_check"
+    },
+    "actions_to_take": {
+      "$ref": "#/$defs/action_array"
+    },
+    "actions_to_avoid": {
+      "$ref": "#/$defs/action_array"
+    },
+    "recommended_message_draft": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/message_draft"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "message_draft_edit_metadata": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/message_draft_edit_metadata"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aftercare_plan": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/aftercare_item"
+      },
+      "maxItems": 3
+    },
+    "change_conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/change_condition"
+      },
+      "maxItems": 4
+    },
+    "review_timing": {
+      "$ref": "#/$defs/review_timing"
+    },
+    "material_unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/material_unknown"
+      },
+      "maxItems": 4
+    },
+    "model_generated_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "maxItems": 2,
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "enum": [
+              "reply_now",
+              "send_now"
+            ]
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recommended_message_draft": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/message_draft"
+              },
+              {
+                "properties": {
+                  "policy": {
+                    "const": "required_now"
+                  },
+                  "use_timing": {
+                    "const": "now"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "const": "wait_and_reassess"
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recommended_message_draft": {
+            "oneOf": [
+              {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/message_draft"
+                  },
+                  {
+                    "properties": {
+                      "policy": {
+                        "const": "later_only"
+                      },
+                      "use_timing": {
+                        "const": "later"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "selected_decision": {
+            "const": "pause_additional_contact"
+          }
+        },
+        "required": [
+          "selected_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recommended_message_draft": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recommended_message_draft": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "recommended_message_draft"
+        ]
+      },
+      "then": {
+        "properties": {
+          "message_draft_edit_metadata": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "message_draft_edit_metadata": {
+            "$ref": "#/$defs/message_draft_edit_metadata"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "decision": {
+      "enum": [
+        "reply_now",
+        "send_now",
+        "wait_and_reassess",
+        "pause_additional_contact"
+      ]
+    },
+    "fact_id": {
+      "type": "string",
+      "pattern": "^F[0-9]{3}$"
+    },
+    "fact_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact_id"
+      },
+      "maxItems": 60,
+      "uniqueItems": true
+    },
+    "required_fact_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact_id"
+      },
+      "minItems": 1,
+      "maxItems": 60,
+      "uniqueItems": true
+    },
+    "possible_interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "supporting_fact_ids",
+        "epistemic_status"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "supporting_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        },
+        "epistemic_status": {
+          "const": "possibility_only"
+        }
+      }
+    },
+    "pre_action_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check",
+        "supporting_fact_ids"
+      ],
+      "properties": {
+        "check": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "supporting_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        }
+      }
+    },
+    "action_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true
+    },
+    "message_draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "policy",
+        "use_timing"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "policy": {
+          "enum": [
+            "required_now",
+            "later_only"
+          ]
+        },
+        "use_timing": {
+          "enum": [
+            "now",
+            "later"
+          ]
+        }
+      }
+    },
+    "style_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "change",
+        "reason"
+      ],
+      "properties": {
+        "dimension": {
+          "enum": [
+            "register",
+            "sentence_length",
+            "sentence_ending",
+            "punctuation",
+            "emoji_usage",
+            "exclamation_usage",
+            "softness",
+            "directness",
+            "invitation_style",
+            "reply_pressure"
+          ]
+        },
+        "change": {
+          "enum": [
+            "preserved",
+            "lightly_adjusted",
+            "materially_adjusted",
+            "unresolved"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/change_reason"
+        }
+      }
+    },
+    "change_reason": {
+      "enum": [
+        "no_change_needed",
+        "typo_correction",
+        "naturalness",
+        "reduce_over_explanation",
+        "reduce_excessive_apology",
+        "reduce_pressure",
+        "answer_incoming_question",
+        "respect_user_constraint",
+        "respect_relationship_or_hierarchy",
+        "safety_or_boundary",
+        "other"
+      ]
+    },
+    "communicative_intent_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gratitude_change",
+        "apology_change",
+        "question_count_delta",
+        "invitation_presence_delta",
+        "invitation_specificity_delta",
+        "affection_strength_delta",
+        "commitment_strength_delta",
+        "response_pressure_delta",
+        "boundary_strength_delta",
+        "closure_intent_delta",
+        "practical_requirement_fulfillment"
+      ],
+      "properties": {
+        "gratitude_change": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "apology_change": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "question_count_delta": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "invitation_presence_delta": {
+          "$ref": "#/$defs/presence_delta"
+        },
+        "invitation_specificity_delta": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "affection_strength_delta": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "commitment_strength_delta": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "response_pressure_delta": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "boundary_strength_delta": {
+          "$ref": "#/$defs/intent_delta"
+        },
+        "closure_intent_delta": {
+          "$ref": "#/$defs/presence_delta"
+        },
+        "practical_requirement_fulfillment": {
+          "enum": [
+            "fulfilled",
+            "partially_fulfilled",
+            "unfulfilled",
+            "not_applicable",
+            "unresolved"
+          ]
+        }
+      }
+    },
+    "intent_delta": {
+      "enum": [
+        "decreased",
+        "unchanged",
+        "increased",
+        "unresolved"
+      ]
+    },
+    "presence_delta": {
+      "enum": [
+        "removed",
+        "unchanged_absent",
+        "unchanged_present",
+        "added",
+        "unresolved"
+      ]
+    },
+    "message_draft_edit_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_status",
+        "preserved_meaning",
+        "style_delta",
+        "communicative_intent_delta",
+        "change_reasons",
+        "change_summary"
+      ],
+      "properties": {
+        "source_status": {
+          "enum": [
+            "generated_without_candidate",
+            "candidate_preserved",
+            "candidate_minimally_edited",
+            "candidate_materially_corrected_for_safety_or_boundary"
+          ]
+        },
+        "preserved_meaning": {
+          "type": "boolean"
+        },
+        "style_delta": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/style_delta"
+          },
+          "maxItems": 10
+        },
+        "communicative_intent_delta": {
+          "$ref": "#/$defs/communicative_intent_delta"
+        },
+        "change_reasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/change_reason"
+          },
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "change_summary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 400
+        }
+      }
+    },
+    "aftercare_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "action",
+        "avoid",
+        "supporting_fact_ids"
+      ],
+      "properties": {
+        "phase": {
+          "enum": [
+            "tonight",
+            "next",
+            "reassessment_condition"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "avoid": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 600
+        },
+        "supporting_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        }
+      }
+    },
+    "change_condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition",
+        "resulting_direction",
+        "supporting_fact_ids"
+      ],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "resulting_direction": {
+          "$ref": "#/$defs/decision"
+        },
+        "supporting_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        }
+      }
+    },
+    "review_timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "when",
+        "trigger_fact_ids"
+      ],
+      "properties": {
+        "when": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "trigger_fact_ids": {
+          "$ref": "#/$defs/fact_ids"
+        }
+      }
+    },
+    "material_unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unknown_code",
+        "summary",
+        "material_to"
+      ],
+      "properties": {
+        "unknown_code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]+$"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "material_to": {
+          "enum": [
+            "decision",
+            "draft",
+            "action",
+            "safety"
+          ]
+        }
+      }
+    }
+  }
+}

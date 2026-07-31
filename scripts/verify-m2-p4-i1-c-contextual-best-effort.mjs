@@ -64,6 +64,38 @@ const exactI3Paths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const i3ImplementationSha = "c85d6d122ad71569532a55887b9a3b6d93f8a288";
+const layer1PlanningSha = "ec7cd53884ab4056c78d2596c609baef5701274a";
+const acceptedPlanningSha = "3c64e5e2179b4c03979119068716326337a002c6";
+const r1aBaselineSha = "e5cfd903740267db6d070964a9ec72a7d823f310";
+const exactPlanningAcceptanceSyncPaths = [
+  "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1APaths = [
+  "lib/assessment/runtime/contracts/writing-context-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+  "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+  "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+  "evals/runtime/m2-p4-i3-r1-a-schema-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-contract-fixtures-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const acceptedSliceCommits = {
   "M2-P4-I1-C": "da520621b6569ff65ae652fb75945ed923b4fc3b",
   "M2-P4-I1-C-R1": "bee69d1cf0f1792786eccc6508fb5e7184ad6241",
@@ -247,6 +279,15 @@ function currentChangedPaths(baseSha) {
     paths.add(item.replaceAll("\\", "/"));
   }
   return sorted(paths);
+}
+
+function historicalPaths(baseSha, endSha) {
+  return sorted(
+    gitText(["diff", "--name-only", baseSha, endSha, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
 }
 
 function isExactPathSet(paths, exactPaths) {
@@ -2261,8 +2302,8 @@ const historicalI2Paths = gitText([
   .map((item) => item.trim().replaceAll("\\", "/"))
   .filter(Boolean);
 assert.equal(isExactPathSet(historicalI2Paths, exactI2Paths), true);
-const currentI3Paths = currentChangedPaths(i3BaselineSha);
-assert.equal(isExactPathSet(currentI3Paths, exactI3Paths), true);
+const historicalI3Paths = historicalPaths(i3BaselineSha, i3ImplementationSha);
+assert.equal(isExactPathSet(historicalI3Paths, exactI3Paths), true);
 for (const unauthorizedPath of [
   "ai/schemas/unauthorized.schema.json",
   "components/runtime/UnauthorizedComponent.tsx",
@@ -2275,12 +2316,75 @@ for (const unauthorizedPath of [
     false,
   );
 }
+const layer1PlanningManifest = json(
+  "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json",
+);
+const finalPlanningManifest = json(
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+);
+assert.equal(
+  isExactPathSet(
+    historicalPaths(i3ImplementationSha, layer1PlanningSha),
+    layer1PlanningManifest.exact_mutation_paths,
+  ),
+  true,
+);
+assert.equal(layer1PlanningManifest.exact_mutation_path_count, 9);
+assert.equal(
+  isExactPathSet(
+    historicalPaths(layer1PlanningSha, acceptedPlanningSha),
+    finalPlanningManifest.exact_mutation_paths,
+  ),
+  true,
+);
+assert.equal(finalPlanningManifest.planning_snapshot.exact_paths, 12);
+assert.equal(finalPlanningManifest.planning_snapshot.immutable_snapshot, true);
+assert.equal(
+  isExactPathSet(
+    [...finalPlanningManifest.exact_mutation_paths, exactR1APaths[0]],
+    finalPlanningManifest.exact_mutation_paths,
+  ),
+  false,
+);
+assert.equal(
+  isExactPathSet(
+    historicalPaths(acceptedPlanningSha, r1aBaselineSha),
+    exactPlanningAcceptanceSyncPaths,
+  ),
+  true,
+);
+assert.equal(
+  isExactPathSet(currentChangedPaths(r1aBaselineSha), exactR1APaths),
+  true,
+);
+assert.equal(exactR1APaths.some((item) => item.includes("*")), false);
+assert.equal(exactR1APaths.some((item) => item.endsWith("/")), false);
+for (const unauthorizedPath of [
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+  "ai/schemas/unauthorized.schema.json",
+  "ai/prompts/unauthorized.developer.md",
+  "components/runtime/UnauthorizedComponent.tsx",
+  "app/unauthorized/page.tsx",
+  "lib/assessment/runtime/policy-v3.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+]) {
+  assert.equal(
+    isExactPathSet([...exactR1APaths, unauthorizedPath], exactR1APaths),
+    false,
+  );
+}
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("historical_snapshot: PASS");
 console.log("accepted_stack: 27/27");
 console.log("i2_renderer_exceptions: 4/4");
 console.log("i3_successor_exact_scope: 19/19");
+console.log("accepted_planning_snapshot: 12/12");
+console.log("planning_acceptance_sync_scope: 6/6");
+console.log("r1_a_successor_exact_scope: 18/18");
 console.log("unauthorized_app_components_regressions: 4/4");
 console.log("normal_information_gate_terminal: 0");
 console.log("needs_more_information_runtime_path: 0");

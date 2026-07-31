@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/report-content-v2.schema.json",
+  "title": "Moon Reply AI-Generated Report Content v2 Candidate",
+  "description": "AI-generated variable copy only. Product, brand, labels, chapter titles, metadata, fixed disclaimers, Safety copy, Legal copy, and save-card naming are renderer-owned.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cover_line",
+    "short_letter",
+    "decision_reason_summary",
+    "relationship_summary",
+    "observed_fact_commentary",
+    "possible_interpretations",
+    "anxiety_reframe",
+    "message_temperature",
+    "action_rationales",
+    "message_draft_context",
+    "aftercare_commentary",
+    "change_condition_commentary",
+    "closing_lines"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-v2.0.0"
+    },
+    "cover_line": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "short_letter": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 3
+    },
+    "decision_reason_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "relationship_summary": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 700
+    },
+    "observed_fact_commentary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observed_fact_commentary"
+      },
+      "maxItems": 8
+    },
+    "possible_interpretations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "maxItems": 3
+    },
+    "anxiety_reframe": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "maxItems": 2
+    },
+    "message_temperature": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/message_temperature"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action_rationales": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "maxItems": 4
+    },
+    "message_draft_context": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 400
+    },
+    "aftercare_commentary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "maxItems": 3
+    },
+    "change_condition_commentary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "maxItems": 4
+    },
+    "closing_lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      },
+      "minItems": 1,
+      "maxItems": 2
+    }
+  },
+  "$defs": {
+    "paragraph": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 700
+    },
+    "observed_fact_commentary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fact_id",
+        "commentary"
+      ],
+      "properties": {
+        "fact_id": {
+          "type": "string",
+          "pattern": "^F[0-9]{3}$"
+        },
+        "commentary": {
+          "$ref": "#/$defs/paragraph"
+        }
+      }
+    },
+    "message_temperature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "softness",
+        "affection",
+        "pressure",
+        "adjustment"
+      ],
+      "properties": {
+        "softness": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "affection": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "pressure": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "adjustment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    }
+  }
+}

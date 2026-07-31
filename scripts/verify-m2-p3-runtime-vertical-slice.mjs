@@ -73,6 +73,38 @@ const i3ExactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const i3ImplementationSha = "c85d6d122ad71569532a55887b9a3b6d93f8a288";
+const layer1PlanningSha = "ec7cd53884ab4056c78d2596c609baef5701274a";
+const acceptedPlanningSha = "3c64e5e2179b4c03979119068716326337a002c6";
+const r1aBaselineSha = "e5cfd903740267db6d070964a9ec72a7d823f310";
+const exactPlanningAcceptanceSyncPaths = [
+  "docs/phase2/M2_P4_I3_R1_INTERACTION_RELATIONSHIP_VOICE_FINAL_PLAN.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_FINAL_PLANNING_REVIEW.md",
+  "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1APaths = [
+  "lib/assessment/runtime/contracts/writing-context-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+  "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+  "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+  "evals/runtime/m2-p4-i3-r1-a-schema-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-contract-fixtures-v1.json",
+  "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -219,6 +251,29 @@ function currentTaskPaths(startCommit) {
     paths.add(item.replaceAll("\\", "/"));
   }
   return [...paths].sort((left, right) => left.localeCompare(right, "en"));
+}
+
+function historicalPaths(startCommit, endCommit) {
+  return gitText(["diff", "--name-only", startCommit, endCommit, "--"])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right, "en"));
+}
+
+function isExactLiteralSet(paths, expectedPaths) {
+  return (
+    paths.length === expectedPaths.length &&
+    new Set(paths).size === expectedPaths.length &&
+    paths.every(
+      (item) =>
+        typeof item === "string" &&
+        item.length > 0 &&
+        !item.includes("*") &&
+        !item.endsWith("/"),
+    ) &&
+    JSON.stringify(paths) === JSON.stringify([...expectedPaths].sort((left, right) => left.localeCompare(right, "en")))
+  );
 }
 
 function deterministicUuidFactory(initialSequence = 0) {
@@ -1490,10 +1545,29 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     "evals/development",
     "evals/holdout",
   ]).trim();
-  const actualI3Paths = currentTaskPaths(i3BaselineSha);
+  const actualI3Paths = historicalPaths(i3BaselineSha, i3ImplementationSha);
   const expectedI3Paths = [...i3ExactPaths].sort((left, right) =>
     left.localeCompare(right, "en"),
   );
+  const layer1PlanningManifest = json(
+    "evals/runtime/m2-p4-i3-r1-planning-capabilities-v1.json",
+  );
+  const finalPlanningManifest = json(
+    "evals/runtime/m2-p4-i3-r1-final-planning-capabilities-v1.json",
+  );
+  const actualLayer1PlanningPaths = historicalPaths(
+    i3ImplementationSha,
+    layer1PlanningSha,
+  );
+  const actualFinalPlanningPaths = historicalPaths(
+    layer1PlanningSha,
+    acceptedPlanningSha,
+  );
+  const actualPlanningAcceptanceSyncPaths = historicalPaths(
+    acceptedPlanningSha,
+    r1aBaselineSha,
+  );
+  const actualR1APaths = currentTaskPaths(r1aBaselineSha);
   const i2ExecutionSources = [
     i2PageSource,
     i2FixtureSource,
@@ -1560,6 +1634,52 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       i3RuntimeManifest.policy_mutations === 0,
     `I3 exact 19-path successor differs: ${actualI3Paths.join(",")}`,
   );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    isExactLiteralSet(
+      actualLayer1PlanningPaths,
+      layer1PlanningManifest.exact_mutation_paths,
+    ) &&
+      layer1PlanningManifest.exact_mutation_path_count === 9 &&
+      isExactLiteralSet(
+        actualFinalPlanningPaths,
+        finalPlanningManifest.exact_mutation_paths,
+      ) &&
+      finalPlanningManifest.planning_snapshot.exact_paths === 12 &&
+      finalPlanningManifest.planning_snapshot.immutable_snapshot === true &&
+      isExactLiteralSet(
+        actualPlanningAcceptanceSyncPaths,
+        exactPlanningAcceptanceSyncPaths,
+      ) &&
+      isExactLiteralSet(actualR1APaths, exactR1APaths),
+    `R1 planning/R1-A exact successor boundaries differ: ${actualR1APaths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    !isExactLiteralSet(
+      [...finalPlanningManifest.exact_mutation_paths, exactR1APaths[0]],
+      finalPlanningManifest.exact_mutation_paths,
+    ),
+    "Final Planning accepted an R1-A successor path",
+  );
+  for (const unauthorizedPath of [
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+    "ai/schemas/unauthorized.schema.json",
+    "ai/prompts/unauthorized.developer.md",
+    "components/runtime/UnauthorizedComponent.tsx",
+    "app/unauthorized/page.tsx",
+    "lib/assessment/runtime/policy-v3.ts",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  ]) {
+    check(
+      "M2_P3_I2_RENDERER_ONLY_GATE",
+      !isExactLiteralSet([...exactR1APaths, unauthorizedPath], exactR1APaths),
+      `R1-A accepted unauthorized path: ${unauthorizedPath}`,
+    );
+  }
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
     protectedI2Diff === "",

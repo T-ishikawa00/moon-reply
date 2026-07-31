@@ -1,0 +1,71 @@
+{
+  "schema_version": "m2-p4-i3-r1-a-schema-contract-v1",
+  "task_id": "M2-P4-I3-R1-A",
+  "baseline": "e5cfd903740267db6d070964a9ec72a7d823f310",
+  "candidate_schema_set": "pipeline-schema-runtime-v4.0.0",
+  "active_runtime_unchanged": true,
+  "active_runtime": {
+    "prompt_bundle": "prompt-bundle-runtime-v4.0.0",
+    "schema_set": "pipeline-schema-runtime-v3.0.0",
+    "stage_catalog": "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json"
+  },
+  "mappings": {
+    "PB-01": {
+      "schema_path": "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+      "schema_version": "pipeline-schema-v4.0.0"
+    },
+    "PB-04": {
+      "schema_path": "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+      "schema_version": "pipeline-schema-v2.0.0"
+    },
+    "PB-05": {
+      "schema_path": "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+      "schema_version": "pipeline-schema-v2.0.0"
+    },
+    "PB-06": {
+      "status": "unchanged",
+      "schema_path": "ai/schemas/validation-result.schema.json",
+      "successor": "not_in_this_slice"
+    }
+  },
+  "schema_hash_algorithm": "sha256_canonical_lf_utf8",
+  "schema_hashes": {
+    "lib/assessment/runtime/contracts/structured-intake-v4.schema.json": "080de1b798d5abb91a85eb1b22e42bf4d862664fc8d6469f140c43d8622601d7",
+    "lib/assessment/runtime/contracts/decision-plan-v2.schema.json": "76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0",
+    "lib/assessment/runtime/contracts/report-content-v2.schema.json": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650"
+  },
+  "writing_context_contract_module": {
+    "path": "lib/assessment/runtime/contracts/writing-context-v1.ts",
+    "version": "m2-p4-writing-context-v1",
+    "sha256_canonical_lf_utf8": "6f17df0f383458f475ffb56742d87c2cc11aa0129b852da0f134625a35d1917b"
+  },
+  "accepted_planning_commit": "3c64e5e2179b4c03979119068716326337a002c6",
+  "accepted_planning_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "ec7cd53884ab4056c78d2596c609baef5701274a",
+    "end_commit_sha": "3c64e5e2179b4c03979119068716326337a002c6",
+    "exact_paths": 12,
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
+  "provider_projection": {
+    "required": true,
+    "canonical_validation_required": true,
+    "application_validation_owns": [
+      "decision and recommended draft consistency",
+      "recommended draft and edit metadata consistency",
+      "candidate presence, profile, and draft source status consistency",
+      "writing source-reference semantic exclusions and message ID uniqueness",
+      "broad relationship-chip effect-class restrictions",
+      "consultation-narrative exclusion from candidate style evidence",
+      "conditional aftercare cardinality",
+      "report and plan cross-contract cardinality",
+      "selected request fulfillment",
+      "explicit user constraint enforcement",
+      "fixed general limitation ownership"
+    ]
+  },
+  "validation_result_successor": "not_in_this_slice",
+  "runtime_catalog_successor": "not_in_this_slice",
+  "prompt_successor": "not_in_this_slice"
+}
