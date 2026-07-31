@@ -827,4 +827,19 @@ R2 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, an
 
 R3 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, Schema/Prompt/catalog/hash changes, broader prose-quality work, or release.
 
+# M2-P4-I1-C-R4 Temporal Change-Condition Semantics
+
+- [x] Preserve the original I1-C exact 21-path, R1 exact 12-path, R2 exact 10-path, and R3 exact 9-path histories unchanged.
+- [x] Freeze R4 baseline at `e4e844cbaa8534c68a0d87d5831d04b5afe676a1` and declare a separate exact 10-path successor without wildcard, prefix, or future-path authorization.
+- [x] Generate application-owned future-condition commentary in PB-04 change-condition order without converting it to a current send/wait/stop instruction.
+- [x] Preserve raw PB-05 output as Stage evidence; revalidate and supply the relationship/change-condition-grounded projection to PB-06 and the final report.
+- [x] Make only exact future `DECISION_ALLOWED` and exactly matched grounded-commentary `MESSAGE_POLICY_CONSISTENCY` findings nonblocking for contextual runtime.
+- [x] Preserve selected-decision, message-draft, action, three-day-plan, fact, assumption, Safety, certainty, mismatched-commentary, and all other major/critical fail-closed behavior.
+- [x] Prove the four-finding live-failure equivalent is temporal false positives `4`, blocking `0`, final report `1`, with raw Stage evidence and relationship grounding preserved.
+- [x] Preserve policy parity `40/40`, sparse and Safety cases, I1-B/I1-A/foundation/M2-P3 gates, protected diff `0`, and exact R4 scope `10/10`.
+- [ ] Human / ChatGPT review and acceptance.
+- [ ] After acceptance only: separately authorize one synthetic live rerun.
+
+R4 uses OpenAI calls `0`, DB operations `0`, migrations `0`, holdout use `0`, and real-user data `0`; live rerun is not executed. It does not authorize a PR, merge to `main`, Prompt/Schema/catalog/hash changes, broader prose-quality work, or release.
+
 Payment, authentication, email, analytics, public release, real-user processing, PDF/download/share/print, background execution, queue, cron, mobile API, public history, retry, Repair/PB-07, and fallback remain unauthorized.

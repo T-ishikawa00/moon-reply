@@ -13,6 +13,7 @@ const i1cBaselineSha = "c27120eea067f91c5e9ef4447e382f55a329e158";
 const r1BaselineSha = "da520621b6569ff65ae652fb75945ed923b4fc3b";
 const r2BaselineSha = "bee69d1cf0f1792786eccc6508fb5e7184ad6241";
 const r3BaselineSha = "2659c14d82fe2589d2e1cfc655c52c13b878dc7c";
+const r4BaselineSha = "e4e844cbaa8534c68a0d87d5831d04b5afe676a1";
 const r1ExactPaths = [
   "lib/assessment/runtime/contextual-integrity-v3.ts",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -41,6 +42,18 @@ const r2ExactPaths = [
 ];
 const r3ExactPaths = [
   "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const r4ExactPaths = [
+  "lib/assessment/runtime/change-condition-grounding-v3.ts",
+  "lib/assessment/runtime/semantic-disposition-v3.ts",
   "lib/assessment/runtime/pipeline.ts",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
   "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
@@ -146,6 +159,11 @@ const [
   { aggregateSafetyV3 },
   { buildRelationshipSummaryV3, groundReportContentV3 },
   { groundStructuredIntakeV3 },
+  {
+    buildChangeConditionCommentaryV3,
+    groundChangeConditionCommentaryV3,
+  },
+  { evaluateSemanticFindingsV3 },
   { validateStageOutput },
 ] = await Promise.all([
   import("../lib/assessment/runtime/application.ts"),
@@ -157,6 +175,8 @@ const [
   import("../lib/assessment/runtime/safety-aggregation-v3.ts"),
   import("../lib/assessment/runtime/report-grounding-v3.ts"),
   import("../lib/assessment/runtime/structured-intake-grounding-v3.ts"),
+  import("../lib/assessment/runtime/change-condition-grounding-v3.ts"),
+  import("../lib/assessment/runtime/semantic-disposition-v3.ts"),
   import("../lib/assessment/runtime/validation.ts"),
 ]);
 
@@ -183,6 +203,18 @@ const r2CommittedPaths = gitText([
   .map((item) => item.trim().replaceAll("\\", "/"))
   .filter(Boolean);
 assert.deepEqual(sorted(r2CommittedPaths), sorted(r2ExactPaths));
+
+const r3CommittedPaths = gitText([
+  "diff",
+  "--name-only",
+  r3BaselineSha,
+  r4BaselineSha,
+  "--",
+])
+  .split(/\r?\n/gu)
+  .map((item) => item.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+assert.deepEqual(sorted(r3CommittedPaths), sorted(r3ExactPaths));
 
 const protectedHistoricalPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
@@ -1040,6 +1072,156 @@ function decisionPlanFor(outputs, decision) {
   return plan;
 }
 
+function semanticFinding(findingCode, severity, jsonPath, evidenceRefs) {
+  return {
+    finding_code: findingCode,
+    severity,
+    json_path: jsonPath,
+    evidence_refs: evidenceRefs ?? ["input:decision_plan"],
+    detail: "時間軸または候補内容の整合性を確認する検証 finding。",
+  };
+}
+
+const allDirectionPlan = decisionPlanFor(wait003StageOutputs(), "reply_now");
+allDirectionPlan.change_conditions = [
+  {
+    condition: "相手から具体的な返信が届いたこと。",
+    resulting_direction: "reply_now",
+  },
+  {
+    condition: "必要な日程変更が生じたこと。",
+    resulting_direction: "send_now",
+  },
+  {
+    condition: "今夜は返信を見送る意思が明確になったこと。",
+    resulting_direction: "wait_and_reassess",
+  },
+  {
+    condition: "明示的な距離の希望が示されたこと。",
+    resulting_direction: "pause_additional_contact",
+  },
+];
+const allDirectionCommentary = buildChangeConditionCommentaryV3(
+  allDirectionPlan,
+);
+assert.deepEqual(allDirectionCommentary, [
+  "「相手から具体的な返信が届いたこと」という条件が確認された場合は、その時点では短く返信する方向へ見直します。",
+  "「必要な日程変更が生じたこと」という条件が確認された場合は、その時点では必要な連絡を送る方向へ見直します。",
+  "「今夜は返信を見送る意思が明確になったこと」という条件が確認された場合は、その時点では送信を急がず、いったん見直す方向へ切り替えます。",
+  "「明示的な距離の希望が示されたこと」という条件が確認された場合は、その時点では追加連絡を止める方向へ切り替えます。",
+]);
+const allDirectionRawReport = wait003StageOutputs()["PB-05"];
+const allDirectionGroundedReport = groundChangeConditionCommentaryV3(
+  allDirectionPlan,
+  allDirectionRawReport,
+);
+assert.deepEqual(
+  allDirectionGroundedReport.change_condition_commentary,
+  allDirectionCommentary,
+);
+assert.notDeepEqual(
+  allDirectionRawReport.change_condition_commentary,
+  allDirectionCommentary,
+);
+
+const requiredBlockingFindings = [
+  semanticFinding(
+    "DECISION_ALLOWED",
+    "critical",
+    "decision_plan.selected_decision",
+  ),
+  semanticFinding(
+    "MESSAGE_POLICY_CONSISTENCY",
+    "major",
+    "decision_plan.message_draft",
+  ),
+  semanticFinding("ACTION_CONSISTENCY", "major", "decision_plan.actions_to_take[0]"),
+  semanticFinding("ACTION_CONSISTENCY", "major", "decision_plan.actions_to_avoid[0]"),
+  semanticFinding(
+    "THREE_DAY_PLAN_CONSISTENCY",
+    "major",
+    "decision_plan.three_day_plan[0]",
+  ),
+  semanticFinding("FACT_FIDELITY", "major", "report_content.relationship_summary", [
+    "F001",
+  ]),
+  semanticFinding(
+    "ASSUMPTION_AS_FACT",
+    "major",
+    "report_content.possible_interpretations[0]",
+    ["F001"],
+  ),
+  semanticFinding(
+    "SAFETY_REGRESSION",
+    "critical",
+    "report_content.action_rationales[0]",
+    ["input:aggregate_safety_result"],
+  ),
+  semanticFinding(
+    "UNSUPPORTED_CERTAINTY",
+    "major",
+    "report_content.closing_lines[0]",
+    ["F001"],
+  ),
+  semanticFinding(
+    "DECISION_ALLOWED",
+    "major",
+    "decision_plan.change_conditions[99].resulting_direction",
+  ),
+  semanticFinding(
+    "DECISION_ALLOWED",
+    "major",
+    "decision_plan.change_conditions[00].resulting_direction",
+  ),
+];
+const requiredBlockingDisposition = evaluateSemanticFindingsV3({
+  validationOutput: { semantic_checks: requiredBlockingFindings },
+  decisionPlan: allDirectionPlan,
+  groundedReportContent: allDirectionGroundedReport,
+});
+assert.equal(requiredBlockingDisposition.blockingFindings.length, 11);
+assert.equal(
+  requiredBlockingDisposition.ignoredTemporalFalsePositives.length,
+  0,
+);
+
+const mismatchedCommentaryReport = structuredClone(
+  allDirectionGroundedReport,
+);
+mismatchedCommentaryReport.change_condition_commentary[0] =
+  "現在の命令へ誤変換された文。";
+const mismatchedCommentaryDisposition = evaluateSemanticFindingsV3({
+  validationOutput: {
+    semantic_checks: [
+      semanticFinding(
+        "MESSAGE_POLICY_CONSISTENCY",
+        "major",
+        "$.report_content.change_condition_commentary[0]",
+        ["input:report_content"],
+      ),
+    ],
+  },
+  decisionPlan: allDirectionPlan,
+  groundedReportContent: mismatchedCommentaryReport,
+});
+assert.equal(mismatchedCommentaryDisposition.blockingFindings.length, 1);
+assert.equal(
+  mismatchedCommentaryDisposition.ignoredTemporalFalsePositives.length,
+  0,
+);
+
+const minorDisposition = evaluateSemanticFindingsV3({
+  validationOutput: {
+    semantic_checks: [
+      semanticFinding("BRAND_TONE", "minor", "report_content.cover_line"),
+    ],
+  },
+  decisionPlan: allDirectionPlan,
+  groundedReportContent: allDirectionGroundedReport,
+});
+assert.equal(minorDisposition.blockingFindings.length, 0);
+assert.equal(minorDisposition.ignoredTemporalFalsePositives.length, 0);
+
 function runtimeOutputs(testCase) {
   const outputs = testCase.safetyBlocked
     ? safetyBlockedStageOutputs()
@@ -1420,6 +1602,120 @@ assert.equal(
   0,
 );
 
+const temporalLiveOutputs = runtimeOutputs({
+  facts: baselineFacts,
+  inferredFields: baselineInferenceFields,
+  expectedDecision: "reply_now",
+});
+temporalLiveOutputs["PB-04"].change_conditions = [
+  {
+    condition: "今夜は返信を見送る意思が明確になったこと。",
+    resulting_direction: "wait_and_reassess",
+  },
+  {
+    condition: "相手から具体的な返信が届いたこと。",
+    resulting_direction: "reply_now",
+  },
+  {
+    condition: "明示的な距離の希望が示されたこと。",
+    resulting_direction: "pause_additional_contact",
+  },
+];
+const temporalRawCommentary = [
+  "今は送らない。",
+  "返信が届いたら内容を確認する。",
+  "今すぐ連絡を止める。",
+];
+temporalLiveOutputs["PB-05"].change_condition_commentary =
+  temporalRawCommentary;
+temporalLiveOutputs["PB-06"] = {
+  ...temporalLiveOutputs["PB-06"],
+  semantic_checks: [
+    semanticFinding(
+      "DECISION_ALLOWED",
+      "critical",
+      "decision_plan.change_conditions[0].resulting_direction",
+      ["input:decision_policy_result", "input:decision_plan"],
+    ),
+    semanticFinding(
+      "DECISION_ALLOWED",
+      "critical",
+      "$.decision_plan.change_conditions[2].resulting_direction",
+      ["input:decision_policy_result", "input:decision_plan"],
+    ),
+    semanticFinding(
+      "MESSAGE_POLICY_CONSISTENCY",
+      "major",
+      "report_content.change_condition_commentary[0]",
+      ["input:decision_policy_result", "input:report_content"],
+    ),
+    semanticFinding(
+      "MESSAGE_POLICY_CONSISTENCY",
+      "major",
+      "$.report_content.change_condition_commentary[2]",
+      ["input:decision_policy_result", "input:report_content"],
+    ),
+  ],
+};
+const temporalExpectedCommentary = buildChangeConditionCommentaryV3(
+  temporalLiveOutputs["PB-04"],
+);
+const temporalGroundedReport = groundChangeConditionCommentaryV3(
+  temporalLiveOutputs["PB-04"],
+  temporalLiveOutputs["PB-05"],
+);
+const temporalDisposition = evaluateSemanticFindingsV3({
+  validationOutput: temporalLiveOutputs["PB-06"],
+  decisionPlan: temporalLiveOutputs["PB-04"],
+  groundedReportContent: temporalGroundedReport,
+});
+assert.equal(temporalDisposition.ignoredTemporalFalsePositives.length, 4);
+assert.equal(temporalDisposition.blockingFindings.length, 0);
+
+const temporalLiveRuntime = await runWithOutputs(temporalLiveOutputs, 202);
+assert.equal(temporalLiveRuntime.result.eligibility, "ready");
+assert.equal(temporalLiveRuntime.result.decision, "reply_now");
+assert.notEqual(
+  temporalLiveRuntime.result.report.decisionPlan.message_draft,
+  null,
+);
+assert.equal(temporalLiveRuntime.repository.reports.size, 1);
+const temporalRawPb05Stage = [
+  ...temporalLiveRuntime.repository.stageRuns.values(),
+].find((stage) => stage.stageId === "PB-05");
+assert.equal(temporalRawPb05Stage?.status, "completed");
+assert.deepEqual(
+  temporalRawPb05Stage?.completion?.outputJson.change_condition_commentary,
+  temporalRawCommentary,
+);
+const temporalPb06Request = temporalLiveRuntime.transport.requests.find(
+  (request) => request.stageId === "PB-06",
+);
+assert.deepEqual(
+  temporalPb06Request.input.report_content.change_condition_commentary,
+  temporalExpectedCommentary,
+);
+assert.equal(
+  temporalPb06Request.input.report_content.relationship_summary,
+  incomingGroundedSummary,
+);
+assert.deepEqual(
+  temporalLiveRuntime.result.report.content.change_condition_commentary,
+  temporalExpectedCommentary,
+);
+assert.equal(
+  temporalLiveRuntime.result.report.content.relationship_summary,
+  incomingGroundedSummary,
+);
+const temporalRawPb06Stage = [
+  ...temporalLiveRuntime.repository.stageRuns.values(),
+].find((stage) => stage.stageId === "PB-06");
+assert.equal(temporalRawPb06Stage?.status, "completed");
+assert.deepEqual(
+  temporalRawPb06Stage?.completion?.outputJson,
+  temporalLiveOutputs["PB-06"],
+);
+
 const reversedRelationshipSummary =
   "現在は相手からの返信を待っている状態です。";
 const reversedOutputs = runtimeOutputs({
@@ -1453,7 +1749,7 @@ assert.equal(
 );
 assert.equal(reversedRuntime.repository.reports.size, 1);
 
-async function expectPb06FailClosed(severity, index) {
+async function expectPb06FindingFailClosed(finding, index) {
   const outputs = runtimeOutputs({
     facts: baselineFacts,
     inferredFields: baselineInferenceFields,
@@ -1461,15 +1757,7 @@ async function expectPb06FailClosed(severity, index) {
   });
   outputs["PB-06"] = {
     ...outputs["PB-06"],
-    semantic_checks: [
-      {
-        finding_code: "FACT_FIDELITY",
-        severity,
-        json_path: "$.report_content.relationship_summary",
-        evidence_refs: ["F001"],
-        detail: "決定的な事実忠実性 finding を検出した。",
-      },
-    ],
+    semantic_checks: [finding],
   };
   const repository = new FakeAssessmentRepository();
   const transport = new OfflineFakeTransport(outputs);
@@ -1496,8 +1784,40 @@ async function expectPb06FailClosed(severity, index) {
   assert.equal(repository.actualSupabaseCalls, 0);
 }
 
-await expectPb06FailClosed("major", 1);
-await expectPb06FailClosed("critical", 2);
+await expectPb06FindingFailClosed(
+  semanticFinding(
+    "DECISION_ALLOWED",
+    "critical",
+    "decision_plan.selected_decision",
+  ),
+  1,
+);
+await expectPb06FindingFailClosed(
+  semanticFinding(
+    "MESSAGE_POLICY_CONSISTENCY",
+    "major",
+    "decision_plan.message_draft",
+  ),
+  2,
+);
+await expectPb06FindingFailClosed(
+  semanticFinding(
+    "FACT_FIDELITY",
+    "major",
+    "$.report_content.relationship_summary",
+    ["F001"],
+  ),
+  3,
+);
+await expectPb06FindingFailClosed(
+  semanticFinding(
+    "SAFETY_REGRESSION",
+    "critical",
+    "report_content.action_rationales[0]",
+    ["input:aggregate_safety_result"],
+  ),
+  4,
+);
 
 const fixtures = json(
   "evals/quality/m2-p4-i1/decision-facts-fixtures-v1.json",
@@ -1610,9 +1930,26 @@ assert.deepEqual(capabilityManifest.r3_successor, {
     live_rerun_executed: false,
   },
 });
+assert.deepEqual(capabilityManifest.r4_successor, {
+  task_id: "M2-P4-I1-C-R4",
+  title: "Temporal Change-Condition Semantics",
+  status: "implementation_pending_human_chatgpt_review",
+  baseline: {
+    commit: r4BaselineSha,
+  },
+  exact_mutation_paths: r4ExactPaths,
+  task_execution_evidence: {
+    openai_live_calls: 0,
+    database_operations: 0,
+    migrations: 0,
+    holdout_use: 0,
+    real_user_data: 0,
+    live_rerun_executed: false,
+  },
+});
 
 const changedPaths = new Set(
-  gitText(["diff", "--name-only", r3BaselineSha, "--"])
+  gitText(["diff", "--name-only", r4BaselineSha, "--"])
     .split(/\r?\n/gu)
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean),
@@ -1622,7 +1959,7 @@ for (const line of gitText(["status", "--porcelain=v1", "--untracked-files=all"]
   .filter(Boolean)) {
   changedPaths.add(line.slice(3).trim().replaceAll("\\", "/"));
 }
-assert.deepEqual(sorted(changedPaths), sorted(r3ExactPaths));
+assert.deepEqual(sorted(changedPaths), sorted(r4ExactPaths));
 
 console.log("M2_P4_I1_C_CONTEXTUAL_BEST_EFFORT: PASS");
 console.log("normal_information_gate_terminal: 0");
@@ -1654,7 +1991,17 @@ console.log("report_grounding_states: 4/4");
 console.log("reversed_pb05_summary_grounded: PASS");
 console.log("pb06_input_grounded: PASS");
 console.log("final_report_grounded: PASS");
-console.log("pb06_fail_closed_major_critical: 2/2");
+console.log("change_condition_grounding_directions: 4/4");
+console.log("temporal_false_positives_nonblocking: 4/4");
+console.log("temporal_blocking_findings: 0");
+console.log("temporal_final_report: 1");
+console.log("raw_pb05_change_commentary_preserved: PASS");
+console.log("pb06_change_commentary_grounded: PASS");
+console.log("final_change_commentary_grounded: PASS");
+console.log("pb06_fail_closed_major_critical: 4/4");
+console.log("mismatched_grounded_commentary_blocking: PASS");
+console.log("required_non_temporal_blocking_paths: 11/11");
+console.log("minor_findings_nonblocking: PASS");
 console.log("live_failure_equivalent_pb06_safety_regressions: 0");
 console.log("application_owned_intake_fields: PASS");
 console.log("inference_source_canonicalization: PASS");
@@ -1673,4 +2020,5 @@ console.log("holdout_use: 0");
 console.log("protected_diff: 0");
 console.log("r1_historical_exact_scope: 12/12");
 console.log("r2_historical_exact_scope: 10/10");
-console.log("exact_scope: 9/9");
+console.log("r3_historical_exact_scope: 9/9");
+console.log("exact_scope: 10/10");

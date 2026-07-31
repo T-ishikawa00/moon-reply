@@ -138,5 +138,33 @@
       "live_rerun_executed": false
     }
   },
+  "r4_successor": {
+    "task_id": "M2-P4-I1-C-R4",
+    "title": "Temporal Change-Condition Semantics",
+    "status": "implementation_pending_human_chatgpt_review",
+    "baseline": {
+      "commit": "e4e844cbaa8534c68a0d87d5831d04b5afe676a1"
+    },
+    "exact_mutation_paths": [
+      "lib/assessment/runtime/change-condition-grounding-v3.ts",
+      "lib/assessment/runtime/semantic-disposition-v3.ts",
+      "lib/assessment/runtime/pipeline.ts",
+      "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+      "evals/runtime/m2-p4-i1-c-capabilities-v1.json",
+      "scripts/verify-m2-eval-foundation.mjs",
+      "docs/phase2/TASK_M2_P4_I1_C_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md"
+    ],
+    "task_execution_evidence": {
+      "openai_live_calls": 0,
+      "database_operations": 0,
+      "migrations": 0,
+      "holdout_use": 0,
+      "real_user_data": 0,
+      "live_rerun_executed": false
+    }
+  },
   "next": "one separately authorized synthetic live rerun after acceptance"
 }

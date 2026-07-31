@@ -197,3 +197,30 @@ Exact R3 mutation scope is 9 literal paths:
 9. `docs/CODEX_HANDOFF.md`
 
 The original I1-C 21-path, R1 12-path, and R2 10-path records remain immutable. R3 regression evidence covers the `2026-07-31` live-failure equivalent, application-owned field correction, stable source-ref union, relationship-only inference removal, proposed-message true/false derivation, raw Stage evidence preservation, grounded PB-02-through-PB-06 input, full Fake `ready -> reply_now -> non-null draft -> report 1`, PB-06 major/critical fail-closed behavior, policy parity `40/40`, exact scope `9/9`, protected diff `0`, and zero external execution. Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed quality evidence, live execution, merge, release, or Milestone 2 completion.
+
+## R4 Temporal Change-Condition Semantics Successor
+
+- Task: `M2-P4-I1-C-R4`
+- Baseline: `e4e844cbaa8534c68a0d87d5831d04b5afe676a1`
+- Branch: `fix/m2-p4-i1-c-r4-temporal-change-semantics`
+- Status: implementation and required offline validation complete; Human / ChatGPT acceptance pending
+- External execution: OpenAI calls `0`; DB operations `0`; migrations `0`; holdout use `0`; real-user data `0`; live rerun not executed
+
+R4 separates the current application-owned decision policy from future change conditions. Contextual runtime deterministically replaces PB-05 `change_condition_commentary` in PB-04 `change_conditions` order. Each application-owned sentence states an observable future condition and only then describes the direction to reconsider; it never converts a future `wait_and_reassess` or `pause_additional_contact` branch into a current instruction. Raw PB-05 output remains Stage evidence. The relationship-grounded and change-condition-grounded projection is revalidated against the unchanged PB-05 Schema, supplied to PB-06, and persisted in the final report.
+
+Application-owned semantic disposition ignores only two exact temporal false-positive forms: `DECISION_ALLOWED` on an existing `decision_plan.change_conditions[N].resulting_direction`, with or without the leading `$.`; and `MESSAGE_POLICY_CONSISTENCY` on `report_content.change_condition_commentary[N]`, with or without `$.`, only when the actual commentary exactly equals the application-owned projection for that index. Selected decision, message draft, actions, three-day plan, fact fidelity, assumptions, Safety, unsupported certainty, mismatched commentary, every other major/critical finding, invalid envelope, and legacy runtime remain blocking exactly as before. Minor findings remain nonblocking. This disposition is not retry, Repair, PB-07, or fallback.
+
+Exact R4 mutation scope is 10 literal paths:
+
+1. `lib/assessment/runtime/change-condition-grounding-v3.ts`
+2. `lib/assessment/runtime/semantic-disposition-v3.ts`
+3. `lib/assessment/runtime/pipeline.ts`
+4. `scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs`
+5. `evals/runtime/m2-p4-i1-c-capabilities-v1.json`
+6. `scripts/verify-m2-eval-foundation.mjs`
+7. `docs/phase2/TASK_M2_P4_I1_C_REVIEW.md`
+8. `docs/CURRENT_FOCUS.md`
+9. `docs/WBS.md`
+10. `docs/CODEX_HANDOFF.md`
+
+The original I1-C 21-path, R1 12-path, R2 10-path, and R3 9-path records remain immutable. R4 regression evidence covers all four future directions, both exact JSON-path forms, the four-finding `2026-07-31` live-failure equivalent as temporal false positives `4` / blocking `0` / final report `1`, raw PB-05 and PB-06 Stage evidence, grounded PB-06 input and final report, preserved relationship grounding, selected-decision/draft/fact/Safety blocking cases, mismatched-commentary blocking, policy parity `40/40`, exact R4 scope `10/10`, protected diff `0`, and zero external execution. Prompt, Schema, catalog, hash, legacy runtime, and normal PB-06 major/critical fail-closed behavior are unchanged. Automated PASS does not constitute Human / ChatGPT acceptance, provider-backed quality evidence, live execution, merge, release, or Milestone 2 completion.

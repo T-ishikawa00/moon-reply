@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { validateContextualIntakeIntegrityV3 } from "./contextual-integrity-v3.ts";
 import { addUsage, emptyUsageTotals } from "./cost.ts";
 import {
@@ -15,6 +16,7 @@ import {
 import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
+import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import {
   buildDecisionPolicyV2,
@@ -84,6 +86,14 @@ function stringArray(value: unknown) {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === "string")
     : [];
+}
+
+function isMajorOrCriticalFinding(value: unknown): value is JsonObject {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return false;
+  }
+  const finding = value as JsonObject;
+  return finding.severity === "critical" || finding.severity === "major";
 }
 
 function eligibilityFrom(
@@ -422,12 +432,18 @@ export class AssessmentPipeline {
         },
         "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
       )) as unknown as ReportContent;
-      const reportContent = contextualDecisionFacts
-        ? groundReportContentV3(
-            contextualDecisionFacts,
-            generatedReportContent,
-          )
-        : generatedReportContent;
+      let reportContent = generatedReportContent;
+      if (contextualDecisionFacts) {
+        reportContent = groundReportContentV3(
+          contextualDecisionFacts,
+          reportContent,
+        );
+        reportContent = groundChangeConditionCommentaryV3(
+          decisionPlan,
+          reportContent,
+        );
+        validateStageOutput(this.definition("PB-05"), reportContent);
+      }
 
       await this.invokeStage(
         runContext,
@@ -445,16 +461,18 @@ export class AssessmentPipeline {
         (output) => {
           if (
             output.validation_mode !== "semantic_findings_only" ||
-            !Array.isArray(output.semantic_checks) ||
-            output.semantic_checks.some(
-              (finding) =>
-                typeof finding === "object" &&
-                finding !== null &&
-                !Array.isArray(finding) &&
-                (finding.severity === "critical" ||
-                  finding.severity === "major"),
-            )
+            !Array.isArray(output.semantic_checks)
           ) {
+            throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+          }
+          const blockingFindings = contextualRuntime
+            ? evaluateSemanticFindingsV3({
+                validationOutput: output,
+                decisionPlan,
+                groundedReportContent: reportContent,
+              }).blockingFindings
+            : output.semantic_checks.filter(isMajorOrCriticalFinding);
+          if (blockingFindings.length > 0) {
             throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
           }
         },
