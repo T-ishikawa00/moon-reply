@@ -3,17 +3,23 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding`
-- Status: `implementation_pending_human_chatgpt_review`
+- Status: `human_chatgpt_accepted_complete`
+- Accepted implementation commit: `4a1237ac647bff79229d7181d978d5613c2c3b87`
+- Implementation commits: `0ccf59114fe4079e0a5513fef3faf1b9fade11e7`, `4a1237ac647bff79229d7181d978d5613c2c3b87`
+- Immutable implementation snapshot: `2381312ced5fc726dfa245632c25da6bb68a376f..4a1237ac647bff79229d7181d978d5613c2c3b87` (`22/22` exact paths; working tree excluded)
 - Baseline: `2381312ced5fc726dfa245632c25da6bb68a376f`
-- Review correction required: `true`
-- Review correction base: `0ccf59114fe4079e0a5513fef3faf1b9fade11e7`
+- Review correction required: `false`
+- Review correction status: `resolved`
+- Review correction: `0ccf59114fe4079e0a5513fef3faf1b9fade11e7..4a1237ac647bff79229d7181d978d5613c2c3b87` (`9/9`; provenance ownership `7/7`; valid `20/20`; invalid `20/20`; downstream parity `15/15`; no scope expansion; no force push)
 - Branch: `feat/m2-p4-i3-r1-b-writing-context`
-- Review correction scope: `9/9`
 - Exact mutation scope: `22/22`
 - Provider diagnostic: `not_started`
 - Achieved score: `null`
+- Final I3 acceptance: `pending`
+- Milestone 2: `incomplete`
+- `main`: unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`
 
-This slice is offline-integrated only. It does not constitute Human / ChatGPT acceptance, active Runtime activation, final I3 acceptance, a `main` merge, or Milestone 2 completion.
+This exact offline-integrated implementation and its review correction are Human / ChatGPT accepted complete. Acceptance does not activate Runtime, start Provider execution, establish final I3 acceptance, merge to `main`, or complete Milestone 2.
 
 ## Implemented boundary
 
@@ -36,6 +42,21 @@ Active Service remains unchanged on:
 
 There is no `service.ts` mutation, live OpenAI call, real DB operation, Supabase operation, migration, holdout use, real-user data, paid execution, PR, merge, or release.
 
+## Exact acceptance-sync manifest
+
+This acceptance synchronization changes exactly eight existing paths:
+
+1. `evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-b-writing-context.mjs`
+4. `scripts/verify-m2-eval-foundation.mjs`
+5. `scripts/verify-m2-p3-runtime-vertical-slice.mjs`
+6. `docs/CURRENT_FOCUS.md`
+7. `docs/WBS.md`
+8. `docs/CODEX_HANDOFF.md`
+
+It does not extend the immutable `22/22` implementation snapshot. PB-01 v4 Prompt, catalog v5, grounding, Integrity, legacy view, grounding cases, Runtime contract, Pipeline, schema catalog, R1-A assets, Service, active catalog v4, Policy, Safety, UI, and every other historical verifier remain content-fixed to accepted implementation commit `4a1237ac647bff79229d7181d978d5613c2c3b87`; canonical LF comparison excludes checkout-only CRLF normalization.
+
 ## Fixture evidence
 
 - Synthetic valid grounding cases: `20`
@@ -55,18 +76,22 @@ The required sequential verification set completed locally:
 - Decision Policy: `PASS` (`40/40`)
 - Typecheck / lint / production build: `PASS`
 - JSON parse / exact scope `22/22` / protected diff `0` / `git diff --check`: `PASS`
+- Acceptance synchronization exact scope `8/8`; immutable implementation snapshot `22/22`; review correction `9/9`: `PASS`
 
-Automated PASS does not establish Human / ChatGPT acceptance.
+Automated PASS is recorded separately from the Human / ChatGPT acceptance decision.
 
-## Review focus
+## Human / ChatGPT review result
 
-1. Confirm the PB-01 v4 Prompt does not infer Decision, certainty, relationship authority, consent, age, reconciliation intent, or reciprocal interest.
-2. Confirm the field-specific provenance matrix prevents candidate wording from becoming incoming-message, ordinary conversation, explicit-constraint, usual-pattern, repeat-state, timing, or detailed user-goal evidence.
-3. Confirm candidate style, communicative intent, and the single unsent-candidate ownership item exist only when `optional_message` exists and use exact `input:optional_message` provenance.
-4. Confirm incoming profile target identity, owner/status, and exact source-ref equality fail closed, while relationship chip-only evidence stays `writing_only` and decision- or safety-material effects require current-situation evidence.
-5. Confirm downstream PB-02 through PB-06 inputs never receive `writing_context`, remain exact v3 legacy views, and preserve full request-input and final-output parity.
-6. Confirm catalog v5 remains inactive and R1-C remains unauthorized.
+- [x] The PB-01 v4 Prompt does not infer Decision, certainty, relationship authority, consent, age, reconciliation intent, or reciprocal interest.
+- [x] The field-specific provenance matrix prevents candidate wording from becoming incoming-message, ordinary-conversation, explicit-constraint, usual-pattern, repeat-state, timing, or detailed user-goal evidence.
+- [x] Candidate style, communicative intent, and the single unsent-candidate ownership item exist only when `optional_message` exists and use exact `input:optional_message` provenance.
+- [x] Incoming profile target identity, owner/status, and exact source-ref equality fail closed; relationship chip-only evidence stays `writing_only`, while decision- or safety-material effects require current-situation evidence.
+- [x] Downstream PB-02 through PB-06 inputs never receive `writing_context`, remain exact v3 legacy views, and preserve full request-input and final-output parity.
+- [x] Catalog v5 remains inactive and active Service remains on catalog v4.
+- [x] C1 Provider diagnostic and C2 Runtime activation remain unauthorized.
+
+R1-B is Human / ChatGPT accepted complete at implementation commit `4a1237ac647bff79229d7181d978d5613c2c3b87`. Its immutable snapshot is exactly 22 paths, its review correction is resolved in exactly nine paths, provenance ownership is `7/7`, valid and invalid grounding are `20/20` each, Fake Pipeline is `3/3`, PB-02 through PB-06 downstream input parity is `15/15`, leakage is `0`, Canonical Suite is `64/64`, and Decision Policy is `40/40`.
 
 ## Next candidate boundary
 
-`M2-P4-I3-R1-C PB-01 v4 Provider Diagnostic and Runtime Activation` is not authorized. No R1-C, provider execution, active Service switch, E1, or holdout work may begin from this implementation or review.
+The next candidates are split into `M2-P4-I3-R1-C1 PB-01 v4 Bounded Provider Diagnostic` and `M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation`. Neither is authorized. Provider diagnostic, active Service switch, E1, holdout work, final I3 acceptance, and Milestone 2 completion remain not started, pending, or incomplete as stated; the legacy combined R1-C task grants no authority.

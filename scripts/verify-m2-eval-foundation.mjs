@@ -274,6 +274,10 @@ const m2p4I3R1AAcceptedImplementationCommit =
   "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd";
 const m2p4I3R1BBaselineCommit =
   "2381312ced5fc726dfa245632c25da6bb68a376f";
+const m2p4I3R1BFirstImplementationCommit =
+  "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
+const m2p4I3R1BAcceptedImplementationCommit =
+  "4a1237ac647bff79229d7181d978d5613c2c3b87";
 const m2p4I3R1ACapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json";
 const m2p4I3R1BCapabilityManifestPath =
@@ -348,6 +352,27 @@ const exactR1BPaths = new Set([
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1BAcceptanceSyncPaths = new Set([
+  m2p4I3R1BCapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  m2p4I3R1BVerifierPath,
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const m2p4I3R1BReviewCorrectionPaths = new Set([
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  m2p4I3R1BCapabilityManifestPath,
+  m2p4I3R1BVerifierPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
@@ -4278,7 +4303,17 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1AAcceptedImplementationCommit,
     m2p4I3R1BBaselineCommit,
   );
-  const m2p4I3R1BTaskPaths = currentTaskPaths(m2p4I3R1BBaselineCommit);
+  const m2p4I3R1BImplementationPaths = historicalTaskPaths(
+    m2p4I3R1BBaselineCommit,
+    m2p4I3R1BAcceptedImplementationCommit,
+  );
+  const m2p4I3R1BReviewCorrectionTaskPaths = historicalTaskPaths(
+    m2p4I3R1BFirstImplementationCommit,
+    m2p4I3R1BAcceptedImplementationCommit,
+  );
+  const m2p4I3R1BAcceptanceSyncTaskPaths = currentTaskPaths(
+    m2p4I3R1BAcceptedImplementationCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4567,13 +4602,55 @@ function verifyScopeAndProhibitedImplementation() {
       });
     }
   }
+  const expectedM2p4I3R1BSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: m2p4I3R1BBaselineCommit,
+    end_commit_sha: m2p4I3R1BAcceptedImplementationCommit,
+    exact_paths: 22,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const expectedM2p4I3R1BReviewCorrection = {
+    base_commit: m2p4I3R1BFirstImplementationCommit,
+    correction_commit: m2p4I3R1BAcceptedImplementationCommit,
+    exact_paths: 9,
+    provenance_ownership_matrix: "7/7",
+    valid_grounding_cases: 20,
+    invalid_grounding_cases: 20,
+    downstream_input_parity: "15/15",
+    scope_expansion: false,
+    force_push: false,
+  };
   if (
-    !isExactLiteralPathSet(m2p4I3R1BTaskPaths, exactR1BPaths) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1BImplementationPaths,
+      exactR1BPaths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1BReviewCorrectionTaskPaths,
+      m2p4I3R1BReviewCorrectionPaths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1BAcceptanceSyncTaskPaths,
+      m2p4I3R1BAcceptanceSyncPaths,
+    ) ||
     m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
     m2p4I3R1BManifest?.title !==
       "PB-01 v4 Writing Context Extraction and Grounding" ||
-    m2p4I3R1BManifest?.status !==
-      "implementation_pending_human_chatgpt_review" ||
+    m2p4I3R1BManifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I3R1BManifest?.accepted_implementation_commit !==
+      m2p4I3R1BAcceptedImplementationCommit ||
+    JSON.stringify(m2p4I3R1BManifest?.implementation_commits) !==
+      JSON.stringify([
+        m2p4I3R1BFirstImplementationCommit,
+        m2p4I3R1BAcceptedImplementationCommit,
+      ]) ||
+    JSON.stringify(m2p4I3R1BManifest?.implementation_snapshot) !==
+      JSON.stringify(expectedM2p4I3R1BSnapshot) ||
+    m2p4I3R1BManifest?.review_correction_required !== false ||
+    m2p4I3R1BManifest?.review_correction_status !== "resolved" ||
+    JSON.stringify(m2p4I3R1BManifest?.review_correction) !==
+      JSON.stringify(expectedM2p4I3R1BReviewCorrection) ||
     m2p4I3R1BManifest?.baseline !== m2p4I3R1BBaselineCommit ||
     !isExactLiteralPathSet(
       [...(m2p4I3R1BManifest?.exact_mutation_paths ?? [])].sort(),
@@ -4596,26 +4673,37 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1BManifest?.migrations !== 0 ||
     m2p4I3R1BManifest?.provider_diagnostic !== "not_started" ||
     m2p4I3R1BManifest?.next_candidate !==
-      "M2-P4-I3-R1-C PB-01 v4 Provider Diagnostic and Runtime Activation" ||
-    m2p4I3R1BManifest?.next_candidate_authorized !== false
+      "M2-P4-I3-R1-C1 PB-01 v4 Bounded Provider Diagnostic" ||
+    m2p4I3R1BManifest?.next_candidate_authorized !== false ||
+    m2p4I3R1BManifest?.runtime_activation_candidate !==
+      "M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation" ||
+    m2p4I3R1BManifest?.runtime_activation_authorized !== false
   ) {
     fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
       file: m2p4I3R1BCapabilityManifestPath,
       pathName: "$.m2_p4_i3_r1_b",
       invariant:
-        "R1-B is the exact 22-path offline-integrated candidate with inactive active Runtime and unauthorized R1-C",
+        "accepted R1-B keeps the immutable exact 22-path implementation snapshot, exact 9-path review correction, exact 8-path acceptance sync, inactive catalog v5, unchanged catalog-v4 Service, and unauthorized C1/C2 successors",
       expected: {
-        status: "implementation_pending_human_chatgpt_review",
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          m2p4I3R1BAcceptedImplementationCommit,
+        implementation_snapshot: expectedM2p4I3R1BSnapshot,
+        review_correction: expectedM2p4I3R1BReviewCorrection,
         baseline: m2p4I3R1BBaselineCommit,
         exact_mutation_paths: [...exactR1BPaths].sort(),
+        acceptance_sync_paths: [...m2p4I3R1BAcceptanceSyncPaths].sort(),
         active_runtime_changed: false,
         service_mutations: 0,
         provider_diagnostic: "not_started",
         next_candidate_authorized: false,
+        runtime_activation_authorized: false,
       },
       actual: {
         manifest: m2p4I3R1BManifest,
-        task_paths: m2p4I3R1BTaskPaths,
+        implementation_paths: m2p4I3R1BImplementationPaths,
+        review_correction_paths: m2p4I3R1BReviewCorrectionTaskPaths,
+        acceptance_sync_paths: m2p4I3R1BAcceptanceSyncTaskPaths,
       },
     });
   }

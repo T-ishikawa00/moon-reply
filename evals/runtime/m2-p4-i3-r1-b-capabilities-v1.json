@@ -2,11 +2,36 @@
   "schema_version": "m2-p4-i3-r1-b-capabilities-v1",
   "task_id": "M2-P4-I3-R1-B",
   "title": "PB-01 v4 Writing Context Extraction and Grounding",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "accepted_implementation_commit": "4a1237ac647bff79229d7181d978d5613c2c3b87",
+  "implementation_commits": [
+    "0ccf59114fe4079e0a5513fef3faf1b9fade11e7",
+    "4a1237ac647bff79229d7181d978d5613c2c3b87"
+  ],
   "baseline": "2381312ced5fc726dfa245632c25da6bb68a376f",
-  "review_correction_required": true,
-  "review_correction_base": "0ccf59114fe4079e0a5513fef3faf1b9fade11e7",
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "2381312ced5fc726dfa245632c25da6bb68a376f",
+    "end_commit_sha": "4a1237ac647bff79229d7181d978d5613c2c3b87",
+    "exact_paths": 22,
+    "include_working_tree": false,
+    "immutable_snapshot": true
+  },
+  "review_correction_required": false,
+  "review_correction_status": "resolved",
+  "review_correction": {
+    "base_commit": "0ccf59114fe4079e0a5513fef3faf1b9fade11e7",
+    "correction_commit": "4a1237ac647bff79229d7181d978d5613c2c3b87",
+    "exact_paths": 9,
+    "provenance_ownership_matrix": "7/7",
+    "valid_grounding_cases": 20,
+    "invalid_grounding_cases": 20,
+    "downstream_input_parity": "15/15",
+    "scope_expansion": false,
+    "force_push": false
+  },
   "provenance_ownership_matrix_implemented": true,
+  "valid_grounding_cases": 20,
   "invalid_grounding_cases": 20,
   "full_downstream_input_parity": true,
   "exact_mutation_paths": [
@@ -53,6 +78,8 @@
   "real_user_data": 0,
   "provider_diagnostic": "not_started",
   "achieved_score": null,
-  "next_candidate": "M2-P4-I3-R1-C PB-01 v4 Provider Diagnostic and Runtime Activation",
-  "next_candidate_authorized": false
+  "next_candidate": "M2-P4-I3-R1-C1 PB-01 v4 Bounded Provider Diagnostic",
+  "next_candidate_authorized": false,
+  "runtime_activation_candidate": "M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation",
+  "runtime_activation_authorized": false
 }

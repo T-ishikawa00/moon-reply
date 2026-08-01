@@ -120,6 +120,10 @@ const exactR1AAcceptanceSyncPaths = [
   "docs/CODEX_HANDOFF.md",
 ];
 const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
+const r1bFirstImplementationSha =
+  "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
+const r1bAcceptedImplementationSha =
+  "4a1237ac647bff79229d7181d978d5613c2c3b87";
 const exactR1BPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
@@ -138,6 +142,27 @@ const exactR1BPaths = [
   "scripts/verify-m2-p4-i2-report-ia.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1BReviewCorrectionPaths = [
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "evals/runtime/m2-p4-i3-r1-b-grounding-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1BAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1597,6 +1622,9 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const r1aManifest = json(
     "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
   );
+  const r1bManifest = json(
+    "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  );
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1621,7 +1649,17 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1aAcceptedImplementationSha,
     r1bBaselineSha,
   );
-  const actualR1BPaths = currentTaskPaths(r1bBaselineSha);
+  const actualR1BImplementationPaths = historicalPaths(
+    r1bBaselineSha,
+    r1bAcceptedImplementationSha,
+  );
+  const actualR1BReviewCorrectionPaths = historicalPaths(
+    r1bFirstImplementationSha,
+    r1bAcceptedImplementationSha,
+  );
+  const actualR1BAcceptanceSyncPaths = currentTaskPaths(
+    r1bAcceptedImplementationSha,
+  );
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1aBaselineSha,
@@ -1635,6 +1673,25 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     status: "resolved",
     commit: r1aAcceptedImplementationSha,
     changed_paths: ["scripts/verify-m2-p4-i3-r1-a-contracts.mjs"],
+    scope_expansion: false,
+    force_push: false,
+  };
+  const expectedR1BSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1bBaselineSha,
+    end_commit_sha: r1bAcceptedImplementationSha,
+    exact_paths: 22,
+    include_working_tree: false,
+    immutable_snapshot: true,
+  };
+  const expectedR1BReviewCorrection = {
+    base_commit: r1bFirstImplementationSha,
+    correction_commit: r1bAcceptedImplementationSha,
+    exact_paths: 9,
+    provenance_ownership_matrix: "7/7",
+    valid_grounding_cases: 20,
+    invalid_grounding_cases: 20,
+    downstream_input_parity: "15/15",
     scope_expansion: false,
     force_push: false,
   };
@@ -1726,7 +1783,15 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         actualR1AAcceptanceSyncPaths,
         exactR1AAcceptanceSyncPaths,
       ) &&
-      isExactLiteralSet(actualR1BPaths, exactR1BPaths) &&
+      isExactLiteralSet(actualR1BImplementationPaths, exactR1BPaths) &&
+      isExactLiteralSet(
+        actualR1BReviewCorrectionPaths,
+        exactR1BReviewCorrectionPaths,
+      ) &&
+      isExactLiteralSet(
+        actualR1BAcceptanceSyncPaths,
+        exactR1BAcceptanceSyncPaths,
+      ) &&
       isExactLiteralSet(actualR1ASelfCorrectionPaths, [
         "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
       ]) &&
@@ -1746,8 +1811,33 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1aManifest.active_runtime_changed === false &&
       r1aManifest.next_candidate ===
         "M2-P4-I3-R1-B PB-01 v4 Writing Context Extraction and Grounding" &&
-      r1aManifest.next_candidate_authorized === false,
-    `R1 planning/R1-A accepted successor boundaries differ: implementation=${actualR1AImplementationPaths.join(",")}; acceptance=${actualR1AAcceptanceSyncPaths.join(",")}`,
+      r1aManifest.next_candidate_authorized === false &&
+      r1bManifest.task_id === "M2-P4-I3-R1-B" &&
+      r1bManifest.status === "human_chatgpt_accepted_complete" &&
+      r1bManifest.accepted_implementation_commit ===
+        r1bAcceptedImplementationSha &&
+      JSON.stringify(r1bManifest.implementation_commits) ===
+        JSON.stringify([
+          r1bFirstImplementationSha,
+          r1bAcceptedImplementationSha,
+        ]) &&
+      JSON.stringify(r1bManifest.implementation_snapshot) ===
+        JSON.stringify(expectedR1BSnapshot) &&
+      r1bManifest.review_correction_required === false &&
+      r1bManifest.review_correction_status === "resolved" &&
+      JSON.stringify(r1bManifest.review_correction) ===
+        JSON.stringify(expectedR1BReviewCorrection) &&
+      r1bManifest.active_runtime_changed === false &&
+      r1bManifest.service_mutations === 0 &&
+      r1bManifest.candidate_catalog === "runtime-stage-catalog-v5.0.0" &&
+      r1bManifest.provider_diagnostic === "not_started" &&
+      r1bManifest.next_candidate ===
+        "M2-P4-I3-R1-C1 PB-01 v4 Bounded Provider Diagnostic" &&
+      r1bManifest.next_candidate_authorized === false &&
+      r1bManifest.runtime_activation_candidate ===
+        "M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation" &&
+      r1bManifest.runtime_activation_authorized === false,
+    `R1 planning/R1-A/R1-B accepted successor boundaries differ: r1a_implementation=${actualR1AImplementationPaths.join(",")}; r1a_acceptance=${actualR1AAcceptanceSyncPaths.join(",")}; r1b_implementation=${actualR1BImplementationPaths.join(",")}; r1b_correction=${actualR1BReviewCorrectionPaths.join(",")}; r1b_acceptance=${actualR1BAcceptanceSyncPaths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

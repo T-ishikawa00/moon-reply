@@ -8,7 +8,15 @@ import Ajv2020 from "ajv/dist/2020.js";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const baselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
-const reviewCorrectionBase = "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
+const firstImplementationSha =
+  "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
+const acceptedImplementationSha =
+  "4a1237ac647bff79229d7181d978d5613c2c3b87";
+const implementationCommits = [
+  firstImplementationSha,
+  acceptedImplementationSha,
+];
+const reviewCorrectionBase = firstImplementationSha;
 const stageIds = ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
 const exactPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
@@ -45,7 +53,7 @@ const reviewCorrectionPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
-const acceptanceSyncPaths = [
+const r1aAcceptanceSyncPaths = [
   "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json",
   "docs/phase2/TASK_M2_P4_I3_R1_A_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
@@ -55,6 +63,19 @@ const acceptanceSyncPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1bAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_B_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const immutableImplementationPaths = exactPaths.filter(
+  (item) => !r1bAcceptanceSyncPaths.includes(item),
+);
 
 function absolute(relativePath) {
   return path.join(repositoryRoot, ...relativePath.split("/"));
@@ -129,11 +150,48 @@ function assertLiteralSet(actual, expected) {
   assert.deepEqual(sorted(actual), sorted(expected));
 }
 
-assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", baselineSha, "HEAD"]));
+for (const sha of [baselineSha, firstImplementationSha, acceptedImplementationSha]) {
+  assert.doesNotThrow(() => git(["cat-file", "-e", `${sha}^{commit}`]));
+  assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", sha, "HEAD"]));
+}
 assert.equal(exactPaths.length, 22);
 assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
 assert.equal(reviewCorrectionPaths.length, 9);
-assertLiteralSet(currentTaskPaths(reviewCorrectionBase), reviewCorrectionPaths);
+assert.equal(
+  git(["rev-parse", `${firstImplementationSha}^`]).trim(),
+  baselineSha,
+);
+assert.equal(
+  git(["rev-parse", `${acceptedImplementationSha}^`]).trim(),
+  firstImplementationSha,
+);
+assert.deepEqual(
+  normalizedPaths(
+    git(["rev-list", "--reverse", `${baselineSha}..${acceptedImplementationSha}`]),
+  ),
+  implementationCommits,
+);
+assertLiteralSet(
+  historicalPaths(baselineSha, acceptedImplementationSha),
+  exactPaths,
+);
+assertLiteralSet(
+  historicalPaths(firstImplementationSha, acceptedImplementationSha),
+  reviewCorrectionPaths,
+);
+assert.equal(r1bAcceptanceSyncPaths.length, 8);
+assertLiteralSet(
+  currentTaskPaths(acceptedImplementationSha),
+  r1bAcceptanceSyncPaths,
+);
+assert.equal(immutableImplementationPaths.length, 14);
+for (const immutablePath of immutableImplementationPaths) {
+  assert.equal(
+    shaText(source(immutablePath)),
+    shaText(git(["show", `${acceptedImplementationSha}:${immutablePath}`])),
+    `${immutablePath} changed after accepted implementation`,
+  );
+}
 
 const protectedPaths = [
   "lib/assessment/runtime/service.ts",
@@ -207,7 +265,7 @@ const snapshotChecks = [
   {
     base: "8030c0b7778ccea3d7d90cbffcf21ac9c1052bcd",
     end: baselineSha,
-    expected: acceptanceSyncPaths,
+    expected: r1aAcceptanceSyncPaths,
     count: 8,
   },
 ];
@@ -218,10 +276,35 @@ for (const check of snapshotChecks) {
 
 const capabilities = json("evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json");
 assert.equal(capabilities.task_id, "M2-P4-I3-R1-B");
-assert.equal(capabilities.status, "implementation_pending_human_chatgpt_review");
-assert.equal(capabilities.review_correction_required, true);
-assert.equal(capabilities.review_correction_base, reviewCorrectionBase);
+assert.equal(capabilities.status, "human_chatgpt_accepted_complete");
+assert.equal(
+  capabilities.accepted_implementation_commit,
+  acceptedImplementationSha,
+);
+assert.deepEqual(capabilities.implementation_commits, implementationCommits);
+assert.deepEqual(capabilities.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  exact_paths: 22,
+  include_working_tree: false,
+  immutable_snapshot: true,
+});
+assert.equal(capabilities.review_correction_required, false);
+assert.equal(capabilities.review_correction_status, "resolved");
+assert.deepEqual(capabilities.review_correction, {
+  base_commit: firstImplementationSha,
+  correction_commit: acceptedImplementationSha,
+  exact_paths: 9,
+  provenance_ownership_matrix: "7/7",
+  valid_grounding_cases: 20,
+  invalid_grounding_cases: 20,
+  downstream_input_parity: "15/15",
+  scope_expansion: false,
+  force_push: false,
+});
 assert.equal(capabilities.provenance_ownership_matrix_implemented, true);
+assert.equal(capabilities.valid_grounding_cases, 20);
 assert.equal(capabilities.invalid_grounding_cases, 20);
 assert.equal(capabilities.full_downstream_input_parity, true);
 assert.equal(capabilities.exact_mutation_path_count, 22);
@@ -240,7 +323,16 @@ for (const field of [
 ]) {
   assert.ok(capabilities[field] === false || capabilities[field] === 0);
 }
+assert.equal(
+  capabilities.next_candidate,
+  "M2-P4-I3-R1-C1 PB-01 v4 Bounded Provider Diagnostic",
+);
 assert.equal(capabilities.next_candidate_authorized, false);
+assert.equal(
+  capabilities.runtime_activation_candidate,
+  "M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation",
+);
+assert.equal(capabilities.runtime_activation_authorized, false);
 
 const runtimeContract = json("evals/runtime/m2-p4-i3-r1-b-runtime-contract-v1.json");
 assert.equal(runtimeContract.baseline, baselineSha);
@@ -830,6 +922,11 @@ for (const verifierPath of [
 }
 
 console.log("M2_P4_I3_R1_B_WRITING_CONTEXT: PASS");
+console.log(`accepted_implementation_commit: ${acceptedImplementationSha}`);
+console.log("implementation_commits: 2/2");
+console.log("implementation_snapshot: 22/22");
+console.log("acceptance_sync_scope: 8/8");
+console.log("review_correction_status: resolved");
 console.log("review_correction_scope: 9/9");
 console.log("cumulative_r1_b_scope: 22/22");
 console.log(
