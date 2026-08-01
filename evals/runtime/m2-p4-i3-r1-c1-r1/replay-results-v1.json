@@ -2,12 +2,19 @@
   "schema_version": "m2-p4-i3-r1-c1-r1-replay-results-v1",
   "task_id": "M2-P4-I3-R1-C1-R1",
   "evaluator_version": "m2-p4-i3-r1-c1-r1-replay-evaluator-v2",
-  "verdict": "PASS",
+  "verdict": "FAIL",
+  "expected_input_injection": 0,
   "provider_calls_during_replay": 0,
   "db_operations": 0,
   "supabase_operations": 0,
   "holdout_use": 0,
   "metrics": {
+    "input_construction": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
     "provider_transport": {
       "passed": 8,
       "total": 8,
@@ -33,15 +40,15 @@
       "evidence_status": "available"
     },
     "critical_expected_subset": {
-      "passed": 8,
+      "passed": 5,
       "total": 8,
-      "rate": 1,
+      "rate": 0.625,
       "evidence_status": "available"
     },
     "semantic_assertions": {
-      "passed": 42,
+      "passed": 41,
       "total": 42,
-      "rate": 1,
+      "rate": 0.9761904761904762,
       "evidence_status": "available"
     },
     "soft_assertions": {
@@ -57,9 +64,9 @@
       "evidence_status": "available"
     },
     "ownership": {
-      "passed": 8,
+      "passed": 7,
       "total": 8,
-      "rate": 1,
+      "rate": 0.875,
       "evidence_status": "available"
     },
     "constraint_provenance": {
@@ -75,22 +82,122 @@
       "evidence_status": "available"
     },
     "auxiliary_v3_parity": {
-      "passed": 3,
+      "passed": 4,
       "total": 4,
-      "rate": 0.75,
+      "rate": 1,
       "evidence_status": "available"
     }
   },
   "cases": [
     {
       "case_id": "PAIR-01",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "matching_app",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": true,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "matching_app",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
+      "critical_expected_subset_mismatched_paths": [],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 2,
         "total": 2,
@@ -111,13 +218,109 @@
     },
     {
       "case_id": "PAIR-02",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "user",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 1,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "within_usual",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "user",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 1,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "within_usual",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "user",
+          "status": "sent_by_user"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
-      "critical_expected_subset_passed": true,
+      "critical_expected_subset_passed": false,
+      "critical_expected_subset_mismatched_paths": [
+        "/latest_direct_message/user_reply_state"
+      ],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 1,
         "total": 1,
@@ -129,24 +332,122 @@
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": {
-        "passed": false,
-        "mismatched_material_paths": [
-          "/latest_direct_message/user_reply_state"
-        ],
+        "passed": true,
+        "mismatched_material_paths": [],
         "nonmaterial_paths": [],
         "evidence_role": "auxiliary_only"
       },
-      "output_sha256": "0e021ba5e92ab71b2baca16a1bdfd24b3de22973d7a9c25ff54f815608348804"
+      "output_sha256": "0d1fd3151911c5099b086a1b7883f123e0d6d50dbd849239c304385a2484c648"
     },
     {
       "case_id": "PAIR-03",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "work_or_school",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "temporary_distance",
+          "status": "explicit",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": true,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "work_or_school",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "temporary_distance",
+        "status": "explicit"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
+      "critical_expected_subset_mismatched_paths": [],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 2,
         "total": 2,
@@ -167,13 +468,107 @@
     },
     {
       "case_id": "PAIR-04",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "closure_or_boundary",
+          "response_expectation": "none",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "no_contact",
+          "status": "explicit",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": true,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "closure_or_boundary",
+          "response_expectation": "none",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "no_contact",
+          "status": "explicit",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "no_contact",
+        "status": "explicit"
+      },
+      "post_guard_boundary": {
+        "kind": "no_contact",
+        "status": "explicit"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
+      "critical_expected_subset_mismatched_paths": [],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 0,
         "total": 0,
@@ -196,13 +591,110 @@
     },
     {
       "case_id": "V4-05",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "former_partner",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "logistics",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "former_partner",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "logistics",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
+      "critical_expected_subset_mismatched_paths": [],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 0,
         "total": 0,
@@ -218,13 +710,117 @@
     },
     {
       "case_id": "V4-06",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "question",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "question",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [
+        {
+          "author": "user",
+          "status": "sent_by_user"
+        },
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
-      "critical_expected_subset_passed": true,
+      "critical_expected_subset_passed": false,
+      "critical_expected_subset_mismatched_paths": [
+        "/latest_direct_message/kind"
+      ],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 1,
         "total": 1,
@@ -236,17 +832,113 @@
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
-      "output_sha256": "0eaad816fc764015d00fc8fc526dbe7b7b56511fdafdcbdbe79838e09dedf3b7"
+      "output_sha256": "2aba96569db5e31bf9b795c457139a1c6ace85a4f69ffe59a64847cf69f23a67"
     },
     {
       "case_id": "V4-07",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "none",
+          "kind": "none",
+          "response_expectation": "none",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "latest_direct_message.sender",
+            "latest_direct_message.kind",
+            "latest_direct_message.response_expectation",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "none",
+          "kind": "none",
+          "response_expectation": "none",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.usual_cadence_relation"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "post_guard_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "extracted_message_signals": [],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
+      "critical_expected_subset_mismatched_paths": [],
       "semantic_assertions_passed": true,
+      "failed_semantic_assertions": [],
       "soft_assertions": {
         "passed": 2,
         "total": 2,
@@ -262,13 +954,126 @@
     },
     {
       "case_id": "V4-08",
+      "input_construction_passed": true,
+      "expected_data_injected": false,
+      "pre_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "organize_emotions"
+        ],
+        "latest_direct_message": {
+          "sender": "unknown",
+          "kind": "unknown",
+          "response_expectation": "unknown",
+          "user_reply_state": "unknown",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "unknown",
+          "status": "unknown",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "latest_direct_message.sender",
+            "latest_direct_message.kind",
+            "latest_direct_message.response_expectation",
+            "latest_direct_message.user_reply_state",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "boundary_state.kind",
+            "boundary_state.status"
+          ]
+        }
+      },
+      "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "organize_emotions"
+        ],
+        "latest_direct_message": {
+          "sender": "unknown",
+          "kind": "unknown",
+          "response_expectation": "unknown",
+          "user_reply_state": "unknown",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "unknown",
+          "status": "unknown",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "boundary_state.kind",
+            "boundary_state.status",
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.usual_cadence_relation",
+            "latest_direct_message.kind",
+            "latest_direct_message.response_expectation",
+            "latest_direct_message.sender",
+            "latest_direct_message.user_reply_state"
+          ]
+        }
+      },
+      "pre_guard_boundary": {
+        "kind": "unknown",
+        "status": "unknown"
+      },
+      "post_guard_boundary": {
+        "kind": "unknown",
+        "status": "unknown"
+      },
+      "extracted_message_signals": [],
       "provider_transport_passed": true,
       "raw_schema_passed": true,
       "grounded_schema_passed": true,
       "integrity_passed": true,
       "integrity_violations": [],
-      "critical_expected_subset_passed": true,
-      "semantic_assertions_passed": true,
+      "critical_expected_subset_passed": false,
+      "critical_expected_subset_mismatched_paths": [
+        "/boundary_state/kind",
+        "/boundary_state/status"
+      ],
+      "semantic_assertions_passed": false,
+      "failed_semantic_assertions": [
+        {
+          "id": "V4-08-EXPECTED-OWNERSHIP",
+          "fail_code": "MESSAGE_OWNER_CONFUSION"
+        }
+      ],
       "soft_assertions": {
         "passed": 0,
         "total": 0,
@@ -276,11 +1081,11 @@
         "evidence_status": "unavailable"
       },
       "candidate_presence_passed": true,
-      "ownership_passed": true,
+      "ownership_passed": false,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
-      "output_sha256": "7d46caf4932e2e8e01e2fe77858792e69be78246e59a91cf6074042c7a5816e1"
+      "output_sha256": "ba7d77f6a8e5901a2016d7d01b8688d9fb9299e3719055d23ad2a02d93fd0185"
     }
   ]
 }

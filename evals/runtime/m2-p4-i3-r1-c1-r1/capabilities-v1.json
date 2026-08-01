@@ -8,6 +8,24 @@
   "exact_mutation_paths": 31,
   "source_diagnostic": "human_chatgpt_reviewed_fail_complete",
   "provider_calls": 0,
+  "replay_input_construction_authority": {
+    "allowed_sources": [
+      "saved_c1_raw_typed_projection",
+      "synthetic_assessment_input",
+      "deterministic_schema_version_conversion",
+      "application_owned_request_fields"
+    ],
+    "forbidden_sources": [
+      "expected_decision_fact_subset",
+      "expected_writing_context_subset",
+      "expected_source_ownership",
+      "hard_assertions",
+      "soft_assertions",
+      "forbidden_assertions",
+      "acceptable_value_sets"
+    ]
+  },
+  "expected_input_injection": 0,
   "provider_semantic_contract": "writing-signals-v1",
   "provider_schema": "pipeline-schema-v5.0.0",
   "grounded_schema": "pipeline-schema-v4.0.0",
@@ -15,13 +33,44 @@
   "candidate_catalog": "runtime-stage-catalog-v6.0.0",
   "candidate_prompt_bundle": "prompt-bundle-runtime-v6.0.0",
   "candidate_runtime_schema_set": "pipeline-schema-runtime-v3.2.0",
-  "replay": "8/8",
+  "replay_verdict": "FAIL",
+  "replay": "5/8",
   "writing_context_integrity": "8/8",
-  "decision_facts_expected_subset": "8/8",
+  "decision_facts_expected_subset": "5/8",
+  "semantic_assertions": "41/42",
   "candidate_presence_parity": "8/8",
-  "ownership_parity": "8/8",
+  "ownership_parity": "7/8",
   "constraint_provenance": "8/8",
   "privacy_repeat_injection_preservation": "8/8",
+  "auxiliary_v3_parity": "4/4",
+  "failed_replay_cases": [
+    {
+      "case_id": "PAIR-02",
+      "mismatched_paths": [
+        "/latest_direct_message/user_reply_state"
+      ],
+      "actual": "not_applicable",
+      "expected": "replied"
+    },
+    {
+      "case_id": "V4-06",
+      "mismatched_paths": [
+        "/latest_direct_message/kind"
+      ],
+      "actual": "question",
+      "expected": "schedule_coordination"
+    },
+    {
+      "case_id": "V4-08",
+      "mismatched_paths": [
+        "/boundary_state/kind",
+        "/boundary_state/status"
+      ],
+      "actual": "unknown / unknown",
+      "expected": "none / none",
+      "ownership_parity": false
+    }
+  ],
   "fake_pipeline": "3/3",
   "provider_bookkeeping_fields": 0,
   "downstream_writing_signals_leakage": 0,

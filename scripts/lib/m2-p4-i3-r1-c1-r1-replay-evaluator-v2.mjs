@@ -92,15 +92,15 @@ function deepSubset(actual, expected) {
   );
 }
 
-function deepOverlay(target, overlay) {
-  if (!isObject(overlay)) return structuredClone(overlay);
-  const result = isObject(target) ? structuredClone(target) : {};
-  for (const [key, value] of Object.entries(overlay)) {
-    result[key] = isObject(value)
-      ? deepOverlay(result[key], value)
-      : structuredClone(value);
+function subsetMismatchedPaths(actual, expected, pointer = "") {
+  if (Array.isArray(expected) || !isObject(expected)) {
+    return same(actual, expected) ? [] : [pointer || "/"];
   }
-  return result;
+  if (!isObject(actual)) return [pointer || "/"];
+  return Object.entries(expected).flatMap(([key, value]) => {
+    const escaped = key.replaceAll("~", "~0").replaceAll("/", "~1");
+    return subsetMismatchedPaths(actual[key], value, `${pointer}/${escaped}`);
+  });
 }
 
 function stripBookkeeping(value) {
@@ -284,20 +284,6 @@ function assessmentInput(diagnosticCase) {
 export function buildC1ReplayStructuredIntakeV5(diagnosticCase, rawProjection) {
   const request = assessmentInput(diagnosticCase);
   const writingSignals = extractWritingSignalsFromC1ProjectionV1(rawProjection);
-  for (const expected of diagnosticCase.expected_source_ownership ?? []) {
-    if (
-      expected.status !== "unsent_candidate" &&
-      !writingSignals.message_signals.some(
-        (actual) =>
-          actual.author === expected.author && actual.status === expected.status,
-      )
-    ) {
-      writingSignals.message_signals.push({
-        author: expected.author,
-        status: expected.status,
-      });
-    }
-  }
   return {
     schema_version: "pipeline-schema-v5.0.0",
     relationship_stage: request.relationship,
@@ -313,11 +299,39 @@ export function buildC1ReplayStructuredIntakeV5(diagnosticCase, rawProjection) {
     untrusted_embedded_instructions_detected:
       rawProjection.untrusted_embedded_instructions_detected === true,
     context_inferences: [],
-    decision_facts: deepOverlay(
-      rawProjection.decision_facts,
-      diagnosticCase.expected_decision_fact_subset,
-    ),
+    decision_facts: structuredClone(rawProjection.decision_facts),
     writing_signals: writingSignals,
+  };
+}
+
+export function auditC1ReplayInputConstructionV1(
+  diagnosticCase,
+  rawProjection,
+  rawV5,
+) {
+  const authorized = buildC1ReplayStructuredIntakeV5(
+    diagnosticCase,
+    rawProjection,
+  );
+  const matchesAuthorizedConstruction = same(rawV5, authorized);
+  return {
+    matches_authorized_construction: matchesAuthorizedConstruction,
+    decision_facts_match_saved_raw: same(
+      rawV5?.decision_facts,
+      rawProjection?.decision_facts,
+    ),
+    message_signals_match_saved_raw_ownership: same(
+      rawV5?.writing_signals?.message_signals,
+      authorized.writing_signals.message_signals,
+    ),
+    expected_data_injected: !matchesAuthorizedConstruction,
+  };
+}
+
+function boundaryKindStatus(decisionFacts) {
+  return {
+    kind: decisionFacts?.boundary_state?.kind ?? null,
+    status: decisionFacts?.boundary_state?.status ?? null,
   };
 }
 
@@ -467,6 +481,11 @@ export function evaluateC1OfflineReplayV2({
       diagnosticCase,
       saved.raw_typed_projection,
     );
+    const inputConstructionAudit = auditC1ReplayInputConstructionV1(
+      diagnosticCase,
+      saved.raw_typed_projection,
+      rawV5,
+    );
     const providerSchemaPassed = validateProvider(rawV5);
     const grounded = groundStructuredIntakeV5(request, rawV5);
     const groundedSchemaPassed = validateGrounded(grounded);
@@ -533,6 +552,16 @@ export function evaluateC1OfflineReplayV2({
       grounded.writing_context?.candidate_communicative_intent !== null;
     caseResults.push({
       case_id: diagnosticCase.case_id,
+      input_construction_passed:
+        inputConstructionAudit.matches_authorized_construction,
+      expected_data_injected: inputConstructionAudit.expected_data_injected,
+      pre_guard_decision_facts: structuredClone(rawV5.decision_facts),
+      post_guard_decision_facts: structuredClone(grounded.decision_facts),
+      pre_guard_boundary: boundaryKindStatus(rawV5.decision_facts),
+      post_guard_boundary: boundaryKindStatus(grounded.decision_facts),
+      extracted_message_signals: structuredClone(
+        rawV5.writing_signals.message_signals,
+      ),
       provider_transport_passed:
         saved.provider_completed === true,
       raw_schema_passed: providerSchemaPassed,
@@ -543,8 +572,15 @@ export function evaluateC1OfflineReplayV2({
         grounded.decision_facts,
         diagnosticCase.expected_decision_fact_subset,
       ),
+      critical_expected_subset_mismatched_paths: subsetMismatchedPaths(
+        grounded.decision_facts,
+        diagnosticCase.expected_decision_fact_subset,
+      ),
       semantic_assertions_passed: hard.every((item) => item.passed) &&
         forbidden.every((item) => item.passed),
+      failed_semantic_assertions: [...hard, ...forbidden]
+        .filter((item) => !item.passed)
+        .map((item) => ({ id: item.id, fail_code: item.fail_code })),
       soft_assertions: score(soft),
       candidate_presence_passed: candidateExpected === candidateActual,
       ownership_passed: ownershipParity(
@@ -587,6 +623,7 @@ export function evaluateC1OfflineReplayV2({
     evaluator_version: "m2-p4-i3-r1-c1-r1-replay-evaluator-v2",
     cases: caseResults,
     metrics: {
+      input_construction: metric("input_construction_passed"),
       provider_transport: metric("provider_transport_passed"),
       raw_schema: metric("raw_schema_passed"),
       grounded_schema: metric("grounded_schema_passed"),
@@ -604,6 +641,7 @@ export function evaluateC1OfflineReplayV2({
     },
   };
   evaluation.verdict = [
+    "input_construction",
     "provider_transport",
     "raw_schema",
     "grounded_schema",
@@ -626,6 +664,9 @@ export function replayResultsArtifactV1(evaluation) {
     task_id: "M2-P4-I3-R1-C1-R1",
     evaluator_version: evaluation.evaluator_version,
     verdict: evaluation.verdict,
+    expected_input_injection: evaluation.cases.filter(
+      (caseResult) => caseResult.expected_data_injected,
+    ).length,
     provider_calls_during_replay: 0,
     db_operations: 0,
     supabase_operations: 0,
