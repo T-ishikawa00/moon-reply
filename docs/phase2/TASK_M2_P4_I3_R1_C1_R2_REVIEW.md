@@ -3,22 +3,32 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic`
-- Status: `provider_diagnostic_failed_pending_human_chatgpt_review`
+- Status: `human_chatgpt_reviewed_fail_complete`
 - Authorization: `M2-P4-I3-R1-C1-R2-2026-08-01`
 - Confirmation: `R1-C1-R2-8-CALL-SYNTHETIC-ONLY`
 - Baseline: `277101219c27477e67e1196af0e6067713571edc`
 - Branch: `test/m2-p4-i3-r1-c1-r2-provider-diagnostic`
 - Commit A: `d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e`
+- Commit B: `7239f50fd24eb80369e74583cd619c2155813401`
+- Exact diagnostic snapshot: `17/17`
+- Exact review sync scope: `8/8`
 - Model / stage: `gpt-5.6-luna` / `PB-01 v5 only`
 - Synthetic cases / authorized Provider calls: `8 / 8`
 - Actual / completed Provider calls: `8 / 8`
 - Retry / repair / fallback: `0 / 0 / 0`
 - PB-02 through PB-06 / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Authorization consumed / rerun authorized: `true / false`
+- Execution protocol accepted: `true`
+- Diagnostic evidence valid: `true`
+- Post-run evaluator correction accepted: `true`
+- Provider product gate passed: `false`
 - Verdict / cases passed: `FAIL / 5 of 8`
 - Active Runtime changed: `false`
 - C2 eligible / authorized: `false / false`
-- Next step: Human / ChatGPT review
+- Next candidate: `M2-P4-I3-R1-C1-R2-R1 Offline Provider Semantic Consistency Revision`
+- Next candidate authorized: `false`
+- I3 final acceptance: `pending`
+- Milestone 2: `incomplete`
 - `main`: unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`
 
 ## Historical verifier compatibility
@@ -33,6 +43,29 @@
 The seven historical verifiers passed only against the accepted SHA in a clean external clone. This proves the accepted historical evidence remains self-consistent; it does not claim those verifiers support the R2 successor branch, does not establish R2 Provider quality, and does not authorize Runtime activation.
 
 The one-time sequential eight-call synthetic-only diagnostic completed. It tested Provider-owned semantic `writing_signals` and then ran deterministic Application grounding and validation locally. It did not call Service or the full Pipeline and does not authorize Runtime activation, C2, E1, PR, main merge, release, or rerun.
+
+## Human / ChatGPT review
+
+- [x] The bounded execution protocol is accepted.
+- [x] The diagnostic evidence is valid.
+- [x] The saved-evidence offline evaluator correction is accepted.
+- [x] The Provider product gate remains failed.
+- [x] C2 remains ineligible and unauthorized.
+- [x] No rerun is authorized.
+
+The final review status is `human_chatgpt_reviewed_fail_complete`. This accepts the execution protocol, evidence, and deterministic evaluator correction; it does not accept Provider product quality.
+
+## Immutable diagnostic snapshot
+
+- Type: `historical_commit_range`
+- Base commit: `277101219c27477e67e1196af0e6067713571edc`
+- End commit: `7239f50fd24eb80369e74583cd619c2155813401`
+- Exact paths: `17/17`
+- Immutable snapshot: `true`
+- Include working tree: `false`
+- Execution commits: `d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e`, `7239f50fd24eb80369e74583cd619c2155813401`
+
+Commit B is the immutable source for the R2 execution evidence. The review sync changes none of the nine execution-evidence blobs outside its exact eight-path manifest.
 
 ## Diagnostic outcome
 
@@ -49,9 +82,23 @@ The one-time sequential eight-call synthetic-only diagnostic completed. It teste
 - Secret leakage: `0`
 - Usage: input `46190`, cached `39298`, output `11310`, reasoning `1279` tokens
 
-The material failures are Provider-owned semantics: R2-03 did not emit the required `no_private_contact_at_work` constraint taxonomy; R2-04 represented the explicit other-person message as unknown quoted history, causing ownership, contextual Integrity, and Decision Facts failures; R2-08 emitted no quoted/incoming other-person message signal, so the principal ownership gate failed. R2-07 passed after applying the stated boundary rule.
+## Accepted failure analysis
 
-Post-run offline evaluation corrected two deterministic evaluator defects without another Provider call or any Provider-output mutation: privacy markers are unordered categories, and a user-owned `other` boundary signal is nonrestrictive for R2-03/R2-07. The verdict remained `FAIL`; case pass count changed from `4/8` to `5/8`, boundary ownership from `6/8` to `8/8`, and privacy-repeat-injection from `7/8` to `8/8`.
+### R2-03
+
+The Provider identified the semantic statement `職場では私的な話をしない` but emitted `custom_explicit_constraint` instead of `no_private_contact_at_work`. The grounded boundary remained `none / none`. This is a classification-taxonomy failure, not a restrictive-boundary safety failure.
+
+### R2-04
+
+Application Decision Facts correctly retained `sender=other_person` and `boundary=no_contact / explicit`. Provider `writing_signals` instead emitted `author=unknown`, `status=quoted_history`, and incoming-message `present=unknown`. This is a cross-projection message-ownership inconsistency and a Provider semantic failure. The final restrictive boundary remained protected.
+
+### R2-08
+
+Injection detection, privacy categories, repeat state, and candidate absence passed. Provider `message_signals` was nevertheless empty, omitting quoted other-person message ownership. The principal Provider ownership gate therefore failed.
+
+R2-07 passed after applying the accepted nonrestrictive-boundary rule.
+
+Post-run offline evaluation used `saved_evidence_offline_recompute` and corrected two deterministic evaluator defects without another Provider call or any Provider-output mutation: privacy categories are an unordered set, and a user-owned nonrestrictive `other` boundary is allowed for R2-03/R2-07. Provider calls added and Provider outputs mutated were both `0`. The verdict was `FAIL` before and `FAIL` after; case pass count changed from `4/8` to `5/8`, boundary ownership from `6/8` to `8/8`, and privacy-repeat-injection from `7/8` to `8/8`. The correction introduced no expected data into Provider input.
 
 ## Diagnostic boundary
 
@@ -61,7 +108,7 @@ The case file contains only `case_id`, `name`, synthetic `AssessmentInput`, and 
 
 ## One-time execution control
 
-The tracked authorization began unconsumed. Immediately before the first Provider call, the runner claimed execution in memory and atomically created the repo-local `.git` consumption marker. The existing OpenAI transport ran with its SDK retry count explicitly forced and checked at zero. Provider calls ran sequentially, one per case, with no retry, repair, PB-07, fallback, or automatic extension. The tracked authorization now records `consumed=true`, actual calls `8`, completion state `provider_diagnostic_failed_pending_human_chatgpt_review`, and `rerun_authorized=false`.
+The tracked authorization began unconsumed. Immediately before the first Provider call, the runner claimed execution in memory and atomically created the repo-local `.git` consumption marker. The existing OpenAI transport ran with its SDK retry count explicitly forced and checked at zero. Provider calls ran sequentially, one per case, with no retry, repair, PB-07, fallback, or automatic extension. The immutable execution artifact records `consumed=true`, actual calls `8`, completion state `provider_diagnostic_failed_pending_human_chatgpt_review`, and `rerun_authorized=false`; the separate review capability status is now `human_chatgpt_reviewed_fail_complete`.
 
 ## Hard gates
 
@@ -91,6 +138,19 @@ Soft style assertions are reported separately. A `0/0` metric has `rate=null` an
 
 Production PB-01 v5 Prompt, Schemas, Writing Signals contract, grounding, evidence guard, Integrity v2, Pipeline, schema catalog, catalog v6, Service, routes, PB-02 through PB-06, Policy, Safety, UI, Supabase, package files, C1 evidence, R1-C1-R1 evidence, development, and holdout remain unchanged.
 
+## Exact review sync manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r2/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs`
+4. `scripts/verify-m2-eval-foundation.mjs`
+5. `scripts/verify-m2-p3-runtime-vertical-slice.mjs`
+6. `docs/CURRENT_FOCUS.md`
+7. `docs/WBS.md`
+8. `docs/CODEX_HANDOFF.md`
+
+The review sync is exact `8/8`. It makes Provider calls `0`, adds no retry, repair, PB-07, fallback, PB-02 through PB-06, DB, Supabase, holdout, or real-user operation, and leaves the active Runtime and `main` unchanged.
+
 ## Review boundary
 
-Commit A records the prepared one-time package. Commit B records only actual R2 evidence, the bounded offline evaluator correction, and state synchronization. The `FAIL` result leaves C2 ineligible and unauthorized and does not change active Runtime or `main`. Human / ChatGPT review remains required before any separately authorized successor.
+Commit A records the prepared one-time package. Commit B records only actual R2 evidence, the bounded offline evaluator correction, and state synchronization. Human / ChatGPT review is complete with the Provider verdict fixed at `FAIL`. C2 remains ineligible and unauthorized, and active Runtime and `main` remain unchanged. The next candidate is `M2-P4-I3-R1-C1-R2-R1 Offline Provider Semantic Consistency Revision`; it is not authorized.

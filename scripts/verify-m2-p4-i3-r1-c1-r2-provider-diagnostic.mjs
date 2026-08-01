@@ -27,6 +27,8 @@ const repositoryRoot = path.resolve(
 const baseline = "277101219c27477e67e1196af0e6067713571edc";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
 const branch = "test/m2-p4-i3-r1-c1-r2-provider-diagnostic";
+const packageCommit = "d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e";
+const resultCommit = "7239f50fd24eb80369e74583cd619c2155813401";
 const artifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r2";
 const exactPaths = [
   `${artifactRoot}/diagnostic-cases-v1.json`,
@@ -47,6 +49,19 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const reviewSyncPaths = [
+  `${artifactRoot}/capabilities-v1.json`,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const immutableExecutionPaths = exactPaths.filter(
+  (item) => !reviewSyncPaths.includes(item),
+);
 const protectedPaths = [
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/application.ts",
@@ -132,6 +147,12 @@ function currentTaskPaths(startCommit) {
       ...normalizedPaths(git(["diff", "--name-only", startCommit, "--"])),
       ...normalizedPaths(git(["ls-files", "--others", "--exclude-standard"])),
     ]),
+  );
+}
+
+function historicalPaths(startCommit, endCommit) {
+  return sorted(
+    normalizedPaths(git(["diff", "--name-only", startCommit, endCommit, "--"])),
   );
 }
 
@@ -388,7 +409,29 @@ function assertCompletedState({
   assert.equal(results.c2_eligible, false);
   assert.equal(results.c2_authorized, false);
 
-  assert.equal(capabilities.status, results.status);
+  assert.equal(
+    results.status,
+    "provider_diagnostic_failed_pending_human_chatgpt_review",
+  );
+  assert.equal(capabilities.status, "human_chatgpt_reviewed_fail_complete");
+  assert.equal(capabilities.execution_protocol_accepted, true);
+  assert.equal(capabilities.diagnostic_evidence_valid, true);
+  assert.equal(capabilities.post_run_evaluator_correction_accepted, true);
+  assert.equal(capabilities.provider_product_gate_passed, false);
+  assert.deepEqual(capabilities.execution_snapshot, {
+    type: "historical_commit_range",
+    base_commit_sha: baseline,
+    end_commit_sha: resultCommit,
+    exact_paths: 17,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  });
+  assert.deepEqual(capabilities.execution_commits, [
+    packageCommit,
+    resultCommit,
+  ]);
+  assertLiteralSet(capabilities.review_sync_exact_paths, reviewSyncPaths);
+  assert.equal(capabilities.review_sync_exact_path_count, 8);
   assert.equal(capabilities.actual_calls, results.calls_actual);
   assert.equal(capabilities.completed_calls, results.calls_completed);
   assert.equal(
@@ -400,10 +443,58 @@ function assertCompletedState({
   assert.deepEqual(capabilities.usage_totals, results.usage_totals);
   assert.equal(capabilities.authorization_consumed, true);
   assert.equal(capabilities.rerun_authorized, false);
+  assert.equal(capabilities.pb_02_through_pb_06_calls, 0);
+  assert.equal(capabilities.secret_leakage, 0);
   assert.equal(capabilities.active_runtime_changed, false);
   assert.equal(capabilities.c2_eligible, false);
   assert.equal(capabilities.c2_authorized, false);
+  assert.equal(
+    capabilities.next_candidate,
+    "M2-P4-I3-R1-C1-R2-R1 Offline Provider Semantic Consistency Revision",
+  );
+  assert.equal(capabilities.next_candidate_authorized, false);
+  assert.equal(capabilities.i3_final_acceptance, "pending");
   assert.equal(capabilities.main_changed, false);
+  assert.equal(capabilities.milestone_2, "incomplete");
+
+  const r203 = results.calls.find((call) => call.case_id === "R2-03");
+  const r203Constraint =
+    r203?.raw_output?.writing_signals?.explicit_user_constraints?.find(
+      (item) => item.bounded_summary === "職場では私的な話をしない",
+    );
+  assert.equal(r203Constraint?.kind, "custom_explicit_constraint");
+  assert.deepEqual(r203?.grounded_output?.decision_facts?.boundary_state, {
+    kind: "none",
+    status: "none",
+    repeated_unanswered_contact: false,
+  });
+  assert.equal(r203?.boundary_results?.passed, true);
+
+  const r204 = results.calls.find((call) => call.case_id === "R2-04");
+  assert.deepEqual(r204?.raw_output?.writing_signals?.message_signals, [
+    { author: "unknown", status: "quoted_history" },
+  ]);
+  assert.equal(
+    r204?.raw_output?.writing_signals?.incoming_message_profile?.present,
+    "unknown",
+  );
+  assert.equal(
+    r204?.grounded_output?.decision_facts?.latest_direct_message?.sender,
+    "other_person",
+  );
+  assert.deepEqual(r204?.grounded_output?.decision_facts?.boundary_state, {
+    kind: "no_contact",
+    status: "explicit",
+    repeated_unanswered_contact: false,
+  });
+  assert.equal(r204?.ownership_results?.passed, false);
+  assert.equal(r204?.boundary_results?.passed, true);
+
+  const r208 = results.calls.find((call) => call.case_id === "R2-08");
+  assert.deepEqual(r208?.raw_output?.writing_signals?.message_signals, []);
+  assert.equal(r208?.ownership_results?.passed, false);
+  assert.equal(r208?.privacy_repeat_injection_results?.passed, true);
+  assert.equal(r208?.candidate_presence_results?.passed, true);
 
   const summary = source(`${artifactRoot}/diagnostic-summary-v1.md`);
   for (const required of [
@@ -466,8 +557,20 @@ assert.equal(git(["branch", "--show-current"]).trim(), branch);
 assert.equal(git(["rev-parse", "main"]).trim(), mainBaseline);
 assert.equal(git(["rev-parse", "origin/main"]).trim(), mainBaseline);
 assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", baseline, "HEAD"]));
+assert.equal(git(["rev-parse", `${packageCommit}^`]).trim(), baseline);
+assert.equal(git(["rev-parse", `${resultCommit}^`]).trim(), packageCommit);
 assert.equal(exactPaths.length, 17);
 assertLiteralSet(currentTaskPaths(baseline), exactPaths);
+assertLiteralSet(historicalPaths(baseline, resultCommit), exactPaths);
+assert.equal(reviewSyncPaths.length, 8);
+assertLiteralSet(currentTaskPaths(resultCommit), reviewSyncPaths);
+for (const immutablePath of immutableExecutionPaths) {
+  assert.equal(
+    git(["diff", "--name-only", resultCommit, "--", immutablePath]).trim(),
+    "",
+    `${immutablePath} changed after Commit B`,
+  );
+}
 assert.equal(git(["diff", "--check", baseline, "--"]).trim(), "");
 for (const relativePath of exactPaths) {
   assert.equal(existsSync(absolute(relativePath)), true, relativePath);
@@ -731,10 +834,7 @@ if (authorization.consumed === false) {
   });
 }
 
-const requiredDocState =
-  authorization.consumed === false
-    ? "provider_diagnostic_package_ready"
-    : results.status;
+const requiredDocState = "human_chatgpt_reviewed_fail_complete";
 for (const docPath of [
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
   "docs/CURRENT_FOCUS.md",
@@ -754,7 +854,14 @@ for (const docPath of [
 
 console.log("M2_P4_I3_R1_C1_R2_PROVIDER_DIAGNOSTIC: PASS");
 console.log("package_scope: 17/17");
+console.log("diagnostic_snapshot: 17/17 immutable");
+console.log("review_sync_scope: 8/8");
+console.log("execution_evidence_blobs_unchanged: 9/9");
 console.log(`provider_calls: ${results.calls_actual}/8`);
 console.log(`authorization_consumed: ${authorization.consumed}`);
+console.log("rerun_authorized: false");
+console.log("verdict: FAIL");
+console.log("cases: 5/8");
 console.log("active_runtime_changed: false");
+console.log("c2_eligible: false");
 console.log("c2_authorized: false");

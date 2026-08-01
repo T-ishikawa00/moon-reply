@@ -12,6 +12,10 @@ const r1C1R1AcceptedImplementationSha =
   "d8415e2ae165143d646c6f9573e24752d8b1a1c7";
 const r1C1R1AcceptanceSha =
   "277101219c27477e67e1196af0e6067713571edc";
+const r1C1R2PackageSha =
+  "d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e";
+const r1C1R2ResultSha =
+  "7239f50fd24eb80369e74583cd619c2155813401";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -92,6 +96,16 @@ const exactR1C1R2Paths = [
   "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1C1R2ReviewSyncPaths = [
+  r1C1R2CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1814,6 +1828,11 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R1AcceptedImplementationSha,
     r1C1R1AcceptanceSha,
   );
+  const actualR1C1R2ExecutionPaths = historicalPaths(
+    r1C1R1AcceptanceSha,
+    r1C1R2ResultSha,
+  );
+  const actualR1C1R2ReviewSyncPaths = currentTaskPaths(r1C1R2ResultSha);
   const actualR1C1R2Paths = currentTaskPaths(r1C1R1AcceptanceSha);
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
@@ -1822,6 +1841,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     exact_paths: 18,
     include_working_tree: false,
     immutable_snapshot: true,
+  };
+  const expectedR1C1R2ExecutionSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R1AcceptanceSha,
+    end_commit_sha: r1C1R2ResultSha,
+    exact_paths: 17,
+    immutable_snapshot: true,
+    include_working_tree: false,
   };
   const expectedR1ASelfCorrection = {
     required: true,
@@ -2064,12 +2091,29 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     "M2_P3_I2_RENDERER_ONLY_GATE",
     exactR1C1R2Paths.length === 17 &&
       isExactLiteralSet(actualR1C1R2Paths, exactR1C1R2Paths) &&
+      isExactLiteralSet(actualR1C1R2ExecutionPaths, exactR1C1R2Paths) &&
+      exactR1C1R2ReviewSyncPaths.length === 8 &&
+      isExactLiteralSet(
+        actualR1C1R2ReviewSyncPaths,
+        exactR1C1R2ReviewSyncPaths,
+      ) &&
       r1C1R2Manifest.task_id === "M2-P4-I3-R1-C1-R2" &&
-      [
-        "provider_diagnostic_package_ready",
-        "provider_diagnostic_completed_pending_human_chatgpt_review",
-        "provider_diagnostic_failed_pending_human_chatgpt_review",
-      ].includes(r1C1R2Manifest.status) &&
+      r1C1R2Manifest.status === "human_chatgpt_reviewed_fail_complete" &&
+      r1C1R2Manifest.execution_protocol_accepted === true &&
+      r1C1R2Manifest.diagnostic_evidence_valid === true &&
+      r1C1R2Manifest.post_run_evaluator_correction_accepted === true &&
+      r1C1R2Manifest.provider_product_gate_passed === false &&
+      JSON.stringify(r1C1R2Manifest.execution_snapshot) ===
+        JSON.stringify(expectedR1C1R2ExecutionSnapshot) &&
+      JSON.stringify(r1C1R2Manifest.execution_commits) ===
+        JSON.stringify([r1C1R2PackageSha, r1C1R2ResultSha]) &&
+      isExactLiteralSet(
+        [...r1C1R2Manifest.review_sync_exact_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R2ReviewSyncPaths,
+      ) &&
+      r1C1R2Manifest.review_sync_exact_path_count === 8 &&
       r1C1R2Manifest.authorization_id ===
         "M2-P4-I3-R1-C1-R2-2026-08-01" &&
       r1C1R2Manifest.baseline === r1C1R1AcceptanceSha &&
@@ -2098,14 +2142,34 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2Manifest.real_user_data === 0 &&
       r1C1R2Manifest.active_runtime_changed === false &&
       r1C1R2Manifest.r1_c1_r2_authorized === true &&
+      r1C1R2Manifest.authorization_consumed === true &&
       r1C1R2Manifest.rerun_authorized === false &&
+      r1C1R2Manifest.provider_diagnostic_verdict === "FAIL" &&
+      r1C1R2Manifest.case_pass_count === 5 &&
+      r1C1R2Manifest.actual_calls === 8 &&
+      r1C1R2Manifest.completed_calls === 8 &&
+      r1C1R2Manifest.pb_02_through_pb_06_calls === 0 &&
+      r1C1R2Manifest.secret_leakage === 0 &&
       r1C1R2Manifest.c2_eligible === false &&
       r1C1R2Manifest.c2_authorized === false &&
+      r1C1R2Manifest.next_candidate ===
+        "M2-P4-I3-R1-C1-R2-R1 Offline Provider Semantic Consistency Revision" &&
+      r1C1R2Manifest.next_candidate_authorized === false &&
+      r1C1R2Manifest.i3_final_acceptance === "pending" &&
+      r1C1R2Manifest.main_changed === false &&
+      r1C1R2Manifest.milestone_2 === "incomplete" &&
       r1C1R2Authorization.authorization_id ===
         r1C1R2Manifest.authorization_id &&
+      r1C1R2Authorization.consumed === true &&
       r1C1R2Authorization.authorized_calls === 8 &&
       r1C1R2Authorization.rerun_authorized === false &&
       r1C1R2Results.calls_authorized === 8 &&
+      r1C1R2Results.status ===
+        "provider_diagnostic_failed_pending_human_chatgpt_review" &&
+      r1C1R2Results.evaluation.verdict === "FAIL" &&
+      r1C1R2Results.evaluation.case_pass_count === 5 &&
+      r1C1R2Results.calls_actual === 8 &&
+      r1C1R2Results.calls_completed === 8 &&
       r1C1R2Results.retry_count === 0 &&
       r1C1R2Results.repair_count === 0 &&
       r1C1R2Results.fallback_count === 0 &&
@@ -2118,7 +2182,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2Results.rerun_authorized === false &&
       r1C1R2Results.c2_eligible === false &&
       r1C1R2Results.c2_authorized === false,
-    `R1-C1-R2 exact bounded diagnostic scope differs: ${actualR1C1R2Paths.join(",")}`,
+    `R1-C1-R2 failed-diagnostic review boundary differs: execution=${actualR1C1R2ExecutionPaths.join(",")}; review_sync=${actualR1C1R2ReviewSyncPaths.join(",")}; cumulative=${actualR1C1R2Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
@@ -2190,6 +2254,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         exactC1ReviewSyncPaths,
       ),
       `R1-C1 review sync accepted unauthorized path: ${unauthorizedPath}`,
+    );
+    check(
+      "M2_P3_I2_RENDERER_ONLY_GATE",
+      !isExactLiteralSet(
+        [...exactR1C1R2ReviewSyncPaths, unauthorizedPath],
+        exactR1C1R2ReviewSyncPaths,
+      ),
+      `R1-C1-R2 review sync accepted unauthorized path: ${unauthorizedPath}`,
     );
   }
   check(
