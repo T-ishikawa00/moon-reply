@@ -3,18 +3,18 @@
 ## Status
 
 - Task: M2-P4-I3-R1-C1-R2-R2 Four-Case Bounded Provider Diagnostic
-- Status: provider_targeted_diagnostic_package_ready
+- Status: provider_targeted_diagnostic_failed_pending_human_chatgpt_review
 - Authorization: M2-P4-I3-R1-C1-R2-R2-2026-08-02
 - Confirmation: R2-R2-4-CALL-PROMPT-V6-SYNTHETIC-ONLY
 - Baseline: fbb315f45e777fe2001e54657d7015ebbf7d3663
 - Branch: test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic
-- Commit A: pending
+- Commit A: 36e7d1967a502f0ed80aaccb12d44507f0058560
 - Model / stage: gpt-5.6-luna / PB-01 v6 only
 - Synthetic cases / authorized Provider calls: 4 / 4
-- Actual Provider calls: 0
+- Actual / maximum Provider calls: 4 / 4
 - Retry / repair / fallback: 0 / 0 / 0
 - PB-02 through PB-06 / DB / Supabase / holdout / real-user data: 0 / 0 / 0 / 0 / 0
-- Authorization consumed / rerun authorized: false / false
+- Authorization consumed / rerun authorized: true / false
 - Provider quality established: false
 - Full eight-case confirmation required: true
 - Active Runtime changed: false
@@ -22,9 +22,39 @@
 - Next step after execution: Human / ChatGPT review
 - main: unchanged at 61e33a10e195fad17e253a6b9719217e1992f273
 
+## Execution result
+
+- Overall targeted verdict: FAIL
+- Cases passed: 3 / 4
+- Targeted repair cases: 3 / 3 PASS
+- Normal ownership regression control: 0 / 1 FAIL
+- R2R2-01 known taxonomy: PASS
+- R2R2-02 no-contact ownership: PASS
+- R2R2-03 quoted ownership: PASS
+- R2R2-04 normal control: FAIL
+- Principal R2R2-03 quoted ownership: PASS
+- Provider transport / exact returned model: 4/4 / 4/4
+- Raw JSON / raw Schema v5: 4/4 / 4/4
+- Grounded Schema v4: 4/4
+- Writing Context Integrity v2 / contextual intake Integrity: 4/4 / 4/4
+- Application Decision Facts: 3/4
+- Provider semantic core: 4/4
+- Message / boundary ownership: 4/4 / 4/4
+- Candidate presence / relationship limits / privacy-repeat-injection: 4/4 / 4/4 / 4/4
+- Provider output immutability / secret leakage: 4/4 / 0
+- Usage input / cached / output / reasoning tokens: 26092 / 19068 / 5452 / 367
+- Marker consumed: true
+- Provider rerun: unauthorized and not performed
+- Provider quality established: false
+- Full eight-case confirmation required: true
+- Active Runtime changed: false
+- C2 eligible / authorized: false / false
+
+R2R2-04 preserved the required Provider message order, grounded three-item ownership order, candidate separation, boundary, Schema, and Integrity gates. It failed the frozen Application Decision Facts gate because grounded practical_reason was none / false instead of schedule_coordination / true. The resulting hard failures are R2R2-04-APPLICATION-DECISION-FACTS and R2R2-04-NORMAL-OWNERSHIP-CONTROL. No evaluator, contract, Prompt, Schema, or Provider output is changed after execution.
+
 ## Objective
 
-This is a targeted repair diagnostic, not a broad quality run. It checks whether inactive Prompt v6 corrects exactly three accepted R2 failures: known-taxonomy precedence, Decision Facts versus Writing Signals ownership agreement, and preservation of quoted untrusted-message existence and authorship. A fourth preserved case is a normal three-message ownership regression control.
+This is a targeted repair diagnostic, not a broad quality run. It checked whether inactive Prompt v6 corrected exactly three accepted R2 failures: known-taxonomy precedence, Decision Facts versus Writing Signals ownership agreement, and preservation of quoted untrusted-message existence and authorship. A fourth preserved case was a normal three-message ownership regression control.
 
 Even a 4/4 PASS establishes only those targeted repairs and the selected control. Provider quality remains unestablished, full eight-case confirmation remains required, and C2 remains ineligible and unauthorized.
 

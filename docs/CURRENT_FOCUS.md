@@ -3,7 +3,7 @@
 <!-- M2-P4-I3-R1-C1-R2-R2:START -->
 ## Immediate Bounded Diagnostic
 
-M2-P4-I3-R1-C1-R2-R2 is provider_targeted_diagnostic_package_ready on test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic from baseline fbb315f45e777fe2001e54657d7015ebbf7d3663. The exact four-call synthetic-only PB-01 Prompt v6 diagnostic is Human-authorized but not yet executed: calls 0 / 4, authorization unconsumed, rerun unauthorized. Provider quality established remains false, full eight-case confirmation required remains true, Active Runtime is unchanged, and C2 is ineligible and unauthorized.
+M2-P4-I3-R1-C1-R2-R2 is provider_targeted_diagnostic_failed_pending_human_chatgpt_review on test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic from baseline fbb315f45e777fe2001e54657d7015ebbf7d3663 and Commit A 36e7d1967a502f0ed80aaccb12d44507f0058560. The one-time synthetic-only PB-01 Prompt v6 run completed exact calls 4 / 4 with retry / repair / fallback 0. Targeted repairs passed 3 / 3 and principal quoted ownership passed, but R2R2-04 failed the frozen Application Decision Facts practical_reason gate, so cases are 3 / 4 and overall verdict is FAIL. Authorization and marker are consumed; rerun is unauthorized. Provider quality established remains false, full eight-case confirmation required remains true, Active Runtime and main are unchanged, and C2 is ineligible and unauthorized.
 <!-- M2-P4-I3-R1-C1-R2-R2:END -->
 
 ## Current Phase

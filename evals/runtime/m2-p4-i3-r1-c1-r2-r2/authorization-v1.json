@@ -6,12 +6,12 @@
   "model": "gpt-5.6-luna",
   "stage": "PB-01 v6 only",
   "authorized_calls": 4,
-  "consumed": false,
+  "consumed": true,
   "rerun_authorized": false,
-  "execution_claimed_at": null,
-  "completed_at": null,
-  "package_commit": null,
-  "actual_calls": 0,
-  "completed_calls": 0,
-  "completion_state": "not_executed"
+  "execution_claimed_at": "2026-08-01T17:55:36.501Z",
+  "completed_at": "2026-08-01T17:56:11.486Z",
+  "package_commit": "36e7d1967a502f0ed80aaccb12d44507f0058560",
+  "actual_calls": 4,
+  "completed_calls": 4,
+  "completion_state": "provider_targeted_diagnostic_failed_pending_human_chatgpt_review"
 }

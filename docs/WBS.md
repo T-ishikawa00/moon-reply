@@ -4,12 +4,12 @@
 ## M2-P4-I3-R1-C1-R2-R2 Current Gate
 
 - [x] Exact four-case PB-01 Prompt v6 diagnostic package prepared in exact 17-path scope
-- [ ] Commit A validated and pushed
-- [ ] One-time sequential Provider execution completed, maximum 4 calls
-- [ ] Post-run exact eight-path evidence validated and committed
+- [x] Commit A 36e7d1967a502f0ed80aaccb12d44507f0058560 validated and pushed
+- [x] One-time sequential Provider execution completed at exact 4 / 4 calls
+- [x] Post-run evidence synchronized within the exact eight-path mutable scope
 - [ ] Human / ChatGPT review completed
 
-Current status: provider_targeted_diagnostic_package_ready; calls 0 / 4; authorization unconsumed; rerun unauthorized; Provider quality established false; full eight-case confirmation required true; Active Runtime unchanged; C2 unauthorized.
+Current status: provider_targeted_diagnostic_failed_pending_human_chatgpt_review; overall FAIL and cases 3 / 4. Targeted repairs are 3 / 3 PASS and principal quoted ownership is PASS; R2R2-04 control is FAIL because Application Decision Facts practical_reason did not meet the frozen schedule gate. Calls completed 4 / 4 with retry / repair / fallback 0; authorization and marker consumed; rerun unauthorized; Provider quality established false; full eight-case confirmation required true; Active Runtime and main unchanged; C2 unauthorized.
 <!-- M2-P4-I3-R1-C1-R2-R2:END -->
 
 ## Status Rule

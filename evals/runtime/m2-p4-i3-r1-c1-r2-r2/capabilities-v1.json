@@ -2,7 +2,7 @@
   "schema_version": "m2-p4-i3-r1-c1-r2-r2-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R2-R2",
   "title": "Four-Case Bounded Provider Diagnostic",
-  "status": "provider_targeted_diagnostic_package_ready",
+  "status": "provider_targeted_diagnostic_failed_pending_human_chatgpt_review",
   "authorization_id": "M2-P4-I3-R1-C1-R2-R2-2026-08-02",
   "baseline": "fbb315f45e777fe2001e54657d7015ebbf7d3663",
   "branch": "test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic",
@@ -20,8 +20,8 @@
   "candidate_catalog_inactive": true,
   "synthetic_cases": 4,
   "authorized_calls": 4,
-  "actual_calls": 0,
-  "completed_calls": 0,
+  "actual_calls": 4,
+  "completed_calls": 4,
   "retry_count": 0,
   "repair_count": 0,
   "fallback_count": 0,
@@ -30,11 +30,11 @@
   "supabase_operations": 0,
   "holdout_use": 0,
   "real_user_data": 0,
-  "authorization_consumed": false,
+  "authorization_consumed": true,
   "rerun_authorized": false,
-  "package_commit": null,
-  "targeted_retest_verdict": "NOT_EXECUTED",
-  "targeted_cases_passed": "0/4",
+  "package_commit": "36e7d1967a502f0ed80aaccb12d44507f0058560",
+  "targeted_retest_verdict": "FAIL",
+  "targeted_cases_passed": "3/4",
   "provider_targeted_fix_evidence": false,
   "provider_quality_established": false,
   "full_eight_case_confirmation_required": true,
@@ -43,10 +43,144 @@
   "c2_eligible": false,
   "c2_authorized": false,
   "usage_totals": {
-    "input_tokens": 0,
-    "cached_tokens": 0,
-    "output_tokens": 0,
-    "reasoning_tokens": 0
+    "input_tokens": 26092,
+    "cached_tokens": 19068,
+    "output_tokens": 5452,
+    "reasoning_tokens": 367
   },
-  "next_step": "execute once, then Human / ChatGPT review"
+  "next_step": "Human / ChatGPT review",
+  "metrics": {
+    "provider_transport": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "returned_model_exact": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_json_parse": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_schema_v5": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "grounded_schema_v4": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "writing_context_integrity_v2": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "contextual_intake_integrity": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "application_decision_facts": {
+      "passed": 3,
+      "total": 4,
+      "rate": 0.75,
+      "evidence_status": "available"
+    },
+    "provider_semantic_core": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "forbidden_bookkeeping": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "message_ownership": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "boundary_ownership": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_presence": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_style": {
+      "passed": 2,
+      "total": 2,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_intent": {
+      "passed": 2,
+      "total": 2,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "relationship_limits": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "privacy_repeat_injection": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "application_grounding": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_output_immutability": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "targeted_repairs": {
+      "passed": 3,
+      "total": 3,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "normal_regression_control": {
+      "passed": 0,
+      "total": 1,
+      "rate": 0,
+      "evidence_status": "available"
+    },
+    "soft_style_assertions": {
+      "passed": 0,
+      "total": 0,
+      "rate": null,
+      "evidence_status": "unavailable"
+    }
+  }
 }
