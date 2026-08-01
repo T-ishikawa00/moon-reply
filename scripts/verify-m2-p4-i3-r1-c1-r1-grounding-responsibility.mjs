@@ -19,7 +19,7 @@ const repositoryRoot = path.resolve(
 );
 const baselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
 const correctionBaselineSha =
-  "715fd906ad94ecc18b55dd13b16784c26bf12129";
+  "28bedad969d1007bbd731f0e9d47824eecd84651";
 const mainBaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const branch = "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility";
 const markerSha256 =
@@ -60,6 +60,7 @@ const exactPaths = [
   "docs/CODEX_HANDOFF.md",
 ];
 const exactCorrectionPaths = [
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
   "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
   `${artifactRoot}/replay-results-v1.json`,
   `${artifactRoot}/capabilities-v1.json`,
@@ -240,6 +241,7 @@ function requiredBoundaryEvidencePassed(cases) {
   const byId = new Map(cases.map((item) => [item.case_id, item]));
   const pair03 = byId.get("PAIR-03");
   const pair04 = byId.get("PAIR-04");
+  const v408 = byId.get("V4-08");
   return (
     pair03?.pre_guard_decision_facts?.boundary_state?.kind ===
       "temporary_distance" &&
@@ -257,8 +259,59 @@ function requiredBoundaryEvidencePassed(cases) {
     pair04?.post_guard_decision_facts?.boundary_state?.kind === "no_contact" &&
     pair04?.post_guard_decision_facts?.boundary_state?.status === "explicit" &&
     pair04?.post_guard_boundary?.kind === "no_contact" &&
-    pair04?.post_guard_boundary?.status === "explicit"
+    pair04?.post_guard_boundary?.status === "explicit" &&
+    v408?.pre_guard_boundary?.kind === "unknown" &&
+    v408?.pre_guard_boundary?.status === "unknown" &&
+    v408?.strict_source_decision_facts?.boundary_state?.kind === "unknown" &&
+    v408?.strict_source_decision_facts?.boundary_state?.status === "unknown" &&
+    v408?.post_guard_boundary?.kind === "none" &&
+    v408?.post_guard_boundary?.status === "none"
   );
+}
+
+function buildV408ApplicationFixture(v408ReplayCase) {
+  const raw = structuredClone(v408ReplayCase.raw_v5);
+  raw.boundaries = [];
+  raw.decision_facts.boundary_state = {
+    kind: "unknown",
+    status: "unknown",
+    repeated_unanswered_contact: false,
+  };
+  raw.writing_signals.message_signals = [
+    { author: "other_person", status: "incoming" },
+  ];
+  raw.writing_signals.candidate_style_profile = null;
+  raw.writing_signals.candidate_communicative_intent = null;
+  raw.writing_signals.boundary_ownership_signals = [];
+  raw.writing_signals.privacy_markers = ["account_identifier", "email"];
+  raw.writing_signals.repeat_consultation_state.state =
+    "repeated_without_material_change";
+  raw.untrusted_embedded_instructions_detected = true;
+  return {
+    fixture_id: "V4-08-APPLICATION-SEMANTIC-ONLY",
+    input: {
+      currentSituation:
+        "Synthetic repeated consultation with no observed boundary.",
+      optionalMessage: null,
+      relationship: raw.relationship_stage,
+      requestedTopics: raw.decision_facts.selected_requests,
+      privacyAcknowledged: true,
+    },
+    raw,
+    expected_data_injected: false,
+  };
+}
+
+function collectRawPiiStrings(value) {
+  if (Array.isArray(value)) return value.flatMap(collectRawPiiStrings);
+  if (isObject(value)) {
+    return Object.values(value).flatMap(collectRawPiiStrings);
+  }
+  if (typeof value !== "string") return [];
+  const hasEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/iu.test(value);
+  const hasAccountHandle = /@[A-Z0-9_]{2,}/iu.test(value);
+  const hasPhone = /\b\d{2,4}[- ]\d{2,4}[- ]\d{3,4}\b/u.test(value);
+  return hasEmail || hasAccountHandle || hasPhone ? [value] : [];
 }
 
 assert.equal(git(["branch", "--show-current"]).trim(), branch);
@@ -270,7 +323,7 @@ assert.doesNotThrow(() =>
 assert.equal(exactPaths.length, 31);
 assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
 assert.equal(git(["diff", "--check", baselineSha, "--"]).trim(), "");
-assert.equal(exactCorrectionPaths.length, 8);
+assert.equal(exactCorrectionPaths.length, 9);
 assertLiteralSet(
   currentTaskPaths(correctionBaselineSha),
   exactCorrectionPaths,
@@ -338,6 +391,26 @@ assert.equal(
   ),
   false,
 );
+const decisionFactsGuardSource = source(
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+);
+for (const requiredGuardToken of [
+  "observedBoundaryAbsent",
+  "hasAnyOwnedRestrictiveBoundarySignal",
+  "hasExplicitNonBlockRestrictiveBoundary",
+  "hasExplicitBlockedBoundary",
+]) {
+  assert.equal(decisionFactsGuardSource.includes(requiredGuardToken), true);
+}
+
+const applicationFixtureBuilderSource = buildV408ApplicationFixture.toString();
+for (const evaluationOnlyField of forbiddenReplayInputSources) {
+  assert.equal(
+    applicationFixtureBuilderSource.includes(evaluationOnlyField),
+    false,
+    `application fixture expected-data leak: ${evaluationOnlyField}`,
+  );
+}
 
 const replayEvaluatorSource = source(
   "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
@@ -415,12 +488,40 @@ assertLiteralSet(
 );
 assert.equal(capabilities.status, "implementation_pending_human_chatgpt_review");
 assert.equal(capabilities.exact_mutation_paths, 31);
+assert.equal(capabilities.exact_correction_paths, 9);
+assert.equal(
+  capabilities.replay_adjudication_correction_baseline,
+  correctionBaselineSha,
+);
 assert.equal(capabilities.provider_calls, 0);
 assert.equal(capabilities.active_runtime_changed, false);
 assert.equal(capabilities.c2_authorized, false);
 assert.equal(capabilities.next_candidate_authorized, false);
 assert.equal(capabilities.replay_verdict, "FAIL");
+assert.equal(capabilities.strict_source_replay_verdict, "FAIL");
+assert.equal(capabilities.strict_cases_passed, 5);
 assert.equal(capabilities.replay, "5/8");
+assert.equal(capabilities.application_adjudicated_verdict, "PASS");
+assert.equal(capabilities.application_adjudicated_decision_facts, "8/8");
+assert.equal(capabilities.application_canonical_fixtures, "8/8");
+assert.equal(
+  capabilities.application_fixture_result,
+  "PASS_APPLICATION_UNIT_ONLY",
+);
+assert.equal(capabilities.provider_retest_required, true);
+assert.deepEqual(capabilities.provider_semantic_coverage, {
+  available: 7,
+  total: 8,
+  unavailable_cases: ["V4-08"],
+  v4_08_evidence_status: "unavailable_from_source_diagnostic",
+});
+assert.deepEqual(capabilities.expectation_contract_defects, [
+  "PAIR-02:/latest_direct_message/user_reply_state",
+]);
+assert.deepEqual(capabilities.nonmaterial_taxonomy_equivalences, [
+  "V4-06:/latest_direct_message/kind",
+]);
+assert.equal(capabilities.r1_c1_r2_authorized, false);
 assert.equal(capabilities.expected_input_injection, 0);
 assert.deepEqual(
   capabilities.replay_input_construction_authority.allowed_sources,
@@ -501,7 +602,9 @@ const [
     loadM2P4WritingContextRuntimeStageCatalog,
   },
   { assertOpenAIStructuredOutputSchema, toOpenAiStructuredOutputSchema },
+  { guardDecisionFactsWithEvidenceV4 },
   { groundStructuredIntakeV5 },
+  { buildContextualDecisionPolicyV3 },
   { validateGroundedStageOutput },
   {
     collectWritingContextIntegrityViolationsV2,
@@ -512,7 +615,9 @@ const [
   import("../lib/assessment/runtime/fakes.ts"),
   import("../lib/assessment/runtime/schema-catalog.ts"),
   import("../lib/assessment/runtime/openai-schema.ts"),
+  import("../lib/assessment/runtime/decision-facts-evidence-guard-v4.ts"),
   import("../lib/assessment/runtime/structured-intake-grounding-v5.ts"),
+  import("../lib/assessment/runtime/policy-v3.ts"),
   import("../lib/assessment/runtime/validation.ts"),
   import("../lib/assessment/runtime/writing-context-integrity-v2.ts"),
 ]);
@@ -561,10 +666,144 @@ const replay = evaluateC1OfflineReplayV2({
   providerSchema,
   groundedSchema,
 });
+const v408ReplayCaseForFixture = replay.cases.find(
+  (item) => item.case_id === "V4-08",
+);
+assert.ok(v408ReplayCaseForFixture);
+const v408ApplicationFixture = buildV408ApplicationFixture(
+  v408ReplayCaseForFixture,
+);
+const fixtureProviderValidator = schemaAjv.compile(providerSchema);
+assert.equal(
+  fixtureProviderValidator(v408ApplicationFixture.raw),
+  true,
+  JSON.stringify(fixtureProviderValidator.errors),
+);
+const v408ApplicationGrounded = groundStructuredIntakeV5(
+  v408ApplicationFixture.input,
+  v408ApplicationFixture.raw,
+);
+assert.doesNotThrow(() =>
+  validateGroundedStageOutput(
+    runtimeV6.definitions[0],
+    v408ApplicationGrounded,
+  ),
+);
+const v408ApplicationWritingContext =
+  v408ApplicationGrounded.writing_context;
+const v408ApplicationIntegrityViolations =
+  collectWritingContextIntegrityViolationsV2(
+    v408ApplicationFixture.input,
+    v408ApplicationGrounded,
+  );
+const applicationFixtureChecks = [
+  {
+    id: "message_grounding",
+    passed:
+      v408ApplicationWritingContext.message_ownership.length === 1 &&
+      v408ApplicationWritingContext.message_ownership[0].message_id ===
+        "MSG001" &&
+      v408ApplicationWritingContext.message_ownership[0].author ===
+        "other_person" &&
+      v408ApplicationWritingContext.message_ownership[0].status ===
+        "incoming" &&
+      v408ApplicationWritingContext.incoming_message_profile.message_id ===
+        "MSG001",
+  },
+  {
+    id: "candidate_absence",
+    passed:
+      v408ApplicationWritingContext.candidate_style_profile === null &&
+      v408ApplicationWritingContext.candidate_communicative_intent === null,
+  },
+  {
+    id: "absent_boundary_normalization",
+    passed:
+      v408ApplicationGrounded.decision_facts.boundary_state.kind === "none" &&
+      v408ApplicationGrounded.decision_facts.boundary_state.status === "none",
+  },
+  {
+    id: "privacy_markers",
+    passed:
+      JSON.stringify(v408ApplicationWritingContext.privacy_markers) ===
+      JSON.stringify(["account_identifier", "email"]),
+  },
+  {
+    id: "repeat_state",
+    passed:
+      v408ApplicationWritingContext.repeat_consultation_state.state ===
+      "repeated_without_material_change",
+  },
+  {
+    id: "integrity_v2",
+    passed: v408ApplicationIntegrityViolations.length === 0,
+  },
+  {
+    id: "raw_pii_absence",
+    passed: collectRawPiiStrings(v408ApplicationFixture.raw).length === 0,
+  },
+  {
+    id: "injection_and_expected_data_separation",
+    passed:
+      v408ApplicationGrounded.untrusted_embedded_instructions_detected ===
+        true &&
+      v408ApplicationFixture.expected_data_injected === false,
+  },
+];
+const applicationFixturePassed = applicationFixtureChecks.filter(
+  (item) => item.passed,
+).length;
+const applicationFixtureResult = {
+  fixture_id: v408ApplicationFixture.fixture_id,
+  evidence_role: "application_unit_only",
+  provider_replay_claim: false,
+  provider_quality_claim: false,
+  expected_data_injected: v408ApplicationFixture.expected_data_injected,
+  raw_pii_strings: collectRawPiiStrings(v408ApplicationFixture.raw).length,
+  passed: applicationFixturePassed,
+  total: applicationFixtureChecks.length,
+  rate: applicationFixturePassed / applicationFixtureChecks.length,
+  checks: applicationFixtureChecks,
+};
+assert.equal(applicationFixtureResult.passed, 8);
+assert.equal(applicationFixtureResult.total, 8);
 assert.equal(replay.verdict, "FAIL");
-assert.deepEqual(replayResultsArtifactV1(replay), replayArtifact);
+assert.deepEqual(
+  replayResultsArtifactV1(replay, { applicationFixtureResult }),
+  replayArtifact,
+);
+assert.equal(replay.strict_source_replay_verdict, "FAIL");
+assert.equal(replay.strict_cases_passed, 5);
+assert.equal(replay.application_adjudicated_verdict, "PASS");
+assert.equal(replay.provider_retest_required, true);
+assert.deepEqual(replay.expectation_contract_defects, [
+  {
+    case_id: "PAIR-02",
+    path: "/latest_direct_message/user_reply_state",
+    actual: "not_applicable",
+    expected: "replied",
+    canonical_rule: "sender_user_or_none_requires_not_applicable",
+  },
+]);
+assert.deepEqual(replay.nonmaterial_taxonomy_equivalences, [
+  {
+    case_id: "V4-06",
+    path: "/latest_direct_message/kind",
+    actual: "question",
+    expected: "schedule_coordination",
+    practical_reason: "schedule_coordination",
+    incoming_profile_supported: true,
+    decision_policy_equal: true,
+  },
+]);
 assert.equal(replayArtifact.expected_input_injection, 0);
 assert.equal(replayArtifact.provider_calls_during_replay, 0);
+assert.deepEqual(replay.metrics.strict_source_cases, {
+  passed: 5,
+  total: 8,
+  rate: 0.625,
+  evidence_status: "available",
+});
 for (const metricName of [
   "input_construction",
   "provider_transport",
@@ -581,6 +820,12 @@ assert.deepEqual(replay.metrics.critical_expected_subset, {
   passed: 5,
   total: 8,
   rate: 0.625,
+  evidence_status: "available",
+});
+assert.deepEqual(replay.metrics.application_adjudicated_decision_facts, {
+  passed: 8,
+  total: 8,
+  rate: 1,
   evidence_status: "available",
 });
 assert.deepEqual(replay.metrics.semantic_assertions, {
@@ -600,6 +845,15 @@ assert.deepEqual(replay.metrics.auxiliary_v3_parity, {
   total: 4,
   rate: 1,
   evidence_status: "available",
+});
+assert.deepEqual(replay.metrics.provider_semantic_coverage, {
+  passed: 7,
+  available: 7,
+  unavailable: 1,
+  total: 8,
+  rate: 0.875,
+  evidence_status: "partial",
+  unavailable_cases: ["V4-08"],
 });
 assert.equal(replay.metrics.soft_assertions.evidence_status, "available");
 const replayById = new Map(replay.cases.map((item) => [item.case_id, item]));
@@ -663,6 +917,11 @@ assert.equal(
   pair02Case.post_guard_decision_facts.latest_direct_message.user_reply_state,
   "not_applicable",
 );
+assert.equal(
+  pair02Case.decision_fact_adjudication.disposition,
+  "expectation_contract_defect",
+);
+assert.equal(pair02Case.application_adjudicated_decision_facts_passed, true);
 const pair03Case = replayById.get("PAIR-03");
 const pair03 = pair03Case.grounded_output;
 assert.equal(pair03.writing_context.relationship_dimensions.hierarchy.value, "user_is_junior");
@@ -722,6 +981,21 @@ assert.deepEqual(
   replayById.get("V4-06").critical_expected_subset_mismatched_paths,
   ["/latest_direct_message/kind"],
 );
+const v406Case = replayById.get("V4-06");
+assert.equal(
+  v406Case.decision_fact_adjudication.disposition,
+  "nonmaterial_taxonomy_equivalence",
+);
+assert.equal(v406Case.application_adjudicated_decision_facts_passed, true);
+const v406ExpectedTaxonomyFacts = structuredClone(
+  v406Case.post_guard_decision_facts,
+);
+v406ExpectedTaxonomyFacts.latest_direct_message.kind =
+  "schedule_coordination";
+assert.deepEqual(
+  buildContextualDecisionPolicyV3(v406Case.post_guard_decision_facts),
+  buildContextualDecisionPolicyV3(v406ExpectedTaxonomyFacts),
+);
 const v407 = replayById.get("V4-07").grounded_output;
 assert.equal(v407.writing_context.candidate_style_profile.register, "casual");
 assert.equal(v407.writing_context.candidate_style_profile.sentence_length, "short");
@@ -741,14 +1015,142 @@ assert.deepEqual(
   replayById.get("V4-08").critical_expected_subset_mismatched_paths,
   ["/boundary_state/kind", "/boundary_state/status"],
 );
-assert.equal(replayById.get("V4-08").ownership_passed, false);
-assert.deepEqual(replayById.get("V4-08").failed_semantic_assertions, [
+const v408Case = replayById.get("V4-08");
+assert.deepEqual(v408Case.post_guard_boundary, {
+  kind: "none",
+  status: "none",
+});
+assert.equal(
+  v408Case.decision_fact_adjudication.disposition,
+  "application_absent_boundary_normalization",
+);
+assert.equal(v408Case.application_adjudicated_decision_facts_passed, true);
+assert.equal(v408Case.ownership_passed, false);
+assert.equal(v408Case.provider_semantic_coverage, false);
+assert.equal(
+  v408Case.ownership_evidence_status,
+  "unavailable_from_source_diagnostic",
+);
+assert.equal(v408Case.ownership_application_failure_attributed, false);
+assert.deepEqual(v408Case.failed_semantic_assertions, [
   {
     id: "V4-08-EXPECTED-OWNERSHIP",
-    fail_code: "MESSAGE_OWNER_CONFUSION",
+    fail_code: "PROVIDER_SEMANTIC_COVERAGE_UNAVAILABLE",
+    attribution: "source_diagnostic",
+    evidence_status: "unavailable_from_source_diagnostic",
   },
 ]);
 assert.equal(requiredBoundaryEvidencePassed(replay.cases), true);
+
+const guardRequest = v408ApplicationFixture.input;
+const unknownBoundaryFacts = structuredClone(
+  v408Case.pre_guard_decision_facts,
+);
+const absentBoundaryGuarded = guardDecisionFactsWithEvidenceV4(
+  guardRequest,
+  unknownBoundaryFacts,
+  { boundary_ownership_signals: [] },
+  [],
+  [],
+);
+assert.deepEqual(absentBoundaryGuarded.boundary_state, {
+  kind: "none",
+  status: "none",
+  repeated_unanswered_contact: false,
+});
+
+const ownedSignalDoesNotCreateBoundary = guardDecisionFactsWithEvidenceV4(
+  guardRequest,
+  unknownBoundaryFacts,
+  {
+    boundary_ownership_signals: [
+      { kind: "no_contact", asserted_by: "other_person", explicit: true },
+    ],
+  },
+  [],
+  [],
+);
+assert.deepEqual(ownedSignalDoesNotCreateBoundary.boundary_state, {
+  kind: "unknown",
+  status: "unknown",
+  repeated_unanswered_contact: false,
+});
+
+const topLevelBoundaryDoesNotBecomeAbsent = guardDecisionFactsWithEvidenceV4(
+  guardRequest,
+  unknownBoundaryFacts,
+  { boundary_ownership_signals: [] },
+  [{ kind: "relationship_closed", status: "explicit" }],
+  [],
+);
+assert.deepEqual(topLevelBoundaryDoesNotBecomeAbsent.boundary_state, {
+  kind: "unknown",
+  status: "unknown",
+  repeated_unanswered_contact: false,
+});
+
+for (const restrictiveKind of ["no_contact", "relationship_closed"]) {
+  const explicitFacts = structuredClone(unknownBoundaryFacts);
+  explicitFacts.boundary_state = {
+    kind: restrictiveKind,
+    status: "explicit",
+    repeated_unanswered_contact: false,
+  };
+  const preserved = guardDecisionFactsWithEvidenceV4(
+    guardRequest,
+    explicitFacts,
+    {
+      boundary_ownership_signals: [
+        {
+          kind: restrictiveKind,
+          asserted_by: "other_person",
+          explicit: true,
+        },
+      ],
+    },
+    [],
+    [],
+  );
+  assert.deepEqual(preserved.boundary_state, explicitFacts.boundary_state);
+}
+
+const blockedFacts = structuredClone(unknownBoundaryFacts);
+blockedFacts.boundary_state = {
+  kind: "blocked_or_restricted",
+  status: "explicit",
+  repeated_unanswered_contact: false,
+};
+const blockedPreserved = guardDecisionFactsWithEvidenceV4(
+  guardRequest,
+  blockedFacts,
+  { boundary_ownership_signals: [] },
+  [{ kind: "blocked_or_restricted", status: "explicit" }],
+  [],
+);
+assert.deepEqual(blockedPreserved.boundary_state, blockedFacts.boundary_state);
+
+const userPreferenceFacts = structuredClone(unknownBoundaryFacts);
+userPreferenceFacts.boundary_state = {
+  kind: "temporary_distance",
+  status: "explicit",
+  repeated_unanswered_contact: false,
+};
+const userPreferenceGuarded = guardDecisionFactsWithEvidenceV4(
+  guardRequest,
+  userPreferenceFacts,
+  {
+    boundary_ownership_signals: [
+      { kind: "temporary_distance", asserted_by: "user", explicit: true },
+    ],
+  },
+  [],
+  [],
+);
+assert.deepEqual(userPreferenceGuarded.boundary_state, {
+  kind: "none",
+  status: "none",
+  repeated_unanswered_contact: false,
+});
 
 const pair02DiagnosticCase = caseBundle.cases.find(
   (item) => item.case_id === "PAIR-02",
@@ -817,6 +1219,15 @@ mutatedPair04.post_guard_decision_facts.boundary_state.kind = "none";
 mutatedPair04.post_guard_decision_facts.boundary_state.status = "none";
 mutatedPair04.post_guard_boundary = { kind: "none", status: "none" };
 assert.equal(requiredBoundaryEvidencePassed(pair04PostGuardMutation), false);
+
+const v408PostGuardMutation = structuredClone(replay.cases);
+const mutatedV408 = v408PostGuardMutation.find(
+  (item) => item.case_id === "V4-08",
+);
+mutatedV408.post_guard_decision_facts.boundary_state.kind = "unknown";
+mutatedV408.post_guard_decision_facts.boundary_state.status = "unknown";
+mutatedV408.post_guard_boundary = { kind: "unknown", status: "unknown" };
+assert.equal(requiredBoundaryEvidencePassed(v408PostGuardMutation), false);
 
 for (const replayCase of replay.cases) {
   const rawBefore = structuredClone(replayCase.raw_v5);
@@ -1111,19 +1522,26 @@ console.log("M2_P4_I3_R1_C1_R1_GROUNDING_RESPONSIBILITY: PASS");
 console.log("c1_evidence_immutable: PASS");
 console.log("provider_schema_v5: PASS");
 console.log("provider_bookkeeping_fields: 0");
-console.log("correction_scope: 8/8");
+console.log("correction_scope: 9/9");
 console.log("cumulative_scope: 31/31");
 console.log("replay_input_construction: 8/8");
 console.log("expected_input_injection: 0");
-console.log("replay_verdict: FAIL");
-console.log("replay_cases: 5/8");
+console.log("strict_source_replay_verdict: FAIL");
+console.log("strict_source_replay_cases: 5/8");
+console.log("application_adjudicated_decision_facts: 8/8");
 console.log("writing_context_integrity_v2: 8/8");
 console.log("decision_facts_expected_subset: 5/8");
 console.log("semantic_assertions: 41/42");
 console.log("ownership_parity: 7/8");
 console.log("pair_03_boundary_regression: resolved");
 console.log("pair_04_no_contact: preserved");
+console.log("v4_08_absent_boundary: normalized_none_none");
+console.log("v4_08_ownership_evidence: unavailable_from_source_diagnostic");
 console.log("oracle_contamination_mutations_rejected: 4/4");
+console.log("absent_boundary_mutation_rejected: 1/1");
+console.log("application_canonical_fixtures: 8/8");
+console.log("provider_semantic_coverage: 7/8");
+console.log("provider_retest_required: true");
 console.log("fake_pipeline: 3/3");
 console.log("downstream_writing_signals_leakage: 0");
 console.log("downstream_writing_context_leakage: 0");
@@ -1131,3 +1549,4 @@ console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
 console.log("active_runtime_changed: false");
+console.log("c2_authorized: false");

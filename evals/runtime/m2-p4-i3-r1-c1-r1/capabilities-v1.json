@@ -4,8 +4,10 @@
   "title": "Offline Diagnostic Postmortem and Grounding Responsibility Revision",
   "status": "implementation_pending_human_chatgpt_review",
   "baseline": "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9",
+  "replay_adjudication_correction_baseline": "28bedad969d1007bbd731f0e9d47824eecd84651",
   "branch": "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility",
   "exact_mutation_paths": 31,
+  "exact_correction_paths": 9,
   "source_diagnostic": "human_chatgpt_reviewed_fail_complete",
   "provider_calls": 0,
   "replay_input_construction_authority": {
@@ -34,12 +36,27 @@
   "candidate_prompt_bundle": "prompt-bundle-runtime-v6.0.0",
   "candidate_runtime_schema_set": "pipeline-schema-runtime-v3.2.0",
   "replay_verdict": "FAIL",
+  "strict_source_replay_verdict": "FAIL",
+  "strict_cases_passed": 5,
   "replay": "5/8",
+  "application_adjudicated_verdict": "PASS",
+  "application_adjudicated_decision_facts": "8/8",
   "writing_context_integrity": "8/8",
   "decision_facts_expected_subset": "5/8",
   "semantic_assertions": "41/42",
   "candidate_presence_parity": "8/8",
   "ownership_parity": "7/8",
+  "provider_semantic_coverage": {
+    "available": 7,
+    "total": 8,
+    "unavailable_cases": [
+      "V4-08"
+    ],
+    "v4_08_evidence_status": "unavailable_from_source_diagnostic"
+  },
+  "application_canonical_fixtures": "8/8",
+  "application_fixture_result": "PASS_APPLICATION_UNIT_ONLY",
+  "provider_retest_required": true,
   "constraint_provenance": "8/8",
   "privacy_repeat_injection_preservation": "8/8",
   "auxiliary_v3_parity": "4/4",
@@ -50,7 +67,8 @@
         "/latest_direct_message/user_reply_state"
       ],
       "actual": "not_applicable",
-      "expected": "replied"
+      "expected": "replied",
+      "adjudication": "expectation_contract_defect"
     },
     {
       "case_id": "V4-06",
@@ -58,7 +76,9 @@
         "/latest_direct_message/kind"
       ],
       "actual": "question",
-      "expected": "schedule_coordination"
+      "expected": "schedule_coordination",
+      "adjudication": "nonmaterial_taxonomy_equivalence",
+      "decision_policy_equal": true
     },
     {
       "case_id": "V4-08",
@@ -68,8 +88,18 @@
       ],
       "actual": "unknown / unknown",
       "expected": "none / none",
-      "ownership_parity": false
+      "adjudication": "application_absent_boundary_normalization",
+      "application_post_guard": "none / none",
+      "ownership_parity": false,
+      "ownership_evidence_status": "unavailable_from_source_diagnostic",
+      "application_failure_attributed": false
     }
+  ],
+  "expectation_contract_defects": [
+    "PAIR-02:/latest_direct_message/user_reply_state"
+  ],
+  "nonmaterial_taxonomy_equivalences": [
+    "V4-06:/latest_direct_message/kind"
   ],
   "fake_pipeline": "3/3",
   "provider_bookkeeping_fields": 0,
@@ -83,6 +113,7 @@
   "active_runtime_changed": false,
   "service_switch": false,
   "c2_authorized": false,
+  "r1_c1_r2_authorized": false,
   "next_candidate": "M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic",
   "next_candidate_authorized": false,
   "e1_status": "not_started",

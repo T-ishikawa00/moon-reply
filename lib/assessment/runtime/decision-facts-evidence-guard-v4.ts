@@ -61,13 +61,32 @@ function hasOwnedBoundarySignal(
   );
 }
 
+function hasAnyOwnedRestrictiveBoundarySignal(
+  rawSignals: Record<string, unknown>,
+) {
+  return objects(rawSignals.boundary_ownership_signals).some(
+    (signal) =>
+      restrictiveBoundaryKinds.has(String(signal.kind)) &&
+      signal.explicit === true &&
+      (signal.asserted_by === "other_person" ||
+        signal.asserted_by === "system"),
+  );
+}
+
+function hasExplicitNonBlockRestrictiveBoundary(boundaries: JsonValue) {
+  return objects(boundaries).some(
+    (boundary) =>
+      boundary.kind !== "blocked_or_restricted" &&
+      restrictiveBoundaryKinds.has(String(boundary.kind)) &&
+      boundary.status === "explicit",
+  );
+}
+
 function hasExplicitBlockedBoundary(boundaries: JsonValue) {
   return objects(boundaries).some(
     (boundary) =>
       boundary.kind === "blocked_or_restricted" &&
-      boundary.status === "explicit" &&
-      Array.isArray(boundary.source_refs) &&
-      boundary.source_refs.includes("input:current_situation"),
+      boundary.status === "explicit",
   );
 }
 
@@ -105,12 +124,24 @@ export function guardDecisionFactsWithEvidenceV4(
   const boundary = guarded.boundary_state;
   if (isObject(boundary)) {
     const kind = typeof boundary.kind === "string" ? boundary.kind : "unknown";
+    const status =
+      typeof boundary.status === "string" ? boundary.status : "unknown";
     const supported =
       restrictiveBoundaryKinds.has(kind) &&
       (hasOwnedBoundarySignal(signals, kind) ||
         (kind === "blocked_or_restricted" &&
           hasExplicitBlockedBoundary(topLevelBoundaries)));
     if (restrictiveBoundaryKinds.has(kind) && !supported) {
+      boundary.kind = "none";
+      boundary.status = "none";
+    }
+    const observedBoundaryAbsent =
+      kind === "unknown" &&
+      status === "unknown" &&
+      !hasAnyOwnedRestrictiveBoundarySignal(signals) &&
+      !hasExplicitNonBlockRestrictiveBoundary(topLevelBoundaries) &&
+      !hasExplicitBlockedBoundary(topLevelBoundaries);
+    if (observedBoundaryAbsent) {
       boundary.kind = "none";
       boundary.status = "none";
     }

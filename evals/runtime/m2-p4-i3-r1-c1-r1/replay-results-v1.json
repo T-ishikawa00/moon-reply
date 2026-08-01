@@ -3,12 +3,98 @@
   "task_id": "M2-P4-I3-R1-C1-R1",
   "evaluator_version": "m2-p4-i3-r1-c1-r1-replay-evaluator-v2",
   "verdict": "FAIL",
+  "strict_source_replay_verdict": "FAIL",
+  "strict_cases_passed": 5,
+  "application_adjudicated_verdict": "PASS",
+  "expectation_contract_defects": [
+    {
+      "case_id": "PAIR-02",
+      "path": "/latest_direct_message/user_reply_state",
+      "actual": "not_applicable",
+      "expected": "replied",
+      "canonical_rule": "sender_user_or_none_requires_not_applicable"
+    }
+  ],
+  "nonmaterial_taxonomy_equivalences": [
+    {
+      "case_id": "V4-06",
+      "path": "/latest_direct_message/kind",
+      "actual": "question",
+      "expected": "schedule_coordination",
+      "practical_reason": "schedule_coordination",
+      "incoming_profile_supported": true,
+      "decision_policy_equal": true
+    }
+  ],
+  "provider_semantic_coverage": {
+    "passed": 7,
+    "available": 7,
+    "unavailable": 1,
+    "total": 8,
+    "rate": 0.875,
+    "evidence_status": "partial",
+    "unavailable_cases": [
+      "V4-08"
+    ]
+  },
+  "application_fixture_result": {
+    "fixture_id": "V4-08-APPLICATION-SEMANTIC-ONLY",
+    "evidence_role": "application_unit_only",
+    "provider_replay_claim": false,
+    "provider_quality_claim": false,
+    "expected_data_injected": false,
+    "raw_pii_strings": 0,
+    "passed": 8,
+    "total": 8,
+    "rate": 1,
+    "checks": [
+      {
+        "id": "message_grounding",
+        "passed": true
+      },
+      {
+        "id": "candidate_absence",
+        "passed": true
+      },
+      {
+        "id": "absent_boundary_normalization",
+        "passed": true
+      },
+      {
+        "id": "privacy_markers",
+        "passed": true
+      },
+      {
+        "id": "repeat_state",
+        "passed": true
+      },
+      {
+        "id": "integrity_v2",
+        "passed": true
+      },
+      {
+        "id": "raw_pii_absence",
+        "passed": true
+      },
+      {
+        "id": "injection_and_expected_data_separation",
+        "passed": true
+      }
+    ]
+  },
+  "provider_retest_required": true,
   "expected_input_injection": 0,
   "provider_calls_during_replay": 0,
   "db_operations": 0,
   "supabase_operations": 0,
   "holdout_use": 0,
   "metrics": {
+    "strict_source_cases": {
+      "passed": 5,
+      "total": 8,
+      "rate": 0.625,
+      "evidence_status": "available"
+    },
     "input_construction": {
       "passed": 8,
       "total": 8,
@@ -43,6 +129,12 @@
       "passed": 5,
       "total": 8,
       "rate": 0.625,
+      "evidence_status": "available"
+    },
+    "application_adjudicated_decision_facts": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
       "evidence_status": "available"
     },
     "semantic_assertions": {
@@ -86,11 +178,23 @@
       "total": 4,
       "rate": 1,
       "evidence_status": "available"
+    },
+    "provider_semantic_coverage": {
+      "passed": 7,
+      "available": 7,
+      "unavailable": 1,
+      "total": 8,
+      "rate": 0.875,
+      "evidence_status": "partial",
+      "unavailable_cases": [
+        "V4-08"
+      ]
     }
   },
   "cases": [
     {
       "case_id": "PAIR-01",
+      "strict_source_replay_passed": true,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -175,6 +279,47 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "matching_app",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "none",
         "status": "none"
@@ -196,6 +341,13 @@
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
       "critical_expected_subset_mismatched_paths": [],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "strict_match",
+        "strict_mismatched_paths": []
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -206,6 +358,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": {
@@ -218,6 +373,7 @@
     },
     {
       "case_id": "PAIR-02",
+      "strict_source_replay_passed": false,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -296,6 +452,44 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "user",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 1,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "within_usual",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "none",
         "status": "none"
@@ -319,6 +513,20 @@
       "critical_expected_subset_mismatched_paths": [
         "/latest_direct_message/user_reply_state"
       ],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "expectation_contract_defect",
+        "strict_mismatched_paths": [
+          "/latest_direct_message/user_reply_state"
+        ]
+      },
+      "expectation_contract_defect": {
+        "path": "/latest_direct_message/user_reply_state",
+        "actual": "not_applicable",
+        "expected": "replied",
+        "canonical_rule": "sender_user_or_none_requires_not_applicable"
+      },
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -329,6 +537,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": {
@@ -341,6 +552,7 @@
     },
     {
       "case_id": "PAIR-03",
+      "strict_source_replay_passed": true,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -425,6 +637,47 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "work_or_school",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "schedule_coordination",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "temporary_distance",
         "status": "explicit"
@@ -446,6 +699,13 @@
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
       "critical_expected_subset_mismatched_paths": [],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "strict_match",
+        "strict_mismatched_paths": []
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -456,6 +716,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": {
@@ -468,6 +731,7 @@
     },
     {
       "case_id": "PAIR-04",
+      "strict_source_replay_passed": true,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -546,6 +810,44 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "closure_or_boundary",
+          "response_expectation": "none",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "no_contact",
+          "status": "explicit",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "no_contact",
         "status": "explicit"
@@ -567,6 +869,13 @@
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
       "critical_expected_subset_mismatched_paths": [],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "strict_match",
+        "strict_mismatched_paths": []
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -577,6 +886,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": {
@@ -591,6 +903,7 @@
     },
     {
       "case_id": "V4-05",
+      "strict_source_replay_passed": true,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -672,6 +985,45 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "former_partner",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "not_applicable",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "logistics",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "practical_reason.deadline"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "none",
         "status": "none"
@@ -693,6 +1045,13 @@
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
       "critical_expected_subset_mismatched_paths": [],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "strict_match",
+        "strict_mismatched_paths": []
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -703,6 +1062,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
@@ -710,6 +1072,7 @@
     },
     {
       "case_id": "V4-06",
+      "strict_source_replay_passed": false,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -753,6 +1116,46 @@
         }
       },
       "post_guard_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "question",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 0,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true,
+          "deadline": "unknown"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.usual_cadence_relation",
+            "practical_reason.deadline"
+          ]
+        }
+      },
+      "strict_source_decision_facts": {
         "schema_version": "m2-p4-decision-facts-v2",
         "relationship_stage": "other",
         "selected_requests": [
@@ -819,6 +1222,22 @@
       "critical_expected_subset_mismatched_paths": [
         "/latest_direct_message/kind"
       ],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "nonmaterial_taxonomy_equivalence",
+        "strict_mismatched_paths": [
+          "/latest_direct_message/kind"
+        ]
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": {
+        "path": "/latest_direct_message/kind",
+        "actual": "question",
+        "expected": "schedule_coordination",
+        "practical_reason": "schedule_coordination",
+        "incoming_profile_supported": true,
+        "decision_policy_equal": true
+      },
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -829,6 +1248,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
@@ -836,6 +1258,7 @@
     },
     {
       "case_id": "V4-07",
+      "strict_source_replay_passed": true,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -921,6 +1344,46 @@
           ]
         }
       },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "none",
+          "kind": "none",
+          "response_expectation": "none",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.usual_cadence_relation"
+          ]
+        }
+      },
       "pre_guard_boundary": {
         "kind": "none",
         "status": "none"
@@ -937,6 +1400,13 @@
       "integrity_violations": [],
       "critical_expected_subset_passed": true,
       "critical_expected_subset_mismatched_paths": [],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "strict_match",
+        "strict_mismatched_paths": []
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": true,
       "failed_semantic_assertions": [],
       "soft_assertions": {
@@ -947,6 +1417,9 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": true,
+      "ownership_evidence_status": "available",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": true,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
@@ -954,6 +1427,7 @@
     },
     {
       "case_id": "V4-08",
+      "strict_source_replay_passed": false,
       "input_construction_passed": true,
       "expected_data_injected": false,
       "pre_guard_decision_facts": {
@@ -1022,6 +1496,50 @@
           "proposed_message_present": false
         },
         "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        },
+        "information_state": {
+          "assessment_mode": "best_effort",
+          "can_proceed_without_followup": true,
+          "used_context_inference": false,
+          "unresolved_fields": [
+            "contact_state.elapsed_since_latest_user_message_minutes",
+            "contact_state.unanswered_user_message_count",
+            "contact_state.usual_cadence_relation",
+            "latest_direct_message.kind",
+            "latest_direct_message.response_expectation",
+            "latest_direct_message.sender",
+            "latest_direct_message.user_reply_state"
+          ]
+        }
+      },
+      "strict_source_decision_facts": {
+        "schema_version": "m2-p4-decision-facts-v2",
+        "relationship_stage": "other",
+        "selected_requests": [
+          "organize_emotions"
+        ],
+        "latest_direct_message": {
+          "sender": "unknown",
+          "kind": "unknown",
+          "response_expectation": "unknown",
+          "user_reply_state": "unknown",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": null,
+          "elapsed_since_latest_user_message_minutes": null,
+          "usual_cadence_relation": "unknown",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
           "kind": "unknown",
           "status": "unknown",
           "repeated_unanswered_contact": false
@@ -1036,8 +1554,6 @@
           "can_proceed_without_followup": true,
           "used_context_inference": false,
           "unresolved_fields": [
-            "boundary_state.kind",
-            "boundary_state.status",
             "contact_state.elapsed_since_latest_user_message_minutes",
             "contact_state.unanswered_user_message_count",
             "contact_state.usual_cadence_relation",
@@ -1053,8 +1569,8 @@
         "status": "unknown"
       },
       "post_guard_boundary": {
-        "kind": "unknown",
-        "status": "unknown"
+        "kind": "none",
+        "status": "none"
       },
       "extracted_message_signals": [],
       "provider_transport_passed": true,
@@ -1067,11 +1583,23 @@
         "/boundary_state/kind",
         "/boundary_state/status"
       ],
+      "application_adjudicated_decision_facts_passed": true,
+      "decision_fact_adjudication": {
+        "disposition": "application_absent_boundary_normalization",
+        "strict_mismatched_paths": [
+          "/boundary_state/kind",
+          "/boundary_state/status"
+        ]
+      },
+      "expectation_contract_defect": null,
+      "nonmaterial_taxonomy_equivalence": null,
       "semantic_assertions_passed": false,
       "failed_semantic_assertions": [
         {
           "id": "V4-08-EXPECTED-OWNERSHIP",
-          "fail_code": "MESSAGE_OWNER_CONFUSION"
+          "fail_code": "PROVIDER_SEMANTIC_COVERAGE_UNAVAILABLE",
+          "attribution": "source_diagnostic",
+          "evidence_status": "unavailable_from_source_diagnostic"
         }
       ],
       "soft_assertions": {
@@ -1082,10 +1610,13 @@
       },
       "candidate_presence_passed": true,
       "ownership_passed": false,
+      "ownership_evidence_status": "unavailable_from_source_diagnostic",
+      "ownership_application_failure_attributed": false,
+      "provider_semantic_coverage": false,
       "constraint_provenance_passed": true,
       "privacy_repeat_injection_passed": true,
       "auxiliary_v3_comparison": null,
-      "output_sha256": "ba7d77f6a8e5901a2016d7d01b8688d9fb9299e3719055d23ad2a02d93fd0185"
+      "output_sha256": "8ebfc77d42e32c4f9ff13b775e28f0a4315a8166c5b525016f7e0b258e8f239d"
     }
   ]
 }

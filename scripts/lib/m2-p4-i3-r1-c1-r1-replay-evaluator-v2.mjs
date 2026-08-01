@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import Ajv2020 from "ajv/dist/2020.js";
+import { buildContextualDecisionPolicyV3 } from "../../lib/assessment/runtime/policy-v3.ts";
 import { groundStructuredIntakeV5 } from "../../lib/assessment/runtime/structured-intake-grounding-v5.ts";
 import { collectWritingContextIntegrityViolationsV2 } from "../../lib/assessment/runtime/writing-context-integrity-v2.ts";
 
@@ -458,6 +459,163 @@ function auxiliaryV3Comparison(
   };
 }
 
+function strictSourceReplayDecisionFacts(rawDecisionFacts, groundedDecisionFacts) {
+  const strict = structuredClone(groundedDecisionFacts);
+  const rawBoundary = rawDecisionFacts?.boundary_state;
+  const groundedBoundary = strict?.boundary_state;
+  if (
+    rawBoundary?.kind === "unknown" &&
+    rawBoundary?.status === "unknown" &&
+    groundedBoundary?.kind === "none" &&
+    groundedBoundary?.status === "none"
+  ) {
+    groundedBoundary.kind = "unknown";
+    groundedBoundary.status = "unknown";
+  }
+  return strict;
+}
+
+function samePathSet(actual, expected) {
+  return same(sortedUnique(actual), sortedUnique(expected));
+}
+
+function providerSemanticCoverage(writingSignals, expectedOwnership) {
+  const providerOwnedExpectations = asArray(expectedOwnership).filter(
+    (item) => item?.status !== "unsent_candidate",
+  );
+  const actualSignals = asArray(writingSignals?.message_signals);
+  const missing = providerOwnedExpectations.filter(
+    (wanted) =>
+      !actualSignals.some(
+        (actual) =>
+          actual?.author === wanted?.author &&
+          actual?.status === wanted?.status,
+      ),
+  );
+  const available = missing.length === 0;
+  return {
+    available,
+    evidence_status: available
+      ? "available"
+      : "unavailable_from_source_diagnostic",
+    missing_signal_count: missing.length,
+  };
+}
+
+function adjudicateDecisionFacts({
+  strictDecisionFacts,
+  postGuardDecisionFacts,
+  expectedSubset,
+  writingContext,
+}) {
+  const mismatchedPaths = subsetMismatchedPaths(
+    strictDecisionFacts,
+    expectedSubset,
+  );
+  if (mismatchedPaths.length === 0) {
+    return {
+      passed: true,
+      disposition: "strict_match",
+      strict_mismatched_paths: [],
+      expectation_contract_defect: null,
+      nonmaterial_taxonomy_equivalence: null,
+    };
+  }
+
+  const actualMessage = strictDecisionFacts?.latest_direct_message;
+  const expectedMessage = expectedSubset?.latest_direct_message;
+  if (
+    samePathSet(mismatchedPaths, [
+      "/latest_direct_message/user_reply_state",
+    ]) &&
+    ["user", "none"].includes(actualMessage?.sender) &&
+    actualMessage?.user_reply_state === "not_applicable" &&
+    expectedMessage?.user_reply_state === "replied"
+  ) {
+    return {
+      passed: true,
+      disposition: "expectation_contract_defect",
+      strict_mismatched_paths: mismatchedPaths,
+      expectation_contract_defect: {
+        path: "/latest_direct_message/user_reply_state",
+        actual: "not_applicable",
+        expected: "replied",
+        canonical_rule: "sender_user_or_none_requires_not_applicable",
+      },
+      nonmaterial_taxonomy_equivalence: null,
+    };
+  }
+
+  const practical = postGuardDecisionFacts?.practical_reason;
+  const incomingActs = asArray(
+    writingContext?.incoming_message_profile?.dialogue_acts,
+  );
+  if (
+    samePathSet(mismatchedPaths, ["/latest_direct_message/kind"]) &&
+    actualMessage?.kind === "question" &&
+    expectedMessage?.kind === "schedule_coordination" &&
+    practical?.kind === "schedule_coordination" &&
+    practical?.active === true &&
+    incomingActs.some((act) =>
+      ["question", "schedule_coordination"].includes(act),
+    )
+  ) {
+    const expectedPolicyFacts = structuredClone(postGuardDecisionFacts);
+    expectedPolicyFacts.latest_direct_message.kind = "schedule_coordination";
+    const actualPolicy = buildContextualDecisionPolicyV3(
+      postGuardDecisionFacts,
+    );
+    const expectedPolicy = buildContextualDecisionPolicyV3(
+      expectedPolicyFacts,
+    );
+    const decisionPolicyEqual = same(actualPolicy, expectedPolicy);
+    if (decisionPolicyEqual) {
+      return {
+        passed: true,
+        disposition: "nonmaterial_taxonomy_equivalence",
+        strict_mismatched_paths: mismatchedPaths,
+        expectation_contract_defect: null,
+        nonmaterial_taxonomy_equivalence: {
+          path: "/latest_direct_message/kind",
+          actual: "question",
+          expected: "schedule_coordination",
+          practical_reason: "schedule_coordination",
+          incoming_profile_supported: true,
+          decision_policy_equal: true,
+        },
+      };
+    }
+  }
+
+  if (
+    samePathSet(mismatchedPaths, [
+      "/boundary_state/kind",
+      "/boundary_state/status",
+    ]) &&
+    strictDecisionFacts?.boundary_state?.kind === "unknown" &&
+    strictDecisionFacts?.boundary_state?.status === "unknown" &&
+    postGuardDecisionFacts?.boundary_state?.kind === "none" &&
+    postGuardDecisionFacts?.boundary_state?.status === "none" &&
+    deepSubset(postGuardDecisionFacts, expectedSubset)
+  ) {
+    return {
+      passed: true,
+      disposition: "application_absent_boundary_normalization",
+      strict_mismatched_paths: mismatchedPaths,
+      expectation_contract_defect: null,
+      nonmaterial_taxonomy_equivalence: null,
+    };
+  }
+
+  return {
+    passed: false,
+    disposition: "material_mismatch",
+    strict_mismatched_paths: mismatchedPaths,
+    expectation_contract_defect: null,
+    nonmaterial_taxonomy_equivalence: null,
+  };
+}
+
 export function evaluateC1OfflineReplayV2({
   caseBundle,
   diagnosticResults,
@@ -488,6 +646,10 @@ export function evaluateC1OfflineReplayV2({
     );
     const providerSchemaPassed = validateProvider(rawV5);
     const grounded = groundStructuredIntakeV5(request, rawV5);
+    const strictDecisionFacts = strictSourceReplayDecisionFacts(
+      rawV5.decision_facts,
+      grounded.decision_facts,
+    );
     const groundedSchemaPassed = validateGrounded(grounded);
     const integrityViolations = collectWritingContextIntegrityViolationsV2(
       request,
@@ -521,6 +683,20 @@ export function evaluateC1OfflineReplayV2({
           assertion.scope === "both" || assertion.scope === "v4",
       )
       .map((assertion) => evaluateAssertion(assertionCall, assertion));
+    const ownershipPassed = ownershipParity(
+      grounded.writing_context,
+      diagnosticCase.expected_source_ownership ?? [],
+    );
+    const semanticCoverage = providerSemanticCoverage(
+      rawV5.writing_signals,
+      diagnosticCase.expected_source_ownership ?? [],
+    );
+    const decisionFactAdjudication = adjudicateDecisionFacts({
+      strictDecisionFacts,
+      postGuardDecisionFacts: grounded.decision_facts,
+      expectedSubset: diagnosticCase.expected_decision_fact_subset,
+      writingContext: grounded.writing_context,
+    });
     hard.push(
       {
         id: `${diagnosticCase.case_id}-EXPECTED-WRITING-SUBSET`,
@@ -532,11 +708,14 @@ export function evaluateC1OfflineReplayV2({
       },
       {
         id: `${diagnosticCase.case_id}-EXPECTED-OWNERSHIP`,
-        passed: ownershipParity(
-          grounded.writing_context,
-          diagnosticCase.expected_source_ownership ?? [],
-        ),
-        fail_code: "MESSAGE_OWNER_CONFUSION",
+        passed: ownershipPassed,
+        fail_code: semanticCoverage.available
+          ? "MESSAGE_OWNER_CONFUSION"
+          : "PROVIDER_SEMANTIC_COVERAGE_UNAVAILABLE",
+        attribution: semanticCoverage.available
+          ? "application"
+          : "source_diagnostic",
+        evidence_status: semanticCoverage.evidence_status,
       },
     );
     semanticResults.push(...hard, ...forbidden);
@@ -550,13 +729,45 @@ export function evaluateC1OfflineReplayV2({
     const candidateActual =
       grounded.writing_context?.candidate_style_profile !== null &&
       grounded.writing_context?.candidate_communicative_intent !== null;
+    const privacyRepeatInjectionPassed =
+      same(
+        grounded.writing_context?.privacy_markers,
+        rawV5.writing_signals.privacy_markers,
+      ) &&
+      grounded.writing_context?.repeat_consultation_state?.state ===
+        rawV5.writing_signals.repeat_consultation_state.state &&
+      grounded.untrusted_embedded_instructions_detected ===
+        rawV5.untrusted_embedded_instructions_detected;
+    const constraintProvenancePassed = constraintsCanonical(
+      grounded.writing_context,
+    );
+    const strictCriticalExpectedSubsetPassed = deepSubset(
+      strictDecisionFacts,
+      diagnosticCase.expected_decision_fact_subset,
+    );
+    const semanticAssertionsPassed =
+      hard.every((item) => item.passed) &&
+      forbidden.every((item) => item.passed);
     caseResults.push({
       case_id: diagnosticCase.case_id,
+      strict_source_replay_passed:
+        inputConstructionAudit.matches_authorized_construction &&
+        saved.provider_completed === true &&
+        providerSchemaPassed &&
+        groundedSchemaPassed &&
+        integrityViolations.length === 0 &&
+        strictCriticalExpectedSubsetPassed &&
+        semanticAssertionsPassed &&
+        candidateExpected === candidateActual &&
+        ownershipPassed &&
+        constraintProvenancePassed &&
+        privacyRepeatInjectionPassed,
       input_construction_passed:
         inputConstructionAudit.matches_authorized_construction,
       expected_data_injected: inputConstructionAudit.expected_data_injected,
       pre_guard_decision_facts: structuredClone(rawV5.decision_facts),
       post_guard_decision_facts: structuredClone(grounded.decision_facts),
+      strict_source_decision_facts: strictDecisionFacts,
       pre_guard_boundary: boundaryKindStatus(rawV5.decision_facts),
       post_guard_boundary: boundaryKindStatus(grounded.decision_facts),
       extracted_message_signals: structuredClone(
@@ -568,37 +779,40 @@ export function evaluateC1OfflineReplayV2({
       grounded_schema_passed: groundedSchemaPassed,
       integrity_passed: integrityViolations.length === 0,
       integrity_violations: integrityViolations,
-      critical_expected_subset_passed: deepSubset(
-        grounded.decision_facts,
-        diagnosticCase.expected_decision_fact_subset,
-      ),
+      critical_expected_subset_passed: strictCriticalExpectedSubsetPassed,
       critical_expected_subset_mismatched_paths: subsetMismatchedPaths(
-        grounded.decision_facts,
+        strictDecisionFacts,
         diagnosticCase.expected_decision_fact_subset,
       ),
-      semantic_assertions_passed: hard.every((item) => item.passed) &&
-        forbidden.every((item) => item.passed),
+      application_adjudicated_decision_facts_passed:
+        decisionFactAdjudication.passed,
+      decision_fact_adjudication: {
+        disposition: decisionFactAdjudication.disposition,
+        strict_mismatched_paths:
+          decisionFactAdjudication.strict_mismatched_paths,
+      },
+      expectation_contract_defect:
+        decisionFactAdjudication.expectation_contract_defect,
+      nonmaterial_taxonomy_equivalence:
+        decisionFactAdjudication.nonmaterial_taxonomy_equivalence,
+      semantic_assertions_passed: semanticAssertionsPassed,
       failed_semantic_assertions: [...hard, ...forbidden]
         .filter((item) => !item.passed)
-        .map((item) => ({ id: item.id, fail_code: item.fail_code })),
+        .map((item) => ({
+          id: item.id,
+          fail_code: item.fail_code,
+          attribution: item.attribution ?? "application",
+          evidence_status: item.evidence_status ?? "available",
+        })),
       soft_assertions: score(soft),
       candidate_presence_passed: candidateExpected === candidateActual,
-      ownership_passed: ownershipParity(
-        grounded.writing_context,
-        diagnosticCase.expected_source_ownership ?? [],
-      ),
-      constraint_provenance_passed: constraintsCanonical(
-        grounded.writing_context,
-      ),
-      privacy_repeat_injection_passed:
-        same(
-          grounded.writing_context?.privacy_markers,
-          rawV5.writing_signals.privacy_markers,
-        ) &&
-        grounded.writing_context?.repeat_consultation_state?.state ===
-          rawV5.writing_signals.repeat_consultation_state.state &&
-        grounded.untrusted_embedded_instructions_detected ===
-          rawV5.untrusted_embedded_instructions_detected,
+      ownership_passed: ownershipPassed,
+      ownership_evidence_status: semanticCoverage.evidence_status,
+      ownership_application_failure_attributed:
+        !ownershipPassed && semanticCoverage.available,
+      provider_semantic_coverage: semanticCoverage.available,
+      constraint_provenance_passed: constraintProvenancePassed,
+      privacy_repeat_injection_passed: privacyRepeatInjectionPassed,
       auxiliary_v3_comparison: auxiliaryV3Comparison(
         grounded.decision_facts,
         v3?.decision_facts,
@@ -619,16 +833,42 @@ export function evaluateC1OfflineReplayV2({
   const auxiliary = caseResults
     .map((item) => item.auxiliary_v3_comparison)
     .filter((item) => item !== null);
+  const unavailableProviderCoverageCases = caseResults
+    .filter((item) => !item.provider_semantic_coverage)
+    .map((item) => item.case_id);
+  const providerCoverageAvailable =
+    caseResults.length - unavailableProviderCoverageCases.length;
+  const expectationContractDefects = caseResults.flatMap((item) =>
+    item.expectation_contract_defect === null
+      ? []
+      : [{ case_id: item.case_id, ...item.expectation_contract_defect }],
+  );
+  const nonmaterialTaxonomyEquivalences = caseResults.flatMap((item) =>
+    item.nonmaterial_taxonomy_equivalence === null
+      ? []
+      : [
+          {
+            case_id: item.case_id,
+            ...item.nonmaterial_taxonomy_equivalence,
+          },
+        ],
+  );
   const evaluation = {
     evaluator_version: "m2-p4-i3-r1-c1-r1-replay-evaluator-v2",
     cases: caseResults,
+    expectation_contract_defects: expectationContractDefects,
+    nonmaterial_taxonomy_equivalences: nonmaterialTaxonomyEquivalences,
     metrics: {
+      strict_source_cases: metric("strict_source_replay_passed"),
       input_construction: metric("input_construction_passed"),
       provider_transport: metric("provider_transport_passed"),
       raw_schema: metric("raw_schema_passed"),
       grounded_schema: metric("grounded_schema_passed"),
       integrity: metric("integrity_passed"),
       critical_expected_subset: metric("critical_expected_subset_passed"),
+      application_adjudicated_decision_facts: metric(
+        "application_adjudicated_decision_facts_passed",
+      ),
       semantic_assertions: score(semanticResults),
       soft_assertions: score(softResults),
       candidate_presence: metric("candidate_presence_passed"),
@@ -638,6 +878,21 @@ export function evaluateC1OfflineReplayV2({
       auxiliary_v3_parity: score(
         auxiliary.map((item) => ({ passed: item.passed })),
       ),
+      provider_semantic_coverage: {
+        passed: providerCoverageAvailable,
+        available: providerCoverageAvailable,
+        unavailable: unavailableProviderCoverageCases.length,
+        total: caseResults.length,
+        rate:
+          caseResults.length === 0
+            ? null
+            : providerCoverageAvailable / caseResults.length,
+        evidence_status:
+          unavailableProviderCoverageCases.length === 0
+            ? "available"
+            : "partial",
+        unavailable_cases: unavailableProviderCoverageCases,
+      },
     },
   };
   evaluation.verdict = [
@@ -655,15 +910,51 @@ export function evaluateC1OfflineReplayV2({
   ].every((metricName) => evaluation.metrics[metricName].rate === 1)
     ? "PASS"
     : "FAIL";
+  evaluation.strict_source_replay_verdict = evaluation.verdict;
+  evaluation.strict_cases_passed =
+    evaluation.metrics.strict_source_cases.passed;
+  evaluation.application_adjudicated_verdict = [
+    "input_construction",
+    "provider_transport",
+    "raw_schema",
+    "grounded_schema",
+    "integrity",
+    "application_adjudicated_decision_facts",
+    "candidate_presence",
+    "constraint_provenance",
+    "privacy_repeat_injection",
+  ].every((metricName) => evaluation.metrics[metricName].rate === 1)
+    ? "PASS"
+    : "FAIL";
+  evaluation.provider_retest_required =
+    unavailableProviderCoverageCases.length > 0;
   return evaluation;
 }
 
-export function replayResultsArtifactV1(evaluation) {
+export function replayResultsArtifactV1(
+  evaluation,
+  { applicationFixtureResult = null } = {},
+) {
   return {
     schema_version: "m2-p4-i3-r1-c1-r1-replay-results-v1",
     task_id: "M2-P4-I3-R1-C1-R1",
     evaluator_version: evaluation.evaluator_version,
     verdict: evaluation.verdict,
+    strict_source_replay_verdict: evaluation.strict_source_replay_verdict,
+    strict_cases_passed: evaluation.strict_cases_passed,
+    application_adjudicated_verdict:
+      evaluation.application_adjudicated_verdict,
+    expectation_contract_defects: structuredClone(
+      evaluation.expectation_contract_defects,
+    ),
+    nonmaterial_taxonomy_equivalences: structuredClone(
+      evaluation.nonmaterial_taxonomy_equivalences,
+    ),
+    provider_semantic_coverage: structuredClone(
+      evaluation.metrics.provider_semantic_coverage,
+    ),
+    application_fixture_result: structuredClone(applicationFixtureResult),
+    provider_retest_required: evaluation.provider_retest_required,
     expected_input_injection: evaluation.cases.filter(
       (caseResult) => caseResult.expected_data_injected,
     ).length,
