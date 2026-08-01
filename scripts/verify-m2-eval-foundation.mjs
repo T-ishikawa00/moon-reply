@@ -28,6 +28,10 @@ const r1C1R2R1AcceptedImplementationCommit =
   "378c304c45b85cf419d263204e495f2d800a8bc9";
 const r1C1R2R1AcceptedAcceptanceCommit =
   "fbb315f45e777fe2001e54657d7015ebbf7d3663";
+const r1C1R2R2PackageCommit =
+  "36e7d1967a502f0ed80aaccb12d44507f0058560";
+const r1C1R2R2ResultCommit =
+  "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -145,6 +149,41 @@ const exactR1C1R2R1AcceptanceSyncPaths = new Set([
   r1C1R2R1CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const r1C1R2R2CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/capabilities-v1.json";
+const r1C1R2R2AuthorizationPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/authorization-v1.json";
+const r1C1R2R2ResultsPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-results-v1.json";
+const exactR1C1R2R2Paths = new Set([
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/quality-contract-v1.json",
+  r1C1R2R2AuthorizationPath,
+  r1C1R2R2CapabilityManifestPath,
+  r1C1R2R2ResultsPath,
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-summary-v1.md",
+  "scripts/lib/m2-p4-i3-r1-c1-r2-r2-provider-evaluator-v1.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const exactR1C1R2R2ReviewSyncPaths = new Set([
+  r1C1R2R2CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -4612,6 +4651,16 @@ function verifyScopeAndProhibitedImplementation() {
     r1C1R2ReviewCommit,
     r1C1R2R1AcceptedAcceptanceCommit,
   );
+  const m2p4I3R1C1R2R2ExecutionPaths = historicalTaskPaths(
+    r1C1R2R1AcceptedAcceptanceCommit,
+    r1C1R2R2ResultCommit,
+  );
+  const m2p4I3R1C1R2R2ReviewSyncPaths = currentTaskPaths(
+    r1C1R2R2ResultCommit,
+  );
+  const m2p4I3R1C1R2R2TaskPaths = currentTaskPaths(
+    r1C1R2R1AcceptedAcceptanceCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4630,6 +4679,9 @@ function verifyScopeAndProhibitedImplementation() {
   const m2p4I3R1C1R2Authorization = readJson(r1C1R2AuthorizationPath);
   const m2p4I3R1C1R2Results = readJson(r1C1R2ResultsPath);
   const m2p4I3R1C1R2R1Manifest = readJson(r1C1R2R1CapabilityManifestPath);
+  const m2p4I3R1C1R2R2Manifest = readJson(r1C1R2R2CapabilityManifestPath);
+  const m2p4I3R1C1R2R2Authorization = readJson(r1C1R2R2AuthorizationPath);
+  const m2p4I3R1C1R2R2Results = readJson(r1C1R2R2ResultsPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -5372,6 +5424,133 @@ function verifyScopeAndProhibitedImplementation() {
       },
     });
   }
+  const expectedR1C1R2R2ExecutionSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R2R1AcceptedAcceptanceCommit,
+    end_commit_sha: r1C1R2R2ResultCommit,
+    exact_paths: 17,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
+  if (
+    exactR1C1R2R2Paths.size !== 17 ||
+    exactR1C1R2R2ReviewSyncPaths.size !== 8 ||
+    exactR1C1R2R2Paths.size - exactR1C1R2R2ReviewSyncPaths.size !== 9 ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2ExecutionPaths,
+      exactR1C1R2R2Paths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2ReviewSyncPaths,
+      exactR1C1R2R2ReviewSyncPaths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2TaskPaths,
+      exactR1C1R2R2Paths,
+    ) ||
+    m2p4I3R1C1R2R2Manifest?.task_id !== "M2-P4-I3-R1-C1-R2-R2" ||
+    m2p4I3R1C1R2R2Manifest?.status !==
+      "human_chatgpt_reviewed_fail_complete" ||
+    m2p4I3R1C1R2R2Manifest?.execution_protocol_accepted !== true ||
+    m2p4I3R1C1R2R2Manifest?.diagnostic_evidence_valid !== true ||
+    m2p4I3R1C1R2R2Manifest?.frozen_targeted_verdict !== "FAIL" ||
+    m2p4I3R1C1R2R2Manifest?.provider_product_gate_passed !== false ||
+    m2p4I3R1C1R2R2Manifest?.targeted_repairs_evidence_accepted !== true ||
+    m2p4I3R1C1R2R2Manifest?.targeted_repairs_passed !== "3/3" ||
+    m2p4I3R1C1R2R2Manifest?.principal_quoted_ownership !== "PASS" ||
+    m2p4I3R1C1R2R2Manifest?.ownership_sequence_control_passed !== true ||
+    m2p4I3R1C1R2R2Manifest?.normal_control_overall !== "FAIL" ||
+    m2p4I3R1C1R2R2Manifest?.r2r2_04_classification !==
+      "decision_policy_equivalent_but_semantically_incomplete" ||
+    m2p4I3R1C1R2R2Manifest?.decision_policy_equivalent !== true ||
+    m2p4I3R1C1R2R2Manifest
+      ?.decision_facts_semantic_completeness_passed !== false ||
+    JSON.stringify(m2p4I3R1C1R2R2Manifest?.execution_snapshot) !==
+      JSON.stringify(expectedR1C1R2R2ExecutionSnapshot) ||
+    JSON.stringify(m2p4I3R1C1R2R2Manifest?.execution_commits) !==
+      JSON.stringify([r1C1R2R2PackageCommit, r1C1R2R2ResultCommit]) ||
+    !isExactLiteralPathSet(
+      [
+        ...(m2p4I3R1C1R2R2Manifest?.review_sync_exact_paths ?? []),
+      ].sort(),
+      exactR1C1R2R2ReviewSyncPaths,
+    ) ||
+    m2p4I3R1C1R2R2Manifest?.review_sync_exact_path_count !== 8 ||
+    m2p4I3R1C1R2R2Manifest?.baseline !==
+      r1C1R2R1AcceptedAcceptanceCommit ||
+    m2p4I3R1C1R2R2Manifest?.branch !==
+      "test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic" ||
+    m2p4I3R1C1R2R2Manifest?.exact_paths !== 17 ||
+    m2p4I3R1C1R2R2Manifest?.model !== "gpt-5.6-luna" ||
+    m2p4I3R1C1R2R2Manifest?.stage !== "PB-01 v6 only" ||
+    m2p4I3R1C1R2R2Manifest?.authorized_calls !== 4 ||
+    m2p4I3R1C1R2R2Manifest?.actual_calls !== 4 ||
+    m2p4I3R1C1R2R2Manifest?.completed_calls !== 4 ||
+    m2p4I3R1C1R2R2Manifest?.additional_provider_calls !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.retry_count !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.repair_count !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.fallback_count !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.pb_02_through_pb_06_calls !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.db_operations !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.supabase_operations !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.holdout_use !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.real_user_data !== 0 ||
+    m2p4I3R1C1R2R2Manifest?.authorization_consumed !== true ||
+    m2p4I3R1C1R2R2Manifest?.rerun_authorized !== false ||
+    m2p4I3R1C1R2R2Manifest?.provider_quality_established !== false ||
+    m2p4I3R1C1R2R2Manifest?.full_eight_case_confirmation_required !== true ||
+    m2p4I3R1C1R2R2Manifest?.active_runtime_changed !== false ||
+    m2p4I3R1C1R2R2Manifest?.c2_eligible !== false ||
+    m2p4I3R1C1R2R2Manifest?.c2_authorized !== false ||
+    m2p4I3R1C1R2R2Manifest?.next_candidate !==
+      "M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision" ||
+    m2p4I3R1C1R2R2Manifest?.next_candidate_authorized !== false ||
+    m2p4I3R1C1R2R2Authorization?.consumed !== true ||
+    m2p4I3R1C1R2R2Authorization?.rerun_authorized !== false ||
+    m2p4I3R1C1R2R2Authorization?.actual_calls !== 4 ||
+    m2p4I3R1C1R2R2Results?.status !==
+      "provider_targeted_diagnostic_failed_pending_human_chatgpt_review" ||
+    m2p4I3R1C1R2R2Results?.evaluation?.verdict !== "FAIL" ||
+    m2p4I3R1C1R2R2Results?.evaluation?.case_pass_count !== 3 ||
+    m2p4I3R1C1R2R2Results?.evaluation?.targeted_repairs !== "PASS" ||
+    m2p4I3R1C1R2R2Results?.evaluation?.normal_regression_control !== "FAIL" ||
+    m2p4I3R1C1R2R2Results?.evaluation
+      ?.principal_r2r2_03_quoted_ownership !== "PASS" ||
+    m2p4I3R1C1R2R2Results?.calls_actual !== 4 ||
+    m2p4I3R1C1R2R2Results?.calls_completed !== 4 ||
+    m2p4I3R1C1R2R2Results?.authorization_consumed !== true ||
+    m2p4I3R1C1R2R2Results?.rerun_authorized !== false ||
+    m2p4I3R1C1R2R2Results?.active_runtime_changed !== false ||
+    m2p4I3R1C1R2R2Results?.c2_eligible !== false ||
+    m2p4I3R1C1R2R2Results?.c2_authorized !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: r1C1R2R2CapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_c1_r2_r2_review_boundary",
+      invariant:
+        "R2-R2 preserves the immutable 17-path failed diagnostic, exact 8-path review sync, three accepted targeted repairs, Policy-equivalent semantic omission, inactive Runtime, and unauthorized rerun/C2",
+      expected: {
+        status: "human_chatgpt_reviewed_fail_complete",
+        diagnostic_snapshot: 17,
+        review_sync_paths: 8,
+        immutable_execution_artifacts: 9,
+        targeted_repairs: "3/3 PASS",
+        decision_policy_equivalent: true,
+        decision_facts_semantic_completeness_passed: false,
+        provider_product_gate_passed: false,
+        additional_provider_calls: 0,
+        c2_authorized: false,
+      },
+      actual: {
+        execution_paths: m2p4I3R1C1R2R2ExecutionPaths,
+        review_sync_paths: m2p4I3R1C1R2R2ReviewSyncPaths,
+        cumulative_paths: m2p4I3R1C1R2R2TaskPaths,
+        manifest: m2p4I3R1C1R2R2Manifest,
+        authorization: m2p4I3R1C1R2R2Authorization,
+        results: m2p4I3R1C1R2R2Results,
+      },
+    });
+  }
   for (const unauthorizedPath of [
     "lib/assessment/runtime/service.ts",
     "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
@@ -5472,6 +5651,15 @@ function verifyScopeAndProhibitedImplementation() {
         pathName: "$.m2_p4_i3_r1_c1_review_sync_negative_scope",
         invariant:
           "C1 failed-diagnostic review sync rejects every protected path",
+        expected: "rejected",
+        actual: "accepted",
+      });
+    }
+    if (exactR1C1R2R2ReviewSyncPaths.has(unauthorizedPath)) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: unauthorizedPath,
+        pathName: "$.m2_p4_i3_r1_c1_r2_r2_review_sync_negative_scope",
+        invariant: "R2-R2 review sync rejects every protected path",
         expected: "rejected",
         actual: "accepted",
       });

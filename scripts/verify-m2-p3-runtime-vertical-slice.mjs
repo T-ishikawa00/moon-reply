@@ -22,6 +22,10 @@ const r1C1R2R1AcceptedImplementationSha =
   "378c304c45b85cf419d263204e495f2d800a8bc9";
 const r1C1R2R1AcceptedAcceptanceSha =
   "fbb315f45e777fe2001e54657d7015ebbf7d3663";
+const r1C1R2R2PackageSha =
+  "36e7d1967a502f0ed80aaccb12d44507f0058560";
+const r1C1R2R2ResultSha =
+  "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -139,6 +143,41 @@ const exactR1C1R2R1AcceptanceSyncPaths = [
   r1C1R2R1CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const r1C1R2R2CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/capabilities-v1.json";
+const r1C1R2R2AuthorizationPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/authorization-v1.json";
+const r1C1R2R2ResultsPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-results-v1.json";
+const exactR1C1R2R2Paths = [
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/quality-contract-v1.json",
+  r1C1R2R2AuthorizationPath,
+  r1C1R2R2CapabilityManifestPath,
+  r1C1R2R2ResultsPath,
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-summary-v1.md",
+  "scripts/lib/m2-p4-i3-r1-c1-r2-r2-provider-evaluator-v1.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1C1R2R2ReviewSyncPaths = [
+  r1C1R2R2CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -478,6 +517,26 @@ function historicalPaths(startCommit, endCommit) {
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean)
     .sort((left, right) => left.localeCompare(right, "en"));
+}
+
+function currentTaskPaths(startCommit) {
+  const paths = new Set(
+    gitText(["diff", "--name-only", startCommit, "--"])
+      .split(/\r?\n/gu)
+      .map((item) => item.trim().replaceAll("\\", "/"))
+      .filter(Boolean),
+  );
+  const status = gitText([
+    "status",
+    "--porcelain=v1",
+    "--untracked-files=all",
+  ]);
+  for (const line of status.split(/\r?\n/gu).filter(Boolean)) {
+    let item = line.slice(3).trim();
+    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
+    paths.add(item.replaceAll("\\", "/"));
+  }
+  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
 }
 
 function isExactLiteralSet(paths, expectedPaths) {
@@ -1785,6 +1844,9 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const r1C1R2Authorization = json(r1C1R2AuthorizationPath);
   const r1C1R2Results = json(r1C1R2ResultsPath);
   const r1C1R2R1Manifest = json(r1C1R2R1CapabilityManifestPath);
+  const r1C1R2R2Manifest = json(r1C1R2R2CapabilityManifestPath);
+  const r1C1R2R2Authorization = json(r1C1R2R2AuthorizationPath);
+  const r1C1R2R2Results = json(r1C1R2R2ResultsPath);
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1865,6 +1927,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R2ReviewSha,
     r1C1R2R1AcceptedAcceptanceSha,
   );
+  const actualR1C1R2R2ExecutionPaths = historicalPaths(
+    r1C1R2R1AcceptedAcceptanceSha,
+    r1C1R2R2ResultSha,
+  );
+  const actualR1C1R2R2ReviewSyncPaths = currentTaskPaths(r1C1R2R2ResultSha);
+  const actualR1C1R2R2Paths = currentTaskPaths(
+    r1C1R2R1AcceptedAcceptanceSha,
+  );
   const expectedR1C1R2R1ImplementationSnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1C1R2ReviewSha,
@@ -1885,6 +1955,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     type: "historical_commit_range",
     base_commit_sha: r1C1R1AcceptanceSha,
     end_commit_sha: r1C1R2ResultSha,
+    exact_paths: 17,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
+  const expectedR1C1R2R2ExecutionSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R2R1AcceptedAcceptanceSha,
+    end_commit_sha: r1C1R2R2ResultSha,
     exact_paths: 17,
     immutable_snapshot: true,
     include_working_tree: false,
@@ -2293,6 +2371,102 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
+    exactR1C1R2R2Paths.length === 17 &&
+      exactR1C1R2R2ReviewSyncPaths.length === 8 &&
+      exactR1C1R2R2Paths.length - exactR1C1R2R2ReviewSyncPaths.length === 9 &&
+      isExactLiteralSet(
+        actualR1C1R2R2ExecutionPaths,
+        exactR1C1R2R2Paths,
+      ) &&
+      isExactLiteralSet(
+        actualR1C1R2R2ReviewSyncPaths,
+        exactR1C1R2R2ReviewSyncPaths,
+      ) &&
+      isExactLiteralSet(actualR1C1R2R2Paths, exactR1C1R2R2Paths) &&
+      r1C1R2R2Manifest.task_id === "M2-P4-I3-R1-C1-R2-R2" &&
+      r1C1R2R2Manifest.status === "human_chatgpt_reviewed_fail_complete" &&
+      r1C1R2R2Manifest.execution_protocol_accepted === true &&
+      r1C1R2R2Manifest.diagnostic_evidence_valid === true &&
+      r1C1R2R2Manifest.frozen_targeted_verdict === "FAIL" &&
+      r1C1R2R2Manifest.provider_product_gate_passed === false &&
+      r1C1R2R2Manifest.targeted_repairs_evidence_accepted === true &&
+      r1C1R2R2Manifest.targeted_repairs_passed === "3/3" &&
+      r1C1R2R2Manifest.principal_quoted_ownership === "PASS" &&
+      r1C1R2R2Manifest.ownership_sequence_control_passed === true &&
+      r1C1R2R2Manifest.normal_control_overall === "FAIL" &&
+      r1C1R2R2Manifest.r2r2_04_classification ===
+        "decision_policy_equivalent_but_semantically_incomplete" &&
+      r1C1R2R2Manifest.decision_policy_equivalent === true &&
+      r1C1R2R2Manifest.decision_facts_semantic_completeness_passed === false &&
+      JSON.stringify(r1C1R2R2Manifest.execution_snapshot) ===
+        JSON.stringify(expectedR1C1R2R2ExecutionSnapshot) &&
+      JSON.stringify(r1C1R2R2Manifest.execution_commits) ===
+        JSON.stringify([r1C1R2R2PackageSha, r1C1R2R2ResultSha]) &&
+      isExactLiteralSet(
+        [...r1C1R2R2Manifest.review_sync_exact_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R2R2ReviewSyncPaths,
+      ) &&
+      r1C1R2R2Manifest.review_sync_exact_path_count === 8 &&
+      r1C1R2R2Manifest.baseline === r1C1R2R1AcceptedAcceptanceSha &&
+      r1C1R2R2Manifest.branch ===
+        "test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic" &&
+      r1C1R2R2Manifest.exact_paths === 17 &&
+      r1C1R2R2Manifest.model === "gpt-5.6-luna" &&
+      r1C1R2R2Manifest.stage === "PB-01 v6 only" &&
+      r1C1R2R2Manifest.authorized_calls === 4 &&
+      r1C1R2R2Manifest.actual_calls === 4 &&
+      r1C1R2R2Manifest.completed_calls === 4 &&
+      r1C1R2R2Manifest.additional_provider_calls === 0 &&
+      r1C1R2R2Manifest.retry_count === 0 &&
+      r1C1R2R2Manifest.repair_count === 0 &&
+      r1C1R2R2Manifest.fallback_count === 0 &&
+      r1C1R2R2Manifest.pb_02_through_pb_06_calls === 0 &&
+      r1C1R2R2Manifest.db_operations === 0 &&
+      r1C1R2R2Manifest.supabase_operations === 0 &&
+      r1C1R2R2Manifest.holdout_use === 0 &&
+      r1C1R2R2Manifest.real_user_data === 0 &&
+      r1C1R2R2Manifest.authorization_consumed === true &&
+      r1C1R2R2Manifest.rerun_authorized === false &&
+      r1C1R2R2Manifest.provider_quality_established === false &&
+      r1C1R2R2Manifest.full_eight_case_confirmation_required === true &&
+      r1C1R2R2Manifest.active_runtime_changed === false &&
+      r1C1R2R2Manifest.main_changed === false &&
+      r1C1R2R2Manifest.c2_eligible === false &&
+      r1C1R2R2Manifest.c2_authorized === false &&
+      r1C1R2R2Manifest.next_candidate ===
+        "M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision" &&
+      r1C1R2R2Manifest.next_candidate_authorized === false &&
+      r1C1R2R2Authorization.consumed === true &&
+      r1C1R2R2Authorization.rerun_authorized === false &&
+      r1C1R2R2Authorization.actual_calls === 4 &&
+      r1C1R2R2Results.status ===
+        "provider_targeted_diagnostic_failed_pending_human_chatgpt_review" &&
+      r1C1R2R2Results.evaluation.verdict === "FAIL" &&
+      r1C1R2R2Results.evaluation.case_pass_count === 3 &&
+      r1C1R2R2Results.evaluation.targeted_repairs === "PASS" &&
+      r1C1R2R2Results.evaluation.normal_regression_control === "FAIL" &&
+      r1C1R2R2Results.evaluation.principal_r2r2_03_quoted_ownership ===
+        "PASS" &&
+      r1C1R2R2Results.calls_actual === 4 &&
+      r1C1R2R2Results.calls_completed === 4 &&
+      r1C1R2R2Results.retry_count === 0 &&
+      r1C1R2R2Results.repair_count === 0 &&
+      r1C1R2R2Results.fallback_count === 0 &&
+      r1C1R2R2Results.pb_02_through_pb_06_calls === 0 &&
+      r1C1R2R2Results.db_operations === 0 &&
+      r1C1R2R2Results.supabase_operations === 0 &&
+      r1C1R2R2Results.holdout_use === 0 &&
+      r1C1R2R2Results.real_user_data === 0 &&
+      r1C1R2R2Results.active_runtime_changed === false &&
+      r1C1R2R2Results.rerun_authorized === false &&
+      r1C1R2R2Results.c2_eligible === false &&
+      r1C1R2R2Results.c2_authorized === false,
+    `R1-C1-R2-R2 failed-targeted-review boundary differs: execution=${actualR1C1R2R2ExecutionPaths.join(",")}; review_sync=${actualR1C1R2R2ReviewSyncPaths.join(",")}; cumulative=${actualR1C1R2R2Paths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
     !isExactLiteralSet(
       [...finalPlanningManifest.exact_mutation_paths, exactR1APaths[0]],
       finalPlanningManifest.exact_mutation_paths,
@@ -2369,6 +2543,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         exactR1C1R2ReviewSyncPaths,
       ),
       `R1-C1-R2 review sync accepted unauthorized path: ${unauthorizedPath}`,
+    );
+    check(
+      "M2_P3_I2_RENDERER_ONLY_GATE",
+      !isExactLiteralSet(
+        [...exactR1C1R2R2ReviewSyncPaths, unauthorizedPath],
+        exactR1C1R2R2ReviewSyncPaths,
+      ),
+      `R1-C1-R2-R2 review sync accepted unauthorized path: ${unauthorizedPath}`,
     );
   }
   check(

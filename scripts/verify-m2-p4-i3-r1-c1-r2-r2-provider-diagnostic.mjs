@@ -7,6 +7,7 @@ import {
   loadM2P4ProductQualityRuntimeStageCatalog,
   loadM2P4SemanticConsistencyRuntimeStageCatalog,
 } from "../lib/assessment/runtime/schema-catalog.ts";
+import { buildContextualDecisionPolicyV3 } from "../lib/assessment/runtime/policy-v3.ts";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -16,6 +17,8 @@ const baseline = "fbb315f45e777fe2001e54657d7015ebbf7d3663";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
 const branch =
   "test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic";
+const packageCommit = "36e7d1967a502f0ed80aaccb12d44507f0058560";
+const resultCommit = "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
 const artifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r2-r2";
 const exactPaths = [
   artifactRoot + "/diagnostic-cases-v1.json",
@@ -46,6 +49,19 @@ const postRunMutablePaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ].sort((left, right) => left.localeCompare(right, "en"));
+const reviewSyncPaths = [
+  artifactRoot + "/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+].sort((left, right) => left.localeCompare(right, "en"));
+const immutableExecutionPaths = exactPaths.filter(
+  (item) => !reviewSyncPaths.includes(item),
+);
 const frozenAfterCommitAPaths = [
   artifactRoot + "/diagnostic-cases-v1.json",
   artifactRoot + "/diagnostic-contract-v1.json",
@@ -135,14 +151,10 @@ function currentTaskPaths(startCommit) {
   return sorted(paths);
 }
 
-function pathsSinceCommit(commit) {
-  const paths = new Set(
-    normalizedPaths(git(["diff", "--name-only", commit, "HEAD", "--"])),
+function historicalPaths(startCommit, endCommit) {
+  return sorted(
+    normalizedPaths(git(["diff", "--name-only", startCommit, endCommit, "--"])),
   );
-  for (const item of normalizedPaths(git(["diff", "--name-only", "--"]))) {
-    paths.add(item);
-  }
-  return sorted(paths);
 }
 
 function assertExactPaths(actual, expected, label) {
@@ -176,16 +188,17 @@ function assertUnchangedFromBaseline(relativePath) {
   }
 }
 
-function assertMatchesCommit(relativePath, commit) {
+function assertUnchangedBetween(relativePath, startCommit, endCommit) {
   const changed = git([
     "diff",
     "--name-only",
-    commit,
+    startCommit,
+    endCommit,
     "--",
     relativePath,
   ]).trim();
   if (changed !== "") {
-    fail("Commit A frozen path changed: " + relativePath);
+    fail("execution-frozen path changed: " + relativePath);
   }
 }
 
@@ -347,7 +360,6 @@ function assertCompletedState({
   if (
     !allowedStatuses.includes(results.status) ||
     results.status !== authorization.completion_state ||
-    results.status !== capabilities.status ||
     authorization.consumed !== true ||
     authorization.rerun_authorized !== false ||
     capabilities.authorization_consumed !== true ||
@@ -450,13 +462,126 @@ function assertCompletedState({
   }
 
   for (const frozenPath of frozenAfterCommitAPaths) {
-    assertMatchesCommit(frozenPath, results.package_commit);
+    assertUnchangedBetween(frozenPath, packageCommit, resultCommit);
   }
   assertExactPaths(
-    pathsSinceCommit(results.package_commit),
+    historicalPaths(packageCommit, resultCommit),
     postRunMutablePaths,
     "post-run exact 8-path scope differs",
   );
+  assertExactPaths(
+    currentTaskPaths(resultCommit),
+    reviewSyncPaths,
+    "review sync exact 8-path scope differs",
+  );
+  for (const immutablePath of immutableExecutionPaths) {
+    if (
+      git(["diff", "--name-only", resultCommit, "--", immutablePath]).trim() !==
+      ""
+    ) {
+      fail("execution artifact changed after Commit B: " + immutablePath);
+    }
+  }
+
+  const expectedExecutionSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: baseline,
+    end_commit_sha: resultCommit,
+    exact_paths: 17,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
+  if (
+    capabilities.status !== "human_chatgpt_reviewed_fail_complete" ||
+    capabilities.execution_protocol_accepted !== true ||
+    capabilities.diagnostic_evidence_valid !== true ||
+    capabilities.frozen_targeted_verdict !== "FAIL" ||
+    capabilities.provider_product_gate_passed !== false ||
+    capabilities.targeted_repairs_evidence_accepted !== true ||
+    capabilities.targeted_repairs_passed !== "3/3" ||
+    capabilities.principal_quoted_ownership !== "PASS" ||
+    capabilities.ownership_sequence_control_passed !== true ||
+    capabilities.normal_control_overall !== "FAIL" ||
+    capabilities.r2r2_04_classification !==
+      "decision_policy_equivalent_but_semantically_incomplete" ||
+    capabilities.decision_policy_equivalent !== true ||
+    capabilities.decision_facts_semantic_completeness_passed !== false ||
+    capabilities.additional_provider_calls !== 0 ||
+    !same(capabilities.execution_snapshot, expectedExecutionSnapshot) ||
+    !same(capabilities.execution_commits, [packageCommit, resultCommit]) ||
+    capabilities.review_sync_exact_path_count !== 8 ||
+    capabilities.next_candidate !==
+      "M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision" ||
+    capabilities.next_candidate_authorized !== false
+  ) {
+    fail("Human / ChatGPT review capability boundary differs");
+  }
+  assertExactPaths(
+    sorted(capabilities.review_sync_exact_paths),
+    reviewSyncPaths,
+    "capability review sync paths differ",
+  );
+
+  const control = results.calls.find((call) => call.case_id === "R2R2-04");
+  const actualFacts = control?.grounded_output?.decision_facts;
+  if (
+    !actualFacts ||
+    control?.ownership_results?.passed !== true ||
+    control?.candidate_presence_results?.passed !== true ||
+    !same(control?.raw_output?.writing_signals?.message_signals, [
+      { author: "user", status: "sent_by_user" },
+      { author: "other_person", status: "incoming" },
+    ]) ||
+    !same(
+      control?.grounded_output?.writing_context?.message_ownership?.map(
+        (item) => ({
+          author: item.author,
+          status: item.status,
+          sequence: item.sequence,
+        }),
+      ),
+      [
+        { author: "user", status: "sent_by_user", sequence: 1 },
+        { author: "other_person", status: "incoming", sequence: 2 },
+        { author: "user", status: "unsent_candidate", sequence: 3 },
+      ],
+    ) ||
+    !same(actualFacts.latest_direct_message, {
+      sender: "other_person",
+      kind: "question",
+      response_expectation: "reasonable",
+      user_reply_state: "not_replied",
+      sns_signal_only: false,
+    }) ||
+    !same(actualFacts.practical_reason, {
+      kind: "none",
+      active: false,
+      deadline: "none",
+    }) ||
+    !same(actualFacts.boundary_state, {
+      kind: "none",
+      status: "none",
+      repeated_unanswered_contact: false,
+    })
+  ) {
+    fail("R2R2-04 saved ownership or Decision Facts evidence differs");
+  }
+
+  const comparisonFacts = structuredClone(actualFacts);
+  comparisonFacts.practical_reason = {
+    kind: "schedule_coordination",
+    active: true,
+    deadline: "unknown",
+  };
+  const actualPolicy = buildContextualDecisionPolicyV3(actualFacts);
+  const comparisonPolicy = buildContextualDecisionPolicyV3(comparisonFacts);
+  if (
+    !same(actualPolicy, comparisonPolicy) ||
+    !same(actualPolicy.allowed_decisions, ["reply_now"]) ||
+    !same(actualPolicy.reason_codes, ["unanswered_meaningful_message"])
+  ) {
+    fail("R2R2-04 review-time Decision Policy equivalence differs");
+  }
 }
 
 const contractPath = artifactRoot + "/diagnostic-contract-v1.json";
@@ -502,11 +627,25 @@ if (
 if (git(["stash", "list"]).trim() !== "") {
   fail("stash is not empty");
 }
+if (
+  git(["rev-parse", packageCommit + "^"]).trim() !== baseline ||
+  git(["rev-parse", resultCommit + "^"]).trim() !== packageCommit
+) {
+  fail("execution commit chain differs");
+}
 assertExactPaths(
   currentTaskPaths(baseline),
   exactPaths,
   "exact 17-path scope differs",
 );
+assertExactPaths(
+  historicalPaths(baseline, resultCommit),
+  exactPaths,
+  "immutable diagnostic snapshot differs",
+);
+if (reviewSyncPaths.length !== 8 || immutableExecutionPaths.length !== 9) {
+  fail("review or immutable execution path count differs");
+}
 if (git(["diff", "--check", baseline, "--"]).trim() !== "") {
   fail("git diff --check failed");
 }
@@ -852,8 +991,29 @@ if (results.status === "not_executed") {
   }
 }
 
+for (const docPath of [
+  reviewPath,
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]) {
+  const doc = source(docPath);
+  if (
+    !doc.includes("human_chatgpt_reviewed_fail_complete") ||
+    !doc.includes(
+      "M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision",
+    ) ||
+    !/unauthorized|not authorized/iu.test(doc)
+  ) {
+    fail("review synchronization document differs: " + docPath);
+  }
+}
+
 console.log("M2_P4_I3_R1_C1_R2_R2_PROVIDER_DIAGNOSTIC: PASS");
 console.log("exact_scope: 17/17");
+console.log("diagnostic_snapshot: 17/17 immutable");
+console.log("review_sync_scope: 8/8");
+console.log("execution_artifacts_unchanged: 9/9");
 console.log("synthetic_inputs_deep_equal: 4/4");
 console.log(
   "provider_calls: " + results.calls_actual + "/" + contract.authorized_calls,
@@ -862,6 +1022,12 @@ console.log(
   "authorization_consumed: " + String(results.authorization_consumed),
 );
 console.log("rerun_authorized: false");
+console.log("frozen_targeted_verdict: FAIL");
+console.log("targeted_repairs: 3/3 PASS");
+console.log("ownership_sequence_control: PASS");
+console.log("decision_policy_equivalent: PASS");
+console.log("decision_facts_semantic_completeness: FAIL");
+console.log("additional_provider_calls: 0");
 console.log("r2_evidence_immutable: PASS");
 console.log("r2_r1_snapshot_preserved: PASS");
 console.log("prompt_v6_catalog_v7_unchanged: PASS");

@@ -3,24 +3,57 @@
 ## Status
 
 - Task: M2-P4-I3-R1-C1-R2-R2 Four-Case Bounded Provider Diagnostic
-- Status: provider_targeted_diagnostic_failed_pending_human_chatgpt_review
+- Status: human_chatgpt_reviewed_fail_complete
 - Authorization: M2-P4-I3-R1-C1-R2-R2-2026-08-02
 - Confirmation: R2-R2-4-CALL-PROMPT-V6-SYNTHETIC-ONLY
 - Baseline: fbb315f45e777fe2001e54657d7015ebbf7d3663
 - Branch: test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic
 - Commit A: 36e7d1967a502f0ed80aaccb12d44507f0058560
+- Commit B: 2cb243486063ba9235f4f3ce65f051cf5fd38d6e
+- Exact diagnostic snapshot: 17/17
+- Exact review sync scope: 8/8
 - Model / stage: gpt-5.6-luna / PB-01 v6 only
 - Synthetic cases / authorized Provider calls: 4 / 4
 - Actual / maximum Provider calls: 4 / 4
 - Retry / repair / fallback: 0 / 0 / 0
 - PB-02 through PB-06 / DB / Supabase / holdout / real-user data: 0 / 0 / 0 / 0 / 0
 - Authorization consumed / rerun authorized: true / false
+- Execution protocol accepted: true
+- Diagnostic evidence valid: true
+- Targeted repairs evidence accepted: true
+- Provider product gate passed: false
 - Provider quality established: false
 - Full eight-case confirmation required: true
 - Active Runtime changed: false
 - C2 eligible / authorized: false / false
-- Next step after execution: Human / ChatGPT review
+- Next candidate: M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision
+- Next candidate authorized: false
 - main: unchanged at 61e33a10e195fad17e253a6b9719217e1992f273
+
+## Human / ChatGPT review
+
+- [x] The bounded execution protocol is accepted.
+- [x] The immutable diagnostic evidence is valid.
+- [x] The three targeted-repair cases are accepted as 3 / 3 PASS.
+- [x] Principal quoted ownership and ownership sequence control are PASS.
+- [x] The frozen normal control and overall targeted verdict remain FAIL.
+- [x] Decision Facts semantic completeness is FAIL.
+- [x] Provider product quality is not established.
+- [x] No rerun or C2 authorization is granted.
+
+The final review status is human_chatgpt_reviewed_fail_complete. Review completion accepts the execution protocol and targeted-repair evidence; it does not rewrite the frozen verdict or accept Provider product quality.
+
+## Immutable diagnostic snapshot
+
+- Type: historical_commit_range
+- Base commit: fbb315f45e777fe2001e54657d7015ebbf7d3663
+- End commit: 2cb243486063ba9235f4f3ce65f051cf5fd38d6e
+- Exact paths: 17/17
+- Immutable snapshot: true
+- Include working tree: false
+- Execution commits: 36e7d1967a502f0ed80aaccb12d44507f0058560, 2cb243486063ba9235f4f3ce65f051cf5fd38d6e
+
+Commit B is the immutable source of execution evidence. The review sync changes none of the nine execution artifacts outside its exact eight-path manifest.
 
 ## Execution result
 
@@ -50,7 +83,13 @@
 - Active Runtime changed: false
 - C2 eligible / authorized: false / false
 
-R2R2-04 preserved the required Provider message order, grounded three-item ownership order, candidate separation, boundary, Schema, and Integrity gates. It failed the frozen Application Decision Facts gate because grounded practical_reason was none / false instead of schedule_coordination / true. The resulting hard failures are R2R2-04-APPLICATION-DECISION-FACTS and R2R2-04-NORMAL-OWNERSHIP-CONTROL. No evaluator, contract, Prompt, Schema, or Provider output is changed after execution.
+R2R2-04 preserved the required Provider message order, grounded three-item ownership order, candidate separation, none / none boundary, Schema, and Integrity gates. Its latest direct message remained other_person / question / reasonable / not_replied. It failed the frozen Application Decision Facts gate because grounded practical_reason was none / false instead of schedule_coordination / true. The accepted classification is decision_policy_equivalent_but_semantically_incomplete; this is not an ownership regression. The frozen hard failures remain R2R2-04-APPLICATION-DECISION-FACTS and R2R2-04-NORMAL-OWNERSHIP-CONTROL.
+
+## Review-time deterministic policy check
+
+The check uses only the saved R2R2-04 grounded Decision Facts. The actual facts are passed to buildContextualDecisionPolicyV3. A temporary in-memory comparison copy changes only practical_reason to kind schedule_coordination, active true, and deadline unknown. Both policy results are deep-equal, select reply_now, and carry reason unanswered_meaningful_message.
+
+Policy equality is PASS for this exact case. This establishes only that the practical_reason omission does not change Decision Policy here. The comparison copy is not actual evidence; diagnostic-results, Provider output, evaluator output, and frozen verdict remain unchanged.
 
 ## Objective
 
@@ -105,8 +144,21 @@ All four also require exact returned model gpt-5.6-luna, raw JSON and Schema v5,
 16. docs/WBS.md
 17. docs/CODEX_HANDOFF.md
 
-After Commit A, only authorization, capabilities, results, summary, this review, CURRENT_FOCUS, WBS, and CODEX_HANDOFF may change. Cases, contracts, evaluator, runner, dedicated verifier, Prompt, and Schemas remain frozen.
+During execution from Commit A through Commit B, only authorization, capabilities, results, summary, this review, CURRENT_FOCUS, WBS, and CODEX_HANDOFF changed. Cases, contracts, evaluator, runner, dedicated verifier, Prompt, and Schemas remained frozen.
+
+## Exact review sync manifest
+
+1. evals/runtime/m2-p4-i3-r1-c1-r2-r2/capabilities-v1.json
+2. docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md
+3. scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs
+4. scripts/verify-m2-eval-foundation.mjs
+5. scripts/verify-m2-p3-runtime-vertical-slice.mjs
+6. docs/CURRENT_FOCUS.md
+7. docs/WBS.md
+8. docs/CODEX_HANDOFF.md
+
+The review sync is exact 8/8. It adds Provider calls 0 and changes no authorization, results, summary, cases, contracts, quality contract, evaluator, runner, Prompt v6, catalog v7, Schema, or Production code. Active Runtime and main remain unchanged.
 
 ## Review boundary
 
-Commit A records the prepared one-time package. Commit B may record only actual evidence and the exact eight-path status synchronization. No result authorizes Prompt or Schema repair, Provider rerun, Runtime activation, C2, E1, PR, main merge, release, or any successor.
+Commit A records the prepared one-time package. Commit B records only actual evidence and its exact eight-path post-run synchronization. Human / ChatGPT review is complete with the targeted verdict fixed at FAIL. No Prompt or Schema repair, Provider rerun, Runtime activation, C2, E1, PR, main merge, release, or successor implementation is authorized. The next candidate is M2-P4-I3-R1-C1-R2-R2-R1 Offline Practical Reason Consistency Revision, and it remains unauthorized.
