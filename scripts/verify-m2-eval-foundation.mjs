@@ -278,6 +278,8 @@ const m2p4I3R1BFirstImplementationCommit =
   "0ccf59114fe4079e0a5513fef3faf1b9fade11e7";
 const m2p4I3R1BAcceptedImplementationCommit =
   "4a1237ac647bff79229d7181d978d5613c2c3b87";
+const m2p4I3R1BAcceptanceCommit =
+  "76c469db264cd1cb9434b6a19ec5c75db5754a2a";
 const m2p4I3R1ACapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json";
 const m2p4I3R1BCapabilityManifestPath =
@@ -376,6 +378,49 @@ const m2p4I3R1BReviewCorrectionPaths = new Set([
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+]);
+const exactC1Paths = new Set([
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
+  "scripts/lib/m2-p4-i3-r1-c1-evaluator.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-summary-v1.md",
+  "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const c1SuccessorLocalToolPaths = new Set([
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
+  "scripts/lib/m2-p4-i3-r1-c1-evaluator.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+]);
+const c1MainRunnerPath =
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs";
+const c1ProviderRunnerPath =
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs";
+const c1ProviderRunnerImportPaths = new Set([
+  "lib/assessment/runtime/openai-transport.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/validation.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v3.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+  "lib/assessment/runtime/writing-context-integrity-v1.ts",
+  "lib/assessment/runtime/structured-intake-legacy-view-v3.ts",
 ]);
 const m2p4I3R1BVerifierImportPaths = new Set([
   "lib/assessment/runtime/application.ts",
@@ -492,6 +537,7 @@ const successorLocalToolPaths = new Set([
   m2p4I3VerifierPath,
   m2p4I3R1AVerifierPath,
   m2p4I3R1BVerifierPath,
+  ...c1SuccessorLocalToolPaths,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -4036,6 +4082,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        file === c1ProviderRunnerPath &&
+        localImport &&
+        c1ProviderRunnerImportPaths.has(localImport)
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4048,7 +4101,8 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
     for (const [label, pattern] of isolationPatterns) {
       const allowedCapabilityReference =
         label === "environment secret access" &&
-        file === b1b2aCapabilityPaths.environment;
+        (file === b1b2aCapabilityPaths.environment ||
+          file === c1MainRunnerPath);
       if (pattern.test(source) && !allowedCapabilityReference) {
         fail(isolationGate, {
           file,
@@ -4311,8 +4365,12 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1BFirstImplementationCommit,
     m2p4I3R1BAcceptedImplementationCommit,
   );
-  const m2p4I3R1BAcceptanceSyncTaskPaths = currentTaskPaths(
+  const m2p4I3R1BAcceptanceSyncTaskPaths = historicalTaskPaths(
     m2p4I3R1BAcceptedImplementationCommit,
+    m2p4I3R1BAcceptanceCommit,
+  );
+  const m2p4I3R1C1TaskPaths = currentTaskPaths(
+    m2p4I3R1BAcceptanceCommit,
   );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
@@ -4634,6 +4692,7 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I3R1BAcceptanceSyncTaskPaths,
       m2p4I3R1BAcceptanceSyncPaths,
     ) ||
+    !isExactLiteralPathSet(m2p4I3R1C1TaskPaths, exactC1Paths) ||
     m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
     m2p4I3R1BManifest?.title !==
       "PB-01 v4 Writing Context Extraction and Grounding" ||
@@ -4683,7 +4742,7 @@ function verifyScopeAndProhibitedImplementation() {
       file: m2p4I3R1BCapabilityManifestPath,
       pathName: "$.m2_p4_i3_r1_b",
       invariant:
-        "accepted R1-B keeps the immutable exact 22-path implementation snapshot, exact 9-path review correction, exact 8-path acceptance sync, inactive catalog v5, unchanged catalog-v4 Service, and unauthorized C1/C2 successors",
+        "accepted R1-B keeps its immutable snapshots while the separately authorized C1 successor is exactly 21 literal paths and C2 remains unauthorized",
       expected: {
         status: "human_chatgpt_accepted_complete",
         accepted_implementation_commit:
@@ -4693,6 +4752,7 @@ function verifyScopeAndProhibitedImplementation() {
         baseline: m2p4I3R1BBaselineCommit,
         exact_mutation_paths: [...exactR1BPaths].sort(),
         acceptance_sync_paths: [...m2p4I3R1BAcceptanceSyncPaths].sort(),
+        c1_successor_paths: [...exactC1Paths].sort(),
         active_runtime_changed: false,
         service_mutations: 0,
         provider_diagnostic: "not_started",
@@ -4704,6 +4764,7 @@ function verifyScopeAndProhibitedImplementation() {
         implementation_paths: m2p4I3R1BImplementationPaths,
         review_correction_paths: m2p4I3R1BReviewCorrectionTaskPaths,
         acceptance_sync_paths: m2p4I3R1BAcceptanceSyncTaskPaths,
+        c1_successor_paths: m2p4I3R1C1TaskPaths,
       },
     });
   }
@@ -4727,6 +4788,47 @@ function verifyScopeAndProhibitedImplementation() {
         file: unauthorizedPath,
         pathName: "$.m2_p4_i3_r1_b_negative_scope",
         invariant: "R1-B rejects every non-manifest path",
+        expected: "rejected",
+        actual: "accepted",
+      });
+    }
+  }
+  if (
+    exactC1Paths.size !== 21 ||
+    [...exactC1Paths].some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+      pathName: "$.m2_p4_i3_r1_c1_exact_scope",
+      invariant: "C1 successor is exactly 21 literal paths",
+      expected: 21,
+      actual: [...exactC1Paths],
+    });
+  }
+  for (const unauthorizedPath of [
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/application.ts",
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+    "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+    "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+    "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+    "lib/assessment/runtime/writing-context-integrity-v1.ts",
+    "lib/assessment/runtime/policy-v3.ts",
+    "app/unauthorized/page.tsx",
+    "components/runtime/Unauthorized.tsx",
+    "evals/development/unauthorized.json",
+    "evals/holdout/unauthorized.json",
+  ]) {
+    if (exactC1Paths.has(unauthorizedPath)) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: unauthorizedPath,
+        pathName: "$.m2_p4_i3_r1_c1_negative_scope",
+        invariant: "C1 rejects every protected or non-manifest path",
         expected: "rejected",
         actual: "accepted",
       });

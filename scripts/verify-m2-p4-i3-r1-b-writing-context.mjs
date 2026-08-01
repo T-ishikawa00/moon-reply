@@ -73,8 +73,34 @@ const r1bAcceptanceSyncPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1bAcceptanceCommitSha =
+  "76c469db264cd1cb9434b6a19ec5c75db5754a2a";
+const exactC1Paths = [
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
+  "scripts/lib/m2-p4-i3-r1-c1-evaluator.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-summary-v1.md",
+  "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const immutableImplementationPaths = exactPaths.filter(
-  (item) => !r1bAcceptanceSyncPaths.includes(item),
+  (item) =>
+    !r1bAcceptanceSyncPaths.includes(item) && !exactC1Paths.includes(item),
 );
 
 function absolute(relativePath) {
@@ -155,7 +181,10 @@ for (const sha of [baselineSha, firstImplementationSha, acceptedImplementationSh
   assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", sha, "HEAD"]));
 }
 assert.equal(exactPaths.length, 22);
-assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
+assertLiteralSet(
+  historicalPaths(baselineSha, r1bAcceptanceCommitSha),
+  exactPaths,
+);
 assert.equal(reviewCorrectionPaths.length, 9);
 assert.equal(
   git(["rev-parse", `${firstImplementationSha}^`]).trim(),
@@ -181,10 +210,12 @@ assertLiteralSet(
 );
 assert.equal(r1bAcceptanceSyncPaths.length, 8);
 assertLiteralSet(
-  currentTaskPaths(acceptedImplementationSha),
+  historicalPaths(acceptedImplementationSha, r1bAcceptanceCommitSha),
   r1bAcceptanceSyncPaths,
 );
-assert.equal(immutableImplementationPaths.length, 14);
+assert.equal(exactC1Paths.length, 21);
+assertLiteralSet(currentTaskPaths(r1bAcceptanceCommitSha), exactC1Paths);
+assert.equal(immutableImplementationPaths.length, 9);
 for (const immutablePath of immutableImplementationPaths) {
   assert.equal(
     shaText(source(immutablePath)),
@@ -917,6 +948,7 @@ for (const verifierPath of [
 ]) {
   const verifier = source(verifierPath);
   assert.equal(verifier.includes("exactR1BPaths"), true, verifierPath);
+  assert.equal(verifier.includes("exactC1Paths"), true, verifierPath);
   assert.equal(verifier.includes("runtime-stage-catalog-v5.json"), true, verifierPath);
   assert.equal(verifier.includes("lib/assessment/runtime/service.ts"), true, verifierPath);
 }
@@ -926,6 +958,7 @@ console.log(`accepted_implementation_commit: ${acceptedImplementationSha}`);
 console.log("implementation_commits: 2/2");
 console.log("implementation_snapshot: 22/22");
 console.log("acceptance_sync_scope: 8/8");
+console.log("r1_c1_successor_exact_scope: 21/21");
 console.log("review_correction_status: resolved");
 console.log("review_correction_scope: 9/9");
 console.log("cumulative_r1_b_scope: 22/22");

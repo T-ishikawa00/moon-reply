@@ -110,6 +110,30 @@ const exactR1BPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const c1BaselineSha = "76c469db264cd1cb9434b6a19ec5c75db5754a2a";
+const exactC1Paths = [
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
+  "scripts/lib/m2-p4-i3-r1-c1-evaluator.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-summary-v1.md",
+  "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const exactImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v2.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v2.schema.json",
@@ -994,8 +1018,16 @@ assert.equal(
   ),
   true,
 );
-assert.equal(isExactLiteralSet(currentChangedPaths(r1bBaselineSha), exactR1BPaths), true);
+assert.equal(
+  isExactLiteralSet(
+    historicalImplementationPaths(r1bBaselineSha, c1BaselineSha),
+    exactR1BPaths,
+  ),
+  true,
+);
 assert.equal(exactR1BPaths.length, 22);
+assert.equal(isExactLiteralSet(currentChangedPaths(c1BaselineSha), exactC1Paths), true);
+assert.equal(exactC1Paths.length, 21);
 for (const unauthorizedPath of [
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
@@ -1041,6 +1073,8 @@ console.log("i3_successor_exact_scope: 19/19");
 console.log("accepted_planning_snapshot: 12/12");
 console.log("planning_acceptance_sync_scope: 6/6");
 console.log("r1_a_successor_exact_scope: 18/18");
+console.log("r1_b_successor_exact_scope: 22/22");
+console.log("r1_c1_successor_exact_scope: 21/21");
 console.log("unauthorized_app_components_regressions: 4/4");
 console.log("reference_decisions: 40/40");
 console.log(`reply_now: ${categoryPasses.get("reply_now")}/10`);

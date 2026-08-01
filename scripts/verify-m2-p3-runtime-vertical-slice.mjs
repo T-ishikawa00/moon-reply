@@ -169,6 +169,30 @@ const exactR1BAcceptanceSyncPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const c1BaselineSha = "76c469db264cd1cb9434b6a19ec5c75db5754a2a";
+const exactC1Paths = [
+  "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
+  "scripts/lib/m2-p4-i3-r1-c1-evaluator.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1/diagnostic-summary-v1.md",
+  "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 const i1cImplementationPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
   "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
@@ -1657,9 +1681,11 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1bFirstImplementationSha,
     r1bAcceptedImplementationSha,
   );
-  const actualR1BAcceptanceSyncPaths = currentTaskPaths(
+  const actualR1BAcceptanceSyncPaths = historicalPaths(
     r1bAcceptedImplementationSha,
+    c1BaselineSha,
   );
+  const actualC1Paths = currentTaskPaths(c1BaselineSha);
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1aBaselineSha,
@@ -1792,6 +1818,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         actualR1BAcceptanceSyncPaths,
         exactR1BAcceptanceSyncPaths,
       ) &&
+      isExactLiteralSet(actualC1Paths, exactC1Paths) &&
       isExactLiteralSet(actualR1ASelfCorrectionPaths, [
         "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
       ]) &&
@@ -1837,7 +1864,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1bManifest.runtime_activation_candidate ===
         "M2-P4-I3-R1-C2 PB-01 v4 Runtime Activation" &&
       r1bManifest.runtime_activation_authorized === false,
-    `R1 planning/R1-A/R1-B accepted successor boundaries differ: r1a_implementation=${actualR1AImplementationPaths.join(",")}; r1a_acceptance=${actualR1AAcceptanceSyncPaths.join(",")}; r1b_implementation=${actualR1BImplementationPaths.join(",")}; r1b_correction=${actualR1BReviewCorrectionPaths.join(",")}; r1b_acceptance=${actualR1BAcceptanceSyncPaths.join(",")}`,
+    `R1 planning/R1-A/R1-B/C1 successor boundaries differ: r1a_implementation=${actualR1AImplementationPaths.join(",")}; r1a_acceptance=${actualR1AAcceptanceSyncPaths.join(",")}; r1b_implementation=${actualR1BImplementationPaths.join(",")}; r1b_correction=${actualR1BReviewCorrectionPaths.join(",")}; r1b_acceptance=${actualR1BAcceptanceSyncPaths.join(",")}; c1=${actualC1Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
@@ -1878,6 +1905,29 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       "M2_P3_I2_RENDERER_ONLY_GATE",
       !isExactLiteralSet([...exactR1BPaths, unauthorizedPath], exactR1BPaths),
       `R1-B accepted unauthorized path: ${unauthorizedPath}`,
+    );
+  }
+  for (const unauthorizedPath of [
+    "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/application.ts",
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+    "lib/assessment/runtime/contracts/pb-01-structure-v4.developer.md",
+    "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+    "lib/assessment/runtime/structured-intake-grounding-v4.ts",
+    "lib/assessment/runtime/writing-context-integrity-v1.ts",
+    "lib/assessment/runtime/policy-v3.ts",
+    "components/runtime/Unauthorized.tsx",
+    "app/unauthorized/page.tsx",
+    "evals/development/unauthorized.json",
+    "evals/holdout/unauthorized.json",
+  ]) {
+    check(
+      "M2_P3_I2_RENDERER_ONLY_GATE",
+      !isExactLiteralSet([...exactC1Paths, unauthorizedPath], exactC1Paths),
+      `R1-C1 accepted unauthorized path: ${unauthorizedPath}`,
     );
   }
   check(
