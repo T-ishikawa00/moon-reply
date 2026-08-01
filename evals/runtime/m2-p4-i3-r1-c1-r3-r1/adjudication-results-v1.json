@@ -1,0 +1,241 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r1-adjudication-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R1",
+  "adjudicator_version": "m2-p4-i3-r1-c1-r3-r1-offline-adjudicator-v1",
+  "status": "offline_adjudication_passed_pending_human_chatgpt_review",
+  "evidence_commit": "34a21c2a6acdec6b6208cacd2182f2e40302813f",
+  "evidence_mode": "immutable_saved_r3_exact_eight_calls_only",
+  "input_fields": [
+    "call.synthetic_input",
+    "call.raw_output"
+  ],
+  "frozen_r3_status": "evaluation_blocked_pending_human_chatgpt_review",
+  "frozen_r3_verdict": "EVALUATION_BLOCKED",
+  "frozen_evaluator_preserved": true,
+  "provider_semantic_quality_established": true,
+  "provider_quality_scope": "exact_eight_case_pb01_v7_semantic_suite",
+  "candidate_pipeline_confirmation_passed": true,
+  "candidate_ready_for_isolated_e2e": true,
+  "provider_calls": 0,
+  "provider_rerun": false,
+  "provider_output_mutation_count": 0,
+  "expected_data_injection_count": 0,
+  "active_runtime_changed": false,
+  "main_changed": false,
+  "c2_eligible": false,
+  "c2_authorized": false,
+  "next_candidate": "M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E",
+  "next_candidate_authorized": false,
+  "correction_gates": {
+    "known_taxonomy": "PASS",
+    "no_contact_ownership": "PASS",
+    "quoted_ownership": "PASS",
+    "practical_reason_subset": "PASS"
+  },
+  "metrics": {
+    "raw_schema_v5": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "grounded_schema_v4": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "writing_context_integrity_v2": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "contextual_intake_integrity_v3": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "application_decision_facts": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "provider_semantic_core_adjudicated": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "message_ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "boundary_ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "candidate_presence": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "candidate_style": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1
+    },
+    "candidate_intent": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1
+    },
+    "relationship_limits": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "privacy_repeat_injection": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    },
+    "practical_reason": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1
+    },
+    "correction_gates": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1
+    },
+    "cases": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1
+    }
+  },
+  "cases": [
+    {
+      "case_id": "R3-01",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": true,
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-02",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": "not_applicable",
+      "retained_context_inference_paths": [
+        "contact_state.usual_cadence_relation"
+      ],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-03",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": true,
+      "retained_context_inference_paths": [
+        "latest_direct_message.kind",
+        "latest_direct_message.response_expectation"
+      ],
+      "removed_context_inference_paths": [
+        "contact_state.usual_cadence_relation"
+      ],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-04",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": "not_applicable",
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-05",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": true,
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-06",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": true,
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-07",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": "not_applicable",
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [
+        "relationship_stage",
+        "latest_direct_message.sender"
+      ],
+      "hard_failures": []
+    },
+    {
+      "case_id": "R3-08",
+      "passed": true,
+      "raw_schema": true,
+      "grounded_schema": true,
+      "writing_context_integrity": true,
+      "contextual_intake_integrity": true,
+      "application_decision_facts": true,
+      "provider_semantic_core": true,
+      "practical_reason": "not_applicable",
+      "retained_context_inference_paths": [],
+      "removed_context_inference_paths": [],
+      "hard_failures": []
+    }
+  ]
+}

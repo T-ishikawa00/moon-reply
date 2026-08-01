@@ -243,6 +243,28 @@ const exactR1C1R3Paths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const r1C1R3R1ArtifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r3-r1";
+const r1C1R3R1CapabilityManifestPath =
+  `${r1C1R3R1ArtifactRoot}/capabilities-v1.json`;
+const r1C1R3R1ContractPath =
+  `${r1C1R3R1ArtifactRoot}/adjudication-contract-v1.json`;
+const r1C1R3R1ResultsPath =
+  `${r1C1R3R1ArtifactRoot}/adjudication-results-v1.json`;
+const exactR1C1R3R1Paths = [
+  "lib/assessment/runtime/context-inference-canonicalization-v5.ts",
+  r1C1R3R1ContractPath,
+  r1C1R3R1ResultsPath,
+  r1C1R3R1CapabilityManifestPath,
+  "scripts/lib/m2-p4-i3-r1-c1-r3-r1-offline-adjudicator-v1.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r1-offline-adjudication.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R1_REVIEW.md",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -1891,6 +1913,9 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const r1C1R3Authorization = json(r1C1R3AuthorizationPath);
   const r1C1R3Results = json(r1C1R3ResultsPath);
   const r1C1R3Contract = json(r1C1R3ContractPath);
+  const r1C1R3R1Manifest = json(r1C1R3R1CapabilityManifestPath);
+  const r1C1R3R1Contract = json(r1C1R3R1ContractPath);
+  const r1C1R3R1Results = json(r1C1R3R1ResultsPath);
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -2654,6 +2679,71 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
           r1C1R3Manifest.candidate_ready_for_isolated_e2e ===
             (r1C1R3Results.evaluation.verdict === "PASS"))),
     "R1-C1-R3 exact eight-case confirmation boundary differs",
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    exactR1C1R3R1Paths.length === 13 &&
+      isExactLiteralSet(
+        [...r1C1R3R1Contract.exact_mutation_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R3R1Paths,
+      ) &&
+      isExactLiteralSet(
+        [...r1C1R3R1Manifest.exact_mutation_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R3R1Paths,
+      ) &&
+      r1C1R3R1Contract.task_id === "M2-P4-I3-R1-C1-R3-R1" &&
+      r1C1R3R1Contract.baseline ===
+        "34a21c2a6acdec6b6208cacd2182f2e40302813f" &&
+      r1C1R3R1Contract.case_count === 8 &&
+      r1C1R3R1Contract.provider_calls === 0 &&
+      r1C1R3R1Contract.provider_rerun_authorized === false &&
+      r1C1R3R1Contract.frozen_r3_verdict === "EVALUATION_BLOCKED" &&
+      r1C1R3R1Contract.frozen_evaluator_preserved === true &&
+      r1C1R3R1Contract.exact_mutation_path_count === 13 &&
+      r1C1R3R1Manifest.status ===
+        "offline_adjudication_passed_pending_human_chatgpt_review" &&
+      r1C1R3R1Manifest.saved_calls_replayed === 8 &&
+      r1C1R3R1Manifest.provider_calls === 0 &&
+      r1C1R3R1Manifest.provider_rerun === false &&
+      r1C1R3R1Manifest.provider_outputs_mutated === 0 &&
+      r1C1R3R1Manifest.expected_data_injection === 0 &&
+      r1C1R3R1Manifest.frozen_evaluator_preserved === true &&
+      r1C1R3R1Manifest.frozen_results_preserved === true &&
+      r1C1R3R1Manifest.practical_reason === "4/4" &&
+      r1C1R3R1Manifest.correction_gates === "4/4" &&
+      r1C1R3R1Manifest.cases_passed === "8/8" &&
+      r1C1R3R1Manifest.provider_semantic_quality_established === true &&
+      r1C1R3R1Manifest.candidate_pipeline_confirmation_passed === true &&
+      r1C1R3R1Manifest.candidate_ready_for_isolated_e2e === true &&
+      r1C1R3R1Manifest.active_runtime_changed === false &&
+      r1C1R3R1Manifest.protected_diff === 0 &&
+      r1C1R3R1Manifest.main_changed === false &&
+      r1C1R3R1Manifest.c2_eligible === false &&
+      r1C1R3R1Manifest.c2_authorized === false &&
+      r1C1R3R1Manifest.next_candidate ===
+        "M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E" &&
+      r1C1R3R1Manifest.next_candidate_authorized === false &&
+      r1C1R3R1Results.status === r1C1R3R1Manifest.status &&
+      r1C1R3R1Results.provider_calls === 0 &&
+      r1C1R3R1Results.provider_output_mutation_count === 0 &&
+      r1C1R3R1Results.expected_data_injection_count === 0 &&
+      r1C1R3R1Results.metrics.raw_schema_v5.passed === 8 &&
+      r1C1R3R1Results.metrics.grounded_schema_v4.passed === 8 &&
+      r1C1R3R1Results.metrics.contextual_intake_integrity_v3.passed === 8 &&
+      r1C1R3R1Results.metrics.provider_semantic_core_adjudicated.passed === 8 &&
+      r1C1R3R1Results.metrics.practical_reason.passed === 4 &&
+      r1C1R3R1Results.metrics.correction_gates.passed === 4 &&
+      r1C1R3R1Results.metrics.cases.passed === 8 &&
+      r1C1R3R1Results.frozen_r3_verdict === "EVALUATION_BLOCKED" &&
+      r1C1R3R1Results.provider_semantic_quality_established === true &&
+      r1C1R3R1Results.candidate_ready_for_isolated_e2e === true &&
+      r1C1R3R1Results.active_runtime_changed === false &&
+      r1C1R3R1Results.c2_authorized === false,
+    "R1-C1-R3-R1 offline adjudication boundary differs",
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

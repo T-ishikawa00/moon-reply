@@ -223,6 +223,28 @@ const exactR1C1R2R2R1AcceptanceSyncPaths = new Set([
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ]);
+const r1C1R3R1ArtifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r3-r1";
+const r1C1R3R1CapabilityManifestPath =
+  `${r1C1R3R1ArtifactRoot}/capabilities-v1.json`;
+const r1C1R3R1ContractPath =
+  `${r1C1R3R1ArtifactRoot}/adjudication-contract-v1.json`;
+const r1C1R3R1ResultsPath =
+  `${r1C1R3R1ArtifactRoot}/adjudication-results-v1.json`;
+const exactR1C1R3R1Paths = new Set([
+  "lib/assessment/runtime/context-inference-canonicalization-v5.ts",
+  r1C1R3R1ContractPath,
+  r1C1R3R1ResultsPath,
+  r1C1R3R1CapabilityManifestPath,
+  "scripts/lib/m2-p4-i3-r1-c1-r3-r1-offline-adjudicator-v1.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r1-offline-adjudication.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R1_REVIEW.md",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 const r1C1R2MainRunnerPath =
   "scripts/run-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs";
 const r1C1R2SuccessorLocalToolPaths = new Set([
@@ -258,6 +280,18 @@ const r1C1R3SuccessorLocalToolPaths = new Set([
 ]);
 const r1C1R3ProductionImportPaths = new Set([
   ...r1C1R2R2ProductionImportPaths,
+]);
+const r1C1R3R1SuccessorLocalToolPaths = new Set([
+  "scripts/lib/m2-p4-i3-r1-c1-r3-r1-offline-adjudicator-v1.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r1-offline-adjudication.mjs",
+]);
+const r1C1R3R1ProductionImportPaths = new Set([
+  "lib/assessment/runtime/context-inference-canonicalization-v5.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "lib/assessment/runtime/contextual-integrity-v3.ts",
+  "lib/assessment/runtime/validation.ts",
+  "lib/assessment/runtime/writing-context-integrity-v2.ts",
 ]);
 
 const repositoryRoot = path.resolve(scriptDirectory, "..");
@@ -802,6 +836,7 @@ const successorLocalToolPaths = new Set([
   ...r1C1R2SuccessorLocalToolPaths,
   ...r1C1R2R2SuccessorLocalToolPaths,
   ...r1C1R3SuccessorLocalToolPaths,
+  ...r1C1R3R1SuccessorLocalToolPaths,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -4379,6 +4414,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        r1C1R3R1SuccessorLocalToolPaths.has(file) &&
+        localImport &&
+        r1C1R3R1ProductionImportPaths.has(localImport)
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4754,6 +4796,9 @@ function verifyScopeAndProhibitedImplementation() {
   const m2p4I3R1C1R2R2R1Manifest = readJson(
     r1C1R2R2R1CapabilityManifestPath,
   );
+  const m2p4I3R1C1R3R1Manifest = readJson(r1C1R3R1CapabilityManifestPath);
+  const m2p4I3R1C1R3R1Contract = readJson(r1C1R3R1ContractPath);
+  const m2p4I3R1C1R3R1Results = readJson(r1C1R3R1ResultsPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -5034,6 +5079,83 @@ function verifyScopeAndProhibitedImplementation() {
         acceptance_sync_paths: m2p4I3R1C1R2R2R1AcceptanceSyncPaths,
         cumulative_paths: m2p4I3R1C1R2R2R1TaskPaths,
         manifest: m2p4I3R1C1R2R2R1Manifest,
+      },
+    });
+  }
+  if (
+    exactR1C1R3R1Paths.size !== 13 ||
+    !isExactLiteralPathSet(
+      [...(m2p4I3R1C1R3R1Manifest?.exact_mutation_paths ?? [])].sort(),
+      exactR1C1R3R1Paths,
+    ) ||
+    !isExactLiteralPathSet(
+      [...(m2p4I3R1C1R3R1Contract?.exact_mutation_paths ?? [])].sort(),
+      exactR1C1R3R1Paths,
+    ) ||
+    m2p4I3R1C1R3R1Manifest?.task_id !== "M2-P4-I3-R1-C1-R3-R1" ||
+    m2p4I3R1C1R3R1Manifest?.status !==
+      "offline_adjudication_passed_pending_human_chatgpt_review" ||
+    m2p4I3R1C1R3R1Manifest?.baseline !==
+      "34a21c2a6acdec6b6208cacd2182f2e40302813f" ||
+    m2p4I3R1C1R3R1Manifest?.exact_mutation_path_count !== 13 ||
+    m2p4I3R1C1R3R1Manifest?.saved_calls_replayed !== 8 ||
+    m2p4I3R1C1R3R1Manifest?.provider_calls !== 0 ||
+    m2p4I3R1C1R3R1Manifest?.provider_rerun !== false ||
+    m2p4I3R1C1R3R1Manifest?.provider_outputs_mutated !== 0 ||
+    m2p4I3R1C1R3R1Manifest?.expected_data_injection !== 0 ||
+    m2p4I3R1C1R3R1Manifest?.frozen_r3_verdict !== "EVALUATION_BLOCKED" ||
+    m2p4I3R1C1R3R1Manifest?.frozen_evaluator_preserved !== true ||
+    m2p4I3R1C1R3R1Manifest?.frozen_results_preserved !== true ||
+    m2p4I3R1C1R3R1Manifest?.practical_reason !== "4/4" ||
+    m2p4I3R1C1R3R1Manifest?.correction_gates !== "4/4" ||
+    m2p4I3R1C1R3R1Manifest?.cases_passed !== "8/8" ||
+    m2p4I3R1C1R3R1Manifest?.provider_semantic_quality_established !== true ||
+    m2p4I3R1C1R3R1Manifest?.candidate_pipeline_confirmation_passed !== true ||
+    m2p4I3R1C1R3R1Manifest?.candidate_ready_for_isolated_e2e !== true ||
+    m2p4I3R1C1R3R1Manifest?.active_runtime_changed !== false ||
+    m2p4I3R1C1R3R1Manifest?.protected_diff !== 0 ||
+    m2p4I3R1C1R3R1Manifest?.main_changed !== false ||
+    m2p4I3R1C1R3R1Manifest?.c2_eligible !== false ||
+    m2p4I3R1C1R3R1Manifest?.c2_authorized !== false ||
+    m2p4I3R1C1R3R1Manifest?.next_candidate !==
+      "M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E" ||
+    m2p4I3R1C1R3R1Manifest?.next_candidate_authorized !== false ||
+    m2p4I3R1C1R3R1Contract?.task_id !== "M2-P4-I3-R1-C1-R3-R1" ||
+    m2p4I3R1C1R3R1Contract?.case_count !== 8 ||
+    m2p4I3R1C1R3R1Contract?.provider_calls !== 0 ||
+    m2p4I3R1C1R3R1Contract?.provider_rerun_authorized !== false ||
+    m2p4I3R1C1R3R1Contract?.frozen_evaluator_preserved !== true ||
+    m2p4I3R1C1R3R1Contract?.exact_mutation_path_count !== 13 ||
+    m2p4I3R1C1R3R1Results?.status !==
+      "offline_adjudication_passed_pending_human_chatgpt_review" ||
+    m2p4I3R1C1R3R1Results?.frozen_r3_verdict !== "EVALUATION_BLOCKED" ||
+    m2p4I3R1C1R3R1Results?.provider_calls !== 0 ||
+    m2p4I3R1C1R3R1Results?.provider_output_mutation_count !== 0 ||
+    m2p4I3R1C1R3R1Results?.expected_data_injection_count !== 0 ||
+    m2p4I3R1C1R3R1Results?.metrics?.cases?.passed !== 8 ||
+    m2p4I3R1C1R3R1Results?.metrics?.cases?.total !== 8 ||
+    m2p4I3R1C1R3R1Results?.provider_semantic_quality_established !== true ||
+    m2p4I3R1C1R3R1Results?.candidate_ready_for_isolated_e2e !== true ||
+    m2p4I3R1C1R3R1Results?.active_runtime_changed !== false ||
+    m2p4I3R1C1R3R1Results?.c2_authorized !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: r1C1R3R1CapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_c1_r3_r1_boundary",
+      invariant:
+        "R3-R1 is an exact 13-path offline saved-evidence adjudication with frozen R3 preservation, 8/8 semantic replay, zero Provider calls, unchanged Active Runtime, and unauthorized C2",
+      expected: {
+        status: "offline_adjudication_passed_pending_human_chatgpt_review",
+        exact_paths: 13,
+        cases: "8/8",
+        provider_calls: 0,
+        active_runtime_changed: false,
+        c2_authorized: false,
+      },
+      actual: {
+        manifest: m2p4I3R1C1R3R1Manifest,
+        contract: m2p4I3R1C1R3R1Contract,
+        results: m2p4I3R1C1R3R1Results,
       },
     });
   }
@@ -6770,6 +6892,7 @@ function verifyScopeAndProhibitedImplementation() {
       !exactR1C1R1Paths.includes(item) &&
       !exactR1C1R2R1Paths.has(item) &&
       !exactR1C1R2R2R1Paths.has(item) &&
+      !exactR1C1R3R1Paths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -6810,7 +6933,8 @@ function verifyScopeAndProhibitedImplementation() {
       exactR1BPaths.has(item) ||
       exactR1C1R1Paths.includes(item) ||
       exactR1C1R2R1Paths.has(item) ||
-      exactR1C1R2R2R1Paths.has(item)
+      exactR1C1R2R2R1Paths.has(item) ||
+      exactR1C1R3R1Paths.has(item)
     ) {
       continue;
     }

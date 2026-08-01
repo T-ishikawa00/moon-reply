@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R1:START -->
+## M2-P4-I3-R1-C1-R3-R1 Offline Evidence Adjudication and Context-Inference Canonicalization
+
+- [x] Exact `13/13` implementation scope fixed from R3 Commit B `34a21c2a6acdec6b6208cacd2182f2e40302813f`
+- [x] Frozen R3 evaluator, results, evidence, Prompt v7, catalog v8, Schema, outputs, and response IDs preserved
+- [x] Practical-reason `kind/active` subset adjudication applied on raw and grounded surfaces: `4/4`
+- [x] R3-08 `other / current_situation_explicit` accepted without permitting `optional_message` or `relationship_chip`
+- [x] R3-03/R3-07 unresolved or unknown context inferences canonicalized; known resolved inference order preserved
+- [x] Offline exact-eight replay passed Schemas, both Integrity gates, Decision Facts, semantic core, ownership, candidate, relationship, privacy, and case gates
+- [x] Provider calls / output mutations / expected-data injection: `0 / 0 / 0`
+- [x] Candidate pipeline confirmation passed; candidate ready for separately authorized isolated E2E
+- [ ] Human / ChatGPT review
+- [ ] M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E — unauthorized
+- [ ] C2 Runtime activation — unauthorized
+
+Current automated status is `offline_adjudication_passed_pending_human_chatgpt_review`. The frozen R3 verdict remains `EVALUATION_BLOCKED`; Provider semantic quality is established only for `exact_eight_case_pb01_v7_semantic_suite`. Active Runtime and `main` are unchanged. R4, C2, E1, PR, main merge, release, and Provider rerun remain unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3:START -->
 ## M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation
 

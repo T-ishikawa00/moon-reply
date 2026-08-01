@@ -1,5 +1,11 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R1:START -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R1
+
+M2-P4-I3-R1-C1-R3-R1 is `offline_adjudication_passed_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r1-offline-adjudication`, based only on the exact eight saved R3 `call.synthetic_input` and `call.raw_output` values at Commit B `34a21c2a6acdec6b6208cacd2182f2e40302813f`. Offline replay passed raw/grounded Schema, Writing/Contextual Integrity, Application Decision Facts, Provider semantic core, message/boundary/candidate/relationship/privacy gates, and cases `8/8`; candidate style/intent and practical reason passed `4/4`; correction gates passed `4/4`. Provider calls, rerun, Provider-output mutations, and expected-data injection are `0 / false / 0 / 0`. The frozen R3 evaluator/result remain unchanged at `EVALUATION_BLOCKED`; all R3 evidence, Prompt v7, catalog v8, Schema, outputs, and response IDs remain immutable. Provider semantic quality is established only for `exact_eight_case_pb01_v7_semantic_suite`; candidate pipeline confirmation passes and isolated-E2E readiness is true. Active Runtime/main are unchanged. The next candidate is `M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E`, but it is unauthorized; C2, E1, PR, main merge, release, and Provider rerun also remain unauthorized. Await Human / ChatGPT review.
+<!-- M2-P4-I3-R1-C1-R3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3:START -->
 ## Active handoff — M2-P4-I3-R1-C1-R3
 

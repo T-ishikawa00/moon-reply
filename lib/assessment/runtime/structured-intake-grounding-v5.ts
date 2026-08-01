@@ -1,3 +1,4 @@
+import { canonicalizeContextInferencesV5 } from "./context-inference-canonicalization-v5.ts";
 import { guardDecisionFactsWithEvidenceV4 } from "./decision-facts-evidence-guard-v4.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import type { AssessmentInput, JsonObject } from "./types.ts";
@@ -74,12 +75,18 @@ export function groundStructuredIntakeV5(
     (grounded.context_inferences ?? []) as never,
   );
   grounded.decision_facts = guardedDecisionFacts;
-  grounded.writing_context = groundWritingSignalsV1(
+  const canonicalized = canonicalizeContextInferencesV5(
+    grounded as JsonObject,
+  ) as unknown as Record<string, unknown>;
+  const canonicalDecisionFacts = isObject(canonicalized.decision_facts)
+    ? (canonicalized.decision_facts as JsonObject)
+    : ({} as JsonObject);
+  canonicalized.writing_context = groundWritingSignalsV1(
     request,
     signals,
-    guardedDecisionFacts,
+    canonicalDecisionFacts,
   );
-  delete grounded.writing_signals;
-  grounded.schema_version = "pipeline-schema-v4.0.0";
-  return grounded as JsonObject;
+  delete canonicalized.writing_signals;
+  canonicalized.schema_version = "pipeline-schema-v4.0.0";
+  return canonicalized as JsonObject;
 }

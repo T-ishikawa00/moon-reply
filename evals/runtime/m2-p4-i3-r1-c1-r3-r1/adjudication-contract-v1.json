@@ -1,0 +1,139 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r1-adjudication-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R1",
+  "title": "Offline Evidence Adjudication and Context-Inference Canonicalization",
+  "baseline": "34a21c2a6acdec6b6208cacd2182f2e40302813f",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r1-offline-adjudication",
+  "evidence_mode": "immutable_saved_r3_exact_eight_calls_only",
+  "evidence_source": "evals/runtime/m2-p4-i3-r1-c1-r3/diagnostic-results-v1.json",
+  "replay_input_fields": [
+    "call.synthetic_input",
+    "call.raw_output"
+  ],
+  "case_count": 8,
+  "provider_calls": 0,
+  "provider_rerun_authorized": false,
+  "frozen_r3_status": "evaluation_blocked_pending_human_chatgpt_review",
+  "frozen_r3_verdict": "EVALUATION_BLOCKED",
+  "frozen_evaluator_preserved": true,
+  "accepted_evaluator_defects": [
+    "practical_reason_subset_full_object_comparison",
+    "r3_08_user_goal_basis_contract"
+  ],
+  "accepted_application_canonicalization_gaps": [
+    "unresolved_or_unknown_context_inference_retention"
+  ],
+  "practical_reason_adjudication": {
+    "comparison": "expected_subset",
+    "always_compared_fields": [
+      "kind",
+      "active"
+    ],
+    "deadline_rule": "schema_valid_and_compared_only_when_explicitly_expected",
+    "applicable_cases": [
+      "R3-01",
+      "R3-03",
+      "R3-05",
+      "R3-06"
+    ],
+    "surfaces": [
+      "raw",
+      "grounded"
+    ]
+  },
+  "r3_08_user_goal_adjudication": {
+    "values": [
+      "other",
+      "unknown"
+    ],
+    "bases": [
+      "current_situation_explicit",
+      "current_situation_inferred",
+      "requested_topics",
+      "unresolved"
+    ],
+    "forbidden_bases": [
+      "optional_message",
+      "relationship_chip"
+    ]
+  },
+  "canonicalization": {
+    "helper": "canonicalizeContextInferencesV5",
+    "pure": true,
+    "raw_input_mutated": false,
+    "remove_when_field_unresolved": true,
+    "remove_when_final_value_null": true,
+    "remove_when_final_value_unknown": true,
+    "preserve_remaining_order": true,
+    "recompute_used_context_inference": true,
+    "r3_03_remove": [
+      "contact_state.usual_cadence_relation"
+    ],
+    "r3_03_preserve": [
+      "latest_direct_message.kind",
+      "latest_direct_message.response_expectation"
+    ],
+    "r3_07_remove": [
+      "latest_direct_message.sender"
+    ],
+    "r3_07_final_inference_count": 0
+  },
+  "required_metrics": {
+    "raw_schema_v5": "8/8",
+    "grounded_schema_v4": "8/8",
+    "writing_context_integrity_v2": "8/8",
+    "contextual_intake_integrity_v3": "8/8",
+    "application_decision_facts": "8/8",
+    "provider_semantic_core_adjudicated": "8/8",
+    "message_ownership": "8/8",
+    "boundary_ownership": "8/8",
+    "candidate_presence": "8/8",
+    "candidate_style": "4/4",
+    "candidate_intent": "4/4",
+    "relationship_limits": "8/8",
+    "privacy_repeat_injection": "8/8",
+    "practical_reason": "4/4",
+    "correction_gates": "4/4",
+    "cases": "8/8",
+    "provider_output_mutation_count": 0,
+    "expected_data_injection_count": 0
+  },
+  "exact_mutation_paths": [
+    "lib/assessment/runtime/context-inference-canonicalization-v5.ts",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r1/adjudication-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r1/adjudication-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r1/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r1-offline-adjudicator-v1.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r1-offline-adjudication.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R1_REVIEW.md",
+    "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_mutation_path_count": 13,
+  "immutable_r3_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/diagnostic-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/quality-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/authorization-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/capabilities-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/diagnostic-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3/diagnostic-summary-v1.md",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-provider-evaluator-v1.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-provider-confirmation.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-provider-confirmation.mjs",
+    "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v8.json",
+    "lib/assessment/runtime/contracts/structured-intake-v5.schema.json"
+  ],
+  "provider_quality_scope": "exact_eight_case_pb01_v7_semantic_suite",
+  "active_runtime_changed": false,
+  "c2_eligible": false,
+  "c2_authorized": false,
+  "next_candidate": "M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E",
+  "next_candidate_authorized": false
+}

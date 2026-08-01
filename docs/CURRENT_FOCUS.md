@@ -1,5 +1,11 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R1:START -->
+## Immediate Offline Adjudication Status
+
+M2-P4-I3-R1-C1-R3-R1 is `offline_adjudication_passed_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r1-offline-adjudication`. Exactly eight saved R3 `synthetic_input` / `raw_output` pairs were replayed offline with Provider calls, rerun, Provider-output mutations, and expected-data injection all `0`. Raw and grounded Schemas, Writing Context Integrity, Contextual Intake Integrity, Application Decision Facts, Provider semantic core, message ownership, boundary ownership, candidate presence, relationship limits, privacy/repeat/injection, and cases passed `8/8`; candidate style/intent and practical reason passed `4/4`; correction gates passed `4/4`. R3-03 and R3-07 unresolved/unknown inference residue is removed while R3-03 known resolved inferences remain ordered. The frozen R3 status remains `EVALUATION_BLOCKED`, all R3 evidence is immutable, and the frozen evaluator/result are preserved. Provider semantic quality is established only for `exact_eight_case_pb01_v7_semantic_suite`; candidate pipeline confirmation passes and the candidate is ready for a separately authorized isolated E2E. Active Runtime/main are unchanged; R4, Runtime activation, C2, E1, PR, main merge, release, and Provider rerun remain unauthorized. Human / ChatGPT review is pending.
+<!-- M2-P4-I3-R1-C1-R3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3:START -->
 ## Immediate Execution Status
 
