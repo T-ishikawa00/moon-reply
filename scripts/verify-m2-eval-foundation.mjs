@@ -280,6 +280,8 @@ const m2p4I3R1BAcceptedImplementationCommit =
   "4a1237ac647bff79229d7181d978d5613c2c3b87";
 const m2p4I3R1BAcceptanceCommit =
   "76c469db264cd1cb9434b6a19ec5c75db5754a2a";
+const m2p4I3R1C1ResultCommit =
+  "7b0c1b6da5d877f7a7a6de5be431276452e3b8b2";
 const m2p4I3R1ACapabilityManifestPath =
   "evals/runtime/m2-p4-i3-r1-a-capabilities-v1.json";
 const m2p4I3R1BCapabilityManifestPath =
@@ -396,6 +398,16 @@ const exactC1Paths = new Set([
   "scripts/verify-m2-p4-i2-report-ia.mjs",
   "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
   "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const exactC1ReviewSyncPaths = new Set([
+  "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -4369,8 +4381,12 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1BAcceptedImplementationCommit,
     m2p4I3R1BAcceptanceCommit,
   );
-  const m2p4I3R1C1TaskPaths = currentTaskPaths(
+  const m2p4I3R1C1ExecutionPaths = historicalTaskPaths(
     m2p4I3R1BAcceptanceCommit,
+    m2p4I3R1C1ResultCommit,
+  );
+  const m2p4I3R1C1ReviewSyncTaskPaths = currentTaskPaths(
+    m2p4I3R1C1ResultCommit,
   );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
@@ -4692,7 +4708,11 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I3R1BAcceptanceSyncTaskPaths,
       m2p4I3R1BAcceptanceSyncPaths,
     ) ||
-    !isExactLiteralPathSet(m2p4I3R1C1TaskPaths, exactC1Paths) ||
+    !isExactLiteralPathSet(m2p4I3R1C1ExecutionPaths, exactC1Paths) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1ReviewSyncTaskPaths,
+      exactC1ReviewSyncPaths,
+    ) ||
     m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
     m2p4I3R1BManifest?.title !==
       "PB-01 v4 Writing Context Extraction and Grounding" ||
@@ -4764,7 +4784,8 @@ function verifyScopeAndProhibitedImplementation() {
         implementation_paths: m2p4I3R1BImplementationPaths,
         review_correction_paths: m2p4I3R1BReviewCorrectionTaskPaths,
         acceptance_sync_paths: m2p4I3R1BAcceptanceSyncTaskPaths,
-        c1_successor_paths: m2p4I3R1C1TaskPaths,
+        c1_execution_snapshot_paths: m2p4I3R1C1ExecutionPaths,
+        c1_review_sync_paths: m2p4I3R1C1ReviewSyncTaskPaths,
       },
     });
   }
@@ -4807,6 +4828,20 @@ function verifyScopeAndProhibitedImplementation() {
       actual: [...exactC1Paths],
     });
   }
+  if (
+    exactC1ReviewSyncPaths.size !== 8 ||
+    [...exactC1ReviewSyncPaths].some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "evals/runtime/m2-p4-i3-r1-c1/capabilities-v1.json",
+      pathName: "$.m2_p4_i3_r1_c1_review_sync_scope",
+      invariant: "C1 failed-diagnostic review sync is exactly 8 literal paths",
+      expected: 8,
+      actual: [...exactC1ReviewSyncPaths],
+    });
+  }
   for (const unauthorizedPath of [
     "lib/assessment/runtime/service.ts",
     "lib/assessment/runtime/application.ts",
@@ -4829,6 +4864,16 @@ function verifyScopeAndProhibitedImplementation() {
         file: unauthorizedPath,
         pathName: "$.m2_p4_i3_r1_c1_negative_scope",
         invariant: "C1 rejects every protected or non-manifest path",
+        expected: "rejected",
+        actual: "accepted",
+      });
+    }
+    if (exactC1ReviewSyncPaths.has(unauthorizedPath)) {
+      fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+        file: unauthorizedPath,
+        pathName: "$.m2_p4_i3_r1_c1_review_sync_negative_scope",
+        invariant:
+          "C1 failed-diagnostic review sync rejects every protected path",
         expected: "rejected",
         actual: "accepted",
       });

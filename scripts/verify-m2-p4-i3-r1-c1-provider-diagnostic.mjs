@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -19,6 +19,8 @@ const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
 const r1bAcceptedImplementationSha =
   "4a1237ac647bff79229d7181d978d5613c2c3b87";
 const branch = "test/m2-p4-i3-r1-c1-provider-diagnostic";
+const packageCommitSha = "0c228406298fbb829cbb216e31c00e6812cc1393";
+const resultCommitSha = "7b0c1b6da5d877f7a7a6de5be431276452e3b8b2";
 const artifactRoot = "evals/runtime/m2-p4-i3-r1-c1";
 const exactPaths = [
   "scripts/lib/m2-p4-i3-r1-c1-provider-runner.mjs",
@@ -43,6 +45,19 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const reviewSyncPaths = [
+  `${artifactRoot}/capabilities-v1.json`,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const immutableExecutionPaths = exactPaths.filter(
+  (item) => !reviewSyncPaths.includes(item),
+);
 const protectedPaths = [
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/application.ts",
@@ -202,7 +217,11 @@ function recursivelyFindKeys(value, result = []) {
 const args = process.argv.slice(2);
 assert.deepEqual(args.length, 2);
 assert.equal(args[0], "--phase");
-assert.ok(args[1] === "prepare" || args[1] === "completed");
+assert.ok(
+  args[1] === "prepare" ||
+    args[1] === "completed" ||
+    args[1] === "reviewed",
+);
 const phase = args[1];
 
 assert.equal(git(["branch", "--show-current"]).trim(), branch);
@@ -212,6 +231,22 @@ assert.doesNotThrow(() => git(["cat-file", "-e", `${baselineSha}^{commit}`]));
 assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", baselineSha, "HEAD"]));
 assert.equal(exactPaths.length, 21);
 assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
+if (phase === "reviewed") {
+  assert.equal(reviewSyncPaths.length, 8);
+  assert.doesNotThrow(() => git(["cat-file", "-e", `${resultCommitSha}^{commit}`]));
+  assertLiteralSet(historicalPaths(baselineSha, resultCommitSha), exactPaths);
+  assertLiteralSet(currentTaskPaths(resultCommitSha), reviewSyncPaths);
+  for (const immutablePath of immutableExecutionPaths) {
+    assert.equal(
+      source(immutablePath).replaceAll("\r\n", "\n"),
+      git(["show", `${resultCommitSha}:${immutablePath}`]).replaceAll(
+        "\r\n",
+        "\n",
+      ),
+      `${immutablePath} changed after the immutable execution snapshot`,
+    );
+  }
+}
 
 for (const protectedPath of protectedPaths) {
   assert.equal(
@@ -390,7 +425,7 @@ if (phase === "prepare") {
   );
   assert.ok(typeof results.started_at === "string");
   assert.ok(typeof results.completed_at === "string");
-  assert.ok(/^[0-9a-f]{40}$/u.test(results.package_commit));
+  assert.equal(results.package_commit, packageCommitSha);
   assert.doesNotThrow(() => git(["cat-file", "-e", `${results.package_commit}^{commit}`]));
   assert.doesNotThrow(() =>
     git(["merge-base", "--is-ancestor", results.package_commit, "HEAD"]),
@@ -424,6 +459,31 @@ if (phase === "prepare") {
   assert.equal(results.db_operations, 0);
   assert.equal(results.supabase_operations, 0);
   assert.equal(results.c2_authorized, false);
+  assert.equal(
+    existsSync(
+      absolute(".git/moon-reply-r1-c1-provider-diagnostic-consumed.json"),
+    ),
+    true,
+  );
+
+  const rawSchemaPassed = results.cases.filter(
+    (call) => call.validation?.raw_schema === true,
+  ).length;
+  const groundedSchemaPassed = results.cases.filter(
+    (call) => call.validation?.grounded_schema === true,
+  ).length;
+  const v4IntegrityPassed = results.cases.filter(
+    (call) =>
+      call.contract_variant === "v4" && call.validation?.integrity === true,
+  ).length;
+  const v3IntegrityPassed = results.cases.filter(
+    (call) =>
+      call.contract_variant === "v3" && call.validation?.integrity === true,
+  ).length;
+  assert.equal(rawSchemaPassed, 12);
+  assert.equal(groundedSchemaPassed, 12);
+  assert.equal(v4IntegrityPassed, 0);
+  assert.equal(v3IntegrityPassed, 3);
 
   for (const call of results.cases) {
     if (call.raw_typed_projection !== null) {
@@ -506,12 +566,98 @@ if (phase === "prepare") {
     capabilities.c2_eligible_for_review,
     results.c2_eligible_for_review,
   );
-  assert.equal(
-    capabilities.status,
+  const pendingReviewStatus =
     results.evaluation.verdict === "PASS"
       ? "provider_diagnostic_completed_pending_human_chatgpt_review"
-      : "provider_diagnostic_failed_pending_human_chatgpt_review",
-  );
+      : "provider_diagnostic_failed_pending_human_chatgpt_review";
+  if (phase === "reviewed") {
+    assert.equal(results.status, "completed_fail");
+    assert.equal(results.evaluation.verdict, "FAIL");
+    assert.equal(capabilities.status, "human_chatgpt_reviewed_fail_complete");
+    assert.equal(capabilities.execution_protocol_accepted, true);
+    assert.equal(capabilities.product_gate_passed, false);
+    assert.deepEqual(capabilities.execution_snapshot, {
+      type: "historical_commit_range",
+      base_commit_sha: baselineSha,
+      end_commit_sha: resultCommitSha,
+      exact_paths: 21,
+      immutable_snapshot: true,
+      include_working_tree: false,
+    });
+    assert.deepEqual(capabilities.execution_commits, [
+      packageCommitSha,
+      resultCommitSha,
+    ]);
+    assertLiteralSet(capabilities.review_sync_exact_paths, reviewSyncPaths);
+    assert.equal(capabilities.review_sync_exact_path_count, 8);
+    assert.equal(capabilities.provider_transport_calls, 12);
+    assert.equal(capabilities.raw_schema_pass, "12/12");
+    assert.equal(capabilities.grounded_schema_pass, "12/12");
+    assert.equal(capabilities.writing_context_integrity, "0/8");
+    assert.equal(capabilities.contextual_integrity_v3, "3/4");
+    assert.equal(capabilities.current_style_evidence, "unavailable");
+    assert.equal(
+      capabilities.soft_assertion_evidence,
+      "0/0_not_positive_evidence",
+    );
+    assert.equal(capabilities.decision_facts_material_regression, true);
+    assert.deepEqual(capabilities.evaluator_limitations, [
+      "composite viability naming",
+      "assertion suppression after Integrity failure",
+      "parity status coupling",
+      "empty denominator is unavailable evidence",
+    ]);
+    assert.equal(capabilities.c2_eligible_for_review, false);
+    assert.equal(capabilities.c2_authorized, false);
+    assert.equal(capabilities.reexecution_authorized, false);
+    assert.equal(capabilities.review_sync_openai_calls, 0);
+    assert.equal(capabilities.review_sync_db_operations, 0);
+    assert.equal(capabilities.review_sync_supabase_operations, 0);
+    assert.equal(capabilities.review_sync_holdout_use, 0);
+    assert.equal(
+      capabilities.next_candidate,
+      "M2-P4-I3-R1-C1-R1 Offline Diagnostic Postmortem and Grounding Responsibility Revision",
+    );
+    assert.equal(capabilities.next_candidate_authorized, false);
+    assert.equal(results.evaluation.soft_assertions.total, 0);
+    assert.equal(results.evaluation.soft_assertions.passed, 0);
+    assert.equal(
+      results.evaluation.hard_fail_codes.includes(
+        "DECISION_FACTS_REGRESSION",
+      ),
+      true,
+    );
+    const pair03 = results.evaluation.paired_decision_facts_parity.cases.find(
+      (item) => item.case_id === "PAIR-03",
+    );
+    const pair04 = results.evaluation.paired_decision_facts_parity.cases.find(
+      (item) => item.case_id === "PAIR-04",
+    );
+    assert.deepEqual(sorted(pair03?.mismatched_critical_paths ?? []), [
+      "/boundary_state/kind",
+      "/boundary_state/status",
+    ]);
+    assert.deepEqual(pair04?.mismatched_critical_paths, [
+      "/contact_state/usual_cadence_relation",
+    ]);
+    const reviewSource = source(
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_REVIEW.md",
+    );
+    for (const requiredConclusion of [
+      "Provider/Schema transport itself succeeded.",
+      "empty denominator is not positive evidence",
+      "no_private_contact_at_work",
+      "live v3 output is not a perfect oracle",
+      "No paid rerun occurs before a separately authorized offline root-cause correction.",
+    ]) {
+      assert.equal(reviewSource.includes(requiredConclusion), true);
+    }
+  } else {
+    assert.ok(
+      capabilities.status === pendingReviewStatus ||
+        capabilities.status === "human_chatgpt_reviewed_fail_complete",
+    );
+  }
 }
 
 for (const verifier of historicalVerifiers) {
@@ -536,3 +682,13 @@ console.log("historical_verifiers: 8/8");
 console.log("protected_diff: 0");
 console.log("active_runtime_changed: false");
 console.log("c2_authorized: false");
+if (phase === "reviewed") {
+  console.log("execution_snapshot: 21/21 immutable");
+  console.log("review_sync_scope: 8/8");
+  console.log("execution_protocol_accepted: true");
+  console.log("product_gate_passed: false");
+  console.log("raw_schema: 12/12");
+  console.log("grounded_schema: 12/12");
+  console.log("writing_context_integrity: 0/8");
+  console.log("reexecution_authorized: false");
+}
