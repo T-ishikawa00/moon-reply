@@ -1,0 +1,702 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-quality-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2",
+  "case_count": 8,
+  "empty_evidence_rule": {
+    "rate": null,
+    "evidence_status": "unavailable"
+  },
+  "decision_taxonomy_adjudication": {
+    "sender_user_or_none_reply_state": "not_applicable",
+    "schedule_question_equivalence": {
+      "accepted_latest_direct_message_kinds": [
+        "question",
+        "schedule_coordination"
+      ],
+      "required_practical_reason_kind": "schedule_coordination",
+      "required_practical_reason_active": true,
+      "decision_policy_must_be_identical": true
+    }
+  },
+  "cases": [
+    {
+      "case_id": "R2-01",
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "schedule_coordination"
+        ],
+        "practical_requirements_any": [
+          "answer_question",
+          "confirm_schedule"
+        ]
+      },
+      "candidate_present": true,
+      "relationship_values": {
+        "communication_context": [
+          "matching_app"
+        ]
+      },
+      "relationship_forbidden": {
+        "social_role": [
+          "stranger"
+        ],
+        "romantic_stage": [
+          "partner"
+        ]
+      },
+      "relationship_chip_only_dimension": "communication_context",
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "matching_app",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": true,
+      "candidate_style": {},
+      "candidate_intent": {},
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {
+        "register": [
+          "polite",
+          "neutral_polite"
+        ],
+        "sentence_length": [
+          "terse",
+          "short"
+        ]
+      }
+    },
+    {
+      "case_id": "R2-02",
+      "raw_messages": [
+        {
+          "author": "user",
+          "statuses": [
+            "sent_by_user"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          false
+        ],
+        "dialogue_acts_any": [],
+        "practical_requirements_any": []
+      },
+      "candidate_present": false,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "user",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 1,
+          "usual_cadence_relation": "within_usual",
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2-03",
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "schedule_coordination"
+        ],
+        "practical_requirements_any": [
+          "answer_question",
+          "confirm_schedule"
+        ]
+      },
+      "candidate_present": true,
+      "relationship_values": {
+        "hierarchy": [
+          "user_is_junior"
+        ],
+        "communication_context": [
+          "work"
+        ]
+      },
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [
+        "no_private_contact_at_work"
+      ],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "work_or_school",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none"
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": true,
+      "candidate_style": {},
+      "candidate_intent": {},
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {
+        "register": [
+          "polite",
+          "neutral_polite"
+        ],
+        "sentence_length": [
+          "terse",
+          "short"
+        ]
+      }
+    },
+    {
+      "case_id": "R2-04",
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "boundary",
+          "conversation_closure",
+          "decline"
+        ],
+        "practical_requirements_any": []
+      },
+      "candidate_present": false,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [
+        {
+          "kind": "no_contact",
+          "asserted_by": "other_person",
+          "explicit": true
+        }
+      ],
+      "raw_boundary": {
+        "kinds": [
+          "no_contact"
+        ],
+        "statuses": [
+          "explicit"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "no_contact",
+        "status": "explicit"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "closure_or_boundary",
+          "response_expectation": "none",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "no_contact",
+          "status": "explicit",
+          "repeated_unanswered_contact": false
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2-05",
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "practical_notice"
+        ],
+        "dialogue_acts_forbidden": [
+          "affection_expression"
+        ],
+        "practical_requirements_any": [
+          "provide_information",
+          "answer_question"
+        ]
+      },
+      "candidate_present": false,
+      "relationship_values": {
+        "romantic_stage": [
+          "former_partner"
+        ]
+      },
+      "relationship_forbidden": {
+        "romantic_stage": [
+          "partner",
+          "dating_before_relationship"
+        ]
+      },
+      "relationship_chip_only_dimension": "romantic_stage",
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "former_partner",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "kind": "practical_information",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": false
+        },
+        "practical_reason": {
+          "kind": "logistics",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "user_goal_values": [
+        "respond_politely",
+        "schedule_only",
+        "other",
+        "unknown"
+      ],
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2-06",
+      "raw_messages": [
+        {
+          "author": "user",
+          "statuses": [
+            "sent_by_user"
+          ]
+        },
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "schedule_coordination"
+        ],
+        "practical_requirements_any": [
+          "answer_question",
+          "confirm_schedule"
+        ]
+      },
+      "candidate_present": true,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": true,
+      "candidate_style": {},
+      "candidate_intent": {},
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {
+        "sentence_length": [
+          "terse",
+          "short"
+        ]
+      }
+    },
+    {
+      "case_id": "R2-07",
+      "raw_messages": [],
+      "incoming": {
+        "present": [
+          false,
+          "unknown"
+        ],
+        "dialogue_acts_any": [],
+        "practical_requirements_any": []
+      },
+      "candidate_present": true,
+      "relationship_values": {
+        "social_role": [
+          "close_friend"
+        ]
+      },
+      "relationship_forbidden": {
+        "romantic_stage": [
+          "dating_before_relationship",
+          "partner"
+        ]
+      },
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [
+        "no_self_invitation"
+      ],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": {
+        "register": [
+          "casual"
+        ],
+        "sentence_length": [
+          "terse",
+          "short"
+        ],
+        "emoji_usage": [
+          "restrained"
+        ]
+      },
+      "candidate_intent": {
+        "invitation_presence": [
+          false
+        ]
+      },
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {
+        "softness": [
+          "medium",
+          "high"
+        ]
+      }
+    },
+    {
+      "case_id": "R2-08",
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "quoted_history",
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true,
+          "unknown"
+        ],
+        "dialogue_acts_any": [],
+        "practical_requirements_any": []
+      },
+      "candidate_present": false,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "organize_emotions"
+        ],
+        "contact_state": {
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none",
+          "repeated_unanswered_contact": false
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [
+        "email",
+        "account_identifier"
+      ],
+      "repeat_states": [
+        "repeated_without_material_change"
+      ],
+      "changed_fact_ids": [],
+      "embedded_instruction_detected": true,
+      "user_goal_values": [
+        "other",
+        "unknown"
+      ],
+      "user_goal_bases": [
+        "requested_topics",
+        "unresolved"
+      ],
+      "soft_style": {}
+    }
+  ]
+}

@@ -28,7 +28,8 @@ const implementationCommits = [
   acceptedImplementationSha,
 ];
 const mainBaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
-const branch = "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility";
+const acceptedTaskSha = "277101219c27477e67e1196af0e6067713571edc";
+const branch = "test/m2-p4-i3-r1-c1-r2-provider-diagnostic";
 const markerSha256 =
   "51e9beec79bc5d44e79c4c74c07293964686a73d0ebf6acf60c590def918f934";
 const artifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r1";
@@ -80,6 +81,25 @@ const exactCorrectionPaths = [
 const exactAcceptanceSyncPaths = [
   `${artifactRoot}/capabilities-v1.json`,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR2Paths = [
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/quality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/authorization-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/capabilities-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-summary-v1.md",
+  "scripts/lib/m2-p4-i3-r1-c1-r2-provider-evaluator-v1.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
@@ -343,8 +363,10 @@ assert.equal(git(["rev-parse", "origin/main"]).trim(), mainBaselineSha);
 assert.doesNotThrow(() =>
   git(["merge-base", "--is-ancestor", acceptedImplementationSha, "HEAD"]),
 );
+assert.doesNotThrow(() =>
+  git(["merge-base", "--is-ancestor", acceptedTaskSha, "HEAD"]),
+);
 assert.equal(exactPaths.length, 31);
-assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
 assertLiteralSet(
   historicalTaskPaths(baselineSha, acceptedImplementationSha),
   exactPaths,
@@ -370,13 +392,22 @@ assert.equal(
 );
 assert.equal(exactAcceptanceSyncPaths.length, 8);
 assertLiteralSet(
-  currentTaskPaths(acceptedImplementationSha),
+  historicalTaskPaths(acceptedImplementationSha, acceptedTaskSha),
   exactAcceptanceSyncPaths,
 );
 assert.equal(
-  git(["diff", "--check", acceptedImplementationSha, "--"]).trim(),
+  git([
+    "diff",
+    "--check",
+    acceptedImplementationSha,
+    acceptedTaskSha,
+    "--",
+  ]).trim(),
   "",
 );
+assert.equal(exactR2Paths.length, 17);
+assertLiteralSet(currentTaskPaths(acceptedTaskSha), exactR2Paths);
+assert.equal(git(["diff", "--check", acceptedTaskSha, "--"]).trim(), "");
 
 const protectedPathPatterns = [
   /^(app|components|supabase|evals\/(development|holdout))\//u,
@@ -1627,6 +1658,7 @@ console.log("active_runtime_changed: false");
 console.log("application_architecture_accepted: true");
 console.log("application_offline_implementation_accepted: true");
 console.log("provider_quality_accepted: false");
-console.log("r1_c1_r2_authorized: false");
+console.log("r1_c1_r1_historical_successor_authorized: false");
+console.log("r1_c1_r2_separate_package_scope: 17/17");
 console.log("c2_eligible: false");
 console.log("c2_authorized: false");

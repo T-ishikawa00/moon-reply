@@ -10,6 +10,8 @@ const r1C1R1CorrectionBaselineSha =
   "28bedad969d1007bbd731f0e9d47824eecd84651";
 const r1C1R1AcceptedImplementationSha =
   "d8415e2ae165143d646c6f9573e24752d8b1a1c7";
+const r1C1R1AcceptanceSha =
+  "277101219c27477e67e1196af0e6067713571edc";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -64,6 +66,31 @@ const exactR1C1R1CorrectionPaths = [
 const exactR1C1R1AcceptanceSyncPaths = [
   r1C1R1CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const r1C1R2CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2/capabilities-v1.json";
+const r1C1R2AuthorizationPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2/authorization-v1.json";
+const r1C1R2ResultsPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-results-v1.json";
+const exactR1C1R2Paths = [
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2/quality-contract-v1.json",
+  r1C1R2AuthorizationPath,
+  r1C1R2CapabilityManifestPath,
+  r1C1R2ResultsPath,
+  "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-summary-v1.md",
+  "scripts/lib/m2-p4-i3-r1-c1-r2-provider-evaluator-v1.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
@@ -1728,6 +1755,9 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     "evals/runtime/m2-p4-i3-r1-b-capabilities-v1.json",
   );
   const r1C1R1Manifest = json(r1C1R1CapabilityManifestPath);
+  const r1C1R2Manifest = json(r1C1R2CapabilityManifestPath);
+  const r1C1R2Authorization = json(r1C1R2AuthorizationPath);
+  const r1C1R2Results = json(r1C1R2ResultsPath);
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1780,9 +1810,11 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R1CorrectionBaselineSha,
     r1C1R1AcceptedImplementationSha,
   );
-  const actualR1C1R1AcceptanceSyncPaths = currentTaskPaths(
+  const actualR1C1R1AcceptanceSyncPaths = historicalPaths(
     r1C1R1AcceptedImplementationSha,
+    r1C1R1AcceptanceSha,
   );
+  const actualR1C1R2Paths = currentTaskPaths(r1C1R1AcceptanceSha);
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1aBaselineSha,
@@ -2027,6 +2059,66 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         "M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic" &&
       r1C1R1Manifest.next_candidate_authorized === false,
     `R1-C1-R1 acceptance boundary differs: implementation=${actualR1C1R1ImplementationPaths.join(",")}; correction=${actualR1C1R1CorrectionPaths.join(",")}; acceptance=${actualR1C1R1AcceptanceSyncPaths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    exactR1C1R2Paths.length === 17 &&
+      isExactLiteralSet(actualR1C1R2Paths, exactR1C1R2Paths) &&
+      r1C1R2Manifest.task_id === "M2-P4-I3-R1-C1-R2" &&
+      [
+        "provider_diagnostic_package_ready",
+        "provider_diagnostic_completed_pending_human_chatgpt_review",
+        "provider_diagnostic_failed_pending_human_chatgpt_review",
+      ].includes(r1C1R2Manifest.status) &&
+      r1C1R2Manifest.authorization_id ===
+        "M2-P4-I3-R1-C1-R2-2026-08-01" &&
+      r1C1R2Manifest.baseline === r1C1R1AcceptanceSha &&
+      r1C1R2Manifest.branch ===
+        "test/m2-p4-i3-r1-c1-r2-provider-diagnostic" &&
+      r1C1R2Manifest.exact_paths === 17 &&
+      r1C1R2Manifest.historical_verifier_mode ===
+        "accepted_sha_external_clone" &&
+      r1C1R2Manifest.historical_verifier_sha === r1C1R1AcceptanceSha &&
+      r1C1R2Manifest.historical_snapshot_revalidation === "7/7" &&
+      r1C1R2Manifest.historical_verifiers_current_branch_compatible ===
+        false &&
+      r1C1R2Manifest.incompatibility_reason ===
+        "exact R1-C1-R1 31-path snapshot authority" &&
+      r1C1R2Manifest.old_verifier_mutations === 0 &&
+      r1C1R2Manifest.scope_expansion === 0 &&
+      r1C1R2Manifest.model === "gpt-5.6-luna" &&
+      r1C1R2Manifest.stage === "PB-01 v5 only" &&
+      r1C1R2Manifest.authorized_calls === 8 &&
+      r1C1R2Manifest.retry_count === 0 &&
+      r1C1R2Manifest.repair_count === 0 &&
+      r1C1R2Manifest.fallback_count === 0 &&
+      r1C1R2Manifest.db_operations === 0 &&
+      r1C1R2Manifest.supabase_operations === 0 &&
+      r1C1R2Manifest.holdout_use === 0 &&
+      r1C1R2Manifest.real_user_data === 0 &&
+      r1C1R2Manifest.active_runtime_changed === false &&
+      r1C1R2Manifest.r1_c1_r2_authorized === true &&
+      r1C1R2Manifest.rerun_authorized === false &&
+      r1C1R2Manifest.c2_eligible === false &&
+      r1C1R2Manifest.c2_authorized === false &&
+      r1C1R2Authorization.authorization_id ===
+        r1C1R2Manifest.authorization_id &&
+      r1C1R2Authorization.authorized_calls === 8 &&
+      r1C1R2Authorization.rerun_authorized === false &&
+      r1C1R2Results.calls_authorized === 8 &&
+      r1C1R2Results.retry_count === 0 &&
+      r1C1R2Results.repair_count === 0 &&
+      r1C1R2Results.fallback_count === 0 &&
+      r1C1R2Results.pb_02_through_pb_06_calls === 0 &&
+      r1C1R2Results.db_operations === 0 &&
+      r1C1R2Results.supabase_operations === 0 &&
+      r1C1R2Results.holdout_use === 0 &&
+      r1C1R2Results.real_user_data === 0 &&
+      r1C1R2Results.active_runtime_changed === false &&
+      r1C1R2Results.rerun_authorized === false &&
+      r1C1R2Results.c2_eligible === false &&
+      r1C1R2Results.c2_authorized === false,
+    `R1-C1-R2 exact bounded diagnostic scope differs: ${actualR1C1R2Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
