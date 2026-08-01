@@ -18,6 +18,8 @@ const r1C1R2ResultSha =
   "7239f50fd24eb80369e74583cd619c2155813401";
 const r1C1R2ReviewSha =
   "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6";
+const r1C1R2R1AcceptedImplementationSha =
+  "378c304c45b85cf419d263204e495f2d800a8bc9";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -125,6 +127,16 @@ const exactR1C1R2R1Paths = [
   "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
   "lib/assessment/runtime/schema-catalog.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1C1R2R1AcceptanceSyncPaths = [
+  r1C1R2R1CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1860,7 +1872,22 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R1AcceptanceSha,
     r1C1R2ReviewSha,
   );
+  const actualR1C1R2R1ImplementationPaths = historicalPaths(
+    r1C1R2ReviewSha,
+    r1C1R2R1AcceptedImplementationSha,
+  );
+  const actualR1C1R2R1AcceptanceSyncPaths = currentTaskPaths(
+    r1C1R2R1AcceptedImplementationSha,
+  );
   const actualR1C1R2R1Paths = currentTaskPaths(r1C1R2ReviewSha);
+  const expectedR1C1R2R1ImplementationSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R2ReviewSha,
+    end_commit_sha: r1C1R2R1AcceptedImplementationSha,
+    exact_paths: 13,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1aBaselineSha,
@@ -2214,10 +2241,23 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
     exactR1C1R2R1Paths.length === 13 &&
+      exactR1C1R2R1AcceptanceSyncPaths.length === 8 &&
+      isExactLiteralSet(
+        actualR1C1R2R1ImplementationPaths,
+        exactR1C1R2R1Paths,
+      ) &&
+      isExactLiteralSet(
+        actualR1C1R2R1AcceptanceSyncPaths,
+        exactR1C1R2R1AcceptanceSyncPaths,
+      ) &&
       isExactLiteralSet(actualR1C1R2R1Paths, exactR1C1R2R1Paths) &&
       r1C1R2R1Manifest.task_id === "M2-P4-I3-R1-C1-R2-R1" &&
-      r1C1R2R1Manifest.status ===
-        "offline_revision_implemented_pending_human_chatgpt_review" &&
+      r1C1R2R1Manifest.status === "human_chatgpt_accepted_complete" &&
+      r1C1R2R1Manifest.offline_prompt_revision_accepted === true &&
+      r1C1R2R1Manifest.accepted_implementation_commit ===
+        r1C1R2R1AcceptedImplementationSha &&
+      JSON.stringify(r1C1R2R1Manifest.implementation_snapshot) ===
+        JSON.stringify(expectedR1C1R2R1ImplementationSnapshot) &&
       r1C1R2R1Manifest.baseline === r1C1R2ReviewSha &&
       r1C1R2R1Manifest.branch ===
         "feat/m2-p4-i3-r1-c1-r2-r1-semantic-consistency" &&
@@ -2228,6 +2268,13 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         exactR1C1R2R1Paths,
       ) &&
       r1C1R2R1Manifest.exact_mutation_path_count === 13 &&
+      isExactLiteralSet(
+        [...r1C1R2R1Manifest.acceptance_sync_exact_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R2R1AcceptanceSyncPaths,
+      ) &&
+      r1C1R2R1Manifest.acceptance_sync_exact_path_count === 8 &&
       r1C1R2R1Manifest.prompt === "pb-01-structure-v6" &&
       r1C1R2R1Manifest.catalog === "runtime-stage-catalog-v7.0.0" &&
       r1C1R2R1Manifest.prompt_bundle ===
@@ -2253,8 +2300,11 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2R1Manifest.c2_authorized === false &&
       r1C1R2R1Manifest.next_candidate ===
         "M2-P4-I3-R1-C1-R2-R2 Four-Case Bounded Provider Diagnostic" &&
-      r1C1R2R1Manifest.next_candidate_authorized === false,
-    `R1-C1-R2-R1 inactive offline successor boundary differs: ${actualR1C1R2R1Paths.join(",")}`,
+      r1C1R2R1Manifest.next_candidate_authorized === false &&
+      r1C1R2R1Manifest.i3_final_acceptance === "pending" &&
+      r1C1R2R1Manifest.main_changed === false &&
+      r1C1R2R1Manifest.milestone_2 === "incomplete",
+    `R1-C1-R2-R1 accepted offline successor boundary differs: implementation=${actualR1C1R2R1ImplementationPaths.join(",")}; acceptance=${actualR1C1R2R1AcceptanceSyncPaths.join(",")}; cumulative=${actualR1C1R2R1Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

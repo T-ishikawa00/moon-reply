@@ -2,7 +2,17 @@
   "schema_version": "m2-p4-i3-r1-c1-r2-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R2-R1",
   "title": "Offline Provider Semantic Consistency Revision",
-  "status": "offline_revision_implemented_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "offline_prompt_revision_accepted": true,
+  "accepted_implementation_commit": "378c304c45b85cf419d263204e495f2d800a8bc9",
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6",
+    "end_commit_sha": "378c304c45b85cf419d263204e495f2d800a8bc9",
+    "exact_paths": 13,
+    "immutable_snapshot": true,
+    "include_working_tree": false
+  },
   "baseline": "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6",
   "branch": "feat/m2-p4-i3-r1-c1-r2-r1-semantic-consistency",
   "exact_mutation_paths": [
@@ -21,6 +31,17 @@
     "docs/CODEX_HANDOFF.md"
   ],
   "exact_mutation_path_count": 13,
+  "acceptance_sync_exact_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r2-r1/capabilities-v1.json",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
+    "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "acceptance_sync_exact_path_count": 8,
   "prompt": "pb-01-structure-v6",
   "catalog": "runtime-stage-catalog-v7.0.0",
   "prompt_bundle": "prompt-bundle-runtime-v7.0.0",
