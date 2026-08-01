@@ -11,6 +11,41 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
+const r1C1R1BaselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
+const exactR1C1R1Paths = [
+  "lib/assessment/runtime/contracts/writing-signals-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v5.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v6.json",
+  "lib/assessment/runtime/writing-signals-grounding-v1.ts",
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "lib/assessment/runtime/writing-context-integrity-v2.ts",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/postmortem-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/responsibility-matrix-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/replay-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json",
+  "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "lib/assessment/runtime/types.ts",
+  "lib/assessment/runtime/validation.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const baseCommit = "617aca826612f58adb4b3f0d113ff1a89c36016a";
@@ -3853,6 +3888,7 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
     "scripts/verify-m2-eval-foundation.mjs",
     m2p3VerifierPath,
     ...m2p3ScriptPaths,
+    ...exactR1C1R1Paths.filter((item) => item.startsWith("scripts/")),
   ]);
   for (const item of paths.filter((candidate) =>
     candidate.startsWith("scripts/"),
@@ -4385,9 +4421,11 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1BAcceptanceCommit,
     m2p4I3R1C1ResultCommit,
   );
-  const m2p4I3R1C1ReviewSyncTaskPaths = currentTaskPaths(
+  const m2p4I3R1C1ReviewSyncTaskPaths = historicalTaskPaths(
     m2p4I3R1C1ResultCommit,
+    r1C1R1BaselineSha,
   );
+  const m2p4I3R1C1R1TaskPaths = currentTaskPaths(r1C1R1BaselineSha);
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4713,6 +4751,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I3R1C1ReviewSyncTaskPaths,
       exactC1ReviewSyncPaths,
     ) ||
+    exactR1C1R1Paths.length !== 31 ||
+    !isExactLiteralPathSet(m2p4I3R1C1R1TaskPaths, exactR1C1R1Paths) ||
     m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
     m2p4I3R1BManifest?.title !==
       "PB-01 v4 Writing Context Extraction and Grounding" ||
@@ -4773,6 +4813,7 @@ function verifyScopeAndProhibitedImplementation() {
         exact_mutation_paths: [...exactR1BPaths].sort(),
         acceptance_sync_paths: [...m2p4I3R1BAcceptanceSyncPaths].sort(),
         c1_successor_paths: [...exactC1Paths].sort(),
+        c1_r1_successor_paths: [...exactR1C1R1Paths].sort(),
         active_runtime_changed: false,
         service_mutations: 0,
         provider_diagnostic: "not_started",
@@ -4786,6 +4827,7 @@ function verifyScopeAndProhibitedImplementation() {
         acceptance_sync_paths: m2p4I3R1BAcceptanceSyncTaskPaths,
         c1_execution_snapshot_paths: m2p4I3R1C1ExecutionPaths,
         c1_review_sync_paths: m2p4I3R1C1ReviewSyncTaskPaths,
+        c1_r1_paths: m2p4I3R1C1R1TaskPaths,
       },
     });
   }
@@ -4840,6 +4882,21 @@ function verifyScopeAndProhibitedImplementation() {
       invariant: "C1 failed-diagnostic review sync is exactly 8 literal paths",
       expected: 8,
       actual: [...exactC1ReviewSyncPaths],
+    });
+  }
+  if (
+    exactR1C1R1Paths.length !== 31 ||
+    new Set(exactR1C1R1Paths).size !== 31 ||
+    exactR1C1R1Paths.some(
+      (item) => item.includes("*") || item.endsWith("/"),
+    )
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: "evals/runtime/m2-p4-i3-r1-c1-r1/postmortem-contract-v1.json",
+      pathName: "$.m2_p4_i3_r1_c1_r1_exact_scope",
+      invariant: "R1-C1-R1 successor is exactly 31 literal paths",
+      expected: 31,
+      actual: exactR1C1R1Paths,
     });
   }
   for (const unauthorizedPath of [
@@ -5794,6 +5851,7 @@ function verifyScopeAndProhibitedImplementation() {
       !m2p4I3ExactPaths.has(item) &&
       !m2p4I3R1AExactPaths.has(item) &&
       !exactR1BPaths.has(item) &&
+      !exactR1C1R1Paths.includes(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -5831,7 +5889,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I2ExactPaths.has(item) ||
       m2p4I3ExactPaths.has(item) ||
       m2p4I3R1AExactPaths.has(item) ||
-      exactR1BPaths.has(item)
+      exactR1BPaths.has(item) ||
+      exactR1C1R1Paths.includes(item)
     ) {
       continue;
     }

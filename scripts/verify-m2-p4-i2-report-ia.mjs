@@ -4,6 +4,41 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+const r1C1R1BaselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
+const exactR1C1R1Paths = [
+  "lib/assessment/runtime/contracts/writing-signals-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v5.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v6.json",
+  "lib/assessment/runtime/writing-signals-grounding-v1.ts",
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "lib/assessment/runtime/writing-context-integrity-v2.ts",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/postmortem-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/responsibility-matrix-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/replay-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json",
+  "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "lib/assessment/runtime/types.ts",
+  "lib/assessment/runtime/validation.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -413,8 +448,22 @@ assert.equal(
   true,
 );
 assert.equal(exactR1BPaths.length, 22);
-assert.equal(isExactLiteralSet(currentTaskPaths(c1BaselineSha), exactC1Paths), true);
+assert.equal(
+  isExactLiteralSet(
+    historicalPaths(c1BaselineSha, r1C1R1BaselineSha),
+    exactC1Paths,
+  ),
+  true,
+);
 assert.equal(exactC1Paths.length, 21);
+assert.equal(exactR1C1R1Paths.length, 31);
+assert.equal(
+  isExactLiteralSet(
+    currentTaskPaths(r1C1R1BaselineSha),
+    exactR1C1R1Paths,
+  ),
+  true,
+);
 for (const unauthorizedPath of [
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",

@@ -19,6 +19,7 @@ import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
+import { groundStructuredIntakeV5 } from "./structured-intake-grounding-v5.ts";
 import { buildStructuredIntakeLegacyViewV3 } from "./structured-intake-legacy-view-v3.ts";
 import {
   buildDecisionPolicyV2,
@@ -48,8 +49,12 @@ import type {
   StageResponse,
   UsageTotals,
 } from "./types.ts";
-import { validateStageOutput } from "./validation.ts";
+import {
+  validateGroundedStageOutput,
+  validateStageOutput,
+} from "./validation.ts";
 import { validateWritingContextIntegrityV1 } from "./writing-context-integrity-v1.ts";
+import { validateWritingContextIntegrityV2 } from "./writing-context-integrity-v2.ts";
 
 export type AssessmentRunContext = {
   requestId: string;
@@ -200,6 +205,9 @@ export class AssessmentPipeline {
       model: runContext.model,
       promptHash: definition.promptHash,
       schemaHash: definition.schemaHash,
+      ...(definition.groundedSchemaHash
+        ? { groundedSchemaHash: definition.groundedSchemaHash }
+        : {}),
       input,
     });
     await this.repository.startStage({
@@ -281,14 +289,19 @@ export class AssessmentPipeline {
 
     try {
       const deterministicSafety = deterministicSafetyResult(request);
+      const responsibilityRevisionRuntime =
+        runContext.schemaSetVersion === "pipeline-schema-runtime-v3.2.0";
       const writingContextRuntime =
         runContext.schemaSetVersion === "pipeline-schema-runtime-v3.1.0";
+      const writingContextOutputRuntime =
+        writingContextRuntime || responsibilityRevisionRuntime;
       const contextualRuntime =
         runContext.schemaSetVersion === "pipeline-schema-runtime-v3.0.0" ||
-        writingContextRuntime;
+        writingContextOutputRuntime;
       const productQualityRuntime =
         runContext.promptBundleVersion === "prompt-bundle-runtime-v4.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v5.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v5.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v6.0.0";
       const rawStructuredIntake = await this.invokeStage(
         runContext,
         {
@@ -302,20 +315,37 @@ export class AssessmentPipeline {
         },
         "LOCAL_SCHEMA_PB-01",
       );
-      const groundedStructuredIntake = writingContextRuntime
-        ? groundStructuredIntakeV4(request, rawStructuredIntake)
-        : contextualRuntime
-          ? groundStructuredIntakeV3(request, rawStructuredIntake)
-          : rawStructuredIntake;
+      const groundedStructuredIntake = responsibilityRevisionRuntime
+        ? groundStructuredIntakeV5(request, rawStructuredIntake)
+        : writingContextRuntime
+          ? groundStructuredIntakeV4(request, rawStructuredIntake)
+          : contextualRuntime
+            ? groundStructuredIntakeV3(request, rawStructuredIntake)
+            : rawStructuredIntake;
       if (contextualRuntime) {
-        validateStageOutput(this.definition("PB-01"), groundedStructuredIntake);
+        if (responsibilityRevisionRuntime) {
+          validateGroundedStageOutput(
+            this.definition("PB-01"),
+            groundedStructuredIntake,
+          );
+          validateWritingContextIntegrityV2(
+            request,
+            groundedStructuredIntake,
+          );
+          validateContextualIntakeIntegrityV3(groundedStructuredIntake);
+        } else {
+          validateStageOutput(
+            this.definition("PB-01"),
+            groundedStructuredIntake,
+          );
+        }
         if (writingContextRuntime) {
           validateWritingContextIntegrityV1(request, groundedStructuredIntake);
-        } else {
+        } else if (!responsibilityRevisionRuntime) {
           validateContextualIntakeIntegrityV3(groundedStructuredIntake);
         }
       }
-      const structuredIntake = writingContextRuntime
+      const structuredIntake = writingContextOutputRuntime
         ? buildStructuredIntakeLegacyViewV3(groundedStructuredIntake)
         : groundedStructuredIntake;
       if (writingContextRuntime) {

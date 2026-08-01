@@ -9,6 +9,41 @@ import {
   shaJson,
 } from "./lib/m2-p4-i3-r1-c1-evaluator.mjs";
 
+const r1C1R1BaselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
+const exactR1C1R1Paths = [
+  "lib/assessment/runtime/contracts/writing-signals-v1.ts",
+  "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
+  "lib/assessment/runtime/contracts/pb-01-structure-v5.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v6.json",
+  "lib/assessment/runtime/writing-signals-grounding-v1.ts",
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+  "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+  "lib/assessment/runtime/writing-context-integrity-v2.ts",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/postmortem-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/responsibility-matrix-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/replay-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json",
+  "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "lib/assessment/runtime/types.ts",
+  "lib/assessment/runtime/validation.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+  "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+  "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+  "scripts/verify-m2-p4-i3-product-quality.mjs",
+  "scripts/verify-m2-p4-i2-report-ia.mjs",
+  "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+  "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -19,6 +54,8 @@ const r1bBaselineSha = "2381312ced5fc726dfa245632c25da6bb68a376f";
 const r1bAcceptedImplementationSha =
   "4a1237ac647bff79229d7181d978d5613c2c3b87";
 const branch = "test/m2-p4-i3-r1-c1-provider-diagnostic";
+const successorBranch =
+  "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility";
 const packageCommitSha = "0c228406298fbb829cbb216e31c00e6812cc1393";
 const resultCommitSha = "7b0c1b6da5d877f7a7a6de5be431276452e3b8b2";
 const artifactRoot = "evals/runtime/m2-p4-i3-r1-c1";
@@ -215,30 +252,43 @@ function recursivelyFindKeys(value, result = []) {
 }
 
 const args = process.argv.slice(2);
-assert.deepEqual(args.length, 2);
-assert.equal(args[0], "--phase");
-assert.ok(
-  args[1] === "prepare" ||
-    args[1] === "completed" ||
-    args[1] === "reviewed",
-);
-const phase = args[1];
+assert.ok(args.length === 0 || args.length === 2);
+if (args.length === 2) {
+  assert.equal(args[0], "--phase");
+  assert.ok(
+    args[1] === "prepare" ||
+      args[1] === "completed" ||
+      args[1] === "reviewed",
+  );
+}
+const phase = args.length === 0 ? "reviewed" : args[1];
 
-assert.equal(git(["branch", "--show-current"]).trim(), branch);
+assert.equal(git(["branch", "--show-current"]).trim(), successorBranch);
 assert.equal(git(["rev-parse", "main"]).trim(), mainBaselineSha);
 assert.equal(git(["rev-parse", "origin/main"]).trim(), mainBaselineSha);
 assert.doesNotThrow(() => git(["cat-file", "-e", `${baselineSha}^{commit}`]));
 assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", baselineSha, "HEAD"]));
 assert.equal(exactPaths.length, 21);
-assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
+assertLiteralSet(
+  historicalPaths(baselineSha, r1C1R1BaselineSha),
+  exactPaths,
+);
+assert.equal(exactR1C1R1Paths.length, 31);
+assertLiteralSet(currentTaskPaths(r1C1R1BaselineSha), exactR1C1R1Paths);
 if (phase === "reviewed") {
   assert.equal(reviewSyncPaths.length, 8);
   assert.doesNotThrow(() => git(["cat-file", "-e", `${resultCommitSha}^{commit}`]));
   assertLiteralSet(historicalPaths(baselineSha, resultCommitSha), exactPaths);
-  assertLiteralSet(currentTaskPaths(resultCommitSha), reviewSyncPaths);
+  assertLiteralSet(
+    historicalPaths(resultCommitSha, r1C1R1BaselineSha),
+    reviewSyncPaths,
+  );
   for (const immutablePath of immutableExecutionPaths) {
     assert.equal(
-      source(immutablePath).replaceAll("\r\n", "\n"),
+      git(["show", `${r1C1R1BaselineSha}:${immutablePath}`]).replaceAll(
+        "\r\n",
+        "\n",
+      ),
       git(["show", `${resultCommitSha}:${immutablePath}`]).replaceAll(
         "\r\n",
         "\n",
@@ -249,6 +299,19 @@ if (phase === "reviewed") {
 }
 
 for (const protectedPath of protectedPaths) {
+  assert.equal(
+    git([
+      "diff",
+      "--name-only",
+      baselineSha,
+      r1C1R1BaselineSha,
+      "--",
+      protectedPath,
+    ]).trim(),
+    "",
+    `historical protected diff: ${protectedPath}`,
+  );
+  if (exactR1C1R1Paths.includes(protectedPath)) continue;
   assert.equal(
     git(["diff", "--name-only", baselineSha, "--", protectedPath]).trim(),
     "",
@@ -267,7 +330,8 @@ assertLiteralSet(
   r1bAcceptanceSyncPaths,
 );
 for (const immutablePath of r1bExactPaths.filter(
-  (item) => !exactPaths.includes(item),
+  (item) =>
+    !exactPaths.includes(item) && !exactR1C1R1Paths.includes(item),
 )) {
   assert.equal(
     source(immutablePath).replaceAll("\r\n", "\n"),

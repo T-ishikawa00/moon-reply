@@ -25,11 +25,38 @@ function getValidator(definition: StageDefinition) {
   return validator;
 }
 
+function getGroundedValidator(definition: StageDefinition) {
+  if (
+    !definition.groundedOutputSchema ||
+    !definition.groundedSchemaHash ||
+    !definition.groundedSchemaVersion
+  ) {
+    throw new M2RuntimeError("M2_STAGE_DEFINITION_MISSING");
+  }
+  const groundedDefinition: StageDefinition = {
+    ...definition,
+    schemaVersion: definition.groundedSchemaVersion,
+    schemaHash: definition.groundedSchemaHash,
+    outputSchema: definition.groundedOutputSchema,
+  };
+  return getValidator(groundedDefinition);
+}
+
 export function validateStageOutput(
   definition: StageDefinition,
   output: JsonObject,
 ) {
   const validator = getValidator(definition);
+  if (!validator(output)) {
+    throw new M2RuntimeError("M2_STAGE_SCHEMA_INVALID");
+  }
+}
+
+export function validateGroundedStageOutput(
+  definition: StageDefinition,
+  output: JsonObject,
+) {
+  const validator = getGroundedValidator(definition);
   if (!validator(output)) {
     throw new M2RuntimeError("M2_STAGE_SCHEMA_INVALID");
   }

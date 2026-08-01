@@ -1,0 +1,118 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r1-postmortem-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R1",
+  "title": "Offline Diagnostic Postmortem and Grounding Responsibility Revision",
+  "baseline": "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9",
+  "branch": "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility",
+  "offline_successor_only": true,
+  "source_diagnostic": "human_chatgpt_reviewed_fail_complete",
+  "source_evidence": {
+    "commit": "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9",
+    "immutable_paths": [
+      {
+        "path": "evals/runtime/m2-p4-i3-r1-c1/diagnostic-results-v1.json",
+        "git_blob": "768b0c387aac9b17ec6e038328639988d830a201"
+      },
+      {
+        "path": "evals/runtime/m2-p4-i3-r1-c1/diagnostic-cases-v1.json",
+        "git_blob": "901c7ad456b3a3f8ec5a41fe3bcce60232b64aca"
+      },
+      {
+        "path": "evals/runtime/m2-p4-i3-r1-c1/diagnostic-contract-v1.json",
+        "git_blob": "e033c313ce931cd00ba7b5c63fbb08e11a649886"
+      },
+      {
+        "path": "evals/runtime/m2-p4-i3-r1-c1/diagnostic-summary-v1.md",
+        "git_blob": "18666d6af491c4a99c387b71137a92502c6591c6"
+      }
+    ],
+    "saved_provider_calls": 12,
+    "new_provider_calls": 0
+  },
+  "architecture": {
+    "provider_output": {
+      "schema": "pipeline-schema-v5.0.0",
+      "writing_contract": "writing-signals-v1",
+      "responsibility": "semantic classification only"
+    },
+    "application_grounded_output": {
+      "schema": "pipeline-schema-v4.0.0",
+      "writing_contract": "m2-p4-writing-context-v1",
+      "responsibility": "canonical provenance, ownership, identifiers, nullability, unresolved state, and negative evidence guard"
+    },
+    "downstream_output": {
+      "schema": "pipeline-schema-v3.0.0",
+      "writing_signals": false,
+      "writing_context": false
+    }
+  },
+  "exact_mutation_paths": [
+    "lib/assessment/runtime/contracts/writing-signals-v1.ts",
+    "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
+    "lib/assessment/runtime/contracts/pb-01-structure-v5.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v6.json",
+    "lib/assessment/runtime/writing-signals-grounding-v1.ts",
+    "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+    "lib/assessment/runtime/structured-intake-grounding-v5.ts",
+    "lib/assessment/runtime/writing-context-integrity-v2.ts",
+    "evals/runtime/m2-p4-i3-r1-c1-r1/postmortem-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r1/responsibility-matrix-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r1/replay-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+    "lib/assessment/runtime/types.ts",
+    "lib/assessment/runtime/validation.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/pipeline.ts",
+    "scripts/verify-m2-p4-i3-r1-c1-provider-diagnostic.mjs",
+    "scripts/verify-m2-p4-i3-r1-b-writing-context.mjs",
+    "scripts/verify-m2-p4-i3-r1-a-contracts.mjs",
+    "scripts/verify-m2-p4-i3-product-quality.mjs",
+    "scripts/verify-m2-p4-i2-report-ia.mjs",
+    "scripts/verify-m2-p4-i1-c-contextual-best-effort.mjs",
+    "scripts/verify-m2-p4-i1-b-runtime-integration.mjs",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_mutation_path_count": 31,
+  "execution_boundaries": {
+    "openai_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0,
+    "retries": 0,
+    "repair": 0,
+    "fallback": 0,
+    "active_runtime_changed": false,
+    "service_switch": false,
+    "c2_authorized": false,
+    "next_provider_diagnostic_authorized": false,
+    "pull_request": false,
+    "main_merge": false,
+    "force_push": false,
+    "e1": false
+  },
+  "pass_criteria": {
+    "c1_evidence_immutable": true,
+    "provider_schema_v5": "PASS",
+    "provider_bookkeeping_fields": 0,
+    "replay_cases": "8/8",
+    "writing_context_integrity_v2": "8/8",
+    "decision_facts_expected_subset": "8/8",
+    "pair_03_boundary_regression": "resolved",
+    "pair_04_no_contact": "preserved",
+    "candidate_presence_parity": "8/8",
+    "ownership_parity": "8/8",
+    "constraint_provenance": "8/8",
+    "privacy_repeat_injection_preservation": "8/8",
+    "fake_pipeline": "3/3",
+    "downstream_writing_signals_leakage": 0,
+    "downstream_writing_context_leakage": 0
+  }
+}

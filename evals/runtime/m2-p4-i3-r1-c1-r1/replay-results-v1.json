@@ -1,0 +1,286 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r1-replay-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R1",
+  "evaluator_version": "m2-p4-i3-r1-c1-r1-replay-evaluator-v2",
+  "verdict": "PASS",
+  "provider_calls_during_replay": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "holdout_use": 0,
+  "metrics": {
+    "provider_transport": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_schema": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "grounded_schema": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "integrity": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "critical_expected_subset": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "semantic_assertions": {
+      "passed": 42,
+      "total": 42,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "soft_assertions": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_presence": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "constraint_provenance": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "privacy_repeat_injection": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "auxiliary_v3_parity": {
+      "passed": 3,
+      "total": 4,
+      "rate": 0.75,
+      "evidence_status": "available"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "PAIR-01",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1,
+        "evidence_status": "available"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": {
+        "passed": true,
+        "mismatched_material_paths": [],
+        "nonmaterial_paths": [],
+        "evidence_role": "auxiliary_only"
+      },
+      "output_sha256": "85cdbbb3185aa6248a2c29e0c9c2818b20a3164cc7c3a54120bf6e3fb42113ca"
+    },
+    {
+      "case_id": "PAIR-02",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 1,
+        "total": 1,
+        "rate": 1,
+        "evidence_status": "available"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": {
+        "passed": false,
+        "mismatched_material_paths": [
+          "/latest_direct_message/user_reply_state"
+        ],
+        "nonmaterial_paths": [],
+        "evidence_role": "auxiliary_only"
+      },
+      "output_sha256": "0e021ba5e92ab71b2baca16a1bdfd24b3de22973d7a9c25ff54f815608348804"
+    },
+    {
+      "case_id": "PAIR-03",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1,
+        "evidence_status": "available"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": {
+        "passed": true,
+        "mismatched_material_paths": [],
+        "nonmaterial_paths": [],
+        "evidence_role": "auxiliary_only"
+      },
+      "output_sha256": "3f19510224de6f0ac8ade55e0c951fff932cdf4db9de5856c60e81f9c841dfcf"
+    },
+    {
+      "case_id": "PAIR-04",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 0,
+        "total": 0,
+        "rate": null,
+        "evidence_status": "unavailable"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": {
+        "passed": true,
+        "mismatched_material_paths": [],
+        "nonmaterial_paths": [
+          "/contact_state/usual_cadence_relation"
+        ],
+        "evidence_role": "auxiliary_only"
+      },
+      "output_sha256": "ae041e4f40df43a97bd91e8462c7e531def4892910b8e9aca3bc7bad1655abeb"
+    },
+    {
+      "case_id": "V4-05",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 0,
+        "total": 0,
+        "rate": null,
+        "evidence_status": "unavailable"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": null,
+      "output_sha256": "f35e2b2aa9cc5b0c05d8d9a6e2d84f5db9364433a719215988e82328b616468c"
+    },
+    {
+      "case_id": "V4-06",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 1,
+        "total": 1,
+        "rate": 1,
+        "evidence_status": "available"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": null,
+      "output_sha256": "0eaad816fc764015d00fc8fc526dbe7b7b56511fdafdcbdbe79838e09dedf3b7"
+    },
+    {
+      "case_id": "V4-07",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1,
+        "evidence_status": "available"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": null,
+      "output_sha256": "56c2a3dd270456c87d4e0fee1e1a4689896c0d34c9fcec7e8fc92a13bee586d8"
+    },
+    {
+      "case_id": "V4-08",
+      "provider_transport_passed": true,
+      "raw_schema_passed": true,
+      "grounded_schema_passed": true,
+      "integrity_passed": true,
+      "integrity_violations": [],
+      "critical_expected_subset_passed": true,
+      "semantic_assertions_passed": true,
+      "soft_assertions": {
+        "passed": 0,
+        "total": 0,
+        "rate": null,
+        "evidence_status": "unavailable"
+      },
+      "candidate_presence_passed": true,
+      "ownership_passed": true,
+      "constraint_provenance_passed": true,
+      "privacy_repeat_injection_passed": true,
+      "auxiliary_v3_comparison": null,
+      "output_sha256": "7d46caf4932e2e8e01e2fe77858792e69be78246e59a91cf6074042c7a5816e1"
+    }
+  ]
+}

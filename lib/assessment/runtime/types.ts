@@ -226,6 +226,9 @@ export type StageDefinition = {
   schemaVersion: string;
   schemaHash: string;
   outputSchema: JsonObject;
+  groundedOutputSchema?: JsonObject;
+  groundedSchemaVersion?: string;
+  groundedSchemaHash?: string;
 };
 
 export type StageRequest = {
