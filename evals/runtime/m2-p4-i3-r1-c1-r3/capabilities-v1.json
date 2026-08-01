@@ -2,7 +2,7 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3",
   "title": "Final Eight-Case PB-01 Provider Confirmation",
-  "status": "provider_final_confirmation_package_ready",
+  "status": "evaluation_blocked_pending_human_chatgpt_review",
   "authorization_id": "M2-P4-I3-R1-C1-R3-2026-08-02",
   "baseline": "3a56237a251bbc072ea34304a021c026fb7486f1",
   "branch": "test/m2-p4-i3-r1-c1-r3-final-eight-case-provider-confirmation",
@@ -20,8 +20,8 @@
   "candidate_catalog_inactive": true,
   "synthetic_cases": 8,
   "authorized_calls": 8,
-  "actual_calls": 0,
-  "completed_calls": 0,
+  "actual_calls": 8,
+  "completed_calls": 8,
   "retry_count": 0,
   "repair_count": 0,
   "fallback_count": 0,
@@ -30,11 +30,15 @@
   "supabase_operations": 0,
   "holdout_use": 0,
   "real_user_data": 0,
-  "authorization_consumed": false,
+  "authorization_consumed": true,
   "rerun_authorized": false,
-  "package_commit": null,
-  "final_confirmation_verdict": "NOT_EXECUTED",
-  "cases_passed": "0/8",
+  "package_commit": "86d990a791a48dbb552f1b2eacc2011e7e8fa380",
+  "final_confirmation_verdict": "EVALUATION_BLOCKED",
+  "frozen_evaluator_verdict_before_block": "FAIL",
+  "evaluation_blocked_reason_code": "M2_R3_EVALUATOR_DEFECT",
+  "evaluation_blocked_reason": "The frozen practical-reason assertion used full-object equality against a kind/active subset contract, so schema-valid deadline fields created four false hard failures.",
+  "cases_passed": "2/8",
+  "cases_passed_disposition": "frozen_evaluator_nonfinal",
   "provider_quality_established": false,
   "provider_quality_scope": "exact_eight_case_pb01_v7_suite",
   "candidate_ready_for_isolated_e2e": false,
@@ -43,12 +47,177 @@
   "c2_eligible": false,
   "c2_authorized": false,
   "usage_totals": {
-    "input_tokens": 0,
-    "cached_tokens": 0,
-    "output_tokens": 0,
-    "reasoning_tokens": 0
+    "input_tokens": 55246,
+    "cached_tokens": 47222,
+    "output_tokens": 11981,
+    "reasoning_tokens": 1160
   },
   "next_candidate": "M2-P4-I3-R1-C1-R4 Isolated Candidate Runtime E2E",
   "next_candidate_authorized": false,
-  "next_step": "execute once, then Human / ChatGPT review"
+  "next_step": "Human / ChatGPT review",
+  "metrics": {
+    "provider_transport": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "returned_model_exact": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_json_parse": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_schema_v5": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "grounded_schema_v4": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "writing_context_integrity_v2": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "contextual_intake_integrity": {
+      "passed": 6,
+      "total": 8,
+      "rate": 0.75,
+      "evidence_status": "available"
+    },
+    "application_decision_facts": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_semantic_core": {
+      "passed": 7,
+      "total": 8,
+      "rate": 0.875,
+      "evidence_status": "available"
+    },
+    "forbidden_bookkeeping": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "probability_confidence_fields": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "case_fixture_oracle_references": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_pii_copied": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "secret_leakage": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "message_ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "boundary_ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_presence": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_style": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_intent": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "relationship_limits": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "privacy_repeat_injection": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "application_grounding": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_output_immutability": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "practical_reason_consistency": {
+      "passed": 0,
+      "total": 4,
+      "rate": 0,
+      "evidence_status": "available"
+    },
+    "targeted_correction_gates": {
+      "passed": 3,
+      "total": 4,
+      "rate": 0.75,
+      "evidence_status": "available"
+    },
+    "soft_style_assertions": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    }
+  },
+  "correction_gates": {
+    "known_taxonomy": "PASS",
+    "no_contact_ownership": "PASS",
+    "quoted_ownership": "PASS",
+    "practical_reason_consistency": "EVALUATION_BLOCKED"
+  },
+  "principal_r3_08_quoted_ownership": "PASS"
 }

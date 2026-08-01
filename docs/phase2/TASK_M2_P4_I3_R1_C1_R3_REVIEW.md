@@ -2,41 +2,52 @@
 
 ## Status
 
-`provider_final_confirmation_package_ready`
+`evaluation_blocked_pending_human_chatgpt_review`
 
-The inactive PB-01 Prompt v7 final eight-case Provider confirmation package is ready. Provider execution has not started, authorization is unconsumed, and the R3 one-time marker is absent.
+The one-time inactive PB-01 Prompt v7 confirmation completed all eight authorized synthetic Provider calls. The frozen evaluator then exposed a material subset-versus-full-object comparison defect, so the original frozen `FAIL / 2 of 8` disposition is not a valid final Provider-quality adjudication.
 
-## Human authorization
+## Execution record
 
 - Authorization ID: `M2-P4-I3-R1-C1-R3-2026-08-02`
-- Confirmation phrase: `R3-8-CALL-PROMPT-V7-SYNTHETIC-ONLY`
-- Model: `gpt-5.6-luna`
-- Stage: PB-01 v7 only
-- Synthetic cases / authorized calls: `8 / 8`
+- Commit A: `86d990a791a48dbb552f1b2eacc2011e7e8fa380`
+- Model / stage: `gpt-5.6-luna` / PB-01 v7 only
+- Calls actual / maximum / completed: `8 / 8 / 8`
 - Retry / repair / fallback: `0 / 0 / 0`
 - PB-02 through PB-06 / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
+- Authorization / marker: consumed / consumed
 - Rerun authorized: `false`
+- Provider output mutations / secret leakage: `0 / 0`
 
-This authorization is valid only for the exact R3 eight-call confirmation. Runtime activation, C2, E1, PR, main merge, and release remain unauthorized.
+## Frozen evidence
 
-## Frozen package
+- Returned model / raw JSON / raw Schema v5: `8/8 / 8/8 / 8/8`
+- Grounded Schema v4 / Writing Context Integrity v2: `8/8 / 8/8`
+- Contextual intake Integrity: `6/8`
+- Application Decision Facts / Provider semantic core: `8/8 / 7/8`
+- Message ownership / boundary ownership / candidate presence: `8/8 / 8/8 / 8/8`
+- Candidate style / intent: `4/4 / 4/4`
+- Relationship limits / privacy-repeat-injection / Application grounding: `8/8 / 8/8 / 8/8`
+- Known taxonomy / no-contact ownership / quoted ownership: `PASS / PASS / PASS`
+- Principal R3-08 quoted ownership: `PASS`
+- Frozen evaluator cases passed: `2/8` (non-final)
+- Usage input / cached / output / reasoning: `55246 / 47222 / 11981 / 1160`
 
-- Baseline: `3a56237a251bbc072ea34304a021c026fb7486f1`
-- Branch: `test/m2-p4-i3-r1-c1-r3-final-eight-case-provider-confirmation`
-- Exact scope: `17/17`
-- Post-run mutable scope: `8/8`
-- Prompt / catalog: `pb-01-structure-v7` / `runtime-stage-catalog-v8.0.0`
-- Provider / grounded Schema: `pipeline-schema-v5.0.0` / `pipeline-schema-v4.0.0`
-- Active Runtime changed: `false`
-- Commit A: pending
+## Evaluator defect
 
-Cases, contracts, evaluator, runner, dedicated verifier, Prompt, and Schemas become frozen at Commit A. If an evaluator defect is discovered after execution, saved outputs must remain unchanged and the task stops at `evaluation_blocked_pending_human_chatgpt_review`; offline reevaluation and Provider rerun are prohibited.
+The practical-reason contract requires the `kind` and `active` subset. The frozen assertion instead required full-object equality. R3-01, R3-03, R3-05, and R3-06 preserved the required values in raw and grounded Decision Facts, but each also contained the schema-valid `deadline` field; that extra field alone produced four false hard failures.
 
-## Current result
+Per the frozen protocol, the evaluator, runner, dedicated verifier, Prompt, Schema, and Provider outputs were not modified. No offline reevaluation and no Provider rerun were performed. The frozen failures remain intact in the result artifact.
 
-- Provider calls: `0/8`
-- Cases passed: `0/8` (`NOT_EXECUTED`)
+Independent review candidates remain: contextual intake Integrity failed on R3-03 and R3-07, and the frozen R3-08 user-goal basis assertion failed. They are not repaired or reclassified in this task.
+
+## Disposition
+
+- Final confirmation verdict: `EVALUATION_BLOCKED`
 - Provider quality established: `false`
 - Candidate ready for isolated E2E: `false`
+- Active Runtime / main changed: `false / false`
 - C2 eligible / authorized: `false / false`
-- Next authorized action: execute once after Commit A, then Human / ChatGPT review
+- R4 isolated candidate Runtime E2E authorized: `false`
+- Only next step: Human / ChatGPT review
+
+Runtime activation, C2, E1, PR, main merge, release, and Provider rerun remain unauthorized.

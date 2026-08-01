@@ -3,14 +3,19 @@
 <!-- M2-P4-I3-R1-C1-R3:START -->
 ## M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation
 
-- Status: `provider_final_confirmation_package_ready`
+- Status: `evaluation_blocked_pending_human_chatgpt_review`
 - Baseline / branch: `3a56237a251bbc072ea34304a021c026fb7486f1` / `test/m2-p4-i3-r1-c1-r3-final-eight-case-provider-confirmation`
 - Scope: exact `17/17`; post-run mutable `8/8`
 - Authorization: exact eight synthetic PB-01 v7 calls; retry / repair / fallback `0 / 0 / 0`; rerun `false`
-- Calls / cases: `0/8` / `0/8` (`NOT_EXECUTED`)
+- Commit A: `86d990a791a48dbb552f1b2eacc2011e7e8fa380`
+- Calls actual / completed: `8/8` / `8/8`; authorization and marker consumed; rerun `false`
+- Frozen cases: `2/8`, non-final because the practical-reason evaluator compared a full object to a `kind/active` subset and rejected valid `deadline` fields
+- Schemas / Writing Context Integrity / Decision Facts / ownership / boundary / candidate / grounding: `8/8`
+- Contextual intake Integrity / semantic core: `6/8` / `7/8`
+- Known taxonomy / no-contact ownership / quoted ownership / principal R3-08 ownership: PASS
 - Provider quality / isolated-E2E readiness: `false / false`
 - Active Runtime changed: `false`; C2 remains unauthorized
-- Next: create and push Commit A, execute the runner once, preserve actual evidence, then Human / ChatGPT review
+- Next: Human / ChatGPT review only; no offline reevaluation, Provider rerun, Runtime activation, or C2
 <!-- M2-P4-I3-R1-C1-R3:END -->
 
 <!-- M2-P4-I3-R1-C1-R2-R2-R1:START -->
