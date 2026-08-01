@@ -40,7 +40,7 @@ The active Supabase migration sequence begins with `0002_m2_p3_runtime_vertical_
 
 The post-acceptance synthetic live E2E ran against code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
 
-Current state: M2-P3 Runtime Vertical Slice, M2-P4-I2, M2-P4-I3-R1 Final Planning, M2-P4-I3-R1-A, and M2-P4-I3-R1-B are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-A defines inactive candidate schema set `pipeline-schema-runtime-v4.0.0` for PB-01 Structured Intake v4, PB-04 Decision Plan v2, and PB-05 Report Content v2 while keeping `writing_context` separate from unchanged `decision_facts`. R1-B accepts PB-01 v4 Prompt, Application grounding, Integrity validation, and a v3 legacy downstream view in inactive candidate catalog v5. R1-C1 is separately and explicitly Human-authorized for one PB-01-only bounded Provider diagnostic but remains `not_executed` pending Commit A and execution preflight. Its boundary is exact 8 synthetic cases, 4 paired v3/v4 cases, maximum 12 calls (`v3=4`, `v4=8`), no retry, and no DB / Supabase. Active Service remains on `prompt-bundle-runtime-v4.0.0`, `pipeline-schema-runtime-v3.0.0`, and `runtime-stage-catalog-v4.json`; C2 Runtime activation and E1 remain unauthorized, and I3 final acceptance / merge to `main` remain pending.
+Current state: M2-P3 Runtime Vertical Slice, M2-P4-I2, M2-P4-I3-R1 Final Planning, M2-P4-I3-R1-A, and M2-P4-I3-R1-B are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-A defines inactive candidate schema set `pipeline-schema-runtime-v4.0.0` for PB-01 Structured Intake v4, PB-04 Decision Plan v2, and PB-05 Report Content v2 while keeping `writing_context` separate from unchanged `decision_facts`. R1-B accepts PB-01 v4 Prompt, Application grounding, Integrity validation, and a v3 legacy downstream view in inactive candidate catalog v5. R1-C1 completed its one separately authorized PB-01-only bounded Provider diagnostic from package commit `0c228406298fbb829cbb216e31c00e6812cc1393`: exact 8 synthetic cases, 4 paired v3/v4 cases, exact 12 calls (`v3=4`, `v4=8`), no retry, no DB / Supabase, and C1 verdict `FAIL`; Human / ChatGPT review is pending. Active Service remains on `prompt-bundle-runtime-v4.0.0`, `pipeline-schema-runtime-v3.0.0`, and `runtime-stage-catalog-v4.json`; C2 eligibility is false, C2 Runtime activation and E1 remain unauthorized, and I3 final acceptance / merge to `main` remain pending.
 
 Evidence remains two-layered: task-time automated validation used `FakeAiStageTransport` and `FakeAssessmentRepository` only and retains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`; the post-acceptance Human-configured synthetic live E2E has nonzero usage, while exact aggregate tokens, cost, and call count have not been calculated. Real-user records and holdout use remain `0`.
 
@@ -199,10 +199,10 @@ I2 is Human / ChatGPT accepted and complete at `410714875903ae61b5bcdc6cce90030f
 
 - Authorization: `M2-P4-I3-R1-C1-2026-08-01`; confirmation `R1-C1-12-CALL-SYNTHETIC-ONLY`.
 - Branch / baseline: `test/m2-p4-i3-r1-c1-provider-diagnostic` / `76c469db264cd1cb9434b6a19ec5c75db5754a2a`.
-- Package status: `execution_authorized_not_started`; exact cumulative scope `21/21`; Commit A and Provider execution pending.
-- Diagnostic: exact 8 synthetic cases, 4 paired PB-01 v3/v4 cases, maximum 12 sequential calls (`v3=4`, `v4=8`) using `gpt-5.6-luna`.
+- Package status: `provider_diagnostic_failed_pending_human_chatgpt_review`; exact cumulative scope `21/21`; Commit A `0c228406298fbb829cbb216e31c00e6812cc1393` normally pushed.
+- Diagnostic: exact 8 synthetic cases, 4 paired PB-01 v3/v4 cases, exact `12/12` sequential calls (`v3=4`, `v4=8`) using `gpt-5.6-luna`; cases `0/8`, v3 viability `3/4`, v4 viability and grounding + Integrity `0/8`, paired parity `0/4`, C1 `FAIL`.
 - Boundaries: retry / repair / fallback `0`; PB-02 through PB-06 `0`; DB / Supabase / holdout / real-user data `0`; no full Pipeline execution.
-- Active Runtime remains catalog v4. C2 is unauthorized, E1 is not started, I3 final acceptance is pending, `main` remains unchanged, and Milestone 2 is incomplete.
+- Active Runtime remains catalog v4. C2 eligible for review is `false`, C2 is unauthorized, E1 is not started, I3 final acceptance is pending, `main` remains unchanged, and Milestone 2 is incomplete.
 
 ## Current Restriction
 
@@ -212,7 +212,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Milestone 1 is closed. M2-P3, M2-P4 planning, I1-A through I2, I3-R1 Final Planning, R1-A, and R1-B are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 is explicitly authorized and remains `not_executed`: finish the exact package, pass prepare gates, create and normally push Commit A, then run the one-time PB-01-only diagnostic only after clean HEAD/upstream/main/stash/model/confirmation/marker preflight. Record the actual result without retry or automatic progression. C2 Runtime activation and E1 remain unauthorized, final I3 acceptance remains pending, active Runtime remains catalog v4, and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+Milestone 1 is closed. M2-P3, M2-P4 planning, I1-A through I2, I3-R1 Final Planning, R1-A, and R1-B are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 completed its one-time PB-01-only diagnostic after all preflights passed; record Commit B, then hand the immutable C1 `FAIL` evidence to Human / ChatGPT review. Do not rerun, remediate, activate Runtime, or start C2 under this authority. C2 Runtime activation and E1 remain unauthorized, final I3 acceptance remains pending, active Runtime remains catalog v4, and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`
