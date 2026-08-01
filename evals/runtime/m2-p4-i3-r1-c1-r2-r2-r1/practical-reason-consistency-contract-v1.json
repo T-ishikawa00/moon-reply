@@ -1,0 +1,142 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2-R2-R1",
+  "title": "Offline Practical Reason Consistency Revision",
+  "baseline": "33a91f00be9f71fa533c9635d30425dc23914d81",
+  "branch": "feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency",
+  "objective": "Create an inactive PB-01 Prompt successor that requires one coherent semantic account for evidence-backed incoming schedule coordination.",
+  "exact_mutation_paths": [
+    "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v8.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/practical-reason-consistency-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/offline-analysis-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/capabilities-v1.json",
+    "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_mutation_path_count": 13,
+  "candidate": {
+    "prompt_version": "pb-01-structure-v7",
+    "prompt_path": "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
+    "prompt_sha256_utf8_lf": "aa359908f6ef01d6aaf72aece600ccb9d4efbe30f087080fbe5172fbb45b7498",
+    "catalog_version": "runtime-stage-catalog-v8.0.0",
+    "catalog_path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v8.json",
+    "prompt_bundle_version": "prompt-bundle-runtime-v8.0.0",
+    "provider_schema_version": "pipeline-schema-v5.0.0",
+    "candidate_runtime_schema_set": "pipeline-schema-runtime-v3.2.0",
+    "grounded_schema_version": "pipeline-schema-v4.0.0",
+    "pb_02_through_pb_06_predecessor": "runtime-stage-catalog-v7.0.0",
+    "inactive": true
+  },
+  "rule_families": {
+    "practical_reason_consistency": {
+      "required": true,
+      "current_situation_evidence_required": true,
+      "evidence_categories": [
+        "date",
+        "day_of_week",
+        "time",
+        "availability",
+        "rescheduling",
+        "meeting_timing",
+        "concrete_schedule_choice"
+      ],
+      "schedule_response_required": true,
+      "required_practical_reason": {
+        "kind": "schedule_coordination",
+        "active": true
+      },
+      "allowed_latest_message_kinds": [
+        "question",
+        "schedule_coordination"
+      ],
+      "taxonomy_difference_requires_preserved_practical_function": true
+    },
+    "cross_projection_consistency": {
+      "required": true,
+      "projections": [
+        "decision_facts.latest_direct_message",
+        "decision_facts.practical_reason",
+        "writing_signals.message_signals",
+        "writing_signals.incoming_message_profile",
+        "writing_signals.candidate_communicative_intent",
+        "writing_signals.boundary_ownership_signals"
+      ],
+      "reasonable_incoming_schedule_question_with_none_false_allowed": false,
+      "incoming_confirm_schedule_requires_schedule_coordination_true": true,
+      "candidate_schedule_content_can_create_incoming_reason": false,
+      "optional_message_can_create_incoming_reason": false,
+      "pb_01_selects_or_changes_decision_policy": false
+    },
+    "do_not_over_infer": {
+      "invitation_alone_is_sufficient": false,
+      "romantic_relationship_alone_is_sufficient": false,
+      "user_wants_to_send_message_alone_is_sufficient": false,
+      "vague_future_meeting_alone_is_sufficient": false,
+      "candidate_only_date_alone_is_sufficient": false,
+      "actual_schedule_question_choice_obligation_change_or_coordination_required": true
+    },
+    "final_internal_consistency_check": {
+      "required": true,
+      "practical_reason_included": true,
+      "private_chain_of_thought_requested": false,
+      "private_chain_of_thought_exposed": false
+    }
+  },
+  "prompt_content_boundary": {
+    "diagnostic_case_ids": 0,
+    "fixture_names": 0,
+    "oracle_content": 0,
+    "benchmark_wording": 0,
+    "raw_prose_regex_rules": 0,
+    "application_side_language_specific_rules": 0,
+    "examples": "generic_paraphrased_only"
+  },
+  "immutable_predecessors": {
+    "prompt_v6": "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md",
+    "catalog_v7": "lib/assessment/runtime/contracts/runtime-stage-catalog-v7.json",
+    "r2_r2_execution_artifacts": [
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-cases-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/quality-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/authorization-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-results-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-summary-v1.md",
+      "scripts/lib/m2-p4-i3-r1-c1-r2-r2-provider-evaluator-v1.mjs",
+      "scripts/run-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+      "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs"
+    ],
+    "r2_r2_review_records": [
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/capabilities-v1.json",
+      "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md"
+    ],
+    "provider_outputs_mutated": 0
+  },
+  "runtime_boundary": {
+    "active_catalog": "runtime-stage-catalog-v4.0.0",
+    "active_prompt_bundle": "prompt-bundle-runtime-v4.0.0",
+    "active_schema_set": "pipeline-schema-runtime-v3.0.0",
+    "active_runtime_changed": false,
+    "service_mutations": 0,
+    "pipeline_mutations": 0,
+    "policy_mutations": 0,
+    "ui_mutations": 0
+  },
+  "execution_boundary": {
+    "provider_calls": 0,
+    "openai_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0,
+    "provider_rerun": false,
+    "runtime_activation": false
+  }
+}

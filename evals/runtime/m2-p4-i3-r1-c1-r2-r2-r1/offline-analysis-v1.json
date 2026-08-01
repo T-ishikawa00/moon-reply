@@ -1,0 +1,89 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-r2-r1-offline-analysis-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2-R2-R1",
+  "analysis_mode": "immutable_saved_r2_r2_evidence_only",
+  "evidence": {
+    "accepted_review_commit": "33a91f00be9f71fa533c9635d30425dc23914d81",
+    "package_commit": "36e7d1967a502f0ed80aaccb12d44507f0058560",
+    "execution_result_commit": "2cb243486063ba9235f4f3ce65f051cf5fd38d6e",
+    "sources": [
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-results-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-summary-v1.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r2-r2/capabilities-v1.json",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md"
+    ],
+    "evidence_regenerated": false,
+    "provider_outputs_mutated": 0
+  },
+  "preserved_results": {
+    "targeted_repairs": "3/3",
+    "ownership_sequence": "PASS",
+    "targeted_repair_evidence_accepted": true,
+    "provider_quality_established": false,
+    "final_eight_case_confirmation_required": true
+  },
+  "observed_semantic_account": {
+    "latest_direct_message": {
+      "sender": "other_person",
+      "kind": "question",
+      "response_expectation": "reasonable",
+      "user_reply_state": "not_replied"
+    },
+    "message_ownership_recognized": true,
+    "incoming_message_profile": {
+      "present": true,
+      "dialogue_acts_contains": "question",
+      "practical_requirements_contains": "answer_question"
+    },
+    "candidate_communicative_intent": {
+      "practical_requirement_contains": "confirm_schedule"
+    },
+    "actual_practical_reason": {
+      "kind": "none",
+      "active": false,
+      "deadline": "none"
+    },
+    "required_semantic_projection": {
+      "kind": "schedule_coordination",
+      "active": true
+    }
+  },
+  "policy_comparison": {
+    "actual_and_comparison_deep_equal": true,
+    "allowed_decisions": [
+      "reply_now"
+    ],
+    "reason_codes": [
+      "unanswered_meaningful_message"
+    ],
+    "comparison_changes_only_practical_reason": true,
+    "comparison_is_actual_evidence": false,
+    "decision_policy_changed": false
+  },
+  "analysis": {
+    "incoming_question_and_ownership_recognized": true,
+    "schedule_coordination_true_omitted": true,
+    "omission_policy_equivalent_for_saved_case": true,
+    "omission_semantically_incomplete": true,
+    "prompt_successor_addresses_semantic_inconsistency": true,
+    "application_grounding_change_required": false,
+    "decision_policy_change_required": false
+  },
+  "execution": {
+    "provider_calls": 0,
+    "provider_outputs_mutated": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0,
+    "provider_rerun": false
+  },
+  "conclusion": {
+    "practical_reason_consistency_implemented": true,
+    "provider_quality_established": false,
+    "final_eight_case_confirmation_required": true,
+    "active_runtime_changed": false,
+    "c2_eligible": false,
+    "c2_authorized": false
+  }
+}

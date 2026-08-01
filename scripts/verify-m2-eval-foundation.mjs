@@ -32,6 +32,8 @@ const r1C1R2R2PackageCommit =
   "36e7d1967a502f0ed80aaccb12d44507f0058560";
 const r1C1R2R2ResultCommit =
   "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
+const r1C1R2R2ReviewCommit =
+  "33a91f00be9f71fa533c9635d30425dc23914d81";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -184,6 +186,23 @@ const exactR1C1R2R2ReviewSyncPaths = new Set([
   r1C1R2R2CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const r1C1R2R2R1CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/capabilities-v1.json";
+const exactR1C1R2R2R1Paths = new Set([
+  "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v8.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/practical-reason-consistency-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/offline-analysis-v1.json",
+  r1C1R2R2R1CapabilityManifestPath,
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -4063,6 +4082,9 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
     ...m2p3ScriptPaths,
     ...exactR1C1R1Paths.filter((item) => item.startsWith("scripts/")),
     ...[...exactR1C1R2R1Paths].filter((item) => item.startsWith("scripts/")),
+    ...[...exactR1C1R2R2R1Paths].filter((item) =>
+      item.startsWith("scripts/"),
+    ),
   ]);
   for (const item of paths.filter((candidate) =>
     candidate.startsWith("scripts/"),
@@ -4655,11 +4677,16 @@ function verifyScopeAndProhibitedImplementation() {
     r1C1R2R1AcceptedAcceptanceCommit,
     r1C1R2R2ResultCommit,
   );
-  const m2p4I3R1C1R2R2ReviewSyncPaths = currentTaskPaths(
+  const m2p4I3R1C1R2R2ReviewSyncPaths = historicalTaskPaths(
     r1C1R2R2ResultCommit,
+    r1C1R2R2ReviewCommit,
   );
-  const m2p4I3R1C1R2R2TaskPaths = currentTaskPaths(
+  const m2p4I3R1C1R2R2TaskPaths = historicalTaskPaths(
     r1C1R2R1AcceptedAcceptanceCommit,
+    r1C1R2R2ReviewCommit,
+  );
+  const m2p4I3R1C1R2R2R1TaskPaths = currentTaskPaths(
+    r1C1R2R2ReviewCommit,
   );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
@@ -4682,6 +4709,9 @@ function verifyScopeAndProhibitedImplementation() {
   const m2p4I3R1C1R2R2Manifest = readJson(r1C1R2R2CapabilityManifestPath);
   const m2p4I3R1C1R2R2Authorization = readJson(r1C1R2R2AuthorizationPath);
   const m2p4I3R1C1R2R2Results = readJson(r1C1R2R2ResultsPath);
+  const m2p4I3R1C1R2R2R1Manifest = readJson(
+    r1C1R2R2R1CapabilityManifestPath,
+  );
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4847,6 +4877,84 @@ function verifyScopeAndProhibitedImplementation() {
         layer_1_planning: m2p4I3R1Layer1PlanningPaths,
         final_planning: m2p4I3R1FinalPlanningPaths,
         acceptance_sync: m2p4I3R1PlanningAcceptanceSyncTaskPaths,
+      },
+    });
+  }
+  if (
+    exactR1C1R2R2R1Paths.size !== 13 ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2R1TaskPaths,
+      exactR1C1R2R2R1Paths,
+    ) ||
+    m2p4I3R1C1R2R2R1Manifest?.task_id !==
+      "M2-P4-I3-R1-C1-R2-R2-R1" ||
+    m2p4I3R1C1R2R2R1Manifest?.status !==
+      "offline_revision_implemented_pending_human_chatgpt_review" ||
+    m2p4I3R1C1R2R2R1Manifest?.baseline !== r1C1R2R2ReviewCommit ||
+    m2p4I3R1C1R2R2R1Manifest?.branch !==
+      "feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency" ||
+    !isExactLiteralPathSet(
+      [
+        ...(m2p4I3R1C1R2R2R1Manifest?.exact_mutation_paths ?? []),
+      ].sort(),
+      exactR1C1R2R2R1Paths,
+    ) ||
+    m2p4I3R1C1R2R2R1Manifest?.exact_mutation_path_count !== 13 ||
+    m2p4I3R1C1R2R2R1Manifest?.prompt !== "pb-01-structure-v7" ||
+    m2p4I3R1C1R2R2R1Manifest?.catalog !==
+      "runtime-stage-catalog-v8.0.0" ||
+    m2p4I3R1C1R2R2R1Manifest?.prompt_bundle !==
+      "prompt-bundle-runtime-v8.0.0" ||
+    m2p4I3R1C1R2R2R1Manifest?.provider_schema !==
+      "pipeline-schema-v5.0.0" ||
+    m2p4I3R1C1R2R2R1Manifest?.candidate_runtime_schema_set !==
+      "pipeline-schema-runtime-v3.2.0" ||
+    m2p4I3R1C1R2R2R1Manifest?.grounded_schema !==
+      "pipeline-schema-v4.0.0" ||
+    m2p4I3R1C1R2R2R1Manifest?.practical_reason_consistency_implemented !==
+      true ||
+    m2p4I3R1C1R2R2R1Manifest?.targeted_repairs_preserved !== "3/3" ||
+    m2p4I3R1C1R2R2R1Manifest?.ownership_sequence_preserved !== true ||
+    m2p4I3R1C1R2R2R1Manifest?.candidate_catalog_inactive !== true ||
+    m2p4I3R1C1R2R2R1Manifest?.provider_calls !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.provider_outputs_mutated !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.provider_quality_established !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.final_eight_case_confirmation_required !==
+      true ||
+    m2p4I3R1C1R2R2R1Manifest?.active_runtime_changed !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.db_operations !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.supabase_operations !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.holdout_use !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.real_user_data !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.protected_diff !== 0 ||
+    m2p4I3R1C1R2R2R1Manifest?.main_changed !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.c2_eligible !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.c2_authorized !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.next_candidate !==
+      "M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation" ||
+    m2p4I3R1C1R2R2R1Manifest?.next_candidate_authorized !== false ||
+    m2p4I3R1C1R2R2R1Manifest?.i3_final_acceptance !== "pending" ||
+    m2p4I3R1C1R2R2R1Manifest?.milestone_2 !== "incomplete"
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: r1C1R2R2R1CapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_c1_r2_r2_r1_boundary",
+      invariant:
+        "R2-R2-R1 is an exact 13-path inactive offline Prompt successor that preserves targeted repairs and ownership while requiring final eight-case confirmation",
+      expected: {
+        status: "offline_revision_implemented_pending_human_chatgpt_review",
+        exact_paths: 13,
+        practical_reason_consistency_implemented: true,
+        targeted_repairs_preserved: "3/3",
+        ownership_sequence_preserved: true,
+        provider_calls: 0,
+        active_runtime_changed: false,
+        provider_quality_established: false,
+        c2_authorized: false,
+      },
+      actual: {
+        paths: m2p4I3R1C1R2R2R1TaskPaths,
+        manifest: m2p4I3R1C1R2R2R1Manifest,
       },
     });
   }
@@ -6582,6 +6690,7 @@ function verifyScopeAndProhibitedImplementation() {
       !exactR1BPaths.has(item) &&
       !exactR1C1R1Paths.includes(item) &&
       !exactR1C1R2R1Paths.has(item) &&
+      !exactR1C1R2R2R1Paths.has(item) &&
       !prefixAllowed.some((prefix) => item.startsWith(prefix))
     ) {
       fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
@@ -6621,7 +6730,8 @@ function verifyScopeAndProhibitedImplementation() {
       m2p4I3R1AExactPaths.has(item) ||
       exactR1BPaths.has(item) ||
       exactR1C1R1Paths.includes(item) ||
-      exactR1C1R2R1Paths.has(item)
+      exactR1C1R2R1Paths.has(item) ||
+      exactR1C1R2R2R1Paths.has(item)
     ) {
       continue;
     }
