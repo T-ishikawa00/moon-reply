@@ -12,6 +12,17 @@ import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const r1C1R1BaselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
+const r1C1R1CorrectionBaselineSha =
+  "28bedad969d1007bbd731f0e9d47824eecd84651";
+const r1C1R1AcceptedImplementationCommit =
+  "d8415e2ae165143d646c6f9573e24752d8b1a1c7";
+const r1C1R1ImplementationCommits = [
+  "715fd906ad94ecc18b55dd13b16784c26bf12129",
+  "28bedad969d1007bbd731f0e9d47824eecd84651",
+  r1C1R1AcceptedImplementationCommit,
+];
+const r1C1R1CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json";
 const exactR1C1R1Paths = [
   "lib/assessment/runtime/contracts/writing-signals-v1.ts",
   "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
@@ -45,6 +56,27 @@ const exactR1C1R1Paths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const exactR1C1R1CorrectionPaths = new Set([
+  "lib/assessment/runtime/decision-facts-evidence-guard-v4.ts",
+  "scripts/lib/m2-p4-i3-r1-c1-r1-replay-evaluator-v2.mjs",
+  "evals/runtime/m2-p4-i3-r1-c1-r1/replay-results-v1.json",
+  r1C1R1CapabilityManifestPath,
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const exactR1C1R1AcceptanceSyncPaths = new Set([
+  r1C1R1CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
 
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
@@ -4425,7 +4457,17 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1C1ResultCommit,
     r1C1R1BaselineSha,
   );
-  const m2p4I3R1C1R1TaskPaths = currentTaskPaths(r1C1R1BaselineSha);
+  const m2p4I3R1C1R1ImplementationPaths = historicalTaskPaths(
+    r1C1R1BaselineSha,
+    r1C1R1AcceptedImplementationCommit,
+  );
+  const m2p4I3R1C1R1CorrectionPaths = historicalTaskPaths(
+    r1C1R1CorrectionBaselineSha,
+    r1C1R1AcceptedImplementationCommit,
+  );
+  const m2p4I3R1C1R1AcceptanceSyncPaths = currentTaskPaths(
+    r1C1R1AcceptedImplementationCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);
@@ -4439,6 +4481,7 @@ function verifyScopeAndProhibitedImplementation() {
   );
   const m2p4I3R1AManifest = readJson(m2p4I3R1ACapabilityManifestPath);
   const m2p4I3R1BManifest = readJson(m2p4I3R1BCapabilityManifestPath);
+  const m2p4I3R1C1R1Manifest = readJson(r1C1R1CapabilityManifestPath);
   const declaredM2p4I1cPaths = Array.isArray(
     m2p4I1cManifest?.implementation_paths,
   )
@@ -4752,7 +4795,10 @@ function verifyScopeAndProhibitedImplementation() {
       exactC1ReviewSyncPaths,
     ) ||
     exactR1C1R1Paths.length !== 31 ||
-    !isExactLiteralPathSet(m2p4I3R1C1R1TaskPaths, exactR1C1R1Paths) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R1ImplementationPaths,
+      exactR1C1R1Paths,
+    ) ||
     m2p4I3R1BManifest?.task_id !== "M2-P4-I3-R1-B" ||
     m2p4I3R1BManifest?.title !==
       "PB-01 v4 Writing Context Extraction and Grounding" ||
@@ -4813,7 +4859,7 @@ function verifyScopeAndProhibitedImplementation() {
         exact_mutation_paths: [...exactR1BPaths].sort(),
         acceptance_sync_paths: [...m2p4I3R1BAcceptanceSyncPaths].sort(),
         c1_successor_paths: [...exactC1Paths].sort(),
-        c1_r1_successor_paths: [...exactR1C1R1Paths].sort(),
+        c1_r1_implementation_paths: [...exactR1C1R1Paths].sort(),
         active_runtime_changed: false,
         service_mutations: 0,
         provider_diagnostic: "not_started",
@@ -4827,7 +4873,94 @@ function verifyScopeAndProhibitedImplementation() {
         acceptance_sync_paths: m2p4I3R1BAcceptanceSyncTaskPaths,
         c1_execution_snapshot_paths: m2p4I3R1C1ExecutionPaths,
         c1_review_sync_paths: m2p4I3R1C1ReviewSyncTaskPaths,
-        c1_r1_paths: m2p4I3R1C1R1TaskPaths,
+        c1_r1_implementation_paths: m2p4I3R1C1R1ImplementationPaths,
+      },
+    });
+  }
+  const expectedR1C1R1ImplementationSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R1BaselineSha,
+    end_commit_sha: r1C1R1AcceptedImplementationCommit,
+    exact_paths: 31,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
+  const expectedR1C1R1FinalCorrection = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R1CorrectionBaselineSha,
+    end_commit_sha: r1C1R1AcceptedImplementationCommit,
+    exact_paths: 9,
+  };
+  if (
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R1ImplementationPaths,
+      exactR1C1R1Paths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R1CorrectionPaths,
+      exactR1C1R1CorrectionPaths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R1AcceptanceSyncPaths,
+      exactR1C1R1AcceptanceSyncPaths,
+    ) ||
+    m2p4I3R1C1R1Manifest?.task_id !== "M2-P4-I3-R1-C1-R1" ||
+    m2p4I3R1C1R1Manifest?.status !== "human_chatgpt_accepted_complete" ||
+    m2p4I3R1C1R1Manifest?.application_architecture_accepted !== true ||
+    m2p4I3R1C1R1Manifest?.application_offline_implementation_accepted !==
+      true ||
+    m2p4I3R1C1R1Manifest?.provider_quality_accepted !== false ||
+    m2p4I3R1C1R1Manifest?.accepted_implementation_commit !==
+      r1C1R1AcceptedImplementationCommit ||
+    JSON.stringify(m2p4I3R1C1R1Manifest?.implementation_commits) !==
+      JSON.stringify(r1C1R1ImplementationCommits) ||
+    JSON.stringify(m2p4I3R1C1R1Manifest?.implementation_snapshot) !==
+      JSON.stringify(expectedR1C1R1ImplementationSnapshot) ||
+    JSON.stringify(m2p4I3R1C1R1Manifest?.final_review_correction) !==
+      JSON.stringify(expectedR1C1R1FinalCorrection) ||
+    !isExactLiteralPathSet(
+      [...(m2p4I3R1C1R1Manifest?.acceptance_sync_exact_paths ?? [])].sort(),
+      exactR1C1R1AcceptanceSyncPaths,
+    ) ||
+    m2p4I3R1C1R1Manifest?.acceptance_sync_exact_path_count !== 8 ||
+    m2p4I3R1C1R1Manifest?.strict_source_replay_verdict !== "FAIL" ||
+    m2p4I3R1C1R1Manifest?.strict_cases_passed !== 5 ||
+    m2p4I3R1C1R1Manifest?.application_adjudicated_decision_facts !== "8/8" ||
+    m2p4I3R1C1R1Manifest?.application_canonical_fixtures !== "8/8" ||
+    m2p4I3R1C1R1Manifest?.provider_semantic_coverage !== "7/8" ||
+    m2p4I3R1C1R1Manifest?.provider_retest_required !== true ||
+    m2p4I3R1C1R1Manifest?.r1_c1_r2_authorized !== false ||
+    m2p4I3R1C1R1Manifest?.c2_eligible !== false ||
+    m2p4I3R1C1R1Manifest?.c2_authorized !== false ||
+    m2p4I3R1C1R1Manifest?.active_runtime_changed !== false ||
+    m2p4I3R1C1R1Manifest?.next_candidate !==
+      "M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic" ||
+    m2p4I3R1C1R1Manifest?.next_candidate_authorized !== false
+  ) {
+    fail("M2_PROHIBITED_IMPLEMENTATION_GATE", {
+      file: r1C1R1CapabilityManifestPath,
+      pathName: "$.m2_p4_i3_r1_c1_r1_acceptance",
+      invariant:
+        "R1-C1-R1 accepts only the Application architecture and offline implementation with immutable 31-path implementation, 9-path correction, exact 8-path acceptance sync, Provider quality false, and successor authorization false",
+      expected: {
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit: r1C1R1AcceptedImplementationCommit,
+        implementation_snapshot: expectedR1C1R1ImplementationSnapshot,
+        final_review_correction: expectedR1C1R1FinalCorrection,
+        acceptance_sync_paths: [...exactR1C1R1AcceptanceSyncPaths].sort(),
+        strict_source_replay_verdict: "FAIL",
+        strict_cases_passed: 5,
+        provider_semantic_coverage: "7/8",
+        provider_quality_accepted: false,
+        r1_c1_r2_authorized: false,
+        c2_eligible: false,
+        c2_authorized: false,
+      },
+      actual: {
+        manifest: m2p4I3R1C1R1Manifest,
+        implementation_paths: m2p4I3R1C1R1ImplementationPaths,
+        correction_paths: m2p4I3R1C1R1CorrectionPaths,
+        acceptance_sync_paths: m2p4I3R1C1R1AcceptanceSyncPaths,
       },
     });
   }

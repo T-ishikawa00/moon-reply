@@ -2,7 +2,41 @@
   "schema_version": "m2-p4-i3-r1-c1-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R1",
   "title": "Offline Diagnostic Postmortem and Grounding Responsibility Revision",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "application_architecture_accepted": true,
+  "application_offline_implementation_accepted": true,
+  "provider_quality_accepted": false,
+  "accepted_implementation_commit": "d8415e2ae165143d646c6f9573e24752d8b1a1c7",
+  "implementation_commits": [
+    "715fd906ad94ecc18b55dd13b16784c26bf12129",
+    "28bedad969d1007bbd731f0e9d47824eecd84651",
+    "d8415e2ae165143d646c6f9573e24752d8b1a1c7"
+  ],
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9",
+    "end_commit_sha": "d8415e2ae165143d646c6f9573e24752d8b1a1c7",
+    "exact_paths": 31,
+    "immutable_snapshot": true,
+    "include_working_tree": false
+  },
+  "final_review_correction": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "28bedad969d1007bbd731f0e9d47824eecd84651",
+    "end_commit_sha": "d8415e2ae165143d646c6f9573e24752d8b1a1c7",
+    "exact_paths": 9
+  },
+  "acceptance_sync_exact_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+    "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "acceptance_sync_exact_path_count": 8,
   "baseline": "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9",
   "replay_adjudication_correction_baseline": "28bedad969d1007bbd731f0e9d47824eecd84651",
   "branch": "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility",
@@ -46,7 +80,8 @@
   "semantic_assertions": "41/42",
   "candidate_presence_parity": "8/8",
   "ownership_parity": "7/8",
-  "provider_semantic_coverage": {
+  "provider_semantic_coverage": "7/8",
+  "provider_semantic_coverage_detail": {
     "available": 7,
     "total": 8,
     "unavailable_cases": [
@@ -112,6 +147,7 @@
   "real_user_data": 0,
   "active_runtime_changed": false,
   "service_switch": false,
+  "c2_eligible": false,
   "c2_authorized": false,
   "r1_c1_r2_authorized": false,
   "next_candidate": "M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic",

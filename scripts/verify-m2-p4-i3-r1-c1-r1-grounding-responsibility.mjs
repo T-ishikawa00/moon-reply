@@ -20,6 +20,13 @@ const repositoryRoot = path.resolve(
 const baselineSha = "bdc98af2c7c59a1d7ececa2077906c8fbb839ac9";
 const correctionBaselineSha =
   "28bedad969d1007bbd731f0e9d47824eecd84651";
+const acceptedImplementationSha =
+  "d8415e2ae165143d646c6f9573e24752d8b1a1c7";
+const implementationCommits = [
+  "715fd906ad94ecc18b55dd13b16784c26bf12129",
+  "28bedad969d1007bbd731f0e9d47824eecd84651",
+  acceptedImplementationSha,
+];
 const mainBaselineSha = "61e33a10e195fad17e253a6b9719217e1992f273";
 const branch = "feat/m2-p4-i3-r1-c1-r1-grounding-responsibility";
 const markerSha256 =
@@ -66,6 +73,16 @@ const exactCorrectionPaths = [
   `${artifactRoot}/capabilities-v1.json`,
   "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactAcceptanceSyncPaths = [
+  `${artifactRoot}/capabilities-v1.json`,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
@@ -162,6 +179,12 @@ function currentTaskPaths(base) {
         git(["ls-files", "--others", "--exclude-standard"]),
       ),
     ]),
+  );
+}
+
+function historicalTaskPaths(base, end) {
+  return sorted(
+    new Set(normalizedPaths(git(["diff", "--name-only", base, end, "--"]))),
   );
 }
 
@@ -318,18 +341,40 @@ assert.equal(git(["branch", "--show-current"]).trim(), branch);
 assert.equal(git(["rev-parse", "main"]).trim(), mainBaselineSha);
 assert.equal(git(["rev-parse", "origin/main"]).trim(), mainBaselineSha);
 assert.doesNotThrow(() =>
-  git(["merge-base", "--is-ancestor", correctionBaselineSha, "HEAD"]),
+  git(["merge-base", "--is-ancestor", acceptedImplementationSha, "HEAD"]),
 );
 assert.equal(exactPaths.length, 31);
 assertLiteralSet(currentTaskPaths(baselineSha), exactPaths);
-assert.equal(git(["diff", "--check", baselineSha, "--"]).trim(), "");
+assertLiteralSet(
+  historicalTaskPaths(baselineSha, acceptedImplementationSha),
+  exactPaths,
+);
+assert.equal(
+  git(["diff", "--check", baselineSha, acceptedImplementationSha, "--"]).trim(),
+  "",
+);
 assert.equal(exactCorrectionPaths.length, 9);
 assertLiteralSet(
-  currentTaskPaths(correctionBaselineSha),
+  historicalTaskPaths(correctionBaselineSha, acceptedImplementationSha),
   exactCorrectionPaths,
 );
 assert.equal(
-  git(["diff", "--check", correctionBaselineSha, "--"]).trim(),
+  git([
+    "diff",
+    "--check",
+    correctionBaselineSha,
+    acceptedImplementationSha,
+    "--",
+  ]).trim(),
+  "",
+);
+assert.equal(exactAcceptanceSyncPaths.length, 8);
+assertLiteralSet(
+  currentTaskPaths(acceptedImplementationSha),
+  exactAcceptanceSyncPaths,
+);
+assert.equal(
+  git(["diff", "--check", acceptedImplementationSha, "--"]).trim(),
   "",
 );
 
@@ -486,7 +531,34 @@ assertLiteralSet(
   responsibility.forbidden_provider_bookkeeping_keys,
   forbiddenProviderBookkeeping,
 );
-assert.equal(capabilities.status, "implementation_pending_human_chatgpt_review");
+assert.equal(capabilities.status, "human_chatgpt_accepted_complete");
+assert.equal(capabilities.application_architecture_accepted, true);
+assert.equal(capabilities.application_offline_implementation_accepted, true);
+assert.equal(capabilities.provider_quality_accepted, false);
+assert.equal(
+  capabilities.accepted_implementation_commit,
+  acceptedImplementationSha,
+);
+assert.deepEqual(capabilities.implementation_commits, implementationCommits);
+assert.deepEqual(capabilities.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  exact_paths: 31,
+  immutable_snapshot: true,
+  include_working_tree: false,
+});
+assert.deepEqual(capabilities.final_review_correction, {
+  type: "historical_commit_range",
+  base_commit_sha: correctionBaselineSha,
+  end_commit_sha: acceptedImplementationSha,
+  exact_paths: 9,
+});
+assertLiteralSet(
+  capabilities.acceptance_sync_exact_paths,
+  exactAcceptanceSyncPaths,
+);
+assert.equal(capabilities.acceptance_sync_exact_path_count, 8);
 assert.equal(capabilities.exact_mutation_paths, 31);
 assert.equal(capabilities.exact_correction_paths, 9);
 assert.equal(
@@ -509,7 +581,8 @@ assert.equal(
   "PASS_APPLICATION_UNIT_ONLY",
 );
 assert.equal(capabilities.provider_retest_required, true);
-assert.deepEqual(capabilities.provider_semantic_coverage, {
+assert.equal(capabilities.provider_semantic_coverage, "7/8");
+assert.deepEqual(capabilities.provider_semantic_coverage_detail, {
   available: 7,
   total: 8,
   unavailable_cases: ["V4-08"],
@@ -522,6 +595,7 @@ assert.deepEqual(capabilities.nonmaterial_taxonomy_equivalences, [
   "V4-06:/latest_direct_message/kind",
 ]);
 assert.equal(capabilities.r1_c1_r2_authorized, false);
+assert.equal(capabilities.c2_eligible, false);
 assert.equal(capabilities.expected_input_injection, 0);
 assert.deepEqual(
   capabilities.replay_input_construction_authority.allowed_sources,
@@ -1522,8 +1596,9 @@ console.log("M2_P4_I3_R1_C1_R1_GROUNDING_RESPONSIBILITY: PASS");
 console.log("c1_evidence_immutable: PASS");
 console.log("provider_schema_v5: PASS");
 console.log("provider_bookkeeping_fields: 0");
-console.log("correction_scope: 9/9");
-console.log("cumulative_scope: 31/31");
+console.log("acceptance_sync_scope: 8/8");
+console.log("final_correction_scope: 9/9");
+console.log("immutable_implementation_scope: 31/31");
 console.log("replay_input_construction: 8/8");
 console.log("expected_input_injection: 0");
 console.log("strict_source_replay_verdict: FAIL");
@@ -1549,4 +1624,9 @@ console.log("openai_calls: 0");
 console.log("db_operations: 0");
 console.log("holdout_use: 0");
 console.log("active_runtime_changed: false");
+console.log("application_architecture_accepted: true");
+console.log("application_offline_implementation_accepted: true");
+console.log("provider_quality_accepted: false");
+console.log("r1_c1_r2_authorized: false");
+console.log("c2_eligible: false");
 console.log("c2_authorized: false");

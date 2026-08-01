@@ -3,7 +3,11 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R1 Offline Diagnostic Postmortem and Grounding Responsibility Revision`
-- Status: `implementation_pending_human_chatgpt_review`
+- Status: `human_chatgpt_accepted_complete`
+- Accepted implementation commit: `d8415e2ae165143d646c6f9573e24752d8b1a1c7`
+- Implementation commits: `715fd906ad94ecc18b55dd13b16784c26bf12129`, `28bedad969d1007bbd731f0e9d47824eecd84651`, `d8415e2ae165143d646c6f9573e24752d8b1a1c7`
+- Immutable implementation snapshot: `bdc98af2c7c59a1d7ececa2077906c8fbb839ac9..d8415e2ae165143d646c6f9573e24752d8b1a1c7` (`31/31` exact paths; working tree excluded)
+- Final review correction: `28bedad969d1007bbd731f0e9d47824eecd84651..d8415e2ae165143d646c6f9573e24752d8b1a1c7` (`9/9` exact paths)
 - Baseline: `bdc98af2c7c59a1d7ececa2077906c8fbb839ac9`
 - Uncontaminated replay correction baseline: `715fd906ad94ecc18b55dd13b16784c26bf12129`
 - Replay adjudication / absent-boundary correction baseline: `28bedad969d1007bbd731f0e9d47824eecd84651`
@@ -14,12 +18,16 @@
 - New Provider calls: `0`
 - DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0`
 - Active Runtime changed: `false`
+- Application architecture accepted: `true`
+- Application offline implementation accepted: `true`
+- Provider quality accepted: `false`
+- C2 eligible: `false`
 - C2 authorized: `false`
 - Final I3 acceptance: `pending`
 - Milestone 2: `incomplete`
 - `main`: unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`
 
-This offline successor implementation has completed replay adjudication and the absent-boundary guard correction and is awaiting Human / ChatGPT review. Strict source replay remains honestly `FAIL / 5/8`; Application-adjudicated Decision Facts and Application canonical fixtures are separately `8/8`. Neither verifier PASS nor Application unit evidence is Provider-quality evidence or acceptance. This correction does not authorize a Provider diagnostic, R1-C1-R2, C2 Runtime activation, E1, a Service switch, PR, merge, force push, release, or deployment.
+This offline successor Application architecture and implementation are Human / ChatGPT accepted complete. Strict source replay remains honestly `FAIL / 5/8`; Application-adjudicated Decision Facts and Application canonical fixtures are separately `8/8`. Neither verifier PASS nor Application unit evidence establishes Provider-quality acceptance. This acceptance does not authorize a Provider diagnostic, R1-C1-R2, C2 Runtime activation, E1, a Service switch, PR, merge, force push, release, or deployment.
 
 ## Postmortem conclusion
 
@@ -99,23 +107,39 @@ The required sequential validation set passes while preserving the replay `FAIL`
 - Typecheck / lint / production build: `PASS`
 - JSON parse / correction scope `9/9` / cumulative scope `31/31` / C1 blob immutability / protected diff `0` / `git diff --check`: `PASS`
 - OpenAI / DB / Supabase / holdout operations: `0 / 0 / 0 / 0`
+- Acceptance synchronization exact scope `8/8`; immutable implementation snapshot `31/31`; final review correction `9/9`: `PASS`
 
 Verifier PASS, replay FAIL, Human / ChatGPT review, and acceptance are recorded separately.
 
+## Exact acceptance-sync manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r1/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R1_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-c1-r1-grounding-responsibility.mjs`
+4. `scripts/verify-m2-eval-foundation.mjs`
+5. `scripts/verify-m2-p3-runtime-vertical-slice.mjs`
+6. `docs/CURRENT_FOCUS.md`
+7. `docs/WBS.md`
+8. `docs/CODEX_HANDOFF.md`
+
+This exact `8/8` synchronization does not extend or rewrite the immutable `31/31` implementation snapshot or the historical `9/9` final review correction. Production implementation files remain content-fixed to accepted implementation commit `d8415e2ae165143d646c6f9573e24752d8b1a1c7`.
+
 ## Human / ChatGPT review
 
-- [ ] Confirm the Provider contract is semantic-only and contains zero forbidden bookkeeping keys.
-- [ ] Confirm Application grounding owns provenance, identifiers, ownership, nullability, and unresolved-state closure.
-- [ ] Confirm the negative evidence guard removes unsupported restrictive facts without creating a Decision.
-- [ ] Confirm expected/assertion data cannot influence input construction and all four mutation regressions fail.
-- [ ] Confirm PAIR-03 has the direct `temporary_distance / explicit` -> `none / none` evidence and PAIR-04 remains `no_contact / explicit` before and after the guard.
-- [ ] Confirm V4-08 strict source remains `unknown / unknown`, Application post-guard is `none / none`, and supported restrictive boundaries remain fail-closed.
-- [ ] Confirm PAIR-02 is an expectation-contract defect, V4-06 is a policy-equivalent taxonomy difference, and neither Production value was changed to fit expected data.
-- [ ] Confirm V4-08 ownership evidence is unavailable from the source diagnostic, is not attributed to Application, and requires Provider retest.
-- [ ] Confirm the semantic-only fixture is Application unit evidence rather than Provider replay evidence.
-- [ ] Confirm downstream PB-02 through PB-06 see only the v3 legacy view.
-- [ ] Confirm catalog v6 is inactive and active Service remains unchanged.
-- [ ] Accept or reject this implementation.
+- [x] Confirm the Provider contract is semantic-only and contains zero forbidden bookkeeping keys.
+- [x] Confirm Application grounding owns provenance, identifiers, ownership, nullability, and unresolved-state closure.
+- [x] Confirm the negative evidence guard removes unsupported restrictive facts without creating a Decision.
+- [x] Confirm expected/assertion data cannot influence input construction and all four mutation regressions fail.
+- [x] Confirm PAIR-03 has the direct `temporary_distance / explicit` -> `none / none` evidence and PAIR-04 remains `no_contact / explicit` before and after the guard.
+- [x] Confirm V4-08 strict source remains `unknown / unknown`, Application post-guard is `none / none`, and supported restrictive boundaries remain fail-closed.
+- [x] Confirm PAIR-02 is an expectation-contract defect, V4-06 is a policy-equivalent taxonomy difference, and neither Production value was changed to fit expected data.
+- [x] Confirm V4-08 ownership evidence is unavailable from the source diagnostic, is not attributed to Application, and requires Provider retest.
+- [x] Confirm the semantic-only fixture is Application unit evidence rather than Provider replay evidence.
+- [x] Confirm downstream PB-02 through PB-06 see only the v3 legacy view.
+- [x] Confirm catalog v6 is inactive and active Service remains unchanged.
+- [x] Accept the Application architecture and offline implementation while preserving Provider quality as not accepted.
+
+M2-P4-I3-R1-C1-R1 is Human / ChatGPT accepted complete at implementation commit `d8415e2ae165143d646c6f9573e24752d8b1a1c7`. The Provider semantic-only architecture, Application-owned canonical bookkeeping, Application Decision Facts evidence guard, Writing Context Integrity v2, downstream v3 isolation, Fake Pipeline `3/3`, Application canonical fixtures `8/8`, and Application-adjudicated Decision Facts `8/8` are accepted. Strict source replay remains `FAIL / 5/8`, strict ownership and Provider semantic coverage remain `7/8`, V4-08 Provider ownership remains unavailable, and Provider retest remains required.
 
 ## Next candidate boundary
 
