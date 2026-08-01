@@ -16,6 +16,8 @@ const r1C1R2PackageSha =
   "d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e";
 const r1C1R2ResultSha =
   "7239f50fd24eb80369e74583cd619c2155813401";
+const r1C1R2ReviewSha =
+  "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -106,6 +108,23 @@ const exactR1C1R2ReviewSyncPaths = [
   r1C1R2CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r2-provider-diagnostic.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const r1C1R2R1CapabilityManifestPath =
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r1/capabilities-v1.json";
+const exactR1C1R2R1Paths = [
+  "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v7.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r1/semantic-consistency-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r1/offline-analysis-v1.json",
+  r1C1R2R1CapabilityManifestPath,
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r1-semantic-consistency.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R1_REVIEW.md",
+  "lib/assessment/runtime/schema-catalog.ts",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1772,6 +1791,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const r1C1R2Manifest = json(r1C1R2CapabilityManifestPath);
   const r1C1R2Authorization = json(r1C1R2AuthorizationPath);
   const r1C1R2Results = json(r1C1R2ResultsPath);
+  const r1C1R2R1Manifest = json(r1C1R2R1CapabilityManifestPath);
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1832,8 +1852,15 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R1AcceptanceSha,
     r1C1R2ResultSha,
   );
-  const actualR1C1R2ReviewSyncPaths = currentTaskPaths(r1C1R2ResultSha);
-  const actualR1C1R2Paths = currentTaskPaths(r1C1R1AcceptanceSha);
+  const actualR1C1R2ReviewSyncPaths = historicalPaths(
+    r1C1R2ResultSha,
+    r1C1R2ReviewSha,
+  );
+  const actualR1C1R2Paths = historicalPaths(
+    r1C1R1AcceptanceSha,
+    r1C1R2ReviewSha,
+  );
+  const actualR1C1R2R1Paths = currentTaskPaths(r1C1R2ReviewSha);
   const expectedR1ASnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1aBaselineSha,
@@ -2183,6 +2210,51 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2Results.c2_eligible === false &&
       r1C1R2Results.c2_authorized === false,
     `R1-C1-R2 failed-diagnostic review boundary differs: execution=${actualR1C1R2ExecutionPaths.join(",")}; review_sync=${actualR1C1R2ReviewSyncPaths.join(",")}; cumulative=${actualR1C1R2Paths.join(",")}`,
+  );
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    exactR1C1R2R1Paths.length === 13 &&
+      isExactLiteralSet(actualR1C1R2R1Paths, exactR1C1R2R1Paths) &&
+      r1C1R2R1Manifest.task_id === "M2-P4-I3-R1-C1-R2-R1" &&
+      r1C1R2R1Manifest.status ===
+        "offline_revision_implemented_pending_human_chatgpt_review" &&
+      r1C1R2R1Manifest.baseline === r1C1R2ReviewSha &&
+      r1C1R2R1Manifest.branch ===
+        "feat/m2-p4-i3-r1-c1-r2-r1-semantic-consistency" &&
+      isExactLiteralSet(
+        [...r1C1R2R1Manifest.exact_mutation_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R2R1Paths,
+      ) &&
+      r1C1R2R1Manifest.exact_mutation_path_count === 13 &&
+      r1C1R2R1Manifest.prompt === "pb-01-structure-v6" &&
+      r1C1R2R1Manifest.catalog === "runtime-stage-catalog-v7.0.0" &&
+      r1C1R2R1Manifest.prompt_bundle ===
+        "prompt-bundle-runtime-v7.0.0" &&
+      r1C1R2R1Manifest.provider_schema === "pipeline-schema-v5.0.0" &&
+      r1C1R2R1Manifest.candidate_runtime_schema_set ===
+        "pipeline-schema-runtime-v3.2.0" &&
+      r1C1R2R1Manifest.grounded_schema === "pipeline-schema-v4.0.0" &&
+      r1C1R2R1Manifest.candidate_catalog_inactive === true &&
+      r1C1R2R1Manifest.active_runtime_changed === false &&
+      r1C1R2R1Manifest.accepted_r2_evidence_unchanged === true &&
+      r1C1R2R1Manifest.provider_calls === 0 &&
+      r1C1R2R1Manifest.provider_outputs_mutated === 0 &&
+      r1C1R2R1Manifest.provider_quality_established === false &&
+      r1C1R2R1Manifest.provider_retest_required === true &&
+      r1C1R2R1Manifest.db_operations === 0 &&
+      r1C1R2R1Manifest.supabase_operations === 0 &&
+      r1C1R2R1Manifest.holdout_use === 0 &&
+      r1C1R2R1Manifest.real_user_data === 0 &&
+      r1C1R2R1Manifest.protected_diff === 0 &&
+      r1C1R2R1Manifest.main_changed === false &&
+      r1C1R2R1Manifest.c2_eligible === false &&
+      r1C1R2R1Manifest.c2_authorized === false &&
+      r1C1R2R1Manifest.next_candidate ===
+        "M2-P4-I3-R1-C1-R2-R2 Four-Case Bounded Provider Diagnostic" &&
+      r1C1R2R1Manifest.next_candidate_authorized === false,
+    `R1-C1-R2-R1 inactive offline successor boundary differs: ${actualR1C1R2R1Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

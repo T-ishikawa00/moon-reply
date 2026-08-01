@@ -1,0 +1,61 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-r1-offline-analysis-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2-R1",
+  "analysis_mode": "immutable_saved_r2_evidence_only",
+  "evidence": {
+    "accepted_review_commit": "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6",
+    "execution_result_commit": "7239f50fd24eb80369e74583cd619c2155813401",
+    "sources": [
+      "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-results-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r2/diagnostic-summary-v1.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r2/capabilities-v1.json",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_REVIEW.md"
+    ],
+    "provider_outputs_mutated": 0,
+    "evidence_regenerated": false
+  },
+  "accepted_failures": [
+    {
+      "case_id": "R2-03",
+      "observation": "The semantic meaning was present, but the explicit constraint used the custom taxonomy instead of the existing bounded taxonomy.",
+      "revision": "known_taxonomy_precedence"
+    },
+    {
+      "case_id": "R2-04",
+      "observation": "Decision Facts recognized other-person ownership and an explicit no-contact boundary, while Writing Signals used unknown quoted ownership.",
+      "revision": "cross_projection_consistency"
+    },
+    {
+      "case_id": "R2-08",
+      "observation": "Injection, privacy, and repeat state were recognized, while quoted-message ownership was omitted.",
+      "revision": "untrusted_content_ownership_preservation"
+    }
+  ],
+  "scope_assessment": {
+    "accepted_failure_count": 3,
+    "prompt_rule_family_count": 3,
+    "application_grounding_changed": false,
+    "writing_signals_contract_changed": false,
+    "evidence_guard_changed": false,
+    "integrity_v2_changed": false,
+    "provider_schema_changed": false,
+    "grounded_schema_changed": false,
+    "pb_02_through_pb_06_changed": false
+  },
+  "execution": {
+    "provider_calls": 0,
+    "openai_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0
+  },
+  "conclusion": {
+    "offline_revision_implemented": true,
+    "provider_quality_established": false,
+    "provider_retest_required": true,
+    "active_runtime_changed": false,
+    "c2_eligible": false,
+    "c2_authorized": false
+  }
+}

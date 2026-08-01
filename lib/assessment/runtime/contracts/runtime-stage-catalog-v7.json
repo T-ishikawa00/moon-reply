@@ -1,0 +1,97 @@
+{
+  "schema_version": "m2-p4-runtime-stage-catalog-v1",
+  "catalog_version": "runtime-stage-catalog-v7.0.0",
+  "prompt_bundle_version": "prompt-bundle-runtime-v7.0.0",
+  "schema_set_version": "pipeline-schema-runtime-v3.2.0",
+  "baseline": "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6",
+  "hash_algorithm": "sha256-utf8-lf",
+  "common_prompt": {
+    "inherited_from": "ai/prompts/prompt-bundle.manifest.json#SHARED-COMMON",
+    "prompt_version": "v1.0.0",
+    "prompt_path": "ai/prompts/shared/common-stage-contract.md",
+    "prompt_sha256": "218ebd586906c47910c7436874a13d2aa4ca6d6cef4df55dbfacff0ecb168fbf"
+  },
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "sequence_number": 1,
+      "source": "m2-p4-semantic-consistency-successor",
+      "prompt_version": "v6.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md",
+      "prompt_sha256": "446fdc12a9aa041466692a847bd1847cb76a1e4081ca36afdbba7d7470b3cd87",
+      "schema_version": "pipeline-schema-v5.0.0",
+      "schema_name": "pb_01_structure_v5",
+      "schema_path": "lib/assessment/runtime/contracts/structured-intake-v5.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "64d023a5d166f2cd07226b65e0537f46dfbc4d22b05deaf61ed726293c1ce153",
+      "grounded_schema_version": "pipeline-schema-v4.0.0",
+      "grounded_schema_path": "lib/assessment/runtime/contracts/structured-intake-v4.schema.json",
+      "grounded_schema_sha256": "080de1b798d5abb91a85eb1b22e42bf4d862664fc8d6469f140c43d8622601d7"
+    },
+    {
+      "stage_id": "PB-02",
+      "sequence_number": 2,
+      "source": "accepted-historical-manifest",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "ai/prompts/safety-semantic/v1.0.0.developer.md",
+      "prompt_sha256": "8d8ebc98b75bad52df3324f53085aefec3c848f5d7d21e180e914c0c6b498091",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_02_safety_semantic_v1",
+      "schema_path": "ai/schemas/safety-assessment.schema.json",
+      "schema_pointer": "#/$defs/model_result",
+      "schema_sha256": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    {
+      "stage_id": "PB-03",
+      "sequence_number": 3,
+      "source": "m2-p4-contextual-successor",
+      "prompt_version": "v3.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+      "prompt_sha256": "0b85fb5dd71d6639d7f16c603fb32736ce7960be99695fd6f24e5b9c9fb32b5d",
+      "schema_version": "pipeline-schema-v3.0.0",
+      "schema_name": "pb_03_eligibility_projection_v3",
+      "schema_path": "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
+    },
+    {
+      "stage_id": "PB-04",
+      "sequence_number": 4,
+      "source": "m2-p4-product-quality-successor",
+      "prompt_version": "v3.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+      "prompt_sha256": "5805f84d97529a2d451889a1478911d7b9c8fff0c5be0c18985b01e8f84481c0",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_04_decision_plan_v1",
+      "schema_path": "ai/schemas/decision-plan.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "d50352be0b41b6b2949b0524cffa3f48f42ca47c50d7fdcd2366fa1cb6353417"
+    },
+    {
+      "stage_id": "PB-05",
+      "sequence_number": 5,
+      "source": "m2-p4-product-quality-successor",
+      "prompt_version": "v3.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+      "prompt_sha256": "10b784af65ec5c6604af822bd11832c9d9869371f013b3b2540018cf4b18faa6",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_05_report_writing_v1",
+      "schema_path": "ai/schemas/report-content.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "41d7fbeb3210bee7ceb1184295e9e64b8fbf2316d4082ab4c15390d55ba0cc8c"
+    },
+    {
+      "stage_id": "PB-06",
+      "sequence_number": 6,
+      "source": "m2-p4-product-quality-successor",
+      "prompt_version": "v2.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+      "prompt_sha256": "4844f7d703453ad6db7b7c3832c5cf467f6700ecf49a9c5d6213211133a048e7",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_06_semantic_validation_v1",
+      "schema_path": "ai/schemas/validation-result.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  ]
+}

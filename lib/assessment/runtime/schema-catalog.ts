@@ -1132,3 +1132,117 @@ export async function loadM2P4GroundingResponsibilityRuntimeStageCatalog() {
     definitions,
   };
 }
+
+export async function loadM2P4SemanticConsistencyRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v7.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v6.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v1" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v7.0.0" ||
+    runtimeManifest.prompt_bundle_version !==
+      "prompt-bundle-runtime-v7.0.0" ||
+    runtimeManifest.schema_set_version !==
+      "pipeline-schema-runtime-v3.2.0" ||
+    runtimeManifest.baseline !==
+      "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 6 ||
+    !Array.isArray(predecessorManifest.stages) ||
+    predecessorManifest.stages.length !== 6 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const pb01 = runtimeManifest.stages[0];
+  const predecessorPb01 = predecessorManifest.stages[0];
+  if (
+    pb01?.stage_id !== "PB-01" ||
+    pb01.sequence_number !== 1 ||
+    pb01.source !== "m2-p4-semantic-consistency-successor" ||
+    pb01.prompt_version !== "v6.0.0" ||
+    pb01.prompt_path !==
+      "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md" ||
+    pb01.schema_version !== "pipeline-schema-v5.0.0" ||
+    pb01.schema_name !== "pb_01_structure_v5" ||
+    pb01.schema_path !==
+      "lib/assessment/runtime/contracts/structured-intake-v5.schema.json" ||
+    pb01.schema_pointer !== null ||
+    pb01.grounded_schema_version !== "pipeline-schema-v4.0.0" ||
+    pb01.grounded_schema_path !==
+      "lib/assessment/runtime/contracts/structured-intake-v4.schema.json" ||
+    typeof pb01.grounded_schema_sha256 !== "string" ||
+    !predecessorPb01 ||
+    pb01.schema_version !== predecessorPb01.schema_version ||
+    pb01.schema_name !== predecessorPb01.schema_name ||
+    pb01.schema_path !== predecessorPb01.schema_path ||
+    pb01.schema_pointer !== predecessorPb01.schema_pointer ||
+    pb01.schema_sha256 !== predecessorPb01.schema_sha256 ||
+    pb01.grounded_schema_version !== predecessorPb01.grounded_schema_version ||
+    pb01.grounded_schema_path !== predecessorPb01.grounded_schema_path ||
+    pb01.grounded_schema_sha256 !== predecessorPb01.grounded_schema_sha256
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+  for (let index = 1; index < 6; index += 1) {
+    if (
+      JSON.stringify(runtimeManifest.stages[index]) !==
+      JSON.stringify(predecessorManifest.stages[index])
+    ) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+  }
+
+  const commonPrompt = await readFile(
+    path.join(
+      /*turbopackIgnore: true*/ repositoryRoot,
+      runtimeManifest.common_prompt.prompt_path,
+    ),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== runtimeManifest.common_prompt.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+  const pb01Prompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, pb01.prompt_path),
+    "utf8",
+  );
+  if (hashText(pb01Prompt) !== pb01.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+
+  const predecessor =
+    await loadM2P4GroundingResponsibilityRuntimeStageCatalog();
+  const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(pb01Prompt)}`;
+  const definitions = predecessor.definitions.map((definition) =>
+    definition.stageId === "PB-01"
+      ? {
+          ...definition,
+          promptVersion: pb01.prompt_version,
+          promptHash: hashText(developerPrompt),
+          developerPrompt,
+        }
+      : { ...definition },
+  );
+
+  return {
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    definitions,
+  };
+}
