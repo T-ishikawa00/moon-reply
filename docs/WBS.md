@@ -1,5 +1,18 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3:START -->
+## M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation
+
+- Status: `provider_final_confirmation_package_ready`
+- Baseline / branch: `3a56237a251bbc072ea34304a021c026fb7486f1` / `test/m2-p4-i3-r1-c1-r3-final-eight-case-provider-confirmation`
+- Scope: exact `17/17`; post-run mutable `8/8`
+- Authorization: exact eight synthetic PB-01 v7 calls; retry / repair / fallback `0 / 0 / 0`; rerun `false`
+- Calls / cases: `0/8` / `0/8` (`NOT_EXECUTED`)
+- Provider quality / isolated-E2E readiness: `false / false`
+- Active Runtime changed: `false`; C2 remains unauthorized
+- Next: create and push Commit A, execute the runner once, preserve actual evidence, then Human / ChatGPT review
+<!-- M2-P4-I3-R1-C1-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R2-R2-R1:START -->
 ## M2-P4-I3-R1-C1-R2-R2-R1 Current Gate
 

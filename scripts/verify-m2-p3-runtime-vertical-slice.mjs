@@ -30,6 +30,8 @@ const r1C1R2R2ReviewSha =
   "33a91f00be9f71fa533c9635d30425dc23914d81";
 const r1C1R2R2R1AcceptedImplementationSha =
   "b65af5303d0f1514742b794a00ce35f5c4a99bf4";
+const r1C1R2R2R1AcceptedAcceptanceSha =
+  "3a56237a251bbc072ea34304a021c026fb7486f1";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -208,6 +210,32 @@ const exactR1C1R2R2R1Paths = [
 const exactR1C1R2R2R1AcceptanceSyncPaths = [
   r1C1R2R2R1CapabilityManifestPath,
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const r1C1R3ArtifactRoot = "evals/runtime/m2-p4-i3-r1-c1-r3";
+const r1C1R3CapabilityManifestPath =
+  `${r1C1R3ArtifactRoot}/capabilities-v1.json`;
+const r1C1R3AuthorizationPath =
+  `${r1C1R3ArtifactRoot}/authorization-v1.json`;
+const r1C1R3ResultsPath = `${r1C1R3ArtifactRoot}/diagnostic-results-v1.json`;
+const r1C1R3ContractPath = `${r1C1R3ArtifactRoot}/diagnostic-contract-v1.json`;
+const exactR1C1R3Paths = [
+  `${r1C1R3ArtifactRoot}/diagnostic-cases-v1.json`,
+  r1C1R3ContractPath,
+  `${r1C1R3ArtifactRoot}/quality-contract-v1.json`,
+  r1C1R3AuthorizationPath,
+  r1C1R3CapabilityManifestPath,
+  r1C1R3ResultsPath,
+  `${r1C1R3ArtifactRoot}/diagnostic-summary-v1.md`,
+  "scripts/lib/m2-p4-i3-r1-c1-r3-provider-evaluator-v1.mjs",
+  "scripts/run-m2-p4-i3-r1-c1-r3-provider-confirmation.mjs",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-provider-confirmation.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_REVIEW.md",
   "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
@@ -548,26 +576,6 @@ function historicalPaths(startCommit, endCommit) {
     .map((item) => item.trim().replaceAll("\\", "/"))
     .filter(Boolean)
     .sort((left, right) => left.localeCompare(right, "en"));
-}
-
-function currentTaskPaths(startCommit) {
-  const paths = new Set(
-    gitText(["diff", "--name-only", startCommit, "--"])
-      .split(/\r?\n/gu)
-      .map((item) => item.trim().replaceAll("\\", "/"))
-      .filter(Boolean),
-  );
-  const status = gitText([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ]);
-  for (const line of status.split(/\r?\n/gu).filter(Boolean)) {
-    let item = line.slice(3).trim();
-    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
-    paths.add(item.replaceAll("\\", "/"));
-  }
-  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
 }
 
 function isExactLiteralSet(paths, expectedPaths) {
@@ -1879,6 +1887,10 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   const r1C1R2R2Authorization = json(r1C1R2R2AuthorizationPath);
   const r1C1R2R2Results = json(r1C1R2R2ResultsPath);
   const r1C1R2R2R1Manifest = json(r1C1R2R2R1CapabilityManifestPath);
+  const r1C1R3Manifest = json(r1C1R3CapabilityManifestPath);
+  const r1C1R3Authorization = json(r1C1R3AuthorizationPath);
+  const r1C1R3Results = json(r1C1R3ResultsPath);
+  const r1C1R3Contract = json(r1C1R3ContractPath);
   const actualLayer1PlanningPaths = historicalPaths(
     i3ImplementationSha,
     layer1PlanningSha,
@@ -1975,10 +1987,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R2R2ReviewSha,
     r1C1R2R2R1AcceptedImplementationSha,
   );
-  const actualR1C1R2R2R1AcceptanceSyncPaths = currentTaskPaths(
+  const actualR1C1R2R2R1AcceptanceSyncPaths = historicalPaths(
     r1C1R2R2R1AcceptedImplementationSha,
+    r1C1R2R2R1AcceptedAcceptanceSha,
   );
-  const actualR1C1R2R2R1Paths = currentTaskPaths(r1C1R2R2ReviewSha);
+  const actualR1C1R2R2R1Paths = historicalPaths(
+    r1C1R2R2ReviewSha,
+    r1C1R2R2R1AcceptedAcceptanceSha,
+  );
   const expectedR1C1R2R2R1ImplementationSnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1C1R2R2ReviewSha,
@@ -2588,6 +2604,56 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2R2R1Manifest.i3_final_acceptance === "pending" &&
       r1C1R2R2R1Manifest.milestone_2 === "incomplete",
     `R1-C1-R2-R2-R1 accepted offline successor boundary differs: implementation=${actualR1C1R2R2R1ImplementationPaths.join(",")}; acceptance_sync=${actualR1C1R2R2R1AcceptanceSyncPaths.join(",")}; cumulative=${actualR1C1R2R2R1Paths.join(",")}`,
+  );
+  const r1C1R3Initial = r1C1R3Authorization.consumed === false;
+  const r1C1R3Completed = r1C1R3Authorization.consumed === true;
+  check(
+    "M2_P3_I2_RENDERER_ONLY_GATE",
+    exactR1C1R3Paths.length === 17 &&
+      isExactLiteralSet(
+        [...r1C1R3Contract.exact_mutation_paths].sort((left, right) =>
+          left.localeCompare(right, "en"),
+        ),
+        exactR1C1R3Paths,
+      ) &&
+      r1C1R3Contract.task_id === "M2-P4-I3-R1-C1-R3" &&
+      r1C1R3Contract.baseline === r1C1R2R2R1AcceptedAcceptanceSha &&
+      r1C1R3Contract.model === "gpt-5.6-luna" &&
+      r1C1R3Contract.prompt === "pb-01-structure-v7" &&
+      r1C1R3Contract.catalog === "runtime-stage-catalog-v8.0.0" &&
+      r1C1R3Contract.authorized_calls === 8 &&
+      r1C1R3Contract.rerun_authorized === false &&
+      r1C1R3Manifest.exact_paths === 17 &&
+      r1C1R3Manifest.active_runtime_changed === false &&
+      r1C1R3Manifest.c2_authorized === false &&
+      r1C1R3Authorization.rerun_authorized === false &&
+      r1C1R3Results.calls_actual <= 8 &&
+      r1C1R3Results.retry_count === 0 &&
+      r1C1R3Results.repair_count === 0 &&
+      r1C1R3Results.fallback_count === 0 &&
+      r1C1R3Results.pb_02_through_pb_06_calls === 0 &&
+      r1C1R3Results.db_operations === 0 &&
+      r1C1R3Results.supabase_operations === 0 &&
+      r1C1R3Results.holdout_use === 0 &&
+      r1C1R3Results.real_user_data === 0 &&
+      r1C1R3Results.active_runtime_changed === false &&
+      r1C1R3Results.c2_authorized === false &&
+      ((r1C1R3Initial &&
+        r1C1R3Manifest.status ===
+          "provider_final_confirmation_package_ready" &&
+        r1C1R3Results.status === "not_executed" &&
+        r1C1R3Results.calls_actual === 0 &&
+        r1C1R3Manifest.provider_quality_established === false &&
+        r1C1R3Manifest.candidate_ready_for_isolated_e2e === false) ||
+        (r1C1R3Completed &&
+          r1C1R3Manifest.status === r1C1R3Results.status &&
+          r1C1R3Manifest.final_confirmation_verdict ===
+            r1C1R3Results.evaluation.verdict &&
+          r1C1R3Manifest.provider_quality_established ===
+            (r1C1R3Results.evaluation.verdict === "PASS") &&
+          r1C1R3Manifest.candidate_ready_for_isolated_e2e ===
+            (r1C1R3Results.evaluation.verdict === "PASS"))),
+    "R1-C1-R3 exact eight-case confirmation boundary differs",
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

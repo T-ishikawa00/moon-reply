@@ -16,6 +16,8 @@ const repositoryRoot = path.resolve(
 const baseline = "33a91f00be9f71fa533c9635d30425dc23914d81";
 const acceptedImplementationCommit =
   "b65af5303d0f1514742b794a00ce35f5c4a99bf4";
+const acceptedAcceptanceCommit =
+  "3a56237a251bbc072ea34304a021c026fb7486f1";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
@@ -104,27 +106,6 @@ function historicalTaskPaths(startCommit, endCommit) {
     .sort((left, right) => left.localeCompare(right, "en"));
 }
 
-function currentTaskPaths(startCommit = baseline) {
-  const paths = new Set(
-    gitText(["diff", "--name-only", startCommit, "--"])
-      .split(/\r?\n/gu)
-      .map((item) => item.trim().replaceAll("\\", "/"))
-      .filter(Boolean),
-  );
-  for (const line of gitText([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ])
-    .split(/\r?\n/gu)
-    .filter(Boolean)) {
-    let item = line.slice(3).trim();
-    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
-    paths.add(item.replaceAll("\\", "/"));
-  }
-  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
-}
-
 function assertExactPaths(actual, expected, label) {
   const literal = actual.every(
     (item) =>
@@ -182,8 +163,11 @@ const implementationPaths = historicalTaskPaths(
   baseline,
   acceptedImplementationCommit,
 );
-const acceptanceSyncPaths = currentTaskPaths(acceptedImplementationCommit);
-const actualPaths = currentTaskPaths();
+const acceptanceSyncPaths = historicalTaskPaths(
+  acceptedImplementationCommit,
+  acceptedAcceptanceCommit,
+);
+const actualPaths = implementationPaths;
 assertExactPaths(actualPaths, exactPaths, "exact 13-path scope differs");
 assertExactPaths(
   implementationPaths,
@@ -649,6 +633,7 @@ console.log("M2_P4_I3_R1_C1_R2_R2_R1_PRACTICAL_REASON_CONSISTENCY: PASS");
 console.log("exact_scope: 13/13");
 console.log("immutable_implementation_scope: 13/13");
 console.log("acceptance_sync_scope: 8/8");
+console.log("historical_successor_compatible: true");
 console.log("non_sync_implementation_blobs_unchanged: 5/5");
 console.log(`accepted_implementation_commit: ${acceptedImplementationCommit}`);
 console.log("offline_practical_reason_revision_accepted: true");

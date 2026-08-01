@@ -1,5 +1,11 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-P4-I3-R1-C1-R3:START -->
+## Immediate Execution Status
+
+M2-P4-I3-R1-C1-R3 is `provider_final_confirmation_package_ready` on `test/m2-p4-i3-r1-c1-r3-final-eight-case-provider-confirmation` from exact baseline `3a56237a251bbc072ea34304a021c026fb7486f1`. Human authorization `M2-P4-I3-R1-C1-R3-2026-08-02` permits exactly eight sequential synthetic PB-01 Prompt v7 calls to `gpt-5.6-luna`, with retry / repair / fallback / PB-02 through PB-06 / DB / Supabase / holdout / real-user data all zero. The exact package scope is `17/17`; execution has not started, authorization is unconsumed, Provider quality is unestablished, candidate isolated-E2E readiness is false, Active Runtime is unchanged, and Runtime activation / C2 / E1 / PR / main merge / release remain unauthorized.
+<!-- M2-P4-I3-R1-C1-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R2-R2-R1:START -->
 ## Immediate Acceptance Status
 
