@@ -34,6 +34,8 @@ const r1C1R2R2ResultCommit =
   "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
 const r1C1R2R2ReviewCommit =
   "33a91f00be9f71fa533c9635d30425dc23914d81";
+const r1C1R2R2R1AcceptedImplementationCommit =
+  "b65af5303d0f1514742b794a00ce35f5c4a99bf4";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -203,6 +205,16 @@ const exactR1C1R2R2R1Paths = new Set([
   "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
   "lib/assessment/runtime/schema-catalog.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+]);
+const exactR1C1R2R2R1AcceptanceSyncPaths = new Set([
+  r1C1R2R2R1CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -4685,6 +4697,13 @@ function verifyScopeAndProhibitedImplementation() {
     r1C1R2R1AcceptedAcceptanceCommit,
     r1C1R2R2ReviewCommit,
   );
+  const m2p4I3R1C1R2R2R1ImplementationPaths = historicalTaskPaths(
+    r1C1R2R2ReviewCommit,
+    r1C1R2R2R1AcceptedImplementationCommit,
+  );
+  const m2p4I3R1C1R2R2R1AcceptanceSyncPaths = currentTaskPaths(
+    r1C1R2R2R1AcceptedImplementationCommit,
+  );
   const m2p4I3R1C1R2R2R1TaskPaths = currentTaskPaths(
     r1C1R2R2ReviewCommit,
   );
@@ -4880,8 +4899,25 @@ function verifyScopeAndProhibitedImplementation() {
       },
     });
   }
+  const expectedR1C1R2R2R1ImplementationSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R2R2ReviewCommit,
+    end_commit_sha: r1C1R2R2R1AcceptedImplementationCommit,
+    exact_paths: 13,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
   if (
     exactR1C1R2R2R1Paths.size !== 13 ||
+    exactR1C1R2R2R1AcceptanceSyncPaths.size !== 8 ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2R1ImplementationPaths,
+      exactR1C1R2R2R1Paths,
+    ) ||
+    !isExactLiteralPathSet(
+      m2p4I3R1C1R2R2R1AcceptanceSyncPaths,
+      exactR1C1R2R2R1AcceptanceSyncPaths,
+    ) ||
     !isExactLiteralPathSet(
       m2p4I3R1C1R2R2R1TaskPaths,
       exactR1C1R2R2R1Paths,
@@ -4889,7 +4925,13 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1C1R2R2R1Manifest?.task_id !==
       "M2-P4-I3-R1-C1-R2-R2-R1" ||
     m2p4I3R1C1R2R2R1Manifest?.status !==
-      "offline_revision_implemented_pending_human_chatgpt_review" ||
+      "human_chatgpt_accepted_complete" ||
+    m2p4I3R1C1R2R2R1Manifest
+      ?.offline_practical_reason_revision_accepted !== true ||
+    m2p4I3R1C1R2R2R1Manifest?.accepted_implementation_commit !==
+      r1C1R2R2R1AcceptedImplementationCommit ||
+    JSON.stringify(m2p4I3R1C1R2R2R1Manifest?.implementation_snapshot) !==
+      JSON.stringify(expectedR1C1R2R2R1ImplementationSnapshot) ||
     m2p4I3R1C1R2R2R1Manifest?.baseline !== r1C1R2R2ReviewCommit ||
     m2p4I3R1C1R2R2R1Manifest?.branch !==
       "feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency" ||
@@ -4900,6 +4942,13 @@ function verifyScopeAndProhibitedImplementation() {
       exactR1C1R2R2R1Paths,
     ) ||
     m2p4I3R1C1R2R2R1Manifest?.exact_mutation_path_count !== 13 ||
+    !isExactLiteralPathSet(
+      [
+        ...(m2p4I3R1C1R2R2R1Manifest?.acceptance_sync_exact_paths ?? []),
+      ].sort(),
+      exactR1C1R2R2R1AcceptanceSyncPaths,
+    ) ||
+    m2p4I3R1C1R2R2R1Manifest?.acceptance_sync_exact_path_count !== 8 ||
     m2p4I3R1C1R2R2R1Manifest?.prompt !== "pb-01-structure-v7" ||
     m2p4I3R1C1R2R2R1Manifest?.catalog !==
       "runtime-stage-catalog-v8.0.0" ||
@@ -4921,6 +4970,8 @@ function verifyScopeAndProhibitedImplementation() {
     m2p4I3R1C1R2R2R1Manifest?.provider_quality_established !== false ||
     m2p4I3R1C1R2R2R1Manifest?.final_eight_case_confirmation_required !==
       true ||
+    m2p4I3R1C1R2R2R1Manifest?.final_eight_case_confirmation_authorized !==
+      false ||
     m2p4I3R1C1R2R2R1Manifest?.active_runtime_changed !== false ||
     m2p4I3R1C1R2R2R1Manifest?.db_operations !== 0 ||
     m2p4I3R1C1R2R2R1Manifest?.supabase_operations !== 0 ||
@@ -4940,10 +4991,13 @@ function verifyScopeAndProhibitedImplementation() {
       file: r1C1R2R2R1CapabilityManifestPath,
       pathName: "$.m2_p4_i3_r1_c1_r2_r2_r1_boundary",
       invariant:
-        "R2-R2-R1 is an exact 13-path inactive offline Prompt successor that preserves targeted repairs and ownership while requiring final eight-case confirmation",
+        "R2-R2-R1 preserves an immutable exact 13-path accepted offline Prompt successor and exact 8-path acceptance sync while final eight-case confirmation and C2 remain unauthorized",
       expected: {
-        status: "offline_revision_implemented_pending_human_chatgpt_review",
-        exact_paths: 13,
+        status: "human_chatgpt_accepted_complete",
+        accepted_implementation_commit:
+          r1C1R2R2R1AcceptedImplementationCommit,
+        implementation_paths: 13,
+        acceptance_sync_paths: 8,
         practical_reason_consistency_implemented: true,
         targeted_repairs_preserved: "3/3",
         ownership_sequence_preserved: true,
@@ -4953,7 +5007,9 @@ function verifyScopeAndProhibitedImplementation() {
         c2_authorized: false,
       },
       actual: {
-        paths: m2p4I3R1C1R2R2R1TaskPaths,
+        implementation_paths: m2p4I3R1C1R2R2R1ImplementationPaths,
+        acceptance_sync_paths: m2p4I3R1C1R2R2R1AcceptanceSyncPaths,
+        cumulative_paths: m2p4I3R1C1R2R2R1TaskPaths,
         manifest: m2p4I3R1C1R2R2R1Manifest,
       },
     });

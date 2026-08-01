@@ -2,7 +2,17 @@
   "schema_version": "m2-p4-i3-r1-c1-r2-r2-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R2-R2-R1",
   "title": "Offline Practical Reason Consistency Revision",
-  "status": "offline_revision_implemented_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
+  "offline_practical_reason_revision_accepted": true,
+  "accepted_implementation_commit": "b65af5303d0f1514742b794a00ce35f5c4a99bf4",
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "33a91f00be9f71fa533c9635d30425dc23914d81",
+    "end_commit_sha": "b65af5303d0f1514742b794a00ce35f5c4a99bf4",
+    "exact_paths": 13,
+    "immutable_snapshot": true,
+    "include_working_tree": false
+  },
   "baseline": "33a91f00be9f71fa533c9635d30425dc23914d81",
   "branch": "feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency",
   "exact_mutation_paths": [
@@ -21,6 +31,17 @@
     "docs/CODEX_HANDOFF.md"
   ],
   "exact_mutation_path_count": 13,
+  "acceptance_sync_exact_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/capabilities-v1.json",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+    "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
+    "scripts/verify-m2-eval-foundation.mjs",
+    "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "acceptance_sync_exact_path_count": 8,
   "prompt": "pb-01-structure-v7",
   "catalog": "runtime-stage-catalog-v8.0.0",
   "prompt_bundle": "prompt-bundle-runtime-v8.0.0",
@@ -43,6 +64,7 @@
   "provider_outputs_mutated": 0,
   "provider_quality_established": false,
   "final_eight_case_confirmation_required": true,
+  "final_eight_case_confirmation_authorized": false,
   "active_runtime_changed": false,
   "db_operations": 0,
   "supabase_operations": 0,

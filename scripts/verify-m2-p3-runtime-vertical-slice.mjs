@@ -28,6 +28,8 @@ const r1C1R2R2ResultSha =
   "2cb243486063ba9235f4f3ce65f051cf5fd38d6e";
 const r1C1R2R2ReviewSha =
   "33a91f00be9f71fa533c9635d30425dc23914d81";
+const r1C1R2R2R1AcceptedImplementationSha =
+  "b65af5303d0f1514742b794a00ce35f5c4a99bf4";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -197,6 +199,16 @@ const exactR1C1R2R2R1Paths = [
   "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
   "lib/assessment/runtime/schema-catalog.ts",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const exactR1C1R2R2R1AcceptanceSyncPaths = [
+  r1C1R2R2R1CapabilityManifestPath,
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
   "scripts/verify-m2-eval-foundation.mjs",
   "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
   "docs/CURRENT_FOCUS.md",
@@ -1959,7 +1971,22 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R2R1AcceptedAcceptanceSha,
     r1C1R2R2ReviewSha,
   );
+  const actualR1C1R2R2R1ImplementationPaths = historicalPaths(
+    r1C1R2R2ReviewSha,
+    r1C1R2R2R1AcceptedImplementationSha,
+  );
+  const actualR1C1R2R2R1AcceptanceSyncPaths = currentTaskPaths(
+    r1C1R2R2R1AcceptedImplementationSha,
+  );
   const actualR1C1R2R2R1Paths = currentTaskPaths(r1C1R2R2ReviewSha);
+  const expectedR1C1R2R2R1ImplementationSnapshot = {
+    type: "historical_commit_range",
+    base_commit_sha: r1C1R2R2ReviewSha,
+    end_commit_sha: r1C1R2R2R1AcceptedImplementationSha,
+    exact_paths: 13,
+    immutable_snapshot: true,
+    include_working_tree: false,
+  };
   const expectedR1C1R2R1ImplementationSnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1C1R2ReviewSha,
@@ -2493,10 +2520,25 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",
     exactR1C1R2R2R1Paths.length === 13 &&
+      exactR1C1R2R2R1AcceptanceSyncPaths.length === 8 &&
+      isExactLiteralSet(
+        actualR1C1R2R2R1ImplementationPaths,
+        exactR1C1R2R2R1Paths,
+      ) &&
+      isExactLiteralSet(
+        actualR1C1R2R2R1AcceptanceSyncPaths,
+        exactR1C1R2R2R1AcceptanceSyncPaths,
+      ) &&
       isExactLiteralSet(actualR1C1R2R2R1Paths, exactR1C1R2R2R1Paths) &&
       r1C1R2R2R1Manifest.task_id === "M2-P4-I3-R1-C1-R2-R2-R1" &&
       r1C1R2R2R1Manifest.status ===
-        "offline_revision_implemented_pending_human_chatgpt_review" &&
+        "human_chatgpt_accepted_complete" &&
+      r1C1R2R2R1Manifest.offline_practical_reason_revision_accepted ===
+        true &&
+      r1C1R2R2R1Manifest.accepted_implementation_commit ===
+        r1C1R2R2R1AcceptedImplementationSha &&
+      JSON.stringify(r1C1R2R2R1Manifest.implementation_snapshot) ===
+        JSON.stringify(expectedR1C1R2R2R1ImplementationSnapshot) &&
       r1C1R2R2R1Manifest.baseline === r1C1R2R2ReviewSha &&
       r1C1R2R2R1Manifest.branch ===
         "feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency" &&
@@ -2507,6 +2549,13 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
         exactR1C1R2R2R1Paths,
       ) &&
       r1C1R2R2R1Manifest.exact_mutation_path_count === 13 &&
+      isExactLiteralSet(
+        [
+          ...r1C1R2R2R1Manifest.acceptance_sync_exact_paths,
+        ].sort((left, right) => left.localeCompare(right, "en")),
+        exactR1C1R2R2R1AcceptanceSyncPaths,
+      ) &&
+      r1C1R2R2R1Manifest.acceptance_sync_exact_path_count === 8 &&
       r1C1R2R2R1Manifest.prompt === "pb-01-structure-v7" &&
       r1C1R2R2R1Manifest.catalog === "runtime-stage-catalog-v8.0.0" &&
       r1C1R2R2R1Manifest.prompt_bundle ===
@@ -2523,6 +2572,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2R2R1Manifest.provider_outputs_mutated === 0 &&
       r1C1R2R2R1Manifest.provider_quality_established === false &&
       r1C1R2R2R1Manifest.final_eight_case_confirmation_required === true &&
+      r1C1R2R2R1Manifest.final_eight_case_confirmation_authorized === false &&
       r1C1R2R2R1Manifest.active_runtime_changed === false &&
       r1C1R2R2R1Manifest.db_operations === 0 &&
       r1C1R2R2R1Manifest.supabase_operations === 0 &&
@@ -2537,7 +2587,7 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
       r1C1R2R2R1Manifest.next_candidate_authorized === false &&
       r1C1R2R2R1Manifest.i3_final_acceptance === "pending" &&
       r1C1R2R2R1Manifest.milestone_2 === "incomplete",
-    `R1-C1-R2-R2-R1 inactive offline successor boundary differs: ${actualR1C1R2R2R1Paths.join(",")}`,
+    `R1-C1-R2-R2-R1 accepted offline successor boundary differs: implementation=${actualR1C1R2R2R1ImplementationPaths.join(",")}; acceptance_sync=${actualR1C1R2R2R1AcceptanceSyncPaths.join(",")}; cumulative=${actualR1C1R2R2R1Paths.join(",")}`,
   );
   check(
     "M2_P3_I2_RENDERER_ONLY_GATE",

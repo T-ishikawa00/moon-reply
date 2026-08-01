@@ -14,6 +14,8 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baseline = "33a91f00be9f71fa533c9635d30425dc23914d81";
+const acceptedImplementationCommit =
+  "b65af5303d0f1514742b794a00ce35f5c4a99bf4";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md",
@@ -30,6 +32,19 @@ const exactPaths = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ].sort((left, right) => left.localeCompare(right, "en"));
+const exactAcceptanceSyncPaths = [
+  "evals/runtime/m2-p4-i3-r1-c1-r2-r2-r1/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency.mjs",
+  "scripts/verify-m2-eval-foundation.mjs",
+  "scripts/verify-m2-p3-runtime-vertical-slice.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+].sort((left, right) => left.localeCompare(right, "en"));
+const nonSyncImplementationPaths = exactPaths.filter(
+  (item) => !exactAcceptanceSyncPaths.includes(item),
+);
 const immutableR2R2ExecutionPaths = [
   "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-cases-v1.json",
   "evals/runtime/m2-p4-i3-r1-c1-r2-r2/diagnostic-contract-v1.json",
@@ -81,9 +96,17 @@ function same(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-function currentTaskPaths() {
+function historicalTaskPaths(startCommit, endCommit) {
+  return gitText(["diff", "--name-only", startCommit, endCommit, "--"])
+    .split(/\r?\n/gu)
+    .map((item) => item.trim().replaceAll("\\", "/"))
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right, "en"));
+}
+
+function currentTaskPaths(startCommit = baseline) {
   const paths = new Set(
-    gitText(["diff", "--name-only", baseline, "--"])
+    gitText(["diff", "--name-only", startCommit, "--"])
       .split(/\r?\n/gu)
       .map((item) => item.trim().replaceAll("\\", "/"))
       .filter(Boolean),
@@ -133,6 +156,19 @@ function assertUnchanged(relativePath) {
   }
 }
 
+function assertMatchesCommit(relativePath, commit) {
+  const changed = gitText([
+    "diff",
+    "--name-only",
+    commit,
+    "--",
+    relativePath,
+  ]).trim();
+  if (changed !== "") {
+    throw new Error(`accepted implementation blob changed: ${relativePath}`);
+  }
+}
+
 const promptPath =
   "lib/assessment/runtime/contracts/pb-01-structure-v7.developer.md";
 const catalogPath =
@@ -142,8 +178,27 @@ const contractPath = `${artifactRoot}/practical-reason-consistency-contract-v1.j
 const analysisPath = `${artifactRoot}/offline-analysis-v1.json`;
 const capabilitiesPath = `${artifactRoot}/capabilities-v1.json`;
 
+const implementationPaths = historicalTaskPaths(
+  baseline,
+  acceptedImplementationCommit,
+);
+const acceptanceSyncPaths = currentTaskPaths(acceptedImplementationCommit);
 const actualPaths = currentTaskPaths();
 assertExactPaths(actualPaths, exactPaths, "exact 13-path scope differs");
+assertExactPaths(
+  implementationPaths,
+  exactPaths,
+  "immutable implementation scope differs",
+);
+assertExactPaths(
+  acceptanceSyncPaths,
+  exactAcceptanceSyncPaths,
+  "exact 8-path acceptance sync differs",
+);
+
+for (const nonSyncPath of nonSyncImplementationPaths) {
+  assertMatchesCommit(nonSyncPath, acceptedImplementationCommit);
+}
 
 for (const immutablePath of [
   "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md",
@@ -382,6 +437,13 @@ assertExactPaths(
   "capability path manifest differs",
 );
 assertExactPaths(
+  [...capabilities.acceptance_sync_exact_paths].sort((left, right) =>
+    left.localeCompare(right, "en"),
+  ),
+  exactAcceptanceSyncPaths,
+  "acceptance-sync capability manifest differs",
+);
+assertExactPaths(
   [...contract.immutable_predecessors.r2_r2_execution_artifacts].sort(
     (left, right) => left.localeCompare(right, "en"),
   ),
@@ -400,6 +462,14 @@ assertExactPaths(
   "immutable R2-R2 review manifest differs",
 );
 
+const expectedImplementationSnapshot = {
+  type: "historical_commit_range",
+  base_commit_sha: baseline,
+  end_commit_sha: acceptedImplementationCommit,
+  exact_paths: 13,
+  immutable_snapshot: true,
+  include_working_tree: false,
+};
 if (
   contract.exact_mutation_path_count !== 13 ||
   contract.candidate.prompt_sha256_utf8_lf !== hashText(prompt) ||
@@ -460,9 +530,13 @@ if (
   analysis.execution.provider_outputs_mutated !== 0 ||
   analysis.conclusion.provider_quality_established !== false ||
   analysis.conclusion.final_eight_case_confirmation_required !== true ||
-  capabilities.status !==
-    "offline_revision_implemented_pending_human_chatgpt_review" ||
+  capabilities.status !== "human_chatgpt_accepted_complete" ||
+  capabilities.offline_practical_reason_revision_accepted !== true ||
+  capabilities.accepted_implementation_commit !==
+    acceptedImplementationCommit ||
+  !same(capabilities.implementation_snapshot, expectedImplementationSnapshot) ||
   capabilities.exact_mutation_path_count !== 13 ||
+  capabilities.acceptance_sync_exact_path_count !== 8 ||
   capabilities.practical_reason_consistency_implemented !== true ||
   capabilities.targeted_repairs_preserved !== "3/3" ||
   capabilities.ownership_sequence_preserved !== true ||
@@ -470,6 +544,7 @@ if (
   capabilities.provider_outputs_mutated !== 0 ||
   capabilities.provider_quality_established !== false ||
   capabilities.final_eight_case_confirmation_required !== true ||
+  capabilities.final_eight_case_confirmation_authorized !== false ||
   capabilities.active_runtime_changed !== false ||
   capabilities.protected_diff !== 0 ||
   capabilities.c2_eligible !== false ||
@@ -485,7 +560,11 @@ if (
 
 for (const [documentPath, fragments] of Object.entries({
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R2_R2_R1_REVIEW.md": [
-    "offline_revision_implemented_pending_human_chatgpt_review",
+    "human_chatgpt_accepted_complete",
+    "OFFLINE PRACTICAL REASON REVISION ACCEPTED COMPLETE",
+    "Offline practical-reason revision accepted: `true`",
+    `Accepted implementation commit: \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact scope: `8/8`",
     "Targeted repairs preserved: `3/3`",
     "Ownership sequence preserved: `true`",
     "Provider calls / Provider outputs mutated: `0 / 0`",
@@ -495,16 +574,22 @@ for (const [documentPath, fragments] of Object.entries({
   ],
   "docs/CURRENT_FOCUS.md": [
     "M2-P4-I3-R1-C1-R2-R2-R1",
-    "offline_revision_implemented_pending_human_chatgpt_review",
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization is exact `8/8`",
     "catalog v8",
   ],
   "docs/WBS.md": [
     "M2-P4-I3-R1-C1-R2-R2-R1 Current Gate",
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
     "final eight-case Provider confirmation remains required",
     "C2 remains unauthorized",
   ],
   "docs/CODEX_HANDOFF.md": [
     "M2-P4-I3-R1-C1-R2-R2-R1",
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
     "Prompt v7",
     "next candidate is `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation` and is unauthorized",
   ],
@@ -562,8 +647,15 @@ gitText(["diff", "--check", baseline, "--"]);
 
 console.log("M2_P4_I3_R1_C1_R2_R2_R1_PRACTICAL_REASON_CONSISTENCY: PASS");
 console.log("exact_scope: 13/13");
+console.log("immutable_implementation_scope: 13/13");
+console.log("acceptance_sync_scope: 8/8");
+console.log("non_sync_implementation_blobs_unchanged: 5/5");
+console.log(`accepted_implementation_commit: ${acceptedImplementationCommit}`);
+console.log("offline_practical_reason_revision_accepted: true");
 console.log("prompt_v6_unchanged: PASS");
+console.log("prompt_v7_unchanged: PASS");
 console.log("catalog_v7_unchanged: PASS");
+console.log("catalog_v8_unchanged: PASS");
 console.log("r2_r2_execution_artifacts_unchanged: 9/9");
 console.log("r2_r2_review_records_unchanged: 3/3");
 console.log("practical_reason_consistency: PASS");
@@ -579,6 +671,7 @@ console.log("provider_outputs_mutated: 0");
 console.log("active_runtime_changed: false");
 console.log("provider_quality_established: false");
 console.log("final_eight_case_confirmation_required: true");
+console.log("final_eight_case_confirmation_authorized: false");
 console.log("main_unchanged: PASS");
 console.log("c2_authorized: false");
 console.log("protected_diff: 0");

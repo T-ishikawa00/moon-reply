@@ -1,9 +1,9 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-P4-I3-R1-C1-R2-R2-R1:START -->
-## Immediate Offline Revision State: R2-R2-R1
+## Immediate Acceptance State: R2-R2-R1
 
-M2-P4-I3-R1-C1-R2-R2-R1 is `offline_revision_implemented_pending_human_chatgpt_review` in exact `13/13` scope from `33a91f00be9f71fa533c9635d30425dc23914d81`. Prompt v7 requires a concrete incoming scheduling question, choice, obligation, change, or coordination need before projecting `schedule_coordination / true`; it permits `question` versus `schedule_coordination` only when the practical function is preserved and forbids candidate-only or `optional_message` content from creating the incoming reason. Catalog v8 is inactive and keeps Provider Schema v5, grounded Schema v4, Runtime schema set v3.2, and PB-02 through PB-06 unchanged. Prompt v6, catalog v7, all non-overlapping R2-R2 evidence, Application grounding, Integrity v2, Decision Policy, Pipeline, Service, UI, Supabase, active catalog v4, and `main` are unchanged. Targeted repairs remain `3/3`, ownership sequence remains successful, and Provider calls/output mutations are `0/0`. Provider quality is unestablished; final eight-case confirmation remains required and unauthorized; C2 remains unauthorized. The next candidate is `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation` and is unauthorized.
+M2-P4-I3-R1-C1-R2-R2-R1 is `human_chatgpt_accepted_complete` at accepted implementation commit `b65af5303d0f1514742b794a00ce35f5c4a99bf4`. The immutable implementation snapshot is exact `13/13` for `33a91f00be9f71fa533c9635d30425dc23914d81..b65af5303d0f1514742b794a00ce35f5c4a99bf4`, and acceptance sync is exact `8/8`. Prompt v7 requires a concrete incoming scheduling question, choice, obligation, change, or coordination need before projecting `schedule_coordination / true`; it permits `question` versus `schedule_coordination` only when the practical function is preserved and forbids candidate-only or `optional_message` content from creating the incoming reason. Catalog v8 is inactive and keeps Provider Schema v5, grounded Schema v4, Runtime schema set v3.2, and PB-02 through PB-06 unchanged. Prompt v6/v7, catalog v7/v8, all R2-R2 evidence, Application grounding, Integrity v2, Decision Policy, Pipeline, Service, UI, Supabase, active catalog v4, and `main` are unchanged by acceptance sync. Targeted repairs remain `3/3`, ownership sequence remains successful, and Provider calls/output mutations are `0/0`. Provider quality is unestablished; final eight-case confirmation remains required and unauthorized; Active Runtime remains unchanged and C2 remains unauthorized. The next candidate is `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation` and is unauthorized.
 <!-- M2-P4-I3-R1-C1-R2-R2-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R2-R2:START -->
@@ -52,7 +52,7 @@ The active Supabase migration sequence begins with `0002_m2_p3_runtime_vertical_
 
 The post-acceptance synthetic live E2E ran against code commit `66ab02c566d61d0c563e26e3d2c5fb23f6500d45`.
 
-Current state: M2-P3 Runtime Vertical Slice, M2-P4-I2, M2-P4-I3-R1 Final Planning, M2-P4-I3-R1-A, M2-P4-I3-R1-B, R1-C1-R1, and offline R1-C1-R2-R1 are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 bounded execution protocol and R1-C1-R2 remain reviewed with Provider verdict `FAIL`. R2-R2 is `human_chatgpt_reviewed_fail_complete`: targeted repairs `3/3 PASS`, ownership sequence PASS, Decision Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen verdict FAIL. R2-R2-R1 Prompt v7/catalog v8 offline revision is implemented pending Human / ChatGPT review. Provider quality remains unestablished, final eight-case confirmation is unauthorized, Active Service remains catalog v4, C2 Runtime activation and E1 remain unauthorized, and I3 final acceptance / merge to `main` remain pending.
+Current state: M2-P3 Runtime Vertical Slice, M2-P4-I2, M2-P4-I3-R1 Final Planning, M2-P4-I3-R1-A, M2-P4-I3-R1-B, R1-C1-R1, offline R1-C1-R2-R1, and offline R2-R2-R1 are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 bounded execution protocol and R1-C1-R2 remain reviewed with Provider verdict `FAIL`. R2-R2 is `human_chatgpt_reviewed_fail_complete`: targeted repairs `3/3 PASS`, ownership sequence PASS, Decision Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen verdict FAIL. Provider quality remains unestablished, final eight-case confirmation is unauthorized, Active Service remains catalog v4, C2 Runtime activation and E1 remain unauthorized, and I3 final acceptance / merge to `main` remain pending.
 
 Evidence remains two-layered: task-time automated validation used `FakeAiStageTransport` and `FakeAssessmentRepository` only and retains OpenAI calls `0`, Supabase calls `0`, and API spend `USD 0`; the post-acceptance Human-configured synthetic live E2E has nonzero usage, while exact aggregate tokens, cost, and call count have not been calculated. Real-user records and holdout use remain `0`.
 
@@ -278,13 +278,14 @@ The preceding R2-R2 field preserves its review-time successor authorization stat
 ## M2-P4-I3-R1-C1-R2-R2-R1 Handoff
 
 - Baseline / branch: `33a91f00be9f71fa533c9635d30425dc23914d81` / `feat/m2-p4-i3-r1-c1-r2-r2-r1-practical-reason-consistency`.
-- Status / exact scope: `offline_revision_implemented_pending_human_chatgpt_review` / `13/13`.
+- Status / accepted implementation: `human_chatgpt_accepted_complete` / `b65af5303d0f1514742b794a00ce35f5c4a99bf4`.
+- Immutable implementation / acceptance sync: `13/13` for `33a91f00be9f71fa533c9635d30425dc23914d81..b65af5303d0f1514742b794a00ce35f5c4a99bf4` / `8/8`.
 - Candidate: PB-01 Prompt v7, catalog v8, prompt bundle v8, Provider Schema v5, grounded Schema v4, Runtime schema set v3.2; candidate catalog inactive.
 - Semantic rule: concrete current-situation scheduling evidence requires `practical_reason schedule_coordination / true`; latest-message `question` and `schedule_coordination` are both permitted only when the practical function is preserved.
 - Non-inference rule: invitation, romance, desire to send, vague future meeting, or candidate-only date is insufficient; `optional_message` cannot manufacture an incoming practical reason.
-- Preserved evidence: targeted repairs `3/3`, ownership sequence PASS, actual/comparison Policy deep equality, Prompt v6/catalog v7, nine R2-R2 execution artifacts, and three non-overlapping review records unchanged.
+- Preserved evidence: targeted repairs `3/3`, ownership sequence PASS, actual/comparison Policy deep equality, Prompt v6/v7, catalog v7/v8, nine R2-R2 execution artifacts, and three non-overlapping review records unchanged by acceptance sync.
 - Execution boundary: Provider calls / Provider outputs mutated / DB / Supabase / holdout / real-user data `0 / 0 / 0 / 0 / 0 / 0`.
-- Capability boundary: Provider quality established `false`; final eight-case confirmation required `true`; Active Runtime changed `false`; C2 eligible / authorized `false / false`; `main` changed `false`; Milestone 2 incomplete.
+- Capability boundary: Provider quality established `false`; final eight-case confirmation required / authorized `true / false`; Active Runtime changed `false`; C2 eligible / authorized `false / false`; `main` changed `false`; Milestone 2 incomplete.
 - Next candidate: `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation`; authorized `false`.
 
 ## Current Restriction
@@ -295,7 +296,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Milestone 1 is closed. M2-P3, M2-P4 planning, I1-A through I2, I3-R1 Final Planning, R1-A, R1-B, R1-C1-R1, and offline R1-C1-R2-R1 are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 and R1-C1-R2 retain reviewed Provider verdicts `FAIL`. R2-R2 is Human / ChatGPT reviewed complete with targeted repairs `3/3 PASS`, Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen verdict `FAIL`. R2-R2-R1 is implemented offline pending Human / ChatGPT review. Do not rerun C1, R2, or R2-R2, run the unauthorized final eight-case confirmation, activate Runtime, or start C2. C2 Runtime activation and E1 remain unauthorized, final I3 acceptance remains pending, active Runtime remains catalog v4, and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+Milestone 1 is closed. M2-P3, M2-P4 planning, I1-A through I2, I3-R1 Final Planning, R1-A, R1-B, R1-C1-R1, offline R1-C1-R2-R1, and offline R2-R2-R1 are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 and R1-C1-R2 retain reviewed Provider verdicts `FAIL`. R2-R2 is Human / ChatGPT reviewed complete with targeted repairs `3/3 PASS`, Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen verdict `FAIL`. R2-R2-R1 acceptance does not establish Provider quality, an eight-case PASS, Runtime activation eligibility, or C2 eligibility. Do not rerun C1, R2, or R2-R2, run the unauthorized final eight-case confirmation, activate Runtime, or start C2. C2 Runtime activation and E1 remain unauthorized, final I3 acceptance remains pending, active Runtime remains catalog v4, and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`
