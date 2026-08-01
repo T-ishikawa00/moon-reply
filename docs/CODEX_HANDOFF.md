@@ -1,5 +1,11 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R2-R2:START -->
+## Immediate Authority: R2-R2
+
+Human authorized only M2-P4-I3-R1-C1-R2-R2 Four-Case Bounded Provider Diagnostic under authorization M2-P4-I3-R1-C1-R2-R2-2026-08-02. The package is provider_targeted_diagnostic_package_ready with exact four synthetic PB-01 Prompt v6 calls, maximum four, retry / repair / fallback zero, and no PB-02 through PB-06, DB, Supabase, holdout, or real-user use. Calls are currently 0 / 4, authorization is unconsumed, rerun is unauthorized, Provider quality established is false, full eight-case confirmation required is true, Active Runtime is unchanged, and C2 is unauthorized. This authority does not include Prompt/Schema edits, Runtime activation, C2, E1, PR, main merge, or release.
+<!-- M2-P4-I3-R1-C1-R2-R2:END -->
+
 ## Role
 
 CodeX is the implementation and repository operation agent. It must follow the current Human-approved milestone and the scope of the current task.

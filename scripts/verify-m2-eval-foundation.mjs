@@ -26,6 +26,8 @@ const r1C1R2ReviewCommit =
   "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6";
 const r1C1R2R1AcceptedImplementationCommit =
   "378c304c45b85cf419d263204e495f2d800a8bc9";
+const r1C1R2R1AcceptedAcceptanceCommit =
+  "fbb315f45e777fe2001e54657d7015ebbf7d3663";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -164,6 +166,16 @@ const r1C1R2ProductionImportPaths = new Set([
   "lib/assessment/runtime/writing-context-integrity-v2.ts",
   "lib/assessment/runtime/contextual-integrity-v3.ts",
   "lib/assessment/runtime/policy-v3.ts",
+]);
+const r1C1R2R2MainRunnerPath =
+  "scripts/run-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs";
+const r1C1R2R2SuccessorLocalToolPaths = new Set([
+  "scripts/lib/m2-p4-i3-r1-c1-r2-r2-provider-evaluator-v1.mjs",
+  r1C1R2R2MainRunnerPath,
+  "scripts/verify-m2-p4-i3-r1-c1-r2-r2-provider-diagnostic.mjs",
+]);
+const r1C1R2R2ProductionImportPaths = new Set([
+  ...r1C1R2ProductionImportPaths,
 ]);
 
 const repositoryRoot = path.resolve(scriptDirectory, "..");
@@ -706,6 +718,7 @@ const successorLocalToolPaths = new Set([
   m2p4I3R1BVerifierPath,
   ...c1SuccessorLocalToolPaths,
   ...r1C1R2SuccessorLocalToolPaths,
+  ...r1C1R2R2SuccessorLocalToolPaths,
   ...b1aSuccessorLocalToolPaths,
   ...b1b1SuccessorLocalToolPaths,
   ...b1b2aSuccessorLocalToolPaths,
@@ -4266,6 +4279,13 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
       ) {
         continue;
       }
+      if (
+        r1C1R2R2SuccessorLocalToolPaths.has(file) &&
+        ((localImport && r1C1R2R2ProductionImportPaths.has(localImport)) ||
+          specifier === "ajv/dist/2020.js")
+      ) {
+        continue;
+      }
       fail(isolationGate, {
         file,
         pathName: "$.imports",
@@ -4280,7 +4300,8 @@ function verifySuccessorLocalTools(paths, m2p3ScriptPaths = new Set()) {
         label === "environment secret access" &&
         (file === b1b2aCapabilityPaths.environment ||
           file === c1MainRunnerPath ||
-          file === r1C1R2MainRunnerPath);
+          file === r1C1R2MainRunnerPath ||
+          file === r1C1R2R2MainRunnerPath);
       if (pattern.test(source) && !allowedCapabilityReference) {
         fail(isolationGate, {
           file,
@@ -4583,10 +4604,14 @@ function verifyScopeAndProhibitedImplementation() {
     r1C1R2ReviewCommit,
     r1C1R2R1AcceptedImplementationCommit,
   );
-  const m2p4I3R1C1R2R1AcceptanceSyncPaths = currentTaskPaths(
+  const m2p4I3R1C1R2R1AcceptanceSyncPaths = historicalTaskPaths(
     r1C1R2R1AcceptedImplementationCommit,
+    r1C1R2R1AcceptedAcceptanceCommit,
   );
-  const m2p4I3R1C1R2R1TaskPaths = currentTaskPaths(r1C1R2ReviewCommit);
+  const m2p4I3R1C1R2R1TaskPaths = historicalTaskPaths(
+    r1C1R2ReviewCommit,
+    r1C1R2R1AcceptedAcceptanceCommit,
+  );
   const m2p3Manifest = readJson(m2p3CapabilityManifestPath);
   const m2p4I1bManifest = readJson(m2p4I1bCapabilityManifestPath);
   const m2p4I1cManifest = readJson(m2p4I1cCapabilityManifestPath);

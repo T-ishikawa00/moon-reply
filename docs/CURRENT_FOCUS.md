@@ -1,5 +1,11 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-P4-I3-R1-C1-R2-R2:START -->
+## Immediate Bounded Diagnostic
+
+M2-P4-I3-R1-C1-R2-R2 is provider_targeted_diagnostic_package_ready on test/m2-p4-i3-r1-c1-r2-r2-four-case-provider-diagnostic from baseline fbb315f45e777fe2001e54657d7015ebbf7d3663. The exact four-call synthetic-only PB-01 Prompt v6 diagnostic is Human-authorized but not yet executed: calls 0 / 4, authorization unconsumed, rerun unauthorized. Provider quality established remains false, full eight-case confirmation required remains true, Active Runtime is unchanged, and C2 is ineligible and unauthorized.
+<!-- M2-P4-I3-R1-C1-R2-R2:END -->
+
 ## Current Phase
 
 Phase 2 / Milestone 2 — M2-P3 complete; M2-P4 planning and I1-A through I2 Human / ChatGPT accepted; I3 offline implementation accepted and one synthetic live smoke succeeded, while final I3 acceptance / main merge remain pending; I3-R1 Final Planning, R1-A, R1-B, and R1-C1-R1 Application architecture / offline implementation Human / ChatGPT accepted complete; R1-C1 bounded execution protocol remains accepted with product-quality verdict `FAIL`; the separately Human-authorized R1-C1-R2 exact eight-call synthetic-only PB-01 v5 diagnostic is `human_chatgpt_reviewed_fail_complete` with valid evidence and Provider verdict `FAIL`; its offline R1-C1-R2-R1 Prompt-contract revision is Human / ChatGPT accepted complete at `378c304c45b85cf419d263204e495f2d800a8bc9`, without establishing Provider quality or authorizing R2-R2; C2 remains ineligible and unauthorized; Milestone 2 remains incomplete

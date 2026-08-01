@@ -1,0 +1,365 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-r2-quality-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2-R2",
+  "case_count": 4,
+  "empty_evidence_rule": {
+    "rate": null,
+    "evidence_status": "unavailable"
+  },
+  "set_semantics": {
+    "privacy_markers": "unordered_set",
+    "changed_fact_ids": "unordered_set_when_order_is_immaterial"
+  },
+  "sequence_semantics": {
+    "message_signals": "source_order_sensitive",
+    "canonical_message_ownership": "sequence_sensitive"
+  },
+  "decision_taxonomy_adjudication": {
+    "sender_user_or_none_reply_state": "not_applicable",
+    "schedule_question_equivalence": {
+      "accepted_latest_direct_message_kinds": [
+        "question",
+        "schedule_coordination"
+      ],
+      "required_practical_reason_kind": "schedule_coordination",
+      "required_practical_reason_active": true,
+      "decision_policy_must_be_identical": true
+    }
+  },
+  "cases": [
+    {
+      "case_id": "R2R2-01",
+      "source_case_reference": "R2-03",
+      "targeted_repair": true,
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "schedule_coordination"
+        ],
+        "practical_requirements_any": [
+          "answer_question",
+          "confirm_schedule"
+        ]
+      },
+      "candidate_present": true,
+      "relationship_values": {
+        "hierarchy": [
+          "user_is_junior"
+        ],
+        "social_role": [
+          "work_contact"
+        ],
+        "communication_context": [
+          "work"
+        ]
+      },
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [
+        "no_private_contact_at_work"
+      ],
+      "forbid_custom_constraints": true,
+      "boundary_signals": [],
+      "boundary_signal_rule": "only_user_owned_nonrestrictive_or_empty",
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "work_or_school",
+        "selected_requests": [
+          "decide_send_or_wait",
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none"
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": true,
+      "candidate_style": {},
+      "candidate_intent": {},
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2R2-02",
+      "source_case_reference": "R2-04",
+      "targeted_repair": true,
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming",
+            "quoted_history"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "boundary",
+          "conversation_closure",
+          "decline"
+        ],
+        "practical_requirements_any": []
+      },
+      "candidate_present": false,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [
+        {
+          "kind": "no_contact",
+          "asserted_by": "other_person",
+          "explicit": true
+        }
+      ],
+      "raw_boundary": {
+        "kinds": [
+          "no_contact"
+        ],
+        "statuses": [
+          "explicit"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "no_contact",
+        "status": "explicit"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "ambiguous",
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person"
+        },
+        "contact_state": {
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "no_contact",
+          "status": "explicit"
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2R2-03",
+      "source_case_reference": "R2-08",
+      "targeted_repair": true,
+      "principal_targeted_gate": true,
+      "raw_messages": [
+        {
+          "author": "other_person",
+          "statuses": [
+            "quoted_history"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true,
+          false,
+          "unknown"
+        ],
+        "dialogue_acts_any": [],
+        "practical_requirements_any": [],
+        "consistency_rule": "other_person_latest_requires_true;none_or_unknown_strict_history_allows_false_or_unknown"
+      },
+      "candidate_present": false,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "organize_emotions"
+        ],
+        "contact_state": {
+          "proposed_message_present": false
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none"
+        }
+      },
+      "schedule_kind_equivalence": false,
+      "candidate_style": null,
+      "candidate_intent": null,
+      "privacy_markers_required": [
+        "email",
+        "account_identifier"
+      ],
+      "repeat_states": [
+        "repeated_without_material_change"
+      ],
+      "changed_fact_ids": [],
+      "changed_fact_ids_order_immaterial": true,
+      "embedded_instruction_detected": true,
+      "user_goal_values": [
+        "other",
+        "unknown"
+      ],
+      "user_goal_bases": [
+        "requested_topics",
+        "unresolved"
+      ],
+      "soft_style": {}
+    },
+    {
+      "case_id": "R2R2-04",
+      "source_case_reference": "R2-06",
+      "targeted_repair": false,
+      "normal_regression_control": true,
+      "raw_messages": [
+        {
+          "author": "user",
+          "statuses": [
+            "sent_by_user"
+          ]
+        },
+        {
+          "author": "other_person",
+          "statuses": [
+            "incoming"
+          ]
+        }
+      ],
+      "incoming": {
+        "present": [
+          true
+        ],
+        "dialogue_acts_any": [
+          "question",
+          "schedule_coordination"
+        ],
+        "practical_requirements_any": [
+          "answer_question",
+          "confirm_schedule"
+        ]
+      },
+      "candidate_present": true,
+      "relationship_values": {},
+      "relationship_forbidden": {},
+      "relationship_chip_only_dimension": null,
+      "required_constraints": [],
+      "boundary_signals": [],
+      "raw_boundary": {
+        "kinds": [
+          "none",
+          "unknown"
+        ],
+        "statuses": [
+          "none",
+          "unknown"
+        ]
+      },
+      "grounded_boundary": {
+        "kind": "none",
+        "status": "none"
+      },
+      "decision_fact_subset": {
+        "relationship_stage": "other",
+        "selected_requests": [
+          "draft_message"
+        ],
+        "latest_direct_message": {
+          "sender": "other_person",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_replied",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "proposed_message_present": true
+        },
+        "boundary_state": {
+          "kind": "none",
+          "status": "none"
+        },
+        "practical_reason": {
+          "kind": "schedule_coordination",
+          "active": true
+        }
+      },
+      "schedule_kind_equivalence": true,
+      "candidate_style": {},
+      "candidate_intent": {},
+      "privacy_markers_required": [],
+      "repeat_states": [
+        "first_assessment",
+        "unknown"
+      ],
+      "embedded_instruction_detected": false,
+      "soft_style": {}
+    }
+  ]
+}

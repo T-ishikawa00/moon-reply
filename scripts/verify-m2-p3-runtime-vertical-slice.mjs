@@ -20,6 +20,8 @@ const r1C1R2ReviewSha =
   "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6";
 const r1C1R2R1AcceptedImplementationSha =
   "378c304c45b85cf419d263204e495f2d800a8bc9";
+const r1C1R2R1AcceptedAcceptanceSha =
+  "fbb315f45e777fe2001e54657d7015ebbf7d3663";
 const r1C1R1ImplementationCommits = [
   "715fd906ad94ecc18b55dd13b16784c26bf12129",
   "28bedad969d1007bbd731f0e9d47824eecd84651",
@@ -468,27 +470,6 @@ function gitText(args) {
       stdio: ["ignore", "pipe", "pipe"],
     },
   );
-}
-
-function currentTaskPaths(startCommit) {
-  const paths = new Set(
-    gitText(["diff", "--name-only", startCommit, "--"])
-      .split(/\r?\n/gu)
-      .map((item) => item.trim().replaceAll("\\", "/"))
-      .filter(Boolean),
-  );
-  for (const line of gitText([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ])
-    .split(/\r?\n/gu)
-    .filter(Boolean)) {
-    let item = line.slice(3).trim();
-    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
-    paths.add(item.replaceAll("\\", "/"));
-  }
-  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
 }
 
 function historicalPaths(startCommit, endCommit) {
@@ -1876,10 +1857,14 @@ gate("M2_P3_I2_RENDERER_ONLY_GATE", () => {
     r1C1R2ReviewSha,
     r1C1R2R1AcceptedImplementationSha,
   );
-  const actualR1C1R2R1AcceptanceSyncPaths = currentTaskPaths(
+  const actualR1C1R2R1AcceptanceSyncPaths = historicalPaths(
     r1C1R2R1AcceptedImplementationSha,
+    r1C1R2R1AcceptedAcceptanceSha,
   );
-  const actualR1C1R2R1Paths = currentTaskPaths(r1C1R2ReviewSha);
+  const actualR1C1R2R1Paths = historicalPaths(
+    r1C1R2ReviewSha,
+    r1C1R2R1AcceptedAcceptanceSha,
+  );
   const expectedR1C1R2R1ImplementationSnapshot = {
     type: "historical_commit_range",
     base_commit_sha: r1C1R2ReviewSha,

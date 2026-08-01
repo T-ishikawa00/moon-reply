@@ -1,0 +1,17 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r2-r2-authorization-v1",
+  "task_id": "M2-P4-I3-R1-C1-R2-R2",
+  "authorization_id": "M2-P4-I3-R1-C1-R2-R2-2026-08-02",
+  "confirmation_phrase": "R2-R2-4-CALL-PROMPT-V6-SYNTHETIC-ONLY",
+  "model": "gpt-5.6-luna",
+  "stage": "PB-01 v6 only",
+  "authorized_calls": 4,
+  "consumed": false,
+  "rerun_authorized": false,
+  "execution_claimed_at": null,
+  "completed_at": null,
+  "package_commit": null,
+  "actual_calls": 0,
+  "completed_calls": 0,
+  "completion_state": "not_executed"
+}

@@ -15,6 +15,8 @@ const repositoryRoot = path.resolve(
 const baseline = "2c3f9e8a4b1c763a2d7d56d367cf16dc4993aca6";
 const acceptedImplementationCommit =
   "378c304c45b85cf419d263204e495f2d800a8bc9";
+const acceptedAcceptanceCommit =
+  "fbb315f45e777fe2001e54657d7015ebbf7d3663";
 const exactPaths = [
   "lib/assessment/runtime/contracts/pb-01-structure-v6.developer.md",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v7.json",
@@ -83,27 +85,6 @@ function hashText(value) {
   return createHash("sha256")
     .update(Buffer.from(canonicalText(value), "utf8"))
     .digest("hex");
-}
-
-function currentTaskPaths(startCommit) {
-  const paths = new Set(
-    gitText(["diff", "--name-only", startCommit, "--"])
-      .split(/\r?\n/gu)
-      .map((item) => item.trim().replaceAll("\\", "/"))
-      .filter(Boolean),
-  );
-  for (const line of gitText([
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all",
-  ])
-    .split(/\r?\n/gu)
-    .filter(Boolean)) {
-    let item = line.slice(3).trim();
-    if (item.includes(" -> ")) item = item.split(" -> ").at(-1);
-    paths.add(item.replaceAll("\\", "/"));
-  }
-  return [...paths].sort((left, right) => left.localeCompare(right, "en"));
 }
 
 function historicalTaskPaths(startCommit, endCommit) {
@@ -175,8 +156,11 @@ const implementationPaths = historicalTaskPaths(
   baseline,
   acceptedImplementationCommit,
 );
-const acceptanceSyncPaths = currentTaskPaths(acceptedImplementationCommit);
-const actualPaths = currentTaskPaths(baseline);
+const acceptanceSyncPaths = historicalTaskPaths(
+  acceptedImplementationCommit,
+  acceptedAcceptanceCommit,
+);
+const actualPaths = historicalTaskPaths(baseline, acceptedAcceptanceCommit);
 assertExactPaths(actualPaths, exactPaths, "exact 13-path scope differs");
 assertExactPaths(
   implementationPaths,

@@ -1,5 +1,17 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R2-R2:START -->
+## M2-P4-I3-R1-C1-R2-R2 Current Gate
+
+- [x] Exact four-case PB-01 Prompt v6 diagnostic package prepared in exact 17-path scope
+- [ ] Commit A validated and pushed
+- [ ] One-time sequential Provider execution completed, maximum 4 calls
+- [ ] Post-run exact eight-path evidence validated and committed
+- [ ] Human / ChatGPT review completed
+
+Current status: provider_targeted_diagnostic_package_ready; calls 0 / 4; authorization unconsumed; rerun unauthorized; Provider quality established false; full eight-case confirmation required true; Active Runtime unchanged; C2 unauthorized.
+<!-- M2-P4-I3-R1-C1-R2-R2:END -->
+
 ## Status Rule
 
 Historical completed work is preserved below. Current delivery sequencing is controlled by `docs/ROADMAP.md`. A checked historical planning item does not authorize a later implementation. Milestone 1 has satisfied its validation and Human acceptance gates; Milestones 2–9 remain incomplete, and no work beyond an explicitly authorized bounded task may start.
