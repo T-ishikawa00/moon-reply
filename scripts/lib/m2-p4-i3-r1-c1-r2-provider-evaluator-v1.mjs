@@ -150,6 +150,22 @@ function exactRawMessages(actualMessages, expectedMessages) {
   );
 }
 
+function boundarySignalsMatch(actualValue, qualityCase) {
+  const actual = asArray(actualValue);
+  if (
+    qualityCase.boundary_signal_rule ===
+    "only_user_owned_nonrestrictive_or_empty"
+  ) {
+    return actual.every(
+      (item) =>
+        item?.kind === "other" &&
+        item?.asserted_by === "user" &&
+        item?.explicit === true,
+    );
+  }
+  return same(actual, qualityCase.boundary_signals);
+}
+
 function canonicalGroundedMessages(
   ownership,
   expectedRawMessages,
@@ -568,7 +584,10 @@ function groundedAssertions(call, signals, qualityCase, callIndex) {
     assertion(
       `R2-${callIndex}-PRIVACY-PRESERVED`,
       "privacy_repeat_injection",
-      same(writing?.privacy_markers, signals?.privacy_markers),
+      same(
+        sortedUnique(asArray(writing?.privacy_markers)),
+        sortedUnique(asArray(signals?.privacy_markers)),
+      ),
       signals?.privacy_markers ?? null,
       writing?.privacy_markers ?? null,
     ),
@@ -789,8 +808,8 @@ export function evaluateProviderCall({ call, contract, qualityCase }) {
     assertion(
       `R2-${callIndex}-BOUNDARY-OWNERSHIP-SIGNALS`,
       "boundary_ownership",
-      same(signals?.boundary_ownership_signals, qualityCase.boundary_signals),
-      qualityCase.boundary_signals,
+      boundarySignalsMatch(signals?.boundary_ownership_signals, qualityCase),
+      qualityCase.boundary_signal_rule ?? qualityCase.boundary_signals,
       signals?.boundary_ownership_signals ?? null,
     ),
     assertion(

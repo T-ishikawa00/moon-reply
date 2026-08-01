@@ -3,21 +3,22 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R2 PB-01 v5 Bounded Provider Diagnostic`
-- Status: `provider_diagnostic_package_ready`
+- Status: `provider_diagnostic_failed_pending_human_chatgpt_review`
 - Authorization: `M2-P4-I3-R1-C1-R2-2026-08-01`
 - Confirmation: `R1-C1-R2-8-CALL-SYNTHETIC-ONLY`
 - Baseline: `277101219c27477e67e1196af0e6067713571edc`
 - Branch: `test/m2-p4-i3-r1-c1-r2-provider-diagnostic`
-- Commit A: pending
+- Commit A: `d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e`
 - Model / stage: `gpt-5.6-luna` / `PB-01 v5 only`
 - Synthetic cases / authorized Provider calls: `8 / 8`
-- Actual Provider calls: `0`
+- Actual / completed Provider calls: `8 / 8`
 - Retry / repair / fallback: `0 / 0 / 0`
 - PB-02 through PB-06 / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
-- Authorization consumed / rerun authorized: `false / false`
+- Authorization consumed / rerun authorized: `true / false`
+- Verdict / cases passed: `FAIL / 5 of 8`
 - Active Runtime changed: `false`
 - C2 eligible / authorized: `false / false`
-- Next step after execution: Human / ChatGPT review
+- Next step: Human / ChatGPT review
 - `main`: unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`
 
 ## Historical verifier compatibility
@@ -31,7 +32,26 @@
 
 The seven historical verifiers passed only against the accepted SHA in a clean external clone. This proves the accepted historical evidence remains self-consistent; it does not claim those verifiers support the R2 successor branch, does not establish R2 Provider quality, and does not authorize Runtime activation.
 
-The package is prepared for one exact sequential eight-call synthetic-only diagnostic. It tests Provider-owned semantic `writing_signals` and then runs deterministic Application grounding and validation locally. It does not call Service or the full Pipeline and does not authorize Runtime activation, C2, E1, PR, main merge, release, or rerun.
+The one-time sequential eight-call synthetic-only diagnostic completed. It tested Provider-owned semantic `writing_signals` and then ran deterministic Application grounding and validation locally. It did not call Service or the full Pipeline and does not authorize Runtime activation, C2, E1, PR, main merge, release, or rerun.
+
+## Diagnostic outcome
+
+- Provider transport / returned-model record / raw JSON / raw Schema v5: `8/8` each
+- Forbidden bookkeeping / grounded Schema v4 / Writing Context Integrity v2: `8/8` each
+- Provider semantic core: `5/8`
+- Contextual intake Integrity / Application Decision Facts: `7/8` each
+- Message ownership: `6/8`
+- Boundary ownership / candidate presence / relationship limits / privacy-repeat-injection / Application grounding: `8/8` each
+- Candidate style / intent: `4/4` each
+- Soft style assertions: `5/6` (nonblocking)
+- R2-03 / R2-04 grounded boundaries: `none / none` and `no_contact / explicit`
+- Principal R2-08 quoted-message ownership: `FAIL`
+- Secret leakage: `0`
+- Usage: input `46190`, cached `39298`, output `11310`, reasoning `1279` tokens
+
+The material failures are Provider-owned semantics: R2-03 did not emit the required `no_private_contact_at_work` constraint taxonomy; R2-04 represented the explicit other-person message as unknown quoted history, causing ownership, contextual Integrity, and Decision Facts failures; R2-08 emitted no quoted/incoming other-person message signal, so the principal ownership gate failed. R2-07 passed after applying the stated boundary rule.
+
+Post-run offline evaluation corrected two deterministic evaluator defects without another Provider call or any Provider-output mutation: privacy markers are unordered categories, and a user-owned `other` boundary signal is nonrestrictive for R2-03/R2-07. The verdict remained `FAIL`; case pass count changed from `4/8` to `5/8`, boundary ownership from `6/8` to `8/8`, and privacy-repeat-injection from `7/8` to `8/8`.
 
 ## Diagnostic boundary
 
@@ -41,7 +61,7 @@ The case file contains only `case_id`, `name`, synthetic `AssessmentInput`, and 
 
 ## One-time execution control
 
-The tracked authorization state begins unconsumed. Immediately before the first Provider call, the runner claims execution in memory and atomically creates the repo-local `.git` consumption marker. The existing OpenAI transport is used with its SDK retry count explicitly forced and checked at zero. Provider calls run sequentially, one per case, with no retry, repair, PB-07, fallback, or automatic extension. After the attempt, the tracked authorization artifact records `consumed=true`, actual calls, completion state, and `rerun_authorized=false` even when the product verdict is `FAIL`.
+The tracked authorization began unconsumed. Immediately before the first Provider call, the runner claimed execution in memory and atomically created the repo-local `.git` consumption marker. The existing OpenAI transport ran with its SDK retry count explicitly forced and checked at zero. Provider calls ran sequentially, one per case, with no retry, repair, PB-07, fallback, or automatic extension. The tracked authorization now records `consumed=true`, actual calls `8`, completion state `provider_diagnostic_failed_pending_human_chatgpt_review`, and `rerun_authorized=false`.
 
 ## Hard gates
 
@@ -73,4 +93,4 @@ Production PB-01 v5 Prompt, Schemas, Writing Signals contract, grounding, eviden
 
 ## Review boundary
 
-Commit A records the prepared one-time package. Commit B may record only actual R2 evidence and state synchronization. Even a PASS does not make C2 eligible or authorized and does not change active Runtime or `main`. Human / ChatGPT review remains required before any separately authorized successor.
+Commit A records the prepared one-time package. Commit B records only actual R2 evidence, the bounded offline evaluator correction, and state synchronization. The `FAIL` result leaves C2 ineligible and unauthorized and does not change active Runtime or `main`. Human / ChatGPT review remains required before any separately authorized successor.

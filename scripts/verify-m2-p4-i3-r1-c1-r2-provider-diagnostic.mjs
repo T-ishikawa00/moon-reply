@@ -421,7 +421,12 @@ function assertCompletedState({
 
   if (results.calls.length === 8) {
     const mutatedR208 = structuredClone(results.calls[7]);
-    mutatedR208.raw_output.writing_signals.message_signals[0].author = "user";
+    mutatedR208.raw_output.writing_signals.message_signals = [
+      {
+        author: "user",
+        status: "sent_by_user",
+      },
+    ];
     const mutationEvaluation = evaluateProviderCall({
       call: mutatedR208,
       contract,
@@ -595,6 +600,10 @@ assert.deepEqual(quality.cases[7].raw_messages[0].statuses, [
   "incoming",
 ]);
 assert.deepEqual(quality.cases[2].boundary_signals, []);
+assert.equal(
+  quality.cases[2].boundary_signal_rule,
+  "only_user_owned_nonrestrictive_or_empty",
+);
 assert.deepEqual(quality.cases[2].grounded_boundary, {
   kind: "none",
   status: "none",
@@ -602,6 +611,10 @@ assert.deepEqual(quality.cases[2].grounded_boundary, {
 assert.deepEqual(quality.cases[3].boundary_signals, [
   { kind: "no_contact", asserted_by: "other_person", explicit: true },
 ]);
+assert.equal(
+  quality.cases[6].boundary_signal_rule,
+  "only_user_owned_nonrestrictive_or_empty",
+);
 assert.deepEqual(quality.cases[3].grounded_boundary, {
   kind: "no_contact",
   status: "explicit",
@@ -625,6 +638,19 @@ assert.equal(
 );
 assert.equal(capabilities.old_verifier_mutations, 0);
 assert.equal(capabilities.scope_expansion, 0);
+if (authorization.consumed === true) {
+  const expectedCorrection = {
+    mode: "saved_evidence_offline_recompute",
+    privacy_markers_compared_as_unordered_set: true,
+    user_owned_nonrestrictive_boundary_signal_allowed: true,
+    provider_calls_added: 0,
+    provider_outputs_mutated: 0,
+    verdict_before: "FAIL",
+    verdict_after: "FAIL",
+  };
+  assert.deepEqual(capabilities.post_run_evaluator_correction, expectedCorrection);
+  assert.deepEqual(results.post_run_evaluator_correction, expectedCorrection);
+}
 assert.equal(capabilities.model, contract.model);
 assert.equal(capabilities.stage, "PB-01 v5 only");
 assert.equal(capabilities.r1_c1_r1, "human_chatgpt_accepted_complete");

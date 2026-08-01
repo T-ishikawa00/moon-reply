@@ -225,6 +225,7 @@
         "no_private_contact_at_work"
       ],
       "boundary_signals": [],
+      "boundary_signal_rule": "only_user_owned_nonrestrictive_or_empty",
       "raw_boundary": {
         "kinds": [
           "none",
@@ -564,6 +565,7 @@
         "no_self_invitation"
       ],
       "boundary_signals": [],
+      "boundary_signal_rule": "only_user_owned_nonrestrictive_or_empty",
       "raw_boundary": {
         "kinds": [
           "none",

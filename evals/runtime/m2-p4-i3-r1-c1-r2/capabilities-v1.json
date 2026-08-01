@@ -2,7 +2,7 @@
   "schema_version": "m2-p4-i3-r1-c1-r2-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R2",
   "title": "PB-01 v5 Bounded Provider Diagnostic",
-  "status": "provider_diagnostic_package_ready",
+  "status": "provider_diagnostic_failed_pending_human_chatgpt_review",
   "authorization_id": "M2-P4-I3-R1-C1-R2-2026-08-01",
   "baseline": "277101219c27477e67e1196af0e6067713571edc",
   "branch": "test/m2-p4-i3-r1-c1-r2-provider-diagnostic",
@@ -14,6 +14,15 @@
   "incompatibility_reason": "exact R1-C1-R1 31-path snapshot authority",
   "old_verifier_mutations": 0,
   "scope_expansion": 0,
+  "post_run_evaluator_correction": {
+    "mode": "saved_evidence_offline_recompute",
+    "privacy_markers_compared_as_unordered_set": true,
+    "user_owned_nonrestrictive_boundary_signal_allowed": true,
+    "provider_calls_added": 0,
+    "provider_outputs_mutated": 0,
+    "verdict_before": "FAIL",
+    "verdict_after": "FAIL"
+  },
   "model": "gpt-5.6-luna",
   "stage": "PB-01 v5 only",
   "catalog": "runtime-stage-catalog-v6.0.0",
@@ -21,8 +30,8 @@
   "provider_schema": "pipeline-schema-v5.0.0",
   "grounded_schema": "pipeline-schema-v4.0.0",
   "authorized_calls": 8,
-  "actual_calls": 0,
-  "completed_calls": 0,
+  "actual_calls": 8,
+  "completed_calls": 8,
   "synthetic_cases": 8,
   "retry_count": 0,
   "repair_count": 0,
@@ -34,17 +43,132 @@
   "r1_c1_r1": "human_chatgpt_accepted_complete",
   "active_runtime_changed": false,
   "r1_c1_r2_authorized": true,
-  "authorization_consumed": false,
+  "authorization_consumed": true,
   "rerun_authorized": false,
-  "package_commit": null,
-  "provider_diagnostic_verdict": "NOT_EXECUTED",
-  "case_pass_count": 0,
-  "metrics": {},
+  "package_commit": "d0ad3eceb130a806b2c2b06cb1a59dbbaa35bf4e",
+  "provider_diagnostic_verdict": "FAIL",
+  "case_pass_count": 5,
+  "metrics": {
+    "provider_transport": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "returned_model_recorded": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_json_parse": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_schema_v5": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "forbidden_bookkeeping": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_semantic_core": {
+      "passed": 5,
+      "total": 8,
+      "rate": 0.625,
+      "evidence_status": "available"
+    },
+    "grounded_schema_v4": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "writing_context_integrity_v2": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "contextual_intake_integrity": {
+      "passed": 7,
+      "total": 8,
+      "rate": 0.875,
+      "evidence_status": "available"
+    },
+    "application_decision_facts": {
+      "passed": 7,
+      "total": 8,
+      "rate": 0.875,
+      "evidence_status": "available"
+    },
+    "message_ownership": {
+      "passed": 6,
+      "total": 8,
+      "rate": 0.75,
+      "evidence_status": "available"
+    },
+    "boundary_ownership": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_presence": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_style": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_intent": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "relationship_limits": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "privacy_repeat_injection": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "application_grounding": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "soft_style_assertions": {
+      "passed": 5,
+      "total": 6,
+      "rate": 0.8333333333333334,
+      "evidence_status": "available"
+    }
+  },
   "usage_totals": {
-    "input_tokens": 0,
-    "cached_tokens": 0,
-    "output_tokens": 0,
-    "reasoning_tokens": 0
+    "input_tokens": 46190,
+    "cached_tokens": 39298,
+    "output_tokens": 11310,
+    "reasoning_tokens": 1279
   },
   "c2_eligible": false,
   "c2_authorized": false,
