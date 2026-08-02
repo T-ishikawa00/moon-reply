@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/candidate-analysis-v1.schema.json",
+  "title": "Moon Reply Candidate Analysis Provider Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidate_style_profile",
+    "candidate_communicative_intent",
+    "candidate_language_expression",
+    "candidate_safety_signals"
+  ],
+  "properties": {
+    "candidate_style_profile": { "$ref": "#/$defs/candidate_style_profile" },
+    "candidate_communicative_intent": { "$ref": "#/$defs/candidate_communicative_intent" },
+    "candidate_language_expression": { "$ref": "#/$defs/candidate_language_expression" },
+    "candidate_safety_signals": { "$ref": "#/$defs/candidate_safety_signals" }
+  },
+  "$defs": {
+    "candidate_style_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "register",
+        "sentence_length",
+        "sentence_ending",
+        "punctuation",
+        "emoji_usage",
+        "exclamation_usage",
+        "softness",
+        "directness",
+        "invitation_style",
+        "reply_pressure"
+      ],
+      "properties": {
+        "register": { "enum": ["polite", "neutral_polite", "casual", "mixed"] },
+        "sentence_length": { "enum": ["terse", "short", "medium", "long"] },
+        "sentence_ending": { "enum": ["formal", "neutral", "soft", "playful", "mixed"] },
+        "punctuation": { "enum": ["sparse", "standard", "expressive"] },
+        "emoji_usage": { "enum": ["none", "restrained", "frequent"] },
+        "exclamation_usage": { "enum": ["none", "restrained", "frequent"] },
+        "softness": { "enum": ["low", "medium", "high"] },
+        "directness": { "enum": ["indirect", "balanced", "direct"] },
+        "invitation_style": { "enum": ["none", "tentative", "direct", "practical"] },
+        "reply_pressure": { "enum": ["low", "medium", "high"] }
+      }
+    },
+    "candidate_communicative_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gratitude_strength",
+        "apology_strength",
+        "question_count",
+        "invitation_presence",
+        "invitation_specificity",
+        "affection_strength",
+        "commitment_strength",
+        "response_pressure",
+        "boundary_strength",
+        "conversation_closure",
+        "practical_requirement"
+      ],
+      "properties": {
+        "gratitude_strength": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "apology_strength": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "question_count": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "invitation_presence": { "type": "boolean" },
+        "invitation_specificity": { "enum": ["none", "tentative", "direct", "practical", "unknown"] },
+        "affection_strength": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "commitment_strength": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "response_pressure": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "boundary_strength": { "enum": ["none", "low", "medium", "high", "unknown"] },
+        "conversation_closure": { "enum": ["none", "soft", "explicit", "unknown"] },
+        "practical_requirement": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/practical_requirement_signal" },
+          "maxItems": 7,
+          "uniqueItems": true
+        }
+      }
+    },
+    "practical_requirement_signal": {
+      "enum": [
+        "answer_question",
+        "confirm_schedule",
+        "provide_information",
+        "acknowledge_boundary",
+        "acknowledge_decline",
+        "none",
+        "unknown"
+      ]
+    },
+    "candidate_language_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_language",
+        "mixed_languages",
+        "dialect_or_regional_expression",
+        "intentional_nonstandard_expression",
+        "possible_typo"
+      ],
+      "properties": {
+        "primary_language": { "enum": ["ja", "en", "other", "unknown"] },
+        "mixed_languages": {
+          "type": "array",
+          "items": { "enum": ["ja", "en", "other"] },
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "dialect_or_regional_expression": { "enum": ["present", "absent", "unknown"] },
+        "intentional_nonstandard_expression": { "enum": ["present", "absent", "unknown"] },
+        "possible_typo": { "enum": ["present", "absent", "unknown"] }
+      }
+    },
+    "candidate_safety_signal_code": {
+      "enum": [
+        "threat",
+        "coercion",
+        "fear_inducing_pressure",
+        "conditional_retaliation",
+        "uninvited_visit",
+        "location_tracking",
+        "repeat_contact_pressure",
+        "reply_demand",
+        "address_disclosure",
+        "identity_disclosure",
+        "account_disclosure",
+        "workplace_or_school_disclosure",
+        "third_party_sensitive_detail",
+        "self_harm_intent",
+        "self_harm_threat_as_pressure",
+        "suicidal_ideation",
+        "violent_intent",
+        "violent_threat",
+        "instruction_to_harm",
+        "minor_age_signal",
+        "adult_minor_romantic_or_sexual_context",
+        "authority_over_minor",
+        "request_to_facilitate_illegal_conduct",
+        "instruction_to_evade_lawful_process",
+        "criminal_coordination",
+        "initiates_contact",
+        "continues_contact",
+        "asks_for_reply",
+        "proposes_meeting"
+      ]
+    },
+    "candidate_safety_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["untrusted_embedded_instruction_detected", "signal_codes"],
+      "properties": {
+        "untrusted_embedded_instruction_detected": { "type": "boolean" },
+        "signal_codes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/candidate_safety_signal_code" },
+          "maxItems": 29,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

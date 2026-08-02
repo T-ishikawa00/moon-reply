@@ -1,7 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->
-## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture Planning
+## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture and R3-R2-A
 
 - [x] Candidate Source Isolation failure recorded separately from immutable R3/R3-R1 history
 - [x] Decision B fixed: separate Base PB-01 and Candidate PB-01C Provider boundaries
@@ -21,11 +21,18 @@
 - [x] Accepted Planning content commit `212720bba2ebb805da9ef701d645359a6bd470a7`
 - [x] Immutable Planning snapshot exact `10/10`: `df03cc2cc374ed059d40c122788e736f75883758..212720bba2ebb805da9ef701d645359a6bd470a7`; working tree excluded
 - [x] Acceptance synchronization exact `5/5`; five accepted Planning blobs and A-through-E manifests unchanged
-- [ ] R3-R2-A Split Stage Contracts and Schemas — unauthorized
+- [x] R3-R2-A implementation authorized in exact scope `10/10` from `7a4e5d3187e1731d677cc5aa19c23acdeb535ed8`
+- [x] Base Provider Schema `pipeline-schema-base-v1.0.0` and Candidate Provider Schema metadata `pipeline-schema-candidate-v1.0.0` created as closed Draft 2020-12 contracts
+- [x] Base source-ref allowlist `3/3`, Candidate Safety union `29/29`, and exact four-state `CandidateEnvelope` fixed in machine-verifiable contracts
+- [x] `legacy-six-v1` and `split-base-candidate-v1` topology constants and JSON contract agree `2/2`
+- [x] Dedicated verifier: exact scope `10/10`, JSON `4/4`, AJV `2/2`, valid `2/2`, invalid expected failures `18/18`, protected diff `0`
+- [x] Typecheck, lint with warnings `0`, production build, and `git diff --check` PASS
+- [ ] R3-R2-A Human / ChatGPT review
+- [ ] R3-R2-B Grounding, Allowlist Merge, and Source Integrity — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current status is `human_chatgpt_accepted_complete`; the accepted architecture is `split_base_and_candidate_provider_stages`, while Candidate Source Isolation remains failed in the current single-stage architecture. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. R3-R2-A is unauthorized; R4 and C2 remain `HOLD`. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
+Current R3-R2-A status is `implementation_pending_human_chatgpt_review`. The accepted architecture remains `split_base_and_candidate_provider_stages`, while the current active single-stage Runtime is unchanged. Provider semantic quality and Runtime eligibility are not established. The five accepted Planning blobs, R3-R1 canonicalization, historical artifacts, and A-through-E manifests remain unchanged. Provider / DB / Supabase operations are `0 / 0 / 0`; R3-R2-B, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

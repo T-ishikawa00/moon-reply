@@ -1,0 +1,110 @@
+{
+  "contract_version": "m2-p4-i3-r1-c1-r3-r2-a-stage-topology-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-A",
+  "title": "Split Stage Contracts and Schemas",
+  "status": "implementation_pending_human_chatgpt_review",
+  "accepted_planning_commit": "212720bba2ebb805da9ef701d645359a6bd470a7",
+  "acceptance_commit": "7a4e5d3187e1731d677cc5aa19c23acdeb535ed8",
+  "implementation_baseline": "7a4e5d3187e1731d677cc5aa19c23acdeb535ed8",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-a-split-contracts",
+  "exact_scope": {
+    "value": "10/10",
+    "count": 10,
+    "paths": [
+      "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
+      "lib/assessment/runtime/contracts/candidate-analysis-v1.schema.json",
+      "lib/assessment/runtime/contracts/split-stage-contracts-v1.ts",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-a/stage-topology-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-a/capabilities-v1.json",
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-a-split-contracts.mjs",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_A_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md"
+    ]
+  },
+  "schema_versions": {
+    "base_provider_schema_file": "base-structured-intake-v1.schema.json",
+    "base_provider_schema_version": "pipeline-schema-base-v1.0.0",
+    "base_decision_facts_version": "m2-p4-base-decision-facts-v1",
+    "base_writing_signals_version": "m2-p4-base-writing-signals-v1",
+    "candidate_provider_schema_file": "candidate-analysis-v1.schema.json",
+    "candidate_provider_schema_version": "pipeline-schema-candidate-v1.0.0",
+    "typed_contract_version": "m2-p4-split-stage-contracts-v1"
+  },
+  "topology_versions": ["legacy-six-v1", "split-base-candidate-v1"],
+  "stage_topologies": {
+    "legacy_six": {
+      "version": "legacy-six-v1",
+      "stages": [
+        { "stage_id": "PB-01", "sequence": 1 },
+        { "stage_id": "PB-02", "sequence": 2 },
+        { "stage_id": "PB-03", "sequence": 3 },
+        { "stage_id": "PB-04", "sequence": 4 },
+        { "stage_id": "PB-05", "sequence": 5 },
+        { "stage_id": "PB-06", "sequence": 6 }
+      ]
+    },
+    "split_base_candidate": {
+      "version": "split-base-candidate-v1",
+      "stages": [
+        { "stage_id": "PB-01", "sequence": 1 },
+        { "stage_id": "PB-01C", "sequence": 2 },
+        { "stage_id": "PB-02", "sequence": 3 },
+        { "stage_id": "PB-03", "sequence": 4 },
+        { "stage_id": "PB-04", "sequence": 5 },
+        { "stage_id": "PB-05", "sequence": 6 },
+        { "stage_id": "PB-06", "sequence": 7 }
+      ]
+    }
+  },
+  "candidate_envelope_states": {
+    "absent": {
+      "presence": false,
+      "analysis_status": "absent",
+      "safety_status": "absent",
+      "analysis": null
+    },
+    "available": {
+      "presence": true,
+      "analysis_status": "available",
+      "safety_status": "available",
+      "analysis": "CandidateAnalysisV1"
+    },
+    "analysis_unavailable_safety_available": {
+      "presence": true,
+      "analysis_status": "unavailable",
+      "safety_status": "available",
+      "analysis": null
+    },
+    "safety_unavailable": {
+      "presence": true,
+      "analysis_status": "unavailable",
+      "safety_status": "unavailable",
+      "analysis": null
+    }
+  },
+  "base_source_ref_allowlist": [
+    "input:current_situation",
+    "input:relationship",
+    "input:requested_topics"
+  ],
+  "application_canonical_base_field_map": {
+    "base_structured_intake.relationship_stage": "request.relationship",
+    "decision_facts.relationship_stage": "request.relationship",
+    "decision_facts.selected_requests": "request.requestedTopics"
+  },
+  "pb_01c_call_condition": "trim(optional_message).length > 0",
+  "null_candidate_provider_calls": 0,
+  "persistence_of_skipped_row": "planned_in_R3_R2_C_not_implemented",
+  "active_runtime_changed": false,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "r3_r2_b_authorized": false,
+  "sha256": {
+    "base_schema": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6",
+    "candidate_schema": "47b135176f187c9801637838a55aea8f734e425109d2e19da6b6ecb3975db86b",
+    "typescript_contract": "7d10f031cfc948a005d98edae872f406dd4b26d0c123404a55aea3caf28c1f61"
+  }
+}

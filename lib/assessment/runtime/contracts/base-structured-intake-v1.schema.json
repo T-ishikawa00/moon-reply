@@ -1,0 +1,875 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/base-structured-intake-v1.schema.json",
+  "title": "Moon Reply Base Structured Intake Provider Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "relationship_stage",
+    "user_goal",
+    "timeline",
+    "boundaries",
+    "context",
+    "observed_facts",
+    "user_assumptions",
+    "user_emotions",
+    "material_unknowns",
+    "safety_signals",
+    "untrusted_embedded_instructions_detected",
+    "context_inferences",
+    "decision_facts",
+    "base_writing_signals"
+  ],
+  "properties": {
+    "schema_version": { "const": "pipeline-schema-base-v1.0.0" },
+    "relationship_stage": { "$ref": "#/$defs/relationship_stage" },
+    "user_goal": {
+      "enum": [
+        "decide_send_or_wait",
+        "reply_to_message",
+        "prepare_message",
+        "organize_relationship",
+        "plan_next_three_days",
+        "organize_emotions",
+        "unknown"
+      ]
+    },
+    "timeline": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/timeline_event" },
+      "maxItems": 40
+    },
+    "boundaries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/boundary" },
+      "maxItems": 20
+    },
+    "context": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/context_item" },
+      "maxItems": 30
+    },
+    "observed_facts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/observed_fact" },
+      "maxItems": 60
+    },
+    "user_assumptions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/subjective_item" },
+      "maxItems": 30
+    },
+    "user_emotions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/subjective_item" },
+      "maxItems": 30
+    },
+    "material_unknowns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/material_unknown" },
+      "maxItems": 30
+    },
+    "safety_signals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/safety_signal" },
+      "maxItems": 20
+    },
+    "untrusted_embedded_instructions_detected": { "type": "boolean" },
+    "context_inferences": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/context_inference" },
+      "maxItems": 30
+    },
+    "decision_facts": { "$ref": "#/$defs/decision_facts" },
+    "base_writing_signals": { "$ref": "#/$defs/base_writing_signals" }
+  },
+  "$defs": {
+    "source_ref": {
+      "enum": [
+        "input:current_situation",
+        "input:relationship",
+        "input:requested_topics"
+      ]
+    },
+    "source_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source_ref" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "relationship_stage": {
+      "enum": [
+        "dating",
+        "in_relationship",
+        "ambiguous",
+        "former_partner",
+        "matching_app",
+        "friend",
+        "work_or_school",
+        "other",
+        "unknown"
+      ]
+    },
+    "decision_field_path": {
+      "enum": [
+        "relationship_stage",
+        "latest_direct_message.sender",
+        "latest_direct_message.kind",
+        "latest_direct_message.response_expectation",
+        "latest_direct_message.user_reply_state",
+        "latest_direct_message.sns_signal_only",
+        "contact_state.unanswered_user_message_count",
+        "contact_state.elapsed_since_latest_user_message_minutes",
+        "contact_state.usual_cadence_relation",
+        "boundary_state.kind",
+        "boundary_state.status",
+        "boundary_state.repeated_unanswered_contact",
+        "practical_reason.kind",
+        "practical_reason.active",
+        "practical_reason.deadline"
+      ]
+    },
+    "timeline_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "sequence", "actor", "statement", "source_refs"],
+      "properties": {
+        "event_id": { "type": "string", "pattern": "^E[0-9]{3}$" },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "actor": { "enum": ["user", "other_person", "third_party", "unknown"] },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["boundary_id", "kind", "status", "statement", "source_refs"],
+      "properties": {
+        "boundary_id": { "type": "string", "pattern": "^B[0-9]{3}$" },
+        "kind": {
+          "enum": [
+            "no_contact",
+            "temporary_distance",
+            "blocked_or_restricted",
+            "relationship_closed",
+            "contact_channel",
+            "other"
+          ]
+        },
+        "status": { "enum": ["explicit", "inferred", "unknown"] },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "context_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_id", "kind", "statement", "source_refs"],
+      "properties": {
+        "context_id": { "type": "string", "pattern": "^C[0-9]{3}$" },
+        "kind": {
+          "enum": [
+            "schedule",
+            "usual_cadence",
+            "relationship",
+            "practical_need",
+            "message_state",
+            "other"
+          ]
+        },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "observed_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fact_id", "statement", "source_refs", "support"],
+      "properties": {
+        "fact_id": { "type": "string", "pattern": "^F[0-9]{3}$" },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "source_refs": { "$ref": "#/$defs/source_refs" },
+        "support": { "enum": ["explicit", "normalized", "unknown"] }
+      }
+    },
+    "subjective_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "statement", "source_refs"],
+      "properties": {
+        "item_id": { "type": "string", "pattern": "^[AM][0-9]{3}$" },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "material_unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unknown_code", "description", "material_to"],
+      "properties": {
+        "unknown_code": { "type": "string", "pattern": "^[a-z][a-z0-9_]+$" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "material_to": {
+          "type": "array",
+          "items": { "enum": ["eligibility", "decision", "message_draft", "safety"] },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "safety_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signal_id", "reason_code", "status", "source_refs"],
+      "properties": {
+        "signal_id": { "type": "string", "pattern": "^S[0-9]{3}$" },
+        "reason_code": {
+          "enum": [
+            "self_harm",
+            "harm_others",
+            "dv_abuse_fear",
+            "stalking_or_visit",
+            "waiting_or_ambush",
+            "threat_or_coercion",
+            "minor_related",
+            "doxxing",
+            "surveillance",
+            "illegal_conduct",
+            "third_party_secret"
+          ]
+        },
+        "status": { "enum": ["affirmative", "ambiguous", "negated"] },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "context_inference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inference_id",
+        "field_path",
+        "supporting_fact_ids",
+        "source_refs",
+        "rationale_summary"
+      ],
+      "properties": {
+        "inference_id": { "type": "string", "pattern": "^I[0-9]{3}$" },
+        "field_path": { "$ref": "#/$defs/decision_field_path" },
+        "supporting_fact_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^F[0-9]{3}$" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "source_refs": { "$ref": "#/$defs/source_refs" },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    },
+    "decision_facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "relationship_stage",
+        "selected_requests",
+        "latest_direct_message",
+        "contact_state",
+        "boundary_state",
+        "practical_reason",
+        "information_state"
+      ],
+      "properties": {
+        "schema_version": { "const": "m2-p4-base-decision-facts-v1" },
+        "relationship_stage": { "$ref": "#/$defs/relationship_stage" },
+        "selected_requests": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "decide_send_or_wait",
+              "message_impact",
+              "draft_message",
+              "relationship",
+              "next_three_days",
+              "organize_emotions"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "latest_direct_message": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sender",
+            "kind",
+            "response_expectation",
+            "user_reply_state",
+            "sns_signal_only"
+          ],
+          "properties": {
+            "sender": { "enum": ["user", "other_person", "none", "unknown"] },
+            "kind": {
+              "enum": [
+                "question",
+                "schedule_coordination",
+                "apology",
+                "thanks_or_followup",
+                "practical_information",
+                "invitation",
+                "closure_or_boundary",
+                "social_acknowledgement",
+                "other",
+                "none",
+                "unknown"
+              ]
+            },
+            "response_expectation": { "enum": ["reasonable", "optional", "none", "unknown"] },
+            "user_reply_state": { "enum": ["not_replied", "replied", "not_applicable", "unknown"] },
+            "sns_signal_only": { "type": "boolean" }
+          }
+        },
+        "contact_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unanswered_user_message_count",
+            "elapsed_since_latest_user_message_minutes",
+            "usual_cadence_relation"
+          ],
+          "properties": {
+            "unanswered_user_message_count": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 20
+            },
+            "elapsed_since_latest_user_message_minutes": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            },
+            "usual_cadence_relation": {
+              "enum": ["within_usual", "beyond_usual", "unknown", "not_applicable"]
+            }
+          }
+        },
+        "boundary_state": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "status", "repeated_unanswered_contact"],
+              "properties": {
+                "kind": { "const": "none" },
+                "status": { "const": "none" },
+                "repeated_unanswered_contact": { "type": "boolean" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "status", "repeated_unanswered_contact"],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "no_contact",
+                    "temporary_distance",
+                    "blocked_or_restricted",
+                    "relationship_closed"
+                  ]
+                },
+                "status": { "const": "explicit" },
+                "repeated_unanswered_contact": { "type": "boolean" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "status", "repeated_unanswered_contact"],
+              "properties": {
+                "kind": { "const": "unknown" },
+                "status": { "const": "unknown" },
+                "repeated_unanswered_contact": { "const": false }
+              }
+            }
+          ]
+        },
+        "practical_reason": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "active", "deadline"],
+              "properties": {
+                "kind": { "const": "none" },
+                "active": { "const": false },
+                "deadline": { "const": "none" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "active", "deadline"],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "schedule_coordination",
+                    "factual_correction",
+                    "promised_information",
+                    "logistics",
+                    "thank_you",
+                    "initial_apology",
+                    "single_invitation"
+                  ]
+                },
+                "active": { "const": true },
+                "deadline": { "enum": ["none", "same_day", "next_day", "later", "unknown"] }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "active", "deadline"],
+              "properties": {
+                "kind": { "const": "unknown" },
+                "active": { "const": false },
+                "deadline": { "const": "unknown" }
+              }
+            }
+          ]
+        },
+        "information_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assessment_mode",
+            "can_proceed_without_followup",
+            "used_context_inference",
+            "unresolved_fields"
+          ],
+          "properties": {
+            "assessment_mode": { "const": "best_effort" },
+            "can_proceed_without_followup": { "const": true },
+            "used_context_inference": { "type": "boolean" },
+            "unresolved_fields": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/decision_field_path" },
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
+    "relationship_signal_basis": {
+      "enum": [
+        "current_situation_explicit",
+        "current_situation_inferred",
+        "relationship_chip",
+        "unresolved"
+      ]
+    },
+    "current_situation_signal_basis": {
+      "enum": ["current_situation_explicit", "current_situation_inferred", "unresolved"]
+    },
+    "goal_signal_basis": {
+      "enum": [
+        "current_situation_explicit",
+        "current_situation_inferred",
+        "relationship_chip",
+        "requested_topics",
+        "unresolved"
+      ]
+    },
+    "channel_signal_basis": {
+      "enum": [
+        "current_situation_explicit",
+        "current_situation_inferred",
+        "relationship_chip",
+        "unresolved"
+      ]
+    },
+    "language_signal_basis": {
+      "enum": ["current_situation_explicit", "current_situation_inferred", "unresolved"]
+    },
+    "romantic_stage_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": {
+          "enum": [
+            "none",
+            "new_acquaintance",
+            "dating_before_relationship",
+            "ambiguous",
+            "partner",
+            "former_partner",
+            "unknown"
+          ]
+        },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "social_role_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": {
+          "enum": [
+            "stranger",
+            "acquaintance",
+            "friend",
+            "close_friend",
+            "work_contact",
+            "school_contact",
+            "other",
+            "unknown"
+          ]
+        },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "hierarchy_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": { "enum": ["user_is_junior", "peer", "user_is_senior", "none", "unknown"] },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "familiarity_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": { "enum": ["first_contact", "early", "developing", "established", "former", "unknown"] },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "communication_context_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": { "enum": ["matching_app", "private", "work", "school", "mixed", "other", "unknown"] },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "observed_register_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": { "enum": ["polite", "neutral_polite", "casual", "mixed", "unknown"] },
+        "basis": { "$ref": "#/$defs/relationship_signal_basis" }
+      }
+    },
+    "relationship_dimension_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "romantic_stage",
+        "social_role",
+        "hierarchy",
+        "familiarity",
+        "communication_context",
+        "observed_register"
+      ],
+      "properties": {
+        "romantic_stage": { "$ref": "#/$defs/romantic_stage_signal" },
+        "social_role": { "$ref": "#/$defs/social_role_signal" },
+        "hierarchy": { "$ref": "#/$defs/hierarchy_signal" },
+        "familiarity": { "$ref": "#/$defs/familiarity_signal" },
+        "communication_context": { "$ref": "#/$defs/communication_context_signal" },
+        "observed_register": { "$ref": "#/$defs/observed_register_signal" }
+      }
+    },
+    "message_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["author", "status"],
+      "properties": {
+        "author": { "enum": ["user", "other_person", "third_party", "unknown"] },
+        "status": { "enum": ["incoming", "sent_by_user", "quoted_history", "unknown"] }
+      }
+    },
+    "dialogue_act_signal": {
+      "enum": [
+        "answer",
+        "question",
+        "thanks",
+        "apology",
+        "invitation",
+        "schedule_coordination",
+        "practical_notice",
+        "affection_expression",
+        "boundary",
+        "decline",
+        "hold",
+        "conversation_closure",
+        "promised_future_contact",
+        "other",
+        "unknown"
+      ]
+    },
+    "practical_requirement_signal": {
+      "enum": [
+        "answer_question",
+        "confirm_schedule",
+        "provide_information",
+        "acknowledge_boundary",
+        "acknowledge_decline",
+        "none",
+        "unknown"
+      ]
+    },
+    "incoming_message_signal_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dialogue_acts",
+        "unanswered_obligations",
+        "practical_requirements",
+        "closure_signal",
+        "response_expectation",
+        "present"
+      ],
+      "properties": {
+        "dialogue_acts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dialogue_act_signal" },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "unanswered_obligations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dialogue_act_signal" },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "practical_requirements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/practical_requirement_signal" },
+          "maxItems": 7,
+          "uniqueItems": true
+        },
+        "closure_signal": { "enum": ["none", "soft", "explicit", "unknown"] },
+        "response_expectation": { "enum": ["reasonable", "optional", "none", "unknown"] },
+        "present": { "enum": [true, false, "unknown"] }
+      }
+    },
+    "user_goal_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "basis"],
+      "properties": {
+        "value": {
+          "enum": [
+            "respond_politely",
+            "move_closer",
+            "maintain_distance",
+            "schedule_only",
+            "apologize",
+            "repair_conflict",
+            "decline_without_false_hope",
+            "end_contact",
+            "express_affection",
+            "clarify_relationship",
+            "other",
+            "unknown"
+          ]
+        },
+        "basis": { "$ref": "#/$defs/goal_signal_basis" }
+      }
+    },
+    "explicit_constraint_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "bounded_summary"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "no_emoji",
+            "no_self_invitation",
+            "no_late_night_send",
+            "no_phone_call",
+            "no_private_contact_at_work",
+            "no_followup_message",
+            "keep_polite_register",
+            "keep_casual_register",
+            "custom_explicit_constraint"
+          ]
+        },
+        "bounded_summary": { "type": ["string", "null"], "minLength": 1, "maxLength": 240 }
+      }
+    },
+    "communication_pattern_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "usual_register",
+        "usual_length",
+        "usual_emoji_pattern",
+        "usual_response_cadence_summary",
+        "usual_initiator",
+        "reciprocal_style_summary",
+        "basis"
+      ],
+      "properties": {
+        "usual_register": { "enum": ["polite", "neutral_polite", "casual", "mixed", "unknown"] },
+        "usual_length": { "enum": ["terse", "short", "medium", "long", "unknown"] },
+        "usual_emoji_pattern": { "enum": ["none", "restrained", "frequent", "unknown"] },
+        "usual_response_cadence_summary": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "usual_initiator": { "enum": ["user", "other_person", "reciprocal", "variable", "unknown"] },
+        "reciprocal_style_summary": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "basis": { "$ref": "#/$defs/current_situation_signal_basis" }
+      }
+    },
+    "channel_and_timing_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "relative_timing", "basis"],
+      "properties": {
+        "channel": {
+          "enum": ["line", "instagram_dm", "matching_app", "sms", "work_chat", "email", "other", "unknown"]
+        },
+        "relative_timing": { "enum": ["immediate", "same_day", "late_night", "next_day", "delayed", "unknown"] },
+        "basis": { "$ref": "#/$defs/channel_signal_basis" }
+      }
+    },
+    "language_and_expression_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_language",
+        "mixed_languages",
+        "dialect_or_regional_expression",
+        "established_shared_expression",
+        "intentional_nonstandard_expression",
+        "possible_typo",
+        "basis"
+      ],
+      "properties": {
+        "primary_language": { "enum": ["ja", "en", "other", "unknown"] },
+        "mixed_languages": {
+          "type": "array",
+          "items": { "enum": ["ja", "en", "other"] },
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "dialect_or_regional_expression": { "enum": ["present", "absent", "unknown"] },
+        "established_shared_expression": { "enum": ["present", "absent", "unknown"] },
+        "intentional_nonstandard_expression": { "enum": ["present", "absent", "unknown"] },
+        "possible_typo": { "enum": ["present", "absent", "unknown"] },
+        "basis": { "$ref": "#/$defs/language_signal_basis" }
+      }
+    },
+    "repeat_consultation_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "changed_fact_ids", "basis"],
+      "properties": {
+        "state": {
+          "enum": [
+            "first_assessment",
+            "repeated_without_material_change",
+            "repeated_with_material_change",
+            "unknown"
+          ]
+        },
+        "changed_fact_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^F[0-9]{3}$" },
+          "maxItems": 20,
+          "uniqueItems": true
+        },
+        "basis": { "$ref": "#/$defs/current_situation_signal_basis" }
+      }
+    },
+    "privacy_marker_signal": {
+      "enum": [
+        "name",
+        "phone",
+        "email",
+        "account_identifier",
+        "workplace",
+        "school",
+        "address",
+        "third_party_sensitive_detail"
+      ]
+    },
+    "boundary_ownership_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "asserted_by", "explicit"],
+      "properties": {
+        "kind": {
+          "enum": ["no_contact", "temporary_distance", "blocked_or_restricted", "relationship_closed", "other"]
+        },
+        "asserted_by": { "enum": ["user", "other_person", "system", "unknown"] },
+        "explicit": { "type": "boolean" }
+      }
+    },
+    "base_writing_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "relationship_dimensions",
+        "message_signals",
+        "incoming_message_profile",
+        "user_goal_detail",
+        "explicit_user_constraints",
+        "communication_pattern",
+        "channel_and_timing",
+        "language_and_expression",
+        "repeat_consultation_state",
+        "privacy_markers",
+        "boundary_ownership_signals"
+      ],
+      "properties": {
+        "schema_version": { "const": "m2-p4-base-writing-signals-v1" },
+        "relationship_dimensions": { "$ref": "#/$defs/relationship_dimension_signals" },
+        "message_signals": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/message_signal" },
+          "maxItems": 40,
+          "uniqueItems": true
+        },
+        "incoming_message_profile": { "$ref": "#/$defs/incoming_message_signal_profile" },
+        "user_goal_detail": { "$ref": "#/$defs/user_goal_signal" },
+        "explicit_user_constraints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/explicit_constraint_signal" },
+          "maxItems": 12,
+          "uniqueItems": true
+        },
+        "communication_pattern": { "$ref": "#/$defs/communication_pattern_signal" },
+        "channel_and_timing": { "$ref": "#/$defs/channel_and_timing_signal" },
+        "language_and_expression": { "$ref": "#/$defs/language_and_expression_signal" },
+        "repeat_consultation_state": { "$ref": "#/$defs/repeat_consultation_signal" },
+        "privacy_markers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/privacy_marker_signal" },
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "boundary_ownership_signals": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/boundary_ownership_signal" },
+          "maxItems": 12,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
