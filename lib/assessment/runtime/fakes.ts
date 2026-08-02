@@ -13,6 +13,9 @@ import type {
   JsonObject,
   M2StageId,
   PersistedAssessmentRequest,
+  SkipStageRecord,
+  SplitCompletedAssessment,
+  StageRunStatus,
   StageRequest,
   StartStageRecord,
 } from "./types.ts";
@@ -39,9 +42,20 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   readonly stageRuns = new Map<
     string,
     StartStageRecord & {
-      status: "processing" | "completed" | "failed";
+      status: StageRunStatus;
       completion?: CompleteStageRecord;
       failure?: FailStageRecord;
+      responseId?: null;
+      returnedModel?: null;
+      usage?: {
+        inputTokens: 0;
+        cachedTokens: 0;
+        outputTokens: 0;
+        reasoningTokens: 0;
+      };
+      latencyMs?: 0;
+      outputJson?: null;
+      errorCode?: null;
     }
   >();
   readonly reports = new Map<string, FinalizeCompletedAssessmentRecord>();
@@ -99,6 +113,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
 
   async startStage(record: StartStageRecord) {
     this.maybeFail(`startStage:${record.stageId}`);
+    this.assertTopologyStage(record);
     this.stageRuns.set(record.id, {
       ...clone(record),
       status: "processing",
@@ -109,6 +124,9 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   async completeStage(record: CompleteStageRecord) {
     const stage = this.stageRuns.get(record.stageRunId);
     if (!stage) throw new M2RuntimeError("M2_FAKE_STAGE_NOT_FOUND");
+    if (stage.status !== "processing") {
+      throw new M2RuntimeError("M2_FAKE_STAGE_STATE_CONFLICT", 409);
+    }
     this.maybeFail(`completeStage:${stage.stageId}`);
     stage.status = "completed";
     stage.completion = clone(record);
@@ -118,10 +136,55 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   async failStage(record: FailStageRecord) {
     const stage = this.stageRuns.get(record.stageRunId);
     if (!stage) throw new M2RuntimeError("M2_FAKE_STAGE_NOT_FOUND");
+    if (stage.status !== "processing") {
+      throw new M2RuntimeError("M2_FAKE_STAGE_STATE_CONFLICT", 409);
+    }
     this.maybeFail(`failStage:${stage.stageId}`);
     stage.status = "failed";
     stage.failure = clone(record);
     this.events.push(`failStage:${stage.stageId}`);
+  }
+
+  async skipStage(record: SkipStageRecord) {
+    this.maybeFail(`skipStage:${record.stageId}`);
+    this.assertTopologyStage(record);
+    this.stageRuns.set(record.id, {
+      ...clone(record),
+      status: "skipped",
+      responseId: null,
+      returnedModel: null,
+      usage: {
+        inputTokens: 0,
+        cachedTokens: 0,
+        outputTokens: 0,
+        reasoningTokens: 0,
+      },
+      latencyMs: 0,
+      outputJson: null,
+      errorCode: null,
+    });
+    this.events.push(`skipStage:${record.stageId}`);
+  }
+
+  private assertTopologyStage(
+    record: Pick<StartStageRecord, "runId" | "stageId" | "sequenceNumber">,
+  ) {
+    const run = this.runs.get(record.runId);
+    if (!run) throw new M2RuntimeError("M2_FAKE_RUN_NOT_FOUND");
+    const topology =
+      run.stageTopologyVersion === "split-base-candidate-v1"
+        ? ["PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
+        : ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
+    if (
+      topology[record.sequenceNumber - 1] !== record.stageId ||
+      [...this.stageRuns.values()].some(
+        (stage) =>
+          stage.runId === record.runId &&
+          stage.sequenceNumber === record.sequenceNumber,
+      )
+    ) {
+      throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
   }
 
   async completeRun(record: CompleteRunRecord) {
@@ -161,6 +224,23 @@ export class FakeAssessmentRepository implements AssessmentRepository {
       run.status !== "processing" ||
       request.status !== "processing" ||
       this.reports.has(record.runId)
+    ) {
+      throw new M2RuntimeError("M2_FINALIZATION_STATE_CONFLICT", 409);
+    }
+    const stageRuns = [...this.stageRuns.values()].filter(
+      (stage) => stage.runId === record.runId,
+    );
+    if (
+      stageRuns.some(
+        (stage) =>
+          stage.status === "processing" ||
+          (stage.status === "failed" &&
+            !(
+              stage.stageId === "PB-01C" &&
+              stage.failure?.errorCode ===
+                "M2_CANDIDATE_ANALYSIS_UNAVAILABLE"
+            )),
+      )
     ) {
       throw new M2RuntimeError("M2_FINALIZATION_STATE_CONFLICT", 409);
     }
@@ -215,7 +295,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     if (!run?.decision) return null;
     const report = this.reports.get(run.id);
     if (!report) return null;
-    const completed: CompletedAssessment = {
+    const completed = {
       requestId,
       runId: run.id,
       eligibility: "ready",
@@ -229,13 +309,13 @@ export class FakeAssessmentRepository implements AssessmentRepository {
         totalReasoningTokens: run.totalReasoningTokens ?? 0,
         usageDerivedCostUsd: run.usageDerivedCostUsd ?? 0,
       },
-    };
+    } as CompletedAssessment | SplitCompletedAssessment;
     return completed;
   }
 }
 
 type FakeTransportOptions = {
-  outputs: Record<M2StageId, JsonObject>;
+  outputs: Partial<Record<M2StageId, JsonObject>>;
   failAtStage?: M2StageId;
   returnedModelAtStage?: Partial<Record<M2StageId, string>>;
 };
@@ -244,7 +324,8 @@ export class FakeAiStageTransport implements AiStageTransport {
   readonly actualProviderCalls = 0;
   readonly apiSpendUsd = 0;
   readonly calls: M2StageId[] = [];
-  private readonly outputs: Record<M2StageId, JsonObject>;
+  readonly requests: StageRequest[] = [];
+  private readonly outputs: Partial<Record<M2StageId, JsonObject>>;
   private readonly failAtStage?: M2StageId;
   private readonly returnedModelAtStage: Partial<Record<M2StageId, string>>;
 
@@ -256,15 +337,20 @@ export class FakeAiStageTransport implements AiStageTransport {
 
   async invoke(request: StageRequest) {
     this.calls.push(request.stageId);
+    this.requests.push(clone(request));
     if (request.stageId === this.failAtStage) {
       throw new M2RuntimeError("M2_FAKE_STAGE_FAILURE");
     }
     const sequence = this.calls.length;
+    const output = this.outputs[request.stageId];
+    if (output === undefined) {
+      throw new M2RuntimeError("M2_FAKE_STAGE_OUTPUT_MISSING");
+    }
     return {
       responseId: `fake-response-${request.stageId.toLowerCase()}-${sequence}`,
       returnedModel:
         this.returnedModelAtStage[request.stageId] ?? request.model,
-      output: clone(this.outputs[request.stageId]),
+      output: clone(output),
       usage: {
         inputTokens: 100 + sequence,
         cachedTokens: 0,
@@ -461,7 +547,7 @@ const semanticPass: JsonObject = {
   failed_codes: [],
 };
 
-export function wait003StageOutputs(): Record<M2StageId, JsonObject> {
+export function wait003StageOutputs(): Partial<Record<M2StageId, JsonObject>> {
   return clone({
     "PB-01": waitStructuredIntake,
     "PB-02": normalModelSafety,

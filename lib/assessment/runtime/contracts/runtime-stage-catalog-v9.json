@@ -1,0 +1,111 @@
+{
+  "schema_version": "m2-p4-runtime-stage-catalog-v2",
+  "catalog_version": "runtime-stage-catalog-v9.0.0",
+  "prompt_bundle_version": "prompt-bundle-runtime-v9.0.0",
+  "schema_set_version": "pipeline-schema-runtime-v4.0.0",
+  "stage_topology_version": "split-base-candidate-v1",
+  "baseline": "93893d78b58463b067a1419e8bf7056540636921",
+  "hash_algorithm": "sha256-utf8-lf",
+  "common_prompt": {
+    "inherited_from": "ai/prompts/prompt-bundle.manifest.json#SHARED-COMMON",
+    "prompt_version": "v1.0.0",
+    "prompt_path": "ai/prompts/shared/common-stage-contract.md",
+    "prompt_sha256": "218ebd586906c47910c7436874a13d2aa4ca6d6cef4df55dbfacff0ecb168fbf"
+  },
+  "stages": [
+    {
+      "stage_id": "PB-01",
+      "sequence_number": 1,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01-base-situation-v1.developer.md",
+      "prompt_sha256": "5add38000efcf812d6ecfc12807c29df12358e16f8cca521729e4452d1ea71eb",
+      "schema_version": "pipeline-schema-base-v1.0.0",
+      "schema_name": "pb_01_base_situation_v1",
+      "schema_path": "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6",
+      "grounded_schema_version": "pipeline-schema-base-v1.0.0",
+      "grounded_schema_path": "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
+      "grounded_schema_sha256": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6"
+    },
+    {
+      "stage_id": "PB-01C",
+      "sequence_number": 2,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v1.developer.md",
+      "prompt_sha256": "9605685a8158a23c061f7a3a56c20b0d3ea1dad1be0059423a258144017d0c09",
+      "schema_version": "pipeline-schema-candidate-v1.0.0",
+      "schema_name": "pb_01c_candidate_analysis_v1",
+      "schema_path": "lib/assessment/runtime/contracts/candidate-analysis-v1.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "47b135176f187c9801637838a55aea8f734e425109d2e19da6b6ecb3975db86b"
+    },
+    {
+      "stage_id": "PB-02",
+      "sequence_number": 3,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-02-split-safety-v1.developer.md",
+      "prompt_sha256": "d02baddeea20db089d3304876825a70dc09bcda6ddc2a7d05cf4c41811c0ef32",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_02_split_safety_v1",
+      "schema_path": "ai/schemas/safety-assessment.schema.json",
+      "schema_pointer": "#/$defs/model_result",
+      "schema_sha256": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    {
+      "stage_id": "PB-03",
+      "sequence_number": 4,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-03-split-projection-v1.developer.md",
+      "prompt_sha256": "d282595168e09f5acfb4d4e22fe3f6997d8d748c9c9aed8e3defc3aabbf249f9",
+      "schema_version": "pipeline-schema-v3.0.0",
+      "schema_name": "pb_03_split_projection_v3",
+      "schema_path": "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
+    },
+    {
+      "stage_id": "PB-04",
+      "sequence_number": 5,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-04-split-decision-v1.developer.md",
+      "prompt_sha256": "b963029b5369187de243a98439978c30cc3c0cd5c39ce91ea758d81c4408a362",
+      "schema_version": "pipeline-schema-v2.0.0",
+      "schema_name": "pb_04_split_decision_v2",
+      "schema_path": "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0"
+    },
+    {
+      "stage_id": "PB-05",
+      "sequence_number": 6,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-05-split-report-v1.developer.md",
+      "prompt_sha256": "cea7f5f3420107810876c03b52ed5e0c3b6b111ddb04941a8ef0e946cc0739c9",
+      "schema_version": "pipeline-schema-v2.0.0",
+      "schema_name": "pb_05_split_report_v2",
+      "schema_path": "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650"
+    },
+    {
+      "stage_id": "PB-06",
+      "sequence_number": 7,
+      "source": "m2-p4-candidate-source-isolation-successor",
+      "prompt_version": "v1.0.0",
+      "prompt_path": "lib/assessment/runtime/contracts/pb-06-split-validator-v1.developer.md",
+      "prompt_sha256": "e26c2b6d2acb1e43ca9511470e87ee403228463033d0b8d63544329d321ba9b3",
+      "schema_version": "pipeline-schema-v1.0.0",
+      "schema_name": "pb_06_split_validator_v1",
+      "schema_path": "ai/schemas/validation-result.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  ]
+}

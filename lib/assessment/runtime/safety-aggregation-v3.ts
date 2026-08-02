@@ -41,30 +41,44 @@ function responseModeFor(
   return "unsafe_contact_stop";
 }
 
+function reasonCodesFrom(channel: SafetyResult | JsonObject): string[] {
+  const reasonCodes = channel.reason_codes;
+  if (!Array.isArray(reasonCodes)) return [];
+  const result: string[] = [];
+  for (const value of reasonCodes) {
+    if (typeof value === "string") result.push(value);
+  }
+  return result;
+}
+
 export function aggregateSafetyV3(
   deterministic: SafetyResult,
   modelResult: JsonObject,
+  applicationResult?: SafetyResult | JsonObject,
 ): SafetyResult {
-  const modelClassification = modelResult.classification;
-  if (
-    modelClassification !== "normal_allowed" &&
-    modelClassification !== "needs_review" &&
-    modelClassification !== "rejected"
-  ) {
-    throw new M2RuntimeError("M2_SAFETY_OUTPUT_INVALID");
-  }
-
-  const classification =
-    safetyRank[deterministic.classification] >= safetyRank[modelClassification]
-      ? deterministic.classification
-      : modelClassification;
-  const modelReasonCodes = Array.isArray(modelResult.reason_codes)
-    ? modelResult.reason_codes.filter(
-        (value): value is string => typeof value === "string",
-      )
-    : [];
+  const channels: Array<SafetyResult | JsonObject> = [
+    deterministic,
+    modelResult,
+    ...(applicationResult ? [applicationResult] : []),
+  ];
+  const classifications = channels.map((channel) => {
+    const classification = channel.classification;
+    if (
+      classification !== "normal_allowed" &&
+      classification !== "needs_review" &&
+      classification !== "rejected"
+    ) {
+      throw new M2RuntimeError("M2_SAFETY_OUTPUT_INVALID");
+    }
+    return classification;
+  });
+  const classification = classifications.reduce((strictest, current) =>
+    safetyRank[strictest] >= safetyRank[current] ? strictest : current,
+  );
   const reasonCodes = [
-    ...new Set([...deterministic.reason_codes, ...modelReasonCodes]),
+    ...new Set(
+      channels.flatMap(reasonCodesFrom),
+    ),
   ].filter((code) => classification === "normal_allowed" || code !== "normal");
 
   return {

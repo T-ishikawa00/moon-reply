@@ -17,6 +17,10 @@ import type {
   PersistedAssessmentRequest,
   RelationshipValue,
   RequestedTopic,
+  SkipStageRecord,
+  SplitCompletedAssessment,
+  StageRunStatus,
+  StageTopologyVersion,
   StartStageRecord,
 } from "./types.ts";
 
@@ -42,6 +46,7 @@ type RunRow = {
   returned_model: string | null;
   prompt_bundle_version: string;
   schema_set_version: string;
+  stage_topology_version: StageTopologyVersion;
   eligibility: string | null;
   decision: string | null;
   total_input_tokens: number;
@@ -59,7 +64,7 @@ type StageRunRow = {
   run_id: string;
   stage_id: string;
   sequence_number: number;
-  status: "processing" | "completed" | "failed";
+  status: StageRunStatus;
   request_hash: string;
   prompt_hash: string;
   schema_hash: string;
@@ -223,6 +228,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       returned_model: null,
       prompt_bundle_version: record.promptBundleVersion,
       schema_set_version: record.schemaSetVersion,
+      stage_topology_version: record.stageTopologyVersion,
       eligibility: null,
       decision: null,
       total_input_tokens: 0,
@@ -297,6 +303,31 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         error_code: record.errorCode,
       })
       .eq("id", record.stageRunId);
+    if (error) throw databaseFailure();
+  }
+
+  async skipStage(record: SkipStageRecord) {
+    const { error } = await this.client.from("assessment_stage_runs").insert({
+      id: record.id,
+      run_id: record.runId,
+      stage_id: record.stageId,
+      sequence_number: record.sequenceNumber,
+      status: "skipped",
+      request_hash: record.requestHash,
+      prompt_hash: record.promptHash,
+      schema_hash: record.schemaHash,
+      response_id: null,
+      requested_model: record.requestedModel,
+      returned_model: null,
+      input_tokens: 0,
+      cached_tokens: 0,
+      output_tokens: 0,
+      reasoning_tokens: 0,
+      latency_ms: 0,
+      output_json: null,
+      error_code: null,
+      created_at: record.createdAt,
+    });
     if (error) throw databaseFailure();
   }
 
@@ -412,6 +443,6 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         totalReasoningTokens: Number(run.total_reasoning_tokens),
         usageDerivedCostUsd: Number(run.usage_derived_cost_usd),
       },
-    } as CompletedAssessment;
+    } as CompletedAssessment | SplitCompletedAssessment;
   }
 }

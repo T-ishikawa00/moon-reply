@@ -1,0 +1,125 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-c-routing-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-C",
+  "synthetic_only": true,
+  "provider_execution": false,
+  "database_execution": false,
+  "cases": [
+    {
+      "case_id": "ROUTE-01",
+      "scenario": "split_available_candidate_ready_completed",
+      "input": {
+        "current_situation": "A synthetic incoming schedule question is awaiting a reply.",
+        "optional_message": "Thanks. Tuesday works for me.",
+        "relationship": "other",
+        "requested_topics": ["draft_message"]
+      },
+      "assertions": ["seven_stage_order", "candidate_available", "ready_completed"]
+    },
+    {
+      "case_id": "ROUTE-02",
+      "scenario": "split_absent_candidate_skipped",
+      "input": {
+        "current_situation": "A synthetic practical reply is pending.",
+        "optional_message": null,
+        "relationship": "other",
+        "requested_topics": ["decide_send_or_wait"]
+      },
+      "assertions": ["pb_01c_provider_calls_zero", "pb_01c_skipped"]
+    },
+    {
+      "case_id": "ROUTE-03",
+      "scenario": "candidate_non_safety_invalid_safety_valid",
+      "candidate_fault": "invalid_style_enum",
+      "assertions": ["pb_01c_failed_analysis_unavailable", "degraded_completion_allowed"]
+    },
+    {
+      "case_id": "ROUTE-04",
+      "scenario": "candidate_safety_invalid_deterministic_normal",
+      "candidate_fault": "missing_candidate_safety_signals",
+      "assertions": ["pb_01c_failed_safety_unavailable", "run_failed"]
+    },
+    {
+      "case_id": "ROUTE-05",
+      "scenario": "candidate_safety_unavailable_deterministic_non_normal",
+      "deterministic_classification": "rejected",
+      "candidate_fault": "transport_failure",
+      "assertions": ["safety_blocked_completed", "pb_02_through_pb_06_calls_zero"]
+    },
+    {
+      "case_id": "ROUTE-06",
+      "scenario": "explicit_no_contact_candidate_contact",
+      "base_boundary": "no_contact",
+      "candidate_signal_codes": ["initiates_contact"],
+      "assertions": ["explicit_no_contact", "safety_blocked"]
+    },
+    {
+      "case_id": "ROUTE-07",
+      "scenario": "repeated_unanswered_candidate_reply_demand",
+      "base_repeated_unanswered_contact": true,
+      "candidate_signal_codes": ["reply_demand"],
+      "assertions": ["repeated_unanswered_contact", "safety_blocked"]
+    },
+    {
+      "case_id": "ROUTE-08",
+      "scenario": "pb_06_material_candidate_drift",
+      "semantic_finding": {
+        "finding_code": "MESSAGE_POLICY_CONSISTENCY",
+        "severity": "major",
+        "json_path": "decision_plan.recommended_message_draft.text"
+      },
+      "assertions": ["m2_semantic_validation_failed"]
+    },
+    {
+      "case_id": "ROUTE-09",
+      "scenario": "pb_06_policy_violation",
+      "semantic_finding": {
+        "finding_code": "DECISION_ALLOWED",
+        "severity": "critical",
+        "json_path": "decision_plan.selected_decision"
+      },
+      "assertions": ["m2_semantic_validation_failed"]
+    },
+    {
+      "case_id": "ROUTE-10",
+      "scenario": "pb_01_base_source_integrity_failure",
+      "base_fault": "candidate_source_reference",
+      "assertions": ["m2_base_source_integrity_failed"]
+    },
+    {
+      "case_id": "ROUTE-11",
+      "scenario": "pb_01c_base_fact_injection",
+      "candidate_fault": "observed_facts_property",
+      "assertions": ["m2_candidate_source_integrity_failed"]
+    },
+    {
+      "case_id": "ROUTE-12",
+      "scenario": "legacy_six_normal_completion_parity",
+      "topology": "legacy-six-v1",
+      "assertions": ["legacy_report_deep_equal", "legacy_decision_card_deep_equal"]
+    },
+    {
+      "case_id": "ROUTE-13",
+      "scenario": "skipped_stage_persistence_invariant",
+      "assertions": ["provider_fields_null", "usage_zero", "latency_zero"]
+    },
+    {
+      "case_id": "ROUTE-14",
+      "scenario": "wrong_topology_definition_rejection",
+      "topology_fault": "pb_01c_wrong_sequence",
+      "assertions": ["m2_stage_topology_invalid"]
+    },
+    {
+      "case_id": "ROUTE-15",
+      "scenario": "failed_pb_01c_usage_count_once",
+      "candidate_fault": "invalid_language_enum",
+      "assertions": ["response_usage_preserved", "usage_not_double_counted"]
+    },
+    {
+      "case_id": "ROUTE-16",
+      "scenario": "pb_01c_returned_model_mismatch",
+      "returned_model": "synthetic-model-mismatch",
+      "assertions": ["m2_candidate_safety_unavailable", "no_retry"]
+    }
+  ]
+}

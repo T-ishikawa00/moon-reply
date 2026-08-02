@@ -1,7 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->
-## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture, R3-R2-A, and R3-R2-B
+## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture, R3-R2-A/B, and R3-R2-C
 
 - [x] Candidate Source Isolation failure recorded separately from immutable R3/R3-R1 history
 - [x] Decision B fixed: separate Base PB-01 and Candidate PB-01C Provider boundaries
@@ -42,11 +42,19 @@
 - [x] Immutable implementation snapshot exact `13/13`: `be78f8930475e42d9a746a6754bc9e2f34c5aad0..ef5c6db66da77deebb9ad0d5498fe69ec584aad8`; working tree excluded
 - [x] Acceptance synchronization exact `6/6`; seven non-sync implementation blobs `7/7`, accepted A implementation blobs `4/4`, accepted A acceptance state, and accepted Planning blobs `5/5` unchanged
 - [x] Dedicated verifier, typecheck, lint with warnings `0`, production build, protected diff `0`, and `git diff --check` PASS
-- [ ] R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics — unauthorized
+- [x] R3-R2-C exact `23/23` implementation authorized and completed from baseline `93893d78b58463b067a1419e8bf7056540636921`
+- [x] Inactive Catalog v9 / Prompt bundle v9 / Schema set v4 / exact split seven-stage topology implemented without Active Service switch
+- [x] PB-01 Base and PB-01C Candidate routing, absent skip, degraded continuation, Candidate Safety fail-close, and cross-channel Safety implemented
+- [x] Application-owned transient Policy projection, split Plan/Report v2, PB-06 fidelity authorities, and major/critical fail-close implemented
+- [x] Topology persistence and `skipStage` repository contract implemented; migration `0004` created and statically validated but not applied
+- [x] Synthetic routing fixtures `16/16`, Fake split scenarios `11`, mutation rejection `17/17`, payload routing `7/7`, and legacy parity PASS
+- [x] Dedicated verifier, Policy `40/40`, typecheck, lint warnings `0`, build, protected blob gates, and `git diff --check` PASS
+- [ ] R3-R2-C Human / ChatGPT review
+- [ ] R3-R2-D Offline Counterfactual and Historical Regression — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-B status is `human_chatgpt_accepted_complete` at accepted implementation commit `ef5c6db66da77deebb9ad0d5498fe69ec584aad8` on `feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity`; immutable implementation scope is `13/13`, and acceptance sync is `6/6`. The acceptance establishes only inactive Base/Candidate projection and grounding, Base Legacy View, structural Source Integrity, CandidateEnvelope/Safety sibling construction, Split Analysis Envelope, legitimate literal overlap, and deterministic A/B/null Base-request isolation. It does not establish Provider execution order or quality, Pipeline/Prompt integration, Safety aggregation, persistence, migration, DB compatibility, isolated Runtime E2E readiness, or Runtime activation. The seven non-sync implementation blobs, accepted A implementation blobs and acceptance state, and five accepted Planning blobs remain unchanged. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Runtime, Pipeline, Service, Prompt, Catalog, persistence, migrations, and main remain unchanged. R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics — unauthorized; R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
+Current R3-R2-C status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`. It establishes only the offline/Fake inactive split Pipeline, exact topology and routing, Candidate Safety/fidelity failure semantics, and static persistence/migration contract. Migration application, live DB compatibility, Provider quality, isolated E2E readiness, Runtime activation, and acceptance are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Service remains catalog v4 and `main` is unchanged. R3-R2-D/E, R4, C2, E1, PR, and main merge remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

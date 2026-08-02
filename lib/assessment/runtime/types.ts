@@ -1,5 +1,6 @@
 export const M2_STAGE_IDS = [
   "PB-01",
+  "PB-01C",
   "PB-02",
   "PB-03",
   "PB-04",
@@ -8,6 +9,27 @@ export const M2_STAGE_IDS = [
 ] as const;
 
 export type M2StageId = (typeof M2_STAGE_IDS)[number];
+
+export const LEGACY_M2_STAGE_IDS = [
+  "PB-01",
+  "PB-02",
+  "PB-03",
+  "PB-04",
+  "PB-05",
+  "PB-06",
+] as const;
+
+export type LegacyM2StageId = (typeof LEGACY_M2_STAGE_IDS)[number];
+
+export type StageTopologyVersion =
+  | "legacy-six-v1"
+  | "split-base-candidate-v1";
+
+export type StageRunStatus =
+  | "processing"
+  | "completed"
+  | "failed"
+  | "skipped";
 
 export const RELATIONSHIP_VALUES = [
   "dating",
@@ -269,6 +291,7 @@ export type CreateRunRecord = {
   requestedModel: "gpt-5.6-luna";
   promptBundleVersion: string;
   schemaSetVersion: string;
+  stageTopologyVersion: StageTopologyVersion;
   startedAt: string;
 };
 
@@ -303,6 +326,18 @@ export type FailStageRecord = {
   errorCode: string;
 };
 
+export type SkipStageRecord = {
+  id: string;
+  runId: string;
+  stageId: "PB-01C";
+  sequenceNumber: 2;
+  requestHash: string;
+  promptHash: string;
+  schemaHash: string;
+  requestedModel: "gpt-5.6-luna";
+  createdAt: string;
+};
+
 export type CompleteRunRecord = UsageTotals & {
   runId: string;
   requestId: string;
@@ -327,7 +362,7 @@ export type FinalizeCompletedAssessmentRecord = UsageTotals & {
   returnedModel: string | null;
   eligibility: "ready";
   decision: Decision;
-  reportJson: RuntimeReport;
+  reportJson: RuntimeReport | SplitRuntimeReportV1;
   decisionCardJson: DecisionCard;
   completedAt: string;
 };
@@ -391,10 +426,115 @@ export type ReportContent = {
   closing_lines: string[];
 };
 
+export type SplitDecisionPlanV2 = {
+  schema_version: "pipeline-schema-v2.0.0";
+  selected_decision: Decision;
+  decision_reason_fact_ids: string[];
+  possible_interpretations: Array<{
+    statement: string;
+    supporting_fact_ids: string[];
+    epistemic_status: "possibility_only";
+  }>;
+  pre_action_check: {
+    check: string;
+    supporting_fact_ids: string[];
+  };
+  actions_to_take: string[];
+  actions_to_avoid: string[];
+  recommended_message_draft: {
+    text: string;
+    policy: "required_now" | "later_only";
+    use_timing: "now" | "later";
+  } | null;
+  message_draft_edit_metadata: {
+    source_status:
+      | "generated_without_candidate"
+      | "candidate_preserved"
+      | "candidate_minimally_edited"
+      | "candidate_materially_corrected_for_safety_or_boundary";
+    preserved_meaning: boolean;
+    style_delta: Array<{
+      dimension:
+        | "register"
+        | "sentence_length"
+        | "sentence_ending"
+        | "punctuation"
+        | "emoji_usage"
+        | "exclamation_usage"
+        | "softness"
+        | "directness"
+        | "invitation_style"
+        | "reply_pressure";
+      change:
+        | "preserved"
+        | "lightly_adjusted"
+        | "materially_adjusted"
+        | "unresolved";
+      reason: string;
+    }>;
+    communicative_intent_delta: JsonObject;
+    change_reasons: string[];
+    change_summary: string | null;
+  } | null;
+  aftercare_plan: Array<{
+    phase: "tonight" | "next" | "reassessment_condition";
+    action: string;
+    avoid: string | null;
+    supporting_fact_ids: string[];
+  }>;
+  change_conditions: Array<{
+    condition: string;
+    resulting_direction: Decision;
+    supporting_fact_ids: string[];
+  }>;
+  review_timing: {
+    when: string;
+    trigger_fact_ids: string[];
+  };
+  material_unknowns: Array<{
+    unknown_code: string;
+    summary: string;
+    material_to: "decision" | "draft" | "action" | "safety";
+  }>;
+  model_generated_limitations: string[];
+};
+
+export type SplitReportContentV2 = {
+  schema_version: "pipeline-schema-v2.0.0";
+  cover_line: string;
+  short_letter: string[];
+  decision_reason_summary: string;
+  relationship_summary: string | null;
+  observed_fact_commentary: Array<{
+    fact_id: string;
+    commentary: string;
+  }>;
+  possible_interpretations: string[];
+  anxiety_reframe: string[];
+  message_temperature: {
+    softness: string;
+    affection: string;
+    pressure: string;
+    adjustment: string;
+  } | null;
+  action_rationales: string[];
+  message_draft_context: string | null;
+  aftercare_commentary: string[];
+  change_condition_commentary: string[];
+  closing_lines: string[];
+};
+
 export type RuntimeReport = {
   schemaVersion: "m2-p3-runtime-report-v1";
   decisionPlan: DecisionPlan;
   content: ReportContent;
+  fixedLimitation: string;
+};
+
+export type SplitRuntimeReportV1 = {
+  schemaVersion: "m2-p4-split-runtime-report-v1";
+  decisionPlan: SplitDecisionPlanV2;
+  content: SplitReportContentV2;
   fixedLimitation: string;
 };
 
@@ -418,8 +558,13 @@ export type CompletedAssessment = {
   usage: UsageTotals;
 };
 
+export type SplitCompletedAssessment = Omit<CompletedAssessment, "report"> & {
+  report: SplitRuntimeReportV1;
+};
+
 export type AssessmentExecutionResult =
   | (CompletedAssessment & { duplicate: boolean })
+  | (SplitCompletedAssessment & { duplicate: boolean })
   | {
       requestId: string;
       runId: string;
@@ -438,6 +583,7 @@ export interface AssessmentRepository {
   startStage(record: StartStageRecord): Promise<void>;
   completeStage(record: CompleteStageRecord): Promise<void>;
   failStage(record: FailStageRecord): Promise<void>;
+  skipStage(record: SkipStageRecord): Promise<void>;
   completeRun(record: CompleteRunRecord): Promise<void>;
   failRun(record: FailRunRecord): Promise<void>;
   finalizeCompletedAssessment(
@@ -445,12 +591,13 @@ export interface AssessmentRepository {
   ): Promise<void>;
   getCompletedAssessment(
     requestId: string,
-  ): Promise<CompletedAssessment | null>;
+  ): Promise<CompletedAssessment | SplitCompletedAssessment | null>;
 }
 
 export type PipelineEvent =
   | M2StageId
   | "LOCAL_SCHEMA_PB-01"
+  | "LOCAL_SCHEMA_PB-01C"
   | "LOCAL_SCHEMA_PB-02"
   | "LOCAL_SCHEMA_PB-03"
   | "LOCAL_SAFETY_AGGREGATION"

@@ -1,0 +1,83 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-c-capabilities-v1",
+  "status": "implementation_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-C",
+  "title": "Pipeline, Topology Persistence, Candidate Fidelity, Safety, and Failure Semantics",
+  "baseline": "93893d78b58463b067a1419e8bf7056540636921",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence",
+  "exact_scope": "23/23",
+  "planning_package_status": "human_chatgpt_accepted_complete",
+  "r3_r2_a_status": "human_chatgpt_accepted_complete",
+  "r3_r2_b_status": "human_chatgpt_accepted_complete",
+  "catalog_version": "runtime-stage-catalog-v9.0.0",
+  "prompt_bundle_version": "prompt-bundle-runtime-v9.0.0",
+  "schema_set_version": "pipeline-schema-runtime-v4.0.0",
+  "stage_topology_version": "split-base-candidate-v1",
+  "split_pipeline_created": true,
+  "candidate_stage_created": true,
+  "candidate_absent_skipped_stage_created": true,
+  "candidate_safety_routing_created": true,
+  "candidate_degraded_mode_created": true,
+  "pb_06_candidate_fidelity_created": true,
+  "topology_persistence_contract_created": true,
+  "migration_created": true,
+  "migration_applied": false,
+  "legacy_six_parity": "PASS",
+  "active_service_catalog_changed": false,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "active_runtime_activated": false,
+  "r3_r2_d_authorized": false,
+  "r3_r2_e_authorized": false,
+  "r4_authorized": false,
+  "c2_authorized": false,
+  "next_candidate": "M2-P4-I3-R1-C1-R3-R2-D Offline Counterfactual and Historical Regression",
+  "next_candidate_authorized": false,
+  "stage_hashes": {
+    "PB-01": {
+      "prompt_sha256": "5add38000efcf812d6ecfc12807c29df12358e16f8cca521729e4452d1ea71eb",
+      "schema_sha256": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6"
+    },
+    "PB-01C": {
+      "prompt_sha256": "9605685a8158a23c061f7a3a56c20b0d3ea1dad1be0059423a258144017d0c09",
+      "schema_sha256": "47b135176f187c9801637838a55aea8f734e425109d2e19da6b6ecb3975db86b"
+    },
+    "PB-02": {
+      "prompt_sha256": "d02baddeea20db089d3304876825a70dc09bcda6ddc2a7d05cf4c41811c0ef32",
+      "schema_sha256": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    "PB-03": {
+      "prompt_sha256": "d282595168e09f5acfb4d4e22fe3f6997d8d748c9c9aed8e3defc3aabbf249f9",
+      "schema_sha256": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
+    },
+    "PB-04": {
+      "prompt_sha256": "b963029b5369187de243a98439978c30cc3c0cd5c39ce91ea758d81c4408a362",
+      "schema_sha256": "76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0"
+    },
+    "PB-05": {
+      "prompt_sha256": "cea7f5f3420107810876c03b52ed5e0c3b6b111ddb04941a8ef0e946cc0739c9",
+      "schema_sha256": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650"
+    },
+    "PB-06": {
+      "prompt_sha256": "e26c2b6d2acb1e43ca9511470e87ee403228463033d0b8d63544329d321ba9b3",
+      "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  },
+  "catalog_sha256": "c97ba7e4e004652665d7dca0d91daf05a27ec9e6a512e4a29aa87d0e9adb913c",
+  "migration_sha256": "6ecc0f592fa6c1b0d70dd49f2bd0b9be560316d6c46fd1ccb0bfaa846545c538",
+  "routing_fixtures_sha256": "a60fcbab41796c8c1c411b07ecc874c40d29d1f5cef1f53e127e793bbd7226f0",
+  "routing_fixture_count": 16,
+  "fake_split_scenario_count": 11,
+  "mutation_rejection_count": 17,
+  "payload_routing_result": "7/7",
+  "migration_static_validation": "PASS",
+  "dedicated_verifier": "PASS",
+  "accepted_a_implementation_blobs_unchanged": "4/4",
+  "accepted_a_acceptance_state_unchanged": true,
+  "accepted_b_non_sync_blobs_unchanged": "7/7",
+  "accepted_b_acceptance_state_unchanged": true,
+  "accepted_planning_blobs_unchanged": "5/5",
+  "active_service_unchanged": true,
+  "human_chatgpt_review": "pending"
+}
