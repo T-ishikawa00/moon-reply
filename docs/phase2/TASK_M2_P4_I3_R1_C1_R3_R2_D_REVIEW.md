@@ -3,15 +3,23 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R3-R2-D`
-- Status: `offline_counterfactual_passed_pending_human_chatgpt_review`
+- Status: `human_chatgpt_accepted_complete`
+- Human / ChatGPT result: `OFFLINE COUNTERFACTUAL ACCEPTED COMPLETE`
+- Offline Counterfactual accepted: `true`
+- Accepted implementation commit: `8b9b4a4dff2992483266a3fb9bbc80b183091b2e`
+- Immutable implementation snapshot: `9d2bd94a2629d97197c6ffbb0608ec573b9b824a..8b9b4a4dff2992483266a3fb9bbc80b183091b2e` (`10/10` exact paths; working tree excluded)
 - Baseline: `9d2bd94a2629d97197c6ffbb0608ec573b9b824a`
 - Branch: `test/m2-p4-i3-r1-c1-r3-r2-d-counterfactual-regression`
-- Exact scope: `10/10`
+- Exact implementation scope: `10/10`
+- Acceptance synchronization exact scope: `6/6`
+- Non-sync evidence blobs unchanged: `4/4`
 - Runner: `m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1`
-- Human / ChatGPT review: pending
-- R3-R2-E: unauthorized
+- Candidate ready for Provider diagnostic: `true`
+- Candidate ready for isolated E2E: `false`
+- R3-R2-E ready / authorized: `true / false`
+- R4 / C2 authorized: `false / false`
 
-This Slice creates offline test and evidence assets only. It does not modify or activate Runtime, Prompt, Schema, Catalog, Pipeline, Service, migration, application, or UI code.
+Human / ChatGPT accepts the immutable offline Counterfactual, legitimate-overlap, and historical six-stage regression evidence. This acceptance establishes only the offline structural boundary. It does not modify or activate Runtime, Prompt, Schema, Catalog, Pipeline, Service, migration, application, or UI code.
 
 ## Source authority
 
@@ -95,6 +103,7 @@ The seven independent mutations cover the Base optional key, Base Timeline Senti
 
 ## Protected assets
 
+- D non-sync evidence blobs: `4/4 unchanged` from accepted implementation commit `8b9b4a4dff2992483266a3fb9bbc80b183091b2e`
 - Accepted Planning blobs: `5/5 unchanged`
 - Accepted A implementation blobs: `4/4 unchanged`
 - Accepted B non-sync implementation blobs: `7/7 unchanged`
@@ -105,16 +114,55 @@ The seven independent mutations cover the Base optional key, Base Timeline Senti
 - `main` / `origin/main`: `61e33a10e195fad17e253a6b9719217e1992f273`, unchanged
 - Migration `0004`: unchanged and unapplied
 
+## Immutable implementation manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-cases-v1.json`
+2. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-results-v1.json`
+3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/historical-regression-manifest-v1.json`
+4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/capabilities-v1.json`
+5. `scripts/lib/m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1.mjs`
+6. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-d-counterfactual.mjs`
+7. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_D_REVIEW.md`
+8. `docs/CURRENT_FOCUS.md`
+9. `docs/WBS.md`
+10. `docs/CODEX_HANDOFF.md`
+
+This immutable historical snapshot is exactly `9d2bd94a2629d97197c6ffbb0608ec573b9b824a..8b9b4a4dff2992483266a3fb9bbc80b183091b2e`; it excludes the working tree.
+
+## Exact acceptance-sync manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_D_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-d-counterfactual.mjs`
+4. `docs/CURRENT_FOCUS.md`
+5. `docs/WBS.md`
+6. `docs/CODEX_HANDOFF.md`
+
+The four non-sync evidence blobs remain content-identical to accepted implementation commit `8b9b4a4dff2992483266a3fb9bbc80b183091b2e`: the cases, committed result, historical manifest, and offline runner. This `6/6` synchronization does not extend or rewrite the immutable `10/10` implementation snapshot.
+
 ## Validation
 
 - Offline runner: `PASS`
-- Dedicated verifier: `PASS` (`47` checks)
+- Accepted implementation verifier result: `PASS_47_CHECKS`
+- Acceptance-aware dedicated verifier: `PASS` (`54` checks including the retained original `47`)
 - Decision Policy: `40/40 PASS`
 - Typecheck: `PASS`
 - Lint: `PASS`, warnings `0`
 - Build: `PASS`
 - `git diff --check`: `PASS`
 
+Validated sequentially:
+
+1. `node scripts/lib/m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1.mjs --check`
+2. `node scripts/verify-m2-p4-i3-r1-c1-r3-r2-d-counterfactual.mjs`
+3. `node evals/quality/m2-p4-i1/verify-decision-policy.mjs`
+4. `npm run typecheck`
+5. `npm run lint`
+6. `npm run build`
+7. `git diff --check`
+
 ## Acceptance boundary
 
-This evidence establishes offline Candidate source isolation and legacy-six regression only. It does not establish Luna quality, Provider quality, live DB compatibility, isolated E2E readiness, or Runtime activation. R3-R2-E, R4, C2, PR, and main merge remain unauthorized.
+This evidence establishes offline Candidate source isolation, A/B/null Base invariance, legitimate-overlap no-false-positive behavior, and legacy-six regression only. It does not establish Luna semantic quality, Provider quality, live DB compatibility, isolated E2E readiness, or Runtime activation.
+
+Human / ChatGPT acceptance is complete. R3-R2-E is ready but unauthorized and was not started. R4, C2, Provider execution, migration application, Supabase access, Runtime activation, PR creation, and main integration remain unauthorized. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.

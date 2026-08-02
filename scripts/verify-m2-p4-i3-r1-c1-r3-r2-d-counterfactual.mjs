@@ -14,6 +14,10 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const baseline = "9d2bd94a2629d97197c6ffbb0608ec573b9b824a";
+const acceptedImplementationCommit =
+  "8b9b4a4dff2992483266a3fb9bbc80b183091b2e";
+const expectedBranch =
+  "test/m2-p4-i3-r1-c1-r3-r2-d-counterfactual-regression";
 const planningContent = "212720bba2ebb805da9ef701d645359a6bd470a7";
 const acceptedA = "2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f";
 const acceptedB = "ef5c6db66da77deebb9ad0d5498fe69ec584aad8";
@@ -32,6 +36,20 @@ const exactScope = [
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+];
+const acceptanceSyncScope = [
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_D_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-d-counterfactual.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const nonSyncEvidencePaths = [
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/historical-regression-manifest-v1.json",
+  "scripts/lib/m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1.mjs",
 ];
 const jsonPaths = exactScope.slice(0, 4);
 const planningPaths = [
@@ -138,6 +156,40 @@ const untracked = git("ls-files", "--others", "--exclude-standard")
 const actualScope = [...new Set([...tracked, ...untracked])];
 check("exact scope 10/10", sameSet(actualScope, exactScope));
 check("duplicate paths 0", new Set(exactScope).size === exactScope.length);
+const historicalImplementationScope = git(
+  "diff",
+  "--name-only",
+  baseline,
+  acceptedImplementationCommit,
+  "--",
+)
+  .split(/\r?\n/u)
+  .filter(Boolean);
+check(
+  "immutable implementation snapshot exact 10/10",
+  sameSet(historicalImplementationScope, exactScope),
+);
+const acceptanceTracked = git(
+  "diff",
+  "--name-only",
+  acceptedImplementationCommit,
+  "--",
+)
+  .split(/\r?\n/u)
+  .filter(Boolean);
+const actualAcceptanceSyncScope = [
+  ...new Set([...acceptanceTracked, ...untracked].filter(Boolean)),
+];
+check(
+  "acceptance sync exact scope 6/6",
+  sameSet(actualAcceptanceSyncScope, acceptanceSyncScope) &&
+    new Set(acceptanceSyncScope).size === acceptanceSyncScope.length,
+);
+git("merge-base", "--is-ancestor", acceptedImplementationCommit, "HEAD");
+check(
+  "accepted implementation ancestry and branch",
+  git("branch", "--show-current") === expectedBranch,
+);
 
 const parsed = Object.fromEntries(jsonPaths.map((item) => [item, readJson(item)]));
 check("JSON parse 4/4", Object.keys(parsed).length === 4);
@@ -145,6 +197,25 @@ const cases = parsed[jsonPaths[0]];
 const committedResult = parsed[jsonPaths[1]];
 const historicalManifest = parsed[jsonPaths[2]];
 const capabilities = parsed[jsonPaths[3]];
+check(
+  "non-sync evidence blobs unchanged 4/4",
+  nonSyncEvidencePaths.length === 4 &&
+    nonSyncEvidencePaths.every((item) => blobMatches(acceptedImplementationCommit, item)),
+);
+check(
+  "committed counterfactual result unchanged",
+  blobMatches(
+    acceptedImplementationCommit,
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-results-v1.json",
+  ),
+);
+check(
+  "offline runner unchanged",
+  blobMatches(
+    acceptedImplementationCommit,
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1.mjs",
+  ),
+);
 const sourceContract = readJson(
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2/counterfactual-suite-v1.json",
 );
@@ -478,6 +549,91 @@ check(
     capabilities.build_result === "PASS" &&
     capabilities.git_diff_check === "PASS",
 );
+const requiredAcceptanceDocumentFragments = {
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_D_REVIEW.md": [
+    "human_chatgpt_accepted_complete",
+    "OFFLINE COUNTERFACTUAL ACCEPTED COMPLETE",
+    `Accepted implementation commit: \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact scope: `6/6`",
+    "Non-sync evidence blobs unchanged: `4/4`",
+    "R3-R2-E ready / authorized: `true / false`",
+  ],
+  "docs/CURRENT_FOCUS.md": [
+    "M2-P4-I3-R1-C1-R3-R2-D",
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization is exact `6/6`",
+    "non-sync evidence blobs remain unchanged `4/4`",
+  ],
+  "docs/WBS.md": [
+    "Human / ChatGPT result: `OFFLINE COUNTERFACTUAL ACCEPTED COMPLETE`",
+    `Accepted implementation commit \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact `6/6`",
+    "non-sync evidence blobs `4/4` unchanged",
+  ],
+  "docs/CODEX_HANDOFF.md": [
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization `6/6`",
+    "non-sync evidence blobs `4/4`",
+    "ready but unauthorized",
+  ],
+};
+const acceptanceDocumentsRecorded = Object.entries(
+  requiredAcceptanceDocumentFragments,
+).every(([relativePath, fragments]) => {
+  const document = readText(relativePath);
+  return fragments.every((fragment) => document.includes(fragment));
+});
+const implementationSnapshot = capabilities.implementation_snapshot;
+check(
+  "accepted capability and documentation recorded",
+  capabilities.status === "human_chatgpt_accepted_complete" &&
+    capabilities.offline_counterfactual_accepted === true &&
+    capabilities.accepted_implementation_commit === acceptedImplementationCommit &&
+    implementationSnapshot.type === "historical_commit_range" &&
+    implementationSnapshot.base === baseline &&
+    implementationSnapshot.end === acceptedImplementationCommit &&
+    implementationSnapshot.exact_paths === 10 &&
+    implementationSnapshot.immutable === true &&
+    implementationSnapshot.include_working_tree === false &&
+    capabilities.exact_mutation_path_count === 10 &&
+    sameSet(capabilities.exact_mutation_paths, exactScope) &&
+    capabilities.acceptance_sync_exact_scope === "6/6" &&
+    capabilities.acceptance_sync_exact_path_count === 6 &&
+    sameSet(capabilities.acceptance_sync_exact_paths, acceptanceSyncScope) &&
+    capabilities.non_sync_evidence_blobs_unchanged === "4/4" &&
+    capabilities.committed_counterfactual_result_unchanged === true &&
+    capabilities.offline_runner_unchanged === true &&
+    capabilities.accepted_planning_blobs_unchanged === "5/5" &&
+    capabilities.accepted_a_implementation_blobs_unchanged === "4/4" &&
+    capabilities.accepted_b_non_sync_blobs_unchanged === "7/7" &&
+    capabilities.accepted_c_non_sync_blobs_unchanged === "17/17" &&
+    capabilities.active_v4_assets_unchanged === "19/19" &&
+    capabilities.offline_counterfactual_accepted === true &&
+    capabilities.candidate_ready_for_provider_diagnostic === true &&
+    capabilities.candidate_ready_for_isolated_e2e === false &&
+    capabilities.r3_r2_e_ready === true &&
+    capabilities.r3_r2_e_authorized === false &&
+    capabilities.r4_authorized === false &&
+    capabilities.c2_authorized === false &&
+    capabilities.external_provider_calls === 0 &&
+    capabilities.db_operations === 0 &&
+    capabilities.supabase_operations === 0 &&
+    capabilities.migration_applied === false &&
+    capabilities.active_service_changed === false &&
+    capabilities.active_runtime_activated === false &&
+    capabilities.main_changed === false &&
+    capabilities.next_candidate ===
+      "M2-P4-I3-R1-C1-R3-R2-E Bounded Split-Stage Provider Diagnostic" &&
+    capabilities.next_candidate_authorized === false &&
+    capabilities.acceptance_sync_verifier_result ===
+      "PASS_54_CHECKS_INCLUDING_RETAINED_47" &&
+    capabilities.dedicated_verifier_check_count === 54 &&
+    capabilities.retained_original_check_count === 47 &&
+    capabilities.human_chatgpt_review === "accepted_complete" &&
+    acceptanceDocumentsRecorded,
+);
 
 const independentMutants = [];
 {
@@ -545,9 +701,17 @@ execFileSync(
 );
 check("git diff --check PASS", true);
 
+assert.ok(checkCount >= 47, `existing 47-check coverage not retained: ${checkCount}`);
+assert.equal(
+  checkCount,
+  capabilities.dedicated_verifier_check_count,
+  "recorded acceptance-aware verifier check count",
+);
 console.log("M2-P4-I3-R1-C1-R3-R2-D COUNTERFACTUAL VERIFIER: PASS");
 console.log(`checks: ${checkCount}`);
-console.log(`exact scope: ${exactScope.length}/10`);
+console.log(`acceptance sync scope: ${acceptanceSyncScope.length}/6`);
+console.log(`immutable implementation scope: ${exactScope.length}/10`);
+console.log(`non-sync evidence blobs unchanged: ${nonSyncEvidencePaths.length}/4`);
 console.log(`hard gates: ${recomputed.counterfactual.hard_gate_summary}`);
 console.log(`negative mutants: ${recomputed.negative_mutants.summary}`);
 console.log(`historical regression: ${recomputed.historical_regression.summary}`);
