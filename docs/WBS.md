@@ -1,7 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->
-## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture and R3-R2-A
+## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture, R3-R2-A, and R3-R2-B
 
 - [x] Candidate Source Isolation failure recorded separately from immutable R3/R3-R1 history
 - [x] Decision B fixed: separate Base PB-01 and Candidate PB-01C Provider boundaries
@@ -31,11 +31,19 @@
 - [x] Accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`
 - [x] Immutable implementation snapshot exact `10/10`: `7a4e5d3187e1731d677cc5aa19c23acdeb535ed8..2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; working tree excluded
 - [x] Acceptance synchronization exact `6/6`; four implementation blobs and five accepted Planning blobs unchanged
-- [ ] R3-R2-B Grounding, Allowlist Merge, and Source Integrity — unauthorized
+- [x] R3-R2-B exact `13/13` implementation authorized from accepted A baseline `be78f8930475e42d9a746a6754bc9e2f34c5aad0`
+- [x] Base Provider projection, Base grounding, and byte-equivalent deep-cloned Base Legacy View implemented without Candidate input
+- [x] Candidate Provider projection and explicit field-by-field Candidate analysis / separate Safety allowlist grounding implemented
+- [x] Base and Candidate Source Integrity implemented with structural keys, provenance allowlists, recursive ownership exclusion, and no arbitrary literal scan
+- [x] CandidateEnvelope constructors and Safety cross-state consistency implemented `4/4`; Split Envelope keeps Base and Candidate as siblings
+- [x] Synthetic fixtures fixed at valid `15`, invalid expected-failure `35`, and mutation rejection `10`
+- [x] M2-P4-I3-R1-C1-R3-R2-B result: `IMPLEMENTATION COMPLETE — HUMAN / CHATGPT REVIEW PENDING`
+- [x] Dedicated verifier, typecheck, lint with warnings `0`, production build, and `git diff --check` PASS
+- [ ] R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-A status is `human_chatgpt_accepted_complete` at accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; immutable implementation scope is `10/10`, and acceptance sync is `6/6`. The acceptance establishes only inactive Split Stage Schema and TypeScript contracts, the machine-readable topology contract, and the exact `CandidateEnvelope` type boundary. The active single-stage Runtime is unchanged, and Application grounding, CandidateEnvelope construction, Runtime Source Integrity, Pipeline integration, Prompt or Provider quality, persistence or migration, isolated E2E readiness, and Runtime activation are not established. The four non-sync implementation blobs, five accepted Planning blobs, R3-R1 canonicalization, historical artifacts, and A-through-E manifests remain unchanged. Provider / DB / Supabase operations are `0 / 0 / 0`; R3-R2-B, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
+Current R3-R2-B status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity`. R3-R2-A remains `human_chatgpt_accepted_complete` at accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; its four protected implementation blobs, acceptance state, and the five accepted Planning blobs remain unchanged. B adds only inactive pure Application helpers, synthetic fixtures, a dedicated verifier, and review/status records in exact scope `13/13`. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Runtime, Pipeline, Service, Prompt, Catalog, persistence, migrations, and main remain unchanged. R3-R2-C, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

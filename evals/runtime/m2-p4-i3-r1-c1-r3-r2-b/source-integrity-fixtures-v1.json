@@ -1,0 +1,253 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-b-source-integrity-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-B",
+  "synthetic_only": true,
+  "base_provider_source": {
+    "currentSituation": "SYNTHETIC_BASE_LITERAL_OVERLAP_R3R2B",
+    "relationship": "ambiguous",
+    "requestedTopics": ["decide_send_or_wait", "draft_message"]
+  },
+  "candidate_variants": {
+    "candidate_a": "CANDIDATE_SENTINEL_A_R3R2_7F19",
+    "candidate_b": "CANDIDATE_SENTINEL_B_R3R2_4C82",
+    "candidate_absent": null,
+    "legitimate_literal_overlap": "SYNTHETIC_BASE_LITERAL_OVERLAP_R3R2B"
+  },
+  "raw_base_structured_intake": {
+    "schema_version": "pipeline-schema-base-v1.0.0",
+    "relationship_stage": "former_partner",
+    "user_goal": "decide_send_or_wait",
+    "timeline": [],
+    "boundaries": [],
+    "context": [],
+    "observed_facts": [
+      {
+        "fact_id": "F001",
+        "statement": "Synthetic fact one.",
+        "source_refs": ["input:relationship", "input:current_situation"],
+        "support": "explicit"
+      },
+      {
+        "fact_id": "F002",
+        "statement": "Synthetic fact two.",
+        "source_refs": ["input:requested_topics", "input:current_situation"],
+        "support": "normalized"
+      }
+    ],
+    "user_assumptions": [],
+    "user_emotions": [],
+    "material_unknowns": [],
+    "safety_signals": [],
+    "untrusted_embedded_instructions_detected": false,
+    "context_inferences": [
+      {
+        "inference_id": "I001",
+        "field_path": "relationship_stage",
+        "supporting_fact_ids": ["F001"],
+        "source_refs": ["input:relationship"],
+        "rationale_summary": "Synthetic relationship inference to remove."
+      },
+      {
+        "inference_id": "I002",
+        "field_path": "latest_direct_message.kind",
+        "supporting_fact_ids": ["F001", "F002"],
+        "source_refs": ["input:requested_topics"],
+        "rationale_summary": "Synthetic supported inference."
+      },
+      {
+        "inference_id": "I003",
+        "field_path": "practical_reason.kind",
+        "supporting_fact_ids": ["F999"],
+        "source_refs": ["input:current_situation"],
+        "rationale_summary": "Synthetic unsupported inference retained for later rejection."
+      },
+      {
+        "inference_id": "I004",
+        "field_path": "latest_direct_message.sender",
+        "supporting_fact_ids": ["F001"],
+        "source_refs": ["input:relationship"],
+        "rationale_summary": "Synthetic unresolved inference to remove."
+      }
+    ],
+    "decision_facts": {
+      "schema_version": "m2-p4-base-decision-facts-v1",
+      "relationship_stage": "former_partner",
+      "selected_requests": ["relationship"],
+      "latest_direct_message": {
+        "sender": "unknown",
+        "kind": "question",
+        "response_expectation": "reasonable",
+        "user_reply_state": "not_replied",
+        "sns_signal_only": false
+      },
+      "contact_state": {
+        "unanswered_user_message_count": null,
+        "elapsed_since_latest_user_message_minutes": null,
+        "usual_cadence_relation": "unknown"
+      },
+      "boundary_state": {
+        "kind": "none",
+        "status": "none",
+        "repeated_unanswered_contact": false
+      },
+      "practical_reason": {
+        "kind": "schedule_coordination",
+        "active": true,
+        "deadline": "later"
+      },
+      "information_state": {
+        "assessment_mode": "best_effort",
+        "can_proceed_without_followup": true,
+        "used_context_inference": true,
+        "unresolved_fields": ["relationship_stage", "latest_direct_message.sender"]
+      }
+    },
+    "base_writing_signals": {
+      "schema_version": "m2-p4-base-writing-signals-v1",
+      "relationship_dimensions": {
+        "romantic_stage": { "value": "ambiguous", "basis": "relationship_chip" },
+        "social_role": { "value": "unknown", "basis": "unresolved" },
+        "hierarchy": { "value": "unknown", "basis": "unresolved" },
+        "familiarity": { "value": "unknown", "basis": "unresolved" },
+        "communication_context": { "value": "private", "basis": "current_situation_explicit" },
+        "observed_register": { "value": "unknown", "basis": "unresolved" }
+      },
+      "message_signals": [],
+      "incoming_message_profile": {
+        "dialogue_acts": [],
+        "unanswered_obligations": [],
+        "practical_requirements": [],
+        "closure_signal": "none",
+        "response_expectation": "none",
+        "present": false
+      },
+      "user_goal_detail": { "value": "unknown", "basis": "requested_topics" },
+      "explicit_user_constraints": [],
+      "communication_pattern": {
+        "usual_register": "unknown",
+        "usual_length": "unknown",
+        "usual_emoji_pattern": "unknown",
+        "usual_response_cadence_summary": null,
+        "usual_initiator": "unknown",
+        "reciprocal_style_summary": null,
+        "basis": "unresolved"
+      },
+      "channel_and_timing": {
+        "channel": "unknown",
+        "relative_timing": "unknown",
+        "basis": "unresolved"
+      },
+      "language_and_expression": {
+        "primary_language": "ja",
+        "mixed_languages": [],
+        "dialect_or_regional_expression": "absent",
+        "established_shared_expression": "unknown",
+        "intentional_nonstandard_expression": "absent",
+        "possible_typo": "absent",
+        "basis": "current_situation_explicit"
+      },
+      "repeat_consultation_state": {
+        "state": "first_assessment",
+        "changed_fact_ids": [],
+        "basis": "current_situation_explicit"
+      },
+      "privacy_markers": [],
+      "boundary_ownership_signals": []
+    }
+  },
+  "candidate_optional_message": "  SYNTHETIC_CANDIDATE_MESSAGE_R3R2B  ",
+  "raw_candidate_provider_output": {
+    "candidate_style_profile": {
+      "register": "casual",
+      "sentence_length": "short",
+      "sentence_ending": "soft",
+      "punctuation": "standard",
+      "emoji_usage": "restrained",
+      "exclamation_usage": "none",
+      "softness": "high",
+      "directness": "balanced",
+      "invitation_style": "tentative",
+      "reply_pressure": "low"
+    },
+    "candidate_communicative_intent": {
+      "gratitude_strength": "low",
+      "apology_strength": "none",
+      "question_count": 1,
+      "invitation_presence": true,
+      "invitation_specificity": "tentative",
+      "affection_strength": "none",
+      "commitment_strength": "none",
+      "response_pressure": "low",
+      "boundary_strength": "none",
+      "conversation_closure": "none",
+      "practical_requirement": ["answer_question"]
+    },
+    "candidate_language_expression": {
+      "primary_language": "ja",
+      "mixed_languages": [],
+      "dialect_or_regional_expression": "absent",
+      "intentional_nonstandard_expression": "absent",
+      "possible_typo": "absent"
+    },
+    "candidate_safety_signals": {
+      "untrusted_embedded_instruction_detected": false,
+      "signal_codes": []
+    }
+  },
+  "base_valid_cases": [
+    { "fixture_id": "BASE-VALID-001", "scenario": "canonical_application_relationship_and_selected_requests" },
+    { "fixture_id": "BASE-VALID-002", "scenario": "relationship_stage_inference_removal" },
+    { "fixture_id": "BASE-VALID-003", "scenario": "unresolved_relationship_stage_removal" },
+    { "fixture_id": "BASE-VALID-004", "scenario": "inference_source_ref_canonicalization" },
+    { "fixture_id": "BASE-VALID-005", "scenario": "unknown_unresolved_inference_canonicalization" },
+    { "fixture_id": "BASE-VALID-006", "scenario": "base_legacy_view_deep_clone" },
+    { "fixture_id": "BASE-VALID-007", "scenario": "candidate_a_b_null_base_request_byte_identity" },
+    { "fixture_id": "BASE-VALID-008", "scenario": "legitimate_literal_overlap_no_false_positive" }
+  ],
+  "candidate_valid_cases": [
+    { "fixture_id": "CANDIDATE-VALID-001", "scenario": "available" },
+    { "fixture_id": "CANDIDATE-VALID-002", "scenario": "absent" },
+    { "fixture_id": "CANDIDATE-VALID-003", "scenario": "analysis_unavailable_safety_available" },
+    { "fixture_id": "CANDIDATE-VALID-004", "scenario": "safety_unavailable" },
+    { "fixture_id": "CANDIDATE-VALID-005", "scenario": "candidate_allowlist_output" },
+    { "fixture_id": "CANDIDATE-VALID-006", "scenario": "candidate_safety_empty_signal_codes" },
+    { "fixture_id": "CANDIDATE-VALID-007", "scenario": "candidate_safety_valid_multiple_codes" }
+  ],
+  "invalid_fixtures": [
+    { "fixture_id": "BASE-INVALID-001", "target_validator": "base_provider_request", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "additional request key", "mutation": "base_request_additional_key" },
+    { "fixture_id": "BASE-INVALID-002", "target_validator": "base_provider_request", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "optional_message request key", "mutation": "base_request_optional_message" },
+    { "fixture_id": "BASE-INVALID-003", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "input optional message source ref", "mutation": "base_optional_source_ref" },
+    { "fixture_id": "BASE-INVALID-004", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "arbitrary followup source ref", "mutation": "base_followup_source_ref" },
+    { "fixture_id": "BASE-INVALID-005", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "Candidate field at Base root", "mutation": "base_candidate_field_root" },
+    { "fixture_id": "BASE-INVALID-006", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "Candidate field nested in Base writing signals", "mutation": "base_candidate_field_nested" },
+    { "fixture_id": "BASE-INVALID-007", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "proposed message presence in contact state", "mutation": "base_proposed_message_present" },
+    { "fixture_id": "BASE-INVALID-008", "target_validator": "base_legacy_view", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "Candidate field in Base Legacy View", "mutation": "legacy_candidate_field" },
+    { "fixture_id": "BASE-INVALID-009", "target_validator": "base_raw_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "nonunique source refs", "mutation": "base_duplicate_source_refs" },
+    { "fixture_id": "BASE-INVALID-010", "target_validator": "base_grounded_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "incorrect grounded canonical relationship", "mutation": "base_incorrect_relationship" },
+    { "fixture_id": "BASE-INVALID-011", "target_validator": "base_grounded_output", "expected_safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED", "short_reason": "incorrect selected requests", "mutation": "base_incorrect_selected_requests" },
+    { "fixture_id": "CANDIDATE-INVALID-001", "target_validator": "candidate_provider_input", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "blank optional message", "mutation": "candidate_blank_message" },
+    { "fixture_id": "CANDIDATE-INVALID-002", "target_validator": "candidate_provider_input", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "incorrect Candidate metadata", "mutation": "candidate_incorrect_metadata" },
+    { "fixture_id": "CANDIDATE-INVALID-003", "target_validator": "candidate_provider_input", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "additional Candidate input key", "mutation": "candidate_input_additional_key" },
+    { "fixture_id": "CANDIDATE-INVALID-004", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Timeline in Candidate output", "mutation": "candidate_output_timeline" },
+    { "fixture_id": "CANDIDATE-INVALID-005", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Observed Facts in Candidate output", "mutation": "candidate_output_observed_facts" },
+    { "fixture_id": "CANDIDATE-INVALID-006", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Decision Facts in Candidate output", "mutation": "candidate_output_decision_facts" },
+    { "fixture_id": "CANDIDATE-INVALID-007", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "source refs in Candidate output", "mutation": "candidate_output_source_refs" },
+    { "fixture_id": "CANDIDATE-INVALID-008", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "ID in Candidate output", "mutation": "candidate_output_id" },
+    { "fixture_id": "CANDIDATE-INVALID-009", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "sequence in Candidate output", "mutation": "candidate_output_sequence" },
+    { "fixture_id": "CANDIDATE-INVALID-010", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "raw Candidate echo property", "mutation": "candidate_output_raw_echo" },
+    { "fixture_id": "CANDIDATE-INVALID-011", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Provider response ID", "mutation": "candidate_output_response_id" },
+    { "fixture_id": "CANDIDATE-INVALID-012", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Provider usage metadata", "mutation": "candidate_output_usage" },
+    { "fixture_id": "CANDIDATE-INVALID-013", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Provider latency metadata", "mutation": "candidate_output_latency" },
+    { "fixture_id": "CANDIDATE-INVALID-014", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "unknown Candidate Safety code", "mutation": "candidate_unknown_safety_code" },
+    { "fixture_id": "CANDIDATE-INVALID-015", "target_validator": "candidate_provider_output", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "duplicate Candidate Safety code", "mutation": "candidate_duplicate_safety_code" },
+    { "fixture_id": "CANDIDATE-INVALID-016", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "presence false with available state", "mutation": "envelope_false_available" },
+    { "fixture_id": "CANDIDATE-INVALID-017", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "presence true with absent state", "mutation": "envelope_true_absent" },
+    { "fixture_id": "CANDIDATE-INVALID-018", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "available state with null analysis", "mutation": "envelope_available_null" },
+    { "fixture_id": "CANDIDATE-INVALID-019", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "unavailable state with non-null analysis", "mutation": "envelope_unavailable_analysis" },
+    { "fixture_id": "CANDIDATE-INVALID-020", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "present Candidate with absent Safety", "mutation": "envelope_present_safety_absent" },
+    { "fixture_id": "CANDIDATE-INVALID-021", "target_validator": "candidate_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "unknown Envelope key", "mutation": "envelope_unknown_key" },
+    { "fixture_id": "CANDIDATE-INVALID-022", "target_validator": "candidate_split_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "CandidateEnvelope inside Base", "mutation": "split_candidate_envelope_inside_base" },
+    { "fixture_id": "CANDIDATE-INVALID-023", "target_validator": "candidate_analysis", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Base fact field inside Candidate Analysis", "mutation": "candidate_analysis_base_fact" },
+    { "fixture_id": "CANDIDATE-INVALID-024", "target_validator": "candidate_split_envelope", "expected_safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED", "short_reason": "Safety result missing for available Safety state", "mutation": "split_missing_available_safety" }
+  ]
+}
