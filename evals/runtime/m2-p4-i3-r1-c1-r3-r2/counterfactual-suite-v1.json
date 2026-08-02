@@ -3,7 +3,16 @@
   "task_id": "M2-P4-I3-R1-C1-R3-R2",
   "suite_id": "candidate-source-isolation-counterfactual-v1",
   "mode": "planning_contract_offline_shared_base_output",
+  "planning_review_correction": "implemented_pending_human_chatgpt_review",
   "provider_calls_in_this_task": 0,
+  "literal_scan_policy": {
+    "production_arbitrary_candidate_literal_scanning": false,
+    "test_only_registered_detectors": [
+      "CANDIDATE_SENTINEL_A_R3R2_7F19",
+      "CANDIDATE_SENTINEL_B_R3R2_4C82"
+    ],
+    "other_test_detector_rule": "must_be_proven_absent_from_Base_Input_before_test"
+  },
   "base_case": {
     "base_case_id": "BASE-R3R2-001",
     "synthetic_only": true,
@@ -24,7 +33,11 @@
     "canonical_serialization": "fixed_key_order_utf8_json",
     "hash_algorithm": "sha256",
     "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001",
-    "shared_base_output_reuse_count": 3
+    "shared_base_output_reuse_count": 3,
+    "registered_sentinels_absent_from_base_provider_input": {
+      "CANDIDATE_SENTINEL_A_R3R2_7F19": true,
+      "CANDIDATE_SENTINEL_B_R3R2_4C82": true
+    }
   },
   "variants": [
     {
@@ -33,6 +46,12 @@
       "sentinel": "CANDIDATE_SENTINEL_A_R3R2_7F19",
       "candidate_provider_calls_expected": 1,
       "candidate_analysis_status_expected": "available",
+      "candidate_envelope_expected": {
+        "presence": true,
+        "analysis_status": "available",
+        "safety_status": "available",
+        "analysis": "validated_CandidateAnalysis"
+      },
       "base_provider_request_fixture_id": "BASE-R3R2-001",
       "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001"
     },
@@ -42,6 +61,12 @@
       "sentinel": "CANDIDATE_SENTINEL_B_R3R2_4C82",
       "candidate_provider_calls_expected": 1,
       "candidate_analysis_status_expected": "available",
+      "candidate_envelope_expected": {
+        "presence": true,
+        "analysis_status": "available",
+        "safety_status": "available",
+        "analysis": "validated_CandidateAnalysis"
+      },
       "base_provider_request_fixture_id": "BASE-R3R2-001",
       "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001"
     },
@@ -52,11 +77,43 @@
       "candidate_provider_calls_expected": 0,
       "candidate_analysis_status_expected": "absent",
       "candidate_analysis_expected": null,
+      "candidate_envelope_expected": {
+        "presence": false,
+        "analysis_status": "absent",
+        "safety_status": "absent",
+        "analysis": null
+      },
       "base_provider_request_fixture_id": "BASE-R3R2-001",
       "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001",
       "optional_source_refs_expected": 0
     }
   ],
+  "legitimate_overlap_case": {
+    "case_id": "CSI-LEGITIMATE-OVERLAP-001",
+    "synthetic_only": true,
+    "base_provider_input": {
+      "current_situation": "架空人物Bから「承知しました」と業務連絡が届き、架空人物Aは次の確認事項に短く返信するか相談しています。",
+      "relationship": "work_or_school",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "draft_message"
+      ]
+    },
+    "optional_message": "承知しました。確認して返信します。",
+    "overlapping_literal": "承知しました",
+    "overlapping_literal_present_in_current_situation": true,
+    "overlapping_literal_present_in_optional_message": true,
+    "registered_sentinels_absent_from_base_input": {
+      "CANDIDATE_SENTINEL_A_R3R2_7F19": true,
+      "CANDIDATE_SENTINEL_B_R3R2_4C82": true
+    },
+    "base_provider_request_has_optional_message_key": false,
+    "base_output_may_contain_overlap_due_to_current_situation": true,
+    "production_source_integrity_expected": "PASS",
+    "production_literal_equality_rejection_allowed": false,
+    "base_request_and_output_candidate_independent": true,
+    "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-LEGITIMATE-OVERLAP-001"
+  },
   "offline_execution_method": {
     "base_provider_output_source": "one_shared_offline_fixture",
     "independent_live_base_outputs_required": false,
@@ -69,7 +126,7 @@
       "base_legacy_view",
       "PB-02_payload",
       "PB-03_payload",
-      "candidate_analysis"
+      "candidate_envelope"
     ]
   },
   "hard_gates": [
@@ -82,6 +139,11 @@
       "gate_id": "CSI-BASE-REQUEST-NO-OPTIONAL-KEY",
       "assertion": "base_provider_request_has_no_optional_message_key",
       "expected": true
+    },
+    {
+      "gate_id": "CSI-REGISTERED-SENTINELS-ABSENT-FROM-BASE-INPUT",
+      "assertion": "registered_sentinel_A_B_count_in_every_Base_Input",
+      "expected": 0
     },
     {
       "gate_id": "CSI-SHARED-BASE-OUTPUT",
@@ -139,6 +201,13 @@
       "gate_id": "CSI-BASE-OPTIONAL-REFS-ZERO",
       "assertion": "input_optional_message_source_ref_count_in_all_base_surfaces",
       "expected": 0
+    },
+    {
+      "gate_id": "CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE",
+      "assertion": "production_source_integrity_passes_when_overlap_literal_is_explicit_in_current_situation_and_optional_message_while_structural_isolation_holds",
+      "expected": true,
+      "production_arbitrary_literal_scan_expected": false,
+      "registered_sentinel_A_B_count_in_Base_Input": 0
     }
   ],
   "negative_mutants": [
@@ -171,6 +240,11 @@
       "mutant_id": "MUT-BASE-OPTIONAL-REF",
       "mutation": "attach input:optional_message to Base Legacy View",
       "must_fail_gate": "CSI-BASE-OPTIONAL-REFS-ZERO"
+    },
+    {
+      "mutant_id": "MUT-PRODUCTION-ARBITRARY-LITERAL-REJECTION",
+      "mutation": "reject legitimate Base output solely because the overlapping literal also occurs in optional_message",
+      "must_fail_gate": "CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE"
     }
   ],
   "acceptance_boundary": {

@@ -5,9 +5,11 @@
   "status": "candidate_source_isolation_architecture_pending_human_chatgpt_review",
   "task_type": "planning_only",
   "baseline": "df03cc2cc374ed059d40c122788e736f75883758",
+  "planning_review_correction_base": "b4e0300d78d4782a99cb8fdca178722ca9df7dd1",
+  "planning_review_correction": "implemented_pending_human_chatgpt_review",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
   "origin_main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
-  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-candidate-source-isolation",
+  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-planning-correction",
   "accepted_decision": {
     "option": "B",
     "decision": "separate_provider_boundaries_for_base_situation_and_optional_candidate_message",
@@ -27,6 +29,14 @@
     "r4": "HOLD",
     "runtime_activation": "HOLD",
     "c2": "HOLD"
+  },
+  "planning_review_gaps": {
+    "pb_06_independent_candidate_fidelity": "resolved_in_planning_contract",
+    "candidate_absent_vs_unavailable_routing": "resolved_in_planning_contract",
+    "production_candidate_literal_false_positives": "resolved_in_planning_contract",
+    "authoritative_run_topology_discriminator": "resolved_in_planning_contract",
+    "application_owned_base_fields_canonical": "resolved_in_planning_contract",
+    "planning_package_human_chatgpt_accepted": false
   },
   "exact_planning_scope": {
     "path_count": 10,
@@ -84,7 +94,18 @@
     "implication": "The split cannot be implemented safely by adding only a Provider call. Types, catalogs, persistence status, sequence constraints, fake transport coverage, routing, usage, and historical topology validation must move together in later accepted slices."
   },
   "successor_stage_topology": {
-    "topology_version": "split-base-candidate-v1",
+    "stage_topology_version_field": "assessment_runs.stage_topology_version",
+    "authoritative_discriminator": "stage_topology_version",
+    "allowed_stage_topology_versions": [
+      "legacy-six-v1",
+      "split-base-candidate-v1"
+    ],
+    "historical_existing_runs_treated_or_parent_run_backfilled_as": "legacy-six-v1",
+    "successor_runs_use": "split-base-candidate-v1",
+    "schema_set_version_is_authoritative": false,
+    "prompt_bundle_version_is_authoritative": false,
+    "schema_and_prompt_versions_are_consistency_checks": true,
+    "candidate_response_ids_only_on_pb_01c_stage_rows": true,
     "stages": [
       {
         "stage_id": "PB-01",
@@ -141,15 +162,20 @@
     "historical_compatibility": {
       "historical_six_stage_rows_mutated": false,
       "historical_catalogs_mutated": false,
-      "discriminator": [
+      "authoritative_discriminator": "assessment_runs.stage_topology_version",
+      "consistency_checks": [
         "assessment_runs.schema_set_version",
-        "assessment_runs.prompt_bundle_version",
-        "runtime_stage_catalog_version"
+        "assessment_runs.prompt_bundle_version"
       ],
+      "historical_parent_run_value": "legacy-six-v1",
+      "successor_parent_run_value": "split-base-candidate-v1",
+      "historical_existing_stage_rows_modified": false,
       "six_stage_topology": "PB-01:1,PB-02:2,PB-03:3,PB-04:4,PB-05:5,PB-06:6",
       "split_topology": "PB-01:1,PB-01C:2,PB-02:3,PB-03:4,PB-04:5,PB-05:6,PB-06:7",
-      "reader_rule": "Readers and verifiers must select the expected topology from the parent run version and must never infer corruption merely because a historical run has six rows.",
-      "future_persistence_change": "Replace the single hard-coded stage-to-sequence check with version-aware application integrity plus a database-compatible union of historical and successor pairs; add unique(run_id, sequence_number); do not update existing rows."
+      "reader_rule": "Readers, repository integrity, and verifiers must select the exact topology from assessment_runs.stage_topology_version and must never infer corruption merely because a historical run has six rows.",
+      "schema_or_prompt_version_mismatch_rule": "fail_consistency_check_without_overriding_stage_topology_version",
+      "future_persistence_change": "R3-R2-C migration adds and persists stage_topology_version on the parent run, treats or backfills historical parent runs as legacy-six-v1 without changing existing Stage rows, admits the historical and successor Stage/sequence pairs, adds unique(run_id, sequence_number), and rejects version/topology disagreement.",
+      "implementation_owner": "R3-R2-C"
     }
   },
   "base_situation_stage": {
@@ -207,7 +233,16 @@
     "raw_output_name": "raw_base_structured_intake",
     "grounded_output_name": "base_structured_intake",
     "legacy_output_name": "base_legacy_view",
-    "candidate_data_in_any_base_surface": "forbidden"
+    "candidate_data_in_any_base_surface": "forbidden",
+    "application_canonical_fields": {
+      "base_structured_intake.relationship_stage": "request.relationship",
+      "base_structured_intake.decision_facts.relationship_stage": "request.relationship",
+      "base_structured_intake.decision_facts.selected_requests": "request.requestedTopics"
+    },
+    "provider_output_may_override_application_canonical_fields": false,
+    "candidate_presence_inside_base_decision_facts": false,
+    "contact_state.proposed_message_present_in_base_schema": false,
+    "contact_state.proposed_message_present_in_base_legacy_view": false
   },
   "candidate_message_stage": {
     "stage_id": "PB-01C",
@@ -254,19 +289,101 @@
       "sequence"
     ],
     "application_owned_fields": [
-      "candidate_presence",
-      "candidate_analysis_status",
+      "CandidateEnvelope.presence",
+      "CandidateEnvelope.analysis_status",
+      "CandidateEnvelope.safety_status",
+      "CandidateEnvelope.analysis",
       "source_refs",
       "ids",
       "sequence",
       "nullability",
       "allowlist_merge"
     ],
-    "provider_may_copy_raw_candidate_text_to_output": false
+    "provider_may_copy_raw_candidate_text_to_output": false,
+    "candidate_safety_contract": {
+      "bounded_required_signal": "untrusted_embedded_instruction_detected",
+      "signal_type": "boolean",
+      "signal_owner": "candidate",
+      "signal_copied_into_base_fact": false,
+      "candidate_stage_must_treat_embedded_instruction_as_inert_data": true,
+      "candidate_stage_may_follow_embedded_instruction": false
+    }
+  },
+  "candidate_envelope_contract": {
+    "name": "CandidateEnvelope",
+    "owner": "application",
+    "exact_keys": [
+      "presence",
+      "analysis_status",
+      "safety_status",
+      "analysis"
+    ],
+    "additional_properties": false,
+    "field_types": {
+      "presence": "boolean",
+      "analysis_status": [
+        "absent",
+        "available",
+        "unavailable"
+      ],
+      "safety_status": [
+        "absent",
+        "available",
+        "unavailable"
+      ],
+      "analysis": "CandidateAnalysis|null"
+    },
+    "states": {
+      "optional_message_null_empty_or_blank": {
+        "presence": false,
+        "analysis_status": "absent",
+        "safety_status": "absent",
+        "analysis": null
+      },
+      "candidate_analysis_and_safety_valid": {
+        "presence": true,
+        "analysis_status": "available",
+        "safety_status": "available",
+        "analysis": "validated_candidate_analysis"
+      },
+      "non_safety_analysis_unavailable_safety_valid": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "available",
+        "analysis": null
+      },
+      "candidate_safety_unavailable": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null,
+        "blocking": true,
+        "disposition_source": "safety-failure-matrix-v1.json"
+      }
+    },
+    "forbidden_fields": [
+      "provider_response_id",
+      "response_id",
+      "usage",
+      "latency",
+      "latency_ms",
+      "stage_id",
+      "stage_ids",
+      "expected",
+      "expected_values"
+    ],
+    "forbidden_fields_scope": "recursive_any_depth",
+    "explicit_downstream_consumers": [
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "inserted_into_base_structured_intake": false,
+    "inserted_into_base_legacy_view": false
   },
   "application_ownership": {
     "base_and_candidate_merged_into_structured_intake": false,
-    "candidate_presence": "trimmed_optional_message_non_empty",
+    "candidate_presence": "CandidateEnvelope.presence_from_trimmed_optional_message_non_empty",
     "candidate_source_ref": "input:optional_message",
     "candidate_source_refs_attach_only_to_candidate_owned_envelope": true,
     "candidate_ids_and_sequence_generated_after_provider_validation": true,
@@ -277,7 +394,14 @@
     ],
     "decision_policy_owns_candidate_presence_effect": true,
     "aggregate_safety_owns_cross_channel_disposition": true,
-    "no_merged_object_may_present_candidate_content_as_consultation_fact": true
+    "no_merged_object_may_present_candidate_content_as_consultation_fact": true,
+    "base_canonical_assignments": {
+      "base_structured_intake.relationship_stage": "request.relationship",
+      "decision_facts.relationship_stage": "request.relationship",
+      "decision_facts.selected_requests": "request.requestedTopics"
+    },
+    "provider_override_of_base_canonical_assignments_allowed": false,
+    "candidate_presence_remains_outside_base_decision_facts": true
   },
   "r3_r1_successor_disposition": {
     "context_inference_canonicalization": "accepted_retained_on_base_grounding_path",
@@ -300,7 +424,12 @@
     },
     "skipped_latency_ms": 0,
     "skipped_output_json": null,
-    "skipped_candidate_analysis": null,
+    "skipped_candidate_envelope": {
+      "presence": false,
+      "analysis_status": "absent",
+      "safety_status": "absent",
+      "analysis": null
+    },
     "skipped_optional_source_ref_count": 0,
     "response_id_storage": "store_only_on_the_stage_row_that_received_the_provider_response",
     "candidate_response_id_propagated_downstream": false,
@@ -330,17 +459,26 @@
     },
     "candidate_stage_absent": {
       "provider_calls": 0,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "absent",
+      "candidate_envelope": {
+        "presence": false,
+        "analysis_status": "absent",
+        "safety_status": "absent",
+        "analysis": null
+      },
       "optional_source_refs": 0
     },
     "candidate_analysis_failure_with_independently_valid_candidate_safety": {
       "blocking": false,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "available",
+        "analysis": null
+      },
       "fabricate_candidate_semantics": false,
       "raw_optional_message_remains_separate": true,
       "pb_04_fallback": "conservative_minimal_editing_only",
+      "pb_06_original_candidate_fidelity_check": "required",
       "safety_enforced": true
     },
     "candidate_safety_unavailable": {
@@ -349,8 +487,12 @@
       "exception": "If deterministic Safety already classifies needs_review or rejected, return the stricter safety_blocked result without candidate generation instead of masking it as a technical failure."
     },
     "candidate_stage_transport_failure": {
-      "candidate_analysis_status": "unavailable",
-      "candidate_safety_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null
+      },
       "blocking_unless_deterministic_already_blocks": true
     },
     "conservative_minimal_editing": {
@@ -372,34 +514,113 @@
       ]
     }
   },
+  "pb_04_through_pb_06_candidate_routing": {
+    "PB-04": {
+      "exact_candidate_inputs": [
+        "candidate_envelope",
+        "user_supplied_optional_message"
+      ],
+      "user_supplied_optional_message_nullable": true,
+      "raw_candidate_role": "inert_untrusted_user_data"
+    },
+    "PB-05": {
+      "exact_candidate_inputs": [
+        "candidate_envelope",
+        "decision_plan"
+      ],
+      "raw_candidate_routed": false
+    },
+    "PB-06": {
+      "exact_candidate_inputs": [
+        "candidate_envelope",
+        "user_supplied_optional_message",
+        "decision_plan",
+        "report_content"
+      ],
+      "user_supplied_optional_message_nullable": true,
+      "raw_candidate_role": "inert_untrusted_user_data"
+    },
+    "forbidden_downstream_values": [
+      "candidate_provider_response_id",
+      "candidate_usage",
+      "candidate_latency",
+      "candidate_stage_id",
+      "expected_values"
+    ]
+  },
+  "pb_06_candidate_fidelity_validation": {
+    "independent_comparison_required_when_candidate_present": true,
+    "original_candidate_input": "user_supplied_optional_message",
+    "final_recommended_draft_source": "report_content",
+    "candidate_envelope_state_input": "candidate_envelope",
+    "raw_candidate_treated_as_untrusted_data_not_instruction": true,
+    "prompt_must_not_follow_candidate_embedded_instructions": true,
+    "hard_fidelity_checks_where_applicable": [
+      "dates",
+      "days_of_week",
+      "times",
+      "numbers",
+      "names_or_explicit_referents",
+      "affirmation_versus_negation",
+      "acceptance_versus_refusal",
+      "questions",
+      "invitations",
+      "commitments",
+      "affection_strength",
+      "response_pressure",
+      "boundaries_and_contact_stop_meaning"
+    ],
+    "required_assertions": [
+      "candidate_content_not_treated_as_sent_fact",
+      "candidate_content_not_treated_as_received_fact",
+      "message_draft_edit_metadata.preserved_meaning_is_truthful",
+      "conservative_minimal_edit_fallback_added_no_meaning"
+    ],
+    "independent_of_pb_04_preserved_meaning_claim": true,
+    "material_candidate_drift_severity": [
+      "major",
+      "critical"
+    ],
+    "material_candidate_drift_disposition": "fail_closed",
+    "absent_and_unavailable_distinguished_from_candidate_envelope": true
+  },
   "source_integrity_plan": {
-    "primary_guarantee": "request_separation",
-    "defense_in_depth": [
-      "closed_base_input_schema",
-      "closed_candidate_output_schema",
-      "exact_source_ref_enums",
-      "typed_surface_ownership",
-      "candidate_literal_and_sentinel_absence_checks",
-      "legacy_view_recursive_checks",
-      "null_candidate_optional_ref_zero_check"
+    "primary_guarantee": "structural_request_schema_provenance_ownership_and_routing_separation",
+    "production_proof_mechanisms": [
+      "PB-01_request_exact_closed_keys",
+      "no_optional_message_key_in_PB-01_request",
+      "Base_output_schema_has_no_Candidate_fields",
+      "exact_Base_source_ref_enum",
+      "typed_field_and_surface_ownership",
+      "no_optional_message_ref_in_Base_output",
+      "no_Candidate_field_in_Base_Legacy_View",
+      "no_Base_fact_field_in_Candidate_output",
+      "exact_downstream_payload_routing"
     ],
     "generic_source_ref_regex_only": false,
-    "reject_conditions": [
+    "production_reject_conditions": [
+      "pb_01_request_has_non_allowlisted_key",
       "input:optional_message_ref_in_base_output",
-      "candidate_literal_in_base_timeline",
-      "candidate_literal_in_base_context",
-      "candidate_literal_in_base_observed_facts",
-      "candidate_literal_in_base_material_unknowns",
       "candidate_derived_decision_fact",
       "candidate_ref_in_base_legacy_view",
       "base_fact_field_in_candidate_stage_output",
+      "downstream_payload_route_mismatch",
       "optional_source_ref_when_optional_message_null"
-    ]
+    ],
+    "arbitrary_raw_candidate_literal_rejection_in_production": false,
+    "legitimate_literal_overlap_must_not_fail_production": true,
+    "literal_and_sentinel_scanning_scope": "test_only",
+    "allowed_test_only_detectors": [
+      "CANDIDATE_SENTINEL_A_R3R2_7F19",
+      "CANDIDATE_SENTINEL_B_R3R2_4C82",
+      "other_value_only_after_test_proves_absent_from_Base_Input"
+    ],
+    "arbitrary_user_candidate_text_as_production_substring_detector": false
   },
   "rollout_slices": [
     {
       "slice_id": "R3-R2-A",
-      "title": "Split Stage Contracts and Schemas",
+      "title": "Split Stage Topology, CandidateEnvelope Contracts, and Schemas",
       "exact_path_count": 10,
       "exact_paths": [
         "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
@@ -413,13 +634,19 @@
         "docs/WBS.md",
         "docs/CODEX_HANDOFF.md"
       ],
-      "scope": "stage_topology_schemas_and_typed_contracts_only",
+      "scope": "stage_topology_version_candidate_envelope_base_candidate_schemas_and_typed_contracts_only",
+      "responsibilities": [
+        "stage_topology_version_type_contract",
+        "CandidateEnvelope_type_contract",
+        "Base_and_Candidate_closed_schemas",
+        "application_owned_Base_field_mapping_contract"
+      ],
       "human_chatgpt_acceptance_required_before_next": true,
       "authorized": false
     },
     {
       "slice_id": "R3-R2-B",
-      "title": "Grounding, Allowlist Merge, and Source Integrity",
+      "title": "Base Canonicalization, CandidateEnvelope Construction, and Source Integrity",
       "exact_path_count": 13,
       "exact_paths": [
         "lib/assessment/runtime/base-structured-intake-grounding-v1.ts",
@@ -436,13 +663,19 @@
         "docs/WBS.md",
         "docs/CODEX_HANDOFF.md"
       ],
-      "scope": "application_grounding_allowlist_envelope_and_source_integrity_only",
+      "scope": "application_base_canonicalization_candidate_envelope_construction_allowlist_merge_and_structural_production_source_integrity_only",
+      "responsibilities": [
+        "Application_canonical_Base_fields",
+        "CandidateEnvelope_state_construction",
+        "candidate_allowlist_merge",
+        "Production_structural_source_integrity_without_arbitrary_literal_scanning"
+      ],
       "human_chatgpt_acceptance_required_before_next": true,
       "authorized": false
     },
     {
       "slice_id": "R3-R2-C",
-      "title": "Pipeline, Persistence, Safety, and Failure Semantics",
+      "title": "Pipeline, Topology Persistence, Candidate Fidelity, Safety, and Failure Semantics",
       "exact_path_count": 23,
       "exact_paths": [
         "lib/assessment/runtime/types.ts",
@@ -469,7 +702,16 @@
         "docs/WBS.md",
         "docs/CODEX_HANDOFF.md"
       ],
-      "scope": "inactive_successor_pipeline_catalog_prompts_persistence_safety_and_failure_semantics_only",
+      "scope": "inactive_successor_pipeline_catalog_prompts_pb_06_candidate_fidelity_stage_topology_version_persistence_safety_embedded_instruction_handling_and_failure_semantics_only",
+      "responsibilities": [
+        "PB-04_PB-05_PB-06_CandidateEnvelope_routing",
+        "PB-06_original_candidate_fidelity_validation",
+        "persisted_parent_run_stage_topology_version_migration",
+        "historical_parent_run_legacy_treatment_without_Stage_row_mutation",
+        "Candidate_Safety_embedded_instruction_signal",
+        "failure_semantics"
+      ],
+      "stage_topology_version_migration_owner": true,
       "active_service_catalog_change": false,
       "db_operation_authorized": false,
       "human_chatgpt_acceptance_required_before_next": true,
@@ -477,7 +719,7 @@
     },
     {
       "slice_id": "R3-R2-D",
-      "title": "Offline Counterfactual and Historical Regression",
+      "title": "Offline Counterfactual, Legitimate Overlap, and Historical Regression",
       "exact_path_count": 10,
       "exact_paths": [
         "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-cases-v1.json",
@@ -491,7 +733,12 @@
         "docs/WBS.md",
         "docs/CODEX_HANDOFF.md"
       ],
-      "scope": "offline_counterfactual_isolation_and_historical_six_stage_regression_only",
+      "scope": "offline_A_B_null_and_legitimate_overlap_counterfactual_test_only_sentinel_isolation_and_historical_six_stage_regression_only",
+      "responsibilities": [
+        "registered_test_sentinel_A_B_contamination_detection",
+        "legitimate_literal_overlap_no_false_positive",
+        "historical_legacy_six_v1_regression"
+      ],
       "provider_calls": 0,
       "db_operations": 0,
       "human_chatgpt_acceptance_required_before_next": true,
@@ -529,6 +776,11 @@
         "docs/CODEX_HANDOFF.md"
       ],
       "scope": "bounded_provider_diagnostic_for_pb_01_and_pb_01c_only",
+      "responsibilities": [
+        "bounded_PB-01_and_PB-01C_provider_evidence",
+        "Candidate_Safety_signal_evidence",
+        "Candidate_fidelity_evidence_without_full_Runtime_E2E"
+      ],
       "human_chatgpt_acceptance_required_before_next": true,
       "authorized": false
     }
@@ -549,6 +801,19 @@
       "activation_only": true
     }
   },
+  "rollout_manifest_consistency": {
+    "slice_ids": [
+      "R3-R2-A",
+      "R3-R2-B",
+      "R3-R2-C",
+      "R3-R2-D",
+      "R3-R2-E"
+    ],
+    "exact_path_counts_unchanged": true,
+    "exact_path_lists_unchanged": true,
+    "future_manifest_change_requires_stop_and_explicit_human_rescope": true,
+    "r3_r2_a_authorized": false
+  },
   "planning_validation_contract": {
     "exact_planning_scope": "10/10",
     "provider_calls": 0,
@@ -556,6 +821,15 @@
     "supabase_operations": 0,
     "holdout_use": 0,
     "real_user_data": 0,
+    "json_parse": "5/5",
+    "candidate_envelope_fully_specified": true,
+    "pb_06_raw_candidate_fidelity_route_specified": true,
+    "absent_unavailable_preserved_through_pb_06": true,
+    "arbitrary_production_literal_scanning_removed": true,
+    "registered_sentinel_scanning_test_only": true,
+    "legitimate_overlap_case_required": true,
+    "application_owned_base_fields_specified": true,
+    "authoritative_stage_topology_version_specified": true,
     "json_parse_required": true,
     "architecture_assertions_required": true,
     "git_diff_check_required": true

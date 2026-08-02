@@ -6,11 +6,15 @@
 - [x] Candidate Source Isolation failure recorded separately from immutable R3/R3-R1 history
 - [x] Decision B fixed: separate Base PB-01 and Candidate PB-01C Provider boundaries
 - [x] Base-only Schema ownership, exact source-ref allowlist, and fail-closed Source Integrity planned
-- [x] Candidate-only output ownership, Application envelope ownership, and null/skipped semantics planned
-- [x] PB-02 through PB-06 split payload routing and Safety cross-channel routing planned
-- [x] Historical six-stage compatibility, successor sequences, response ID, usage, error, and skipped-row persistence decisions fixed
-- [x] Candidate A/B/null counterfactual hard gates and negative mutants fixed
+- [x] Application-owned exact `CandidateEnvelope` and absent/available/unavailable semantics planned through PB-06
+- [x] PB-04/PB-05/PB-06 explicit CandidateEnvelope routing and PB-06 independent original-candidate fidelity validation planned
+- [x] Candidate embedded-instruction signal, inert raw-data treatment, and separate Safety cross-channel routing planned
+- [x] Application-canonical Base relationship/request fields fixed; Provider override and Base `proposed_message_present` prohibited
+- [x] Production Source Integrity corrected to structural proof; arbitrary candidate-literal rejection prohibited; registered Sentinels test-only
+- [x] Legitimate literal-overlap no-false-positive gate fixed alongside Candidate A/B/null counterfactuals
+- [x] Authoritative parent-run `stage_topology_version` and R3-R2-C migration ownership fixed without modifying historical Stage rows
 - [x] R3-R2-A through E exact future path manifests and sequential acceptance barriers fixed
+- [x] A-through-E exact path counts and path lists preserved; any future manifest change is stop-and-re-scope
 - [x] Exact Planning mutation scope fixed at `10/10`
 - [x] Automated Planning validation PASS
 - [ ] Human / ChatGPT review
@@ -18,7 +22,7 @@
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current status is `candidate_source_isolation_architecture_pending_human_chatgpt_review`. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
+Current status is `candidate_source_isolation_architecture_pending_human_chatgpt_review`; Planning Review Correction is `implemented_pending_human_chatgpt_review`. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. R3-R2-A is unauthorized. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

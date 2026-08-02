@@ -2,6 +2,7 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-safety-failure-matrix-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2",
   "status": "planning_pending_human_chatgpt_review",
+  "planning_review_correction": "implemented_pending_human_chatgpt_review",
   "safety_principle": "Candidate source isolation must not make Safety blind to optional_message.",
   "mandatory_raw_deterministic_inspection": [
     "current_situation",
@@ -10,9 +11,20 @@
   "candidate_semantic_channel": {
     "source": "PB-01C.candidate_safety_signals",
     "application_projection": "candidate_safety_result",
-    "nullable_only_when_candidate_absent_or_candidate_analysis_unavailable": true,
+    "candidate_envelope_status_projection": "CandidateEnvelope.safety_status",
+    "absent_only_when_candidate_absent": true,
+    "unavailable_when_candidate_safety_cannot_be_independently_validated": true,
     "merged_into_base_structured_intake": false,
-    "copied_into_base_fact_surfaces": false
+    "copied_into_base_fact_surfaces": false,
+    "embedded_instruction_contract": {
+      "bounded_required_field": "untrusted_embedded_instruction_detected",
+      "type": "boolean",
+      "owner": "candidate",
+      "candidate_stage_may_follow_embedded_instruction": false,
+      "PB-04_raw_candidate_role": "inert_untrusted_user_data",
+      "PB-06_raw_candidate_role": "inert_untrusted_user_data",
+      "copied_into_base_fact": false
+    }
   },
   "pb_02_input": [
     "base_structured_intake",
@@ -221,20 +233,25 @@
     },
     {
       "failure_id": "BASE-SOURCE-INTEGRITY-FAILURE",
-      "condition": "Base output contains candidate source, candidate literal, or forbidden ownership",
+      "condition": "Base request/output violates closed keys, exact source refs, typed field/surface ownership, Base Legacy View isolation, Candidate output isolation, or exact downstream routing",
       "base_available": false,
       "blocking": true,
       "behavior": "fail_closed",
       "safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED",
-      "downstream_provider_calls": 0
+      "downstream_provider_calls": 0,
+      "arbitrary_candidate_literal_overlap_is_a_production_failure": false
     },
     {
       "failure_id": "CANDIDATE-ABSENT",
       "condition": "optional_message is null empty or whitespace after trim",
       "base_available": true,
       "candidate_provider_calls": 0,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "absent",
+      "candidate_envelope": {
+        "presence": false,
+        "analysis_status": "absent",
+        "safety_status": "absent",
+        "analysis": null
+      },
       "candidate_safety_result": null,
       "optional_source_refs": 0,
       "blocking": false
@@ -243,8 +260,12 @@
       "failure_id": "CANDIDATE-NONSAFETY-ANALYSIS-INVALID",
       "condition": "Candidate Safety independently validates but one or more style intent or language fields do not",
       "base_available": true,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "available",
+        "analysis": null
+      },
       "candidate_safety_result": "available",
       "blocking": false,
       "behavior": "continue_only_after_aggregate_safety_normal",
@@ -255,8 +276,12 @@
       "failure_id": "CANDIDATE-PROVIDER-NO-RESPONSE",
       "condition": "PB-01C fails before any independently valid Candidate Safety result exists",
       "base_available": true,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null
+      },
       "candidate_safety_result": null,
       "blocking": true,
       "behavior": "fail_closed_before_candidate_generation",
@@ -267,8 +292,12 @@
       "failure_id": "CANDIDATE-SAFETY-INVALID",
       "condition": "PB-01C returns candidate fields but candidate_safety_signals fail the bounded Safety contract",
       "base_available": true,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null
+      },
       "candidate_safety_result": null,
       "blocking": true,
       "behavior": "fail_closed_before_candidate_generation",
@@ -278,11 +307,37 @@
       "failure_id": "CANDIDATE-SOURCE-INTEGRITY-FAILURE",
       "condition": "PB-01C emits Base fact fields source refs IDs or sequence",
       "base_available": true,
-      "candidate_analysis": null,
-      "candidate_analysis_status": "unavailable",
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null
+      },
       "blocking": true,
       "behavior": "reject_candidate_output",
       "safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED"
+    },
+    {
+      "failure_id": "CANDIDATE-EMBEDDED-INSTRUCTION-SIGNAL-INVALID",
+      "condition": "PB-01C omits or invalidates the bounded untrusted_embedded_instruction_detected boolean",
+      "base_available": true,
+      "candidate_envelope": {
+        "presence": true,
+        "analysis_status": "unavailable",
+        "safety_status": "unavailable",
+        "analysis": null
+      },
+      "blocking": true,
+      "behavior": "fail_closed_before_candidate_generation",
+      "safe_code": "M2_CANDIDATE_SAFETY_UNAVAILABLE"
+    },
+    {
+      "failure_id": "CANDIDATE-EMBEDDED-INSTRUCTION-FOLLOWED",
+      "condition": "PB-01C PB-04 or PB-06 follows candidate-embedded text as an instruction instead of treating it as inert user data",
+      "blocking": true,
+      "behavior": "fail_closed",
+      "signal_remains_candidate_owned": true,
+      "signal_enters_base_fact": false
     },
     {
       "failure_id": "PB02-SAFETY-OUTPUT-INVALID",
@@ -307,6 +362,16 @@
       "PB-05_and_PB-06_calls": 0
     },
     {
+      "failure_id": "PB06-CANDIDATE-FIDELITY-DRIFT",
+      "condition": "Independent original-candidate comparison finds material drift in dates days times numbers names or referents polarity acceptance refusal questions invitations commitments affection pressure boundaries or contact-stop meaning",
+      "blocking": true,
+      "severity": "major_or_critical",
+      "behavior": "fail_closed",
+      "preserved_meaning_claim_must_be_truthful": true,
+      "conservative_minimal_edit_may_add_meaning": false,
+      "candidate_content_may_be_treated_as_sent_or_received_fact": false
+    },
+    {
       "failure_id": "PB06-MAJOR-OR-CRITICAL",
       "condition": "A true application-adjudicated material major or critical semantic finding remains",
       "blocking": true,
@@ -322,6 +387,7 @@
       "candidate_present_and_candidate_safety_cannot_be_established",
       "aggregate_safety_not_normal",
       "PB_04_fallback_policy_violation",
+      "PB_06_material_candidate_fidelity_drift",
       "true_material_PB_06_major_or_critical"
     ],
     "nonblocking_only_when_all_conditions_hold": [
@@ -331,6 +397,9 @@
       "candidate_analysis_failure_is_limited_to_non_safety_fields",
       "candidate_analysis_is_null_not_fabricated",
       "PB_04_uses_conservative_minimal_editing",
+      "PB_06_receives_candidate_envelope_and_original_candidate",
+      "PB_06_preserves_absent_vs_unavailable",
+      "PB_06_independent_candidate_fidelity_validation_passes",
       "PB_06_material_validation_passes"
     ]
   },

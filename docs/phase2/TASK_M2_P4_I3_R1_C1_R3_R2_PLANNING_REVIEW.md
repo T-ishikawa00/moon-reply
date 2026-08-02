@@ -7,7 +7,9 @@
 - Automated planning validation: `PASS`
 - Human / ChatGPT acceptance: pending
 - Baseline: `df03cc2cc374ed059d40c122788e736f75883758`
-- Branch: `docs/m2-p4-i3-r1-c1-r3-r2-candidate-source-isolation`
+- Planning review correction base: `b4e0300d78d4782a99cb8fdca178722ca9df7dd1`
+- Planning review correction: `implemented_pending_human_chatgpt_review`
+- Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
 - Exact scope: `10/10`
 - Provider calls / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Active Runtime / Prompt / Schema / Pipeline / Service changed: `false / false / false / false / false`
@@ -24,31 +26,41 @@ The planning package therefore selects separate Provider boundaries:
 
 The successor disposition is recorded separately. No historical R3 or R3-R1 dedicated artifact is rewritten.
 
+The architecture direction is accepted; the Planning Package remains pending Human / ChatGPT acceptance. This exact `10/10` correction resolves the five review gaps: independent PB-06 candidate fidelity, typed absent/unavailable routing, removal of arbitrary Production literal rejection, authoritative persisted topology selection, and Application-canonical Base fields.
+
 ## Architecture review points
 
 ### Base boundary
 
 PB-01 accepts only `current_situation`, `relationship`, and `requested_topics`. Its Schema has no candidate fields. Base source refs use a closed three-value enum; `input:optional_message` is forbidden by Schema and typed Integrity.
 
+Application grounding canonically fixes `base relationship_stage` and `decision_facts.relationship_stage` from `request.relationship`, and `decision_facts.selected_requests` from `request.requestedTopics`. Provider output cannot override them. Candidate presence remains outside Base Decision Facts; `contact_state.proposed_message_present` stays absent from Base Schema and Base Legacy View.
+
 ### Candidate boundary
 
 PB-01C is called only for a non-empty trimmed candidate. It receives the raw candidate plus constant `user / unsent_candidate` metadata. Its four output fields are candidate style, intent, language/expression, and Safety signals. It cannot emit Base facts, provenance, IDs, or sequence.
+
+Application code creates the exact `CandidateEnvelope { presence, analysis_status, safety_status, analysis }`. Null/blank maps to `false / absent / absent / null`; valid analysis maps to `true / available / available / CandidateAnalysis`; non-Safety unavailable with valid Safety maps to `true / unavailable / available / null`; Safety unavailable maps to `true / unavailable / unavailable / null` and blocks. Response IDs, usage, latency, Stage IDs, and expected values are forbidden from the envelope. PB-04, PB-05, and PB-06 receive it explicitly.
 
 ### Safety
 
 Deterministic Safety still inspects both raw inputs. Candidate semantic Safety reaches PB-02 as a separate nullable key. Application code performs strictest aggregation and cross-channel checks such as explicit no-contact plus candidate contact action. Candidate Safety never enters Base facts.
 
+Candidate Safety includes bounded `untrusted_embedded_instruction_detected`. PB-01C must not follow candidate-embedded instructions; PB-04 and PB-06 treat the raw candidate as inert untrusted data. The signal is Candidate-owned and never becomes a Base Fact.
+
 ### Topology and persistence
 
-`PB-01C` is successor sequence 2; PB-02 through PB-06 become successor sequences 3 through 7. Historical six-stage runs retain their stored sequences and are selected by parent-run version. Candidate absence creates zero Provider calls and, in the future implementation, one `skipped` audit row with null response/output and zero usage.
+`PB-01C` is successor sequence 2; PB-02 through PB-06 become successor sequences 3 through 7. Persisted parent-run `stage_topology_version` is authoritative: historical runs are treated/backfilled as `legacy-six-v1`, successor runs use `split-base-candidate-v1`, and existing historical Stage rows are never modified. Readers, repository integrity, and verifiers select from this field; Schema and Prompt bundle versions are consistency checks only. Candidate absence creates zero Provider calls and, in the future implementation, one `skipped` audit row with null response/output and zero usage. R3-R2-C owns the future migration.
 
 ### Failure boundary
 
 Base failure is terminal. Candidate analysis is nonblocking only when candidate Safety independently remains valid, aggregate Safety is normal, no candidate semantics are fabricated, and PB-04 uses the conservative minimal-edit fallback. Candidate Safety unavailable is fail-closed before candidate generation.
 
+PB-04 receives `candidate_envelope` and nullable `user_supplied_optional_message`; PB-05 receives `candidate_envelope` with `decision_plan`; PB-06 receives `candidate_envelope`, nullable original candidate, `decision_plan`, and `report_content`. PB-06 independently compares the final recommended draft with the original candidate for dates/days/times/numbers, names/referents, polarity, acceptance/refusal, questions/invitations, commitments, affection, pressure, and boundary/contact-stop meaning. It verifies candidate content was not treated as sent/received fact, `preserved_meaning` is truthful, and fallback added no meaning. Material drift remains major/critical and fail-closed.
+
 ## Exact planning artifacts
 
-New:
+Existing dedicated Planning paths:
 
 1. `docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md`
 2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md`
@@ -58,7 +70,7 @@ New:
 6. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/safety-failure-matrix-v1.json`
 7. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json`
 
-Updated with a separate successor block:
+Existing rolling documents, limited to their separate R3-R2 blocks:
 
 8. `docs/CURRENT_FOCUS.md`
 9. `docs/WBS.md`
@@ -66,23 +78,27 @@ Updated with a separate successor block:
 
 No Runtime or verifier file is in scope.
 
+All ten paths existed at correction start; this correction adds no path.
+
 ## Counterfactual review
 
-The planned offline suite uses candidate A, candidate B, and null against one fixed Base request and one shared Base output. It requires identical Base request hashes and byte-identical Base Intake/Legacy View, zero candidate sentinels in Base/PB-02/PB-03, zero null-candidate calls, and candidate deltas only in candidate-owned fields. It explicitly does not require three independent live LLM outputs to be byte-identical.
+The planned offline suite uses candidate A, candidate B, and null against one fixed Base request and one shared Base output. It requires identical Base request hashes and byte-identical Base Intake/Legacy View, zero registered candidate sentinels in Base/PB-02/PB-03, zero null-candidate calls, and candidate deltas only in candidate-owned fields. It also contains `CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE`: a phrase may occur in both `current_situation` and `optional_message`, and Base output may legitimately contain it from the Base source without Production rejection. Arbitrary candidate-literal scanning is prohibited in Production; registered Sentinel A/B and values proven absent from Base Input are test-only. The suite explicitly does not require three independent live LLM outputs to be byte-identical.
 
 ## Rollout and authority
 
 The implementation is divided into sequentially accepted slices:
 
-1. R3-R2-A — Stage topology, Schemas, typed contracts
-2. R3-R2-B — grounding, allowlist envelope, Source Integrity
-3. R3-R2-C — inactive successor routing, persistence, Safety, failure semantics
-4. R3-R2-D — offline counterfactual and historical regression
-5. R3-R2-E — bounded split-stage Provider diagnostic
+1. R3-R2-A — Stage topology version, CandidateEnvelope, Schemas, typed contracts
+2. R3-R2-B — Base canonicalization, CandidateEnvelope construction, structural Source Integrity
+3. R3-R2-C — inactive successor routing/Prompts, PB-06 fidelity, topology migration, Safety, failure semantics
+4. R3-R2-D — A/B/null plus legitimate-overlap counterfactual, test-only Sentinels, historical regression
+5. R3-R2-E — bounded split-stage Provider diagnostic with Candidate Safety/fidelity evidence
 6. R4 — isolated full Runtime E2E
 7. C2 — activation only after R4 acceptance
 
 The exact future path manifests for A through E are in `architecture-contract-v1.json`. Every slice requires Human / ChatGPT acceptance before the next. None is authorized by this planning package.
+
+All A-through-E exact path counts and path lists are unchanged. Any required future manifest change is a stop-and-re-scope condition.
 
 ## Validation record
 
@@ -97,11 +113,19 @@ The following checks must be completed before commit:
 - [x] DB / migration diff `0`
 - [x] historical R3 dedicated artifacts unchanged
 - [x] historical R3-R1 dedicated artifacts unchanged
-- [x] existing rolling-document R3-R1 blocks byte-text-identical after LF normalization
+- [x] existing rolling-document R3 and R3-R1 blocks byte-text-identical after LF normalization
 - [x] Provider calls `0`
 - [x] DB / Supabase operations `0`
 - [x] holdout / real-user data `0`
 - [x] JSON parse PASS: `5/5`
+- [x] `CandidateEnvelope` fully specified
+- [x] PB-06 original-candidate fidelity route specified
+- [x] absent/unavailable distinction preserved through PB-06
+- [x] arbitrary Production candidate-literal scanning removed
+- [x] registered Sentinel scanning restricted to tests
+- [x] legitimate-overlap no-false-positive gate specified
+- [x] Application-owned Base fields specified
+- [x] authoritative `stage_topology_version` specified
 - [x] required architecture assertions PASS
 - [x] `git diff --check` PASS
 
