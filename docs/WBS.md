@@ -37,13 +37,16 @@
 - [x] Base and Candidate Source Integrity implemented with structural keys, provenance allowlists, recursive ownership exclusion, and no arbitrary literal scan
 - [x] CandidateEnvelope constructors and Safety cross-state consistency implemented `4/4`; Split Envelope keeps Base and Candidate as siblings
 - [x] Synthetic fixtures fixed at valid `15`, invalid expected-failure `35`, and mutation rejection `10`
-- [x] M2-P4-I3-R1-C1-R3-R2-B result: `IMPLEMENTATION COMPLETE — HUMAN / CHATGPT REVIEW PENDING`
-- [x] Dedicated verifier, typecheck, lint with warnings `0`, production build, and `git diff --check` PASS
+- [x] M2-P4-I3-R1-C1-R3-R2-B Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- [x] Accepted implementation commit `ef5c6db66da77deebb9ad0d5498fe69ec584aad8`
+- [x] Immutable implementation snapshot exact `13/13`: `be78f8930475e42d9a746a6754bc9e2f34c5aad0..ef5c6db66da77deebb9ad0d5498fe69ec584aad8`; working tree excluded
+- [x] Acceptance synchronization exact `6/6`; seven non-sync implementation blobs `7/7`, accepted A implementation blobs `4/4`, accepted A acceptance state, and accepted Planning blobs `5/5` unchanged
+- [x] Dedicated verifier, typecheck, lint with warnings `0`, production build, protected diff `0`, and `git diff --check` PASS
 - [ ] R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-B status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity`. R3-R2-A remains `human_chatgpt_accepted_complete` at accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; its four protected implementation blobs, acceptance state, and the five accepted Planning blobs remain unchanged. B adds only inactive pure Application helpers, synthetic fixtures, a dedicated verifier, and review/status records in exact scope `13/13`. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Runtime, Pipeline, Service, Prompt, Catalog, persistence, migrations, and main remain unchanged. R3-R2-C, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
+Current R3-R2-B status is `human_chatgpt_accepted_complete` at accepted implementation commit `ef5c6db66da77deebb9ad0d5498fe69ec584aad8` on `feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity`; immutable implementation scope is `13/13`, and acceptance sync is `6/6`. The acceptance establishes only inactive Base/Candidate projection and grounding, Base Legacy View, structural Source Integrity, CandidateEnvelope/Safety sibling construction, Split Analysis Envelope, legitimate literal overlap, and deterministic A/B/null Base-request isolation. It does not establish Provider execution order or quality, Pipeline/Prompt integration, Safety aggregation, persistence, migration, DB compatibility, isolated Runtime E2E readiness, or Runtime activation. The seven non-sync implementation blobs, accepted A implementation blobs and acceptance state, and five accepted Planning blobs remain unchanged. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Runtime, Pipeline, Service, Prompt, Catalog, persistence, migrations, and main remain unchanged. R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics — unauthorized; R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

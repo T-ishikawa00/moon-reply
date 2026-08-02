@@ -1,8 +1,18 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-b-capabilities-v1",
-  "status": "implementation_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-B",
   "title": "Grounding, Allowlist Merge, and Source Integrity",
+  "implementation_accepted": true,
+  "accepted_implementation_commit": "ef5c6db66da77deebb9ad0d5498fe69ec584aad8",
+  "implementation_snapshot": {
+    "type": "historical_commit_range",
+    "base_commit_sha": "be78f8930475e42d9a746a6754bc9e2f34c5aad0",
+    "end_commit_sha": "ef5c6db66da77deebb9ad0d5498fe69ec584aad8",
+    "exact_paths": 13,
+    "immutable_snapshot": true,
+    "include_working_tree": false
+  },
   "baseline": "be78f8930475e42d9a746a6754bc9e2f34c5aad0",
   "branch": "feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity",
   "planning_package_status": "human_chatgpt_accepted_complete",
@@ -24,6 +34,16 @@
     "docs/CODEX_HANDOFF.md"
   ],
   "exact_mutation_path_count": 13,
+  "acceptance_sync_exact_scope": "6/6",
+  "acceptance_sync_exact_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/capabilities-v1.json",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_B_REVIEW.md",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-b-source-integrity.mjs",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "acceptance_sync_exact_path_count": 6,
   "base_request_projection_created": true,
   "base_grounding_created": true,
   "base_legacy_view_created": true,
@@ -33,6 +53,13 @@
   "base_source_integrity_created": true,
   "candidate_source_integrity_created": true,
   "split_analysis_envelope_created": true,
+  "base_grounding_accepted": true,
+  "candidate_grounding_accepted": true,
+  "base_legacy_view_accepted": true,
+  "split_analysis_envelope_accepted": true,
+  "base_source_integrity_accepted": true,
+  "candidate_source_integrity_accepted": true,
+  "candidate_envelope_construction_accepted": true,
   "candidate_a_b_null_base_request_identical": true,
   "production_arbitrary_literal_scanning": false,
   "candidate_envelope_states": "4/4",
@@ -50,6 +77,10 @@
   "git_diff_check": "PASS",
   "protected_diff": 0,
   "active_runtime_imports": 0,
+  "non_sync_implementation_blobs_unchanged": "7/7",
+  "accepted_a_implementation_blobs_unchanged": "4/4",
+  "accepted_a_acceptance_state_unchanged": true,
+  "accepted_planning_blobs_unchanged": "5/5",
   "helper_versions": {
     "base_structured_intake_grounding": "m2-p4-base-structured-intake-grounding-v1",
     "candidate_analysis_grounding": "m2-p4-candidate-analysis-grounding-v1",
@@ -69,6 +100,7 @@
   "provider_calls": 0,
   "db_operations": 0,
   "supabase_operations": 0,
+  "provider_quality_established": false,
   "active_runtime_changed": false,
   "pipeline_changed": false,
   "prompt_changed": false,
@@ -77,7 +109,7 @@
   "r3_r2_c_authorized": false,
   "r4_authorized": false,
   "c2_authorized": false,
-  "human_chatgpt_review": "pending",
+  "human_chatgpt_review": "accepted_complete",
   "next_candidate": "M2-P4-I3-R1-C1-R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics",
   "next_candidate_authorized": false
 }

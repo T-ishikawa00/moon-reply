@@ -1,15 +1,20 @@
-# M2-P4-I3-R1-C1-R3-R2-B Implementation Review
+# M2-P4-I3-R1-C1-R3-R2-B Implementation Acceptance Review
 
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R3-R2-B Grounding, Allowlist Merge, and Source Integrity`
-- Status: `implementation_pending_human_chatgpt_review`
+- Status: `human_chatgpt_accepted_complete`
+- Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- Implementation accepted: `true`
+- Accepted implementation commit: `ef5c6db66da77deebb9ad0d5498fe69ec584aad8`
+- Immutable implementation snapshot: `be78f8930475e42d9a746a6754bc9e2f34c5aad0..ef5c6db66da77deebb9ad0d5498fe69ec584aad8` (`13/13` exact paths; working tree excluded)
 - Baseline: `be78f8930475e42d9a746a6754bc9e2f34c5aad0`
 - Branch: `feat/m2-p4-i3-r1-c1-r3-r2-b-source-integrity`
 - Exact implementation scope: `13/13`
-- Human / ChatGPT review: pending
+- Acceptance synchronization exact scope: `6/6`
+- Human / ChatGPT review: `accepted_complete`
 
-This inactive Application slice implements Base request projection and grounding, a Base-only compatibility snapshot, Candidate request projection and allowlist grounding, four Candidate lane constructors, and structural Source Integrity. It is not connected to Pipeline, Service, Prompt, Catalog, persistence, DB, Supabase, or Active Runtime.
+Human / ChatGPT accepts this inactive Application slice for Base request projection and grounding, a Base-only compatibility snapshot, Candidate request projection and allowlist grounding, four Candidate lane constructors, separate Candidate Safety, structural Source Integrity, and the Split Analysis Envelope. It is not connected to Pipeline, Service, Prompt, Catalog, persistence, DB, Supabase, or Active Runtime.
 
 ## Helper identity
 
@@ -58,7 +63,9 @@ The Split Analysis Envelope has exactly `base_structured_intake`, `base_legacy_v
 | Gate | Result |
 | --- | --- |
 | Dedicated source-integrity verifier | PASS |
-| Exact scope / duplicate paths | `13/13` / `0` |
+| Immutable implementation scope / duplicate paths | `13/13` / `0` |
+| Acceptance synchronization scope / duplicate paths | `6/6` / `0` |
+| Seven non-sync implementation blobs | `7/7` unchanged from accepted implementation commit |
 | Accepted A implementation blobs | `4/4` unchanged |
 | Accepted A acceptance state | unchanged at baseline |
 | Accepted Planning blobs | `5/5` unchanged |
@@ -71,6 +78,56 @@ The Split Analysis Envelope has exactly `base_structured_intake`, `base_legacy_v
 | Lint | PASS, warnings `0` |
 | Production build | PASS |
 | `git diff --check` | PASS |
+
+## Immutable implementation manifest
+
+The accepted implementation snapshot is the historical commit range `be78f8930475e42d9a746a6754bc9e2f34c5aad0..ef5c6db66da77deebb9ad0d5498fe69ec584aad8`. It contains exactly these `13/13` paths and excludes the working tree:
+
+1. `lib/assessment/runtime/base-structured-intake-grounding-v1.ts`
+2. `lib/assessment/runtime/candidate-analysis-grounding-v1.ts`
+3. `lib/assessment/runtime/base-structured-intake-legacy-view-v1.ts`
+4. `lib/assessment/runtime/split-analysis-envelope-v1.ts`
+5. `lib/assessment/runtime/base-source-integrity-v1.ts`
+6. `lib/assessment/runtime/candidate-source-integrity-v1.ts`
+7. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/source-integrity-fixtures-v1.json`
+8. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/capabilities-v1.json`
+9. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-b-source-integrity.mjs`
+10. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_B_REVIEW.md`
+11. `docs/CURRENT_FOCUS.md`
+12. `docs/WBS.md`
+13. `docs/CODEX_HANDOFF.md`
+
+## Exact acceptance-sync manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_B_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-b-source-integrity.mjs`
+4. `docs/CURRENT_FOCUS.md`
+5. `docs/WBS.md`
+6. `docs/CODEX_HANDOFF.md`
+
+The six runtime helpers and `source-integrity-fixtures-v1.json` remain content-identical to accepted implementation commit `ef5c6db66da77deebb9ad0d5498fe69ec584aad8`. The accepted A implementation blobs `4/4`, accepted A acceptance state, and accepted Planning blobs `5/5` remain unchanged. This `6/6` synchronization records acceptance without rewriting the immutable `13/13` implementation snapshot.
+
+## Acceptance statement
+
+Human / ChatGPT accepted complete. This acceptance establishes inactive Application Base projection and grounding, an inactive Base-only Legacy View, inactive Candidate projection and allowlist grounding, inactive CandidateEnvelope constructors with a separate Candidate Safety sibling lane, inactive Base/Candidate structural Source Integrity, the inactive Split Analysis Envelope, legitimate Base/Candidate literal overlap, and deterministic A/B/null Base-request isolation.
+
+This acceptance does not establish Provider Schema execution order, Pipeline or Prompt integration, Safety aggregation, persistence or migration, DB compatibility, Provider quality, isolated Runtime E2E readiness, or Runtime activation.
+
+## Required R3-R2-C integration prerequisites
+
+These accepted entry requirements constrain a future separately authorized R3-R2-C integration; they do not mutate or authorize it:
+
+1. Validate raw Base output against the accepted Base Schema before Grounding.
+2. Validate raw Candidate output against the accepted Candidate Schema before Grounding.
+3. Validate raw Base Source Integrity before Grounding.
+4. Run Base Grounding.
+5. Validate grounded Base Source Integrity with the Base input, Base Provider request, raw Base output, and grounded Base output.
+6. Build the Base Legacy View only from that same grounded Base output.
+7. Validate the Base Legacy View before downstream routing.
+8. Build an available Candidate lane only from `groundCandidateAnalysisV1` output.
+9. Validate Candidate Provider input, raw output, analysis, Safety result, Envelope, and Split Envelope.
+10. Never construct or route a merged Base/Candidate Structured Intake.
 
 ## Authority boundary
 
@@ -87,4 +144,4 @@ The Split Analysis Envelope has exactly `base_structured_intake`, `base_legacy_v
 - R4: unauthorized
 - C2: unauthorized
 
-Human / ChatGPT review remains pending. This implementation does not authorize or begin `M2-P4-I3-R1-C1-R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics`.
+Human / ChatGPT accepted this implementation complete. The next candidate is `M2-P4-I3-R1-C1-R3-R2-C Pipeline, Persistence, Safety, and Failure Semantics`; it remains unauthorized and was not begun by this acceptance.
