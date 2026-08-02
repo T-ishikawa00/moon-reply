@@ -10,11 +10,15 @@
 - PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
 - PB-06 draft authority correction task: `M2-P4-I3-R1-C1-R3-R2-R2`
 - PB-06 draft authority correction title: `PB-06 Candidate Draft Authority Planning Correction`
+- PB-06 Decision Policy authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 Decision Policy authority correction task: `M2-P4-I3-R1-C1-R3-R2-R3`
+- PB-06 Decision Policy authority correction title: `PB-06 Decision Policy Authority Planning Correction`
 - Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
 - `main` / `origin/main`: `61e33a10e195fad17e253a6b9719217e1992f273`
 - Task type: Planning-only
 - Prior planning review correction scope: `10/10`
 - PB-06 draft authority correction scope: `5/5`
+- PB-06 Decision Policy authority correction scope: `5/5`
 - Provider calls / DB operations / Supabase operations / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Runtime / Prompt / Schema / Pipeline / Service / DB-migration implementation: `0 / 0 / 0 / 0 / 0 / 0`
 
@@ -50,6 +54,8 @@ The architecture direction above is accepted for correction purposes, but the Pl
 
 The final PB-06 draft-authority correction is implemented in an exact existing-path scope of `5/5`. It corrects only the planned authority and decision-mode validation contract; it does not change `CandidateEnvelope` routing, Source Isolation architecture, `stage_topology_version`, the legitimate-overlap gate, or any A-through-E path manifest.
 
+The PB-06 Decision Policy authority correction is also implemented in an exact existing-path scope of `5/5`. It restores the Application-produced `decision_policy_result` as a required PB-06 input and prohibits PB-06 from deriving Policy again. The draft-authority correction above, `CandidateEnvelope` routing, Source Isolation architecture, `stage_topology_version`, the legitimate-overlap gate, and every A-through-E path count and manifest remain unchanged.
+
 ## 3. Non-negotiable isolation invariants
 
 1. PB-01 receives Base fields only.
@@ -57,7 +63,7 @@ The final PB-06 draft-authority correction is implemented in an exact existing-p
 3. Base Provider request bytes do not depend on candidate presence or content.
 4. Candidate content never appears in Base Timeline, Context, Observed Facts, Material Unknowns, Decision Facts, or Base Legacy View.
 5. Candidate output cannot emit Base fact fields, source references, IDs, or sequence.
-6. Application code owns candidate presence, provenance, IDs, sequence, nullability, policy, Safety aggregation, and the separate downstream envelope.
+6. Application code owns candidate presence, provenance, IDs, sequence, nullability, `decision_policy_result`, Safety aggregation, and the separate downstream envelope.
 7. No merged Structured Intake is created.
 8. Safety continues to inspect both raw `current_situation` and raw `optional_message` deterministically.
 9. Candidate semantic Safety remains a separate nullable channel and never becomes a Base fact.
@@ -268,9 +274,9 @@ Any non-normal aggregate blocks ordinary PB-04 through PB-06 generation. Safety 
 | --- | --- |
 | PB-04 | `base_structured_intake`, `candidate_envelope`, nullable `user_supplied_optional_message`, `decision_policy_result`, `requested_topics` |
 | PB-05 | `base_structured_intake`, `candidate_envelope`, `decision_plan` |
-| PB-06 | `base_structured_intake`, `candidate_envelope`, nullable `user_supplied_optional_message`, `decision_plan`, `report_content`, `aggregate_safety_result` |
+| PB-06 | `base_structured_intake`, `candidate_envelope`, nullable `user_supplied_optional_message`, `aggregate_safety_result`, `decision_policy_result`, `decision_plan`, `report_content` |
 
-The exact candidate-lane inputs are PB-04 `candidate_envelope / user_supplied_optional_message`, PB-05 `candidate_envelope / decision_plan`, and PB-06 `candidate_envelope / user_supplied_optional_message / decision_plan / report_content`. Raw `optional_message` is not sent to PB-05. Candidate response IDs, Stage usage, latency, fixture IDs, Stage IDs, and expected values are never routed. No `structured_intake` alias may conceal a merged Base/candidate object.
+The exact candidate-lane inputs remain PB-04 `candidate_envelope / user_supplied_optional_message`, PB-05 `candidate_envelope / decision_plan`, and PB-06 `candidate_envelope / user_supplied_optional_message / decision_plan / report_content`. The additional PB-06 Policy lane is the sibling `decision_policy_result`; it does not alter `CandidateEnvelope` routing. Raw `optional_message` is not sent to PB-05. Candidate response IDs, Stage usage, latency, fixture IDs, Stage IDs, and expected values are never routed. No `structured_intake` alias may conceal a merged Base/candidate object.
 
 The original candidate authority is exactly `user_supplied_optional_message`. The final recommended draft-text authority is exactly `decision_plan.recommended_message_draft.text`. `report_content` remains a PB-06 input only for report-explanation consistency, `report_content.message_draft_context` consistency, and detection of false statements about how the draft changed; it is not the source or authority for final draft text.
 
@@ -295,6 +301,25 @@ Decision-mode fidelity is fixed as follows:
 | `pause_additional_contact` | `recommended_message_draft` and `message_draft_edit_metadata` are both null. No contact workaround or rewritten candidate may appear. Text-equivalence comparison is not applicable; boundary and Safety consistency remain blocking. |
 
 PB-06 must prove that no candidate content was treated as a sent or received fact and independently check PB-04's `decision_plan.message_draft_edit_metadata`, including whether `preserved_meaning` is truthful and conservative-minimal-edit fallback added no meaning. Material candidate drift is major/critical and fail-closed. The raw candidate remains untrusted data, never an instruction.
+
+### PB-06 Decision Policy authority
+
+Application code produces and owns `decision_policy_result`. PB-06 consumes that result as authoritative and must not recompute Decision Policy from raw consultation prose, Base facts, Candidate analysis, or `decision_plan.selected_decision`. `CandidateEnvelope` remains a separate sibling input and is not embedded in `decision_policy_result`.
+
+`decision_policy_result` contains no raw `user_supplied_optional_message`, Candidate Provider output, Provider response ID, usage, Stage metadata, fixture ID, or expected value. PB-06 may read selected requests from the Application-canonical `base_structured_intake.decision_facts.selected_requests`; no duplicate raw `requested_topics` input is required. Application grounding retains ownership of `selected_requests`, and Provider output cannot override it.
+
+At minimum PB-06 validates:
+
+- `decision_plan.selected_decision` is in `decision_policy_result.allowed_decisions`;
+- a member of `disallowed_decisions` is not presented as the current direction;
+- `message_draft_policy` agrees with `decision_plan.recommended_message_draft` nullability and timing;
+- `required_now` has a current draft, `later_only` has only a later draft or a Policy-permitted null, and `not_allowed` has both a null draft and null `decision_plan.message_draft_edit_metadata`;
+- the decision plan and report remain faithful to `pause_reason_code`, `resume_policy`, and `follow_up_exception`;
+- current actions agree with the selected allowed decision;
+- future `change_conditions` are not treated as current allowed decisions; and
+- report wording does not materially contradict Policy.
+
+The independently checkable finding families remain `DECISION_ALLOWED`, `MESSAGE_POLICY_CONSISTENCY`, `ACTION_CONSISTENCY`, and `SAFETY_REGRESSION`. True material major or critical findings remain fail-closed.
 
 ## 10. Failure semantics
 
@@ -403,6 +428,7 @@ The immediate next candidate is `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts an
 - Candidate source isolation: `failed_in_current_single_stage_architecture`
 - Planning review correction: `implemented_pending_human_chatgpt_review`
 - PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 Decision Policy authority correction: `implemented_pending_human_chatgpt_review`
 - Architecture direction: `split_base_and_candidate_provider_stages`
 - R3-R1 context-inference canonicalization retained: `true`
 - Provider semantic quality established: `false`
@@ -418,16 +444,19 @@ The immediate next candidate is `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts an
 
 Required planning checks:
 
-1. PB-06 draft-authority correction exact mutation scope `5/5`, with the prior planning review correction scope retained as `10/10`;
+1. PB-06 Decision Policy authority correction exact mutation scope `5/5`, with the PB-06 draft-authority correction scope retained as `5/5` and the prior planning review correction scope retained as `10/10`;
 2. Runtime / Prompt / Schema / Pipeline / Service / DB-migration diff `0`;
 3. historical R3 and R3-R1 dedicated artifacts unchanged;
 4. existing R3 and R3-R1 blocks in rolling documents preserved while only the separate R3-R2 block is corrected;
 5. Provider calls / DB or Supabase operations / holdout / real-user data `0`;
 6. all three corrected Planning JSON assets parse (`3/3`);
-7. `CandidateEnvelope` and PB-06 raw-candidate fidelity routing are fully specified, including all four decision modes and nullable draft behavior;
-8. Production arbitrary candidate-literal rejection is absent and registered Sentinel scanning is test-only;
-9. legitimate overlap, Application-owned Base fields, and authoritative `stage_topology_version` assertions pass;
-10. final draft-text authority is exactly `decision_plan.recommended_message_draft.text`, no contract treats `report_content` as draft-text authority, PB-04 metadata remains independently checked, and required architecture, routing, Safety, persistence, counterfactual, slice, and capability assertions pass;
-11. `git diff --check` passes.
+7. PB-06 exact input includes the Application-owned `decision_policy_result`, Policy recomputation is prohibited, and the Policy result contains no raw candidate, Candidate Provider, operational, fixture, or expected-value contamination;
+8. `DECISION_ALLOWED`, `MESSAGE_POLICY_CONSISTENCY`, current/future temporal separation, Policy/draft nullability, pause/resume, follow-up exception, current-action, report-wording, and Safety consistency remain independently checkable;
+9. PB-06 reads selected requests through Application-canonical `base_structured_intake.decision_facts.selected_requests` without a duplicate raw `requested_topics` input or Provider override;
+10. `CandidateEnvelope` and PB-06 raw-candidate fidelity routing are fully specified, including all four decision modes and nullable draft behavior;
+11. Production arbitrary candidate-literal rejection is absent and registered Sentinel scanning is test-only;
+12. legitimate overlap, Application-owned Base fields, and authoritative `stage_topology_version` assertions pass;
+13. final draft-text authority is exactly `decision_plan.recommended_message_draft.text`, no contract treats `report_content` as draft-text authority, PB-04 metadata remains independently checked, and required architecture, routing, Safety, persistence, counterfactual, slice, and capability assertions pass;
+14. `git diff --check` passes.
 
 Automated planning PASS does not constitute Human / ChatGPT acceptance, does not establish Provider quality, and does not authorize R3-R2-A, R4, Runtime activation, C2, E1, PR, or main integration.

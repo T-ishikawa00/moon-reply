@@ -12,9 +12,13 @@
 - PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
 - PB-06 draft authority correction task: `M2-P4-I3-R1-C1-R3-R2-R2`
 - PB-06 draft authority correction title: `PB-06 Candidate Draft Authority Planning Correction`
+- PB-06 Decision Policy authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 Decision Policy authority correction task: `M2-P4-I3-R1-C1-R3-R2-R3`
+- PB-06 Decision Policy authority correction title: `PB-06 Decision Policy Authority Planning Correction`
 - Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
 - Prior planning review correction scope: `10/10`
 - PB-06 draft authority correction scope: `5/5`
+- PB-06 Decision Policy authority correction scope: `5/5`
 - Provider calls / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Active Runtime / Prompt / Schema / Pipeline / Service changed: `false / false / false / false / false`
 - R4 / C2 authorized: `false / false`
@@ -33,6 +37,8 @@ The successor disposition is recorded separately. No historical R3 or R3-R1 dedi
 The architecture direction is accepted; the Planning Package remains pending Human / ChatGPT acceptance. This exact `10/10` correction resolves the five review gaps: independent PB-06 candidate fidelity, typed absent/unavailable routing, removal of arbitrary Production literal rejection, authoritative persisted topology selection, and Application-canonical Base fields.
 
 The final Planning-only correction fixes the PB-06 draft-text authority in an exact existing-path scope of `5/5`. It does not alter the accepted architecture direction, routing topology, or implementation authority.
+
+This Decision Policy authority correction restores Application-owned `decision_policy_result` to the PB-06 exact input in the same exact existing-path scope of `5/5`. It does not alter the prior draft-authority correction, CandidateEnvelope routing, Source Isolation, stage topology, legitimate-overlap gate, or A-through-E manifests.
 
 ## Architecture review points
 
@@ -62,11 +68,17 @@ Candidate Safety includes bounded `untrusted_embedded_instruction_detected`. PB-
 
 Base failure is terminal. Candidate analysis is nonblocking only when candidate Safety independently remains valid, aggregate Safety is normal, no candidate semantics are fabricated, and PB-04 uses the conservative minimal-edit fallback. Candidate Safety unavailable is fail-closed before candidate generation.
 
-PB-04 receives `candidate_envelope` and nullable `user_supplied_optional_message`; PB-05 receives `candidate_envelope` with `decision_plan`; PB-06 receives `candidate_envelope`, nullable original candidate, `decision_plan`, and `report_content`. The original candidate authority is exactly `user_supplied_optional_message`; the final draft-text authority is exactly `decision_plan.recommended_message_draft.text`. `report_content` is limited to report-explanation consistency, `report_content.message_draft_context` consistency, and detection of false statements about how the draft changed. It is not draft-text authority.
+PB-04 receives `candidate_envelope` and nullable `user_supplied_optional_message`; PB-05 receives `candidate_envelope` with `decision_plan`; PB-06 receives exactly `base_structured_intake`, `candidate_envelope`, nullable `user_supplied_optional_message`, `aggregate_safety_result`, `decision_policy_result`, `decision_plan`, and `report_content`. The original candidate authority is exactly `user_supplied_optional_message`; the final draft-text authority is exactly `decision_plan.recommended_message_draft.text`. `report_content` is limited to report-explanation consistency, `report_content.message_draft_context` consistency, and detection of false statements about how the draft changed. It is not draft-text authority.
 
 For `reply_now` and `send_now`, `recommended_message_draft` must be non-null with `required_now / now`, and PB-06 compares its `.text` against the original candidate. For `wait_and_reassess`, a non-null draft must be `later_only / later` and undergo the same comparison; a null draft is Policy-permitted only with null `message_draft_edit_metadata`, and no false preserved-meaning PASS is allowed. For `pause_additional_contact`, both fields must be null, no workaround or rewritten candidate may appear, text equivalence is not applicable, and boundary/Safety consistency remains blocking.
 
 PB-06 validates dates/days/times/numbers, names/referents, polarity, acceptance/refusal, questions/invitations, commitments, affection, pressure, and boundary/contact-stop meaning. It independently checks PB-04's `decision_plan.message_draft_edit_metadata`, verifies candidate content was not treated as sent/received fact, and confirms that truthful `preserved_meaning` and fallback behavior added no meaning. Material drift remains major/critical and fail-closed.
+
+Application code produces and owns `decision_policy_result`. PB-06 treats it as authoritative and does not recompute Policy from raw prose, Base facts, Candidate analysis, or the selected decision. The result contains no raw optional message, Candidate Provider output, response ID, usage, Stage metadata, fixture ID, or expected value. `CandidateEnvelope` remains a separate sibling input.
+
+PB-06 checks the selected decision against `allowed_decisions` and `disallowed_decisions`; enforces `required_now`, `later_only`, and `not_allowed` draft/null/edit-metadata behavior; preserves pause reason, resume policy, and follow-up exception; aligns current actions with the selected allowed decision; distinguishes future change conditions from the current direction; and rejects material report contradiction of Policy. `DECISION_ALLOWED`, `MESSAGE_POLICY_CONSISTENCY`, `ACTION_CONSISTENCY`, and `SAFETY_REGRESSION` remain independently checkable, and true material major/critical findings remain fail-closed.
+
+Selected requests reach PB-06 through Application-canonical `base_structured_intake.decision_facts.selected_requests`. A duplicate raw `requested_topics` input is unnecessary, and Provider output cannot override `selected_requests`.
 
 ## Exact planning artifacts
 
@@ -88,7 +100,7 @@ Existing rolling documents, limited to their separate R3-R2 blocks:
 
 No Runtime or verifier file is in scope.
 
-The prior `10/10` planning review correction manifest remains historical context. This PB-06 draft-authority correction updates only these existing paths:
+The prior `10/10` planning review correction manifest remains historical context. The PB-06 draft-authority correction updates only these existing paths:
 
 1. `docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md`
 2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md`
@@ -96,7 +108,7 @@ The prior `10/10` planning review correction manifest remains historical context
 4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json`
 5. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json`
 
-All five paths existed at correction start; this correction adds no path.
+All five paths existed at correction start; the draft-authority correction added no path. This Decision Policy authority correction uses the same exact five existing paths and also adds no path.
 
 ## Counterfactual review
 
@@ -123,6 +135,7 @@ All A-through-E exact path counts and path lists are unchanged. Any required fut
 The following checks must be completed before commit:
 
 - [x] PB-06 draft-authority correction exact scope `5/5`; prior planning review correction scope remains `10/10`
+- [x] PB-06 Decision Policy authority correction exact scope `5/5`
 - [x] Runtime diff `0`
 - [x] Prompt diff `0`
 - [x] Schema diff `0`
@@ -138,6 +151,15 @@ The following checks must be completed before commit:
 - [x] corrected JSON parse PASS: `3/3`
 - [x] `CandidateEnvelope` fully specified
 - [x] PB-06 original-candidate fidelity route specified
+- [x] PB-06 exact input contains Application-owned `decision_policy_result`
+- [x] PB-06 does not recompute Decision Policy from raw prose, Base facts, Candidate analysis, or selected decision
+- [x] `decision_policy_result` contains no raw candidate, Candidate Provider, operational, Stage, fixture, or expected-value contamination
+- [x] `DECISION_ALLOWED` remains independently checkable
+- [x] `MESSAGE_POLICY_CONSISTENCY` remains independently checkable
+- [x] current/future temporal distinction remains preserved
+- [x] pause reason, resume policy, follow-up exception, current actions, report wording, and Safety remain Policy-checkable
+- [x] selected requests route through Application-canonical `base_structured_intake.decision_facts.selected_requests`; duplicate raw `requested_topics` input absent
+- [x] Provider output cannot override Application-owned `selected_requests`
 - [x] final draft-text source is exactly `decision_plan.recommended_message_draft.text`
 - [x] no contract identifies `report_content` as draft-text authority
 - [x] nullable draft behavior is defined for `reply_now`, `send_now`, `wait_and_reassess`, and `pause_additional_contact`

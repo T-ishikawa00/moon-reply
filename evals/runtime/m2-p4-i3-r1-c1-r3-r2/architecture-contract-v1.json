@@ -10,6 +10,9 @@
   "pb_06_draft_authority_correction": "implemented_pending_human_chatgpt_review",
   "pb_06_draft_authority_correction_task_id": "M2-P4-I3-R1-C1-R3-R2-R2",
   "pb_06_draft_authority_correction_title": "PB-06 Candidate Draft Authority Planning Correction",
+  "pb_06_decision_policy_authority_correction": "implemented_pending_human_chatgpt_review",
+  "pb_06_decision_policy_authority_correction_task_id": "M2-P4-I3-R1-C1-R3-R2-R3",
+  "pb_06_decision_policy_authority_correction_title": "PB-06 Decision Policy Authority Planning Correction",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
   "origin_main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
   "branch": "docs/m2-p4-i3-r1-c1-r3-r2-planning-correction",
@@ -42,6 +45,7 @@
     "production_candidate_literal_false_positives": "resolved_in_planning_contract",
     "authoritative_run_topology_discriminator": "resolved_in_planning_contract",
     "application_owned_base_fields_canonical": "resolved_in_planning_contract",
+    "pb_06_application_decision_policy_authority": "resolved_in_planning_contract",
     "planning_package_human_chatgpt_accepted": false
   },
   "exact_planning_scope": {
@@ -67,6 +71,26 @@
     "verifier_changes": 0
   },
   "pb_06_draft_authority_correction_scope": {
+    "path_count": 5,
+    "paths": [
+      "docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/architecture-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json"
+    ],
+    "new_paths": 0,
+    "runtime_changes": 0,
+    "prompt_changes": 0,
+    "schema_changes": 0,
+    "pipeline_changes": 0,
+    "service_changes": 0,
+    "db_or_migration_changes": 0,
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  },
+  "pb_06_decision_policy_authority_correction_scope": {
     "path_count": 5,
     "paths": [
       "docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md",
@@ -419,6 +443,10 @@
       "unavailable"
     ],
     "decision_policy_owns_candidate_presence_effect": true,
+    "decision_policy_result_owner": "application",
+    "decision_policy_result_produced_by_application_code": true,
+    "decision_policy_result_is_authoritative_pb_06_input": true,
+    "pb_06_decision_policy_recomputation_allowed": false,
     "aggregate_safety_owns_cross_channel_disposition": true,
     "no_merged_object_may_present_candidate_content_as_consultation_fact": true,
     "base_canonical_assignments": {
@@ -427,6 +455,7 @@
       "decision_facts.selected_requests": "request.requestedTopics"
     },
     "provider_override_of_base_canonical_assignments_allowed": false,
+    "provider_override_of_selected_requests_allowed": false,
     "candidate_presence_remains_outside_base_decision_facts": true
   },
   "r3_r1_successor_disposition": {
@@ -557,6 +586,15 @@
       "raw_candidate_routed": false
     },
     "PB-06": {
+      "input_exact_keys": [
+        "base_structured_intake",
+        "candidate_envelope",
+        "user_supplied_optional_message",
+        "aggregate_safety_result",
+        "decision_policy_result",
+        "decision_plan",
+        "report_content"
+      ],
       "exact_candidate_inputs": [
         "candidate_envelope",
         "user_supplied_optional_message",
@@ -646,6 +684,66 @@
     ],
     "material_candidate_drift_disposition": "fail_closed",
     "absent_and_unavailable_distinguished_from_candidate_envelope": true
+  },
+  "pb_06_decision_policy_authority_validation": {
+    "authoritative_input": "decision_policy_result",
+    "owner": "application",
+    "produced_by_application_code": true,
+    "pb_06_recomputes_decision_policy": false,
+    "recomputation_sources_forbidden": [
+      "raw_consultation_prose",
+      "base_structured_intake_fact_surfaces",
+      "candidate_envelope.analysis",
+      "decision_plan.selected_decision"
+    ],
+    "decision_policy_result_forbidden_contents": [
+      "raw_user_supplied_optional_message",
+      "candidate_provider_output",
+      "provider_response_id",
+      "usage",
+      "stage_metadata",
+      "fixture_id",
+      "expected_value"
+    ],
+    "candidate_envelope_is_separate_sibling_input": true,
+    "selected_requests_source": "base_structured_intake.decision_facts.selected_requests",
+    "selected_requests_owner": "application",
+    "provider_override_of_selected_requests_allowed": false,
+    "duplicate_raw_requested_topics_input_required": false,
+    "minimum_checks": [
+      "decision_plan.selected_decision_is_in_decision_policy_result.allowed_decisions",
+      "disallowed_decisions_are_not_presented_as_current_direction",
+      "message_draft_policy_agrees_with_recommended_message_draft_nullability_and_timing",
+      "pause_reason_code_and_resume_policy_remain_faithful",
+      "follow_up_exception_remains_faithful",
+      "current_actions_agree_with_selected_allowed_decision",
+      "future_change_conditions_are_not_current_allowed_decisions",
+      "report_wording_does_not_materially_contradict_policy"
+    ],
+    "message_draft_policy_contract": {
+      "required_now": {
+        "recommended_message_draft": "non_null_current_draft",
+        "required_use_timing": "now"
+      },
+      "later_only": {
+        "recommended_message_draft": "later_draft_or_policy_permitted_null",
+        "when_non_null_required_use_timing": "later"
+      },
+      "not_allowed": {
+        "recommended_message_draft": null,
+        "message_draft_edit_metadata": null
+      }
+    },
+    "applicable_semantic_finding_families": [
+      "DECISION_ALLOWED",
+      "MESSAGE_POLICY_CONSISTENCY",
+      "ACTION_CONSISTENCY",
+      "SAFETY_REGRESSION"
+    ],
+    "decision_allowed_independently_checkable": true,
+    "message_policy_consistency_independently_checkable": true,
+    "current_future_temporal_distinction_preserved": true,
+    "true_material_major_or_critical_findings_disposition": "fail_closed"
   },
   "source_integrity_plan": {
     "primary_guarantee": "structural_request_schema_provenance_ownership_and_routing_separation",
@@ -886,6 +984,15 @@
     "holdout_use": 0,
     "real_user_data": 0,
     "json_parse": "3/3",
+    "pb_06_exact_input_contains_decision_policy_result": true,
+    "pb_06_decision_policy_result_owner": "application",
+    "pb_06_decision_policy_recomputation_allowed": false,
+    "decision_policy_result_contamination_present": false,
+    "decision_allowed_independently_checkable": true,
+    "message_policy_consistency_independently_checkable": true,
+    "current_future_temporal_distinction_preserved": true,
+    "selected_requests_application_canonical_source_specified": true,
+    "duplicate_raw_requested_topics_input_required": false,
     "candidate_envelope_fully_specified": true,
     "pb_06_raw_candidate_fidelity_route_specified": true,
     "pb_06_final_recommended_draft_source": "decision_plan.recommended_message_draft.text",

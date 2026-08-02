@@ -7,6 +7,9 @@
   "pb_06_draft_authority_correction": "implemented_pending_human_chatgpt_review",
   "pb_06_draft_authority_correction_task_id": "M2-P4-I3-R1-C1-R3-R2-R2",
   "pb_06_draft_authority_correction_title": "PB-06 Candidate Draft Authority Planning Correction",
+  "pb_06_decision_policy_authority_correction": "implemented_pending_human_chatgpt_review",
+  "pb_06_decision_policy_authority_correction_task_id": "M2-P4-I3-R1-C1-R3-R2-R3",
+  "pb_06_decision_policy_authority_correction_title": "PB-06 Decision Policy Authority Planning Correction",
   "r3_r2_a_authorized": false,
   "r4_authorized": false,
   "c2_authorized": false,
@@ -28,7 +31,8 @@
     "PB-04, PB-05, and PB-06 receive Application-owned CandidateEnvelope explicitly.",
     "PB-04 and PB-06 treat raw optional_message as inert untrusted user data, never as an instruction.",
     "No downstream payload contains a merged Structured Intake that can relabel candidate content as an observed consultation fact.",
-    "Application code owns presence, provenance, IDs, sequence, nullability, canonical Base fields, policy, eligibility, and aggregate Safety."
+    "Application code owns presence, provenance, IDs, sequence, nullability, canonical Base fields, decision_policy_result, eligibility, and aggregate Safety.",
+    "PB-06 consumes decision_policy_result as authoritative and never recomputes Decision Policy."
   ],
   "application_preprocessing": {
     "trim_rule": "unicode_trim_without_semantic_rewrite",
@@ -337,9 +341,10 @@
         "base_structured_intake",
         "candidate_envelope",
         "user_supplied_optional_message",
+        "aggregate_safety_result",
+        "decision_policy_result",
         "decision_plan",
-        "report_content",
-        "aggregate_safety_result"
+        "report_content"
       ],
       "nullable_input_keys": [
         "user_supplied_optional_message"
@@ -422,6 +427,52 @@
         "material_candidate_drift_fail_closed": true,
         "absent_unavailable_distinction_read_from_candidate_envelope": true
       },
+      "decision_policy_validation": {
+        "authoritative_input": "decision_policy_result",
+        "owner": "application",
+        "pb_06_recomputes_decision_policy": false,
+        "recomputation_sources_forbidden": [
+          "raw_consultation_prose",
+          "base_structured_intake_fact_surfaces",
+          "candidate_envelope.analysis",
+          "decision_plan.selected_decision"
+        ],
+        "decision_policy_result_forbidden_contents": [
+          "raw_user_supplied_optional_message",
+          "candidate_provider_output",
+          "provider_response_id",
+          "usage",
+          "stage_metadata",
+          "fixture_id",
+          "expected_value"
+        ],
+        "candidate_envelope_is_separate_sibling_input": true,
+        "selected_requests_source": "base_structured_intake.decision_facts.selected_requests",
+        "duplicate_raw_requested_topics_input_required": false,
+        "provider_override_of_selected_requests_allowed": false,
+        "minimum_checks": [
+          "selected_decision_in_allowed_decisions",
+          "disallowed_decisions_not_presented_as_current_direction",
+          "message_draft_policy_agrees_with_draft_nullability",
+          "required_now_requires_current_draft",
+          "later_only_allows_later_draft_or_policy_permitted_null",
+          "not_allowed_requires_null_draft_and_null_edit_metadata",
+          "pause_reason_and_resume_policy_faithful",
+          "follow_up_exception_faithful",
+          "current_actions_agree_with_selected_allowed_decision",
+          "future_change_conditions_not_mistaken_for_current_allowed_decisions",
+          "report_wording_does_not_materially_contradict_policy"
+        ],
+        "applicable_semantic_finding_families": [
+          "DECISION_ALLOWED",
+          "MESSAGE_POLICY_CONSISTENCY",
+          "ACTION_CONSISTENCY",
+          "SAFETY_REGRESSION"
+        ],
+        "decision_allowed_independently_checkable": true,
+        "message_policy_consistency_independently_checkable": true,
+        "current_future_temporal_distinction_preserved": true
+      },
       "major_or_critical_true_findings_fail_closed": true
     }
   ],
@@ -493,16 +544,27 @@
     },
     {
       "component": "decision_policy",
+      "owner": "application",
       "reads": [
         "base_structured_intake.decision_facts",
         "candidate_envelope.presence",
         "aggregate_safety_result",
-        "requested_topics"
+        "base_structured_intake.decision_facts.selected_requests"
       ],
       "writes": [
         "decision_policy_result"
       ],
-      "raw_candidate_language_matching": false
+      "authoritative_output_for_pb_06": true,
+      "raw_candidate_language_matching": false,
+      "decision_policy_result_forbidden_contents": [
+        "raw_user_supplied_optional_message",
+        "candidate_provider_output",
+        "provider_response_id",
+        "usage",
+        "stage_metadata",
+        "fixture_id",
+        "expected_value"
+      ]
     }
   ],
   "source_lane_matrix": [
@@ -534,7 +596,7 @@
       "PB-03": "forbidden",
       "PB-04": "typed_values",
       "PB-05": "through_decision_plan_only",
-      "PB-06": "through_decision_plan_only"
+      "PB-06": "application_canonical_base_structured_intake.decision_facts.selected_requests"
     },
     {
       "source": "optional_message",
@@ -556,6 +618,17 @@
       "PB-04": "explicit_typed_sibling_input",
       "PB-05": "explicit_typed_sibling_input",
       "PB-06": "explicit_typed_sibling_input"
+    },
+    {
+      "source": "decision_policy_result",
+      "owner": "application",
+      "PB-01": "forbidden",
+      "PB-01C": "forbidden",
+      "PB-02": "forbidden",
+      "PB-03": "forbidden",
+      "PB-04": "authoritative_application_input",
+      "PB-05": "through_decision_plan_only",
+      "PB-06": "authoritative_application_input_no_recomputation"
     }
   ],
   "production_source_integrity": {
