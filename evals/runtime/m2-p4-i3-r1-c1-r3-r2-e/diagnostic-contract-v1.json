@@ -1,0 +1,144 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-diagnostic-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E",
+  "title": "Bounded Split-Stage Provider Diagnostic",
+  "authorization_id": "M2-P4-I3-R1-C1-R3-R2-E-2026-08-03",
+  "confirmation_phrase": "R3-R2-E-14-CALL-SPLIT-SYNTHETIC-ONLY",
+  "baseline": "8ce5e608b019197e48107354b73338a6883b4938",
+  "accepted_d_implementation": "8b9b4a4dff2992483266a3fb9bbc80b183091b2e",
+  "accepted_c_implementation": "7e09b540220eac3b0afb91bc9cfb822cc0ab632d",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "branch": "test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic",
+  "package_commit_subject": "test: prepare split-stage provider diagnostic",
+  "result_commit_subject": "test: record split-stage provider diagnostic",
+  "catalog": "runtime-stage-catalog-v9.0.0",
+  "catalog_path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v9.json",
+  "catalog_sha256_utf8_lf": "3bbcee33b0df6b4e29d8e3390cb87dee45d4e3fe40fa38a65d96745871899f35",
+  "prompt_bundle": "prompt-bundle-runtime-v9.0.0",
+  "schema_set": "pipeline-schema-runtime-v4.0.0",
+  "stage_topology": "split-base-candidate-v1",
+  "model": "gpt-5.6-luna",
+  "active_catalog": "runtime-stage-catalog-v4.0.0",
+  "active_prompt_bundle": "prompt-bundle-runtime-v4.0.0",
+  "active_schema_set": "pipeline-schema-runtime-v3.0.0",
+  "active_stage_topology": "legacy-six-v1",
+  "stage_assets": {
+    "PB-01": {
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01-base-situation-v1.developer.md",
+      "prompt_version": "v1.0.0",
+      "prompt_asset_sha256": "c109a3fc13050f1cdafc17b3437611123b821c51bc89f9b514e432530a48c321",
+      "combined_prompt_sha256": "4c36c0fd7a6dd6e39b193b372fca7d1221a63c9ce2c84d54342c02c5f83996c0",
+      "schema_path": "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
+      "schema_version": "pipeline-schema-base-v1.0.0",
+      "schema_asset_sha256": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6",
+      "schema_definition_sha256": "cb0845a1e7344a7cc71ec6d6426828509be5f5011e879497ba936b33802bc16c",
+      "grounded_schema_version": "pipeline-schema-base-v1.0.0"
+    },
+    "PB-01C": {
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v1.developer.md",
+      "prompt_version": "v1.0.0",
+      "prompt_asset_sha256": "9605685a8158a23c061f7a3a56c20b0d3ea1dad1be0059423a258144017d0c09",
+      "combined_prompt_sha256": "4351cd93a765495ade4d6eb8565b339c5f0dabc3312634b9a6a6cfe1a146a407",
+      "schema_path": "lib/assessment/runtime/contracts/candidate-analysis-v1.schema.json",
+      "schema_version": "pipeline-schema-candidate-v1.0.0",
+      "schema_asset_sha256": "47b135176f187c9801637838a55aea8f734e425109d2e19da6b6ecb3975db86b",
+      "schema_definition_sha256": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023"
+    }
+  },
+  "authorized_calls": 14,
+  "pb_01_calls": 8,
+  "pb_01c_calls": 6,
+  "call_sequence": [
+    { "call_index": 1, "case_id": "E-B01", "stage_id": "PB-01" },
+    { "call_index": 2, "case_id": "E-B02", "stage_id": "PB-01" },
+    { "call_index": 3, "case_id": "E-B03", "stage_id": "PB-01" },
+    { "call_index": 4, "case_id": "E-B04", "stage_id": "PB-01" },
+    { "call_index": 5, "case_id": "E-B05", "stage_id": "PB-01" },
+    { "call_index": 6, "case_id": "E-B06", "stage_id": "PB-01" },
+    { "call_index": 7, "case_id": "E-B07", "stage_id": "PB-01" },
+    { "call_index": 8, "case_id": "E-B08", "stage_id": "PB-01" },
+    { "call_index": 9, "case_id": "E-C01", "stage_id": "PB-01C" },
+    { "call_index": 10, "case_id": "E-C02", "stage_id": "PB-01C" },
+    { "call_index": 11, "case_id": "E-C03", "stage_id": "PB-01C" },
+    { "call_index": 12, "case_id": "E-C04", "stage_id": "PB-01C" },
+    { "call_index": 13, "case_id": "E-C05", "stage_id": "PB-01C" },
+    { "call_index": 14, "case_id": "E-C06", "stage_id": "PB-01C" }
+  ],
+  "execution_limits": {
+    "maximum_total_provider_attempts": 14,
+    "parallel_provider_calls": 0,
+    "retries": 0,
+    "repair_calls": 0,
+    "fallback_calls": 0,
+    "pb_02_through_pb_06_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_application": false,
+    "holdout_cases": 0,
+    "real_user_cases": 0,
+    "automatic_extension": false
+  },
+  "environment_allowlist": ["OPENAI_API_KEY", "OPENAI_MODEL"],
+  "provider_input_keys": {
+    "PB-01": ["current_situation", "relationship", "requested_topics"],
+    "PB-01C": ["optional_message", "candidate_metadata"]
+  },
+  "candidate_metadata": {
+    "message_owner": "user",
+    "message_status": "unsent_candidate"
+  },
+  "forbidden_provider_input_fields": {
+    "PB-01": [
+      "optional_message", "candidate_metadata", "candidate_text", "case_id",
+      "focus_tags", "expected", "assertions", "acceptable_values", "fixture_id",
+      "source_case_reference", "old_output", "oracle", "verdict"
+    ],
+    "PB-01C": [
+      "current_situation", "relationship", "requested_topics", "base_facts",
+      "policy", "case_id", "focus_tags", "expected", "assertions",
+      "acceptable_values", "fixture_id", "old_output", "oracle", "verdict"
+    ]
+  },
+  "one_time_marker": ".git/moon-reply-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic-consumed.json",
+  "exact_mutation_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "post_run_mutable_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "frozen_after_commit_a_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs"
+  ],
+  "provider_quality_scope": "exact_8_pb01_plus_6_pb01c_synthetic_natural_language_suite",
+  "pass_status": "provider_diagnostic_passed_pending_human_chatgpt_review",
+  "fail_status": "provider_diagnostic_failed_pending_human_chatgpt_review",
+  "evaluation_blocked_status": "evaluation_blocked_pending_human_chatgpt_review",
+  "rerun_authorized": false,
+  "r4_authorized": false,
+  "c2_authorized": false
+}

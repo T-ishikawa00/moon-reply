@@ -1,5 +1,9 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E:BEGIN -->
+M2-P4-I3-R1-C1-R3-R2-E is `provider_diagnostic_package_ready_not_started` on `test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic`. The exact frozen package scope is `14/14`, post-run mutable scope is `8/8`, Provider calls are `0/14` with PB-01 `0/8` and PB-01C `0/6`, and the one-time authorization remains unconsumed. Provider quality and isolated-E2E readiness are not established. Migration remains unapplied, Active Service and `main` remain unchanged, and R4 / C2 authorization remains `false / false`. Human / ChatGPT review will be required after the one-time execution; rerun is unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R2-E:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->
 ## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture, R3-R2-A/B, and R3-R2-C
 
