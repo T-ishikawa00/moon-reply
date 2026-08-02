@@ -14,6 +14,8 @@ const repositoryRoot = path.resolve(
 
 const taskId = "M2-P4-I3-R1-C1-R3-R2-A";
 const baseline = "7a4e5d3187e1731d677cc5aa19c23acdeb535ed8";
+const acceptedImplementationCommit =
+  "2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch = "feat/m2-p4-i3-r1-c1-r3-r2-a-split-contracts";
 
@@ -67,6 +69,22 @@ const acceptedPlanningPaths = [
   paths.acceptedRouting,
   paths.acceptedCounterfactual,
   paths.acceptedSafety,
+];
+
+const acceptanceSyncPaths = [
+  paths.capabilities,
+  paths.review,
+  paths.verifier,
+  paths.currentFocus,
+  paths.wbs,
+  paths.handoff,
+];
+
+const protectedImplementationPaths = [
+  paths.baseSchema,
+  paths.candidateSchema,
+  paths.typedContract,
+  paths.topology,
 ];
 
 const expectedBaseRootProperties = [
@@ -221,6 +239,21 @@ function currentTaskPaths(base) {
   );
 }
 
+function historicalTaskPaths(startCommit, endCommit) {
+  return sorted(
+    normalizedPaths(git(["diff", "--name-only", startCommit, endCommit, "--"])),
+  );
+}
+
+function assertMatchesCommit(relativePath, commit) {
+  const changed = git(["diff", "--name-only", commit, "--", relativePath]).trim();
+  assert.equal(
+    changed,
+    "",
+    `accepted implementation blob changed: ${relativePath}`,
+  );
+}
+
 function sha256(relativePath) {
   return createHash("sha256").update(readFileSync(absolute(relativePath))).digest("hex");
 }
@@ -359,6 +392,11 @@ const typedContractSource = source(paths.typedContract);
 const contractModule = await import(pathToFileURL(absolute(paths.typedContract)).href);
 
 assert.equal(new Set(exactPaths).size, exactPaths.length, "duplicate scope paths");
+assert.equal(
+  new Set(acceptanceSyncPaths).size,
+  acceptanceSyncPaths.length,
+  "duplicate acceptance-sync paths",
+);
 assert.equal(parsed.topology.exact_scope.count, 10);
 assert.equal(parsed.topology.exact_scope.value, "10/10");
 assert.deepEqual(parsed.topology.exact_scope.paths, exactPaths);
@@ -366,12 +404,31 @@ assert.equal(new Set(parsed.topology.exact_scope.paths).size, 10);
 assert.equal(parsed.capabilities.exact_scope, "10/10");
 assert.deepEqual(parsed.capabilities.exact_mutation_paths, exactPaths);
 assert.equal(new Set(parsed.capabilities.exact_mutation_paths).size, 10);
+assert.equal(parsed.capabilities.exact_mutation_path_count, 10);
+assert.equal(parsed.capabilities.acceptance_sync_exact_scope, "6/6");
+assert.deepEqual(
+  parsed.capabilities.acceptance_sync_exact_paths,
+  acceptanceSyncPaths,
+);
+assert.equal(parsed.capabilities.acceptance_sync_exact_path_count, 6);
+assert.deepEqual(
+  historicalTaskPaths(baseline, acceptedImplementationCommit),
+  sorted(exactPaths),
+);
 assert.deepEqual(currentTaskPaths(baseline), sorted(exactPaths));
+assert.deepEqual(
+  currentTaskPaths(acceptedImplementationCommit),
+  sorted(acceptanceSyncPaths),
+);
 
 assert.equal(git(["branch", "--show-current"]).trim(), expectedBranch);
 assert.equal(git(["rev-parse", "main"]).trim(), mainBaseline);
 assert.equal(git(["rev-parse", "origin/main"]).trim(), mainBaseline);
 git(["merge-base", "--is-ancestor", baseline, "HEAD"]);
+
+for (const protectedPath of protectedImplementationPaths) {
+  assertMatchesCommit(protectedPath, acceptedImplementationCommit);
+}
 
 for (const protectedPath of acceptedPlanningPaths) {
   const expectedBlob = git(["rev-parse", `${baseline}:${protectedPath}`]).trim();
@@ -1007,8 +1064,21 @@ for (const [label, fixture] of candidateInvalidFixtures) {
 assert.equal(baseInvalidFixtures.length, 6);
 assert.equal(candidateInvalidFixtures.length, 12);
 
-assert.equal(parsed.capabilities.status, "implementation_pending_human_chatgpt_review");
+assert.equal(parsed.capabilities.status, "human_chatgpt_accepted_complete");
 assert.equal(parsed.capabilities.task_id, taskId);
+assert.equal(parsed.capabilities.implementation_accepted, true);
+assert.equal(
+  parsed.capabilities.accepted_implementation_commit,
+  acceptedImplementationCommit,
+);
+assert.deepEqual(parsed.capabilities.implementation_snapshot, {
+  type: "historical_commit_range",
+  base_commit_sha: baseline,
+  end_commit_sha: acceptedImplementationCommit,
+  exact_paths: 10,
+  immutable_snapshot: true,
+  include_working_tree: false,
+});
 assert.equal(parsed.capabilities.planning_package_status, "human_chatgpt_accepted_complete");
 assert.equal(parsed.capabilities.baseline, baseline);
 assert.equal(parsed.capabilities.base_schema_created, true);
@@ -1016,22 +1086,77 @@ assert.equal(parsed.capabilities.candidate_schema_created, true);
 assert.equal(parsed.capabilities.split_stage_types_created, true);
 assert.equal(parsed.capabilities.stage_topology_contract_created, true);
 assert.equal(parsed.capabilities.candidate_envelope_discriminated_union, true);
+assert.equal(parsed.capabilities.base_schema_accepted, true);
+assert.equal(parsed.capabilities.candidate_schema_accepted, true);
+assert.equal(parsed.capabilities.split_stage_types_accepted, true);
+assert.equal(parsed.capabilities.stage_topology_contract_accepted, true);
+assert.equal(parsed.capabilities.candidate_envelope_accepted, true);
 assert.equal(parsed.capabilities.base_optional_message_surface_count, 0);
 assert.equal(parsed.capabilities.base_optional_message_source_ref_count, 0);
 assert.equal(parsed.capabilities.candidate_base_fact_surface_count, 0);
+assert.equal(parsed.capabilities.implementation_blobs_unchanged, "4/4");
+assert.equal(parsed.capabilities.accepted_planning_blobs_unchanged, "5/5");
 assert.equal(parsed.capabilities.provider_calls, 0);
 assert.equal(parsed.capabilities.db_operations, 0);
 assert.equal(parsed.capabilities.supabase_operations, 0);
+assert.equal(parsed.capabilities.provider_quality_established, false);
 assert.equal(parsed.capabilities.active_runtime_changed, false);
+assert.equal(parsed.capabilities.main_changed, false);
 assert.equal(parsed.capabilities.r3_r2_b_authorized, false);
 assert.equal(parsed.capabilities.r4_authorized, false);
 assert.equal(parsed.capabilities.c2_authorized, false);
+assert.equal(parsed.capabilities.human_chatgpt_review, "accepted_complete");
+assert.equal(
+  parsed.capabilities.next_candidate,
+  "M2-P4-I3-R1-C1-R3-R2-B Grounding, Allowlist Merge, and Source Integrity",
+);
 assert.equal(parsed.capabilities.next_candidate_authorized, false);
 assert.equal(parsed.topology.provider_calls, 0);
 assert.equal(parsed.topology.db_operations, 0);
 assert.equal(parsed.topology.supabase_operations, 0);
 assert.equal(parsed.topology.active_runtime_changed, false);
 assert.equal(parsed.topology.r3_r2_b_authorized, false);
+
+for (const [documentPath, fragments] of Object.entries({
+  [paths.review]: [
+    "human_chatgpt_accepted_complete",
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    `Accepted implementation commit: \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact scope: `6/6`",
+    "Four non-sync implementation blobs",
+    "Provider quality: not established",
+    "R3-R2-B: unauthorized",
+  ],
+  [paths.currentFocus]: [
+    taskId,
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization is exact `6/6`",
+    "Provider / DB / Supabase calls are `0 / 0 / 0`",
+  ],
+  [paths.wbs]: [
+    taskId,
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    acceptedImplementationCommit,
+    "Acceptance synchronization exact `6/6`",
+    "R3-R2-B Grounding, Allowlist Merge, and Source Integrity — unauthorized",
+  ],
+  [paths.handoff]: [
+    taskId,
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance sync is exact `6/6`",
+    "R3-R2-B, R4, Runtime activation, C2, E1, PR, and main merge remain unauthorized",
+  ],
+})) {
+  const document = source(documentPath);
+  for (const fragment of fragments) {
+    assert.ok(
+      document.includes(fragment),
+      `${documentPath} missing acceptance fragment: ${fragment}`,
+    );
+  }
+}
 
 for (const exactPath of exactPaths) {
   const text = source(exactPath);
@@ -1048,7 +1173,9 @@ for (const exactPath of exactPaths) {
 git(["diff", "--check"]);
 
 console.log(`${taskId} split-contract verifier: PASS`);
-console.log("exact_scope: 10/10");
+console.log("immutable_implementation_scope: 10/10");
+console.log("acceptance_sync_exact_scope: 6/6");
+console.log("implementation_blobs_unchanged: 4/4");
 console.log("json_parse: 4/4");
 console.log("ajv_compile: 2/2");
 console.log("valid_fixtures: 2/2");

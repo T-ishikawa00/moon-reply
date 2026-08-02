@@ -27,12 +27,15 @@
 - [x] `legacy-six-v1` and `split-base-candidate-v1` topology constants and JSON contract agree `2/2`
 - [x] Dedicated verifier: exact scope `10/10`, JSON `4/4`, AJV `2/2`, valid `2/2`, invalid expected failures `18/18`, protected diff `0`
 - [x] Typecheck, lint with warnings `0`, production build, and `git diff --check` PASS
-- [ ] R3-R2-A Human / ChatGPT review
+- [x] M2-P4-I3-R1-C1-R3-R2-A Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- [x] Accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`
+- [x] Immutable implementation snapshot exact `10/10`: `7a4e5d3187e1731d677cc5aa19c23acdeb535ed8..2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; working tree excluded
+- [x] Acceptance synchronization exact `6/6`; four implementation blobs and five accepted Planning blobs unchanged
 - [ ] R3-R2-B Grounding, Allowlist Merge, and Source Integrity — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-A status is `implementation_pending_human_chatgpt_review`. The accepted architecture remains `split_base_and_candidate_provider_stages`, while the current active single-stage Runtime is unchanged. Provider semantic quality and Runtime eligibility are not established. The five accepted Planning blobs, R3-R1 canonicalization, historical artifacts, and A-through-E manifests remain unchanged. Provider / DB / Supabase operations are `0 / 0 / 0`; R3-R2-B, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
+Current R3-R2-A status is `human_chatgpt_accepted_complete` at accepted implementation commit `2a5c8ed6ea02a4173c50a4d1e31ad54a857d707f`; immutable implementation scope is `10/10`, and acceptance sync is `6/6`. The acceptance establishes only inactive Split Stage Schema and TypeScript contracts, the machine-readable topology contract, and the exact `CandidateEnvelope` type boundary. The active single-stage Runtime is unchanged, and Application grounding, CandidateEnvelope construction, Runtime Source Integrity, Pipeline integration, Prompt or Provider quality, persistence or migration, isolated E2E readiness, and Runtime activation are not established. The four non-sync implementation blobs, five accepted Planning blobs, R3-R1 canonicalization, historical artifacts, and A-through-E manifests remain unchanged. Provider / DB / Supabase operations are `0 / 0 / 0`; R3-R2-B, R4, Runtime activation, and C2 remain unauthorized or `HOLD`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
