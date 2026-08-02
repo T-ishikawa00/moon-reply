@@ -2,19 +2,32 @@
 
 ## Status and boundary
 
-- Status: `implementation_pending_human_chatgpt_review`
+- Task: `M2-P4-I3-R1-C1-R3-R2-C Pipeline, Topology Persistence, Candidate Fidelity, Safety, and Failure Semantics`
+- Status: `human_chatgpt_accepted_complete`
+- Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- Implementation accepted: `true`
+- Initial implementation commit: `3afb05ad37073b6b95e872c2e34360341c2542dc`
+- Accepted corrected implementation commit: `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`
+- Immutable cumulative implementation snapshot: `93893d78b58463b067a1419e8bf7056540636921..7e09b540220eac3b0afb91bc9cfb822cc0ab632d` (`23/23` exact paths; working tree excluded)
+- Immutable review-correction snapshot: `3afb05ad37073b6b95e872c2e34360341c2542dc..7e09b540220eac3b0afb91bc9cfb822cc0ab632d` (`13/13` exact paths; working tree excluded)
 - Baseline: `93893d78b58463b067a1419e8bf7056540636921`
 - Branch: `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`
 - Exact implementation scope: `23/23`
 - Exact review-correction scope: `13/13`
-- Review correction: `implemented_pending_human_chatgpt_review`
+- Acceptance synchronization exact scope: `6/6`
+- Non-sync implementation blobs unchanged: `17/17`
+- Review correction: `human_chatgpt_accepted_complete`
+- Prompt responsibility parity: `PASS`
+- Candidate persistence error ownership: `PASS`
 - Provider / DB / Supabase operations: `0 / 0 / 0`
+- Provider quality established: `false`
 - Active Service catalog: unchanged; still `loadM2P4ProductQualityRuntimeStageCatalog`
 - Migration: created, not applied
-- Human / ChatGPT review: pending
-- R3-R2-D: unauthorized
+- Live DB compatibility established: `false`
+- Active Runtime activated: `false`
+- R3-R2-D ready / authorized: `true / false`
 
-This implementation connects accepted A/B contracts to an inactive split Runtime. The R1 review correction restores accepted Base/Decision/Report/Validator Prompt responsibility parity and separates PB-01C Stage-persistence failures from Candidate analysis/Safety semantics. It does not establish Human / ChatGPT acceptance, Provider quality, migration application, live DB compatibility, isolated E2E readiness, Runtime activation, C2 eligibility, or Milestone 2 completion.
+Human / ChatGPT accepts the corrected inactive split Runtime implementation. The R1 review correction restores accepted Base/Decision/Report/Validator Prompt responsibility parity and separates PB-01C Stage-persistence failures from Candidate analysis/Safety semantics. This acceptance does not establish Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, C2 eligibility, production readiness, or Milestone 2 completion.
 
 ## Version identity and Stage table
 
@@ -75,11 +88,79 @@ Runtime repository types persist `stage_topology_version` and support `skipStage
 - Accepted B non-sync blobs: `7/7` unchanged
 - Accepted Planning blobs: `5/5` unchanged
 - Legacy-six report and Decision Card: deep-equal parity PASS
-- Dedicated verifier: existing `99` checks retained and correction assertions PASS
+- Dedicated verifier: `154` checks PASS, including the retained existing `99`
 - Decision Policy verifier: `40/40`
 - Typecheck: PASS
 - Lint: PASS, warnings `0`
 - Production build: PASS
 - `git diff --check`: PASS
 
-These are Fake/offline and static results. They do not claim Provider quality, live persistence compatibility, migration application, isolated E2E readiness, or Runtime activation.
+These are Fake/offline and static results. They establish the accepted inactive implementation boundary only; they do not establish Provider quality, live persistence compatibility, migration application, isolated E2E readiness, or Runtime activation.
+
+## Immutable cumulative implementation manifest
+
+1. `lib/assessment/runtime/types.ts`
+2. `lib/assessment/runtime/pipeline.ts`
+3. `lib/assessment/runtime/fakes.ts`
+4. `lib/assessment/runtime/schema-catalog.ts`
+5. `lib/assessment/runtime/supabase-repository.ts`
+6. `lib/assessment/runtime/safety-aggregation-v3.ts`
+7. `lib/assessment/runtime/candidate-safety-routing-v1.ts`
+8. `lib/assessment/runtime/contracts/runtime-stage-catalog-v9.json`
+9. `lib/assessment/runtime/contracts/pb-01-base-situation-v1.developer.md`
+10. `lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v1.developer.md`
+11. `lib/assessment/runtime/contracts/pb-02-split-safety-v1.developer.md`
+12. `lib/assessment/runtime/contracts/pb-03-split-projection-v1.developer.md`
+13. `lib/assessment/runtime/contracts/pb-04-split-decision-v1.developer.md`
+14. `lib/assessment/runtime/contracts/pb-05-split-report-v1.developer.md`
+15. `lib/assessment/runtime/contracts/pb-06-split-validator-v1.developer.md`
+16. `supabase/migrations/0004_m2_p4_candidate_source_isolation.sql`
+17. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/routing-fixtures-v1.json`
+18. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/capabilities-v1.json`
+19. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs`
+20. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md`
+21. `docs/CURRENT_FOCUS.md`
+22. `docs/WBS.md`
+23. `docs/CODEX_HANDOFF.md`
+
+## Immutable review-correction manifest
+
+1. `lib/assessment/runtime/pipeline.ts`
+2. `lib/assessment/runtime/contracts/runtime-stage-catalog-v9.json`
+3. `lib/assessment/runtime/contracts/pb-01-base-situation-v1.developer.md`
+4. `lib/assessment/runtime/contracts/pb-04-split-decision-v1.developer.md`
+5. `lib/assessment/runtime/contracts/pb-05-split-report-v1.developer.md`
+6. `lib/assessment/runtime/contracts/pb-06-split-validator-v1.developer.md`
+7. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/routing-fixtures-v1.json`
+8. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/capabilities-v1.json`
+9. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs`
+10. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md`
+11. `docs/CURRENT_FOCUS.md`
+12. `docs/WBS.md`
+13. `docs/CODEX_HANDOFF.md`
+
+## Exact acceptance-sync manifest
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md`
+3. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs`
+4. `docs/CURRENT_FOCUS.md`
+5. `docs/WBS.md`
+6. `docs/CODEX_HANDOFF.md`
+
+The other seventeen implementation paths remain content-identical to accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. This `6/6` synchronization does not extend or rewrite either immutable historical implementation snapshot.
+
+## Validation and acceptance statement
+
+Validated sequentially:
+
+1. `node scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs`
+2. `node evals/quality/m2-p4-i1/verify-decision-policy.mjs`
+3. `npm run typecheck`
+4. `npm run lint`
+5. `npm run build`
+6. `git diff --check`
+
+Verified result: acceptance sync `6/6`, immutable cumulative scope `23/23`, immutable correction scope `13/13`, non-sync implementation blobs `17/17` unchanged, accepted A `4/4`, accepted B `7/7`, accepted Planning `5/5`, predecessor Prompts `4/4`, verifier `154` checks, routing fixtures `20/20`, mutations `17/17`, Fake split scenarios `15`, payload routing `7/7`, Decision Policy `40/40`, typecheck PASS, lint PASS with warnings `0`, build PASS, migration unchanged and unapplied, Provider / DB / Supabase `0 / 0 / 0`, Active Service unchanged, and `git diff --check` PASS.
+
+Human / ChatGPT accepted complete. R3-R2-D is ready but remains unauthorized and was not started. R3-R2-E, R4, C2, Provider execution, migration application, Supabase access, Runtime activation, PR creation, and main integration remain unauthorized. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.

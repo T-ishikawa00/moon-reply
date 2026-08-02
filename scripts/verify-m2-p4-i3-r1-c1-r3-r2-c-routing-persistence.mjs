@@ -11,6 +11,9 @@ const repositoryRoot = path.resolve(
 );
 const baseline = "93893d78b58463b067a1419e8bf7056540636921";
 const correctionBaseline = "3afb05ad37073b6b95e872c2e34360341c2542dc";
+const acceptedImplementationCommit =
+  "7e09b540220eac3b0afb91bc9cfb822cc0ab632d";
+const expectedMainCommit = "61e33a10e195fad17e253a6b9719217e1992f273";
 const git = (...args) =>
   execFileSync(
     "git.exe",
@@ -40,6 +43,15 @@ const deepCheck = (name, actual, expected) => {
 };
 const exactKeys = (value, keys) =>
   JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort());
+const sameLiteralSet = (actual, expected) =>
+  JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort());
+const snapshotMatches = (snapshot, baseCommit, endCommit, exactPaths) =>
+  snapshot?.type === "historical_commit_range" &&
+  snapshot.base_commit_sha === baseCommit &&
+  snapshot.end_commit_sha === endCommit &&
+  snapshot.exact_paths === exactPaths &&
+  snapshot.immutable_snapshot === true &&
+  snapshot.include_working_tree === false;
 const safeCodeOf = (error) => error?.safeCode ?? error?.message;
 const exactScope = [
   "lib/assessment/runtime/types.ts",
@@ -81,12 +93,35 @@ const exactCorrectionScope = [
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
 ];
+const exactAcceptanceSyncScope = [
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const acceptanceSyncPathSet = new Set(exactAcceptanceSyncScope);
+const nonSyncImplementation = exactScope.filter(
+  (relativePath) => !acceptanceSyncPathSet.has(relativePath),
+);
 const trackedDiff = git("diff", "--name-only", baseline, "--").split(/\r?\n/u);
 const untracked = git("ls-files", "--others", "--exclude-standard").split(
   /\r?\n/u,
 );
 const actualScope = [...new Set([...trackedDiff, ...untracked].filter(Boolean))].sort();
-deepCheck("exact scope 23/23", actualScope, [...exactScope].sort());
+const historicalScope = git(
+  "diff",
+  "--name-only",
+  baseline,
+  acceptedImplementationCommit,
+  "--",
+).split(/\r?\n/u).filter(Boolean);
+check(
+  "exact cumulative scope 23/23",
+  sameLiteralSet(actualScope, exactScope) &&
+    sameLiteralSet(historicalScope, exactScope),
+);
 check("duplicate scope paths 0", new Set(exactScope).size === exactScope.length);
 const correctionTrackedDiff = git(
   "diff",
@@ -97,18 +132,39 @@ const correctionTrackedDiff = git(
 const actualCorrectionScope = [
   ...new Set([...correctionTrackedDiff, ...untracked].filter(Boolean)),
 ].sort();
-deepCheck(
-  "exact correction scope 13/13",
-  actualCorrectionScope,
-  [...exactCorrectionScope].sort(),
-);
+const historicalCorrectionScope = git(
+  "diff",
+  "--name-only",
+  correctionBaseline,
+  acceptedImplementationCommit,
+  "--",
+).split(/\r?\n/u).filter(Boolean);
 check(
-  "duplicate correction scope paths 0",
-  new Set(exactCorrectionScope).size === exactCorrectionScope.length,
+  "exact correction scope 13/13",
+  sameLiteralSet(actualCorrectionScope, exactCorrectionScope) &&
+    sameLiteralSet(historicalCorrectionScope, exactCorrectionScope),
+);
+const acceptanceTrackedDiff = git(
+  "diff",
+  "--name-only",
+  acceptedImplementationCommit,
+  "--",
+).split(/\r?\n/u);
+const actualAcceptanceSyncScope = [
+  ...new Set([...acceptanceTrackedDiff, ...untracked].filter(Boolean)),
+].sort();
+check(
+  "exact acceptance sync scope 6/6 and duplicate paths 0",
+  sameLiteralSet(actualAcceptanceSyncScope, exactAcceptanceSyncScope) &&
+    new Set(exactCorrectionScope).size === exactCorrectionScope.length &&
+    new Set(exactAcceptanceSyncScope).size === exactAcceptanceSyncScope.length,
 );
 
 const blobUnchanged = (relativePath) =>
   git("rev-parse", `${baseline}:${relativePath}`) ===
+  git("hash-object", relativePath);
+const blobUnchangedFromAcceptedImplementation = (relativePath) =>
+  git("rev-parse", `${acceptedImplementationCommit}:${relativePath}`) ===
   git("hash-object", relativePath);
 const acceptedAImplementation = [
   "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
@@ -141,8 +197,10 @@ check(
   acceptedBNonSync.every(blobUnchanged),
 );
 check(
-  "accepted Planning blobs 5/5 unchanged",
-  acceptedPlanning.every(blobUnchanged),
+  "accepted Planning 5/5 and non-sync implementation 17/17 unchanged",
+  acceptedPlanning.every(blobUnchanged) &&
+    nonSyncImplementation.length === 17 &&
+    nonSyncImplementation.every(blobUnchangedFromAcceptedImplementation),
 );
 const capabilitiesA = readJson(
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-a/capabilities-v1.json",
@@ -1126,15 +1184,91 @@ check(
     capabilities.persistence_routing_fixture_count === 4 &&
     capabilities.fake_split_scenario_count === 15,
 );
+const requiredAcceptanceDocumentFragments = {
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md": [
+    "human_chatgpt_accepted_complete",
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    `Accepted corrected implementation commit: \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact scope: `6/6`",
+    "Non-sync implementation blobs unchanged: `17/17`",
+    "R3-R2-D ready / authorized: `true / false`",
+  ],
+  "docs/CURRENT_FOCUS.md": [
+    "M2-P4-I3-R1-C1-R3-R2-C",
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization is exact `6/6`",
+    "non-sync implementation blobs are unchanged `17/17`",
+  ],
+  "docs/WBS.md": [
+    "M2-P4-I3-R1-C1-R3-R2-C Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`",
+    `Accepted corrected implementation commit \`${acceptedImplementationCommit}\``,
+    "Acceptance synchronization exact `6/6`",
+    "non-sync implementation blobs `17/17` unchanged",
+  ],
+  "docs/CODEX_HANDOFF.md": [
+    "human_chatgpt_accepted_complete",
+    acceptedImplementationCommit,
+    "acceptance synchronization `6/6`",
+    "non-sync implementation blobs `17/17`",
+    "ready but unauthorized",
+  ],
+};
+const acceptanceDocumentsRecorded = Object.entries(
+  requiredAcceptanceDocumentFragments,
+).every(([relativePath, fragments]) => {
+  const document = readText(relativePath);
+  return fragments.every((fragment) => document.includes(fragment));
+});
 check(
-  "review correction capability recorded",
-  capabilities.status === "implementation_pending_human_chatgpt_review" &&
-    capabilities.review_correction ===
-      "implemented_pending_human_chatgpt_review" &&
+  "accepted capability and documentation recorded",
+  capabilities.status === "human_chatgpt_accepted_complete" &&
+    capabilities.implementation_accepted === true &&
+    capabilities.accepted_implementation_commit ===
+      acceptedImplementationCommit &&
+    capabilities.initial_implementation_commit === correctionBaseline &&
+    capabilities.review_correction_commit === acceptedImplementationCommit &&
+    snapshotMatches(
+      capabilities.implementation_snapshot,
+      baseline,
+      acceptedImplementationCommit,
+      23,
+    ) &&
+    snapshotMatches(
+      capabilities.review_correction_snapshot,
+      correctionBaseline,
+      acceptedImplementationCommit,
+      13,
+    ) &&
+    capabilities.review_correction === "human_chatgpt_accepted_complete" &&
     capabilities.prompt_responsibility_parity === "PASS" &&
     capabilities.candidate_persistence_error_ownership === "PASS" &&
     capabilities.correction_scope === "13/13" &&
-    capabilities.original_cumulative_scope === "23/23",
+    capabilities.original_cumulative_scope === "23/23" &&
+    capabilities.exact_mutation_path_count === 23 &&
+    sameLiteralSet(capabilities.exact_mutation_paths, exactScope) &&
+    capabilities.review_correction_exact_scope === "13/13" &&
+    capabilities.review_correction_exact_path_count === 13 &&
+    sameLiteralSet(
+      capabilities.review_correction_exact_paths,
+      exactCorrectionScope,
+    ) &&
+    capabilities.acceptance_sync_exact_scope === "6/6" &&
+    capabilities.acceptance_sync_exact_path_count === 6 &&
+    sameLiteralSet(
+      capabilities.acceptance_sync_exact_paths,
+      exactAcceptanceSyncScope,
+    ) &&
+    capabilities.non_sync_implementation_blobs_unchanged === "17/17" &&
+    capabilities.accepted_a_implementation_blobs_unchanged === "4/4" &&
+    capabilities.accepted_b_non_sync_blobs_unchanged === "7/7" &&
+    capabilities.accepted_planning_blobs_unchanged === "5/5" &&
+    capabilities.predecessor_accepted_prompt_blobs_unchanged === "4/4" &&
+    capabilities.dedicated_verifier_check_count === 154 &&
+    capabilities.retained_original_check_count === 99 &&
+    capabilities.decision_policy_result === "40/40" &&
+    capabilities.human_chatgpt_review === "accepted_complete" &&
+    acceptanceDocumentsRecorded,
 );
 
 let mutationCount = 0;
@@ -1182,10 +1316,39 @@ check("Provider calls 0", capabilities.provider_calls === 0 && available.transpo
 check("DB operations 0", capabilities.db_operations === 0);
 check("Supabase operations 0", capabilities.supabase_operations === 0);
 check("service catalog activation unchanged", capabilities.active_service_catalog_changed === false);
-check("R3-R2-D unauthorized", capabilities.r3_r2_d_authorized === false);
+check(
+  "acceptance boundaries and main unchanged",
+  capabilities.provider_quality_established === false &&
+    capabilities.migration_applied === false &&
+    capabilities.live_db_compatibility_established === false &&
+    capabilities.active_runtime_activated === false &&
+    capabilities.main_changed === false &&
+    capabilities.r3_r2_d_ready === true &&
+    capabilities.r3_r2_d_authorized === false &&
+    capabilities.r3_r2_e_authorized === false &&
+    capabilities.r4_authorized === false &&
+    capabilities.c2_authorized === false &&
+    capabilities.next_candidate ===
+      "M2-P4-I3-R1-C1-R3-R2-D Offline Counterfactual and Historical Regression" &&
+    capabilities.next_candidate_authorized === false &&
+    git("rev-parse", "main") === expectedMainCommit &&
+    git("rev-parse", "origin/main") === expectedMainCommit,
+);
 check("git diff --check PASS", git("diff", "--check").length === 0);
 
 assert.ok(checkCount >= 99, `existing 99-check coverage not retained: ${checkCount}`);
 console.log(
   `M2-P4-I3-R1-C1-R3-R2-C routing/persistence verifier: PASS (${checkCount} checks including the existing 99, ${mutationCount} mutations, 16 existing + ${routingFixtures.cases.length - 16} persistence routing fixtures; Provider/DB/Supabase 0/0/0)`,
 );
+console.log("acceptance_sync_scope: 6/6");
+console.log("immutable_cumulative_scope: 23/23");
+console.log("immutable_correction_scope: 13/13");
+console.log("non_sync_implementation_blobs_unchanged: 17/17");
+console.log("accepted_a_blobs_unchanged: 4/4");
+console.log("accepted_b_blobs_unchanged: 7/7");
+console.log("accepted_planning_blobs_unchanged: 5/5");
+console.log("predecessor_prompt_blobs_unchanged: 4/4");
+console.log("migration_applied: false");
+console.log("live_db_compatibility_established: false");
+console.log("active_service_changed: false");
+console.log("r3_r2_d_ready_authorized: true/false");

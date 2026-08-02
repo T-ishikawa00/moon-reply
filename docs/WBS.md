@@ -53,12 +53,17 @@
 - [x] PB-01 Base semantic responsibility, PB-04 Decision product quality, PB-05 Report field/voice, and PB-06 validation-quality parity restored; four predecessor accepted Prompts unchanged
 - [x] PB-01C start/complete/fail/skip persistence ownership corrected to fail only as `M2_STAGE_PERSISTENCE_FAILED`, with no Candidate Safety/degraded/`safety_blocked` reclassification or duplicate Stage-failure write
 - [x] Existing `99` checks, `17/17` mutations, and `16/16` routing fixtures retained; persistence fixtures `4/4`, Fake split scenarios `15`, and Prompt parity assertions PASS
-- [ ] R3-R2-C Human / ChatGPT review
-- [ ] R3-R2-D Offline Counterfactual and Historical Regression — unauthorized
+- [x] M2-P4-I3-R1-C1-R3-R2-C Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- [x] Accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`; initial implementation commit `3afb05ad37073b6b95e872c2e34360341c2542dc`
+- [x] Immutable cumulative snapshot exact `23/23`: `93893d78b58463b067a1419e8bf7056540636921..7e09b540220eac3b0afb91bc9cfb822cc0ab632d`; working tree excluded
+- [x] Immutable review-correction snapshot exact `13/13`: `3afb05ad37073b6b95e872c2e34360341c2542dc..7e09b540220eac3b0afb91bc9cfb822cc0ab632d`; working tree excluded
+- [x] Acceptance synchronization exact `6/6`; non-sync implementation blobs `17/17` unchanged; accepted A `4/4`, B `7/7`, Planning `5/5`, and predecessor Prompts `4/4` unchanged
+- [x] Dedicated verifier `154` checks, fixtures `20/20`, mutations `17/17`, Fake split scenarios `15`, payload routing `7/7`, Policy `40/40`, typecheck, lint warnings `0`, build, and `git diff --check` PASS
+- [ ] R3-R2-D Offline Counterfactual and Historical Regression — ready, unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-C status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`; R1 correction is `implemented_pending_human_chatgpt_review` in exact scope `13/13`, with original C cumulative scope `23/23`. It establishes only the offline/Fake inactive split Pipeline, exact topology/routing, restored Prompt responsibility parity, Candidate Safety/fidelity semantics, and corrected Stage-persistence error ownership. Migration application, live DB compatibility, Provider quality, isolated E2E readiness, Runtime activation, and acceptance are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, and `main` is unchanged. R3-R2-D/E, R4, C2, E1, PR, and main merge remain unauthorized.
+Current R3-R2-C status is `human_chatgpt_accepted_complete` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence` at accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. Acceptance establishes only the offline/Fake inactive split Pipeline, exact topology/routing, restored Prompt responsibility parity, Candidate Safety/fidelity semantics, corrected Stage-persistence error ownership, and the unapplied migration artifact. Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, production readiness, and Milestone 2 completion are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, Active Runtime is not activated, and `main` is unchanged. R3-R2-D is ready but unauthorized; R3-R2-E, R4, C2, E1, PR, and main merge remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
