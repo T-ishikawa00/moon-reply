@@ -9,8 +9,12 @@
 - Baseline: `df03cc2cc374ed059d40c122788e736f75883758`
 - Planning review correction base: `b4e0300d78d4782a99cb8fdca178722ca9df7dd1`
 - Planning review correction: `implemented_pending_human_chatgpt_review`
+- PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 draft authority correction task: `M2-P4-I3-R1-C1-R3-R2-R2`
+- PB-06 draft authority correction title: `PB-06 Candidate Draft Authority Planning Correction`
 - Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
-- Exact scope: `10/10`
+- Prior planning review correction scope: `10/10`
+- PB-06 draft authority correction scope: `5/5`
 - Provider calls / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Active Runtime / Prompt / Schema / Pipeline / Service changed: `false / false / false / false / false`
 - R4 / C2 authorized: `false / false`
@@ -27,6 +31,8 @@ The planning package therefore selects separate Provider boundaries:
 The successor disposition is recorded separately. No historical R3 or R3-R1 dedicated artifact is rewritten.
 
 The architecture direction is accepted; the Planning Package remains pending Human / ChatGPT acceptance. This exact `10/10` correction resolves the five review gaps: independent PB-06 candidate fidelity, typed absent/unavailable routing, removal of arbitrary Production literal rejection, authoritative persisted topology selection, and Application-canonical Base fields.
+
+The final Planning-only correction fixes the PB-06 draft-text authority in an exact existing-path scope of `5/5`. It does not alter the accepted architecture direction, routing topology, or implementation authority.
 
 ## Architecture review points
 
@@ -56,7 +62,11 @@ Candidate Safety includes bounded `untrusted_embedded_instruction_detected`. PB-
 
 Base failure is terminal. Candidate analysis is nonblocking only when candidate Safety independently remains valid, aggregate Safety is normal, no candidate semantics are fabricated, and PB-04 uses the conservative minimal-edit fallback. Candidate Safety unavailable is fail-closed before candidate generation.
 
-PB-04 receives `candidate_envelope` and nullable `user_supplied_optional_message`; PB-05 receives `candidate_envelope` with `decision_plan`; PB-06 receives `candidate_envelope`, nullable original candidate, `decision_plan`, and `report_content`. PB-06 independently compares the final recommended draft with the original candidate for dates/days/times/numbers, names/referents, polarity, acceptance/refusal, questions/invitations, commitments, affection, pressure, and boundary/contact-stop meaning. It verifies candidate content was not treated as sent/received fact, `preserved_meaning` is truthful, and fallback added no meaning. Material drift remains major/critical and fail-closed.
+PB-04 receives `candidate_envelope` and nullable `user_supplied_optional_message`; PB-05 receives `candidate_envelope` with `decision_plan`; PB-06 receives `candidate_envelope`, nullable original candidate, `decision_plan`, and `report_content`. The original candidate authority is exactly `user_supplied_optional_message`; the final draft-text authority is exactly `decision_plan.recommended_message_draft.text`. `report_content` is limited to report-explanation consistency, `report_content.message_draft_context` consistency, and detection of false statements about how the draft changed. It is not draft-text authority.
+
+For `reply_now` and `send_now`, `recommended_message_draft` must be non-null with `required_now / now`, and PB-06 compares its `.text` against the original candidate. For `wait_and_reassess`, a non-null draft must be `later_only / later` and undergo the same comparison; a null draft is Policy-permitted only with null `message_draft_edit_metadata`, and no false preserved-meaning PASS is allowed. For `pause_additional_contact`, both fields must be null, no workaround or rewritten candidate may appear, text equivalence is not applicable, and boundary/Safety consistency remains blocking.
+
+PB-06 validates dates/days/times/numbers, names/referents, polarity, acceptance/refusal, questions/invitations, commitments, affection, pressure, and boundary/contact-stop meaning. It independently checks PB-04's `decision_plan.message_draft_edit_metadata`, verifies candidate content was not treated as sent/received fact, and confirms that truthful `preserved_meaning` and fallback behavior added no meaning. Material drift remains major/critical and fail-closed.
 
 ## Exact planning artifacts
 
@@ -78,7 +88,15 @@ Existing rolling documents, limited to their separate R3-R2 blocks:
 
 No Runtime or verifier file is in scope.
 
-All ten paths existed at correction start; this correction adds no path.
+The prior `10/10` planning review correction manifest remains historical context. This PB-06 draft-authority correction updates only these existing paths:
+
+1. `docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md`
+3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/architecture-contract-v1.json`
+4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json`
+5. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json`
+
+All five paths existed at correction start; this correction adds no path.
 
 ## Counterfactual review
 
@@ -104,7 +122,7 @@ All A-through-E exact path counts and path lists are unchanged. Any required fut
 
 The following checks must be completed before commit:
 
-- [x] exact planning scope `10/10`
+- [x] PB-06 draft-authority correction exact scope `5/5`; prior planning review correction scope remains `10/10`
 - [x] Runtime diff `0`
 - [x] Prompt diff `0`
 - [x] Schema diff `0`
@@ -117,15 +135,20 @@ The following checks must be completed before commit:
 - [x] Provider calls `0`
 - [x] DB / Supabase operations `0`
 - [x] holdout / real-user data `0`
-- [x] JSON parse PASS: `5/5`
+- [x] corrected JSON parse PASS: `3/3`
 - [x] `CandidateEnvelope` fully specified
 - [x] PB-06 original-candidate fidelity route specified
+- [x] final draft-text source is exactly `decision_plan.recommended_message_draft.text`
+- [x] no contract identifies `report_content` as draft-text authority
+- [x] nullable draft behavior is defined for `reply_now`, `send_now`, `wait_and_reassess`, and `pause_additional_contact`
+- [x] PB-06 independently checks PB-04 `message_draft_edit_metadata`
 - [x] absent/unavailable distinction preserved through PB-06
 - [x] arbitrary Production candidate-literal scanning removed
 - [x] registered Sentinel scanning restricted to tests
 - [x] legitimate-overlap no-false-positive gate specified
 - [x] Application-owned Base fields specified
 - [x] authoritative `stage_topology_version` specified
+- [x] CandidateEnvelope routing, Source Isolation architecture, stage topology, legitimate-overlap gate, and A-through-E manifests unchanged
 - [x] required architecture assertions PASS
 - [x] `git diff --check` PASS
 

@@ -7,10 +7,14 @@
 - Baseline: `df03cc2cc374ed059d40c122788e736f75883758`
 - Planning review correction base: `b4e0300d78d4782a99cb8fdca178722ca9df7dd1`
 - Planning review correction: `implemented_pending_human_chatgpt_review`
+- PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 draft authority correction task: `M2-P4-I3-R1-C1-R3-R2-R2`
+- PB-06 draft authority correction title: `PB-06 Candidate Draft Authority Planning Correction`
 - Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
 - `main` / `origin/main`: `61e33a10e195fad17e253a6b9719217e1992f273`
 - Task type: Planning-only
-- Exact mutation scope: `10/10`
+- Prior planning review correction scope: `10/10`
+- PB-06 draft authority correction scope: `5/5`
 - Provider calls / DB operations / Supabase operations / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Runtime / Prompt / Schema / Pipeline / Service / DB-migration implementation: `0 / 0 / 0 / 0 / 0 / 0`
 
@@ -43,6 +47,8 @@ The architecture direction above is accepted for correction purposes, but the Pl
 3. Production Source Integrity uses structural ownership and source-ref proofs, not arbitrary candidate-literal rejection.
 4. Persisted parent-run `stage_topology_version` is the authoritative topology discriminator.
 5. Application-owned Base relationship and request fields remain canonical over Provider output.
+
+The final PB-06 draft-authority correction is implemented in an exact existing-path scope of `5/5`. It corrects only the planned authority and decision-mode validation contract; it does not change `CandidateEnvelope` routing, Source Isolation architecture, `stage_topology_version`, the legitimate-overlap gate, or any A-through-E path manifest.
 
 ## 3. Non-negotiable isolation invariants
 
@@ -266,7 +272,9 @@ Any non-normal aggregate blocks ordinary PB-04 through PB-06 generation. Safety 
 
 The exact candidate-lane inputs are PB-04 `candidate_envelope / user_supplied_optional_message`, PB-05 `candidate_envelope / decision_plan`, and PB-06 `candidate_envelope / user_supplied_optional_message / decision_plan / report_content`. Raw `optional_message` is not sent to PB-05. Candidate response IDs, Stage usage, latency, fixture IDs, Stage IDs, and expected values are never routed. No `structured_intake` alias may conceal a merged Base/candidate object.
 
-When `candidate_envelope.presence=true`, PB-06 independently compares the final recommended draft in `report_content` with the original `user_supplied_optional_message`. The hard fidelity checks cover, where applicable:
+The original candidate authority is exactly `user_supplied_optional_message`. The final recommended draft-text authority is exactly `decision_plan.recommended_message_draft.text`. `report_content` remains a PB-06 input only for report-explanation consistency, `report_content.message_draft_context` consistency, and detection of false statements about how the draft changed; it is not the source or authority for final draft text.
+
+When the selected decision and draft nullability require text comparison, PB-06 independently compares `user_supplied_optional_message` with `decision_plan.recommended_message_draft.text`. The hard fidelity checks cover, where applicable:
 
 - dates, days of week, times, and numbers;
 - names and explicit referents;
@@ -277,7 +285,16 @@ When `candidate_envelope.presence=true`, PB-06 independently compares the final 
 - response pressure;
 - boundaries and contact-stop meaning.
 
-PB-06 must prove that no candidate content was treated as a sent or received fact, `message_draft_edit_metadata.preserved_meaning` is truthful, and conservative-minimal-edit fallback added no meaning. Material candidate drift is major/critical and fail-closed. PB-06 performs these checks from the original candidate independently of PB-04 metadata; the raw candidate remains untrusted data, never an instruction.
+Decision-mode fidelity is fixed as follows:
+
+| `decision_plan.selected_decision` | Recommended draft and PB-06 behavior |
+| --- | --- |
+| `reply_now` | `recommended_message_draft` is non-null with `policy=required_now` and `use_timing=now`; compare the original candidate with `.text`. |
+| `send_now` | `recommended_message_draft` is non-null with `policy=required_now` and `use_timing=now`; compare the original candidate with `.text`. |
+| `wait_and_reassess` | A non-null draft must use `policy=later_only` and `use_timing=later`, then undergo candidate fidelity comparison. A null draft is permitted by Policy only with null `message_draft_edit_metadata`; PB-06 must not emit a false preserved-meaning PASS. |
+| `pause_additional_contact` | `recommended_message_draft` and `message_draft_edit_metadata` are both null. No contact workaround or rewritten candidate may appear. Text-equivalence comparison is not applicable; boundary and Safety consistency remain blocking. |
+
+PB-06 must prove that no candidate content was treated as a sent or received fact and independently check PB-04's `decision_plan.message_draft_edit_metadata`, including whether `preserved_meaning` is truthful and conservative-minimal-edit fallback added no meaning. Material candidate drift is major/critical and fail-closed. The raw candidate remains untrusted data, never an instruction.
 
 ## 10. Failure semantics
 
@@ -385,6 +402,7 @@ The immediate next candidate is `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts an
 
 - Candidate source isolation: `failed_in_current_single_stage_architecture`
 - Planning review correction: `implemented_pending_human_chatgpt_review`
+- PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
 - Architecture direction: `split_base_and_candidate_provider_stages`
 - R3-R1 context-inference canonicalization retained: `true`
 - Provider semantic quality established: `false`
@@ -400,16 +418,16 @@ The immediate next candidate is `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts an
 
 Required planning checks:
 
-1. exact mutation scope `10/10`;
+1. PB-06 draft-authority correction exact mutation scope `5/5`, with the prior planning review correction scope retained as `10/10`;
 2. Runtime / Prompt / Schema / Pipeline / Service / DB-migration diff `0`;
 3. historical R3 and R3-R1 dedicated artifacts unchanged;
 4. existing R3 and R3-R1 blocks in rolling documents preserved while only the separate R3-R2 block is corrected;
 5. Provider calls / DB or Supabase operations / holdout / real-user data `0`;
-6. all five Planning JSON assets parse (`5/5`);
-7. `CandidateEnvelope` and PB-06 raw-candidate fidelity routing are fully specified, including absent/unavailable propagation;
+6. all three corrected Planning JSON assets parse (`3/3`);
+7. `CandidateEnvelope` and PB-06 raw-candidate fidelity routing are fully specified, including all four decision modes and nullable draft behavior;
 8. Production arbitrary candidate-literal rejection is absent and registered Sentinel scanning is test-only;
 9. legitimate overlap, Application-owned Base fields, and authoritative `stage_topology_version` assertions pass;
-10. required architecture, routing, Safety, persistence, counterfactual, slice, and capability assertions pass;
+10. final draft-text authority is exactly `decision_plan.recommended_message_draft.text`, no contract treats `report_content` as draft-text authority, PB-04 metadata remains independently checked, and required architecture, routing, Safety, persistence, counterfactual, slice, and capability assertions pass;
 11. `git diff --check` passes.
 
 Automated planning PASS does not constitute Human / ChatGPT acceptance, does not establish Provider quality, and does not authorize R3-R2-A, R4, Runtime activation, C2, E1, PR, or main integration.

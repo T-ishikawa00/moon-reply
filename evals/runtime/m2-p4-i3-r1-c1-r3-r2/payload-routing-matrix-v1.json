@@ -2,8 +2,25 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-payload-routing-matrix-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2",
   "architecture": "split_base_and_candidate_provider_stages",
-  "status": "planning_pending_human_chatgpt_review",
+  "status": "candidate_source_isolation_architecture_pending_human_chatgpt_review",
   "planning_review_correction": "implemented_pending_human_chatgpt_review",
+  "pb_06_draft_authority_correction": "implemented_pending_human_chatgpt_review",
+  "pb_06_draft_authority_correction_task_id": "M2-P4-I3-R1-C1-R3-R2-R2",
+  "pb_06_draft_authority_correction_title": "PB-06 Candidate Draft Authority Planning Correction",
+  "r3_r2_a_authorized": false,
+  "r4_authorized": false,
+  "c2_authorized": false,
+  "exact_correction_scope": {
+    "path_count": 5,
+    "new_paths": 0,
+    "paths": [
+      "docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/architecture-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json"
+    ]
+  },
   "principles": [
     "Base consultation facts and optional candidate semantics remain separate through PB-06.",
     "Raw optional_message is visible only to deterministic Safety, PB-01C, PB-04, and PB-06.",
@@ -343,9 +360,44 @@
       "raw_candidate_role": "inert_untrusted_user_data_not_instruction",
       "embedded_candidate_instruction_following_allowed": false,
       "candidate_fidelity_validation": {
-        "independent_original_to_final_draft_comparison_when_presence_true": true,
+        "decision_mode_aware_independent_original_to_final_draft_comparison": true,
         "original_candidate": "user_supplied_optional_message",
-        "final_recommended_draft": "report_content",
+        "final_recommended_draft": "decision_plan.recommended_message_draft.text",
+        "report_content_is_draft_text_authority": false,
+        "report_content_roles": [
+          "report_explanation_consistency",
+          "report_content.message_draft_context_consistency",
+          "no_false_statement_about_how_draft_changed"
+        ],
+        "decision_modes": {
+          "reply_now": {
+            "recommended_message_draft_non_null": true,
+            "required_policy": "required_now",
+            "required_use_timing": "now",
+            "candidate_fidelity_comparison": "user_supplied_optional_message_vs_decision_plan.recommended_message_draft.text"
+          },
+          "send_now": {
+            "recommended_message_draft_non_null": true,
+            "required_policy": "required_now",
+            "required_use_timing": "now",
+            "candidate_fidelity_comparison": "user_supplied_optional_message_vs_decision_plan.recommended_message_draft.text"
+          },
+          "wait_and_reassess": {
+            "recommended_message_draft_nullable_by_policy": true,
+            "when_non_null_required_policy": "later_only",
+            "when_non_null_required_use_timing": "later",
+            "when_non_null_candidate_fidelity_comparison": "user_supplied_optional_message_vs_decision_plan.recommended_message_draft.text",
+            "when_null_message_draft_edit_metadata_must_be_null": true,
+            "when_null_false_preserved_meaning_pass_allowed": false
+          },
+          "pause_additional_contact": {
+            "recommended_message_draft_must_be_null": true,
+            "message_draft_edit_metadata_must_be_null": true,
+            "contact_workaround_or_rewritten_candidate_allowed": false,
+            "text_equivalence_comparison": "not_applicable",
+            "boundary_and_safety_consistency_blocking": true
+          }
+        },
         "checks_where_applicable": [
           "dates",
           "days_of_week",
@@ -363,6 +415,8 @@
         ],
         "candidate_content_treated_as_sent_or_received_fact_allowed": false,
         "message_draft_edit_metadata.preserved_meaning_must_be_truthful": true,
+        "pb_04_message_draft_edit_metadata_source": "decision_plan.message_draft_edit_metadata",
+        "pb_04_message_draft_edit_metadata_independently_checked": true,
         "conservative_minimal_edit_fallback_may_add_meaning": false,
         "material_candidate_drift_severity": "major_or_critical",
         "material_candidate_drift_fail_closed": true,
