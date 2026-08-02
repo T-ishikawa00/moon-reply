@@ -1,0 +1,563 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-architecture-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2",
+  "title": "Candidate Source Isolation Architecture Planning",
+  "status": "candidate_source_isolation_architecture_pending_human_chatgpt_review",
+  "task_type": "planning_only",
+  "baseline": "df03cc2cc374ed059d40c122788e736f75883758",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "origin_main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-candidate-source-isolation",
+  "accepted_decision": {
+    "option": "B",
+    "decision": "separate_provider_boundaries_for_base_situation_and_optional_candidate_message",
+    "candidate_source_isolation_current_architecture": "FAIL",
+    "evidence_case": "R3-03",
+    "failure": "candidate_only_thursday_15_00_was_merged_into_an_other_person_incoming_timeline_statement",
+    "root_cause": "single_pb_01_request_exposed_base_and_candidate_sources_to_one_natural_language_generation_boundary",
+    "rejected_remediation": "application_side_language_independent_removal_after_semantic_merge",
+    "reason": "Once meanings have been merged into a single natural-language statement, deterministic removal cannot reliably recover source ownership.",
+    "r3_r1_context_inference_canonicalization_retained": true,
+    "r3_r1_historical_artifacts_rewritten": false,
+    "successor_disposition_recorded_separately": true,
+    "superseded_pending_isolation_claims": [
+      "provider_semantic_quality_established=true",
+      "candidate_ready_for_isolated_e2e=true"
+    ],
+    "r4": "HOLD",
+    "runtime_activation": "HOLD",
+    "c2": "HOLD"
+  },
+  "exact_planning_scope": {
+    "path_count": 10,
+    "paths": [
+      "docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/architecture-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/counterfactual-suite-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/safety-failure-matrix-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md"
+    ],
+    "runtime_changes": 0,
+    "prompt_changes": 0,
+    "schema_changes": 0,
+    "pipeline_changes": 0,
+    "service_changes": 0,
+    "db_or_migration_changes": 0,
+    "verifier_changes": 0
+  },
+  "observed_current_constraints": {
+    "current_stage_ids": [
+      "PB-01",
+      "PB-02",
+      "PB-03",
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "current_sequence_numbers": {
+      "PB-01": 1,
+      "PB-02": 2,
+      "PB-03": 3,
+      "PB-04": 4,
+      "PB-05": 5,
+      "PB-06": 6
+    },
+    "assessment_stage_runs_unique_key": [
+      "run_id",
+      "stage_id"
+    ],
+    "assessment_stage_runs_statuses": [
+      "processing",
+      "completed",
+      "failed"
+    ],
+    "response_id_nullable": true,
+    "usage_fields_nonnegative": true,
+    "stage_sequence_check_is_hard_coded": true,
+    "catalog_stage_count_is_six": true,
+    "stage_id_types_are_closed": true,
+    "implication": "The split cannot be implemented safely by adding only a Provider call. Types, catalogs, persistence status, sequence constraints, fake transport coverage, routing, usage, and historical topology validation must move together in later accepted slices."
+  },
+  "successor_stage_topology": {
+    "topology_version": "split-base-candidate-v1",
+    "stages": [
+      {
+        "stage_id": "PB-01",
+        "name": "Base Situation Intake",
+        "sequence_number": 1,
+        "provider_call": "required",
+        "failure": "fail_closed"
+      },
+      {
+        "stage_id": "PB-01C",
+        "name": "Candidate Message Analysis",
+        "sequence_number": 2,
+        "provider_call": "only_when_trimmed_optional_message_non_empty",
+        "failure": "conditionally_nonblocking"
+      },
+      {
+        "stage_id": "PB-02",
+        "name": "Safety Semantic",
+        "sequence_number": 3,
+        "provider_call": "required_after_safety_inputs_established"
+      },
+      {
+        "stage_id": "PB-03",
+        "name": "Eligibility Projection",
+        "sequence_number": 4,
+        "provider_call": "required"
+      },
+      {
+        "stage_id": "PB-04",
+        "name": "Decision Plan",
+        "sequence_number": 5,
+        "provider_call": "only_when_application_eligibility_ready"
+      },
+      {
+        "stage_id": "PB-05",
+        "name": "Report Writer",
+        "sequence_number": 6,
+        "provider_call": "only_when_application_eligibility_ready"
+      },
+      {
+        "stage_id": "PB-06",
+        "name": "Semantic Validator",
+        "sequence_number": 7,
+        "provider_call": "only_when_application_eligibility_ready"
+      }
+    ],
+    "candidate_stage_id_decision": {
+      "stage_id": "PB-01C",
+      "reason": "It is explicitly candidate-owned, remains adjacent to Base PB-01, and avoids renaming the historical PB-01 identity.",
+      "base_stage_id_changed": false,
+      "pb_02_through_pb_06_sequence_numbers_change_for_successor_runs": true,
+      "historical_sequence_numbers_change": false
+    },
+    "historical_compatibility": {
+      "historical_six_stage_rows_mutated": false,
+      "historical_catalogs_mutated": false,
+      "discriminator": [
+        "assessment_runs.schema_set_version",
+        "assessment_runs.prompt_bundle_version",
+        "runtime_stage_catalog_version"
+      ],
+      "six_stage_topology": "PB-01:1,PB-02:2,PB-03:3,PB-04:4,PB-05:5,PB-06:6",
+      "split_topology": "PB-01:1,PB-01C:2,PB-02:3,PB-03:4,PB-04:5,PB-05:6,PB-06:7",
+      "reader_rule": "Readers and verifiers must select the expected topology from the parent run version and must never infer corruption merely because a historical run has six rows.",
+      "future_persistence_change": "Replace the single hard-coded stage-to-sequence check with version-aware application integrity plus a database-compatible union of historical and successor pairs; add unique(run_id, sequence_number); do not update existing rows."
+    }
+  },
+  "base_situation_stage": {
+    "stage_id": "PB-01",
+    "input_required_keys": [
+      "current_situation",
+      "relationship",
+      "requested_topics"
+    ],
+    "input_additional_properties": false,
+    "forbidden_input_keys": [
+      "optional_message",
+      "candidate_text",
+      "candidate_presence",
+      "candidate_style",
+      "candidate_intent",
+      "candidate_expected_values",
+      "case_id",
+      "oracle",
+      "expected"
+    ],
+    "owned_output_surfaces": [
+      "timeline",
+      "context",
+      "observed_facts",
+      "material_unknowns",
+      "decision_facts",
+      "relationship_semantics",
+      "communication_pattern_from_current_situation",
+      "message_ownership_from_current_situation",
+      "boundary_ownership",
+      "privacy_repeat_injection_semantics_from_current_situation"
+    ],
+    "base_schema_has_candidate_fields": false,
+    "forbidden_base_output_fields": [
+      "optional_message",
+      "candidate_analysis",
+      "candidate_style_profile",
+      "candidate_communicative_intent",
+      "candidate_language_expression",
+      "candidate_safety_signals",
+      "proposed_message_present"
+    ],
+    "source_ref_allowlist": [
+      "input:current_situation",
+      "input:relationship",
+      "input:requested_topics"
+    ],
+    "forbidden_source_ref": "input:optional_message",
+    "source_ref_enforcement": [
+      "base_schema_enum",
+      "typed_field_ownership_validator",
+      "recursive_base_surface_integrity_validator"
+    ],
+    "raw_output_name": "raw_base_structured_intake",
+    "grounded_output_name": "base_structured_intake",
+    "legacy_output_name": "base_legacy_view",
+    "candidate_data_in_any_base_surface": "forbidden"
+  },
+  "candidate_message_stage": {
+    "stage_id": "PB-01C",
+    "call_condition": "trim(optional_message).length > 0",
+    "input_required_keys": [
+      "optional_message",
+      "candidate_metadata"
+    ],
+    "candidate_metadata": {
+      "message_owner": "user",
+      "message_status": "unsent_candidate"
+    },
+    "input_additional_properties": false,
+    "forbidden_input_keys": [
+      "current_situation",
+      "relationship",
+      "requested_topics",
+      "base_structured_intake",
+      "decision_facts",
+      "case_id",
+      "oracle",
+      "expected_candidate_style",
+      "expected_candidate_intent",
+      "expected_values"
+    ],
+    "provider_output_exact_keys": [
+      "candidate_style_profile",
+      "candidate_communicative_intent",
+      "candidate_language_expression",
+      "candidate_safety_signals"
+    ],
+    "provider_output_additional_properties": false,
+    "forbidden_provider_output_fields": [
+      "timeline",
+      "context",
+      "observed_facts",
+      "material_unknowns",
+      "relationship_stage",
+      "decision_facts",
+      "incoming_message_facts",
+      "boundary_facts",
+      "source_refs",
+      "ids",
+      "sequence"
+    ],
+    "application_owned_fields": [
+      "candidate_presence",
+      "candidate_analysis_status",
+      "source_refs",
+      "ids",
+      "sequence",
+      "nullability",
+      "allowlist_merge"
+    ],
+    "provider_may_copy_raw_candidate_text_to_output": false
+  },
+  "application_ownership": {
+    "base_and_candidate_merged_into_structured_intake": false,
+    "candidate_presence": "trimmed_optional_message_non_empty",
+    "candidate_source_ref": "input:optional_message",
+    "candidate_source_refs_attach_only_to_candidate_owned_envelope": true,
+    "candidate_ids_and_sequence_generated_after_provider_validation": true,
+    "candidate_nullability": [
+      "absent",
+      "available",
+      "unavailable"
+    ],
+    "decision_policy_owns_candidate_presence_effect": true,
+    "aggregate_safety_owns_cross_channel_disposition": true,
+    "no_merged_object_may_present_candidate_content_as_consultation_fact": true
+  },
+  "r3_r1_successor_disposition": {
+    "context_inference_canonicalization": "accepted_retained_on_base_grounding_path",
+    "historical_status": "preserved",
+    "provider_semantic_quality_established": false,
+    "candidate_ready_for_isolated_e2e": false,
+    "reason": "R3-R1 corrected downstream canonicalization but did not prove source isolation because the single PB-01 request already contained both source classes."
+  },
+  "persistence_plan": {
+    "candidate_stage_row_when_present": "persist",
+    "candidate_stage_row_when_absent": "persist_zero_call_skipped_row",
+    "skipped_status": "skipped",
+    "skipped_response_id": null,
+    "skipped_returned_model": null,
+    "skipped_usage": {
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "skipped_latency_ms": 0,
+    "skipped_output_json": null,
+    "skipped_candidate_analysis": null,
+    "skipped_optional_source_ref_count": 0,
+    "response_id_storage": "store_only_on_the_stage_row_that_received_the_provider_response",
+    "candidate_response_id_propagated_downstream": false,
+    "usage_aggregation": {
+      "skipped_stage_contribution": 0,
+      "completed_stage": "add_once_after_response",
+      "failed_before_response": "zero",
+      "failed_after_response": "add_returned_usage_once",
+      "run_total": "sum_non_skipped_stage_usage_without_double_counting"
+    },
+    "error_code_ownership": {
+      "base_provider_or_schema_or_integrity": "base_stage_terminal_error",
+      "candidate_analysis_only": "M2_CANDIDATE_ANALYSIS_UNAVAILABLE",
+      "candidate_safety_unavailable": "M2_CANDIDATE_SAFETY_UNAVAILABLE",
+      "candidate_source_integrity": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED",
+      "base_source_integrity": "M2_BASE_SOURCE_INTEGRITY_FAILED",
+      "persistence": "M2_STAGE_PERSISTENCE_FAILED"
+    },
+    "implementation_slice": "R3-R2-C",
+    "implemented_in_this_task": false
+  },
+  "failure_semantics": {
+    "base_situation_stage_failure": {
+      "blocking": true,
+      "behavior": "fail_closed",
+      "downstream_provider_calls": 0
+    },
+    "candidate_stage_absent": {
+      "provider_calls": 0,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "absent",
+      "optional_source_refs": 0
+    },
+    "candidate_analysis_failure_with_independently_valid_candidate_safety": {
+      "blocking": false,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "unavailable",
+      "fabricate_candidate_semantics": false,
+      "raw_optional_message_remains_separate": true,
+      "pb_04_fallback": "conservative_minimal_editing_only",
+      "safety_enforced": true
+    },
+    "candidate_safety_unavailable": {
+      "blocking": true,
+      "behavior": "fail_closed_before_candidate_generation",
+      "exception": "If deterministic Safety already classifies needs_review or rejected, return the stricter safety_blocked result without candidate generation instead of masking it as a technical failure."
+    },
+    "candidate_stage_transport_failure": {
+      "candidate_analysis_status": "unavailable",
+      "candidate_safety_status": "unavailable",
+      "blocking_unless_deterministic_already_blocks": true
+    },
+    "conservative_minimal_editing": {
+      "allowed": [
+        "preserve_original_candidate_when_no_safe_edit_is_needed",
+        "correct_obvious_surface_typography",
+        "remove_content_forbidden_by_application_decision_policy"
+      ],
+      "forbidden": [
+        "add_facts",
+        "add_or_strengthen_commitment",
+        "add_or_strengthen_invitation",
+        "add_affection",
+        "add_question",
+        "increase_reply_pressure",
+        "infer_schedule_details",
+        "infer_relationship_meaning",
+        "override_explicit_boundary"
+      ]
+    }
+  },
+  "source_integrity_plan": {
+    "primary_guarantee": "request_separation",
+    "defense_in_depth": [
+      "closed_base_input_schema",
+      "closed_candidate_output_schema",
+      "exact_source_ref_enums",
+      "typed_surface_ownership",
+      "candidate_literal_and_sentinel_absence_checks",
+      "legacy_view_recursive_checks",
+      "null_candidate_optional_ref_zero_check"
+    ],
+    "generic_source_ref_regex_only": false,
+    "reject_conditions": [
+      "input:optional_message_ref_in_base_output",
+      "candidate_literal_in_base_timeline",
+      "candidate_literal_in_base_context",
+      "candidate_literal_in_base_observed_facts",
+      "candidate_literal_in_base_material_unknowns",
+      "candidate_derived_decision_fact",
+      "candidate_ref_in_base_legacy_view",
+      "base_fact_field_in_candidate_stage_output",
+      "optional_source_ref_when_optional_message_null"
+    ]
+  },
+  "rollout_slices": [
+    {
+      "slice_id": "R3-R2-A",
+      "title": "Split Stage Contracts and Schemas",
+      "exact_path_count": 10,
+      "exact_paths": [
+        "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
+        "lib/assessment/runtime/contracts/candidate-analysis-v1.schema.json",
+        "lib/assessment/runtime/contracts/split-stage-contracts-v1.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-a/stage-topology-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-a/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-a-split-contracts.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_A_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "scope": "stage_topology_schemas_and_typed_contracts_only",
+      "human_chatgpt_acceptance_required_before_next": true,
+      "authorized": false
+    },
+    {
+      "slice_id": "R3-R2-B",
+      "title": "Grounding, Allowlist Merge, and Source Integrity",
+      "exact_path_count": 13,
+      "exact_paths": [
+        "lib/assessment/runtime/base-structured-intake-grounding-v1.ts",
+        "lib/assessment/runtime/candidate-analysis-grounding-v1.ts",
+        "lib/assessment/runtime/base-structured-intake-legacy-view-v1.ts",
+        "lib/assessment/runtime/split-analysis-envelope-v1.ts",
+        "lib/assessment/runtime/base-source-integrity-v1.ts",
+        "lib/assessment/runtime/candidate-source-integrity-v1.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/source-integrity-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-b/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-b-source-integrity.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_B_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "scope": "application_grounding_allowlist_envelope_and_source_integrity_only",
+      "human_chatgpt_acceptance_required_before_next": true,
+      "authorized": false
+    },
+    {
+      "slice_id": "R3-R2-C",
+      "title": "Pipeline, Persistence, Safety, and Failure Semantics",
+      "exact_path_count": 23,
+      "exact_paths": [
+        "lib/assessment/runtime/types.ts",
+        "lib/assessment/runtime/pipeline.ts",
+        "lib/assessment/runtime/fakes.ts",
+        "lib/assessment/runtime/schema-catalog.ts",
+        "lib/assessment/runtime/supabase-repository.ts",
+        "lib/assessment/runtime/safety-aggregation-v3.ts",
+        "lib/assessment/runtime/candidate-safety-routing-v1.ts",
+        "lib/assessment/runtime/contracts/runtime-stage-catalog-v9.json",
+        "lib/assessment/runtime/contracts/pb-01-base-situation-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-02-split-safety-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-03-split-projection-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-04-split-decision-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-05-split-report-v1.developer.md",
+        "lib/assessment/runtime/contracts/pb-06-split-validator-v1.developer.md",
+        "supabase/migrations/0004_m2_p4_candidate_source_isolation.sql",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/routing-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-c/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-c-routing-persistence.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_C_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "scope": "inactive_successor_pipeline_catalog_prompts_persistence_safety_and_failure_semantics_only",
+      "active_service_catalog_change": false,
+      "db_operation_authorized": false,
+      "human_chatgpt_acceptance_required_before_next": true,
+      "authorized": false
+    },
+    {
+      "slice_id": "R3-R2-D",
+      "title": "Offline Counterfactual and Historical Regression",
+      "exact_path_count": 10,
+      "exact_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/counterfactual-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/historical-regression-manifest-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-d/capabilities-v1.json",
+        "scripts/lib/m2-p4-i3-r1-c1-r3-r2-d-offline-runner-v1.mjs",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-d-counterfactual.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_D_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "scope": "offline_counterfactual_isolation_and_historical_six_stage_regression_only",
+      "provider_calls": 0,
+      "db_operations": 0,
+      "human_chatgpt_acceptance_required_before_next": true,
+      "authorized": false
+    },
+    {
+      "slice_id": "R3-R2-E",
+      "title": "Bounded Split-Stage Provider Diagnostic",
+      "exact_path_count": 14,
+      "exact_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json",
+        "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs",
+        "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "post_run_mutable_path_count": 8,
+      "post_run_mutable_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md",
+        "docs/CURRENT_FOCUS.md",
+        "docs/WBS.md",
+        "docs/CODEX_HANDOFF.md"
+      ],
+      "scope": "bounded_provider_diagnostic_for_pb_01_and_pb_01c_only",
+      "human_chatgpt_acceptance_required_before_next": true,
+      "authorized": false
+    }
+  ],
+  "post_slice_boundaries": {
+    "R4": {
+      "title": "Isolated Full Runtime E2E",
+      "status": "HOLD",
+      "authorized": false,
+      "entry_gate": "R3-R2-E Human / ChatGPT accepted",
+      "exact_scope_and_call_budget_require_separate_human_authorization": true
+    },
+    "C2": {
+      "title": "Runtime Activation",
+      "status": "HOLD",
+      "authorized": false,
+      "entry_gate": "R4 Human / ChatGPT accepted",
+      "activation_only": true
+    }
+  },
+  "planning_validation_contract": {
+    "exact_planning_scope": "10/10",
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "holdout_use": 0,
+    "real_user_data": 0,
+    "json_parse_required": true,
+    "architecture_assertions_required": true,
+    "git_diff_check_required": true
+  }
+}

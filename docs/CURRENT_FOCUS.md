@@ -1,5 +1,11 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2:START -->
+## Immediate Candidate Source Isolation Planning Status
+
+M2-P4-I3-R1-C1-R3-R2 is `candidate_source_isolation_architecture_pending_human_chatgpt_review` on `docs/m2-p4-i3-r1-c1-r3-r2-candidate-source-isolation`. Candidate Source Isolation is `FAIL` in the current single PB-01 architecture because R3-03 merged candidate-only `木曜15時` into an `other_person` incoming Timeline statement. Decision B is controlling: retain PB-01 as a Base-only Situation Intake Stage and add separate PB-01C Candidate Message Analysis; never merge candidate semantics into Base Intake or Base Legacy View. R3-R1 context-inference canonicalization is retained, but its Provider-quality and isolated-E2E readiness claims are superseded pending isolation, so both are `false`. Exact Planning scope is `10/10`; Runtime, Prompt, Schema, Pipeline, Service, DB/migrations, Provider, Supabase, holdout, and real-user operations are all unchanged or zero. R4, Runtime activation, C2, E1, PR, and main merge are on hold. The next candidate is `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts and Schemas`, unauthorized pending Human / ChatGPT review and separate instruction.
+<!-- M2-P4-I3-R1-C1-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
 ## Immediate Offline Adjudication Status
 

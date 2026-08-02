@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2:START -->
+## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture Planning
+
+- [x] Candidate Source Isolation failure recorded separately from immutable R3/R3-R1 history
+- [x] Decision B fixed: separate Base PB-01 and Candidate PB-01C Provider boundaries
+- [x] Base-only Schema ownership, exact source-ref allowlist, and fail-closed Source Integrity planned
+- [x] Candidate-only output ownership, Application envelope ownership, and null/skipped semantics planned
+- [x] PB-02 through PB-06 split payload routing and Safety cross-channel routing planned
+- [x] Historical six-stage compatibility, successor sequences, response ID, usage, error, and skipped-row persistence decisions fixed
+- [x] Candidate A/B/null counterfactual hard gates and negative mutants fixed
+- [x] R3-R2-A through E exact future path manifests and sequential acceptance barriers fixed
+- [x] Exact Planning mutation scope fixed at `10/10`
+- [x] Automated Planning validation PASS
+- [ ] Human / ChatGPT review
+- [ ] R3-R2-A Split Stage Contracts and Schemas — unauthorized
+- [ ] R4 Isolated Full Runtime E2E — HOLD
+- [ ] C2 Runtime activation — HOLD
+
+Current status is `candidate_source_isolation_architecture_pending_human_chatgpt_review`. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
+<!-- M2-P4-I3-R1-C1-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
 ## M2-P4-I3-R1-C1-R3-R1 Offline Evidence Adjudication and Context-Inference Canonicalization
 

@@ -1,5 +1,11 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2:START -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2
+
+M2-P4-I3-R1-C1-R3-R2 is Planning-only at `candidate_source_isolation_architecture_pending_human_chatgpt_review` on `docs/m2-p4-i3-r1-c1-r3-r2-candidate-source-isolation`. Current single-stage PB-01 Candidate Source Isolation is `FAIL`: R3-03 merged candidate-only `木曜15時` into an `other_person` incoming Timeline statement. The successor direction is separate Provider boundaries: Base PB-01 receives only `current_situation / relationship / requested_topics`; Candidate PB-01C receives only non-empty `optional_message` plus constant unsent-candidate metadata. Candidate Safety remains separate, while deterministic Safety still inspects both raw inputs. Historical R3/R3-R1 artifacts and the existing R3-R1 blocks below remain unchanged; R3-R1 canonicalization is retained, but Provider semantic quality and isolated-E2E readiness are now `false / false` pending isolation. The exact task scope is `10/10`; Runtime, Prompt, Schema, Pipeline, Service, DB/migration, Provider, Supabase, holdout, and real-user changes/operations are zero. Automated Planning validation is `PASS`; Human / ChatGPT review remains pending. R3-R2-A is the next candidate but is unauthorized; R4, Runtime activation, C2, E1, PR, and main merge remain on hold or prohibited.
+<!-- M2-P4-I3-R1-C1-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R1
 

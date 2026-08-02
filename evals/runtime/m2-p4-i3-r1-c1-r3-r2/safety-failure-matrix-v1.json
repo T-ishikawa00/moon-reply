@@ -1,0 +1,344 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-safety-failure-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2",
+  "status": "planning_pending_human_chatgpt_review",
+  "safety_principle": "Candidate source isolation must not make Safety blind to optional_message.",
+  "mandatory_raw_deterministic_inspection": [
+    "current_situation",
+    "optional_message"
+  ],
+  "candidate_semantic_channel": {
+    "source": "PB-01C.candidate_safety_signals",
+    "application_projection": "candidate_safety_result",
+    "nullable_only_when_candidate_absent_or_candidate_analysis_unavailable": true,
+    "merged_into_base_structured_intake": false,
+    "copied_into_base_fact_surfaces": false
+  },
+  "pb_02_input": [
+    "base_structured_intake",
+    "deterministic_rule_result",
+    "candidate_safety_result"
+  ],
+  "pb_03_input": [
+    "base_structured_intake",
+    "aggregate_safety_result",
+    "application_eligibility_expectation"
+  ],
+  "safety_categories": [
+    {
+      "category": "threat_or_coercion",
+      "reason_codes": [
+        "threat_or_coercion",
+        "dv_abuse_fear"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "threat",
+        "coercion",
+        "fear_inducing_pressure",
+        "conditional_retaliation"
+      ],
+      "aggregate_rule": "strictest_of_deterministic_base_semantic_and_candidate_semantic",
+      "normal_flow": "blocked",
+      "response_mode": "abuse_safety_support_or_unsafe_contact_stop",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "stalking_or_contact_pressure",
+      "reason_codes": [
+        "stalking_or_visit",
+        "waiting_or_ambush",
+        "surveillance",
+        "repeated_unanswered_contact"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "uninvited_visit",
+        "location_tracking",
+        "repeat_contact_pressure",
+        "reply_demand"
+      ],
+      "cross_channel_inputs": [
+        "base_structured_intake.decision_facts.contact_state",
+        "base_structured_intake.decision_facts.boundary_state",
+        "candidate_safety_result"
+      ],
+      "aggregate_rule": "strictest_and_cross_channel_repeat_contact_check",
+      "normal_flow": "blocked",
+      "response_mode": "unsafe_contact_stop",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "doxxing_or_privacy_disclosure",
+      "reason_codes": [
+        "doxxing",
+        "third_party_secret"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "address_disclosure",
+        "identity_disclosure",
+        "account_disclosure",
+        "workplace_or_school_disclosure",
+        "third_party_sensitive_detail"
+      ],
+      "aggregate_rule": "strictest_with_privacy_minimization",
+      "normal_flow": "blocked_or_redacted_only_under_separately_accepted_policy",
+      "response_mode": "privacy_protection",
+      "candidate_draft_generation": "prohibited_in_v1_split_flow"
+    },
+    {
+      "category": "self_harm",
+      "reason_codes": [
+        "self_harm"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "self_harm_intent",
+        "self_harm_threat_as_pressure",
+        "suicidal_ideation"
+      ],
+      "aggregate_rule": "any_signal_blocks_normal_flow",
+      "normal_flow": "blocked",
+      "response_mode": "urgent_self_safety",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "harm_to_others",
+      "reason_codes": [
+        "harm_others"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "violent_intent",
+        "violent_threat",
+        "instruction_to_harm"
+      ],
+      "aggregate_rule": "any_signal_blocks_normal_flow",
+      "normal_flow": "blocked",
+      "response_mode": "urgent_other_safety",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "minor_related_content",
+      "reason_codes": [
+        "minor_related"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "minor_age_signal",
+        "adult_minor_romantic_or_sexual_context",
+        "authority_over_minor"
+      ],
+      "aggregate_rule": "any_material_signal_blocks_normal_flow",
+      "normal_flow": "blocked",
+      "response_mode": "minor_safeguarding",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "illegal_content",
+      "reason_codes": [
+        "illegal_conduct"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "request_to_facilitate_illegal_conduct",
+        "instruction_to_evade_lawful_process",
+        "criminal_coordination"
+      ],
+      "aggregate_rule": "any_material_signal_blocks_normal_flow",
+      "normal_flow": "blocked",
+      "response_mode": "lawful_alternative",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "category": "explicit_no_contact_violation",
+      "reason_codes": [
+        "explicit_no_contact",
+        "blocked_or_restricted",
+        "relationship_closed"
+      ],
+      "deterministic_inspection_targets": [
+        "current_situation",
+        "optional_message"
+      ],
+      "candidate_semantic_signals": [
+        "initiates_contact",
+        "continues_contact",
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "cross_channel_inputs": [
+        "base_structured_intake.decision_facts.boundary_state",
+        "candidate_safety_result"
+      ],
+      "aggregate_rule": "application_cross_product_of_explicit_base_boundary_and_candidate_contact_action",
+      "normal_flow": "blocked",
+      "response_mode": "unsafe_contact_stop",
+      "candidate_draft_generation": "prohibited",
+      "candidate_stage_receives_base_boundary": false
+    }
+  ],
+  "failure_matrix": [
+    {
+      "failure_id": "BASE-PROVIDER-FAILURE",
+      "condition": "PB-01 transport or Provider failure",
+      "base_available": false,
+      "candidate_available": "not_relevant",
+      "candidate_safety_available": "not_relevant",
+      "blocking": true,
+      "behavior": "fail_closed",
+      "downstream_provider_calls": 0
+    },
+    {
+      "failure_id": "BASE-SCHEMA-FAILURE",
+      "condition": "PB-01 output fails Base Schema",
+      "base_available": false,
+      "blocking": true,
+      "behavior": "fail_closed",
+      "downstream_provider_calls": 0
+    },
+    {
+      "failure_id": "BASE-SOURCE-INTEGRITY-FAILURE",
+      "condition": "Base output contains candidate source, candidate literal, or forbidden ownership",
+      "base_available": false,
+      "blocking": true,
+      "behavior": "fail_closed",
+      "safe_code": "M2_BASE_SOURCE_INTEGRITY_FAILED",
+      "downstream_provider_calls": 0
+    },
+    {
+      "failure_id": "CANDIDATE-ABSENT",
+      "condition": "optional_message is null empty or whitespace after trim",
+      "base_available": true,
+      "candidate_provider_calls": 0,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "absent",
+      "candidate_safety_result": null,
+      "optional_source_refs": 0,
+      "blocking": false
+    },
+    {
+      "failure_id": "CANDIDATE-NONSAFETY-ANALYSIS-INVALID",
+      "condition": "Candidate Safety independently validates but one or more style intent or language fields do not",
+      "base_available": true,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "unavailable",
+      "candidate_safety_result": "available",
+      "blocking": false,
+      "behavior": "continue_only_after_aggregate_safety_normal",
+      "pb_04_fallback": "conservative_minimal_editing_only",
+      "fabricated_candidate_semantics": 0
+    },
+    {
+      "failure_id": "CANDIDATE-PROVIDER-NO-RESPONSE",
+      "condition": "PB-01C fails before any independently valid Candidate Safety result exists",
+      "base_available": true,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "unavailable",
+      "candidate_safety_result": null,
+      "blocking": true,
+      "behavior": "fail_closed_before_candidate_generation",
+      "safe_code": "M2_CANDIDATE_SAFETY_UNAVAILABLE",
+      "exception": "If deterministic Safety already yields needs_review or rejected return safety_blocked with its stricter response mode."
+    },
+    {
+      "failure_id": "CANDIDATE-SAFETY-INVALID",
+      "condition": "PB-01C returns candidate fields but candidate_safety_signals fail the bounded Safety contract",
+      "base_available": true,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "unavailable",
+      "candidate_safety_result": null,
+      "blocking": true,
+      "behavior": "fail_closed_before_candidate_generation",
+      "safe_code": "M2_CANDIDATE_SAFETY_UNAVAILABLE"
+    },
+    {
+      "failure_id": "CANDIDATE-SOURCE-INTEGRITY-FAILURE",
+      "condition": "PB-01C emits Base fact fields source refs IDs or sequence",
+      "base_available": true,
+      "candidate_analysis": null,
+      "candidate_analysis_status": "unavailable",
+      "blocking": true,
+      "behavior": "reject_candidate_output",
+      "safe_code": "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED"
+    },
+    {
+      "failure_id": "PB02-SAFETY-OUTPUT-INVALID",
+      "condition": "PB-02 result cannot be aggregated",
+      "blocking": true,
+      "behavior": "fail_closed",
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "failure_id": "AGGREGATE-SAFETY-NONNORMAL",
+      "condition": "strictest aggregate classification is needs_review or rejected",
+      "blocking": true,
+      "behavior": "return_safety_blocked",
+      "PB-04_through_PB-06_calls": 0,
+      "candidate_draft_generation": "prohibited"
+    },
+    {
+      "failure_id": "PB04-FALLBACK-POLICY-VIOLATION",
+      "condition": "Fallback adds meaning facts commitment invitation affection question pressure or schedule",
+      "blocking": true,
+      "behavior": "fail_closed_before_report",
+      "PB-05_and_PB-06_calls": 0
+    },
+    {
+      "failure_id": "PB06-MAJOR-OR-CRITICAL",
+      "condition": "A true application-adjudicated material major or critical semantic finding remains",
+      "blocking": true,
+      "behavior": "fail_closed",
+      "validator_weakening_allowed": false
+    }
+  ],
+  "blocking_boundary": {
+    "always_blocking": [
+      "base_stage_unavailable",
+      "base_schema_invalid",
+      "base_source_integrity_invalid",
+      "candidate_present_and_candidate_safety_cannot_be_established",
+      "aggregate_safety_not_normal",
+      "PB_04_fallback_policy_violation",
+      "true_material_PB_06_major_or_critical"
+    ],
+    "nonblocking_only_when_all_conditions_hold": [
+      "base_stage_valid",
+      "candidate_safety_result_independently_valid",
+      "aggregate_safety_result_normal_allowed",
+      "candidate_analysis_failure_is_limited_to_non_safety_fields",
+      "candidate_analysis_is_null_not_fabricated",
+      "PB_04_uses_conservative_minimal_editing",
+      "PB_06_material_validation_passes"
+    ]
+  },
+  "safety_blindness_assertions": {
+    "deterministic_current_situation_inspection_preserved": true,
+    "deterministic_optional_message_inspection_preserved": true,
+    "candidate_semantic_safety_separate": true,
+    "candidate_safety_merged_into_base_facts": false,
+    "explicit_no_contact_cross_channel_check_required": true
+  }
+}

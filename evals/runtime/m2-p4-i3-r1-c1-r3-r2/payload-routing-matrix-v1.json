@@ -1,0 +1,374 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-payload-routing-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2",
+  "architecture": "split_base_and_candidate_provider_stages",
+  "status": "planning_pending_human_chatgpt_review",
+  "principles": [
+    "Base consultation facts and optional candidate semantics remain separate through PB-06.",
+    "Raw optional_message is visible only to deterministic Safety, PB-01C, and PB-04.",
+    "Candidate semantic Safety reaches PB-02 through a separate nullable key.",
+    "No downstream payload contains a merged Structured Intake that can relabel candidate content as an observed consultation fact.",
+    "Application code owns presence, provenance, IDs, sequence, nullability, policy, eligibility, and aggregate Safety."
+  ],
+  "application_preprocessing": {
+    "trim_rule": "unicode_trim_without_semantic_rewrite",
+    "candidate_presence": "trimmed_optional_message_length_greater_than_zero",
+    "base_provider_request_projection": [
+      "current_situation",
+      "relationship",
+      "requested_topics"
+    ],
+    "deterministic_safety_projection": [
+      "current_situation",
+      "optional_message"
+    ],
+    "expected_values_or_case_ids_routed": false
+  },
+  "provider_stage_routes": [
+    {
+      "stage_id": "PB-01",
+      "stage_name": "Base Situation Intake",
+      "sequence_number": 1,
+      "call_condition": "always",
+      "input_exact_keys": [
+        "current_situation",
+        "relationship",
+        "requested_topics"
+      ],
+      "nullable_input_keys": [],
+      "forbidden_input_keys": [
+        "optional_message",
+        "candidate_metadata",
+        "candidate_analysis",
+        "candidate_style",
+        "candidate_intent",
+        "candidate_expected_values"
+      ],
+      "output_exact_top_level_surfaces": [
+        "schema_version",
+        "relationship_stage",
+        "user_goal",
+        "timeline",
+        "boundaries",
+        "context",
+        "observed_facts",
+        "user_assumptions",
+        "user_emotions",
+        "material_unknowns",
+        "safety_signals",
+        "untrusted_embedded_instructions_detected",
+        "context_inferences",
+        "decision_facts",
+        "base_writing_signals"
+      ],
+      "output_forbidden_surfaces": [
+        "writing_signals.candidate_style_profile",
+        "writing_signals.candidate_communicative_intent",
+        "candidate_analysis",
+        "candidate_style_profile",
+        "candidate_communicative_intent",
+        "candidate_language_expression",
+        "candidate_safety_signals",
+        "decision_facts.contact_state.proposed_message_present"
+      ],
+      "source_ref_allowlist": [
+        "input:current_situation",
+        "input:relationship",
+        "input:requested_topics"
+      ],
+      "source_ref_denylist": [
+        "input:optional_message"
+      ]
+    },
+    {
+      "stage_id": "PB-01C",
+      "stage_name": "Candidate Message Analysis",
+      "sequence_number": 2,
+      "call_condition": "trimmed_optional_message_non_empty",
+      "input_exact_keys": [
+        "optional_message",
+        "candidate_metadata"
+      ],
+      "candidate_metadata_exact": {
+        "message_owner": "user",
+        "message_status": "unsent_candidate"
+      },
+      "forbidden_input_keys": [
+        "current_situation",
+        "relationship",
+        "requested_topics",
+        "base_structured_intake",
+        "base_legacy_view",
+        "decision_facts",
+        "expected",
+        "case_id"
+      ],
+      "output_exact_keys": [
+        "candidate_style_profile",
+        "candidate_communicative_intent",
+        "candidate_language_expression",
+        "candidate_safety_signals"
+      ],
+      "output_forbidden_keys": [
+        "timeline",
+        "context",
+        "observed_facts",
+        "material_unknowns",
+        "relationship_stage",
+        "decision_facts",
+        "incoming_message_facts",
+        "boundary_facts",
+        "source_refs",
+        "ids",
+        "sequence"
+      ],
+      "provider_output_raw_candidate_echo_allowed": false,
+      "null_candidate_behavior": {
+        "provider_calls": 0,
+        "candidate_analysis": null,
+        "candidate_safety_result": null,
+        "optional_source_ref_count": 0
+      }
+    },
+    {
+      "stage_id": "PB-02",
+      "stage_name": "Safety Semantic",
+      "sequence_number": 3,
+      "input_exact_keys": [
+        "base_structured_intake",
+        "deterministic_rule_result",
+        "candidate_safety_result"
+      ],
+      "nullable_input_keys": [
+        "candidate_safety_result"
+      ],
+      "forbidden_input_keys": [
+        "structured_intake",
+        "optional_message",
+        "user_supplied_optional_message",
+        "candidate_analysis",
+        "candidate_style_profile",
+        "candidate_communicative_intent"
+      ],
+      "candidate_literal_allowed": false,
+      "candidate_safety_result_rule": "candidate_owned_bounded_semantics_only_never_base_fact_fields"
+    },
+    {
+      "stage_id": "PB-03",
+      "stage_name": "Eligibility Projection",
+      "sequence_number": 4,
+      "input_exact_keys": [
+        "base_structured_intake",
+        "aggregate_safety_result",
+        "application_eligibility_expectation"
+      ],
+      "nullable_input_keys": [],
+      "forbidden_input_keys": [
+        "structured_intake",
+        "optional_message",
+        "user_supplied_optional_message",
+        "candidate_analysis",
+        "candidate_safety_result",
+        "deterministic_rule_result",
+        "model_semantic_result"
+      ],
+      "candidate_literal_allowed": false
+    },
+    {
+      "stage_id": "PB-04",
+      "stage_name": "Decision Plan",
+      "sequence_number": 5,
+      "input_exact_keys": [
+        "base_structured_intake",
+        "candidate_analysis",
+        "user_supplied_optional_message",
+        "decision_policy_result",
+        "requested_topics"
+      ],
+      "nullable_input_keys": [
+        "candidate_analysis",
+        "user_supplied_optional_message"
+      ],
+      "forbidden_input_keys": [
+        "structured_intake",
+        "aggregate_merged_intake",
+        "candidate_response_id",
+        "candidate_stage_usage",
+        "expected"
+      ],
+      "fallback_when_candidate_analysis_unavailable": "conservative_minimal_editing_only_after_candidate_safety_established",
+      "raw_optional_message_persisted_into_output": false
+    },
+    {
+      "stage_id": "PB-05",
+      "stage_name": "Report Writer",
+      "sequence_number": 6,
+      "input_exact_keys": [
+        "base_structured_intake",
+        "candidate_analysis",
+        "decision_plan"
+      ],
+      "nullable_input_keys": [
+        "candidate_analysis"
+      ],
+      "forbidden_input_keys": [
+        "structured_intake",
+        "optional_message",
+        "user_supplied_optional_message",
+        "candidate_safety_result",
+        "candidate_response_id",
+        "expected"
+      ]
+    },
+    {
+      "stage_id": "PB-06",
+      "stage_name": "Semantic Validator",
+      "sequence_number": 7,
+      "input_exact_keys": [
+        "base_structured_intake",
+        "candidate_analysis",
+        "decision_plan",
+        "report_content",
+        "aggregate_safety_result"
+      ],
+      "nullable_input_keys": [
+        "candidate_analysis"
+      ],
+      "forbidden_input_keys": [
+        "structured_intake",
+        "optional_message",
+        "user_supplied_optional_message",
+        "candidate_response_id",
+        "candidate_stage_usage",
+        "expected"
+      ],
+      "major_or_critical_true_findings_fail_closed": true
+    }
+  ],
+  "application_routes": [
+    {
+      "component": "deterministic_safety_inspector",
+      "reads": [
+        "current_situation",
+        "optional_message"
+      ],
+      "writes": [
+        "deterministic_rule_result"
+      ],
+      "provider_call": false
+    },
+    {
+      "component": "base_grounding",
+      "reads": [
+        "raw_base_structured_intake",
+        "current_situation",
+        "relationship",
+        "requested_topics"
+      ],
+      "forbidden_reads": [
+        "optional_message",
+        "candidate_analysis"
+      ],
+      "writes": [
+        "base_structured_intake",
+        "base_legacy_view"
+      ]
+    },
+    {
+      "component": "candidate_grounding",
+      "reads": [
+        "candidate_provider_output",
+        "candidate_presence"
+      ],
+      "forbidden_reads": [
+        "current_situation",
+        "base_structured_intake"
+      ],
+      "writes": [
+        "candidate_analysis",
+        "candidate_safety_result"
+      ],
+      "application_attached_source_ref": "input:optional_message"
+    },
+    {
+      "component": "candidate_safety_cross_channel_router",
+      "reads": [
+        "base_structured_intake.boundaries",
+        "base_structured_intake.safety_signals",
+        "deterministic_rule_result",
+        "candidate_safety_result"
+      ],
+      "writes": [
+        "aggregate_safety_result"
+      ],
+      "writes_base_fact_surfaces": false
+    },
+    {
+      "component": "decision_policy",
+      "reads": [
+        "base_structured_intake.decision_facts",
+        "candidate_presence",
+        "aggregate_safety_result",
+        "requested_topics"
+      ],
+      "writes": [
+        "decision_policy_result"
+      ],
+      "raw_candidate_language_matching": false
+    }
+  ],
+  "source_lane_matrix": [
+    {
+      "source": "current_situation",
+      "PB-01": "raw",
+      "PB-01C": "forbidden",
+      "PB-02": "base_semantics_only",
+      "PB-03": "base_semantics_only",
+      "PB-04": "base_semantics_only",
+      "PB-05": "base_semantics_only",
+      "PB-06": "base_semantics_only"
+    },
+    {
+      "source": "relationship",
+      "PB-01": "typed_value",
+      "PB-01C": "forbidden",
+      "PB-02": "base_semantics_only",
+      "PB-03": "base_semantics_only",
+      "PB-04": "base_semantics_only",
+      "PB-05": "base_semantics_only",
+      "PB-06": "base_semantics_only"
+    },
+    {
+      "source": "requested_topics",
+      "PB-01": "typed_values",
+      "PB-01C": "forbidden",
+      "PB-02": "forbidden",
+      "PB-03": "forbidden",
+      "PB-04": "typed_values",
+      "PB-05": "through_decision_plan_only",
+      "PB-06": "through_decision_plan_only"
+    },
+    {
+      "source": "optional_message",
+      "deterministic_safety": "raw",
+      "PB-01": "forbidden",
+      "PB-01C": "raw",
+      "PB-02": "candidate_safety_semantics_only",
+      "PB-03": "forbidden",
+      "PB-04": "raw_separate_nullable_key",
+      "PB-05": "candidate_analysis_only",
+      "PB-06": "candidate_analysis_only"
+    }
+  ],
+  "merge_prohibition": {
+    "forbidden_container_names": [
+      "merged_structured_intake",
+      "aggregate_structured_intake",
+      "combined_consultation_facts"
+    ],
+    "candidate_fields_inside_base_structured_intake": false,
+    "base_fact_fields_inside_candidate_analysis": false,
+    "candidate_semantics_inside_base_legacy_view": false,
+    "candidate_content_presented_as_observed_consultation_fact": false
+  }
+}
