@@ -59,11 +59,18 @@
 - [x] Immutable review-correction snapshot exact `13/13`: `3afb05ad37073b6b95e872c2e34360341c2542dc..7e09b540220eac3b0afb91bc9cfb822cc0ab632d`; working tree excluded
 - [x] Acceptance synchronization exact `6/6`; non-sync implementation blobs `17/17` unchanged; accepted A `4/4`, B `7/7`, Planning `5/5`, and predecessor Prompts `4/4` unchanged
 - [x] Dedicated verifier `154` checks, fixtures `20/20`, mutations `17/17`, Fake split scenarios `15`, payload routing `7/7`, Policy `40/40`, typecheck, lint warnings `0`, build, and `git diff --check` PASS
-- [ ] R3-R2-D Offline Counterfactual and Historical Regression — ready, unauthorized
+- [x] R3-R2-D exact `10/10` Offline Counterfactual and Historical Regression authorized and implemented from accepted C baseline `9d2bd94a2629d97197c6ffbb0608ec573b9b824a`
+- [x] Candidate A / B / null Base Request, grounded Base Intake, and Base Legacy View byte identity established; registered Sentinel and Base optional source-ref counts `0`
+- [x] Hard counterfactual gates `14/14`, accepted negative mutants `7/7`, legitimate literal overlap `PASS`, and null Candidate PB-01C calls `0` with persisted `skipped` state
+- [x] Active Catalog v4 legacy-six replay `4/4 PASS`: ready parity, safety stop, PB-05 failure stop, and duplicate behavior; PB-01C legacy calls `0`
+- [x] Fake split / legacy Stage invocations `20 / 20`; external Provider / DB / Supabase operations `0 / 0 / 0`; migration unchanged and unapplied
+- [x] R3-R2-D dedicated verifier `47` checks, Policy `40/40`, typecheck, lint warnings `0`, build, exact scope `10/10`, protected blob gates, and `git diff --check` PASS
+- [ ] R3-R2-D Human / ChatGPT review — pending
+- [ ] R3-R2-E Bounded Split-Stage Provider Diagnostic — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-C status is `human_chatgpt_accepted_complete` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence` at accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. Acceptance establishes only the offline/Fake inactive split Pipeline, exact topology/routing, restored Prompt responsibility parity, Candidate Safety/fidelity semantics, corrected Stage-persistence error ownership, and the unapplied migration artifact. Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, production readiness, and Milestone 2 completion are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, Active Runtime is not activated, and `main` is unchanged. R3-R2-D is ready but unauthorized; R3-R2-E, R4, C2, E1, PR, and main merge remain unauthorized.
+Current R3-R2-C status remains `human_chatgpt_accepted_complete` at accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. R3-R2-D is `offline_counterfactual_passed_pending_human_chatgpt_review` on `test/m2-p4-i3-r1-c1-r3-r2-d-counterfactual-regression`; it establishes only offline Candidate source isolation and Active v4 legacy-six regression. Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, production readiness, and Milestone 2 completion are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, Active Runtime is not activated, and `main` is unchanged. R3-R2-E, R4, C2, E1, PR, and main merge remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

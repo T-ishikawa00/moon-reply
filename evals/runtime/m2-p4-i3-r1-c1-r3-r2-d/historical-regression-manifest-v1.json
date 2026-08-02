@@ -1,0 +1,203 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-d-historical-regression-manifest-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-D",
+  "status": "immutable_offline_regression_authority",
+  "authorities": {
+    "active_main": "61e33a10e195fad17e253a6b9719217e1992f273",
+    "d_baseline": "9d2bd94a2629d97197c6ffbb0608ec573b9b824a",
+    "accepted_c_implementation": "7e09b540220eac3b0afb91bc9cfb822cc0ab632d",
+    "c_acceptance": "9d2bd94a2629d97197c6ffbb0608ec573b9b824a"
+  },
+  "active_runtime": {
+    "service_loader": "loadM2P4ProductQualityRuntimeStageCatalog",
+    "catalog_version": "runtime-stage-catalog-v4.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v4.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v3.0.0",
+    "stage_topology_version": "legacy-six-v1",
+    "stage_order": [
+      "PB-01",
+      "PB-02",
+      "PB-03",
+      "PB-04",
+      "PB-05",
+      "PB-06"
+    ],
+    "stage_sequence": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "active_stage_assets": [
+    {
+      "stage_id": "PB-01",
+      "sequence_number": 1,
+      "prompt_path": "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+      "prompt_sha256": "fa46652e835f75f9861879e131e485d3e892fb4f94175ebd29a9af811b06e0b1",
+      "schema_path": "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8"
+    },
+    {
+      "stage_id": "PB-02",
+      "sequence_number": 2,
+      "prompt_path": "ai/prompts/safety-semantic/v1.0.0.developer.md",
+      "prompt_sha256": "8d8ebc98b75bad52df3324f53085aefec3c848f5d7d21e180e914c0c6b498091",
+      "schema_path": "ai/schemas/safety-assessment.schema.json",
+      "schema_pointer": "#/$defs/model_result",
+      "schema_sha256": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    {
+      "stage_id": "PB-03",
+      "sequence_number": 3,
+      "prompt_path": "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+      "prompt_sha256": "0b85fb5dd71d6639d7f16c603fb32736ce7960be99695fd6f24e5b9c9fb32b5d",
+      "schema_path": "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
+    },
+    {
+      "stage_id": "PB-04",
+      "sequence_number": 4,
+      "prompt_path": "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+      "prompt_sha256": "5805f84d97529a2d451889a1478911d7b9c8fff0c5be0c18985b01e8f84481c0",
+      "schema_path": "ai/schemas/decision-plan.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "d50352be0b41b6b2949b0524cffa3f48f42ca47c50d7fdcd2366fa1cb6353417"
+    },
+    {
+      "stage_id": "PB-05",
+      "sequence_number": 5,
+      "prompt_path": "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+      "prompt_sha256": "10b784af65ec5c6604af822bd11832c9d9869371f013b3b2540018cf4b18faa6",
+      "schema_path": "ai/schemas/report-content.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "41d7fbeb3210bee7ceb1184295e9e64b8fbf2316d4082ab4c15390d55ba0cc8c"
+    },
+    {
+      "stage_id": "PB-06",
+      "sequence_number": 6,
+      "prompt_path": "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+      "prompt_sha256": "4844f7d703453ad6db7b7c3832c5cf467f6700ecf49a9c5d6213211133a048e7",
+      "schema_path": "ai/schemas/validation-result.schema.json",
+      "schema_pointer": null,
+      "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  ],
+  "protected_asset_baseline": "9d2bd94a2629d97197c6ffbb0608ec573b9b824a",
+  "protected_assets": [
+    {
+      "path": "lib/assessment/runtime/service.ts",
+      "git_blob_sha": "dd49b816f5d98e9cb25e1b69102cbaa9d97c6820",
+      "sha256_utf8_lf": "98350b83ff8f8e61cf2ac29d04a79c05dfd5d88775fe7480a6d910e787a8d8ca"
+    },
+    {
+      "path": "lib/assessment/runtime/schema-catalog.ts",
+      "git_blob_sha": "12c715ca81e35739fcc3c4b55fc235e46e04fd50",
+      "sha256_utf8_lf": "0fb6c50c01dd02f2cb4628428d4a2d3df4bf09fc4e311901ebb6fd86230cc6f3"
+    },
+    {
+      "path": "lib/assessment/runtime/application.ts",
+      "git_blob_sha": "4ccf34c6e6443368a166520569e640962c23902a",
+      "sha256_utf8_lf": "5dfc2eccd377b2a5ecdbc0f0daacfaa798ee327c8898bd47f67b2730734fa4a5"
+    },
+    {
+      "path": "lib/assessment/runtime/pipeline.ts",
+      "git_blob_sha": "a32da8df95b87cde9e4ac6feef416c0a6fb910ac",
+      "sha256_utf8_lf": "0d51c5ff74dd15e569cdc54e931b9647bd88a091d6055b1f4fd122081a8a1b7d"
+    },
+    {
+      "path": "lib/assessment/runtime/fakes.ts",
+      "git_blob_sha": "8ac9eab9c3d648c0dd3a4fe84242429935e818e7",
+      "sha256_utf8_lf": "6bccf0245f3b5b2496719450bba547bdc312abfbba3560f929d9d5c716cc8b05"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+      "git_blob_sha": "f7aa2642245c97f27226dd53c8eaa2ce4edd03d8",
+      "sha256_utf8_lf": "769ab14b82ca7f4c1fbb2455809c3b009044aee9db0bff3e7f7c59122a5ce1eb"
+    },
+    {
+      "path": "ai/prompts/shared/common-stage-contract.md",
+      "git_blob_sha": "ed353048ccfd2a8c89fdac38ec3385f2ee0b4195",
+      "sha256_utf8_lf": "218ebd586906c47910c7436874a13d2aa4ca6d6cef4df55dbfacff0ecb168fbf"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/pb-01-structure-v3.developer.md",
+      "git_blob_sha": "cb26007ce790ece878bd1af6c9daecf3ba72c7ef",
+      "sha256_utf8_lf": "fa46652e835f75f9861879e131e485d3e892fb4f94175ebd29a9af811b06e0b1"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/structured-intake-v3.schema.json",
+      "git_blob_sha": "9b88f6e6a00c7f063d66288990b83f55ed97f281",
+      "sha256_utf8_lf": "40457d83f992973e745eb7b3488cf244166cbadd5b3b5a3e19affc16a4f6cce8"
+    },
+    {
+      "path": "ai/prompts/safety-semantic/v1.0.0.developer.md",
+      "git_blob_sha": "b71ea6bb80bc3b5ad693f755dad05c92ef6c8d46",
+      "sha256_utf8_lf": "8d8ebc98b75bad52df3324f53085aefec3c848f5d7d21e180e914c0c6b498091"
+    },
+    {
+      "path": "ai/schemas/safety-assessment.schema.json",
+      "git_blob_sha": "b752254f516107afc9a74588164d823233e9ee4f",
+      "sha256_utf8_lf": "f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/pb-03-projection-v3.developer.md",
+      "git_blob_sha": "a17dc9e6ffdc4e7b2542b05697da4b6165d04888",
+      "sha256_utf8_lf": "0b85fb5dd71d6639d7f16c603fb32736ce7960be99695fd6f24e5b9c9fb32b5d"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/eligibility-projection-v3.schema.json",
+      "git_blob_sha": "4d42ecb6e991326b8ad2358b7dcbef66d60bea59",
+      "sha256_utf8_lf": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/pb-04-decision-plan-v3.developer.md",
+      "git_blob_sha": "131e89e7e1fe659b242aff5370f0512b8e95ffe1",
+      "sha256_utf8_lf": "5805f84d97529a2d451889a1478911d7b9c8fff0c5be0c18985b01e8f84481c0"
+    },
+    {
+      "path": "ai/schemas/decision-plan.schema.json",
+      "git_blob_sha": "f6f38d655efae19396eaf16b8df362c683677929",
+      "sha256_utf8_lf": "d50352be0b41b6b2949b0524cffa3f48f42ca47c50d7fdcd2366fa1cb6353417"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/pb-05-report-writer-v3.developer.md",
+      "git_blob_sha": "0b963d92338acf0ea6618872dd95a1b777a67d7a",
+      "sha256_utf8_lf": "10b784af65ec5c6604af822bd11832c9d9869371f013b3b2540018cf4b18faa6"
+    },
+    {
+      "path": "ai/schemas/report-content.schema.json",
+      "git_blob_sha": "09cbdd30640201d94039b14118b20653b66bb3cb",
+      "sha256_utf8_lf": "41d7fbeb3210bee7ceb1184295e9e64b8fbf2316d4082ab4c15390d55ba0cc8c"
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/pb-06-semantic-validator-v2.developer.md",
+      "git_blob_sha": "a30f684ddb59ebe9351a349837e84ce0a07c0af6",
+      "sha256_utf8_lf": "4844f7d703453ad6db7b7c3832c5cf467f6700ecf49a9c5d6213211133a048e7"
+    },
+    {
+      "path": "ai/schemas/validation-result.schema.json",
+      "git_blob_sha": "901cd68d320ddbc91ee35022a2103c0929b950a9",
+      "sha256_utf8_lf": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
+    }
+  ],
+  "expected_scenarios": [
+    "LEGACY-READY-001",
+    "LEGACY-SAFETY-BLOCKED-001",
+    "LEGACY-PB05-FAIL-STOPS-PB06-001",
+    "LEGACY-DUPLICATE-READY-001"
+  ],
+  "execution_boundary": {
+    "synthetic_only": true,
+    "external_provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_application": false,
+    "pb_01c_in_legacy": false,
+    "active_runtime_mutation": false
+  }
+}

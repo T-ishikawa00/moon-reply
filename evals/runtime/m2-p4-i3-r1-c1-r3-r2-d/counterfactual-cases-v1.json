@@ -1,0 +1,257 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-counterfactual-suite-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2",
+  "suite_id": "candidate-source-isolation-counterfactual-v1",
+  "mode": "planning_contract_offline_shared_base_output",
+  "planning_review_correction": "implemented_pending_human_chatgpt_review",
+  "provider_calls_in_this_task": 0,
+  "literal_scan_policy": {
+    "production_arbitrary_candidate_literal_scanning": false,
+    "test_only_registered_detectors": [
+      "CANDIDATE_SENTINEL_A_R3R2_7F19",
+      "CANDIDATE_SENTINEL_B_R3R2_4C82"
+    ],
+    "other_test_detector_rule": "must_be_proven_absent_from_Base_Input_before_test"
+  },
+  "base_case": {
+    "base_case_id": "BASE-R3R2-001",
+    "synthetic_only": true,
+    "base_provider_input": {
+      "current_situation": "架空人物Aには、架空人物Bから業務日程を確認する質問が届いており、Aはまだ返信していません。質問に具体的な曜日や時刻は記載されていません。Aは業務目的だけの丁寧な短文で返信するかを相談しています。",
+      "relationship": "work_or_school",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "draft_message"
+      ]
+    },
+    "forbidden_base_provider_input_keys": [
+      "optional_message",
+      "candidate_metadata",
+      "candidate_analysis",
+      "expected"
+    ],
+    "canonical_serialization": "fixed_key_order_utf8_json",
+    "hash_algorithm": "sha256",
+    "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001",
+    "shared_base_output_reuse_count": 3,
+    "registered_sentinels_absent_from_base_provider_input": {
+      "CANDIDATE_SENTINEL_A_R3R2_7F19": true,
+      "CANDIDATE_SENTINEL_B_R3R2_4C82": true
+    }
+  },
+  "variants": [
+    {
+      "variant_id": "CANDIDATE-A",
+      "optional_message": "承知しました。CANDIDATE_SENTINEL_A_R3R2_7F19",
+      "sentinel": "CANDIDATE_SENTINEL_A_R3R2_7F19",
+      "candidate_provider_calls_expected": 1,
+      "candidate_analysis_status_expected": "available",
+      "candidate_envelope_expected": {
+        "presence": true,
+        "analysis_status": "available",
+        "safety_status": "available",
+        "analysis": "validated_CandidateAnalysis"
+      },
+      "base_provider_request_fixture_id": "BASE-R3R2-001",
+      "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001"
+    },
+    {
+      "variant_id": "CANDIDATE-B",
+      "optional_message": "承知しました。CANDIDATE_SENTINEL_B_R3R2_4C82",
+      "sentinel": "CANDIDATE_SENTINEL_B_R3R2_4C82",
+      "candidate_provider_calls_expected": 1,
+      "candidate_analysis_status_expected": "available",
+      "candidate_envelope_expected": {
+        "presence": true,
+        "analysis_status": "available",
+        "safety_status": "available",
+        "analysis": "validated_CandidateAnalysis"
+      },
+      "base_provider_request_fixture_id": "BASE-R3R2-001",
+      "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001"
+    },
+    {
+      "variant_id": "CANDIDATE-NULL",
+      "optional_message": null,
+      "sentinel": null,
+      "candidate_provider_calls_expected": 0,
+      "candidate_analysis_status_expected": "absent",
+      "candidate_analysis_expected": null,
+      "candidate_envelope_expected": {
+        "presence": false,
+        "analysis_status": "absent",
+        "safety_status": "absent",
+        "analysis": null
+      },
+      "base_provider_request_fixture_id": "BASE-R3R2-001",
+      "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-001",
+      "optional_source_refs_expected": 0
+    }
+  ],
+  "legitimate_overlap_case": {
+    "case_id": "CSI-LEGITIMATE-OVERLAP-001",
+    "synthetic_only": true,
+    "base_provider_input": {
+      "current_situation": "架空人物Bから「承知しました」と業務連絡が届き、架空人物Aは次の確認事項に短く返信するか相談しています。",
+      "relationship": "work_or_school",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "draft_message"
+      ]
+    },
+    "optional_message": "承知しました。確認して返信します。",
+    "overlapping_literal": "承知しました",
+    "overlapping_literal_present_in_current_situation": true,
+    "overlapping_literal_present_in_optional_message": true,
+    "registered_sentinels_absent_from_base_input": {
+      "CANDIDATE_SENTINEL_A_R3R2_7F19": true,
+      "CANDIDATE_SENTINEL_B_R3R2_4C82": true
+    },
+    "base_provider_request_has_optional_message_key": false,
+    "base_output_may_contain_overlap_due_to_current_situation": true,
+    "production_source_integrity_expected": "PASS",
+    "production_literal_equality_rejection_allowed": false,
+    "base_request_and_output_candidate_independent": true,
+    "shared_base_output_fixture_id": "SHARED-BASE-OUTPUT-R3R2-LEGITIMATE-OVERLAP-001"
+  },
+  "offline_execution_method": {
+    "base_provider_output_source": "one_shared_offline_fixture",
+    "independent_live_base_outputs_required": false,
+    "independent_live_candidate_outputs_required": false,
+    "base_pipeline_replay": "deserialize_the_same_shared_base_output_for_each_variant_then_run_identical_base_grounding_and_legacy_projection",
+    "candidate_pipeline_replay": "run_only_candidate_owned_grounding_for_A_and_B_use_null_for_null_variant",
+    "payload_capture": [
+      "serialized_base_provider_request",
+      "base_structured_intake",
+      "base_legacy_view",
+      "PB-02_payload",
+      "PB-03_payload",
+      "candidate_envelope"
+    ]
+  },
+  "hard_gates": [
+    {
+      "gate_id": "CSI-REQUEST-HASH-IDENTICAL",
+      "assertion": "serialized_base_provider_request_sha256_identical_across_A_B_null",
+      "expected": true
+    },
+    {
+      "gate_id": "CSI-BASE-REQUEST-NO-OPTIONAL-KEY",
+      "assertion": "base_provider_request_has_no_optional_message_key",
+      "expected": true
+    },
+    {
+      "gate_id": "CSI-REGISTERED-SENTINELS-ABSENT-FROM-BASE-INPUT",
+      "assertion": "registered_sentinel_A_B_count_in_every_Base_Input",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-SHARED-BASE-OUTPUT",
+      "assertion": "one_shared_base_output_reused_for_A_B_null_offline_verification",
+      "expected": true
+    },
+    {
+      "gate_id": "CSI-BASE-INTAKE-BYTE-IDENTICAL",
+      "assertion": "serialized_base_structured_intake_byte_identical_across_A_B_null",
+      "expected": true
+    },
+    {
+      "gate_id": "CSI-BASE-LEGACY-BYTE-IDENTICAL",
+      "assertion": "serialized_base_legacy_view_byte_identical_across_A_B_null",
+      "expected": true
+    },
+    {
+      "gate_id": "CSI-SENTINEL-A-BASE-ZERO",
+      "assertion": "CANDIDATE_SENTINEL_A_R3R2_7F19_count_in_base_structured_intake",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-SENTINEL-B-BASE-ZERO",
+      "assertion": "CANDIDATE_SENTINEL_B_R3R2_4C82_count_in_base_structured_intake",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-SENTINELS-PB02-ZERO",
+      "assertion": "candidate_sentinel_literal_count_in_PB_02_payload",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-SENTINELS-PB03-ZERO",
+      "assertion": "candidate_sentinel_literal_count_in_PB_03_payload",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-CANDIDATE-OWNED-DELTA-ONLY",
+      "assertion": "A_B_delta_paths_subset_of_candidate_owned_fields",
+      "expected": true,
+      "candidate_owned_fields": [
+        "candidate_style_profile",
+        "candidate_communicative_intent",
+        "candidate_language_expression",
+        "candidate_safety_signals",
+        "application_candidate_envelope"
+      ]
+    },
+    {
+      "gate_id": "CSI-NULL-CANDIDATE-CALLS-ZERO",
+      "assertion": "null_optional_message_candidate_provider_calls",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-BASE-OPTIONAL-REFS-ZERO",
+      "assertion": "input_optional_message_source_ref_count_in_all_base_surfaces",
+      "expected": 0
+    },
+    {
+      "gate_id": "CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE",
+      "assertion": "production_source_integrity_passes_when_overlap_literal_is_explicit_in_current_situation_and_optional_message_while_structural_isolation_holds",
+      "expected": true,
+      "production_arbitrary_literal_scan_expected": false,
+      "registered_sentinel_A_B_count_in_Base_Input": 0
+    }
+  ],
+  "negative_mutants": [
+    {
+      "mutant_id": "MUT-BASE-OPTIONAL-KEY",
+      "mutation": "add optional_message to PB-01 request",
+      "must_fail_gate": "CSI-BASE-REQUEST-NO-OPTIONAL-KEY"
+    },
+    {
+      "mutant_id": "MUT-BASE-TIMELINE-SENTINEL",
+      "mutation": "copy candidate sentinel into Base Timeline",
+      "must_fail_gate": "CSI-SENTINEL-A-BASE-ZERO"
+    },
+    {
+      "mutant_id": "MUT-PB02-RAW-CANDIDATE",
+      "mutation": "copy raw optional_message into PB-02 payload",
+      "must_fail_gate": "CSI-SENTINELS-PB02-ZERO"
+    },
+    {
+      "mutant_id": "MUT-PB03-CANDIDATE-ANALYSIS",
+      "mutation": "copy candidate_analysis into PB-03 payload",
+      "must_fail_gate": "CSI-SENTINELS-PB03-ZERO"
+    },
+    {
+      "mutant_id": "MUT-NULL-CALL",
+      "mutation": "invoke PB-01C for null optional_message",
+      "must_fail_gate": "CSI-NULL-CANDIDATE-CALLS-ZERO"
+    },
+    {
+      "mutant_id": "MUT-BASE-OPTIONAL-REF",
+      "mutation": "attach input:optional_message to Base Legacy View",
+      "must_fail_gate": "CSI-BASE-OPTIONAL-REFS-ZERO"
+    },
+    {
+      "mutant_id": "MUT-PRODUCTION-ARBITRARY-LITERAL-REJECTION",
+      "mutation": "reject legitimate Base output solely because the overlapping literal also occurs in optional_message",
+      "must_fail_gate": "CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE"
+    }
+  ],
+  "acceptance_boundary": {
+    "proves_request_separation": true,
+    "proves_three_live_llm_outputs_byte_identical": false,
+    "three_live_llm_outputs_byte_identical_required": false,
+    "provider_quality_established": false,
+    "runtime_activation_authorized": false
+  }
+}
