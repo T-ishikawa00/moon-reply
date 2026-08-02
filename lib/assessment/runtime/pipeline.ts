@@ -119,6 +119,13 @@ const zeroUsage = Object.freeze({
   reasoningTokens: 0,
 });
 
+function asCandidateStagePersistenceError(error: unknown) {
+  const runtimeError = asM2RuntimeError(error);
+  return runtimeError.safeCode === "M2_STAGE_PERSISTENCE_FAILED"
+    ? runtimeError
+    : new M2RuntimeError("M2_STAGE_PERSISTENCE_FAILED");
+}
+
 function asJsonObject(value: unknown) {
   return value as JsonObject;
 }
@@ -530,8 +537,8 @@ export class AssessmentPipeline {
         outputJson: response?.output ?? null,
         errorCode,
       });
-    } catch {
-      throw new M2RuntimeError("M2_STAGE_PERSISTENCE_FAILED");
+    } catch (error) {
+      throw asCandidateStagePersistenceError(error);
     }
   }
 
@@ -543,23 +550,27 @@ export class AssessmentPipeline {
     const input = asJsonObject(projectCandidateProviderInputV1(optionalMessage));
     this.emit("PB-01C");
     const stageRunId = this.uuid();
-    await this.repository.startStage({
-      id: stageRunId,
-      runId: runContext.runId,
-      stageId: "PB-01C",
-      sequenceNumber: definition.sequenceNumber,
-      requestHash: hashJson({
-        stageId: definition.stageId,
-        model: runContext.model,
+    try {
+      await this.repository.startStage({
+        id: stageRunId,
+        runId: runContext.runId,
+        stageId: "PB-01C",
+        sequenceNumber: definition.sequenceNumber,
+        requestHash: hashJson({
+          stageId: definition.stageId,
+          model: runContext.model,
+          promptHash: definition.promptHash,
+          schemaHash: definition.schemaHash,
+          input,
+        }),
         promptHash: definition.promptHash,
         schemaHash: definition.schemaHash,
-        input,
-      }),
-      promptHash: definition.promptHash,
-      schemaHash: definition.schemaHash,
-      requestedModel: runContext.model,
-      createdAt: this.now(),
-    });
+        requestedModel: runContext.model,
+        createdAt: this.now(),
+      });
+    } catch (error) {
+      throw asCandidateStagePersistenceError(error);
+    }
 
     let response: StageResponse | null = null;
     try {
@@ -616,14 +627,18 @@ export class AssessmentPipeline {
         candidateAnalysis: grounded.candidate_analysis,
         candidateSafetyResult: grounded.candidate_safety_result,
       });
-      await this.repository.completeStage({
-        stageRunId,
-        responseId: response.responseId,
-        returnedModel: response.returnedModel,
-        usage: response.usage,
-        latencyMs: response.latencyMs,
-        outputJson: response.output,
-      });
+      try {
+        await this.repository.completeStage({
+          stageRunId,
+          responseId: response.responseId,
+          returnedModel: response.returnedModel,
+          usage: response.usage,
+          latencyMs: response.latencyMs,
+          outputJson: response.output,
+        });
+      } catch (error) {
+        throw asCandidateStagePersistenceError(error);
+      }
       return {
         kind: "available",
         lane: buildAvailableCandidateLaneV1(
@@ -636,6 +651,9 @@ export class AssessmentPipeline {
         error,
         "M2_CANDIDATE_SAFETY_UNAVAILABLE",
       );
+      if (safeError.safeCode === "M2_STAGE_PERSISTENCE_FAILED") {
+        throw safeError;
+      }
       const errorCode =
         safeError.safeCode === "M2_CANDIDATE_SOURCE_INTEGRITY_FAILED"
           ? safeError.safeCode
@@ -654,23 +672,27 @@ export class AssessmentPipeline {
   private async skipCandidateStage(runContext: AssessmentRunContext) {
     const definition = this.definition("PB-01C");
     this.emit("PB-01C");
-    await this.repository.skipStage({
-      id: this.uuid(),
-      runId: runContext.runId,
-      stageId: "PB-01C",
-      sequenceNumber: 2,
-      requestHash: hashJson({
+    try {
+      await this.repository.skipStage({
+        id: this.uuid(),
+        runId: runContext.runId,
         stageId: "PB-01C",
-        model: runContext.model,
+        sequenceNumber: 2,
+        requestHash: hashJson({
+          stageId: "PB-01C",
+          model: runContext.model,
+          promptHash: definition.promptHash,
+          schemaHash: definition.schemaHash,
+          candidate: "candidate_absent",
+        }),
         promptHash: definition.promptHash,
         schemaHash: definition.schemaHash,
-        candidate: "candidate_absent",
-      }),
-      promptHash: definition.promptHash,
-      schemaHash: definition.schemaHash,
-      requestedModel: runContext.model,
-      createdAt: this.now(),
-    });
+        requestedModel: runContext.model,
+        createdAt: this.now(),
+      });
+    } catch (error) {
+      throw asCandidateStagePersistenceError(error);
+    }
     return buildAbsentCandidateLaneV1();
   }
 

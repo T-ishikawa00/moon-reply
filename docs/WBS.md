@@ -49,12 +49,16 @@
 - [x] Topology persistence and `skipStage` repository contract implemented; migration `0004` created and statically validated but not applied
 - [x] Synthetic routing fixtures `16/16`, Fake split scenarios `11`, mutation rejection `17/17`, payload routing `7/7`, and legacy parity PASS
 - [x] Dedicated verifier, Policy `40/40`, typecheck, lint warnings `0`, build, protected blob gates, and `git diff --check` PASS
+- [x] R3-R2-C-R1 Human / ChatGPT review correction implemented in exact scope `13/13`; original C cumulative scope remains `23/23`
+- [x] PB-01 Base semantic responsibility, PB-04 Decision product quality, PB-05 Report field/voice, and PB-06 validation-quality parity restored; four predecessor accepted Prompts unchanged
+- [x] PB-01C start/complete/fail/skip persistence ownership corrected to fail only as `M2_STAGE_PERSISTENCE_FAILED`, with no Candidate Safety/degraded/`safety_blocked` reclassification or duplicate Stage-failure write
+- [x] Existing `99` checks, `17/17` mutations, and `16/16` routing fixtures retained; persistence fixtures `4/4`, Fake split scenarios `15`, and Prompt parity assertions PASS
 - [ ] R3-R2-C Human / ChatGPT review
 - [ ] R3-R2-D Offline Counterfactual and Historical Regression — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-C status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`. It establishes only the offline/Fake inactive split Pipeline, exact topology and routing, Candidate Safety/fidelity failure semantics, and static persistence/migration contract. Migration application, live DB compatibility, Provider quality, isolated E2E readiness, Runtime activation, and acceptance are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; Active Service remains catalog v4 and `main` is unchanged. R3-R2-D/E, R4, C2, E1, PR, and main merge remain unauthorized.
+Current R3-R2-C status is `implementation_pending_human_chatgpt_review` on `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`; R1 correction is `implemented_pending_human_chatgpt_review` in exact scope `13/13`, with original C cumulative scope `23/23`. It establishes only the offline/Fake inactive split Pipeline, exact topology/routing, restored Prompt responsibility parity, Candidate Safety/fidelity semantics, and corrected Stage-persistence error ownership. Migration application, live DB compatibility, Provider quality, isolated E2E readiness, Runtime activation, and acceptance are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, and `main` is unchanged. R3-R2-D/E, R4, C2, E1, PR, and main merge remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

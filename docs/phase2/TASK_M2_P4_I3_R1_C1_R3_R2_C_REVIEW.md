@@ -6,13 +6,15 @@
 - Baseline: `93893d78b58463b067a1419e8bf7056540636921`
 - Branch: `feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence`
 - Exact implementation scope: `23/23`
+- Exact review-correction scope: `13/13`
+- Review correction: `implemented_pending_human_chatgpt_review`
 - Provider / DB / Supabase operations: `0 / 0 / 0`
 - Active Service catalog: unchanged; still `loadM2P4ProductQualityRuntimeStageCatalog`
 - Migration: created, not applied
 - Human / ChatGPT review: pending
 - R3-R2-D: unauthorized
 
-This implementation connects accepted A/B contracts to an inactive split Runtime. It does not establish Provider quality, migration application, live DB compatibility, isolated E2E readiness, Runtime activation, C2 eligibility, or Milestone 2 completion.
+This implementation connects accepted A/B contracts to an inactive split Runtime. The R1 review correction restores accepted Base/Decision/Report/Validator Prompt responsibility parity and separates PB-01C Stage-persistence failures from Candidate analysis/Safety semantics. It does not establish Human / ChatGPT acceptance, Provider quality, migration application, live DB compatibility, isolated E2E readiness, Runtime activation, C2 eligibility, or Milestone 2 completion.
 
 ## Version identity and Stage table
 
@@ -20,15 +22,23 @@ Catalog Schema is `m2-p4-runtime-stage-catalog-v2`; Catalog is `runtime-stage-ca
 
 | Seq | Stage | Responsibility | Prompt SHA-256 | Schema / SHA-256 |
 |---:|---|---|---|---|
-| 1 | PB-01 | Candidate-free Base situation | `5add38000efcf812d6ecfc12807c29df12358e16f8cca521729e4452d1ea71eb` | Base v1 / `43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6` |
+| 1 | PB-01 | Candidate-free Base situation | `c109a3fc13050f1cdafc17b3437611123b821c51bc89f9b514e432530a48c321` | Base v1 / `43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6` |
 | 2 | PB-01C | Candidate-only analysis and Safety signals | `9605685a8158a23c061f7a3a56c20b0d3ea1dad1be0059423a258144017d0c09` | Candidate v1 / `47b135176f187c9801637838a55aea8f734e425109d2e19da6b6ecb3975db86b` |
 | 3 | PB-02 | Split semantic Safety | `d02baddeea20db089d3304876825a70dc09bcda6ddc2a7d05cf4c41811c0ef32` | Safety model result / `f4c758e61b8ebc425bfc5ff73a14e177cdf37579bf5863616065c3ea4045353c` |
 | 4 | PB-03 | Application eligibility acknowledgment | `d282595168e09f5acfb4d4e22fe3f6997d8d748c9c9aed8e3defc3aabbf249f9` | Eligibility v3 / `5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097` |
-| 5 | PB-04 | Policy-bound Decision Plan v2 | `b963029b5369187de243a98439978c30cc3c0cd5c39ce91ea758d81c4408a362` | Decision Plan v2 / `76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0` |
-| 6 | PB-05 | Explanation-only Report Content v2 | `cea7f5f3420107810876c03b52ed5e0c3b6b111ddb04941a8ef0e946cc0739c9` | Report Content v2 / `85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650` |
-| 7 | PB-06 | Policy, fidelity, report, and Safety validator | `e26c2b6d2acb1e43ca9511470e87ee403228463033d0b8d63544329d321ba9b3` | Validation v1 / `62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be` |
+| 5 | PB-04 | Policy-bound Decision Plan v2 | `ab7f922ddcb5481c30aff097b26888c84597af238d76de1f398274022c70991b` | Decision Plan v2 / `76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0` |
+| 6 | PB-05 | Explanation-only Report Content v2 | `95b74f072e5b587c8b598f3a5c6a7d9fe3094472ddd619c20c715b541f6dd6c5` | Report Content v2 / `85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650` |
+| 7 | PB-06 | Policy, fidelity, report, and Safety validator | `7a38fec597393da4602c8c78cd92f37e35ac34ac3e70546d70c9149cce2e55dc` | Validation v1 / `62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be` |
 
 The inherited common Prompt SHA-256 remains `218ebd586906c47910c7436874a13d2aa4ca6d6cef4df55dbfacff0ecb168fbf`.
+
+## Review-correction result
+
+- PB-01 Base now carries known-taxonomy precedence, cross-projection agreement, concrete practical-reason rules, untrusted quoted-content preservation, boundary ownership, relationship limits, and a final internal consistency check without Candidate-owned extraction.
+- PB-04 now carries one copy-ready draft, smallest-useful-edit, concrete current-action, distinct aftercare, observable future-condition, and brief limitation responsibilities while retaining CandidateEnvelope/degraded restrictions.
+- PB-05 now assigns all thirteen Report Content v2 fields and restores the accepted calm Japanese product voice, epistemic separation, selected-topic fulfillment, and explanation-only draft boundary.
+- PB-06 now carries the accepted major/critical versus minor quality boundary, three default-minor quality codes, required-section/message-policy distinctions, important non-findings, independent PB-04 metadata validation, and fail-closed material Candidate drift.
+- The four predecessor accepted Prompts remain unchanged. Catalog identity, Stage definitions/paths/versions, common Prompt, all Schemas/hashes, PB-01C/PB-02/PB-03 Prompt hashes, topology, and Active Service remain unchanged.
 
 ## Execution order
 
@@ -41,6 +51,7 @@ The split path is fixed to: (1) persist split run topology; (2) deterministic Sa
 - Degraded Candidate: when Candidate Safety is independently valid but non-Safety analysis fails Schema, PB-01C is persisted failed with `M2_CANDIDATE_ANALYSIS_UNAVAILABLE`; response evidence and one usage charge are preserved, no retry occurs, and conservative PB-04/PB-06 processing may complete.
 - Safety unavailable: PB-01C is persisted failed with `M2_CANDIDATE_SAFETY_UNAVAILABLE`. A deterministic-normal run fails; an already non-normal deterministic result completes `safety_blocked` without PB-02 through PB-06.
 - Candidate Source Integrity contamination fails with `M2_CANDIDATE_SOURCE_INTEGRITY_FAILED`; it never degrades.
+- Any PB-01C `startStage`, `completeStage`, `failStage`, or `skipStage` persistence failure fails the run as `M2_STAGE_PERSISTENCE_FAILED`. It is never reclassified as Candidate analysis/Safety unavailable, never completes `safety_blocked` or degraded, never continues to PB-02, and never performs a second Stage-failure write. A valid PB-01C response is counted exactly once even when its completion write fails.
 - Candidate direct Safety maps 25 material signal codes to ten established reason families. Four contact-action codes and embedded-instruction detection alone are nonblocking. Base `no_contact`, block/restriction, closure, and repeated-unanswered facts are evaluated cross-channel against Candidate presence. Final aggregation takes the strictest channel and deduplicates reason codes.
 
 ## Policy, fidelity, and report authorities
@@ -55,15 +66,16 @@ Runtime repository types persist `stage_topology_version` and support `skipStage
 
 ## Offline evidence
 
-- Routing fixtures: `16/16`, synthetic only
-- Fake split scenarios: `11`
+- Existing routing fixtures: `16/16` unchanged, synthetic only
+- Persistence-correction routing fixtures: `4/4`, synthetic only
+- Fake split scenarios: `15`
 - Mutation rejection: `17/17`
 - Payload routing: `7/7`
 - Accepted A implementation blobs: `4/4` unchanged
 - Accepted B non-sync blobs: `7/7` unchanged
 - Accepted Planning blobs: `5/5` unchanged
 - Legacy-six report and Decision Card: deep-equal parity PASS
-- Dedicated verifier: PASS
+- Dedicated verifier: existing `99` checks retained and correction assertions PASS
 - Decision Policy verifier: `40/40`
 - Typecheck: PASS
 - Lint: PASS, warnings `0`

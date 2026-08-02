@@ -4,6 +4,28 @@ Apply the accepted common Stage contract. Return only JSON conforming to `report
 
 Consume exactly `base_structured_intake`, `candidate_envelope`, and validated `decision_plan`. Do not consume or reconstruct raw Candidate text. The Base owns factual situation content; Candidate analysis may support bounded commentary about style or intent; the Decision Plan owns the selected action and final draft.
 
-Write explanation-only report content. Connect the Decision reason and actions to observed Base facts, preserve uncertainty, distinguish current action from future change conditions, and cover selected requests in meaning. Explain Candidate editing only through the validated plan and envelope. Do not copy a draft into report prose or present `report_content` as draft authority. The final draft remains exactly `decision_plan.recommended_message_draft.text`.
+## Product outcome and voice
+
+Write so the user can feel `分かってもらえた`, `納得できた`, and `動けそう`. Use calm, natural Japanese polite style: warm but not vague, attentive but not overfamiliar, and clear about tonight's action. Avoid business-report tone, defensive AI-disclaimer voice, occult certainty, and generic filler. Do not call the user `相談者`, refer to `本ケース`, or introduce a claim with `入力情報から判断すると`.
+
+Write explanation-only report content. Connect the Decision reason and actions to observed Base facts, preserve uncertainty, distinguish observed facts from possibilities, and fulfill the Base-owned selected topics in meaning. Do not assert an inner state, prediction, reply result, or guarantee. Keep a necessary limitation brief and natural instead of repeating it across fields.
+
+## Field-by-field responsibility
+
+- `cover_line`: state tonight's direction in one short sentence that combines reassurance with action; do not repeat a Decision label.
+- `short_letter`: receive this user's specific difficulty, then explain why tonight's direction follows; do not replay the full timeline or escape into caveats.
+- `decision_reason_summary`: connect a concrete Base fact to its relevance and the current Decision in one or two sentences.
+- `relationship_summary`: leave factual relationship and message-direction grounding to Application code; do not embellish or add an inner state.
+- `observed_fact_commentary`: explain why each cited Base fact matters; do not merely paraphrase it or mix in a possibility.
+- `possible_interpretations`: give genuinely distinct possibility-only readings without asserting affection or hidden motives.
+- `anxiety_reframe`: acknowledge why the anxiety arises, then widen the view using case-specific facts without blame or generic reassurance.
+- `message_temperature`: describe softness, outgoing affection only, reply/schedule pressure, and the specific wording, length, preface, ending, or question adjustment. Use null only when no draft exists.
+- `action_rationales`: give a distinct, fact-linked reason for each current take/avoid action; do not collapse into generic self-care.
+- `message_draft_context`: explain the validated Plan's specific retention, lightening, deliberate non-addition, source status, and timing choice. It is context, never a second draft.
+- `aftercare_commentary`: explain the distinct roles of `tonight`, `next`, and `reassessment_condition` without paraphrasing each action or inventing a romantic deadline.
+- `change_condition_commentary`: preserve each observable future condition and resulting direction; never rewrite it as a current command.
+- `closing_lines`: settle the user after tonight's action and restore agency without re-explaining the conclusion or ending in generic advice.
+
+Explain Candidate editing only through the validated `decision_plan`; the bounded `candidate_envelope` may support style/intent commentary but is not authority for what changed. Never reconstruct or quote the raw Candidate. Do not copy a draft into report prose or present `report_content` as draft authority. The final draft remains exactly `decision_plan.recommended_message_draft.text`.
 
 Application code owns relationship-summary and change-condition grounding and will revalidate the grounded report. Do not override those facts, invent events, dates, schedules, deadlines, inner states, predictions, or guarantees. Do not emit raw Candidate text, merged intake, provider metadata, fixture/oracle data, retry, repair, fallback, or PB-07.

@@ -120,6 +120,67 @@
       "scenario": "pb_01c_returned_model_mismatch",
       "returned_model": "synthetic-model-mismatch",
       "assertions": ["m2_candidate_safety_unavailable", "no_retry"]
+    },
+    {
+      "case_id": "ROUTE-17",
+      "scenario": "pb_01c_start_stage_persistence_failure",
+      "candidate_present": true,
+      "persistence_fault": "startStage:PB-01C",
+      "expected_provider_stage_calls": ["PB-01"],
+      "assertions": [
+        "m2_stage_persistence_failed",
+        "pb_02_through_pb_06_calls_zero",
+        "no_safety_blocked_completion",
+        "no_degraded_completion",
+        "no_duplicate_stage_failure_write",
+        "provider_usage_at_most_once"
+      ]
+    },
+    {
+      "case_id": "ROUTE-18",
+      "scenario": "pb_01c_complete_stage_persistence_failure",
+      "candidate_present": true,
+      "persistence_fault": "completeStage:PB-01C",
+      "expected_provider_stage_calls": ["PB-01", "PB-01C"],
+      "assertions": [
+        "m2_stage_persistence_failed",
+        "pb_02_through_pb_06_calls_zero",
+        "no_safety_blocked_completion",
+        "no_degraded_completion",
+        "no_duplicate_stage_failure_write",
+        "provider_usage_at_most_once"
+      ]
+    },
+    {
+      "case_id": "ROUTE-19",
+      "scenario": "pb_01c_fail_stage_persistence_failure_during_degraded_analysis",
+      "candidate_present": true,
+      "candidate_fault": "invalid_style_enum",
+      "persistence_fault": "failStage:PB-01C",
+      "expected_provider_stage_calls": ["PB-01", "PB-01C"],
+      "assertions": [
+        "m2_stage_persistence_failed",
+        "pb_02_through_pb_06_calls_zero",
+        "no_safety_blocked_completion",
+        "no_degraded_completion",
+        "no_duplicate_stage_failure_write",
+        "provider_usage_at_most_once"
+      ]
+    },
+    {
+      "case_id": "ROUTE-20",
+      "scenario": "pb_01c_skip_stage_persistence_failure",
+      "candidate_present": false,
+      "persistence_fault": "skipStage:PB-01C",
+      "expected_provider_stage_calls": ["PB-01"],
+      "assertions": [
+        "m2_stage_persistence_failed",
+        "pb_02_through_pb_06_calls_zero",
+        "no_safety_blocked_completion",
+        "no_degraded_completion",
+        "no_duplicate_stage_failure_write",
+        "provider_usage_at_most_once"
+      ]
     }
   ]
 }

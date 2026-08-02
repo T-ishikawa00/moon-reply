@@ -6,6 +6,11 @@
   "baseline": "93893d78b58463b067a1419e8bf7056540636921",
   "branch": "feat/m2-p4-i3-r1-c1-r3-r2-c-routing-persistence",
   "exact_scope": "23/23",
+  "original_cumulative_scope": "23/23",
+  "correction_scope": "13/13",
+  "review_correction": "implemented_pending_human_chatgpt_review",
+  "prompt_responsibility_parity": "PASS",
+  "candidate_persistence_error_ownership": "PASS",
   "planning_package_status": "human_chatgpt_accepted_complete",
   "r3_r2_a_status": "human_chatgpt_accepted_complete",
   "r3_r2_b_status": "human_chatgpt_accepted_complete",
@@ -36,7 +41,7 @@
   "next_candidate_authorized": false,
   "stage_hashes": {
     "PB-01": {
-      "prompt_sha256": "5add38000efcf812d6ecfc12807c29df12358e16f8cca521729e4452d1ea71eb",
+      "prompt_sha256": "c109a3fc13050f1cdafc17b3437611123b821c51bc89f9b514e432530a48c321",
       "schema_sha256": "43d4ef598ccc1b2bd083d7dd86300c89f1db4805aa11537a182ec69899ce3ae6"
     },
     "PB-01C": {
@@ -52,23 +57,25 @@
       "schema_sha256": "5631202aeacf733ed9d40aa11766032fe685823ed8063fcf0941afcdbc673097"
     },
     "PB-04": {
-      "prompt_sha256": "b963029b5369187de243a98439978c30cc3c0cd5c39ce91ea758d81c4408a362",
+      "prompt_sha256": "ab7f922ddcb5481c30aff097b26888c84597af238d76de1f398274022c70991b",
       "schema_sha256": "76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0"
     },
     "PB-05": {
-      "prompt_sha256": "cea7f5f3420107810876c03b52ed5e0c3b6b111ddb04941a8ef0e946cc0739c9",
+      "prompt_sha256": "95b74f072e5b587c8b598f3a5c6a7d9fe3094472ddd619c20c715b541f6dd6c5",
       "schema_sha256": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650"
     },
     "PB-06": {
-      "prompt_sha256": "e26c2b6d2acb1e43ca9511470e87ee403228463033d0b8d63544329d321ba9b3",
+      "prompt_sha256": "7a38fec597393da4602c8c78cd92f37e35ac34ac3e70546d70c9149cce2e55dc",
       "schema_sha256": "62690536cce3021a7698caf7249dffc73a9326f2685e62502aa5d2863709f4be"
     }
   },
-  "catalog_sha256": "c97ba7e4e004652665d7dca0d91daf05a27ec9e6a512e4a29aa87d0e9adb913c",
+  "catalog_sha256": "3bbcee33b0df6b4e29d8e3390cb87dee45d4e3fe40fa38a65d96745871899f35",
   "migration_sha256": "6ecc0f592fa6c1b0d70dd49f2bd0b9be560316d6c46fd1ccb0bfaa846545c538",
-  "routing_fixtures_sha256": "a60fcbab41796c8c1c411b07ecc874c40d29d1f5cef1f53e127e793bbd7226f0",
-  "routing_fixture_count": 16,
-  "fake_split_scenario_count": 11,
+  "routing_fixtures_sha256": "dd88e364919f6fbd68ce5f9466b62ff304d706761e81c49876ede7bcc3d9c095",
+  "routing_fixture_count": 20,
+  "existing_routing_fixture_count": 16,
+  "persistence_routing_fixture_count": 4,
+  "fake_split_scenario_count": 15,
   "mutation_rejection_count": 17,
   "payload_routing_result": "7/7",
   "migration_static_validation": "PASS",
