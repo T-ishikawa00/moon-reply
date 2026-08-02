@@ -3,25 +3,41 @@
 ## Status
 
 - Task: `M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture Planning`
-- Package status: `candidate_source_isolation_architecture_pending_human_chatgpt_review`
+- Package status: `human_chatgpt_accepted_complete`
 - Automated planning validation: `PASS`
-- Human / ChatGPT acceptance: pending
+- Human / ChatGPT acceptance: `PLANNING PACKAGE ACCEPTED COMPLETE`
+- Accepted planning content commit: `212720bba2ebb805da9ef701d645359a6bd470a7`
+- Immutable planning snapshot: `df03cc2cc374ed059d40c122788e736f75883758..212720bba2ebb805da9ef701d645359a6bd470a7` (`10/10` exact paths; working tree excluded)
 - Baseline: `df03cc2cc374ed059d40c122788e736f75883758`
 - Planning review correction base: `b4e0300d78d4782a99cb8fdca178722ca9df7dd1`
-- Planning review correction: `implemented_pending_human_chatgpt_review`
-- PB-06 draft authority correction: `implemented_pending_human_chatgpt_review`
+- Planning review correction: `accepted_complete`
+- PB-06 draft authority correction: `accepted_complete`
 - PB-06 draft authority correction task: `M2-P4-I3-R1-C1-R3-R2-R2`
 - PB-06 draft authority correction title: `PB-06 Candidate Draft Authority Planning Correction`
-- PB-06 Decision Policy authority correction: `implemented_pending_human_chatgpt_review`
+- PB-06 Decision Policy authority correction: `accepted_complete`
 - PB-06 Decision Policy authority correction task: `M2-P4-I3-R1-C1-R3-R2-R3`
 - PB-06 Decision Policy authority correction title: `PB-06 Decision Policy Authority Planning Correction`
 - Branch: `docs/m2-p4-i3-r1-c1-r3-r2-planning-correction`
 - Prior planning review correction scope: `10/10`
 - PB-06 draft authority correction scope: `5/5`
 - PB-06 Decision Policy authority correction scope: `5/5`
+- Acceptance synchronization scope: `5/5`
 - Provider calls / DB / Supabase / holdout / real-user data: `0 / 0 / 0 / 0 / 0`
 - Active Runtime / Prompt / Schema / Pipeline / Service changed: `false / false / false / false / false`
 - R4 / C2 authorized: `false / false`
+
+## Acceptance decision
+
+Human / ChatGPT result: `PLANNING PACKAGE ACCEPTED COMPLETE`.
+
+Accepted Planning content commits:
+
+1. `b4e0300d78d4782a99cb8fdca178722ca9df7dd1` — initial architecture plan
+2. `9418a4615e29dbd59f6477fde576393f8efcb211` — planning review correction
+3. `1485ce4b51331452aa84cc31969320a0286e0228` — PB-06 candidate draft authority correction
+4. `212720bba2ebb805da9ef701d645359a6bd470a7` — PB-06 Decision Policy authority correction
+
+The accepted immutable Planning snapshot is the historical commit range `df03cc2cc374ed059d40c122788e736f75883758..212720bba2ebb805da9ef701d645359a6bd470a7`, exact `10/10` paths, with `immutable: true` and `include working tree: false`.
 
 ## Review conclusion
 
@@ -34,7 +50,7 @@ The planning package therefore selects separate Provider boundaries:
 
 The successor disposition is recorded separately. No historical R3 or R3-R1 dedicated artifact is rewritten.
 
-The architecture direction is accepted; the Planning Package remains pending Human / ChatGPT acceptance. This exact `10/10` correction resolves the five review gaps: independent PB-06 candidate fidelity, typed absent/unavailable routing, removal of arbitrary Production literal rejection, authoritative persisted topology selection, and Application-canonical Base fields.
+The architecture direction and Planning Package are Human / ChatGPT accepted complete. This exact `10/10` Planning snapshot resolves the five review gaps: independent PB-06 candidate fidelity, typed absent/unavailable routing, removal of arbitrary Production literal rejection, authoritative persisted topology selection, and Application-canonical Base fields.
 
 The final Planning-only correction fixes the PB-06 draft-text authority in an exact existing-path scope of `5/5`. It does not alter the accepted architecture direction, routing topology, or implementation authority.
 
@@ -110,6 +126,26 @@ The prior `10/10` planning review correction manifest remains historical context
 
 All five paths existed at correction start; the draft-authority correction added no path. This Decision Policy authority correction uses the same exact five existing paths and also adds no path.
 
+### Exact acceptance-sync manifest
+
+This final acceptance synchronization updates exactly five existing paths and creates no file:
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/capabilities-v1.json`
+2. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_PLANNING_REVIEW.md`
+3. `docs/CURRENT_FOCUS.md`
+4. `docs/WBS.md`
+5. `docs/CODEX_HANDOFF.md`
+
+The following five accepted Planning blobs remain byte-identical to accepted planning content commit `212720bba2ebb805da9ef701d645359a6bd470a7`:
+
+1. `docs/phase2/M2_P4_I3_R1_C1_R3_R2_CANDIDATE_SOURCE_ISOLATION_PLAN.md`
+2. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/architecture-contract-v1.json`
+3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/payload-routing-matrix-v1.json`
+4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/counterfactual-suite-v1.json`
+5. `evals/runtime/m2-p4-i3-r1-c1-r3-r2/safety-failure-matrix-v1.json`
+
+The acceptance sync changes metadata only. Architecture Plan, Architecture Contract, Payload Routing Matrix, Counterfactual Suite, Safety Failure Matrix, A-through-E manifests, Runtime, Prompt, Schema, Pipeline, Service, DB/migration, and historical R3/R3-R1 artifacts remain unchanged.
+
 ## Counterfactual review
 
 The planned offline suite uses candidate A, candidate B, and null against one fixed Base request and one shared Base output. It requires identical Base request hashes and byte-identical Base Intake/Legacy View, zero registered candidate sentinels in Base/PB-02/PB-03, zero null-candidate calls, and candidate deltas only in candidate-owned fields. It also contains `CSI-LEGITIMATE-LITERAL-OVERLAP-NO-FALSE-POSITIVE`: a phrase may occur in both `current_situation` and `optional_message`, and Base output may legitimately contain it from the Base source without Production rejection. Arbitrary candidate-literal scanning is prohibited in Production; registered Sentinel A/B and values proven absent from Base Input are test-only. The suite explicitly does not require three independent live LLM outputs to be byte-identical.
@@ -134,6 +170,11 @@ All A-through-E exact path counts and path lists are unchanged. Any required fut
 
 The following checks must be completed before commit:
 
+- [x] Acceptance synchronization exact scope `5/5`
+- [x] Immutable Planning snapshot exact scope `10/10`
+- [x] Five accepted Planning blobs unchanged from `212720bba2ebb805da9ef701d645359a6bd470a7`: `5/5`
+- [x] Architecture Contract, Payload Routing Matrix, Counterfactual Suite, Safety Failure Matrix, and Capabilities JSON parse PASS: `5/5`
+- [x] A-through-E exact path counts and path lists unchanged
 - [x] PB-06 draft-authority correction exact scope `5/5`; prior planning review correction scope remains `10/10`
 - [x] PB-06 Decision Policy authority correction exact scope `5/5`
 - [x] Runtime diff `0`
@@ -174,12 +215,16 @@ The following checks must be completed before commit:
 - [x] required architecture assertions PASS
 - [x] `git diff --check` PASS
 
-Automated Planning validation is `PASS`. This is protocol evidence only; Human / ChatGPT acceptance remains pending.
+Automated Planning validation is `PASS`. Human / ChatGPT separately accepts the Planning Package complete. Neither result establishes Provider semantic quality or authorizes implementation.
 
 ## Result boundary
 
-Planning acceptance, if later granted, approves only the architecture direction and rollout contract. It does not establish Provider quality, make the candidate ready for isolated E2E, authorize R3-R2-A, run R4, activate Runtime, start C2/E1, create a PR, or merge to `main`.
+Planning acceptance approves only the architecture direction and rollout contract. It does not establish Provider quality, make the candidate ready for isolated E2E, authorize or start R3-R2-A, run R4, activate Runtime, start C2/E1, create a PR, or merge to `main`.
 
 Next candidate: `M2-P4-I3-R1-C1-R3-R2-A Split Stage Contracts and Schemas`.
 
 Next candidate authorized: `false`.
+
+R4: `HOLD`.
+
+C2: `HOLD`.

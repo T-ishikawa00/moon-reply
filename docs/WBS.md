@@ -17,12 +17,15 @@
 - [x] A-through-E exact path counts and path lists preserved; any future manifest change is stop-and-re-scope
 - [x] Exact Planning mutation scope fixed at `10/10`
 - [x] Automated Planning validation PASS
-- [ ] Human / ChatGPT review
+- [x] Human / ChatGPT result: `PLANNING PACKAGE ACCEPTED COMPLETE`
+- [x] Accepted Planning content commit `212720bba2ebb805da9ef701d645359a6bd470a7`
+- [x] Immutable Planning snapshot exact `10/10`: `df03cc2cc374ed059d40c122788e736f75883758..212720bba2ebb805da9ef701d645359a6bd470a7`; working tree excluded
+- [x] Acceptance synchronization exact `5/5`; five accepted Planning blobs and A-through-E manifests unchanged
 - [ ] R3-R2-A Split Stage Contracts and Schemas — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current status is `candidate_source_isolation_architecture_pending_human_chatgpt_review`; Planning Review Correction is `implemented_pending_human_chatgpt_review`. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. R3-R2-A is unauthorized. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
+Current status is `human_chatgpt_accepted_complete`; the accepted architecture is `split_base_and_candidate_provider_stages`, while Candidate Source Isolation remains failed in the current single-stage architecture. Provider semantic quality and isolated-E2E readiness are `false / false`. R3-R1 canonicalization remains retained. R3-R2-A is unauthorized; R4 and C2 remain `HOLD`. Active Runtime/main are unchanged; Provider calls, DB/Supabase operations, holdout, and real-user data are all `0`.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->
