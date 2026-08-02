@@ -1,7 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E:BEGIN -->
-M2-P4-I3-R1-C1-R3-R2-E is `provider_diagnostic_package_ready_not_started` on `test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic`. The exact frozen package scope is `14/14`, post-run mutable scope is `8/8`, Provider calls are `0/14` with PB-01 `0/8` and PB-01C `0/6`, and the one-time authorization remains unconsumed. Provider quality and isolated-E2E readiness are not established. Migration remains unapplied, Active Service and `main` remain unchanged, and R4 / C2 authorization remains `false / false`. Human / ChatGPT review will be required after the one-time execution; rerun is unauthorized.
+M2-P4-I3-R1-C1-R3-R2-E is `provider_diagnostic_failed_pending_human_chatgpt_review` on `test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic`. Commit A is `ae56535fd6d5587e6055e938cd68e0355cd8f037`; exact scope is `14/14`, post-run mutable scope is `8/8`, Provider calls are `14/14` with PB-01 `8/8` and PB-01C `6/6`, and returned-model exactness is `14/14`. The frozen evaluator self-tests are `16/16`; overall verdict is `FAIL`; Provider quality established is `false`; Candidate ready for isolated E2E is `false`. Output mutation, expected-data injection, secret leakage, and exact-literal leakage are `0/0/0/2`. Migration remains unapplied, Active Service and main remain unchanged, and R4 / C2 authorization remains `false / false`. Human / ChatGPT review is pending and rerun is unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->

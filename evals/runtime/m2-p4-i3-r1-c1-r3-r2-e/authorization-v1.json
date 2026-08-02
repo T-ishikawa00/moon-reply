@@ -7,12 +7,12 @@
   "authorized_calls": 14,
   "pb_01_calls": 8,
   "pb_01c_calls": 6,
-  "consumed": false,
+  "consumed": true,
   "rerun_authorized": false,
-  "execution_claimed_at": null,
-  "completed_at": null,
-  "package_commit": null,
-  "actual_calls": 0,
-  "completed_calls": 0,
-  "completion_state": "not_started"
+  "execution_claimed_at": "2026-08-02T21:10:10.086Z",
+  "completed_at": "2026-08-02T21:11:45.831Z",
+  "package_commit": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
+  "actual_calls": 14,
+  "completed_calls": 14,
+  "completion_state": "provider_diagnostic_failed_pending_human_chatgpt_review"
 }

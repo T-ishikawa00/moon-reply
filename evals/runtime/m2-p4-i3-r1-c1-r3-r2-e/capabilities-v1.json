@@ -2,24 +2,24 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E",
   "title": "Bounded Split-Stage Provider Diagnostic",
-  "status": "provider_diagnostic_package_ready_not_started",
+  "status": "provider_diagnostic_failed_pending_human_chatgpt_review",
   "baseline": "8ce5e608b019197e48107354b73338a6883b4938",
   "branch": "test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic",
   "exact_scope": "14/14",
   "post_run_mutable_scope": "8/8",
   "authorized_calls": 14,
-  "actual_calls": 0,
-  "pb_01_calls": "0/8",
-  "pb_01c_calls": "0/6",
+  "actual_calls": 14,
+  "pb_01_calls": "8/8",
+  "pb_01c_calls": "6/6",
   "model": "gpt-5.6-luna",
   "catalog": "runtime-stage-catalog-v9.0.0",
   "prompt_bundle": "prompt-bundle-runtime-v9.0.0",
   "schema_set": "pipeline-schema-runtime-v4.0.0",
   "stage_topology": "split-base-candidate-v1",
-  "authorization_consumed": false,
+  "authorization_consumed": true,
   "rerun_authorized": false,
-  "package_commit": null,
-  "provider_diagnostic_verdict": "NOT_EXECUTED",
+  "package_commit": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
+  "provider_diagnostic_verdict": "FAIL",
   "provider_quality_established": false,
   "provider_quality_scope": "exact_8_pb01_plus_6_pb01c_synthetic_natural_language_suite",
   "full_runtime_provider_quality_established": false,
@@ -37,5 +37,327 @@
   "active_runtime_activated": false,
   "main_changed": false,
   "next_candidate": "M2-P4-I3-R1-C1-R4 Isolated Full Runtime E2E",
-  "next_candidate_authorized": false
+  "next_candidate_authorized": false,
+  "completed_calls": 14,
+  "evaluator_self_tests": {
+    "evaluator_version": "m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1",
+    "passed": 16,
+    "total": 16,
+    "results": [
+      {
+        "name": "primitive equals PASS and FAIL",
+        "passed": true
+      },
+      {
+        "name": "one_of PASS and FAIL",
+        "passed": true
+      },
+      {
+        "name": "contains_all ignores array order",
+        "passed": true
+      },
+      {
+        "name": "contains_any requires at least one",
+        "passed": true
+      },
+      {
+        "name": "excludes_all detects one forbidden value",
+        "passed": true
+      },
+      {
+        "name": "subset path ignores unspecified valid field",
+        "passed": true
+      },
+      {
+        "name": "practical reason compares primitive kind and active only",
+        "passed": true
+      },
+      {
+        "name": "allowed primitive pair accepts only listed pair",
+        "passed": true
+      },
+      {
+        "name": "unknown and null are not positive inference",
+        "passed": true
+      },
+      {
+        "name": "exact literal absence detects leak",
+        "passed": true
+      },
+      {
+        "name": "raw output hash detects mutation",
+        "passed": true
+      },
+      {
+        "name": "expected value injection is detected",
+        "passed": true
+      },
+      {
+        "name": "case ID injection is detected",
+        "passed": true
+      },
+      {
+        "name": "zero denominator soft metric is rejected",
+        "passed": true
+      },
+      {
+        "name": "Candidate Safety duplicate code is rejected",
+        "passed": true
+      },
+      {
+        "name": "Source-ref integrity violation is rejected",
+        "passed": true
+      }
+    ]
+  },
+  "metrics": {
+    "provider_attempted": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_completed": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "returned_model_exact": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "unique_response_ids": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_input_isolation": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_base_schema": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_base_source_integrity": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "grounded_base_schema": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "grounded_base_source_integrity": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "contextual_intake_integrity": {
+      "passed": 5,
+      "total": 8,
+      "rate": 0.625,
+      "evidence_status": "available"
+    },
+    "application_canonical_fields": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "pb_01_semantic_cases": {
+      "passed": 5,
+      "total": 8,
+      "rate": 0.625,
+      "evidence_status": "available"
+    },
+    "candidate_fields_in_base_zero": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "optional_message_source_refs_zero": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_candidate_schema": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_source_integrity": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_allowlist_grounding": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "pb_01c_semantic_cases": {
+      "passed": 3,
+      "total": 6,
+      "rate": 0.5,
+      "evidence_status": "available"
+    },
+    "base_fact_fields_in_candidate_zero": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "raw_candidate_echo_zero": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "candidate_metadata_leakage_zero": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "all_case_verdicts": {
+      "passed": 6,
+      "total": 14,
+      "rate": 0.42857142857142855,
+      "evidence_status": "available"
+    },
+    "provider_output_immutability": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "expected_data_injection_zero": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "secret_leakage_zero": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "exact_literal_leakage_zero": {
+      "passed": 13,
+      "total": 14,
+      "rate": 0.9285714285714286,
+      "evidence_status": "available"
+    },
+    "case_fixture_oracle_reference_zero": {
+      "passed": 14,
+      "total": 14,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "soft_assertions": {
+      "passed": 12,
+      "total": 14,
+      "rate": 0.8571428571428571,
+      "evidence_status": "available"
+    },
+    "evaluator_self_tests": {
+      "passed": 16,
+      "total": 16,
+      "rate": 1,
+      "evidence_status": "available"
+    }
+  },
+  "hard_failures": [
+    {
+      "case_id": "E-B01",
+      "failure": "E-B01-CONSTRAINT"
+    },
+    {
+      "case_id": "E-B01",
+      "failure": "E-B01-CONTEXTUAL-INTEGRITY"
+    },
+    {
+      "case_id": "E-B01",
+      "failure": "E-B01-HIERARCHY"
+    },
+    {
+      "case_id": "E-B02",
+      "failure": "E-B02-CADENCE"
+    },
+    {
+      "case_id": "E-B02",
+      "failure": "E-B02-CONSTRAINT"
+    },
+    {
+      "case_id": "E-B02",
+      "failure": "E-B02-LITERAL-LEAKAGE"
+    },
+    {
+      "case_id": "E-B05",
+      "failure": "E-B05-CONSTRAINT"
+    },
+    {
+      "case_id": "E-B06",
+      "failure": "E-B06-CONTEXTUAL-INTEGRITY"
+    },
+    {
+      "case_id": "E-B07",
+      "failure": "E-B07-CONTEXTUAL-INTEGRITY"
+    },
+    {
+      "case_id": "E-C01",
+      "failure": "E-C01-PRACTICAL"
+    },
+    {
+      "case_id": "E-C01",
+      "failure": "E-C01-SAFETY-ACTIONS"
+    },
+    {
+      "case_id": "E-C03",
+      "failure": "E-C03-APOLOGY"
+    },
+    {
+      "case_id": "E-C04",
+      "failure": "E-C04-REGISTER"
+    }
+  ],
+  "soft_findings": [
+    {
+      "case_id": "E-B05",
+      "finding": "E-B05-SOFT-GOAL"
+    },
+    {
+      "case_id": "E-B06",
+      "finding": "E-B06-SOFT-GOAL"
+    }
+  ],
+  "usage_totals": {
+    "input_tokens": 53023,
+    "cached_tokens": 44983,
+    "output_tokens": 13617,
+    "reasoning_tokens": 2006
+  },
+  "output_mutation_count": 0,
+  "expected_data_injection_count": 0,
+  "secret_leakage_count": 0,
+  "exact_literal_leakage_count": 2
 }
