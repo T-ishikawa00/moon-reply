@@ -1,8 +1,8 @@
 # WBS.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E:BEGIN -->
-M2-P4-I3-R1-C1-R3-R2-E is `provider_diagnostic_failed_pending_human_chatgpt_review` on `test/m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic`. Commit A is `ae56535fd6d5587e6055e938cd68e0355cd8f037`; exact scope is `14/14`, post-run mutable scope is `8/8`, Provider calls are `14/14` with PB-01 `8/8` and PB-01C `6/6`, and returned-model exactness is `14/14`. The frozen evaluator self-tests are `16/16`; overall verdict is `FAIL`; Provider quality established is `false`; Candidate ready for isolated E2E is `false`. Output mutation, expected-data injection, secret leakage, and exact-literal leakage are `0/0/0/2`. Migration remains unapplied, Active Service and main remain unchanged, and R4 / C2 authorization remains `false / false`. Human / ChatGPT review is pending and rerun is unauthorized.
-<!-- M2-P4-I3-R1-C1-R3-R2-E:END -->
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R1:BEGIN -->
+M2-P4-I3-R1-C1-R3-R2-E-R1 is `offline_postmortem_completed_pending_human_chatgpt_review` on `docs/m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem`. The E execution protocol remains valid and its immutable machine result remains `FAIL / 6 of 14`; E-R1 independently classifies the 13 frozen hard failures as Evaluator `4`, Quality Contract `2`, Application bookkeeping `3`, Provider / Prompt `4`, and unresolved `0`. Provider semantic adjudication is pass/fail/unresolved `10/4/0`; Split Runtime readiness is ready/blocked/unresolved `8/6/0`. Provider calls `0`, DB / Supabase operations `0 / 0`, and Product Owner decisions `4` are pending. Provider quality remains unestablished, Candidate ready for isolated E2E remains `false`, R4 remains HOLD, and E-R2 remains unauthorized. Active Runtime, main, and migration remain unchanged; migration is unapplied and Active Service is unchanged.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2:START -->
 ## M2-P4-I3-R1-C1-R3-R2 Candidate Source Isolation Architecture, R3-R2-A/B, and R3-R2-C
@@ -73,11 +73,13 @@ M2-P4-I3-R1-C1-R3-R2-E is `provider_diagnostic_failed_pending_human_chatgpt_revi
 - [x] Accepted implementation commit `8b9b4a4dff2992483266a3fb9bbc80b183091b2e`; immutable implementation snapshot exact `10/10` for `9d2bd94a2629d97197c6ffbb0608ec573b9b824a..8b9b4a4dff2992483266a3fb9bbc80b183091b2e`, working tree excluded
 - [x] Acceptance synchronization exact `6/6`; non-sync evidence blobs `4/4` unchanged; accepted Planning `5/5`, A `4/4`, B `7/7`, C non-sync `17/17`, and Active v4 assets `19/19` unchanged
 - [x] Acceptance-aware verifier `54` checks including retained original `47`; deterministic replay, hard gates `14/14`, mutants `7/7`, historical regression `4/4`, legitimate overlap, Policy `40/40`, typecheck, lint warnings `0`, build, and `git diff --check` PASS
-- [ ] R3-R2-E Bounded Split-Stage Provider Diagnostic — unauthorized
+- [x] R3-R2-E Bounded Split-Stage Provider Diagnostic — frozen `FAIL / 6 of 14`; execution protocol accepted
+- [x] R3-R2-E-R1 Frozen Provider Diagnostic Postmortem — offline complete, Human / ChatGPT review and 4 Product Owner decisions pending
+- [ ] R3-R2-E-R2 Semantic Responsibility Revision — unauthorized
 - [ ] R4 Isolated Full Runtime E2E — HOLD
 - [ ] C2 Runtime activation — HOLD
 
-Current R3-R2-C status remains `human_chatgpt_accepted_complete` at accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. R3-R2-D is `human_chatgpt_accepted_complete` at accepted implementation commit `8b9b4a4dff2992483266a3fb9bbc80b183091b2e` on `test/m2-p4-i3-r1-c1-r3-r2-d-counterfactual-regression`; it establishes only offline Candidate source isolation, A/B/null Base invariance, legitimate-overlap no-false-positive behavior, and Active v4 legacy-six regression. Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, production readiness, and Milestone 2 completion are not established. Provider / DB / Supabase operations remain `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, Active Runtime is not activated, and `main` is unchanged. R3-R2-E is ready but unauthorized; R4, C2, E1, PR, and main merge remain unauthorized.
+Current R3-R2-C status remains `human_chatgpt_accepted_complete` at accepted corrected implementation commit `7e09b540220eac3b0afb91bc9cfb822cc0ab632d`. R3-R2-D is `human_chatgpt_accepted_complete` at accepted implementation commit `8b9b4a4dff2992483266a3fb9bbc80b183091b2e` on `test/m2-p4-i3-r1-c1-r3-r2-d-counterfactual-regression`; it establishes only offline Candidate source isolation, A/B/null Base invariance, legitimate-overlap no-false-positive behavior, and Active v4 legacy-six regression. R3-R2-E subsequently executed with frozen `FAIL / 6 of 14`; E-R1 offline postmortem is complete pending Human / ChatGPT review and 4 Product Owner decisions. Provider quality, migration application, live DB compatibility, isolated E2E readiness, Active Service activation, production readiness, and Milestone 2 completion remain unestablished. E-R1 Provider / DB / Supabase operations are `0 / 0 / 0`; migration remains unapplied, Active Service remains catalog v4, Active Runtime is not activated, and `main` is unchanged. E-R2, R4, C2, E1, PR, and main merge remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R1:START -->

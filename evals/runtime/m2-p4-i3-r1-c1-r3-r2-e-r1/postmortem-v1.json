@@ -1,0 +1,176 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
+  "title": "Frozen Provider Diagnostic Postmortem and Independent Offline Responsibility Adjudication",
+  "status": "offline_postmortem_completed_pending_human_chatgpt_review",
+  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "e_package_commit_a": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
+  "e_evidence_commit_b": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "frozen_e_artifact_sha256": {
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json": "68d136e5fbfb0224c1359bd8fc06c6b3f1dffe9fbc2a26dc2593e665542fc73c",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json": "eff2321f1271e58b120f24f3c860d952e1344f643098653dc0efe151dd012cf6",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json": "b9d74f6daf970b9e20e38695343319f781de29d8f1e42bdc7bad8478d88883fe",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json": "1c6c13c740be969f6e93b1027148777800ccf8413d18867f1f55d92c3463d483",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json": "cbae1476edd82e023757297c56cc8434b991b9f4c34c4153885bd1bed9e6a505",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md": "de98febd0017b3e0d5faebfccc4ba38e1e3ac779cebde5a9c799c5c528815e19",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json": "7ea4c332c847db4df079322b96c74cb9797ca25485bf472fcf6c02a758db299f",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs": "db29c818f5898c82c8f4ff1545230b61675f5d49d5172dea4182b6f9cab70979",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs": "9ed4e61d5bda1a8d9486ad0d39d922c9d71065ebc59b152ae36c470a69d8ca49",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs": "cf19d0dd772b068619f53c76eb24eb4340eb2b71db7a69c518b14fc12747e3bf",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md": "e5074bd703264fbb6dc65270c762d9da6c804314688d26e7cec88303af89b893"
+  },
+  "frozen_execution": {
+    "protocol": "accepted",
+    "execution_evidence_valid": true,
+    "provider_calls": "14/14",
+    "pb_01_calls": "8/8",
+    "pb_01c_calls": "6/6",
+    "machine_verdict": "FAIL",
+    "machine_case_result": "6/14",
+    "authorization_consumed": true,
+    "rerun_authorized": false
+  },
+  "model": "gpt-5.6-luna",
+  "usage_totals": {
+    "input_tokens": 53023,
+    "cached_input_tokens": 44983,
+    "output_tokens": 13617,
+    "reasoning_tokens": 2006
+  },
+  "evidence_safety": {
+    "provider_calls_in_this_task": 0,
+    "provider_output_mutation_count": 0,
+    "expected_data_injection_count": 0,
+    "secret_leakage_count": 0,
+    "frozen_global_exact_literal_counter": 2,
+    "adjudicated_true_exact_literal_leakage_count": 0,
+    "frozen_provider_outputs_immutable": true
+  },
+  "independence": {
+    "prior_human_or_chatgpt_guesses_used_as_oracle": false,
+    "predefined_counts_used": false,
+    "predefined_residual_case_ids_used": false,
+    "case_id_result_override_used": false,
+    "classification_source": "frozen hard failures, assertion evidence, synthetic evaluator reproducers, frozen Prompt and Schema boundaries, and deterministic contextual-integrity analysis"
+  },
+  "classification_summary": {
+    "classified_failure_codes": "13/13",
+    "evaluator_implementation_defect": 4,
+    "quality_contract_overconstraint": 2,
+    "application_bookkeeping_gap": 3,
+    "provider_or_prompt_gap": 4,
+    "unresolved_requires_human_chatgpt_review": 0
+  },
+  "evaluator_hypotheses": {
+    "EV-H1": {
+      "status": "confirmed",
+      "finding": "A one-match wildcard becomes a scalar and makes contains_all reject a value that is present.",
+      "successor_rule": "Preserve wildcard selection as an array for zero, one, or many matches."
+    },
+    "EV-H2": {
+      "status": "confirmed",
+      "finding": "The scoped assertion passes, while the global counter sees the same literal in an allowed user_assumptions sibling surface.",
+      "successor_rule": "Evaluate exact literals only within the assertion surface and JSON path."
+    }
+  },
+  "quality_contract_hypotheses": {
+    "reviewed_semantic_failures": 6,
+    "justified": 4,
+    "too_narrow": 2,
+    "ambiguous": 0,
+    "requires_product_owner_decision": 4,
+    "too_narrow_failure_codes": [
+      "E-C01-PRACTICAL",
+      "E-C03-APOLOGY"
+    ]
+  },
+  "application_bookkeeping_findings": {
+    "failure_codes": [
+      "E-B01-CONTEXTUAL-INTEGRITY",
+      "E-B06-CONTEXTUAL-INTEGRITY",
+      "E-B07-CONTEXTUAL-INTEGRITY"
+    ],
+    "resolved_values_left_in_unresolved_fields": {
+      "E-B01": 2,
+      "E-B06": 1,
+      "E-B07": 3
+    },
+    "natural_language_reinterpretation_required": false,
+    "deterministic_application_correction_possible": true
+  },
+  "provider_prompt_findings": {
+    "failure_codes": [
+      "E-B01-HIERARCHY",
+      "E-B02-CADENCE",
+      "E-C01-SAFETY-ACTIONS",
+      "E-C04-REGISTER"
+    ],
+    "schema_change_required": false,
+    "provider_retest_required_after_authorized_revision": true
+  },
+  "unresolved_findings": [],
+  "product_owner_decisions_required": {
+    "count": 4,
+    "decision_ids": [
+      "PO-E-C01-PRACTICAL",
+      "PO-E-C01-SAFETY-ACTIONS",
+      "PO-E-C03-APOLOGY",
+      "PO-E-C04-REGISTER"
+    ],
+    "answer_state": "pending"
+  },
+  "provider_semantic_adjudication": {
+    "pass": 10,
+    "fail": 4,
+    "unresolved": 0,
+    "total": 14,
+    "fail_case_ids": [
+      "E-B01",
+      "E-B02",
+      "E-C01",
+      "E-C04"
+    ]
+  },
+  "split_runtime_readiness_adjudication": {
+    "ready": 8,
+    "blocked": 6,
+    "unresolved": 0,
+    "total": 14,
+    "blocked_case_ids": [
+      "E-B01",
+      "E-B02",
+      "E-B06",
+      "E-B07",
+      "E-C01",
+      "E-C04"
+    ]
+  },
+  "candidate_source_isolation_boundary": {
+    "provider_input_isolation": "14/14",
+    "base_candidate_field_count": 0,
+    "base_optional_message_source_ref_count": 0,
+    "candidate_base_fact_field_count": 0,
+    "candidate_raw_echo_count": 0,
+    "candidate_operational_metadata_count": 0,
+    "schema_pass": true,
+    "source_integrity_pass": true,
+    "provider_output_immutability": "14/14",
+    "expected_data_injection_count": 0,
+    "secret_leakage_count": 0,
+    "candidate_source_isolation_provider_boundary_confirmed": true,
+    "provider_quality_established": false
+  },
+  "authorization_boundary": {
+    "provider_rerun_authorized": false,
+    "e_r2_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applied": false,
+    "active_service_changed": false,
+    "active_runtime_activated": false,
+    "main_changed": false
+  }
+}

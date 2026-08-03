@@ -1,0 +1,1152 @@
+{
+  "adjudicator_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudicator-v1",
+  "application_bookkeeping_findings": [
+    {
+      "case_id": "E-B01",
+      "context_inference_count": 0,
+      "deterministic_application_correction_possible": true,
+      "field_analyses": [
+        {
+          "canonical_unresolved_representation": null,
+          "context_inference_present": false,
+          "contradiction_type": "none",
+          "decision_field_path": "contact_state.elapsed_since_latest_user_message_minutes",
+          "deterministic_application_correction_possible": false,
+          "final_semantic_value": null,
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "contact_state.usual_cadence_relation",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "not_applicable",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "practical_reason.deadline",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "later",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        }
+      ],
+      "root_cause_counts": {
+        "duplicate_inference_field": 0,
+        "forbidden_inference_field": 0,
+        "inference_and_unresolved_conflict": 0,
+        "other": 0,
+        "resolved_value_remains_in_unresolved_fields": 2,
+        "unknown_or_null_value_missing_from_unresolved_fields": 0,
+        "unsupported_fact_reference": 0,
+        "used_context_inference_mismatch": 0
+      },
+      "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID",
+      "semantic_value_requires_natural_language_reinterpretation": false,
+      "used_context_inference": false
+    },
+    {
+      "case_id": "E-B06",
+      "context_inference_count": 0,
+      "deterministic_application_correction_possible": true,
+      "field_analyses": [
+        {
+          "canonical_unresolved_representation": null,
+          "context_inference_present": false,
+          "contradiction_type": "none",
+          "decision_field_path": "contact_state.elapsed_since_latest_user_message_minutes",
+          "deterministic_application_correction_possible": false,
+          "final_semantic_value": null,
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "latest_direct_message.response_expectation",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "optional",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        }
+      ],
+      "root_cause_counts": {
+        "duplicate_inference_field": 0,
+        "forbidden_inference_field": 0,
+        "inference_and_unresolved_conflict": 0,
+        "other": 0,
+        "resolved_value_remains_in_unresolved_fields": 1,
+        "unknown_or_null_value_missing_from_unresolved_fields": 0,
+        "unsupported_fact_reference": 0,
+        "used_context_inference_mismatch": 0
+      },
+      "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID",
+      "semantic_value_requires_natural_language_reinterpretation": false,
+      "used_context_inference": false
+    },
+    {
+      "case_id": "E-B07",
+      "context_inference_count": 0,
+      "deterministic_application_correction_possible": true,
+      "field_analyses": [
+        {
+          "canonical_unresolved_representation": null,
+          "context_inference_present": false,
+          "contradiction_type": "none",
+          "decision_field_path": "contact_state.elapsed_since_latest_user_message_minutes",
+          "deterministic_application_correction_possible": false,
+          "final_semantic_value": null,
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": null,
+          "context_inference_present": false,
+          "contradiction_type": "none",
+          "decision_field_path": "contact_state.unanswered_user_message_count",
+          "deterministic_application_correction_possible": false,
+          "final_semantic_value": null,
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "none",
+          "decision_field_path": "contact_state.usual_cadence_relation",
+          "deterministic_application_correction_possible": false,
+          "final_semantic_value": "unknown",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "latest_direct_message.kind",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "none",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "latest_direct_message.response_expectation",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "none",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        },
+        {
+          "canonical_unresolved_representation": "unknown",
+          "context_inference_present": false,
+          "contradiction_type": "resolved_value_remains_in_unresolved_fields",
+          "decision_field_path": "latest_direct_message.sender",
+          "deterministic_application_correction_possible": true,
+          "final_semantic_value": "none",
+          "registered_in_unresolved_fields": true,
+          "used_context_inference": false
+        }
+      ],
+      "root_cause_counts": {
+        "duplicate_inference_field": 0,
+        "forbidden_inference_field": 0,
+        "inference_and_unresolved_conflict": 0,
+        "other": 0,
+        "resolved_value_remains_in_unresolved_fields": 3,
+        "unknown_or_null_value_missing_from_unresolved_fields": 0,
+        "unsupported_fact_reference": 0,
+        "used_context_inference_mismatch": 0
+      },
+      "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID",
+      "semantic_value_requires_natural_language_reinterpretation": false,
+      "used_context_inference": false
+    }
+  ],
+  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "candidate_source_isolation_boundary": {
+    "base_candidate_field_count": 0,
+    "base_optional_message_source_ref_count": 0,
+    "candidate_base_fact_field_count": 0,
+    "candidate_operational_metadata_count": 0,
+    "candidate_raw_echo_count": 0,
+    "candidate_source_isolation_provider_boundary_confirmed": true,
+    "expected_data_injection_count": 0,
+    "frozen_global_exact_literal_counter": 2,
+    "frozen_global_exact_literal_counter_disposition": "confirmed_evaluator_scope_defect_not_source_leakage",
+    "provider_input_isolation": true,
+    "provider_output_immutability": true,
+    "provider_quality_established": false,
+    "schema_pass": true,
+    "secret_leakage_count": 0,
+    "source_integrity_pass": true
+  },
+  "case_level_derived_statuses": [
+    {
+      "case_id": "E-B01",
+      "classification_categories": [
+        "application_bookkeeping_gap",
+        "evaluator_implementation_defect",
+        "provider_or_prompt_gap"
+      ],
+      "classified_failure_codes": [
+        "E-B01-CONSTRAINT",
+        "E-B01-CONTEXTUAL-INTEGRITY",
+        "E-B01-HIERARCHY"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "fail",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-B02",
+      "classification_categories": [
+        "evaluator_implementation_defect",
+        "provider_or_prompt_gap"
+      ],
+      "classified_failure_codes": [
+        "E-B02-CADENCE",
+        "E-B02-CONSTRAINT",
+        "E-B02-LITERAL-LEAKAGE"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "fail",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-B03",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-B04",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-B05",
+      "classification_categories": [
+        "evaluator_implementation_defect"
+      ],
+      "classified_failure_codes": [
+        "E-B05-CONSTRAINT"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-B06",
+      "classification_categories": [
+        "application_bookkeeping_gap"
+      ],
+      "classified_failure_codes": [
+        "E-B06-CONTEXTUAL-INTEGRITY"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-B07",
+      "classification_categories": [
+        "application_bookkeeping_gap"
+      ],
+      "classified_failure_codes": [
+        "E-B07-CONTEXTUAL-INTEGRITY"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-B08",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-C01",
+      "classification_categories": [
+        "provider_or_prompt_gap",
+        "quality_contract_overconstraint"
+      ],
+      "classified_failure_codes": [
+        "E-C01-PRACTICAL",
+        "E-C01-SAFETY-ACTIONS"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "fail",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-C02",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-C03",
+      "classification_categories": [
+        "quality_contract_overconstraint"
+      ],
+      "classified_failure_codes": [
+        "E-C03-APOLOGY"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-C04",
+      "classification_categories": [
+        "provider_or_prompt_gap"
+      ],
+      "classified_failure_codes": [
+        "E-C04-REGISTER"
+      ],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "fail",
+      "split_runtime_readiness_status": "blocked"
+    },
+    {
+      "case_id": "E-C05",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    },
+    {
+      "case_id": "E-C06",
+      "classification_categories": [],
+      "classified_failure_codes": [],
+      "frozen_case_passed": false,
+      "provider_semantic_status": "pass",
+      "split_runtime_readiness_status": "ready"
+    }
+  ],
+  "category_counts": {
+    "application_bookkeeping_gap": 3,
+    "evaluator_implementation_defect": 4,
+    "provider_or_prompt_gap": 4,
+    "quality_contract_overconstraint": 2,
+    "unresolved_requires_human_chatgpt_review": 0
+  },
+  "classification_complete": true,
+  "classifications": [
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-B01",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "A one-match wildcard collapsed to a scalar; the frozen contains_all operator then treated the retained expected value as absent.",
+      "confidence": "confirmed",
+      "failure_code": "E-B01-CONSTRAINT",
+      "frozen_actual": "no_private_contact_at_work",
+      "frozen_assertion_id": "E-B01-CONSTRAINT",
+      "frozen_evidence_json_pointer": "/calls/0/assertion_results/9",
+      "frozen_expected": [
+        "no_private_contact_at_work"
+      ],
+      "primary_category": "evaluator_implementation_defect",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "evaluator",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-B01",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "The final semantic values are evidence-consistent; only canonical unresolved-field bookkeeping contradicts them and can be corrected deterministically without rereading text.",
+      "confidence": "confirmed",
+      "failure_code": "E-B01-CONTEXTUAL-INTEGRITY",
+      "frozen_actual": {
+        "passed": false,
+        "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID"
+      },
+      "frozen_assertion_id": "E-B01-CONTEXTUAL-INTEGRITY",
+      "frozen_evidence_json_pointer": "/calls/0/contextual_integrity_result",
+      "frozen_expected": {
+        "passed": true
+      },
+      "primary_category": "application_bookkeeping_gap",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "application",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-B01",
+      "changes_provider_semantic_view": true,
+      "concise_rationale": "The synthetic input explicitly identifies the other person as a workplace senior, so unknown loses a directly stated hierarchy relation.",
+      "confidence": "confirmed",
+      "failure_code": "E-B01-HIERARCHY",
+      "frozen_actual": "unknown",
+      "frozen_assertion_id": "E-B01-HIERARCHY",
+      "frozen_evidence_json_pointer": "/calls/0/assertion_results/10",
+      "frozen_expected": "user_is_junior",
+      "primary_category": "provider_or_prompt_gap",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "prompt",
+      "recommended_next_owner": "ChatGPT",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-B02",
+      "changes_provider_semantic_view": true,
+      "concise_rationale": "The user explicitly says the current delay is ordinary relative to the stated usual cadence, so unknown discards direct evidence.",
+      "confidence": "confirmed",
+      "failure_code": "E-B02-CADENCE",
+      "frozen_actual": "unknown",
+      "frozen_assertion_id": "E-B02-CADENCE",
+      "frozen_evidence_json_pointer": "/calls/1/assertion_results/4",
+      "frozen_expected": "within_usual",
+      "primary_category": "provider_or_prompt_gap",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "prompt",
+      "recommended_next_owner": "ChatGPT",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-B02",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "A one-match wildcard collapsed to a scalar; the frozen contains_all operator then treated the retained expected value as absent.",
+      "confidence": "confirmed",
+      "failure_code": "E-B02-CONSTRAINT",
+      "frozen_actual": "no_followup_message",
+      "frozen_assertion_id": "E-B02-CONSTRAINT",
+      "frozen_evidence_json_pointer": "/calls/1/assertion_results/7",
+      "frozen_expected": [
+        "no_followup_message"
+      ],
+      "primary_category": "evaluator_implementation_defect",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "evaluator",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-B02",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "Every scoped exact-literal assertion passed, but the runner's global scan counted the literal in an allowed sibling surface.",
+      "confidence": "confirmed",
+      "failure_code": "E-B02-LITERAL-LEAKAGE",
+      "frozen_actual": 2,
+      "frozen_assertion_id": "E-B02-LITERAL-LEAKAGE",
+      "frozen_evidence_json_pointer": "/calls/1/exact_literal_leakage_count",
+      "frozen_expected": 0,
+      "primary_category": "evaluator_implementation_defect",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "evaluator",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-B05",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "A one-match wildcard collapsed to a scalar; the frozen contains_all operator then treated the retained expected value as absent.",
+      "confidence": "confirmed",
+      "failure_code": "E-B05-CONSTRAINT",
+      "frozen_actual": "no_self_invitation",
+      "frozen_assertion_id": "E-B05-CONSTRAINT",
+      "frozen_evidence_json_pointer": "/calls/4/assertion_results/8",
+      "frozen_expected": [
+        "no_self_invitation"
+      ],
+      "primary_category": "evaluator_implementation_defect",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "evaluator",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-B06",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "The final semantic values are evidence-consistent; only canonical unresolved-field bookkeeping contradicts them and can be corrected deterministically without rereading text.",
+      "confidence": "confirmed",
+      "failure_code": "E-B06-CONTEXTUAL-INTEGRITY",
+      "frozen_actual": {
+        "passed": false,
+        "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID"
+      },
+      "frozen_assertion_id": "E-B06-CONTEXTUAL-INTEGRITY",
+      "frozen_evidence_json_pointer": "/calls/5/contextual_integrity_result",
+      "frozen_expected": {
+        "passed": true
+      },
+      "primary_category": "application_bookkeeping_gap",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "application",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-B07",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "The final semantic values are evidence-consistent; only canonical unresolved-field bookkeeping contradicts them and can be corrected deterministically without rereading text.",
+      "confidence": "confirmed",
+      "failure_code": "E-B07-CONTEXTUAL-INTEGRITY",
+      "frozen_actual": {
+        "passed": false,
+        "safe_error_code": "M2_CONTEXTUAL_INFERENCE_INVALID"
+      },
+      "frozen_assertion_id": "E-B07-CONTEXTUAL-INTEGRITY",
+      "frozen_evidence_json_pointer": "/calls/6/contextual_integrity_result",
+      "frozen_expected": {
+        "passed": true
+      },
+      "primary_category": "application_bookkeeping_gap",
+      "product_owner_decision_required": false,
+      "production_change_indicated": "application",
+      "recommended_next_owner": "CodeX",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-C01",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "The Candidate both provides Saturday availability and asks for the time; provide_information is Schema-valid and the Prompt does not require confirm_schedule for this wording.",
+      "confidence": "strongly_supported",
+      "failure_code": "E-C01-PRACTICAL",
+      "frozen_actual": [
+        "provide_information"
+      ],
+      "frozen_assertion_id": "E-C01-PRACTICAL",
+      "frozen_evidence_json_pointer": "/calls/8/assertion_results/11",
+      "frozen_expected": [
+        "confirm_schedule"
+      ],
+      "primary_category": "quality_contract_overconstraint",
+      "product_owner_decision_required": true,
+      "production_change_indicated": "quality_contract",
+      "recommended_next_owner": "ProductOwner",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-C01",
+      "changes_provider_semantic_view": true,
+      "concise_rationale": "The Candidate directly asks the recipient to provide the meeting time, while the Prompt requires every directly supported contact-action signal.",
+      "confidence": "strongly_supported",
+      "failure_code": "E-C01-SAFETY-ACTIONS",
+      "frozen_actual": [
+        "proposes_meeting"
+      ],
+      "frozen_assertion_id": "E-C01-SAFETY-ACTIONS",
+      "frozen_evidence_json_pointer": "/calls/8/assertion_results/13",
+      "frozen_expected": [
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "primary_category": "provider_or_prompt_gap",
+      "product_owner_decision_required": true,
+      "production_change_indicated": "prompt",
+      "recommended_next_owner": "ProductOwner",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": false,
+      "case_id": "E-C03",
+      "changes_provider_semantic_view": false,
+      "concise_rationale": "A single unmodified casual apology can reasonably be low strength; the separate same-day request already captures response pressure.",
+      "confidence": "strongly_supported",
+      "failure_code": "E-C03-APOLOGY",
+      "frozen_actual": "low",
+      "frozen_assertion_id": "E-C03-APOLOGY",
+      "frozen_evidence_json_pointer": "/calls/10/assertion_results/2",
+      "frozen_expected": [
+        "medium",
+        "high"
+      ],
+      "primary_category": "quality_contract_overconstraint",
+      "product_owner_decision_required": true,
+      "production_change_indicated": "quality_contract",
+      "recommended_next_owner": "ProductOwner",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    },
+    {
+      "blocks_runtime_readiness": true,
+      "case_id": "E-C04",
+      "changes_provider_semantic_view": true,
+      "concise_rationale": "Two predicate endings use desu or masu politeness, so classifying the whole three-sentence Candidate as casual is not supported; neutral_polite is already allowed.",
+      "confidence": "strongly_supported",
+      "failure_code": "E-C04-REGISTER",
+      "frozen_actual": "casual",
+      "frozen_assertion_id": "E-C04-REGISTER",
+      "frozen_evidence_json_pointer": "/calls/11/assertion_results/1",
+      "frozen_expected": [
+        "polite",
+        "neutral_polite"
+      ],
+      "primary_category": "provider_or_prompt_gap",
+      "product_owner_decision_required": true,
+      "production_change_indicated": "prompt",
+      "recommended_next_owner": "ProductOwner",
+      "supporting_frozen_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json"
+      ]
+    }
+  ],
+  "evaluator_hypotheses": {
+    "EV-H1": {
+      "frozen_actual": "retained",
+      "frozen_result": "FAIL",
+      "status": "confirmed",
+      "successor_actual": [
+        "retained"
+      ],
+      "successor_result": "PASS",
+      "successor_rule": "Wildcard selection remains an array for zero, one, or many matches."
+    },
+    "EV-H2": {
+      "frozen_allowed_surface_occurrence_pointers": [
+        "/grounded_output/user_assumptions/0/statement",
+        "/raw_output/user_assumptions/0/statement"
+      ],
+      "frozen_evidence_case_id": "E-B02",
+      "frozen_global_leakage_counter": 2,
+      "frozen_scoped_assertion_result": "PASS",
+      "frozen_scoped_assertions_passed": true,
+      "status": "confirmed",
+      "successor_rule": "Exact-literal validation evaluates only the assertion surface and JSON path.",
+      "successor_scoped_result": "PASS"
+    }
+  },
+  "evaluator_successor_self_tests": {
+    "passed": 12,
+    "results": [
+      {
+        "name": "wildcard 0 match",
+        "passed": true
+      },
+      {
+        "name": "wildcard 1 match preserves array",
+        "passed": true
+      },
+      {
+        "name": "wildcard 2+ matches preserve array",
+        "passed": true
+      },
+      {
+        "name": "contains_all one-element PASS",
+        "passed": true
+      },
+      {
+        "name": "contains_all missing value FAIL",
+        "passed": true
+      },
+      {
+        "name": "scoped literal absent PASS",
+        "passed": true
+      },
+      {
+        "name": "scoped literal present FAIL",
+        "passed": true
+      },
+      {
+        "name": "literal only in allowed sibling surface PASS",
+        "passed": true
+      },
+      {
+        "name": "raw and grounded surfaces evaluated explicitly",
+        "passed": true
+      },
+      {
+        "name": "frozen output immutability",
+        "passed": true
+      },
+      {
+        "name": "no expected-value injection",
+        "passed": true
+      },
+      {
+        "name": "no case-ID based result override",
+        "passed": true
+      }
+    ],
+    "total": 12
+  },
+  "frozen_evidence": {
+    "authorization_consumed": true,
+    "execution_evidence_valid": true,
+    "execution_protocol_accepted": true,
+    "machine_case_result": "6/14",
+    "machine_verdict": "FAIL",
+    "pb_01_calls": 8,
+    "pb_01c_calls": 6,
+    "provider_calls": 14,
+    "rerun_authorized": false
+  },
+  "frozen_failure_codes": [
+    "E-B01-CONSTRAINT",
+    "E-B01-CONTEXTUAL-INTEGRITY",
+    "E-B01-HIERARCHY",
+    "E-B02-CADENCE",
+    "E-B02-CONSTRAINT",
+    "E-B02-LITERAL-LEAKAGE",
+    "E-B05-CONSTRAINT",
+    "E-B06-CONTEXTUAL-INTEGRITY",
+    "E-B07-CONTEXTUAL-INTEGRITY",
+    "E-C01-PRACTICAL",
+    "E-C01-SAFETY-ACTIONS",
+    "E-C03-APOLOGY",
+    "E-C04-REGISTER"
+  ],
+  "overall_postmortem_status": "PASS_PENDING_HUMAN_CHATGPT_REVIEW",
+  "product_owner_decisions_required": [
+    {
+      "case_id": "E-C01",
+      "chatgpt_recommendation": "Accept provide_information, confirm_schedule, or both for this wording unless Product Owner defines a stricter multi-label rule.",
+      "current_quality_contract_expectation": [
+        "confirm_schedule"
+      ],
+      "decision_id": "PO-E-C01-PRACTICAL",
+      "luna_actual_classification": [
+        "provide_information"
+      ],
+      "option_a": "provide_information を妥当とし、confirm_schedule は任意の追加ラベルとする。",
+      "option_b": "時間の提示依頼を含むため confirm_schedule を必須とし、必要なら provide_information も併記する。",
+      "product_owner_answer": "pending",
+      "question": "「土曜ならいける。時間を教えて」を、予定確認と情報提供の両方として扱うか、情報提供だけでも妥当とするか。返信案の実質維持判定に影響する。",
+      "reply_or_report_impact": "A narrow label contract can trigger unnecessary rewrites even when the Candidate's practical intent is preserved.",
+      "source_excerpt": "おっけー、土曜ならいけるで！ また時間おしえて〜😊"
+    },
+    {
+      "case_id": "E-C01",
+      "chatgpt_recommendation": "Count a direct request to provide meeting details as asks_for_reply in addition to proposes_meeting, subject to Product Owner confirmation of the trigger boundary.",
+      "current_quality_contract_expectation": [
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "decision_id": "PO-E-C01-SAFETY-ACTIONS",
+      "luna_actual_classification": [
+        "proposes_meeting"
+      ],
+      "option_a": "通常の情報依頼も asks_for_reply として記録し、reply_demand とは明確に分離する。",
+      "option_b": "asks_for_reply は返答そのものを明示要求する表現だけに限定し、情報依頼は別の実質ラベルで扱う。",
+      "product_owner_answer": "pending",
+      "question": "「また時間おしえて」のような通常の情報依頼も asks_for_reply として記録するか。Base の連絡禁止境界と組み合わせる後段 Safety 判定に影響する。",
+      "reply_or_report_impact": "Missing asks_for_reply weakens later boundary-aware contact routing when Base facts are combined.",
+      "source_excerpt": "おっけー、土曜ならいけるで！ また時間おしえて〜😊"
+    },
+    {
+      "case_id": "E-C03",
+      "chatgpt_recommendation": "Allow low for a single casual apology unless repetition, intensifiers, self-blame, or repair language raises the strength.",
+      "current_quality_contract_expectation": [
+        "medium",
+        "high"
+      ],
+      "decision_id": "PO-E-C03-APOLOGY",
+      "luna_actual_classification": "low",
+      "option_a": "修飾のない一回の「ごめん」は low とし、返答圧力は response_pressure で別評価する。",
+      "option_b": "関係不安を伴う冒頭謝罪は medium とし、単なる軽い謝意より強く扱う。",
+      "product_owner_answer": "pending",
+      "question": "「ごめん、何か嫌だった？」の冒頭の一回だけの謝罪を low とするか medium とするか。返信案の温度調整量に影響する。",
+      "reply_or_report_impact": "Conflating apology presence with apology intensity can exaggerate the Candidate's emotional temperature.",
+      "source_excerpt": "ごめん、何か嫌だった？ 忙しいだけならいいんだけど、 できれば今日中に返事ほしいな…"
+    },
+    {
+      "case_id": "E-C04",
+      "chatgpt_recommendation": "Treat dominant desu or masu endings as neutral_polite unless clearly offset by sustained casual endings; reserve mixed for a genuinely balanced register split.",
+      "current_quality_contract_expectation": [
+        "polite",
+        "neutral_polite"
+      ],
+      "decision_id": "PO-E-C04-REGISTER",
+      "luna_actual_classification": "casual",
+      "option_a": "主要な述語終止がです・ます調なら neutral_polite とする。",
+      "option_b": "常体の語句とです・ます調が混在する場合は mixed とする。",
+      "product_owner_answer": "pending",
+      "question": "「ありがとう」に続いて二文がです・ます調の終了文を、全体として neutral_polite とするか mixed とするか。最終返信案の語調維持に影響する。",
+      "reply_or_report_impact": "A casual misclassification can cause the final draft to flatten a deliberate closure tone.",
+      "source_excerpt": "今までありがとう。 これで連絡は終わりにします。 返信は大丈夫です。"
+    }
+  ],
+  "provider_prompt_findings": [
+    {
+      "actual_provider_value": "unknown",
+      "case_id": "E-B01",
+      "failure_code": "E-B01-HIERARCHY",
+      "input_excerpt": "職場の先輩から「来週どこかで打ち合わせできる？」って来てて、 まだ返してません。 私は職場では私的な連絡をしないと決めてるので、 業務のことだけ短く返したいです。",
+      "input_summary": "workplace schedule, user-owned rule, hierarchy, and no invented schedule detail",
+      "justified_expected_set": "user_is_junior",
+      "prompt_correction_candidate": "Clarify that an explicitly stated workplace senior establishes user_is_junior while the work_or_school chip alone does not.",
+      "provider_retest_required": true,
+      "schema_change_required": false,
+      "user_visible_impact": "A missed hierarchy signal can produce an inappropriately casual or assertive reply."
+    },
+    {
+      "actual_provider_value": "unknown",
+      "case_id": "E-B02",
+      "failure_code": "E-B02-CADENCE",
+      "input_excerpt": "マチアプで知り合って2回会った人に、 昨日の夜「また行こう〜」って私から送って、まだ返事ないです。 いつも半日〜1日くらい空く人だから普通っちゃ普通なんだけど、 嫌われたのかなって考えちゃいま",
+      "input_summary": "matching-app ordinary reply cadence, anxiety as assumption, and no follow-up constraint",
+      "justified_expected_set": "within_usual",
+      "prompt_correction_candidate": "Separate the qualitative cadence relation from the exact elapsed-time field and preserve explicit ordinary-cadence statements.",
+      "provider_retest_required": true,
+      "schema_change_required": false,
+      "user_visible_impact": "Losing the ordinary-cadence signal can amplify anxiety and overstate the need for action."
+    },
+    {
+      "actual_provider_value": [
+        "proposes_meeting"
+      ],
+      "case_id": "E-C01",
+      "failure_code": "E-C01-SAFETY-ACTIONS",
+      "input_excerpt": "おっけー、土曜ならいけるで！ また時間おしえて〜😊",
+      "input_summary": "casual dialect, restrained emoji, and practical scheduling intent",
+      "justified_expected_set": [
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "prompt_correction_candidate": "Define whether ordinary requests for requested information count as asks_for_reply and distinguish them from reply_demand.",
+      "provider_retest_required": true,
+      "schema_change_required": false,
+      "user_visible_impact": "Missing asks_for_reply weakens later boundary-aware contact routing when Base facts are combined."
+    },
+    {
+      "actual_provider_value": "casual",
+      "case_id": "E-C04",
+      "failure_code": "E-C04-REGISTER",
+      "input_excerpt": "今までありがとう。 これで連絡は終わりにします。 返信は大丈夫です。",
+      "input_summary": "explicit user-owned closure with no reply request",
+      "justified_expected_set": [
+        "polite",
+        "neutral_polite"
+      ],
+      "prompt_correction_candidate": "Define message-level register aggregation for mixed lexical warmth and polite predicate endings.",
+      "provider_retest_required": true,
+      "schema_change_required": false,
+      "user_visible_impact": "A casual misclassification can cause the final draft to flatten a deliberate closure tone."
+    }
+  ],
+  "provider_semantic_adjudication": {
+    "counts": {
+      "fail": 4,
+      "pass": 10,
+      "total": 14,
+      "unresolved": 0
+    },
+    "fail_cases": [
+      "E-B01",
+      "E-B02",
+      "E-C01",
+      "E-C04"
+    ],
+    "pass_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B06",
+      "E-B07",
+      "E-B08",
+      "E-C02",
+      "E-C03",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": []
+  },
+  "quality_contract_findings": [
+    {
+      "case_id": "E-B01",
+      "chatgpt_recommendation": "Require explicit Japanese role terms such as workplace senior or junior to populate the bounded hierarchy value without inventing authority beyond the text.",
+      "failure_code": "E-B01-HIERARCHY",
+      "frozen_actual": "unknown",
+      "frozen_expected": "user_is_junior",
+      "input_excerpt": "職場の先輩から「来週どこかで打ち合わせできる？」って来てて、 まだ返してません。 私は職場では私的な連絡をしないと決めてるので、 業務のことだけ短く返したいです。",
+      "input_summary": "workplace schedule, user-owned rule, hierarchy, and no invented schedule detail",
+      "product_behavior_impact": "A missed hierarchy signal can produce an inappropriately casual or assertive reply.",
+      "product_owner_decision_required": false,
+      "prompt_definition": "Use current-situation evidence for hierarchy; the relationship chip alone cannot establish it.",
+      "review_classification": "justified",
+      "schema_allowed_values": [
+        "user_is_junior",
+        "peer",
+        "user_is_senior",
+        "none",
+        "unknown"
+      ],
+      "uniquely_determinable": true
+    },
+    {
+      "case_id": "E-B02",
+      "chatgpt_recommendation": "Treat an explicit user statement that the delay is ordinary as within_usual even when exact elapsed minutes remain unresolved.",
+      "failure_code": "E-B02-CADENCE",
+      "frozen_actual": "unknown",
+      "frozen_expected": "within_usual",
+      "input_excerpt": "マチアプで知り合って2回会った人に、 昨日の夜「また行こう〜」って私から送って、まだ返事ないです。 いつも半日〜1日くらい空く人だから普通っちゃ普通なんだけど、 嫌われたのかなって考えちゃいま",
+      "input_summary": "matching-app ordinary reply cadence, anxiety as assumption, and no follow-up constraint",
+      "product_behavior_impact": "Losing the ordinary-cadence signal can amplify anxiety and overstate the need for action.",
+      "product_owner_decision_required": false,
+      "prompt_definition": "Extract the situation-owned typed Base decision facts and preserve direct current-situation evidence.",
+      "review_classification": "justified",
+      "schema_allowed_values": [
+        "within_usual",
+        "beyond_usual",
+        "unknown",
+        "not_applicable"
+      ],
+      "uniquely_determinable": true
+    },
+    {
+      "case_id": "E-C01",
+      "chatgpt_recommendation": "Accept provide_information, confirm_schedule, or both for this wording unless Product Owner defines a stricter multi-label rule.",
+      "failure_code": "E-C01-PRACTICAL",
+      "frozen_actual": [
+        "provide_information"
+      ],
+      "frozen_expected": [
+        "confirm_schedule"
+      ],
+      "input_excerpt": "おっけー、土曜ならいけるで！ また時間おしえて〜😊",
+      "input_summary": "casual dialect, restrained emoji, and practical scheduling intent",
+      "product_behavior_impact": "A narrow label contract can trigger unnecessary rewrites even when the Candidate's practical intent is preserved.",
+      "product_owner_decision_required": true,
+      "prompt_definition": "Classify the bounded Candidate field; no field-specific threshold or aggregation rule is defined.",
+      "review_classification": "too_narrow",
+      "schema_allowed_values": [
+        "answer_question",
+        "confirm_schedule",
+        "provide_information",
+        "acknowledge_boundary",
+        "acknowledge_decline",
+        "none",
+        "unknown"
+      ],
+      "uniquely_determinable": false
+    },
+    {
+      "case_id": "E-C01",
+      "chatgpt_recommendation": "Count a direct request to provide meeting details as asks_for_reply in addition to proposes_meeting, subject to Product Owner confirmation of the trigger boundary.",
+      "failure_code": "E-C01-SAFETY-ACTIONS",
+      "frozen_actual": [
+        "proposes_meeting"
+      ],
+      "frozen_expected": [
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "input_excerpt": "おっけー、土曜ならいけるで！ また時間おしえて〜😊",
+      "input_summary": "casual dialect, restrained emoji, and practical scheduling intent",
+      "product_behavior_impact": "Missing asks_for_reply weakens later boundary-aware contact routing when Base facts are combined.",
+      "product_owner_decision_required": true,
+      "prompt_definition": "Emit every directly supported bounded signal code, including contact-action signals when present.",
+      "review_classification": "justified",
+      "schema_allowed_values": [
+        "threat",
+        "coercion",
+        "fear_inducing_pressure",
+        "conditional_retaliation",
+        "uninvited_visit",
+        "location_tracking",
+        "repeat_contact_pressure",
+        "reply_demand",
+        "address_disclosure",
+        "identity_disclosure",
+        "account_disclosure",
+        "workplace_or_school_disclosure",
+        "third_party_sensitive_detail",
+        "self_harm_intent",
+        "self_harm_threat_as_pressure",
+        "suicidal_ideation",
+        "violent_intent",
+        "violent_threat",
+        "instruction_to_harm",
+        "minor_age_signal",
+        "adult_minor_romantic_or_sexual_context",
+        "authority_over_minor",
+        "request_to_facilitate_illegal_conduct",
+        "instruction_to_evade_lawful_process",
+        "criminal_coordination",
+        "initiates_contact",
+        "continues_contact",
+        "asks_for_reply",
+        "proposes_meeting"
+      ],
+      "uniquely_determinable": true
+    },
+    {
+      "case_id": "E-C03",
+      "chatgpt_recommendation": "Allow low for a single casual apology unless repetition, intensifiers, self-blame, or repair language raises the strength.",
+      "failure_code": "E-C03-APOLOGY",
+      "frozen_actual": "low",
+      "frozen_expected": [
+        "medium",
+        "high"
+      ],
+      "input_excerpt": "ごめん、何か嫌だった？ 忙しいだけならいいんだけど、 できれば今日中に返事ほしいな…",
+      "input_summary": "apology and moderate reply pressure without escalation to threat or coercion",
+      "product_behavior_impact": "Conflating apology presence with apology intensity can exaggerate the Candidate's emotional temperature.",
+      "product_owner_decision_required": true,
+      "prompt_definition": "Classify the bounded Candidate field; no field-specific threshold or aggregation rule is defined.",
+      "review_classification": "too_narrow",
+      "schema_allowed_values": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "unknown"
+      ],
+      "uniquely_determinable": false
+    },
+    {
+      "case_id": "E-C04",
+      "chatgpt_recommendation": "Treat dominant desu or masu endings as neutral_polite unless clearly offset by sustained casual endings; reserve mixed for a genuinely balanced register split.",
+      "failure_code": "E-C04-REGISTER",
+      "frozen_actual": "casual",
+      "frozen_expected": [
+        "polite",
+        "neutral_polite"
+      ],
+      "input_excerpt": "今までありがとう。 これで連絡は終わりにします。 返信は大丈夫です。",
+      "input_summary": "explicit user-owned closure with no reply request",
+      "product_behavior_impact": "A casual misclassification can cause the final draft to flatten a deliberate closure tone.",
+      "product_owner_decision_required": true,
+      "prompt_definition": "Classify the bounded Candidate field; no field-specific threshold or aggregation rule is defined.",
+      "review_classification": "justified",
+      "schema_allowed_values": [
+        "polite",
+        "neutral_polite",
+        "casual",
+        "mixed"
+      ],
+      "uniquely_determinable": true
+    }
+  ],
+  "safeguards": {
+    "c2_authorized": false,
+    "candidate_ready_for_isolated_e2e": false,
+    "db_operations": 0,
+    "e_r2_authorized": false,
+    "expected_data_injection_count": 0,
+    "provider_calls_in_this_task": 0,
+    "provider_output_mutation_count": 0,
+    "provider_quality_established": false,
+    "provider_rerun_authorized": false,
+    "r4_authorized": false,
+    "secret_leakage_count": 0,
+    "supabase_operations": 0
+  },
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudication-results-v1",
+  "split_runtime_readiness_adjudication": {
+    "blocked_cases": [
+      "E-B01",
+      "E-B02",
+      "E-B06",
+      "E-B07",
+      "E-C01",
+      "E-C04"
+    ],
+    "counts": {
+      "blocked": 6,
+      "ready": 8,
+      "total": 14,
+      "unresolved": 0
+    },
+    "ready_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B08",
+      "E-C02",
+      "E-C03",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": []
+  },
+  "status": "offline_postmortem_completed_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
+  "unresolved_findings": []
+}

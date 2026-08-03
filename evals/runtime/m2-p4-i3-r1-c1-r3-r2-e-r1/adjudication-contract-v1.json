@@ -1,0 +1,237 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudication-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
+  "title": "Frozen Provider Diagnostic Postmortem and Independent Offline Responsibility Adjudication",
+  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "e_package_commit_a": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
+  "e_evidence_commit_b": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem",
+  "evidence_mode": "immutable_saved_e_exact_fourteen_calls_offline_only",
+  "provider_calls": 0,
+  "provider_rerun_authorized": false,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "allowed_classification_categories": [
+    "evaluator_implementation_defect",
+    "quality_contract_overconstraint",
+    "application_bookkeeping_gap",
+    "provider_or_prompt_gap",
+    "unresolved_requires_human_chatgpt_review"
+  ],
+  "required_classification_fields": [
+    "failure_code",
+    "case_id",
+    "primary_category",
+    "confidence",
+    "frozen_assertion_id",
+    "frozen_expected",
+    "frozen_actual",
+    "frozen_evidence_json_pointer",
+    "supporting_frozen_paths",
+    "concise_rationale",
+    "changes_provider_semantic_view",
+    "blocks_runtime_readiness",
+    "production_change_indicated",
+    "product_owner_decision_required",
+    "recommended_next_owner"
+  ],
+  "allowed_confidence_values": [
+    "confirmed",
+    "strongly_supported",
+    "uncertain"
+  ],
+  "allowed_production_change_indications": [
+    "none",
+    "evaluator",
+    "quality_contract",
+    "application",
+    "prompt",
+    "schema",
+    "unresolved"
+  ],
+  "allowed_next_owners": [
+    "ChatGPT",
+    "CodeX",
+    "ProductOwner",
+    "HumanChatGPTReview"
+  ],
+  "no_oracle_rule": {
+    "human_or_chatgpt_prior_guesses_are_oracles": false,
+    "predefined_corrected_result_allowed": false,
+    "predefined_residual_count_allowed": false,
+    "predefined_residual_case_ids_allowed": false,
+    "predefined_category_counts_allowed": false,
+    "case_id_result_override_allowed": false,
+    "failure_code_result_override_allowed": false,
+    "counts_must_be_derived_from_mapping": true,
+    "case_lists_must_be_derived_from_mapping": true
+  },
+  "classification_precedence": [
+    "confirmed_evaluator_reproducer",
+    "deterministic_application_bookkeeping",
+    "field_level_quality_or_semantic_responsibility",
+    "unresolved_requires_human_chatgpt_review"
+  ],
+  "evaluator_successor_rules": {
+    "wildcard_selection": "preserve_array_for_zero_one_or_many_matches",
+    "exact_literal_validation": "evaluate_only_the_assertion_surface_and_json_path"
+  },
+  "semantic_field_rules": [
+    {
+      "json_path": "base_writing_signals.relationship_dimensions.hierarchy.value",
+      "primary_category": "provider_or_prompt_gap",
+      "confidence": "confirmed",
+      "quality_contract_review": "justified",
+      "product_owner_decision_required": false,
+      "concise_rationale": "The synthetic input explicitly identifies the other person as a workplace senior, so unknown loses a directly stated hierarchy relation.",
+      "product_behavior_impact": "A missed hierarchy signal can produce an inappropriately casual or assertive reply.",
+      "chatgpt_recommendation": "Require explicit Japanese role terms such as workplace senior or junior to populate the bounded hierarchy value without inventing authority beyond the text.",
+      "prompt_correction_candidate": "Clarify that an explicitly stated workplace senior establishes user_is_junior while the work_or_school chip alone does not.",
+      "schema_change_required": false,
+      "provider_retest_required": true
+    },
+    {
+      "json_path": "decision_facts.contact_state.usual_cadence_relation",
+      "primary_category": "provider_or_prompt_gap",
+      "confidence": "confirmed",
+      "quality_contract_review": "justified",
+      "product_owner_decision_required": false,
+      "concise_rationale": "The user explicitly says the current delay is ordinary relative to the stated usual cadence, so unknown discards direct evidence.",
+      "product_behavior_impact": "Losing the ordinary-cadence signal can amplify anxiety and overstate the need for action.",
+      "chatgpt_recommendation": "Treat an explicit user statement that the delay is ordinary as within_usual even when exact elapsed minutes remain unresolved.",
+      "prompt_correction_candidate": "Separate the qualitative cadence relation from the exact elapsed-time field and preserve explicit ordinary-cadence statements.",
+      "schema_change_required": false,
+      "provider_retest_required": true
+    },
+    {
+      "json_path": "candidate_analysis.candidate_communicative_intent.practical_requirement",
+      "primary_category": "quality_contract_overconstraint",
+      "confidence": "strongly_supported",
+      "quality_contract_review": "too_narrow",
+      "product_owner_decision_required": true,
+      "concise_rationale": "The Candidate both provides Saturday availability and asks for the time; provide_information is Schema-valid and the Prompt does not require confirm_schedule for this wording.",
+      "product_behavior_impact": "A narrow label contract can trigger unnecessary rewrites even when the Candidate's practical intent is preserved.",
+      "chatgpt_recommendation": "Accept provide_information, confirm_schedule, or both for this wording unless Product Owner defines a stricter multi-label rule.",
+      "prompt_correction_candidate": "Define when availability plus a request for time is provide_information, confirm_schedule, or a multi-label combination.",
+      "schema_change_required": false,
+      "provider_retest_required": false,
+      "schema_definition": "practical_requirement_signal"
+    },
+    {
+      "json_path": "candidate_safety_result.signal_codes",
+      "primary_category": "provider_or_prompt_gap",
+      "confidence": "strongly_supported",
+      "quality_contract_review": "justified",
+      "product_owner_decision_required": true,
+      "concise_rationale": "The Candidate directly asks the recipient to provide the meeting time, while the Prompt requires every directly supported contact-action signal.",
+      "product_behavior_impact": "Missing asks_for_reply weakens later boundary-aware contact routing when Base facts are combined.",
+      "chatgpt_recommendation": "Count a direct request to provide meeting details as asks_for_reply in addition to proposes_meeting, subject to Product Owner confirmation of the trigger boundary.",
+      "prompt_correction_candidate": "Define whether ordinary requests for requested information count as asks_for_reply and distinguish them from reply_demand.",
+      "schema_change_required": false,
+      "provider_retest_required": true,
+      "schema_definition": "candidate_safety_signal_code"
+    },
+    {
+      "json_path": "candidate_analysis.candidate_communicative_intent.apology_strength",
+      "primary_category": "quality_contract_overconstraint",
+      "confidence": "strongly_supported",
+      "quality_contract_review": "too_narrow",
+      "product_owner_decision_required": true,
+      "concise_rationale": "A single unmodified casual apology can reasonably be low strength; the separate same-day request already captures response pressure.",
+      "product_behavior_impact": "Conflating apology presence with apology intensity can exaggerate the Candidate's emotional temperature.",
+      "chatgpt_recommendation": "Allow low for a single casual apology unless repetition, intensifiers, self-blame, or repair language raises the strength.",
+      "prompt_correction_candidate": "Define apology strength independently from response pressure and list bounded intensity signals.",
+      "schema_change_required": false,
+      "provider_retest_required": false,
+      "schema_definition": "apology_strength"
+    },
+    {
+      "json_path": "candidate_analysis.candidate_style_profile.register",
+      "primary_category": "provider_or_prompt_gap",
+      "confidence": "strongly_supported",
+      "quality_contract_review": "justified",
+      "product_owner_decision_required": true,
+      "concise_rationale": "Two predicate endings use desu or masu politeness, so classifying the whole three-sentence Candidate as casual is not supported; neutral_polite is already allowed.",
+      "product_behavior_impact": "A casual misclassification can cause the final draft to flatten a deliberate closure tone.",
+      "chatgpt_recommendation": "Treat dominant desu or masu endings as neutral_polite unless clearly offset by sustained casual endings; reserve mixed for a genuinely balanced register split.",
+      "prompt_correction_candidate": "Define message-level register aggregation for mixed lexical warmth and polite predicate endings.",
+      "schema_change_required": false,
+      "provider_retest_required": true,
+      "schema_definition": "register"
+    }
+  ],
+  "quality_contract_review_values": [
+    "justified",
+    "too_narrow",
+    "ambiguous",
+    "requires_product_owner_decision"
+  ],
+  "two_view_adjudication_rules": {
+    "provider_semantic": {
+      "blocking_categories": [
+        "provider_or_prompt_gap"
+      ],
+      "unresolved_categories": [
+        "unresolved_requires_human_chatgpt_review"
+      ],
+      "not_directly_attributed_to_provider": [
+        "evaluator_implementation_defect",
+        "quality_contract_overconstraint",
+        "application_bookkeeping_gap"
+      ]
+    },
+    "split_runtime_readiness": {
+      "blocking_categories": [
+        "application_bookkeeping_gap",
+        "provider_or_prompt_gap"
+      ],
+      "unresolved_categories": [
+        "unresolved_requires_human_chatgpt_review"
+      ],
+      "nonblocking_categories": [
+        "evaluator_implementation_defect",
+        "quality_contract_overconstraint"
+      ]
+    }
+  },
+  "product_owner_decision_rules": {
+    "required_for_quality_contract_overconstraint_candidates": true,
+    "required_for_unresolved_findings": true,
+    "required_for_user_experience_prompt_boundaries": true,
+    "answer_state": "pending",
+    "e_r2_authorized_until_resolved": false
+  },
+  "provider_quality_established": false,
+  "candidate_ready_for_isolated_e2e": false,
+  "r4_authorized": false,
+  "e_r2_authorized": false,
+  "c2_authorized": false,
+  "frozen_evidence_must_remain_unchanged": true,
+  "exact_mutation_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r1/postmortem-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r1/adjudication-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r1/adjudication-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r1/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r1-adjudicator-v1.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R1_REVIEW.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_mutation_path_count": 10,
+  "immutable_e_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/quality-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/authorization-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/diagnostic-summary-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-provider-diagnostic.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_REVIEW.md"
+  ]
+}
