@@ -1,0 +1,330 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r2-revision-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R2",
+  "synthetic_only": true,
+  "real_user_data": 0,
+  "provider_responses": 0,
+  "grounding_v2": [
+    {
+      "fixture_id": "GROUNDING-RESOLVED-DEADLINE",
+      "operation": "resolved_unresolved_field",
+      "field_path": "practical_reason.deadline",
+      "semantic_value": "later",
+      "expected_retained": false
+    },
+    {
+      "fixture_id": "GROUNDING-RESOLVED-CADENCE",
+      "operation": "resolved_unresolved_field",
+      "field_path": "contact_state.usual_cadence_relation",
+      "semantic_value": "not_applicable",
+      "expected_retained": false
+    },
+    {
+      "fixture_id": "GROUNDING-RESOLVED-EXPECTATION",
+      "operation": "resolved_unresolved_field",
+      "field_path": "latest_direct_message.response_expectation",
+      "semantic_value": "optional",
+      "expected_retained": false
+    },
+    {
+      "fixture_id": "GROUNDING-RESOLVED-NONE-MESSAGE",
+      "operation": "resolved_unresolved_fields",
+      "field_paths": [
+        "latest_direct_message.sender",
+        "latest_direct_message.kind",
+        "latest_direct_message.response_expectation"
+      ],
+      "semantic_value": "none",
+      "expected_retained": false
+    },
+    {
+      "fixture_id": "GROUNDING-GENUINE-UNKNOWN",
+      "operation": "canonical_unresolved_field",
+      "field_path": "practical_reason.deadline",
+      "semantic_value": "unknown",
+      "expected_retained": true
+    },
+    {
+      "fixture_id": "GROUNDING-UNSUPPORTED-PATH",
+      "operation": "unsupported_unresolved_field",
+      "field_path": "unsupported.synthetic_path",
+      "expected_retained": true,
+      "expected_contextual_integrity": "rejected"
+    },
+    {
+      "fixture_id": "GROUNDING-INFERENCE-BOOKKEEPING",
+      "operation": "recompute_used_context_inference",
+      "expected_expression": "context_inferences.length > 0"
+    },
+    {
+      "fixture_id": "GROUNDING-INPUT-NONMUTATION",
+      "operation": "input_nonmutation",
+      "expected": true
+    }
+  ],
+  "semantic_disposition_v4": [
+    {
+      "fixture_id": "DISPOSITION-HARD-FACT-MINOR",
+      "finding": {
+        "finding_code": "FACT_FIDELITY",
+        "severity": "minor",
+        "json_path": "report_content.decision_reason_summary",
+        "evidence_refs": [],
+        "detail": "Synthetic hard-fact mismatch."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-HARD-SAFETY-MINOR",
+      "finding": {
+        "finding_code": "SAFETY_REGRESSION",
+        "severity": "minor",
+        "json_path": "decision_plan.recommended_message_draft.text",
+        "evidence_refs": [],
+        "detail": "Synthetic Safety regression."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-FLEXIBLE-REGISTER",
+      "finding": {
+        "finding_code": "BRAND_TONE",
+        "severity": "major",
+        "json_path": "candidate_envelope.analysis.candidate_style_profile.register",
+        "evidence_refs": [],
+        "detail": "Synthetic register-only difference."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-FLEXIBLE-APOLOGY",
+      "finding": {
+        "finding_code": "MESSAGE_POLICY_CONSISTENCY",
+        "severity": "major",
+        "json_path": "candidate_envelope.analysis.candidate_communicative_intent.apology_strength",
+        "evidence_refs": [],
+        "detail": "Synthetic apology-label-only difference."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-CONDITIONAL-PRACTICAL",
+      "finding": {
+        "finding_code": "MESSAGE_POLICY_CONSISTENCY",
+        "severity": "major",
+        "json_path": "candidate_envelope.analysis.candidate_communicative_intent.practical_requirement",
+        "evidence_refs": [],
+        "detail": "Synthetic practical-label-only difference."
+      },
+      "expected_disposition": "conditional"
+    },
+    {
+      "fixture_id": "DISPOSITION-TEMPLATE",
+      "finding": {
+        "finding_code": "TEMPLATE_GENERICITY",
+        "severity": "major",
+        "json_path": "report_content.short_letter",
+        "evidence_refs": [],
+        "detail": "Synthetic generic phrasing."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-REPETITION",
+      "finding": {
+        "finding_code": "REPETITION",
+        "severity": "major",
+        "json_path": "report_content.closing_lines",
+        "evidence_refs": [],
+        "detail": "Synthetic repetition."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-FINAL-DRAFT-MEANING",
+      "finding": {
+        "finding_code": "MESSAGE_POLICY_CONSISTENCY",
+        "severity": "major",
+        "json_path": "decision_plan.recommended_message_draft.text",
+        "evidence_refs": [],
+        "detail": "Synthetic material Candidate meaning loss."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-FINAL-DRAFT-PERSONALITY",
+      "finding": {
+        "finding_code": "BRAND_TONE",
+        "severity": "major",
+        "json_path": "decision_plan.recommended_message_draft.text",
+        "evidence_refs": [],
+        "detail": "Synthetic material final-draft personality drift."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-MISSING-REASSESSMENT",
+      "finding": {
+        "finding_code": "REVIEW_CONDITION_PRESENT",
+        "severity": "major",
+        "json_path": "decision_plan.change_conditions",
+        "evidence_refs": [],
+        "detail": "Synthetic missing reassessment condition."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "DISPOSITION-TEMPORAL-FUTURE",
+      "finding": {
+        "finding_code": "DECISION_ALLOWED",
+        "severity": "major",
+        "json_path": "decision_plan.change_conditions[0].resulting_direction",
+        "evidence_refs": [],
+        "detail": "Synthetic valid future direction."
+      },
+      "expected_disposition": "ignored"
+    },
+    {
+      "fixture_id": "DISPOSITION-EDITORIAL-MINOR",
+      "finding": {
+        "finding_code": "DECISION_REASON_SUPPORT",
+        "severity": "minor",
+        "json_path": "report_content.short_letter[0]",
+        "evidence_refs": [],
+        "detail": "Synthetic minor editorial weakness."
+      },
+      "expected_disposition": "nonblocking"
+    }
+  ],
+  "v10_fake_flows": [
+    {
+      "flow_id": "V10-READY-CANDIDATE-ABSENT",
+      "candidate_present": false,
+      "finding_fixture_ids": [],
+      "expected_outcome": "completed"
+    },
+    {
+      "flow_id": "V10-READY-DUAL-PRACTICAL",
+      "candidate_present": true,
+      "finding_fixture_ids": [],
+      "expected_outcome": "completed"
+    },
+    {
+      "flow_id": "V10-FLEXIBLE-REGISTER",
+      "candidate_present": true,
+      "finding_fixture_ids": [
+        "DISPOSITION-FLEXIBLE-REGISTER"
+      ],
+      "expected_outcome": "completed"
+    },
+    {
+      "flow_id": "V10-FLEXIBLE-APOLOGY",
+      "candidate_present": true,
+      "finding_fixture_ids": [
+        "DISPOSITION-FLEXIBLE-APOLOGY"
+      ],
+      "expected_outcome": "completed"
+    },
+    {
+      "flow_id": "V10-CONDITIONAL-PRACTICAL",
+      "candidate_present": true,
+      "finding_fixture_ids": [
+        "DISPOSITION-CONDITIONAL-PRACTICAL"
+      ],
+      "expected_outcome": "completed"
+    },
+    {
+      "flow_id": "V10-FINAL-MEANING-LOSS",
+      "candidate_present": true,
+      "finding_fixture_ids": [
+        "DISPOSITION-FINAL-DRAFT-MEANING"
+      ],
+      "expected_outcome": "failed"
+    },
+    {
+      "flow_id": "V10-MISSING-CURRENT-DIRECTION",
+      "candidate_present": false,
+      "finding_fixture_ids": [
+        "FLOW-MISSING-DIRECTION"
+      ],
+      "expected_outcome": "failed"
+    },
+    {
+      "flow_id": "V10-MISSING-IMMEDIATE-ACTION",
+      "candidate_present": false,
+      "finding_fixture_ids": [
+        "FLOW-MISSING-ACTION"
+      ],
+      "expected_outcome": "failed"
+    },
+    {
+      "flow_id": "V10-MISSING-REASSESSMENT",
+      "candidate_present": false,
+      "finding_fixture_ids": [
+        "DISPOSITION-MISSING-REASSESSMENT"
+      ],
+      "expected_outcome": "failed"
+    },
+    {
+      "flow_id": "V10-UNSUPPORTED-CERTAINTY",
+      "candidate_present": false,
+      "finding_fixture_ids": [
+        "FLOW-UNSUPPORTED-CERTAINTY"
+      ],
+      "expected_outcome": "failed"
+    }
+  ],
+  "additional_flow_findings": {
+    "FLOW-MISSING-DIRECTION": {
+      "finding_code": "REQUIRED_SECTION_MEANING",
+      "severity": "major",
+      "json_path": "report_content.cover_line",
+      "evidence_refs": [],
+      "detail": "Synthetic missing current direction."
+    },
+    "FLOW-MISSING-ACTION": {
+      "finding_code": "ACTION_CONSISTENCY",
+      "severity": "major",
+      "json_path": "decision_plan.actions_to_take",
+      "evidence_refs": [],
+      "detail": "Synthetic missing immediate action."
+    },
+    "FLOW-UNSUPPORTED-CERTAINTY": {
+      "finding_code": "UNSUPPORTED_CERTAINTY",
+      "severity": "major",
+      "json_path": "report_content.decision_reason_summary",
+      "evidence_refs": [],
+      "detail": "Synthetic unsupported certainty."
+    }
+  },
+  "v9_parity": [
+    {
+      "scenario_id": "V9-READY",
+      "expected_outcome": "completed"
+    },
+    {
+      "scenario_id": "V9-SAFETY-BLOCKED",
+      "expected_outcome": "safety_blocked"
+    },
+    {
+      "scenario_id": "V9-SEMANTIC-BLOCKING",
+      "expected_outcome": "failed"
+    }
+  ],
+  "mutation_rejections": [
+    "resolved_field_retained_in_unresolved_fields",
+    "semantic_value_changed_by_grounding_v2",
+    "hard_fact_finding_treated_nonblocking",
+    "flexible_internal_register_treated_blocking",
+    "conditional_practical_label_treated_clean",
+    "final_draft_meaning_loss_treated_nonblocking",
+    "product_outcome_missing_direction_accepted",
+    "product_outcome_missing_immediate_step_accepted",
+    "product_outcome_missing_reassessment_accepted",
+    "asks_for_reply_treated_as_reply_demand",
+    "v10_run_persisted_under_legacy_topology",
+    "migration_0005_omitted_v10",
+    "v9_behavior_changed",
+    "active_service_switched"
+  ]
+}

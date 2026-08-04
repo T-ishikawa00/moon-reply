@@ -1,5 +1,24 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R2 Directional Guidance and Semantic Materiality Revision
+
+- [x] Accepted Product Doctrine and Product Owner decisions `4/4` preserved
+- [x] Exact implementation scope fixed and implemented `21/21`
+- [x] Inactive v10 Catalog / Prompt bundle with unchanged Schema set and split topology created
+- [x] Grounding v2 and Semantic Disposition v4 created
+- [x] PB-01, PB-01C, PB-04, PB-05, and PB-06 directional Prompt successors created
+- [x] Frozen E PB-01 replay `8/8`; frozen assets and raw hashes unchanged
+- [x] Synthetic Materiality fixtures `12/12`; v10 Fake flows `10/10`; v9 parity `3/3`
+- [x] Migration 0005 created and statically validated
+- [ ] Human / ChatGPT implementation review and acceptance
+- [ ] Provider retest — unauthorized
+- [ ] R4 — HOLD / unauthorized
+- [ ] Runtime activation, C2, PR, and main integration — unauthorized
+
+Migration 0005 remains unapplied. Provider / DB / Supabase operations are `0 / 0 / 0`; Active Service and main remain unchanged. Status is `implementation_pending_human_chatgpt_review`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R1-R1:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R1-R1 is `human_chatgpt_accepted_complete` on `docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction`; Human / ChatGPT result is `PRODUCT DIRECTION AND MATERIALITY DOCTRINE ACCEPTED COMPLETE`. The accepted content commit `32bb29f16e962918fefa313f3e04c440d9d948d9` is fixed; its immutable content snapshot `dcd34011bfc2638bc0a1f7bd9b965b9880497a40..32bb29f16e962918fefa313f3e04c440d9d948d9` is exact `10/10`, acceptance synchronization is exact `6/6`, and non-sync Product Direction blobs remain unchanged `4/4`. The Product Direction Doctrine is accepted, the E frozen machine result remains `FAIL / 6 of 14`, and the E-R1 responsibility postmortem is retained. Product Owner decisions `4/4` approved; Hard / Flexible / Product Outcome evaluation is adopted; the successor `frozen_case_passed` projection matches frozen `case_verdict` for `14/14`. Responsibility categories remain Evaluator `4`, Quality Contract `1`, Application bookkeeping `3`, Provider / Prompt `5`, unresolved `0`; Materiality remains blocking / conditional / nonblocking `5/2/6`. Provider Stage remains blocking / conditional / flexible / clean / unresolved `4/1/2/7/0`; Split Runtime pre-R4 remains blocked / conditional / locally-ready / unresolved `4/1/9/0`, where locally-ready is not R4-ready. Frozen E assets remain unchanged `11/11`. Provider quality remains unestablished and Candidate ready for isolated E2E remains `false`. E-R2 is ready but remains unauthorized; R4 remains HOLD. Provider calls `0`; DB / Supabase operations `0 / 0`. Active Runtime, main, and migration remain unchanged; migration is unapplied and Active Service is unchanged.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R1-R1:END -->

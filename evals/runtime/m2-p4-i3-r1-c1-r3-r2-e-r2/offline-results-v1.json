@@ -1,0 +1,805 @@
+{
+  "active_service_unchanged": true,
+  "baseline": "6b001a76c80747f60c69624d9d148465d2e1a963",
+  "catalogs": {
+    "assertions": {
+      "all_schemas_compiled_and_projected": true,
+      "common_prompt_deep_equal": true,
+      "exact_stage_order": true,
+      "pb02_pb03_deep_equal": true,
+      "schemas_unchanged": true,
+      "v10_identity": true,
+      "v9_identity": true
+    },
+    "passed": 7,
+    "status": "PASS",
+    "total": 7
+  },
+  "fixed_clock": "2026-08-04T00:00:00.000Z",
+  "frozen_pb01_replay": {
+    "contextual_integrity_after": "8/8",
+    "contextual_integrity_before": "5/8",
+    "provider_output_mutations": 0,
+    "raw_hashes_unchanged": true,
+    "results": [
+      {
+        "case_id": "E-B01",
+        "changed_paths": [
+          "decision_facts.information_state.unresolved_fields"
+        ],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": false,
+        "expected_removed_bookkeeping_paths": [
+          "contact_state.usual_cadence_relation",
+          "practical_reason.deadline"
+        ],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "8f49bb786d5d01afa7650823de58c987aafe606fdb53db16559a8aa95d796ee3",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [
+          "contact_state.usual_cadence_relation",
+          "practical_reason.deadline"
+        ],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B02",
+        "changed_paths": [],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": true,
+        "expected_removed_bookkeeping_paths": [],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "8abfe1ca5aa7aa06f2f05f18830135d7b38a10aa269435997b59a86a8f27b47f",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B03",
+        "changed_paths": [],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": true,
+        "expected_removed_bookkeeping_paths": [],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "252470a3139164a6774d77adff677bf01a2f959f8cde93ec3aff718da62fe7f6",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B04",
+        "changed_paths": [],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": true,
+        "expected_removed_bookkeeping_paths": [],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "1c33a43306387ad697d9fdcd02b15e732763e64ae672a06012bc2464b6dc27e8",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B05",
+        "changed_paths": [],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": true,
+        "expected_removed_bookkeeping_paths": [],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "7117f8b9f01718c04276515094ac3bcb7c9c3cd394f42cc8121d0e8b029aeee4",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B06",
+        "changed_paths": [
+          "decision_facts.information_state.unresolved_fields"
+        ],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": false,
+        "expected_removed_bookkeeping_paths": [
+          "latest_direct_message.response_expectation"
+        ],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "892392b14c76b83fb1dac91a19062820d373d8f4e9ef17cf15dfacc9a9e91574",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [
+          "latest_direct_message.response_expectation"
+        ],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B07",
+        "changed_paths": [
+          "decision_facts.information_state.unresolved_fields"
+        ],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": false,
+        "expected_removed_bookkeeping_paths": [
+          "latest_direct_message.kind",
+          "latest_direct_message.response_expectation",
+          "latest_direct_message.sender"
+        ],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "45a51fbb3c82bf187b845bf9c5f435510514ec27ed0eefee3fb4f65eba25120e",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [
+          "latest_direct_message.kind",
+          "latest_direct_message.response_expectation",
+          "latest_direct_message.sender"
+        ],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      },
+      {
+        "case_id": "E-B08",
+        "changed_paths": [],
+        "contextual_integrity_after": true,
+        "contextual_integrity_before": true,
+        "expected_removed_bookkeeping_paths": [],
+        "grounded_schema_passed": true,
+        "grounded_source_integrity_passed": true,
+        "raw_hash_unchanged": true,
+        "raw_output_sha256": "ab3f5557fb20f75cfa6c39e37fb4b9ab1e6349b810aeb50dac86d2855dbe407c",
+        "raw_schema_passed": true,
+        "raw_source_integrity_passed": true,
+        "removed_bookkeeping_paths": [],
+        "semantic_values_preserved": true,
+        "status": "PASS"
+      }
+    ],
+    "summary": "8/8"
+  },
+  "grounding_v2": {
+    "input_nonmutation": true,
+    "results": [
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-RESOLVED-DEADLINE",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender"
+        ]
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-RESOLVED-CADENCE",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender"
+        ]
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-RESOLVED-EXPECTATION",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender"
+        ]
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-RESOLVED-NONE-MESSAGE",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": []
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-GENUINE-UNKNOWN",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender",
+          "practical_reason.deadline"
+        ]
+      },
+      {
+        "contextual_integrity": "rejected",
+        "fixture_id": "GROUNDING-UNSUPPORTED-PATH",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender",
+          "unsupported.synthetic_path"
+        ]
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-INFERENCE-BOOKKEEPING",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender"
+        ]
+      },
+      {
+        "contextual_integrity": "not_applicable",
+        "fixture_id": "GROUNDING-INPUT-NONMUTATION",
+        "input_nonmutation": true,
+        "semantic_values_preserved": true,
+        "status": "PASS",
+        "unresolved_fields": [
+          "latest_direct_message.sender"
+        ]
+      }
+    ],
+    "semantic_value_preservation": true,
+    "summary": "8/8"
+  },
+  "hashes": {
+    "catalog_v10_sha256": "f083224e2a9c7602197187ba7b043a7f2b6aa03cc0de3874231e71ca4701dc1c",
+    "frozen_pb01_raw_sha256": {
+      "E-B01": "8f49bb786d5d01afa7650823de58c987aafe606fdb53db16559a8aa95d796ee3",
+      "E-B02": "8abfe1ca5aa7aa06f2f05f18830135d7b38a10aa269435997b59a86a8f27b47f",
+      "E-B03": "252470a3139164a6774d77adff677bf01a2f959f8cde93ec3aff718da62fe7f6",
+      "E-B04": "1c33a43306387ad697d9fdcd02b15e732763e64ae672a06012bc2464b6dc27e8",
+      "E-B05": "7117f8b9f01718c04276515094ac3bcb7c9c3cd394f42cc8121d0e8b029aeee4",
+      "E-B06": "892392b14c76b83fb1dac91a19062820d373d8f4e9ef17cf15dfacc9a9e91574",
+      "E-B07": "45a51fbb3c82bf187b845bf9c5f435510514ec27ed0eefee3fb4f65eba25120e",
+      "E-B08": "ab3f5557fb20f75cfa6c39e37fb4b9ab1e6349b810aeb50dac86d2855dbe407c"
+    },
+    "grounding_v2_sha256": "6f3c69370344f7b13a9a3426038b40d94e86a3067b3ff5abb255993772f0e6e1",
+    "migration_0005_sha256": "830f375f9e1f02c95a08f3bcbf598f2a5b4a81bf11bbb80df544a9999e62e36e",
+    "prompt_sha256": {
+      "PB-01": "c93588001b6f513b0a00cedc2bfa811b10f08881618b75f8ee4c37b1d8341565",
+      "PB-01C": "44530b76a30089e479e93f96f55eb389a592c3b4be41fd17d2c78cc278981dae",
+      "PB-02": "d02baddeea20db089d3304876825a70dc09bcda6ddc2a7d05cf4c41811c0ef32",
+      "PB-03": "d282595168e09f5acfb4d4e22fe3f6997d8d748c9c9aed8e3defc3aabbf249f9",
+      "PB-04": "44402ba38884e3b08d8f8e7c198ee006bf306859fe226184117ab25d56ec5c9c",
+      "PB-05": "f205804d5cb6d021bcc2b5ba4137d661406554bb706be6da7fc7fe14269e3ad1",
+      "PB-06": "5913506c699282b44d1207b415c21b2e4dfb6174dc1824cdc3373edb77f8c5a7"
+    },
+    "semantic_disposition_v4_sha256": "68524d4235513826e42b02eb05c3c34f548f5ac2685359a17a4e7019877c604b"
+  },
+  "identities": {
+    "v10": {
+      "catalog_version": "runtime-stage-catalog-v10.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v10.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v4.0.0",
+      "stage_topology_version": "split-base-candidate-v1"
+    },
+    "v9": {
+      "catalog_version": "runtime-stage-catalog-v9.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v9.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v4.0.0",
+      "stage_topology_version": "split-base-candidate-v1"
+    }
+  },
+  "invalid_legacy_v10_identity_rejected": true,
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "migration_static_validation": {
+    "assertions": {
+      "admits_v10": true,
+      "admits_v9": true,
+      "exact_legacy_order": true,
+      "exact_split_order": true,
+      "no_assessment_runs_update": true,
+      "no_assessment_stage_runs_update": true,
+      "rejects_split_bundles_in_legacy": true,
+      "skipped_invariants": true,
+      "split_schema_v4": true,
+      "transaction": true,
+      "v2_authority": true
+    },
+    "passed": 11,
+    "status": "PASS",
+    "total": 11
+  },
+  "mutation_rejections": {
+    "results": [
+      {
+        "mutant_id": "resolved_field_retained_in_unresolved_fields",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "semantic_value_changed_by_grounding_v2",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "hard_fact_finding_treated_nonblocking",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "flexible_internal_register_treated_blocking",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "conditional_practical_label_treated_clean",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "final_draft_meaning_loss_treated_nonblocking",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "product_outcome_missing_direction_accepted",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "product_outcome_missing_immediate_step_accepted",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "product_outcome_missing_reassessment_accepted",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "asks_for_reply_treated_as_reply_demand",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "v10_run_persisted_under_legacy_topology",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "migration_0005_omitted_v10",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "v9_behavior_changed",
+        "rejected": true,
+        "status": "PASS"
+      },
+      {
+        "mutant_id": "active_service_switched",
+        "rejected": true,
+        "status": "PASS"
+      }
+    ],
+    "summary": "14/14"
+  },
+  "operations": {
+    "active_runtime_activated": false,
+    "active_service_changed": false,
+    "db_operations": 0,
+    "external_provider_calls": 0,
+    "fake_stage_invocations_recorded_separately": true,
+    "migration_applied": false,
+    "provider_response_data_added": 0,
+    "real_user_data": 0,
+    "supabase_operations": 0
+  },
+  "overall_verdict": "PASS",
+  "prompt_responsibilities": {
+    "assertions": {
+      "apology_flexibility": true,
+      "asks_reply_not_demand": true,
+      "directional_decision": true,
+      "directional_report": true,
+      "draft_authority": true,
+      "no_evaluation_literals": true,
+      "pb01_cadence": true,
+      "pb01_hierarchy": true,
+      "pb01_unresolved_consistency": true,
+      "pb01c_multi_label": true,
+      "register_aggregation": true,
+      "three_tier_materiality": true
+    },
+    "passed": 12,
+    "prompt_hashes": {
+      "lib/assessment/runtime/contracts/pb-01-base-situation-v2.developer.md": "c93588001b6f513b0a00cedc2bfa811b10f08881618b75f8ee4c37b1d8341565",
+      "lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v2.developer.md": "44530b76a30089e479e93f96f55eb389a592c3b4be41fd17d2c78cc278981dae",
+      "lib/assessment/runtime/contracts/pb-04-directional-decision-v2.developer.md": "44402ba38884e3b08d8f8e7c198ee006bf306859fe226184117ab25d56ec5c9c",
+      "lib/assessment/runtime/contracts/pb-05-directional-report-v2.developer.md": "f205804d5cb6d021bcc2b5ba4137d661406554bb706be6da7fc7fe14269e3ad1",
+      "lib/assessment/runtime/contracts/pb-06-materiality-validator-v2.developer.md": "5913506c699282b44d1207b415c21b2e4dfb6174dc1824cdc3373edb77f8c5a7"
+    },
+    "total": 12
+  },
+  "provider_retest_authorized": false,
+  "r4_authorized": false,
+  "runner_version": "m2-p4-i3-r1-c1-r3-r2-e-r2-offline-runner-v1",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r2-offline-results-v1",
+  "semantic_materiality": {
+    "constant_deep_match": {
+      "always_nonblocking_codes": true,
+      "conditional_internal_path_patterns": true,
+      "flexible_internal_path_patterns": true,
+      "hard_finding_codes": true,
+      "product_outcome_path_patterns": true
+    },
+    "product_doctrine_passed": true,
+    "product_owner_decisions": "4/4",
+    "results": [
+      {
+        "actual_disposition": "blocking",
+        "expected_disposition": "blocking",
+        "fixture_id": "DISPOSITION-HARD-FACT-MINOR",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "blocking",
+        "expected_disposition": "blocking",
+        "fixture_id": "DISPOSITION-HARD-SAFETY-MINOR",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "nonblocking",
+        "expected_disposition": "nonblocking",
+        "fixture_id": "DISPOSITION-FLEXIBLE-REGISTER",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "nonblocking",
+        "expected_disposition": "nonblocking",
+        "fixture_id": "DISPOSITION-FLEXIBLE-APOLOGY",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "conditional",
+        "expected_disposition": "conditional",
+        "fixture_id": "DISPOSITION-CONDITIONAL-PRACTICAL",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "nonblocking",
+        "expected_disposition": "nonblocking",
+        "fixture_id": "DISPOSITION-TEMPLATE",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "nonblocking",
+        "expected_disposition": "nonblocking",
+        "fixture_id": "DISPOSITION-REPETITION",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "blocking",
+        "expected_disposition": "blocking",
+        "fixture_id": "DISPOSITION-FINAL-DRAFT-MEANING",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "blocking",
+        "expected_disposition": "blocking",
+        "fixture_id": "DISPOSITION-FINAL-DRAFT-PERSONALITY",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "blocking",
+        "expected_disposition": "blocking",
+        "fixture_id": "DISPOSITION-MISSING-REASSESSMENT",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "ignored",
+        "expected_disposition": "ignored",
+        "fixture_id": "DISPOSITION-TEMPORAL-FUTURE",
+        "status": "PASS"
+      },
+      {
+        "actual_disposition": "nonblocking",
+        "expected_disposition": "nonblocking",
+        "fixture_id": "DISPOSITION-EDITORIAL-MINOR",
+        "status": "PASS"
+      }
+    ],
+    "summary": "12/12"
+  },
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R2",
+  "v10_fake_flows": {
+    "results": [
+      {
+        "actual_outcome": "completed",
+        "expected_outcome": "completed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-READY-CANDIDATE-ABSENT",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": null,
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "completed",
+        "expected_outcome": "completed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-01C",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-READY-DUAL-PRACTICAL",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": null,
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "completed",
+        "expected_outcome": "completed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-01C",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-FLEXIBLE-REGISTER",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": null,
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "completed",
+        "expected_outcome": "completed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-01C",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-FLEXIBLE-APOLOGY",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": null,
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "completed",
+        "expected_outcome": "completed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-01C",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-CONDITIONAL-PRACTICAL",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": null,
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "failed",
+        "expected_outcome": "failed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-01C",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-FINAL-MEANING-LOSS",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "failed",
+        "expected_outcome": "failed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-MISSING-CURRENT-DIRECTION",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "failed",
+        "expected_outcome": "failed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-MISSING-IMMEDIATE-ACTION",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "failed",
+        "expected_outcome": "failed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-MISSING-REASSESSMENT",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual_outcome": "failed",
+        "expected_outcome": "failed",
+        "fake_stage_invocations": [
+          "PB-01",
+          "PB-02",
+          "PB-03",
+          "PB-04",
+          "PB-05",
+          "PB-06"
+        ],
+        "flow_id": "V10-UNSUPPORTED-CERTAINTY",
+        "pb_06_evidence_persisted": true,
+        "provider_calls": 0,
+        "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+        "status": "PASS",
+        "supabase_operations": 0
+      }
+    ],
+    "summary": "10/10"
+  },
+  "v9_parity": {
+    "results": [
+      {
+        "actual": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03",
+            "PB-04",
+            "PB-05",
+            "PB-06"
+          ],
+          "outcome": "completed"
+        },
+        "deep_equal": true,
+        "expected": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03",
+            "PB-04",
+            "PB-05",
+            "PB-06"
+          ],
+          "outcome": "completed"
+        },
+        "provider_calls": 0,
+        "scenario_id": "V9-READY",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03"
+          ],
+          "outcome": "safety_blocked"
+        },
+        "deep_equal": true,
+        "expected": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03"
+          ],
+          "outcome": "safety_blocked"
+        },
+        "provider_calls": 0,
+        "scenario_id": "V9-SAFETY-BLOCKED",
+        "status": "PASS",
+        "supabase_operations": 0
+      },
+      {
+        "actual": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03",
+            "PB-04",
+            "PB-05",
+            "PB-06"
+          ],
+          "outcome": "failed"
+        },
+        "deep_equal": true,
+        "expected": {
+          "fake_stage_invocations": [
+            "PB-01",
+            "PB-02",
+            "PB-03",
+            "PB-04",
+            "PB-05",
+            "PB-06"
+          ],
+          "outcome": "failed"
+        },
+        "provider_calls": 0,
+        "scenario_id": "V9-SEMANTIC-BLOCKING",
+        "status": "PASS",
+        "supabase_operations": 0
+      }
+    ],
+    "summary": "3/3"
+  }
+}

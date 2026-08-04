@@ -1,0 +1,173 @@
+{
+  "schema_version": "m2-p4-directional-guidance-materiality-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R2",
+  "status": "implementation_pending_human_chatgpt_review",
+  "baseline": "6b001a76c80747f60c69624d9d148465d2e1a963",
+  "product_direction_doctrine": {
+    "canonical_statement_ja": "月の返事は、恋の唯一の正解や相手の本心を断定するサービスではない。\n相談者が迷って動けないときに、\n今ある事実と複数の見方を整理し、\n今の時点で最も進みやすい方向を一つ示す鑑定ノートである。",
+    "machine_readable_summary_en": "The product does not claim a unique romantic truth. It preserves facts, presents plausible interpretations, recommends one current direction, gives an immediate next step, and defines reassessment conditions.",
+    "required_outcome_sequence": [
+      "facts",
+      "plausible_interpretations",
+      "recommended_current_direction",
+      "immediate_next_step",
+      "reassessment_condition"
+    ],
+    "japanese_product_summary": "事実は厳密に守る。解釈には幅を持たせる。その上で、相談者が今進みやすい方向を一つ示す。"
+  },
+  "evaluation_model": "hard_flexible_product_outcome",
+  "tiers": {
+    "hard_factual_safety": {
+      "material_findings_block": true,
+      "responsibilities": [
+        "speaker_or_message_owner",
+        "sent_received_or_unsent_status",
+        "factual_events_dates_numbers_promises_or_schedules",
+        "assumption_versus_fact",
+        "explicit_boundary",
+        "explicit_user_constraint",
+        "safety",
+        "privacy",
+        "candidate_base_isolation",
+        "material_meaning_preservation",
+        "allowed_decision_and_draft"
+      ]
+    },
+    "flexible_semantic": {
+      "independently_hard_fails": false,
+      "families": [
+        "apology_low_or_medium",
+        "neutral_polite_or_mixed",
+        "minor_softness_or_style",
+        "overlapping_practical_intent",
+        "minor_emotional_temperature"
+      ],
+      "escalates_only_for": [
+        "material_meaning_loss",
+        "material_voice_change",
+        "recommended_direction_change",
+        "boundary_violation",
+        "safety_disposition_change",
+        "explicit_user_constraint_violation"
+      ]
+    },
+    "product_outcome": {
+      "required_responsibilities": [
+        "facts",
+        "plausible_interpretations",
+        "recommended_current_direction",
+        "immediate_next_step",
+        "reassessment_condition"
+      ]
+    }
+  },
+  "product_owner_decisions": [
+    {
+      "decision_id": "PO-E-C01-PRACTICAL",
+      "status": "approved",
+      "accepted_interpretation": {
+        "explicit_meaning_units": [
+          "provide_information",
+          "confirm_schedule"
+        ],
+        "preferred_practical_requirement": [
+          "provide_information",
+          "confirm_schedule"
+        ]
+      },
+      "materiality": "conditional",
+      "internal_enum_omission_alone_is_hard_fail": false,
+      "meaning_reversal_is_hard_fail": true
+    },
+    {
+      "decision_id": "PO-E-C01-SAFETY-ACTIONS",
+      "status": "approved",
+      "accepted_interpretation": {
+        "asks_for_reply": true,
+        "reply_demand": false,
+        "proposes_meeting": true
+      },
+      "materiality": "conditional"
+    },
+    {
+      "decision_id": "PO-E-C03-APOLOGY",
+      "status": "approved",
+      "accepted_interpretation": {
+        "apology_presence": true,
+        "acceptable_apology_strengths": [
+          "low",
+          "medium"
+        ],
+        "response_pressure_evaluated_separately": true
+      },
+      "materiality": "nonblocking"
+    },
+    {
+      "decision_id": "PO-E-C04-REGISTER",
+      "status": "approved",
+      "accepted_interpretation": {
+        "acceptable_registers": [
+          "neutral_polite",
+          "mixed"
+        ],
+        "lexical_warmth_may_coexist_with_polite_endings": true
+      },
+      "materiality": "nonblocking"
+    }
+  ],
+  "semantic_disposition_rules": {
+    "hard_finding_codes": [
+      "FACT_FIDELITY",
+      "ASSUMPTION_AS_FACT",
+      "DECISION_ALLOWED",
+      "SAFETY_REGRESSION"
+    ],
+    "always_nonblocking_codes": [
+      "TEMPLATE_GENERICITY",
+      "REPETITION"
+    ],
+    "flexible_internal_path_patterns": [
+      "^(?:\\$\\.)?candidate_envelope\\.analysis\\.candidate_style_profile(?:\\.|$)",
+      "^(?:\\$\\.)?candidate_envelope\\.analysis\\.candidate_communicative_intent\\.apology_strength$"
+    ],
+    "conditional_internal_path_patterns": [
+      "^(?:\\$\\.)?candidate_envelope\\.analysis\\.candidate_communicative_intent\\.practical_requirement$"
+    ],
+    "product_outcome_path_patterns": [
+      "^(?:\\$\\.)?decision_plan\\.recommended_message_draft(?:$|\\.(?:text|policy|use_timing)$)",
+      "^(?:\\$\\.)?decision_plan\\.actions_to_take(?:$|\\[(?:0|[1-9]\\d*)\\]$)",
+      "^(?:\\$\\.)?decision_plan\\.aftercare_plan(?:$|\\[(?:0|[1-9]\\d*)\\](?:\\.|$))",
+      "^(?:\\$\\.)?decision_plan\\.change_conditions(?:$|\\[(?:0|[1-9]\\d*)\\](?:\\.|$))",
+      "^(?:\\$\\.)?report_content\\.cover_line$",
+      "^(?:\\$\\.)?report_content\\.decision_reason_summary$",
+      "^(?:\\$\\.)?report_content\\.action_rationales(?:$|\\[(?:0|[1-9]\\d*)\\]$)",
+      "^(?:\\$\\.)?report_content\\.aftercare_commentary(?:$|\\[(?:0|[1-9]\\d*)\\]$)",
+      "^(?:\\$\\.)?report_content\\.change_condition_commentary(?:$|\\[(?:0|[1-9]\\d*)\\]$)",
+      "^(?:\\$\\.)?report_content\\.message_draft_context$"
+    ],
+    "brand_tone_default": "nonblocking",
+    "brand_tone_final_draft_material_personality_drift": "blocking",
+    "remaining_major_or_critical": "blocking",
+    "remaining_minor": "nonblocking",
+    "accepted_temporal_false_positive_behavior": "preserve_v3"
+  },
+  "candidate_semantics": {
+    "asks_for_reply_equals_reply_demand": false,
+    "dual_practical_semantic_units_required": true,
+    "apology_low_medium_flexible": true,
+    "neutral_polite_mixed_flexible": true,
+    "original_candidate_authority": "user_supplied_optional_message",
+    "final_draft_authority": "decision_plan.recommended_message_draft.text",
+    "report_content_is_draft_authority": false
+  },
+  "runtime_identity": {
+    "predecessor_catalog": "runtime-stage-catalog-v9.0.0",
+    "successor_catalog": "runtime-stage-catalog-v10.0.0",
+    "successor_prompt_bundle": "prompt-bundle-runtime-v10.0.0",
+    "schema_set": "pipeline-schema-runtime-v4.0.0",
+    "stage_topology": "split-base-candidate-v1"
+  },
+  "provider_retest_authorized": false,
+  "r4_authorized": false,
+  "case_specific_production_rules": 0
+}

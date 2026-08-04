@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
+import { groundBaseStructuredIntakeV2 } from "./base-structured-intake-grounding-v2.ts";
 import { buildBaseStructuredIntakeLegacyViewV1 } from "./base-structured-intake-legacy-view-v1.ts";
 import { validateBaseSourceIntegrityV1 } from "./base-source-integrity-v1.ts";
 import { groundCandidateAnalysisV1, projectCandidateProviderInputV1 } from "./candidate-analysis-grounding-v1.ts";
@@ -32,6 +33,7 @@ import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
+import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
 import { groundStructuredIntakeV5 } from "./structured-intake-grounding-v5.ts";
@@ -411,12 +413,15 @@ export class AssessmentPipeline {
   }
 
   private validateRuntimeIdentity(runContext: AssessmentRunContext) {
-    const splitIdentity =
+    const splitPromptBundle =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
+    const splitIdentity =
+      splitPromptBundle ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? runContext.promptBundleVersion !== "prompt-bundle-runtime-v9.0.0" ||
+        ? !splitPromptBundle ||
           runContext.schemaSetVersion !== "pipeline-schema-runtime-v4.0.0"
         : splitIdentity
     ) {
@@ -721,6 +726,8 @@ export class AssessmentPipeline {
     request: AssessmentInput,
     runContext: AssessmentRunContext,
   ): Promise<AssessmentExecutionResult> {
+    const directionalGuidanceRuntime =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
     const deterministicSafety = deterministicSafetyResult(request);
     const baseProviderInput = projectBaseProviderInputV1(request);
     let baseStructuredIntake: JsonObject | null = null;
@@ -738,10 +745,9 @@ export class AssessmentPipeline {
           baseProviderRequest: baseProviderInput,
           rawBaseOutput,
         });
-        const grounded = groundBaseStructuredIntakeV1(
-          baseProviderInput,
-          rawBaseOutput,
-        );
+        const grounded = directionalGuidanceRuntime
+          ? groundBaseStructuredIntakeV2(baseProviderInput, rawBaseOutput)
+          : groundBaseStructuredIntakeV1(baseProviderInput, rawBaseOutput);
         validateGroundedStageOutput(this.definition("PB-01"), grounded);
         validateBaseSourceIntegrityV1({
           input: baseProviderInput,
@@ -916,11 +922,17 @@ export class AssessmentPipeline {
         ) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }
-        const { blockingFindings } = evaluateSemanticFindingsV3({
-          validationOutput: output,
-          decisionPlan: decisionPlan as unknown as DecisionPlan,
-          groundedReportContent: reportContent as unknown as ReportContent,
-        });
+        const { blockingFindings } = directionalGuidanceRuntime
+          ? evaluateSemanticFindingsV4({
+              validationOutput: output,
+              decisionPlan: decisionPlan as unknown as DecisionPlan,
+              groundedReportContent: reportContent as unknown as ReportContent,
+            })
+          : evaluateSemanticFindingsV3({
+              validationOutput: output,
+              decisionPlan: decisionPlan as unknown as DecisionPlan,
+              groundedReportContent: reportContent as unknown as ReportContent,
+            });
         if (blockingFindings.length > 0) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }
