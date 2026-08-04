@@ -1,5 +1,19 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R1 replacement package
+
+- Status: `not_started` on `test/m2-p4-i3-r1-c1-r3-r2-e-r3-r1-provider-product-diagnostic` from exact baseline `84ce1bce84f834c53bc46b5bb636ce77322da383`.
+- Superseded package: Commit A `b909bf3ad259bea0251cf2f81e7a40d9262ce211` remains `aborted_before_execution`; Provider / DB / Supabase calls `0 / 0 / 0`; marker absent; authorization unconsumed; no evidence Commit B.
+- Replacement: revision `R1`; reason `runner_checked_nonexistent_active_loader_return_property`; changes `diagnostic_package_only`; Product cases / Quality doctrine / Provider budget changed `false / false / false`.
+- Scope: exact `16/16`; post-run mutable `10/10`; six synthetic Product Outcome cases only.
+- Provider budget: expected `37`, hard maximum `40`, retries / repair / fallback / parallel `0 / 0 / 0 / 0`.
+- Runtime: inactive v10 Catalog / Prompt bundle, Schema set v4, split Base/Candidate topology; `AssessmentApplication`, `FakeAssessmentRepository`, and real OpenAI Responses transport.
+- Correction: active v4 manifest version is verified separately; the real active loader return contract is `promptBundleVersion`, `schemaSetVersion`, and `definitions`; Prompt / Schema identities and Stage count/order are verified without requiring `catalogVersion`.
+- Current evidence: Provider calls `0`; replacement Commit A / Commit B pending; evaluator `20/20` and active-loader regression `7/7` required; Product Review not started; Product Owner Review pending.
+- Boundary: Provider quality, isolated-E2E readiness, R4 readiness, live DB compatibility, site readiness, JPY 980 value, and Runtime activation are not established. Migration 0005 remains unchanged and unapplied; Active Service and main remain unchanged; R4, C2, PR, main merge, and force push are unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R2
 
