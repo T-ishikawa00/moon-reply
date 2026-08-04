@@ -14,6 +14,9 @@ const repositoryRoot = path.resolve(
 );
 const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R1-R1";
 const baseline = "dcd34011bfc2638bc0a1f7bd9b965b9880497a40";
+const acceptedContentCommit =
+  "32bb29f16e962918fefa313f3e04c440d9d948d9";
+const acceptanceStatus = "human_chatgpt_accepted_complete";
 const packageCommitA = "ae56535fd6d5587e6055e938cd68e0355cd8f037";
 const evidenceCommitB = "c10169c92364a31f6c512e714ac18bffafc9ec08";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
@@ -42,6 +45,20 @@ const exactPaths = [
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+];
+const acceptancePaths = [
+  capabilitiesPath,
+  verifierPath,
+  reviewPath,
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const nonSyncProductDirectionPaths = [
+  postmortemPath,
+  contractPath,
+  resultsPath,
+  adjudicatorPath,
 ];
 const frozenPaths = [
   frozenRoot + "/diagnostic-contract-v1.json",
@@ -128,12 +145,20 @@ function assertExactPaths(actual, expected, label) {
   assert(same(sorted(actual), sorted(expected)), label + " differs");
 }
 
-function currentTaskPaths() {
-  const tracked = normalizedPaths(git(["diff", "--name-only", baseline, "--"]));
+function currentPathsSince(reference) {
+  const tracked = normalizedPaths(git(["diff", "--name-only", reference, "--"]));
   const untracked = normalizedPaths(
     git(["ls-files", "--others", "--exclude-standard"]),
   );
   return sorted(new Set([...tracked, ...untracked]));
+}
+
+function currentTaskPaths() {
+  return currentPathsSince(baseline);
+}
+
+function currentAcceptancePaths() {
+  return currentPathsSince(acceptedContentCommit);
 }
 
 function assertTextHygiene(relativePath) {
@@ -153,6 +178,16 @@ function assertFrozenBlob(relativePath) {
     relativePath,
   ]).trim();
   assert(actual === expected, relativePath + " differs from frozen Commit B");
+}
+
+function assertBlobAtCommit(relativePath, commit, label) {
+  const expected = git(["rev-parse", commit + ":" + relativePath]).trim();
+  const actual = git([
+    "hash-object",
+    "--path=" + relativePath,
+    relativePath,
+  ]).trim();
+  assert(actual === expected, relativePath + " differs from " + label);
 }
 
 function sha256File(relativePath) {
@@ -225,13 +260,22 @@ const recomputed = buildAdjudicationResultV1({
 });
 
 assert(git(["branch", "--show-current"]).trim() === branch, "branch mismatch");
+assert(
+  git(["rev-parse", acceptedContentCommit]).trim() === acceptedContentCommit,
+  "accepted content commit differs",
+);
 assert(git(["rev-parse", "main"]).trim() === mainBaseline, "main changed");
 assert(
   git(["rev-parse", "origin/main"]).trim() === mainBaseline,
   "origin/main changed",
 );
 assert(git(["stash", "list"]) === "", "stash must be empty");
-for (const commit of [packageCommitA, evidenceCommitB, baseline]) {
+for (const commit of [
+  packageCommitA,
+  evidenceCommitB,
+  baseline,
+  acceptedContentCommit,
+]) {
   assert(
     git(["merge-base", "--is-ancestor", commit, "HEAD"]) === "",
     commit + " is not in history",
@@ -244,8 +288,34 @@ for (const relativePath of exactPaths) {
 }
 for (const relativePath of frozenPaths) assertFrozenBlob(relativePath);
 
+const contentSnapshotPaths = normalizedPaths(
+  git([
+    "diff",
+    "--name-only",
+    baseline + ".." + acceptedContentCommit,
+    "--",
+  ]),
+);
+assertExactPaths(
+  contentSnapshotPaths,
+  exactPaths,
+  "immutable Product Direction content scope",
+);
 const taskPaths = currentTaskPaths();
 assertExactPaths(taskPaths, exactPaths, "exact Product Direction Sync scope");
+const acceptanceTaskPaths = currentAcceptancePaths();
+assertExactPaths(
+  acceptanceTaskPaths,
+  acceptancePaths,
+  "exact Acceptance Sync scope",
+);
+for (const relativePath of nonSyncProductDirectionPaths) {
+  assertBlobAtCommit(
+    relativePath,
+    acceptedContentCommit,
+    "accepted Product Direction content",
+  );
+}
 assertExactPaths(contract.exact_mutation_paths, exactPaths, "contract scope");
 assertExactPaths(contract.immutable_e_paths, frozenPaths, "frozen E scope");
 assert(new Set(exactPaths).size === exactPaths.length, "duplicate exact path");
@@ -758,11 +828,20 @@ assert(
 );
 
 assert(
-  capabilities.status === storedResults.status &&
+  capabilities.status === acceptanceStatus &&
     capabilities.task_id === taskId &&
     capabilities.baseline === baseline &&
     capabilities.branch === branch &&
     capabilities.exact_scope === `${exactPaths.length}/${exactPaths.length}` &&
+    capabilities.product_direction_sync_accepted === true &&
+    capabilities.accepted_content_commit === acceptedContentCommit &&
+    same(capabilities.content_snapshot, {
+      base: baseline,
+      end: acceptedContentCommit,
+      exact_paths: exactPaths.length,
+      immutable: true,
+      include_working_tree: false,
+    }) &&
     capabilities.product_direction_doctrine_recorded === true &&
     capabilities.product_owner_decisions ===
       `${decisions.length}/${decisions.length}` &&
@@ -946,6 +1025,13 @@ assert(
   protectedDiff.length === 0,
   "Runtime, Prompt, Schema, Catalog, Pipeline, Service, or migration diff detected",
 );
+const acceptanceProtectedDiff = acceptanceTaskPaths.filter((relativePath) =>
+  /^(?:app|components|fixtures|lib|public|supabase)\//u.test(relativePath),
+);
+assert(
+  acceptanceProtectedDiff.length === 0,
+  "Acceptance Sync contains a protected product diff",
+);
 assert(
   normalizedPaths(
     git(["diff", "--name-only", baseline, "--", "supabase/migrations"]),
@@ -960,7 +1046,11 @@ for (const docPath of [
 ]) {
   const text = source(docPath);
   for (const required of [
-    "product_direction_synced_pending_human_chatgpt_review",
+    "human_chatgpt_accepted_complete",
+    "PRODUCT DIRECTION AND MATERIALITY DOCTRINE ACCEPTED COMPLETE",
+    "accepted content commit `32bb29f16e962918fefa313f3e04c440d9d948d9`",
+    "immutable content snapshot `dcd34011bfc2638bc0a1f7bd9b965b9880497a40..32bb29f16e962918fefa313f3e04c440d9d948d9` is exact `10/10`",
+    "acceptance synchronization is exact `6/6`",
     "FAIL / 6 of 14",
     "Product Owner decisions `4/4` approved",
     "Hard / Flexible / Product Outcome",
@@ -1000,11 +1090,49 @@ const buildOutput = npm(["run", "build"]);
 assert(buildOutput.length > 0, "build produced no evidence");
 
 git(["diff", "--check", baseline, "--"]);
+git(["diff", "--check", acceptedContentCommit, "--"]);
 assertExactPaths(currentTaskPaths(), exactPaths, "post-build exact scope");
+assertExactPaths(
+  currentAcceptancePaths(),
+  acceptancePaths,
+  "post-build Acceptance Sync scope",
+);
+assertExactPaths(
+  normalizedPaths(
+    git([
+      "diff",
+      "--name-only",
+      baseline + ".." + acceptedContentCommit,
+      "--",
+    ]),
+  ),
+  exactPaths,
+  "post-build immutable Product Direction content scope",
+);
+for (const relativePath of nonSyncProductDirectionPaths) {
+  assertBlobAtCommit(
+    relativePath,
+    acceptedContentCommit,
+    "accepted Product Direction content after validation",
+  );
+}
 for (const relativePath of frozenPaths) assertFrozenBlob(relativePath);
 assert(git(["rev-parse", "main"]).trim() === mainBaseline, "main changed after validation");
 
-console.log("M2_P4_I3_R1_C1_R3_R2_E_R1_R1_PRODUCT_DIRECTION: PASS");
+console.log(
+  "M2_P4_I3_R1_C1_R3_R2_E_R1_R1_PRODUCT_DIRECTION_ACCEPTANCE: PASS",
+);
+console.log(`status: ${acceptanceStatus}`);
+console.log(`accepted_content_commit: ${acceptedContentCommit}`);
+console.log(
+  `acceptance_sync_scope: ${acceptancePaths.length}/${acceptancePaths.length}`,
+);
+console.log(
+  `immutable_content_scope: ${contentSnapshotPaths.length}/${exactPaths.length}`,
+);
+console.log(
+  `non_sync_product_direction_blobs: ${nonSyncProductDirectionPaths.length}/${nonSyncProductDirectionPaths.length}`,
+);
 console.log(`exact_scope: ${exactPaths.length}/${exactPaths.length}`);
 console.log("duplicate_paths: 0");
 console.log("json_parse: 4/4");
@@ -1013,6 +1141,8 @@ console.log("frozen_e_machine_result: FAIL / 6 of 14");
 console.log(`classified_failure_codes: ${classifications.length}/${frozenFailureCodes.length}`);
 console.log(`product_owner_decisions: ${decisions.length}/${decisions.length} approved`);
 console.log("product_owner_decisions_pending: 0");
+console.log("product_direction_sync_accepted: true");
+console.log("deterministic_replay: PASS");
 console.log(
   `frozen_case_passed_projection: ${caseStatuses.length}/${caseStatuses.length} PASS`,
 );
@@ -1029,7 +1159,12 @@ console.log("provider_quality_established: false");
 console.log("candidate_ready_for_isolated_e2e: false");
 console.log("e_r2_ready: true");
 console.log("e_r2_authorized: false");
+console.log("r4_ready: false");
 console.log("r4_authorized: false");
+console.log("migration_applied: false");
+console.log("active_service_changed: false");
+console.log("active_runtime_activated: false");
+console.log("main_changed: false");
 console.log("policy: 40/40 PASS");
 console.log("typecheck: PASS");
 console.log("lint: PASS warnings=0");

@@ -1,10 +1,19 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-capabilities-v1",
-  "status": "product_direction_synced_pending_human_chatgpt_review",
+  "status": "human_chatgpt_accepted_complete",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1-R1",
   "baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
   "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction",
   "exact_scope": "10/10",
+  "product_direction_sync_accepted": true,
+  "accepted_content_commit": "32bb29f16e962918fefa313f3e04c440d9d948d9",
+  "content_snapshot": {
+    "base": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
+    "end": "32bb29f16e962918fefa313f3e04c440d9d948d9",
+    "exact_paths": 10,
+    "immutable": true,
+    "include_working_tree": false
+  },
   "product_direction_doctrine_recorded": true,
   "product_owner_decisions": "4/4",
   "product_owner_decisions_pending": 0,

@@ -2,9 +2,11 @@
 
 ## 1. Status
 
-`M2-P4-I3-R1-C1-R3-R2-E-R1-R1` is `product_direction_synced_pending_human_chatgpt_review` on `docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction`.
+`M2-P4-I3-R1-C1-R3-R2-E-R1-R1` is `human_chatgpt_accepted_complete` on `docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction`.
 
 This exact `10/10` Product Direction Sync records the doctrine, resolves Product Owner decisions `4/4`, adds Materiality to every frozen failure classification, and corrects only the successor `frozen_case_passed` projection. It performs Provider calls `0`, DB / Supabase operations `0 / 0`, and no Runtime, Prompt, Schema, Catalog, Pipeline, Service, or migration change.
+
+Human / ChatGPT result is `PRODUCT DIRECTION AND MATERIALITY DOCTRINE ACCEPTED COMPLETE`. The accepted content commit `32bb29f16e962918fefa313f3e04c440d9d948d9` is fixed; its immutable content snapshot `dcd34011bfc2638bc0a1f7bd9b965b9880497a40..32bb29f16e962918fefa313f3e04c440d9d948d9` is exact `10/10`, acceptance synchronization is exact `6/6`, and the four non-sync Product Direction blobs remain unchanged `4/4`.
 
 ## 2. Frozen E evidence remains unchanged
 
@@ -128,26 +130,26 @@ E-R2の必須範囲:
 
 ## 16. Validation
 
-最終証跡は次を指定順で実行し、すべてPASSした。
+Acceptance Syncの最終証跡は次を指定順で実行し、すべてPASSした。
 
-1. adjudicator write
-2. adjudicator deterministic `--check`
-3. dedicated Product Direction verifier
-4. Decision Policy `40/40`
-5. typecheck
-6. lint warnings `0`
-7. build
-8. `git diff --check`
+1. adjudicator deterministic `--check`
+2. acceptance-aware Product Direction verifier
+3. Decision Policy `40/40`
+4. typecheck
+5. lint warnings `0`
+6. build
+7. `git diff --check`
+8. `git status --short`
 
-専用Verifierはexact scope、JSON `4/4`、凍結E `11/11`、履歴、外部操作`0`、評価Doctrine、分類`13/13`、PO判断`4/4`、projection `14/14`、両derived View、deterministic replay、Policy、typecheck、lint、build、差分境界を検査する。
+専用VerifierはAcceptance Sync `6/6`、immutable content `10/10`、accepted content commit、non-sync Product Direction blobs `4/4`、JSON `4/4`、凍結E `11/11`、履歴、外部操作`0`、評価Doctrine、分類`13/13`、PO判断`4/4`、projection `14/14`、両derived View、deterministic replay、Policy、typecheck、lint、build、差分境界を検査する。
 
-記録結果: exact scope `10/10`、duplicate paths `0`、JSON `4/4`、frozen E `11/11`、classification `13/13`、PO decisions `4/4 approved` / pending `0`、projection `14/14`、Policy `40/40`、typecheck PASS、lint PASS warnings `0`、build PASS、`git diff --check` PASS。
+記録結果: Acceptance Sync `6/6`、immutable content `10/10`、non-sync Product Direction blobs `4/4`、duplicate paths `0`、JSON `4/4`、frozen E `11/11`、classification `13/13`、PO decisions `4/4 approved` / pending `0`、projection `14/14`、deterministic replay PASS、Policy `40/40`、typecheck PASS、lint PASS warnings `0`、build PASS、`git diff --check` PASS。
 
 ## 17. Acceptance boundary
 
-本Taskが提示するのは、Product Direction Doctrine、承認済みPO判断、Materiality再編、後続projection補正、およびE-R2 entry contractである。Provider quality remains unestablished。Active Runtime, main, and migration remain unchanged。migrationはunapplied、Active Serviceはunchanged、Provider / DB / Supabaseは`0 / 0 / 0`。
+本Taskは、Product Direction Doctrine、承認済みPO判断、Materiality再編、後続projection補正、およびE-R2 entry contractをHuman / ChatGPT accepted completeとして確定する。Frozen Eのmachine verdict `FAIL`とcase result `6/14`は不変であり、Provider quality remains unestablished。Active Runtime, main, and migration remain unchanged。migrationはunapplied、Active Serviceはunchanged、Provider / DB / Supabaseは`0 / 0 / 0`。
 
-Human / ChatGPT reviewと本Taskのacceptanceはまだ別途必要である。PR、main merge、force pushは行わない。
+Human / ChatGPT acceptanceは完了したが、これはE-R2実装、Provider再実行、R4、C2、PR、main merge、またはforce pushの権限を付与しない。
 
 ## 18. E-R2 unauthorized
 
