@@ -7,7 +7,7 @@ import {
 } from "./m2-p4-i3-r1-c1-r3-r2-e-provider-evaluator-v1.mjs";
 
 export const ADJUDICATOR_VERSION =
-  "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudicator-v1";
+  "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-adjudicator-v1";
 
 const frozenRoot = "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e";
 const frozenResultsPath = frozenRoot + "/diagnostic-results-v1.json";
@@ -580,12 +580,39 @@ function shortInput(caseDefinition) {
   return String(raw).replace(/\s+/gu, " ").trim().slice(0, 96);
 }
 
-function classificationFlags(category, productOwnerDecisionRequired) {
+function defaultEvaluationPolicy(category) {
+  return {
+    evaluator_implementation_defect: {
+      evaluation_tier: "evaluator_only",
+      materiality: "nonblocking",
+    },
+    quality_contract_overconstraint: {
+      evaluation_tier: "flexible_semantic",
+      materiality: "nonblocking",
+    },
+    application_bookkeeping_gap: {
+      evaluation_tier: "application_integrity",
+      materiality: "blocking",
+    },
+    provider_or_prompt_gap: {
+      evaluation_tier: "semantic_coverage",
+      materiality: "blocking",
+    },
+    unresolved_requires_human_chatgpt_review: {
+      evaluation_tier: "product_outcome",
+      materiality: "blocking",
+    },
+  }[category];
+}
+
+function classificationFlags(
+  category,
+  productOwnerDecisionRequired,
+  materiality,
+) {
   const provider = category === "provider_or_prompt_gap";
   const unresolved =
     category === "unresolved_requires_human_chatgpt_review";
-  const runtime =
-    category === "application_bookkeeping_gap" || provider || unresolved;
   const production = {
     evaluator_implementation_defect: "evaluator",
     quality_contract_overconstraint: "quality_contract",
@@ -595,7 +622,7 @@ function classificationFlags(category, productOwnerDecisionRequired) {
   }[category];
   let owner = {
     evaluator_implementation_defect: "CodeX",
-    quality_contract_overconstraint: "ProductOwner",
+    quality_contract_overconstraint: "CodeX",
     application_bookkeeping_gap: "CodeX",
     provider_or_prompt_gap: "ChatGPT",
     unresolved_requires_human_chatgpt_review: "HumanChatGPTReview",
@@ -603,7 +630,7 @@ function classificationFlags(category, productOwnerDecisionRequired) {
   if (productOwnerDecisionRequired) owner = "ProductOwner";
   return {
     changes_provider_semantic_view: provider || unresolved,
-    blocks_runtime_readiness: runtime,
+    blocks_runtime_readiness: materiality === "blocking",
     production_change_indicated: production,
     product_owner_decision_required: productOwnerDecisionRequired,
     recommended_next_owner: owner,
@@ -621,19 +648,34 @@ function baseClassification({
   pointer,
   rationale,
   productOwnerDecisionRequired = false,
+  productOwnerDecisionId = null,
+  evaluationTier,
+  materiality,
+  conditionalBlockingCondition = null,
 }) {
+  const defaultPolicy = defaultEvaluationPolicy(category);
+  const resolvedEvaluationTier = evaluationTier ?? defaultPolicy.evaluation_tier;
+  const resolvedMateriality = materiality ?? defaultPolicy.materiality;
   return {
     failure_code: failureCode,
     case_id: caseId,
     primary_category: category,
     confidence,
+    evaluation_tier: resolvedEvaluationTier,
+    materiality: resolvedMateriality,
+    conditional_blocking_condition: conditionalBlockingCondition,
     frozen_assertion_id: assertionId,
     frozen_expected: clone(expected),
     frozen_actual: clone(actual),
     frozen_evidence_json_pointer: pointer,
     supporting_frozen_paths: clone(frozenSupportingPaths),
     concise_rationale: rationale,
-    ...classificationFlags(category, productOwnerDecisionRequired),
+    product_owner_decision_id: productOwnerDecisionId,
+    ...classificationFlags(
+      category,
+      productOwnerDecisionRequired,
+      resolvedMateriality,
+    ),
   };
 }
 
@@ -672,54 +714,13 @@ function qualityFinding({
   };
 }
 
-function productOwnerDecision(finding, rule) {
-  const questions = {
-    "candidate_analysis.candidate_communicative_intent.practical_requirement": {
-      question:
-        "「土曜ならいける。時間を教えて」を、予定確認と情報提供の両方として扱うか、情報提供だけでも妥当とするか。返信案の実質維持判定に影響する。",
-      option_a:
-        "provide_information を妥当とし、confirm_schedule は任意の追加ラベルとする。",
-      option_b:
-        "時間の提示依頼を含むため confirm_schedule を必須とし、必要なら provide_information も併記する。",
-    },
-    "candidate_safety_result.signal_codes": {
-      question:
-        "「また時間おしえて」のような通常の情報依頼も asks_for_reply として記録するか。Base の連絡禁止境界と組み合わせる後段 Safety 判定に影響する。",
-      option_a:
-        "通常の情報依頼も asks_for_reply として記録し、reply_demand とは明確に分離する。",
-      option_b:
-        "asks_for_reply は返答そのものを明示要求する表現だけに限定し、情報依頼は別の実質ラベルで扱う。",
-    },
-    "candidate_analysis.candidate_communicative_intent.apology_strength": {
-      question:
-        "「ごめん、何か嫌だった？」の冒頭の一回だけの謝罪を low とするか medium とするか。返信案の温度調整量に影響する。",
-      option_a:
-        "修飾のない一回の「ごめん」は low とし、返答圧力は response_pressure で別評価する。",
-      option_b:
-        "関係不安を伴う冒頭謝罪は medium とし、単なる軽い謝意より強く扱う。",
-    },
-    "candidate_analysis.candidate_style_profile.register": {
-      question:
-        "「ありがとう」に続いて二文がです・ます調の終了文を、全体として neutral_polite とするか mixed とするか。最終返信案の語調維持に影響する。",
-      option_a:
-        "主要な述語終止がです・ます調なら neutral_polite とする。",
-      option_b:
-        "常体の語句とです・ます調が混在する場合は mixed とする。",
-    },
-  };
-  const decision = questions[rule.json_path];
+function productOwnerDecision(finding, rule, approvedDecision) {
   return {
-    decision_id: "PO-" + finding.failure_code,
+    ...clone(approvedDecision),
     case_id: finding.case_id,
-    source_excerpt: finding.input_excerpt,
-    luna_actual_classification: clone(finding.frozen_actual),
-    current_quality_contract_expectation: clone(finding.frozen_expected),
-    question: decision.question,
-    option_a: decision.option_a,
-    option_b: decision.option_b,
-    reply_or_report_impact: rule.product_behavior_impact,
-    chatgpt_recommendation: rule.chatgpt_recommendation,
-    product_owner_answer: "pending",
+    frozen_provider_classification: clone(finding.frozen_actual),
+    frozen_quality_contract_expectation: clone(finding.frozen_expected),
+    product_behavior_impact: rule.product_behavior_impact,
   };
 }
 
@@ -824,9 +825,9 @@ function deriveCandidateSourceIsolation(frozenResults) {
 }
 
 function caseViews(calls, classifications, contract) {
-  const providerRules = contract.two_view_adjudication_rules.provider_semantic;
+  const providerRules = contract.view_adjudication_rules.provider_stage;
   const runtimeRules =
-    contract.two_view_adjudication_rules.split_runtime_readiness;
+    contract.view_adjudication_rules.split_runtime_pre_r4;
   const cases = calls.map((call) => {
     const selected = classifications.filter(
       (item) => item.case_id === call.case_id,
@@ -834,67 +835,103 @@ function caseViews(calls, classifications, contract) {
     const categories = uniqueSorted(
       selected.map((item) => item.primary_category),
     );
+    const materialities = uniqueSorted(
+      selected.map((item) => item.materiality),
+    );
+    const evaluationTiers = uniqueSorted(
+      selected.map((item) => item.evaluation_tier),
+    );
     const providerStatus = categories.some((category) =>
       providerRules.unresolved_categories.includes(category),
     )
       ? "unresolved"
-      : categories.some((category) =>
-            providerRules.blocking_categories.includes(category),
+      : materialities.some((materiality) =>
+            providerRules.blocking_materiality.includes(materiality),
           )
-        ? "fail"
-        : "pass";
+        ? "blocking"
+        : materialities.some((materiality) =>
+              providerRules.conditional_materiality.includes(materiality),
+            )
+          ? "conditional"
+          : evaluationTiers.some((tier) =>
+                providerRules.flexible_evaluation_tiers.includes(tier),
+              )
+            ? "flexible_finding"
+            : providerRules.remaining_status;
     const runtimeStatus = categories.some((category) =>
       runtimeRules.unresolved_categories.includes(category),
     )
       ? "unresolved"
-      : categories.some((category) =>
-            runtimeRules.blocking_categories.includes(category),
+      : materialities.some((materiality) =>
+            runtimeRules.blocked_materiality.includes(materiality),
           )
         ? "blocked"
-        : "ready";
+        : materialities.some((materiality) =>
+              runtimeRules.conditional_materiality.includes(materiality),
+            )
+          ? "conditional"
+          : runtimeRules.remaining_status;
     return {
       case_id: call.case_id,
-      frozen_case_passed: call.evaluation?.case_passed === true,
+      frozen_case_passed: call.evaluation?.case_verdict === "PASS",
       classified_failure_codes: selected.map((item) => item.failure_code),
       classification_categories: categories,
-      provider_semantic_status: providerStatus,
-      split_runtime_readiness_status: runtimeStatus,
+      evaluation_tiers: evaluationTiers,
+      materialities,
+      provider_stage_status: providerStatus,
+      split_runtime_pre_r4_status: runtimeStatus,
     };
   });
   const ids = (field, value) =>
     cases.filter((item) => item[field] === value).map((item) => item.case_id);
-  const providerPass = ids("provider_semantic_status", "pass");
-  const providerFail = ids("provider_semantic_status", "fail");
-  const providerUnresolved = ids("provider_semantic_status", "unresolved");
-  const runtimeReady = ids("split_runtime_readiness_status", "ready");
-  const runtimeBlocked = ids("split_runtime_readiness_status", "blocked");
-  const runtimeUnresolved = ids(
-    "split_runtime_readiness_status",
-    "unresolved",
+  const providerBlocking = ids("provider_stage_status", "blocking");
+  const providerConditional = ids("provider_stage_status", "conditional");
+  const providerFlexible = ids(
+    "provider_stage_status",
+    "flexible_finding",
   );
+  const providerClean = ids("provider_stage_status", "clean");
+  const providerUnresolved = ids("provider_stage_status", "unresolved");
+  const runtimeBlocked = ids("split_runtime_pre_r4_status", "blocked");
+  const runtimeConditional = ids(
+    "split_runtime_pre_r4_status",
+    "conditional",
+  );
+  const runtimeLocallyReady = ids(
+    "split_runtime_pre_r4_status",
+    "locally_ready",
+  );
+  const runtimeUnresolved = ids("split_runtime_pre_r4_status", "unresolved");
   return {
     cases,
-    provider_semantic_adjudication: {
-      pass_cases: providerPass,
-      fail_cases: providerFail,
+    provider_stage_adjudication: {
+      blocking_cases: providerBlocking,
+      conditional_cases: providerConditional,
+      flexible_finding_cases: providerFlexible,
+      clean_cases: providerClean,
       unresolved_cases: providerUnresolved,
       counts: {
-        pass: providerPass.length,
-        fail: providerFail.length,
+        blocking: providerBlocking.length,
+        conditional: providerConditional.length,
+        flexible_finding: providerFlexible.length,
+        clean: providerClean.length,
         unresolved: providerUnresolved.length,
         total: cases.length,
       },
     },
-    split_runtime_readiness_adjudication: {
-      ready_cases: runtimeReady,
+    split_runtime_pre_r4_adjudication: {
       blocked_cases: runtimeBlocked,
+      conditional_cases: runtimeConditional,
+      locally_ready_cases: runtimeLocallyReady,
       unresolved_cases: runtimeUnresolved,
       counts: {
-        ready: runtimeReady.length,
         blocked: runtimeBlocked.length,
+        conditional: runtimeConditional.length,
+        locally_ready: runtimeLocallyReady.length,
         unresolved: runtimeUnresolved.length,
         total: cases.length,
       },
+      locally_ready_equals_r4_ready: false,
     },
   };
 }
@@ -1036,6 +1073,11 @@ export function buildAdjudicationResultV1({
             rationale: rule.concise_rationale,
             productOwnerDecisionRequired:
               rule.product_owner_decision_required,
+            productOwnerDecisionId: rule.product_owner_decision_id,
+            evaluationTier: rule.evaluation_tier,
+            materiality: rule.materiality,
+            conditionalBlockingCondition:
+              rule.conditional_blocking_condition,
           }),
         );
         const finding = qualityFinding({
@@ -1063,8 +1105,17 @@ export function buildAdjudicationResultV1({
             provider_retest_required: rule.provider_retest_required,
           });
         }
-        if (rule.product_owner_decision_required) {
-          productOwnerDecisions.push(productOwnerDecision(finding, rule));
+        if (rule.product_owner_decision_id) {
+          const approvedDecision =
+            adjudicationContract.product_owner_decisions.find(
+              (item) => item.decision_id === rule.product_owner_decision_id,
+            );
+          if (!approvedDecision) {
+            throw new Error("Approved Product Owner decision missing");
+          }
+          productOwnerDecisions.push(
+            productOwnerDecision(finding, rule, approvedDecision),
+          );
         }
         continue;
       }
@@ -1093,6 +1144,19 @@ export function buildAdjudicationResultV1({
         .length,
     ]),
   );
+  const evaluationTierCounts = Object.fromEntries(
+    adjudicationContract.allowed_evaluation_tiers.map((tier) => [
+      tier,
+      classifications.filter((item) => item.evaluation_tier === tier).length,
+    ]),
+  );
+  const materialityCounts = Object.fromEntries(
+    adjudicationContract.allowed_materiality_values.map((materiality) => [
+      materiality,
+      classifications.filter((item) => item.materiality === materiality)
+        .length,
+    ]),
+  );
   const views = caseViews(
     frozenResults.calls,
     classifications,
@@ -1116,13 +1180,25 @@ export function buildAdjudicationResultV1({
   const h2Literals = uniqueSorted(
     h2LiteralAssertions.flatMap((item) => asArray(item.expected)),
   );
+  const pendingProductOwnerDecisions = productOwnerDecisions.filter(
+    (item) =>
+      item.status !== "approved" ||
+      item.approved_by !== "ProductOwner" ||
+      item.approved_in_conversation !== true,
+  );
+  const productOwnerDecisionsComplete =
+    productOwnerDecisions.length ===
+      adjudicationContract.product_owner_decisions.length &&
+    new Set(productOwnerDecisions.map((item) => item.decision_id)).size ===
+      productOwnerDecisions.length &&
+    pendingProductOwnerDecisions.length === 0;
 
   return {
     schema_version:
-      "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudication-results-v1",
-    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R1",
+      "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-adjudication-results-v1",
+    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R1-R1",
     adjudicator_version: ADJUDICATOR_VERSION,
-    status: "offline_postmortem_completed_pending_human_chatgpt_review",
+    status: "product_direction_synced_pending_human_chatgpt_review",
     baseline: adjudicationContract.baseline,
     frozen_evidence: {
       execution_protocol_accepted: true,
@@ -1139,10 +1215,12 @@ export function buildAdjudicationResultV1({
     classification_complete: classificationComplete,
     classifications,
     category_counts: categoryCounts,
+    evaluation_tier_counts: evaluationTierCounts,
+    materiality_counts: materialityCounts,
     case_level_derived_statuses: views.cases,
-    provider_semantic_adjudication: views.provider_semantic_adjudication,
-    split_runtime_readiness_adjudication:
-      views.split_runtime_readiness_adjudication,
+    provider_stage_adjudication: views.provider_stage_adjudication,
+    split_runtime_pre_r4_adjudication:
+      views.split_runtime_pre_r4_adjudication,
     evaluator_hypotheses: {
       ...reproducer.hypotheses,
       "EV-H2": {
@@ -1171,7 +1249,14 @@ export function buildAdjudicationResultV1({
         failure_code: item.failure_code,
         rationale: item.concise_rationale,
       })),
-    product_owner_decisions_required: productOwnerDecisions,
+    product_direction_doctrine: clone(
+      adjudicationContract.product_direction_doctrine,
+    ),
+    evaluation_doctrine: clone(adjudicationContract.evaluation_doctrine),
+    product_owner_decisions: productOwnerDecisions,
+    product_owner_decisions_complete: productOwnerDecisionsComplete,
+    product_owner_decisions_pending: pendingProductOwnerDecisions.length,
+    e_r2_entry_contract: clone(adjudicationContract.e_r2_entry_contract),
     candidate_source_isolation_boundary: candidateBoundary,
     safeguards: {
       provider_calls_in_this_task: 0,
@@ -1183,12 +1268,14 @@ export function buildAdjudicationResultV1({
       secret_leakage_count: 0,
       provider_quality_established: false,
       candidate_ready_for_isolated_e2e: false,
+      e_r2_ready: true,
       e_r2_authorized: false,
       r4_authorized: false,
       c2_authorized: false,
     },
     overall_postmortem_status:
       classificationComplete &&
+      productOwnerDecisionsComplete &&
       reproducer.self_tests.passed === reproducer.self_tests.total
         ? "PASS_PENDING_HUMAN_CHATGPT_REVIEW"
         : "FAIL",
@@ -1232,9 +1319,9 @@ function runCli() {
   if (process.argv.includes("--check")) {
     const committed = readText(root, resultsPath);
     if (serialized !== committed) {
-      throw new Error("M2_R3_R2_E_R1_DETERMINISTIC_REPLAY_MISMATCH");
+      throw new Error("M2_R3_R2_E_R1_R1_DETERMINISTIC_REPLAY_MISMATCH");
     }
-    console.log("M2_R3_R2_E_R1_ADJUDICATOR_CHECK: PASS");
+    console.log("M2_R3_R2_E_R1_R1_ADJUDICATOR_CHECK: PASS");
     return;
   }
   writeFileSync(
@@ -1242,7 +1329,7 @@ function runCli() {
     serialized,
     "utf8",
   );
-  console.log("M2_R3_R2_E_R1_ADJUDICATOR_WRITE: PASS");
+  console.log("M2_R3_R2_E_R1_R1_ADJUDICATOR_WRITE: PASS");
 }
 
 const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : "";

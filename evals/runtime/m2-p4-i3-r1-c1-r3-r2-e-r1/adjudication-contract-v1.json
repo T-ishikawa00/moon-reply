@@ -1,13 +1,15 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-adjudication-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
-  "title": "Frozen Provider Diagnostic Postmortem and Independent Offline Responsibility Adjudication",
-  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-adjudication-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1-R1",
+  "title": "Product Direction Doctrine, Product Owner Decision Sync, and Postmortem Evidence Correction",
+  "status": "product_direction_synced_pending_human_chatgpt_review",
+  "baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
   "e_package_commit_a": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
   "e_evidence_commit_b": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "e_r1_baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
-  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem",
-  "evidence_mode": "immutable_saved_e_exact_fourteen_calls_offline_only",
+  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction",
+  "evidence_mode": "immutable_saved_e_exact_fourteen_calls_product_direction_adjudication_offline_only",
   "provider_calls": 0,
   "provider_rerun_authorized": false,
   "db_operations": 0,
@@ -24,6 +26,9 @@
     "case_id",
     "primary_category",
     "confidence",
+    "evaluation_tier",
+    "materiality",
+    "conditional_blocking_condition",
     "frozen_assertion_id",
     "frozen_expected",
     "frozen_actual",
@@ -40,6 +45,19 @@
     "confirmed",
     "strongly_supported",
     "uncertain"
+  ],
+  "allowed_evaluation_tiers": [
+    "evaluator_only",
+    "application_integrity",
+    "hard_factual_safety",
+    "semantic_coverage",
+    "flexible_semantic",
+    "product_outcome"
+  ],
+  "allowed_materiality_values": [
+    "blocking",
+    "conditional",
+    "nonblocking"
   ],
   "allowed_production_change_indications": [
     "none",
@@ -62,10 +80,101 @@
     "predefined_residual_count_allowed": false,
     "predefined_residual_case_ids_allowed": false,
     "predefined_category_counts_allowed": false,
+    "predefined_view_counts_allowed": false,
     "case_id_result_override_allowed": false,
     "failure_code_result_override_allowed": false,
     "counts_must_be_derived_from_mapping": true,
     "case_lists_must_be_derived_from_mapping": true
+  },
+  "product_direction_doctrine": {
+    "canonical_statement_ja": "月の返事は、恋の唯一の正解や相手の本心を断定するサービスではない。\n相談者が迷って動けないときに、\n今ある事実と複数の見方を整理し、\n今の時点で最も進みやすい方向を一つ示す鑑定ノートである。",
+    "machine_readable_summary_en": "The product does not claim a unique romantic truth. It preserves facts, presents plausible interpretations, recommends one current direction, gives an immediate next step, and defines reassessment conditions.",
+    "required_outcome_sequence": [
+      "facts",
+      "plausible_interpretations",
+      "recommended_current_direction",
+      "immediate_next_step",
+      "reassessment_condition"
+    ],
+    "prohibited_framings": [
+      "unsupported_inner_state_certainty",
+      "future_guarantee",
+      "occult_certainty",
+      "one_label_is_the_truth",
+      "forcing_ambiguous_human_language_into_one_artificial_interpretation",
+      "direction_without_an_actionable_next_step",
+      "advice_without_a_reassessment_condition"
+    ],
+    "japanese_product_summary": "事実は厳密に守る。解釈には幅を持たせる。その上で、相談者が今進みやすい方向を一つ示す。"
+  },
+  "evaluation_doctrine": {
+    "model": "hard_flexible_product_outcome",
+    "hard_factual_safety": {
+      "blocking_when_material": true,
+      "responsibilities": [
+        "speaker_or_message_owner",
+        "sent_received_or_unsent_status",
+        "factual_events",
+        "explicit_dates_numbers_or_commitments",
+        "user_assumption_versus_observed_fact",
+        "explicit_other_person_boundary",
+        "explicit_user_constraint",
+        "no_contact",
+        "safety",
+        "privacy",
+        "fabricated_facts",
+        "candidate_to_base_contamination",
+        "base_to_candidate_contamination",
+        "material_meaning_reversal",
+        "material_meaning_deletion",
+        "prohibited_contact_workaround"
+      ]
+    },
+    "flexible_semantic": {
+      "independently_hard_fails": false,
+      "responsibilities": [
+        "apology_strength",
+        "register_subtype",
+        "softness",
+        "emotional_temperature",
+        "detailed_style_dimensions",
+        "overlapping_practical_intent_labels",
+        "minor_tone_labels",
+        "wording_category_boundaries"
+      ],
+      "escalates_only_for": [
+        "material_meaning_loss",
+        "boundary_violation",
+        "safety_disposition_change",
+        "final_draft_personality_drift",
+        "final_direction_change",
+        "user_constraint_violation"
+      ]
+    },
+    "product_outcome": {
+      "established_by_e_pb01_pb01c_alone": false,
+      "evaluated_in": [
+        "PB-04",
+        "PB-05",
+        "PB-06",
+        "R4"
+      ],
+      "gates": [
+        "user_feels_understood",
+        "user_can_accept_the_reasoning",
+        "user_can_act",
+        "facts_are_preserved",
+        "plausible_views_are_separated_from_facts",
+        "one_current_direction_is_presented",
+        "tonights_action_is_concrete",
+        "reassessment_condition_is_observable",
+        "candidate_meaning_is_preserved",
+        "reply_draft_is_natural_for_that_person",
+        "anxiety_is_not_amplified",
+        "unsupported_certainty_is_absent",
+        "jpy_980_product_value_is_plausible"
+      ]
+    }
   },
   "classification_precedence": [
     "confirmed_evaluator_reproducer",
@@ -82,10 +191,14 @@
       "json_path": "base_writing_signals.relationship_dimensions.hierarchy.value",
       "primary_category": "provider_or_prompt_gap",
       "confidence": "confirmed",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "blocking",
+      "conditional_blocking_condition": null,
       "quality_contract_review": "justified",
+      "product_owner_decision_id": null,
       "product_owner_decision_required": false,
       "concise_rationale": "The synthetic input explicitly identifies the other person as a workplace senior, so unknown loses a directly stated hierarchy relation.",
-      "product_behavior_impact": "A missed hierarchy signal can produce an inappropriately casual or assertive reply.",
+      "product_behavior_impact": "Explicit hierarchy affects distance and respectful reply direction.",
       "chatgpt_recommendation": "Require explicit Japanese role terms such as workplace senior or junior to populate the bounded hierarchy value without inventing authority beyond the text.",
       "prompt_correction_candidate": "Clarify that an explicitly stated workplace senior establishes user_is_junior while the work_or_school chip alone does not.",
       "schema_change_required": false,
@@ -95,10 +208,14 @@
       "json_path": "decision_facts.contact_state.usual_cadence_relation",
       "primary_category": "provider_or_prompt_gap",
       "confidence": "confirmed",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "blocking",
+      "conditional_blocking_condition": null,
       "quality_contract_review": "justified",
+      "product_owner_decision_id": null,
       "product_owner_decision_required": false,
       "concise_rationale": "The user explicitly says the current delay is ordinary relative to the stated usual cadence, so unknown discards direct evidence.",
-      "product_behavior_impact": "Losing the ordinary-cadence signal can amplify anxiety and overstate the need for action.",
+      "product_behavior_impact": "Losing an explicitly ordinary cadence can amplify anxiety and change the recommended current direction.",
       "chatgpt_recommendation": "Treat an explicit user statement that the delay is ordinary as within_usual even when exact elapsed minutes remain unresolved.",
       "prompt_correction_candidate": "Separate the qualitative cadence relation from the exact elapsed-time field and preserve explicit ordinary-cadence statements.",
       "schema_change_required": false,
@@ -106,28 +223,36 @@
     },
     {
       "json_path": "candidate_analysis.candidate_communicative_intent.practical_requirement",
-      "primary_category": "quality_contract_overconstraint",
-      "confidence": "strongly_supported",
-      "quality_contract_review": "too_narrow",
-      "product_owner_decision_required": true,
-      "concise_rationale": "The Candidate both provides Saturday availability and asks for the time; provide_information is Schema-valid and the Prompt does not require confirm_schedule for this wording.",
-      "product_behavior_impact": "A narrow label contract can trigger unnecessary rewrites even when the Candidate's practical intent is preserved.",
-      "chatgpt_recommendation": "Accept provide_information, confirm_schedule, or both for this wording unless Product Owner defines a stricter multi-label rule.",
-      "prompt_correction_candidate": "Define when availability plus a request for time is provide_information, confirm_schedule, or a multi-label combination.",
+      "primary_category": "provider_or_prompt_gap",
+      "confidence": "confirmed",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "conditional",
+      "conditional_blocking_condition": "The omission becomes blocking when downstream output loses, reverses, or invents either explicit meaning unit.",
+      "quality_contract_review": "product_owner_resolved_multi_intent",
+      "product_owner_decision_id": "PO-E-C01-PRACTICAL",
+      "product_owner_decision_required": false,
+      "concise_rationale": "The Candidate explicitly provides Saturday availability and asks for a concrete time, so both semantic units must remain covered even if a bounded internal enum expresses only one.",
+      "product_behavior_impact": "Dropping either availability or the time request downstream materially changes the Candidate meaning.",
+      "chatgpt_recommendation": "Represent both provide_information and confirm_schedule and validate downstream semantic coverage rather than demanding one artificial label.",
+      "prompt_correction_candidate": "Require multi-intent coverage for availability plus a request for time without treating enum incompleteness alone as a product-wide Hard FAIL.",
       "schema_change_required": false,
-      "provider_retest_required": false,
+      "provider_retest_required": true,
       "schema_definition": "practical_requirement_signal"
     },
     {
       "json_path": "candidate_safety_result.signal_codes",
       "primary_category": "provider_or_prompt_gap",
-      "confidence": "strongly_supported",
-      "quality_contract_review": "justified",
-      "product_owner_decision_required": true,
-      "concise_rationale": "The Candidate directly asks the recipient to provide the meeting time, while the Prompt requires every directly supported contact-action signal.",
-      "product_behavior_impact": "Missing asks_for_reply weakens later boundary-aware contact routing when Base facts are combined.",
-      "chatgpt_recommendation": "Count a direct request to provide meeting details as asks_for_reply in addition to proposes_meeting, subject to Product Owner confirmation of the trigger boundary.",
-      "prompt_correction_candidate": "Define whether ordinary requests for requested information count as asks_for_reply and distinguish them from reply_demand.",
+      "confidence": "confirmed",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "conditional",
+      "conditional_blocking_condition": "Missing asks_for_reply is blocking only when it changes a boundary-aware contact or Safety disposition, or causes a material Candidate meaning loss.",
+      "quality_contract_review": "product_owner_resolved_contact_action",
+      "product_owner_decision_id": "PO-E-C01-SAFETY-ACTIONS",
+      "product_owner_decision_required": false,
+      "concise_rationale": "An ordinary request for meeting information asks for a reply but is not a reply demand; its Safety materiality depends on boundary-aware downstream use.",
+      "product_behavior_impact": "Missing asks_for_reply matters when Base boundaries change contact or Safety disposition, not as an isolated danger label.",
+      "chatgpt_recommendation": "Record asks_for_reply and proposes_meeting while keeping reply_demand false for this ordinary information request.",
+      "prompt_correction_candidate": "Distinguish asks_for_reply from reply_demand and raise materiality only when explicit boundary conditions intersect.",
       "schema_change_required": false,
       "provider_retest_required": true,
       "schema_definition": "candidate_safety_signal_code"
@@ -135,13 +260,17 @@
     {
       "json_path": "candidate_analysis.candidate_communicative_intent.apology_strength",
       "primary_category": "quality_contract_overconstraint",
-      "confidence": "strongly_supported",
-      "quality_contract_review": "too_narrow",
-      "product_owner_decision_required": true,
-      "concise_rationale": "A single unmodified casual apology can reasonably be low strength; the separate same-day request already captures response pressure.",
-      "product_behavior_impact": "Conflating apology presence with apology intensity can exaggerate the Candidate's emotional temperature.",
-      "chatgpt_recommendation": "Allow low for a single casual apology unless repetition, intensifiers, self-blame, or repair language raises the strength.",
-      "prompt_correction_candidate": "Define apology strength independently from response pressure and list bounded intensity signals.",
+      "confidence": "confirmed",
+      "evaluation_tier": "flexible_semantic",
+      "materiality": "nonblocking",
+      "conditional_blocking_condition": null,
+      "quality_contract_review": "product_owner_resolved_flexible",
+      "product_owner_decision_id": "PO-E-C03-APOLOGY",
+      "product_owner_decision_required": false,
+      "concise_rationale": "A single unmodified apology can reasonably be low or medium; response and deadline pressure are separate signals.",
+      "product_behavior_impact": "A low-versus-medium label difference alone does not change Product Outcome.",
+      "chatgpt_recommendation": "Accept low or medium while separately preserving apology presence, anxiety, response pressure, and deadline pressure.",
+      "prompt_correction_candidate": "Define apology strength independently from response pressure and allow bounded low or medium interpretation.",
       "schema_change_required": false,
       "provider_retest_required": false,
       "schema_definition": "apology_strength"
@@ -149,13 +278,17 @@
     {
       "json_path": "candidate_analysis.candidate_style_profile.register",
       "primary_category": "provider_or_prompt_gap",
-      "confidence": "strongly_supported",
-      "quality_contract_review": "justified",
-      "product_owner_decision_required": true,
-      "concise_rationale": "Two predicate endings use desu or masu politeness, so classifying the whole three-sentence Candidate as casual is not supported; neutral_polite is already allowed.",
-      "product_behavior_impact": "A casual misclassification can cause the final draft to flatten a deliberate closure tone.",
-      "chatgpt_recommendation": "Treat dominant desu or masu endings as neutral_polite unless clearly offset by sustained casual endings; reserve mixed for a genuinely balanced register split.",
-      "prompt_correction_candidate": "Define message-level register aggregation for mixed lexical warmth and polite predicate endings.",
+      "confidence": "confirmed",
+      "evaluation_tier": "flexible_semantic",
+      "materiality": "nonblocking",
+      "conditional_blocking_condition": null,
+      "quality_contract_review": "product_owner_resolved_flexible",
+      "product_owner_decision_id": "PO-E-C04-REGISTER",
+      "product_owner_decision_required": false,
+      "concise_rationale": "Neutral-polite and mixed are both acceptable for lexical warmth combined with dominant polite predicate endings; casual is not preferred.",
+      "product_behavior_impact": "The internal register subtype alone is nonblocking, but a final draft that shifts into rough casual speech would be blocking personality drift.",
+      "chatgpt_recommendation": "Accept neutral_polite or mixed and validate preservation of closure, boundary, no-reply meaning, and final-draft register.",
+      "prompt_correction_candidate": "Add register aggregation guidance for lexical warmth with polite predicate endings.",
       "schema_change_required": false,
       "provider_retest_required": true,
       "schema_definition": "register"
@@ -165,42 +298,177 @@
     "justified",
     "too_narrow",
     "ambiguous",
-    "requires_product_owner_decision"
+    "requires_product_owner_decision",
+    "product_owner_resolved_multi_intent",
+    "product_owner_resolved_contact_action",
+    "product_owner_resolved_flexible"
   ],
-  "two_view_adjudication_rules": {
-    "provider_semantic": {
-      "blocking_categories": [
-        "provider_or_prompt_gap"
-      ],
-      "unresolved_categories": [
-        "unresolved_requires_human_chatgpt_review"
-      ],
-      "not_directly_attributed_to_provider": [
-        "evaluator_implementation_defect",
-        "quality_contract_overconstraint",
-        "application_bookkeeping_gap"
-      ]
+  "product_owner_decisions": [
+    {
+      "decision_id": "PO-E-C01-PRACTICAL",
+      "status": "approved",
+      "approved_by": "ProductOwner",
+      "approved_in_conversation": true,
+      "case_id": "E-C01",
+      "source_excerpt": "土曜ならいけるで！ また時間おしえて〜😊",
+      "accepted_interpretation": {
+        "explicit_meaning_units": [
+          "provide_information",
+          "confirm_schedule"
+        ],
+        "preferred_practical_requirement": [
+          "provide_information",
+          "confirm_schedule"
+        ]
+      },
+      "responsibility": "provider_or_prompt_gap",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "conditional",
+      "conditional_blocking_condition": "The omission becomes blocking when downstream output loses, reverses, or invents either explicit meaning unit.",
+      "internal_enum_omission_alone_is_hard_fail": false,
+      "meaning_reversal_is_hard_fail": true
     },
-    "split_runtime_readiness": {
-      "blocking_categories": [
-        "application_bookkeeping_gap",
-        "provider_or_prompt_gap"
+    {
+      "decision_id": "PO-E-C01-SAFETY-ACTIONS",
+      "status": "approved",
+      "approved_by": "ProductOwner",
+      "approved_in_conversation": true,
+      "case_id": "E-C01",
+      "source_excerpt": "また時間おしえて〜",
+      "accepted_interpretation": {
+        "asks_for_reply": true,
+        "reply_demand": false,
+        "proposes_meeting": true
+      },
+      "asks_for_reply_equals_reply_demand": false,
+      "safety_materiality_intersections": [
+        "no_contact",
+        "blocked_or_restricted",
+        "relationship_closed",
+        "repeated_unanswered_contact",
+        "explicit_contact_prohibition"
       ],
+      "responsibility": "provider_or_prompt_gap",
+      "evaluation_tier": "semantic_coverage",
+      "materiality": "conditional",
+      "conditional_blocking_condition": "Missing asks_for_reply is blocking only when it changes a boundary-aware contact or Safety disposition, or causes a material Candidate meaning loss."
+    },
+    {
+      "decision_id": "PO-E-C03-APOLOGY",
+      "status": "approved",
+      "approved_by": "ProductOwner",
+      "approved_in_conversation": true,
+      "case_id": "E-C03",
+      "source_excerpt": "ごめん、何か嫌だった？ 忙しいだけならいいんだけど、できれば今日中に返事ほしいな…",
+      "accepted_interpretation": {
+        "apology_presence": true,
+        "acceptable_apology_strengths": [
+          "low",
+          "medium"
+        ],
+        "response_pressure_evaluated_separately": true,
+        "same_day_reply_request_folded_into_apology_strength": false
+      },
+      "separate_fields": [
+        "anxiety",
+        "question",
+        "response_pressure",
+        "deadline_pressure",
+        "coercion"
+      ],
+      "responsibility": "quality_contract_overconstraint",
+      "evaluation_tier": "flexible_semantic",
+      "materiality": "nonblocking",
+      "conditional_blocking_condition": null,
+      "blocking_escalation": "Only when apology presence is lost, the apology is materially amplified, or the final draft changes the person's emotional temperature."
+    },
+    {
+      "decision_id": "PO-E-C04-REGISTER",
+      "status": "approved",
+      "approved_by": "ProductOwner",
+      "approved_in_conversation": true,
+      "case_id": "E-C04",
+      "source_excerpt": "今までありがとう。これで連絡は終わりにします。返信は大丈夫です。",
+      "accepted_interpretation": {
+        "acceptable_registers": [
+          "neutral_polite",
+          "mixed"
+        ],
+        "discouraged_registers": [
+          "casual"
+        ],
+        "dominant_predicate_endings_are_polite": true,
+        "lexical_warmth_may_coexist_with_polite_endings": true
+      },
+      "hard_gate_meanings": [
+        "explicit_closure",
+        "boundary",
+        "no_reply"
+      ],
+      "responsibility": "provider_or_prompt_gap",
+      "evaluation_tier": "flexible_semantic",
+      "materiality": "nonblocking",
+      "conditional_blocking_condition": null,
+      "blocking_escalation": "A final draft that abruptly changes to rough casual speech, or loses closure, boundary, or no-reply meaning, is blocking.",
+      "prompt_improvement": "recommended",
+      "provider_retest": "useful_but_not_independently_sufficient_for_runtime_readiness"
+    }
+  ],
+  "view_adjudication_rules": {
+    "provider_stage": {
       "unresolved_categories": [
         "unresolved_requires_human_chatgpt_review"
       ],
-      "nonblocking_categories": [
-        "evaluator_implementation_defect",
-        "quality_contract_overconstraint"
-      ]
+      "blocking_materiality": [
+        "blocking"
+      ],
+      "conditional_materiality": [
+        "conditional"
+      ],
+      "flexible_evaluation_tiers": [
+        "flexible_semantic"
+      ],
+      "remaining_status": "clean"
+    },
+    "split_runtime_pre_r4": {
+      "unresolved_categories": [
+        "unresolved_requires_human_chatgpt_review"
+      ],
+      "blocked_materiality": [
+        "blocking"
+      ],
+      "conditional_materiality": [
+        "conditional"
+      ],
+      "remaining_status": "locally_ready",
+      "locally_ready_equals_r4_ready": false
     }
   },
-  "product_owner_decision_rules": {
-    "required_for_quality_contract_overconstraint_candidates": true,
-    "required_for_unresolved_findings": true,
-    "required_for_user_experience_prompt_boundaries": true,
-    "answer_state": "pending",
-    "e_r2_authorized_until_resolved": false
+  "e_r2_entry_contract": {
+    "ready": true,
+    "authorized": false,
+    "required_scope": [
+      "deterministic_unresolved_fields_canonicalization",
+      "pb01_explicit_hierarchy_handling",
+      "pb01_qualitative_cadence_handling",
+      "pb01c_multi_intent_semantic_coverage",
+      "pb01c_asks_for_reply_versus_reply_demand_distinction",
+      "pb01c_apology_strength_flexibility",
+      "pb01c_register_aggregation_guidance",
+      "pb04_directional_guidance_output",
+      "pb05_directional_guidance_report_voice",
+      "pb06_hard_flexible_product_outcome_validation",
+      "successor_evaluator_without_ev_h1_or_ev_h2",
+      "targeted_provider_retest",
+      "full_pb04_through_pb06_product_outcome_testing_before_r4"
+    ],
+    "does_not_target": "make_all_internal_labels_exact",
+    "success_criteria": [
+      "hard_factual_safety_gates_pass",
+      "conditional_semantic_coverage_is_preserved_downstream",
+      "flexible_label_differences_do_not_create_false_hard_fail",
+      "final_direction_action_and_reassessment_structure_is_preserved"
+    ]
   },
   "provider_quality_established": false,
   "candidate_ready_for_isolated_e2e": false,

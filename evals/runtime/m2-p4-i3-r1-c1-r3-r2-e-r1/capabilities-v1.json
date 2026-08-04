@@ -1,54 +1,124 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-capabilities-v1",
-  "status": "offline_postmortem_completed_pending_human_chatgpt_review",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
-  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
-  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-capabilities-v1",
+  "status": "product_direction_synced_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1-R1",
+  "baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
+  "branch": "docs/m2-p4-i3-r1-c1-r3-r2-e-r1-r1-product-direction",
   "exact_scope": "10/10",
+  "product_direction_doctrine_recorded": true,
+  "product_owner_decisions": "4/4",
+  "product_owner_decisions_pending": 0,
+  "evaluation_model": "hard_flexible_product_outcome",
   "frozen_e_machine_verdict": "FAIL",
   "frozen_e_case_result": "6/14",
+  "frozen_case_projection_corrected": true,
+  "frozen_case_projection_matched": "14/14",
   "execution_protocol_accepted": true,
   "execution_evidence_valid": true,
-  "provider_calls_in_this_task": 0,
-  "provider_rerun_authorized": false,
-  "classification_complete": true,
-  "classification_category_counts": {
-    "evaluator_implementation_defect": 4,
-    "quality_contract_overconstraint": 2,
-    "application_bookkeeping_gap": 3,
-    "provider_or_prompt_gap": 4,
-    "unresolved_requires_human_chatgpt_review": 0
-  },
-  "provider_semantic_adjudication": {
-    "source": "computed_from_evidence",
-    "pass": 10,
-    "fail": 4,
-    "unresolved": 0,
-    "total": 14
-  },
-  "runtime_readiness_adjudication": {
-    "source": "computed_from_evidence",
-    "ready": 8,
-    "blocked": 6,
-    "unresolved": 0,
-    "total": 14
-  },
-  "unresolved_case_ids": [],
-  "product_owner_decisions_required": 4,
   "candidate_source_isolation_provider_boundary_confirmed": true,
-  "candidate_source_isolation_provider_boundary_source": "computed_from_evidence",
+  "candidate_source_isolation_provider_boundary_source": "computed_from_frozen_evidence",
   "provider_quality_established": false,
   "candidate_ready_for_isolated_e2e": false,
   "r4_ready": false,
   "r4_authorized": false,
+  "e_r2_ready": true,
   "e_r2_authorized": false,
   "c2_authorized": false,
+  "provider_calls": 0,
+  "provider_rerun_authorized": false,
   "db_operations": 0,
   "supabase_operations": 0,
   "migration_applied": false,
   "active_service_changed": false,
   "active_runtime_activated": false,
   "main_changed": false,
-  "next_candidate": "M2-P4-I3-R1-C1-R3-R2-E-R2 Semantic Responsibility Revision",
+  "classification_complete": true,
+  "classification_category_counts": {
+    "evaluator_implementation_defect": 4,
+    "quality_contract_overconstraint": 1,
+    "application_bookkeeping_gap": 3,
+    "provider_or_prompt_gap": 5,
+    "unresolved_requires_human_chatgpt_review": 0
+  },
+  "evaluation_tier_counts": {
+    "evaluator_only": 4,
+    "application_integrity": 3,
+    "hard_factual_safety": 0,
+    "semantic_coverage": 4,
+    "flexible_semantic": 2,
+    "product_outcome": 0
+  },
+  "materiality_counts": {
+    "blocking": 5,
+    "conditional": 2,
+    "nonblocking": 6
+  },
+  "provider_stage_adjudication": {
+    "source": "derived_from_case_mapping",
+    "blocking_cases": [
+      "E-B01",
+      "E-B02",
+      "E-B06",
+      "E-B07"
+    ],
+    "conditional_cases": [
+      "E-C01"
+    ],
+    "flexible_finding_cases": [
+      "E-C03",
+      "E-C04"
+    ],
+    "clean_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B08",
+      "E-C02",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": [],
+    "counts": {
+      "blocking": 4,
+      "conditional": 1,
+      "flexible_finding": 2,
+      "clean": 7,
+      "unresolved": 0,
+      "total": 14
+    }
+  },
+  "split_runtime_pre_r4_adjudication": {
+    "source": "derived_from_case_mapping",
+    "blocked_cases": [
+      "E-B01",
+      "E-B02",
+      "E-B06",
+      "E-B07"
+    ],
+    "conditional_cases": [
+      "E-C01"
+    ],
+    "locally_ready_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B08",
+      "E-C02",
+      "E-C03",
+      "E-C04",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": [],
+    "counts": {
+      "blocked": 4,
+      "conditional": 1,
+      "locally_ready": 9,
+      "unresolved": 0,
+      "total": 14
+    },
+    "locally_ready_equals_r4_ready": false
+  },
+  "next_candidate": "M2-P4-I3-R1-C1-R3-R2-E-R2 Directional Guidance and Semantic Materiality Revision",
   "next_candidate_authorized": false
 }

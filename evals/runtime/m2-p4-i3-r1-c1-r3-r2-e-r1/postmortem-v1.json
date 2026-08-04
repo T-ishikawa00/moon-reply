@@ -1,9 +1,10 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-postmortem-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1",
-  "title": "Frozen Provider Diagnostic Postmortem and Independent Offline Responsibility Adjudication",
-  "status": "offline_postmortem_completed_pending_human_chatgpt_review",
-  "baseline": "c10169c92364a31f6c512e714ac18bffafc9ec08",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r1-r1-postmortem-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R1-R1",
+  "title": "Product Direction Doctrine, Product Owner Decision Sync, and Postmortem Evidence Correction",
+  "status": "product_direction_synced_pending_human_chatgpt_review",
+  "baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
+  "e_r1_baseline": "dcd34011bfc2638bc0a1f7bd9b965b9880497a40",
   "e_package_commit_a": "ae56535fd6d5587e6055e938cd68e0355cd8f037",
   "e_evidence_commit_b": "c10169c92364a31f6c512e714ac18bffafc9ec08",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
@@ -29,122 +30,150 @@
     "machine_verdict": "FAIL",
     "machine_case_result": "6/14",
     "authorization_consumed": true,
-    "rerun_authorized": false
-  },
-  "model": "gpt-5.6-luna",
-  "usage_totals": {
-    "input_tokens": 53023,
-    "cached_input_tokens": 44983,
-    "output_tokens": 13617,
-    "reasoning_tokens": 2006
+    "rerun_authorized": false,
+    "evidence_changed": false
   },
   "evidence_safety": {
     "provider_calls_in_this_task": 0,
     "provider_output_mutation_count": 0,
     "expected_data_injection_count": 0,
     "secret_leakage_count": 0,
-    "frozen_global_exact_literal_counter": 2,
-    "adjudicated_true_exact_literal_leakage_count": 0,
-    "frozen_provider_outputs_immutable": true
+    "frozen_provider_outputs_immutable": true,
+    "db_operations": 0,
+    "supabase_operations": 0
   },
   "independence": {
     "prior_human_or_chatgpt_guesses_used_as_oracle": false,
     "predefined_counts_used": false,
+    "predefined_view_counts_used": false,
     "predefined_residual_case_ids_used": false,
     "case_id_result_override_used": false,
-    "classification_source": "frozen hard failures, assertion evidence, synthetic evaluator reproducers, frozen Prompt and Schema boundaries, and deterministic contextual-integrity analysis"
+    "classification_source": "frozen hard failures, assertion evidence, synthetic evaluator reproducers, frozen Prompt and Schema boundaries, deterministic contextual-integrity analysis, and approved Product Owner decisions"
+  },
+  "product_direction_doctrine": {
+    "canonical_statement_ja": "月の返事は、恋の唯一の正解や相手の本心を断定するサービスではない。\n相談者が迷って動けないときに、\n今ある事実と複数の見方を整理し、\n今の時点で最も進みやすい方向を一つ示す鑑定ノートである。",
+    "machine_readable_summary_en": "The product does not claim a unique romantic truth. It preserves facts, presents plausible interpretations, recommends one current direction, gives an immediate next step, and defines reassessment conditions.",
+    "required_outcome_sequence": [
+      "facts",
+      "plausible_interpretations",
+      "recommended_current_direction",
+      "immediate_next_step",
+      "reassessment_condition"
+    ],
+    "japanese_product_summary": "事実は厳密に守る。解釈には幅を持たせる。その上で、相談者が今進みやすい方向を一つ示す。"
+  },
+  "evaluation_doctrine": {
+    "model": "hard_flexible_product_outcome",
+    "hard_factual_safety_is_blocking_when_material": true,
+    "flexible_semantics_independently_hard_fail": false,
+    "product_outcome_requires_pb04_pb05_pb06_and_r4": true,
+    "e_pb01_pb01c_alone_establishes_product_outcome": false
   },
   "classification_summary": {
     "classified_failure_codes": "13/13",
     "evaluator_implementation_defect": 4,
-    "quality_contract_overconstraint": 2,
+    "quality_contract_overconstraint": 1,
     "application_bookkeeping_gap": 3,
-    "provider_or_prompt_gap": 4,
+    "provider_or_prompt_gap": 5,
     "unresolved_requires_human_chatgpt_review": 0
   },
-  "evaluator_hypotheses": {
-    "EV-H1": {
-      "status": "confirmed",
-      "finding": "A one-match wildcard becomes a scalar and makes contains_all reject a value that is present.",
-      "successor_rule": "Preserve wildcard selection as an array for zero, one, or many matches."
-    },
-    "EV-H2": {
-      "status": "confirmed",
-      "finding": "The scoped assertion passes, while the global counter sees the same literal in an allowed user_assumptions sibling surface.",
-      "successor_rule": "Evaluate exact literals only within the assertion surface and JSON path."
-    }
+  "evaluation_tier_summary": {
+    "evaluator_only": 4,
+    "application_integrity": 3,
+    "hard_factual_safety": 0,
+    "semantic_coverage": 4,
+    "flexible_semantic": 2,
+    "product_outcome": 0
   },
-  "quality_contract_hypotheses": {
-    "reviewed_semantic_failures": 6,
-    "justified": 4,
-    "too_narrow": 2,
-    "ambiguous": 0,
-    "requires_product_owner_decision": 4,
-    "too_narrow_failure_codes": [
-      "E-C01-PRACTICAL",
-      "E-C03-APOLOGY"
-    ]
+  "materiality_summary": {
+    "blocking": 5,
+    "conditional": 2,
+    "nonblocking": 6
   },
-  "application_bookkeeping_findings": {
-    "failure_codes": [
-      "E-B01-CONTEXTUAL-INTEGRITY",
-      "E-B06-CONTEXTUAL-INTEGRITY",
-      "E-B07-CONTEXTUAL-INTEGRITY"
-    ],
-    "resolved_values_left_in_unresolved_fields": {
-      "E-B01": 2,
-      "E-B06": 1,
-      "E-B07": 3
-    },
-    "natural_language_reinterpretation_required": false,
-    "deterministic_application_correction_possible": true
-  },
-  "provider_prompt_findings": {
-    "failure_codes": [
-      "E-B01-HIERARCHY",
-      "E-B02-CADENCE",
-      "E-C01-SAFETY-ACTIONS",
-      "E-C04-REGISTER"
-    ],
-    "schema_change_required": false,
-    "provider_retest_required_after_authorized_revision": true
-  },
-  "unresolved_findings": [],
-  "product_owner_decisions_required": {
-    "count": 4,
+  "product_owner_decisions": {
+    "approved": "4/4",
+    "pending": 0,
+    "approved_by": "ProductOwner",
+    "approved_in_conversation": true,
     "decision_ids": [
       "PO-E-C01-PRACTICAL",
       "PO-E-C01-SAFETY-ACTIONS",
       "PO-E-C03-APOLOGY",
       "PO-E-C04-REGISTER"
-    ],
-    "answer_state": "pending"
-  },
-  "provider_semantic_adjudication": {
-    "pass": 10,
-    "fail": 4,
-    "unresolved": 0,
-    "total": 14,
-    "fail_case_ids": [
-      "E-B01",
-      "E-B02",
-      "E-C01",
-      "E-C04"
     ]
   },
-  "split_runtime_readiness_adjudication": {
-    "ready": 8,
-    "blocked": 6,
-    "unresolved": 0,
-    "total": 14,
-    "blocked_case_ids": [
+  "provider_stage_adjudication": {
+    "blocking_cases": [
       "E-B01",
       "E-B02",
       "E-B06",
-      "E-B07",
-      "E-C01",
+      "E-B07"
+    ],
+    "conditional_cases": [
+      "E-C01"
+    ],
+    "flexible_finding_cases": [
+      "E-C03",
       "E-C04"
-    ]
+    ],
+    "clean_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B08",
+      "E-C02",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": [],
+    "counts": {
+      "blocking": 4,
+      "conditional": 1,
+      "flexible_finding": 2,
+      "clean": 7,
+      "unresolved": 0,
+      "total": 14
+    }
+  },
+  "split_runtime_pre_r4_adjudication": {
+    "blocked_cases": [
+      "E-B01",
+      "E-B02",
+      "E-B06",
+      "E-B07"
+    ],
+    "conditional_cases": [
+      "E-C01"
+    ],
+    "locally_ready_cases": [
+      "E-B03",
+      "E-B04",
+      "E-B05",
+      "E-B08",
+      "E-C02",
+      "E-C03",
+      "E-C04",
+      "E-C05",
+      "E-C06"
+    ],
+    "unresolved_cases": [],
+    "counts": {
+      "blocked": 4,
+      "conditional": 1,
+      "locally_ready": 9,
+      "unresolved": 0,
+      "total": 14
+    },
+    "locally_ready_equals_r4_ready": false
+  },
+  "frozen_case_projection_correction": {
+    "incorrect_source": "call.evaluation?.case_passed === true",
+    "correct_source": "call.evaluation?.case_verdict === \"PASS\"",
+    "matched_frozen_cases": "14/14",
+    "true_from_frozen_pass": 6,
+    "false_from_frozen_fail": 8,
+    "frozen_e_result_modified": false,
+    "frozen_machine_result_remains": "FAIL / 6 of 14"
   },
   "candidate_source_isolation_boundary": {
     "provider_input_isolation": "14/14",
@@ -156,14 +185,34 @@
     "schema_pass": true,
     "source_integrity_pass": true,
     "provider_output_immutability": "14/14",
-    "expected_data_injection_count": 0,
-    "secret_leakage_count": 0,
     "candidate_source_isolation_provider_boundary_confirmed": true,
     "provider_quality_established": false
   },
+  "e_r2_entry_contract": {
+    "ready": true,
+    "authorized": false,
+    "required_scope": [
+      "deterministic_unresolved_fields_canonicalization",
+      "pb01_explicit_hierarchy_handling",
+      "pb01_qualitative_cadence_handling",
+      "pb01c_multi_intent_semantic_coverage",
+      "pb01c_asks_for_reply_versus_reply_demand_distinction",
+      "pb01c_apology_strength_flexibility",
+      "pb01c_register_aggregation_guidance",
+      "pb04_directional_guidance_output",
+      "pb05_directional_guidance_report_voice",
+      "pb06_hard_flexible_product_outcome_validation",
+      "successor_evaluator_without_ev_h1_or_ev_h2",
+      "targeted_provider_retest",
+      "full_pb04_through_pb06_product_outcome_testing_before_r4"
+    ],
+    "success_criterion": "Hard factual and Safety gates pass; conditional semantic coverage is preserved downstream; Flexible label differences do not create false Hard FAIL; final direction, action, and reassessment structure are preserved."
+  },
   "authorization_boundary": {
     "provider_rerun_authorized": false,
+    "e_r2_ready": true,
     "e_r2_authorized": false,
+    "r4_ready": false,
     "r4_authorized": false,
     "c2_authorized": false,
     "db_operations": 0,
