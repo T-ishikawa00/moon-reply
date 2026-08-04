@@ -1,0 +1,18 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-authorization-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3",
+  "authorization_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-2026-08-04",
+  "confirmation_phrase": "E-R3-40-MAX-37-EXPECTED-DIRECTIONAL-SYNTHETIC-ONLY",
+  "model": "gpt-5.6-luna",
+  "authorized_max_calls": 40,
+  "expected_calls": 37,
+  "approved_cases": 6,
+  "consumed": false,
+  "rerun_authorized": false,
+  "execution_claimed_at": null,
+  "completed_at": null,
+  "package_commit": null,
+  "actual_calls": 0,
+  "completed_calls": 0,
+  "completion_state": "not_started"
+}

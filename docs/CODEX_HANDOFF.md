@@ -1,5 +1,16 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3
+
+- Status: `not_started` on `test/m2-p4-i3-r1-c1-r3-r2-e-r3-provider-product-diagnostic`.
+- Scope: exact `16/16`; post-run mutable `10/10`; six synthetic Product Outcome cases only.
+- Provider budget: expected `37`, hard maximum `40`, retries / repair / fallback / parallel `0 / 0 / 0 / 0`.
+- Runtime: inactive v10 Catalog / Prompt bundle, Schema set v4, split Base/Candidate topology; `AssessmentApplication`, `FakeAssessmentRepository`, and real OpenAI Responses transport.
+- Current evidence: Provider calls `0`; Commit A / Commit B pending; Product Review not started; Product Owner Review pending.
+- Boundary: Provider quality, isolated-E2E readiness, R4 readiness, live DB compatibility, site readiness, JPY 980 value, and Runtime activation are not established. Migration 0005 remains unchanged and unapplied; Active Service and main remain unchanged; R4, C2, PR, main merge, and force push are unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R2
 

@@ -1,5 +1,20 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3 Bounded Directional Guidance Provider and Product Outcome Diagnostic
+
+- [x] Exact six synthetic cases and 37 expected / 40 maximum Provider-attempt contract fixed
+- [x] Frozen three-tier Quality Contract and 20 evaluator self-tests prepared
+- [x] Full inactive v10 Pipeline, Fake repository, real Responses transport, and one-time marker design prepared
+- [ ] Commit A frozen and normally pushed
+- [ ] One authorized sequential Provider diagnostic executed exactly once
+- [ ] Post-run verification and Commit B normally pushed
+- [ ] Product Owner review completed
+- [ ] R4 — unauthorized
+
+Status is `not_started`. Provider calls are `0`; Product Owner review is pending; Provider quality is unestablished. DB / Supabase, migration application, Active Service switching, Runtime activation, R4, C2, PR, main merge, and force push remain unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R2 Directional Guidance and Semantic Materiality Revision
 
