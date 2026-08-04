@@ -2,7 +2,16 @@
 
 ## 1. Status
 
-Status is `implementation_pending_human_chatgpt_review`. The exact `21/21` implementation is offline-complete on the inactive successor branch. It is not Human / ChatGPT accepted, activated, or live-validated.
+Status is `human_chatgpt_accepted_complete`.
+
+- Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`
+- Implementation accepted: `true`
+- Accepted implementation commit: `a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f`
+- Immutable implementation snapshot: `6b001a76c80747f60c69624d9d148465d2e1a963..a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f` (`21/21` exact paths; immutable; working tree excluded)
+- Acceptance Sync scope: `6/6`
+- Non-sync implementation blobs: `15/15 unchanged`
+
+Human / ChatGPT accepts the inactive v10 successor implementation and its offline deterministic evidence. This acceptance does not activate the Runtime, apply migration 0005, establish Provider or live Product Outcome quality, or authorize the next candidate.
 
 ## 2. Product impact
 
@@ -10,7 +19,16 @@ The successor organizes delivery as `facts -> plausible_interpretations -> recom
 
 ## 3. Exact scope
 
-The implementation changes exactly the authorized `21/21` paths: two existing Runtime files, nine new Runtime/Prompt/Catalog files, one unapplied migration, four evaluation records, two scripts, one review record, and three synchronization documents. No additional path is authorized.
+The accepted implementation is the immutable historical `21/21` path range `6b001a76c80747f60c69624d9d148465d2e1a963..a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f`. The Acceptance Sync changes exactly these `6/6` paths:
+
+1. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r2/capabilities-v1.json`
+2. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r2-directional-guidance.mjs`
+3. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R2_REVIEW.md`
+4. `docs/CURRENT_FOCUS.md`
+5. `docs/WBS.md`
+6. `docs/CODEX_HANDOFF.md`
+
+The other `15/15` implementation blobs remain content-identical to accepted implementation commit `a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f`. Frozen E assets remain unchanged `11/11`; accepted Product Direction non-sync blobs remain unchanged `4/4`; Catalog v9, v1 split Prompts, all existing output Schemas, migration 0004, migration 0005, Active Service, and main remain unchanged.
 
 ## 4. Accepted Doctrine authority
 
@@ -74,11 +92,15 @@ Migration `0005_m2_p4_directional_guidance_runtime.sql` statically admits v9 and
 
 ## 17. Validation
 
-Offline results: Grounding `8/8`, frozen PB-01 replay `8/8`, Materiality `12/12`, v10 Fake flows `10/10`, v9 parity `3/3`, Prompt responsibilities `12/12`, mutation rejection `14/14`, migration static PASS, Product Doctrine PASS, Product Owner decisions `4/4`, and Provider / DB / Supabase `0 / 0 / 0`.
+Accepted implementation evidence: dedicated verifier `89/89`, Grounding `8/8`, frozen PB-01 replay `8/8` with unchanged raw hashes, semantic-value preservation PASS, Materiality `12/12`, v10 Fake flows `10/10`, v9 parity `3/3`, mutation rejection `14/14`, Product Doctrine PASS, Product Owner decisions `4/4`, Decision Policy `40/40`, typecheck PASS, lint PASS with warnings `0`, build PASS, and `git diff --check` PASS.
+
+Acceptance-aware validation passes `99/99`, including all retained implementation assertions `89/89`, the immutable implementation scope `21/21`, Acceptance Sync scope `6/6`, and non-sync implementation blob preservation `15/15`. Provider / DB / Supabase operations remain `0 / 0 / 0`.
 
 ## 18. Acceptance boundary
 
-Automated implementation PASS is not Human / ChatGPT acceptance and does not establish Provider quality, live DB compatibility, or live Product Outcome quality. The successor remains inactive. No Runtime activation, migration application, PR, or main integration occurred.
+Human / ChatGPT acceptance establishes the inactive v10 successor, Directional Guidance Prompt responsibilities, deterministic Base bookkeeping correction, Hard / Flexible / Product Outcome disposition, v9 offline parity, the unapplied migration 0005 artifact, and offline Fake Product Outcome behavior. The successor remains inactive.
+
+This acceptance does not establish Provider quality, live Luna output quality, live reply-draft quality, live report quality, JPY 980 Product Outcome quality, migration application, live DB compatibility, isolated E2E readiness, Active Runtime activation, R4 readiness, or C2 eligibility. No Provider execution, DB/Supabase operation, Runtime activation, migration application, PR, or main integration occurred.
 
 - No Provider quality claim.
 - No live DB compatibility claim.
@@ -88,8 +110,8 @@ Automated implementation PASS is not Human / ChatGPT acceptance and does not est
 
 ## 19. Provider retest unauthorized
 
-Provider quality is unestablished. `provider_retest_ready=true` records only offline technical readiness; `provider_retest_authorized=false`. No Provider request or response was created in this task.
+Provider quality is unestablished. `provider_retest_ready=true` records only offline technical readiness; `provider_retest_authorized=false`. Provider retest remains unauthorized. No Provider request or response was created in this task.
 
 ## 20. R4 unauthorized
 
-`r4_ready=false` and `r4_authorized=false`. C2 and the next bounded diagnostic are also unauthorized. Active Service and main remain unchanged.
+`r4_ready=false` and `r4_authorized=false`. C2 remains unauthorized. The next candidate is `M2-P4-I3-R1-C1-R3-R2-E-R3 Bounded Directional Guidance Provider and Product Outcome Diagnostic`; E-R3 remains unauthorized and was not started. Active Service is unchanged, and main / origin-main remain `61e33a10e195fad17e253a6b9719217e1992f273`.

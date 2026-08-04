@@ -15,6 +15,8 @@ const repositoryRoot = path.resolve(
 );
 const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R2";
 const baseline = "6b001a76c80747f60c69624d9d148465d2e1a963";
+const acceptedImplementationCommit =
+  "a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f";
 const expectedBranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r2-directional-guidance";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
@@ -49,6 +51,31 @@ const exactScope = [
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
   "docs/CODEX_HANDOFF.md",
+];
+const acceptanceSyncScope = [
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r2/capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r2-directional-guidance.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R2_REVIEW.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/WBS.md",
+  "docs/CODEX_HANDOFF.md",
+];
+const nonSyncImplementationPaths = [
+  "lib/assessment/runtime/pipeline.ts",
+  "lib/assessment/runtime/schema-catalog.ts",
+  "lib/assessment/runtime/base-structured-intake-grounding-v2.ts",
+  "lib/assessment/runtime/semantic-disposition-v4.ts",
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v10.json",
+  "lib/assessment/runtime/contracts/pb-01-base-situation-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-01c-candidate-analysis-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-04-directional-decision-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-directional-report-v2.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-materiality-validator-v2.developer.md",
+  "supabase/migrations/0005_m2_p4_directional_guidance_runtime.sql",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r2/semantic-materiality-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r2/revision-fixtures-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r2/offline-results-v1.json",
+  "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r2-offline-runner-v1.mjs",
 ];
 const jsonPaths = [
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v10.json",
@@ -158,6 +185,16 @@ function currentTaskPaths() {
   return sorted(new Set([...tracked, ...untracked]));
 }
 
+function currentAcceptanceSyncPaths() {
+  const tracked = git("diff", "--name-only", acceptedImplementationCommit, "--")
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  const untracked = git("ls-files", "--others", "--exclude-standard")
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  return sorted(new Set([...tracked, ...untracked]));
+}
+
 function noWhitespaceErrors() {
   const trackedCheck = git("diff", "--check", baseline, "--") === "";
   const contentCheck = exactScope.every((relativePath) => {
@@ -182,6 +219,28 @@ check("origin/main unchanged", git("rev-parse", "origin/main") === mainBaseline)
 check("stash empty", git("stash", "list") === "");
 check("exact scope duplicate paths 0", new Set(exactScope).size === exactScope.length);
 check("exact scope 21/21", same(currentTaskPaths(), sorted(exactScope)));
+const historicalImplementationPaths = git(
+  "diff",
+  "--name-only",
+  baseline,
+  acceptedImplementationCommit,
+  "--",
+)
+  .split(/\r?\n/u)
+  .filter(Boolean);
+check(
+  "immutable implementation snapshot exact 21/21",
+  same(sorted(historicalImplementationPaths), sorted(exactScope)),
+);
+check(
+  "acceptance sync exact scope 6/6",
+  same(currentAcceptanceSyncPaths(), sorted(acceptanceSyncScope)) &&
+    new Set(acceptanceSyncScope).size === acceptanceSyncScope.length,
+);
+check(
+  "accepted implementation commit exact and in history",
+  git("merge-base", "--is-ancestor", acceptedImplementationCommit, "HEAD") === "",
+);
 
 const parsed = Object.fromEntries(jsonPaths.map((item) => [item, readJson(item)]));
 const catalogV10 = parsed[jsonPaths[0]];
@@ -196,6 +255,20 @@ const productDirectionCapabilities = readJson(
 );
 
 check("JSON parse 5/5", Object.keys(parsed).length === 5);
+check(
+  "non-sync implementation blobs 15/15 unchanged",
+  nonSyncImplementationPaths.length === 15 &&
+    nonSyncImplementationPaths.every((item) =>
+      blobMatches(acceptedImplementationCommit, item),
+    ),
+);
+check(
+  "migration 0005 unchanged from accepted implementation",
+  blobMatches(
+    acceptedImplementationCommit,
+    "supabase/migrations/0005_m2_p4_directional_guidance_runtime.sql",
+  ),
+);
 check(
   "Product Direction acceptance preserved",
   productDirectionCapabilities.status === "human_chatgpt_accepted_complete" &&
@@ -337,6 +410,18 @@ check(
 
 const recomputed = await runDirectionalGuidanceOffline();
 check("deterministic replay matches committed result", same(recomputed, committedResult));
+check(
+  "accepted Grounding replay and Materiality results unchanged",
+  committedResult.grounding_v2.summary === "8/8" &&
+    committedResult.frozen_pb01_replay.summary === "8/8" &&
+    committedResult.semantic_materiality.summary === "12/12",
+);
+check(
+  "accepted v10 Fake v9 parity and mutation results unchanged",
+  committedResult.v10_fake_flows.summary === "10/10" &&
+    committedResult.v9_parity.summary === "3/3" &&
+    committedResult.mutation_rejections.summary === "14/14",
+);
 check("offline overall PASS", committedResult.overall_verdict === "PASS");
 check("AJV compile all relevant Schemas", committedResult.catalogs.status === "PASS");
 check(
@@ -517,6 +602,10 @@ check(
     capabilities.provider_calls === 0,
 );
 check(
+  "Provider quality remains false",
+  capabilities.provider_quality_established === false,
+);
+check(
   "DB Supabase operations 0",
   committedResult.operations.db_operations === 0 &&
     committedResult.operations.supabase_operations === 0 &&
@@ -546,9 +635,73 @@ check(
 );
 check(
   "Capabilities exact scope and status",
-  capabilities.status === "implementation_pending_human_chatgpt_review" &&
+  capabilities.status === "human_chatgpt_accepted_complete" &&
+    capabilities.implementation_accepted === true &&
     capabilities.exact_scope === "21/21" &&
     same(sorted(capabilities.exact_mutation_paths), sorted(exactScope)),
+);
+check(
+  "Acceptance metadata and authorization boundary exact",
+  capabilities.accepted_implementation_commit === acceptedImplementationCommit &&
+    same(capabilities.implementation_snapshot, {
+      type: "historical_commit_range",
+      base: baseline,
+      end: acceptedImplementationCommit,
+      exact_paths: 21,
+      immutable: true,
+      include_working_tree: false,
+    }) &&
+    capabilities.exact_mutation_path_count === 21 &&
+    capabilities.acceptance_sync_exact_scope === "6/6" &&
+    capabilities.acceptance_sync_exact_path_count === 6 &&
+    same(sorted(capabilities.acceptance_sync_exact_paths), sorted(acceptanceSyncScope)) &&
+    capabilities.non_sync_implementation_blobs_unchanged === "15/15" &&
+    capabilities.frozen_e_assets_unchanged === "11/11" &&
+    capabilities.accepted_product_direction_non_sync_blobs_unchanged === "4/4" &&
+    capabilities.catalog_v9_unchanged === true &&
+    capabilities.v1_split_prompts_unchanged === true &&
+    capabilities.output_schemas_unchanged === true &&
+    capabilities.migration_0004_unchanged === true &&
+    capabilities.migration_0005_unchanged === true &&
+    capabilities.product_direction_status === "human_chatgpt_accepted_complete" &&
+    capabilities.product_owner_decisions === "4/4" &&
+    capabilities.evaluation_model === "hard_flexible_product_outcome" &&
+    capabilities.base_grounding_v2_accepted === true &&
+    capabilities.semantic_disposition_v4_accepted === true &&
+    capabilities.directional_prompts_accepted === true &&
+    capabilities.migration_0005_accepted_as_unapplied === true &&
+    capabilities.migration_0005_applied === false &&
+    capabilities.candidate_source_isolation_preserved === true &&
+    capabilities.v9_parity === "PASS" &&
+    capabilities.provider_quality_established === false &&
+    capabilities.candidate_ready_for_isolated_e2e === false &&
+    capabilities.provider_retest_ready === true &&
+    capabilities.provider_retest_authorized === false &&
+    capabilities.r4_ready === false &&
+    capabilities.r4_authorized === false &&
+    capabilities.c2_authorized === false &&
+    capabilities.provider_calls === 0 &&
+    capabilities.db_operations === 0 &&
+    capabilities.supabase_operations === 0 &&
+    capabilities.active_service_changed === false &&
+    capabilities.active_runtime_activated === false &&
+    capabilities.main_changed === false &&
+    capabilities.next_candidate ===
+      "M2-P4-I3-R1-C1-R3-R2-E-R3 Bounded Directional Guidance Provider and Product Outcome Diagnostic" &&
+    capabilities.next_candidate_authorized === false &&
+    capabilities.implementation_verifier_result === "PASS_89_OF_89" &&
+    capabilities.acceptance_sync_verifier_result ===
+      "PASS_99_OF_99_INCLUDING_RETAINED_89" &&
+    capabilities.dedicated_verifier_check_count === 99 &&
+    capabilities.retained_original_check_count === 89 &&
+    capabilities.product_doctrine_result === "PASS" &&
+    capabilities.decision_policy_result === "PASS_40_OF_40" &&
+    capabilities.typecheck_result === "PASS" &&
+    capabilities.lint_result === "PASS" &&
+    capabilities.lint_warnings === 0 &&
+    capabilities.build_result === "PASS" &&
+    capabilities.git_diff_check === "PASS" &&
+    capabilities.human_chatgpt_review === "accepted_complete",
 );
 check(
   "Capabilities hashes match offline results",
@@ -608,10 +761,47 @@ check(
   ["docs/CURRENT_FOCUS.md", "docs/WBS.md", "docs/CODEX_HANDOFF.md"].every(
     (item) =>
       readText(item).includes("M2-P4-I3-R1-C1-R3-R2-E-R2") &&
-      readText(item).includes("implementation_pending_human_chatgpt_review") &&
+      readText(item).includes("human_chatgpt_accepted_complete") &&
+      readText(item).includes(acceptedImplementationCommit) &&
+      readText(item).includes("6/6") &&
+      readText(item).includes("15/15") &&
       readText(item).includes("Provider") &&
       readText(item).includes("Active Service") &&
       readText(item).includes("main"),
+  ),
+);
+const requiredAcceptanceDocumentFragments = {
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R2_REVIEW.md": [
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    `Accepted implementation commit: \`${acceptedImplementationCommit}\``,
+    "Acceptance Sync scope: `6/6`",
+    "Non-sync implementation blobs: `15/15 unchanged`",
+    "Provider retest remains unauthorized",
+    "E-R3 remains unauthorized",
+  ],
+  "docs/CURRENT_FOCUS.md": [
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    "acceptance synchronization is exact `6/6`",
+    "non-sync implementation blobs remain unchanged `15/15`",
+  ],
+  "docs/WBS.md": [
+    "Human / ChatGPT result: `IMPLEMENTATION ACCEPTED COMPLETE`",
+    "Acceptance Sync scope is exact `6/6`",
+    "non-sync implementation blobs are unchanged `15/15`",
+  ],
+  "docs/CODEX_HANDOFF.md": [
+    "IMPLEMENTATION ACCEPTED COMPLETE",
+    "acceptance synchronization `6/6`",
+    "non-sync implementation blobs `15/15` unchanged",
+  ],
+};
+check(
+  "Acceptance documentation records exact scope and boundaries",
+  Object.entries(requiredAcceptanceDocumentFragments).every(
+    ([relativePath, fragments]) => {
+      const document = readText(relativePath);
+      return fragments.every((fragment) => document.includes(fragment));
+    },
   ),
 );
 
@@ -630,6 +820,11 @@ check("git diff --check PASS", noWhitespaceErrors());
 console.log(`${taskId} DIRECTIONAL_GUIDANCE_VERIFIER: PASS`);
 console.log(`checks: ${checks.length}/${checks.length}`);
 console.log("exact_scope: 21/21");
+console.log("immutable_implementation_scope: 21/21");
+console.log("acceptance_sync_scope: 6/6");
+console.log("non_sync_implementation_blobs: 15/15 unchanged");
+console.log(`accepted_implementation_commit: ${acceptedImplementationCommit}`);
+console.log("retained_implementation_checks: 89/89");
 console.log("json_parse: 5/5");
 console.log("frozen_e_assets: 11/11 unchanged");
 console.log("product_direction_non_sync: 4/4 unchanged");

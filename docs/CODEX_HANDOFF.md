@@ -3,14 +3,16 @@
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R2
 
-- Status: `implementation_pending_human_chatgpt_review`; exact scope `21/21` on `feat/m2-p4-i3-r1-c1-r3-r2-e-r2-directional-guidance`.
+- Status: `human_chatgpt_accepted_complete`; Human / ChatGPT result is `IMPLEMENTATION ACCEPTED COMPLETE` on `feat/m2-p4-i3-r1-c1-r3-r2-e-r2-directional-guidance`.
+- Accepted implementation: commit `a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f`; immutable snapshot `6b001a76c80747f60c69624d9d148465d2e1a963..a66c82ac74775f5fcab3b8fce6ffb09f6dbd590f`, exact `21/21`, working tree excluded.
+- Sync integrity: acceptance synchronization `6/6`; non-sync implementation blobs `15/15` unchanged; frozen E assets `11/11` unchanged; accepted Product Direction non-sync blobs `4/4` unchanged.
 - Accepted authority: Product Doctrine remains accepted and Product Owner decisions are `4/4`; frozen E machine verdict remains `FAIL / 6 of 14`.
 - Inactive successor: Catalog `runtime-stage-catalog-v10.0.0`, Prompt bundle `prompt-bundle-runtime-v10.0.0`, Schema set `pipeline-schema-runtime-v4.0.0`, topology `split-base-candidate-v1`; v9 and Active Catalog v4 are unchanged.
 - Runtime behavior: only v10 selects Grounding v2 and Semantic Disposition v4. v9 retains v1/v3 behavior. No other split behavioral branch was introduced.
 - Offline evidence: Grounding `8/8`; frozen PB-01 replay `8/8`, Contextual Integrity `5/8 -> 8/8`, raw hashes unchanged and semantic values preserved; Materiality `12/12`; v10 Fake flows `10/10`; v9 parity `3/3`; Prompt responsibilities `12/12`; mutation rejection `14/14`.
-- Migration: 0005 created and static PASS, SHA-256 `830f375f9e1f02c95a08f3bcbf598f2a5b4a81bf11bbb80df544a9999e62e36e`, `migration_applied=false`.
+- Migration: 0005 accepted as an unapplied artifact and static PASS, SHA-256 `830f375f9e1f02c95a08f3bcbf598f2a5b4a81bf11bbb80df544a9999e62e36e`, `migration_applied=false`; live DB compatibility is not established.
 - Operations: Provider / DB / Supabase `0 / 0 / 0`; frozen E unchanged; Active Service and main unchanged.
-- Boundary: no Provider-quality, live DB compatibility, or live Product Outcome claim. Provider retest is unauthorized, R4 is HOLD/unauthorized, and C2, Runtime activation, PR, main merge, force push, and release remain unauthorized. Next candidate is E-R3, but it is not authorized.
+- Boundary: no Provider-quality, live Luna output, live reply-draft, live report, JPY 980 Product Outcome, live DB compatibility, isolated E2E, R4-readiness, or C2-eligibility claim. Provider retest is unauthorized; E-R3 is the next candidate but remains unauthorized and was not started. R4, C2, Runtime activation, PR, main merge, force push, and release remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R1-R1:BEGIN -->
