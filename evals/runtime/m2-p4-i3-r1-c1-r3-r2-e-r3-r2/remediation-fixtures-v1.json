@@ -1,0 +1,178 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r2-remediation-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R2",
+  "synthetic_only": true,
+  "real_user_data": 0,
+  "fixed_started_at": "2026-08-05T10:00:00.000Z",
+  "time_zone": "Asia/Tokyo",
+  "fixtures": [
+    {
+      "fixture_id": "T-01",
+      "category": "temporal_authority",
+      "operation": "authorized_action_horizon_label",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "T-02",
+      "category": "temporal_authority",
+      "operation": "invented_exact_clock_time",
+      "expected": "BLOCKING"
+    },
+    {
+      "fixture_id": "T-03",
+      "category": "temporal_authority",
+      "operation": "predicted_reply_deadline",
+      "expected": "BLOCKING"
+    },
+    {
+      "fixture_id": "T-04",
+      "category": "temporal_authority",
+      "operation": "identical_stage_action_context",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "T-05",
+      "category": "temporal_authority",
+      "operation": "missing_timezone",
+      "expected": "M2_RUNTIME_AUTHORITY_INVALID"
+    },
+    {
+      "fixture_id": "T-06",
+      "category": "temporal_authority",
+      "operation": "v10_unaffected",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "C-07",
+      "category": "contact_constraint",
+      "operation": "nofollow_rejects_later_draft",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "C-08",
+      "category": "contact_constraint",
+      "operation": "nofollow_rejects_time_only_contact_branch",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "C-09",
+      "category": "contact_constraint",
+      "operation": "nofollow_permits_continued_waiting",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "C-10",
+      "category": "contact_constraint",
+      "operation": "explicit_permitted_exception",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "C-11",
+      "category": "contact_constraint",
+      "operation": "business_only_rejects_personal_invitation_escalation",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "G-12",
+      "category": "candidate_grounding",
+      "operation": "concrete_plus_none",
+      "expected": ["confirm_schedule"]
+    },
+    {
+      "fixture_id": "G-13",
+      "category": "candidate_grounding",
+      "operation": "concrete_plus_unknown",
+      "expected": ["answer_question"]
+    },
+    {
+      "fixture_id": "G-14",
+      "category": "candidate_grounding",
+      "operation": "confirm_schedule_adds_asks_for_reply",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-15",
+      "category": "candidate_grounding",
+      "operation": "confirm_schedule_adds_proposes_meeting",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-16",
+      "category": "candidate_grounding",
+      "operation": "asks_for_reply_does_not_add_reply_demand",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-17",
+      "category": "candidate_grounding",
+      "operation": "raw_output_immutable",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-18",
+      "category": "candidate_grounding",
+      "operation": "input_nonmutation",
+      "expected": true
+    },
+    {
+      "fixture_id": "R-19",
+      "category": "runtime",
+      "operation": "v11_ready_flow",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "R-20",
+      "category": "runtime",
+      "operation": "v11_no_contact_pb03_stop",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "R-21",
+      "category": "runtime",
+      "operation": "v11_nofollow_constraint_violation",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "R-22",
+      "category": "runtime",
+      "operation": "v9_parity",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "R-23",
+      "category": "runtime",
+      "operation": "v10_parity",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "E-24",
+      "category": "evidence_review",
+      "operation": "null_final_not_labelled_final",
+      "expected": true
+    },
+    {
+      "fixture_id": "E-25",
+      "category": "evidence_review",
+      "operation": "accepted_output_only_when_present",
+      "expected": true
+    },
+    {
+      "fixture_id": "E-26",
+      "category": "evidence_review",
+      "operation": "frozen_hashes_37",
+      "expected": "37/37"
+    },
+    {
+      "fixture_id": "E-27",
+      "category": "evidence_review",
+      "operation": "forbidden_key_count",
+      "expected": 0
+    },
+    {
+      "fixture_id": "E-28",
+      "category": "evidence_review",
+      "operation": "response_ids_unique",
+      "expected": "37/37"
+    }
+  ]
+}

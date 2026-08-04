@@ -1,5 +1,24 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R2:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R2 Offline Authority, Constraint, and Review Integrity Remediation
+
+- [x] Exact implementation scope fixed at `25/25`
+- [x] Inactive v11 Catalog / Prompt bundle / Schema set created with split Stage order `7/7`
+- [x] Application-owned `action_context` and separate `contact_constraint_policy` integrated only for v11
+- [x] Base Schema v2, PB-01 v3, Candidate Grounding v2, and PB-04 / PB-05 / PB-06 v3 created
+- [x] Deterministic no-followup and business-only constraint integrity added before PB-05
+- [x] Decision Plan v2 free-text enforcement limitations recorded without Schema mutation or Japanese-substring policy
+- [x] Frozen E-R3 evidence independently audited; request/output hashes and response IDs `37/37`, forbidden input keys `0`
+- [x] Corrected Product Review labels null-final Plan / Report as `棄却された中間生成物`
+- [x] Offline fixtures `28/28`; timing `6/6`, contact constraint `5/5`, Candidate `7/7`, Runtime `5/5`, evidence review `5/5`
+- [x] v9 / v10 parity `PASS / PASS`
+- [ ] Human / ChatGPT implementation review and acceptance
+- [ ] Provider rerun, R4, C2, Runtime activation, PR, and main integration — unauthorized
+
+Status is `implementation_pending_human_chatgpt_review` on `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r2-authority-integrity`, based on `e8db575adc9636032997c8e3d43f8a56e38fae15`. The frozen E-R3 machine verdict remains `FAIL / 1 of 6`; neither offline remediation nor the corrected review projection rewrites it. Provider / DB / Supabase operations are `0 / 0 / 0`. Migration 0004 / 0005, Active Service, E-R3 evidence, v10, old Schemas, and main remain unchanged. Provider quality, Provider-rerun readiness/authorization, R4 readiness/authorization, and C2 authorization remain false.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R3 replacement package revision `R1` is `provider_product_diagnostic_failed_pending_human_chatgpt_review` on `test/m2-p4-i3-r1-c1-r3-r2-e-r3-r1-provider-product-diagnostic` from exact baseline `84ce1bce84f834c53bc46b5bb636ce77322da383`. Original Commit A `b909bf3ad259bea0251cf2f81e7a40d9262ce211` remains `aborted_before_execution` with Provider calls `0`, marker `false`, authorization consumed `false`, and no evidence Commit B. Replacement scope is `16/16`; Product cases / Quality doctrine / Provider budget changed are `false / false / false`; Provider calls expected / maximum / actual are `37 / 40 / 37`. Machine verdict is `FAIL`; Product Owner review is pending; Provider quality established is `false`. Migration 0005 is unchanged and unapplied, Active Service and main are unchanged, and Runtime activation / R4 / C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3:END -->

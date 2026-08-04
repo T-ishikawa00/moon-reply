@@ -196,6 +196,36 @@ export type DecisionPolicyResultV2 = {
   reason_codes: string[];
 };
 
+export type UserContactConstraintV1 = {
+  kind: "none" | "no_followup_message" | "business_only" | "unknown";
+  status: "none" | "explicit" | "unknown";
+  supporting_fact_ids: string[];
+};
+
+export type ActionContextV1 = {
+  schema_version: "m2-p4-action-context-v1";
+  trusted_now_iso: string;
+  time_zone: string;
+  action_horizon: {
+    code: "current_local_day_remaining";
+    user_facing_label_ja: "今夜";
+    starts_at: string;
+    ends_at: string;
+  };
+  authority: "application";
+};
+
+export type ContactConstraintPolicyV1 = {
+  schema_version: "m2-p4-contact-constraint-policy-v1";
+  constraint_kind: UserContactConstraintV1["kind"];
+  constraint_status: UserContactConstraintV1["status"];
+  supporting_fact_ids: string[];
+  follow_up_exception: DecisionPolicyResultV2["follow_up_exception"];
+  outbound_contact_now_allowed: boolean;
+  outbound_contact_after_time_passage_allowed: boolean;
+  exception_required_for_future_contact: boolean;
+};
+
 export type JsonValue =
   | string
   | number

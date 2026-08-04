@@ -1,0 +1,102 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r2-remediation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R2",
+  "mode": "offline_only",
+  "baseline": "e8db575adc9636032997c8e3d43f8a56e38fae15",
+  "accepted_e_r2_baseline": "84ce1bce84f834c53bc46b5bb636ce77322da383",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "old_aborted_package_commit": "b909bf3ad259bea0251cf2f81e7a40d9262ce211",
+  "exact_scope": [
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "lib/assessment/runtime/types.ts",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md",
+    "lib/assessment/runtime/runtime-authority-v1.ts",
+    "lib/assessment/runtime/candidate-analysis-grounding-v2.ts",
+    "lib/assessment/runtime/base-structured-intake-grounding-v3.ts",
+    "lib/assessment/runtime/decision-plan-constraint-integrity-v1.ts",
+    "lib/assessment/runtime/contracts/base-structured-intake-v2.schema.json",
+    "lib/assessment/runtime/contracts/pb-01-base-situation-v3.developer.md",
+    "lib/assessment/runtime/contracts/pb-04-directional-decision-v3.developer.md",
+    "lib/assessment/runtime/contracts/pb-05-directional-report-v3.developer.md",
+    "lib/assessment/runtime/contracts/pb-06-materiality-validator-v3.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/remediation-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/remediation-fixtures-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/offline-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/evidence-audit-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/product-review-corrected-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/capabilities-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r2-offline-runner-v1.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r2-authority-integrity.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R2_REVIEW.md"
+  ],
+  "runtime_identity": {
+    "catalog_version": "runtime-stage-catalog-v11.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v11.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v5.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "stage_order": ["PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
+  },
+  "provider_input_keys": {
+    "PB-01": ["current_situation", "relationship", "requested_topics"],
+    "PB-01C": ["optional_message", "candidate_metadata"],
+    "PB-02": ["base_structured_intake", "deterministic_rule_result", "candidate_safety_result"],
+    "PB-03": ["base_structured_intake", "aggregate_safety_result", "application_eligibility_expectation"],
+    "PB-04": ["base_structured_intake", "candidate_envelope", "user_supplied_optional_message", "decision_policy_result", "contact_constraint_policy", "action_context", "requested_topics"],
+    "PB-05": ["base_structured_intake", "candidate_envelope", "decision_plan", "contact_constraint_policy", "action_context"],
+    "PB-06": ["base_structured_intake", "candidate_envelope", "user_supplied_optional_message", "aggregate_safety_result", "decision_policy_result", "decision_plan", "report_content", "contact_constraint_policy", "action_context"]
+  },
+  "decision_plan_v2_enforcement": {
+    "structured_enforcement": [
+      "selected_decision",
+      "recommended_message_draft.policy",
+      "recommended_message_draft.use_timing",
+      "message_draft_edit_metadata.communicative_intent_delta",
+      "change_conditions[*].resulting_direction",
+      "contact_constraint_policy",
+      "action_context.action_horizon"
+    ],
+    "recorded_limitations": [
+      "actions_to_take is free text and has no structured outbound-contact action kind",
+      "aftercare_plan.action is free text and has no structured outbound-contact action kind",
+      "change_conditions.condition is free text and has no structured trigger taxonomy",
+      "review_timing.when is free text and has no structured reassessment trigger kind"
+    ],
+    "production_raw_japanese_substring_matching": false,
+    "decision_plan_v2_schema_changed": false
+  },
+  "frozen_authorities": {
+    "e_r3_commit_a": "e96774e093b48966f3f9c2679ac778c1aacb8e23",
+    "e_r3_commit_b": "e8db575adc9636032997c8e3d43f8a56e38fae15",
+    "frozen_machine_verdict": "FAIL",
+    "frozen_machine_passed_cases": "1/6",
+    "e_r3_artifact_directory_unchanged": true,
+    "frozen_evaluator_unchanged": true,
+    "catalog_v10_unchanged": true,
+    "v10_prompts_unchanged": true,
+    "old_schemas_unchanged": true,
+    "migration_0004_unchanged": true,
+    "migration_0005_unchanged": true,
+    "service_unchanged": true,
+    "application_unchanged": true,
+    "active_loader_unchanged": true
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "retry_calls": 0,
+    "repair_calls": 0,
+    "fallback_calls": 0,
+    "migration_applied": false,
+    "active_runtime_activated": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false,
+    "force_push_authorized": false
+  }
+}

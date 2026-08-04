@@ -2,9 +2,11 @@ import { randomUUID } from "node:crypto";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
 import { groundBaseStructuredIntakeV2 } from "./base-structured-intake-grounding-v2.ts";
+import { groundBaseStructuredIntakeV3 } from "./base-structured-intake-grounding-v3.ts";
 import { buildBaseStructuredIntakeLegacyViewV1 } from "./base-structured-intake-legacy-view-v1.ts";
 import { validateBaseSourceIntegrityV1 } from "./base-source-integrity-v1.ts";
 import { groundCandidateAnalysisV1, projectCandidateProviderInputV1 } from "./candidate-analysis-grounding-v1.ts";
+import { groundCandidateAnalysisV2 } from "./candidate-analysis-grounding-v2.ts";
 import {
   evaluateCandidateBoundaryContactV1,
   projectCandidateSafetyDispositionV1,
@@ -17,6 +19,7 @@ import {
   type CandidateSafetySignalsV1,
 } from "./contracts/split-stage-contracts-v1.ts";
 import { validateContextualIntakeIntegrityV3 } from "./contextual-integrity-v3.ts";
+import { validateDecisionPlanConstraintIntegrityV1 } from "./decision-plan-constraint-integrity-v1.ts";
 import { addUsage, emptyUsageTotals } from "./cost.ts";
 import {
   buildLocalEligibilityResultV3,
@@ -31,6 +34,10 @@ import {
 } from "./policy.ts";
 import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
+import {
+  createActionContextV1,
+  createContactConstraintPolicyV1,
+} from "./runtime-authority-v1.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
@@ -58,12 +65,14 @@ import {
 } from "./policy-v3.ts";
 import type {
   AiStageTransport,
+  ActionContextV1,
   AssessmentExecutionResult,
   AssessmentInput,
   AssessmentRepository,
   DecisionCard,
   DecisionPlan,
   DecisionPolicyResultV2,
+  ContactConstraintPolicyV1,
   Eligibility,
   JsonObject,
   M2StageId,
@@ -102,6 +111,7 @@ type PipelineOptions = {
   observe?: PipelineObserver;
   now?: () => string;
   uuid?: () => string;
+  timeZone?: string;
 };
 
 type StageInput = {
@@ -263,6 +273,7 @@ function projectSplitDecisionFacts(
     throw new M2RuntimeError("M2_DECISION_FACTS_INCOMPLETE");
   }
   const projected = structuredClone(baseFacts) as JsonObject;
+  delete projected.user_contact_constraint;
   projected.schema_version = "m2-p4-decision-facts-v2";
   const contactState = projected.contact_state;
   if (
@@ -394,6 +405,7 @@ export class AssessmentPipeline {
   private readonly observe?: PipelineObserver;
   private readonly now: () => string;
   private readonly uuid: () => string;
+  private readonly timeZone?: string;
   private usage: UsageTotals = emptyUsageTotals();
   private returnedModel: string | null = null;
 
@@ -410,22 +422,32 @@ export class AssessmentPipeline {
     this.observe = options.observe;
     this.now = options.now ?? (() => new Date().toISOString());
     this.uuid = options.uuid ?? randomUUID;
+    this.timeZone = options.timeZone;
   }
 
   private validateRuntimeIdentity(runContext: AssessmentRunContext) {
-    const splitPromptBundle =
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
-    const splitIdentity =
-      splitPromptBundle ||
+    const legacySplitPair =
+      (runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0";
+    const authorityIntegrityPair =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" &&
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
+    const splitIdentity =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !splitPromptBundle ||
-          runContext.schemaSetVersion !== "pipeline-schema-runtime-v4.0.0"
+        ? !legacySplitPair && !authorityIntegrityPair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
+    if (authorityIntegrityPair && !this.timeZone) {
+      throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
 
@@ -627,7 +649,11 @@ export class AssessmentPipeline {
         };
       }
 
-      const grounded = groundCandidateAnalysisV1(response.output);
+      const authorityIntegrityRuntime =
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0";
+      const grounded = authorityIntegrityRuntime
+        ? groundCandidateAnalysisV2(response.output)
+        : groundCandidateAnalysisV1(response.output);
       validateCandidateSourceIntegrityV1({
         candidateAnalysis: grounded.candidate_analysis,
         candidateSafetyResult: grounded.candidate_safety_result,
@@ -728,6 +754,8 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     const directionalGuidanceRuntime =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
+    const authorityIntegrityRuntime =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0";
     const deterministicSafety = deterministicSafetyResult(request);
     const baseProviderInput = projectBaseProviderInputV1(request);
     let baseStructuredIntake: JsonObject | null = null;
@@ -745,9 +773,11 @@ export class AssessmentPipeline {
           baseProviderRequest: baseProviderInput,
           rawBaseOutput,
         });
-        const grounded = directionalGuidanceRuntime
-          ? groundBaseStructuredIntakeV2(baseProviderInput, rawBaseOutput)
-          : groundBaseStructuredIntakeV1(baseProviderInput, rawBaseOutput);
+        const grounded = authorityIntegrityRuntime
+          ? groundBaseStructuredIntakeV3(baseProviderInput, rawBaseOutput)
+          : directionalGuidanceRuntime
+            ? groundBaseStructuredIntakeV2(baseProviderInput, rawBaseOutput)
+            : groundBaseStructuredIntakeV1(baseProviderInput, rawBaseOutput);
         validateGroundedStageOutput(this.definition("PB-01"), grounded);
         validateBaseSourceIntegrityV1({
           input: baseProviderInput,
@@ -854,6 +884,21 @@ export class AssessmentPipeline {
     const decisionPolicy = buildContextualDecisionPolicyV3(
       contextualDecisionFacts,
     );
+    let actionContext: ActionContextV1 | null = null;
+    let contactConstraintPolicy: ContactConstraintPolicyV1 | null = null;
+    if (authorityIntegrityRuntime) {
+      if (!this.timeZone) {
+        throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
+      }
+      actionContext = createActionContextV1({
+        trustedNowIso: runContext.startedAt,
+        timeZone: this.timeZone,
+      });
+      contactConstraintPolicy = createContactConstraintPolicyV1({
+        baseStructuredIntake: splitEnvelope.base_structured_intake,
+        followUpException: decisionPolicy.follow_up_exception,
+      });
+    }
     const decisionPlan = (await this.invokeStage(
       runContext,
       {
@@ -863,16 +908,33 @@ export class AssessmentPipeline {
           candidate_envelope: splitEnvelope.candidate_envelope,
           user_supplied_optional_message: request.optionalMessage,
           decision_policy_result: decisionPolicy,
+          ...(authorityIntegrityRuntime
+            ? {
+                contact_constraint_policy: contactConstraintPolicy,
+                action_context: actionContext,
+              }
+            : {}),
           requested_topics: request.requestedTopics,
         }),
       },
       "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
-      (output) =>
+      (output) => {
         validateSplitDecisionPlan(
           output as unknown as SplitDecisionPlanV2,
           decisionPolicy,
           splitEnvelope.candidate_envelope,
-        ),
+        );
+        if (authorityIntegrityRuntime) {
+          if (!actionContext || !contactConstraintPolicy) {
+            throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
+          }
+          validateDecisionPlanConstraintIntegrityV1({
+            decisionPlan: output as unknown as SplitDecisionPlanV2,
+            contactConstraintPolicy,
+            actionContext,
+          });
+        }
+      },
     )) as unknown as SplitDecisionPlanV2;
 
     const generatedReportContent = (await this.invokeStage(
@@ -883,6 +945,12 @@ export class AssessmentPipeline {
           base_structured_intake: splitEnvelope.base_structured_intake,
           candidate_envelope: splitEnvelope.candidate_envelope,
           decision_plan: decisionPlan,
+          ...(authorityIntegrityRuntime
+            ? {
+                contact_constraint_policy: contactConstraintPolicy,
+                action_context: actionContext,
+              }
+            : {}),
         }),
       },
       "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
@@ -912,6 +980,12 @@ export class AssessmentPipeline {
           decision_policy_result: decisionPolicy,
           decision_plan: decisionPlan,
           report_content: reportContent,
+          ...(authorityIntegrityRuntime
+            ? {
+                contact_constraint_policy: contactConstraintPolicy,
+                action_context: actionContext,
+              }
+            : {}),
         }),
       },
       "LOCAL_SEMANTIC_DISPOSITION",
@@ -922,7 +996,8 @@ export class AssessmentPipeline {
         ) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }
-        const { blockingFindings } = directionalGuidanceRuntime
+        const { blockingFindings } =
+          directionalGuidanceRuntime || authorityIntegrityRuntime
           ? evaluateSemanticFindingsV4({
               validationOutput: output,
               decisionPlan: decisionPlan as unknown as DecisionPlan,

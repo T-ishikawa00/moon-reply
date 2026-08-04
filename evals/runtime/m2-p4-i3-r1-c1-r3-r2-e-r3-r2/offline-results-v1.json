@@ -1,0 +1,480 @@
+{
+  "action_context": {
+    "action_horizon": {
+      "code": "current_local_day_remaining",
+      "ends_at": "2026-08-05T15:00:00.000Z",
+      "starts_at": "2026-08-05T10:00:00.000Z",
+      "user_facing_label_ja": "今夜"
+    },
+    "authority": "application",
+    "schema_version": "m2-p4-action-context-v1",
+    "time_zone": "Asia/Tokyo",
+    "trusted_now_iso": "2026-08-05T10:00:00.000Z"
+  },
+  "baseline": "e8db575adc9636032997c8e3d43f8a56e38fae15",
+  "c2_authorized": false,
+  "catalog_identity_passed": true,
+  "contact_constraint_policies": {
+    "business_only": {
+      "constraint_kind": "business_only",
+      "constraint_status": "explicit",
+      "exception_required_for_future_contact": false,
+      "follow_up_exception": "none",
+      "outbound_contact_after_time_passage_allowed": true,
+      "outbound_contact_now_allowed": true,
+      "schema_version": "m2-p4-contact-constraint-policy-v1",
+      "supporting_fact_ids": [
+        "F905"
+      ]
+    },
+    "nofollow_explicit_exception": {
+      "constraint_kind": "no_followup_message",
+      "constraint_status": "explicit",
+      "exception_required_for_future_contact": true,
+      "follow_up_exception": "material_factual_correction",
+      "outbound_contact_after_time_passage_allowed": false,
+      "outbound_contact_now_allowed": true,
+      "schema_version": "m2-p4-contact-constraint-policy-v1",
+      "supporting_fact_ids": [
+        "F906"
+      ]
+    },
+    "nofollow_no_exception": {
+      "constraint_kind": "no_followup_message",
+      "constraint_status": "explicit",
+      "exception_required_for_future_contact": true,
+      "follow_up_exception": "none",
+      "outbound_contact_after_time_passage_allowed": false,
+      "outbound_contact_now_allowed": false,
+      "schema_version": "m2-p4-contact-constraint-policy-v1",
+      "supporting_fact_ids": [
+        "F906"
+      ]
+    }
+  },
+  "decision_plan_v2_limitations_recorded": [
+    "actions_to_take is free text and has no structured outbound-contact action kind",
+    "aftercare_plan.action is free text and has no structured outbound-contact action kind",
+    "change_conditions.condition is free text and has no structured trigger taxonomy",
+    "review_timing.when is free text and has no structured reassessment trigger kind"
+  ],
+  "evidence_audit": {
+    "call_count": 37,
+    "forbidden_provider_input_keys": 0,
+    "overall_verdict": "PASS",
+    "raw_output_hashes": {
+      "after_processing_matched": 37,
+      "matched": 37,
+      "total": 37
+    },
+    "request_hashes": {
+      "matched": 37,
+      "total": 37
+    },
+    "response_ids": {
+      "present": 37,
+      "total": 37,
+      "unique": 37
+    }
+  },
+  "fixed_started_at": "2026-08-05T10:00:00.000Z",
+  "fixture_results": [
+    {
+      "actual": "PASS",
+      "category": "temporal_authority",
+      "expected": "PASS",
+      "fixture_id": "T-01",
+      "operation": "authorized_action_horizon_label",
+      "status": "PASS"
+    },
+    {
+      "actual": "BLOCKING",
+      "category": "temporal_authority",
+      "expected": "BLOCKING",
+      "fixture_id": "T-02",
+      "operation": "invented_exact_clock_time",
+      "status": "PASS"
+    },
+    {
+      "actual": "BLOCKING",
+      "category": "temporal_authority",
+      "expected": "BLOCKING",
+      "fixture_id": "T-03",
+      "operation": "predicted_reply_deadline",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "temporal_authority",
+      "expected": "PASS",
+      "fixture_id": "T-04",
+      "operation": "identical_stage_action_context",
+      "status": "PASS"
+    },
+    {
+      "actual": "M2_RUNTIME_AUTHORITY_INVALID",
+      "category": "temporal_authority",
+      "expected": "M2_RUNTIME_AUTHORITY_INVALID",
+      "fixture_id": "T-05",
+      "operation": "missing_timezone",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "temporal_authority",
+      "expected": "PASS",
+      "fixture_id": "T-06",
+      "operation": "v10_unaffected",
+      "status": "PASS"
+    },
+    {
+      "actual": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "category": "contact_constraint",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "fixture_id": "C-07",
+      "operation": "nofollow_rejects_later_draft",
+      "status": "PASS"
+    },
+    {
+      "actual": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "category": "contact_constraint",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "fixture_id": "C-08",
+      "operation": "nofollow_rejects_time_only_contact_branch",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "contact_constraint",
+      "expected": "PASS",
+      "fixture_id": "C-09",
+      "operation": "nofollow_permits_continued_waiting",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "contact_constraint",
+      "expected": "PASS",
+      "fixture_id": "C-10",
+      "operation": "explicit_permitted_exception",
+      "status": "PASS"
+    },
+    {
+      "actual": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "category": "contact_constraint",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "fixture_id": "C-11",
+      "operation": "business_only_rejects_personal_invitation_escalation",
+      "status": "PASS"
+    },
+    {
+      "actual": [
+        "confirm_schedule"
+      ],
+      "category": "candidate_grounding",
+      "expected": [
+        "confirm_schedule"
+      ],
+      "fixture_id": "G-12",
+      "operation": "concrete_plus_none",
+      "status": "PASS"
+    },
+    {
+      "actual": [
+        "answer_question"
+      ],
+      "category": "candidate_grounding",
+      "expected": [
+        "answer_question"
+      ],
+      "fixture_id": "G-13",
+      "operation": "concrete_plus_unknown",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "candidate_grounding",
+      "expected": true,
+      "fixture_id": "G-14",
+      "operation": "confirm_schedule_adds_asks_for_reply",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "candidate_grounding",
+      "expected": true,
+      "fixture_id": "G-15",
+      "operation": "confirm_schedule_adds_proposes_meeting",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "candidate_grounding",
+      "expected": true,
+      "fixture_id": "G-16",
+      "operation": "asks_for_reply_does_not_add_reply_demand",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "candidate_grounding",
+      "expected": true,
+      "fixture_id": "G-17",
+      "operation": "raw_output_immutable",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "candidate_grounding",
+      "expected": true,
+      "fixture_id": "G-18",
+      "operation": "input_nonmutation",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "runtime",
+      "expected": "PASS",
+      "fixture_id": "R-19",
+      "operation": "v11_ready_flow",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "runtime",
+      "expected": "PASS",
+      "fixture_id": "R-20",
+      "operation": "v11_no_contact_pb03_stop",
+      "status": "PASS"
+    },
+    {
+      "actual": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "category": "runtime",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+      "fixture_id": "R-21",
+      "operation": "v11_nofollow_constraint_violation",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "runtime",
+      "expected": "PASS",
+      "fixture_id": "R-22",
+      "operation": "v9_parity",
+      "status": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "category": "runtime",
+      "expected": "PASS",
+      "fixture_id": "R-23",
+      "operation": "v10_parity",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "evidence_review",
+      "expected": true,
+      "fixture_id": "E-24",
+      "operation": "null_final_not_labelled_final",
+      "status": "PASS"
+    },
+    {
+      "actual": true,
+      "category": "evidence_review",
+      "expected": true,
+      "fixture_id": "E-25",
+      "operation": "accepted_output_only_when_present",
+      "status": "PASS"
+    },
+    {
+      "actual": "37/37",
+      "category": "evidence_review",
+      "expected": "37/37",
+      "fixture_id": "E-26",
+      "operation": "frozen_hashes_37",
+      "status": "PASS"
+    },
+    {
+      "actual": 0,
+      "category": "evidence_review",
+      "expected": 0,
+      "fixture_id": "E-27",
+      "operation": "forbidden_key_count",
+      "status": "PASS"
+    },
+    {
+      "actual": "37/37",
+      "category": "evidence_review",
+      "expected": "37/37",
+      "fixture_id": "E-28",
+      "operation": "response_ids_unique",
+      "status": "PASS"
+    }
+  ],
+  "fixture_summary": {
+    "candidate_grounding": "7/7",
+    "contact_constraint": "5/5",
+    "evidence_review": "5/5",
+    "overall": "28/28",
+    "runtime": "5/5",
+    "temporal_authority": "6/6"
+  },
+  "frozen_e_r3_evidence_unchanged": true,
+  "frozen_e_r3_machine_verdict": "FAIL",
+  "hashes": {
+    "catalog_v11_sha256": "a47cf1327cdcdf5dccbf97758bed83ed7b3a291ad47fb04619ec4e8da444e33a",
+    "frozen_e_r3_sha256": "fd6ba0ad2b8c8dc7c659614145391dde6d999520b884c0ce15a4db74f2357988",
+    "raw_output_hashes": "37/37",
+    "request_hashes": "37/37"
+  },
+  "identities": {
+    "v10": {
+      "catalog_version": "runtime-stage-catalog-v10.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v10.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v4.0.0"
+    },
+    "v11": {
+      "catalog_version": "runtime-stage-catalog-v11.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v11.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v5.0.0",
+      "stage_order": [
+        "PB-01",
+        "PB-01C",
+        "PB-02",
+        "PB-03",
+        "PB-04",
+        "PB-05",
+        "PB-06"
+      ],
+      "stage_topology_version": "split-base-candidate-v1"
+    },
+    "v9": {
+      "catalog_version": "runtime-stage-catalog-v9.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v9.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v4.0.0"
+    }
+  },
+  "operations": {
+    "active_runtime_activated": false,
+    "active_service_changed": false,
+    "db_operations": 0,
+    "external_provider_calls": 0,
+    "fake_stage_invocations": 21,
+    "fallback_calls": 0,
+    "migration_applied": false,
+    "repair_calls": 0,
+    "retry_calls": 0,
+    "supabase_operations": 0
+  },
+  "overall_verdict": "PASS",
+  "parity": {
+    "v10": "PASS",
+    "v9": "PASS"
+  },
+  "provider_input_keys": {
+    "PB-01": [
+      "current_situation",
+      "relationship",
+      "requested_topics"
+    ],
+    "PB-01C": [
+      "candidate_metadata",
+      "optional_message"
+    ],
+    "PB-02": [
+      "base_structured_intake",
+      "candidate_safety_result",
+      "deterministic_rule_result"
+    ],
+    "PB-03": [
+      "aggregate_safety_result",
+      "application_eligibility_expectation",
+      "base_structured_intake"
+    ],
+    "PB-04": [
+      "action_context",
+      "base_structured_intake",
+      "candidate_envelope",
+      "contact_constraint_policy",
+      "decision_policy_result",
+      "requested_topics",
+      "user_supplied_optional_message"
+    ],
+    "PB-05": [
+      "action_context",
+      "base_structured_intake",
+      "candidate_envelope",
+      "contact_constraint_policy",
+      "decision_plan"
+    ],
+    "PB-06": [
+      "action_context",
+      "aggregate_safety_result",
+      "base_structured_intake",
+      "candidate_envelope",
+      "contact_constraint_policy",
+      "decision_plan",
+      "decision_policy_result",
+      "report_content",
+      "user_supplied_optional_message"
+    ]
+  },
+  "provider_input_keys_exact": true,
+  "provider_quality_established": false,
+  "provider_rerun_authorized": false,
+  "provider_rerun_ready": false,
+  "r4_authorized": false,
+  "r4_ready": false,
+  "runner_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r2-offline-runner-v1",
+  "runtime_flows": {
+    "missing_timezone": {
+      "fake_stage_path": [],
+      "outcome": "M2_RUNTIME_AUTHORITY_INVALID"
+    },
+    "no_contact_stop": {
+      "fake_stage_path": [
+        "PB-01",
+        "PB-01C",
+        "PB-02",
+        "PB-03"
+      ],
+      "outcome": "safety_blocked"
+    },
+    "nofollow_violation": {
+      "fake_stage_path": [
+        "PB-01",
+        "PB-02",
+        "PB-03",
+        "PB-04"
+      ],
+      "outcome": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    "nofollow_waiting": {
+      "fake_stage_path": [
+        "PB-01",
+        "PB-02",
+        "PB-03",
+        "PB-04",
+        "PB-05",
+        "PB-06"
+      ],
+      "outcome": "ready"
+    },
+    "ready": {
+      "fake_stage_path": [
+        "PB-01",
+        "PB-01C",
+        "PB-02",
+        "PB-03",
+        "PB-04",
+        "PB-05",
+        "PB-06"
+      ],
+      "outcome": "ready"
+    }
+  },
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r2-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R2",
+  "time_zone": "Asia/Tokyo"
+}
