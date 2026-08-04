@@ -2,15 +2,77 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-product-owner-review-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3",
   "status": "pending_product_owner_review",
-  "package_commit": null,
-  "machine_verdict": "NOT_EXECUTED",
+  "package_commit": "e96774e093b48966f3f9c2679ac778c1aacb8e23",
+  "machine_verdict": "FAIL",
   "product_owner_review_complete": false,
   "cases": [
-    {"case_id":"E-R3-01","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null},
-    {"case_id":"E-R3-02","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null},
-    {"case_id":"E-R3-03","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null,"boundary_respected":null,"workaround_absent":null},
-    {"case_id":"E-R3-04","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null},
-    {"case_id":"E-R3-05","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null},
-    {"case_id":"E-R3-06","understood_user":null,"direction_helpful":null,"immediate_step_actionable":null,"draft_sendable":null,"personality_preserved":null,"report_value":null,"overall":null,"product_owner_comment":null}
+    {
+      "case_id": "E-R3-01",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null
+    },
+    {
+      "case_id": "E-R3-02",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null
+    },
+    {
+      "case_id": "E-R3-03",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null,
+      "boundary_respected": null,
+      "workaround_absent": null
+    },
+    {
+      "case_id": "E-R3-04",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null
+    },
+    {
+      "case_id": "E-R3-05",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null
+    },
+    {
+      "case_id": "E-R3-06",
+      "understood_user": null,
+      "direction_helpful": null,
+      "immediate_step_actionable": null,
+      "draft_sendable": null,
+      "personality_preserved": null,
+      "report_value": null,
+      "overall": null,
+      "product_owner_comment": null
+    }
   ]
 }

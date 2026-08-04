@@ -1,21 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3:BEGIN -->
-## M2-P4-I3-R1-C1-R3-R2-E-R3-R1 Replacement Frozen Diagnostic Package
-
-- [x] Exact six synthetic cases and 37 expected / 40 maximum Provider-attempt contract fixed
-- [x] Original Commit A `b909bf3ad259bea0251cf2f81e7a40d9262ce211` preserved as `aborted_before_execution` with calls `0`, marker absent, authorization unconsumed, and no Commit B
-- [x] Replacement metadata records package revision `R1`, exact baseline, package-only reason, and unchanged Product cases / Quality doctrine / Provider budget
-- [x] Frozen three-tier Quality Contract, existing evaluator self-tests `20/20`, and active-loader return-shape regression `7/7` prepared
-- [x] Active v4 manifest identity separated from the actual loader return contract; nonexistent `catalogVersion` is not required
-- [x] Full inactive v10 Pipeline, Fake repository, real Responses transport, and fresh one-time marker design prepared
-- [ ] Replacement Commit A frozen and normally pushed
-- [ ] One authorized sequential Provider diagnostic executed exactly once
-- [ ] Post-run verification and Commit B normally pushed
-- [ ] Product Owner review completed
-- [ ] R4 — unauthorized
-
-Status is `not_started` on `test/m2-p4-i3-r1-c1-r3-r2-e-r3-r1-provider-product-diagnostic` from baseline `84ce1bce84f834c53bc46b5bb636ce77322da383`. Replacement Provider calls are `0`; Product Owner review is pending; Provider quality is unestablished. DB / Supabase, migration application, Active Service switching, Runtime activation, R4, C2, PR, main merge, and force push remain unauthorized.
+M2-P4-I3-R1-C1-R3-R2-E-R3 replacement package revision `R1` is `provider_product_diagnostic_failed_pending_human_chatgpt_review` on `test/m2-p4-i3-r1-c1-r3-r2-e-r3-r1-provider-product-diagnostic` from exact baseline `84ce1bce84f834c53bc46b5bb636ce77322da383`. Original Commit A `b909bf3ad259bea0251cf2f81e7a40d9262ce211` remains `aborted_before_execution` with Provider calls `0`, marker `false`, authorization consumed `false`, and no evidence Commit B. Replacement scope is `16/16`; Product cases / Quality doctrine / Provider budget changed are `false / false / false`; Provider calls expected / maximum / actual are `37 / 40 / 37`. Machine verdict is `FAIL`; Product Owner review is pending; Provider quality established is `false`. Migration 0005 is unchanged and unapplied, Active Service and main are unchanged, and Runtime activation / R4 / C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R2:BEGIN -->

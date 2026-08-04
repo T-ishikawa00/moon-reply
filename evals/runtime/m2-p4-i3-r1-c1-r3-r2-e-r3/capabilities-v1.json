@@ -2,10 +2,12 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3",
   "title": "Bounded Directional Guidance Provider and Product Outcome Diagnostic",
-  "status": "not_started",
+  "status": "provider_product_diagnostic_failed_pending_human_chatgpt_review",
+  "baseline": "84ce1bce84f834c53bc46b5bb636ce77322da383",
   "package_revision": "R1",
   "package_baseline": "84ce1bce84f834c53bc46b5bb636ce77322da383",
   "aborted_package_commit": "b909bf3ad259bea0251cf2f81e7a40d9262ce211",
+  "aborted_package_status": "aborted_before_execution",
   "aborted_package_provider_calls": 0,
   "aborted_package_marker_created": false,
   "aborted_package_authorization_consumed": false,
@@ -14,16 +16,15 @@
   "product_cases_changed": false,
   "quality_doctrine_changed": false,
   "provider_budget_changed": false,
-  "baseline": "84ce1bce84f834c53bc46b5bb636ce77322da383",
   "branch": "test/m2-p4-i3-r1-c1-r3-r2-e-r3-r1-provider-product-diagnostic",
   "exact_scope": "16/16",
   "post_run_mutable_scope": "10/10",
-  "package_commit": null,
-  "approved_cases": "0/6",
+  "package_commit": "e96774e093b48966f3f9c2679ac778c1aacb8e23",
+  "approved_cases": "6/6",
   "expected_calls": 37,
   "authorized_max_calls": 40,
-  "actual_calls": 0,
-  "completed_calls": 0,
+  "actual_calls": 37,
+  "completed_calls": 37,
   "model": "gpt-5.6-luna",
   "catalog": "runtime-stage-catalog-v10.0.0",
   "prompt_bundle": "prompt-bundle-runtime-v10.0.0",
@@ -37,7 +38,7 @@
   "r4_ready": false,
   "r4_authorized": false,
   "c2_authorized": false,
-  "authorization_consumed": false,
+  "authorization_consumed": true,
   "rerun_authorized": false,
   "db_operations": 0,
   "supabase_operations": 0,
@@ -45,8 +46,183 @@
   "active_service_changed": false,
   "active_runtime_activated": false,
   "main_changed": false,
-  "machine_verdict": "NOT_EXECUTED",
-  "evaluator_self_tests": null,
-  "active_loader_return_shape_self_tests": null,
-  "metrics": {}
+  "machine_verdict": "FAIL",
+  "evaluator_self_tests": {
+    "evaluator_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-evaluator-v1",
+    "passed": 20,
+    "total": 20,
+    "results": [
+      {
+        "name": "wildcard 0 result preserved as array",
+        "passed": true
+      },
+      {
+        "name": "wildcard 1 result preserved as array",
+        "passed": true
+      },
+      {
+        "name": "wildcard 2+ result preserved as array",
+        "passed": true
+      },
+      {
+        "name": "scoped literal absence PASS",
+        "passed": true
+      },
+      {
+        "name": "scoped literal presence FAIL",
+        "passed": true
+      },
+      {
+        "name": "allowed sibling literal does not leak",
+        "passed": true
+      },
+      {
+        "name": "set order normalized",
+        "passed": true
+      },
+      {
+        "name": "primitive pair evaluator PASS and FAIL",
+        "passed": true
+      },
+      {
+        "name": "Hard code blocks regardless Provider severity",
+        "passed": true
+      },
+      {
+        "name": "flexible internal label does not independently block",
+        "passed": true
+      },
+      {
+        "name": "conditional practical label remains conditional",
+        "passed": true
+      },
+      {
+        "name": "final-output material drift blocks",
+        "passed": true
+      },
+      {
+        "name": "no-contact exact Stage-stop evaluator",
+        "passed": true
+      },
+      {
+        "name": "expected-data injection detected",
+        "passed": true
+      },
+      {
+        "name": "case-ID injection detected",
+        "passed": true
+      },
+      {
+        "name": "output hash mutation detected",
+        "passed": true
+      },
+      {
+        "name": "usage double count detected",
+        "passed": true
+      },
+      {
+        "name": "duplicate response ID detected",
+        "passed": true
+      },
+      {
+        "name": "Product Review extraction deterministic",
+        "passed": true
+      },
+      {
+        "name": "zero-denominator metric rejected",
+        "passed": true
+      }
+    ]
+  },
+  "active_loader_return_shape_self_tests": {
+    "suite_version": "active-loader-return-shape-r1",
+    "passed": 7,
+    "total": 7,
+    "results": [
+      {
+        "name": "loader-shaped object without catalogVersion passes",
+        "passed": true
+      },
+      {
+        "name": "incorrect Prompt bundle fails",
+        "passed": true
+      },
+      {
+        "name": "incorrect Schema set fails",
+        "passed": true
+      },
+      {
+        "name": "incorrect Stage count fails",
+        "passed": true
+      },
+      {
+        "name": "incorrect Stage order fails",
+        "passed": true
+      },
+      {
+        "name": "incorrect Prompt hash fails",
+        "passed": true
+      },
+      {
+        "name": "incorrect Schema hash fails",
+        "passed": true
+      }
+    ]
+  },
+  "metrics": {
+    "approved_cases_executed": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_completed": {
+      "passed": 37,
+      "total": 37,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "returned_model_exact": {
+      "passed": 37,
+      "total": 37,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "unique_response_ids": {
+      "passed": 37,
+      "total": 37,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_input_isolation": {
+      "passed": 6,
+      "total": 6,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "provider_output_immutability": {
+      "passed": 37,
+      "total": 37,
+      "rate": 1,
+      "evidence_status": "available"
+    },
+    "hard_gates": {
+      "passed": 1,
+      "total": 6,
+      "rate": 0.16666666666666666,
+      "evidence_status": "available"
+    },
+    "product_outcome": {
+      "passed": 1,
+      "total": 6,
+      "rate": 0.16666666666666666,
+      "evidence_status": "available"
+    },
+    "evaluator_self_tests": {
+      "passed": 20,
+      "total": 20,
+      "rate": 1,
+      "evidence_status": "available"
+    }
+  }
 }
