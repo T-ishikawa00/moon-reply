@@ -1,5 +1,22 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1
+
+- Status: package_prepared_pending_human_chatgpt_review on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package; exact baseline 962f93d3f115a77fb25517ea9b21fed324f24074; exact package scope 17/17.
+- Rejected package: test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-v11-provider-package Commit A 26fea3149bba1c845aefe0654ad5fca817ae229f remains package_rejected_before_execution, immutable, Provider 0, authorization unconsumed, marker absent, Evidence Commit B absent. Its authority, phrase, and marker are not reused.
+- Frozen cases: byte-identical 6/6 to E-R3; source blob 7102b8ba21ab4a7487a681b4c0d52e3d33c5c300; SHA-256 af8a7cc65dc05ace3fd43f04e38ba97d27695b35d47f7c85d3d50c1b12c33e49.
+- Inactive diagnostic identity: runtime-stage-catalog-v11.0.0 / prompt-bundle-runtime-v11.0.0 / pipeline-schema-runtime-v5.0.0 / split-base-candidate-v1 / gpt-5.6-luna / Asia/Tokyo.
+- Proposed one-time execution: 37 nominal full-path and 37 authorized maximum Provider attempts, 0 spare retry calls, 0 retries, sequential only. E-R3-01/02/03/04/05/06 nominal call counts are 7/6/4/6/7/7; actual calls are the sum of actual prefixes, at most 37.
+- Product/technical split: permitted Product rejection freezes a null-final exact case prefix and continues the next case at PB-01; network, model, package, isolation, budget, ledger, repository, Runtime, marker/authorization, and unknown failures stop globally.
+- Authorization: M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1-2026-08-05 / E-R3-R3-R1-V11-37-MAX-SYNTHETIC-ONLY is prepared_pending_explicit_human_authorization; execution_authorized / consumed / rerun_authorized false / false / false; Package Commit and Evidence Commit are null; fresh marker absent.
+- Package safety: dedicated child package-check removes OPENAI_API_KEY and proves no real transport construction, Provider credential or .env inspection, marker creation, authorization consumption, or result-artifact mutation. A later real execution requires the explicit execute flag plus exact Package Commit A, Authorization ID, confirmation phrase, branch/upstream/clean state, frozen hashes, per-case prefix and maximum-call controls, model, timezone, marker absence, unconsumed authority, and a process-environment Provider key.
+- Decision Policy evidence projection mirrors Production by cloning Decision Facts, deleting user_contact_constraint, setting schema v2 and proposed_message_present, and calling requireContextualDecisionFactsV3.
+- Quality boundary: Protocol PASS does not imply Product PASS; Hard facts/Safety remain strict; conditional internal labels block only on a downstream material consequence; flexible style never independently blocks; complete Product Outcome remains required; machine PASS cannot complete Product Owner review.
+- Current operations: Provider / DB / Supabase 0 / 0 / 0. Evidence Commit B is absent and unauthorized. Active Service, Active Runtime, migrations, and main are unchanged. R4 / C2 / PR / main merge / force push remain unauthorized.
+- Next action: Human / ChatGPT package review. Do not execute the proposed Provider command from this package task.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R2:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R2
 
