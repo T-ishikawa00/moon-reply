@@ -1,5 +1,17 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3
+
+- Status / branch: product_owner_review_complete_remediation_required / review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-product-owner-decision.
+- Frozen authority: Product Owner Review Packet baseline f0b5dff36b63a9deaf5f87f8825911b0510ac0b1; Evidence Commit B 9e9bf7d90740c1d00bfc4e282c85906744cd736c; Package Commit A 6eea601c99f18cbde62659140502d0456b0b505b; main baseline 61e33a10e195fad17e253a6b9719217e1992f273. Existing Review Packet 11/11, frozen Evidence 10/10, frozen Package 7/7, pending 16/16-null Artifact, and original 28/28-null Artifact remain unchanged.
+- Product Owner review: complete for E-R3-01 through E-R3-04. E-R3-05 and E-R3-06 remain excluded because accepted_final_result is absent. Overall Product judgment is not_ready_for_jpy_980_runtime_activation.
+- Case dispositions: E-R3-01 content_correct_product_presentation_revision_required; E-R3-02 product_content_near_acceptance_presentation_revision_required; E-R3-03 safety_logic_accepted_pre_payment_ux_review_required; E-R3-04 draft_accepted_report_revision_required.
+- Charter: planning-only Workstreams A Product presentation density, B Factual precision, C Anxiety-safe writing, D Safety UX, E Deterministic evaluator successor, F Semantic disposition successor, and G Verification are fixed. Product Owner review must repeat on actual successor final output before Runtime activation.
+- Boundary: Provider quality established, Provider rerun authorized, and v12 implementation authorized are false / false / false. Machine and Protocol verdicts, ChatGPT adjudication, marker, authorization, Runtime, Prompt, Catalog, Schema, Evaluator, semantic disposition, UI, migrations, Active Service, Active Runtime, and main remain unchanged. This Task uses Provider / DB / Supabase 0 / 0 / 0. R4, C2, PR, main merge, and force push remain unauthorized.
+- Next action: Human / ChatGPT review of the v12 remediation charter.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2
 

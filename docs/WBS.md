@@ -1,5 +1,25 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3 Product Owner Decision and v12 Remediation Charter
+
+- [x] Exact Product Owner Review Packet baseline fixed at f0b5dff36b63a9deaf5f87f8825911b0510ac0b1
+- [x] Exact offline planning-only scope fixed at 11/11
+- [x] Three strict UTF-8 source authorities fixed by Git blob SHA, raw SHA-256, bytes, JSON validity, U+FFFD count 0, and secret count 0
+- [x] Existing Review Packet 11/11, frozen Evidence 10/10, and frozen Package 7/7 preserved
+- [x] Pending Product Owner Artifact 16/16 null and frozen original Artifact 28/28 null preserved
+- [x] Product Owner review completed for E-R3-01 through E-R3-04; E-R3-05 and E-R3-06 excluded because accepted_final_result is absent
+- [x] Overall Product judgment recorded as not_ready_for_jpy_980_runtime_activation
+- [x] P0 unsupported-causality, no-contact fail-closed, and pre-payment Safety UX requirements fixed
+- [x] P1 proportionality, non-repetition, fact precision, chronology, anxiety-safe uncertainty, and draft prominence requirements fixed
+- [x] Planning-only v12 Workstreams A through G fixed
+- [x] Provider quality established / Provider rerun authorized / remediation implementation authorized recorded as false / false / false
+- [ ] Human / ChatGPT review of the v12 remediation charter
+- [ ] Provider rerun, v12 implementation, Runtime activation, R4, C2, PR, and main integration — unauthorized
+
+Status is product_owner_review_complete_remediation_required and capabilities status is product_owner_review_complete_remediation_charter_ready. Provider / DB / Supabase are 0 / 0 / 0. Machine verdict, Protocol verdict, ChatGPT adjudication, marker, authorization, Runtime, Prompt, Catalog, Schema, Evaluator, semantic disposition, UI, migrations, Active Service, Active Runtime, and main remain unchanged.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2 Evidence Adjudication and Product Owner Review Packet
 

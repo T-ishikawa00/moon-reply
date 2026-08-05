@@ -1,0 +1,178 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-source-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3",
+  "title": "Product Owner Review Decision and v12 Remediation Charter Source Contract",
+  "status": "product_owner_review_complete_remediation_required",
+  "mode": "offline_planning_only",
+  "branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-product-owner-decision",
+  "baseline": "f0b5dff36b63a9deaf5f87f8825911b0510ac0b1",
+  "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+  "package_commit_a": "6eea601c99f18cbde62659140502d0456b0b505b",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "source_authority_commit": "f0b5dff36b63a9deaf5f87f8825911b0510ac0b1",
+  "source_encoding": "UTF-8",
+  "source_manifest": [
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-packet-v1.md",
+      "git_blob_sha": "e7b9753361ebb45bf14a5615149fd01ca6ba3b77",
+      "raw_sha256": "74cd5931d3eba4260b69cd6bf8a9df7c5738c2baa14b145ebd9a73c81d3e9442",
+      "bytes": 26005,
+      "strict_utf8_result": "PASS",
+      "replacement_character_count": 0,
+      "json_validity": "not_applicable",
+      "secret_scan_result": "PASS",
+      "secret_count": 0
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/chatgpt-evidence-adjudication-v1.json",
+      "git_blob_sha": "096827af38115a2ebdea27af907ef1234ab3da40",
+      "raw_sha256": "82b40b19dff3927ee0ee9803610821ce9239234e5f104e5ddf248832d823caa1",
+      "bytes": 6246,
+      "strict_utf8_result": "PASS",
+      "replacement_character_count": 0,
+      "json_validity": "PASS",
+      "secret_scan_result": "PASS",
+      "secret_count": 0
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-v1.json",
+      "git_blob_sha": "68ff9d00e3c95eae9786e5321bac8801ee1fe77e",
+      "raw_sha256": "45147b76ce5ce1ced2229a1a1bef4d106bd1aea7f5c21f9514d67ee9d5c905e4",
+      "bytes": 1070,
+      "strict_utf8_result": "PASS",
+      "replacement_character_count": 0,
+      "json_validity": "PASS",
+      "secret_scan_result": "PASS",
+      "secret_count": 0
+    }
+  ],
+  "source_manifest_count": 3,
+  "frozen_review_packet": {
+    "commit": "f0b5dff36b63a9deaf5f87f8825911b0510ac0b1",
+    "scope": [
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/adjudication-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/chatgpt-evidence-adjudication-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/adjudication-summary-v1.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-packet-v1.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/capabilities-v1.json",
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2-evidence-adjudication.mjs",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R2_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md"
+    ],
+    "scope_count": 11,
+    "immutable_path_count": 8,
+    "rolling_document_path_count": 3,
+    "rolling_document_integrity": "prior_marked_block_unchanged"
+  },
+  "frozen_package_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/quality-contract-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evaluator-v1.mjs",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evidence-auditor-v1.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-v11-provider-diagnostic.mjs",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-v11-provider-package.mjs"
+  ],
+  "frozen_evidence_paths": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-summary-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/product-review-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/product-owner-review-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/authorization-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/capabilities-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/quality-contract-v1.json",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evaluator-v1.mjs",
+    "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evidence-auditor-v1.mjs"
+  ],
+  "pending_product_owner_artifact": {
+    "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-v1.json",
+    "required_null_count": 16,
+    "must_remain_unchanged": true
+  },
+  "frozen_original_product_owner_artifact": {
+    "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/product-owner-review-v1.json",
+    "required_null_count": 28,
+    "must_remain_unchanged": true
+  },
+  "frozen_historical_result": {
+    "machine_verdict": "FAIL",
+    "protocol_verdict": "PASS",
+    "hard_verdict": "FAIL",
+    "product_verdict": "FAIL",
+    "provider_attempts": 37,
+    "completed_calls": 37,
+    "technical_failure": null,
+    "evidence_audit": "PASS"
+  },
+  "marker": {
+    "path": ".git/moon-reply-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-diagnostic-consumed.json",
+    "raw_sha256": "59c71422b39d2fe295ad51844e3869285f67996706d1b67471590ee8ae4fd67c",
+    "must_remain_present": true,
+    "must_remain_unchanged": true
+  },
+  "authorization": {
+    "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/authorization-v1.json",
+    "git_blob_sha": "3b85a2f55c37b618197a880dddca4ad1124c589d",
+    "raw_sha256": "a243b0b3b26d19307daf8ef57130822994481828201f2335291519e6743cba3e",
+    "consumed": true,
+    "rerun_authorized": false,
+    "must_remain_unchanged": true
+  },
+  "protected_authorities": {
+    "migration_0004_blob": "e3c42330d8e024a888fe8fd417e853ee1afad73c",
+    "migration_0005_blob": "d3c01e8d5a157dfbdc15b2333f1df01969a84cf7",
+    "active_service_blob": "dd49b816f5d98e9cb25e1b69102cbaa9d97c6820",
+    "active_runtime_catalog": "runtime-stage-catalog-v4.0.0",
+    "migrations_applied": false,
+    "active_runtime_activated": false
+  },
+  "exact_scope": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/source-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/product-owner-review-decision-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/product-owner-review-summary-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/v12-remediation-charter-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/v12-remediation-charter-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/capabilities-v1.json",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-product-owner-decision.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_REVIEW.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_scope_count": 11,
+  "new_path_count": 8,
+  "updated_path_count": 3,
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_rerun": false,
+    "package_check_rerun": false,
+    "retry": false,
+    "repair": false,
+    "fallback": false,
+    "runtime_changes": false,
+    "prompt_changes": false,
+    "catalog_changes": false,
+    "schema_changes": false,
+    "evaluator_changes": false,
+    "semantic_disposition_changes": false,
+    "ui_changes": false,
+    "migration_changes": false,
+    "active_service_changes": false,
+    "active_runtime_activated": false,
+    "machine_verdict_changed": false,
+    "chatgpt_adjudication_changed": false,
+    "provider_rerun_authorized": false,
+    "successor_remediation_implementation_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false,
+    "force_push_authorized": false
+  }
+}
