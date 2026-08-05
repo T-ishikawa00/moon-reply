@@ -1,0 +1,34 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2-capabilities-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2",
+  "status": "chatgpt_evidence_adjudication_complete_product_owner_review_pending",
+  "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+  "frozen_machine_verdict": "FAIL",
+  "frozen_protocol_verdict": "PASS",
+  "frozen_evidence_unchanged": true,
+  "chatgpt_adjudication_complete": true,
+  "product_owner_review_ready": true,
+  "product_owner_review_ready_cases": [
+    "E-R3-01",
+    "E-R3-02",
+    "E-R3-03",
+    "E-R3-04"
+  ],
+  "product_owner_review_excluded_cases": [
+    "E-R3-05",
+    "E-R3-06"
+  ],
+  "product_owner_review_complete": false,
+  "true_provider_product_defect_count": 1,
+  "provider_quality_established": false,
+  "provider_rerun_ready": false,
+  "provider_rerun_authorized": false,
+  "successor_remediation_planning_ready": true,
+  "successor_remediation_authorized": false,
+  "active_runtime_activated": false,
+  "r4_ready": false,
+  "r4_authorized": false,
+  "c2_authorized": false,
+  "main_changed": false,
+  "next_action": "product_owner_review_of_accepted_final_results"
+}

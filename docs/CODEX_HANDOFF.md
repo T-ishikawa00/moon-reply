@@ -1,5 +1,17 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2
+
+- Status / branch: `chatgpt_evidence_adjudication_complete_product_owner_review_pending` / `review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2-product-owner-packet`.
+- Frozen authority: Package Commit A `6eea601c99f18cbde62659140502d0456b0b505b`; Evidence Commit B and exact baseline `9e9bf7d90740c1d00bfc4e282c85906744cd736c`; source manifest records ten Git blob SHA and raw SHA-256 values. Frozen seven package paths, ten evidence paths, authorization, and marker remain unchanged.
+- Historical result: Provider attempts/completed `37/37`; Machine / Protocol / Hard / Product `FAIL / PASS / FAIL / FAIL`; `technical_failure=null`; evidence audit `PASS`. The Machine result remains authoritative historical evidence and is not rewritten.
+- Separate ChatGPT adjudication: E-R3-01 `UNSUPPORTED_CERTAINTY` is a high-confidence deterministic evaluator false positive; E-R3-05 `FACT_FIDELITY` is a medium-confidence PB-06 false positive with minor editorial ambiguity; E-R3-06 `ASSUMPTION_AS_FACT` is one high-confidence genuine Product defect; E-R3-06 `ACTION_CONSISTENCY` is a high-confidence evaluator contract defect over an acceptable future reassessment branch.
+- Product review: E-R3-01 through E-R3-04 have accepted `final_result` and are review-ready. E-R3-03 exposes only the accepted `safety_blocked` stop. E-R3-05 and E-R3-06 have no accepted `final_result`, remain `棄却された中間生成物`, and are excluded. Product Owner ratings remain `16/16 null`; Product Owner review is incomplete.
+- Boundary: Provider quality is not established. Provider rerun required-now / ready / authorized is `false / false / false`. Six successor corrections are planning-only and implementation is unauthorized. This Task uses Provider / DB / Supabase `0 / 0 / 0`; Runtime, Prompt, Catalog, Schema, migrations, Active Service, Active Runtime, and main remain unchanged. R4 and C2 remain unauthorized; PR, main merge, and force push are unauthorized.
+- Next action: Product Owner reads `product-owner-review-packet-v1.md` and rates only the four accepted final results.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1 executed status is EXECUTED_PENDING_EVIDENCE_COMMIT on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package. Package Commit A is 6eea601c99f18cbde62659140502d0456b0b505b; Provider attempts / completed calls are 37 / 37; machine verdict is FAIL. Product Owner review remains pending. Provider / DB / Supabase are 37 / 0 / 0. Authorization remains consumed after any attempted run and the marker remains present. Active Runtime and main remain unchanged; R4 and C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:END -->

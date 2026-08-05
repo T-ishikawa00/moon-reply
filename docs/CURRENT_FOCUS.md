@@ -1,5 +1,9 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:BEGIN -->
+M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2 is `chatgpt_evidence_adjudication_complete_product_owner_review_pending` on `review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2-product-owner-packet`, based directly on Evidence Commit B `9e9bf7d90740c1d00bfc4e282c85906744cd736c`. Frozen Machine / Protocol / Hard / Product verdicts remain `FAIL / PASS / FAIL / FAIL`; frozen evidence, authorization, and marker remain unchanged. ChatGPT separately adjudicates one deterministic evaluator false positive, one PB-06 false positive, one genuine Provider Product defect, and one evaluator contract defect without rewriting the Machine result. Accepted final results for E-R3-01 through E-R3-04 are ready for Product Owner review; E-R3-05 and E-R3-06 are excluded because accepted `final_result` is absent. Product Owner ratings remain `16/16 null`; review is pending. Provider quality remains unestablished, and Provider rerun is neither required now nor authorized. This offline Task uses Provider / DB / Supabase `0 / 0 / 0`; Runtime, Prompt, Catalog, Schema, migrations, Active Service, Active Runtime, main remain unchanged; R4 and C2 remain unauthorized. Next action is Product Owner review of accepted final results.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1 executed status is EXECUTED_PENDING_EVIDENCE_COMMIT on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package. Package Commit A is 6eea601c99f18cbde62659140502d0456b0b505b; Provider attempts / completed calls are 37 / 37; machine verdict is FAIL. Product Owner review remains pending. Provider / DB / Supabase are 37 / 0 / 0. Authorization remains consumed after any attempted run and the marker remains present. Active Runtime and main remain unchanged; R4 and C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:END -->

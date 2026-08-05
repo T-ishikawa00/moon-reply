@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2 Evidence Adjudication and Product Owner Review Packet
+
+- [x] Exact Evidence Commit B baseline fixed at `9e9bf7d90740c1d00bfc4e282c85906744cd736c`
+- [x] Exact offline-only mutation scope fixed at `11/11`
+- [x] Ten frozen sources recorded with Git blob SHA and raw SHA-256
+- [x] Frozen Machine / Protocol / Hard / Product verdict preserved as `FAIL / PASS / FAIL / FAIL`
+- [x] ChatGPT adjudication recorded separately: evaluator false positive `1`, PB-06 false positive `1`, genuine Product defect `1`, evaluator contract defect `1`
+- [x] Accepted `final_result` only packet prepared for E-R3-01 through E-R3-04
+- [x] E-R3-05 and E-R3-06 excluded as `棄却された中間生成物`; no intermediate output presented as Product
+- [x] Product Owner rating artifact restricted to four cases with `16/16 null`
+- [x] Six successor remediation candidates recorded as planning-only
+- [ ] Product Owner review of accepted final results
+- [ ] Provider rerun, remediation implementation, Runtime activation, R4, C2, PR, and main integration — unauthorized
+
+Status is `chatgpt_evidence_adjudication_complete_product_owner_review_pending`. Provider quality remains unestablished. Provider rerun required-now / ready / authorized is `false / false / false`. This Task performs Provider / DB / Supabase `0 / 0 / 0` and does not change Runtime, Prompt, Catalog, Schema, migrations, Active Service, Active Runtime, or main. Next action is Product Owner review, not technical execution.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1 executed status is EXECUTED_PENDING_EVIDENCE_COMMIT on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package. Package Commit A is 6eea601c99f18cbde62659140502d0456b0b505b; Provider attempts / completed calls are 37 / 37; machine verdict is FAIL. Product Owner review remains pending. Provider / DB / Supabase are 37 / 0 / 0. Authorization remains consumed after any attempted run and the marker remains present. Active Runtime and main remain unchanged; R4 and C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:END -->

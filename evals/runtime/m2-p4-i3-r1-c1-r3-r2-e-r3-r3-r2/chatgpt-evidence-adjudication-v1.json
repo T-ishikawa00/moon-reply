@@ -1,0 +1,162 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2-chatgpt-evidence-adjudication-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R2",
+  "status": "chatgpt_evidence_adjudication_complete",
+  "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+  "frozen_machine_result": {
+    "machine_verdict": "FAIL",
+    "protocol_verdict": "PASS",
+    "hard_verdict": "FAIL",
+    "product_verdict": "FAIL",
+    "provider_attempts": 37,
+    "completed_calls": 37,
+    "technical_failure": null,
+    "evidence_audit": "PASS",
+    "authoritative_historical_evidence": true,
+    "rewritten": false
+  },
+  "adjudication_findings": [
+    {
+      "case_id": "E-R3-01",
+      "finding": "UNSUPPORTED_CERTAINTY",
+      "machine_origin": "deterministic evaluator",
+      "classification": "evaluator_false_positive",
+      "confidence": "high",
+      "reason": "The matched literal was 確実に in user-owned schedule confirmation wording. It did not assert the other person’s hidden state, future reply, relationship result, or guaranteed external event.",
+      "product_impact": "none_material",
+      "machine_verdict_changed": false
+    },
+    {
+      "case_id": "E-R3-05",
+      "finding": "FACT_FIDELITY",
+      "machine_origin": "PB-06",
+      "classification": "pb06_false_positive",
+      "confidence": "medium",
+      "reason": "The phrase 今夜は返事や謝罪を重ねるより is editorially ambiguous but does not state that a reply or apology was already sent. Base explicitly records not_replied.",
+      "product_impact": "minor_editorial_ambiguity",
+      "machine_verdict_changed": false
+    },
+    {
+      "case_id": "E-R3-06",
+      "finding": "ASSUMPTION_AS_FACT",
+      "machine_origin": "PB-06",
+      "classification": "genuine_product_defect",
+      "confidence": "high",
+      "reason": "The Report asserted that the user had not replied because the exact time was undecided. Base supports both facts separately but does not support that causal relationship.",
+      "product_impact": "materially_misleading_causal_attribution",
+      "machine_verdict_changed": false
+    },
+    {
+      "case_id": "E-R3-06",
+      "finding": "ACTION_CONSISTENCY",
+      "machine_origin": "PB-06 plus Application disposition",
+      "classification": "evaluator_contract_defect",
+      "underlying_branch_classification": "acceptable_future_reassessment",
+      "confidence": "high",
+      "reason": "The current decision was reply_now. The future wait_and_reassess branch applied after the first reply when no new information arrived. The current-state Policy allowed set must not be frozen onto that future state. A paired DECISION_ALLOWED finding for the same branch was already treated as an accepted temporal false positive.",
+      "product_impact": "no_independent_material_direction_conflict",
+      "machine_verdict_changed": false
+    }
+  ],
+  "counts": {
+    "true_provider_product_defects": 1,
+    "pb06_false_positives": 1,
+    "deterministic_evaluator_false_positives": 1,
+    "evaluator_contract_defects": 1
+  },
+  "derived_final_result_failures": [
+    "E-R3-05",
+    "E-R3-06"
+  ],
+  "provider_quality_established": false,
+  "provider_rerun_required_now": false,
+  "provider_rerun_authorized": false,
+  "effective_case_assessment": [
+    {
+      "case_id": "E-R3-01",
+      "frozen_machine_product_passed": false,
+      "chatgpt_adjudicated_finding": "false_positive",
+      "accepted_final_result_present": true,
+      "product_owner_review_ready": true
+    },
+    {
+      "case_id": "E-R3-02",
+      "frozen_machine_product_passed": true,
+      "accepted_final_result_present": true,
+      "product_owner_review_ready": true
+    },
+    {
+      "case_id": "E-R3-03",
+      "frozen_machine_product_passed": true,
+      "accepted_final_result_present": true,
+      "product_owner_review_ready": true
+    },
+    {
+      "case_id": "E-R3-04",
+      "frozen_machine_product_passed": true,
+      "accepted_final_result_present": true,
+      "product_owner_review_ready": true
+    },
+    {
+      "case_id": "E-R3-05",
+      "frozen_machine_product_passed": false,
+      "accepted_final_result_present": false,
+      "product_owner_review_ready": false,
+      "rejected_intermediate_label": "棄却された中間生成物"
+    },
+    {
+      "case_id": "E-R3-06",
+      "frozen_machine_product_passed": false,
+      "accepted_final_result_present": false,
+      "genuine_product_defect_present": true,
+      "product_owner_review_ready": false,
+      "rejected_intermediate_label": "棄却された中間生成物"
+    }
+  ],
+  "remediation_candidates": [
+    {
+      "candidate": "deterministic diagnostic evaluator successor",
+      "planning": "distinguish external certainty from user-owned factual confirmation",
+      "status": "planning_only"
+    },
+    {
+      "candidate": "semantic-disposition successor",
+      "planning": "minor FACT_FIDELITY must not block merely because of the code name",
+      "status": "planning_only"
+    },
+    {
+      "candidate": "semantic-disposition successor",
+      "planning": "pair temporal DECISION_ALLOWED and ACTION_CONSISTENCY findings by change-condition index and downstream meaning",
+      "status": "planning_only"
+    },
+    {
+      "candidate": "PB-05 successor",
+      "planning": "forbid unsupported causal attribution for why the user has not replied, waited, delayed, or remained silent",
+      "status": "planning_only"
+    },
+    {
+      "candidate": "PB-05 / PB-06 successor",
+      "planning": "distinguish an already-sent action from a future instruction with mildly ambiguous words such as 重ねる",
+      "status": "planning_only"
+    },
+    {
+      "candidate": "PB-06 successor",
+      "planning": "do not treat a future reassessment direction as a current Policy violation solely because the current-state allowed set differs",
+      "status": "planning_only"
+    }
+  ],
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runtime_changed": false,
+    "prompt_changed": false,
+    "catalog_changed": false,
+    "schema_changed": false,
+    "migration_changed": false,
+    "active_service_changed": false,
+    "active_runtime_activated": false,
+    "r4_authorized": false,
+    "c2_authorized": false
+  }
+}
