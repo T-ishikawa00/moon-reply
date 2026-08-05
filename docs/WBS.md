@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1 v12 Implementation Decomposition
+
+- [x] Exact baseline 366b99b19ccf7f2aabe92fa760d07521de5e4104 and exact planning scope 11/11 fixed
+- [x] Preflight passed with clean worktree, empty stash, HEAD=upstream, main=origin/main, frozen authorities unchanged, consumed authorization, and rerun_authorized=false
+- [x] Forty-four source authorities fixed by Git blob SHA, raw SHA-256, and byte count
+- [x] Legacy ready, split ready, safety_blocked, and needs_more_information shapes audited
+- [x] Active v4 legacy and inactive v9-v11 split output compatibility mapped
+- [x] Unsafe isCompleted narrowing, unchecked API cast, unchecked persisted-report cast, and masked runtime mismatch documented
+- [x] Every RuntimeAssessmentNote field mapped across legacy/split/nullability/guard/failure/adapter
+- [x] Presentation density separated into internal audit, persisted Product report, CustomerAssessmentProjection, and visual sections
+- [x] Deterministic full report → CustomerAssessmentProjection → UI boundary defined
+- [x] Payment state recorded exactly as absent and current/required Safety sequences mapped
+- [x] Future Packages A through F fixed with pairwise-disjoint proposed paths, tests, gates, Provider requirements, and Human visual-review requirements
+- [x] Offline acceptance matrix fixed at 24 cases with mandatory Product Owner successor-output review
+- [ ] Human / ChatGPT review of the v12 implementation decomposition
+- [ ] Any Package A-F implementation, Provider rerun, Runtime activation, R4, C2, PR, or main integration — unauthorized
+
+Status is v12_implementation_decomposition_ready_pending_human_chatgpt_review. Provider / DB / Supabase are 0 / 0 / 0. Runtime, Prompt, Catalog, Schema, evaluator, semantic disposition, UI, API route, payment, fixtures, migrations, Active Service, Active Runtime, and main remain unchanged. next_action=human_chatgpt_review_of_v12_implementation_decomposition.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3 Product Owner Decision and v12 Remediation Charter
 

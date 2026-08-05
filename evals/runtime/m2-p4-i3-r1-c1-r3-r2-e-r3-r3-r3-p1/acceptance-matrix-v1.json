@@ -1,0 +1,372 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-acceptance-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1",
+  "status": "offline_acceptance_defined_implementation_unauthorized",
+  "cases": [
+    {
+      "case_id": "P1-AC-01",
+      "requirement": "legacy_ready_result",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_legacy_ready",
+      "expected_result": "decoded as legacy_ready and projected without changing the full report",
+      "expected_customer_surface": "decision, reason, optional draft, immediate action, and reassessment render without split-only assumptions",
+      "automated_gate": "PASS",
+      "human_gate": "Product view included in successor review"
+    },
+    {
+      "case_id": "P1-AC-02",
+      "requirement": "split_ready_result",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "frozen_shape_derived_split_ready",
+      "expected_result": "decoded as split_ready with recommended_message_draft and aftercare_plan normalized",
+      "expected_customer_surface": "no three_day_plan access and no runtime exception",
+      "automated_gate": "PASS",
+      "human_gate": "Product view included in successor review"
+    },
+    {
+      "case_id": "P1-AC-03",
+      "requirement": "split_message_temperature_null",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_split_ready_nullable",
+      "expected_result": "messageTemperature is null in CustomerAssessmentProjection",
+      "expected_customer_surface": "message-reading section is omitted with no empty heading and no property access",
+      "automated_gate": "PASS",
+      "human_gate": "Visual omission reviewed"
+    },
+    {
+      "case_id": "P1-AC-04",
+      "requirement": "split_relationship_summary_null",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_split_ready_nullable",
+      "expected_result": "relationshipSummary is null in CustomerAssessmentProjection",
+      "expected_customer_surface": "relationship section is omitted with no blank paragraph",
+      "automated_gate": "PASS",
+      "human_gate": "Visual omission reviewed"
+    },
+    {
+      "case_id": "P1-AC-05",
+      "requirement": "reply_now_with_draft",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_ready_decision",
+      "expected_result": "finalDraft is non-null with required_now and now",
+      "expected_customer_surface": "draft is primary, visually prominent, selectable, and copyable",
+      "automated_gate": "PASS",
+      "human_gate": "Copy action and feedback reviewed"
+    },
+    {
+      "case_id": "P1-AC-06",
+      "requirement": "send_now_with_draft",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_ready_decision",
+      "expected_result": "finalDraft is non-null with required_now and now",
+      "expected_customer_surface": "draft is primary and no wait-only absence copy appears",
+      "automated_gate": "PASS",
+      "human_gate": "Product view included in successor review"
+    },
+    {
+      "case_id": "P1-AC-07",
+      "requirement": "wait_and_reassess_with_no_draft",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "frozen_shape_derived_split_ready",
+      "expected_result": "finalDraft is null and immediateAction plus reassessment remain non-null",
+      "expected_customer_surface": "renderer-owned wait explanation appears only when a draft was requested",
+      "automated_gate": "PASS",
+      "human_gate": "Absence copy reviewed"
+    },
+    {
+      "case_id": "P1-AC-08",
+      "requirement": "pause_additional_contact_with_no_draft",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "synthetic_ready_decision",
+      "expected_result": "finalDraft and draft edit metadata are null",
+      "expected_customer_surface": "no draft, workaround, later-contact instruction, or reply request appears",
+      "automated_gate": "PASS",
+      "human_gate": "Boundary-safe absence copy reviewed"
+    },
+    {
+      "case_id": "P1-AC-09",
+      "requirement": "safety_blocked_with_no_report",
+      "packages": [
+        "A",
+        "E",
+        "F"
+      ],
+      "fixture_kind": "frozen_shape_derived_safety_blocked",
+      "expected_result": "safety_blocked delivery contains questionCodes but no decision, report, decisionCard, or projection",
+      "expected_customer_surface": "separate stop surface only",
+      "automated_gate": "PASS",
+      "human_gate": "Stop surface reviewed"
+    },
+    {
+      "case_id": "P1-AC-10",
+      "requirement": "needs_more_information_with_no_report",
+      "packages": [
+        "A",
+        "F"
+      ],
+      "fixture_kind": "synthetic_needs_more_information",
+      "expected_result": "needs_more_information delivery contains zero to three question codes and no report",
+      "expected_customer_surface": "no Product report or payment eligibility is implied",
+      "automated_gate": "PASS",
+      "human_gate": "Not separately required"
+    },
+    {
+      "case_id": "P1-AC-11",
+      "requirement": "explicit_no_contact",
+      "packages": [
+        "E",
+        "F"
+      ],
+      "fixture_kind": "structured_pre_payment_boundary",
+      "expected_result": "blocked_stop before any payment-capable state",
+      "expected_customer_surface": "nonjudgmental stop; no draft, workaround, later-contact plan, hidden exception, or charge",
+      "automated_gate": "PASS",
+      "human_gate": "Mandatory actual stop-screen review"
+    },
+    {
+      "case_id": "P1-AC-12",
+      "requirement": "simple_business_correction",
+      "packages": [
+        "A",
+        "B",
+        "C",
+        "F"
+      ],
+      "fixture_kind": "E-R3-01-derived_offline_fixture",
+      "expected_result": "reply_now and exact business-only corrected draft remain preserved",
+      "expected_customer_surface": "compact decision, reason, draft, immediate action, and reassessment hierarchy without repeated aftercare",
+      "automated_gate": "PASS",
+      "human_gate": "Mandatory Product Owner review"
+    },
+    {
+      "case_id": "P1-AC-13",
+      "requirement": "ordinary_reply_waiting",
+      "packages": [
+        "A",
+        "B",
+        "C",
+        "F"
+      ],
+      "fixture_kind": "E-R3-02-derived_offline_fixture",
+      "expected_result": "wait_and_reassess with no immediate draft",
+      "expected_customer_surface": "one current action and one observable reassessment trigger without unnecessary no-reply enumeration",
+      "automated_gate": "PASS",
+      "human_gate": "Mandatory Product Owner review"
+    },
+    {
+      "case_id": "P1-AC-14",
+      "requirement": "natural_polite_thank_you",
+      "packages": [
+        "B",
+        "C",
+        "F"
+      ],
+      "fixture_kind": "E-R3-04-derived_offline_fixture",
+      "expected_result": "explicit gratitude and enjoyment remain observed facts while romantic intent remains uncertain",
+      "expected_customer_surface": "natural final draft remains prominent; no invented next-day chronology",
+      "automated_gate": "PASS",
+      "human_gate": "Mandatory Product Owner review"
+    },
+    {
+      "case_id": "P1-AC-15",
+      "requirement": "kansai_persona_preserved_candidate",
+      "packages": [
+        "A",
+        "C",
+        "F"
+      ],
+      "fixture_kind": "synthetic_candidate_fidelity",
+      "expected_result": "recommended_message_draft preserves user-owned Kansai wording and persona except bounded approved correction",
+      "expected_customer_surface": "normalized finalDraft is exactly the accepted final recommended_message_draft.text",
+      "automated_gate": "PASS",
+      "human_gate": "Product Owner reads the final draft"
+    },
+    {
+      "case_id": "P1-AC-16",
+      "requirement": "unsupported_causal_attribution",
+      "packages": [
+        "C",
+        "D",
+        "F"
+      ],
+      "fixture_kind": "E-R3-06-derived_negative_mutant",
+      "expected_result": "separate facts joined as an unsupported cause remain blocking",
+      "expected_customer_surface": "no accepted Product output contains the unsupported causal statement",
+      "automated_gate": "PASS",
+      "human_gate": "Product Owner verifies the repaired actual output"
+    },
+    {
+      "case_id": "P1-AC-17",
+      "requirement": "unsupported_chronology",
+      "packages": [
+        "C",
+        "F"
+      ],
+      "fixture_kind": "E-R3-04-derived_negative_mutant",
+      "expected_result": "exact day or next-day wording is rejected when Base supplies only after",
+      "expected_customer_surface": "supported non-specific chronology is used",
+      "automated_gate": "PASS",
+      "human_gate": "Product Owner verifies the repaired actual output"
+    },
+    {
+      "case_id": "P1-AC-18",
+      "requirement": "anxiety_amplifying_negative_enumeration",
+      "packages": [
+        "C",
+        "F"
+      ],
+      "fixture_kind": "E-R3-02-derived_negative_mutant",
+      "expected_result": "immaterial rejection, abandonment, or no-reply enumeration is rejected",
+      "expected_customer_surface": "current evidence boundary, one action, and one review trigger are used instead",
+      "automated_gate": "PASS",
+      "human_gate": "Product Owner reviews emotional impact"
+    },
+    {
+      "case_id": "P1-AC-19",
+      "requirement": "deterministic_certainty_false_positive",
+      "packages": [
+        "D",
+        "F"
+      ],
+      "fixture_kind": "E-R3-01-derived_positive_control",
+      "expected_result": "user-owned schedule confirmation does not independently fail certainty evaluation",
+      "expected_customer_surface": "supported schedule remains unchanged",
+      "automated_gate": "PASS",
+      "human_gate": "Not separately required"
+    },
+    {
+      "case_id": "P1-AC-20",
+      "requirement": "temporal_future_reassessment",
+      "packages": [
+        "D",
+        "F"
+      ],
+      "fixture_kind": "E-R3-06-derived_temporal_control",
+      "expected_result": "future resulting_direction is paired by index and meaning and is not treated as a current Policy contradiction",
+      "expected_customer_surface": "reassessment remains future-conditional",
+      "automated_gate": "PASS",
+      "human_gate": "Product Owner verifies direction clarity"
+    },
+    {
+      "case_id": "P1-AC-21",
+      "requirement": "real_current_direction_contradiction",
+      "packages": [
+        "D",
+        "F"
+      ],
+      "fixture_kind": "negative_semantic_mutant",
+      "expected_result": "a current action that contradicts the selected decision remains blocking",
+      "expected_customer_surface": "no accepted contradictory Product output",
+      "automated_gate": "PASS",
+      "human_gate": "Not separately required"
+    },
+    {
+      "case_id": "P1-AC-22",
+      "requirement": "missing_or_absent_payment_implementation",
+      "packages": [
+        "E",
+        "F"
+      ],
+      "fixture_kind": "repository_capability_absence",
+      "expected_result": "purchase state is eligible_payment_unavailable and implementation state is absent",
+      "expected_customer_surface": "no enabled checkout, transaction success, payment confirmation, charge, or delivery claim",
+      "automated_gate": "PASS",
+      "human_gate": "Unavailable state reviewed"
+    },
+    {
+      "case_id": "P1-AC-23",
+      "requirement": "full_report_immutability",
+      "packages": [
+        "A",
+        "F"
+      ],
+      "fixture_kind": "legacy_and_split_deep_freeze",
+      "expected_result": "projection produces no mutation and full persisted report deep equality remains true",
+      "expected_customer_surface": "internal audit data is not directly rendered",
+      "automated_gate": "PASS",
+      "human_gate": "Not separately required"
+    },
+    {
+      "case_id": "P1-AC-24",
+      "requirement": "requested_topics_semantic_selection",
+      "packages": [
+        "A",
+        "B",
+        "F"
+      ],
+      "fixture_kind": "topic_permutation_matrix",
+      "expected_result": "projection selection changes only through requestedTopics and content availability, never case IDs",
+      "expected_customer_surface": "primary sections are proportional without a fixed word-count rule",
+      "automated_gate": "PASS",
+      "human_gate": "Representative compact and expanded views reviewed"
+    }
+  ],
+  "case_count": 24,
+  "mandatory_requirement_coverage": [
+    "legacy_ready_result",
+    "split_ready_result",
+    "split_message_temperature_null",
+    "split_relationship_summary_null",
+    "reply_now_with_draft",
+    "wait_and_reassess_with_no_draft",
+    "pause_additional_contact_with_no_draft",
+    "safety_blocked_with_no_report",
+    "explicit_no_contact",
+    "simple_business_correction",
+    "ordinary_reply_waiting",
+    "natural_polite_thank_you",
+    "kansai_persona_preserved_candidate",
+    "unsupported_causal_attribution",
+    "unsupported_chronology",
+    "anxiety_amplifying_negative_enumeration",
+    "deterministic_certainty_false_positive",
+    "temporal_future_reassessment",
+    "missing_or_absent_payment_implementation"
+  ],
+  "product_owner_gate": {
+    "mandatory": true,
+    "scope": "actual successor final outputs and assembled customer-facing Product view",
+    "machine_pass_substitutes_for_product_owner_review": false,
+    "required_before_runtime_activation": true
+  },
+  "execution_boundary": {
+    "offline_only": true,
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "provider_rerun_authorized": false,
+    "implementation_authorized": false
+  }
+}

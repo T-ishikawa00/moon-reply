@@ -1,0 +1,373 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-source-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1",
+  "title": "v12 Implementation Architecture and Work-Package Decomposition Source Contract",
+  "status": "v12_implementation_decomposition_ready_pending_human_chatgpt_review",
+  "mode": "read_only_analysis_planning_only",
+  "branch": "plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-v12-decomposition",
+  "baseline": "366b99b19ccf7f2aabe92fa760d07521de5e4104",
+  "expected_parent": "f0b5dff36b63a9deaf5f87f8825911b0510ac0b1",
+  "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+  "package_commit_a": "6eea601c99f18cbde62659140502d0456b0b505b",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "source_encoding": "UTF-8",
+  "preflight": {
+    "fetch_origin_prune": "PASS",
+    "expected_branch": "PASS",
+    "head_equals_upstream": "PASS",
+    "head_equals_baseline": "PASS",
+    "parent_equals_expected_parent": "PASS",
+    "worktree_clean_before_branch_creation": true,
+    "stash_empty": true,
+    "product_owner_decision_exists": true,
+    "v12_remediation_charter_exists": true,
+    "evidence_commit_b_ancestor": true,
+    "frozen_evidence_unchanged": true,
+    "frozen_package_unchanged": true,
+    "frozen_review_packet_unchanged": true,
+    "marker_unchanged": true,
+    "authorization_consumed": true,
+    "rerun_authorized": false,
+    "main_equals_origin_main": true,
+    "product_owner_decision_verifier": "PASS_39_OF_39"
+  },
+  "authority_manifest": [
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/source-contract-v1.json",
+      "git_blob_sha": "0ceadbe6e0b90ed189d7799d6f58b63a46af88bd",
+      "raw_sha256": "710febc620af03d6b7940eaca29928ffd1ae40991e1f879b3fdbe0e5e9c31bfa",
+      "bytes": 7891
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/product-owner-review-decision-v1.json",
+      "git_blob_sha": "3c7a667067f8f6fff330b417b1ffec56e1d5606b",
+      "raw_sha256": "11f8a0527004b26344d560c5b56384e47027794e685436c5d39aa5fc2aafbeb7",
+      "bytes": 9649
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3/v12-remediation-charter-v1.json",
+      "git_blob_sha": "67cb149a4674cad403409b47b32d1a72c12c93a5",
+      "raw_sha256": "433e970f68bd5832f1907a63ea48ff3ec1ee7b665a8e156a06600676dea4cb80",
+      "bytes": 5772
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/product-owner-review-packet-v1.md",
+      "git_blob_sha": "e7b9753361ebb45bf14a5615149fd01ca6ba3b77",
+      "raw_sha256": "74cd5931d3eba4260b69cd6bf8a9df7c5738c2baa14b145ebd9a73c81d3e9442",
+      "bytes": 26005
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/chatgpt-evidence-adjudication-v1.json",
+      "git_blob_sha": "096827af38115a2ebdea27af907ef1234ab3da40",
+      "raw_sha256": "82b40b19dff3927ee0ee9803610821ce9239234e5f104e5ddf248832d823caa1",
+      "bytes": 6246
+    },
+    {
+      "path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-results-v1.json",
+      "git_blob_sha": "91412dcce44db64d3bf061dac2002b5bd79bc557",
+      "raw_sha256": "e749a6e7df0e90e90d77cab7ec48b88155ffe6b9ab1f21111c46b67e9dc60b10",
+      "bytes": 2257060
+    },
+    {
+      "path": "lib/assessment/runtime/types.ts",
+      "git_blob_sha": "03461556f10d593d7b2d2ec6bc33b2409e5fac3d",
+      "raw_sha256": "f21952654a1f7b8681e9cf87f615959539825f7e7bec89414677bf918c958f0c",
+      "bytes": 16562
+    },
+    {
+      "path": "lib/assessment/runtime/pipeline.ts",
+      "git_blob_sha": "6c11f94b2b990e535bc94f3f6e4e3d92a4c3fd24",
+      "raw_sha256": "44390012f0df77d38c686c98f82cdf889e38bec39bf95f7e31e1cadbc400957e",
+      "bytes": 47909
+    },
+    {
+      "path": "lib/assessment/runtime/schema-catalog.ts",
+      "git_blob_sha": "a00e13e0bed453db08dfdc68bb2d2c14518bd0e9",
+      "raw_sha256": "e81d6ab4e628ab191d64f710edb4d0f5da2d95b63a06cfeddc8c664e9d75c02e",
+      "bytes": 70382
+    },
+    {
+      "path": "lib/assessment/runtime/service.ts",
+      "git_blob_sha": "dd49b816f5d98e9cb25e1b69102cbaa9d97c6820",
+      "raw_sha256": "8ce95b3d5f6604f5c093956a226b412f69882d388c9e53976662806af8fd1402",
+      "bytes": 1209
+    },
+    {
+      "path": "lib/assessment/runtime/application.ts",
+      "git_blob_sha": "4ccf34c6e6443368a166520569e640962c23902a",
+      "raw_sha256": "3923e9b0aea733559c0eb19cd5ef33a92a01ce56fd5016246ba7509fc2bd9fc3",
+      "bytes": 2941
+    },
+    {
+      "path": "lib/assessment/runtime/supabase-repository.ts",
+      "git_blob_sha": "0781a54564ce66e69b8f89484ef32bb4fbd46f8b",
+      "raw_sha256": "f553a86bc1402508bada6693bb593c3b57e6db004d07a9d96bec3624f2253d03",
+      "bytes": 13821
+    },
+    {
+      "path": "lib/assessment/runtime/environment.ts",
+      "git_blob_sha": "bac51b451ae4c0a3f59c3b905f8163cc182eac2b",
+      "raw_sha256": "bf253f68b9fceb7533a0dbb14aefc9710af3f4b0a172d93733927553f889b6ec",
+      "bytes": 1111
+    },
+    {
+      "path": "lib/assessment/runtime/policy.ts",
+      "git_blob_sha": "3f465cf049b7b252b7a818d3f5f08203733fc5d4",
+      "raw_sha256": "1abcb5d9acd37dd95eb8aee4a58f57cffb3a4f3cbdba776e5fcacc04a59cb67d",
+      "bytes": 7804
+    },
+    {
+      "path": "lib/assessment/runtime/candidate-safety-routing-v1.ts",
+      "git_blob_sha": "a43dcfd3f8247252a859aa791664cf019ce26236",
+      "raw_sha256": "7852657244928b68a9b1f70ac4df3ba4d4eecf4a78b2f4eec678f992037abb68",
+      "bytes": 4473
+    },
+    {
+      "path": "app/api/internal/assessments/route.ts",
+      "git_blob_sha": "c22f13693a2e1b39f4899776dae698984575fa96",
+      "raw_sha256": "7b9cd98d6ca614abdb6aeb16eedb738d136ec5935ee99948b0088d264bbe0a2e",
+      "bytes": 5111
+    },
+    {
+      "path": "components/runtime/RuntimeAssessmentForm.tsx",
+      "git_blob_sha": "e55d6a5c001f5701bd8c02dd77d5538a409ee119",
+      "raw_sha256": "3fb842cbcf65b0317bff4576db78ec99f1ba896f657eeca2f94aac74a856520a",
+      "bytes": 10987
+    },
+    {
+      "path": "components/runtime/RuntimeAssessmentNote.tsx",
+      "git_blob_sha": "3a99697f650bbf753262658b1f93d60befa7a062",
+      "raw_sha256": "75b80b7e9d71f6e868047aee97c1b2d1da2add180deb64de145c5b5e1c908251",
+      "bytes": 14333
+    },
+    {
+      "path": "components/artifact/ArtifactComposition.tsx",
+      "git_blob_sha": "387e4f4321583a89c93e5c03172d73d9d9981209",
+      "raw_sha256": "72e22a9e5a06c9f8434d240f0fa9ec59bb2697c0daa9d690a763420541deff86",
+      "bytes": 2096
+    },
+    {
+      "path": "app/review/runtime/page.tsx",
+      "git_blob_sha": "e4761a7b3e63f2338dd835c0847a22833020cad3",
+      "raw_sha256": "8c170e523ceafd21f914ecf8ef10de167545e465f3b0bbbaee8b565fa010f27d",
+      "bytes": 1913
+    },
+    {
+      "path": "app/review/runtime/i2/page.tsx",
+      "git_blob_sha": "e734121f91c7580fc16a11efbc55c135266dec59",
+      "raw_sha256": "f73c4c424a6caaa0de9641f8b37fd89f482afd179c40c5a1c64cec67d98d98f7",
+      "bytes": 1103
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v2.json",
+      "git_blob_sha": "4a3688450aaae546d8f0791eade41f7acf7eadc1",
+      "raw_sha256": "cafa4dbc6f714e6e886f716aebf1c602313504ef34049ae5d81b0c8f33a5ce32",
+      "bytes": 4336
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v3.json",
+      "git_blob_sha": "76830fe413a33e8bc5c9870edc4306ec786b911b",
+      "raw_sha256": "f11a1d9267d3ccce69b000b3a1d0e3f2627758f2e8353aafb98118c2479cd529",
+      "bytes": 4444
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+      "git_blob_sha": "f7aa2642245c97f27226dd53c8eaa2ce4edd03d8",
+      "raw_sha256": "769ab14b82ca7f4c1fbb2455809c3b009044aee9db0bff3e7f7c59122a5ce1eb",
+      "bytes": 4387
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v5.json",
+      "git_blob_sha": "90a35f795843aef9983831111018797a02c97f0f",
+      "raw_sha256": "9a4b57a14eae71c6d560a177387ab55b159ac2f5bb23291149b82821d64d68c3",
+      "bytes": 4392
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v6.json",
+      "git_blob_sha": "f20259d2f200840c50414ab1f5c9fda23787fa7c",
+      "raw_sha256": "16d012b3e7a2d15a4e20c0f705d110a82e34183df46681b3e0f755cc6ffb9f6d",
+      "bytes": 4659
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v7.json",
+      "git_blob_sha": "e447abfd5674eff6cbf40b01eeca7d2c7f721950",
+      "raw_sha256": "8d7ce2aa73d7d06efc74168af9fa0894dff465ce42e9801392c50f7df3b4ec01",
+      "bytes": 4655
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v8.json",
+      "git_blob_sha": "2a427267e95cd048851b252b833ee181bdb7a707",
+      "raw_sha256": "e2d9cbf6f67789af3b7c3163c89841c8f8c39da41e72176450cc2759c4125412",
+      "bytes": 4663
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v9.json",
+      "git_blob_sha": "55d52fb06dd7a9d7b7fa15d3a2d14f5848001c3d",
+      "raw_sha256": "3bbcee33b0df6b4e29d8e3390cb87dee45d4e3fe40fa38a65d96745871899f35",
+      "bytes": 5548
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v10.json",
+      "git_blob_sha": "69169ae4e9f572a078ec0d420eebef2a7434af27",
+      "raw_sha256": "f083224e2a9c7602197187ba7b043a7f2b6aa03cc0de3874231e71ca4701dc1c",
+      "bytes": 5556
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
+      "git_blob_sha": "77ca12f3b8525e436132174a0af6622aee3c4db1",
+      "raw_sha256": "47e61d9316a298d67bbe17ac8f25124e7c3570e9b4a49c6d652d2cb9ed243eb1",
+      "bytes": 5552
+    },
+    {
+      "path": "ai/schemas/decision-plan.schema.json",
+      "git_blob_sha": "f6f38d655efae19396eaf16b8df362c683677929",
+      "raw_sha256": "cfd90b0639f1a24c2a215fe647612e9584092380bac23436e9de5bea1d31ccfd",
+      "bytes": 8138
+    },
+    {
+      "path": "ai/schemas/report-content.schema.json",
+      "git_blob_sha": "09cbdd30640201d94039b14118b20653b66bb3cb",
+      "raw_sha256": "32248dc862d1f24d10110cce527f659d7e698490b945dc1ad54a94a7a4e94edb",
+      "bytes": 4366
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
+      "git_blob_sha": "a6638d00b1eebc12f83aa6200bbd706768a4b8fb",
+      "raw_sha256": "76edb7009c3f341c915bc99307a2e8004f0dc86df34d6008509c8c022524bef0",
+      "bytes": 13818
+    },
+    {
+      "path": "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+      "git_blob_sha": "a87c5fcd2e2f41824bdf498f5c3eca1eb2a4f9ce",
+      "raw_sha256": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650",
+      "bytes": 3993
+    },
+    {
+      "path": "components/request/RequestForm.tsx",
+      "git_blob_sha": "eb5f84e86dd2a5a47c9e8454b07c803c3073fb99",
+      "raw_sha256": "f716bda060f1ace460488d1ad09fcf9e245dc8ffba28a9cb4f861e0032100d37",
+      "bytes": 30793
+    },
+    {
+      "path": "lib/safety/classify.ts",
+      "git_blob_sha": "794aa13b5d40c6389c178c5f761a9b052dcacac6",
+      "raw_sha256": "5998929426446848c4ae51b7dbc29b217af7f37e180f9d1a4c06adc463b0f0d3",
+      "bytes": 4297
+    },
+    {
+      "path": "lib/safety/rules.ts",
+      "git_blob_sha": "4e6c637b61275d0b6864e60cc40df1b62000c286",
+      "raw_sha256": "5dcdbf868f4725056bbfd164b3e6b46915a27734762a2e296dc1f900369a6de8",
+      "bytes": 5322
+    },
+    {
+      "path": "lib/safety/messages.ts",
+      "git_blob_sha": "16298f37ac52b4cfdbbbe7b606e55aab38c53776",
+      "raw_sha256": "3635d0545a6c0f1edaaad179eec5aae696807be897ec3e3c4ab8dd11641410f5",
+      "bytes": 1757
+    },
+    {
+      "path": "fixtures/review/safety-states.ts",
+      "git_blob_sha": "b7e71e577786c32fe8018aa8bd5e24823e1d2c70",
+      "raw_sha256": "f1ce6bdc901dc09732d3d54d7e6ffd25f2a623b5d36a242749f23cf49dde1d7e",
+      "bytes": 5700
+    },
+    {
+      "path": "fixtures/review/purchase-confirmations.ts",
+      "git_blob_sha": "ec22a26bd3df38781b029db8e0e646e2d4db8d0d",
+      "raw_sha256": "444dfe7d744eb6255a87ed8b59c62e7b5d771baa49f492d206b81fcf3ab84b81",
+      "bytes": 2938
+    },
+    {
+      "path": "components/review/ReviewPurchaseConfirmation.tsx",
+      "git_blob_sha": "5f77c298639a78d3c9d0d3c7dc987f32f806ae5a",
+      "raw_sha256": "6ed3a067161d6a637f36c59a31f51a2059eedf766efc7418d1495dfbafc6318d",
+      "bytes": 8290
+    },
+    {
+      "path": "app/review/purchase/confirmation/[fixtureId]/page.tsx",
+      "git_blob_sha": "d9a2edc83d063262348387a82d74033d50be13f7",
+      "raw_sha256": "0abe2ad170b4ab38e621c449735f7d1aa6ab20c8b0dba603196b5edcefbc7da8",
+      "bytes": 1136
+    },
+    {
+      "path": "package.json",
+      "git_blob_sha": "85d4d41ade37613923858c36332eca99d2dfd51f",
+      "raw_sha256": "bab9a77b5875b3ad0755c75c936fae197d24701e66c282a285e2ca06e3fb5d25",
+      "bytes": 737
+    }
+  ],
+  "authority_manifest_count": 44,
+  "repository_discovery": {
+    "api_route_paths": [
+      "app/api/internal/assessments/route.ts"
+    ],
+    "payment_or_checkout_api_route_paths": [],
+    "payment_sdk_dependencies": [],
+    "purchase_ui_paths": [
+      "components/request/RequestForm.tsx",
+      "fixtures/review/purchase-confirmations.ts",
+      "components/review/ReviewPurchaseConfirmation.tsx",
+      "app/review/purchase/confirmation/[fixtureId]/page.tsx"
+    ],
+    "purchase_implementation_state": "absent"
+  },
+  "frozen_state": {
+    "review_packet_scope": "11/11 unchanged",
+    "frozen_evidence_scope": "10/10 unchanged",
+    "frozen_package_scope": "7/7 unchanged",
+    "marker_path": ".git/moon-reply-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-diagnostic-consumed.json",
+    "marker_raw_sha256": "59c71422b39d2fe295ad51844e3869285f67996706d1b67471590ee8ae4fd67c",
+    "authorization_path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/authorization-v1.json",
+    "authorization_git_blob_sha": "3b85a2f55c37b618197a880dddca4ad1124c589d",
+    "authorization_raw_sha256": "a243b0b3b26d19307daf8ef57130822994481828201f2335291519e6743cba3e",
+    "authorization_consumed": true,
+    "rerun_authorized": false
+  },
+  "exact_scope": [
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/source-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/architecture-audit-v1.md",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/runtime-output-compatibility-matrix-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/implementation-work-packages-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/acceptance-matrix-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/capabilities-v1.json",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-v12-decomposition.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P1_REVIEW.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/WBS.md",
+    "docs/CODEX_HANDOFF.md"
+  ],
+  "exact_scope_count": 11,
+  "new_path_count": 8,
+  "updated_path_count": 3,
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_rerun": false,
+    "package_check": false,
+    "retry": false,
+    "repair": false,
+    "fallback": false,
+    "runtime_changes": false,
+    "prompt_changes": false,
+    "catalog_changes": false,
+    "schema_changes": false,
+    "evaluator_changes": false,
+    "semantic_disposition_changes": false,
+    "ui_changes": false,
+    "api_route_changes": false,
+    "payment_changes": false,
+    "test_fixture_changes": false,
+    "migration_changes": false,
+    "active_service_changes": false,
+    "active_runtime_activated": false,
+    "v12_implementation_authorized": false,
+    "provider_rerun_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false,
+    "force_push_authorized": false
+  }
+}

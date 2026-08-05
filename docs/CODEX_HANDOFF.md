@@ -1,5 +1,19 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1
+
+- Status / branch / baseline: v12_implementation_decomposition_ready_pending_human_chatgpt_review / plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-v12-decomposition / 366b99b19ccf7f2aabe92fa760d07521de5e4104.
+- Frozen authority: Product Owner baseline parent f0b5dff36b63a9deaf5f87f8825911b0510ac0b1; Evidence Commit B 9e9bf7d90740c1d00bfc4e282c85906744cd736c; Package Commit A 6eea601c99f18cbde62659140502d0456b0b505b; main 61e33a10e195fad17e253a6b9719217e1992f273. Review Packet 11/11, Evidence 10/10, Package 7/7, marker, and consumed authorization remain unchanged; rerun_authorized=false.
+- Runtime result: active catalog v4 returns legacy ready; inactive v9-v11 return split ready. safety_blocked and needs_more_information contain no Report. RuntimeAssessmentForm narrows every ready result to legacy, so split can reach RuntimeAssessmentNote; three_day_plan.length deterministically fails and nullable message_temperature is unguarded. Static typecheck masks the wire-shape defect.
+- Projection decision: preserve the full persisted report and use a pure deterministic CustomerAssessmentProjection before UI. Normalize finalDraft, immediateAction, and reassessment; explicitly handle both report versions and nullable fields; select sections with requestedTopics and semantic necessity; never use case IDs or a fixed word-count rule; keep expanded detail secondary. No extra presentation Provider stage is needed.
+- Presentation finding: the current UI renders a fixed full section set and uses requestedTopics mainly for navigation, so internal evidence is exposed regardless of topic. Do not delete audit fields; add the missing projection layer.
+- Payment / Safety: payment implementation is absent. The repository has no payment API route or SDK and only disabled fixture previews. No Safety-blocked request can currently be charged because no request can be charged; production pre-payment Safety remains unverified. Required order is input → Safety eligibility → eligible purchase → payment → generation/delivery, with blocked input terminating at a nonjudgmental no-charge/no-Report/no-draft stop.
+- Packages: A normalization/projection; B customer note; C PB-05 precision/anxiety-safe writing; D evaluator/disposition; E pre-payment Safety UX/gate; F consolidated offline regression and successor packet. Exact proposed paths are pairwise disjoint. Provider calls are not required; Human visual review is mandatory for B, E, and assembled F Product review.
+- Acceptance: 24 offline cases cover all required legacy/split/null/draft/Safety/Product/evaluator/payment cases. Product Owner review of actual successor final outputs remains mandatory and cannot be replaced by machine PASS.
+- Boundary / next action: v12 implementation, Provider rerun, Active Runtime, R4, C2, PR, main merge, and force push remain unauthorized. Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v12_implementation_decomposition.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3
 

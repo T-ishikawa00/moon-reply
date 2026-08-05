@@ -1,0 +1,371 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1-implementation-work-packages-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1",
+  "status": "future_packages_defined_implementation_unauthorized",
+  "package_order": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "path_overlap_policy": {
+    "proposed_paths_are_pairwise_disjoint": true,
+    "shared_path_count": 0,
+    "integration_rule": "Each package consumes only an accepted predecessor contract. Later activation or main integration is outside these packages and requires separate authority."
+  },
+  "packages": [
+    {
+      "package_id": "A",
+      "name": "Runtime result normalization and customer projection",
+      "exact_responsibility": [
+        "Replace eligibility-only ready narrowing with runtime decoding by eligibility and report.schemaVersion.",
+        "Support legacy and split ready results plus safety_blocked and needs_more_information explicitly.",
+        "Create deterministic CustomerAssessmentProjection without changing or replacing the persisted full report.",
+        "Expose one normalized finalDraft, one normalized immediateAction, and one normalized reassessment field.",
+        "Handle nullable split message_temperature and relationship_summary.",
+        "Prevent unvalidated persisted JSON and unvalidated API JSON from being trusted as a ready result."
+      ],
+      "prerequisites": [
+        "P1 decomposition Human / ChatGPT accepted",
+        "baseline 366b99b19ccf7f2aabe92fa760d07521de5e4104 remains the planning authority",
+        "CustomerAssessmentProjection v1 field contract approved",
+        "no Runtime activation authority is inferred"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-runtime-projection",
+      "proposed_paths": [
+        "lib/assessment/runtime/types.ts",
+        "lib/assessment/runtime/runtime-result-normalization-v1.ts",
+        "lib/assessment/runtime/customer-assessment-projection-v1.ts",
+        "lib/assessment/runtime/customer-assessment-delivery-v1.ts",
+        "lib/assessment/runtime/supabase-repository.ts",
+        "app/api/internal/assessments/route.ts",
+        "components/runtime/RuntimeAssessmentForm.tsx",
+        "components/runtime/RuntimeAssessmentProjectionPreview.tsx",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/projection-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/projection-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/offline-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-runtime-projection.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P2_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "change Provider output",
+        "change Prompt, Catalog, or Schema",
+        "redesign the final customer note",
+        "activate split Runtime",
+        "payment implementation",
+        "Provider execution"
+      ],
+      "tests": [
+        "decode every result-union member and reject unknown or mixed shapes",
+        "legacy ready projection parity",
+        "split ready projection parity",
+        "split nullable message_temperature and relationship_summary",
+        "reply_now and send_now required draft",
+        "wait_and_reassess nullable draft",
+        "pause_additional_contact null draft",
+        "safety_blocked and needs_more_information contain no report",
+        "deep-freeze input and prove the full report is byte/deep equal before and after projection",
+        "prove requestedTopics and source fields are the only selection inputs",
+        "forbid case IDs and Provider imports"
+      ],
+      "acceptance_gate": "Dedicated offline verifier passes; typecheck, lint, build, and diff checks pass; all legacy/split/null/stop fixtures pass; persisted full report remains unchanged; Human / ChatGPT accepts the projection contract.",
+      "provider_calls_required": false,
+      "human_visual_review_required": false
+    },
+    {
+      "package_id": "B",
+      "name": "Customer-facing note presentation",
+      "exact_responsibility": [
+        "Render CustomerAssessmentProjection rather than the full persisted report.",
+        "Use a proportional primary view selected by requestedTopics and semantic necessity.",
+        "Keep the normalized final draft visually prominent and provide an accessible copy action.",
+        "Move optional evidence and expanded detail behind secondary disclosure.",
+        "Prevent every internal field from becoming a visible customer section.",
+        "Provide a non-active review route for desktop and narrow-width Human visual review."
+      ],
+      "prerequisites": [
+        "Package A accepted",
+        "CustomerAssessmentProjection v1 immutable for this package",
+        "actual successor projection fixtures available",
+        "Runtime activation remains unauthorized"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note",
+      "proposed_paths": [
+        "components/runtime/CustomerAssessmentNote.tsx",
+        "components/runtime/CustomerAssessmentNote.module.css",
+        "components/runtime/CustomerDraftCopyButton.tsx",
+        "app/review/runtime/v12/page.tsx",
+        "lib/assessment/runtime/review/m2-p4-v12-customer-projection-fixtures.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/presentation-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/visual-review-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "alter full report persistence",
+        "rewrite Provider text",
+        "implement case-specific layouts",
+        "use one fixed word count",
+        "activate the review route as a public route",
+        "payment implementation",
+        "Provider execution"
+      ],
+      "tests": [
+        "primary section set for each requested topic",
+        "simple business correction uses the compact hierarchy",
+        "ordinary waiting consultation shows immediate action and reassessment without irrelevant message analysis",
+        "draft prominence and keyboard-operable copy action",
+        "wait and pause draft-absence copy",
+        "null optional sections are omitted without empty headings",
+        "expanded details are secondary and collapsed initially",
+        "no internal fact IDs, case IDs, usage, run IDs, or report schema metadata are rendered",
+        "desktop, 399px, 320px, keyboard, 200 percent zoom, and reduced-motion review"
+      ],
+      "acceptance_gate": "Automated presentation verifier passes and Human visual/Product review passes every named viewport and interaction case; no public activation occurs.",
+      "provider_calls_required": false,
+      "human_visual_review_required": true
+    },
+    {
+      "package_id": "C",
+      "name": "PB-05 factual precision and anxiety-safe writing successor",
+      "exact_responsibility": [
+        "Block unsupported causal wording in generated report content.",
+        "Block unsupported chronology wording.",
+        "State explicit observed facts as facts while keeping inferred intent uncertain.",
+        "Avoid anxiety-amplifying negative-possibility enumeration.",
+        "Remove generic aftercare repetition unless supported by stated anxiety or checking behavior.",
+        "Keep density selection in deterministic projection rather than adding a new presentation Provider stage."
+      ],
+      "prerequisites": [
+        "Package A accepted",
+        "Product Owner P0 and P1 wording authority retained",
+        "frozen E-R3 raw Provider outputs remain immutable",
+        "no Provider rerun authority is inferred"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing",
+      "proposed_paths": [
+        "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
+        "lib/assessment/runtime/report-grounding-v4.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/offline-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P4_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "change PB-01 through PB-04",
+        "change PB-06 evaluator or semantic disposition",
+        "change result normalization or UI",
+        "delete structured audit fields",
+        "add another Provider stage",
+        "execute Provider"
+      ],
+      "tests": [
+        "separate facts are not joined by an unsupported causal connector",
+        "same-day versus next-day ambiguity does not invent chronology",
+        "quoted gratitude and enjoyment remain observed facts",
+        "romantic intent remains uncertain",
+        "negative outcomes are not enumerated when immaterial to current action",
+        "generic aftercare is absent without an anxiety or compulsive-checking fact",
+        "Kansai and persona-preserved candidate text remains intact",
+        "frozen accepted E-R3 drafts remain unchanged"
+      ],
+      "acceptance_gate": "Offline Prompt and grounding fixtures pass with no raw evidence mutation; Human / ChatGPT accepts the wording contract. Provider quality remains unestablished.",
+      "provider_calls_required": false,
+      "human_visual_review_required": false
+    },
+    {
+      "package_id": "D",
+      "name": "Deterministic evaluator and semantic-disposition successor",
+      "exact_responsibility": [
+        "Replace context-free recursive certainty substring matching with path-aware material assertion evaluation.",
+        "Report the actual matched field path.",
+        "Do not block minor FACT_FIDELITY solely by code name.",
+        "Pair temporal DECISION_ALLOWED and ACTION_CONSISTENCY findings by change-condition index and semantic meaning.",
+        "Do not treat a future reassessment direction as a current-direction violation.",
+        "Preserve blocking for genuine unsupported certainty and real current-direction contradictions.",
+        "Wire the accepted Package C Prompt asset into a new inactive v12 catalog."
+      ],
+      "prerequisites": [
+        "Packages A and C accepted",
+        "semantic disposition doctrine from the v12 charter retained",
+        "v11 remains inactive",
+        "new v12 catalog remains inactive"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-evaluator-disposition",
+      "proposed_paths": [
+        "lib/assessment/runtime/contracts/pb-06-materiality-validator-v4.developer.md",
+        "lib/assessment/runtime/semantic-disposition-v5.ts",
+        "lib/assessment/runtime/contracts/runtime-stage-catalog-v12.json",
+        "lib/assessment/runtime/schema-catalog.ts",
+        "lib/assessment/runtime/pipeline.ts",
+        "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-evaluator-v2.mjs",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5/remediation-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5/remediation-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5/offline-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-evaluator-disposition.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P5_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "weaken major or critical fail-closed behavior",
+        "suppress all certainty language",
+        "suppress all FACT_FIDELITY findings",
+        "modify UI or payment",
+        "activate catalog v12",
+        "execute Provider"
+      ],
+      "tests": [
+        "user-owned schedule confirmation is not a certainty failure",
+        "unsupported guaranteed reply remains blocking",
+        "minor FACT_FIDELITY does not block without material downstream effect",
+        "major factual drift remains blocking",
+        "future reassessment direction passes when current direction is preserved",
+        "current-direction contradiction remains blocking",
+        "matched path identifies the real field",
+        "E-R3-01 certainty false positive is removed offline",
+        "E-R3-05 minor overblocking is removed offline",
+        "E-R3-06 temporal defect is removed while causal defect remains blocking"
+      ],
+      "acceptance_gate": "Dedicated offline evaluator and semantic-disposition verifier passes all positive and negative mutants; v12 catalog is loadable but inactive; Human / ChatGPT accepts the exact blocking matrix.",
+      "provider_calls_required": false,
+      "human_visual_review_required": false
+    },
+    {
+      "package_id": "E",
+      "name": "Pre-payment Safety UX and payment gate",
+      "exact_responsibility": [
+        "Collect an application-owned structured contact-boundary answer before purchase eligibility.",
+        "Fail closed for explicit no-contact, blocked or restricted, relationship closed, and unknown boundary state.",
+        "Render a separate nonjudgmental stop screen with no draft, workaround, later-contact plan, or hidden exception.",
+        "Define one server-owned purchase state machine that cannot enter a payment-capable state before Safety eligibility.",
+        "Keep payment unavailable when no payment implementation exists.",
+        "Provide an actual review screen and state-machine evidence for Human visual/Product review."
+      ],
+      "prerequisites": [
+        "P1 decomposition accepted",
+        "existing payment state confirmed absent",
+        "Safety stop copy approved before implementation",
+        "no payment-provider integration authority is inferred"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-prepayment-safety-gate",
+      "proposed_paths": [
+        "components/request/RequestForm.tsx",
+        "lib/purchase/prepayment-safety-gate-v1.ts",
+        "lib/purchase/purchase-state-machine-v1.ts",
+        "app/api/internal/purchase-eligibility/route.ts",
+        "components/request/PrePaymentSafetyStop.tsx",
+        "components/request/PrePaymentSafetyStop.module.css",
+        "components/review/ReviewPurchaseConfirmation.tsx",
+        "app/review/purchase/safety/[fixtureId]/page.tsx",
+        "fixtures/review/prepayment-safety-states.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-cases-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/visual-review-checklist-v1.md",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-prepayment-safety-gate.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "implement a payment provider",
+        "create a checkout session",
+        "charge JPY980",
+        "generate a Product report before payment",
+        "use free-text case IDs or Provider inference for the structured boundary gate",
+        "change Runtime, Prompt, Catalog, or Schema",
+        "execute Provider"
+      ],
+      "tests": [
+        "explicit no-contact enters blocked_stop",
+        "blocked or restricted enters blocked_stop",
+        "unknown boundary enters blocked_stop",
+        "normal boundary plus normal Safety enters eligible_payment_unavailable while payment is absent",
+        "blocked states cannot transition to purchase, payment, generation, delivery, draft, or workaround",
+        "every transition revalidates Safety server-side",
+        "tampered client eligibility fails closed",
+        "missing payment implementation never reports payment success",
+        "nonjudgmental stop copy keyboard, screen-reader, 399px, 320px, and 200 percent zoom review"
+      ],
+      "acceptance_gate": "State-machine verifier proves Safety-before-payment and payment absence; Human visual/Product review accepts the actual stop screen; no payment provider or Runtime activation is added.",
+      "provider_calls_required": false,
+      "human_visual_review_required": true
+    },
+    {
+      "package_id": "F",
+      "name": "Consolidated offline regression and successor package preparation",
+      "exact_responsibility": [
+        "Run consolidated offline coverage for E-R3-01 through E-R3-06.",
+        "Cover legacy and split customer projection compatibility and null fields.",
+        "Cover Safety-before-payment and the absent-payment state.",
+        "Prepare an immutable successor review packet using only accepted final outputs.",
+        "Require Product Owner review of actual successor output.",
+        "Prepare but do not execute any Provider package."
+      ],
+      "prerequisites": [
+        "Packages A through E accepted",
+        "their accepted commits and exact manifests fixed",
+        "frozen Evidence Commit B remains immutable",
+        "fresh Provider authorization is not present and is not required for this package"
+      ],
+      "proposed_branch": "test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7-offline-regression-package",
+      "proposed_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/regression-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/regression-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/offline-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/product-owner-review-packet-v1.md",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/product-owner-review-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/successor-package-plan-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7/capabilities-v1.json",
+        "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7-offline-runner-v1.mjs",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p7-offline-regression.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P7_REVIEW.md"
+      ],
+      "explicit_non_goals": [
+        "Provider execution",
+        "runner rerun against Provider",
+        "authorization creation or consumption",
+        "marker creation or deletion",
+        "Runtime activation",
+        "R4 or C2",
+        "PR or main merge"
+      ],
+      "tests": [
+        "E-R3-01 through E-R3-06 expected dispositions",
+        "legacy and split ready projection parity",
+        "nullable message temperature and relationship summary",
+        "all four decisions and draft policies",
+        "safety_blocked and needs_more_information no-report shapes",
+        "explicit no-contact before payment",
+        "absent payment implementation",
+        "unsupported causal attribution and chronology",
+        "anxiety-safe negative possibility handling",
+        "certainty false-positive and temporal reassessment mutants",
+        "frozen evidence raw hashes unchanged",
+        "Product Owner packet excludes rejected intermediate Plan and Report content"
+      ],
+      "acceptance_gate": "All consolidated offline gates pass; Human visual review of the assembled Product view and Product Owner review of actual successor final outputs are mandatory; Provider remains unauthorized.",
+      "provider_calls_required": false,
+      "human_visual_review_required": true
+    }
+  ],
+  "global_acceptance_boundary": {
+    "v12_implementation_authorized": false,
+    "provider_rerun_authorized": false,
+    "active_runtime_activation_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "main_integration_authorized": false,
+    "product_owner_review_of_actual_successor_output_mandatory": true
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "implementation_started": false
+  }
+}
