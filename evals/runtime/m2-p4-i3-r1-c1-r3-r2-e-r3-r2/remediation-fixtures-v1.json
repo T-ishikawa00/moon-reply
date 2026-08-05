@@ -173,6 +173,76 @@
       "category": "evidence_review",
       "operation": "response_ids_unique",
       "expected": "37/37"
+    },
+    {
+      "fixture_id": "G-29",
+      "category": "candidate_grounding",
+      "operation": "non_conflicting_v2_deep_equals_v1",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-30",
+      "category": "candidate_grounding",
+      "operation": "conflicting_concrete_sentinel_only_accepted_fields_differ",
+      "expected": true
+    },
+    {
+      "fixture_id": "G-31",
+      "category": "candidate_grounding",
+      "operation": "candidate_v1_composition_structurally_verifiable",
+      "expected": true
+    },
+    {
+      "fixture_id": "C-32",
+      "category": "contact_constraint",
+      "operation": "no_restriction_mentioned_defaults_to_none",
+      "expected": {
+        "kind": "none",
+        "status": "none",
+        "supporting_fact_ids": []
+      }
+    },
+    {
+      "fixture_id": "C-33",
+      "category": "contact_constraint",
+      "operation": "ordinary_omission_none_policy_allows_outbound",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "C-34",
+      "category": "contact_constraint",
+      "operation": "genuine_unknown_policy_fails_closed",
+      "expected": "PASS"
+    },
+    {
+      "fixture_id": "C-35",
+      "category": "contact_constraint",
+      "operation": "unknown_rejects_reply_now",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "C-36",
+      "category": "contact_constraint",
+      "operation": "unknown_rejects_later_draft",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "C-37",
+      "category": "contact_constraint",
+      "operation": "unknown_rejects_future_contact_direction",
+      "expected": "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED"
+    },
+    {
+      "fixture_id": "C-38",
+      "category": "contact_constraint",
+      "operation": "business_only_invitation_distinction_limitation_recorded",
+      "expected": true
+    },
+    {
+      "fixture_id": "C-39",
+      "category": "contact_constraint",
+      "operation": "business_only_full_semantic_enforcement_not_claimed",
+      "expected": true
     }
   ]
 }

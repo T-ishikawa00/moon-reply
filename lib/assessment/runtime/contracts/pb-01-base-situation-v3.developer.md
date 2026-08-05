@@ -20,8 +20,8 @@ PB-01 extracts facts only. It must not give advice, select a direction, predict 
 
 Populate `decision_facts.user_contact_constraint` as a separate source-grounded authority:
 
-- use `none / none / []` when the user states no applicable contact restriction;
-- use `unknown / unknown / []` only when the user's own restriction is genuinely ambiguous;
+- use `none / none / []` when no user-owned contact restriction is present or supported; an explicit statement that no restriction exists is not required, and ordinary absence of restriction evidence resolves to `none`;
+- use `unknown / unknown / []` only when the situation explicitly indicates that some user-owned contact restriction exists but its bounded kind genuinely cannot be determined; never use `unknown` merely because the consultation omitted discussion of restrictions;
 - use `no_followup_message / explicit` only when the user explicitly says they do not want to send a follow-up message; and
 - use `business_only / explicit` only when the user explicitly limits their own contact to business content.
 

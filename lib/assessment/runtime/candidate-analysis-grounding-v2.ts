@@ -1,9 +1,9 @@
 import {
   type CandidateAnalysisV1,
-  type CandidateProviderOutputV1,
   type CandidateSafetySignalCodeV1,
   type CandidateSafetySignalsV1,
 } from "./contracts/split-stage-contracts-v1.ts";
+import { groundCandidateAnalysisV1 } from "./candidate-analysis-grounding-v1.ts";
 import { validateCandidateSourceIntegrityV1 } from "./candidate-source-integrity-v1.ts";
 import { M2RuntimeError } from "./errors.ts";
 import type { JsonObject } from "./types.ts";
@@ -32,10 +32,11 @@ function normalizePracticalRequirements(
 }
 
 function normalizedSafetySignals(
-  raw: CandidateProviderOutputV1,
+  existingSignals: readonly CandidateSafetySignalCodeV1[],
   practicalRequirements: readonly string[],
+  invitationPresence: boolean,
 ): CandidateSafetySignalCodeV1[] {
-  const signals = [...raw.candidate_safety_signals.signal_codes];
+  const signals = [...existingSignals];
   const ensure = (signal: CandidateSafetySignalCodeV1) => {
     if (!signals.includes(signal)) signals.push(signal);
   };
@@ -47,7 +48,7 @@ function normalizedSafetySignals(
   }
   if (
     practicalRequirements.includes("confirm_schedule") ||
-    raw.candidate_communicative_intent.invitation_presence
+    invitationPresence
   ) {
     ensure("proposes_meeting");
   }
@@ -78,58 +79,29 @@ function validateNormalizedResult(result: CandidateAnalysisGroundingResultV2) {
 export function groundCandidateAnalysisV2(
   rawCandidateProviderOutput: JsonObject,
 ): CandidateAnalysisGroundingResultV2 {
-  validateCandidateSourceIntegrityV1({ rawCandidateProviderOutput });
-  const raw = rawCandidateProviderOutput as unknown as CandidateProviderOutputV1;
-  const style = raw.candidate_style_profile;
-  const intent = raw.candidate_communicative_intent;
-  const language = raw.candidate_language_expression;
-  const safety = raw.candidate_safety_signals;
+  const groundedV1 = groundCandidateAnalysisV1(rawCandidateProviderOutput);
+  const groundedClone = structuredClone(groundedV1);
+  const intent =
+    groundedClone.candidate_analysis.candidate_communicative_intent;
   const practicalRequirements = normalizePracticalRequirements(
     intent.practical_requirement,
   );
-  const signalCodes = normalizedSafetySignals(raw, practicalRequirements);
-
   const grounded: CandidateAnalysisGroundingResultV2 = {
+    ...groundedClone,
     candidate_analysis: {
-      candidate_style_profile: {
-        register: style.register,
-        sentence_length: style.sentence_length,
-        sentence_ending: style.sentence_ending,
-        punctuation: style.punctuation,
-        emoji_usage: style.emoji_usage,
-        exclamation_usage: style.exclamation_usage,
-        softness: style.softness,
-        directness: style.directness,
-        invitation_style: style.invitation_style,
-        reply_pressure: style.reply_pressure,
-      },
+      ...groundedClone.candidate_analysis,
       candidate_communicative_intent: {
-        gratitude_strength: intent.gratitude_strength,
-        apology_strength: intent.apology_strength,
-        question_count: intent.question_count,
-        invitation_presence: intent.invitation_presence,
-        invitation_specificity: intent.invitation_specificity,
-        affection_strength: intent.affection_strength,
-        commitment_strength: intent.commitment_strength,
-        response_pressure: intent.response_pressure,
-        boundary_strength: intent.boundary_strength,
-        conversation_closure: intent.conversation_closure,
+        ...intent,
         practical_requirement: practicalRequirements,
-      },
-      candidate_language_expression: {
-        primary_language: language.primary_language,
-        mixed_languages: [...language.mixed_languages],
-        dialect_or_regional_expression:
-          language.dialect_or_regional_expression,
-        intentional_nonstandard_expression:
-          language.intentional_nonstandard_expression,
-        possible_typo: language.possible_typo,
       },
     },
     candidate_safety_result: {
-      untrusted_embedded_instruction_detected:
-        safety.untrusted_embedded_instruction_detected,
-      signal_codes: signalCodes,
+      ...groundedClone.candidate_safety_result,
+      signal_codes: normalizedSafetySignals(
+        groundedClone.candidate_safety_result.signal_codes,
+        practicalRequirements,
+        intent.invitation_presence,
+      ),
     },
   };
   validateNormalizedResult(grounded);

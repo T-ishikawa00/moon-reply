@@ -6,6 +6,26 @@
   "accepted_e_r2_baseline": "84ce1bce84f834c53bc46b5bb636ce77322da383",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
   "old_aborted_package_commit": "b909bf3ad259bea0251cf2f81e7a40d9262ce211",
+  "acceptance_correction": {
+    "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R2-R1",
+    "baseline": "1fd102b7235481e3ee6bcd733744db5bb2887773",
+    "exact_scope": [
+      "lib/assessment/runtime/candidate-analysis-grounding-v2.ts",
+      "lib/assessment/runtime/contracts/pb-01-base-situation-v3.developer.md",
+      "lib/assessment/runtime/decision-plan-constraint-integrity-v1.ts",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/remediation-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/remediation-fixtures-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/offline-results-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/capabilities-v1.json",
+      "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r2-offline-runner-v1.mjs",
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r2-authority-integrity.mjs",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R2_REVIEW.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "docs/CODEX_HANDOFF.md",
+      "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json"
+    ]
+  },
   "exact_scope": [
     "lib/assessment/runtime/pipeline.ts",
     "lib/assessment/runtime/schema-catalog.ts",
@@ -63,8 +83,12 @@
       "actions_to_take is free text and has no structured outbound-contact action kind",
       "aftercare_plan.action is free text and has no structured outbound-contact action kind",
       "change_conditions.condition is free text and has no structured trigger taxonomy",
-      "review_timing.when is free text and has no structured reassessment trigger kind"
+      "review_timing.when is free text and has no structured reassessment trigger kind",
+      "Decision Plan v2 cannot fully distinguish a personal invitation from business schedule coordination when the Provider metadata records an invitation change without an affection or commitment increase."
     ],
+    "business_only_bounded_structured_guard": true,
+    "business_only_full_semantic_enforcement": false,
+    "business_only_requires_pb06_semantic_validation": true,
     "production_raw_japanese_substring_matching": false,
     "decision_plan_v2_schema_changed": false
   },
@@ -77,6 +101,9 @@
     "frozen_evaluator_unchanged": true,
     "catalog_v10_unchanged": true,
     "v10_prompts_unchanged": true,
+    "catalog_v11_version_identifiers_unchanged": true,
+    "catalog_v11_stage_count_and_order_unchanged": true,
+    "catalog_v11_pb01_prompt_hash_only_updated": true,
     "old_schemas_unchanged": true,
     "migration_0004_unchanged": true,
     "migration_0005_unchanged": true,

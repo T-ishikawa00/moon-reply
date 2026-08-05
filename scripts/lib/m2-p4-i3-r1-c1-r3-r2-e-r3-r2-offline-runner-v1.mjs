@@ -32,8 +32,12 @@ const [
     loadM2P4CandidateSourceIsolationRuntimeStageCatalog,
     loadM2P4DirectionalGuidanceRuntimeStageCatalog,
   },
+  { groundCandidateAnalysisV1 },
   { groundCandidateAnalysisV2 },
-  { validateDecisionPlanConstraintIntegrityV1 },
+  {
+    DECISION_PLAN_V2_CONSTRAINT_LIMITATIONS,
+    validateDecisionPlanConstraintIntegrityV1,
+  },
   { createActionContextV1, createContactConstraintPolicyV1 },
   { evaluateSemanticFindingsV4 },
   { runDirectionalGuidanceOffline },
@@ -41,6 +45,7 @@ const [
   import("../../lib/assessment/runtime/pipeline.ts"),
   import("../../lib/assessment/runtime/fakes.ts"),
   import("../../lib/assessment/runtime/schema-catalog.ts"),
+  import("../../lib/assessment/runtime/candidate-analysis-grounding-v1.ts"),
   import("../../lib/assessment/runtime/candidate-analysis-grounding-v2.ts"),
   import(
     "../../lib/assessment/runtime/decision-plan-constraint-integrity-v1.ts"
@@ -294,12 +299,31 @@ function semanticOutcome(plan, report, semanticFinding) {
 }
 
 function candidateFixtureValues(rawCandidate) {
+  const nonConflicting = clone(rawCandidate);
+  nonConflicting.candidate_communicative_intent.practical_requirement = [
+    "none",
+  ];
+  nonConflicting.candidate_communicative_intent.invitation_presence = false;
+  nonConflicting.candidate_safety_signals.signal_codes = [];
+  const nonConflictingSnapshot = clone(nonConflicting);
+  const nonConflictingV1 = groundCandidateAnalysisV1(nonConflicting);
+  const nonConflictingV2 = groundCandidateAnalysisV2(nonConflicting);
+
   const concreteNone = clone(rawCandidate);
   concreteNone.candidate_communicative_intent.practical_requirement = [
     "confirm_schedule",
     "none",
   ];
   concreteNone.candidate_safety_signals.signal_codes = [];
+  const concreteNoneSnapshot = clone(concreteNone);
+  const concreteNoneV1 = groundCandidateAnalysisV1(concreteNone);
+  const expectedConcreteNoneV2 = clone(concreteNoneV1);
+  expectedConcreteNoneV2.candidate_analysis.candidate_communicative_intent.practical_requirement =
+    ["confirm_schedule"];
+  expectedConcreteNoneV2.candidate_safety_result.signal_codes = [
+    "asks_for_reply",
+    "proposes_meeting",
+  ];
   const concreteUnknown = clone(rawCandidate);
   concreteUnknown.candidate_communicative_intent.practical_requirement = [
     "answer_question",
@@ -307,10 +331,35 @@ function candidateFixtureValues(rawCandidate) {
   ];
   concreteUnknown.candidate_communicative_intent.invitation_presence = false;
   concreteUnknown.candidate_safety_signals.signal_codes = ["asks_for_reply"];
-  const rawHashBefore = jsonSha256(concreteNone);
   const groundedNone = groundCandidateAnalysisV2(concreteNone);
-  const rawHashAfter = jsonSha256(concreteNone);
   const groundedUnknown = groundCandidateAnalysisV2(concreteUnknown);
+  const groundingSource = readText(
+    "lib/assessment/runtime/candidate-analysis-grounding-v2.ts",
+  );
+  const functionStart = groundingSource.indexOf(
+    "export function groundCandidateAnalysisV2",
+  );
+  const functionSource = groundingSource.slice(functionStart);
+  const v1CallIndex = functionSource.indexOf(
+    "groundCandidateAnalysisV1(rawCandidateProviderOutput)",
+  );
+  const deepCloneIndex = functionSource.indexOf(
+    "structuredClone(groundedV1)",
+    v1CallIndex,
+  );
+  const normalizeIndex = functionSource.indexOf(
+    "normalizePracticalRequirements(",
+    deepCloneIndex,
+  );
+  const deriveIndex = functionSource.indexOf(
+    "normalizedSafetySignals(",
+    normalizeIndex,
+  );
+  const validateIndex = functionSource.indexOf(
+    "validateNormalizedResult(grounded)",
+    deriveIndex,
+  );
+  const returnIndex = functionSource.indexOf("return grounded", validateIndex);
   return {
     concrete_none: groundedNone.candidate_analysis.candidate_communicative_intent
       .practical_requirement,
@@ -332,8 +381,31 @@ function candidateFixtureValues(rawCandidate) {
       !groundedUnknown.candidate_safety_result.signal_codes.includes(
         "reply_demand",
       ),
-    raw_output_immutable: rawHashBefore === rawHashAfter,
-    input_nonmutation: rawHashBefore === jsonSha256(concreteNone),
+    raw_output_immutable: same(concreteNone, concreteNoneSnapshot),
+    input_nonmutation:
+      same(concreteNone, concreteNoneSnapshot) &&
+      same(nonConflicting, nonConflictingSnapshot),
+    non_conflicting_deep_equals_v1:
+      same(nonConflictingV2.candidate_analysis, nonConflictingV1.candidate_analysis) &&
+      same(
+        nonConflictingV2.candidate_safety_result,
+        nonConflictingV1.candidate_safety_result,
+      ),
+    conflicting_only_accepted_fields_differ: same(
+      groundedNone,
+      expectedConcreteNoneV2,
+    ),
+    v1_composition_structurally_verifiable:
+      functionStart >= 0 &&
+      v1CallIndex >= 0 &&
+      deepCloneIndex > v1CallIndex &&
+      normalizeIndex > deepCloneIndex &&
+      deriveIndex > normalizeIndex &&
+      validateIndex > deriveIndex &&
+      returnIndex > validateIndex &&
+      !functionSource.includes("candidate_style_profile: {") &&
+      !functionSource.includes("candidate_language_expression: {") &&
+      !functionSource.includes("const raw ="),
   };
 }
 
@@ -607,6 +679,22 @@ export async function runAuthorityIntegrityOffline() {
     baseStructuredIntake: readyOutputs(frozen)["PB-01"],
     followUpException: "none",
   });
+  const ordinaryAbsenceBase = asBaseV2(
+    stageOutputs(readyCase)["PB-01"],
+    { kind: "none" },
+  );
+  const unknownConstraintBase = asBaseV2(
+    stageOutputs(readyCase)["PB-01"],
+    { kind: "unknown" },
+  );
+  const nonePolicy = createContactConstraintPolicyV1({
+    baseStructuredIntake: ordinaryAbsenceBase,
+    followUpException: "none",
+  });
+  const unknownPolicy = createContactConstraintPolicyV1({
+    baseStructuredIntake: unknownConstraintBase,
+    followUpException: "none",
+  });
   const waitingPlan = nofollowOutputs(frozen)["PB-04"];
   const laterDraftPlan = clone(waitingPlan);
   const readyPlan = readyOutputs(frozen)["PB-04"];
@@ -623,6 +711,36 @@ export async function runAuthorityIntegrityOffline() {
     "added";
   businessEscalationPlan.message_draft_edit_metadata.communicative_intent_delta.affection_strength_delta =
     "increased";
+  const unknownReplyNowPlan = clone(readyPlan);
+  const unknownLaterDraftPlan = clone(waitingPlan);
+  unknownLaterDraftPlan.recommended_message_draft = clone(
+    readyPlan.recommended_message_draft,
+  );
+  unknownLaterDraftPlan.recommended_message_draft.policy = "later_only";
+  unknownLaterDraftPlan.recommended_message_draft.use_timing = "later";
+  unknownLaterDraftPlan.message_draft_edit_metadata = clone(
+    readyPlan.message_draft_edit_metadata,
+  );
+  const unknownFutureDirectionPlan = clone(waitingPlan);
+  unknownFutureDirectionPlan.change_conditions[0].resulting_direction =
+    "reply_now";
+
+  const businessOnlyLimitation =
+    "Decision Plan v2 cannot fully distinguish a personal invitation from business schedule coordination when the Provider metadata records an invitation change without an affection or commitment increase.";
+  const businessOnlyLimitationRecorded =
+    DECISION_PLAN_V2_CONSTRAINT_LIMITATIONS.some(
+      ({ limitation }) => limitation === businessOnlyLimitation,
+    ) &&
+    contract.decision_plan_v2_enforcement.recorded_limitations.includes(
+      businessOnlyLimitation,
+    );
+  const businessOnlySemanticBoundaryHonest =
+    contract.decision_plan_v2_enforcement
+      .business_only_bounded_structured_guard === true &&
+    contract.decision_plan_v2_enforcement
+      .business_only_full_semantic_enforcement === false &&
+    contract.decision_plan_v2_enforcement
+      .business_only_requires_pb06_semantic_validation === true;
 
   const candidateValues = candidateFixtureValues(
     readyOutputs(frozen)["PB-01C"],
@@ -737,6 +855,46 @@ export async function runAuthorityIntegrityOffline() {
       candidateValues.asks_independent_from_demand,
     raw_output_immutable: candidateValues.raw_output_immutable,
     input_nonmutation: candidateValues.input_nonmutation,
+    non_conflicting_v2_deep_equals_v1:
+      candidateValues.non_conflicting_deep_equals_v1,
+    conflicting_concrete_sentinel_only_accepted_fields_differ:
+      candidateValues.conflicting_only_accepted_fields_differ,
+    candidate_v1_composition_structurally_verifiable:
+      candidateValues.v1_composition_structurally_verifiable,
+    no_restriction_mentioned_defaults_to_none:
+      ordinaryAbsenceBase.decision_facts.user_contact_constraint,
+    ordinary_omission_none_policy_allows_outbound:
+      nonePolicy.outbound_contact_now_allowed &&
+      nonePolicy.outbound_contact_after_time_passage_allowed &&
+      !nonePolicy.exception_required_for_future_contact &&
+      constraintOutcome(readyPlan, nonePolicy, actionContext) === "PASS"
+        ? "PASS"
+        : "FAIL",
+    genuine_unknown_policy_fails_closed:
+      !unknownPolicy.outbound_contact_now_allowed &&
+      !unknownPolicy.outbound_contact_after_time_passage_allowed &&
+      unknownPolicy.exception_required_for_future_contact
+        ? "PASS"
+        : "FAIL",
+    unknown_rejects_reply_now: constraintOutcome(
+      unknownReplyNowPlan,
+      unknownPolicy,
+      actionContext,
+    ),
+    unknown_rejects_later_draft: constraintOutcome(
+      unknownLaterDraftPlan,
+      unknownPolicy,
+      actionContext,
+    ),
+    unknown_rejects_future_contact_direction: constraintOutcome(
+      unknownFutureDirectionPlan,
+      unknownPolicy,
+      actionContext,
+    ),
+    business_only_invitation_distinction_limitation_recorded:
+      businessOnlyLimitationRecorded,
+    business_only_full_semantic_enforcement_not_claimed:
+      businessOnlySemanticBoundaryHonest,
     v11_ready_flow:
       !readyRun.error && readyRun.result?.eligibility === "ready"
         ? "PASS"
@@ -885,12 +1043,28 @@ export async function runAuthorityIntegrityOffline() {
     },
     action_context: actionContext,
     contact_constraint_policies: {
+      ordinary_absence_none: nonePolicy,
+      genuine_unknown: unknownPolicy,
       nofollow_no_exception: nofollowPolicy,
       nofollow_explicit_exception: exceptionPolicy,
       business_only: businessPolicy,
     },
+    candidate_grounding_v1_composition: {
+      non_conflicting_deep_equal:
+        candidateValues.non_conflicting_deep_equals_v1,
+      conflicting_only_accepted_fields_differ:
+        candidateValues.conflicting_only_accepted_fields_differ,
+      structurally_verifiable:
+        candidateValues.v1_composition_structurally_verifiable,
+    },
     decision_plan_v2_limitations_recorded:
       contract.decision_plan_v2_enforcement.recorded_limitations,
+    business_only_enforcement: {
+      bounded_structured_guard: true,
+      full_semantic_enforcement: false,
+      requires_pb06_semantic_validation: true,
+      limitation_recorded: businessOnlyLimitationRecorded,
+    },
     evidence_audit: {
       overall_verdict: evidenceAudit.overall_verdict,
       call_count: evidenceAudit.call_count,

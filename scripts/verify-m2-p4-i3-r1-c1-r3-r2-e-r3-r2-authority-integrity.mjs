@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,6 +11,7 @@ const repositoryRoot = path.resolve(
   "..",
 );
 const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R2";
+const correctionTaskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R2-R1";
 const taskRoot = "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2";
 const frozenRoot = "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3";
 const expectedBranch =
@@ -18,6 +20,7 @@ const baseline = "e8db575adc9636032997c8e3d43f8a56e38fae15";
 const commitA = "e96774e093b48966f3f9c2679ac778c1aacb8e23";
 const abortedCommit = "b909bf3ad259bea0251cf2f81e7a40d9262ce211";
 const mainBaseline = "61e33a10e195fad17e253a6b9719217e1992f273";
+const correctionBaseline = "1fd102b7235481e3ee6bcd733744db5bb2887773";
 
 const paths = {
   contract: `${taskRoot}/remediation-contract-v1.json`,
@@ -33,6 +36,8 @@ const paths = {
     "lib/assessment/runtime/contracts/runtime-stage-catalog-v10.json",
   catalogV11:
     "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
+  pb01Prompt:
+    "lib/assessment/runtime/contracts/pb-01-base-situation-v3.developer.md",
   baseSchemaV2:
     "lib/assessment/runtime/contracts/base-structured-intake-v2.schema.json",
 };
@@ -77,6 +82,10 @@ const readText = (relativePath) =>
   readFileSync(path.join(repositoryRoot, relativePath), "utf8");
 const readJson = (relativePath) => JSON.parse(readText(relativePath));
 const canonicalText = (value) => value.replace(/\r\n/gu, "\n");
+const sha256Text = (value) =>
+  createHash("sha256")
+    .update(Buffer.from(canonicalText(value), "utf8"))
+    .digest("hex");
 const lines = (value) => value.split(/\r?\n/u).filter(Boolean);
 const sorted = (values) =>
   [...new Set(values)].sort((left, right) => left.localeCompare(right, "en"));
@@ -102,15 +111,20 @@ function check(label, condition) {
   assert.equal(Boolean(condition), true, label);
 }
 
-function currentScope() {
+function currentScope(baseRef = baseline) {
   return sorted([
-    ...lines(git("diff", "--name-only", baseline, "--")),
+    ...lines(git("diff", "--name-only", baseRef, "--")),
     ...lines(git("ls-files", "--others", "--exclude-standard")),
   ]);
 }
 
 function unchangedSinceBaseline(relativePaths) {
   const changed = new Set(currentScope());
+  return relativePaths.every((relativePath) => !changed.has(relativePath));
+}
+
+function unchangedSinceCorrection(relativePaths) {
+  const changed = new Set(currentScope(correctionBaseline));
   return relativePaths.every((relativePath) => !changed.has(relativePath));
 }
 
@@ -154,6 +168,9 @@ const frozenContract = readJson(paths.frozenContract);
 const frozenResult = readJson(paths.frozenResult);
 const manifestV10 = readJson(paths.catalogV10);
 const manifestV11 = readJson(paths.catalogV11);
+const baselineManifestV11 = JSON.parse(
+  git("show", `${correctionBaseline}:${paths.catalogV11}`),
+);
 const baseSchemaV1 = readJson(
   "lib/assessment/runtime/contracts/base-structured-intake-v1.schema.json",
 );
@@ -161,6 +178,10 @@ const baseSchemaV2 = readJson(paths.baseSchemaV2);
 const packageJson = readJson("package.json");
 
 check("branch exact", git("branch", "--show-current") === expectedBranch);
+check(
+  "acceptance-correction baseline is in current history",
+  gitSucceeds("merge-base", "--is-ancestor", correctionBaseline, "HEAD"),
+);
 check("baseline is in current history", gitSucceeds("merge-base", "--is-ancestor", baseline, "HEAD"));
 check("E-R3 Commit A is in current history", gitSucceeds("merge-base", "--is-ancestor", commitA, "HEAD"));
 check("E-R3 Commit B is exact baseline", contract.baseline === baseline);
@@ -171,6 +192,29 @@ check("stash empty", git("stash", "list") === "");
 check("contract exact scope has 25 unique paths", contract.exact_scope.length === 25 && new Set(contract.exact_scope).size === 25);
 check("exact scope 25/25", same(currentScope(), sorted(contract.exact_scope)));
 check("all exact-scope paths exist", contract.exact_scope.every((relativePath) => existsSync(path.join(repositoryRoot, relativePath))));
+check(
+  "acceptance-correction contract identity exact",
+  contract.acceptance_correction.task_id === correctionTaskId &&
+    contract.acceptance_correction.baseline === correctionBaseline,
+);
+check(
+  "acceptance-correction scope has 14 unique paths",
+  contract.acceptance_correction.exact_scope.length === 14 &&
+    new Set(contract.acceptance_correction.exact_scope).size === 14,
+);
+check(
+  "exact correction scope 14/14",
+  same(
+    currentScope(correctionBaseline),
+    sorted(contract.acceptance_correction.exact_scope),
+  ),
+);
+check(
+  "all correction-scope paths exist",
+  contract.acceptance_correction.exact_scope.every((relativePath) =>
+    existsSync(path.join(repositoryRoot, relativePath)),
+  ),
+);
 
 const rollingDocuments = new Set([
   "docs/CURRENT_FOCUS.md",
@@ -197,12 +241,31 @@ const protectedRuntimePaths = [
   "lib/assessment/runtime/application.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
 ];
+const correctionProtectedPaths = [
+  ...frozenEPaths,
+  paths.catalogV10,
+  ...v10PromptPaths,
+  ...oldSchemaPaths,
+  ...protectedRuntimePaths,
+  "lib/assessment/runtime/runtime-authority-v1.ts",
+  "lib/assessment/runtime/base-structured-intake-grounding-v3.ts",
+  paths.baseSchemaV2,
+  "lib/assessment/runtime/contracts/pb-04-directional-decision-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-05-directional-report-v3.developer.md",
+  "lib/assessment/runtime/contracts/pb-06-materiality-validator-v3.developer.md",
+  paths.audit,
+  paths.correctedReview,
+];
 
 check("E-R3 evidence and original review unchanged", unchangedSinceBaseline(frozenEPaths));
 check("Catalog v10 unchanged", unchangedSinceBaseline([paths.catalogV10]));
 check("all v10 Prompt files unchanged", unchangedSinceBaseline(v10PromptPaths));
 check("old Schemas unchanged", unchangedSinceBaseline(oldSchemaPaths));
 check("Grounding v2, Semantic Disposition v4, migrations, Service, Application, and Active Catalog unchanged", unchangedSinceBaseline(protectedRuntimePaths));
+check(
+  "correction preserves frozen evidence, v9/v10, action context, Base Schema v2, PB-04/PB-05/PB-06 v3, migrations, and Active Service",
+  unchangedSinceCorrection(correctionProtectedPaths),
+);
 
 const currentCatalogSource = readText("lib/assessment/runtime/schema-catalog.ts");
 const baselineCatalogSource = git(
@@ -245,10 +308,54 @@ const {
 const { createActionContextV1 } = await import(
   "../lib/assessment/runtime/runtime-authority-v1.ts"
 );
+const { DECISION_PLAN_V2_CONSTRAINT_LIMITATIONS } = await import(
+  "../lib/assessment/runtime/decision-plan-constraint-integrity-v1.ts"
+);
 const [catalogV10, catalogV11] = await Promise.all([
   loadM2P4DirectionalGuidanceRuntimeStageCatalog(),
   loadM2P4AuthorityIntegrityRuntimeStageCatalog(),
 ]);
+const currentPb01Manifest = manifestV11.stages.find(
+  ({ stage_id: stageId }) => stageId === "PB-01",
+);
+const baselinePb01Manifest = baselineManifestV11.stages.find(
+  ({ stage_id: stageId }) => stageId === "PB-01",
+);
+const catalogWithBaselinePromptHash = structuredClone(manifestV11);
+catalogWithBaselinePromptHash.stages.find(
+  ({ stage_id: stageId }) => stageId === "PB-01",
+).prompt_sha256 = baselinePb01Manifest.prompt_sha256;
+const pb01PromptSha256 = sha256Text(readText(paths.pb01Prompt));
+
+check(
+  "PB-01 v3 prompt SHA-256 matches Catalog exactly",
+  currentPb01Manifest.prompt_sha256 === pb01PromptSha256,
+);
+check(
+  "Catalog correction changes only PB-01 prompt_sha256",
+  currentPb01Manifest.prompt_sha256 !== baselinePb01Manifest.prompt_sha256 &&
+    same(catalogWithBaselinePromptHash, baselineManifestV11),
+);
+check(
+  "PB-01 non-hash fields and every non-PB-01 Stage entry unchanged",
+  same(
+    {
+      ...currentPb01Manifest,
+      prompt_sha256: baselinePb01Manifest.prompt_sha256,
+    },
+    baselinePb01Manifest,
+  ) &&
+    manifestV11.stages
+      .filter(({ stage_id: stageId }) => stageId !== "PB-01")
+      .every((stage) =>
+        same(
+          stage,
+          baselineManifestV11.stages.find(
+            ({ stage_id: stageId }) => stageId === stage.stage_id,
+          ),
+        ),
+      ),
+);
 
 check(
   "v11 identity exact",
@@ -257,6 +364,12 @@ check(
     catalogV11.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" &&
     catalogV11.stageTopologyVersion === "split-base-candidate-v1" &&
     manifestV11.baseline === baseline,
+);
+check(
+  "Catalog loader PASS without prompt hash mismatch",
+  catalogV11.definitions.length === 7 &&
+    catalogV11.definitions.find(({ stageId }) => stageId === "PB-01")
+      ?.promptVersion === currentPb01Manifest.prompt_version,
 );
 check(
   "v11 Stage order 7/7",
@@ -391,6 +504,79 @@ check(
     pipelineSource.includes("validateDecisionPlanConstraintIntegrityV1"),
 );
 
+const pb01PromptSource = readText(paths.pb01Prompt);
+check(
+  "PB-01 ordinary absence defaults to none and genuine unknown remains bounded",
+  pb01PromptSource.includes(
+    "when no user-owned contact restriction is present or supported",
+  ) &&
+    pb01PromptSource.includes(
+      "an explicit statement that no restriction exists is not required",
+    ) &&
+    pb01PromptSource.includes(
+      "ordinary absence of restriction evidence resolves to `none`",
+    ) &&
+    pb01PromptSource.includes(
+      "explicitly indicates that some user-owned contact restriction exists",
+    ) &&
+    pb01PromptSource.includes(
+      "never use `unknown` merely because the consultation omitted discussion of restrictions",
+    ),
+);
+
+const candidateGroundingV2Source = readText(
+  "lib/assessment/runtime/candidate-analysis-grounding-v2.ts",
+);
+const candidateV2FunctionStart = candidateGroundingV2Source.indexOf(
+  "export function groundCandidateAnalysisV2",
+);
+const candidateV2FunctionSource = candidateGroundingV2Source.slice(
+  candidateV2FunctionStart,
+);
+const candidateV1CallIndex = candidateV2FunctionSource.indexOf(
+  "groundCandidateAnalysisV1(rawCandidateProviderOutput)",
+);
+const candidateDeepCloneIndex = candidateV2FunctionSource.indexOf(
+  "structuredClone(groundedV1)",
+  candidateV1CallIndex,
+);
+const candidateNormalizeIndex = candidateV2FunctionSource.indexOf(
+  "normalizePracticalRequirements(",
+  candidateDeepCloneIndex,
+);
+const candidateDeriveIndex = candidateV2FunctionSource.indexOf(
+  "normalizedSafetySignals(",
+  candidateNormalizeIndex,
+);
+const candidateValidateIndex = candidateV2FunctionSource.indexOf(
+  "validateNormalizedResult(grounded)",
+  candidateDeriveIndex,
+);
+const candidateReturnIndex = candidateV2FunctionSource.indexOf(
+  "return grounded",
+  candidateValidateIndex,
+);
+check(
+  "Candidate Grounding v2 composes v1 in required order",
+  candidateV2FunctionStart >= 0 &&
+    candidateV1CallIndex >= 0 &&
+    candidateDeepCloneIndex > candidateV1CallIndex &&
+    candidateNormalizeIndex > candidateDeepCloneIndex &&
+    candidateDeriveIndex > candidateNormalizeIndex &&
+    candidateValidateIndex > candidateDeriveIndex &&
+    candidateReturnIndex > candidateValidateIndex,
+);
+check(
+  "Candidate Grounding v2 has no duplicated v1 field projection",
+  !candidateV2FunctionSource.includes("candidate_style_profile: {") &&
+    !candidateV2FunctionSource.includes("candidate_language_expression: {") &&
+    !candidateV2FunctionSource.includes("const raw =") &&
+    !candidateV2FunctionSource.includes("reply_demand") &&
+    !candidateV2FunctionSource.includes("coercion") &&
+    !candidateV2FunctionSource.includes("threat") &&
+    !candidateV2FunctionSource.includes("pressure"),
+);
+
 const constraintSource = readText(
   "lib/assessment/runtime/decision-plan-constraint-integrity-v1.ts",
 );
@@ -404,12 +590,29 @@ check(
 );
 check(
   "Decision Plan v2 limitations recorded",
-  contract.decision_plan_v2_enforcement.recorded_limitations.length === 4 &&
+  contract.decision_plan_v2_enforcement.recorded_limitations.length === 5 &&
     contract.decision_plan_v2_enforcement.production_raw_japanese_substring_matching === false &&
     contract.decision_plan_v2_enforcement.decision_plan_v2_schema_changed === false &&
     unchangedSinceBaseline([
       "lib/assessment/runtime/contracts/decision-plan-v2.schema.json",
     ]),
+);
+const businessOnlyLimitation =
+  "Decision Plan v2 cannot fully distinguish a personal invitation from business schedule coordination when the Provider metadata records an invitation change without an affection or commitment increase.";
+check(
+  "business-only limitation and PB-06 semantic boundary recorded honestly",
+  DECISION_PLAN_V2_CONSTRAINT_LIMITATIONS.some(
+    ({ limitation }) => limitation === businessOnlyLimitation,
+  ) &&
+    contract.decision_plan_v2_enforcement.recorded_limitations.includes(
+      businessOnlyLimitation,
+    ) &&
+    contract.decision_plan_v2_enforcement
+      .business_only_bounded_structured_guard === true &&
+    contract.decision_plan_v2_enforcement
+      .business_only_full_semantic_enforcement === false &&
+    contract.decision_plan_v2_enforcement
+      .business_only_requires_pb06_semantic_validation === true,
 );
 
 const generated = await runAuthorityIntegrityOffline();
@@ -419,13 +622,68 @@ check(
   "corrected Product Review artifact deterministic",
   canonicalText(generated.correctedReview) === canonicalText(readText(paths.correctedReview)),
 );
-check("all required fixtures present exactly once", fixtures.fixtures.length === 28 && new Set(fixtures.fixtures.map(({ fixture_id: fixtureId }) => fixtureId)).size === 28);
-check("all fixtures PASS 28/28", committedResult.overall_verdict === "PASS" && committedResult.fixture_summary.overall === "28/28" && committedResult.fixture_results.every(({ status }) => status === "PASS"));
+const fixtureResult = (operation) =>
+  committedResult.fixture_results.find(
+    ({ operation: selectedOperation }) => selectedOperation === operation,
+  );
+check("all required fixtures present exactly once", fixtures.fixtures.length === 39 && new Set(fixtures.fixtures.map(({ fixture_id: fixtureId }) => fixtureId)).size === 39);
+check("all fixtures PASS 39/39", committedResult.overall_verdict === "PASS" && committedResult.fixture_summary.overall === "39/39" && committedResult.fixture_results.every(({ status }) => status === "PASS"));
 check("timing fixtures PASS 6/6", committedResult.fixture_summary.temporal_authority === "6/6");
-check("nofollow/contact fixtures PASS 5/5", committedResult.fixture_summary.contact_constraint === "5/5");
-check("Candidate Grounding v2 fixtures PASS 7/7", committedResult.fixture_summary.candidate_grounding === "7/7");
+check("contact-constraint fixtures PASS 13/13", committedResult.fixture_summary.contact_constraint === "13/13");
+check("Candidate Grounding v2 fixtures PASS 10/10", committedResult.fixture_summary.candidate_grounding === "10/10");
 check("Runtime fixtures PASS 5/5", committedResult.fixture_summary.runtime === "5/5");
 check("evidence review fixtures PASS 5/5", committedResult.fixture_summary.evidence_review === "5/5");
+check(
+  "Candidate v1 composition parity fixtures PASS",
+  fixtureResult("non_conflicting_v2_deep_equals_v1")?.actual === true &&
+    fixtureResult(
+      "conflicting_concrete_sentinel_only_accepted_fields_differ",
+    )?.actual === true &&
+    fixtureResult("candidate_v1_composition_structurally_verifiable")
+      ?.actual === true &&
+    committedResult.candidate_grounding_v1_composition
+      .non_conflicting_deep_equal === true &&
+    committedResult.candidate_grounding_v1_composition
+      .conflicting_only_accepted_fields_differ === true &&
+    committedResult.candidate_grounding_v1_composition
+      .structurally_verifiable === true,
+);
+check(
+  "ordinary none and genuine unknown fixtures PASS",
+  same(fixtureResult("no_restriction_mentioned_defaults_to_none")?.actual, {
+    kind: "none",
+    status: "none",
+    supporting_fact_ids: [],
+  }) &&
+    fixtureResult("ordinary_omission_none_policy_allows_outbound")?.actual ===
+      "PASS" &&
+    fixtureResult("genuine_unknown_policy_fails_closed")?.actual === "PASS" &&
+    [
+      "unknown_rejects_reply_now",
+      "unknown_rejects_later_draft",
+      "unknown_rejects_future_contact_direction",
+    ].every(
+      (operation) =>
+        fixtureResult(operation)?.actual ===
+        "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED",
+    ),
+);
+check(
+  "business-only bounded guard and limitation fixtures PASS",
+  fixtureResult("business_only_rejects_personal_invitation_escalation")
+    ?.actual === "M2_PLAN_CONSTRAINT_INTEGRITY_FAILED" &&
+    fixtureResult(
+      "business_only_invitation_distinction_limitation_recorded",
+    )?.actual === true &&
+    fixtureResult("business_only_full_semantic_enforcement_not_claimed")
+      ?.actual === true &&
+    committedResult.business_only_enforcement.bounded_structured_guard ===
+      true &&
+    committedResult.business_only_enforcement.full_semantic_enforcement ===
+      false &&
+    committedResult.business_only_enforcement
+      .requires_pb06_semantic_validation === true,
+);
 check("v9 parity PASS", committedResult.parity.v9 === "PASS");
 check("v10 parity PASS", committedResult.parity.v10 === "PASS");
 check(
@@ -536,6 +794,13 @@ check(
     capabilities.action_context_created === true &&
     capabilities.contact_constraint_policy_created === true &&
     capabilities.candidate_grounding_v2_created === true &&
+    capabilities.candidate_grounding_v2_composes_v1 === true &&
+    capabilities.ordinary_absent_contact_constraint_defaults_to_none ===
+      true &&
+    capabilities.unknown_contact_constraint_fails_closed === true &&
+    capabilities.business_only_bounded_structured_guard === true &&
+    capabilities.business_only_full_semantic_enforcement === false &&
+    capabilities.business_only_requires_pb06_semantic_validation === true &&
     capabilities.product_review_projection_corrected === true &&
     capabilities.provider_quality_established === false &&
     capabilities.provider_rerun_ready === false &&
@@ -552,6 +817,8 @@ check(
   reviewDocument.includes("implementation_pending_human_chatgpt_review") &&
     reviewDocument.includes("Human / ChatGPT review: pending") &&
     reviewDocument.includes("Implementation acceptance: not established") &&
+    reviewDocument.includes("Exact acceptance-correction scope: `14/14`") &&
+    reviewDocument.includes(pb01PromptSha256) &&
     reviewDocument.includes("Provider quality established: `false`") &&
     reviewDocument.includes("R4 ready / authorized: `false / false`"),
 );
@@ -563,7 +830,8 @@ check(
       return (
         document.includes(`${taskId}:BEGIN`) &&
         document.includes("implementation_pending_human_chatgpt_review") &&
-        document.includes("28/28") &&
+        document.includes("14/14") &&
+        document.includes("39/39") &&
         document.includes("FAIL / 1 of 6") &&
         document.includes("0 / 0 / 0") &&
         document.includes("R4")
@@ -603,14 +871,29 @@ check(
 npmGate("build");
 check("git diff --check PASS", gitSucceeds("diff", "--check", baseline, "--"));
 check("exact scope remains 25/25 after quality gates", same(currentScope(), sorted(contract.exact_scope)));
+check(
+  "exact correction scope remains 14/14 after quality gates",
+  same(
+    currentScope(correctionBaseline),
+    sorted(contract.acceptance_correction.exact_scope),
+  ),
+);
 check("protected paths remain unchanged after quality gates", unchangedSinceBaseline([...frozenEPaths, paths.catalogV10, ...v10PromptPaths, ...oldSchemaPaths, ...protectedRuntimePaths]));
+check(
+  "correction protected paths remain unchanged after quality gates",
+  unchangedSinceCorrection(correctionProtectedPaths),
+);
 check("main remains unchanged after quality gates", git("rev-parse", "refs/heads/main") === mainBaseline && git("rev-parse", "refs/remotes/origin/main") === mainBaseline);
 
 console.log(`${taskId} AUTHORITY_INTEGRITY_VERIFIER: PASS`);
 console.log(`checks: ${checks.length}/${checks.length}`);
 console.log("exact_scope: 25/25");
-console.log("fixtures: 28/28");
-console.log("timing / nofollow / Candidate: 6/6 / 5/5 / 7/7");
+console.log("exact_correction_scope: 14/14");
+console.log(`PB-01 v3 prompt SHA-256: ${pb01PromptSha256}`);
+console.log("Catalog changed field: PB-01 prompt_sha256 only");
+console.log("Catalog identity / Stage order: unchanged / 7/7");
+console.log("fixtures: 39/39");
+console.log("timing / contact / Candidate: 6/6 / 13/13 / 10/10");
 console.log("v9 / v10 parity: PASS / PASS");
 console.log("frozen request/raw hashes: 37/37 / 37/37");
 console.log("response IDs unique / forbidden keys: 37/37 / 0");

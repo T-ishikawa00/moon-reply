@@ -30,6 +30,12 @@ export const DECISION_PLAN_V2_CONSTRAINT_LIMITATIONS = Object.freeze([
     limitation:
       "Decision Plan v2 has no structured reassessment trigger kind; Production validation does not inspect timing prose.",
   }),
+  Object.freeze({
+    json_path:
+      "$.message_draft_edit_metadata.communicative_intent_delta",
+    limitation:
+      "Decision Plan v2 cannot fully distinguish a personal invitation from business schedule coordination when the Provider metadata records an invitation change without an affection or commitment increase.",
+  }),
 ]);
 
 function invalid(): never {
@@ -86,6 +92,26 @@ export function validateDecisionPlanConstraintIntegrityV1({
   const explicitNoFollowup =
     contactConstraintPolicy.constraint_kind === "no_followup_message" &&
     contactConstraintPolicy.constraint_status === "explicit";
+  const unknownConstraint =
+    contactConstraintPolicy.constraint_kind === "unknown" &&
+    contactConstraintPolicy.constraint_status === "unknown";
+
+  if (
+    unknownConstraint &&
+    (contactConstraintPolicy.outbound_contact_now_allowed ||
+      contactConstraintPolicy.outbound_contact_after_time_passage_allowed ||
+      !contactConstraintPolicy.exception_required_for_future_contact ||
+      decisionPlan.selected_decision === "reply_now" ||
+      decisionPlan.selected_decision === "send_now" ||
+      decisionPlan.recommended_message_draft !== null ||
+      decisionPlan.message_draft_edit_metadata !== null ||
+      decisionPlan.change_conditions.some(
+        ({ resulting_direction: direction }) =>
+          direction === "reply_now" || direction === "send_now",
+      ))
+  ) {
+    invalid();
+  }
 
   if (explicitNoFollowup) {
     if (

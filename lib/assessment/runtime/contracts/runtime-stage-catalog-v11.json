@@ -19,7 +19,7 @@
       "source": "m2-p4-authority-integrity-successor",
       "prompt_version": "v3.0.0",
       "prompt_path": "lib/assessment/runtime/contracts/pb-01-base-situation-v3.developer.md",
-      "prompt_sha256": "f06447d010c8e55db6f47e1632a2c701fec16c5501f68e99ed5883006a9e8c5f",
+      "prompt_sha256": "620b73a7264dfc877f19b6708e59fe23e232d824952ead9d4a77eb6e6a55b06d",
       "schema_version": "pipeline-schema-base-v2.0.0",
       "schema_name": "pb_01_base_situation_v3",
       "schema_path": "lib/assessment/runtime/contracts/base-structured-intake-v2.schema.json",
