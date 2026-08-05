@@ -1,26 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:BEGIN -->
-## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1 v11 Fresh Provider Product Diagnostic Replacement Package
-
-- [x] Rejected branch and Commit A preserved unchanged at package_rejected_before_execution
-- [x] Baseline and accepted capability preflight exact
-- [x] Exact package scope fixed at 17/17
-- [x] Frozen cases copied byte-identically 6/6
-- [x] v11 Catalog / Prompt bundle / Schema set, topology 7/7, model, and Asia/Tokyo timezone fixed
-- [x] Call ledger fixed at 37 nominal full-path / 37 authorized maximum / 0 spare retry / 0 retry
-- [x] Per-case prefixes, continuation after permitted Product rejection, and global technical-failure stop encoded
-- [x] Decision Policy projection deletes v11-only user_contact_constraint before contextual v3 validation
-- [x] Provider input allowlists and oracle-key denylist fixed for PB-01 through PB-06
-- [x] Independent evidence auditor boundary and Product evaluator boundary defined
-- [x] Package-check without OPENAI_API_KEY proves zero transport, credential inspection, marker, authorization consumption, and result mutation
-- [x] Authorization prepared without consumption; marker absent
-- [x] Initial result is NOT_EXECUTED; Product Owner ratings are blank
-- [ ] Human / ChatGPT package review and acceptance
-- [ ] Provider execution — unauthorized in this task
-- [ ] Evidence Commit B, Runtime activation, R4, C2, PR, and main merge — unauthorized
-
-Status is package_prepared_pending_human_chatgpt_review on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package. Rejected Commit A 26fea3149bba1c845aefe0654ad5fca817ae229f remains unexecuted and unmodified with Provider calls 0, authorization unconsumed, marker absent, and Evidence Commit B absent. Actual Provider calls are the sum of actual case prefixes, at most 37; all six cases are attempted unless a global technical failure stops execution. Provider / DB / Supabase are 0 / 0 / 0. Product verdict, Provider quality, and Product Owner judgment are not established. Active Service, Active Runtime, migrations, and main remain unchanged.
+M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1 executed status is EXECUTED_PENDING_EVIDENCE_COMMIT on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r1-v11-provider-package. Package Commit A is 6eea601c99f18cbde62659140502d0456b0b505b; Provider attempts / completed calls are 37 / 37; machine verdict is FAIL. Product Owner review remains pending. Provider / DB / Supabase are 37 / 0 / 0. Authorization remains consumed after any attempted run and the marker remains present. Active Runtime and main remain unchanged; R4 and C2 remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R2:BEGIN -->
