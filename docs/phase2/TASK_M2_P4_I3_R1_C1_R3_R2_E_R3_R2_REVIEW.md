@@ -2,16 +2,21 @@
 
 ## 1. Status
 
-Status is `implementation_pending_human_chatgpt_review` on `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r2-authority-integrity`.
+Status is `human_chatgpt_accepted_complete` on `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r2-authority-integrity`.
 
 - Exact baseline: `e8db575adc9636032997c8e3d43f8a56e38fae15`
 - Exact implementation scope: `25/25`
 - Exact acceptance-correction baseline: `1fd102b7235481e3ee6bcd733744db5bb2887773`
 - Exact acceptance-correction scope: `14/14`
-- Human / ChatGPT review: pending
-- Implementation acceptance: not established
+- Exact acceptance-sync scope: `5/5`
+- Non-sync implementation blobs unchanged: `20/20`
+- Human / ChatGPT review: `IMPLEMENTATION ACCEPTED COMPLETE`
+- Implementation acceptance: `true`
+- Acceptance-correction acceptance: `true`
+- Accepted implementation commit: `1fd102b7235481e3ee6bcd733744db5bb2887773`
+- Accepted correction commit: `fba4c822f37856538d933957f26225b8e0adc521`
 
-Automated evidence can establish offline implementation integrity. It cannot accept the implementation, establish Provider quality, authorize a Provider rerun, or advance R4/C2.
+Human / ChatGPT acceptance is recorded independently of automated evidence. It accepts the offline implementation and its correction; it does not establish Provider quality, authorize a Provider rerun, or advance R4/C2.
 
 ## 2. Frozen authority
 
@@ -104,12 +109,12 @@ The corrected projection is `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r2/product-
 
 Required automated validation covers the offline runner write/check pair, dedicated authority-integrity verifier, Decision Policy `40/40`, typecheck, zero-warning lint, build, `git diff --check`, and exact status inspection. The dedicated verifier also enforces original scope `25/25`, exact correction scope `14/14`, frozen/protected asset preservation, Catalog PB-01 hash equality and hash-only Catalog diff, v11 identity/order, independent evidence hashes, all `39/39` fixtures, v9/v10 parity, zero external operations, unchanged main, and unauthorized R4.
 
-Automated PASS is implementation evidence only. It is not Human / ChatGPT acceptance and does not change the capability boundary.
+At accepted correction commit `fba4c822f37856538d933957f26225b8e0adc521`, the immutable dedicated verifier passes `93/93`. The acceptance-sync delta is separately fixed at exact `5/5`, with non-sync implementation blobs unchanged `20/20`. Automated PASS remains implementation evidence; the Human / ChatGPT acceptance recorded here is the independent acceptance decision and does not broaden the capability boundary.
 
 ## 15. Capability boundary
 
 - Provider quality established: `false`
-- Provider rerun ready: `false`
+- Provider rerun ready: `true`
 - Provider rerun authorized: `false`
 - Active Runtime activated: `false`
 - Migration applied: `false`
@@ -118,6 +123,20 @@ Automated PASS is implementation evidence only. It is not Human / ChatGPT accept
 - PB-06 semantic validation still required: `true`
 - R4 ready / authorized: `false / false`
 - C2 authorized: `false`
+- Next candidate: `M2-P4-I3-R1-C1-R3-R2-E-R3-R3`
+- Next candidate authorized: `false`
 - PR / main merge / force push authorized: `false / false / false`
 
-Provider / retry / repair / fallback / DB / Supabase operations are all zero. Human / ChatGPT review is pending. No Provider rerun, Runtime activation, R4, C2, PR, main integration, or release action is authorized by this package.
+Provider / retry / repair / fallback / DB / Supabase operations are all zero. Human / ChatGPT result is `IMPLEMENTATION ACCEPTED COMPLETE`. No Provider rerun, Runtime activation, R4, C2, next-candidate execution, PR, main integration, or release action is authorized by this acceptance.
+
+## 16. Accepted facts
+
+- v11 Catalog / Prompt bundle / Schema set and Stage topology `7/7` are accepted.
+- Application-owned `action_context` and `contact_constraint_policy` are accepted.
+- Ordinary restriction omission resolves to `none / none / []`; genuine unknown remains fail-closed.
+- Candidate Grounding v2 composition of accepted v1 and the bounded business-only guard are accepted.
+- Full personal/business semantic enforcement remains `false`; PB-06 semantic validation remains required.
+- The corrected Product Review projection is accepted.
+- Fixtures `39/39`, dedicated verifier `93/93`, and v9 / v10 parity `PASS / PASS` are accepted automated evidence.
+- Frozen E-R3 evidence remains unchanged and its verdict remains `FAIL / 1 of 6`.
+- Provider / DB / Supabase remain `0 / 0 / 0`; migrations remain unchanged and unapplied; Active Service and main remain unchanged.
