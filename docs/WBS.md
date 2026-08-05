@@ -1,5 +1,24 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3 v11 Fresh Provider Product Diagnostic Package
+
+- [x] Baseline and accepted capability preflight exact
+- [x] Exact package scope fixed at 17/17
+- [x] Frozen cases copied byte-identically 6/6
+- [x] v11 Catalog / Prompt bundle / Schema set, topology 7/7, model, and Asia/Tokyo timezone fixed
+- [x] Exact proposed call ledger fixed at 37 expected / 37 maximum / 0 spare / 0 retry
+- [x] Provider input allowlists and oracle-key denylist fixed for PB-01 through PB-06
+- [x] Independent evidence auditor boundary and Product evaluator boundary defined
+- [x] Authorization prepared without consumption; marker absent
+- [x] Initial result is NOT_EXECUTED; Product Owner ratings are blank
+- [ ] Human / ChatGPT package review and acceptance
+- [ ] Provider execution — unauthorized in this task
+- [ ] Evidence Commit B, Runtime activation, R4, C2, PR, and main merge — unauthorized
+
+Status is package_prepared_pending_human_chatgpt_review on test/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-v11-provider-package. Provider / DB / Supabase are 0 / 0 / 0. Product verdict, Provider quality, and Product Owner judgment are not established. Active Service, Active Runtime, migrations, and main remain unchanged.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R2:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R3-R2 Offline Authority, Constraint, and Review Integrity Remediation
 

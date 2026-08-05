@@ -1,0 +1,20 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-product-owner-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3",
+  "status": "pending_provider_execution",
+  "machine_product_pass_does_not_complete_review": true,
+  "ratings": {
+    "良い": null,
+    "気になる": null,
+    "商品として厳しい": null,
+    "コメント": null
+  },
+  "cases": [
+    {"case_id": "E-R3-01", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null},
+    {"case_id": "E-R3-02", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null},
+    {"case_id": "E-R3-03", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null},
+    {"case_id": "E-R3-04", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null},
+    {"case_id": "E-R3-05", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null},
+    {"case_id": "E-R3-06", "良い": null, "気になる": null, "商品として厳しい": null, "コメント": null}
+  ]
+}

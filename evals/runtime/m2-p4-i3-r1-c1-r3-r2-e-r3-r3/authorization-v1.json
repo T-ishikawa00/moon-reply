@@ -1,0 +1,22 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-authorization-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3",
+  "authorization_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-2026-08-05",
+  "proposed_confirmation_phrase": "E-R3-R3-V11-37-EXACT-SYNTHETIC-ONLY",
+  "status": "prepared_pending_explicit_human_authorization",
+  "execution_authorized": false,
+  "consumed": false,
+  "rerun_authorized": false,
+  "model": "gpt-5.6-luna",
+  "time_zone": "Asia/Tokyo",
+  "expected_calls": 37,
+  "authorized_max_calls": 37,
+  "actual_attempts": 0,
+  "completed_calls": 0,
+  "marker_created": false,
+  "package_commit": null,
+  "evidence_commit": null,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0
+}
