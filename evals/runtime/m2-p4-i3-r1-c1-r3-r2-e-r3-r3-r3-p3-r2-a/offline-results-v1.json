@@ -1,0 +1,61 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "status": "PASS",
+  "baseline": "a5b2defa1bb765d46076a28ca9827d494fcbe433",
+  "fixture_counts": {
+    "positive": 8,
+    "negative": 20,
+    "legacy_positive": 2,
+    "split_positive": 6,
+    "frozen_e_r3_accepted_ready": 3,
+    "frozen_e_r3_safety_blocked": 1,
+    "frozen_e_r3_rejected_intermediate": 2
+  },
+  "results": {
+    "legacy_exact_mapping": "PASS",
+    "split_exact_mapping": "PASS",
+    "opening_letter_complete_source_order": "PASS",
+    "situation_reading_selected_only": "PASS",
+    "situation_reading_content_order": "PASS",
+    "unmatched_fact_omitted_without_placeholder": "PASS",
+    "possible_interpretations_complete_without_topic_gate": "PASS",
+    "legacy_material_unknown_strings": "PASS",
+    "split_material_unknown_summaries": "PASS",
+    "draft_context_null_preserved": "PASS",
+    "action_rationales_complete_source_order": "PASS",
+    "closing_lines_complete_source_order": "PASS",
+    "consultation_limitations_family_mapping": "PASS",
+    "unicode_emoji_dialect_line_break_preservation": "PASS",
+    "positive_fixtures": "PASS",
+    "negative_fixtures": "PASS",
+    "full_report_serialized_unchanged": "PASS",
+    "full_report_deep_unchanged": "PASS",
+    "deterministic_repeat_equality": "PASS",
+    "direct_v1_parity": "PASS",
+    "v1_decoder_acceptance": "PASS",
+    "recursive_customer_data_exclusion": "PASS",
+    "frozen_e_r3_accepted_ready_compatibility": "PASS",
+    "frozen_e_r3_non_ready_rejection": "PASS"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_rerun": false,
+    "package_check": false,
+    "retry": false,
+    "repair": false,
+    "fallback": false,
+    "runtime_activation": false,
+    "ui_changes": false
+  },
+  "acceptance_boundary": {
+    "automated_offline_verification": "PASS",
+    "human_chatgpt_review": "PENDING",
+    "customer_reassurance_established": false,
+    "jpy980_readiness_established": false,
+    "r2_b_authorized": false,
+    "r2_c_authorized": false
+  }
+}

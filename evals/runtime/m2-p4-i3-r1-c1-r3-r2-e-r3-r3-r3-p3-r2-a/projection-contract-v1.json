@@ -1,0 +1,217 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "status": "experience_projection_v2_implemented_pending_human_chatgpt_review",
+  "baseline": "a5b2defa1bb765d46076a28ca9827d494fcbe433",
+  "projection": {
+    "type": "CustomerAssessmentExperienceProjectionV2",
+    "schema_version": "customer-assessment-experience-projection-v2",
+    "implementation_path": "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
+    "top_level_keys": [
+      "projectionSchemaVersion",
+      "baseProjection",
+      "openingLine",
+      "openingLetter",
+      "situationReading",
+      "possibleInterpretations",
+      "materialUnknowns",
+      "draftContext",
+      "actionRationales",
+      "closingLines",
+      "consultationLimitations"
+    ],
+    "versioned_successor": true,
+    "customer_assessment_projection_v1_mutated": false,
+    "customer_facing_text_generated": false,
+    "source_text_paraphrased": false,
+    "chronology_repaired": false,
+    "causal_relationship_added": false,
+    "generic_reassurance_added": false,
+    "case_or_fixture_id_selection": false
+  },
+  "accepted_flow": [
+    "requireReadyAssessmentResult",
+    "projectCustomerAssessmentV1",
+    "validated_full_report_exact_extraction",
+    "fresh_projection_return"
+  ],
+  "source_mapping": {
+    "openingLine": {
+      "legacy": "content.cover_line",
+      "split": "content.cover_line",
+      "selection": "exact_string"
+    },
+    "openingLetter": {
+      "legacy": "content.short_letter",
+      "split": "content.short_letter",
+      "selection": "complete_array_source_order_no_deduplication"
+    },
+    "situationReading": {
+      "selector": "Set(decisionPlan.decision_reason_fact_ids)",
+      "source": "content.observed_fact_commentary",
+      "traversal": "original_content_order",
+      "output": "matching_commentary_strings_only",
+      "unmatched_behavior": "omit_without_placeholder"
+    },
+    "possibleInterpretations": {
+      "legacy": "content.possible_interpretations",
+      "split": "content.possible_interpretations",
+      "selection": "complete_array_source_order_independent_of_requested_topics"
+    },
+    "materialUnknowns": {
+      "legacy": "decisionPlan.material_unknowns",
+      "split": "decisionPlan.material_unknowns[*].summary",
+      "selection": "exact_strings_source_order"
+    },
+    "draftContext": {
+      "legacy": "content.message_draft_context",
+      "split": "content.message_draft_context",
+      "selection": "exact_string_or_null"
+    },
+    "actionRationales": {
+      "legacy": "content.action_rationales",
+      "split": "content.action_rationales",
+      "selection": "complete_array_source_order"
+    },
+    "closingLines": {
+      "legacy": "content.closing_lines",
+      "split": "content.closing_lines",
+      "selection": "complete_array_source_order"
+    },
+    "consultationLimitations": {
+      "legacy": "decisionPlan.limitations",
+      "split": "decisionPlan.model_generated_limitations",
+      "selection": "exact_strings_source_order",
+      "separate_from": "report.fixedLimitation"
+    }
+  },
+  "decoder_contract": {
+    "top_level_keys": "exact",
+    "schema_version": "exact",
+    "base_projection_decoder": "decodeCustomerAssessmentProjectionV1",
+    "common_limits": {
+      "openingLine": "non_empty_string",
+      "openingLetter": {
+        "minimum": 1,
+        "maximum": 3
+      },
+      "situationReading": {
+        "minimum": 0,
+        "maximum": 8
+      },
+      "possibleInterpretations": {
+        "minimum": 0,
+        "maximum": 3
+      },
+      "draftContext": "null_or_non_empty_string",
+      "actionRationales": {
+        "minimum": 0,
+        "maximum": 4
+      },
+      "closingLines": {
+        "minimum": 1,
+        "maximum": 2
+      }
+    },
+    "legacy_limits": {
+      "sourceReportSchemaVersion": "m2-p3-runtime-report-v1",
+      "materialUnknowns": {
+        "minimum": 0,
+        "maximum": 12
+      },
+      "consultationLimitations": {
+        "minimum": 1,
+        "maximum": 8
+      }
+    },
+    "split_limits": {
+      "sourceReportSchemaVersion": "m2-p4-split-runtime-report-v1",
+      "materialUnknowns": {
+        "minimum": 0,
+        "maximum": 4
+      },
+      "consultationLimitations": {
+        "minimum": 0,
+        "maximum": 2
+      }
+    },
+    "repeated_source_strings_allowed": true,
+    "unknown_source_report_version_rejected": true
+  },
+  "recursive_exclusions": [
+    "case_id",
+    "caseId",
+    "fixture_id",
+    "fixtureId",
+    "request_id",
+    "requestId",
+    "run_id",
+    "runId",
+    "Provider response ID",
+    "usage",
+    "diagnostic verdict",
+    "machine verdict",
+    "Stage data",
+    "fact_id",
+    "factId",
+    "decision_reason_fact_ids",
+    "supporting_fact_ids",
+    "trigger_fact_ids",
+    "unknown_code",
+    "material_to",
+    "direct Full Report"
+  ],
+  "allowed_structural_exception": "baseProjection.decisionCode",
+  "immutability": {
+    "ready_result_deep_frozen_in_tests": true,
+    "report_deep_frozen_in_tests": true,
+    "serialized_report_unchanged": true,
+    "deep_report_unchanged": true,
+    "repeated_projection_deep_equal": true,
+    "direct_v1_projection_deep_equals_baseProjection": true,
+    "v1_decoder_accepts_baseProjection": true,
+    "v1_implementation_blob_unchanged": true,
+    "v1_contract_blob_unchanged": true
+  },
+  "product_doctrine_support": {
+    "opening_ritual": "openingLine",
+    "personalized_letter": "openingLetter",
+    "grounded_situation_reading": "situationReading",
+    "fact_uncertainty_separation": [
+      "situationReading",
+      "possibleInterpretations",
+      "materialUnknowns"
+    ],
+    "draft_context": "draftContext",
+    "action_rationale": "actionRationales",
+    "emotional_closing": "closingLines",
+    "rendering_owned_by_r2_b": true,
+    "customer_reassurance_established": false,
+    "jpy980_readiness_established": false
+  },
+  "frozen_e_r3_compatibility": {
+    "accepted_ready_project_success": [
+      "E-R3-01",
+      "E-R3-02",
+      "E-R3-04"
+    ],
+    "safety_blocked_rejected_as_ready": [
+      "E-R3-03"
+    ],
+    "rejected_intermediate_not_accepted_product": [
+      "E-R3-05",
+      "E-R3-06"
+    ]
+  },
+  "authorization": {
+    "provider_rerun_authorized": false,
+    "active_runtime_activation_authorized": false,
+    "r2_b_authorized": false,
+    "r2_c_authorized": false,
+    "existing_package_c_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false
+  }
+}
