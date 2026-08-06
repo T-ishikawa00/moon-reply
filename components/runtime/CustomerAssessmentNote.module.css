@@ -1,0 +1,525 @@
+.reviewPage {
+  min-height: 100svh;
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 82% 4%, rgb(159 135 208 / 18%), transparent 30rem),
+    linear-gradient(180deg, var(--night-900), var(--night-800));
+  padding: clamp(1.25rem, 4vw, 3.5rem) 1rem clamp(4rem, 8vw, 7rem);
+  color: var(--paper-50);
+}
+
+.reviewShell {
+  inline-size: min(100%, 68rem);
+  margin-inline: auto;
+}
+
+.reviewHeader {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.reviewHeader p,
+.reviewHeader h1 {
+  margin: 0;
+}
+
+.reviewHeader p:first-child {
+  color: var(--moon-400);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.reviewHeader h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.65rem, 5vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.reviewHeader p:last-child {
+  max-inline-size: 48rem;
+  color: var(--paper-200);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.fixtureNavigation {
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  border-block: 1px solid var(--border-night);
+  padding-block: 1rem;
+}
+
+.fixtureNavigation > p {
+  margin: 0 0 0.75rem;
+  color: var(--paper-200);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.fixtureList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fixtureList li {
+  min-inline-size: 0;
+}
+
+.fixtureLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  border: 1px solid var(--border-night-strong);
+  border-radius: 999rem;
+  padding: 0.65rem 0.95rem;
+  color: var(--paper-50);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-decoration: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.fixtureLink:hover {
+  border-color: var(--moon-400);
+  background: rgb(255 255 255 / 6%);
+}
+
+.fixtureLinkActive {
+  border-color: var(--moon-400);
+  background: var(--moon-600);
+}
+
+.fixtureSummary {
+  margin: 0 0 1.25rem;
+  color: var(--paper-200);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.note {
+  inline-size: min(100%, 52rem);
+  min-inline-size: 0;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid var(--border-paper);
+  background: var(--paper-50);
+  color: var(--ink-950);
+  box-shadow: var(--shadow-paper);
+}
+
+.note :where(p, li, dd, strong) {
+  overflow-wrap: anywhere;
+}
+
+.noteHeader {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(145deg, var(--night-800), var(--night-900));
+  padding: clamp(2rem, 7vw, 4.75rem) clamp(1.25rem, 6vw, 4rem);
+  color: var(--paper-50);
+}
+
+.noteHeader > :not(.headerArc) {
+  position: relative;
+  z-index: 1;
+}
+
+.headerArc {
+  opacity: 0.65;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--moon-400);
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.documentType {
+  margin: clamp(2.75rem, 8vw, 5.25rem) 0 0;
+  color: var(--paper-200);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sectionKicker {
+  margin: 0;
+  color: var(--moon-600);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.noteHeader .sectionKicker {
+  margin-top: 1.5rem;
+  color: var(--moon-400);
+}
+
+.noteHeader h1 {
+  max-inline-size: 40rem;
+  margin: 0.45rem 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 7vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+}
+
+.headerDivider {
+  max-inline-size: 30rem;
+  margin-block: clamp(1.75rem, 5vw, 3rem);
+}
+
+.reasonBlock {
+  max-inline-size: 39rem;
+  border-left: 2px solid var(--moon-500);
+  padding-left: clamp(1rem, 3vw, 1.5rem);
+}
+
+.reasonLabel,
+.primaryReason {
+  margin: 0;
+}
+
+.reasonLabel {
+  color: var(--moon-400);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.primaryReason {
+  margin-top: 0.65rem;
+  color: var(--paper-100);
+  font-size: clamp(1.05rem, 2.6vw, 1.2rem);
+  line-height: 2;
+}
+
+.section {
+  min-inline-size: 0;
+  border-top: 1px solid var(--border-paper-subtle);
+  padding: clamp(2rem, 6vw, 3.75rem) clamp(1.25rem, 6vw, 4rem);
+}
+
+.section h2 {
+  margin: 0.45rem 0 0;
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: clamp(1.55rem, 4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.section h3 {
+  margin: 0;
+  color: var(--ink-800);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.draftSection {
+  background: linear-gradient(180deg, var(--paper-200), var(--paper-50));
+}
+
+.draftText {
+  margin: 1.5rem 0 0;
+  border-left: 3px solid var(--moon-600);
+  padding: 1rem 0 1rem clamp(1rem, 4vw, 1.75rem);
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3vw, 1.42rem);
+  line-height: 1.95;
+  white-space: pre-wrap;
+}
+
+.copyAction {
+  display: flex;
+  min-inline-size: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.copyButton {
+  min-height: 2.75rem;
+  border: 1px solid var(--night-800);
+  border-radius: 999rem;
+  background: var(--night-800);
+  padding: 0.7rem 1.2rem;
+  color: var(--paper-50);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.copyButton:hover {
+  border-color: var(--moon-600);
+  background: var(--moon-600);
+}
+
+.copyStatus {
+  min-inline-size: 0;
+  flex: 1 1 18rem;
+  margin: 0;
+  color: var(--ink-700);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.draftAbsenceSection {
+  background: var(--paper-200);
+}
+
+.draftAbsenceText {
+  margin: 1.25rem 0 0;
+  color: var(--ink-700);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.actionText,
+.reassessmentWhen,
+.relationshipText {
+  margin: 1.25rem 0 0;
+  color: var(--ink-700);
+  font-size: 1.08rem;
+  line-height: 1.95;
+}
+
+.avoidBlock {
+  margin-top: 1.5rem;
+  border-left: 2px solid var(--moon-500);
+  padding-left: 1rem;
+}
+
+.plainList {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plainList li {
+  position: relative;
+  padding-left: 1.2rem;
+  color: var(--ink-700);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.plainList li::before {
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--moon-600);
+  content: "—";
+  font-weight: 800;
+}
+
+.reassessmentSection {
+  background: var(--paper-100);
+}
+
+.conditionList {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.conditionList li {
+  min-inline-size: 0;
+  border-left: 2px solid var(--moon-600);
+  padding-left: 1rem;
+}
+
+.conditionList p,
+.conditionList span {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.conditionList p {
+  color: var(--ink-800);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.conditionList span {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--ink-600);
+  font-size: 0.95rem;
+}
+
+.compactSection h2 {
+  font-size: clamp(1.45rem, 4vw, 2rem);
+}
+
+.supportText {
+  margin-top: 1.25rem;
+  border-left: 2px solid var(--moon-500);
+  padding-left: clamp(1rem, 4vw, 1.75rem);
+}
+
+.supportText p {
+  margin: 0;
+  color: var(--ink-700);
+  font-size: 1.05rem;
+  line-height: 1.95;
+}
+
+.supportText p + p {
+  margin-top: 0.8rem;
+}
+
+.temperatureList {
+  display: grid;
+  gap: 0;
+  margin: 1.4rem 0 0;
+}
+
+.temperatureList div {
+  min-inline-size: 0;
+  border-top: 1px solid var(--border-paper-subtle);
+  padding-block: 0.9rem;
+}
+
+.temperatureList dt {
+  color: var(--moon-600);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.temperatureList dd {
+  margin: 0.35rem 0 0;
+  color: var(--ink-700);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.planList {
+  display: grid;
+  gap: 1.25rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planList li {
+  min-inline-size: 0;
+  border-top: 2px solid var(--moon-600);
+  padding-top: 0.9rem;
+}
+
+.planList span,
+.planList strong {
+  display: block;
+}
+
+.planList span {
+  color: var(--moon-600);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.planList strong {
+  margin-top: 0.45rem;
+  color: var(--ink-800);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.planList p {
+  margin: 0.55rem 0 0;
+  color: var(--ink-600);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.secondaryDetails {
+  border-top: 1px solid var(--border-paper);
+  background: var(--paper-200);
+  padding: 1.25rem clamp(1.25rem, 6vw, 4rem) 1.5rem;
+}
+
+.secondaryDetails summary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--ink-800);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--moon-600);
+  text-underline-offset: 0.25em;
+}
+
+.secondaryBody {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.secondaryBody section {
+  min-inline-size: 0;
+  border-top: 1px solid var(--border-paper);
+  padding-top: 1rem;
+}
+
+.secondaryBody h2 {
+  margin: 0;
+  color: var(--ink-800);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.secondaryBody p {
+  margin: 0.65rem 0 0;
+  color: var(--ink-700);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.copyButton:focus-visible,
+.fixtureLink:focus-visible,
+.secondaryDetails summary:focus-visible {
+  outline: 3px solid var(--moon-400);
+  outline-offset: 3px;
+}
+
+@media (min-width: 42rem) {
+  .temperatureList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+
+  .planList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copyButton,
+  .fixtureLink {
+    transition: none;
+  }
+}

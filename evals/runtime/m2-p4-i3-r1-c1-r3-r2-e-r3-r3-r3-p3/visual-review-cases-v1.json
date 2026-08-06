@@ -1,0 +1,164 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-visual-review-cases-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3",
+  "status": "pending_human_visual_chatgpt_review",
+  "route": "/review/runtime/v12",
+  "fixture_navigation": {
+    "method": "query_parameter",
+    "parameter": "fixture",
+    "example": "/review/runtime/v12?fixture=simple_business_reply_with_draft"
+  },
+  "viewports": [
+    {
+      "id": "desktop_1440",
+      "width_px": 1440,
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "id": "mobile_399",
+      "width_px": 399,
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "id": "mobile_320",
+      "width_px": 320,
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    }
+  ],
+  "interaction_accessibility_checks": [
+    {
+      "id": "keyboard_only_navigation",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "visible_focus_on_copy_button",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "copy_success_announcement",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "copy_failure_announcement",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "details_open_close",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "browser_zoom_200_percent",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "reduced_motion_preference",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "long_japanese_wrapping",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "emoji_and_line_break_preservation",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "no_horizontal_scroll",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "no_overlapping_content",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    },
+    {
+      "id": "draft_discoverable_without_searching",
+      "status": "pending",
+      "human_result": null,
+      "chatgpt_result": null
+    }
+  ],
+  "fixtures": [
+    {
+      "fixture_id": "simple_business_reply_with_draft",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "ordinary_reply_waiting",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "polite_thank_you_with_draft",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "relationship_summary_requested",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "expanded_plan_requested_legacy",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "expanded_plan_requested_split",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "nullable_optional_sections",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "pause_additional_contact_no_draft",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    },
+    {
+      "fixture_id": "kansai_persona_draft",
+      "status": "pending",
+      "human_visual_review": null,
+      "chatgpt_visual_review": null
+    }
+  ]
+}

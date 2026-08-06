@@ -1,0 +1,139 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-presentation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3",
+  "status": "customer_note_implemented_pending_human_visual_chatgpt_review",
+  "baseline": "8700ded1454058f72d33f2eb4d1ae6a05b6e008c",
+  "authority": {
+    "accepted_input": "CustomerAssessmentProjectionV1",
+    "component_prop": "projection",
+    "full_structured_report_remains_persistence_audit_authority": true,
+    "full_structured_report_enters_customer_component": false,
+    "runtime_result_enters_customer_component": false,
+    "provider_output_enters_customer_component": false,
+    "layout_uses_source_report_schema_version": false,
+    "case_or_fixture_specific_component_logic": false
+  },
+  "primary_hierarchy": [
+    "current_answer",
+    "primary_reason",
+    "final_draft_when_available_or_requested_null_draft_explanation",
+    "immediate_action",
+    "reassessment"
+  ],
+  "decision_labels": {
+    "reply_now": "今、返信する",
+    "send_now": "今、送る",
+    "wait_and_reassess": "今夜は送らず、次の材料を待つ",
+    "pause_additional_contact": "追加の連絡を止める"
+  },
+  "draft_presentation": {
+    "exact_text_preserved": true,
+    "whitespace_preserved": true,
+    "emoji_preserved": true,
+    "quotation_marks_added": false,
+    "policy_or_timing_codes_rendered": false,
+    "copy_source": "projection.finalDraft.text",
+    "copy_button_when_null": false,
+    "wait_null_copy": "今は送らず、次の判断材料を待つため、\n送信文案は表示していません。",
+    "pause_null_copy": "追加の連絡を止める判断のため、\n送信文案は表示していません。"
+  },
+  "requested_topic_modules": {
+    "organize_emotions": {
+      "visible_heading": "気持ちを整理するために",
+      "primary": [
+        "first_shortLetter_paragraph_when_available",
+        "first_anxietyReframe_paragraph_when_available"
+      ],
+      "exact_duplicates_rendered_twice": false,
+      "remaining_content_location": "secondary_disclosure"
+    },
+    "message_impact": {
+      "visible_when": "messageTemperature_non_null",
+      "visible_heading": "この文面の印象",
+      "labels": [
+        "柔らかさ",
+        "好意の強さ",
+        "返信への圧力",
+        "調整した点"
+      ],
+      "interpretations_location": "secondary_disclosure"
+    },
+    "relationship": {
+      "visible_when": "relationshipSummary_non_null",
+      "visible_heading": "今の関係について",
+      "empty_heading_allowed": false
+    },
+    "next_three_days": {
+      "visible_when": "optionalDetails.expandedPlan_non_empty",
+      "legacy_labels": {
+        "tonight": "今夜",
+        "next_day": "次の日",
+        "day_three": "3日目"
+      },
+      "split_labels": {
+        "tonight": "今夜",
+        "next": "次に",
+        "reassessment_condition": "見直す条件"
+      },
+      "plan_commentary_location": "secondary_disclosure"
+    },
+    "draft_message": "prominent_draft_or_renderer_owned_null_explanation",
+    "decide_send_or_wait": "fulfilled_without_duplicate_module"
+  },
+  "secondary_disclosure": {
+    "element": "details",
+    "label": "詳しい補足を見る",
+    "collapsed_by_default": true,
+    "omitted_when_empty": true,
+    "repeats_primary_content": false,
+    "allowed_content": [
+      "immediateAction.secondaryActions",
+      "remaining_shortLetter",
+      "remaining_anxietyReframe",
+      "possible_interpretations",
+      "plan_commentary"
+    ]
+  },
+  "review_route": {
+    "path": "/review/runtime/v12",
+    "fixture_only": true,
+    "query_parameter": "fixture",
+    "noindex": true,
+    "nofollow": true,
+    "public_navigation_link": false,
+    "production_behavior": "not_found",
+    "existing_internal_gate_reused": "M2_INTERNAL_RUNTIME_ENABLED",
+    "new_secret_added": false,
+    "runtime_form_connected": false,
+    "purchase_flow_connected": false,
+    "provider_api_db_supabase_calls": false
+  },
+  "fixture_ids": [
+    "simple_business_reply_with_draft",
+    "ordinary_reply_waiting",
+    "polite_thank_you_with_draft",
+    "relationship_summary_requested",
+    "expanded_plan_requested_legacy",
+    "expanded_plan_requested_split",
+    "nullable_optional_sections",
+    "pause_additional_contact_no_draft",
+    "kansai_persona_draft"
+  ],
+  "exact_scope": [
+    "components/runtime/CustomerAssessmentNote.tsx",
+    "components/runtime/CustomerAssessmentNote.module.css",
+    "components/runtime/CustomerDraftCopyButton.tsx",
+    "app/review/runtime/v12/page.tsx",
+    "lib/assessment/runtime/review/m2-p4-v12-customer-projection-fixtures.ts",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/presentation-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/visual-review-cases-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3/capabilities-v1.json",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_REVIEW.md"
+  ],
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}
