@@ -1,0 +1,200 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-experience-section-architecture-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
+  "status": "reassuring_experience_section_architecture_defined",
+  "required_emotional_journey": [
+    {
+      "step": 1,
+      "outcome": "The customer feels that their anxiety was received."
+    },
+    {
+      "step": 2,
+      "outcome": "Their situation is restated in consultation-specific language."
+    },
+    {
+      "step": 3,
+      "outcome": "Observed facts and feared interpretations are separated."
+    },
+    {
+      "step": 4,
+      "outcome": "Uncertainty is bounded without listing every negative possibility."
+    },
+    {
+      "step": 5,
+      "outcome": "One present direction is given."
+    },
+    {
+      "step": 6,
+      "outcome": "A draft is provided when permitted and requested."
+    },
+    {
+      "step": 7,
+      "outcome": "One immediate action is made concrete."
+    },
+    {
+      "step": 8,
+      "outcome": "Observable reassessment conditions are given."
+    },
+    {
+      "step": 9,
+      "outcome": "The note closes with calm, non-generic aftercare."
+    }
+  ],
+  "experience_sequence": [
+    "理解された感覚",
+    "安心",
+    "納得",
+    "行動"
+  ],
+  "rejected_sequence": [
+    "結論",
+    "操作指示",
+    "終了"
+  ],
+  "core_experience_candidates": [
+    {
+      "id": "A",
+      "title": "Cover / opening",
+      "functions": [
+        "Moon Reply identity",
+        "one consultation-specific opening line",
+        "current answer visible but not visually disproportionate"
+      ],
+      "visibility": "core"
+    },
+    {
+      "id": "B",
+      "title": "月の返事からの短い手紙",
+      "functions": [
+        "acknowledges the emotional situation",
+        "consultation-specific",
+        "no false reassurance",
+        "no generic therapeutic filler"
+      ],
+      "visibility": "at_least_one_personalized_emotional_or_reflective_section_visible"
+    },
+    {
+      "id": "C",
+      "title": "今の状況を読み解く",
+      "functions": [
+        "grounded customer-readable observations",
+        "proves the consultation was actually read",
+        "no fact IDs rendered"
+      ],
+      "visibility": "when_selected_observed_fact_commentary_is_non_empty"
+    },
+    {
+      "id": "D",
+      "title": "確かに言えること / まだ分からないこと",
+      "functions": [
+        "separates observed facts from interpretation and uncertainty",
+        "does not introduce additional adverse possibilities merely for balance"
+      ],
+      "visibility": "when_distinct_fact_interpretation_or_material_unknown_content_exists"
+    },
+    {
+      "id": "E",
+      "title": "送信文案",
+      "functions": [
+        "prominent and copyable when permitted",
+        "exact source text",
+        "may include exact source draft context"
+      ],
+      "visibility": "when_permitted_and_requested"
+    },
+    {
+      "id": "F",
+      "title": "この文面がどう届くか",
+      "functions": [
+        "message impact only when relevant and requested"
+      ],
+      "visibility": "optional_requested_topic"
+    },
+    {
+      "id": "G",
+      "title": "今夜の動き方",
+      "functions": [
+        "one immediate step",
+        "relevant avoid guidance",
+        "no generic aftercare unless supported"
+      ],
+      "visibility": "core"
+    },
+    {
+      "id": "H",
+      "title": "見直す条件",
+      "functions": [
+        "observable trigger",
+        "future direction",
+        "no internal enum display"
+      ],
+      "visibility": "core"
+    },
+    {
+      "id": "I",
+      "title": "月の返事から最後に",
+      "functions": [
+        "one or two consultation-specific closing paragraphs",
+        "reassurance without guarantee",
+        "emotional closure"
+      ],
+      "visibility": "core"
+    }
+  ],
+  "composition_rules": {
+    "every_case_shows_every_section": false,
+    "normal_target_visible_sections": {
+      "minimum": 6,
+      "maximum": 9,
+      "unit": "semantically_distinct_sections"
+    },
+    "each_section_has_distinct_emotional_or_decision_function": true,
+    "fixed_word_count_ceiling": false,
+    "duplicated_primary_meaning_allowed": false,
+    "simple_consultation": "May be shorter, but must still feel like an assessment rather than a formatted answer.",
+    "emotional_consultation": "May be longer because emotional acknowledgment and uncertainty separation are Product value, not padding."
+  },
+  "density_rules": {
+    "basis": "semantic_necessity_not_character_count",
+    "visible_product_functions": [
+      "emotional_acknowledgment",
+      "grounded_situation_understanding",
+      "uncertainty_separation",
+      "present_decision",
+      "draft_utility",
+      "immediate_action",
+      "reassessment",
+      "emotional_closure"
+    ],
+    "omit_or_secondary_when": "the field merely repeats a Product function already performed",
+    "all_reassuring_content_hidden_behind_details": false,
+    "personalized_emotional_or_reflective_section_visible_in_every_ready_assessment": true,
+    "organize_emotions_is_only_reassurance_route": false,
+    "requested_topics_rule": "RequestedTopics affect emphasis and optional modules, but the baseline assessment experience must still feel complete.",
+    "text_transformation": {
+      "paraphrase": false,
+      "factual_rewrite": false,
+      "generated_filler": false,
+      "source_text_order_preserved": true
+    },
+    "deterministic_repetition_control": [
+      "assign each projected field to one primary Product function",
+      "do not render the same projected field in multiple primary sections",
+      "deduplicate exact normalized strings without rewriting them",
+      "move only genuinely secondary distinct detail to disclosure",
+      "use fixture and Product Owner review to reject semantic repetition not detectable by exact equality"
+    ]
+  },
+  "acceptance_principles": {
+    "customer_feels_personally_understood": true,
+    "emotional_reassurance_without_unsupported_certainty": true,
+    "simple_cases_no_longer_feel_empty_or_underpriced": true,
+    "emotional_cases_do_not_become_generic_therapy_copy": true,
+    "final_draft_remains_immediately_discoverable": true,
+    "every_visible_section_has_a_distinct_function": true,
+    "repetition_materially_lower_than_old_full_report": true,
+    "visual_shell_retains_moon_reply_atmosphere": true,
+    "product_owner_judges_experience_plausibly_worth_jpy980": true,
+    "runtime_activation_remains_separately_unauthorized": true
+  }
+}

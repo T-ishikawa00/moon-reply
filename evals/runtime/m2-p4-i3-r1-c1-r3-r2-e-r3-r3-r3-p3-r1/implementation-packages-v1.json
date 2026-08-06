@@ -1,0 +1,139 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-implementation-packages-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
+  "status": "successor_packages_defined_implementation_unauthorized",
+  "package_order": [
+    "R2-A",
+    "R2-B",
+    "R2-C"
+  ],
+  "path_overlap_policy": {
+    "r2_proposed_paths_are_pairwise_disjoint": true,
+    "shared_path_count": 0,
+    "accepted_predecessor_contracts_are_consumed_read_only": true,
+    "runtime_activation_is_separate": true
+  },
+  "packages": [
+    {
+      "package_id": "R2-A",
+      "name": "Experience Projection successor",
+      "purpose": [
+        "add the missing deterministic experience fields",
+        "preserve the full Report unchanged",
+        "preserve accepted CustomerAssessmentProjectionV1 behavior and contract",
+        "add no Provider call",
+        "make no UI design change"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection",
+      "proposed_paths": [
+        "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a/projection-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a/projection-fixtures-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a/offline-results-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_A_REVIEW.md"
+      ],
+      "tests": [
+        "legacy and split exact source mapping",
+        "selected observed commentary emits no fact IDs",
+        "legacy material_unknowns strings and split summaries preserve order and text",
+        "draft context and nullable fields preserve exact values",
+        "full input Report is byte and deep unchanged",
+        "v1 contract and behavior remain unchanged",
+        "no Provider imports, calls, paraphrase, or filler"
+      ],
+      "provider_calls_required": false,
+      "human_visual_review_required": false,
+      "implementation_authorized": false
+    },
+    {
+      "package_id": "R2-B",
+      "name": "Reassuring Customer Note revision",
+      "purpose": [
+        "retain the accepted visual shell",
+        "reduce hero dominance",
+        "restore meaningful assessment length",
+        "render the new emotional journey",
+        "preserve prominent draft and copy action",
+        "remove semantic repetition"
+      ],
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
+      "proposed_paths": [
+        "components/runtime/CustomerAssessmentNote.tsx",
+        "components/runtime/CustomerAssessmentNote.module.css",
+        "components/runtime/CustomerDraftCopyButton.tsx",
+        "app/review/runtime/v12/page.tsx",
+        "lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md"
+      ],
+      "tests": [
+        "approximately six to nine distinct visible sections for normal cases",
+        "simple case feels complete without padding",
+        "emotional and null-optional cases retain personalized visible reassurance",
+        "hero answer is not visually disproportionate",
+        "draft stays immediately discoverable and exact-copyable",
+        "no fact IDs or internal enums render",
+        "no case-specific writing or layout",
+        "exact duplicate and semantic repetition checks"
+      ],
+      "provider_calls_required": false,
+      "human_visual_review_required": false,
+      "implementation_authorized": false
+    },
+    {
+      "package_id": "R2-C",
+      "name": "Human Visual and Product review",
+      "purpose": [
+        "review desktop 1440",
+        "review mobile 399",
+        "review mobile 320",
+        "review keyboard behavior",
+        "review 200 percent zoom",
+        "review copy success and failure",
+        "review details behavior",
+        "obtain Product Owner review of simple, emotional, null-optional, polite-draft, and persona-preserved cases"
+      ],
+      "proposed_branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product",
+      "proposed_paths": [
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c/review-matrix-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c/human-visual-review-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c/product-owner-review-v1.json",
+        "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c/capabilities-v1.json",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product-review.mjs",
+        "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_C_REVIEW.md"
+      ],
+      "required_product_cases": [
+        "simple",
+        "emotional",
+        "null_optional",
+        "polite_draft",
+        "persona_preserved"
+      ],
+      "provider_calls_required": false,
+      "human_visual_review_required": true,
+      "implementation_authorized": false
+    }
+  ],
+  "existing_package_c_boundary": {
+    "source_contract": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p1/implementation-work-packages-v1.json",
+    "package_id": "C",
+    "name": "PB-05 factual precision and anxiety-safe writing successor",
+    "remains_separate": true,
+    "continues_to_own": "PB-05 factual and anxiety-safe writing quality",
+    "ownership_transferred_to_r2": false,
+    "proposed_path_overlap_with_r2": 0
+  },
+  "global_acceptance_boundary": {
+    "r2_a_through_r2_c_require_provider_execution": false,
+    "implementation_authorized": false,
+    "provider_rerun_authorized": false,
+    "active_runtime_activation_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "main_integration_authorized": false
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-product-doctrine-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
+  "title": "Reassuring Assessment Experience Product Doctrine",
+  "status": "reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review",
+  "mode": "planning_only",
+  "branch": "plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience",
+  "baseline": "fdbdf808f135655084de32aec2e57473c1beaf31",
+  "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note",
+  "expected_parent": "8700ded1454058f72d33f2eb4d1ae6a05b6e008c",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "non_negotiable_hard_gate": [
+    {
+      "priority": 1,
+      "principle": "safety"
+    },
+    {
+      "priority": 2,
+      "principle": "factual_integrity"
+    },
+    {
+      "priority": 3,
+      "principle": "user_and_other_person_boundary_integrity"
+    },
+    {
+      "priority": 4,
+      "principle": "no_unsupported_certainty"
+    },
+    {
+      "priority": 5,
+      "principle": "no_fabricated_inner_state_causality_chronology_or_future_outcome"
+    }
+  ],
+  "primary_product_value": {
+    "not_primary_purchase": "The customer is not primarily buying the shortest correct answer.",
+    "primary_purchase": "The customer is buying a calm, personalized assessment experience where anxiety can be temporarily entrusted, organized, and returned in a form that feels understandable and manageable."
+  },
+  "desired_customer_state_after_reading": [
+    "なんか安心した。今日はこれでいい。",
+    "今はこれをすればいい。"
+  ],
+  "product_priority_after_hard_gates": [
+    {
+      "priority": 1,
+      "value": "emotional_reassurance_and_containment"
+    },
+    {
+      "priority": 2,
+      "value": "feeling_personally_understood"
+    },
+    {
+      "priority": 3,
+      "value": "atmosphere_ritual_and_afterglow"
+    },
+    {
+      "priority": 4,
+      "value": "clear_present_direction"
+    },
+    {
+      "priority": 5,
+      "value": "usable_draft_and_immediate_action"
+    },
+    {
+      "priority": 6,
+      "value": "information_efficiency"
+    }
+  ],
+  "fortune_telling_like_experience": {
+    "permitted_only_through": [
+      "visual_atmosphere",
+      "letter_like_pacing",
+      "opening_and_closing_ritual",
+      "reflective_language",
+      "a_sense_of_personal_reading",
+      "moon_night_paper_and_quiet_visual_identity"
+    ],
+    "must_not_come_from": [
+      "claiming_psychic_knowledge",
+      "asserting_hidden_feelings",
+      "predicting_replies",
+      "predicting_reconciliation",
+      "promising_relationship_outcomes",
+      "presenting_possibilities_as_facts"
+    ]
+  },
+  "anti_goals": [
+    "not_a_productivity_decision_dashboard",
+    "not_a_clinical_report",
+    "not_an_ai_debug_output",
+    "not_a_five_line_answer_card",
+    "not_verbose_merely_because_structured_fields_exist",
+    "not_repetitive_padding",
+    "not_generic_reassurance_disconnected_from_the_consultation",
+    "not_false_certainty_used_to_create_comfort",
+    "not_a_fixed_word_count_template",
+    "not_case_id_specific_writing_or_layout"
+  ],
+  "diagnosis": {
+    "previous_long_note": "The problem with the previous long note was repetition, not length itself.",
+    "current_package_b_note": "The problem with the current Package B note is under-delivery, not visual direction."
+  },
+  "experience_outcome": {
+    "sequence": [
+      "理解された感覚",
+      "安心",
+      "納得",
+      "行動"
+    ],
+    "rejected_sequence": [
+      "結論",
+      "操作指示",
+      "終了"
+    ]
+  },
+  "authority_boundary": {
+    "hard_gates_precede_product_value": true,
+    "product_doctrine_defined": true,
+    "implementation_authorized": false,
+    "runtime_activation_authorized": false,
+    "provider_rerun_authorized": false,
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}

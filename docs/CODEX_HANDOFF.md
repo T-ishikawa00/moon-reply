@@ -1,5 +1,19 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
+## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1
+
+- Status / branch / baseline: `reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review` / `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience` / `fdbdf808f135655084de32aec2e57473c1beaf31`.
+- Frozen state: Package A/R1 accepted implementation and Package B exact `10/10` remain unchanged. Provider marker remains present and unchanged; authorization is consumed with `rerun_authorized=false`. Active Runtime remains v4; main/origin-main remain `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Visual Review: navy/paper/gold visual direction, brand atmosphere, desktop typography/readability, draft discoverability, and observed copy interaction are accepted. Customer density is `failed_too_short`; JPY980 is `not_ready`; Package B disposition is `visual_shell_accepted_experience_content_revision_required`. Mobile, keyboard, 200% zoom, copy failure, and reduced motion are not complete.
+- Doctrine: Hard Gates precede reassurance. The Product sells a calm personalized assessment experience, targeting `なんか安心した。今日はこれでいい。` and then `今はこれをすればいい。`; the journey is `理解された感覚 → 安心 → 納得 → 行動`.
+- Projection gap: v1 preserves decision, reason, draft, action, reassessment, selected topic details, and fixed limitation, but lacks stable opening, full letter, selected observed commentary, material unknowns, draft context, action rationales, closing, and consultation-specific limitations.
+- Successor: plan `CustomerAssessmentExperienceProjectionV2` as Full structured Report → deterministic versioned Projection → Customer UI. Preserve v1 and the full Report. Preserve exact text/order, remove fact IDs/internal enums, and add no Provider Stage, paraphrase, factual rewrite, or filler.
+- Density/sections: normal target is approximately 6-9 semantically distinct visible sections. Keep one personalized emotional/reflection section visible in every ready assessment; `organize_emotions` is not the sole reassurance route; requestedTopics alter emphasis, not baseline completeness.
+- Packages: R2-A Experience Projection; R2-B Reassuring Customer Note; R2-C Human Visual/Product review. Proposed paths are pairwise disjoint. Existing Package C remains separate and owns PB-05 factual and anxiety-safe writing quality.
+- Boundary: implementation_authorized=false. Provider / DB / Supabase are `0 / 0 / 0`; Provider rerun, Runtime activation, R4, C2, PR, main merge, and force push remain unauthorized. next_action=`human_chatgpt_review_of_reassuring_assessment_experience_doctrine`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1
 

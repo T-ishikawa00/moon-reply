@@ -1,5 +1,25 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 Reassuring Assessment Experience Doctrine
+
+- [x] Exact baseline `fdbdf808f135655084de32aec2e57473c1beaf31` and planning scope `12/12` fixed
+- [x] Package A/R1 accepted implementation and Package B exact `10/10` preserved
+- [x] Provider marker preserved, authorization consumed, `rerun_authorized=false`, Active Runtime v4 and main unchanged
+- [x] Product Doctrine and Hard Gate hierarchy fixed
+- [x] Human Visual Review recorded as visual shell accepted and experience content revision required
+- [x] Required emotional journey `理解された感覚 → 安心 → 納得 → 行動` defined
+- [x] Proportional A-I section architecture and semantic density rules defined
+- [x] Exact `CustomerAssessmentProjectionV1` experience-field gaps audited for legacy and split Reports
+- [x] Versioned `CustomerAssessmentExperienceProjectionV2` deterministic source mapping planned without widening v1
+- [x] Packages R2-A through R2-C defined with pairwise-disjoint proposed paths
+- [x] Existing Package C retained as the separate owner of PB-05 factual and anxiety-safe writing quality
+- [ ] Human / ChatGPT review of the Reassuring Assessment Experience Doctrine
+- [ ] Any implementation, Provider rerun, Runtime activation, R4, C2, PR, or main integration — unauthorized
+
+Status is reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review. implementation_authorized=false. Provider / DB / Supabase are `0 / 0 / 0`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`, Active Runtime remains v4, and R4/C2 remain unauthorized. next_action=human_chatgpt_review_of_reassuring_assessment_experience_doctrine.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1 v12 Implementation Decomposition
 

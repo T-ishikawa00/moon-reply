@@ -1,0 +1,65 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-human-visual-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
+  "status": "visual_shell_accepted_experience_content_revision_required",
+  "review_subject": {
+    "package": "Package B",
+    "route": "/review/runtime/v12",
+    "implementation_baseline": "fdbdf808f135655084de32aec2e57473c1beaf31"
+  },
+  "judgment": {
+    "visual_direction": "accepted",
+    "brand_atmosphere": "accepted",
+    "draft_discoverability": "accepted",
+    "draft_copy_interaction": "accepted_pending_keyboard_and_failure_manual_test",
+    "typography_readability_at_observed_desktop_width": "accepted",
+    "customer_content_density": "failed_too_short",
+    "jpy980_readiness": "not_ready",
+    "package_b_implementation_disposition": "visual_shell_accepted_experience_content_revision_required"
+  },
+  "specific_findings": [
+    "The navy / paper / gold visual language fits Moon Reply.",
+    "The final draft is easy to find.",
+    "The simple business case ends too quickly.",
+    "The nullable optional-sections case visibly lacks substance.",
+    "The large hero answer consumes substantial space relative to the body.",
+    "The result feels like a polished AI answer rather than a paid assessment.",
+    "The waiting case improves when emotional support is visible but still lacks the full assessment journey.",
+    "The Kansai draft preserves line breaks, dialect, and emoji successfully.",
+    "The desired target is approximately the prior assessment's sense of fullness without its semantic repetition."
+  ],
+  "explicitly_not_complete_without_separate_observation": [
+    {
+      "check": "mobile_399",
+      "complete": false
+    },
+    {
+      "check": "mobile_320",
+      "complete": false
+    },
+    {
+      "check": "keyboard",
+      "complete": false
+    },
+    {
+      "check": "browser_zoom_200_percent",
+      "complete": false
+    },
+    {
+      "check": "copy_failure",
+      "complete": false
+    },
+    {
+      "check": "reduced_motion",
+      "complete": false
+    }
+  ],
+  "review_limits": {
+    "mobile_human_review_complete": false,
+    "keyboard_human_review_complete": false,
+    "zoom_200_percent_human_review_complete": false,
+    "copy_failure_human_review_complete": false,
+    "reduced_motion_human_review_complete": false,
+    "jpy980_product_readiness_established": false
+  }
+}

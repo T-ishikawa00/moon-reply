@@ -1,0 +1,183 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-experience-projection-gap-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
+  "status": "experience_projection_gap_audited_successor_planned",
+  "audit_target": {
+    "type": "CustomerAssessmentProjectionV1",
+    "schema_version": "customer-assessment-projection-v1",
+    "implementation_path": "lib/assessment/runtime/customer-assessment-projection-v1.ts",
+    "accepted_contract_mutation_allowed": false,
+    "silent_contract_widening_allowed": false
+  },
+  "source_reports": [
+    {
+      "report_type": "RuntimeReport",
+      "schema_version": "m2-p3-runtime-report-v1",
+      "family": "legacy"
+    },
+    {
+      "report_type": "SplitRuntimeReportV1",
+      "schema_version": "m2-p4-split-runtime-report-v1",
+      "family": "split"
+    }
+  ],
+  "current_v1_concepts_preserved": [
+    {
+      "projection_field": "decisionCode",
+      "source": "decisionPlan.selected_decision"
+    },
+    {
+      "projection_field": "primaryReason",
+      "source": "content.decision_reason_summary"
+    },
+    {
+      "projection_field": "finalDraft",
+      "legacy_source": "decisionPlan.message_draft",
+      "split_source": "decisionPlan.recommended_message_draft"
+    },
+    {
+      "projection_field": "immediateAction",
+      "legacy_source": "decisionPlan.three_day_plan plus actions_to_take and actions_to_avoid",
+      "split_source": "decisionPlan.aftercare_plan plus actions_to_take and actions_to_avoid"
+    },
+    {
+      "projection_field": "reassessment",
+      "source": "decisionPlan.review_timing plus decisionPlan.change_conditions"
+    },
+    {
+      "projection_field": "relationshipSummary",
+      "source": "content.relationship_summary",
+      "current_visibility": "requestedTopics_relationship_only"
+    },
+    {
+      "projection_field": "messageTemperature",
+      "source": "content.message_temperature",
+      "current_visibility": "requestedTopics_message_impact_only"
+    },
+    {
+      "projection_field": "fixedLimitation",
+      "source": "report.fixedLimitation"
+    }
+  ],
+  "gap_audit": [
+    {
+      "desired_field": "openingLine",
+      "report_source": "content.cover_line",
+      "legacy_source": "content.cover_line",
+      "split_source": "content.cover_line",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false
+    },
+    {
+      "desired_field": "openingLetter",
+      "report_source": "content.short_letter",
+      "legacy_source": "content.short_letter",
+      "split_source": "content.short_letter",
+      "current_v1_access": "conditional_as_optionalDetails.shortLetter_only_when_requestedTopics_contains_organize_emotions",
+      "can_current_ui_render_without_inventing_text": "only_for_organize_emotions",
+      "gap": "no_stable_baseline_access_to_the_full_short_letter"
+    },
+    {
+      "desired_field": "situationReading",
+      "report_source": "content.observed_fact_commentary selected by decisionPlan.decision_reason_fact_ids",
+      "legacy_source": "content.observed_fact_commentary[*].commentary",
+      "split_source": "content.observed_fact_commentary[*].commentary",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false,
+      "customer_output_excludes": [
+        "fact_id",
+        "decision_reason_fact_ids"
+      ]
+    },
+    {
+      "desired_field": "possibleInterpretations",
+      "report_source": "content.possible_interpretations",
+      "legacy_source": "content.possible_interpretations",
+      "split_source": "content.possible_interpretations",
+      "current_v1_access": "conditional_as_optionalDetails.interpretations_only_when_requestedTopics_contains_message_impact",
+      "can_current_ui_render_without_inventing_text": "only_for_message_impact"
+    },
+    {
+      "desired_field": "materialUnknowns",
+      "report_source": "decisionPlan.material_unknowns",
+      "legacy_source": "decisionPlan.material_unknowns[*]",
+      "split_source": "decisionPlan.material_unknowns[*].summary",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false
+    },
+    {
+      "desired_field": "draftContext",
+      "report_source": "content.message_draft_context",
+      "legacy_source": "content.message_draft_context",
+      "split_source": "content.message_draft_context",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false
+    },
+    {
+      "desired_field": "actionRationales",
+      "report_source": "content.action_rationales",
+      "legacy_source": "content.action_rationales",
+      "split_source": "content.action_rationales",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false
+    },
+    {
+      "desired_field": "closingLines",
+      "report_source": "content.closing_lines",
+      "legacy_source": "content.closing_lines",
+      "split_source": "content.closing_lines",
+      "current_v1_access": "unavailable",
+      "can_current_ui_render_without_inventing_text": false
+    },
+    {
+      "desired_field": "consultationLimitations",
+      "report_source": "decisionPlan consultation-specific limitations",
+      "legacy_source": "decisionPlan.limitations[*]",
+      "split_source": "decisionPlan.model_generated_limitations[*]",
+      "current_v1_access": "unavailable_except_for_separate_report.fixedLimitation",
+      "can_current_ui_render_without_inventing_text": false
+    }
+  ],
+  "preferred_future_boundary": [
+    "Full structured Report",
+    "deterministic CustomerAssessmentExperienceProjection successor",
+    "Customer UI"
+  ],
+  "proposed_successor": {
+    "type": "CustomerAssessmentExperienceProjectionV2",
+    "schema_version": "customer-assessment-experience-projection-v2",
+    "versioned_successor": true,
+    "mutates_v1": false,
+    "preserves_full_report_unchanged": true,
+    "preserves_accepted_v1_concepts": true,
+    "field_mapping": {
+      "openingLine": "content.cover_line",
+      "openingLetter": "content.short_letter",
+      "situationReading": "content.observed_fact_commentary entries whose fact_id occurs in decisionPlan.decision_reason_fact_ids; preserve content order and emit commentary only",
+      "possibleInterpretations": "content.possible_interpretations",
+      "materialUnknowns_legacy": "decisionPlan.material_unknowns strings",
+      "materialUnknowns_split": "decisionPlan.material_unknowns[*].summary",
+      "draftContext": "content.message_draft_context",
+      "actionRationales": "content.action_rationales",
+      "closingLines": "content.closing_lines",
+      "consultationLimitations_legacy": "decisionPlan.limitations strings",
+      "consultationLimitations_split": "decisionPlan.model_generated_limitations strings",
+      "existing": "decision, primary reason, final draft, immediate action, reassessment, relationship summary, message temperature, requested-topic details, and fixed limitation"
+    },
+    "selection_rules": {
+      "source_text_preserved_exactly": true,
+      "source_array_order_preserved": true,
+      "fact_ids_removed_from_customer_output": true,
+      "internal_enums_removed_from_customer_output": true,
+      "no_case_id_branching": true
+    }
+  },
+  "prohibitions": {
+    "additional_provider_stage": false,
+    "paraphrase": false,
+    "factual_rewrite": false,
+    "generated_filler": false,
+    "provider_execution": false,
+    "runtime_activation": false
+  }
+}
