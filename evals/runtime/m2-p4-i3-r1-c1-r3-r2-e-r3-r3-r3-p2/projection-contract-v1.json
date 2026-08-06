@@ -1,8 +1,38 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-projection-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2",
-  "status": "runtime_projection_implemented_pending_human_chatgpt_review",
-  "baseline": "7810861cec9036d5a131dcdf810e6b5e0e74cac5",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-r1-projection-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2-R1",
+  "status": "runtime_projection_corrected_pending_human_chatgpt_review",
+  "baseline": "db47145cd8ed04e9516861c20cdafbd198205cc5",
+  "review_correction": {
+    "original_package_a_architecture_accepted": true,
+    "human_chatgpt_implementation_review": "blocking_split_fact_id_schema_parity_defect_found",
+    "defect_corrected_offline": true,
+    "provider_quality_established": false,
+    "provider_rerun_authorized": false,
+    "package_b_authorization": "unauthorized_pending_r1_review"
+  },
+  "split_fact_id_decoding": {
+    "decision_reason_fact_ids": {
+      "minimum": 1,
+      "maximum": 60,
+      "unique": true,
+      "pattern": "^F[0-9]{3}$"
+    },
+    "optional_locations": [
+      "possible_interpretations[*].supporting_fact_ids",
+      "pre_action_check.supporting_fact_ids",
+      "aftercare_plan[*].supporting_fact_ids",
+      "change_conditions[*].supporting_fact_ids",
+      "review_timing.trigger_fact_ids"
+    ],
+    "optional_minimum": 0,
+    "optional_maximum": 60,
+    "optional_unique": true,
+    "optional_pattern": "^F[0-9]{3}$",
+    "legacy_minimum": 1,
+    "legacy_maximum": null,
+    "legacy_behavior_unchanged": true
+  },
   "projection_schema_version": "customer-assessment-projection-v1",
   "delivery_schema_version": "customer-assessment-delivery-v1",
   "supported_runtime_results": [
@@ -107,6 +137,10 @@
     "provider_response_id",
     "usage",
     "fact_id",
+    "fact_ids",
+    "decision_reason_fact_ids",
+    "supporting_fact_ids",
+    "trigger_fact_ids",
     "diagnostic_verdict",
     "machine_verdict",
     "internal_stage_data"

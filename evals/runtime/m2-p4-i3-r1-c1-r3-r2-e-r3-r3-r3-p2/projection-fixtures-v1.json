@@ -1,6 +1,6 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-projection-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-r1-projection-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2-R1",
   "data_policy": "offline_synthetic_only",
   "provenance": {
     "shape_authority": "Frozen E-R3 accepted final structures for E-R3-01 E-R3-02 E-R3-03 and E-R3-04",
@@ -561,6 +561,178 @@
         "relationship_summary_null": true,
         "message_temperature_null": true
       }
+    },
+    {
+      "fixture_id": "split_possible_interpretation_empty_supporting_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/possible_interpretations/0/supporting_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_pre_action_check_empty_supporting_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/pre_action_check/supporting_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_aftercare_plan_empty_supporting_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/0/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/1/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/2/supporting_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_change_condition_empty_supporting_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/change_conditions/0/supporting_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_review_timing_empty_trigger_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/review_timing/trigger_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_all_optional_fact_id_arrays_empty",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/possible_interpretations/0/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/pre_action_check/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/0/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/1/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/aftercare_plan/2/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/change_conditions/0/supporting_fact_ids",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/review_timing/trigger_fact_ids",
+          "value": []
+        }
+      ],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
     }
   ],
   "stop_fixtures": [
@@ -684,6 +856,190 @@
           "op": "replace",
           "path": "/decisionCard/messageDraft",
           "value": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "split_empty_decision_reason_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": []
+        }
+      ]
+    },
+    {
+      "fixture_id": "split_decision_reason_fact_ids_length_61",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": [
+            "F000",
+            "F001",
+            "F002",
+            "F003",
+            "F004",
+            "F005",
+            "F006",
+            "F007",
+            "F008",
+            "F009",
+            "F010",
+            "F011",
+            "F012",
+            "F013",
+            "F014",
+            "F015",
+            "F016",
+            "F017",
+            "F018",
+            "F019",
+            "F020",
+            "F021",
+            "F022",
+            "F023",
+            "F024",
+            "F025",
+            "F026",
+            "F027",
+            "F028",
+            "F029",
+            "F030",
+            "F031",
+            "F032",
+            "F033",
+            "F034",
+            "F035",
+            "F036",
+            "F037",
+            "F038",
+            "F039",
+            "F040",
+            "F041",
+            "F042",
+            "F043",
+            "F044",
+            "F045",
+            "F046",
+            "F047",
+            "F048",
+            "F049",
+            "F050",
+            "F051",
+            "F052",
+            "F053",
+            "F054",
+            "F055",
+            "F056",
+            "F057",
+            "F058",
+            "F059",
+            "F060"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture_id": "split_optional_fact_ids_length_61",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/pre_action_check/supporting_fact_ids",
+          "value": [
+            "F000",
+            "F001",
+            "F002",
+            "F003",
+            "F004",
+            "F005",
+            "F006",
+            "F007",
+            "F008",
+            "F009",
+            "F010",
+            "F011",
+            "F012",
+            "F013",
+            "F014",
+            "F015",
+            "F016",
+            "F017",
+            "F018",
+            "F019",
+            "F020",
+            "F021",
+            "F022",
+            "F023",
+            "F024",
+            "F025",
+            "F026",
+            "F027",
+            "F028",
+            "F029",
+            "F030",
+            "F031",
+            "F032",
+            "F033",
+            "F034",
+            "F035",
+            "F036",
+            "F037",
+            "F038",
+            "F039",
+            "F040",
+            "F041",
+            "F042",
+            "F043",
+            "F044",
+            "F045",
+            "F046",
+            "F047",
+            "F048",
+            "F049",
+            "F050",
+            "F051",
+            "F052",
+            "F053",
+            "F054",
+            "F055",
+            "F056",
+            "F057",
+            "F058",
+            "F059",
+            "F060"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture_id": "split_duplicate_fact_ids",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/possible_interpretations/0/supporting_fact_ids",
+          "value": [
+            "F101",
+            "F101"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture_id": "split_malformed_fact_id",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/review_timing/trigger_fact_ids",
+          "value": [
+            "F10A"
+          ]
         }
       ]
     }

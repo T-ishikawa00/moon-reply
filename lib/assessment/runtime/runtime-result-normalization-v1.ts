@@ -152,9 +152,26 @@ function assertObjectArray(
   });
 }
 
-function assertFactIds(value: unknown) {
+function assertLegacyFactIds(value: unknown) {
   assertStringArray(value, {
     minimum: 1,
+    unique: true,
+    pattern: factIdPattern,
+  });
+}
+
+function assertSplitRequiredFactIds(value: unknown) {
+  assertStringArray(value, {
+    minimum: 1,
+    maximum: 60,
+    unique: true,
+    pattern: factIdPattern,
+  });
+}
+
+function assertSplitOptionalFactIds(value: unknown) {
+  assertStringArray(value, {
+    maximum: 60,
     unique: true,
     pattern: factIdPattern,
   });
@@ -236,11 +253,15 @@ function assertDraftPolicy(decision: Decision, draft: unknown) {
   }
 }
 
-function assertPossibleInterpretation(value: unknown) {
+function assertPossibleInterpretation(value: unknown, split: boolean) {
   assertRecord(value);
   assertExactKeys(value, ["statement", "supporting_fact_ids", "epistemic_status"]);
   assertString(value.statement);
-  assertFactIds(value.supporting_fact_ids);
+  if (split) {
+    assertSplitOptionalFactIds(value.supporting_fact_ids);
+  } else {
+    assertLegacyFactIds(value.supporting_fact_ids);
+  }
   if (value.epistemic_status !== "possibility_only") invalid();
 }
 
@@ -254,14 +275,18 @@ function assertChangeCondition(value: unknown, split: boolean) {
   );
   assertString(value.condition);
   decodeDecisionCode(value.resulting_direction);
-  if (split) assertFactIds(value.supporting_fact_ids);
+  if (split) assertSplitOptionalFactIds(value.supporting_fact_ids);
 }
 
-function assertReviewTiming(value: unknown) {
+function assertReviewTiming(value: unknown, split: boolean) {
   assertRecord(value);
   assertExactKeys(value, ["when", "trigger_fact_ids"]);
   assertString(value.when);
-  assertFactIds(value.trigger_fact_ids);
+  if (split) {
+    assertSplitOptionalFactIds(value.trigger_fact_ids);
+  } else {
+    assertLegacyFactIds(value.trigger_fact_ids);
+  }
 }
 
 function assertLegacyDecisionPlan(value: unknown): asserts value is DecisionPlan {
@@ -282,8 +307,13 @@ function assertLegacyDecisionPlan(value: unknown): asserts value is DecisionPlan
   ]);
   if (value.schema_version !== "pipeline-schema-v1.0.0") invalid();
   const decision = decodeDecisionCode(value.selected_decision);
-  assertFactIds(value.decision_reason_fact_ids);
-  assertObjectArray(value.possible_interpretations, assertPossibleInterpretation, 0, 5);
+  assertLegacyFactIds(value.decision_reason_fact_ids);
+  assertObjectArray(
+    value.possible_interpretations,
+    (item) => assertPossibleInterpretation(item, false),
+    0,
+    5,
+  );
   assertStringArray(value.actions_to_take, { minimum: 1, maximum: 8, unique: true });
   assertStringArray(value.actions_to_avoid, { minimum: 1, maximum: 8, unique: true });
   assertDraftPolicy(decision, value.message_draft);
@@ -312,7 +342,7 @@ function assertLegacyDecisionPlan(value: unknown): asserts value is DecisionPlan
     1,
     8,
   );
-  assertReviewTiming(value.review_timing);
+  assertReviewTiming(value.review_timing, false);
   assertStringArray(value.material_unknowns, { maximum: 12, unique: true });
   assertStringArray(value.limitations, { minimum: 1, maximum: 8, unique: true });
 }
@@ -462,12 +492,17 @@ function assertSplitDecisionPlan(
   ]);
   if (value.schema_version !== "pipeline-schema-v2.0.0") invalid();
   const decision = decodeDecisionCode(value.selected_decision);
-  assertFactIds(value.decision_reason_fact_ids);
-  assertObjectArray(value.possible_interpretations, assertPossibleInterpretation, 0, 3);
+  assertSplitRequiredFactIds(value.decision_reason_fact_ids);
+  assertObjectArray(
+    value.possible_interpretations,
+    (item) => assertPossibleInterpretation(item, true),
+    0,
+    3,
+  );
   assertRecord(value.pre_action_check);
   assertExactKeys(value.pre_action_check, ["check", "supporting_fact_ids"]);
   assertString(value.pre_action_check.check);
-  assertFactIds(value.pre_action_check.supporting_fact_ids);
+  assertSplitOptionalFactIds(value.pre_action_check.supporting_fact_ids);
   assertStringArray(value.actions_to_take, { minimum: 1, maximum: 4, unique: true });
   assertStringArray(value.actions_to_avoid, { minimum: 1, maximum: 4, unique: true });
   assertDraftPolicy(decision, value.recommended_message_draft);
@@ -484,7 +519,7 @@ function assertSplitDecisionPlan(
       assertOneOf(item.phase, ["tonight", "next", "reassessment_condition"] as const);
       assertString(item.action);
       assertString(item.avoid, { nullable: true });
-      assertFactIds(item.supporting_fact_ids);
+      assertSplitOptionalFactIds(item.supporting_fact_ids);
     },
     0,
     3,
@@ -497,7 +532,7 @@ function assertSplitDecisionPlan(
     0,
     4,
   );
-  assertReviewTiming(value.review_timing);
+  assertReviewTiming(value.review_timing, true);
   assertObjectArray(
     value.material_unknowns,
     (item) => {
