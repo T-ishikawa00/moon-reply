@@ -1,0 +1,68 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2",
+  "status": "PASS",
+  "execution_mode": "offline_synthetic_only",
+  "baseline": "7810861cec9036d5a131dcdf810e6b5e0e74cac5",
+  "fixture_counts": {
+    "legacy_ready": 1,
+    "split_ready": 4,
+    "safety_blocked": 1,
+    "needs_more_information": 1,
+    "invalid_runtime_shapes_rejected": 8,
+    "invalid_delivery_shapes_rejected": 3
+  },
+  "results": {
+    "runtime_union_decoder": "PASS",
+    "legacy_projection": "PASS",
+    "split_projection": "PASS",
+    "nullable_split_fields": "PASS",
+    "final_draft_exact_preservation": "PASS",
+    "immediate_action_normalization": "PASS",
+    "reassessment_normalization": "PASS",
+    "full_report_immutability": "PASS",
+    "projection_determinism": "PASS",
+    "requested_topics_initial_authority": "PASS",
+    "requested_topics_duplicate_authority": "PASS",
+    "duplicate_mismatch_uses_persisted_original": "PASS",
+    "stop_delivery_excludes_projection_report_and_draft": "PASS",
+    "api_wire_decoder": "PASS",
+    "persisted_hydration_decoder": "PASS_STATIC_AND_FIXTURE",
+    "frozen_accepted_final_structure_decoder": "PASS",
+    "case_id_independence": "PASS",
+    "customer_preview_projection_only": "PASS"
+  },
+  "source_report": {
+    "deep_frozen": true,
+    "object_unchanged": true,
+    "serialized_unchanged": true,
+    "repeated_projection_deeply_equal": true
+  },
+  "runtime_state": {
+    "active_runtime": "v4",
+    "active_runtime_activated": false,
+    "customer_ui_finalized": false
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_rerun": false,
+    "package_check": false,
+    "retry": false,
+    "repair": false,
+    "fallback": false
+  },
+  "authorization": {
+    "package_b_authorized": false,
+    "package_c_authorized": false,
+    "package_d_authorized": false,
+    "package_e_authorized": false,
+    "package_f_authorized": false,
+    "provider_rerun_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false
+  }
+}

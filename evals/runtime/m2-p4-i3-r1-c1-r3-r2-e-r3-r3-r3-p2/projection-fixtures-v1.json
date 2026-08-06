@@ -1,0 +1,736 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-projection-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2",
+  "data_policy": "offline_synthetic_only",
+  "provenance": {
+    "shape_authority": "Frozen E-R3 accepted final structures for E-R3-01 E-R3-02 E-R3-03 and E-R3-04",
+    "text_source": "synthetic test copy created for Package A",
+    "e_r3_05_status": "intermediate_output_not_accepted_final_product",
+    "e_r3_06_status": "intermediate_output_not_accepted_final_product"
+  },
+  "result_templates": {
+    "legacy_ready_base": {
+      "requestId": "10000000-0000-4000-8000-000000000001",
+      "runId": "20000000-0000-4000-8000-000000000001",
+      "eligibility": "ready",
+      "decision": "reply_now",
+      "report": {
+        "schemaVersion": "m2-p3-runtime-report-v1",
+        "decisionPlan": {
+          "schema_version": "pipeline-schema-v1.0.0",
+          "selected_decision": "reply_now",
+          "decision_reason_fact_ids": [
+            "F001"
+          ],
+          "possible_interpretations": [
+            {
+              "statement": "相手は確認への返信を待っている可能性があります。",
+              "supporting_fact_ids": [
+                "F001"
+              ],
+              "epistemic_status": "possibility_only"
+            }
+          ],
+          "actions_to_take": [
+            "今夜、確認事項へ一度だけ返信する。",
+            "送信後は次の連絡を待つ。"
+          ],
+          "actions_to_avoid": [
+            "同じ確認を続けて送らない。",
+            "返信時刻だけで結論を決めない。"
+          ],
+          "message_draft": {
+            "text": "確認ありがとう。予定は土曜で大丈夫です。",
+            "policy": "required_now",
+            "use_timing": "now"
+          },
+          "three_day_plan": [
+            {
+              "day": "tonight",
+              "action": "今夜、確認事項へ一度だけ返信する。",
+              "avoid": "同じ確認を続けて送らない。"
+            },
+            {
+              "day": "next_day",
+              "action": "返信後は相手からの連絡を待つ。",
+              "avoid": "反応を何度も確認しない。"
+            },
+            {
+              "day": "day_three",
+              "action": "新しい事実があれば判断を見直す。",
+              "avoid": "事実がないまま意味を断定しない。"
+            }
+          ],
+          "change_conditions": [
+            {
+              "condition": "相手から予定変更の連絡が届いた場合",
+              "resulting_direction": "reply_now"
+            }
+          ],
+          "review_timing": {
+            "when": "相手から新しい連絡が届いた時点",
+            "trigger_fact_ids": [
+              "F001"
+            ]
+          },
+          "material_unknowns": [],
+          "limitations": [
+            "入力されていない相手の意図は判断できません。"
+          ]
+        },
+        "content": {
+          "schema_version": "pipeline-schema-v1.0.0",
+          "cover_line": "確認事項に短く返信できる状況です。",
+          "short_letter": [
+            "事実として確認できる内容だけを返せば十分です。"
+          ],
+          "decision_reason_summary": "相手から具体的な確認が届いており、今の返信には実務上の理由があります。",
+          "relationship_summary": "現在は具体的な予定を確認できる関係です。",
+          "observed_fact_commentary": [
+            {
+              "fact_id": "F001",
+              "commentary": "相手から土曜の予定確認が届いています。"
+            }
+          ],
+          "possible_interpretations": [
+            "相手は予定を確定したい可能性があります。"
+          ],
+          "anxiety_reframe": [
+            "確認への返信と関係全体の評価は分けて考えられます。"
+          ],
+          "message_temperature": {
+            "softness": "落ち着いた柔らかさがあります。",
+            "affection": "強い好意表現は含みません。",
+            "pressure": "返答を迫る圧はありません。",
+            "adjustment": "確認への回答だけに絞っています。"
+          },
+          "action_rationales": [
+            "具体的な確認には具体的に返すためです。"
+          ],
+          "message_draft_context": "予定確認への一回の返信として使います。",
+          "three_day_plan_commentary": [
+            "今夜は確認へ返信します。",
+            "翌日は追加連絡を控えます。",
+            "新しい連絡があれば見直します。"
+          ],
+          "change_condition_commentary": [
+            "予定変更が届けば、その内容に応じて返信します。"
+          ],
+          "unknowns_commentary": [],
+          "closing_lines": [
+            "今は確認事項への一度の返信に絞れます。"
+          ]
+        },
+        "fixedLimitation": "このノートは入力情報の整理であり、相手の本心や将来を保証しません。"
+      },
+      "decisionCard": {
+        "schemaVersion": "m2-p3-decision-card-v1",
+        "decision": "reply_now",
+        "reason": "相手から具体的な確認が届いており、今の返信には実務上の理由があります。",
+        "actionsToTake": [
+          "今夜、確認事項へ一度だけ返信する。",
+          "送信後は次の連絡を待つ。"
+        ],
+        "actionsToAvoid": [
+          "同じ確認を続けて送らない。",
+          "返信時刻だけで結論を決めない。"
+        ],
+        "messageDraft": "確認ありがとう。予定は土曜で大丈夫です。",
+        "reviewTiming": "相手から新しい連絡が届いた時点"
+      },
+      "duplicate": false,
+      "usage": {
+        "totalInputTokens": 100,
+        "totalCachedTokens": 0,
+        "totalOutputTokens": 50,
+        "totalReasoningTokens": 10,
+        "usageDerivedCostUsd": 0
+      }
+    },
+    "split_ready_base": {
+      "requestId": "10000000-0000-4000-8000-000000000002",
+      "runId": "20000000-0000-4000-8000-000000000002",
+      "eligibility": "ready",
+      "decision": "send_now",
+      "report": {
+        "schemaVersion": "m2-p4-split-runtime-report-v1",
+        "decisionPlan": {
+          "schema_version": "pipeline-schema-v2.0.0",
+          "selected_decision": "send_now",
+          "decision_reason_fact_ids": [
+            "F101"
+          ],
+          "possible_interpretations": [
+            {
+              "statement": "短い事実訂正を受け取りやすい可能性があります。",
+              "supporting_fact_ids": [
+                "F101"
+              ],
+              "epistemic_status": "possibility_only"
+            }
+          ],
+          "pre_action_check": {
+            "check": "訂正内容が入力事実と一致することを確認する。",
+            "supporting_fact_ids": [
+              "F101"
+            ]
+          },
+          "actions_to_take": [
+            "今夜、事実訂正を一度だけ送る。",
+            "送信後は追加説明を控える。"
+          ],
+          "actions_to_avoid": [
+            "訂正以外の推測を加えない。",
+            "同じ訂正を繰り返さない。"
+          ],
+          "recommended_message_draft": {
+            "text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+            "policy": "required_now",
+            "use_timing": "now"
+          },
+          "message_draft_edit_metadata": {
+            "source_status": "generated_without_candidate",
+            "preserved_meaning": true,
+            "style_delta": [
+              {
+                "dimension": "register",
+                "change": "preserved",
+                "reason": "no_change_needed"
+              }
+            ],
+            "communicative_intent_delta": {
+              "gratitude_change": "unchanged",
+              "apology_change": "unchanged",
+              "question_count_delta": 0,
+              "invitation_presence_delta": "unchanged_absent",
+              "invitation_specificity_delta": "unchanged",
+              "affection_strength_delta": "unchanged",
+              "commitment_strength_delta": "unchanged",
+              "response_pressure_delta": "unchanged",
+              "boundary_strength_delta": "unchanged",
+              "closure_intent_delta": "unchanged_absent",
+              "practical_requirement_fulfillment": "fulfilled"
+            },
+            "change_reasons": [
+              "no_change_needed"
+            ],
+            "change_summary": null
+          },
+          "aftercare_plan": [
+            {
+              "phase": "tonight",
+              "action": "今夜、事実訂正を一度だけ送る。",
+              "avoid": "訂正以外の推測を加えない。",
+              "supporting_fact_ids": [
+                "F101"
+              ]
+            },
+            {
+              "phase": "next",
+              "action": "送信後は相手からの反応を待つ。",
+              "avoid": null,
+              "supporting_fact_ids": [
+                "F101"
+              ]
+            },
+            {
+              "phase": "reassessment_condition",
+              "action": "新しい連絡があれば内容を確認する。",
+              "avoid": "時刻だけで関係を断定しない。",
+              "supporting_fact_ids": [
+                "F101"
+              ]
+            }
+          ],
+          "change_conditions": [
+            {
+              "condition": "相手から訂正への質問が届いた場合",
+              "resulting_direction": "reply_now",
+              "supporting_fact_ids": [
+                "F101"
+              ]
+            }
+          ],
+          "review_timing": {
+            "when": "相手から新しい質問が届いた時点",
+            "trigger_fact_ids": [
+              "F101"
+            ]
+          },
+          "material_unknowns": [],
+          "model_generated_limitations": []
+        },
+        "content": {
+          "schema_version": "pipeline-schema-v2.0.0",
+          "cover_line": "短い事実訂正を一度だけ送れる状況です。",
+          "short_letter": [
+            "訂正に必要な事実だけを伝えれば十分です。"
+          ],
+          "decision_reason_summary": "送信済み情報に具体的な誤りがあり、短い訂正には現在の実務上の理由があります。",
+          "relationship_summary": "現在は必要な事実訂正を伝えられる関係です。",
+          "observed_fact_commentary": [
+            {
+              "fact_id": "F101",
+              "commentary": "送信した時刻情報に誤りがあります。"
+            }
+          ],
+          "possible_interpretations": [
+            "相手は短い訂正をそのまま受け取る可能性があります。"
+          ],
+          "anxiety_reframe": [
+            "訂正の送信と関係全体の評価は分けて考えられます。"
+          ],
+          "message_temperature": {
+            "softness": "短い謝意を含む柔らかさがあります。",
+            "affection": "好意を強く示す内容ではありません。",
+            "pressure": "返信を求める圧はありません。",
+            "adjustment": "訂正事項だけに絞っています。"
+          },
+          "action_rationales": [
+            "誤った事実を早めに訂正するためです。"
+          ],
+          "message_draft_context": "事実訂正として一度だけ送ります。",
+          "aftercare_commentary": [
+            "送信後は追加説明を控えます。",
+            "次の連絡を待ちます。"
+          ],
+          "change_condition_commentary": [
+            "質問が届けば、その質問にだけ答えます。"
+          ],
+          "closing_lines": [
+            "今は短い訂正だけに絞れます。"
+          ]
+        },
+        "fixedLimitation": "このノートは入力情報の整理であり、相手の本心や将来を保証しません。"
+      },
+      "decisionCard": {
+        "schemaVersion": "m2-p3-decision-card-v1",
+        "decision": "send_now",
+        "reason": "送信済み情報に具体的な誤りがあり、短い訂正には現在の実務上の理由があります。",
+        "actionsToTake": [
+          "今夜、事実訂正を一度だけ送る。",
+          "送信後は追加説明を控える。"
+        ],
+        "actionsToAvoid": [
+          "訂正以外の推測を加えない。",
+          "同じ訂正を繰り返さない。"
+        ],
+        "messageDraft": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "reviewTiming": "相手から新しい質問が届いた時点"
+      },
+      "duplicate": false,
+      "usage": {
+        "totalInputTokens": 120,
+        "totalCachedTokens": 0,
+        "totalOutputTokens": 60,
+        "totalReasoningTokens": 12,
+        "usageDerivedCostUsd": 0
+      }
+    },
+    "safety_blocked_base": {
+      "requestId": "10000000-0000-4000-8000-000000000003",
+      "runId": "20000000-0000-4000-8000-000000000003",
+      "eligibility": "safety_blocked",
+      "questionCodes": [],
+      "duplicate": false,
+      "usage": {
+        "totalInputTokens": 0,
+        "totalCachedTokens": 0,
+        "totalOutputTokens": 0,
+        "totalReasoningTokens": 0,
+        "usageDerivedCostUsd": 0
+      }
+    },
+    "needs_information_base": {
+      "requestId": "10000000-0000-4000-8000-000000000004",
+      "runId": "20000000-0000-4000-8000-000000000004",
+      "eligibility": "needs_more_information",
+      "questionCodes": [
+        "M2_QUESTION_TIMELINE"
+      ],
+      "duplicate": false,
+      "usage": {
+        "totalInputTokens": 20,
+        "totalCachedTokens": 0,
+        "totalOutputTokens": 5,
+        "totalReasoningTokens": 1,
+        "usageDerivedCostUsd": 0
+      }
+    }
+  },
+  "ready_fixtures": [
+    {
+      "fixture_id": "valid_legacy_ready_reply_now_with_draft",
+      "base_result": "legacy_ready_base",
+      "result_patches": [],
+      "requested_topics": [
+        "message_impact",
+        "relationship",
+        "next_three_days"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p3-runtime-report-v1",
+        "decision_code": "reply_now",
+        "final_draft_text": "確認ありがとう。予定は土曜で大丈夫です。",
+        "immediate_action": "今夜、確認事項へ一度だけ返信する。",
+        "relationship_summary_null": false,
+        "message_temperature_null": false
+      }
+    },
+    {
+      "fixture_id": "valid_split_ready_send_now_with_draft",
+      "base_result": "split_ready_base",
+      "result_patches": [],
+      "requested_topics": [
+        "draft_message",
+        "organize_emotions",
+        "next_three_days"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "send_now",
+        "final_draft_text": "さっきの時間、18時じゃなくて19時でした。ごめんね。",
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_message_temperature_null_wait_without_draft",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/selected_decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/recommended_message_draft",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/message_draft_edit_metadata",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/message_temperature",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/messageDraft",
+          "value": null
+        }
+      ],
+      "requested_topics": [
+        "message_impact",
+        "relationship",
+        "draft_message"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "wait_and_reassess",
+        "final_draft_text": null,
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": false,
+        "message_temperature_null": true
+      }
+    },
+    {
+      "fixture_id": "split_relationship_summary_null_pause_without_draft",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/decision",
+          "value": "pause_additional_contact"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/selected_decision",
+          "value": "pause_additional_contact"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/recommended_message_draft",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/message_draft_edit_metadata",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/relationship_summary",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/decision",
+          "value": "pause_additional_contact"
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/messageDraft",
+          "value": null
+        }
+      ],
+      "requested_topics": [
+        "message_impact",
+        "relationship",
+        "draft_message"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "pause_additional_contact",
+        "final_draft_text": null,
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": false
+      }
+    },
+    {
+      "fixture_id": "split_both_nullable_fields_null",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/selected_decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/recommended_message_draft",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/message_draft_edit_metadata",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/message_temperature",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/relationship_summary",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/decision",
+          "value": "wait_and_reassess"
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/messageDraft",
+          "value": null
+        }
+      ],
+      "requested_topics": [
+        "message_impact",
+        "relationship",
+        "draft_message"
+      ],
+      "expected": {
+        "source_report_schema_version": "m2-p4-split-runtime-report-v1",
+        "decision_code": "wait_and_reassess",
+        "final_draft_text": null,
+        "immediate_action": "今夜、事実訂正を一度だけ送る。",
+        "relationship_summary_null": true,
+        "message_temperature_null": true
+      }
+    }
+  ],
+  "stop_fixtures": [
+    {
+      "fixture_id": "safety_blocked_without_report",
+      "base_result": "safety_blocked_base",
+      "result_patches": [],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected_eligibility": "safety_blocked"
+    },
+    {
+      "fixture_id": "needs_more_information_without_report",
+      "base_result": "needs_information_base",
+      "result_patches": [],
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "expected_eligibility": "needs_more_information"
+    }
+  ],
+  "invalid_fixtures": [
+    {
+      "fixture_id": "unknown_report_schema",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/schemaVersion",
+          "value": "unknown-runtime-report-v99"
+        }
+      ]
+    },
+    {
+      "fixture_id": "mixed_legacy_split_result",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "add",
+          "path": "/report/decisionPlan/aftercare_plan",
+          "value": []
+        }
+      ]
+    },
+    {
+      "fixture_id": "ready_without_report",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "remove",
+          "path": "/report"
+        }
+      ]
+    },
+    {
+      "fixture_id": "non_ready_with_report",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/eligibility",
+          "value": "safety_blocked"
+        },
+        {
+          "op": "remove",
+          "path": "/decision"
+        },
+        {
+          "op": "remove",
+          "path": "/decisionCard"
+        },
+        {
+          "op": "add",
+          "path": "/questionCodes",
+          "value": []
+        }
+      ]
+    },
+    {
+      "fixture_id": "malformed_decision_card",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "remove",
+          "path": "/decisionCard/reason"
+        }
+      ]
+    },
+    {
+      "fixture_id": "malformed_nullable_field",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/relationship_summary",
+          "value": 42
+        }
+      ]
+    },
+    {
+      "fixture_id": "missing_required_nested_field",
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "remove",
+          "path": "/report/decisionPlan/review_timing/when"
+        }
+      ]
+    },
+    {
+      "fixture_id": "reply_now_without_policy_valid_draft",
+      "base_result": "legacy_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/message_draft",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/decisionCard/messageDraft",
+          "value": null
+        }
+      ]
+    }
+  ],
+  "behavior_fixtures": {
+    "mutated_source_detection": {
+      "base_result": "legacy_ready_base",
+      "requested_topics": [
+        "message_impact"
+      ],
+      "mutation_path": "/report/fixedLimitation",
+      "expected": "frozen_assignment_rejected_and_source_unchanged"
+    },
+    "requested_topics_duplicate_mismatch": {
+      "base_result": "split_ready_base",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/duplicate",
+          "value": true
+        },
+        {
+          "op": "add",
+          "path": "/authoritativeRequestedTopics",
+          "value": [
+            "relationship"
+          ]
+        }
+      ],
+      "current_requested_topics": [
+        "message_impact"
+      ],
+      "expected_projected_topics": [
+        "relationship"
+      ],
+      "expected_authority": "persisted_original_request"
+    },
+    "case_id_independence": {
+      "base_result": "legacy_ready_base",
+      "requested_topics": [
+        "relationship"
+      ],
+      "metadata_only_fixture_ids": [
+        "SYNTHETIC-CASE-ALPHA",
+        "SYNTHETIC-CASE-BETA"
+      ],
+      "expected": "deeply_equal_projection"
+    }
+  }
+}

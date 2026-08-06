@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { asM2RuntimeError, M2RuntimeError } from "@/lib/assessment/runtime/errors";
 import { isInternalRuntimeAvailable } from "@/lib/assessment/runtime/environment";
 import { executeInternalAssessment } from "@/lib/assessment/runtime/service";
+import { createCustomerAssessmentDeliveryV1 } from "@/lib/assessment/runtime/customer-assessment-delivery-v1";
 import {
   RELATIONSHIP_VALUES,
   REQUESTED_TOPIC_VALUES,
@@ -142,11 +143,13 @@ export async function POST(request: Request) {
     } catch {
       throw new M2RuntimeError("M2_INVALID_JSON", 400);
     }
-    const result = await executeInternalAssessment(
-      validateBody(parsed),
-      idempotencyKey,
+    const input = validateBody(parsed);
+    const result = await executeInternalAssessment(input, idempotencyKey);
+    const delivery = createCustomerAssessmentDeliveryV1(
+      result,
+      input.requestedTopics,
     );
-    return json({ data: result }, 200);
+    return json({ data: delivery }, 200);
   } catch (error) {
     const safeError = asM2RuntimeError(error);
     return json(

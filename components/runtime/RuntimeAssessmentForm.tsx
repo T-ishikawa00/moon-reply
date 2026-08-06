@@ -1,13 +1,15 @@
 "use client";
 
 import { FormEvent, useRef, useState } from "react";
+import {
+  decodeCustomerAssessmentApiResponseV1,
+  type CustomerAssessmentDeliveryV1,
+} from "@/lib/assessment/runtime/customer-assessment-delivery-v1";
 import type {
-  AssessmentExecutionResult,
-  CompletedAssessment,
   RelationshipValue,
   RequestedTopic,
 } from "@/lib/assessment/runtime/types";
-import { RuntimeAssessmentNote } from "./RuntimeAssessmentNote";
+import { RuntimeAssessmentProjectionPreview } from "./RuntimeAssessmentProjectionPreview";
 
 const relationships: Array<{ value: RelationshipValue; label: string }> = [
   { value: "dating", label: "付き合う前" },
@@ -48,13 +50,7 @@ type RequestState =
   | { status: "idle" }
   | { status: "processing" }
   | { status: "error"; code: string }
-  | { status: "success"; result: AssessmentExecutionResult };
-
-function isCompleted(
-  result: AssessmentExecutionResult,
-): result is CompletedAssessment & { duplicate: boolean } {
-  return result.eligibility === "ready";
-}
+  | { status: "success"; delivery: CustomerAssessmentDeliveryV1 };
 
 export function RuntimeAssessmentForm() {
   const [form, setForm] = useState(initialForm);
@@ -123,13 +119,7 @@ export function RuntimeAssessmentForm() {
         }),
       });
       const payload: unknown = await response.json();
-      if (
-        !response.ok ||
-        typeof payload !== "object" ||
-        payload === null ||
-        Array.isArray(payload) ||
-        !("data" in payload)
-      ) {
+      if (!response.ok) {
         const code =
           typeof payload === "object" &&
           payload !== null &&
@@ -145,10 +135,8 @@ export function RuntimeAssessmentForm() {
         setRequestState({ status: "error", code });
         return;
       }
-      setRequestState({
-        status: "success",
-        result: payload.data as AssessmentExecutionResult,
-      });
+      const decoded = decodeCustomerAssessmentApiResponseV1(payload);
+      setRequestState({ status: "success", delivery: decoded.data });
     } catch {
       setRequestState({ status: "error", code: "M2_INTERNAL_REQUEST_FAILED" });
     } finally {
@@ -156,11 +144,13 @@ export function RuntimeAssessmentForm() {
     }
   }
 
-  if (requestState.status === "success" && isCompleted(requestState.result)) {
+  if (
+    requestState.status === "success" &&
+    requestState.delivery.eligibility === "ready"
+  ) {
     return (
-      <RuntimeAssessmentNote
-        assessment={requestState.result}
-        requestedTopics={form.requestedTopics}
+      <RuntimeAssessmentProjectionPreview
+        projection={requestState.delivery.projection}
       />
     );
   }
@@ -281,16 +271,18 @@ export function RuntimeAssessmentForm() {
           </div>
         ) : null}
         {requestState.status === "success" &&
-        requestState.result.eligibility !== "ready" ? (
+        requestState.delivery.eligibility === "safety_blocked" ? (
           <div className="runtime-stop-result" role="status">
-            <strong>
-              {requestState.result.eligibility === "safety_blocked"
-                ? "Safetyにより通常レポート生成を停止しました。"
-                : "追加情報が必要なため通常レポート生成を停止しました。"}
-            </strong>
-            {requestState.result.questionCodes.length > 0 ? (
+            <strong>Safetyにより通常レポート生成を停止しました。</strong>
+          </div>
+        ) : null}
+        {requestState.status === "success" &&
+        requestState.delivery.eligibility === "needs_more_information" ? (
+          <div className="runtime-stop-result" role="status">
+            <strong>追加情報が必要なため通常レポート生成を停止しました。</strong>
+            {requestState.delivery.questionCodes.length > 0 ? (
               <p>
-                質問コード: {requestState.result.questionCodes.join("、")}
+                質問コード: {requestState.delivery.questionCodes.join("、")}
               </p>
             ) : null}
           </div>

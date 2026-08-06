@@ -4,11 +4,14 @@ import {
   type SupabaseClient,
 } from "@supabase/supabase-js";
 import { M2RuntimeError } from "./errors.ts";
+import {
+  decodeRequestedTopics,
+  hydratePersistedReadyAssessmentV1,
+} from "./runtime-result-normalization-v1.ts";
 import type {
   AssessmentRepository,
   CompleteRunRecord,
   CompleteStageRecord,
-  CompletedAssessment,
   CreateRequestRecord,
   CreateRunRecord,
   FailRunRecord,
@@ -18,7 +21,6 @@ import type {
   RelationshipValue,
   RequestedTopic,
   SkipStageRecord,
-  SplitCompletedAssessment,
   StageRunStatus,
   StageTopologyVersion,
   StartStageRecord,
@@ -163,7 +165,7 @@ function mapRequest(row: RequestRow): PersistedAssessmentRequest {
     currentSituation: row.raw_situation,
     optionalMessage: row.optional_message,
     relationship: row.relationship,
-    requestedTopics: row.requested_topics,
+    requestedTopics: decodeRequestedTopics(row.requested_topics),
     privacyAcknowledged: true,
     status: row.status,
     createdAt: row.created_at,
@@ -206,7 +208,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       throw new M2RuntimeError("M2_IDEMPOTENCY_CONFLICT", 409);
     }
     if (error || !data) throw databaseFailure();
-    return mapRequest(data as RequestRow);
+    return mapRequest(data);
   }
 
   async findByIdempotencyKey(idempotencyKey: string) {
@@ -216,7 +218,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       .eq("idempotency_key", idempotencyKey)
       .maybeSingle();
     if (error) throw databaseFailure();
-    return data ? mapRequest(data as RequestRow) : null;
+    return data ? mapRequest(data) : null;
   }
 
   async createRun(record: CreateRunRecord) {
@@ -409,6 +411,20 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
   }
 
   async getCompletedAssessment(requestId: string) {
+    const { data: originalRequest, error: requestError } = await this.client
+      .from("assessment_requests")
+      .select("*")
+      .eq("id", requestId)
+      .maybeSingle();
+    if (requestError) throw databaseFailure();
+    if (!originalRequest) {
+      throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
+    }
+    const persistedRequest = mapRequest(originalRequest);
+    if (persistedRequest.status !== "completed") {
+      throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
+    }
+
     const { data: run, error: runError } = await this.client
       .from("assessment_runs")
       .select("*")
@@ -420,6 +436,9 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       .maybeSingle();
     if (runError) throw databaseFailure();
     if (!run || typeof run.decision !== "string") return null;
+    if (run.request_id !== requestId) {
+      throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
+    }
 
     const { data: report, error: reportError } = await this.client
       .from("assessment_reports")
@@ -427,22 +446,22 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       .eq("run_id", run.id)
       .maybeSingle();
     if (reportError) throw databaseFailure();
-    if (!report) return null;
+    if (!report) throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
 
-    return {
+    return hydratePersistedReadyAssessmentV1({
       requestId,
       runId: run.id,
-      eligibility: "ready",
       decision: run.decision,
-      report: report.report_json,
-      decisionCard: report.decision_card_json,
+      reportJson: report.report_json,
+      decisionCardJson: report.decision_card_json,
+      authoritativeRequestedTopics: persistedRequest.requestedTopics,
       usage: {
-        totalInputTokens: Number(run.total_input_tokens),
-        totalCachedTokens: Number(run.total_cached_tokens),
-        totalOutputTokens: Number(run.total_output_tokens),
-        totalReasoningTokens: Number(run.total_reasoning_tokens),
-        usageDerivedCostUsd: Number(run.usage_derived_cost_usd),
+        totalInputTokens: run.total_input_tokens,
+        totalCachedTokens: run.total_cached_tokens,
+        totalOutputTokens: run.total_output_tokens,
+        totalReasoningTokens: run.total_reasoning_tokens,
+        usageDerivedCostUsd: run.usage_derived_cost_usd,
       },
-    } as CompletedAssessment | SplitCompletedAssessment;
+    });
   }
 }

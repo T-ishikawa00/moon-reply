@@ -586,23 +586,37 @@ export type CompletedAssessment = {
   report: RuntimeReport;
   decisionCard: DecisionCard;
   usage: UsageTotals;
+  authoritativeRequestedTopics?: RequestedTopic[];
 };
 
 export type SplitCompletedAssessment = Omit<CompletedAssessment, "report"> & {
   report: SplitRuntimeReportV1;
 };
 
+export type LegacyReadyAssessmentResult = CompletedAssessment & {
+  duplicate: boolean;
+};
+
+export type SplitReadyAssessmentResult = SplitCompletedAssessment & {
+  duplicate: boolean;
+};
+
+export type ReadyAssessmentResult =
+  | LegacyReadyAssessmentResult
+  | SplitReadyAssessmentResult;
+
+export type StoppedAssessmentResult = {
+  requestId: string;
+  runId: string;
+  eligibility: "needs_more_information" | "safety_blocked";
+  questionCodes: string[];
+  duplicate: boolean;
+  usage: UsageTotals;
+};
+
 export type AssessmentExecutionResult =
-  | (CompletedAssessment & { duplicate: boolean })
-  | (SplitCompletedAssessment & { duplicate: boolean })
-  | {
-      requestId: string;
-      runId: string;
-      eligibility: "needs_more_information" | "safety_blocked";
-      questionCodes: string[];
-      duplicate: boolean;
-      usage: UsageTotals;
-    };
+  | ReadyAssessmentResult
+  | StoppedAssessmentResult;
 
 export interface AssessmentRepository {
   createRequest(record: CreateRequestRecord): Promise<PersistedAssessmentRequest>;

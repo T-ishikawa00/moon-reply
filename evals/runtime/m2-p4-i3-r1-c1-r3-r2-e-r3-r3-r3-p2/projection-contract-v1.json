@@ -1,0 +1,121 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2-projection-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P2",
+  "status": "runtime_projection_implemented_pending_human_chatgpt_review",
+  "baseline": "7810861cec9036d5a131dcdf810e6b5e0e74cac5",
+  "projection_schema_version": "customer-assessment-projection-v1",
+  "delivery_schema_version": "customer-assessment-delivery-v1",
+  "supported_runtime_results": [
+    {
+      "variant": "legacy_ready",
+      "eligibility": "ready",
+      "report_schema_version": "m2-p3-runtime-report-v1",
+      "report_required": true
+    },
+    {
+      "variant": "split_ready",
+      "eligibility": "ready",
+      "report_schema_version": "m2-p4-split-runtime-report-v1",
+      "report_required": true
+    },
+    {
+      "variant": "safety_blocked",
+      "eligibility": "safety_blocked",
+      "report_required": false,
+      "projection_allowed": false
+    },
+    {
+      "variant": "needs_more_information",
+      "eligibility": "needs_more_information",
+      "report_required": false,
+      "projection_allowed": false
+    }
+  ],
+  "ready_discriminator": [
+    "eligibility",
+    "report.schemaVersion"
+  ],
+  "unknown_or_mixed_result_behavior": "fail_closed_M2_RUNTIME_RESULT_INVALID",
+  "projection_fields": [
+    "projectionSchemaVersion",
+    "sourceReportSchemaVersion",
+    "requestedTopics",
+    "decisionCode",
+    "primaryReason",
+    "finalDraft",
+    "immediateAction",
+    "reassessment",
+    "relationshipSummary",
+    "messageTemperature",
+    "optionalDetails",
+    "fixedLimitation"
+  ],
+  "projection_sources": {
+    "decisionCode": "decisionPlan.selected_decision",
+    "primaryReason": "content.decision_reason_summary",
+    "legacy_finalDraft": "decisionPlan.message_draft",
+    "split_finalDraft": "decisionPlan.recommended_message_draft",
+    "legacy_immediateAction_primary": "decisionPlan.three_day_plan[day=tonight].action",
+    "split_immediateAction_primary": "decisionPlan.aftercare_plan[phase=tonight].action",
+    "immediateAction_fallback": "decisionPlan.actions_to_take[0]",
+    "reassessment_when": "decisionPlan.review_timing.when",
+    "reassessment_conditions": "decisionPlan.change_conditions",
+    "relationshipSummary": "content.relationship_summary when requestedTopics includes relationship",
+    "messageTemperature": "content.message_temperature when requestedTopics includes message_impact",
+    "fixedLimitation": "report.fixedLimitation"
+  },
+  "requested_topics_authority": {
+    "initial": "server_validated_AssessmentInput.requestedTopics",
+    "duplicate": "persisted_original_assessment_request.requested_topics",
+    "mismatch_behavior": "use_persisted_original_request",
+    "delivery_field": "requestedTopicsAuthority"
+  },
+  "optional_selection": {
+    "message_impact": [
+      "messageTemperature",
+      "optionalDetails.interpretations"
+    ],
+    "relationship": [
+      "relationshipSummary"
+    ],
+    "organize_emotions": [
+      "optionalDetails.shortLetter",
+      "optionalDetails.anxietyReframe"
+    ],
+    "next_three_days": [
+      "optionalDetails.expandedPlan",
+      "optionalDetails.planCommentary"
+    ],
+    "draft_message_with_null_draft": [
+      "finalDraft=null",
+      "decisionCode",
+      "requestedTopics contains draft_message"
+    ]
+  },
+  "immutability": {
+    "persisted_full_report_is_authority": true,
+    "projection_mutates_source": false,
+    "projection_rewrites_source": false,
+    "projection_generates_text": false,
+    "renderer_input": "CustomerAssessmentProjectionV1_only"
+  },
+  "customer_copy_exclusions": [
+    "case_id",
+    "fixture_id",
+    "request_id",
+    "run_id",
+    "provider_response_id",
+    "usage",
+    "fact_id",
+    "diagnostic_verdict",
+    "machine_verdict",
+    "internal_stage_data"
+  ],
+  "decision_label_owner": "renderer",
+  "projection_contains_customer_facing_decision_label": false,
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}
