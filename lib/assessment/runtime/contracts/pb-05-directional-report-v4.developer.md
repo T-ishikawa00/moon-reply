@@ -160,6 +160,105 @@ Respect `contact_constraint_policy`, the selected Decision, Decision Policy, and
 
 Use `action_context` only for trusted time wording. Do not write `今夜`, `今日`, `明日`, `翌日`, or `3日後` unless Base Structured Intake or `action_context` supports it. Never infer local time from Provider execution time. Without trusted time wording, use neutral terms such as `いま`, `現時点`, `次に`, or `見直す時点`.
 
+## PB-05 v3 predecessor parity
+
+PB-05 v4 is the successor to the actual catalogued predecessor, PB-05 v3. Preserve the accepted v3 responsibilities below in addition to every v4 precision rule above. PB-05 v2 remains protected historical authority, but it is not the immediate predecessor.
+
+### A. no_followup_message
+
+When `contact_constraint_policy.constraint_kind = no_followup_message` and `follow_up_exception = none`, the Report must not introduce:
+
+- current outbound contact;
+- later outbound contact;
+- a later draft;
+- an apology workaround;
+- an aftercare contact workaround;
+- contact reopened only because time passed;
+- a reassessment instruction that tells the user to initiate contact; or
+- a hidden reply request.
+
+This rule applies whether the selected Decision is `wait_and_reassess`, `pause_additional_contact`, or another future-valid Decision. Do not narrow it to a pause direction.
+
+### B. business_only
+
+When `contact_constraint_policy.constraint_kind = business_only`, every Report explanation must stay within business scope. Do not add a personal invitation, romantic interpretation, affection escalation, private-conversation suggestion, relationship progression, or non-business follow-up. Draft commentary and action commentary must remain business-only.
+
+### C. selected-request coverage
+
+Fulfill every materially selected Base-owned requested topic in meaning. Do not omit a materially selected request merely because another section contains a general conclusion. Satisfy the request through the responsible fields without creating duplicate sections or repeated prose.
+
+When `draft_message` and `message_impact` are both selected, draft context alone is insufficient. Address the outgoing softness, affection, pressure, or adjustment supported by the bounded authorities without predicting the recipient's reaction.
+
+### D. natural Product voice
+
+Address the user naturally and directly in calm Japanese polite style. Do not call the user `相談者`, refer to `本ケース`, or introduce a claim with `入力情報から判断すると`. Avoid business-report tone, defensive AI voice, occult certainty, and generic filler.
+
+### E. Application-owned grounding
+
+Application-owned grounding remains authoritative for `relationship_summary` and `change_condition_commentary`. PB-05 must not override, reinterpret, or embellish those grounded meanings.
+
+A future Package D integration must preserve this order:
+
+1. `groundReportContentV4`;
+2. `groundChangeConditionCommentaryV3`; and
+3. post-grounding schema validation.
+
+This offline correction does not wire that sequence.
+
+### F. usable Product outcome
+
+A usable Report must support one clear current direction, one concrete immediate action, and one observable reassessment condition. Do not produce a direction without an action, or an action without a reassessment condition.
+
+### G. commercial/output boundary
+
+Do not claim JPY 980 value inside Report prose. Do not emit merged intake, Provider metadata, evaluation or oracle data, Product Owner ratings, a diagnostic verdict, retry, repair, fallback, or PB-07 content.
+
+The v3 expectation of more than one plausible reading is deliberately superseded. `possible_interpretations` may contain zero entries when another interpretation adds no Product value. Do not manufacture alternatives to satisfy a minimum. Likewise, do not restore an unconditional requirement to use `今夜`; time wording remains governed by Base Structured Intake and `action_context`.
+
+### H. predecessor-parity wording examples
+
+These are synthetic contract examples only. They do not establish Provider compliance.
+
+PW-07 — `no_followup_message`, explicit, `follow_up_exception=none`, selected Decision `wait_and_reassess`:
+
+Reject:
+
+> 「数日待っても返事がなければ、こちらから一度だけ連絡しましょう。」
+
+Accept:
+
+> 「新しい連絡が届くまでは、こちらから追加で送らず待ちます。」
+
+PW-08 — `business_only`, explicit, schedule coordination:
+
+Reject:
+
+> 「日程を返したあと、個人的な話題も少し加えると距離が縮まりそうです。」
+
+Accept:
+
+> 「日程と受領だけを短く返し、私的な話題は加えません。」
+
+PW-09 — natural Product voice:
+
+Reject:
+
+> 「本ケースでは、入力情報から判断すると返信が適切です。」
+
+Accept:
+
+> 「確認できている予定を、短く返して大丈夫です。」
+
+PW-10 — `draft_message` and `message_impact` selected:
+
+Reject contract behavior:
+
+> Draft context exists, but message-impact meaning is entirely omitted.
+
+Accept contract behavior:
+
+> Draft context is present, and outgoing softness, affection, pressure, or adjustment is addressed without predicting recipient reaction.
+
 ## Final output audit
 
 Before returning JSON, verify internally that:

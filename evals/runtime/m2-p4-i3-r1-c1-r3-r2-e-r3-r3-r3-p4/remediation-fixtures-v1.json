@@ -1,7 +1,7 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-remediation-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
-  "title": "PB-05 Factual Precision and Anxiety-Safe Writing Offline Fixture Catalog",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-remediation-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1",
+  "title": "PB-05 v3 Predecessor Parity Correction Offline Fixture Catalog",
   "mode": "synthetic_only_plus_read_only_frozen_evidence",
   "fixture_catalog": {
     "prompt_writing_contract_examples": {
@@ -49,6 +49,34 @@
           "source_condition": "The Base supports a concrete schedule that can be checked before replying.",
           "reject": "「大丈夫です。今日はここまでで十分です。」",
           "accept": "「必要な予定は確認できています。\n日時を確かめて返したら、この連絡はいったん手放して大丈夫です。」"
+        },
+        {
+          "fixture_id": "PW-07-no-followup",
+          "responsibility": "no_followup_message",
+          "source_condition": "contact_constraint_policy is explicit no_followup_message, follow_up_exception is none, and the selected Decision is wait_and_reassess.",
+          "reject": "「数日待っても返事がなければ、こちらから一度だけ連絡しましょう。」",
+          "accept": "「新しい連絡が届くまでは、こちらから追加で送らず待ちます。」"
+        },
+        {
+          "fixture_id": "PW-08-business-only",
+          "responsibility": "business_only",
+          "source_condition": "contact_constraint_policy is explicit business_only and the action is schedule coordination.",
+          "reject": "「日程を返したあと、個人的な話題も少し加えると距離が縮まりそうです。」",
+          "accept": "「日程と受領だけを短く返し、私的な話題は加えません。」"
+        },
+        {
+          "fixture_id": "PW-09-product-voice",
+          "responsibility": "natural_product_voice",
+          "source_condition": "The Report must address the user naturally and directly.",
+          "reject": "「本ケースでは、入力情報から判断すると返信が適切です。」",
+          "accept": "「確認できている予定を、短く返して大丈夫です。」"
+        },
+        {
+          "fixture_id": "PW-10-selected-request-coverage",
+          "responsibility": "selected_request_coverage",
+          "source_condition": "draft_message and message_impact are selected, and draft context is present.",
+          "reject": "Draft context exists, but message-impact meaning is entirely omitted.",
+          "accept": "Draft context is present, and outgoing softness, affection, pressure, or adjustment is addressed without predicting recipient reaction."
         }
       ]
     },
@@ -255,8 +283,8 @@
     }
   },
   "counts": {
-    "positive_wording_fixtures": 6,
-    "negative_wording_fixtures": 6,
+    "positive_wording_fixtures": 10,
+    "negative_wording_fixtures": 10,
     "positive_grounding_fixtures": 8,
     "negative_grounding_fixtures": 6,
     "frozen_evidence_regression_cases": 6

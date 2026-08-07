@@ -1,17 +1,16 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-remediation-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
-  "title": "Package C — PB-05 Factual Precision and Anxiety-Safe Writing Successor",
-  "status": "pb05_precision_writing_successor_implemented_pending_human_chatgpt_review",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-remediation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1",
+  "title": "Package C — PB-05 v3 Predecessor Parity Correction",
+  "status": "pb05_precision_writing_v3_parity_corrected_pending_human_chatgpt_review",
   "mode": "inactive_offline_only",
-  "baseline": "df3c707ec7f567120d28f0ce164ef42916e61c63",
-  "parent": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+  "baseline": "eb76dd591fd52ba344c9114c85b8b63187664e9b",
+  "parent": "df3c707ec7f567120d28f0ce164ef42916e61c63",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
-  "source_branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product",
-  "implementation_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing",
+  "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing",
+  "implementation_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity",
   "exact_scope": [
     "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
-    "lib/assessment/runtime/report-grounding-v4.ts",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-contract-v1.json",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-fixtures-v1.json",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/offline-results-v1.json",
@@ -20,11 +19,13 @@
     "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P4_REVIEW.md"
   ],
   "scope_shape": {
-    "new": 8,
-    "updated": 0,
+    "new": 0,
+    "updated": 7,
     "deleted": 0
   },
   "package_authority": {
+    "package_c_architecture_accepted": true,
+    "grounding_v4_accepted_unchanged": true,
     "creates_inactive_successor_assets_only": true,
     "provider_quality_established": false,
     "final_jpy980_readiness_established": false,
@@ -39,10 +40,11 @@
     "path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
     "title": "PB-05 Directional Report — Developer Contract v4.0.0",
     "version": "v4.0.0",
-    "sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
     "output_schema": "report-content-v2.schema.json",
     "versioned_successor": true,
     "existing_v2_mutated": false,
+    "existing_v3_mutated": false,
     "exact_future_inputs": [
       "base_structured_intake",
       "candidate_envelope",
@@ -106,6 +108,15 @@
       "contact_and_safety_integrity",
       "action_context_authority"
     ],
+    "predecessor_parity_responsibilities": [
+      "no_followup_message",
+      "business_only",
+      "selected_request_coverage",
+      "natural_product_voice",
+      "application_owned_change_condition_grounding",
+      "concrete_action_and_reassessment",
+      "commercial_output_boundary"
+    ],
     "field_responsibilities": [
       "cover_line",
       "short_letter",
@@ -124,6 +135,111 @@
     "no_fixed_length_template": true,
     "optional_arrays_may_be_empty": true,
     "provider_quality_claim": false
+  },
+  "predecessor_authority": {
+    "catalog_path": "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
+    "catalog_version": "runtime-stage-catalog-v11.0.0",
+    "stage_id": "PB-05",
+    "prompt_version": "v3.0.0",
+    "prompt_path": "lib/assessment/runtime/contracts/pb-05-directional-report-v3.developer.md",
+    "prompt_git_blob_sha": "8d0242ee120238c488b80b310bf47e13cea617ba",
+    "prompt_sha256_canonical_utf8_lf": "3dfdf47d9df45bdde344e57d5481dcac247095736eed8cd1919f2e7547d8b083",
+    "successor_prompt_path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
+    "v4_baseline_sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "v4_corrected_sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
+    "v2_protected_historical_authority": true,
+    "v3_is_immediate_predecessor": true
+  },
+  "predecessor_parity": {
+    "complete": true,
+    "matrix": [
+      {
+        "responsibility": "exact_input_boundary",
+        "status": "preserved",
+        "reason": "v4 consumes the same five bounded future inputs and no raw merged input."
+      },
+      {
+        "responsibility": "contact_constraint_policy",
+        "status": "preserved",
+        "reason": "Application-owned contact constraints remain authoritative and cannot be reinterpreted."
+      },
+      {
+        "responsibility": "no_followup_message",
+        "status": "preserved_and_made_explicit",
+        "reason": "The prohibition now applies across every selected Decision when no exception exists."
+      },
+      {
+        "responsibility": "business_only",
+        "status": "preserved_and_made_explicit",
+        "reason": "All explanation, draft commentary, and action commentary remain within business scope."
+      },
+      {
+        "responsibility": "action_context_authority",
+        "status": "preserved_with_deliberate_neutral_time_refinement",
+        "reason": "Trusted Base or action_context remains required, while unsupported 今夜 wording is replaced by neutral time language."
+      },
+      {
+        "responsibility": "selected_request_meaning_coverage",
+        "status": "preserved",
+        "reason": "Every materially selected Base-owned topic must be fulfilled in meaning without duplicate sections."
+      },
+      {
+        "responsibility": "natural_japanese_product_voice",
+        "status": "preserved",
+        "reason": "The Report addresses the user directly and retains the v3 Product-voice prohibitions."
+      },
+      {
+        "responsibility": "relationship_grounding",
+        "status": "preserved",
+        "reason": "Application-owned relationship_summary grounding remains authoritative."
+      },
+      {
+        "responsibility": "change_condition_grounding",
+        "status": "preserved_as_future_application_owned_integration",
+        "reason": "The required grounding order is recorded without wiring unauthorized Package D."
+      },
+      {
+        "responsibility": "concrete_action",
+        "status": "preserved",
+        "reason": "A usable Report requires one concrete immediate action."
+      },
+      {
+        "responsibility": "observable_reassessment",
+        "status": "preserved",
+        "reason": "A usable Report requires an observable reassessment condition."
+      },
+      {
+        "responsibility": "candidate_reconstruction_prohibition",
+        "status": "preserved",
+        "reason": "Raw Candidate text remains unavailable and must not be reconstructed or quoted."
+      },
+      {
+        "responsibility": "draft_authority",
+        "status": "preserved",
+        "reason": "decision_plan.recommended_message_draft.text remains the sole final-draft authority."
+      },
+      {
+        "responsibility": "jpy980_prose_prohibition",
+        "status": "preserved",
+        "reason": "Commercial value is assessed outside Report prose."
+      },
+      {
+        "responsibility": "provider_evaluation_metadata_prohibition",
+        "status": "preserved",
+        "reason": "Provider, evaluation, oracle, Product Owner, and diagnostic metadata remain outside Report output."
+      },
+      {
+        "responsibility": "multiple_interpretation_minimum",
+        "status": "deliberately_superseded",
+        "reason": "Zero possible_interpretations remains valid when another interpretation adds no Product value and would create filler or repetition."
+      }
+    ],
+    "mutation_verification": {
+      "existing_v4_responsibility_mutations_rejected": "11/11",
+      "predecessor_parity_mutations_rejected": "7/7",
+      "total_independently_recorded": "18/18",
+      "provider_quality_proof": false
+    }
   },
   "grounding_contract": {
     "path": "lib/assessment/runtime/report-grounding-v4.ts",
@@ -168,8 +284,8 @@
     "prompt_writing_contract_examples": "synthetic_only_not_provider_compliance",
     "deterministic_grounding_behavior": "synthetic_executable",
     "frozen_evidence_regression": "read_only_evidence_commit_b",
-    "positive_wording_fixtures": 6,
-    "negative_wording_fixtures": 6,
+    "positive_wording_fixtures": 10,
+    "negative_wording_fixtures": 10,
     "positive_grounding_fixtures": 8,
     "negative_grounding_fixtures": 6,
     "frozen_regression_cases": 6
@@ -192,7 +308,9 @@
     "product_doctrine_unchanged": true,
     "frozen_e_r3_evidence_unchanged": true,
     "pb05_v2_unchanged": true,
+    "pb05_v3_unchanged": true,
     "report_grounding_v3_unchanged": true,
+    "report_grounding_v4_unchanged": true,
     "pipeline_unchanged": true,
     "catalog_unchanged": true,
     "schema_unchanged": true,
@@ -242,5 +360,5 @@
     "git diff --check",
     "git status --short"
   ],
-  "next_action": "human_chatgpt_review_of_pb05_precision_writing_successor"
+  "next_action": "human_chatgpt_review_of_pb05_v3_parity_correction"
 }

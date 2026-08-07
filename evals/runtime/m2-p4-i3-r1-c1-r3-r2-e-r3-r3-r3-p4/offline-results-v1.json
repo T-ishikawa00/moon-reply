@@ -1,22 +1,37 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-offline-results-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1",
   "status": "PASS",
   "capability_status": "prompt_contract_established",
   "provider_quality_established": false,
-  "baseline": "df3c707ec7f567120d28f0ce164ef42916e61c63",
+  "baseline": "eb76dd591fd52ba344c9114c85b8b63187664e9b",
+  "predecessor": {
+    "catalog": "runtime-stage-catalog-v11.0.0",
+    "stage_id": "PB-05",
+    "version": "v3.0.0",
+    "path": "lib/assessment/runtime/contracts/pb-05-directional-report-v3.developer.md",
+    "git_blob_sha": "8d0242ee120238c488b80b310bf47e13cea617ba",
+    "sha256_canonical_utf8_lf": "3dfdf47d9df45bdde344e57d5481dcac247095736eed8cd1919f2e7547d8b083",
+    "parity_matrix": "16/16 PASS"
+  },
   "prompt": {
     "version": "v4.0.0",
-    "sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "baseline_sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
     "contract_sections_present": "PASS",
     "responsibilities_separated": "PASS",
-    "paired_examples": "6/6 PASS",
-    "self_mutation_responsibility_rejections": "11/11 PASS",
+    "existing_v4_precision_responsibilities": "11/11 PASS",
+    "predecessor_parity_responsibilities": "7/7 PASS",
+    "paired_examples": "10/10 PASS",
+    "existing_responsibility_mutation_rejections": "11/11 PASS",
+    "predecessor_parity_mutation_rejections": "7/7 PASS",
+    "total_independent_mutation_rejections": "18/18 PASS",
     "provider_compliance_proven": false
   },
   "grounding": {
     "version": "m2-p4-report-grounding-v4",
     "sha256_canonical_utf8_lf": "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8",
+    "blob_identical_to_baseline": "PASS",
     "input_immutability": "PASS",
     "fresh_report_object": "PASS",
     "relationship_v3_semantics": "PASS",
@@ -39,11 +54,18 @@
     "density_without_repetition": "PASS",
     "persona_and_draft_integrity": "PASS",
     "contact_and_safety_integrity": "PASS",
-    "action_context_authority": "PASS"
+    "action_context_authority": "PASS",
+    "no_followup_message_parity": "PASS",
+    "business_only_parity": "PASS",
+    "selected_request_coverage_parity": "PASS",
+    "natural_product_voice_parity": "PASS",
+    "application_grounding_parity": "PASS",
+    "usable_product_outcome_parity": "PASS",
+    "commercial_output_boundary_parity": "PASS"
   },
   "fixture_counts": {
-    "positive_wording": 6,
-    "negative_wording": 6,
+    "positive_wording": 10,
+    "negative_wording": 10,
     "positive_grounding": 8,
     "negative_grounding": 6,
     "frozen_evidence_regression": 6
@@ -70,7 +92,9 @@
     "r2_c": "UNCHANGED",
     "product_doctrine": "UNCHANGED",
     "pb05_v2": "UNCHANGED",
+    "pb05_v3": "UNCHANGED",
     "report_grounding_v3": "UNCHANGED",
+    "report_grounding_v4": "UNCHANGED",
     "pipeline_catalog_schema_ui": "UNCHANGED",
     "evaluator_semantic_disposition": "UNCHANGED",
     "active_runtime": "v4",
@@ -93,5 +117,5 @@
     "c2_authorized": false,
     "final_jpy980_readiness_established": false
   },
-  "next_action": "human_chatgpt_review_of_pb05_precision_writing_successor"
+  "next_action": "human_chatgpt_review_of_pb05_v3_parity_correction"
 }

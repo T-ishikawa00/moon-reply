@@ -6,21 +6,36 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4";
-const baseline = "df3c707ec7f567120d28f0ce164ef42916e61c63";
-const expectedParent = "1e6e719a8bdd766617405ec40691ff498f1bbc2a";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1";
+const baseline = "eb76dd591fd52ba344c9114c85b8b63187664e9b";
+const expectedParent = "df3c707ec7f567120d28f0ce164ef42916e61c63";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity";
 const expectedSourceBranch =
-  "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product";
+  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing";
 const evidenceCommitB = "9e9bf7d90740c1d00bfc4e282c85906744cd736c";
+const expectedV3Blob = "8d0242ee120238c488b80b310bf47e13cea617ba";
+const expectedV3Hash =
+  "3dfdf47d9df45bdde344e57d5481dcac247095736eed8cd1919f2e7547d8b083";
+const expectedV4BaselineHash =
+  "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d";
+const expectedV4CorrectedHash =
+  "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768";
+const expectedGroundingV4Hash =
+  "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8";
 const maxBuffer = 32 * 1024 * 1024;
 
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4";
 const promptPath =
   "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md";
+const predecessorV2Path =
+  "lib/assessment/runtime/contracts/pb-05-directional-report-v2.developer.md";
+const predecessorV3Path =
+  "lib/assessment/runtime/contracts/pb-05-directional-report-v3.developer.md";
+const v11CatalogPath =
+  "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json";
 const groundingPath = "lib/assessment/runtime/report-grounding-v4.ts";
 const contractPath = `${packageRoot}/remediation-contract-v1.json`;
 const fixturesPath = `${packageRoot}/remediation-fixtures-v1.json`;
@@ -33,7 +48,6 @@ const reviewPath =
 
 const exactScope = [
   promptPath,
-  groundingPath,
   contractPath,
   fixturesPath,
   offlineResultsPath,
@@ -83,7 +97,8 @@ const doctrineScope = [
 ];
 
 const protectedRuntimePaths = [
-  "lib/assessment/runtime/contracts/pb-05-directional-report-v2.developer.md",
+  predecessorV2Path,
+  predecessorV3Path,
   "lib/assessment/runtime/report-grounding-v3.ts",
   "lib/assessment/runtime/contracts/report-content-v2.schema.json",
   "lib/assessment/runtime/types.ts",
@@ -91,6 +106,7 @@ const protectedRuntimePaths = [
   "lib/assessment/runtime/schema-catalog.ts",
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
+  v11CatalogPath,
   "lib/assessment/runtime/semantic-disposition-v3.ts",
   "lib/assessment/runtime/semantic-disposition-v4.ts",
   "components/runtime/CustomerDraftCopyButton.tsx",
@@ -143,6 +159,13 @@ function sha256CanonicalText(relativePath) {
   return sha256Bytes(
     Buffer.from(strictText(relativePath).replaceAll("\r\n", "\n"), "utf8"),
   );
+}
+
+function sha256CanonicalTextAt(revision, relativePath) {
+  const source = new TextDecoder("utf-8", { fatal: true }).decode(
+    blobBytesAt(revision, relativePath),
+  );
+  return sha256Bytes(Buffer.from(source.replaceAll("\r\n", "\n"), "utf8"));
 }
 
 function sha256Json(value) {
@@ -221,6 +244,19 @@ const responsibilityHeadings = new Map([
   ["action_context_authority", "## Action-context authority"],
 ]);
 
+const predecessorParityHeadings = new Map([
+  ["no_followup_message", "### A. no_followup_message"],
+  ["business_only", "### B. business_only"],
+  ["selected_request_coverage", "### C. selected-request coverage"],
+  ["natural_product_voice", "### D. natural Product voice"],
+  [
+    "application_owned_change_condition_grounding",
+    "### E. Application-owned grounding",
+  ],
+  ["concrete_action_and_reassessment", "### F. usable Product outcome"],
+  ["commercial_output_boundary", "### G. commercial/output boundary"],
+]);
+
 function sectionText(source, heading) {
   const start = source.indexOf(heading);
   assert.notEqual(start, -1, heading);
@@ -235,6 +271,117 @@ function withoutSection(source, heading) {
   return `${source.slice(0, start)}${
     next === -1 ? "" : source.slice(next + 1)
   }`;
+}
+
+function subsectionText(source, heading) {
+  const start = source.indexOf(heading);
+  assert.notEqual(start, -1, heading);
+  const nextSubsection = source.indexOf("\n### ", start + heading.length);
+  const nextSection = source.indexOf("\n## ", start + heading.length);
+  const candidates = [nextSubsection, nextSection].filter((index) => index !== -1);
+  const end = candidates.length === 0 ? source.length : Math.min(...candidates);
+  return source.slice(start, end);
+}
+
+function withoutSubsection(source, heading) {
+  const start = source.indexOf(heading);
+  assert.notEqual(start, -1, heading);
+  const nextSubsection = source.indexOf("\n### ", start + heading.length);
+  const nextSection = source.indexOf("\n## ", start + heading.length);
+  const candidates = [nextSubsection, nextSection].filter((index) => index !== -1);
+  const end = candidates.length === 0 ? source.length : Math.min(...candidates);
+  return `${source.slice(0, start)}${source.slice(end === source.length ? end : end + 1)}`;
+}
+
+function assertPredecessorParity(source) {
+  const paritySection = sectionText(source, "## PB-05 v3 predecessor parity");
+  assert.match(paritySection, /actual catalogued predecessor, PB-05 v3/u);
+  assert.match(paritySection, /PB-05 v2 remains protected historical authority/u);
+
+  const anchorsByResponsibility = {
+    no_followup_message: [
+      "contact_constraint_policy.constraint_kind = no_followup_message",
+      "follow_up_exception = none",
+      "current outbound contact",
+      "later outbound contact",
+      "a later draft",
+      "an apology workaround",
+      "an aftercare contact workaround",
+      "contact reopened only because time passed",
+      "a reassessment instruction that tells the user to initiate contact",
+      "a hidden reply request",
+      "wait_and_reassess",
+      "pause_additional_contact",
+      "another future-valid Decision",
+      "Do not narrow it to a pause direction.",
+    ],
+    business_only: [
+      "contact_constraint_policy.constraint_kind = business_only",
+      "personal invitation",
+      "romantic interpretation",
+      "affection escalation",
+      "private-conversation suggestion",
+      "relationship progression",
+      "non-business follow-up",
+      "Draft commentary and action commentary must remain business-only.",
+    ],
+    selected_request_coverage: [
+      "every materially selected Base-owned requested topic in meaning",
+      "Do not omit a materially selected request",
+      "without creating duplicate sections or repeated prose",
+      "draft_message",
+      "message_impact",
+      "without predicting the recipient's reaction",
+    ],
+    natural_product_voice: [
+      "Address the user naturally and directly",
+      "相談者",
+      "本ケース",
+      "入力情報から判断すると",
+      "business-report tone",
+      "defensive AI voice",
+      "occult certainty",
+      "generic filler",
+    ],
+    application_owned_change_condition_grounding: [
+      "relationship_summary",
+      "change_condition_commentary",
+      "groundReportContentV4",
+      "groundChangeConditionCommentaryV3",
+      "post-grounding schema validation",
+      "does not wire that sequence",
+    ],
+    concrete_action_and_reassessment: [
+      "one clear current direction",
+      "one concrete immediate action",
+      "one observable reassessment condition",
+      "Do not produce a direction without an action",
+      "an action without a reassessment condition",
+    ],
+    commercial_output_boundary: [
+      "Do not claim JPY 980 value inside Report prose.",
+      "merged intake",
+      "Provider metadata",
+      "evaluation or oracle data",
+      "Product Owner ratings",
+      "a diagnostic verdict",
+      "retry, repair, fallback",
+      "PB-07 content",
+    ],
+  };
+
+  for (const [responsibility, heading] of predecessorParityHeadings) {
+    const subsection = subsectionText(paritySection, heading);
+    for (const anchor of anchorsByResponsibility[responsibility]) {
+      assert.ok(subsection.includes(anchor), `${responsibility}: ${anchor}`);
+    }
+  }
+
+  assert.match(paritySection, /more than one plausible reading is deliberately superseded/u);
+  assert.match(paritySection, /possible_interpretations.*zero entries/su);
+  assert.match(paritySection, /adds no Product value/u);
+  assert.match(paritySection, /do not restore an unconditional requirement to use `今夜`/u);
+  assert.match(paritySection, /time wording remains governed by Base Structured Intake and `action_context`/u);
 }
 
 function assertPromptContract(source, fixtureCatalog) {
@@ -360,6 +507,8 @@ function assertPromptContract(source, fixtureCatalog) {
   ]) {
     assert.ok(fieldSection.includes(`- \`${field}\`:`), field);
   }
+
+  assertPredecessorParity(source);
 
   const normalized = markdownExampleText(source);
   for (const fixture of fixtureCatalog.pairs) {
@@ -513,7 +662,7 @@ async function check(name, run) {
   }
 }
 
-await check("exact baseline branch parent source main and origin-main authority", () => {
+await check("exact R1 baseline branch parent source main and origin-main authority", () => {
   const head = gitText(["rev-parse", "HEAD"]);
   assert.equal(gitText(["branch", "--show-current"]), expectedBranch);
   assert.equal(gitText(["rev-parse", baseline]), baseline);
@@ -522,25 +671,35 @@ await check("exact baseline branch parent source main and origin-main authority"
   assert.equal(gitText(["rev-parse", `origin/${expectedSourceBranch}`]), baseline);
   assert.equal(gitText(["merge-base", head, baseline]), baseline);
   assert.ok(head === baseline || gitText(["rev-parse", `${head}^`]) === baseline);
-  assert.equal(gitText(["rev-list", "--count", `${baseline}..${head}`]), head === baseline ? "0" : "1");
+  assert.equal(
+    gitText(["rev-list", "--count", `${baseline}..${head}`]),
+    head === baseline ? "0" : "1",
+  );
   assert.equal(gitText(["rev-parse", "main"]), expectedMain);
   assert.equal(gitText(["rev-parse", "origin/main"]), expectedMain);
 });
 
-await check("exact scope 8/8 with all paths new", () => {
+await check("exact correction scope 7/7 with all paths updated", () => {
   const actual = changedPathsFromBaseline();
-  assert.equal(exactScope.length, 8);
+  assert.equal(exactScope.length, 7);
   assert.deepEqual(sorted(actual.map((entry) => entry.path)), sorted(exactScope));
-  assert.equal(actual.length, 8);
-  assert.equal(actual.every((entry) => entry.status === "A"), true);
+  assert.equal(actual.length, 7);
+  assert.equal(actual.every((entry) => entry.status === "M"), true);
   for (const relativePath of exactScope) {
     assert.equal(existsSync(absolute(relativePath)), true, relativePath);
     assert.equal(
       gitSucceeds(["cat-file", "-e", `${baseline}:${relativePath}`]),
-      false,
+      true,
       relativePath,
     );
   }
+  assert.equal(contract.baseline, baseline);
+  assert.equal(contract.parent, expectedParent);
+  assert.equal(contract.main_baseline, expectedMain);
+  assert.equal(contract.source_branch, expectedSourceBranch);
+  assert.equal(contract.implementation_branch, expectedBranch);
+  assert.deepEqual(contract.exact_scope, exactScope);
+  assert.deepEqual(contract.scope_shape, { new: 0, updated: 7, deleted: 0 });
 });
 
 await check("strict UTF-8 JSON validity U+FFFD zero secret zero", () => {
@@ -578,6 +737,111 @@ await check("Prompt v4 exact version schema and input authority", () => {
   ]);
 });
 
+await check("actual v11 PB-05 predecessor is protected v3 with exact version path and hashes", () => {
+  const catalog = json(v11CatalogPath);
+  const pb05 = catalog.stages.find((stage) => stage.stage_id === "PB-05");
+  assert.ok(pb05);
+  assert.equal(catalog.catalog_version, "runtime-stage-catalog-v11.0.0");
+  assert.equal(pb05.prompt_version, "v3.0.0");
+  assert.equal(pb05.prompt_path, predecessorV3Path);
+  assert.equal(pb05.prompt_sha256, expectedV3Hash);
+  assert.equal(blobAt(baseline, predecessorV3Path), expectedV3Blob);
+  assert.equal(blobAt("HEAD", predecessorV3Path), expectedV3Blob);
+  assert.equal(sha256CanonicalText(predecessorV3Path), expectedV3Hash);
+  assert.equal(sha256CanonicalTextAt(baseline, predecessorV3Path), expectedV3Hash);
+  assertUnchangedFromBaseline(predecessorV2Path);
+  assertUnchangedFromBaseline(predecessorV3Path);
+  assertUnchangedFromBaseline(v11CatalogPath);
+
+  assert.deepEqual(contract.predecessor_authority, {
+    catalog_path: v11CatalogPath,
+    catalog_version: "runtime-stage-catalog-v11.0.0",
+    stage_id: "PB-05",
+    prompt_version: "v3.0.0",
+    prompt_path: predecessorV3Path,
+    prompt_git_blob_sha: expectedV3Blob,
+    prompt_sha256_canonical_utf8_lf: expectedV3Hash,
+    successor_prompt_path: promptPath,
+    v4_baseline_sha256_canonical_utf8_lf: expectedV4BaselineHash,
+    v4_corrected_sha256_canonical_utf8_lf: expectedV4CorrectedHash,
+    v2_protected_historical_authority: true,
+    v3_is_immediate_predecessor: true,
+  });
+  assert.equal(capabilities.pb05_v3_actual_predecessor_recorded, true);
+  assert.equal(capabilities.pb05_v3_prompt_git_blob_sha, expectedV3Blob);
+  assert.equal(capabilities.pb05_v3_prompt_sha256, expectedV3Hash);
+});
+
+await check("PB-05 v3 predecessor parity responsibilities are substantive 7/7", () => {
+  assertPredecessorParity(promptSource);
+  assert.deepEqual(
+    contract.prompt_contract.predecessor_parity_responsibilities,
+    [...predecessorParityHeadings.keys()],
+  );
+  for (const key of [
+    "pb05_v3_parity_complete",
+    "no_followup_message_parity",
+    "business_only_parity",
+    "selected_request_coverage_parity",
+    "product_voice_parity",
+    "application_grounding_parity",
+    "usable_outcome_parity",
+    "commercial_output_boundary_parity",
+    "existing_v4_precision_rules_preserved",
+  ]) {
+    assert.equal(capabilities[key], true, key);
+  }
+});
+
+await check("predecessor parity matrix is exact and every supersession has a reason", () => {
+  const expected = [
+    ["exact_input_boundary", "preserved"],
+    ["contact_constraint_policy", "preserved"],
+    ["no_followup_message", "preserved_and_made_explicit"],
+    ["business_only", "preserved_and_made_explicit"],
+    [
+      "action_context_authority",
+      "preserved_with_deliberate_neutral_time_refinement",
+    ],
+    ["selected_request_meaning_coverage", "preserved"],
+    ["natural_japanese_product_voice", "preserved"],
+    ["relationship_grounding", "preserved"],
+    [
+      "change_condition_grounding",
+      "preserved_as_future_application_owned_integration",
+    ],
+    ["concrete_action", "preserved"],
+    ["observable_reassessment", "preserved"],
+    ["candidate_reconstruction_prohibition", "preserved"],
+    ["draft_authority", "preserved"],
+    ["jpy980_prose_prohibition", "preserved"],
+    ["provider_evaluation_metadata_prohibition", "preserved"],
+    ["multiple_interpretation_minimum", "deliberately_superseded"],
+  ];
+  const matrix = contract.predecessor_parity.matrix;
+  assert.equal(contract.predecessor_parity.complete, true);
+  assert.equal(matrix.length, expected.length);
+  assert.equal(new Set(matrix.map((row) => row.responsibility)).size, expected.length);
+  assert.deepEqual(
+    matrix.map((row) => [row.responsibility, row.status]),
+    expected,
+  );
+  for (const row of matrix) {
+    assert.equal(typeof row.reason, "string", row.responsibility);
+    assert.ok(row.reason.trim().length > 0, row.responsibility);
+    if (row.status.includes("superseded")) {
+      assert.match(row.reason, /Zero possible_interpretations/u);
+      assert.match(row.reason, /no Product value/u);
+    }
+  }
+  assert.deepEqual(contract.predecessor_parity.mutation_verification, {
+    existing_v4_responsibility_mutations_rejected: "11/11",
+    predecessor_parity_mutations_rejected: "7/7",
+    total_independently_recorded: "18/18",
+    provider_quality_proof: false,
+  });
+});
+
 await check("Prompt contract self-mutation rejects every missing responsibility 11/11", () => {
   assert.deepEqual(
     contract.prompt_contract.required_separated_responsibilities,
@@ -592,10 +856,21 @@ await check("Prompt contract self-mutation rejects every missing responsibility 
   }
 });
 
-await check("wording fixture catalog exact positive 6 negative 6", () => {
+await check("predecessor parity self-mutation rejects every missing responsibility 7/7", () => {
+  for (const [responsibility, heading] of predecessorParityHeadings) {
+    const mutated = withoutSubsection(promptSource, heading);
+    assert.throws(
+      () => assertPromptContract(mutated, wordingCatalog),
+      undefined,
+      responsibility,
+    );
+  }
+});
+
+await check("wording fixture catalog exact positive 10 negative 10", () => {
   assert.equal(wordingCatalog.authority, "synthetic_contract_examples_only");
   assert.equal(wordingCatalog.provider_compliance_proven, false);
-  assert.equal(wordingCatalog.pairs.length, 6);
+  assert.equal(wordingCatalog.pairs.length, 10);
   assert.deepEqual(
     wordingCatalog.pairs.map((fixture) => fixture.responsibility),
     [
@@ -605,11 +880,17 @@ await check("wording fixture catalog exact positive 6 negative 6", () => {
       "anxiety_safe_uncertainty",
       "generic_aftercare_restriction",
       "consultation_specific_reassurance",
+      "no_followup_message",
+      "business_only",
+      "natural_product_voice",
+      "selected_request_coverage",
     ],
   );
-  assert.equal(new Set(wordingCatalog.pairs.map((item) => item.fixture_id)).size, 6);
-  assert.equal(fixtures.counts.positive_wording_fixtures, 6);
-  assert.equal(fixtures.counts.negative_wording_fixtures, 6);
+  assert.equal(new Set(wordingCatalog.pairs.map((item) => item.fixture_id)).size, 10);
+  assert.equal(fixtures.counts.positive_wording_fixtures, 10);
+  assert.equal(fixtures.counts.negative_wording_fixtures, 10);
+  assert.equal(contract.fixture_authority.positive_wording_fixtures, 10);
+  assert.equal(contract.fixture_authority.negative_wording_fixtures, 10);
 });
 
 await check("causal chronology explicit-fact and anxiety-safe contracts are substantive", () => {
@@ -680,15 +961,28 @@ await check("field responsibility density persona contact and action context con
     assert.ok(actionContext.includes(value), value);
 });
 
-await check("Prompt and grounding hashes are fixed consistently", () => {
+await check("Prompt baseline and corrected hashes are fixed and Grounding v4 is blob-identical", () => {
   const promptHash = sha256CanonicalText(promptPath);
   const groundingHash = sha256CanonicalText(groundingPath);
+  assert.equal(sha256CanonicalTextAt(baseline, promptPath), expectedV4BaselineHash);
+  assert.equal(promptHash, expectedV4CorrectedHash);
+  assert.equal(sha256CanonicalTextAt(baseline, groundingPath), expectedGroundingV4Hash);
+  assert.equal(groundingHash, expectedGroundingV4Hash);
+  assert.equal(blobAt("HEAD", groundingPath), blobAt(baseline, groundingPath));
+  assert.equal(gitSucceeds(["diff", "--quiet", baseline, "--", groundingPath]), true);
   assert.equal(contract.prompt_contract.sha256_canonical_utf8_lf, promptHash);
+  assert.equal(
+    contract.predecessor_authority.v4_baseline_sha256_canonical_utf8_lf,
+    expectedV4BaselineHash,
+  );
   assert.equal(contract.grounding_contract.sha256_canonical_utf8_lf, groundingHash);
+  assert.equal(capabilities.pb05_v4_baseline_sha256, expectedV4BaselineHash);
   assert.equal(capabilities.pb05_v4_prompt_sha256, promptHash);
   assert.equal(capabilities.report_grounding_v4_sha256, groundingHash);
+  assert.equal(offlineResults.prompt.baseline_sha256_canonical_utf8_lf, expectedV4BaselineHash);
   assert.equal(offlineResults.prompt.sha256_canonical_utf8_lf, promptHash);
   assert.equal(offlineResults.grounding.sha256_canonical_utf8_lf, groundingHash);
+  assert.equal(offlineResults.grounding.blob_identical_to_baseline, "PASS");
 });
 
 let groundingV4;
@@ -736,6 +1030,9 @@ await check("grounding source owns only deterministic fields and no semantic rew
 
 await check("positive grounding fixtures PASS 8/8 with exact preservation", () => {
   assert.equal(groundingCatalog.positive.length, 8);
+  assert.equal(fixtures.counts.positive_grounding_fixtures, 8);
+  assert.equal(contract.fixture_authority.positive_grounding_fixtures, 8);
+  assert.equal(offlineResults.fixture_counts.positive_grounding, 8);
   assert.equal(
     new Set(groundingCatalog.positive.map((item) => item.fixture_id)).size,
     8,
@@ -840,6 +1137,9 @@ await check("positive grounding fixtures PASS 8/8 with exact preservation", () =
 
 await check("negative grounding fixtures reject fail-closed 6/6", () => {
   assert.equal(groundingCatalog.negative.length, 6);
+  assert.equal(fixtures.counts.negative_grounding_fixtures, 6);
+  assert.equal(contract.fixture_authority.negative_grounding_fixtures, 6);
+  assert.equal(offlineResults.fixture_counts.negative_grounding, 6);
   assert.equal(
     new Set(groundingCatalog.negative.map((item) => item.fixture_id)).size,
     6,
@@ -1037,7 +1337,7 @@ await check("R2-A R1 R2-B R1 R2-C and Product Doctrine unchanged", () => {
   }
 });
 
-await check("existing PB-05 v2 grounding v3 Pipeline Catalog Schema evaluator semantic UI unchanged", () => {
+await check("PB-05 v2 v3 grounding v3 Pipeline Catalog Schema evaluator semantic UI unchanged", () => {
   for (const relativePath of protectedRuntimePaths) {
     assertUnchangedFromBaseline(relativePath);
   }
@@ -1098,11 +1398,29 @@ await check("no Provider network DB or Supabase imports or calls", () => {
   assert.equal(contract.operations.provider_calls, 0);
   assert.equal(contract.operations.db_operations, 0);
   assert.equal(contract.operations.supabase_operations, 0);
+  assert.equal(fixtures.operations.provider_calls, 0);
+  assert.equal(fixtures.operations.db_operations, 0);
+  assert.equal(fixtures.operations.supabase_operations, 0);
+  assert.equal(offlineResults.operations.provider_calls, 0);
+  assert.equal(offlineResults.operations.db_operations, 0);
+  assert.equal(offlineResults.operations.supabase_operations, 0);
 });
 
 await check("capabilities remain prompt-only and Package D onward unauthorized", () => {
   const expectedTrue = [
+    "package_c_architecture_accepted",
+    "grounding_v4_accepted_unchanged",
     "r2_customer_note_ui_accepted",
+    "pb05_v3_actual_predecessor_recorded",
+    "pb05_v3_parity_complete",
+    "no_followup_message_parity",
+    "business_only_parity",
+    "selected_request_coverage_parity",
+    "product_voice_parity",
+    "application_grounding_parity",
+    "usable_outcome_parity",
+    "commercial_output_boundary_parity",
+    "existing_v4_precision_rules_preserved",
     "pb05_v4_prompt_complete",
     "report_grounding_v4_complete",
     "unsupported_causality_contract_complete",
@@ -1116,6 +1434,15 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
     "prompt_contract_established",
   ];
   for (const key of expectedTrue) assert.equal(capabilities[key], true, key);
+  assert.equal(capabilities.baseline, baseline);
+  assert.equal(capabilities.exact_scope_updated, "7/7");
+  assert.equal(capabilities.positive_wording_fixtures, 10);
+  assert.equal(capabilities.negative_wording_fixtures, 10);
+  assert.equal(capabilities.existing_responsibility_mutations_rejected, 11);
+  assert.equal(capabilities.predecessor_parity_mutations_rejected, 7);
+  assert.equal(capabilities.total_prompt_mutations_rejected, 18);
+  assert.equal(capabilities.positive_grounding_fixtures, 8);
+  assert.equal(capabilities.negative_grounding_fixtures, 6);
   const expectedFalse = [
     "provider_quality_established",
     "package_d_authorized",
@@ -1133,11 +1460,11 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
   for (const key of expectedFalse) assert.equal(capabilities[key], false, key);
   assert.equal(
     capabilities.status,
-    "pb05_precision_writing_successor_implemented_pending_human_chatgpt_review",
+    "pb05_precision_writing_v3_parity_corrected_pending_human_chatgpt_review",
   );
   assert.equal(
     capabilities.next_action,
-    "human_chatgpt_review_of_pb05_precision_writing_successor",
+    "human_chatgpt_review_of_pb05_v3_parity_correction",
   );
 });
 
@@ -1149,9 +1476,18 @@ await check("offline results establish Prompt contract not Provider quality", ()
   assert.equal(offlineResults.status, "PASS");
   assert.equal(offlineResults.capability_status, "prompt_contract_established");
   assert.equal(offlineResults.provider_quality_established, false);
+  assert.equal(offlineResults.baseline, baseline);
+  assert.equal(offlineResults.predecessor.git_blob_sha, expectedV3Blob);
+  assert.equal(offlineResults.predecessor.sha256_canonical_utf8_lf, expectedV3Hash);
+  assert.equal(offlineResults.predecessor.parity_matrix, "16/16 PASS");
+  assert.equal(offlineResults.prompt.existing_v4_precision_responsibilities, "11/11 PASS");
+  assert.equal(offlineResults.prompt.predecessor_parity_responsibilities, "7/7 PASS");
+  assert.equal(offlineResults.prompt.existing_responsibility_mutation_rejections, "11/11 PASS");
+  assert.equal(offlineResults.prompt.predecessor_parity_mutation_rejections, "7/7 PASS");
+  assert.equal(offlineResults.prompt.total_independent_mutation_rejections, "18/18 PASS");
   assert.deepEqual(offlineResults.fixture_counts, {
-    positive_wording: 6,
-    negative_wording: 6,
+    positive_wording: 10,
+    negative_wording: 10,
     positive_grounding: 8,
     negative_grounding: 6,
     frozen_evidence_regression: 6,
@@ -1165,10 +1501,19 @@ await check("offline results establish Prompt contract not Provider quality", ()
 await check("review document records exact outcome and authority limits", () => {
   const review = strictText(reviewPath);
   for (const phrase of [
+    "PB-05 v3 Predecessor Parity Correction",
     "PB-05 Directional Report — Developer Contract v4.0.0",
     "m2-p4-report-grounding-v4",
-    "Exact scope: `8/8` new",
-    "Positive / negative wording fixtures: `6 / 6`",
+    "Exact correction scope: `7/7` updated",
+    "actual immediate predecessor",
+    expectedV3Blob,
+    expectedV3Hash,
+    expectedV4BaselineHash,
+    expectedV4CorrectedHash,
+    expectedGroundingV4Hash,
+    "machine-readable matrix is `16/16` complete",
+    "Positive / negative wording fixtures: `10 / 10`",
+    "predecessor parity mutations: `7/7 REJECT`",
     "Positive / negative grounding fixtures: `8 / 6`",
     "Provider / DB / Supabase: `0 / 0 / 0`",
     "Provider quality established: `false`",
@@ -1208,9 +1553,11 @@ console.log(
     failed.length === 0 ? "PASS" : "FAIL"
   } ${checks.length - failed.length}/${checks.length}`,
 );
-console.log("Exact scope: 8/8 new");
+console.log("Exact correction scope: 7/7 updated");
 console.log("Prompt v4 responsibility mutations rejected: 11/11");
-console.log("Wording fixtures: positive 6/6; negative 6/6");
+console.log("PB-05 v3 predecessor parity mutations rejected: 7/7");
+console.log("Total Prompt responsibility mutations rejected: 18/18");
+console.log("Wording fixtures: positive 10/10; negative 10/10");
 console.log("Grounding fixtures: positive 8/8; negative 6/6 rejected");
 console.log("Frozen E-R3 regression: 6/6; machine verdict unchanged FAIL");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");
