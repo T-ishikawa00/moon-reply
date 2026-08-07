@@ -70,9 +70,9 @@ const forbiddenKeys = new Set([
   "report",
 ]);
 
-const factIdPattern = /(?:^|[^\p{L}\p{N}_])F[0-9]{3}(?:$|[^\p{L}\p{N}_])/u;
+const factIdPattern = /F[0-9]{3}/u;
 const decisionCodePattern =
-  /(?:^|[^\p{L}\p{N}_])(?:reply_now|send_now|wait_and_reassess|pause_additional_contact)(?:$|[^\p{L}\p{N}_])/u;
+  /(?:reply_now|send_now|wait_and_reassess|pause_additional_contact)/u;
 
 function projectionInvalid(): never {
   throw new M2RuntimeError("M2_CUSTOMER_EXPERIENCE_PROJECTION_INVALID");
@@ -129,6 +129,34 @@ function assertTexts(
   value.forEach((item) => assertText(item));
 }
 
+function assertBaseProjectionCustomerTexts(
+  value: CustomerAssessmentProjectionV1,
+) {
+  assertText(value.primaryReason);
+  if (value.finalDraft !== null) assertText(value.finalDraft.text);
+  assertText(value.immediateAction.action);
+  value.immediateAction.avoid.forEach((item) => assertText(item));
+  value.immediateAction.secondaryActions.forEach((item) => assertText(item));
+  assertText(value.reassessment.when);
+  value.reassessment.conditions.forEach((item) => assertText(item.condition));
+  if (value.relationshipSummary !== null) assertText(value.relationshipSummary);
+  if (value.messageTemperature !== null) {
+    assertText(value.messageTemperature.softness);
+    assertText(value.messageTemperature.affection);
+    assertText(value.messageTemperature.pressure);
+    assertText(value.messageTemperature.adjustment);
+  }
+  value.optionalDetails.interpretations?.forEach((item) => assertText(item));
+  value.optionalDetails.shortLetter?.forEach((item) => assertText(item));
+  value.optionalDetails.anxietyReframe?.forEach((item) => assertText(item));
+  value.optionalDetails.expandedPlan?.forEach((item) => {
+    assertText(item.action);
+    if (item.avoid !== null) assertText(item.avoid);
+  });
+  value.optionalDetails.planCommentary?.forEach((item) => assertText(item));
+  assertText(value.fixedLimitation);
+}
+
 export function projectCustomerAssessmentExperienceV2(
   readyResult: unknown,
   authoritativeRequestedTopics: unknown,
@@ -182,6 +210,7 @@ function assertCustomerAssessmentExperienceProjectionV2(
   const baseProjection = decodeCustomerAssessmentProjectionV1(
     value.baseProjection,
   );
+  assertBaseProjectionCustomerTexts(baseProjection);
   assertText(value.openingLine);
   assertTexts(value.openingLetter, 1, 3);
   assertTexts(value.situationReading, 0, 8);

@@ -1,8 +1,15 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
-  "status": "experience_projection_v2_implemented_pending_human_chatgpt_review",
-  "baseline": "a5b2defa1bb765d46076a28ca9827d494fcbe433",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-projection-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1",
+  "status": "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
+  "baseline": "da325d9b4d8404879a08c1b50107e7f7df8787ec",
+  "review_correction": {
+    "r2_a_architecture_accepted": true,
+    "r2_a_identifier_exclusion_defect_found": true,
+    "r2_a_identifier_exclusion_corrected": true,
+    "provider_quality_established": false,
+    "provider_rerun_authorized": false
+  },
   "projection": {
     "type": "CustomerAssessmentExperienceProjectionV2",
     "schema_version": "customer-assessment-experience-projection-v2",
@@ -136,7 +143,62 @@
       }
     },
     "repeated_source_strings_allowed": true,
-    "unknown_source_report_version_rejected": true
+    "unknown_source_report_version_rejected": true,
+    "identifier_exclusion": {
+      "fact_id_pattern": "F[0-9]{3}",
+      "unicode_letter_boundaries_used": false,
+      "decision_literals": [
+        "reply_now",
+        "send_now",
+        "wait_and_reassess",
+        "pause_additional_contact"
+      ],
+      "experience_customer_text_paths": [
+        "openingLine",
+        "openingLetter[*]",
+        "situationReading[*]",
+        "possibleInterpretations[*]",
+        "materialUnknowns[*]",
+        "draftContext",
+        "actionRationales[*]",
+        "closingLines[*]",
+        "consultationLimitations[*]"
+      ],
+      "base_projection_customer_text_paths": [
+        "primaryReason",
+        "finalDraft.text",
+        "immediateAction.action",
+        "immediateAction.avoid[*]",
+        "immediateAction.secondaryActions[*]",
+        "reassessment.when",
+        "reassessment.conditions[*].condition",
+        "relationshipSummary",
+        "messageTemperature.softness",
+        "messageTemperature.affection",
+        "messageTemperature.pressure",
+        "messageTemperature.adjustment",
+        "optionalDetails.interpretations[*]",
+        "optionalDetails.shortLetter[*]",
+        "optionalDetails.anxietyReframe[*]",
+        "optionalDetails.expandedPlan[*].action",
+        "optionalDetails.expandedPlan[*].avoid",
+        "optionalDetails.planCommentary[*]",
+        "fixedLimitation"
+      ],
+      "structural_fields_not_scanned_as_customer_text": [
+        "projectionSchemaVersion",
+        "baseProjection.projectionSchemaVersion",
+        "baseProjection.sourceReportSchemaVersion",
+        "baseProjection.requestedTopics",
+        "baseProjection.decisionCode",
+        "baseProjection.finalDraft.policy",
+        "baseProjection.finalDraft.useTiming",
+        "baseProjection.reassessment.conditions[*].resultingDirection",
+        "baseProjection.optionalDetails.expandedPlan[*].phase"
+      ],
+      "recursive_forbidden_key_rejection_preserved": true,
+      "key_and_text_value_exclusion_are_separate": true
+    }
   },
   "recursive_exclusions": [
     "case_id",
@@ -161,7 +223,15 @@
     "material_to",
     "direct Full Report"
   ],
-  "allowed_structural_exception": "baseProjection.decisionCode",
+  "allowed_structural_fields": [
+    "baseProjection.decisionCode",
+    "baseProjection.reassessment.conditions[*].resultingDirection",
+    "baseProjection.finalDraft.policy",
+    "baseProjection.finalDraft.useTiming",
+    "baseProjection.optionalDetails.expandedPlan[*].phase",
+    "baseProjection.requestedTopics",
+    "projection schema-version strings"
+  ],
   "immutability": {
     "ready_result_deep_frozen_in_tests": true,
     "report_deep_frozen_in_tests": true,

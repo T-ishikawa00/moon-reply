@@ -1,6 +1,6 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-projection-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1",
   "data_policy": "offline_synthetic_only",
   "template_source": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/projection-fixtures-v1.json",
   "template_source_policy": "accepted_package_a_synthetic_templates_read_only",
@@ -477,6 +477,85 @@
       "fixture_id": "decision_enum_in_customer_text",
       "source_family": "split",
       "mutation": "decision_enum_in_closingLines"
+    },
+    {
+      "fixture_id": "japanese_adjacent_fact_ids_in_opening_line",
+      "source_family": "split",
+      "mutation": "japanese_adjacent_fact_ids_in_openingLine"
+    },
+    {
+      "fixture_id": "japanese_copula_fact_id_in_closing_line",
+      "source_family": "split",
+      "mutation": "japanese_copula_fact_id_in_closingLines"
+    },
+    {
+      "fixture_id": "japanese_particle_fact_id_in_situation_reading",
+      "source_family": "split",
+      "mutation": "japanese_particle_fact_id_in_situationReading"
+    },
+    {
+      "fixture_id": "japanese_particle_reply_now_in_opening_letter",
+      "source_family": "split",
+      "mutation": "japanese_particle_reply_now_in_openingLetter"
+    },
+    {
+      "fixture_id": "japanese_copula_wait_in_action_rationale",
+      "source_family": "split",
+      "mutation": "japanese_copula_wait_in_actionRationales"
+    },
+    {
+      "fixture_id": "fact_id_in_base_primary_reason",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_primaryReason"
+    },
+    {
+      "fixture_id": "fact_id_in_base_final_draft_text",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_finalDraft_text"
+    },
+    {
+      "fixture_id": "fact_id_in_base_immediate_action",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_immediateAction_action"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_reassessment_when",
+      "source_family": "split",
+      "mutation": "decision_enum_in_base_reassessment_when"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_reassessment_condition",
+      "source_family": "split",
+      "mutation": "decision_enum_in_base_reassessment_condition"
+    },
+    {
+      "fixture_id": "fact_id_in_base_relationship_summary",
+      "source_family": "legacy",
+      "base_fixture": "v1_parity_legacy",
+      "mutation": "fact_id_in_base_relationshipSummary"
+    },
+    {
+      "fixture_id": "fact_id_in_base_message_softness",
+      "source_family": "split",
+      "base_fixture": "v1_parity_split",
+      "mutation": "fact_id_in_base_messageTemperature_softness"
+    },
+    {
+      "fixture_id": "fact_id_in_base_short_letter",
+      "source_family": "legacy",
+      "base_fixture": "v1_parity_legacy",
+      "mutation": "fact_id_in_base_optionalDetails_shortLetter"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_expanded_plan_action",
+      "source_family": "split",
+      "base_fixture": "v1_parity_split",
+      "mutation": "decision_enum_in_base_optionalDetails_expandedPlan_action"
+    },
+    {
+      "fixture_id": "fact_id_in_base_fixed_limitation",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_fixedLimitation"
     }
   ]
 }

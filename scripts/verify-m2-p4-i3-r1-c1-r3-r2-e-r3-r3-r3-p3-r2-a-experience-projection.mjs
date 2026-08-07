@@ -6,12 +6,12 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A";
-const baseline = "a5b2defa1bb765d46076a28ca9827d494fcbe433";
-const expectedParent = "fdbdf808f135655084de32aec2e57473c1beaf31";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1";
+const baseline = "da325d9b4d8404879a08c1b50107e7f7df8787ec";
+const expectedParent = "a5b2defa1bb765d46076a28ca9827d494fcbe433";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-customer-text-exclusion";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a";
 
@@ -255,18 +255,124 @@ function containsForbiddenKey(value) {
   );
 }
 
-function experienceStrings(value) {
+const factIdPattern = /F[0-9]{3}/u;
+const decisionCodePattern =
+  /(?:reply_now|send_now|wait_and_reassess|pause_additional_contact)/u;
+
+function indexedTextEntries(prefix, values) {
+  return values.map((text, index) => ({ path: `${prefix}[${index}]`, text }));
+}
+
+function experienceTextEntries(value) {
   return [
-    value.openingLine,
-    ...value.openingLetter,
-    ...value.situationReading,
-    ...value.possibleInterpretations,
-    ...value.materialUnknowns,
-    ...(value.draftContext === null ? [] : [value.draftContext]),
-    ...value.actionRationales,
-    ...value.closingLines,
-    ...value.consultationLimitations,
+    { path: "openingLine", text: value.openingLine },
+    ...indexedTextEntries("openingLetter", value.openingLetter),
+    ...indexedTextEntries("situationReading", value.situationReading),
+    ...indexedTextEntries("possibleInterpretations", value.possibleInterpretations),
+    ...indexedTextEntries("materialUnknowns", value.materialUnknowns),
+    ...(value.draftContext === null
+      ? []
+      : [{ path: "draftContext", text: value.draftContext }]),
+    ...indexedTextEntries("actionRationales", value.actionRationales),
+    ...indexedTextEntries("closingLines", value.closingLines),
+    ...indexedTextEntries("consultationLimitations", value.consultationLimitations),
   ];
+}
+
+function baseProjectionCustomerTextEntries(value) {
+  const entries = [
+    { path: "baseProjection.primaryReason", text: value.primaryReason },
+    ...(value.finalDraft === null
+      ? []
+      : [{ path: "baseProjection.finalDraft.text", text: value.finalDraft.text }]),
+    { path: "baseProjection.immediateAction.action", text: value.immediateAction.action },
+    ...indexedTextEntries(
+      "baseProjection.immediateAction.avoid",
+      value.immediateAction.avoid,
+    ),
+    ...indexedTextEntries(
+      "baseProjection.immediateAction.secondaryActions",
+      value.immediateAction.secondaryActions,
+    ),
+    { path: "baseProjection.reassessment.when", text: value.reassessment.when },
+    ...value.reassessment.conditions.map((item, index) => ({
+      path: `baseProjection.reassessment.conditions[${index}].condition`,
+      text: item.condition,
+    })),
+    ...(value.relationshipSummary === null
+      ? []
+      : [
+          {
+            path: "baseProjection.relationshipSummary",
+            text: value.relationshipSummary,
+          },
+        ]),
+  ];
+  if (value.messageTemperature !== null) {
+    entries.push(
+      {
+        path: "baseProjection.messageTemperature.softness",
+        text: value.messageTemperature.softness,
+      },
+      {
+        path: "baseProjection.messageTemperature.affection",
+        text: value.messageTemperature.affection,
+      },
+      {
+        path: "baseProjection.messageTemperature.pressure",
+        text: value.messageTemperature.pressure,
+      },
+      {
+        path: "baseProjection.messageTemperature.adjustment",
+        text: value.messageTemperature.adjustment,
+      },
+    );
+  }
+  entries.push(
+    ...indexedTextEntries(
+      "baseProjection.optionalDetails.interpretations",
+      value.optionalDetails.interpretations ?? [],
+    ),
+    ...indexedTextEntries(
+      "baseProjection.optionalDetails.shortLetter",
+      value.optionalDetails.shortLetter ?? [],
+    ),
+    ...indexedTextEntries(
+      "baseProjection.optionalDetails.anxietyReframe",
+      value.optionalDetails.anxietyReframe ?? [],
+    ),
+    ...(value.optionalDetails.expandedPlan ?? []).flatMap((item, index) => [
+      {
+        path: `baseProjection.optionalDetails.expandedPlan[${index}].action`,
+        text: item.action,
+      },
+      ...(item.avoid === null
+        ? []
+        : [
+            {
+              path: `baseProjection.optionalDetails.expandedPlan[${index}].avoid`,
+              text: item.avoid,
+            },
+          ]),
+    ]),
+    ...indexedTextEntries(
+      "baseProjection.optionalDetails.planCommentary",
+      value.optionalDetails.planCommentary ?? [],
+    ),
+    { path: "baseProjection.fixedLimitation", text: value.fixedLimitation },
+  );
+  return entries;
+}
+
+function customerTextEntries(value) {
+  return [
+    ...experienceTextEntries(value),
+    ...baseProjectionCustomerTextEntries(value.baseProjection),
+  ];
+}
+
+function experienceStrings(value) {
+  return experienceTextEntries(value).map((entry) => entry.text);
 }
 
 const checks = [];
@@ -283,6 +389,7 @@ function check(name, action) {
 }
 
 const fixtures = readJson(fixturePath);
+const baselineFixtures = JSON.parse(git(["show", `${baseline}:${fixturePath}`]));
 const sourceFixtures = readJson(fixtures.template_source);
 const projectionContract = readJson(projectionContractPath);
 const offlineResults = readJson(offlineResultPath);
@@ -328,17 +435,25 @@ function expectedExperienceMapping(report) {
   };
 }
 
-function projectionForFamily(family) {
-  const fixture = fixtures.positive_fixtures.find((candidate) =>
-    family === "legacy"
-      ? candidate.fixture_id === "legacy_full_experience"
-      : candidate.fixture_id === "split_full_experience",
+function projectionForFixture(fixtureId) {
+  const fixture = fixtures.positive_fixtures.find(
+    (candidate) => candidate.fixture_id === fixtureId,
   );
+  assert.ok(fixture, fixtureId);
   const readyResult = instantiate(fixture);
   return experienceProjection.projectCustomerAssessmentExperienceV2(
     readyResult,
     fixture.requested_topics,
   );
+}
+
+function projectionForNegativeFixture(fixture) {
+  const fixtureId =
+    fixture.base_fixture ??
+    (fixture.source_family === "legacy"
+      ? "legacy_full_experience"
+      : "split_full_experience");
+  return projectionForFixture(fixtureId);
 }
 
 function mutateNegative(base, mutation) {
@@ -407,6 +522,53 @@ function mutateNegative(base, mutation) {
     case "decision_enum_in_closingLines":
       target.closingLines = ["内部値 reply_now を表示する"];
       break;
+    case "japanese_adjacent_fact_ids_in_openingLine":
+      target.openingLine = "F101とF102を確認しました";
+      break;
+    case "japanese_copula_fact_id_in_closingLines":
+      target.closingLines[0] = "説明はF101です";
+      break;
+    case "japanese_particle_fact_id_in_situationReading":
+      target.situationReading[0] = "F001を根拠にしています";
+      break;
+    case "japanese_particle_reply_now_in_openingLetter":
+      target.openingLetter[0] = "reply_nowを選びます";
+      break;
+    case "japanese_copula_wait_in_actionRationales":
+      target.actionRationales[0] = "wait_and_reassessの場合です";
+      break;
+    case "fact_id_in_base_primaryReason":
+      target.baseProjection.primaryReason = "説明はF101です";
+      break;
+    case "fact_id_in_base_finalDraft_text":
+      target.baseProjection.finalDraft.text = "F101を含む下書きです";
+      break;
+    case "fact_id_in_base_immediateAction_action":
+      target.baseProjection.immediateAction.action = "F101を参照します";
+      break;
+    case "decision_enum_in_base_reassessment_when":
+      target.baseProjection.reassessment.when = "reply_nowの場合です";
+      break;
+    case "decision_enum_in_base_reassessment_condition":
+      target.baseProjection.reassessment.conditions[0].condition =
+        "wait_and_reassessへ変更します";
+      break;
+    case "fact_id_in_base_relationshipSummary":
+      target.baseProjection.relationshipSummary = "説明はF101です";
+      break;
+    case "fact_id_in_base_messageTemperature_softness":
+      target.baseProjection.messageTemperature.softness = "F101を参照します";
+      break;
+    case "fact_id_in_base_optionalDetails_shortLetter":
+      target.baseProjection.optionalDetails.shortLetter[0] = "F101を確認しました";
+      break;
+    case "decision_enum_in_base_optionalDetails_expandedPlan_action":
+      target.baseProjection.optionalDetails.expandedPlan[0].action =
+        "reply_nowを選びます";
+      break;
+    case "fact_id_in_base_fixedLimitation":
+      target.baseProjection.fixedLimitation = "説明はF101です";
+      break;
     default:
       assert.fail(`Unknown negative mutation: ${mutation}`);
   }
@@ -423,12 +585,24 @@ check("exact branch baseline parent main and origin-main authority", () => {
   assert.ok(head === baseline || git(["rev-parse", `${head}^`]) === baseline);
 });
 
-check("exact implementation scope 7/7 and every path is new", () => {
+check("original R2-A 7/7 accounted for and exact R1 correction scope 7/7", () => {
   assert.equal(exactScope.length, 7);
   exactScope.forEach((candidate) => {
     assert.equal(existsSync(path.join(root, candidate)), true, candidate);
-    assert.equal(gitObjectExists(`${baseline}:${candidate}`), false, candidate);
+    assert.equal(gitObjectExists(`${baseline}:${candidate}`), true, candidate);
+    assert.equal(gitObjectExists(`${expectedParent}:${candidate}`), false, candidate);
   });
+  const originalR2APaths = git([
+    "diff-tree",
+    "--no-commit-id",
+    "--name-only",
+    "-r",
+    baseline,
+  ])
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  assert.deepEqual(sorted(originalR2APaths), sorted(exactScope));
+
   const head = git(["rev-parse", "HEAD"]);
   const actualPaths =
     head === baseline
@@ -436,8 +610,9 @@ check("exact implementation scope 7/7 and every path is new", () => {
       : git(["diff", "--name-only", baseline, head]).split(/\r?\n/u).filter(Boolean);
   assert.deepEqual(sorted(actualPaths), sorted(exactScope));
   if (head === baseline) {
-    parseStatusPaths().forEach((record) => assert.equal(record.status, "??"));
+    parseStatusPaths().forEach((record) => assert.equal(record.status, " M"));
   } else {
+    assert.equal(git(["rev-parse", `${head}^`]), baseline);
     assert.equal(parseStatusPaths().length, 0);
   }
 });
@@ -518,6 +693,63 @@ check("V2 composes accepted V1 and contains no prohibited integration", () => {
   assert.doesNotMatch(source, /CustomerAssessmentProjectionV1\s*=\s*\{/u);
 });
 
+check("identifier exclusion uses no Unicode-letter boundary and enumerates customer text", () => {
+  const source = readText(implementationPath);
+  assert.match(source, /const factIdPattern = \/F\[0-9\]\{3\}\/u;/u);
+  assert.match(
+    source,
+    /reply_now\|send_now\|wait_and_reassess\|pause_additional_contact/u,
+  );
+  assert.doesNotMatch(source, /\\p\{L\}|\\p\{N\}/u);
+  assert.match(source, /function assertBaseProjectionCustomerTexts\(/u);
+  for (const pattern of [
+    /value\.primaryReason/u,
+    /value\.finalDraft\.text/u,
+    /value\.immediateAction\.action/u,
+    /value\.immediateAction\.avoid/u,
+    /value\.immediateAction\.secondaryActions/u,
+    /value\.reassessment\.when/u,
+    /value\.reassessment\.conditions/u,
+    /value\.relationshipSummary/u,
+    /value\.messageTemperature\.softness/u,
+    /value\.messageTemperature\.affection/u,
+    /value\.messageTemperature\.pressure/u,
+    /value\.messageTemperature\.adjustment/u,
+    /value\.optionalDetails\.interpretations/u,
+    /value\.optionalDetails\.shortLetter/u,
+    /value\.optionalDetails\.anxietyReframe/u,
+    /value\.optionalDetails\.expandedPlan/u,
+    /value\.optionalDetails\.planCommentary/u,
+    /value\.fixedLimitation/u,
+  ]) {
+    assert.match(source, pattern);
+  }
+});
+
+check("recursive forbidden-key rejection remains a separate gate", () => {
+  const source = readText(implementationPath);
+  for (const key of [
+    "fact_id",
+    "decision_reason_fact_ids",
+    "supporting_fact_ids",
+    "trigger_fact_ids",
+    "unknown_code",
+    "material_to",
+    "report",
+    "requestId",
+    "runId",
+    "usage",
+    "diagnostic_verdict",
+    "machine_verdict",
+    "stage_data",
+  ]) {
+    assert.equal(source.includes(`"${key}"`), true, key);
+  }
+  assert.match(source, /function assertNoForbiddenKeys\(value: unknown\)/u);
+  assert.match(source, /assertNoForbiddenKeys\(child\)/u);
+  assert.match(source, /assertNoForbiddenKeys\(value\);/u);
+});
+
 check("exact legacy split mapping and source-order implementation", () => {
   const source = readText(implementationPath);
   for (const pattern of [
@@ -545,8 +777,15 @@ check("projection contract exact shape limits doctrine and authorization boundar
   assert.equal(projectionContract.baseline, baseline);
   assert.equal(
     projectionContract.status,
-    "experience_projection_v2_implemented_pending_human_chatgpt_review",
+    "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
   );
+  assert.deepEqual(projectionContract.review_correction, {
+    r2_a_architecture_accepted: true,
+    r2_a_identifier_exclusion_defect_found: true,
+    r2_a_identifier_exclusion_corrected: true,
+    provider_quality_established: false,
+    provider_rerun_authorized: false,
+  });
   assert.deepEqual(projectionContract.projection.top_level_keys, [
     "projectionSchemaVersion",
     "baseProjection",
@@ -570,6 +809,36 @@ check("projection contract exact shape limits doctrine and authorization boundar
     projectionContract.decoder_contract.split_limits.consultationLimitations.maximum,
     2,
   );
+  assert.deepEqual(
+    projectionContract.decoder_contract.identifier_exclusion.experience_customer_text_paths,
+    [
+      "openingLine",
+      "openingLetter[*]",
+      "situationReading[*]",
+      "possibleInterpretations[*]",
+      "materialUnknowns[*]",
+      "draftContext",
+      "actionRationales[*]",
+      "closingLines[*]",
+      "consultationLimitations[*]",
+    ],
+  );
+  assert.equal(
+    projectionContract.decoder_contract.identifier_exclusion.base_projection_customer_text_paths.length,
+    19,
+  );
+  assert.equal(
+    projectionContract.decoder_contract.identifier_exclusion.unicode_letter_boundaries_used,
+    false,
+  );
+  assert.equal(
+    projectionContract.decoder_contract.identifier_exclusion.recursive_forbidden_key_rejection_preserved,
+    true,
+  );
+  assert.equal(
+    projectionContract.decoder_contract.identifier_exclusion.key_and_text_value_exclusion_are_separate,
+    true,
+  );
   assert.equal(projectionContract.product_doctrine_support.rendering_owned_by_r2_b, true);
   assert.equal(projectionContract.product_doctrine_support.customer_reassurance_established, false);
   assert.equal(projectionContract.product_doctrine_support.jpy980_readiness_established, false);
@@ -581,15 +850,22 @@ check("capabilities exact success and zero-operation boundary", () => {
   assert.equal(capabilities.baseline, baseline);
   assert.equal(
     capabilities.status,
-    "experience_projection_v2_implemented_pending_human_chatgpt_review",
+    "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
   );
   for (const key of [
     "product_doctrine_accepted",
     "package_a_accepted",
     "package_b_visual_shell_accepted",
+    "r2_a_architecture_accepted",
+    "r2_a_identifier_exclusion_defect_found",
+    "r2_a_identifier_exclusion_corrected",
     "customer_assessment_projection_v1_unchanged",
     "experience_projection_v2_complete",
     "experience_fields_exact_source_only",
+    "japanese_adjacent_fact_ids_rejected",
+    "japanese_adjacent_decision_enums_rejected",
+    "base_projection_customer_text_covered",
+    "structural_enum_values_remain_allowed",
     "full_report_unchanged",
     "v1_parity_preserved",
   ]) {
@@ -616,18 +892,44 @@ check("capabilities exact success and zero-operation boundary", () => {
   }
   assert.equal(
     capabilities.next_action,
-    "human_chatgpt_review_of_experience_projection_v2",
+    "human_chatgpt_review_of_r2_a_r1_identifier_exclusion",
   );
 });
 
-check("fixture catalog exact 8 positive and 20 negative synthetic only", () => {
+check("fixture catalog preserves 8 positive and previous 20 plus 15 R1 negative", () => {
   assert.equal(fixtures.task_id, taskId);
   assert.equal(fixtures.data_policy, "offline_synthetic_only");
   assert.equal(fixtures.template_source_policy, "accepted_package_a_synthetic_templates_read_only");
   assert.equal(fixtures.positive_fixtures.length, 8);
-  assert.equal(fixtures.negative_fixtures.length, 20);
+  assert.equal(fixtures.negative_fixtures.length, 35);
   assert.equal(new Set(fixtures.positive_fixtures.map((item) => item.fixture_id)).size, 8);
-  assert.equal(new Set(fixtures.negative_fixtures.map((item) => item.fixture_id)).size, 20);
+  assert.equal(new Set(fixtures.negative_fixtures.map((item) => item.fixture_id)).size, 35);
+  assert.equal(baselineFixtures.negative_fixtures.length, 20);
+  assert.deepEqual(fixtures.positive_fixtures, baselineFixtures.positive_fixtures);
+  assert.deepEqual(
+    fixtures.negative_fixtures.slice(0, 20),
+    baselineFixtures.negative_fixtures,
+  );
+  const correctionFixtureIds = fixtures.negative_fixtures
+    .slice(20)
+    .map((item) => item.fixture_id);
+  assert.deepEqual(correctionFixtureIds, [
+    "japanese_adjacent_fact_ids_in_opening_line",
+    "japanese_copula_fact_id_in_closing_line",
+    "japanese_particle_fact_id_in_situation_reading",
+    "japanese_particle_reply_now_in_opening_letter",
+    "japanese_copula_wait_in_action_rationale",
+    "fact_id_in_base_primary_reason",
+    "fact_id_in_base_final_draft_text",
+    "fact_id_in_base_immediate_action",
+    "decision_enum_in_base_reassessment_when",
+    "decision_enum_in_base_reassessment_condition",
+    "fact_id_in_base_relationship_summary",
+    "fact_id_in_base_message_softness",
+    "fact_id_in_base_short_letter",
+    "decision_enum_in_base_expanded_plan_action",
+    "fact_id_in_base_fixed_limitation",
+  ]);
 });
 
 const positiveStats = { legacy: 0, split: 0 };
@@ -673,12 +975,9 @@ check("positive fixtures exact mapping immutability determinism and V1 parity", 
     assert.notStrictEqual(first.actionRationales, readyResult.report.content.action_rationales);
     assert.notStrictEqual(first.closingLines, readyResult.report.content.closing_lines);
     assert.equal(containsForbiddenKey(first), false, fixture.fixture_id);
-    for (const text of experienceStrings(first)) {
-      assert.doesNotMatch(text, /(?:^|[^\p{L}\p{N}_])F[0-9]{3}(?:$|[^\p{L}\p{N}_])/u);
-      assert.doesNotMatch(
-        text,
-        /(?:^|[^\p{L}\p{N}_])(?:reply_now|send_now|wait_and_reassess|pause_additional_contact)(?:$|[^\p{L}\p{N}_])/u,
-      );
+    for (const entry of customerTextEntries(first)) {
+      assert.doesNotMatch(entry.text, factIdPattern, entry.path);
+      assert.doesNotMatch(entry.text, decisionCodePattern, entry.path);
     }
 
     if (fixture.expected_situation_reading) {
@@ -742,10 +1041,148 @@ check("repeated accepted source strings remain decoder-valid", () => {
   experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(repeated);
 });
 
-check("all 20 negative fixtures reject fail-closed", () => {
+check("all V2 experience customer-readable paths enforce identifier exclusion", () => {
+  const cases = [
+    ["openingLine", (value) => { value.openingLine = "F101を確認します"; }],
+    ["openingLetter[*]", (value) => { value.openingLetter[0] = "F101を確認します"; }],
+    ["situationReading[*]", (value) => { value.situationReading[0] = "F101を確認します"; }],
+    ["possibleInterpretations[*]", (value) => { value.possibleInterpretations[0] = "F101を確認します"; }],
+    ["materialUnknowns[*]", (value) => { value.materialUnknowns[0] = "F101を確認します"; }],
+    ["draftContext", (value) => { value.draftContext = "F101を確認します"; }],
+    ["actionRationales[*]", (value) => { value.actionRationales[0] = "F101を確認します"; }],
+    ["closingLines[*]", (value) => { value.closingLines[0] = "F101を確認します"; }],
+    ["consultationLimitations[*]", (value) => { value.consultationLimitations[0] = "F101を確認します"; }],
+  ];
+  assert.deepEqual(cases.map(([pathName]) => pathName), [
+    "openingLine",
+    "openingLetter[*]",
+    "situationReading[*]",
+    "possibleInterpretations[*]",
+    "materialUnknowns[*]",
+    "draftContext",
+    "actionRationales[*]",
+    "closingLines[*]",
+    "consultationLimitations[*]",
+  ]);
+  for (const [pathName, mutate] of cases) {
+    const candidate = clone(positiveProjections.get("split_full_experience"));
+    experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate);
+    mutate(candidate);
+    assert.throws(
+      () => experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate),
+      undefined,
+      pathName,
+    );
+  }
+});
+
+check("Japanese-adjacent Fact IDs and Decision literals reject without boundaries", () => {
+  const factExamples = [
+    "F101とF102",
+    "説明はF101です",
+    "F001を参照",
+    "（F002）",
+    "F003。",
+    "F004",
+  ];
+  const decisionExamples = [
+    "reply_nowを選ぶ",
+    "send_nowの場合",
+    "wait_and_reassessへ変更",
+    "pause_additional_contactです",
+  ];
+  for (const text of [...factExamples, ...decisionExamples]) {
+    const candidate = clone(positiveProjections.get("split_full_experience"));
+    candidate.openingLine = text;
+    assert.throws(
+      () => experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate),
+      undefined,
+      text,
+    );
+  }
+});
+
+check("all 19 baseProjection customer-readable paths enforce text exclusion", () => {
+  const cases = [
+    ["baseProjection.primaryReason", "split_full_experience", (value) => { value.baseProjection.primaryReason = "F101を確認します"; }],
+    ["baseProjection.finalDraft.text", "split_full_experience", (value) => { value.baseProjection.finalDraft.text = "F101を確認します"; }],
+    ["baseProjection.immediateAction.action", "split_full_experience", (value) => { value.baseProjection.immediateAction.action = "F101を確認します"; }],
+    ["baseProjection.immediateAction.avoid[*]", "split_full_experience", (value) => { value.baseProjection.immediateAction.avoid[0] = "F101を確認します"; }],
+    ["baseProjection.immediateAction.secondaryActions[*]", "split_full_experience", (value) => { value.baseProjection.immediateAction.secondaryActions[0] = "F101を確認します"; }],
+    ["baseProjection.reassessment.when", "split_full_experience", (value) => { value.baseProjection.reassessment.when = "F101を確認します"; }],
+    ["baseProjection.reassessment.conditions[*].condition", "split_full_experience", (value) => { value.baseProjection.reassessment.conditions[0].condition = "F101を確認します"; }],
+    ["baseProjection.relationshipSummary", "v1_parity_legacy", (value) => { value.baseProjection.relationshipSummary = "F101を確認します"; }],
+    ["baseProjection.messageTemperature.softness", "v1_parity_split", (value) => { value.baseProjection.messageTemperature.softness = "F101を確認します"; }],
+    ["baseProjection.messageTemperature.affection", "v1_parity_split", (value) => { value.baseProjection.messageTemperature.affection = "F101を確認します"; }],
+    ["baseProjection.messageTemperature.pressure", "v1_parity_split", (value) => { value.baseProjection.messageTemperature.pressure = "F101を確認します"; }],
+    ["baseProjection.messageTemperature.adjustment", "v1_parity_split", (value) => { value.baseProjection.messageTemperature.adjustment = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.interpretations[*]", "v1_parity_split", (value) => { value.baseProjection.optionalDetails.interpretations[0] = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.shortLetter[*]", "v1_parity_legacy", (value) => { value.baseProjection.optionalDetails.shortLetter[0] = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.anxietyReframe[*]", "v1_parity_legacy", (value) => { value.baseProjection.optionalDetails.anxietyReframe[0] = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.expandedPlan[*].action", "v1_parity_split", (value) => { value.baseProjection.optionalDetails.expandedPlan[0].action = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.expandedPlan[*].avoid", "v1_parity_split", (value) => { value.baseProjection.optionalDetails.expandedPlan[0].avoid = "F101を確認します"; }],
+    ["baseProjection.optionalDetails.planCommentary[*]", "v1_parity_split", (value) => { value.baseProjection.optionalDetails.planCommentary[0] = "F101を確認します"; }],
+    ["baseProjection.fixedLimitation", "split_full_experience", (value) => { value.baseProjection.fixedLimitation = "F101を確認します"; }],
+  ];
+  assert.equal(cases.length, 19);
+  for (const [pathName, fixtureId, mutate] of cases) {
+    const candidate = clone(positiveProjections.get(fixtureId));
+    experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate);
+    mutate(candidate);
+    assert.throws(
+      () => experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate),
+      undefined,
+      pathName,
+    );
+  }
+});
+
+check("structural Decision schema topic policy timing and phase values remain accepted", () => {
+  const candidate = clone(positiveProjections.get("v1_parity_split"));
+  candidate.baseProjection.decisionCode = "reply_now";
+  candidate.baseProjection.reassessment.conditions[0].resultingDirection =
+    "wait_and_reassess";
+  candidate.baseProjection.finalDraft.policy = "required_now";
+  candidate.baseProjection.finalDraft.useTiming = "now";
+  candidate.baseProjection.optionalDetails.expandedPlan[0].phase =
+    "reassessment_condition";
+
+  const decoded =
+    experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(candidate);
+  assert.equal(decoded.projectionSchemaVersion, "customer-assessment-experience-projection-v2");
+  assert.equal(decoded.baseProjection.projectionSchemaVersion, "customer-assessment-projection-v1");
+  assert.equal(decoded.baseProjection.sourceReportSchemaVersion, "m2-p4-split-runtime-report-v1");
+  assert.equal(decoded.baseProjection.decisionCode, "reply_now");
+  assert.equal(
+    decoded.baseProjection.reassessment.conditions[0].resultingDirection,
+    "wait_and_reassess",
+  );
+  assert.equal(decoded.baseProjection.finalDraft.policy, "required_now");
+  assert.equal(decoded.baseProjection.finalDraft.useTiming, "now");
+  assert.equal(
+    decoded.baseProjection.optionalDetails.expandedPlan[0].phase,
+    "reassessment_condition",
+  );
+  assert.deepEqual(decoded.baseProjection.requestedTopics, candidate.baseProjection.requestedTopics);
+  const acceptedRequestedTopics = new Set(
+    [...positiveProjections.values()].flatMap(
+      (projection) => projection.baseProjection.requestedTopics,
+    ),
+  );
+  assert.deepEqual(sorted(acceptedRequestedTopics), [
+    "decide_send_or_wait",
+    "draft_message",
+    "message_impact",
+    "next_three_days",
+    "organize_emotions",
+    "relationship",
+  ]);
+});
+
+check("all previous 20 negative fixtures still reject fail-closed", () => {
   let rejected = 0;
-  for (const fixture of fixtures.negative_fixtures) {
-    const base = projectionForFamily(fixture.source_family);
+  for (const fixture of fixtures.negative_fixtures.slice(0, 20)) {
+    const base = projectionForNegativeFixture(fixture);
     const invalid = mutateNegative(base, fixture.mutation);
     assert.throws(
       () => experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(invalid),
@@ -755,6 +1192,21 @@ check("all 20 negative fixtures reject fail-closed", () => {
     rejected += 1;
   }
   assert.equal(rejected, 20);
+});
+
+check("all 15 R1 correction negative fixtures reject fail-closed", () => {
+  let rejected = 0;
+  for (const fixture of fixtures.negative_fixtures.slice(20)) {
+    const base = projectionForNegativeFixture(fixture);
+    const invalid = mutateNegative(base, fixture.mutation);
+    assert.throws(
+      () => experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(invalid),
+      undefined,
+      fixture.fixture_id,
+    );
+    rejected += 1;
+  }
+  assert.equal(rejected, 15);
 });
 
 check("frozen E-R3 accepted-ready cases project successfully 3/3", () => {
@@ -769,6 +1221,13 @@ check("frozen E-R3 accepted-ready cases project successfully 3/3", () => {
       readyResult,
       record.evidence.synthetic_input.requested_topics,
     );
+    for (const entry of customerTextEntries(projected)) {
+      assert.equal(
+        factIdPattern.test(entry.text) || decisionCodePattern.test(entry.text),
+        false,
+        `${caseId}:${entry.path}:${JSON.stringify(entry.text)}`,
+      );
+    }
     experienceProjection.decodeCustomerAssessmentExperienceProjectionV2(projected);
     assert.equal(JSON.stringify(readyResult.report), reportBefore, caseId);
     assert.equal(containsForbiddenKey(projected), false, caseId);
@@ -825,7 +1284,9 @@ check("offline result manifest matches independently executed evidence", () => {
   assert.equal(offlineResults.baseline, baseline);
   assert.deepEqual(offlineResults.fixture_counts, {
     positive: 8,
-    negative: 20,
+    negative: 35,
+    previous_negative: 20,
+    r1_negative: 15,
     legacy_positive: 2,
     split_positive: 6,
     frozen_e_r3_accepted_ready: 3,
@@ -868,7 +1329,10 @@ check("no UI Provider network DB Supabase Runtime Prompt Catalog Schema Pipeline
 });
 
 check("git diff --check PASS", () => {
-  assert.equal(git(["diff", "--check"]), "");
+  const head = git(["rev-parse", "HEAD"]);
+  const diffCheckArgs =
+    head === baseline ? ["diff", "--check"] : ["diff", "--check", baseline, head];
+  assert.equal(git(diffCheckArgs), "");
   exactScope.forEach((candidate) => {
     assert.doesNotMatch(readText(candidate), /[\t ]+$/gmu, candidate);
   });
@@ -879,9 +1343,9 @@ console.log("");
 console.log(
   `Experience projection verifier: ${failed.length === 0 ? "PASS" : "FAIL"} ${checks.length - failed.length}/${checks.length}`,
 );
-console.log("Exact scope: 7/7 new paths");
+console.log("Original R2-A scope: 7/7; exact R1 correction scope: 7/7");
 console.log("Positive fixtures: 8/8");
-console.log("Negative fixtures: 20/20");
+console.log("Previous negative fixtures: 20/20; R1 negative fixtures: 15/15");
 console.log("Frozen E-R3: ready 3/3; safety/rejected 3/3 not accepted ready Product");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");
 if (failed.length > 0) process.exitCode = 1;
