@@ -1,0 +1,124 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-review-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
+  "record_type": "human_chatgpt_product_owner_acceptance",
+  "status": "accepted_complete",
+  "baseline": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+  "review_target": {
+    "surface": "Customer Assessment Note UI",
+    "projection": "CustomerAssessmentExperienceProjectionV2",
+    "route": "/review/runtime/v12",
+    "fixture_count": 9,
+    "synthetic_only": true
+  },
+  "viewports": [
+    {
+      "id": "desktop",
+      "width_px": null,
+      "status": "PASS"
+    },
+    {
+      "id": "mobile_399",
+      "width_px": 399,
+      "status": "PASS"
+    },
+    {
+      "id": "mobile_320",
+      "width_px": 320,
+      "status": "PASS"
+    }
+  ],
+  "observed_width_findings": {
+    "no_horizontal_scroll": true,
+    "no_content_overlap": true,
+    "readable_japanese_wrapping": true,
+    "headings_remain_legible": true,
+    "current_answer_stacks_on_narrow_mobile": true,
+    "draft_remains_discoverable": true,
+    "paper_navy_gold_atmosphere_preserved": true,
+    "long_emotional_content_remains_readable": true,
+    "information_density_accepted": true
+  },
+  "mobile_320_cases": [
+    {
+      "fixture_id": "ordinary_reply_waiting",
+      "status": "PASS",
+      "findings": [
+        "cover_readable",
+        "answer_stacked",
+        "opening_letter_readable",
+        "situation_reading_readable",
+        "unknowns_readable",
+        "action_and_reassessment_readable"
+      ]
+    },
+    {
+      "fixture_id": "kansai_persona_draft",
+      "status": "PASS",
+      "findings": [
+        "dialect_preserved",
+        "line_break_preserved",
+        "emoji_preserved",
+        "draft_readable",
+        "copy_button_usable"
+      ]
+    }
+  ],
+  "expanded_plan_narrow_behavior": {
+    "status": "PASS",
+    "finding": "No horizontal-overflow or structural blocker observed in responsive review evidence."
+  },
+  "interaction_accessibility": {
+    "keyboard_only_navigation": "PASS",
+    "copy_success": "PASS",
+    "copy_failure": "PASS",
+    "copy_success_announcement": "PASS",
+    "copy_failure_announcement": "PASS",
+    "zoom_200_percent": "PASS",
+    "reduced_motion": "PASS"
+  },
+  "automated_evidence_retained": {
+    "keyboard_accessible_native_button": true,
+    "native_details_collapsed_by_default": true,
+    "focus_visible_styling_exists": true,
+    "copy_writes_exact_source_text": true
+  },
+  "human_visual_review": {
+    "status": "PASS",
+    "disposition": "accepted_complete"
+  },
+  "chatgpt_visual_review": {
+    "status": "PASS",
+    "accepted_findings": [
+      "Visual shell fits Moon Reply",
+      "mobile reading experience is strong",
+      "letter-first pacing supports reassurance",
+      "information density is no longer too short",
+      "primary sections have distinct Product functions",
+      "final draft remains easy to find",
+      "responsive typography remains readable",
+      "320px does not materially degrade the experience",
+      "current-answer mobile correction resolves the previous cramped layout",
+      "no further major UI redesign is recommended"
+    ],
+    "minor_non_blocking_product_observations": [
+      "source-generated content must not force unnecessary \u300c\u307e\u3060\u5206\u304b\u3089\u306a\u3044\u3053\u3068\u300d sections",
+      "generic reassurance repetition remains a Provider/Prompt quality issue",
+      "renderer-owned time-neutral action heading is now corrected"
+    ],
+    "ui_blockers": false
+  },
+  "product_owner_experience_review": {
+    "complete": true,
+    "disposition": "accepted_for_customer_note_ui_and_synthetic_experience"
+  },
+  "acceptance": {
+    "r2_a": "ACCEPTED COMPLETE",
+    "r2_a_r1": "ACCEPTED COMPLETE",
+    "r2_b": "ACCEPTED COMPLETE",
+    "r2_b_r1": "ACCEPTED COMPLETE",
+    "r2_c": "HUMAN / CHATGPT / PRODUCT OWNER ACCEPTED COMPLETE",
+    "customer_assessment_note_ui": "ACCEPTED COMPLETE"
+  },
+  "formal_wcag_certification_claimed": false
+}

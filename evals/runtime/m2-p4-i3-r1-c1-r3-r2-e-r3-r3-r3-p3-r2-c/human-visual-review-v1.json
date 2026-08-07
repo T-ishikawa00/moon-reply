@@ -1,0 +1,65 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-human-visual-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
+  "evidence_type": "human_observed",
+  "status": "PASS",
+  "review_complete": true,
+  "baseline": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+  "reviewed_widths": {
+    "desktop": "PASS",
+    "mobile_399": "PASS",
+    "mobile_320": "PASS"
+  },
+  "at_observed_widths": {
+    "no_horizontal_scroll": true,
+    "no_content_overlap": true,
+    "readable_japanese_wrapping": true,
+    "headings_remain_legible": true,
+    "current_answer_stacks_correctly_on_narrow_mobile": true,
+    "draft_remains_discoverable": true,
+    "paper_navy_gold_atmosphere_preserved": true,
+    "long_emotional_content_remains_readable": true,
+    "information_density_accepted": true
+  },
+  "mobile_320_observations": {
+    "ordinary_reply_waiting": {
+      "status": "PASS",
+      "cover_readable": true,
+      "answer_stacked": true,
+      "opening_letter_readable": true,
+      "situation_reading_readable": true,
+      "unknowns_readable": true,
+      "action_and_reassessment_readable": true
+    },
+    "kansai_persona_draft": {
+      "status": "PASS",
+      "dialect_preserved": true,
+      "line_break_preserved": true,
+      "emoji_preserved": true,
+      "draft_readable": true,
+      "copy_button_usable": true
+    }
+  },
+  "expanded_plan_narrow_behavior": {
+    "status": "PASS",
+    "horizontal_overflow_blocker_observed": false,
+    "structural_blocker_observed": false
+  },
+  "interaction_accessibility_results": {
+    "keyboard_only_navigation": "PASS",
+    "copy_success": "PASS",
+    "copy_failure": "PASS",
+    "copy_success_announcement": "PASS",
+    "copy_failure_announcement": "PASS",
+    "zoom_200_percent": "PASS",
+    "reduced_motion": "PASS"
+  },
+  "automated_evidence_retained": {
+    "button_uses_keyboard_accessible_native_button": true,
+    "details_is_native_and_collapsed_by_default": true,
+    "focus_visible_styling_exists": true,
+    "copy_writes_exact_source_text": true
+  },
+  "formal_wcag_certification_claimed": false,
+  "disposition": "HUMAN VISUAL ACCEPTED COMPLETE"
+}
