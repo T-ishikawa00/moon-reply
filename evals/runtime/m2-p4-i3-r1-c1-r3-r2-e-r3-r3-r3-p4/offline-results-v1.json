@@ -1,0 +1,97 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
+  "status": "PASS",
+  "capability_status": "prompt_contract_established",
+  "provider_quality_established": false,
+  "baseline": "df3c707ec7f567120d28f0ce164ef42916e61c63",
+  "prompt": {
+    "version": "v4.0.0",
+    "sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "contract_sections_present": "PASS",
+    "responsibilities_separated": "PASS",
+    "paired_examples": "6/6 PASS",
+    "self_mutation_responsibility_rejections": "11/11 PASS",
+    "provider_compliance_proven": false
+  },
+  "grounding": {
+    "version": "m2-p4-report-grounding-v4",
+    "sha256_canonical_utf8_lf": "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8",
+    "input_immutability": "PASS",
+    "fresh_report_object": "PASS",
+    "relationship_v3_semantics": "PASS",
+    "draft_null_behavior": "PASS",
+    "draft_present_exact_preservation": "PASS",
+    "observed_fact_id_integrity": "PASS",
+    "observed_fact_source_order": "PASS",
+    "unicode_dialect_emoji_preservation": "PASS",
+    "positive_fixtures": "8/8 PASS",
+    "negative_fixtures": "6/6 REJECT"
+  },
+  "writing_contract_results": {
+    "unsupported_causality": "PASS",
+    "chronology_integrity": "PASS",
+    "explicit_fact_inference_separation": "PASS",
+    "anxiety_safe_uncertainty": "PASS",
+    "generic_aftercare_restriction": "PASS",
+    "consultation_specific_reassurance": "PASS",
+    "distinct_field_responsibility": "PASS",
+    "density_without_repetition": "PASS",
+    "persona_and_draft_integrity": "PASS",
+    "contact_and_safety_integrity": "PASS",
+    "action_context_authority": "PASS"
+  },
+  "fixture_counts": {
+    "positive_wording": 6,
+    "negative_wording": 6,
+    "positive_grounding": 8,
+    "negative_grounding": 6,
+    "frozen_evidence_regression": 6
+  },
+  "frozen_evidence": {
+    "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+    "source_manifest": "10/10 PASS",
+    "marker_hash": "PASS",
+    "authorization_consumed": true,
+    "rerun_authorized": false,
+    "machine_verdict": "FAIL",
+    "machine_verdict_reclassified": false,
+    "case_regression": "6/6 PASS",
+    "e_r3_01_output_and_draft_unchanged": "PASS",
+    "e_r3_02_no_followup_respected": "PASS",
+    "e_r3_03_safety_blocked_not_pb05_ready": "PASS",
+    "e_r3_04_next_day_wording_retained_as_negative_example": "PASS",
+    "e_r3_05_accepted_final_reconstructed": false,
+    "e_r3_06_accepted_final_reconstructed": false
+  },
+  "regression": {
+    "r2_a_r1": "UNCHANGED",
+    "r2_b_r1": "UNCHANGED",
+    "r2_c": "UNCHANGED",
+    "product_doctrine": "UNCHANGED",
+    "pb05_v2": "UNCHANGED",
+    "report_grounding_v3": "UNCHANGED",
+    "pipeline_catalog_schema_ui": "UNCHANGED",
+    "evaluator_semantic_disposition": "UNCHANGED",
+    "active_runtime": "v4",
+    "active_runtime_activated": false,
+    "main": "UNCHANGED"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_reruns": 0,
+    "package_checks": 0
+  },
+  "authority": {
+    "package_d_authorized": false,
+    "package_e_authorized": false,
+    "package_f_authorized": false,
+    "provider_rerun_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "final_jpy980_readiness_established": false
+  },
+  "next_action": "human_chatgpt_review_of_pb05_precision_writing_successor"
+}

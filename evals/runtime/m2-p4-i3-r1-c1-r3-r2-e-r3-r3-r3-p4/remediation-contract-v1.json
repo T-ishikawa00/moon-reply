@@ -1,0 +1,246 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-remediation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
+  "title": "Package C — PB-05 Factual Precision and Anxiety-Safe Writing Successor",
+  "status": "pb05_precision_writing_successor_implemented_pending_human_chatgpt_review",
+  "mode": "inactive_offline_only",
+  "baseline": "df3c707ec7f567120d28f0ce164ef42916e61c63",
+  "parent": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+  "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
+  "source_branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product",
+  "implementation_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing",
+  "exact_scope": [
+    "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
+    "lib/assessment/runtime/report-grounding-v4.ts",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-contract-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-fixtures-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/offline-results-v1.json",
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/capabilities-v1.json",
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing.mjs",
+    "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P4_REVIEW.md"
+  ],
+  "scope_shape": {
+    "new": 8,
+    "updated": 0,
+    "deleted": 0
+  },
+  "package_authority": {
+    "creates_inactive_successor_assets_only": true,
+    "provider_quality_established": false,
+    "final_jpy980_readiness_established": false,
+    "live_runtime_readiness_established": false,
+    "r4_readiness_established": false,
+    "c2_readiness_established": false,
+    "future_wiring_owner": "separately_accepted_package_d_and_inactive_v12_catalog",
+    "activation_authority_inferred": false,
+    "additional_presentation_provider_stage_added": false
+  },
+  "prompt_contract": {
+    "path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
+    "title": "PB-05 Directional Report — Developer Contract v4.0.0",
+    "version": "v4.0.0",
+    "sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "output_schema": "report-content-v2.schema.json",
+    "versioned_successor": true,
+    "existing_v2_mutated": false,
+    "exact_future_inputs": [
+      "base_structured_intake",
+      "candidate_envelope",
+      "decision_plan",
+      "contact_constraint_policy",
+      "action_context"
+    ],
+    "prohibited_inputs": [
+      "raw_optional_candidate_text",
+      "raw_merged_request",
+      "provider_metadata",
+      "evaluator_oracle_data",
+      "product_owner_ratings",
+      "diagnostic_verdicts",
+      "retry_data",
+      "repair_data",
+      "fallback_data"
+    ],
+    "authority": {
+      "base_structured_intake": [
+        "facts",
+        "chronology",
+        "explicit_user_emotion",
+        "explicit_message_text",
+        "uncertainty",
+        "boundaries"
+      ],
+      "decision_plan": [
+        "selected_direction",
+        "current_action",
+        "reassessment_conditions",
+        "final_draft"
+      ],
+      "candidate_envelope": [
+        "bounded_style_commentary",
+        "bounded_intent_commentary"
+      ],
+      "application": [
+        "contact_constraint_policy",
+        "trusted_action_context"
+      ],
+      "report_content": "explanation_only_no_new_facts"
+    },
+    "hard_gate_order": [
+      "safety",
+      "factual_integrity",
+      "user_and_other_person_boundary_integrity",
+      "no_unsupported_certainty",
+      "no_fabricated_inner_state_causality_chronology_or_future_outcome"
+    ],
+    "required_separated_responsibilities": [
+      "factual_authority",
+      "causal_integrity",
+      "chronology_integrity",
+      "explicit_fact_versus_inference",
+      "anxiety_safe_uncertainty",
+      "consultation_specific_reassurance",
+      "distinct_field_responsibility",
+      "density_without_repetition",
+      "persona_preservation",
+      "contact_and_safety_integrity",
+      "action_context_authority"
+    ],
+    "field_responsibilities": [
+      "cover_line",
+      "short_letter",
+      "decision_reason_summary",
+      "relationship_summary",
+      "observed_fact_commentary",
+      "possible_interpretations",
+      "anxiety_reframe",
+      "message_temperature",
+      "action_rationales",
+      "message_draft_context",
+      "aftercare_commentary",
+      "change_condition_commentary",
+      "closing_lines"
+    ],
+    "no_fixed_length_template": true,
+    "optional_arrays_may_be_empty": true,
+    "provider_quality_claim": false
+  },
+  "grounding_contract": {
+    "path": "lib/assessment/runtime/report-grounding-v4.ts",
+    "version": "m2-p4-report-grounding-v4",
+    "sha256_canonical_utf8_lf": "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8",
+    "inactive_successor": true,
+    "pipeline_wired": false,
+    "exports": [
+      "buildRelationshipSummaryV4",
+      "groundSplitReportContentV4"
+    ],
+    "safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED",
+    "owned_replacements": [
+      "relationship_summary",
+      "message_temperature_when_draft_null",
+      "message_draft_context_when_draft_null"
+    ],
+    "invariants": {
+      "input_objects_mutated": false,
+      "fresh_report_content_returned": true,
+      "provider_customer_text_preserved_except_owned_fields": true,
+      "relationship_summary_semantics_equal_v3": true,
+      "draft_present_text_created_or_rewritten": false,
+      "observed_fact_source_order_preserved": true,
+      "observed_fact_text_rewritten": false,
+      "duplicate_observed_fact_ids_rejected": true,
+      "unselected_observed_fact_ids_rejected": true,
+      "raw_candidate_or_metadata_injection_rejected": true,
+      "accessor_based_source_mutation_rejected_before_access": true
+    },
+    "explicit_non_features": [
+      "causal_connector_substring_stripping",
+      "chronology_phrase_replacement",
+      "sentiment_scoring",
+      "semantic_similarity",
+      "llm_like_rewriting",
+      "regex_false_reassurance_generation",
+      "meaning_based_paragraph_deletion"
+    ]
+  },
+  "fixture_authority": {
+    "prompt_writing_contract_examples": "synthetic_only_not_provider_compliance",
+    "deterministic_grounding_behavior": "synthetic_executable",
+    "frozen_evidence_regression": "read_only_evidence_commit_b",
+    "positive_wording_fixtures": 6,
+    "negative_wording_fixtures": 6,
+    "positive_grounding_fixtures": 8,
+    "negative_grounding_fixtures": 6,
+    "frozen_regression_cases": 6
+  },
+  "frozen_evidence": {
+    "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+    "manifest_authority": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r2/adjudication-contract-v1.json",
+    "diagnostic_results_path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-results-v1.json",
+    "source_manifest_count": 10,
+    "machine_verdict": "FAIL",
+    "machine_verdict_reclassified": false,
+    "source_mutated": false,
+    "e_r3_05_accepted_final_reconstructed": false,
+    "e_r3_06_accepted_final_reconstructed": false
+  },
+  "regression_boundaries": {
+    "r2_a_r1_unchanged": true,
+    "r2_b_r1_unchanged": true,
+    "r2_c_evidence_unchanged": true,
+    "product_doctrine_unchanged": true,
+    "frozen_e_r3_evidence_unchanged": true,
+    "pb05_v2_unchanged": true,
+    "report_grounding_v3_unchanged": true,
+    "pipeline_unchanged": true,
+    "catalog_unchanged": true,
+    "schema_unchanged": true,
+    "evaluator_unchanged": true,
+    "semantic_disposition_unchanged": true,
+    "ui_unchanged": true,
+    "customer_draft_copy_behavior_unchanged": true,
+    "active_runtime": "v4",
+    "main_unchanged": true
+  },
+  "operations": {
+    "provider_calls": 0,
+    "runner_reruns": 0,
+    "package_checks": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migrations": 0,
+    "runtime_activations": 0,
+    "catalog_wiring_changes": 0,
+    "pipeline_wiring_changes": 0,
+    "schema_changes": 0,
+    "ui_changes": 0,
+    "deterministic_evaluator_changes": 0,
+    "semantic_disposition_changes": 0,
+    "pb06_changes": 0,
+    "payment_changes": 0,
+    "safety_ux_changes": 0
+  },
+  "authority_state": {
+    "package_d_authorized": false,
+    "package_e_authorized": false,
+    "package_f_authorized": false,
+    "provider_rerun_authorized": false,
+    "active_runtime_activated": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false,
+    "force_push_authorized": false
+  },
+  "validation_sequence": [
+    "node scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing.mjs",
+    "node evals/quality/m2-p4-i1/verify-decision-policy.mjs",
+    "npm run typecheck",
+    "npm run lint",
+    "npm run build",
+    "git diff --check",
+    "git status --short"
+  ],
+  "next_action": "human_chatgpt_review_of_pb05_precision_writing_successor"
+}

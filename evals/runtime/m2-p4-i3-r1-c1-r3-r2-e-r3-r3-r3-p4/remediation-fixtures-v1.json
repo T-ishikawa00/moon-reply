@@ -1,0 +1,269 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-remediation-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4",
+  "title": "PB-05 Factual Precision and Anxiety-Safe Writing Offline Fixture Catalog",
+  "mode": "synthetic_only_plus_read_only_frozen_evidence",
+  "fixture_catalog": {
+    "prompt_writing_contract_examples": {
+      "authority": "synthetic_contract_examples_only",
+      "provider_compliance_proven": false,
+      "pairs": [
+        {
+          "fixture_id": "PW-01-unsupported-causality",
+          "responsibility": "causal_integrity",
+          "source_condition": "The Base supports that the user has not replied and that the exact time is undecided, but it does not support a causal connection.",
+          "reject": "「返信がまだなのは、具体的な時間が未定だからですね。」",
+          "accept": "「返信はまだで、具体的な時間も未定です。\n未返信の理由は、今の情報だけでは分かりません。」"
+        },
+        {
+          "fixture_id": "PW-02-unsupported-chronology",
+          "responsibility": "chronology_integrity",
+          "source_condition": "The source supports only that the message arrived after the meeting.",
+          "reject": "「初対面の翌日に、相手からお礼が届いています。」",
+          "accept": "「初めて会ったあとに、相手からお礼が届いています。」"
+        },
+        {
+          "fixture_id": "PW-03-explicit-fact-versus-intent",
+          "responsibility": "explicit_fact_inference_separation",
+          "source_condition": "The explicit message says 楽しかったです; romantic intent is not explicit.",
+          "reject": "「相手は楽しかったと感じている可能性があります。」",
+          "accept": "「相手は、楽しかったという感想を伝えています。\nそれが恋愛的な好意を示すかまでは分かりません。」"
+        },
+        {
+          "fixture_id": "PW-04-negative-enumeration",
+          "responsibility": "anxiety_safe_uncertainty",
+          "source_condition": "Adverse possibilities are neither supported nor material to the current action.",
+          "reject": "「返信しない可能性や、関係を終わらせたい可能性もあります。」",
+          "accept": "「返信が遅れている理由は、まだ分かりません。」"
+        },
+        {
+          "fixture_id": "PW-05-generic-aftercare",
+          "responsibility": "generic_aftercare_restriction",
+          "source_condition": "A simple business reply contains no waiting anxiety, repeated checking, or disengagement difficulty.",
+          "reject": "「スマートフォンから離れ、自分の時間に戻りましょう。」",
+          "accept": "「宛先と日時を確認して、一度だけ返信しましょう。」"
+        },
+        {
+          "fixture_id": "PW-06-consultation-specific-reassurance",
+          "responsibility": "consultation_specific_reassurance",
+          "source_condition": "The Base supports a concrete schedule that can be checked before replying.",
+          "reject": "「大丈夫です。今日はここまでで十分です。」",
+          "accept": "「必要な予定は確認できています。\n日時を確かめて返したら、この連絡はいったん手放して大丈夫です。」"
+        }
+      ]
+    },
+    "deterministic_grounding_behavior": {
+      "authority": "synthetic_executable_grounding_fixtures",
+      "provider_compliance_proven": false,
+      "positive": [
+        {
+          "fixture_id": "GR-P01-other-person-not-replied",
+          "behavior": "relationship_summary",
+          "latest_direct_message": {
+            "sender": "other_person",
+            "user_reply_state": "not_replied"
+          },
+          "expected": "equals_buildRelationshipSummaryV3"
+        },
+        {
+          "fixture_id": "GR-P02-other-person-replied",
+          "behavior": "relationship_summary",
+          "latest_direct_message": {
+            "sender": "other_person",
+            "user_reply_state": "replied"
+          },
+          "expected": "equals_buildRelationshipSummaryV3"
+        },
+        {
+          "fixture_id": "GR-P03-user-waiting",
+          "behavior": "relationship_summary",
+          "latest_direct_message": {
+            "sender": "user",
+            "user_reply_state": "not_applicable"
+          },
+          "expected": "equals_buildRelationshipSummaryV3"
+        },
+        {
+          "fixture_id": "GR-P04-none",
+          "behavior": "relationship_summary",
+          "latest_direct_message": {
+            "sender": "none",
+            "user_reply_state": "not_applicable"
+          },
+          "expected": "equals_buildRelationshipSummaryV3"
+        },
+        {
+          "fixture_id": "GR-P05-no-draft",
+          "behavior": "draft_nullability",
+          "draft_present": false,
+          "expected": {
+            "message_temperature": null,
+            "message_draft_context": null
+          }
+        },
+        {
+          "fixture_id": "GR-P06-draft-present",
+          "behavior": "draft_text_preservation",
+          "draft_present": true,
+          "message_temperature": {
+            "softness": "やわらかさはそのままです。",
+            "affection": "親しさを足していません。",
+            "pressure": "返信圧を加えていません。",
+            "adjustment": "短さと改行を保っています。"
+          },
+          "message_draft_context": "関西弁・改行・絵文字を変えず、時間の確認だけを残した計画です。",
+          "expected": "exact_preservation"
+        },
+        {
+          "fixture_id": "GR-P07-observed-source-order",
+          "behavior": "observed_fact_commentary",
+          "decision_reason_fact_ids": [
+            "F003",
+            "F001",
+            "F002"
+          ],
+          "observed_fact_commentary": [
+            {
+              "fact_id": "F001",
+              "commentary": "最初の明示事実を、そのまま説明します。"
+            },
+            {
+              "fact_id": "F003",
+              "commentary": "後から選ばれた事実も、元の順序で残します。"
+            }
+          ],
+          "expected": "source_order_and_exact_text_preserved"
+        },
+        {
+          "fixture_id": "GR-P08-unicode-dialect-emoji",
+          "behavior": "provider_text_preservation",
+          "preservation_values": {
+            "cover_line": "“そのまま”の言葉で返せます🌙",
+            "short_letter": "おおきに、って言える距離感も大事やで。",
+            "commentary": "関西弁・改行・絵文字😊を、そのまま残します。",
+            "message_draft_context": "「おっけー」の調子と改行を変えていません。"
+          },
+          "expected": "exact_preservation"
+        }
+      ],
+      "negative": [
+        {
+          "fixture_id": "GR-N01-duplicate-observed-fact-id",
+          "behavior": "duplicate_observed_fact_ids",
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        },
+        {
+          "fixture_id": "GR-N02-unselected-observed-fact-id",
+          "behavior": "observed_fact_id_not_in_decision_reason_fact_ids",
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        },
+        {
+          "fixture_id": "GR-N03-malformed-relationship-facts",
+          "behavior": "malformed_latest_direct_message_sender",
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        },
+        {
+          "fixture_id": "GR-N04-source-mutation-attempt",
+          "behavior": "accessor_property_attempts_source_mutation",
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        },
+        {
+          "fixture_id": "GR-N05-raw-candidate-injection",
+          "behavior": "inject_forbidden_authority_key",
+          "target": "decision_plan",
+          "injected_key": "raw_candidate_text",
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        },
+        {
+          "fixture_id": "GR-N06-provider-report-metadata-injection",
+          "behavior": "inject_forbidden_authority_keys",
+          "target": "generated_report_content",
+          "injected_keys": [
+            "provider_metadata",
+            "report_metadata"
+          ],
+          "expected_safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED"
+        }
+      ]
+    },
+    "frozen_evidence_regression": {
+      "authority": "read_only_frozen_evidence_commit_b",
+      "evidence_commit_b": "9e9bf7d90740c1d00bfc4e282c85906744cd736c",
+      "source_path": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3/diagnostic-results-v1.json",
+      "hash_algorithm": "sha256_utf8_json_stringify",
+      "machine_verdict": "FAIL",
+      "mutate_source": false,
+      "cases": [
+        {
+          "case_id": "E-R3-01",
+          "regression_role": "customer_output_and_draft_unchanged",
+          "final_result_present": true,
+          "eligibility": "ready",
+          "decision": "reply_now",
+          "final_result_sha256": "cf91a9728d8a25ecd259ab76e86f3cbfc375e33b3bd9bdb89cca572b610ebbac",
+          "final_report_sha256": "69e8352df9d81630dbde1f13a2de86c3310b307e8e7d282c734e57c3a30b7fc9",
+          "final_draft_sha256": "1689a6c72a3e11e7d6554963a77386b5c5dcd2db6be9837d218fc631841a9f64"
+        },
+        {
+          "case_id": "E-R3-02",
+          "regression_role": "no_followup_preference_respected",
+          "final_result_present": true,
+          "eligibility": "ready",
+          "decision": "wait_and_reassess",
+          "final_result_sha256": "2cb37b5a26f14765b903dfaf122226b90e957ff21848f1e4f851a64931e84e96",
+          "constraint_kind": "no_followup_message",
+          "follow_up_exception": "none",
+          "outbound_contact_now_allowed": false,
+          "outbound_contact_after_time_passage_allowed": false,
+          "final_draft": null
+        },
+        {
+          "case_id": "E-R3-03",
+          "regression_role": "safety_blocked_not_pb05_ready_product",
+          "final_result_present": true,
+          "eligibility": "safety_blocked",
+          "final_result_sha256": "eb6d59b0d573975fdf5a64cd7ff9915d246a82e6326585c5320669496cd862b9",
+          "pb05_executed": false,
+          "accepted_pb05_product": false
+        },
+        {
+          "case_id": "E-R3-04",
+          "regression_role": "unsupported_next_day_wording_negative_chronology_example",
+          "final_result_present": true,
+          "eligibility": "ready",
+          "decision": "reply_now",
+          "final_result_sha256": "22f9c79c8777b24af271db73ec7661f87bbc3a7463442d9672fb6e8abd96628b",
+          "negative_example_fragment": "初対面の翌日",
+          "reclassified": false
+        },
+        {
+          "case_id": "E-R3-05",
+          "regression_role": "rejected_intermediate_historical_evidence_only",
+          "final_result_present": false,
+          "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+          "accepted_final_product_reconstructed": false
+        },
+        {
+          "case_id": "E-R3-06",
+          "regression_role": "unsupported_causal_attribution_negative_example",
+          "final_result_present": false,
+          "safe_error_code": "M2_SEMANTIC_VALIDATION_FAILED",
+          "negative_example_fragment": "返信がまだなのは、土曜に行けることは決まっていても、具体的な時間が未定だからですね。",
+          "accepted_final_product_reconstructed": false
+        }
+      ]
+    }
+  },
+  "counts": {
+    "positive_wording_fixtures": 6,
+    "negative_wording_fixtures": 6,
+    "positive_grounding_fixtures": 8,
+    "negative_grounding_fixtures": 6,
+    "frozen_evidence_regression_cases": 6
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}
