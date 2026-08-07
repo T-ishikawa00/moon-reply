@@ -1,43 +1,38 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1 Review
 
 ## Status
 
-`reassuring_customer_note_v2_implemented_pending_human_visual_chatgpt_review`
+`reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review`
 
-Accepted Product Doctrine と accepted
-`CustomerAssessmentExperienceProjectionV2` を使い、Package B の navy / paper / gold
-Visual Shell を保持したまま、顧客向け鑑定ノートを
-「理解された感覚 → 安心 → 納得 → 行動」の順に再構成した。
+Accepted Product Doctrine、accepted `CustomerAssessmentExperienceProjectionV2`、R2-B architecture、
+navy / paper / gold Visual Shell、鑑定体験と情報量を変更せず、renderer-owned action heading の
+time-neutral 化と mobile current-answer layout だけを補正した。
 
-Human Visual Review、ChatGPT Visual Review、Product Owner Experience Review は未実施である。
-この実装は JPY980 readiness を確立しない。
+Desktop と 399px mobile の部分的な Human / ChatGPT Visual Review evidence は PASS である。
+ただし最終 Human Visual Review、ChatGPT Visual Review、Product Owner Experience Review は未完了で、
+この補正は final JPY980 readiness を確立しない。
 
 ## Baseline and exact scope
 
-- Branch: `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note`
-- Exact baseline: `89a6d55fdf3845451e80f1ee21dc648b224bcc9d`
-- Baseline parent: `da325d9b4d8404879a08c1b50107e7f7df8787ec`
+- Branch: `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy`
+- Exact baseline: `e509405935e82d7079023609b2d852d51f286f3e`
+- Baseline parent: `89a6d55fdf3845451e80f1ee21dc648b224bcc9d`
 - Main / origin-main: `61e33a10e195fad17e253a6b9719217e1992f273`
-- Exact scope: `8/8`
-- Updated: `3`
-- New: `5`
+- Exact scope: `6/6`
+- Updated: `6`
+- New: `0`
 
 Updated:
 
 1. `components/runtime/CustomerAssessmentNote.tsx`
 2. `components/runtime/CustomerAssessmentNote.module.css`
-3. `app/review/runtime/v12/page.tsx`
+3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json`
+4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json`
+5. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs`
+6. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md`
 
-New:
-
-1. `lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts`
-2. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json`
-3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json`
-4. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs`
-5. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md`
-
-`CustomerDraftCopyButton.tsx` は変更していない。既存の exact copy、成功通知、失敗通知を
-そのまま使用する。
+Review route、9 fixtures、`CustomerDraftCopyButton.tsx` は baseline blob のまま変更していない。
+既存の exact copy、成功通知、失敗通知をそのまま使用する。
 
 ## Component boundary
 
@@ -76,11 +71,33 @@ Moon Reply identity、紙面の可読性、quiet premium atmosphere は保持し
 - `relationship` は requested かつ relationship summary が non-null の場合だけ表示する。
 - `next_three_days` は requested かつ expanded plan がある場合だけ表示する。legacy は
   「今夜 / 次の日 / 3日目」、split は「今夜 / 次に / 見直す条件」を使用する。
-- 「今夜の動き方」は primary action と avoid を表示し、distinct action rationale を最大一つ
+- renderer-owned 「今の動き方」は primary action と avoid を表示し、distinct action rationale を最大一つ
   「この動き方をすすめる理由」として表示する。
+- section kicker は renderer-owned 「いま」とする。`immediateAction.action`、
+  `actionRationales`、fixtures 内の source-owned 「今夜」、legacy / split plan labels は変更しない。
 - 「見直す条件」は observable condition と renderer-owned future Decision label を分ける。
 - `projection.closingLines` は「月の返事から最後に」として 1–2 paragraphs を表示し、
   fixed limitation はその後の小さな footer に限定する。
+
+## Mobile current-answer correction
+
+- `.currentAnswer` は `max-width: 26.25rem`、すなわち 420px 以下で一列に stack する。
+- `.fixtureLink` の full-width behavior は従来どおり `max-width: 24rem` だけに限定する。
+- font size、answer text、cover hierarchy、note width、paper padding、section spacing、draft
+  prominence は変更していない。
+
+## Partial Visual Review evidence
+
+- Observed desktop: `PASS`
+- Observed 399px mobile: `PASS with minor current-answer layout correction requested`
+- Observed: horizontal scroll なし、content overlap なし、日本語 wrapping は readable、draft は
+  discoverable、information density と reassuring assessment direction は accepted、visual JPY980
+  plausibility は established
+- Pending: 320px、keyboard-only navigation、copy success announcement、copy failure announcement、
+  200% zoom、reduced-motion review、actual Provider output Product review
+
+この部分 evidence は Human Visual Review、ChatGPT Visual Review、Product Owner Experience Review
+の完了を意味しない。Final JPY980 readiness は `false` のままである。
 
 ## Exact repetition policy
 
@@ -128,28 +145,33 @@ Validation order:
 6. `git diff --check`
 7. `git status --short`
 
-Dedicated verifier は exact baseline/branch/scope、3 updated / 5 new、strict UTF-8、JSON、secret、
-Product Doctrine、R2-A/R1、V1 Projection、Delivery、Runtime、marker/authorization、component boundary、
-9 decoded fixtures、route isolation、mobile CSS、capabilities を fail-closed で確認する。
+Dedicated verifier は exact correction baseline/branch/scope `6/6`、全6パスが updated であること、
+その他の R2-B paths、Product Doctrine、R2-A/R1、V1 Projection、Delivery、Runtime、
+copy button、fixture source、review route が baseline blob のままであることを確認する。さらに、
+renderer heading / kicker の限定置換、420px current-answer stack、24rem fixture-link boundary、
+9 decoded fixtures、route isolation、capabilities、strict UTF-8、JSON、secret、`git diff --check` を
+fail-closed で確認する。
 
 Final automated results:
 
-- Dedicated R2-B verifier: `PASS 20/20`
+- Dedicated R2-B-R1 verifier: `PASS 20/20`, exact correction scope `6/6`
 - R2-A/R1 verifier in reconstructed accepted checkout: `PASS 32/32`, exact `7/7`
 - Decision Policy: `PASS 40/40`
 - TypeScript typecheck: `PASS`
 - ESLint: `PASS`, zero warnings
 - Next production build: `PASS`
 - `git diff --check`: `PASS`
-- Build-generated `next-env.d.ts` drift: none
+- Build-generated `next-env.d.ts` drift: none after completed production build
 
 ## Authority boundary
 
 - Provider / DB / Supabase: `0 / 0 / 0`
 - Provider text rewrite: `false`
 - Active Runtime: v4 unchanged; activation `false`
-- Human Visual Review: pending
-- ChatGPT Visual Review: pending
+- Desktop Visual Review: `PASS`
+- 399px Mobile Visual Review: `PASS`, requested minor layout correction applied
+- Human Visual Review: incomplete; final pending items remain
+- ChatGPT Visual Review: incomplete
 - Product Owner Experience Review: pending
 - JPY980 readiness: `false`
 - R2-C: unauthorized
@@ -159,4 +181,5 @@ Final automated results:
 - Public Runtime / Public Request flow / payment / Safety Gate: unchanged and unauthorized
 - PR / main merge / force push: none
 
-次の操作は R2-C の Human / ChatGPT Visual and Product Review である。この文書はそれを自己承認しない。
+Next action は `final_320_keyboard_copy_zoom_and_product_review` である。この文書は R2-C、
+Existing Package C、Provider rerun、Runtime activation、R4、C2、PR、main merge を自己承認しない。

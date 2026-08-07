@@ -14,13 +14,18 @@ import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
 const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B";
-const baseline = "89a6d55fdf3845451e80f1ee21dc648b224bcc9d";
-const expectedParent = "da325d9b4d8404879a08c1b50107e7f7df8787ec";
+const correctionTaskId =
+  "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1";
+const baseline = "e509405935e82d7079023609b2d852d51f286f3e";
+const expectedParent = "89a6d55fdf3845451e80f1ee21dc648b224bcc9d";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy";
+const expectedSourceBranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note";
 const acceptedSourceBranch =
   "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-customer-text-exclusion";
+const acceptedR2AR1Commit = expectedParent;
 
 const notePath = "components/runtime/CustomerAssessmentNote.tsx";
 const noteCssPath = "components/runtime/CustomerAssessmentNote.module.css";
@@ -41,15 +46,15 @@ const experienceProjectionPath =
 const r2aVerifierPath =
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection.mjs";
 
-const updatedPaths = [notePath, noteCssPath, reviewPagePath];
-const newPaths = [
-  fixturesPath,
+const updatedPaths = [
+  notePath,
+  noteCssPath,
   presentationContractPath,
   capabilitiesPath,
   verifierPath,
   reviewDocumentPath,
 ];
-const exactScope = [...updatedPaths, ...newPaths];
+const exactScope = [...updatedPaths];
 
 const fixtureIds = [
   "simple_business_reply_with_draft",
@@ -86,6 +91,8 @@ const doctrineScope = [
 ];
 
 const protectedPaths = [
+  reviewPagePath,
+  fixturesPath,
   "lib/assessment/runtime/customer-assessment-projection-v1.ts",
   "lib/assessment/runtime/customer-assessment-delivery-v1.ts",
   "lib/assessment/runtime/runtime-result-normalization-v1.ts",
@@ -140,6 +147,24 @@ function readText(relativePath) {
 
 function readJson(relativePath) {
   return JSON.parse(readText(relativePath));
+}
+
+function readGitText(revision, relativePath) {
+  const value = execFileSync(
+    "git.exe",
+    [
+      "-c",
+      "safe.directory=C:/projects/moon-reply",
+      "show",
+      `${revision}:${relativePath}`,
+    ],
+    { cwd: root },
+  );
+  return new TextDecoder("utf-8", { fatal: true }).decode(value);
+}
+
+function normalizeNewlines(value) {
+  return value.replaceAll("\r\n", "\n");
 }
 
 function sha256(value) {
@@ -216,7 +241,7 @@ function runR2AVerifierInAcceptedClone() {
         "--quiet",
         "-B",
         acceptedSourceBranch,
-        baseline,
+        acceptedR2AR1Commit,
       ],
       { cwd: cloneRoot, stdio: "pipe" },
     );
@@ -284,13 +309,15 @@ await check("exact baseline branch parent main and origin-main authority", () =>
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
   assert.equal(git(["rev-parse", baseline]), baseline);
   assert.equal(git(["rev-parse", `${baseline}^`]), expectedParent);
+  assert.equal(git(["rev-parse", expectedSourceBranch]), baseline);
+  assert.equal(git(["rev-parse", `origin/${expectedSourceBranch}`]), baseline);
   assert.equal(git(["merge-base", head, baseline]), baseline);
   if (head !== baseline) assert.equal(git(["rev-parse", `${head}^`]), baseline);
   assert.equal(git(["rev-parse", "main"]), expectedMain);
   assert.equal(git(["rev-parse", "origin/main"]), expectedMain);
 });
 
-await check("exact scope 8/8 with exactly 3 updated and 5 new", () => {
+await check("exact correction scope 6/6 with exactly 6 updated", () => {
   const tracked = git([
     "diff",
     "--name-status",
@@ -312,21 +339,15 @@ await check("exact scope 8/8 with exactly 3 updated and 5 new", () => {
     .filter((relativePath) => !trackedPaths.has(relativePath))
     .map((relativePath) => ({ status: "A", path: relativePath }));
   const actual = [...tracked, ...untracked];
-  assert.equal(exactScope.length, 8);
+  assert.equal(exactScope.length, 6);
   assert.deepEqual(sorted(actual.map((item) => item.path)), sorted(exactScope));
   assert.deepEqual(
     sorted(actual.filter((item) => item.status === "M").map((item) => item.path)),
     sorted(updatedPaths),
   );
-  assert.deepEqual(
-    sorted(actual.filter((item) => item.status === "A").map((item) => item.path)),
-    sorted(newPaths),
-  );
+  assert.equal(actual.filter((item) => item.status === "A").length, 0);
   for (const candidate of updatedPaths) {
     assert.equal(gitObjectExists(`${baseline}:${candidate}`), true, candidate);
-  }
-  for (const candidate of newPaths) {
-    assert.equal(gitObjectExists(`${baseline}:${candidate}`), false, candidate);
   }
 });
 
@@ -360,7 +381,7 @@ await check("accepted R2-A R1 verifier remains PASS 32/32 exact 7/7", () => {
   runR2AVerifierInAcceptedClone();
 });
 
-await check("V1 Delivery Runtime Package B remainder and copy action unchanged", () => {
+await check("R2-B remainder R2-A V1 Delivery Runtime and copy action unchanged", () => {
   protectedPaths.forEach(assertBaselineBlobUnchanged);
   assert.match(
     readText("lib/assessment/runtime/schema-catalog.ts"),
@@ -429,13 +450,25 @@ await check("cover uses openingLine heading and compact renderer-owned answer", 
 
 await check("visible letter situation uncertainty draft action reassessment closing", () => {
   const source = readText(notePath);
+  const baselineSource = normalizeNewlines(readGitText(baseline, notePath));
+  const expectedSource = baselineSource
+    .replace(
+      '<p className={styles.sectionKicker}>今夜</p>',
+      '<p className={styles.sectionKicker}>いま</p>',
+    )
+    .replace("<h2>今夜の動き方</h2>", "<h2>今の動き方</h2>");
+  assert.notEqual(expectedSource, baselineSource);
+  assert.equal(normalizeNewlines(source), expectedSource);
+  assert.match(source, /<p className=\{styles\.sectionKicker\}>いま<\/p>/u);
+  assert.match(source, /<h2>今の動き方<\/h2>/u);
+  assert.equal(source.includes("今夜の動き方"), false);
   for (const heading of [
     "月の返事からの短い手紙",
     "今の状況を読み解く",
     "確認できていること",
     "まだ分からないこと",
     "送信文案",
-    "今夜の動き方",
+    "今の動き方",
     "見直す条件",
     "月の返事から最後に",
   ]) {
@@ -446,7 +479,7 @@ await check("visible letter situation uncertainty draft action reassessment clos
   assert.match(source, /projection\.materialUnknowns/u);
   assert.match(source, /projection\.closingLines/u);
   assert.match(source, /materialUnknowns\.length > 0/u);
-  assert.ok(source.indexOf("月の返事からの短い手紙") < source.indexOf("今夜の動き方"));
+  assert.ok(source.indexOf("月の返事からの短い手紙") < source.indexOf("今の動き方"));
   assert.ok(
     source.lastIndexOf("月の返事から最後に") <
       source.indexOf("<footer className={styles.fixedLimitation}"),
@@ -636,8 +669,34 @@ await check("no Provider API DB Supabase Runtime payment or public connection", 
   );
 });
 
-await check("mobile-first CSS retains shell and avoids horizontal overflow risks", () => {
+await check("420 current answer and 24rem fixture link retain mobile shell", () => {
   const css = readText(noteCssPath);
+  const baselineCss = normalizeNewlines(readGitText(baseline, noteCssPath));
+  const previousMobileRule = `@media (max-width: 24rem) {
+  .currentAnswer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fixtureLink {`;
+  const correctedMobileRules = `@media (max-width: 26.25rem) {
+  .currentAnswer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 24rem) {
+  .fixtureLink {`;
+  const expectedCss = baselineCss.replace(previousMobileRule, correctedMobileRules);
+  assert.notEqual(expectedCss, baselineCss);
+  assert.equal(normalizeNewlines(css), expectedCss);
+  assert.match(
+    css,
+    /@media \(max-width: 26\.25rem\) \{\s*\.currentAnswer \{\s*grid-template-columns: minmax\(0, 1fr\);\s*\}\s*\}/u,
+  );
+  assert.match(
+    css,
+    /@media \(max-width: 24rem\) \{\s*\.fixtureLink \{\s*inline-size: 100%;\s*\}\s*\}/u,
+  );
   assert.match(css, /overflow-x:\s*clip/u);
   assert.match(css, /min-inline-size:\s*0/u);
   assert.match(css, /overflow-wrap:\s*anywhere/u);
@@ -660,10 +719,25 @@ await check("mobile-first CSS retains shell and avoids horizontal overflow risks
 await check("presentation contract and capabilities are exact and fail closed", () => {
   const contract = readJson(presentationContractPath);
   const capabilities = readJson(capabilitiesPath);
+  const correctedStatus =
+    "reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review";
+  const pendingVisualReview = [
+    "mobile_320",
+    "keyboard_only_navigation",
+    "copy_success_announcement",
+    "copy_failure_announcement",
+    "zoom_200_percent",
+    "reduced_motion_review",
+    "actual_provider_output_product_review",
+  ];
   assert.equal(contract.task_id, taskId);
+  assert.equal(contract.correction_task_id, correctionTaskId);
+  assert.equal(contract.status, correctedStatus);
   assert.equal(contract.baseline, baseline);
+  assert.equal(contract.source_branch, expectedSourceBranch);
+  assert.equal(contract.implementation_branch, expectedBranch);
   assert.deepEqual(contract.exact_scope, exactScope);
-  assert.deepEqual(contract.scope_shape, { updated: 3, new: 5 });
+  assert.deepEqual(contract.scope_shape, { updated: 6, new: 0 });
   assert.deepEqual(contract.fixture_ids, fixtureIds);
   assert.equal(
     contract.authority.accepted_input,
@@ -676,14 +750,57 @@ await check("presentation contract and capabilities are exact and fail closed", 
   assert.deepEqual(Object.values(contract.operations), [0, 0, 0]);
   assert.equal(contract.review_route.production_behavior, "not_found");
   assert.equal(contract.exact_repetition_policy.fuzzy_matching, false);
+  assert.deepEqual(contract.mobile_layout, {
+    current_answer: {
+      stack_at_or_below: "26.25rem",
+      grid_template_columns: "minmax(0, 1fr)",
+    },
+    fixture_link: {
+      full_width_at_or_below: "24rem",
+      boundary_unchanged: true,
+    },
+  });
+  assert.deepEqual(contract.sections.immediate_action, {
+    kicker: "いま",
+    heading: "今の動き方",
+    renderer_labels_are_time_neutral: true,
+    action_source: "projection.baseProjection.immediateAction.action",
+    avoid_source: "projection.baseProjection.immediateAction.avoid",
+    rationale_source: "projection.actionRationales",
+    visible_rationale_limit: 1,
+    remaining_rationales_location: "secondary_disclosure",
+  });
+  assert.equal(contract.visual_review.desktop, "pass");
+  assert.equal(
+    contract.visual_review.mobile_399,
+    "pass_with_minor_current_answer_layout_correction_requested",
+  );
+  assert.deepEqual(contract.visual_review.observed, {
+    horizontal_scroll: false,
+    overlapping_content: false,
+    japanese_wrapping_readable: true,
+    draft_discoverable: true,
+    information_density_accepted: true,
+    reassuring_experience_direction_accepted: true,
+    visual_jpy980_plausibility_established: true,
+  });
+  assert.deepEqual(contract.visual_review.pending, pendingVisualReview);
+  assert.equal(contract.visual_review.human_visual_review_complete, false);
+  assert.equal(contract.visual_review.chatgpt_visual_review_complete, false);
+  assert.equal(
+    contract.visual_review.product_owner_experience_review_complete,
+    false,
+  );
+  assert.equal(contract.visual_review.jpy980_readiness_established, false);
 
   const expectedCapabilities = {
-    status:
-      "reassuring_customer_note_v2_implemented_pending_human_visual_chatgpt_review",
+    correction_task_id: correctionTaskId,
+    status: correctedStatus,
     baseline,
     product_doctrine_accepted: true,
     r2_a_accepted: true,
     r2_a_r1_accepted: true,
+    r2_b_architecture_accepted: true,
     experience_projection_v2_consumed: true,
     accepted_visual_shell_retained: true,
     hero_dominance_reduced: true,
@@ -695,6 +812,12 @@ await check("presentation contract and capabilities are exact and fail closed", 
     exact_repetition_control_only: true,
     provider_text_rewritten: false,
     customer_note_implementation_complete: true,
+    desktop_visual_review_passed: true,
+    mobile_399_visual_review_passed: true,
+    time_neutral_action_heading: true,
+    mobile_answer_stack_420: true,
+    information_density_accepted: true,
+    reassuring_experience_direction_accepted: true,
     human_visual_review_complete: false,
     chatgpt_visual_review_complete: false,
     product_owner_experience_review_complete: false,
@@ -711,7 +834,7 @@ await check("presentation contract and capabilities are exact and fail closed", 
     pull_request_created: false,
     main_merged: false,
     force_push_used: false,
-    next_action: "human_visual_chatgpt_and_product_review_of_reassuring_note",
+    next_action: "final_320_keyboard_copy_zoom_and_product_review",
   };
   for (const [key, value] of Object.entries(expectedCapabilities)) {
     assert.deepEqual(capabilities[key], value, key);
@@ -732,7 +855,7 @@ console.log(
     failed.length === 0 ? "PASS" : "FAIL"
   } ${checks.length - failed.length}/${checks.length}`,
 );
-console.log(`Exact scope: ${exactScope.length}/8; updated 3; new 5`);
+console.log(`Exact correction scope: ${exactScope.length}/6; updated 6; new 0`);
 console.log(`Review fixtures: ${fixtureIds.length}/9`);
 console.log(`R2-A/R1 verifier: ${r2aVerifierSummary}`);
 console.log("Provider / DB / Supabase: 0 / 0 / 0");

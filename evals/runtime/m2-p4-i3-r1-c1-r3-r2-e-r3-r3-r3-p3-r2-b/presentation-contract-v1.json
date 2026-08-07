@@ -1,10 +1,11 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-presentation-contract-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B",
-  "status": "reassuring_customer_note_v2_implemented_pending_human_visual_chatgpt_review",
-  "baseline": "89a6d55fdf3845451e80f1ee21dc648b224bcc9d",
-  "source_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-customer-text-exclusion",
-  "implementation_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
+  "correction_task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1",
+  "status": "reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review",
+  "baseline": "e509405935e82d7079023609b2d852d51f286f3e",
+  "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
+  "implementation_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy",
   "authority": {
     "accepted_input": "CustomerAssessmentExperienceProjectionV2",
     "component_prop": "projection",
@@ -22,6 +23,16 @@
     "projection.openingLine_as_primary_heading",
     "compact_renderer_owned_current_answer"
   ],
+  "mobile_layout": {
+    "current_answer": {
+      "stack_at_or_below": "26.25rem",
+      "grid_template_columns": "minmax(0, 1fr)"
+    },
+    "fixture_link": {
+      "full_width_at_or_below": "24rem",
+      "boundary_unchanged": true
+    }
+  },
   "decision_labels": {
     "reply_now": "今、返信する",
     "send_now": "今、送る",
@@ -76,7 +87,9 @@
       "pause_null_copy": "追加の連絡を止める判断のため、\n送信文案は表示していません。"
     },
     "immediate_action": {
-      "heading": "今夜の動き方",
+      "kicker": "いま",
+      "heading": "今の動き方",
+      "renderer_labels_are_time_neutral": true,
       "action_source": "projection.baseProjection.immediateAction.action",
       "avoid_source": "projection.baseProjection.immediateAction.avoid",
       "rationale_source": "projection.actionRationales",
@@ -171,6 +184,32 @@
     "runtime_form_connected": false,
     "provider_api_db_supabase_calls": false
   },
+  "visual_review": {
+    "desktop": "pass",
+    "mobile_399": "pass_with_minor_current_answer_layout_correction_requested",
+    "observed": {
+      "horizontal_scroll": false,
+      "overlapping_content": false,
+      "japanese_wrapping_readable": true,
+      "draft_discoverable": true,
+      "information_density_accepted": true,
+      "reassuring_experience_direction_accepted": true,
+      "visual_jpy980_plausibility_established": true
+    },
+    "pending": [
+      "mobile_320",
+      "keyboard_only_navigation",
+      "copy_success_announcement",
+      "copy_failure_announcement",
+      "zoom_200_percent",
+      "reduced_motion_review",
+      "actual_provider_output_product_review"
+    ],
+    "human_visual_review_complete": false,
+    "chatgpt_visual_review_complete": false,
+    "product_owner_experience_review_complete": false,
+    "jpy980_readiness_established": false
+  },
   "fixture_ids": [
     "simple_business_reply_with_draft",
     "ordinary_reply_waiting",
@@ -185,16 +224,14 @@
   "exact_scope": [
     "components/runtime/CustomerAssessmentNote.tsx",
     "components/runtime/CustomerAssessmentNote.module.css",
-    "app/review/runtime/v12/page.tsx",
-    "lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json",
     "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs",
     "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md"
   ],
   "scope_shape": {
-    "updated": 3,
-    "new": 5
+    "updated": 6,
+    "new": 0
   },
   "operations": {
     "provider_calls": 0,

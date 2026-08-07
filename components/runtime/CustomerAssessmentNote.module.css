@@ -688,11 +688,13 @@
   }
 }
 
-@media (max-width: 24rem) {
+@media (max-width: 26.25rem) {
   .currentAnswer {
     grid-template-columns: minmax(0, 1fr);
   }
+}
 
+@media (max-width: 24rem) {
   .fixtureLink {
     inline-size: 100%;
   }

@@ -327,8 +327,8 @@ export function CustomerAssessmentNote({ projection }: Props) {
 
       {immediateAction || actionsToAvoid.length > 0 ? (
         <section className={`${styles.section} ${styles.actionSection}`}>
-          <p className={styles.sectionKicker}>今夜</p>
-          <h2>今夜の動き方</h2>
+          <p className={styles.sectionKicker}>いま</p>
+          <h2>今の動き方</h2>
           {immediateAction ? (
             <p className={styles.actionText}>{immediateAction}</p>
           ) : null}

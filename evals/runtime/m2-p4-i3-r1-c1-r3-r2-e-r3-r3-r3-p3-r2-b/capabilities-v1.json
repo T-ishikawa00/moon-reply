@@ -1,11 +1,13 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B",
-  "status": "reassuring_customer_note_v2_implemented_pending_human_visual_chatgpt_review",
-  "baseline": "89a6d55fdf3845451e80f1ee21dc648b224bcc9d",
+  "correction_task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1",
+  "status": "reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review",
+  "baseline": "e509405935e82d7079023609b2d852d51f286f3e",
   "product_doctrine_accepted": true,
   "r2_a_accepted": true,
   "r2_a_r1_accepted": true,
+  "r2_b_architecture_accepted": true,
   "experience_projection_v2_consumed": true,
   "accepted_visual_shell_retained": true,
   "hero_dominance_reduced": true,
@@ -17,6 +19,12 @@
   "exact_repetition_control_only": true,
   "provider_text_rewritten": false,
   "customer_note_implementation_complete": true,
+  "desktop_visual_review_passed": true,
+  "mobile_399_visual_review_passed": true,
+  "time_neutral_action_heading": true,
+  "mobile_answer_stack_420": true,
+  "information_density_accepted": true,
+  "reassuring_experience_direction_accepted": true,
   "human_visual_review_complete": false,
   "chatgpt_visual_review_complete": false,
   "product_owner_experience_review_complete": false,
@@ -33,5 +41,5 @@
   "pull_request_created": false,
   "main_merged": false,
   "force_push_used": false,
-  "next_action": "human_visual_chatgpt_and_product_review_of_reassuring_note"
+  "next_action": "final_320_keyboard_copy_zoom_and_product_review"
 }
