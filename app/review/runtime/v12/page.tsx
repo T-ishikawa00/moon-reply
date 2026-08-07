@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { CustomerAssessmentNote } from "@/components/runtime/CustomerAssessmentNote";
 import styles from "@/components/runtime/CustomerAssessmentNote.module.css";
 import {
-  customerAssessmentReviewFixtures,
-  selectCustomerAssessmentReviewFixture,
-} from "@/lib/assessment/runtime/review/m2-p4-v12-customer-projection-fixtures";
+  customerAssessmentExperienceReviewFixtures,
+  selectCustomerAssessmentExperienceReviewFixture,
+} from "@/lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +37,7 @@ export default async function CustomerAssessmentReviewPage({
 
   const fixtureQuery = (await searchParams).fixture;
   const fixtureId = Array.isArray(fixtureQuery) ? fixtureQuery[0] : fixtureQuery;
-  const selectedFixture = selectCustomerAssessmentReviewFixture(fixtureId);
+  const selectedFixture = selectCustomerAssessmentExperienceReviewFixture(fixtureId);
 
   return (
     <main className={styles.reviewPage}>
@@ -53,7 +53,7 @@ export default async function CustomerAssessmentReviewPage({
         <nav className={styles.fixtureNavigation} aria-label="確認ケースを選ぶ">
           <p>確認ケース</p>
           <ul className={styles.fixtureList}>
-            {customerAssessmentReviewFixtures.map((fixture) => {
+            {customerAssessmentExperienceReviewFixtures.map((fixture) => {
               const isActive = fixture.id === selectedFixture.id;
               return (
                 <li key={fixture.id}>
