@@ -1,86 +1,93 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-stop-copy-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0",
-  "status": "prepayment_safety_product_charter_pending_product_owner_review",
-  "baseline": "1196e7d581e1e7d2b1f200eaa92de2477999f5bd",
-  "common": {
-    "heading": "今回は、ここで鑑定を止めます",
-    "body": "現在の情報では、相手の境界を尊重するため、\n月の返事では連絡文案や、\n連絡を再開するための方法を提案できません。",
-    "payment_statement": "この画面では決済は発生しません。"
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-r1-stop-copy-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+  "status": "prepayment_safety_intent_charter_rewritten_pending_human_chatgpt_review",
+  "baseline": "30e762e1f3d17f2a007b7f7f92d3ba91e01b861e",
+  "distinct_message_required_for_each_noneligible_state": true,
+  "messages": {
+    "blocked_unsafe_assistance": {
+      "heading": "その目的のお手伝いはできません",
+      "body": "月の返事では、\n相手から示された拒否や連絡制限を回避する方法、\n別の手段や第三者を使う方法、\n監視・追跡、\n脅しや強い圧力を使う方法は提案しません。",
+      "redirection": "相手の境界を尊重しながら、\nご自身の気持ちを整理する相談へ\n切り替えることはできます。",
+      "payment_statement": "この画面では決済は発生しません。",
+      "allowed_outputs": [
+        "static_refusal_copy",
+        "brief_boundary_respecting_redirection",
+        "payment_not_charged_statement"
+      ],
+      "forbidden_outputs": [
+        "draft",
+        "report",
+        "customer_projection",
+        "provider_generated_assessment",
+        "unsafe_method",
+        "workaround",
+        "optimization_advice"
+      ],
+      "boundary_support_switch_may_be_offered": true,
+      "provider_called": false,
+      "payment_session_created": false
+    },
+    "urgent_safety_redirect": {
+      "heading": "いまは鑑定より、安全を優先してください",
+      "body": "現在の安全に関わる可能性があるため、\n月の返事では関係を進めるための文案や方針を\nお返しできません。\n\n安全な場所へ移ること、\n信頼できる人や適切な支援先につながることを\n優先してください。",
+      "payment_statement": "この画面では決済は発生しません。",
+      "allowed_outputs": [
+        "static_urgent_copy",
+        "general_safety_resource_guidance",
+        "payment_not_charged_statement"
+      ],
+      "forbidden_outputs": [
+        "relationship_strategy",
+        "contact_draft",
+        "report",
+        "customer_projection",
+        "reconciliation_plan",
+        "diagnosis",
+        "legal_conclusion"
+      ],
+      "boundary_support_switch_may_be_offered": false,
+      "location_specific_resource_invented": false,
+      "provider_called": false,
+      "payment_session_created": false
+    },
+    "unsupported_professional_request": {
+      "heading": "この内容は、月の返事の対応範囲外です",
+      "body": "法律、医療、契約、金銭等の専門判断は\n月の返事ではお受けできません。\n\n専門判断を含めず、\n気持ちや状況の整理だけに限定できる場合は、\n相談内容を切り替えて確認できます。",
+      "payment_statement": "この画面では決済は発生しません。",
+      "allowed_outputs": [
+        "static_scope_explanation",
+        "nonprofessional_scope_clarification_option",
+        "payment_not_charged_statement"
+      ],
+      "forbidden_outputs": [
+        "professional_advice",
+        "professional_document",
+        "report",
+        "customer_projection"
+      ],
+      "nonprofessional_scope_switch_may_be_offered": true,
+      "provider_called": false,
+      "payment_session_created": false
+    }
   },
   "tone_and_safety_properties": {
     "nonjudgmental": true,
     "unambiguous": true,
+    "customer_identity_labeling_allowed": false,
     "accusation": false,
     "threat": false,
-    "legal_judgment": false,
-    "diagnosis": false,
     "moral_lecture": false,
     "hidden_later_contact_permission": false,
-    "relationship_strategy_in_urgent_state": false
+    "past_unsafe_behavior_mention_alone_blocks": false
   },
-  "prohibited_outputs": {
-    "draft": false,
-    "report": false,
-    "projection": false,
-    "apology_workaround": false,
-    "alternate_channel": false,
-    "third_party_contact": false,
-    "save_for_later_draft": false,
-    "countdown": false,
-    "waiting_period_as_permission": false
-  },
-  "reason_specific": [
-    {
-      "reason_code": "temporary_pause",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "相手が時間や距離を求めている間は、追加の連絡を提案しません。経過した時間を理由に連絡再開を勧めることもありません。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "explicit_no_contact",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "連絡を望まない意思が明確に示されているため、連絡文案や再開方法は提案しません。解釈だけを有料で提供することもありません。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "channel_restricted",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "連絡手段が制限されているため、別のSNS、電話、勤務先、友人などを使う方法は提案しません。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "relationship_closed",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "関係を終えたい意思が明確に示されているため、連絡文案、再開方法、解釈だけの有料鑑定は提供しません。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "unresolved_unknown",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "相手の境界を確認できない状態では、決済へ進めません。今回は文案や回避策を提供せず、無料でここまでとします。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "unsupported_required_contact",
-      "classification": "blocked_no_purchase",
-      "supporting_text": "法的または専門的な判断が必要となる可能性があり、このサービスの対応範囲外です。適切な公的・専門的な窓口を利用してください。月の返事は法的助言を行いません。",
-      "inherits_common_payment_statement": true
-    },
-    {
-      "reason_code": "urgent_safety_redirect",
-      "classification": "urgent_safety_redirect",
-      "supporting_text": "いまは関係の進め方より、ご自身の安全確保を優先してください。このサービスでは連絡文案や関係上の対応方針を提案しません。必要な場合は、信頼できる支援先や適切な緊急対応につながってください。",
-      "inherits_common_payment_statement": true,
-      "location_specific_contact_defined": false
-    }
-  ],
-  "payment_and_output_rules": {
+  "global_output_rules": {
+    "blocked_provider_assessment_created": false,
+    "urgent_relationship_strategy_created": false,
+    "professional_advice_created": false,
     "payment_session_created": false,
     "provider_called": false,
-    "draft_created": false,
     "report_created": false,
-    "projection_created": false,
-    "workaround_created": false
+    "projection_created": false
   }
 }

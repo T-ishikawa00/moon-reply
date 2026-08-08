@@ -1,113 +1,152 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0 Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1 Review
 
 ## Status
 
-`prepayment_safety_product_charter_pending_product_owner_review`
+`prepayment_safety_intent_charter_rewritten_pending_human_chatgpt_review`
 
-This is a planning-only Pre-Payment Safety Product Charter. It decides how purchase candidacy must be classified before any future Package E or payment implementation. It does not implement UI, API, payment, Runtime, Provider, database, or Supabase behavior.
+This is a planning-only correction of the Pre-Payment Safety Charter. It separates the contact boundary from the assistance the customer is requesting. It does not implement UI, API, payment, Runtime, Provider, database, or Supabase behavior.
+
+**PRODUCT OWNER DIRECTION: ACCEPTED**
+
+Detailed Human / ChatGPT Charter review remains pending. Product Owner acceptance of the direction is not implementation acceptance, JPY980 readiness, Runtime authority, or release approval.
 
 ## Technical result
 
-- Exact baseline: `1196e7d581e1e7d2b1f200eaa92de2477999f5bd`
-- Exact scope: 8/8 new files
-- Upstream dependency: unchanged Package D implementation recorded as accepted for this planning package
-- Classification vocabulary: exact 6/6
-- Decision matrix: 18/18 required cases
-- Eligible classifications: `eligible_general`, `eligible_scoped_reply`, `eligible_business_only`
-- Non-purchase classifications: `needs_clarification`, `blocked_no_purchase`, `urgent_safety_redirect`
-- Purchase authority: server-owned deterministic classification only
+- Exact baseline: `30e762e1f3d17f2a007b7f7f92d3ba91e01b861e`
+- Exact correction scope: 8/8 existing files updated; no new or deleted files
+- Upstream dependency: accepted Package D unchanged
+- Safety model: `contact_boundary_state × requested_assistance_goal`, plus normalized request/Candidate comparison
+- Boundary states: exact 9/9
+- Assistance goals: exact 8/8
+- Safety dispositions: exact 5/5
+- Eligible delivery scopes: exact 5/5
+- Derived purchase classifications: exact 9/9
+- Decision matrix: 42/42 required cases
+- Eligible classifications: `eligible_general`, `eligible_pause_assessment`, `eligible_boundary_support_only`, `eligible_scoped_reply`, `eligible_business_only`
+- Non-purchase classifications: `needs_clarification`, `blocked_unsafe_assistance`, `urgent_safety_redirect`, `unsupported_professional_request`
+- Purchase authority: canonical, input-bound, server-owned eligibility identity only
 - Active Runtime: v4
 - v12: inactive
-- Payment-provider implementation: absent
+- Payment implementation and SDK: absent
 - Provider / DB / Supabase: `0 / 0 / 0`
-- Product Owner review: pending
+- Human / ChatGPT Charter review: pending
 - Package E implementation: unauthorized
 - Payment-provider integration: unauthorized
 - JPY980 readiness: not established
 
-The prior P5-R2 7/7 correction and protected Package D, Runtime, Pipeline, Service, Prompt, Catalog, Schema, evaluator, and semantic-disposition assets remain unchanged. This package does not retroactively edit prior evidence.
+The protected Package D, Runtime, Pipeline, Service, Prompt, Catalog, Schema, PB stages, evaluator, semantic disposition, Customer Assessment Note, Projection, DB/repository, and governance files remain outside this correction. Prior evidence is not rewritten.
 
-## Product policy
+## Superseded policy
 
-Safety and boundary verification precedes purchase eligibility. Unknown or conflicting answers cannot reach payment. A blocked state creates no payment session, Provider call, draft, Report, Projection, saved-for-later output, or workaround. Client UI has no authority to set eligibility or purchase availability.
+The prior P6-P0 state-only policy is expressly superseded in three places:
 
-Time passage and unblocking never reopen contact by themselves. Another SNS, phone number, friend, workplace, or third party is not a workaround. Stop copy must be neutral and direct, without accusation, diagnosis, legal judgment, threat, or moral lecture.
+1. `temporary_pause` is no longer an automatic free stop. A safe request may become `eligible_pause_assessment` and receive a paid, no-draft assessment.
+2. `explicit_no_contact`, `channel_restricted`, and `relationship_closed` are no longer automatic exclusions from all paid support. A boundary-respecting request may become `eligible_boundary_support_only`.
+3. A legal, medical, financial, or contractual context no longer blocks by mere presence. Only a primary output requiring professional judgment is `unsupported_professional_request`; separable emotional organization can remain eligible.
 
-## Classification decisions
+The correction does not create contact permission. Time passage, unblocking, another account, another channel, a workplace, or a third party never reopens contact. Business-only and new-inbound reply remain strictly scoped.
 
-| Classification | Purchase treatment | Mandatory boundary |
+## Safety Gate versus Decision Engine
+
+The Safety Gate answers one question: **may Moon Reply provide this requested kind of assistance?** It blocks unsafe execution assistance, redirects urgent current Safety, excludes professional judgment, requests clarification when necessary, or selects an eligible delivery scope.
+
+The Decision Engine answers a different question: **within a permitted scope, should the customer send, reply, wait, or pause additional contact?** `wait_and_reassess` and `pause_additional_contact` are normal Product outcomes. Using either as a reason to deny purchase would recreate the defect this correction removes.
+
+The paid Product is the individualized assessment note, not a guaranteed message draft. A result can therefore be commercially valid while intentionally omitting a draft.
+
+## Eligible delivery contracts
+
+| Classification | Paid value | Hard limit |
 | --- | --- | --- |
-| `eligible_general` | Purchase candidate | No known no-contact, pause, channel restriction, closure, or unresolved boundary. |
-| `eligible_scoped_reply` | Candidate after clarification | A new inbound message explicitly invites a reply and the reply stays within its exact subject and scope. |
-| `eligible_business_only` | Candidate after explicit scope confirmation | Practical permission is explicit and the request contains only the permitted practical matter. |
-| `needs_clarification` | No purchase | Unknown, conflict, conditional permission, or unclear invitation must be resolved first. |
-| `blocked_no_purchase` | Free stop | Known boundary, unresolved unknown, unsupported matter, or workaround attempt. |
-| `urgent_safety_redirect` | Free safety redirect | No relationship draft or contact strategy. |
+| `eligible_general` | Normal assessment, direction, action, reassessment, and draft when supported | No unsafe, urgent, or professional request |
+| `eligible_pause_assessment` | Full no-draft assessment, reasons, immediate self-directed action, observable reassessment condition, reassurance | No current draft or time-only later-contact plan |
+| `eligible_boundary_support_only` | Facts, uncertainty, emotional organization, boundary-respecting direction, self-directed action, calm closure | No draft, recontact strategy, countdown, alternate/third-party contact, guarantee, or hidden-state certainty |
+| `eligible_scoped_reply` | Assessment and possible reply limited to the explicitly invited inbound subject | No broader permission or unrelated follow-up |
+| `eligible_business_only` | Assessment and possible draft limited to an explicitly permitted practical subject | No private, romantic, pressure, or relationship-progression content |
 
-## Customer question flow
+## True pre-payment stops
 
-The primary screen title is `決済前の安全確認`. The customer selects one of nine exact current-contact states. `business_only` always requires explicit confirmation of both practical permission and a request limited entirely to the practical subject. `new_inbound_after_boundary` always starts at `needs_clarification`; both an explicit reply invitation and an in-scope intended reply are required.
+`blocked_unsafe_assistance` applies to requested execution help for circumvention, surveillance, tracking, deception, coercion, threats, harassment, humiliation, or using practical contact as a pretext. A safe dropdown choice cannot override explicit unsafe free text.
 
-Unknown or conflicting answers remain non-purchase. If clarification cannot resolve them, the result is `blocked_no_purchase`.
+`urgent_safety_redirect` applies to a current self-harm/suicide risk, a current threat to another person, violence, immediate danger, coercive control with current danger, or an equivalent urgent condition. It returns static safety-oriented guidance without a relationship strategy or invented location-specific number.
 
-## Free stop experience
+`unsupported_professional_request` applies when the primary output requires legal, medical, clinical, contractual, financial, or equivalent professional judgment. Mere context is insufficient; nonprofessional emotional organization must be separated where possible.
 
-Common heading:
+Past unsafe behavior mentioned in a request is not, by itself, a block. A present request for help stopping or respecting a boundary can be boundary-support-only. The system classifies the requested assistance, not the customer's identity.
 
-> 今回は、ここで鑑定を止めます
+## Pre-purchase disclosure and authority
 
-Common body:
+Before a pause assessment can be purchased, the customer is told:
 
-> 現在の情報では、相手の境界を尊重するため、
-> 月の返事では連絡文案や、
-> 連絡を再開するための方法を提案できません。
+> 鑑定結果によっては、
+> 「今は送らない」という判断になり、
+> 送信文案が表示されない場合があります。
+>
+> その場合も、
+> 理由・今の動き方・見直す条件を
+> 鑑定ノートとしてお返しします。
 
-Payment statement:
+Before boundary-support-only can be purchased, the customer is told:
 
-> この画面では決済は発生しません。
+> この鑑定では、
+> 相手への連絡文案や再接触方法は提供しません。
+>
+> 確認できる事実、
+> 気持ちの整理、
+> 相手の境界を尊重した今後の方向性を
+> 鑑定ノートとしてお返しします。
 
-Reason-specific copy exists for temporary pause, explicit no-contact, channel restriction, relationship closure, unresolved unknown, unsupported required contact, and urgent safety redirect. The urgent copy prioritizes safety without inventing a location-specific contact.
+All five eligible classifications also require the anti-circumvention attestation. Scope acknowledgement and attestation are purchase gates, not evidence that the customer's statements are true and not overrides for unsafe, urgent, or professional content.
+
+Eligibility is bound by the server to normalized request text, normalized Candidate or null, authoritative requested topics, both classification axes, all clarification answers, the applicable scope acknowledgement, attestation, and Safety policy version. Any bound-field mutation revokes eligibility and `purchase_available`, returns the request to `unassessed`, and rejects stale tabs or copied URLs. The client cannot create an authority hash.
 
 ## Purchase state machine
 
-The planned server-owned states are:
+The exact 14 planned states are:
 
-`unassessed` → `collecting_boundary_answer` → classification or clarification → one of the three eligible classifications → `purchase_available` → future `payment_pending` → future `payment_completed`.
+`unassessed` → `collecting_safety_answers` → clarification or one of nine derived classifications → one of five eligible classifications → `purchase_available` → future `payment_pending` → future `payment_completed`.
 
-Only the three eligible classifications can enter `purchase_available`. `needs_clarification`, `blocked_no_purchase`, and `urgent_safety_redirect` cannot create a payment session. Any mutation to request text, candidate text, requested topics, or boundary answers invalidates prior eligibility and returns the changed request to `unassessed`.
-
-Browser back, refresh, an old tab, a copied URL, a direct API request, and duplicate submission cannot bypass server revalidation or manufacture purchase authority. The payment transitions are policy definitions only; no payment implementation exists.
+Only the five eligible classifications can enter `purchase_available`, and only after the applicable scope disclosure plus `attestation_confirmed=true`. Clarification, unsafe, urgent, and professional states cannot create payment sessions. Payment transitions remain policy definitions only; implementation is absent.
 
 ## Independent product-risk assessment
 
-The highest abuse surface is `business_only`. A checkbox is not evidence of scope; future implementation must classify the actual request and fail closed when personal or relationship content is mixed in. The second-highest risk is a new inbound message after a prior refusal: receipt of a message is not consent to discuss unrelated topics. Both controls therefore require server-owned, input-bound eligibility that is invalidated on mutation.
+The rewrite corrects an overbroad policy, but it increases classification burden. The main abuse surface is no longer the checkbox; it is semantic conflict between structured answers and free text. A future implementation that trusts selected options without classifying the normalized request and Candidate would be unsafe and contractually noncompliant.
 
-The charter is commercially defensible because it refuses to charge JPY980 for a result whose only safe output is “do not contact.” However, this policy is not implementation-ready until the Product Owner resolves all five open decisions below. Treating this document as payment authority before that review would be a governance failure.
+The second risk is false commercial framing. Charging for a no-draft assessment is defensible only if the note delivers individualized facts, bounded uncertainty, reasons, useful self-directed action, observable reassessment conditions, reassurance, and closure. A thin restatement of “do not contact” would not justify JPY980 even though the charter permits the category.
 
-## Open Product Owner review items
+The third risk is boundary laundering through `business_only` or `new_inbound_after_boundary`. Practical permission cannot absorb personal content, and receipt of a new message cannot create broad relationship permission. Both require exact-subject enforcement against actual request content.
 
-All five items remain pending final review:
+The attestation is a governance control, not a safety classifier. Treating it as proof of truthfulness or allowing it to override unsafe content would be a critical design defect.
 
-1. Temporary pause is a free stop, not a paid no-draft assessment.
-2. Explicit boundary or closure receives no paid interpretation-only assessment.
-3. Business-only is allowed only under strict practical scope.
-4. New inbound contact can reopen only the exact invited scope.
-5. Legal or professional disputes are unsupported in the MVP.
+## Product Owner direction accepted
 
-No implementation authority is created until these five decisions are accepted.
+The Product Owner accepts all eight principles:
+
+1. Temporary pause can receive a paid no-draft assessment.
+2. Explicit boundary states can receive paid boundary-support-only assessment.
+3. Unsafe execution assistance stops before payment.
+4. Urgent current Safety redirects before payment.
+5. Professional judgment is unsupported; separable emotional organization may remain eligible.
+6. Business-only remains strictly practical.
+7. New-inbound reply remains strictly scoped.
+8. Product value is the individualized assessment note, not guaranteed draft presence.
+
+This acceptance supersedes the three overbroad P6-P0 decisions. It does not authorize Package E or any implementation.
 
 ## Plain-language summary
 
-1. **誰が決済へ進めるか** — 制限が知られていない人、明確に返信を求める新着連絡へその用件だけ返す人、明示的に許可された実務用件だけを扱う人の3分類だけが、サーバー判定後に購入候補になります。
-2. **誰が無料で止まるか** — 一時停止、明確な連絡拒否、ブロック等の手段制限、関係終了、不明状態の未解決、別経路や第三者の利用、時間経過や解除だけによる再開、専門判断が必要な案件、緊急安全案件は決済前に無料で止まります。
-3. **なぜ一時的な距離置きも課金しないか** — 安全に出せる結論が「今は追加連絡しない」だけなら、その結論を伝えるためにJPY980を請求するのは不適切だからです。
-4. **business-onlyをどう制限するか** — 実務連絡の許可が明示され、今回の依頼がその実務用件だけに完全に限定される場合に限ります。恋愛解釈、個人的誘い、関係進展、感情的圧力、範囲外の追送は認めません。
-5. **過去の拒絶後に新着連絡が来た場合の扱い** — 自動的には再開しません。返信が明確に求められていることと、その新着用件だけに返すことの両方を確認した場合に限り、限定返信の候補になります。
-6. **まだ実装していないこと** — UI、API、決済、決済セッション、Runtime接続、Provider実行、DB/Supabase、Package E/F、R4、C2は実装・実行・承認していません。
-7. **次にProduct Ownerが判断する5項目** — 一時停止を無料停止にすること、明確な境界への有料解釈を出さないこと、business-onlyの厳格範囲、新着連絡の限定再開、法的・専門案件をMVP対象外にすることです。
+1. **なぜ一時的な距離置きは有料鑑定可能なのか** — 「今は送らない」という判断でも、理由、気持ちの整理、今できる行動、見直すための観察可能な条件まで個別に返せるためです。課金対象は文案ではなく、完全な個別鑑定ノートです。ただし、時間がたてば送ってよいという計画や現在の文案は出しません。
+2. **明確な拒絶後でも何を提供できるのか** — 相手へ送る文案や再接触方法ではなく、確認できる事実、不明点、本人の気持ちの整理、連絡を止める方向、本人だけで実行できる次の行動、落ち着いた区切りを提供できます。
+3. **何を求めた場合に本当に無料停止するのか** — 拒否やブロックの回避、別アカウントや第三者、監視・追跡、だまし、脅し、強制、嫌がらせ等の実行支援を求めた場合です。安全そうな選択肢を選んでも、自由記述が危険なら決済前に止めます。
+4. **緊急Safetyと通常の恋愛不安の違い** — 悲しさ、返信への不安、待つつらさだけでは緊急扱いにしません。現在の自傷・自殺リスク、他者への加害予告、暴力、差し迫った危険等がある場合に限り、安全確保を優先して無料で止めます。
+5. **専門案件をどう分けるのか** — 法律・医療・契約・金銭の話題があるだけでは止めません。診断、法的判断、契約解釈、債務判断等そのものを求める場合は対象外です。専門判断を除いた気持ちや状況の整理へ明確に分けられるなら、再分類できます。
+6. **文案が出ない可能性を購入前にどう説明するのか** — 「今は送らない」という結果では送信文案が表示されない場合があること、その場合も理由・今の動き方・見直す条件を鑑定ノートで返すことを明示し、同意がなければ購入可能にしません。
+7. **Safety GateとDecision Engineの役割の違い** — Safety Gateは「その支援を提供してよいか」を決めます。Decision Engineは、提供可能な範囲で「送る・返す・待つ・追加連絡を止める」のどれが妥当かを決めます。待つ判断は通常の有料鑑定結果であり、安全停止理由ではありません。
+8. **まだ実装していないもの** — UI、API、決済、決済セッション、決済SDK、Runtime接続、Provider実行、DB/Supabase、Package E/F、R4、C2は実装・実行・承認していません。Active Runtimeはv4のままで、v12も非アクティブです。
+9. **次のゲート** — 次は Human / ChatGPT Charter review です。Product Owner方向性の受理だけで、実装、JPY980 readiness、公開、リリースへ進むことはできません。
 
 ## Authority boundary
 
-`product_owner_review_complete=false`, `package_e_implementation_authorized=false`, `payment_provider_integration_authorized=false`, `provider_rerun_authorized=false`, `active_runtime_activated=false`, `package_f_authorized=false`, `r4_authorized=false`, `c2_authorized=false`, and `final_jpy980_readiness_established=false`.
+`product_owner_direction_accepted=true`, `human_chatgpt_charter_review_complete=false`, `package_e_implementation_authorized=false`, `payment_provider_integration_authorized=false`, `provider_rerun_authorized=false`, `active_runtime_activated=false`, `package_f_authorized=false`, `r4_authorized=false`, `c2_authorized=false`, and `final_jpy980_readiness_established=false`.
 
-No PR, main merge, or force push is authorized by this package.
+No PR, main merge, force push, Provider execution, DB/Supabase operation, payment implementation, or Runtime activation is authorized by this package.

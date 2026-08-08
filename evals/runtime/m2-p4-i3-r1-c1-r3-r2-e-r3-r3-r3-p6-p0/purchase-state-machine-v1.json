@@ -1,16 +1,25 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-purchase-state-machine-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0",
-  "status": "prepayment_safety_product_charter_pending_product_owner_review",
-  "baseline": "1196e7d581e1e7d2b1f200eaa92de2477999f5bd",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-r1-purchase-state-machine-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+  "status": "prepayment_safety_intent_charter_rewritten_pending_human_chatgpt_review",
+  "baseline": "30e762e1f3d17f2a007b7f7f92d3ba91e01b861e",
   "ownership": {
     "authority_owner": "server",
-    "classification_method": "deterministic",
+    "classification_method": "deterministic_two_axis_plus_normalized_content",
     "client_can_set_state": false,
     "client_settable_states": [],
+    "client_can_set_classification": false,
     "client_can_authorize_purchase": false,
-    "client_can_create_payment_session": false
+    "client_can_create_payment_session": false,
+    "client_generated_authority_hash_allowed": false
   },
+  "eligible_states": [
+    "eligible_general",
+    "eligible_pause_assessment",
+    "eligible_boundary_support_only",
+    "eligible_scoped_reply",
+    "eligible_business_only"
+  ],
   "states": [
     {
       "code": "unassessed",
@@ -20,7 +29,7 @@
       "can_create_payment_session": false
     },
     {
-      "code": "collecting_boundary_answer",
+      "code": "collecting_safety_answers",
       "category": "assessment",
       "classification_eligible": false,
       "can_transition_to_purchase_available": false,
@@ -38,38 +47,74 @@
       "category": "eligible_classification",
       "classification_eligible": true,
       "can_transition_to_purchase_available": true,
-      "can_create_payment_session": false
+      "can_create_payment_session": false,
+      "required_purchase_gates": [
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "code": "eligible_pause_assessment",
+      "category": "eligible_classification",
+      "classification_eligible": true,
+      "can_transition_to_purchase_available": true,
+      "can_create_payment_session": false,
+      "required_purchase_gates": [
+        "pause_assessment_disclosure_acknowledged",
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "code": "eligible_boundary_support_only",
+      "category": "eligible_classification",
+      "classification_eligible": true,
+      "can_transition_to_purchase_available": true,
+      "can_create_payment_session": false,
+      "required_purchase_gates": [
+        "boundary_support_only_disclosure_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
       "code": "eligible_scoped_reply",
       "category": "eligible_classification",
       "classification_eligible": true,
       "can_transition_to_purchase_available": true,
-      "can_create_payment_session": false
+      "can_create_payment_session": false,
+      "required_purchase_gates": [
+        "scoped_reply_scope_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
       "code": "eligible_business_only",
       "category": "eligible_classification",
       "classification_eligible": true,
       "can_transition_to_purchase_available": true,
-      "can_create_payment_session": false
+      "can_create_payment_session": false,
+      "required_purchase_gates": [
+        "business_only_scope_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
-      "code": "blocked_no_purchase",
+      "code": "blocked_unsafe_assistance",
       "category": "terminal_free_stop",
       "classification_eligible": false,
       "can_transition_to_purchase_available": false,
       "can_create_payment_session": false,
       "allowed_outputs": [
-        "static_stop_copy",
-        "static_reassurance"
+        "static_refusal_copy",
+        "brief_boundary_respecting_redirection",
+        "payment_not_charged_statement"
       ],
       "forbidden_outputs": [
         "draft",
         "report",
-        "projection",
+        "customer_projection",
+        "provider_generated_assessment",
+        "unsafe_method",
         "workaround",
-        "saved_for_later_draft"
+        "optimization_advice"
       ]
     },
     {
@@ -78,15 +123,43 @@
       "classification_eligible": false,
       "can_transition_to_purchase_available": false,
       "can_create_payment_session": false,
-      "relationship_draft_allowed": false,
-      "contact_guidance_allowed": false
+      "allowed_outputs": [
+        "static_urgent_copy",
+        "general_safety_resource_guidance",
+        "payment_not_charged_statement"
+      ],
+      "forbidden_outputs": [
+        "relationship_strategy",
+        "draft",
+        "report",
+        "customer_projection"
+      ]
+    },
+    {
+      "code": "unsupported_professional_request",
+      "category": "terminal_scope_stop",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false,
+      "allowed_outputs": [
+        "static_scope_explanation",
+        "nonprofessional_scope_clarification_option",
+        "payment_not_charged_statement"
+      ],
+      "forbidden_outputs": [
+        "professional_advice",
+        "professional_document",
+        "report",
+        "customer_projection"
+      ]
     },
     {
       "code": "purchase_available",
       "category": "purchase_authority",
       "classification_eligible": false,
       "can_transition_to_purchase_available": false,
-      "can_create_payment_session": true,
+      "can_create_payment_session": false,
+      "future_policy_may_transition_to_payment_pending": true,
       "implementation_present": false
     },
     {
@@ -109,77 +182,119 @@
   "transitions": [
     {
       "from": "unassessed",
-      "event": "begin_boundary_assessment",
-      "to": "collecting_boundary_answer",
+      "event": "begin_safety_and_assistance_assessment",
+      "to": "collecting_safety_answers",
       "authority": "server"
     },
     {
-      "from": "collecting_boundary_answer",
-      "event": "classify_no_restriction_known",
+      "from": "collecting_safety_answers",
+      "event": "classify_eligible_general",
       "to": "eligible_general",
       "authority": "server"
     },
     {
-      "from": "collecting_boundary_answer",
-      "event": "classify_unknown_conflict_or_conditional_scope",
+      "from": "collecting_safety_answers",
+      "event": "classify_eligible_pause_assessment",
+      "to": "eligible_pause_assessment",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_safety_answers",
+      "event": "classify_eligible_boundary_support_only",
+      "to": "eligible_boundary_support_only",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_safety_answers",
+      "event": "classify_eligible_scoped_reply",
+      "to": "eligible_scoped_reply",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_safety_answers",
+      "event": "classify_eligible_business_only",
+      "to": "eligible_business_only",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_safety_answers",
+      "event": "classify_needs_clarification",
       "to": "needs_clarification",
       "authority": "server"
     },
     {
-      "from": "collecting_boundary_answer",
-      "event": "classify_block_reason",
-      "to": "blocked_no_purchase",
+      "from": "collecting_safety_answers",
+      "event": "classify_blocked_unsafe_assistance",
+      "to": "blocked_unsafe_assistance",
       "authority": "server"
     },
     {
-      "from": "collecting_boundary_answer",
-      "event": "classify_urgent_safety",
+      "from": "collecting_safety_answers",
+      "event": "classify_urgent_safety_redirect",
       "to": "urgent_safety_redirect",
       "authority": "server"
     },
     {
-      "from": "needs_clarification",
-      "event": "confirm_explicit_reply_invitation_and_scoped_reply",
-      "to": "eligible_scoped_reply",
-      "authority": "server",
-      "required_conditions": [
-        "new_message_explicitly_asks_for_or_clearly_invites_reply",
-        "intended_reply_limited_to_new_message_subject"
-      ]
-    },
-    {
-      "from": "needs_clarification",
-      "event": "confirm_explicit_practical_permission_and_scope",
-      "to": "eligible_business_only",
-      "authority": "server",
-      "required_conditions": [
-        "practical_contact_permission_explicit",
-        "current_request_entirely_within_permitted_practical_subject"
-      ]
-    },
-    {
-      "from": "needs_clarification",
-      "event": "clarification_unresolved_or_disqualifying",
-      "to": "blocked_no_purchase",
+      "from": "collecting_safety_answers",
+      "event": "classify_unsupported_professional_request",
+      "to": "unsupported_professional_request",
       "authority": "server"
+    },
+    {
+      "from": "needs_clarification",
+      "event": "clarification_answer_changes_bound_input",
+      "to": "unassessed",
+      "authority": "server",
+      "full_reclassification_required": true
     },
     {
       "from": "eligible_general",
       "event": "server_issue_purchase_authority",
       "to": "purchase_available",
-      "authority": "server"
+      "authority": "server",
+      "required_conditions": [
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "from": "eligible_pause_assessment",
+      "event": "server_issue_purchase_authority",
+      "to": "purchase_available",
+      "authority": "server",
+      "required_conditions": [
+        "pause_assessment_disclosure_acknowledged",
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "from": "eligible_boundary_support_only",
+      "event": "server_issue_purchase_authority",
+      "to": "purchase_available",
+      "authority": "server",
+      "required_conditions": [
+        "boundary_support_only_disclosure_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
       "from": "eligible_scoped_reply",
       "event": "server_issue_purchase_authority",
       "to": "purchase_available",
-      "authority": "server"
+      "authority": "server",
+      "required_conditions": [
+        "scoped_reply_scope_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
       "from": "eligible_business_only",
       "event": "server_issue_purchase_authority",
       "to": "purchase_available",
-      "authority": "server"
+      "authority": "server",
+      "required_conditions": [
+        "business_only_scope_acknowledged",
+        "attestation_confirmed"
+      ]
     },
     {
       "from": "purchase_available",
@@ -196,18 +311,44 @@
       "implemented": false
     }
   ],
+  "server_owned_eligibility_identity": {
+    "canonical_bound_fields": [
+      "normalized_request_text",
+      "normalized_candidate_text_or_null",
+      "authoritative_requested_topics",
+      "contact_boundary_state",
+      "requested_assistance_goal",
+      "all_clarification_answers",
+      "applicable_delivery_scope_acknowledgement",
+      "attestation_confirmed",
+      "safety_policy_version"
+    ],
+    "hash_computed_by": "server",
+    "client_generated_authority_hash_allowed": false,
+    "safe_structured_option_overrides_unsafe_request_content": false,
+    "any_bound_field_change_revokes_eligibility": true,
+    "any_bound_field_change_revokes_purchase_available": true,
+    "any_bound_field_change_result_state": "unassessed",
+    "stale_authority_rejected": true,
+    "old_tab_rejected": true,
+    "copied_url_rejected": true
+  },
   "input_mutation_invalidation": {
     "watched_inputs": [
-      "request_text",
-      "candidate_text",
-      "requested_topics",
-      "boundary_answers"
+      "normalized_request_text",
+      "normalized_candidate_text_or_null",
+      "authoritative_requested_topics",
+      "contact_boundary_state",
+      "requested_assistance_goal",
+      "all_clarification_answers",
+      "applicable_delivery_scope_acknowledgement",
+      "attestation_confirmed",
+      "safety_policy_version"
     ],
     "invalidates_previous_eligibility": true,
     "result_state": "unassessed",
     "revokes_purchase_authority": true,
-    "invalidates_pending_payment_authority": true,
-    "completed_payment_rule": "A changed request is a new request beginning at unassessed; the completed transaction record is not rewritten."
+    "invalidates_pending_payment_authority": true
   },
   "bypass_resistance": {
     "browser_back_bypasses_classification": false,
@@ -218,10 +359,10 @@
     "server_revalidation_required": true
   },
   "reopening_rules": {
-    "blocked_state_direct_to_eligible_allowed": false,
+    "noneligible_state_direct_to_eligible_allowed": false,
     "time_passage_is_state_transition": false,
     "unblocking_alone_is_state_transition": false,
-    "new_inbound_contact_requires_new_classification": true
+    "new_inbound_contact_requires_full_reclassification": true
   },
   "idempotency": {
     "duplicate_requests_create_duplicate_purchase_authority": false,
@@ -233,6 +374,8 @@
     "api_implemented": false,
     "payment_provider_implemented": false,
     "payment_session_creation_implemented": false,
-    "runtime_activated": false
+    "runtime_activated": false,
+    "provider_executed": false,
+    "db_or_supabase_operated": false
   }
 }

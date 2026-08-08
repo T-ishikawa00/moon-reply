@@ -1,298 +1,628 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-decision-matrix-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0",
-  "status": "prepayment_safety_product_charter_pending_product_owner_review",
-  "baseline": "1196e7d581e1e7d2b1f200eaa92de2477999f5bd",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-r1-decision-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+  "status": "prepayment_safety_intent_charter_rewritten_pending_human_chatgpt_review",
+  "baseline": "30e762e1f3d17f2a007b7f7f92d3ba91e01b861e",
+  "model": {
+    "classification_axes": [
+      "contact_boundary_state",
+      "requested_assistance_goal"
+    ],
+    "boundary_state_alone_determines_classification": false,
+    "normalized_request_and_candidate_must_be_compared": true,
+    "contact_boundary_states": [
+      "no_restriction_known",
+      "temporary_pause",
+      "explicit_no_contact",
+      "channel_restricted",
+      "relationship_closed",
+      "business_only",
+      "new_inbound_after_boundary",
+      "unknown",
+      "urgent_safety"
+    ],
+    "requested_assistance_goals": [
+      "understand_and_organize",
+      "decide_send_wait_or_pause",
+      "draft_within_current_permission",
+      "recontact_or_overcome_boundary",
+      "alternate_channel_or_third_party",
+      "monitor_track_or_manipulate",
+      "professional_judgment",
+      "urgent_safety_help"
+    ],
+    "safety_dispositions": [
+      "eligible",
+      "needs_clarification",
+      "blocked_unsafe_assistance",
+      "urgent_safety_redirect",
+      "unsupported_professional_request"
+    ],
+    "eligible_delivery_scopes": [
+      "general",
+      "pause_assessment",
+      "boundary_support_only",
+      "scoped_reply",
+      "business_only"
+    ],
+    "derived_classifications": [
+      "eligible_general",
+      "eligible_pause_assessment",
+      "eligible_boundary_support_only",
+      "eligible_scoped_reply",
+      "eligible_business_only",
+      "needs_clarification",
+      "blocked_unsafe_assistance",
+      "urgent_safety_redirect",
+      "unsupported_professional_request"
+    ]
+  },
   "classification_states": [
     {
       "code": "eligible_general",
-      "kind": "eligible",
-      "meaning": "No explicit no-contact, temporary pause, channel restriction, relationship closure, or unresolved boundary is known.",
-      "purchase_eligibility": "candidate",
-      "can_reach_purchase_available": true,
-      "direct_payment_session_creation_allowed": false,
-      "requirements": [
-        "server_owned_deterministic_classification"
-      ]
+      "safety_disposition": "eligible",
+      "delivery_scope": "general",
+      "purchase_eligibility": "candidate_subject_to_attestation",
+      "can_reach_purchase_available_subject_to_gates": true,
+      "message_draft_policy": "available_when_supported"
+    },
+    {
+      "code": "eligible_pause_assessment",
+      "safety_disposition": "eligible",
+      "delivery_scope": "pause_assessment",
+      "purchase_eligibility": "candidate_subject_to_scope_disclosure_and_attestation",
+      "can_reach_purchase_available_subject_to_gates": true,
+      "message_draft_policy": "not_available"
+    },
+    {
+      "code": "eligible_boundary_support_only",
+      "safety_disposition": "eligible",
+      "delivery_scope": "boundary_support_only",
+      "purchase_eligibility": "candidate_subject_to_scope_disclosure_and_attestation",
+      "can_reach_purchase_available_subject_to_gates": true,
+      "message_draft_policy": "forbidden"
     },
     {
       "code": "eligible_scoped_reply",
-      "kind": "eligible",
-      "meaning": "A prior restriction existed, but the other person later sent a new message that explicitly asks for or clearly invites a response.",
-      "purchase_eligibility": "candidate_after_clarification",
-      "can_reach_purchase_available": true,
-      "direct_payment_session_creation_allowed": false,
-      "requirements": [
-        "new_inbound_explicitly_asks_for_or_clearly_invites_reply",
-        "reply_limited_to_new_inbound_subject_and_scope",
-        "no_broader_contact_permission_inferred",
-        "no_unrelated_follow_up"
-      ]
+      "safety_disposition": "eligible",
+      "delivery_scope": "scoped_reply",
+      "purchase_eligibility": "candidate_subject_to_scope_disclosure_and_attestation",
+      "can_reach_purchase_available_subject_to_gates": true,
+      "message_draft_policy": "limited_to_explicitly_invited_subject"
     },
     {
       "code": "eligible_business_only",
-      "kind": "eligible",
-      "meaning": "Private contact is not permitted, but necessary business, logistics, property, money, contract, or equivalent practical contact is explicitly permitted.",
-      "purchase_eligibility": "candidate_after_explicit_scope_confirmation",
-      "can_reach_purchase_available": true,
-      "direct_payment_session_creation_allowed": false,
-      "requirements": [
-        "practical_contact_permission_explicit",
-        "current_request_entirely_within_permitted_practical_subject",
-        "no_romance_interpretation",
-        "no_personal_invitation",
-        "no_relationship_progression",
-        "no_emotional_pressure_wording",
-        "no_follow_up_outside_permitted_practical_matter"
-      ]
+      "safety_disposition": "eligible",
+      "delivery_scope": "business_only",
+      "purchase_eligibility": "candidate_subject_to_scope_disclosure_and_attestation",
+      "can_reach_purchase_available_subject_to_gates": true,
+      "message_draft_policy": "limited_to_permitted_practical_subject"
     },
     {
       "code": "needs_clarification",
-      "kind": "non_eligible",
-      "meaning": "The answer is unknown or conflicting, a prior restriction and new inbound contact coexist, permitted scope is unclear, or the user cannot determine whether a reply is invited.",
+      "safety_disposition": "needs_clarification",
+      "delivery_scope": null,
       "purchase_eligibility": false,
-      "can_reach_purchase_available": false,
-      "direct_payment_session_creation_allowed": false,
-      "unresolved_transition": "blocked_no_purchase"
+      "can_reach_purchase_available_subject_to_gates": false,
+      "message_draft_policy": "unavailable"
     },
     {
-      "code": "blocked_no_purchase",
-      "kind": "blocked",
-      "meaning": "A known or unresolved boundary, unsupported scope, or attempted workaround requires a free stop before payment.",
+      "code": "blocked_unsafe_assistance",
+      "safety_disposition": "blocked_unsafe_assistance",
+      "delivery_scope": null,
       "purchase_eligibility": false,
-      "can_reach_purchase_available": false,
-      "direct_payment_session_creation_allowed": false,
-      "outputs_allowed": []
+      "can_reach_purchase_available_subject_to_gates": false,
+      "message_draft_policy": "forbidden"
     },
     {
       "code": "urgent_safety_redirect",
-      "kind": "urgent_redirect",
-      "meaning": "Threat, coercion, immediate danger, stalking concern, violence, or an equivalent urgent safety issue is selected.",
+      "safety_disposition": "urgent_safety_redirect",
+      "delivery_scope": null,
       "purchase_eligibility": false,
-      "can_reach_purchase_available": false,
-      "direct_payment_session_creation_allowed": false,
-      "relationship_draft_or_contact_guidance_allowed": false
+      "can_reach_purchase_available_subject_to_gates": false,
+      "message_draft_policy": "forbidden"
+    },
+    {
+      "code": "unsupported_professional_request",
+      "safety_disposition": "unsupported_professional_request",
+      "delivery_scope": null,
+      "purchase_eligibility": false,
+      "can_reach_purchase_available_subject_to_gates": false,
+      "message_draft_policy": "forbidden"
     }
-  ],
-  "blocked_reason_codes": [
-    "temporary_pause",
-    "explicit_no_contact",
-    "channel_restricted",
-    "relationship_closed",
-    "unresolved_unknown",
-    "attempted_alternate_channel",
-    "attempted_third_party_contact",
-    "time_passage_only_reopening",
-    "unblock_only_reopening",
-    "required_contact_outside_supported_scope"
   ],
   "cases": [
     {
       "case_id": "DM-01",
-      "scenario": "No known restriction",
+      "scenario": "No restriction and general support",
       "inputs": {
-        "primary_option": "no_restriction_known"
+        "contact_boundary_state": "no_restriction_known",
+        "requested_assistance_goal": "understand_and_organize"
       },
       "classification": "eligible_general",
-      "reason_code": null,
       "can_reach_purchase_available": true
     },
     {
       "case_id": "DM-02",
-      "scenario": "Temporary pause",
+      "scenario": "No restriction and send-wait decision",
       "inputs": {
-        "primary_option": "temporary_pause"
+        "contact_boundary_state": "no_restriction_known",
+        "requested_assistance_goal": "decide_send_wait_or_pause"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "temporary_pause",
-      "can_reach_purchase_available": false
+      "classification": "eligible_general",
+      "can_reach_purchase_available": true
     },
     {
       "case_id": "DM-03",
-      "scenario": "Explicit no-contact",
+      "scenario": "Temporary pause and emotional organization",
       "inputs": {
-        "primary_option": "explicit_no_contact"
+        "contact_boundary_state": "temporary_pause",
+        "requested_assistance_goal": "understand_and_organize"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "explicit_no_contact",
-      "can_reach_purchase_available": false
+      "classification": "eligible_pause_assessment",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-04",
-      "scenario": "Blocked or channel restricted",
+      "scenario": "Temporary pause and send-wait decision",
       "inputs": {
-        "primary_option": "channel_restricted"
+        "contact_boundary_state": "temporary_pause",
+        "requested_assistance_goal": "decide_send_wait_or_pause"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "channel_restricted",
-      "can_reach_purchase_available": false
+      "classification": "eligible_pause_assessment",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-05",
-      "scenario": "Relationship closure",
+      "scenario": "Temporary pause, ordinary draft request, and pause disclosure accepted",
       "inputs": {
-        "primary_option": "relationship_closed"
+        "contact_boundary_state": "temporary_pause",
+        "requested_assistance_goal": "draft_within_current_permission",
+        "pause_assessment_disclosure_acknowledged": true
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "relationship_closed",
-      "can_reach_purchase_available": false
+      "classification": "eligible_pause_assessment",
+      "can_reach_purchase_available": true,
+      "draft_available": false,
+      "safe_transformation": "full_no_draft_assessment"
     },
     {
       "case_id": "DM-06",
-      "scenario": "Business-only and practical request only",
+      "scenario": "Temporary pause and alternate-channel request",
       "inputs": {
-        "primary_option": "business_only",
-        "practical_contact_permission_explicit": true,
-        "current_request_entirely_within_permitted_practical_subject": true
+        "contact_boundary_state": "temporary_pause",
+        "requested_assistance_goal": "alternate_channel_or_third_party"
       },
-      "classification": "eligible_business_only",
-      "reason_code": null,
-      "can_reach_purchase_available": true
-    },
-    {
-      "case_id": "DM-07",
-      "scenario": "Business-only with personal content mixed in",
-      "inputs": {
-        "primary_option": "business_only",
-        "practical_contact_permission_explicit": true,
-        "current_request_entirely_within_permitted_practical_subject": false
-      },
-      "classification": "blocked_no_purchase",
-      "reason_code": "required_contact_outside_supported_scope",
+      "classification": "blocked_unsafe_assistance",
       "can_reach_purchase_available": false
     },
     {
-      "case_id": "DM-08",
-      "scenario": "Prior no-contact, new message explicitly asks a question, and reply stays in scope",
+      "case_id": "DM-07",
+      "scenario": "Explicit no-contact and emotional organization",
       "inputs": {
-        "primary_option": "new_inbound_after_boundary",
-        "new_message_explicitly_asks_for_or_clearly_invites_reply": true,
-        "intended_reply_limited_to_new_message_subject": true
+        "contact_boundary_state": "explicit_no_contact",
+        "requested_assistance_goal": "understand_and_organize"
       },
-      "classification": "eligible_scoped_reply",
-      "reason_code": null,
-      "can_reach_purchase_available": true
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "draft_available": false
+    },
+    {
+      "case_id": "DM-08",
+      "scenario": "Explicit no-contact and decision whether to stop",
+      "inputs": {
+        "contact_boundary_state": "explicit_no_contact",
+        "requested_assistance_goal": "decide_send_wait_or_pause",
+        "requested_direction": "stop_contacting"
+      },
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-09",
-      "scenario": "Prior no-contact and unblocked only",
+      "scenario": "Explicit no-contact and request to persuade or overcome refusal",
       "inputs": {
-        "prior_boundary": "explicit_no_contact",
-        "unblocked_only": true,
-        "new_inbound_message": false
+        "contact_boundary_state": "explicit_no_contact",
+        "requested_assistance_goal": "recontact_or_overcome_boundary"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "unblock_only_reopening",
+      "classification": "blocked_unsafe_assistance",
       "can_reach_purchase_available": false
     },
     {
       "case_id": "DM-10",
-      "scenario": "Prior no-contact and new message does not invite reply",
+      "scenario": "Channel restriction and alternate account",
       "inputs": {
-        "primary_option": "new_inbound_after_boundary",
-        "new_message_explicitly_asks_for_or_clearly_invites_reply": false,
-        "intended_reply_limited_to_new_message_subject": true
+        "contact_boundary_state": "channel_restricted",
+        "requested_assistance_goal": "alternate_channel_or_third_party",
+        "requested_method": "alternate_account"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "explicit_no_contact",
+      "classification": "blocked_unsafe_assistance",
       "can_reach_purchase_available": false
     },
     {
       "case_id": "DM-11",
-      "scenario": "Unknown state",
+      "scenario": "Relationship closed and closure support",
       "inputs": {
-        "primary_option": "unknown"
+        "contact_boundary_state": "relationship_closed",
+        "requested_assistance_goal": "understand_and_organize",
+        "requested_direction": "calm_closure"
       },
-      "classification": "needs_clarification",
-      "reason_code": null,
-      "can_reach_purchase_available": false
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-12",
-      "scenario": "Unknown remains unresolved",
+      "scenario": "Relationship closed and reconciliation guarantee request",
       "inputs": {
-        "primary_option": "unknown",
-        "clarification_resolved": false
+        "contact_boundary_state": "relationship_closed",
+        "requested_assistance_goal": "recontact_or_overcome_boundary",
+        "requested_claim": "reconciliation_guarantee"
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "unresolved_unknown",
+      "classification": "blocked_unsafe_assistance",
       "can_reach_purchase_available": false
     },
     {
       "case_id": "DM-13",
-      "scenario": "Alternative SNS workaround",
+      "scenario": "Business-only and practical request only",
       "inputs": {
-        "alternate_channel_attempted": true
+        "contact_boundary_state": "business_only",
+        "requested_assistance_goal": "draft_within_current_permission",
+        "practical_contact_permission_explicit": true,
+        "current_request_practical_only": true
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "attempted_alternate_channel",
-      "can_reach_purchase_available": false
+      "classification": "eligible_business_only",
+      "can_reach_purchase_available": true
     },
     {
       "case_id": "DM-14",
-      "scenario": "Contact through a friend",
+      "scenario": "Business-only with personal content in proposed message",
       "inputs": {
-        "third_party_contact_attempted": true
+        "contact_boundary_state": "business_only",
+        "requested_assistance_goal": "draft_within_current_permission",
+        "practical_contact_permission_explicit": true,
+        "current_request_practical_only": false
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "attempted_third_party_contact",
-      "can_reach_purchase_available": false
+      "classification": "needs_clarification",
+      "can_reach_purchase_available": false,
+      "resolution_rule": "block_if_private_content_is_confirmed"
     },
     {
       "case_id": "DM-15",
-      "scenario": "Time has passed",
+      "scenario": "Business-only context and separate emotional organization only",
       "inputs": {
-        "prior_boundary": "temporary_pause_or_stronger",
-        "time_passage_only": true
+        "contact_boundary_state": "business_only",
+        "requested_assistance_goal": "understand_and_organize",
+        "message_or_contact_requested": false
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "time_passage_only_reopening",
-      "can_reach_purchase_available": false
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-16",
-      "scenario": "Urgent danger",
+      "scenario": "Prior boundary, new inbound explicitly invites reply, and reply is in scope",
       "inputs": {
-        "primary_option": "urgent_safety"
+        "contact_boundary_state": "new_inbound_after_boundary",
+        "requested_assistance_goal": "draft_within_current_permission",
+        "reply_explicitly_invited": true,
+        "reply_limited_to_exact_subject": true
       },
-      "classification": "urgent_safety_redirect",
-      "reason_code": null,
-      "can_reach_purchase_available": false
+      "classification": "eligible_scoped_reply",
+      "can_reach_purchase_available": true
     },
     {
       "case_id": "DM-17",
-      "scenario": "Legal or contract dispute requiring professional judgment",
+      "scenario": "Prior boundary, new inbound does not invite reply, and emotional organization requested",
       "inputs": {
-        "professional_judgment_required": true
+        "contact_boundary_state": "new_inbound_after_boundary",
+        "requested_assistance_goal": "understand_and_organize",
+        "reply_explicitly_invited": false
       },
-      "classification": "blocked_no_purchase",
-      "reason_code": "required_contact_outside_supported_scope",
-      "can_reach_purchase_available": false
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "draft_available": false
     },
     {
       "case_id": "DM-18",
-      "scenario": "Conflicting answers",
+      "scenario": "Prior boundary, new inbound does not invite reply, but reply requested",
       "inputs": {
-        "answers_conflict": true
+        "contact_boundary_state": "new_inbound_after_boundary",
+        "requested_assistance_goal": "draft_within_current_permission",
+        "reply_explicitly_invited": false
       },
       "classification": "needs_clarification",
-      "reason_code": null,
+      "can_reach_purchase_available": false,
+      "eligible_scoped_reply_allowed": false
+    },
+    {
+      "case_id": "DM-19",
+      "scenario": "Unblocking only and emotional organization",
+      "inputs": {
+        "original_boundary": "explicit_no_contact",
+        "unblocking_only": true,
+        "requested_assistance_goal": "understand_and_organize"
+      },
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "contact_permission_reopened": false
+    },
+    {
+      "case_id": "DM-20",
+      "scenario": "Unblocking only and recontact method requested",
+      "inputs": {
+        "original_boundary": "explicit_no_contact",
+        "unblocking_only": true,
+        "requested_assistance_goal": "recontact_or_overcome_boundary"
+      },
+      "classification": "blocked_unsafe_assistance",
       "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-21",
+      "scenario": "Time passage only and emotional organization after temporary pause",
+      "inputs": {
+        "original_boundary": "temporary_pause",
+        "time_passage_only": true,
+        "requested_assistance_goal": "understand_and_organize"
+      },
+      "classification": "eligible_pause_assessment",
+      "can_reach_purchase_available": true,
+      "contact_permission_reopened": false,
+      "draft_available": false
+    },
+    {
+      "case_id": "DM-22",
+      "scenario": "Time passage only used as permission claim to recontact",
+      "inputs": {
+        "original_boundary": "temporary_pause",
+        "time_passage_only": true,
+        "requested_assistance_goal": "recontact_or_overcome_boundary"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-23",
+      "scenario": "Alternate SNS requested",
+      "inputs": {
+        "requested_assistance_goal": "alternate_channel_or_third_party",
+        "requested_method": "alternate_sns"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-24",
+      "scenario": "Third-party contact requested",
+      "inputs": {
+        "requested_assistance_goal": "alternate_channel_or_third_party",
+        "requested_method": "third_party_contact"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-25",
+      "scenario": "Surveillance or tracking requested",
+      "inputs": {
+        "requested_assistance_goal": "monitor_track_or_manipulate",
+        "requested_method": "surveillance_or_tracking"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-26",
+      "scenario": "Impersonation or deception requested",
+      "inputs": {
+        "requested_assistance_goal": "recontact_or_overcome_boundary",
+        "requested_method": "impersonation_or_deception"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-27",
+      "scenario": "Threat, blackmail, or coercion requested",
+      "inputs": {
+        "requested_assistance_goal": "monitor_track_or_manipulate",
+        "requested_method": "threat_blackmail_or_coercion"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-28",
+      "scenario": "Revenge or harassment requested",
+      "inputs": {
+        "requested_assistance_goal": "monitor_track_or_manipulate",
+        "requested_method": "revenge_or_harassment"
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-29",
+      "scenario": "Current self-harm or suicide risk",
+      "inputs": {
+        "contact_boundary_state": "urgent_safety",
+        "requested_assistance_goal": "urgent_safety_help",
+        "current_risk": "self_harm_or_suicide"
+      },
+      "classification": "urgent_safety_redirect",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-30",
+      "scenario": "Current threat to harm another person",
+      "inputs": {
+        "contact_boundary_state": "urgent_safety",
+        "requested_assistance_goal": "urgent_safety_help",
+        "current_risk": "harm_to_another_person"
+      },
+      "classification": "urgent_safety_redirect",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-31",
+      "scenario": "Legal judgment requested",
+      "inputs": {
+        "requested_assistance_goal": "professional_judgment",
+        "professional_output": "legal_judgment"
+      },
+      "classification": "unsupported_professional_request",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-32",
+      "scenario": "Medical diagnosis requested",
+      "inputs": {
+        "requested_assistance_goal": "professional_judgment",
+        "professional_output": "medical_diagnosis"
+      },
+      "classification": "unsupported_professional_request",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-33",
+      "scenario": "Legal context and emotional organization only",
+      "inputs": {
+        "contact_boundary_state": "no_restriction_known",
+        "requested_assistance_goal": "understand_and_organize",
+        "legal_context_present": true,
+        "professional_judgment_requested": false
+      },
+      "classification": "eligible_general",
+      "can_reach_purchase_available": true,
+      "professional_advice_allowed": false
+    },
+    {
+      "case_id": "DM-34",
+      "scenario": "Unknown state clarified to a safe general scope",
+      "inputs": {
+        "initial_contact_boundary_state": "unknown",
+        "clarified_contact_boundary_state": "no_restriction_known",
+        "requested_assistance_goal": "understand_and_organize"
+      },
+      "classification": "eligible_general",
+      "can_reach_purchase_available": true
+    },
+    {
+      "case_id": "DM-35",
+      "scenario": "Unknown state remains unresolved",
+      "inputs": {
+        "contact_boundary_state": "unknown",
+        "clarification_resolved": false
+      },
+      "classification": "needs_clarification",
+      "can_reach_purchase_available": false
+    },
+    {
+      "case_id": "DM-36",
+      "scenario": "Structured safe answer but free text requests circumvention",
+      "inputs": {
+        "contact_boundary_state": "no_restriction_known",
+        "requested_assistance_goal": "understand_and_organize",
+        "normalized_request_explicitly_requests_unsafe_circumvention": true
+      },
+      "classification": "blocked_unsafe_assistance",
+      "can_reach_purchase_available": false,
+      "structured_safe_option_overrides_free_text": false
+    },
+    {
+      "case_id": "DM-37",
+      "scenario": "Attestation absent after otherwise eligible classification",
+      "inputs": {
+        "classification": "eligible_general",
+        "attestation_confirmed": false
+      },
+      "classification": "eligible_general",
+      "can_reach_purchase_available": false,
+      "authority_outcome": "purchase_gate_denied"
+    },
+    {
+      "case_id": "DM-38",
+      "scenario": "Bound request, Candidate, topic, or answer mutates after eligibility",
+      "inputs": {
+        "prior_classification": "eligible_general",
+        "bound_input_mutated": true
+      },
+      "classification": "eligible_general",
+      "can_reach_purchase_available": false,
+      "authority_outcome": "eligibility_revoked_to_unassessed"
+    },
+    {
+      "case_id": "DM-39",
+      "scenario": "Old tab presents stale authority",
+      "inputs": {
+        "prior_classification": "eligible_general",
+        "stale_authority_presented": true
+      },
+      "classification": "eligible_general",
+      "can_reach_purchase_available": false,
+      "authority_outcome": "stale_authority_rejected"
+    },
+    {
+      "case_id": "DM-40",
+      "scenario": "Eligible pause assessment without disclosure acknowledgement",
+      "inputs": {
+        "classification": "eligible_pause_assessment",
+        "pause_assessment_disclosure_acknowledged": false,
+        "attestation_confirmed": true
+      },
+      "classification": "eligible_pause_assessment",
+      "can_reach_purchase_available": false,
+      "authority_outcome": "purchase_gate_denied"
+    },
+    {
+      "case_id": "DM-41",
+      "scenario": "Eligible boundary support without disclosure acknowledgement",
+      "inputs": {
+        "classification": "eligible_boundary_support_only",
+        "boundary_support_only_disclosure_acknowledged": false,
+        "attestation_confirmed": true
+      },
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": false,
+      "authority_outcome": "purchase_gate_denied"
+    },
+    {
+      "case_id": "DM-42",
+      "scenario": "Past unsafe behavior mentioned and help stopping requested without current urgent risk",
+      "inputs": {
+        "contact_boundary_state": "explicit_no_contact",
+        "requested_assistance_goal": "understand_and_organize",
+        "past_unsafe_behavior_mentioned": true,
+        "current_urgent_safety": false,
+        "requested_direction": "stop_and_respect_boundary"
+      },
+      "classification": "eligible_boundary_support_only",
+      "can_reach_purchase_available": true,
+      "blocked_solely_by_past_mention": false
     }
   ],
   "global_rules": {
     "purchase_authority_owner": "server",
-    "classification_method": "deterministic",
-    "client_can_authorize_payment": false,
-    "unknown_can_reach_payment": false,
-    "conflicting_answers_can_reach_payment": false,
+    "classification_method": "deterministic_two_axis_plus_normalized_content",
+    "safety_gate_decides_assistance_kind": true,
+    "decision_engine_decides_send_reply_wait_or_pause": true,
+    "normal_wait_or_pause_outcome_blocks_purchase": false,
+    "safe_structured_option_overrides_explicit_unsafe_content": false,
+    "past_unsafe_behavior_mention_alone_blocks": false,
     "time_passage_reopens_contact": false,
     "unblocking_alone_reopens_contact": false,
+    "new_inbound_requires_full_reclassification": true,
     "alternate_channel_workaround_allowed": false,
     "third_party_workaround_allowed": false,
-    "blocked_output_allowed": false,
-    "urgent_relationship_guidance_allowed": false,
-    "legal_advice_allowed": false,
-    "diagnosis_allowed": false
+    "professional_context_alone_blocks": false,
+    "professional_judgment_supported": false,
+    "attestation_required_for_purchase_available": true,
+    "applicable_scope_disclosure_required_for_purchase_available": true,
+    "client_can_authorize_purchase": false,
+    "client_generated_authority_hash_allowed": false,
+    "payment_implementation_present": false
   }
 }

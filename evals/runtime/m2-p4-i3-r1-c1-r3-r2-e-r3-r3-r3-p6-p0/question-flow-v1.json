@@ -1,88 +1,118 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-question-flow-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0",
-  "status": "prepayment_safety_product_charter_pending_product_owner_review",
-  "baseline": "1196e7d581e1e7d2b1f200eaa92de2477999f5bd",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-r1-question-flow-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+  "status": "prepayment_safety_intent_charter_rewritten_pending_human_chatgpt_review",
+  "baseline": "30e762e1f3d17f2a007b7f7f92d3ba91e01b861e",
   "ownership": {
     "answers_are_client_input": true,
     "classification_owner": "server",
-    "classification_method": "deterministic",
+    "classification_method": "deterministic_two_axis_plus_normalized_content",
     "client_can_set_classification": false,
     "client_can_set_purchase_available": false,
-    "client_can_create_payment_session": false
+    "client_can_create_payment_session": false,
+    "client_generated_authority_hash_allowed": false
   },
   "primary_screen": {
-    "title": "決済前の安全確認",
-    "explanation": "相手の境界を尊重し、利用後のトラブルを避けるため、\n現在の連絡状況を確認します。",
-    "question": "現在、相手との連絡について最も近い状態を選んでください。",
+    "title": "決済前の利用確認",
+    "explanation": "月の返事では、\n「今は送らない」という鑑定も含めて、\n状況に合った方向性をお返しします。\n\n一方で、\n相手の拒否や連絡制限を回避する方法、\n緊急性のある相談、\n専門判断が必要な内容には対応していません。",
+    "contact_boundary_question": "現在、相手との連絡状況に最も近いものを選んでください。",
     "selection_mode": "single_required",
-    "options": [
+    "contact_boundary_options": [
       {
         "code": "no_restriction_known",
-        "customer_label": "連絡を控えるよう求められておらず、\nブロック等もない",
-        "server_classification_candidate": "eligible_general",
-        "follow_up_required": false
+        "customer_label": "連絡を控えるよう求められておらず、ブロック等もない"
       },
       {
         "code": "temporary_pause",
-        "customer_label": "「考える時間がほしい」\n「落ち着いたら連絡する」などと言われている",
-        "server_classification_candidate": "blocked_no_purchase",
-        "blocked_reason": "temporary_pause",
-        "follow_up_required": false
+        "customer_label": "「考える時間がほしい」「落ち着いたら連絡する」「今日は一人にしてほしい」などと言われている"
       },
       {
         "code": "explicit_no_contact",
-        "customer_label": "「連絡しないで」\n「これ以上連絡しないで」などと言われている",
-        "server_classification_candidate": "blocked_no_purchase",
-        "blocked_reason": "explicit_no_contact",
-        "follow_up_required": false
+        "customer_label": "「連絡しないで」「これ以上連絡しないで」などと言われている"
       },
       {
         "code": "channel_restricted",
-        "customer_label": "ブロック、着信拒否などで\n連絡手段を制限されている",
-        "server_classification_candidate": "blocked_no_purchase",
-        "blocked_reason": "channel_restricted",
-        "follow_up_required": false
+        "customer_label": "ブロック、着信拒否などで連絡手段を制限されている"
       },
       {
         "code": "relationship_closed",
-        "customer_label": "関係を終えたい意思を\n明確に伝えられている",
-        "server_classification_candidate": "blocked_no_purchase",
-        "blocked_reason": "relationship_closed",
-        "follow_up_required": false
+        "customer_label": "関係を終えたい意思を明確に伝えられている"
       },
       {
         "code": "business_only",
-        "customer_label": "私的な連絡は禁止だが、\n業務・荷物・金銭等の必要連絡だけは許可されている",
-        "server_classification_candidate": "needs_clarification",
-        "follow_up_required": true,
-        "follow_up_flow": "business_only_scope"
+        "customer_label": "私的な連絡は禁止だが、業務・荷物・金銭等の必要連絡だけは許可されている"
       },
       {
         "code": "new_inbound_after_boundary",
-        "customer_label": "以前は制限があったが、\nその後、相手から新しい連絡が届いている",
-        "server_classification_candidate": "needs_clarification",
-        "follow_up_required": true,
-        "follow_up_flow": "new_inbound_scope"
+        "customer_label": "以前は制限があったが、その後、相手から新しい連絡が届いている"
       },
       {
         "code": "unknown",
-        "customer_label": "判断できない／分からない",
-        "server_classification_candidate": "needs_clarification",
-        "follow_up_required": true,
-        "follow_up_flow": "boundary_clarification"
+        "customer_label": "判断できない／分からない"
       },
       {
         "code": "urgent_safety",
-        "customer_label": "脅迫、危険、緊急性がある",
-        "server_classification_candidate": "urgent_safety_redirect",
-        "follow_up_required": false
+        "customer_label": "自傷、自殺、暴力、脅迫など、現在の安全に関わる緊急性がある"
+      }
+    ],
+    "requested_assistance_question": "今回、月の返事に最も手伝ってほしいことを選んでください。",
+    "requested_assistance_options": [
+      {
+        "code": "understand_and_organize",
+        "customer_label": "状況や気持ちを整理し、今後の方向性を知りたい"
+      },
+      {
+        "code": "decide_send_wait_or_pause",
+        "customer_label": "送る・待つ・追加連絡を止める判断を知りたい"
+      },
+      {
+        "code": "draft_within_current_permission",
+        "customer_label": "現在許可されている範囲で、返信文案を考えたい"
+      },
+      {
+        "code": "recontact_or_overcome_boundary",
+        "customer_label": "拒否・ブロック・距離置きがある状態でも、連絡する方法を知りたい"
+      },
+      {
+        "code": "alternate_channel_or_third_party",
+        "customer_label": "別アカウント、別SNS、別番号、知人などを使う方法を知りたい"
+      },
+      {
+        "code": "monitor_track_or_manipulate",
+        "customer_label": "相手の行動を監視・追跡したり、強く反応させる方法を知りたい"
+      },
+      {
+        "code": "professional_judgment",
+        "customer_label": "法律、医療、契約、金銭等について専門的な判断や助言がほしい"
+      },
+      {
+        "code": "urgent_safety_help",
+        "customer_label": "自傷、自殺、暴力、脅迫など、現在の安全に関わる緊急性がある"
       }
     ]
   },
-  "follow_up_flows": {
-    "business_only_scope": {
-      "entry_classification": "needs_clarification",
+  "required_follow_up_flows": {
+    "temporary_pause": {
+      "required_for_classification": "eligible_pause_assessment",
+      "acknowledgement_field": "pause_assessment_disclosure_acknowledged",
+      "acknowledgement_text": "鑑定結果によっては、\n「今は送らない」という判断になり、\n送信文案が表示されない場合があります。\n\nその場合も、\n理由・今の動き方・見直す条件を\n鑑定ノートとしてお返しします。",
+      "false_or_absent_result": "eligible_but_purchase_unavailable",
+      "message_draft_guaranteed": false
+    },
+    "explicit_boundary": {
+      "contact_boundary_states": [
+        "explicit_no_contact",
+        "channel_restricted",
+        "relationship_closed"
+      ],
+      "required_for_classification": "eligible_boundary_support_only",
+      "acknowledgement_field": "boundary_support_only_disclosure_acknowledged",
+      "acknowledgement_text": "この鑑定では、\n相手への連絡文案や再接触方法は提供しません。\n\n確認できる事実、\n気持ちの整理、\n相手の境界を尊重した今後の方向性を\n鑑定ノートとしてお返しします。",
+      "false_or_absent_result": "eligible_but_purchase_unavailable",
+      "message_draft_allowed": false,
+      "recontact_method_allowed": false
+    },
+    "business_only": {
       "questions": [
         {
           "code": "practical_permission_explicit",
@@ -105,23 +135,16 @@
           "required_answer": "yes"
         }
       ],
-      "resolution": {
-        "all_yes": "eligible_business_only",
-        "any_no": "blocked_no_purchase",
-        "any_unknown": "needs_clarification",
-        "unknown_unresolved": "blocked_no_purchase"
-      },
-      "eligible_constraints": [
-        "assessment_and_draft_strictly_within_practical_scope",
-        "no_romance_interpretation",
-        "no_personal_invitation",
-        "no_relationship_progression",
-        "no_emotional_pressure_wording",
-        "no_follow_up_outside_permitted_practical_matter"
-      ]
+      "acknowledgement_field": "business_only_scope_acknowledged",
+      "acknowledgement_meaning": [
+        "output_is_limited_to_permitted_practical_subject",
+        "private_or_romantic_content_is_excluded"
+      ],
+      "all_yes_and_acknowledged": "eligible_business_only",
+      "any_unknown": "needs_clarification",
+      "private_content_confirmed": "blocked_unsafe_assistance"
     },
-    "new_inbound_scope": {
-      "entry_classification": "needs_clarification",
+    "new_inbound_after_boundary": {
       "questions": [
         {
           "code": "reply_explicitly_invited",
@@ -134,7 +157,7 @@
           "required_answer": "yes"
         },
         {
-          "code": "reply_limited_to_new_message_subject",
+          "code": "reply_limited_to_exact_subject",
           "customer_question": "予定している返答は、その新しいメッセージの用件と範囲だけに限定されていますか。",
           "answer_options": [
             "yes",
@@ -144,44 +167,69 @@
           "required_answer": "yes"
         }
       ],
-      "resolution": {
-        "all_yes": "eligible_scoped_reply",
-        "any_no": "blocked_no_purchase",
-        "any_unknown": "needs_clarification",
-        "unknown_unresolved": "blocked_no_purchase"
-      },
-      "eligible_constraints": [
-        "reply_stays_within_new_inbound_subject_and_scope",
-        "no_broader_relationship_or_contact_permission_inferred",
-        "no_unrelated_follow_up"
-      ]
+      "acknowledgement_field": "scoped_reply_scope_acknowledged",
+      "acknowledgement_meaning": [
+        "output_is_limited_to_new_inbound_subject",
+        "no_broader_contact_permission_is_created"
+      ],
+      "all_yes_and_acknowledged": "eligible_scoped_reply",
+      "no_reply_invitation_and_emotional_organization": "eligible_boundary_support_only",
+      "no_reply_invitation_and_reply_request": "needs_clarification"
     },
-    "boundary_clarification": {
-      "entry_classification": "needs_clarification",
-      "purpose": "Resolve whether any no-contact, pause, channel restriction, closure, or narrow permission exists without guessing.",
-      "unresolved_result": "blocked_no_purchase",
-      "payment_available_while_unresolved": false
+    "unknown": {
+      "purpose": "clarify_boundary_state_and_assistance_goal_without_guessing",
+      "resolved_result": "matching_eligible_or_noneligible_classification",
+      "unresolved_result": "needs_clarification",
+      "purchase_available_while_unresolved": false
+    },
+    "professional_context": {
+      "customer_question": "専門判断を含めず、気持ちや状況の整理だけに相談内容を限定できますか。",
+      "yes_result": "reclassify_under_applicable_nonprofessional_scope",
+      "no_result": "unsupported_professional_request",
+      "professional_advice_allowed": false
     }
   },
-  "conflict_rule": {
-    "conflicting_answers_result": "needs_clarification",
-    "unresolved_conflict_result": "blocked_no_purchase",
-    "payment_available_while_conflicting": false
+  "mandatory_attestation": {
+    "field": "attestation_confirmed",
+    "required_value": true,
+    "customer_text": "この鑑定を、\n相手から示された拒否や連絡制限を回避する方法、\n監視・追跡、\n脅しや強い圧力を使う方法として\n利用しないことを確認します。",
+    "false_or_absent_can_reach_purchase_available": false,
+    "server_recomputes_classification": true,
+    "overrides_unsafe_content": false,
+    "overrides_urgent_safety": false,
+    "overrides_professional_scope_exclusion": false,
+    "proof_of_truthfulness": false,
+    "client_can_create_purchase_authority": false
+  },
+  "server_content_comparison": {
+    "compare_structured_answers_with_normalized_request": true,
+    "compare_structured_answers_with_normalized_candidate_when_present": true,
+    "safe_selected_option_overrides_explicit_unsafe_content": false,
+    "classify_requested_assistance_not_customer_identity": true,
+    "past_unsafe_behavior_mention_alone_blocks": false
+  },
+  "conflict_and_precedence_rules": {
+    "precedence": [
+      "current_urgent_safety_to_urgent_safety_redirect",
+      "explicit_unsafe_request_to_blocked_unsafe_assistance",
+      "primary_professional_judgment_to_unsupported_professional_request",
+      "structured_content_conflict_to_needs_clarification",
+      "eligible_scope_classification"
+    ],
+    "structured_answers_and_request_conflict": "needs_clarification",
+    "explicit_unsafe_request_content": "blocked_unsafe_assistance",
+    "current_urgent_safety_content": "urgent_safety_redirect",
+    "no_infinite_clarification_loop": true,
+    "unresolved_after_bounded_clarification": "needs_clarification",
+    "purchase_available_while_unresolved": false
   },
   "reopening_rules": {
     "time_passage_alone_reopens_contact": false,
     "unblocking_alone_reopens_contact": false,
-    "new_inbound_requires_new_classification": true,
+    "new_inbound_requires_full_reclassification": true,
     "alternate_sns_allowed": false,
     "phone_number_workaround_allowed": false,
     "friend_or_third_party_workaround_allowed": false,
     "workplace_workaround_allowed": false
-  },
-  "urgent_safety_rule": {
-    "classification": "urgent_safety_redirect",
-    "purchase_available": false,
-    "relationship_draft_allowed": false,
-    "contact_strategy_allowed": false,
-    "location_specific_resources_defined_in_this_package": false
   }
 }
