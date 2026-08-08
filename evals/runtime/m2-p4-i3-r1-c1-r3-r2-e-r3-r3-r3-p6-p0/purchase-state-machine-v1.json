@@ -1,0 +1,238 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0-purchase-state-machine-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0",
+  "status": "prepayment_safety_product_charter_pending_product_owner_review",
+  "baseline": "1196e7d581e1e7d2b1f200eaa92de2477999f5bd",
+  "ownership": {
+    "authority_owner": "server",
+    "classification_method": "deterministic",
+    "client_can_set_state": false,
+    "client_settable_states": [],
+    "client_can_authorize_purchase": false,
+    "client_can_create_payment_session": false
+  },
+  "states": [
+    {
+      "code": "unassessed",
+      "category": "assessment",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "collecting_boundary_answer",
+      "category": "assessment",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "needs_clarification",
+      "category": "clarification",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "eligible_general",
+      "category": "eligible_classification",
+      "classification_eligible": true,
+      "can_transition_to_purchase_available": true,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "eligible_scoped_reply",
+      "category": "eligible_classification",
+      "classification_eligible": true,
+      "can_transition_to_purchase_available": true,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "eligible_business_only",
+      "category": "eligible_classification",
+      "classification_eligible": true,
+      "can_transition_to_purchase_available": true,
+      "can_create_payment_session": false
+    },
+    {
+      "code": "blocked_no_purchase",
+      "category": "terminal_free_stop",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false,
+      "allowed_outputs": [
+        "static_stop_copy",
+        "static_reassurance"
+      ],
+      "forbidden_outputs": [
+        "draft",
+        "report",
+        "projection",
+        "workaround",
+        "saved_for_later_draft"
+      ]
+    },
+    {
+      "code": "urgent_safety_redirect",
+      "category": "terminal_safety_redirect",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false,
+      "relationship_draft_allowed": false,
+      "contact_guidance_allowed": false
+    },
+    {
+      "code": "purchase_available",
+      "category": "purchase_authority",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": true,
+      "implementation_present": false
+    },
+    {
+      "code": "payment_pending",
+      "category": "future_payment",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false,
+      "implementation_present": false
+    },
+    {
+      "code": "payment_completed",
+      "category": "future_payment",
+      "classification_eligible": false,
+      "can_transition_to_purchase_available": false,
+      "can_create_payment_session": false,
+      "implementation_present": false
+    }
+  ],
+  "transitions": [
+    {
+      "from": "unassessed",
+      "event": "begin_boundary_assessment",
+      "to": "collecting_boundary_answer",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_boundary_answer",
+      "event": "classify_no_restriction_known",
+      "to": "eligible_general",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_boundary_answer",
+      "event": "classify_unknown_conflict_or_conditional_scope",
+      "to": "needs_clarification",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_boundary_answer",
+      "event": "classify_block_reason",
+      "to": "blocked_no_purchase",
+      "authority": "server"
+    },
+    {
+      "from": "collecting_boundary_answer",
+      "event": "classify_urgent_safety",
+      "to": "urgent_safety_redirect",
+      "authority": "server"
+    },
+    {
+      "from": "needs_clarification",
+      "event": "confirm_explicit_reply_invitation_and_scoped_reply",
+      "to": "eligible_scoped_reply",
+      "authority": "server",
+      "required_conditions": [
+        "new_message_explicitly_asks_for_or_clearly_invites_reply",
+        "intended_reply_limited_to_new_message_subject"
+      ]
+    },
+    {
+      "from": "needs_clarification",
+      "event": "confirm_explicit_practical_permission_and_scope",
+      "to": "eligible_business_only",
+      "authority": "server",
+      "required_conditions": [
+        "practical_contact_permission_explicit",
+        "current_request_entirely_within_permitted_practical_subject"
+      ]
+    },
+    {
+      "from": "needs_clarification",
+      "event": "clarification_unresolved_or_disqualifying",
+      "to": "blocked_no_purchase",
+      "authority": "server"
+    },
+    {
+      "from": "eligible_general",
+      "event": "server_issue_purchase_authority",
+      "to": "purchase_available",
+      "authority": "server"
+    },
+    {
+      "from": "eligible_scoped_reply",
+      "event": "server_issue_purchase_authority",
+      "to": "purchase_available",
+      "authority": "server"
+    },
+    {
+      "from": "eligible_business_only",
+      "event": "server_issue_purchase_authority",
+      "to": "purchase_available",
+      "authority": "server"
+    },
+    {
+      "from": "purchase_available",
+      "event": "server_create_payment_session_future",
+      "to": "payment_pending",
+      "authority": "server",
+      "implemented": false
+    },
+    {
+      "from": "payment_pending",
+      "event": "verified_payment_completion_future",
+      "to": "payment_completed",
+      "authority": "server",
+      "implemented": false
+    }
+  ],
+  "input_mutation_invalidation": {
+    "watched_inputs": [
+      "request_text",
+      "candidate_text",
+      "requested_topics",
+      "boundary_answers"
+    ],
+    "invalidates_previous_eligibility": true,
+    "result_state": "unassessed",
+    "revokes_purchase_authority": true,
+    "invalidates_pending_payment_authority": true,
+    "completed_payment_rule": "A changed request is a new request beginning at unassessed; the completed transaction record is not rewritten."
+  },
+  "bypass_resistance": {
+    "browser_back_bypasses_classification": false,
+    "refresh_bypasses_classification": false,
+    "old_tab_bypasses_classification": false,
+    "copied_url_bypasses_classification": false,
+    "direct_api_request_bypasses_classification": false,
+    "server_revalidation_required": true
+  },
+  "reopening_rules": {
+    "blocked_state_direct_to_eligible_allowed": false,
+    "time_passage_is_state_transition": false,
+    "unblocking_alone_is_state_transition": false,
+    "new_inbound_contact_requires_new_classification": true
+  },
+  "idempotency": {
+    "duplicate_requests_create_duplicate_purchase_authority": false,
+    "server_idempotency_key_required_for_future_payment_session": true
+  },
+  "implementation_status": {
+    "planning_only": true,
+    "ui_implemented": false,
+    "api_implemented": false,
+    "payment_provider_implemented": false,
+    "payment_session_creation_implemented": false,
+    "runtime_activated": false
+  }
+}
