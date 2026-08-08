@@ -1,6 +1,6 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
   "fixture_authority": "synthetic_offline_only",
   "semantic_fixtures": [
     {
@@ -170,6 +170,128 @@
         "detail": "Editorial precision issue without a material guaranteed customer proposition."
       },
       "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "review_timing_when_material_unsupported_certainty_blocks",
+      "current_decision": "wait_and_reassess",
+      "review_timing": {
+        "when": "The other person will definitely reply tomorrow.",
+        "trigger_fact_ids": ["F001"]
+      },
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.review_timing.when",
+        "evidence_refs": [],
+        "detail": "The customer-visible reassessment timing guarantees a future reply without authority."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "material_unknown_summary_material_unsupported_certainty_blocks",
+      "current_decision": "wait_and_reassess",
+      "material_unknowns": [
+        {
+          "unknown_code": "reply_reason",
+          "summary": "The silence definitely means the relationship is over.",
+          "material_to": "decision"
+        }
+      ],
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.material_unknowns[0].summary",
+        "evidence_refs": [],
+        "detail": "The customer-visible unknown summary converts an unresolved hidden state into a certain outcome."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "model_generated_limitation_material_unsupported_certainty_blocks",
+      "current_decision": "wait_and_reassess",
+      "model_generated_limitations": [
+        "A reply will certainly arrive after this limitation expires."
+      ],
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.model_generated_limitations[0]",
+        "evidence_refs": [],
+        "detail": "The customer-visible consultation limitation guarantees future conduct without authority."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "material_template_genericity_product_unusable_blocks",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "TEMPLATE_GENERICITY",
+        "severity": "major",
+        "json_path": "$.report_content.relationship_summary",
+        "evidence_refs": [],
+        "detail": "The paid assessment is boilerplate that omits the case-specific relationship facts and provides no usable consultation value, making the delivery materially unusable."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "material_repetition_product_unusable_blocks",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "REPETITION",
+        "severity": "major",
+        "json_path": "$.report_content.short_letter[0]",
+        "evidence_refs": [],
+        "detail": "The same generic sentence replaces every substantive paid-report section, removing the case-specific decision support and making the delivery materially unusable."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "repetition_minor_default_nonblocking",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "REPETITION",
+        "severity": "minor",
+        "json_path": "$.report_content.closing_lines[0]",
+        "evidence_refs": [],
+        "detail": "One closing phrase repeats an earlier point, but all case-specific Product meaning remains usable."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "review_timing_trigger_fact_ids_not_customer_prose",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.review_timing.trigger_fact_ids[0]",
+        "evidence_refs": [],
+        "detail": "This finding targets an internal supporting-fact identifier rather than customer-readable prose."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "material_unknown_code_not_customer_prose",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.material_unknowns[0].unknown_code",
+        "evidence_refs": [],
+        "detail": "This finding targets an internal unknown code rather than customer-readable prose."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "material_unknown_material_to_not_customer_prose",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.decision_plan.material_unknowns[0].material_to",
+        "evidence_refs": [],
+        "detail": "This finding targets internal materiality metadata rather than customer-readable prose."
+      },
+      "expected_disposition": "nonblocking"
     }
   ],
   "evaluator_fixtures": [
@@ -263,10 +385,10 @@
     }
   ],
   "counts": {
-    "required_named_fixtures": 17,
-    "semantic_fixtures": 12,
+    "required_named_fixtures": 28,
+    "semantic_fixtures": 21,
     "evaluator_fixtures": 7,
-    "total_synthetic_fixtures": 19,
+    "total_synthetic_fixtures": 28,
     "frozen_e_r3_cases": 6
   },
   "operations": {

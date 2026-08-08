@@ -15,7 +15,7 @@ export const SEMANTIC_DISPOSITION_V5_HARD_FINDING_CODES = [
   "DECISION_ALLOWED",
 ] as const;
 
-export const SEMANTIC_DISPOSITION_V5_ALWAYS_NONBLOCKING_CODES = [
+export const SEMANTIC_DISPOSITION_V5_STYLE_FINDING_CODES = [
   "TEMPLATE_GENERICITY",
   "REPETITION",
 ] as const;
@@ -43,6 +43,9 @@ export const SEMANTIC_DISPOSITION_V5_PRODUCT_OUTCOME_PATH_PATTERNS = [
   "^(?:\\$\\.)?decision_plan\\.actions_to_avoid(?:$|\\[(?:0|[1-9]\\d*)\\]$)",
   "^(?:\\$\\.)?decision_plan\\.aftercare_plan(?:$|\\[(?:0|[1-9]\\d*)\\](?:\\.|$))",
   "^(?:\\$\\.)?decision_plan\\.change_conditions(?:$|\\[(?:0|[1-9]\\d*)\\](?:\\.|$))",
+  "^(?:\\$\\.)?decision_plan\\.review_timing\\.when$",
+  "^(?:\\$\\.)?decision_plan\\.material_unknowns\\[(?:0|[1-9]\\d*)\\]\\.summary$",
+  "^(?:\\$\\.)?decision_plan\\.model_generated_limitations\\[(?:0|[1-9]\\d*)\\]$",
   "^(?:\\$\\.)?report_content(?:$|\\.)",
 ] as const;
 
@@ -60,8 +63,8 @@ const enduringConstraintLanguage =
 const hardFindingCodes = new Set<string>(
   SEMANTIC_DISPOSITION_V5_HARD_FINDING_CODES,
 );
-const alwaysNonblockingCodes = new Set<string>(
-  SEMANTIC_DISPOSITION_V5_ALWAYS_NONBLOCKING_CODES,
+const styleFindingCodes = new Set<string>(
+  SEMANTIC_DISPOSITION_V5_STYLE_FINDING_CODES,
 );
 const temporalFindingCodes = new Set<string>(
   SEMANTIC_DISPOSITION_V5_TEMPORAL_FINDING_CODES,
@@ -218,8 +221,13 @@ function classifyFinding(
       reason: "conditional_internal_semantics",
     };
   }
-  if (alwaysNonblockingCodes.has(findingCode)) {
-    return { disposition: "nonblocking", reason: "default_style_nonblocking" };
+  if (styleFindingCodes.has(findingCode)) {
+    return isMajor && matchesPath(finding.json_path, productOutcomePatterns)
+      ? {
+          disposition: "blocking",
+          reason: "materially_unusable_product_style",
+        }
+      : { disposition: "nonblocking", reason: "default_style_nonblocking" };
   }
   if (findingCode === "BRAND_TONE") {
     return isMajor &&

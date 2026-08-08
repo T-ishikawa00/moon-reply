@@ -6,17 +6,15 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const baseline = "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74";
-const expectedParent = "b495b958a8fd8dfe203380ca0036140f83f4f4dd";
+const baseline = "2f8b8fa6ce8e54117f25640809240521a39b1b4d";
+const expectedParent = "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedSourceBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-evaluator-disposition";
-const expectedBranch =
   "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-r1-evaluator-precision";
+const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-r2-product-outcome-gates";
 const catalogV12Baseline =
   "b495b958a8fd8dfe203380ca0036140f83f4f4dd";
-const baselinePb06V4Hash =
-  "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9";
 const correctedPb06V4Hash =
   "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b";
 const evidenceCommitB = "9e9bf7d90740c1d00bfc4e282c85906744cd736c";
@@ -42,17 +40,13 @@ const schemaCatalogPath = "lib/assessment/runtime/schema-catalog.ts";
 const pipelinePath = "lib/assessment/runtime/pipeline.ts";
 
 const updatedPaths = [
-  pb06V4Path,
   semanticV5Path,
-  catalogV12Path,
-  evaluatorV2Path,
   contractPath,
   fixturesPath,
   offlineResultsPath,
   capabilitiesPath,
   verifierPath,
   reviewPath,
-  schemaCatalogPath,
 ];
 const exactScope = [...updatedPaths].sort();
 
@@ -63,6 +57,10 @@ const protectedPaths = [
   "lib/assessment/runtime/semantic-disposition-v4.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
   "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evaluator-v1.mjs",
+  pb06V4Path,
+  catalogV12Path,
+  evaluatorV2Path,
+  schemaCatalogPath,
   pipelinePath,
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
@@ -126,10 +124,6 @@ function normalizedText(value) {
 
 function textAt(revision, relativePath) {
   return blobBytesAt(revision, relativePath).toString("utf8");
-}
-
-function countOccurrences(value, needle) {
-  return value.split(needle).length - 1;
 }
 
 function assertStrictShaTriplet({ actualFileSha, catalogPromptSha, loaderPromptHash }) {
@@ -250,9 +244,12 @@ function buildFixturePlan(fixture) {
     message_draft_edit_metadata: null,
     aftercare_plan: [],
     change_conditions: changes,
-    review_timing: { when: "新しい事実が届いた時", trigger_fact_ids: ["F001"] },
-    material_unknowns: [],
-    model_generated_limitations: [],
+    review_timing: fixture.review_timing ?? {
+      when: "新しい事実が届いた時",
+      trigger_fact_ids: ["F001"],
+    },
+    material_unknowns: fixture.material_unknowns ?? [],
+    model_generated_limitations: fixture.model_generated_limitations ?? [],
   };
 }
 
@@ -317,9 +314,9 @@ await check("exact branch baseline parent source main and origin-main authority"
   assert.equal(git(["stash", "list"]), "");
 });
 
-await check("exact P5-R1 correction scope 11/11 updated only", () => {
+await check("exact P5-R2 correction scope 7/7 updated only", () => {
   assert.deepEqual(changedPaths(), exactScope);
-  assert.equal(updatedPaths.length, 11);
+  assert.equal(updatedPaths.length, 7);
   for (const relativePath of updatedPaths) {
     assert.equal(existsSync(absolute(relativePath)), true, relativePath);
     assert.equal(
@@ -484,6 +481,98 @@ await check("semantic disposition v5 version return contract and direct split ty
   }
 });
 
+await check("Product Outcome paths include exact customer prose and exclude internal metadata", () => {
+  const patterns =
+    semanticV5.SEMANTIC_DISPOSITION_V5_PRODUCT_OUTCOME_PATH_PATTERNS.map(
+      (pattern) => new RegExp(pattern, "u"),
+    );
+  const matches = (value) => patterns.some((pattern) => pattern.test(value));
+  for (const relativePath of [
+    "decision_plan.review_timing.when",
+    "$.decision_plan.material_unknowns[0].summary",
+    "decision_plan.material_unknowns[12].summary",
+    "$.decision_plan.model_generated_limitations[0]",
+    "decision_plan.model_generated_limitations[12]",
+  ]) {
+    assert.equal(matches(relativePath), true, relativePath);
+  }
+  for (const relativePath of [
+    "decision_plan.review_timing",
+    "$.decision_plan.review_timing.trigger_fact_ids",
+    "$.decision_plan.review_timing.trigger_fact_ids[0]",
+    "decision_plan.material_unknowns[0]",
+    "$.decision_plan.material_unknowns[0].unknown_code",
+    "$.decision_plan.material_unknowns[0].material_to",
+    "decision_plan.model_generated_limitations",
+  ]) {
+    assert.equal(matches(relativePath), false, relativePath);
+  }
+});
+
+await check("material style gates use PB-06 severity and path without detail keyword parsing", () => {
+  assert.deepEqual(
+    semanticV5.SEMANTIC_DISPOSITION_V5_STYLE_FINDING_CODES,
+    ["TEMPLATE_GENERICITY", "REPETITION"],
+  );
+  const fixtureById = (fixtureId) =>
+    fixtures.semantic_fixtures.find((fixture) => fixture.fixture_id === fixtureId);
+  const evaluate = (fixtureId, findingOverrides = {}) => {
+    const fixture = fixtureById(fixtureId);
+    assert.ok(fixture, fixtureId);
+    return semanticV5.evaluateSemanticFindingsV5({
+      validationOutput: {
+        semantic_checks: [{ ...fixture.finding, ...findingOverrides }],
+      },
+      decisionPlan: buildFixturePlan(fixture),
+      groundedReportContent: buildFixtureReport(fixture),
+    }).findingDispositions[0];
+  };
+  const materialTemplate = evaluate(
+    "material_template_genericity_product_unusable_blocks",
+  );
+  assert.equal(materialTemplate.disposition, "blocking");
+  assert.equal(materialTemplate.reason, "materially_unusable_product_style");
+  assert.equal(
+    evaluate("material_repetition_product_unusable_blocks").disposition,
+    "blocking",
+  );
+  assert.equal(
+    evaluate("material_template_genericity_product_unusable_blocks", {
+      severity: "critical",
+    }).disposition,
+    "blocking",
+  );
+  assert.equal(
+    evaluate("material_repetition_product_unusable_blocks", {
+      severity: "critical",
+    }).disposition,
+    "blocking",
+  );
+  assert.equal(
+    evaluate("review_timing_when_material_unsupported_certainty_blocks", {
+      severity: "critical",
+    }).disposition,
+    "blocking",
+  );
+  assert.equal(
+    evaluate("template_genericity_minor_nonblocking").disposition,
+    "nonblocking",
+  );
+  assert.equal(
+    evaluate("repetition_minor_default_nonblocking").disposition,
+    "nonblocking",
+  );
+  assert.equal(
+    evaluate("material_final_draft_brand_drift_blocks").disposition,
+    "blocking",
+  );
+  const source = text(semanticV5Path);
+  const styleStart = source.indexOf("if (styleFindingCodes.has(findingCode))");
+  const brandStart = source.indexOf('if (findingCode === "BRAND_TONE")');
+  assert.ok(styleStart >= 0 && brandStart > styleStart);
+  assert.doesNotMatch(source.slice(styleStart, brandStart), /finding\.detail/u);
+});
+
 let semanticFixturePasses = 0;
 await check("semantic disposition v5 exact materiality matrix fixtures", () => {
   for (const fixture of fixtures.semantic_fixtures) {
@@ -641,7 +730,11 @@ await check("evaluator v2 self-tests PASS at least 12/12", () => {
   result.results.forEach((item) => assert.equal(item.passed, true, item.name));
 });
 
-await check("required named fixtures 17/17 and total synthetic fixtures 19/19", () => {
+await check("required named fixtures 28/28 and total synthetic fixtures 28/28", () => {
+  assert.equal(
+    fixtures.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
+  );
   const fixtureIds = new Set([
     ...fixtures.semantic_fixtures.map((fixture) => fixture.fixture_id),
     ...fixtures.evaluator_fixtures.map((fixture) => fixture.fixture_id),
@@ -660,6 +753,17 @@ await check("required named fixtures 17/17 and total synthetic fixtures 19/19", 
     "material_final_draft_brand_drift_blocks",
     "exact_matched_path_recorded",
     "no_followup_boundary_finding_remains_blocking",
+    "material_unsupported_certainty_blocks",
+    "minor_unsupported_certainty_nonblocking",
+    "review_timing_when_material_unsupported_certainty_blocks",
+    "material_unknown_summary_material_unsupported_certainty_blocks",
+    "model_generated_limitation_material_unsupported_certainty_blocks",
+    "material_template_genericity_product_unusable_blocks",
+    "material_repetition_product_unusable_blocks",
+    "repetition_minor_default_nonblocking",
+    "review_timing_trigger_fact_ids_not_customer_prose",
+    "material_unknown_code_not_customer_prose",
+    "material_unknown_material_to_not_customer_prose",
     "negated_b必ずしも_reply_not_blocked",
     "certainty_denied_by_tohaienai_not_blocked",
     "certainty_denied_by_danteidekinai_not_blocked",
@@ -672,7 +776,7 @@ await check("required named fixtures 17/17 and total synthetic fixtures 19/19", 
     semanticFixturePasses + fixtures.evaluator_fixtures.length,
     fixtures.counts.total_synthetic_fixtures,
   );
-  assert.equal(fixtures.counts.total_synthetic_fixtures, 19);
+  assert.equal(fixtures.counts.total_synthetic_fixtures, 28);
 });
 
 const frozenResultsPath =
@@ -851,24 +955,22 @@ await check("synthetic mutation of each PB-06 SHA source is rejected", () => {
   assert.match(loaderSource, /hashText\(stagePrompt\) !== stage\.prompt_sha256/u);
 });
 
-await check("Catalog v12 and schema-catalog have exact one-literal baseline deltas", () => {
-  const baselineCatalog = normalizedText(textAt(baseline, catalogV12Path));
-  const currentCatalog = normalizedText(text(catalogV12Path));
-  assert.equal(countOccurrences(baselineCatalog, baselinePb06V4Hash), 1);
-  assert.equal(
-    currentCatalog,
-    baselineCatalog.replace(baselinePb06V4Hash, correctedPb06V4Hash),
-  );
-
-  const baselineSchemaCatalog = normalizedText(textAt(baseline, schemaCatalogPath));
-  const currentSchemaCatalog = normalizedText(text(schemaCatalogPath));
-  assert.equal(countOccurrences(baselineSchemaCatalog, baselinePb06V4Hash), 1);
-  assert.equal(
-    currentSchemaCatalog,
-    baselineSchemaCatalog.replace(baselinePb06V4Hash, correctedPb06V4Hash),
-  );
-  assertUnchangedFromBaseline(pipelinePath);
-  assertUnchangedFromBaseline("lib/assessment/runtime/service.ts");
+await check("Prompt Catalog loader evaluator Pipeline and Service unchanged from P5-R1", () => {
+  for (const relativePath of [
+    pb06V4Path,
+    catalogV12Path,
+    schemaCatalogPath,
+    evaluatorV2Path,
+    pipelinePath,
+    "lib/assessment/runtime/service.ts",
+  ]) {
+    assertUnchangedFromBaseline(relativePath);
+    assert.equal(
+      normalizedText(text(relativePath)),
+      normalizedText(textAt(baseline, relativePath)),
+      relativePath,
+    );
+  }
 });
 
 await check("v12 PB-05 and PB-06 exact prompts with unchanged schemas", () => {
@@ -963,11 +1065,15 @@ await check("service remains unchanged Active Runtime v4 and v12 inactive", () =
 await check("remediation contract exact blocking matrix and temporal boundaries", () => {
   const contract = json(contractPath);
   assert.equal(
+    contract.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
+  );
+  assert.equal(
     contract.status,
-    "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+    "product_outcome_disposition_gaps_corrected_pending_final_human_chatgpt_package_d_review",
   );
   assert.equal(contract.baseline, baseline);
-  assert.equal(contract.exact_scope, "11/11_updated_only");
+  assert.equal(contract.exact_scope, "7/7_updated_only");
   assert.equal(contract.blocking_matrix.FACT_FIDELITY.minor, "nonblocking");
   assert.equal(contract.blocking_matrix.FACT_FIDELITY.major, "blocking");
   assert.equal(contract.blocking_matrix.UNSUPPORTED_CERTAINTY.minor, "nonblocking");
@@ -977,6 +1083,16 @@ await check("remediation contract exact blocking matrix and temporal boundaries"
   );
   assert.equal(contract.blocking_matrix.TEMPLATE_GENERICITY.default, "nonblocking");
   assert.equal(contract.blocking_matrix.REPETITION.default, "nonblocking");
+  assert.equal(
+    contract.blocking_matrix.TEMPLATE_GENERICITY
+      .major_or_critical_materially_unusable_product_outcome,
+    "blocking",
+  );
+  assert.equal(
+    contract.blocking_matrix.REPETITION
+      .major_or_critical_materially_unusable_product_outcome,
+    "blocking",
+  );
   assert.equal(
     contract.blocking_matrix.current_action_contradiction.material,
     "blocking",
@@ -999,11 +1115,39 @@ await check("remediation contract exact blocking matrix and temporal boundaries"
       .absent_authority_required_when_irrelevant,
     false,
   );
+  assert.deepEqual(
+    contract.product_outcome_path_contract.customer_readable_source_paths_added,
+    [
+      "decision_plan.review_timing.when",
+      "decision_plan.material_unknowns[i].summary",
+      "decision_plan.model_generated_limitations[i]",
+    ],
+  );
+  assert.deepEqual(
+    contract.product_outcome_path_contract.excluded_internal_metadata_paths,
+    [
+      "decision_plan.review_timing.trigger_fact_ids",
+      "decision_plan.material_unknowns[i].unknown_code",
+      "decision_plan.material_unknowns[i].material_to",
+    ],
+  );
+  assert.equal(
+    contract.product_outcome_path_contract.natural_language_detail_keyword_matching,
+    false,
+  );
+  assert.equal(
+    contract.product_outcome_path_contract.ordinary_style_differences_blocking,
+    false,
+  );
+  assert.equal(
+    contract.product_outcome_path_contract.brand_tone_behavior_changed,
+    false,
+  );
   assert.deepEqual(contract.fixture_counts, {
-    required_named_fixtures: 17,
-    semantic_fixtures: 12,
+    required_named_fixtures: 28,
+    semantic_fixtures: 21,
     evaluator_fixtures: 7,
-    total_synthetic_fixtures: 19,
+    total_synthetic_fixtures: 28,
     frozen_e_r3_cases: 6,
     evaluator_self_tests_minimum: 12,
   });
@@ -1014,13 +1158,19 @@ await check("remediation contract exact blocking matrix and temporal boundaries"
 await check("capabilities exact pending-review status and fail-closed authority", () => {
   const capabilities = json(capabilitiesPath);
   assert.equal(
+    capabilities.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
+  );
+  assert.equal(
     capabilities.status,
-    "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+    "product_outcome_disposition_gaps_corrected_pending_final_human_chatgpt_package_d_review",
   );
   assert.equal(capabilities.baseline, baseline);
-  assert.equal(capabilities.exact_scope, "11/11_updated");
+  assert.equal(capabilities.exact_scope, "7/7_updated");
   for (const key of [
     "package_d_architecture_accepted",
+    "p5_r1_precision_correction_accepted",
+    "package_d_final_acceptance_withheld",
     "v12_integration_accepted_unchanged",
     "package_c_accepted",
     "pb06_v4_complete",
@@ -1039,6 +1189,14 @@ await check("capabilities exact pending-review status and fail-closed authority"
     "pb06_finding_detail_contract_corrected",
     "pb06_catalog_loader_sha_synchronized",
     "genuine_causal_defect_still_blocking",
+    "review_timing_when_customer_path_covered",
+    "material_unknown_summary_customer_path_covered",
+    "model_generated_limitation_customer_path_covered",
+    "internal_ids_and_metadata_excluded_from_customer_prose",
+    "materially_unusable_template_genericity_blocking",
+    "materially_unusable_repetition_blocking",
+    "ordinary_style_nonblocking_preserved",
+    "brand_tone_behavior_unchanged",
   ]) {
     assert.equal(capabilities[key], true, key);
   }
@@ -1052,6 +1210,7 @@ await check("capabilities exact pending-review status and fail-closed authority"
     "r4_authorized",
     "c2_authorized",
     "final_jpy980_readiness_established",
+    "final_human_chatgpt_package_d_review_complete",
   ]) {
     assert.equal(capabilities[key], false, key);
   }
@@ -1060,13 +1219,17 @@ await check("capabilities exact pending-review status and fail-closed authority"
 await check("offline results exact fixtures regression and no Provider-quality claim", () => {
   const results = json(offlineResultsPath);
   assert.equal(results.status, "PASS");
+  assert.equal(
+    results.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
+  );
   assert.equal(results.baseline, baseline);
-  assert.equal(results.exact_scope, "11/11_updated");
+  assert.equal(results.exact_scope, "7/7_updated");
   assert.equal(results.pb06_v4.sha256_utf8_lf, expectedHashes.pb06V4);
-  assert.equal(results.fixture_results.required_named_fixtures, "17/17 PASS");
+  assert.equal(results.fixture_results.required_named_fixtures, "28/28 PASS");
   assert.equal(
     results.fixture_results.synthetic_semantic_and_evaluator_fixtures,
-    "19/19 PASS",
+    "28/28 PASS",
   );
   assert.equal(results.fixture_results.frozen_e_r3_cases, "6/6 PASS");
   assert.equal(results.frozen_e_r3_successor_adjudication.successor_machine_verdict, "FAIL");
@@ -1086,21 +1249,28 @@ await check("offline results exact fixtures regression and no Provider-quality c
   assert.equal(results.deterministic_evaluator_v2.case_id_classification, false);
   assert.equal(results.deterministic_evaluator_v2.self_tests, "12/12 PASS");
   assert.equal(results.runtime_catalog_v12.pb06_catalog_loader_sha_three_way_equal, true);
+  assert.equal(results.runtime_catalog_v12.baseline_delta, "UNCHANGED from P5-R1 baseline");
+  assert.equal(results.regression.runtime_stage_catalog_v12, "UNCHANGED");
+  assert.equal(results.regression.schema_catalog_ts, "UNCHANGED");
   assert.equal(results.regression.pipeline_ts, "UNCHANGED");
   assert.equal(results.authority.final_jpy980_readiness_established, false);
 });
 
 await check("review document records technical and plain-language authority limits", () => {
   const source = text(reviewPath);
+  assert.match(source, /P5-R2 Review/u);
   assert.match(source, /## Technical result/u);
   assert.match(source, /## Plain-language summary/u);
+  assert.match(source, /P5-R1 precision correction is accepted/u);
+  assert.match(source, /decision_plan\.review_timing\.when/u);
+  assert.match(source, /decision_plan\.material_unknowns\[i\]\.summary/u);
+  assert.match(source, /decision_plan\.model_generated_limitations\[i\]/u);
+  assert.match(source, /28\/28 PASS/u);
   assert.match(source, /Frozen Evidence Commit B remains read-only/u);
   assert.match(source, /original machine verdict remains `FAIL`/u);
-  assert.match(source, /LUNA\/Provider は実際に動かしていません/u);
-  assert.match(source, /未来条件の例外/u);
-  assert.match(source, /必ずしも返信するとは限らない/u);
-  assert.match(source, /最終Package D review/u);
-  assert.match(source, /Runtime activation、Provider rerun、Package E\/F、R4、C2/u);
+  assert.match(source, /Provider \/ DB \/ Supabase は 0 \/ 0 \/ 0/u);
+  assert.match(source, /final Package D acceptance and JPY980 readiness are not established/u);
+  assert.match(source, /Provider rerun, Active Runtime activation/u);
 });
 
 await check("no Provider network DB Supabase runner retry repair or fallback execution", () => {
@@ -1150,9 +1320,9 @@ if (failed.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(`\nEvaluator disposition verifier: PASS ${checks.length}/${checks.length}`);
-  console.log("Exact P5-R1 correction scope: 11/11 updated only");
+  console.log("Exact P5-R2 correction scope: 7/7 updated only");
   console.log(`Semantic fixtures: ${semanticFixturePasses}/${fixtures.counts.semantic_fixtures}`);
-  console.log("Required named fixtures: 17/17; total synthetic fixtures: 19/19");
+  console.log("Required named fixtures: 28/28; total synthetic fixtures: 28/28");
   console.log(
     `Evaluator v2 self-tests: ${evaluatorSelfTests.passed}/${evaluatorSelfTests.total}`,
   );

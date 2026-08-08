@@ -1,10 +1,10 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
-  "title": "Temporal exception narrowing and negated-certainty evaluator correction",
-  "status": "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
-  "baseline": "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74",
-  "exact_scope": "11/11_updated_only",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R2",
+  "title": "Product Outcome path completeness and materially unusable style gates",
+  "status": "product_outcome_disposition_gaps_corrected_pending_final_human_chatgpt_package_d_review",
+  "baseline": "2f8b8fa6ce8e54117f25640809240521a39b1b4d",
+  "exact_scope": "7/7_updated_only",
   "predecessors": {
     "runtime_catalog": "runtime-stage-catalog-v11.0.0",
     "pb05_prompt": {
@@ -55,14 +55,23 @@
       "minor": "nonblocking",
       "major_material_customer_assertion": "blocking",
       "critical_material_customer_assertion": "blocking",
+      "customer_readable_split_decision_paths": [
+        "decision_plan.review_timing.when",
+        "decision_plan.material_unknowns[i].summary",
+        "decision_plan.model_generated_limitations[i]"
+      ],
       "code_name_only_blocking_forbidden": true,
       "certainty_word_only_blocking_forbidden": true
     },
     "TEMPLATE_GENERICITY": {
-      "default": "nonblocking"
+      "default": "nonblocking",
+      "minor": "nonblocking",
+      "major_or_critical_materially_unusable_product_outcome": "blocking"
     },
     "REPETITION": {
-      "default": "nonblocking"
+      "default": "nonblocking",
+      "minor": "nonblocking",
+      "major_or_critical_materially_unusable_product_outcome": "blocking"
     },
     "BRAND_TONE": {
       "material_final_draft_major_or_critical": "blocking",
@@ -119,6 +128,27 @@
     "enduring_contact_constraint_exemption_forbidden": true,
     "current_action_exemption_forbidden": true
   },
+  "product_outcome_path_contract": {
+    "customer_readable_source_paths_added": [
+      "decision_plan.review_timing.when",
+      "decision_plan.material_unknowns[i].summary",
+      "decision_plan.model_generated_limitations[i]"
+    ],
+    "customer_projection_targets": [
+      "CustomerAssessmentProjectionV1.reassessment.when",
+      "CustomerAssessmentExperienceProjectionV2.materialUnknowns",
+      "CustomerAssessmentExperienceProjectionV2.consultationLimitations"
+    ],
+    "excluded_internal_metadata_paths": [
+      "decision_plan.review_timing.trigger_fact_ids",
+      "decision_plan.material_unknowns[i].unknown_code",
+      "decision_plan.material_unknowns[i].material_to"
+    ],
+    "style_materiality_signal": "PB-06 major_or_critical severity on a Product Outcome path",
+    "natural_language_detail_keyword_matching": false,
+    "ordinary_style_differences_blocking": false,
+    "brand_tone_behavior_changed": false
+  },
   "finding_detail_contract": {
     "exact_json_path_required": true,
     "broad_parent_path_for_scalar_or_string_forbidden": true,
@@ -133,10 +163,10 @@
     }
   },
   "fixture_counts": {
-    "required_named_fixtures": 17,
-    "semantic_fixtures": 12,
+    "required_named_fixtures": 28,
+    "semantic_fixtures": 21,
     "evaluator_fixtures": 7,
-    "total_synthetic_fixtures": 19,
+    "total_synthetic_fixtures": 28,
     "frozen_e_r3_cases": 6,
     "evaluator_self_tests_minimum": 12
   },
