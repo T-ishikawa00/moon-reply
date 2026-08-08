@@ -6,22 +6,24 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1";
-const baseline = "eb76dd591fd52ba344c9114c85b8b63187664e9b";
-const expectedParent = "df3c707ec7f567120d28f0ce164ef42916e61c63";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R2";
+const baseline = "f2efc64009ae1afd8343c1383db12cccf827ed23";
+const expectedParent = "eb76dd591fd52ba344c9114c85b8b63187664e9b";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r2-contract-alignment";
 const expectedSourceBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity";
 const evidenceCommitB = "9e9bf7d90740c1d00bfc4e282c85906744cd736c";
 const expectedV3Blob = "8d0242ee120238c488b80b310bf47e13cea617ba";
 const expectedV3Hash =
   "3dfdf47d9df45bdde344e57d5481dcac247095736eed8cd1919f2e7547d8b083";
-const expectedV4BaselineHash =
+const expectedV4OriginalBaselineHash =
   "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d";
-const expectedV4CorrectedHash =
+const expectedV4BaselineHash =
   "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768";
+const expectedV4CorrectedHash =
+  "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f";
 const expectedGroundingV4Hash =
   "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8";
 const maxBuffer = 32 * 1024 * 1024;
@@ -54,6 +56,19 @@ const exactScope = [
   capabilitiesPath,
   verifierPath,
   reviewPath,
+];
+
+const exactPb05Inputs = [
+  "base_structured_intake",
+  "candidate_envelope",
+  "decision_plan",
+  "contact_constraint_policy",
+  "action_context",
+];
+
+const unavailablePolicySafetyInputs = [
+  "decision_policy_result",
+  "aggregate_safety_result",
 ];
 
 const r2aR1Scope = [
@@ -346,9 +361,9 @@ function assertPredecessorParity(source) {
     application_owned_change_condition_grounding: [
       "relationship_summary",
       "change_condition_commentary",
-      "groundReportContentV4",
+      "groundSplitReportContentV4",
       "groundChangeConditionCommentaryV3",
-      "post-grounding schema validation",
+      "post-grounding `validateStageOutput` for PB-05",
       "does not wire that sequence",
     ],
     concrete_action_and_reassessment: [
@@ -384,6 +399,79 @@ function assertPredecessorParity(source) {
   assert.match(paritySection, /time wording remains governed by Base Structured Intake and `action_context`/u);
 }
 
+function assertContractAlignmentPrompt(source) {
+  const authoritySection = sectionText(
+    source,
+    responsibilityHeadings.get("factual_authority"),
+  );
+  assert.match(
+    authoritySection,
+    /PB-05 does not directly receive `decision_policy_result`, `aggregate_safety_result`, a PB-02 result, a PB-03 result, or a PB-06 result\./u,
+  );
+  assert.equal(
+    (source.match(/`decision_policy_result`/gu) ?? []).length,
+    1,
+  );
+  assert.equal(
+    (source.match(/`aggregate_safety_result`/gu) ?? []).length,
+    1,
+  );
+
+  const contactSection = sectionText(
+    source,
+    responsibilityHeadings.get("contact_and_safety_integrity"),
+  );
+  for (const phrase of [
+    "validated selected Decision in `decision_plan`",
+    "`contact_constraint_policy`",
+    "trusted `action_context`",
+    "validated Decision Plan and Application-owned contact constraint already embody the upstream Policy and Safety decisions relevant to PB-05",
+    "do not recompute, reinterpret, or override upstream Policy or Safety",
+    "Do not claim direct access to Policy or Safety objects that are not inputs.",
+  ]) {
+    assert.ok(contactSection.includes(phrase), phrase);
+  }
+  assert.doesNotMatch(
+    contactSection,
+    /selected Decision, Decision Policy, and the Safety outcome/u,
+  );
+
+  const observedSection = sectionText(
+    source,
+    "## observed_fact_commentary Grounding contract",
+  );
+  for (const phrase of [
+    "`fact_id` must appear in `decision_plan.decision_reason_fact_ids`",
+    "`fact_id` values must be unique within `observed_fact_commentary`",
+    "do not emit commentary for an unselected Base fact",
+    "do not duplicate one `fact_id` to create more prose",
+    "preserve observed fact and interpretation separation",
+    "commentary text must not expose internal IDs to the customer",
+    "Zero `observed_fact_commentary` items is valid",
+    "Do not require commentary for every `decision_reason_fact_id`",
+    "fail-closed for duplicate or unselected fact IDs",
+  ]) {
+    assert.ok(observedSection.includes(phrase), phrase);
+  }
+
+  const groundingSubsection = subsectionText(
+    sectionText(source, "## PB-05 v3 predecessor parity"),
+    "### E. Application-owned grounding",
+  );
+  const orderedSequence = [
+    "1. `groundSplitReportContentV4`;",
+    "2. `groundChangeConditionCommentaryV3`; and",
+    "3. post-grounding `validateStageOutput` for PB-05.",
+  ];
+  let previousIndex = -1;
+  for (const item of orderedSequence) {
+    const index = groundingSubsection.indexOf(item);
+    assert.ok(index > previousIndex, item);
+    previousIndex = index;
+  }
+  assert.doesNotMatch(source, /groundReportContentV4/u);
+}
+
 function assertPromptContract(source, fixtureCatalog) {
   assert.match(
     source,
@@ -403,13 +491,7 @@ function assertPromptContract(source, fixtureCatalog) {
   const inputNames = [...inputBlock.matchAll(/^- `([^`]+)`$/gmu)].map(
     (match) => match[1],
   );
-  assert.deepEqual(inputNames, [
-    "base_structured_intake",
-    "candidate_envelope",
-    "decision_plan",
-    "contact_constraint_policy",
-    "action_context",
-  ]);
+  assert.deepEqual(inputNames, exactPb05Inputs);
   for (const phrase of [
     "Base Structured Intake owns facts, chronology, explicit user emotion, explicit message text, uncertainty, and boundaries.",
     "Decision Plan owns the selected direction, current action, reassessment conditions, and final draft.",
@@ -471,7 +553,7 @@ function assertPromptContract(source, fixtureCatalog) {
       "Never reconstruct or quote raw Candidate text.",
     ],
     contact_and_safety_integrity: [
-      "Respect `contact_constraint_policy`",
+      "Respect the validated selected Decision in `decision_plan`",
       "Never weaken a Safety or boundary gate.",
     ],
     action_context_authority: [
@@ -509,6 +591,7 @@ function assertPromptContract(source, fixtureCatalog) {
   }
 
   assertPredecessorParity(source);
+  assertContractAlignmentPrompt(source);
 
   const normalized = markdownExampleText(source);
   for (const fixture of fixtureCatalog.pairs) {
@@ -646,6 +729,7 @@ const promptSource = strictText(promptPath);
 const groundingSource = strictText(groundingPath);
 const wordingCatalog =
   fixtures.fixture_catalog.prompt_writing_contract_examples;
+const alignmentCatalog = fixtures.fixture_catalog.contract_alignment_cases;
 const groundingCatalog =
   fixtures.fixture_catalog.deterministic_grounding_behavior;
 
@@ -662,7 +746,7 @@ async function check(name, run) {
   }
 }
 
-await check("exact R1 baseline branch parent source main and origin-main authority", () => {
+await check("exact R2 baseline branch parent source main and origin-main authority", () => {
   const head = gitText(["rev-parse", "HEAD"]);
   assert.equal(gitText(["branch", "--show-current"]), expectedBranch);
   assert.equal(gitText(["rev-parse", baseline]), baseline);
@@ -728,13 +812,45 @@ await check("Prompt v4 exact version schema and input authority", () => {
   assertPromptContract(promptSource, wordingCatalog);
   assert.equal(contract.prompt_contract.version, "v4.0.0");
   assert.equal(contract.prompt_contract.output_schema, "report-content-v2.schema.json");
-  assert.deepEqual(contract.prompt_contract.exact_future_inputs, [
-    "base_structured_intake",
-    "candidate_envelope",
-    "decision_plan",
-    "contact_constraint_policy",
-    "action_context",
-  ]);
+  assert.deepEqual(contract.prompt_contract.exact_future_inputs, exactPb05Inputs);
+  for (const prohibited of [
+    ...unavailablePolicySafetyInputs,
+    "pb02_result",
+    "pb03_result",
+    "pb06_result",
+  ]) {
+    assert.equal(
+      contract.prompt_contract.prohibited_inputs.includes(prohibited),
+      true,
+      prohibited,
+    );
+  }
+  assert.deepEqual(contract.prompt_contract.input_authority_alignment, {
+    direct_input_count: 5,
+    unavailable_direct_inputs: [
+      ...unavailablePolicySafetyInputs,
+      "pb02_result",
+      "pb03_result",
+      "pb06_result",
+    ],
+    validated_decision_plan_embodies_relevant_upstream_decisions: true,
+    application_owned_contact_constraint_embodies_relevant_upstream_decisions:
+      true,
+    trusted_action_context_respected: true,
+    recompute_reinterpret_or_override_upstream_policy_or_safety: false,
+    claim_direct_access_to_unavailable_policy_or_safety_objects: false,
+  });
+  assert.deepEqual(contract.prompt_contract.observed_fact_commentary_rules, {
+    fact_id_source: "decision_plan.decision_reason_fact_ids",
+    fact_ids_unique_within_observed_fact_commentary: true,
+    unselected_base_fact_commentary_allowed: false,
+    duplicate_fact_id_for_more_prose_allowed: false,
+    observed_fact_and_interpretation_separated: true,
+    internal_fact_ids_exposed_in_customer_commentary: false,
+    zero_items_permitted_when_not_useful_and_schema_permits: true,
+    every_decision_reason_fact_id_required: false,
+    grounding_v4_duplicate_or_unselected_ids_fail_closed: true,
+  });
 });
 
 await check("actual v11 PB-05 predecessor is protected v3 with exact version path and hashes", () => {
@@ -762,7 +878,10 @@ await check("actual v11 PB-05 predecessor is protected v3 with exact version pat
     prompt_git_blob_sha: expectedV3Blob,
     prompt_sha256_canonical_utf8_lf: expectedV3Hash,
     successor_prompt_path: promptPath,
-    v4_baseline_sha256_canonical_utf8_lf: expectedV4BaselineHash,
+    v4_original_baseline_sha256_canonical_utf8_lf:
+      expectedV4OriginalBaselineHash,
+    v4_r1_corrected_sha256_canonical_utf8_lf: expectedV4BaselineHash,
+    v4_r2_baseline_sha256_canonical_utf8_lf: expectedV4BaselineHash,
     v4_corrected_sha256_canonical_utf8_lf: expectedV4CorrectedHash,
     v2_protected_historical_authority: true,
     v3_is_immediate_predecessor: true,
@@ -837,7 +956,8 @@ await check("predecessor parity matrix is exact and every supersession has a rea
   assert.deepEqual(contract.predecessor_parity.mutation_verification, {
     existing_v4_responsibility_mutations_rejected: "11/11",
     predecessor_parity_mutations_rejected: "7/7",
-    total_independently_recorded: "18/18",
+    integration_alignment_mutations_rejected: "3/3",
+    total_independently_recorded: "21/21",
     provider_quality_proof: false,
   });
 });
@@ -867,6 +987,41 @@ await check("predecessor parity self-mutation rejects every missing responsibili
   }
 });
 
+await check("integration alignment self-mutations reject every authority defect 3/3", () => {
+  const mutations = [
+    {
+      name: "nonexistent grounding export",
+      source: promptSource.replaceAll(
+        "groundSplitReportContentV4",
+        "groundReportContentV4",
+      ),
+    },
+    {
+      name: "missing exact input-authority restriction",
+      source: promptSource.replace(
+        " PB-05 does not directly receive `decision_policy_result`, `aggregate_safety_result`, a PB-02 result, a PB-03 result, or a PB-06 result.",
+        "",
+      ),
+    },
+    {
+      name: "missing observed fact-ID subset and uniqueness rules",
+      source: withoutSection(
+        promptSource,
+        "## observed_fact_commentary Grounding contract",
+      ),
+    },
+  ];
+  assert.equal(mutations.length, 3);
+  for (const mutation of mutations) {
+    assert.notEqual(mutation.source, promptSource, mutation.name);
+    assert.throws(
+      () => assertPromptContract(mutation.source, wordingCatalog),
+      undefined,
+      mutation.name,
+    );
+  }
+});
+
 await check("wording fixture catalog exact positive 10 negative 10", () => {
   assert.equal(wordingCatalog.authority, "synthetic_contract_examples_only");
   assert.equal(wordingCatalog.provider_compliance_proven, false);
@@ -891,6 +1046,77 @@ await check("wording fixture catalog exact positive 10 negative 10", () => {
   assert.equal(fixtures.counts.negative_wording_fixtures, 10);
   assert.equal(contract.fixture_authority.positive_wording_fixtures, 10);
   assert.equal(contract.fixture_authority.negative_wording_fixtures, 10);
+});
+
+await check("contract alignment cases pass 3/3 and reject 3/3 offline", () => {
+  assert.equal(alignmentCatalog.authority, "synthetic_offline_contract_checks");
+  assert.equal(alignmentCatalog.provider_compliance_proven, false);
+  assert.deepEqual(
+    alignmentCatalog.positive.map((item) => item.case_id),
+    ["CA-P01", "CA-P02", "CA-P03"],
+  );
+  assert.deepEqual(
+    alignmentCatalog.negative.map((item) => item.case_id),
+    ["CA-N01", "CA-N02", "CA-N03"],
+  );
+  assert.equal(
+    alignmentCatalog.positive.every((item) => item.expected === "PASS"),
+    true,
+  );
+  assert.equal(
+    alignmentCatalog.negative.every((item) => item.expected === "REJECT"),
+    true,
+  );
+
+  const [exportCase, inputCase, factCase] = alignmentCatalog.positive;
+  assert.equal(exportCase.future_integration_export, "groundSplitReportContentV4");
+  assert.match(
+    groundingSource,
+    /export function groundSplitReportContentV4\(/u,
+  );
+  assert.deepEqual(inputCase.direct_inputs, exactPb05Inputs);
+  assert.deepEqual(
+    inputCase.unavailable_direct_inputs,
+    unavailablePolicySafetyInputs,
+  );
+  const selectedFactIds = new Set(factCase.decision_reason_fact_ids);
+  const observedFactIds = factCase.observed_fact_commentary.map(
+    (item) => item.fact_id,
+  );
+  assert.equal(new Set(observedFactIds).size, observedFactIds.length);
+  assert.equal(observedFactIds.every((factId) => selectedFactIds.has(factId)), true);
+
+  const [badExportCase, badInputCase, badFactCase] = alignmentCatalog.negative;
+  assert.equal(badExportCase.future_integration_export, "groundReportContentV4");
+  assert.doesNotMatch(groundingSource, /export function groundReportContentV4\(/u);
+  assert.deepEqual(
+    badInputCase.claimed_direct_inputs,
+    unavailablePolicySafetyInputs,
+  );
+  assert.equal(
+    badInputCase.claimed_direct_inputs.some((name) =>
+      exactPb05Inputs.includes(name),
+    ),
+    false,
+  );
+  const permittedFactIds = badFactCase.permitted_observed_fact_ids;
+  const allowedFactIds = new Set(badFactCase.decision_reason_fact_ids);
+  assert.equal(new Set(permittedFactIds).size < permittedFactIds.length, true);
+  assert.equal(permittedFactIds.some((factId) => !allowedFactIds.has(factId)), true);
+
+  assert.deepEqual(contract.contract_alignment_cases, {
+    fixture_section: "fixture_catalog.contract_alignment_cases",
+    positive_case_ids: ["CA-P01", "CA-P02", "CA-P03"],
+    negative_case_ids: ["CA-N01", "CA-N02", "CA-N03"],
+    positive_results: "3/3 PASS",
+    negative_results: "3/3 REJECT",
+    offline_contract_checks_only: true,
+    provider_compliance_proven: false,
+  });
+  assert.equal(fixtures.counts.positive_contract_alignment_cases, 3);
+  assert.equal(fixtures.counts.negative_contract_alignment_cases, 3);
+  assert.equal(contract.fixture_authority.positive_contract_alignment_cases, 3);
+  assert.equal(contract.fixture_authority.negative_contract_alignment_cases, 3);
 });
 
 await check("causal chronology explicit-fact and anxiety-safe contracts are substantive", () => {
@@ -972,8 +1198,20 @@ await check("Prompt baseline and corrected hashes are fixed and Grounding v4 is 
   assert.equal(gitSucceeds(["diff", "--quiet", baseline, "--", groundingPath]), true);
   assert.equal(contract.prompt_contract.sha256_canonical_utf8_lf, promptHash);
   assert.equal(
-    contract.predecessor_authority.v4_baseline_sha256_canonical_utf8_lf,
+    contract.predecessor_authority.v4_original_baseline_sha256_canonical_utf8_lf,
+    expectedV4OriginalBaselineHash,
+  );
+  assert.equal(
+    contract.predecessor_authority.v4_r1_corrected_sha256_canonical_utf8_lf,
     expectedV4BaselineHash,
+  );
+  assert.equal(
+    contract.predecessor_authority.v4_r2_baseline_sha256_canonical_utf8_lf,
+    expectedV4BaselineHash,
+  );
+  assert.equal(
+    contract.predecessor_authority.v4_corrected_sha256_canonical_utf8_lf,
+    expectedV4CorrectedHash,
   );
   assert.equal(contract.grounding_contract.sha256_canonical_utf8_lf, groundingHash);
   assert.equal(capabilities.pb05_v4_baseline_sha256, expectedV4BaselineHash);
@@ -1004,6 +1242,19 @@ await check("grounding v4 module exports version functions and file-local safe e
   );
   assert.equal(typeof groundingV4.buildRelationshipSummaryV4, "function");
   assert.equal(typeof groundingV4.groundSplitReportContentV4, "function");
+  assert.equal(Object.hasOwn(groundingV4, "groundReportContentV4"), false);
+  assert.deepEqual(contract.grounding_contract.exports, [
+    "buildRelationshipSummaryV4",
+    "groundSplitReportContentV4",
+  ]);
+  assert.deepEqual(contract.grounding_contract.not_exported, [
+    "groundReportContentV4",
+  ]);
+  assert.deepEqual(contract.grounding_contract.future_integration_sequence, [
+    "groundSplitReportContentV4",
+    "groundChangeConditionCommentaryV3",
+    "post-grounding validateStageOutput for PB-05",
+  ]);
 });
 
 await check("grounding source owns only deterministic fields and no semantic rewriting", () => {
@@ -1413,6 +1664,7 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
     "r2_customer_note_ui_accepted",
     "pb05_v3_actual_predecessor_recorded",
     "pb05_v3_parity_complete",
+    "pb05_v3_parity_accepted",
     "no_followup_message_parity",
     "business_only_parity",
     "selected_request_coverage_parity",
@@ -1423,6 +1675,9 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
     "existing_v4_precision_rules_preserved",
     "pb05_v4_prompt_complete",
     "report_grounding_v4_complete",
+    "grounding_export_identity_aligned",
+    "pb05_exact_input_authority_aligned",
+    "observed_fact_commentary_grounding_contract_aligned",
     "unsupported_causality_contract_complete",
     "chronology_integrity_contract_complete",
     "explicit_fact_inference_separation_complete",
@@ -1438,9 +1693,13 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
   assert.equal(capabilities.exact_scope_updated, "7/7");
   assert.equal(capabilities.positive_wording_fixtures, 10);
   assert.equal(capabilities.negative_wording_fixtures, 10);
+  assert.equal(capabilities.contract_alignment_positive_cases, 3);
+  assert.equal(capabilities.contract_alignment_negative_cases, 3);
   assert.equal(capabilities.existing_responsibility_mutations_rejected, 11);
   assert.equal(capabilities.predecessor_parity_mutations_rejected, 7);
-  assert.equal(capabilities.total_prompt_mutations_rejected, 18);
+  assert.equal(capabilities.integration_alignment_mutations_rejected, 3);
+  assert.equal(capabilities.prompt_mutations_total_rejected, 21);
+  assert.equal(capabilities.total_prompt_mutations_rejected, 21);
   assert.equal(capabilities.positive_grounding_fixtures, 8);
   assert.equal(capabilities.negative_grounding_fixtures, 6);
   const expectedFalse = [
@@ -1460,11 +1719,11 @@ await check("capabilities remain prompt-only and Package D onward unauthorized",
   for (const key of expectedFalse) assert.equal(capabilities[key], false, key);
   assert.equal(
     capabilities.status,
-    "pb05_precision_writing_v3_parity_corrected_pending_human_chatgpt_review",
+    "pb05_precision_writing_contract_aligned_pending_human_chatgpt_review",
   );
   assert.equal(
     capabilities.next_action,
-    "human_chatgpt_review_of_pb05_v3_parity_correction",
+    "human_chatgpt_review_of_pb05_contract_alignment",
   );
 });
 
@@ -1484,10 +1743,34 @@ await check("offline results establish Prompt contract not Provider quality", ()
   assert.equal(offlineResults.prompt.predecessor_parity_responsibilities, "7/7 PASS");
   assert.equal(offlineResults.prompt.existing_responsibility_mutation_rejections, "11/11 PASS");
   assert.equal(offlineResults.prompt.predecessor_parity_mutation_rejections, "7/7 PASS");
-  assert.equal(offlineResults.prompt.total_independent_mutation_rejections, "18/18 PASS");
+  assert.equal(offlineResults.prompt.integration_alignment_mutation_rejections, "3/3 PASS");
+  assert.equal(offlineResults.prompt.total_independent_mutation_rejections, "21/21 PASS");
+  assert.deepEqual(offlineResults.contract_alignment_results, {
+    grounding_export_identity: "groundSplitReportContentV4",
+    nonexistent_grounding_export_absent: "groundReportContentV4",
+    future_integration_sequence: [
+      "groundSplitReportContentV4",
+      "groundChangeConditionCommentaryV3",
+      "post-grounding validateStageOutput for PB-05",
+    ],
+    exact_pb05_inputs: exactPb05Inputs,
+    decision_policy_result_direct_input: false,
+    aggregate_safety_result_direct_input: false,
+    upstream_policy_or_safety_recomputed_reinterpreted_or_overridden: false,
+    observed_fact_ids_subset_of_decision_reason_fact_ids: true,
+    observed_fact_ids_unique: true,
+    zero_observed_fact_commentary_permitted: true,
+    all_decision_reason_fact_ids_required: false,
+    positive_cases: "3/3 PASS",
+    negative_cases: "3/3 REJECT",
+    offline_contract_checks_only: true,
+    provider_compliance_proven: false,
+  });
   assert.deepEqual(offlineResults.fixture_counts, {
     positive_wording: 10,
     negative_wording: 10,
+    positive_contract_alignment: 3,
+    negative_contract_alignment: 3,
     positive_grounding: 8,
     negative_grounding: 6,
     frozen_evidence_regression: 6,
@@ -1501,7 +1784,7 @@ await check("offline results establish Prompt contract not Provider quality", ()
 await check("review document records exact outcome and authority limits", () => {
   const review = strictText(reviewPath);
   for (const phrase of [
-    "PB-05 v3 Predecessor Parity Correction",
+    "PB-05 Grounding Name, Input Authority, and Fact-ID Contract Alignment",
     "PB-05 Directional Report — Developer Contract v4.0.0",
     "m2-p4-report-grounding-v4",
     "Exact correction scope: `7/7` updated",
@@ -1514,6 +1797,17 @@ await check("review document records exact outcome and authority limits", () => 
     "machine-readable matrix is `16/16` complete",
     "Positive / negative wording fixtures: `10 / 10`",
     "predecessor parity mutations: `7/7 REJECT`",
+    "integration-alignment mutations: `3/3 REJECT`",
+    "total: `21/21 REJECT`",
+    "groundSplitReportContentV4",
+    "groundChangeConditionCommentaryV3",
+    "post-grounding `validateStageOutput` for PB-05",
+    "exactly five inputs",
+    "does not directly receive `decision_policy_result`, `aggregate_safety_result`",
+    "Every `observed_fact_commentary.fact_id` must be unique",
+    "positive: `CA-P01`",
+    "`3/3 PASS`",
+    "`3/3 REJECT`",
     "Positive / negative grounding fixtures: `8 / 6`",
     "Provider / DB / Supabase: `0 / 0 / 0`",
     "Provider quality established: `false`",
@@ -1556,8 +1850,10 @@ console.log(
 console.log("Exact correction scope: 7/7 updated");
 console.log("Prompt v4 responsibility mutations rejected: 11/11");
 console.log("PB-05 v3 predecessor parity mutations rejected: 7/7");
-console.log("Total Prompt responsibility mutations rejected: 18/18");
+console.log("Integration alignment mutations rejected: 3/3");
+console.log("Total Prompt responsibility mutations rejected: 21/21");
 console.log("Wording fixtures: positive 10/10; negative 10/10");
+console.log("Contract alignment cases: positive 3/3; negative 3/3 rejected");
 console.log("Grounding fixtures: positive 8/8; negative 6/6 rejected");
 console.log("Frozen E-R3 regression: 6/6; machine verdict unchanged FAIL");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");

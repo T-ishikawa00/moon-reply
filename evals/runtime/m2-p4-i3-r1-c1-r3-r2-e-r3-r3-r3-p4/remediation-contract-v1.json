@@ -1,14 +1,14 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-remediation-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1",
-  "title": "Package C — PB-05 v3 Predecessor Parity Correction",
-  "status": "pb05_precision_writing_v3_parity_corrected_pending_human_chatgpt_review",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r2-remediation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R2",
+  "title": "Package C — PB-05 Grounding Name, Input Authority, and Fact-ID Contract Alignment",
+  "status": "pb05_precision_writing_contract_aligned_pending_human_chatgpt_review",
   "mode": "inactive_offline_only",
-  "baseline": "eb76dd591fd52ba344c9114c85b8b63187664e9b",
-  "parent": "df3c707ec7f567120d28f0ce164ef42916e61c63",
+  "baseline": "f2efc64009ae1afd8343c1383db12cccf827ed23",
+  "parent": "eb76dd591fd52ba344c9114c85b8b63187664e9b",
   "main_baseline": "61e33a10e195fad17e253a6b9719217e1992f273",
-  "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-pb05-precision-writing",
-  "implementation_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity",
+  "source_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-pb05-v3-parity",
+  "implementation_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r2-contract-alignment",
   "exact_scope": [
     "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4/remediation-contract-v1.json",
@@ -40,7 +40,7 @@
     "path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
     "title": "PB-05 Directional Report — Developer Contract v4.0.0",
     "version": "v4.0.0",
-    "sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
+    "sha256_canonical_utf8_lf": "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f",
     "output_schema": "report-content-v2.schema.json",
     "versioned_successor": true,
     "existing_v2_mutated": false,
@@ -61,7 +61,12 @@
       "diagnostic_verdicts",
       "retry_data",
       "repair_data",
-      "fallback_data"
+      "fallback_data",
+      "decision_policy_result",
+      "aggregate_safety_result",
+      "pb02_result",
+      "pb03_result",
+      "pb06_result"
     ],
     "authority": {
       "base_structured_intake": [
@@ -87,6 +92,32 @@
         "trusted_action_context"
       ],
       "report_content": "explanation_only_no_new_facts"
+    },
+    "input_authority_alignment": {
+      "direct_input_count": 5,
+      "unavailable_direct_inputs": [
+        "decision_policy_result",
+        "aggregate_safety_result",
+        "pb02_result",
+        "pb03_result",
+        "pb06_result"
+      ],
+      "validated_decision_plan_embodies_relevant_upstream_decisions": true,
+      "application_owned_contact_constraint_embodies_relevant_upstream_decisions": true,
+      "trusted_action_context_respected": true,
+      "recompute_reinterpret_or_override_upstream_policy_or_safety": false,
+      "claim_direct_access_to_unavailable_policy_or_safety_objects": false
+    },
+    "observed_fact_commentary_rules": {
+      "fact_id_source": "decision_plan.decision_reason_fact_ids",
+      "fact_ids_unique_within_observed_fact_commentary": true,
+      "unselected_base_fact_commentary_allowed": false,
+      "duplicate_fact_id_for_more_prose_allowed": false,
+      "observed_fact_and_interpretation_separated": true,
+      "internal_fact_ids_exposed_in_customer_commentary": false,
+      "zero_items_permitted_when_not_useful_and_schema_permits": true,
+      "every_decision_reason_fact_id_required": false,
+      "grounding_v4_duplicate_or_unselected_ids_fail_closed": true
     },
     "hard_gate_order": [
       "safety",
@@ -145,8 +176,10 @@
     "prompt_git_blob_sha": "8d0242ee120238c488b80b310bf47e13cea617ba",
     "prompt_sha256_canonical_utf8_lf": "3dfdf47d9df45bdde344e57d5481dcac247095736eed8cd1919f2e7547d8b083",
     "successor_prompt_path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
-    "v4_baseline_sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
-    "v4_corrected_sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
+    "v4_original_baseline_sha256_canonical_utf8_lf": "f4f5dc2cc11f1afb64765961ad47838edf76f04daad20a0e6f5f3e72079d6a7d",
+    "v4_r1_corrected_sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
+    "v4_r2_baseline_sha256_canonical_utf8_lf": "0ed1f8e63d352c1599ab97686617d8a15c037fcb5c8c376df0ece0eb343ac768",
+    "v4_corrected_sha256_canonical_utf8_lf": "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f",
     "v2_protected_historical_authority": true,
     "v3_is_immediate_predecessor": true
   },
@@ -237,9 +270,27 @@
     "mutation_verification": {
       "existing_v4_responsibility_mutations_rejected": "11/11",
       "predecessor_parity_mutations_rejected": "7/7",
-      "total_independently_recorded": "18/18",
+      "integration_alignment_mutations_rejected": "3/3",
+      "total_independently_recorded": "21/21",
       "provider_quality_proof": false
     }
+  },
+  "contract_alignment_cases": {
+    "fixture_section": "fixture_catalog.contract_alignment_cases",
+    "positive_case_ids": [
+      "CA-P01",
+      "CA-P02",
+      "CA-P03"
+    ],
+    "negative_case_ids": [
+      "CA-N01",
+      "CA-N02",
+      "CA-N03"
+    ],
+    "positive_results": "3/3 PASS",
+    "negative_results": "3/3 REJECT",
+    "offline_contract_checks_only": true,
+    "provider_compliance_proven": false
   },
   "grounding_contract": {
     "path": "lib/assessment/runtime/report-grounding-v4.ts",
@@ -250,6 +301,14 @@
     "exports": [
       "buildRelationshipSummaryV4",
       "groundSplitReportContentV4"
+    ],
+    "not_exported": [
+      "groundReportContentV4"
+    ],
+    "future_integration_sequence": [
+      "groundSplitReportContentV4",
+      "groundChangeConditionCommentaryV3",
+      "post-grounding validateStageOutput for PB-05"
     ],
     "safe_error": "M2_REPORT_GROUNDING_INTEGRITY_FAILED",
     "owned_replacements": [
@@ -286,6 +345,8 @@
     "frozen_evidence_regression": "read_only_evidence_commit_b",
     "positive_wording_fixtures": 10,
     "negative_wording_fixtures": 10,
+    "positive_contract_alignment_cases": 3,
+    "negative_contract_alignment_cases": 3,
     "positive_grounding_fixtures": 8,
     "negative_grounding_fixtures": 6,
     "frozen_regression_cases": 6
@@ -360,5 +421,5 @@
     "git diff --check",
     "git status --short"
   ],
-  "next_action": "human_chatgpt_review_of_pb05_v3_parity_correction"
+  "next_action": "human_chatgpt_review_of_pb05_contract_alignment"
 }

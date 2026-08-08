@@ -12,7 +12,7 @@ Consume exactly these future inputs:
 - `contact_constraint_policy`
 - `action_context`
 
-Do not consume raw optional Candidate text, a raw merged request, Provider metadata, evaluator or oracle data, Product Owner ratings, diagnostic verdicts, or retry, repair, and fallback data.
+Do not consume raw optional Candidate text, a raw merged request, Provider metadata, evaluator or oracle data, Product Owner ratings, diagnostic verdicts, or retry, repair, and fallback data. PB-05 does not directly receive `decision_policy_result`, `aggregate_safety_result`, a PB-02 result, a PB-03 result, or a PB-06 result.
 
 Authority is deliberately split:
 
@@ -137,6 +137,19 @@ Every emitted paragraph must perform a distinct Product function.
 - `change_condition_commentary`: preserve an observable future condition and its future direction. Do not turn a future reassessment condition into a current command.
 - `closing_lines`: provide consultation-specific emotional closure and restore agency without a guarantee, repeated slogan, or full re-explanation.
 
+## observed_fact_commentary Grounding contract
+
+For every item in `observed_fact_commentary`:
+
+- `fact_id` must appear in `decision_plan.decision_reason_fact_ids`;
+- `fact_id` values must be unique within `observed_fact_commentary`;
+- do not emit commentary for an unselected Base fact;
+- do not duplicate one `fact_id` to create more prose;
+- preserve observed fact and interpretation separation; and
+- commentary text must not expose internal IDs to the customer; `fact_id` remains structured metadata only.
+
+Zero `observed_fact_commentary` items is valid when no additional commentary is useful and the Schema permits it. Do not require commentary for every `decision_reason_fact_id`. Application-owned Grounding v4 remains fail-closed for duplicate or unselected fact IDs.
+
 ## Density without repetition
 
 The defect to avoid is repeated meaning, not length itself. Do not repeat one conclusion across `cover_line`, `short_letter`, `decision_reason_summary`, `action_rationales`, `aftercare_commentary`, and `closing_lines`. Do not impose a character or paragraph target beyond the existing Schema. Do not fill optional arrays merely because the Schema permits them. Simple cases may be shorter; emotionally complex cases may be longer.
@@ -154,7 +167,9 @@ remains entirely owned by Decision Plan. Report prose may explain preservation b
 
 ## Contact and Safety integrity
 
-Respect `contact_constraint_policy`, the selected Decision, Decision Policy, and the Safety outcome. A no-contact or pause direction must not produce a draft, apology workaround, later-contact workaround, time-passage exception, hidden contact suggestion, or response request. Never weaken a Safety or boundary gate.
+Respect the validated selected Decision in `decision_plan`, `contact_constraint_policy`, and trusted `action_context`. The validated Decision Plan and Application-owned contact constraint already embody the upstream Policy and Safety decisions relevant to PB-05. Explain those bounded decisions, but do not recompute, reinterpret, or override upstream Policy or Safety. Do not claim direct access to Policy or Safety objects that are not inputs.
+
+A no-contact or pause direction must not produce a draft, apology workaround, later-contact workaround, time-passage exception, hidden contact suggestion, or response request. Never weaken a Safety or boundary gate.
 
 ## Action-context authority
 
@@ -199,9 +214,9 @@ Application-owned grounding remains authoritative for `relationship_summary` and
 
 A future Package D integration must preserve this order:
 
-1. `groundReportContentV4`;
+1. `groundSplitReportContentV4`;
 2. `groundChangeConditionCommentaryV3`; and
-3. post-grounding schema validation.
+3. post-grounding `validateStageOutput` for PB-05.
 
 This offline correction does not wire that sequence.
 

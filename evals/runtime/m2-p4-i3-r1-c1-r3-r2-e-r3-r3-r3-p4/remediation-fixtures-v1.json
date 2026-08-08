@@ -1,7 +1,7 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r1-remediation-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R1",
-  "title": "PB-05 v3 Predecessor Parity Correction Offline Fixture Catalog",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r2-remediation-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P4-R2",
+  "title": "PB-05 Grounding Name, Input Authority, and Fact-ID Contract Alignment Offline Fixture Catalog",
   "mode": "synthetic_only_plus_read_only_frozen_evidence",
   "fixture_catalog": {
     "prompt_writing_contract_examples": {
@@ -77,6 +77,83 @@
           "source_condition": "draft_message and message_impact are selected, and draft context is present.",
           "reject": "Draft context exists, but message-impact meaning is entirely omitted.",
           "accept": "Draft context is present, and outgoing softness, affection, pressure, or adjustment is addressed without predicting recipient reaction."
+        }
+      ]
+    },
+    "contract_alignment_cases": {
+      "authority": "synthetic_offline_contract_checks",
+      "provider_compliance_proven": false,
+      "positive": [
+        {
+          "case_id": "CA-P01",
+          "contract": "future_integration_export_identity",
+          "future_integration_export": "groundSplitReportContentV4",
+          "expected": "PASS"
+        },
+        {
+          "case_id": "CA-P02",
+          "contract": "exact_pb05_input_authority",
+          "direct_inputs": [
+            "base_structured_intake",
+            "candidate_envelope",
+            "decision_plan",
+            "contact_constraint_policy",
+            "action_context"
+          ],
+          "unavailable_direct_inputs": [
+            "decision_policy_result",
+            "aggregate_safety_result"
+          ],
+          "expected": "PASS"
+        },
+        {
+          "case_id": "CA-P03",
+          "contract": "observed_fact_id_subset_and_uniqueness",
+          "decision_reason_fact_ids": [
+            "F001",
+            "F002"
+          ],
+          "observed_fact_commentary": [
+            {
+              "fact_id": "F002",
+              "commentary": "選択済みの明示事実だけを説明します。"
+            },
+            {
+              "fact_id": "F001",
+              "commentary": "別の選択済み事実を重複なく説明します。"
+            }
+          ],
+          "expected": "PASS"
+        }
+      ],
+      "negative": [
+        {
+          "case_id": "CA-N01",
+          "contract": "nonexistent_grounding_export_reference",
+          "future_integration_export": "groundReportContentV4",
+          "expected": "REJECT"
+        },
+        {
+          "case_id": "CA-N02",
+          "contract": "unavailable_policy_or_safety_direct_input_claim",
+          "claimed_direct_inputs": [
+            "decision_policy_result",
+            "aggregate_safety_result"
+          ],
+          "expected": "REJECT"
+        },
+        {
+          "case_id": "CA-N03",
+          "contract": "duplicate_or_unselected_observed_fact_ids_permitted",
+          "decision_reason_fact_ids": [
+            "F001"
+          ],
+          "permitted_observed_fact_ids": [
+            "F001",
+            "F001",
+            "F999"
+          ],
+          "expected": "REJECT"
         }
       ]
     },
@@ -285,6 +362,8 @@
   "counts": {
     "positive_wording_fixtures": 10,
     "negative_wording_fixtures": 10,
+    "positive_contract_alignment_cases": 3,
+    "negative_contract_alignment_cases": 3,
     "positive_grounding_fixtures": 8,
     "negative_grounding_fixtures": 6,
     "frozen_evidence_regression_cases": 6
