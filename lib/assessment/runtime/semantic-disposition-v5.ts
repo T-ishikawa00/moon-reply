@@ -47,7 +47,7 @@ export const SEMANTIC_DISPOSITION_V5_PRODUCT_OUTCOME_PATH_PATTERNS = [
 ] as const;
 
 const futureDirectionPath =
-  /^(?:\$\.)?decision_plan\.change_conditions\[(0|[1-9]\d*)\](?:\.resulting_direction)?$/u;
+  /^(?:\$\.)?decision_plan\.change_conditions\[(0|[1-9]\d*)\]\.resulting_direction$/u;
 const futureCommentaryPath =
   /^(?:\$\.)?report_content\.change_condition_commentary\[(0|[1-9]\d*)\]$/u;
 const finalDraftPath =

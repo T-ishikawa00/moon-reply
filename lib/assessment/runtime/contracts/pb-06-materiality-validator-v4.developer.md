@@ -25,7 +25,11 @@ With explicit `no_followup_message` and `follow_up_exception=none`, block any cu
 
 Use only the existing fourteen codes: `FACT_FIDELITY`, `ASSUMPTION_AS_FACT`, `DECISION_ALLOWED`, `DECISION_REASON_SUPPORT`, `MESSAGE_POLICY_CONSISTENCY`, `ACTION_CONSISTENCY`, `THREE_DAY_PLAN_CONSISTENCY`, `UNSUPPORTED_CERTAINTY`, `SAFETY_REGRESSION`, `REQUIRED_SECTION_MEANING`, `REVIEW_CONDITION_PRESENT`, `TEMPLATE_GENERICITY`, `BRAND_TONE`, and `REPETITION`.
 
-Every finding must cite the exact `json_path`. Its `detail` must state the material proposition asserted and why the supplied authorities do not support that proposition. Do not cite a broad parent object when the finding is in one string or scalar field.
+Every finding must cite the exact `json_path`. Do not cite a broad parent object when the finding is in one string or scalar field.
+
+For factual, assertion, policy, and Safety findings—including `FACT_FIDELITY`, `ASSUMPTION_AS_FACT`, `UNSUPPORTED_CERTAINTY`, `DECISION_ALLOWED`, `ACTION_CONSISTENCY`, `MESSAGE_POLICY_CONSISTENCY`, and `SAFETY_REGRESSION`—the `detail` must identify the material assertion or discrepancy and the relevant supplied or absent authority.
+
+For Product and editorial findings—including `TEMPLATE_GENERICITY`, `BRAND_TONE`, and `REPETITION`—the `detail` must identify the concrete Product or editorial defect and its actual downstream Product impact. Do not force an absent-authority explanation when authority is not the relevant concept.
 
 Return `deterministic_checks=[]`, findings in `semantic_checks`, `final_disposition=null`, `repair_strategy=null`, and `failed_codes=[]`. Do not edit or regenerate output, add codes, expose hidden reasoning, use evaluation literals or keyword adjudication, retry, repair, fall back, or invoke PB-07.
 
@@ -46,6 +50,8 @@ Do not emit `UNSUPPORTED_CERTAINTY` merely because a sentence contains 確実に
 `木曜15時に確実に参加できるか確認する` is user-owned verification language. It directs the user to verify their own schedule. It is not a prediction, a claim about the other person's hidden state, a guaranteed reply, or a guaranteed external outcome, so the certainty word alone is not a finding.
 
 `相手は必ず返信します。` is an unsupported guarantee about another person's future action and is a major or critical `UNSUPPORTED_CERTAINTY` finding. Equivalent guaranteed replies, guaranteed relationship outcomes, guaranteed external events, and asserted hidden states remain findings.
+
+An explicit denial or uncertainty that governs the matched proposition is not a guarantee. Forms such as `必ずしも～とは限らない`, `～とは言えない`, `～とは断定できない`, `～とは分からない`, `～とは決まっていない`, and `～を保証できない` must not become `UNSUPPORTED_CERTAINTY` merely because certainty vocabulary appears inside the denied proposition. Apply the denial to that proposition; do not implement a global substring whitelist.
 
 There is no broad word-based waiver and no broad word-based blocking. A finding must identify the exact field, the materially asserted proposition, and the authority that is absent.
 

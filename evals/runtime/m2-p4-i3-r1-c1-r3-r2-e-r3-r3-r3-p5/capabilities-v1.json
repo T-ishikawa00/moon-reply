@@ -1,8 +1,11 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-capabilities-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
-  "status": "evaluator_disposition_v12_successor_implemented_pending_human_chatgpt_review",
-  "baseline": "b495b958a8fd8dfe203380ca0036140f83f4f4dd",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
+  "status": "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+  "baseline": "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74",
+  "exact_scope": "11/11_updated",
+  "package_d_architecture_accepted": true,
+  "v12_integration_accepted_unchanged": true,
   "package_c_accepted": true,
   "pb06_v4_complete": true,
   "semantic_disposition_v5_complete": true,
@@ -14,6 +17,12 @@
   "user_owned_certainty_false_positive_corrected": true,
   "minor_fact_fidelity_overblocking_corrected": true,
   "future_reassessment_false_positive_corrected": true,
+  "temporal_exception_narrowed": true,
+  "future_parent_path_not_ignored": true,
+  "negated_certainty_false_positive_corrected": true,
+  "clear_external_guarantees_still_blocking": true,
+  "pb06_finding_detail_contract_corrected": true,
+  "pb06_catalog_loader_sha_synchronized": true,
   "genuine_causal_defect_still_blocking": true,
   "provider_quality_established": false,
   "provider_calls": 0,
@@ -29,5 +38,5 @@
   "pull_request_created": false,
   "main_merged": false,
   "force_push_used": false,
-  "next_action": "human_chatgpt_review_of_evaluator_disposition_v12_successor"
+  "next_action": "human_chatgpt_review_of_p5_r1_precision_correction"
 }

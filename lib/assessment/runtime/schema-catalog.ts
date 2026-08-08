@@ -2181,7 +2181,7 @@ export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
         promptPath:
           "lib/assessment/runtime/contracts/pb-06-materiality-validator-v4.developer.md",
         promptHash:
-          "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+          "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b",
         schemaName: "pb_06_materiality_validator_v4",
       },
     ],

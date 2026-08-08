@@ -1,16 +1,19 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-offline-results-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
   "status": "PASS",
-  "capability_status": "evaluator_disposition_v12_successor_implemented_pending_human_chatgpt_review",
-  "baseline": "b495b958a8fd8dfe203380ca0036140f83f4f4dd",
+  "capability_status": "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+  "baseline": "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74",
+  "exact_scope": "11/11_updated",
   "pb06_v4": {
     "version": "v4.0.0",
     "path": "lib/assessment/runtime/contracts/pb-06-materiality-validator-v4.developer.md",
-    "sha256_utf8_lf": "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+    "sha256_utf8_lf": "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b",
     "output_schema": "ai/schemas/validation-result.schema.json",
     "exact_input_count": 9,
     "proposition_aware_certainty": "PASS",
+    "explicit_negation_and_uncertainty_scope": "PASS",
+    "finding_detail_responsibility_by_category": "PASS",
     "fact_fidelity_materiality": "PASS",
     "current_future_separation": "PASS",
     "preserved_hard_boundary_and_safety_contract": "PASS"
@@ -22,6 +25,7 @@
     "material_unsupported_certainty_blocking": "PASS",
     "minor_unsupported_certainty_nonblocking": "PASS",
     "future_direction_false_positive_ignored": "PASS",
+    "future_parent_path_blocking": "PASS",
     "grounded_future_commentary_false_positive_ignored": "PASS",
     "current_direction_contradiction_blocking": "PASS",
     "unsupported_causality_blocking": "PASS",
@@ -36,7 +40,10 @@
     "customer_facing_assertion_paths_only": true,
     "case_id_classification": false,
     "actual_matched_path_recorded": true,
-    "self_tests": "6/6 PASS"
+    "negated_certainty_nonfindings": "4/4 PASS",
+    "clear_external_guarantees_blocking": "4/4 PASS",
+    "future_parent_path_not_ignored": true,
+    "self_tests": "12/12 PASS"
   },
   "runtime_catalog_v12": {
     "schema_version": "m2-p4-runtime-stage-catalog-v2",
@@ -50,7 +57,9 @@
     "pb05_version": "v4.0.0",
     "pb05_sha256": "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f",
     "pb06_version": "v4.0.0",
-    "pb06_sha256": "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+    "pb06_sha256": "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b",
+    "pb06_catalog_loader_sha_three_way_equal": true,
+    "baseline_delta": "PB-06.prompt_sha256 only",
     "schemas_unchanged_valid_and_openai_compilable": true,
     "active": false
   },
@@ -76,11 +85,11 @@
     "successor_machine_verdict": "FAIL",
     "cases_evaluated": "6/6",
     "successor_cases_passed": "4/6",
-    "root_blocking_findings": 1,
+    "root_blocking_findings": 2,
     "derived_product_outcome_failures": 2,
-    "superseded_legacy_findings": 3,
+    "superseded_legacy_findings": 2,
     "path_aware_certainty_findings": 0,
-    "ignored_temporal_false_positives": 1,
+    "ignored_temporal_false_positives": 0,
     "e_r3_01_certainty_false_positive_removed": true,
     "e_r3_01_accepted_draft_unchanged": true,
     "e_r3_02_boundary_preserved": true,
@@ -88,15 +97,17 @@
     "e_r3_04_boundary_preserved": true,
     "e_r3_05_minor_fact_fidelity_nonblocking": true,
     "e_r3_05_historical_final_result_remains_null": true,
-    "e_r3_06_temporal_false_positive_removed": true,
+    "e_r3_06_exact_resulting_direction_rule_preserved": true,
+    "e_r3_06_parent_path_action_consistency_blocking": true,
+    "e_r3_06_root_codes": ["ASSUMPTION_AS_FACT", "ACTION_CONSISTENCY"],
     "e_r3_06_unsupported_causality_blocking": true,
     "e_r3_06_historical_final_result_remains_null": true,
     "accepted_product_reconstructed_for_null_cases": false,
     "new_provider_quality_claimed": false
   },
   "fixture_results": {
-    "required_named_fixtures": "12/12 PASS",
-    "synthetic_semantic_and_evaluator_fixtures": "14/14 PASS",
+    "required_named_fixtures": "17/17 PASS",
+    "synthetic_semantic_and_evaluator_fixtures": "19/19 PASS",
     "frozen_e_r3_cases": "6/6 PASS"
   },
   "regression": {
@@ -105,6 +116,9 @@
     "pb06_v3": "UNCHANGED",
     "semantic_disposition_v4": "UNCHANGED",
     "runtime_stage_catalog_v11": "UNCHANGED",
+    "runtime_stage_catalog_v12": "PB-06 prompt_sha256 only",
+    "schema_catalog_ts": "v12 PB-06 successor promptHash only",
+    "pipeline_ts": "UNCHANGED",
     "v11_loader": "PASS",
     "service_ts": "UNCHANGED",
     "active_runtime": "v4",
@@ -129,5 +143,5 @@
     "c2_authorized": false,
     "final_jpy980_readiness_established": false
   },
-  "next_action": "human_chatgpt_review_of_evaluator_disposition_v12_successor"
+  "next_action": "human_chatgpt_review_of_p5_r1_precision_correction"
 }

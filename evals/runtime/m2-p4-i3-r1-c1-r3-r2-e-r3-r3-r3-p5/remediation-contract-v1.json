@@ -1,9 +1,10 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
-  "title": "PB-06 materiality, semantic disposition, evaluator, and inactive v12 successor contract",
-  "status": "implemented_pending_human_chatgpt_review",
-  "baseline": "b495b958a8fd8dfe203380ca0036140f83f4f4dd",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
+  "title": "Temporal exception narrowing and negated-certainty evaluator correction",
+  "status": "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+  "baseline": "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74",
+  "exact_scope": "11/11_updated_only",
   "predecessors": {
     "runtime_catalog": "runtime-stage-catalog-v11.0.0",
     "pb05_prompt": {
@@ -68,7 +69,9 @@
       "default": "nonblocking"
     },
     "future_change_condition_direction": {
+      "eligible_exception_path": "decision_plan.change_conditions[i].resulting_direction",
       "different_from_current_only": "not_current_direction_blocking",
+      "parent_change_condition_path": "blocking",
       "safety_or_enduring_boundary_violation": "blocking"
     },
     "application_grounded_future_commentary": {
@@ -90,17 +93,52 @@
     "material_asserted_proposition_required": true,
     "absent_authority_reason_required": true,
     "context_free_recursive_substring_matching": false,
+    "explicit_denial_must_govern_matched_proposition": true,
+    "global_certainty_substring_waiver": false,
     "case_id_classification": false,
     "allowed_user_owned_verification_example": "木曜15時に確実に参加できるか確認する",
-    "blocked_external_guarantee_example": "相手は必ず返信します。"
+    "explicit_denial_examples": [
+      "相手は必ずしも返信するとは限りません。",
+      "相手が確実に返信するとは言えません。",
+      "返信が確実に来るとは断定できません。",
+      "必ず返信があるとは分かりません。"
+    ],
+    "blocked_external_guarantee_examples": [
+      "相手は必ず返信します。",
+      "返信は確実に来ます。",
+      "間違いなく復縁できます。",
+      "相手の本心は復縁したいのです。"
+    ]
   },
   "temporal_contract": {
     "current_decision_is_distinct_from_future_resulting_direction": true,
     "future_direction_path": "decision_plan.change_conditions[i].resulting_direction",
+    "parent_change_condition_path_is_temporal_exception": false,
     "grounded_future_commentary_path": "report_content.change_condition_commentary[i]",
     "commentary_requires_exact_application_grounded_same_index_value": true,
     "enduring_contact_constraint_exemption_forbidden": true,
     "current_action_exemption_forbidden": true
+  },
+  "finding_detail_contract": {
+    "exact_json_path_required": true,
+    "broad_parent_path_for_scalar_or_string_forbidden": true,
+    "factual_assertion_policy_safety": {
+      "material_assertion_or_discrepancy_required": true,
+      "relevant_supplied_or_absent_authority_required": true
+    },
+    "product_editorial": {
+      "concrete_defect_required": true,
+      "actual_downstream_product_impact_required": true,
+      "absent_authority_required_when_irrelevant": false
+    }
+  },
+  "fixture_counts": {
+    "required_named_fixtures": 17,
+    "semantic_fixtures": 12,
+    "evaluator_fixtures": 7,
+    "total_synthetic_fixtures": 19,
+    "frozen_e_r3_cases": 6,
+    "evaluator_self_tests_minimum": 12
   },
   "frozen_e_r3_successor_expectations": [
     {
@@ -128,7 +166,9 @@
     },
     {
       "case_id": "E-R3-06",
-      "temporal_action_false_positive_removed": true,
+      "exact_resulting_direction_false_positive_rule_preserved": true,
+      "parent_path_action_consistency_blocking": true,
+      "expected_root_codes": ["ASSUMPTION_AS_FACT", "ACTION_CONSISTENCY"],
       "unsupported_causal_attribution_blocking": true,
       "historical_final_result_remains_null": true,
       "accepted_product_reconstruction_forbidden": true
@@ -140,6 +180,7 @@
     "v12_runtime_active": false,
     "active_runtime": "v4",
     "service_wiring_changed": false,
+    "pb06_prompt_catalog_loader_sha_strictly_equal": true,
     "provider_quality_established": false
   },
   "operations": {

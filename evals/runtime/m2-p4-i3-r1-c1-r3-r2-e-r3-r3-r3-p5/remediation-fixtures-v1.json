@@ -1,6 +1,6 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5-R1",
   "fixture_authority": "synthetic_offline_only",
   "semantic_fixtures": [
     {
@@ -45,6 +45,25 @@
         "detail": "The future reply_now direction differs from the current wait_and_reassess direction and current allowed set."
       },
       "expected_disposition": "ignored"
+    },
+    {
+      "fixture_id": "parent_change_condition_path_not_temporal_exception",
+      "current_decision": "wait_and_reassess",
+      "change_conditions": [
+        {
+          "condition": "相手から具体的な質問が届いた場合",
+          "resulting_direction": "reply_now",
+          "supporting_fact_ids": ["F001"]
+        }
+      ],
+      "finding": {
+        "finding_code": "ACTION_CONSISTENCY",
+        "severity": "major",
+        "json_path": "$.decision_plan.change_conditions[0]",
+        "evidence_refs": ["F001", "policy:decision_policy_result"],
+        "detail": "The whole change condition contains a materially unsupported chronology and non-observable trigger; this is not merely a future direction differing from current policy."
+      },
+      "expected_disposition": "blocking"
     },
     {
       "fixture_id": "grounded_future_commentary_not_current_violation",
@@ -161,6 +180,30 @@
       "expected_unsupported_certainty_findings": 0
     },
     {
+      "fixture_id": "negated_b必ずしも_reply_not_blocked",
+      "json_path": "$.report_content.short_letter[0]",
+      "text": "相手は必ずしも返信するとは限りません。",
+      "expected_unsupported_certainty_findings": 0
+    },
+    {
+      "fixture_id": "certainty_denied_by_tohaienai_not_blocked",
+      "json_path": "$.report_content.short_letter[0]",
+      "text": "相手が確実に返信するとは言えません。",
+      "expected_unsupported_certainty_findings": 0
+    },
+    {
+      "fixture_id": "certainty_denied_by_danteidekinai_not_blocked",
+      "json_path": "$.report_content.short_letter[0]",
+      "text": "返信が確実に来るとは断定できません。",
+      "expected_unsupported_certainty_findings": 0
+    },
+    {
+      "fixture_id": "certainty_denied_by_wakaranai_not_blocked",
+      "json_path": "$.report_content.short_letter[0]",
+      "text": "必ず返信があるとは分かりません。",
+      "expected_unsupported_certainty_findings": 0
+    },
+    {
       "fixture_id": "guaranteed_reply_blocks",
       "json_path": "$.report_content.short_letter[0]",
       "text": "相手は必ず返信します。",
@@ -212,17 +255,18 @@
     {
       "case_id": "E-R3-06",
       "expected_successor_product_passed": false,
-      "expected_root_codes": ["ASSUMPTION_AS_FACT"],
-      "expected_superseded_reason": "accepted_temporal_false_positive",
+      "expected_root_codes": ["ASSUMPTION_AS_FACT", "ACTION_CONSISTENCY"],
+      "exact_resulting_direction_false_positive_rule_preserved": true,
+      "parent_path_action_consistency_blocking": true,
       "historical_final_result_present": false,
       "accepted_product_reconstructed": false
     }
   ],
   "counts": {
-    "required_named_fixtures": 12,
-    "semantic_fixtures": 11,
-    "evaluator_fixtures": 3,
-    "total_synthetic_fixtures": 14,
+    "required_named_fixtures": 17,
+    "semantic_fixtures": 12,
+    "evaluator_fixtures": 7,
+    "total_synthetic_fixtures": 19,
     "frozen_e_r3_cases": 6
   },
   "operations": {

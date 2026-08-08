@@ -35,12 +35,12 @@ const certaintyPatterns = Object.freeze([
   {
     assertionKind: "guaranteed_reply",
     pattern:
-      /(?:相手|先方|彼|彼女)(?:は|が|も)?.{0,16}(?:必ず|確実に|間違いなく|きっと).{0,16}(?:返信|返事|連絡)|(?:返信|返事|連絡)(?:は|が|も)?.{0,10}(?:必ず|確実に|間違いなく|きっと).{0,12}(?:来る|くる|届く|返ってくる|あります)/u,
+      /(?:相手|先方|彼|彼女)(?:は|が|も)?.{0,16}(?:必ず|確実に|間違いなく|きっと).{0,16}(?:返信|返事|連絡)(?:する|します|がある|があります)?|(?:返信|返事|連絡)(?:は|が|も)?.{0,10}(?:必ず|確実に|間違いなく|きっと).{0,12}(?:来る|来ます|くる|きます|届く|届きます|返ってくる|返ってきます|あります)|(?:必ず|確実に|間違いなく|きっと).{0,12}(?:返信|返事|連絡)(?:が)?(?:ある|あります|来る|来ます|くる|きます)/u,
   },
   {
     assertionKind: "guaranteed_relationship_outcome",
     pattern:
-      /(?:必ず|確実に|間違いなく|きっと).{0,16}(?:復縁|交際|関係修復|結婚).{0,10}(?:できる|する|成功|叶う)|(?:復縁|交際|関係修復|結婚).{0,10}(?:できる|する|成功|叶う).{0,8}(?:に違いない|はずです)/u,
+      /(?:必ず|確実に|間違いなく|きっと).{0,16}(?:復縁|交際|関係修復|結婚).{0,10}(?:できる|できます|する|します|成功する|成功します|叶う|叶います)|(?:復縁|交際|関係修復|結婚).{0,10}(?:できる|できます|する|します|成功する|成功します|叶う|叶います).{0,8}(?:に違いない|はずです)/u,
   },
   {
     assertionKind: "asserted_hidden_state",
@@ -54,8 +54,11 @@ const certaintyPatterns = Object.freeze([
   },
 ]);
 
+const certaintyDenialContinuation =
+  /^(?:(?:という)?こと)?(?:とは(?:限らない|限りません|言えない|言えません|断定できない|断定できません|分からない|分かりません|わからない|わかりません|決まっていない|決まっていません)|を保証(?:することは)?でき(?:ない|ません))/u;
+
 const futureDirectionPath =
-  /^(?:\$\.)?decision_plan\.change_conditions\[(0|[1-9]\d*)\](?:\.resulting_direction)?$/u;
+  /^(?:\$\.)?decision_plan\.change_conditions\[(0|[1-9]\d*)\]\.resulting_direction$/u;
 const futureCommentaryPath =
   /^(?:\$\.)?report_content\.change_condition_commentary\[(0|[1-9]\d*)\]$/u;
 const temporalCodes = new Set([
@@ -141,8 +144,10 @@ export function customerFacingAssertionEntries(evidence) {
 export function classifyUnsupportedCertaintyProposition(text) {
   if (typeof text !== "string" || text.length === 0) return null;
   for (const rule of certaintyPatterns) {
-    const match = rule.pattern.exec(text);
-    if (match) {
+    const pattern = new RegExp(rule.pattern.source, `${rule.pattern.flags}g`);
+    for (const match of text.matchAll(pattern)) {
+      const continuation = text.slice(match.index + match[0].length);
+      if (certaintyDenialContinuation.test(continuation)) continue;
       return {
         assertion_kind: rule.assertionKind,
         matched_proposition: match[0],
@@ -518,6 +523,64 @@ export function runEvaluatorV2SelfTests() {
         findUnsupportedCertaintyAssertions({
           grounded_base: { observed_facts: ["相手は必ず返信します。"] },
         }).length === 0,
+    },
+    {
+      name: "negated_b必ずしも_reply_not_blocked",
+      passed:
+        classifyUnsupportedCertaintyProposition(
+          "相手は必ずしも返信するとは限りません。",
+        ) === null,
+    },
+    {
+      name: "certainty_denied_by_tohaienai_not_blocked",
+      passed:
+        classifyUnsupportedCertaintyProposition(
+          "相手が確実に返信するとは言えません。",
+        ) === null,
+    },
+    {
+      name: "certainty_denied_by_danteidekinai_not_blocked",
+      passed:
+        classifyUnsupportedCertaintyProposition(
+          "返信が確実に来るとは断定できません。",
+        ) === null,
+    },
+    {
+      name: "certainty_denied_by_wakaranai_not_blocked",
+      passed:
+        classifyUnsupportedCertaintyProposition(
+          "必ず返信があるとは分かりません。",
+        ) === null,
+    },
+    {
+      name: "clear_guaranteed_reply_still_blocked",
+      passed:
+        classifyUnsupportedCertaintyProposition("返信は確実に来ます。")
+          ?.assertion_kind === "guaranteed_reply",
+    },
+    {
+      name: "future_parent_path_not_ignored",
+      passed:
+        classifySuccessorSemanticFinding(
+          {
+            finding_code: "ACTION_CONSISTENCY",
+            severity: "major",
+            json_path: "$.decision_plan.change_conditions[0]",
+            evidence_refs: ["policy:decision_policy_result"],
+            detail:
+              "The whole future change condition has a material inconsistency with the current policy.",
+          },
+          {
+            decision_plan: {
+              change_conditions: [
+                {
+                  condition: "相手から具体的な質問が届いた場合",
+                  resulting_direction: "reply_now",
+                },
+              ],
+            },
+          },
+        ).disposition === "blocking",
     },
   ];
   return {

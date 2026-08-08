@@ -6,13 +6,19 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const baseline = "b495b958a8fd8dfe203380ca0036140f83f4f4dd";
-const expectedParent = "f2efc64009ae1afd8343c1383db12cccf827ed23";
+const baseline = "88e4262e3b0a4f92da4d24cf6c351885f3ea2c74";
+const expectedParent = "b495b958a8fd8dfe203380ca0036140f83f4f4dd";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedSourceBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p4-r2-contract-alignment";
-const expectedBranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-evaluator-disposition";
+const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-r1-evaluator-precision";
+const catalogV12Baseline =
+  "b495b958a8fd8dfe203380ca0036140f83f4f4dd";
+const baselinePb06V4Hash =
+  "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9";
+const correctedPb06V4Hash =
+  "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b";
 const evidenceCommitB = "9e9bf7d90740c1d00bfc4e282c85906744cd736c";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5";
@@ -35,7 +41,7 @@ const reviewPath =
 const schemaCatalogPath = "lib/assessment/runtime/schema-catalog.ts";
 const pipelinePath = "lib/assessment/runtime/pipeline.ts";
 
-const newPaths = [
+const updatedPaths = [
   pb06V4Path,
   semanticV5Path,
   catalogV12Path,
@@ -46,9 +52,9 @@ const newPaths = [
   capabilitiesPath,
   verifierPath,
   reviewPath,
+  schemaCatalogPath,
 ];
-const updatedPaths = [schemaCatalogPath, pipelinePath];
-const exactScope = [...newPaths, ...updatedPaths].sort();
+const exactScope = [...updatedPaths].sort();
 
 const protectedPaths = [
   "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
@@ -57,6 +63,7 @@ const protectedPaths = [
   "lib/assessment/runtime/semantic-disposition-v4.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v11.json",
   "scripts/lib/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evaluator-v1.mjs",
+  pipelinePath,
   "lib/assessment/runtime/service.ts",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v4.json",
   "ai/schemas/validation-result.schema.json",
@@ -84,7 +91,7 @@ const expectedHashes = {
     "68524d4235513826e42b02eb05c3c34f548f5ac2685359a17a4e7019877c604b",
   catalogV11:
     "47e61d9316a298d67bbe17ac8f25124e7c3570e9b4a49c6d652d2cb9ed243eb1",
-  pb06V4: "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+  pb06V4: correctedPb06V4Hash,
 };
 
 const checks = [];
@@ -111,6 +118,40 @@ function sha256Bytes(value) {
 
 function sha256Text(value) {
   return sha256Bytes(Buffer.from(value.replace(/\r\n/gu, "\n"), "utf8"));
+}
+
+function normalizedText(value) {
+  return value.replace(/\r\n/gu, "\n");
+}
+
+function textAt(revision, relativePath) {
+  return blobBytesAt(revision, relativePath).toString("utf8");
+}
+
+function countOccurrences(value, needle) {
+  return value.split(needle).length - 1;
+}
+
+function assertStrictShaTriplet({ actualFileSha, catalogPromptSha, loaderPromptHash }) {
+  for (const value of [actualFileSha, catalogPromptSha, loaderPromptHash]) {
+    assert.match(value, /^[0-9a-f]{64}$/u);
+  }
+  assert.equal(catalogPromptSha, actualFileSha, "Catalog SHA must equal actual PB-06 SHA");
+  assert.equal(loaderPromptHash, catalogPromptSha, "Loader SHA must equal Catalog SHA");
+}
+
+function evaluatorDispositionPb06LoaderHash() {
+  const source = text(schemaCatalogPath);
+  const loaderStart = source.indexOf(
+    "export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog()",
+  );
+  assert.ok(loaderStart >= 0);
+  const loaderSource = source.slice(loaderStart);
+  const match = /"PB-06"[\s\S]*?promptHash:\s*\n?\s*"([0-9a-f]{64})"/u.exec(
+    loaderSource,
+  );
+  assert.ok(match);
+  return match[1];
 }
 
 function git(args, options = {}) {
@@ -276,18 +317,9 @@ await check("exact branch baseline parent source main and origin-main authority"
   assert.equal(git(["stash", "list"]), "");
 });
 
-await check("exact implementation scope 12/12 with expected 10 new and 2 updated", () => {
+await check("exact P5-R1 correction scope 11/11 updated only", () => {
   assert.deepEqual(changedPaths(), exactScope);
-  assert.equal(newPaths.length, 10);
-  assert.equal(updatedPaths.length, 2);
-  for (const relativePath of newPaths) {
-    assert.equal(existsSync(absolute(relativePath)), true, relativePath);
-    assert.equal(
-      gitSucceeds(["cat-file", "-e", `${baseline}:${relativePath}`]),
-      false,
-      relativePath,
-    );
-  }
+  assert.equal(updatedPaths.length, 11);
   for (const relativePath of updatedPaths) {
     assert.equal(existsSync(absolute(relativePath)), true, relativePath);
     assert.equal(
@@ -376,10 +408,32 @@ await check("PB-06 v4 certainty proposition distinction is narrow and exact-path
   assert.match(source, /Do not emit `UNSUPPORTED_CERTAINTY` merely because/u);
   assert.match(source, /木曜15時に確実に参加できるか確認する/u);
   assert.match(source, /相手は必ず返信します。/u);
-  assert.match(source, /material proposition asserted/u);
-  assert.match(source, /authority that is absent/u);
+  for (const form of [
+    "必ずしも～とは限らない",
+    "～とは言えない",
+    "～とは断定できない",
+    "～とは分からない",
+    "～とは決まっていない",
+    "～を保証できない",
+  ]) {
+    assert.ok(source.includes(form), form);
+  }
+  assert.match(source, /governs the matched proposition/u);
+  assert.match(source, /do not implement a global substring whitelist/u);
   assert.match(source, /no broad word-based waiver/u);
   assert.match(source, /no broad word-based blocking/u);
+});
+
+await check("PB-06 v4 finding detail responsibility is category-correct", () => {
+  const source = text(pb06V4Path);
+  assert.match(source, /factual, assertion, policy, and Safety findings/u);
+  assert.match(source, /material assertion or discrepancy/u);
+  assert.match(source, /relevant supplied or absent authority/u);
+  assert.match(source, /Product and editorial findings/u);
+  assert.match(source, /concrete Product or editorial defect/u);
+  assert.match(source, /actual downstream Product impact/u);
+  assert.match(source, /Do not force an absent-authority explanation/u);
+  assert.match(source, /Do not cite a broad parent object/u);
 });
 
 await check("PB-06 v4 FACT_FIDELITY materiality and hard factual boundaries", () => {
@@ -450,15 +504,42 @@ await check("semantic disposition v5 exact materiality matrix fixtures", () => {
 
 await check("temporal false-positive handling is path index and boundary aware", () => {
   const source = text(semanticV5Path);
-  assert.match(source, /change_conditions\\\[/u);
+  assert.ok(
+    source.includes(
+      "/^(?:\\$\\.)?decision_plan\\.change_conditions\\[(0|[1-9]\\d*)\\]\\.resulting_direction$/u",
+    ),
+  );
+  assert.equal(source.includes("(?:\\.resulting_direction)?$/u"), false);
   assert.match(source, /policy:contact_constraint_policy/u);
   assert.match(source, /policy:aggregate_safety_result/u);
   assert.match(source, /buildChangeConditionCommentaryV3/u);
   assert.match(source, /accepted_temporal_false_positive/u);
+  const futureDirection = fixtures.semantic_fixtures.find(
+    (fixture) =>
+      fixture.fixture_id === "future_resulting_direction_not_current_violation",
+  );
+  const parentPath = fixtures.semantic_fixtures.find(
+    (fixture) =>
+      fixture.fixture_id === "parent_change_condition_path_not_temporal_exception",
+  );
+  const futureCommentary = fixtures.semantic_fixtures.find(
+    (fixture) =>
+      fixture.fixture_id === "grounded_future_commentary_not_current_violation",
+  );
   const noFollowup = fixtures.semantic_fixtures.find(
     (fixture) =>
       fixture.fixture_id === "no_followup_boundary_finding_remains_blocking",
   );
+  const evaluate = (fixture) =>
+    semanticV5.evaluateSemanticFindingsV5({
+      validationOutput: { semantic_checks: [fixture.finding] },
+      decisionPlan: buildFixturePlan(fixture),
+      groundedReportContent: buildFixtureReport(fixture),
+    });
+  assert.equal(evaluate(futureDirection).ignoredTemporalFalsePositives.length, 1);
+  assert.equal(evaluate(parentPath).blockingFindings.length, 1);
+  assert.equal(evaluate(parentPath).ignoredTemporalFalsePositives.length, 0);
+  assert.equal(evaluate(futureCommentary).ignoredTemporalFalsePositives.length, 1);
   const result = semanticV5.evaluateSemanticFindingsV5({
     validationOutput: { semantic_checks: [noFollowup.finding] },
     decisionPlan: buildFixturePlan(noFollowup),
@@ -495,6 +576,35 @@ await check("evaluator v2 proposition classification fixtures and exact paths", 
   assert.equal(passed, fixtures.counts.evaluator_fixtures);
 });
 
+await check("explicitly denied certainty is nonfinding while clear guarantees block", () => {
+  for (const value of [
+    "相手は必ずしも返信するとは限りません。",
+    "相手が確実に返信するとは言えません。",
+    "返信が確実に来るとは断定できません。",
+    "必ず返信があるとは分かりません。",
+  ]) {
+    assert.equal(evaluatorV2.classifyUnsupportedCertaintyProposition(value), null, value);
+  }
+  for (const [value, expectedKind] of [
+    ["相手は必ず返信します。", "guaranteed_reply"],
+    ["返信は確実に来ます。", "guaranteed_reply"],
+    ["間違いなく復縁できます。", "guaranteed_relationship_outcome"],
+    ["相手の本心は復縁したいのです。", "asserted_hidden_state"],
+  ]) {
+    assert.equal(
+      evaluatorV2.classifyUnsupportedCertaintyProposition(value)?.assertion_kind,
+      expectedKind,
+      value,
+    );
+  }
+  assert.equal(
+    evaluatorV2.classifyUnsupportedCertaintyProposition(
+      "相手は必ず返信しますが、復縁できるとは限りません。",
+    )?.assertion_kind,
+    "guaranteed_reply",
+  );
+});
+
 await check("evaluator v2 removes recursive certainty matching and case-ID classification", () => {
   const source = text(evaluatorV2Path);
   assert.equal(
@@ -522,14 +632,16 @@ await check("evaluator v2 preserves evaluator v1 integrity protocol and Product 
   );
 });
 
-await check("evaluator v2 self-tests PASS 6/6", () => {
+let evaluatorSelfTests;
+await check("evaluator v2 self-tests PASS at least 12/12", () => {
   const result = evaluatorV2.runEvaluatorV2SelfTests();
-  assert.equal(result.total, 6);
+  evaluatorSelfTests = result;
+  assert.ok(result.total >= 12);
   assert.equal(result.passed, result.total);
   result.results.forEach((item) => assert.equal(item.passed, true, item.name));
 });
 
-await check("required named fixtures 12/12 and total synthetic fixtures 14/14", () => {
+await check("required named fixtures 17/17 and total synthetic fixtures 19/19", () => {
   const fixtureIds = new Set([
     ...fixtures.semantic_fixtures.map((fixture) => fixture.fixture_id),
     ...fixtures.evaluator_fixtures.map((fixture) => fixture.fixture_id),
@@ -540,6 +652,7 @@ await check("required named fixtures 12/12 and total synthetic fixtures 14/14", 
     "minor_fact_fidelity_nonblocking",
     "major_fact_fidelity_blocking",
     "future_resulting_direction_not_current_violation",
+    "parent_change_condition_path_not_temporal_exception",
     "grounded_future_commentary_not_current_violation",
     "current_direction_contradiction_blocks",
     "unsupported_causality_still_blocks",
@@ -547,11 +660,19 @@ await check("required named fixtures 12/12 and total synthetic fixtures 14/14", 
     "material_final_draft_brand_drift_blocks",
     "exact_matched_path_recorded",
     "no_followup_boundary_finding_remains_blocking",
+    "negated_b必ずしも_reply_not_blocked",
+    "certainty_denied_by_tohaienai_not_blocked",
+    "certainty_denied_by_danteidekinai_not_blocked",
+    "certainty_denied_by_wakaranai_not_blocked",
   ];
   required.forEach((fixtureId) => assert.equal(fixtureIds.has(fixtureId), true));
   assert.equal(required.length, fixtures.counts.required_named_fixtures);
   assert.equal(fixtureIds.size, fixtures.counts.total_synthetic_fixtures);
-  assert.equal(semanticFixturePasses + fixtures.evaluator_fixtures.length, 14);
+  assert.equal(
+    semanticFixturePasses + fixtures.evaluator_fixtures.length,
+    fixtures.counts.total_synthetic_fixtures,
+  );
+  assert.equal(fixtures.counts.total_synthetic_fixtures, 19);
 });
 
 const frozenResultsPath =
@@ -594,7 +715,7 @@ await check("Frozen E-R3 source manifest blobs marker and authorization unchange
   assert.equal(authorization.rerun_authorized, false);
 });
 
-await check("Frozen E-R3 successor outcomes match 6/6 without reclassification", () => {
+await check("Frozen E-R3 source remains unchanged and corrected successor outcomes match 6/6", () => {
   assert.equal(frozenResults.machine_verdict, "FAIL");
   assert.equal(successorEvaluation.verdict, "FAIL");
   assert.equal(successorEvaluation.cases.length, 6);
@@ -659,26 +780,32 @@ await check("E-R3-05 minor FACT_FIDELITY nonblocking with historical null retain
   assert.equal(actual.derived_product_outcome_failures.length, 1);
 });
 
-await check("E-R3-06 temporal false positive removed and causal defect blocking", () => {
+await check("E-R3-06 parent-path ACTION_CONSISTENCY and causal defect both block", () => {
   const actual = successorEvaluation.cases.find((item) => item.case_id === "E-R3-06");
   const frozen = frozenResults.cases.find((item) => item.case_id === "E-R3-06");
   assert.equal(frozen.final_result, null);
   assert.equal(actual.final_result_present, false);
   assert.deepEqual(
     actual.root_blocking_findings.map((item) => item.finding_code),
-    ["ASSUMPTION_AS_FACT"],
+    ["ASSUMPTION_AS_FACT", "ACTION_CONSISTENCY"],
   );
-  assert.equal(actual.ignored_temporal_false_positives.length, 1);
+  assert.equal(
+    actual.root_blocking_findings.find(
+      (item) => item.finding_code === "ACTION_CONSISTENCY",
+    )?.json_path,
+    "decision_plan.change_conditions[2]",
+  );
+  assert.equal(actual.ignored_temporal_false_positives.length, 0);
   assert.equal(actual.derived_product_outcome_failures.length, 1);
 });
 
 await check("frozen successor aggregate remains fail-closed", () => {
   assert.equal(successorEvaluation.counts.cases_passed, 4);
-  assert.equal(successorEvaluation.counts.root_blocking_findings, 1);
+  assert.equal(successorEvaluation.counts.root_blocking_findings, 2);
   assert.equal(successorEvaluation.counts.derived_product_outcome_failures, 2);
-  assert.equal(successorEvaluation.counts.superseded_legacy_findings, 3);
+  assert.equal(successorEvaluation.counts.superseded_legacy_findings, 2);
   assert.equal(successorEvaluation.counts.path_aware_certainty_findings, 0);
-  assert.equal(successorEvaluation.counts.ignored_temporal_false_positives, 1);
+  assert.equal(successorEvaluation.counts.ignored_temporal_false_positives, 0);
 });
 
 await check("v12 Catalog exact identity common prompt and PB-01 through PB-04 parity", () => {
@@ -691,10 +818,57 @@ await check("v12 Catalog exact identity common prompt and PB-01 through PB-04 pa
   assert.equal(v12.prompt_bundle_version, "prompt-bundle-runtime-v12.0.0");
   assert.equal(v12.schema_set_version, "pipeline-schema-runtime-v5.0.0");
   assert.equal(v12.stage_topology_version, "split-base-candidate-v1");
-  assert.equal(v12.baseline, baseline);
+  assert.equal(v12.baseline, catalogV12Baseline);
   assert.equal(v12.hash_algorithm, "sha256-utf8-lf");
   assert.deepEqual(v12.common_prompt, v11.common_prompt);
   assert.deepEqual(v12.stages.slice(0, 5), v11.stages.slice(0, 5));
+});
+
+await check("PB-06 actual Catalog and v12 loader SHA are strictly equal", () => {
+  const actualFileSha = sha256Text(text(pb06V4Path));
+  const catalogPromptSha = json(catalogV12Path).stages[6].prompt_sha256;
+  const loaderPromptHash = evaluatorDispositionPb06LoaderHash();
+  assert.equal(actualFileSha, correctedPb06V4Hash);
+  assertStrictShaTriplet({ actualFileSha, catalogPromptSha, loaderPromptHash });
+});
+
+await check("synthetic mutation of each PB-06 SHA source is rejected", () => {
+  const triplet = {
+    actualFileSha: sha256Text(text(pb06V4Path)),
+    catalogPromptSha: json(catalogV12Path).stages[6].prompt_sha256,
+    loaderPromptHash: evaluatorDispositionPb06LoaderHash(),
+  };
+  const mutate = (value) => `${value.slice(0, -1)}${value.endsWith("0") ? "1" : "0"}`;
+  for (const key of Object.keys(triplet)) {
+    assert.throws(
+      () => assertStrictShaTriplet({ ...triplet, [key]: mutate(triplet[key]) }),
+      undefined,
+      key,
+    );
+  }
+  const loaderSource = text(schemaCatalogPath);
+  assert.match(loaderSource, /stage\.prompt_sha256 !== successor\.promptHash/u);
+  assert.match(loaderSource, /hashText\(stagePrompt\) !== stage\.prompt_sha256/u);
+});
+
+await check("Catalog v12 and schema-catalog have exact one-literal baseline deltas", () => {
+  const baselineCatalog = normalizedText(textAt(baseline, catalogV12Path));
+  const currentCatalog = normalizedText(text(catalogV12Path));
+  assert.equal(countOccurrences(baselineCatalog, baselinePb06V4Hash), 1);
+  assert.equal(
+    currentCatalog,
+    baselineCatalog.replace(baselinePb06V4Hash, correctedPb06V4Hash),
+  );
+
+  const baselineSchemaCatalog = normalizedText(textAt(baseline, schemaCatalogPath));
+  const currentSchemaCatalog = normalizedText(text(schemaCatalogPath));
+  assert.equal(countOccurrences(baselineSchemaCatalog, baselinePb06V4Hash), 1);
+  assert.equal(
+    currentSchemaCatalog,
+    baselineSchemaCatalog.replace(baselinePb06V4Hash, correctedPb06V4Hash),
+  );
+  assertUnchangedFromBaseline(pipelinePath);
+  assertUnchangedFromBaseline("lib/assessment/runtime/service.ts");
 });
 
 await check("v12 PB-05 and PB-06 exact prompts with unchanged schemas", () => {
@@ -788,6 +962,12 @@ await check("service remains unchanged Active Runtime v4 and v12 inactive", () =
 
 await check("remediation contract exact blocking matrix and temporal boundaries", () => {
   const contract = json(contractPath);
+  assert.equal(
+    contract.status,
+    "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
+  );
+  assert.equal(contract.baseline, baseline);
+  assert.equal(contract.exact_scope, "11/11_updated_only");
   assert.equal(contract.blocking_matrix.FACT_FIDELITY.minor, "nonblocking");
   assert.equal(contract.blocking_matrix.FACT_FIDELITY.major, "blocking");
   assert.equal(contract.blocking_matrix.UNSUPPORTED_CERTAINTY.minor, "nonblocking");
@@ -802,17 +982,46 @@ await check("remediation contract exact blocking matrix and temporal boundaries"
     "blocking",
   );
   assert.equal(contract.certainty_proposition_contract.case_id_classification, false);
+  assert.equal(
+    contract.certainty_proposition_contract.explicit_denial_must_govern_matched_proposition,
+    true,
+  );
+  assert.equal(
+    contract.certainty_proposition_contract.global_certainty_substring_waiver,
+    false,
+  );
+  assert.equal(
+    contract.temporal_contract.parent_change_condition_path_is_temporal_exception,
+    false,
+  );
+  assert.equal(
+    contract.finding_detail_contract.product_editorial
+      .absent_authority_required_when_irrelevant,
+    false,
+  );
+  assert.deepEqual(contract.fixture_counts, {
+    required_named_fixtures: 17,
+    semantic_fixtures: 12,
+    evaluator_fixtures: 7,
+    total_synthetic_fixtures: 19,
+    frozen_e_r3_cases: 6,
+    evaluator_self_tests_minimum: 12,
+  });
   assert.equal(contract.runtime_boundary.v12_runtime_active, false);
+  assert.equal(contract.runtime_boundary.pb06_prompt_catalog_loader_sha_strictly_equal, true);
 });
 
 await check("capabilities exact pending-review status and fail-closed authority", () => {
   const capabilities = json(capabilitiesPath);
   assert.equal(
     capabilities.status,
-    "evaluator_disposition_v12_successor_implemented_pending_human_chatgpt_review",
+    "evaluator_disposition_v12_precision_corrected_pending_human_chatgpt_review",
   );
   assert.equal(capabilities.baseline, baseline);
+  assert.equal(capabilities.exact_scope, "11/11_updated");
   for (const key of [
+    "package_d_architecture_accepted",
+    "v12_integration_accepted_unchanged",
     "package_c_accepted",
     "pb06_v4_complete",
     "semantic_disposition_v5_complete",
@@ -823,6 +1032,12 @@ await check("capabilities exact pending-review status and fail-closed authority"
     "user_owned_certainty_false_positive_corrected",
     "minor_fact_fidelity_overblocking_corrected",
     "future_reassessment_false_positive_corrected",
+    "temporal_exception_narrowed",
+    "future_parent_path_not_ignored",
+    "negated_certainty_false_positive_corrected",
+    "clear_external_guarantees_still_blocking",
+    "pb06_finding_detail_contract_corrected",
+    "pb06_catalog_loader_sha_synchronized",
     "genuine_causal_defect_still_blocking",
   ]) {
     assert.equal(capabilities[key], true, key);
@@ -845,17 +1060,33 @@ await check("capabilities exact pending-review status and fail-closed authority"
 await check("offline results exact fixtures regression and no Provider-quality claim", () => {
   const results = json(offlineResultsPath);
   assert.equal(results.status, "PASS");
+  assert.equal(results.baseline, baseline);
+  assert.equal(results.exact_scope, "11/11_updated");
   assert.equal(results.pb06_v4.sha256_utf8_lf, expectedHashes.pb06V4);
-  assert.equal(results.fixture_results.required_named_fixtures, "12/12 PASS");
+  assert.equal(results.fixture_results.required_named_fixtures, "17/17 PASS");
   assert.equal(
     results.fixture_results.synthetic_semantic_and_evaluator_fixtures,
-    "14/14 PASS",
+    "19/19 PASS",
   );
   assert.equal(results.fixture_results.frozen_e_r3_cases, "6/6 PASS");
   assert.equal(results.frozen_e_r3_successor_adjudication.successor_machine_verdict, "FAIL");
+  assert.equal(results.frozen_e_r3_successor_adjudication.successor_cases_passed, "4/6");
+  assert.equal(results.frozen_e_r3_successor_adjudication.root_blocking_findings, 2);
+  assert.equal(results.frozen_e_r3_successor_adjudication.superseded_legacy_findings, 2);
+  assert.equal(
+    results.frozen_e_r3_successor_adjudication.ignored_temporal_false_positives,
+    0,
+  );
+  assert.deepEqual(
+    results.frozen_e_r3_successor_adjudication.e_r3_06_root_codes,
+    ["ASSUMPTION_AS_FACT", "ACTION_CONSISTENCY"],
+  );
   assert.equal(results.regression.active_runtime, "v4");
   assert.equal(results.regression.active_runtime_activated, false);
   assert.equal(results.deterministic_evaluator_v2.case_id_classification, false);
+  assert.equal(results.deterministic_evaluator_v2.self_tests, "12/12 PASS");
+  assert.equal(results.runtime_catalog_v12.pb06_catalog_loader_sha_three_way_equal, true);
+  assert.equal(results.regression.pipeline_ts, "UNCHANGED");
   assert.equal(results.authority.final_jpy980_readiness_established, false);
 });
 
@@ -866,6 +1097,9 @@ await check("review document records technical and plain-language authority limi
   assert.match(source, /Frozen Evidence Commit B remains read-only/u);
   assert.match(source, /original machine verdict remains `FAIL`/u);
   assert.match(source, /LUNA\/Provider は実際に動かしていません/u);
+  assert.match(source, /未来条件の例外/u);
+  assert.match(source, /必ずしも返信するとは限らない/u);
+  assert.match(source, /最終Package D review/u);
   assert.match(source, /Runtime activation、Provider rerun、Package E\/F、R4、C2/u);
 });
 
@@ -916,10 +1150,13 @@ if (failed.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(`\nEvaluator disposition verifier: PASS ${checks.length}/${checks.length}`);
-  console.log("Exact implementation scope: 12/12 (10 new + 2 updated)");
+  console.log("Exact P5-R1 correction scope: 11/11 updated only");
   console.log(`Semantic fixtures: ${semanticFixturePasses}/${fixtures.counts.semantic_fixtures}`);
-  console.log("Required named fixtures: 12/12; total synthetic fixtures: 14/14");
-  console.log("Evaluator v2 self-tests: 6/6");
+  console.log("Required named fixtures: 17/17; total synthetic fixtures: 19/19");
+  console.log(
+    `Evaluator v2 self-tests: ${evaluatorSelfTests.passed}/${evaluatorSelfTests.total}`,
+  );
+  console.log("PB-06 actual / Catalog / loader SHA: strict three-way equality");
   console.log("Frozen E-R3 successor expectations: 6/6; verdict remains FAIL");
   console.log("v11 / v12 loaders: PASS / PASS");
   console.log("Provider / DB / Supabase: 0 / 0 / 0");
