@@ -1,0 +1,233 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
+  "fixture_authority": "synthetic_offline_only",
+  "semantic_fixtures": [
+    {
+      "fixture_id": "minor_fact_fidelity_nonblocking",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "FACT_FIDELITY",
+        "severity": "minor",
+        "json_path": "$.report_content.short_letter[1]",
+        "evidence_refs": ["F001"],
+        "detail": "Small wording ambiguity with no change to event, speaker, chronology, direction, draft meaning, Safety, boundary, or selected-request meaning."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "major_fact_fidelity_blocking",
+      "current_decision": "reply_now",
+      "finding": {
+        "finding_code": "FACT_FIDELITY",
+        "severity": "major",
+        "json_path": "$.report_content.relationship_summary",
+        "evidence_refs": ["F001"],
+        "detail": "The report reverses the speaker and changes a received message into a sent message."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "future_resulting_direction_not_current_violation",
+      "current_decision": "wait_and_reassess",
+      "change_conditions": [
+        {
+          "condition": "相手から具体的な質問が届いた場合",
+          "resulting_direction": "reply_now",
+          "supporting_fact_ids": ["F001"]
+        }
+      ],
+      "finding": {
+        "finding_code": "ACTION_CONSISTENCY",
+        "severity": "major",
+        "json_path": "decision_plan.change_conditions[0].resulting_direction",
+        "evidence_refs": ["F001", "policy:decision_policy_result"],
+        "detail": "The future reply_now direction differs from the current wait_and_reassess direction and current allowed set."
+      },
+      "expected_disposition": "ignored"
+    },
+    {
+      "fixture_id": "grounded_future_commentary_not_current_violation",
+      "current_decision": "wait_and_reassess",
+      "change_conditions": [
+        {
+          "condition": "相手から具体的な質問が届いた場合",
+          "resulting_direction": "reply_now",
+          "supporting_fact_ids": ["F001"]
+        }
+      ],
+      "grounded_change_condition_commentary": [
+        "「相手から具体的な質問が届いた場合」という条件が確認された場合は、その時点では短く返信する方向へ見直します。"
+      ],
+      "finding": {
+        "finding_code": "MESSAGE_POLICY_CONSISTENCY",
+        "severity": "major",
+        "json_path": "$.report_content.change_condition_commentary[0]",
+        "evidence_refs": ["F001", "policy:decision_policy_result"],
+        "detail": "The Application-grounded future commentary differs from the current direction."
+      },
+      "expected_disposition": "ignored"
+    },
+    {
+      "fixture_id": "current_direction_contradiction_blocks",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "DECISION_ALLOWED",
+        "severity": "major",
+        "json_path": "$.decision_plan.selected_decision",
+        "evidence_refs": ["policy:decision_policy_result"],
+        "detail": "The current selected direction is disallowed by the current Decision Policy."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "unsupported_causality_still_blocks",
+      "current_decision": "reply_now",
+      "finding": {
+        "finding_code": "ASSUMPTION_AS_FACT",
+        "severity": "major",
+        "json_path": "$.report_content.short_letter[0]",
+        "evidence_refs": ["F001", "F002"],
+        "detail": "Separate facts are converted into an unsupported causal explanation for why the other person has not replied."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "template_genericity_minor_nonblocking",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "TEMPLATE_GENERICITY",
+        "severity": "minor",
+        "json_path": "$.report_content.closing_lines[0]",
+        "evidence_refs": [],
+        "detail": "The closing is ordinary but does not remove Product meaning."
+      },
+      "expected_disposition": "nonblocking"
+    },
+    {
+      "fixture_id": "material_final_draft_brand_drift_blocks",
+      "current_decision": "reply_now",
+      "finding": {
+        "finding_code": "BRAND_TONE",
+        "severity": "major",
+        "json_path": "$.decision_plan.recommended_message_draft.text",
+        "evidence_refs": ["input:user_supplied_optional_message"],
+        "detail": "The final draft materially replaces the user's personality and voice."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "no_followup_boundary_finding_remains_blocking",
+      "current_decision": "wait_and_reassess",
+      "finding": {
+        "finding_code": "ACTION_CONSISTENCY",
+        "severity": "major",
+        "json_path": "$.decision_plan.actions_to_take[0]",
+        "evidence_refs": ["policy:contact_constraint_policy"],
+        "detail": "The current action tells the user to send another message despite no_followup_message."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "material_unsupported_certainty_blocks",
+      "current_decision": "reply_now",
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "major",
+        "json_path": "$.report_content.short_letter[0]",
+        "evidence_refs": [],
+        "detail": "The customer-facing sentence guarantees that the other person will reply without authority."
+      },
+      "expected_disposition": "blocking"
+    },
+    {
+      "fixture_id": "minor_unsupported_certainty_nonblocking",
+      "current_decision": "reply_now",
+      "finding": {
+        "finding_code": "UNSUPPORTED_CERTAINTY",
+        "severity": "minor",
+        "json_path": "$.report_content.short_letter[0]",
+        "evidence_refs": [],
+        "detail": "Editorial precision issue without a material guaranteed customer proposition."
+      },
+      "expected_disposition": "nonblocking"
+    }
+  ],
+  "evaluator_fixtures": [
+    {
+      "fixture_id": "user_owned_schedule_confirmation_not_certainty",
+      "json_path": "$.decision_plan.actions_to_take[0]",
+      "text": "木曜15時に確実に参加できるか確認する",
+      "expected_unsupported_certainty_findings": 0
+    },
+    {
+      "fixture_id": "guaranteed_reply_blocks",
+      "json_path": "$.report_content.short_letter[0]",
+      "text": "相手は必ず返信します。",
+      "expected_unsupported_certainty_findings": 1,
+      "expected_assertion_kind": "guaranteed_reply"
+    },
+    {
+      "fixture_id": "exact_matched_path_recorded",
+      "json_path": "$.report_content.closing_lines[0]",
+      "text": "返信は確実に来るでしょう。",
+      "expected_unsupported_certainty_findings": 1,
+      "expected_json_path": "$.report_content.closing_lines[0]"
+    }
+  ],
+  "frozen_e_r3_fixtures": [
+    {
+      "case_id": "E-R3-01",
+      "expected_successor_product_passed": true,
+      "expected_root_codes": [],
+      "expected_superseded_reason": "superseded_context_free_certainty_scan",
+      "historical_final_result_present": true
+    },
+    {
+      "case_id": "E-R3-02",
+      "expected_successor_product_passed": true,
+      "expected_root_codes": [],
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-03",
+      "expected_successor_product_passed": true,
+      "expected_root_codes": [],
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-04",
+      "expected_successor_product_passed": true,
+      "expected_root_codes": [],
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-05",
+      "expected_successor_product_passed": false,
+      "expected_root_codes": [],
+      "expected_superseded_reason": "minor_fact_fidelity",
+      "historical_final_result_present": false,
+      "accepted_product_reconstructed": false
+    },
+    {
+      "case_id": "E-R3-06",
+      "expected_successor_product_passed": false,
+      "expected_root_codes": ["ASSUMPTION_AS_FACT"],
+      "expected_superseded_reason": "accepted_temporal_false_positive",
+      "historical_final_result_present": false,
+      "accepted_product_reconstructed": false
+    }
+  ],
+  "counts": {
+    "required_named_fixtures": 12,
+    "semantic_fixtures": 11,
+    "evaluator_fixtures": 3,
+    "total_synthetic_fixtures": 14,
+    "frozen_e_r3_cases": 6
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}

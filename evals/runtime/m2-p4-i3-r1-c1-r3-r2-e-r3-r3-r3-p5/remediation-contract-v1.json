@@ -1,0 +1,164 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-remediation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
+  "title": "PB-06 materiality, semantic disposition, evaluator, and inactive v12 successor contract",
+  "status": "implemented_pending_human_chatgpt_review",
+  "baseline": "b495b958a8fd8dfe203380ca0036140f83f4f4dd",
+  "predecessors": {
+    "runtime_catalog": "runtime-stage-catalog-v11.0.0",
+    "pb05_prompt": {
+      "version": "v4.0.0",
+      "path": "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
+      "sha256_utf8_lf": "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f"
+    },
+    "report_grounding": {
+      "version": "m2-p4-report-grounding-v4",
+      "path": "lib/assessment/runtime/report-grounding-v4.ts",
+      "sha256_utf8_lf": "dc256f6bb98a9a350f3b5938d76229ee3d9d4a5ec9095a183a185afa584388b8"
+    },
+    "pb06_prompt": "v3.0.0",
+    "semantic_disposition": "m2-p4-semantic-disposition-v4",
+    "deterministic_evaluator": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-evaluator-v1"
+  },
+  "successors": {
+    "runtime_catalog": "runtime-stage-catalog-v12.0.0",
+    "prompt_bundle": "prompt-bundle-runtime-v12.0.0",
+    "schema_set": "pipeline-schema-runtime-v5.0.0",
+    "stage_topology": "split-base-candidate-v1",
+    "pb06_prompt": "v4.0.0",
+    "semantic_disposition": "m2-p4-semantic-disposition-v5",
+    "deterministic_evaluator": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-evaluator-v2"
+  },
+  "blocking_matrix": {
+    "ASSUMPTION_AS_FACT": {
+      "minor": "blocking_when_genuine",
+      "major": "blocking",
+      "critical": "blocking"
+    },
+    "SAFETY_REGRESSION": {
+      "minor": "blocking_when_genuine",
+      "major": "blocking",
+      "critical": "blocking"
+    },
+    "DECISION_ALLOWED": {
+      "genuine_current_direction": "blocking",
+      "future_direction_differs_from_current_only": "ignored_temporal_false_positive"
+    },
+    "FACT_FIDELITY": {
+      "minor": "nonblocking",
+      "major": "blocking",
+      "critical": "blocking",
+      "code_name_only_blocking_forbidden": true
+    },
+    "UNSUPPORTED_CERTAINTY": {
+      "minor": "nonblocking",
+      "major_material_customer_assertion": "blocking",
+      "critical_material_customer_assertion": "blocking",
+      "code_name_only_blocking_forbidden": true,
+      "certainty_word_only_blocking_forbidden": true
+    },
+    "TEMPLATE_GENERICITY": {
+      "default": "nonblocking"
+    },
+    "REPETITION": {
+      "default": "nonblocking"
+    },
+    "BRAND_TONE": {
+      "material_final_draft_major_or_critical": "blocking",
+      "default": "nonblocking"
+    },
+    "future_change_condition_direction": {
+      "different_from_current_only": "not_current_direction_blocking",
+      "safety_or_enduring_boundary_violation": "blocking"
+    },
+    "application_grounded_future_commentary": {
+      "exact_same_index_commentary": "not_current_direction_blocking",
+      "arbitrary_aftercare_or_current_action": "not_ignored"
+    },
+    "current_action_contradiction": {
+      "material": "blocking"
+    },
+    "no_followup_boundary": {
+      "current_or_later_outbound_contact": "blocking",
+      "time_only_exception": "blocking",
+      "aftercare_workaround": "blocking"
+    }
+  },
+  "certainty_proposition_contract": {
+    "customer_facing_assertion_paths_only": true,
+    "actual_matched_json_path_required": true,
+    "material_asserted_proposition_required": true,
+    "absent_authority_reason_required": true,
+    "context_free_recursive_substring_matching": false,
+    "case_id_classification": false,
+    "allowed_user_owned_verification_example": "木曜15時に確実に参加できるか確認する",
+    "blocked_external_guarantee_example": "相手は必ず返信します。"
+  },
+  "temporal_contract": {
+    "current_decision_is_distinct_from_future_resulting_direction": true,
+    "future_direction_path": "decision_plan.change_conditions[i].resulting_direction",
+    "grounded_future_commentary_path": "report_content.change_condition_commentary[i]",
+    "commentary_requires_exact_application_grounded_same_index_value": true,
+    "enduring_contact_constraint_exemption_forbidden": true,
+    "current_action_exemption_forbidden": true
+  },
+  "frozen_e_r3_successor_expectations": [
+    {
+      "case_id": "E-R3-01",
+      "certainty_false_positive_removed": true,
+      "accepted_draft_unchanged": true
+    },
+    {
+      "case_id": "E-R3-02",
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-03",
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-04",
+      "historical_boundary_preserved": true
+    },
+    {
+      "case_id": "E-R3-05",
+      "minor_fact_fidelity_code_only_block_removed": true,
+      "historical_final_result_remains_null": true,
+      "accepted_product_reconstruction_forbidden": true
+    },
+    {
+      "case_id": "E-R3-06",
+      "temporal_action_false_positive_removed": true,
+      "unsupported_causal_attribution_blocking": true,
+      "historical_final_result_remains_null": true,
+      "accepted_product_reconstruction_forbidden": true
+    }
+  ],
+  "runtime_boundary": {
+    "v12_catalog_loadable": true,
+    "v12_pipeline_wired": true,
+    "v12_runtime_active": false,
+    "active_runtime": "v4",
+    "service_wiring_changed": false,
+    "provider_quality_established": false
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_reruns": 0,
+    "retry_calls": 0,
+    "repair_calls": 0,
+    "fallback_calls": 0
+  },
+  "authority": {
+    "package_e_authorized": false,
+    "package_f_authorized": false,
+    "provider_rerun_authorized": false,
+    "active_runtime_activation_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "pull_request_authorized": false,
+    "main_merge_authorized": false
+  }
+}

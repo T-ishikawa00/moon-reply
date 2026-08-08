@@ -34,6 +34,7 @@ import {
 } from "./policy.ts";
 import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
+import { groundSplitReportContentV4 } from "./report-grounding-v4.ts";
 import {
   createActionContextV1,
   createContactConstraintPolicyV1,
@@ -41,6 +42,7 @@ import {
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
+import { evaluateSemanticFindingsV5 } from "./semantic-disposition-v5.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
 import { groundStructuredIntakeV5 } from "./structured-intake-grounding-v5.ts";
@@ -433,20 +435,26 @@ export class AssessmentPipeline {
     const authorityIntegrityPair =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
+    const evaluatorDispositionPair =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" &&
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !legacySplitPair && !authorityIntegrityPair
+        ? !legacySplitPair &&
+          !authorityIntegrityPair &&
+          !evaluatorDispositionPair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    if (authorityIntegrityPair && !this.timeZone) {
+    if ((authorityIntegrityPair || evaluatorDispositionPair) && !this.timeZone) {
       throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
@@ -650,7 +658,8 @@ export class AssessmentPipeline {
       }
 
       const authorityIntegrityRuntime =
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -754,8 +763,11 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     const directionalGuidanceRuntime =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
+    const qualityEvaluationRuntime =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0";
     const authorityIntegrityRuntime =
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0";
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+      qualityEvaluationRuntime;
     const deterministicSafety = deterministicSafetyResult(request);
     const baseProviderInput = projectBaseProviderInputV1(request);
     let baseStructuredIntake: JsonObject | null = null;
@@ -955,10 +967,16 @@ export class AssessmentPipeline {
       },
       "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
     )) as unknown as SplitReportContentV2;
-    let reportContent = groundReportContentV3(
-      contextualDecisionFacts,
-      generatedReportContent as unknown as ReportContent,
-    ) as unknown as SplitReportContentV2;
+    let reportContent = qualityEvaluationRuntime
+      ? groundSplitReportContentV4(
+          contextualDecisionFacts,
+          decisionPlan,
+          generatedReportContent,
+        )
+      : (groundReportContentV3(
+          contextualDecisionFacts,
+          generatedReportContent as unknown as ReportContent,
+        ) as unknown as SplitReportContentV2);
     reportContent = groundChangeConditionCommentaryV3(
       decisionPlan as unknown as DecisionPlan,
       reportContent as unknown as ReportContent,
@@ -996,18 +1014,23 @@ export class AssessmentPipeline {
         ) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }
-        const { blockingFindings } =
-          directionalGuidanceRuntime || authorityIntegrityRuntime
-          ? evaluateSemanticFindingsV4({
+        const { blockingFindings } = qualityEvaluationRuntime
+          ? evaluateSemanticFindingsV5({
+              validationOutput: output,
+              decisionPlan,
+              groundedReportContent: reportContent,
+            })
+          : directionalGuidanceRuntime || authorityIntegrityRuntime
+            ? evaluateSemanticFindingsV4({
               validationOutput: output,
               decisionPlan: decisionPlan as unknown as DecisionPlan,
               groundedReportContent: reportContent as unknown as ReportContent,
             })
-          : evaluateSemanticFindingsV3({
-              validationOutput: output,
-              decisionPlan: decisionPlan as unknown as DecisionPlan,
-              groundedReportContent: reportContent as unknown as ReportContent,
-            });
+            : evaluateSemanticFindingsV3({
+                validationOutput: output,
+                decisionPlan: decisionPlan as unknown as DecisionPlan,
+                groundedReportContent: reportContent as unknown as ReportContent,
+              });
         if (blockingFindings.length > 0) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }

@@ -1,0 +1,133 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p5-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P5",
+  "status": "PASS",
+  "capability_status": "evaluator_disposition_v12_successor_implemented_pending_human_chatgpt_review",
+  "baseline": "b495b958a8fd8dfe203380ca0036140f83f4f4dd",
+  "pb06_v4": {
+    "version": "v4.0.0",
+    "path": "lib/assessment/runtime/contracts/pb-06-materiality-validator-v4.developer.md",
+    "sha256_utf8_lf": "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+    "output_schema": "ai/schemas/validation-result.schema.json",
+    "exact_input_count": 9,
+    "proposition_aware_certainty": "PASS",
+    "fact_fidelity_materiality": "PASS",
+    "current_future_separation": "PASS",
+    "preserved_hard_boundary_and_safety_contract": "PASS"
+  },
+  "semantic_disposition_v5": {
+    "version": "m2-p4-semantic-disposition-v5",
+    "minor_fact_fidelity_nonblocking": "PASS",
+    "major_fact_fidelity_blocking": "PASS",
+    "material_unsupported_certainty_blocking": "PASS",
+    "minor_unsupported_certainty_nonblocking": "PASS",
+    "future_direction_false_positive_ignored": "PASS",
+    "grounded_future_commentary_false_positive_ignored": "PASS",
+    "current_direction_contradiction_blocking": "PASS",
+    "unsupported_causality_blocking": "PASS",
+    "template_and_repetition_default_nonblocking": "PASS",
+    "material_final_draft_brand_drift_blocking": "PASS",
+    "no_followup_boundary_blocking": "PASS"
+  },
+  "deterministic_evaluator_v2": {
+    "version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-evaluator-v2",
+    "predecessor_integrity_protocol_product_checks_composed": true,
+    "superseded_context_free_recursive_certainty_scan": true,
+    "customer_facing_assertion_paths_only": true,
+    "case_id_classification": false,
+    "actual_matched_path_recorded": true,
+    "self_tests": "6/6 PASS"
+  },
+  "runtime_catalog_v12": {
+    "schema_version": "m2-p4-runtime-stage-catalog-v2",
+    "catalog_version": "runtime-stage-catalog-v12.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v12.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v5.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "loader": "PASS",
+    "common_prompt_unchanged": true,
+    "pb01_through_pb04_unchanged": true,
+    "pb05_version": "v4.0.0",
+    "pb05_sha256": "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f",
+    "pb06_version": "v4.0.0",
+    "pb06_sha256": "53c4306e6c4b679403fe53a86216517339077fe40117e748aa54fdff67c390b9",
+    "schemas_unchanged_valid_and_openai_compilable": true,
+    "active": false
+  },
+  "pipeline": {
+    "v12_authority_integrity_base_candidate_behavior": "PASS",
+    "v12_action_context_and_contact_constraint_policy": "PASS",
+    "v12_pb04_validation": "PASS",
+    "v12_grounding_sequence": [
+      "groundSplitReportContentV4",
+      "groundChangeConditionCommentaryV3",
+      "validateStageOutput(PB-05)"
+    ],
+    "v12_pb06_definition": "v4.0.0",
+    "v12_semantic_disposition": "m2-p4-semantic-disposition-v5",
+    "v11_grounding": "m2-p4-report-grounding-v3",
+    "v11_semantic_disposition": "m2-p4-semantic-disposition-v4",
+    "v11_behavior_preserved": true
+  },
+  "frozen_e_r3_successor_adjudication": {
+    "source_mutated": false,
+    "historical_machine_verdict": "FAIL",
+    "historical_machine_verdict_reclassified": false,
+    "successor_machine_verdict": "FAIL",
+    "cases_evaluated": "6/6",
+    "successor_cases_passed": "4/6",
+    "root_blocking_findings": 1,
+    "derived_product_outcome_failures": 2,
+    "superseded_legacy_findings": 3,
+    "path_aware_certainty_findings": 0,
+    "ignored_temporal_false_positives": 1,
+    "e_r3_01_certainty_false_positive_removed": true,
+    "e_r3_01_accepted_draft_unchanged": true,
+    "e_r3_02_boundary_preserved": true,
+    "e_r3_03_boundary_preserved": true,
+    "e_r3_04_boundary_preserved": true,
+    "e_r3_05_minor_fact_fidelity_nonblocking": true,
+    "e_r3_05_historical_final_result_remains_null": true,
+    "e_r3_06_temporal_false_positive_removed": true,
+    "e_r3_06_unsupported_causality_blocking": true,
+    "e_r3_06_historical_final_result_remains_null": true,
+    "accepted_product_reconstructed_for_null_cases": false,
+    "new_provider_quality_claimed": false
+  },
+  "fixture_results": {
+    "required_named_fixtures": "12/12 PASS",
+    "synthetic_semantic_and_evaluator_fixtures": "14/14 PASS",
+    "frozen_e_r3_cases": "6/6 PASS"
+  },
+  "regression": {
+    "pb05_v4": "UNCHANGED",
+    "report_grounding_v4": "UNCHANGED",
+    "pb06_v3": "UNCHANGED",
+    "semantic_disposition_v4": "UNCHANGED",
+    "runtime_stage_catalog_v11": "UNCHANGED",
+    "v11_loader": "PASS",
+    "service_ts": "UNCHANGED",
+    "active_runtime": "v4",
+    "active_runtime_activated": false,
+    "main": "UNCHANGED"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "runner_reruns": 0,
+    "retry_calls": 0,
+    "repair_calls": 0,
+    "fallback_calls": 0
+  },
+  "authority": {
+    "package_e_authorized": false,
+    "package_f_authorized": false,
+    "provider_rerun_authorized": false,
+    "active_runtime_activation_authorized": false,
+    "r4_authorized": false,
+    "c2_authorized": false,
+    "final_jpy980_readiness_established": false
+  },
+  "next_action": "human_chatgpt_review_of_evaluator_disposition_v12_successor"
+}
