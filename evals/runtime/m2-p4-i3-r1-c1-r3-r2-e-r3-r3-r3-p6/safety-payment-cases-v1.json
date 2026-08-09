@@ -1,7 +1,99 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-safety-payment-cases-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R1",
-  "baseline": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R2",
+  "baseline": "ddbea5347d0fb2c1cfacd990e9a7f17acaf53801",
+  "presentation_expectations": {
+    "phase_2_title": "鑑定前の確認",
+    "phase_2_navigation_label": "利用確認",
+    "intro": "月の返事では、\n『今は送らない』という答えも含めて、\n今の状況に合った鑑定をお返しします。\n\n対応できる内容かどうかだけ、\n先に確認させてください。",
+    "primary_contact_boundaries": [
+      {
+        "value": "no_restriction_known",
+        "label": "特に連絡の制限はない",
+        "helper": "連絡を控えるよう求められておらず、ブロック等もない"
+      },
+      {
+        "value": "temporary_pause",
+        "label": "少し時間を置いてほしいと言われている",
+        "helper": "『考える時間がほしい』『落ち着いたら連絡する』『今日は一人にしてほしい』など"
+      },
+      {
+        "value": "explicit_no_contact",
+        "label": "連絡しないでほしいと言われている",
+        "helper": "『連絡しないで』『これ以上連絡しないで』など"
+      },
+      {
+        "value": "channel_restricted",
+        "label": "ブロックなどで連絡手段が制限されている",
+        "helper": "ブロック、着信拒否など"
+      },
+      {
+        "value": "relationship_closed",
+        "label": "関係を終えたい意思を伝えられている"
+      }
+    ],
+    "secondary_contact_boundaries": [
+      {
+        "value": "business_only",
+        "label": "必要な連絡だけは許可されている",
+        "helper": "業務・荷物・金銭など、私的ではない用件に限られている"
+      },
+      {
+        "value": "new_inbound_after_boundary",
+        "label": "以前の制限後に、相手から新しい連絡が届いている",
+        "helper": "返信を求められているか、用件の範囲が明確かを確認します"
+      },
+      {
+        "value": "unknown",
+        "label": "どれに当てはまるか分からない"
+      }
+    ],
+    "urgent_safety_entry": {
+      "value": "urgent_safety",
+      "summary": "いま、自分や相手の安全に関わる緊急な状況がある場合",
+      "label": "安全に関わる緊急な状況がある",
+      "helper": "通常の鑑定ではなく、安全を優先した案内を表示します"
+    },
+    "primary_assistance_goals": [
+      "understand_and_organize",
+      "decide_send_wait_or_pause",
+      "draft_within_current_permission"
+    ],
+    "secondary_assistance_goals": [
+      "recontact_or_overcome_boundary",
+      "alternate_channel_or_third_party",
+      "monitor_track_or_manipulate",
+      "professional_judgment",
+      "urgent_safety_help"
+    ],
+    "cta": "この内容で確認する",
+    "product_presentations": {
+      "eligible_pause_assessment": {
+        "scopeLabel": "今は送らない、という答えも含む鑑定",
+        "heading": "送らない時間も、迷いのままにしません。",
+        "description": "相手との距離を尊重しながら、\nいま確かめられること、\n今は送らない理由、\n今夜できること、\n何が変われば見直せるかまで、\nあなたの相談に沿って鑑定ノートにまとめます。",
+        "provides": [
+          "いま確かめられること",
+          "今は送らない理由",
+          "今夜できること",
+          "見直すための条件"
+        ],
+        "draftAvailability": "状況によっては送信文案を表示しません。\nその場合も、鑑定ノートは通常どおりお返しします。"
+      },
+      "eligible_boundary_support_only": {
+        "scopeLabel": "連絡を重ねない今を整理する鑑定",
+        "heading": "連絡文案ではなく、気持ちと次の一歩を整理します。",
+        "description": "確認できることと、\nまだ分からないことを分けながら、\nご自身の気持ちと、\n相手が示した距離を越えずにできる次の一歩を\n鑑定ノートにまとめます。",
+        "provides": [
+          "確認できること／まだ分からないこと",
+          "ご自身の気持ちの整理",
+          "今夜、自分側でできること",
+          "今後の自分側の方向性"
+        ],
+        "draftAvailability": "相手への連絡文案や再接触方法はお返ししません。"
+      }
+    }
+  },
   "base_input": {
     "schemaVersion": "prepayment-safety-input-v1",
     "adultConfirmed": true,

@@ -87,6 +87,12 @@ type SafetyPresentation = {
   draftAvailability: string;
 };
 
+type ContactBoundaryPresentationOption = {
+  value: ContactBoundaryStateV1;
+  label: string;
+  helper?: string;
+};
+
 const initialFormState: RequestFormData = {
   adultConfirmed: false,
   nickname: "",
@@ -150,46 +156,53 @@ const whatToKnowOptions: readonly {
   { label: "不安を整理したい", value: "organize_emotions" },
 ];
 
-const contactBoundaryOptions: readonly {
-  value: ContactBoundaryStateV1;
-  label: string;
-}[] = [
+const primaryContactBoundaryOptions: readonly ContactBoundaryPresentationOption[] = [
   {
     value: "no_restriction_known",
-    label: "連絡を控えるよう求められておらず、ブロック等もない",
+    label: "特に連絡の制限はない",
+    helper: "連絡を控えるよう求められておらず、ブロック等もない",
   },
   {
     value: "temporary_pause",
-    label:
-      "「考える時間がほしい」「落ち着いたら連絡する」「今日は一人にしてほしい」などと言われている",
+    label: "少し時間を置いてほしいと言われている",
+    helper:
+      "『考える時間がほしい』『落ち着いたら連絡する』『今日は一人にしてほしい』など",
   },
   {
     value: "explicit_no_contact",
-    label: "「連絡しないで」「これ以上連絡しないで」などと言われている",
+    label: "連絡しないでほしいと言われている",
+    helper: "『連絡しないで』『これ以上連絡しないで』など",
   },
   {
     value: "channel_restricted",
-    label: "ブロック、着信拒否などで連絡手段を制限されている",
+    label: "ブロックなどで連絡手段が制限されている",
+    helper: "ブロック、着信拒否など",
   },
   {
     value: "relationship_closed",
-    label: "関係を終えたい意思を明確に伝えられている",
+    label: "関係を終えたい意思を伝えられている",
   },
+];
+
+const secondaryContactBoundaryOptions: readonly ContactBoundaryPresentationOption[] = [
   {
     value: "business_only",
-    label:
-      "私的な連絡は禁止だが、業務・荷物・金銭等の必要連絡だけは許可されている",
+    label: "必要な連絡だけは許可されている",
+    helper: "業務・荷物・金銭など、私的ではない用件に限られている",
   },
   {
     value: "new_inbound_after_boundary",
-    label: "以前は制限があったが、その後、相手から新しい連絡が届いている",
+    label: "以前の制限後に、相手から新しい連絡が届いている",
+    helper: "返信を求められているか、用件の範囲が明確かを確認します",
   },
-  { value: "unknown", label: "判断できない／分からない" },
-  {
-    value: "urgent_safety",
-    label: "自傷、自殺、暴力、脅迫など、現在の安全に関わる緊急性がある",
-  },
+  { value: "unknown", label: "どれに当てはまるか分からない" },
 ];
+
+const urgentSafetyContactBoundaryOption: ContactBoundaryPresentationOption = {
+  value: "urgent_safety",
+  label: "安全に関わる緊急な状況がある",
+  helper: "通常の鑑定ではなく、安全を優先した案内を表示します",
+};
 
 const primaryAssistanceOptions: readonly {
   value: RequestedAssistanceGoalV1;
@@ -242,6 +255,9 @@ const phaseTitles: Record<Phase, string> = {
   4: "受取メール",
 };
 
+const phaseTwoIntro =
+  "月の返事では、\n『今は送らない』という答えも含めて、\n今の状況に合った鑑定をお返しします。\n\n対応できる内容かどうかだけ、\n先に確認させてください。";
+
 const eligiblePresentations: Record<
   EligiblePrepaymentClassificationV1,
   SafetyPresentation
@@ -255,20 +271,31 @@ const eligiblePresentations: Record<
     draftAvailability: "状況と依頼内容に合う場合は、文案を含むことがあります。",
   },
   eligible_pause_assessment: {
-    scopeLabel: "今は送らない判断を含む鑑定",
-    heading: "文案がない場合も、鑑定ノートが本編です。",
+    scopeLabel: "今は送らない、という答えも含む鑑定",
+    heading: "送らない時間も、迷いのままにしません。",
     description:
-      "相手が求めた時間や距離を尊重し、理由・今の動き方・見直す条件を鑑定ノートとしてお返しします。",
-    provides: ["送らない判断の理由", "今できる具体的な行動", "見直すための条件"],
-    draftAvailability: "送信文案が表示されない場合があります。",
+      "相手との距離を尊重しながら、\nいま確かめられること、\n今は送らない理由、\n今夜できること、\n何が変われば見直せるかまで、\nあなたの相談に沿って鑑定ノートにまとめます。",
+    provides: [
+      "いま確かめられること",
+      "今は送らない理由",
+      "今夜できること",
+      "見直すための条件",
+    ],
+    draftAvailability:
+      "状況によっては送信文案を表示しません。\nその場合も、鑑定ノートは通常どおりお返しします。",
   },
   eligible_boundary_support_only: {
-    scopeLabel: "境界を尊重した整理の鑑定",
-    heading: "連絡文案ではなく、整理と今後の方向性をお返しします。",
+    scopeLabel: "連絡を重ねない今を整理する鑑定",
+    heading: "連絡文案ではなく、気持ちと次の一歩を整理します。",
     description:
-      "確認できる事実、気持ちの整理、相手の境界を尊重した今後の方向性を鑑定ノートとしてお返しします。",
-    provides: ["確認できる事実", "ご自身の気持ちの整理", "境界を尊重した方向性"],
-    draftAvailability: "相手への連絡文案や再接触方法は提供しません。",
+      "確認できることと、\nまだ分からないことを分けながら、\nご自身の気持ちと、\n相手が示した距離を越えずにできる次の一歩を\n鑑定ノートにまとめます。",
+    provides: [
+      "確認できること／まだ分からないこと",
+      "ご自身の気持ちの整理",
+      "今夜、自分側でできること",
+      "今後の自分側の方向性",
+    ],
+    draftAvailability: "相手への連絡文案や再接触方法はお返ししません。",
   },
   eligible_scoped_reply: {
     scopeLabel: "最新の用件だけに限った返信鑑定",
@@ -1477,22 +1504,11 @@ export function RequestForm() {
           aria-labelledby="request-phase-2-title"
         >
           <header className="request-sheet__heading">
-            <p>02 / 決済前の利用確認</p>
-            <h2 id="request-phase-2-title">決済前の利用確認</h2>
-            <span>
-              月の返事では、「今は送らない」という鑑定も含めて、状況に合った方向性をお返しします。
-            </span>
+            <p>02 / 鑑定前の確認</p>
+            <h2 id="request-phase-2-title">鑑定前の確認</h2>
           </header>
 
-          <p className={styles.supportCopy}>
-            月の返事では、{"\n"}
-            『今は送らない』という鑑定も含めて、{"\n"}
-            状況に合った方向性をお返しします。{"\n\n"}
-            一方で、{"\n"}
-            相手の拒否や連絡制限を回避する方法、{"\n"}
-            現在の安全に関わる緊急性の高い相談、{"\n"}
-            専門判断が必要な内容には対応していません。
-          </p>
+          <p className={styles.supportCopy}>{phaseTwoIntro}</p>
 
           <fieldset
             id="contactBoundaryState"
@@ -1508,7 +1524,7 @@ export function RequestForm() {
               相手から伝えられた内容と、現在の連絡手段の状態で選んでください。
             </p>
             <div className={styles.choiceList}>
-              {contactBoundaryOptions.map((option) => (
+              {primaryContactBoundaryOptions.map((option) => (
                 <label key={option.value} className={styles.choice}>
                   <input
                     type="radio"
@@ -1517,10 +1533,68 @@ export function RequestForm() {
                     checked={safety.contactBoundaryState === option.value}
                     onChange={() => selectContactBoundary(option.value)}
                   />
-                  <span>{option.label}</span>
+                  <span className={styles.choiceContent}>
+                    <strong className={styles.choiceLabel}>{option.label}</strong>
+                    {option.helper ? (
+                      <small className={styles.choiceHelper}>{option.helper}</small>
+                    ) : null}
+                  </span>
                 </label>
               ))}
             </div>
+            <details className={styles.secondaryChoices}>
+              <summary>その他の連絡状況はこちら</summary>
+              <div className={styles.choiceList}>
+                {secondaryContactBoundaryOptions.map((option) => (
+                  <label key={option.value} className={styles.choice}>
+                    <input
+                      type="radio"
+                      name="contact-boundary"
+                      value={option.value}
+                      checked={safety.contactBoundaryState === option.value}
+                      onChange={() => selectContactBoundary(option.value)}
+                    />
+                    <span className={styles.choiceContent}>
+                      <strong className={styles.choiceLabel}>{option.label}</strong>
+                      {option.helper ? (
+                        <small className={styles.choiceHelper}>{option.helper}</small>
+                      ) : null}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </details>
+            <details
+              className={`${styles.secondaryChoices} ${styles.urgentSafetyEntry}`}
+            >
+              <summary>
+                いま、自分や相手の安全に関わる緊急な状況がある場合
+              </summary>
+              <div className={styles.choiceList}>
+                <label className={styles.choice}>
+                  <input
+                    type="radio"
+                    name="contact-boundary"
+                    value={urgentSafetyContactBoundaryOption.value}
+                    checked={
+                      safety.contactBoundaryState ===
+                      urgentSafetyContactBoundaryOption.value
+                    }
+                    onChange={() =>
+                      selectContactBoundary(urgentSafetyContactBoundaryOption.value)
+                    }
+                  />
+                  <span className={styles.choiceContent}>
+                    <strong className={styles.choiceLabel}>
+                      {urgentSafetyContactBoundaryOption.label}
+                    </strong>
+                    <small className={styles.choiceHelper}>
+                      {urgentSafetyContactBoundaryOption.helper}
+                    </small>
+                  </span>
+                </label>
+              </div>
+            </details>
             <FieldError
               id="contactBoundaryState-error"
               message={errors.contactBoundaryState}
@@ -1584,7 +1658,7 @@ export function RequestForm() {
               onClick={classifyCurrentInput}
               disabled={safetyBusy}
             >
-              {safetyBusy ? "利用確認中です" : "利用確認の結果を見る"}
+              {safetyBusy ? "利用確認中です" : "この内容で確認する"}
             </button>
           </div>
 
@@ -1624,7 +1698,15 @@ export function RequestForm() {
               </h3>
               <p className={styles.eligibleLead}>{gatePresentation.description}</p>
               <div className={styles.scopeDisclosure}>
-                <strong>この鑑定で扱う範囲</strong>
+                <strong>この鑑定でお返しするもの</strong>
+                <ul className={styles.eligibleProvideList}>
+                  {gatePresentation.provides.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.scopeDisclosure}>
+                <strong>文案について</strong>
                 <p>{gatePresentation.draftAvailability}</p>
               </div>
               <div
@@ -1724,7 +1806,10 @@ export function RequestForm() {
               <div className={styles.clarificationFields}>
                 {clarificationCodes.includes("boundary_state_required") ? (
                   <ClarificationField legend="現在の連絡状況を、もう一度確認してください。">
-                    {contactBoundaryOptions
+                    {[
+                      ...primaryContactBoundaryOptions,
+                      ...secondaryContactBoundaryOptions,
+                    ]
                       .filter((option) => option.value !== "unknown")
                       .map((option) => (
                         <ClarificationChoice

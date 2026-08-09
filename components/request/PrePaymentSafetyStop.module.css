@@ -104,6 +104,7 @@
 .resultAction:focus-visible,
 .choice:has(input:focus-visible),
 .checkChoice:has(input:focus-visible),
+.secondaryChoices summary:focus-visible,
 .reviewNav a:focus-visible,
 .reviewDisclosure summary:focus-visible {
   outline: 3px solid var(--focus-ring-paper);
@@ -133,9 +134,7 @@
 
 .supportCopy {
   margin: 0 clamp(1.5rem, 5vw, 3rem);
-  border-left: 3px solid var(--moon-600);
-  background: var(--paper-200);
-  padding: var(--space-5);
+  padding: 0 0 var(--space-5);
   color: var(--ink-600);
   line-height: 1.95;
   white-space: pre-line;
@@ -170,19 +169,19 @@
 
 .choiceList {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-3);
   margin-top: var(--space-4);
 }
 
 .choice {
   display: grid;
-  min-height: 3.5rem;
+  min-height: 3.25rem;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
   gap: var(--space-3);
   border: 1px solid var(--border-paper);
   background: var(--paper-100);
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   color: var(--ink-600);
   line-height: 1.75;
   cursor: pointer;
@@ -201,6 +200,27 @@
   height: 1.25rem;
   margin-top: 0.15rem;
   accent-color: var(--violet-600);
+}
+
+.choiceContent {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.choiceLabel {
+  color: var(--ink-800);
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.choiceHelper {
+  color: var(--ink-600);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
 }
 
 .secondaryChoices {
@@ -222,6 +242,17 @@
   margin: 0;
   border-top: 1px solid var(--border-paper);
   padding: var(--space-3);
+}
+
+.urgentSafetyEntry {
+  border-style: dashed;
+  background: transparent;
+}
+
+.urgentSafetyEntry summary {
+  color: var(--ink-600);
+  font-size: 0.84rem;
+  font-weight: 700;
 }
 
 .eligibleCard {
@@ -250,6 +281,24 @@
   color: var(--ink-600);
   line-height: 1.95;
   white-space: pre-line;
+}
+
+.eligibleProvideList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eligibleProvideList li {
+  border-left: 2px solid var(--moon-600);
+  background: var(--paper-200);
+  padding: var(--space-3);
+  color: var(--ink-600);
+  font-size: 0.82rem;
+  line-height: 1.7;
 }
 
 .gateControls {
@@ -550,6 +599,7 @@
   }
 
   .provideList,
+  .eligibleProvideList,
   .reviewDisclosure dl > div {
     grid-template-columns: 1fr;
   }
@@ -580,6 +630,10 @@
   .checkChoice,
   .reviewSection,
   .reviewHeader {
+    padding-inline: 1rem;
+  }
+
+  .secondaryChoices summary {
     padding-inline: 1rem;
   }
 }

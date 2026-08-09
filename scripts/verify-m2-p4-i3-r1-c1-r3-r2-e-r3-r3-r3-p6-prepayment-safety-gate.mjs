@@ -12,16 +12,13 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const baseline = "91efbf1ef14a27fb21d24f12baeb8196d6113cf0";
+const baseline = "ddbea5347d0fb2c1cfacd990e9a7f17acaf53801";
 const expectedBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-prepayment-safety-ux";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-r2-customer-experience";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const exactScope = [
   "components/request/RequestForm.tsx",
-  "components/request/PrePaymentSafetyStop.tsx",
   "components/request/PrePaymentSafetyStop.module.css",
-  "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
-  "app/review/purchase/safety/[fixtureId]/page.tsx",
   "fixtures/review/prepayment-safety-states.ts",
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-contract-v1.json",
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-cases-v1.json",
@@ -30,7 +27,6 @@ const exactScope = [
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-prepayment-safety-gate.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md",
 ];
-const newOnly = exactScope.slice(1);
 const legacyComponentPath =
   "components/review/ReviewPurchaseConfirmation.tsx";
 const legacyFixturePath = "fixtures/review/purchase-confirmations.ts";
@@ -38,6 +34,13 @@ const expectedLegacyComponentBlob =
   "5f77c298639a78d3c9d0d3c7dc987f32f806ae5a";
 const expectedLegacyFixtureBlob =
   "ec22a26bd3df38781b029db8e0e646e2d4db8d0d";
+const stopComponentPath = "components/request/PrePaymentSafetyStop.tsx";
+const expectedStopComponentBlob =
+  "2c146a032049dedca3a1547c3bcfc52aa66e1fa5";
+const reviewComponentPath =
+  "components/review/ReviewPrePaymentSafetyConfirmation.tsx";
+const expectedReviewComponentBlob =
+  "d96c311af2d18af370238a7a940185e5576b573a";
 const contractPath =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-contract-v1.json";
 const casesPath =
@@ -137,6 +140,65 @@ function deepMerge(base, overrides) {
   return output;
 }
 
+function sliceBetween(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  const end = source.indexOf(endMarker, start + startMarker.length);
+  assert.ok(start >= 0, `missing start marker: ${startMarker}`);
+  assert.ok(end > start, `missing end marker: ${endMarker}`);
+  return source.slice(start, end);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
+function assertPresentationBlock(block, expected) {
+  for (const property of [
+    "scopeLabel",
+    "heading",
+    "description",
+    "draftAvailability",
+  ]) {
+    assert.match(
+      block,
+      new RegExp(
+        `${property}:\\s*${escapeRegExp(JSON.stringify(expected[property]))}`,
+        "u",
+      ),
+      property,
+    );
+  }
+  const providesBlock = sliceBetween(block, "provides:", "draftAvailability:");
+  const actualProvides = [
+    ...providesBlock.matchAll(/"(?:\\.|[^"\\])*"/gu),
+  ].map((match) => JSON.parse(match[0]));
+  assert.deepEqual(actualProvides, expected.provides);
+}
+
+function assertOptionBlock(block, expectedOptions) {
+  let cursor = 0;
+  for (const option of expectedOptions) {
+    const marker = `value: ${JSON.stringify(option.value)}`;
+    const start = block.indexOf(marker, cursor);
+    assert.ok(start >= cursor, option.value);
+    const next = block.indexOf("value: ", start + marker.length);
+    const optionSource = block.slice(start, next >= 0 ? next : block.length);
+    assert.ok(
+      optionSource.includes(`label: ${JSON.stringify(option.label)}`),
+      option.label,
+    );
+    if (option.helper) {
+      assert.ok(
+        optionSource.includes(JSON.stringify(option.helper)),
+        option.helper,
+      );
+    } else {
+      assert.doesNotMatch(optionSource, /helper:/u, option.value);
+    }
+    cursor = start + marker.length;
+  }
+}
+
 const contract = readJson(contractPath);
 const cases = readJson(casesPath);
 const capabilities = readJson(capabilitiesPath);
@@ -154,6 +216,11 @@ const routeSource = readUtf8(
 const fixtureSource = readUtf8(
   "fixtures/review/prepayment-safety-states.ts",
 );
+const fixtureModuleUrl = pathToFileURL(
+  path.join(repositoryRoot, "fixtures/review/prepayment-safety-states.ts"),
+).href;
+const { PREPAYMENT_SAFETY_REVIEW_FIXTURES } = await import(fixtureModuleUrl);
+const presentationExpectations = cases.presentation_expectations;
 
 check("exact branch baseline main and empty stash authority", () => {
   assert.equal(git(["branch", "--show-current"]).stdout.trim(), expectedBranch);
@@ -170,18 +237,14 @@ check("exact branch baseline main and empty stash authority", () => {
   }
 });
 
-check("exact corrected scope 12/12 with one update and eleven new paths", () => {
+check("exact R2 customer presentation scope is 9/9 update only", () => {
   assert.deepEqual(currentChangedPaths(), [...exactScope].sort());
-  assert.equal(
-    git(["cat-file", "-e", `${baseline}:${exactScope[0]}`], true).status,
-    0,
-  );
-  for (const relativePath of newOnly) {
+  for (const relativePath of exactScope) {
     assert.ok(fs.statSync(path.join(repositoryRoot, relativePath)).isFile());
-    assert.notEqual(
+    assert.equal(
       git(["cat-file", "-e", `${baseline}:${relativePath}`], true).status,
       0,
-      `${relativePath} unexpectedly exists at baseline`,
+      `${relativePath} must pre-exist at baseline`,
     );
   }
 });
@@ -212,6 +275,14 @@ check("legacy M1 purchase review component and fixture blobs are unchanged", () 
     expectedLegacyComponentBlob,
   );
   assert.equal(filteredWorktreeBlob(legacyFixturePath), expectedLegacyFixtureBlob);
+  assert.equal(
+    filteredWorktreeBlob(stopComponentPath),
+    expectedStopComponentBlob,
+  );
+  assert.equal(
+    filteredWorktreeBlob(reviewComponentPath),
+    expectedReviewComponentBlob,
+  );
 });
 
 check("legacy M1 review contract is not imported wrapped or repurposed", () => {
@@ -223,8 +294,11 @@ check("legacy M1 review contract is not imported wrapped or repurposed", () => {
   assert.match(routeSource, /prepayment-safety-states/u);
 });
 
-check("lib safety accepted engine API and Charter evidence remain unchanged", () => {
+check("accepted stop Safety Engine API state machine and Runtime remain unchanged", () => {
   const protectedPaths = [
+    stopComponentPath,
+    reviewComponentPath,
+    "app/review/purchase/safety/[fixtureId]/page.tsx",
     "lib/safety",
     "lib/purchase/prepayment-safety-types-v1.ts",
     "lib/purchase/prepayment-safety-rules-v1.ts",
@@ -234,6 +308,7 @@ check("lib safety accepted engine API and Charter evidence remain unchanged", ()
     "app/api/internal/purchase-eligibility/route.ts",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0",
+    "lib/assessment/runtime",
   ];
   assert.equal(
     git(["diff", "--name-only", baseline, "--", ...protectedPaths]).stdout.trim(),
@@ -286,30 +361,74 @@ check("free-text inbound outbound relationship and topic mappings are exact", ()
   );
 });
 
-check("exact nine boundary states and eight assistance goals are selectable", () => {
-  const states = [
-    "no_restriction_known",
-    "temporary_pause",
-    "explicit_no_contact",
-    "channel_restricted",
-    "relationship_closed",
-    "business_only",
-    "new_inbound_after_boundary",
-    "unknown",
-    "urgent_safety",
-  ];
-  const goals = [
-    "understand_and_organize",
-    "decide_send_wait_or_pause",
-    "draft_within_current_permission",
-    "recontact_or_overcome_boundary",
-    "alternate_channel_or_third_party",
-    "monitor_track_or_manipulate",
-    "professional_judgment",
-    "urgent_safety_help",
-  ];
-  for (const value of [...states, ...goals]) {
-    assert.ok(requestSource.includes(`"${value}"`), value);
+check("nine engine states use progressive 5 plus 3 plus urgent presentation", () => {
+  assert.ok(
+    requestSource.includes(
+      `<h2 id="request-phase-2-title">${presentationExpectations.phase_2_title}</h2>`,
+    ),
+  );
+  assert.ok(requestSource.includes(JSON.stringify(presentationExpectations.intro)));
+  assert.equal(
+    requestSource.split(JSON.stringify(presentationExpectations.intro)).length - 1,
+    1,
+  );
+  assert.ok(
+    requestSource.includes(
+      `2: ${JSON.stringify(presentationExpectations.phase_2_navigation_label)}`,
+    ),
+  );
+  assert.ok(requestSource.includes(JSON.stringify(presentationExpectations.cta)));
+  assert.doesNotMatch(requestSource, /決済前の利用確認|利用確認の結果を見る/u);
+  const primaryBlock = sliceBetween(
+    requestSource,
+    "const primaryContactBoundaryOptions:",
+    "const secondaryContactBoundaryOptions:",
+  );
+  const secondaryBlock = sliceBetween(
+    requestSource,
+    "const secondaryContactBoundaryOptions:",
+    "const urgentSafetyContactBoundaryOption:",
+  );
+  const urgentBlock = sliceBetween(
+    requestSource,
+    "const urgentSafetyContactBoundaryOption:",
+    "const primaryAssistanceOptions:",
+  );
+  assert.equal(presentationExpectations.primary_contact_boundaries.length, 5);
+  assert.equal(presentationExpectations.secondary_contact_boundaries.length, 3);
+  assertOptionBlock(
+    primaryBlock,
+    presentationExpectations.primary_contact_boundaries,
+  );
+  assertOptionBlock(
+    secondaryBlock,
+    presentationExpectations.secondary_contact_boundaries,
+  );
+  assertOptionBlock(urgentBlock, [presentationExpectations.urgent_safety_entry]);
+  assert.doesNotMatch(primaryBlock, /urgent_safety/u);
+  assert.doesNotMatch(secondaryBlock, /urgent_safety/u);
+  assert.doesNotMatch(urgentBlock, /自傷|自殺|暴力|脅迫/u);
+  assert.ok(
+    requestSource.includes(presentationExpectations.urgent_safety_entry.summary),
+  );
+  assert.match(requestSource, /その他の連絡状況はこちら/u);
+  assert.doesNotMatch(requestSource, /contactBoundaryOptions\.map/u);
+
+  const primaryGoalBlock = sliceBetween(
+    requestSource,
+    "const primaryAssistanceOptions:",
+    "const secondaryAssistanceOptions:",
+  );
+  const secondaryGoalBlock = sliceBetween(
+    requestSource,
+    "const secondaryAssistanceOptions:",
+    "const phaseTitles:",
+  );
+  for (const value of presentationExpectations.primary_assistance_goals) {
+    assert.ok(primaryGoalBlock.includes(`value: ${JSON.stringify(value)}`), value);
+  }
+  for (const value of presentationExpectations.secondary_assistance_goals) {
+    assert.ok(secondaryGoalBlock.includes(`value: ${JSON.stringify(value)}`), value);
   }
   assert.match(requestSource, /その他の目的に当てはまる場合/u);
 });
@@ -356,17 +475,58 @@ check("API unavailable and unexpected responses fail closed with calm local copy
   assert.doesNotMatch(requestSource, />\s*PREPAYMENT_[A-Z_]+\s*</u);
 });
 
-check("eligible Product copy preserves general pause boundary scoped and business value", () => {
-  const requiredCopy = [
-    "この内容は、通常の鑑定として確認できます。",
+check("pause and boundary Product copy is exact and fixture-identical", () => {
+  const expectedPause =
+    presentationExpectations.product_presentations.eligible_pause_assessment;
+  const expectedBoundary =
+    presentationExpectations.product_presentations
+      .eligible_boundary_support_only;
+  const requestPauseBlock = sliceBetween(
+    requestSource,
+    "  eligible_pause_assessment: {",
+    "  eligible_boundary_support_only: {",
+  );
+  const requestBoundaryBlock = sliceBetween(
+    requestSource,
+    "  eligible_boundary_support_only: {",
+    "  eligible_scoped_reply: {",
+  );
+  assertPresentationBlock(requestPauseBlock, expectedPause);
+  assertPresentationBlock(requestBoundaryBlock, expectedBoundary);
+
+  for (const [fixtureId, expected] of [
+    ["eligible-pause-assessment", expectedPause],
+    ["eligible-boundary-support-only", expectedBoundary],
+  ]) {
+    const fixture = PREPAYMENT_SAFETY_REVIEW_FIXTURES[fixtureId];
+    assert.deepEqual(
+      {
+        scopeLabel: fixture.scopeLabel,
+        heading: fixture.heading,
+        description: fixture.description,
+        provides: fixture.provides,
+        draftAvailability: fixture.draftAvailability,
+      },
+      expected,
+      fixtureId,
+    );
+  }
+
+  assert.match(requestSource, /gatePresentation\.provides\.map/u);
+  assert.match(requestSource, /eligibleProvideList/u);
+  for (const preservedCopy of [
     "『今は送らない』という判断になり",
     "理由・今の動き方・見直す条件を",
     "相手への連絡文案や再接触方法は提供しません。",
     "相手から届いた最新の文面の用件だけ",
     "明確に許可された実務上の用件だけ",
-    "文案がない場合も、鑑定ノートが本編です。",
-  ];
-  for (const copy of requiredCopy) assert.ok(requestSource.includes(copy), copy);
+  ]) {
+    assert.ok(requestSource.includes(preservedCopy), preservedCopy);
+  }
+  assert.doesNotMatch(
+    JSON.stringify(expectedPause),
+    /(?:返信|返事).*(?:保証|必ず|来る)/u,
+  );
 });
 
 check("common attestation is exact and remains non-authoritative client input", () => {
@@ -434,7 +594,14 @@ check("stop and clarification accessibility focus and semantics are explicit", (
   assert.match(requestSource, /clarificationHeadingRef\.current\?\.focus\(\)/u);
   assert.match(requestSource, /role="status"/u);
   assert.match(requestSource, /role="alert"/u);
+  assert.match(requestSource, /<fieldset[\s\S]*primaryContactBoundaryOptions/u);
+  assert.match(requestSource, /<details[\s\S]*その他の連絡状況はこちら/u);
+  assert.match(requestSource, /urgentSafetyContactBoundaryOption\.value/u);
   assert.match(styleSource, /:focus-visible/u);
+  assert.match(styleSource, /\.choiceLabel/u);
+  assert.match(styleSource, /\.choiceHelper/u);
+  assert.match(styleSource, /\.secondaryChoices summary:focus-visible/u);
+  assert.match(styleSource, /overflow-wrap: anywhere/u);
   assert.match(styleSource, /@media \(max-width: 320px\)/u);
   assert.match(styleSource, /@media \(prefers-reduced-motion: reduce\)/u);
 });
@@ -502,24 +669,66 @@ check("Provider DB Supabase external execution remains zero", () => {
 
 check("contract records exact authority scope flow and review boundary", () => {
   assert.equal(contract.status, capabilities.status);
+  assert.equal(
+    contract.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R2",
+  );
   assert.equal(contract.baseline, baseline);
   assert.equal(contract.branch, expectedBranch);
-  assert.equal(contract.scope.path_count, 12);
-  assert.deepEqual(contract.scope.update_only, [exactScope[0]]);
-  assert.deepEqual(contract.scope.new_only, newOnly);
+  assert.equal(contract.scope.path_count, 9);
+  assert.deepEqual(contract.scope.update_only, exactScope);
+  assert.deepEqual(contract.scope.new_only, []);
   assert.equal(contract.authority.classification_owner, "server");
   assert.equal(contract.authority.purchase_gate_owner, "server");
+  assert.equal(contract.authority.accepted_p6_i2_head, baseline);
+  assert.equal(
+    contract.protected_customer_surfaces.stop_component_blob_sha,
+    expectedStopComponentBlob,
+  );
+  assert.equal(
+    contract.protected_customer_surfaces.review_component_blob_sha,
+    expectedReviewComponentBlob,
+  );
+  assert.equal(contract.request_flow.phase_2_customer_title, "鑑定前の確認");
+  assert.equal(contract.request_flow.phase_2_intro_block_count, 1);
+  assert.equal(contract.request_flow.primary_contact_boundary_option_count, 5);
+  assert.equal(contract.request_flow.secondary_contact_boundary_option_count, 3);
+  assert.equal(contract.request_flow.urgent_safety_entry_separate, true);
+  assert.equal(contract.request_flow.customer_cta, "この内容で確認する");
   assert.equal(contract.request_flow.eligible_classification_count, 5);
   assert.equal(contract.request_flow.one_completed_clarification_submission_maximum, 1);
   assert.equal(contract.request_flow.eligibility_hash_stored_or_reused_by_client, false);
   assert.equal(contract.payment.payment_implementation_present, false);
-  assert.equal(contract.human_review.status, "pending");
+  assert.equal(contract.human_review.phase_1_request_ux, "human_visual_accepted");
+  assert.equal(
+    contract.human_review.blocked_unsafe_stop,
+    "human_visual_accepted",
+  );
+  assert.equal(contract.human_review.urgent_safety_stop, "human_visual_accepted");
+  assert.equal(
+    contract.human_review.phase_2_customer_presentation,
+    "pending_r2_human_visual_review",
+  );
+  assert.equal(
+    contract.human_review.pause_product_value_presentation,
+    "pending_r2_human_visual_review",
+  );
+  assert.equal(
+    contract.human_review.boundary_support_product_value_presentation,
+    "pending_r2_human_visual_review",
+  );
+  assert.equal(
+    contract.human_review.p6_i2_overall,
+    "pending_human_visual_product_review",
+  );
+  assert.equal(contract.human_review.package_e_c, "unauthorized");
+  assert.equal(contract.human_review.final_jpy980_readiness, false);
 });
 
 check("capabilities preserve every no-authority boundary", () => {
   const expected = {
     status:
-      "prepayment_safety_ux_implemented_pending_human_visual_product_review",
+      "prepayment_safety_customer_experience_refined_pending_r2_human_visual_review",
     baseline,
     safety_engine_accepted: true,
     legacy_m1_purchase_review_asset_preserved: true,
@@ -534,6 +743,11 @@ check("capabilities preserve every no-authority boundary", () => {
     urgent_safety_ui_complete: true,
     professional_scope_ui_complete: true,
     review_route_complete: true,
+    phase_2_customer_presentation_refined: true,
+    progressive_contact_boundary_presentation_complete: true,
+    urgent_safety_entry_separated_from_primary_contact_choices: true,
+    pause_and_boundary_fixture_copy_matches_request_form: true,
+    accepted_phase_1_and_stop_surfaces_unchanged: true,
     payment_provider_implemented: false,
     payment_session_created: false,
     payment_authority_issued: false,
@@ -544,11 +758,19 @@ check("capabilities preserve every no-authority boundary", () => {
     v12_active: false,
     runtime_activated: false,
     human_visual_product_review_complete: false,
+    phase_1_request_ux_status: "human_visual_accepted",
+    blocked_unsafe_stop_status: "human_visual_accepted",
+    urgent_safety_stop_status: "human_visual_accepted",
+    phase_2_customer_presentation_status: "pending_r2_human_visual_review",
+    pause_product_value_presentation_status: "pending_r2_human_visual_review",
+    boundary_support_product_value_presentation_status:
+      "pending_r2_human_visual_review",
+    p6_i2_overall_status: "pending_human_visual_product_review",
     package_e_c_authorized: false,
     package_f_authorized: false,
     provider_rerun_authorized: false,
     final_jpy980_readiness_established: false,
-    next_action: "human_visual_product_review_of_pre_payment_safety_ux",
+    next_action: "r2_human_visual_product_review_of_customer_presentation",
   };
   for (const [key, value] of Object.entries(expected)) {
     assert.deepEqual(capabilities[key], value, key);
@@ -561,6 +783,11 @@ const gateModuleUrl = pathToFileURL(
 const { evaluatePrepaymentSafetyV1 } = await import(gateModuleUrl);
 
 check("automated Safety and payment cases execute 20/20", () => {
+  assert.equal(
+    cases.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R2",
+  );
+  assert.equal(cases.baseline, baseline);
   assert.equal(cases.cases.length, 20);
   for (const testCase of cases.cases) {
     const input = deepMerge(cases.base_input, testCase.input_overrides);
@@ -631,7 +858,7 @@ check("Active Runtime remains v4 and v12 remains inactive", () => {
   assert.equal(capabilities.v12_active, false);
 });
 
-check("Human review checklist and review report remain explicitly pending", () => {
+check("Human review evidence records accepted locks and R2 pending states", () => {
   const checklist = readUtf8(checklistPath);
   const review = readUtf8(reviewPath);
   for (const marker of [
@@ -653,12 +880,23 @@ check("Human review checklist and review report remain explicitly pending", () =
     "H.",
     "I.",
     "J.",
+    "Phase 1 Request UX: `human_visual_accepted`",
+    "Blocked unsafe stop: `human_visual_accepted`",
+    "Urgent Safety stop: `human_visual_accepted`",
+    "Phase 2 customer presentation: `pending_r2_human_visual_review`",
+    "Pause Product value presentation: `pending_r2_human_visual_review`",
+    "Boundary-support Product value presentation: `pending_r2_human_visual_review`",
+    "P6-I2 overall: `pending_human_visual_product_review`",
+    "Package E-C: `unauthorized`",
+    "Final JPY980 readiness: `false`",
   ]) {
     assert.ok(checklist.includes(marker), marker);
   }
   assert.match(review, /## TECHNICAL/u);
   assert.match(review, /## PLAIN-LANGUAGE/u);
-  assert.match(review, /Human visual\/Product review remains pending/u);
+  assert.match(review, /pending_r2_human_visual_review/u);
+  assert.match(review, /pending_human_visual_product_review/u);
+  assert.match(review, /Final JPY980 readiness: `false`/u);
   assert.match(review, /Provider \/ DB \/ Supabase operations are `0 \/ 0 \/ 0`/u);
 });
 
@@ -678,11 +916,11 @@ if (failures.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(`Pre-payment Safety UX gate verifier: PASS ${passed}/${total}`);
-  console.log("Exact corrected scope: 12/12 (1 update, 11 new)");
+  console.log("Exact R2 scope: 9/9 update only");
   console.log("Automated Safety/payment cases: 20/20");
   console.log("Legacy M1 review blobs: 2/2 unchanged");
   console.log("Provider / DB / Supabase: 0 / 0 / 0");
   console.log("Payment implementation/session/authority: false / false / false");
   console.log("Active Runtime: v4; v12 inactive");
-  console.log("Human visual/Product review: pending");
+  console.log("R2 Human visual/Product review: pending");
 }

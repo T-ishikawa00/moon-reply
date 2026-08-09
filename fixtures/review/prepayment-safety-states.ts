@@ -113,22 +113,33 @@ export const PREPAYMENT_SAFETY_REVIEW_FIXTURES = {
   "eligible-pause-assessment": eligible({
     id: "eligible-pause-assessment",
     classification: "eligible_pause_assessment",
-    scopeLabel: "今は送らない判断を含む鑑定",
-    heading: "文案が出ない場合も、鑑定ノートが本編です。",
+    scopeLabel: "今は送らない、という答えも含む鑑定",
+    heading: "送らない時間も、迷いのままにしません。",
     description:
-      "相手が求めた時間や距離を尊重し、理由・今の動き方・見直す条件を鑑定ノートとしてお返しする想定です。",
-    provides: ["送らない判断の理由", "今できる具体的な行動", "見直すための条件"],
-    draftAvailability: "送信文案が表示されない場合があります。",
+      "相手との距離を尊重しながら、\nいま確かめられること、\n今は送らない理由、\n今夜できること、\n何が変われば見直せるかまで、\nあなたの相談に沿って鑑定ノートにまとめます。",
+    provides: [
+      "いま確かめられること",
+      "今は送らない理由",
+      "今夜できること",
+      "見直すための条件",
+    ],
+    draftAvailability:
+      "状況によっては送信文案を表示しません。\nその場合も、鑑定ノートは通常どおりお返しします。",
   }),
   "eligible-boundary-support-only": eligible({
     id: "eligible-boundary-support-only",
     classification: "eligible_boundary_support_only",
-    scopeLabel: "境界を尊重した整理の鑑定",
-    heading: "連絡文案ではなく、整理と今後の方向性をお返しします。",
+    scopeLabel: "連絡を重ねない今を整理する鑑定",
+    heading: "連絡文案ではなく、気持ちと次の一歩を整理します。",
     description:
-      "確認できる事実、気持ちの整理、相手の境界を尊重した今後の方向性を鑑定ノートとしてお返しする想定です。",
-    provides: ["確認できる事実", "ご自身の気持ちの整理", "境界を尊重した方向性"],
-    draftAvailability: "相手への連絡文案や再接触方法は提供しません。",
+      "確認できることと、\nまだ分からないことを分けながら、\nご自身の気持ちと、\n相手が示した距離を越えずにできる次の一歩を\n鑑定ノートにまとめます。",
+    provides: [
+      "確認できること／まだ分からないこと",
+      "ご自身の気持ちの整理",
+      "今夜、自分側でできること",
+      "今後の自分側の方向性",
+    ],
+    draftAvailability: "相手への連絡文案や再接触方法はお返ししません。",
   }),
   "eligible-scoped-reply": eligible({
     id: "eligible-scoped-reply",

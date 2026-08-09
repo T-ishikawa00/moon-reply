@@ -1,27 +1,23 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-safety-payment-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R1",
-  "status": "prepayment_safety_ux_implemented_pending_human_visual_product_review",
-  "baseline": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
-  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-prepayment-safety-ux",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R2",
+  "status": "prepayment_safety_customer_experience_refined_pending_r2_human_visual_review",
+  "baseline": "ddbea5347d0fb2c1cfacd990e9a7f17acaf53801",
+  "branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-r2-customer-experience",
   "authority": {
     "accepted_charter_commit": "611eecbf1249b222588c979a37162872215c9182",
     "accepted_safety_engine_head": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
+    "accepted_p6_i2_head": "ddbea5347d0fb2c1cfacd990e9a7f17acaf53801",
     "classification_owner": "server",
     "purchase_gate_owner": "server",
     "client_fallback_to_legacy_safety": false,
     "historical_p6_p0_branch_lock_is_successor_gate": false
   },
   "scope": {
-    "path_count": 12,
+    "path_count": 9,
     "update_only": [
-      "components/request/RequestForm.tsx"
-    ],
-    "new_only": [
-      "components/request/PrePaymentSafetyStop.tsx",
+      "components/request/RequestForm.tsx",
       "components/request/PrePaymentSafetyStop.module.css",
-      "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
-      "app/review/purchase/safety/[fixtureId]/page.tsx",
       "fixtures/review/prepayment-safety-states.ts",
       "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-contract-v1.json",
       "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-cases-v1.json",
@@ -29,7 +25,8 @@
       "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/capabilities-v1.json",
       "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-prepayment-safety-gate.mjs",
       "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md"
-    ]
+    ],
+    "new_only": []
   },
   "protected_legacy_review": {
     "component_path": "components/review/ReviewPurchaseConfirmation.tsx",
@@ -39,9 +36,23 @@
     "new_review_component": "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
     "legacy_component_imported_or_wrapped": false
   },
+  "protected_customer_surfaces": {
+    "stop_component_path": "components/request/PrePaymentSafetyStop.tsx",
+    "stop_component_blob_sha": "2c146a032049dedca3a1547c3bcfc52aa66e1fa5",
+    "review_component_path": "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
+    "review_component_blob_sha": "d96c311af2d18af370238a7a940185e5576b573a",
+    "blocked_unsafe_assistance": "human_visual_accepted_unchanged",
+    "urgent_safety_redirect": "human_visual_accepted_unchanged"
+  },
   "request_flow": {
     "phase_1_free_text_first_preserved": true,
-    "phase_2_customer_title": "決済前の利用確認",
+    "phase_2_customer_title": "鑑定前の確認",
+    "phase_2_navigation_label": "利用確認",
+    "phase_2_intro_block_count": 1,
+    "primary_contact_boundary_option_count": 5,
+    "secondary_contact_boundary_option_count": 3,
+    "urgent_safety_entry_separate": true,
+    "customer_cta": "この内容で確認する",
     "authoritative_endpoint": "POST /api/internal/purchase-eligibility",
     "initial_scope_acknowledgements": false,
     "initial_attestation": false,
@@ -93,13 +104,21 @@
     "v12_active": false
   },
   "human_review": {
-    "status": "pending",
-    "desktop": "pending",
-    "viewport_399px": "pending",
-    "viewport_320px": "pending",
-    "keyboard_only": "pending",
-    "screen_reader_names": "pending",
-    "zoom_200_percent": "pending",
-    "reduced_motion": "pending"
+    "phase_1_request_ux": "human_visual_accepted",
+    "blocked_unsafe_stop": "human_visual_accepted",
+    "urgent_safety_stop": "human_visual_accepted",
+    "phase_2_customer_presentation": "pending_r2_human_visual_review",
+    "pause_product_value_presentation": "pending_r2_human_visual_review",
+    "boundary_support_product_value_presentation": "pending_r2_human_visual_review",
+    "p6_i2_overall": "pending_human_visual_product_review",
+    "desktop": "pending_r2_human_visual_review",
+    "viewport_399px": "pending_r2_human_visual_review",
+    "viewport_320px": "pending_r2_human_visual_review",
+    "keyboard_only": "pending_r2_human_visual_review",
+    "screen_reader_names": "pending_r2_human_visual_review",
+    "zoom_200_percent": "pending_r2_human_visual_review",
+    "reduced_motion": "pending_r2_human_visual_review",
+    "package_e_c": "unauthorized",
+    "final_jpy980_readiness": false
   }
 }
