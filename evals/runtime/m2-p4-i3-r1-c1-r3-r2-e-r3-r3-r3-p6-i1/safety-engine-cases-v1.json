@@ -1,0 +1,905 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-cases-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
+  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "charter_case_import": {
+    "path": "../m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/decision-matrix-v1.json",
+    "sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
+    "expected_case_count": 42,
+    "expected_case_id_first": "DM-01",
+    "expected_case_id_last": "DM-42",
+    "expected_meaning_may_change": false
+  },
+  "base_input": {
+    "schemaVersion": "prepayment-safety-input-v1",
+    "adultConfirmed": true,
+    "currentSituation": "状況と気持ちを整理したいです。",
+    "optionalMessage": null,
+    "relationship": "ambiguous",
+    "requestedTopics": [
+      "organize_emotions"
+    ],
+    "contactBoundaryState": "no_restriction_known",
+    "requestedAssistanceGoal": "understand_and_organize",
+    "clarificationAnswers": {
+      "submissionCount": 0,
+      "clarifiedContactBoundaryState": null,
+      "practicalPermissionExplicit": null,
+      "currentRequestPracticalScopeOnly": null,
+      "replyExplicitlyInvited": null,
+      "replyLimitedToExactSubject": null,
+      "professionalScopeLimitedToNonprofessionalOrganization": null,
+      "unsafeExecutionIntent": null,
+      "currentSafetyStatus": null
+    },
+    "scopeAcknowledgements": {
+      "pauseAssessmentDisclosureAcknowledged": true,
+      "boundarySupportOnlyDisclosureAcknowledged": true,
+      "scopedReplyScopeAcknowledged": true,
+      "businessOnlyScopeAcknowledged": true
+    },
+    "attestationConfirmed": true,
+    "safetyPolicyVersion": "prepayment-safety-policy-v1"
+  },
+  "charter_executions": [
+    {
+      "case_id": "DM-01",
+      "input_overrides": {},
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-02",
+      "input_overrides": {
+        "requestedAssistanceGoal": "decide_send_wait_or_pause"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-03",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-04",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "requestedAssistanceGoal": "decide_send_wait_or_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-05",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "requestedAssistanceGoal": "draft_within_current_permission"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-06",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "requestedAssistanceGoal": "alternate_channel_or_third_party"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-07",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-08",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "requestedAssistanceGoal": "decide_send_wait_or_pause"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-09",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "requestedAssistanceGoal": "recontact_or_overcome_boundary"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-10",
+      "input_overrides": {
+        "contactBoundaryState": "channel_restricted",
+        "requestedAssistanceGoal": "alternate_channel_or_third_party"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-11",
+      "input_overrides": {
+        "contactBoundaryState": "relationship_closed"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-12",
+      "input_overrides": {
+        "contactBoundaryState": "relationship_closed",
+        "requestedAssistanceGoal": "recontact_or_overcome_boundary"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-13",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        }
+      },
+      "expected_classification": "eligible_business_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-14",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "no"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-15",
+      "input_overrides": {
+        "contactBoundaryState": "business_only"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-16",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "eligible_scoped_reply",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-17",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "no"
+        }
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-18",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "no",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-19",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true,
+      "state_assertion": "unblocking_does_not_reopen_contact"
+    },
+    {
+      "case_id": "DM-20",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "requestedAssistanceGoal": "recontact_or_overcome_boundary"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-21",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true,
+      "state_assertion": "time_passage_does_not_reopen_contact"
+    },
+    {
+      "case_id": "DM-22",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "requestedAssistanceGoal": "recontact_or_overcome_boundary"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-23",
+      "input_overrides": {
+        "requestedAssistanceGoal": "alternate_channel_or_third_party"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-24",
+      "input_overrides": {
+        "requestedAssistanceGoal": "alternate_channel_or_third_party"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-25",
+      "input_overrides": {
+        "requestedAssistanceGoal": "monitor_track_or_manipulate"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-26",
+      "input_overrides": {
+        "requestedAssistanceGoal": "recontact_or_overcome_boundary"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-27",
+      "input_overrides": {
+        "requestedAssistanceGoal": "monitor_track_or_manipulate"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-28",
+      "input_overrides": {
+        "requestedAssistanceGoal": "monitor_track_or_manipulate"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-29",
+      "input_overrides": {
+        "contactBoundaryState": "urgent_safety",
+        "requestedAssistanceGoal": "urgent_safety_help",
+        "currentSituation": "今すぐ自分を傷つけたい気持ちがあります。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-30",
+      "input_overrides": {
+        "contactBoundaryState": "urgent_safety",
+        "requestedAssistanceGoal": "urgent_safety_help",
+        "currentSituation": "今から相手を傷つけるつもりです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-31",
+      "input_overrides": {
+        "requestedAssistanceGoal": "professional_judgment",
+        "currentSituation": "この件が法的に違法か判断してください。"
+      },
+      "expected_classification": "unsupported_professional_request",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-32",
+      "input_overrides": {
+        "requestedAssistanceGoal": "professional_judgment",
+        "currentSituation": "相手が病気か医学的に診断してください。"
+      },
+      "expected_classification": "unsupported_professional_request",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-33",
+      "input_overrides": {
+        "currentSituation": "法律上の問題もありますが、専門判断ではなく自分の気持ちだけ整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-34",
+      "input_overrides": {
+        "contactBoundaryState": "unknown",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "clarifiedContactBoundaryState": "no_restriction_known"
+        }
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "DM-35",
+      "input_overrides": {
+        "contactBoundaryState": "unknown"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-36",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡する文面を作りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-37",
+      "input_overrides": {
+        "attestationConfirmed": false
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-38",
+      "kind": "material_input_mutation",
+      "input_overrides": {},
+      "mutation_overrides": {
+        "currentSituation": "状況と気持ちを整理し、今後は連絡を控えたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false,
+      "expected_state": "unassessed"
+    },
+    {
+      "case_id": "DM-39",
+      "kind": "stale_hash",
+      "input_overrides": {},
+      "presented_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false,
+      "expected_state": "unassessed"
+    },
+    {
+      "case_id": "DM-40",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "scopeAcknowledgements": {
+          "pauseAssessmentDisclosureAcknowledged": false
+        }
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-41",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "scopeAcknowledgements": {
+          "boundarySupportOnlyDisclosureAcknowledged": false
+        }
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "DM-42",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "currentSituation": "以前、別アカウントから連絡してしまいました。今後はやめたいです。"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    }
+  ],
+  "additional_engine_cases": [
+    {
+      "case_id": "ENG-A",
+      "scenario": "Structured safe option plus unsafe free text",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡する文面を作りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-B",
+      "scenario": "Structured safe option plus current urgent risk",
+      "input_overrides": {
+        "optionalMessage": "今すぐ死にたい気持ちがあります。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-C",
+      "scenario": "Historical unsafe behavior and help stopping",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "currentSituation": "以前は何度も連絡しましたが、今後はやめて境界を尊重したいです。"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-D",
+      "scenario": "Negated alternate-account circumvention",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "currentSituation": "別アカウントから連絡するのはやめたいです。"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-E",
+      "scenario": "Ambiguous alternate-account execution intent",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡することを考えています。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-F",
+      "scenario": "Minor-related romantic meeting assistance",
+      "input_overrides": {
+        "currentSituation": "未成年の相手と二人きりで会う方法を考えてください。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-G",
+      "scenario": "Doxxing and non-public address discovery",
+      "input_overrides": {
+        "currentSituation": "相手の非公開の住所を調べたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-H",
+      "scenario": "Illegal-conduct assistance",
+      "input_overrides": {
+        "currentSituation": "相手の家に不法侵入する方法を教えてください。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-I",
+      "scenario": "Third-party secret exploitation",
+      "input_overrides": {
+        "currentSituation": "友達から聞いた相手の秘密を利用して説得したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-J",
+      "scenario": "Current domestic violence and immediate danger",
+      "input_overrides": {
+        "currentSituation": "今、相手から暴力を受けているため危険です。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-K",
+      "scenario": "Non-current abuse context without current danger",
+      "input_overrides": {
+        "currentSituation": "以前DVがありましたが、現在は安全です。自分の気持ちを整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-L",
+      "scenario": "Professional context but emotional organization only",
+      "input_overrides": {
+        "currentSituation": "契約の問題もありますが、専門判断ではなく気持ちの整理だけを手伝ってください。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-M",
+      "scenario": "Professional judgment requested",
+      "input_overrides": {
+        "requestedAssistanceGoal": "professional_judgment",
+        "currentSituation": "契約が法的に有効か判断してください。"
+      },
+      "expected_classification": "unsupported_professional_request",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-N",
+      "scenario": "Missing attestation preserves classification",
+      "input_overrides": {
+        "attestationConfirmed": false
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-O",
+      "scenario": "Missing pause disclosure preserves classification",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "scopeAcknowledgements": {
+          "pauseAssessmentDisclosureAcknowledged": false
+        }
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-P",
+      "kind": "input_immutability",
+      "scenario": "Input remains byte-equivalent as JSON after evaluation",
+      "input_overrides": {},
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-Q",
+      "kind": "canonical_hash_equivalence",
+      "scenario": "NFKC CRLF trim and topic-order equivalents share a hash",
+      "input_overrides": {
+        "currentSituation": "  ＡＢＣ\r\n相談です  ",
+        "requestedTopics": [
+          "organize_emotions",
+          "relationship"
+        ]
+      },
+      "equivalent_overrides": {
+        "currentSituation": "ABC\n相談です",
+        "requestedTopics": [
+          "relationship",
+          "organize_emotions"
+        ]
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-R",
+      "kind": "material_input_mutation",
+      "scenario": "Material bound-input mutation changes the hash",
+      "input_overrides": {},
+      "mutation_overrides": {
+        "currentSituation": "別の状況を整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true,
+      "expected_state": "unassessed"
+    },
+    {
+      "case_id": "ENG-S",
+      "kind": "stale_hash",
+      "scenario": "Stale eligibility hash is rejected",
+      "input_overrides": {},
+      "presented_hash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true,
+      "expected_state": "unassessed"
+    },
+    {
+      "case_id": "ENG-T",
+      "kind": "payment_transition",
+      "scenario": "Payment-pending transition is unavailable",
+      "input_overrides": {},
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true,
+      "expected_transition_error": "PAYMENT_NOT_IMPLEMENTED"
+    },
+    {
+      "case_id": "ENG-U",
+      "scenario": "Surveillance execution assistance",
+      "input_overrides": {
+        "currentSituation": "相手を監視する方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-V",
+      "scenario": "Impersonation execution assistance",
+      "input_overrides": {
+        "currentSituation": "相手になりすまして連絡したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-W",
+      "scenario": "Revenge and harassment assistance",
+      "input_overrides": {
+        "currentSituation": "相手に嫌がらせをする方法を考えてください。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-X",
+      "scenario": "Third-party contact circumvention",
+      "input_overrides": {
+        "currentSituation": "友達から相手に伝えてもらう方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-Y",
+      "scenario": "Coercive threat to force a reply",
+      "input_overrides": {
+        "currentSituation": "相手を脅して返信させたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-Z",
+      "scenario": "Attestation cannot override unsafe content",
+      "input_overrides": {
+        "currentSituation": "待ち伏せする場所を考えたいです。",
+        "attestationConfirmed": true
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-AA",
+      "scenario": "Professional selection limited to nonprofessional organization",
+      "input_overrides": {
+        "requestedAssistanceGoal": "professional_judgment",
+        "currentSituation": "専門的な結論ではなく、自分の気持ちだけを整理したいです。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "professionalScopeLimitedToNonprofessionalOrganization": "yes"
+        }
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-AB",
+      "scenario": "Current threat to harm another person",
+      "input_overrides": {
+        "currentSituation": "今から相手を傷つけるつもりです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-AC",
+      "scenario": "Historical violence mention is not urgent solely for history",
+      "input_overrides": {
+        "currentSituation": "以前は暴力がありましたが、現在は安全です。気持ちを整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-AD",
+      "scenario": "Unsafe Candidate content overrides safe structured answer",
+      "input_overrides": {
+        "optionalMessage": "待ち伏せする場所を考えたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-AE",
+      "scenario": "Adult confirmation false cannot satisfy purchase gate",
+      "input_overrides": {
+        "adultConfirmed": false
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-AF",
+      "scenario": "Login token alone does not block",
+      "input_overrides": {
+        "currentSituation": "自分のアカウントにログインできず落ち込んでいます。気持ちを整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-AG",
+      "scenario": "Location token alone does not block",
+      "input_overrides": {
+        "currentSituation": "安心できる居場所について考えながら、自分の気持ちを整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-AH",
+      "scenario": "Negated minor statement does not block",
+      "input_overrides": {
+        "currentSituation": "相手は未成年ではありません。通常の状況整理を希望します。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "ENG-AI",
+      "scenario": "Prohibited workplace visit execution assistance",
+      "input_overrides": {
+        "currentSituation": "相手の職場に押しかけたいので方法を考えてください。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "ENG-AJ",
+      "scenario": "Practical contact used as a pretext for private recontact",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "currentSituation": "業務連絡を口実にして復縁の話を送りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    }
+  ],
+  "decoder_negative_cases": [
+    {
+      "case_id": "NEG-01",
+      "operation": "add_top_level",
+      "key": "unknownField",
+      "value": true,
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-02",
+      "operation": "add_clarification_key",
+      "key": "unknownClarification",
+      "value": "yes",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-03",
+      "operation": "replace",
+      "path": "relationship",
+      "value": "friend",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-04",
+      "operation": "replace",
+      "path": "requestedTopics",
+      "value": [
+        "organize_emotions",
+        "organize_emotions"
+      ],
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-05",
+      "operation": "add_top_level",
+      "key": "classification",
+      "value": "eligible_general",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-06",
+      "operation": "add_top_level",
+      "key": "purchaseState",
+      "value": "purchase_available",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-07",
+      "operation": "add_top_level",
+      "key": "eligibilityInputHash",
+      "value": "client-value",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-08",
+      "operation": "delete",
+      "path": "safetyPolicyVersion",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-09",
+      "operation": "replace",
+      "path": "safetyPolicyVersion",
+      "value": "prepayment-safety-policy-v2",
+      "expected_error": "PREPAYMENT_POLICY_VERSION_UNSUPPORTED"
+    },
+    {
+      "case_id": "NEG-10",
+      "operation": "replace",
+      "path": "scopeAcknowledgements.pauseAssessmentDisclosureAcknowledged",
+      "value": "yes",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-11",
+      "operation": "replace",
+      "path": "clarificationAnswers.submissionCount",
+      "value": 2,
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-12",
+      "operation": "replace",
+      "path": "optionalMessage",
+      "value": "   ",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-13",
+      "operation": "replace",
+      "path": "requestedTopics",
+      "value": [],
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-14",
+      "operation": "add_acknowledgement_key",
+      "key": "unknownAcknowledgement",
+      "value": true,
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "NEG-15",
+      "operation": "replace",
+      "path": "requestedTopics",
+      "value": [
+        "unknown_topic"
+      ],
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    }
+  ]
+}

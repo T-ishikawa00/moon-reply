@@ -1,0 +1,60 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
+  "status": "pass",
+  "execution_mode": "offline_deterministic_local",
+  "execution_date": "2026-08-09",
+  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine",
+  "charter_source": {
+    "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+    "decision_matrix_sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
+    "unchanged": true
+  },
+  "charter_cases": {
+    "passed": 42,
+    "total": 42
+  },
+  "additional_engine_cases": {
+    "passed": 36,
+    "total": 36,
+    "minimum_required": 20
+  },
+  "classification_and_state_cases": {
+    "passed": 78,
+    "total": 78,
+    "minimum_required": 62
+  },
+  "decoder_negative_cases": {
+    "passed": 15,
+    "total": 15
+  },
+  "verified_properties": {
+    "classification_precedence": "pass",
+    "structured_safe_option_cannot_override_unsafe_content": "pass",
+    "urgent_current_safety_redirect": "pass",
+    "historical_and_negated_phrase_distinction": "pass",
+    "ambiguous_execution_intent_to_clarification": "pass",
+    "minor_related_hard_boundary": "pass",
+    "professional_scope_separation": "pass",
+    "acknowledgement_does_not_change_classification": "pass",
+    "input_immutability": "pass",
+    "canonical_equivalence_same_hash": "pass",
+    "material_mutation_different_hash": "pass",
+    "stale_hash_rejected": "pass",
+    "payment_pending_rejected": "PAYMENT_NOT_IMPLEMENTED",
+    "payment_completed_produced": false,
+    "output_array_overlap": 0,
+    "raw_input_echo": 0,
+    "raw_unsafe_phrase_echo": 0
+  },
+  "payment_implementation_present": false,
+  "payment_session_available": false,
+  "payment_authority_issued": false,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "active_runtime": "v4",
+  "v12_active": false,
+  "next_action": "human_chatgpt_review_of_pre_payment_safety_engine"
+}

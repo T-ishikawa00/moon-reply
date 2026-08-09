@@ -1,0 +1,208 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
+  "status": "prepayment_safety_engine_implemented_pending_human_chatgpt_review",
+  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "authority": {
+    "accepted_charter_task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
+    "accepted_charter_commit": "611eecbf1249b222588c979a37162872215c9182",
+    "classification_owner": "server",
+    "classification_method": "deterministic_two_axis_phrase_level_content_inspection",
+    "full_semantic_understanding_claimed": false,
+    "client_can_set_classification": false,
+    "client_can_set_eligibility_hash": false,
+    "client_can_set_purchase_state": false,
+    "client_can_create_payment_authority": false
+  },
+  "input_contract": {
+    "schema_version": "prepayment-safety-input-v1",
+    "safety_policy_version": "prepayment-safety-policy-v1",
+    "unknown_top_level_keys_allowed": false,
+    "required_fields": [
+      "schemaVersion",
+      "adultConfirmed",
+      "currentSituation",
+      "optionalMessage",
+      "relationship",
+      "requestedTopics",
+      "contactBoundaryState",
+      "requestedAssistanceGoal",
+      "clarificationAnswers",
+      "scopeAcknowledgements",
+      "attestationConfirmed",
+      "safetyPolicyVersion"
+    ],
+    "current_situation": {
+      "trimmed": true,
+      "minimum_code_points": 1,
+      "maximum_code_points": 5000
+    },
+    "optional_message": {
+      "nullable": true,
+      "trimmed_when_present": true,
+      "minimum_code_points_when_present": 1,
+      "maximum_code_points_when_present": 2000
+    },
+    "relationship_values_source": "lib/assessment/runtime/types.ts#RELATIONSHIP_VALUES",
+    "requested_topic_values_source": "lib/assessment/runtime/types.ts#REQUESTED_TOPIC_VALUES",
+    "requested_topics_unique": true,
+    "requested_topics_minimum": 1,
+    "requested_topics_maximum": 3,
+    "contact_boundary_states": [
+      "no_restriction_known",
+      "temporary_pause",
+      "explicit_no_contact",
+      "channel_restricted",
+      "relationship_closed",
+      "business_only",
+      "new_inbound_after_boundary",
+      "unknown",
+      "urgent_safety"
+    ],
+    "requested_assistance_goals": [
+      "understand_and_organize",
+      "decide_send_wait_or_pause",
+      "draft_within_current_permission",
+      "recontact_or_overcome_boundary",
+      "alternate_channel_or_third_party",
+      "monitor_track_or_manipulate",
+      "professional_judgment",
+      "urgent_safety_help"
+    ],
+    "clarification_answer_keys": [
+      "submissionCount",
+      "clarifiedContactBoundaryState",
+      "practicalPermissionExplicit",
+      "currentRequestPracticalScopeOnly",
+      "replyExplicitlyInvited",
+      "replyLimitedToExactSubject",
+      "professionalScopeLimitedToNonprofessionalOrganization",
+      "unsafeExecutionIntent",
+      "currentSafetyStatus"
+    ],
+    "clarification_submission_count_values": [0, 1],
+    "scope_acknowledgement_keys": [
+      "pauseAssessmentDisclosureAcknowledged",
+      "boundarySupportOnlyDisclosureAcknowledged",
+      "scopedReplyScopeAcknowledged",
+      "businessOnlyScopeAcknowledged"
+    ],
+    "input_mutated_by_decoder_or_engine": false
+  },
+  "classification_contract": {
+    "precedence": [
+      "current_urgent_safety",
+      "explicit_unsafe_requested_assistance",
+      "primary_professional_judgment_request",
+      "structured_content_conflict_or_insufficient_scope",
+      "eligible_delivery_scope"
+    ],
+    "safety_dispositions": [
+      "eligible",
+      "needs_clarification",
+      "blocked_unsafe_assistance",
+      "urgent_safety_redirect",
+      "unsupported_professional_request"
+    ],
+    "eligible_delivery_scopes": [
+      "general",
+      "pause_assessment",
+      "boundary_support_only",
+      "scoped_reply",
+      "business_only"
+    ],
+    "derived_classifications": [
+      "eligible_general",
+      "eligible_pause_assessment",
+      "eligible_boundary_support_only",
+      "eligible_scoped_reply",
+      "eligible_business_only",
+      "needs_clarification",
+      "blocked_unsafe_assistance",
+      "urgent_safety_redirect",
+      "unsupported_professional_request"
+    ],
+    "attestation_overrides_classification": false,
+    "selected_safe_option_overrides_unsafe_content": false,
+    "single_broad_token_automatic_reject_allowed": false,
+    "case_id_branching_allowed": false,
+    "clarification_is_structured_and_bounded": true,
+    "maximum_complete_clarification_submissions": 1,
+    "unresolved_clarification_defaults_to_eligible": false
+  },
+  "identity_contract": {
+    "function": "createPrepaymentSafetyIdentityV1",
+    "normalization": [
+      "unicode_nfkc",
+      "crlf_to_lf",
+      "trim_outer_whitespace",
+      "preserve_internal_line_breaks",
+      "preserve_emoji",
+      "preserve_internal_punctuation",
+      "candidate_kept_separate_from_request",
+      "canonical_json_key_ordering",
+      "deterministic_requested_topic_ordering"
+    ],
+    "hash_algorithm": "sha256",
+    "hash_encoding": "utf8",
+    "response_field": "eligibilityInputHash",
+    "payment_token": false,
+    "raw_text_returned": false
+  },
+  "purchase_gate_contract": {
+    "adult_confirmation_required_for_every_eligible_scope": true,
+    "attestation_required_for_every_eligible_scope": true,
+    "missing_acknowledgement_changes_safety_classification": false,
+    "missing_acknowledgement_leaves_purchase_gate_unsatisfied": true,
+    "payment_implementation_present": false,
+    "payment_session_available": false,
+    "payment_authority_issued": false
+  },
+  "purchase_state_machine_contract": {
+    "state_count": 14,
+    "states": [
+      "unassessed",
+      "collecting_safety_answers",
+      "needs_clarification",
+      "eligible_general",
+      "eligible_pause_assessment",
+      "eligible_boundary_support_only",
+      "eligible_scoped_reply",
+      "eligible_business_only",
+      "blocked_unsafe_assistance",
+      "urgent_safety_redirect",
+      "unsupported_professional_request",
+      "purchase_available",
+      "payment_pending",
+      "payment_completed"
+    ],
+    "only_eligible_states_can_reach_purchase_available": true,
+    "stale_hash_rejected": true,
+    "changed_input_returns_to": "unassessed",
+    "time_passage_is_transition": false,
+    "unblocking_is_transition": false,
+    "new_inbound_requires_full_reclassification": true,
+    "payment_pending_error": "PAYMENT_NOT_IMPLEMENTED",
+    "payment_completed_producible": false,
+    "global_mutable_state": false
+  },
+  "internal_api_contract": {
+    "method": "POST",
+    "path": "/api/internal/purchase-eligibility",
+    "runtime": "nodejs",
+    "dynamic": "force-dynamic",
+    "production_available": false,
+    "availability_flag": "M2_INTERNAL_RUNTIME_ENABLED",
+    "same_origin_required": true,
+    "json_content_type_required": true,
+    "maximum_body_bytes": 24576,
+    "cache_control": "no-store",
+    "x_robots_tag": "noindex, nofollow",
+    "classifications_use_http_status": 200,
+    "raw_input_echoed": false,
+    "internal_rule_names_exposed": false,
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}
