@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-cases-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
-  "baseline": "c94e780a13e319873618e95412b48275d289970e",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2",
+  "baseline": "f85545c89a5ebc324d2eabf7372f0302113eb0c3",
   "charter_case_import": {
     "path": "../m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/decision-matrix-v1.json",
     "sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
@@ -1163,6 +1163,191 @@
       },
       "expected_classification": "eligible_scoped_reply",
       "expected_purchase_gate_satisfied": false
+    }
+  ],
+  "r2_local_hazard_cases": [
+    {
+      "case_id": "R2-01",
+      "scenario": "Current-risk denial applies only to its own proposition",
+      "input_overrides": {
+        "currentSituation": "死にたいわけではありません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-02",
+      "scenario": "Japanese comma isolates a later different current risk",
+      "input_overrides": {
+        "currentSituation": "死にたいわけではありません、相手を殺したいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-03",
+      "scenario": "ASCII comma isolates a later different current risk",
+      "input_overrides": {
+        "currentSituation": "自分を傷つけるつもりはありません,相手を傷つけたいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-04",
+      "scenario": "Adversative demo isolates a later current risk",
+      "input_overrides": {
+        "currentSituation": "自分を傷つけるつもりはありません、でも死にたいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-05",
+      "scenario": "Dewa-naku contrast preserves denial while exposing later current risk",
+      "input_overrides": {
+        "currentSituation": "死にたいわけではなく、相手を殺したいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-06",
+      "scenario": "Unsafe stopping applies only to its own proposition",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいわけではありません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-07",
+      "scenario": "Japanese comma isolates a later different unsafe request",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいわけではありません、相手の居場所を特定したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-08",
+      "scenario": "ASCII comma isolates a later different unsafe request",
+      "input_overrides": {
+        "currentSituation": "待ち伏せはしません,別SNSから連絡する方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-09",
+      "scenario": "Adversative demo isolates a later third-party request",
+      "input_overrides": {
+        "currentSituation": "監視するのはやめたいです、でも友達から相手に連絡してもらう方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-10",
+      "scenario": "Dewa-naku contrast exposes a later different unsafe request",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいわけではなく、相手の居場所を特定したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-11",
+      "scenario": "Multiple safe clauses cannot suppress a later unsafe clause",
+      "input_overrides": {
+        "currentSituation": "監視はしません、別アカウントも使いません、相手の居場所を特定したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-12",
+      "scenario": "Unsafe clause remains blocked before unrelated safe stopping clause",
+      "input_overrides": {
+        "currentSituation": "相手の居場所を特定したいです、監視するのはやめたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-13",
+      "scenario": "Denied ambush cannot suppress later alternate-SNS assistance",
+      "input_overrides": {
+        "currentSituation": "待ち伏せはしません、別SNSから連絡する方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-14",
+      "scenario": "Two comma-separated stopping predicates remain safe",
+      "input_overrides": {
+        "currentSituation": "監視するのはやめたい、距離を置きたい"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-15",
+      "scenario": "Alternate-account and contact avoidance remain safe",
+      "input_overrides": {
+        "currentSituation": "別アカウントは使いません、連絡もしません"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-16",
+      "scenario": "Denied death wish and current safety statement remain safe",
+      "input_overrides": {
+        "currentSituation": "死にたいわけではありません、今は安全です"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-17",
+      "scenario": "Ippo-de contrast isolates a later unsafe request",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいわけではありません、一方で相手の居場所を特定したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R2-18",
+      "scenario": "Coordinated risk nouns share one stopping predicate without blind comma splitting",
+      "input_overrides": {
+        "currentSituation": "監視、追跡、尾行はしません。距離を置きたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R2-19",
+      "scenario": "Ambiguous stopping ownership fails to clarification",
+      "input_overrides": {
+        "currentSituation": "別アカウントで連絡するか、しないか決めていません。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "unsafe_execution_intent_required"
+      ]
+    },
+    {
+      "case_id": "R2-20",
+      "scenario": "Denied other-harm proposition plus current safety remains safe",
+      "input_overrides": {
+        "currentSituation": "相手を傷つけたいとは思っていません。今は安全です。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
     }
   ],
   "decoder_negative_cases": [

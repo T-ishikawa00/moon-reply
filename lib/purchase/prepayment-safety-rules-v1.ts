@@ -29,20 +29,25 @@ const STRONG_HISTORICAL_OR_NONCURRENT_PHRASES = [
 ] as const;
 
 const CURRENT_SAFETY_DENIAL_PHRASES = [
-  /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:わけ|の)?(?:では|じゃ)(?:ありません|ない|なく)/u,
   /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:と|とは)?(?:思って|考えて)(?:いません|いない)/u,
-  /(?:自分を傷つけたい|相手を(?:殺したい|傷つけたい)|人を(?:殺したい|傷つけたい))(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:自分を傷つけたい|相手を(?:殺したい|傷つけたい)|人を(?:殺したい|傷つけたい))(?:わけ|の)?(?:では|じゃ)(?:ありません|ない|なく)/u,
   /(?:自分を傷つける|相手を(?:殺す|傷つける)|人を(?:殺す|傷つける))(?:つもり|意図)(?:は)?(?:ありません|ない)/u,
   /(?:自分を傷つけたい|相手を(?:殺したい|傷つけたい)|人を(?:殺したい|傷つけたい))(?:と|とは)?(?:思って)?(?:いません|いない)/u,
-  /(?:殴られている|蹴られている|首を絞められている|殺されそう|襲われている)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:殴られている|蹴られている|首を絞められている|殺されそう|襲われている)(?:わけ|の)?(?:では|じゃ)(?:ありません|ない|なく)/u,
   /(?:not suicidal|do not want to (?:die|harm myself|hurt|kill)|not being attacked)/iu,
 ] as const;
 
 const LOCAL_STOPPING_OR_AVOIDING_PHRASES = [
-  /(?:したい|連絡したい)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:したい|連絡したい)(?:わけ|の)?(?:では|じゃ)(?:ありません|ない|なく)/u,
   /(?:する|連絡する)(?:つもり|意図)(?:は)?(?:ありません|ない)/u,
   /(?:やめたい|やめます|しません|しないように|避けたい|防ぎたい|繰り返さない|距離を置きたい|尊重したい|巻き込まない|手放したい|止めたい)/u,
   /(?:help me stop|want to stop|will not|avoid doing|respect (?:the )?boundary|do not want to|won't contact)/iu,
+] as const;
+
+const AMBIGUOUS_UNSAFE_OWNERSHIP_PHRASES = [
+  /(?:したい|する|使う|調べる|特定する|監視する|連絡する)か[、,]?\s*(?:しない|やめる|避ける)か/u,
+  /(?:実行|連絡|監視|追跡|特定)(?:する)?(?:意図|つもり)?(?:が)?(?:ある|ない)のか(?:、|,)?\s*(?:ない|ある)のか/u,
 ] as const;
 
 const TEMPORARY_PAUSE_SOURCE_PHRASES = [
@@ -93,7 +98,7 @@ const NARROW_SCOPED_REPLY_PHRASES = [
 
 const EXPLICIT_UNSAFE_ASSISTANCE_PHRASES = [
   /(?:別|他)(?:の)?アカウント.{0,28}(?:連絡する文面を作りたい|連絡したい|連絡する方法|メッセージを送りたい|送る方法)/u,
-  /(?:別SNS|別のSNS|別番号|違う番号).{0,24}(?:連絡したい|連絡する方法|電話したい|送る方法)/u,
+  /(?:別SNS|別のSNS|別番号|違う番号).{0,24}(?:連絡したい|連絡する方法|電話したい|送る方法)/iu,
   /(?:ブロック|着信拒否|連絡制限).{0,24}(?:回避|突破|すり抜け).{0,16}(?:連絡|送信|電話)/u,
   /(?:友達|友人|知人|同僚|第三者).{0,28}(?:相手に伝えてもらう方法|連絡してもらう方法|連絡させたい|仲介させたい)/u,
   /(?:相手の)?(?:居場所|住所|現在地|位置情報|電話番号).{0,24}(?:特定したい|調べたい|突き止めたい|入手したい|探し出したい)/u,
@@ -117,7 +122,7 @@ const EXPLICIT_UNSAFE_ASSISTANCE_PHRASES = [
 
 const AMBIGUOUS_UNSAFE_EXECUTION_PHRASES = [
   /(?:別|他)(?:の)?アカウント.{0,24}(?:連絡|メッセージ|返信)/u,
-  /(?:別SNS|別のSNS|別番号|違う番号).{0,20}(?:連絡|送信|電話)/u,
+  /(?:別SNS|別のSNS|別番号|違う番号).{0,20}(?:連絡|送信|電話)/iu,
   /(?:友達|友人|知人|同僚|第三者).{0,24}(?:伝える|連絡|仲介)/u,
   /(?:居場所|住所|現在地|位置情報|電話番号).{0,20}(?:特定|調べる|探す|入手)/u,
   /(?:待ち伏せ|監視|追跡|尾行)/u,
@@ -325,18 +330,141 @@ function normalizeForInspection(value: string) {
   return value.normalize("NFKC").replace(/\r\n?/gu, "\n").toLocaleLowerCase("ja");
 }
 
-function splitLocalPropositions(text: string) {
-  return text
-    .split(
-      /(?:[。！？!?\n]+|(?:けれども|けれど|けど|ですが|だが)(?:[、,]|\s)*|(?:しかし|ただし|一方で)[、,\s]*)/u,
+type LocalMatchSpan = Readonly<{
+  start: number;
+  end: number;
+}>;
+
+const LOCAL_PROPOSITION_BOUNDARY = "\u0000";
+const INDEPENDENT_PREDICATE_ENDING =
+  /(?:です|でした|ます|ました|ています|ていました|ません|ませんでした|ない|なかった|なく|たい|たかった|いる|いた|ある|あった|する|した|しよう|安全|危険|safe|unsafe|stop|stopped|will not|do not)$/iu;
+const COMMA_CONTINUATION_PREFIX =
+  /^(?:という|っていう|といった|わけ|つもり|意図|の)(?:こと|意味|では|じゃ|は|が|を|も)/u;
+const COORDINATED_RISK_NOUN_BRIDGE =
+  /^(?:[、,]\s*(?:待ち伏せ|監視|追跡|尾行))*\s*(?:は|を|も|について)?$/u;
+
+function findLocalMatchSpans(
+  text: string,
+  patterns: readonly RegExp[],
+): readonly LocalMatchSpan[] {
+  const spans = new Map<string, LocalMatchSpan>();
+  for (const pattern of patterns) {
+    const flags = pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`;
+    for (const match of text.matchAll(new RegExp(pattern.source, flags))) {
+      if (match.index === undefined || match[0].length === 0) continue;
+      const span = Object.freeze({
+        start: match.index,
+        end: match.index + match[0].length,
+      });
+      spans.set(`${span.start}:${span.end}`, span);
+    }
+  }
+  return Object.freeze(
+    [...spans.values()].sort(
+      (left, right) => left.start - right.start || left.end - right.end,
+    ),
+  );
+}
+
+function localSuppressionOwnsRisk(
+  proposition: string,
+  risk: LocalMatchSpan,
+  suppression: LocalMatchSpan,
+) {
+  if (risk.start < suppression.end && suppression.start < risk.end) {
+    return true;
+  }
+  if (suppression.start < risk.end) return false;
+  const bridge = proposition.slice(risk.end, suppression.start);
+  if (COORDINATED_RISK_NOUN_BRIDGE.test(bridge)) return true;
+  return (
+    [...bridge].length <= 12 &&
+    !/[、,]/u.test(bridge) &&
+    !/(?:けれども|けれど|けど|ですが|だが|でも|しかし|ただし|一方で|ではなく|じゃなく|とはいえ|ところが|反面)/u.test(
+      bridge,
     )
+  );
+}
+
+function hasRiskWithoutOwnedSuppression(
+  proposition: string,
+  risks: readonly LocalMatchSpan[],
+  suppressions: readonly LocalMatchSpan[],
+) {
+  return risks.some(
+    (risk) =>
+      !suppressions.some((suppression) =>
+        localSuppressionOwnsRisk(proposition, risk, suppression),
+      ),
+  );
+}
+
+function looksLikeIndependentPredicate(value: string) {
+  return INDEPENDENT_PREDICATE_ENDING.test(value.trim());
+}
+
+function splitPredicateCommas(fragment: string) {
+  const atoms = fragment.split(/([、,])/u);
+  const propositions: string[] = [];
+  let current = atoms[0]?.trim() ?? "";
+
+  for (let index = 1; index < atoms.length; index += 2) {
+    const separator = atoms[index] ?? "";
+    const next = atoms[index + 1]?.trim() ?? "";
+    const splitHere =
+      current.length > 0 &&
+      next.length > 0 &&
+      looksLikeIndependentPredicate(current) &&
+      looksLikeIndependentPredicate(next) &&
+      !COMMA_CONTINUATION_PREFIX.test(next);
+
+    if (splitHere) {
+      propositions.push(current);
+      current = next;
+    } else {
+      current = `${current}${separator}${next}`.trim();
+    }
+  }
+
+  if (current.length > 0) propositions.push(current);
+  return propositions;
+}
+
+function splitLocalPropositions(text: string) {
+  const withBoundaries = text
+    .replace(/[。！？!?\n]+/gu, LOCAL_PROPOSITION_BOUNDARY)
+    .replace(
+      /((?:ではなく|じゃなく)(?:て)?)(?:[、,]|\s)*/gu,
+      `$1${LOCAL_PROPOSITION_BOUNDARY}`,
+    )
+    .replace(
+      /(?:けれども|けれど|けど|ですが|だが)(?:[、,]|\s)*/gu,
+      LOCAL_PROPOSITION_BOUNDARY,
+    )
+    .replace(
+      /(^|[、,\s])(?:それでも|でも|しかし|ただし|その一方で|一方で|とはいえ|ところが|反面)(?:[、,\s]*)/gu,
+      LOCAL_PROPOSITION_BOUNDARY,
+    )
+    .replace(
+      /((?:たい|たかった|です|でした|ます|ました|ません|ませんでした|ない|なかった))が(?:[、,]|\s)*/gu,
+      `$1${LOCAL_PROPOSITION_BOUNDARY}`,
+    );
+
+  return withBoundaries
+    .split(LOCAL_PROPOSITION_BOUNDARY)
+    .flatMap(splitPredicateCommas)
     .map((part) => part.trim())
     .filter(Boolean);
 }
 
 function isExplicitCurrentSafetyProposition(proposition: string) {
-  if (!matchesAny(proposition, DIRECT_CURRENT_SAFETY_PHRASES)) return false;
-  if (matchesAny(proposition, CURRENT_SAFETY_DENIAL_PHRASES)) return false;
+  const risks = findLocalMatchSpans(proposition, DIRECT_CURRENT_SAFETY_PHRASES);
+  if (risks.length === 0) return false;
+  const denials = findLocalMatchSpans(
+    proposition,
+    CURRENT_SAFETY_DENIAL_PHRASES,
+  );
+  if (!hasRiskWithoutOwnedSuppression(proposition, risks, denials)) return false;
   if (
     matchesAny(proposition, STRONG_HISTORICAL_OR_NONCURRENT_PHRASES)
   ) {
@@ -417,28 +545,46 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
 
   for (const text of requestTexts) {
     for (const proposition of splitLocalPropositions(text)) {
-      const stoppingOrAvoiding = matchesAny(
+      const stoppingMatches = findLocalMatchSpans(
         proposition,
         LOCAL_STOPPING_OR_AVOIDING_PHRASES,
       );
+      const stoppingOrAvoiding = stoppingMatches.length > 0;
       const historicalOrNoncurrent = matchesAny(
         proposition,
         STRONG_HISTORICAL_OR_NONCURRENT_PHRASES,
       );
-      const explicitUnsafe = matchesAny(
+      const explicitUnsafeMatches = findLocalMatchSpans(
         proposition,
         EXPLICIT_UNSAFE_ASSISTANCE_PHRASES,
       );
-      const ambiguousUnsafe = matchesAny(
+      const ambiguousUnsafeMatches = findLocalMatchSpans(
         proposition,
         AMBIGUOUS_UNSAFE_EXECUTION_PHRASES,
       );
+      const ambiguousOwnership =
+        (explicitUnsafeMatches.length > 0 ||
+          ambiguousUnsafeMatches.length > 0) &&
+        matchesAny(proposition, AMBIGUOUS_UNSAFE_OWNERSHIP_PHRASES);
+      const explicitUnsafe =
+        !ambiguousOwnership &&
+        hasRiskWithoutOwnedSuppression(
+          proposition,
+          explicitUnsafeMatches,
+          stoppingMatches,
+        );
+      const ambiguousUnsafe =
+        ambiguousOwnership ||
+        hasRiskWithoutOwnedSuppression(
+          proposition,
+          ambiguousUnsafeMatches,
+          stoppingMatches,
+        );
 
-      explicitUnsafeAssistance ||= explicitUnsafe && !stoppingOrAvoiding;
+      explicitUnsafeAssistance ||= explicitUnsafe;
       ambiguousUnsafeExecution ||=
         ambiguousUnsafe &&
         !explicitUnsafe &&
-        !stoppingOrAvoiding &&
         !historicalOrNoncurrent;
       stoppingOrAvoidingContext ||=
         stoppingOrAvoiding || historicalOrNoncurrent;

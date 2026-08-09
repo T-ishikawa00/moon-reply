@@ -1,9 +1,9 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1 Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2 Review
 
 ## Status
 
-- Implementation status: `prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review`
-- Fixed correction baseline: `c94e780a13e319873618e95412b48275d289970e`
+- Implementation status: `prepayment_safety_engine_local_hazard_isolation_corrected_pending_human_chatgpt_review`
+- Fixed correction baseline: `f85545c89a5ebc324d2eabf7372f0302113eb0c3`
 - Accepted Charter authority: P6-P0-R1 at `611eecbf1249b222588c979a37162872215c9182`
 - Automated precision-correction verification: PASS
 - Human / ChatGPT engine review: pending
@@ -14,9 +14,9 @@
 
 ### Exact correction boundary
 
-R1 updates exactly ten existing paths: the three pre-payment input/rule/identity modules, the guarded internal route, four offline evidence files, the dedicated verifier, and this review. `prepayment-safety-gate-v1.ts`, `purchase-state-machine-v1.ts`, the accepted Charter, `RequestForm.tsx`, `lib/safety/**`, Package D, Runtime, Pipeline, service, Prompt, Catalog, Schema, evaluator, semantic disposition, and DB/repository code remain unchanged.
+R2 updates exactly six existing paths: `prepayment-safety-rules-v1.ts`, the safety cases, offline results, capabilities, the dedicated verifier, and this review. The R1 ten-path commit remains intact. `prepayment-safety-types-v1.ts`, `prepayment-safety-identity-v1.ts`, `prepayment-safety-gate-v1.ts`, `purchase-state-machine-v1.ts`, the internal route, the accepted Charter, `RequestForm.tsx`, `lib/safety/**`, Package D, Runtime, Pipeline, service, Prompt, Catalog, Schema, evaluator, semantic disposition, payment, and DB/repository code remain unchanged.
 
-The accepted Safety Engine structure and precedence remain current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and eligible delivery scope. The correction closes four content-inspection gaps without creating payment authority or changing the purchase state machine.
+The accepted Safety Engine precedence remains current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and eligible delivery scope. R2 changes only deterministic content inspection; it creates no payment authority and does not change the purchase state machine.
 
 ### Latest inbound source and identity
 
@@ -26,11 +26,13 @@ The accepted Safety Engine structure and precedence remain current urgent Safety
 
 For `new_inbound_after_boundary`, a missing inbound source returns `needs_clarification` with `latest_inbound_message_required`; it cannot produce `eligible_scoped_reply`. The internal route retains every origin, content-type, byte-count, no-store, noindex, safe-error, and no-echo guard while increasing only the strict request ceiling to a 49,152-byte limit.
 
-### Current Safety and proposition-local unsafe intent
+### Risk-local proposition ownership
 
-Clear present-form self-harm, suicide, other-harm, or immediate physical-danger language now redirects urgently without requiring a time adverb such as `今` or `すぐ`. Strong historical/non-current framing and explicit denial are evaluated separately. Generic stopping language cannot suppress a present Safety signal, so `自殺したいけど、やめたい` remains urgent. Standalone `前に` is not treated as historical evidence.
+Clear present-form self-harm, suicide, other-harm, or immediate physical-danger language continues to redirect urgently without requiring a time adverb such as `今` or `すぐ`. R2 finds local risk spans and suppression spans separately. A denial suppresses a current-Safety match only when it overlaps or locally governs that same match; a different current hazard remains urgent.
 
-Unsafe execution inspection now operates at local sentence or proposition boundaries. A local denial or stopping statement can prevent that proposition from being blocked, but it cannot cancel a separate unsafe proposition. No global negation whitelist is used.
+Unsafe-assistance inspection uses the same bounded ownership rule. A stopping expression can suppress the alternate-account, surveillance, ambush, or other unsafe proposition that it governs, but it cannot suppress another unsafe request before or after it. Ambiguous execution-versus-stopping ownership returns `needs_clarification` with `unsafe_execution_intent_required` instead of defaulting eligible.
+
+Local segmentation distinguishes sentence boundaries, adversative constructions including `でも`, `ではなく`, and `一方で`, and Japanese or ASCII commas only when both sides look like independent predicates. It does not blindly split every comma: coordinated risk nouns with one shared stopping predicate remain one semantic unit. The engine still does not claim full semantic understanding.
 
 ### Boundary and scope evidence
 
@@ -47,6 +49,8 @@ For `new_inbound_after_boundary`, a narrative of the earlier boundary is expecte
 - Existing classification and state total: 78/78 PASS
 - New R1 precision cases: 30/30 PASS (minimum 21)
 - Combined classification/state/R1 cases: 108/108 PASS
+- New R2 local-hazard isolation cases: 20/20 PASS (minimum 12)
+- Combined classification/state/R1/R2 cases: 128/128 PASS
 - Existing decoder mutation and negative cases: 15/15 PASS
 - New inbound decoder and identity regressions: 6/6 PASS
 - Decision Policy regression: 40/40 PASS
@@ -58,17 +62,17 @@ For `new_inbound_after_boundary`, a narrative of the earlier boundary is expecte
 - Payment implementation/session/authority: `false / false / false`
 - Provider / DB / Supabase: `0 / 0 / 0`
 
-Automated PASS establishes deterministic local contract behavior only. Human / ChatGPT review remains pending. It does not establish Provider quality, product acceptance, payment readiness, Runtime activation, or final JPY980 readiness.
+Automated PASS establishes deterministic local contract behavior only. Human / ChatGPT review remains pending. It does not establish full semantic understanding, Provider quality, product acceptance, payment readiness, Runtime activation, or final JPY980 readiness.
 
 ## PLAIN-LANGUAGE
 
-1. 「死にたい」「消えたい」「自分を傷つけたい」「相手を殺したい」など、現在形で明確な危険が書かれていれば、`今`という単語がなくても支払い前に緊急案内へ切り替えます。
-2. 過去の話や明確な否定は別に扱います。ただし「自殺したいけど、やめたい」のような現在の危険を、一般的な「やめたい」で打ち消しません。
-3. 「監視はやめたい」という安全な一文があっても、別の一文で第三者経由の連絡方法を求めていれば、その危険な依頼は止めます。
-4. 選択欄で「制限なし」を選んでも、受信文や状況説明に「連絡しないで」「一人にして」「ブロックした」「関係を終えたい」と明記されていれば、自動的に購入可能にはしません。
-5. 新しい受信があったという選択だけでは不十分です。実際の最新受信文がなければ追加確認にします。
-6. 業務連絡だけ許可されている場合、業務文に食事の誘い・復縁・恋愛的な提案を混ぜると追加確認になります。業務を口実にする回避依頼は従来どおり拒否します。
-7. 境界後の返信は、受信文が返信を求め、返信案が狭い内容に収まり、既存の確認事項も満たす場合だけ購入ゲートを通れます。
-8. 単語だけで意味全体を理解したとは主張しません。機械的に安全な範囲を確認できなければ `needs_clarification` に戻します。
-9. 最新受信文を実質的に変えると資格hashも変わりますが、Unicode表記・改行・外側空白だけが正規化上同じなら同じhashです。
-10. Gate、購入状態、UI、決済、Provider、DB、Supabase、Runtimeは変更していません。次の工程は Human / ChatGPT engine review です。
+1. 「死にたいわけではない」と書いた後に「相手を殺したい」と続けた場合、前半の否定で後半まで安全扱いにはしません。後半を緊急案内へ回します。
+2. 「別アカウントから連絡するつもりはない」と書いた後に、居場所の特定や別SNSでの連絡方法を求めた場合、後半の危険な依頼を止めます。
+3. 句点だけでなく、独立した述語を分ける `、`、`,`、`でも`、`ではなく`、`一方で` も局所的な命題境界として扱います。
+4. すべての読点を機械的に分割するわけではありません。「監視、追跡、尾行はしない」のように一つの否定が並列語全体を支配する表現は一つのまとまりとして扱います。
+5. 「監視するのはやめたい、距離を置きたい」「別アカウントは使わない、連絡もしない」「死にたいわけではない、今は安全」の安全な例は安全のままです。
+6. 危険な依頼と停止表現のどちらを否定しているか機械的に確定できない場合は、購入可能にせず `needs_clarification` に戻します。
+7. 既存のCharter 42件、Engine 36件、R1 30件、Decoder 15件、identity 6件の意味は維持しています。
+8. Gate、入力型、identity、内部API、購入状態、UI、決済、Provider、DB、Supabase、Runtimeは変更していません。
+9. payment authorityは発行しておらず、Package E-B / E-Cも未承認です。
+10. 次の工程は Human / ChatGPT engine review です。
