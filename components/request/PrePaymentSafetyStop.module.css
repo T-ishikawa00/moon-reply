@@ -1,0 +1,594 @@
+.resultCard,
+.eligibleCard,
+.clarificationCard,
+.apiError {
+  margin: 0 clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--border-paper);
+  border-left: 4px solid var(--moon-600);
+  background: var(--paper-100);
+  padding: clamp(1.35rem, 4vw, 2rem);
+  color: var(--ink-950);
+  box-shadow: 0 0.75rem 2rem color-mix(in srgb, var(--night-900) 5%, transparent);
+}
+
+.resultCard h2,
+.eligibleCard h3,
+.clarificationCard h3,
+.apiError h3 {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.55;
+  text-wrap: balance;
+}
+
+.resultCard h2:focus,
+.clarificationCard h3:focus,
+.apiError h3:focus {
+  outline: 3px solid var(--focus-ring-paper);
+  outline-offset: 0.3rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--moon-600);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.body p,
+.eligibleLead,
+.clarificationLead,
+.apiError p {
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.blocked {
+  border-left-color: color-mix(in srgb, var(--violet-600) 64%, var(--ink-600));
+  background: color-mix(in srgb, var(--paper-100) 92%, var(--violet-100));
+}
+
+.urgent {
+  border-color: color-mix(in srgb, var(--moon-600) 70%, var(--border-paper));
+  border-left-width: 4px;
+  background: var(--night-800);
+  color: var(--paper-50);
+}
+
+.urgent .eyebrow {
+  color: var(--moon-400);
+}
+
+.urgent .body p {
+  color: var(--paper-200);
+}
+
+.professional {
+  border-left-color: color-mix(in srgb, var(--ink-600) 70%, var(--moon-600));
+}
+
+.paymentNote {
+  margin-top: var(--space-5);
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  padding-top: var(--space-4);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.resultAction {
+  min-height: 3rem;
+  margin-top: var(--space-5);
+  border: 1px solid var(--moon-600);
+  background: var(--paper-50);
+  padding: 0.75rem 1rem;
+  color: var(--focus-ring-paper);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.resultAction:focus-visible,
+.choice:has(input:focus-visible),
+.checkChoice:has(input:focus-visible),
+.reviewNav a:focus-visible,
+.reviewDisclosure summary:focus-visible {
+  outline: 3px solid var(--focus-ring-paper);
+  outline-offset: 3px;
+}
+
+.paperSecondary {
+  border-color: var(--moon-600);
+  background: var(--paper-50);
+  color: var(--focus-ring-paper);
+}
+
+.paperSecondary:hover {
+  background: var(--paper-200);
+}
+
+.reviewAction {
+  display: block;
+  margin-top: var(--space-5);
+  border: 1px dashed var(--border-paper);
+  background: var(--paper-200);
+  padding: var(--space-4);
+  color: var(--ink-600);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.supportCopy {
+  margin: 0 clamp(1.5rem, 5vw, 3rem);
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-200);
+  padding: var(--space-5);
+  color: var(--ink-600);
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.questionGroup {
+  margin-inline: clamp(1.5rem, 5vw, 3rem);
+  padding-block: clamp(1.5rem, 4vw, 2.4rem);
+  border-top: 1px solid var(--border-paper-subtle);
+}
+
+.questionGroup legend {
+  max-width: 44rem;
+  color: var(--ink-800);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.75;
+}
+
+.questionGroup legend span {
+  margin-left: var(--space-2);
+  color: var(--moon-600);
+  font-size: 0.7rem;
+}
+
+.questionHint {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-600);
+  font-size: 0.82rem;
+  line-height: 1.8;
+}
+
+.choiceList {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.choice {
+  display: grid;
+  min-height: 3.5rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  border: 1px solid var(--border-paper);
+  background: var(--paper-100);
+  padding: var(--space-4);
+  color: var(--ink-600);
+  line-height: 1.75;
+  cursor: pointer;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--moon-600);
+  background: var(--paper-200);
+  color: var(--ink-950);
+  box-shadow: inset 0 0 0 1px var(--moon-600);
+}
+
+.choice input,
+.checkChoice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  accent-color: var(--violet-600);
+}
+
+.secondaryChoices {
+  margin-top: var(--space-4);
+  border: 1px solid var(--border-paper);
+  background: var(--paper-100);
+}
+
+.secondaryChoices summary {
+  min-height: 3.25rem;
+  padding: var(--space-4);
+  color: var(--focus-ring-paper);
+  font-weight: 800;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.secondaryChoices .choiceList {
+  margin: 0;
+  border-top: 1px solid var(--border-paper);
+  padding: var(--space-3);
+}
+
+.eligibleCard {
+  border-left-color: var(--moon-600);
+}
+
+.eligibleLead,
+.clarificationLead {
+  margin-top: var(--space-3);
+}
+
+.scopeDisclosure {
+  margin-top: var(--space-5);
+  border-top: 1px solid var(--border-paper);
+  padding-top: var(--space-4);
+}
+
+.scopeDisclosure strong {
+  display: block;
+  color: var(--ink-800);
+  font-size: 0.82rem;
+}
+
+.scopeDisclosure p {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-600);
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.gateControls {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.checkChoice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  border: 1px solid var(--moon-600);
+  background: var(--paper-50);
+  padding: var(--space-4);
+  color: var(--ink-800);
+  font-weight: 700;
+  line-height: 1.8;
+  cursor: pointer;
+}
+
+.pendingNote,
+.readyNote {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--ink-600);
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+.pendingNote {
+  background: var(--paper-200);
+}
+
+.readyNote {
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-200);
+  font-weight: 800;
+}
+
+.clarificationCard {
+  border-left-color: var(--moon-600);
+}
+
+.clarificationFields {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.clarificationField {
+  border-top: 1px solid var(--border-paper);
+  padding-top: var(--space-4);
+}
+
+.clarificationField legend,
+.clarificationField > strong {
+  color: var(--ink-800);
+  font-weight: 800;
+  line-height: 1.75;
+}
+
+.clarificationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.apiError {
+  border-color: var(--state-danger-border);
+  border-left-width: 4px;
+  background: var(--state-danger-background);
+  color: var(--state-danger-foreground);
+}
+
+.reviewPage {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 84% 4%, color-mix(in srgb, var(--moon-400) 12%, transparent), transparent 23rem),
+    var(--paper-200);
+  padding: clamp(2rem, 6vw, 5rem) 1rem;
+  color: var(--ink-950);
+}
+
+.reviewBoundary,
+.reviewSheet,
+.reviewNav {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+}
+
+.reviewBoundary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--border-night);
+  background: var(--night-800);
+  padding: var(--space-4);
+  color: var(--paper-50);
+}
+
+.reviewBoundary strong {
+  color: var(--moon-400);
+}
+
+.reviewBoundary span {
+  max-width: 38rem;
+  color: var(--paper-200);
+  font-size: 0.78rem;
+  line-height: 1.75;
+}
+
+.reviewSheet {
+  overflow: clip;
+  border: 1px solid var(--border-paper);
+  background: var(--paper-50);
+  box-shadow: var(--shadow-paper);
+}
+
+.reviewHeader {
+  border-bottom: 1px solid var(--border-paper);
+  background: linear-gradient(180deg, var(--paper-100), var(--paper-50));
+  padding: clamp(1.5rem, 5vw, 3rem);
+}
+
+.reviewHeader h1 {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.85rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.reviewHeader > span {
+  display: block;
+  margin-top: var(--space-3);
+  color: var(--ink-600);
+  line-height: 1.9;
+}
+
+.reviewSection {
+  margin-inline: clamp(1.5rem, 5vw, 3rem);
+  padding-block: clamp(1.5rem, 4vw, 2.4rem);
+  border-top: 1px solid var(--border-paper);
+}
+
+.reviewHeader + .reviewSection {
+  border-top: 0;
+}
+
+.reviewSection h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 4vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.reviewSection > p {
+  margin: var(--space-3) 0 0;
+  color: var(--ink-600);
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.provideList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.provideList li {
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-200);
+  padding: var(--space-4);
+  color: var(--ink-600);
+  line-height: 1.75;
+}
+
+.offerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-5);
+}
+
+.offerRow strong {
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 5vw, 2.35rem);
+  font-weight: 600;
+}
+
+.disabledControl {
+  width: 100%;
+  min-height: 3.5rem;
+  margin-top: var(--space-5);
+  border: 1px solid var(--ink-400);
+  background: var(--paper-300);
+  color: var(--ink-600);
+  font: inherit;
+  font-weight: 800;
+  cursor: not-allowed;
+}
+
+.reviewDisclosure {
+  margin: 0 clamp(1.5rem, 5vw, 3rem) clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--border-paper);
+  background: var(--paper-100);
+}
+
+.reviewDisclosure summary {
+  min-height: 3rem;
+  padding: var(--space-4);
+  color: var(--focus-ring-paper);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.reviewDisclosure dl {
+  margin: 0;
+  border-top: 1px solid var(--border-paper);
+  padding: var(--space-4);
+}
+
+.reviewDisclosure dl > div {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: var(--space-3);
+  border-top: 1px solid var(--border-paper-subtle);
+  padding-block: var(--space-2);
+}
+
+.reviewDisclosure dl > div:first-child {
+  border-top: 0;
+}
+
+.reviewDisclosure dt {
+  color: var(--moon-600);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.reviewDisclosure dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink-600);
+}
+
+.reviewNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.reviewNav a {
+  min-height: 2.75rem;
+  border: 1px solid var(--moon-600);
+  background: var(--paper-50);
+  padding: 0.7rem 1rem;
+  color: var(--focus-ring-paper);
+  font-weight: 800;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 520px) {
+  .resultCard,
+  .eligibleCard,
+  .clarificationCard,
+  .apiError,
+  .supportCopy,
+  .questionGroup {
+    margin-inline: 1rem;
+  }
+
+  .clarificationActions,
+  .reviewBoundary,
+  .offerRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .reviewBoundary,
+  .offerRow {
+    display: flex;
+  }
+
+  .provideList,
+  .reviewDisclosure dl > div {
+    grid-template-columns: 1fr;
+  }
+
+  .resultAction,
+  .clarificationActions button,
+  .reviewNav a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 320px) {
+  .reviewPage {
+    padding-inline: 0.75rem;
+  }
+
+  .resultCard,
+  .eligibleCard,
+  .clarificationCard,
+  .apiError,
+  .supportCopy,
+  .questionGroup {
+    margin-inline: 0.75rem;
+  }
+
+  .choice,
+  .checkChoice,
+  .reviewSection,
+  .reviewHeader {
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resultAction,
+  .choice,
+  .reviewNav a {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}

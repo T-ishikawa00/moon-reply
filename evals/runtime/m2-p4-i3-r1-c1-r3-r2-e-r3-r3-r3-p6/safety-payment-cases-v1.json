@@ -1,0 +1,316 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-safety-payment-cases-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R1",
+  "baseline": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
+  "base_input": {
+    "schemaVersion": "prepayment-safety-input-v1",
+    "adultConfirmed": true,
+    "currentSituation": "状況と気持ちを整理したいです。",
+    "latestInboundMessage": null,
+    "optionalMessage": null,
+    "relationship": "ambiguous",
+    "requestedTopics": [
+      "organize_emotions"
+    ],
+    "contactBoundaryState": "no_restriction_known",
+    "requestedAssistanceGoal": "understand_and_organize",
+    "clarificationAnswers": {
+      "submissionCount": 0,
+      "clarifiedContactBoundaryState": null,
+      "practicalPermissionExplicit": null,
+      "currentRequestPracticalScopeOnly": null,
+      "replyExplicitlyInvited": null,
+      "replyLimitedToExactSubject": null,
+      "professionalScopeLimitedToNonprofessionalOrganization": null,
+      "unsafeExecutionIntent": null,
+      "currentSafetyStatus": null
+    },
+    "scopeAcknowledgements": {
+      "pauseAssessmentDisclosureAcknowledged": false,
+      "boundarySupportOnlyDisclosureAcknowledged": false,
+      "scopedReplyScopeAcknowledged": false,
+      "businessOnlyScopeAcknowledged": false
+    },
+    "attestationConfirmed": false,
+    "safetyPolicyVersion": "prepayment-safety-policy-v1"
+  },
+  "cases": [
+    {
+      "case_id": "UX-01",
+      "scenario": "General classification renders gates before purchase progression",
+      "input_overrides": {},
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false,
+      "expected_acknowledgement_codes": [
+        "adult_confirmed",
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "case_id": "UX-02",
+      "scenario": "General classification proceeds only after common attestation",
+      "input_overrides": {
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-03",
+      "scenario": "Temporary pause remains eligible but ungated before disclosure",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": false,
+      "expected_acknowledgement_codes": [
+        "adult_confirmed",
+        "pause_assessment_disclosure_acknowledged",
+        "attestation_confirmed"
+      ]
+    },
+    {
+      "case_id": "UX-04",
+      "scenario": "Temporary pause becomes fully gated after exact disclosure and attestation",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "scopeAcknowledgements": {
+          "pauseAssessmentDisclosureAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-05",
+      "scenario": "Explicit no-contact emotional support remains a paid boundary-only assessment",
+      "input_overrides": {
+        "contactBoundaryState": "explicit_no_contact",
+        "scopeAcknowledgements": {
+          "boundarySupportOnlyDisclosureAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-06",
+      "scenario": "Relationship closed emotional support remains boundary-only",
+      "input_overrides": {
+        "contactBoundaryState": "relationship_closed",
+        "scopeAcknowledgements": {
+          "boundarySupportOnlyDisclosureAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-07",
+      "scenario": "Unsafe alternate-channel assistance stops before purchase",
+      "input_overrides": {
+        "requestedAssistanceGoal": "alternate_channel_or_third_party"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "UX-08",
+      "scenario": "Urgent current safety uses the distinct redirect",
+      "input_overrides": {
+        "contactBoundaryState": "urgent_safety",
+        "requestedAssistanceGoal": "urgent_safety_help",
+        "currentSituation": "今すぐ自分を傷つけたい気持ちがあります。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "UX-09",
+      "scenario": "Professional judgment request stops outside product scope",
+      "input_overrides": {
+        "requestedAssistanceGoal": "professional_judgment"
+      },
+      "expected_classification": "unsupported_professional_request",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "UX-10",
+      "scenario": "New inbound without source asks for latest inbound message",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "latest_inbound_message_required"
+      ]
+    },
+    {
+      "case_id": "UX-11",
+      "scenario": "Clarified no restriction cannot override contradictory source",
+      "input_overrides": {
+        "contactBoundaryState": "unknown",
+        "currentSituation": "相手から『これ以上連絡しないで』と言われています。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "clarifiedContactBoundaryState": "no_restriction_known"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "UX-12",
+      "scenario": "Business-only practical request remains strictly scoped",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "資料受け取りました。確認お願いします。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        },
+        "scopeAcknowledgements": {
+          "businessOnlyScopeAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_business_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-13",
+      "scenario": "Business-only private expansion cannot proceed",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "資料受け取りました。\nところで今度二人でご飯行かない？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        },
+        "scopeAcknowledgements": {
+          "businessOnlyScopeAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "business_scope_required"
+      ]
+    },
+    {
+      "case_id": "UX-14",
+      "scenario": "New inbound explicit invitation permits exact-subject reply only",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間教えて",
+        "optionalMessage": "ありがとう。15時どう？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        },
+        "scopeAcknowledgements": {
+          "scopedReplyScopeAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_scoped_reply",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-15",
+      "scenario": "Scoped reply private expansion cannot broaden permission",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間教えて",
+        "optionalMessage": "ありがとう。15時どう？\nそれと今度二人でご飯行かない？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        },
+        "scopeAcknowledgements": {
+          "scopedReplyScopeAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "reply_scope_required"
+      ]
+    },
+    {
+      "case_id": "UX-16",
+      "scenario": "Missing pause acknowledgement cannot satisfy purchase gate",
+      "input_overrides": {
+        "contactBoundaryState": "temporary_pause",
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "UX-17",
+      "scenario": "Missing common attestation cannot satisfy purchase gate",
+      "input_overrides": {},
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "UX-18",
+      "scenario": "Ambiguous unsafe execution remains clarification and no purchase",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいのは、以前のことか今のことか分かりません。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "unsafe_execution_intent_required"
+      ]
+    },
+    {
+      "case_id": "UX-19",
+      "scenario": "Stopping unsafe execution can return to ordinary assessment",
+      "input_overrides": {
+        "currentSituation": "別SNSで連絡するのはやめたいです。",
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "UX-20",
+      "scenario": "Every result preserves payment absence",
+      "input_overrides": {
+        "contactBoundaryState": "channel_restricted",
+        "scopeAcknowledgements": {
+          "boundarySupportOnlyDisclosureAcknowledged": true
+        },
+        "attestationConfirmed": true
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true,
+      "expected_payment": {
+        "implementation": false,
+        "session": false,
+        "authority": false
+      }
+    }
+  ]
+}

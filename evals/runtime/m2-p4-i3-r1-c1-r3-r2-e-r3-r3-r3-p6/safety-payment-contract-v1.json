@@ -1,0 +1,105 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-safety-payment-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R1",
+  "status": "prepayment_safety_ux_implemented_pending_human_visual_product_review",
+  "baseline": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-prepayment-safety-ux",
+  "authority": {
+    "accepted_charter_commit": "611eecbf1249b222588c979a37162872215c9182",
+    "accepted_safety_engine_head": "91efbf1ef14a27fb21d24f12baeb8196d6113cf0",
+    "classification_owner": "server",
+    "purchase_gate_owner": "server",
+    "client_fallback_to_legacy_safety": false,
+    "historical_p6_p0_branch_lock_is_successor_gate": false
+  },
+  "scope": {
+    "path_count": 12,
+    "update_only": [
+      "components/request/RequestForm.tsx"
+    ],
+    "new_only": [
+      "components/request/PrePaymentSafetyStop.tsx",
+      "components/request/PrePaymentSafetyStop.module.css",
+      "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
+      "app/review/purchase/safety/[fixtureId]/page.tsx",
+      "fixtures/review/prepayment-safety-states.ts",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/safety-payment-cases-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/visual-review-checklist-v1.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6/capabilities-v1.json",
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-prepayment-safety-gate.mjs",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md"
+    ]
+  },
+  "protected_legacy_review": {
+    "component_path": "components/review/ReviewPurchaseConfirmation.tsx",
+    "component_blob_sha": "5f77c298639a78d3c9d0d3c7dc987f32f806ae5a",
+    "fixture_path": "fixtures/review/purchase-confirmations.ts",
+    "fixture_blob_sha": "ec22a26bd3df38781b029db8e0e646e2d4db8d0d",
+    "new_review_component": "components/review/ReviewPrePaymentSafetyConfirmation.tsx",
+    "legacy_component_imported_or_wrapped": false
+  },
+  "request_flow": {
+    "phase_1_free_text_first_preserved": true,
+    "phase_2_customer_title": "決済前の利用確認",
+    "authoritative_endpoint": "POST /api/internal/purchase-eligibility",
+    "initial_scope_acknowledgements": false,
+    "initial_attestation": false,
+    "eligible_classification_count": 5,
+    "one_completed_clarification_submission_maximum": 1,
+    "input_mutation_clears_previous_result": true,
+    "revalidate_before_phase_3": true,
+    "revalidate_before_final_confirmation": true,
+    "eligibility_hash_stored_or_reused_by_client": false,
+    "api_unavailable_behavior": "fail_closed"
+  },
+  "input_mapping": {
+    "latestInboundMessage": "partnerMessage",
+    "optionalMessage": "draftMessage",
+    "combined": false,
+    "relationship_mapping_count": 7,
+    "requested_topic_mapping_count": 6,
+    "contact_boundary_option_count": 9,
+    "requested_assistance_goal_count": 8
+  },
+  "eligible_surfaces": [
+    "eligible_general",
+    "eligible_pause_assessment",
+    "eligible_boundary_support_only",
+    "eligible_scoped_reply",
+    "eligible_business_only"
+  ],
+  "nonpurchase_surfaces": [
+    "needs_clarification",
+    "blocked_unsafe_assistance",
+    "urgent_safety_redirect",
+    "unsupported_professional_request"
+  ],
+  "payment": {
+    "planned_price": "税込980円",
+    "cta_disabled": true,
+    "payment_implementation_present": false,
+    "payment_session_available": false,
+    "payment_authority_issued": false,
+    "supporting_copy": "決済機能は現在準備中です。\nこの画面では料金は発生しません。"
+  },
+  "external_operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  },
+  "runtime": {
+    "active": "v4",
+    "v12_active": false
+  },
+  "human_review": {
+    "status": "pending",
+    "desktop": "pending",
+    "viewport_399px": "pending",
+    "viewport_320px": "pending",
+    "keyboard_only": "pending",
+    "screen_reader_names": "pending",
+    "zoom_200_percent": "pending",
+    "reduced_motion": "pending"
+  }
+}
