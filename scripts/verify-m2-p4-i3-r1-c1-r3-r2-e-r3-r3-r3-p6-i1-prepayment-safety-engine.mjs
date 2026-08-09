@@ -13,14 +13,17 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const baseline = "2c7d1d7a428ab1d87d6013b7168944f8953d0ebd";
+const r3Baseline = "2c7d1d7a428ab1d87d6013b7168944f8953d0ebd";
+const acceptedR3Commit = "91efbf1ef14a27fb21d24f12baeb8196d6113cf0";
+const correctionBaseline = "e96ae3a722fc92f25da9c4a7bc5e0f411b71b390";
 const r2Parent = "f85545c89a5ebc324d2eabf7372f0302113eb0c3";
 const r1Parent = "c94e780a13e319873618e95412b48275d289970e";
 const acceptedCharterCommit = "611eecbf1249b222588c979a37162872215c9182";
 const engineParent = "611eecbf1249b222588c979a37162872215c9182";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
+const expectedTaskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R3";
 const expectedBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-r3-temporal-hazard-ownership";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i2-r3-boundary-phrase-parity";
 const fixtureDirectory = path.join(
   repositoryRoot,
   "evals",
@@ -29,6 +32,15 @@ const fixtureDirectory = path.join(
 );
 
 const exactScope = [
+  "lib/purchase/prepayment-safety-rules-v1.ts",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/safety-engine-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/offline-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md",
+];
+
+const r3ExactScope = [
   "lib/purchase/prepayment-safety-rules-v1.ts",
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/safety-engine-cases-v1.json",
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/offline-results-v1.json",
@@ -77,7 +89,7 @@ const routePath = "app/api/internal/purchase-eligibility/route.ts";
 const contractPath =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/safety-engine-contract-v1.json";
 const reviewPath =
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_I1_REVIEW.md";
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_REVIEW.md";
 
 const charterScope = [
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_P0_REVIEW.md",
@@ -126,7 +138,8 @@ function splitNullTerminated(value) {
 function currentChangedPaths() {
   const changed = new Set(
     splitNullTerminated(
-      git(["diff", "--name-only", "-z", `${baseline}..HEAD`]).stdout,
+      git(["diff", "--name-only", "-z", `${correctionBaseline}..HEAD`])
+        .stdout,
     ).map(normalizeRepoPath),
   );
   const statusEntries = splitNullTerminated(
@@ -280,47 +293,70 @@ const charterQuestionFlow = readJson(
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/question-flow-v1.json",
 );
 
-check("exact branch baseline parent main and empty stash authority", () => {
+check("exact customer phrase branch baseline main and empty stash authority", () => {
   assert.equal(git(["branch", "--show-current"]).stdout.trim(), expectedBranch);
-  assert.equal(git(["merge-base", "HEAD", baseline]).stdout.trim(), baseline);
-  assert.equal(git(["rev-parse", `${baseline}^`]).stdout.trim(), r2Parent);
+  assert.equal(
+    git(["merge-base", "HEAD", correctionBaseline]).stdout.trim(),
+    correctionBaseline,
+  );
+  assert.equal(
+    git(["merge-base", correctionBaseline, acceptedR3Commit]).stdout.trim(),
+    acceptedR3Commit,
+  );
   assert.equal(git(["rev-parse", "main"]).stdout.trim(), expectedMain);
   assert.equal(git(["rev-parse", "origin/main"]).stdout.trim(), expectedMain);
   assert.equal(git(["stash", "list"]).stdout.trim(), "");
   const successorCommitCount = Number(
-    git(["rev-list", "--count", `${baseline}..HEAD`]).stdout.trim(),
+    git(["rev-list", "--count", `${correctionBaseline}..HEAD`]).stdout.trim(),
   );
   assert.ok(successorCommitCount === 0 || successorCommitCount === 1);
   if (successorCommitCount === 1) {
-    assert.equal(git(["rev-parse", "HEAD^"]).stdout.trim(), baseline);
+    assert.equal(git(["rev-parse", "HEAD^"]).stdout.trim(), correctionBaseline);
   }
 });
 
-check("exact R3 correction scope 6/6 and all paths pre-exist", () => {
+check("exact customer boundary phrase correction scope 6/6", () => {
   assert.deepEqual(currentChangedPaths(), [...exactScope].sort());
   for (const relativePath of exactScope) {
     assert.ok(fs.statSync(path.join(repositoryRoot, relativePath)).isFile());
     assert.equal(
-      git(["cat-file", "-e", `${baseline}:${relativePath}`], true).status,
+      git(["cat-file", "-e", `${correctionBaseline}:${relativePath}`], true)
+        .status,
       0,
       `${relativePath} is missing at the correction baseline`,
     );
   }
 });
 
-check("R2 exact 6/6 R1 exact 10/10 and P6-I1 exact 12/12 remain anchored", () => {
-  const r2CommittedScope = git([
+check("accepted R3 R2 R1 and P6-I1 scopes remain anchored", () => {
+  const r3CommittedScope = git([
     "diff-tree",
     "--no-commit-id",
     "--name-only",
     "-r",
-    baseline,
+    acceptedR3Commit,
   ])
     .stdout.trim()
     .split(/\r?\n/u)
     .map(normalizeRepoPath)
     .sort();
-  assert.deepEqual(r2CommittedScope, [...exactScope].sort());
+  assert.deepEqual(r3CommittedScope, [...r3ExactScope].sort());
+  assert.equal(
+    git(["rev-parse", `${acceptedR3Commit}^`]).stdout.trim(),
+    r3Baseline,
+  );
+  const r2CommittedScope = git([
+    "diff-tree",
+    "--no-commit-id",
+    "--name-only",
+    "-r",
+    r3Baseline,
+  ])
+    .stdout.trim()
+    .split(/\r?\n/u)
+    .map(normalizeRepoPath)
+    .sort();
+  assert.deepEqual(r2CommittedScope, [...r3ExactScope].sort());
   const r1CommittedScope = git([
     "diff-tree",
     "--no-commit-id",
@@ -426,7 +462,8 @@ check("Package D legacy Safety RequestForm Runtime and protected assets unchange
     "docs/CODEX_HANDOFF.md",
   ];
   assert.equal(
-    git(["diff", "--quiet", baseline, "--", ...protectedPaths], true).status,
+    git(["diff", "--quiet", correctionBaseline, "--", ...protectedPaths], true)
+      .status,
     0,
   );
 });
@@ -904,11 +941,8 @@ check("R2 local hazard isolation executes 20/20 with at least 12 cases", () => {
 });
 
 check("R3 temporal hazard ownership executes 16/16 with at least 12 cases", () => {
-  assert.equal(
-    fixture.task_id,
-    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
-  );
-  assert.equal(fixture.baseline, baseline);
+  assert.equal(fixture.task_id, expectedTaskId);
+  assert.equal(fixture.baseline, correctionBaseline);
   assert.equal(fixture.r3_temporal_hazard_cases.length, 16);
   assert.ok(fixture.r3_temporal_hazard_cases.length >= 12);
   assert.deepEqual(
@@ -918,6 +952,25 @@ check("R3 temporal hazard ownership executes 16/16 with at least 12 cases", () =
     ),
   );
   for (const testCase of fixture.r3_temporal_hazard_cases) {
+    runEngineCase(testCase, false);
+  }
+});
+
+check("customer boundary phrase parity executes 19/19", () => {
+  assert.equal(fixture.customer_boundary_phrase_cases.length, 19);
+  assert.ok(fixture.customer_boundary_phrase_cases.length >= 12);
+  assert.deepEqual(
+    fixture.customer_boundary_phrase_cases.map(
+      (testCase) => testCase.case_id,
+    ),
+    [
+      ...Array.from({ length: 18 }, (_, index) =>
+        `P6-I2-R3-${String(index + 1).padStart(2, "0")}`,
+      ),
+      "HUMAN-P6-I2-BOUNDARY-01",
+    ],
+  );
+  for (const testCase of fixture.customer_boundary_phrase_cases) {
     runEngineCase(testCase, false);
   }
 });
@@ -940,6 +993,14 @@ function r2Case(caseId) {
 
 function r3Case(caseId) {
   const testCase = fixture.r3_temporal_hazard_cases.find(
+    (candidate) => candidate.case_id === caseId,
+  );
+  assert.ok(testCase, caseId);
+  return testCase;
+}
+
+function boundaryPhraseCase(caseId) {
+  const testCase = fixture.customer_boundary_phrase_cases.find(
     (candidate) => candidate.case_id === caseId,
   );
   assert.ok(testCase, caseId);
@@ -1149,6 +1210,44 @@ check("unsafe assistance negation is proposition-local and mixed text blocks", (
 check("boundary source conflicts fail closed without rewriting structured state", () => {
   for (const caseId of ["R1-12", "R1-13", "R1-14", "R1-15", "R1-28"]) {
     const result = runEngineCase(r1Case(caseId));
+    assert.equal(result.classification, "needs_clarification", caseId);
+    assert.deepEqual(
+      result.requiredClarificationCodes,
+      ["boundary_state_conflict"],
+      caseId,
+    );
+  }
+});
+
+check("customer phrase ownership and boundary distinctions remain fail closed", () => {
+  assert.equal(
+    runEngineCase(boundaryPhraseCase("P6-I2-R3-01")).classification,
+    "eligible_pause_assessment",
+  );
+  assert.equal(
+    runEngineCase(boundaryPhraseCase("P6-I2-R3-06")).classification,
+    "eligible_pause_assessment",
+  );
+  assert.equal(
+    runEngineCase(boundaryPhraseCase("P6-I2-R3-08")).classification,
+    "eligible_general",
+  );
+  assert.equal(
+    runEngineCase(boundaryPhraseCase("P6-I2-R3-10")).classification,
+    "eligible_boundary_support_only",
+  );
+  assert.equal(
+    runEngineCase(boundaryPhraseCase("P6-I2-R3-11")).classification,
+    "eligible_boundary_support_only",
+  );
+  for (const caseId of [
+    "P6-I2-R3-03",
+    "P6-I2-R3-04",
+    "P6-I2-R3-07",
+    "P6-I2-R3-12",
+    "HUMAN-P6-I2-BOUNDARY-01",
+  ]) {
+    const result = runEngineCase(boundaryPhraseCase(caseId));
     assert.equal(result.classification, "needs_clarification", caseId);
     assert.deepEqual(
       result.requiredClarificationCodes,
@@ -1434,7 +1533,10 @@ check("pure fourteen-state machine rejects stale and payment transitions", () =>
 
 check("internal API production origin content body allowlist and no-store guards", () => {
   const routeSource = readUtf8(routePath);
-  const baselineRouteSource = git(["show", `${baseline}:${routePath}`]).stdout;
+  const baselineRouteSource = git([
+    "show",
+    `${correctionBaseline}:${routePath}`,
+  ]).stdout;
   const environmentSource = readUtf8(
     "lib/assessment/runtime/environment.ts",
   );
@@ -1491,10 +1593,10 @@ check("internal API and purchase engine import no Provider OpenAI DB or Supabase
 
 check("capabilities preserve every no-authority boundary", () => {
   const expected = {
-    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
+    task_id: expectedTaskId,
     status:
-      "prepayment_safety_engine_temporal_hazard_ownership_corrected_pending_human_chatgpt_review",
-    baseline,
+      "customer_boundary_phrase_parity_corrected_pending_human_regression_review",
+    baseline: correctionBaseline,
     safety_charter_accepted: true,
     two_axis_engine_complete: true,
     server_owned_identity_complete: true,
@@ -1517,6 +1619,10 @@ check("capabilities preserve every no-authority boundary", () => {
     current_intent_after_historical_context_still_blocks: true,
     ambiguous_temporal_ownership_to_clarification: true,
     boundary_source_conflict_detection_complete: true,
+    customer_ui_temporary_pause_phrase_detected: true,
+    reported_pause_paraphrase_coverage_expanded: true,
+    customer_owned_distance_wish_not_treated_as_partner_boundary: true,
+    human_boundary_conflict_regression_added: true,
     latest_inbound_source_bound_to_identity: true,
     business_scope_content_guard_complete: true,
     scoped_reply_source_guard_complete: true,
@@ -1540,20 +1646,17 @@ check("capabilities preserve every no-authority boundary", () => {
     c2_authorized: false,
     final_jpy980_readiness_established: false,
     next_action:
-      "human_chatgpt_review_of_temporal_hazard_ownership_correction",
+      "human_regression_review_of_customer_boundary_phrase_parity",
   };
   for (const [key, value] of Object.entries(expected)) {
     assert.deepEqual(capabilities[key], value, key);
   }
 });
 
-check("offline evidence preserves 128/128 and adds R3 16/16 plus decoder 6/6", () => {
+check("offline evidence preserves 144/144 and adds phrase parity 19/19", () => {
   assert.equal(offlineResults.status, "pass");
-  assert.equal(
-    offlineResults.task_id,
-    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
-  );
-  assert.equal(offlineResults.baseline, baseline);
+  assert.equal(offlineResults.task_id, expectedTaskId);
+  assert.equal(offlineResults.baseline, correctionBaseline);
   assert.equal(offlineResults.branch, expectedBranch);
   assert.equal(offlineResults.charter_cases.passed, 42);
   assert.equal(offlineResults.charter_cases.total, 42);
@@ -1590,6 +1693,19 @@ check("offline evidence preserves 128/128 and adds R3 16/16 plus decoder 6/6", (
     offlineResults.classification_state_r1_r2_and_r3_cases.total,
     144,
   );
+  assert.equal(offlineResults.customer_boundary_phrase_cases.passed, 19);
+  assert.equal(offlineResults.customer_boundary_phrase_cases.total, 19);
+  assert.ok(offlineResults.customer_boundary_phrase_cases.total >= 12);
+  assert.equal(
+    offlineResults
+      .classification_state_r1_r2_r3_and_customer_boundary_phrase_cases.passed,
+    163,
+  );
+  assert.equal(
+    offlineResults
+      .classification_state_r1_r2_r3_and_customer_boundary_phrase_cases.total,
+    163,
+  );
   assert.equal(
     offlineResults.classification_state_and_r1_precision_cases.total,
     108,
@@ -1615,6 +1731,19 @@ check("offline evidence preserves 128/128 and adds R3 16/16 plus decoder 6/6", (
     offlineResults.verified_properties.ambiguous_temporal_ownership_to_clarification,
     "pass",
   );
+  for (const property of [
+    "customer_ui_temporary_pause_phrase_detected",
+    "reported_pause_paraphrase_coverage_expanded",
+    "customer_owned_distance_wish_not_treated_as_partner_boundary",
+    "ambiguous_boundary_ownership_to_clarification",
+    "human_boundary_conflict_regression_added",
+    "temporary_pause_distinct_from_explicit_no_contact",
+  ]) {
+    assert.equal(offlineResults.verified_properties[property], "pass", property);
+  }
+  assert.equal(offlineResults.payment_authority_issued, false);
+  assert.equal(offlineResults.active_runtime, "v4");
+  assert.equal(offlineResults.v12_active, false);
 });
 
 check("Decision Policy regression remains PASS 40/40", () => {
@@ -1646,27 +1775,23 @@ check("Active Runtime remains v4 and v12 remains inactive", () => {
   assert.equal(capabilities.v12_active, false);
 });
 
-check("review artifact separates R3 technical PASS from Human ChatGPT review", () => {
+check("review separates technical PASS from Human regression review", () => {
   const review = readUtf8(reviewPath);
   assert.match(review, /TECHNICAL/u);
   assert.match(review, /PLAIN-LANGUAGE/u);
-  assert.match(review, /Human \/ ChatGPT engine review/u);
+  assert.match(review, /Human regression review/u);
   assert.match(review, /pending/u);
-  assert.match(review, /42\/42/u);
-  assert.match(review, /36\/36/u);
-  assert.match(review, /30\/30/u);
-  assert.match(review, /20\/20/u);
-  assert.match(review, /128\/128/u);
-  assert.match(review, /16\/16/u);
   assert.match(review, /144\/144/u);
+  assert.match(review, /19\/19/u);
   assert.match(review, /6\/6/u);
-  assert.match(review, /49,152-byte/u);
-  assert.match(review, /full semantic subject equivalence/u);
+  assert.match(review, /HUMAN-P6-I2-BOUNDARY-01/u);
   assert.match(
     review,
-    /prepayment_safety_engine_temporal_hazard_ownership_corrected_pending_human_chatgpt_review/u,
+    /customer_boundary_phrase_parity_corrected_pending_human_regression_review/u,
   );
   assert.match(review, /Provider \/ DB \/ Supabase: `0 \/ 0 \/ 0`/u);
+  assert.match(review, /Payment implementation\/session\/authority: `false \/ false \/ false`/u);
+  assert.match(review, /Active Runtime: `v4`; v12: `inactive`/u);
 });
 
 check("git diff --check PASS", () => {
@@ -1678,15 +1803,16 @@ console.log(
   `Pre-payment safety classification engine verifier: PASS ${passCount}/${passCount}`,
 );
 console.log(
-  "Exact R3 correction scope: 6/6 updated only; R2 exact scope: 6/6 and R1 exact scope: 10/10 preserved",
+  "Exact customer boundary phrase correction scope: 6/6 updated only",
 );
 console.log("Charter cases: 42/42; additional engine cases: 36/36; total: 78/78");
 console.log("R1 precision cases: 30/30 (minimum 21); combined: 108/108");
 console.log("R2 local hazard cases: 20/20 (minimum 12); combined: 128/128");
 console.log("R3 temporal hazard cases: 16/16 (minimum 12); combined: 144/144");
+console.log("Customer boundary phrase parity cases: 19/19; combined: 163/163");
 console.log("Decoder negative cases: 15/15; R1 decoder and identity: 6/6");
 console.log("Decision Policy: 40/40");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");
 console.log("Payment implementation/session/authority: false / false / false");
 console.log("Active Runtime: v4; v12 inactive");
-console.log("Next action: Human / ChatGPT engine review");
+console.log("Next action: Human regression review");

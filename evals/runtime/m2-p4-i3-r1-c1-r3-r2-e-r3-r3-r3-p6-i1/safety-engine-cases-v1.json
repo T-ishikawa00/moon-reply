@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-cases-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
-  "baseline": "2c7d1d7a428ab1d87d6013b7168944f8953d0ebd",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I2-R3",
+  "baseline": "e96ae3a722fc92f25da9c4a7bc5e0f411b71b390",
   "charter_case_import": {
     "path": "../m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/decision-matrix-v1.json",
     "sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
@@ -1497,6 +1497,219 @@
       },
       "expected_classification": "urgent_safety_redirect",
       "expected_purchase_gate_satisfied": false
+    }
+  ],
+  "customer_boundary_phrase_cases": [
+    {
+      "case_id": "P6-I2-R3-01",
+      "scenario": "Customer UI exact temporary-pause label matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "少し時間を置いてほしいと言われている",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-02",
+      "scenario": "Customer UI phrase inside the contact-status answer matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "連絡状況:\n少し時間を置いてほしいと言われている",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-03",
+      "scenario": "Customer UI phrase conflicts with explicit no-contact selection",
+      "input_overrides": {
+        "currentSituation": "少し時間を置いてほしいと言われている",
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-04",
+      "scenario": "Customer UI phrase conflicts with no-known-restriction selection",
+      "input_overrides": {
+        "currentSituation": "少し時間を置いてほしいと言われている",
+        "contactBoundaryState": "no_restriction_known"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-05",
+      "scenario": "Reported distance-pause phrase conflicts with no-known-restriction selection",
+      "input_overrides": {
+        "currentSituation": "少し距離を置きたいと言われました",
+        "contactBoundaryState": "no_restriction_known"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-06",
+      "scenario": "Direct inbound distance-pause phrase matches the structured pause state",
+      "input_overrides": {
+        "latestInboundMessage": "しばらく距離を置きたい",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-07",
+      "scenario": "Direct inbound distance-pause phrase conflicts with explicit no-contact selection",
+      "input_overrides": {
+        "latestInboundMessage": "しばらく距離を置きたい",
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-08",
+      "scenario": "Customer-owned wish to take distance is not partner boundary evidence",
+      "input_overrides": {
+        "currentSituation": "私は少し距離を置きたいと思っています",
+        "contactBoundaryState": "no_restriction_known"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-09",
+      "scenario": "Other person's reported wish to take distance matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "彼女に少し距離を置きたいと言われた",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-10",
+      "scenario": "Explicit no-contact remains distinct from a temporary pause",
+      "input_overrides": {
+        "currentSituation": "相手から『もう連絡しないで』と言われています。",
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-11",
+      "scenario": "Relationship closure remains distinct from a temporary pause",
+      "input_overrides": {
+        "currentSituation": "相手から別れたいと言われました。",
+        "contactBoundaryState": "relationship_closed"
+      },
+      "expected_classification": "eligible_boundary_support_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-12",
+      "scenario": "Unowned distance-pause wording fails closed to clarification",
+      "input_overrides": {
+        "currentSituation": "少し距離を置きたい",
+        "contactBoundaryState": "no_restriction_known"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-13",
+      "scenario": "Explicitly reported Customer UI phrase matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "相手から少し時間を置いてほしいと言われています",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-14",
+      "scenario": "Direct inbound time-pause paraphrase needs no reported framing",
+      "input_overrides": {
+        "latestInboundMessage": "時間を置いてほしい",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-15",
+      "scenario": "Reported time-pause paraphrase conflicts with explicit no-contact selection",
+      "input_overrides": {
+        "currentSituation": "相手から時間を置いてほしいと言われた",
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "P6-I2-R3-16",
+      "scenario": "Reported request to take some distance matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "相手から少し距離を置いてほしいと言われました",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-17",
+      "scenario": "Reported wish to keep distance for a while matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "相手からしばらく距離を置きたいと伝えられた",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "P6-I2-R3-18",
+      "scenario": "Reported wish to refrain from contact for a while matches the structured pause state",
+      "input_overrides": {
+        "currentSituation": "相手からしばらく連絡を控えたいと伝えられた",
+        "contactBoundaryState": "temporary_pause"
+      },
+      "expected_classification": "eligible_pause_assessment",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "HUMAN-P6-I2-BOUNDARY-01",
+      "scenario": "Human live-flow Customer UI phrase conflicts with explicit no-contact selection",
+      "input_overrides": {
+        "currentSituation": "連絡状況:\n少し時間を置いてほしいと言われている\n\n手伝ってほしいこと:\n状況や気持ちを整理し、今後の方向性を知りたい",
+        "contactBoundaryState": "explicit_no_contact"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
     }
   ],
   "decoder_negative_cases": [

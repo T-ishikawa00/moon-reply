@@ -75,6 +75,18 @@ const TEMPORARY_PAUSE_SOURCE_PHRASES = [
   /落ち着いたら(?:こちら|私|自分)?から連絡(?:する|します)/u,
 ] as const;
 
+const CUSTOMER_LANGUAGE_TEMPORARY_PAUSE_PHRASES = [
+  /(?:少し)?時間を置いてほしい/u,
+  /(?:少し距離を置きたい|少し距離を置いてほしい|しばらく距離を置きたい)/u,
+  /しばらく連絡を控えたい/u,
+] as const;
+
+const REPORTED_OTHER_PERSON_STATEMENT_SUFFIX =
+  /^[\s」』”"’）)】、,]*(?:と[\s、,]*)?(?:(?:相手|彼|彼女|先方)(?:から|に)?[\s、,]*)?(?:言われ(?:た|ました|ている|ています|ていた|ていました)|伝えられ(?:た|ました|ている|ています|ていた|ていました)|告げられ(?:た|ました|ている|ています))/u;
+
+const EXPLICIT_CUSTOMER_OWNERSHIP_PREFIX =
+  /(?:私は|わたしは|私自身は|僕は|ぼくは|自分は)\s*[、,]?\s*$/u;
+
 const EXPLICIT_NO_CONTACT_SOURCE_PHRASES = [
   /(?:もう|これ以上|今後)?(?:は)?連絡(?:を)?(?:しないで|してこないで|しないでほしい|しないでください|やめて)/u,
 ] as const;
@@ -336,6 +348,7 @@ type ContentInspectionV1 = Readonly<{
   explicitProfessionalRequest: boolean;
   sourceBoundaryHints: readonly MaterialBoundaryHintV1[];
   latestInboundBoundaryHints: readonly MaterialBoundaryHintV1[];
+  ambiguousBoundaryOwnership: boolean;
   materialPrivateExpansion: boolean;
   scopedReplySourceInvitation: boolean;
   narrowScopedReplyEvidence: boolean;
@@ -641,8 +654,14 @@ function detectBoundaryHintsInSource(
 ): readonly MaterialBoundaryHintV1[] {
   const hints = new Set<MaterialBoundaryHintV1>();
   const normalized = normalizeForInspection(text);
+  const customerLanguagePauseOwnership =
+    inspectCustomerLanguagePauseOwnership(normalized);
 
-  if (matchesAny(normalized, TEMPORARY_PAUSE_SOURCE_PHRASES)) {
+  if (
+    matchesAny(normalized, TEMPORARY_PAUSE_SOURCE_PHRASES) ||
+    (customerLanguagePauseOwnership.phrasePresent &&
+      (sourceIsLatestInbound || customerLanguagePauseOwnership.reported))
+  ) {
     hints.add("temporary_pause");
   }
   if (matchesAny(normalized, EXPLICIT_NO_CONTACT_SOURCE_PHRASES)) {
@@ -662,6 +681,28 @@ function detectBoundaryHintsInSource(
     hints.add("relationship_closed");
   }
   return Object.freeze([...hints]);
+}
+
+function inspectCustomerLanguagePauseOwnership(text: string) {
+  const phraseSpans = findLocalMatchSpans(
+    text,
+    CUSTOMER_LANGUAGE_TEMPORARY_PAUSE_PHRASES,
+  );
+  let reported = false;
+  let customerOwned = false;
+
+  for (const phrase of phraseSpans) {
+    const prefix = text.slice(Math.max(0, phrase.start - 24), phrase.start);
+    const suffix = text.slice(phrase.end, phrase.end + 40);
+    reported ||= REPORTED_OTHER_PERSON_STATEMENT_SUFFIX.test(suffix);
+    customerOwned ||= EXPLICIT_CUSTOMER_OWNERSHIP_PREFIX.test(prefix);
+  }
+
+  return Object.freeze({
+    phrasePresent: phraseSpans.length > 0,
+    reported,
+    customerOwned,
+  });
 }
 
 function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
@@ -688,6 +729,10 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
     input.latestInboundMessage === null
       ? Object.freeze([])
       : detectBoundaryHintsInSource(input.latestInboundMessage, true);
+  const customerLanguagePauseOwnership =
+    inspectCustomerLanguagePauseOwnership(
+      normalizeForInspection(input.currentSituation),
+    );
 
   for (const text of safetyTexts) {
     for (const proposition of splitLocalPropositions(text)) {
@@ -796,6 +841,10 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
       ]),
     ]),
     latestInboundBoundaryHints,
+    ambiguousBoundaryOwnership:
+      customerLanguagePauseOwnership.phrasePresent &&
+      !customerLanguagePauseOwnership.reported &&
+      !customerLanguagePauseOwnership.customerOwned,
     materialPrivateExpansion: requestTexts.some((text) =>
       matchesAny(text, MATERIAL_PRIVATE_EXPANSION_PHRASES),
     ),
@@ -968,6 +1017,9 @@ export function classifyPrepaymentSafetyV1(
       content.latestInboundBoundaryHints,
     )
   ) {
+    clarificationCodes.push("boundary_state_conflict");
+  }
+  if (content.ambiguousBoundaryOwnership) {
     clarificationCodes.push("boundary_state_conflict");
   }
   if (
