@@ -13,13 +13,14 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const baseline = "f85545c89a5ebc324d2eabf7372f0302113eb0c3";
+const baseline = "2c7d1d7a428ab1d87d6013b7168944f8953d0ebd";
+const r2Parent = "f85545c89a5ebc324d2eabf7372f0302113eb0c3";
 const r1Parent = "c94e780a13e319873618e95412b48275d289970e";
 const acceptedCharterCommit = "611eecbf1249b222588c979a37162872215c9182";
 const engineParent = "611eecbf1249b222588c979a37162872215c9182";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-r2-local-hazard-isolation";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-r3-temporal-hazard-ownership";
 const fixtureDirectory = path.join(
   repositoryRoot,
   "evals",
@@ -282,7 +283,7 @@ const charterQuestionFlow = readJson(
 check("exact branch baseline parent main and empty stash authority", () => {
   assert.equal(git(["branch", "--show-current"]).stdout.trim(), expectedBranch);
   assert.equal(git(["merge-base", "HEAD", baseline]).stdout.trim(), baseline);
-  assert.equal(git(["rev-parse", `${baseline}^`]).stdout.trim(), r1Parent);
+  assert.equal(git(["rev-parse", `${baseline}^`]).stdout.trim(), r2Parent);
   assert.equal(git(["rev-parse", "main"]).stdout.trim(), expectedMain);
   assert.equal(git(["rev-parse", "origin/main"]).stdout.trim(), expectedMain);
   assert.equal(git(["stash", "list"]).stdout.trim(), "");
@@ -295,7 +296,7 @@ check("exact branch baseline parent main and empty stash authority", () => {
   }
 });
 
-check("exact R2 correction scope 6/6 and all paths pre-exist", () => {
+check("exact R3 correction scope 6/6 and all paths pre-exist", () => {
   assert.deepEqual(currentChangedPaths(), [...exactScope].sort());
   for (const relativePath of exactScope) {
     assert.ok(fs.statSync(path.join(repositoryRoot, relativePath)).isFile());
@@ -307,8 +308,8 @@ check("exact R2 correction scope 6/6 and all paths pre-exist", () => {
   }
 });
 
-check("R1 exact 10/10 and P6-I1 exact 12/12 remain anchored", () => {
-  const r1CommittedScope = git([
+check("R2 exact 6/6 R1 exact 10/10 and P6-I1 exact 12/12 remain anchored", () => {
+  const r2CommittedScope = git([
     "diff-tree",
     "--no-commit-id",
     "--name-only",
@@ -319,7 +320,20 @@ check("R1 exact 10/10 and P6-I1 exact 12/12 remain anchored", () => {
     .split(/\r?\n/u)
     .map(normalizeRepoPath)
     .sort();
+  assert.deepEqual(r2CommittedScope, [...exactScope].sort());
+  const r1CommittedScope = git([
+    "diff-tree",
+    "--no-commit-id",
+    "--name-only",
+    "-r",
+    r2Parent,
+  ])
+    .stdout.trim()
+    .split(/\r?\n/u)
+    .map(normalizeRepoPath)
+    .sort();
   assert.deepEqual(r1CommittedScope, [...r1ExactScope].sort());
+  assert.equal(git(["rev-parse", `${r2Parent}^`]).stdout.trim(), r1Parent);
   assert.equal(git(["rev-parse", `${r1Parent}^`]).stdout.trim(), engineParent);
   const engineCommittedScope = git([
     "diff-tree",
@@ -876,11 +890,6 @@ check("R1 precision regressions execute 30/30 with at least 21 new cases", () =>
 });
 
 check("R2 local hazard isolation executes 20/20 with at least 12 cases", () => {
-  assert.equal(
-    fixture.task_id,
-    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2",
-  );
-  assert.equal(fixture.baseline, baseline);
   assert.equal(fixture.r2_local_hazard_cases.length, 20);
   assert.ok(fixture.r2_local_hazard_cases.length >= 12);
   assert.deepEqual(
@@ -890,6 +899,25 @@ check("R2 local hazard isolation executes 20/20 with at least 12 cases", () => {
     ),
   );
   for (const testCase of fixture.r2_local_hazard_cases) {
+    runEngineCase(testCase, false);
+  }
+});
+
+check("R3 temporal hazard ownership executes 16/16 with at least 12 cases", () => {
+  assert.equal(
+    fixture.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
+  );
+  assert.equal(fixture.baseline, baseline);
+  assert.equal(fixture.r3_temporal_hazard_cases.length, 16);
+  assert.ok(fixture.r3_temporal_hazard_cases.length >= 12);
+  assert.deepEqual(
+    fixture.r3_temporal_hazard_cases.map((testCase) => testCase.case_id),
+    Array.from({ length: 16 }, (_, index) =>
+      `R3-${String(index + 1).padStart(2, "0")}`,
+    ),
+  );
+  for (const testCase of fixture.r3_temporal_hazard_cases) {
     runEngineCase(testCase, false);
   }
 });
@@ -904,6 +932,14 @@ function r1Case(caseId) {
 
 function r2Case(caseId) {
   const testCase = fixture.r2_local_hazard_cases.find(
+    (candidate) => candidate.case_id === caseId,
+  );
+  assert.ok(testCase, caseId);
+  return testCase;
+}
+
+function r3Case(caseId) {
+  const testCase = fixture.r3_temporal_hazard_cases.find(
     (candidate) => candidate.case_id === caseId,
   );
   assert.ok(testCase, caseId);
@@ -965,6 +1001,62 @@ check("R2 cross-clause hazards fail closed while safe comma language stays safe"
   assert.match(ruleSource, /findLocalMatchSpans/u);
   assert.match(ruleSource, /localSuppressionOwnsRisk/u);
   assert.doesNotMatch(ruleSource, /explicitUnsafe\s*&&\s*!stoppingOrAvoiding/u);
+});
+
+check("R3 historical ownership is risk-local and current intent remains fail-closed", () => {
+  for (const caseId of [
+    "R3-01",
+    "R3-04",
+    "R3-06",
+    "R3-07",
+    "R3-08",
+    "R3-11",
+    "R3-15",
+  ]) {
+    assert.equal(
+      runEngineCase(r3Case(caseId)).classification,
+      "eligible_general",
+      caseId,
+    );
+  }
+  for (const caseId of ["R3-02", "R3-03", "R3-05", "R3-16"]) {
+    assert.equal(
+      runEngineCase(r3Case(caseId)).classification,
+      "urgent_safety_redirect",
+      caseId,
+    );
+  }
+  for (const caseId of ["R3-09", "R3-10", "R3-12", "R3-13"]) {
+    assert.equal(
+      runEngineCase(r3Case(caseId)).classification,
+      "blocked_unsafe_assistance",
+      caseId,
+    );
+  }
+  const ambiguous = runEngineCase(r3Case("R3-14"));
+  assert.equal(ambiguous.classification, "needs_clarification");
+  assert.deepEqual(ambiguous.requiredClarificationCodes, [
+    "unsafe_execution_intent_required",
+  ]);
+
+  const declaredText = fixture.r3_temporal_hazard_cases
+    .map((testCase) => testCase.input_overrides.currentSituation)
+    .join("\n");
+  for (const requiredFragment of [
+    "以前は死にたいと思っていました。今は安全です。",
+    "過去に自傷があり、今は死にたいです。",
+    "以前は監視したいと思っていましたが、今はやめたいです。",
+    "昔も別アカウントから連絡したし、またやりたいです。",
+    "以前のことか今のことか分かりません",
+    "午前は死にたいです。",
+  ]) {
+    assert.ok(declaredText.includes(requiredFragment), requiredFragment);
+  }
+  const ruleSource = readUtf8(rulesPath);
+  assert.match(ruleSource, /historicalContextOwnsRisk/u);
+  assert.match(ruleSource, /currentContextOwnsRisk/u);
+  assert.match(ruleSource, /AMBIGUOUS_TEMPORAL_OWNERSHIP_PHRASES/u);
+  assert.match(ruleSource, /CURRENT_UNSAFE_EXECUTION_INTENT_PHRASES/u);
 });
 
 check("direct present self-harm other-harm and assault gaps are closed", () => {
@@ -1249,6 +1341,7 @@ check("output contracts have no overlap or prohibited eligible outputs", () => {
     ...fixture.additional_engine_cases,
     ...fixture.r1_precision_cases,
     ...fixture.r2_local_hazard_cases,
+    ...fixture.r3_temporal_hazard_cases,
   ]) {
     const input = deepMerge(fixture.base_input, testCase.input_overrides);
     const result = evaluatePrepaymentSafetyV1(input);
@@ -1398,9 +1491,9 @@ check("internal API and purchase engine import no Provider OpenAI DB or Supabase
 
 check("capabilities preserve every no-authority boundary", () => {
   const expected = {
-    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2",
+    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
     status:
-      "prepayment_safety_engine_local_hazard_isolation_corrected_pending_human_chatgpt_review",
+      "prepayment_safety_engine_temporal_hazard_ownership_corrected_pending_human_chatgpt_review",
     baseline,
     safety_charter_accepted: true,
     two_axis_engine_complete: true,
@@ -1418,6 +1511,11 @@ check("capabilities preserve every no-authority boundary", () => {
     adversative_clause_bypass_closed: true,
     current_safety_cross_clause_suppression_closed: true,
     unsafe_assistance_cross_clause_suppression_closed: true,
+    risk_local_historical_ownership_complete: true,
+    historical_wording_does_not_suppress_separate_current_risk: true,
+    historical_unsafe_intent_not_blocked_by_itself: true,
+    current_intent_after_historical_context_still_blocks: true,
+    ambiguous_temporal_ownership_to_clarification: true,
     boundary_source_conflict_detection_complete: true,
     latest_inbound_source_bound_to_identity: true,
     business_scope_content_guard_complete: true,
@@ -1442,18 +1540,18 @@ check("capabilities preserve every no-authority boundary", () => {
     c2_authorized: false,
     final_jpy980_readiness_established: false,
     next_action:
-      "human_chatgpt_review_of_local_hazard_proposition_isolation_correction",
+      "human_chatgpt_review_of_temporal_hazard_ownership_correction",
   };
   for (const [key, value] of Object.entries(expected)) {
     assert.deepEqual(capabilities[key], value, key);
   }
 });
 
-check("offline evidence preserves 108/108 and adds R2 20/20 plus decoder 6/6", () => {
+check("offline evidence preserves 128/128 and adds R3 16/16 plus decoder 6/6", () => {
   assert.equal(offlineResults.status, "pass");
   assert.equal(
     offlineResults.task_id,
-    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2",
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
   );
   assert.equal(offlineResults.baseline, baseline);
   assert.equal(offlineResults.branch, expectedBranch);
@@ -1469,6 +1567,9 @@ check("offline evidence preserves 108/108 and adds R2 20/20 plus decoder 6/6", (
   assert.equal(offlineResults.r2_local_hazard_cases.passed, 20);
   assert.equal(offlineResults.r2_local_hazard_cases.total, 20);
   assert.ok(offlineResults.r2_local_hazard_cases.total >= 12);
+  assert.equal(offlineResults.r3_temporal_hazard_cases.passed, 16);
+  assert.equal(offlineResults.r3_temporal_hazard_cases.total, 16);
+  assert.ok(offlineResults.r3_temporal_hazard_cases.total >= 12);
   assert.equal(
     offlineResults.classification_state_and_r1_precision_cases.passed,
     108,
@@ -1480,6 +1581,14 @@ check("offline evidence preserves 108/108 and adds R2 20/20 plus decoder 6/6", (
   assert.equal(
     offlineResults.classification_state_r1_and_r2_cases.total,
     128,
+  );
+  assert.equal(
+    offlineResults.classification_state_r1_r2_and_r3_cases.passed,
+    144,
+  );
+  assert.equal(
+    offlineResults.classification_state_r1_r2_and_r3_cases.total,
+    144,
   );
   assert.equal(
     offlineResults.classification_state_and_r1_precision_cases.total,
@@ -1497,6 +1606,14 @@ check("offline evidence preserves 108/108 and adds R2 20/20 plus decoder 6/6", (
   assert.equal(
     offlineResults.verified_properties.full_semantic_understanding_claimed,
     false,
+  );
+  assert.equal(
+    offlineResults.verified_properties.risk_local_historical_ownership,
+    "pass",
+  );
+  assert.equal(
+    offlineResults.verified_properties.ambiguous_temporal_ownership_to_clarification,
+    "pass",
   );
 });
 
@@ -1529,7 +1646,7 @@ check("Active Runtime remains v4 and v12 remains inactive", () => {
   assert.equal(capabilities.v12_active, false);
 });
 
-check("review artifact separates R2 technical PASS from Human ChatGPT review", () => {
+check("review artifact separates R3 technical PASS from Human ChatGPT review", () => {
   const review = readUtf8(reviewPath);
   assert.match(review, /TECHNICAL/u);
   assert.match(review, /PLAIN-LANGUAGE/u);
@@ -1540,12 +1657,14 @@ check("review artifact separates R2 technical PASS from Human ChatGPT review", (
   assert.match(review, /30\/30/u);
   assert.match(review, /20\/20/u);
   assert.match(review, /128\/128/u);
+  assert.match(review, /16\/16/u);
+  assert.match(review, /144\/144/u);
   assert.match(review, /6\/6/u);
   assert.match(review, /49,152-byte/u);
   assert.match(review, /full semantic subject equivalence/u);
   assert.match(
     review,
-    /prepayment_safety_engine_local_hazard_isolation_corrected_pending_human_chatgpt_review/u,
+    /prepayment_safety_engine_temporal_hazard_ownership_corrected_pending_human_chatgpt_review/u,
   );
   assert.match(review, /Provider \/ DB \/ Supabase: `0 \/ 0 \/ 0`/u);
 });
@@ -1558,10 +1677,13 @@ check("git diff --check PASS", () => {
 console.log(
   `Pre-payment safety classification engine verifier: PASS ${passCount}/${passCount}`,
 );
-console.log("Exact R2 correction scope: 6/6 updated only; R1 exact scope: 10/10 preserved");
+console.log(
+  "Exact R3 correction scope: 6/6 updated only; R2 exact scope: 6/6 and R1 exact scope: 10/10 preserved",
+);
 console.log("Charter cases: 42/42; additional engine cases: 36/36; total: 78/78");
 console.log("R1 precision cases: 30/30 (minimum 21); combined: 108/108");
 console.log("R2 local hazard cases: 20/20 (minimum 12); combined: 128/128");
+console.log("R3 temporal hazard cases: 16/16 (minimum 12); combined: 144/144");
 console.log("Decoder negative cases: 15/15; R1 decoder and identity: 6/6");
 console.log("Decision Policy: 40/40");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");

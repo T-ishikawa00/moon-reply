@@ -1,9 +1,9 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2 Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3 Review
 
 ## Status
 
-- Implementation status: `prepayment_safety_engine_local_hazard_isolation_corrected_pending_human_chatgpt_review`
-- Fixed correction baseline: `f85545c89a5ebc324d2eabf7372f0302113eb0c3`
+- Implementation status: `prepayment_safety_engine_temporal_hazard_ownership_corrected_pending_human_chatgpt_review`
+- Fixed correction baseline: `2c7d1d7a428ab1d87d6013b7168944f8953d0ebd`
 - Accepted Charter authority: P6-P0-R1 at `611eecbf1249b222588c979a37162872215c9182`
 - Automated precision-correction verification: PASS
 - Human / ChatGPT engine review: pending
@@ -14,9 +14,9 @@
 
 ### Exact correction boundary
 
-R2 updates exactly six existing paths: `prepayment-safety-rules-v1.ts`, the safety cases, offline results, capabilities, the dedicated verifier, and this review. The R1 ten-path commit remains intact. `prepayment-safety-types-v1.ts`, `prepayment-safety-identity-v1.ts`, `prepayment-safety-gate-v1.ts`, `purchase-state-machine-v1.ts`, the internal route, the accepted Charter, `RequestForm.tsx`, `lib/safety/**`, Package D, Runtime, Pipeline, service, Prompt, Catalog, Schema, evaluator, semantic disposition, payment, and DB/repository code remain unchanged.
+R3 updates exactly six existing paths: `prepayment-safety-rules-v1.ts`, the safety cases, offline results, capabilities, the dedicated verifier, and this review. The R2 six-path correction and R1 ten-path correction remain intact. `prepayment-safety-types-v1.ts`, `prepayment-safety-identity-v1.ts`, `prepayment-safety-gate-v1.ts`, `purchase-state-machine-v1.ts`, the internal route, the accepted Charter, `RequestForm.tsx`, `lib/safety/**`, Package D, Runtime, Pipeline, service, Prompt, Catalog, Schema, evaluator, semantic disposition, payment, and DB/repository code remain unchanged.
 
-The accepted Safety Engine precedence remains current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and eligible delivery scope. R2 changes only deterministic content inspection; it creates no payment authority and does not change the purchase state machine.
+The accepted Safety Engine precedence remains current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and eligible delivery scope. R3 changes only deterministic content inspection; it creates no payment authority and does not change the purchase state machine.
 
 ### Latest inbound source and identity
 
@@ -26,13 +26,13 @@ The accepted Safety Engine precedence remains current urgent Safety, explicit un
 
 For `new_inbound_after_boundary`, a missing inbound source returns `needs_clarification` with `latest_inbound_message_required`; it cannot produce `eligible_scoped_reply`. The internal route retains every origin, content-type, byte-count, no-store, noindex, safe-error, and no-echo guard while increasing only the strict request ceiling to a 49,152-byte limit.
 
-### Risk-local proposition ownership
+### Risk-local temporal hazard ownership
 
-Clear present-form self-harm, suicide, other-harm, or immediate physical-danger language continues to redirect urgently without requiring a time adverb such as `今` or `すぐ`. R2 finds local risk spans and suppression spans separately. A denial suppresses a current-Safety match only when it overlaps or locally governs that same match; a different current hazard remains urgent.
+Clear present-form self-harm, suicide, other-harm, or immediate physical-danger language continues to redirect urgently without requiring a time adverb such as `今` or `すぐ`. R3 identifies risk spans and historical/non-current context spans separately. Historical wording suppresses a Safety match only when it overlaps or deterministically governs that same risk. It is not a proposition-wide waiver: a separate current hazard in the same sentence remains urgent.
 
-Unsafe-assistance inspection uses the same bounded ownership rule. A stopping expression can suppress the alternate-account, surveillance, ambush, or other unsafe proposition that it governs, but it cannot suppress another unsafe request before or after it. Ambiguous execution-versus-stopping ownership returns `needs_clarification` with `unsafe_execution_intent_required` instead of defaulting eligible.
+Unsafe-assistance inspection applies the same temporal ownership rule. A historical alternate-account, surveillance, or ambush desire is not blocked solely because its lexical form also matches an explicit unsafe pattern. A historical action mention is likewise nonblocking when the current request is stopping or boundary-respecting. By contrast, `今やりたい`, `またやりたい`, a current location request, or a current third-party contact request remains blocking even when historical context appears earlier.
 
-Local segmentation distinguishes sentence boundaries, adversative constructions including `でも`, `ではなく`, and `一方で`, and Japanese or ASCII commas only when both sides look like independent predicates. It does not blindly split every comma: coordinated risk nouns with one shared stopping predicate remain one semantic unit. The engine still does not claim full semantic understanding.
+R2 denial and stopping ownership remains unchanged. Denials and stopping expressions still suppress only the risk they govern, and sentence, adversative, and independent comma boundaries still isolate separate hazards. If text explicitly leaves historical-versus-current ownership unresolved, the engine returns `needs_clarification` with `unsafe_execution_intent_required`; it does not default eligible. The engine still does not claim full semantic understanding.
 
 ### Boundary and scope evidence
 
@@ -49,8 +49,10 @@ For `new_inbound_after_boundary`, a narrative of the earlier boundary is expecte
 - Existing classification and state total: 78/78 PASS
 - New R1 precision cases: 30/30 PASS (minimum 21)
 - Combined classification/state/R1 cases: 108/108 PASS
-- New R2 local-hazard isolation cases: 20/20 PASS (minimum 12)
+- Existing R2 local-hazard isolation cases: 20/20 PASS (minimum 12)
 - Combined classification/state/R1/R2 cases: 128/128 PASS
+- New R3 temporal-hazard ownership cases: 16/16 PASS (minimum 12)
+- Combined classification/state/R1/R2/R3 cases: 144/144 PASS
 - Existing decoder mutation and negative cases: 15/15 PASS
 - New inbound decoder and identity regressions: 6/6 PASS
 - Decision Policy regression: 40/40 PASS
@@ -62,17 +64,17 @@ For `new_inbound_after_boundary`, a narrative of the earlier boundary is expecte
 - Payment implementation/session/authority: `false / false / false`
 - Provider / DB / Supabase: `0 / 0 / 0`
 
-Automated PASS establishes deterministic local contract behavior only. Human / ChatGPT review remains pending. It does not establish full semantic understanding, Provider quality, product acceptance, payment readiness, Runtime activation, or final JPY980 readiness.
+Automated PASS establishes deterministic local contract behavior only. Human / ChatGPT review of R3 remains pending. It does not establish full semantic understanding, Provider quality, product acceptance, payment readiness, Runtime activation, or final JPY980 readiness.
 
 ## PLAIN-LANGUAGE
 
-1. 「死にたいわけではない」と書いた後に「相手を殺したい」と続けた場合、前半の否定で後半まで安全扱いにはしません。後半を緊急案内へ回します。
-2. 「別アカウントから連絡するつもりはない」と書いた後に、居場所の特定や別SNSでの連絡方法を求めた場合、後半の危険な依頼を止めます。
-3. 句点だけでなく、独立した述語を分ける `、`、`,`、`でも`、`ではなく`、`一方で` も局所的な命題境界として扱います。
-4. すべての読点を機械的に分割するわけではありません。「監視、追跡、尾行はしない」のように一つの否定が並列語全体を支配する表現は一つのまとまりとして扱います。
-5. 「監視するのはやめたい、距離を置きたい」「別アカウントは使わない、連絡もしない」「死にたいわけではない、今は安全」の安全な例は安全のままです。
-6. 危険な依頼と停止表現のどちらを否定しているか機械的に確定できない場合は、購入可能にせず `needs_clarification` に戻します。
-7. 既存のCharter 42件、Engine 36件、R1 30件、Decoder 15件、identity 6件の意味は維持しています。
-8. Gate、入力型、identity、内部API、購入状態、UI、決済、Provider、DB、Supabase、Runtimeは変更していません。
-9. payment authorityは発行しておらず、Package E-B / E-Cも未承認です。
-10. 次の工程は Human / ChatGPT engine review です。
+1. 「以前は死にたいと思っていた。今は安全」は、過去の危険だけを理由に緊急扱いしません。
+2. 同じ文に「以前は死にたい」と「今は相手を殺したい」があれば、過去表現で現在の他害リスクを隠さず、緊急案内へ回します。
+3. 「過去に自傷があり、今は死にたい」のように読点で続く場合も、現在の危険を緊急扱いします。
+4. 「以前は別アカウントから連絡したいと思っていた」「昔は待ち伏せしたいと思っていた」だけなら、過去の意思を現在の実行依頼として止めません。
+5. ただし、続けて居場所の特定や第三者経由の連絡方法を求めた場合は、現在の危険な依頼を止めます。
+6. 「昔もやったし、またやりたい」「以前から考えていて、今やりたい」は、現在の実行意思が明示されるためブロックします。
+7. 過去の話か現在の話か機械的に確定できない場合は、購入可能にせず `needs_clarification` に戻します。
+8. 既存のCharter 42件、Engine 36件、R1 30件、R2 20件、Decoder 15件、identity 6件の意味は維持しています。R3は16件を追加し、分類系は144/144です。
+9. Gate、入力型、identity、内部API、購入状態、UI、決済、Provider、DB、Supabase、Runtimeは変更していません。payment authorityは未発行で、Package E-B / E-Cも未承認です。
+10. 次の工程は R3 Human / ChatGPT engine review です。

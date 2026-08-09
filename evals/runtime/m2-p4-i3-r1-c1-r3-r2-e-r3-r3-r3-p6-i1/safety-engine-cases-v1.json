@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-cases-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R2",
-  "baseline": "f85545c89a5ebc324d2eabf7372f0302113eb0c3",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R3",
+  "baseline": "2c7d1d7a428ab1d87d6013b7168944f8953d0ebd",
   "charter_case_import": {
     "path": "../m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/decision-matrix-v1.json",
     "sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
@@ -1348,6 +1348,155 @@
       },
       "expected_classification": "eligible_general",
       "expected_purchase_gate_satisfied": true
+    }
+  ],
+  "r3_temporal_hazard_cases": [
+    {
+      "case_id": "R3-01",
+      "scenario": "Historical death wish plus current safety is not urgent solely for history",
+      "input_overrides": {
+        "currentSituation": "以前は死にたいと思っていました。今は安全です。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-02",
+      "scenario": "Historical self-harm desire cannot suppress a separate current other-harm risk",
+      "input_overrides": {
+        "currentSituation": "以前は死にたい気持ちもあり、今は相手を殺したいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-03",
+      "scenario": "Historical self-harm context cannot suppress current suicide risk after a comma",
+      "input_overrides": {
+        "currentSituation": "過去に自傷があり、今は死にたいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-04",
+      "scenario": "Historical domestic violence plus current safety is not urgent solely for history",
+      "input_overrides": {
+        "currentSituation": "以前DVがありましたが、現在は安全です。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-05",
+      "scenario": "Adversative current other-harm risk survives separate historical safety context",
+      "input_overrides": {
+        "currentSituation": "以前は死にたいと思っていました、一方で今は相手を傷つけたいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-06",
+      "scenario": "Historical alternate-account desire plus current stopping is not blocked",
+      "input_overrides": {
+        "currentSituation": "以前は別アカウントから連絡したいと思っていました。今はやめたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-07",
+      "scenario": "Historical surveillance desire plus current stopping is not blocked",
+      "input_overrides": {
+        "currentSituation": "以前は監視したいと思っていましたが、今はやめたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-08",
+      "scenario": "Historical ambush desire plus current distance is not blocked",
+      "input_overrides": {
+        "currentSituation": "昔は待ち伏せしたいと思っていました。今は距離を置きたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-09",
+      "scenario": "Historical unsafe desire cannot suppress a separate current location request",
+      "input_overrides": {
+        "currentSituation": "以前は別アカウントから連絡したいと思っていました。でも今は相手の居場所を特定したいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-10",
+      "scenario": "Historical surveillance action cannot suppress a separate current third-party request",
+      "input_overrides": {
+        "currentSituation": "過去に監視していましたが、今は友達から相手に連絡してもらう方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-11",
+      "scenario": "Historical alternate-account action mention plus current stopping is not blocked",
+      "input_overrides": {
+        "currentSituation": "以前別アカウントから連絡してしまった。今はやめて境界を尊重したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-12",
+      "scenario": "Past unsafe action plus explicit recurrence remains blocking",
+      "input_overrides": {
+        "currentSituation": "昔も別アカウントから連絡したし、またやりたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-13",
+      "scenario": "Unsafe method considered historically but wanted now remains blocking",
+      "input_overrides": {
+        "currentSituation": "以前から別アカウントで連絡することを考えていて、今やりたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R3-14",
+      "scenario": "Unclear historical versus current ownership fails to clarification",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいのは、以前のことか今のことか分かりません。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "unsafe_execution_intent_required"
+      ]
+    },
+    {
+      "case_id": "R3-15",
+      "scenario": "Ordinary benign historical wording remains eligible",
+      "input_overrides": {
+        "currentSituation": "以前は大阪に住んでいました。今は仕事の予定を整理したいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R3-16",
+      "scenario": "Nonhistorical word containing mae-wa cannot waive direct current safety risk",
+      "input_overrides": {
+        "currentSituation": "午前は死にたいです。"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
     }
   ],
   "decoder_negative_cases": [

@@ -21,11 +21,30 @@ const SAFETY_CONTEXT_PHRASES = [
   /(?:self-harm|suicid|violence|domestic abuse|immediate danger)/iu,
 ] as const;
 
-const STRONG_HISTORICAL_OR_NONCURRENT_PHRASES = [
-  /(?:以前|過去|昔|かつて|昨年|去年|当時|先月|先週|前は)(?:は|に|の)?/u,
+const HISTORICAL_OR_NONCURRENT_CONTEXT_PHRASES = [
+  /(?:以前|過去|昔|かつて|昨年|去年|当時|先月|先週)(?:は|に|の|から|も)?/u,
+  /(?:^|その|この|[、,\s])前は/u,
   /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:と)?(?:思って|感じて)(?:いました|いた|いたことがある)/u,
+  /(?:したい|やりたい|しよう)(?:と)?(?:思って|考えて|感じて)(?:いました|いた|いたことがある)/u,
   /(?:もう終わった|現在は安全|今は安全|もう安全|危険はない|現在危険ではない)/u,
   /(?:previously|in the past|last year|not current|safe now)/iu,
+] as const;
+
+const CURRENT_TEMPORAL_CONTEXT_PHRASES = [
+  /(?:今|現在|いま(?!した|せん|す)|今夜|直ちに|すぐ|これから)(?:は|も|に)?/u,
+  /(?:currently|right now|immediately|now|tonight|about to)/iu,
+] as const;
+
+const CURRENT_UNSAFE_EXECUTION_INTENT_PHRASES = [
+  /(?:今|現在|いま|これから)(?:は|も)?[^。！？!?\n]{0,40}(?:やりたい|実行したい|続けたい|使いたい|連絡したい|監視したい|追跡したい|尾行したい|待ち伏せしたい|特定したい|調べたい|送りたい|方法を知りたい)/u,
+  /(?:また|再び|もう一度)[^。！？!?\n]{0,32}(?:やりたい|実行したい|続けたい|使いたい|連絡したい|監視したい|追跡したい|尾行したい|待ち伏せしたい|特定したい|調べたい|送りたい)/u,
+  /(?:want to do it now|do it again|still want to do it)/iu,
+] as const;
+
+const AMBIGUOUS_TEMPORAL_OWNERSHIP_PHRASES = [
+  /(?:以前|過去|昔)(?:の話|のこと)?か[、,]?\s*(?:今|現在)(?:の話|のこと)?か(?:分からない|わからない|分かりません|わかりません|不明)/u,
+  /(?:今|現在)(?:の話|のこと)?か[、,]?\s*(?:以前|過去|昔)(?:の話|のこと)?か(?:分からない|わからない|分かりません|わかりません|不明)/u,
+  /(?:historical|past) or current|current or (?:historical|past)/iu,
 ] as const;
 
 const CURRENT_SAFETY_DENIAL_PHRASES = [
@@ -366,6 +385,95 @@ function findLocalMatchSpans(
   );
 }
 
+function spansOverlap(left: LocalMatchSpan, right: LocalMatchSpan) {
+  return left.start < right.end && right.start < left.end;
+}
+
+function mergeOverlappingSpans(
+  spans: readonly LocalMatchSpan[],
+): readonly LocalMatchSpan[] {
+  const merged: LocalMatchSpan[] = [];
+  for (const span of [...spans].sort(
+    (left, right) => left.start - right.start || left.end - right.end,
+  )) {
+    const previous = merged.at(-1);
+    if (previous === undefined || span.start >= previous.end) {
+      merged.push({ ...span });
+      continue;
+    }
+    merged[merged.length - 1] = {
+      start: previous.start,
+      end: Math.max(previous.end, span.end),
+    };
+  }
+  return Object.freeze(merged.map((span) => Object.freeze(span)));
+}
+
+function hasInterveningRisk(
+  risks: readonly LocalMatchSpan[],
+  risk: LocalMatchSpan,
+  context: LocalMatchSpan,
+) {
+  if (context.end <= risk.start) {
+    return risks.some(
+      (candidate) =>
+        candidate !== risk &&
+        !spansOverlap(candidate, risk) &&
+        candidate.end > context.start &&
+        candidate.end <= risk.start,
+    );
+  }
+  if (risk.end <= context.start) {
+    return risks.some(
+      (candidate) =>
+        candidate !== risk &&
+        !spansOverlap(candidate, risk) &&
+        candidate.start >= risk.end &&
+        candidate.start < context.end,
+    );
+  }
+  return false;
+}
+
+function historicalContextOwnsRisk(
+  proposition: string,
+  risks: readonly LocalMatchSpan[],
+  risk: LocalMatchSpan,
+  context: LocalMatchSpan,
+) {
+  if (spansOverlap(risk, context)) return true;
+  if (context.end > risk.start) return false;
+  if (hasInterveningRisk(risks, risk, context)) return false;
+  const bridge = proposition.slice(context.end, risk.start);
+  return (
+    [...bridge].length <= 12 &&
+    /^(?:(?:ずっと|本当に|一度|何度も|当時は)|[、,\sはにもからまで])*$/u.test(
+      bridge,
+    ) &&
+    !matchesAny(bridge, CURRENT_TEMPORAL_CONTEXT_PHRASES)
+  );
+}
+
+function currentContextOwnsRisk(
+  proposition: string,
+  risks: readonly LocalMatchSpan[],
+  risk: LocalMatchSpan,
+  context: LocalMatchSpan,
+  allowTrailingContext = false,
+) {
+  if (spansOverlap(risk, context)) return true;
+  if (hasInterveningRisk(risks, risk, context)) return false;
+  if (context.end <= risk.start) {
+    const bridge = proposition.slice(context.end, risk.start);
+    return [...bridge].length <= 16 && !/[、,]/u.test(bridge);
+  }
+  if (risk.end <= context.start) {
+    const bridge = proposition.slice(risk.end, context.start);
+    return allowTrailingContext && [...bridge].length <= 48;
+  }
+  return false;
+}
+
 function localSuppressionOwnsRisk(
   proposition: string,
   risk: LocalMatchSpan,
@@ -383,19 +491,6 @@ function localSuppressionOwnsRisk(
     !/(?:けれども|けれど|けど|ですが|だが|でも|しかし|ただし|一方で|ではなく|じゃなく|とはいえ|ところが|反面)/u.test(
       bridge,
     )
-  );
-}
-
-function hasRiskWithoutOwnedSuppression(
-  proposition: string,
-  risks: readonly LocalMatchSpan[],
-  suppressions: readonly LocalMatchSpan[],
-) {
-  return risks.some(
-    (risk) =>
-      !suppressions.some((suppression) =>
-        localSuppressionOwnsRisk(proposition, risk, suppression),
-      ),
   );
 }
 
@@ -457,20 +552,87 @@ function splitLocalPropositions(text: string) {
     .filter(Boolean);
 }
 
-function isExplicitCurrentSafetyProposition(proposition: string) {
-  const risks = findLocalMatchSpans(proposition, DIRECT_CURRENT_SAFETY_PHRASES);
-  if (risks.length === 0) return false;
+function inspectSafetyProposition(proposition: string) {
+  const directRisks = mergeOverlappingSpans(
+    findLocalMatchSpans(proposition, DIRECT_CURRENT_SAFETY_PHRASES),
+  );
+  const contextRisks = mergeOverlappingSpans(
+    findLocalMatchSpans(proposition, SAFETY_CONTEXT_PHRASES),
+  );
+  const allRisks = mergeOverlappingSpans([...directRisks, ...contextRisks]);
   const denials = findLocalMatchSpans(
     proposition,
     CURRENT_SAFETY_DENIAL_PHRASES,
   );
-  if (!hasRiskWithoutOwnedSuppression(proposition, risks, denials)) return false;
-  if (
-    matchesAny(proposition, STRONG_HISTORICAL_OR_NONCURRENT_PHRASES)
-  ) {
-    return false;
+  const historicalContexts = findLocalMatchSpans(
+    proposition,
+    HISTORICAL_OR_NONCURRENT_CONTEXT_PHRASES,
+  );
+  const currentContexts = findLocalMatchSpans(
+    proposition,
+    CURRENT_TEMPORAL_CONTEXT_PHRASES,
+  );
+  const ambiguousTemporalOwnership = matchesAny(
+    proposition,
+    AMBIGUOUS_TEMPORAL_OWNERSHIP_PHRASES,
+  );
+  let explicitCurrentSafety = false;
+  let unresolvedSafetyContext = false;
+  let historicalOrNoncurrentSafety = false;
+
+  for (const risk of directRisks) {
+    if (
+      denials.some((denial) =>
+        localSuppressionOwnsRisk(proposition, risk, denial),
+      )
+    ) {
+      continue;
+    }
+    if (ambiguousTemporalOwnership) {
+      unresolvedSafetyContext = true;
+      continue;
+    }
+    if (
+      currentContexts.some((context) =>
+        currentContextOwnsRisk(proposition, allRisks, risk, context),
+      )
+    ) {
+      explicitCurrentSafety = true;
+      continue;
+    }
+    if (
+      historicalContexts.some((context) =>
+        historicalContextOwnsRisk(proposition, allRisks, risk, context),
+      )
+    ) {
+      historicalOrNoncurrentSafety = true;
+      continue;
+    }
+    explicitCurrentSafety = true;
   }
-  return true;
+
+  if (!explicitCurrentSafety) {
+    for (const risk of contextRisks) {
+      if (directRisks.some((directRisk) => spansOverlap(risk, directRisk))) {
+        continue;
+      }
+      if (
+        historicalContexts.some((context) =>
+          historicalContextOwnsRisk(proposition, allRisks, risk, context),
+        )
+      ) {
+        historicalOrNoncurrentSafety = true;
+        continue;
+      }
+      unresolvedSafetyContext = true;
+    }
+  }
+
+  return Object.freeze({
+    explicitCurrentSafety,
+    unresolvedSafetyContext,
+    historicalOrNoncurrentSafety,
+  });
 }
 
 function detectBoundaryHintsInSource(
@@ -529,17 +691,10 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
 
   for (const text of safetyTexts) {
     for (const proposition of splitLocalPropositions(text)) {
-      const explicitCurrentSafety =
-        isExplicitCurrentSafetyProposition(proposition);
-      explicitUrgentSafety ||= explicitCurrentSafety;
-      unresolvedSafetyContext ||=
-        matchesAny(proposition, SAFETY_CONTEXT_PHRASES) &&
-        !explicitCurrentSafety &&
-        !matchesAny(proposition, CURRENT_SAFETY_DENIAL_PHRASES) &&
-        !matchesAny(
-          proposition,
-          STRONG_HISTORICAL_OR_NONCURRENT_PHRASES,
-        );
+      const safety = inspectSafetyProposition(proposition);
+      explicitUrgentSafety ||= safety.explicitCurrentSafety;
+      unresolvedSafetyContext ||= safety.unresolvedSafetyContext;
+      stoppingOrAvoidingContext ||= safety.historicalOrNoncurrentSafety;
     }
   }
 
@@ -550,9 +705,9 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
         LOCAL_STOPPING_OR_AVOIDING_PHRASES,
       );
       const stoppingOrAvoiding = stoppingMatches.length > 0;
-      const historicalOrNoncurrent = matchesAny(
+      const historicalContexts = findLocalMatchSpans(
         proposition,
-        STRONG_HISTORICAL_OR_NONCURRENT_PHRASES,
+        HISTORICAL_OR_NONCURRENT_CONTEXT_PHRASES,
       );
       const explicitUnsafeMatches = findLocalMatchSpans(
         proposition,
@@ -562,32 +717,64 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
         proposition,
         AMBIGUOUS_UNSAFE_EXECUTION_PHRASES,
       );
+      const unsafeRisks = mergeOverlappingSpans([
+        ...explicitUnsafeMatches,
+        ...ambiguousUnsafeMatches,
+      ]);
+      const currentUnsafeIntentMatches = findLocalMatchSpans(
+        proposition,
+        CURRENT_UNSAFE_EXECUTION_INTENT_PHRASES,
+      );
       const ambiguousOwnership =
-        (explicitUnsafeMatches.length > 0 ||
-          ambiguousUnsafeMatches.length > 0) &&
+        unsafeRisks.length > 0 &&
         matchesAny(proposition, AMBIGUOUS_UNSAFE_OWNERSHIP_PHRASES);
-      const explicitUnsafe =
-        !ambiguousOwnership &&
-        hasRiskWithoutOwnedSuppression(
-          proposition,
-          explicitUnsafeMatches,
-          stoppingMatches,
+      const ambiguousTemporalOwnership = matchesAny(
+        proposition,
+        AMBIGUOUS_TEMPORAL_OWNERSHIP_PHRASES,
+      );
+      let explicitUnsafe = false;
+      let ambiguousUnsafe = false;
+      let historicalUnsafe = false;
+
+      for (const risk of unsafeRisks) {
+        const stopped = stoppingMatches.some((stopping) =>
+          localSuppressionOwnsRisk(proposition, risk, stopping),
         );
-      const ambiguousUnsafe =
-        ambiguousOwnership ||
-        hasRiskWithoutOwnedSuppression(
-          proposition,
-          ambiguousUnsafeMatches,
-          stoppingMatches,
+        const currentExecution = currentUnsafeIntentMatches.some((context) =>
+          currentContextOwnsRisk(
+            proposition,
+            unsafeRisks,
+            risk,
+            context,
+            true,
+          ),
+        );
+        const historical = historicalContexts.some((context) =>
+          historicalContextOwnsRisk(proposition, unsafeRisks, risk, context),
+        );
+        const explicitlyUnsafe = explicitUnsafeMatches.some((match) =>
+          spansOverlap(risk, match),
         );
 
+        if (ambiguousOwnership || ambiguousTemporalOwnership) {
+          ambiguousUnsafe = true;
+        } else if (stopped) {
+          continue;
+        } else if (currentExecution) {
+          explicitUnsafe = true;
+        } else if (historical) {
+          historicalUnsafe = true;
+        } else if (explicitlyUnsafe) {
+          explicitUnsafe = true;
+        } else {
+          ambiguousUnsafe = true;
+        }
+      }
+
       explicitUnsafeAssistance ||= explicitUnsafe;
-      ambiguousUnsafeExecution ||=
-        ambiguousUnsafe &&
-        !explicitUnsafe &&
-        !historicalOrNoncurrent;
+      ambiguousUnsafeExecution ||= ambiguousUnsafe && !explicitUnsafe;
       stoppingOrAvoidingContext ||=
-        stoppingOrAvoiding || historicalOrNoncurrent;
+        stoppingOrAvoiding || historicalUnsafe;
     }
     explicitProfessionalRequest ||= matchesAny(
       text,
