@@ -1,11 +1,11 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-offline-results-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
   "status": "pass",
   "execution_mode": "offline_deterministic_local",
   "execution_date": "2026-08-09",
-  "baseline": "611eecbf1249b222588c979a37162872215c9182",
-  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine",
+  "baseline": "c94e780a13e319873618e95412b48275d289970e",
+  "branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-r1-safety-content-precision",
   "charter_source": {
     "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
     "decision_matrix_sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
@@ -25,15 +25,40 @@
     "total": 78,
     "minimum_required": 62
   },
+  "r1_precision_cases": {
+    "passed": 30,
+    "total": 30,
+    "minimum_required": 21
+  },
+  "classification_state_and_r1_precision_cases": {
+    "passed": 108,
+    "total": 108
+  },
   "decoder_negative_cases": {
     "passed": 15,
     "total": 15
+  },
+  "r1_decoder_identity_cases": {
+    "passed": 6,
+    "total": 6
+  },
+  "all_decoder_identity_cases": {
+    "passed": 21,
+    "total": 21
   },
   "verified_properties": {
     "classification_precedence": "pass",
     "structured_safe_option_cannot_override_unsafe_content": "pass",
     "urgent_current_safety_redirect": "pass",
     "historical_and_negated_phrase_distinction": "pass",
+    "direct_present_self_harm_and_other_harm_precision": "pass",
+    "generic_stopping_does_not_suppress_current_safety": "pass",
+    "local_unsafe_negation_handling": "pass",
+    "boundary_source_conflict_detection": "pass",
+    "latest_inbound_source_identity_binding": "pass",
+    "business_scope_actual_content_guard": "pass",
+    "scoped_reply_source_and_expansion_guard": "pass",
+    "full_semantic_scope_equivalence_claimed": false,
     "ambiguous_execution_intent_to_clarification": "pass",
     "minor_related_hard_boundary": "pass",
     "professional_scope_separation": "pass",
@@ -56,5 +81,5 @@
   "supabase_operations": 0,
   "active_runtime": "v4",
   "v12_active": false,
-  "next_action": "human_chatgpt_review_of_pre_payment_safety_engine"
+  "next_action": "human_chatgpt_review_of_pre_payment_safety_engine_precision_correction"
 }

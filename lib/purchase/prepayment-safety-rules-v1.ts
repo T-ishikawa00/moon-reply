@@ -7,26 +7,88 @@ import type {
   PrepaymentSafetyReasonCodeV1,
 } from "./prepayment-safety-types-v1.ts";
 
-const URGENT_CURRENT_PHRASES = [
-  /(?:今|現在|いま|今夜|直ちに|すぐ|これから).{0,24}(?:死にたい|自殺(?:したい|する|しよう)|自分を傷つけ(?:たい|る)|相手を(?:殺す|傷つける|殴る)|人を(?:殺す|傷つける)|暴力を(?:受けている|振るわれている)|殺されそう|襲われている|監禁されている|脅されている|危険(?:です|だ|がある))/u,
-  /(?:死にたい|自殺(?:したい|する|しよう)|自分を傷つけ(?:たい|る)|相手を(?:殺す|傷つける)|殺されそう|襲われている).{0,16}(?:今|現在|いま|すぐ|これから)/u,
+const DIRECT_CURRENT_SAFETY_PHRASES = [
+  /(?:死にたい|消えたい|生きていたくない|自殺したい|自分を傷つけたい|(?:相手|人|誰か)を(?:殺したい|傷つけたい))/u,
+  /(?:殴られている|蹴られている|首を絞められている|暴力を(?:受けている|振るわれている)|殺されそう|襲われている|監禁されている|脅されている)/u,
+  /(?:今|現在|いま|今夜|直ちに|すぐ|これから).{0,24}(?:死にたい|消えたい|生きていたくない|自殺(?:したい|する|しよう)|自分を傷つけ(?:たい|る)|相手を(?:殺す|傷つける|殴る)|人を(?:殺す|傷つける)|暴力を(?:受けている|振るわれている)|殺されそう|襲われている|監禁されている|脅されている|危険(?:です|だ|がある))/u,
+  /(?:死にたい|消えたい|生きていたくない|自殺(?:したい|する|しよう)|自分を傷つけ(?:たい|る)|相手を(?:殺す|傷つける)|殺されそう|襲われている).{0,16}(?:今|現在|いま|すぐ|これから)/u,
   /(?:currently|right now|immediately|about to).{0,30}(?:suicidal|kill myself|harm myself|hurt someone|kill someone|being attacked|in immediate danger)/iu,
   /(?:kill myself|harm myself|hurt someone|kill someone).{0,20}(?:now|tonight|immediately)/iu,
 ] as const;
 
 const SAFETY_CONTEXT_PHRASES = [
-  /(?:自傷|自殺|暴力|DV|家庭内暴力|虐待|監禁|殺害予告|命の危険)/iu,
+  /(?:死にたい|消えたい|生きていたくない|自傷|自殺|暴力|DV|家庭内暴力|虐待|監禁|殺害予告|命の危険)/iu,
   /(?:self-harm|suicid|violence|domestic abuse|immediate danger)/iu,
 ] as const;
 
-const HISTORICAL_OR_NONCURRENT_PHRASES = [
-  /(?:以前|過去|昔|かつて|昨年|去年|前に|もう終わった|現在は安全|今は安全)/u,
+const STRONG_HISTORICAL_OR_NONCURRENT_PHRASES = [
+  /(?:以前|過去|昔|かつて|昨年|去年|当時|先月|先週|前は)(?:は|に|の)?/u,
+  /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:と)?(?:思って|感じて)(?:いました|いた|いたことがある)/u,
+  /(?:もう終わった|現在は安全|今は安全|もう安全|危険はない|現在危険ではない)/u,
   /(?:previously|in the past|last year|not current|safe now)/iu,
 ] as const;
 
-const STOPPING_OR_AVOIDING_PHRASES = [
+const CURRENT_SAFETY_DENIAL_PHRASES = [
+  /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:死にたい|消えたい|生きていたくない|自殺したい)(?:と|とは)?(?:思って|考えて)(?:いません|いない)/u,
+  /(?:自分を傷つけたい|相手を(?:殺したい|傷つけたい)|人を(?:殺したい|傷つけたい))(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:自分を傷つける|相手を(?:殺す|傷つける)|人を(?:殺す|傷つける))(?:つもり|意図)(?:は)?(?:ありません|ない)/u,
+  /(?:自分を傷つけたい|相手を(?:殺したい|傷つけたい)|人を(?:殺したい|傷つけたい))(?:と|とは)?(?:思って)?(?:いません|いない)/u,
+  /(?:殴られている|蹴られている|首を絞められている|殺されそう|襲われている)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:not suicidal|do not want to (?:die|harm myself|hurt|kill)|not being attacked)/iu,
+] as const;
+
+const LOCAL_STOPPING_OR_AVOIDING_PHRASES = [
+  /(?:したい|連絡したい)(?:わけ)?(?:では|じゃ)(?:ありません|ない)/u,
+  /(?:する|連絡する)(?:つもり|意図)(?:は)?(?:ありません|ない)/u,
   /(?:やめたい|やめます|しません|しないように|避けたい|防ぎたい|繰り返さない|距離を置きたい|尊重したい|巻き込まない|手放したい|止めたい)/u,
   /(?:help me stop|want to stop|will not|avoid doing|respect (?:the )?boundary|do not want to|won't contact)/iu,
+] as const;
+
+const TEMPORARY_PAUSE_SOURCE_PHRASES = [
+  /(?:考える|整理する)(?:ための)?時間(?:が|を)?(?:ほしい|欲しい|ください)/u,
+  /(?:今は|しばらく)?一人にして(?:ほしい|欲しい|ください)/u,
+  /落ち着いたら(?:こちら|私|自分)?から連絡(?:する|します)/u,
+] as const;
+
+const EXPLICIT_NO_CONTACT_SOURCE_PHRASES = [
+  /(?:もう|これ以上|今後)?(?:は)?連絡(?:を)?(?:しないで|してこないで|しないでほしい|しないでください|やめて)/u,
+] as const;
+
+const CHANNEL_RESTRICTED_SOURCE_PHRASES = [
+  /(?:ブロック|着信拒否)(?:を)?(?:されている|されています|された|されました|されたまま)/u,
+] as const;
+
+const REPORTED_RELATIONSHIP_CLOSED_PHRASES = [
+  /相手(?:から|に).{0,24}(?:別れたい|関係を終えたい|関係を終わらせたい|関係を終わりにしたい).{0,16}(?:と言われ|と伝えられ|と言って)/u,
+] as const;
+
+const DIRECT_RELATIONSHIP_CLOSED_PHRASES = [
+  /(?:別れたい|関係を終えたい|関係を終わらせたい|この関係を終わりにしたい|もう付き合えない)/u,
+] as const;
+
+const MATERIAL_PRIVATE_EXPANSION_PHRASES = [
+  /(?:今度|今週末|来週|いつか|仕事のあと|業務のあと).{0,20}(?:二人|2人|二人きり|プライベート|個人的)?に?.{0,12}(?:ご飯|食事|飲み|デート|遊び|映画|カフェ|水族館|ドライブ|散歩|買い物).{0,12}(?:行かない|行きませんか|行こう|したい|どう)/u,
+  /(?:今度|今週末|来週|いつか|仕事のあと|業務のあと).{0,24}(?:会わない|会いませんか|会おう|会いたい|出かけない|出かけませんか|出かけよう)/u,
+  /(?:二人|2人)(?:きり|で).{0,16}(?:ご飯|食事|飲み|デート|遊び|映画|カフェ|水族館|ドライブ|散歩|買い物).{0,12}(?:行かない|行きませんか|行こう|したい|どう)/u,
+  /(?:個人的に|プライベートで|二人きりで).{0,16}(?:会いたい|会いませんか|会おう|話したい)/u,
+  /(?:デート|食事|飲み).{0,10}(?:しませんか|行かない|行きませんか|行こう|誘いたい)/u,
+  /(?:復縁したい|やり直したい|関係を戻したい|もう一度付き合いたい|復縁の話|やり直す提案)/u,
+  /(?:好きです|愛しています|愛してる).{0,16}(?:付き合って|恋人|会いたい)/u,
+  /付き合って(?:ください|ほしい)/u,
+  /(?:好きだと|愛していると|付き合ってほしいと|付き合いたいと).{0,12}(?:伝えたい|送りたい|言いたい)/u,
+] as const;
+
+const SCOPED_REPLY_SOURCE_INVITATION_PHRASES = [
+  /(?:教えて|知らせて|返信して|返事(?:して|ください|ほしい)|確認(?:して|お願いします))/u,
+  /(?:何時|いつ|どこ|どちら|どう)(?:ですか|かな|でしょう|[？?])/u,
+  /(?:大丈夫|可能)(?:ですか|でしょうか|[？?])/u,
+] as const;
+
+const NARROW_SCOPED_REPLY_PHRASES = [
+  /(?:ありがとう|ありがとうございます|承知しました|了解|確認しました|わかりました|お願いします)/u,
+  /(?:\d{1,2}(?:時|:\d{2})|午前|午後).{0,12}(?:どう|いかが|大丈夫|お願いします|可能)/u,
+  /(?:月曜|火曜|水曜|木曜|金曜|土曜|日曜|今日|明日|明後日).{0,12}(?:大丈夫|可能|どう|いかが|お願いします)/u,
 ] as const;
 
 const EXPLICIT_UNSAFE_ASSISTANCE_PHRASES = [
@@ -235,6 +297,12 @@ const OUTPUT_POLICIES: Readonly<
   },
 });
 
+type MaterialBoundaryHintV1 =
+  | "temporary_pause"
+  | "explicit_no_contact"
+  | "channel_restricted"
+  | "relationship_closed";
+
 type ContentInspectionV1 = Readonly<{
   explicitUrgentSafety: boolean;
   unresolvedSafetyContext: boolean;
@@ -242,6 +310,11 @@ type ContentInspectionV1 = Readonly<{
   ambiguousUnsafeExecution: boolean;
   stoppingOrAvoidingContext: boolean;
   explicitProfessionalRequest: boolean;
+  sourceBoundaryHints: readonly MaterialBoundaryHintV1[];
+  latestInboundBoundaryHints: readonly MaterialBoundaryHintV1[];
+  materialPrivateExpansion: boolean;
+  scopedReplySourceInvitation: boolean;
+  narrowScopedReplyEvidence: boolean;
 }>;
 
 function matchesAny(text: string, patterns: readonly RegExp[]) {
@@ -252,40 +325,124 @@ function normalizeForInspection(value: string) {
   return value.normalize("NFKC").replace(/\r\n?/gu, "\n").toLocaleLowerCase("ja");
 }
 
+function splitLocalPropositions(text: string) {
+  return text
+    .split(
+      /(?:[。！？!?\n]+|(?:けれども|けれど|けど|ですが|だが)(?:[、,]|\s)*|(?:しかし|ただし|一方で)[、,\s]*)/u,
+    )
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function isExplicitCurrentSafetyProposition(proposition: string) {
+  if (!matchesAny(proposition, DIRECT_CURRENT_SAFETY_PHRASES)) return false;
+  if (matchesAny(proposition, CURRENT_SAFETY_DENIAL_PHRASES)) return false;
+  if (
+    matchesAny(proposition, STRONG_HISTORICAL_OR_NONCURRENT_PHRASES)
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function detectBoundaryHintsInSource(
+  text: string,
+  sourceIsLatestInbound: boolean,
+): readonly MaterialBoundaryHintV1[] {
+  const hints = new Set<MaterialBoundaryHintV1>();
+  const normalized = normalizeForInspection(text);
+
+  if (matchesAny(normalized, TEMPORARY_PAUSE_SOURCE_PHRASES)) {
+    hints.add("temporary_pause");
+  }
+  if (matchesAny(normalized, EXPLICIT_NO_CONTACT_SOURCE_PHRASES)) {
+    hints.add("explicit_no_contact");
+  }
+  if (matchesAny(normalized, CHANNEL_RESTRICTED_SOURCE_PHRASES)) {
+    hints.add("channel_restricted");
+  }
+  if (
+    matchesAny(
+      normalized,
+      sourceIsLatestInbound
+        ? DIRECT_RELATIONSHIP_CLOSED_PHRASES
+        : REPORTED_RELATIONSHIP_CLOSED_PHRASES,
+    )
+  ) {
+    hints.add("relationship_closed");
+  }
+  return Object.freeze([...hints]);
+}
+
 function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
-  const texts = [input.currentSituation, input.optionalMessage].filter(
+  const requestTexts = [input.currentSituation, input.optionalMessage].filter(
     (value): value is string => value !== null,
-  );
+  ).map(normalizeForInspection);
+  const safetyTexts = [
+    ...requestTexts,
+    ...(input.latestInboundMessage === null
+      ? []
+      : [normalizeForInspection(input.latestInboundMessage)]),
+  ];
   let explicitUrgentSafety = false;
   let unresolvedSafetyContext = false;
   let explicitUnsafeAssistance = false;
   let ambiguousUnsafeExecution = false;
   let stoppingOrAvoidingContext = false;
   let explicitProfessionalRequest = false;
+  const currentSituationBoundaryHints = detectBoundaryHintsInSource(
+    input.currentSituation,
+    false,
+  );
+  const latestInboundBoundaryHints =
+    input.latestInboundMessage === null
+      ? Object.freeze([])
+      : detectBoundaryHintsInSource(input.latestInboundMessage, true);
 
-  for (const rawText of texts) {
-    const text = normalizeForInspection(rawText);
-    const historicalOrNoncurrent = matchesAny(
-      text,
-      HISTORICAL_OR_NONCURRENT_PHRASES,
-    );
-    const stoppingOrAvoiding = matchesAny(text, STOPPING_OR_AVOIDING_PHRASES);
-    const explicitUnsafe = matchesAny(text, EXPLICIT_UNSAFE_ASSISTANCE_PHRASES);
-    const ambiguousUnsafe = matchesAny(
-      text,
-      AMBIGUOUS_UNSAFE_EXECUTION_PHRASES,
-    );
+  for (const text of safetyTexts) {
+    for (const proposition of splitLocalPropositions(text)) {
+      const explicitCurrentSafety =
+        isExplicitCurrentSafetyProposition(proposition);
+      explicitUrgentSafety ||= explicitCurrentSafety;
+      unresolvedSafetyContext ||=
+        matchesAny(proposition, SAFETY_CONTEXT_PHRASES) &&
+        !explicitCurrentSafety &&
+        !matchesAny(proposition, CURRENT_SAFETY_DENIAL_PHRASES) &&
+        !matchesAny(
+          proposition,
+          STRONG_HISTORICAL_OR_NONCURRENT_PHRASES,
+        );
+    }
+  }
 
-    explicitUrgentSafety ||= matchesAny(text, URGENT_CURRENT_PHRASES);
-    unresolvedSafetyContext ||=
-      matchesAny(text, SAFETY_CONTEXT_PHRASES) &&
-      !historicalOrNoncurrent &&
-      !stoppingOrAvoiding &&
-      !matchesAny(text, URGENT_CURRENT_PHRASES);
-    explicitUnsafeAssistance ||= explicitUnsafe;
-    ambiguousUnsafeExecution ||=
-      ambiguousUnsafe && !explicitUnsafe && !stoppingOrAvoiding;
-    stoppingOrAvoidingContext ||= stoppingOrAvoiding;
+  for (const text of requestTexts) {
+    for (const proposition of splitLocalPropositions(text)) {
+      const stoppingOrAvoiding = matchesAny(
+        proposition,
+        LOCAL_STOPPING_OR_AVOIDING_PHRASES,
+      );
+      const historicalOrNoncurrent = matchesAny(
+        proposition,
+        STRONG_HISTORICAL_OR_NONCURRENT_PHRASES,
+      );
+      const explicitUnsafe = matchesAny(
+        proposition,
+        EXPLICIT_UNSAFE_ASSISTANCE_PHRASES,
+      );
+      const ambiguousUnsafe = matchesAny(
+        proposition,
+        AMBIGUOUS_UNSAFE_EXECUTION_PHRASES,
+      );
+
+      explicitUnsafeAssistance ||= explicitUnsafe && !stoppingOrAvoiding;
+      ambiguousUnsafeExecution ||=
+        ambiguousUnsafe &&
+        !explicitUnsafe &&
+        !stoppingOrAvoiding &&
+        !historicalOrNoncurrent;
+      stoppingOrAvoidingContext ||=
+        stoppingOrAvoiding || historicalOrNoncurrent;
+    }
     explicitProfessionalRequest ||= matchesAny(
       text,
       EXPLICIT_PROFESSIONAL_REQUEST_PHRASES,
@@ -299,6 +456,28 @@ function inspectContent(input: PrepaymentSafetyInputV1): ContentInspectionV1 {
     ambiguousUnsafeExecution,
     stoppingOrAvoidingContext,
     explicitProfessionalRequest,
+    sourceBoundaryHints: Object.freeze([
+      ...new Set([
+        ...currentSituationBoundaryHints,
+        ...latestInboundBoundaryHints,
+      ]),
+    ]),
+    latestInboundBoundaryHints,
+    materialPrivateExpansion: requestTexts.some((text) =>
+      matchesAny(text, MATERIAL_PRIVATE_EXPANSION_PHRASES),
+    ),
+    scopedReplySourceInvitation:
+      input.latestInboundMessage !== null &&
+      matchesAny(
+        normalizeForInspection(input.latestInboundMessage),
+        SCOPED_REPLY_SOURCE_INVITATION_PHRASES,
+      ),
+    narrowScopedReplyEvidence:
+      input.optionalMessage !== null &&
+      matchesAny(
+        normalizeForInspection(input.optionalMessage),
+        NARROW_SCOPED_REPLY_PHRASES,
+      ),
   });
 }
 
@@ -371,6 +550,21 @@ function effectiveBoundary(
   return input.contactBoundaryState;
 }
 
+function hasBoundarySourceConflict(
+  boundary: ContactBoundaryStateV1 | null,
+  sourceBoundaryHints: readonly MaterialBoundaryHintV1[],
+  latestInboundBoundaryHints: readonly MaterialBoundaryHintV1[],
+) {
+  const relevantHints =
+    boundary === "new_inbound_after_boundary"
+      ? latestInboundBoundaryHints
+      : sourceBoundaryHints;
+  return (
+    boundary !== null &&
+    relevantHints.some((hint) => hint !== boundary)
+  );
+}
+
 export function classifyPrepaymentSafetyV1(
   input: PrepaymentSafetyInputV1,
 ): PrepaymentSafetyClassificationDecisionV1 {
@@ -434,6 +628,21 @@ export function classifyPrepaymentSafetyV1(
   ) {
     clarificationCodes.push("unsafe_execution_intent_required");
   }
+  if (
+    hasBoundarySourceConflict(
+      boundary,
+      content.sourceBoundaryHints,
+      content.latestInboundBoundaryHints,
+    )
+  ) {
+    clarificationCodes.push("boundary_state_conflict");
+  }
+  if (
+    boundary === "new_inbound_after_boundary" &&
+    input.latestInboundMessage === null
+  ) {
+    clarificationCodes.push("latest_inbound_message_required");
+  }
   if (clarificationCodes.length > 0) return clarification(clarificationCodes);
   if (boundary === null) return clarification(["boundary_state_required"]);
 
@@ -471,6 +680,9 @@ export function classifyPrepaymentSafetyV1(
   }
 
   if (boundary === "business_only") {
+    if (content.materialPrivateExpansion) {
+      return clarification(["business_scope_required"]);
+    }
     if (
       input.requestedAssistanceGoal === "understand_and_organize" ||
       input.requestedAssistanceGoal === "decide_send_wait_or_pause" ||
@@ -508,6 +720,13 @@ export function classifyPrepaymentSafetyV1(
       replyCodes.push("reply_invitation_required");
     }
     if (answers.replyLimitedToExactSubject !== "yes") {
+      replyCodes.push("reply_scope_required");
+    }
+    if (
+      content.materialPrivateExpansion ||
+      !content.scopedReplySourceInvitation ||
+      !content.narrowScopedReplyEvidence
+    ) {
       replyCodes.push("reply_scope_required");
     }
     if (replyCodes.length > 0) return clarification(replyCodes);

@@ -1,14 +1,15 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
-  "status": "prepayment_safety_engine_implemented_pending_human_chatgpt_review",
-  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
+  "status": "prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review",
+  "baseline": "c94e780a13e319873618e95412b48275d289970e",
   "authority": {
     "accepted_charter_task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-P0-R1",
     "accepted_charter_commit": "611eecbf1249b222588c979a37162872215c9182",
     "classification_owner": "server",
-    "classification_method": "deterministic_two_axis_phrase_level_content_inspection",
+    "classification_method": "deterministic_two_axis_local_proposition_and_source_content_inspection",
     "full_semantic_understanding_claimed": false,
+    "full_semantic_scope_equivalence_claimed": false,
     "client_can_set_classification": false,
     "client_can_set_eligibility_hash": false,
     "client_can_set_purchase_state": false,
@@ -22,6 +23,7 @@
       "schemaVersion",
       "adultConfirmed",
       "currentSituation",
+      "latestInboundMessage",
       "optionalMessage",
       "relationship",
       "requestedTopics",
@@ -36,6 +38,14 @@
       "trimmed": true,
       "minimum_code_points": 1,
       "maximum_code_points": 5000
+    },
+    "latest_inbound_message": {
+      "meaning": "latest_message_actually_received_from_the_other_person_when_available",
+      "nullable": true,
+      "trimmed_when_present": true,
+      "minimum_code_points_when_present": 1,
+      "maximum_code_points_when_present": 2000,
+      "distinct_from_current_situation_and_outbound_candidate": true
     },
     "optional_message": {
       "nullable": true,
@@ -128,7 +138,25 @@
     "case_id_branching_allowed": false,
     "clarification_is_structured_and_bounded": true,
     "maximum_complete_clarification_submissions": 1,
-    "unresolved_clarification_defaults_to_eligible": false
+    "unresolved_clarification_defaults_to_eligible": false,
+    "direct_present_self_or_other_harm_requires_time_adverb": false,
+    "generic_stopping_suppresses_current_safety_signal": false,
+    "unsafe_negation_boundary": "local_sentence_or_proposition",
+    "boundary_source_fields": [
+      "currentSituation",
+      "latestInboundMessage"
+    ],
+    "optional_message_can_define_received_boundary": false,
+    "boundary_source_conflict_rewrites_structured_state": false,
+    "boundary_source_conflict_result": "needs_clarification",
+    "boundary_source_conflict_code": "boundary_state_conflict",
+    "missing_new_inbound_source_result": "needs_clarification",
+    "missing_new_inbound_source_code": "latest_inbound_message_required",
+    "new_inbound_prior_boundary_narrative_is_expected": true,
+    "new_inbound_current_conflict_source": "latestInboundMessage",
+    "business_scope_actual_content_checked": true,
+    "scoped_reply_requires_inbound_source_evidence": true,
+    "scoped_reply_full_semantic_subject_equivalence_claimed": false
   },
   "identity_contract": {
     "function": "createPrepaymentSafetyIdentityV1",
@@ -140,6 +168,7 @@
       "preserve_emoji",
       "preserve_internal_punctuation",
       "candidate_kept_separate_from_request",
+      "latest_inbound_kept_separate_from_request_and_candidate",
       "canonical_json_key_ordering",
       "deterministic_requested_topic_ordering"
     ],
@@ -195,7 +224,7 @@
     "availability_flag": "M2_INTERNAL_RUNTIME_ENABLED",
     "same_origin_required": true,
     "json_content_type_required": true,
-    "maximum_body_bytes": 24576,
+    "maximum_body_bytes": 49152,
     "cache_control": "no-store",
     "x_robots_tag": "noindex, nofollow",
     "classifications_use_http_status": 200,

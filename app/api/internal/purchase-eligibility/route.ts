@@ -6,7 +6,7 @@ import { PrepaymentSafetyValidationError } from "@/lib/purchase/prepayment-safet
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAXIMUM_BODY_BYTES = 24_576;
+const MAXIMUM_BODY_BYTES = 49_152;
 const JSON_CONTENT_TYPE = /^application\/json(?:\s*;\s*charset=utf-8)?$/iu;
 
 function json(body: unknown, status: number) {

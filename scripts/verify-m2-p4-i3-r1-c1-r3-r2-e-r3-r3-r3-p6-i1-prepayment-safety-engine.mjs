@@ -13,11 +13,12 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const baseline = "611eecbf1249b222588c979a37162872215c9182";
-const expectedParent = "30e762e1f3d17f2a007b7f7f92d3ba91e01b861e";
+const baseline = "c94e780a13e319873618e95412b48275d289970e";
+const acceptedCharterCommit = "611eecbf1249b222588c979a37162872215c9182";
+const expectedParent = "611eecbf1249b222588c979a37162872215c9182";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-r1-safety-content-precision";
 const fixtureDirectory = path.join(
   repositoryRoot,
   "evals",
@@ -26,6 +27,19 @@ const fixtureDirectory = path.join(
 );
 
 const exactScope = [
+  "lib/purchase/prepayment-safety-types-v1.ts",
+  "lib/purchase/prepayment-safety-rules-v1.ts",
+  "lib/purchase/prepayment-safety-identity-v1.ts",
+  "app/api/internal/purchase-eligibility/route.ts",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/safety-engine-contract-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/safety-engine-cases-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/offline-results-v1.json",
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/capabilities-v1.json",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine.mjs",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_I1_REVIEW.md",
+];
+
+const engineBaselineScope = [
   "lib/purchase/prepayment-safety-types-v1.ts",
   "lib/purchase/prepayment-safety-rules-v1.ts",
   "lib/purchase/prepayment-safety-identity-v1.ts",
@@ -38,6 +52,11 @@ const exactScope = [
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1/capabilities-v1.json",
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-prepayment-safety-engine.mjs",
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P6_I1_REVIEW.md",
+];
+
+const protectedCorrectionPaths = [
+  "lib/purchase/prepayment-safety-gate-v1.ts",
+  "lib/purchase/purchase-state-machine-v1.ts",
 ];
 
 const charterScope = [
@@ -257,14 +276,36 @@ check("exact branch baseline parent main and empty stash authority", () => {
   }
 });
 
-check("exact implementation scope 12/12 and all paths new", () => {
+check("exact R1 correction scope 10/10 and all paths pre-exist", () => {
   assert.deepEqual(currentChangedPaths(), [...exactScope].sort());
   for (const relativePath of exactScope) {
     assert.ok(fs.statSync(path.join(repositoryRoot, relativePath)).isFile());
-    assert.notEqual(
+    assert.equal(
       git(["cat-file", "-e", `${baseline}:${relativePath}`], true).status,
       0,
-      `${relativePath} unexpectedly exists at the baseline`,
+      `${relativePath} is missing at the correction baseline`,
+    );
+  }
+});
+
+check("P6-I1 exact baseline scope exists 12/12 and protected pair is unchanged", () => {
+  const committedScope = git([
+    "diff-tree",
+    "--no-commit-id",
+    "--name-only",
+    "-r",
+    baseline,
+  ])
+    .stdout.trim()
+    .split(/\r?\n/u)
+    .map(normalizeRepoPath)
+    .sort();
+  assert.deepEqual(committedScope, [...engineBaselineScope].sort());
+  for (const relativePath of protectedCorrectionPaths) {
+    assert.equal(
+      git(["hash-object", relativePath]).stdout.trim(),
+      git(["rev-parse", `${baseline}:${relativePath}`]).stdout.trim(),
+      relativePath,
     );
   }
 });
@@ -300,7 +341,7 @@ check("accepted P6-P0-R1 Charter remains blob-identical 8/8", () => {
     "--no-commit-id",
     "--name-only",
     "-r",
-    baseline,
+    acceptedCharterCommit,
   ])
     .stdout.trim()
     .split(/\r?\n/u)
@@ -308,7 +349,10 @@ check("accepted P6-P0-R1 Charter remains blob-identical 8/8", () => {
     .sort();
   assert.deepEqual(committedScope, [...charterScope].sort());
   for (const relativePath of charterScope) {
-    const baselineBlob = git(["rev-parse", `${baseline}:${relativePath}`]).stdout.trim();
+    const baselineBlob = git([
+      "rev-parse",
+      `${acceptedCharterCommit}:${relativePath}`,
+    ]).stdout.trim();
     const workingBlob = git(["hash-object", relativePath]).stdout.trim();
     assert.equal(workingBlob, baselineBlob, relativePath);
   }
@@ -316,6 +360,7 @@ check("accepted P6-P0-R1 Charter remains blob-identical 8/8", () => {
 
 check("Package D legacy Safety RequestForm Runtime and protected assets unchanged", () => {
   const protectedPaths = [
+    ...protectedCorrectionPaths,
     "components/request/RequestForm.tsx",
     "lib/safety",
     "lib/assessment/runtime/pipeline.ts",
@@ -384,6 +429,68 @@ check("exact Charter vocabularies and existing Assessment enums", () => {
   ]);
 });
 
+check("R1 contract binds latest inbound and records conservative limitations", () => {
+  assert.equal(
+    contract.task_id,
+    "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
+  );
+  assert.equal(
+    contract.status,
+    "prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review",
+  );
+  assert.equal(contract.baseline, baseline);
+  assert.equal(contract.input_contract.required_fields.length, 13);
+  assert.ok(
+    contract.input_contract.required_fields.includes("latestInboundMessage"),
+  );
+  assert.deepEqual(contract.input_contract.latest_inbound_message, {
+    meaning: "latest_message_actually_received_from_the_other_person_when_available",
+    nullable: true,
+    trimmed_when_present: true,
+    minimum_code_points_when_present: 1,
+    maximum_code_points_when_present: 2000,
+    distinct_from_current_situation_and_outbound_candidate: true,
+  });
+  assert.equal(
+    contract.authority.full_semantic_scope_equivalence_claimed,
+    false,
+  );
+  assert.equal(
+    contract.classification_contract.unsafe_negation_boundary,
+    "local_sentence_or_proposition",
+  );
+  assert.deepEqual(contract.classification_contract.boundary_source_fields, [
+    "currentSituation",
+    "latestInboundMessage",
+  ]);
+  assert.equal(
+    contract.classification_contract.optional_message_can_define_received_boundary,
+    false,
+  );
+  assert.equal(
+    contract.classification_contract.boundary_source_conflict_code,
+    "boundary_state_conflict",
+  );
+  assert.equal(
+    contract.classification_contract.missing_new_inbound_source_code,
+    "latest_inbound_message_required",
+  );
+  assert.equal(
+    contract.classification_contract.new_inbound_prior_boundary_narrative_is_expected,
+    true,
+  );
+  assert.equal(
+    contract.classification_contract.new_inbound_current_conflict_source,
+    "latestInboundMessage",
+  );
+  assert.ok(
+    contract.identity_contract.normalization.includes(
+      "latest_inbound_kept_separate_from_request_and_candidate",
+    ),
+  );
+  assert.equal(contract.internal_api_contract.maximum_body_bytes, 49_152);
+});
+
 check("strict decoder exact top-level and nested allowlists", () => {
   const decoded = decodePrepaymentSafetyInputV1(fixture.base_input);
   assert.ok(Object.isFrozen(decoded));
@@ -391,6 +498,7 @@ check("strict decoder exact top-level and nested allowlists", () => {
   assert.ok(Object.isFrozen(decoded.clarificationAnswers));
   assert.ok(Object.isFrozen(decoded.scopeAcknowledgements));
   assert.equal(decoded.currentSituation, fixture.base_input.currentSituation);
+  assert.equal(decoded.latestInboundMessage, null);
   assert.throws(
     () =>
       decodePrepaymentSafetyInputV1({
@@ -453,6 +561,74 @@ check("decoder rejects all declared mutation and authority inputs 15/15", () => 
   }
 });
 
+check("R1 latest-inbound decoder and identity regressions execute 6/6", () => {
+  assert.equal(fixture.r1_decoder_identity_cases.length, 6);
+  for (const testCase of fixture.r1_decoder_identity_cases) {
+    const input = structuredClone(fixture.base_input);
+    switch (testCase.operation) {
+      case "delete":
+        deletePath(input, testCase.path);
+        break;
+      case "replace":
+        setPath(input, testCase.path, testCase.value);
+        break;
+      case "replace_repeated":
+        setPath(input, testCase.path, testCase.unit.repeat(testCase.count));
+        break;
+      case "valid_null": {
+        const before = JSON.stringify(input);
+        const result = evaluatePrepaymentSafetyV1(input);
+        assert.equal(result.classification, testCase.expected_classification);
+        assert.equal(JSON.stringify(input), before);
+        continue;
+      }
+      case "canonical_hash_equivalence": {
+        const equivalentInput = structuredClone(fixture.base_input);
+        input.latestInboundMessage = testCase.value;
+        equivalentInput.latestInboundMessage = testCase.equivalent_value;
+        const before = JSON.stringify(input);
+        const equivalentBefore = JSON.stringify(equivalentInput);
+        const result = evaluatePrepaymentSafetyV1(input);
+        const equivalentResult = evaluatePrepaymentSafetyV1(equivalentInput);
+        assert.equal(
+          result.eligibilityInputHash === equivalentResult.eligibilityInputHash,
+          testCase.expected_same_hash,
+        );
+        assert.equal(JSON.stringify(input), before);
+        assert.equal(JSON.stringify(equivalentInput), equivalentBefore);
+        continue;
+      }
+      case "material_hash_mutation": {
+        const mutatedInput = structuredClone(fixture.base_input);
+        input.latestInboundMessage = testCase.value;
+        mutatedInput.latestInboundMessage = testCase.mutated_value;
+        const before = JSON.stringify(input);
+        const mutatedBefore = JSON.stringify(mutatedInput);
+        const result = evaluatePrepaymentSafetyV1(input);
+        const mutatedResult = evaluatePrepaymentSafetyV1(mutatedInput);
+        assert.equal(
+          result.eligibilityInputHash === mutatedResult.eligibilityInputHash,
+          testCase.expected_same_hash,
+        );
+        assert.equal(JSON.stringify(input), before);
+        assert.equal(JSON.stringify(mutatedInput), mutatedBefore);
+        continue;
+      }
+      default:
+        assert.fail(`Unknown R1 decoder operation ${testCase.operation}`);
+    }
+    const before = JSON.stringify(input);
+    assert.throws(
+      () => evaluatePrepaymentSafetyV1(input),
+      (error) =>
+        error instanceof PrepaymentSafetyValidationError &&
+        error.safeCode === testCase.expected_error,
+      testCase.case_id,
+    );
+    assert.equal(JSON.stringify(input), before);
+  }
+});
+
 check("no unchecked decoder casts and no case-ID branching", () => {
   const typeSource = readUtf8(exactScope[0]);
   const ruleSource = readUtf8(exactScope[1]);
@@ -479,6 +655,9 @@ function assertResultInvariants(result, input) {
   if (input.optionalMessage !== null) {
     assert.ok(!serialized.includes(input.optionalMessage));
   }
+  if (input.latestInboundMessage !== null) {
+    assert.ok(!serialized.includes(input.latestInboundMessage));
+  }
   assert.doesNotMatch(serialized, /(?:RegExp|regex|PHRASES|pattern_name)/u);
   if (!result.classification.startsWith("eligible_")) {
     assert.equal(result.purchaseGateSatisfied, false);
@@ -491,8 +670,19 @@ function runEngineCase(testCase, charterCase = false) {
   const before = JSON.stringify(input);
   const result = evaluatePrepaymentSafetyV1(input);
   assert.equal(JSON.stringify(input), before, `${testCase.case_id} mutated input`);
-  assert.equal(result.classification, testCase.expected_classification);
+  assert.equal(
+    result.classification,
+    testCase.expected_classification,
+    testCase.case_id,
+  );
   assertResultInvariants(result, input);
+  if (testCase.expected_clarification_codes !== undefined) {
+    assert.deepEqual(
+      result.requiredClarificationCodes,
+      testCase.expected_clarification_codes,
+      testCase.case_id,
+    );
+  }
 
   if (charterCase) {
     const authorityCase = charterMatrix.cases.find(
@@ -635,6 +825,207 @@ check("additional engine cases execute 36/36", () => {
   }
 });
 
+check("R1 precision regressions execute 30/30 with at least 21 new cases", () => {
+  assert.equal(fixture.r1_precision_cases.length, 30);
+  assert.ok(fixture.r1_precision_cases.length >= 21);
+  assert.deepEqual(
+    fixture.r1_precision_cases.map((testCase) => testCase.case_id),
+    Array.from({ length: 30 }, (_, index) =>
+      `R1-${String(index + 1).padStart(2, "0")}`,
+    ),
+  );
+  for (const testCase of fixture.r1_precision_cases) {
+    runEngineCase(testCase, false);
+  }
+});
+
+function r1Case(caseId) {
+  const testCase = fixture.r1_precision_cases.find(
+    (candidate) => candidate.case_id === caseId,
+  );
+  assert.ok(testCase, caseId);
+  return testCase;
+}
+
+check("direct present self-harm other-harm and assault gaps are closed", () => {
+  for (const caseId of [
+    "R1-01",
+    "R1-02",
+    "R1-03",
+    "R1-04",
+    "R1-05",
+    "R1-08",
+  ]) {
+    assert.equal(
+      runEngineCase(r1Case(caseId)).classification,
+      "urgent_safety_redirect",
+      caseId,
+    );
+  }
+  for (const caseId of ["R1-06", "R1-07", "R1-26", "R1-27"]) {
+    assert.equal(
+      runEngineCase(r1Case(caseId)).classification,
+      "eligible_general",
+      caseId,
+    );
+  }
+  for (const currentSituation of [
+    "自分を傷つけたいわけではありません。",
+    "相手を殺したいわけではありません。",
+    "人を傷つけたいとは思っていません。",
+  ]) {
+    assert.equal(
+      evaluatePrepaymentSafetyV1({
+        ...fixture.base_input,
+        currentSituation,
+      }).classification,
+      "eligible_general",
+      currentSituation,
+    );
+  }
+});
+
+check("all declared present-form Safety examples redirect without time adverbs", () => {
+  for (const currentSituation of [
+    "死にたい",
+    "消えたい",
+    "生きていたくない",
+    "自殺したい",
+    "自分を傷つけたい",
+    "相手を殺したい",
+    "相手を傷つけたい",
+    "人を殺したい",
+    "殴られている",
+    "蹴られている",
+    "首を絞められている",
+    "殺されそう",
+    "襲われている",
+  ]) {
+    const input = { ...fixture.base_input, currentSituation };
+    const before = JSON.stringify(input);
+    const result = evaluatePrepaymentSafetyV1(input);
+    assert.equal(
+      result.classification,
+      "urgent_safety_redirect",
+      currentSituation,
+    );
+    assert.equal(JSON.stringify(input), before);
+  }
+});
+
+check("unsafe assistance negation is proposition-local and mixed text blocks", () => {
+  for (const caseId of [
+    "R1-09",
+    "R1-10",
+    "R1-22",
+    "R1-23",
+    "R1-24",
+    "R1-25",
+  ]) {
+    assert.equal(
+      runEngineCase(r1Case(caseId)).classification,
+      "eligible_general",
+      caseId,
+    );
+  }
+  assert.equal(
+    runEngineCase(r1Case("R1-11")).classification,
+    "blocked_unsafe_assistance",
+  );
+});
+
+check("boundary source conflicts fail closed without rewriting structured state", () => {
+  for (const caseId of ["R1-12", "R1-13", "R1-14", "R1-15", "R1-28"]) {
+    const result = runEngineCase(r1Case(caseId));
+    assert.equal(result.classification, "needs_clarification", caseId);
+    assert.deepEqual(
+      result.requiredClarificationCodes,
+      ["boundary_state_conflict"],
+      caseId,
+    );
+  }
+});
+
+check("business-only and scoped-reply source-content guards fail closed", () => {
+  assert.equal(
+    runEngineCase(r1Case("R1-16")).classification,
+    "eligible_business_only",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-17")).classification,
+    "needs_clarification",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-18")).requiredClarificationCodes[0],
+    "latest_inbound_message_required",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-19")).classification,
+    "eligible_scoped_reply",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-20")).requiredClarificationCodes[0],
+    "boundary_state_conflict",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-21")).requiredClarificationCodes[0],
+    "reply_scope_required",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-29")).classification,
+    "eligible_business_only",
+  );
+  const unacknowledged = runEngineCase(r1Case("R1-30"));
+  assert.equal(unacknowledged.classification, "eligible_scoped_reply");
+  assert.equal(unacknowledged.purchaseGateSatisfied, false);
+  assert.ok(
+    unacknowledged.requiredAcknowledgementCodes.includes(
+      "scoped_reply_scope_acknowledged",
+    ),
+  );
+});
+
+check("all declared private-expansion categories are guarded without broad tokens", () => {
+  const businessBase = deepMerge(fixture.base_input, {
+    contactBoundaryState: "business_only",
+    requestedAssistanceGoal: "draft_within_current_permission",
+    clarificationAnswers: {
+      submissionCount: 1,
+      practicalPermissionExplicit: "yes",
+      currentRequestPracticalScopeOnly: "yes",
+    },
+  });
+  for (const optionalMessage of [
+    "今度カフェに行かない？",
+    "今度二人でデートしませんか。",
+    "もう一度やり直したいです。",
+    "好きです。付き合ってください。",
+    "個人的に会いたいです。",
+  ]) {
+    const input = { ...businessBase, optionalMessage };
+    const before = JSON.stringify(input);
+    const result = evaluatePrepaymentSafetyV1(input);
+    assert.equal(result.classification, "needs_clarification", optionalMessage);
+    assert.ok(
+      result.requiredClarificationCodes.includes("business_scope_required"),
+      optionalMessage,
+    );
+    assert.equal(JSON.stringify(input), before);
+  }
+  const currentSituationExpansion = {
+    ...businessBase,
+    currentSituation: "業務の相談に加えて、今度個人的に会いたいです。",
+  };
+  assert.equal(
+    evaluatePrepaymentSafetyV1(currentSituationExpansion).classification,
+    "needs_clarification",
+  );
+  assert.equal(
+    runEngineCase(r1Case("R1-29")).classification,
+    "eligible_business_only",
+  );
+});
+
 check("classification precedence is urgent unsafe professional clarification eligible", () => {
   const byId = new Map(
     fixture.additional_engine_cases.map((testCase) => [
@@ -736,6 +1127,7 @@ check("output contracts have no overlap or prohibited eligible outputs", () => {
   for (const testCase of [
     ...fixture.charter_executions,
     ...fixture.additional_engine_cases,
+    ...fixture.r1_precision_cases,
   ]) {
     const input = deepMerge(fixture.base_input, testCase.input_overrides);
     const result = evaluatePrepaymentSafetyV1(input);
@@ -820,14 +1212,15 @@ check("pure fourteen-state machine rejects stale and payment transitions", () =>
     }).state,
     "payment_pending",
   );
-  const stateSource = readUtf8(exactScope[4]);
+  const stateSource = readUtf8(protectedCorrectionPaths[1]);
   assert.doesNotMatch(stateSource, /accepted\("payment_completed"\)/u);
   assert.doesNotMatch(stateSource, /\blet\s+(?:state|currentState)\s*=/u);
   assert.doesNotMatch(stateSource, /new Set/u);
 });
 
 check("internal API production origin content body allowlist and no-store guards", () => {
-  const routeSource = readUtf8(exactScope[5]);
+  const routeSource = readUtf8(exactScope[3]);
+  const baselineRouteSource = git(["show", `${baseline}:${exactScope[3]}`]).stdout;
   const environmentSource = readUtf8(
     "lib/assessment/runtime/environment.ts",
   );
@@ -843,6 +1236,14 @@ check("internal API production origin content body allowlist and no-store guards
   assert.match(routeSource, /fetchSite !== "same-origin"/u);
   assert.match(routeSource, /JSON_CONTENT_TYPE/u);
   assert.match(routeSource, /MAXIMUM_BODY_BYTES/u);
+  assert.match(routeSource, /MAXIMUM_BODY_BYTES = 49_152/u);
+  assert.equal(
+    routeSource,
+    baselineRouteSource.replace(
+      "const MAXIMUM_BODY_BYTES = 24_576;",
+      "const MAXIMUM_BODY_BYTES = 49_152;",
+    ),
+  );
   assert.match(routeSource, /Buffer\.byteLength\(rawBody, "utf8"\)/u);
   assert.match(routeSource, /"Cache-Control": "no-store"/u);
   assert.match(routeSource, /"X-Robots-Tag": "noindex, nofollow"/u);
@@ -850,6 +1251,7 @@ check("internal API production origin content body allowlist and no-store guards
   assert.match(routeSource, /return json\(\{ data:/u);
   assert.match(routeSource, /\}, 200\)/u);
   assert.doesNotMatch(routeSource, /currentSituation|optionalMessage/u);
+  assert.doesNotMatch(routeSource, /latestInboundMessage/u);
   assert.doesNotMatch(routeSource, /error\.message|String\(error\)/u);
 });
 
@@ -858,9 +1260,9 @@ check("internal API and purchase engine import no Provider OpenAI DB or Supabase
     exactScope[0],
     exactScope[1],
     exactScope[2],
+    protectedCorrectionPaths[0],
+    protectedCorrectionPaths[1],
     exactScope[3],
-    exactScope[4],
-    exactScope[5],
   ]
     .map(readUtf8)
     .join("\n");
@@ -881,7 +1283,9 @@ check("internal API and purchase engine import no Provider OpenAI DB or Supabase
 
 check("capabilities preserve every no-authority boundary", () => {
   const expected = {
-    status: "prepayment_safety_engine_implemented_pending_human_chatgpt_review",
+    task_id: "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
+    status:
+      "prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review",
     baseline,
     safety_charter_accepted: true,
     two_axis_engine_complete: true,
@@ -890,6 +1294,14 @@ check("capabilities preserve every no-authority boundary", () => {
     internal_api_complete: true,
     structured_safe_option_cannot_override_unsafe_content: true,
     ambiguous_content_fails_to_clarification: true,
+    direct_self_harm_present_form_gap_closed: true,
+    generic_stopping_does_not_suppress_current_safety: true,
+    local_unsafe_negation_handling_complete: true,
+    boundary_source_conflict_detection_complete: true,
+    latest_inbound_source_bound_to_identity: true,
+    business_scope_content_guard_complete: true,
+    scoped_reply_source_guard_complete: true,
+    full_semantic_scope_equivalence_claimed: false,
     legacy_safety_classifier_reused_unchanged: false,
     legacy_safety_assets_modified: false,
     payment_authority_issued: false,
@@ -907,24 +1319,41 @@ check("capabilities preserve every no-authority boundary", () => {
     r4_authorized: false,
     c2_authorized: false,
     final_jpy980_readiness_established: false,
-    next_action: "human_chatgpt_review_of_pre_payment_safety_engine",
+    next_action:
+      "human_chatgpt_review_of_pre_payment_safety_engine_precision_correction",
   };
   for (const [key, value] of Object.entries(expected)) {
     assert.deepEqual(capabilities[key], value, key);
   }
 });
 
-check("offline evidence records 42 plus 36 equals 78 passing cases", () => {
+check("offline evidence preserves 78/78 and adds R1 30/30 plus decoder 6/6", () => {
   assert.equal(offlineResults.status, "pass");
   assert.equal(offlineResults.baseline, baseline);
+  assert.equal(offlineResults.branch, expectedBranch);
   assert.equal(offlineResults.charter_cases.passed, 42);
   assert.equal(offlineResults.charter_cases.total, 42);
   assert.equal(offlineResults.additional_engine_cases.passed, 36);
   assert.equal(offlineResults.additional_engine_cases.total, 36);
   assert.equal(offlineResults.classification_and_state_cases.passed, 78);
   assert.equal(offlineResults.classification_and_state_cases.total, 78);
+  assert.equal(offlineResults.r1_precision_cases.passed, 30);
+  assert.equal(offlineResults.r1_precision_cases.total, 30);
+  assert.ok(offlineResults.r1_precision_cases.total >= 21);
+  assert.equal(
+    offlineResults.classification_state_and_r1_precision_cases.passed,
+    108,
+  );
+  assert.equal(
+    offlineResults.classification_state_and_r1_precision_cases.total,
+    108,
+  );
   assert.equal(offlineResults.decoder_negative_cases.passed, 15);
   assert.equal(offlineResults.decoder_negative_cases.total, 15);
+  assert.equal(offlineResults.r1_decoder_identity_cases.passed, 6);
+  assert.equal(offlineResults.r1_decoder_identity_cases.total, 6);
+  assert.equal(offlineResults.all_decoder_identity_cases.passed, 21);
+  assert.equal(offlineResults.all_decoder_identity_cases.total, 21);
   assert.equal(offlineResults.provider_calls, 0);
   assert.equal(offlineResults.db_operations, 0);
   assert.equal(offlineResults.supabase_operations, 0);
@@ -959,14 +1388,22 @@ check("Active Runtime remains v4 and v12 remains inactive", () => {
   assert.equal(capabilities.v12_active, false);
 });
 
-check("review artifact separates technical PASS from Human ChatGPT review", () => {
-  const review = readUtf8(exactScope[11]);
+check("review artifact separates R1 technical PASS from Human ChatGPT review", () => {
+  const review = readUtf8(exactScope[9]);
   assert.match(review, /TECHNICAL/u);
   assert.match(review, /PLAIN-LANGUAGE/u);
   assert.match(review, /Human \/ ChatGPT engine review/u);
   assert.match(review, /pending/u);
   assert.match(review, /42\/42/u);
   assert.match(review, /36\/36/u);
+  assert.match(review, /30\/30/u);
+  assert.match(review, /6\/6/u);
+  assert.match(review, /49,152-byte/u);
+  assert.match(review, /full semantic subject equivalence/u);
+  assert.match(
+    review,
+    /prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review/u,
+  );
   assert.match(review, /Provider \/ DB \/ Supabase: `0 \/ 0 \/ 0`/u);
 });
 
@@ -978,9 +1415,11 @@ check("git diff --check PASS", () => {
 console.log(
   `Pre-payment safety classification engine verifier: PASS ${passCount}/${passCount}`,
 );
-console.log("Exact scope: 12/12 new only");
+console.log("Exact correction scope: 10/10 updated only");
 console.log("Charter cases: 42/42; additional engine cases: 36/36; total: 78/78");
-console.log("Decoder negative cases: 15/15; Decision Policy: 40/40");
+console.log("R1 precision cases: 30/30 (minimum 21); combined: 108/108");
+console.log("Decoder negative cases: 15/15; R1 decoder and identity: 6/6");
+console.log("Decision Policy: 40/40");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");
 console.log("Payment implementation/session/authority: false / false / false");
 console.log("Active Runtime: v4; v12 inactive");

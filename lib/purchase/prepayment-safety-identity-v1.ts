@@ -68,6 +68,10 @@ export function createPrepaymentSafetyIdentityV1(
     },
     contactBoundaryState: input.contactBoundaryState,
     currentSituation: normalizeBoundText(input.currentSituation),
+    latestInboundMessage:
+      input.latestInboundMessage === null
+        ? null
+        : normalizeBoundText(input.latestInboundMessage),
     optionalMessage:
       input.optionalMessage === null
         ? null

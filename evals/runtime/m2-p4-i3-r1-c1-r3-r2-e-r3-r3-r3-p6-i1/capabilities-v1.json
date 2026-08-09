@@ -1,8 +1,8 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-capabilities-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
-  "status": "prepayment_safety_engine_implemented_pending_human_chatgpt_review",
-  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
+  "status": "prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review",
+  "baseline": "c94e780a13e319873618e95412b48275d289970e",
   "safety_charter_accepted": true,
   "two_axis_engine_complete": true,
   "server_owned_identity_complete": true,
@@ -10,6 +10,14 @@
   "internal_api_complete": true,
   "structured_safe_option_cannot_override_unsafe_content": true,
   "ambiguous_content_fails_to_clarification": true,
+  "direct_self_harm_present_form_gap_closed": true,
+  "generic_stopping_does_not_suppress_current_safety": true,
+  "local_unsafe_negation_handling_complete": true,
+  "boundary_source_conflict_detection_complete": true,
+  "latest_inbound_source_bound_to_identity": true,
+  "business_scope_content_guard_complete": true,
+  "scoped_reply_source_guard_complete": true,
+  "full_semantic_scope_equivalence_claimed": false,
   "legacy_safety_classifier_reused_unchanged": false,
   "legacy_safety_assets_modified": false,
   "payment_authority_issued": false,
@@ -29,5 +37,5 @@
   "r4_authorized": false,
   "c2_authorized": false,
   "final_jpy980_readiness_established": false,
-  "next_action": "human_chatgpt_review_of_pre_payment_safety_engine"
+  "next_action": "human_chatgpt_review_of_pre_payment_safety_engine_precision_correction"
 }

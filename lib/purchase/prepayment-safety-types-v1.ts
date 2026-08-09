@@ -168,6 +168,7 @@ export type PrepaymentSafetyInputV1 = Readonly<{
   schemaVersion: typeof PREPAYMENT_SAFETY_INPUT_SCHEMA_VERSION;
   adultConfirmed: boolean;
   currentSituation: string;
+  latestInboundMessage: string | null;
   optionalMessage: string | null;
   relationship: RelationshipValue;
   requestedTopics: readonly RequestedTopic[];
@@ -192,6 +193,8 @@ export type AcknowledgementCodeV1 = (typeof ACKNOWLEDGEMENT_CODES)[number];
 
 export const CLARIFICATION_CODES = [
   "boundary_state_required",
+  "boundary_state_conflict",
+  "latest_inbound_message_required",
   "unsafe_execution_intent_required",
   "current_safety_status_required",
   "business_permission_required",
@@ -308,6 +311,7 @@ const TOP_LEVEL_KEYS = [
   "schemaVersion",
   "adultConfirmed",
   "currentSituation",
+  "latestInboundMessage",
   "optionalMessage",
   "relationship",
   "requestedTopics",
@@ -477,11 +481,16 @@ export function decodePrepaymentSafetyInputV1(
     value.optionalMessage === null
       ? null
       : readTrimmedString(value.optionalMessage, 1, 2_000);
+  const latestInboundMessage =
+    value.latestInboundMessage === null
+      ? null
+      : readTrimmedString(value.latestInboundMessage, 1, 2_000);
 
   return Object.freeze({
     schemaVersion: PREPAYMENT_SAFETY_INPUT_SCHEMA_VERSION,
     adultConfirmed: readBoolean(value.adultConfirmed),
     currentSituation: readTrimmedString(value.currentSituation, 1, 5_000),
+    latestInboundMessage,
     optionalMessage,
     relationship: readEnum(value.relationship, RELATIONSHIP_VALUES),
     requestedTopics: decodeRequestedTopics(value.requestedTopics),

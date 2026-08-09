@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-i1-safety-engine-cases-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1",
-  "baseline": "611eecbf1249b222588c979a37162872215c9182",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1",
+  "baseline": "c94e780a13e319873618e95412b48275d289970e",
   "charter_case_import": {
     "path": "../m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p6-p0/decision-matrix-v1.json",
     "sha256": "97345b85af26f50376989b2e8d0ab1958e6d4872633cfe9286880c995a0b3b3b",
@@ -14,6 +14,7 @@
     "schemaVersion": "prepayment-safety-input-v1",
     "adultConfirmed": true,
     "currentSituation": "状況と気持ちを整理したいです。",
+    "latestInboundMessage": null,
     "optionalMessage": null,
     "relationship": "ambiguous",
     "requestedTopics": [
@@ -184,6 +185,8 @@
       "input_overrides": {
         "contactBoundaryState": "new_inbound_after_boundary",
         "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間を教えてください。",
+        "optionalMessage": "ありがとうございます。15時はいかがですか。",
         "clarificationAnswers": {
           "submissionCount": 1,
           "replyExplicitlyInvited": "yes",
@@ -197,6 +200,7 @@
       "case_id": "DM-17",
       "input_overrides": {
         "contactBoundaryState": "new_inbound_after_boundary",
+        "latestInboundMessage": "土曜なら大丈夫。時間を教えてください。",
         "clarificationAnswers": {
           "submissionCount": 1,
           "replyExplicitlyInvited": "no"
@@ -210,6 +214,8 @@
       "input_overrides": {
         "contactBoundaryState": "new_inbound_after_boundary",
         "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間を教えてください。",
+        "optionalMessage": "ありがとうございます。15時はいかがですか。",
         "clarificationAnswers": {
           "submissionCount": 1,
           "replyExplicitlyInvited": "no",
@@ -791,6 +797,374 @@
       "expected_purchase_gate_satisfied": false
     }
   ],
+  "r1_precision_cases": [
+    {
+      "case_id": "R1-01",
+      "scenario": "Standalone present death wish is urgent",
+      "input_overrides": {
+        "currentSituation": "死にたい"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-02",
+      "scenario": "Standalone present wish to disappear is urgent",
+      "input_overrides": {
+        "currentSituation": "消えたい"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-03",
+      "scenario": "Standalone present self-harm intent is urgent",
+      "input_overrides": {
+        "currentSituation": "自分を傷つけたい"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-04",
+      "scenario": "Standalone present intent to kill another person is urgent",
+      "input_overrides": {
+        "currentSituation": "相手を殺したい"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-05",
+      "scenario": "Generic stopping language does not suppress present suicide intent",
+      "input_overrides": {
+        "currentSituation": "自殺したいけど、やめたい"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-06",
+      "scenario": "Historical death wish with explicit current safety is not urgent",
+      "input_overrides": {
+        "currentSituation": "去年は死にたいと思っていましたが、今は安全です"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-07",
+      "scenario": "Explicitly denied death wish is not urgent solely for the phrase",
+      "input_overrides": {
+        "currentSituation": "死にたいわけではありません"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-08",
+      "scenario": "Present physical assault wording is urgent",
+      "input_overrides": {
+        "currentSituation": "相手に殴られている"
+      },
+      "expected_classification": "urgent_safety_redirect",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-09",
+      "scenario": "Locally negated alternate-account intent is not blocked",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡したいわけではありません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-10",
+      "scenario": "No-intent alternate-account proposition is not blocked",
+      "input_overrides": {
+        "currentSituation": "別アカウントから連絡するつもりはありません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-11",
+      "scenario": "Safe first sentence cannot cancel unsafe second sentence",
+      "input_overrides": {
+        "currentSituation": "監視するのはやめたいです。\nでも友達から相手に連絡してもらう方法を知りたいです。"
+      },
+      "expected_classification": "blocked_unsafe_assistance",
+      "expected_purchase_gate_satisfied": false
+    },
+    {
+      "case_id": "R1-12",
+      "scenario": "Structured no restriction conflicts with explicit no-contact source",
+      "input_overrides": {
+        "currentSituation": "相手から『もう連絡しないで』と言われています。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-13",
+      "scenario": "Structured no restriction conflicts with channel restriction source",
+      "input_overrides": {
+        "currentSituation": "相手にブロックされています。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-14",
+      "scenario": "Structured no restriction conflicts with pause in latest inbound",
+      "input_overrides": {
+        "latestInboundMessage": "今は一人にしてほしい"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-15",
+      "scenario": "Clarified no restriction cannot override contradictory source",
+      "input_overrides": {
+        "contactBoundaryState": "unknown",
+        "currentSituation": "相手から『これ以上連絡しないで』と言われています。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "clarifiedContactBoundaryState": "no_restriction_known"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-16",
+      "scenario": "Business-only practical Candidate remains eligible",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "資料受け取りました。確認お願いします。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        }
+      },
+      "expected_classification": "eligible_business_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-17",
+      "scenario": "Business-only Candidate with personal invitation needs clarification",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "資料受け取りました。\nところで今度二人でご飯行かない？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "business_scope_required"
+      ]
+    },
+    {
+      "case_id": "R1-18",
+      "scenario": "New-inbound state without latest inbound source needs clarification",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "ありがとう。15時どう？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "latest_inbound_message_required"
+      ]
+    },
+    {
+      "case_id": "R1-19",
+      "scenario": "Latest inbound invitation and narrow Candidate allow scoped reply",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "currentSituation": "以前、相手から『もう連絡しないで』と言われました。その後、相手から新しいメッセージが届きました。",
+        "latestInboundMessage": "土曜なら大丈夫。時間教えて",
+        "optionalMessage": "ありがとう。15時どう？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "eligible_scoped_reply",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-20",
+      "scenario": "No-contact inbound contradicts structured reply invitation",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "もう連絡しないで",
+        "optionalMessage": "ありがとう。15時どう？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-21",
+      "scenario": "Scoped reply Candidate with private expansion needs clarification",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間教えて",
+        "optionalMessage": "ありがとう。15時どう？\nそれと今度二人でご飯行かない？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        }
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "reply_scope_required"
+      ]
+    },
+    {
+      "case_id": "R1-22",
+      "scenario": "Stopping alternate-SNS contact is not blocked",
+      "input_overrides": {
+        "currentSituation": "別SNSで連絡するのはやめたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-23",
+      "scenario": "Avoiding third-party involvement is not blocked",
+      "input_overrides": {
+        "currentSituation": "友達を巻き込まないようにしたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-24",
+      "scenario": "Stopping surveillance is not blocked",
+      "input_overrides": {
+        "currentSituation": "監視するのをやめたいです。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-25",
+      "scenario": "Explicit denial of ambush is not blocked",
+      "input_overrides": {
+        "currentSituation": "待ち伏せはしません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-26",
+      "scenario": "Explicit denial of self-harm intent is not urgent",
+      "input_overrides": {
+        "currentSituation": "自分を傷つけるつもりはありません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-27",
+      "scenario": "Explicit denial of other-harm intent is not urgent",
+      "input_overrides": {
+        "currentSituation": "相手を傷つけたいとは思っていません。"
+      },
+      "expected_classification": "eligible_general",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-28",
+      "scenario": "Structured no restriction conflicts with relationship closure source",
+      "input_overrides": {
+        "currentSituation": "相手から別れたいと言われました。"
+      },
+      "expected_classification": "needs_clarification",
+      "expected_purchase_gate_satisfied": false,
+      "expected_clarification_codes": [
+        "boundary_state_conflict"
+      ]
+    },
+    {
+      "case_id": "R1-29",
+      "scenario": "Ordinary business use of broad words is not rejected",
+      "input_overrides": {
+        "contactBoundaryState": "business_only",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "optionalMessage": "好きな資料を選び、会う日程と会議用のご飯の手配を確認します。",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "practicalPermissionExplicit": "yes",
+          "currentRequestPracticalScopeOnly": "yes"
+        }
+      },
+      "expected_classification": "eligible_business_only",
+      "expected_purchase_gate_satisfied": true
+    },
+    {
+      "case_id": "R1-30",
+      "scenario": "Missing scoped acknowledgement cannot satisfy the purchase gate",
+      "input_overrides": {
+        "contactBoundaryState": "new_inbound_after_boundary",
+        "requestedAssistanceGoal": "draft_within_current_permission",
+        "latestInboundMessage": "土曜なら大丈夫。時間教えて",
+        "optionalMessage": "ありがとう。15時どう？",
+        "clarificationAnswers": {
+          "submissionCount": 1,
+          "replyExplicitlyInvited": "yes",
+          "replyLimitedToExactSubject": "yes"
+        },
+        "scopeAcknowledgements": {
+          "scopedReplyScopeAcknowledged": false
+        }
+      },
+      "expected_classification": "eligible_scoped_reply",
+      "expected_purchase_gate_satisfied": false
+    }
+  ],
   "decoder_negative_cases": [
     {
       "case_id": "NEG-01",
@@ -900,6 +1274,49 @@
         "unknown_topic"
       ],
       "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    }
+  ],
+  "r1_decoder_identity_cases": [
+    {
+      "case_id": "R1-DEC-01",
+      "operation": "delete",
+      "path": "latestInboundMessage",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "R1-DEC-02",
+      "operation": "valid_null",
+      "path": "latestInboundMessage",
+      "expected_classification": "eligible_general"
+    },
+    {
+      "case_id": "R1-DEC-03",
+      "operation": "replace",
+      "path": "latestInboundMessage",
+      "value": "   ",
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "R1-DEC-04",
+      "operation": "replace_repeated",
+      "path": "latestInboundMessage",
+      "unit": "あ",
+      "count": 2001,
+      "expected_error": "PREPAYMENT_INVALID_REQUEST"
+    },
+    {
+      "case_id": "R1-ID-05",
+      "operation": "canonical_hash_equivalence",
+      "value": "  ＡＢＣ\r\n受信です  ",
+      "equivalent_value": "ABC\n受信です",
+      "expected_same_hash": true
+    },
+    {
+      "case_id": "R1-ID-06",
+      "operation": "material_hash_mutation",
+      "value": "土曜なら大丈夫。時間教えて",
+      "mutated_value": "日曜なら大丈夫。時間教えて",
+      "expected_same_hash": false
     }
   ]
 }

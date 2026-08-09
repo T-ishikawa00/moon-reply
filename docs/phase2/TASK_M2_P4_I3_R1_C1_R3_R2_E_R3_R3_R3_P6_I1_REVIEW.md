@@ -1,75 +1,74 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1 Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P6-I1-R1 Review
 
 ## Status
 
-- Implementation status: `prepayment_safety_engine_implemented_pending_human_chatgpt_review`
-- Fixed baseline: `611eecbf1249b222588c979a37162872215c9182`
-- Product Owner Charter authority: accepted P6-P0-R1
-- Automated implementation verification: PASS
+- Implementation status: `prepayment_safety_engine_precision_corrected_pending_human_chatgpt_review`
+- Fixed correction baseline: `c94e780a13e319873618e95412b48275d289970e`
+- Accepted Charter authority: P6-P0-R1 at `611eecbf1249b222588c979a37162872215c9182`
+- Automated precision-correction verification: PASS
 - Human / ChatGPT engine review: pending
-- Payment, UI, public RequestForm, Provider, DB, Supabase, Runtime activation: not implemented and not authorized by this package
+- Payment, UI, public RequestForm, Provider, DB, Supabase, and Runtime activation: unchanged, unimplemented, or unauthorized as applicable
 - Final JPY980 readiness: not established
 
 ## TECHNICAL
 
-### Implemented boundary
+### Exact correction boundary
 
-This package adds exactly twelve new paths. It implements a deterministic, server-owned pre-payment Safety classifier; canonical eligibility-input identity; pure purchase-state transitions; an offline contract/case package; and a guarded internal API. It does not modify the accepted Charter, Package D, `lib/safety/**`, `RequestForm.tsx`, Runtime, Pipeline, Provider, schemas, evaluator, semantic disposition, customer delivery, or repositories.
+R1 updates exactly ten existing paths: the three pre-payment input/rule/identity modules, the guarded internal route, four offline evidence files, the dedicated verifier, and this review. `prepayment-safety-gate-v1.ts`, `purchase-state-machine-v1.ts`, the accepted Charter, `RequestForm.tsx`, `lib/safety/**`, Package D, Runtime, Pipeline, service, Prompt, Catalog, Schema, evaluator, semantic disposition, and DB/repository code remain unchanged.
 
-The classifier consumes the Charter's exact two-axis vocabulary:
+The accepted Safety Engine structure and precedence remain current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and eligible delivery scope. The correction closes four content-inspection gaps without creating payment authority or changing the purchase state machine.
 
-- `contact_boundary_state`: 9 values
-- `requested_assistance_goal`: 8 values
-- Safety disposition: 5 values
-- eligible delivery scope: 5 values
-- derived classification: 9 values
+### Latest inbound source and identity
 
-The enforced precedence is current urgent Safety, explicit unsafe requested assistance, primary professional judgment, material conflict or insufficient scope, and finally eligible delivery-scope classification. Attestation and safe structured choices do not override higher-priority evidence.
+`latestInboundMessage: string | null` is now a required top-level input key. `null` is allowed; a present value is outer-trimmed and limited to 1–2,000 Unicode code points. It represents the latest message actually received from the other person and remains distinct from `currentSituation` and the customer's outbound `optionalMessage` Candidate.
 
-### Deterministic inspection
+`createPrepaymentSafetyIdentityV1()` binds the inbound field as its own canonically normalized value. Unicode NFKC, CRLF-to-LF conversion, outer trimming, canonical JSON key ordering, and deterministic requested-topic ordering remain unchanged. Canonically equivalent inbound text preserves the hash; material inbound mutation changes it.
 
-Inspection is local and phrase-level across `currentSituation`, the separate optional Candidate, and structured answers. There is no LLM or Provider call and no claim of full semantic understanding. Explicit execution phrasing is separated from historical, negated, stopping, and ambiguous phrasing. Ambiguity yields bounded `requiredClarificationCodes`; one complete clarification submission is representable, and unresolved material uncertainty remains `needs_clarification`.
+For `new_inbound_after_boundary`, a missing inbound source returns `needs_clarification` with `latest_inbound_message_required`; it cannot produce `eligible_scoped_reply`. The internal route retains every origin, content-type, byte-count, no-store, noindex, safe-error, and no-echo guard while increasing only the strict request ceiling to a 49,152-byte limit.
 
-The new rules preserve explicit coverage for current self-harm or suicide risk, harm to another person, current violence or danger, coercion, stalking or ambush, surveillance and location discovery, doxxing, deception, revenge or harassment, channel or third-party circumvention, illegal assistance, third-party secret exploitation, and minor-related romantic, sexual, or meeting assistance. The legacy `lib/safety` classifier is neither reused unchanged nor modified.
+### Current Safety and proposition-local unsafe intent
 
-### Identity and purchase state
+Clear present-form self-harm, suicide, other-harm, or immediate physical-danger language now redirects urgently without requiring a time adverb such as `今` or `すぐ`. Strong historical/non-current framing and explicit denial are evaluated separately. Generic stopping language cannot suppress a present Safety signal, so `自殺したいけど、やめたい` remains urgent. Standalone `前に` is not treated as historical evidence.
 
-`createPrepaymentSafetyIdentityV1()` applies Unicode NFKC, CRLF-to-LF conversion, outer trimming, canonical JSON key ordering, and deterministic requested-topic ordering before SHA-256 UTF-8 hashing. Request and Candidate remain separate. The API returns only `eligibilityInputHash`; it returns no canonical text, raw input, secret, purchase token, session, or payment authority.
+Unsafe execution inspection now operates at local sentence or proposition boundaries. A local denial or stopping statement can prevent that proposition from being blocked, but it cannot cancel a separate unsafe proposition. No global negation whitelist is used.
 
-The pure fourteen-state machine allows only the five eligible classification states with satisfied gates and a current hash to reach `purchase_available`. A material input change or stale hash returns to `unassessed`. Time passage and unblocking are not transitions. New inbound contact requires full reclassification. Payment creation rejects locally with `PAYMENT_NOT_IMPLEMENTED`, and `payment_completed` cannot be produced.
+### Boundary and scope evidence
 
-### Internal API
+Conservative boundary hints are read only from `currentSituation` and `latestInboundMessage`, never from the outbound Candidate. Explicit pause, no-contact, channel-restriction, and relationship-closure evidence that materially conflicts with the structured boundary returns `needs_clarification` with `boundary_state_conflict`; the engine does not rewrite the selected state.
 
-`POST /api/internal/purchase-eligibility` uses the Node.js runtime and forced dynamic rendering. It is unavailable in production and uses the existing `M2_INTERNAL_RUNTIME_ENABLED` availability check. It requires same-origin JSON, enforces a 24,576-byte limit and exact decoder allowlist, responds with `no-store` and `X-Robots-Tag: noindex, nofollow`, returns ordinary classifications with HTTP 200, and exposes only safe local error codes for malformed requests.
+For `business_only`, the practical-permission answers no longer suffice when the actual request or Candidate materially adds a personal invitation, romantic invitation, reconciliation request, affection escalation, or private meeting proposal. Obvious private mixing returns `needs_clarification`; explicit business-pretext circumvention remains `blocked_unsafe_assistance`. Ordinary isolated words such as `好き`, `会う`, or `ご飯` are not global rejection tokens.
 
-The route imports or calls no Provider, OpenAI, DB, Supabase, payment, Runtime service, or repository implementation. Provider / DB / Supabase: `0 / 0 / 0`.
+For `new_inbound_after_boundary`, a narrative of the earlier boundary is expected and is not itself a contradiction; the latest inbound message is checked for the current pause, no-contact, restriction, or closure conflict. Scoped reply eligibility requires the inbound source, structured invitation and exact-subject answers, narrow deterministic reply evidence, no current boundary contradiction, no private expansion, and the existing scoped acknowledgement gate. The engine explicitly does not claim full semantic subject equivalence. When deterministic scope safety is not established, it returns `needs_clarification` rather than defaulting to scoped eligibility.
 
 ### Offline evidence
 
 - Accepted Charter import and meaning: 42/42 PASS
-- Additional engine cases: 36/36 PASS
-- Classification and state total: 78/78 PASS (minimum 62)
-- Decoder mutation and negative cases: 15/15 PASS
+- Existing additional engine cases: 36/36 PASS
+- Existing classification and state total: 78/78 PASS
+- New R1 precision cases: 30/30 PASS (minimum 21)
+- Combined classification/state/R1 cases: 108/108 PASS
+- Existing decoder mutation and negative cases: 15/15 PASS
+- New inbound decoder and identity regressions: 6/6 PASS
 - Decision Policy regression: 40/40 PASS
 - TypeScript typecheck: PASS
 - ESLint: PASS
 - Next.js production build: PASS
 - `git diff --check`: PASS
-- Active Runtime: v4
-- v12: inactive
+- Active Runtime: v4; v12: inactive
 - Payment implementation/session/authority: `false / false / false`
+- Provider / DB / Supabase: `0 / 0 / 0`
 
-Automated PASS establishes the local contract and regression evidence only. It does not complete Human / ChatGPT engine review, authorize payment or Provider execution, connect UI or LUNA, activate Runtime, or establish final JPY980 readiness.
+Automated PASS establishes deterministic local contract behavior only. Human / ChatGPT review remains pending. It does not establish Provider quality, product acceptance, payment readiness, Runtime activation, or final JPY980 readiness.
 
 ## PLAIN-LANGUAGE
 
-1. 今回の判定エンジンは、支払いの前に「この依頼へ安全に提供できる支援の範囲」をサーバー側で同じ入力なら同じ結果になるよう判定します。
-2. 「少し距離を置きたい」「今日は一人にしてほしい」といった一時的な距離置きだけを理由に購入を止めません。安全な依頼なら、送信文案なしの鑑定として扱えます。
-3. 拒否やブロックの回避、別アカウント、第三者経由、監視・追跡、脅し、嫌がらせなど、危険な支援要求は支払い前に止めます。
-4. 「ログイン」「居場所」「未成年」「暴力」「脅迫」などの単語が一つ出ただけでは自動拒否しません。実行を求めている表現か、過去の話・否定・やめたい意思かを明示的なフレーズ単位で分けます。
-5. 実行意図や現在の危険性を決められない場合は、勝手に購入可能へ進めず、決められた追加確認にします。確認後も不明なら `needs_clarification` のままです。
-6. 古い `lib/safety` のSafety判定をそのまま再利用していません。既存のSafety資産も変更していません。
-7. 入力を実質的に変えると資格hashも変わり、古い画面や古いhashでは購入可能状態へ進めません。表記上同じと扱える正規化だけは同じhashになります。
-8. 今回は決済権限、決済セッション、支払い用トークンを一切発行しません。`purchaseGateSatisfied` は決済が存在するという意味ではありません。
-9. UI、公開RequestForm、LUNA、Provider、DB、Supabase、Runtimeにはまだつないでいません。
-10. 次の工程は Human / ChatGPT engine review です。自動検証PASSと、人による製品判断・JPY980準備完了は別です。
+1. 「死にたい」「消えたい」「自分を傷つけたい」「相手を殺したい」など、現在形で明確な危険が書かれていれば、`今`という単語がなくても支払い前に緊急案内へ切り替えます。
+2. 過去の話や明確な否定は別に扱います。ただし「自殺したいけど、やめたい」のような現在の危険を、一般的な「やめたい」で打ち消しません。
+3. 「監視はやめたい」という安全な一文があっても、別の一文で第三者経由の連絡方法を求めていれば、その危険な依頼は止めます。
+4. 選択欄で「制限なし」を選んでも、受信文や状況説明に「連絡しないで」「一人にして」「ブロックした」「関係を終えたい」と明記されていれば、自動的に購入可能にはしません。
+5. 新しい受信があったという選択だけでは不十分です。実際の最新受信文がなければ追加確認にします。
+6. 業務連絡だけ許可されている場合、業務文に食事の誘い・復縁・恋愛的な提案を混ぜると追加確認になります。業務を口実にする回避依頼は従来どおり拒否します。
+7. 境界後の返信は、受信文が返信を求め、返信案が狭い内容に収まり、既存の確認事項も満たす場合だけ購入ゲートを通れます。
+8. 単語だけで意味全体を理解したとは主張しません。機械的に安全な範囲を確認できなければ `needs_clarification` に戻します。
+9. 最新受信文を実質的に変えると資格hashも変わりますが、Unicode表記・改行・外側空白だけが正規化上同じなら同じhashです。
+10. Gate、購入状態、UI、決済、Provider、DB、Supabase、Runtimeは変更していません。次の工程は Human / ChatGPT engine review です。
