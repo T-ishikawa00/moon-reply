@@ -6,7 +6,14 @@
 
 ## Current Phase
 
-Phase 1 / Automated Public MVP preparation
+Planning / Payment Charter next. Payment implementation is not authorized.
+
+Current canonical planning:
+
+- `docs/ROADMAP.md`
+- `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
+- `docs/CURRENT_FOCUS.md`
+- `docs/CODEX_HANDOFF.md`
 
 ## MVP Direction
 
@@ -14,7 +21,7 @@ Phase 1 MVP is not a full app.
 
 The public MVP target is an automated one-shot paid diagnosis flow:
 
-LP → self-hosted request form → safety check → payment → AI judgment → AI full diagnosis → result page → email notification → feedback.
+LP → self-hosted request form → accepted server-owned Safety/purchase eligibility → final JPY 980 confirmation → verified payment → one assessment grant → AI assessment → result delivery → feedback.
 
 Development may use manual, mock, and QA modes, but the public MVP should automate normal diagnosis flow.
 
@@ -44,22 +51,25 @@ Development may use manual, mock, and QA modes, but the public MVP should automa
 - Full admin panel
 - Auto-generated image card
 
-## Phase Roadmap
+## Product Roadmap
 
-- Phase 0: AI鑑定品質ラボ
-- Phase 1: Automated Public MVP preparation
-- Phase 2: Automated Web MVP hardening
-- Phase 3: 相手別ノート + 低額サブスク検討
-- Phase 4: ネイティブアプリ検討
-- Phase 5: 月額4,000円級プレミアム検討
+- Phase A: Web / PAY.JP direction / JPY 980 one-time purchase
+- Phase B: real-customer paid Web validation
+- Phase C: iOS / Apple IAP / RevenueCat
+- Phase D: Android / Google Play Billing / RevenueCat
+- Phase E: repeat-purchase data analysis
+- Phase F: subscription only if demand is established
+
+The detailed initial Web delivery milestones remain in `docs/ROADMAP.md`. Purchase-count figures are Product Owner heuristics, not automatic release gates.
 
 ## Development Rules
 
 - 需要検証なしに本格実装へ進まない
 - 実装は承認済みステージごとに分割する
-- 単発¥980が売れるまでサブスクを本命にしない
-- Webで検証する。ネイティブアプリは後
-- コイン/ポイント制は採用しない
+- 単発税込¥980で実需要と再購入を検証するまでサブスクを実装しない
+- Webで有料検証し、その後iOS、安定後にAndroidへ進む
+- 初期Customer-facing modelにコイン/ポイント制を採用しない
+- PAY.JP方針、provider書面承認、Payment Charter受入、実装権限を混同しない
 - 不安を煽って課金させない
 - 危険相談は通常鑑定にしない
 - AI利用は隠さない

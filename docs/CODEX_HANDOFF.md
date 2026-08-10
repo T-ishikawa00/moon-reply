@@ -1,5 +1,20 @@
 # CODEX_HANDOFF.md
 
+<!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
+## Active handoff — Payment / Platform / Monetization Strategy
+
+- Status / branch / baseline: `human_chatgpt_agreed_long_term_direction` / `docs/payment-platform-monetization-strategy` / `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`.
+- Canonical authority: `docs/ROADMAP.md` controls high-level delivery order; `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` controls Payment / Platform / Monetization product strategy; provider evidence files control factual approval and selection.
+- Current product: one consultation / one assessment note / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points.
+- Platform order: Web and real paid validation -> iOS / Apple IAP + RevenueCat -> Android / Google Play Billing + RevenueCat -> repeat-purchase analysis -> subscription only if demand supports it.
+- Web direction: PAY.JP is the strategic primary direction; intended initial methods are supported cards and Apple Pay at the same JPY 980 price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-for-Web-uniformity are excluded from the initial direction.
+- Evidence distinction: PAY.JP strategic direction is not merchant/category approval, written provider evidence, formal evidence-gate selection, Payment Charter acceptance, or implementation authorization. No inquiry or Provider call was made by this planning task.
+- Domain boundary: external payment/Store facts -> verified normalized Moon Reply purchase -> entitlement/assessment grant. The initial internal invariant is one valid purchase -> one assessment grant -> one fulfillment -> consume once. This is conceptual only and authorizes no schema, migration, DB, ledger, or API.
+- Safety: the explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at the Safety HEAD baseline. Older P6 task-local `pending_human_*` labels remain immutable task-time records; this newer decision does not establish final JPY 980 readiness or Payment authority.
+- Next action: formulate and obtain Human + ChatGPT acceptance of the Payment Charter. The Charter is not yet accepted.
+- Hard boundary: no PAY.JP SDK/API/checkout/webhook, RevenueCat, Apple IAP, Google Play Billing, Provider call, DB/Supabase/migration, Runtime, PR, main merge, force push, or release is authorized.
+<!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
 ## Active handoff — M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1
 
@@ -240,14 +255,14 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 - Reading Note: approved 14-part Web structure; distinct save-oriented decision card; fixed judgment, scenario, uncertainty, non-guarantee, and limitations preserved.
 - LP: approved ten-part sequence with the Reading Note artifact as primary value proof.
 - Request Sheet: 18+ self-declaration, one large current-situation field, relationship/what-to-know chips, Safety, one acknowledgement, privacy guidance, Request Memo, then email and purchase confirmation.
-- Safety: existing structured vocabulary, classification, severity, and reason-code meanings remain intact; M1-I2-R1 adds only `illegal_conduct`, `third_party_secret`, targeted free-text coverage, normalization, bounded negation guards, and truthful non-normal blocking. Only `normal_allowed` continues; needs_review, rejected, contradictory, invalid-age, missing-confirmation, and unknown states fail closed.
+- Safety: the historical M1 fixture flow keeps its `normal_allowed` / `needs_review` / `rejected` behavior as historical evidence. The current pre-payment authority is the accepted server-owned P6 eligibility gate: only a current eligible result with `purchaseGateSatisfied=true` may continue; clarification, unsafe, urgent, unsupported, invalid, contradictory, or technical-error states fail closed. Customer outcomes such as waiting, a temporary pause, or boundary-respecting support are not payment blocks by themselves.
 - Legal Review: user-readable body, publication decisions, and collapsed review metadata are separate. Legal substance and unresolved operator facts remain unchanged; Contact is inactive.
 - Presentation fixtures/schemas were reorganized only inside M1-I8 and M1-I10 and do not activate runtime behavior.
 - M1-P2-R1 public cases are static presentation data under `fixtures/public/`; they are not Safety fixtures, result fixtures, real consultations, purchaser examples, reviews, or AI-generation evidence.
 
 ## Runtime and External Status
 
-- No provider inquiry was sent and no provider was selected.
+- No provider inquiry was sent and no provider passed the formal evidence-selection gate. PAY.JP is now the Human-agreed strategic primary Web direction, which is a separate state from provider approval or implementation authorization.
 - No legal page is publication-approved and no review site is deployed.
 - No active contact channel or legal acceptance exists.
 - The historical Milestone 1 baseline added no production database connection, payment/refund, AI call, prompt execution, email, API route, server action, analytics, authentication, external form/asset, persistence, file generation, or deployment. M2-P3 adds an internal development-only route and a bounded Human-configured synthetic live connection; no production or public capability is configured.
@@ -408,17 +423,17 @@ The preceding R2-R2 field preserves its review-time successor authorization stat
 - Preserved evidence: targeted repairs `3/3`, ownership sequence PASS, actual/comparison Policy deep equality, Prompt v6/v7, catalog v7/v8, nine R2-R2 execution artifacts, and three non-overlapping review records unchanged by acceptance sync.
 - Execution boundary: Provider calls / Provider outputs mutated / DB / Supabase / holdout / real-user data `0 / 0 / 0 / 0 / 0 / 0`.
 - Capability boundary: Provider quality established `false`; final eight-case confirmation required / authorized `true / false`; Active Runtime changed `false`; C2 eligible / authorized `false / false`; `main` changed `false`; Milestone 2 incomplete.
-- Next candidate: `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation`; authorized `false`.
+- Historical AI-quality lane candidate, not current next work: `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation`; authorized `false`.
 
 ## Current Restriction
 
-The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. Keep historical M1, M2-P1, I1-A, I1-B, I1-C, I2, I3, Final Planning, R1-A, R1-B, R1-C1-R1, R1-C1-R2, R1-C1-R2-R1, and R2-R2 execution snapshots immutable. The C1, R2, and R2-R2 one-time markers and authorizations are consumed; no rerun is authorized. R2-R1 authority is exhausted by its exact 13-path offline successor; R2-R2 Provider authority is exhausted by its exact four calls and review; R2-R2-R1 authority is bounded to its exact 13-path offline revision. Active catalog v4, Service, Application, Pipeline, active PB-01 Prompt and Schema, grounding, Integrity, accepted evidence, PB-02 through PB-06, Policy, UI, development, holdout, packages, and Supabase remain protected. No DB / Supabase operation, holdout or real-user use, retry, Repair/PB-07, fallback, full Pipeline execution, further Provider call, final eight-case confirmation, C2, PR, merge, force push, release, publication, or deployment is authorized.
+The accepted M1-P3 package remains the authoritative Visual Excellence documentation/design specification. Keep historical M1, M2-P1, I1-A, I1-B, I1-C, I2, I3, Final Planning, R1-A, R1-B, R1-C1-R1, R1-C1-R2, R1-C1-R2-R1, and R2-R2 execution snapshots immutable. The C1, R2, and R2-R2 one-time markers and authorizations are consumed; no rerun is authorized. R2-R1 authority is exhausted by its exact 13-path offline successor; R2-R2 Provider authority is exhausted by its exact four calls and review; R2-R2-R1 authority is bounded to its exact 13-path offline revision. Active catalog v4, Service, Application, Pipeline, active PB-01 Prompt and Schema, grounding, Integrity, accepted evidence, PB-02 through PB-06, Policy, UI, development, holdout, packages, and Supabase remain protected. No DB / Supabase operation, holdout or real-user use, retry, Repair/PB-07, fallback, full Pipeline execution, further Provider call, final eight-case confirmation, C2, PAY.JP/RevenueCat/Store payment implementation, PR, merge, force push, release, publication, or deployment is authorized.
 
 Browser use remains prohibited, including the Codex in-app browser, CDP, Playwright, Puppeteer, Selenium, GUI browsers, and screenshot acquisition. Automated checks do not establish visual acceptance; the completed visual and interaction acceptance is recorded separately as Human observational evidence.
 
 ## Next Work
 
-Milestone 1 is closed. M2-P3, M2-P4 planning, I1-A through I2, I3-R1 Final Planning, R1-A, R1-B, R1-C1-R1, offline R1-C1-R2-R1, and offline R2-R2-R1 are Human / ChatGPT accepted and complete; Milestone 2 remains incomplete. R1-C1 and R1-C1-R2 retain reviewed Provider verdicts `FAIL`. R2-R2 is Human / ChatGPT reviewed complete with targeted repairs `3/3 PASS`, Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen verdict `FAIL`. R2-R2-R1 acceptance does not establish Provider quality, an eight-case PASS, Runtime activation eligibility, or C2 eligibility. Do not rerun C1, R2, or R2-R2, run the unauthorized final eight-case confirmation, activate Runtime, or start C2. C2 Runtime activation and E1 remain unauthorized, final I3 acceptance remains pending, active Runtime remains catalog v4, and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+The next formal work is Payment Charter formulation and Human + ChatGPT acceptance. Do not infer PAY.JP API behavior or begin implementation. The Charter must separately decide server-authoritative payment success, idempotency, one-payment/one-assessment linkage, duplicate/retry/reload handling, unknown and browser-close recovery, post-payment LUNA/delivery failure, refunds, webhook, ledger, secrets, observability, incidents, and future App Store/Google Play compatibility. Historical AI Provider work remains frozen; no AI Provider rerun, C2, Payment Provider call, DB/Supabase change, Runtime activation, PR, or main merge is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

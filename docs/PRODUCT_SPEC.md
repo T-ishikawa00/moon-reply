@@ -1,20 +1,20 @@
-# 月の返事 PRODUCT_SPEC.md v0.4
+# 月の返事 PRODUCT_SPEC.md v0.5
 
 ## 0. このドキュメントの位置づけ
 
 このドキュメントは、AIを活用した恋愛メッセージ分析・判断支援デジタルレポート「月の返事」のプロダクト親仕様書である。ユーザー向け定義は「恋のメッセージ鑑定ノート」とする。
 
-Status note: 以下の旧Phase順序は成立時点の履歴として保持する。現在の実行順序、完了定義、次タスクおよびHuman gateは `docs/ROADMAP.md` が優先し、旧Phase番号自体は実装・問い合わせ・デプロイを承認しない。
+Status note: 現在の実行順序、完了定義、次タスクおよびHuman gateは `docs/ROADMAP.md` が優先する。Payment / Platform / Purchase / Entitlement / Monetizationの詳細正本は `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` とする。旧Phase、価格仮説、Subscription案およびprovider候補は履歴であり、それ自体は実装・問い合わせ・デプロイを承認しない。
 
-現時点では本番Webアプリ・ネイティブアプリの実装は行わない。
-まずは以下の順番で検証し、Go条件を満たした場合のみ実装フェーズに進む。
+現時点ではPaymentまたはネイティブアプリの実装は行わない。
+以下の順番を長期方針とし、各Planning、実装、provider、productionおよびrelease gateは別個のHuman authorityを必要とする。
 
-1. Phase 0：AI鑑定品質ラボ
-2. Phase 1：半自動¥980有料検証
-3. Phase 2：自動Web MVP
-4. Phase 3：相手別ノート＋低額サブスク
-5. Phase 4：ネイティブアプリ化
-6. Phase 5：月額4,000円級プレミアム
+1. Phase A：Web / PAY.JP方向 / 税込980円都度払い
+2. Phase B：実CustomerによるWeb有料Product検証
+3. Phase C：iOS / Apple IAP / RevenueCat
+4. Phase D：Android / Google Play Billing / RevenueCat
+5. Phase E：再購入データ分析
+6. Phase F：必要性が確認できた場合のみSubscription設計・実装
 
 最重要ルール：
 
@@ -22,9 +22,9 @@ Status note: 以下の旧Phase順序は成立時点の履歴として保持す�
 - 7日以上ラボにこもらない
 - 自己採点だけで進めない
 - Day5から集客を始める
-- 単発¥980が売れるまでサブスクを本命にしない
-- Webで検証する。ネイティブアプリは後
-- コイン/ポイント制は採用しない
+- 単発税込¥980で実需要と再購入を検証するまでSubscriptionを実装しない
+- Webで有料検証し、その後iOS、iOS購入系の安定後にAndroidへ進む
+- 初期Customer-facing primary modelにコイン/ポイント制を採用しない
 - 不安を煽って課金させない
 - 危険相談は通常鑑定にしない
 - AI利用は隠さない
@@ -400,7 +400,7 @@ AI処理フロー：
 
 ## 12. 課金方針
 
-### Phase 1〜2
+### 初期Web
 
 単発鑑定：¥980固定
 
@@ -422,11 +422,17 @@ AI処理フロー：
 
 無料体験の中心は、LP上の短い抜粋、`/sample-report`の架空サンプル、Web鑑定ノート/保存用鑑定書の見本、入力例、利用の流れとする。将来の無料プレビュー実験は、実購入データを得た後に別途判断する。
 
-### 月額¥980〜1,500
+### Subscriptionは実データ取得後に設計
 
-単発リピートや継続需要が見えたら追加。
+Subscriptionは長期候補として保持するが、価格、月間回数、同梱機能および更新条件は未決定とする。税込980円都度払いとの併売を基本候補とし、Subscription導入時に都度払いを自動的に廃止しない。
 
-価値：
+判断材料は、30日/60日再購入率、Customerあたり平均購入回数、平均相談間隔、repeat customer比率、heavy user頻度とする。有料Customer 30〜50人程度、または累計50〜100鑑定程度は検討開始のheuristicであり、Hard Gate、Release Gateまたは実装条件ではない。
+
+過去に記録された月額¥980〜1,500、月額¥3,980〜4,980、回数・機能bundleは未検証の歴史的仮説であり、現行の価格・商品決定ではない。
+
+#### Historical / unvalidated subscription hypotheses
+
+旧月額¥980〜1,500案：
 
 - 月3〜5回鑑定
 - 相手別ノート1人
@@ -436,11 +442,7 @@ AI処理フロー：
 - 保存無制限
 - 広告なし
 
-### 月額¥3,980〜4,980
-
-将来的にはあり得るが、最初から売らない。
-
-成立条件：
+旧月額¥3,980〜4,980案の成立仮説：
 
 - 相手別ノートが使われている
 - 保存率が高い
@@ -465,8 +467,7 @@ AI処理フロー：
 - 不安を利用した継続消費に見えやすい
 - 「あと少しで分かる」型の引き延ばしに見えやすい
 
-将来的に前払い型を導入する場合も「コイン」ではなく、「鑑定チケット」として検討する。
-ただし、法務・決済審査後に限る。
+内部では1購入に対応する`assessment_grant`を概念上利用できるが、Customer-facingにはcoin/pointとして表示しない。将来の回数券・前払いbundleは未決定であり、Payment Charter、法務およびprovider審査なしに推測しない。
 
 ---
 
@@ -474,18 +475,15 @@ AI処理フロー：
 
 ### Web/PWA段階
 
-決済providerは現時点で未選定・未承認である。PAY.JP、KOMOJU、STORES、Stripe、Squareを含め、実際の機能と表示に基づく書面回答を得るまで取扱可否を断定しない。
+Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProduct戦略であり、provider承認、書面証拠に基づく正式選定、Payment Charter受入または実装権限ではない。実際の機能と表示に基づく書面回答を得るまで取扱可否を断定しない。
 
-候補：
+初期Web決済方法の方向：
 
-1. PAY.JP
-2. KOMOJU
-3. STORES
+- 対応クレジット/デビットカード
+- Apple Pay
+- すべて税込980円
 
-理想決済：
-
-- クレジットカード
-- PayPay
+初期WebではPayPay、Google Pay、複数Payment Provider併用およびWeb統一目的だけのRevenueCat Billingを見送る。KOMOJU、STORES等は必要時のcontingency evidence候補であり、初期並行実装ではない。
 
 申請時は偽装しない。
 
@@ -493,26 +491,27 @@ AI処理フロー：
 
 > 利用者が入力した恋愛関係の状況とメッセージをAIが整理・分析し、文面の受け取られ方として考えられる可能性、送る・待つ・修正するといった判断材料、メッセージ案および短期的な行動案を、デジタルレポートとして提供するサービス。ユーザー向けに「鑑定ノート」「鑑定書」という名称を使用するが、タロット、占星術、生年月日、霊感その他の占術・超自然的手法は使用せず、相手の本心や未来の出来事を断定・保証しない。
 
-### Milestone 4の決済事業者問い合わせでやること
+### Payment CharterとMilestone 4でやること
 
-- `docs/ROADMAP.md` のMilestone 1〜3をHuman受入れ後、Milestone 4でPAY.JPへの正確な照会文をHumanが最終承認する
+- 次の正式作業としてHuman + ChatGPTでPayment Charterを策定・受入する
+- `docs/ROADMAP.md` の外部問い合わせgateに従い、PAY.JPへの正確な照会文をHumanが最終承認する
 - 送信時は公式窓口を再確認し、送信本文と回答を証拠として保存する
-- 書面回答前にproviderを承認・選定しない
+- 書面回答前にproviderを正式承認・選定したと扱わない
+- Charter受入と別のimplementation authorization前にSDK/API実装へ進まない
 
 ---
 
-## 15. App Store / ネイティブアプリ時の課金方針
+## 15. iOS / Android時の課金方針
 
-Web検証が成功し、ネイティブアプリ化する段階では、iOSアプリの課金は基本的にAppleのアプリ内課金（IAP）を本線にする。
+Web有料Product検証後のiOS方向はApple In-App Purchase + RevenueCatとする。初期iOSでもSubscriptionを必須とせず、税込980円のone-time / consumable-style assessment purchaseから開始可能とする。正確なStore product type、価格tier、account linkage、restorationおよびrecoveryは将来の設計事項とする。
 
-月額サブスクは Auto-renewable Subscription として設計する。
+iOSの購入検証、RevenueCat、Moon Reply account linkage、entitlement / assessment grant、restorationおよびrecoveryが安定した後、AndroidをGoogle Play Billing + RevenueCatで展開する。共有実装が可能でもStore releaseをずらしてriskを分離できる。
 
-### 月額4,000円級サブスク
+WebはPAY.JP、iOSはApple IAP + RevenueCat、AndroidはGoogle Play Billing + RevenueCatを用い、最終的なProduct権限の正本はMoon Reply backend上でprovider-independentに正規化する。
 
-最初から売らない。
-将来的に以下の価値が成立してから導入する。
+過去の月額4,000円級Premium機能案は未検証の歴史的仮説であり、現行のSubscription価格、回数または機能決定ではない。
 
-Premium案：
+Historical / unvalidated Premium案：
 
 - 1日1回まで通常鑑定
 - 月4回の深層鑑定書
@@ -676,11 +675,11 @@ AI利用説明例：
 
 ## 19. 返金ポリシー
 
-基本方針：
+Planning direction（Payment Charter未受入）：
 
-デジタル鑑定書という商品の性質上、納品後の返金は原則不可。
+既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。これはAccepted policyではなく、Payment Charterで再審議する。
 
-ただし、以下の場合は将来の全額返金候補として扱い、provider選定後の運用/法務仕様で確定する。
+以下は将来の返金判断候補として保持するが、返金可否、authority、操作、期限、fee扱いおよびCustomer通知はPayment Charter、provider evidenceおよび法務仕様で確定する。現時点のAccepted policyとして扱わない。
 
 - 例外的に決済成功後のSafety再判定で通常鑑定を提供できない場合
 - サービス側都合で納品できない場合
@@ -692,7 +691,7 @@ AI利用説明例：
 
 > デジタル鑑定書という商品の性質上、納品後の返金は原則としてお受けできません。ただし、重複決済または決済後の提供不能が確認された場合は、全額返金の対象候補となります。具体的な返金方法・条件・時期は決済事業者選定後に確定します。
 
-Safetyは決済前に実施し、`normal_allowed`のみ将来の購入フローへ進める。`needs_review`、`rejected`、年齢/同意不備、矛盾入力、unknown/errorは購入不可とする。
+Safetyとserver-owned purchase eligibilityは決済前に実施し、現在のeligible resultかつ`purchaseGateSatisfied=true`の場合のみ将来の購入フローへ進める。clarification、unsafe、urgent、unsupported professional assistance、年齢/同意不備、矛盾入力、unknown/errorはfail closedとする。旧M1の`normal_allowed` / `needs_review` / `rejected`はhistorical fixture vocabularyであり、現在のpurchase authorityではない。
 
 将来、決済成功後にSafety再判定、AI出力Safety、継続失敗またはシステム障害で提供不能となる例外に備え、下流Milestoneでは次の状態列を設計する。
 
@@ -704,7 +703,7 @@ payment_succeeded
   -> refunded
 ```
 
-提供不能時は通常レポートを出さず、復旧可能なら再試行し、復旧不能なら全額返金候補として扱う。二重返金防止、理由/状態記録、operator通知、ユーザーへの結果または返金状況案内を要件とする。ただし、自動返金、providerの返金API、手数料返還、期限、反映日数、具体的管理画面操作はprovider選定後まで断定しない。
+提供不能時に通常レポートを出さないことは維持する。再試行、再発行、返金、二重返金防止、理由/状態記録、operator通知、Customerへの案内、自動返金、provider API、手数料、期限、反映日数および具体的操作はPayment Charterで決めるまで断定しない。
 
 ---
 
@@ -741,7 +740,18 @@ payment_succeeded
 
 ## 21. 開発フェーズ
 
-### Phase 0：AI鑑定品質ラボ
+現在の長期Product正本は次の順序とする。
+
+1. Phase A：Web / PAY.JP方向 / 税込980円都度払い
+2. Phase B：実CustomerによるWeb有料Product検証
+3. Phase C：iOS / Apple IAP / RevenueCat
+4. Phase D：Android / Google Play Billing / RevenueCat
+5. Phase E：再購入データ分析
+6. Phase F：必要性が確認できた場合のみSubscription設計・実装
+
+以下の旧Phase 0〜5は成立時点の履歴であり、現在のPlatform順序、Payment authority、次タスクまたは実装権限を決めない。
+
+### Historical Phase 0：AI鑑定品質ラボ
 
 目的：
 
@@ -763,7 +773,7 @@ payment_succeeded
 - 鑑定書画像テンプレを作る
 - 25〜34歳女性5人に外部評価してもらう
 
-### Phase 1：半自動有料検証
+### Historical Phase 1：半自動有料検証
 
 目的：
 
@@ -794,7 +804,7 @@ payment_succeeded
 - 21:00〜24:00受付：原則1時間以内
 - それ以外：翌日12:00まで
 
-### Phase 2：自動Web MVP
+### Historical Phase 2：自動Web MVP
 
 Phase 1でGo条件を満たした場合のみ進む。
 
@@ -811,7 +821,7 @@ Phase 1でGo条件を満たした場合のみ進む。
 - 相手別ノートの最小DB構造
 - 最低限の管理ログ
 
-### Phase 3：相手別ノートと低額サブスク
+### Historical Phase 3：相手別ノートと低額サブスク
 
 単発課金とリピート需要が見えたら追加。
 
@@ -825,12 +835,12 @@ Phase 1でGo条件を満たした場合のみ進む。
 - 保存件数が増える
 - 広告なし
 
-### Phase 4：ネイティブアプリ
+### Historical Phase 4：ネイティブアプリ
 
 Webで単発課金・低額サブスク・相手別ノートの利用が見えてから検討。
 iOSでは月額サブスクは基本的にApp StoreのIAPを使う。
 
-### Phase 5：月額4,000円級プレミアム
+### Historical Phase 5：月額4,000円級プレミアム
 
 将来的な理想。
 相手別ノート・深層鑑定・関係変化レポート・3日後/7日後フォローが実際に使われてから検討する。
@@ -838,6 +848,8 @@ iOSでは月額サブスクは基本的にApp StoreのIAPを使う。
 ---
 
 ## 22. Go/No-Go基準
+
+以下は旧検証案のhistorical metricsである。現在のWeb release、iOS着手、Android着手またはSubscription検討のHard Gateではない。現行heuristicとauthorityは`docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`を参照する。
 
 ### Go
 
@@ -873,53 +885,24 @@ LPに人を集められない場合は、商品ではなく集客の問題とし
 
 ## 23. 直近の次アクション
 
-今すぐやるべきは、コードでもLPでもプロンプトでもない。
+次の正式作業は、Human + ChatGPTによるPayment Charter策定・受入である。PAY.JPの何をpayment success authorityとするか、browser非authority、idempotency、1 payment = 1 assessment、duplicate/reload/webhook retry、決済成功後のLUNA/delivery failure、refund、unknown/timeout、browser close recovery、purchase ledger/linkage、secrets、observability、incident handlingおよび将来Store互換性を実装前に決める。
 
-最初の成果物は、実在の返信待ち相談10件を集めて、判定を付けること。
-
-表形式：
-
-| ID | 相談タイプ | 状況 | 送ろうとしているメッセージ | 判定 | 判定理由 | 危険フラグ |
-|---|---|---|---|---|---|---|
-
-判定は4つ。
-
-- 送っていい
-- 軽く送るならあり
-- 今夜は待つ
-- 今日は送らない方がいい
-
-同時にDay1で出すもの：
-
-- PAY.JP/KOMOJU/STORESへの確認
-- 外部評価者募集
+Payment Charterは未受入であり、PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
 
 ---
 
 ## 24. CodeX共有用注意
 
-現時点では本実装禁止。
+現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-CodeXに今やらせてよいのは、
+現在許可されている次作業はPayment CharterのPlanning / documentationのみ。CharterのHuman + ChatGPT受入と、その後の別個のimplementation authorizationなしに、以下へ進まない。
 
-- Markdown仕様書化
-- 判定基準表テンプレ作成
-- 鑑定書テンプレ作成
-- プロンプト草案作成
-- 外部評価シート作成
-- LPコピー草案作成
-- 危険相談対応文の草案作成
+- PAY.JP SDK/API/checkout/webhook
+- RevenueCat
+- Apple IAP / Google Play Billing
+- DB/Supabase/migration
+- Runtime/LUNA activation変更
+- 認証、Subscription、coin/point
+- Provider call、PR、main merge、release
 
-まで。
-
-以下はまだやらない。
-
-- 本番Webアプリ実装
-- DB実装
-- 決済実装
-- 認証実装
-- ネイティブアプリ実装
-- サブスク実装
-- コイン/ポイント実装
-
-Phase 1のGo条件を満たしてから、Phase 2のWeb MVP実装に入る。
+過去のPhase Go条件、automated PASS、技術的実装可能性またはStrategy合意はimplementation authorizationではない。

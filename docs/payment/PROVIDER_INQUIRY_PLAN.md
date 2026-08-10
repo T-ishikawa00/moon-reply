@@ -10,6 +10,8 @@ Task 18A did not authorize sending an inquiry or implementing a payment provider
 
 Task 18C prepares drafts, evidence logging, scoring rules, and a decision gate only. It does not authorize sending an inquiry, selecting a provider, or implementing payment.
 
+The `2026-08-10` product strategy now names PAY.JP as the primary Web direction and cards plus Apple Pay as the intended initial methods. Existing drafts remain unsent historical preparation and must not be sent without a post-Charter accuracy refresh and explicit Human send authorization. PayPay, Google Pay, and multiple simultaneous Web providers are not initial requirements.
+
 ---
 
 ## 0. Rule
@@ -33,7 +35,7 @@ Stripe is not the default option.
 
 Square and other providers require current official restriction review.
 
-Priority is for inquiry sequencing only; it is not a provider recommendation or approval.
+PAY.JP is now the strategic primary direction. The remaining order is contingency inquiry sequencing only. None of these positions is provider approval, formal evidence-gate selection, or implementation authorization.
 
 ---
 
@@ -63,7 +65,7 @@ Ask each provider:
 6. Is 特商法 disclosure required before application?
 7. What refund-policy wording is required?
 8. Is pre-payment for digital generation accepted?
-9. Are credit card and PayPay available?
+9. Are supported credit/debit cards and Apple Pay available for this service, account type, and intended flow?
 10. Are future subscriptions or ticket bundles subject to re-review?
 11. What webhook events are available?
 12. What are webhook retry and signature-verification rules?

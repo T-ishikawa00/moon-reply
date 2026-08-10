@@ -1,5 +1,20 @@
 # WBS.md
 
+## Payment / Platform / Monetization Strategy and Payment Charter
+
+- [x] Agreed long-term product direction: Web -> real paid Web validation -> iOS -> Android -> repeat-purchase analysis -> subscription only if demand is established
+- [x] Agreed initial product direction: one assessment / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points
+- [x] PAY.JP agreed as the strategic primary Web direction, with supported cards and Apple Pay intended initially; PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-for-Web-uniformity excluded from the initial direction
+- [x] Agreed mobile direction: Apple IAP + RevenueCat for iOS, then Google Play Billing + RevenueCat for Android
+- [x] Conceptually agreed provider-independent boundary: external transaction -> verified normalized Moon Reply purchase -> entitlement/assessment grant -> consume once
+- [x] Subscription retained as a future coexistence candidate, with approximately 30–50 paid customers or 50–100 paid assessments recorded only as non-binding Product Owner heuristics
+- [x] Explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at Safety HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`; historical task-local pending-review labels remain immutable and final JPY 980 readiness remains separate
+- [ ] Payment Charter formulation and Human + ChatGPT acceptance — next formal work
+- [ ] PAY.JP written category evidence and formal evidence-gate selection — not completed
+- [ ] PAY.JP SDK/API/checkout/webhook, RevenueCat, Apple IAP, Google Play Billing, purchase DB/migration, Runtime, PR, and main integration — unauthorized
+
+Canonical detail is in `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`. Strategy agreement, provider approval, Charter acceptance, implementation, production authorization, and release are separate states. This WBS entry authorizes documentation only.
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
 ## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 Reassuring Assessment Experience Doctrine
 
@@ -934,6 +949,8 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
 - [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, M2-P4 planning, M2-P4-I1-A through I2, I3-R1 Final Planning, R1-A contract-only implementation, and R1-B exact 22-path offline integration are accepted and complete; I3 offline implementation accepted and one synthetic live smoke succeeded; R1-B exact `9/9` review correction is resolved; C1 bounded execution protocol is Human / ChatGPT accepted complete with product-quality `FAIL`; final I3 acceptance / main merge, C2 Runtime activation, scored provider quality acceptance, and Milestone 2 completion remain pending or not started
+- [x] Pre-payment Safety Engine / Safety UX — Human + ChatGPT accepted complete by the explicit `2026-08-10` Human decision; final JPY 980 readiness and Payment authority remain false
+- [ ] Payment Charter — next formal cross-cutting planning task; not yet formulated or accepted and does not complete or skip Milestones 2–6
 - [ ] Milestone 3: Review Site Deployment
 - [ ] Milestone 4: Payment Provider Inquiry and Selection
 - [ ] Milestone 5: Core Backend, Safety, AI and Email

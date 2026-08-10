@@ -2,9 +2,9 @@
 
 ## 0. Purpose
 
-This document defines the payment flow for the Phase 1 automated public MVP.
+This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and the future Human + ChatGPT-accepted Payment Charter.
 
-No payment API implementation is included in this document.
+No payment API implementation is included or authorized by this document. The Payment Charter is not yet formulated or accepted.
 
 The public MVP requires payment success verification before AI judgment or diagnosis generation.
 
@@ -22,25 +22,32 @@ The initial MVP has no free complete reading, ad-supported reading, advertising,
 
 ---
 
-## 2. Payment Candidates
+## 2. Platform and Provider Direction
 
-Candidates:
+Initial Web direction:
 
-- STORES
-- PAY.JP payment link or simple payment flow
-- KOMOJU
-- Square
-- BASE as fallback if category allowed
+- PAY.JP as the strategic primary direction
+- supported credit/debit cards
+- Apple Pay
+- JPY 980 including tax for every enabled initial method
 
-Need confirmation:
+Not in the initial Web direction:
+
+- PayPay
+- Google Pay
+- multiple Payment Providers in parallel
+- RevenueCat Billing solely for cross-platform provider uniformity
+
+PAY.JP has not passed the formal written-evidence selection gate. Need confirmation before implementation:
 
 - AI-assisted fortune-telling / love diagnosis category acceptance
 - digital service delivery
 - refund handling
-- PayPay availability
-- credit card availability
+- card and Apple Pay availability for the actual account, service category, and flow
 - platform rules around fortune-telling/counseling-like services
 - webhook or success verification support
+
+KOMOJU, STORES, BASE, Square, and other providers remain contingency evidence candidates, not parallel initial integrations. Provider approval, Payment Charter acceptance, and implementation authorization are separate decisions.
 
 ---
 
@@ -50,9 +57,9 @@ Required sequence:
 
 1. User submits diagnosis request form
 2. Server validates that the required age-group value is one of the allowed 18-or-older values
-3. Safety screening runs
-4. User proceeds to payment only if age eligibility is valid and normal diagnosis is allowed
-5. Payment provider confirms success
+3. The accepted server-owned Safety and purchase-eligibility gate runs
+4. User proceeds only when the current result is eligible and `purchaseGateSatisfied=true`
+5. The future Payment Charter-defined server authority verifies payment success
 6. System triggers AI judgment and diagnosis generation
 7. Result page is created
 8. Result URL is sent by email
@@ -66,7 +73,9 @@ Reason:
 - Reduces refund burden
 - Prevents generation without verified payment
 
-`needs_review`, `rejected`, invalid age, missing consent, contradictory input, and unknown/error states never reach purchase confirmation or checkout.
+Clarification, unsafe, urgent, unsupported professional-assistance, invalid age, missing consent, contradictory input, and unknown/error states never reach real checkout. Historical M1 `normal_allowed` / `needs_review` / `rejected` fixtures remain review evidence and are not the current purchase authority.
+
+Waiting, not sending now, a temporary pause, and boundary-respecting assessment outcomes do not block purchase when the separate server-owned assistance eligibility is valid.
 
 ---
 
@@ -75,14 +84,15 @@ Reason:
 Public MVP payment flow:
 
 1. User passes safety screening and reaches the final confirmation screen
-2. User reviews or corrects the selected age group
-3. Server confirms that the final required age-group value is one of the allowed 18-or-older values
-4. User starts payment
-5. Payment provider confirms success
-6. System marks request as paid
-7. System triggers AI judgment and diagnosis generation
-8. Result page is created
-9. Result URL is sent by email
+2. User reviews or corrects the selected age group and relevant customer-facing consultation/contact facts
+3. Server confirms the allowed age-group value and current server-owned purchase eligibility
+4. User reviews the final JPY 980 purchase terms
+5. User starts the future Payment Charter-defined payment flow
+6. Server-authoritative provider evidence verifies payment success; browser display is not authority
+7. System issues exactly one assessment grant for the verified purchase
+8. System triggers AI judgment and assessment generation
+9. Result page is created and delivery runs
+10. The assessment grant is consumed exactly once under Charter-defined recovery rules
 
 The production server validation described above is required before public release and is not implemented by Task 18C-R1. The age gate uses the required age-group selection; it does not use a separate age checkbox, date of birth, or identity document.
 
@@ -90,7 +100,7 @@ Manual payment confirmation is not the target public flow.
 
 Manual payment confirmation may be used only during development, QA, or emergency incident handling.
 
-Payment provider webhook or success verification is required before public release.
+Payment provider webhook or other server-authoritative success verification is required before public release. The exact PAY.JP event, signature, ordering, retry, reconciliation, timeout, and recovery rules remain Payment Charter decisions.
 
 ### Exceptional post-payment fulfillment failure
 

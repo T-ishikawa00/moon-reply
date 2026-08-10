@@ -2,9 +2,17 @@
 
 > **INTERNAL SELECTION GATE**
 >
-> **NO PROVIDER IS APPROVED OR SELECTED**
+> **PAY.JP IS THE STRATEGIC PRIMARY WEB DIRECTION**
+>
+> **NO PROVIDER HAS PASSED THIS FORMAL EVIDENCE-SELECTION GATE**
 >
 > **PAYMENT IMPLEMENTATION IS NOT AUTHORIZED**
+
+## Strategy versus evidence state
+
+`PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` records PAY.JP as the Human-agreed primary Web direction. That product decision does not prove category acceptance, merchant eligibility, payment-method availability, webhook/refund behavior, or production approval and does not satisfy this gate.
+
+The intended initial Web methods are supported cards and Apple Pay. PayPay, Google Pay, and multiple simultaneous Web providers are outside the initial direction. Older inquiry materials must be refreshed against the accepted Payment Charter and current official/provider evidence before Human authorizes sending.
 
 ## Required before provider selection
 
@@ -38,8 +46,9 @@
 Even after every item is completed and Human approves a provider:
 
 - sandbox implementation requires a separate task
+- the Payment Charter must be Human + ChatGPT accepted before Payment implementation
 - production payment remains separately gated
 - adding an SDK, checkout, API route, server action or Webhook is not authorized by this document
 - future price, subscription, coin, point or ticket changes require separate review and may require provider re-review
 
-Task 18C completes none of the selection checks above. PAY.JP, KOMOJU and STORES remain Not sent, Not approved, Not selected and Not scored.
+Task 18C completed none of the selection checks above. The `2026-08-10` strategy decision changes PAY.JP's product-strategy position only: PAY.JP, KOMOJU, and STORES remain Not sent, Not approved, not formally selected under this evidence gate, and Not scored.

@@ -6,6 +6,8 @@ Internal product/compliance specification.
 
 This is not legal advice and is not an implemented or publication-approved screen.
 
+The Payment Charter is not yet formulated or accepted. This screen specification does not authorize checkout, a Provider SDK/API, or a payment action.
+
 ---
 
 ## 0. Purpose
@@ -90,7 +92,7 @@ Before payment, the user must be able to:
 - return and revise request content
 - review and correct the age group selected on the request form
 - correct email address
-- review safety classification
+- review or correct the customer-facing consultation/contact facts used for eligibility, without exposing internal classification terminology
 - review purchase conditions
 - cancel without payment
 
@@ -110,8 +112,10 @@ The initial MVP uses a required self-declared age-group gate, not strict identit
 
 ## 6. Safety Gate
 
-A rejected request must never reach this screen.
+Only a current server-owned eligible result with `purchaseGateSatisfied=true` may reach a real contractual payment action.
 
-A needs-review request must not reach real payment until its production treatment is approved.
+Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error states must not reach real payment. Historical M1 `needs_review` and `rejected` review fixtures remain fail-closed evidence but are not the current purchase-authority vocabulary.
 
-The server must enforce the gate. A client-side display or hidden button is not sufficient.
+Waiting, not sending now, a temporary pause, or boundary-respecting support is not disqualifying by itself when the separate assistance eligibility is valid.
+
+The server must enforce the gate. A browser display, redirect, client-side state, visible button, or hidden button is not payment or purchase authority.

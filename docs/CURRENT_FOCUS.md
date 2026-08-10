@@ -1,5 +1,19 @@
 # CURRENT_FOCUS.md
 
+<!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
+## Current Focus — Payment Charter Planning
+
+- Current product direction: Web first, JPY 980 one-time purchase, PAY.JP as the primary Web direction, followed by paid Web validation, iOS / Apple IAP + RevenueCat, then Android / Google Play Billing + RevenueCat.
+- Canonical strategy: `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
+- Safety baseline: the explicit `2026-08-10` Human decision records the Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Task-local P6 artifacts retaining pre-acceptance `pending_human_*` labels remain immutable historical records and do not establish Payment or final JPY 980 readiness.
+- Immediate next formal work: Human + ChatGPT formulation and acceptance of the Payment Charter.
+- Payment Charter status: `not_yet_formulated_or_accepted`.
+- Implementation authority: `false`. Do not add PAY.JP SDK/API/checkout/webhook code, RevenueCat, Apple IAP, Google Play Billing, a purchase/entitlement migration, DB/Supabase changes, Runtime changes, or Payment Provider calls.
+- Formal PAY.JP evidence status remains separate: strategic primary direction does not equal provider approval, formal evidence-gate selection, or implementation authorization.
+
+The detailed AI-quality and historical task records below remain evidence, but they are not authority to displace Payment Charter as the current next planning task.
+<!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
 M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 is reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review on plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience from exact baseline fdbdf808f135655084de32aec2e57473c1beaf31. Human Visual Review accepts Package B's navy/paper/gold visual shell, brand atmosphere, desktop typography, draft discoverability, and observed draft interaction, but customer content density is failed_too_short and JPY980 readiness is not_ready; mobile, keyboard, 200% zoom, copy failure, and reduced motion remain incomplete. Product Doctrine fixes Hard Gates before reassurance and defines the target as 理解された感覚 → 安心 → 納得 → 行動. Current CustomerAssessmentProjectionV1 lacks stable access to opening, full letter, selected fact commentary, material unknowns, draft context, action rationales, closing, and consultation-specific limitations. The planned CustomerAssessmentExperienceProjectionV2 preserves v1 and the full Report while mapping existing Report text deterministically with no additional Provider Stage, paraphrase, factual rewrite, or filler. R2-A Projection, R2-B reassuring note, and R2-C Human Visual/Product review have pairwise-disjoint proposed scopes; existing Package C retains PB-05 factual and anxiety-safe writing quality. implementation_authorized=false. Provider / DB / Supabase are 0 / 0 / 0; Active Runtime remains v4; main, R4, and C2 remain unchanged and unauthorized. next_action=human_chatgpt_review_of_reassuring_assessment_experience_doctrine.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:END -->
@@ -318,7 +332,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Milestone 1 is closed and M2-P3 is complete; Milestone 2 remains incomplete. M2-P4 planning and I1-A through I2, I3-R1 Final Planning, R1-A, R1-B, R1-C1-R1, offline R1-C1-R2-R1, and offline R2-R2-R1 are Human / ChatGPT accepted complete. R1-C1 and R1-C1-R2 retain reviewed product verdicts `FAIL`. R2-R2 is `human_chatgpt_reviewed_fail_complete`: targeted repairs `3/3 PASS`, ownership sequence PASS, Decision Policy equivalence PASS, Decision Facts semantic completeness FAIL, and frozen targeted verdict FAIL. R2-R2-R1 acceptance used no Provider call or evidence rewrite and does not establish Provider quality or an eight-case PASS. The next candidate is `M2-P4-I3-R1-C1-R3 Final Eight-Case PB-01 Provider Confirmation`; it is unauthorized. C2 Runtime activation, E1/E2, final I3 acceptance, release, and merge to `main` remain unauthorized or pending; active Runtime remains catalog v4 and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+The next formal work is the Payment Charter planning and Human + ChatGPT acceptance defined in `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`. It must resolve payment authority, idempotency, one-payment/one-assessment handling, unknown/recovery states, post-payment fulfillment failure, refund authority/operation, webhook, purchase linkage, secrets, observability, incidents, and future Store compatibility without implementing them. PAY.JP SDK/API, RevenueCat, Apple IAP, Google Play Billing, Provider calls, DB/Supabase/migration changes, Runtime changes, PR, main merge, and release remain unauthorized. Historical AI Provider confirmations and C2 remain separately unauthorized and are not the current task.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

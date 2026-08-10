@@ -1,49 +1,75 @@
-﻿# PAYMENT_POLICY.md
+# PAYMENT_POLICY.md
+
+## Status and Authority
+
+This is the concise policy for the initial paid product. The canonical cross-platform detail is `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
+
+- Product strategy: Human + ChatGPT agreed direction
+- Payment Charter: not yet formulated or accepted
+- Payment implementation: unauthorized and absent
 
 ## Initial Payment Policy
 
 Initial validation uses one-time payment:
 
-- 1相談 / 1鑑定ノート: 税込¥980
-- One-shot purchase
-- No automatic renewal
-- No coins
-- No points
-- No endless continuation
+- 1 consultation / 1 assessment note: JPY 980 including tax
+- one-shot purchase
+- no automatic renewal
+- no customer-facing coins
+- no customer-facing points
+- no endless continuation or anxiety-driven upsell
 
-The initial MVP does not use a free complete first reading, ad-supported complete reading, advertising, free tickets, free coins/points, or a repeatable first-free mechanism. The fictional sample report and product previews are the primary free experience.
+The initial MVP does not use a free complete first reading, ad-supported complete reading, in-product advertising or ad-supported monetization as a product revenue model, free tickets, free coins/points, subscription, or a repeatable first-free mechanism. The fictional sample report and product previews are the primary free experience.
 
-## Safety and Exceptional Downstream Failure
+This Payment Policy does not prohibit or govern external marketing or paid customer acquisition.
 
-Safety is evaluated before payment. Only `normal_allowed` may reach a future purchase flow. `needs_review`, `rejected`, invalid age, missing consent, contradictory input, and unknown/error states cannot purchase.
+The primary Web provider direction is PAY.JP. Intended initial Web methods are supported credit/debit cards and Apple Pay, all at the same JPY 980 total price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-based Web billing are not part of the initial direction.
 
-Later milestones must support the exceptional post-payment state requirement:
+PAY.JP direction is not provider approval, formal evidence-gate selection, an accepted Payment Charter, or implementation authorization.
+
+## Safety and Purchase Eligibility
+
+Safety and server-owned purchase eligibility are evaluated before payment. A future purchase flow may continue only when the current server result is eligible and `purchaseGateSatisfied=true`.
+
+Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error states fail closed before payment. A normal relationship outcome such as waiting, not sending now, a temporary pause, or boundary-respecting support is not a payment block by itself.
+
+Browser display, a redirect, an enabled button, or client-owned state is never payment or purchase authority. Payment implementation must not weaken or duplicate the accepted Safety authority.
+
+## Provider-Independent Product Right
+
+The future architecture must separate provider-specific transactions from the Moon Reply product right:
+
+```text
+verified external transaction
+  -> normalized Moon Reply purchase
+  -> one assessment grant
+  -> one fulfillment
+  -> consume once
+```
+
+The grant is an internal domain concept, not a customer-facing coin or point. This policy creates no schema, ledger, API, migration, or entitlement implementation.
+
+## Exceptional Downstream Failure and Refund
+
+The Payment Charter must define the authoritative behavior for payment success followed by LUNA, delivery, or Safety failure. The following remains only a conceptual failure path:
 
 ```text
 payment_succeeded
   -> fulfillment_blocked or fulfillment_failed
-  -> refund_required
-  -> operator_attention_required
-  -> refunded
+  -> recovery or refund decision
+  -> operator attention when required
+  -> final reconciled state
 ```
 
-A Safety-blocked fulfillment must not deliver a normal report. Recoverable technical failure may be retried; unrecoverable or unfulfillable service is a full-refund candidate with duplicate-refund prevention, reason/state recording, operator notification, and user-status communication.
+Refund eligibility, authority, operation, deadlines, fee treatment, provider API capability, duplicate-refund prevention, retry/reissue rules, and customer communication are unresolved until the Payment Charter and provider evidence are accepted.
 
-Automatic refunds, provider refund API capability, fee reimbursement, refund deadlines, reflection timing, and concrete operator-console steps remain unresolved until provider selection and later specification.
+## Long-Term Direction
 
-## Candidate Providers
+- Web: PAY.JP direction
+- iOS: Apple IAP + RevenueCat
+- Android: Google Play Billing + RevenueCat
+- Subscription: future coexistence candidate only after repeat-demand evidence; one-time purchase is not automatically removed
 
-- PAY.JP
-- KOMOJU
-- STORES
+## Current Provider Evidence State
 
-## Excluded / High Risk
-
-- Stripe
-- Square
-
-## Status
-
-Provider availability must be checked using the complete functional description: AI relationship-message analysis and decision-support digital report, user-facing `鑑定ノート` / `鑑定書` terminology, no divination or supernatural method, no true-feeling or future guarantee, and the safety gate. The provider must determine category treatment; no exemption or approval is assumed.
-
-Task M1-P1-R1 does not send an inquiry, select a provider, implement payment/refunds, or convert this policy into publication-ready legal copy.
+No provider inquiry or Provider call is created by this policy. Written evidence, formal provider selection, sandbox authorization, production authorization, and implementation remain separately gated by the evidence documents under `docs/payment/`.
