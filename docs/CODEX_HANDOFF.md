@@ -1,24 +1,25 @@
 # CODEX_HANDOFF.md
 
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
-## Active handoff — Payment Charter v1 Candidate
+## Active handoff — Payment Charter v1 Accepted
 
-- Task / branch / exact baseline: Payment Charter v1 Candidate planning-only documentation synchronization / `docs/payment-charter-v1-candidate` / `32d48c846378859fd5c182aa9b47f8f30daa9789`.
-- Candidate status: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT acceptance is pending, implementation authority is `false`, and production authorization is absent.
-- Exact task scope: 31 documentation paths only (`1` new / `30` updates), with no code, package, lock, config, migration, Provider, DB/Supabase, or Runtime mutation.
-- Canonical authority: `docs/ROADMAP.md` controls high-level delivery order; `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` remains the canonical Payment / Platform / Monetization strategy; `docs/payment/PAYMENT_CHARTER.md` is the unaccepted Candidate; Provider evidence files control factual approval and selection.
+- Task / branch / exact parent: Payment Charter v1 Human + ChatGPT acceptance synchronization / `docs/payment-charter-v1-candidate` / `b6f38586fadd2a17034810dbb139465af5eade2f`.
+- Charter status: `human_chatgpt_accepted_complete`; Human + ChatGPT acceptance date is `2026-08-12`, implementation authority is `false`, and production authorization is absent.
+- Acceptance lineage: original Candidate `7aeb9ecbc5a786b895f9280112f13b0629730429`; integrated-review correction `b6f38586fadd2a17034810dbb139465af5eade2f`; explicit `2026-08-12` Human Delivery/Recovery Email Verification decision.
+- Exact task scope: 15 documentation paths only (`0` new / `15` updates), with no code, package, lock, config, migration, Provider, DB/Supabase, or Runtime mutation.
+- Canonical authority: `docs/ROADMAP.md` controls high-level delivery order; `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` remains the canonical Payment / Platform / Monetization strategy; `docs/payment/PAYMENT_CHARTER.md` is the accepted provider-independent Charter; Provider evidence files control factual approval and selection.
 - Current product: one consultation / one assessment note / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points.
 - Platform order: Web and real paid validation -> iOS / Apple IAP + RevenueCat -> Android / Google Play Billing + RevenueCat -> repeat-purchase analysis -> subscription only if demand supports it.
 - Web direction: PAY.JP is the strategic primary direction; intended initial methods are supported cards and Apple Pay at the same JPY 980 price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-for-Web-uniformity are excluded from the initial direction.
-- Evidence distinction: PAY.JP strategic direction is not merchant/category approval, written provider evidence, formal evidence-gate selection, Payment Charter acceptance, or implementation authorization. No inquiry or Provider call was made by this planning task.
+- Evidence distinction: Payment Charter acceptance is complete, while PAY.JP strategic direction is still not merchant/category approval, written provider evidence, formal evidence-gate selection, or implementation authorization. PAY.JP remains Not sent / Not approved / not formally selected; formal written evidence is absent. No inquiry or Provider call was made by this acceptance task.
 - Domain boundary: external payment/Store facts -> verified normalized Moon Reply purchase -> entitlement/assessment grant. The initial internal invariant is one valid purchase -> one assessment grant -> one fulfillment -> consume once. This is conceptual only and authorizes no schema, migration, DB, ledger, or API.
 - Safety: the explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at the Safety HEAD baseline. Older P6 task-local `pending_human_*` labels remain immutable task-time records; this newer decision does not establish final JPY 980 readiness or Payment authority.
-- Delivery-email mailbox verification: `proposed_required_control_pending_human_decision`; it is not Human Accepted.
+- Delivery/Recovery Email Verification: `accepted_required_control_with_trusted_session_reuse`. First or untrusted-session real Payment requires server-authoritative mailbox-control evidence bound to the current purchase authority/Purchase Intent. A valid trusted session bound to the unchanged verified email may be reused; email change or invalid/unavailable trusted state requires reverification. Trusted state is neither Payment nor Safety authority, is never client-self-asserted, and does not create mandatory login or an account.
 - Professional review: optional and not a Paid Launch or Production Payment hard gate under the explicit `2026-08-11` Human decision. Current official-source, actual Product/Provider behavior, public-wording, and Customer-rights review remains required; material unresolved legal obligations remain blockers.
 - Operations performed by this task: Provider / Payment API / DB / Supabase / Runtime = `0 / 0 / 0 / 0 / 0`.
 - Downstream review-only legal UI synchronization remains a separate unauthorized implementation follow-up before public paid release.
-- Next action: `Human + ChatGPT integrated review of Payment Charter v1 Candidate`.
-- Hard boundary: no PAY.JP SDK/API/checkout/webhook, RevenueCat, Apple IAP, Google Play Billing, Provider call, DB/Supabase/migration, Runtime, downstream legal UI implementation, PR, main merge, force push, or release is authorized.
+- Next action: `Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`; review the draft, refresh factual questions if necessary, verify the official inquiry path, and obtain explicit Human send approval. Do not send in this task.
+- Hard boundary: no inquiry send, PAY.JP SDK/API/checkout/webhook, RevenueCat, Apple IAP, Google Play Billing, Provider call, DB/Supabase/migration, Runtime, downstream legal UI implementation, PR, main merge, rebase, force push, or release is authorized.
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
@@ -439,7 +440,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-The next formal work is Human + ChatGPT integrated review of the formulated Payment Charter v1 Candidate. Do not treat the Candidate as accepted, infer PAY.JP API behavior, or begin implementation. Provider evidence and formal selection remain separate. Delivery-email mailbox verification remains `proposed_required_control_pending_human_decision`; professional review is optional, while current-source/evidence review and resolution of material legal obligations remain required. Historical AI Provider work remains frozen; no AI Provider rerun, C2, Payment Provider call, DB/Supabase change, Runtime activation, downstream review-only legal UI synchronization, PR, or main merge is authorized.
+Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`, and Payment implementation authority remains `false`. The next formal work is Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review. Review the existing inquiry draft against the accepted Charter, refresh factual questions where necessary, verify the current official inquiry path, and obtain explicit Human approval before any later send. Do not infer PAY.JP API behavior or begin implementation. PAY.JP remains Not sent / Not approved / not formally selected; written evidence is absent. Delivery/Recovery Email Verification is `accepted_required_control_with_trusted_session_reuse`; trusted state is server-verifiable, neither Payment nor Safety authority, and no-login/account boundaries remain unchanged. Professional review is optional, while current-source/evidence review and resolution of material legal obligations remain required. Historical AI Provider work remains frozen; no inquiry send, AI Provider rerun, C2, Payment Provider call, DB/Supabase change, Runtime activation, downstream review-only legal UI synchronization, PR, or main merge is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

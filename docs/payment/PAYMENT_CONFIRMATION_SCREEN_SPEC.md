@@ -6,7 +6,7 @@ Internal product/compliance specification.
 
 This is not legal advice and is not an implemented or publication-approved screen.
 
-The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`, but is not Human + ChatGPT accepted. This screen becomes subordinate to the Charter only after acceptance and separate implementation authorization; it does not authorize checkout, a Provider SDK/API, or a payment action.
+Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`. This specification is subordinate to the accepted Charter, but Charter acceptance and this specification do not authorize screen implementation, checkout, a Provider SDK/API, or a payment action.
 
 ---
 
@@ -98,7 +98,23 @@ Before payment, the user must be able to:
 
 ---
 
-## 5. Age Eligibility Gate
+## 5. Delivery/Recovery Email Verification
+
+The final confirmation must use a currently verified delivery/recovery email bound to the current purchase authority and Purchase Intent.
+
+If the Customer edits the email:
+
+- the previous verification binding cannot silently carry over;
+- the current purchase authority must not treat the new email as verified; and
+- the flow must return to the required mailbox-verification step before real Payment.
+
+If a still-valid trusted session is server-verifiably bound to the same unchanged verified email, repeat verification is not required merely because the Customer is buying another assessment. Safety eligibility and final purchase confirmation are still required for every Purchase.
+
+Browser, client, or localStorage state alone cannot assert verified or trusted status. The trusted session is neither Payment authority nor Safety authority and does not introduce mandatory account creation or login. Exact verification and session UI/implementation remain separately unauthorized.
+
+---
+
+## 6. Age Eligibility Gate
 
 - Do not use a dedicated `18歳以上です` checkbox.
 - Use the required age-group selection made on the request form.
@@ -110,7 +126,7 @@ The initial MVP uses a required self-declared age-group gate, not strict identit
 
 ---
 
-## 6. Safety Gate
+## 7. Safety Gate
 
 Only a current server-owned eligible result with `purchaseGateSatisfied=true` may reach a real contractual payment action.
 

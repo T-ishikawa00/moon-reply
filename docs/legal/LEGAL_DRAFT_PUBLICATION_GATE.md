@@ -103,6 +103,9 @@ PAY.JP、KOMOJU、STORESはいずれもNot sent、Not approved、Not selected、
 - [ ] Safety gateがサーバー側で強制される
 - [ ] `rejected`が決済へ到達しない
 - [ ] `needs_review`が未承認のまま決済へ到達しない
+- [ ] 初回または有効なtrusted sessionがない購入では、実決済前にdelivery/recovery mailbox ownership verificationがserver-sideで強制される
+- [ ] trusted delivery/recovery verification stateがserver-authoritativeであり、browser/client/localStorageから自己申告できない
+- [ ] delivery/recovery email変更またはtrusted sessionの失効・取消・無効・不在時に再検証され、Request flow・最終確認・結果配信・recoveryで同じbindingが使われる
 - [ ] AI payloadにemail、payment ID、internal token等が含まれない
 - [ ] マーケティング同意が任意で結果通知と分離される
 - [ ] 法務ページのリンク切れがない

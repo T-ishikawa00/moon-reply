@@ -44,9 +44,9 @@ Current status:
 - M2-P2-A-R1 Successor Tool Allowlist Correction is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`. M2-P2-A Zero-Cost Token & Cost Estimator is Human / ChatGPT accepted and complete at accepted estimator implementation commit `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. The accepted evidence covers exactly six scenarios, deterministic dry-run envelopes, oracle isolation, synthetic upstream profiles, LOW / CENTRAL / HIGH estimate bands, no-cache conservative costs, deterministic JSON and Markdown reports, and generated-report hash `0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f`. M2-P2-B0-R1 is accepted and complete at `a757e7f28affe29a423ff817872a1a7f650a7fd2`. M2-P2-B0-R2 is accepted and complete at `88b456622950622c35510f4b3b9d19abbd9ec8da`; it preserves the accepted historical 16-file snapshot and makes all M2-P2-A scope gates pass without adding B0 to that snapshot. The exact 18-file M2-P2-B0 contract implementation at `cf75679f2d116132f7519256cd762ba1a51a0af9` has completed automated validation and Human / ChatGPT final review and is accepted and complete. M2-P2-B1-A-R1 Successor Tool Allowlist Correction and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1-R1 is Human / ChatGPT accepted and complete at correction commit `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`; M2-P2-B1-B1 is Human / ChatGPT accepted and complete at implementation commit `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at correction commit `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A Dormant OpenAI Live Binding Foundation is Human / ChatGPT accepted and complete at implementation commit `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. Its HTTPS executor and environment-secret provider remain dormant: live and paid authorization are false, the approval record is absent, actual environment reads, secret resolutions, HTTPS requests, and provider calls are zero, and API spend is USD 0. M2-P2-B1-B2-B paid calibration execution remains unauthorized and not started.
 - M2-P2-B1-B2-B0-R1 historical-scope and execution-boundary correction is Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f`. M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package is Human / ChatGPT accepted and complete at `e8b369baa14ff417fed19d75f31c733dd5c8d240`. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling and are not the active product path. M2-P2-B1-B2-B1 true external approval creation and paid execution remain unauthorized and not started.
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
-- PAY.JP is the Human-agreed strategic primary Web direction, but no provider inquiry has been sent and no provider has passed the formal written-evidence selection gate. Strategy, provider approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
+- PAY.JP is the Human-agreed strategic primary Web direction, but no provider inquiry has been sent and no provider has passed the formal written-evidence selection gate. Strategy, provider approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states; Charter acceptance is complete and does not change the other states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`. Acceptance remains pending, and the next formal work is Human + ChatGPT integrated Candidate review. Provider written evidence/formal selection and Payment implementation remain separate and incomplete. No provider inquiry, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
+- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. Delivery/Recovery Email Verification is accepted as `accepted_required_control_with_trusted_session_reuse`. The next formal Payment work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review. PAY.JP remains Not sent, Not approved, and not formally selected; written category evidence is absent. No provider inquiry, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -55,11 +55,15 @@ The initial paid Web MVP is complete only at Milestone 9, when a first real unkn
 1. open the public LP;
 2. submit a reading request;
 3. pass production server-side age and safety validation;
-4. pay JPY 980 once;
-5. trigger AI analysis and report generation;
-6. open the result through an unguessable URL;
-7. receive the result URL by email; and
-8. submit feedback or provide traceable support follow-up.
+4. establish a verified delivery/recovery email through current-flow mailbox verification or a valid server-verifiable trusted session bound to the unchanged email;
+5. complete the final JPY 980 purchase confirmation;
+6. pay JPY 980 once;
+7. trigger AI analysis and report generation;
+8. open the result through an unguessable URL;
+9. receive or recover the result through the verified delivery/recovery channel; and
+10. submit feedback or provide traceable support follow-up.
+
+The initial paid Web MVP remains no-login. A trusted delivery/recovery session is not a Customer account and cannot replace Safety eligibility or final purchase confirmation.
 
 The operator must be able to identify the order, payment state, generation state, and delivery state; handle failures and refund/escalation cases; and stop new paid orders when necessary.
 
@@ -154,13 +158,16 @@ Goal: use the real review URL and an honest service description to obtain writte
 
 Sequence:
 
-1. Human approves the final PAY.JP inquiry.
-2. The inquiry is sent through a verified official channel.
-3. The response is recorded verbatim as evidence.
-4. If PAY.JP is unavailable or unsuitable, proceed to KOMOJU.
-5. STORES or another provider is considered only when authorized.
-6. Written conditions are compared.
-7. Human selects the provider.
+1. Review the existing PAY.JP inquiry draft against the accepted Payment Charter v1.
+2. Refresh factual questions where necessary without inventing Provider behavior.
+3. Verify the current official PAY.JP contact/inquiry path.
+4. Human explicitly approves the final PAY.JP inquiry before sending.
+5. The inquiry is sent through the verified official channel only after that approval.
+6. The response is recorded verbatim as evidence.
+7. If PAY.JP is unavailable or unsuitable, proceed to KOMOJU only when authorized.
+8. STORES or another provider is considered only when authorized.
+9. Written conditions are compared.
+10. Human selects the Provider under the formal evidence gate.
 
 A generic support response, invitation to apply, silence, or SDK availability is not provider approval.
 
@@ -172,7 +179,7 @@ Goal: complete the fulfillment flow using mock-paid or test-paid state before re
 
 This is future production-path hardening and delivery work. It is distinct from the internal-only Milestone 2 target and remains unauthorized.
 
-Includes request submission and Supabase persistence; production server validation of allowed age-group values; production enforcement of the accepted server-owned pre-payment eligibility contract; no payment path unless the current eligible result has `purchaseGateSatisfied=true`; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence. Historical M1 `normal_allowed` / `needs_review` / `rejected` fixtures remain historical review evidence and are not the current purchase authority.
+Includes request submission and Supabase persistence; production server validation of allowed age-group values; production enforcement of the accepted server-owned pre-payment eligibility contract; no payment path unless the current eligible result has `purchaseGateSatisfied=true`; server-authoritative delivery/recovery mailbox verification and trusted-session binding consistent with the accepted Charter; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence. Historical M1 `normal_allowed` / `needs_review` / `rejected` fixtures remain historical review evidence and are not the current purchase authority.
 
 Exit criterion: excluding real card payment, one request can move from submission to stored result and delivery in a controlled test environment.
 
@@ -248,7 +255,7 @@ These are candidates, not approved immediate tasks.
 
 ## 15. Change-Control Rule
 
-No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins. Payment Charter Candidate formulation is a cross-cutting prerequisite; it does not equal Charter acceptance and does not by itself complete or skip a delivery milestone.
+No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins. Payment Charter v1 is accepted as a cross-cutting authority, but its acceptance does not authorize implementation and does not by itself complete or skip a delivery milestone.
 
 Each milestone must be planned, implemented where applicable, validated, committed as bounded work, and accepted by Human. A roadmap update does not itself authorize implementation. Changes to milestone order, completion definition, price, age policy, safety-before-payment rule, provider direction, platform order, monetization model, or MVP scope require explicit Human approval and an update to the controlling documents.
 # M2-P2-B1-B2-A dormant live-binding checkpoint (2026-07-28)

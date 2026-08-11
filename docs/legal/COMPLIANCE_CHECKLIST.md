@@ -41,6 +41,9 @@ Never mark an item complete without evidence.
 - [ ] Payment provider approved the business category
 - [ ] Safety check runs before payment
 - [ ] Rejected safety cases cannot reach payment
+- [ ] Delivery/recovery mailbox ownership verification is enforced before first or untrusted-session real Payment
+- [ ] Trusted delivery/recovery verification state is server-authoritative and cannot be self-asserted by browser, client, or localStorage state
+- [ ] Delivery/recovery email change or an invalid, expired, revoked, or unavailable trusted session requires reverification before real Payment
 - [ ] Marketing email consent is optional and separate
 - [ ] Result notification consent is distinguished from marketing
 - [ ] Fake reviews/metrics prohibited

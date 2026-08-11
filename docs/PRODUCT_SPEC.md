@@ -475,7 +475,7 @@ Subscriptionは長期候補として保持するが、価格、月間回数、�
 
 ### Web/PWA段階
 
-Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProduct戦略であり、provider承認、書面証拠に基づく正式選定、Payment Charter受入または実装権限ではない。実際の機能と表示に基づく書面回答を得るまで取扱可否を断定しない。
+Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProduct戦略であり、provider承認、書面証拠に基づく正式選定または実装権限ではない。Payment Charter v1受入は完了したが、それらの別gateを満たさない。実際の機能と表示に基づく書面回答を得るまで取扱可否を断定しない。
 
 初期Web決済方法の方向：
 
@@ -491,13 +491,16 @@ Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProd
 
 > 利用者が入力した恋愛関係の状況とメッセージをAIが整理・分析し、文面の受け取られ方として考えられる可能性、送る・待つ・修正するといった判断材料、メッセージ案および短期的な行動案を、デジタルレポートとして提供するサービス。ユーザー向けに「鑑定ノート」「鑑定書」という名称を使用するが、タロット、占星術、生年月日、霊感その他の占術・超自然的手法は使用せず、相手の本心や未来の出来事を断定・保証しない。
 
-### Payment Charter v1 Candidate reviewとMilestone 4でやること
+### Payment Charter v1 accepted後とMilestone 4でやること
 
-- Payment Charter v1 Candidateは`payment_charter_v1_candidate_ready_pending_human_chatgpt_review`として策定済み。次の正式作業はHuman + ChatGPT integrated reviewであり、受入は未完了
-- `docs/ROADMAP.md` の外部問い合わせgateに従い、PAY.JPへの正確な照会文をHumanが最終承認する
-- 送信時は公式窓口を再確認し、送信本文と回答を証拠として保存する
+- Payment Charter v1は`2026-08-12`に`human_chatgpt_accepted_complete`。Candidate commitsはhistorical lineageであり、Payment implementation authorityは`false`
+- 次の正式作業は`Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`
+- 既存PAY.JP inquiry draftをaccepted Charterに照らしてreviewし、必要なfactual questionをrefreshする
+- current Provider contact/inquiry pathを確認し、PAY.JPへの正確な照会文をHumanが送信前に明示承認する
+- Human承認後にのみ送信し、送信本文と回答を証拠として保存する
 - 書面回答前にproviderを正式承認・選定したと扱わない
-- Charter受入と別のimplementation authorization前にSDK/API実装へ進まない
+- 書面証拠に基づくformal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない
+- 現在のPAY.JPはNot sent / Not approved / not formally selectedで、formal written evidenceはabsent
 
 ---
 
@@ -675,13 +678,13 @@ AI利用説明例：
 
 ## 19. 返金ポリシー
 
-Planning direction（Payment Charter未受入）：
+Accepted Charter direction（Payment implementation authorityは`false`）：
 
-既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。Payment Charter v1 Candidateは、正しく作成された初回Product charge 1件（`JPY 980`）について、通常Product返金を`JPY 0`または`full JPY 980`とし、Customer-facingな部分返金Product policyを初期MVPでは設けない方向を提示した。ただしCharter自体は未受入であり、Accepted policyまたは実装権限ではない。
+既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。Accepted Payment Charter v1は、正しく作成された初回Product charge 1件（`JPY 980`）について、通常Product返金を`JPY 0`または`full JPY 980`とし、Customer-facingな部分返金Product policyを初期MVPでは設けないProduct原則を受け入れた。これはrefund実装、Provider操作またはProduction Payment権限ではない。
 
 この通常Product返金方針は、P0 Payment Integrity Incidentの経済額是正を制限しない。重複成功charge、誤額、誤Customer、誤Requestその他の不正な経済chargeでは、実際に影響した意図しない経済額を是正し、Moon ReplyのPayment Integrity欠陥によってCustomerを正当な1購入`JPY 980`を超える負担に残さない。誤額取引の是正は、通常価格が`JPY 980`であることを理由に`JPY 980`へ上限設定しない。意図しない超過額の返還は、通常Productの部分返金を提供することとは別概念であり、具体的なProvider操作はevidence-gatedのまま決定しない。
 
-以下は返金判断候補として保持する。最終authority、操作、Provider確認方法、期限、fee扱いおよびCustomer通知は、Charter受入、provider evidence、current-source/customer-rights reviewおよび別個のimplementation authorizationを経て確定する。現時点のAccepted policyまたはProvider事実として扱わない。
+以下はaccepted Charter原則に沿う通常Product full-refund候補として保持する。個別の最終判断、操作、Provider確認方法、期限、fee扱いおよびCustomer通知は、provider evidence、current-source/customer-rights reviewおよび別個のimplementation authorizationを経て確定する。Provider事実または実装済みpolicyとして扱わない。
 
 - 例外的に決済成功後のSafety再判定で通常鑑定を提供できない場合
 - サービス側都合で納品できない場合
@@ -702,6 +705,26 @@ Payment Integrity remediation候補は別に保持する。
 
 Safetyとserver-owned purchase eligibilityは決済前に実施し、現在のeligible resultかつ`purchaseGateSatisfied=true`の場合のみ将来の購入フローへ進める。clarification、unsafe、urgent、unsupported professional assistance、年齢/同意不備、矛盾入力、unknown/errorはfail closedとする。旧M1の`normal_allowed` / `needs_review` / `rejected`はhistorical fixture vocabularyであり、現在のpurchase authorityではない。
 
+Accepted conceptual flowは次のとおり。
+
+```text
+consultation
+  -> Safety / purchase eligibility
+  -> delivery/recovery email
+  -> mailbox verification if no valid trusted session
+  -> server-authoritative verified-email binding
+  -> final JPY 980 purchase confirmation
+  -> Payment
+  -> authoritative verification
+  -> one Purchase / one Grant / one Logical Assessment
+  -> fulfillment
+  -> result delivery/recovery
+```
+
+still-valid trusted sessionがunchanged verified emailへbindされているrepeat purchaseではmailbox再検証を省略できる。Safety eligibilityとfinal purchase confirmationは毎回必須である。email変更、valid trusted session不在、expired/revoked/invalidated/unavailable state、別browser/device、sensitive recoveryまたは既存bindingを安全に確認できない場合は再検証する。
+
+trusted stateはserver-verifiableであり、browser/client/localStorageだけで`verified=true`相当をassertできない。trusted sessionはPayment authorityでもSafety authorityでもない。初期MVPはno-loginを維持し、mandatory account、password/Google/Apple login、profileまたはMy Pageを導入しない。mailbox controlはlegal identityを証明しない。OTP/Magic Link、Provider、session/cookie/token実装、lifetime、refreshおよびrevocationは未解決であり、実装を承認しない。
+
 将来、決済成功後にSafety再判定、AI出力Safety、継続失敗またはシステム障害で提供不能となる例外に備え、下流Milestoneでは次の状態列を設計する。
 
 ```text
@@ -712,7 +735,7 @@ payment_succeeded
   -> refunded
 ```
 
-提供不能時に通常レポートを出さないことは維持する。Candidateはno-recharge、同一Logical Assessmentのbounded fulfillment recoveryおよびindefinite processing禁止を提案する。経済的Purchaseが有効なままで、他の正当なrefund/reversalがない場合はdeliveredまたはservice-failure full-refund terminal handlingへ収束させる。一方、Customer-requested refund、法令上必要なrefund/cancellation、Provider/Store reversal、dispute/chargeback resolution等の正当に適用される別のreconciled terminal outcomeを排除せず、いずれも別のPayment、Purchase、GrantまたはLogical Assessmentを作らない。これらは未受入であり、自動返金、Provider API、手数料、期限、反映日数、具体的状態名および操作はProvider evidenceと将来のimplementation/production-readiness判断まで断定しない。
+提供不能時に通常レポートを出さないことは維持する。Accepted Charterはno-recharge、同一Logical Assessmentのbounded fulfillment recoveryおよびindefinite processing禁止を定める。経済的Purchaseが有効なままで、他の正当なrefund/reversalがない場合はdeliveredまたはservice-failure full-refund terminal handlingへ収束させる。一方、Customer-requested refund、法令上必要なrefund/cancellation、Provider/Store reversal、dispute/chargeback resolution等の正当に適用される別のreconciled terminal outcomeを排除せず、いずれも別のPayment、Purchase、GrantまたはLogical Assessmentを作らない。自動返金、Provider API、手数料、期限、反映日数、具体的状態名および操作はProvider evidenceと将来のimplementation/production-readiness判断まで断定しない。post-payment / pre-fulfillment Customer cancellation policyもPaid Launch前の未解決事項として維持する。
 
 ---
 
@@ -894,9 +917,9 @@ LPに人を集められない場合は、商品ではなく集客の問題とし
 
 ## 23. 直近の次アクション
 
-次の正式作業は、策定済みPayment Charter v1 CandidateのHuman + ChatGPT integrated reviewである。Candidateはprovider-independentなpayment success authority、browser非authority、idempotency、1 intended purchaseのintegrity、unknown/recovery、fulfillment、refund、webhook、ledger、secrets、observability、incidentおよび将来Store互換性を提示するが、未受入であり実装権限ではない。
+Payment Charter v1は`2026-08-12`にHuman + ChatGPT accepted completeとなった。次の正式作業は`Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`であり、実装ではない。既存draftのaccuracy review、必要なfactual question refresh、current inquiry path確認および送信前の明示的Human approvalまでを行う。
 
-Payment Charter v1 Candidate statusは`payment_charter_v1_candidate_ready_pending_human_chatgpt_review`で、Charter v1は未受入である。PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
+Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`、Payment implementation authorityは`false`である。PAY.JPはNot sent / Not approved / not formally selectedで、formal written evidenceはabsent。PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
 
 ---
 
@@ -904,7 +927,7 @@ Payment Charter v1 Candidate statusは`payment_charter_v1_candidate_ready_pendin
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-現在の次作業はPayment Charter v1 CandidateのHuman + ChatGPT review / documentationのみ。CharterのHuman + ChatGPT受入と、その後の別個のimplementation authorizationなしに、以下へ進まない。
+現在の次作業はPost-Charter PAY.JP inquiry accuracy refresh and Human send-readiness reviewのみ。Provider inquiryは送信せず、formal written evidence、evidence-gate selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - PAY.JP SDK/API/checkout/webhook
 - RevenueCat

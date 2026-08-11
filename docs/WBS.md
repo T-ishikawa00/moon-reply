@@ -9,8 +9,10 @@
 - [x] Conceptually agreed provider-independent boundary: external transaction -> verified normalized Moon Reply purchase -> entitlement/assessment grant -> consume once
 - [x] Subscription retained as a future coexistence candidate, with approximately 30–50 paid customers or 50–100 paid assessments recorded only as non-binding Product Owner heuristics
 - [x] Explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at Safety HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`; historical task-local pending-review labels remain immutable and final JPY 980 readiness remains separate
-- [x] Payment Charter v1 Candidate formulation — `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
-- [ ] Human + ChatGPT Payment Charter v1 acceptance — next formal work
+- [x] Payment Charter v1 Candidate formulation — historical lineage at `7aeb9ecbc5a786b895f9280112f13b0629730429`, corrected by `b6f38586fadd2a17034810dbb139465af5eade2f`
+- [x] Human + ChatGPT Payment Charter v1 acceptance — `human_chatgpt_accepted_complete` on `2026-08-12`; implementation authority remains `false`
+- [x] Delivery/Recovery Email Verification Product/Privacy direction — `accepted_required_control_with_trusted_session_reuse`; server-verifiable trust, repeat reuse only for unchanged verified email, reverification on email/trust change, no-login/account boundary preserved
+- [ ] Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review — next formal work; review draft, refresh factual questions, verify official inquiry path, obtain explicit Human approval; do not send under this item
 - [ ] PAY.JP written category evidence and formal evidence-gate selection — not completed
 - [ ] Payment implementation, including PAY.JP SDK/API/checkout/webhook, purchase DB/migration, and refund execution — unauthorized
 - [ ] RevenueCat, Apple IAP, Google Play Billing, Runtime, PR, and main integration — unauthorized
@@ -953,9 +955,9 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 - [x] Milestone 1: fixed-fixture Reviewable Web MVP — Human-accepted, complete, and closed
 - [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, M2-P4 planning, M2-P4-I1-A through I2, I3-R1 Final Planning, R1-A contract-only implementation, and R1-B exact 22-path offline integration are accepted and complete; I3 offline implementation accepted and one synthetic live smoke succeeded; R1-B exact `9/9` review correction is resolved; C1 bounded execution protocol is Human / ChatGPT accepted complete with product-quality `FAIL`; final I3 acceptance / main merge, C2 Runtime activation, scored provider quality acceptance, and Milestone 2 completion remain pending or not started
 - [x] Pre-payment Safety Engine / Safety UX — Human + ChatGPT accepted complete by the explicit `2026-08-10` Human decision; final JPY 980 readiness and Payment authority remain false
-- [ ] Payment Charter v1 — Candidate formulated; Human + ChatGPT acceptance pending; Candidate formulation does not complete or skip Milestones 2–6
+- [x] Payment Charter v1 — Human + ChatGPT accepted complete on `2026-08-12`; implementation remains unauthorized and Charter acceptance does not complete or skip Milestones 2–6
 - [ ] Milestone 3: Review Site Deployment
-- [ ] Milestone 4: Payment Provider Inquiry and Selection
+- [ ] Milestone 4: Payment Provider Inquiry and Selection — next formal subtask is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review; no inquiry has been sent
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
 - [ ] Milestone 6: Approved Provider Sandbox Payment
 - [ ] Milestone 7: E2E, Safety and Failure Operations

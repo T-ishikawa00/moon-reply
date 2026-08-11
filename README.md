@@ -6,7 +6,9 @@
 
 ## Current Phase
 
-Payment Charter v1 Candidate ready for Human + ChatGPT review; Payment implementation remains unauthorized.
+Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Payment implementation remains unauthorized.
+
+The next formal Payment work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review. PAY.JP remains Not sent, Not approved, and not formally selected.
 
 Current canonical planning:
 
@@ -22,7 +24,9 @@ Phase 1 MVP is not a full app.
 
 The public MVP target is an automated one-shot paid diagnosis flow:
 
-LP → self-hosted request form → accepted server-owned Safety/purchase eligibility → final JPY 980 confirmation → verified payment → one assessment grant → AI assessment → result delivery → feedback.
+LP → self-hosted request form → accepted server-owned Safety/purchase eligibility → delivery/recovery email → mailbox verification when no valid trusted session exists → verified-email binding → final JPY 980 confirmation → verified payment → one assessment grant → AI assessment → result delivery/recovery → feedback.
+
+The initial paid Web MVP remains no-login. A valid server-verifiable trusted session bound to the unchanged verified delivery/recovery email may be reused; Safety eligibility and final purchase confirmation are still required for every purchase.
 
 Development may use manual, mock, and QA modes, but the public MVP should automate normal diagnosis flow.
 

@@ -2,9 +2,9 @@
 
 ## 0. Purpose
 
-This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and, only after Human + ChatGPT acceptance, `docs/payment/PAYMENT_CHARTER.md`.
+This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and the accepted `docs/payment/PAYMENT_CHARTER.md`.
 
-No Payment API implementation is included or authorized by this document. The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`, but it is not accepted and grants no implementation authority.
+No Payment API implementation is included or authorized by this document. Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`, while Payment implementation authority remains `false`.
 
 The public MVP requires payment success verification before AI judgment or diagnosis generation.
 
@@ -47,7 +47,7 @@ PAY.JP has not passed the formal written-evidence selection gate. Need confirmat
 - platform rules around fortune-telling/counseling-like services
 - webhook or success verification support
 
-KOMOJU, STORES, BASE, Square, and other providers remain contingency evidence candidates, not parallel initial integrations. Provider approval, Payment Charter acceptance, and implementation authorization are separate decisions.
+KOMOJU, STORES, BASE, Square, and other providers remain contingency evidence candidates, not parallel initial integrations. Payment Charter acceptance is complete, but Provider approval, formal evidence-gate selection, and implementation authorization remain separate and incomplete.
 
 ---
 
@@ -59,12 +59,18 @@ Required sequence:
 2. Server validates that the required age-group value is one of the allowed 18-or-older values
 3. The accepted server-owned Safety and purchase-eligibility gate runs
 4. User proceeds only when the current result is eligible and `purchaseGateSatisfied=true`
-5. After Charter acceptance and separate implementation authorization, the Charter-defined server authority verifies payment success
-6. System triggers AI judgment and diagnosis generation
-7. Result page is created
-8. Result URL is sent by email
+5. User supplies or confirms the delivery/recovery email
+6. When no valid trusted session is bound to the same verified email, server-authoritative mailbox verification is completed
+7. The verified delivery/recovery email is bound to the current purchase authority and Purchase Intent
+8. User completes the final JPY 980 purchase confirmation
+9. After separate implementation authorization, the Charter-defined Payment flow begins
+10. Server-authoritative Provider evidence verifies Payment success
+11. The system normalizes one Purchase, issues one Assessment Grant, and starts one Logical Assessment
+12. Fulfillment completes and the canonical result is delivered or recovered through the verified delivery/recovery channel
 
-The form → server-side age-group validation → safety check → payment order must be maintained in the public flow.
+For a still-valid trusted session bound to the unchanged verified delivery/recovery email, step 6 may be skipped. Safety eligibility and final purchase confirmation cannot be skipped. A trusted session is neither Payment authority nor Safety authority, and browser/client/localStorage state alone cannot assert trusted or verified status.
+
+The request → server-side age-group validation → Safety/purchase eligibility → verified delivery/recovery email binding → final confirmation → Payment order must be maintained in the public flow. The initial MVP remains no-login; trusted delivery/recovery state is not a Customer account.
 
 Reason:
 
@@ -85,14 +91,18 @@ Public MVP payment flow:
 
 1. User passes safety screening and reaches the final confirmation screen
 2. User reviews or corrects the selected age group and relevant customer-facing consultation/contact facts
-3. Server confirms the allowed age-group value and current server-owned purchase eligibility
-4. User reviews the final JPY 980 purchase terms
-5. After Charter acceptance and separate implementation authorization, the user starts the Charter-defined Payment flow
-6. Server-authoritative provider evidence verifies payment success; browser display is not authority
-7. System issues exactly one assessment grant for the verified purchase
-8. System triggers AI judgment and assessment generation
-9. Result page is created and delivery runs
-10. The assessment grant is consumed exactly once under Charter-defined recovery rules
+3. User reviews or corrects the delivery/recovery email
+4. Server confirms the allowed age-group value and current server-owned purchase eligibility
+5. If no valid trusted session is bound to the same verified email, mailbox control is verified and server-authoritatively bound to the current purchase authority and Purchase Intent
+6. User reviews and confirms the final JPY 980 purchase terms
+7. After separate implementation authorization, the user starts the Charter-defined Payment flow
+8. Server-authoritative Provider evidence verifies Payment success; browser display is not authority
+9. System creates at most one normalized Purchase and issues exactly one Assessment Grant for the verified Purchase
+10. System starts one Logical Assessment and performs fulfillment
+11. Result delivery/recovery uses the currently verified delivery/recovery email and canonical Report
+12. The Assessment Grant is consumed exactly once under Charter-defined recovery rules
+
+When the Customer changes the delivery/recovery email, any prior binding cannot carry over silently and the new email must be verified before real Payment. A valid trusted session bound to the unchanged verified email may avoid repeat mailbox verification only; it cannot avoid Safety or final purchase confirmation.
 
 The production server validation described above is required before public release and is not implemented by Task 18C-R1. The age gate uses the required age-group selection; it does not use a separate age checkbox, date of birth, or identity document.
 
@@ -100,7 +110,7 @@ Manual payment confirmation is not the target public flow.
 
 Manual payment confirmation may be used only during development, QA, or emergency incident handling.
 
-Provider callback or other server-authoritative success verification is required before public release. The Candidate states provider-independent integrity rules, but exact PAY.JP events, signatures, ordering, retries, reconciliation evidence, timeouts, and recovery mechanics remain Provider-evidence-gated and unimplemented.
+Provider callback or other server-authoritative success verification is required before public release. The accepted Charter states provider-independent integrity rules, but exact PAY.JP events, signatures, ordering, retries, reconciliation evidence, timeouts, and recovery mechanics remain Provider-evidence-gated and unimplemented.
 
 ### Exceptional post-payment fulfillment failure
 
@@ -123,6 +133,8 @@ No payment, webhook, generation, refund, notification, or state-machine implemen
 ---
 
 ## 5. Payment Provider Inquiry Copy
+
+Current status: PAY.JP is Not sent, Not approved, and not formally selected; formal written evidence is absent. The next formal work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review: review this draft against the accepted Charter, refresh factual questions where necessary, verify the current official inquiry path, and obtain explicit Human approval before any send.
 
 Inquiry message:
 

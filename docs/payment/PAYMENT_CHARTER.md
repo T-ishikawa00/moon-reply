@@ -1,15 +1,22 @@
-# Payment Charter v1 Candidate
+# Payment Charter v1
 
 ## 1. Status and Authority
 
 - Candidate formulation date: `2026-08-11`
-- Status: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
-- Human + ChatGPT acceptance: pending
+- Acceptance date: `2026-08-12`
+- Status: `human_chatgpt_accepted_complete`
+- Human + ChatGPT acceptance: complete
 - Implementation authority: `false`
 - Canonical strategy: `PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
 - Provider-specific facts and approval remain separately evidence-gated.
 
-This Candidate formulates a provider-independent Payment and Product-integrity contract for review. It creates no API, SDK, checkout, webhook, schema, migration, Provider call, Runtime/LUNA change, production authorization, PR, main merge, or release authority.
+Acceptance lineage:
+
+- original Candidate: `7aeb9ecbc5a786b895f9280112f13b0629730429`;
+- integrated-review correction: `b6f38586fadd2a17034810dbb139465af5eade2f`; and
+- explicit `2026-08-12` Human decision on Delivery/Recovery Email Verification with trusted-session reuse.
+
+The Candidate formulation remains historical lineage. This accepted Charter is the current provider-independent Payment and Product-integrity authority. Acceptance creates no API, SDK, checkout, webhook, schema, migration, Provider call, Runtime/LUNA change, production authorization, PR, main merge, or release authority.
 
 The following states are distinct and must never be collapsed:
 
@@ -34,7 +41,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next action is `Human + ChatGPT integrated review of Payment Charter v1 Candidate`.
+The next formal work is `Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`. No inquiry is sent or authorized by this Charter acceptance.
 
 ## 2. Initial Product Contract
 
@@ -57,11 +64,15 @@ The required conceptual sequence is:
 `consultation`
 → `accepted server-owned Safety classification`
 → `purchaseGateSatisfied=true`
-→ `final purchase terms`
-→ `Purchase Intent`
+→ `delivery/recovery email`
+→ `mailbox verification when no valid trusted session exists`
+→ `server-authoritative verified-email binding to current purchase authority / Purchase Intent`
+→ `final purchase terms and confirmation`
 → `Payment`
 
-Browser state is never purchase authority. Any mutation of Safety-bound input that invalidates current purchase eligibility invalidates stale purchase authority. A prior Payment must never be silently reassigned to materially changed consultation content.
+For a still-valid trusted session bound to the unchanged verified delivery/recovery email, repeat mailbox verification may be skipped. Safety eligibility and final purchase confirmation remain required for every Purchase.
+
+Browser state is never purchase authority or trusted-email authority. Any mutation of Safety-bound input that invalidates current purchase eligibility invalidates stale purchase authority. A prior Payment must never be silently reassigned to materially changed consultation content.
 
 Safety controls whether assistance may be provided. Normal Product outcomes—such as waiting, pausing additional contact, or producing no current message draft—do not independently block purchase when the assistance scope remains eligible.
 
@@ -127,7 +138,7 @@ As supported by the selected Provider, provider-independent verification must va
 - Payment state;
 - absence of an already-successful conflicting Payment.
 
-All success paths converge on one server-controlled verification procedure. This Candidate does not define PAY.JP objects, statuses, fields, webhook events, fetch semantics, metadata, authentication/capture semantics, or signatures as facts.
+All success paths converge on one server-controlled verification procedure. This Charter does not define PAY.JP objects, statuses, fields, webhook events, fetch semantics, metadata, authentication/capture semantics, or signatures as facts.
 
 ## 7. Unknown Is Not Failure
 
@@ -143,7 +154,7 @@ If Moon Reply cannot determine whether an external charge succeeded:
 - allow only server-controlled verification or reconciliation;
 - resume repurchase or retry only after failure or cancellation-without-charge is authoritatively established.
 
-Customer recovery guidance must state that another payment is not required while the original status remains unresolved. No exact unknown-state timeout is set by this Candidate.
+Customer recovery guidance must state that another payment is not required while the original status remains unresolved. No exact unknown-state timeout is set by this Charter.
 
 ## 8. Webhook and Provider Callback Rules
 
@@ -204,7 +215,7 @@ Other reconciled terminal outcomes may legitimately apply, including:
 - a Provider- or Store-initiated reversal;
 - a dispute or chargeback financial resolution.
 
-These outcomes must not create another Payment, Purchase, Grant, Logical Assessment, or canonical Report. This Candidate does not invent exact terminal-state names that have not yet been decided.
+These outcomes must not create another Payment, Purchase, Grant, Logical Assessment, or canonical Report. This Charter does not invent exact terminal-state names that have not yet been decided.
 
 Once a service-failure refund terminal path is selected, late generation output must not automatically be published. The special duplicate-charge rule remains distinct: the one legitimate Purchase may still produce its legitimate Report while the excess unintended charge is refunded.
 
@@ -223,21 +234,64 @@ Result-access credentials must conceptually be:
 
 A support reference or Purchase lookup identity is not automatically disclosure authority. Routine Payment or delivery support should not require consultation body, partner messages, raw card number, CVC, or unnecessary sensitive assessment content. Payment and support observability must be privacy-minimized.
 
-This Candidate does not select an exact Result-token implementation or expiry.
+This Charter does not select an exact Result-token implementation or expiry.
 
-## 12. Delivery Email Ownership Verification
+## 12. Delivery/Recovery Email Verification
 
-Status: `proposed_required_control_pending_human_decision`
+Status: `accepted_required_control_with_trusted_session_reuse`
 
-Strong proposed direction: before a real Payment is created in the initial no-login Web MVP, Moon Reply should verify that the Customer controls the delivery/recovery email mailbox and bind that verified delivery address to the Purchase Intent.
+### First or untrusted-session purchase
 
-Rationale:
+Before any real economic charge is initiated, Moon Reply must have server-authoritative evidence that the Customer controls the delivery/recovery email mailbox. This may be established during the current purchase flow or by an existing still-valid trusted session already bound to the same verified email.
 
-- reduce typo-based disclosure of highly private relationship assessment content;
-- create a reliable no-login Customer recovery channel;
-- prevent Support from treating knowledge of an email address as identity.
+The verified delivery/recovery email must be bound to the current purchase authority and Purchase Intent before Payment.
 
-This control is **not Human Accepted**. It is the prominent unresolved Product/Privacy decision in this Candidate, and the exact verification mechanism is not selected.
+### Repeat purchase
+
+Moon Reply must not require mailbox verification again for every purchase merely because the Customer is buying another assessment. When the trusted session remains valid and the verified delivery/recovery email is unchanged, a repeat Customer may proceed without repeating email verification.
+
+Safety eligibility and final purchase confirmation remain required for every Purchase. A trusted session is neither Payment authority nor Safety authority.
+
+### Reverification
+
+Email ownership must be reverified when applicable, including when:
+
+- the delivery/recovery email changes;
+- no valid trusted session exists;
+- the trusted session is expired, revoked, invalidated, or otherwise unavailable;
+- another browser or device has no valid trusted session;
+- sensitive recovery requires renewed mailbox control; or
+- the system cannot safely establish the existing verification binding.
+
+No risk-scoring system is established by this rule.
+
+### Security boundary
+
+Trusted state must be server-verifiable. Browser, client, cookie contents interpreted without server verification, or localStorage state alone must never be able to assert `verified=true` or equivalent trusted status. The Customer must not be able to create or modify trusted status solely through client-controlled state.
+
+### No-login boundary
+
+This accepted control does not introduce mandatory account creation, password login, Google login, Apple login, a Customer profile/account system, or My Page. The initial MVP remains no-login. A trusted delivery/recovery session is not a full Customer account.
+
+### Identity boundary
+
+Email ownership verification proves mailbox control. It does not establish legal identity or prove that the Customer is a particular named individual.
+
+### Still unresolved
+
+The Charter does not decide:
+
+- OTP versus Magic Link;
+- exact verification Provider;
+- session implementation;
+- cookie or token implementation;
+- exact trusted-session lifetime;
+- exact refresh behavior;
+- exact revocation implementation;
+- Google or Apple authentication; or
+- future account migration.
+
+These belong to separately authorized implementation or design work.
 
 ## 13. Refund Policy
 
@@ -270,15 +324,15 @@ A P0 monetary defect is not constrained by the normal Product refund amount. Exa
 
 Moon Reply must remediate the actual affected or unintended economic amount. A Customer must not remain responsible for more than the intended legitimate `JPY 980` purchase because of a Moon Reply Payment Integrity defect. In particular, remediation of a wrong-amount transaction is not capped at `JPY 980` merely because the normal Product price is `JPY 980`.
 
-Refunding an unintended or excess amount for a Payment Integrity Incident is not the same concept as offering a normal partial Product refund. Exact correction, refund, reversal, and confirmation mechanics remain Provider-specific and evidence-gated; this Candidate does not invent the operation.
+Refunding an unintended or excess amount for a Payment Integrity Incident is not the same concept as offering a normal partial Product refund. Exact correction, refund, reversal, and confirmation mechanics remain Provider-specific and evidence-gated; this Charter does not invent the operation.
 
 This Product policy does not eliminate or waive non-waivable Customer rights. Material unresolved legal obligations remain blockers.
 
-Refund Decision Authority and Refund Execution Authority are separate. Moon Reply Refund Decision Authority must remain server/operator controlled under any accepted policy; this Candidate is not that acceptance.
+Refund Decision Authority and Refund Execution Authority are separate. Moon Reply Refund Decision Authority remains server/operator controlled under this accepted policy; implementation and execution authority remain absent.
 
 Where the selected Provider supports merchant-initiated refund execution, any Moon Reply-initiated refund command must be server-side and must never be browser/client authorized. Provider- or Store-initiated refunds, reversals, disputes, or equivalent external financial changes may occur outside a Moon Reply refund command. Those external events must be authenticated or otherwise authoritatively verified, normalized, and reconciled.
 
-Browser/client state is never refund authority, and duplicate processing must remain idempotent. An attempted Moon Reply API command does not by itself establish refund completion. Exact PAY.JP, Apple, Google, and RevenueCat refund mechanics and final confirmation semantics remain evidence-gated. This Candidate does not assume that every future platform permits Moon Reply to execute refunds directly.
+Browser/client state is never refund authority, and duplicate processing must remain idempotent. An attempted Moon Reply API command does not by itself establish refund completion. Exact PAY.JP, Apple, Google, and RevenueCat refund mechanics and final confirmation semantics remain evidence-gated. This Charter does not assume that every future platform permits Moon Reply to execute refunds directly.
 
 ## 14. Dispute and Chargeback
 
@@ -390,7 +444,7 @@ A serious Privacy/Data incident may also stop new paid intake. Examples include:
 - systemic misdelivery of assessment emails;
 - prohibited direct identifiers sent to an external service contrary to approved policy.
 
-This Candidate does not hard-code legal reporting deadlines. Current-source privacy and legal incident procedures are a production/publication responsibility.
+This Charter does not hard-code legal reporting deadlines. Current-source privacy and legal incident procedures are a production/publication responsibility.
 
 ## 20. Production Authorization Hard Gate
 
@@ -437,7 +491,7 @@ The future Production-readiness process must include an evidence-backed rights r
 - attribution requirement;
 - evidence location and status.
 
-Public paid release must not rely on an asset with unknown commercial-use rights. J-PlatPat/trademark screening remains a paid-launch preparation requirement. This Candidate claims neither trademark clearance nor registration and does not create a Rights Register implementation.
+Public paid release must not rely on an asset with unknown commercial-use rights. J-PlatPat/trademark screening remains a paid-launch preparation requirement. This Charter claims neither trademark clearance nor registration and does not create a Rights Register implementation.
 
 ## 23. Provider Evidence Required Before Binding Implementation
 
@@ -463,7 +517,7 @@ The following remain unresolved and must not be inferred:
 
 ### Product decision required before Paid Launch
 
-Customer-initiated cancellation or refund after successful Payment but before generation or fulfillment completion is currently unresolved. It must be decided before Paid Launch and must be consistent with final Customer-facing terms, current official-source consumer-law review, actual fulfillment timing, and selected Provider evidence. This Candidate invents neither a cancellation deadline nor a Provider capability.
+Customer-initiated cancellation or refund after successful Payment but before generation or fulfillment completion is currently unresolved. It must be decided before Paid Launch and must be consistent with final Customer-facing terms, current official-source consumer-law review, actual fulfillment timing, and selected Provider evidence. This Charter invents neither a cancellation deadline nor a Provider capability.
 
 ### Production-measurement decisions
 
@@ -474,11 +528,12 @@ The following remain unresolved until implementation and QA evidence exists:
 - exact unknown-state escalation time;
 - automatic kill-switch thresholds;
 - exact reconciliation cadence;
+- exact trusted-session lifetime, refresh behavior, and revocation implementation;
 - Result-access credential lifetime;
 - specific retention periods;
 - exact Customer-support identity recovery when a verified email is lost.
 
-No number is invented by this Candidate.
+No number is invented by this Charter.
 
 ## 25. Authorization Matrix
 
@@ -486,9 +541,9 @@ No number is invented by this Candidate.
 | --- | --- |
 | Long-term strategy | Agreed |
 | Safety Engine / Safety UX | Current explicit Human decision accepted |
-| Payment Charter v1 Candidate | Formulated; pending Human + ChatGPT review |
-| Payment Charter v1 | **NOT accepted** |
-| Delivery-email mailbox verification | `proposed_required_control_pending_human_decision` |
+| Payment Charter v1 Candidate | Historical lineage: `7aeb9ecbc5a786b895f9280112f13b0629730429`, corrected by `b6f38586fadd2a17034810dbb139465af5eade2f` |
+| Payment Charter v1 | `human_chatgpt_accepted_complete` on `2026-08-12` |
+| Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Professional review | Optional escalation; not completed; not a hard launch gate |
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
 | PAY.JP written category evidence | Not established |

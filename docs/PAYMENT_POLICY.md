@@ -5,11 +5,11 @@
 This is the concise policy for the initial paid product. The canonical cross-platform detail is `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
 
 - Product strategy: Human + ChatGPT agreed direction
-- Payment Charter v1 Candidate: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
-- Human + ChatGPT Charter acceptance: pending
+- Payment Charter v1: `human_chatgpt_accepted_complete`
+- Human + ChatGPT Charter acceptance date: `2026-08-12`
 - Payment implementation: unauthorized and absent
 
-The Candidate is `docs/payment/PAYMENT_CHARTER.md`. It is not implementation authority, Provider approval, or production authorization.
+The accepted Charter is `docs/payment/PAYMENT_CHARTER.md`. Charter acceptance is not implementation authority, Provider approval, formal Provider selection, or production authorization. The Candidate commits remain historical lineage.
 
 ## Initial Payment Policy
 
@@ -28,7 +28,7 @@ This Payment Policy does not prohibit or govern external marketing or paid custo
 
 The primary Web provider direction is PAY.JP. Intended initial Web methods are supported credit/debit cards and Apple Pay, all at the same JPY 980 total price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-based Web billing are not part of the initial direction.
 
-PAY.JP direction is not provider approval, formal evidence-gate selection, an accepted Payment Charter, or implementation authorization.
+PAY.JP direction is not Provider approval, formal evidence-gate selection, or implementation authorization. PAY.JP remains Not sent, Not approved, and not formally selected; written category evidence is absent.
 
 ## Safety and Purchase Eligibility
 
@@ -37,6 +37,16 @@ Safety and server-owned purchase eligibility are evaluated before payment. A fut
 Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error states fail closed before payment. A normal relationship outcome such as waiting, not sending now, a temporary pause, or boundary-respecting support is not a payment block by itself.
 
 Browser display, a redirect, an enabled button, or client-owned state is never payment or purchase authority. Payment implementation must not weaken or duplicate the accepted Safety authority.
+
+## Delivery/Recovery Email Verification
+
+Before a first or otherwise untrusted-session real Payment, Moon Reply must have server-authoritative evidence that the Customer controls the delivery/recovery mailbox and must bind the verified email to the current purchase authority and Purchase Intent.
+
+A repeat Customer does not repeat mailbox verification merely because another assessment is being purchased when a still-valid trusted session is bound to the unchanged verified email. Email change, an expired/revoked/invalid/unavailable trusted session, a browser or device without valid trusted state, sensitive recovery, or an unsafe/uncertain binding requires reverification.
+
+Trusted state must be server-verifiable and cannot be asserted from browser, client, or localStorage state alone. It is neither Payment authority nor Safety authority. Safety eligibility and final purchase confirmation remain required for every purchase.
+
+The initial MVP remains no-login. This control does not create mandatory account registration, password/Google/Apple login, a Customer profile, or My Page. Exact verification method, Provider, session/cookie/token design, lifetime, refresh, and revocation remain unresolved and unauthorized implementation work.
 
 ## Provider-Independent Product Right
 
@@ -54,7 +64,7 @@ The grant is an internal domain concept, not a customer-facing coin or point. Th
 
 ## Exceptional Downstream Failure and Refund
 
-The unaccepted Payment Charter v1 Candidate formulates provider-independent behavior for Payment success followed by LUNA, delivery, or Safety failure. Until Human + ChatGPT acceptance and separate implementation authorization, the following remains only a conceptual failure path:
+The accepted Payment Charter v1 establishes provider-independent principles for Payment success followed by LUNA, delivery, or Safety failure. Until separate implementation authorization, the following remains only a conceptual failure path:
 
 ```text
 payment_succeeded
@@ -64,7 +74,7 @@ payment_succeeded
   -> final reconciled state
 ```
 
-The Candidate proposes initial Product refund eligibility and integrity invariants, but Refund Decision Authority, execution, deadlines, fee treatment, Provider API capability/confirmation, and Customer communication remain unimplemented or evidence-gated. Candidate formulation does not resolve those Provider-specific facts or authorize refund execution.
+The Charter accepts initial Product refund principles and Payment Integrity invariants, but execution, deadlines, fee treatment, Provider API capability/confirmation, and Customer communication remain unimplemented or evidence-gated. Charter acceptance does not resolve those Provider-specific facts or authorize refund execution.
 
 ## Long-Term Direction
 

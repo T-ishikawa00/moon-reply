@@ -4,8 +4,8 @@
 
 - Effective decision date: `2026-08-10`
 - Product strategy status: `human_chatgpt_agreed_long_term_direction`
-- Payment Charter Candidate status: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
-- Payment Charter v1 Human + ChatGPT acceptance: pending
+- Payment Charter v1 status: `human_chatgpt_accepted_complete`
+- Payment Charter v1 Human + ChatGPT acceptance date: `2026-08-12`
 - Payment implementation authorized: `false`
 - Provider / Payment API / DB / Supabase / Runtime operations authorized by this document: `0 / 0 / 0 / 0 / 0`
 
@@ -13,7 +13,7 @@ This document is the canonical product strategy for Payment, Platform, Purchase,
 
 `docs/ROADMAP.md` remains the authoritative high-level delivery roadmap. Provider inquiry evidence and formal provider approval remain governed by the evidence documents under `docs/payment/`. If an older Product, Phase, Payment, or provider-planning document conflicts with this strategy, this document controls the Payment / Platform / Monetization decision, while immutable historical execution and acceptance records remain historical evidence.
 
-This strategy records product direction only. It does not approve PAY.JP as a merchant, establish current feature availability, accept a Payment Charter, authorize an SDK, authorize a Provider call, or authorize implementation.
+This strategy records product direction and the accepted Charter status only. It does not approve PAY.JP as a merchant, establish current feature availability, authorize an SDK, authorize a Provider call, or authorize implementation.
 
 ## 1. Long-Term Platform Sequence
 
@@ -61,7 +61,7 @@ The initial objective is to validate whether real customers will purchase and re
 
 PAY.JP is the primary Web payment direction.
 
-This is a strategic preference, not evidence that PAY.JP has approved Moon Reply and not formal implementation authorization. The operational evidence state remains governed by `PROVIDER_INQUIRY_EVIDENCE_LOG.md`, `PROVIDER_COMPARISON.md`, and `PAYMENT_PROVIDER_DECISION_GATE.md`. Written category evidence, Human selection under that gate, an accepted Payment Charter, and a separate implementation authorization remain required.
+This is a strategic preference, not evidence that PAY.JP has approved Moon Reply and not formal implementation authorization. The operational evidence state remains governed by `PROVIDER_INQUIRY_EVIDENCE_LOG.md`, `PROVIDER_COMPARISON.md`, and `PAYMENT_PROVIDER_DECISION_GATE.md`. Written category evidence, Human selection under that gate, and a separate implementation authorization remain required. Payment Charter v1 acceptance is complete but does not satisfy those separate gates.
 
 The intended initial Web payment methods are:
 
@@ -229,6 +229,9 @@ The current conceptual sequence is:
 consultation input
   -> accepted Safety Gate
   -> server-owned purchase eligibility
+  -> delivery/recovery email
+  -> mailbox verification when no valid trusted session exists
+  -> server-authoritative verified-email binding
   -> JPY 980 final confirmation
   -> Payment Charter-defined payment flow
   -> verified payment
@@ -237,32 +240,22 @@ consultation input
   -> report delivery
 ```
 
-No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, or grant consumption is implemented or authorized by this sequence.
+When a still-valid trusted session is bound to the unchanged verified delivery/recovery email, repeat mailbox verification may be skipped. Safety eligibility and final purchase confirmation remain mandatory for every Purchase. Trusted state is server-verifiable, is neither Payment nor Safety authority, and does not create a mandatory login or Customer account.
 
-## 11. Next Formal Work: Integrated Review of Payment Charter v1 Candidate
+No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-The Payment Charter v1 Candidate is now formulated in `PAYMENT_CHARTER.md`. The next formal planning task is Human + ChatGPT integrated review of that Candidate. It remains unaccepted and must be accepted before any separately authorized Payment implementation.
+## 11. Next Formal Work: Post-Charter PAY.JP Inquiry Accuracy Refresh and Human Send-Readiness Review
 
-At minimum, the Candidate frames the following items for integrated review while preserving Provider-specific unknowns:
+Payment Charter v1 in `PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`. The next formal Payment track is not implementation. It is:
 
-- when the JPY 980 amount and purchase terms become final;
-- which Provider evidence categories must later be established before PAY.JP-specific payment-success authority can be bound;
-- why browser display/redirect state is not authority;
-- idempotency and the one-payment/one-assessment invariant;
-- duplicate click, reload, delayed response, and webhook-retry handling;
-- LUNA or delivery failure after payment success;
-- retry policy and retry ownership;
-- refund policy, refund authority, and refund operation;
-- timeout, unknown, pending, cancelled, and disputed payment states;
-- recovery when the customer closes the browser;
-- webhook events, signature verification, ordering, replay, and retention;
-- purchase ledger and payment-to-assessment linkage;
-- secret ownership and rotation boundaries;
-- logging, observability, redaction, and reconciliation;
-- incident handling and emergency purchase stop; and
-- future App Store / Google Play compatibility.
+1. review the existing PAY.JP inquiry draft against the accepted Charter;
+2. refresh factual questions where necessary without inventing Provider behavior;
+3. verify the current official Provider contact/inquiry path;
+4. obtain explicit Human approval of the final inquiry before sending;
+5. only then send and obtain written category evidence; and
+6. only after written evidence perform formal evidence-gate selection.
 
-The Charter must preserve unknowns until provider evidence or a Human decision resolves them. It must not infer PAY.JP API behavior, webhook semantics, refund capabilities, fee treatment, or RevenueCat/Store configuration.
+No inquiry is sent by this acceptance synchronization. PAY.JP remains Not sent, Not approved, and not formally selected; formal written evidence is absent. The inquiry refresh must preserve unknowns until Provider evidence or a later Human decision resolves them and must not infer PAY.JP API behavior, webhook semantics, refund capabilities, fee treatment, settlement behavior, or Apple Pay details.
 
 ## 12. Authorization Matrix
 
@@ -270,8 +263,9 @@ The Charter must preserve unknowns until provider evidence or a Human decision r
 | --- | --- |
 | Long-term Payment / Platform / Monetization strategy | Human + ChatGPT agreed direction |
 | Safety Engine / Safety UX | Human + ChatGPT accepted complete by current explicit Human decision |
-| Payment Charter v1 Candidate | Formulated; pending Human + ChatGPT review |
-| Payment Charter v1 | Not accepted |
+| Payment Charter v1 Candidate | Historical lineage retained |
+| Payment Charter v1 | `human_chatgpt_accepted_complete` on `2026-08-12` |
+| Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | PAY.JP merchant/category approval | Not established by this strategy |
 | PAY.JP formal evidence-gate selection | Not completed |
 | PAY.JP SDK / API / checkout / webhook | Unauthorized and unimplemented |
@@ -290,7 +284,7 @@ Planning agreement, provider approval, Payment Charter acceptance, implementatio
 - `docs/WBS.md`: bounded planning and future implementation work items.
 - `docs/CODEX_HANDOFF.md`: session handoff and prohibited-action boundary.
 - `docs/PAYMENT_POLICY.md`: concise initial-product payment policy.
-- `docs/payment/PAYMENT_CHARTER.md`: formulated, unaccepted Payment Charter v1 Candidate.
+- `docs/payment/PAYMENT_CHARTER.md`: Human + ChatGPT accepted Payment Charter v1; implementation authority remains `false`.
 - `docs/phase1/PAYMENT_FLOW.md`: detailed Web-flow planning subordinate to the accepted Payment Charter.
 - `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`: evidence gate for formal provider selection.
 - `docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`: factual inquiry/response record; no evidence is created by this strategy.

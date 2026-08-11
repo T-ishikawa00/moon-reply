@@ -14,8 +14,10 @@
 
 ---
 
-## 0. Current Review Authority（2026-08-11）
+## 0. Current Review Authority（2026-08-12）
 
+- Payment Charter v1は`human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。受入日は`2026-08-12`、Payment implementation authorityは`false`
+- Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`
 - 最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言、Customer-rightsおよび該当するHuman/operator判断のreviewは必須
 - materialな未解決法的義務はblockerとして維持
 - 専門家相談は任意であり、未実施それ自体はPayment Charter受入、公開、Paid LaunchまたはProduction Paymentのblockerではない
@@ -54,6 +56,20 @@ Task 18B時点の`Future implementation`表記は成立時点の履歴です。M
 - Purchase Confirmation Screenからのlinkは審査表示であり、同意を記録しない
 - publication gateのcheckboxと`OPERATOR_DECISION_REGISTER.md`のDecision stateは変更しない
 - この実装statusは法務文書の公開承認、専門家確認、運営者・provider決定、販売開始を意味しない
+
+## 1.2 Current Accepted Delivery/Recovery Email Rule（2026-08-12）
+
+以下はTask 18B時点のhistorical matrixより新しいcurrent Product/Privacy authorityである。Request flow、Payment Confirmation、Result delivery、およびEmail/recoveryは、実装時に同じverified-email bindingを使用しなければならない。この記録はUI、session、Payment、DBまたは配信実装を承認しない。
+
+| Rule | Accepted value | 同期が必要な面 | 実装状態 |
+| --- | --- | --- | --- |
+| First / untrusted-session purchase | 実決済開始前にserver-authoritativeなmailbox control evidenceを取得し、verified delivery/recovery emailをcurrent purchase authority / Purchase Intentへbind | Request flow / Payment Confirmation / Payment boundary / Result delivery / Email recovery | 未実装 |
+| Trusted repeat purchase | still-valid trusted sessionが同じunchanged verified emailへbindされている場合、購入ごとのmailbox再検証は不要。Safety eligibilityとfinal purchase confirmationは毎回必須 | Request flow / Payment Confirmation / Payment boundary | 未実装 |
+| Reverification | email変更、valid trusted session不在、expired/revoked/invalidated/unavailable state、別browser/device、sensitive recovery、または既存bindingを安全に確認できない場合に再検証 | Request flow / Payment Confirmation / Result delivery / Email recovery | 未実装 |
+| Security / authority | trusted stateはserver-verifiable。browser/client/localStorageだけで`verified=true`相当をassertできない。trusted sessionはPayment authorityでもSafety authorityでもない | 全対象面 | 未実装 |
+| No-login / identity | mandatory account、password/Google/Apple login、profile、My Pageを導入しない。mailbox controlはlegal identityを証明しない | Request flow / Payment Confirmation / Result delivery / Email recovery | no-login方針を維持、実装未承認 |
+
+OTP/Magic Link、verification Provider、session/cookie/token実装、lifetime、refresh、revocation、future account migrationは未解決であり、本表で決定しない。
 
 ## 2. 整合性マトリクス（Task 18B時点の履歴）
 
