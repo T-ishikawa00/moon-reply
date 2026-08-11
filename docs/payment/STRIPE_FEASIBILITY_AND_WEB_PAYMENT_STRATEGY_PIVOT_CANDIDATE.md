@@ -12,7 +12,7 @@
 - PayPay eligibility: not established
 - Payment implementation authorization: false
 - Production Payment authorization: false
-- Stripe/PAY.JP/RevenueCat account or Provider operations: 0
+- Stripe/PAY.JP/RevenueCat account or Provider/API operations: 0
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
@@ -76,13 +76,20 @@ That wording conflicted with the accepted Task 18C-R2 positioning criterion that
 Bounded official-source facts checked on 2026-08-12:
 
 - Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers.
+- Stripe's prohibited/restricted-business FAQ says Stripe may be able to support some listed businesses only with explicit prior approval, while some categories are never eligible.
+- Stripe independently reviews each account and relevant information during activation; that review determines whether the business is supported.
 - Stripe prohibits false, manipulated, inaccurate, or misleading information about identity, entity, or business nature.
 - Moon Reply has no Stripe feasibility, account, activation, category, or Live Payment evidence.
-- Alignment with a truthful non-divination Product definition is not Stripe approval.
-- Actual account, business, site review, or other authoritative Stripe evidence is required before formal selection.
+- The listing is a serious feasibility risk. It permits neither an inference of automatic approval nor a conclusion of automatic impossibility solely from the listing.
+- Moon Reply must present the accurate real Product for review. Alignment with a truthful non-divination Product definition is not Stripe approval, and wording or positioning never guarantees approval.
+- This Candidate does not claim that Moon Reply qualifies for an exception. Only actual exception/approval evidence from Stripe is authoritative.
+- Actual account, business, site, and activation review, or other authoritative Stripe evidence, is required before formal selection.
 - Eligibility may later be modified or revoked under Provider terms.
 
-Official source: https://stripe.com/jp/legal/restricted-businesses
+Official sources:
+
+- https://stripe.com/jp/legal/restricted-businesses
+- https://support.stripe.com/questions/prohibited-and-restricted-businesses-list-faqs?locale=ja-JP
 
 Wording changes do not guarantee approval. 鑑定ノート must not be hidden or disguised.
 
@@ -97,11 +104,17 @@ The desired initial methods are:
 
 PayPay is a deliberate Product decision. The Human working direction accepts its materially higher variable transaction cost as a conversion and revenue tradeoff. Exact rates, taxes, settlement, and account-specific pricing are not frozen by this Candidate. No monthly fixed-cost justification is assumed without current account evidence. Actual availability remains account-, category-, method-, and evidence-gated.
 
-Stripe's official documentation checked on 2026-08-12 describes PayPay as Japan/Japanese-yen, Customer-initiated, single-use/non-recurring, and supported by Checkout in payment mode. Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
+Stripe's official documentation checked on 2026-08-12 labels PayPay `Public Preview`. It describes PayPay as Japan/Japanese-yen, Customer-initiated and Customer-authenticated, single-use/non-recurring, and supported by Checkout in payment mode; Checkout subscription mode is not supported. Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
 
 Official source: https://docs.stripe.com/payments/paypay
 
-PayPay is not enabled, approved, or established as eligible.
+`Public Preview` does not remove PayPay from the desired initial methods. PayPay remains desired, unverified, not enabled, and not approved. No PayPay fee rate is frozen.
+
+PayPay's Preview/GA status, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked:
+
+1. before Stripe formal Provider selection;
+2. before PayPay implementation authorization; and
+3. before Paid Launch.
 
 ## 6. Method availability and Launch decision
 
@@ -251,6 +264,26 @@ Product Owner rationale:
 
 This does not mean zero total cost. Legal, Privacy, Security, domain, email, infrastructure, Provider fees, and operational costs remain.
 
+### 13.1 Stripe private KYC/business address and public Tokushoho disclosure
+
+Bounded official-source facts checked on 2026-08-12:
+
+- Stripe's Japan onboarding guidance requires business address information and representative information, including the representative's address.
+- Stripe may request additional business-address verification documents when it cannot verify the submitted address automatically.
+- Separately, Stripe's Commerce Disclosure guidance says a sole proprietor may, subject to the page requirements, use an equivalent request-based disclosure statement such as `請求があった場合には速やかに開示いたします` instead of immediately displaying formal name, address, and phone information publicly.
+
+Official sources:
+
+- https://support.stripe.com/questions/getting-started-with-stripe-a-guide-for-users-in-japan
+- https://support.stripe.com/questions/verifying-your-business-address?locale=ja-JP
+- https://support.stripe.com/questions/how-to-create-and-display-a-commerce-disclosure-page?locale=ja-JP
+
+The controlling boundary is:
+
+`Stripe private KYC/business-address disclosure != Customer-facing public Tokushoho disclosure`
+
+The public-disclosure option does not remove Stripe's requirement for truthful private facts or any applicable legal obligation. The exact Human address-disclosure choice remains unresolved. Virtual-office need, suitability, and acceptance remain unresolved; GMO is on hold, not rejected. This Candidate does not conclude that a virtual office is unnecessary, and no unverified virtual-office address may be used as the Stripe KYC/business address. Operator, address, and phone handling require later current-source review, actual Stripe evidence, applicable legal/publication review, and explicit Human review.
+
 ## 14. Downstream public-copy alignment
 
 A separately authorized implementation and content task is required before Stripe account or site review. Audited downstream surfaces include:
@@ -314,6 +347,9 @@ The following remain unresolved:
 - exact Stripe evidence-acquisition method;
 - whether Stripe support or sales is contacted before account activation;
 - actual Stripe business category;
+- actual Stripe private KYC/business-address requirements and accepted evidence;
+- exact Customer-facing Tokushoho operator/address/phone disclosure method;
+- virtual-office need, suitability, Provider acceptance, and Human decision;
 - exact enabled payment-method set;
 - exact Launch decision if PayPay is unavailable;
 - exact Checkout field limits and rendering;
@@ -345,6 +381,9 @@ No resolution is invented here.
 | Apple Pay eligibility | Unverified |
 | Google Pay eligibility | Unverified |
 | PayPay eligibility | Unverified |
+| PayPay lifecycle / enablement | Desired; Public Preview; not enabled; not approved |
+| Stripe private KYC vs public Tokushoho | Separate evidence domains; exact disclosure and address decisions unresolved |
+| Virtual office / GMO | Unresolved; GMO on hold, not rejected |
 | PAY.JP | Paused fallback; not approved; not selected |
 | RevenueCat initial Web use | Not required; unconfigured |
 | RevenueCat future synchronization | Desired; unresolved |

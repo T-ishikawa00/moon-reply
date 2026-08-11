@@ -140,13 +140,18 @@ Rules:
 URL:
 
 - https://stripe.com/jp/legal/restricted-businesses
+- https://support.stripe.com/questions/prohibited-and-restricted-businesses-list-faqs?locale=ja-JP
 
 Current official evidence checked on `2026-08-12`:
 
 - Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers.
+- Stripe's FAQ says it may be able to support some listed businesses only with explicit prior approval, while some categories are never eligible.
+- Stripe independently reviews each account and relevant information during activation; that review determines whether the business is supported.
 - Stripe prohibits false, manipulated, inaccurate, or misleading information about identity, entity, or business nature.
 - These bounded source facts do not establish Moon Reply feasibility, account approval, activation, category acceptance, or Live Payment eligibility.
-- Moon Reply's truthful non-divination positioning is not Stripe approval. Actual account/business/site review or other authoritative Stripe evidence is required before formal selection.
+- The listing is a serious feasibility risk, but the listing alone establishes neither automatic approval nor automatic impossibility.
+- Moon Reply's truthful non-divination positioning is not Stripe approval. The accurate real Product must be reviewed, wording or positioning cannot guarantee approval, and this register does not claim that Moon Reply qualifies for an exception.
+- Only actual exception/approval evidence from Stripe is authoritative. Actual account/business/site/activation review or other authoritative Stripe evidence is required before formal selection.
 - Eligibility may later be modified or revoked under Provider terms.
 
 Project boundary:
@@ -163,12 +168,37 @@ URL:
 
 Current official evidence checked on `2026-08-12`:
 
+- Stripe labels PayPay `Public Preview`.
 - Stripe documentation describes PayPay for Japan and Japanese yen.
-- It is Customer-initiated and single-use/non-recurring.
-- Checkout supports PayPay in payment mode.
+- It is Customer-initiated, Customer-authenticated, and single-use/non-recurring.
+- Checkout supports PayPay in payment mode; Checkout subscription mode is not supported.
 - Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
-- These facts do not establish that PayPay is enabled, approved, or eligible for a future Moon Reply account.
+- `Public Preview` does not remove PayPay from the desired initial method set. PayPay remains desired, unverified, not enabled, and not approved.
+- Preview/GA status, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked before Stripe formal Provider selection, before PayPay implementation authorization, and before Paid Launch.
 - Exact rates, taxes, settlement, and account-specific pricing are not frozen by this source register.
+
+### Stripe Japan onboarding, business-address verification, and Commerce Disclosure
+
+URL:
+
+- https://support.stripe.com/questions/getting-started-with-stripe-a-guide-for-users-in-japan
+- https://support.stripe.com/questions/verifying-your-business-address?locale=ja-JP
+- https://support.stripe.com/questions/how-to-create-and-display-a-commerce-disclosure-page?locale=ja-JP
+
+Current official evidence checked on `2026-08-12`:
+
+- Stripe's Japan onboarding guidance requires business address information and representative information, including the representative's address.
+- Stripe may request additional business-address verification documents when the submitted address cannot be verified automatically.
+- Separately, Stripe's Commerce Disclosure guidance says a sole proprietor may, subject to the page requirements, use an equivalent request-based disclosure statement such as `請求があった場合には速やかに開示いたします` instead of immediately displaying formal name, address, and phone information publicly.
+
+Project boundary:
+
+- `Stripe private KYC/business-address disclosure != Customer-facing public Tokushoho disclosure`.
+- The public-disclosure option does not remove truthful private facts required by Stripe or any applicable legal obligation.
+- The exact Human address-disclosure choice and virtual-office need, suitability, and Stripe acceptance remain unresolved.
+- GMO remains on hold, not rejected. The Candidate does not conclude that a virtual office is unnecessary.
+- No unverified virtual-office address may be used as the Stripe KYC/business address.
+- Operator, address, and phone handling requires later current-source review, actual Stripe evidence, applicable legal/publication review, and explicit Human review.
 
 ### RevenueCat Stripe external-purchase tracking
 
