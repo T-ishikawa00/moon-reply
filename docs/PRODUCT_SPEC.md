@@ -491,9 +491,9 @@ Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProd
 
 > 利用者が入力した恋愛関係の状況とメッセージをAIが整理・分析し、文面の受け取られ方として考えられる可能性、送る・待つ・修正するといった判断材料、メッセージ案および短期的な行動案を、デジタルレポートとして提供するサービス。ユーザー向けに「鑑定ノート」「鑑定書」という名称を使用するが、タロット、占星術、生年月日、霊感その他の占術・超自然的手法は使用せず、相手の本心や未来の出来事を断定・保証しない。
 
-### Payment CharterとMilestone 4でやること
+### Payment Charter v1 Candidate reviewとMilestone 4でやること
 
-- 次の正式作業としてHuman + ChatGPTでPayment Charterを策定・受入する
+- Payment Charter v1 Candidateは`payment_charter_v1_candidate_ready_pending_human_chatgpt_review`として策定済み。次の正式作業はHuman + ChatGPT integrated reviewであり、受入は未完了
 - `docs/ROADMAP.md` の外部問い合わせgateに従い、PAY.JPへの正確な照会文をHumanが最終承認する
 - 送信時は公式窓口を再確認し、送信本文と回答を証拠として保存する
 - 書面回答前にproviderを正式承認・選定したと扱わない
@@ -677,9 +677,9 @@ AI利用説明例：
 
 Planning direction（Payment Charter未受入）：
 
-既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。これはAccepted policyではなく、Payment Charterで再審議する。
+既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。Payment Charter v1 Candidateは初期MVPの返金額を`JPY 0`または`full JPY 980`とし、ケース別の候補を提示したが、Charter自体は未受入でありAccepted policyまたは実装権限ではない。
 
-以下は将来の返金判断候補として保持するが、返金可否、authority、操作、期限、fee扱いおよびCustomer通知はPayment Charter、provider evidenceおよび法務仕様で確定する。現時点のAccepted policyとして扱わない。
+以下は返金判断候補として保持する。最終authority、操作、Provider確認方法、期限、fee扱いおよびCustomer通知は、Charter受入、provider evidence、current-source/customer-rights reviewおよび別個のimplementation authorizationを経て確定する。現時点のAccepted policyまたはProvider事実として扱わない。
 
 - 例外的に決済成功後のSafety再判定で通常鑑定を提供できない場合
 - サービス側都合で納品できない場合
@@ -703,7 +703,7 @@ payment_succeeded
   -> refunded
 ```
 
-提供不能時に通常レポートを出さないことは維持する。再試行、再発行、返金、二重返金防止、理由/状態記録、operator通知、Customerへの案内、自動返金、provider API、手数料、期限、反映日数および具体的操作はPayment Charterで決めるまで断定しない。
+提供不能時に通常レポートを出さないことは維持する。Candidateはno-recharge、同一Logical Assessmentのbounded fulfillment recovery、最終的なdeliveredまたはservice-failure full-refundへの収束を提案するが未受入である。自動返金、provider API、手数料、期限、反映日数および具体的操作はprovider evidenceと将来のimplementation/production-readiness判断まで断定しない。
 
 ---
 
@@ -885,9 +885,9 @@ LPに人を集められない場合は、商品ではなく集客の問題とし
 
 ## 23. 直近の次アクション
 
-次の正式作業は、Human + ChatGPTによるPayment Charter策定・受入である。PAY.JPの何をpayment success authorityとするか、browser非authority、idempotency、1 payment = 1 assessment、duplicate/reload/webhook retry、決済成功後のLUNA/delivery failure、refund、unknown/timeout、browser close recovery、purchase ledger/linkage、secrets、observability、incident handlingおよび将来Store互換性を実装前に決める。
+次の正式作業は、策定済みPayment Charter v1 CandidateのHuman + ChatGPT integrated reviewである。Candidateはprovider-independentなpayment success authority、browser非authority、idempotency、1 intended purchaseのintegrity、unknown/recovery、fulfillment、refund、webhook、ledger、secrets、observability、incidentおよび将来Store互換性を提示するが、未受入であり実装権限ではない。
 
-Payment Charterは未受入であり、PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
+Payment Charter v1 Candidate statusは`payment_charter_v1_candidate_ready_pending_human_chatgpt_review`で、Charter v1は未受入である。PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
 
 ---
 
@@ -895,7 +895,7 @@ Payment Charterは未受入であり、PAY.JP SDK/API、RevenueCat、Apple IAP�
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-現在許可されている次作業はPayment CharterのPlanning / documentationのみ。CharterのHuman + ChatGPT受入と、その後の別個のimplementation authorizationなしに、以下へ進まない。
+現在の次作業はPayment Charter v1 CandidateのHuman + ChatGPT review / documentationのみ。CharterのHuman + ChatGPT受入と、その後の別個のimplementation authorizationなしに、以下へ進まない。
 
 - PAY.JP SDK/API/checkout/webhook
 - RevenueCat

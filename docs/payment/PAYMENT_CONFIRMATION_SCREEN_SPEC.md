@@ -6,7 +6,7 @@ Internal product/compliance specification.
 
 This is not legal advice and is not an implemented or publication-approved screen.
 
-The Payment Charter is not yet formulated or accepted. This screen specification does not authorize checkout, a Provider SDK/API, or a payment action.
+The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`, but is not Human + ChatGPT accepted. This screen becomes subordinate to the Charter only after acceptance and separate implementation authorization; it does not authorize checkout, a Provider SDK/API, or a payment action.
 
 ---
 

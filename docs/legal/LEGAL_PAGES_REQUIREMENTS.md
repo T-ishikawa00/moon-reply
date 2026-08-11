@@ -6,7 +6,7 @@ Internal planning draft for Task 18B.
 
 This document is not legal advice, is not a public legal page, and is not approved for publication.
 
-Task 18B must use this specification to draft the legal pages and operator decision placeholders. Final wording requires operator completion, current-source verification, and professional review where marked.
+Task 18B must use this specification to draft the legal pages and operator decision placeholders. Final wording requires operator completion and review against current official primary sources, actual Product/Provider behavior, and final public wording. Material unresolved legal obligations remain blockers. Professional consultation is optional and is not a publication or Paid Launch prerequisite.
 
 ---
 
@@ -38,7 +38,7 @@ Required sections:
 - Reading use rights
 - No resale
 - Non-guarantee of another person's feelings, replies, reconciliation, future, or relationship improvement
-- Limitation of liability, marked for professional review
+- Limitation of liability, marked for current-source and Customer-rights review
 - Suspension and termination
 - Refund Policy reference
 - Privacy Policy reference
@@ -58,7 +58,7 @@ Required sections:
 - AI-provider processing
 - Payment-provider processing
 - Email-provider processing
-- Foreign processing/transfer wording, marked for professional review
+- Foreign processing/transfer wording, marked for current-source and actual-data-flow review
 - Cookies and analytics
 - Retention, with unapproved periods kept `TBD`
 - Deletion and contact process
@@ -106,7 +106,7 @@ Required sections:
 - Chargeback handling
 - Refund processing time: `TBD`
 
-Refund wording and applicable statutory limits must be marked for professional and provider review.
+Refund wording and applicable statutory limits must be marked for current-source, Customer-rights, actual-Product, and Provider-evidence review. Internal review does not guarantee legal compliance.
 
 ---
 

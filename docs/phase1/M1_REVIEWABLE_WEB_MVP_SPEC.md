@@ -169,7 +169,7 @@ Route: `/review/purchase/confirmation/normal-001`.
 - AI use and data-minimization summary
 - No true-feeling, reply, reconciliation, future, or result guarantee
 - Safety status: `normal_allowed` fixture; blocked states cannot route here
-- Refund/cancellation summary identified as draft and provider/professional-review dependent
+- Refund/cancellation summary identified as draft and dependent on applicable Provider evidence, current official-source legal/Customer-rights review, actual Product behavior, and applicable operator decisions; professional consultation is optional, not required
 - Terms, Privacy, Refund, Tokushoho, AI disclosure, unsupported-cases, and contact links
 - Edit links for request content, age group, and email
 

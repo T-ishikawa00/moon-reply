@@ -85,4 +85,4 @@ If an unsupported case is discovered after payment due to a product failure:
 
 Do not insert unverified hotline details.
 
-Final refund wording and workflow require professional, provider, and operational review.
+Final refund wording and workflow require review against current official primary legal sources, applicable Provider evidence, actual Product behavior, and operational recovery evidence. Material unresolved legal obligations remain blockers. Professional consultation is optional, not mandatory, and does not provide a legal guarantee.

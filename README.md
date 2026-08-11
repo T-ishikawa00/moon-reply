@@ -6,12 +6,13 @@
 
 ## Current Phase
 
-Planning / Payment Charter next. Payment implementation is not authorized.
+Payment Charter v1 Candidate ready for Human + ChatGPT review; Payment implementation remains unauthorized.
 
 Current canonical planning:
 
 - `docs/ROADMAP.md`
 - `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
+- `docs/payment/PAYMENT_CHARTER.md`
 - `docs/CURRENT_FOCUS.md`
 - `docs/CODEX_HANDOFF.md`
 

@@ -2,9 +2,9 @@
 
 ## 0. Purpose
 
-This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and the future Human + ChatGPT-accepted Payment Charter.
+This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and, only after Human + ChatGPT acceptance, `docs/payment/PAYMENT_CHARTER.md`.
 
-No payment API implementation is included or authorized by this document. The Payment Charter is not yet formulated or accepted.
+No Payment API implementation is included or authorized by this document. The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`, but it is not accepted and grants no implementation authority.
 
 The public MVP requires payment success verification before AI judgment or diagnosis generation.
 
@@ -59,7 +59,7 @@ Required sequence:
 2. Server validates that the required age-group value is one of the allowed 18-or-older values
 3. The accepted server-owned Safety and purchase-eligibility gate runs
 4. User proceeds only when the current result is eligible and `purchaseGateSatisfied=true`
-5. The future Payment Charter-defined server authority verifies payment success
+5. After Charter acceptance and separate implementation authorization, the Charter-defined server authority verifies payment success
 6. System triggers AI judgment and diagnosis generation
 7. Result page is created
 8. Result URL is sent by email
@@ -87,7 +87,7 @@ Public MVP payment flow:
 2. User reviews or corrects the selected age group and relevant customer-facing consultation/contact facts
 3. Server confirms the allowed age-group value and current server-owned purchase eligibility
 4. User reviews the final JPY 980 purchase terms
-5. User starts the future Payment Charter-defined payment flow
+5. After Charter acceptance and separate implementation authorization, the user starts the Charter-defined Payment flow
 6. Server-authoritative provider evidence verifies payment success; browser display is not authority
 7. System issues exactly one assessment grant for the verified purchase
 8. System triggers AI judgment and assessment generation
@@ -100,7 +100,7 @@ Manual payment confirmation is not the target public flow.
 
 Manual payment confirmation may be used only during development, QA, or emergency incident handling.
 
-Payment provider webhook or other server-authoritative success verification is required before public release. The exact PAY.JP event, signature, ordering, retry, reconciliation, timeout, and recovery rules remain Payment Charter decisions.
+Provider callback or other server-authoritative success verification is required before public release. The Candidate states provider-independent integrity rules, but exact PAY.JP events, signatures, ordering, retries, reconciliation evidence, timeouts, and recovery mechanics remain Provider-evidence-gated and unimplemented.
 
 ### Exceptional post-payment fulfillment failure
 

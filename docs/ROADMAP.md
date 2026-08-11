@@ -46,7 +46,7 @@ Current status:
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
 - PAY.JP is the Human-agreed strategic primary Web direction, but no provider inquiry has been sent and no provider has passed the formal written-evidence selection gate. Strategy, provider approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- The next formal planning work is the Payment Charter. It is not yet formulated or accepted. No provider inquiry, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
+- The Payment Charter v1 Candidate is formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`. Acceptance remains pending, and the next formal work is Human + ChatGPT integrated Candidate review. Provider written evidence/formal selection and Payment implementation remain separate and incomplete. No provider inquiry, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -248,7 +248,7 @@ These are candidates, not approved immediate tasks.
 
 ## 15. Change-Control Rule
 
-No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins. Payment Charter planning is a cross-cutting prerequisite and does not by itself complete or skip a delivery milestone.
+No milestone may be skipped merely because a later integration is technically available. Human acceptance of the previous milestone is required before the next milestone begins. Payment Charter Candidate formulation is a cross-cutting prerequisite; it does not equal Charter acceptance and does not by itself complete or skip a delivery milestone.
 
 Each milestone must be planned, implemented where applicable, validated, committed as bounded work, and accepted by Human. A roadmap update does not itself authorize implementation. Changes to milestone order, completion definition, price, age policy, safety-before-payment rule, provider direction, platform order, monetization model, or MVP scope require explicit Human approval and an update to the controlling documents.
 # M2-P2-B1-B2-A dormant live-binding checkpoint (2026-07-28)

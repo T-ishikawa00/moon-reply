@@ -10,7 +10,7 @@
 >
 > **REQUIRES FINAL SOURCE REVIEW**
 >
-> この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式情報、実際のサービス仕様、決済事業者の条件および必要に応じた専門家確認を反映する必要があります。
+> この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
 ---
 
@@ -18,7 +18,7 @@
 
 本ポリシーは、税込980円の単発デジタル鑑定書について、現時点の返金・再提供方針案を整理するものです。「いかなる場合も返金しない」とするものではなく、法令上の権利を制限しません。
 
-返金条件は、[[PAYMENT_PROVIDER_TBD]]の仕様、実装、利用者への表示および専門家確認を経て最終化します。[[PROFESSIONAL_REVIEW_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]]
+返金条件は、[[PAYMENT_PROVIDER_TBD]]の証拠、実装、利用者への表示、最新の公式一次情報およびCustomer-rights reviewを経て最終化します。専門家相談は任意です。[[CURRENT_SOURCE_REVIEW_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]]
 
 ## 2. ケース別マトリクス
 
@@ -26,7 +26,7 @@
 | --- | --- | --- |
 | 決済前 | 料金は発生しません。 | 実装確認：[[OPERATOR_DECISION_REQUIRED]] |
 | 決済後・生成開始前のユーザーキャンセル | 返金可否は未決定です。 | [[OPERATOR_DECISION_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]] |
-| 正常に鑑定書を提供済み | 鑑定内容への不満または満足度のみを理由とする返金は、原則対象外とする方向です。 | [[PROFESSIONAL_REVIEW_REQUIRED]] |
+| 正常に鑑定書を提供済み | 鑑定内容への不満または満足度のみを理由とする返金は、原則対象外とする方向です。 | [[CURRENT_SOURCE_REVIEW_REQUIRED]] |
 | AI生成失敗 | 全額返金の候補とします。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
 | 結果保存失敗 | 再生成または全額返金の候補とします。 | [[OPERATOR_DECISION_REQUIRED]] |
 | 重複決済 | 重複分を返金する方向です。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
@@ -35,9 +35,9 @@
 | サービス障害 | 再提供または返金の候補とします。 | [[OPERATOR_DECISION_REQUIRED]] |
 | メールアドレス入力間違い | 本人確認後の訂正および再送を優先する方向です。 | [[OPERATOR_DECISION_REQUIRED]] |
 | 結果URL紛失 | 本人確認後の再発行を候補とします。 | セキュリティ設計：[[OPERATOR_DECISION_REQUIRED]] |
-| 鑑定内容への不満のみ | 原則として返金対象外とする方向です。 | [[PROFESSIONAL_REVIEW_REQUIRED]] |
+| 鑑定内容への不満のみ | 原則として返金対象外とする方向です。 | [[CURRENT_SOURCE_REVIEW_REQUIRED]] |
 | チャージバック | 決済事業者の手続および適用法令に従います。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
-| 法令上返金が必要な場合 | 適用法令に従います。 | [[PROFESSIONAL_REVIEW_REQUIRED]] |
+| 法令上返金が必要な場合 | 適用法令に従います。 | [[CURRENT_SOURCE_REVIEW_REQUIRED]] |
 
 ## 3. 返金申請
 
@@ -69,6 +69,6 @@
 - 返金対象ケースおよび例外を運営者が承認する
 - [[PAYMENT_PROVIDER_TBD]]の返金・チャージバック・手数料条件を確認する
 - 利用規約、特定商取引法に基づく表記および最終確認画面と一致させる
-- 消費者契約法その他の適用法令に関する専門家確認を行う
+- 消費者契約法その他の適用法令について最新の公式一次情報、実際のProduct/Provider挙動および最終公開文言を確認する。専門家相談は任意であり、未実施それ自体は公開・Paid Launchのblockerではない
 
 これらが完了するまで、本ポリシーを公開用の確定文面として扱いません。

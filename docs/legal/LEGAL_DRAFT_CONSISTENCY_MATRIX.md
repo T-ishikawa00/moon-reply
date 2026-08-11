@@ -10,7 +10,16 @@
 >
 > **REQUIRES FINAL SOURCE REVIEW**
 >
-> この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式情報、実際のサービス仕様、決済事業者の条件および必要に応じた専門家確認を反映する必要があります。
+> この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
+
+---
+
+## 0. Current Review Authority（2026-08-11）
+
+- 最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言、Customer-rightsおよび該当するHuman/operator判断のreviewは必須
+- materialな未解決法的義務はblockerとして維持
+- 専門家相談は任意であり、未実施それ自体はPayment Charter受入、公開、Paid LaunchまたはProduction Paymentのblockerではない
+- 以下のTask 18BおよびM1-I5時点の表現はhistorical evidenceとして維持し、現在のreview authorityまたはdownstream UI実装完了を意味しない
 
 ---
 

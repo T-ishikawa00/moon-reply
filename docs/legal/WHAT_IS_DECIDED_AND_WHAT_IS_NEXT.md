@@ -7,7 +7,7 @@
 - すでに決まったこと
 - これから運営者が決めること
 - 外部の回答が必要なこと
-- 専門家確認が必要なこと
+- current-source/evidence reviewが必要なこと
 
 を分かりやすく整理する。
 
@@ -91,7 +91,7 @@
 
 ---
 
-## 専門家確認が必要なこと
+## Current-source / Evidence Reviewが必要なこと
 
 - 特定商取引法上の住所・電話番号の表示方法
 - 個人、個人事業主または法人という運営形態に関する法務・税務上の整理
@@ -103,7 +103,9 @@
 - AI生成物の権利帰属と利用許諾
 - 準拠法・管轄裁判所の最終文言
 
-専門家確認が必要という分類は、専門家確認済みという意味ではない。現時点で専門家確認は完了していない。
+これらは最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言およびCustomer-rightsとの整合確認が必要な事項である。ApplicableなHuman/operator判断も完了させ、materialな未解決法的義務はblockerとして残す。内部reviewは法的適合性を保証しない。
+
+専門家相談は`2026-08-11` Human decisionにより任意であり、Payment Charter受入、公開、Paid LaunchまたはProduction Paymentの必須条件ではない。現時点で専門家reviewは実施・完了していない。
 
 ---
 

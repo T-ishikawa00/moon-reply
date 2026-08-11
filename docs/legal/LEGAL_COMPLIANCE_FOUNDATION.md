@@ -12,7 +12,7 @@ This document is:
 - provisional
 - not legal advice
 - not a public legal page
-- subject to professional and provider review
+- subject to current-source and Provider-evidence review, with optional professional escalation
 
 It must not be represented as legally complete or approved for publication.
 
@@ -150,9 +150,9 @@ Users must be warned not to enter their own or a third party's direct identifier
 
 ---
 
-## 7. Legal Review Gate
+## 7. Current-Source Legal and Evidence Review Gate
 
-Real payment implementation may begin only after:
+A future Payment implementation authorization must not be granted until review evidence includes:
 
 - payment-provider category inquiry
 - compliance docs review
@@ -160,7 +160,7 @@ Real payment implementation may begin only after:
 - refund policy direction is approved
 - operator disclosure approach is decided
 
-Uncertain legal questions must remain marked for professional review. No professional review has been completed by Task 18A.
+Uncertain legal questions must remain unresolved and marked for current-source review. Material unresolved legal obligations remain blockers. Professional consultation is optional, not a Paid Launch or Production Payment prerequisite, and no professional review has been completed by Task 18A. Internal review does not guarantee legal compliance.
 
 ---
 
@@ -187,4 +187,4 @@ Uncertain legal questions must remain marked for professional review. No profess
 
 - Laws, official guidance, contract terms, and provider restrictions must be rechecked immediately before public launch
 - External-provider retention and processing conditions must not be published as fixed facts before the exact service, endpoint, account settings, and current terms are verified
-- Unknowns must remain `TBD` or be marked for professional/provider confirmation
+- Unknowns must remain `TBD` or be marked for current-source/Provider confirmation; optional professional consultation does not replace that evidence

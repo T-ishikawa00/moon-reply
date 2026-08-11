@@ -10,7 +10,7 @@ This is not legal advice.
 
 Every source must be rechecked before public launch.
 
-No professional legal review, payment-provider approval, or trademark clearance is recorded by this register.
+No professional legal review has been completed; professional consultation is optional and is not a Paid Launch prerequisite. No payment-provider approval or trademark clearance is recorded by this register.
 
 ---
 
@@ -59,7 +59,7 @@ Use for:
 Research note:
 
 - Source URL checked on 2026-07-10
-- Final interpretation and contract wording require professional review
+- Final interpretation and contract wording require review against current official primary sources, actual Product behavior, and Customer-facing wording; optional professional consultation may be used as escalation
 
 ### 個人情報保護法・ガイドライン
 
@@ -199,15 +199,17 @@ Current status:
 
 ---
 
-## Professional Review Required
+## Optional Professional Consultation
 
-Professional review is recommended for:
+Professional consultation may be considered as an optional escalation for:
 
 - Privacy policy foreign-transfer / processor wording
 - Terms limitation-of-liability wording
 - Refund policy wording
 - 特商法 operator disclosure method
 - Final payment-provider category classification
+
+It is not a mandatory Charter acceptance, publication, Paid Launch, or Production Payment condition. Current official primary sources, actual Product/Provider behavior, final public wording, applicable Human/operator decisions, and preserved evidence remain required. Material unresolved legal obligations remain blockers, and internal review does not guarantee legal compliance.
 
 Do not add unofficial blogs as controlling sources.
 

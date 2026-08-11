@@ -4,7 +4,8 @@
 
 - Effective decision date: `2026-08-10`
 - Product strategy status: `human_chatgpt_agreed_long_term_direction`
-- Payment Charter status: `not_yet_formulated_or_accepted`
+- Payment Charter Candidate status: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
+- Payment Charter v1 Human + ChatGPT acceptance: pending
 - Payment implementation authorized: `false`
 - Provider / Payment API / DB / Supabase / Runtime operations authorized by this document: `0 / 0 / 0 / 0 / 0`
 
@@ -238,14 +239,14 @@ consultation input
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: Payment Charter
+## 11. Next Formal Work: Integrated Review of Payment Charter v1 Candidate
 
-The next formal planning task is Human + ChatGPT formulation and acceptance of a Payment Charter. The Charter must be accepted before Payment implementation.
+The Payment Charter v1 Candidate is now formulated in `PAYMENT_CHARTER.md`. The next formal planning task is Human + ChatGPT integrated review of that Candidate. It remains unaccepted and must be accepted before any separately authorized Payment implementation.
 
-At minimum, the Charter must decide:
+At minimum, the Candidate frames the following items for integrated review while preserving Provider-specific unknowns:
 
 - when the JPY 980 amount and purchase terms become final;
-- which PAY.JP evidence is authoritative for payment success;
+- which Provider evidence categories must later be established before PAY.JP-specific payment-success authority can be bound;
 - why browser display/redirect state is not authority;
 - idempotency and the one-payment/one-assessment invariant;
 - duplicate click, reload, delayed response, and webhook-retry handling;
@@ -269,7 +270,8 @@ The Charter must preserve unknowns until provider evidence or a Human decision r
 | --- | --- |
 | Long-term Payment / Platform / Monetization strategy | Human + ChatGPT agreed direction |
 | Safety Engine / Safety UX | Human + ChatGPT accepted complete by current explicit Human decision |
-| Payment Charter | Not yet formulated or accepted |
+| Payment Charter v1 Candidate | Formulated; pending Human + ChatGPT review |
+| Payment Charter v1 | Not accepted |
 | PAY.JP merchant/category approval | Not established by this strategy |
 | PAY.JP formal evidence-gate selection | Not completed |
 | PAY.JP SDK / API / checkout / webhook | Unauthorized and unimplemented |
@@ -288,6 +290,7 @@ Planning agreement, provider approval, Payment Charter acceptance, implementatio
 - `docs/WBS.md`: bounded planning and future implementation work items.
 - `docs/CODEX_HANDOFF.md`: session handoff and prohibited-action boundary.
 - `docs/PAYMENT_POLICY.md`: concise initial-product payment policy.
+- `docs/payment/PAYMENT_CHARTER.md`: formulated, unaccepted Payment Charter v1 Candidate.
 - `docs/phase1/PAYMENT_FLOW.md`: detailed Web-flow planning subordinate to the accepted Payment Charter.
 - `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`: evidence gate for formal provider selection.
 - `docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`: factual inquiry/response record; no evidence is created by this strategy.

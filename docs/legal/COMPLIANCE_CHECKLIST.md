@@ -50,7 +50,10 @@ Never mark an item complete without evidence.
 - [ ] Result-token expiry/revocation design approved
 - [ ] Official support-resource links verified
 - [ ] J-PlatPat search completed and recorded
-- [ ] Professional review items resolved or consciously accepted
+- [ ] Current official-source legal, Privacy, and Customer-rights review completed and evidenced
+- [ ] Actual implementation, Provider evidence, and final public wording reviewed for consistency
+- [ ] Material legal obligations identified and either resolved or retained as explicit blockers
+- [ ] Professional consultation, if used, recorded as optional escalation and not treated as a Paid Launch prerequisite
 
 ---
 

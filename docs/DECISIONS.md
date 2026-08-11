@@ -13,7 +13,9 @@
 - Mobile payment direction: Apple IAP + RevenueCat on iOS; Google Play Billing + RevenueCat on Android
 - External payment facts remain separate from the provider-independent Moon Reply purchase and entitlement/assessment-grant authority
 - Subscription remains a future coexistence candidate only after repeat-purchase evidence; one-time purchase is not automatically removed
-- Next formal Payment work: Human + ChatGPT Payment Charter formulation and acceptance; no Payment implementation is authorized
+- Payment Charter v1 Candidate formulated with status `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`; it is not accepted and grants no implementation authority
+- Next formal Payment work: Human + ChatGPT integrated review of Payment Charter v1 Candidate; no Payment implementation is authorized
+- Professional/specialist review is optional, not a mandatory Paid Launch or Production Payment gate; current official-source and actual Product/Provider/public-wording review remains required, and material unresolved legal obligations remain blockers
 - AI use must be disclosed
 - Dangerous consultations must not receive normal romance鑑定
 - Input UX: 鑑定依頼シート, not rigid multi-field form

@@ -5,8 +5,11 @@
 This is the concise policy for the initial paid product. The canonical cross-platform detail is `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
 
 - Product strategy: Human + ChatGPT agreed direction
-- Payment Charter: not yet formulated or accepted
+- Payment Charter v1 Candidate: `payment_charter_v1_candidate_ready_pending_human_chatgpt_review`
+- Human + ChatGPT Charter acceptance: pending
 - Payment implementation: unauthorized and absent
+
+The Candidate is `docs/payment/PAYMENT_CHARTER.md`. It is not implementation authority, Provider approval, or production authorization.
 
 ## Initial Payment Policy
 
@@ -51,7 +54,7 @@ The grant is an internal domain concept, not a customer-facing coin or point. Th
 
 ## Exceptional Downstream Failure and Refund
 
-The Payment Charter must define the authoritative behavior for payment success followed by LUNA, delivery, or Safety failure. The following remains only a conceptual failure path:
+The unaccepted Payment Charter v1 Candidate formulates provider-independent behavior for Payment success followed by LUNA, delivery, or Safety failure. Until Human + ChatGPT acceptance and separate implementation authorization, the following remains only a conceptual failure path:
 
 ```text
 payment_succeeded
@@ -61,7 +64,7 @@ payment_succeeded
   -> final reconciled state
 ```
 
-Refund eligibility, authority, operation, deadlines, fee treatment, provider API capability, duplicate-refund prevention, retry/reissue rules, and customer communication are unresolved until the Payment Charter and provider evidence are accepted.
+The Candidate proposes initial Product refund eligibility and integrity invariants, but Refund Decision Authority, execution, deadlines, fee treatment, Provider API capability/confirmation, and Customer communication remain unimplemented or evidence-gated. Candidate formulation does not resolve those Provider-specific facts or authorize refund execution.
 
 ## Long-Term Direction
 
