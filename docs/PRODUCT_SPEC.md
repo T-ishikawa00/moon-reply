@@ -677,19 +677,28 @@ AI利用説明例：
 
 Planning direction（Payment Charter未受入）：
 
-既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。Payment Charter v1 Candidateは初期MVPの返金額を`JPY 0`または`full JPY 980`とし、ケース別の候補を提示したが、Charter自体は未受入でありAccepted policyまたは実装権限ではない。
+既存draft仮説は「デジタル鑑定書という商品の性質上、納品後の返金は原則不可」。Payment Charter v1 Candidateは、正しく作成された初回Product charge 1件（`JPY 980`）について、通常Product返金を`JPY 0`または`full JPY 980`とし、Customer-facingな部分返金Product policyを初期MVPでは設けない方向を提示した。ただしCharter自体は未受入であり、Accepted policyまたは実装権限ではない。
+
+この通常Product返金方針は、P0 Payment Integrity Incidentの経済額是正を制限しない。重複成功charge、誤額、誤Customer、誤Requestその他の不正な経済chargeでは、実際に影響した意図しない経済額を是正し、Moon ReplyのPayment Integrity欠陥によってCustomerを正当な1購入`JPY 980`を超える負担に残さない。誤額取引の是正は、通常価格が`JPY 980`であることを理由に`JPY 980`へ上限設定しない。意図しない超過額の返還は、通常Productの部分返金を提供することとは別概念であり、具体的なProvider操作はevidence-gatedのまま決定しない。
 
 以下は返金判断候補として保持する。最終authority、操作、Provider確認方法、期限、fee扱いおよびCustomer通知は、Charter受入、provider evidence、current-source/customer-rights reviewおよび別個のimplementation authorizationを経て確定する。現時点のAccepted policyまたはProvider事実として扱わない。
 
 - 例外的に決済成功後のSafety再判定で通常鑑定を提供できない場合
 - サービス側都合で納品できない場合
-- 重複決済
 - 明らかな提供不能
 - その他、運営側が返金すべきと判断した場合
 
+Payment Integrity remediation候補は別に保持する。
+
+- 重複成功charge
+- 誤額
+- 誤Customer
+- 誤Request
+- 無効なpurchase authorityまたはSafety authority bypassによるcharge
+
 内部draft方向（publication-readyではない）：
 
-> デジタル鑑定書という商品の性質上、納品後の返金は原則としてお受けできません。ただし、重複決済または決済後の提供不能が確認された場合は、全額返金の対象候補となります。具体的な返金方法・条件・時期は決済事業者選定後に確定します。
+> デジタル鑑定書という商品の性質上、正常提供後の満足度のみを理由とする通常Product返金は原則対象外とする方向です。ただし、決済後の提供不能は通常Productの全額返金候補です。重複・誤額・誤Customer・誤Request等のPayment Integrity Incidentは、通常Product返金とは別に、実際に影響した意図しない経済額を是正する対象です。具体的な方法・条件・時期は、Provider evidence、current-source/Customer-rights review、actual Product behaviorおよびoperator decisionと整合後に確定します。
 
 Safetyとserver-owned purchase eligibilityは決済前に実施し、現在のeligible resultかつ`purchaseGateSatisfied=true`の場合のみ将来の購入フローへ進める。clarification、unsafe、urgent、unsupported professional assistance、年齢/同意不備、矛盾入力、unknown/errorはfail closedとする。旧M1の`normal_allowed` / `needs_review` / `rejected`はhistorical fixture vocabularyであり、現在のpurchase authorityではない。
 
@@ -703,7 +712,7 @@ payment_succeeded
   -> refunded
 ```
 
-提供不能時に通常レポートを出さないことは維持する。Candidateはno-recharge、同一Logical Assessmentのbounded fulfillment recovery、最終的なdeliveredまたはservice-failure full-refundへの収束を提案するが未受入である。自動返金、provider API、手数料、期限、反映日数および具体的操作はprovider evidenceと将来のimplementation/production-readiness判断まで断定しない。
+提供不能時に通常レポートを出さないことは維持する。Candidateはno-recharge、同一Logical Assessmentのbounded fulfillment recoveryおよびindefinite processing禁止を提案する。経済的Purchaseが有効なままで、他の正当なrefund/reversalがない場合はdeliveredまたはservice-failure full-refund terminal handlingへ収束させる。一方、Customer-requested refund、法令上必要なrefund/cancellation、Provider/Store reversal、dispute/chargeback resolution等の正当に適用される別のreconciled terminal outcomeを排除せず、いずれも別のPayment、Purchase、GrantまたはLogical Assessmentを作らない。これらは未受入であり、自動返金、Provider API、手数料、期限、反映日数、具体的状態名および操作はProvider evidenceと将来のimplementation/production-readiness判断まで断定しない。
 
 ---
 

@@ -20,16 +20,21 @@
 
 返金条件は、[[PAYMENT_PROVIDER_TBD]]の証拠、実装、利用者への表示、最新の公式一次情報およびCustomer-rights reviewを経て最終化します。専門家相談は任意です。[[CURRENT_SOURCE_REVIEW_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]]
 
+通常Product返金とPayment Integrity remediationは別概念です。正しく作成された初回Product charge 1件（税込980円）について、初期MVPの通常Product返金は0円または980円全額とし、Customer-facingな部分返金Product policyは設けない方向です。
+
+重複成功charge、誤額、誤Customer、誤Requestその他のPayment Integrity Incidentでは、通常Product返金額を上限とせず、実際に影響した意図しない経済額を是正する必要があります。Moon ReplyのPayment Integrity欠陥により、利用者を正当な1購入980円を超える負担に残しません。意図しない超過額の返還は通常Productの部分返金ではなく、具体的な返金、取消、reversalその他の是正操作はProvider evidenceを確認するまで断定しません。[[PROVIDER_CONFIRMATION_REQUIRED]]
+
 ## 2. ケース別マトリクス
 
 | ケース | 現時点の方針案 | 最終確認 |
 | --- | --- | --- |
 | 決済前 | 料金は発生しません。 | 実装確認：[[OPERATOR_DECISION_REQUIRED]] |
-| 決済後・生成開始前のユーザーキャンセル | 返金可否は未決定です。 | [[OPERATOR_DECISION_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]] |
+| 決済成功後・生成または提供完了前のユーザーキャンセル | 返金可否は現在未決定です。Paid Launch前に、最終利用者向け規約、最新の公式一次情報に基づくconsumer-law review、実際のfulfillment timingおよび選定Provider evidenceと整合させて決定します。期限やProvider capabilityは現時点で断定しません。 | [[OPERATOR_DECISION_REQUIRED]] [[CURRENT_SOURCE_REVIEW_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]] |
 | 正常に鑑定書を提供済み | 鑑定内容への不満または満足度のみを理由とする返金は、原則対象外とする方向です。 | [[CURRENT_SOURCE_REVIEW_REQUIRED]] |
 | AI生成失敗 | 全額返金の候補とします。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
 | 結果保存失敗 | 再生成または全額返金の候補とします。 | [[OPERATOR_DECISION_REQUIRED]] |
-| 重複決済 | 重複分を返金する方向です。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
+| 重複成功charge | 超過した意図しない実経済額を是正する方向です。通常Productの部分返金とは扱いません。 | [[PROVIDER_CONFIRMATION_REQUIRED]] |
+| 誤額・誤Customer・誤Request | 実際に影響した意図しない経済額を是正し、正当な1購入980円を超える負担に利用者を残しません。 | [[OPERATOR_DECISION_REQUIRED]] [[PROVIDER_CONFIRMATION_REQUIRED]] |
 | `rejected`相談を誤って決済 | 生成を停止し、全額返金の候補とします。 | サーバー実装必須：[[OPERATOR_DECISION_REQUIRED]] |
 | `needs_review`相談を誤って決済 | 生成を停止し、全額返金の候補とします。 | サーバー実装必須：[[OPERATOR_DECISION_REQUIRED]] |
 | サービス障害 | 再提供または返金の候補とします。 | [[OPERATOR_DECISION_REQUIRED]] |
@@ -52,6 +57,10 @@
 本人確認方法、購入特定情報および誤メール対応は未決定です。[[OPERATOR_DECISION_REQUIRED]]
 
 ## 4. 返金方法および処理時間
+
+Moon Replyの返金判断authorityは、受入済みpolicyの下でserver/operator controlledとします。選定Providerがmerchant-initiated refund executionを提供する場合、Moon Reply起点の返金commandはserver-sideとし、browser/clientに権限を与えません。本文書はそのpolicy受入または実装権限を意味しません。
+
+Provider/Store起点のrefund、reversal、disputeその他の外部金融変更はMoon Replyの返金command外で発生し得ます。これらはauthenticatedまたはauthoritatively verifiedな証拠に基づき、正規化・reconciliationする必要があります。Browser/client stateは返金authorityではなく、重複処理はidempotentでなければなりません。PAY.JP、Apple、GoogleおよびRevenueCatの具体的な返金mechanicsはevidence-gatedです。
 
 1. 返金は元の支払方法へ行うことを原則とする方向ですが、[[PAYMENT_PROVIDER_TBD]]の仕様に従って最終化します。
 2. 返金処理時間は[[REFUND_PROCESSING_TIME_TBD]]です。

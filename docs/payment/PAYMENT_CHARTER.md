@@ -190,12 +190,23 @@ Browser reload, callback replay, concurrent worker, process restart, or operator
 
 Infinite retry is prohibited. Exact retry counts and exact 10-minute, 15-minute, or other wall-clock thresholds are not set here; they remain production-preparation decisions based on measured Runtime behavior.
 
-Every successfully paid Purchase must eventually converge to either:
+Every successfully paid Purchase must never remain indefinitely `processing`.
+
+If the economic Purchase remains effective and has not otherwise been validly refunded or reversed, it must converge to either:
 
 - `delivered`; or
-- a reconciled service-failure full-refund terminal outcome.
+- reconciled service-failure full-refund terminal handling.
 
-Indefinite `processing` is not an acceptable terminal state. Once a service-failure refund terminal path is selected, late generation output must not automatically be published. Duplicate-charge excess refunds are different: the legitimate Payment may still produce its legitimate Report while the excess Payment is refunded.
+Other reconciled terminal outcomes may legitimately apply, including:
+
+- an authorized Customer-requested refund;
+- a legally required refund or cancellation;
+- a Provider- or Store-initiated reversal;
+- a dispute or chargeback financial resolution.
+
+These outcomes must not create another Payment, Purchase, Grant, Logical Assessment, or canonical Report. This Candidate does not invent exact terminal-state names that have not yet been decided.
+
+Once a service-failure refund terminal path is selected, late generation output must not automatically be published. The special duplicate-charge rule remains distinct: the one legitimate Purchase may still produce its legitimate Report while the excess unintended charge is refunded.
 
 ## 11. Customer Recovery and Privacy
 
@@ -230,14 +241,13 @@ This control is **not Human Accepted**. It is the prominent unresolved Product/P
 
 ## 13. Refund Policy
 
-The initial MVP refund amount is either `JPY 0` or `full JPY 980`. There is no partial-refund Product policy for the initial MVP.
+### Normal Product Refund Policy
 
-Full-refund candidates include:
+For one correctly created initial Product charge of `JPY 980`, the initial MVP Product refund is either `JPY 0` or `full JPY 980`. There is no Customer-facing partial-refund Product policy for that initial Product purchase.
 
-- excess duplicate successful charge;
-- wrong amount, Customer, or Request;
+Normal Product full-refund candidates include:
+
 - paid service that cannot be delivered after bounded recovery;
-- charge created through a Safety bypass;
 - objective major Product defect, including empty output, clear truncation, another consultation mixed in, or internal-error-only/non-product output.
 
 The following are normally insufficient by themselves when a conforming assessment was delivered:
@@ -248,9 +258,27 @@ The following are normally insufficient by themselves when a conforming assessme
 - the partner later reacted differently;
 - the Customer changed their mind after normal delivery.
 
+### Payment Integrity Remediation
+
+A P0 monetary defect is not constrained by the normal Product refund amount. Examples include:
+
+- a duplicate successful charge;
+- a wrong amount;
+- a wrong Customer;
+- a wrong Request;
+- a charge created through invalid purchase authority or a Safety-authority bypass.
+
+Moon Reply must remediate the actual affected or unintended economic amount. A Customer must not remain responsible for more than the intended legitimate `JPY 980` purchase because of a Moon Reply Payment Integrity defect. In particular, remediation of a wrong-amount transaction is not capped at `JPY 980` merely because the normal Product price is `JPY 980`.
+
+Refunding an unintended or excess amount for a Payment Integrity Incident is not the same concept as offering a normal partial Product refund. Exact correction, refund, reversal, and confirmation mechanics remain Provider-specific and evidence-gated; this Candidate does not invent the operation.
+
 This Product policy does not eliminate or waive non-waivable Customer rights. Material unresolved legal obligations remain blockers.
 
-Refund Decision Authority and Refund Execution Authority are separate. Execution is server controlled and retries are idempotent. An attempted API request does not by itself establish refund completion; final confirmation semantics remain Provider-evidence-gated.
+Refund Decision Authority and Refund Execution Authority are separate. Moon Reply Refund Decision Authority must remain server/operator controlled under any accepted policy; this Candidate is not that acceptance.
+
+Where the selected Provider supports merchant-initiated refund execution, any Moon Reply-initiated refund command must be server-side and must never be browser/client authorized. Provider- or Store-initiated refunds, reversals, disputes, or equivalent external financial changes may occur outside a Moon Reply refund command. Those external events must be authenticated or otherwise authoritatively verified, normalized, and reconciled.
+
+Browser/client state is never refund authority, and duplicate processing must remain idempotent. An attempted Moon Reply API command does not by itself establish refund completion. Exact PAY.JP, Apple, Google, and RevenueCat refund mechanics and final confirmation semantics remain evidence-gated. This Candidate does not assume that every future platform permits Moon Reply to execute refunds directly.
 
 ## 14. Dispute and Chargeback
 
@@ -431,7 +459,13 @@ The following remain unresolved and must not be inferred:
 - settlement/payout reports and timing;
 - Apple Pay-specific behavior.
 
-## 24. Production-Measurement Decisions Still Unresolved
+## 24. Production and Product Decisions Still Unresolved
+
+### Product decision required before Paid Launch
+
+Customer-initiated cancellation or refund after successful Payment but before generation or fulfillment completion is currently unresolved. It must be decided before Paid Launch and must be consistent with final Customer-facing terms, current official-source consumer-law review, actual fulfillment timing, and selected Provider evidence. This Candidate invents neither a cancellation deadline nor a Provider capability.
+
+### Production-measurement decisions
 
 The following remain unresolved until implementation and QA evidence exists:
 
@@ -462,7 +496,7 @@ No number is invented by this Candidate.
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |
 | Payment Provider calls | Unauthorized |
-| Refund execution | Unimplemented and unauthorized |
+| Moon Reply-initiated refund command | Unimplemented and unauthorized; Provider/Store mechanics remain evidence-gated |
 | Production Payment | Unauthorized |
 | RevenueCat | Unauthorized |
 | Apple IAP | Unauthorized |
