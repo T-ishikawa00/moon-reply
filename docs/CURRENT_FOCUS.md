@@ -1,22 +1,23 @@
 # CURRENT_FOCUS.md
 
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
-## Current Focus — Post-Charter PAY.JP Inquiry Accuracy Refresh and Human Send-Readiness Review
+## Current Focus — PAY.JP Production Application Readiness Planning and Human Readiness Review
 
 - Current product direction: Web first, JPY 980 one-time purchase, PAY.JP as the primary Web direction, followed by paid Web validation, iOS / Apple IAP + RevenueCat, then Android / Google Play Billing + RevenueCat.
 - Canonical strategy: `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
 - Safety baseline: the explicit `2026-08-10` Human decision records the Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Task-local P6 artifacts retaining pre-acceptance `pending_human_*` labels remain immutable historical records and do not establish Payment or final JPY 980 readiness.
-- Immediate next formal work: `Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`.
+- Immediate next formal work: `PAY.JP Production Application Readiness planning and Human readiness review` under `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`.
+- PAY.JP readiness status: `payjp_production_application_readiness_planning_ready_pending_human_chatgpt_review`.
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`.
 - Human + ChatGPT Charter acceptance: complete on `2026-08-12`. Candidate commits remain historical lineage; acceptance is not implementation or production authority.
 - Delivery/Recovery Email Verification: `accepted_required_control_with_trusted_session_reuse`. First or untrusted-session real Payment requires server-authoritative mailbox-control evidence bound to the current purchase authority/Purchase Intent; a valid trusted session bound to the unchanged verified email may be reused; email change or invalid/unavailable trusted state requires reverification.
 - Trusted-session boundary: neither Payment nor Safety authority; never client-self-asserted; no mandatory login, account, profile, or My Page. Safety eligibility and final purchase confirmation remain required for every Purchase.
 - Professional review: optional under the explicit `2026-08-11` Human decision; current official-source, actual Product/Provider behavior, public-wording, and Customer-rights review remains required, and material unresolved legal obligations remain blockers.
 - Implementation authority: `false`. Do not add PAY.JP SDK/API/checkout/webhook code, RevenueCat, Apple IAP, Google Play Billing, a purchase/entitlement migration, DB/Supabase changes, Runtime changes, or Payment Provider calls.
-- Formal PAY.JP evidence status remains separate: Not sent / Not approved / not formally selected; formal written evidence is absent. The inquiry draft and current official inquiry path require accuracy/readiness review and explicit Human send approval; this acceptance sync does not send an inquiry.
+- Formal PAY.JP evidence status remains separate: production-use application Not submitted / Not approved / not formally selected; authoritative application/review evidence is absent. Account creation and application submission are unauthorized. The historical inquiry draft is optional support clarification only and is not preapproval.
 - Downstream review-only legal UI synchronization is a separate unauthorized implementation follow-up before public paid release.
 
-The detailed AI-quality and historical task records below remain evidence, but they are not authority to displace the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review as the current next formal task.
+The detailed AI-quality and historical task records below remain evidence, but they are not authority to displace PAY.JP Production Application Readiness planning and Human readiness review as the current next formal task.
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
@@ -337,7 +338,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Payment Charter v1 in `docs/payment/PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. The next formal work is `Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`: review the existing draft against the accepted Charter, refresh factual questions where necessary, verify the current official inquiry path, and obtain explicit Human approval before any later send. PAY.JP remains Not sent / Not approved / not formally selected, and written evidence is absent. Delivery/Recovery Email Verification is accepted with server-verifiable trusted-session reuse, no client-owned trust, and no mandatory account or login. PAY.JP-specific API/webhook/refund facts remain evidence-gated. Inquiry sending, PAY.JP SDK/API, RevenueCat, Apple IAP, Google Play Billing, Provider calls, DB/Supabase/migration changes, Runtime changes, downstream review-only legal UI synchronization, PR, main merge, and release remain unauthorized. Historical AI Provider confirmations and C2 remain separately unauthorized and are not the current task.
+Payment Charter v1 in `docs/payment/PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. The next formal work is `PAY.JP Production Application Readiness planning and Human readiness review`: complete the readiness package, actual Human/operator facts, final intended URLs, legal publication readiness, and security-declaration readiness before any separate Human submit authorization. The application is Not submitted; PAY.JP remains Not approved / not formally selected, and authoritative application/review evidence is absent. Delivery/Recovery Email Verification is accepted with server-verifiable trusted-session reuse, no client-owned trust, and no mandatory Moon Reply account or login. PAY.JP-specific API/webhook/refund facts remain evidence-gated. PAY.JP account creation/application submission, PAY.JP SDK/API, RevenueCat, Apple IAP, Google Play Billing, Provider calls, DB/Supabase/migration changes, Runtime/LUNA changes, downstream review-only legal UI synchronization, PR, main merge, and release remain unauthorized. Historical AI Provider confirmations and C2 remain separately unauthorized and are not the current task.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

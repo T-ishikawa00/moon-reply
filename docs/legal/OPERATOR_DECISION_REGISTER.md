@@ -31,12 +31,13 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 - 判断方法と選択肢：`OPERATOR_DECISION_GUIDE.md`
 - Human回答欄：`OPERATOR_DECISION_WORKSHEET.md`
 - provider事実の比較：`../payment/PROVIDER_COMPARISON.md`
-- provider照会証拠：`../payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
+- PAY.JP production application readiness：`../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+- provider application/review/inquiry証拠：`../payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
 - provider選定ゲート：`../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
 
 | Decision ID | 項目 | 現在値 | 必要な判断・証拠 | 担当 | 期限 | 状態 |
 | --- | --- | --- | --- | --- | --- | --- |
-| OP-001 | 運営形態：個人 / 個人事業主 / 法人 | [[OPERATOR_DECISION_REQUIRED]] | 契約、税務、表示上の運営主体を決定 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
+| OP-001 | 運営形態：個人 / 個人事業主 / 法人 | [[OPERATOR_DECISION_REQUIRED]] | 契約、税務、表示上の運営主体を決定。PAY.JPの個人/個人事業主routeでは開業届またはcurrent guidanceが認めるequivalent evidenceも必要 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-002 | 法的氏名 | [[OPERATOR_LEGAL_NAME_TBD]] | 公開・契約に使用する実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-003 | 屋号 | [[OPERATOR_TRADE_NAME_TBD]] | 使用有無および実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-004 | 運営責任者 | [[RESPONSIBLE_PERSON_TBD]] | 公開する責任者の実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
@@ -45,7 +46,7 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 | OP-007 | 問い合わせメール | [[SUPPORT_EMAIL_TBD]] | 実在性、受信、権限、運用確認 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-008 | 問い合わせフォーム | [[CONTACT_FORM_URL_TBD]] | 実在URL、入力項目、個人情報取扱い | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-009 | 問い合わせ対応時間 | [[SUPPORT_RESPONSE_TIME_TBD]] | 対応体制と実現可能な返信目安 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
-| OP-010 | 決済プロバイダ | [[PAYMENT_PROVIDER_TBD]] | 書面によるカテゴリ確認とHuman承認 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
+| OP-010 | 決済プロバイダ | [[PAYMENT_PROVIDER_TBD]] | provider-specific authoritative approval evidenceとHuman formal selection。PAY.JPはproduction-use application/review evidence + applicable conditionsが必要 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
 | OP-011 | 支払方法 | [[PAYMENT_METHODS_TBD]] | provider機能、契約、実装方式 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
 | OP-012 | 支払時期 | [[PAYMENT_TIMING_TBD]] | 契約成立・売上確定・表示条件 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
 | OP-013 | 提供時間 | [[DELIVERY_TIMING_TBD]] | 生成・保存・通知フローの実測と運用判断 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
@@ -75,7 +76,7 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 ## 更新規則
 
 - 判断または証拠がない項目を完了にしない
-- providerのマーケティングページだけでカテゴリ承認と扱わない
+- providerのマーケティングページ、blank application form、generic support answerまたはoptional clarificationだけでカテゴリ承認と扱わない。PAY.JPはapplication Not submitted / Not approved / Not selectedのまま
 - 任意の専門家相談を実施した場合は対象文書、確認者、確認日および対応結果を記録する。未実施それ自体を公開・Paid Launchのblockerにしない
 - 値を確定した場合は、整合性表に従ってすべての関連文書・画面へ反映する
 - Human承認済みの初期MVP方針を、将来運用が未決定であることを理由に未決定へ戻さない

@@ -8,9 +8,9 @@
 
 ## 0. Hard gate
 
-No written category acceptance = provider cannot be selected.
+No authoritative category/application acceptance evidence = provider cannot be selected.
 
-Written acceptance must address the honestly described 月の返事 service. A generic marketing page, feature page, application form, verbal statement, or silence is not category approval.
+Acceptance evidence must address the honestly described 月の返事 service through the provider's applicable approval/review route. For PAY.JP, this means production-use application/review evidence and applicable PAY.JP/card-company conditions. A generic marketing page, feature page, blank application form, optional support clarification, verbal statement, or silence is not category approval.
 
 Conditional acceptance is not unconditional acceptance. Every condition must be recorded in `PROVIDER_INQUIRY_EVIDENCE_LOG.md` and reflected in the comparison before scoring.
 
@@ -20,7 +20,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 | Factor | Weight | Evidence required before scoring |
 | --- | ---: | --- |
-| Written category acceptance | 30 | Written response that matches the actual service description and records all conditions |
+| Authoritative category/application acceptance | 30 | Provider-specific approval/review evidence that matches the actual service description and records all conditions |
 | Account freeze/termination risk | 15 | Contract/restriction terms and written clarification of reserve, freeze, termination and unsettled funds |
 | Webhook and idempotency support | 15 | Current official documentation for events, signatures, retries and duplicate handling |
 | Test/sandbox environment | 10 | Current official documentation or account evidence for a usable test process |
@@ -35,7 +35,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 - Scoring starts only after evidence exists.
 - Unknown is not a positive score and must not be converted into an optimistic assumption.
 - Each score must cite the evidence location and checked date.
-- Written category acceptance is both a weighted factor and a mandatory gate.
+- Authoritative category/application acceptance is both a weighted factor and a mandatory gate.
 - A conditional acceptance must list every condition and score only the service that complies with those conditions.
 - Human makes the final provider decision.
 - The highest score does not automatically authorize selection or implementation.
@@ -43,9 +43,9 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 ## 3. Initial provider status
 
-| Provider | Inquiry status | Category status | Score | Evidence | Selection status |
+| Provider | Evidence-route status | Category/application status | Score | Evidence | Selection status |
 | --- | --- | --- | --- | --- | --- |
-| PAY.JP | Not sent | Not approved | Not scored | Evidence required | Not selected |
+| PAY.JP | Production-use application Not submitted | Not approved | Not scored | PAYJP-APP-001; authoritative application/review evidence required | Not selected |
 | KOMOJU | Not sent | Not approved | Not scored | Evidence required | Not selected |
 | STORES | Not sent | Not approved | Not scored | Evidence required | Not selected |
 

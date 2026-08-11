@@ -49,7 +49,7 @@
 
 - 結果通知とマーケティング同意を分離する
 - 不安を煽る販売、結果保証、架空レビュー、架空実績を禁止する
-- 決済事業者は、実際の事業内容を伝えた書面によるカテゴリ確認後に選定する
+- 決済事業者は、実際の事業内容をtruthfully開示し、provider-specific authoritative approval/review evidenceを取得した後にHumanが正式選定する。PAY.JPではproduction-use application/review evidenceが必要であり、support clarificationはpreapprovalではない
 - Stripeを初期前提にしない
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
 
@@ -77,7 +77,8 @@
 
 ## 外部から証拠を得ること
 
-- 決済事業者が月の返事のカテゴリを取り扱えるという書面回答
+- 決済事業者固有の正式な審査経路によるauthoritative category/application acceptance、条件および追加対応
+- PAY.JPの場合、production-use application、PAY.JP/card-company review outcome、additional-information requests/responsesおよびconditions
 - 利用可能な決済手段と、追加審査の条件
 - Webhookイベント、署名検証、再送仕様および冪等性に必要な実装証拠
 - 手数料、入金サイクル、返金、チャージバック、保留金、契約終了時の未精算金条件
@@ -87,7 +88,7 @@
 - Email providerの送信方式、処理地域、保持・削除条件
 - Safety gateとAI payloadが設計どおりに動くことを示す実装・試験証拠
 
-公式サイトの一般的なマーケティング説明だけでは、月の返事のカテゴリ承認の証拠にならない。
+公式サイトの一般的なマーケティング説明、blank application form、generic support answer、optional clarificationだけでは、月の返事のカテゴリ承認の証拠にならない。
 
 ---
 
@@ -117,8 +118,10 @@
 2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
 3. Milestone 2で運営者情報と公開条件を完成する
 4. Milestone 3で決済なしの審査用サイトをデプロイする
-5. Milestone 4で決済事業者へ照会し、書面回答を比較してHumanがproviderを選定する
-6. Milestone 5で実決済を除くBackend・Safety・AI・メールを完成する
-7. Milestone 6で選定済みproviderのSandbox決済を実装する
+5. Milestone 4でPAY.JP Production Application ReadinessをHuman reviewし、actual facts・final URLs・security readinessを整える
+6. Humanがexact production-use application submissionを明示承認した場合のみ申請し、review evidence・conditionsを保存する
+7. authoritative acceptance evidenceに基づきHumanがproviderを正式選定する。fallback providersは各provider固有のverified evidence pathを使う
+8. Milestone 5で実決済を除くBackend・Safety・AI・メールを完成する
+9. Milestone 6で選定済みproviderのSandbox決済を実装する
 
-Provider inquiry must not begin before Milestone 3 is accepted. Provider-specific payment implementation must not begin before Human selects the provider in Milestone 4.
+PAY.JP production-use application submission requires separate explicit Human authorization after readiness review. Provider-specific Payment implementation must not begin before Human formal selection in Milestone 4 and a separate implementation authorization.

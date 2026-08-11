@@ -41,7 +41,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next formal work is `Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`. No inquiry is sent or authorized by this Charter acceptance.
+The next formal work is `PAY.JP Production Application Readiness planning and Human readiness review` under `PAYJP_PRODUCTION_APPLICATION_READINESS.md`. The production-use application is Not submitted, account creation and submission are not authorized by this Charter acceptance, PAY.JP is Not approved / not formally selected, and Payment implementation authority remains `false`.
 
 ## 2. Initial Product Contract
 
@@ -546,7 +546,7 @@ No number is invented by this Charter.
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Professional review | Optional escalation; not completed; not a hard launch gate |
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
-| PAY.JP written category evidence | Not established |
+| PAY.JP production-application/review evidence | Not established; application Not submitted |
 | PAY.JP formal selection | Incomplete |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |

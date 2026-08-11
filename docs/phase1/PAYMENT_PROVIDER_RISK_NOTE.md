@@ -38,25 +38,35 @@ No provider is approved yet.
 
 ---
 
-## 3. Provider Inquiry Requirement
+## 3. Provider Review / Evidence Requirement
 
 Before implementing real payment:
 
 - Disclose the actual AI relationship-message analysis and decision-support flow
 - Disclose the user-facing `鑑定ノート` and `鑑定書` terms
-- Confirm which category the provider applies; do not assert an exemption
-- Confirm whether one-shot digital diagnosis is allowed
+- Obtain the applicable provider/category decision through the provider's authoritative review route; do not self-declare an exemption or category
+- Confirm whether the one-shot digital report is accepted
 - Confirm refund policy requirements
 - Confirm prohibited wording
 - Confirm required legal disclosures
 - Confirm whether PayPay or credit card support is available
 - Confirm whether 特商法表記 is required before review
 
+For PAY.JP specifically:
+
+- PAY.JP is the strategic primary Web direction but remains Not approved / not selected
+- disclose the complete truthful service in the production-use application
+- complete Production Application Readiness and obtain explicit Human submission authorization before any future submission
+- preserve the authoritative PAY.JP/card-company application/review outcome and every condition
+- do not use optional support clarification as preapproval or as a substitute for formal review evidence
+
+KOMOJU, STORES, or another fallback must use its own verified review/application/inquiry route. Do not generalize the PAY.JP process.
+
 ---
 
-## 4. Product Description for Provider Inquiry
+## 4. Product Description for Provider Review or Specific Clarification
 
-Use this neutral description when contacting providers:
+Use this neutral description in an authoritative application/review or, when necessary, a narrowly scoped support clarification:
 
 ```text
 AIを活用した恋愛メッセージ分析・判断支援デジタルレポートを検討しています。
@@ -65,12 +75,13 @@ AIを活用した恋愛メッセージ分析・判断支援デジタルレポー
 
 ユーザー向けの商品表現として「恋のメッセージ鑑定ノート」「鑑定ノート」「鑑定書」を使用します。タロット、占星術、生年月日、数秘術、霊感その他の超自然的な占術は使用しません。医療、診断、カウンセリング、法律相談、調査、相手の本心断定、復縁保証、返信保証または未来保証は行いません。
 
-単発価格は税込980円程度を予定しています。
+単発価格は税込980円です。
 納品形式はWeb上の結果ページまたはメールでのデジタル鑑定書です。
 
-上記の機能および表示内容を踏まえ、貴社ではどの業種・商品カテゴリとして扱われるか、また決済利用が可能かをご教示ください。
-あわせて、必要な注意書き、制限、公開ページ、返金・デジタルコンテンツ要件、個人申込み要件、手数料、reserveまたは売上保留条件をご教示ください。
+上記の機能および表示内容を省略せず、貴社の正式な申込・審査経路で審査を受けます。specific support clarificationを行う場合は、未解決の具体的な質問だけを確認します。
 ```
+
+For PAY.JP, this description belongs in production-application readiness and the actual production-use application. Support does not provide pre-application approval.
 
 ---
 

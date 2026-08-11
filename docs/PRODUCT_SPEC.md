@@ -475,7 +475,7 @@ Subscriptionは長期候補として保持するが、価格、月間回数、�
 
 ### Web/PWA段階
 
-Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProduct戦略であり、provider承認、書面証拠に基づく正式選定または実装権限ではない。Payment Charter v1受入は完了したが、それらの別gateを満たさない。実際の機能と表示に基づく書面回答を得るまで取扱可否を断定しない。
+Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProduct戦略であり、provider承認、authoritative evidenceに基づく正式選定または実装権限ではない。Payment Charter v1受入は完了したが、それらの別gateを満たさない。実際の機能と表示をtruthfully提出したproduction-use application/review evidenceを得るまで取扱可否を断定しない。
 
 初期Web決済方法の方向：
 
@@ -494,13 +494,14 @@ Webの第一Payment Provider方針はPAY.JPとする。ただし、これはProd
 ### Payment Charter v1 accepted後とMilestone 4でやること
 
 - Payment Charter v1は`2026-08-12`に`human_chatgpt_accepted_complete`。Candidate commitsはhistorical lineageであり、Payment implementation authorityは`false`
-- 次の正式作業は`Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`
-- 既存PAY.JP inquiry draftをaccepted Charterに照らしてreviewし、必要なfactual questionをrefreshする
-- current Provider contact/inquiry pathを確認し、PAY.JPへの正確な照会文をHumanが送信前に明示承認する
-- Human承認後にのみ送信し、送信本文と回答を証拠として保存する
-- 書面回答前にproviderを正式承認・選定したと扱わない
-- 書面証拠に基づくformal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない
-- 現在のPAY.JPはNot sent / Not approved / not formally selectedで、formal written evidenceはabsent
+- 次の正式作業は`PAY.JP Production Application Readiness planning and Human readiness review`
+- `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`をcontrolling readiness planとし、actual operator/application facts、final intended URLs、legal publication readinessおよびsecurity-declaration readinessをHumanが確認する
+- PAY.JPはpre-application screeningを提供しないため、historical inquiry draftをapproval prerequisiteにしない。support inquiryはspecific clarificationに限り、production application evidenceを代替しない
+- readiness review後も、production-use application submissionにはexact applicationの明示的Human authorizationが別途必要
+- future submission時はapplication facts、URLs、documents、reference、additional-information requests/responses、status、outcomeおよびconditionsを証拠として保存する
+- authoritative application/review evidence前にproviderを正式承認・選定したと扱わない
+- formal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない
+- 現在のPAY.JP production-use applicationはNot submitted、PAY.JPはNot approved / not formally selectedで、authoritative application/review evidenceはabsent
 
 ---
 
@@ -917,9 +918,9 @@ LPに人を集められない場合は、商品ではなく集客の問題とし
 
 ## 23. 直近の次アクション
 
-Payment Charter v1は`2026-08-12`にHuman + ChatGPT accepted completeとなった。次の正式作業は`Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review`であり、実装ではない。既存draftのaccuracy review、必要なfactual question refresh、current inquiry path確認および送信前の明示的Human approvalまでを行う。
+Payment Charter v1は`2026-08-12`にHuman + ChatGPT accepted completeとなった。次の正式作業は`PAY.JP Production Application Readiness planning and Human readiness review`であり、実装ではない。statusは`payjp_production_application_readiness_planning_ready_pending_human_chatgpt_review`。actual operator/application facts、final intended URLs、legal publication readinessおよびsecurity-declaration readinessを確認し、actual application fieldsはsubmission-preparation時に再確認する。
 
-Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`、Payment implementation authorityは`false`である。PAY.JPはNot sent / Not approved / not formally selectedで、formal written evidenceはabsent。PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime変更を承認しない。
+Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`、Payment implementation authorityは`false`である。PAY.JP production-use applicationはNot submitted、PAY.JPはNot approved / not formally selectedで、authoritative application/review evidenceはabsent。PAY.JP account creation/application submission、PAY.JP SDK/API、RevenueCat、Apple IAP、Google Play Billing、Provider call、DB/Supabase/migrationまたはRuntime/LUNA変更を承認しない。
 
 ---
 
@@ -927,7 +928,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-現在の次作業はPost-Charter PAY.JP inquiry accuracy refresh and Human send-readiness reviewのみ。Provider inquiryは送信せず、formal written evidence、evidence-gate selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+現在の次作業はPAY.JP Production Application Readiness planning and Human readiness reviewのみ。account creation/application submissionは行わず、authoritative application/review evidence、evidence-gate selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - PAY.JP SDK/API/checkout/webhook
 - RevenueCat

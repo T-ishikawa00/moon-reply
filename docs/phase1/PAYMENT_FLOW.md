@@ -38,7 +38,7 @@ Not in the initial Web direction:
 - multiple Payment Providers in parallel
 - RevenueCat Billing solely for cross-platform provider uniformity
 
-PAY.JP has not passed the formal written-evidence selection gate. Need confirmation before implementation:
+PAY.JP has not submitted a production-use application or passed the formal authoritative-evidence selection gate. Actual application/review evidence must resolve before implementation:
 
 - AI-assisted fortune-telling / love diagnosis category acceptance
 - digital service delivery
@@ -132,11 +132,13 @@ No payment, webhook, generation, refund, notification, or state-machine implemen
 
 ---
 
-## 5. Payment Provider Inquiry Copy
+## 5. PAY.JP Readiness and Historical Clarification Copy
 
-Current status: PAY.JP is Not sent, Not approved, and not formally selected; formal written evidence is absent. The next formal work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review: review this draft against the accepted Charter, refresh factual questions where necessary, verify the current official inquiry path, and obtain explicit Human approval before any send.
+Current status: the PAY.JP production-use application is Not submitted; PAY.JP is Not approved and not formally selected, and authoritative application/review evidence is absent. The next formal work is PAY.JP Production Application Readiness planning and Human readiness review under `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`. Account creation and submission remain unauthorized.
 
-Inquiry message:
+PAY.JP provides no pre-application screening. The following copy is preserved as an unsent historical artifact and may be adapted only for a specific support clarification. It is not send-ready, not a prerequisite, and not approval evidence.
+
+Historical/optional clarification copy:
 
 ```text
 AIを活用した恋愛メッセージ分析・判断支援デジタルレポートを検討しています。

@@ -154,7 +154,7 @@ Users must be warned not to enter their own or a third party's direct identifier
 
 A future Payment implementation authorization must not be granted until review evidence includes:
 
-- payment-provider category inquiry
+- provider-specific authoritative category/application approval and review evidence
 - compliance docs review
 - final confirmation screen requirements are approved
 - refund policy direction is approved
@@ -175,10 +175,11 @@ Uncertain legal questions must remain unresolved and marked for current-source r
 
 ## 9. Payment Provider Position
 
-- A provider must be selected only after an honest category inquiry and written evidence
-- PAY.JP and KOMOJU are priority inquiry candidates, not approved providers
-- STORES, Square, and other providers require current official review and/or inquiry
-- Stripe is not the initial default and must not be implemented without written category review
+- A provider must be selected only after truthful disclosure and provider-specific authoritative approval/review evidence
+- PAY.JP is the strategic primary Web direction, but its production-use application is Not submitted and it is Not approved / not selected
+- For PAY.JP, authoritative category/application evidence comes from the formal production-use application and applicable PAY.JP/card-company review, not an invented pre-screening inquiry
+- An optional PAY.JP support clarification is not preapproval and does not replace application/review evidence
+- KOMOJU, STORES, Square, Stripe, and other fallback providers require verification of their own current official review/application/inquiry evidence route; PAY.JP's process must not be generalized to them
 - No provider SDK, checkout, webhook, or production payment flow is authorized by Task 18A
 
 ---

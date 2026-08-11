@@ -52,7 +52,7 @@ The remaining delivery lane separates work that must not be collapsed into one t
 | UI/review implementation | Milestone 1 | Payment-free, fixture/mock based, no public writes or runtime integrations |
 | Operator decisions | Milestone 2 | Human facts and policies; no fictional public facts |
 | Deployment for review | Milestone 3 | Stable review URL with payment unavailable |
-| External inquiry and selection | Milestone 4 | Written evidence and Human provider selection required |
+| Provider review evidence and selection | Milestone 4 | Provider-specific authoritative evidence and Human provider selection required |
 | Backend/AI/email implementation | Milestone 5 | Mock-paid/test-paid fulfillment before real payment integration |
 | Payment implementation | Milestone 6 | Human-approved provider, sandbox/test mode only |
 | E2E and operations | Milestone 7 | Normal, safety, abuse, failure, refund, recovery, and stop procedures |
@@ -81,13 +81,13 @@ Planning/specification must define hosting, review URL, indexing/privacy posture
 
 Implementation deploys only the payment-free review site. Validation covers stable URL access, mobile/desktop presentation, navigation, broken links, contact receipt, and a clear payment-unavailable notice. Human acceptance closes the milestone.
 
-### Milestone 4: Payment Provider Inquiry and Selection
+### Milestone 4: Payment Provider Review Evidence and Selection
 
-Planning/specification must freeze the truthful service description, verified inquiry channel, evidence format, provider fallback order, comparison criteria, and Human decision gate.
+Planning/specification must freeze the truthful service description, provider-specific review route, evidence format, provider fallback order, comparison criteria, and Human decision gates.
 
-External inquiry occurs only after Milestones 1–3 are accepted. PAY.JP is first; KOMOJU follows only if needed; STORES or another provider requires authorization. Responses are retained verbatim. Generic support, an invitation to apply, silence, or SDK availability is not approval.
+For PAY.JP, the sequence is Production Application Readiness -> Human submit authorization -> production-use application -> preserved PAY.JP/card-company review evidence and conditions -> Human formal selection. PAY.JP provides no pre-application screening; optional support clarification is not approval. KOMOJU, STORES, or another fallback follows only if needed and authorized, using that provider's verified evidence route.
 
-Validation confirms written evidence and known application/site conditions. Human selects the provider and accepts the milestone.
+Validation confirms authoritative approval/review evidence and all known application/site conditions. Human selects the provider and accepts the milestone.
 
 ### Milestone 5: Core Backend, Safety, AI and Email
 
@@ -99,7 +99,7 @@ Validation proves one controlled request can move from submission through stored
 
 ### Milestone 6: Approved Provider Sandbox Payment
 
-Planning/specification must be provider-specific and based on Milestone 4 written evidence. It must define checkout, event verification, webhook signatures, idempotency, duplicate prevention, purchase state machine, cancellation/failure, refunds, and evidence retention.
+Planning/specification must be provider-specific and based on Milestone 4 authoritative approval/review evidence. It must define checkout, event verification, webhook signatures, idempotency, duplicate prevention, purchase state machine, cancellation/failure, refunds, and evidence retention.
 
 Implementation connects only the Human-approved provider in test/sandbox mode. Validation proves one sandbox payment triggers exactly one fulfillment and one accessible result. Human acceptance closes the milestone.
 
@@ -125,9 +125,9 @@ Verification confirms payment evidence, internal purchase record, exactly one ge
 
 The dependency chain is strict:
 
-`M1 review experience → M2 truthful operator/publication facts → M3 stable review deployment → M4 written provider evidence and Human selection → M5 backend fulfillment without real card payment → M6 approved-provider sandbox payment → M7 E2E/failure operations → M8 production approval and soft launch → M9 first real purchase verification`
+`M1 review experience → M2 truthful operator/publication facts → M3 stable review deployment → M4 provider-specific authoritative review evidence and Human selection → M5 backend fulfillment without real card payment → M6 approved-provider sandbox payment → M7 E2E/failure operations → M8 production approval and soft launch → M9 first real purchase verification`
 
-Provider inquiry is not the immediate next task. Provider-specific payment implementation cannot precede Human provider selection. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
+PAY.JP Production Application Readiness planning and Human readiness review is the current Payment task; account creation and application submission remain unauthorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
 
 ## 6. One-Task / One-Commit / Human-Review Rule
 

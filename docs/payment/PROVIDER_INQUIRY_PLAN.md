@@ -2,40 +2,40 @@
 
 ## Status
 
-Internal inquiry-preparation draft.
+Internal provider-evidence planning document.
 
-This is not legal advice, a submitted inquiry, or evidence of provider approval.
+This is not legal advice, a submitted inquiry/application, or evidence of provider approval.
 
-Task 18A did not authorize sending an inquiry or implementing a payment provider.
+Task 18A did not authorize a Provider account, application submission, inquiry, or Payment implementation.
 
-Task 18C prepares drafts, evidence logging, scoring rules, and a decision gate only. It does not authorize sending an inquiry, selecting a provider, or implementing payment.
+Task 18C prepared historical drafts, evidence logging, scoring rules, and a decision gate only. It did not authorize an account, application submission, inquiry, provider selection, or Payment implementation.
 
-The `2026-08-10` product strategy now names PAY.JP as the primary Web direction and cards plus Apple Pay as the intended initial methods. Existing drafts remain unsent historical preparation and must not be sent without a post-Charter accuracy refresh and explicit Human send authorization. PayPay, Google Pay, and multiple simultaneous Web providers are not initial requirements.
+The `2026-08-10` product strategy names PAY.JP as the primary Web direction and cards plus Apple Pay as the intended initial methods. Current PAY.JP guidance checked on `2026-08-12` provides no pre-application screening: the PAY.JP primary path is production-application readiness, explicit Human submission authorization, production-use application, and preservation of review evidence. The PAY.JP inquiry draft is an unsent historical artifact that may be adapted only for a specific support clarification; it is not a preapproval path. PayPay, Google Pay, and multiple simultaneous Web providers are not initial requirements.
 
 ---
 
 ## 0. Rule
 
-No real payment SDK implementation before written category review.
+No real payment SDK implementation before provider-specific authoritative approval/review evidence, Human formal selection, and separate implementation authorization.
 
 No provider is currently approved.
 
-No inquiry has been sent. PAY.JP, KOMOJU, and STORES remain Not sent, Not approved, Not selected, and Not scored.
+No PAY.JP production-use application has been submitted. No inquiry has been sent. PAY.JP, KOMOJU, and STORES remain Not approved, Not selected, and Not scored.
 
 ---
 
-## 1. Inquiry Priority
+## 1. Provider-specific evidence routes
 
-1. PAY.JP
-2. KOMOJU
-3. STORES or other Japan-friendly provider
-4. Additional providers after review
+1. PAY.JP: `PAYJP_PRODUCTION_APPLICATION_READINESS.md` -> Human submit authorization -> production-use application -> PAY.JP/card-company review evidence.
+2. KOMOJU: fallback only; verify its current provider-specific official review/inquiry route before use.
+3. STORES or another Japan-friendly provider: fallback only; verify its current provider-specific evidence route before use.
+4. Additional providers: only after separate review and authorization.
 
 Stripe is not the default option.
 
 Square and other providers require current official restriction review.
 
-PAY.JP is now the strategic primary direction. The remaining order is contingency inquiry sequencing only. None of these positions is provider approval, formal evidence-gate selection, or implementation authorization.
+PAY.JP is the strategic primary direction. The remaining order is contingency sequencing only. No generic inquiry model may be forced onto every provider. None of these positions is provider approval, formal evidence-gate selection, or implementation authorization.
 
 ---
 
@@ -49,13 +49,13 @@ Do not disguise the service category.
 
 Do not omit the AI use, user-facing `鑑定` terminology, actual analysis flow, digital delivery, methods not used, non-guarantee, or safety-gate characteristics to obtain approval.
 
-Do not claim this wording settles the provider category. Ask each provider to determine its applicable business or product category from the complete functional description.
+Do not claim this wording settles the provider category. Submit the complete functional description through the provider's authoritative review route. For PAY.JP that means the production-use application, not a pre-screening inquiry.
 
 ---
 
-## 3. Questions
+## 3. Facts that provider evidence must resolve
 
-Ask each provider:
+Resolve the following through each provider's verified evidence route. For PAY.JP, use actual application/review evidence; support may be contacted only for a specific clarification and its answer must not be treated as category approval.
 
 1. Is this service category accepted?
 2. Which business/product category does the provider apply to the disclosed functions and user-facing terminology?
@@ -78,14 +78,14 @@ Ask each provider:
 
 ---
 
-## 4. Evidence Log
+## 4. Evidence log
 
-For every response, record:
+For every application, review, inquiry, or response, record as applicable:
 
 - provider
-- inquiry date
+- submission/inquiry date
 - channel
-- exact description sent
+- exact description and application facts submitted/sent
 - response date
 - responder/contact reference
 - accepted/rejected/conditional
@@ -94,15 +94,16 @@ For every response, record:
 - evidence file/link
 - next review date
 
-Do not mark a provider approved without written evidence.
+Do not mark a provider approved without authoritative evidence from its applicable approval/review route.
 
-Verbal guidance, marketing copy, or an application form alone is not sufficient evidence of category approval.
+Verbal guidance, marketing copy, a blank application form, or an optional support clarification alone is not sufficient evidence of category approval.
 
 ---
 
-## 5. Task 18C inquiry artifacts
+## 5. Evidence and historical inquiry artifacts
 
-- PAY.JP: `PAYJP_INQUIRY_DRAFT.md`
+- PAY.JP controlling readiness: `PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+- PAY.JP historical/optional support template: `PAYJP_INQUIRY_DRAFT.md`
 - KOMOJU: `KOMOJU_INQUIRY_DRAFT.md`
 - STORES: `STORES_INQUIRY_DRAFT.md`
 - Other providers: `GENERIC_PROVIDER_INQUIRY_TEMPLATE.md`
@@ -114,11 +115,20 @@ Verbal guidance, marketing copy, or an application form alone is not sufficient 
 
 ## 6. Required workflow
 
-1. Verify the provider's current official inquiry channel and restricted-business information.
-2. Human completes real operator contact information and approves the exact message.
-3. Send only in Milestone 4, after Human acceptance of Milestones 1–3 and explicit approval of the exact inquiry.
-4. Preserve the exact sent text, timestamp, channel, reference, and complete response.
-5. Update the evidence log and provider comparison without optimistic assumptions.
-6. Score only after evidence exists.
-7. Human selects a provider only after the decision gate passes.
-8. Start sandbox implementation only under a separate authorized task.
+### PAY.JP primary path
+
+1. Complete the bounded readiness plan without creating an account or claiming implementation readiness.
+2. Human supplies truthful operator/application facts, final intended URLs, and route-specific documents.
+3. Review legal/publication and security-declaration readiness; recheck current PAY.JP requirements and actual application fields.
+4. Human explicitly authorizes the exact production-use application submission.
+5. Submit only under that future authorization and preserve the exact application/reference/review evidence.
+6. Resolve every additional-information request and attached condition from evidence.
+7. Human formally selects PAY.JP only after authoritative acceptance evidence passes the decision gate.
+8. Start Payment implementation only under a separate authorized task.
+
+### Contingency-provider path
+
+1. Verify the provider's own current official review, application, or inquiry route.
+2. Obtain explicit Human authorization before any external submission or contact.
+3. Preserve exact evidence and update the comparison without optimistic assumptions.
+4. Score and select only after provider-specific authoritative evidence exists.

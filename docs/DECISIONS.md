@@ -16,7 +16,7 @@
 - Payment Charter v1 is Human + ChatGPT accepted complete as of `2026-08-12` with status `human_chatgpt_accepted_complete`; Candidate commits `7aeb9ecbc5a786b895f9280112f13b0629730429` and `b6f38586fadd2a17034810dbb139465af5eade2f` remain historical lineage, and implementation authority remains `false`
 - Delivery/Recovery Email Verification is `accepted_required_control_with_trusted_session_reuse`: first or untrusted-session purchase requires server-authoritative mailbox-control evidence bound to the current purchase authority/Purchase Intent; a valid trusted session bound to the unchanged verified email may be reused; email change or invalid/unavailable trusted state requires reverification
 - The trusted delivery/recovery session is neither Payment authority nor Safety authority, cannot be client-self-asserted, and does not introduce login, an account, a profile, or My Page
-- Next formal Payment work: Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review; no inquiry send or Payment implementation is authorized
+- Next formal Payment work: PAY.JP Production Application Readiness planning and Human readiness review; the application is Not submitted, account creation/submission/Payment implementation are unauthorized, and PAY.JP remains Not approved / not formally selected
 - Professional/specialist review is optional, not a mandatory Paid Launch or Production Payment gate; current official-source and actual Product/Provider/public-wording review remains required, and material unresolved legal obligations remain blockers
 - AI use must be disclosed
 - Dangerous consultations must not receive normal romance鑑定

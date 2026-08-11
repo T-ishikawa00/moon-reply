@@ -44,9 +44,9 @@ Current status:
 - M2-P2-A-R1 Successor Tool Allowlist Correction is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`. M2-P2-A Zero-Cost Token & Cost Estimator is Human / ChatGPT accepted and complete at accepted estimator implementation commit `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. The accepted evidence covers exactly six scenarios, deterministic dry-run envelopes, oracle isolation, synthetic upstream profiles, LOW / CENTRAL / HIGH estimate bands, no-cache conservative costs, deterministic JSON and Markdown reports, and generated-report hash `0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f`. M2-P2-B0-R1 is accepted and complete at `a757e7f28affe29a423ff817872a1a7f650a7fd2`. M2-P2-B0-R2 is accepted and complete at `88b456622950622c35510f4b3b9d19abbd9ec8da`; it preserves the accepted historical 16-file snapshot and makes all M2-P2-A scope gates pass without adding B0 to that snapshot. The exact 18-file M2-P2-B0 contract implementation at `cf75679f2d116132f7519256cd762ba1a51a0af9` has completed automated validation and Human / ChatGPT final review and is accepted and complete. M2-P2-B1-A-R1 Successor Tool Allowlist Correction and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1-R1 is Human / ChatGPT accepted and complete at correction commit `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`; M2-P2-B1-B1 is Human / ChatGPT accepted and complete at implementation commit `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at correction commit `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A Dormant OpenAI Live Binding Foundation is Human / ChatGPT accepted and complete at implementation commit `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. Its HTTPS executor and environment-secret provider remain dormant: live and paid authorization are false, the approval record is absent, actual environment reads, secret resolutions, HTTPS requests, and provider calls are zero, and API spend is USD 0. M2-P2-B1-B2-B paid calibration execution remains unauthorized and not started.
 - M2-P2-B1-B2-B0-R1 historical-scope and execution-boundary correction is Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f`. M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package is Human / ChatGPT accepted and complete at `e8b369baa14ff417fed19d75f31c733dd5c8d240`. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling and are not the active product path. M2-P2-B1-B2-B1 true external approval creation and paid execution remain unauthorized and not started.
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
-- PAY.JP is the Human-agreed strategic primary Web direction, but no provider inquiry has been sent and no provider has passed the formal written-evidence selection gate. Strategy, provider approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states; Charter acceptance is complete and does not change the other states.
+- PAY.JP is the Human-agreed strategic primary Web direction, but its production-use application is Not submitted and no provider has passed the formal authoritative-evidence selection gate. Strategy, account creation, application readiness, submit authorization, submission, provider approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states; Charter acceptance is complete and does not change the other states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. Delivery/Recovery Email Verification is accepted as `accepted_required_control_with_trusted_session_reuse`. The next formal Payment work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review. PAY.JP remains Not sent, Not approved, and not formally selected; written category evidence is absent. No provider inquiry, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
+- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. Delivery/Recovery Email Verification is accepted as `accepted_required_control_with_trusted_session_reuse`. The next formal Payment work is PAY.JP Production Application Readiness planning and Human readiness review. The application is Not submitted; PAY.JP remains Not approved and not formally selected, and authoritative application/review evidence is absent. No PAY.JP account/application submission, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work has started. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -152,26 +152,26 @@ Includes hosting deployment, stable review URL, mobile and desktop review, navig
 
 Exit criterion: an external reviewer or payment provider can inspect the service at a stable URL.
 
-## 7. Milestone 4: Payment Provider Inquiry and Selection
+## 7. Milestone 4: Payment Provider Review Evidence and Selection
 
-Goal: use the real review URL and an honest service description to obtain written provider evidence and a Human selection.
+Goal: use final intended URLs and an honest service description to obtain provider-specific authoritative approval/review evidence and a Human selection.
 
 Sequence:
 
-1. Review the existing PAY.JP inquiry draft against the accepted Payment Charter v1.
-2. Refresh factual questions where necessary without inventing Provider behavior.
-3. Verify the current official PAY.JP contact/inquiry path.
-4. Human explicitly approves the final PAY.JP inquiry before sending.
-5. The inquiry is sent through the verified official channel only after that approval.
-6. The response is recorded verbatim as evidence.
-7. If PAY.JP is unavailable or unsuitable, proceed to KOMOJU only when authorized.
-8. STORES or another provider is considered only when authorized.
-9. Written conditions are compared.
-10. Human selects the Provider under the formal evidence gate.
+1. Payment Charter v1 remains accepted and independent from provider approval.
+2. Complete PAY.JP Production Application Readiness planning and Human readiness review.
+3. Complete actual operator/application facts, final intended URLs, legal publication readiness, and security-declaration readiness.
+4. Recheck current PAY.JP requirements and actual application fields without inventing implementation compliance.
+5. Human explicitly authorizes the exact PAY.JP production-use application submission.
+6. Submit only under that future authorization and preserve exact application/reference/review evidence.
+7. Resolve and preserve additional-information requests, PAY.JP/card-company results, and every attached condition.
+8. If PAY.JP is unavailable or unsuitable, proceed to KOMOJU or another fallback only when authorized and under that provider's verified evidence route.
+9. Update comparison and scorecard only from authoritative evidence.
+10. Human formally selects the Provider.
 
-A generic support response, invitation to apply, silence, or SDK availability is not provider approval.
+A generic support response, optional clarification, invitation to apply, silence, or SDK availability is not provider approval. PAY.JP provides no pre-application screening; its primary evidence route is the production-use application/review process.
 
-Exit criterion: Human selects a provider using written evidence, and the required application and site conditions are known.
+Exit criterion: Human selects a provider using provider-specific authoritative approval/review evidence, and all applicable conditions are known. This documentation task does not meet that criterion.
 
 ## 8. Milestone 5: Core Backend, Safety, AI and Email
 

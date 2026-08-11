@@ -155,12 +155,33 @@ Research note:
 
 URL:
 
-- Official provider documents and inquiry response must be recorded before implementation
+- https://help.pay.jp/ja/articles/5000820-申請前に事前審査をしてもらうことはできますか
+- https://help.pay.jp/ja/articles/3438184-利用開始までどのような流れになりますか
+- https://help.pay.jp/ja/articles/3438268-サイト未オープンの場合でも申請可能ですか
+- https://help.pay.jp/ja/articles/3438177-個人-個人事業主-でも利用できますか-必要な書類はありますか
+- https://help.pay.jp/ja/articles/8610808-セキュリティ対策実施状況のご申告-の回答方法を教えてください
 
 Status:
 
-- Inquiry candidate
-- Not approved yet
+- Strategic primary Web direction
+- Production-use application evidence required
+- Application Not submitted
+- Not approved / not selected
+
+Current official evidence checked on `2026-08-12`:
+
+- PAY.JP does not provide pre-application screening. Sending service materials to support in advance does not produce an approval/rejection decision.
+- Formal review uses the information submitted through the production-use application after account registration.
+- Account registration and email verification precede console access; test API keys are available after email verification. This records only the official flow and does not authorize account creation, key access, API use, or implementation.
+- An unopened site may be used for application, but the service, Terms, Privacy, and Tokushoho URLs must be final/confirmed. Demo, sample, test-only, or unsettled URLs are not sufficient; required content must be present by Payment launch.
+- Corporate and individual applications are permitted. An individual/sole-proprietor route requires `開業届` or a currently accepted equivalent described in the official guidance.
+- New production applications require completion of the security-measures declaration. Applicable credit-card security measures are required, including EMV 3-D Secure before service launch.
+
+Project evidence boundary:
+
+- Moon Reply has not created a PAY.JP account or submitted an application under this task.
+- No actual operator document, final URL, security declaration, implementation-compliance evidence, application outcome, or approval is recorded.
+- The controlling readiness plan is `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`.
 
 ### KOMOJU
 

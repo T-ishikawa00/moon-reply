@@ -8,13 +8,14 @@
 
 Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Payment implementation remains unauthorized.
 
-The next formal Payment work is the Post-Charter PAY.JP inquiry accuracy refresh and Human send-readiness review. PAY.JP remains Not sent, Not approved, and not formally selected.
+The next formal Payment work is PAY.JP Production Application Readiness planning and Human readiness review. The application is Not submitted; PAY.JP remains Not approved and not formally selected. Account creation, submission, and Payment implementation are unauthorized.
 
 Current canonical planning:
 
 - `docs/ROADMAP.md`
 - `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
 - `docs/payment/PAYMENT_CHARTER.md`
+- `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
 - `docs/CURRENT_FOCUS.md`
 - `docs/CODEX_HANDOFF.md`
 

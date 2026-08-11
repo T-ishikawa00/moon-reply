@@ -1,10 +1,18 @@
 # PAYJP_INQUIRY_DRAFT.md
 
-> **DRAFT**
+> Status: `optional_support_clarification_template_not_preapproval_path`
 >
 > **NOT SENT**
 >
 > **NO APPROVAL RECEIVED**
+
+PAY.JP official guidance checked on `2026-08-12` states that pre-application screening is not provided. Formal review uses the production-use application after account registration; sending service materials to support in advance does not produce an approval/rejection decision.
+
+This file preserves the unsent Task 18C inquiry work as a historical artifact. It is not send-ready, is not required before the PAY.JP production-use application, and must not be used as a category-preapproval request. It may be adapted only when a specific support clarification remains useful. Any such clarification does not replace production-application/review evidence and does not establish approval or formal selection.
+
+The controlling PAY.JP path is `PAYJP_PRODUCTION_APPLICATION_READINESS.md`.
+
+## Historical unsent draft — do not send as written
 
 ## Suggested subject
 
@@ -71,4 +79,4 @@ PAY.JP ご担当者様
 
 ---
 
-この文面は送信前ドラフトである。正しい問い合わせ窓口、最新の取扱制限、実在する運営者連絡先およびHumanの送信承認を確認するまで送信しない。
+この文面はTask 18C時点の未送信historical draftであり、現在のPAY.JP事前承認経路ではない。このまま送信しない。specific support clarificationへ適応する場合も、正しい窓口、最新の公式情報、実在する運営者連絡先、限定した質問、Humanの送信承認を確認し、その回答をproduction application approvalとして扱わない。

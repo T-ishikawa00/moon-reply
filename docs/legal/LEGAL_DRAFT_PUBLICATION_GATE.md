@@ -21,23 +21,24 @@
 - `[ ]`を`[x]`へ変更する場合は、判断者、確認日、証拠および反映先を記録する
 - 本ゲートの完了は、決済実装を自動的に承認するものではない
 - 決済実装は引き続き禁止します（Payment implementation remains prohibited.）
-- Task 18Cは判断ガイドとprovider照会準備を作成するだけであり、本ゲートのチェックを完了しない
+- Task 18Cのprovider inquiry artifactsはhistorical preparationであり、本ゲートのチェックを完了しない。現在のPAY.JP readiness planningも本ゲート、申請、承認または公開承認を完了しない
 - 最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言およびCustomer-rightsのreviewは必須とし、materialな未解決法的義務はblockerとして残す
 - 専門家相談は任意のescalationであり、未実施それ自体は公開、Paid LaunchまたはProduction Paymentのblockerではない。内部reviewは法的適合性を保証しない
 
-## Task 18C supporting documents
+## Provider and readiness supporting documents
 
 - Operator decision guide: `OPERATOR_DECISION_GUIDE.md`
 - Operator worksheet: `OPERATOR_DECISION_WORKSHEET.md`
 - Provider comparison: `../payment/PROVIDER_COMPARISON.md`
-- PAY.JP inquiry draft: `../payment/PAYJP_INQUIRY_DRAFT.md`
+- PAY.JP production-application readiness: `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+- PAY.JP historical/optional support clarification draft: `../payment/PAYJP_INQUIRY_DRAFT.md`
 - KOMOJU inquiry draft: `../payment/KOMOJU_INQUIRY_DRAFT.md`
 - STORES inquiry draft: `../payment/STORES_INQUIRY_DRAFT.md`
 - Inquiry evidence log: `../payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
 - Provider scorecard: `../payment/PROVIDER_DECISION_SCORECARD.md`
 - Provider selection gate: `../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
 
-PAY.JP、KOMOJU、STORESはいずれもNot sent、Not approved、Not selected、Not scoredである。
+PAY.JP production-use applicationはNot submittedであり、PAY.JPはNot approved、Not selected、Not scoredである。KOMOJU、STORESのfallback inquiry artifactsはNot sent、Not approved、Not selected、Not scoredである。PAY.JP application readinessはlegal publication approvalではない。
 
 ## 1. Operator completion
 
@@ -51,8 +52,11 @@ PAY.JP、KOMOJU、STORESはいずれもNot sent、Not approved、Not selected、
 
 ## 2. Provider decisions
 
-- [ ] 決済事業者から書面によるカテゴリ確認を取得
-- [ ] 決済事業者をHumanが承認
+- [ ] 決済事業者固有の正式な審査経路からauthoritative category/application approval evidenceとconditionsを取得
+- [ ] PAY.JPの場合、production-use application/review outcomeおよびapplicableなPAY.JP/card-company conditionsを保存
+- [ ] PAY.JP security-measures declarationのactual questionsと回答根拠を確認
+- [ ] EMV 3-D Secureを含むapplicableなsecurity requirementsの実装・試験証拠を確認
+- [ ] 決済事業者をHumanが正式承認・選定
 - [ ] AI providerを確定
 - [ ] AI endpointを確定
 - [ ] AI organization/projectのdata-control settingsを確認

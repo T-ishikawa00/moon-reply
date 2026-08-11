@@ -176,19 +176,26 @@ Dependency: Milestone 2 Human acceptance.
 - [ ] Validation: contact receipt and indexing/privacy decision
 - [ ] Human acceptance of Milestone 3
 
-## Milestone 4: Payment Provider Inquiry and Selection
+## Milestone 4: Payment Provider Review Evidence and Selection
 
 Dependency: Milestone 3 Human acceptance.
 
-- [ ] Planning/spec: freeze truthful inquiry content, verified channel, evidence format, fallback order, comparison criteria, and Human gates
-- [ ] Human acceptance of Milestone 4 planning/specification and final PAY.JP inquiry
-- [ ] External inquiry: send PAY.JP inquiry through verified official channel
-- [ ] Evidence: record PAY.JP response verbatim
+- [ ] PAY.JP Production Application Readiness planning/specification
+- [ ] Human readiness review of the complete PAY.JP readiness package
+- [ ] Actual operator/application facts complete; no guessed personal information
+- [ ] Final intended service, Terms, Privacy, and Tokushoho URLs available
+- [ ] PAY.JP security-declaration readiness and implementation-evidence gaps reviewed
+- [ ] Current PAY.JP requirements and actual application fields rechecked
+- [ ] Human explicitly authorizes the exact PAY.JP production-use application submission
+- [ ] External submission: submit PAY.JP production-use application through the verified official route
+- [ ] Evidence: preserve exact application facts, URLs, documents, reference identifiers, and status changes
+- [ ] Evidence: preserve additional-information requests, exact responses, PAY.JP/card-company outcomes, and all conditions
+- [ ] Resolve every applicable Provider/card-company condition
 - [ ] External inquiry: if required and authorized, send KOMOJU inquiry and record response verbatim
 - [ ] External inquiry: consider STORES/other provider only when authorized
-- [ ] Validation: distinguish written acceptance/conditions from generic support, invitation, silence, or SDK availability
-- [ ] Validation: compare written conditions and required application/site changes
-- [ ] Human provider selection
+- [ ] Validation: distinguish authoritative provider-specific acceptance/conditions from generic support, optional clarification, invitation, silence, or SDK availability
+- [ ] Validation: compare authoritative conditions and required application/site changes
+- [ ] Human formal PAY.JP/provider selection
 - [ ] Human acceptance of Milestone 4
 
 ## Milestone 5: Core Backend, Safety, AI and Email
