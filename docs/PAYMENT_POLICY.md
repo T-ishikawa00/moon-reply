@@ -26,9 +26,9 @@ The initial MVP does not use a free complete first reading, ad-supported complet
 
 This Payment Policy does not prohibit or govern external marketing or paid customer acquisition.
 
-The primary Web provider direction is PAY.JP. Intended initial Web methods are supported credit/debit cards and Apple Pay, all at the same JPY 980 total price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-based Web billing are not part of the initial direction.
+Stripe Checkout is the desired strategic primary Web direction under a Candidate that remains pending Human + ChatGPT integrated review. Desired initial methods are credit/debit cards, Apple Pay, Google Pay, and PayPay, all for the same JPY 980 tax-inclusive one-time Product. No method is treated as enabled or eligible without actual Stripe evidence.
 
-PAY.JP direction is not Provider approval, formal evidence-gate selection, or implementation authorization. PAY.JP remains Not sent, Not approved, and not formally selected; written category evidence is absent.
+Stripe feasibility, account, approval, activation, and formal selection are absent or incomplete. PAY.JP is `paused_fallback_provider_direction`; its evidence remains preserved but does not control current next work. RevenueCat is not required for initial Web fulfillment and remains a desired, unresolved future cross-platform synchronization layer. No Provider account, contact, API, implementation, or Production Payment authority is created.
 
 ## Safety and Purchase Eligibility
 
@@ -78,11 +78,11 @@ The Charter accepts initial Product refund principles and Payment Integrity inva
 
 ## Long-Term Direction
 
-- Web: PAY.JP direction
+- Web: desired Stripe Checkout direction under Candidate review; PAY.JP paused fallback
 - iOS: Apple IAP + RevenueCat
 - Android: Google Play Billing + RevenueCat
 - Subscription: future coexistence candidate only after repeat-demand evidence; one-time purchase is not automatically removed
 
 ## Current Provider Evidence State
 
-No provider inquiry or Provider call is created by this policy. Written evidence, formal provider selection, sandbox authorization, production authorization, and implementation remain separately gated by the evidence documents under `docs/payment/`.
+No provider inquiry, account, or Provider call is created by this policy. Written Stripe feasibility and method evidence, formal provider selection, sandbox authorization, production authorization, and implementation remain separately gated by the evidence documents under `docs/payment/`.

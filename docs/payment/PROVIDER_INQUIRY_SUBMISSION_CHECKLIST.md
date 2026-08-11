@@ -4,9 +4,22 @@
 >
 > **NO INQUIRY HAS BEEN SENT BY TASK 18C**
 
-PAY.JP does not provide pre-application screening. This checklist now separates the PAY.JP production-use application route from optional/fallback support inquiries. It does not authorize an account, application, inquiry, or implementation.
+Current strategy context: Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, API, or implementation.
 
-## PAY.JP production-use application — before future submission
+## Stripe future evidence acquisition — before any separately authorized action
+
+- [ ] Candidate integrated review completed
+- [ ] Exact evidence-acquisition route explicitly authorized by Human
+- [ ] Actual public service wording truthfully discloses AI use, 鑑定ノート terminology, methods not used, and non-guarantees
+- [ ] Actual site and legal/publication state accurately represented
+- [ ] Cards, Apple Pay, Google Pay, and PayPay are each treated as unverified until evidence exists
+- [ ] Required account/business/site/category/Live Payment, Checkout, test/live, webhook, refund/dispute, descriptor, linkage, fee/settlement, and RevenueCat questions fixed without invented answers
+- [ ] Exact submitted facts and sensitive-evidence storage plan approved
+- [ ] Human explicitly authorizes any Stripe account creation, submission, or contact
+
+No Stripe item is complete in this Candidate task. Conceptual lanes STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 remain Not started.
+
+## PAY.JP paused fallback — before any future submission after reactivation
 
 - [ ] `PAYJP_PRODUCTION_APPLICATION_READINESS.md` reviewed
 - [ ] Actual operator/application facts completed by Human
@@ -25,7 +38,7 @@ PAY.JP does not provide pre-application screening. This checklist now separates 
 - [ ] Status changes, PAY.JP/card-company outcomes, and all conditions preserved
 - [ ] No approval or selection inferred before authoritative review evidence exists
 
-No item in these PAY.JP sections is completed by this documentation task. Application status remains `Not submitted`.
+No item in these PAY.JP sections is completed by this documentation task. Application status remains `Not submitted`; the fallback is paused and reactivation requires separate Human authority plus current-source re-review.
 
 ## Optional support clarification or contingency-provider inquiry — before sending
 

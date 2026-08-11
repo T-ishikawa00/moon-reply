@@ -10,7 +10,7 @@ Payment provider must not be assumed before checking category rules and review r
 
 ## 1. Current Policy
 
-Do not assume Stripe as the default payment provider.
+Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Do not treat that direction as Stripe feasibility, account approval/activation, formal selection, or implementation authority.
 
 月の返事の内部公式定義は「AIを活用した恋愛メッセージ分析・判断支援デジタルレポート」である。一方、provider may interpret the complete service as:
 
@@ -21,20 +21,22 @@ Do not assume Stripe as the default payment provider.
 
 Because of this, payment provider category rules must be checked before Stage 5 Payment implementation.
 
+Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers. Moon Reply's truthful non-divination alignment is not approval. Customer-facing 鑑定ノート wording, AI use, actual behavior, methods not used, and non-guarantees must be disclosed without disguise. Actual account/business/site/category/Live Payment and method-specific evidence is required.
+
 ---
 
 ## 2. Candidate Providers
 
 Potential candidates:
 
+- Stripe — desired strategic primary Candidate; no feasibility/account/approval/activation/formal selection evidence
 - PAY.JP
 - KOMOJU
 - STORES
 - Square
-- Stripe
 - Other Japan-friendly payment providers
 
-No provider is approved yet.
+PAY.JP is paused fallback. No provider is approved or formally selected.
 
 ---
 
@@ -49,18 +51,17 @@ Before implementing real payment:
 - Confirm refund policy requirements
 - Confirm prohibited wording
 - Confirm required legal disclosures
-- Confirm whether PayPay or credit card support is available
+- Confirm cards, Apple Pay, Google Pay, and PayPay separately for the actual account/category/flow
 - Confirm whether 特商法表記 is required before review
 
-For PAY.JP specifically:
+For Stripe:
 
-- PAY.JP is the strategic primary Web direction but remains Not approved / not selected
-- disclose the complete truthful service in the production-use application
-- complete Production Application Readiness and obtain explicit Human submission authorization before any future submission
-- preserve the authoritative PAY.JP/card-company application/review outcome and every condition
-- do not use optional support clarification as preapproval or as a substitute for formal review evidence
+- feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete
+- preserve actual truthful account/business/site/category/Live Payment and each method outcome
+- preserve Checkout/product/price, test/live, webhook, refund/dispute, descriptor, linkage, fee/settlement, and future RevenueCat evidence
+- return to explicit Human launch review if any desired method is unavailable; PayPay unavailable is not automatic approval to omit it
 
-KOMOJU, STORES, or another fallback must use its own verified review/application/inquiry route. Do not generalize the PAY.JP process.
+For PAY.JP, preserved readiness and application requirements remain paused fallback evidence. Any reactivation requires current-source re-review and separate Human authority. Other fallbacks must use their own verified route.
 
 ---
 
@@ -81,13 +82,13 @@ AIを活用した恋愛メッセージ分析・判断支援デジタルレポー
 上記の機能および表示内容を省略せず、貴社の正式な申込・審査経路で審査を受けます。specific support clarificationを行う場合は、未解決の具体的な質問だけを確認します。
 ```
 
-For PAY.JP, this description belongs in production-application readiness and the actual production-use application. Support does not provide pre-application approval.
+For any future Stripe evidence acquisition, this complete truthful description must not hide 鑑定ノート or AI use; wording changes do not guarantee approval. For PAY.JP after possible reactivation, the description belongs in its application route; support does not provide pre-application approval.
 
 ---
 
 ## 5. Implementation Rule
 
-Stage 5 Payment must not start until provider risk is reviewed.
+Payment implementation must not start until Candidate review, truthful public-copy alignment, authoritative Stripe feasibility/method evidence, Human formal Provider selection, and separate implementation authorization are complete.
 
 Payment implementation must remain provider-abstracted where practical.
 

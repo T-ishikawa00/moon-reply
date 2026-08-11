@@ -141,15 +141,47 @@ URL:
 
 - https://stripe.com/jp/legal/restricted-businesses
 
-Current project decision:
+Current official evidence checked on `2026-08-12`:
 
-- Stripe is not the default provider
-- Do not implement without written category review
+- Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers.
+- Stripe prohibits false, manipulated, inaccurate, or misleading information about identity, entity, or business nature.
+- These bounded source facts do not establish Moon Reply feasibility, account approval, activation, category acceptance, or Live Payment eligibility.
+- Moon Reply's truthful non-divination positioning is not Stripe approval. Actual account/business/site review or other authoritative Stripe evidence is required before formal selection.
+- Eligibility may later be modified or revoked under Provider terms.
 
-Research note:
+Project boundary:
 
-- Source URL checked on 2026-07-10
-- No category approval has been obtained
+- Stripe Checkout is only the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review.
+- No Stripe account, contact, approval, activation, or formal selection is recorded.
+- 鑑定ノート, AI use, actual service behavior, and non-guarantees must not be hidden or disguised.
+
+### Stripe PayPay
+
+URL:
+
+- https://docs.stripe.com/payments/paypay
+
+Current official evidence checked on `2026-08-12`:
+
+- Stripe documentation describes PayPay for Japan and Japanese yen.
+- It is Customer-initiated and single-use/non-recurring.
+- Checkout supports PayPay in payment mode.
+- Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
+- These facts do not establish that PayPay is enabled, approved, or eligible for a future Moon Reply account.
+- Exact rates, taxes, settlement, and account-specific pricing are not frozen by this source register.
+
+### RevenueCat Stripe external-purchase tracking
+
+URL:
+
+- https://www.revenuecat.com/docs/web/integrations/stripe/track-external-purchases
+
+Current official evidence checked on `2026-08-12`:
+
+- RevenueCat documentation supports importing Stripe Checkout one-time purchases using a Checkout Session ID and App User ID.
+- This does not establish Moon Reply integration readiness, configuration, identity migration, or PayPay-specific compatibility.
+- RevenueCat is not required for initial Web fulfillment. Future synchronization is desired and unresolved.
+- A future App User ID should use an opaque Moon Reply internal identifier, not raw email.
 
 ### PAY.JP
 
@@ -163,7 +195,7 @@ URL:
 
 Status:
 
-- Strategic primary Web direction
+- Paused fallback Provider direction
 - Production-use application evidence required
 - Application Not submitted
 - Not approved / not selected
@@ -181,7 +213,7 @@ Project evidence boundary:
 
 - Moon Reply has not created a PAY.JP account or submitted an application under this task.
 - No actual operator document, final URL, security declaration, implementation-compliance evidence, application outcome, or approval is recorded.
-- The controlling readiness plan is `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`.
+- The preserved fallback-readiness plan is `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`; it does not control current next work.
 
 ### KOMOJU
 

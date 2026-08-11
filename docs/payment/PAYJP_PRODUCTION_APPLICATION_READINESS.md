@@ -1,8 +1,8 @@
 # PAYJP_PRODUCTION_APPLICATION_READINESS.md
 
-> **CONTROLLING PAY.JP READINESS PLAN**
+> **PRESERVED PAUSED PAY.JP FALLBACK READINESS**
 >
-> Status: `payjp_production_application_readiness_planning_ready_pending_human_chatgpt_review`
+> Status: `paused_fallback_readiness`
 >
 > Application: **Not submitted**
 >
@@ -14,7 +14,9 @@
 
 ## 0. Purpose and authority boundary
 
-This document controls PAY.JP production-use application readiness planning for Moon Reply. PAY.JP is the strategic primary Web direction, but neither strategy nor readiness establishes account creation, submission authorization, Provider approval, formal selection, Payment implementation authorization, or Production Payment authorization.
+This document preserves PAY.JP production-use application evidence and blockers as fallback readiness. PAY.JP is `paused_fallback_provider_direction`; it does not control current next work. Neither this preserved readiness nor possible future reactivation establishes account creation, submission authorization, Provider approval, formal selection, Payment implementation authorization, or Production Payment authorization.
+
+Current next work is Human + ChatGPT integrated review of the Stripe Feasibility and Web Payment Strategy Pivot Candidate. This paused document creates no current requirement to contract GMO or another virtual office, prepare an opening notification, create or submit a PAY.JP application, or complete a PAY.JP security declaration. Those items remain unresolved and preserved for possible fallback reactivation, not rejected or completed.
 
 This documentation task does not create or use a PAY.JP account, credentials, API keys, console, test environment, application form, Provider API, Payment API, DB, Supabase, Runtime, or LUNA operation. Operation counts are:
 
@@ -27,9 +29,9 @@ This documentation task does not create or use a PAY.JP account, credentials, AP
 | Runtime | 0 |
 | LUNA | 0 |
 
-The required separation is:
+The preserved separation is:
 
-`PAY.JP strategic primary direction` != `PAY.JP account creation` != `application readiness` != `Human submission authorization` != `application submission` != `Provider approval` != `formal Provider selection` != `Payment implementation authorization` != `Production Payment authorization`.
+`PAY.JP paused fallback direction` != `fallback reactivation authority` != `PAY.JP account creation` != `application readiness` != `Human submission authorization` != `application submission` != `Provider approval` != `formal Provider selection` != `Payment implementation authorization` != `Production Payment authorization`.
 
 ## 1. Current PAY.JP process evidence
 
@@ -160,7 +162,7 @@ This task grants none of these future completion states and does not grant submi
 
 Gate F status: **Not authorized.**
 
-## 8. Human-visible unresolved blockers
+## 8. Preserved fallback blockers — not current Stripe-track blockers
 
 - actual application entity and operator facts;
 - `開業届` or currently accepted equivalent if required by the chosen individual/sole-proprietor route;
@@ -174,10 +176,12 @@ Gate F status: **Not authorized.**
 - explicit Human submit authorization; and
 - PAY.JP and applicable card-company approval itself.
 
+Possible future reactivation triggers are: Stripe determines the accurately described Product is prohibited or unsupported; Stripe Live Payment activation cannot be obtained; actual Stripe payment-method availability materially fails the Product requirement and Human chooses fallback; material Stripe operational/financial risk causes a Human strategy change; or Human explicitly reactivates PAY.JP. Reactivation requires current-source re-review and separate authority.
+
 ## 9. Provider selection and implementation rule
 
 For PAY.JP, formal selection requires authoritative production-application/review evidence that addresses the truthfully disclosed Moon Reply service. Acceptable future evidence may include the production application outcome, PAY.JP/card-company review result, written requests and exact responses, attached approval conditions, and official account/application evidence.
 
 A generic support answer is not category approval unless it explicitly constitutes authoritative approval; that must never be assumed. Optional support clarification does not replace the production-use application or its review evidence.
 
-No PAY.JP approval means PAY.JP cannot be formally selected. Formal selection, if later completed by Human, still does not authorize Payment implementation or Production Payment.
+While paused, PAY.JP is not selected. If separately reactivated, no PAY.JP approval means PAY.JP cannot be formally selected. Formal selection, if later completed by Human, still does not authorize Payment implementation or Production Payment.

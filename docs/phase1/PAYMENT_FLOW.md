@@ -26,28 +26,16 @@ The initial MVP has no free complete reading, ad-supported reading, advertising,
 
 Initial Web direction:
 
-- PAY.JP as the strategic primary direction
+- Stripe Checkout as the desired strategic primary direction under an unaccepted Candidate
 - supported credit/debit cards
 - Apple Pay
+- Google Pay
+- PayPay
 - JPY 980 including tax for every enabled initial method
 
-Not in the initial Web direction:
+Candidate review does not establish Stripe feasibility, account, approval/activation, formal selection, or method eligibility. Cards, Apple Pay, Google Pay, and PayPay each require actual account/category/method evidence. No desired method may be silently removed; PayPay unavailable returns the project to explicit Human launch review.
 
-- PayPay
-- Google Pay
-- multiple Payment Providers in parallel
-- RevenueCat Billing solely for cross-platform provider uniformity
-
-PAY.JP has not submitted a production-use application or passed the formal authoritative-evidence selection gate. Actual application/review evidence must resolve before implementation:
-
-- AI-assisted fortune-telling / love diagnosis category acceptance
-- digital service delivery
-- refund handling
-- card and Apple Pay availability for the actual account, service category, and flow
-- platform rules around fortune-telling/counseling-like services
-- webhook or success verification support
-
-KOMOJU, STORES, BASE, Square, and other providers remain contingency evidence candidates, not parallel initial integrations. Payment Charter acceptance is complete, but Provider approval, formal evidence-gate selection, and implementation authorization remain separate and incomplete.
+RevenueCat is not required for initial Web fulfillment. Future cross-platform synchronization is desired and unresolved. PAY.JP is paused fallback with preserved evidence. Payment Charter acceptance is complete, while Provider evidence, formal selection, implementation authorization, and Production Payment authorization remain separate and incomplete.
 
 ---
 
@@ -110,7 +98,7 @@ Manual payment confirmation is not the target public flow.
 
 Manual payment confirmation may be used only during development, QA, or emergency incident handling.
 
-Provider callback or other server-authoritative success verification is required before public release. The accepted Charter states provider-independent integrity rules, but exact PAY.JP events, signatures, ordering, retries, reconciliation evidence, timeouts, and recovery mechanics remain Provider-evidence-gated and unimplemented.
+Provider callback or other server-authoritative success verification is required before public release. The accepted Charter states Provider-independent integrity rules, but exact Stripe/PAY.JP objects, events, signatures, ordering, retries, reconciliation evidence, timeouts, refund relations, and recovery mechanics remain Provider-evidence-gated and unimplemented.
 
 ### Exceptional post-payment fulfillment failure
 
@@ -132,11 +120,11 @@ No payment, webhook, generation, refund, notification, or state-machine implemen
 
 ---
 
-## 5. PAY.JP Readiness and Historical Clarification Copy
+## 5. Stripe Candidate Evidence Boundary and PAY.JP Historical Clarification Copy
 
-Current status: the PAY.JP production-use application is Not submitted; PAY.JP is Not approved and not formally selected, and authoritative application/review evidence is absent. The next formal work is PAY.JP Production Application Readiness planning and Human readiness review under `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`. Account creation and submission remain unauthorized.
+Current status: the next formal work is Human + ChatGPT integrated review of the Stripe strategy Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. No Provider account/contact is authorized. PAY.JP is paused fallback; its production-use application remains Not submitted and it is Not approved or selected.
 
-PAY.JP provides no pre-application screening. The following copy is preserved as an unsent historical artifact and may be adapted only for a specific support clarification. It is not send-ready, not a prerequisite, and not approval evidence.
+PAY.JP provides no pre-application screening. The following copy is preserved as an unsent historical fallback artifact and may be adapted only after separate reactivation/contact authority. It is not send-ready, not a current prerequisite, and not approval evidence.
 
 Historical/optional clarification copy:
 

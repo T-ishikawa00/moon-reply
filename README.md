@@ -8,13 +8,14 @@
 
 Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Payment implementation remains unauthorized.
 
-The next formal Payment work is PAY.JP Production Application Readiness planning and Human readiness review. The application is Not submitted; PAY.JP remains Not approved and not formally selected. Account creation, submission, and Payment implementation are unauthorized.
+Stripe Feasibility and Web Payment Strategy Pivot Candidate is ready for Human + ChatGPT review. Its status is `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`; it is not accepted. Stripe is the desired strategic primary Web direction, while feasibility, account, approval, activation, and formal selection remain absent or incomplete. PAY.JP is preserved as a paused fallback. Provider account/contact/API operations and Payment implementation remain unauthorized.
 
 Current canonical planning:
 
 - `docs/ROADMAP.md`
 - `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
 - `docs/payment/PAYMENT_CHARTER.md`
+- `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
 - `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
 - `docs/CURRENT_FOCUS.md`
 - `docs/CODEX_HANDOFF.md`
@@ -59,7 +60,7 @@ Development may use manual, mock, and QA modes, but the public MVP should automa
 
 ## Product Roadmap
 
-- Phase A: Web / PAY.JP direction / JPY 980 one-time purchase
+- Phase A: Web / desired Stripe Checkout direction / cards, Apple Pay, Google Pay, and PayPay / JPY 980 one-time purchase; Candidate review and feasibility evidence remain pending
 - Phase B: real-customer paid Web validation
 - Phase C: iOS / Apple IAP / RevenueCat
 - Phase D: Android / Google Play Billing / RevenueCat
@@ -75,7 +76,7 @@ The detailed initial Web delivery milestones remain in `docs/ROADMAP.md`. Purcha
 - 単発税込¥980で実需要と再購入を検証するまでサブスクを実装しない
 - Webで有料検証し、その後iOS、安定後にAndroidへ進む
 - 初期Customer-facing modelにコイン/ポイント制を採用しない
-- PAY.JP方針、provider書面承認、Payment Charter受入、実装権限を混同しない
+- Stripe戦略Candidate、feasibility、provider承認・正式選定、Payment Charter受入、実装権限を混同しない
 - 不安を煽って課金させない
 - 危険相談は通常鑑定にしない
 - AI利用は隠さない

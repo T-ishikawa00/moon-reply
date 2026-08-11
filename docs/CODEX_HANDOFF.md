@@ -1,7 +1,21 @@
 # CODEX_HANDOFF.md
 
+## Active handoff — Stripe Feasibility and Web Payment Strategy Pivot Candidate
+
+- Task / branch / exact parent: Stripe Feasibility and Web Payment Strategy Pivot Candidate / `docs/stripe-feasibility-web-payment-strategy-pivot-candidate` / `093a3863546abecc7e8a00a0ce4379c25c8eecec`.
+- Exact mutation scope: 30 documentation paths only, comprising 1 new canonical Candidate and 29 updates; no code, package, lock, config, migration, Provider, DB/Supabase, Runtime, or LUNA mutation.
+- Candidate status: `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT integrated acceptance is pending.
+- Strategy boundary: Stripe Checkout is the desired strategic primary Web direction, not established feasibility, approval, activation, or formal selection.
+- Desired methods: cards, Apple Pay, Google Pay, and PayPay; all remain unverified. PayPay is a deliberate conversion/revenue tradeoff, not enabled or approved.
+- RevenueCat: not required for initial Web; future cross-platform synchronization is desired and unresolved.
+- PAY.JP: `paused_fallback_provider_direction`; all readiness evidence and blockers are preserved, but it does not control current next work.
+- Payment Charter v1: `human_chatgpt_accepted_complete`; Provider-independent normative invariants unchanged.
+- Operations: Stripe/PAY.JP/RevenueCat account or Provider operations `0`; API/DB/Supabase/Runtime/LUNA operations `0`.
+- Implementation/production authority: `false / false`. Public-copy code/UI alignment, Provider contact, PR, main merge, rebase, force push, and release are unauthorized.
+- Next action: Human + ChatGPT integrated review of Stripe Feasibility and Web Payment Strategy Pivot Candidate.
+
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
-## Active handoff — Payment Charter v1 Accepted
+## Historical superseded handoff — Payment Charter v1 Accepted / PAY.JP-primary snapshot
 
 - Task / branch / exact parent: Payment Charter v1 Human + ChatGPT acceptance synchronization / `docs/payment-charter-v1-candidate` / `b6f38586fadd2a17034810dbb139465af5eade2f`.
 - Charter status: `human_chatgpt_accepted_complete`; Human + ChatGPT acceptance date is `2026-08-12`, implementation authority is `false`, and production authorization is absent.
@@ -10,7 +24,7 @@
 - Canonical authority: `docs/ROADMAP.md` controls high-level delivery order; `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` remains the canonical Payment / Platform / Monetization strategy; `docs/payment/PAYMENT_CHARTER.md` is the accepted provider-independent Charter; Provider evidence files control factual approval and selection.
 - Current product: one consultation / one assessment note / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points.
 - Platform order: Web and real paid validation -> iOS / Apple IAP + RevenueCat -> Android / Google Play Billing + RevenueCat -> repeat-purchase analysis -> subscription only if demand supports it.
-- Web direction: PAY.JP is the strategic primary direction; intended initial methods are supported cards and Apple Pay at the same JPY 980 price. PayPay, Google Pay, multiple simultaneous Web providers, and RevenueCat-for-Web-uniformity are excluded from the initial direction.
+- Historical Web snapshot: PAY.JP was then recorded as primary with cards and Apple Pay. That direction and its initial-method exclusions are superseded by the current Stripe Candidate handoff above.
 - Evidence distinction: Payment Charter acceptance is complete, while PAY.JP strategic direction is still not account creation, application readiness completion, submission authorization, application submission, merchant/category approval, formal evidence-gate selection, or implementation authorization. The production-use application is Not submitted; PAY.JP remains Not approved / not formally selected, and authoritative application/review evidence is absent.
 - Domain boundary: external payment/Store facts -> verified normalized Moon Reply purchase -> entitlement/assessment grant. The initial internal invariant is one valid purchase -> one assessment grant -> one fulfillment -> consume once. This is conceptual only and authorizes no schema, migration, DB, ledger, or API.
 - Safety: the explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at the Safety HEAD baseline. Older P6 task-local `pending_human_*` labels remain immutable task-time records; this newer decision does not establish final JPY 980 readiness or Payment authority.
@@ -18,7 +32,7 @@
 - Professional review: optional and not a Paid Launch or Production Payment hard gate under the explicit `2026-08-11` Human decision. Current official-source, actual Product/Provider behavior, public-wording, and Customer-rights review remains required; material unresolved legal obligations remain blockers.
 - Operations performed by this task: Provider / API / DB / Supabase / Runtime / LUNA = `0 / 0 / 0 / 0 / 0 / 0`.
 - Downstream review-only legal UI synchronization remains a separate unauthorized implementation follow-up before public paid release.
-- Next action: `PAY.JP Production Application Readiness planning and Human readiness review`; complete the bounded readiness package without creating an account or submitting an application.
+- Historical next-action snapshot: PAY.JP readiness review was then recorded as next work. It is not current authority.
 - Readiness status: `payjp_production_application_readiness_planning_ready_pending_human_chatgpt_review`; application `Not submitted`; PAY.JP `Not approved / not formally selected`.
 - Hard boundary: no PAY.JP account creation/application submission, PAY.JP SDK/API/checkout/webhook, RevenueCat, Apple IAP, Google Play Billing, Provider call, DB/Supabase/migration, Runtime/LUNA, downstream legal UI implementation, PR, main merge, rebase, force push, or release is authorized.
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
@@ -270,7 +284,7 @@ The complete mutation manifest, slice evidence, audits, Human route checklist, l
 
 ## Runtime and External Status
 
-- No provider inquiry was sent and no provider passed the formal evidence-selection gate. PAY.JP is now the Human-agreed strategic primary Web direction, which is a separate state from provider approval or implementation authorization.
+- No provider inquiry was sent and no provider passed the formal evidence-selection gate. The current desired Stripe direction remains a Candidate pending review; PAY.JP is paused fallback. Neither state is Provider approval, formal selection, or implementation authorization.
 - No legal page is publication-approved and no review site is deployed.
 - No active contact channel or legal acceptance exists.
 - The historical Milestone 1 baseline added no production database connection, payment/refund, AI call, prompt execution, email, API route, server action, analytics, authentication, external form/asset, persistence, file generation, or deployment. M2-P3 adds an internal development-only route and a bounded Human-configured synthetic live connection; no production or public capability is configured.
@@ -441,7 +455,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`, and Payment implementation authority remains `false`. The next formal work is PAY.JP Production Application Readiness planning and Human readiness review under `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`. Complete actual Human/operator facts, final intended URLs, legal publication readiness, and security-declaration readiness before any separate Human submit authorization. Do not infer PAY.JP API behavior or begin implementation. The application is Not submitted; PAY.JP remains Not approved / not formally selected, and authoritative application/review evidence is absent. Delivery/Recovery Email Verification is `accepted_required_control_with_trusted_session_reuse`; trusted state is server-verifiable, neither Payment nor Safety authority, and no-login/account boundaries remain unchanged. Professional review is optional, while current-source/evidence review and resolution of material legal obligations remain required. Historical AI Provider work remains frozen; no PAY.JP account creation/application submission, AI Provider rerun, C2, Payment Provider call, DB/Supabase change, Runtime/LUNA activation, downstream review-only legal UI synchronization, PR, or main merge is authorized.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`, and Payment implementation authority remains `false`. The current next work is Human + ChatGPT integrated review of the Stripe strategy Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain unverified or absent. PAY.JP is a paused fallback with preserved evidence. Delivery/Recovery Email Verification and current-source/legal obligations remain unchanged. No Provider operation, AI Provider rerun, C2, DB/Supabase change, Runtime/LUNA activation, downstream public-copy code/UI synchronization, PR, or main merge is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

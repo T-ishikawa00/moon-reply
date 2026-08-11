@@ -4,6 +4,8 @@
 >
 > **NO INQUIRY HAS BEEN SENT**
 >
+> **NO STRIPE ACCOUNT, CONTACT, APPROVAL, OR ACTIVATION EXISTS**
+>
 > **NO PAY.JP PRODUCTION-USE APPLICATION HAS BEEN SUBMITTED**
 >
 > **NO APPROVAL OR SELECTION IS RECORDED**
@@ -17,11 +19,22 @@
 - Conditional responses must preserve every stated condition.
 - Exact submitted/sent content must be preserved by immutable file, commit hash, PDF, screenshot or equivalent evidence location.
 
+## Stripe future feasibility and account evidence lanes
+
+These conceptual lanes are registered only for future evidence. Neither lane has started, and their presence is not authorization to create an account or contact Stripe.
+
+| Evidence ID | Provider | Status | Account/contact | Exact submitted facts | Reference ID | Outcome | Method evidence | Evidence location | Next action | Human decision |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| STRIPE-FEAS-001 | Stripe | Not started | None | None submitted | — | Feasibility not established | Cards/Apple Pay/Google Pay/PayPay unverified | None recorded | Human + ChatGPT integrated Candidate review | Evidence acquisition not authorized |
+| STRIPE-ACCOUNT-001 | Stripe | Not started | Account absent / contact none | None submitted | — | Approval/activation absent | None | None recorded | Await separate future authority | Account/contact not authorized |
+
+Official restricted-business, PayPay, and RevenueCat documentation checked on `2026-08-12` is bounded source context, not Moon Reply account, approval, activation, or method eligibility evidence.
+
 ## PAY.JP production-application evidence lane
 
 | Application ID | Provider | Status | Submitted date | Exact application facts | Reference ID | Review requests/responses | Outcome | Conditions | Evidence location | Next action | Human decision |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PAYJP-APP-001 | PAY.JP | Not submitted | — | None submitted | — | None | Not approved | Unknown | None recorded | Complete readiness planning and Human readiness review | Submission not authorized; selection pending |
+| PAYJP-APP-001 | PAY.JP | Not submitted / paused fallback | — | None submitted | — | None | Not approved | Unknown | None recorded | No current action; reactivation requires separate Human authority | Submission not authorized; not selected |
 
 No PAY.JP account, date, reference ID, outcome, or condition exists in this repository. Future sensitive evidence must remain in an approved non-public location.
 

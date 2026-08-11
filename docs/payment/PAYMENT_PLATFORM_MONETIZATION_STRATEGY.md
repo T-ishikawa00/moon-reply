@@ -4,6 +4,9 @@
 
 - Effective decision date: `2026-08-10`
 - Product strategy status: `human_chatgpt_agreed_long_term_direction`
+- Stripe pivot Candidate formulation date: `2026-08-12`
+- Stripe pivot Candidate status: `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`
+- Stripe pivot Candidate acceptance: pending
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`
 - Payment Charter v1 Human + ChatGPT acceptance date: `2026-08-12`
 - Payment implementation authorized: `false`
@@ -13,7 +16,7 @@ This document is the canonical product strategy for Payment, Platform, Purchase,
 
 `docs/ROADMAP.md` remains the authoritative high-level delivery roadmap. Provider application/review/inquiry evidence and formal provider approval remain governed by the evidence documents under `docs/payment/`. If an older Product, Phase, Payment, or provider-planning document conflicts with this strategy, this document controls the Payment / Platform / Monetization decision, while immutable historical execution and acceptance records remain historical evidence.
 
-This strategy records product direction and the accepted Charter status only. It does not authorize a PAY.JP account or application submission, approve PAY.JP as a merchant, establish current feature availability, authorize an SDK, authorize a Provider call, or authorize implementation.
+This strategy records the long-term sequence, Human working direction, and accepted Charter status. The Stripe transition is a Candidate, not an accepted Provider decision. It does not authorize a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, implementation, or Production Payment.
 
 ## 1. Long-Term Platform Sequence
 
@@ -26,7 +29,7 @@ Moon Reply will ultimately target three platforms:
 They are not simultaneous implementation tracks. The controlling product sequence is:
 
 ```text
-Phase A  Web / PAY.JP direction / JPY 980 one-time purchase
+Phase A  Web / desired Stripe Checkout direction under Candidate review / JPY 980 one-time purchase
   ->
 Phase B  Real-customer paid Web validation
   ->
@@ -59,25 +62,24 @@ The initial objective is to validate whether real customers will purchase and re
 
 ### 3.1 Primary direction
 
-PAY.JP is the primary Web payment direction.
+Stripe Checkout is the desired strategic primary Web direction recorded by the Human working direction.
 
-This is a strategic preference, not evidence that PAY.JP has approved Moon Reply and not formal implementation authorization. The operational evidence state remains governed by `PAYJP_PRODUCTION_APPLICATION_READINESS.md`, `PROVIDER_INQUIRY_EVIDENCE_LOG.md`, `PROVIDER_COMPARISON.md`, and `PAYMENT_PROVIDER_DECISION_GATE.md`. Authoritative production-application/review evidence, Human selection under that gate, and a separate implementation authorization remain required. Payment Charter v1 acceptance is complete but does not satisfy those separate gates.
+The transition remains `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`. Human desired direction is not Candidate acceptance, Stripe feasibility, account approval/activation, formal Provider selection, Payment implementation authorization, or Production Payment authorization. Payment Charter v1 acceptance is complete and does not satisfy those separate gates.
 
-The intended initial Web payment methods are:
+The desired initial Web payment methods are:
 
-- supported credit/debit cards; and
-- Apple Pay.
+- supported credit/debit cards;
+- Apple Pay;
+- Google Pay; and
+- PayPay.
 
-The initial Web release does not include:
+No desired method is treated as available without actual Stripe account/category/method evidence. No unavailable method may be silently removed. PayPay unavailable is not automatic approval to launch without PayPay; that outcome returns to explicit Human launch review.
 
-- PayPay;
-- Google Pay;
-- multiple Payment Providers in parallel; or
-- RevenueCat Billing solely to force cross-platform payment-provider uniformity.
+PayPay's materially higher variable transaction cost is an accepted Human conversion/revenue tradeoff in the working direction. Exact rates, taxes, settlement, and account-specific pricing are not frozen. The Product Owner prefers variable cost over unnecessary pre-revenue monthly fixed cost and wants to avoid premature virtual-office or PAY.JP-specific preparation, but this does not imply zero total cost.
 
-The planning rationale for PAY.JP is its Japan-based operation, Japanese-language operability, confidence in refund/payment-incident support, and ability to support a future Web subscription without changing the strategic provider solely for that reason. Some additional backend integration is acceptable if the Payment Charter and provider evidence support the choice.
+RevenueCat is not required for initial Web fulfillment. Future cross-platform synchronization remains desired where evidenced. PAY.JP is `paused_fallback_provider_direction`; its readiness evidence remains preserved, but it does not control current next work.
 
-The decision not to add PayPay initially is not a permanent rejection. Based on the `2026-08-10` planning premise, Moon Reply will not incorporate solely to obtain PayPay before paid-demand validation. Human may reconsider if incorporation becomes economically rational or real data shows that PayPay absence is a material purchase barrier. Current provider terms and eligibility must be reverified before any action.
+Candidate Checkout identity is 月の返事｜恋のメッセージ鑑定ノート with adjacent description AIによる恋愛メッセージ分析・判断支援デジタルレポート 1件／税込980円／単発購入. Exact Stripe Product/Price/Checkout fields and statement descriptors remain unresolved and evidence/implementation-gated; no Provider object is created.
 
 ## 4. Mobile Payment Direction
 
@@ -117,7 +119,7 @@ The strategic provider map is:
 
 | Platform | Payment rail | RevenueCat role |
 | --- | --- | --- |
-| Web | PAY.JP direction | Not required for the initial Web payment path |
+| Web | Desired Stripe Checkout direction under Candidate review | Not required initially; future external-purchase synchronization desired and unresolved |
 | iOS | Apple In-App Purchase | Verify and manage Store purchases/subscriptions |
 | Android | Google Play Billing | Verify and manage Store purchases/subscriptions |
 
@@ -125,17 +127,17 @@ The unifying authority is the Moon Reply backend purchase and entitlement model,
 
 ## 6. Provider-Independent Purchase Boundary
 
-The domain model must not be designed as PAY.JP-only. At minimum, the future conceptual boundary must be able to represent:
+The domain model must not be designed as Provider-only. At minimum, the future conceptual boundary must be able to represent:
 
 ```text
-provider = payjp | app_store | google_play
+provider = stripe | payjp | app_store | google_play
 purchase_type = one_time | subscription
 ```
 
 Provider-specific payment or subscription facts must remain separate from Moon Reply product rights.
 
 ```text
-PAY.JP payment | Apple transaction | Google Play purchase
+Stripe payment | PAY.JP payment | Apple transaction | Google Play purchase
   -> verify and normalize
 Moon Reply purchase
   -> issue entitlement / assessment grant
@@ -171,7 +173,7 @@ The intended future platform mapping is:
 
 | Platform | Subscription rail |
 | --- | --- |
-| Web | PAY.JP direction |
+| Web | Desired Stripe direction; exact future subscription rail unresolved |
 | iOS | Apple subscription + RevenueCat |
 | Android | Google Play subscription + RevenueCat |
 
@@ -244,18 +246,18 @@ When a still-valid trusted session is bound to the unchanged verified delivery/r
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: PAY.JP Production Application Readiness and Human Readiness Review
+## 11. Next Formal Work: Stripe Strategy Candidate Integrated Review
 
-Payment Charter v1 in `PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`. Current official PAY.JP guidance provides no pre-application screening. The next formal Payment track is not implementation. It is:
+Payment Charter v1 in `PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`. The next formal Payment track is not implementation or Provider operation. It is:
 
-1. complete `PAYJP_PRODUCTION_APPLICATION_READINESS.md` and Human readiness review;
-2. complete actual operator/application facts, final intended URLs, legal publication readiness, and security-declaration readiness without false implementation claims;
-3. recheck current PAY.JP requirements and actual application fields;
-4. obtain explicit Human authorization for the exact production-use application submission;
-5. only under that future authorization, submit and preserve application/reference/review evidence and conditions; and
-6. only after authoritative acceptance evidence, perform Human formal provider selection.
+1. Human + ChatGPT integrated review of the Stripe strategy Candidate;
+2. if accepted, separately authorize truthful public-copy alignment;
+3. separately authorize and obtain actual Stripe account/business/site/category/Live Payment and method-specific evidence;
+4. return to Human launch review for any unavailable desired method;
+5. perform Human formal Provider selection only after authoritative evidence; and
+6. authorize sandbox/test implementation only in a separate task.
 
-The application is Not submitted. No PAY.JP account is created or authorized by this planning package. PAY.JP remains Not approved and not formally selected; authoritative application/review evidence is absent. Optional support clarification is not preapproval. Unknown API behavior, webhook semantics, refund capabilities, fee treatment, settlement behavior, or Apple Pay details remain evidence-gated.
+No Stripe account/contact exists or is authorized by this planning package. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. PAY.JP remains paused fallback, Not approved, and not selected. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
 
 ## 12. Authorization Matrix
 
@@ -266,10 +268,13 @@ The application is Not submitted. No PAY.JP account is created or authorized by 
 | Payment Charter v1 Candidate | Historical lineage retained |
 | Payment Charter v1 | `human_chatgpt_accepted_complete` on `2026-08-12` |
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
-| PAY.JP merchant/category approval | Not established by this strategy |
-| PAY.JP formal evidence-gate selection | Not completed |
-| PAY.JP SDK / API / checkout / webhook | Unauthorized and unimplemented |
-| RevenueCat implementation | Unauthorized and unimplemented |
+| Stripe strategic primary direction | Human working direction; Candidate pending review |
+| Stripe feasibility / account / approval / activation | Not established / absent / absent / absent |
+| Stripe formal selection | Incomplete |
+| Cards / Apple Pay / Google Pay / PayPay | Unverified |
+| PAY.JP | Paused fallback; Not approved; Not selected |
+| Provider SDK / API / checkout / webhook | Unauthorized and unimplemented |
+| RevenueCat initial Web / future synchronization | Not required and unconfigured / desired and unresolved |
 | Apple IAP / Google Play Billing implementation | Unauthorized and unimplemented |
 | Purchase/entitlement DB or migration work | Unauthorized |
 | Runtime / LUNA activation change | Unauthorized |
@@ -285,7 +290,8 @@ Planning agreement, provider approval, Payment Charter acceptance, implementatio
 - `docs/CODEX_HANDOFF.md`: session handoff and prohibited-action boundary.
 - `docs/PAYMENT_POLICY.md`: concise initial-product payment policy.
 - `docs/payment/PAYMENT_CHARTER.md`: Human + ChatGPT accepted Payment Charter v1; implementation authority remains `false`.
+- `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`: current Stripe transition Candidate; acceptance pending.
 - `docs/phase1/PAYMENT_FLOW.md`: detailed Web-flow planning subordinate to the accepted Payment Charter.
 - `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`: evidence gate for formal provider selection.
-- `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`: controlling PAY.JP readiness plan; status remains pending Human + ChatGPT review.
+- `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`: preserved paused-fallback readiness evidence; does not control current next work.
 - `docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`: factual application/review/inquiry record; no external evidence is created by this strategy.

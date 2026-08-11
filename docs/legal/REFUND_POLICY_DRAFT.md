@@ -14,6 +14,8 @@
 
 ---
 
+Provider context on `2026-08-12`: Stripe Checkout is the desired strategic primary Web direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility, account, approval/activation, formal selection, refund capability, fee treatment, and completion semantics are not established. PAY.JP is paused fallback. This context does not change the accepted Provider-independent normal Product refund and Payment Integrity remediation principles below and does not authorize any refund operation.
+
 ## 1. 基本方針
 
 本ポリシーは、税込980円の単発デジタル鑑定書について、現時点の返金・再提供方針案を整理するものです。「いかなる場合も返金しない」とするものではなく、法令上の権利を制限しません。
@@ -60,7 +62,7 @@
 
 Moon Replyの返金判断authorityは、受入済みpolicyの下でserver/operator controlledとします。選定Providerがmerchant-initiated refund executionを提供する場合、Moon Reply起点の返金commandはserver-sideとし、browser/clientに権限を与えません。本文書はそのpolicy受入または実装権限を意味しません。
 
-Provider/Store起点のrefund、reversal、disputeその他の外部金融変更はMoon Replyの返金command外で発生し得ます。これらはauthenticatedまたはauthoritatively verifiedな証拠に基づき、正規化・reconciliationする必要があります。Browser/client stateは返金authorityではなく、重複処理はidempotentでなければなりません。PAY.JP、Apple、GoogleおよびRevenueCatの具体的な返金mechanicsはevidence-gatedです。
+Provider/Store起点のrefund、reversal、disputeその他の外部金融変更はMoon Replyの返金command外で発生し得ます。これらはauthenticatedまたはauthoritatively verifiedな証拠に基づき、正規化・reconciliationする必要があります。Browser/client stateは返金authorityではなく、重複処理はidempotentでなければなりません。Stripe、PAY.JP、Apple、GoogleおよびRevenueCatの具体的な返金mechanics、fee、期限、object関係およびfinal completion semanticsはevidence-gatedであり、本ドラフトでは推測しません。
 
 1. 返金は元の支払方法へ行うことを原則とする方向ですが、[[PAYMENT_PROVIDER_TBD]]の仕様に従って最終化します。
 2. 返金処理時間は[[REFUND_PROCESSING_TIME_TBD]]です。

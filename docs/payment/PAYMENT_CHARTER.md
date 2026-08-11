@@ -32,7 +32,10 @@ Current boundaries remain:
 | Boundary | State |
 | --- | --- |
 | Payment implementation authorized | `false` |
-| PAY.JP merchant/category approval | Not established |
+| Stripe strategy | Desired Human direction under Candidate review; not feasibility, approval, activation, or selection |
+| Stripe feasibility / account / approval / activation | Not established / absent / absent / absent |
+| Cards / Apple Pay / Google Pay / PayPay eligibility | Unverified |
+| PAY.JP | Paused fallback; Not approved; Not selected |
 | Formal Provider evidence-gate selection | Not completed |
 | Payment API / SDK / checkout / webhook implementation | `0` |
 | DB / Supabase / migration operations authorized | `0` |
@@ -41,7 +44,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next formal work is `PAY.JP Production Application Readiness planning and Human readiness review` under `PAYJP_PRODUCTION_APPLICATION_READINESS.md`. The production-use application is Not submitted, account creation and submission are not authorized by this Charter acceptance, PAY.JP is Not approved / not formally selected, and Payment implementation authority remains `false`.
+The next formal work is Human + ChatGPT integrated review of the Stripe Feasibility and Web Payment Strategy Pivot Candidate. The Candidate is not accepted. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unestablished or absent. PAY.JP is paused fallback. Provider account/contact/API operations and Payment implementation authority remain `false`.
 
 ## 2. Initial Product Contract
 
@@ -138,7 +141,7 @@ As supported by the selected Provider, provider-independent verification must va
 - Payment state;
 - absence of an already-successful conflicting Payment.
 
-All success paths converge on one server-controlled verification procedure. This Charter does not define PAY.JP objects, statuses, fields, webhook events, fetch semantics, metadata, authentication/capture semantics, or signatures as facts.
+All success paths converge on one server-controlled verification procedure. This Charter does not define Stripe, PAY.JP, or other Provider objects, statuses, fields, webhook events, fetch semantics, metadata, authentication/capture semantics, or signatures as facts.
 
 ## 7. Unknown Is Not Failure
 
@@ -332,7 +335,7 @@ Refund Decision Authority and Refund Execution Authority are separate. Moon Repl
 
 Where the selected Provider supports merchant-initiated refund execution, any Moon Reply-initiated refund command must be server-side and must never be browser/client authorized. Provider- or Store-initiated refunds, reversals, disputes, or equivalent external financial changes may occur outside a Moon Reply refund command. Those external events must be authenticated or otherwise authoritatively verified, normalized, and reconciled.
 
-Browser/client state is never refund authority, and duplicate processing must remain idempotent. An attempted Moon Reply API command does not by itself establish refund completion. Exact PAY.JP, Apple, Google, and RevenueCat refund mechanics and final confirmation semantics remain evidence-gated. This Charter does not assume that every future platform permits Moon Reply to execute refunds directly.
+Browser/client state is never refund authority, and duplicate processing must remain idempotent. An attempted Moon Reply API command does not by itself establish refund completion. Exact Stripe, PAY.JP, Apple, Google, and RevenueCat refund mechanics and final confirmation semantics remain evidence-gated. This Charter does not assume that every future platform permits Moon Reply to execute refunds directly.
 
 ## 14. Dispute and Chargeback
 
@@ -371,7 +374,7 @@ Preserve separate timestamps where relevant:
 
 These timestamps do not represent the same event. `payment_succeeded_at` is not automatically accounting or tax revenue-recognition authority.
 
-Do not hard-code PAY.JP fee rates, tax rates, Apple commission, Google service fees, or settlement timing. RevenueCat is not accounting, tax, or settlement authority. Settlement and payout may aggregate many Purchases and must not be modeled as a mandatory single `purchase -> payout_id` relationship. Accounting classification must never change Assessment Grant or Product-entitlement behavior.
+Do not hard-code Stripe or PAY.JP fee rates, PayPay rates, tax rates, Apple commission, Google service fees, or settlement timing. RevenueCat is not accounting, tax, or settlement authority. Settlement and payout may aggregate many Purchases and must not be modeled as a mandatory single `purchase -> payout_id` relationship. Accounting classification must never change Assessment Grant or Product-entitlement behavior.
 
 ## 16. Reconciliation
 
@@ -495,23 +498,20 @@ Public paid release must not rely on an asset with unknown commercial-use rights
 
 ## 23. Provider Evidence Required Before Binding Implementation
 
-The following remain unresolved and must not be inferred:
+The following Provider-specific facts remain unresolved and must not be inferred:
 
-- PAY.JP authoritative Payment object;
-- exact success state and fields;
-- create-versus-refetch authority;
-- authentication/capture semantics;
+- actual Stripe account/business/site/category and Live Payment outcome;
+- cards, Apple Pay, Google Pay, and PayPay eligibility and conditions;
+- authoritative Payment object, exact success state, fields, and object relationships;
+- create-versus-refetch authority and authentication/capture semantics;
 - Payment API idempotency behavior;
-- webhook authentication/signature;
-- webhook event IDs and types;
-- callback retry behavior;
-- metadata capability;
-- refund API and confirmation behavior;
-- dispute/chargeback semantics;
-- Provider fees;
-- Provider tax treatment;
-- settlement/payout reports and timing;
-- Apple Pay-specific behavior.
+- webhook authentication/signature, event IDs/types, retry behavior, and ordering;
+- metadata and Customer/Purchase/Request linkage capability;
+- refund API, confirmation, dispute, and chargeback behavior;
+- statement descriptor behavior;
+- Provider fees, taxes, reserves, holds, settlement, and payout timing;
+- test/live separation; and
+- future RevenueCat import and identity behavior where used.
 
 ## 24. Production and Product Decisions Still Unresolved
 
@@ -546,8 +546,11 @@ No number is invented by this Charter.
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Professional review | Optional escalation; not completed; not a hard launch gate |
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
-| PAY.JP production-application/review evidence | Not established; application Not submitted |
-| PAY.JP formal selection | Incomplete |
+| Stripe strategic direction Candidate | Pending Human + ChatGPT integrated review |
+| Stripe feasibility / account / approval / activation | Not established / absent / absent / absent |
+| Stripe formal selection | Incomplete |
+| Cards / Apple Pay / Google Pay / PayPay | Unverified |
+| PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |
 | Payment Provider calls | Unauthorized |

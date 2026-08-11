@@ -10,7 +10,7 @@ Task 18A did not authorize a Provider account, application submission, inquiry, 
 
 Task 18C prepared historical drafts, evidence logging, scoring rules, and a decision gate only. It did not authorize an account, application submission, inquiry, provider selection, or Payment implementation.
 
-The `2026-08-10` product strategy names PAY.JP as the primary Web direction and cards plus Apple Pay as the intended initial methods. Current PAY.JP guidance checked on `2026-08-12` provides no pre-application screening: the PAY.JP primary path is production-application readiness, explicit Human submission authorization, production-use application, and preservation of review evidence. The PAY.JP inquiry draft is an unsent historical artifact that may be adapted only for a specific support clarification; it is not a preapproval path. PayPay, Google Pay, and multiple simultaneous Web providers are not initial requirements.
+The `2026-08-12` Human working direction names Stripe Checkout as the desired strategic primary Web direction and cards, Apple Pay, Google Pay, and PayPay as desired initial methods. The transition is an unaccepted Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and all method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its preserved application readiness and historical inquiry evidence do not control current next work.
 
 ---
 
@@ -20,22 +20,17 @@ No real payment SDK implementation before provider-specific authoritative approv
 
 No provider is currently approved.
 
-No PAY.JP production-use application has been submitted. No inquiry has been sent. PAY.JP, KOMOJU, and STORES remain Not approved, Not selected, and Not scored.
+No Stripe account has been created, no Stripe contact or evidence acquisition has started, no PAY.JP production-use application has been submitted, and no inquiry has been sent. Stripe and PAY.JP remain not selected and Not scored.
 
 ---
 
 ## 1. Provider-specific evidence routes
 
-1. PAY.JP: `PAYJP_PRODUCTION_APPLICATION_READINESS.md` -> Human submit authorization -> production-use application -> PAY.JP/card-company review evidence.
-2. KOMOJU: fallback only; verify its current provider-specific official review/inquiry route before use.
-3. STORES or another Japan-friendly provider: fallback only; verify its current provider-specific evidence route before use.
-4. Additional providers: only after separate review and authorization.
+1. Stripe desired direction: Candidate integrated review -> separately authorized truthful public-copy alignment -> separately authorized actual account/business/site/category/Live Payment and method evidence -> Human formal selection.
+2. PAY.JP paused fallback: only after explicit Human reactivation -> current-source re-review -> readiness -> separate submission authority -> application/review evidence.
+3. KOMOJU, STORES, Square, or another provider: fallback only under separate review and its verified evidence route.
 
-Stripe is not the default option.
-
-Square and other providers require current official restriction review.
-
-PAY.JP is the strategic primary direction. The remaining order is contingency sequencing only. No generic inquiry model may be forced onto every provider. None of these positions is provider approval, formal evidence-gate selection, or implementation authorization.
+No generic inquiry model may be forced onto every provider. None of these positions is Provider approval, formal evidence-gate selection, or implementation authorization.
 
 ---
 
@@ -49,13 +44,13 @@ Do not disguise the service category.
 
 Do not omit the AI use, user-facing `鑑定` terminology, actual analysis flow, digital delivery, methods not used, non-guarantee, or safety-gate characteristics to obtain approval.
 
-Do not claim this wording settles the provider category. Submit the complete functional description through the provider's authoritative review route. For PAY.JP that means the production-use application, not a pre-screening inquiry.
+Do not claim this wording settles the provider category. A future Stripe evidence package must use the complete truthful description and preserve Customer-facing 鑑定ノート terminology. Wording changes do not guarantee approval. For PAY.JP if reactivated, the authoritative route remains the production-use application, not a pre-screening inquiry.
 
 ---
 
 ## 3. Facts that provider evidence must resolve
 
-Resolve the following through each provider's verified evidence route. For PAY.JP, use actual application/review evidence; support may be contacted only for a specific clarification and its answer must not be treated as category approval.
+Resolve the following through each provider's verified evidence route. Stripe evidence acquisition and any support/sales contact remain separately undecided and unauthorized. PAY.JP fallback evidence remains paused.
 
 1. Is this service category accepted?
 2. Which business/product category does the provider apply to the disclosed functions and user-facing terminology?
@@ -65,7 +60,7 @@ Resolve the following through each provider's verified evidence route. For PAY.J
 6. Is 特商法 disclosure required before application?
 7. What refund-policy wording is required?
 8. Is pre-payment for digital generation accepted?
-9. Are supported credit/debit cards and Apple Pay available for this service, account type, and intended flow?
+9. Are cards, Apple Pay, Google Pay, and PayPay available for this service, account type, category, currency, and intended Checkout flow?
 10. Are future subscriptions or ticket bundles subject to re-review?
 11. What webhook events are available?
 12. What are webhook retry and signature-verification rules?
@@ -75,6 +70,8 @@ Resolve the following through each provider's verified evidence route. For PAY.J
 16. Is sole-proprietor registration required, or can an individual apply?
 17. Is a completed public site required before review?
 18. Are there fees, reserves, fund holds, or digital-content-specific requirements?
+19. What exact Checkout/Product/Price rendering and statement descriptor behavior applies?
+20. What are the test/live, PaymentIntent/Checkout Session/Charge/refund, Customer/Purchase/Request, and future RevenueCat import/identity boundaries?
 
 ---
 
@@ -102,7 +99,8 @@ Verbal guidance, marketing copy, a blank application form, or an optional suppor
 
 ## 5. Evidence and historical inquiry artifacts
 
-- PAY.JP controlling readiness: `PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+- PAY.JP preserved paused-fallback readiness: `PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+- Stripe strategy Candidate: `STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
 - PAY.JP historical/optional support template: `PAYJP_INQUIRY_DRAFT.md`
 - KOMOJU: `KOMOJU_INQUIRY_DRAFT.md`
 - STORES: `STORES_INQUIRY_DRAFT.md`
@@ -115,20 +113,20 @@ Verbal guidance, marketing copy, a blank application form, or an optional suppor
 
 ## 6. Required workflow
 
-### PAY.JP primary path
+### Stripe desired-direction path
 
-1. Complete the bounded readiness plan without creating an account or claiming implementation readiness.
-2. Human supplies truthful operator/application facts, final intended URLs, and route-specific documents.
-3. Review legal/publication and security-declaration readiness; recheck current PAY.JP requirements and actual application fields.
-4. Human explicitly authorizes the exact production-use application submission.
-5. Submit only under that future authorization and preserve the exact application/reference/review evidence.
-6. Resolve every additional-information request and attached condition from evidence.
-7. Human formally selects PAY.JP only after authoritative acceptance evidence passes the decision gate.
-8. Start Payment implementation only under a separate authorized task.
+1. Complete Human + ChatGPT integrated review of the Candidate.
+2. Under separate authority, align actual public wording without disguising AI use or 鑑定ノート.
+3. Under another explicit authority, obtain actual Stripe account/business/site/category/Live Payment and method-specific evidence.
+4. Preserve exact submitted facts, outcomes, conditions, and evidence.
+5. Return to explicit Human launch review if any desired method is unavailable.
+6. Human formally selects a Provider only after the decision gate passes.
+7. Start sandbox/test implementation only under a separate authorized task.
 
-### Contingency-provider path
+### PAY.JP and other fallback path
 
-1. Verify the provider's own current official review, application, or inquiry route.
-2. Obtain explicit Human authorization before any external submission or contact.
-3. Preserve exact evidence and update the comparison without optimistic assumptions.
-4. Score and select only after provider-specific authoritative evidence exists.
+1. Human explicitly reactivates the fallback.
+2. Recheck current official requirements and the provider's review/application/inquiry route.
+3. Obtain explicit Human authorization before any external submission or contact.
+4. Preserve exact evidence and update the comparison without optimistic assumptions.
+5. Score and select only after provider-specific authoritative evidence exists.

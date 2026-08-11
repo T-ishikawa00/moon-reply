@@ -49,11 +49,13 @@
 
 - 結果通知とマーケティング同意を分離する
 - 不安を煽る販売、結果保証、架空レビュー、架空実績を禁止する
-- 決済事業者は、実際の事業内容をtruthfully開示し、provider-specific authoritative approval/review evidenceを取得した後にHumanが正式選定する。PAY.JPではproduction-use application/review evidenceが必要であり、support clarificationはpreapprovalではない
-- Stripeを初期前提にしない
+- 決済事業者は、実際の事業内容をtruthfully開示し、provider-specific authoritative approval/review evidenceを取得した後にHumanが正式選定する
+- Stripe CheckoutはHuman desired strategic primary Web directionだが、Candidate review pendingであり、feasibility、account、approval/activation、formal selectionおよびmethod eligibilityを確立しない
+- desired initial methodsはcards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPay unavailableはPayPayなしLaunchの自動承認ではない
+- RevenueCatはinitial Webに必須ではなく、future synchronizationはdesired / unresolved。PAY.JPはpaused fallback
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
 
-これらはHuman承認済みの内部方針であり、未決定事項へ戻さない。
+Product、価格、Safetyおよびtruthful positioningのaccepted内部方針は維持する。Stripeに関する箇条書きはHuman working directionの記録であり、Candidate acceptance、feasibility、approval/activation、formal selectionまたはimplementation authorityではない。
 
 ---
 
@@ -78,8 +80,8 @@
 ## 外部から証拠を得ること
 
 - 決済事業者固有の正式な審査経路によるauthoritative category/application acceptance、条件および追加対応
-- PAY.JPの場合、production-use application、PAY.JP/card-company review outcome、additional-information requests/responsesおよびconditions
-- 利用可能な決済手段と、追加審査の条件
+- Stripeの場合、actual account/business/site/category/Live Payment outcome、accurate submitted descriptionおよびconditions
+- cards、Apple Pay、Google Pay、PayPayのaccount/category/method-specific eligibilityと追加条件
 - Webhookイベント、署名検証、再送仕様および冪等性に必要な実装証拠
 - 手数料、入金サイクル、返金、チャージバック、保留金、契約終了時の未精算金条件
 - 単発デジタルコンテンツの決済・納品条件
@@ -118,10 +120,10 @@
 2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
 3. Milestone 2で運営者情報と公開条件を完成する
 4. Milestone 3で決済なしの審査用サイトをデプロイする
-5. Milestone 4でPAY.JP Production Application ReadinessをHuman reviewし、actual facts・final URLs・security readinessを整える
-6. Humanがexact production-use application submissionを明示承認した場合のみ申請し、review evidence・conditionsを保存する
-7. authoritative acceptance evidenceに基づきHumanがproviderを正式選定する。fallback providersは各provider固有のverified evidence pathを使う
-8. Milestone 5で実決済を除くBackend・Safety・AI・メールを完成する
-9. Milestone 6で選定済みproviderのSandbox決済を実装する
+5. Human + ChatGPTがStripe strategy Candidateをintegrated reviewし、acceptまたはreviseする
+6. 別権限でtruthful public-copy alignmentを行い、Stripe feasibility evidence acquisitionをHumanが承認する
+7. actual Stripe evidenceでcategory/Live Payment/cards/Apple Pay/Google Pay/PayPayを確認する
+8. desired method不足時は明示的Human launch reviewへ戻し、authoritative evidenceに基づいてHumanがproviderを正式選定する
+9. 別個のimplementation authorization後に選定済みproviderのsandbox/test実装へ進む
 
-PAY.JP production-use application submission requires separate explicit Human authorization after readiness review. Provider-specific Payment implementation must not begin before Human formal selection in Milestone 4 and a separate implementation authorization.
+Operator identity、住所・電話表示、support email、Tokushoho publication、opening notificationおよびvirtual officeは未解決のまま維持する。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

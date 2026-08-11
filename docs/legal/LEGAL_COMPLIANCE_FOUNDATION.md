@@ -22,9 +22,11 @@ It must not be represented as legally complete or approved for publication.
 
 月の返事 is designed as:
 
-- AI-assisted love-message reading content
-- fortune-telling / entertainment / emotional organization
-- one-shot digital content delivery
+- an AI-assisted relationship-message analysis and decision-support digital report
+- Customer-facing 恋のメッセージ鑑定ノート that organizes known facts, unknowns, interpretations, rationale, action, reassessment, and message drafts
+- one-shot digital content delivery using AI
+
+Moon, night, letter, paper, navy, ivory, and pale-gold presentation is visual/editorial atmosphere only. The service uses no tarot, astrology, birth-date divination, numerology, psychic/spiritual method, supernatural prediction, or external investigation.
 
 It is not designed as:
 
@@ -36,6 +38,8 @@ It is not designed as:
 - investigation of another person
 - guarantee of reconciliation or reply
 - surveillance service
+- matching, introduction, or intermediary service
+- human fortune-teller service
 
 The service must not claim knowledge of another person's true feelings or guarantee the future, a reply, reconciliation, or relationship improvement.
 
@@ -176,10 +180,11 @@ Uncertain legal questions must remain unresolved and marked for current-source r
 ## 9. Payment Provider Position
 
 - A provider must be selected only after truthful disclosure and provider-specific authoritative approval/review evidence
-- PAY.JP is the strategic primary Web direction, but its production-use application is Not submitted and it is Not approved / not selected
-- For PAY.JP, authoritative category/application evidence comes from the formal production-use application and applicable PAY.JP/card-company review, not an invented pre-screening inquiry
-- An optional PAY.JP support clarification is not preapproval and does not replace application/review evidence
-- KOMOJU, STORES, Square, Stripe, and other fallback providers require verification of their own current official review/application/inquiry evidence route; PAY.JP's process must not be generalized to them
+- Stripe Checkout is the desired strategic primary Web direction under an unaccepted Candidate; Stripe feasibility/account/approval/activation/formal selection and cards/Apple Pay/Google Pay/PayPay eligibility are not established
+- The Customer-facing 鑑定ノート wording, AI use, actual analysis flow, methods not used, and non-guarantees must be disclosed without disguising the service
+- Stripe's Japan-specific restricted-business risk requires actual account/business/site/category/Live Payment and method-specific authoritative evidence before formal selection
+- PAY.JP is preserved as a paused fallback; its readiness evidence and application route remain recorded, but PAY.JP-specific operator/opening-notification/security blockers do not control current Stripe-track work
+- PAY.JP reactivation requires current-source re-review and separate Human authority
 - No provider SDK, checkout, webhook, or production payment flow is authorized by Task 18A
 
 ---

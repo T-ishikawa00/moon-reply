@@ -25,10 +25,13 @@
 - 最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言およびCustomer-rightsのreviewは必須とし、materialな未解決法的義務はblockerとして残す
 - 専門家相談は任意のescalationであり、未実施それ自体は公開、Paid LaunchまたはProduction Paymentのblockerではない。内部reviewは法的適合性を保証しない
 
+Current strategy boundary on `2026-08-12`: Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility/account/approval/activation/formal selection and method eligibility are not established. PAY.JP is paused fallback. PAY.JP-specific operator/address/opening-notification/security preparation is not current work, but every operator, address, phone, support-email, Tokushoho, and publication decision below remains unresolved and must be completed before the applicable future review or Paid Launch. Stripe does not remove these obligations.
+
 ## Provider and readiness supporting documents
 
 - Operator decision guide: `OPERATOR_DECISION_GUIDE.md`
 - Operator worksheet: `OPERATOR_DECISION_WORKSHEET.md`
+- Stripe strategy Candidate: `../payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
 - Provider comparison: `../payment/PROVIDER_COMPARISON.md`
 - PAY.JP production-application readiness: `../payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
 - PAY.JP historical/optional support clarification draft: `../payment/PAYJP_INQUIRY_DRAFT.md`
@@ -38,7 +41,7 @@
 - Provider scorecard: `../payment/PROVIDER_DECISION_SCORECARD.md`
 - Provider selection gate: `../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
 
-PAY.JP production-use applicationはNot submittedであり、PAY.JPはNot approved、Not selected、Not scoredである。KOMOJU、STORESのfallback inquiry artifactsはNot sent、Not approved、Not selected、Not scoredである。PAY.JP application readinessはlegal publication approvalではない。
+StripeはCandidate review pending / feasibility not established / account absent / approval・activation absent / formal selection incomplete / method eligibility unverifiedである。PAY.JP production-use applicationはNot submittedで、PAY.JPはpaused fallback / Not approved / Not selected / Not scoredである。既存Provider artifactsまたはCandidateはlegal publication approvalではない。
 
 ## 1. Operator completion
 
@@ -53,6 +56,8 @@ PAY.JP production-use applicationはNot submittedであり、PAY.JPはNot approv
 ## 2. Provider decisions
 
 - [ ] 決済事業者固有の正式な審査経路からauthoritative category/application approval evidenceとconditionsを取得
+- [ ] Stripeの場合、actual account/business/site/category/Live Payment outcomeとcards・Apple Pay・Google Pay・PayPayのmethod-specific evidenceを保存
+- [ ] desired methodが不足する場合はHuman launch reviewへ戻し、PayPayなしLaunchを自動承認しない
 - [ ] PAY.JPの場合、production-use application/review outcomeおよびapplicableなPAY.JP/card-company conditionsを保存
 - [ ] PAY.JP security-measures declarationのactual questionsと回答根拠を確認
 - [ ] EMV 3-D Secureを含むapplicableなsecurity requirementsの実装・試験証拠を確認

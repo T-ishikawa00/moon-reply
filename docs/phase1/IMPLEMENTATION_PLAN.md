@@ -4,6 +4,8 @@
 
 This document aligns implementation planning with the authoritative `docs/ROADMAP.md` delivery sequence.
 
+Current Payment planning authority on `2026-08-12`: the Stripe Feasibility and Web Payment Strategy Pivot Candidate is `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`. The next Payment work is Human + ChatGPT integrated Candidate review. Stripe feasibility/account/contact/approval/activation/formal selection and method eligibility are unestablished; PAY.JP is paused fallback; implementation authority is `false`.
+
 Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 
 Task M1-P1 planning/specification is completed in the repository and awaiting Human review. It does not authorize implementation.
@@ -83,9 +85,9 @@ Implementation deploys only the payment-free review site. Validation covers stab
 
 ### Milestone 4: Payment Provider Review Evidence and Selection
 
-Planning/specification must freeze the truthful service description, provider-specific review route, evidence format, provider fallback order, comparison criteria, and Human decision gates.
+Planning/specification must freeze the truthful service description, provider-specific review route, evidence format, provider fallback order, comparison criteria, and Human decision gates. No account, contact, submission, or implementation is authorized by planning.
 
-For PAY.JP, the sequence is Production Application Readiness -> Human submit authorization -> production-use application -> preserved PAY.JP/card-company review evidence and conditions -> Human formal selection. PAY.JP provides no pre-application screening; optional support clarification is not approval. KOMOJU, STORES, or another fallback follows only if needed and authorized, using that provider's verified evidence route.
+Current conceptual sequence is Candidate integrated review -> separately authorized truthful public-positioning sync -> separately authorized Stripe account/business/site/category/Live Payment and cards/Apple Pay/Google Pay/PayPay evidence -> explicit Human review if any desired method is unavailable -> Human formal Provider selection. PAY.JP is preserved paused fallback and follows its application route only after explicit reactivation and current-source re-review.
 
 Validation confirms authoritative approval/review evidence and all known application/site conditions. Human selects the provider and accepts the milestone.
 
@@ -125,9 +127,9 @@ Verification confirms payment evidence, internal purchase record, exactly one ge
 
 The dependency chain is strict:
 
-`M1 review experience → M2 truthful operator/publication facts → M3 stable review deployment → M4 provider-specific authoritative review evidence and Human selection → M5 backend fulfillment without real card payment → M6 approved-provider sandbox payment → M7 E2E/failure operations → M8 production approval and soft launch → M9 first real purchase verification`
+`Stripe Candidate review → separately authorized public-positioning sync → Stripe feasibility evidence → Human formal Provider selection → separately authorized sandbox/test implementation → Production QA → separate Production authorization → Soft Launch`
 
-PAY.JP Production Application Readiness planning and Human readiness review is the current Payment task; account creation and application submission remain unauthorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
+No implementation item in this Payment sequence is complete. No Provider account/contact is authorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
 
 ## 6. One-Task / One-Commit / Human-Review Rule
 
@@ -138,10 +140,8 @@ PAY.JP Production Application Readiness planning and Human readiness review is t
 - No unrelated feature creep is allowed.
 - Technical availability of a later integration does not authorize skipping dependencies.
 
-## 7. Current Gate and Next Task
+## 7. Current Payment Gate and Next Task
 
-Task M1-P1 defines the route inventory, UI states, fixture strategy, legal/contact presentation, design brief, acceptance criteria, and implementation slices for the payment-free Reviewable Web MVP.
+Milestone 1 task snapshots are historical and do not control the current Payment task. The current next task is Human + ChatGPT integrated review of the Stripe Feasibility and Web Payment Strategy Pivot Candidate.
 
-Until Human accepts Task M1-P1, no Milestone 1 implementation is authorized.
-
-After acceptance, the next task is M1-I1 Route Shell and Review Navigation only, subject to separate explicit Human authorization. M1-I2 through M1-I6, Milestone 2, APIs, persistence, payment, OpenAI, email, deployment, and package changes remain unauthorized.
+Candidate review does not authorize truthful-public-copy implementation, Provider evidence acquisition, account/contact, sandbox/test implementation, Production Payment, deployment, or release. Each future step requires its own authority and evidence in the sequence above.
