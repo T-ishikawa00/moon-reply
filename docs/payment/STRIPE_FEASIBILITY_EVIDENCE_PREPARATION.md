@@ -198,7 +198,7 @@ The following are exactly three proposed questions. They are `PROPOSED / NOT SEN
 
 ### Question 1
 
-For the accurately described Moon Reply Product, does Stripe treat the actual service as falling within or outside the Japan jurisdiction-specific `Psychic services and fortune tellers` category? The determination must use the complete functional description, not the name `鑑定ノート` in isolation.
+「以下に正確に記載した『月の返事』のサービスについて、日本のStripeアカウントで決済処理を行うことは可能でしょうか。また、本サービスは日本向け禁止業種に記載されている『サイキックサービス / 占い師』に該当すると判断されますか。」Stripe must assess the complete functional description, not the name `鑑定ノート` in isolation.
 
 ### Question 2
 
