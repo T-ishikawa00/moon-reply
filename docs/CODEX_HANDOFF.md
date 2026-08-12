@@ -1,19 +1,22 @@
 # CODEX_HANDOFF.md
 
-## Active handoff — Stripe-first Web Payment Strategy Acceptance Synchronization
+## Active handoff — Stripe-first Customer-facing / Public-copy Alignment Accepted
 
-- Task / branch / exact parent: Stripe-first Web Payment Strategy Human + ChatGPT Acceptance Synchronization / `docs/stripe-feasibility-web-payment-strategy-pivot-candidate` / `0ba190171018a2af08073db00aea80a6cfde1214`.
-- Exact mutation scope: 29 documentation updates only; no new/renamed/deleted file and no code, package, lock, config, migration, Provider, DB/Supabase, Runtime, or LUNA mutation.
-- Accepted status: `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`; Human + ChatGPT integrated Product/strategy acceptance complete on `2026-08-12`.
-- Strategy boundary: Stripe Checkout is the accepted strategic primary Web direction to investigate and prepare, not established feasibility, approval, activation, or formal selection.
-- Desired methods: credit/debit cards, Apple Pay, Google Pay, and PayPay; all remain unverified. PayPay remains Public Preview, not enabled, not approved, and recheck-gated; its higher variable cost is an accepted conversion/revenue tradeoff, while exact fees are not frozen.
-- RevenueCat: not required for initial Web; future cross-platform synchronization is desired and unresolved.
-- PAY.JP: `paused_fallback_provider_direction`; all readiness evidence and blockers are preserved, but it does not control current next work.
+- Task / branch / exact parent: Stripe-first Customer-facing / Public-copy Alignment Human + ChatGPT Acceptance Synchronization / `codex/stripe-first-customer-public-copy-alignment` / `48d21e7ee7d672575eae6fd957e637b37da2a52f`.
+- Exact acceptance-sync mutation scope: 18 documentation updates only; no new/renamed/deleted file and no code, package, lock, config, migration, Provider, DB/Supabase, Runtime, or LUNA mutation.
+- Accepted status: `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; Human + ChatGPT acceptance complete on `2026-08-12`.
+- Accepted implementation lineage: baseline `3d3888f53293231506838195c478fa2e1a88417f`; initial implementation `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95`; Human Visual QA correction `48d21e7ee7d672575eae6fd957e637b37da2a52f`.
+- QA: Human Visual QA `PASS`; Automated QA `PASS` at the accepted implementation lineage ending `48d21e7ee7d672575eae6fd957e637b37da2a52f`.
+- Product/UI/content boundary: truthful AI/Product explanation in the LP Hero and before Request input; aligned request/sample metadata; Product-first LIVE final purchase-confirmation hierarchy; exact Service `月の返事`; exact Product `恋のメッセージ鑑定ノート`; AI analysis/decision-support explanation; JPY 980 tax-inclusive one-time purchase; no automatic renewal; non-guarantee; fixed sample versus actual AI Product distinction; Runtime renderer-owned AI/non-guarantee footer; preserved projection-derived `fixedLimitation`; moon/night/letter/paper Brand atmosphere; quiet emotional reading experience; and 鑑定 terminology are accepted. The Product remains an AI-enabled romance-message analysis and decision-support digital report, not generic AI tooling or fortune-telling.
+- Strategy boundary: Stripe Checkout remains the accepted strategic primary Web direction to investigate and prepare, not established feasibility, approval, activation, or formal selection.
+- Desired methods: credit/debit cards, Apple Pay, Google Pay, and PayPay remain unverified. PayPay remains desired, Public Preview, not enabled, not approved, and recheck-gated.
+- RevenueCat: not required and unconfigured for initial Web; future cross-platform synchronization is desired and unresolved.
+- PAY.JP: `paused_fallback_provider_direction`; application Not submitted, Not approved, and not selected; preserved evidence does not control current next work.
 - Payment Charter v1: `human_chatgpt_accepted_complete`; Provider-independent normative invariants unchanged.
 - Address/privacy: truthful private disclosure to legitimate non-public counterparties is acceptable; routine public home-address display is not the default; exact Tokushoho implementation remains unresolved and current-source/evidence-gated. Virtual-office use is not currently required by Human preference; GMO remains on hold, not rejected.
-- Operations: Stripe/PAY.JP/RevenueCat account or Provider operations `0`; API/DB/Supabase/Runtime/LUNA operations `0`.
-- Implementation/production authority: `false / false`. Public-copy code/UI alignment, Provider contact, PR, main merge, rebase, force push, and release are unauthorized.
-- Next action: The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
+- Operations: Provider / API / DB / Supabase / Runtime / LUNA = `0 / 0 / 0 / 0 / 0 / 0`.
+- Payment implementation / Production Payment authority: `false / false`. This Product/UI/content acceptance creates no Provider contact, Payment implementation, PR, main merge, rebase, force push, release, deployment, or legal-publication authority.
+- Next action: The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
 
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
 ## Historical superseded handoff — Payment Charter v1 Accepted / PAY.JP-primary snapshot
@@ -456,7 +459,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Payment Charter v1 remains `human_chatgpt_accepted_complete`, and Payment implementation and Production Payment authority remain `false / false`. The Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. PAY.JP is a paused fallback with preserved evidence. Delivery/Recovery Email Verification and current-source/legal obligations remain unchanged. No Provider operation, AI Provider rerun, C2, DB/Supabase change, Runtime/LUNA activation, downstream public-copy code/UI synchronization, PR, or main merge is authorized.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`, and Payment implementation and Production Payment authority remain `false / false`. The Stripe-first strategy remains `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. The Customer-facing / Public-copy Alignment is `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`, with Human Visual QA and Automated QA PASS at the accepted implementation lineage ending `48d21e7ee7d672575eae6fd957e637b37da2a52f`. The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated. PAY.JP is a paused fallback with preserved evidence. Delivery/Recovery Email Verification and current-source/legal obligations remain unchanged. No Provider operation, AI Provider rerun, C2, DB/Supabase change, Runtime/LUNA activation, further public-copy code/UI change, Production Payment, PR, or main merge is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

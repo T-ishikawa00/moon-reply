@@ -26,7 +26,7 @@ No Stripe account has been created, no Stripe contact or evidence acquisition ha
 
 ## 1. Provider-specific evidence routes
 
-1. Stripe accepted strategic direction: completed Acceptance Sync -> separately authorized truthful Customer-facing/public-copy alignment -> separately authorized actual account/business/site/category/Live Payment and method evidence -> Human formal selection.
+1. Stripe accepted direction: strategy Acceptance Sync complete -> Customer-facing/public-copy Alignment accepted complete -> Stripe feasibility evidence preparation -> separately authorized actual account/contact/business/site/category/Live Payment and method evidence acquisition -> Human formal selection.
 2. PAY.JP paused fallback: only after explicit Human reactivation -> current-source re-review -> readiness -> separate submission authority -> application/review evidence.
 3. KOMOJU, STORES, Square, or another provider: fallback only under separate review and its verified evidence route.
 

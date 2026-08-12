@@ -13,7 +13,7 @@
 - [x] Human + ChatGPT Payment Charter v1 acceptance — `human_chatgpt_accepted_complete` on `2026-08-12`; implementation authority remains `false`
 - [x] Delivery/Recovery Email Verification Product/Privacy direction — `accepted_required_control_with_trusted_session_reuse`; server-verifiable trust, repeat reuse only for unchanged verified email, reverification on email/trust change, no-login/account boundary preserved
 - [x] Human + ChatGPT integrated acceptance of Stripe Feasibility and Web Payment Strategy Pivot Candidate — Product/strategy acceptance sync complete on `2026-08-12`; not feasibility, approval, selection, or implementation authority
-- [ ] Truthful Customer-facing/public-copy alignment — current next work; separately scoped and unauthorized
+- [x] Truthful Customer-facing/public-copy alignment — `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; accepted lineage `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`; Human Visual QA / Automated QA `PASS / PASS`; Product/UI/content authority only
 - [ ] Stripe feasibility/account/business/site/category/Live Payment and cards/Apple Pay/Google Pay/PayPay evidence — not started; Provider account/contact unauthorized
 - [ ] Human formal Provider selection — Stripe incomplete; PAY.JP paused fallback / not approved / not selected
 - [ ] Payment implementation, including Provider SDK/API/checkout/webhook, purchase DB/migration, and refund execution — unauthorized
@@ -958,7 +958,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 - [x] Pre-payment Safety Engine / Safety UX — Human + ChatGPT accepted complete by the explicit `2026-08-10` Human decision; final JPY 980 readiness and Payment authority remain false
 - [x] Payment Charter v1 — Human + ChatGPT accepted complete on `2026-08-12`; implementation remains unauthorized and Charter acceptance does not complete or skip Milestones 2–6
 - [ ] Milestone 3: Review Site Deployment
-- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy Acceptance Sync complete; next formal subtask is separately authorized truthful Customer-facing/public-copy alignment; feasibility evidence and formal selection not started
+- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy and Customer-facing/public-copy Acceptance Syncs complete; next high-level work is Stripe feasibility evidence preparation; actual evidence acquisition and formal selection not started and remain separately authorized/evidence-gated
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
 - [ ] Milestone 6: Approved Provider Sandbox Payment
 - [ ] Milestone 7: E2E, Safety and Failure Operations

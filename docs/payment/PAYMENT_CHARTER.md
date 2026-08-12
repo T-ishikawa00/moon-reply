@@ -33,6 +33,7 @@ Current boundaries remain:
 | --- | --- |
 | Payment implementation authorized | `false` |
 | Stripe strategy | Human + ChatGPT accepted at Product/strategy level on `2026-08-12`; not feasibility, approval, activation, or selection |
+| Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Product/UI/content authority only; Human Visual QA and Automated QA PASS |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Cards / Apple Pay / Google Pay / PayPay eligibility | Unverified |
 | PAY.JP | Paused fallback; Not approved; Not selected |
@@ -44,7 +45,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`.
+The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. The accepted public-copy state and this next-work synchronization do not modify any normative Charter principle.
 
 ## 2. Initial Product Contract
 

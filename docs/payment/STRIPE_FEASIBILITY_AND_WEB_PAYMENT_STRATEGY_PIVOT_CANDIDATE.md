@@ -7,7 +7,11 @@
 - Human working direction recorded: yes
 - Human + ChatGPT integrated Candidate acceptance: complete
 - Human + ChatGPT acceptance date: 2026-08-12
-- Authority established: Product/strategy only
+- Customer-facing / Public-copy Alignment accepted status: stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete
+- Customer-facing / Public-copy Alignment acceptance date: 2026-08-12
+- Accepted implementation lineage: 3d3888f53293231506838195c478fa2e1a88417f -> 0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95 -> 48d21e7ee7d672575eae6fd957e637b37da2a52f
+- Human Visual QA / Automated QA: PASS / PASS
+- Authority established: Product/strategy and Product/UI/content alignment only
 - Initial Web Product: one consultation = one assessment note / JPY 980 tax-inclusive / one-time purchase / no automatic renewal / no initial subscription / no Customer-facing coins or points
 - Stripe feasibility: not established
 - Stripe account: absent
@@ -26,7 +30,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
+The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
 
 The following states are intentionally separate:
 
@@ -294,9 +298,9 @@ The controlling boundary is:
 
 The public-disclosure option does not remove Stripe's requirement for truthful private facts or any applicable legal obligation. Human accepts truthful private home/business-address disclosure to Stripe KYC, banks, tax/public authorities, and other legitimately required non-public counterparties. Routine public display of the Human's home address to general Customers is not desired as the default; where current law and actual Provider requirements allow, a legally valid request-based or otherwise non-routine-public disclosure method is preferred. Exact Tokushoho implementation remains unresolved and current-source/evidence-gated. Stripe does not guarantee request-based disclosure will always be sufficient and does not remove operator, address, phone, or publication obligations. Virtual-office use is not currently required by Human preference; GMO is on hold, not rejected, and may be reconsidered if actual legal, Provider, postal, privacy, or operational evidence makes it useful or necessary. No unverified virtual-office address may be used as the Stripe KYC/business address.
 
-## 14. Downstream public-copy alignment
+## 14. Downstream public-copy alignment — accepted complete
 
-A separately authorized implementation and content task is required before Stripe account or site review. Audited downstream surfaces include:
+A separately authorized bounded implementation and content task completed at accepted lineage `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`. Human + ChatGPT acceptance is complete on `2026-08-12`; Human Visual QA and Automated QA are PASS. Audited downstream surfaces included:
 
 - app/page.tsx;
 - app/layout.tsx;
@@ -313,7 +317,7 @@ A separately authorized implementation and content task is required before Strip
 - relevant email copy sources;
 - relevant metadata and SEO copy sources.
 
-Required direction:
+Accepted direction:
 
 - preserve 月の返事;
 - preserve 恋のメッセージ鑑定ノート;
@@ -323,7 +327,7 @@ Required direction:
 - preserve the truth that no supernatural method is used;
 - never present a fake Stripe approval badge or logo.
 
-These code and UI paths are intentionally unchanged in this documentation-only task.
+The audit did not require mutation of every listed surface. The accepted implementation remained bounded to its exact task-time 9-path manifest (`8` updates / `1` new), with the Human Visual QA correction bounded to `2` updated paths. The dedicated implementation verifier remains immutable task-time evidence tied to the accepted lineage. This acceptance authorizes no further code/UI change and does not establish Stripe feasibility or legal-publication readiness.
 
 ## 15. Stripe feasibility evidence required before formal selection
 
@@ -372,7 +376,7 @@ The following remain unresolved:
 - PayPay-to-RevenueCat synchronization compatibility;
 - account migration for future iOS and Android;
 - PAY.JP fallback reactivation execution;
-- downstream public-copy implementation scope.
+- future Provider-evidence-dependent public wording or legal-publication changes, if authoritative evidence requires them.
 
 No resolution is invented here.
 
@@ -382,6 +386,7 @@ No resolution is invented here.
 | --- | --- |
 | Payment Charter v1 | Human + ChatGPT accepted complete; human_chatgpt_accepted_complete |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on 2026-08-12 |
+| Stripe-first Customer-facing / Public-copy Alignment | stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete on 2026-08-12; Human Visual QA and Automated QA PASS; Product/UI/content only |
 | Stripe feasibility | Not established |
 | Stripe account | Absent |
 | Stripe contact | None |

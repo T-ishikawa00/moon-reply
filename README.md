@@ -10,7 +10,9 @@ Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Paymen
 
 The Stripe-first Web Payment Strategy is Human + ChatGPT accepted at the Product/strategy level as of `2026-08-12`. Its status is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. Stripe Checkout is the accepted strategic primary Web direction to investigate and prepare, while Stripe feasibility is not established; account, contact, approval, and activation are absent; formal Provider selection is incomplete; and every desired method remains unverified. PAY.JP is preserved as `paused_fallback_provider_direction`. Provider account/contact/API operations, Payment implementation, and Production Payment remain unauthorized.
 
-The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
+The Stripe-first Customer-facing / Public-copy Alignment is Human + ChatGPT accepted complete as of `2026-08-12` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`. The accepted lineage is baseline `3d3888f53293231506838195c478fa2e1a88417f`, initial implementation `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95`, and Human Visual QA correction `48d21e7ee7d672575eae6fd957e637b37da2a52f`. Human Visual QA and Automated QA are PASS at the accepted implementation lineage. This accepts Product/UI/content alignment only and creates no Provider, Payment implementation, Production Payment, or legal-publication authority.
+
+The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
 
 Current canonical planning:
 

@@ -12,7 +12,7 @@
 
 回答は `OPERATOR_DECISION_WORKSHEET.md` に記録し、根拠となる契約、最新の公式一次情報、設定画面および試験結果を紐づける。専門家相談を利用する場合は任意の補助証拠として記録できるが、Paid LaunchまたはProduction Paymentの必須条件ではない。
 
-Current sequencing: 次の正式Payment作業は別途承認されるtruthful Customer-facing/public-copy alignment taskである。Stripe feasibility evidence preparationが続き得るが、actual evidence acquisitionは別途承認かつevidence-gatedである。Legal identity、住所・電話表示、final support email、Tokushoho publicationおよびopening notificationは未解決で、将来のapplicable Provider review/publication/Paid Launch前に実証が必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
+Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12`に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`となった。次のhigh-level Payment作業はStripe feasibility evidence preparationである。actual Stripe account/contact/business/site/category/Live Paymentおよびpayment-method evidence acquisitionは別途承認かつevidence-gatedである。Legal identity、住所・電話表示、final support email、Tokushoho publicationおよびopening notificationは未解決で、将来のapplicable Provider review/publication/Paid Launch前に実証が必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
 
 ---
 

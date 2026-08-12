@@ -2,7 +2,7 @@
 
 ## Adopted Decisions
 
-Items explicitly labeled Human working direction in historical records retain that historical meaning. The current Stripe-first strategy is accepted at the Product/strategy level only; acceptance is not feasibility evidence, Provider approval/activation, formal selection, or implementation authority.
+Items explicitly labeled Human working direction in historical records retain that historical meaning. The current Stripe-first strategy is accepted at the Product/strategy level, and its Customer-facing / Public-copy Alignment is separately accepted at the Product/UI/content level. Neither acceptance is feasibility evidence, Provider approval/activation, formal selection, Payment implementation authority, Production Payment authority, or legal-publication approval.
 
 - Service name: 月の返事
 - Repository name: moon-reply
@@ -11,6 +11,7 @@ Items explicitly labeled Human working direction in historical records retain th
 - Web validation before native app
 - Long-term platform order: Web -> real paid Web validation -> iOS -> Android
 - Human + ChatGPT accepted Product/strategy direction on `2026-08-12`, not a final Provider selection: Stripe Checkout is the strategic primary Web direction to investigate and prepare; status `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`
+- Human + ChatGPT accepted the Customer-facing / Public-copy Alignment on `2026-08-12` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; accepted lineage `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`; Human Visual QA and Automated QA PASS
 - Desired initial Web methods: credit/debit cards + Apple Pay + Google Pay + PayPay at the same JPY 980 tax-inclusive one-time price; no method is treated as available without actual evidence
 - RevenueCat is not required for the initial Web path; future Stripe / Apple IAP / Google Play Billing purchase synchronization remains desired and unresolved
 - PAY.JP is preserved as a paused fallback Provider direction; its evidence is retained, but its readiness plan does not control current next work
@@ -21,7 +22,7 @@ Items explicitly labeled Human working direction in historical records retain th
 - Payment Charter v1 is Human + ChatGPT accepted complete as of `2026-08-12` with status `human_chatgpt_accepted_complete`; Candidate commits `7aeb9ecbc5a786b895f9280112f13b0629730429` and `b6f38586fadd2a17034810dbb139465af5eade2f` remain historical lineage, and implementation authority remains `false`
 - Delivery/Recovery Email Verification is `accepted_required_control_with_trusted_session_reuse`: first or untrusted-session purchase requires server-authoritative mailbox-control evidence bound to the current purchase authority/Purchase Intent; a valid trusted session bound to the unchanged verified email may be reused; email change or invalid/unavailable trusted state requires reverification
 - The trusted delivery/recovery session is neither Payment authority nor Safety authority, cannot be client-self-asserted, and does not introduce login, an account, a profile, or My Page
-- Next formal Payment work: a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated; Provider operations/Payment implementation remain unauthorized
+- Next high-level Payment work: Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated; Provider operations and Payment implementation remain unauthorized
 - Professional/specialist review is optional, not a mandatory Paid Launch or Production Payment gate; current official-source and actual Product/Provider/public-wording review remains required, and material unresolved legal obligations remain blockers
 - AI use must be disclosed
 - Dangerous consultations must not receive normal romance鑑定

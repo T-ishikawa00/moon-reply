@@ -7,6 +7,10 @@
 - Stripe pivot Candidate formulation date: `2026-08-12`
 - Stripe-first strategy accepted status: `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`
 - Stripe-first strategy Human + ChatGPT acceptance date: `2026-08-12`
+- Customer-facing / Public-copy Alignment accepted status: `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`
+- Customer-facing / Public-copy Alignment Human + ChatGPT acceptance date: `2026-08-12`
+- Accepted implementation lineage: `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`
+- Human Visual QA / Automated QA: `PASS / PASS`
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`
 - Payment Charter v1 Human + ChatGPT acceptance date: `2026-08-12`
 - Payment implementation authorized: `false`
@@ -16,7 +20,7 @@ This document is the canonical product strategy for Payment, Platform, Purchase,
 
 `docs/ROADMAP.md` remains the authoritative high-level delivery roadmap. Provider application/review/inquiry evidence and formal provider approval remain governed by the evidence documents under `docs/payment/`. If an older Product, Phase, Payment, or provider-planning document conflicts with this strategy, this document controls the Payment / Platform / Monetization decision, while immutable historical execution and acceptance records remain historical evidence.
 
-This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, and accepted Charter status. Strategy acceptance is not an accepted Provider decision. It does not authorize a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, implementation, or Production Payment.
+This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, accepted Customer-facing / Public-copy Alignment, and accepted Charter status. Public-copy acceptance is Product/UI/content authority only. Neither strategy nor public-copy acceptance is an accepted Provider decision or authorization for a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, Payment implementation, Production Payment, or legal publication.
 
 ## 1. Long-Term Platform Sequence
 
@@ -258,17 +262,18 @@ When a still-valid trusted session is bound to the unchanged verified delivery/r
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: Truthful Customer-facing/Public-copy Alignment
+## 11. Next Formal Work: Stripe Feasibility Evidence Preparation
 
-Payment Charter v1 in `PAYMENT_CHARTER.md` is `human_chatgpt_accepted_complete` as of `2026-08-12`. Stripe-first strategy Acceptance Sync is complete. The next formal Payment track is not implementation or Provider operation. It is:
+Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy Acceptance Sync and the Customer-facing / Public-copy Alignment Acceptance Sync are complete as of `2026-08-12`. The next high-level Payment track is preparation, not Provider operation or evidence acquisition. The sequence is:
 
-1. separately authorize truthful Customer-facing/public-copy alignment;
-2. prepare Stripe feasibility evidence work, then separately authorize and obtain actual Stripe account/business/site/category/Live Payment, private KYC/business-address, and method-specific evidence, including the required PayPay rechecks; stable review URLs/public legal conditions must exist before any Provider/site review that requires them;
-3. return to Human launch review for any unavailable desired method;
-4. perform Human formal Provider selection only after authoritative evidence;
-5. authorize sandbox/test implementation only in a separate task;
-6. complete Production QA without treating QA as Production Payment authorization; and
-7. obtain separate Production Payment authorization before Soft Launch.
+1. preserve truthful Customer-facing/public-copy alignment as accepted complete;
+2. prepare Stripe feasibility evidence work;
+3. separately authorize and obtain actual Stripe account/contact/business/site/category/Live Payment, private KYC/business-address, and method-specific evidence, including the required PayPay rechecks; stable review URLs/public legal conditions must exist before any Provider/site review that requires them;
+4. return to Human launch review for any unavailable desired method;
+5. perform Human formal Provider selection only after authoritative evidence;
+6. authorize Payment implementation in sandbox/test only in a separate task;
+7. complete Production QA without treating QA as Production Payment authorization; and
+8. obtain separate Production Payment authorization before Soft Launch.
 
 No Stripe account/contact exists or is authorized by this planning package. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. PAY.JP remains paused fallback, Not approved, and not selected. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
 
@@ -282,6 +287,7 @@ No Stripe account/contact exists or is authorized by this planning package. Stri
 | Payment Charter v1 | `human_chatgpt_accepted_complete` on `2026-08-12` |
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on `2026-08-12` |
+| Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Human Visual QA and Automated QA PASS; Product/UI/content only |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay / PayPay | Unverified |

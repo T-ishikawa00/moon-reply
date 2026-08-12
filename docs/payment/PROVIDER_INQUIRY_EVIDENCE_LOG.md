@@ -25,7 +25,7 @@ These conceptual lanes are registered only for future evidence. Neither lane has
 
 | Evidence ID | Provider | Status | Account/contact | Exact submitted facts | Reference ID | Outcome | Method evidence | Evidence location | Next action | Human decision |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| STRIPE-FEAS-001 | Stripe | Not started | None | None submitted | — | Feasibility not established | Credit/debit cards/Apple Pay/Google Pay/PayPay unverified | None recorded | Truthful Customer-facing/public-copy alignment under separate authority | Evidence acquisition not authorized |
+| STRIPE-FEAS-001 | Stripe | Not started | None | None submitted | — | Feasibility not established | Credit/debit cards/Apple Pay/Google Pay/PayPay unverified | None recorded | Stripe feasibility evidence preparation | Evidence acquisition not authorized |
 | STRIPE-ACCOUNT-001 | Stripe | Not started | Account absent / contact none | None submitted | — | Approval/activation absent | None | None recorded | Await separate future authority | Account/contact not authorized |
 
 Official restricted-business, PayPay, and RevenueCat documentation checked on `2026-08-12` is bounded source context, not Moon Reply account, approval, activation, or method eligibility evidence.

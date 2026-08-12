@@ -120,9 +120,9 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
 3. Milestone 2で運営者情報と公開条件を完成する
 4. Milestone 3で決済なしの審査用サイトをデプロイする
-5. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了。以下のfuture stepは未完了
-6. 次の正式Payment作業として、別権限でtruthful Customer-facing/public-copy alignmentを行う
-7. 別権限でStripe feasibility evidenceを準備・取得し、actual account/business/site/category/Live Payment/credit/debit cards/Apple Pay/Google Pay/PayPayを確認する。必要なProvider/site review前にstable review URLs/public legal conditionsを整える
+5. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了
+6. truthful Customer-facing/public-copy alignmentは同日に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`となり、Human Visual QA / Automated QAは`PASS / PASS`
+7. 次のhigh-level Payment作業としてStripe feasibility evidenceを準備する。actual Stripe account/contact/business/site/category/Live Payment/credit/debit cards/Apple Pay/Google Pay/PayPay evidence acquisitionは別権限かつevidence-gatedであり、必要なProvider/site review前にstable review URLs/public legal conditionsを整える
 8. desired method不足時は明示的Human launch reviewへ戻し、authoritative evidenceに基づいてHumanがproviderを正式選定する
 9. 別個のimplementation authorization後に選定済みproviderのsandbox/test実装へ進む
 10. Production QAを完了する。Production QAはProduction Payment authorizationではない
