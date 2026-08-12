@@ -51,9 +51,10 @@
 - 不安を煽る販売、結果保証、架空レビュー、架空実績を禁止する
 - 決済事業者は、実際の事業内容をtruthfully開示し、provider-specific authoritative approval/review evidenceを取得した後にHumanが正式選定する
 - Stripe Checkoutは`2026-08-12`にHuman + ChatGPT accepted strategic primary Web directionとなった。ただしProduct/strategy acceptanceであり、feasibility、account/contact、approval/activation、formal selectionおよびmethod eligibilityを確立しない
-- desired initial methodsはcredit/debit cards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPayはPublic Preview / not enabled / not approved / recheck-gated。PayPay unavailableはPayPayなしLaunchの自動承認ではない
+- desired initial methodsはcredit/debit cards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPayはdesired / not enabled / not approved、lifecycleは`not_frozen_recheck_required`。PayPay unavailableはPayPayなしLaunchの自動承認ではない
 - RevenueCatはinitial Webに必須ではなく、future synchronizationはdesired / unresolved。PAY.JPはpaused fallback
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
+- Stripe Feasibility Evidence Preparationは`stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`のdocs-only Candidateとして準備済み。Human + ChatGPT reviewはpendingで、Stripe feasibility、account/contact/submission、approval/activationまたはformal selectionを確立しない
 
 Product、価格、Safety、truthful positioningおよびStripe-first strategyのaccepted内部方針は維持する。Stripe strategy acceptanceはfeasibility、approval/activation、formal selectionまたはimplementation authorityではない。
 
@@ -72,6 +73,7 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 - 結果URLの失効・再発行と誤メール訂正をどう扱うか
 - 初期MVPでマーケティングメールを行うか
 - 鑑定書の共有を私的利用のみ、一部共有可、全文共有可のどこまで許可するか
+- `AGE-GATE-001`：current Request UIの専用`私は18歳以上です` checkboxと、必須年齢層選択を要求し専用checkboxを禁止するcurrent draft/specのどちらをMVPのage-gate mechanismとして採用するか。Lane B/C readiness前にHuman Product/legal判断が必要で、本Candidateでは解消しない
 
 判断は `OPERATOR_DECISION_GUIDE.md` を読み、`OPERATOR_DECISION_WORKSHEET.md` に回答して記録する。個人情報はこの段階で推測または仮入力しない。
 
@@ -81,6 +83,7 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 - 決済事業者固有の正式な審査経路によるauthoritative category/application acceptance、条件および追加対応
 - Stripeの場合、actual account/business/site/category/Live Payment outcome、accurate submitted descriptionおよびconditions
+- `STRIPE-FEAS-001` Preliminary Category Clarification、`STRIPE-ACCOUNT-001` Account/Business/Site/Live Payment Review、`STRIPE-PAYPAY-001` PayPay-specific Onboarding Reviewのlane別authoritative evidence。Lane A preliminary evidenceだけではformal selectionまたはapprovalに足りず、Lane CはLane Bを自動継承しない
 - cards、Apple Pay、Google Pay、PayPayのaccount/category/method-specific eligibilityと追加条件
 - Webhookイベント、署名検証、再送仕様および冪等性に必要な実装証拠
 - 手数料、入金サイクル、返金、チャージバック、保留金、契約終了時の未精算金条件
@@ -116,16 +119,16 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 現在の実行順序は `docs/ROADMAP.md` が制御する。法務・provider準備文書の旧Task順序は、現行Milestoneを上書きしない。
 
-1. Task M1-P1で決済なしのReviewable Web MVPを仕様化し、Humanが受け入れる
-2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
-3. Milestone 2で運営者情報と公開条件を完成する
-4. Milestone 3で決済なしの審査用サイトをデプロイする
-5. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了
-6. truthful Customer-facing/public-copy alignmentは同日に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`となり、Human Visual QA / Automated QAは`PASS / PASS`
-7. 次のhigh-level Payment作業としてStripe feasibility evidenceを準備する。actual Stripe account/contact/business/site/category/Live Payment/credit/debit cards/Apple Pay/Google Pay/PayPay evidence acquisitionは別権限かつevidence-gatedであり、必要なProvider/site review前にstable review URLs/public legal conditionsを整える
-8. desired method不足時は明示的Human launch reviewへ戻し、authoritative evidenceに基づいてHumanがproviderを正式選定する
-9. 別個のimplementation authorization後に選定済みproviderのsandbox/test実装へ進む
-10. Production QAを完了する。Production QAはProduction Payment authorizationではない
+1. Milestone 1 Reviewable Web MVPは`docs/ROADMAP.md`に記録された受入状態を維持する
+2. Milestone 2は現行RoadmapどおりInternal Automated AI / DB Vertical Sliceの内部作業線であり、運営者情報、公開条件、Stripe readinessまたはlegal publicationを完成させるMilestoneではない
+3. Milestone 3でRoadmapが定める決済なしのReview Site Deploymentへ進み、stable review URLおよびlater applicable public/review conditionsはその後の該当readiness workで整える。exact gateはRoadmapが制御する
+4. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了し、truthful Customer-facing/public-copy alignmentも同日に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`、Human Visual QA / Automated QA `PASS / PASS`となった
+5. Stripe Feasibility Evidence Preparationはstatus `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`で準備され、Human + ChatGPT Candidate reviewはpending
+6. Candidate review後も、actual Stripe account/contact/submission、Lane A clarification、Lane B account/business/site/category/Live Payment review、Lane C PayPay reviewはそれぞれ別の明示的external-action authorityが必要
+7. Milestone 4のProvider Review Evidence and Selectionでは、必要なstable review URL/public conditionsを満たしたうえでlane-specific authoritative evidenceを取得し、desired method不足時は明示的Human launch reviewへ戻す
+8. Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
+9. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む
+10. Production QAはProduction Payment authorizationではない
 11. 別個のProduction Payment authorization後にのみSoft Launchへ進む
 
-Operator identity、電話表示、support email、Tokushoho publicationおよびopening notificationは未解決のまま維持する。住所はHuman preferenceのみ記録済みで、exact Tokushoho disclosure implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはHuman preference上currently not required、GMOはon hold / not rejectedで、actual legal/Provider/postal/privacy/operational evidenceにより再検討できる。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.
+Operator identity、電話表示、support email、Tokushoho publicationおよびopening notificationは未解決のまま維持する。住所はHuman preferenceのみ記録済みで、exact Tokushoho disclosure implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはHuman preference上currently not required、GMOはon hold / not rejectedで、actual legal/Provider/postal/privacy/operational evidenceにより再検討できる。`AGE-GATE-001`はLane B/C blockerとして未解決である。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、いずれのStripe lane outcomeからも自動reactivationしない。Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

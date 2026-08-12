@@ -12,6 +12,8 @@ Every source must be rechecked before public launch.
 
 No professional legal review has been completed; professional consultation is optional and is not a Paid Launch prerequisite. No payment-provider approval or trademark clearance is recorded by this register.
 
+Stripe Feasibility Evidence Preparation Candidate status is `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review` as of `2026-08-12`; Human + ChatGPT review remains pending. The source refresh below creates no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, or legal-publication authority.
+
 ---
 
 ## Japanese Consumer / Commerce Sources
@@ -140,12 +142,13 @@ Rules:
 URL:
 
 - https://stripe.com/jp/legal/restricted-businesses
+- https://support.stripe.com/questions/restricted-business-list-and-considerations?locale=ja-JP
 - https://support.stripe.com/questions/prohibited-and-restricted-businesses-list-faqs?locale=ja-JP
 
 Current official evidence checked on `2026-08-12`:
 
-- Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers.
-- Stripe's FAQ says it may be able to support some listed businesses only with explicit prior approval, while some categories are never eligible.
+- Stripe's Japan jurisdiction-specific prohibited-business list includes the literal category `サイキックサービス / 占い師`.
+- Separately, Stripe's general restricted/prohibited-business guidance says some listed businesses may be supportable only after additional detailed review and explicit approval, while some categories are never eligible.
 - Stripe independently reviews each account and relevant information during activation; that review determines whether the business is supported.
 - Stripe prohibits false, manipulated, inaccurate, or misleading information about identity, entity, or business nature.
 - These bounded source facts do not establish Moon Reply feasibility, account approval, activation, category acceptance, or Live Payment eligibility.
@@ -159,37 +162,43 @@ Project boundary:
 - Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare; strategy acceptance is not feasibility, approval, activation, or formal selection.
 - No Stripe account, contact, approval, activation, or formal selection is recorded.
 - 鑑定ノート, AI use, actual service behavior, and non-guarantees must not be hidden or disguised.
+- `STRIPE-FEAS-001` preliminary evidence, `STRIPE-ACCOUNT-001` account/Live evidence, and `STRIPE-PAYPAY-001` PayPay evidence are separate lanes. No lane has external evidence or an outcome.
 
 ### Stripe PayPay
 
 URL:
 
-- https://docs.stripe.com/payments/paypay
+- https://docs.stripe.com/payments/paypay/accept-a-payment?locale=ja-JP
+- https://support.stripe.com/questions/accepting-paypay-payments-for-japan-based-stripe-accounts?locale=ja-JP
 
 Current official evidence checked on `2026-08-12`:
 
-- Stripe labels PayPay `Public Preview`.
-- Stripe documentation describes PayPay for Japan and Japanese yen.
-- It is Customer-initiated, Customer-authenticated, and single-use/non-recurring.
-- Checkout supports PayPay in payment mode; Checkout subscription mode is not supported.
-- Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
-- `Public Preview` does not remove PayPay from the desired initial method set. PayPay remains desired, unverified, not enabled, and not approved.
-- Preview/GA status, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked before Stripe formal Provider selection, before PayPay implementation authorization, and before Paid Launch.
+- Stripe documentation describes PayPay as a Japan payment method and the support guidance says a Japan Stripe account may accept it only after PayPay onboarding review approval.
+- The support guidance requires Japanese Product, image, and price presentation, a checkout path or explanatory document, completed Tokushoho information, and matching applicable account/business facts.
+- When selecting goods type, the support guidance lists examples for `デジタルコンテンツ` and instructs other products or services to use `一般`.
+- This register does not select Moon Reply's PayPay goods type. `goods_type_selection = unresolved_pending_actual_onboarding_evidence_and_human_review`; final confirmation requires the actual onboarding UI and current Product facts.
+- The support guidance describes external partner review as approximately two weeks. This is a planning estimate, not an SLA or release deadline, and incomplete information or further review may extend it.
+- Prior project records that labeled PayPay `Public Preview` are historical source snapshots. Current official surfaces are not sufficiently consistent for this project to freeze either Preview or GA as the controlling lifecycle label.
+- `lifecycle_label = not_frozen_recheck_required`. Recheck before Stripe formal Provider selection, before PayPay implementation authorization, immediately before PayPay onboarding/enablement, and before Paid Launch.
+- PayPay remains desired, unverified, not enabled, and not approved. Stripe account support does not establish PayPay support.
 - Exact rates, taxes, settlement, and account-specific pricing are not frozen by this source register.
 
 ### Stripe Japan onboarding, business-address verification, and Commerce Disclosure
 
 URL:
 
-- https://support.stripe.com/questions/getting-started-with-stripe-a-guide-for-users-in-japan
+- https://support.stripe.com/questions/business-website-for-account-activation-faq?locale=ja-JP
+- https://support.stripe.com/questions/getting-started-with-stripe-a-guide-for-users-in-japan?locale=ja-JP
 - https://support.stripe.com/questions/verifying-your-business-address?locale=ja-JP
 - https://support.stripe.com/questions/how-to-create-and-display-a-commerce-disclosure-page?locale=ja-JP
 
 Current official evidence checked on `2026-08-12`:
 
-- Stripe's Japan onboarding guidance requires business address information and representative information, including the representative's address.
+- Stripe's activation guidance requires an applicable business website, social profile, or application URL and sufficient Product/business information for review. Moon Reply has no stable public/review URL recorded by this Candidate.
+- Stripe's Japan onboarding guidance requires business and representative/KYC information, including applicable address, identity-document, website, and payout-bank facts.
 - Stripe may request additional business-address verification documents when the submitted address cannot be verified automatically.
 - Separately, Stripe's Commerce Disclosure guidance says a sole proprietor may, subject to the page requirements, use an equivalent request-based disclosure statement such as `請求があった場合には速やかに開示いたします` instead of immediately displaying formal name, address, and phone information publicly.
+- Stripe's Commerce Disclosure guidance requires a completed disclosure page and notes final-confirmation requirements, but it does not guarantee legal compliance. Moon Reply's Tokushoho review display remains incomplete and not publication-ready.
 
 Project boundary:
 
@@ -200,6 +209,7 @@ Project boundary:
 - Virtual-office use is not currently required by Human preference. GMO remains on hold, not rejected; virtual-office use may be reconsidered if actual legal, Provider, postal, privacy, or operational evidence makes it useful or necessary.
 - No unverified virtual-office address may be used as the Stripe KYC/business address.
 - Operator, address, and phone handling requires later current-source review, actual Stripe evidence, applicable legal/publication review, and explicit Human review.
+- Git may store private-KYC field names, readiness/status, checked date, redacted outcome, and an opaque non-public evidence reference only; actual Human PII, identity evidence, bank values, Stripe credentials, and complete sensitive application evidence remain outside Git.
 
 ### RevenueCat Stripe external-purchase tracking
 

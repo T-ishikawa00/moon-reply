@@ -11,6 +11,7 @@
 - Customer-facing / Public-copy Alignment acceptance date: 2026-08-12
 - Accepted implementation lineage: 3d3888f53293231506838195c478fa2e1a88417f -> 0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95 -> 48d21e7ee7d672575eae6fd957e637b37da2a52f
 - Human Visual QA / Automated QA: PASS / PASS
+- Stripe Feasibility Evidence Preparation Candidate: stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review / Human + ChatGPT review pending
 - Authority established: Product/strategy and Product/UI/content alignment only
 - Initial Web Product: one consultation = one assessment note / JPY 980 tax-inclusive / one-time purchase / no automatic renewal / no initial subscription / no Customer-facing coins or points
 - Stripe feasibility: not established
@@ -20,7 +21,7 @@
 - Stripe activation: absent
 - Stripe formal selection: incomplete
 - Cards / Apple Pay / Google Pay eligibility: unverified / unverified / unverified
-- PayPay: desired / Public Preview / unverified / not enabled / not approved / recheck-gated
+- PayPay: desired / unverified / not enabled / not approved / lifecycle not frozen and recheck required / goods type unresolved
 - PAY.JP: paused fallback / not approved / not selected
 - RevenueCat initial Web: not required / unconfigured
 - RevenueCat future synchronization: desired / unresolved
@@ -30,7 +31,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
+Stripe feasibility evidence preparation now exists as a docs-only Candidate pending Human + ChatGPT review. Actual Stripe account/contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
 
 The following states are intentionally separate:
 
@@ -87,8 +88,8 @@ That wording conflicted with the accepted Task 18C-R2 positioning criterion that
 
 Bounded official-source facts checked on 2026-08-12:
 
-- Stripe's Japan-specific prohibited-business list includes Psychic services and fortune tellers.
-- Stripe's prohibited/restricted-business FAQ says Stripe may be able to support some listed businesses only with explicit prior approval, while some categories are never eligible.
+- Stripe's Japan jurisdiction-specific prohibited-business list includes the literal category `サイキックサービス / 占い師`.
+- Separately, Stripe's general restricted/prohibited-business guidance says some listed businesses may be supportable only after additional detailed review and explicit approval, while some categories are never eligible.
 - Stripe independently reviews each account and relevant information during activation; that review determines whether the business is supported.
 - Stripe prohibits false, manipulated, inaccurate, or misleading information about identity, entity, or business nature.
 - Moon Reply has no Stripe feasibility, account, activation, category, or Live Payment evidence.
@@ -101,6 +102,7 @@ Bounded official-source facts checked on 2026-08-12:
 Official sources:
 
 - https://stripe.com/jp/legal/restricted-businesses
+- https://support.stripe.com/questions/restricted-business-list-and-considerations?locale=ja-JP
 - https://support.stripe.com/questions/prohibited-and-restricted-businesses-list-faqs?locale=ja-JP
 
 Wording changes do not guarantee approval. 鑑定ノート must not be hidden or disguised.
@@ -116,17 +118,21 @@ The desired initial methods are:
 
 PayPay is a deliberate Product decision. The accepted strategy accepts its materially higher variable transaction cost as a conversion and revenue tradeoff. Exact rates, taxes, settlement, and account-specific pricing are not frozen by this accepted document. No monthly fixed-cost justification is assumed without current account evidence. Actual availability remains account-, category-, method-, and evidence-gated.
 
-Stripe's official documentation checked on 2026-08-12 labels PayPay `Public Preview`. It describes PayPay as Japan/Japanese-yen, Customer-initiated and Customer-authenticated, single-use/non-recurring, and supported by Checkout in payment mode; Checkout subscription mode is not supported. Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
+Historical task-time source snapshot: the official documentation inspected for this accepted pivot originally labeled PayPay `Public Preview` and described Japan/Japanese-yen, Customer-initiated and Customer-authenticated, single-use/non-recurring payments and Checkout payment-mode support. That label is retained here only as historical evidence of the pivot review and is not the current controlling lifecycle state.
 
-Official source: https://docs.stripe.com/payments/paypay
+Current refresh sources checked `2026-08-12`:
 
-`Public Preview` does not remove PayPay from the desired initial methods. PayPay remains desired, unverified, not enabled, and not approved. No PayPay fee rate is frozen.
+- https://docs.stripe.com/payments/paypay/accept-a-payment?locale=ja-JP
+- https://support.stripe.com/questions/accepting-paypay-payments-for-japan-based-stripe-accounts?locale=ja-JP
 
-PayPay's Preview/GA status, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked:
+Official surfaces are not sufficiently consistent for this project to freeze either Preview or GA as the controlling lifecycle label. PayPay remains desired, unverified, not enabled, and not approved. `lifecycle_label = not_frozen_recheck_required`; no PayPay fee rate is frozen. Lifecycle, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked:
 
 1. before Stripe formal Provider selection;
-2. before PayPay implementation authorization; and
-3. before Paid Launch.
+2. before PayPay implementation authorization;
+3. immediately before PayPay onboarding/enablement; and
+4. before Paid Launch.
+
+Official onboarding guidance preserves a literal examples-for-`デジタルコンテンツ`, otherwise-`一般` rule. Moon Reply's actual goods type is not selected by this synchronization and remains `unresolved_pending_actual_onboarding_evidence_and_human_review` until the actual onboarding UI and current Product facts are reviewed.
 
 ## 6. Method availability and Launch decision
 
@@ -255,7 +261,7 @@ PAY.JP is preserved as paused_fallback_provider_direction.
 
 PAY.JP readiness evidence, application requirements, evidence lanes, and historical PAY.JP decisions remain preserved. docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md is reclassified from active readiness to paused fallback readiness. Its operator, address, opening-notification, and security blockers are not current Stripe-track blockers.
 
-Possible future PAY.JP reactivation triggers include:
+Possible future inputs to an explicit Human PAY.JP reactivation review include:
 
 - Stripe determines that the accurately described Product is prohibited or unsupported;
 - Stripe Live Payment activation cannot be obtained;
@@ -264,6 +270,8 @@ Possible future PAY.JP reactivation triggers include:
 - Human explicitly reactivates PAY.JP.
 
 Reactivation requires current-source re-review and separate authority. GMO virtual-office contracting and PAY.JP-driven opening-notification preparation remain on hold, not permanently rejected.
+
+No Stripe lane outcome automatically reactivates PAY.JP. Lane A unsupported, Lane B rejected, or Lane C rejected still requires explicit Human reactivation authority and the PAY.JP-specific current-source/readiness/application route.
 
 ## 13. Fixed-cost rationale
 
@@ -331,6 +339,14 @@ The audit did not require mutation of every listed surface. The accepted impleme
 
 ## 15. Stripe feasibility evidence required before formal selection
 
+The docs-only preparation Candidate uses three separate lanes:
+
+- `STRIPE-FEAS-001` / Lane A: preliminary category clarification; preparation ready pending Human review; external action not authorized; not submitted; outcome `null`;
+- `STRIPE-ACCOUNT-001` / Lane B: account/business/site/category/Live Payment review; preparation blocked; external action not authorized; not submitted; outcome `null`; and
+- `STRIPE-PAYPAY-001` / Lane C: PayPay-specific onboarding review; preparation blocked; external action not authorized; not submitted; outcome `null`.
+
+Lane A can never establish account approval, activation, Live Payment eligibility, or formal Provider selection by itself. Lane B is required for Stripe account/Live supportability evidence. Lane C is required if PayPay is to be treated as enabled/approved and may not inherit Lane B approval.
+
 Future evidence must cover:
 
 - actual Stripe account and business-profile review;
@@ -387,6 +403,8 @@ No resolution is invented here.
 | Payment Charter v1 | Human + ChatGPT accepted complete; human_chatgpt_accepted_complete |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on 2026-08-12 |
 | Stripe-first Customer-facing / Public-copy Alignment | stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete on 2026-08-12; Human Visual QA and Automated QA PASS; Product/UI/content only |
+| Stripe Feasibility Evidence Preparation | stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review; Human + ChatGPT review pending |
+| Lane A / B / C | Ready pending Human review / blocked / blocked; all external actions not authorized; all acquisitions not submitted; outcomes `null` |
 | Stripe feasibility | Not established |
 | Stripe account | Absent |
 | Stripe contact | None |
@@ -396,7 +414,8 @@ No resolution is invented here.
 | Apple Pay eligibility | Unverified |
 | Google Pay eligibility | Unverified |
 | PayPay eligibility | Unverified |
-| PayPay lifecycle / enablement | Desired; Public Preview; unverified; not enabled; not approved; recheck-gated |
+| PayPay lifecycle / enablement | Desired; lifecycle not frozen / recheck required; unverified; not enabled; not approved; goods type unresolved pending actual onboarding evidence and Human review |
+| AGE-GATE-001 | Unresolved Human Product/legal decision blocker for Lane B/C |
 | Stripe private KYC vs public Tokushoho | Separate evidence domains; private truthful disclosure accepted; routine public home-address display not default; exact Tokushoho method unresolved |
 | Virtual office / GMO | Not currently required by Human preference; GMO on hold, not rejected; evidence-based reconsideration available |
 | PAY.JP | Paused fallback; not approved; not selected |

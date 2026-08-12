@@ -9,6 +9,8 @@
 - Stripe-first strategy Human + ChatGPT acceptance date: `2026-08-12`
 - Customer-facing / Public-copy Alignment accepted status: `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`
 - Customer-facing / Public-copy Alignment Human + ChatGPT acceptance date: `2026-08-12`
+- Stripe Feasibility Evidence Preparation Candidate status: `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`
+- Stripe Feasibility Evidence Preparation Human + ChatGPT review: `pending`
 - Accepted implementation lineage: `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`
 - Human Visual QA / Automated QA: `PASS / PASS`
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`
@@ -20,7 +22,7 @@ This document is the canonical product strategy for Payment, Platform, Purchase,
 
 `docs/ROADMAP.md` remains the authoritative high-level delivery roadmap. Provider application/review/inquiry evidence and formal provider approval remain governed by the evidence documents under `docs/payment/`. If an older Product, Phase, Payment, or provider-planning document conflicts with this strategy, this document controls the Payment / Platform / Monetization decision, while immutable historical execution and acceptance records remain historical evidence.
 
-This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, accepted Customer-facing / Public-copy Alignment, and accepted Charter status. Public-copy acceptance is Product/UI/content authority only. Neither strategy nor public-copy acceptance is an accepted Provider decision or authorization for a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, Payment implementation, Production Payment, or legal publication.
+This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, accepted Customer-facing / Public-copy Alignment, accepted Charter status, and the pending-review Stripe feasibility evidence-preparation Candidate. Public-copy acceptance is Product/UI/content authority only. Evidence preparation is documentation authority only. Neither state is an accepted Provider decision or authorization for a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, Payment implementation, Production Payment, or legal publication.
 
 ## 1. Long-Term Platform Sequence
 
@@ -89,8 +91,8 @@ Candidate Checkout identity is 月の返事｜恋のメッセージ鑑定ノー�
 
 Official sources checked on `2026-08-12` preserve three controlling boundaries:
 
-- Stripe's Japan list includes Psychic services and fortune tellers. Stripe's FAQ also says some listed businesses may be supportable only with explicit prior approval, while some categories are never eligible, and Stripe's independent activation review determines support. The listing is a serious feasibility risk, but it establishes neither automatic approval nor automatic impossibility. Moon Reply must present the accurate real Product; wording or positioning never guarantees approval, this strategy does not claim an exception, and only actual Stripe exception/approval evidence is authoritative.
-- Stripe labels PayPay `Public Preview`. Current documentation describes Japan/JPY, Customer-authenticated single-use payments, Checkout payment-mode support, no Checkout subscription-mode support, Stripe-wide restrictions, and additional PayPay category discretion. `Public Preview` does not remove it from the desired initial methods. PayPay remains desired, unverified, not enabled, and not approved; no PayPay fee rate is frozen. Preview/GA status, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked before Stripe formal Provider selection, before PayPay implementation authorization, and before Paid Launch.
+- Stripe's Japan jurisdiction-specific list includes `サイキックサービス / 占い師`. Separate general guidance says some listed businesses may be supportable only after detailed review and explicit approval, while some categories are never eligible, and Stripe's independent activation review determines support. The two facts establish neither automatic approval nor automatic impossibility for Moon Reply. Moon Reply must present the accurate real Product; wording or positioning never guarantees approval, this strategy does not claim an exception, and only authoritative Stripe evidence about the actual Product may establish supportability.
+- PayPay remains desired, unverified, not enabled, and not approved. Current official surfaces are not sufficiently consistent for this project to freeze either Preview or GA as the controlling lifecycle label; `lifecycle_label = not_frozen_recheck_required`. Lifecycle, supported integration surface, method restrictions, and Moon Reply eligibility must be rechecked before formal Stripe Provider selection, before PayPay implementation authorization, immediately before PayPay onboarding/enablement, and before Paid Launch. Official onboarding guidance preserves a literal `デジタルコンテンツ` examples / otherwise `一般` rule, but Moon Reply's selection remains `unresolved_pending_actual_onboarding_evidence_and_human_review`. No PayPay fee rate is frozen.
 - Stripe private onboarding/KYC requires truthful business-address and representative information and may require additional address evidence when automatic verification fails. Separately, Stripe's Commerce Disclosure guidance permits a sole proprietor, subject to its requirements, to use an equivalent request-based statement instead of immediate public display of formal name, address, and phone information. `Stripe private KYC/business-address disclosure != Customer-facing public Tokushoho disclosure`. Human accepts truthful private disclosure to Stripe KYC, banks, tax/public authorities, and other legitimately required non-public counterparties; routine public display of the Human's home address is not desired as the default; and a legally valid request-based or otherwise non-routine-public method is preferred where current law and actual Provider requirements allow. Exact Tokushoho implementation remains unresolved and evidence-gated; Stripe removes no legal/operator/address/phone/publication obligation and does not guarantee request-based disclosure will always suffice. Virtual-office use is not currently required by Human preference; GMO is on hold, not rejected, and may be reconsidered if actual legal, Provider, postal, privacy, or operational evidence makes it useful or necessary. No unverified virtual-office address may be used for Stripe KYC.
 
 The bounded source URLs and evidence notes are maintained in `docs/legal/LEGAL_SOURCE_REGISTER.md` and the accepted Stripe strategy artifact. No Stripe account, contact, approval, selection, or operation is created by this acceptance synchronization.
@@ -262,20 +264,23 @@ When a still-valid trusted session is bound to the unchanged verified delivery/r
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: Stripe Feasibility Evidence Preparation
+## 11. Next Formal Work: Review of the Stripe Feasibility Evidence Preparation Candidate
 
-Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy Acceptance Sync and the Customer-facing / Public-copy Alignment Acceptance Sync are complete as of `2026-08-12`. The next high-level Payment track is preparation, not Provider operation or evidence acquisition. The sequence is:
+Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy Acceptance Sync and Customer-facing/Public-copy Alignment Acceptance Sync are complete as of `2026-08-12`. Evidence preparation now exists as a docs-only Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review remains pending. The sequence is:
 
 1. preserve truthful Customer-facing/public-copy alignment as accepted complete;
-2. prepare Stripe feasibility evidence work;
-3. separately authorize and obtain actual Stripe account/contact/business/site/category/Live Payment, private KYC/business-address, and method-specific evidence, including the required PayPay rechecks; stable review URLs/public legal conditions must exist before any Provider/site review that requires them;
-4. return to Human launch review for any unavailable desired method;
-5. perform Human formal Provider selection only after authoritative evidence;
-6. authorize Payment implementation in sandbox/test only in a separate task;
-7. complete Production QA without treating QA as Production Payment authorization; and
-8. obtain separate Production Payment authorization before Soft Launch.
+2. complete Human + ChatGPT review of the evidence-preparation Candidate without inferring acceptance;
+3. keep Lane A `STRIPE-FEAS-001` preliminary clarification, Lane B `STRIPE-ACCOUNT-001` account/business/site/Live review, and Lane C `STRIPE-PAYPAY-001` PayPay review separate;
+4. grant separate Human external-action authority for the exact applicable lane, route, package, private evidence storage, and action before any contact or submission;
+5. obtain lane-specific authoritative evidence; stable review URLs/public legal conditions must exist before any Provider/site review that requires them;
+6. require Lane B for Stripe account/Live supportability and Lane C if PayPay is to be treated as enabled/approved; never use Lane A alone as formal approval;
+7. return to Human launch review for any unavailable desired method;
+8. perform Human formal Provider selection only after authoritative evidence;
+9. authorize Payment implementation in sandbox/test only in a separate task;
+10. complete Production QA without treating QA as Production Payment authorization; and
+11. obtain separate Production Payment authorization before Soft Launch.
 
-No Stripe account/contact exists or is authorized by this planning package. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. PAY.JP remains paused fallback, Not approved, and not selected. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
+No Stripe account/contact/submission exists or is authorized by this planning package. Lane A preparation is ready pending Human review; Lane B/C preparation is blocked; all external-action authorities are not authorized, all acquisitions are not submitted, and all outcomes are `null`. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. `AGE-GATE-001` blocks Lane B/C pending Human Product/legal decision. PAY.JP remains paused fallback, Not approved, and not selected, with no automatic reactivation from any Stripe lane outcome. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
 
 ## 12. Authorization Matrix
 
@@ -288,10 +293,13 @@ No Stripe account/contact exists or is authorized by this planning package. Stri
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on `2026-08-12` |
 | Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Human Visual QA and Automated QA PASS; Product/UI/content only |
+| Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review pending |
+| Stripe Lane A / B / C | Ready pending Human review / blocked / blocked; no external-action authority; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay / PayPay | Unverified |
-| PayPay lifecycle / enablement | Desired; `Public Preview`; Not enabled; Not approved; recheck-gated |
+| PayPay lifecycle / enablement | Desired; lifecycle `not_frozen_recheck_required`; Not enabled; Not approved; goods type unresolved pending actual onboarding evidence and Human review |
+| `AGE-GATE-001` | Unresolved Human Product/legal decision blocker for Lane B/C |
 | Stripe private KYC vs public Tokushoho | Separate evidence domains; private truthful disclosure accepted; routine public home-address display not default; exact Tokushoho method unresolved |
 | Virtual office / GMO | Not currently required by Human preference; GMO on hold, Not rejected; evidence-based reconsideration available |
 | PAY.JP | Paused fallback; Not approved; Not selected |
@@ -313,6 +321,9 @@ Planning agreement, provider approval, Payment Charter acceptance, implementatio
 - `docs/PAYMENT_POLICY.md`: concise initial-product payment policy.
 - `docs/payment/PAYMENT_CHARTER.md`: Human + ChatGPT accepted Payment Charter v1; implementation authority remains `false`.
 - `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`: Stripe transition Candidate source; accepted status is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`.
+- `docs/payment/STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`: pending-review controller for the three evidence lanes and authority matrix.
+- `docs/payment/STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md`: canonical PII-free Product/submission facts; proposed wording is not submitted.
+- `docs/payment/STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md`: Gate A/B/C, KYC boundary, PayPay readiness, and `AGE-GATE-001`.
 - `docs/phase1/PAYMENT_FLOW.md`: detailed Web-flow planning subordinate to the accepted Payment Charter.
 - `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`: evidence gate for formal provider selection.
 - `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`: preserved paused-fallback readiness evidence; does not control current next work.

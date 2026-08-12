@@ -14,21 +14,27 @@
 
 - `Not sent` means the inquiry has not been transmitted through any channel.
 - `Not submitted` means no production-use application has been submitted.
+- Stripe lanes use four separate fields: `preparation_status`, `external_action_authority`, `acquisition_status`, and `outcome`. Their allowed values are controlled by `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`.
+- `outcome` remains `null` until authoritative lane evidence exists.
+- A conditional Lane B/C outcome requires `conditions[]` and `open_condition_count` and is not approved/enabled while any condition remains open.
 - A submission/sent date, channel, reference ID, response date, outcome, or condition must never be guessed.
 - Approval may be recorded only from authoritative provider/application review evidence that addresses the accurately described 月の返事 service.
 - Conditional responses must preserve every stated condition.
 - Exact submitted/sent content must be preserved by immutable file, commit hash, PDF, screenshot or equivalent evidence location.
 
-## Stripe future feasibility and account evidence lanes
+## Stripe feasibility, account, and PayPay evidence lanes
 
-These conceptual lanes are registered only for future evidence. Neither lane has started, and their presence is not authorization to create an account or contact Stripe.
+These lanes are registered for preparation and future evidence. No lane has actual external evidence. Their presence is not authorization to create an account, contact Stripe, submit information, use the Dashboard, or begin PayPay onboarding.
 
-| Evidence ID | Provider | Status | Account/contact | Exact submitted facts | Reference ID | Outcome | Method evidence | Evidence location | Next action | Human decision |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| STRIPE-FEAS-001 | Stripe | Not started | None | None submitted | — | Feasibility not established | Credit/debit cards/Apple Pay/Google Pay/PayPay unverified | None recorded | Stripe feasibility evidence preparation | Evidence acquisition not authorized |
-| STRIPE-ACCOUNT-001 | Stripe | Not started | Account absent / contact none | None submitted | — | Approval/activation absent | None | None recorded | Await separate future authority | Account/contact not authorized |
+| Evidence ID | Lane | `preparation_status` | `external_action_authority` | `acquisition_status` | `outcome` | `conditions[]` | `open_condition_count` | Account/contact | Exact submitted facts | Reference ID | Evidence location | Next action |
+| --- | --- | --- | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- |
+| STRIPE-FEAS-001 | Lane A / Preliminary Category Clarification | `preparation_ready_pending_human_review` | `external_action_not_authorized` | `not_submitted` | `null` | `[]` | 0 | Account absent / contact none | None submitted | — | No external evidence; Candidate package only | Human + ChatGPT Candidate review; later separate route/package/storage/action authority if approved |
+| STRIPE-ACCOUNT-001 | Lane B / Account / Business / Site / Live Payment Review | `preparation_blocked` | `external_action_not_authorized` | `not_submitted` | `null` | `[]` | 0 | Account absent / contact none | None submitted | — | None recorded | Resolve readiness blockers under separate authority; no account action authorized |
+| STRIPE-PAYPAY-001 | Lane C / PayPay-specific Onboarding Review | `preparation_blocked` | `external_action_not_authorized` | `not_submitted` | `null` | `[]` | 0 | Account absent / contact none | None submitted | — | None recorded | Lane B/account/site prerequisites plus PayPay readiness; no onboarding authorized |
 
-Official restricted-business, PayPay, and RevenueCat documentation checked on `2026-08-12` is bounded source context, not Moon Reply account, approval, activation, or method eligibility evidence.
+Current Stripe external actions: `0`.
+
+Official restricted-business, account/site, PayPay, and RevenueCat documentation checked on `2026-08-12` is bounded source context, not Moon Reply account, approval, activation, lane outcome, or method eligibility evidence. Lane A evidence can never substitute for Lane B approval; Lane C cannot inherit Lane B approval.
 
 ## PAY.JP production-application evidence lane
 

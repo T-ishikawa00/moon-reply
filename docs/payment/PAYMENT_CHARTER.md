@@ -34,7 +34,9 @@ Current boundaries remain:
 | Payment implementation authorized | `false` |
 | Stripe strategy | Human + ChatGPT accepted at Product/strategy level on `2026-08-12`; not feasibility, approval, activation, or selection |
 | Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Product/UI/content authority only; Human Visual QA and Automated QA PASS |
+| Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Candidate review pending; no external-action authority |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
+| Stripe evidence lanes | Lane A ready pending Human review; Lane B/C blocked; all external actions not authorized; all acquisitions not submitted; all outcomes `null` |
 | Cards / Apple Pay / Google Pay / PayPay eligibility | Unverified |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Formal Provider evidence-gate selection | Not completed |
@@ -45,7 +47,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next high-level Payment work is Stripe feasibility evidence preparation. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. The accepted public-copy state and this next-work synchronization do not modify any normative Charter principle.
+Stripe feasibility evidence preparation now exists only as a docs-only Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review remains pending. `STRIPE-FEAS-001`, `STRIPE-ACCOUNT-001`, and `STRIPE-PAYPAY-001` remain separate, with no external-action authority, submission, or outcome. Actual Stripe account/contact/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. This evidence-context synchronization modifies no normative Charter principle.
 
 ## 2. Initial Product Contract
 
@@ -499,6 +501,14 @@ Public paid release must not rely on an asset with unknown commercial-use rights
 
 ## 23. Provider Evidence Required Before Binding Implementation
 
+The evidence-preparation Candidate defines three non-substitutable lanes:
+
+- Lane A / `STRIPE-FEAS-001`: preliminary category clarification only;
+- Lane B / `STRIPE-ACCOUNT-001`: actual account/business/site/category/Live Payment review; and
+- Lane C / `STRIPE-PAYPAY-001`: PayPay-specific onboarding review.
+
+Lane A alone is not sufficient for Stripe approval or formal Provider selection. Lane C cannot inherit Lane B approval automatically. All three outcomes are currently `null`, and this lane synchronization changes no Charter invariant.
+
 The following Provider-specific facts remain unresolved and must not be inferred:
 
 - actual Stripe account/business/site/category and Live Payment outcome;
@@ -548,10 +558,13 @@ No number is invented by this Charter.
 | Professional review | Optional escalation; not completed; not a hard launch gate |
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
 | Stripe strategic direction | `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` on `2026-08-12`; Product/strategy authority only |
+| Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review pending |
+| Stripe Lane A / B / C | Ready pending Human review / blocked / blocked; external action not authorized; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay | Unverified |
-| PayPay | Desired; `Public Preview`; Unverified; Not enabled; Not approved; recheck-gated |
+| PayPay | Desired; Unverified; Not enabled; Not approved; lifecycle `not_frozen_recheck_required`; goods type unresolved pending actual onboarding evidence and Human review |
+| `AGE-GATE-001` | Unresolved Human Product/legal decision blocker for Lane B/C; not resolved by this Charter synchronization |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |

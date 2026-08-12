@@ -14,6 +14,18 @@
 
 Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and PayPay. Each remains unverified. If any desired method is unavailable, the project returns to explicit Human launch review; PayPay unavailable is not automatic approval to launch without it. PAY.JP is paused fallback, and its preserved readiness route does not control current next work.
 
+Stripe Feasibility Evidence Preparation is a pending-review Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`. Candidate preparation is not evidence and does not satisfy this gate.
+
+### Stripe lane-specific evidence rule
+
+| Lane | Required role in this gate | Current state |
+| --- | --- | --- |
+| `STRIPE-FEAS-001` / Lane A | Preliminary category clarification only; may inform next route but is never sufficient approval or formal selection by itself | Preparation ready pending Human review; external action not authorized; not submitted; outcome `null` |
+| `STRIPE-ACCOUNT-001` / Lane B | Required for actual Stripe account/business/site/category/Live Payment supportability evidence | Preparation blocked; external action not authorized; not submitted; outcome `null` |
+| `STRIPE-PAYPAY-001` / Lane C | Required if PayPay is to be treated as enabled or approved | Preparation blocked; external action not authorized; not submitted; outcome `null` |
+
+Lane C cannot inherit Lane B approval. A conditional Lane B/C result requires `conditions[]` and `open_condition_count`; it cannot be normalized to approved/enabled while any condition remains open.
+
 ## Required before provider selection
 
 - [ ] Provider-specific authoritative approval/review evidence obtained
@@ -32,9 +44,9 @@ Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and P
 - [ ] Provider comparison updated
 - [ ] Human explicitly approves selection
 
-For Stripe, the gate additionally requires accurate service disclosure including 鑑定ノート and AI use; actual account/business/site/category/Live Payment outcome; credit/debit-card, Apple Pay, Google Pay, and PayPay evidence; Checkout/product/price, test/live, webhook, refund/dispute, statement-descriptor, Customer/Purchase/Request linkage, fees/settlement/reserve/hold, and future RevenueCat evidence where applicable. Stripe currently has no feasibility evidence, account, contact, approval, activation, or formal selection. No generic marketing page, silence, or SDK availability passes this gate.
+For Stripe, the gate additionally requires accurate service disclosure including 鑑定ノート and AI use; Lane B actual account/business/site/category/Live Payment outcome; credit/debit-card, Apple Pay, and Google Pay evidence; Lane C evidence if PayPay is treated as enabled/approved; Checkout/product/price, test/live, webhook, refund/dispute, statement-descriptor, Customer/Purchase/Request linkage, fees/settlement/reserve/hold, and future RevenueCat evidence where applicable. Stripe currently has no feasibility evidence, account, contact, submission, approval, activation, or formal selection. No Lane A signal, generic marketing page, silence, goods-type option, or SDK availability passes this gate.
 
-For PAY.JP if separately reactivated, the first item requires actual production-use application/review outcome and all applicable PAY.JP/card-company conditions. PAY.JP is paused, `Not submitted`, `Not approved`, and `Not selected`.
+For PAY.JP if separately reactivated, the first item requires actual production-use application/review outcome and all applicable PAY.JP/card-company conditions. Lane A unsupported, Lane B rejected, or Lane C rejected does not automatically reactivate PAY.JP. Reactivation requires explicit Human authority, current-source re-review, and the PAY.JP-specific readiness/application route. PAY.JP is paused, `Not submitted`, `Not approved`, and `Not selected`.
 
 ## Evidence required for each check
 

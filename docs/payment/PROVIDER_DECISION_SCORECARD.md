@@ -10,9 +10,9 @@
 
 No authoritative category/application acceptance evidence = provider cannot be selected.
 
-Acceptance evidence must address the honestly described 月の返事 service, including Customer-facing 鑑定ノート wording and AI use, through the provider's applicable approval/review route. For Stripe, this requires actual account/business/site/category/Live Payment and method-specific evidence, not only restricted-business or feature documentation. For PAY.JP if reactivated, this means production-use application/review evidence and applicable PAY.JP/card-company conditions. A generic marketing page, feature page, blank application form, optional support clarification, verbal statement, or silence is not category approval.
+Acceptance evidence must address the honestly described 月の返事 service, including Customer-facing 鑑定ノート wording and AI use, through the provider's applicable approval/review route. Stripe Lane A `STRIPE-FEAS-001` is preliminary only and can never satisfy the hard gate alone. Stripe requires Lane B `STRIPE-ACCOUNT-001` actual account/business/site/category/Live Payment evidence; Lane C `STRIPE-PAYPAY-001` is additionally required if PayPay is to be scored or treated as enabled/approved. For PAY.JP if reactivated, acceptance means production-use application/review evidence and applicable PAY.JP/card-company conditions. A generic marketing page, feature page, blank application form, optional support clarification, goods-type option, verbal statement, or silence is not category approval.
 
-Conditional acceptance is not unconditional acceptance. Every condition must be recorded in `PROVIDER_INQUIRY_EVIDENCE_LOG.md` and reflected in the comparison before scoring.
+Conditional acceptance is not unconditional acceptance. Every condition must be recorded in `PROVIDER_INQUIRY_EVIDENCE_LOG.md` as `conditions[]` with `open_condition_count` and reflected in the comparison before scoring. No conditional state becomes approved/enabled while any condition remains open.
 
 ---
 
@@ -45,7 +45,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 | Provider | Evidence-route status | Category/application status | Score | Evidence | Selection status |
 | --- | --- | --- | --- | --- | --- |
-| Stripe | STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 Not started | Feasibility not established; account/contact/approval/activation absent | Not scored | Actual truthful account/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence required | Strategy accepted / not selected |
+| Stripe | Lane A preparation ready pending Human review; Lane B/C blocked; no external action; all not submitted/outcome `null` | Feasibility not established; account/contact/submission/approval/activation absent | Not scored | Lane B truthful account/business/site/category/Live Payment and card/wallet evidence required; Lane C required for PayPay; Lane A alone insufficient | Strategy accepted / evidence-preparation Candidate pending review / not selected |
 | PAY.JP | Production-use application Not submitted | Not approved | Not scored | PAYJP-APP-001; authoritative application/review evidence required | Not selected |
 | KOMOJU | Not sent | Not approved | Not scored | Evidence required | Not selected |
 | STORES | Not sent | Not approved | Not scored | Evidence required | Not selected |
@@ -54,7 +54,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 Use one row per provider and factor only after evidence exists.
 
-The Human + ChatGPT accepted Stripe strategy and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by strategy acceptance.
+The Human + ChatGPT accepted Stripe strategy, pending evidence-preparation Candidate, and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by strategy acceptance or preparation status.
 
 | Provider | Factor | Raw assessment | Weight | Weighted score | Evidence location | Checked date | Conditions/notes |
 | --- | --- | --- | ---: | ---: | --- | --- | --- |

@@ -2,22 +2,52 @@
 
 > **INTERNAL CHECKLIST**
 >
-> **NO INQUIRY HAS BEEN SENT BY TASK 18C**
+> **NO STRIPE CONTACT, SUBMISSION, ACCOUNT ACTION, OR PAYPAY ONBOARDING HAS OCCURRED**
 
-Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, API, or implementation.
+Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment is accepted complete. Stripe Feasibility Evidence Preparation is only a pending-review Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
 
-## Stripe future evidence acquisition — before any separately authorized action
+## Stripe Lane A preparation — before any separately authorized action
 
 - [x] Human + ChatGPT Stripe-first strategy acceptance completed on `2026-08-12`; Product/strategy authority only
-- [ ] Exact evidence-acquisition route explicitly authorized by Human
-- [ ] Actual public service wording truthfully discloses AI use, 鑑定ノート terminology, methods not used, and non-guarantees
-- [ ] Actual site and legal/publication state accurately represented
+- [x] Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE`; Product/UI/content authority only
+- [x] Canonical PII-free Product facts prepared in `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md`
+- [x] Proposed short/medium/full descriptions prepared and labeled not submitted / pending review
+- [x] Exactly three Lane A preliminary questions prepared and not sent
+- [x] Official external contact/support routes identified without using them
+- [x] Candidate package version `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01` assigned
+- [ ] Human + ChatGPT accepts the exact evidence-preparation Candidate
+- [ ] Approved non-public evidence storage location and opaque reference assigned
+- [ ] Exact Lane A route and package explicitly authorized by Human
+- [ ] Actual site, implementation, and legal/publication state revalidated at action time
 - [ ] Cards, Apple Pay, Google Pay, and PayPay are each treated as unverified until evidence exists
-- [ ] Required account/business/site/category/Live Payment, Checkout, test/live, webhook, refund/dispute, descriptor, linkage, fee/settlement, and RevenueCat questions fixed without invented answers
-- [ ] Exact submitted facts and sensitive-evidence storage plan approved
-- [ ] Human explicitly authorizes any Stripe account creation, submission, or contact
+- [ ] Exact submitted facts approved without adding private values to Git
+- [ ] Human explicitly authorizes the external action
 
-Only the strategy-acceptance prerequisite above is complete. Every future evidence-acquisition item remains unchecked; conceptual lanes STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 remain Not started.
+Lane A current state is `preparation_ready_pending_human_review / external_action_not_authorized / not_submitted / outcome null`. Checked preparation items do not authorize contact or evidence acquisition.
+
+## Stripe Lane B account/site/Live Payment readiness
+
+- [ ] Stable public/review URL exists when required by the route
+- [ ] Required Website information is complete and accurate
+- [ ] Operator/KYC inputs are privately ready
+- [ ] Tokushoho is publication-ready for the applicable review
+- [ ] Support/contact facts and refund/cancellation facts are complete
+- [ ] Domain/site ownership evidence is available where required
+- [ ] `AGE-GATE-001` is resolved by Human Product/legal decision and all applicable surfaces are consistent
+- [ ] Exact account/business/site/category/Live Payment action is separately Human-authorized
+
+Lane B current state is `preparation_blocked / external_action_not_authorized / not_submitted / outcome null`. Full classification is in `STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md`.
+
+## Stripe Lane C PayPay-specific readiness
+
+- [ ] Stripe account-state prerequisite is authoritatively evidenced
+- [ ] Japanese Product description, sales presentation/image, JPY price, and purchase flow are ready
+- [ ] Completed Tokushoho link and matching applicable website/account facts are ready
+- [ ] PayPay goods type is confirmed against the actual onboarding UI and Human-approved
+- [ ] Method/category restrictions and lifecycle label are rechecked
+- [ ] Exact PayPay onboarding action is separately Human-authorized
+
+Lane C current state is `preparation_blocked / external_action_not_authorized / not_submitted / outcome null`. Stripe account support never establishes PayPay support automatically. PayPay remains desired, unverified, not enabled, and not approved; lifecycle is `not_frozen_recheck_required`.
 
 ## PAY.JP paused fallback — before any future submission after reactivation
 
@@ -70,6 +100,9 @@ For PAY.JP, this route may be used only for a specific clarification. It is not 
 ## Record location
 
 - Inquiry status and response metadata: `PROVIDER_INQUIRY_EVIDENCE_LOG.md`
+- Stripe evidence-preparation controller: `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`
+- Canonical PII-free Product/submission facts: `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md`
+- Stripe account/site/PayPay gates: `STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md`
 - Provider facts and comparison: `PROVIDER_COMPARISON.md`
 - Evidence-based scoring: `PROVIDER_DECISION_SCORECARD.md`
 - Selection prerequisites: `PAYMENT_PROVIDER_DECISION_GATE.md`
