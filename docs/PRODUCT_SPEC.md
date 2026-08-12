@@ -937,7 +937,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-次の正式なPayment作業はLane A Preliminary Category Clarification Authorization Packageである。exact final external Japanese message、accepted Product-description/version、exact three questions、verified official Stripe contact route、non-public evidence storage/reference method、pre-send checklistおよびexplicit Human external-action authorization gateを準備できるが、actual Stripe contact/submissionは別途承認であり、本Acceptance Syncでは送信しない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。現在の正式なPayment作業は、status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`、acceptance `pending`のStripe Lane B Human Decision Package Candidateに対するHuman + ChatGPT reviewである。Lane B/Cはblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - Stripe/PAY.JP SDK/API/checkout/webhook
 - RevenueCat

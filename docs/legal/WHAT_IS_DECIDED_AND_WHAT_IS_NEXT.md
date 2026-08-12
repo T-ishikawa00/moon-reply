@@ -117,18 +117,21 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 ## 次の順番
 
-現在の実行順序は `docs/ROADMAP.md` が制御する。法務・provider準備文書の旧Task順序は、現行Milestoneを上書きしない。
+現在の全体Roadmapは`docs/ROADMAP.md`が制御し、Stripe Lane Bに関するHuman decision、Legal、Website、deployment、KYCおよびaccount準備の前提順序は`docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`のB0–B7が制御する。法務・provider準備文書の旧Task順序はこれらを上書きしない。
 
 1. Milestone 1 Reviewable Web MVPは`docs/ROADMAP.md`に記録された受入状態を維持する
 2. Milestone 2は現行RoadmapどおりInternal Automated AI / DB Vertical Sliceの内部作業線であり、運営者情報、公開条件、Stripe readinessまたはlegal publicationを完成させるMilestoneではない
-3. Milestone 3でRoadmapが定める決済なしのReview Site Deploymentへ進み、stable review URLおよびlater applicable public/review conditionsはその後の該当readiness workで整える。exact gateはRoadmapが制御する
-4. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了し、truthful Customer-facing/public-copy alignmentも同日に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`、Human Visual QA / Automated QA `PASS / PASS`となった
-5. Stripe Feasibility Evidence Preparationはstatus `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`として`2026-08-12`にaccepted complete。accepted lineageは`8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`
-6. 次の正式なPayment作業はLane A Preliminary Category Clarification Authorization Package。exact external message、official route、evidence storage、pre-send gateを準備できるが、actual Stripe contact/submissionは別途承認であり、本Acceptance Syncでは送信しない
-7. Milestone 4のProvider Review Evidence and Selectionでは、必要なstable review URL/public conditionsを満たしたうえでlane-specific authoritative evidenceを取得し、desired method不足時は明示的Human launch reviewへ戻す
-8. Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
-9. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む
-10. Production QAはProduction Payment authorizationではない
-11. 別個のProduction Payment authorization後にのみSoft Launchへ進む
+3. Stripe-first strategy Acceptance Sync、truthful Customer-facing/public-copy alignmentおよびStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted complete。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive
+4. `2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`となったが、これはStripe Provider outcomeではない
+5. B0 Stripe Lane B Human Decision Package Candidateはreadyだが、Human + ChatGPT acceptanceおよび全Human decisionは`pending`
+6. B1 Human + ChatGPT decision review and acceptance syncが現在のexact next work。Lane B/Cはblockedのままで、external actionは承認されない
+7. B1 acceptance後にのみB2 Legal Draft Finalization Candidateへ進み、accepted predecessor後にB3 Review-ready Website/Public Surface implementationへ進む
+8. B4a deployment-readiness implementation/configurationとB4b stable URL deploymentを分離し、B4bには別個のHuman external-action authorityを必須とする
+9. B5 private KYC readinessではactual Human valueをGitへ入れず、B6 Stripe Account/Activation Authorization Packageはaccount creation/submissionを承認しない
+10. B7 actual Stripe account creation/KYC/activation submissionは、さらに別の明示的Human external-action authorization後にのみ実行できる
+11. PayPay Lane Cはseparate and later。Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
+12. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む。Production QAはProduction Payment authorizationではなく、別個のProduction Payment authorization後にのみSoft Launchへ進む
+
+predecessor acceptance前にexact future branchまたはmutation manifestを割り当てない。
 
 Operator identity、電話表示、support email、Tokushoho publicationおよびopening notificationは未解決のまま維持する。住所はHuman preferenceのみ記録済みで、exact Tokushoho disclosure implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはHuman preference上currently not required、GMOはon hold / not rejectedで、actual legal/Provider/postal/privacy/operational evidenceにより再検討できる。`AGE-GATE-001`はLane B/C blockerとして未解決である。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、いずれのStripe lane outcomeからも自動reactivationしない。Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

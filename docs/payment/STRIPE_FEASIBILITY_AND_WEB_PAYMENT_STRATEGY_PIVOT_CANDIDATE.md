@@ -31,7 +31,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-Stripe feasibility evidence preparation is Human + ChatGPT accepted complete at lineage `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
+Stripe feasibility evidence preparation is Human + ChatGPT accepted complete at lineage `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`. On `2026-08-13`, Human directed that Stripe Sales not be used (`not_used_by_human_direction`); this is a workflow choice, not a Stripe outcome. Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, whose acceptance remains `pending`. Lane B/C remain blocked, and actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains unauthorized and evidence-gated.
 
 The following states are intentionally separate:
 

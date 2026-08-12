@@ -12,7 +12,7 @@ The Stripe-first Web Payment Strategy is Human + ChatGPT accepted at the Product
 
 The Stripe-first Customer-facing / Public-copy Alignment is Human + ChatGPT accepted complete as of `2026-08-12` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`. The accepted lineage is baseline `3d3888f53293231506838195c478fa2e1a88417f`, initial implementation `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95`, and Human Visual QA correction `48d21e7ee7d672575eae6fd957e637b37da2a52f`. Human Visual QA and Automated QA are PASS at the accepted implementation lineage. This accepts Product/UI/content alignment only and creates no Provider, Payment implementation, Production Payment, or legal-publication authority.
 
-Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`. Lane A preparation is `preparation_human_approved`, while external action remains not authorized, acquisition remains not submitted, and outcome remains `null`; Lane B/C remain blocked. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. It may prepare the exact external message, official route, non-public evidence storage/reference method, pre-send checklist, and explicit Human authorization gate, but actual Stripe contact/submission remains separately authorized. Stripe feasibility, account/contact/approval/activation, formal selection, and all desired-method eligibility remain unresolved.
+Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`. Lane A preparation remains `preparation_human_approved`, with external action not authorized, acquisition not submitted, and outcome `null`, but it is preserved inactive work. On `2026-08-13`, Human directed that the Stripe Sales route not be used (`not_used_by_human_direction`); this is a workflow choice, not a Stripe Provider outcome. The exact current next work is Human + ChatGPT review of the [Stripe Lane B Human Decision Package Candidate](docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md), status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, with acceptance `pending`. Lane B/C remain blocked, no external action is authorized, and Stripe feasibility, account/contact/approval/activation, formal selection, and all desired-method eligibility remain unresolved.
 
 Current canonical planning:
 
@@ -20,6 +20,7 @@ Current canonical planning:
 - `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
 - `docs/payment/PAYMENT_CHARTER.md`
 - `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
+- `docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
 - `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
 - `docs/CURRENT_FOCUS.md`
 - `docs/CODEX_HANDOFF.md`

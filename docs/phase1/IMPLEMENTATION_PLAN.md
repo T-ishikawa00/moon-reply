@@ -4,7 +4,7 @@
 
 This document aligns implementation planning with the authoritative `docs/ROADMAP.md` delivery sequence.
 
-Current Payment planning authority on `2026-08-12`: the Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` at the Product/strategy level, its Customer-facing / Public-copy Alignment is `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` at the Product/UI/content level, and Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` at the planning/documentation level. Lane A preparation is `preparation_human_approved`, while external action remains not authorized, acquisition remains not submitted, and outcome remains `null`; Lane B/C remain blocked. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Actual Stripe contact/submission and Provider evidence acquisition remain separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; PAY.JP is paused fallback; Payment implementation and Production Payment authority are `false / false`.
+Current Payment planning authority: the Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` at the Product/strategy level, its Customer-facing / Public-copy Alignment is `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` at the Product/UI/content level, and Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` at the planning/documentation level. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. On `2026-08-13`, Human directed that Stripe Sales not be used (`not_used_by_human_direction`); this is not a Provider outcome. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`. Lane B/C remain blocked; no external action is authorized. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; PAY.JP is paused fallback; Payment implementation and Production Payment authority are `false / false`.
 
 Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 
@@ -52,8 +52,8 @@ The remaining delivery lane separates work that must not be collapsed into one t
 | --- | --- | --- |
 | Planning/specification | Every milestone, beginning with Milestone 1 | Defines scope and acceptance; does not authorize implementation by itself |
 | UI/review implementation | Milestone 1 | Payment-free, fixture/mock based, no public writes or runtime integrations |
-| Operator decisions | Milestone 2 | Human facts and policies; no fictional public facts |
-| Deployment for review | Milestone 3 | Stable review URL with payment unavailable |
+| Operator decisions | Milestone 2 / Stripe Lane B B1 | Human facts and policies; no fictional public facts; current Lane B Candidate decisions remain pending |
+| Public-surface and deployment work | Milestone 3 / Stripe Lane B B3–B4b | B1/B2 predecessor acceptance, review-ready public surface, deployment readiness, then separately authorized stable review URL with payment unavailable |
 | Provider review evidence and selection | Milestone 4 | Provider-specific authoritative evidence and Human provider selection required |
 | Backend/AI/email implementation | Milestone 5 | Mock-paid/test-paid fulfillment before real payment integration |
 | Payment implementation | Milestone 6 | Human-approved provider, sandbox/test mode only |
@@ -77,17 +77,19 @@ Planning/specification must enumerate every unresolved operator/publication deci
 
 Validation confirms that no public review page presents invented or unresolved information as complete. Human acceptance closes the milestone.
 
+For the Stripe Lane B overlay, B1 Human + ChatGPT review of `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md` is the exact current next work. The current Candidate resolves no Human decision and authorizes no B2–B7 work.
+
 ### Milestone 3: Review Site Deployment
 
-Planning/specification must define hosting, review URL, indexing/privacy posture, contact receipt test, device coverage, and rollback/removal procedure.
+For Stripe Lane B, B2 Legal Draft Finalization Candidate and B3 Review-ready Website/Public Surface implementation may begin only after accepted predecessors. Planning/specification for B4a must then define hosting, review URL, indexing/privacy posture, contact receipt test, device coverage, and rollback/removal procedure.
 
-Implementation deploys only the payment-free review site. Validation covers stable URL access, mobile/desktop presentation, navigation, broken links, contact receipt, and a clear payment-unavailable notice. Human acceptance closes the milestone.
+B4b implementation deploys only the payment-free review site and requires separate Human external-action authority. Validation covers stable URL access, mobile/desktop presentation, navigation, broken links, contact receipt, and a clear payment-unavailable notice. Human acceptance closes the milestone. No exact future branch or mutation manifest is assigned before predecessor acceptance.
 
 ### Milestone 4: Payment Provider Review Evidence and Selection
 
 Planning/specification must freeze the truthful service description, provider-specific review route, evidence format, provider fallback order, comparison criteria, and Human decision gates. No account, contact, submission, or implementation is authorized by planning.
 
-Current conceptual sequence is completed Stripe-first strategy Acceptance Sync -> accepted-complete Customer-facing/public-copy Alignment -> accepted-complete Stripe feasibility evidence preparation -> Lane A Preliminary Category Clarification Authorization Package -> separately authorized actual Stripe account/contact/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence acquisition -> explicit Human review if any desired method is unavailable -> Human formal Provider selection. Stable review URLs/public legal conditions must exist before any Provider/site review requiring them. PAY.JP is preserved paused fallback and follows its application route only after explicit reactivation and current-source re-review.
+Current conceptual sequence is completed Stripe-first strategy Acceptance Sync -> accepted-complete Customer-facing/public-copy Alignment -> accepted-complete Stripe feasibility evidence preparation -> B0 Stripe Lane B Human Decision Package Candidate -> B1 Human + ChatGPT review/acceptance sync -> B2 Legal Draft Finalization Candidate -> B3 Review-ready Website/Public Surface -> B4a deployment readiness -> B4b separately authorized stable-URL deployment -> B5 private KYC readiness -> B6 Stripe Account/Activation Authorization Package -> B7 actual Stripe account/KYC/activation submission under further explicit Human authority -> lane-specific evidence -> explicit Human review if any desired method is unavailable -> Human formal Provider selection. Stable review URLs/public legal conditions must exist before any Provider/site review requiring them. PAY.JP is preserved paused fallback and follows its application route only after explicit reactivation and current-source re-review.
 
 Validation confirms authoritative approval/review evidence and all known application/site conditions. Human selects the provider and accepts the milestone.
 
@@ -127,7 +129,7 @@ Verification confirms payment evidence, internal purchase record, exactly one ge
 
 The dependency chain is strict:
 
-`Stripe-first strategy Acceptance Sync (complete) → Customer-facing/public-copy Alignment (accepted complete) → Stripe feasibility evidence preparation (accepted complete) → Lane A Preliminary Category Clarification Authorization Package → separately authorized actual Stripe evidence acquisition → Human formal Provider selection → separately authorized Payment implementation → Production QA → separate Production Payment authorization → Soft Launch`
+`Stripe-first strategy Acceptance Sync (complete) → Customer-facing/public-copy Alignment (accepted complete) → Stripe feasibility evidence preparation (accepted complete) → B0 Lane B Human Decision Package Candidate → B1 Human + ChatGPT decision review/acceptance sync → B2 Legal Draft Finalization Candidate → B3 Website/Public Surface → B4a deployment readiness → B4b separately authorized stable-URL deployment → B5 private KYC readiness → B6 account/activation authorization package → B7 separately authorized account/KYC/activation submission → authoritative evidence → Human formal Provider selection → separately authorized Payment implementation → Production QA → separate Production Payment authorization → Soft Launch`
 
 The Product/UI/content alignment item is accepted complete; no Payment Provider implementation item is complete. No Provider account/contact is authorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment and Production QA cannot be treated as Production Payment authorization. Soft Launch requires separate Production Payment authorization and cannot precede E2E and failure-operation evidence.
 
@@ -142,6 +144,6 @@ The Product/UI/content alignment item is accepted complete; no Payment Provider 
 
 ## 7. Current Payment Gate and Next Task
 
-Milestone 1 task snapshots are historical and do not control the current Payment task. The Customer-facing/public-copy Alignment and Stripe feasibility evidence preparation are accepted complete. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package, while actual Stripe contact/submission and account/business/site/category/Live Payment or payment-method evidence acquisition remain separately authorized and evidence-gated.
+Milestone 1 task snapshots are historical and do not control the current Payment task. The Customer-facing/public-copy Alignment and Stripe feasibility evidence preparation are accepted complete. Stripe Sales is `not_used_by_human_direction`, Lane A is preserved inactive, and the exact current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate. Candidate acceptance remains `pending`; Lane B/C remain blocked; actual Stripe contact/submission and account/business/site/category/Live Payment or payment-method evidence acquisition remain unauthorized and evidence-gated.
 
 Strategy acceptance alone did not authorize truthful-public-copy implementation; that bounded implementation was separately authorized and is now accepted. Neither acceptance authorizes Provider evidence acquisition, account/contact, sandbox/test Payment implementation, Production Payment, deployment, legal publication, or release. Each future step requires its own authority and evidence in the sequence above.

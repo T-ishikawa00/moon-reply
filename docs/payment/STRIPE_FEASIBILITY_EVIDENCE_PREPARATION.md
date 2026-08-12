@@ -36,6 +36,35 @@ accepted Stripe-first Product/strategy
 != Payment implementation or Production Payment authority
 ```
 
+## 1A. Current workflow pivot and bounded Lane B sequence
+
+- Workflow-pivot date: `2026-08-13`
+- Stripe Sales route: `not_used_by_human_direction`
+- Sales-route meaning: Human workflow choice; not a Stripe Provider outcome
+- Current controlling Candidate: `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
+- Candidate status: `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`
+- Human + ChatGPT Candidate acceptance: `pending`
+- Exact current next work: Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate
+- Lane A workflow position: preserved accepted preparation evidence / inactive current work
+- Lane B/C: blocked
+- External action: not authorized
+
+The current bounded sequence is:
+
+| Step | Work |
+| --- | --- |
+| B0 | Workflow Pivot + Human Decision Package Candidate |
+| B1 | Human + ChatGPT decision review and acceptance sync |
+| B2 | Legal Draft Finalization Candidate |
+| B3 | Review-ready Website/Public Surface implementation |
+| B4a | Deployment-readiness implementation/configuration |
+| B4b | Stable URL deployment under separate external-action authority |
+| B5 | Private KYC readiness |
+| B6 | Stripe Account/Activation Authorization Package |
+| B7 | Actual Stripe account creation/KYC/activation submission under a further explicit Human external-action authorization |
+
+PayPay Lane C remains separate and later. No exact future branch or mutation manifest may be assigned before predecessor acceptance. This pivot changes none of the three lanes' four-field values.
+
 ## 2. Official-source category boundary
 
 Official sources checked on `2026-08-12` establish two separate facts:
@@ -138,7 +167,7 @@ acquisition_status: not_submitted
 outcome: null
 ```
 
-No Stripe contact is authorized by this acceptance. The official external routes identified for later Human review are Stripe's contact page at `https://stripe.com/jp/contact` and the official support route linked from that page. Identifying a route is not authorization to use it and does not establish that Stripe will treat it as the authoritative category-review route.
+No Stripe contact is authorized by this acceptance. The task-time preparation record identified Stripe's contact page at `https://stripe.com/jp/contact` and the official support route linked from that page; Human has since directed that the Stripe Sales route not be used, and Lane A is not active next work. The preserved route record is not authorization to use any route and does not establish that Stripe will treat any route as authoritative.
 
 ### Lane B — `STRIPE-ACCOUNT-001`
 
@@ -194,9 +223,9 @@ outcome: null
 
 Stripe account support does not establish PayPay support. Lane C must never inherit Lane B approval automatically.
 
-## 5. Lane A proposed preliminary clarification questions
+## 5. Preserved inactive Lane A proposed preliminary clarification questions
 
-The following are exactly three questions with status `HUMAN + CHATGPT ACCEPTED PREPARATION WORDING / NOT SENT`.
+The following exactly three questions remain historical accepted preparation evidence with status `HUMAN + CHATGPT ACCEPTED PREPARATION WORDING / NOT SENT`. They are not an active Sales message or current next work.
 
 ### Question 1
 
@@ -281,7 +310,7 @@ The non-authoritative ChatGPT recommendation is to retain the current dedicated 
 
 PAY.JP remains `paused_fallback_provider_direction`. Lane A unsupported, Lane B rejected, or Lane C rejected does not automatically reactivate PAY.JP. Any reactivation requires explicit Human authority, current-source re-review, and the PAY.JP-specific readiness/application route. No PAY.JP account or Provider state changes here.
 
-Payment Charter v1 remains `human_chatgpt_accepted_complete`. This Acceptance Sync records the accepted evidence-preparation context, Lane A preparation status, unresolved Provider state, and next formal work only. It does not reopen or change normative Charter principles.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`. The `2026-08-13` workflow pivot records Lane A as preserved inactive and makes Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate the exact current next work. It does not reopen or change normative Charter principles.
 
 ## 10. Evidence and operation boundaries
 
@@ -296,7 +325,11 @@ Git may contain only PII-free facts, required field names, readiness/status, che
 | Stripe-first Product/strategy | Human + ChatGPT accepted complete |
 | Customer-facing/Public-copy Alignment | Human + ChatGPT accepted complete |
 | Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12` |
+| Stripe Lane B Human Decision Package Candidate | `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; acceptance pending |
+| Stripe Sales route | `not_used_by_human_direction`; Human workflow choice / not a Provider outcome |
+| Current next work | Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate |
 | Lane A preparation | Human-approved preparation package |
+| Lane A workflow position | Preserved inactive |
 | Lane A external action | Not authorized |
 | Lane A acquisition | Not submitted |
 | Lane A outcome | `null` |

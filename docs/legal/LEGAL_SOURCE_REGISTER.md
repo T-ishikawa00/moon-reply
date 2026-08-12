@@ -12,7 +12,7 @@ Every source must be rechecked before public launch.
 
 No professional legal review has been completed; professional consultation is optional and is not a Paid Launch prerequisite. No payment-provider approval or trademark clearance is recorded by this register.
 
-Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`; Lane A preparation is `preparation_human_approved`, while external action remains not authorized, acquisition remains not submitted, and outcome remains `null`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. The source refresh and preparation acceptance create no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, or legal-publication authority.
+Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`; Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Human directed on `2026-08-13` that Stripe Sales not be used (`not_used_by_human_direction`); this is a workflow choice, not a Stripe Provider outcome. The exact current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`. Lane B/C remain blocked, and this source refresh creates no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, Payment implementation, deployment, or legal-publication authority.
 
 ---
 
@@ -27,6 +27,9 @@ Authority:
 URL:
 
 - https://www.no-trouble.caa.go.jp/what/mailorder/
+- https://www.no-trouble.caa.go.jp/what/mailorder/rule.html
+- https://www.no-trouble.caa.go.jp/what/mailorder/advertising.html
+- https://www.no-trouble.caa.go.jp/what/mailorder/guidelines.html
 
 Use for:
 
@@ -38,8 +41,12 @@ Use for:
 
 Research note:
 
-- Source URL checked on 2026-07-10
-- Recheck the current statute, regulations, and official guidance before launch
+- Official Consumer Affairs Agency source set checked on `2026-08-13`.
+- A business or individual acting as a business that accepts Internet applications for paid services may fall within mail-order regulation when the statutory elements are met and no exclusion applies. This register does not make Moon Reply's final legal classification.
+- Applicable mail-order advertising obligations include price/consideration, payment timing and method, delivery/service timing, cancellation/withdrawal terms, and applicable operator name, address, phone, and responsible-person information.
+- Some advertising particulars may be omitted only where the advertisement states that the omitted information will be provided on request without delay and an actual mechanism can provide it with sufficient time before the Customer decides whether to apply. A nominal or non-functioning request route is insufficient.
+- The Internet final-confirmation stage requires prescribed information and must allow the Customer to review and correct the application content easily; misleading or incomplete presentation can be regulated.
+- These bounded facts neither establish Moon Reply compliance nor finalize Tokushoho wording. Recheck the current statute, regulations, official guidance, actual Product flow, and operation before publication.
 
 ### 消費者契約法
 
@@ -145,7 +152,7 @@ URL:
 - https://support.stripe.com/questions/restricted-business-list-and-considerations?locale=ja-JP
 - https://support.stripe.com/questions/prohibited-and-restricted-businesses-list-faqs?locale=ja-JP
 
-Current official evidence checked on `2026-08-12`:
+Current official evidence checked on `2026-08-13`:
 
 - Stripe's Japan jurisdiction-specific prohibited-business list includes the literal category `サイキックサービス / 占い師`.
 - Separately, Stripe's general restricted/prohibited-business guidance says some listed businesses may be supportable only after additional detailed review and explicit approval, while some categories are never eligible.
@@ -191,14 +198,17 @@ URL:
 - https://support.stripe.com/questions/getting-started-with-stripe-a-guide-for-users-in-japan?locale=ja-JP
 - https://support.stripe.com/questions/verifying-your-business-address?locale=ja-JP
 - https://support.stripe.com/questions/how-to-create-and-display-a-commerce-disclosure-page?locale=ja-JP
+- https://support.stripe.com/questions/business-information-requirements-to-use-stripe?locale=ja-JP
 
-Current official evidence checked on `2026-08-12`:
+Current official evidence checked on `2026-08-13`:
 
-- Stripe's activation guidance requires an applicable business website, social profile, or application URL and sufficient Product/business information for review. Moon Reply has no stable public/review URL recorded by this accepted preparation package.
-- Stripe's Japan onboarding guidance requires business and representative/KYC information, including applicable address, identity-document, website, and payout-bank facts.
+- Stripe's activation guidance requires a functioning website, social profile, or application URL used to promote or sell the business and requires business name and offered Product/service information to match submitted account facts. Applicable Customer-support, refund/dispute, and cancellation information must be present by the required sales/review stage, and Stripe may require site-ownership verification. Moon Reply has no stable public/review URL recorded by this Candidate.
+- Stripe's Japan onboarding guidance requires business and representative/KYC information, including applicable entity/legal name, address, business description, website, representative identity, identity-document, phone, and payout-bank facts. Completing an account profile is required for activation/Live capabilities and KYC review; this Candidate authorizes no account action.
+- Stripe's Japan guidance states that an individual may register as a sole proprietor whether or not a business-registration filing has been made. This does not decide Moon Reply's Human entity choice, tax timing, opening-notification timing, or actual onboarding field values.
+- Stripe separately verifies business identity, address/site ownership, bank information, the supportability of what the business sells and its category, and overall business risk. Passing none of these checks is inferred here.
 - Stripe may request additional business-address verification documents when the submitted address cannot be verified automatically.
-- Separately, Stripe's Commerce Disclosure guidance says a sole proprietor may, subject to the page requirements, use an equivalent request-based disclosure statement such as `請求があった場合には速やかに開示いたします` instead of immediately displaying formal name, address, and phone information publicly.
-- Stripe's Commerce Disclosure guidance requires a completed disclosure page and notes final-confirmation requirements, but it does not guarantee legal compliance. Moon Reply's Tokushoho review display remains incomplete and not publication-ready.
+- Stripe's Commerce Disclosure guidance lists formal/business name, address, reachable Japanese phone, email address, and Head of Operations among the disclosure fields. For specified sole-proprietor fields it permits an equivalent request-based statement such as `請求があった場合には速やかに開示いたします`, subject to the page and actual disclosure requirements.
+- Stripe's Commerce Disclosure guidance requires a completed disclosure page accessible from the website/payment surface and notes final-confirmation requirements, but it does not guarantee legal compliance. Moon Reply's Tokushoho review display and any request mechanism remain incomplete and not publication-ready.
 
 Project boundary:
 

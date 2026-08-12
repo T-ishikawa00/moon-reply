@@ -46,7 +46,7 @@ Current status:
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
 - Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is a paused fallback with preserved evidence. Strategy acceptance, Provider evidence/approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; Payment implementation authority remains `false`. The Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`; Customer-facing / Public-copy Alignment is `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; and Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A preparation is `preparation_human_approved`, while external action remains not authorized, acquisition remains not submitted, and outcome remains `null`; Lane B/C remain blocked. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Actual Stripe contact/submission and Provider evidence acquisition remain separately authorized and evidence-gated. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unresolved. No Provider account/contact/API, production backend connection, Payment implementation, production OpenAI/Supabase connection, email, public release, legal publication, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
+- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; Payment implementation authority remains `false`. The Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`; Customer-facing / Public-copy Alignment is `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; and Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Human directed on `2026-08-13` that Stripe Sales not be used (`not_used_by_human_direction`), which is not a Provider outcome. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate (`stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`; acceptance `pending`). Lane B/C remain blocked; no external action is authorized. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unresolved. No Provider account/contact/API, production backend connection, Payment implementation, production OpenAI/Supabase connection, email, public release, legal publication, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -146,6 +146,8 @@ Operator identity, contact, publication, delivery, URL-lifetime, refund/reissue,
 
 ## 6. Milestone 3: Review Site Deployment
 
+Stripe Lane B work applies an explicit predecessor overlay to this milestone: B1 Human + ChatGPT decision review is the exact current next work; B2 Legal Draft Finalization Candidate and B3 Review-ready Website/Public Surface implementation must follow accepted predecessors; B4a prepares deployment configuration; and B4b stable-URL deployment requires separate Human external-action authority. No public Website implementation, stable-domain work, or deployment is authorized by the current Candidate.
+
 Goal: deploy the payment-free Reviewable Web MVP to a stable external URL.
 
 Includes hosting deployment, stable review URL, mobile and desktop review, navigation and broken-link review, contact receipt review, clear notice that payment is unavailable, and an appropriate indexing/privacy decision for the review stage.
@@ -156,18 +158,26 @@ Exit criterion: an external reviewer or payment provider can inspect the service
 
 Goal: use final intended URLs and an honest service description to obtain provider-specific authoritative approval/review evidence and a Human selection.
 
-Future conceptual sequence:
+Current bounded Stripe Lane B sequence:
 
 1. Payment Charter v1 remains accepted and independent from provider approval.
 2. Stripe-first strategy Acceptance Sync is complete on `2026-08-12`.
-3. Truthful Customer-facing/public-copy alignment is Human + ChatGPT accepted complete on `2026-08-12`; Human Visual QA and Automated QA are PASS. No step below is complete.
-4. Next, prepare Stripe feasibility evidence. Actual Stripe account/contact/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence acquisition remains separately authorized and evidence-gated; stable review URLs and public legal conditions must exist before any Provider/site review that requires them.
-5. Return to explicit Human launch review if any desired method is unavailable; PayPay unavailable is not automatic approval to omit it.
-6. Update comparison and scorecard only from authoritative evidence.
-7. Human formally selects the Provider.
-8. Under a separately authorized task, implement only the selected Provider in sandbox/test mode.
-9. Complete Production QA; Production QA does not authorize Production Payment, which requires separate authorization.
-10. Proceed to Soft Launch only after separate Production Payment authorization and all other applicable gates pass.
+3. Truthful Customer-facing/public-copy alignment is Human + ChatGPT accepted complete on `2026-08-12`; Human Visual QA and Automated QA are PASS.
+4. Stripe feasibility evidence preparation is accepted complete; Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome.
+5. B0 Stripe Lane B Human Decision Package Candidate is ready with status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`; acceptance and every Human decision remain pending.
+6. B1 Human + ChatGPT decision review and acceptance sync is the exact current next work.
+7. B2 Legal Draft Finalization Candidate follows only after B1 acceptance.
+8. B3 Review-ready Website/Public Surface implementation follows its accepted predecessor.
+9. B4a deployment-readiness implementation/configuration remains distinct from B4b stable-URL deployment; B4b requires separate external-action authority.
+10. B5 private KYC readiness keeps actual Human values outside Git.
+11. B6 may prepare a Stripe Account/Activation Authorization Package without creating an account or submitting information.
+12. B7 actual Stripe account creation/KYC/activation submission requires a further explicit Human external-action authorization.
+13. PayPay Lane C remains separate and later. Return to explicit Human launch review if any desired method is unavailable; PayPay unavailable is not automatic approval to omit it.
+14. Update comparison and scorecard only from authoritative evidence, then require Human formal Provider selection.
+15. Under a separately authorized task, implement only the selected Provider in sandbox/test mode.
+16. Complete Production QA without treating it as Production Payment authorization, and proceed to Soft Launch only after separate Production Payment authorization and all other applicable gates pass.
+
+No exact future branch or mutation manifest is assigned before predecessor acceptance.
 
 A generic support response, marketing page, silence, or SDK availability is not Stripe approval. PAY.JP fallback reactivation requires current-source review and separate Human authority.
 

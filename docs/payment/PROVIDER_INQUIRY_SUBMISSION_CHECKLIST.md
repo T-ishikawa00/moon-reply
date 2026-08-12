@@ -4,9 +4,9 @@
 >
 > **NO STRIPE CONTACT, SUBMISSION, ACCOUNT ACTION, OR PAYPAY ONBOARDING HAS OCCURRED**
 
-Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment and Stripe Feasibility Evidence Preparation are accepted complete; the preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
+Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment and Stripe Feasibility Evidence Preparation are accepted complete; the preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Human directed on `2026-08-13` that Stripe Sales not be used (`not_used_by_human_direction`), an internal workflow choice rather than a Provider outcome. Lane A is preserved inactive without changing its four-field state. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`; Lane B/C remain blocked. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
 
-## Stripe Lane A preparation — before any separately authorized action
+## Preserved inactive Stripe Lane A preparation — not current next work
 
 - [x] Human + ChatGPT Stripe-first strategy acceptance completed on `2026-08-12`; Product/strategy authority only
 - [x] Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE`; Product/UI/content authority only

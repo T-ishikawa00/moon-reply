@@ -16,6 +16,24 @@ Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and P
 
 Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` at the planning/documentation level. Accepted preparation is not Provider evidence, creates no external-action authority, and does not satisfy this gate.
 
+On `2026-08-13`, Human directed that the Stripe Sales route not be used (`not_used_by_human_direction`). This is an internal workflow choice, not a Stripe Provider outcome. Lane A's four-field state remains preserved but inactive. The controlling current Candidate is `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT acceptance is `pending`. The exact current next work is Human + ChatGPT review of that Candidate. Lane B/C remain blocked and no external action is authorized.
+
+The bounded predecessor sequence is:
+
+| Step | Work |
+| --- | --- |
+| B0 | Workflow Pivot + Human Decision Package Candidate |
+| B1 | Human + ChatGPT decision review and acceptance sync |
+| B2 | Legal Draft Finalization Candidate |
+| B3 | Review-ready Website/Public Surface implementation |
+| B4a | Deployment-readiness implementation/configuration |
+| B4b | Stable URL deployment under separate external-action authority |
+| B5 | Private KYC readiness |
+| B6 | Stripe Account/Activation Authorization Package |
+| B7 | Actual Stripe account creation/KYC/activation submission under a further explicit Human external-action authorization |
+
+PayPay Lane C remains separate and later. No exact future branch or mutation manifest is assigned before predecessor acceptance. This sequence passes no item in this gate.
+
 ### Stripe lane-specific evidence rule
 
 | Lane | Required role in this gate | Current state |

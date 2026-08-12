@@ -11,6 +11,11 @@
 - Stripe external action: `not authorized`
 - Stripe account/contact/submission: `absent / none / none`
 - PayPay enablement/review: `not enabled / not submitted`
+- Stripe Sales route: `not_used_by_human_direction` / Human workflow choice / not a Provider outcome
+- Current controlling Candidate: `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
+- Candidate status: `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`
+- Human + ChatGPT Candidate acceptance: `pending`
+- Exact current next work: Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate
 
 Readiness item classifications:
 
@@ -23,7 +28,25 @@ Readiness item classifications:
 
 An item classification is preparation evidence only. It is not Stripe acceptance, legal approval, public readiness, or implementation authorization.
 
-## 2. Gate A — Preliminary clarification readiness
+The `2026-08-13` workflow pivot preserves Lane A as accepted preparation evidence but makes it inactive current work. Lane B blocker-resolution decisions are active internal preparation; Lane B and Lane C remain blocked, and no external action is authorized.
+
+Bounded sequence:
+
+| Step | Work |
+| --- | --- |
+| B0 | Workflow Pivot + Human Decision Package Candidate |
+| B1 | Human + ChatGPT decision review and acceptance sync |
+| B2 | Legal Draft Finalization Candidate |
+| B3 | Review-ready Website/Public Surface implementation |
+| B4a | Deployment-readiness implementation/configuration |
+| B4b | Stable URL deployment under separate external-action authority |
+| B5 | Private KYC readiness |
+| B6 | Stripe Account/Activation Authorization Package |
+| B7 | Actual Stripe account creation/KYC/activation submission under a further explicit Human external-action authorization |
+
+PayPay Lane C remains separate and later. Exact future branches/manifests must wait for predecessor acceptance. The sequence changes no lane four-field value.
+
+## 2. Preserved inactive Gate A — Preliminary clarification readiness
 
 Lane: `STRIPE-FEAS-001`
 
@@ -40,14 +63,14 @@ outcome: null
 | Proposed short/medium/full description prepared | `draft_only` | Human + ChatGPT accepted preparation wording; not submitted |
 | Customer-facing `鑑定` terminology disclosed | `satisfied` | Explicit in all applicable proposed descriptions |
 | Lane A questions prepared | `satisfied` | Exactly three Human + ChatGPT accepted preparation questions in `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`; not sent |
-| Official external contact route identified | `satisfied` | `https://stripe.com/jp/contact` and its linked official support route; route authority still must be confirmed |
+| Official external contact route identified | `satisfied` | Preserved task-time preparation record only: `https://stripe.com/jp/contact` and its linked official support route; Stripe Sales is not used and no Lane A route/action is active |
 | Exact preparation package version frozen | `satisfied` | Task-time formulation identifier `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`; no submitted version exists |
 | Non-public evidence storage location prepared | `Human_input_required` | Storage/access control and opaque reference not assigned in Git |
 | Explicit Human external-action authorization | `Human_input_required` | Not granted by this Acceptance Sync |
 
-Gate A's internal preparation package is Human + ChatGPT approved. This does not complete every pre-action condition or authorize contact: external action remains prohibited until the exact route, package, non-public evidence storage, and action are separately approved.
+Gate A's internal preparation package is Human + ChatGPT approved and preserved, but is not current next work. Human directed that Stripe Sales not be used. This does not create a Provider outcome or authorize any contact; external action remains prohibited.
 
-A public production website is required for Lane A only if the actual official Lane A route requires it.
+A public production website would be required for Lane A only if a later separately authorized official route required it; no such Lane A action is active.
 
 ## 3. Gate B — Account / Live Payment readiness
 
