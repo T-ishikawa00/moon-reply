@@ -8,11 +8,11 @@
 
 ## 0. 使い方
 
-このガイドは、Humanが運営上の判断を行うための説明資料である。推奨案はプロジェクト上の初期方向であり、Humanの最終判断、provider-specific authoritative approval/review evidenceまたは最新の公式一次情報と実際のProduct/運用証拠の確認を代替しない。Stripeはdesired strategic primary Candidateにすぎず、feasibility、approvalまたはformal selectionではない。PAY.JPはpaused fallbackである。
+このガイドは、Humanが運営上の判断を行うための説明資料である。推奨案はプロジェクト上の初期方向であり、Humanの最終判断、provider-specific authoritative approval/review evidenceまたは最新の公式一次情報と実際のProduct/運用証拠の確認を代替しない。Stripe CheckoutはHuman + ChatGPT accepted strategic primary Web directionだが、feasibility、approval、activationまたはformal selectionではない。PAY.JPはpaused fallbackである。
 
 回答は `OPERATOR_DECISION_WORKSHEET.md` に記録し、根拠となる契約、最新の公式一次情報、設定画面および試験結果を紐づける。専門家相談を利用する場合は任意の補助証拠として記録できるが、Paid LaunchまたはProduction Paymentの必須条件ではない。
 
-Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated reviewが次作業である。Legal identity、住所・電話表示、final support email、Tokushoho publication、opening notificationおよびvirtual officeは解決しておらず、将来のapplicable Provider review/publication/Paid Launch前に実証が必要である。ただし、GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、現行Stripe Candidate reviewのblockerまたはcurrent requirementではない。住所・電話表示方法は、最新の公式一次情報とactual selected Provider evidenceを得た将来判断で確定する。
+Current sequencing: 次の正式Payment作業は別途承認されるtruthful Customer-facing/public-copy alignment taskである。Stripe feasibility evidence preparationが続き得るが、actual evidence acquisitionは別途承認かつevidence-gatedである。Legal identity、住所・電話表示、final support email、Tokushoho publicationおよびopening notificationは未解決で、将来のapplicable Provider review/publication/Paid Launch前に実証が必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
 
 ---
 
@@ -22,7 +22,7 @@ Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated revie
 - **なぜ必要なのか:** 決済事業者との契約主体、特商法表記、税務・会計、問い合わせ対応主体を一致させるため。
 - **選択肢:** 個人 / 個人事業主 / 法人。
 - **推奨案:** 有料公開前の未確認状態を禁止する。運営形態はprovider契約と法務表示の主体に一致させる。法務・税務上の判断は必要に応じて専門家に確認する。特定の形態が常に最適とは結論しない。
-- **今すぐ決める必要があるか:** 現行Stripe Candidate reviewでは決めない。将来のapplicable Provider契約・審査および公開用法務文書へ実情報を入れる前に必要。現在は未決定のまま。
+- **今すぐ決める必要があるか:** 現行Acceptance Syncでは決めない。将来のapplicable Provider契約・審査および公開用法務文書へ実情報を入れる前に必要。現在は未決定のまま。
 - **証拠・確認先:** providerの申込資格・契約条件、最新の税務・法務公式情報、実際の事業届出・法人情報。PAY.JPの個人/個人事業主routeでは開業届またはcurrent guidanceが認めるequivalent document。専門家相談は必要に応じた任意のescalation。
 
 ## OP-003 屋号
@@ -38,10 +38,11 @@ Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated revie
 
 - **何を決めるのか:** 特商法表記等で事業者所在地をどの方法で表示するか。
 - **なぜ必要なのか:** 通信販売の事業者情報を正確かつ適法に表示するため。
-- **選択肢:** 実住所を表示 / 最新の公式案内と採用する表示方法の証拠に基づく別の方法を採用 / 運営形態を見直してから決定。
-- **推奨案:** 有料公開前に実在する情報と採用方法を確定し、provider契約情報と整合させる。省略やバーチャルオフィスが常に許されるとは結論しない。
-- **今すぐ決める必要があるか:** 現行Stripe Candidate reviewのblockerではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とselected Provider evidenceに基づく実情報・表示方法の確定が必須。
-- **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実住所、採用する表示方法および住所利用契約。専門家相談は任意。
+- **Human preference:** Stripe KYC、銀行、税務・公的機関その他の正当に必要な非公開相手へのtruthful private home/business address disclosureは許容する。一般Customerへの自宅住所のroutine public displayはdefaultにしない。現行法とactual Provider要件が許す場合、適法なrequest-basedまたはotherwise non-routine-public disclosure methodを優先する。
+- **選択肢:** 実住所を表示 / 最新の公式案内と採用する表示方法の証拠に基づくrequest-basedその他の適法な方法 / actual evidenceにより有用・必要となった場合にvirtual officeを再検討 / 運営形態を見直してから決定。
+- **推奨案:** private KYC disclosureとCustomer-facing public disclosureを分離する。有料公開前に実在する情報とexact Tokushoho implementationを確定し、provider契約情報と整合させる。request-based disclosureが常に十分、またはvirtual officeが常に許容・不要とは結論しない。virtual-office useは現時点のHuman preferenceではrequiredではなく、GMOはon hold / not rejectedとする。
+- **今すぐ決める必要があるか:** Human preferenceは記録済みだが、OP-005はfully completedではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とactual Provider evidenceに基づく実情報・exact表示方法の確定が必須。
+- **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実住所、採用する表示方法および必要なら住所利用契約。actual legal、Provider、postal、privacyまたはoperational evidenceにより有用・必要となる場合はvirtual officeを再検討する。専門家相談は任意。
 
 ## OP-006 電話番号公開方法
 
@@ -49,7 +50,7 @@ Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated revie
 - **なぜ必要なのか:** 事業者への連絡手段と法定表示を実態に合わせるため。
 - **選択肢:** 事業用電話番号を表示 / 最新の公式案内と採用する表示方法の証拠に基づく別の方法を採用 / 運営体制を整えてから決定。
 - **推奨案:** 私用番号を無計画に公開せず、実際に受電・折返し可能な運用と表示を一致させる。電話番号の省略が常に許されるとは結論しない。
-- **今すぐ決める必要があるか:** 現行Stripe Candidate reviewのblockerではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とselected Provider evidenceに基づく実情報・表示方法の確定が必須。
+- **今すぐ決める必要があるか:** 現行Acceptance Syncのblockerではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とselected Provider evidenceに基づく実情報・表示方法の確定が必須。
 - **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実番号、採用する表示方法および電話サービス契約。専門家相談は任意。
 
 ## OP-007 問い合わせメール
@@ -58,7 +59,7 @@ Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated revie
 - **なぜ必要なのか:** 決済、返金、結果通知、個人情報請求等の連絡を確実に受けるため。
 - **選択肢:** 独自ドメインメール / provider-hosted business mailbox / その他の運営者が管理する事業用アドレス。
 - **推奨案:** 私用メールと分離し、運営者が継続管理し、利用可能なら二要素認証を有効化し、公開前に送受信試験を行う。
-- **今すぐ決める必要があるか:** 現行Candidate taskではProvider contactを行わない。将来のactual Provider submission/contactまたは公開前には実在する連絡先が必要で、exact actionへのHuman authorizationも必要。historical draftには入力しない。
+- **今すぐ決める必要があるか:** 現行Acceptance Sync taskではProvider contactを行わない。将来のactual Provider submission/contactまたは公開前には実在する連絡先が必要で、exact actionへのHuman authorizationも必要。historical draftには入力しない。
 - **証拠・確認先:** ドメイン・mailbox契約、管理権限、二要素認証設定、送受信試験記録。
 
 ## OP-008 問い合わせフォーム
@@ -85,7 +86,7 @@ Current sequencing: Stripe strategy CandidateのHuman + ChatGPT integrated revie
 - **なぜ必要なのか:** PrivacyとCookie表示を実際のデータフローに一致させ、不要な追跡を避けるため。
 - **選択肢:** 初期MVPでは使用しない / privacy重視の最小構成 / 一般的なanalyticsを事前レビュー後に利用。
 - **推奨案:** 明確な計測要件と同意・拒否設計が整うまで初期MVPでは追加しない方向。ただしHumanの未決定事項である。
-- **今すぐ決める必要があるか:** 現行Stripe Candidate reviewでは未決定のまま。将来のactual Provider/site review、final legal URLsおよびPaid Launch/publication前には、実装有無とPrivacy・Cookie記載を一致させる必要がある。
+- **今すぐ決める必要があるか:** 現行Acceptance Syncでは未決定のまま。将来のactual Provider/site review、final legal URLsおよびPaid Launch/publication前には、実装有無とPrivacy・Cookie記載を一致させる必要がある。
 - **証拠・確認先:** 実装コード、network通信、provider契約・設定、取得項目、保持期間、拒否方法。
 
 ## OP-021 Cookie方針

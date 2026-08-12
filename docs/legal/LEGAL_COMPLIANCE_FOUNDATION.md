@@ -180,7 +180,7 @@ Uncertain legal questions must remain unresolved and marked for current-source r
 ## 9. Payment Provider Position
 
 - A provider must be selected only after truthful disclosure and provider-specific authoritative approval/review evidence
-- Stripe Checkout is the desired strategic primary Web direction under an unaccepted Candidate; Stripe feasibility/account/approval/activation/formal selection and cards/Apple Pay/Google Pay/PayPay eligibility are not established
+- Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare; this strategy acceptance does not establish Stripe feasibility/account/contact/approval/activation/formal selection or credit/debit-card/Apple Pay/Google Pay/PayPay eligibility
 - The Customer-facing 鑑定ノート wording, AI use, actual analysis flow, methods not used, and non-guarantees must be disclosed without disguising the service
 - Stripe's Japan-specific restricted-business risk requires actual account/business/site/category/Live Payment and method-specific authoritative evidence before formal selection
 - PAY.JP is preserved as a paused fallback; its readiness evidence and application route remain recorded, but PAY.JP-specific operator/opening-notification/security blockers do not control current Stripe-track work

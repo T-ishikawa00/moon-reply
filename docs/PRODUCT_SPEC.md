@@ -9,7 +9,7 @@ Status note: 現在の実行順序、完了定義、次タスクおよびHuman g
 現時点ではPaymentまたはネイティブアプリの実装は行わない。
 以下の順番を長期方針とし、各Planning、実装、provider、productionおよびrelease gateは別個のHuman authorityを必要とする。
 
-1. Phase A：Web / Stripe Checkout desired direction under Candidate review / cards・Apple Pay・Google Pay・PayPay / 税込980円都度払い
+1. Phase A：Web / Human + ChatGPT accepted Stripe Checkout strategic direction / credit/debit cards・Apple Pay・Google Pay・PayPay / 税込980円都度払い
 2. Phase B：実CustomerによるWeb有料Product検証
 3. Phase C：iOS / Apple IAP / RevenueCat
 4. Phase D：Android / Google Play Billing / RevenueCat
@@ -475,7 +475,7 @@ Subscriptionは長期候補として保持するが、価格、月間回数、�
 
 ### Web/PWA段階
 
-Human working directionではStripe CheckoutをWebのdesired strategic primaryとする。ただし、Stripe Feasibility and Web Payment Strategy Pivot CandidateはHuman + ChatGPT integrated review pendingであり、feasibility、account、approval/activation、formal selectionまたはimplementation authorityを確立しない。Payment Charter v1受入は完了しており、Provider-independent原則は変更しない。
+Human + ChatGPT accepted Product/strategy directionではStripe CheckoutをWebのstrategic primaryとして調査・準備する。statusは`stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`である。ただし、この受理はStripe feasibility、account、contact、approval/activation、formal selectionまたはimplementation authorityを確立しない。Payment Charter v1受入は完了しており、Provider-independent原則は変更しない。
 
 初期Web決済方法の方向：
 
@@ -485,7 +485,9 @@ Human working directionではStripe CheckoutをWebのdesired strategic primary�
 - PayPay
 - すべて税込980円
 
-いずれのdesired methodもactual Stripe account/category/method evidenceなしに利用可能と扱わない。PayPay unavailableはPayPayなしLaunchの自動承認ではなく、Human launch reviewへ戻す。RevenueCatは初期Web fulfillmentに必須ではないが、将来のStripe / Apple IAP / Google Play Billing購入同期に利用する方向を未解決のまま保持する。PAY.JPはpaused fallbackであり、evidenceは削除しない。
+いずれのdesired methodもactual Stripe account/category/method evidenceなしに利用可能と扱わない。PayPayはdesired / Public Preview / unverified / not enabled / not approved / recheck-gatedであり、unavailableの場合はPayPayなしLaunchの自動承認ではなくHuman launch reviewへ戻す。RevenueCatは初期Web fulfillmentに必須ではなくunconfiguredだが、将来のStripe / Apple IAP / Google Play Billing購入同期に利用する方向を未解決のまま保持する。PAY.JPは`paused_fallback_provider_direction`であり、evidenceは削除しない。
+
+Product authorityは`External economic rail -> authoritative verification -> Moon Reply Purchase -> Assessment Grant -> Logical Assessment -> Report`とする。StripeまたはRevenueCatはMoon Reply Purchase、GrantまたはLogical Assessmentのauthorityを置換しない。
 
 申請時は偽装しない。
 
@@ -493,15 +495,15 @@ Human working directionではStripe CheckoutをWebのdesired strategic primary�
 
 > 利用者が入力した恋愛関係の状況とメッセージをAIが整理・分析し、文面の受け取られ方として考えられる可能性、送る・待つ・修正するといった判断材料、メッセージ案および短期的な行動案を、デジタルレポートとして提供するサービス。ユーザー向けに「鑑定ノート」「鑑定書」という名称を使用するが、タロット、占星術、生年月日、霊感その他の占術・超自然的手法は使用せず、相手の本心や未来の出来事を断定・保証しない。
 
-### Stripe strategy Candidate review後とMilestone 4でやること
+### Stripe-first strategy Acceptance Sync後とMilestone 4でやること
 
 - Payment Charter v1は`2026-08-12`に`human_chatgpt_accepted_complete`。Candidate commitsはhistorical lineageであり、Payment implementation authorityは`false`
-- 次の正式作業は`Human + ChatGPT integrated review of Stripe Feasibility and Web Payment Strategy Pivot Candidate`
-- Candidate acceptance後も、truthful public-copy alignment、actual Stripe account/business/site/category/Live Paymentおよびmethod-specific evidence、Human formal Provider selection、別個のimplementation authorizationを順番に必要とする
-- Stripe account/contactは本Candidate taskでは作成・実施しない。generic marketing pageやsilenceをapprovalと扱わない
+- Stripe-first strategyは`2026-08-12`にProduct/strategy levelでHuman + ChatGPT accepted complete。Provider selectionまたはapprovalではない
+- 次の正式Payment作業は別途承認されるtruthful Customer-facing/public-copy alignment task。Stripe feasibility evidence preparationが続き得るが、actual account/business/site/category/Live Paymentおよびmethod-specific evidence acquisitionは別途承認かつevidence-gated
+- Stripe account/contactは本Acceptance Sync taskでは作成・実施しない。generic marketing pageやsilenceをapprovalと扱わない
 - cards、Apple Pay、Google Pay、PayPayのavailability、Checkout、test/live、webhook、refund、descriptor、Customer linkage、fees/settlementはevidence-gated
 - PAY.JP readiness evidenceはpaused fallbackとして保存し、GMO/開業届/PAY.JP申請準備をcurrent next workにしない
-- formal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない
+- stable review URLs/public legal conditionsが必要なProvider/site reviewより前にそれらを整える。formal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない。Production QAはProduction Paymentを承認せず、Soft Launchには別個のProduction Payment authorizationが必要
 
 ---
 
@@ -775,7 +777,7 @@ payment_succeeded
 
 現在の長期Product正本は次の順序とする。
 
-1. Phase A：Web / desired Stripe Checkout direction under Candidate review / 税込980円都度払い
+1. Phase A：Web / accepted Stripe Checkout strategic direction / credit/debit cards・Apple Pay・Google Pay・PayPay / 税込980円都度払い
 2. Phase B：実CustomerによるWeb有料Product検証
 3. Phase C：iOS / Apple IAP / RevenueCat
 4. Phase D：Android / Google Play Billing / RevenueCat
@@ -918,7 +920,7 @@ LPに人を集められない場合は、商品ではなく集客の問題とし
 
 ## 23. 直近の次アクション
 
-Payment Charter v1は`2026-08-12`にHuman + ChatGPT accepted completeとなった。次の正式作業は`Human + ChatGPT integrated review of Stripe Feasibility and Web Payment Strategy Pivot Candidate`であり、実装ではない。statusは`stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`。Stripe feasibility、account、approval/activation、formal selection、desired method eligibilityは未確立である。
+Stripe-first Web Payment Strategyは`2026-08-12`にHuman + ChatGPT accepted completeとなり、statusは`stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`である。次の正式Payment作業は別途承認されるtruthful Customer-facing/public-copy alignment taskである。Stripe feasibility evidence preparationが続き得るが、actual account/business/site/category/Live Paymentおよびmethod-specific evidence acquisitionは別途承認かつevidence-gatedである。Stripe feasibilityはnot established、account/contact/approval/activationはabsent、formal selectionはincomplete、desired method eligibilityはunverifiedである。
 
 Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`、Payment implementation authorityは`false`である。Stripe/PAY.JP/RevenueCat account、contact、API、configuration、Provider call、DB/Supabase/migrationまたはRuntime/LUNA変更を承認しない。PAY.JPはpaused fallbackであり、RevenueCat initial Web useはnot required / unconfigured、future synchronizationはdesired / unresolvedである。
 
@@ -928,7 +930,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-現在の次作業はStripe strategy CandidateのHuman + ChatGPT integrated reviewのみ。Provider account/contactは行わず、Candidate acceptance、truthful public-copy alignment、authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+現在の次作業は別途承認されるtruthful Customer-facing/public-copy alignmentのみ。Provider account/contactは行わず、authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - Stripe/PAY.JP SDK/API/checkout/webhook
 - RevenueCat

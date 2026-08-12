@@ -8,7 +8,7 @@ Milestones are ordered dependencies. No implementation task starts until its pla
 
 Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2 planning has not started; Milestone 2 runtime and all implementation work beyond M2-P1 remain unauthorized. Browser use and screenshot acquisition by CodeX/agents remain prohibited; the completed visual and interaction QA is Human observational evidence.
 
-Current Payment strategy task: Human + ChatGPT integrated review of the Stripe pivot Candidate, status `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`. Stripe feasibility/account/contact/approval/activation/formal selection and cards/Apple Pay/Google Pay/PayPay eligibility remain unestablished. PAY.JP is paused fallback. No item below authorizes Provider operation or implementation.
+Current Payment strategy state: Human + ChatGPT Stripe-first Product/strategy acceptance complete on `2026-08-12`, status `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. The next formal work is separately authorized truthful Customer-facing/public-copy alignment. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and credit/debit-card/Apple Pay/Google Pay/PayPay eligibility remains unverified. PAY.JP is paused fallback. No item below authorizes Provider operation or implementation.
 
 ## Milestone 0: Completed Foundations
 
@@ -182,9 +182,9 @@ Dependency: Milestone 2 Human acceptance.
 
 Dependency: Milestone 3 Human acceptance.
 
-- [ ] Human + ChatGPT integrated review of Stripe strategy Candidate
-- [ ] Separately authorized truthful public-positioning synchronization
-- [ ] Separately authorized Stripe evidence-acquisition plan
+- [x] Human + ChatGPT Stripe-first strategy Acceptance Sync complete on `2026-08-12`; Product/strategy authority only
+- [ ] Separately authorized truthful Customer-facing/public-copy alignment — current next work
+- [ ] Separately authorized Stripe evidence preparation/acquisition plan; stable review URLs/public legal conditions required before any Provider/site review that requires them
 - [ ] Actual Stripe account/business/site/category/Live Payment outcome preserved
 - [ ] Cards eligibility evidenced
 - [ ] Apple Pay eligibility evidenced
@@ -196,6 +196,8 @@ Dependency: Milestone 3 Human acceptance.
 - [ ] PAY.JP fallback reactivated only if Human explicitly authorizes it; current-source re-review then required
 - [ ] Human formal Provider selection
 - [ ] Human acceptance of Milestone 4
+
+Production QA does not authorize Production Payment. Soft Launch requires separate Production Payment authorization after all applicable evidence and Human gates pass.
 
 ## Milestone 5: Core Backend, Safety, AI and Email
 

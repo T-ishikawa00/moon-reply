@@ -50,12 +50,12 @@
 - 結果通知とマーケティング同意を分離する
 - 不安を煽る販売、結果保証、架空レビュー、架空実績を禁止する
 - 決済事業者は、実際の事業内容をtruthfully開示し、provider-specific authoritative approval/review evidenceを取得した後にHumanが正式選定する
-- Stripe CheckoutはHuman desired strategic primary Web directionだが、Candidate review pendingであり、feasibility、account、approval/activation、formal selectionおよびmethod eligibilityを確立しない
-- desired initial methodsはcards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPay unavailableはPayPayなしLaunchの自動承認ではない
+- Stripe Checkoutは`2026-08-12`にHuman + ChatGPT accepted strategic primary Web directionとなった。ただしProduct/strategy acceptanceであり、feasibility、account/contact、approval/activation、formal selectionおよびmethod eligibilityを確立しない
+- desired initial methodsはcredit/debit cards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPayはPublic Preview / not enabled / not approved / recheck-gated。PayPay unavailableはPayPayなしLaunchの自動承認ではない
 - RevenueCatはinitial Webに必須ではなく、future synchronizationはdesired / unresolved。PAY.JPはpaused fallback
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
 
-Product、価格、Safetyおよびtruthful positioningのaccepted内部方針は維持する。Stripeに関する箇条書きはHuman working directionの記録であり、Candidate acceptance、feasibility、approval/activation、formal selectionまたはimplementation authorityではない。
+Product、価格、Safety、truthful positioningおよびStripe-first strategyのaccepted内部方針は維持する。Stripe strategy acceptanceはfeasibility、approval/activation、formal selectionまたはimplementation authorityではない。
 
 ---
 
@@ -63,7 +63,7 @@ Product、価格、Safetyおよびtruthful positioningのaccepted内部方針は
 
 - 個人、個人事業主、法人のどの運営形態にするか
 - 「月の返事」を屋号として使うか、別屋号または屋号なしにするか
-- 住所・電話番号をどの適法な方法で表示するか
+- 住所・電話番号をどの適法な方法で表示するか。住所についてはtruthful private disclosureを許容し、routine public home-address displayをdefaultにせず、許容される場合はrequest-based/non-routine-public methodを優先するHuman preferenceを記録済みだが、exact Tokushoho implementationは未決定
 - 問い合わせをメール、フォームまたは両方で受けるか
 - 問い合わせの返信目安を2営業日、3営業日、5営業日等のどれにするか
 - Analyticsを利用するか
@@ -120,10 +120,12 @@ Product、価格、Safetyおよびtruthful positioningのaccepted内部方針は
 2. Milestone 1の実装sliceを一つずつ実装・検証・Human受入れする
 3. Milestone 2で運営者情報と公開条件を完成する
 4. Milestone 3で決済なしの審査用サイトをデプロイする
-5. Human + ChatGPTがStripe strategy Candidateをintegrated reviewし、acceptまたはreviseする
-6. 別権限でtruthful public-copy alignmentを行い、Stripe feasibility evidence acquisitionをHumanが承認する
-7. actual Stripe evidenceでcategory/Live Payment/cards/Apple Pay/Google Pay/PayPayを確認する
+5. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了。以下のfuture stepは未完了
+6. 次の正式Payment作業として、別権限でtruthful Customer-facing/public-copy alignmentを行う
+7. 別権限でStripe feasibility evidenceを準備・取得し、actual account/business/site/category/Live Payment/credit/debit cards/Apple Pay/Google Pay/PayPayを確認する。必要なProvider/site review前にstable review URLs/public legal conditionsを整える
 8. desired method不足時は明示的Human launch reviewへ戻し、authoritative evidenceに基づいてHumanがproviderを正式選定する
 9. 別個のimplementation authorization後に選定済みproviderのsandbox/test実装へ進む
+10. Production QAを完了する。Production QAはProduction Payment authorizationではない
+11. 別個のProduction Payment authorization後にのみSoft Launchへ進む
 
-Operator identity、住所・電話表示、support email、Tokushoho publication、opening notificationおよびvirtual officeは未解決のまま維持する。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.
+Operator identity、電話表示、support email、Tokushoho publicationおよびopening notificationは未解決のまま維持する。住所はHuman preferenceのみ記録済みで、exact Tokushoho disclosure implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはHuman preference上currently not required、GMOはon hold / not rejectedで、actual legal/Provider/postal/privacy/operational evidenceにより再検討できる。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

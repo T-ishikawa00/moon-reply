@@ -8,7 +8,9 @@
 
 Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Payment implementation remains unauthorized.
 
-Stripe Feasibility and Web Payment Strategy Pivot Candidate is ready for Human + ChatGPT review. Its status is `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`; it is not accepted. Stripe is the desired strategic primary Web direction, while feasibility, account, approval, activation, and formal selection remain absent or incomplete. PAY.JP is preserved as a paused fallback. Provider account/contact/API operations and Payment implementation remain unauthorized.
+The Stripe-first Web Payment Strategy is Human + ChatGPT accepted at the Product/strategy level as of `2026-08-12`. Its status is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. Stripe Checkout is the accepted strategic primary Web direction to investigate and prepare, while Stripe feasibility is not established; account, contact, approval, and activation are absent; formal Provider selection is incomplete; and every desired method remains unverified. PAY.JP is preserved as `paused_fallback_provider_direction`. Provider account/contact/API operations, Payment implementation, and Production Payment remain unauthorized.
+
+The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
 
 Current canonical planning:
 
@@ -60,7 +62,7 @@ Development may use manual, mock, and QA modes, but the public MVP should automa
 
 ## Product Roadmap
 
-- Phase A: Web / desired Stripe Checkout direction / cards, Apple Pay, Google Pay, and PayPay / JPY 980 one-time purchase; Candidate review and feasibility evidence remain pending
+- Phase A: Web / accepted Stripe Checkout strategic direction / credit/debit cards, Apple Pay, Google Pay, and PayPay / JPY 980 tax-inclusive one-time purchase; feasibility and method evidence remain pending
 - Phase B: real-customer paid Web validation
 - Phase C: iOS / Apple IAP / RevenueCat
 - Phase D: Android / Google Play Billing / RevenueCat

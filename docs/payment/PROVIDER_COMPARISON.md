@@ -8,7 +8,7 @@ This is not legal advice and does not record an approved or selected provider.
 
 All unverified fields remain `TBD`.
 
-Stripe Checkout is the desired strategic primary Web direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility/account/approval/activation/formal selection are absent or incomplete and Stripe is Not scored. PAY.JP is paused fallback and remains `Not submitted`, `Not approved`, `Not selected`, and `Not scored`. KOMOJU and STORES remain historical unsent fallback candidates.
+Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and Stripe is Not scored. PAY.JP is paused fallback and remains `Not submitted`, `Not approved`, `Not selected`, and `Not scored`. KOMOJU and STORES remain historical unsent fallback candidates.
 
 Task 18C-R2の公式な内部ポジショニングは「AIを活用した恋愛メッセージ分析・判断支援デジタルレポート」である。これはproviderの業種区分、取扱可否または承認を決定しない。各providerには実際の機能、`鑑定ノート`・`鑑定書`というユーザー向け表現、使用しない手法および非保証を開示し、カテゴリ判断を求める。
 
@@ -19,7 +19,7 @@ Task 18C-R2の公式な内部ポジショニングは「AIを活用した恋愛�
 | PAY.JP | Production application evidence required / not approved | Production-use application Not submitted | TBD | TBD | TBD | TBD | TBD | Official guidance confirms application route; Moon Reply entity/evidence TBD | Final service, Terms, Privacy, Tokushoho URLs required; Moon Reply readiness TBD | TBD | TBD | TBD | TBD | TBD | TBD | Official sources checked 2026-08-12; no application/review outcome | Not selected |
 | KOMOJU | Inquiry required / not approved | Not sent / no written response | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | None recorded | Not selected |
 | STORES | Inquiry required / not approved | Not sent / no written response | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | None recorded | Not selected |
-| Stripe | Explicit prohibited-category risk / feasibility not established | STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 not started; no account/business/site/category/Live Payment outcome | TBD | Unverified | Unverified | TBD | TBD | TBD | TBD | TBD | TBD | TBD | Not frozen | TBD | Desired Checkout direction only | Official restricted-business and PayPay docs checked 2026-08-12; no Moon Reply account/review evidence | Candidate pending review / not selected |
+| Stripe | Explicit prohibited-category risk / feasibility not established | STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 not started; no account/business/site/category/Live Payment outcome | TBD | Unverified | Unverified | TBD | TBD | TBD | TBD | TBD | TBD | TBD | Not frozen | TBD | Accepted Checkout strategic direction only | Official restricted-business and PayPay docs checked 2026-08-12; no Moon Reply account/review evidence | Strategy accepted / not selected |
 | Square | Official restriction recheck required / not selected | No written category review | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | None recorded | Not selected |
 
 ---

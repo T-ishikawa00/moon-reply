@@ -45,7 +45,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 | Provider | Evidence-route status | Category/application status | Score | Evidence | Selection status |
 | --- | --- | --- | --- | --- | --- |
-| Stripe | STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 Not started | Feasibility not established; account/approval/activation absent | Not scored | Actual truthful account/business/site/category/Live Payment and cards/Apple Pay/Google Pay/PayPay evidence required | Candidate pending review / not selected |
+| Stripe | STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 Not started | Feasibility not established; account/contact/approval/activation absent | Not scored | Actual truthful account/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence required | Strategy accepted / not selected |
 | PAY.JP | Production-use application Not submitted | Not approved | Not scored | PAYJP-APP-001; authoritative application/review evidence required | Not selected |
 | KOMOJU | Not sent | Not approved | Not scored | Evidence required | Not selected |
 | STORES | Not sent | Not approved | Not scored | Evidence required | Not selected |
@@ -54,7 +54,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 Use one row per provider and factor only after evidence exists.
 
-The Human desired Stripe direction and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by this Candidate task.
+The Human + ChatGPT accepted Stripe strategy and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by strategy acceptance.
 
 | Provider | Factor | Raw assessment | Weight | Weighted score | Evidence location | Checked date | Conditions/notes |
 | --- | --- | --- | ---: | ---: | --- | --- | --- |

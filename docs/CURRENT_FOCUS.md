@@ -1,15 +1,16 @@
 # CURRENT_FOCUS.md
 
-## Current Focus — Stripe Feasibility and Web Payment Strategy Pivot Candidate Review
+## Current Focus — Stripe-first Web Payment Strategy Acceptance Complete
 
-- Candidate status: `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT integrated acceptance is pending.
-- Current next work: Human + ChatGPT integrated review of Stripe Feasibility and Web Payment Strategy Pivot Candidate.
-- Human working direction: Stripe Checkout is the desired strategic primary Web direction; desired methods are cards, Apple Pay, Google Pay, and PayPay for the JPY 980 tax-inclusive one-time Product.
+- Accepted status: `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`; Human + ChatGPT integrated Product/strategy acceptance completed on `2026-08-12`.
+- Current next work: The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
+- Accepted strategy direction: Stripe Checkout is the strategic primary Web direction to investigate and prepare; desired methods are credit/debit cards, Apple Pay, Google Pay, and PayPay for the JPY 980 tax-inclusive one-time Product.
 - Evidence boundary: Stripe feasibility is not established; Stripe account, contact, approval, and activation are absent; formal selection is incomplete; every desired method is unverified.
 - RevenueCat: not required for initial Web; future cross-platform synchronization is desired and unresolved.
 - PAY.JP: `paused_fallback_provider_direction`; readiness evidence is preserved, but PAY.JP readiness does not control current next work.
 - Payment Charter v1: `human_chatgpt_accepted_complete`; normative Provider-independent authority unchanged.
-- Implementation authority: `false`. Provider account/contact/API, DB/Supabase/migration, Runtime/LUNA, public-copy code/UI changes, Production Payment, PR, main merge, and release remain unauthorized.
+- Address/privacy decision: truthful private home/business-address disclosure to legitimate non-public counterparties is acceptable; routine public display of the Human's home address is not the default; a legally valid request-based or otherwise non-routine-public method is preferred where current law and actual Provider requirements permit. Exact Tokushoho implementation remains unresolved and evidence-gated. Virtual-office use is not currently required by Human preference; GMO remains on hold, not rejected.
+- Implementation authority: `false`. Production Payment authorization is also `false`. Provider account/contact/API, DB/Supabase/migration, Runtime/LUNA, public-copy code/UI changes, Production Payment, PR, main merge, and release remain unauthorized.
 
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:BEGIN -->
 ## Historical superseded focus — PAY.JP Production Application Readiness Planning
@@ -17,7 +18,7 @@
 - Current product direction: Web first, JPY 980 one-time purchase, PAY.JP as the primary Web direction, followed by paid Web validation, iOS / Apple IAP + RevenueCat, then Android / Google Play Billing + RevenueCat.
 - Canonical strategy: `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`.
 - Safety baseline: the explicit `2026-08-10` Human decision records the Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Task-local P6 artifacts retaining pre-acceptance `pending_human_*` labels remain immutable historical records and do not establish Payment or final JPY 980 readiness.
-- Historical snapshot at `2026-08-10`: the PAY.JP readiness plan was then recorded as the next formal work. It is now superseded by the current Stripe Candidate review above.
+- Historical snapshot at `2026-08-10`: the PAY.JP readiness plan was then recorded as the next formal work. It is now superseded by the accepted Stripe-first strategy and current next-work authority above.
 - PAY.JP readiness status: `payjp_production_application_readiness_planning_ready_pending_human_chatgpt_review`.
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`.
 - Human + ChatGPT Charter acceptance: complete on `2026-08-12`. Candidate commits remain historical lineage; acceptance is not implementation or production authority.
@@ -28,7 +29,7 @@
 - Formal PAY.JP evidence status remains separate: production-use application Not submitted / Not approved / not formally selected; authoritative application/review evidence is absent. Account creation and application submission are unauthorized. The historical inquiry draft is optional support clarification only and is not preapproval.
 - Downstream review-only legal UI synchronization is a separate unauthorized implementation follow-up before public paid release.
 
-This block records the superseded PAY.JP-primary planning snapshot. It is historical evidence only and does not displace the Stripe strategy Candidate review above.
+This block records the superseded PAY.JP-primary planning snapshot. It is historical evidence only and does not displace the accepted Stripe-first strategy above.
 <!-- PAYMENT-PLATFORM-MONETIZATION-2026-08-10:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
@@ -349,7 +350,7 @@ Checkpoint B aligns the authorized saved-artifact and Brand Foundation labels to
 
 ## Next Work
 
-Payment Charter v1 in `docs/payment/PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`, and implementation authority remains `false`. The current next work is Human + ChatGPT integrated review of the Stripe strategy Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and every desired payment method remain unverified or absent. PAY.JP is a paused fallback, and its preserved readiness blockers are not current Stripe-track blockers. Provider operations, DB/Supabase/migration, Runtime/LUNA, downstream public-copy code/UI changes, Production Payment, PR, main merge, and release remain unauthorized.
+Payment Charter v1 in `docs/payment/PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`, and implementation authority remains `false`. The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and every desired method remains unverified. PAY.JP is a paused fallback. Provider operations, DB/Supabase/migration, Runtime/LUNA, downstream public-copy code/UI changes, Production Payment, PR, main merge, and release remain unauthorized.
 
 # Historical record: M2-P2-B1-B2-B0 accepted execution package
 

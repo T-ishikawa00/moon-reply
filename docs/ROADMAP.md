@@ -10,9 +10,9 @@ Earlier documents considered semi-manual validation, semi-manual Web delivery, a
 
 ### Long-term platform and monetization sequence
 
-The Human-approved platform/product sequence, with the current unaccepted Provider Candidate explicitly qualified, is:
+The Human-approved platform/product sequence, with the accepted Stripe-first strategy kept separate from Provider feasibility and selection, is:
 
-1. Phase A — Web / desired Stripe Checkout direction under Candidate review / cards, Apple Pay, Google Pay, and PayPay / JPY 980 one-time purchase;
+1. Phase A — Web / accepted Stripe Checkout strategic direction / credit/debit cards, Apple Pay, Google Pay, and PayPay / JPY 980 tax-inclusive one-time purchase;
 2. Phase B — real-customer paid Web validation;
 3. Phase C — iOS / Apple In-App Purchase / RevenueCat;
 4. Phase D — Android / Google Play Billing / RevenueCat;
@@ -44,9 +44,9 @@ Current status:
 - M2-P2-A-R1 Successor Tool Allowlist Correction is Human / ChatGPT accepted and complete at `deff429e45a411f0d6c6d5bd3f199adca994ebb5`. M2-P2-A Zero-Cost Token & Cost Estimator is Human / ChatGPT accepted and complete at accepted estimator implementation commit `2e2e0cc4c57c46320d56aa986055f65187aa6aee`. The accepted evidence covers exactly six scenarios, deterministic dry-run envelopes, oracle isolation, synthetic upstream profiles, LOW / CENTRAL / HIGH estimate bands, no-cache conservative costs, deterministic JSON and Markdown reports, and generated-report hash `0e79050e8f44d91b2329e92e97fd91b833c0a37bda397bb16b20132beb4ec84f`. M2-P2-B0-R1 is accepted and complete at `a757e7f28affe29a423ff817872a1a7f650a7fd2`. M2-P2-B0-R2 is accepted and complete at `88b456622950622c35510f4b3b9d19abbd9ec8da`; it preserves the accepted historical 16-file snapshot and makes all M2-P2-A scope gates pass without adding B0 to that snapshot. The exact 18-file M2-P2-B0 contract implementation at `cf75679f2d116132f7519256cd762ba1a51a0af9` has completed automated validation and Human / ChatGPT final review and is accepted and complete. M2-P2-B1-A-R1 Successor Tool Allowlist Correction and M2-P2-B1-A are Human / ChatGPT accepted and complete. M2-P2-B1-B1-R1 is Human / ChatGPT accepted and complete at correction commit `2f9fa4f2aa0616a03ec716bf0c09e1d0e0df038e`; M2-P2-B1-B1 is Human / ChatGPT accepted and complete at implementation commit `efdf10067fb3c1b4072c891ab5f3f1d2c949de55`. M2-P2-B1-B2-A-R1 is Human / ChatGPT accepted and complete at correction commit `fa222917f0e6ff4a4e25d11da239717c062af6d0`; M2-P2-B1-B2-A Dormant OpenAI Live Binding Foundation is Human / ChatGPT accepted and complete at implementation commit `76ceb4a25cc565e84b9537bd25dbe703f87bd342`. Its HTTPS executor and environment-secret provider remain dormant: live and paid authorization are false, the approval record is absent, actual environment reads, secret resolutions, HTTPS requests, and provider calls are zero, and API spend is USD 0. M2-P2-B1-B2-B paid calibration execution remains unauthorized and not started.
 - M2-P2-B1-B2-B0-R1 historical-scope and execution-boundary correction is Human / ChatGPT accepted and complete at `30c05ca2c383641676a3c1fde680e2e83d44397f`. M2-P2-B1-B2-B0 One-Time Paid Calibration Execution Package is Human / ChatGPT accepted and complete at `e8b369baa14ff417fed19d75f31c733dd5c8d240`. M2-P2-B0 through M2-P2-B1-B2-B0 are retained as paused internal QA tooling and are not the active product path. M2-P2-B1-B2-B1 true external approval creation and paid execution remain unauthorized and not started.
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
-- Stripe Checkout is the Human desired strategic primary Web direction under an unaccepted Candidate. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility are unestablished. PAY.JP is a paused fallback with preserved evidence. Strategy, Candidate acceptance, Provider evidence/approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
+- Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is a paused fallback with preserved evidence. Strategy acceptance, Provider evidence/approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. Delivery/Recovery Email Verification is accepted as `accepted_required_control_with_trusted_session_reuse`. The next formal Payment work is Human + ChatGPT integrated review of the Stripe strategy Candidate. No Provider account/contact/API, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
+- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; implementation authority remains `false`. The Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. Delivery/Recovery Email Verification is accepted as `accepted_required_control_with_trusted_session_reuse`. The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. No Provider account/contact/API, production backend connection, payment, production OpenAI/Supabase connection, email, public release, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -159,15 +159,15 @@ Goal: use final intended URLs and an honest service description to obtain provid
 Future conceptual sequence:
 
 1. Payment Charter v1 remains accepted and independent from provider approval.
-2. Human + ChatGPT review and accept or revise the Stripe strategy Candidate.
-3. Under separate authorization, align truthful public copy without hiding 鑑定ノート or AI use.
-4. Obtain actual Stripe account/business/site/category/Live Payment and cards/Apple Pay/Google Pay/PayPay evidence.
+2. Stripe-first strategy Acceptance Sync is complete on `2026-08-12`; no future step below is complete.
+3. Under separate authorization, align truthful Customer-facing/public copy without hiding 鑑定ノート or AI use.
+4. Prepare for and, under separate authorization, obtain actual Stripe account/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence; stable review URLs and public legal conditions must exist before any Provider/site review that requires them.
 5. Return to explicit Human launch review if any desired method is unavailable; PayPay unavailable is not automatic approval to omit it.
 6. Update comparison and scorecard only from authoritative evidence.
 7. Human formally selects the Provider.
 8. Under a separately authorized task, implement only the selected Provider in sandbox/test mode.
-9. Complete Production QA and obtain separate Production Payment authorization.
-10. Proceed to Soft Launch only after all applicable gates pass.
+9. Complete Production QA; Production QA does not authorize Production Payment, which requires separate authorization.
+10. Proceed to Soft Launch only after separate Production Payment authorization and all other applicable gates pass.
 
 A generic support response, marketing page, silence, or SDK availability is not Stripe approval. PAY.JP fallback reactivation requires current-source review and separate Human authority.
 

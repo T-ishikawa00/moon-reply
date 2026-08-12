@@ -4,11 +4,11 @@
 >
 > **NO INQUIRY HAS BEEN SENT BY TASK 18C**
 
-Current strategy context: Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, API, or implementation.
+Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, API, or implementation.
 
 ## Stripe future evidence acquisition — before any separately authorized action
 
-- [ ] Candidate integrated review completed
+- [x] Human + ChatGPT Stripe-first strategy acceptance completed on `2026-08-12`; Product/strategy authority only
 - [ ] Exact evidence-acquisition route explicitly authorized by Human
 - [ ] Actual public service wording truthfully discloses AI use, 鑑定ノート terminology, methods not used, and non-guarantees
 - [ ] Actual site and legal/publication state accurately represented
@@ -17,7 +17,7 @@ Current strategy context: Stripe Checkout is the desired strategic primary direc
 - [ ] Exact submitted facts and sensitive-evidence storage plan approved
 - [ ] Human explicitly authorizes any Stripe account creation, submission, or contact
 
-No Stripe item is complete in this Candidate task. Conceptual lanes STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 remain Not started.
+Only the strategy-acceptance prerequisite above is complete. Every future evidence-acquisition item remains unchecked; conceptual lanes STRIPE-FEAS-001 and STRIPE-ACCOUNT-001 remain Not started.
 
 ## PAY.JP paused fallback — before any future submission after reactivation
 

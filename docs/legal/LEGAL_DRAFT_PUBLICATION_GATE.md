@@ -25,7 +25,9 @@
 - 最新の公式一次情報、実際のProduct/Provider挙動、最終公開文言およびCustomer-rightsのreviewは必須とし、materialな未解決法的義務はblockerとして残す
 - 専門家相談は任意のescalationであり、未実施それ自体は公開、Paid LaunchまたはProduction Paymentのblockerではない。内部reviewは法的適合性を保証しない
 
-Current strategy boundary on `2026-08-12`: Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility/account/approval/activation/formal selection and method eligibility are not established. PAY.JP is paused fallback. PAY.JP-specific operator/address/opening-notification/security preparation is not current work, but every operator, address, phone, support-email, Tokushoho, and publication decision below remains unresolved and must be completed before the applicable future review or Paid Launch. Stripe does not remove these obligations.
+Current strategy boundary on `2026-08-12`: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and method eligibility is unverified. PAY.JP is paused fallback. PAY.JP-specific operator/address/opening-notification/security preparation is not current work, but every remaining operator, address, phone, support-email, Tokushoho, and publication completion item below remains unresolved and must be completed before the applicable future review or Paid Launch. Stripe does not remove these obligations.
+
+Human address/privacy direction is recorded but does not complete this gate: truthful private home/business-address disclosure to legitimate non-public counterparties is acceptable; routine public display of the Human's home address to general Customers is not desired as the default; and a legally valid request-based or otherwise non-routine-public method is preferred where current law and actual Provider requirements allow. Exact Tokushoho implementation remains unresolved and current-source/evidence-gated. Virtual-office use is not currently required by Human preference; GMO remains on hold, not rejected, and may be reconsidered if actual evidence makes it useful or necessary.
 
 ## Provider and readiness supporting documents
 
@@ -41,7 +43,7 @@ Current strategy boundary on `2026-08-12`: Stripe Checkout is the desired strate
 - Provider scorecard: `../payment/PROVIDER_DECISION_SCORECARD.md`
 - Provider selection gate: `../payment/PAYMENT_PROVIDER_DECISION_GATE.md`
 
-StripeはCandidate review pending / feasibility not established / account absent / approval・activation absent / formal selection incomplete / method eligibility unverifiedである。PAY.JP production-use applicationはNot submittedで、PAY.JPはpaused fallback / Not approved / Not selected / Not scoredである。既存Provider artifactsまたはCandidateはlegal publication approvalではない。
+Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established / account absent / contact none / approval・activation absent / formal selection incomplete / method eligibility unverifiedである。PAY.JP production-use applicationはNot submittedで、PAY.JPはpaused fallback / Not approved / Not selected / Not scoredである。既存Provider artifactsまたはstrategy acceptanceはlegal publication approvalではない。
 
 ## 1. Operator completion
 

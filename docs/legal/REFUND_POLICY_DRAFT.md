@@ -14,7 +14,7 @@
 
 ---
 
-Provider context on `2026-08-12`: Stripe Checkout is the desired strategic primary Web direction under a Candidate pending Human + ChatGPT integrated review. Stripe feasibility, account, approval/activation, formal selection, refund capability, fee treatment, and completion semantics are not established. PAY.JP is paused fallback. This context does not change the accepted Provider-independent normal Product refund and Payment Integrity remediation principles below and does not authorize any refund operation.
+Provider context on `2026-08-12`: Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. This Product/strategy acceptance is not Provider selection. Stripe feasibility, account/contact, approval/activation, formal selection, refund capability, fee treatment, and completion semantics are not established. PAY.JP is paused fallback. This context does not change the accepted Provider-independent normal Product refund and Payment Integrity remediation principles below and does not authorize any refund operation.
 
 ## 1. 基本方針
 

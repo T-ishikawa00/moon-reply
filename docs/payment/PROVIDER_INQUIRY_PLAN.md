@@ -10,7 +10,7 @@ Task 18A did not authorize a Provider account, application submission, inquiry, 
 
 Task 18C prepared historical drafts, evidence logging, scoring rules, and a decision gate only. It did not authorize an account, application submission, inquiry, provider selection, or Payment implementation.
 
-The `2026-08-12` Human working direction names Stripe Checkout as the desired strategic primary Web direction and cards, Apple Pay, Google Pay, and PayPay as desired initial methods. The transition is an unaccepted Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and all method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its preserved application readiness and historical inquiry evidence do not control current next work.
+The `2026-08-12` Human + ChatGPT accepted Product/strategy direction names Stripe Checkout as the strategic primary Web direction to investigate and prepare, with credit/debit cards, Apple Pay, Google Pay, and PayPay as desired initial methods. Stripe feasibility/account/contact/approval/activation/formal selection and all method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its preserved application readiness and historical inquiry evidence do not control current next work.
 
 ---
 
@@ -26,7 +26,7 @@ No Stripe account has been created, no Stripe contact or evidence acquisition ha
 
 ## 1. Provider-specific evidence routes
 
-1. Stripe desired direction: Candidate integrated review -> separately authorized truthful public-copy alignment -> separately authorized actual account/business/site/category/Live Payment and method evidence -> Human formal selection.
+1. Stripe accepted strategic direction: completed Acceptance Sync -> separately authorized truthful Customer-facing/public-copy alignment -> separately authorized actual account/business/site/category/Live Payment and method evidence -> Human formal selection.
 2. PAY.JP paused fallback: only after explicit Human reactivation -> current-source re-review -> readiness -> separate submission authority -> application/review evidence.
 3. KOMOJU, STORES, Square, or another provider: fallback only under separate review and its verified evidence route.
 
@@ -115,13 +115,13 @@ Verbal guidance, marketing copy, a blank application form, or an optional suppor
 
 ### Stripe desired-direction path
 
-1. Complete Human + ChatGPT integrated review of the Candidate.
-2. Under separate authority, align actual public wording without disguising AI use or 鑑定ノート.
-3. Under another explicit authority, obtain actual Stripe account/business/site/category/Live Payment and method-specific evidence.
+1. Stripe-first strategy Acceptance Sync is complete on `2026-08-12`; this is not Provider approval or selection.
+2. Under separate authority, align truthful Customer-facing/public wording without disguising AI use or 鑑定ノート.
+3. Prepare evidence work, then under another explicit authority obtain actual Stripe account/business/site/category/Live Payment and method-specific evidence; stable review URLs/public legal conditions must exist before any Provider/site review that requires them.
 4. Preserve exact submitted facts, outcomes, conditions, and evidence.
 5. Return to explicit Human launch review if any desired method is unavailable.
 6. Human formally selects a Provider only after the decision gate passes.
-7. Start sandbox/test implementation only under a separate authorized task.
+7. Start sandbox/test implementation only under a separate authorized task; Production QA does not authorize Production Payment, and Soft Launch requires separate Production Payment authorization.
 
 ### PAY.JP and other fallback path
 

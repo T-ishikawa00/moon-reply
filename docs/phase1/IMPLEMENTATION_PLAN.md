@@ -4,7 +4,7 @@
 
 This document aligns implementation planning with the authoritative `docs/ROADMAP.md` delivery sequence.
 
-Current Payment planning authority on `2026-08-12`: the Stripe Feasibility and Web Payment Strategy Pivot Candidate is `stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review`. The next Payment work is Human + ChatGPT integrated Candidate review. Stripe feasibility/account/contact/approval/activation/formal selection and method eligibility are unestablished; PAY.JP is paused fallback; implementation authority is `false`.
+Current Payment planning authority on `2026-08-12`: the Stripe-first strategy is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` at the Product/strategy level. The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; PAY.JP is paused fallback; implementation and Production Payment authority are `false / false`.
 
 Task 18C-R3 is accepted by Human at commit `54e5f2dba518eb13ab2fb1d7f645799be65fd1e8`.
 
@@ -87,7 +87,7 @@ Implementation deploys only the payment-free review site. Validation covers stab
 
 Planning/specification must freeze the truthful service description, provider-specific review route, evidence format, provider fallback order, comparison criteria, and Human decision gates. No account, contact, submission, or implementation is authorized by planning.
 
-Current conceptual sequence is Candidate integrated review -> separately authorized truthful public-positioning sync -> separately authorized Stripe account/business/site/category/Live Payment and cards/Apple Pay/Google Pay/PayPay evidence -> explicit Human review if any desired method is unavailable -> Human formal Provider selection. PAY.JP is preserved paused fallback and follows its application route only after explicit reactivation and current-source re-review.
+Current conceptual sequence is completed Stripe-first strategy Acceptance Sync -> separately authorized truthful Customer-facing/public-copy alignment -> separately authorized Stripe account/business/site/category/Live Payment and credit/debit-card/Apple Pay/Google Pay/PayPay evidence -> explicit Human review if any desired method is unavailable -> Human formal Provider selection. Stable review URLs/public legal conditions must exist before any Provider/site review requiring them. PAY.JP is preserved paused fallback and follows its application route only after explicit reactivation and current-source re-review.
 
 Validation confirms authoritative approval/review evidence and all known application/site conditions. Human selects the provider and accepts the milestone.
 
@@ -127,9 +127,9 @@ Verification confirms payment evidence, internal purchase record, exactly one ge
 
 The dependency chain is strict:
 
-`Stripe Candidate review → separately authorized public-positioning sync → Stripe feasibility evidence → Human formal Provider selection → separately authorized sandbox/test implementation → Production QA → separate Production authorization → Soft Launch`
+`Stripe-first strategy Acceptance Sync (complete) → separately authorized truthful Customer-facing/public-copy alignment → separately authorized Stripe feasibility evidence → Human formal Provider selection → separately authorized sandbox/test implementation → Production QA → separate Production Payment authorization → Soft Launch`
 
-No implementation item in this Payment sequence is complete. No Provider account/contact is authorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment cannot be treated as production authorization. Production cannot precede E2E and failure-operation evidence.
+No implementation item in this Payment sequence is complete. No Provider account/contact is authorized. Provider-specific Payment implementation cannot precede Human formal selection and separate implementation authorization. Sandbox payment and Production QA cannot be treated as Production Payment authorization. Soft Launch requires separate Production Payment authorization and cannot precede E2E and failure-operation evidence.
 
 ## 6. One-Task / One-Commit / Human-Review Rule
 
@@ -142,6 +142,6 @@ No implementation item in this Payment sequence is complete. No Provider account
 
 ## 7. Current Payment Gate and Next Task
 
-Milestone 1 task snapshots are historical and do not control the current Payment task. The current next task is Human + ChatGPT integrated review of the Stripe Feasibility and Web Payment Strategy Pivot Candidate.
+Milestone 1 task snapshots are historical and do not control the current Payment task. The current next task is separately authorized truthful Customer-facing/public-copy alignment. Stripe feasibility evidence preparation may follow, but actual evidence acquisition remains separately authorized and evidence-gated.
 
-Candidate review does not authorize truthful-public-copy implementation, Provider evidence acquisition, account/contact, sandbox/test implementation, Production Payment, deployment, or release. Each future step requires its own authority and evidence in the sequence above.
+Strategy acceptance does not authorize truthful-public-copy implementation, Provider evidence acquisition, account/contact, sandbox/test implementation, Production Payment, deployment, or release. Each future step requires its own authority and evidence in the sequence above.

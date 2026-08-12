@@ -2,7 +2,7 @@
 
 > **INTERNAL SELECTION GATE**
 >
-> **STRIPE IS THE DESIRED STRATEGIC PRIMARY DIRECTION UNDER AN UNACCEPTED CANDIDATE**
+> **STRIPE STRATEGY IS ACCEPTED; STRIPE IS NOT APPROVED OR FORMALLY SELECTED**
 >
 > **NO PROVIDER HAS PASSED THIS FORMAL EVIDENCE-SELECTION GATE**
 >
@@ -10,9 +10,9 @@
 
 ## Strategy versus evidence state
 
-`PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` records Stripe Checkout as the Human desired strategic primary Web direction under a Candidate pending Human + ChatGPT integrated review. That direction does not prove Stripe feasibility, account approval/activation, category acceptance, merchant eligibility, payment-method availability, webhook/refund behavior, or production approval and does not satisfy this gate.
+`PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` records Stripe Checkout as the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. That Product/strategy acceptance does not prove Stripe feasibility, account/contact, approval/activation, category acceptance, merchant eligibility, payment-method availability, webhook/refund behavior, or production approval and does not satisfy this gate.
 
-Desired initial Web methods are cards, Apple Pay, Google Pay, and PayPay. Each remains unverified. If any desired method is unavailable, the project returns to explicit Human launch review; PayPay unavailable is not automatic approval to launch without it. PAY.JP is paused fallback, and its preserved readiness route does not control current next work.
+Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and PayPay. Each remains unverified. If any desired method is unavailable, the project returns to explicit Human launch review; PayPay unavailable is not automatic approval to launch without it. PAY.JP is paused fallback, and its preserved readiness route does not control current next work.
 
 ## Required before provider selection
 
@@ -32,7 +32,7 @@ Desired initial Web methods are cards, Apple Pay, Google Pay, and PayPay. Each r
 - [ ] Provider comparison updated
 - [ ] Human explicitly approves selection
 
-For Stripe, the gate additionally requires accurate service disclosure including 鑑定ノート and AI use; actual account/business/site/category/Live Payment outcome; cards, Apple Pay, Google Pay, and PayPay evidence; Checkout/product/price, test/live, webhook, refund/dispute, statement-descriptor, Customer/Purchase/Request linkage, fees/settlement/reserve/hold, and future RevenueCat evidence where applicable. Stripe currently has no feasibility evidence, account, approval, activation, or formal selection. No generic marketing page, silence, or SDK availability passes this gate.
+For Stripe, the gate additionally requires accurate service disclosure including 鑑定ノート and AI use; actual account/business/site/category/Live Payment outcome; credit/debit-card, Apple Pay, Google Pay, and PayPay evidence; Checkout/product/price, test/live, webhook, refund/dispute, statement-descriptor, Customer/Purchase/Request linkage, fees/settlement/reserve/hold, and future RevenueCat evidence where applicable. Stripe currently has no feasibility evidence, account, contact, approval, activation, or formal selection. No generic marketing page, silence, or SDK availability passes this gate.
 
 For PAY.JP if separately reactivated, the first item requires actual production-use application/review outcome and all applicable PAY.JP/card-company conditions. PAY.JP is paused, `Not submitted`, `Not approved`, and `Not selected`.
 
@@ -54,4 +54,4 @@ Even after every item is completed and Human approves a provider:
 - adding an SDK, checkout, API route, server action or Webhook is not authorized by this document
 - future price, subscription, coin, point or ticket changes require separate review and may require provider re-review
 
-The Stripe strategy Candidate completes none of the selection checks above. Stripe remains feasibility not established, account absent, approval/activation absent, formal selection incomplete, and Not scored. PAY.JP remains paused fallback, Not submitted, Not approved, not selected, and Not scored. Historical/fallback artifacts do not establish approval.
+Stripe-first Product/strategy acceptance completes none of the selection checks above. Stripe remains feasibility not established, account absent, contact none, approval/activation absent, formal selection incomplete, and Not scored. PAY.JP remains paused fallback, Not submitted, Not approved, not selected, and Not scored. Strategy acceptance and historical/fallback artifacts do not establish approval.

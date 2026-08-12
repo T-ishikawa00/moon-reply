@@ -26,14 +26,14 @@ The initial MVP has no free complete reading, ad-supported reading, advertising,
 
 Initial Web direction:
 
-- Stripe Checkout as the desired strategic primary direction under an unaccepted Candidate
+- Stripe Checkout as the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare
 - supported credit/debit cards
 - Apple Pay
 - Google Pay
 - PayPay
 - JPY 980 including tax for every enabled initial method
 
-Candidate review does not establish Stripe feasibility, account, approval/activation, formal selection, or method eligibility. Cards, Apple Pay, Google Pay, and PayPay each require actual account/category/method evidence. No desired method may be silently removed; PayPay unavailable returns the project to explicit Human launch review.
+Strategy acceptance does not establish Stripe feasibility, account/contact, approval/activation, formal selection, or method eligibility. Credit/debit cards, Apple Pay, Google Pay, and PayPay each require actual account/category/method evidence. No desired method may be silently removed; PayPay unavailable returns the project to explicit Human launch review.
 
 RevenueCat is not required for initial Web fulfillment. Future cross-platform synchronization is desired and unresolved. PAY.JP is paused fallback with preserved evidence. Payment Charter acceptance is complete, while Provider evidence, formal selection, implementation authorization, and Production Payment authorization remain separate and incomplete.
 
@@ -120,9 +120,9 @@ No payment, webhook, generation, refund, notification, or state-machine implemen
 
 ---
 
-## 5. Stripe Candidate Evidence Boundary and PAY.JP Historical Clarification Copy
+## 5. Accepted Stripe Strategy / Evidence Boundary and PAY.JP Historical Clarification Copy
 
-Current status: the next formal work is Human + ChatGPT integrated review of the Stripe strategy Candidate. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. No Provider account/contact is authorized. PAY.JP is paused fallback; its production-use application remains Not submitted and it is Not approved or selected.
+Current status: The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. No Provider account/contact is authorized. PAY.JP is paused fallback; its production-use application remains Not submitted and it is Not approved or selected.
 
 PAY.JP provides no pre-application screening. The following copy is preserved as an unsent historical fallback artifact and may be adapted only after separate reactivation/contact authority. It is not send-ready, not a current prerequisite, and not approval evidence.
 

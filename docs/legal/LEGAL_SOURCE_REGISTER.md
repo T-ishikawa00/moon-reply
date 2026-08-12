@@ -156,7 +156,7 @@ Current official evidence checked on `2026-08-12`:
 
 Project boundary:
 
-- Stripe Checkout is only the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review.
+- Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare; strategy acceptance is not feasibility, approval, activation, or formal selection.
 - No Stripe account, contact, approval, activation, or formal selection is recorded.
 - 鑑定ノート, AI use, actual service behavior, and non-guarantees must not be hidden or disguised.
 
@@ -195,8 +195,9 @@ Project boundary:
 
 - `Stripe private KYC/business-address disclosure != Customer-facing public Tokushoho disclosure`.
 - The public-disclosure option does not remove truthful private facts required by Stripe or any applicable legal obligation.
-- The exact Human address-disclosure choice and virtual-office need, suitability, and Stripe acceptance remain unresolved.
-- GMO remains on hold, not rejected. The Candidate does not conclude that a virtual office is unnecessary.
+- Human accepts truthful private home/business-address disclosure to Stripe KYC, banks, tax/public authorities, and other legitimately required non-public counterparties. Routine public display of the Human's home address to general Customers is not desired as the default; where current law and actual Provider requirements allow, a legally valid request-based or otherwise non-routine-public disclosure method is preferred.
+- Exact Tokushoho disclosure implementation remains unresolved and current-source/evidence-gated. Stripe does not guarantee that request-based disclosure is always sufficient and does not remove operator, address, phone, or publication obligations.
+- Virtual-office use is not currently required by Human preference. GMO remains on hold, not rejected; virtual-office use may be reconsidered if actual legal, Provider, postal, privacy, or operational evidence makes it useful or necessary.
 - No unverified virtual-office address may be used as the Stripe KYC/business address.
 - Operator, address, and phone handling requires later current-source review, actual Stripe evidence, applicable legal/publication review, and explicit Human review.
 

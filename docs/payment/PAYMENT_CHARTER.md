@@ -32,8 +32,8 @@ Current boundaries remain:
 | Boundary | State |
 | --- | --- |
 | Payment implementation authorized | `false` |
-| Stripe strategy | Desired Human direction under Candidate review; not feasibility, approval, activation, or selection |
-| Stripe feasibility / account / approval / activation | Not established / absent / absent / absent |
+| Stripe strategy | Human + ChatGPT accepted at Product/strategy level on `2026-08-12`; not feasibility, approval, activation, or selection |
+| Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Cards / Apple Pay / Google Pay / PayPay eligibility | Unverified |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Formal Provider evidence-gate selection | Not completed |
@@ -44,7 +44,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-The next formal work is Human + ChatGPT integrated review of the Stripe Feasibility and Web Payment Strategy Pivot Candidate. The Candidate is not accepted. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unestablished or absent. PAY.JP is paused fallback. Provider account/contact/API operations and Payment implementation authority remain `false`.
+The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`.
 
 ## 2. Initial Product Contract
 
@@ -546,17 +546,18 @@ No number is invented by this Charter.
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Professional review | Optional escalation; not completed; not a hard launch gate |
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
-| Stripe strategic direction Candidate | Pending Human + ChatGPT integrated review |
-| Stripe feasibility / account / approval / activation | Not established / absent / absent / absent |
+| Stripe strategic direction | `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` on `2026-08-12`; Product/strategy authority only |
+| Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
-| Cards / Apple Pay / Google Pay / PayPay | Unverified |
+| Cards / Apple Pay / Google Pay | Unverified |
+| PayPay | Desired; `Public Preview`; Unverified; Not enabled; Not approved; recheck-gated |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |
 | Payment Provider calls | Unauthorized |
 | Moon Reply-initiated refund command | Unimplemented and unauthorized; Provider/Store mechanics remain evidence-gated |
 | Production Payment | Unauthorized |
-| RevenueCat | Unauthorized |
+| RevenueCat initial Web / future synchronization | Not required and unconfigured / desired and unresolved; implementation unauthorized |
 | Apple IAP | Unauthorized |
 | Google Play Billing | Unauthorized |
 | Runtime / LUNA changes | Unauthorized |

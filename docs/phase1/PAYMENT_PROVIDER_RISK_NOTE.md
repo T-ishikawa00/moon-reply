@@ -10,7 +10,7 @@ Payment provider must not be assumed before checking category rules and review r
 
 ## 1. Current Policy
 
-Stripe Checkout is the desired strategic primary direction under a Candidate pending Human + ChatGPT integrated review. Do not treat that direction as Stripe feasibility, account approval/activation, formal selection, or implementation authority.
+Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Do not treat that Product/strategy acceptance as Stripe feasibility, account/contact, approval/activation, formal selection, or implementation authority.
 
 月の返事の内部公式定義は「AIを活用した恋愛メッセージ分析・判断支援デジタルレポート」である。一方、provider may interpret the complete service as:
 
@@ -29,7 +29,7 @@ Stripe's Japan-specific prohibited-business list includes Psychic services and f
 
 Potential candidates:
 
-- Stripe — desired strategic primary Candidate; no feasibility/account/approval/activation/formal selection evidence
+- Stripe — accepted strategic primary direction; no feasibility/account/contact/approval/activation/formal selection evidence
 - PAY.JP
 - KOMOJU
 - STORES
@@ -88,7 +88,7 @@ For any future Stripe evidence acquisition, this complete truthful description m
 
 ## 5. Implementation Rule
 
-Payment implementation must not start until Candidate review, truthful public-copy alignment, authoritative Stripe feasibility/method evidence, Human formal Provider selection, and separate implementation authorization are complete.
+Payment implementation must not start until truthful Customer-facing/public-copy alignment, authoritative Stripe feasibility/method evidence, Human formal Provider selection, and separate implementation authorization are complete. Production QA does not authorize Production Payment; Soft Launch requires separate Production Payment authorization.
 
 Payment implementation must remain provider-abstracted where practical.
 

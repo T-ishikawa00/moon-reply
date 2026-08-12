@@ -3,28 +3,36 @@
 ## 1. Status and authority
 
 - Candidate formulation date: 2026-08-12
-- Candidate status: stripe_feasibility_and_web_payment_strategy_pivot_candidate_ready_pending_human_chatgpt_review
+- Accepted status: stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete
 - Human working direction recorded: yes
-- Human + ChatGPT integrated Candidate acceptance: pending
+- Human + ChatGPT integrated Candidate acceptance: complete
+- Human + ChatGPT acceptance date: 2026-08-12
+- Authority established: Product/strategy only
+- Initial Web Product: one consultation = one assessment note / JPY 980 tax-inclusive / one-time purchase / no automatic renewal / no initial subscription / no Customer-facing coins or points
 - Stripe feasibility: not established
+- Stripe account: absent
+- Stripe contact: none
 - Stripe approval: absent
+- Stripe activation: absent
 - Stripe formal selection: incomplete
-- PayPay eligibility: not established
+- Cards / Apple Pay / Google Pay eligibility: unverified / unverified / unverified
+- PayPay: desired / Public Preview / unverified / not enabled / not approved / recheck-gated
+- PAY.JP: paused fallback / not approved / not selected
+- RevenueCat initial Web: not required / unconfigured
+- RevenueCat future synchronization: desired / unresolved
 - Payment implementation authorization: false
 - Production Payment authorization: false
 - Stripe/PAY.JP/RevenueCat account or Provider/API operations: 0
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-The next action is Human + ChatGPT integrated review of Stripe Feasibility and Web Payment Strategy Pivot Candidate.
+The next formal Payment work is a separately authorized truthful Customer-facing/public-copy alignment task. Stripe feasibility evidence preparation may follow, while actual account/business/site/category/Live Payment and method-specific evidence acquisition remains separately authorized and evidence-gated.
 
 The following states are intentionally separate:
 
-Human desired strategic direction
-!= this Candidate
-!= Candidate acceptance
+Human + ChatGPT accepted Product/strategy direction
 != Stripe feasibility evidence
-!= Stripe account approval or activation
+!= Stripe account, contact, approval, or activation
 != formal Provider selection
 != Payment implementation authorization
 != Production Payment authorization.
@@ -102,7 +110,7 @@ The desired initial methods are:
 - Google Pay;
 - PayPay.
 
-PayPay is a deliberate Product decision. The Human working direction accepts its materially higher variable transaction cost as a conversion and revenue tradeoff. Exact rates, taxes, settlement, and account-specific pricing are not frozen by this Candidate. No monthly fixed-cost justification is assumed without current account evidence. Actual availability remains account-, category-, method-, and evidence-gated.
+PayPay is a deliberate Product decision. The accepted strategy accepts its materially higher variable transaction cost as a conversion and revenue tradeoff. Exact rates, taxes, settlement, and account-specific pricing are not frozen by this accepted document. No monthly fixed-cost justification is assumed without current account evidence. Actual availability remains account-, category-, method-, and evidence-gated.
 
 Stripe's official documentation checked on 2026-08-12 labels PayPay `Public Preview`. It describes PayPay as Japan/Japanese-yen, Customer-initiated and Customer-authenticated, single-use/non-recurring, and supported by Checkout in payment mode; Checkout subscription mode is not supported. Stripe-wide restrictions apply, and PayPay may impose additional category restrictions at its discretion.
 
@@ -218,6 +226,8 @@ Conceptual Provider scope must be capable of representing:
 
 RevenueCat is a verification, normalization, and management layer where used. It is neither the underlying economic rail nor Moon Reply Product authority. This is a conceptual map, not a literal database enum or schema.
 
+The accepted Product-authority sequence is `External economic rail -> authoritative verification -> Moon Reply Purchase -> Assessment Grant -> Logical Assessment -> Report`. Neither Stripe nor RevenueCat replaces Moon Reply Purchase, Assessment Grant, Logical Assessment, or Report authority.
+
 Payment Charter invariants remain unchanged:
 
 - Safety before Payment;
@@ -282,7 +292,7 @@ The controlling boundary is:
 
 `Stripe private KYC/business-address disclosure != Customer-facing public Tokushoho disclosure`
 
-The public-disclosure option does not remove Stripe's requirement for truthful private facts or any applicable legal obligation. The exact Human address-disclosure choice remains unresolved. Virtual-office need, suitability, and acceptance remain unresolved; GMO is on hold, not rejected. This Candidate does not conclude that a virtual office is unnecessary, and no unverified virtual-office address may be used as the Stripe KYC/business address. Operator, address, and phone handling require later current-source review, actual Stripe evidence, applicable legal/publication review, and explicit Human review.
+The public-disclosure option does not remove Stripe's requirement for truthful private facts or any applicable legal obligation. Human accepts truthful private home/business-address disclosure to Stripe KYC, banks, tax/public authorities, and other legitimately required non-public counterparties. Routine public display of the Human's home address to general Customers is not desired as the default; where current law and actual Provider requirements allow, a legally valid request-based or otherwise non-routine-public disclosure method is preferred. Exact Tokushoho implementation remains unresolved and current-source/evidence-gated. Stripe does not guarantee request-based disclosure will always be sufficient and does not remove operator, address, phone, or publication obligations. Virtual-office use is not currently required by Human preference; GMO is on hold, not rejected, and may be reconsidered if actual legal, Provider, postal, privacy, or operational evidence makes it useful or necessary. No unverified virtual-office address may be used as the Stripe KYC/business address.
 
 ## 14. Downstream public-copy alignment
 
@@ -348,8 +358,8 @@ The following remain unresolved:
 - whether Stripe support or sales is contacted before account activation;
 - actual Stripe business category;
 - actual Stripe private KYC/business-address requirements and accepted evidence;
-- exact Customer-facing Tokushoho operator/address/phone disclosure method;
-- virtual-office need, suitability, Provider acceptance, and Human decision;
+- exact Customer-facing Tokushoho operator/address/phone disclosure implementation;
+- whether actual legal, Provider, postal, privacy, or operational evidence makes virtual-office use useful or necessary; current Human preference does not require it;
 - exact enabled payment-method set;
 - exact Launch decision if PayPay is unavailable;
 - exact Checkout field limits and rendering;
@@ -371,7 +381,7 @@ No resolution is invented here.
 | Item | State |
 | --- | --- |
 | Payment Charter v1 | Human + ChatGPT accepted complete; human_chatgpt_accepted_complete |
-| Stripe strategic primary direction | Human working direction; Candidate pending review |
+| Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on 2026-08-12 |
 | Stripe feasibility | Not established |
 | Stripe account | Absent |
 | Stripe contact | None |
@@ -381,9 +391,9 @@ No resolution is invented here.
 | Apple Pay eligibility | Unverified |
 | Google Pay eligibility | Unverified |
 | PayPay eligibility | Unverified |
-| PayPay lifecycle / enablement | Desired; Public Preview; not enabled; not approved |
-| Stripe private KYC vs public Tokushoho | Separate evidence domains; exact disclosure and address decisions unresolved |
-| Virtual office / GMO | Unresolved; GMO on hold, not rejected |
+| PayPay lifecycle / enablement | Desired; Public Preview; unverified; not enabled; not approved; recheck-gated |
+| Stripe private KYC vs public Tokushoho | Separate evidence domains; private truthful disclosure accepted; routine public home-address display not default; exact Tokushoho method unresolved |
+| Virtual office / GMO | Not currently required by Human preference; GMO on hold, not rejected; evidence-based reconsideration available |
 | PAY.JP | Paused fallback; not approved; not selected |
 | RevenueCat initial Web use | Not required; unconfigured |
 | RevenueCat future synchronization | Desired; unresolved |

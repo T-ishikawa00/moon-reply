@@ -26,7 +26,7 @@ The initial MVP does not use a free complete first reading, ad-supported complet
 
 This Payment Policy does not prohibit or govern external marketing or paid customer acquisition.
 
-Stripe Checkout is the desired strategic primary Web direction under a Candidate that remains pending Human + ChatGPT integrated review. Desired initial methods are credit/debit cards, Apple Pay, Google Pay, and PayPay, all for the same JPY 980 tax-inclusive one-time Product. No method is treated as enabled or eligible without actual Stripe evidence.
+Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Desired initial methods are credit/debit cards, Apple Pay, Google Pay, and PayPay, all for the same JPY 980 tax-inclusive one-time Product. No method is treated as enabled or eligible without actual Stripe evidence.
 
 Stripe feasibility, account, approval, activation, and formal selection are absent or incomplete. PAY.JP is `paused_fallback_provider_direction`; its evidence remains preserved but does not control current next work. RevenueCat is not required for initial Web fulfillment and remains a desired, unresolved future cross-platform synchronization layer. No Provider account, contact, API, implementation, or Production Payment authority is created.
 
@@ -78,7 +78,7 @@ The Charter accepts initial Product refund principles and Payment Integrity inva
 
 ## Long-Term Direction
 
-- Web: desired Stripe Checkout direction under Candidate review; PAY.JP paused fallback
+- Web: accepted Stripe Checkout strategic direction; actual feasibility and method evidence pending; PAY.JP paused fallback
 - iOS: Apple IAP + RevenueCat
 - Android: Google Play Billing + RevenueCat
 - Subscription: future coexistence candidate only after repeat-demand evidence; one-time purchase is not automatically removed
