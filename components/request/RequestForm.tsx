@@ -651,8 +651,10 @@ function LocalPurchaseConfirmation({
       aria-labelledby="request-local-complete-title"
     >
       <p>お申し込み前の最終確認</p>
-      <h2 id="request-local-complete-title">{presentation.scopeLabel}</h2>
-      <span>{presentation.heading}</span>
+      <h2 id="request-local-complete-title">
+        恋のメッセージ鑑定ノート
+      </h2>
+      <span>{presentation.scopeLabel}</span>
       <dl>
         <MemoRow label="サービス" value="月の返事" />
         <MemoRow label="商品" value="恋のメッセージ鑑定ノート" />

@@ -12,6 +12,7 @@ const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 
 const baseline = "3d3888f53293231506838195c478fa2e1a88417f";
+const originalImplementation = "0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95";
 const expectedBranch = "codex/stripe-first-customer-public-copy-alignment";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedStripeStatus =
@@ -42,6 +43,7 @@ const exactScope = [
 ];
 const updatedPaths = exactScope.slice(0, 8);
 const newPaths = exactScope.slice(8);
+const correctionScope = [paths.requestForm, paths.verifier];
 
 if (path.resolve(process.cwd()) !== repositoryRoot) {
   throw new Error(`Run from repository root: ${repositoryRoot}`);
@@ -98,8 +100,12 @@ function readText(relativePath) {
   );
 }
 
+function readRefText(ref, relativePath) {
+  return normalizeText(runGit(["show", `${ref}:${relativePath}`]).toString("utf8"));
+}
+
 function readBaselineText(relativePath) {
-  return normalizeText(runGit(["show", `${baseline}:${relativePath}`]).toString("utf8"));
+  return readRefText(baseline, relativePath);
 }
 
 function sorted(values) {
@@ -114,12 +120,12 @@ function nulEntries(buffer) {
     .filter(Boolean);
 }
 
-function changedPathsFromBaseline() {
+function changedPathsFrom(reference) {
   const tracked = git(
     "diff",
     "--name-only",
     "--no-renames",
-    baseline,
+    reference,
     "--",
   )
     .split(/\r?\n/gu)
@@ -129,6 +135,10 @@ function changedPathsFromBaseline() {
     runGit(["ls-files", "--others", "--exclude-standard", "-z"]),
   );
   return sorted(new Set([...tracked, ...untracked]));
+}
+
+function changedPathsFromBaseline() {
+  return changedPathsFrom(baseline);
 }
 
 function countOccurrences(source, value) {
@@ -191,12 +201,34 @@ const changedPaths = changedPathsFromBaseline();
 const commitsAfterBaseline = Number(
   git("rev-list", "--count", `${baseline}..HEAD`),
 );
-const exactDirectBaseline =
+const currentHead = git("rev-parse", "HEAD");
+const originalParents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  originalImplementation,
+).split(/\s+/u);
+const currentParents = git("rev-list", "--parents", "-n", "1", "HEAD").split(
+  /\s+/u,
+);
+const originalImplementationState =
+  commitsAfterBaseline === 1 &&
+  currentHead === originalImplementation &&
+  originalParents.length === 2 &&
+  originalParents[1] === baseline;
+const directCorrectionState =
+  commitsAfterBaseline === 2 &&
+  currentHead !== originalImplementation &&
+  originalParents.length === 2 &&
+  originalParents[1] === baseline &&
+  currentParents.length === 2 &&
+  currentParents[1] === originalImplementation;
+const exactAnchoredLineage =
   git("merge-base", baseline, "HEAD") === baseline &&
-  ((commitsAfterBaseline === 0 && git("rev-parse", "HEAD") === baseline) ||
-    (commitsAfterBaseline === 1 && git("rev-parse", "HEAD^") === baseline));
+  (originalImplementationState || directCorrectionState);
 
-check("exact direct baseline", exactDirectBaseline);
+check("exact anchored implementation/correction lineage", exactAnchoredLineage);
 check("expected implementation branch", git("branch", "--show-current") === expectedBranch);
 check(
   "main and origin/main remain fixed",
@@ -206,6 +238,10 @@ check(
 check(
   "exact mutation manifest 9/9",
   isDeepStrictEqual(changedPaths, sorted(exactScope)),
+);
+check(
+  "exact correction manifest 2/2",
+  isDeepStrictEqual(changedPathsFrom(originalImplementation), sorted(correctionScope)),
 );
 check(
   "update/new classification 8/1",
@@ -383,11 +419,35 @@ const localConfirmation = sourceSlice(
   "export function RequestForm()",
   "LocalPurchaseConfirmation",
 );
+const purchaseHeadingMatches = [
+  ...localConfirmation.matchAll(
+    /<h2 id="request-local-complete-title">\s*([^<]+?)\s*<\/h2>/gu,
+  ),
+];
 check(
-  "LIVE confirmation preserves Safety-specific presentation rows",
+  "LIVE confirmation uses exact Product as the primary H2",
+  purchaseHeadingMatches.length === 1 &&
+    purchaseHeadingMatches[0][1].trim() === "恋のメッセージ鑑定ノート",
+);
+check(
+  "LIVE confirmation renders Safety scope as secondary copy",
+  localConfirmation.includes("<span>{presentation.scopeLabel}</span>") &&
+    countOccurrences(localConfirmation, "presentation.scopeLabel") === 1,
+);
+check(
+  "LIVE confirmation does not use Safety scope as the H2 value",
+  !/<h2[^>]*>[^<]*presentation\.scopeLabel[^<]*<\/h2>/gu.test(
+    localConfirmation,
+  ),
+);
+check(
+  "LIVE confirmation no longer renders presentation.heading",
+  !localConfirmation.includes("presentation.heading"),
+);
+check(
+  "LIVE confirmation preserves Safety-specific description rows",
   ordered(localConfirmation, [
     "presentation.scopeLabel",
-    "presentation.heading",
     "presentation.description",
     "presentation.draftAvailability",
     "form.relationship",
@@ -446,6 +506,23 @@ check(
 check(
   "LIVE confirmation uses the bounded 13-row information structure",
   countOccurrences(localConfirmation, "<MemoRow") === 13,
+);
+const originalRequestForm = readRefText(originalImplementation, paths.requestForm);
+const expectedCorrectedRequestForm = replaceOnce(
+  originalRequestForm,
+  `      <p>お申し込み前の最終確認</p>
+      <h2 id="request-local-complete-title">{presentation.scopeLabel}</h2>
+      <span>{presentation.heading}</span>`,
+  `      <p>お申し込み前の最終確認</p>
+      <h2 id="request-local-complete-title">
+        恋のメッセージ鑑定ノート
+      </h2>
+      <span>{presentation.scopeLabel}</span>`,
+  "LIVE confirmation hierarchy correction",
+);
+check(
+  "RequestForm correction changes only the authorized hierarchy",
+  requestForm === expectedCorrectedRequestForm,
 );
 check(
   "RequestForm change is confined to LocalPurchaseConfirmation",
