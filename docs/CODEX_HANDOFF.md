@@ -1,24 +1,25 @@
 # CODEX_HANDOFF.md
 
-## Active handoff — Stripe Feasibility Evidence Preparation Candidate
+## Active handoff — Stripe Feasibility Evidence Preparation Accepted
 
-- Task / branch / exact baseline: Stripe Feasibility Evidence Preparation Candidate / `codex/stripe-feasibility-evidence-preparation-candidate` / `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b`.
-- Exact mutation scope: docs-only `16` paths (`3` new / `13` updated); no code, UI, package, lock, config, migration, Provider, API, DB/Supabase, Runtime, or LUNA mutation.
-- Candidate formulation date / status: `2026-08-12` / `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`.
-- Human + ChatGPT Candidate acceptance: `pending`. This handoff must not be read as acceptance.
+- Task / branch / exact Acceptance Sync baseline: Stripe Feasibility Evidence Preparation Human + ChatGPT Acceptance Synchronization / `codex/stripe-feasibility-evidence-preparation-candidate` / `e2111fd88dffef4137ce3202f3805aef93c647cb`.
+- Exact Acceptance Sync mutation scope: docs-only `26` updated paths; `0` new / `0` deleted / `0` renamed; no code, UI, package, lock, config, migration, Provider, API, DB/Supabase, Runtime, or LUNA mutation.
+- Accepted status / date: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` / `2026-08-12`.
+- Accepted lineage: baseline `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> Candidate `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> submission-precision correction `e2111fd88dffef4137ce3202f3805aef93c647cb`.
+- Human + ChatGPT integrated review: `complete`; evidence-preparation/planning authority only.
 - Accepted predecessor authority: Stripe-first Product/strategy and Customer-facing/Public-copy Alignment remain Human + ChatGPT accepted complete. Payment Charter v1 remains `human_chatgpt_accepted_complete`; no normative Charter principle is reopened.
 - Category boundary: Stripe's Japan jurisdiction-specific list includes `サイキックサービス / 占い師`; separate general guidance says some listed businesses may be supportable after detailed review and explicit approval. Neither fact is a Moon Reply outcome. Stripe feasibility remains not established.
-- Lane A / `STRIPE-FEAS-001`: `preparation_ready_pending_human_review` / `external_action_not_authorized` / `not_submitted` / outcome `null`.
+- Lane A / `STRIPE-FEAS-001`: `preparation_human_approved` / `external_action_not_authorized` / `not_submitted` / outcome `null`; preparation package approved, external action not authorized.
 - Lane B / `STRIPE-ACCOUNT-001`: `preparation_blocked` / `external_action_not_authorized` / `not_submitted` / outcome `null`.
 - Lane C / `STRIPE-PAYPAY-001`: `preparation_blocked` / `external_action_not_authorized` / `not_submitted` / outcome `null`.
 - Stripe account/contact/submission/approval/activation: `absent / none / none / absent / absent`; formal selection incomplete.
 - PayPay: desired / unverified / not enabled / not approved. Controlling lifecycle label is `not_frozen_recheck_required`; goods type is `unresolved_pending_actual_onboarding_evidence_and_human_review`.
-- `AGE-GATE-001`: current checkbox versus age-band document conflict is unresolved and blocks Lane B/C pending Human Product/legal decision. This Candidate changes neither UI nor the controlling age-related drafts/specifications.
+- `AGE-GATE-001`: current checkbox versus age-band document conflict is `unresolved_human_product_legal_decision_required` and blocks Lane B/C, but did not block completion of Lane A preparation. This Acceptance Sync changes neither UI nor the controlling age-related drafts/specifications.
 - Private KYC: Git contains field names and status only; actual Human PII, identity evidence, bank values, credentials, sensitive exports, and complete sensitive screenshots remain outside Git.
 - PAY.JP: `paused_fallback_provider_direction`; no automatic reactivation from any Stripe lane outcome.
 - Operations: Stripe account/contact/submission = `0 / 0 / 0`; Provider/API/DB/Supabase/Runtime/LUNA = `0 / 0 / 0 / 0 / 0 / 0`; PayPay/PAY.JP/RevenueCat operations = `0 / 0 / 0`.
 - Payment implementation / Production Payment / legal publication authority: `false / false / false`.
-- Next action: Human + ChatGPT review of this Candidate. Any Stripe contact, account, submission, evidence acquisition, PayPay onboarding, Provider selection, or implementation requires later separate authority.
+- Next action: The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. It may prepare the exact final external Japanese message, accepted Product-description/version, exact three questions, verified official route, non-public evidence storage/reference method, pre-send checklist, and explicit Human external-action authorization gate. Actual Stripe contact/submission remains separately authorized.
 
 ## Historical superseded handoff — Stripe-first Customer-facing / Public-copy Alignment Accepted
 
@@ -48,7 +49,7 @@
 - Canonical authority: `docs/ROADMAP.md` controls high-level delivery order; `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` remains the canonical Payment / Platform / Monetization strategy; `docs/payment/PAYMENT_CHARTER.md` is the accepted provider-independent Charter; Provider evidence files control factual approval and selection.
 - Current product: one consultation / one assessment note / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points.
 - Platform order: Web and real paid validation -> iOS / Apple IAP + RevenueCat -> Android / Google Play Billing + RevenueCat -> repeat-purchase analysis -> subscription only if demand supports it.
-- Historical Web snapshot: PAY.JP was then recorded as primary with cards and Apple Pay. That direction and its initial-method exclusions are superseded by the current Stripe Candidate handoff above.
+- Historical Web snapshot: PAY.JP was then recorded as primary with cards and Apple Pay. That direction and its initial-method exclusions are superseded by the current accepted Stripe authority handoff above.
 - Evidence distinction: Payment Charter acceptance is complete, while PAY.JP strategic direction is still not account creation, application readiness completion, submission authorization, application submission, merchant/category approval, formal evidence-gate selection, or implementation authorization. The production-use application is Not submitted; PAY.JP remains Not approved / not formally selected, and authoritative application/review evidence is absent.
 - Domain boundary: external payment/Store facts -> verified normalized Moon Reply purchase -> entitlement/assessment grant. The initial internal invariant is one valid purchase -> one assessment grant -> one fulfillment -> consume once. This is conceptual only and authorizes no schema, migration, DB, ledger, or API.
 - Safety: the explicit `2026-08-10` Human decision records Safety Engine / Safety UX as Human + ChatGPT accepted complete at the Safety HEAD baseline. Older P6 task-local `pending_human_*` labels remain immutable task-time records; this newer decision does not establish final JPY 980 readiness or Payment authority.
@@ -479,7 +480,7 @@ Browser use remains prohibited, including the Codex in-app browser, CDP, Playwri
 
 ## Next Work
 
-Payment Charter v1 remains `human_chatgpt_accepted_complete`, and Payment implementation and Production Payment authority remain `false / false`. Stripe-first strategy and Customer-facing/Public-copy Alignment remain accepted complete. Stripe Feasibility Evidence Preparation is now a docs-only Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review is pending. Lane A preparation is ready pending Human review with no external-action authority; Lane B/C are blocked; all outcomes are `null`. Actual Stripe account/contact/submission, account/business/site/category/Live Payment evidence, PayPay onboarding, and method-specific evidence acquisition remain separately authorized and evidence-gated. PAY.JP remains a paused fallback. No Provider operation, AI Provider rerun, C2, DB/Supabase change, Runtime/LUNA activation, further public-copy code/UI change, Production Payment, PR, or main merge is authorized.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`, and Payment implementation and Production Payment authority remain `false / false`. Stripe-first strategy, Customer-facing/Public-copy Alignment, and Stripe Feasibility Evidence Preparation are accepted complete; the evidence-preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`. Lane A preparation is `preparation_human_approved`, but external action remains not authorized, acquisition remains not submitted, and outcome remains `null`; Lane B/C are blocked with no external authority, no submission, and `null` outcomes. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Actual Stripe contact/submission, account/business/site/category/Live Payment evidence, PayPay onboarding, and method-specific evidence acquisition remain separately authorized and evidence-gated. PAY.JP remains a paused fallback. No Provider operation, AI Provider rerun, C2, DB/Supabase change, Runtime/LUNA activation, further public-copy code/UI change, Production Payment, PR, or main merge is authorized.
 # M2-P2-B1-B2-A handoff
 
 - Branch: `design/m2-p2-b1-b2-a-live-bindings`

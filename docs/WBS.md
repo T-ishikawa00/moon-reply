@@ -958,7 +958,7 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 - [x] Pre-payment Safety Engine / Safety UX — Human + ChatGPT accepted complete by the explicit `2026-08-10` Human decision; final JPY 980 readiness and Payment authority remain false
 - [x] Payment Charter v1 — Human + ChatGPT accepted complete on `2026-08-12`; implementation remains unauthorized and Charter acceptance does not complete or skip Milestones 2–6
 - [ ] Milestone 3: Review Site Deployment
-- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy and Customer-facing/public-copy Acceptance Syncs complete; next high-level work is Stripe feasibility evidence preparation; actual evidence acquisition and formal selection not started and remain separately authorized/evidence-gated
+- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy, Customer-facing/public-copy, and Stripe feasibility evidence preparation Acceptance Syncs complete; Lane A preparation is Human-approved with external action not authorized / not submitted / outcome `null`; next formal Payment work is Lane A Preliminary Category Clarification Authorization Package; actual Stripe contact/submission, evidence acquisition, and formal selection remain separately authorized/evidence-gated
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
 - [ ] Milestone 6: Approved Provider Sandbox Payment
 - [ ] Milestone 7: E2E, Safety and Failure Operations

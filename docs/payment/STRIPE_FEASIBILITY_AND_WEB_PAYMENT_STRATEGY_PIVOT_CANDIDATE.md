@@ -11,8 +11,8 @@
 - Customer-facing / Public-copy Alignment acceptance date: 2026-08-12
 - Accepted implementation lineage: 3d3888f53293231506838195c478fa2e1a88417f -> 0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95 -> 48d21e7ee7d672575eae6fd957e637b37da2a52f
 - Human Visual QA / Automated QA: PASS / PASS
-- Stripe Feasibility Evidence Preparation Candidate: stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review / Human + ChatGPT review pending
-- Authority established: Product/strategy and Product/UI/content alignment only
+- Stripe Feasibility Evidence Preparation: stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete / Human + ChatGPT accepted complete on 2026-08-12 / planning-documentation authority only
+- Authority established: Product/strategy, Product/UI/content alignment, and evidence-preparation planning/documentation only
 - Initial Web Product: one consultation = one assessment note / JPY 980 tax-inclusive / one-time purchase / no automatic renewal / no initial subscription / no Customer-facing coins or points
 - Stripe feasibility: not established
 - Stripe account: absent
@@ -31,7 +31,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-Stripe feasibility evidence preparation now exists as a docs-only Candidate pending Human + ChatGPT review. Actual Stripe account/contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
+Stripe feasibility evidence preparation is Human + ChatGPT accepted complete at lineage `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains separately authorized and evidence-gated.
 
 The following states are intentionally separate:
 
@@ -339,9 +339,9 @@ The audit did not require mutation of every listed surface. The accepted impleme
 
 ## 15. Stripe feasibility evidence required before formal selection
 
-The docs-only preparation Candidate uses three separate lanes:
+The accepted docs-only preparation package uses three separate lanes:
 
-- `STRIPE-FEAS-001` / Lane A: preliminary category clarification; preparation ready pending Human review; external action not authorized; not submitted; outcome `null`;
+- `STRIPE-FEAS-001` / Lane A: preliminary category clarification; preparation Human-approved; external action not authorized; not submitted; outcome `null`;
 - `STRIPE-ACCOUNT-001` / Lane B: account/business/site/category/Live Payment review; preparation blocked; external action not authorized; not submitted; outcome `null`; and
 - `STRIPE-PAYPAY-001` / Lane C: PayPay-specific onboarding review; preparation blocked; external action not authorized; not submitted; outcome `null`.
 
@@ -403,8 +403,8 @@ No resolution is invented here.
 | Payment Charter v1 | Human + ChatGPT accepted complete; human_chatgpt_accepted_complete |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on 2026-08-12 |
 | Stripe-first Customer-facing / Public-copy Alignment | stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete on 2026-08-12; Human Visual QA and Automated QA PASS; Product/UI/content only |
-| Stripe Feasibility Evidence Preparation | stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review; Human + ChatGPT review pending |
-| Lane A / B / C | Ready pending Human review / blocked / blocked; all external actions not authorized; all acquisitions not submitted; outcomes `null` |
+| Stripe Feasibility Evidence Preparation | stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete on 2026-08-12; planning/documentation authority only |
+| Lane A / B / C | `preparation_human_approved` / blocked / blocked; all external actions not authorized; all acquisitions not submitted; outcomes `null` |
 | Stripe feasibility | Not established |
 | Stripe account | Absent |
 | Stripe contact | None |

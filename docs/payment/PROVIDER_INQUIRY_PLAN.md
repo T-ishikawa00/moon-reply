@@ -10,7 +10,7 @@ Task 18A did not authorize a Provider account, application submission, inquiry, 
 
 Task 18C prepared historical drafts, evidence logging, scoring rules, and a decision gate only. It did not authorize an account, application submission, inquiry, provider selection, or Payment implementation.
 
-The `2026-08-12` Human + ChatGPT accepted Product/strategy direction names Stripe Checkout as the strategic primary Web direction to investigate and prepare, with credit/debit cards, Apple Pay, Google Pay, and PayPay as desired initial methods. Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; it is not future work. Stripe Feasibility Evidence Preparation is a docs-only Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`, pending Human + ChatGPT review. Stripe feasibility/account/contact/submission/approval/activation/formal selection and all method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its preserved application readiness and historical inquiry evidence do not control current next work.
+The `2026-08-12` Human + ChatGPT accepted Product/strategy direction names Stripe Checkout as the strategic primary Web direction to investigate and prepare, with credit/debit cards, Apple Pay, Google Pay, and PayPay as desired initial methods. Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`; it is not future work. Stripe Feasibility Evidence Preparation is also accepted complete at the planning/documentation level with status `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A preparation is `preparation_human_approved`, but external action remains not authorized, acquisition remains not submitted, and outcome remains `null`. Stripe feasibility/account/contact/submission/approval/activation/formal selection and all method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its preserved application readiness and historical inquiry evidence do not control current next work.
 
 ---
 
@@ -26,7 +26,7 @@ No Stripe account has been created, no Stripe contact/submission or evidence acq
 
 ## 1. Provider-specific evidence routes
 
-1. Stripe accepted direction: strategy Acceptance Sync complete -> Customer-facing/Public-copy Alignment `ACCEPTED COMPLETE` -> Stripe feasibility evidence-preparation Candidate pending Human + ChatGPT review -> separate Human external-action authorization -> lane-specific authoritative evidence acquisition -> Human formal selection.
+1. Stripe accepted direction: strategy Acceptance Sync complete -> Customer-facing/Public-copy Alignment `ACCEPTED COMPLETE` -> Stripe feasibility evidence preparation `ACCEPTED COMPLETE` -> Lane A Preliminary Category Clarification Authorization Package -> separate Human external-action authorization -> lane-specific authoritative evidence acquisition -> Human formal selection.
 2. Stripe lanes: Lane A `STRIPE-FEAS-001` is preliminary clarification only; Lane B `STRIPE-ACCOUNT-001` is required for account/business/site/category/Live Payment supportability; Lane C `STRIPE-PAYPAY-001` is required if PayPay is treated as enabled/approved. Lane A alone is insufficient for formal selection, and Lane C never inherits Lane B approval.
 3. PAY.JP paused fallback: only after explicit Human reactivation -> current-source re-review -> readiness -> separate submission authority -> application/review evidence.
 4. KOMOJU, STORES, Square, or another provider: fallback only under separate review and its verified evidence route.
@@ -37,7 +37,7 @@ No generic inquiry model may be forced onto every provider. None of these positi
 
 ## 2. Honest Product Description
 
-Use `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md` as the canonical PII-free source. Its accepted Product facts are frozen for this Candidate, while its short, medium, and full descriptions are explicitly `PROPOSED / NOT SUBMITTED / PENDING HUMAN + CHATGPT REVIEW`.
+Use `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md` as the canonical PII-free source. Its accepted Product facts are frozen for the accepted preparation package, while its short, medium, and full descriptions are explicitly `HUMAN + CHATGPT ACCEPTED PREPARATION WORDING / NOT SUBMITTED`.
 
 The canonical package distinguishes accepted Product requirements from currently publicly deployed production capability. It must never claim that real Payment, Live Stripe Checkout, Production Safety-linked purchase authority, Production email delivery/recovery, or Production report fulfillment is Live without submission-time implementation evidence.
 
@@ -123,13 +123,14 @@ Verbal guidance, marketing copy, a blank application form, or an optional suppor
 
 1. Stripe-first strategy Acceptance Sync is complete on `2026-08-12`; this is not Provider approval or selection.
 2. Truthful Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE` on `2026-08-12`; preserve it and do not treat it as future work or Provider approval.
-3. Complete Human + ChatGPT review of the Stripe feasibility evidence-preparation Candidate. Candidate completion alone does not grant external-action authority.
-4. Under separate Human authority, acquire only the specifically authorized lane evidence: Lane A preliminary clarification, Lane B account/business/site/category/Live Payment review, or Lane C PayPay onboarding review.
-5. Before the authorized action, freeze the exact submission package, actual implementation/publication facts, non-public evidence storage, and route. Stable review URLs/public legal conditions must exist before any Provider/site review that requires them.
-6. Preserve exact submitted facts, outcomes, `conditions[]`, `open_condition_count`, and evidence without normalizing conditional status.
-7. Return to explicit Human launch review if any desired method is unavailable. Lane A alone never supports formal selection; Lane C evidence is required to call PayPay enabled/approved.
-8. Human formally selects a Provider only after the decision gate passes.
-9. Start sandbox/test implementation only under a separate authorized task; Production QA does not authorize Production Payment, and Soft Launch requires separate Production Payment authorization.
+3. Preserve the Human + ChatGPT accepted Stripe feasibility evidence-preparation package; acceptance alone does not grant external-action authority.
+4. Prepare the Lane A Preliminary Category Clarification Authorization Package: exact final external Japanese message, accepted Product-description/version, exact three questions, verified official route, non-public evidence storage/reference method, pre-send checklist, and explicit Human external-action authorization gate. Do not contact or submit to Stripe.
+5. Under separate Human authority, acquire only the specifically authorized lane evidence: Lane A preliminary clarification, Lane B account/business/site/category/Live Payment review, or Lane C PayPay onboarding review.
+6. Before the authorized action, freeze the exact submission package, actual implementation/publication facts, non-public evidence storage, and route. Stable review URLs/public legal conditions must exist before any Provider/site review that requires them.
+7. Preserve exact submitted facts, outcomes, `conditions[]`, `open_condition_count`, and evidence without normalizing conditional status.
+8. Return to explicit Human launch review if any desired method is unavailable. Lane A alone never supports formal selection; Lane C evidence is required to call PayPay enabled/approved.
+9. Human formally selects a Provider only after the decision gate passes.
+10. Start sandbox/test implementation only under a separate authorized task; Production QA does not authorize Production Payment, and Soft Launch requires separate Production Payment authorization.
 
 ### PAY.JP and other fallback path
 

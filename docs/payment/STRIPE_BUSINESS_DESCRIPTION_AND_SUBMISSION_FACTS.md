@@ -3,10 +3,12 @@
 ## 1. Status and purpose
 
 - Package type: canonical PII-free submission-facts package
-- Candidate package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
+- Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Formulation date: `2026-08-12`
-- Status: `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`
-- Human + ChatGPT review: `pending`
+- Status: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`
+- Human + ChatGPT integrated review: `complete`
+- Acceptance date: `2026-08-12`
+- Accepted lineage: `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`
 - Submission status: `NOT SUBMITTED`
 - Stripe contact: `none`
 
@@ -94,7 +96,7 @@ accepted Product requirement
 
 The accepted Product contract must not be presented to Stripe as proof that a feature is currently Live. A future submission must state the then-current implementation evidence accurately.
 
-| Capability | Accepted Product requirement | Current implementation/publication state for this Candidate |
+| Capability | Accepted Product requirement | Current implementation/publication state for this accepted preparation package |
 | --- | --- | --- |
 | Real Payment | Required for a future paid Product | Not implemented or Live |
 | Live Stripe Checkout | Desired strategic direction after evidence and authorization | Absent; no Stripe account or Provider object |
@@ -108,9 +110,9 @@ No planned but non-Live feature may be described as currently operating in Produ
 
 ## 4. B — Proposed future submission wording
 
-Every description in this section is:
+Every description in this section has status:
 
-`PROPOSED / NOT SUBMITTED / PENDING HUMAN + CHATGPT REVIEW`
+`HUMAN + CHATGPT ACCEPTED PREPARATION WORDING / NOT SUBMITTED`
 
 ### 4.1 Proposed short description
 
@@ -133,7 +135,7 @@ The full description preserves AI use, Customer input, Product outputs, Customer
 
 | Item | Current state | Submission rule |
 | --- | --- | --- |
-| Accepted Product facts | Frozen for this Candidate | May be used only with current implementation truth |
+| Accepted Product facts | Frozen for this accepted preparation package | May be used only with current implementation truth |
 | Customer-facing/Public-copy Alignment | Human + ChatGPT accepted complete | Does not establish publication or Provider approval |
 | Local review UI | Implemented for review | Must not be called a public production service |
 | Public/review URL | Absent | Supply only after a stable actual URL exists |
@@ -149,7 +151,7 @@ Before any future submission, the exact package version, actual URLs, public sta
 
 ## 6. D — Human/private facts not stored in Git
 
-Git stores field names and status only. No actual private Human value is supplied by this Candidate.
+Git stores field names and status only. No actual private Human value is supplied by this accepted preparation package.
 
 | Required/private field name | Current status in Git |
 | --- | --- |

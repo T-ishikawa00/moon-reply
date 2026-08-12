@@ -45,7 +45,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 | Provider | Evidence-route status | Category/application status | Score | Evidence | Selection status |
 | --- | --- | --- | --- | --- | --- |
-| Stripe | Lane A preparation ready pending Human review; Lane B/C blocked; no external action; all not submitted/outcome `null` | Feasibility not established; account/contact/submission/approval/activation absent | Not scored | Lane B truthful account/business/site/category/Live Payment and card/wallet evidence required; Lane C required for PayPay; Lane A alone insufficient | Strategy accepted / evidence-preparation Candidate pending review / not selected |
+| Stripe | Lane A preparation Human-approved; Lane B/C blocked; no external action; all not submitted/outcome `null` | Feasibility not established; account/contact/submission/approval/activation absent | Not scored | Lane B truthful account/business/site/category/Live Payment and card/wallet evidence required; Lane C required for PayPay; Lane A alone insufficient | Strategy and evidence preparation accepted / no Provider evidence / not selected |
 | PAY.JP | Production-use application Not submitted | Not approved | Not scored | PAYJP-APP-001; authoritative application/review evidence required | Not selected |
 | KOMOJU | Not sent | Not approved | Not scored | Evidence required | Not selected |
 | STORES | Not sent | Not approved | Not scored | Evidence required | Not selected |
@@ -54,7 +54,7 @@ Conditional acceptance is not unconditional acceptance. Every condition must be 
 
 Use one row per provider and factor only after evidence exists.
 
-The Human + ChatGPT accepted Stripe strategy, pending evidence-preparation Candidate, and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by strategy acceptance or preparation status.
+The Human + ChatGPT accepted Stripe strategy, accepted evidence-preparation package, and accepted PayPay conversion/cost tradeoff are not scores. Neither Stripe nor PAY.JP is scored by strategy acceptance or preparation status.
 
 | Provider | Factor | Raw assessment | Weight | Weighted score | Evidence location | Checked date | Conditions/notes |
 | --- | --- | --- | ---: | ---: | --- | --- | --- |

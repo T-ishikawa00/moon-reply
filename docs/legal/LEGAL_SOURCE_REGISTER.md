@@ -12,7 +12,7 @@ Every source must be rechecked before public launch.
 
 No professional legal review has been completed; professional consultation is optional and is not a Paid Launch prerequisite. No payment-provider approval or trademark clearance is recorded by this register.
 
-Stripe Feasibility Evidence Preparation Candidate status is `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review` as of `2026-08-12`; Human + ChatGPT review remains pending. The source refresh below creates no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, or legal-publication authority.
+Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`; Lane A preparation is `preparation_human_approved`, while external action remains not authorized, acquisition remains not submitted, and outcome remains `null`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. The source refresh and preparation acceptance create no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, or legal-publication authority.
 
 ---
 
@@ -194,7 +194,7 @@ URL:
 
 Current official evidence checked on `2026-08-12`:
 
-- Stripe's activation guidance requires an applicable business website, social profile, or application URL and sufficient Product/business information for review. Moon Reply has no stable public/review URL recorded by this Candidate.
+- Stripe's activation guidance requires an applicable business website, social profile, or application URL and sufficient Product/business information for review. Moon Reply has no stable public/review URL recorded by this accepted preparation package.
 - Stripe's Japan onboarding guidance requires business and representative/KYC information, including applicable address, identity-document, website, and payout-bank facts.
 - Stripe may request additional business-address verification documents when the submitted address cannot be verified automatically.
 - Separately, Stripe's Commerce Disclosure guidance says a sole proprietor may, subject to the page requirements, use an equivalent request-based disclosure statement such as `請求があった場合には速やかに開示いたします` instead of immediately displaying formal name, address, and phone information publicly.

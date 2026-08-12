@@ -2,10 +2,12 @@
 
 ## 1. Status and classification
 
-- Candidate package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
+- Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Formulation date: `2026-08-12`
-- Candidate status: `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`
-- Human + ChatGPT Candidate review: `pending`
+- Accepted status: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`
+- Human + ChatGPT integrated review: `complete`
+- Acceptance date: `2026-08-12`
+- Accepted lineage: `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`
 - Stripe external action: `not authorized`
 - Stripe account/contact/submission: `absent / none / none`
 - PayPay enablement/review: `not enabled / not submitted`
@@ -26,7 +28,7 @@ An item classification is preparation evidence only. It is not Stripe acceptance
 Lane: `STRIPE-FEAS-001`
 
 ```yaml
-preparation_status: preparation_ready_pending_human_review
+preparation_status: preparation_human_approved
 external_action_authority: external_action_not_authorized
 acquisition_status: not_submitted
 outcome: null
@@ -35,15 +37,15 @@ outcome: null
 | Requirement | Classification | Current evidence/boundary |
 | --- | --- | --- |
 | Accurate Product facts frozen | `satisfied` | PII-free accepted facts frozen in `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md` |
-| Proposed short/medium/full description prepared | `draft_only` | Prepared; not submitted; pending Human + ChatGPT review |
+| Proposed short/medium/full description prepared | `draft_only` | Human + ChatGPT accepted preparation wording; not submitted |
 | Customer-facing `鑑定` terminology disclosed | `satisfied` | Explicit in all applicable proposed descriptions |
-| Lane A questions prepared | `satisfied` | Exactly three proposed questions in `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`; not sent |
+| Lane A questions prepared | `satisfied` | Exactly three Human + ChatGPT accepted preparation questions in `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`; not sent |
 | Official external contact route identified | `satisfied` | `https://stripe.com/jp/contact` and its linked official support route; route authority still must be confirmed |
-| Exact submission package version frozen | `satisfied` | Candidate version `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`; no submitted version exists |
+| Exact preparation package version frozen | `satisfied` | Task-time formulation identifier `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`; no submitted version exists |
 | Non-public evidence storage location prepared | `Human_input_required` | Storage/access control and opaque reference not assigned in Git |
-| Explicit Human external-action authorization | `Human_input_required` | Not granted by this Candidate |
+| Explicit Human external-action authorization | `Human_input_required` | Not granted by this Acceptance Sync |
 
-Gate A is not Human-approved. `preparation_ready_pending_human_review` means the documentation package is ready for review; it does not mean every pre-action condition is complete. External action remains prohibited until the exact route, package, non-public evidence storage, and authority are separately approved.
+Gate A's internal preparation package is Human + ChatGPT approved. This does not complete every pre-action condition or authorize contact: external action remains prohibited until the exact route, package, non-public evidence storage, and action are separately approved.
 
 A public production website is required for Lane A only if the actual official Lane A route requires it.
 
@@ -64,7 +66,7 @@ outcome: null
 | Stable public/review domain | `blocker` | No stable public/review URL recorded |
 | Functioning accessible site | `blocker` | Local review implementation is not a public review environment |
 | Business name | `Human_input_required` | Legal/operator fact not stored in Git |
-| Complete service description | `draft_only` | Proposed PII-free descriptions prepared; review pending |
+| Complete service description | `draft_only` | Human + ChatGPT accepted preparation wording; not submitted |
 | JPY 980 price | `implemented_not_public` | Accepted and represented in local review UI |
 | Product/sample image or equivalent sales presentation | `implemented_not_public` | Local sample/report presentation exists; not public review evidence |
 | Purchase-flow representation | `implemented_not_public` | Review-only flow exists; no real Payment |
@@ -97,13 +99,15 @@ Current conflict:
 
 ```yaml
 id: AGE-GATE-001
-status: Human Product/legal decision required before Lane B / Lane C readiness
-resolution_in_this_candidate: prohibited
+status: unresolved_human_product_legal_decision_required
+lane_b_readiness: blocked
+lane_c_readiness: blocked
+resolution_in_this_acceptance_sync: prohibited
 ```
 
 Non-authoritative ChatGPT recommendation: retain the current dedicated 18+ self-attestation for MVP and do not collect age-band data solely for eligibility. This is not Human acceptance.
 
-This Candidate does not modify RequestForm, `ORDER_FORM_SPEC.md`, `PAYMENT_CONFIRMATION_SCREEN_SPEC.md`, the Terms draft, or the Privacy draft.
+This Acceptance Sync does not modify RequestForm, `ORDER_FORM_SPEC.md`, `PAYMENT_CONFIRMATION_SCREEN_SPEC.md`, the Terms draft, or the Privacy draft.
 
 ## 5. Private KYC evidence boundary
 
@@ -147,7 +151,7 @@ outcome: null
 | PayPay readiness item | Classification | Current evidence/boundary |
 | --- | --- | --- |
 | Stripe account-state prerequisite | `blocker` | Stripe account absent; Lane B has no outcome |
-| Japanese Product description | `draft_only` | Proposed descriptions prepared; not submitted |
+| Japanese Product description | `draft_only` | Human + ChatGPT accepted preparation wording; not submitted |
 | Japanese Product image / sales presentation | `implemented_not_public` | Local review/sample presentation only |
 | JPY price | `implemented_not_public` | Accepted JPY 980 value represented locally |
 | Checkout/purchase flow | `implemented_not_public` | Review representation only; no real checkout |
@@ -160,7 +164,7 @@ outcome: null
 | Method enablement state | `blocker` | Not enabled and not approved |
 | Lifecycle-label recheck | `Provider_evidence_required` | Controlling label not frozen; recheck at each required gate |
 
-Stripe account support does not establish PayPay support. Lane C may not inherit a Lane B outcome automatically. This Candidate does not enable PayPay or claim approval.
+Stripe account support does not establish PayPay support. Lane C may not inherit a Lane B outcome automatically. This Acceptance Sync does not enable PayPay or claim approval.
 
 ## 7. PayPay lifecycle, goods type, and timing
 

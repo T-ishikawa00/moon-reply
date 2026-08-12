@@ -9,9 +9,10 @@
 - Stripe-first strategy Human + ChatGPT acceptance date: `2026-08-12`
 - Customer-facing / Public-copy Alignment accepted status: `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`
 - Customer-facing / Public-copy Alignment Human + ChatGPT acceptance date: `2026-08-12`
-- Stripe Feasibility Evidence Preparation Candidate status: `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`
-- Stripe Feasibility Evidence Preparation Human + ChatGPT review: `pending`
-- Accepted implementation lineage: `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`
+- Stripe Feasibility Evidence Preparation accepted status: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`
+- Stripe Feasibility Evidence Preparation Human + ChatGPT acceptance date: `2026-08-12`
+- Stripe Feasibility Evidence Preparation accepted lineage: `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`
+- Customer-facing / Public-copy Alignment accepted implementation lineage: `3d3888f53293231506838195c478fa2e1a88417f` -> `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95` -> `48d21e7ee7d672575eae6fd957e637b37da2a52f`
 - Human Visual QA / Automated QA: `PASS / PASS`
 - Payment Charter v1 status: `human_chatgpt_accepted_complete`
 - Payment Charter v1 Human + ChatGPT acceptance date: `2026-08-12`
@@ -22,7 +23,7 @@ This document is the canonical product strategy for Payment, Platform, Purchase,
 
 `docs/ROADMAP.md` remains the authoritative high-level delivery roadmap. Provider application/review/inquiry evidence and formal provider approval remain governed by the evidence documents under `docs/payment/`. If an older Product, Phase, Payment, or provider-planning document conflicts with this strategy, this document controls the Payment / Platform / Monetization decision, while immutable historical execution and acceptance records remain historical evidence.
 
-This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, accepted Customer-facing / Public-copy Alignment, accepted Charter status, and the pending-review Stripe feasibility evidence-preparation Candidate. Public-copy acceptance is Product/UI/content authority only. Evidence preparation is documentation authority only. Neither state is an accepted Provider decision or authorization for a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, Payment implementation, Production Payment, or legal publication.
+This strategy records the long-term sequence, Human + ChatGPT accepted Stripe-first Product/strategy direction, accepted Customer-facing / Public-copy Alignment, accepted Charter status, and accepted Stripe feasibility evidence preparation. Public-copy acceptance is Product/UI/content authority only. Evidence-preparation acceptance is planning/documentation authority only. Neither state is an accepted Provider decision or authorization for a Stripe or PAY.JP account, contact, application, approval, activation, SDK, Provider call, Payment implementation, Production Payment, or legal publication.
 
 ## 1. Long-Term Platform Sequence
 
@@ -264,12 +265,12 @@ When a still-valid trusted session is bound to the unchanged verified delivery/r
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: Review of the Stripe Feasibility Evidence Preparation Candidate
+## 11. Next Formal Work: Lane A Preliminary Category Clarification Authorization Package
 
-Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy Acceptance Sync and Customer-facing/Public-copy Alignment Acceptance Sync are complete as of `2026-08-12`. Evidence preparation now exists as a docs-only Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review remains pending. The sequence is:
+Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy, Customer-facing/Public-copy Alignment, and Stripe Feasibility Evidence Preparation are Human + ChatGPT accepted complete as of `2026-08-12`; the evidence-preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. It may prepare the exact final external Japanese message, exact accepted Product-description/version to paste or attach, exact three questions, verified official Stripe contact route, non-public evidence storage location/reference method, pre-send evidence checklist, and explicit Human external-action authorization gate. Actual Stripe contact/submission remains separately authorized. The sequence is:
 
 1. preserve truthful Customer-facing/public-copy alignment as accepted complete;
-2. complete Human + ChatGPT review of the evidence-preparation Candidate without inferring acceptance;
+2. prepare the Lane A authorization package without contacting or submitting to Stripe;
 3. keep Lane A `STRIPE-FEAS-001` preliminary clarification, Lane B `STRIPE-ACCOUNT-001` account/business/site/Live review, and Lane C `STRIPE-PAYPAY-001` PayPay review separate;
 4. grant separate Human external-action authority for the exact applicable lane, route, package, private evidence storage, and action before any contact or submission;
 5. obtain lane-specific authoritative evidence; stable review URLs/public legal conditions must exist before any Provider/site review that requires them;
@@ -280,7 +281,7 @@ Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_compl
 10. complete Production QA without treating QA as Production Payment authorization; and
 11. obtain separate Production Payment authorization before Soft Launch.
 
-No Stripe account/contact/submission exists or is authorized by this planning package. Lane A preparation is ready pending Human review; Lane B/C preparation is blocked; all external-action authorities are not authorized, all acquisitions are not submitted, and all outcomes are `null`. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. `AGE-GATE-001` blocks Lane B/C pending Human Product/legal decision. PAY.JP remains paused fallback, Not approved, and not selected, with no automatic reactivation from any Stripe lane outcome. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
+No Stripe account/contact/submission exists or is authorized by this planning package. Lane A preparation is `preparation_human_approved`; Lane B/C preparation is blocked; all external-action authorities are not authorized, all acquisitions are not submitted, and all outcomes are `null`. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. `AGE-GATE-001` blocks Lane B/C pending Human Product/legal decision but did not block Lane A preparation acceptance. PAY.JP remains paused fallback, Not approved, and not selected, with no automatic reactivation from any Stripe lane outcome. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
 
 ## 12. Authorization Matrix
 
@@ -293,8 +294,8 @@ No Stripe account/contact/submission exists or is authorized by this planning pa
 | Delivery/Recovery Email Verification | `accepted_required_control_with_trusted_session_reuse` |
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on `2026-08-12` |
 | Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Human Visual QA and Automated QA PASS; Product/UI/content only |
-| Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review pending |
-| Stripe Lane A / B / C | Ready pending Human review / blocked / blocked; no external-action authority; not submitted; outcomes `null` |
+| Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; planning/documentation authority only |
+| Stripe Lane A / B / C | `preparation_human_approved` / blocked / blocked; no external-action authority; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay / PayPay | Unverified |

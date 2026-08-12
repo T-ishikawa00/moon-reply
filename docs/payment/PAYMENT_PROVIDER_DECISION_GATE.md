@@ -14,13 +14,13 @@
 
 Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and PayPay. Each remains unverified. If any desired method is unavailable, the project returns to explicit Human launch review; PayPay unavailable is not automatic approval to launch without it. PAY.JP is paused fallback, and its preserved readiness route does not control current next work.
 
-Stripe Feasibility Evidence Preparation is a pending-review Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`. Candidate preparation is not evidence and does not satisfy this gate.
+Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` at the planning/documentation level. Accepted preparation is not Provider evidence, creates no external-action authority, and does not satisfy this gate.
 
 ### Stripe lane-specific evidence rule
 
 | Lane | Required role in this gate | Current state |
 | --- | --- | --- |
-| `STRIPE-FEAS-001` / Lane A | Preliminary category clarification only; may inform next route but is never sufficient approval or formal selection by itself | Preparation ready pending Human review; external action not authorized; not submitted; outcome `null` |
+| `STRIPE-FEAS-001` / Lane A | Preliminary category clarification only; may inform next route but is never sufficient approval or formal selection by itself | Preparation Human-approved; external action not authorized; not submitted; outcome `null` |
 | `STRIPE-ACCOUNT-001` / Lane B | Required for actual Stripe account/business/site/category/Live Payment supportability evidence | Preparation blocked; external action not authorized; not submitted; outcome `null` |
 | `STRIPE-PAYPAY-001` / Lane C | Required if PayPay is to be treated as enabled or approved | Preparation blocked; external action not authorized; not submitted; outcome `null` |
 

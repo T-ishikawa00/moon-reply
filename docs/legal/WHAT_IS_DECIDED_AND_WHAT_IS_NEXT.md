@@ -54,7 +54,7 @@
 - desired initial methodsはcredit/debit cards、Apple Pay、Google Pay、PayPay。いずれもunverifiedで、PayPayはdesired / not enabled / not approved、lifecycleは`not_frozen_recheck_required`。PayPay unavailableはPayPayなしLaunchの自動承認ではない
 - RevenueCatはinitial Webに必須ではなく、future synchronizationはdesired / unresolved。PAY.JPはpaused fallback
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
-- Stripe Feasibility Evidence Preparationは`stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`のdocs-only Candidateとして準備済み。Human + ChatGPT reviewはpendingで、Stripe feasibility、account/contact/submission、approval/activationまたはformal selectionを確立しない
+- Stripe Feasibility Evidence Preparationは`2026-08-12`に`stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。Lane A preparationは`preparation_human_approved`だが、external actionはnot authorized、acquisitionはnot submitted、outcomeは`null`であり、Stripe feasibility、account/contact/submission、approval/activationまたはformal selectionを確立しない
 
 Product、価格、Safety、truthful positioningおよびStripe-first strategyのaccepted内部方針は維持する。Stripe strategy acceptanceはfeasibility、approval/activation、formal selectionまたはimplementation authorityではない。
 
@@ -73,7 +73,7 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 - 結果URLの失効・再発行と誤メール訂正をどう扱うか
 - 初期MVPでマーケティングメールを行うか
 - 鑑定書の共有を私的利用のみ、一部共有可、全文共有可のどこまで許可するか
-- `AGE-GATE-001`：current Request UIの専用`私は18歳以上です` checkboxと、必須年齢層選択を要求し専用checkboxを禁止するcurrent draft/specのどちらをMVPのage-gate mechanismとして採用するか。Lane B/C readiness前にHuman Product/legal判断が必要で、本Candidateでは解消しない
+- `AGE-GATE-001`：current Request UIの専用`私は18歳以上です` checkboxと、必須年齢層選択を要求し専用checkboxを禁止するcurrent draft/specのどちらをMVPのage-gate mechanismとして採用するか。Lane B/C readiness前にHuman Product/legal判断が必要で、本Acceptance Syncでは解消しない
 
 判断は `OPERATOR_DECISION_GUIDE.md` を読み、`OPERATOR_DECISION_WORKSHEET.md` に回答して記録する。個人情報はこの段階で推測または仮入力しない。
 
@@ -123,8 +123,8 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 2. Milestone 2は現行RoadmapどおりInternal Automated AI / DB Vertical Sliceの内部作業線であり、運営者情報、公開条件、Stripe readinessまたはlegal publicationを完成させるMilestoneではない
 3. Milestone 3でRoadmapが定める決済なしのReview Site Deploymentへ進み、stable review URLおよびlater applicable public/review conditionsはその後の該当readiness workで整える。exact gateはRoadmapが制御する
 4. Stripe-first strategy Acceptance Syncは`2026-08-12`に完了し、truthful Customer-facing/public-copy alignmentも同日に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`、Human Visual QA / Automated QA `PASS / PASS`となった
-5. Stripe Feasibility Evidence Preparationはstatus `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`で準備され、Human + ChatGPT Candidate reviewはpending
-6. Candidate review後も、actual Stripe account/contact/submission、Lane A clarification、Lane B account/business/site/category/Live Payment review、Lane C PayPay reviewはそれぞれ別の明示的external-action authorityが必要
+5. Stripe Feasibility Evidence Preparationはstatus `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`として`2026-08-12`にaccepted complete。accepted lineageは`8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`
+6. 次の正式なPayment作業はLane A Preliminary Category Clarification Authorization Package。exact external message、official route、evidence storage、pre-send gateを準備できるが、actual Stripe contact/submissionは別途承認であり、本Acceptance Syncでは送信しない
 7. Milestone 4のProvider Review Evidence and Selectionでは、必要なstable review URL/public conditionsを満たしたうえでlane-specific authoritative evidenceを取得し、desired method不足時は明示的Human launch reviewへ戻す
 8. Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
 9. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む

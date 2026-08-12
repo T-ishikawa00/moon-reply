@@ -4,18 +4,18 @@
 >
 > **NO STRIPE CONTACT, SUBMISSION, ACCOUNT ACTION, OR PAYPAY ONBOARDING HAS OCCURRED**
 
-Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment is accepted complete. Stripe Feasibility Evidence Preparation is only a pending-review Candidate with status `stripe_feasibility_evidence_preparation_candidate_ready_pending_human_chatgpt_review`. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
+Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment and Stripe Feasibility Evidence Preparation are accepted complete; the preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. The next formal Payment work is Lane A Preliminary Category Clarification Authorization Package. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
 
 ## Stripe Lane A preparation — before any separately authorized action
 
 - [x] Human + ChatGPT Stripe-first strategy acceptance completed on `2026-08-12`; Product/strategy authority only
 - [x] Customer-facing/Public-copy Alignment is `ACCEPTED COMPLETE`; Product/UI/content authority only
 - [x] Canonical PII-free Product facts prepared in `STRIPE_BUSINESS_DESCRIPTION_AND_SUBMISSION_FACTS.md`
-- [x] Proposed short/medium/full descriptions prepared and labeled not submitted / pending review
+- [x] Short/medium/full descriptions are Human + ChatGPT accepted preparation wording and remain not submitted
 - [x] Exactly three Lane A preliminary questions prepared and not sent
 - [x] Official external contact/support routes identified without using them
-- [x] Candidate package version `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01` assigned
-- [ ] Human + ChatGPT accepts the exact evidence-preparation Candidate
+- [x] Task-time formulation package version `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01` retained
+- [x] Human + ChatGPT accepts the exact evidence-preparation package; planning/documentation authority only
 - [ ] Approved non-public evidence storage location and opaque reference assigned
 - [ ] Exact Lane A route and package explicitly authorized by Human
 - [ ] Actual site, implementation, and legal/publication state revalidated at action time
@@ -23,7 +23,7 @@ Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strate
 - [ ] Exact submitted facts approved without adding private values to Git
 - [ ] Human explicitly authorizes the external action
 
-Lane A current state is `preparation_ready_pending_human_review / external_action_not_authorized / not_submitted / outcome null`. Checked preparation items do not authorize contact or evidence acquisition.
+Lane A current state is `preparation_human_approved / external_action_not_authorized / not_submitted / outcome null`. Checked preparation items and internal acceptance do not authorize contact or evidence acquisition.
 
 ## Stripe Lane B account/site/Live Payment readiness
 
