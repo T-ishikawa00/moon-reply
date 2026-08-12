@@ -265,13 +265,13 @@ When a still-valid trusted session is bound to the unchanged verified delivery/r
 
 No Payment Provider SDK, checkout, Payment API, webhook, purchase ledger, entitlement issuance, trusted-session mechanism, or grant consumption is implemented or authorized by this sequence.
 
-## 11. Next Formal Work: Human + ChatGPT Review of Stripe Lane B Human Decision Package Candidate
+## 11. Next Formal Work: Stripe Lane B Legal Draft Finalization Candidate (B2)
 
-Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy, Customer-facing/Public-copy Alignment, and Stripe Feasibility Evidence Preparation are Human + ChatGPT accepted complete as of `2026-08-12`; the evidence-preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Human directed on `2026-08-13` that Stripe Sales not be used (`not_used_by_human_direction`), which is a workflow choice rather than a Provider outcome. Lane A remains preserved inactive without changing its four fields. The exact current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate (`STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`), status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`. The bounded sequence is:
+Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_complete`. Stripe-first strategy, Customer-facing/Public-copy Alignment, and Stripe Feasibility Evidence Preparation remain accepted complete. Stripe Sales is `not_used_by_human_direction`, which is not a Provider outcome, and Lane A remains preserved inactive without changing its four fields. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. The bounded sequence is:
 
-1. B0 — Workflow Pivot + Human Decision Package Candidate;
-2. B1 — Human + ChatGPT decision review and acceptance sync;
-3. B2 — Legal Draft Finalization Candidate;
+1. B0 — Workflow Pivot + Human Decision Package Candidate — complete;
+2. B1 — Human + ChatGPT decision review and acceptance sync — complete;
+3. B2 — Stripe Lane B Legal Draft Finalization Candidate — current next work;
 4. B3 — Review-ready Website/Public Surface implementation;
 5. B4a — Deployment-readiness implementation/configuration;
 6. B4b — Stable URL deployment under separate external-action authority;
@@ -279,7 +279,7 @@ Payment Charter v1 in `PAYMENT_CHARTER.md` remains `human_chatgpt_accepted_compl
 8. B6 — Stripe Account/Activation Authorization Package; and
 9. B7 — actual Stripe account creation/KYC/activation submission under a further explicit Human external-action authorization.
 
-No exact future branch or mutation manifest may be assigned before predecessor acceptance. PayPay Lane C remains separate and later. No Stripe account/contact/submission exists or is authorized by this planning package. Lane A is `preparation_human_approved / external_action_not_authorized / not_submitted / null` and preserved inactive; Lane B/C are `preparation_blocked / external_action_not_authorized / not_submitted / null`. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. `AGE-GATE-001` blocks Lane B/C pending Human Product/legal decision. PAY.JP remains paused fallback, Not approved, and not selected, with no automatic reactivation from any Stripe lane outcome. Checkout, test/live, webhook, refund, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
+No exact future branch or mutation manifest may be assigned before predecessor acceptance. PayPay Lane C remains separate and later. No Stripe account/contact/submission exists or is authorized by this planning package. Lane A is `preparation_human_approved / external_action_not_authorized / not_submitted / null` and preserved inactive; Lane B/C are `preparation_blocked / external_action_not_authorized / not_submitted / null`. Stripe feasibility and approval/activation are absent; formal selection is incomplete; cards, Apple Pay, Google Pay, and PayPay are unverified. `AGE-GATE-001` Human direction is accepted, but downstream specification/legal alignment remains pending and blocks Lane B/C. PAY.JP remains paused fallback, Not approved, and not selected, with no automatic reactivation from any Stripe lane outcome. Checkout, test/live, webhook, refund execution, descriptor, Customer linkage, fees, settlement, and future RevenueCat identity/import behavior remain evidence-gated.
 
 ## 12. Authorization Matrix
 
@@ -293,12 +293,14 @@ No exact future branch or mutation manifest may be assigned before predecessor a
 | Stripe strategic primary direction | Human + ChatGPT accepted Product/strategy direction on `2026-08-12` |
 | Stripe-first Customer-facing / Public-copy Alignment | `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete` on `2026-08-12`; Human Visual QA and Automated QA PASS; Product/UI/content only |
 | Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; planning/documentation authority only |
+| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven policy decisions accepted; downstream alignment pending |
 | Stripe Lane A / B / C | `preparation_human_approved` / blocked / blocked; no external-action authority; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay / PayPay | Unverified |
 | PayPay lifecycle / enablement | Desired; lifecycle `not_frozen_recheck_required`; Not enabled; Not approved; goods type unresolved pending actual onboarding evidence and Human review |
-| `AGE-GATE-001` | Unresolved Human Product/legal decision blocker for Lane B/C |
+| `AGE-GATE-001` | Human direction accepted / downstream specification and legal alignment pending; Lane B/C blocked |
+| Current next work | Stripe Lane B Legal Draft Finalization Candidate (B2); internal/draft only; publication unauthorized |
 | Stripe private KYC vs public Tokushoho | Separate evidence domains; private truthful disclosure accepted; routine public home-address display not default; exact Tokushoho method unresolved |
 | Virtual office / GMO | Not currently required by Human preference; GMO on hold, Not rejected; evidence-based reconsideration available |
 | PAY.JP | Paused fallback; Not approved; Not selected |

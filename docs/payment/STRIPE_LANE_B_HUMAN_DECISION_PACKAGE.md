@@ -1,14 +1,16 @@
-# Stripe Lane B Human Decision Package Candidate
+# Stripe Lane B Human Decision Package — Human + ChatGPT Accepted
 
-## 1. Candidate status and authority
+## 1. Accepted status and authority
 
-- Candidate status: `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`
-- Candidate date: `2026-08-13`
-- Human + ChatGPT review: `pending`
-- Human + ChatGPT Candidate acceptance: `pending`
+- Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
+- Acceptance date: `2026-08-13`
+- Human + ChatGPT review: `complete`
+- Human + ChatGPT acceptance: `complete`
+- Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
+- All seven Decision IDs: `accepted`
 - Stripe Sales route: `not_used_by_human_direction`
 - Lane A: preserved / external action not authorized / not submitted / `null`
-- Lane B: blocked
+- Lane B: blocked pending downstream Legal/Site/KYC/domain alignment
 - Lane C: blocked
 - Stripe feasibility: not established
 - Stripe account/contact/submission: absent / none / none
@@ -51,13 +53,12 @@ acquisition_status: not_submitted
 outcome: null
 ```
 
-This document is the controlling Candidate for the Human decisions required before Legal Draft Finalization Candidate work, public Website implementation, stable domain/deployment readiness, private KYC readiness, or a Stripe Account/Activation Authorization Package.
+This document is the controlling accepted Human-decision package for the policy directions required before Legal Draft Finalization Candidate work, public Website implementation, stable domain/deployment readiness, private KYC readiness, or a Stripe Account/Activation Authorization Package.
 
 The following states are deliberately separate:
 
 ```text
-Human decision package Candidate
-!= Human accepted decisions
+Human-accepted policy directions
 != Legal finalization
 != Website implementation
 != publication
@@ -67,7 +68,7 @@ Human decision package Candidate
 != Payment implementation authority
 ```
 
-This Candidate resolves no Product/legal decision, creates no account/contact/submission authority, publishes nothing, changes no Product code or UI, and does not resolve `AGE-GATE-001`.
+This Acceptance Sync accepts the seven policy directions below. It creates no account/contact/submission authority, publishes nothing, changes no Product code or UI, and does not claim downstream specifications or legal drafts are already aligned. `AGE-GATE-001` is now Human-direction accepted with downstream alignment pending, and Lane B remains blocked until that alignment is completed.
 
 Bounded official-source facts are controlled by `../legal/LEGAL_SOURCE_REGISTER.md` and were rechecked on `2026-08-13`. They establish preparation requirements only and do not establish Moon Reply legal compliance, Stripe supportability, or Stripe approval.
 
@@ -75,18 +76,13 @@ Bounded official-source facts are controlled by `../legal/LEGAL_SOURCE_REGISTER.
 
 ### LB-DEC-AGE-001 — Age-gate mechanism
 
-Current conflict:
+Accepted direction:
 
-- the current Request UI uses the dedicated `私は18歳以上です` self-attestation checkbox; and
-- older current/draft specifications require age-band selection and prohibit that checkbox.
-
-Options:
-
-A. Retain the dedicated 18+ checkbox.
-
-B. Replace it with required age-band selection.
-
-Non-authoritative ChatGPT recommendation: **A. Retain the dedicated 18+ checkbox and do not collect age-band data solely for eligibility.**
+- Use the dedicated `私は18歳以上です` self-attestation checkbox.
+- Do not collect age bands solely for eligibility.
+- Do not collect date of birth or identity documents for initial Customer age eligibility.
+- Server-side purchase authority must ultimately require accepted adult confirmation.
+- This is self-attestation, not strict identity verification.
 
 Rationale:
 
@@ -98,38 +94,35 @@ Rationale:
 - The reviewed Stripe and Consumer Affairs Agency source set contains no requirement that Moon Reply collect age bands.
 - This is self-attestation, not identity verification.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
-Preserved blocker:
+Downstream state:
 
 ```yaml
-AGE-GATE-001: unresolved_human_product_legal_decision_required
+AGE-GATE-001:
+  human_direction: accepted
+  downstream_alignment: pending
+  semantic_state: accepted_human_direction_downstream_alignment_pending
 ```
 
-No RequestForm, age-related specification, or legal draft is modified by this Candidate.
+No RequestForm, `ORDER_FORM_SPEC`, `PAYMENT_CONFIRMATION_SCREEN_SPEC`, Terms, Privacy, age-related specification, or legal draft is modified by this Acceptance Sync. Lane B remains blocked until the conflicting downstream specifications and legal drafts are synchronized.
 
 ### LB-DEC-ENTITY-001 — Stripe entity/account route
 
-Options:
-
-A. Individual / sole-proprietor route.
-
-B. Corporation route.
-
-Non-authoritative ChatGPT recommendation: **A. Use the individual / sole-proprietor route for the initial MVP.**
+Accepted direction: **Use the individual / sole-proprietor applicable Stripe route for the initial MVP.**
 
 - Do not create a corporation solely to open a Stripe account.
 - Current Stripe Japan guidance says sole proprietors may register regardless of whether a business-registration filing has been made.
 - Tax timing and opening-notification decisions remain separate.
-- Actual Stripe onboarding labels and required fields must be reviewed when the later account-authorization task is created.
+- Actual Stripe onboarding entity labels and required fields remain evidence-gated and must be reviewed when the later account-authorization task is created.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
 No account creation is authorized.
 
 ### LB-DEC-DISCLOSURE-001 — Tokushoho operator disclosure
 
-The decision must keep three disclosures separate:
+The accepted decision keeps three disclosures separate:
 
 A. Truthful private KYC disclosure to Stripe.
 
@@ -137,13 +130,7 @@ B. Customer-facing public disclosure.
 
 C. A statutory request-based disclosure mechanism.
 
-Options:
-
-A. Publicly show legal name, full address, and phone.
-
-B. Use request-based omission for legally eligible fields, with a functioning pre-Payment disclosure-request mechanism.
-
-Non-authoritative ChatGPT recommendation: **B. Use request-based disclosure as the preferred initial direction where current law and actual Stripe requirements permit.**
+Accepted direction: **Prefer request-based disclosure for legally eligible legal-name/address/phone fields where current law and actual Stripe requirements permit, with a functioning pre-Payment disclosure-request mechanism.**
 
 Limitations:
 
@@ -156,24 +143,18 @@ Limitations:
 - Exact response-time wording must be operationally achievable.
 - Stripe Commerce Disclosure separately requires an email address.
 - Stripe also lists Head of Operations as a distinct field.
-- This Candidate does not conclude that the Human's legal name can remain routinely non-public under every Stripe review outcome.
+- This acceptance does not establish that the Human's legal name can remain routinely non-public under every Stripe review outcome.
 - Exact final Tokushoho wording remains gated by current official sources and actual Stripe evidence.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
 No real name, address, or phone is committed.
 
 ### LB-DEC-SUPPORT-001 — Contact/support model
 
-Options:
+Accepted direction: **Use one operating business mailbox plus one categorized contact form.**
 
-A. One operating business mailbox plus one categorized contact form.
-
-B. Multiple separate public mailboxes/forms.
-
-Non-authoritative ChatGPT recommendation: **A. Use one real business mailbox plus one categorized form.**
-
-Proposed categories:
+Accepted categories:
 
 - delivery / result URL / email non-delivery;
 - ordinary cancellation / refund;
@@ -196,9 +177,9 @@ Operational requirements:
 - no purchase-ID requirement for a disclosure request; and
 - Human/private input for the actual support email and response-time commitment.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
-No actual email address is invented by this Candidate.
+No actual email address is invented by this Acceptance Sync.
 
 ### LB-DEC-REFUND-001 — Refund and cancellation model
 
@@ -211,13 +192,12 @@ ordinary Product refund
 
 #### Before Payment
 
-- The Customer may stop the application.
+- The Customer may stop the application with `JPY 0 / free cancellation`.
 - No charge occurs.
 
 #### After Payment success but before generation starts
 
-- The decision remains dependent on an objectively verifiable pre-generation state.
-- Non-authoritative recommendation: permit a full JPY 980 cancellation/refund only if the system can prove the request arrived before `generation_started`.
+- Permit a full JPY 980 cancellation/refund only where the future system can objectively prove the request arrived before `generation_started`.
 - Do not promise this publicly until the state machine and operation can enforce it.
 
 #### After generation begins / after successful fulfillment
@@ -259,13 +239,13 @@ Unresolved:
 - evidence retention; and
 - chargeback/dispute workflow.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
-This Candidate does not modify any normative principle in `PAYMENT_CHARTER.md`.
+This Acceptance Sync preserves the provider-independent Charter boundaries, keeps ordinary JPY 980 Product refunds distinct from uncapped Payment Integrity remediation, and synchronizes the accepted pre-generation cancellation direction without implementing any Provider operation.
 
 ### LB-DEC-FULFILLMENT-001 — Delivery and fulfillment wording
 
-Proposed future wording skeleton:
+Accepted wording skeleton:
 
 > 「確認済みメールアドレスについて、サーバーが決済成功を確認した後に鑑定ノートの生成を開始します。結果は、公開前に実測と運用確認に基づいて定める提供期限までに結果ページで提供し、確認済みメールアドレスへ通知します。障害時は同一購入で復旧を試み、提供できない場合は税込980円を全額返金します。」
 
@@ -279,19 +259,13 @@ Proposed future wording skeleton:
 - No concrete minutes or hours may be published before production-like measurement.
 - Provider object, authorization, and capture semantics remain unresolved.
 
-Non-authoritative ChatGPT recommendation: **Accept the skeleton and determine the concrete delivery deadline from measured production-like performance plus a conservative operational buffer.**
+Accepted direction: **Use the skeleton and determine the concrete delivery deadline only from measured production-like performance plus a conservative operational buffer.**
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
 ### LB-DEC-DOMAIN-001 — Stable domain/review URL strategy
 
-Options:
-
-A. Use a temporary review URL and later migrate.
-
-B. Choose the final production domain before Stripe Account/Site review.
-
-Non-authoritative ChatGPT recommendation: **B. Choose the final production domain before Stripe review.**
+Accepted direction: **Choose the intended final production domain before Stripe Account/Site review; do not use a temporary review URL as the default Stripe review strategy.**
 
 Rationale:
 
@@ -310,15 +284,15 @@ Current boundary:
 - no deployment is authorized; and
 - actual domain research/selection is a later Human task.
 
-Human decision status: `pending`
+Human decision status: `accepted`
 
 ## 3. Recommended execution sequence
 
 | Step | Bounded work |
 | --- | --- |
-| B0 | Workflow Pivot + Human Decision Package Candidate |
-| B1 | Human + ChatGPT decision review and acceptance sync |
-| B2 | Legal Draft Finalization Candidate |
+| B0 | Workflow Pivot + Human Decision Package Candidate — complete at historical formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a` |
+| B1 | Human + ChatGPT decision review and acceptance sync — complete on `2026-08-13` |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — exact current next work |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -328,10 +302,10 @@ Human decision status: `pending`
 
 PayPay Lane C remains separate and later. Exact future branches and mutation manifests must not be assigned before predecessor acceptance.
 
-The exact current next work is Human + ChatGPT review of this Stripe Lane B Human Decision Package Candidate. B1 has not occurred, every Human decision above remains pending, Lane B remains blocked, and no external action is authorized.
+The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. B2 must synchronize the accepted Human directions into the age-related specifications/legal drafts, Terms, Privacy, Tokushoho, Refund, Contact, AI disclosure, Unsupported Cases, and final-confirmation legal facts. B2 is internal/draft work only; it authorizes no publication. Lane B remains blocked until the downstream Legal/Site/KYC/domain requirements are actually completed, and no external action is authorized.
 
 ## 4. Private-data and operation boundary
 
 Git may contain decision options, status, field names, and redacted references only. It must not contain actual legal name, date of birth, home/business address, phone, identity-document image or number, bank values, support-mailbox credentials, domain-registrar credentials, Stripe credentials, complete sensitive screenshots, or low-entropy PII hashes.
 
-This Candidate performs zero Stripe Sales/Support/account/submission/Dashboard/API/SDK/Checkout operations; zero PayPay/PAY.JP/RevenueCat operations; zero Provider/API/DB/Supabase/migration/Runtime/LUNA operations; zero domain purchase/DNS/deployment operations; and zero Payment implementation operations.
+This Acceptance Sync performs zero Stripe Sales/Support/account/submission/Dashboard/API/SDK/Checkout operations; zero PayPay/PAY.JP/RevenueCat operations; zero Provider/API/DB/Supabase/migration/Runtime/LUNA operations; zero domain purchase/DNS/deployment operations; and zero Payment implementation operations.

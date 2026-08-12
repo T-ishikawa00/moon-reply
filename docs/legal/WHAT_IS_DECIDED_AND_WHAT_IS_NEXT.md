@@ -55,6 +55,8 @@
 - RevenueCatはinitial Webに必須ではなく、future synchronizationはdesired / unresolved。PAY.JPはpaused fallback
 - Providerまたは第三者の業種区分は未確定であり、文言変更だけで承認・免除を得られるとは扱わない
 - Stripe Feasibility Evidence Preparationは`2026-08-12`に`stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。Lane A preparationは`preparation_human_approved`だが、external actionはnot authorized、acquisitionはnot submitted、outcomeは`null`であり、Stripe feasibility、account/contact/submission、approval/activationまたはformal selectionを確立しない
+- Stripe Lane B Human Decision Packageは`2026-08-13`に`stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。専用18+ self-attestation、individual/sole-proprietor applicable Stripe route、許容されるfieldのrequest-based disclosure優先、1 business mailbox + 1 categorized form、refund/Payment Integrity policy、具体的durationを置かないfulfillment skeleton、Stripe Account/Site review前のintended final production domain選定方針をacceptedとする
+- このpolicy acceptanceはdownstream specs/legal drafts、actual entity labels、mailbox/SLA、domain availability/purchase、Stripe evidence、legal publicationまたはPayment implementationを完成・承認しない
 
 Product、価格、Safety、truthful positioningおよびStripe-first strategyのaccepted内部方針は維持する。Stripe strategy acceptanceはfeasibility、approval/activation、formal selectionまたはimplementation authorityではない。
 
@@ -62,10 +64,10 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 ## 運営者が決めること
 
-- 個人、個人事業主、法人のどの運営形態にするか
+- actual Stripe onboarding entity label、opening-notification/tax timing、および運営・契約・表示主体の最終事実
 - 「月の返事」を屋号として使うか、別屋号または屋号なしにするか
-- 住所・電話番号をどの適法な方法で表示するか。住所についてはtruthful private disclosureを許容し、routine public home-address displayをdefaultにせず、許容される場合はrequest-based/non-routine-public methodを優先するHuman preferenceを記録済みだが、exact Tokushoho implementationは未決定
-- 問い合わせをメール、フォームまたは両方で受けるか
+- accepted request-based disclosure方向に沿ったlegal name/address/phoneのexact Tokushoho wordingと実情報。全fieldを非公開にできるとは扱わない
+- accepted 1 business mailbox + 1 categorized form modelに使用するactual mailbox address、form URL、access control、記録方法およびSLA
 - 問い合わせの返信目安を2営業日、3営業日、5営業日等のどれにするか
 - Analyticsを利用するか
 - Cookieをどの範囲で利用し、どのように説明・選択可能にするか
@@ -73,7 +75,7 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 - 結果URLの失効・再発行と誤メール訂正をどう扱うか
 - 初期MVPでマーケティングメールを行うか
 - 鑑定書の共有を私的利用のみ、一部共有可、全文共有可のどこまで許可するか
-- `AGE-GATE-001`：current Request UIの専用`私は18歳以上です` checkboxと、必須年齢層選択を要求し専用checkboxを禁止するcurrent draft/specのどちらをMVPのage-gate mechanismとして採用するか。Lane B/C readiness前にHuman Product/legal判断が必要で、本Acceptance Syncでは解消しない
+- intended final production domainの候補、availabilityおよび購入判断。temporary review URLをdefault strategyにしないpolicyのみacceptedで、domain purchase/DNS/deploymentは未承認
 
 判断は `OPERATOR_DECISION_GUIDE.md` を読み、`OPERATOR_DECISION_WORKSHEET.md` に回答して記録する。個人情報はこの段階で推測または仮入力しない。
 
@@ -123,9 +125,9 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 2. Milestone 2は現行RoadmapどおりInternal Automated AI / DB Vertical Sliceの内部作業線であり、運営者情報、公開条件、Stripe readinessまたはlegal publicationを完成させるMilestoneではない
 3. Stripe-first strategy Acceptance Sync、truthful Customer-facing/public-copy alignmentおよびStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted complete。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive
 4. `2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`となったが、これはStripe Provider outcomeではない
-5. B0 Stripe Lane B Human Decision Package Candidateはreadyだが、Human + ChatGPT acceptanceおよび全Human decisionは`pending`
-6. B1 Human + ChatGPT decision review and acceptance syncが現在のexact next work。Lane B/Cはblockedのままで、external actionは承認されない
-7. B1 acceptance後にのみB2 Legal Draft Finalization Candidateへ進み、accepted predecessor後にB3 Review-ready Website/Public Surface implementationへ進む
+5. B0 Stripe Lane B Human Decision Package Candidateはcommit `223a2746f72ae8faa90b4df198f998a8132f2f3a`でformulated
+6. B1 Human + ChatGPT decision review and acceptance syncは`2026-08-13`にcomplete。7件のpolicy decisionはすべてaccepted
+7. **B2 Stripe Lane B Legal Draft Finalization Candidateが現在のexact next work**。internal/draft workでありpublicationを承認しない。accepted predecessor後にのみB3 Review-ready Website/Public Surface implementationへ進む
 8. B4a deployment-readiness implementation/configurationとB4b stable URL deploymentを分離し、B4bには別個のHuman external-action authorityを必須とする
 9. B5 private KYC readinessではactual Human valueをGitへ入れず、B6 Stripe Account/Activation Authorization Packageはaccount creation/submissionを承認しない
 10. B7 actual Stripe account creation/KYC/activation submissionは、さらに別の明示的Human external-action authorization後にのみ実行できる
@@ -134,4 +136,4 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 predecessor acceptance前にexact future branchまたはmutation manifestを割り当てない。
 
-Operator identity、電話表示、support email、Tokushoho publicationおよびopening notificationは未解決のまま維持する。住所はHuman preferenceのみ記録済みで、exact Tokushoho disclosure implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはHuman preference上currently not required、GMOはon hold / not rejectedで、actual legal/Provider/postal/privacy/operational evidenceにより再検討できる。`AGE-GATE-001`はLane B/C blockerとして未解決である。PAY.JP固有の準備はcurrent next workではなくpaused fallbackであり、いずれのStripe lane outcomeからも自動reactivationしない。Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.
+Actual operator identity labels、exact legal name/address/phone wording、support mailbox/SLA、Tokushoho publicationおよびopening notificationは未解決のまま維持する。request-based disclosure方向はacceptedだが、exact Tokushoho implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはcurrently not required、GMOはon hold / not rejectedである。`AGE-GATE-001`はHuman direction accepted / downstream alignment pendingであり、RequestForm、ORDER_FORM_SPEC、PAYMENT_CONFIRMATION_SCREEN_SPEC、TermsおよびPrivacyは本Acceptance Syncでは変更しない。Lane B/Cはdownstream requirements完了までblockedである。PAY.JPはpaused fallbackで、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

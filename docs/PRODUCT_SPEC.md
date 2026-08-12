@@ -508,7 +508,7 @@ Product authorityは`External economic rail -> authoritative verification -> Moo
 - `STRIPE-FEAS-001`、`STRIPE-ACCOUNT-001`、`STRIPE-PAYPAY-001`は別Lane。actual Stripe account/contact/business/site/category/Live Paymentおよびpayment-method evidence acquisitionは別途承認かつevidence-gated
 - Stripe account/contactは本Acceptance Sync taskでは作成・実施しない。generic marketing pageやsilenceをapprovalと扱わない
 - cards、Apple Pay、Google Pay、PayPayのavailability、Checkout、test/live、webhook、refund、descriptor、Customer linkage、fees/settlementはevidence-gated
-- `AGE-GATE-001`はcurrent Request UIの18+専用checkboxと年齢層選択を要求するdraft/specの矛盾であり、本Acceptance Syncでは解消せずLane B/C blockerとしてHuman Product/legal判断を待つ。Lane A preparation acceptanceのblockerではない
+- `AGE-GATE-001`は専用`私は18歳以上です` self-attestationを採用し、eligibility目的だけの年齢層、DOBまたは本人確認書類を収集しないHuman方向性が`2026-08-13`にaccepted。server-side purchase authorityはaccepted adult confirmationを最終的に要求する。RequestForm、ORDER_FORM_SPEC、PAYMENT_CONFIRMATION_SCREEN_SPEC、Terms、Privacyのdownstream alignmentは未実施で、Lane B/C blockerとして残る
 - PAY.JP readiness evidenceはpaused fallbackとして保存し、GMO/開業届/PAY.JP申請準備をcurrent next workにしない
 - stable review URLs/public legal conditionsが必要なProvider/site reviewより前にそれらを整える。formal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない。Production QAはProduction Paymentを承認せず、Soft Launchには別個のProduction Payment authorizationが必要
 
@@ -937,7 +937,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。現在の正式なPayment作業は、status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`、acceptance `pending`のStripe Lane B Human Decision Package Candidateに対するHuman + ChatGPT reviewである。Lane B/Cはblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。Stripe Lane B Human Decision Packageはstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。現在の正式なPayment作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)**である。Lane B/Cはdownstream requirements未完了のためblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - Stripe/PAY.JP SDK/API/checkout/webhook
 - RevenueCat

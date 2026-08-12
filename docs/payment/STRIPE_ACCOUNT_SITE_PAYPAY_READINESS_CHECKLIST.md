@@ -12,10 +12,11 @@
 - Stripe account/contact/submission: `absent / none / none`
 - PayPay enablement/review: `not enabled / not submitted`
 - Stripe Sales route: `not_used_by_human_direction` / Human workflow choice / not a Provider outcome
-- Current controlling Candidate: `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
-- Candidate status: `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`
-- Human + ChatGPT Candidate acceptance: `pending`
-- Exact current next work: Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate
+- Current controlling package: `STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
+- Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
+- Human + ChatGPT review / acceptance: `complete / complete` on `2026-08-13`
+- Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
+- Exact current next work: Stripe Lane B Legal Draft Finalization Candidate (B2)
 
 Readiness item classifications:
 
@@ -28,15 +29,15 @@ Readiness item classifications:
 
 An item classification is preparation evidence only. It is not Stripe acceptance, legal approval, public readiness, or implementation authorization.
 
-The `2026-08-13` workflow pivot preserves Lane A as accepted preparation evidence but makes it inactive current work. Lane B blocker-resolution decisions are active internal preparation; Lane B and Lane C remain blocked, and no external action is authorized.
+The `2026-08-13` acceptance preserves Lane A as accepted preparation evidence but inactive current work. All seven Lane B policy decisions are accepted; Lane B and Lane C remain blocked pending downstream Legal/Site/KYC/domain requirements, and no external action is authorized.
 
 Bounded sequence:
 
 | Step | Work |
 | --- | --- |
-| B0 | Workflow Pivot + Human Decision Package Candidate |
-| B1 | Human + ChatGPT decision review and acceptance sync |
-| B2 | Legal Draft Finalization Candidate |
+| B0 | Workflow Pivot + Human Decision Package Candidate — complete |
+| B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — exact current next work |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -107,7 +108,7 @@ outcome: null
 | Domain/site ownership evidence | `blocker` | Stable domain/evidence absent |
 | AI disclosure | `implemented_not_public` | Accepted public-copy alignment exists locally |
 | Unsupported-case disclosure | `implemented_not_public` | Local review disclosure exists; not public evidence |
-| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` unresolved |
+| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` Human direction accepted; downstream surfaces inconsistent |
 | Responsive/public-environment QA | `blocker` | No stable public environment to verify |
 | No misleading Stripe logo/approval claims | `satisfied` | Current local public surfaces contain no Stripe approval/logo claim; recheck required before publication |
 
@@ -115,20 +116,19 @@ Gate B must not be marked publication-ready, approved, activated, or Live capabl
 
 ## 4. `AGE-GATE-001`
 
-Current conflict:
+Accepted Human direction: retain the dedicated self-attestation checkbox `私は18歳以上です`; do not collect age bands solely for eligibility; do not collect DOB or identity documents for initial Customer age eligibility; and ultimately require server-authoritative accepted adult confirmation before purchase. This is self-attestation, not strict identity verification.
 
-- current Request UI uses the required self-attestation checkbox `私は18歳以上です`; and
-- current controlling/draft documents retain required age-group selection (`18〜24歳`, `25〜29歳`, `30〜34歳`, `35〜39歳`, `40歳以上`) and prohibit the dedicated checkbox.
+Current controlling/draft documents still retain required age-group selection and prohibit the dedicated checkbox. Downstream alignment remains pending.
 
 ```yaml
 id: AGE-GATE-001
-status: unresolved_human_product_legal_decision_required
+human_direction: accepted
+downstream_alignment: pending
+semantic_state: accepted_human_direction_downstream_alignment_pending
 lane_b_readiness: blocked
 lane_c_readiness: blocked
-resolution_in_this_acceptance_sync: prohibited
+downstream_mutation_in_this_acceptance_sync: prohibited
 ```
-
-Non-authoritative ChatGPT recommendation: retain the current dedicated 18+ self-attestation for MVP and do not collect age-band data solely for eligibility. This is not Human acceptance.
 
 This Acceptance Sync does not modify RequestForm, `ORDER_FORM_SPEC.md`, `PAYMENT_CONFIRMATION_SCREEN_SPEC.md`, the Terms draft, or the Privacy draft.
 

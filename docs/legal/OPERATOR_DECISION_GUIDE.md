@@ -12,7 +12,9 @@
 
 回答は `OPERATOR_DECISION_WORKSHEET.md` に記録し、根拠となる契約、最新の公式一次情報、設定画面および試験結果を紐づける。専門家相談を利用する場合は任意の補助証拠として記録できるが、Paid LaunchまたはProduction Paymentの必須条件ではない。
 
-Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12`に`stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`となり、Stripe Feasibility Evidence Preparationも同日に`stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`となった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveである。Humanは`2026-08-13`にStripe Sales routeを使用しないことを選択し、stateは`not_used_by_human_direction`であるが、これはStripe Provider outcomeではない。現在の正式なPayment作業は、status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`、acceptance `pending`のStripe Lane B Human Decision Package Candidateに対するHuman + ChatGPT reviewである。Lane B/Cはblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。Legal identity、住所・電話表示、final support email、Tokushoho publicationおよびopening notificationは未解決で、将来のapplicable Provider review/publication/Paid Launch前に実証が必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
+Current sequencing: truthful Customer-facing/public-copy alignmentとStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted completeとなった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive、Stripe Salesは`not_used_by_human_direction`だがProvider outcomeではない。Stripe Lane B Human Decision Packageは`2026-08-13`にstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。現在の正式なPayment作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)**である。Lane B/Cはdownstream Legal/Site/KYC/domain requirements未完了のためblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。actual entity label、最終的な住所・電話表示文言、mailbox address、SLA、Tokushoho publication、opening notificationおよびdomain selectionは引き続き証拠またはHuman/private inputが必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
+
+Accepted Lane B directions are: dedicated 18+ self-attestation; initial individual/sole-proprietor applicable Stripe route; request-based disclosure preference where legally and Provider-permitted; one operating business mailbox plus one categorized contact form; the accepted refund/Payment Integrity policy; the accepted fulfillment skeleton without a concrete duration; and intended final production domain selection before Stripe Account/Site review. These directions are not downstream implementation, legal publication, Stripe evidence, or external-action authority.
 
 ---
 
@@ -20,9 +22,9 @@ Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12
 
 - **何を決めるのか:** 月の返事を個人、個人事業主、法人のどの主体で運営・契約・表示するか。
 - **なぜ必要なのか:** 決済事業者との契約主体、特商法表記、税務・会計、問い合わせ対応主体を一致させるため。
-- **選択肢:** 個人 / 個人事業主 / 法人。
-- **推奨案:** 有料公開前の未確認状態を禁止する。運営形態はprovider契約と法務表示の主体に一致させる。法務・税務上の判断は必要に応じて専門家に確認する。特定の形態が常に最適とは結論しない。
-- **今すぐ決める必要があるか:** 現行Acceptance Syncでは決めない。将来のapplicable Provider契約・審査および公開用法務文書へ実情報を入れる前に必要。現在は未決定のまま。
+- **Accepted direction:** 初期MVPのStripe routeはindividual / sole-proprietor applicable routeを使用し、Stripeだけを理由に法人を設立しない。
+- **残る判断:** actual Stripe onboarding entity label、運営・契約・表示主体の最終一致、税務およびopening-notification timingは別判断であり、証拠なしに確定しない。
+- **今すぐ決める必要があるか:** policy directionはaccepted。B2ではdraftを整合し、actual Provider契約・審査および公開用法務文書へ実情報を入れる前に残る事実を確定する。
 - **証拠・確認先:** providerの申込資格・契約条件、最新の税務・法務公式情報、実際の事業届出・法人情報。PAY.JPの個人/個人事業主routeでは開業届またはcurrent guidanceが認めるequivalent document。専門家相談は必要に応じた任意のescalation。
 
 ## OP-003 屋号
@@ -38,10 +40,10 @@ Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12
 
 - **何を決めるのか:** 特商法表記等で事業者所在地をどの方法で表示するか。
 - **なぜ必要なのか:** 通信販売の事業者情報を正確かつ適法に表示するため。
-- **Human preference:** Stripe KYC、銀行、税務・公的機関その他の正当に必要な非公開相手へのtruthful private home/business address disclosureは許容する。一般Customerへの自宅住所のroutine public displayはdefaultにしない。現行法とactual Provider要件が許す場合、適法なrequest-basedまたはotherwise non-routine-public disclosure methodを優先する。
+- **Accepted direction:** Stripe KYC、銀行、税務・公的機関その他の正当に必要な非公開相手へのtruthful private home/business address disclosureを維持する。一般Customerへの自宅住所のroutine public displayはdefaultにせず、現行法とactual Stripe要件が許すeligible fieldsでは適法なrequest-based disclosureを優先する。
 - **選択肢:** 実住所を表示 / 最新の公式案内と採用する表示方法の証拠に基づくrequest-basedその他の適法な方法 / actual evidenceにより有用・必要となった場合にvirtual officeを再検討 / 運営形態を見直してから決定。
 - **推奨案:** private KYC disclosureとCustomer-facing public disclosureを分離する。有料公開前に実在する情報とexact Tokushoho implementationを確定し、provider契約情報と整合させる。request-based disclosureが常に十分、またはvirtual officeが常に許容・不要とは結論しない。virtual-office useは現時点のHuman preferenceではrequiredではなく、GMOはon hold / not rejectedとする。
-- **今すぐ決める必要があるか:** Human preferenceは記録済みだが、OP-005はfully completedではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とactual Provider evidenceに基づく実情報・exact表示方法の確定が必須。
+- **今すぐ決める必要があるか:** directionはacceptedだが、OP-005はfully completedではない。B2および将来のactual Provider/site review、final URLの審査用ページ、公開前には、最新の公式一次情報とactual Provider evidenceに基づく実情報・exact表示方法の確定が必須。
 - **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実住所、採用する表示方法および必要なら住所利用契約。actual legal、Provider、postal、privacyまたはoperational evidenceにより有用・必要となる場合はvirtual officeを再検討する。専門家相談は任意。
 
 ## OP-006 電話番号公開方法
@@ -49,7 +51,7 @@ Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12
 - **何を決めるのか:** 特商法表記等で電話番号をどの方法で表示するか。
 - **なぜ必要なのか:** 事業者への連絡手段と法定表示を実態に合わせるため。
 - **選択肢:** 事業用電話番号を表示 / 最新の公式案内と採用する表示方法の証拠に基づく別の方法を採用 / 運営体制を整えてから決定。
-- **推奨案:** 私用番号を無計画に公開せず、実際に受電・折返し可能な運用と表示を一致させる。電話番号の省略が常に許されるとは結論しない。
+- **Accepted direction:** eligibleな電話番号fieldは現行法とactual Stripe要件が許す場合にrequest-based disclosureを優先する。私用番号を無計画に公開せず、実際に受電・折返し可能な運用と表示を一致させる。電話番号の省略が常に許されるとは結論しない。
 - **今すぐ決める必要があるか:** 現行Acceptance Syncのblockerではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とselected Provider evidenceに基づく実情報・表示方法の確定が必須。
 - **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実番号、採用する表示方法および電話サービス契約。専門家相談は任意。
 
@@ -57,18 +59,16 @@ Current sequencing: truthful Customer-facing/public-copy alignmentは`2026-08-12
 
 - **何を決めるのか:** 利用者・provider・法務窓口として使う実在のメールアドレス。
 - **なぜ必要なのか:** 決済、返金、結果通知、個人情報請求等の連絡を確実に受けるため。
-- **選択肢:** 独自ドメインメール / provider-hosted business mailbox / その他の運営者が管理する事業用アドレス。
-- **推奨案:** 私用メールと分離し、運営者が継続管理し、利用可能なら二要素認証を有効化し、公開前に送受信試験を行う。
-- **今すぐ決める必要があるか:** 現行Acceptance Sync taskではProvider contactを行わない。将来のactual Provider submission/contactまたは公開前には実在する連絡先が必要で、exact actionへのHuman authorizationも必要。historical draftには入力しない。
+- **Accepted direction:** 私用メールと分離した1つのoperating business mailboxを、1つのcategorized contact formの通知・対応先として継続管理する。利用可能なら二要素認証を有効化し、公開前に送受信試験を行う。
+- **今すぐ決める必要があるか:** modelはacceptedだが、actual mailbox addressとSLAはHuman/private inputとして未解決。B2で公開draftを整合し、将来のactual Provider submission/contactまたは公開前に実在する連絡先と運用証拠を確定する。
 - **証拠・確認先:** ドメイン・mailbox契約、管理権限、二要素認証設定、送受信試験記録。
 
 ## OP-008 問い合わせフォーム
 
 - **何を決めるのか:** 問い合わせ受付をフォームのみ、メールのみ、または両方にするか。
 - **なぜ必要なのか:** 問い合わせの取りこぼしを防ぎ、必要最小限の情報で適切な対応経路へ振り分けるため。
-- **選択肢:** フォームのみ / メールのみ / 両方。
-- **推奨案:** 初期運用負荷と障害時の代替経路を踏まえてHumanが決める。採用する経路は、決済問題、重複請求、生成失敗、誤メール、結果URL、プライバシー・削除請求を受け付けられることを事前に試験する。
-- **今すぐ決める必要があるか:** provider審査用ページと公開前には必要。フォーム実装はTask 18Cの範囲外。
+- **Accepted direction:** 1つのoperating business mailboxと1つのcategorized contact formを併用する。categoryはdelivery/result URL/non-delivery、ordinary cancellation/refund、Payment Integrity、Privacy/deletion/disclosure、seller-information disclosure request、otherとする。
+- **今すぐ決める必要があるか:** modelはaccepted。B2でContact/legal draftへ反映し、provider審査用ページと公開前にはactual mailbox、form、通知、記録、access control、受信試験およびSLAを確定する。実装は本Acceptance Syncの範囲外。
 - **証拠・確認先:** 実在URL、入力項目、通知先、権限、障害時手順、各問い合わせ種別の受信試験。
 
 ## OP-009 問い合わせ返信目安

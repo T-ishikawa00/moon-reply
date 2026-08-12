@@ -4,7 +4,7 @@
 >
 > **NO STRIPE CONTACT, SUBMISSION, ACCOUNT ACTION, OR PAYPAY ONBOARDING HAS OCCURRED**
 
-Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment and Stripe Feasibility Evidence Preparation are accepted complete; the preparation status is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Human directed on `2026-08-13` that Stripe Sales not be used (`not_used_by_human_direction`), an internal workflow choice rather than a Provider outcome. Lane A is preserved inactive without changing its four-field state. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`; Lane B/C remain blocked. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, or implementation.
+Current strategy context: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Customer-facing/Public-copy Alignment and Stripe Feasibility Evidence Preparation remain accepted complete. Stripe Sales is `not_used_by_human_direction`, an internal workflow choice rather than a Provider outcome, and Lane A is preserved inactive without changing its four-field state. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**; Lane B/C remain blocked pending downstream requirements. Stripe feasibility/account/contact/submission/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback. This checklist does not authorize an account, application, contact, inquiry, Dashboard action, PayPay onboarding, API, implementation, publication, domain purchase, or deployment.
 
 ## Preserved inactive Stripe Lane A preparation — not current next work
 
@@ -33,7 +33,8 @@ Lane A current state is `preparation_human_approved / external_action_not_author
 - [ ] Tokushoho is publication-ready for the applicable review
 - [ ] Support/contact facts and refund/cancellation facts are complete
 - [ ] Domain/site ownership evidence is available where required
-- [ ] `AGE-GATE-001` is resolved by Human Product/legal decision and all applicable surfaces are consistent
+- [x] `AGE-GATE-001` Human direction accepted: dedicated 18+ self-attestation; no age-band collection solely for eligibility
+- [ ] `AGE-GATE-001` downstream specifications and legal drafts are consistent with the accepted direction
 - [ ] Exact account/business/site/category/Live Payment action is separately Human-authorized
 
 Lane B current state is `preparation_blocked / external_action_not_authorized / not_submitted / outcome null`. Full classification is in `STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md`.

@@ -47,7 +47,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-Stripe feasibility evidence preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`, at accepted lineage `8a07cd46ea2370b14ff09a69fa05e4de88c0f50b` -> `ef0af57d9db1c071c9847257b4a87b4f4f6af633` -> `e2111fd88dffef4137ce3202f3805aef93c647cb`. `STRIPE-FEAS-001`, `STRIPE-ACCOUNT-001`, and `STRIPE-PAYPAY-001` remain separate. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, an internal Human workflow choice and not a Provider outcome. Current next work is Human + ChatGPT review of the Stripe Lane B Human Decision Package Candidate, status `stripe_lane_b_human_decision_package_candidate_ready_pending_human_chatgpt_review`, acceptance `pending`; Lane B/C remain blocked and no external action is authorized. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. This evidence-context synchronization modifies no normative Charter principle, including the distinction between ordinary JPY 980 Product refunds and uncapped Payment Integrity remediation.
+Stripe feasibility evidence preparation remains `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy directions are accepted. Lane B/C remain blocked pending downstream requirements, and no external action is authorized. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. Ordinary JPY 980 Product refunds remain distinct from uncapped Payment Integrity remediation.
 
 ## 2. Initial Product Contract
 
@@ -305,6 +305,8 @@ These belong to separately authorized implementation or design work.
 
 For one correctly created initial Product charge of `JPY 980`, the initial MVP Product refund is either `JPY 0` or `full JPY 980`. There is no Customer-facing partial-refund Product policy for that initial Product purchase.
 
+Before Payment, cancellation costs `JPY 0` because no charge has occurred. After successful Payment but before generation starts, the accepted policy direction permits a full `JPY 980` cancellation/refund only where the future server-authoritative system can objectively prove that the request arrived before `generation_started`. Exact state-machine, Provider execution, operational, evidence-retention, and legally compliant public-wording details remain downstream-gated.
+
 Normal Product full-refund candidates include:
 
 - paid service that cannot be delivered after bounded recovery;
@@ -524,11 +526,11 @@ The following Provider-specific facts remain unresolved and must not be inferred
 - test/live separation; and
 - future RevenueCat import and identity behavior where used.
 
-## 24. Production and Product Decisions Still Unresolved
+## 24. Accepted Policy Direction and Production Decisions Still Unresolved
 
-### Product decision required before Paid Launch
+### Accepted pre-generation cancellation direction
 
-Customer-initiated cancellation or refund after successful Payment but before generation or fulfillment completion is currently unresolved. It must be decided before Paid Launch and must be consistent with final Customer-facing terms, current official-source consumer-law review, actual fulfillment timing, and selected Provider evidence. This Charter invents neither a cancellation deadline nor a Provider capability.
+Customer-initiated cancellation/refund after successful Payment but before generation starts is accepted as a full `JPY 980` refund only when the future system can objectively prove the request preceded `generation_started`. This is a policy direction, not an implemented state, Provider capability, public promise, or legal conclusion. B2 and later implementation/Provider work must align final Customer-facing terms, current official-source consumer-law review, actual fulfillment timing, evidence, and execution mechanics. No concrete time-based cancellation deadline is invented.
 
 ### Production-measurement decisions
 
@@ -559,12 +561,14 @@ No number is invented by this Charter.
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
 | Stripe strategic direction | `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` on `2026-08-12`; Product/strategy authority only |
 | Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; preparation authority only |
+| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven policy decisions accepted; downstream alignment pending |
 | Stripe Lane A / B / C | `preparation_human_approved` / blocked / blocked; external action not authorized; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay | Unverified |
 | PayPay | Desired; Unverified; Not enabled; Not approved; lifecycle `not_frozen_recheck_required`; goods type unresolved pending actual onboarding evidence and Human review |
-| `AGE-GATE-001` | Unresolved Human Product/legal decision blocker for Lane B/C; not resolved by this Charter synchronization |
+| `AGE-GATE-001` | Human direction accepted / downstream specification and legal alignment pending; Lane B/C remain blocked |
+| Current next work | Stripe Lane B Legal Draft Finalization Candidate (B2); internal/draft only; publication unauthorized |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |
