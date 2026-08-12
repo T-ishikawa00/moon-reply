@@ -29,6 +29,7 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
             <p>
               この全文見本は、文章の雰囲気と鑑定ノートの構成をご確認いただくための固定架空ケースです。
               実在の相談者・購入者の事例でも、AI生成実績でもありません。
+              この固定見本は構成と文章の雰囲気だけを示し、実際の月の返事「恋のメッセージ鑑定ノート」は、入力された関係性やメッセージをAIが整理・分析して、次にどう動くかを考える判断材料としてまとめる商品です。
             </p>
           </div>
           <Link href="/request" className="button button--primary">鑑定ノートを依頼する</Link>

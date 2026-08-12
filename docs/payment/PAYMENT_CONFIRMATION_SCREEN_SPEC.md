@@ -22,7 +22,8 @@ This is a specification, not an implemented screen.
 
 Show together and clearly:
 
-- Product: 月の返事 単発鑑定ノート
+- Service: 月の返事
+- Product: 恋のメッセージ鑑定ノート
 - Product description: AIによる恋愛メッセージ分析・判断支援デジタルレポート
 - Service eligibility: 月の返事は18歳以上を対象とする
 - Age group selected on the request form

@@ -230,7 +230,7 @@ export function CustomerAssessmentNote({ projection }: Props) {
           <MoonSeal size="medium" />
           <span>月の返事</span>
         </div>
-        <p className={styles.documentType}>鑑定ノート</p>
+        <p className={styles.documentType}>恋のメッセージ鑑定ノート</p>
         {openingLine ? <h1 id="customer-assessment-title">{openingLine}</h1> : null}
         <EditorialDivider variant="night" className={styles.headerDivider} />
         <div className={styles.currentAnswer}>
@@ -459,11 +459,13 @@ export function CustomerAssessmentNote({ projection }: Props) {
         </section>
       ) : null}
 
-      {fixedLimitation ? (
-        <footer className={styles.fixedLimitation}>
-          <p>{fixedLimitation}</p>
-        </footer>
-      ) : null}
+      <footer className={styles.fixedLimitation}>
+        <p>
+          この鑑定ノートは、入力された情報をAIが整理・分析した判断材料です。
+          相手の本心や返信、復縁、将来の結果を断定・保証するものではありません。
+        </p>
+        {fixedLimitation ? <p>{fixedLimitation}</p> : null}
+      </footer>
     </article>
   );
 }

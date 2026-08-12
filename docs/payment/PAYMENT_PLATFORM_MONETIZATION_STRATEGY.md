@@ -306,7 +306,7 @@ Planning agreement, provider approval, Payment Charter acceptance, implementatio
 - `docs/CODEX_HANDOFF.md`: session handoff and prohibited-action boundary.
 - `docs/PAYMENT_POLICY.md`: concise initial-product payment policy.
 - `docs/payment/PAYMENT_CHARTER.md`: Human + ChatGPT accepted Payment Charter v1; implementation authority remains `false`.
-- `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`: current Stripe transition Candidate; acceptance pending.
+- `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`: Stripe transition Candidate source; accepted status is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`.
 - `docs/phase1/PAYMENT_FLOW.md`: detailed Web-flow planning subordinate to the accepted Payment Charter.
 - `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`: evidence gate for formal provider selection.
 - `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`: preserved paused-fallback readiness evidence; does not control current next work.

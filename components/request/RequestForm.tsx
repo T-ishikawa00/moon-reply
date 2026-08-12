@@ -654,12 +654,25 @@ function LocalPurchaseConfirmation({
       <h2 id="request-local-complete-title">{presentation.scopeLabel}</h2>
       <span>{presentation.heading}</span>
       <dl>
+        <MemoRow label="サービス" value="月の返事" />
+        <MemoRow label="商品" value="恋のメッセージ鑑定ノート" />
+        <MemoRow
+          label="商品の役割"
+          value="入力された状況・文面をAIが整理・分析し、次にどう動くかを考えるための判断材料としてまとめます。"
+        />
         <MemoRow label="鑑定でお返しするもの" value={presentation.description} />
         <MemoRow label="文案について" value={presentation.draftAvailability} />
         <MemoRow label="今の関係" value={form.relationship} />
         <MemoRow label="今夜知りたいこと" value={form.whatToKnow.join("、")} />
-        <MemoRow label="受け取りメール" value={form.email} />
+        <MemoRow label="受け取り・復旧メール" value={form.email} />
+        <MemoRow label="数量" value="1相談 / 1鑑定ノート" />
         <MemoRow label="予定している料金" value="税込980円" />
+        <MemoRow label="購入形式" value="都度払い" />
+        <MemoRow label="自動更新" value="なし" />
+        <MemoRow
+          label="結果について"
+          value="相手の本心、返信、復縁、将来の結果を断定・保証しません。"
+        />
       </dl>
       <div className="request-runtime-note" role="note">
         <strong>決済機能は現在準備中です。</strong>

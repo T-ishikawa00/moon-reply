@@ -7,7 +7,7 @@ import { RequestForm } from "@/components/request/RequestForm";
 export const metadata: Metadata = {
   title: "鑑定依頼シート | 月の返事",
   description:
-    "今の状況を自由に書き、Safety確認、依頼メモ、受け取り先を順に確認する月の返事の鑑定依頼シートです。",
+    "月の返事の鑑定依頼シートです。関係性やメッセージを入力し、AIによる整理・分析を次の行動の判断材料にする「恋のメッセージ鑑定ノート」の依頼内容を確認します。",
 };
 
 export default function RequestPage() {
@@ -31,6 +31,10 @@ export default function RequestPage() {
           <span>
             必須の長文欄は一つだけです。相談入力のあと、決済より前にSafetyを確認し、
             一枚の依頼メモで受け取り方を確かめます。
+          </span>
+          <span>
+            恋のメッセージ鑑定ノートでは、入力された関係性・状況・メッセージをAIが整理・分析し、
+            次にどう動くかを考えるための判断材料にまとめます。相手の本心や未来を断定するものではありません。
           </span>
           <div className="request-page__boundary" role="note">
             現在は審査用のローカル確認です。入力内容は外部へ送信・保存されず、

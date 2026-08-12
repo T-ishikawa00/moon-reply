@@ -3,8 +3,9 @@ import { PublicSampleReport } from "@/components/report/PublicSampleReport";
 import { PUBLIC_SAMPLE_SEND_CASE } from "@/fixtures/public/public-sample-cases";
 
 export const metadata: Metadata = {
-  title: "「送る」架空ケースの鑑定ノート見本 | 月の返事",
-  description: "具体的な日程の質問へ短く返信する判断を示す、実在の相談者・購入者の事例ではない固定架空ケースです。",
+  title: "「送る」架空ケース｜恋のメッセージ鑑定ノート全文見本 | 月の返事",
+  description:
+    "月の返事「恋のメッセージ鑑定ノート」の固定された架空の全文見本です。実際の商品は入力された関係性やメッセージをAIが整理・分析し、次の行動の判断材料にしますが、この見本は実在事例でもAI生成実績でもありません。",
 };
 
 export default function SampleReportPage() {
