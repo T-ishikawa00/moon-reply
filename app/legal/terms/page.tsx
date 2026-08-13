@@ -9,7 +9,7 @@ import { termsReviewSections } from "@/lib/legal/review-content";
 
 export const metadata: Metadata = {
   title: "利用規約 審査表示 | 月の返事",
-  description: "既存の利用規約ドラフトだけを基礎に、条項構造と未決定事項を確認する公開前の審査表示です。",
+  description: "受入済みのB2方針に沿って、条項構造と未決定事項を確認する公開前の利用規約審査表示です。",
 };
 
 export default function TermsReviewPage() {
@@ -18,12 +18,12 @@ export default function TermsReviewPage() {
       <LegalPageHeader
         eyebrow="TERMS REVIEW"
         title="利用規約 審査表示"
-        description="既存の利用規約ドラフトの順序と意味を、確定条項に見せない形で確認します。現在拘束力のある利用条件ではありません。"
+        description="受入済みのB2方針をB3の画面候補として確認します。現在拘束力のある利用条件でも、法務公開済みの規約でもありません。"
         showDates
       />
       <div className="legal-document-body">
         <ReviewCallout strong="このページは現在の利用契約条件ではありません。">
-          支払、提供、返金、問い合わせ、管轄その他の未確定事項を、運営者判断・外部証拠・専門家確認の各状態として明示しています。同意checkboxや同意記録はありません。
+          支払、提供、返金、問い合わせ、管轄その他の未確定事項を明示しています。同意チェックボックス、同意記録、決済はありません。最新の公式情報と実仕様の確認は必要ですが、専門家相談は必要に応じた任意のエスカレーションです。
         </ReviewCallout>
         <LegalSectionList sections={termsReviewSections} />
       </div>

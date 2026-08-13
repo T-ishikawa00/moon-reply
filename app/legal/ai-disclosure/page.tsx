@@ -9,7 +9,7 @@ import {
 
 export const metadata: Metadata = {
   title: "AI利用説明 審査表示 | 月の返事",
-  description: "AIの予定役割、限界、データ最小化、現在のM1非稼働を分けて確認する公開前の審査表示です。",
+  description: "AIの予定役割、限界、データ最小化、現在の外部AI非稼働を分けて確認する公開前の審査表示です。",
 };
 
 export default function AiDisclosureReviewPage() {
@@ -18,11 +18,11 @@ export default function AiDisclosureReviewPage() {
       <LegalPageHeader
         eyebrow="AI DISCLOSURE REVIEW"
         title="AI利用説明 審査表示"
-        description="AIが将来行う予定の整理・分析と、AIができないこと、現在のM1 reviewで実際に動作していないことを区別します。"
+        description="AIが将来行う予定の整理・分析と、AIができないこと、現在の審査表示で実際に動作していないことを区別します。"
       />
       <div className="legal-document-body">
-        <ReviewCallout strong="現在のM1ページは決定的なfixture dataを表示し、AI APIを呼び出しません。">
-          表示中のサンプルと審査用結果は固定データです。実際のAI生成、外部事業者処理、外部送信、学習実績、納品実績を示しません。
+        <ReviewCallout strong="現在の審査表示は固定された架空データを使い、外部AIを呼び出しません。">
+          表示中のサンプルと審査用結果は固定データです。実際のAI生成、外部AI事業者での処理、学習実績、納品実績を示しません。
         </ReviewCallout>
 
         <ContentSection eyebrow="INTENDED USE" title="AIが行う予定のこと">
@@ -63,15 +63,18 @@ export default function AiDisclosureReviewPage() {
           <p className="mt-4 leading-8 text-[#d5cab9]">
             決済前に停止し、通常鑑定ノートやメッセージ案を生成しない方針です。月の返事は緊急支援サービスではなく、未検証の相談先、リンク、電話番号は掲載しません。
           </p>
+          <p className="mt-4 leading-8 text-[#d5cab9]">
+            サービス側の検知漏れ等により、通常鑑定の対象外である相談が停止前に意図せず請求された場合は、生成を停止し、通常の取消ではなく意図しない請求の是正（Payment Integrity）として実際の経済的な誤りを980円を上限とせず是正する方向です。決済・返金機能は未実装です。
+          </p>
         </ContentSection>
 
         <ContentSection
           eyebrow="FUTURE PAYLOAD DESIGN"
-          title="将来のAIペイロード最小化"
-          intro="将来の本番環境では、生成に必要な最小限の相談内容、関係性、メッセージ文面、Safety分類だけを送る方針です。"
+          title="将来AIへ送る情報の最小化"
+          intro="将来の本番環境では、生成に必要な最小限の相談内容、関係性、メッセージ文面、安全確認の結果だけを送る方針です。"
         >
-          <ReviewCallout strong="生成ペイロードから除外する方針">
-            メールアドレス、決済識別子、外部事業者の顧客ID、購入ID、内部token、秘密鍵その他の生成に不要な直接識別子は送らない方針です。実際のサーバー側ペイロード検証は未完了です。
+          <ReviewCallout strong="AI生成のために送らない方針の情報">
+            メールアドレス、決済識別子、外部事業者の顧客ID、購入ID、内部トークン、秘密鍵その他の生成に不要な直接識別子は送らない方針です。実際のサーバー側送信内容の検証は未完了です。
           </ReviewCallout>
         </ContentSection>
 
@@ -85,7 +88,7 @@ export default function AiDisclosureReviewPage() {
             { label: "AI事業者", summary: "契約、プライバシー、安全性、利用可否の外部証拠がありません。", status: "外部証拠待ち", decisionIds: ["OP-015"] },
             { label: "利用エンドポイント", summary: "実際に利用するAPI経路は未確定です。", status: "外部証拠待ち", decisionIds: ["OP-016"] },
             { label: "アカウントのデータ制御設定", summary: "組織・プロジェクト設定の証拠がありません。", status: "外部証拠待ち", decisionIds: ["OP-017"] },
-            { label: "処理地域・国外処理", summary: "事業者、契約、データフローが未確定のため法的整理前です。", status: "専門家確認待ち", decisionIds: ["OP-032"] },
+            { label: "処理地域・国外処理", summary: "事業者、契約、データフローが未確定のため法的分類を断定しません。", status: "外部証拠待ち", decisionIds: ["OP-032"] },
             { label: "保持・削除条件", summary: "固定期間も保持なしも主張しません。最新の公式情報と実設定の確認が必要です。", status: "外部証拠待ち", decisionIds: ["OP-017", "OP-025"] },
           ]} />
         </ContentSection>
@@ -95,7 +98,7 @@ export default function AiDisclosureReviewPage() {
           <blockquote className="mt-5 border-l-4 border-[#8a6d2e] bg-[#fffdf5] p-5 font-serif text-lg leading-9">
             このレポートは、入力された情報をもとにAIが整理・分析した判断材料です。相手の本心や将来の出来事を断定・保証するものではありません。医療・心理・法律上の助言ではありません。
           </blockquote>
-          <p className="mt-4 leading-8 text-[#67596b]">法務レビュー、実仕様、他文書との整合確認を経るまで公開用の確定文言ではありません。</p>
+          <p className="mt-4 leading-8 text-[#67596b]">最新の公式情報、実仕様、他文書との整合確認を経るまで公開用の確定文言ではありません。専門家相談は必要に応じた任意のエスカレーションです。</p>
         </ContentSection>
       </div>
     </LegalReviewScaffold>

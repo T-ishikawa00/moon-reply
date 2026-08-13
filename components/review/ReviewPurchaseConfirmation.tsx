@@ -28,7 +28,7 @@ export function ReviewPurchaseConfirmation({
       <aside className="request-review-boundary" role="note">
         <strong>購入前の最終確認プレビュー</strong>
         <span>
-          normal_allowed の固定fixtureだけを表示します。決済、外部送信、保存、結果生成、メール送信は行いません。
+          架空の固定データによるレビュー表示です。決済、外部送信、保存、結果生成、メール送信は行いません。
         </span>
       </aside>
 
@@ -36,7 +36,7 @@ export function ReviewPurchaseConfirmation({
         <header className="purchase-sheet__header">
           <p>お申し込み前の最終確認</p>
           <h1 id="purchase-review-title">{purchase.product.userFacingLabel}</h1>
-          <span>1相談につき、一冊の鑑定ノートを受け取る都度払いの商品です。</span>
+          <span>1相談につき一冊の鑑定ノートを受け取る、一度きりの購入です。自動更新はありません。</span>
         </header>
 
         <section className="purchase-sheet__offer" aria-labelledby="purchase-offer-title">
@@ -46,9 +46,12 @@ export function ReviewPurchaseConfirmation({
             <strong>{purchase.product.price}</strong>
           </div>
           <dl>
+            <Row label="サービス" value={purchase.product.serviceName} />
+            <Row label="商品" value={purchase.product.userFacingLabel} />
+            <Row label="商品説明" value={purchase.product.officialClassification} />
             <Row label="数量" value={purchase.product.quantity} />
-            <Row label="支払い" value={purchase.product.purchaseType} />
-            <Row label="更新" value={purchase.product.renewal} />
+            <Row label="購入形態" value={purchase.product.purchaseType} />
+            <Row label="自動更新" value={purchase.product.renewal} />
             <Row label="コイン等" value="なし" />
           </dl>
         </section>
@@ -72,8 +75,8 @@ export function ReviewPurchaseConfirmation({
               <p>依頼内容</p>
               <h2 id="purchase-request-title">この相談で申し込む予定です</h2>
             </div>
-            <Link href="/review/request/confirmation/normal-001">
-              依頼メモへ戻る
+            <Link href="/request#sheet">
+              成人確認・相談・メールを修正
             </Link>
           </div>
           <dl>
@@ -91,8 +94,20 @@ export function ReviewPurchaseConfirmation({
               label="自分が送ろうとしている文面"
               value={excerpt(request.draftMessage)}
             />
-            <Row label="受け取りメール" value={request.email} />
-            <Row label="Safety" value="normal_allowed / 通常確認可能" />
+            <Row
+              label="成人確認「私は18歳以上です」"
+              value={purchase.adultConfirmation.confirmed ? "確認済み" : "未確認"}
+            />
+            <Row label="配信・回復用メール" value={request.email} />
+            <Row
+              label="メール確認状態"
+              value={purchase.deliveryRecoveryEmail.verificationStatus}
+            />
+            <Row label="安全上の利用資格" value={purchase.safetyEligibility} />
+            <Row label="支払方法" value={purchase.paymentMethod} />
+            <Row label="支払時期" value={purchase.paymentTiming} />
+            <Row label="提供方法" value={purchase.deliveryMethod} />
+            <Row label="提供時期" value={purchase.deliveryTiming} />
           </dl>
         </section>
 
@@ -116,6 +131,28 @@ export function ReviewPurchaseConfirmation({
           </div>
         </section>
 
+        <section className="purchase-sheet__boundaries" aria-labelledby="purchase-refund-title">
+          <p>取消・返金・意図しない請求</p>
+          <h2 id="purchase-refund-title">通常返金とPayment Integrityを分けて確認</h2>
+          <div>
+            <section>
+              <h3>通常の取消・返金</h3>
+              <ul>
+                <li>決済前は料金が発生せず、中止できます。</li>
+                <li>決済成功後でも、生成開始前と客観的に確認できる取消は税込980円を全額返金する方向です。</li>
+                <li>商品・技術上の障害は同じ購入の範囲で復旧し、再課金せず、安全な履行が不可能なら税込980円を全額返金する方向です。</li>
+                <li>正常な提供後は不満だけでは原則対象外ですが、法令上の権利や重大な不具合への救済を排除しません。</li>
+              </ul>
+            </section>
+            <section>
+              <h3>意図しない請求の是正</h3>
+              <p>
+                重複、誤額、誤った利用者・相談、安全確認のすり抜けその他の意図しない請求は、Payment Integrityとして実際の経済的な誤りを是正します。税込980円を是正の上限にしません。実行機能は未実装です。
+              </p>
+            </section>
+          </div>
+        </section>
+
         <section className="purchase-sheet__legal" aria-labelledby="purchase-legal-title">
           <p>購入条件の確認</p>
           <h2 id="purchase-legal-title">返金・利用条件は正式公開前です</h2>
@@ -123,10 +160,13 @@ export function ReviewPurchaseConfirmation({
             返金条件、決済方法、支払時期、提供時期には未確定事項があります。この画面では同意を取得しません。
           </span>
           <nav aria-label="購入条件の確認リンク">
-            <Link href="/legal/refund">返金方針を確認する</Link>
             <Link href="/legal/terms">利用規約を確認する</Link>
             <Link href="/legal/privacy">プライバシー方針を確認する</Link>
+            <Link href="/legal/tokushoho">特定商取引法に基づく表記を確認する</Link>
+            <Link href="/legal/refund">返金方針を確認する</Link>
+            <Link href="/contact">お問い合わせ準備を確認する</Link>
             <Link href="/legal/ai-disclosure">AI利用説明を確認する</Link>
+            <Link href="/legal/unsupported-cases">通常鑑定として扱わない相談を確認する</Link>
           </nav>
         </section>
 
@@ -184,7 +224,7 @@ export function UnavailableReviewPurchaseConfirmation({
           <span className="status-label status-label--review">ここで停止</span>
           <h1>購入確認を表示できません</h1>
           <p>
-            指定されたIDは許可リストにありません。通常fixtureへ置き換えず、購入確認・決済・通常レポートには進めません。
+            指定されたレビューIDは許可されていません。別の固定例へ置き換えず、購入確認・決済・通常レポートには進めません。
           </p>
         </header>
         <details className="request-review-metadata">

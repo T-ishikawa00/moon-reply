@@ -26,8 +26,7 @@ export function ReviewRequestConfirmation({
       <aside className="request-review-boundary" role="note">
         <strong>審査用の固定依頼メモ</strong>
         <span>
-          外部送信、保存、決済、AI処理は行われていません。normal_allowed fixture
-          の表示だけを確認します。
+          架空の固定データによるレビュー表示です。実際の購入、外部送信、保存、AI生成、メール送信は行いません。
         </span>
       </aside>
 
@@ -39,6 +38,23 @@ export function ReviewRequestConfirmation({
             機械的な項目表ではなく、依頼者が相談内容を落ち着いて読み直せる一枚として構成しています。
           </span>
         </header>
+
+        <section aria-labelledby="review-eligibility-title">
+          <div className="request-memo__heading">
+            <h2 id="review-eligibility-title">申込み前の確認</h2>
+            <Link href="/request#adultConfirmed">成人確認を修正</Link>
+          </div>
+          <dl>
+            <Row
+              label="成人確認"
+              value={fixture.adultConfirmed ? "「私は18歳以上です」確認済み" : "未確認"}
+            />
+            <Row
+              label="通常の有料鑑定へ進む条件"
+              value="安全確認済みの固定レビュー例です。実際の有料フローに進めるサーバー側確認は未実装です。"
+            />
+          </dl>
+        </section>
 
         <section aria-labelledby="review-consultation-title">
           <div className="request-memo__heading">
@@ -75,11 +91,11 @@ export function ReviewRequestConfirmation({
 
         <section aria-labelledby="review-safety-title">
           <div className="request-memo__heading">
-            <h2 id="review-safety-title">Safety確認</h2>
-            <Link href="/request#safety">Safetyを修正</Link>
+            <h2 id="review-safety-title">安全確認</h2>
+            <Link href="/request#safety">安全確認を修正</Link>
           </div>
           <p className="request-memo__safety">
-            normal_allowed / 通常鑑定の確認に進める内容 / 必須確認済み
+            この固定レビュー例では、通常の有料鑑定の最終確認へ進める内容として確認済みです。
           </p>
         </section>
 
@@ -89,10 +105,10 @@ export function ReviewRequestConfirmation({
             <Link href="/request#email">メールを修正</Link>
           </div>
           <dl>
-            <Row label="受け取りメール" value={fixture.email} />
+            <Row label="配信・回復用メール" value={fixture.email} />
             <Row
               label="利用目的"
-              value="鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定"
+              value="鑑定結果の配信と、同じ購入の安全な回復に使用する予定"
             />
           </dl>
         </section>

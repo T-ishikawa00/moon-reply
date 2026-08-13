@@ -15,7 +15,7 @@ import {
 export const metadata: Metadata = {
   title: "お問い合わせ 準備表示 | 月の返事",
   description:
-    "送信機能や連絡先を提供せず、予定カテゴリと未決定項目だけを確認するお問い合わせ準備ページです。",
+    "一つの事業用メールと一つの6分類フォームという受入済み方針を、受付機能なしで確認するお問い合わせ準備ページです。",
   robots: {
     index: false,
     follow: false,
@@ -29,18 +29,29 @@ export default function ContactReviewPage() {
       <LegalPageHeader
         eyebrow="CONTACT REVIEW"
         title="お問い合わせ 準備表示"
-        description="将来想定する相談カテゴリと、受付開始前に必要な判断を確認する非稼働ページです。"
+        description="将来の窓口構成と6つの受付カテゴリ、受付開始前に必要な判断を確認する非稼働ページです。"
         status="受付準備中・送信不可"
       />
       <div className="legal-document-body">
         <ReviewCallout strong="お問い合わせ受付は稼働していません。">
-          form、mailto、外部送信、受付済み表示、稼働する連絡先はありません。このページを開いても問い合わせは送信されません。
+          実在する事業用メール、送信フォーム、mailto、外部送信、受付済み表示、返信目安はありません。このページを開いても問い合わせは送信されません。
         </ReviewCallout>
 
         <ContentSection
+          eyebrow="ACCEPTED PLANNED MODEL"
+          title="予定する窓口構成"
+          intro="B2で受け入れた構成方針であり、運用開始を示しません。"
+          tone="ivory"
+        >
+          <p>
+            一つの運用可能な事業用メールボックスと、一つのカテゴリ分けされた問い合わせフォームを用意する方向です。実際の連絡先、送信先、本人確認、受付記録、対応体制は未実装です。
+          </p>
+        </ContentSection>
+
+        <ContentSection
           eyebrow="PLANNED CATEGORIES"
-          title="対応予定カテゴリ"
-          intro="将来の受付設計候補です。現在対応できることや返信目安を示すものではありません。"
+          title="6つの対応予定カテゴリ"
+          intro="受入済みの機能分類です。現在対応できること、送信できること、返信目安を示すものではありません。"
         >
           <ol className="legal-category-list">
             {plannedContactCategories.map((item, index) => (
@@ -59,6 +70,16 @@ export default function ContactReviewPage() {
           intro="空欄や架空値は埋めず、公開前のDecision状態だけを示します。"
         >
           <DecisionGrid decisions={contactUnresolvedRows} />
+        </ContentSection>
+
+        <ContentSection
+          eyebrow="SELLER DISCLOSURE PUBLICATION BLOCKER"
+          title="販売事業者情報の開示請求"
+          tone="night"
+        >
+          <p>
+            法令と実際のStripe要件が許す場合に限り、購入前に利用できる開示請求経路を設ける条件付き方向です。現在は実在する受付経路がないため、法務公開を止める項目です。このページから開示請求はできません。
+          </p>
         </ContentSection>
 
         <ContentSection eyebrow="DO NOT SEND" title="送らないでください">

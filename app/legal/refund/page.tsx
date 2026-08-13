@@ -6,11 +6,14 @@ import {
   LegalReviewScaffold,
   ReviewCallout,
 } from "@/components/legal/LegalReview";
-import { refundCases } from "@/lib/legal/review-content";
+import {
+  ordinaryRefundCases,
+  paymentIntegrityCases,
+} from "@/lib/legal/review-content";
 
 export const metadata: Metadata = {
   title: "返金方針 審査表示 | 月の返事",
-  description: "税込980円の単発鑑定ノートについて、確定前のケース別方針案を確認する返金審査表示です。",
+  description: "税込980円の通常返金と、意図しない請求のPayment Integrity是正を分けて確認する公開前の返金審査表示です。",
 };
 
 export default function RefundReviewPage() {
@@ -19,45 +22,44 @@ export default function RefundReviewPage() {
       <LegalPageHeader
         eyebrow="REFUND REVIEW"
         title="返金方針 審査表示"
-        description="ケースごとの候補対応を確認するための現時点の方針案です。自動返金、固定期限、確定済み返金条件を示すページではありません。"
+        description="通常の商品返金と、意図しない請求の是正を別のルールとして確認します。返金機能、固定処理期間、外部事業者の実行方法は未確定です。"
       />
       <div className="legal-document-body">
-        <ReviewCallout strong="決済事業者・専門家確認待ち">
-          返金条件は外部事業者の仕様、実装、利用者表示、適用法令の確認前です。「いかなる場合も返金しない」とするものではなく、法令上の権利を制限しません。
+        <ReviewCallout strong="返金・取消・請求是正の実行機能はありません。">
+          以下は受入済みのB2方針をレビューする表示です。外部事業者の実仕様、実装、利用者表示、適用される最新の法的義務との照合前であり、処理日数も約束しません。「いかなる場合も返金しない」とするものではなく、法令上の権利を制限しません。
         </ReviewCallout>
 
         <ContentSection
-          eyebrow="CASE MATRIX"
-          title="現時点の方針案"
-          intro="各行は候補対応です。確定方針、返金保証、自動処理の存在を表しません。"
+          eyebrow="ORDINARY PRODUCT REFUND"
+          title="通常の商品返金"
+          intro="正しく成立した税込980円の一度きりの購入についての方向です。0円または980円全額を基本とし、実行済みとは表示しません。"
         >
-          <DecisionGrid decisions={refundCases} />
+          <DecisionGrid decisions={ordinaryRefundCases} />
+        </ContentSection>
+
+        <ContentSection
+          eyebrow="PAYMENT INTEGRITY"
+          title="意図しない請求の是正"
+          intro="重複、誤額、誤った利用者・相談、安全確認のすり抜けなど、実際の経済的な誤りを直す考え方です。通常の商品返金とは別に扱います。"
+          tone="night"
+        >
+          <p className="mb-6 leading-8 text-[#d5cab9]">
+            通常の税込980円の請求1件だけが誤りなら980円の是正となり得ますが、複数請求や誤額などの実際の影響額を直すため、是正額を税込980円で打ち切りません。
+          </p>
+          <DecisionGrid decisions={paymentIntegrityCases} />
         </ContentSection>
 
         <ContentSection
           eyebrow="PROCESS STATUS"
-          title="申請・返金方法・処理時間"
+          title="申請経路・実行方法・処理期間"
           intro="現在は返金申請機能も稼働する問い合わせ窓口もありません。"
           tone="ivory"
         >
           <DecisionGrid decisions={[
-            { label: "申請経路", summary: "受付先、本人確認、購入特定情報、誤メール対応は未決定です。", status: "運営者判断待ち", decisionIds: ["OP-007", "OP-008", "OP-027", "OP-028"] },
-            { label: "返金方法", summary: "元の支払方法へ行う方向ですが、外部仕様確認前で確定していません。", status: "外部証拠待ち", decisionIds: ["OP-010"] },
-            { label: "処理時間・反映", summary: "固定期限、反映日数、返金可能期間、手数料の取扱いはいずれも未確認です。", status: "外部証拠待ち", decisionIds: ["OP-014"] },
+            { label: "申請経路", summary: "受付先、本人確認、購入の特定、誤メール対応は未決定です。", status: "運営者判断待ち", decisionIds: ["OP-007", "OP-008", "OP-027", "OP-028"] },
+            { label: "返金・取消・是正方法", summary: "外部事業者で利用できる操作、条件、完了時点を確認していません。具体的な方法を断定しません。", status: "外部証拠待ち", decisionIds: ["OP-010", "OP-014"] },
+            { label: "処理期間", summary: "固定期限や反映日数を示す証拠がないため、期間を約束しません。", status: "外部証拠待ち", decisionIds: ["OP-014"] },
           ]} />
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="SAFETY EXCEPTION"
-          title="Safety判定に関する返金候補"
-          tone="night"
-        >
-          <p className="leading-8">
-            通常鑑定対象外の相談は決済前に停止する設計です。検知漏れ、ルーティング不備その他のサービス側問題で決済された場合は、通常の恋愛鑑定ノートとメッセージ案の生成を停止し、全額返金の候補として扱う方向です。
-          </p>
-          <p className="mt-4 leading-8 text-[#d5cab9]">
-            現在のM1には決済、返金自動化、監査記録、外部事業者連携がありません。初期MVPの needs_review と rejected の購入不可方針だけが内部決定済みです。
-          </p>
         </ContentSection>
       </div>
     </LegalReviewScaffold>

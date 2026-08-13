@@ -11,22 +11,23 @@ import type { ReviewDecision } from "@/lib/legal/review-content";
 
 export const metadata: Metadata = {
   title: "プライバシー 審査表示 | 月の返事",
-  description: "将来のデータ取扱い計画と現在のM1非送信挙動を区別して確認する、公開前のプライバシー審査表示です。",
+  description: "将来のデータ取扱い計画と現在の内部レビュー処理を区別して確認する、公開前のプライバシー審査表示です。",
 };
 
 const plannedCollection = [
-  "メールアドレス、ニックネーム、年齢層",
-  "相手との関係性・関係状況",
+  "配信・回復用メールアドレスと、その確認状態・制御・監査記録",
+  "ニックネーム",
+  "「私は18歳以上です」の確認値・状態・監査記録",
+  "相手との関係性・現在の状況",
   "相談内容とメッセージ文面",
-  "Safety選択項目と分類結果",
+  "安全確認の入力と結果",
   "同意記録",
-  "生成された鑑定結果",
-  "購入記録と決済事業者から受け取る取引識別情報",
-  "メール送信記録",
-  "AI生成に関するメタデータ",
-  "フィードバック",
-  "問い合わせ内容と対応記録",
-  "IPアドレス、User-Agent、アクセス日時その他の技術情報を取得する可能性",
+  "依頼・購入・決済の識別情報",
+  "生成された鑑定結果と生成に関する記録",
+  "結果の配信・メール送信に関する記録",
+  "サポート、返金、プライバシー、販売事業者情報の開示請求と対応記録",
+  "IPアドレス、User-Agent、アクセス日時、障害・セキュリティ記録その他の技術情報",
+  "任意のマーケティング同意を使用する場合の同意・撤回記録",
 ] as const;
 
 const doNotEnter = [
@@ -42,7 +43,7 @@ const doNotEnter = [
 
 const purposes = [
   "鑑定依頼の受付と処理",
-  "Safety確認と通常鑑定対象外ケースの停止",
+  "安全確認と通常鑑定対象外ケースの停止",
   "決済状況の確認と購入管理",
   "鑑定ノートの生成",
   "結果ページと結果通知の提供",
@@ -60,13 +61,13 @@ const processingDecisions: readonly ReviewDecision[] = [
   { label: "データ保管基盤", summary: "利用機能、プロジェクトのリージョン、バックアップ、ログ、削除方法を実装と照合できていません。", status: "外部証拠待ち", decisionIds: ["OP-018"] },
   { label: "決済処理", summary: "事業者、支払方法、支払時期、受領情報、法的整理は未確定です。", status: "外部証拠待ち", decisionIds: ["OP-010", "OP-011", "OP-012"] },
   { label: "メール処理", summary: "結果通知・運用メールに用いる事業者、地域、保持・削除条件は未確定です。", status: "外部証拠待ち", decisionIds: ["OP-019"] },
-  { label: "委託・第三者・国外処理", summary: "実際の契約、処理地域、データフローがないため法的分類を断定しません。", status: "専門家確認待ち", decisionIds: ["OP-032"] },
+  { label: "委託・第三者・国外処理", summary: "実際の契約、処理地域、データフローがないため法的分類を断定しません。", status: "外部証拠待ち", decisionIds: ["OP-032"] },
   { label: "Cookie・analytics", summary: "導入有無、取得項目、目的、拒否方法は未決定です。", status: "運営者判断待ち", decisionIds: ["OP-020", "OP-021"] },
 ];
 
 const retentionFacts = [
   { label: "相談本文", value: "保存期間：未確定。購入・会計記録より短くする方向" },
-  { label: "Safety記録", value: "保存期間：未確定。安全上必要な最小限" },
+  { label: "安全確認記録", value: "保存期間：未確定。安全上必要な最小限" },
   { label: "鑑定結果", value: "保存期間：未確定。再アクセス要件と調整" },
   { label: "購入・会計記録", value: "保存期間：未確定。法令・返金・チャージバック要件と調整" },
   { label: "AI生成ログ", value: "保存期間：未確定。メタデータ中心でプロンプト原文を最小化する方向" },
@@ -80,12 +81,12 @@ export default function PrivacyReviewPage() {
       <LegalPageHeader
         eyebrow="PRIVACY REVIEW"
         title="プライバシー 審査表示"
-        description="将来の本番設計案と、現在のM1 review環境で実際に起きていることを混同しないための構成確認です。"
+        description="将来の本番設計案と、現在の内部レビュー環境で実際に起き得る処理を混同しないための構成確認です。"
         showDates
       />
       <div className="legal-document-body">
-        <ReviewCallout strong="現在のM1 review環境は、フォームデータを永続化・外部送信しません。">
-          入力はブラウザメモリ内のローカルUI確認に限られ、再読み込みでリセットされます。本番の取得、保存、AI、決済、メール、問い合わせ処理が稼働している証拠ではありません。
+        <ReviewCallout strong="現在のレビュー環境に本番の永続化・外部AI・決済・メール送信・問い合わせ処理はありません。">
+          内部レビューが有効な場合、相談内容と安全確認の入力が同一オリジンの内部評価先へ送信され、確認処理されることがあります。本番データの保存、外部AI事業者での処理、決済処理、メール送信、本番問い合わせ受付が稼働していることは示しません。
         </ReviewCallout>
 
         <ContentSection eyebrow="OPERATOR STATUS" title="運営者の状態">
@@ -101,7 +102,7 @@ export default function PrivacyReviewPage() {
           <ul className="grid gap-3 md:grid-cols-2">
             {plannedCollection.map((item) => <li key={item} className="rounded-lg border border-[#d8c596] bg-[#fff8e9] p-4 leading-7">{item}</li>)}
           </ul>
-          <p className="mt-5 leading-8 text-[#67596b]">年齢確認は18歳以上の年齢層を自己申告する方式で、生年月日・身分証明書を取得しない方針です。</p>
+          <p className="mt-5 leading-8 text-[#67596b]">年齢適格性は、必須チェックボックス「私は18歳以上です」の確認値と必要な監査記録を扱う方向です。その確認だけを目的として年齢層、生年月日、身分証明書を取得しません。本番のサーバー側確認は未実装です。</p>
         </ContentSection>
 
         <ContentSection eyebrow="DO NOT ENTER" title="入力しないよう求める情報">
@@ -120,11 +121,11 @@ export default function PrivacyReviewPage() {
 
         <ContentSection
           eyebrow="AI PAYLOAD MINIMIZATION"
-          title="AI処理と送信最小化"
-          intro="将来AIへ送るのは、鑑定ノート生成に必要な最小限の相談内容、関係性、メッセージ文面、Safety分類とする方針です。"
+          title="AIへ送る情報の最小化"
+          intro="将来AIへ送るのは、鑑定ノート生成に必要な最小限の相談内容、関係性、メッセージ文面、安全確認の結果とする方針です。"
         >
-          <ReviewCallout strong="AI生成ペイロードに含めない方針">
-            メールアドレス、決済識別子、外部事業者の顧客ID、購入ID、内部token、秘密鍵、IPアドレス、User-AgentはAI生成に不要であり、送信しない方針です。実際のサーバー側ペイロード検証は未完了です。
+          <ReviewCallout strong="AI生成のために送らない方針の情報">
+            メールアドレス、決済識別子、外部事業者の顧客ID、購入ID、内部トークン、秘密鍵、IPアドレス、User-AgentはAI生成に不要であり、送信しない方針です。実際のサーバー側送信内容の検証は未完了です。
           </ReviewCallout>
           <div className="mt-6"><DecisionGrid decisions={[processingDecisions[1]]} /></div>
         </ContentSection>
@@ -147,7 +148,7 @@ export default function PrivacyReviewPage() {
           <FactRows facts={retentionFacts} />
           <div className="mt-6">
             <DecisionGrid decisions={[
-              { label: "保存期間全般", summary: "データ種別ごとの必要性、法令、返金・会計、削除、安全、外部条件を確認して決定します。", status: "専門家確認待ち", decisionIds: ["OP-022", "OP-023", "OP-024", "OP-025"] },
+              { label: "保存期間全般", summary: "データ種別ごとの必要性、法令、返金・会計、削除、安全、外部条件を確認して決定します。", status: "外部証拠待ち", decisionIds: ["OP-022", "OP-023", "OP-024", "OP-025"] },
             ]} />
           </div>
         </ContentSection>
@@ -160,9 +161,9 @@ export default function PrivacyReviewPage() {
         </ContentSection>
 
         <ContentSection eyebrow="DATA SUBJECT REQUESTS" title="開示・訂正・削除の手続" tone="ivory">
-          <p className="leading-8">受付先、本人確認、対象範囲、法令・会計・決済上の保持例外、result token失効、外部事業者への削除依頼、手数料、対応期間は未確定です。</p>
+          <p className="leading-8">受付先、本人確認、対象範囲、法令・会計・決済上の保持例外、結果URLの失効、外部事業者への削除依頼、手数料、対応期間は未確定です。</p>
           <div className="mt-6"><DecisionGrid decisions={[
-            { label: "請求受付と本人確認", summary: "現在は受付窓口も処理SLAもありません。", status: "専門家確認待ち", decisionIds: ["OP-007", "OP-008", "OP-009", "OP-028"] },
+            { label: "請求受付と本人確認", summary: "現在は受付窓口も確定した対応期間もありません。", status: "運営者判断待ち", decisionIds: ["OP-007", "OP-008", "OP-009", "OP-028"] },
           ]} /></div>
         </ContentSection>
 

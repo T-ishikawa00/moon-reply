@@ -12,25 +12,8 @@ import { unsupportedCaseCategories } from "@/lib/legal/review-content";
 export const metadata: Metadata = {
   title: "通常鑑定として扱わない相談 審査表示 | 月の返事",
   description:
-    "Safety-firstの通常鑑定停止境界とM1のrejected・needs_review処理を確認する公開前文書です。",
+    "安全確認を通常の有料鑑定より前に行う停止境界と、確認が必要な場合の扱いを説明する公開前文書です。",
 };
-
-const m1StopDecisions = [
-  {
-    label: "rejected",
-    summary:
-      "決済へ進めず、通常鑑定ノートやメッセージ案を生成しません。",
-    status: "内部方針決定済み・実装証拠待ち" as const,
-    decisionIds: ["OP-034"],
-  },
-  {
-    label: "needs_review",
-    summary:
-      "本番取扱いが別途承認されるまで決済へ進めず、通常鑑定ノートやメッセージ案を生成しません。",
-    status: "内部方針決定済み・実装証拠待ち" as const,
-    decisionIds: ["OP-034"],
-  },
-];
 
 export default function UnsupportedCasesReviewPage() {
   return (
@@ -39,10 +22,10 @@ export default function UnsupportedCasesReviewPage() {
         eyebrow="SAFETY AND UNSUPPORTED CASES REVIEW"
         title="通常鑑定として扱わないご相談"
         description="相談した方を責めず、安全上の問題を恋愛の継続や連絡の後押しへ変換しないための停止境界です。"
-        status="公開前・Safety審査用"
+        status="公開前・安全方針の審査用"
       />
       <div className="legal-document-body legal-document-body--care">
-        <ReviewCallout strong="Safetyは必ず決済より前に確認します。">
+        <ReviewCallout strong="安全確認は必ず決済より前に行います。">
           全ての相談を通常の恋愛鑑定として扱うわけではありません。安全上の問題を含む場合は、安全を優先して通常鑑定を停止します。これは相談した方を非難・侮辱する対応ではありません。
         </ReviewCallout>
 
@@ -63,25 +46,32 @@ export default function UnsupportedCasesReviewPage() {
             危険や強い恐怖が関わる状況を、恋愛の駆け引きや「送るべき文面」へ置き換えると、相談した方や相手の安全を損なうおそれがあります。
           </p>
           <p>
-            そのため、決定的なSafety ruleで通常鑑定の前に分類し、normal_allowed だけを依頼メモと購入前確認へ進めます。needs_review と rejected は fail closed で停止します。
+            そのため、危険、緊急、通常鑑定で扱えない内容、無効・矛盾・不明な入力、技術的なエラーがある場合は通常の有料鑑定へ進めません。通常の有料鑑定を安全に提供できることが確認されない間は、鑑定ノートやメッセージ案も生成しません。
           </p>
         </ContentSection>
 
         <ContentSection
-          eyebrow="CURRENT M1 HANDLING"
-          title="現在のM1停止処理"
-          intro="既存の分類語彙とseverityを変更せず、固定fixtureとlocal deterministic ruleの結果を確認します。"
+          eyebrow="CLARIFICATION"
+          title="追加情報や確認が必要な場合"
+          intro="確認が必要であることと、利用できないことを同一視しません。"
           tone="ivory"
         >
-          <DecisionGrid decisions={m1StopDecisions} />
-          <nav className="legal-inline-links" aria-label="Safety審査状態">
-            <Link href="/review/request/rejected">
-              rejected 審査状態 <span aria-hidden="true">→</span>
-            </Link>
-            <Link href="/review/request/needs-review">
-              needs_review 審査状態 <span aria-hidden="true">→</span>
-            </Link>
-          </nav>
+          <p>
+            相談内容を安全に評価するため追加情報や確認が必要な場合は、その確認が完了するまで決済、通常の鑑定ノート、メッセージ案へ進みません。安全に再評価できれば、通常の有料鑑定へ進める場合があります。
+          </p>
+          <p>
+            待つこと、今は送らないこと、一時的に連絡を控えること、相手の境界を尊重することだけを理由に、自動的に利用不可とは扱いません。
+          </p>
+        </ContentSection>
+
+        <ContentSection
+          eyebrow="UNINTENDED CHARGE"
+          title="停止前に意図せず請求された場合"
+          intro="通常の取消ではなく、意図しない請求の是正として扱う方向です。"
+        >
+          <p>
+            サービス側の検知漏れや処理不備により、通常鑑定として扱えない相談が停止前に意図せず請求された場合は、鑑定ノートとメッセージ案の生成を停止し、Payment Integrityとして実際の経済的な誤りを980円を上限とせず是正します。決済・是正機能は未実装です。
+          </p>
         </ContentSection>
 
         <ContentSection

@@ -23,7 +23,7 @@ export default function TokushohoReviewPage() {
       <LegalPageHeader
         eyebrow="COMMERCIAL DISCLOSURE REVIEW"
         title="特定商取引法に基づく表記 審査表示"
-        description="固定済みの商品事実と、公開前に実情報・外部証拠・専門家確認が必要な項目を、スマートフォンでも横スクロールなく確認する構成です。"
+        description="固定済みの商品事実と、公開前に実情報・外部証拠が必要な項目を、スマートフォンでも横スクロールなく確認する構成です。"
       />
       <div className="legal-document-body">
         <ReviewCallout strong="この画面は、完成した特定商取引法に基づく表記ではありません。">
@@ -33,7 +33,7 @@ export default function TokushohoReviewPage() {
         <ContentSection
           eyebrow="FIXED ROWS"
           title="固定済みの表示項目"
-          intro="以下だけを通常値として表示します。提供方法は計画であり、提供時期の確定ではありません。"
+          intro="価格、数量、一度きりの購入、自動更新なし、18歳以上の必須確認、商品・AI・非保証の説明だけを固定値として表示します。"
         >
           <FactRows facts={tokushohoFixedRows} />
         </ContentSection>
@@ -52,9 +52,20 @@ export default function TokushohoReviewPage() {
         <ContentSection
           eyebrow="UNRESOLVED DISCLOSURE ROWS"
           title="未確定の開示項目"
-          intro="空欄、架空値、推測値は表示しません。Decision IDは審査専用メタデータです。"
+          intro="空欄、架空値、推測値は表示しません。内部の審査情報は各項目の折りたたみ内に隔離します。"
         >
           <DecisionGrid decisions={tokushohoUnresolvedRows} />
+        </ContentSection>
+
+        <ContentSection
+          eyebrow="CONDITIONAL SELLER DISCLOSURE DIRECTION"
+          title="請求に応じた販売事業者情報の開示"
+          intro="採用済みの条件付き方向であり、現在利用できる制度や受付経路ではありません。"
+          tone="ivory"
+        >
+          <p className="leading-8">
+            法令と実際のStripe要件の双方が許す場合に限り、購入前に利用できる請求経路を設け、必要な販売事業者情報を遅滞なく開示する方向です。現在は事業用メール、問い合わせフォーム、受付処理がなく、利用者が請求できる状態ではありません。
+          </p>
         </ContentSection>
 
         <ContentSection
@@ -63,9 +74,10 @@ export default function TokushohoReviewPage() {
           tone="night"
         >
           <ul className="list-disc space-y-3 pl-6 leading-8">
-            <li>事業者名、責任者、所在地、電話、メールを実情報と運用証拠で完成させる</li>
-            <li>住所・電話の表示方法を、最新の公式情報と専門家確認に基づいて決める</li>
+            <li>事業者名、責任者、所在地、電話、事業用メールを実情報と運用証拠で完成させる</li>
+            <li>住所・電話の表示方法を、最新の公式情報、実情報、実際の外部事業者要件に基づいて決める</li>
             <li>特定の住所形態が利用可能、または住所・電話を省略できると推測で主張しない</li>
+            <li>販売事業者情報の開示請求を採用する場合は、実在する購入前の受付経路を用意する</li>
             <li>決済事業者のカテゴリ確認、支払方法、支払時期、返金条件を外部証拠で確認する</li>
             <li>購入前確認と価格・数量・支払・提供・返金条件を一致させる</li>
           </ul>
