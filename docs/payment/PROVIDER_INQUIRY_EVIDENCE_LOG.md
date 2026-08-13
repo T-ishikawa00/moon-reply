@@ -12,7 +12,7 @@
 
 ## Status rules
 
-> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. No inquiry, contact, submission, account action, evidence acquisition, or Provider outcome is added by B2.
+> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). No inquiry, contact, submission, account action, evidence acquisition, or Provider outcome is added by B2.
 
 - `Not sent` means the inquiry has not been transmitted through any channel.
 - `Not submitted` means no production-use application has been submitted.

@@ -12,7 +12,7 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
-> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending` であり、本表は公開できません。
+> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete` であり、本表は公開できません。
 
 ---
 

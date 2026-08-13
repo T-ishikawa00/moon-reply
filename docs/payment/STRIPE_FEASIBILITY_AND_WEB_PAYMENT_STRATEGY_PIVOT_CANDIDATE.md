@@ -2,7 +2,7 @@
 
 ## 1. Status and authority
 
-> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. This status-only mirror does not alter the accepted Product/strategy direction or establish Stripe feasibility, selection, approval, or implementation.
+> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). This status-only mirror does not alter the accepted Product/strategy direction or establish Stripe feasibility, selection, approval, or implementation.
 
 - Candidate formulation date: 2026-08-12
 - Accepted status: stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete
@@ -33,7 +33,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-Stripe feasibility evidence preparation remains Human + ChatGPT accepted complete. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe outcome. Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; B2 Human + ChatGPT review is the exact current next work and acceptance remains pending. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains unauthorized and evidence-gated.
+Stripe feasibility evidence preparation remains Human + ChatGPT accepted complete. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe outcome. Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. B2 is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and B2 acceptance is complete. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains unauthorized and evidence-gated.
 
 The following states are intentionally separate:
 
@@ -417,8 +417,8 @@ No resolution is invented here.
 | Google Pay eligibility | Unverified |
 | PayPay eligibility | Unverified |
 | PayPay lifecycle / enablement | Desired; lifecycle not frozen / recheck required; unverified; not enabled; not approved; goods type unresolved pending actual onboarding evidence and Human review |
-| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`; seven decisions accepted; B2 Candidate ready pending review; Production enforcement/evidence pending |
-| AGE-GATE-001 | Human direction accepted / downstream specification and legal alignment pending; Lane B/C blocked |
+| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`; seven decisions accepted; B2 docs/spec/legal authority accepted; Production enforcement/evidence pending |
+| AGE-GATE-001 | B2 docs/spec/legal alignment accepted / Production server enforcement unimplemented; Lane B/C blocked |
 | Stripe private KYC vs public Tokushoho | Separate evidence domains; private truthful disclosure accepted; routine public home-address display not default; exact Tokushoho method unresolved |
 | Virtual office / GMO | Not currently required by Human preference; GMO on hold, not rejected; evidence-based reconsideration available |
 | PAY.JP | Paused fallback; not approved; not selected |

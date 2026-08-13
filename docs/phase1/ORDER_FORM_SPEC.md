@@ -1,8 +1,8 @@
 # ORDER_FORM_SPEC.md
 
-## B2 Candidate status
+## B2 accepted status
 
-`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`. This specification-only alignment does not authorize UI/code mutation, Payment implementation, or publication.
+`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`. Human + ChatGPT review / acceptance is `complete / complete`. This specification-only alignment does not authorize UI/code mutation, Payment implementation, or publication.
 
 ## 0. Purpose
 

@@ -12,7 +12,7 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
-> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。以下のCurrent B2 authorityがTask 18Bのhistorical matrixより優先します。
+> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete`。以下のCurrent B2 authorityがTask 18Bのhistorical matrixより優先します。
 
 ---
 
@@ -25,7 +25,7 @@
 - 専門家相談は任意であり、未実施それ自体はPayment Charter受入、公開、Paid LaunchまたはProduction Paymentのblockerではない
 - 以下のTask 18BおよびM1-I5時点の表現はhistorical evidenceとして維持し、現在のreview authorityまたはdownstream UI実装完了を意味しない
 - Stripe Lane B Human Decision Packageは`stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`であり、`LB-DEC-AGE-001`、`LB-DEC-ENTITY-001`、`LB-DEC-DISCLOSURE-001`、`LB-DEC-SUPPORT-001`、`LB-DEC-REFUND-001`、`LB-DEC-FULFILLMENT-001`、`LB-DEC-DOMAIN-001`はaccepted
-- B2は上記をdraft/specへ同期したCandidateであり、statusは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`。Human + ChatGPT review / acceptanceは`pending / pending`
+- B2は上記をdraft/spec/legal authorityへ同期し、statusは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`。Human + ChatGPT review / acceptanceは`complete / complete`
 
 ---
 
@@ -65,7 +65,7 @@ Task 18B時点の`Future implementation`表記は成立時点の履歴です。M
 
 | Decision | Current Candidate value | Evidence/implementation/publication state |
 | --- | --- | --- |
-| `LB-DEC-AGE-001` | 必須boolean自己申告 `私は18歳以上です`。年齢適格性だけのための年齢層、DOB、本人確認書類は収集しない | `AGE-GATE-001 = accepted_direction_legal_spec_alignment_candidate_complete`; Production server enforcementは未実装 |
+| `LB-DEC-AGE-001` | 必須boolean自己申告 `私は18歳以上です`。年齢適格性だけのための年齢層、DOB、本人確認書類は収集しない | `AGE-GATE-001 = accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete`; Production server enforcementは未実装 |
 | `LB-DEC-ENTITY-001` | applicableな個人・個人事業主route | actual legal name/address/phone等はHuman/private input待ち |
 | `LB-DEC-DISCLOSURE-001` | 法令と実際のStripe要件が許す項目で`請求があった場合には遅滞なく開示します`を候補とする | Payment前request、no login/purchase/Purchase ID、実経路・logsがpublication前に必要 |
 | `LB-DEC-SUPPORT-001` | 1 operating business mailbox + 1 categorized form、6 functional categories | mailbox/form/SLA/backendは未実装・未確定 |

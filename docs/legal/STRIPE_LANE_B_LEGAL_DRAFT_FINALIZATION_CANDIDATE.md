@@ -1,18 +1,21 @@
 # Stripe Lane B Legal Draft Finalization Candidate (B2)
 
-## Candidate control
+## B2 acceptance control
 
-- Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`
-- Candidate date: `2026-08-13`
+- Accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`
+- Acceptance date: `2026-08-13`
+- Review outcome: `PASS`
 - Exact baseline: `83eee8753ca8e85591fa9131078834f18e5f1231`
+- Initial Candidate: `db8ba66f2a07c2de7207f4ab9296c6334f106fe2`
+- Review Correction R1: `15236314372a1a150235de6f94c245f4c978fcfa`
 - Branch: `codex/stripe-lane-b-legal-draft-finalization-candidate`
-- Human + ChatGPT review: `in_progress / correction_required`
-- Human + ChatGPT acceptance: `pending`
+- Human + ChatGPT review: `complete`
+- Human + ChatGPT acceptance: `complete`
 - Publication approval: `false`
 - Payment implementation authority: `false`
 - Production Payment authority: `false`
 
-This Candidate is an internal legal-draft and specification-alignment package. It is not legal advice, is not accepted, is not approved for publication, and creates no Stripe, Provider, Payment, deployment, domain, DNS, account, KYC, or Production authority.
+This accepted B2 package establishes docs/spec/legal-draft authority only. It is not legal advice, is not approved for publication, and creates no Stripe, Provider, Payment, deployment, domain, DNS, account, KYC, or Production authority.
 
 ## Accepted predecessor authority
 
@@ -26,11 +29,11 @@ The controlling predecessor remains `stripe_lane_b_human_decision_package_human_
 - `LB-DEC-FULFILLMENT-001`
 - `LB-DEC-DOMAIN-001`
 
-Payment Charter v1 remains `human_chatgpt_accepted_complete`; this Candidate makes no normative Charter change.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`; this accepted B2 package makes no normative Charter change.
 
 ## Initial Candidate formulation manifest
 
-The initial formulation below is preserved as historical lineage. Its baseline is `83eee8753ca8e85591fa9131078834f18e5f1231`, and its Candidate commit is `db8ba66f2a07c2de7207f4ab9296c6334f106fe2`.
+The initial formulation below is preserved as historical lineage. Its baseline is `83eee8753ca8e85591fa9131078834f18e5f1231`, and its Candidate commit is `db8ba66f2a07c2de7207f4ab9296c6334f106fe2`. Its task-time status was `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; it was not accepted at formulation time.
 
 ### Update — exactly 40
 
@@ -85,6 +88,8 @@ Counts: `update = 40 / new = 1 / delete = 0 / rename = 0 / total = 41 / code_or_
 
 Human + ChatGPT review found that the initial 41-path formulation did not contain the complete current docs/spec authority scope. A repository-wide tracked-file authority audit identified 21 Category A current docs/spec paths requiring alignment and four current code/UI implementation paths requiring explicit B3 deferral.
 
+Review Correction R1 commit: `15236314372a1a150235de6f94c245f4c978fcfa`.
+
 R1 corrects current documentation, specification, legal-draft, planning, metrics, QA, architecture, and commercial Safety authority only. It does not modify code/UI, start B3, change Payment Charter principles, establish Provider facts, or grant publication, deployment, Payment implementation, or Production Payment authority.
 
 ### Review Correction R1 — Update exactly 22
@@ -116,7 +121,7 @@ Counts: `update = 22 / new = 0 / delete = 0 / rename = 0 / total = 22 / code_or_
 
 Eleven of the 21 authority-doc paths were outside the initial formulation manifest. The effective unique B2 docs/spec authority scope from the initial baseline through R1 is therefore the original 41 paths plus 11 newly added authority-doc paths, for `52` unique paths. This extends the effective B2 authority scope without rewriting or pretending the initial formulation did not occur.
 
-R1 leaves Human + ChatGPT acceptance `pending`. A correction commit or push does not mark B2 accepted.
+At R1 task time, Human + ChatGPT review remained `in_progress / correction_required` and acceptance remained `pending`. The R1 correction commit or push did not itself mark B2 accepted.
 
 ## Resolved Candidate facts
 
@@ -136,15 +141,15 @@ R1 leaves Human + ChatGPT acceptance `pending`. A correction commit or push does
 
 ## Age alignment state
 
-`AGE-GATE-001 = accepted_direction_legal_spec_alignment_candidate_complete`
+`AGE-GATE-001 = accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete`
 
-This means the accepted Human direction is aligned in this B2 Candidate's current drafts and specifications. It does not mean Candidate acceptance, Production server enforcement, Lane B readiness, Payment authorization, identity verification, or Provider approval.
+This means the accepted Human direction and B2 docs/spec/legal alignment are Human + ChatGPT accepted complete. It does not mean Production server enforcement, Lane B readiness, Payment authorization, identity verification, or Provider approval.
 
 The future real paid flow must require server-authoritative adult confirmation. The current RequestForm and prepayment gate already follow the accepted direction and are not modified by B2.
 
 ## Request-based disclosure boundary
 
-For legally eligible fields, the preferred Candidate direction is request-based disclosure where current law and actual Stripe requirements permit. The Candidate wording is:
+For legally eligible fields, the accepted conditional B2 direction is request-based disclosure where current law and actual Stripe requirements permit. The accepted draft wording is:
 
 `請求があった場合には遅滞なく開示します`
 
@@ -237,7 +242,7 @@ The sources support only the recorded conditional facts. They do not establish M
 
 ## Publication and no-PII boundary
 
-This Candidate remains **NOT APPROVED FOR PUBLICATION**. No publication checklist item is completed merely because a policy decision is accepted.
+This accepted B2 package remains **NOT APPROVED FOR PUBLICATION**. No publication checklist item is completed merely because B2 docs/spec/legal authority is accepted.
 
 Actual Human legal name, home/business address, phone, date of birth, identity document, bank information, opening-notification status, Provider account data, credentials, secrets, and complete KYC evidence must not be stored in this Candidate. Git may contain field names, readiness states, redacted outcomes, and opaque evidence references only.
 
@@ -270,9 +275,9 @@ The following four paths are current implementation, are not historical, and are
 3. `app/legal/privacy/page.tsx`
 4. `lib/legal/review-content.ts`
 
-These paths remain stale relative to the corrected B2 docs/spec/legal-draft authority. Their temporary B2-to-B3 deferral does not block later acceptance of the B2 docs/spec/legal-draft package itself, but each path is a hard blocker for B3 completion, legal publication, review-ready/public-site acceptance, Paid Launch, and Production Payment.
+These paths remain stale relative to the accepted B2 docs/spec/legal-draft authority. Their temporary B2-to-B3 deferral did not block acceptance of the B2 docs/spec/legal-draft package itself, but each path remains a hard blocker for B3 completion, legal publication, review-ready/public-site acceptance, Paid Launch, and Production Payment.
 
-Later B2 acceptance, if separately granted, means only `docs/spec/legal-draft authority accepted`. It does not mean current legal UI is aligned, the public site is review-ready, legal pages are publishable, or B3 is complete. B3 remains inactive during R1 and may align these four paths only after separate B2 acceptance and explicit implementation authority.
+B2 acceptance means only `docs/spec/legal-draft authority accepted`. It does not mean current legal UI is aligned, the public site is review-ready, legal pages are publishable, or B3 is complete. B3 remained inactive during R1. This Acceptance Sync does not start B3; B3 is the next authorized-candidate stage and requires the next explicit Human instruction before implementation.
 
 ## Preserved lane and Provider states
 
@@ -286,10 +291,12 @@ Later B2 acceptance, if separately granted, means only `docs/spec/legal-draft au
 - Production Payment: `false`
 - Legal publication: `false`
 
-## Human + ChatGPT review gate
+## Human + ChatGPT acceptance record
 
-The exact next work after the R1 correction commit is:
+Human + ChatGPT review outcome is `PASS`; review and acceptance are `complete` on `2026-08-13`. Review Correction R1 is accepted as part of the B2 lineage. The historical Initial Candidate and R1 sections above remain task-time truthful.
 
-**Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2) after Review Correction R1**
+The exact next work after this Acceptance Sync is:
 
-B2 acceptance remains pending. B3 may begin only after separate Human + ChatGPT acceptance of B2. This Candidate must not be marked accepted by its correction commit or push.
+**Stripe Lane B Review-ready Website/Public Surface implementation (B3)**
+
+B2 acceptance is complete. This Acceptance Sync does not start B3, mutate B3 paths, or authorize publication, Provider action, Payment implementation, or Production Payment. B3 requires the next explicit Human instruction.

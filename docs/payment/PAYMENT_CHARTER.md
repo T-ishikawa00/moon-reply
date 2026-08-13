@@ -2,7 +2,7 @@
 
 ## 1. Status and Authority
 
-> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. Payment Charter v1 remains `human_chatgpt_accepted_complete`; no normative Charter principle, Payment implementation authority, or Production Payment authority changes.
+> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). Payment Charter v1 remains `human_chatgpt_accepted_complete`; no normative Charter principle, Payment implementation authority, or Production Payment authority changes.
 
 - Candidate formulation date: `2026-08-11`
 - Acceptance date: `2026-08-12`
@@ -49,7 +49,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-Stripe feasibility evidence preparation remains `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy directions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; B2 Human + ChatGPT review is the exact current next work and acceptance remains pending. Lane B/C remain blocked pending downstream requirements, and no external action is authorized. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. Ordinary JPY 980 Product refunds remain distinct from uncapped Payment Integrity remediation.
+Stripe feasibility evidence preparation remains `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy directions are accepted. B2 is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and B2 acceptance is complete. Lane B/C remain blocked pending downstream requirements, and no external action is authorized. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. Ordinary JPY 980 Product refunds remain distinct from uncapped Payment Integrity remediation.
 
 ## 2. Initial Product Contract
 
@@ -563,14 +563,14 @@ No number is invented by this Charter.
 | Current-source legal/Privacy/Customer-rights review | Required; unresolved material obligations remain blockers |
 | Stripe strategic direction | `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete` on `2026-08-12`; Product/strategy authority only |
 | Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; preparation authority only |
-| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven decisions accepted; B2 Candidate ready pending review; Production enforcement/evidence pending |
+| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven decisions accepted; B2 docs/spec/legal authority accepted; Production enforcement/evidence pending |
 | Stripe Lane A / B / C | `preparation_human_approved` / blocked / blocked; external action not authorized; not submitted; outcomes `null` |
 | Stripe feasibility / account / contact / approval / activation | Not established / absent / none / absent / absent |
 | Stripe formal selection | Incomplete |
 | Cards / Apple Pay / Google Pay | Unverified |
 | PayPay | Desired; Unverified; Not enabled; Not approved; lifecycle `not_frozen_recheck_required`; goods type unresolved pending actual onboarding evidence and Human review |
-| `AGE-GATE-001` | Human direction accepted / downstream specification and legal alignment pending; Lane B/C remain blocked |
-| Current next work | Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2); Candidate not accepted; B3 inactive |
+| `AGE-GATE-001` | B2 docs/spec/legal alignment accepted / Production server enforcement unimplemented; Lane B/C remain blocked |
+| Current next work | Stripe Lane B Review-ready Website/Public Surface implementation (B3); B2 accepted; B3 not started |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |

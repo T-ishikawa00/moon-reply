@@ -6,7 +6,7 @@
 >
 > **DO NOT ENTER GUESSED PERSONAL INFORMATION**
 
-> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。このガイドへ実際のHuman PIIを記録しない。
+> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete`。このガイドへ実際のHuman PIIを記録しない。
 
 ## 0. 使い方
 
@@ -14,7 +14,7 @@
 
 回答は `OPERATOR_DECISION_WORKSHEET.md` に記録し、根拠となる契約、最新の公式一次情報、設定画面および試験結果を紐づける。専門家相談を利用する場合は任意の補助証拠として記録できるが、Paid LaunchまたはProduction Paymentの必須条件ではない。
 
-Current sequencing: truthful Customer-facing/public-copy alignmentとStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted completeとなった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive、Stripe Salesは`not_used_by_human_direction`だがProvider outcomeではない。Stripe Lane B Human Decision Packageは`2026-08-13`にstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。B2 Candidateは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`であり、現在の正式な作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)のHuman + ChatGPT review**である。Lane B/Cはdownstream Legal/Site/KYC/domain requirements未完了のためblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。actual entity label、最終的な住所・電話表示文言、mailbox address、SLA、Tokushoho publication、opening notificationおよびdomain selectionは引き続き証拠またはHuman/private inputが必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
+Current sequencing: truthful Customer-facing/public-copy alignmentとStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted completeとなった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive、Stripe Salesは`not_used_by_human_direction`だがProvider outcomeではない。Stripe Lane B Human Decision Packageは`2026-08-13`にstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。B2 Candidateは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`であり、現在の正式な作業は**Stripe Lane B Review-ready Website/Public Surface implementation (B3)**である。Lane B/Cはdownstream Legal/Site/KYC/domain requirements未完了のためblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。actual entity label、最終的な住所・電話表示文言、mailbox address、SLA、Tokushoho publication、opening notificationおよびdomain selectionは引き続き証拠またはHuman/private inputが必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
 
 Accepted Lane B directions are: dedicated 18+ self-attestation; initial individual/sole-proprietor applicable Stripe route; request-based disclosure preference where legally and Provider-permitted; one operating business mailbox plus one categorized contact form; the accepted refund/Payment Integrity policy; the accepted fulfillment skeleton without a concrete duration; and intended final production domain selection before Stripe Account/Site review. These directions are not downstream implementation, legal publication, Stripe evidence, or external-action authority.
 

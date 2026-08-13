@@ -13,7 +13,7 @@
 
 この文書は内部検討用であり、法的助言、公開承認、決済事業者の承認または実装承認ではない。
 
-B2 Candidate statusは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptanceは`pending / pending`であり、現在のexact next workはB2 CandidateのHuman + ChatGPT reviewである。
+B2 accepted statusは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptanceは`complete / complete`であり、現在のexact next workはStripe Lane B Review-ready Website/Public Surface implementation (B3)である。
 
 ---
 
@@ -62,7 +62,7 @@ B2 Candidate statusは`stripe_lane_b_legal_draft_finalization_candidate_ready_pe
 - Stripe Feasibility Evidence Preparationは`2026-08-12`に`stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。Lane A preparationは`preparation_human_approved`だが、external actionはnot authorized、acquisitionはnot submitted、outcomeは`null`であり、Stripe feasibility、account/contact/submission、approval/activationまたはformal selectionを確立しない
 - Stripe Lane B Human Decision Packageは`2026-08-13`に`stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。専用18+ self-attestation、individual/sole-proprietor applicable Stripe route、許容されるfieldのrequest-based disclosure優先、1 business mailbox + 1 categorized form、refund/Payment Integrity policy、具体的durationを置かないfulfillment skeleton、Stripe Account/Site review前のintended final production domain選定方針をacceptedとする
 - このpolicy acceptanceはdownstream specs/legal drafts、actual entity labels、mailbox/SLA、domain availability/purchase、Stripe evidence、legal publicationまたはPayment implementationを完成・承認しない
-- B2 Candidateではaccepted policyをCURRENT drafts/specsへ同期した。`AGE-GATE-001 = accepted_direction_legal_spec_alignment_candidate_complete`だが、Candidate acceptance、Production server enforcement、Lane B readinessまたはPayment authorityを意味しない
+- accepted B2 docs/spec/legal authorityではaccepted policyをCURRENT drafts/specsへ同期した。`AGE-GATE-001 = accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete`だが、B2 docs/spec/legal acceptanceはcompleteだが、Production server enforcement、Lane B readinessまたはPayment authorityを意味しない
 - 通常Product返金とPayment Integrity remediationを区別し、Product/technical failureはsame-Purchase recovery / no recharge / impossible fulfillment時の税込980円全額返金、Safety bypass等はactual economic errorのuncapped remediationとする
 - fulfillment skeletonはverified email、server-authoritative Payment success、protected result page、same-Purchase recovery、no rechargeを要求し、具体的delivery durationは未確定のままにする
 - Contact modelは1 operating business mailbox + 1 categorized form、6 functional categoriesとし、販売事業者情報開示はPayment前・no login/purchase/Purchase IDで請求可能にする
@@ -136,7 +136,7 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 4. `2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`となったが、これはStripe Provider outcomeではない
 5. B0 Stripe Lane B Human Decision Package Candidateはcommit `223a2746f72ae8faa90b4df198f998a8132f2f3a`でformulated
 6. B1 Human + ChatGPT decision review and acceptance syncは`2026-08-13`にcomplete。7件のpolicy decisionはすべてaccepted
-7. B2 Stripe Lane B Legal Draft Finalization Candidateは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`。**現在のexact next workはB2 CandidateのHuman + ChatGPT review**であり、acceptanceはpending。B3はB2が別途acceptedとなった後にのみ開始できる
+7. B2 Stripe Lane B Legal Draft Finalization Candidateは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`。Human + ChatGPT review / acceptanceは`complete / complete`。**現在のexact next workはStripe Lane B Review-ready Website/Public Surface implementation (B3)**だが、このAcceptance SyncはB3を開始せず、実装には次の明示的Human instructionが必要
 8. B4a deployment-readiness implementation/configurationとB4b stable URL deploymentを分離し、B4bには別個のHuman external-action authorityを必須とする
 9. B5 private KYC readinessではactual Human valueをGitへ入れず、B6 Stripe Account/Activation Authorization Packageはaccount creation/submissionを承認しない
 10. B7 actual Stripe account creation/KYC/activation submissionは、さらに別の明示的Human external-action authorization後にのみ実行できる
@@ -145,4 +145,4 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 
 predecessor acceptance前にexact future branchまたはmutation manifestを割り当てない。
 
-Actual operator identity labels、exact legal name/address/phone wording、support mailbox/SLA、Tokushoho publicationおよびopening notificationは未解決のまま維持する。request-based disclosure方向はacceptedだが、exact Tokushoho implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはcurrently not required、GMOはon hold / not rejectedである。`AGE-GATE-001`のaccepted Human directionはB2 CandidateのCURRENT specs/legal draftsへ同期済みだが、Production server enforcementは未実装である。RequestFormは既に整合し、B2では変更しない。Lane B/Cはdownstream requirements完了までblockedである。PAY.JPはpaused fallbackで、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.
+Actual operator identity labels、exact legal name/address/phone wording、support mailbox/SLA、Tokushoho publicationおよびopening notificationは未解決のまま維持する。request-based disclosure方向はacceptedだが、exact Tokushoho implementationは未解決・current-source/evidence-gatedである。truthful private disclosureとCustomer-facing public disclosureを混同しない。Virtual-office useはcurrently not required、GMOはon hold / not rejectedである。`AGE-GATE-001`のaccepted Human directionはaccepted B2 docs/spec/legal authorityのCURRENT specs/legal draftsへ同期済みだが、Production server enforcementは未実装である。RequestFormは既に整合し、B2では変更しない。Lane B/Cはdownstream requirements完了までblockedである。PAY.JPはpaused fallbackで、Stripeも法務・公開義務を除去しない。Provider-specific Payment implementation must not begin before Human formal selection and separate implementation authorization.

@@ -6,7 +6,7 @@
 >
 > **NOT LEGAL OR TAX ADVICE**
 
-> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。accepted Lane B directionは再回答対象ではなく、Human Answerはactual private valueまたは残る運用判断だけに使用する。
+> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete`。accepted Lane B directionは再回答対象ではなく、Human Answerはactual private valueまたは残る運用判断だけに使用する。
 
 ## 記入ルール
 

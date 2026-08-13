@@ -2,7 +2,7 @@
 
 ## 1. Accepted status and authority
 
-> **B2 Candidate downstream status:** the accepted seven decisions are synchronized into the B2 Candidate with status `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance remains `pending / pending`; exact next work is B2 review. This predecessor remains accepted, but it does not accept B2 or authorize B3.
+> **B2 accepted downstream status:** the accepted seven decisions are synchronized into the accepted B2 package with status `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`. Human + ChatGPT review / acceptance is `complete / complete`; exact next work is Stripe Lane B Review-ready Website/Public Surface implementation (B3). This predecessor remains accepted; B2 is now separately accepted, and this Acceptance Sync does not start B3.
 
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Acceptance date: `2026-08-13`
@@ -70,7 +70,7 @@ Human-accepted policy directions
 != Payment implementation authority
 ```
 
-At B1 acceptance time, this Acceptance Sync accepted the seven policy directions below without claiming downstream specifications or legal drafts were already aligned. The later B2 Candidate now records `AGE-GATE-001 = accepted_direction_legal_spec_alignment_candidate_complete`; B2 review / acceptance and Production server enforcement remain pending, and Lane B remains blocked. Neither B1 nor B2 creates account/contact/submission authority, publishes anything, or changes Product code/UI.
+At B1 acceptance time, this Acceptance Sync accepted the seven policy directions below without claiming downstream specifications or legal drafts were already aligned. The accepted B2 docs/spec/legal authority records `AGE-GATE-001 = accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete`; B2 review / acceptance is complete; Production server enforcement remains unimplemented, and Lane B remains blocked. Neither B1 nor B2 creates account/contact/submission authority, publishes anything, or changes Product code/UI.
 
 Bounded official-source facts are controlled by `../legal/LEGAL_SOURCE_REGISTER.md` and were rechecked on `2026-08-13`. They establish preparation requirements only and do not establish Moon Reply legal compliance, Stripe supportability, or Stripe approval.
 
@@ -294,7 +294,7 @@ Human decision status: `accepted`
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete at historical formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a` |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete on `2026-08-13` |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review is exact current next work; acceptance pending |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Human + ChatGPT review and acceptance are complete; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is exact current next work |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -304,7 +304,7 @@ Human decision status: `accepted`
 
 PayPay Lane C remains separate and later. Exact future branches and mutation manifests must not be assigned before predecessor acceptance.
 
-The B2 Candidate synchronized the accepted Human directions into the age-related specifications/legal drafts, Terms, Privacy, Tokushoho, Refund, Contact, AI disclosure, Unsupported Cases, and final-confirmation legal facts. Its status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; the exact current next work is **Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)**, and acceptance remains pending. B2 is internal/draft work only and authorizes no publication. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are actually completed, and no external action is authorized.
+The B2 Candidate synchronized the accepted Human directions into the age-related specifications/legal drafts, Terms, Privacy, Tokushoho, Refund, Contact, AI disclosure, Unsupported Cases, and final-confirmation legal facts. Its status is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; the exact current next work is **Stripe Lane B Review-ready Website/Public Surface implementation (B3)**, and B2 acceptance is complete. B2 is internal/draft work only and authorizes no publication. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are actually completed, and no external action is authorized.
 
 ## 4. Private-data and operation boundary
 

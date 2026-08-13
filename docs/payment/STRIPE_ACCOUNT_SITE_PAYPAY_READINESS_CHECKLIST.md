@@ -2,7 +2,7 @@
 
 ## 1. Status and classification
 
-> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved.
+> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved.
 
 - Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Formulation date: `2026-08-12`
@@ -18,7 +18,7 @@
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Human + ChatGPT review / acceptance: `complete / complete` on `2026-08-13`
 - Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
-- Exact current next work: Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)
+- Exact current next work: Stripe Lane B Review-ready Website/Public Surface implementation (B3)
 
 Readiness item classifications:
 
@@ -39,7 +39,7 @@ Bounded sequence:
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — ready pending Human + ChatGPT review; acceptance pending |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — Human + ChatGPT accepted complete; acceptance complete |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -110,7 +110,7 @@ outcome: null
 | Domain/site ownership evidence | `blocker` | Stable domain/evidence absent |
 | AI disclosure | `implemented_not_public` | Accepted public-copy alignment exists locally |
 | Unsupported-case disclosure | `implemented_not_public` | Local review disclosure exists; not public evidence |
-| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` Human direction accepted; downstream surfaces inconsistent |
+| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` Human direction accepted; B2 docs/spec/legal alignment accepted; current implementation and Production enforcement pending |
 | Responsive/public-environment QA | `blocker` | No stable public environment to verify |
 | No misleading Stripe logo/approval claims | `satisfied` | Current local public surfaces contain no Stripe approval/logo claim; recheck required before publication |
 
@@ -125,14 +125,14 @@ The B2 Candidate aligns CURRENT controlling drafts/specifications to the dedicat
 ```yaml
 id: AGE-GATE-001
 human_direction: accepted
-downstream_alignment: candidate_complete_pending_human_chatgpt_review
-semantic_state: accepted_direction_legal_spec_alignment_candidate_complete
+downstream_alignment: human_chatgpt_accepted_complete
+semantic_state: accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete
 lane_b_readiness: blocked
 lane_c_readiness: blocked
 production_server_enforcement: false
 ```
 
-B2 modifies the listed controlling specifications and legal drafts only. RequestForm already follows the accepted direction and is not modified. Human + ChatGPT review / acceptance of B2 remains `pending / pending`.
+B2 modifies the listed controlling specifications and legal drafts only. RequestForm already follows the accepted direction and is not modified. Human + ChatGPT review / acceptance of B2 remains `complete / complete`.
 
 ## 5. Private KYC evidence boundary
 

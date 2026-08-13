@@ -6,7 +6,7 @@ Internal planning draft.
 
 This is not legal advice and is not approved for publication.
 
-B2 Candidate status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance is `pending / pending`. Accepted policy decisions may be marked resolved, but implementation, evidence, private-value, and publication items remain open.
+B2 accepted status is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance is `complete / complete`. Accepted policy decisions may be marked resolved, but implementation, evidence, private-value, and publication items remain open.
 
 ## Status Meaning
 
@@ -99,6 +99,6 @@ Do not mark uncompleted items as completed.
 - [x] Cross-document consistency matrix created
 - [x] Publication gate created
 - [x] B2 Candidate legal-draft/spec alignment assembled with the exact 41-path manifest
-- [ ] B2 Human + ChatGPT review and acceptance completed
+- [x] B2 Human + ChatGPT review and acceptance completed on `2026-08-13`
 
 These checks mean internal drafts exist. They do not mean publication approval.

@@ -8,7 +8,7 @@ This document is not legal advice, is not a public legal page, and is not approv
 
 Task 18B must use this specification to draft the legal pages and operator decision placeholders. Final wording requires operator completion and review against current official primary sources, actual Product/Provider behavior, and final public wording. Material unresolved legal obligations remain blockers. Professional consultation is optional and is not a publication or Paid Launch prerequisite.
 
-B2 Candidate status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance is `pending / pending`. This current B2 overlay supersedes controlling Task 18B wording where the accepted Lane B decisions differ, without converting historical snapshots into current authority.
+B2 accepted status is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance is `complete / complete`. This current B2 overlay supersedes controlling Task 18B wording where the accepted Lane B decisions differ, without converting historical snapshots into current authority.
 
 ---
 

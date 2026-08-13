@@ -2,7 +2,7 @@
 
 ## Payment / Platform / Monetization Strategy and Payment Charter
 
-> **B2 Candidate current overlay:** implementation complete for review with status `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`; exact next work is that review. B3 is not active, and no external, Payment, Production, publication, domain, or deployment authority is created.
+> **B2 accepted current overlay:** docs/spec/legal authority is Human + ChatGPT accepted complete with status `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`. Human + ChatGPT review / acceptance is `complete / complete`; exact next work is Stripe Lane B Review-ready Website/Public Surface implementation (B3). B3 is the next authorized-candidate stage and is not started by this Acceptance Sync; no external, Payment, Production, publication, domain, or deployment authority is created.
 
 - [x] Agreed long-term product direction: Web -> real paid Web validation -> iOS -> Android -> repeat-purchase analysis -> subscription only if demand is established
 - [x] Agreed initial product direction: one assessment / JPY 980 tax-inclusive / one-time / no automatic renewal / no customer-facing coins or points
@@ -515,7 +515,7 @@ Completed planning record; it does not authorize implementation outside Mileston
 ### P4.9: Task 18C-R1 Age Eligibility Policy Alignment
 
 - [x] `回答しない` removed from request-form age choices
-- [x] Required boolean self-attestation `私は18歳以上です` aligned across current B2 Candidate specifications; Production enforcement remains pending
+- [x] Required boolean self-attestation `私は18歳以上です` aligned across current accepted B2 specifications; Production enforcement remains pending
 - [x] 18-or-older notice added near the age field
 - [x] Separate age checkbox rejected by policy
 - [x] Date-of-birth and identity-document collection excluded
@@ -959,8 +959,8 @@ Dependency order is mandatory. Detailed tasks are in `docs/phase1/IMPLEMENTATION
 - [ ] Milestone 2: internal automated AI / DB vertical slice — M2-P3 Runtime Vertical Slice, M2-P4 planning, M2-P4-I1-A through I2, I3-R1 Final Planning, R1-A contract-only implementation, and R1-B exact 22-path offline integration are accepted and complete; I3 offline implementation accepted and one synthetic live smoke succeeded; R1-B exact `9/9` review correction is resolved; C1 bounded execution protocol is Human / ChatGPT accepted complete with product-quality `FAIL`; final I3 acceptance / main merge, C2 Runtime activation, scored provider quality acceptance, and Milestone 2 completion remain pending or not started
 - [x] Pre-payment Safety Engine / Safety UX — Human + ChatGPT accepted complete by the explicit `2026-08-10` Human decision; final JPY 980 readiness and Payment authority remain false
 - [x] Payment Charter v1 — Human + ChatGPT accepted complete on `2026-08-12`; implementation remains unauthorized and Charter acceptance does not complete or skip Milestones 2–6
-- [ ] Milestone 3: Review Site Deployment — Stripe Lane B B1 is accepted; B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`, and B2 Human + ChatGPT review is the exact current next work. B3 remains inactive until B2 acceptance, followed only after accepted predecessors by B4a deployment readiness and separate B4b external-action authority before stable-URL deployment
-- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy, Customer-facing/public-copy, Stripe feasibility evidence preparation, and all seven Lane B Human policy decisions are accepted complete; Lane A remains Human-approved preparation with external action not authorized / not submitted / outcome `null` but is preserved inactive; Stripe Sales is `not_used_by_human_direction`, not a Provider outcome; `AGE-GATE-001` downstream alignment and other Legal/Site/KYC/domain requirements remain pending; Lane B/C remain blocked and actual Stripe contact/submission, evidence acquisition, and formal selection remain unauthorized/evidence-gated
+- [ ] Milestone 3: Review Site Deployment — Stripe Lane B B1 and B2 docs/spec/legal authority are accepted; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and is not started by this Acceptance Sync. B4a deployment readiness and separate B4b external-action authority remain later prerequisites before stable-URL deployment
+- [ ] Milestone 4: Payment Provider Review Evidence and Selection — Stripe-first strategy, Customer-facing/public-copy, Stripe feasibility evidence preparation, and all seven Lane B Human policy decisions are accepted complete; Lane A remains Human-approved preparation with external action not authorized / not submitted / outcome `null` but is preserved inactive; Stripe Sales is `not_used_by_human_direction`, not a Provider outcome; `AGE-GATE-001` B2 docs/spec/legal alignment is accepted; Production enforcement and other Legal/Site/KYC/domain requirements remain pending; Lane B/C remain blocked and actual Stripe contact/submission, evidence acquisition, and formal selection remain unauthorized/evidence-gated
 - [ ] Milestone 5: Core Backend, Safety, AI and Email
 - [ ] Milestone 6: Approved Provider Sandbox Payment
 - [ ] Milestone 7: E2E, Safety and Failure Operations

@@ -10,7 +10,7 @@
 
 ## Strategy versus evidence state
 
-> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. This gate remains unsatisfied: Stripe feasibility/account/approval/activation/formal selection and method evidence remain absent or unresolved.
+> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). This gate remains unsatisfied: Stripe feasibility/account/approval/activation/formal selection and method evidence remain absent or unresolved.
 
 `PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` records Stripe Checkout as the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. That Product/strategy acceptance does not prove Stripe feasibility, account/contact, approval/activation, category acceptance, merchant eligibility, payment-method availability, webhook/refund behavior, or production approval and does not satisfy this gate.
 
@@ -18,7 +18,7 @@ Desired initial Web methods are credit/debit cards, Apple Pay, Google Pay, and P
 
 Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` at the planning/documentation level. Accepted preparation is not Provider evidence, creates no external-action authority, and does not satisfy this gate.
 
-On `2026-08-13`, Human directed that the Stripe Sales route not be used (`not_used_by_human_direction`). This is an internal workflow choice, not a Stripe Provider outcome. Lane A's four-field state remains preserved but inactive. The controlling Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`; Human + ChatGPT review/acceptance is complete and all seven policy decisions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; B2 Human + ChatGPT review is the exact current next work and acceptance is pending. Lane B/C remain blocked pending downstream requirements, and no external action is authorized.
+On `2026-08-13`, Human directed that the Stripe Sales route not be used (`not_used_by_human_direction`). This is an internal workflow choice, not a Stripe Provider outcome. Lane A's four-field state remains preserved but inactive. The controlling Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`; Human + ChatGPT review/acceptance is complete and all seven policy decisions are accepted. B2 is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and B2 acceptance is complete. Lane B/C remain blocked pending downstream requirements, and no external action is authorized.
 
 The bounded predecessor sequence is:
 
@@ -26,7 +26,7 @@ The bounded predecessor sequence is:
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — ready pending Human + ChatGPT review; internal/draft only; acceptance pending |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — Human + ChatGPT accepted complete; internal/draft only; acceptance complete |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |

@@ -16,7 +16,7 @@ This document is:
 
 It must not be represented as legally complete or approved for publication.
 
-B2 Candidate status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance is `pending / pending`. The seven accepted Lane B Human decisions are aligned as Candidate authority only. Payment implementation, Production Payment, Provider selection, and legal publication remain `false` or unresolved.
+B2 accepted status is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance is `complete / complete`. The seven accepted Lane B Human decisions are aligned as accepted docs/spec/legal authority only. Payment implementation, Production Payment, Provider selection, and legal publication remain `false` or unresolved.
 
 ---
 

@@ -2,12 +2,12 @@
 
 ## Adopted Decisions
 
-### Stripe Lane B B2 Candidate current overlay
+### Stripe Lane B B2 accepted current overlay
 
-- Candidate: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`
-- Human + ChatGPT review / acceptance: `pending / pending`
-- Exact current next work: Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)
-- The seven accepted `LB-DEC-*` decisions are synchronized, not reopened; no Provider, Payment, publication, B3, domain/deployment, or actual-PII authority is created.
+- Accepted B2 status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`
+- Human + ChatGPT review / acceptance: `complete / complete`
+- Exact current next work: Stripe Lane B Review-ready Website/Public Surface implementation (B3)
+- The seven accepted `LB-DEC-*` decisions are synchronized, not reopened. B3 is the next authorized-candidate stage but is not started by this Acceptance Sync; no Provider, Payment, publication, domain/deployment, or actual-PII authority is created.
 
 Items explicitly labeled Human working direction in historical records retain that historical meaning. The current Stripe-first strategy is accepted at the Product/strategy level, and its Customer-facing / Public-copy Alignment is separately accepted at the Product/UI/content level. Neither acceptance is feasibility evidence, Provider approval/activation, formal selection, Payment implementation authority, Production Payment authority, or legal-publication approval.
 
@@ -31,7 +31,7 @@ Items explicitly labeled Human working direction in historical records retain th
 - The trusted delivery/recovery session is neither Payment authority nor Safety authority, cannot be client-self-asserted, and does not introduce login, an account, a profile, or My Page
 - Stripe Feasibility Evidence Preparation: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` and is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Stripe Provider outcome
 - Stripe Lane B Human Decision Package: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; historical Candidate formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a`; all seven decisions accepted: dedicated 18+ self-attestation, individual/sole-proprietor route, request-based disclosure preference where permitted, one business mailbox plus categorized form, accepted refund/Payment Integrity policy direction, accepted fulfillment wording skeleton without a concrete duration, and intended final production domain before Stripe Account/Site review
-- `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_candidate_complete` in the B2 Candidate; Production server enforcement remains unimplemented. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are completed. Current next work: **Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)**. Actual Stripe contact/submission, Provider operations, evidence acquisition, formal selection, Payment implementation, legal publication, domain purchase, and deployment remain unauthorized
+- `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete` under accepted B2 docs/spec/legal authority; Production server enforcement remains unimplemented. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are completed. Current next work: **Stripe Lane B Review-ready Website/Public Surface implementation (B3)**. Actual Stripe contact/submission, Provider operations, evidence acquisition, formal selection, Payment implementation, legal publication, domain purchase, and deployment remain unauthorized
 - Professional/specialist review is optional, not a mandatory Paid Launch or Production Payment gate; current official-source and actual Product/Provider/public-wording review remains required, and material unresolved legal obligations remain blockers
 - AI use must be disclosed
 - Dangerous consultations must not receive normal romance鑑定

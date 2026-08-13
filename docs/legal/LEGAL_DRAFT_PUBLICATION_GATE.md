@@ -12,7 +12,7 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
-> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。accepted policy decisionは`decision resolved / evidence or implementation pending`と分類できますが、本ゲートのcheckboxは一つも完了しません。
+> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete`。accepted policy decisionは`decision resolved / evidence or implementation pending`と分類できますが、本ゲートのcheckboxは一つも完了しません。
 
 ---
 
@@ -135,4 +135,4 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] 公開日を[[EFFECTIVE_DATE_TBD]]として確定
 - [ ] 最終更新日を[[LAST_UPDATED_DATE_TBD]]として確定
 
-B2 Candidate完了時点でも、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。B2 Human + ChatGPT review / acceptanceは`pending / pending`であり、次の作業はB2 Candidate reviewです。
+B2 acceptance完了時点でも、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。B2 Human + ChatGPT review / acceptanceは`complete / complete`であり、次の作業はStripe Lane B Review-ready Website/Public Surface implementation (B3)です。
