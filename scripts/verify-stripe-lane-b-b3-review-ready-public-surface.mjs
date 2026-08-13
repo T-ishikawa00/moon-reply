@@ -14,6 +14,7 @@ const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 const baseline = "9762a47b4ca4a38ae18f5c1e2e69a1cbe08e5230";
 const initialCandidate = "b1b695e0f444478928c31280062dea0ae5d7c14a";
 const reviewCorrectionR1 = "5e429501d5d11b9aa1d2f9b7da0a9e268c177afb";
+const reviewCorrectionR2 = "4d718eb7fb4ab0cb7e74afefa5728fee3f6991a0";
 const expectedBranch = "codex/stripe-lane-b-b3-review-ready-public-surface";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedB2Status =
@@ -23,6 +24,7 @@ const candidateStatus =
 
 const updatedPaths = [
   "app/globals.css",
+  "app/layout.tsx",
   "app/contact/page.tsx",
   "app/legal/ai-disclosure/page.tsx",
   "app/legal/page.tsx",
@@ -46,6 +48,10 @@ const correctionR1Scope = [
 ];
 const correctionR2Scope = [
   "app/globals.css",
+  "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
+const correctionR3Scope = [
+  "app/layout.tsx",
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
 ];
 
@@ -216,6 +222,17 @@ const reviewCorrectionR1Anchored =
   reviewCorrectionR1Parents.length === 2 &&
   reviewCorrectionR1Parents[0] === reviewCorrectionR1 &&
   reviewCorrectionR1Parents[1] === initialCandidate;
+const reviewCorrectionR2Parents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  reviewCorrectionR2,
+).split(/\s+/u);
+const reviewCorrectionR2Anchored =
+  reviewCorrectionR2Parents.length === 2 &&
+  reviewCorrectionR2Parents[0] === reviewCorrectionR2 &&
+  reviewCorrectionR2Parents[1] === reviewCorrectionR1;
 const baselineState =
   commitsAfterBaseline === 0 && currentHead === baseline;
 const initialCandidateState =
@@ -225,22 +242,27 @@ const correctionR1State =
   currentHead === reviewCorrectionR1;
 const correctionR2State =
   commitsAfterBaseline === 3 &&
-  currentHead !== reviewCorrectionR1 &&
+  currentHead === reviewCorrectionR2;
+const correctionR3State =
+  commitsAfterBaseline === 4 &&
+  currentHead !== reviewCorrectionR2 &&
   headParents.length === 2 &&
-  headParents[1] === reviewCorrectionR1;
+  headParents[1] === reviewCorrectionR2;
 const exactLineage =
   initialCandidateAnchored &&
   reviewCorrectionR1Anchored &&
+  reviewCorrectionR2Anchored &&
   git("merge-base", baseline, "HEAD") === baseline &&
-  commitsAfterBaseline <= 3 &&
+  commitsAfterBaseline <= 4 &&
   (baselineState ||
     initialCandidateState ||
     correctionR1State ||
-    correctionR2State);
+    correctionR2State ||
+    correctionR3State);
 
 check("Initial B3 Candidate parent is the exact baseline", initialCandidateAnchored);
 check(
-  "exact baseline to Initial Candidate to R1 to optional R2 lineage",
+  "exact baseline to Initial Candidate to R1 to R2 to optional R3 lineage",
   exactLineage,
 );
 check("expected B3 branch", git("branch", "--show-current") === expectedBranch);
@@ -252,11 +274,11 @@ check(
 
 const changedPaths = changedPathsFromBaseline();
 check(
-  "exact 14-path mutation manifest",
+  "exact 15-path mutation manifest",
   isDeepStrictEqual(changedPaths, sorted(exactScope)),
 );
 check(
-  "update/new classification is exactly 13/1",
+  "update/new classification is exactly 14/1",
   updatedPaths.every(
     (relativePath) =>
       existsSync(path.join(repositoryRoot, relativePath)) &&
@@ -297,12 +319,23 @@ check(
     correctionR1NameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
-const correctionR2Paths = changedPathsFrom(reviewCorrectionR1);
+const correctionR2Paths = git(
+  "diff",
+  "--name-only",
+  "--no-renames",
+  reviewCorrectionR1,
+  reviewCorrectionR2,
+  "--",
+)
+  .split(/\r?\n/gu)
+  .map((value) => value.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
 const correctionR2NameStatuses = git(
   "diff",
   "--name-status",
   "--no-renames",
   reviewCorrectionR1,
+  reviewCorrectionR2,
   "--",
 )
   .split(/\r?\n/gu)
@@ -312,6 +345,23 @@ check(
   isDeepStrictEqual(correctionR2Paths, sorted(correctionR2Scope)) &&
     correctionR2NameStatuses.length === 2 &&
     correctionR2NameStatuses.every((entry) => /^M\t/u.test(entry)),
+);
+
+const correctionR3Paths = changedPathsFrom(reviewCorrectionR2);
+const correctionR3NameStatuses = git(
+  "diff",
+  "--name-status",
+  "--no-renames",
+  reviewCorrectionR2,
+  "--",
+)
+  .split(/\r?\n/gu)
+  .filter(Boolean);
+check(
+  "Human Visual QA Correction R3 scope is exactly two updates",
+  isDeepStrictEqual(correctionR3Paths, sorted(correctionR3Scope)) &&
+    correctionR3NameStatuses.length === 2 &&
+    correctionR3NameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
 const changedNameStatuses = git(
@@ -336,6 +386,7 @@ check("working diff check", git("diff", "--check") === "");
 check("staged diff check", git("diff", "--cached", "--check") === "");
 
 const globalStyles = readText("app/globals.css");
+const rootLayout = readText("app/layout.tsx");
 const authority = readText("lib/legal/review-content.ts");
 const legalHub = readText("app/legal/page.tsx");
 const terms = readText("app/legal/terms/page.tsx");
@@ -352,6 +403,18 @@ const purchaseConfirmation = readText(
   "components/review/ReviewPurchaseConfirmation.tsx",
 );
 const purchaseFixture = readText("fixtures/review/purchase-confirmations.ts");
+
+const globalSmoothScrollRule = sourceSlice(
+  globalStyles,
+  "html {",
+  "}",
+  "global HTML smooth-scroll rule",
+);
+check(
+  "global smooth scrolling has the matching root HTML declaration",
+  globalSmoothScrollRule.includes("scroll-behavior: smooth;") &&
+    rootLayout.includes('<html lang="ja" data-scroll-behavior="smooth">'),
+);
 
 const nightFactLabelRule = sourceSlice(
   globalStyles,
