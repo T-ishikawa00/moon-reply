@@ -99,7 +99,7 @@ export const legalPageInventory = [
   {
     href: "/legal/privacy",
     name: "プライバシー 審査表示",
-    purpose: "将来の取得・処理計画と現在の非送信挙動を区別する",
+    purpose: "将来の取得・処理計画と、現在は内部レビュー処理が行われる場合がある一方、本番の外部処理は未稼働である境界を区別する",
     unresolved: "外部事業者、データフロー、処理地域、保存期間、請求手続、Cookie",
   },
   {

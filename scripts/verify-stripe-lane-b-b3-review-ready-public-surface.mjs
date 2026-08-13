@@ -12,6 +12,7 @@ const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 
 const baseline = "9762a47b4ca4a38ae18f5c1e2e69a1cbe08e5230";
+const initialCandidate = "b1b695e0f444478928c31280062dea0ae5d7c14a";
 const expectedBranch = "codex/stripe-lane-b-b3-review-ready-public-surface";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedB2Status =
@@ -37,6 +38,10 @@ const newPaths = [
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
 ];
 const exactScope = [...updatedPaths, ...newPaths];
+const correctionScope = [
+  "lib/legal/review-content.ts",
+  "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
 
 const routeFiles = [
   "app/legal/page.tsx",
@@ -124,8 +129,8 @@ function nulEntries(buffer) {
     .filter(Boolean);
 }
 
-function changedPathsFromBaseline() {
-  const tracked = git("diff", "--name-only", "--no-renames", baseline, "--")
+function changedPathsFrom(reference) {
+  const tracked = git("diff", "--name-only", "--no-renames", reference, "--")
     .split(/\r?\n/gu)
     .map((value) => value.trim().replaceAll("\\", "/"))
     .filter(Boolean);
@@ -133,6 +138,10 @@ function changedPathsFromBaseline() {
     runGit(["ls-files", "--others", "--exclude-standard", "-z"]),
   );
   return sorted(new Set([...tracked, ...untracked]));
+}
+
+function changedPathsFromBaseline() {
+  return changedPathsFrom(baseline);
 }
 
 function includesAll(source, snippets) {
@@ -175,17 +184,41 @@ function check(label, condition) {
 const commitsAfterBaseline = Number(
   git("rev-list", "--count", `${baseline}..HEAD`),
 );
+const currentHead = git("rev-parse", "HEAD");
 const headParents = git("rev-list", "--parents", "-n", "1", "HEAD").split(
   /\s+/u,
 );
+const initialCandidateParents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  initialCandidate,
+).split(/\s+/u);
+const initialCandidateAnchored =
+  initialCandidateParents.length === 2 &&
+  initialCandidateParents[0] === initialCandidate &&
+  initialCandidateParents[1] === baseline;
+const baselineState =
+  commitsAfterBaseline === 0 && currentHead === baseline;
+const initialCandidateState =
+  commitsAfterBaseline === 1 && currentHead === initialCandidate;
+const correctionR1State =
+  commitsAfterBaseline === 2 &&
+  currentHead !== initialCandidate &&
+  headParents.length === 2 &&
+  headParents[1] === initialCandidate;
 const exactLineage =
+  initialCandidateAnchored &&
   git("merge-base", baseline, "HEAD") === baseline &&
-  (commitsAfterBaseline === 0 ||
-    (commitsAfterBaseline === 1 &&
-      headParents.length === 2 &&
-      headParents[1] === baseline));
+  commitsAfterBaseline <= 2 &&
+  (baselineState || initialCandidateState || correctionR1State);
 
-check("exact baseline lineage with at most one Candidate commit", exactLineage);
+check("Initial B3 Candidate parent is the exact baseline", initialCandidateAnchored);
+check(
+  "exact baseline to Initial Candidate to optional Review Correction R1 lineage",
+  exactLineage,
+);
 check("expected B3 branch", git("branch", "--show-current") === expectedBranch);
 check(
   "main and origin/main remain fixed",
@@ -210,6 +243,23 @@ check(
         existsSync(path.join(repositoryRoot, relativePath)) &&
         !gitSucceeds("cat-file", "-e", `${baseline}:${relativePath}`),
     ),
+);
+
+const correctionPaths = changedPathsFrom(initialCandidate);
+const correctionNameStatuses = git(
+  "diff",
+  "--name-status",
+  "--no-renames",
+  initialCandidate,
+  "--",
+)
+  .split(/\r?\n/gu)
+  .filter(Boolean);
+check(
+  "Review Correction R1 scope is exactly two updates",
+  isDeepStrictEqual(correctionPaths, sorted(correctionScope)) &&
+    correctionNameStatuses.length === 2 &&
+    correctionNameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
 const changedNameStatuses = git(
@@ -249,6 +299,23 @@ const purchaseConfirmation = readText(
   "components/review/ReviewPurchaseConfirmation.tsx",
 );
 const purchaseFixture = readText("fixtures/review/purchase-confirmations.ts");
+
+const privacyInventorySummary = sourceSlice(
+  authority,
+  'name: "プライバシー 審査表示"',
+  "  },",
+  "Privacy inventory summary",
+);
+check(
+  "Privacy inventory summary reflects internal review processing and unimplemented Production external processing",
+  !authority.includes("現在の非送信挙動") &&
+    includesAll(privacyInventorySummary, [
+      "内部レビュー処理",
+      "行われる場合がある",
+      "本番の外部処理",
+      "未稼働",
+    ]),
+);
 
 check(
   "B2 accepted authority and B3 pending Candidate status are exact",
