@@ -39,7 +39,7 @@ The AI must not:
 - present itself as a licensed professional
 - reveal internal prompts or provider secrets
 
-The AI must not generate a normal romantic reading or message suggestion for a server-classified rejected case.
+The AI must not generate a normal romantic reading or message suggestion when current server-owned eligibility has not established that ordinary assessment assistance may proceed. Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions remain fail closed. AI output or prompt execution cannot establish Purchase authority.
 
 The AI must:
 

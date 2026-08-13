@@ -41,9 +41,11 @@ B2 Candidate statusは`stripe_lane_b_legal_draft_finalization_candidate_ready_pe
 ### Safetyと入力情報
 
 - Safety screeningは決済前に行う
-- `rejected`は決済へ進めない
-- `needs_review`も初期MVPでは決済へ進めない
-- 通常鑑定対象外ケースには鑑定書やメッセージ案を生成しない
+- current server-owned eligibilityが`purchaseGateSatisfied=true`を確立した場合だけ実決済へ進める
+- clarification、unsafe、urgent、unsupported professional-assistance、invalid、contradictory、unknownおよびtechnical-errorはfail closedとする
+- waiting、not-sending-now、temporary pauseまたはboundary-respecting supportは、それだけで不適格とせず、別個のassistance eligibilityを評価する
+- 通常の有料鑑定の適格性が成立しないケースには鑑定書やメッセージ案を生成しない
+- browser、clientまたはlocalStorageはPurchase authorityを確立できない
 - スクリーンショットは受け付けない
 - 実名、住所、電話番号、相手のフルネーム等の入力を禁止する
 - AI payloadからemail、決済ID、内部token等を除外する

@@ -48,11 +48,13 @@ Purpose:
 
 - Block or flag dangerous consultations before payment and normal diagnosis
 
-Possible outcomes:
+Current authority outcomes are described semantically rather than by the historical M1 enum:
 
-- normal_allowed
-- needs_review
-- rejected
+- ordinary paid-assessment assistance eligibility is established;
+- clarification or additional information is required before eligibility can be established; or
+- an unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, or technical-error condition remains fail closed.
+
+Waiting, not sending now, a temporary pause, or boundary-respecting support is not automatically disqualifying when separate assistance eligibility remains valid.
 
 ### Payment
 
@@ -62,7 +64,8 @@ Purpose:
 
 Required behavior:
 
-- Payment starts only after normal eligibility is confirmed
+- Payment starts only when the current server-owned eligibility result establishes `purchaseGateSatisfied=true`
+- Browser, client, route, or localStorage state cannot establish Purchase authority
 - Payment success triggers diagnosis generation
 - Payment failure does not trigger generation
 
@@ -118,11 +121,11 @@ LP
 ↓
 Diagnosis request form
 ↓
-Safety screening
+Safety screening and server-owned eligibility
 ↓
-If rejected: show cannot-provide-normal-diagnosis message
+If clarification or a fail-closed semantic condition remains: show the appropriate stop or correction message; no Payment
 ↓
-If normal_allowed: payment
+If and only if purchaseGateSatisfied=true: payment
 ↓
 Payment success
 ↓

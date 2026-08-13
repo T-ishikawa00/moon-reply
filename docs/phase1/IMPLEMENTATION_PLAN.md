@@ -97,9 +97,9 @@ Validation confirms authoritative approval/review evidence and all known applica
 
 ### Milestone 5: Core Backend, Safety, AI and Email
 
-Planning/specification must define API/persistence boundaries, allowed age values, safety enforcement, state transitions, AI payload minimization, structured schemas, retry/failure behavior, tokens, email test/log mode, feedback persistence, and recovery evidence.
+Planning/specification must define API/persistence boundaries, the required adult-confirmation boolean and its server-side authority evidence, semantic Safety enforcement, current server-owned eligibility with `purchaseGateSatisfied=true`, state transitions, AI payload minimization, structured schemas, retry/failure behavior, tokens, email test/log mode, feedback persistence, and recovery evidence. It must not require an eligibility-only age band, date of birth, or identity document.
 
-Implementation connects the request-to-delivery flow using mock-paid or test-paid state. `needs_review` and `rejected` must have no payment path. Real provider card integration is excluded.
+Implementation connects the request-to-delivery flow using mock-paid or test-paid state. Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions must have no payment path. Waiting, not-sending-now, temporary pause, and boundary-respecting support are not automatically disqualifying when separate assistance eligibility remains valid. Browser, client, and localStorage cannot establish Purchase authority. Real provider card integration is excluded.
 
 Validation proves one controlled request can move from submission through stored result and delivery without real card payment. Human acceptance closes the milestone.
 
@@ -113,7 +113,7 @@ Implementation connects only the Human-approved provider in test/sandbox mode. V
 
 Planning/specification must define the evidence matrix and operator runbooks for normal, dangerous, abusive, duplicated, and failed paths.
 
-Implementation may add only the controls and recovery paths accepted in the plan. Validation covers invalid age, `rejected`, `needs_review`, duplicate webhook, AI/email failure, token protection, rate limits, spam/abuse, manual recovery, refund/reissue, retention/deletion, device UI, legal/publication review, and production stop. Human acceptance closes the milestone.
+Implementation may add only the controls and recovery paths accepted in the plan. Validation covers missing/invalid adult confirmation; clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error fail-closed behavior; the non-automatic treatment of waiting, not-sending-now, temporary pause, and boundary-respecting support; server-owned `purchaseGateSatisfied=true`; duplicate webhook; AI/email failure; token protection; rate limits; spam/abuse; manual recovery; refund/reissue; retention/deletion; device UI; legal/publication review; and production stop. Human acceptance closes the milestone.
 
 ### Milestone 8: Production Application and Soft Launch
 

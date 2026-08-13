@@ -51,7 +51,7 @@ Possible direction for later approval:
 - consultation free text: shorter retention than purchase records
 - AI generation logs: metadata-focused; raw prompt retention minimized
 - purchase/accounting records: retained as legally/operationally required
-- rejected safety content: minimum retention necessary
+- semantic Safety, urgent, unsupported-assistance, clarification, and other fail-closed records: minimum retention necessary, with no period treated as approved by this draft
 - provider raw payloads: redact or minimize unnecessary personal data
 
 No candidate period may be presented as final until approved.

@@ -87,7 +87,7 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 | OP-031 | trademark search | 未実施 | J-PlatPat検索日、区分、結果、証拠 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
 | OP-032 | professional legal review | 任意・未実施 | `2026-08-11` Human decisionにより必須gateではない。将来任意に実施する場合のみreviewer、対象文書、指摘、対応記録を保存 | Human | 任意 | Internally decided |
 | OP-033 | public support-resource verification | 未確認 | 公式source、jurisdiction、用途、確認日 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
-| OP-034 | `needs_review` production treatment | 初期MVPは決済不可。通常の恋愛鑑定書・メッセージ案を生成しない。将来の取扱いは別途承認 | 初期MVP方針はHuman承認済み。将来運用にはserver-side処理、Human review、返金・停止条件の別承認と実装証拠が必要 | Human | 初期MVP方針は決定済み / 将来取扱いは未定 | Internally decided |
+| OP-034 | clarification / fail-closed production treatment | current server-owned eligibilityが`purchaseGateSatisfied=true`を確立するまで決済不可。通常の恋愛鑑定書・メッセージ案を生成しない。追加情報により安全に再評価できる場合の将来運用は別途承認 | fail-closedとserver-owned Purchase authorityはHuman承認済み。clarification等の将来運用にはserver-side再評価、Human review、返金・停止条件の別承認と実装証拠が必要。waiting、temporary pause、boundary-respecting supportは単独では不適格にしない | Human | 初期MVP方針は決定済み / 将来取扱いは未定 | Internally decided |
 | OP-035 | user sharing/quotation rules for readings | [[OPERATOR_DECISION_REQUIRED]] | 個人的利用、引用、一部共有、公開範囲 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided / Current-source review required |
 
 ## 更新規則

@@ -129,14 +129,14 @@ Accepted Lane B directions are: dedicated 18+ self-attestation; initial individu
 - **今すぐ決める必要があるか:** 初期MVPの公開設計前に必要。これは推奨であり、完了済み判断ではない。
 - **証拠・確認先:** Human決定、同意画面、同意・解除記録、Email provider条件、最新の公式情報。
 
-## OP-034 `needs_review`の取扱い
+## OP-034 追加確認・fail-closed状態の取扱い
 
-- **何を決めるのか:** 初期MVP後に`needs_review`を扱う場合の別運用。初期MVPの扱いはすでに決定済み。
-- **なぜ必要なのか:** 安全性が未確認の相談を通常鑑定・決済へ誤って流さないため。
-- **選択肢:** 初期MVPでは決済不可・通常鑑定なし / 将来、別タスクでHuman review等を設計して承認。
-- **推奨案:** 承認済み方針どおり、初期MVPでは決済へ進めず、通常の恋愛鑑定書やメッセージ案を生成しない。将来の扱いは別途承認する。
-- **今すぐ決める必要があるか:** 初期MVPの方向は内部決定済み。将来運用は今決めず、別タスクと証拠が必要。
-- **証拠・確認先:** Human承認記録、server-side safety gate試験、返金・監査設計。Task 18Cでは実装しない。
+- **何を決めるのか:** 通常の有料鑑定の適格性が未成立で、追加情報またはclarificationにより安全に再評価できる場合の将来運用。unsafe、urgent、unsupported professional-assistance、invalid、contradictory、unknownおよびtechnical-errorはfail closedを維持する。
+- **なぜ必要なのか:** current server-owned eligibilityが成立していない相談を通常鑑定・決済へ誤って流さないため。
+- **選択肢:** 初期MVPでは決済不可・通常鑑定なしを継続 / 将来、追加情報の取得、再評価または別途Human reviewを設計して承認。
+- **推奨案:** current server-owned eligibilityが`purchaseGateSatisfied=true`を確立するまで決済へ進めず、通常の恋愛鑑定書やメッセージ案を生成しない。waiting、not-sending-now、temporary pauseまたはboundary-respecting supportは、それだけで不適格とせず、別個のassistance eligibilityにより評価する。
+- **今すぐ決める必要があるか:** fail-closedとserver-owned Purchase authorityの方向は内部決定済み。clarification等の将来運用は今決めず、別タスクと証拠が必要。
+- **証拠・確認先:** Human承認記録、server-owned eligibilityおよび`purchaseGateSatisfied`試験、返金・監査設計。browser、clientまたはlocalStorageはPurchase authorityにならない。Task 18Cでは実装しない。
 
 ## OP-035 鑑定書の共有
 

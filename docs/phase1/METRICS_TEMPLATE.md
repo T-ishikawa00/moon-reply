@@ -29,7 +29,10 @@ Do not fill fake numbers.
 | Form starts | TBD |
 | Form submissions | TBD |
 | Safety checks run | TBD |
-| Safety rejected cases | TBD |
+| Eligible for ordinary paid assessment | TBD |
+| Clarification or additional information required | TBD |
+| Unsafe / urgent / unsupported fail-closed cases | TBD |
+| Payment gate denied | TBD |
 | Payment starts | TBD |
 | Payment successes | TBD |
 | Payment failures | TBD |
@@ -47,7 +50,10 @@ Do not fill fake numbers.
 | Metric | Count |
 |---|---:|
 | Safety checks run | TBD |
-| Safety rejected | TBD |
+| Eligible for ordinary paid assessment | TBD |
+| Clarification / fail-closed | TBD |
+| Unsafe / urgent / unsupported | TBD |
+| Payment gate denied | TBD |
 | Payment successes | TBD |
 | AI judgment generations | TBD |
 | AI diagnosis generations | TBD |
@@ -57,6 +63,8 @@ Do not fill fake numbers.
 | Result email failures | TBD |
 | Feedback submissions | TBD |
 
+Historical reports may retain their task-time enum-labelled metric rows as immutable evidence. New/current business reporting must use the semantic rows above and must not infer Purchase authority from a client event or historical Safety enum.
+
 ---
 
 ## 4. Conversion Rates
@@ -65,7 +73,7 @@ Do not fill fake numbers.
 |---|---:|
 | CTA click rate | TBD |
 | Form completion rate | TBD |
-| Safety rejection rate | TBD |
+| Ordinary paid-assessment ineligibility / fail-closed rate | TBD |
 | Payment conversion rate | TBD |
 | Generation failure rate | TBD |
 | Result email failure rate | TBD |

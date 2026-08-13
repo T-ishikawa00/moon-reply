@@ -216,13 +216,14 @@ Dependency: Milestone 4 Human acceptance. Production server age validation remai
 
 - [ ] Planning/spec: request endpoint, persistence, state machine, access, recovery, and evidence boundaries
 - [ ] Planning/spec: required adult-confirmation boolean and production server Purchase-authority enforcement
+- [ ] Planning/spec: current server-owned eligibility, `purchaseGateSatisfied=true`, semantic fail-closed conditions, input-bound authority evidence, and browser/client/localStorage non-authority
 - [ ] Planning/spec: AI payload minimization, judgment/report schemas, validation, retries, and failure handling
 - [ ] Planning/spec: result token, email test/log mode, feedback persistence, and operations
 - [ ] Human acceptance of Milestone 5 planning/specification
 - [ ] Implementation: request submission endpoint and Supabase request persistence
 - [ ] Implementation: production server enforcement of accepted adult-confirmation boolean
-- [ ] Implementation: production enforcement of `normal_allowed`, `needs_review`, and `rejected`
-- [ ] Implementation: prohibit payment path for `needs_review` and `rejected`
+- [ ] Implementation: production enforcement of current server-owned eligibility and `purchaseGateSatisfied=true`
+- [ ] Implementation: prohibit payment for clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions; do not automatically disqualify waiting, not-sending-now, temporary pause, or boundary-respecting support when separate assistance eligibility remains valid
 - [ ] Implementation: minimized structured AI judgment and full report generation
 - [ ] Implementation: output validation, retries, and failure handling
 - [ ] Implementation: result token generation, persistence, protected result page, and feedback persistence
@@ -252,8 +253,9 @@ Dependency: Milestone 6 Human acceptance.
 - [ ] Planning/spec: normal, safety, abuse, duplicate, failure, recovery, refund, deletion, device, legal, and stop evidence matrix
 - [ ] Human acceptance of Milestone 7 planning/specification
 - [ ] Implementation: accepted rate limiting, abuse/spam controls, recovery, and production-stop controls
-- [ ] Validation: normal E2E and invalid age
-- [ ] Validation: `rejected` and `needs_review`
+- [ ] Validation: normal E2E and missing/invalid adult-confirmation boolean
+- [ ] Validation: every semantic fail-closed condition, `purchaseGateSatisfied=false`, stale/input-mutated authority, and browser/client/localStorage non-authority
+- [ ] Validation: waiting, not-sending-now, temporary pause, and boundary-respecting support do not become automatic Payment blocks when separate assistance eligibility remains valid
 - [ ] Validation: duplicate webhook
 - [ ] Validation: payment success plus AI failure and email failure
 - [ ] Validation: token access protection, rate limiting, and abuse/spam controls

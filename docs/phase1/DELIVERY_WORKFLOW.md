@@ -40,7 +40,9 @@ If dangerous content is detected:
 - Use safety response
 - Do not proceed to normal payment flow when detected before payment
 - If payment already succeeded in an exceptional state, do not deliver a normal report and enter the future downstream failure/refund workflow
-- Record as safety-rejected case
+- Record the semantic unsafe, urgent, unsupported-assistance, clarification, or other fail-closed reason and the server-owned eligibility decision without treating a historical enum as Purchase authority
+
+No delivery-generation path may begin unless valid Payment authority exists. Real Payment itself may be reached only after current server-owned eligibility establishes `purchaseGateSatisfied=true`; browser/client/localStorage state cannot establish that authority.
 
 Danger types:
 

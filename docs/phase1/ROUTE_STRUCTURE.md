@@ -32,23 +32,24 @@ Purpose:
 
 ### `/request/rejected`
 
-Purpose:
+Legacy/review compatibility classification:
 
-- Show message when normal diagnosis cannot be provided
-- Explain that dangerous consultations are not handled as normal romantic diagnosis
-- No AI romantic diagnosis
-- No payment
+- This route name is retained only to represent the historical M1/review stop state implemented by the existing code.
+- The route name is not current Purchase authority and does not define the current server-owned eligibility contract.
+- Any Customer-facing presentation must explain semantically that ordinary paid-assessment eligibility was not established; no internal historical enum should be exposed as current product state.
+- No AI romantic diagnosis or Payment is available from this legacy/review representation.
 
 ### `/checkout`
 
 Purpose:
 
-- Start payment for normal_allowed requests
+- Start Payment only when the current server-owned eligibility result establishes `purchaseGateSatisfied=true`
 
 Note:
 
 - May be placeholder during development
 - Public MVP requires verified payment flow
+- Browser, client, localStorage, or arrival at this route cannot establish Purchase authority
 
 ### `/checkout/success`
 

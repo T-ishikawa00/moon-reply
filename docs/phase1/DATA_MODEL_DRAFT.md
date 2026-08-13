@@ -58,7 +58,7 @@ Fields:
 - request_token
 - email
 - nickname
-- age_range
+- adult_confirmed
 - relationship_type
 - relationship_status
 - last_partner_message
@@ -82,13 +82,16 @@ Status examples:
 
 - draft
 - submitted
-- safety_rejected
 - payment_pending
 - paid
 - generating
 - completed
 - failed
 - refunded
+
+`adult_confirmed` is the current eligibility-direction boolean corresponding to the required self-attestation `私は18歳以上です`. No age band, date of birth, or identity document is required solely for age eligibility. The exact production audit/status storage shape remains a later implementation decision, but future server-owned Purchase authority must require accepted adult confirmation.
+
+The archived Stage 3 schema and generated compatibility types may retain `age_range` and `safety_rejected` as historical fields. They are not requirements for this current data model and cannot establish Purchase authority. This documentation correction does not modify an actual schema or migration.
 
 ---
 
@@ -114,11 +117,15 @@ Fields:
 - reason
 - created_at
 
-Result examples:
+Current authority rules:
 
-- normal_allowed
-- needs_review
-- rejected
+- `safety_checks.result` records semantic Safety evidence and reasons; it is not Purchase authority.
+- Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions remain fail closed for real Payment.
+- Waiting, not sending now, a temporary pause, or boundary-respecting support is not automatically disqualifying when separate assistance eligibility remains valid.
+- A separate current server-owned purchase-eligibility record must establish `purchaseGateSatisfied=true`, bind the evaluated input/evidence, and be invalidated by material input mutation before real Payment can be reached.
+- Browser, client, or localStorage state cannot write or assert Purchase authority.
+
+Historical `normal_allowed`, `needs_review`, and `rejected` values may remain only in explicitly historical schema, fixture, or regression compatibility evidence. Exact production table and field names remain undecided by this draft.
 
 ---
 

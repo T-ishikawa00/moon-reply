@@ -6,7 +6,7 @@
 - Candidate date: `2026-08-13`
 - Exact baseline: `83eee8753ca8e85591fa9131078834f18e5f1231`
 - Branch: `codex/stripe-lane-b-legal-draft-finalization-candidate`
-- Human + ChatGPT review: `pending`
+- Human + ChatGPT review: `in_progress / correction_required`
 - Human + ChatGPT acceptance: `pending`
 - Publication approval: `false`
 - Payment implementation authority: `false`
@@ -28,7 +28,9 @@ The controlling predecessor remains `stripe_lane_b_human_decision_package_human_
 
 Payment Charter v1 remains `human_chatgpt_accepted_complete`; this Candidate makes no normative Charter change.
 
-## Exact mutation manifest
+## Initial Candidate formulation manifest
+
+The initial formulation below is preserved as historical lineage. Its baseline is `83eee8753ca8e85591fa9131078834f18e5f1231`, and its Candidate commit is `db8ba66f2a07c2de7207f4ab9296c6334f106fe2`.
 
 ### Update — exactly 40
 
@@ -78,6 +80,43 @@ Payment Charter v1 remains `human_chatgpt_accepted_complete`; this Candidate mak
 41. `docs/legal/STRIPE_LANE_B_LEGAL_DRAFT_FINALIZATION_CANDIDATE.md`
 
 Counts: `update = 40 / new = 1 / delete = 0 / rename = 0 / total = 41 / code_or_ui = 0`.
+
+## Human + ChatGPT Review Correction R1
+
+Human + ChatGPT review found that the initial 41-path formulation did not contain the complete current docs/spec authority scope. A repository-wide tracked-file authority audit identified 21 Category A current docs/spec paths requiring alignment and four current code/UI implementation paths requiring explicit B3 deferral.
+
+R1 corrects current documentation, specification, legal-draft, planning, metrics, QA, architecture, and commercial Safety authority only. It does not modify code/UI, start B3, change Payment Charter principles, establish Provider facts, or grant publication, deployment, Payment implementation, or Production Payment authority.
+
+### Review Correction R1 — Update exactly 22
+
+1. `docs/ai/AI_PROMPT_GUARDRAILS.md`
+2. `docs/ai/DATA_RETENTION_POLICY.md`
+3. `docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md`
+4. `docs/legal/OPERATOR_DECISION_GUIDE.md`
+5. `docs/legal/OPERATOR_DECISION_REGISTER.md`
+6. `docs/legal/OPERATOR_DECISION_WORKSHEET.md`
+7. `docs/legal/TERMS_OF_SERVICE_DRAFT.md`
+8. `docs/legal/UNSUPPORTED_CASES_PUBLIC_DRAFT.md`
+9. `docs/legal/WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md`
+10. `docs/phase1/AUTOMATION_ARCHITECTURE.md`
+11. `docs/phase1/DATA_MODEL_DRAFT.md`
+12. `docs/phase1/DELIVERY_WORKFLOW.md`
+13. `docs/phase1/IMPLEMENTATION_PLAN.md`
+14. `docs/phase1/IMPLEMENTATION_WBS.md`
+15. `docs/phase1/INTEGRATION_STAGING_PLAN.md`
+16. `docs/phase1/LP_STRUCTURE.md`
+17. `docs/phase1/METRICS_TEMPLATE.md`
+18. `docs/phase1/ORDER_FORM_SPEC.md`
+19. `docs/phase1/QUALITY_CHECKLIST.md`
+20. `docs/phase1/ROUTE_STRUCTURE.md`
+21. `docs/safety/CRISIS_AND_UNSUPPORTED_CASES_POLICY.md`
+22. `docs/legal/STRIPE_LANE_B_LEGAL_DRAFT_FINALIZATION_CANDIDATE.md`
+
+Counts: `update = 22 / new = 0 / delete = 0 / rename = 0 / total = 22 / code_or_ui = 0`.
+
+Eleven of the 21 authority-doc paths were outside the initial formulation manifest. The effective unique B2 docs/spec authority scope from the initial baseline through R1 is therefore the original 41 paths plus 11 newly added authority-doc paths, for `52` unique paths. This extends the effective B2 authority scope without rewriting or pretending the initial formulation did not occur.
+
+R1 leaves Human + ChatGPT acceptance `pending`. A correction commit or push does not mark B2 accepted.
 
 ## Resolved Candidate facts
 
@@ -222,6 +261,19 @@ B2 does not mutate these paths:
 
 RequestForm age UI is already aligned and is not a B2 or B3 age-change target. Real Payment enforcement requires later and separate authorization.
 
+### Formal B3-deferred current implementation drift
+
+The following four paths are current implementation, are not historical, and are not fixture/regression/compatibility evidence. They are formally classified as `b3_deferred_current_implementation_alignment_required`:
+
+1. `app/legal/refund/page.tsx`
+2. `app/legal/unsupported-cases/page.tsx`
+3. `app/legal/privacy/page.tsx`
+4. `lib/legal/review-content.ts`
+
+These paths remain stale relative to the corrected B2 docs/spec/legal-draft authority. Their temporary B2-to-B3 deferral does not block later acceptance of the B2 docs/spec/legal-draft package itself, but each path is a hard blocker for B3 completion, legal publication, review-ready/public-site acceptance, Paid Launch, and Production Payment.
+
+Later B2 acceptance, if separately granted, means only `docs/spec/legal-draft authority accepted`. It does not mean current legal UI is aligned, the public site is review-ready, legal pages are publishable, or B3 is complete. B3 remains inactive during R1 and may align these four paths only after separate B2 acceptance and explicit implementation authority.
+
 ## Preserved lane and Provider states
 
 - Lane A: `preparation_human_approved / external_action_not_authorized / not_submitted / null`, preserved inactive
@@ -236,8 +288,8 @@ RequestForm age UI is already aligned and is not a B2 or B3 age-change target. R
 
 ## Human + ChatGPT review gate
 
-The exact next work after the Candidate commit is:
+The exact next work after the R1 correction commit is:
 
-**Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)**
+**Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2) after Review Correction R1**
 
-B3 may begin only after separate Human + ChatGPT acceptance of B2. This Candidate must not be marked accepted by its implementation commit or push.
+B2 acceptance remains pending. B3 may begin only after separate Human + ChatGPT acceptance of B2. This Candidate must not be marked accepted by its correction commit or push.

@@ -32,8 +32,9 @@ Public submission flow:
 
 1. User submits request
 2. Safety screening runs
-3. If rejected, normal diagnosis does not proceed
-4. If allowed, user proceeds to payment
+3. Server-owned eligibility evaluates adult confirmation, Safety, assistance scope, input validity, and authority evidence
+4. Clarification and fail-closed semantic conditions do not proceed to normal diagnosis or Payment
+5. The user proceeds toward Payment only when the current server-owned result establishes `purchaseGateSatisfied=true`; the form/browser cannot assert this
 
 ---
 
@@ -148,8 +149,9 @@ Ask yes/no:
 If any yes:
 
 - Do not provide normal diagnosis.
-- Route to rejected or needs_review.
-- Do not proceed to payment for normal diagnosis unless eligibility is cleared.
+- Route to the appropriate semantic unsafe, urgent, unsupported-assistance, clarification, or other fail-closed handling.
+- Do not proceed to payment for normal diagnosis unless current server-owned eligibility establishes `purchaseGateSatisfied=true`.
+- Do not infer Purchase authority from browser, client, route, or localStorage state.
 - Refund may be required if payment already occurred due to an exceptional state.
 
 ---
@@ -170,25 +172,27 @@ Required checkboxes:
 
 ## 3. Form Completion Behavior
 
-If safety screening returns normal_allowed:
+If current server-owned eligibility establishes `purchaseGateSatisfied=true`:
 
 - Show next step toward payment
 - Do not generate diagnosis before payment success
 
-If safety screening returns rejected:
+If an unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, or technical-error condition remains:
 
 - Show cannot-provide-normal-diagnosis message
 - Do not send user to normal payment flow
 - Provide safety/refund guidance where applicable
 
-If safety screening returns needs_review:
+If clarification or additional information is required before eligibility can be established:
 
 - Stop the initial-MVP purchase flow.
 - Do not show an ordinary report or normal message suggestion.
 - Offer return/edit and review-safe unsupported-case/contact information only.
 
+Waiting, not-sending-now, temporary pause, and boundary-respecting support are not automatically disqualifying when separate assistance eligibility remains valid. They still require a fresh current server-owned result before Payment.
+
 Refund guidance applies only to an exceptional state in which payment already succeeded before later fulfillment became blocked or failed. Product/technical failure uses bounded same-Purchase recovery without recharge and a full JPY 980 ordinary refund if secure, valid fulfillment remains impossible. Safety bypass and other unintended economic charges are Payment Integrity remediation rather than ordinary cancellation. No Provider capability, automatic refund, timing, or operator procedure is claimed by this form specification.
 
 Development/QA may use mocked safety outcomes and placeholder payment routes, but the public MVP must keep the sequence:
 
-form submission → safety screening → payment → generation.
+form submission → adult confirmation and safety/assistance evaluation → server-owned purchase eligibility → payment → generation.

@@ -59,7 +59,7 @@ AI generation must be split into:
 
 Do not generate full diagnosis without judgment.
 
-Do not generate normal diagnosis if safety result is rejected.
+Do not generate a normal diagnosis when current server-owned eligibility has not established that ordinary assessment assistance may proceed. Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions remain fail closed. Real Payment may be reached only with `purchaseGateSatisfied=true`, and browser/client/localStorage state cannot establish that authority.
 
 ---
 

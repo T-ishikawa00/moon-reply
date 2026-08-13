@@ -81,7 +81,7 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] 支払時期を確定
 - [ ] 提供時間を確定
 - [ ] 返金処理時間を確定
-- [ ] 初期MVP後に`needs_review`を扱う場合の本番運用を別途承認（初期MVPは決済不可・通常鑑定なしで内部決定済み）
+- [ ] 追加情報・clarificationが必要で通常の有料鑑定の適格性が未成立の場合の本番運用を別途承認（安全に解消され、server-owned Purchase authorityが再評価されるまで決済不可・通常鑑定なし）
 - [ ] 誤ったメールアドレスへの訂正・再送方法を確定
 - [ ] 結果URLの失効・再発行方法を確定
 
@@ -117,8 +117,10 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] AI promptと禁止表現ポリシーが一致
 - [ ] Safety gateがサーバー側で強制される
 - [ ] server-owned Purchase authorityが必須boolean成人確認 `私は18歳以上です` を実決済前に要求する
-- [ ] `rejected`が決済へ到達しない
-- [ ] `needs_review`が未承認のまま決済へ到達しない
+- [ ] 現在のserver-owned eligibilityが`purchaseGateSatisfied=true`を確立した場合だけ実決済へ到達できる
+- [ ] clarification、unsafe、urgent、unsupported professional-assistance、invalid、contradictory、unknownおよびtechnical-errorがfail closedで実決済へ到達しない
+- [ ] waiting、not-sending-now、temporary pauseまたはboundary-respecting supportを、それだけで購入不適格とせず、別個のassistance eligibilityをserver側で評価する
+- [ ] browser、clientまたはlocalStorageがPurchase authorityを確立できない
 - [ ] 初回または有効なtrusted sessionがない購入では、実決済前にdelivery/recovery mailbox ownership verificationがserver-sideで強制される
 - [ ] trusted delivery/recovery verification stateがserver-authoritativeであり、browser/client/localStorageから自己申告できない
 - [ ] delivery/recovery email変更またはtrusted sessionの失効・取消・無効・不在時に再検証され、Request flow・最終確認・結果配信・recoveryで同じbindingが使われる

@@ -66,7 +66,11 @@ This checklist must be used before public release and before generated Phase 1 d
 
 ## 6. Automation Readiness Check
 
-- [ ] Safety rejected cases do not proceed to payment
+- [ ] Current server-owned purchase eligibility is required and only `purchaseGateSatisfied=true` can proceed to payment
+- [ ] Clarification, unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, and technical-error conditions fail closed
+- [ ] Waiting, not-sending-now, temporary pause, and boundary-respecting support are not automatically disqualifying when separate assistance eligibility remains valid
+- [ ] Browser, client, route, and localStorage state cannot establish Purchase authority
+- [ ] The required adult-confirmation boolean is enforced by server-owned Purchase authority; no eligibility-only age band, DOB, or identity document is required
 - [ ] Payment success is required before generation
 - [ ] AI judgment is generated before full diagnosis
 - [ ] Result page is created after generation

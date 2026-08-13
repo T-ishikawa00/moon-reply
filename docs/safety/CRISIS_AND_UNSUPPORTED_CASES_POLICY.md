@@ -39,7 +39,7 @@ These categories are product-safety boundaries, not a representation that 月の
 
 Safety screening occurs before payment.
 
-If classified as rejected:
+If the consultation is unsafe, urgent, unsupported professional-assistance, invalid, contradictory, unknown, technical-error, or otherwise ineligible for ordinary paid assessment:
 
 - do not begin payment
 - do not generate a romantic reading
@@ -48,12 +48,14 @@ If classified as rejected:
 - do not imply a continuing romantic bond
 - show a safety-oriented interruption screen
 
-If classified as needs_review:
+If clarification or additional information is required before ordinary paid-assessment eligibility can be established:
 
 - do not automatically promise that normal paid flow is available
-- require approved server-side handling before public launch
+- require approved server-side re-evaluation before public launch
 
-Client-side classification alone is not an adequate production control. The production policy must be enforced server-side before a rejected or unresolved needs-review request can reach payment.
+Waiting, not-sending-now, temporary pause, and boundary-respecting support are not automatically disqualifying when separate assistance eligibility remains valid.
+
+Client-side classification alone is not an adequate production control. Real Payment may be reached only when current server-owned eligibility establishes `purchaseGateSatisfied=true`. Clarification and all semantic fail-closed conditions remain blocked until safely resolved where resolution is applicable; browser, client, route, and localStorage state cannot establish Purchase authority.
 
 ---
 
