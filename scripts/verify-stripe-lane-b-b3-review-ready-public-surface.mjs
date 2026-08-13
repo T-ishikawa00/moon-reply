@@ -13,6 +13,7 @@ const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 
 const baseline = "9762a47b4ca4a38ae18f5c1e2e69a1cbe08e5230";
 const initialCandidate = "b1b695e0f444478928c31280062dea0ae5d7c14a";
+const reviewCorrectionR1 = "5e429501d5d11b9aa1d2f9b7da0a9e268c177afb";
 const expectedBranch = "codex/stripe-lane-b-b3-review-ready-public-surface";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedB2Status =
@@ -21,6 +22,7 @@ const candidateStatus =
   "stripe_lane_b_b3_review_ready_website_public_surface_candidate_ready_pending_human_visual_chatgpt_review";
 
 const updatedPaths = [
+  "app/globals.css",
   "app/contact/page.tsx",
   "app/legal/ai-disclosure/page.tsx",
   "app/legal/page.tsx",
@@ -38,8 +40,12 @@ const newPaths = [
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
 ];
 const exactScope = [...updatedPaths, ...newPaths];
-const correctionScope = [
+const correctionR1Scope = [
   "lib/legal/review-content.ts",
+  "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
+const correctionR2Scope = [
+  "app/globals.css",
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
 ];
 
@@ -199,24 +205,42 @@ const initialCandidateAnchored =
   initialCandidateParents.length === 2 &&
   initialCandidateParents[0] === initialCandidate &&
   initialCandidateParents[1] === baseline;
+const reviewCorrectionR1Parents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  reviewCorrectionR1,
+).split(/\s+/u);
+const reviewCorrectionR1Anchored =
+  reviewCorrectionR1Parents.length === 2 &&
+  reviewCorrectionR1Parents[0] === reviewCorrectionR1 &&
+  reviewCorrectionR1Parents[1] === initialCandidate;
 const baselineState =
   commitsAfterBaseline === 0 && currentHead === baseline;
 const initialCandidateState =
   commitsAfterBaseline === 1 && currentHead === initialCandidate;
 const correctionR1State =
   commitsAfterBaseline === 2 &&
-  currentHead !== initialCandidate &&
+  currentHead === reviewCorrectionR1;
+const correctionR2State =
+  commitsAfterBaseline === 3 &&
+  currentHead !== reviewCorrectionR1 &&
   headParents.length === 2 &&
-  headParents[1] === initialCandidate;
+  headParents[1] === reviewCorrectionR1;
 const exactLineage =
   initialCandidateAnchored &&
+  reviewCorrectionR1Anchored &&
   git("merge-base", baseline, "HEAD") === baseline &&
-  commitsAfterBaseline <= 2 &&
-  (baselineState || initialCandidateState || correctionR1State);
+  commitsAfterBaseline <= 3 &&
+  (baselineState ||
+    initialCandidateState ||
+    correctionR1State ||
+    correctionR2State);
 
 check("Initial B3 Candidate parent is the exact baseline", initialCandidateAnchored);
 check(
-  "exact baseline to Initial Candidate to optional Review Correction R1 lineage",
+  "exact baseline to Initial Candidate to R1 to optional R2 lineage",
   exactLineage,
 );
 check("expected B3 branch", git("branch", "--show-current") === expectedBranch);
@@ -228,11 +252,11 @@ check(
 
 const changedPaths = changedPathsFromBaseline();
 check(
-  "exact 13-path mutation manifest",
+  "exact 14-path mutation manifest",
   isDeepStrictEqual(changedPaths, sorted(exactScope)),
 );
 check(
-  "update/new classification is exactly 12/1",
+  "update/new classification is exactly 13/1",
   updatedPaths.every(
     (relativePath) =>
       existsSync(path.join(repositoryRoot, relativePath)) &&
@@ -245,21 +269,49 @@ check(
     ),
 );
 
-const correctionPaths = changedPathsFrom(initialCandidate);
-const correctionNameStatuses = git(
+const correctionR1Paths = git(
+  "diff",
+  "--name-only",
+  "--no-renames",
+  initialCandidate,
+  reviewCorrectionR1,
+  "--",
+)
+  .split(/\r?\n/gu)
+  .map((value) => value.trim().replaceAll("\\", "/"))
+  .filter(Boolean);
+const correctionR1NameStatuses = git(
   "diff",
   "--name-status",
   "--no-renames",
   initialCandidate,
+  reviewCorrectionR1,
   "--",
 )
   .split(/\r?\n/gu)
   .filter(Boolean);
 check(
   "Review Correction R1 scope is exactly two updates",
-  isDeepStrictEqual(correctionPaths, sorted(correctionScope)) &&
-    correctionNameStatuses.length === 2 &&
-    correctionNameStatuses.every((entry) => /^M\t/u.test(entry)),
+  isDeepStrictEqual(sorted(correctionR1Paths), sorted(correctionR1Scope)) &&
+    correctionR1NameStatuses.length === 2 &&
+    correctionR1NameStatuses.every((entry) => /^M\t/u.test(entry)),
+);
+
+const correctionR2Paths = changedPathsFrom(reviewCorrectionR1);
+const correctionR2NameStatuses = git(
+  "diff",
+  "--name-status",
+  "--no-renames",
+  reviewCorrectionR1,
+  "--",
+)
+  .split(/\r?\n/gu)
+  .filter(Boolean);
+check(
+  "Human Visual QA Correction R2 scope is exactly two updates",
+  isDeepStrictEqual(correctionR2Paths, sorted(correctionR2Scope)) &&
+    correctionR2NameStatuses.length === 2 &&
+    correctionR2NameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
 const changedNameStatuses = git(
@@ -283,6 +335,7 @@ check("baseline Candidate diff check", git("diff", "--check", baseline, "--") ==
 check("working diff check", git("diff", "--check") === "");
 check("staged diff check", git("diff", "--cached", "--check") === "");
 
+const globalStyles = readText("app/globals.css");
 const authority = readText("lib/legal/review-content.ts");
 const legalHub = readText("app/legal/page.tsx");
 const terms = readText("app/legal/terms/page.tsx");
@@ -299,6 +352,78 @@ const purchaseConfirmation = readText(
   "components/review/ReviewPurchaseConfirmation.tsx",
 );
 const purchaseFixture = readText("fixtures/review/purchase-confirmations.ts");
+
+const nightFactLabelRule = sourceSlice(
+  globalStyles,
+  ".legal-content-section--night .legal-fact-rows dt {",
+  "}",
+  "night FactRows label rule",
+);
+const nightFactValueRule = sourceSlice(
+  globalStyles,
+  ".legal-content-section--night .legal-fact-rows dd {",
+  "}",
+  "night FactRows value rule",
+);
+check(
+  "night FactRows use explicit high-contrast label and value tokens",
+  nightFactLabelRule.includes("color: var(--moon-300)") &&
+    nightFactValueRule.includes("color: var(--paper-50)") &&
+    !nightFactValueRule.includes("var(--ink-600)"),
+);
+
+const paperLegalInformationSelectors = [
+  ".legal-document-nav > div > p",
+  ".legal-document-nav a small",
+  ".legal-content-section > h2::before",
+  ".legal-fact-rows dt",
+  ".legal-decision-row > details dt",
+  ".legal-section-list__heading > span",
+  ".legal-category-list li > span",
+];
+const paperLegalInformationRules = paperLegalInformationSelectors.map(
+  (selector) =>
+    sourceSlice(
+      globalStyles,
+      `${selector} {`,
+      "}",
+      `${selector} paper information rule`,
+    ),
+);
+check(
+  "small legal informational text uses the high-contrast paper token",
+  paperLegalInformationRules.every(
+    (rule) =>
+      rule.includes("color: var(--focus-ring-paper)") &&
+      !rule.includes("color: var(--moon-600)"),
+  ),
+);
+
+const legalPageHeadingRule = sourceSlice(
+  globalStyles,
+  ".legal-page-header h1 {",
+  "}",
+  "legal page heading rule",
+);
+const purchaseHeadingRule = sourceSlice(
+  globalStyles,
+  ".purchase-sheet__header h1 {",
+  "}",
+  "purchase heading rule",
+);
+const phraseWrapping = [
+  "word-break: normal;",
+  "word-break: auto-phrase;",
+  "text-wrap: balance;",
+];
+check(
+  "legal page heading uses bounded phrase-aware wrapping",
+  includesAll(legalPageHeadingRule, phraseWrapping),
+);
+check(
+  "purchase heading uses bounded phrase-aware wrapping",
+  includesAll(purchaseHeadingRule, phraseWrapping),
+);
 
 const privacyInventorySummary = sourceSlice(
   authority,
