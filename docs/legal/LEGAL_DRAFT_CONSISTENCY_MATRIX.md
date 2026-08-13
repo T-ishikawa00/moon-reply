@@ -12,9 +12,11 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
+> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。以下のCurrent B2 authorityがTask 18Bのhistorical matrixより優先します。
+
 ---
 
-## 0. Current Review Authority（2026-08-12）
+## 0. Current Review Authority（2026-08-13）
 
 - Payment Charter v1は`human_chatgpt_accepted_complete`としてHuman + ChatGPT accepted complete。受入日は`2026-08-12`、Payment implementation authorityは`false`
 - Delivery/Recovery Email Verificationは`accepted_required_control_with_trusted_session_reuse`
@@ -22,6 +24,8 @@
 - materialな未解決法的義務はblockerとして維持
 - 専門家相談は任意であり、未実施それ自体はPayment Charter受入、公開、Paid LaunchまたはProduction Paymentのblockerではない
 - 以下のTask 18BおよびM1-I5時点の表現はhistorical evidenceとして維持し、現在のreview authorityまたはdownstream UI実装完了を意味しない
+- Stripe Lane B Human Decision Packageは`stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`であり、`LB-DEC-AGE-001`、`LB-DEC-ENTITY-001`、`LB-DEC-DISCLOSURE-001`、`LB-DEC-SUPPORT-001`、`LB-DEC-REFUND-001`、`LB-DEC-FULFILLMENT-001`、`LB-DEC-DOMAIN-001`はaccepted
+- B2は上記をdraft/specへ同期したCandidateであり、statusは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`。Human + ChatGPT review / acceptanceは`pending / pending`
 
 ---
 
@@ -57,6 +61,20 @@ Task 18B時点の`Future implementation`表記は成立時点の履歴です。M
 - publication gateのcheckboxと`OPERATOR_DECISION_REGISTER.md`のDecision stateは変更しない
 - この実装statusは法務文書の公開承認、専門家確認、運営者・provider決定、販売開始を意味しない
 
+## 1.3 Current B2 decision consistency
+
+| Decision | Current Candidate value | Evidence/implementation/publication state |
+| --- | --- | --- |
+| `LB-DEC-AGE-001` | 必須boolean自己申告 `私は18歳以上です`。年齢適格性だけのための年齢層、DOB、本人確認書類は収集しない | `AGE-GATE-001 = accepted_direction_legal_spec_alignment_candidate_complete`; Production server enforcementは未実装 |
+| `LB-DEC-ENTITY-001` | applicableな個人・個人事業主route | actual legal name/address/phone等はHuman/private input待ち |
+| `LB-DEC-DISCLOSURE-001` | 法令と実際のStripe要件が許す項目で`請求があった場合には遅滞なく開示します`を候補とする | Payment前request、no login/purchase/Purchase ID、実経路・logsがpublication前に必要 |
+| `LB-DEC-SUPPORT-001` | 1 operating business mailbox + 1 categorized form、6 functional categories | mailbox/form/SLA/backendは未実装・未確定 |
+| `LB-DEC-REFUND-001` | 通常JPY 980 Product refundとuncapped Payment Integrity remediationを分離 | Provider mechanics、fees、duration、dispute semanticsは未確定 |
+| `LB-DEC-FULFILLMENT-001` | verified email、server Payment success、protected result page、same-Purchase recovery、no recharge、不能時全額返金 | delivery timingとProduction実装は未確定 |
+| `LB-DEC-DOMAIN-001` | intended final production domainをStripe Account/Site review前に用意する順序 | domain、DNS、deployment、URLは未承認・未取得 |
+
+Task 18B historical matrix内の年齢層、専用checkbox禁止、専門家確認待ち、返金候補等の記録はtask-time evidenceに限り、Current B2 authorityとして使用しません。専門家相談は任意escalationです。
+
 ## 1.2 Current Accepted Delivery/Recovery Email Rule（2026-08-12）
 
 以下はTask 18B時点のhistorical matrixより新しいcurrent Product/Privacy authorityである。Request flow、Payment Confirmation、Result delivery、およびEmail/recoveryは、実装時に同じverified-email bindingを使用しなければならない。この記録はUI、session、Payment、DBまたは配信実装を承認しない。
@@ -80,7 +98,7 @@ OTP/Magic Link、verification Provider、session/cookie/token実装、lifetime�
 | 分析方法 | 利用者入力のみを根拠とし、占術・超自然的手法・外部調査を使用しない | Terms / Privacy / AI Disclosure | LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 税込価格 | 税込980円 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Email: Future implementation | 固定 |
 | 数量 | 1購入 = 1相談 = 1鑑定書 | Terms / Tokushoho / Refund | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
-| 18歳以上 | 必須の年齢層選択。18歳以上の許可値のみ、`回答しない`なし、専用チェックボックスなし。公開フローではserver-side再検証 | Terms / Privacy / Tokushoho / Unsupported Cases | Payment Confirmation Screen / LP: Future implementation。Request Form: local UI implemented、server-side未実装 | 必須の自己申告型年齢ゲート。生年月日・身分証は収集しない |
+| 18歳以上（Task 18B historical snapshot） | 必須の年齢層選択。18歳以上の許可値のみ、`回答しない`なし、専用チェックボックスなし。公開フローではserver-side再検証 | Terms / Privacy / Tokushoho / Unsupported Cases | Payment Confirmation Screen / LP: Future implementation。Request Form: local UI implemented、server-side未実装 | HISTORICAL ONLY。B2では必須boolean自己申告 `私は18歳以上です` に置換済み。Production server enforcementは未実装 |
 | AI利用 | AI利用を明示 | Terms / Privacy / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | provider未定 |
 | 非保証 | 本心・返信・復縁・未来・関係改善を保証しない | Terms / Tokushoho / AI Disclosure | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |
 | 医療等ではない | 医療・心理・法律・調査サービスではない | Terms / Tokushoho / AI Disclosure / Unsupported Cases / Contact | Payment Confirmation Screen / LP / Request Form / Result Page / Email: Future implementation | 固定 |

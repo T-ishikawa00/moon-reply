@@ -2,6 +2,8 @@
 
 ## 0. このドキュメントの位置づけ
 
+> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`. `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_candidate_complete` at the document/spec Candidate level only. Exact next work is B2 Human + ChatGPT review; B3 and real Payment enforcement remain separately unauthorized.
+
 このドキュメントは、AIを活用した恋愛メッセージ分析・判断支援デジタルレポート「月の返事」のプロダクト親仕様書である。ユーザー向け定義は「恋のメッセージ鑑定ノート」とする。
 
 Status note: 現在の実行順序、完了定義、次タスクおよびHuman gateは `docs/ROADMAP.md` が優先する。Payment / Platform / Purchase / Entitlement / Monetizationの詳細正本は `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` とする。旧Phase、価格仮説、Subscription案およびprovider候補は履歴であり、それ自体は実装・問い合わせ・デプロイを承認しない。
@@ -508,7 +510,7 @@ Product authorityは`External economic rail -> authoritative verification -> Moo
 - `STRIPE-FEAS-001`、`STRIPE-ACCOUNT-001`、`STRIPE-PAYPAY-001`は別Lane。actual Stripe account/contact/business/site/category/Live Paymentおよびpayment-method evidence acquisitionは別途承認かつevidence-gated
 - Stripe account/contactは本Acceptance Sync taskでは作成・実施しない。generic marketing pageやsilenceをapprovalと扱わない
 - cards、Apple Pay、Google Pay、PayPayのavailability、Checkout、test/live、webhook、refund、descriptor、Customer linkage、fees/settlementはevidence-gated
-- `AGE-GATE-001`は専用`私は18歳以上です` self-attestationを採用し、eligibility目的だけの年齢層、DOBまたは本人確認書類を収集しないHuman方向性が`2026-08-13`にaccepted。server-side purchase authorityはaccepted adult confirmationを最終的に要求する。RequestForm、ORDER_FORM_SPEC、PAYMENT_CONFIRMATION_SCREEN_SPEC、Terms、Privacyのdownstream alignmentは未実施で、Lane B/C blockerとして残る
+- `AGE-GATE-001`は専用`私は18歳以上です` self-attestationを採用し、eligibility目的だけの年齢層、DOBまたは本人確認書類を収集しないHuman方向性が`2026-08-13`にaccepted。B2 CandidateではRequestFormの既存整合を維持し、ORDER_FORM_SPEC、PAYMENT_CONFIRMATION_SCREEN_SPEC、Terms、Privacyへ同期したため、semantic stateは`accepted_direction_legal_spec_alignment_candidate_complete`。Human + ChatGPT review / acceptanceとProduction server enforcementは未完了で、Lane B/C blockerとして残る
 - PAY.JP readiness evidenceはpaused fallbackとして保存し、GMO/開業届/PAY.JP申請準備をcurrent next workにしない
 - stable review URLs/public legal conditionsが必要なProvider/site reviewより前にそれらを整える。formal evidence-gate selectionと別のimplementation authorization前にSDK/API実装へ進まない。Production QAはProduction Paymentを承認せず、Soft Launchには別個のProduction Payment authorizationが必要
 
@@ -937,7 +939,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。Stripe Lane B Human Decision Packageはstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。現在の正式なPayment作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)**である。Lane B/Cはdownstream requirements未完了のためblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。Stripe Lane B Human Decision Packageはstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。B2 Candidateは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`であり、現在の正式なPayment作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)のHuman + ChatGPT review**である。Lane B/Cはdownstream requirements未完了のためblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - Stripe/PAY.JP SDK/API/checkout/webhook
 - RevenueCat

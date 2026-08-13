@@ -2,13 +2,15 @@
 
 ## Status and Dependency Rule
 
+> **B2 Candidate current overlay:** implementation complete for review with status `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`; exact next work is B2 review. B3 is not active and no external action is authorized.
+
 This WBS implements the sequence controlled by `docs/ROADMAP.md`.
 
 Milestones are ordered dependencies. No implementation task starts until its planning/specification task is accepted, and no milestone starts until Human accepts the previous milestone. Unchecked items are not authorized merely because they are listed.
 
 Current state: M1-P2 Experience & Visual Direction Revision planning is complete and Human-accepted. M1-P3 is complete and Human and ChatGPT accepted, with B — `Lunar Contrast Edition` selected. M1-I8-R1 and M1-I9-R1 are complete, Human-accepted, and merged to `main`. M1-I12 automated final QA and Human final QA are complete; M1-I12 is Human-accepted and complete. Milestone 1 is Human-accepted, complete, and closed. The accepted deliverable is a fixed-fixture Reviewable Web MVP, not a production-ready or payment-ready product. M2-P1 AI Quality Specification & Evaluation Foundation and M2-P1-R1 integrity hardening are implemented, automatically validated, Human / ChatGPT accepted, and complete at accepted foundation implementation commit `c56f597d0491482995c4afa6fb64cf148dd66345`. M2-P1-R2 manifest-boundary correction is implemented and validated at `e859b4cdfc0efa03d3372784ea34f4abb61bee9d` without changing the accepted foundation. M2-P2 planning has not started; Milestone 2 runtime and all implementation work beyond M2-P1 remain unauthorized. Browser use and screenshot acquisition by CodeX/agents remain prohibited; the completed visual and interaction QA is Human observational evidence.
 
-Current Payment strategy state: Stripe-first Product/strategy, Customer-facing / Public-copy Alignment, and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. Lane B/C remain blocked pending downstream requirements. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and credit/debit-card/Apple Pay/Google Pay/PayPay eligibility remains unverified. PAY.JP is paused fallback. No item below authorizes Provider operation, contact/submission, evidence acquisition, Payment implementation, publication, domain purchase, or deployment.
+Current Payment strategy state: Stripe-first Product/strategy, Customer-facing / Public-copy Alignment, and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; B2 Human + ChatGPT review is the exact current next work and acceptance remains pending. Lane B/C remain blocked pending downstream requirements. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and credit/debit-card/Apple Pay/Google Pay/PayPay eligibility remains unverified. PAY.JP is paused fallback. No item below authorizes Provider operation, contact/submission, evidence acquisition, Payment implementation, publication, domain purchase, or deployment.
 
 ## Milestone 0: Completed Foundations
 
@@ -18,7 +20,7 @@ Current Payment strategy state: Stripe-first Product/strategy, Customer-facing /
 - [x] Static responsive LP at `/`
 - [x] Request-form UI at `/request`
 - [x] Client-side required-field validation
-- [x] Required 18-or-older age-group choices and notice
+- [x] Required boolean self-attestation `私は18歳以上です` and notice
 - [x] Deterministic local safety classifier and UI states
 - [x] Supabase schema/migration foundation
 - [x] RLS enabled without public policies
@@ -170,7 +172,8 @@ Dependency: Milestone 2 Human acceptance plus the ordered Stripe Lane B predeces
 
 - [x] B0 Stripe Lane B Human Decision Package Candidate — historical formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a`
 - [x] B1 Human + ChatGPT decision review and acceptance sync — `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven decisions accepted; no external action
-- [ ] B2 Stripe Lane B Legal Draft Finalization Candidate — exact current next work; internal/draft only; publication unauthorized
+- [x] B2 Stripe Lane B Legal Draft Finalization Candidate — implementation complete for review; `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; internal/draft only; publication unauthorized
+- [ ] B2 Human + ChatGPT review and acceptance — exact current next work; B3 remains inactive
 - [ ] B3 Review-ready Website/Public Surface implementation — scope only after predecessor acceptance
 - [ ] B4a deployment-readiness implementation/configuration — define hosting, stable review URL, indexing/privacy posture, device review, contact test, and rollback/removal
 - [ ] Human acceptance of B4a / Milestone 3 planning and readiness
@@ -212,12 +215,12 @@ Production QA does not authorize Production Payment. Soft Launch requires separa
 Dependency: Milestone 4 Human acceptance. Production server age validation remains incomplete until this milestone.
 
 - [ ] Planning/spec: request endpoint, persistence, state machine, access, recovery, and evidence boundaries
-- [ ] Planning/spec: allowed age values and production server safety enforcement
+- [ ] Planning/spec: required adult-confirmation boolean and production server Purchase-authority enforcement
 - [ ] Planning/spec: AI payload minimization, judgment/report schemas, validation, retries, and failure handling
 - [ ] Planning/spec: result token, email test/log mode, feedback persistence, and operations
 - [ ] Human acceptance of Milestone 5 planning/specification
 - [ ] Implementation: request submission endpoint and Supabase request persistence
-- [ ] Implementation: production server validation of allowed age-group values
+- [ ] Implementation: production server enforcement of accepted adult-confirmation boolean
 - [ ] Implementation: production enforcement of `normal_allowed`, `needs_review`, and `rejected`
 - [ ] Implementation: prohibit payment path for `needs_review` and `rejected`
 - [ ] Implementation: minimized structured AI judgment and full report generation

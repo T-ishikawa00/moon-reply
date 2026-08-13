@@ -2,6 +2,8 @@
 
 ## 1. Status and classification
 
+> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved.
+
 - Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Formulation date: `2026-08-12`
 - Accepted status: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`
@@ -16,7 +18,7 @@
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Human + ChatGPT review / acceptance: `complete / complete` on `2026-08-13`
 - Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
-- Exact current next work: Stripe Lane B Legal Draft Finalization Candidate (B2)
+- Exact current next work: Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)
 
 Readiness item classifications:
 
@@ -37,7 +39,7 @@ Bounded sequence:
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — exact current next work |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — ready pending Human + ChatGPT review; acceptance pending |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -118,19 +120,19 @@ Gate B must not be marked publication-ready, approved, activated, or Live capabl
 
 Accepted Human direction: retain the dedicated self-attestation checkbox `私は18歳以上です`; do not collect age bands solely for eligibility; do not collect DOB or identity documents for initial Customer age eligibility; and ultimately require server-authoritative accepted adult confirmation before purchase. This is self-attestation, not strict identity verification.
 
-Current controlling/draft documents still retain required age-group selection and prohibit the dedicated checkbox. Downstream alignment remains pending.
+The B2 Candidate aligns CURRENT controlling drafts/specifications to the dedicated required boolean checkbox. Production server enforcement remains unimplemented.
 
 ```yaml
 id: AGE-GATE-001
 human_direction: accepted
-downstream_alignment: pending
-semantic_state: accepted_human_direction_downstream_alignment_pending
+downstream_alignment: candidate_complete_pending_human_chatgpt_review
+semantic_state: accepted_direction_legal_spec_alignment_candidate_complete
 lane_b_readiness: blocked
 lane_c_readiness: blocked
-downstream_mutation_in_this_acceptance_sync: prohibited
+production_server_enforcement: false
 ```
 
-This Acceptance Sync does not modify RequestForm, `ORDER_FORM_SPEC.md`, `PAYMENT_CONFIRMATION_SCREEN_SPEC.md`, the Terms draft, or the Privacy draft.
+B2 modifies the listed controlling specifications and legal drafts only. RequestForm already follows the accepted direction and is not modified. Human + ChatGPT review / acceptance of B2 remains `pending / pending`.
 
 ## 5. Private KYC evidence boundary
 

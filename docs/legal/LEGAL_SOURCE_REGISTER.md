@@ -12,7 +12,7 @@ Every source must be rechecked before public launch.
 
 No professional legal review has been completed; professional consultation is optional and is not a Paid Launch prerequisite. No payment-provider approval or trademark clearance is recorded by this register.
 
-Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`; Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` as of `2026-08-13`; all seven policy directions are accepted, but final legally compliant wording, actual Stripe requirements, downstream specification/legal alignment, actual entity labels, mailbox/SLA, and domain selection remain evidence- or Human-input-gated. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. Lane B/C remain blocked, and this source register creates no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, Payment implementation, deployment, domain-purchase, or legal-publication authority.
+Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`; Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` as of `2026-08-13`; all seven policy directions are accepted. Their B2 draft/spec alignment Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; Human + ChatGPT review / acceptance is `pending / pending`. The exact current next work is **Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)**. Final legally compliant wording, actual Stripe requirements, entity values, mailbox/SLA, request-based-disclosure operation, domain selection, implementation, and publication remain evidence- or Human-input-gated. Lane B/C remain blocked, and this source register creates no Stripe contact, submission, account, approval, activation, PayPay enablement, formal Provider selection, Payment implementation, deployment, domain-purchase, or legal-publication authority.
 
 ---
 
@@ -29,6 +29,7 @@ URL:
 - https://www.no-trouble.caa.go.jp/what/mailorder/
 - https://www.no-trouble.caa.go.jp/what/mailorder/rule.html
 - https://www.no-trouble.caa.go.jp/what/mailorder/advertising.html
+- https://www.no-trouble.caa.go.jp/qa/advertising.html
 - https://www.no-trouble.caa.go.jp/what/mailorder/guidelines.html
 
 Use for:
@@ -57,6 +58,8 @@ Authority:
 URL:
 
 - https://www.caa.go.jp/policies/policy/consumer_system/consumer_contract_act/
+- https://www.caa.go.jp/policies/policy/consumer_system/consumer_contract_act/annotations
+- https://laws.e-gov.go.jp/law/412AC0000000061?occasion_date=20250401
 
 Use for:
 
@@ -67,8 +70,9 @@ Use for:
 
 Research note:
 
-- Source URL checked on 2026-07-10
-- Final interpretation and contract wording require review against current official primary sources, actual Product behavior, and Customer-facing wording; optional professional consultation may be used as escalation
+- Official Consumer Affairs Agency and e-Gov sources checked on `2026-08-13`.
+- Clauses that exempt all liability, include intentional or grossly negligent conduct within a liability limitation, remove statutory cancellation rights for the operator's default, or otherwise unfairly harm Consumers require current-source review and may be invalid. This bounded note does not decide final Terms wording.
+- Final interpretation and contract wording require review against current official primary sources, actual Product behavior, and Customer-facing wording; optional professional consultation may be used as escalation.
 
 ### 個人情報保護法・ガイドライン
 
@@ -78,7 +82,8 @@ Authority:
 
 URL:
 
-- https://www.ppc.go.jp/personalinfo/legal/
+- https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/
+- https://www.ppc.go.jp/personalinfo/legal/guidelines_offshore/
 
 Use for:
 
@@ -90,8 +95,10 @@ Use for:
 
 Research note:
 
-- Source URL checked on 2026-07-10
-- Recheck the applicable law, guidelines, Q&A, and provider processing facts before launch
+- Official Personal Information Protection Commission sources checked on `2026-08-13`.
+- A domestic processor is not automatically a third party where the actual arrangement is a qualifying委託 within the necessary purpose and the processor cannot use the data beyond that scope; actual contract and data flow control, and the operator retains supervision obligations.
+- Foreign-third-party provision may require advance consent and information or applicable equivalent-measures and continuing-information handling. No Provider processing is classified in this Candidate without actual contract, location, data-flow, and current-law evidence.
+- Recheck the applicable law, guidelines, Q&A, actual Provider processing facts, and final public wording before launch.
 
 ---
 

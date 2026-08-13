@@ -12,6 +12,8 @@
 
 ## Status rules
 
+> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. No inquiry, contact, submission, account action, evidence acquisition, or Provider outcome is added by B2.
+
 - `Not sent` means the inquiry has not been transmitted through any channel.
 - `Not submitted` means no production-use application has been submitted.
 - Stripe lanes use four separate fields: `preparation_status`, `external_action_authority`, `acquisition_status`, and `outcome`. Their allowed values are controlled by `STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`.

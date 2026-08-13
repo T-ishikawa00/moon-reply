@@ -6,13 +6,15 @@
 >
 > **DO NOT ENTER GUESSED PERSONAL INFORMATION**
 
+> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。このガイドへ実際のHuman PIIを記録しない。
+
 ## 0. 使い方
 
 このガイドは、Humanが運営上の判断を行うための説明資料である。推奨案はプロジェクト上の初期方向であり、Humanの最終判断、provider-specific authoritative approval/review evidenceまたは最新の公式一次情報と実際のProduct/運用証拠の確認を代替しない。Stripe CheckoutはHuman + ChatGPT accepted strategic primary Web directionだが、feasibility、approval、activationまたはformal selectionではない。PAY.JPはpaused fallbackである。
 
 回答は `OPERATOR_DECISION_WORKSHEET.md` に記録し、根拠となる契約、最新の公式一次情報、設定画面および試験結果を紐づける。専門家相談を利用する場合は任意の補助証拠として記録できるが、Paid LaunchまたはProduction Paymentの必須条件ではない。
 
-Current sequencing: truthful Customer-facing/public-copy alignmentとStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted completeとなった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive、Stripe Salesは`not_used_by_human_direction`だがProvider outcomeではない。Stripe Lane B Human Decision Packageは`2026-08-13`にstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。現在の正式なPayment作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)**である。Lane B/Cはdownstream Legal/Site/KYC/domain requirements未完了のためblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。actual entity label、最終的な住所・電話表示文言、mailbox address、SLA、Tokushoho publication、opening notificationおよびdomain selectionは引き続き証拠またはHuman/private inputが必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
+Current sequencing: truthful Customer-facing/public-copy alignmentとStripe Feasibility Evidence Preparationは`2026-08-12`にaccepted completeとなった。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactive、Stripe Salesは`not_used_by_human_direction`だがProvider outcomeではない。Stripe Lane B Human Decision Packageは`2026-08-13`にstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。B2 Candidateは`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`であり、現在の正式な作業は**Stripe Lane B Legal Draft Finalization Candidate (B2)のHuman + ChatGPT review**である。Lane B/Cはdownstream Legal/Site/KYC/domain requirements未完了のためblockedのままで、external actionは承認されない。Stripe feasibility/account/approval/activation/formal selectionは未確立である。actual entity label、最終的な住所・電話表示文言、mailbox address、SLA、Tokushoho publication、opening notificationおよびdomain selectionは引き続き証拠またはHuman/private inputが必要である。GMO契約、開業届その他のPAY.JP固有準備はpaused fallbackであり、current requirementではない。
 
 Accepted Lane B directions are: dedicated 18+ self-attestation; initial individual/sole-proprietor applicable Stripe route; request-based disclosure preference where legally and Provider-permitted; one operating business mailbox plus one categorized contact form; the accepted refund/Payment Integrity policy; the accepted fulfillment skeleton without a concrete duration; and intended final production domain selection before Stripe Account/Site review. These directions are not downstream implementation, legal publication, Stripe evidence, or external-action authority.
 
@@ -45,6 +47,7 @@ Accepted Lane B directions are: dedicated 18+ self-attestation; initial individu
 - **推奨案:** private KYC disclosureとCustomer-facing public disclosureを分離する。有料公開前に実在する情報とexact Tokushoho implementationを確定し、provider契約情報と整合させる。request-based disclosureが常に十分、またはvirtual officeが常に許容・不要とは結論しない。virtual-office useは現時点のHuman preferenceではrequiredではなく、GMOはon hold / not rejectedとする。
 - **今すぐ決める必要があるか:** directionはacceptedだが、OP-005はfully completedではない。B2および将来のactual Provider/site review、final URLの審査用ページ、公開前には、最新の公式一次情報とactual Provider evidenceに基づく実情報・exact表示方法の確定が必須。
 - **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実住所、採用する表示方法および必要なら住所利用契約。actual legal、Provider、postal、privacyまたはoperational evidenceにより有用・必要となる場合はvirtual officeを再検討する。専門家相談は任意。
+- **運用境界:** 販売事業者情報はPayment前に請求可能とし、その請求だけを理由にlogin、completed purchaseまたはPurchase IDを要求しない。`請求があった場合には遅滞なく開示します`を実現できる経路、responseおよびlogsがpublication前に必要。
 
 ## OP-006 電話番号公開方法
 
@@ -54,6 +57,7 @@ Accepted Lane B directions are: dedicated 18+ self-attestation; initial individu
 - **Accepted direction:** eligibleな電話番号fieldは現行法とactual Stripe要件が許す場合にrequest-based disclosureを優先する。私用番号を無計画に公開せず、実際に受電・折返し可能な運用と表示を一致させる。電話番号の省略が常に許されるとは結論しない。
 - **今すぐ決める必要があるか:** 現行Acceptance Syncのblockerではない。将来のactual Provider/site review、final URLの審査用ページおよび公開前には、最新の公式一次情報とselected Provider evidenceに基づく実情報・表示方法の確定が必須。
 - **証拠・確認先:** 最新の消費者庁公式情報、provider要件、実番号、採用する表示方法および電話サービス契約。専門家相談は任意。
+- **運用境界:** Payment前の請求、no login/completed purchase/Purchase ID、遅滞のないactual disclosureおよび監査logsを住所と同じく満たす必要がある。
 
 ## OP-007 問い合わせメール
 
@@ -142,3 +146,11 @@ Accepted Lane B directions are: dedicated 18+ self-attestation; initial individu
 - **推奨案:** 個人的・私的利用を基本とし、小さな抜粋共有は将来検討する。転売と全文の商用再配布は禁止する方向。
 - **今すぐ決める必要があるか:** 初期readiness文書作成だけでは完了不要だが、production-use applicationに使用するfinal利用規約URL、Paid Launch/publication前にはHuman判断と、最新の公式一次情報・実際の利用条件・最終公開文言の確認が必要。最終決定とは扱わない。
 - **証拠・確認先:** Human決定、利用規約案、AI生成物の権利・利用許諾に関するcurrent-source review。専門家相談は任意。
+
+## Accepted refund and fulfillment directions
+
+- ordinary Product refundとPayment Integrity remediationを区別する。
+- successful Payment後かつ客観的に`generation_started`前なら、将来のserver-authoritative state evidenceを条件に税込980円の通常全額返金。
+- Product/technical failureは同一Purchaseで限定復旧し、再課金せず、安全かつ有効な履行が不可能なら税込980円を通常全額返金。
+- duplicate charge、wrong amount/Customer/Request、Safety bypassその他の意図しない経済的chargeはPayment Integrity remediationとして実際の誤りを是正し、980円を上限としない。
+- protected result page、verified-email notification、same-Purchase recoveryを将来の骨格とし、[[DELIVERY_TIMING_TBD]]、Provider mechanicsおよびProduction実装は未解決。

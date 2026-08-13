@@ -1,5 +1,9 @@
 # PAYMENT_FLOW.md
 
+## B2 Candidate status
+
+`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`. B2 changes specification authority only; Payment implementation and Production Payment remain `false / false`.
+
 ## 0. Purpose
 
 This document defines the intended Web flow for the initial automated paid product. It is subordinate to `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md` and the accepted `docs/payment/PAYMENT_CHARTER.md`.
@@ -44,7 +48,7 @@ RevenueCat is not required for initial Web fulfillment. Future cross-platform sy
 Required sequence:
 
 1. User submits diagnosis request form
-2. Server validates that the required age-group value is one of the allowed 18-or-older values
+2. Server verifies the required boolean adult self-attestation `私は18歳以上です`
 3. The accepted server-owned Safety and purchase-eligibility gate runs
 4. User proceeds only when the current result is eligible and `purchaseGateSatisfied=true`
 5. User supplies or confirms the delivery/recovery email
@@ -58,7 +62,7 @@ Required sequence:
 
 For a still-valid trusted session bound to the unchanged verified delivery/recovery email, step 6 may be skipped. Safety eligibility and final purchase confirmation cannot be skipped. A trusted session is neither Payment authority nor Safety authority, and browser/client/localStorage state alone cannot assert trusted or verified status.
 
-The request → server-side age-group validation → Safety/purchase eligibility → verified delivery/recovery email binding → final confirmation → Payment order must be maintained in the public flow. The initial MVP remains no-login; trusted delivery/recovery state is not a Customer account.
+The request → server-authoritative adult-confirmation requirement → Safety/purchase eligibility → verified delivery/recovery email binding → final confirmation → Payment order must be maintained in the public flow. The initial MVP remains no-login; trusted delivery/recovery state is not a Customer account.
 
 Reason:
 
@@ -78,9 +82,9 @@ Waiting, not sending now, a temporary pause, and boundary-respecting assessment 
 Public MVP payment flow:
 
 1. User passes safety screening and reaches the final confirmation screen
-2. User reviews or corrects the selected age group and relevant customer-facing consultation/contact facts
+2. User reviews or corrects the dedicated `私は18歳以上です` boolean self-attestation and relevant customer-facing consultation/contact facts
 3. User reviews or corrects the delivery/recovery email
-4. Server confirms the allowed age-group value and current server-owned purchase eligibility
+4. Server confirms adult self-attestation and current server-owned purchase eligibility
 5. If no valid trusted session is bound to the same verified email, mailbox control is verified and server-authoritatively bound to the current purchase authority and Purchase Intent
 6. User reviews and confirms the final JPY 980 purchase terms
 7. After separate implementation authorization, the user starts the Charter-defined Payment flow
@@ -92,7 +96,7 @@ Public MVP payment flow:
 
 When the Customer changes the delivery/recovery email, any prior binding cannot carry over silently and the new email must be verified before real Payment. A valid trusted session bound to the unchanged verified email may avoid repeat mailbox verification only; it cannot avoid Safety or final purchase confirmation.
 
-The production server validation described above is required before public release and is not implemented by Task 18C-R1. The age gate uses the required age-group selection; it does not use a separate age checkbox, date of birth, or identity document.
+The production server validation described above is required before public release and is not implemented by B2. The age gate uses the dedicated required boolean checkbox `私は18歳以上です`; it does not collect age bands, date of birth, or identity documents solely for eligibility. The current RequestForm and prepayment gate already follow this direction and are not modified by B2.
 
 Manual payment confirmation is not the target public flow.
 
@@ -114,7 +118,7 @@ payment_succeeded
   -> refunded
 ```
 
-Do not deliver a normal report when fulfillment is Safety-blocked. Retry only technically recoverable failures. Treat unrecoverable/unfulfillable service as a full-refund candidate, prevent duplicate refunds, record reasons and state transitions, support operator notification, and communicate result/refund status to the user.
+Do not deliver a normal report when fulfillment is Safety-blocked. Retry only technically recoverable failures. For Product or technical failure, perform bounded same-Purchase recovery without recharge. If secure and valid fulfillment remains impossible, use a full JPY 980 ordinary refund, prevent duplicate refunds, record reasons and state transitions, support operator notification, and communicate result/refund status to the user. Do not automatically deliver delayed output after a refund has been finalized. An unintended post-Payment Safety bypass is Payment Integrity remediation rather than ordinary cancellation and corrects the actual unintended economic charge without a JPY 980 cap.
 
 No payment, webhook, generation, refund, notification, or state-machine implementation is authorized by Task M1-P1-R1.
 
@@ -122,7 +126,7 @@ No payment, webhook, generation, refund, notification, or state-machine implemen
 
 ## 5. Accepted Stripe Strategy / Evidence Boundary and PAY.JP Historical Clarification Copy
 
-Current status: The Customer-facing / Public-copy Alignment and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The exact current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission and account/business/site/category/Live Payment or payment-method evidence acquisition remain unauthorized and evidence-gated. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its production-use application remains Not submitted and it is Not approved or selected.
+Current status: The Customer-facing / Public-copy Alignment and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`; its review and acceptance remain pending. The exact current next work is **Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)**. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission and account/business/site/category/Live Payment or payment-method evidence acquisition remain unauthorized and evidence-gated. Stripe feasibility/account/contact/approval/activation/formal selection and desired-method eligibility remain absent, incomplete, or unverified. PAY.JP is paused fallback; its production-use application remains Not submitted and it is Not approved or selected.
 
 Accepted refund/fulfillment direction: before Payment, cancellation is `JPY 0`; after successful Payment and before `generation_started`, full `JPY 980` cancellation/refund is allowed only when server-authoritative evidence objectively proves the timing; after generation starts or successful fulfillment, dissatisfaction alone is not ordinarily sufficient, without excluding statutory rights or serious defects. Technical failure uses bounded same-Purchase recovery without recharge and full JPY 980 refund if fulfillment remains impossible. Payment Integrity remediation corrects the actual economic error without a JPY 980 cap. Generation starts only after server-authoritative Payment success; result-page delivery and verified delivery/recovery-email notification use the same Purchase. No concrete delivery duration, state machine, Provider capability, or implementation is established here.
 
@@ -152,12 +156,12 @@ Webhookまたは決済成功確認の利用可否も確認したいです。
 
 ## 6. Refund Policy Draft
 
-Future full-refund eligibility candidates:
+Accepted future ordinary-refund or Payment Integrity directions, subject to implementation and Provider evidence:
 
-- duplicate payment
-- payment completed but service cannot be delivered
-- exceptional post-payment Safety block that cannot be handled as a normal diagnosis
-- system/operator error
+- duplicate payment: Payment Integrity remediation of the actual unintended economic amount, not an ordinary Product refund
+- payment completed but service cannot be delivered: bounded same-Purchase recovery without recharge, then full JPY 980 ordinary refund if secure and valid fulfillment remains impossible
+- exceptional post-payment Safety bypass: Payment Integrity remediation, not ordinary cancellation
+- system/operator Product fulfillment error: same-Purchase recovery, no recharge, then full JPY 980 ordinary refund if fulfillment remains impossible
 
 Refund not generally allowed:
 
@@ -168,7 +172,7 @@ Refund not generally allowed:
 
 Internal draft direction, not publication-ready wording:
 
-デジタル鑑定書の性質上、納品後の返金は原則できません。
-ただし、重複決済または決済後の提供不能が確認された場合は、全額返金の対象候補となります。具体的な返金方法・条件・時期は決済事業者選定後に確定します。
+正常な納品後は、鑑定内容への不満のみを理由とする返金は原則対象外です。ただし、法令上の権利および重大なProduct defectの救済を排除しません。
+Productまたは技術上の提供不能では同一Purchaseで復旧し、再課金せず、安全かつ有効な履行が不可能な場合は税込980円を全額返金する方向です。重複決済その他の意図しない経済的chargeはPayment Integrity remediationとして実際の誤りを上限なく是正します。具体的な返金方法・条件・時期は決済事業者選定後に確定します。
 
 Do not claim automatic refund execution, provider refund API support, fee reimbursement, a refund deadline, reflection timing, or a concrete operator-console procedure before provider selection and later specification.

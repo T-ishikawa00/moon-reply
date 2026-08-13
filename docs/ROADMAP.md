@@ -2,6 +2,8 @@
 
 ## 1. Status and Authority
 
+> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; review / acceptance `pending / pending`. Exact next work is B2 Human + ChatGPT review. B3 begins only after separate acceptance. Lane A/B/C, Provider, Payment, Production, publication, domain, and deployment states remain unchanged.
+
 This document is the authoritative high-level delivery roadmap for the initial paid Web MVP and the later Web -> iOS -> Android product sequence of 月の返事.
 
 The canonical service is an `AIを活用した恋愛メッセージ分析・判断支援デジタルレポート`, presented to users as `恋のメッセージ鑑定ノート`. It is one report, not chat, sold as a JPY 980 one-shot service for users aged 18 or older. Safety enforcement must occur before payment.
@@ -46,7 +48,7 @@ Current status:
 - M2-P3-A Internal AI Assessment Runtime Vertical Slice is Human / ChatGPT accepted and complete. The accepted implementation commit is `9bdae7cf05034c7742e5f58f7b104d65cb27a87f`; the accepted M2-P3-A-R1 Runtime Security and Transaction Hardening commit is `3f1123439dcbc724c70505956aa81fa03a9246ad`. Automated validation, dependency review, transaction hardening, and Human Visual QA are complete. In a separate post-acceptance Human-confirmed local development operational state, the OpenAI/Supabase setup, migrations, and bounded synthetic live E2E through PB-01 to PB-06, validated persistence, atomic finalization, usage-total persistence, and assessment-note rendering succeeded.
 - Stripe Checkout is the Human + ChatGPT accepted strategic primary Web direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is a paused fallback with preserved evidence. Strategy acceptance, Provider evidence/approval, formal selection, Payment Charter acceptance, and implementation authorization remain separate states.
 - The explicit `2026-08-10` Human decision records the pre-payment Safety Engine and Safety UX as Human + ChatGPT accepted complete on the Safety line ending at HEAD `55238f64a2409fb0f3f60d3d008f7db4d3a805a1`. Older task-local P6 pending-review labels remain immutable historical records; this does not establish Payment implementation or final JPY 980 readiness.
-- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; Payment implementation authority remains `false`. The Stripe-first strategy, Customer-facing / Public-copy Alignment, and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted, while downstream alignment remains pending. Current next work is **Stripe Lane B Legal Draft Finalization Candidate (B2)**. Lane B/C remain blocked; no external action is authorized. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unresolved. No Provider account/contact/API, production backend connection, Payment implementation, production OpenAI/Supabase connection, email, public release, legal publication, domain purchase, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
+- Payment Charter v1 is `human_chatgpt_accepted_complete` as of `2026-08-12`; Payment implementation authority remains `false`. The Stripe-first strategy, Customer-facing / Public-copy Alignment, and Stripe Feasibility Evidence Preparation remain accepted complete. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. The B2 Candidate is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`, with Human + ChatGPT review / acceptance `pending / pending`; that review is current next work. Lane B/C remain blocked; no external action is authorized. Stripe feasibility/account/approval/activation/formal selection and desired-method eligibility remain unresolved. No Provider account/contact/API, production backend connection, Payment implementation, production OpenAI/Supabase connection, email, public release, legal publication, domain purchase, or deployment work is authorized. The bounded synthetic development connection is not a production connection.
 
 ## 2. Initial Web MVP Completion Definition
 
@@ -79,7 +81,7 @@ Completed foundations:
 - Next.js, TypeScript, and Tailwind project foundation;
 - static LP;
 - request-form UI;
-- required 18-or-older age-group selection and client-side validation;
+- required boolean self-attestation `私は18歳以上です` and client-side validation;
 - deterministic local safety foundation;
 - Supabase schema foundation;
 - legal/compliance foundation;
@@ -146,7 +148,7 @@ Operator identity, contact, publication, delivery, URL-lifetime, refund/reissue,
 
 ## 6. Milestone 3: Review Site Deployment
 
-Stripe Lane B work applies an explicit predecessor overlay to this milestone: B1 Human + ChatGPT decision review is the exact current next work; B2 Legal Draft Finalization Candidate and B3 Review-ready Website/Public Surface implementation must follow accepted predecessors; B4a prepares deployment configuration; and B4b stable-URL deployment requires separate Human external-action authority. No public Website implementation, stable-domain work, or deployment is authorized by the current Candidate.
+Stripe Lane B work applies an explicit predecessor overlay to this milestone: B1 Human + ChatGPT decision review is complete; review of the B2 Legal Draft Finalization Candidate is the exact current next work; B3 Review-ready Website/Public Surface implementation may follow only after separate B2 acceptance; B4a prepares deployment configuration; and B4b stable-URL deployment requires separate Human external-action authority. No public Website implementation, stable-domain work, or deployment is authorized by the current Candidate.
 
 Goal: deploy the payment-free Reviewable Web MVP to a stable external URL.
 
@@ -166,7 +168,7 @@ Current bounded Stripe Lane B sequence:
 4. Stripe feasibility evidence preparation is accepted complete; Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome.
 5. B0 Stripe Lane B Human Decision Package Candidate was formulated at commit `223a2746f72ae8faa90b4df198f998a8132f2f3a`.
 6. B1 Human + ChatGPT decision review and acceptance sync is complete on `2026-08-13`; all seven decisions are accepted.
-7. B2 Stripe Lane B Legal Draft Finalization Candidate is the exact current next work; it remains internal/draft and authorizes no publication.
+7. B2 Stripe Lane B Legal Draft Finalization Candidate is ready pending Human + ChatGPT review; that review is the exact current next work. B2 remains internal/draft, is not accepted, and authorizes no publication. B3 remains inactive until separate B2 acceptance.
 8. B3 Review-ready Website/Public Surface implementation follows its accepted predecessor.
 9. B4a deployment-readiness implementation/configuration remains distinct from B4b stable-URL deployment; B4b requires separate external-action authority.
 10. B5 private KYC readiness keeps actual Human values outside Git.
@@ -189,7 +191,7 @@ Goal: complete the fulfillment flow using mock-paid or test-paid state before re
 
 This is future production-path hardening and delivery work. It is distinct from the internal-only Milestone 2 target and remains unauthorized.
 
-Includes request submission and Supabase persistence; production server validation of allowed age-group values; production enforcement of the accepted server-owned pre-payment eligibility contract; no payment path unless the current eligible result has `purchaseGateSatisfied=true`; server-authoritative delivery/recovery mailbox verification and trusted-session binding consistent with the accepted Charter; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence. Historical M1 `normal_allowed` / `needs_review` / `rejected` fixtures remain historical review evidence and are not the current purchase authority.
+Includes request submission and Supabase persistence; production server enforcement of the accepted adult-confirmation boolean; production enforcement of the accepted server-owned pre-payment eligibility contract; no payment path unless the current eligible result has `purchaseGateSatisfied=true`; server-authoritative delivery/recovery mailbox verification and trusted-session binding consistent with the accepted Charter; minimized AI payloads; structured AI judgment and full-report generation; schema/output validation; retries and failure handling; result-token generation, persistence, and display; email delivery or approved test/log mode; and feedback persistence. Historical M1 `normal_allowed` / `needs_review` / `rejected` fixtures remain historical review evidence and are not the current purchase authority.
 
 Exit criterion: excluding real card payment, one request can move from submission to stored result and delivery in a controlled test environment.
 

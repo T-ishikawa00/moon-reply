@@ -1,5 +1,9 @@
 # ORDER_FORM_SPEC.md
 
+## B2 Candidate status
+
+`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`. This specification-only alignment does not authorize UI/code mutation, Payment implementation, or publication.
+
 ## 0. Purpose
 
 This document defines the Phase 1 diagnosis request form.
@@ -43,7 +47,7 @@ The initial paid Web MVP is text-only. No image/file input, LINE screenshot uplo
 
 Fields:
 
-- 年齢層
+- `私は18歳以上です` の必須boolean自己申告
 - 呼ばれたい名前 or ニックネーム
 - 鑑定結果の受け取りメールアドレス
 - このサービスがAIを利用することへの同意
@@ -51,15 +55,13 @@ Fields:
 
 Age eligibility rules:
 
-- 年齢層は必須入力
-- 選択肢は`18〜24歳`、`25〜29歳`、`30〜34歳`、`35〜39歳`、`40歳以上`のみ
-- `回答しない`は設けない
-- 年齢層の入力欄付近に「月の返事は18歳以上の方を対象としています」と表示する
-- 専用の「18歳以上です」チェックボックスは設けない
-- 生年月日、身分証明書または公的本人確認書類は収集しない
-- 公開フローでは、支払操作へ進む前にサーバー側でも許可された年齢層の値を検証する
+- Customer-facing controlは専用チェックボックス `私は18歳以上です`
+- 値は必須boolean自己申告
+- 年齢適格性の確認だけを目的として、年齢層、生年月日、身分証明書または公的本人確認書類を収集しない
+- 将来の実決済フローでは、支払操作へ進む前にserver-owned Purchase authorityが成人確認済みであることを要求する
+- B2はdocument/spec alignmentであり、Production server enforcementの実装完了を意味しない
 
-This is a required self-declared age-group gate, not strict identity verification.
+This is required self-attestation, not strict identity verification. The current RequestForm and prepayment gate already follow this direction and are not B2 mutation targets.
 
 Do not ask for:
 
@@ -156,12 +158,13 @@ If any yes:
 
 Required checkboxes:
 
+- 私は18歳以上です
 - AIを利用した鑑定であることを理解しました
 - 医療/診断/カウンセリングではないことを理解しました
 - 相手の本心・返信・復縁を保証するものではないことを理解しました
 - 実名・住所・電話番号など不要な個人情報を入力しません
-- 危険相談は原則として決済前に通常鑑定を停止し、例外的な決済後の提供不能は将来の返金/operator対応対象になり得ることを理解しました
-- 納品後は原則返金不可であることを理解しました
+- 危険相談は原則として決済前に通常鑑定を停止し、意図しない決済後のSafety bypassは通常取消ではなくPayment Integrity remediationの対象となることを理解しました
+- 正常な納品後は不満のみを理由とする返金は原則対象外ですが、法令上の権利および重大なProduct defectの救済を排除しないことを理解しました
 
 ---
 
@@ -184,7 +187,7 @@ If safety screening returns needs_review:
 - Do not show an ordinary report or normal message suggestion.
 - Offer return/edit and review-safe unsupported-case/contact information only.
 
-Refund guidance applies only to an exceptional state in which payment already succeeded before later fulfillment became blocked or failed. No provider capability, automatic refund, timing, or operator procedure is claimed by this form specification.
+Refund guidance applies only to an exceptional state in which payment already succeeded before later fulfillment became blocked or failed. Product/technical failure uses bounded same-Purchase recovery without recharge and a full JPY 980 ordinary refund if secure, valid fulfillment remains impossible. Safety bypass and other unintended economic charges are Payment Integrity remediation rather than ordinary cancellation. No Provider capability, automatic refund, timing, or operator procedure is claimed by this form specification.
 
 Development/QA may use mocked safety outcomes and placeholder payment routes, but the public MVP must keep the sequence:
 

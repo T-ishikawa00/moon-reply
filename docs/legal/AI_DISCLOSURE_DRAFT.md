@@ -12,6 +12,8 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
+> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending` であり、Production SafetyまたはPayment enforcementの実装完了を意味しません。
+
 ---
 
 ## 月の返事におけるAIの利用
@@ -45,6 +47,8 @@ AIの出力には、誤り、不完全な内容、矛盾または利用者の状
 自傷、他害、DV・暴力・強い恐怖、待ち伏せ、脅迫、監視、不正ログイン、個人情報晒し、未成年との不適切な恋愛・面会その他の危険相談は、通常の恋愛鑑定として扱いません。
 
 これらの相談は決済前に停止し、通常鑑定書やメッセージ案を生成しない方針です。月の返事は緊急支援サービスではありません。公式の相談先は、対象地域と公式情報を確認した後に別途案内します。
+
+サービス側の検知漏れ、routing不備その他の不具合により決済後に通常鑑定対象外と判明した場合は生成を停止し、通常取消ではなくPayment Integrity incidentとして実際の意図しない経済的chargeを是正する方向です。通常の税込980円charge 1件なら980円の是正となり得ますが、Payment Integrity remediationに980円の上限は設けません。本B2 Candidateはその実装完了を意味しません。
 
 ## AIへ送信する情報
 

@@ -2,6 +2,8 @@
 
 ## 1. Status and authority
 
+> **B2 Candidate current overlay:** `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance `pending / pending`; exact next work B2 review. Lane A remains preserved inactive with its exact four-field state; no external evidence acquisition is authorized.
+
 - Task-time Candidate formulation date: `2026-08-12`
 - Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Status: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`
@@ -45,7 +47,7 @@ accepted Stripe-first Product/strategy
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Human + ChatGPT review / acceptance: `complete / complete` on `2026-08-13`
 - Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
-- Exact current next work: Stripe Lane B Legal Draft Finalization Candidate (B2)
+- Exact current next work: Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2)
 - Lane A workflow position: preserved accepted preparation evidence / inactive current work
 - Lane B/C: blocked
 - External action: not authorized
@@ -56,7 +58,7 @@ The current bounded sequence is:
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — exact current next work |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — ready pending Human + ChatGPT review; acceptance pending |
 | B3 | Review-ready Website/Public Surface implementation |
 | B4a | Deployment-readiness implementation/configuration |
 | B4b | Stable URL deployment under separate external-action authority |
@@ -250,7 +252,7 @@ The controlling PII-free Product and proposed-submission facts are in `STRIPE_BU
 - Gate B is `BLOCKED`.
 - Gate C is `BLOCKED`.
 - Private KYC fields and status may be tracked in Git, but private Human values and sensitive evidence may not be committed.
-- `AGE-GATE-001` Human direction is accepted; downstream specification/legal alignment remains pending and blocks Lane B/C readiness.
+- `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_candidate_complete` in B2; Human + ChatGPT review and Production server enforcement remain pending and block Lane B/C readiness.
 
 ## 7. PayPay boundaries
 
@@ -296,7 +298,7 @@ Official PayPay sources:
 
 Accepted Human direction: retain the dedicated self-attestation checkbox `私は18歳以上です`; do not collect age bands solely for eligibility; do not collect DOB or identity documents for initial Customer age eligibility; and ultimately require server-authoritative accepted adult confirmation before purchase. This is self-attestation, not strict identity verification.
 
-Current controlling/draft documents still retain an incompatible required age-group mechanism and prohibit the dedicated checkbox. This Acceptance Sync does not modify RequestForm, `ORDER_FORM_SPEC`, `PAYMENT_CONFIRMATION_SCREEN_SPEC`, Terms, or Privacy. Downstream alignment remains pending.
+The B2 Candidate aligns CURRENT `ORDER_FORM_SPEC`, `PAYMENT_CONFIRMATION_SCREEN_SPEC`, Terms, and Privacy to the dedicated required boolean checkbox while preserving the already-aligned RequestForm. `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_candidate_complete` at Candidate level; Human + ChatGPT review / acceptance and Production server enforcement remain pending.
 
 ```yaml
 id: AGE-GATE-001
@@ -311,7 +313,7 @@ lane_c_readiness: blocked
 
 PAY.JP remains `paused_fallback_provider_direction`. Lane A unsupported, Lane B rejected, or Lane C rejected does not automatically reactivate PAY.JP. Any reactivation requires explicit Human authority, current-source re-review, and the PAY.JP-specific readiness/application route. No PAY.JP account or Provider state changes here.
 
-Payment Charter v1 remains `human_chatgpt_accepted_complete`. The `2026-08-13` Lane B acceptance records Lane A as preserved inactive and makes **Stripe Lane B Legal Draft Finalization Candidate (B2)** the exact current next work. It preserves the Charter's provider-independent authority boundaries while synchronizing the accepted pre-generation cancellation direction.
+Payment Charter v1 remains `human_chatgpt_accepted_complete`. The `2026-08-13` Lane B acceptance records Lane A as preserved inactive. The B2 Candidate is ready pending Human + ChatGPT review, and that review is the exact current next work. B2 preserves the Charter's provider-independent authority boundaries while synchronizing the accepted pre-generation cancellation direction.
 
 ## 10. Evidence and operation boundaries
 
@@ -326,9 +328,9 @@ Git may contain only PII-free facts, required field names, readiness/status, che
 | Stripe-first Product/strategy | Human + ChatGPT accepted complete |
 | Customer-facing/Public-copy Alignment | Human + ChatGPT accepted complete |
 | Stripe Feasibility Evidence Preparation | `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12` |
-| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven decisions accepted; downstream alignment pending |
+| Stripe Lane B Human Decision Package | `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; seven decisions accepted; B2 Candidate ready pending review; Production enforcement/evidence pending |
 | Stripe Sales route | `not_used_by_human_direction`; Human workflow choice / not a Provider outcome |
-| Current next work | Stripe Lane B Legal Draft Finalization Candidate (B2); internal/draft only; publication unauthorized |
+| Current next work | Human + ChatGPT review of Stripe Lane B Legal Draft Finalization Candidate (B2); Candidate not accepted; B3 inactive |
 | Lane A preparation | Human-approved preparation package |
 | Lane A workflow position | Preserved inactive |
 | Lane A external action | Not authorized |

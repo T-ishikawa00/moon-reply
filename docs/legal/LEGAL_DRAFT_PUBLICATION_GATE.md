@@ -12,12 +12,14 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
+> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。accepted policy decisionは`decision resolved / evidence or implementation pending`と分類できますが、本ゲートのcheckboxは一つも完了しません。
+
 ---
 
 ## 0. ゲート規則
 
 - 以下の項目がすべて完了し、証拠が記録されるまで法務ドラフトを公開承認しない
-- Task 18Bでは一つも完了扱いにしない
+- B2 Candidateではpublication checklistを一つも完了扱いにしない
 - `[ ]`を`[x]`へ変更する場合は、判断者、確認日、証拠および反映先を記録する
 - 本ゲートの完了は、決済実装を自動的に承認するものではない
 - 決済実装は引き続き禁止します（Payment implementation remains prohibited.）
@@ -28,6 +30,8 @@
 Current strategy boundary on `2026-08-12`: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare. Stripe feasibility is not established; account/contact/approval/activation are absent; formal selection is incomplete; and method eligibility is unverified. PAY.JP is paused fallback. PAY.JP-specific operator/address/opening-notification/security preparation is not current work, but every remaining operator, address, phone, support-email, Tokushoho, and publication completion item below remains unresolved and must be completed before the applicable future review or Paid Launch. Stripe does not remove these obligations.
 
 Human address/privacy direction is recorded but does not complete this gate: truthful private home/business-address disclosure to legitimate non-public counterparties is acceptable; routine public display of the Human's home address to general Customers is not desired as the default; and a legally valid request-based or otherwise non-routine-public method is preferred where current law and actual Provider requirements allow. Exact Tokushoho implementation remains unresolved and current-source/evidence-gated. Virtual-office use is not currently required by Human preference; GMO remains on hold, not rejected, and may be reconsidered if actual evidence makes it useful or necessary.
+
+The request-based Candidate direction applies only to legally eligible fields where current law and actual Stripe requirements permit. A Customer must be able to request the applicable seller information before Payment without login, completed purchase, or Purchase ID solely for the request; an operational route and logs must exist and actual information must be provided without delay. This does not complete the gate or establish Stripe approval.
 
 ## Provider and readiness supporting documents
 
@@ -112,6 +116,7 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] LPと禁止表現ポリシーが一致
 - [ ] AI promptと禁止表現ポリシーが一致
 - [ ] Safety gateがサーバー側で強制される
+- [ ] server-owned Purchase authorityが必須boolean成人確認 `私は18歳以上です` を実決済前に要求する
 - [ ] `rejected`が決済へ到達しない
 - [ ] `needs_review`が未承認のまま決済へ到達しない
 - [ ] 初回または有効なtrusted sessionがない購入では、実決済前にdelivery/recovery mailbox ownership verificationがserver-sideで強制される
@@ -128,4 +133,4 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] 公開日を[[EFFECTIVE_DATE_TBD]]として確定
 - [ ] 最終更新日を[[LAST_UPDATED_DATE_TBD]]として確定
 
-Task 18B完了時点では、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。
+B2 Candidate完了時点でも、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。B2 Human + ChatGPT review / acceptanceは`pending / pending`であり、次の作業はB2 Candidate reviewです。

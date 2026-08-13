@@ -6,6 +6,8 @@ Internal planning draft.
 
 This is not legal advice and is not approved for publication.
 
+B2 Candidate status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance is `pending / pending`. Accepted policy decisions may be marked resolved, but implementation, evidence, private-value, and publication items remain open.
+
 ## Status Meaning
 
 - [ ] Not started
@@ -19,12 +21,10 @@ Never mark an item complete without evidence.
 ## Must Before Paid Launch
 
 - [ ] 18+ product policy implemented
-- [ ] Age-group selection is required
-- [ ] Only 18-or-older age-group options are available
-- [ ] No `回答しない` option permits bypassing the age policy
+- [ ] Dedicated `私は18歳以上です` boolean self-attestation is required
+- [ ] No age band, date of birth, or identity document is collected solely for age eligibility
 - [ ] The form clearly states that the service is for users aged 18 or older
-- [ ] The server validates an allowed 18-or-older age-group value before payment
-- [ ] No identity document or date of birth is collected for the initial MVP
+- [ ] Server-owned Purchase authority requires adult confirmation before real Payment
 - [ ] Terms of Service published
 - [ ] Privacy Policy published
 - [ ] 特商法 disclosure published
@@ -98,5 +98,7 @@ Do not mark uncompleted items as completed.
 - [x] Operator decision register created
 - [x] Cross-document consistency matrix created
 - [x] Publication gate created
+- [x] B2 Candidate legal-draft/spec alignment assembled with the exact 41-path manifest
+- [ ] B2 Human + ChatGPT review and acceptance completed
 
 These checks mean internal drafts exist. They do not mean publication approval.

@@ -1,5 +1,9 @@
 # PAYMENT_CONFIRMATION_SCREEN_SPEC.md
 
+## B2 Candidate status
+
+`stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`. Human + ChatGPT review / acceptance is `pending / pending`. This specification-only alignment does not authorize UI/code implementation, Checkout, Provider operations, Payment, or publication.
+
 ## Status
 
 Internal product/compliance specification.
@@ -26,14 +30,17 @@ Show together and clearly:
 - Product: 恋のメッセージ鑑定ノート
 - Product description: AIによる恋愛メッセージ分析・判断支援デジタルレポート
 - Service eligibility: 月の返事は18歳以上を対象とする
-- Age group selected on the request form
-- Quantity: 1 consultation / 1 reading
+- Dedicated adult self-attestation: `私は18歳以上です` with a required boolean value
+- Verified delivery/recovery email state bound to the current Purchase authority
+- Quantity: 1 consultation / 1 assessment note
 - Total price: 税込980円
+- Purchase type: one-time purchase
+- Automatic renewal: none
 - Additional charges: none, unless objectively applicable
-- Payment method
-- Payment timing
-- Expected delivery timing
-- Delivery method
+- Payment method: [[PAYMENT_METHODS_TBD]] / Provider evidence pending
+- Payment timing: [[PAYMENT_TIMING_TBD]] / Provider evidence pending
+- Expected delivery timing: [[DELIVERY_TIMING_TBD]] / production-like measurement and Human approval pending
+- Delivery method: protected result page plus notification to the applicable verified delivery/recovery email
 - AI use
 - Entertainment / information / emotional-organization purpose
 - No tarot, astrology, birth-date, psychic, spiritual, or supernatural method
@@ -60,6 +67,7 @@ Required confirmations:
 - 返金条件を確認しました
 - 利用規約に同意します
 - プライバシーポリシーに同意します
+- 私は18歳以上です
 
 Marketing email consent must not be required for purchase.
 
@@ -91,7 +99,7 @@ Final button wording must be checked against the implemented purchase flow and c
 Before payment, the user must be able to:
 
 - return and revise request content
-- review and correct the age group selected on the request form
+- review and correct the dedicated `私は18歳以上です` boolean self-attestation
 - correct email address
 - review or correct the customer-facing consultation/contact facts used for eligibility, without exposing internal classification terminology
 - review purchase conditions
@@ -117,13 +125,12 @@ Browser, client, or localStorage state alone cannot assert verified or trusted s
 
 ## 6. Age Eligibility Gate
 
-- Do not use a dedicated `18歳以上です` checkbox.
-- Use the required age-group selection made on the request form.
-- Offer only the allowed 18-or-older age-group values.
-- In the production flow, the server must validate an allowed age-group value before payment.
-- Do not collect a date of birth or identity document for the initial MVP.
+- Use the dedicated required checkbox `私は18歳以上です` as boolean self-attestation.
+- Do not collect an age band, date of birth, or identity document solely for initial-MVP age eligibility.
+- In the future real paid flow, server-owned Purchase authority must require confirmed adult self-attestation before Payment.
+- B2 aligns the specification only and does not claim Production server enforcement.
 
-The initial MVP uses a required self-declared age-group gate, not strict identity verification.
+The initial MVP uses required self-attestation, not strict identity verification. The current RequestForm and prepayment gate are already aligned and are not changed by B2.
 
 ---
 
@@ -136,3 +143,17 @@ Clarification, unsafe, urgent, unsupported professional-assistance, invalid, con
 Waiting, not sending now, a temporary pause, or boundary-respecting support is not disqualifying by itself when the separate assistance eligibility is valid.
 
 The server must enforce the gate. A browser display, redirect, client-side state, visible button, or hidden button is not payment or purchase authority.
+
+---
+
+## 8. Refund and fulfillment summary
+
+The future final-confirmation surface must summarize these accepted directions without claiming implementation:
+
+- before Payment: no charge; the Customer may stop;
+- after successful Payment and objectively before `generation_started`: full JPY 980 ordinary refund only when server-authoritative evidence establishes the timing;
+- Product or technical failure: bounded same-Purchase recovery, no recharge, and full JPY 980 ordinary refund if secure and valid fulfillment remains impossible;
+- after generation starts and valid fulfillment succeeds: dissatisfaction alone is not ordinarily sufficient, without excluding statutory rights or serious Product-defect remedies;
+- duplicate charge, wrong amount, wrong Customer, wrong Request, Safety bypass, or another unintended economic charge: Payment Integrity remediation that corrects the actual error without a JPY 980 cap.
+
+The surface must allow review and correction before the contractual Payment action and provide appropriate Terms, Privacy, Tokushoho, Refund, Contact, AI-disclosure, and Unsupported-Cases references. Provider execution mechanics and concrete processing or delivery durations remain unresolved.

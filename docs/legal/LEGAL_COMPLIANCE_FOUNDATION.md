@@ -16,6 +16,8 @@ This document is:
 
 It must not be represented as legally complete or approved for publication.
 
+B2 Candidate status is `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review` on `2026-08-13`; Human + ChatGPT review / acceptance is `pending / pending`. The seven accepted Lane B Human decisions are aligned as Candidate authority only. Payment implementation, Production Payment, Provider selection, and legal publication remain `false` or unresolved.
+
 ---
 
 ## 1. Product Classification
@@ -60,13 +62,12 @@ The service must not claim knowledge of another person's true feelings or guaran
 Age eligibility policy for the initial MVP:
 
 - The initial MVP is for users aged 18 or older
-- Age-group selection is required
-- Only 18-or-older age-group values are offered
-- No separate age checkbox is required
-- No date of birth or identity document is collected
-- The production server flow must validate the allowed age-group value before payment
+- A dedicated `私は18歳以上です` checkbox records required boolean self-attestation
+- No age band, date of birth, or identity document is collected solely for age eligibility
+- The future production server flow must require adult confirmation as part of server-owned Purchase authority before Payment
+- B2 aligns documents/specifications only and does not implement the production control
 
-This is a required self-declared age-group gate, not strict identity verification.
+This is required self-attestation, not strict identity verification. The current RequestForm and prepayment gate already follow this direction and are not changed by B2.
 
 ---
 
@@ -92,18 +93,23 @@ No landing page, advertisement, email, payment screen, prompt, or generated read
 
 Required order:
 
-1. Request form
+1. Request form and adult self-attestation
 2. Safety screening
 3. Unsupported/dangerous case termination
-4. Purchase summary
-5. Final confirmation screen
-6. Payment
-7. Reading generation
-8. Result delivery
+4. Applicable verified delivery/recovery email binding
+5. Purchase summary
+6. Final confirmation and correction opportunity
+7. Server-owned Purchase authority
+8. Payment
+9. Server-authoritative Payment success
+10. Reading generation
+11. Protected result-page delivery and verified-email notification
 
 Dangerous or unsupported cases must not be charged.
 
 Rejected cases must not receive an ordinary reading. Needs-review cases must not reach real payment until approved production handling exists.
+
+Product or technical fulfillment failure uses bounded same-Purchase recovery without recharge and a full JPY 980 ordinary refund if secure and valid fulfillment remains impossible. Duplicate charge, wrong amount, wrong Customer, wrong Request, Safety bypass, and another unintended economic charge are Payment Integrity remediation rather than ordinary Product refund; the actual economic error must be corrected without a JPY 980 remediation cap. These state machines and Provider operations are not implemented by B2.
 
 ---
 
@@ -120,7 +126,9 @@ Before public paid launch, prepare and review:
 - Contact Method
 - Final Payment Confirmation Screen
 
-Task 18A does not create publication-ready versions of these pages.
+The Contact model is one operating business mailbox plus one categorized form using exactly result delivery, ordinary refund, Payment Integrity, Privacy, seller-information disclosure, and other. Seller-information disclosure must be requestable before Payment without login, completed purchase, or Purchase ID solely for that request.
+
+B2 does not create publication-ready versions of these pages.
 
 ---
 

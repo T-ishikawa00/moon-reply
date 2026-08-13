@@ -12,6 +12,8 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
+> B2 Candidate status: `stripe_lane_b_legal_draft_finalization_candidate_ready_pending_human_chatgpt_review`（`2026-08-13`）。Human + ChatGPT review / acceptance は `pending / pending`。accepted policy directionを未決定へ戻さず、actual private valueとevidenceは未解決のまま維持します。
+
 ---
 
 ## 状態の意味
@@ -27,6 +29,18 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 
 `2026-08-12` current sequencing: Stripe Checkout is the Human + ChatGPT accepted strategic primary direction to investigate and prepare; feasibility is not established, account/contact/approval/activation are absent, formal selection is incomplete, and method eligibility is unverified. PAY.JP is paused fallback. OP-001/006/007 and opening-notification remain unresolved. For OP-005, Human accepts truthful private address disclosure to legitimate non-public counterparties, rejects routine public home-address display as the default, and prefers a legally valid request-based or otherwise non-routine-public method where current law and actual Provider requirements allow; exact Tokushoho implementation remains unresolved. Virtual-office use is not currently required by Human preference; GMO remains on hold, not rejected, and reconsideration remains available if actual evidence supports it. Stripe does not waive operator, address, phone, support, or publication obligations.
 
+## B2 accepted direction states
+
+| Lane B Decision | Direction state | Remaining state |
+| --- | --- | --- |
+| `LB-DEC-AGE-001` | `Internally decided`: dedicated required boolean `私は18歳以上です`; no eligibility-only age band/DOB/ID | Production server enforcement evidence required |
+| `LB-DEC-ENTITY-001` | `Internally decided`: applicable individual / sole-proprietor route for initial MVP | actual onboarding label and private identity evidence required |
+| `LB-DEC-DISCLOSURE-001` | `Internally decided`: request-based disclosure preferred for eligible fields where law and actual Stripe requirements permit | actual wording/value/operation/logs and final source review required |
+| `LB-DEC-SUPPORT-001` | `Internally decided`: one business mailbox plus one categorized form with six functional categories | actual mailbox/form/SLA/backend and test evidence required |
+| `LB-DEC-REFUND-001` | `Internally decided`: ordinary Product refund separated from uncapped Payment Integrity remediation | Provider mechanics and implementation evidence required |
+| `LB-DEC-FULFILLMENT-001` | `Internally decided`: verified email, server Payment success, protected result, same-Purchase recovery, no recharge, impossible-fulfillment refund | delivery timing and implementation evidence required |
+| `LB-DEC-DOMAIN-001` | `Internally decided`: intended final production domain before Stripe Account/Site review | domain availability, purchase, DNS, deployment and Human authority required |
+
 ## 判断・証拠管理の関連文書
 
 - 分かりやすい全体整理：`WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md`
@@ -40,14 +54,14 @@ Task 18Bでは判断事項を一つも完了扱いにしませんでした。Tas
 
 | Decision ID | 項目 | 現在値 | 必要な判断・証拠 | 担当 | 期限 | 状態 |
 | --- | --- | --- | --- | --- | --- | --- |
-| OP-001 | 運営形態：個人 / 個人事業主 / 法人 | [[OPERATOR_DECISION_REQUIRED]] | 契約、税務、表示上の運営主体を決定。PAY.JPを将来再開する場合の開業届/equivalent evidenceはfallback-specific requirementとして再確認 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided / future Provider-publication evidence required |
+| OP-001 | 運営形態：個人 / 個人事業主 / 法人 | applicable individual / sole-proprietor route direction accepted; actual label [[OPERATOR_DECISION_REQUIRED]] | 契約、税務、表示上の運営主体を一致させる。PAY.JPを将来再開する場合の開業届/equivalent evidenceはfallback-specific requirementとして再確認 | Human | actual Provider/publication前 | Internally decided direction / actual evidence required |
 | OP-002 | 法的氏名 | [[OPERATOR_LEGAL_NAME_TBD]] | 公開・契約に使用する実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-003 | 屋号 | [[OPERATOR_TRADE_NAME_TBD]] | 使用有無および実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-004 | 運営責任者 | [[RESPONSIBLE_PERSON_TBD]] | 公開する責任者の実情報 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
-| OP-005 | 住所公開方法 | [[OPERATOR_ADDRESS_DISCLOSURE_TBD]] | Human preference recorded: truthful private disclosure accepted; routine public home-address display not default; lawful request-based/non-routine-public method preferred where allowed. Exact Tokushoho method requires current sources and actual Provider evidence; virtual office currently not required, GMO on hold/not rejected | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Human preference recorded / exact method not decided / Current-source review required |
-| OP-006 | 電話番号公開方法 | [[OPERATOR_PHONE_DISCLOSURE_TBD]] | 最新の公式情報、実番号、採用する表示方法 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided / Current-source review required |
-| OP-007 | 問い合わせメール | [[SUPPORT_EMAIL_TBD]] | 実在性、受信、権限、運用確認 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
-| OP-008 | 問い合わせフォーム | [[CONTACT_FORM_URL_TBD]] | 実在URL、入力項目、個人情報取扱い | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
+| OP-005 | 住所公開方法 | request-based disclosure preference accepted where permitted; actual value [[OPERATOR_ADDRESS_DISCLOSURE_TBD]] | Payment前request、no login/purchase/Purchase ID、遅滞のないactual disclosure、logs、current sources、actual Provider evidence。virtual office currently not required、GMO on hold/not rejected | Human | publication前 | Internally decided direction / exact method and evidence required |
+| OP-006 | 電話番号公開方法 | request-based disclosure preference accepted where permitted; actual value [[OPERATOR_PHONE_DISCLOSURE_TBD]] | Payment前request、no login/purchase/Purchase ID、遅滞のないactual disclosure、logs、current sources、実番号・Provider evidence | Human | publication前 | Internally decided direction / exact method and evidence required |
+| OP-007 | 問い合わせメール | one operating business mailbox accepted; actual value [[SUPPORT_EMAIL_TBD]] | 実在性、受信、権限、運用確認 | Human | publication前 | Internally decided model / actual value and evidence required |
+| OP-008 | 問い合わせフォーム | one categorized form and six functional categories accepted; actual value [[CONTACT_FORM_URL_TBD]] | 実在URL、6分類、通知、logs、access control、個人情報取扱い | Human | publication前 | Internally decided model / actual implementation evidence required |
 | OP-009 | 問い合わせ対応時間 | [[SUPPORT_RESPONSE_TIME_TBD]] | 対応体制と実現可能な返信目安 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Not decided |
 | OP-010 | 決済プロバイダ | [[PAYMENT_PROVIDER_TBD]] | Accepted Stripe strategic directionのactual feasibility/account/business/site/category/method evidenceとHuman formal selection。PAY.JPはpaused fallback | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required / no provider selected |
 | OP-011 | 支払方法 | [[PAYMENT_METHODS_TBD]] | provider機能、契約、実装方式 | [[OPERATOR_DECISION_REQUIRED]] | [[OPERATOR_DECISION_REQUIRED]] | Evidence required |
