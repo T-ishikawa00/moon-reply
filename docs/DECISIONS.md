@@ -1,5 +1,9 @@
 ﻿# DECISIONS.md
 
+> **CURRENT Stripe Lane B B4a Candidate overlay:** stripe_lane_b_b4a_netlify_primary_hosting_direction_candidate_ready_pending_human_chatgpt_review; Candidate date 2026-08-14; Human + ChatGPT Hosting direction accepted at conversation/decision level; repository Candidate review / acceptance pending / pending. Accepted B3 authority remains unchanged.
+>
+> First future B4b review-deployment attempt: Netlify; initial review plan: Netlify Free; static compatibility: A; actual Netlify build/deployment and Hard Gate: not proven; paid Production direction: provisional. Detailed authority and proof gates: docs/payment/STRIPE_LANE_B_B4A_DEPLOYMENT_READINESS.md. Current exact work: **Human + ChatGPT review of Stripe Lane B B4a Netlify Primary Hosting Direction Candidate**. Conditional successor after B4a acceptance: **Stripe Lane B stable review URL deployment (B4b)**, separately authorized external work. This overlay supersedes earlier current-next-work wording only; no Netlify/site/deploy/domain/DNS/legal-publication/Stripe/Payment/Production-runtime authority is created.
+
 ## Adopted Decisions
 
 ### Stripe Lane B B3 accepted current overlay

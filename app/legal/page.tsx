@@ -11,12 +11,13 @@ import {
   fixedProductFacts,
   legalPageInventory,
   publicationReadiness,
+  stripeLaneB4aDeploymentReadinessAuthority,
 } from "@/lib/legal/review-content";
 
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装と、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装、審査待ちのB4a Hosting方向、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
@@ -25,7 +26,26 @@ const reviewAuthorityFacts = [
   { label: "Human Visual QA", value: "PASS・complete" },
   { label: "ChatGPT review", value: "PASS・complete" },
   { label: "Human acceptance / B3 acceptance", value: "complete / complete" },
-  { label: "次の作業", value: "Stripe Lane B deployment readiness (B4a)・planning/readiness only" },
+  {
+    label: "B4a Hosting方向",
+    value: "Netlifyを最初の将来B4bレビュー配備先として選定・Candidate審査待ち",
+  },
+  {
+    label: "Netlify初期レビュー計画",
+    value: `${stripeLaneB4aDeploymentReadinessAuthority.initialReviewPlan}・実build／配備は未実施`,
+  },
+  {
+    label: "Hard Gate・Production方向",
+    value: "未証明・Paid Productionはprovisional",
+  },
+  {
+    label: "現在の作業",
+    value: stripeLaneB4aDeploymentReadinessAuthority.currentWork,
+  },
+  {
+    label: "条件付き後続",
+    value: "B4a受入後のB4b・別途external work承認が必要",
+  },
   { label: "法務公開", value: "未承認" },
   { label: "Stripe feasibility・承認・正式選定", value: "未確立・未承認・未選定" },
   { label: "Payment実装", value: "未実装" },
@@ -43,14 +63,14 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針とB3レビュー実装、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針とB3レビュー実装、審査待ちのB4a Hosting方向、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開判断のための審査表示です。受入済みの方針と、未承認・未実装の状態を分離します。
+            これは公開判断のための審査表示です。B3は受入済みですが、B4aはCandidate審査待ちです。Netlifyの実build・配備は行われておらず、B4bには別途承認が必要です。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
