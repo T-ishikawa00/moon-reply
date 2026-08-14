@@ -12,18 +12,26 @@ const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 
 const baseline = "025e28a82c0b773d21ececfd8064af045922079d";
+const candidate = "9fd55ae07a84d8610905c4b89adbd21b47657528";
 const expectedBranch =
   "codex/stripe-lane-b-b4b-private-netlify-review-deployment-evidence";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
-const candidateStatus =
+const historicalCandidateStatus =
   "stripe_lane_b_b4b_private_netlify_review_deployment_evidence_correction_candidate_pending_external_reqa_human_chatgpt_review";
 const candidateDate = "2026-08-14";
+const r1Status =
+  "stripe_lane_b_b4b_remaining_review_wording_external_evidence_r1_source_correction_present_pending_deployment_reqa_human_chatgpt_review";
+const r1Date = "2026-08-14";
 const acceptedB3Status =
   "stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete";
 const acceptedB4aStatus =
   "stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete";
-const technicalQa = "PASS_20_of_20_on_deployed_b4a_sha";
-const overallQa = "FAIL_truthfulness_blockers_on_deployed_b4a_sha";
+const originalTechnicalQa = "PASS_20_of_20_on_deployed_b4a_sha";
+const originalOverallQa = "FAIL_truthfulness_blockers_on_deployed_b4a_sha";
+const correctedCandidateTechnicalQa =
+  "PASS_26_of_26_on_corrected_candidate_sha";
+const correctedCandidateOverallQa =
+  "FAIL_one_remaining_source_truthfulness_blocker";
 
 const controllerPath =
   "docs/payment/STRIPE_LANE_B_B4B_STABLE_REVIEW_URL_DEPLOYMENT.md";
@@ -78,6 +86,19 @@ const updatedPaths = [...documentationMirrors, ...codeUiPaths];
 const newPaths = [controllerPath, verifierPath];
 const exactScope = [...updatedPaths, ...newPaths];
 const documentationPaths = [...documentationMirrors, controllerPath];
+
+const r1CodeUiPaths = [
+  authorityPath,
+  "app/legal/page.tsx",
+  "components/request/RequestForm.tsx",
+];
+const r1UpdatedPaths = [
+  ...documentationMirrors,
+  controllerPath,
+  ...r1CodeUiPaths,
+  verifierPath,
+];
+const r1DocumentationPaths = [...documentationMirrors, controllerPath];
 
 const protectedFiles = [
   b3VerifierPath,
@@ -270,11 +291,23 @@ const head = git("rev-parse", "HEAD");
 const main = git("rev-parse", "main");
 const originMain = git("rev-parse", "origin/main");
 const statusRecords = parseStatusRecords();
-const workingMode = head === baseline;
-const committedMode =
-  head !== baseline &&
-  git("rev-parse", head + "^") === baseline &&
-  Number(git("rev-list", "--count", baseline + ".." + head)) === 1;
+const candidateParents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  candidate,
+).split(/\s+/u);
+const candidateAnchored =
+  candidateParents.length === 2 &&
+  candidateParents[0] === candidate &&
+  candidateParents[1] === baseline &&
+  Number(git("rev-list", "--count", baseline + ".." + candidate)) === 1;
+const r1WorkingMode = head === candidate && statusRecords.length > 0;
+const r1CommittedMode =
+  head !== candidate &&
+  git("rev-parse", head + "^") === candidate &&
+  Number(git("rev-list", "--count", baseline + ".." + head)) === 2;
 
 check("expected B4b branch", branch === expectedBranch);
 check(
@@ -282,41 +315,69 @@ check(
   main === expectedMain && originMain === expectedMain,
 );
 check(
-  "exact baseline to one Candidate commit lifecycle",
-  workingMode || committedMode,
+  "Candidate is the exact direct child of baseline",
+  candidateAnchored,
 );
 check(
-  "committed mode is clean and working mode has Candidate changes",
-  committedMode ? statusRecords.length === 0 : statusRecords.length > 0,
+  "exact baseline to Candidate to optional one R1 lifecycle",
+  r1WorkingMode || r1CommittedMode,
+);
+check(
+  "R1 is the working correction or the exact clean direct child of Candidate",
+  r1WorkingMode ? statusRecords.length > 0 : statusRecords.length === 0,
+);
+check(
+  "no third commit exists after baseline",
+  Number(git("rev-list", "--count", baseline + ".." + head)) <= 2,
 );
 
 const upstreamExists = gitSucceeds("rev-parse", "--verify", "@{upstream}");
+const upstream = upstreamExists ? git("rev-parse", "@{upstream}") : null;
 check(
-  "upstream is absent before push or equals HEAD after push",
-  !upstreamExists || git("rev-parse", "@{upstream}") === head,
+  "upstream is Candidate before R1 push or equals HEAD after push",
+  upstream === candidate || upstream === head,
 );
 
-let changeEntries;
-if (workingMode) {
-  changeEntries = statusRecords.map((record) => ({
-    status:
-      record.indexState === "?" && record.worktreeState === "?"
-        ? "A"
-        : record.indexState === "A"
-          ? "A"
-          : "M",
-    path: record.relativePath,
-    renamed:
-      record.renameTarget !== null ||
-      record.indexState === "R" ||
-      record.worktreeState === "R",
-  }));
+const candidateChangeEntries = gitLines(
+  "diff",
+  "--name-status",
+  "--find-renames",
+  baseline,
+  candidate,
+  "--",
+).map((line) => {
+  const fields = line.split("\t");
+  return {
+    status: fields[0]?.[0] ?? "",
+    path: (fields.at(-1) ?? "").replaceAll("\\", "/"),
+    renamed: /^(?:R|C)/u.test(fields[0] ?? ""),
+  };
+});
+
+let r1ChangeEntries;
+if (r1WorkingMode) {
+  r1ChangeEntries = statusRecords.map((record) => {
+    const states = record.indexState + record.worktreeState;
+    let status = "M";
+    if (states === "??" || states.includes("A")) status = "A";
+    else if (states.includes("D")) status = "D";
+    else if (states.includes("R")) status = "R";
+    else if (states.includes("C")) status = "C";
+    return {
+      status,
+      path: record.relativePath,
+      renamed:
+        record.renameTarget !== null ||
+        record.indexState === "R" ||
+        record.worktreeState === "R",
+    };
+  });
 } else {
-  changeEntries = gitLines(
+  r1ChangeEntries = gitLines(
     "diff",
     "--name-status",
     "--find-renames",
-    baseline,
+    candidate,
     head,
     "--",
   ).map((line) => {
@@ -329,15 +390,23 @@ if (workingMode) {
   });
 }
 
-const candidatePaths = sorted(changeEntries.map((entry) => entry.path));
-const modifiedPaths = sorted(
-  changeEntries
+const candidatePaths = sorted(
+  candidateChangeEntries.map((entry) => entry.path),
+);
+const candidateModifiedPaths = sorted(
+  candidateChangeEntries
     .filter((entry) => entry.status === "M")
     .map((entry) => entry.path),
 );
-const addedPaths = sorted(
-  changeEntries
+const candidateAddedPaths = sorted(
+  candidateChangeEntries
     .filter((entry) => entry.status === "A")
+    .map((entry) => entry.path),
+);
+const r1Paths = sorted(r1ChangeEntries.map((entry) => entry.path));
+const r1ModifiedPaths = sorted(
+  r1ChangeEntries
+    .filter((entry) => entry.status === "M")
     .map((entry) => entry.path),
 );
 
@@ -346,13 +415,13 @@ check(
   isDeepStrictEqual(candidatePaths, sorted(exactScope)),
 );
 check(
-  "classification is exactly 31 modified and 2 added",
-  isDeepStrictEqual(modifiedPaths, sorted(updatedPaths)) &&
-    isDeepStrictEqual(addedPaths, sorted(newPaths)),
+  "Candidate classification is exactly 31 modified and 2 added",
+  isDeepStrictEqual(candidateModifiedPaths, sorted(updatedPaths)) &&
+    isDeepStrictEqual(candidateAddedPaths, sorted(newPaths)),
 );
 check(
-  "delete, rename, and copy counts are zero",
-  changeEntries.every(
+  "Candidate delete, rename, and copy counts are zero",
+  candidateChangeEntries.every(
     (entry) =>
       !entry.renamed &&
       entry.status !== "D" &&
@@ -361,7 +430,7 @@ check(
   ),
 );
 check(
-  "all update paths existed and both new paths were absent at baseline",
+  "all Candidate update paths existed and both new paths were absent at baseline",
   updatedPaths.every(
     (relativePath) =>
       existsAt(baseline, relativePath) &&
@@ -374,33 +443,68 @@ check(
     ),
 );
 check(
-  "type counts are docs 26, code/UI 6, verifier 1",
+  "Candidate type counts are docs 26, code/UI 6, verifier 1",
   documentationPaths.length === 26 &&
     codeUiPaths.length === 6 &&
     newPaths.filter((relativePath) => relativePath.startsWith("scripts/"))
       .length === 1,
 );
-
 check(
-  "B3 verifier, B4a verifier/controller, package, lock, config, and next-env are baseline-identical",
-  protectedFiles.every(
+  "exact 30-path R1 mutation manifest",
+  isDeepStrictEqual(r1Paths, sorted(r1UpdatedPaths)),
+);
+check(
+  "R1 classification is exactly 30 modified and zero added/deleted/renamed",
+  isDeepStrictEqual(r1ModifiedPaths, sorted(r1UpdatedPaths)) &&
+    r1ChangeEntries.length === 30 &&
+    r1ChangeEntries.every(
+      (entry) => entry.status === "M" && !entry.renamed,
+    ),
+);
+check(
+  "all R1 paths existed at Candidate and remain present",
+  r1UpdatedPaths.every(
     (relativePath) =>
-      readText(relativePath) === readTextAt(baseline, relativePath) &&
-      gitSucceeds("diff", "--quiet", baseline, "--", relativePath),
+      existsAt(candidate, relativePath) &&
+      existsSync(path.join(repositoryRoot, relativePath)),
   ),
 );
 check(
-  "Candidate changes no API, Runtime, purchase, Safety, or Supabase path",
+  "R1 type counts are docs 26, code/UI 3, verifier 1",
+  r1DocumentationPaths.length === 26 &&
+    r1CodeUiPaths.length === 3 &&
+    r1UpdatedPaths.filter((relativePath) =>
+      relativePath.startsWith("scripts/"),
+    ).length === 1,
+);
+
+check(
+  "B3 verifier, B4a verifier/controller, package, lock, config, and next-env preserve Candidate and baseline",
+  protectedFiles.every(
+    (relativePath) =>
+      readTextAt(candidate, relativePath) ===
+        readTextAt(baseline, relativePath) &&
+      readText(relativePath) === readTextAt(candidate, relativePath) &&
+      gitSucceeds("diff", "--quiet", candidate, "--", relativePath),
+  ),
+);
+check(
+  "Candidate and R1 change no API, Runtime, purchase, Safety, or Supabase path",
   candidatePaths.every(
     (relativePath) =>
       !protectedPrefixes.some((prefix) => relativePath.startsWith(prefix)),
   ) &&
+    r1Paths.every(
+      (relativePath) =>
+        !protectedPrefixes.some((prefix) => relativePath.startsWith(prefix)),
+    ) &&
     protectedPrefixes.every((prefix) =>
-      gitSucceeds("diff", "--quiet", baseline, "--", prefix),
+      gitSucceeds("diff", "--quiet", candidate, "--", prefix),
     ),
 );
 
 const baselineAuthority = readTextAt(baseline, authorityPath);
+const candidateAuthority = readTextAt(candidate, authorityPath);
 const currentAuthority = readText(authorityPath);
 const baselineB3Object = extractConstObject(
   baselineAuthority,
@@ -408,6 +512,10 @@ const baselineB3Object = extractConstObject(
 );
 const currentB3Object = extractConstObject(
   currentAuthority,
+  "stripeLaneBReviewAuthority",
+);
+const candidateB3Object = extractConstObject(
+  candidateAuthority,
   "stripeLaneBReviewAuthority",
 );
 const baselineB4aObject = extractConstObject(
@@ -418,37 +526,68 @@ const currentB4aObject = extractConstObject(
   currentAuthority,
   "stripeLaneB4aDeploymentReadinessAuthority",
 );
+const candidateB4aObject = extractConstObject(
+  candidateAuthority,
+  "stripeLaneB4aDeploymentReadinessAuthority",
+);
+const candidateB4bObject = extractConstObject(
+  candidateAuthority,
+  "stripeLaneB4bStableReviewDeploymentAuthority",
+);
 const currentB4bObject = extractConstObject(
   currentAuthority,
   "stripeLaneB4bStableReviewDeploymentAuthority",
 );
 
 check(
-  "accepted B3 machine object remains byte-identical",
-  baselineB3Object.length > 0 && baselineB3Object === currentB3Object,
+  "accepted B3 machine object remains byte-identical across baseline, Candidate, and R1",
+  baselineB3Object.length > 0 &&
+    baselineB3Object === candidateB3Object &&
+    candidateB3Object === currentB3Object,
 );
 check(
-  "accepted B4a machine object remains byte-identical",
-  baselineB4aObject.length > 0 && baselineB4aObject === currentB4aObject,
+  "accepted B4a machine object remains byte-identical across baseline, Candidate, and R1",
+  baselineB4aObject.length > 0 &&
+    baselineB4aObject === candidateB4aObject &&
+    candidateB4aObject === currentB4aObject,
 );
 check(
-  "B4b object is the only authority-file addition",
+  "B4b object is the only authority-file mutation",
+  candidateB4bObject.length > 0 &&
   currentB4bObject.length > 0 &&
+    withoutConstObject(
+      candidateAuthority,
+      "stripeLaneB4bStableReviewDeploymentAuthority",
+    ) === baselineAuthority &&
     withoutConstObject(
       currentAuthority,
       "stripeLaneB4bStableReviewDeploymentAuthority",
     ) === baselineAuthority,
 );
 check(
-  "B4b machine authority records exact evidence and pending states",
-  includesAll(currentB4bObject, [
-    candidateStatus,
+  "immutable Candidate B4b authority retains exact pending deployment and re-QA state",
+  includesAll(candidateB4bObject, [
+    historicalCandidateStatus,
     'candidateDate: "' + candidateDate + '"',
+    'predecessorAcceptedB4aSha:',
+    'deployedGitSha: "' + baseline + '"',
+    originalTechnicalQa,
+    originalOverallQa,
+    'correctedCandidateDeployment: "not_performed"',
+    'correctedCandidateExternalReQa: "pending"',
+  ]),
+);
+check(
+  "R1 B4b machine authority separates original B4a, corrected Candidate, and R1 state",
+  includesAll(currentB4bObject, [
+    r1Status,
+    'r1Date: "' + r1Date + '"',
     "stripeLaneB4aDeploymentReadinessAuthority.acceptedStatus",
     'predecessorAcceptedB4aSha:',
     '"' + baseline + '"',
     'provider: "Netlify"',
-    'deployedGitSha: "' + baseline + '"',
+    "originalDeployedB4aEvidence",
+    'gitSha: "' + baseline + '"',
     'providerBuild: "success"',
     'privateDeployment: "success"',
     'observedBuildDuration: "approximately_43_seconds"',
@@ -459,10 +598,25 @@ check(
     "providerUrlExists: true",
     "providerProjectIdentifierExists: true",
     "providerDeployIdentifierExists: true",
-    technicalQa,
-    overallQa,
-    'correctedCandidateDeployment: "not_performed"',
-    'correctedCandidateExternalReQa: "pending"',
+    originalTechnicalQa,
+    originalOverallQa,
+    "correctedCandidateEvidence",
+    'gitSha: "' + candidate + '"',
+    'privateBranchDeployment: "success"',
+    'privateProtection: "maintained"',
+    'productionDeploy: "unchanged_locked"',
+    "publishToProductionOperations: 0",
+    "publicVisibilityChanges: 0",
+    "environmentSecretOperations: 0",
+    correctedCandidateTechnicalQa,
+    correctedCandidateOverallQa,
+    'requestRobots: "PASS_noindex_nofollow_exactly_once_each"',
+    'requestSafetyStop: "PASS_expected_fail_closed"',
+    'remainingSourceTruthfulnessBlockerCountAtCandidateReQa: 1',
+    "r1State",
+    'sourceCorrection: "present"',
+    'privateDeployment: "not_performed"',
+    'externalReQa: "pending"',
     'chatgptReview: "pending"',
     'humanReview: "pending"',
     'b4bAcceptance: "pending"',
@@ -481,21 +635,37 @@ check(
 );
 check(
   "accepted predecessor statuses remain present",
-  baselineB3Object.includes(acceptedB3Status) &&
-    baselineB4aObject.includes(acceptedB4aStatus),
+  currentB3Object.includes(acceptedB3Status) &&
+    currentB4aObject.includes(acceptedB4aStatus),
 );
 
+const candidateController = readTextAt(candidate, controllerPath);
 const controller = readText(controllerPath);
 check(
-  "controller records exact Candidate and predecessor",
-  includesAll(controller, [
-    candidateStatus,
+  "immutable Candidate controller records exact Candidate-time pending state",
+  includesAll(candidateController, [
+    historicalCandidateStatus,
     candidateDate,
     acceptedB4aStatus,
     baseline,
-    "B4b repository Candidate | pending review",
-    "ChatGPT Candidate review | pending",
-    "Human Candidate review | pending",
+    "Corrected Candidate deployment | not_performed",
+    "Corrected Candidate external re-QA | pending",
+  ]),
+);
+check(
+  "R1 controller records exact current status, Candidate, and predecessor",
+  includesAll(controller, [
+    r1Status,
+    r1Date,
+    historicalCandidateStatus,
+    acceptedB4aStatus,
+    baseline,
+    candidate,
+    "R1 source correction | present",
+    "R1 Private deployment | not_performed",
+    "R1 external re-QA | pending",
+    "ChatGPT R1 review | pending",
+    "Human R1 review | pending",
     "B4b acceptance | pending",
   ]),
 );
@@ -517,13 +687,29 @@ check(
   ]),
 );
 check(
-  "controller records technical PASS and overall FAIL without transfer to Candidate",
+  "controller preserves original B4a technical PASS and overall FAIL",
   includesAll(controller, [
-    technicalQa,
-    overallQa,
+    originalTechnicalQa,
+    originalOverallQa,
     "The 20/20 technical result applies only to the deployed accepted B4a SHA.",
-    "Corrected Candidate deployment | not_performed",
-    "Corrected Candidate external re-QA | pending",
+  ]),
+);
+check(
+  "controller records corrected Candidate build, deployment, re-QA, robots, and blocker evidence",
+  includesAll(controller, [
+    "Corrected Candidate SHA | " + candidate,
+    "Corrected Candidate Provider build | success",
+    "Corrected Candidate Private Branch Deploy | success",
+    "Private protection | maintained",
+    "Production Deploy | unchanged / locked",
+    "Publish-to-Production operation | 0",
+    "Public visibility change | 0",
+    "env/secrets operation | 0",
+    correctedCandidateTechnicalQa,
+    correctedCandidateOverallQa,
+    "/request actual HTML robots | PASS",
+    "/request safety-stop | PASS_expected_fail_closed",
+    "Remaining blocker at Candidate re-QA | RequestMemo local-only source wording — exactly 1",
   ]),
 );
 check(
@@ -545,9 +731,12 @@ check(
   includesAll(controller, [
     "Netlify Hard Gate | not_passed",
     "Paid Production Hosting direction | provisional",
-    "corrected Candidate SHA build/private deployment",
-    "actual /request HTML robots verification",
-    "/ and /review re-QA",
+    "separately authorized R1 SHA build/private deployment",
+    "R1 external re-QA",
+    "RequestMemo blocker absence verification",
+    "rendered 13-route regression QA",
+    "actual /request HTML robots re-verification",
+    "/request safety-stop re-verification",
     "runtime contract asset inclusion proof",
     "Preview/Production separation evidence",
     "rollback/republication proof",
@@ -583,15 +772,17 @@ check(
   "controller separates completed bounded operations from future authority",
   includesAll(controller, [
     "completed bounded historical operations",
+    "Corrected Candidate build/Private Branch Deploy/visibility protection/external re-QA",
+    "R1 source correction | present in repository",
+    "R1 build/private deployment/external re-QA | not performed; separately authorized future operations",
     "Additional Provider operation | not authorized",
-    "Corrected Candidate build/deployment | not authorized by this Candidate",
     "Unlock auto publishing | not authorized",
     "Change project visibility | not authorized",
     "Future external operations remain separately authorized.",
   ]),
 );
 check(
-  "controller records exact manifest and counts",
+  "controller preserves exact Candidate manifest and counts",
   exactScope.every((relativePath) => controller.includes(relativePath)) &&
     includesAll(controller, [
       "| update | 31 |",
@@ -607,34 +798,68 @@ check(
       "| runtime-behavior mutation | 0 |",
     ]),
 );
+check(
+  "controller records exact R1 manifest and counts",
+  r1UpdatedPaths.every((relativePath) => controller.includes(relativePath)) &&
+    includesAll(controller, [
+      "## 11A. Exact R1 mutation manifest",
+      "### UPDATE — exactly 30",
+      "| update | 30 |",
+      "| new | 0 |",
+      "| delete | 0 |",
+      "| rename | 0 |",
+      "| total | 30 |",
+      "| docs | 26 |",
+      "| code/UI | 3 |",
+      "| verifier | 1 |",
+      "| config/package/dependency/lockfile/runtime | 0 |",
+    ]),
+);
 
 const mirrorSources = documentationMirrors.map(readText);
-const baselineMirrorSources = documentationMirrors.map((relativePath) =>
-  readTextAt(baseline, relativePath),
+const candidateMirrorSources = documentationMirrors.map((relativePath) =>
+  readTextAt(candidate, relativePath),
 );
 check(
-  "all 25 documentation mirrors change only their top CURRENT overlay",
+  "all 25 R1 documentation mirrors change only their top CURRENT overlay",
   mirrorSources.every(
     (source, index) =>
       maskCurrentOverlay(source) ===
-      maskCurrentOverlay(baselineMirrorSources[index]),
+      maskCurrentOverlay(candidateMirrorSources[index]),
   ),
 );
 check(
-  "all 25 CURRENT overlays record the exact B4b Candidate boundary",
-  mirrorSources.every((source) =>
+  "all 25 immutable Candidate mirrors retain pending deployment and external re-QA",
+  candidateMirrorSources.every((source) =>
     includesAll(source, [
-      candidateStatus,
+      historicalCandidateStatus,
       candidateDate,
       baseline,
-      technicalQa,
-      overallQa,
+      originalTechnicalQa,
+      originalOverallQa,
       "not_performed / pending",
-      "Netlify Hard Gate: not_passed",
-      "Paid Production Hosting: provisional",
+    ]),
+  ),
+);
+check(
+  "all 25 CURRENT overlays record corrected Candidate evidence and exact R1 boundary",
+  mirrorSources.every((source) =>
+    includesAll(source, [
+      r1Status,
+      r1Date,
+      baseline,
+      originalTechnicalQa,
+      originalOverallQa,
+      candidate,
+      correctedCandidateTechnicalQa,
+      correctedCandidateOverallQa,
+      "PASS_expected_fail_closed",
+      "present / not_performed / pending",
+      "Netlify Hard Gate `not_passed`",
+      "Paid Production Hosting `provisional`",
       controllerPath,
-      "Additional Provider operations",
-      "accepted B3/B4a historical evidence remains unchanged",
+      "Future Provider operations remain separately authorized",
+      "historical B3/B4a/B4b Candidate blocks remain unchanged",
     ]),
   ),
 );
@@ -761,8 +986,19 @@ check(
     "動作しません",
   ]) && !reviewPage.includes("表示とローカル UI"),
 );
+check(
+  "all non-R1 Candidate code/UI paths remain Candidate-identical",
+  ["app/request/page.tsx", "app/page.tsx", "app/review/page.tsx"].every(
+    (relativePath) =>
+      readText(relativePath) === readTextAt(candidate, relativePath),
+  ),
+);
 
 const requestForm = readText("components/request/RequestForm.tsx");
+const candidateRequestForm = readTextAt(
+  candidate,
+  "components/request/RequestForm.tsx",
+);
 const baselineRequestForm = readTextAt(
   baseline,
   "components/request/RequestForm.tsx",
@@ -777,15 +1013,39 @@ const requestFormReplacement =
   "              <span>\n" +
   "                最終操作時には、このサイト内で現在の相談入力と利用可否を再確認しますが、本番用の確認は完了せず、購入手続きには進みません。決済、外部AIによる生成、永続保存、メール送信は行われません。\n" +
   "              </span>";
-const expectedRequestForm = replaceOnce(
+const expectedCandidateRequestForm = replaceOnce(
   baselineRequestForm,
   requestFormNeedle,
   requestFormReplacement,
   "RequestForm Phase 4 boundary",
 );
 check(
-  "RequestForm changes only Phase 4 review-boundary copy",
-  requestForm === expectedRequestForm,
+  "immutable Candidate RequestForm changes only Phase 4 review-boundary copy",
+  candidateRequestForm === expectedCandidateRequestForm,
+);
+const requestMemoOldPhrase =
+  "入力内容をローカルで並べ直した表示です。AI処理、外部送信、保存は行っていません。";
+const requestMemoNewPhrase =
+  "入力内容をこの画面上で並べ直した表示です。AI処理、外部送信、保存は行っていません。";
+const expectedR1RequestForm = replaceOnce(
+  candidateRequestForm,
+  requestMemoOldPhrase,
+  requestMemoNewPhrase,
+  "RequestMemo remaining local-only wording",
+);
+check(
+  "Candidate RequestMemo retains exactly one historical old phrase",
+  countOccurrences(candidateRequestForm, requestMemoOldPhrase) === 1 &&
+    countOccurrences(candidateRequestForm, requestMemoNewPhrase) === 0,
+);
+check(
+  "R1 RequestForm changes only the exact RequestMemo wording",
+  requestForm === expectedR1RequestForm,
+);
+check(
+  "R1 RequestMemo old phrase is zero and new phrase is exactly one",
+  countOccurrences(requestForm, requestMemoOldPhrase) === 0 &&
+    countOccurrences(requestForm, requestMemoNewPhrase) === 1,
 );
 check(
   "RequestForm Phase 4 records truthful fail-closed prelaunch meaning",
@@ -805,30 +1065,41 @@ check(
 
 const legalPage = readText("app/legal/page.tsx");
 check(
-  "/legal no longer claims build, deployment, project, or B4b work absent",
+  "/legal no longer claims corrected Candidate build, deployment, or re-QA is absent",
   !includesAll(legalPage, ["実build／配備は未実施"]) &&
     !legalPage.includes("Netlifyの実build・配備は行われておらず") &&
     !legalPage.includes(
       "Netlify account/site・Provider URL作成・実build・deployment",
     ) &&
-    !legalPage.includes("未実施のB4b"),
+    !legalPage.includes("未実施のB4b") &&
+    !legalPage.includes("訂正済みCandidate配備・外部再QA") &&
+    !legalPage.includes("訂正Candidateの配備・再QA・受入は未完了") &&
+    !legalPage.includes("未実施・pending"),
 );
 check(
-  "/legal truthfully presents bounded evidence, FAIL, pending re-QA, and no future authority",
+  "/legal truthfully presents original B4a, corrected Candidate, R1, and authority boundaries",
   includesAll(legalPage, [
     "stripeLaneB4bStableReviewDeploymentAuthority",
-    "Human実行済みの限定証拠",
-    "Provider build・Private deployment",
-    "SUCCESS・Published / successful",
-    "Private / Private・locked",
+    "currentStatus",
+    "Original deployed B4a SHA",
+    "Original B4a technical / overall QA",
     "20/20 PASS",
-    "総合外部QA",
-    "FAIL",
-    "訂正済みCandidate配備・外部再QA",
-    "未実施・pending",
+    "Corrected Candidate SHA",
+    "Corrected Candidate build・Private Branch Deploy",
+    "success・success",
+    "Private protection・Production Deploy",
+    "maintained・unchanged / locked",
+    "Corrected Candidate rendered technical re-QA",
+    "26/26 PASS",
+    "Corrected Candidate overall re-QA",
+    "FAIL・RequestMemo source blocker 1件",
+    "/request robots・safety-stop",
+    "PASS・PASS_expected_fail_closed",
+    "R1 source correction・Private deployment・external re-QA",
+    "present・not_performed・pending",
     "ChatGPT pending・Human pending・B4b pending",
     "not passed・provisional",
-    "追加Provider操作・public visibility・domain/DNSは未承認",
+    "R1のPrivate配備・外部再QA、追加Provider操作",
     "法務公開",
     "未承認",
     "Payment実装",
@@ -841,16 +1112,12 @@ const diffArgs = [
   "diff",
   "--no-ext-diff",
   "--unified=0",
-  baseline,
+  candidate,
 ];
-if (committedMode) diffArgs.push(head);
-diffArgs.push("--", ...exactScope);
-const candidatePatch = git(...diffArgs);
-let candidateAddedText = addedTextFromPatch(candidatePatch);
-if (workingMode) {
-  candidateAddedText +=
-    "\n" + newPaths.map((relativePath) => readText(relativePath)).join("\n");
-}
+if (r1CommittedMode) diffArgs.push(head);
+diffArgs.push("--", ...r1UpdatedPaths);
+const r1Patch = git(...diffArgs);
+const r1AddedText = addedTextFromPatch(r1Patch);
 
 const actualUrlPatterns = [
   /https?:\/\/[^\s)]+/giu,
@@ -874,7 +1141,7 @@ const piiPatterns = [
 function countMatches(patterns) {
   return patterns.reduce(
     (total, pattern) =>
-      total + Array.from(candidateAddedText.matchAll(pattern)).length,
+      total + Array.from(r1AddedText.matchAll(pattern)).length,
     0,
   );
 }
@@ -896,10 +1163,10 @@ const codeDiffArgs = [
   "diff",
   "--no-ext-diff",
   "--unified=0",
-  baseline,
+  candidate,
 ];
-if (committedMode) codeDiffArgs.push(head);
-codeDiffArgs.push("--", ...codeUiPaths);
+if (r1CommittedMode) codeDiffArgs.push(head);
+codeDiffArgs.push("--", ...r1CodeUiPaths);
 const addedCode = addedTextFromPatch(git(...codeDiffArgs));
 const operationalCodePatterns = [
   /\bfetch\s*\(/gu,
@@ -917,10 +1184,10 @@ const operationalCodeCount = operationalCodePatterns.reduce(
 );
 
 const operationCounts = {
-  provider: candidatePaths.filter((relativePath) =>
+  provider: r1Paths.filter((relativePath) =>
     relativePath.startsWith("integrations/"),
   ).length,
-  deployment: candidatePaths.filter((relativePath) =>
+  deployment: r1Paths.filter((relativePath) =>
     [
       "netlify.toml",
       "vercel.json",
@@ -929,16 +1196,16 @@ const operationCounts = {
       "open-next.config.ts",
     ].includes(relativePath),
   ).length,
-  domainDns: candidatePaths.filter((relativePath) =>
+  domainDns: r1Paths.filter((relativePath) =>
     /(?:domain|dns)/iu.test(relativePath),
   ).length,
-  payment: candidatePaths.filter((relativePath) =>
+  payment: r1Paths.filter((relativePath) =>
     relativePath.startsWith("app/api/payment/"),
   ).length,
-  databaseSupabase: candidatePaths.filter((relativePath) =>
+  databaseSupabase: r1Paths.filter((relativePath) =>
     relativePath.startsWith("supabase/"),
   ).length,
-  runtime: candidatePaths.filter(
+  runtime: r1Paths.filter(
     (relativePath) =>
       relativePath.startsWith("app/api/") ||
       relativePath.startsWith("lib/assessment/"),
@@ -952,7 +1219,7 @@ check(
 );
 check(
   "all exact-scope files have no trailing whitespace",
-  exactScope.every((relativePath) =>
+  r1UpdatedPaths.every((relativePath) =>
     noTrailingWhitespace(readText(relativePath)),
   ),
 );
@@ -961,6 +1228,10 @@ check("staged diff check", gitSucceeds("diff", "--cached", "--check"));
 check(
   "baseline cumulative diff check",
   gitSucceeds("diff", "--check", baseline, "--"),
+);
+check(
+  "Candidate to R1 cumulative diff check",
+  gitSucceeds("diff", "--check", candidate, "--"),
 );
 
 if (failures.length > 0) {
@@ -982,7 +1253,7 @@ console.log(
     checkCount +
     " checks passed",
 );
-console.log("PASS mode " + (workingMode ? "working-candidate" : "committed-candidate"));
+console.log("PASS mode " + (r1WorkingMode ? "working-r1" : "committed-r1"));
 console.log("PASS operation counts " + JSON.stringify(operationCounts));
 console.log(
   "PASS sensitive scans " +

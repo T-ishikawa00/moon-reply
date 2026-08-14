@@ -17,7 +17,7 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装・B4a Hosting方向と、取得済みのPrivate Netlify B4b証拠、未完了の再QA・受入、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、訂正CandidateのPrivate build・配備・26/26再QA証拠、未配備のR1と未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
@@ -35,35 +35,49 @@ const reviewAuthorityFacts = [
     value: "PASS・complete / complete / complete",
   },
   {
-    label: "B4b Evidence Correction Candidate",
-    value: `${stripeLaneB4bStableReviewDeploymentAuthority.candidateStatus}・未受入`,
+    label: "B4b Remaining Review Wording + External Evidence R1",
+    value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・未受入`,
   },
   {
-    label: "Human実行済みの限定証拠",
-    value: "Netlify接続・Private project・受入済みB4a SHA build／Private配備・外部QA",
+    label: "Original deployed B4a SHA",
+    value:
+      stripeLaneB4bStableReviewDeploymentAuthority.originalDeployedB4aEvidence.gitSha,
   },
   {
-    label: "Provider build・Private deployment",
-    value: "SUCCESS・Published / successful",
+    label: "Original B4a technical / overall QA",
+    value: "20/20 PASS・FAIL_truthfulness_blockers_on_deployed_b4a_sha",
   },
   {
-    label: "Production / Deploy Preview・auto publishing",
-    value: "Private / Private・locked",
+    label: "Corrected Candidate SHA",
+    value:
+      stripeLaneB4bStableReviewDeploymentAuthority.correctedCandidateEvidence.gitSha,
   },
   {
-    label: "技術外部QA（配備済みB4a SHA）",
-    value: "20/20 PASS",
+    label: "Corrected Candidate build・Private Branch Deploy",
+    value: "success・success",
   },
   {
-    label: "総合外部QA（配備済みB4a SHA）",
-    value: "FAIL・配備前のままの表示を訂正し、再QAが必要",
+    label: "Private protection・Production Deploy",
+    value: "maintained・unchanged / locked",
   },
   {
-    label: "訂正済みCandidate配備・外部再QA",
-    value: "未実施・pending",
+    label: "Corrected Candidate rendered technical re-QA",
+    value: "26/26 PASS",
   },
   {
-    label: "B4b review / acceptance",
+    label: "Corrected Candidate overall re-QA",
+    value: "FAIL・RequestMemo source blocker 1件",
+  },
+  {
+    label: "/request robots・safety-stop",
+    value: "PASS・PASS_expected_fail_closed",
+  },
+  {
+    label: "R1 source correction・Private deployment・external re-QA",
+    value: "present・not_performed・pending",
+  },
+  {
+    label: "R1 review / B4b acceptance",
     value: "ChatGPT pending・Human pending・B4b pending",
   },
   {
@@ -91,19 +105,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、Humanが取得した限定B4b Private配備証拠、未完了の訂正Candidate再QA、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、Humanが取得したB4aと訂正Candidateの限定Private配備証拠、未配備・再QA待ちのR1、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。B4bではHuman管理下で受入済みB4a SHAのNetlify build・Private配備・外部QAを実施しましたが、配備済み表示の真実性にblockerがあり、訂正Candidateの配備・再QA・受入は未完了です。
+            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。受入済みB4a SHAの20/20技術QAとoverall FAILを履歴として維持し、訂正Candidate SHAのNetlify build・Private Branch Deploy・26/26技術再QAも完了しています。訂正Candidateのoverall再QAはRequestMemoのsource blocker 1件によりFAILで、R1ではsource訂正だけがリポジトリに存在し、R1配備・外部再QA・B4b受入は未完了です。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
             <ReviewCallout strong="B4bは未受入で、Netlify Hard Gateも通過していません。">
-              実施済みなのはHuman管理下の限定されたNetlify接続・Private project作成・受入済みB4a SHAのbuild／Private配備・可視性確認・deploy lock・外部QAです。訂正Candidateの追加配備、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
+              Human管理下で実施済みなのは、限定されたNetlify接続・Private project作成・受入済みB4a SHAと訂正Candidate SHAのbuild／Private配備・可視性確認・deploy lock・外部QAです。R1のPrivate配備・外部再QA、追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
             </ReviewCallout>
           </div>
         </section>

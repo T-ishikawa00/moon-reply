@@ -1,25 +1,41 @@
-# Stripe Lane B B4b Stable Review URL Deployment — Private Netlify Evidence Correction Candidate
+# Stripe Lane B B4b Stable Review URL Deployment — Remaining Review Wording + External Evidence R1
 
-## 1. CURRENT Candidate status
+## 1. CURRENT R1 status
 
 | Field | Exact state |
 | --- | --- |
-| Candidate status | stripe_lane_b_b4b_private_netlify_review_deployment_evidence_correction_candidate_pending_external_reqa_human_chatgpt_review |
-| Candidate date | 2026-08-14 |
+| Current status | stripe_lane_b_b4b_remaining_review_wording_external_evidence_r1_source_correction_present_pending_deployment_reqa_human_chatgpt_review |
+| R1 date | 2026-08-14 |
 | Accepted B4a predecessor status | stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete |
 | Accepted B4a predecessor SHA | 025e28a82c0b773d21ececfd8064af045922079d |
-| B4b repository Candidate | pending review |
-| ChatGPT Candidate review | pending |
-| Human Candidate review | pending |
+| Corrected Candidate SHA | 9fd55ae07a84d8610905c4b89adbd21b47657528 |
+| Corrected Candidate Provider build | success |
+| Corrected Candidate Private Branch Deploy | success |
+| Corrected Candidate rendered technical re-QA | PASS_26_of_26_on_corrected_candidate_sha |
+| Corrected Candidate overall re-QA | FAIL_one_remaining_source_truthfulness_blocker |
+| R1 source correction | present |
+| R1 Private deployment | not_performed |
+| R1 external re-QA | pending |
+| ChatGPT R1 review | pending |
+| Human R1 review | pending |
 | B4b acceptance | pending |
-| Corrected Candidate deployment | not_performed |
-| Corrected Candidate external re-QA | pending |
 | Netlify Hard Gate | not_passed |
 | Paid Production Hosting direction | provisional |
 
-This Candidate records evidence and corrects repository truthfulness. It does not accept B4b, pass the Netlify Hard Gate, deploy the corrected Candidate, authorize Production Hosting, or approve publication.
+R1 removes the final known RequestMemo source-truthfulness blocker and synchronizes CURRENT authority with later corrected-Candidate evidence. R1 itself has not been deployed or externally re-QA'd. It does not accept B4b, pass the Netlify Hard Gate, authorize Production Hosting, or approve publication.
 
-The accepted B4a controller and the B3/B4a canonical verifiers remain immutable predecessor evidence. B4b adds a separate CURRENT authority; it does not rewrite what was known at B4a acceptance time.
+The accepted B4a controller, B3/B4a canonical verifiers, and immutable Candidate snapshot remain predecessor evidence. R1 changes CURRENT authority without rewriting what was known at B4a acceptance or Candidate commit time.
+
+### Historical Candidate-time snapshot
+
+| Field | Exact Candidate-time state |
+| --- | --- |
+| Candidate status | stripe_lane_b_b4b_private_netlify_review_deployment_evidence_correction_candidate_pending_external_reqa_human_chatgpt_review |
+| Candidate SHA | 9fd55ae07a84d8610905c4b89adbd21b47657528 |
+| Corrected Candidate deployment known by repository | not_performed |
+| Corrected Candidate external re-QA known by repository | pending |
+
+The immutable Candidate commit preserves this formulation exactly. The successful corrected-Candidate build, Private Branch Deploy, and external re-QA occurred later and are recorded only as CURRENT R1 evidence below.
 
 ## 2. Human-executed bounded external evidence
 
@@ -110,7 +126,7 @@ The overall deployed-SHA result remains FAIL because the deployed accepted B4a S
 - review-hub text claiming local UI only; and
 - RequestForm Phase 4 text claiming local review only.
 
-This Candidate corrects those source statements. The corrections are not externally verified until a separately authorized corrected-Candidate build/private deployment and re-QA occur.
+At Candidate commit time, the repository corrections had not yet been externally verified. The immutable Candidate snapshot preserves that state; later corrected-Candidate build/private deployment and re-QA evidence is recorded separately in the CURRENT R1 section below.
 
 ## 5. /request safety-stop evidence
 
@@ -131,19 +147,32 @@ Observed:
 
 This is expected fail-closed behavior. This Candidate does not enable Production eligibility, Production assessment runtime, Payment, persistence, email, or external AI generation.
 
-## 6. Corrected Candidate state
+## 6. Corrected Candidate evidence and R1 state
 
 | Field | Exact state |
 | --- | --- |
-| Source truthfulness corrections | present in Candidate |
+| Corrected Candidate SHA | 9fd55ae07a84d8610905c4b89adbd21b47657528 |
+| Corrected Candidate Provider build | success |
+| Corrected Candidate Private Branch Deploy | success |
+| Private protection | maintained |
+| Production Deploy | unchanged / locked |
+| Publish-to-Production operation | 0 |
+| Public visibility change | 0 |
+| env/secrets operation | 0 |
+| Corrected Candidate rendered technical re-QA | PASS_26_of_26_on_corrected_candidate_sha |
+| Corrected Candidate overall re-QA | FAIL_one_remaining_source_truthfulness_blocker |
+| /request actual HTML robots | PASS — robots and googlebot noindex, nofollow; exactly one each |
+| /request safety-stop | PASS_expected_fail_closed |
+| Remaining blocker at Candidate re-QA | RequestMemo local-only source wording — exactly 1 |
+| R1 source correction | present |
 | /request route-scoped noindex/nofollow source protection | present in Candidate |
-| Corrected Candidate deployment | not_performed |
-| Corrected Candidate external re-QA | pending |
-| ChatGPT Candidate review | pending |
-| Human Candidate review | pending |
+| R1 Private deployment | not_performed |
+| R1 external re-QA | pending |
+| ChatGPT R1 review | pending |
+| Human R1 review | pending |
 | B4b acceptance | pending |
 
-The previous technical QA result must not be relabeled as QA of the corrected Candidate.
+The original B4a 20/20 result remains B4a-only. The corrected Candidate 26/26 result must not be relabeled as R1 QA because R1 has not been deployed or externally re-QA'd.
 
 ## 7. Netlify Hard Gate remains open
 
@@ -151,12 +180,14 @@ Netlify Hard Gate:
 
 not_passed
 
-Minimum remaining B4b evidence:
+Minimum next evidence after the R1 commit:
 
-- separately authorized corrected Candidate SHA build/private deployment;
-- corrected Candidate external re-QA;
-- actual /request HTML robots verification;
-- / and /review re-QA;
+- separately authorized R1 SHA build/private deployment;
+- R1 external re-QA;
+- RequestMemo blocker absence verification;
+- rendered 13-route regression QA at desktop and approximately 390px;
+- actual /request HTML robots re-verification;
+- /request safety-stop re-verification;
 - explicit HTTP status evidence where tooling permits;
 - runtime contract asset inclusion proof;
 - Preview/Production separation evidence;
@@ -177,7 +208,7 @@ Paid Production Hosting remains provisional and additionally requires:
 - expected operating cost; and
 - current commercial plan and terms evidence.
 
-No Hard Gate is passed by build success, Private deployment success, or 20/20 technical route QA alone.
+No Hard Gate is passed by the original B4a evidence, corrected-Candidate build/private deployment and 26/26 result, or the R1 source commit alone.
 
 ## 8. Legal, domain, Stripe, Payment, and runtime boundaries
 
@@ -203,9 +234,11 @@ Provider publication status Published / successful describes the protected Priva
 
 | Operation class | Authority state |
 | --- | --- |
-| Recorded Human-executed connection/project/build/private deployment/visibility/lock/QA | completed bounded historical operations |
+| Original B4a connection/project/build/private deployment/visibility/lock/QA | completed bounded historical operations |
+| Corrected Candidate build/Private Branch Deploy/visibility protection/external re-QA | completed bounded historical operations |
+| R1 source correction | present in repository |
+| R1 build/private deployment/external re-QA | not performed; separately authorized future operations |
 | Additional Provider operation | not authorized |
-| Corrected Candidate build/deployment | not authorized by this Candidate |
 | Unlock auto publishing | not authorized |
 | Change project visibility | not authorized |
 | Create environment variables or secrets | not authorized |
@@ -214,7 +247,7 @@ Provider publication status Published / successful describes the protected Priva
 | Enable Production runtime | not authorized |
 | Implement or activate Payment | not authorized |
 
-Future external operations remain separately authorized. The Candidate commit and normal push do not deploy the Candidate or change Netlify.
+Future external operations remain separately authorized. The R1 commit and normal push do not deploy R1 or change Netlify.
 
 ## 10. Provider identifier, secret, and PII boundary
 
@@ -289,9 +322,58 @@ Existence markers are intentionally value-free.
 | package/dependency/lockfile | 0 |
 | runtime-behavior mutation | 0 |
 
+## 11A. Exact R1 mutation manifest
+
+### UPDATE — exactly 30
+
+1. README.md
+2. docs/CODEX_HANDOFF.md
+3. docs/CURRENT_FOCUS.md
+4. docs/DECISIONS.md
+5. docs/PRODUCT_SPEC.md
+6. docs/ROADMAP.md
+7. docs/WBS.md
+8. docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md
+9. docs/legal/LEGAL_SOURCE_REGISTER.md
+10. docs/legal/OPERATOR_DECISION_GUIDE.md
+11. docs/legal/WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md
+12. docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md
+13. docs/payment/PAYMENT_CHARTER.md
+14. docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md
+15. docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md
+16. docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md
+17. docs/payment/PROVIDER_INQUIRY_PLAN.md
+18. docs/payment/PROVIDER_INQUIRY_SUBMISSION_CHECKLIST.md
+19. docs/payment/STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md
+20. docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md
+21. docs/payment/STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md
+22. docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md
+23. docs/phase1/IMPLEMENTATION_PLAN.md
+24. docs/phase1/IMPLEMENTATION_WBS.md
+25. docs/phase1/PAYMENT_FLOW.md
+26. docs/payment/STRIPE_LANE_B_B4B_STABLE_REVIEW_URL_DEPLOYMENT.md
+27. lib/legal/review-content.ts
+28. app/legal/page.tsx
+29. components/request/RequestForm.tsx
+30. scripts/verify-stripe-lane-b-b4b-stable-review-url-deployment.mjs
+
+| Count | Exact value |
+| --- | --- |
+| update | 30 |
+| new | 0 |
+| delete | 0 |
+| rename | 0 |
+| total | 30 |
+| docs | 26 |
+| code/UI | 3 |
+| verifier | 1 |
+| config/package/dependency/lockfile/runtime | 0 |
+
 ## 12. Predecessor preservation
 
-The following remain baseline-identical:
+The immutable Candidate remains fixed at `9fd55ae07a84d8610905c4b89adbd21b47657528`, is the direct child of the accepted B4a predecessor, and retains its exact 33-path, 31M/2A snapshot and Candidate-time pending deployment/re-QA state.
+
+The following remain Candidate-identical and baseline-identical where applicable:
 
 - docs/payment/STRIPE_LANE_B_B4A_DEPLOYMENT_READINESS.md;
 - scripts/verify-stripe-lane-b-b4a-deployment-readiness.mjs;
@@ -317,26 +399,44 @@ The following remain baseline-identical:
 | DB/Supabase operation | 0 |
 | email/Contact operation | 0 |
 
+These counts are the original Candidate repository-operation counts and remain historical evidence.
+
+### R1 operation counts
+
+| Operation | Count |
+| --- | --- |
+| Provider operation by R1 | 0 |
+| deployment operation by R1 | 0 |
+| Netlify settings mutation | 0 |
+| domain/DNS operation | 0 |
+| Payment implementation/operation | 0 |
+| Production runtime operation | 0 |
+| DB/Supabase operation | 0 |
+| email/Contact operation | 0 |
+
 ## 14. Stop conditions
 
 Stop without expanding scope if:
 
 - the exact accepted B4a predecessor differs;
-- any 34th path is required;
-- any delete or rename appears;
-- an arbitrary second B4b commit is required;
+- the immutable Candidate SHA or its direct parent differs;
+- any 31st R1 path is required;
+- any R1 add, delete, rename, or copy appears;
+- R1 is not the exact direct child of the Candidate or any third commit appears;
+- the exact 33-path Candidate snapshot or its Candidate-time pending state changes;
 - B3 or B4a evidence must change;
 - package, dependency, lockfile, Next config, or environment mutation is required;
-- API, Runtime, Safety, purchase, Payment, or Supabase behavior must change;
+- RequestForm changes beyond the exact one RequestMemo wording replacement;
+- API, Runtime, Safety, purchase, Payment, or Supabase behavior changes;
 - a raw Provider URL or identifier value would enter Git;
 - a secret or Human PII would enter Git;
-- corrected Candidate deployment or another Provider operation becomes necessary;
+- R1 deployment or another Provider operation becomes necessary for this task;
 - Netlify settings or visibility must change;
 - public publication, domain, DNS, Stripe, or Payment authority would be inferred; or
 - required automated verification fails.
 
 ## 15. Acceptance boundary
 
-Automated validation, the Candidate commit, and normal push do not accept B4b.
+Automated validation, the R1 commit, and normal push do not accept B4b.
 
-B4b remains pending external re-QA, ChatGPT Candidate review, Human Candidate review, and explicit B4b acceptance.
+B4b remains pending separately authorized R1 deployment/external re-QA, ChatGPT R1 review, Human R1 review, Netlify Hard Gate evidence, and explicit B4b acceptance.

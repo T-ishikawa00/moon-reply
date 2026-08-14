@@ -79,37 +79,61 @@ export const stripeLaneB4aDeploymentReadinessAuthority = {
 } as const;
 
 export const stripeLaneB4bStableReviewDeploymentAuthority = {
-  candidateStatus:
-    "stripe_lane_b_b4b_private_netlify_review_deployment_evidence_correction_candidate_pending_external_reqa_human_chatgpt_review",
-  candidateDate: "2026-08-14",
+  currentStatus:
+    "stripe_lane_b_b4b_remaining_review_wording_external_evidence_r1_source_correction_present_pending_deployment_reqa_human_chatgpt_review",
+  r1Date: "2026-08-14",
   predecessorAcceptedB4aStatus:
     stripeLaneB4aDeploymentReadinessAuthority.acceptedStatus,
   predecessorAcceptedB4aSha:
     "025e28a82c0b773d21ececfd8064af045922079d",
   provider: "Netlify",
-  deployedGitSha: "025e28a82c0b773d21ececfd8064af045922079d",
-  executedExternalOperations:
-    "human_controlled_bounded_private_review_operations_complete",
-  githubRepositoryAccess: "moon-reply_only",
-  providerBuild: "success",
-  privateDeployment: "success",
-  observedBuildDuration: "approximately_43_seconds",
-  observedNodeRuntime: "24.19.0",
-  productionVisibility: "private",
-  deployPreviewVisibility: "private",
-  autoPublishing: "locked",
-  providerUrlExists: true,
-  providerProjectIdentifierExists: true,
-  providerDeployIdentifierExists: true,
-  technicalExternalQa: "PASS_20_of_20_on_deployed_b4a_sha",
-  overallExternalQa:
-    "FAIL_truthfulness_blockers_on_deployed_b4a_sha",
-  requestSafetyStop: "expected_fail_closed",
-  correctedCandidateDeployment: "not_performed",
-  correctedCandidateExternalReQa: "pending",
-  chatgptReview: "pending",
-  humanReview: "pending",
-  b4bAcceptance: "pending",
+  originalDeployedB4aEvidence: {
+    gitSha: "025e28a82c0b773d21ececfd8064af045922079d",
+    executedExternalOperations:
+      "human_controlled_bounded_private_review_operations_complete",
+    githubRepositoryAccess: "moon-reply_only",
+    providerBuild: "success",
+    privateDeployment: "success",
+    observedBuildDuration: "approximately_43_seconds",
+    observedNodeRuntime: "24.19.0",
+    productionVisibility: "private",
+    deployPreviewVisibility: "private",
+    autoPublishing: "locked",
+    providerUrlExists: true,
+    providerProjectIdentifierExists: true,
+    providerDeployIdentifierExists: true,
+    technicalExternalQa: "PASS_20_of_20_on_deployed_b4a_sha",
+    overallExternalQa:
+      "FAIL_truthfulness_blockers_on_deployed_b4a_sha",
+    requestSafetyStop: "expected_fail_closed",
+  },
+  correctedCandidateEvidence: {
+    gitSha: "9fd55ae07a84d8610905c4b89adbd21b47657528",
+    providerBuild: "success",
+    privateBranchDeployment: "success",
+    privateProtection: "maintained",
+    productionDeploy: "unchanged_locked",
+    publishToProductionOperations: 0,
+    publicVisibilityChanges: 0,
+    environmentSecretOperations: 0,
+    renderedTechnicalQa:
+      "PASS_26_of_26_on_corrected_candidate_sha",
+    overallExternalReQa:
+      "FAIL_one_remaining_source_truthfulness_blocker",
+    requestRobots: "PASS_noindex_nofollow_exactly_once_each",
+    requestSafetyStop: "PASS_expected_fail_closed",
+    remainingSourceTruthfulnessBlockerAtCandidateReQa:
+      "RequestMemo_local_only_source_wording",
+    remainingSourceTruthfulnessBlockerCountAtCandidateReQa: 1,
+  },
+  r1State: {
+    sourceCorrection: "present",
+    privateDeployment: "not_performed",
+    externalReQa: "pending",
+    chatgptReview: "pending",
+    humanReview: "pending",
+    b4bAcceptance: "pending",
+  },
   netlifyHardGate: "not_passed",
   paidProductionHostingDirection: "provisional",
   legalPublicationApproved: false,
