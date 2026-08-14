@@ -39,20 +39,23 @@ export const stripeLaneBReviewAuthority = {
 } as const;
 
 export const stripeLaneB4aDeploymentReadinessAuthority = {
-  candidateStatus:
-    "stripe_lane_b_b4a_netlify_primary_hosting_direction_candidate_ready_pending_human_chatgpt_review",
-  candidateDate: "2026-08-14",
+  acceptedStatus:
+    "stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete",
+  acceptanceDate: "2026-08-14",
   baseline: "40fcd2dea5328f690451b46ef0613655f1c9fd04",
   acceptedB3Status: stripeLaneBReviewAuthority.acceptedB3Status,
-  hostingDirectionState: "accepted_at_conversation_decision_level",
-  repositoryCandidateReview: "pending",
-  repositoryCandidateAcceptance: "pending",
+  hostingDirectionState: "human_chatgpt_accepted_complete",
+  chatgptReview: "complete",
+  chatgptReviewOutcome: "PASS",
+  humanAcceptance: "complete",
+  b4aAcceptance: "complete",
   reviewDeploymentProvider: "Netlify",
   firstB4bReviewDeploymentAttempt: "Netlify",
   initialReviewPlan: "Netlify Free",
   staticHostingCompatibility: "A",
   netlifyBuildRuntimeCompatibility: "unproven",
   hardGate: "not_proven",
+  b4bEvidence: "not_acquired",
   freePlanScope: "review_evidence_only",
   paidProductionHostingDirection: "provisional",
   paidProductionPlan: "unresolved",
@@ -71,10 +74,8 @@ export const stripeLaneB4aDeploymentReadinessAuthority = {
   stripeAccountContactSubmission: "absent / none / none",
   stripeApprovalActivation: "absent / absent",
   formalStripeSelection: "incomplete",
-  currentWork:
-    "Human + ChatGPT review of Stripe Lane B B4a Netlify Primary Hosting Direction Candidate",
-  conditionalSuccessor: "Stripe Lane B stable review URL deployment (B4b)",
-  conditionalSuccessorAuthority: "separately_authorized_external_work",
+  currentWork: "Stripe Lane B stable review URL deployment (B4b)",
+  currentWorkAuthority: "separately_authorized_external_work",
 } as const;
 
 export const legalNavigationItems = [

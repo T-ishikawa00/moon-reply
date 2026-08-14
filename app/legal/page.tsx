@@ -17,18 +17,22 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装、審査待ちのB4a Hosting方向、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装とB4a Hosting方向、未証明のB4b Hosting実行、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
   { label: "B2 文書・仕様・法務方針", value: "Human + ChatGPT受入済み（2026-08-13）" },
   { label: "B3 画面実装", value: "受入済み（2026-08-14）" },
   { label: "Human Visual QA", value: "PASS・complete" },
-  { label: "ChatGPT review", value: "PASS・complete" },
-  { label: "Human acceptance / B3 acceptance", value: "complete / complete" },
+  { label: "B3 ChatGPT review", value: "PASS・complete" },
+  { label: "B3 Human acceptance / B3 acceptance", value: "complete / complete" },
   {
     label: "B4a Hosting方向",
-    value: "Netlifyを最初の将来B4bレビュー配備先として選定・Candidate審査待ち",
+    value: "Human + ChatGPT受入済み・Netlifyを最初のB4bレビュー配備試行先として選定",
+  },
+  {
+    label: "B4a ChatGPT review / Human acceptance / B4a acceptance",
+    value: "PASS・complete / complete / complete",
   },
   {
     label: "Netlify初期レビュー計画",
@@ -43,8 +47,8 @@ const reviewAuthorityFacts = [
     value: stripeLaneB4aDeploymentReadinessAuthority.currentWork,
   },
   {
-    label: "条件付き後続",
-    value: "B4a受入後のB4b・別途external work承認が必要",
+    label: "B4b external work authority",
+    value: "separately_authorized_external_work・未承認",
   },
   { label: "法務公開", value: "未承認" },
   { label: "Stripe feasibility・承認・正式選定", value: "未確立・未承認・未選定" },
@@ -63,19 +67,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針とB3レビュー実装、審査待ちのB4a Hosting方向、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向と、未実施のB4b、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開判断のための審査表示です。B3は受入済みですが、B4aはCandidate審査待ちです。Netlifyの実build・配備は行われておらず、B4bには別途承認が必要です。
+            これは公開判断のための審査表示です。B3とB4a Hosting方向は受入済みです。現在の段階はB4bですが、Netlifyの実build・配備は行われておらず、外部操作には別途承認が必要です。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
             <ReviewCallout strong="B3のReview-ready Website/Public Surface実装は受入済みです。">
-              Human Visual QA、ChatGPT review、Human acceptance、B3 acceptanceは完了しました。次の作業B4aはplanning/readiness onlyです。法務公開、domain購入、DNS変更、deployment、Stripe承認・提出・有効化、Payment実装、Production Payment、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用は開始または承認されていません。
+              B4aのChatGPT reviewはPASS・complete、Human acceptanceとB4a acceptanceはcompleteです。現在の作業はStripe Lane B stable review URL deployment (B4b)ですが、B4b external workは未承認です。Netlify account/site・Provider URL作成・実build・deployment、法務公開、domain購入、DNS変更、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用は開始または承認されていません。
             </ReviewCallout>
           </div>
         </section>

@@ -12,20 +12,26 @@ const safeRepositoryRoot = repositoryRoot.replaceAll("\\", "/");
 const gitExecutable = process.platform === "win32" ? "git.exe" : "git";
 
 const baseline = "40fcd2dea5328f690451b46ef0613655f1c9fd04";
+const candidate = "c50c3da373822250fe1254807b23c23b3face166";
 const expectedBranch =
   "codex/stripe-lane-b-b4a-netlify-primary-hosting-direction";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedB3Status =
   "stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete";
-const candidateStatus =
+const historicalCandidateStatus =
   "stripe_lane_b_b4a_netlify_primary_hosting_direction_candidate_ready_pending_human_chatgpt_review";
 const candidateDate = "2026-08-14";
-const exactCurrentWork =
+const acceptedB4aStatus =
+  "stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete";
+const acceptanceDate = "2026-08-14";
+const historicalCandidateWork =
   "Human + ChatGPT review of Stripe Lane B B4a Netlify Primary Hosting Direction Candidate";
-const conditionalSuccessor =
+const exactCurrentWork =
   "Stripe Lane B stable review URL deployment (B4b)";
 const controllerPath =
   "docs/payment/STRIPE_LANE_B_B4A_DEPLOYMENT_READINESS.md";
+const verifierPath =
+  "scripts/verify-stripe-lane-b-b4a-deployment-readiness.mjs";
 const b3VerifierPath =
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs";
 
@@ -88,9 +94,10 @@ const updatedPaths = [
 ];
 const newPaths = [
   controllerPath,
-  "scripts/verify-stripe-lane-b-b4a-deployment-readiness.mjs",
+  verifierPath,
 ];
 const exactScope = [...updatedPaths, ...newPaths];
+const acceptanceScope = [...exactScope];
 const codeUiPaths = ["app/legal/page.tsx", "lib/legal/review-content.ts"];
 const protectedFiles = [
   "package.json",
@@ -250,17 +257,35 @@ const commitsAfterBaseline = Number(
 const headParents = git("rev-list", "--parents", "-n", "1", "HEAD").split(
   /\s+/u,
 );
+const candidateParents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  candidate,
+).split(/\s+/u);
+const candidateAnchored =
+  candidateParents.length === 2 &&
+  candidateParents[0] === candidate &&
+  candidateParents[1] === baseline;
 const workingStatuses = workingNameStatuses();
-const workingMode = head === baseline;
-const committedMode =
-  head !== baseline &&
-  commitsAfterBaseline === 1 &&
+const acceptanceWorkingMode =
+  head === candidate && commitsAfterBaseline === 1;
+const acceptanceCommittedMode =
+  head !== candidate &&
+  commitsAfterBaseline === 2 &&
   headParents.length === 2 &&
-  headParents[1] === baseline;
-const candidateStatuses = workingMode
-  ? workingStatuses
-  : changedNameStatusesBetween(baseline, head);
+  headParents[1] === candidate;
+const candidateStatuses = changedNameStatusesBetween(baseline, candidate);
 const candidatePaths = candidateStatuses.map(pathFromNameStatus);
+const acceptanceStatuses = acceptanceWorkingMode
+  ? workingStatuses
+  : changedNameStatusesBetween(candidate, head);
+const acceptancePaths = acceptanceStatuses.map(pathFromNameStatus);
+const cumulativeStatuses = acceptanceWorkingMode
+  ? gitLines("diff", "--name-status", "--no-renames", baseline, "--")
+  : changedNameStatusesBetween(baseline, head);
+const cumulativePaths = cumulativeStatuses.map(pathFromNameStatus);
 
 check("expected B4a branch", git("branch", "--show-current") === expectedBranch);
 check(
@@ -269,16 +294,22 @@ check(
     git("rev-parse", "origin/main") === expectedMain,
 );
 check(
-  "exact baseline to working Candidate or one Candidate commit lineage",
-  (workingMode && commitsAfterBaseline === 0) || committedMode,
+  "Candidate parent is the exact B4a baseline",
+  candidateAnchored,
 );
 check(
-  "committed Candidate mode has a clean working tree",
-  !committedMode || workingStatuses.length === 0,
+  "exact baseline to Candidate to optional Acceptance Sync lineage",
+  candidateAnchored &&
+    git("merge-base", baseline, "HEAD") === baseline &&
+    (acceptanceWorkingMode || acceptanceCommittedMode),
 );
 check(
-  "baseline is the exact merge base",
-  git("merge-base", baseline, "HEAD") === baseline,
+  "maximum commits after baseline is two and any third commit fails",
+  commitsAfterBaseline <= 2,
+);
+check(
+  "committed Acceptance mode has a clean working tree",
+  !acceptanceCommittedMode || workingStatuses.length === 0,
 );
 
 check(
@@ -287,10 +318,24 @@ check(
     isDeepStrictEqual(sorted(candidatePaths), sorted(exactScope)),
 );
 check(
-  "classification is exactly 27 updates and 2 additions",
+  "Candidate classification is exactly 27 updates and 2 additions",
   candidateStatuses.filter((entry) => /^M\t/u.test(entry)).length === 27 &&
     candidateStatuses.filter((entry) => /^A\t/u.test(entry)).length === 2 &&
     candidateStatuses.every((entry) => /^(?:M|A)\t/u.test(entry)),
+);
+check(
+  "Acceptance Sync scope is exactly 29 modified paths",
+  acceptanceStatuses.length === 29 &&
+    isDeepStrictEqual(sorted(acceptancePaths), sorted(acceptanceScope)) &&
+    acceptanceStatuses.every((entry) => /^M\t/u.test(entry)),
+);
+check(
+  "baseline to Acceptance remains exactly 29 unique paths with 27 modified and 2 originally added",
+  cumulativeStatuses.length === 29 &&
+    isDeepStrictEqual(sorted(cumulativePaths), sorted(exactScope)) &&
+    cumulativeStatuses.filter((entry) => /^M\t/u.test(entry)).length === 27 &&
+    cumulativeStatuses.filter((entry) => /^A\t/u.test(entry)).length === 2 &&
+    cumulativeStatuses.every((entry) => /^(?:M|A)\t/u.test(entry)),
 );
 check(
   "all update paths existed and both new paths were absent at baseline",
@@ -323,7 +368,7 @@ check(
     ),
 );
 check(
-  "package, lockfile, Next config, next-env, and B3 verifier are baseline-identical",
+  "package, lockfile, Next config, next-env, and B3 verifier remain baseline-identical",
   protectedFiles.every((relativePath) =>
     gitSucceeds("diff", "--quiet", baseline, "--", relativePath),
   ) &&
@@ -332,8 +377,8 @@ check(
     ),
 );
 check(
-  "no API, runtime, purchase, Safety, Supabase, or environment path changed",
-  candidatePaths.every(
+  "Acceptance changes no API, runtime, purchase, Safety, Supabase, or environment path",
+  acceptancePaths.every(
     (relativePath) =>
       !protectedPrefixes.some((prefix) => relativePath.startsWith(prefix)) &&
       !/(?:^|\/)\.env(?:\.|$)/u.test(relativePath),
@@ -342,6 +387,10 @@ check(
 
 const baselineAuthority = readTextAt(
   baseline,
+  "lib/legal/review-content.ts",
+);
+const historicalCandidateAuthority = readTextAt(
+  candidate,
   "lib/legal/review-content.ts",
 );
 const currentAuthority = readText("lib/legal/review-content.ts");
@@ -364,11 +413,12 @@ check(
   readBuffer(b3VerifierPath).equals(readBufferAt(baseline, b3VerifierPath)),
 );
 
+const historicalCandidateController = readTextAt(candidate, controllerPath);
 const controller = readText(controllerPath);
 check(
-  "controller freezes status, date, baseline, pending review, and unproven evidence",
-  includesAll(controller, [
-    candidateStatus,
+  "Candidate snapshot preserves exact pending controller authority",
+  includesAll(historicalCandidateController, [
+    historicalCandidateStatus,
     candidateDate,
     baseline,
     acceptedB3Status,
@@ -377,6 +427,27 @@ check(
     "Repository B4a Candidate acceptance | `pending`",
     "Netlify Hard Gate | `not_proven`",
     "B4b evidence | `not_acquired`",
+  ]),
+);
+check(
+  "CURRENT controller records exact accepted authority while preserving false boundaries",
+  includesAll(controller, [
+    acceptedB4aStatus,
+    acceptanceDate,
+    candidate,
+    baseline,
+    acceptedB3Status,
+    "ChatGPT review | `PASS / complete`",
+    "Human acceptance | `complete`",
+    "B4a acceptance | `complete`",
+    "Human + ChatGPT Hosting direction | `human_chatgpt_accepted_complete`",
+    "Netlify Hard Gate | `not_proven`",
+    "B4b evidence | `not_acquired`",
+    "Paid Production Hosting direction | `provisional`",
+    "Paid Production plan | `unresolved`",
+    "Current exact work | `" + exactCurrentWork + "`",
+    "Current work authority | `separately_authorized_external_work`",
+    "B4b external work authorized | `false`",
   ]),
 );
 check(
@@ -466,9 +537,18 @@ const b4bEvidenceGates = [
   "- [ ] removal/offline procedure is proven",
   "- [ ] external URL browser QA is completed",
 ];
+const proofGateLines = controller
+  .split("\n")
+  .filter((line) => /^- \[[ x~]\]/u.test(line));
+const historicalProofGateLines = historicalCandidateController
+  .split("\n")
+  .filter((line) => /^- \[[ x~]\]/u.test(line));
 check(
-  "pre-B4b proof gates are complete and unchecked",
-  includesAll(controller, preB4bGates),
+  "all 23 proof gates remain byte-equivalent and unchecked",
+  proofGateLines.length === 23 &&
+    proofGateLines.every((line) => /^- \[ \]/u.test(line)) &&
+    isDeepStrictEqual(proofGateLines, historicalProofGateLines) &&
+    includesAll(controller, preB4bGates),
 );
 check(
   "B4b evidence gates are complete and remain not acquired",
@@ -563,54 +643,103 @@ check(
     countOccurrences(controller, "outcome: `null`") === 3,
 );
 check(
-  "Candidate review and conditional B4b successor remain separated",
-  includesAll(controller, [
+  "Candidate snapshot preserves pending current work and conditional successor",
+  includesAll(historicalCandidateController, [
+    historicalCandidateWork,
     exactCurrentWork,
-    conditionalSuccessor,
     "`separately_authorized_external_work`",
     "Do not switch current work to B4b while Candidate review and acceptance remain pending.",
     "B4a Candidate formulation and commit/push do not authorize that successor.",
   ]),
 );
+check(
+  "CURRENT B4b stage and external-operation authority remain strictly separated",
+  includesAll(controller, [
+    "Current exact work:",
+    "`" + exactCurrentWork + "`",
+    "`separately_authorized_external_work`",
+    "`b4b_external_work_authorized = false`",
+    "The current stage name does not authorize any external operation.",
+    "B4a acceptance and its commit/push do not authorize a Netlify account/site operation, deployment, Provider URL creation, domain purchase, DNS mutation, legal publication, or any other B4b external work.",
+  ]),
+);
 
+const historicalMirrorSources = documentationMirrors.map((relativePath) =>
+  readTextAt(candidate, relativePath),
+);
 const mirrorSources = documentationMirrors.map(readText);
 check(
-  "all 25 documentation mirrors preserve B3 and carry the concise B4a overlay",
-  mirrorSources.every((source) =>
+  "Candidate snapshot preserves all 25 pending B4a documentation mirrors",
+  historicalMirrorSources.every((source) =>
     includesAll(source, [
       acceptedB3Status,
-      candidateStatus,
+      historicalCandidateStatus,
       candidateDate,
       "accepted at conversation/decision level",
       "repository Candidate review / acceptance pending / pending",
-      "Netlify Free",
-      "Hard Gate: not proven",
-      "paid Production direction: provisional",
-      controllerPath,
+      historicalCandidateWork,
       exactCurrentWork,
-      conditionalSuccessor,
       "separately authorized external work",
-      "Accepted B3 authority remains unchanged",
-      "no Netlify/site/deploy/domain/DNS/legal-publication/Stripe/Payment/Production-runtime authority is created",
     ]),
   ),
 );
 check(
-  "separate B4a machine authority preserves Candidate and external-action boundaries",
-  includesAll(currentAuthority, [
+  "all 25 CURRENT documentation mirrors carry exact B4a acceptance and B4b authority boundaries",
+  mirrorSources.every((source) =>
+    includesAll(source, [
+      acceptedB3Status,
+      acceptedB4aStatus,
+      acceptanceDate,
+      "ChatGPT review `PASS / complete`",
+      "Human acceptance / B4a acceptance `complete / complete`",
+      "Netlify Free",
+      "Netlify Hard Gate: `not_proven`",
+      "B4b evidence: `not_acquired`",
+      "paid Production direction / plan: `provisional / unresolved`",
+      controllerPath,
+      exactCurrentWork,
+      "`separately_authorized_external_work`",
+      "`b4b_external_work_authorized = false`",
+      "Accepted B3 authority remains unchanged",
+      "No Netlify account/site/Provider URL/deploy/domain/DNS/legal-publication/Stripe/Payment/Production-runtime authority is created",
+    ]),
+  ),
+);
+check(
+  "Candidate snapshot preserves pending B4a machine authority",
+  includesAll(historicalCandidateAuthority, [
     "export const stripeLaneB4aDeploymentReadinessAuthority",
-    candidateStatus,
+    historicalCandidateStatus,
     'candidateDate: "2026-08-14"',
     'baseline: "' + baseline + '"',
     'hostingDirectionState: "accepted_at_conversation_decision_level"',
     'repositoryCandidateReview: "pending"',
     'repositoryCandidateAcceptance: "pending"',
+    historicalCandidateWork,
+    'conditionalSuccessor: "' + exactCurrentWork + '"',
+    'conditionalSuccessorAuthority: "separately_authorized_external_work"',
+  ]),
+);
+check(
+  "CURRENT B4a machine authority is accepted and preserves external-action boundaries",
+  includesAll(currentAuthority, [
+    "export const stripeLaneB4aDeploymentReadinessAuthority",
+    acceptedB4aStatus,
+    'acceptanceDate: "2026-08-14"',
+    'baseline: "' + baseline + '"',
+    'hostingDirectionState: "human_chatgpt_accepted_complete"',
+    'chatgptReview: "complete"',
+    'chatgptReviewOutcome: "PASS"',
+    'humanAcceptance: "complete"',
+    'b4aAcceptance: "complete"',
     'reviewDeploymentProvider: "Netlify"',
     'initialReviewPlan: "Netlify Free"',
     'staticHostingCompatibility: "A"',
     'netlifyBuildRuntimeCompatibility: "unproven"',
     'hardGate: "not_proven"',
+    'b4bEvidence: "not_acquired"',
     'paidProductionHostingDirection: "provisional"',
+    'paidProductionPlan: "unresolved"',
     '"low_cost_infrastructure_fallback_pending_runtime_proof"',
     'vercelFallback: "paid_simplicity_fallback"',
     'domainSelection: "none"',
@@ -622,29 +751,50 @@ check(
     "paymentImplemented: false",
     "productionPaymentAuthorized: false",
     exactCurrentWork,
-    conditionalSuccessor,
-    'conditionalSuccessorAuthority: "separately_authorized_external_work"',
-  ]),
+    'currentWorkAuthority: "separately_authorized_external_work"',
+  ]) &&
+    !currentAuthority.includes(historicalCandidateStatus) &&
+    !currentAuthority.includes("repositoryCandidateReview") &&
+    !currentAuthority.includes("repositoryCandidateAcceptance") &&
+    !currentAuthority.includes("conditionalSuccessor"),
 );
 
+const historicalLegalPage = readTextAt(candidate, "app/legal/page.tsx");
 const legalPage = readText("app/legal/page.tsx");
 check(
-  "legal review UI presents accepted B3 and pending B4a without Production approval",
-  includesAll(legalPage, [
+  "Candidate snapshot preserves accepted B3 and pending B4a rendered state",
+  includesAll(historicalLegalPage, [
     "B3 画面実装",
     "受入済み（2026-08-14）",
     "B4a Hosting方向",
     "Candidate審査待ち",
     "Netlifyを最初の将来B4bレビュー配備先として選定",
+    "B4a受入後のB4b・別途external work承認が必要",
+  ]),
+);
+check(
+  "legal review UI presents accepted B3/B4a and unperformed B4b without Production approval",
+  includesAll(legalPage, [
+    "B3 画面実装",
+    "受入済み（2026-08-14）",
+    "B4a Hosting方向",
+    "Human + ChatGPT受入済み",
+    "Netlifyを最初のB4bレビュー配備試行先として選定",
+    "B4a ChatGPT review / Human acceptance / B4a acceptance",
+    "PASS・complete / complete / complete",
     "実build／配備は未実施",
     "未証明・Paid Productionはprovisional",
-    "B4a受入後のB4b・別途external work承認が必要",
+    "B4b external work authority",
+    "separately_authorized_external_work・未承認",
+    exactCurrentWork,
     "法務公開",
     "未承認",
     "Stripe feasibility・承認・正式選定",
     "Payment実装",
     "Production Payment",
-    "Netlifyの実build・配備は行われておらず、B4bには別途承認が必要です。",
+    "Netlifyの実build・配備は行われておらず、外部操作には別途承認が必要です。",
+    "Production Runtime",
+    "Contact・メール・販売事業者情報開示",
   ]),
 );
 check(
@@ -672,21 +822,17 @@ check(
     ]),
 );
 
-const trackedPatch = workingMode
-  ? git("diff", "--no-ext-diff", "--unified=0", "HEAD", "--")
-  : git("diff", "--no-ext-diff", "--unified=0", baseline, "HEAD", "--");
-let candidateAddedText = addedTextFromPatch(trackedPatch);
-if (workingMode) {
-  candidateAddedText +=
-    "\n" +
-    newPaths
-      .filter(
-        (relativePath) =>
-          !gitSucceeds("cat-file", "-e", "HEAD:" + relativePath),
-      )
-      .map(readText)
-      .join("\n");
-}
+const acceptancePatch = acceptanceWorkingMode
+  ? git("diff", "--no-ext-diff", "--unified=0", candidate, "--")
+  : git(
+      "diff",
+      "--no-ext-diff",
+      "--unified=0",
+      candidate,
+      head,
+      "--",
+    );
+const acceptanceAddedText = addedTextFromPatch(acceptancePatch);
 
 const secretPatterns = [
   /sk_(?:live|test|proj)_[A-Za-z0-9_-]{8,}/gu,
@@ -711,7 +857,7 @@ const deploymentUrlPatterns = [
 const countMatches = (patterns) =>
   patterns.reduce(
     (total, pattern) =>
-      total + Array.from(candidateAddedText.matchAll(pattern)).length,
+      total + Array.from(acceptanceAddedText.matchAll(pattern)).length,
     0,
   );
 const secretCount = countMatches(secretPatterns);
@@ -727,12 +873,12 @@ check(
 );
 check("actual deployment URL scan count is zero", deploymentUrlCount === 0);
 
-const codePatch = workingMode
+const codePatch = acceptanceWorkingMode
   ? git(
       "diff",
       "--no-ext-diff",
       "--unified=0",
-      "HEAD",
+      candidate,
       "--",
       ...codeUiPaths,
     )
@@ -740,8 +886,8 @@ const codePatch = workingMode
       "diff",
       "--no-ext-diff",
       "--unified=0",
-      baseline,
-      "HEAD",
+      candidate,
+      head,
       "--",
       ...codeUiPaths,
     );
@@ -761,10 +907,10 @@ const operationalCodeCount = operationalCodePatterns.reduce(
   0,
 );
 const operationCounts = {
-  provider: candidatePaths.filter((relativePath) =>
+  provider: acceptancePaths.filter((relativePath) =>
     relativePath.startsWith("integrations/"),
   ).length,
-  deployment: candidatePaths.filter((relativePath) =>
+  deployment: acceptancePaths.filter((relativePath) =>
     [
       "netlify.toml",
       "vercel.json",
@@ -773,16 +919,16 @@ const operationCounts = {
       "open-next.config.ts",
     ].includes(relativePath),
   ).length,
-  domainDns: candidatePaths.filter((relativePath) =>
+  domainDns: acceptancePaths.filter((relativePath) =>
     /(?:domain|dns)/iu.test(relativePath),
   ).length,
-  payment: candidatePaths.filter((relativePath) =>
+  payment: acceptancePaths.filter((relativePath) =>
     relativePath.startsWith("app/api/payment/"),
   ).length,
-  databaseSupabase: candidatePaths.filter((relativePath) =>
+  databaseSupabase: acceptancePaths.filter((relativePath) =>
     relativePath.startsWith("supabase/"),
   ).length,
-  runtimeLuna: candidatePaths.filter(
+  runtimeLuna: acceptancePaths.filter(
     (relativePath) =>
       relativePath.startsWith("app/api/") ||
       relativePath.startsWith("lib/assessment/"),
@@ -801,7 +947,7 @@ check("working diff check", gitSucceeds("diff", "--check"));
 check("staged diff check", gitSucceeds("diff", "--cached", "--check"));
 check(
   "baseline cumulative diff check",
-  workingMode || gitSucceeds("diff", "--check", baseline, "HEAD", "--"),
+  gitSucceeds("diff", "--check", baseline, "--"),
 );
 
 if (failures.length > 0) {
@@ -824,7 +970,10 @@ console.log(
     " checks passed",
 );
 console.log(
-  "PASS mode " + (workingMode ? "working-candidate" : "committed-candidate"),
+  "PASS mode " +
+    (acceptanceWorkingMode
+      ? "working-acceptance-sync"
+      : "committed-acceptance-sync"),
 );
 console.log("PASS operation counts " + JSON.stringify(operationCounts));
 console.log(

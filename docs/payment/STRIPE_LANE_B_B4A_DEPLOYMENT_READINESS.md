@@ -1,23 +1,45 @@
-# Stripe Lane B B4a Deployment Readiness — Netlify Primary Hosting Direction Candidate
+# Stripe Lane B B4a Deployment Readiness — Netlify Primary Hosting Direction Human + ChatGPT Accepted
 
-## 1. Candidate status and authority
+## 1. CURRENT accepted status and authority
 
 | Field | Exact state |
 | --- | --- |
-| Candidate status | `stripe_lane_b_b4a_netlify_primary_hosting_direction_candidate_ready_pending_human_chatgpt_review` |
-| Candidate date | `2026-08-14` |
+| Accepted B4a status | `stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete` |
+| Acceptance date | `2026-08-14` |
+| ChatGPT review | `PASS / complete` |
+| Human acceptance | `complete` |
+| B4a acceptance | `complete` |
 | Exact B4a baseline | `40fcd2dea5328f690451b46ef0613655f1c9fd04` |
+| Historical Candidate SHA | `c50c3da373822250fe1254807b23c23b3face166` |
 | Accepted B3 status | `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` |
 | B3 acceptance date | `2026-08-14` |
-| Human + ChatGPT Hosting direction | `accepted_at_conversation_decision_level` |
-| Repository B4a Candidate review | `pending` |
-| Repository B4a Candidate acceptance | `pending` |
+| Human + ChatGPT Hosting direction | `human_chatgpt_accepted_complete` |
 | Netlify Hard Gate | `not_proven` |
 | B4b evidence | `not_acquired` |
+| Paid Production Hosting direction | `provisional` |
+| Paid Production plan | `unresolved` |
+| Current exact work | `Stripe Lane B stable review URL deployment (B4b)` |
+| Current work authority | `separately_authorized_external_work` |
+| B4b external work authorized | `false` |
 
-This Candidate synchronizes the accepted conversation/decision-level Hosting direction and deployment-readiness gates into repository authority. It does not mark B4a accepted, prove actual Netlify compatibility, authorize B4b, or create any external Provider outcome.
+This Acceptance Sync accepts only the Netlify Primary Hosting Direction and Deployment Readiness planning/authority. It does not prove actual Netlify compatibility, authorize B4b external work, or create any external Provider outcome.
 
 The accepted B3 authority and `scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs` remain historical and canonical. B4a adds successor authority; it does not replace or downgrade B3.
+
+### 1.1 Historical Candidate snapshot
+
+| Field | Exact historical state |
+| --- | --- |
+| Candidate SHA | `c50c3da373822250fe1254807b23c23b3face166` |
+| Candidate status | `stripe_lane_b_b4a_netlify_primary_hosting_direction_candidate_ready_pending_human_chatgpt_review` |
+| Candidate date | `2026-08-14` |
+| Candidate parent / exact baseline | `40fcd2dea5328f690451b46ef0613655f1c9fd04` |
+| Repository B4a Candidate review | `pending` |
+| Repository B4a Candidate acceptance | `pending` |
+| Candidate-time current work | `Human + ChatGPT review of Stripe Lane B B4a Netlify Primary Hosting Direction Candidate` |
+| Candidate-time conditional successor | `Stripe Lane B stable review URL deployment (B4b)` |
+
+These values are historical evidence from the fixed Candidate commit. They are not the CURRENT B4a review or acceptance state.
 
 ## 2. Accepted Hosting selection criteria
 
@@ -48,7 +70,7 @@ The order is authoritative and must not be reinterpreted.
 | Product-code mutation for basic support | `not_currently_required` |
 | Package/dependency mutation for basic support | `not_currently_required` |
 | Actual Netlify build/runtime compatibility | `unproven` |
-| Netlify account/site | `not_created_or_connected_by_this_candidate` |
+| Netlify account/site | `not_created_or_connected` |
 
 Static classification A means current basic Next.js Hosting compatibility appears supportable without a current Product-code or package mutation. It is not actual Provider compatibility proof.
 
@@ -143,7 +165,7 @@ This controller is the single source of truth for the detailed proof gates. Exis
 - [ ] removal/offline procedure is proven
 - [ ] external URL browser QA is completed
 
-All B4b evidence remains `not_acquired`. No proof gate is performed by this Candidate.
+All B4b evidence remains `not_acquired`. Neither the Candidate nor this Acceptance Sync performs a proof gate.
 
 ## 7. Production runtime blocker and measurement gate
 
@@ -155,7 +177,7 @@ Current truthful state:
 - Email verification and sending are not implemented.
 - Contact operation is not implemented.
 
-This Candidate changes no runtime code.
+Neither the Candidate nor this Acceptance Sync changes runtime code.
 
 Before Paid Launch, separately authorize and prove:
 
@@ -186,7 +208,7 @@ If synchronous Netlify execution is unsuitable, require a new Human + ChatGPT de
 - Vercel fallback; or
 - another explicitly reviewed option.
 
-No option is selected by this Candidate.
+No fallback option is selected by this Acceptance Sync.
 
 ## 8. Hosting fallbacks
 
@@ -200,7 +222,7 @@ No option is selected by this Candidate.
 - bundle/filesystem/CPU/memory/runtime proof: `unresolved`
 - rejected: `false`
 
-This Candidate installs neither `@opennextjs/cloudflare` nor `wrangler` and creates no Cloudflare configuration.
+Neither the Candidate nor this Acceptance Sync installs `@opennextjs/cloudflare` or `wrangler`, or creates Cloudflare configuration.
 
 ### Vercel
 
@@ -212,7 +234,7 @@ This Candidate installs neither `@opennextjs/cloudflare` nor `wrangler` and crea
 - commercial plan/pricing/terms recheck before use: `required`
 - rejected: `false`
 
-This Candidate creates no Vercel configuration.
+Neither the Candidate nor this Acceptance Sync creates Vercel configuration.
 
 ## 9. Domain boundary
 
@@ -228,7 +250,7 @@ A future Netlify provider subdomain may be used only for:
 
 unless separately authorized otherwise.
 
-This Candidate performs no availability search, final-domain selection, domain purchase, or DNS mutation.
+Neither the Candidate nor this Acceptance Sync performs an availability search, final-domain selection, domain purchase, or DNS mutation.
 
 ## 10. Legal and publication boundary
 
@@ -318,25 +340,25 @@ The actual Human PII count must remain 0.
 | Perform Provider, DB/Supabase, Runtime/LUNA, email, or Contact operations | `not_authorized` |
 | Start B4b | `not_authorized` |
 
-## 14. Current work and conditional successor
+## 14. Current work and separate external authority
 
 Current exact work:
 
-`Human + ChatGPT review of Stripe Lane B B4a Netlify Primary Hosting Direction Candidate`
-
-Do not switch current work to B4b while Candidate review and acceptance remain pending.
-
-Conditional successor after B4a Human + ChatGPT acceptance:
-
 `Stripe Lane B stable review URL deployment (B4b)`
 
-Successor authority:
+The current stage name does not authorize any external operation.
+
+B4b external-work authority:
 
 `separately_authorized_external_work`
 
-B4a Candidate formulation and commit/push do not authorize that successor.
+Exact authorization state:
 
-## 15. Exact Candidate mutation manifest
+`b4b_external_work_authorized = false`
+
+B4a acceptance and its commit/push do not authorize a Netlify account/site operation, deployment, Provider URL creation, domain purchase, DNS mutation, legal publication, or any other B4b external work.
+
+## 15. Historical exact Candidate mutation manifest
 
 ### UPDATE — exactly 27
 
@@ -388,15 +410,19 @@ B4a Candidate formulation and commit/push do not authorize that successor.
 
 Any required thirtieth mutation path is an immediate stop condition.
 
-## 16. Human + ChatGPT review gate
+## 16. Human + ChatGPT acceptance record
 
-Automated validation, a commit, and a push do not accept this Candidate.
+Automated validation, the Candidate commit, and its push did not accept the Candidate.
 
-Candidate review remains `pending`.
+At historical Candidate SHA `c50c3da373822250fe1254807b23c23b3face166`, Candidate review was `pending` and Candidate acceptance was `pending`.
 
-Candidate acceptance remains `pending`.
+CURRENT ChatGPT review is `PASS / complete`.
 
-B4a acceptance requires an explicit later Human + ChatGPT decision and repository acceptance synchronization.
+CURRENT Human acceptance is `complete`.
+
+CURRENT B4a acceptance is `complete` with status `stripe_lane_b_b4a_netlify_primary_hosting_direction_human_chatgpt_accepted_complete` on `2026-08-14`.
+
+This Acceptance Sync creates no B4b external-operation authority.
 
 ## 17. Exact stop conditions
 
