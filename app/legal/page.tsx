@@ -17,7 +17,7 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、訂正CandidateのPrivate build・配備・26/26再QA証拠、未配備のR1と未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、R1のPrivate build・配備・26/26外部QA証拠、未完了のHard Gateと未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
@@ -35,7 +35,7 @@ const reviewAuthorityFacts = [
     value: "PASS・complete / complete / complete",
   },
   {
-    label: "B4b Remaining Review Wording + External Evidence R1",
+    label: "B4b Final R1 external QA evidence",
     value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・未受入`,
   },
   {
@@ -69,15 +69,58 @@ const reviewAuthorityFacts = [
     value: "FAIL・RequestMemo source blocker 1件",
   },
   {
-    label: "/request robots・safety-stop",
-    value: "PASS・PASS_expected_fail_closed",
+    label: "Latest externally verified artifact",
+    value: `R1 ${stripeLaneB4bStableReviewDeploymentAuthority.latestExternallyVerifiedArtifact.gitSha}`,
   },
   {
-    label: "R1 source correction・Private deployment・external re-QA",
-    value: "present・not_performed・pending",
+    label: "R1 build・Private Branch Deploy",
+    value: "success・success",
   },
   {
-    label: "R1 review / B4b acceptance",
+    label: "Private protection・Production Deploy",
+    value:
+      "maintained・B4a 025e28a82c0b773d21ececfd8064af045922079d unchanged / locked",
+  },
+  {
+    label: "R1 rendered technical QA",
+    value: "PASS_26_of_26_on_r1_sha",
+  },
+  {
+    label: "RequestMemo blocker・/request robots・safety-stop",
+    value: "resolved・PASS・PASS_expected_fail_closed",
+  },
+  {
+    label: "R1 truthfulness QA",
+    value: "FAIL_stale_r1_self_evidence_state_only",
+  },
+  {
+    label: "Unauthenticated HTTP",
+    value: "PASS_13_of_13_unauthenticated_http_401",
+  },
+  {
+    label: "Authenticated HTTP numeric status",
+    value:
+      "partial_rendered_pages_confirmed_exact_numeric_http_status_unconfirmed",
+  },
+  {
+    label: "Preview / Production separation",
+    value: "PASS・R1 Branch Deploy / Production B4a / Auto Publishing Locked",
+  },
+  {
+    label: "Runtime contract asset inclusion",
+    value: "not_fully_proven",
+  },
+  {
+    label: "Rollback / republication・removal / offline",
+    value: "not_executed_not_proven・not_executed_not_proven",
+  },
+  {
+    label: "Evidence Sync role",
+    value:
+      "completed R1 evidenceの記録のみ・追加Provider deployment evidenceを主張しない",
+  },
+  {
+    label: "Final review / B4b acceptance",
     value: "ChatGPT pending・Human pending・B4b pending",
   },
   {
@@ -105,19 +148,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、Humanが取得したB4aと訂正Candidateの限定Private配備証拠、未配備・再QA待ちのR1、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、B4a・訂正Candidateの履歴証拠、最新の外部検証済みartifactであるR1のPrivate配備・QA証拠、未完了のHard Gate、法務公開・Stripe・Paymentの未承認状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。受入済みB4a SHAの20/20技術QAとoverall FAILを履歴として維持し、訂正Candidate SHAのNetlify build・Private Branch Deploy・26/26技術再QAも完了しています。訂正Candidateのoverall再QAはRequestMemoのsource blocker 1件によりFAILで、R1ではsource訂正だけがリポジトリに存在し、R1配備・外部再QA・B4b受入は未完了です。
+            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。受入済みB4a SHAの20/20技術QAとoverall FAIL、訂正Candidate SHAの26/26技術QAとRequestMemo blocker 1件によるoverall FAILを履歴として維持します。最新の外部検証済みartifactはR1 SHA 3f45d40d89660223030bfa1b881e4c04ae394445で、build・Private Branch Deploy・26/26技術QAは成功し、RequestMemo blockerは解消済みです。R1のtruthfulness QAは、配備後に自己証拠表示だけが古くなったためFAILであり、Hosting・Runtime・Safety・Payment・layoutの失敗ではありません。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
             <ReviewCallout strong="B4bは未受入で、Netlify Hard Gateも通過していません。">
-              Human管理下で実施済みなのは、限定されたNetlify接続・Private project作成・受入済みB4a SHAと訂正Candidate SHAのbuild／Private配備・可視性確認・deploy lock・外部QAです。R1のPrivate配備・外部再QA、追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
+              Human管理下で実施済みなのは、限定されたNetlify接続・Private project作成、B4a・訂正Candidate・R1のbuild／Private配備証拠、可視性確認、deploy lock、外部QAです。このEvidence Sync sourceは完了済みR1証拠を記録するだけで、自身について追加のProvider deployment evidenceを主張しません。認証済みHTTP数値status、runtime contract asset全件、rollback／republication、removal／offlineは未証明です。追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
             </ReviewCallout>
           </div>
         </section>
