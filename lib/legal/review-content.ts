@@ -78,6 +78,51 @@ export const stripeLaneB4aDeploymentReadinessAuthority = {
   currentWorkAuthority: "separately_authorized_external_work",
 } as const;
 
+export const stripeLaneB4bStableReviewDeploymentAuthority = {
+  candidateStatus:
+    "stripe_lane_b_b4b_private_netlify_review_deployment_evidence_correction_candidate_pending_external_reqa_human_chatgpt_review",
+  candidateDate: "2026-08-14",
+  predecessorAcceptedB4aStatus:
+    stripeLaneB4aDeploymentReadinessAuthority.acceptedStatus,
+  predecessorAcceptedB4aSha:
+    "025e28a82c0b773d21ececfd8064af045922079d",
+  provider: "Netlify",
+  deployedGitSha: "025e28a82c0b773d21ececfd8064af045922079d",
+  executedExternalOperations:
+    "human_controlled_bounded_private_review_operations_complete",
+  githubRepositoryAccess: "moon-reply_only",
+  providerBuild: "success",
+  privateDeployment: "success",
+  observedBuildDuration: "approximately_43_seconds",
+  observedNodeRuntime: "24.19.0",
+  productionVisibility: "private",
+  deployPreviewVisibility: "private",
+  autoPublishing: "locked",
+  providerUrlExists: true,
+  providerProjectIdentifierExists: true,
+  providerDeployIdentifierExists: true,
+  technicalExternalQa: "PASS_20_of_20_on_deployed_b4a_sha",
+  overallExternalQa:
+    "FAIL_truthfulness_blockers_on_deployed_b4a_sha",
+  requestSafetyStop: "expected_fail_closed",
+  correctedCandidateDeployment: "not_performed",
+  correctedCandidateExternalReQa: "pending",
+  chatgptReview: "pending",
+  humanReview: "pending",
+  b4bAcceptance: "pending",
+  netlifyHardGate: "not_passed",
+  paidProductionHostingDirection: "provisional",
+  legalPublicationApproved: false,
+  paymentImplemented: false,
+  productionPaymentAuthorized: false,
+  productionAssessmentRuntimeEnabled: false,
+  productionPurchaseEligibilityRuntimeEnabled: false,
+  domainSelection: "none",
+  additionalProviderOperationsAuthorized: false,
+  publicVisibilityAuthorized: false,
+  domainDnsAuthorized: false,
+} as const;
+
 export const legalNavigationItems = [
   { href: "/legal", label: "法務・開示 審査ハブ" },
   { href: "/legal/terms", label: "利用規約" },

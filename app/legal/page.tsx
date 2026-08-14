@@ -11,13 +11,13 @@ import {
   fixedProductFacts,
   legalPageInventory,
   publicationReadiness,
-  stripeLaneB4aDeploymentReadinessAuthority,
+  stripeLaneB4bStableReviewDeploymentAuthority,
 } from "@/lib/legal/review-content";
 
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装とB4a Hosting方向、未証明のB4b Hosting実行、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装・B4a Hosting方向と、取得済みのPrivate Netlify B4b証拠、未完了の再QA・受入、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
@@ -35,20 +35,44 @@ const reviewAuthorityFacts = [
     value: "PASS・complete / complete / complete",
   },
   {
-    label: "Netlify初期レビュー計画",
-    value: `${stripeLaneB4aDeploymentReadinessAuthority.initialReviewPlan}・実build／配備は未実施`,
+    label: "B4b Evidence Correction Candidate",
+    value: `${stripeLaneB4bStableReviewDeploymentAuthority.candidateStatus}・未受入`,
   },
   {
-    label: "Hard Gate・Production方向",
-    value: "未証明・Paid Productionはprovisional",
+    label: "Human実行済みの限定証拠",
+    value: "Netlify接続・Private project・受入済みB4a SHA build／Private配備・外部QA",
   },
   {
-    label: "現在の作業",
-    value: stripeLaneB4aDeploymentReadinessAuthority.currentWork,
+    label: "Provider build・Private deployment",
+    value: "SUCCESS・Published / successful",
   },
   {
-    label: "B4b external work authority",
-    value: "separately_authorized_external_work・未承認",
+    label: "Production / Deploy Preview・auto publishing",
+    value: "Private / Private・locked",
+  },
+  {
+    label: "技術外部QA（配備済みB4a SHA）",
+    value: "20/20 PASS",
+  },
+  {
+    label: "総合外部QA（配備済みB4a SHA）",
+    value: "FAIL・配備前のままの表示を訂正し、再QAが必要",
+  },
+  {
+    label: "訂正済みCandidate配備・外部再QA",
+    value: "未実施・pending",
+  },
+  {
+    label: "B4b review / acceptance",
+    value: "ChatGPT pending・Human pending・B4b pending",
+  },
+  {
+    label: "Netlify Hard Gate・Paid Production Hosting",
+    value: "not passed・provisional",
+  },
+  {
+    label: "今後の外部操作",
+    value: "追加Provider操作・public visibility・domain/DNSは未承認",
   },
   { label: "法務公開", value: "未承認" },
   { label: "Stripe feasibility・承認・正式選定", value: "未確立・未承認・未選定" },
@@ -67,19 +91,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向と、未実施のB4b、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、Humanが取得した限定B4b Private配備証拠、未完了の訂正Candidate再QA、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開判断のための審査表示です。B3とB4a Hosting方向は受入済みです。現在の段階はB4bですが、Netlifyの実build・配備は行われておらず、外部操作には別途承認が必要です。
+            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。B4bではHuman管理下で受入済みB4a SHAのNetlify build・Private配備・外部QAを実施しましたが、配備済み表示の真実性にblockerがあり、訂正Candidateの配備・再QA・受入は未完了です。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
-            <ReviewCallout strong="B3のReview-ready Website/Public Surface実装は受入済みです。">
-              B4aのChatGPT reviewはPASS・complete、Human acceptanceとB4a acceptanceはcompleteです。現在の作業はStripe Lane B stable review URL deployment (B4b)ですが、B4b external workは未承認です。Netlify account/site・Provider URL作成・実build・deployment、法務公開、domain購入、DNS変更、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用は開始または承認されていません。
+            <ReviewCallout strong="B4bは未受入で、Netlify Hard Gateも通過していません。">
+              実施済みなのはHuman管理下の限定されたNetlify接続・Private project作成・受入済みB4a SHAのbuild／Private配備・可視性確認・deploy lock・外部QAです。訂正Candidateの追加配備、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
             </ReviewCallout>
           </div>
         </section>

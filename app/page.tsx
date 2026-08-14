@@ -320,7 +320,7 @@ export default function Home() {
             ))}
           </ol>
           <p className="lp-flow-status">
-            現在利用できるのはローカルの依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
+            現在利用できるのは公開前の審査用依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
           </p>
         </div>
       </section>
@@ -450,7 +450,7 @@ export default function Home() {
             <RequestCta />
             <Link href="/sample-report" className="button button--secondary">架空の見本を読む</Link>
           </div>
-          <p className="lp-home-status">現在はローカル確認のみで、購入・生成・送信はできません。</p>
+          <p className="lp-home-status">現在は公開前の審査モードで、購入・生成・送信はできません。</p>
         </div>
       </section>
     </main>

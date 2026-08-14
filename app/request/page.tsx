@@ -8,6 +8,14 @@ export const metadata: Metadata = {
   title: "鑑定依頼シート | 月の返事",
   description:
     "月の返事の鑑定依頼シートです。関係性やメッセージを入力し、AIによる整理・分析を次の行動の判断材料にする「恋のメッセージ鑑定ノート」の依頼内容を確認します。",
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
 };
 
 export default function RequestPage() {
@@ -37,8 +45,10 @@ export default function RequestPage() {
             次にどう動くかを考えるための判断材料にまとめます。相手の本心や未来を断定するものではありません。
           </span>
           <div className="request-page__boundary" role="note">
-            現在は審査用のローカル確認です。入力内容は外部へ送信・保存されず、
-            決済、AI生成、メール送信も行われません。再読み込みすると入力は失われます。
+            現在は公開前の審査モードで、有料販売は開始していません。入力後、このサイト内で
+            利用可否を確認する通信が行われることがありますが、本番用の確認は完了せず、
+            購入手続きには進みません。決済、外部AIによる生成、入力内容の継続保存、
+            メール送信は行われません。再読み込みすると入力は失われます。
           </div>
         </div>
       </section>

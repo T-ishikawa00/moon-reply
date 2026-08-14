@@ -2202,9 +2202,9 @@ export function RequestForm() {
               <FieldError id="email-error" message={errors.email} />
             </div>
             <div className="request-runtime-note" role="note">
-              <strong>現在はローカル確認だけです。</strong>
+              <strong>現在は公開前の審査モードで、有料販売は開始していません。</strong>
               <span>
-                送信、永続保存、メール配信、決済、AI生成は行われません。最終操作時にも、現在の相談入力と利用確認をサーバーで再確認します。
+                最終操作時には、このサイト内で現在の相談入力と利用可否を再確認しますが、本番用の確認は完了せず、購入手続きには進みません。決済、外部AIによる生成、永続保存、メール送信は行われません。
               </span>
             </div>
             <footer className="request-phase-actions">

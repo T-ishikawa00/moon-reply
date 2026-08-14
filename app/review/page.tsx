@@ -53,7 +53,7 @@ export default function ReviewIndexPage() {
             月の返事の画面と導線を、実装状況ごとに確認するための静的な案内です。依頼・Safety、購入前確認、架空サンプル、Web鑑定ノート、保存用判断カード、エラー状態、法務・開示・お問い合わせ構成を確認できます。
           </p>
           <div className="review-hub__boundary" role="note">
-            <strong>ここで確認できるのは表示とローカル UI です。</strong>
+            <strong>ここで確認できるのは公開前の審査用UIと表示です。</strong>
             <span>決済、外部送信、AI生成、メール配信、データ保存、ファイル生成は動作しません。</span>
           </div>
         </div>
