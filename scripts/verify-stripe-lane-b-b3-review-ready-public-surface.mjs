@@ -15,12 +15,17 @@ const baseline = "9762a47b4ca4a38ae18f5c1e2e69a1cbe08e5230";
 const initialCandidate = "b1b695e0f444478928c31280062dea0ae5d7c14a";
 const reviewCorrectionR1 = "5e429501d5d11b9aa1d2f9b7da0a9e268c177afb";
 const reviewCorrectionR2 = "4d718eb7fb4ab0cb7e74afefa5728fee3f6991a0";
+const reviewCorrectionR3 = "2a12842316585d518cbc0fcf221c2211f9703e22";
 const expectedBranch = "codex/stripe-lane-b-b3-review-ready-public-surface";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const acceptedB2Status =
   "stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete";
-const candidateStatus =
+const historicalCandidateStatus =
   "stripe_lane_b_b3_review_ready_website_public_surface_candidate_ready_pending_human_visual_chatgpt_review";
+const acceptedB3Status =
+  "stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete";
+const acceptanceDate = "2026-08-14";
+const exactNextWork = "Stripe Lane B deployment readiness (B4a)";
 
 const updatedPaths = [
   "app/globals.css",
@@ -42,6 +47,21 @@ const newPaths = [
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
 ];
 const exactScope = [...updatedPaths, ...newPaths];
+const initialCandidateScope = [
+  "app/contact/page.tsx",
+  "app/legal/ai-disclosure/page.tsx",
+  "app/legal/page.tsx",
+  "app/legal/privacy/page.tsx",
+  "app/legal/refund/page.tsx",
+  "app/legal/terms/page.tsx",
+  "app/legal/tokushoho/page.tsx",
+  "app/legal/unsupported-cases/page.tsx",
+  "components/review/ReviewPurchaseConfirmation.tsx",
+  "components/review/ReviewRequestConfirmation.tsx",
+  "fixtures/review/purchase-confirmations.ts",
+  "lib/legal/review-content.ts",
+  "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
 const correctionR1Scope = [
   "lib/legal/review-content.ts",
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
@@ -53,6 +73,47 @@ const correctionR2Scope = [
 const correctionR3Scope = [
   "app/layout.tsx",
   "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
+
+const acceptanceDocs = [
+  "README.md",
+  "docs/CODEX_HANDOFF.md",
+  "docs/CURRENT_FOCUS.md",
+  "docs/DECISIONS.md",
+  "docs/PRODUCT_SPEC.md",
+  "docs/ROADMAP.md",
+  "docs/WBS.md",
+  "docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md",
+  "docs/legal/LEGAL_SOURCE_REGISTER.md",
+  "docs/legal/OPERATOR_DECISION_GUIDE.md",
+  "docs/legal/WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md",
+  "docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md",
+  "docs/payment/PAYMENT_CHARTER.md",
+  "docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md",
+  "docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md",
+  "docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md",
+  "docs/payment/PROVIDER_INQUIRY_PLAN.md",
+  "docs/payment/PROVIDER_INQUIRY_SUBMISSION_CHECKLIST.md",
+  "docs/payment/STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md",
+  "docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md",
+  "docs/payment/STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md",
+  "docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md",
+  "docs/phase1/IMPLEMENTATION_PLAN.md",
+  "docs/phase1/IMPLEMENTATION_WBS.md",
+  "docs/phase1/PAYMENT_FLOW.md",
+];
+const acceptanceCodeUiPaths = [
+  "app/legal/page.tsx",
+  "app/legal/terms/page.tsx",
+  "lib/legal/review-content.ts",
+];
+const acceptanceVerifierPaths = [
+  "scripts/verify-stripe-lane-b-b3-review-ready-public-surface.mjs",
+];
+const acceptanceScope = [
+  ...acceptanceDocs,
+  ...acceptanceCodeUiPaths,
+  ...acceptanceVerifierPaths,
 ];
 
 const routeFiles = [
@@ -129,6 +190,12 @@ function readBaselineText(relativePath) {
   );
 }
 
+function readTextAt(reference, relativePath) {
+  return normalizeText(
+    runGit(["show", `${reference}:${relativePath}`]).toString("utf8"),
+  );
+}
+
 function sorted(values) {
   return [...values].sort((left, right) => left.localeCompare(right, "en"));
 }
@@ -150,6 +217,33 @@ function changedPathsFrom(reference) {
     runGit(["ls-files", "--others", "--exclude-standard", "-z"]),
   );
   return sorted(new Set([...tracked, ...untracked]));
+}
+
+function changedPathsBetween(fromReference, toReference) {
+  return git(
+    "diff",
+    "--name-only",
+    "--no-renames",
+    fromReference,
+    toReference,
+    "--",
+  )
+    .split(/\r?\n/gu)
+    .map((value) => value.trim().replaceAll("\\", "/"))
+    .filter(Boolean);
+}
+
+function changedNameStatusesBetween(fromReference, toReference) {
+  return git(
+    "diff",
+    "--name-status",
+    "--no-renames",
+    fromReference,
+    toReference,
+    "--",
+  )
+    .split(/\r?\n/gu)
+    .filter(Boolean);
 }
 
 function changedPathsFromBaseline() {
@@ -233,37 +327,40 @@ const reviewCorrectionR2Anchored =
   reviewCorrectionR2Parents.length === 2 &&
   reviewCorrectionR2Parents[0] === reviewCorrectionR2 &&
   reviewCorrectionR2Parents[1] === reviewCorrectionR1;
-const baselineState =
-  commitsAfterBaseline === 0 && currentHead === baseline;
-const initialCandidateState =
-  commitsAfterBaseline === 1 && currentHead === initialCandidate;
-const correctionR1State =
-  commitsAfterBaseline === 2 &&
-  currentHead === reviewCorrectionR1;
-const correctionR2State =
-  commitsAfterBaseline === 3 &&
-  currentHead === reviewCorrectionR2;
-const correctionR3State =
-  commitsAfterBaseline === 4 &&
-  currentHead !== reviewCorrectionR2 &&
+const reviewCorrectionR3Parents = git(
+  "rev-list",
+  "--parents",
+  "-n",
+  "1",
+  reviewCorrectionR3,
+).split(/\s+/u);
+const reviewCorrectionR3Anchored =
+  reviewCorrectionR3Parents.length === 2 &&
+  reviewCorrectionR3Parents[0] === reviewCorrectionR3 &&
+  reviewCorrectionR3Parents[1] === reviewCorrectionR2;
+const acceptanceWorkingState =
+  commitsAfterBaseline === 4 && currentHead === reviewCorrectionR3;
+const acceptanceCommitState =
+  commitsAfterBaseline === 5 &&
+  currentHead !== reviewCorrectionR3 &&
   headParents.length === 2 &&
-  headParents[1] === reviewCorrectionR2;
+  headParents[1] === reviewCorrectionR3;
 const exactLineage =
   initialCandidateAnchored &&
   reviewCorrectionR1Anchored &&
   reviewCorrectionR2Anchored &&
+  reviewCorrectionR3Anchored &&
   git("merge-base", baseline, "HEAD") === baseline &&
-  commitsAfterBaseline <= 4 &&
-  (baselineState ||
-    initialCandidateState ||
-    correctionR1State ||
-    correctionR2State ||
-    correctionR3State);
+  (acceptanceWorkingState || acceptanceCommitState);
 
 check("Initial B3 Candidate parent is the exact baseline", initialCandidateAnchored);
 check(
-  "exact baseline to Initial Candidate to R1 to R2 to optional R3 lineage",
+  "exact baseline to Initial Candidate to R1 to R2 to R3 to authorized Acceptance Sync lineage",
   exactLineage,
+);
+check(
+  "Acceptance Sync is the authorized fifth commit after baseline or its exact pre-commit working state",
+  acceptanceWorkingState || acceptanceCommitState,
 );
 check("expected B3 branch", git("branch", "--show-current") === expectedBranch);
 check(
@@ -272,13 +369,32 @@ check(
     git("rev-parse", "origin/main") === expectedMain,
 );
 
-const changedPaths = changedPathsFromBaseline();
-check(
-  "exact 15-path mutation manifest",
-  isDeepStrictEqual(changedPaths, sorted(exactScope)),
+const initialCandidatePaths = changedPathsBetween(baseline, initialCandidate);
+const initialCandidateNameStatuses = changedNameStatusesBetween(
+  baseline,
+  initialCandidate,
 );
 check(
-  "update/new classification is exactly 14/1",
+  "Initial Candidate scope is frozen at exactly twelve updates and one added verifier",
+  isDeepStrictEqual(sorted(initialCandidatePaths), sorted(initialCandidateScope)) &&
+    initialCandidateNameStatuses.length === 13 &&
+    initialCandidateNameStatuses.filter((entry) => /^M\t/u.test(entry)).length ===
+      12 &&
+    initialCandidateNameStatuses.filter((entry) => /^A\t/u.test(entry)).length ===
+      1,
+);
+
+const historicalB3Paths = changedPathsBetween(baseline, reviewCorrectionR3);
+const historicalB3NameStatuses = changedNameStatusesBetween(
+  baseline,
+  reviewCorrectionR3,
+);
+check(
+  "Baseline to R3 mutation manifest is frozen at exactly fifteen paths",
+  isDeepStrictEqual(sorted(historicalB3Paths), sorted(exactScope)),
+);
+check(
+  "Baseline to R3 classification is exactly fourteen modified and one added verifier",
   updatedPaths.every(
     (relativePath) =>
       existsSync(path.join(repositoryRoot, relativePath)) &&
@@ -288,30 +404,22 @@ check(
       (relativePath) =>
         existsSync(path.join(repositoryRoot, relativePath)) &&
         !gitSucceeds("cat-file", "-e", `${baseline}:${relativePath}`),
-    ),
+    ) &&
+    historicalB3NameStatuses.length === 15 &&
+    historicalB3NameStatuses.filter((entry) => /^M\t/u.test(entry)).length ===
+      14 &&
+    historicalB3NameStatuses.filter((entry) => /^A\t/u.test(entry)).length ===
+      1,
 );
 
-const correctionR1Paths = git(
-  "diff",
-  "--name-only",
-  "--no-renames",
+const correctionR1Paths = changedPathsBetween(
   initialCandidate,
   reviewCorrectionR1,
-  "--",
-)
-  .split(/\r?\n/gu)
-  .map((value) => value.trim().replaceAll("\\", "/"))
-  .filter(Boolean);
-const correctionR1NameStatuses = git(
-  "diff",
-  "--name-status",
-  "--no-renames",
+);
+const correctionR1NameStatuses = changedNameStatusesBetween(
   initialCandidate,
   reviewCorrectionR1,
-  "--",
-)
-  .split(/\r?\n/gu)
-  .filter(Boolean);
+);
 check(
   "Review Correction R1 scope is exactly two updates",
   isDeepStrictEqual(sorted(correctionR1Paths), sorted(correctionR1Scope)) &&
@@ -319,52 +427,55 @@ check(
     correctionR1NameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
-const correctionR2Paths = git(
-  "diff",
-  "--name-only",
-  "--no-renames",
+const correctionR2Paths = changedPathsBetween(
   reviewCorrectionR1,
   reviewCorrectionR2,
-  "--",
-)
-  .split(/\r?\n/gu)
-  .map((value) => value.trim().replaceAll("\\", "/"))
-  .filter(Boolean);
-const correctionR2NameStatuses = git(
-  "diff",
-  "--name-status",
-  "--no-renames",
+);
+const correctionR2NameStatuses = changedNameStatusesBetween(
   reviewCorrectionR1,
   reviewCorrectionR2,
-  "--",
-)
-  .split(/\r?\n/gu)
-  .filter(Boolean);
+);
 check(
   "Human Visual QA Correction R2 scope is exactly two updates",
-  isDeepStrictEqual(correctionR2Paths, sorted(correctionR2Scope)) &&
+  isDeepStrictEqual(sorted(correctionR2Paths), sorted(correctionR2Scope)) &&
     correctionR2NameStatuses.length === 2 &&
     correctionR2NameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
-const correctionR3Paths = changedPathsFrom(reviewCorrectionR2);
-const correctionR3NameStatuses = git(
+const correctionR3Paths = changedPathsBetween(
+  reviewCorrectionR2,
+  reviewCorrectionR3,
+);
+const correctionR3NameStatuses = changedNameStatusesBetween(
+  reviewCorrectionR2,
+  reviewCorrectionR3,
+);
+check(
+  "Human Visual QA Correction R3 scope is exactly two updates",
+  isDeepStrictEqual(sorted(correctionR3Paths), sorted(correctionR3Scope)) &&
+    correctionR3NameStatuses.length === 2 &&
+    correctionR3NameStatuses.every((entry) => /^M\t/u.test(entry)),
+);
+
+const acceptancePaths = changedPathsFrom(reviewCorrectionR3);
+const acceptanceNameStatuses = git(
   "diff",
   "--name-status",
   "--no-renames",
-  reviewCorrectionR2,
+  reviewCorrectionR3,
   "--",
 )
   .split(/\r?\n/gu)
   .filter(Boolean);
 check(
-  "Human Visual QA Correction R3 scope is exactly two updates",
-  isDeepStrictEqual(correctionR3Paths, sorted(correctionR3Scope)) &&
-    correctionR3NameStatuses.length === 2 &&
-    correctionR3NameStatuses.every((entry) => /^M\t/u.test(entry)),
+  "Acceptance Sync scope is exactly twenty-nine modified paths",
+  isDeepStrictEqual(acceptancePaths, sorted(acceptanceScope)) &&
+    acceptanceNameStatuses.length === 29 &&
+    acceptanceNameStatuses.every((entry) => /^M\t/u.test(entry)),
 );
 
-const changedNameStatuses = git(
+const cumulativePaths = changedPathsFromBaseline();
+const cumulativeNameStatuses = git(
   "diff",
   "--name-status",
   "--no-renames",
@@ -374,20 +485,35 @@ const changedNameStatuses = git(
   .split(/\r?\n/gu)
   .filter(Boolean);
 check(
-  "no delete or rename",
-  changedNameStatuses.every((entry) => /^(?:M|A)\t/u.test(entry)),
+  "Baseline to Acceptance Sync cumulative manifest is exactly forty unique paths",
+  cumulativePaths.length === 40 &&
+    isDeepStrictEqual(
+      cumulativePaths,
+      sorted(new Set([...exactScope, ...acceptanceScope])),
+    ),
 );
 check(
-  "next-env.d.ts remains baseline-identical",
-  readText("next-env.d.ts") === readBaselineText("next-env.d.ts"),
+  "Baseline to Acceptance Sync classification is exactly thirty-nine modified and one added verifier",
+  cumulativeNameStatuses.length === 40 &&
+    cumulativeNameStatuses.filter((entry) => /^M\t/u.test(entry)).length === 39 &&
+    cumulativeNameStatuses.filter((entry) => /^A\t/u.test(entry)).length === 1 &&
+    cumulativeNameStatuses.every((entry) => /^(?:M|A)\t/u.test(entry)),
 );
-check("baseline Candidate diff check", git("diff", "--check", baseline, "--") === "");
+check(
+  "next-env.d.ts remains HEAD-identical",
+  readText("next-env.d.ts") === readTextAt("HEAD", "next-env.d.ts"),
+);
+check("baseline cumulative diff check", git("diff", "--check", baseline, "--") === "");
 check("working diff check", git("diff", "--check") === "");
 check("staged diff check", git("diff", "--cached", "--check") === "");
 
 const globalStyles = readText("app/globals.css");
 const rootLayout = readText("app/layout.tsx");
 const authority = readText("lib/legal/review-content.ts");
+const historicalR3Authority = readTextAt(
+  reviewCorrectionR3,
+  "lib/legal/review-content.ts",
+);
 const legalHub = readText("app/legal/page.tsx");
 const terms = readText("app/legal/terms/page.tsx");
 const privacy = readText("app/legal/privacy/page.tsx");
@@ -403,6 +529,26 @@ const purchaseConfirmation = readText(
   "components/review/ReviewPurchaseConfirmation.tsx",
 );
 const purchaseFixture = readText("fixtures/review/purchase-confirmations.ts");
+const currentFocus = readText("docs/CURRENT_FOCUS.md");
+const codeHandoff = readText("docs/CODEX_HANDOFF.md");
+const acceptanceDocSources = acceptanceDocs.map((relativePath) => ({
+  relativePath,
+  source: readText(relativePath),
+}));
+const publicationGate = readText(
+  "docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md",
+);
+const historicalR3PublicationGate = readTextAt(
+  reviewCorrectionR3,
+  "docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md",
+);
+const laneReadiness = readText(
+  "docs/payment/STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md",
+);
+const payjpReadiness = readText(
+  "docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md",
+);
+const implementationPlan = readText("docs/phase1/IMPLEMENTATION_PLAN.md");
 
 const globalSmoothScrollRule = sourceSlice(
   globalStyles,
@@ -506,10 +652,10 @@ check(
 );
 
 check(
-  "B2 accepted authority and B3 pending Candidate status are exact",
-  includesAll(authority, [
+  "R3 snapshot preserves the exact historical pending Candidate authority",
+  includesAll(historicalR3Authority, [
     acceptedB2Status,
-    candidateStatus,
+    historicalCandidateStatus,
     'candidateDate: "2026-08-13"',
     'humanVisualQa: "pending"',
     'chatgptReview: "pending"',
@@ -520,18 +666,173 @@ check(
   ]),
 );
 check(
-  "review hub separates authority, publication, Stripe, and Payment states",
+  "CURRENT machine authority is the exact accepted B3 state and preserves false boundaries",
+  includesAll(authority, [
+    acceptedB2Status,
+    acceptedB3Status,
+    `acceptanceDate: "${acceptanceDate}"`,
+    'humanVisualQa: "complete"',
+    'humanVisualQaOutcome: "PASS"',
+    'chatgptReview: "complete"',
+    'chatgptReviewOutcome: "PASS"',
+    'humanAcceptance: "complete"',
+    'b3Acceptance: "complete"',
+    `nextWork: "${exactNextWork}"`,
+    'nextWorkScope: "planning/readiness only"',
+    "legalPublicationApproved: false",
+    "stripeApprovalEstablished: false",
+    "paymentImplemented: false",
+    "productionPaymentAuthorized: false",
+  ]) &&
+    !authority.includes(historicalCandidateStatus),
+);
+check(
+  "all twenty-five CURRENT documentation mirrors carry the exact accepted status, date, review states, and B4a next work",
+  acceptanceDocSources.every(({ source }) =>
+    includesAll(source, [
+      acceptedB3Status,
+      acceptanceDate,
+      exactNextWork,
+      "planning/readiness only",
+    ]) &&
+      /Human Visual QA[^\n]{0,80}PASS \/ complete/u.test(source) &&
+      /ChatGPT review[^\n]{0,80}PASS \/ complete/u.test(source) &&
+      /Human acceptance \/ B3 acceptance[^\n]{0,80}complete \/ complete/u.test(
+        source,
+      ),
+  ),
+);
+check(
+  "CURRENT acceptance evidence preserves final Human review and Work browser QA",
+  [currentFocus, codeHandoff].every((source) =>
+    includesAll(source, [
+      "AI disclosure",
+      "Tokushoho review",
+      "purchase-confirmation review",
+      "10/10",
+      "approximately 390px",
+      "actual client-side navigation",
+      "console warnings/errors",
+      "missing-data-scroll-behavior",
+      "horizontal overflow",
+      "clipping",
+      "R2 contrast",
+      "Japanese phrase wrapping",
+      "Contact six categories",
+      "ordinary refund / Payment Integrity separation",
+      "native disabled purchase button",
+    ]),
+  ),
+);
+const currentPublicationChecklist = publicationGate
+  .split("\n")
+  .filter((line) => /^- \[[ x~]\]/u.test(line));
+const historicalR3PublicationChecklist = historicalR3PublicationGate
+  .split("\n")
+  .filter((line) => /^- \[[ x~]\]/u.test(line));
+check(
+  "B3 acceptance changes zero publication checklist states and remains NOT APPROVED FOR PUBLICATION",
+  publicationGate.includes("NOT APPROVED FOR PUBLICATION") &&
+    isDeepStrictEqual(
+      currentPublicationChecklist,
+      historicalR3PublicationChecklist,
+    ),
+);
+check(
+  "Lane A, Lane B, and Lane C four-field states remain exact and Lane B remains blocked",
+  countMatches(
+    laneReadiness,
+    /^preparation_status: preparation_human_approved$/gmu,
+  ) === 1 &&
+    countMatches(
+      laneReadiness,
+      /^preparation_status: preparation_blocked$/gmu,
+    ) === 2 &&
+    countMatches(
+      laneReadiness,
+      /^external_action_authority: external_action_not_authorized$/gmu,
+    ) === 3 &&
+    countMatches(laneReadiness, /^acquisition_status: not_submitted$/gmu) ===
+      3 &&
+    countMatches(laneReadiness, /^outcome: null$/gmu) === 3 &&
+    includesAll(laneReadiness, [
+      "overall_gate_b: BLOCKED",
+      "overall_gate_c: BLOCKED",
+      "Lane B and Lane C remain blocked",
+      "The sequence changes no lane four-field value.",
+    ]),
+);
+check(
+  "Stripe, PayPay, and PAY.JP evidence states remain unresolved and unapproved",
+  includesAll(laneReadiness, [
+    "Stripe account/contact/submission: `absent / none / none`",
+    "Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved",
+    "desired_initial_method: true",
+    "moon_reply_eligibility: unverified",
+    "method_state: not_enabled",
+    "approval_state: not_approved",
+  ]) &&
+    includesAll(currentFocus, [
+      "Stripe feasibility is not established",
+      "Stripe account, contact, approval, and activation are absent",
+      "formal selection is incomplete",
+      "every desired method is unverified",
+    ]) &&
+    includesAll(payjpReadiness, [
+      "paused_fallback_provider_direction",
+      "Not submitted",
+      "Not approved",
+      "Not selected",
+    ]),
+);
+check(
+  "B4a is exact planning-only next work with complete purpose and no B4b or external-action authority",
+  includesAll(implementationPlan, [
+    exactNextWork,
+    "planning/readiness only",
+    "hosting compatibility",
+    "hosting cost/operating model",
+    "stable review URL plan",
+    "indexing/privacy posture",
+    "contact receipt validation plan",
+    "device/browser coverage",
+    "rollback/removal procedure",
+    "domain decision sequencing",
+    "no domain purchase, DNS mutation, deployment, publication, Stripe submission, Provider activation, or Production Payment",
+    "B4b implementation deploys only the payment-free review site and requires separate Human external-action authority",
+  ]),
+);
+check(
+  "review hub renders accepted B3 while separating publication, Stripe, Payment, and operations",
   includesAll(legalHub, [
     "B2 文書・仕様・法務方針",
     "Human + ChatGPT受入済み",
     "B3 画面実装",
-    "レビュー候補",
+    "受入済み（2026-08-14）",
+    "Human Visual QA",
+    "PASS・complete",
+    "ChatGPT review",
+    "Human acceptance / B3 acceptance",
+    exactNextWork,
+    "planning/readiness only",
     "法務公開",
     "未承認",
-    "Stripe承認・正式選定",
+    "Stripe feasibility・承認・正式選定",
+    "未確立・未承認・未選定",
     "Payment実装",
     "未実装",
-    "専門家相談は必要に応じた任意のエスカレーション",
+    "Production Payment",
+    "Contact・メール・販売事業者情報開示",
+    "運用未解決",
+  ]),
+);
+check(
+  "Terms identifies the accepted B3 review implementation without activating contract, publication, Provider, or Payment authority",
+  includesAll(terms, [
+    "受入済みB3レビュー実装",
+    "現在拘束力のある利用条件でも、法務公開済みの規約でもありません",
+    "このページは現在の利用契約条件ではありません",
+    "同意記録、決済はありません",
   ]),
 );
 
@@ -574,7 +875,8 @@ const renderedPageSources = [
 check(
   "machine authority status strings are not rendered as ordinary copy",
   !renderedPageSources.includes(acceptedB2Status) &&
-    !renderedPageSources.includes(candidateStatus),
+    !renderedPageSources.includes(historicalCandidateStatus) &&
+    !renderedPageSources.includes(acceptedB3Status),
 );
 check(
   "ordinary Customer-facing copy does not expose legacy Safety enums",
@@ -804,6 +1106,22 @@ check(
 const implementationSources = updatedPaths
   .map((relativePath) => readText(relativePath))
   .join("\n");
+const acceptanceNonVerifierPatch = normalizeText(
+  runGit([
+    "diff",
+    "--no-ext-diff",
+    "--unified=0",
+    reviewCorrectionR3,
+    "--",
+    ...acceptanceDocs,
+    ...acceptanceCodeUiPaths,
+  ]).toString("utf8"),
+);
+const acceptanceAddedText = acceptanceNonVerifierPatch
+  .split("\n")
+  .filter((line) => /^\+(?!\+\+)/u.test(line))
+  .map((line) => line.slice(1))
+  .join("\n");
 const operationGroups = {
   provider: [
     /from\s+["']stripe["']/giu,
@@ -842,6 +1160,17 @@ check(
     implementationSources,
   ) &&
     !/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/iu.test(implementationSources),
+);
+check(
+  "Acceptance Sync introduces zero secret, actual email, phone, or postal-code literals",
+  !/(?:sk_live_[A-Za-z0-9]+|sk_test_[A-Za-z0-9]+|AKIA[0-9A-Z]{16}|-----BEGIN (?:RSA |EC )?PRIVATE KEY-----)/u.test(
+    acceptanceAddedText,
+  ) &&
+    !/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/iu.test(acceptanceAddedText) &&
+    !/(?:\+81[- ]?\d{1,4}[- ]?\d{1,4}[- ]?\d{3,4}|0\d{1,4}-\d{1,4}-\d{3,4})/u.test(
+      acceptanceAddedText,
+    ) &&
+    !/〒\s*\d{3}-\d{4}/u.test(acceptanceAddedText),
 );
 
 check(

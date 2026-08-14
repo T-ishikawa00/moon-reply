@@ -12,7 +12,7 @@
 
 ## Status rules
 
-> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). No inquiry, contact, submission, account action, evidence acquisition, or Provider outcome is added by B2.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. No inquiry, contact, submission, account action, evidence acquisition, or Provider outcome is added by B3 acceptance. B4b stable-URL deployment requires separate authority.
 
 - `Not sent` means the inquiry has not been transmitted through any channel.
 - `Not submitted` means no production-use application has been submitted.

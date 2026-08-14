@@ -12,7 +12,7 @@
 >
 > この文書は月の返事の内部検討用ドラフトです。運営者情報、利用する外部事業者、保存期間、提供条件等が未確定であり、公開前に最新の公式一次情報、実際のサービス仕様、決済事業者の条件および必要に応じた任意の専門家相談を反映する必要があります。
 
-> B2 accepted status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptance は `complete / complete`。accepted policy decisionは`decision resolved / evidence or implementation pending`と分類できますが、本ゲートのcheckboxは一つも完了しません。
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. `NOT APPROVED FOR PUBLICATION` remains controlling, and B3 acceptance completes none of this gate's publication checkboxes. B4a does not authorize domain purchase, DNS mutation, deployment, public publication, Stripe submission, Provider activation, or Production Payment; B4b stable-URL deployment requires separate authority.
 
 ---
 
@@ -135,4 +135,4 @@ Stripe strategyはHuman + ChatGPT acceptedだが、feasibility not established /
 - [ ] 公開日を[[EFFECTIVE_DATE_TBD]]として確定
 - [ ] 最終更新日を[[LAST_UPDATED_DATE_TBD]]として確定
 
-B2 acceptance完了時点でも、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。B2 Human + ChatGPT review / acceptanceは`complete / complete`であり、次の作業はStripe Lane B Review-ready Website/Public Surface implementation (B3)です。
+B3 acceptance完了後も、公開判断は`NOT APPROVED FOR PUBLICATION`のままです。B3 Human Visual QA / ChatGPT reviewは`PASS / complete`、Human acceptance / B3 acceptanceは`complete / complete`です。次の作業はStripe Lane B deployment readiness (B4a)ですが、planning/readiness onlyであり、本ゲートのcheckboxを一つも完了しません。

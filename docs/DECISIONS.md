@@ -2,12 +2,14 @@
 
 ## Adopted Decisions
 
-### Stripe Lane B B2 accepted current overlay
+### Stripe Lane B B3 accepted current overlay
 
 - Accepted B2 status: `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`
-- Human + ChatGPT review / acceptance: `complete / complete`
-- Exact current next work: Stripe Lane B Review-ready Website/Public Surface implementation (B3)
-- The seven accepted `LB-DEC-*` decisions are synchronized, not reopened. B3 is the next authorized-candidate stage but is not started by this Acceptance Sync; no Provider, Payment, publication, domain/deployment, or actual-PII authority is created.
+- Accepted B3 status: `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`
+- Human Visual QA / ChatGPT review: `PASS / complete` / `PASS / complete`; Human acceptance / B3 acceptance: `complete / complete`
+- B3 accepted meaning: `Review-ready Website/Public Surface implementation accepted`
+- Exact current next work: Stripe Lane B deployment readiness (B4a), planning/readiness only
+- The seven accepted `LB-DEC-*` decisions are not reopened. B3 acceptance creates no Provider, Payment, publication, domain/DNS/deployment, or actual-PII authority; B4b stable-URL deployment remains separately authorized.
 
 Items explicitly labeled Human working direction in historical records retain that historical meaning. The current Stripe-first strategy is accepted at the Product/strategy level, and its Customer-facing / Public-copy Alignment is separately accepted at the Product/UI/content level. Neither acceptance is feasibility evidence, Provider approval/activation, formal selection, Payment implementation authority, Production Payment authority, or legal-publication approval.
 
@@ -31,7 +33,7 @@ Items explicitly labeled Human working direction in historical records retain th
 - The trusted delivery/recovery session is neither Payment authority nor Safety authority, cannot be client-self-asserted, and does not introduce login, an account, a profile, or My Page
 - Stripe Feasibility Evidence Preparation: `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` on `2026-08-12`; Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` and is preserved inactive. Stripe Sales is `not_used_by_human_direction`, which is not a Stripe Provider outcome
 - Stripe Lane B Human Decision Package: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; historical Candidate formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a`; all seven decisions accepted: dedicated 18+ self-attestation, individual/sole-proprietor route, request-based disclosure preference where permitted, one business mailbox plus categorized form, accepted refund/Payment Integrity policy direction, accepted fulfillment wording skeleton without a concrete duration, and intended final production domain before Stripe Account/Site review
-- `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete` under accepted B2 docs/spec/legal authority; Production server enforcement remains unimplemented. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are completed. Current next work: **Stripe Lane B Review-ready Website/Public Surface implementation (B3)**. Actual Stripe contact/submission, Provider operations, evidence acquisition, formal selection, Payment implementation, legal publication, domain purchase, and deployment remain unauthorized
+- `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete` under accepted B2 docs/spec/legal authority; the B3 review-ready display is accepted, while Production server enforcement remains unimplemented. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are completed. Current next work: **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. Actual Stripe contact/submission, Provider operations, evidence acquisition, formal selection, Payment implementation, legal publication, domain purchase, DNS mutation, and deployment remain unauthorized
 - Professional/specialist review is optional, not a mandatory Paid Launch or Production Payment gate; current official-source and actual Product/Provider/public-wording review remains required, and material unresolved legal obligations remain blockers
 - AI use must be disclosed
 - Dangerous consultations must not receive normal romance鑑定

@@ -2,7 +2,7 @@
 
 ## 1. Status and classification
 
-> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. Stripe account/site readiness and PayPay onboarding remain blocked, unverified, not enabled, and not approved; B4b stable-URL deployment requires separate authority.
 
 - Task-time formulation package version: `STRIPE-FEAS-PREP-2026-08-12-CANDIDATE-01`
 - Formulation date: `2026-08-12`
@@ -18,7 +18,7 @@
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Human + ChatGPT review / acceptance: `complete / complete` on `2026-08-13`
 - Historical Candidate formulation commit: `223a2746f72ae8faa90b4df198f998a8132f2f3a`
-- Exact current next work: Stripe Lane B Review-ready Website/Public Surface implementation (B3)
+- Exact current next work: Stripe Lane B deployment readiness (B4a), planning/readiness only
 
 Readiness item classifications:
 
@@ -40,8 +40,8 @@ Bounded sequence:
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete; seven decisions accepted |
 | B2 | Stripe Lane B Legal Draft Finalization Candidate — Human + ChatGPT accepted complete; acceptance complete |
-| B3 | Review-ready Website/Public Surface implementation |
-| B4a | Deployment-readiness implementation/configuration |
+| B3 | Review-ready Website/Public Surface implementation — accepted complete on `2026-08-14` |
+| B4a | Deployment readiness — exact current next work; planning/readiness only |
 | B4b | Stable URL deployment under separate external-action authority |
 | B5 | Private KYC readiness |
 | B6 | Stripe Account/Activation Authorization Package |
@@ -110,7 +110,7 @@ outcome: null
 | Domain/site ownership evidence | `blocker` | Stable domain/evidence absent |
 | AI disclosure | `implemented_not_public` | Accepted public-copy alignment exists locally |
 | Unsupported-case disclosure | `implemented_not_public` | Local review disclosure exists; not public evidence |
-| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` Human direction accepted; B2 docs/spec/legal alignment accepted; current implementation and Production enforcement pending |
+| Age-gate mechanism consistency | `blocker` | `AGE-GATE-001` Human direction and B2 docs/spec/legal alignment accepted; B3 review-ready display accepted; Production server enforcement pending |
 | Responsive/public-environment QA | `blocker` | No stable public environment to verify |
 | No misleading Stripe logo/approval claims | `satisfied` | Current local public surfaces contain no Stripe approval/logo claim; recheck required before publication |
 

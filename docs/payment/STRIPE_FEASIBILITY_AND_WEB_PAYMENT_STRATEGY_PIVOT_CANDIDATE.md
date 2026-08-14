@@ -2,7 +2,7 @@
 
 ## 1. Status and authority
 
-> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). This status-only mirror does not alter the accepted Product/strategy direction or establish Stripe feasibility, selection, approval, or implementation.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. This status-only mirror does not alter the accepted Product/strategy direction or establish Stripe feasibility, selection, approval, or implementation; B4b stable-URL deployment requires separate authority.
 
 - Candidate formulation date: 2026-08-12
 - Accepted status: stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete
@@ -33,7 +33,7 @@
 - DB/Supabase/Runtime/LUNA operations: 0
 - PR/main merge/release: unauthorized
 
-Stripe feasibility evidence preparation remains Human + ChatGPT accepted complete. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe outcome. Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy decisions are accepted. B2 is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and B2 acceptance is complete. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains unauthorized and evidence-gated.
+Stripe feasibility evidence preparation, the Lane B Human Decision Package, B2 authority, and B3 review-ready Website/Public Surface implementation remain accepted complete at their separate levels. Stripe Sales is `not_used_by_human_direction`, which is a workflow choice and not a Stripe outcome. Lane A remains preserved inactive at `preparation_human_approved / external_action_not_authorized / not_submitted / null`. Stripe Lane B deployment readiness (B4a) is the exact current next work and is planning/readiness only. Lane B/C remain blocked pending downstream requirements, and actual Stripe contact/submission/business/site/category/Live Payment and payment-method evidence acquisition remains unauthorized and evidence-gated.
 
 The following states are intentionally separate:
 

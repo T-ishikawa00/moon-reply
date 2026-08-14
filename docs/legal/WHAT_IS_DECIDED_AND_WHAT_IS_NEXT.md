@@ -13,7 +13,7 @@
 
 この文書は内部検討用であり、法的助言、公開承認、決済事業者の承認または実装承認ではない。
 
-B2 accepted statusは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`（`2026-08-13`）。Human + ChatGPT review / acceptanceは`complete / complete`であり、現在のexact next workはStripe Lane B Review-ready Website/Public Surface implementation (B3)である。
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. B4a does not authorize domain purchase, DNS mutation, deployment, public publication, Stripe submission, Provider activation, or Production Payment; B4b stable-URL deployment requires separate authority.
 
 ---
 
@@ -136,12 +136,13 @@ Product、価格、Safety、truthful positioningおよびStripe-first strategy�
 4. `2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`となったが、これはStripe Provider outcomeではない
 5. B0 Stripe Lane B Human Decision Package Candidateはcommit `223a2746f72ae8faa90b4df198f998a8132f2f3a`でformulated
 6. B1 Human + ChatGPT decision review and acceptance syncは`2026-08-13`にcomplete。7件のpolicy decisionはすべてaccepted
-7. B2 Stripe Lane B Legal Draft Finalization Candidateは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`。Human + ChatGPT review / acceptanceは`complete / complete`。**現在のexact next workはStripe Lane B Review-ready Website/Public Surface implementation (B3)**だが、このAcceptance SyncはB3を開始せず、実装には次の明示的Human instructionが必要
-8. B4a deployment-readiness implementation/configurationとB4b stable URL deploymentを分離し、B4bには別個のHuman external-action authorityを必須とする
-9. B5 private KYC readinessではactual Human valueをGitへ入れず、B6 Stripe Account/Activation Authorization Packageはaccount creation/submissionを承認しない
-10. B7 actual Stripe account creation/KYC/activation submissionは、さらに別の明示的Human external-action authorization後にのみ実行できる
-11. PayPay Lane Cはseparate and later。Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
-12. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む。Production QAはProduction Payment authorizationではなく、別個のProduction Payment authorization後にのみSoft Launchへ進む
+7. B2 Stripe Lane B Legal Draft Finalization Candidateは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`。Human + ChatGPT review / acceptanceは`complete / complete`
+8. B3 Review-ready Website/Public Surface implementationは`stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete`（`2026-08-14`）。Human Visual QA / ChatGPT reviewは`PASS / complete`、Human acceptance / B3 acceptanceは`complete / complete`
+9. **現在のexact next workはStripe Lane B deployment readiness (B4a)**。B4aはplanning/readiness onlyで、B4b stable URL deploymentには別個のHuman external-action authorityを必須とする
+10. B5 private KYC readinessではactual Human valueをGitへ入れず、B6 Stripe Account/Activation Authorization Packageはaccount creation/submissionを承認しない
+11. B7 actual Stripe account creation/KYC/activation submissionは、さらに別の明示的Human external-action authorization後にのみ実行できる
+12. PayPay Lane Cはseparate and later。Lane A preliminary evidenceだけでStripeをformal selectionせず、Lane BをStripe account/Live supportability evidenceに必須とし、PayPayをenabled/approvedと扱う場合はLane C evidenceを必須とする
+13. authoritative evidenceに基づくHuman formal Provider selectionと別個のimplementation authorization後にのみ、選定済みproviderのsandbox/test実装へ進む。Production QAはProduction Payment authorizationではなく、別個のProduction Payment authorization後にのみSoft Launchへ進む
 
 predecessor acceptance前にexact future branchまたはmutation manifestを割り当てない。
 

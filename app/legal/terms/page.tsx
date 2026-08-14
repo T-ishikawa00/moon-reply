@@ -18,7 +18,7 @@ export default function TermsReviewPage() {
       <LegalPageHeader
         eyebrow="TERMS REVIEW"
         title="利用規約 審査表示"
-        description="受入済みのB2方針をB3の画面候補として確認します。現在拘束力のある利用条件でも、法務公開済みの規約でもありません。"
+        description="受入済みのB2方針を反映した、受入済みB3レビュー実装として確認します。現在拘束力のある利用条件でも、法務公開済みの規約でもありません。"
         showDates
       />
       <div className="legal-document-body">

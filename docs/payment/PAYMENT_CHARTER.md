@@ -2,7 +2,7 @@
 
 ## 1. Status and Authority
 
-> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`; exact next work Stripe Lane B Review-ready Website/Public Surface implementation (B3). Payment Charter v1 remains `human_chatgpt_accepted_complete`; no normative Charter principle, Payment implementation authority, or Production Payment authority changes.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. Payment Charter v1 remains `human_chatgpt_accepted_complete`; no normative Charter principle, Payment implementation authority, or Production Payment authority changes. B4b stable-URL deployment requires separate authority.
 
 - Candidate formulation date: `2026-08-11`
 - Acceptance date: `2026-08-12`
@@ -49,7 +49,7 @@ Current boundaries remain:
 | RevenueCat / Apple IAP / Google Play implementation | Unauthorized |
 | PR / main merge / release | Unauthorized |
 
-Stripe feasibility evidence preparation remains `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete`. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. The Stripe Lane B Human Decision Package is `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete` on `2026-08-13`; all seven policy directions are accepted. B2 is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is the exact current next work and B2 acceptance is complete. Lane B/C remain blocked pending downstream requirements, and no external action is authorized. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. Ordinary JPY 980 Product refunds remain distinct from uncapped Payment Integrity remediation.
+Stripe feasibility evidence preparation, the Lane B Human Decision Package, B2 authority, and B3 review-ready Website/Public Surface implementation remain accepted complete at their separate authority levels. Lane A remains Human-approved preparation / no external authority / not submitted / `null` but is preserved inactive. Stripe Sales is `not_used_by_human_direction`, not a Provider outcome. Stripe Lane B deployment readiness (B4a) is the exact current next work and is planning/readiness only. Lane B/C remain blocked pending downstream requirements, and no external action is authorized. Stripe feasibility is not established; account/contact/submission remain absent/none/none; approval/activation are absent; formal selection is incomplete; and desired-method eligibility is unverified. PAY.JP is paused fallback. Provider account/contact/API operations, Payment implementation authority, and Production Payment authority remain `false`. Ordinary JPY 980 Product refunds remain distinct from uncapped Payment Integrity remediation.
 
 ## 2. Initial Product Contract
 
@@ -570,7 +570,7 @@ No number is invented by this Charter.
 | Cards / Apple Pay / Google Pay | Unverified |
 | PayPay | Desired; Unverified; Not enabled; Not approved; lifecycle `not_frozen_recheck_required`; goods type unresolved pending actual onboarding evidence and Human review |
 | `AGE-GATE-001` | B2 docs/spec/legal alignment accepted / Production server enforcement unimplemented; Lane B/C remain blocked |
-| Current next work | Stripe Lane B Review-ready Website/Public Surface implementation (B3); B2 accepted; B3 not started |
+| Current next work | Stripe Lane B deployment readiness (B4a); planning/readiness only; B3 accepted; B4b deployment separately authorized |
 | PAY.JP | Paused fallback; Not approved; Not selected |
 | Payment implementation | Unauthorized |
 | Payment DB / migration | Unauthorized |

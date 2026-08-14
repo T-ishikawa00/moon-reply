@@ -2,7 +2,7 @@
 
 ## 0. このドキュメントの位置づけ
 
-> **B2 accepted current overlay:** `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`; Human + ChatGPT review / acceptance `complete / complete`. `AGE-GATE-001` is `accepted_direction_legal_spec_alignment_human_chatgpt_accepted_complete` at the accepted B2 docs/spec/legal authority level only. Exact next work is Stripe Lane B Review-ready Website/Public Surface implementation (B3); B3 is not started by this Acceptance Sync and requires the next explicit Human instruction, while real Payment enforcement remains separately unauthorized.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. B4a does not authorize domain purchase, DNS mutation, deployment, public publication, Stripe submission, Provider activation, or Production Payment; B4b stable-URL deployment requires separate authority.
 
 このドキュメントは、AIを活用した恋愛メッセージ分析・判断支援デジタルレポート「月の返事」のプロダクト親仕様書である。ユーザー向け定義は「恋のメッセージ鑑定ノート」とする。
 
@@ -939,7 +939,7 @@ Payment Charter v1 statusは`human_chatgpt_accepted_complete`、Delivery/Recover
 
 現時点ではPayment実装禁止。実装権限の最新境界は`docs/CURRENT_FOCUS.md`と`docs/CODEX_HANDOFF.md`が優先する。
 
-`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。Stripe Lane B Human Decision Packageはstatus `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`でHuman + ChatGPT accepted completeとなり、7件のpolicy decisionはすべてacceptedである。B2 accepted authorityは`stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`であり、現在の正式なPayment作業は**Stripe Lane B Review-ready Website/Public Surface implementation (B3)**である。Lane B/Cはdownstream requirements未完了のためblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
+`2026-08-13`のHuman workflow decisionによりStripe Sales routeは`not_used_by_human_direction`であり、これはStripe Provider outcomeではない。Lane Aは`preparation_human_approved / external_action_not_authorized / not_submitted / null`のままpreserved inactiveとする。Stripe Lane B Human Decision PackageとB2 authorityはaccepted completeであり、B3 review-ready Website/Public Surface implementationも`2026-08-14`にaccepted completeとなった。現在の正式な次作業は**Stripe Lane B deployment readiness (B4a)**であり、planning/readiness onlyとする。Lane B/Cはdownstream requirements未完了のためblockedのままで、external actionは一切承認されない。authoritative Stripe evidence、Human formal selectionおよび別個のimplementation authorizationなしに、以下へ進まない。
 
 - Stripe/PAY.JP SDK/API/checkout/webhook
 - RevenueCat

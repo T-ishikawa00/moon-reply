@@ -16,15 +16,21 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済み方針、B3実装候補、公開前の法務・Safety文書を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装と、未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const reviewAuthorityFacts = [
   { label: "B2 文書・仕様・法務方針", value: "Human + ChatGPT受入済み（2026-08-13）" },
-  { label: "B3 画面実装", value: "レビュー候補（候補日 2026-08-13）・Human Visual QA／ChatGPT review待ち" },
+  { label: "B3 画面実装", value: "受入済み（2026-08-14）" },
+  { label: "Human Visual QA", value: "PASS・complete" },
+  { label: "ChatGPT review", value: "PASS・complete" },
+  { label: "Human acceptance / B3 acceptance", value: "complete / complete" },
+  { label: "次の作業", value: "Stripe Lane B deployment readiness (B4a)・planning/readiness only" },
   { label: "法務公開", value: "未承認" },
-  { label: "Stripe承認・正式選定", value: "確認されていません" },
+  { label: "Stripe feasibility・承認・正式選定", value: "未確立・未承認・未選定" },
   { label: "Payment実装", value: "未実装" },
+  { label: "Production Payment", value: "未承認" },
+  { label: "Contact・メール・販売事業者情報開示", value: "運用未解決" },
 ] as const;
 
 const publicationBlockers = publicationReadiness.slice(0, 6);
@@ -37,7 +43,7 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針、B3の画面実装候補、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
+        description="受入済みのB2方針とB3レビュー実装、法務公開・Stripe・Paymentの未完了状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
@@ -48,8 +54,8 @@ export default function LegalIndexPage() {
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
-            <ReviewCallout strong="B3はレビュー候補であり、受入済みではありません。">
-              法務公開、Stripe承認、決済、返金実行、メール送信、問い合わせ受付は開始していません。Human Visual QA、ChatGPT review、Human acceptanceはいずれも保留です。
+            <ReviewCallout strong="B3のReview-ready Website/Public Surface実装は受入済みです。">
+              Human Visual QA、ChatGPT review、Human acceptance、B3 acceptanceは完了しました。次の作業B4aはplanning/readiness onlyです。法務公開、domain購入、DNS変更、deployment、Stripe承認・提出・有効化、Payment実装、Production Payment、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用は開始または承認されていません。
             </ReviewCallout>
           </div>
         </section>

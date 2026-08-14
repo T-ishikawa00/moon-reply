@@ -2,7 +2,7 @@
 
 ## 1. Accepted status and authority
 
-> **B2 accepted downstream status:** the accepted seven decisions are synchronized into the accepted B2 package with status `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete` on `2026-08-13`. Human + ChatGPT review / acceptance is `complete / complete`; exact next work is Stripe Lane B Review-ready Website/Public Surface implementation (B3). This predecessor remains accepted; B2 is now separately accepted, and this Acceptance Sync does not start B3.
+> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. The seven decisions and B2 predecessor remain accepted; B4a does not authorize domain purchase, DNS mutation, deployment, public publication, Stripe submission, Provider activation, or Production Payment; B4b stable-URL deployment requires separate authority.
 
 - Accepted status: `stripe_lane_b_human_decision_package_human_chatgpt_accepted_complete`
 - Acceptance date: `2026-08-13`
@@ -294,9 +294,9 @@ Human decision status: `accepted`
 | --- | --- |
 | B0 | Workflow Pivot + Human Decision Package Candidate — complete at historical formulation commit `223a2746f72ae8faa90b4df198f998a8132f2f3a` |
 | B1 | Human + ChatGPT decision review and acceptance sync — complete on `2026-08-13` |
-| B2 | Stripe Lane B Legal Draft Finalization Candidate — `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Human + ChatGPT review and acceptance are complete; Stripe Lane B Review-ready Website/Public Surface implementation (B3) is exact current next work |
-| B3 | Review-ready Website/Public Surface implementation |
-| B4a | Deployment-readiness implementation/configuration |
+| B2 | Stripe Lane B Legal Draft Finalization Candidate — `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; Human + ChatGPT review and acceptance complete |
+| B3 | Review-ready Website/Public Surface implementation — accepted complete on `2026-08-14` |
+| B4a | Deployment readiness — exact current next work; planning/readiness only |
 | B4b | Stable URL deployment under separate external-action authority |
 | B5 | Private KYC readiness |
 | B6 | Stripe Account/Activation Authorization Package |
@@ -304,7 +304,7 @@ Human decision status: `accepted`
 
 PayPay Lane C remains separate and later. Exact future branches and mutation manifests must not be assigned before predecessor acceptance.
 
-The B2 Candidate synchronized the accepted Human directions into the age-related specifications/legal drafts, Terms, Privacy, Tokushoho, Refund, Contact, AI disclosure, Unsupported Cases, and final-confirmation legal facts. Its status is `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; the exact current next work is **Stripe Lane B Review-ready Website/Public Surface implementation (B3)**, and B2 acceptance is complete. B2 is internal/draft work only and authorizes no publication. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are actually completed, and no external action is authorized.
+The B2 Candidate synchronized the accepted Human directions into the age-related specifications/legal drafts, Terms, Privacy, Tokushoho, Refund, Contact, AI disclosure, Unsupported Cases, and final-confirmation legal facts. Its status remains `stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete`; B3 review-ready Website/Public Surface implementation is separately accepted complete on `2026-08-14`. The exact current next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. B2 and B3 authorize no publication. Lane B remains blocked until downstream Legal/Site/KYC/domain requirements are actually completed, and no external action is authorized.
 
 ## 4. Private-data and operation boundary
 

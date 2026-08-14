@@ -21,15 +21,21 @@ export type LegalReviewSection = {
 export const stripeLaneBReviewAuthority = {
   acceptedB2Status:
     "stripe_lane_b_legal_draft_finalization_human_chatgpt_accepted_complete",
-  candidateStatus:
-    "stripe_lane_b_b3_review_ready_website_public_surface_candidate_ready_pending_human_visual_chatgpt_review",
-  candidateDate: "2026-08-13",
-  humanVisualQa: "pending",
-  chatgptReview: "pending",
-  humanAcceptance: "pending",
+  acceptedB3Status:
+    "stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete",
+  acceptanceDate: "2026-08-14",
+  humanVisualQa: "complete",
+  humanVisualQaOutcome: "PASS",
+  chatgptReview: "complete",
+  chatgptReviewOutcome: "PASS",
+  humanAcceptance: "complete",
+  b3Acceptance: "complete",
+  nextWork: "Stripe Lane B deployment readiness (B4a)",
+  nextWorkScope: "planning/readiness only",
   legalPublicationApproved: false,
   stripeApprovalEstablished: false,
   paymentImplemented: false,
+  productionPaymentAuthorized: false,
 } as const;
 
 export const legalNavigationItems = [
@@ -87,7 +93,7 @@ export const legalPageInventory = [
   {
     href: "/legal",
     name: "法務・開示 審査ハブ",
-    purpose: "B2の受入済み方針、B3の実装候補、公開準備を横断確認する",
+    purpose: "B2の受入済み方針、受入済みB3レビュー実装、未完了の公開準備を横断確認する",
     unresolved: "運営者・外部事業者・商取引・プライバシー・日付・Human公開承認",
   },
   {
