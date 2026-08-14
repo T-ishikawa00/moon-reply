@@ -1,3 +1,190 @@
+# Stripe Lane B B4b — Final Private Review Hard Gate Technical Evidence Closure
+
+## CURRENT technical evidence closure
+
+| Field | Exact CURRENT state |
+| --- | --- |
+| Current status | stripe_lane_b_b4b_private_review_hard_gate_technical_evidence_complete_pending_human_chatgpt_final_review_b4b_acceptance |
+| Product parent role | Runtime asset Product Correction |
+| Product Correction SHA | 004c3fbf6efcc0914cccb1d8ff08b41de7f655a6 |
+| Product Correction parent | bab2f3259add84e9e3a6abeacf0cf777b6a617b1 |
+| Product Correction mutation | next.config.ts only |
+| QA probe SHA | 68e16cebb1eccd0966e3a6e11aedef030cab87aa |
+| QA probe role | temporary Private QA evidence only / excluded from Product lineage |
+| Technical evidence | complete |
+| Netlify Hard Gate | technical_evidence_complete_pending_final_review_acceptance |
+| ChatGPT final review | pending |
+| Human final review | pending |
+| B4b acceptance | pending |
+| Paid Production Hosting | provisional |
+| Closure commit Provider deployment state | not claimed |
+
+This closure records prior Human-supplied Private Review evidence. It does not claim that this closure commit has been deployed, does not accept B4b or the Netlify Hard Gate, and does not authorize Paid Production Hosting, Production, public launch, publication, visibility, domain/DNS, Provider, Stripe, or Payment operations.
+
+### Product Correction
+
+The final Product closure lineage must use Product Correction SHA `004c3fbf6efcc0914cccb1d8ff08b41de7f655a6` as its exact parent. The Correction is the direct child of historical Final Evidence Sync SHA `bab2f3259add84e9e3a6abeacf0cf777b6a617b1` and changes exactly one Product path: `next.config.ts`.
+
+The Correction uses route-scoped `outputFileTracingIncludes` for `/api/internal/assessments` and includes exactly:
+
+1. `./ai/schemas/safety-assessment.schema.json`
+2. `./ai/schemas/decision-plan.schema.json`
+3. `./ai/schemas/report-content.schema.json`
+4. `./ai/schemas/validation-result.schema.json`
+
+No broad glob, `netlify.toml`, runtime logic, API behavior, Safety behavior, Payment behavior, purchase behavior, Supabase behavior, package, dependency, lockfile, or environment mutation is part of the Product Correction.
+
+### QA-only probe evidence
+
+QA probe SHA `68e16cebb1eccd0966e3a6e11aedef030cab87aa` is a direct child of the Product Correction. It is temporary evidence only and must not be an ancestor of the Product closure commit. Its probe route is excluded from Product and is not a Product feature.
+
+The Private Netlify QA probe returned:
+
+- `ok = true`;
+- `stageCount = 6`;
+- `promptBundleVersion = prompt-bundle-runtime-v4.0.0`; and
+- `schemaSetVersion = pipeline-schema-runtime-v3.0.0`.
+
+The active catalog loader therefore read and hash-verified its required runtime asset closure in the actual Netlify Server Handler. Before the Product Correction, 11/15 assets were traced. At the Correction SHA, 15/15 assets were traced.
+
+### Completed Private Review technical evidence
+
+| Evidence | Exact state |
+| --- | --- |
+| Private protection | complete |
+| Authenticated HTTP | PASS_13_of_13_authenticated_http_200 |
+| Unauthenticated HTTP | PASS_13_of_13_unauthenticated_http_401 |
+| Route rendering | complete |
+| Safety fail-closed | complete |
+| Preview / Production separation | complete |
+| Runtime contract asset inclusion | PASS_active_runtime_assets_read_and_hash_verified_in_netlify_function |
+| Private branch rollback / republication | PASS_private_branch_context_rollback_via_git_republication |
+| Deploy removal / offline | PASS_deploy_removal_offline_via_deleted_probe_permalink |
+| Overall technicalEvidence | complete |
+
+Authenticated HTTP evidence covers 13/13 requested routes with HTTP status `200` and `response.ok = true`. Unauthenticated HTTP preserves the earlier 13/13 `401` evidence.
+
+The active Private Branch context was moved from QA probe SHA `68e16cebb1eccd0966e3a6e11aedef030cab87aa` back to Product Correction SHA `004c3fbf6efcc0914cccb1d8ff08b41de7f655a6`. A new Correction Private Branch Deploy succeeded, the top route rendered normally, and the probe endpoint returned 404 in the active Branch context. This is Private Branch context rollback through Git republication, not Production Publish Deploy rollback.
+
+The obsolete QA probe Deploy was deliberately deleted after its purpose was complete. Its unique Permalink rendered before deletion and returned the Netlify generic 404 / site-not-found response after deletion. Git records only the value-free evidence result and must not contain the raw Permalink, Provider URL, Deploy ID, Site ID, account identifier, or team identifier.
+
+### Production preservation
+
+| Field | Exact state |
+| --- | --- |
+| Production branch | codex/stripe-lane-b-b4a-netlify-primary-hosting-direction |
+| Production SHA | 025e28a82c0b773d21ececfd8064af045922079d |
+| Production state | unchanged / locked |
+| Publish-to-Production operations | 0 |
+| Production unlock operations | 0 |
+| Public visibility changes | 0 |
+| Domain/DNS changes | 0 |
+| Environment/secrets operations | 0 |
+
+### Review and acceptance boundary
+
+Technical evidence completeness does not satisfy final review or acceptance:
+
+- ChatGPT final review = `pending`;
+- Human final review = `pending`;
+- B4b acceptance = `pending`;
+- Netlify Hard Gate = `technical_evidence_complete_pending_final_review_acceptance`; and
+- Paid Production Hosting = `provisional`.
+
+All final-review, acceptance, Hard Gate, and Production-readiness states remain pending or provisional.
+
+### Paid Production work remains open
+
+Private Review technical closure does not establish:
+
+- actual assessment processing duration;
+- p50;
+- p95;
+- relevant maximum duration;
+- failure rate;
+- timeout suitability;
+- Production secrets design;
+- logging / observability;
+- operating cost;
+- current commercial plan / terms; or
+- additional Production capacity / availability evidence.
+
+### Exact Final Private Review technical closure mutation manifest
+
+#### UPDATE — exactly 28
+
+1. `README.md`
+2. `docs/CODEX_HANDOFF.md`
+3. `docs/CURRENT_FOCUS.md`
+4. `docs/DECISIONS.md`
+5. `docs/PRODUCT_SPEC.md`
+6. `docs/ROADMAP.md`
+7. `docs/WBS.md`
+8. `docs/legal/LEGAL_DRAFT_PUBLICATION_GATE.md`
+9. `docs/legal/LEGAL_SOURCE_REGISTER.md`
+10. `docs/legal/OPERATOR_DECISION_GUIDE.md`
+11. `docs/legal/WHAT_IS_DECIDED_AND_WHAT_IS_NEXT.md`
+12. `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
+13. `docs/payment/PAYMENT_CHARTER.md`
+14. `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
+15. `docs/payment/PAYMENT_PROVIDER_DECISION_GATE.md`
+16. `docs/payment/PROVIDER_INQUIRY_EVIDENCE_LOG.md`
+17. `docs/payment/PROVIDER_INQUIRY_PLAN.md`
+18. `docs/payment/PROVIDER_INQUIRY_SUBMISSION_CHECKLIST.md`
+19. `docs/payment/STRIPE_ACCOUNT_SITE_PAYPAY_READINESS_CHECKLIST.md`
+20. `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
+21. `docs/payment/STRIPE_FEASIBILITY_EVIDENCE_PREPARATION.md`
+22. `docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
+23. `docs/phase1/IMPLEMENTATION_PLAN.md`
+24. `docs/phase1/IMPLEMENTATION_WBS.md`
+25. `docs/phase1/PAYMENT_FLOW.md`
+26. `docs/payment/STRIPE_LANE_B_B4B_STABLE_REVIEW_URL_DEPLOYMENT.md`
+27. `lib/legal/review-content.ts`
+28. `app/legal/page.tsx`
+
+#### NEW — exactly 1
+
+29. `scripts/verify-stripe-lane-b-b4b-final-private-review-hard-gate-closure.mjs`
+
+| Count | Exact value |
+| --- | --- |
+| update | 28 |
+| new | 1 |
+| delete | 0 |
+| rename | 0 |
+| total | 29 |
+| docs | 26 |
+| code/UI | 2 |
+| verifier | 1 |
+| config/runtime | 0 |
+
+### Closure operation counts
+
+| Operation | Count |
+| --- | --- |
+| Provider operation by closure | 0 |
+| Deployment operation by closure | 0 |
+| Publish-to-Production operation | 0 |
+| Production unlock operation | 0 |
+| Netlify settings mutation | 0 |
+| Public visibility operation | 0 |
+| Domain/DNS operation | 0 |
+| Environment/secrets operation | 0 |
+| Payment implementation/operation | 0 |
+| Production runtime operation | 0 |
+| DB/Supabase operation | 0 |
+| Email/Contact/external AI operation | 0 |
+
+### Closure lineage and stop conditions
+
+Stop without expanding scope if the closure is not the working change on exact Correction SHA `004c3fbf6efcc0914cccb1d8ff08b41de7f655a6` or its exact single direct child; if QA probe SHA `68e16cebb1eccd0966e3a6e11aedef030cab87aa` is an ancestor; if the probe route exists; if any 30th path appears; if the Correction is not exactly the one-path `next.config.ts` mutation from `bab2f3259add84e9e3a6abeacf0cf777b6a617b1`; if the historical B4b verifier changes; if Product/runtime/package/lock behavior changes; if any raw Provider URL/identifier, secret, or Human PII enters Git; or if this closure claims its own deployment, B4b acceptance, Netlify Hard Gate acceptance, Production readiness, public launch, or Paid Production approval.
+
+## Sealed historical Final R1 evidence controller
+
+The complete historical controller below is byte-identical to Product Correction parent state and remains an immutable record of what was known at Final Evidence Sync time. Its historical `CURRENT` and remaining-evidence wording must not be read as the CURRENT technical-closure state above.
+
+<!-- B4B_FINAL_R1_HISTORICAL_CONTROLLER_START -->
+
 # Stripe Lane B B4b Stable Review URL Deployment — Final R1 External QA Evidence Sync
 
 ## 1. CURRENT Final R1 evidence state

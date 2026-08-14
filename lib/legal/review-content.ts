@@ -80,8 +80,9 @@ export const stripeLaneB4aDeploymentReadinessAuthority = {
 
 export const stripeLaneB4bStableReviewDeploymentAuthority = {
   currentStatus:
-    "stripe_lane_b_b4b_final_r1_external_qa_evidence_recorded_pending_human_chatgpt_review_b4b_acceptance",
+    "stripe_lane_b_b4b_private_review_hard_gate_technical_evidence_complete_pending_human_chatgpt_final_review_b4b_acceptance",
   r1Date: "2026-08-14",
+  technicalClosureDate: "2026-08-15",
   predecessorAcceptedB4aStatus:
     stripeLaneB4aDeploymentReadinessAuthority.acceptedStatus,
   predecessorAcceptedB4aSha:
@@ -184,16 +185,67 @@ export const stripeLaneB4bStableReviewDeploymentAuthority = {
     rollbackRepublication: "not_executed_not_proven",
     removalOffline: "not_executed_not_proven",
   },
+  finalPrivateReviewHardGateClosureEvidence: {
+    productCorrection: {
+      gitSha: "004c3fbf6efcc0914cccb1d8ff08b41de7f655a6",
+      parentSha: "bab2f3259add84e9e3a6abeacf0cf777b6a617b1",
+      productMutation: "next.config.ts_only",
+      tracedRuntimeAssetsBefore: "11_of_15",
+      tracedRuntimeAssetsAfter: "15_of_15",
+      probeExcludedFromProduct: true,
+    },
+    qaProbeEvidence: {
+      gitSha: "68e16cebb1eccd0966e3a6e11aedef030cab87aa",
+      parentSha: "004c3fbf6efcc0914cccb1d8ff08b41de7f655a6",
+      role: "temporary_private_qa_evidence_only",
+      productAncestor: false,
+      providerResult:
+        "PASS_active_runtime_assets_read_and_hash_verified_in_netlify_function",
+      stageCount: 6,
+      promptBundleVersion: "prompt-bundle-runtime-v4.0.0",
+      schemaSetVersion: "pipeline-schema-runtime-v3.0.0",
+    },
+    technicalEvidence: {
+      privateProtection: "complete",
+      authenticatedHttp: "PASS_13_of_13_authenticated_http_200",
+      unauthenticatedHttp: "PASS_13_of_13_unauthenticated_http_401",
+      routeRendering: "complete",
+      safetyFailClosed: "complete",
+      previewProductionSeparation: "complete",
+      runtimeContractAssets:
+        "PASS_active_runtime_assets_read_and_hash_verified_in_netlify_function",
+      privateRollbackRepublication:
+        "PASS_private_branch_context_rollback_via_git_republication",
+      removalOffline:
+        "PASS_deploy_removal_offline_via_deleted_probe_permalink",
+      overall: "complete",
+    },
+    productionPreservation: {
+      branch:
+        "codex/stripe-lane-b-b4a-netlify-primary-hosting-direction",
+      gitSha: "025e28a82c0b773d21ececfd8064af045922079d",
+      state: "unchanged_locked",
+      publishToProductionOperations: 0,
+      productionUnlockOperations: 0,
+      publicVisibilityChanges: 0,
+      domainDnsChanges: 0,
+      environmentSecretOperations: 0,
+    },
+  },
   currentReviewState: {
-    latestExternallyVerifiedArtifact:
-      "R1_3f45d40d89660223030bfa1b881e4c04ae394445",
+    latestExternallyVerifiedProductArtifact:
+      "Product_Correction_004c3fbf6efcc0914cccb1d8ff08b41de7f655a6",
+    qaProbeRole: "temporary_evidence_only_excluded_from_product",
+    technicalEvidence: "complete",
     evidenceSyncRole:
-      "records_completed_r1_evidence_without_asserting_additional_provider_deployment_evidence",
+      "records_completed_private_review_technical_evidence_without_asserting_closure_commit_deployment_or_acceptance",
     chatgptFinalReview: "pending",
     humanFinalReview: "pending",
     b4bAcceptance: "pending",
-    netlifyHardGate: "not_passed",
+    netlifyHardGate:
+      "technical_evidence_complete_pending_final_review_acceptance",
     paidProductionHosting: "provisional",
+    closureCommitDeploymentState: "not_claimed",
   },
   legalPublicationApproved: false,
   publicProductLaunchAuthorized: false,

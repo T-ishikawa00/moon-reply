@@ -17,8 +17,11 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、R1のPrivate build・配備・26/26外部QA証拠、未完了のHard Gateと未承認の法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、B4b Private Reviewの技術証拠complete、未完了の最終レビュー・受入、未承認のProduction・法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
+
+const closureEvidence =
+  stripeLaneB4bStableReviewDeploymentAuthority.finalPrivateReviewHardGateClosureEvidence;
 
 const reviewAuthorityFacts = [
   { label: "B2 文書・仕様・法務方針", value: "Human + ChatGPT受入済み（2026-08-13）" },
@@ -35,97 +38,80 @@ const reviewAuthorityFacts = [
     value: "PASS・complete / complete / complete",
   },
   {
-    label: "B4b Final R1 external QA evidence",
-    value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・未受入`,
+    label: "B4b Private Review technical evidence closure",
+    value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・technical evidence complete・未受入`,
   },
   {
-    label: "Original deployed B4a SHA",
-    value:
-      stripeLaneB4bStableReviewDeploymentAuthority.originalDeployedB4aEvidence.gitSha,
+    label: "Product runtime Correction SHA",
+    value: closureEvidence.productCorrection.gitSha,
   },
   {
-    label: "Original B4a technical / overall QA",
-    value: "20/20 PASS・FAIL_truthfulness_blockers_on_deployed_b4a_sha",
+    label: "Product Correction",
+    value: "next.config.ts only・runtime assets 11/15 → 15/15 traced",
   },
   {
-    label: "Corrected Candidate SHA",
-    value:
-      stripeLaneB4bStableReviewDeploymentAuthority.correctedCandidateEvidence.gitSha,
+    label: "QA-only probe evidence",
+    value: `${closureEvidence.qaProbeEvidence.gitSha}・temporary evidence only・Product lineageから除外`,
   },
   {
-    label: "Corrected Candidate build・Private Branch Deploy",
-    value: "success・success",
-  },
-  {
-    label: "Private protection・Production Deploy",
-    value: "maintained・unchanged / locked",
-  },
-  {
-    label: "Corrected Candidate rendered technical re-QA",
-    value: "26/26 PASS",
-  },
-  {
-    label: "Corrected Candidate overall re-QA",
-    value: "FAIL・RequestMemo source blocker 1件",
-  },
-  {
-    label: "Latest externally verified artifact",
-    value: `R1 ${stripeLaneB4bStableReviewDeploymentAuthority.latestExternallyVerifiedArtifact.gitSha}`,
-  },
-  {
-    label: "R1 build・Private Branch Deploy",
-    value: "success・success",
-  },
-  {
-    label: "Private protection・Production Deploy",
-    value:
-      "maintained・B4a 025e28a82c0b773d21ececfd8064af045922079d unchanged / locked",
-  },
-  {
-    label: "R1 rendered technical QA",
-    value: "PASS_26_of_26_on_r1_sha",
-  },
-  {
-    label: "RequestMemo blocker・/request robots・safety-stop",
-    value: "resolved・PASS・PASS_expected_fail_closed",
-  },
-  {
-    label: "R1 truthfulness QA",
-    value: "FAIL_stale_r1_self_evidence_state_only",
+    label: "Authenticated HTTP",
+    value: closureEvidence.technicalEvidence.authenticatedHttp,
   },
   {
     label: "Unauthenticated HTTP",
-    value: "PASS_13_of_13_unauthenticated_http_401",
-  },
-  {
-    label: "Authenticated HTTP numeric status",
-    value:
-      "partial_rendered_pages_confirmed_exact_numeric_http_status_unconfirmed",
-  },
-  {
-    label: "Preview / Production separation",
-    value: "PASS・R1 Branch Deploy / Production B4a / Auto Publishing Locked",
+    value: closureEvidence.technicalEvidence.unauthenticatedHttp,
   },
   {
     label: "Runtime contract asset inclusion",
-    value: "not_fully_proven",
+    value: closureEvidence.technicalEvidence.runtimeContractAssets,
   },
   {
-    label: "Rollback / republication・removal / offline",
-    value: "not_executed_not_proven・not_executed_not_proven",
+    label: "Preview / Production separation",
+    value: "complete・Private Branch context / locked Production B4a",
   },
   {
-    label: "Evidence Sync role",
-    value:
-      "completed R1 evidenceの記録のみ・追加Provider deployment evidenceを主張しない",
+    label: "Private rollback / republication",
+    value: closureEvidence.technicalEvidence.privateRollbackRepublication,
+  },
+  {
+    label: "Deploy removal / offline",
+    value: closureEvidence.technicalEvidence.removalOffline,
+  },
+  {
+    label: "Private protection・route rendering・Safety fail-closed",
+    value: "complete・complete・complete",
+  },
+  {
+    label: "Technical evidence",
+    value: closureEvidence.technicalEvidence.overall,
+  },
+  {
+    label: "Production branch / SHA",
+    value: `${closureEvidence.productionPreservation.branch}・${closureEvidence.productionPreservation.gitSha}`,
+  },
+  {
+    label: "Production state / operations",
+    value: "unchanged / locked・Publish 0・unlock 0・visibility 0・domain/DNS 0・env/secrets 0",
+  },
+  {
+    label: "Historical B4b evidence",
+    value: "B4a・Candidate・R1・Final Evidence Sync snapshots preserved",
+  },
+  {
+    label: "Closure source role",
+    value: "prior Human-supplied evidenceを記録・自身のdeploymentを主張しない",
   },
   {
     label: "Final review / B4b acceptance",
     value: "ChatGPT pending・Human pending・B4b pending",
   },
   {
-    label: "Netlify Hard Gate・Paid Production Hosting",
-    value: "not passed・provisional",
+    label: "Netlify Hard Gate",
+    value: "technical evidence complete・final review / acceptance pending",
+  },
+  {
+    label: "Paid Production Hosting",
+    value: "provisional・performance / secrets / observability / cost / plan evidence未完了",
   },
   {
     label: "今後の外部操作",
@@ -148,19 +134,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、B4a・訂正Candidateの履歴証拠、最新の外部検証済みartifactであるR1のPrivate配備・QA証拠、未完了のHard Gate、法務公開・Stripe・Paymentの未承認状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、B4b Private Reviewの完備した技術証拠、未完了の最終レビュー・受入、Paid Production・法務公開・Stripe・Paymentの未承認状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開前のPrivate審査表示です。B3とB4a Hosting方向は受入済みです。受入済みB4a SHAの20/20技術QAとoverall FAIL、訂正Candidate SHAの26/26技術QAとRequestMemo blocker 1件によるoverall FAILを履歴として維持します。最新の外部検証済みartifactはR1 SHA 3f45d40d89660223030bfa1b881e4c04ae394445で、build・Private Branch Deploy・26/26技術QAは成功し、RequestMemo blockerは解消済みです。R1のtruthfulness QAは、配備後に自己証拠表示だけが古くなったためFAILであり、Hosting・Runtime・Safety・Payment・layoutの失敗ではありません。
+            これは公開前のPrivate審査表示です。Product runtime CorrectionはSHA 004c3fbf6efcc0914cccb1d8ff08b41de7f655a6で、変更はnext.config.tsだけです。QA probe SHA 68e16cebb1eccd0966e3a6e11aedef030cab87aaは一時的なPrivate QA証拠だけに使用され、Product lineageから除外されています。認証済み13/13 HTTP 200、未認証13/13 HTTP 401、runtime assetの実Netlify Function検証、Private Branch context rollback/republication、Deploy removal/offlineを含む必須技術証拠はcompleteです。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
-            <ReviewCallout strong="B4bは未受入で、Netlify Hard Gateも通過していません。">
-              Human管理下で実施済みなのは、限定されたNetlify接続・Private project作成、B4a・訂正Candidate・R1のbuild／Private配備証拠、可視性確認、deploy lock、外部QAです。このEvidence Sync sourceは完了済みR1証拠を記録するだけで、自身について追加のProvider deployment evidenceを主張しません。認証済みHTTP数値status、runtime contract asset全件、rollback／republication、removal／offlineは未証明です。追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
+            <ReviewCallout strong="技術証拠はcompleteですが、B4bとNetlify Hard Gateは未受入です。">
+              ChatGPT final review、Human final review、B4b acceptanceはpendingです。このclosure sourceは先行するHuman管理下のPrivate Review証拠を記録するだけで、自身のdeploymentやacceptanceを主張しません。ProductionはB4a SHAのままunchanged / lockedで、Publish・unlock・visibility・domain/DNS・env/secrets操作は0です。Paid Production Hostingはprovisionalで、性能、timeout、Production secrets、logging／observability、cost、current plan／terms、capacity／availability証拠が別途必要です。追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
             </ReviewCallout>
           </div>
         </section>
