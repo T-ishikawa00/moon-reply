@@ -80,7 +80,7 @@ export const stripeLaneB4aDeploymentReadinessAuthority = {
 
 export const stripeLaneB4bStableReviewDeploymentAuthority = {
   currentStatus:
-    "stripe_lane_b_b4b_private_review_hard_gate_technical_evidence_complete_pending_human_chatgpt_final_review_b4b_acceptance",
+    "stripe_lane_b_b4b_private_review_hard_gate_human_chatgpt_accepted_complete",
   r1Date: "2026-08-14",
   technicalClosureDate: "2026-08-15",
   predecessorAcceptedB4aStatus:
@@ -232,20 +232,42 @@ export const stripeLaneB4bStableReviewDeploymentAuthority = {
       environmentSecretOperations: 0,
     },
   },
+  finalPrivateReviewHardGateAcceptance: {
+    acceptanceDate: "2026-08-15",
+    technicalClosureSha:
+      "ae20d3540a890f0a0b567695fd982b1d5a57d7f9",
+    technicalEvidence: "complete",
+    chatgptFinalReview: "complete",
+    chatgptFinalReviewOutcome: "PASS",
+    humanFinalReview: "complete",
+    humanFinalReviewOutcome: "PASS",
+    b4bAcceptance: "complete",
+    netlifyHardGate:
+      "human_chatgpt_accepted_complete_private_review_scope_only",
+    acceptanceScope: "private_review_technical_scope_only",
+    paidProductionHosting: "provisional",
+    productionReadiness: "not_established",
+  },
   currentReviewState: {
     latestExternallyVerifiedProductArtifact:
       "Product_Correction_004c3fbf6efcc0914cccb1d8ff08b41de7f655a6",
     qaProbeRole: "temporary_evidence_only_excluded_from_product",
     technicalEvidence: "complete",
     evidenceSyncRole:
-      "records_completed_private_review_technical_evidence_without_asserting_closure_commit_deployment_or_acceptance",
-    chatgptFinalReview: "pending",
-    humanFinalReview: "pending",
-    b4bAcceptance: "pending",
+      "records_human_chatgpt_accepted_private_review_technical_scope_without_production_authority",
+    chatgptFinalReview: "complete",
+    chatgptFinalReviewOutcome: "PASS",
+    humanFinalReview: "complete",
+    humanFinalReviewOutcome: "PASS",
+    b4bAcceptance: "complete",
     netlifyHardGate:
-      "technical_evidence_complete_pending_final_review_acceptance",
+      "human_chatgpt_accepted_complete_private_review_scope_only",
     paidProductionHosting: "provisional",
+    productionReadiness: "not_established",
     closureCommitDeploymentState: "not_claimed",
+    currentWork: "Paid Production Readiness Planning",
+    currentWorkState:
+      "planning_only_not_started_no_external_authority_created",
   },
   legalPublicationApproved: false,
   publicProductLaunchAuthorized: false,

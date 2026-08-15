@@ -1,3 +1,33 @@
+# Stripe Lane B B4b — Private Review Hard Gate Acceptance
+
+## CURRENT Acceptance
+
+| Field | Exact CURRENT state |
+| --- | --- |
+| Current status | stripe_lane_b_b4b_private_review_hard_gate_human_chatgpt_accepted_complete |
+| Acceptance date | 2026-08-15 |
+| Technical Evidence Closure SHA | ae20d3540a890f0a0b567695fd982b1d5a57d7f9 |
+| Technical evidence | complete |
+| ChatGPT final review | PASS / complete |
+| Human final review | PASS / complete |
+| B4b acceptance | complete |
+| Netlify Hard Gate | human_chatgpt_accepted_complete_private_review_scope_only |
+| Acceptance scope | private_review_technical_scope_only |
+| Paid Production Hosting | provisional |
+| Production readiness | not established |
+
+This Human + ChatGPT acceptance is limited to the existing B4b Private Review technical evidence closure and the Netlify Private Review Hard Gate. It does not modify or supersede the technical evidence recorded at `ae20d3540a890f0a0b567695fd982b1d5a57d7f9`.
+
+Production remains at B4a SHA `025e28a82c0b773d21ececfd8064af045922079d` as `unchanged / locked`. Legal publication and Public Launch are not approved. Payment is not implemented; Production Payment, Production Runtime, Stripe approval/formal selection, additional Provider operations, public visibility, and domain/DNS remain unauthorized. No Netlify, deployment, Publish-to-Production, Production unlock, environment/secrets, Provider, Contact/email, legal-publication, PR, merge, rebase, cherry-pick, force-push, or `main` operation is part of this Acceptance Sync.
+
+The exact next candidate is **Paid Production Readiness Planning**, with state `planning only / not started / no external authority created`. This Acceptance Sync does not begin that planning or create external authority.
+
+## Historical predecessor — Technical Evidence Closure
+
+The complete controller below is byte-identical to Technical Evidence Closure SHA `ae20d3540a890f0a0b567695fd982b1d5a57d7f9`. Its pending final-review and acceptance wording is a historical snapshot and does not override the CURRENT Acceptance above.
+
+<!-- B4B_TECHNICAL_CLOSURE_HISTORICAL_CONTROLLER_START -->
+
 # Stripe Lane B B4b — Final Private Review Hard Gate Technical Evidence Closure
 
 ## CURRENT technical evidence closure

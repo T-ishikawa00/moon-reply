@@ -17,11 +17,13 @@ import {
 export const metadata: Metadata = {
   title: "法務・Safety 文書索引 | 月の返事",
   description:
-    "月の返事の受入済みB3レビュー実装・B4a Hosting方向、B4b Private Reviewの技術証拠complete、未完了の最終レビュー・受入、未承認のProduction・法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
+    "月の返事の受入済みB3レビュー実装・B4a Hosting方向・B4b Private Review technical scopeと、未承認のProduction・法務公開・Provider・Payment状態を分けて確認する審査用索引です。",
 };
 
 const closureEvidence =
   stripeLaneB4bStableReviewDeploymentAuthority.finalPrivateReviewHardGateClosureEvidence;
+const acceptance =
+  stripeLaneB4bStableReviewDeploymentAuthority.finalPrivateReviewHardGateAcceptance;
 
 const reviewAuthorityFacts = [
   { label: "B2 文書・仕様・法務方針", value: "Human + ChatGPT受入済み（2026-08-13）" },
@@ -39,7 +41,11 @@ const reviewAuthorityFacts = [
   },
   {
     label: "B4b Private Review technical evidence closure",
-    value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・technical evidence complete・未受入`,
+    value: `${stripeLaneB4bStableReviewDeploymentAuthority.currentStatus}・technical evidence complete・Human + ChatGPT受入済み`,
+  },
+  {
+    label: "Technical Evidence Closure SHA",
+    value: acceptance.technicalClosureSha,
   },
   {
     label: "Product runtime Correction SHA",
@@ -98,26 +104,40 @@ const reviewAuthorityFacts = [
     value: "B4a・Candidate・R1・Final Evidence Sync snapshots preserved",
   },
   {
-    label: "Closure source role",
-    value: "prior Human-supplied evidenceを記録・自身のdeploymentを主張しない",
+    label: "Technical closure source role",
+    value: "prior Human-supplied evidenceを記録・historical predecessorとして不変",
   },
   {
-    label: "Final review / B4b acceptance",
-    value: "ChatGPT pending・Human pending・B4b pending",
+    label: "ChatGPT final review",
+    value: `${acceptance.chatgptFinalReviewOutcome} / ${acceptance.chatgptFinalReview}`,
+  },
+  {
+    label: "Human final review",
+    value: `${acceptance.humanFinalReviewOutcome} / ${acceptance.humanFinalReview}`,
+  },
+  {
+    label: "B4b acceptance",
+    value: acceptance.b4bAcceptance,
   },
   {
     label: "Netlify Hard Gate",
-    value: "technical evidence complete・final review / acceptance pending",
+    value: `Private Review scopeでaccepted complete（${acceptance.netlifyHardGate}）`,
   },
   {
     label: "Paid Production Hosting",
-    value: "provisional・performance / secrets / observability / cost / plan evidence未完了",
+    value: `${acceptance.paidProductionHosting}・performance / secrets / observability / cost / plan evidence未完了`,
+  },
+  {
+    label: "Production readiness",
+    value: "not established",
   },
   {
     label: "今後の外部操作",
     value: "追加Provider操作・public visibility・domain/DNSは未承認",
   },
+  { label: "Production Runtime", value: "未承認・未有効化" },
   { label: "法務公開", value: "未承認" },
+  { label: "Public Launch", value: "未承認" },
   { label: "Stripe feasibility・承認・正式選定", value: "未確立・未承認・未選定" },
   { label: "Payment実装", value: "未実装" },
   { label: "Production Payment", value: "未承認" },
@@ -134,19 +154,19 @@ export default function LegalIndexPage() {
       <LegalPageHeader
         eyebrow="LEGAL DOCUMENT INDEX"
         title="法務・Safety 文書索引"
-        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向、B4b Private Reviewの完備した技術証拠、未完了の最終レビュー・受入、Paid Production・法務公開・Stripe・Paymentの未承認状態を混同せず確認します。"
+        description="受入済みのB2方針・B3レビュー実装・B4a Hosting方向・B4b Private Review technical scopeと、Paid Production・法務公開・Stripe・Paymentの未承認状態を混同せず確認します。"
       />
 
       <div className="legal-document-body">
         <section className="legal-content-section legal-content-section--night" aria-labelledby="legal-authority-title">
           <h2 id="legal-authority-title">現在のレビュー状態</h2>
           <p className="legal-content-section__intro">
-            これは公開前のPrivate審査表示です。Product runtime CorrectionはSHA 004c3fbf6efcc0914cccb1d8ff08b41de7f655a6で、変更はnext.config.tsだけです。QA probe SHA 68e16cebb1eccd0966e3a6e11aedef030cab87aaは一時的なPrivate QA証拠だけに使用され、Product lineageから除外されています。認証済み13/13 HTTP 200、未認証13/13 HTTP 401、runtime assetの実Netlify Function検証、Private Branch context rollback/republication、Deploy removal/offlineを含む必須技術証拠はcompleteです。
+            これは公開前のPrivate審査表示です。Technical Evidence Closure SHA ae20d3540a890f0a0b567695fd982b1d5a57d7f9に記録されたB4b Private Review technical evidenceはcompleteです。ChatGPT final reviewとHuman final reviewはPASS / complete、B4b acceptanceはcomplete、Netlify Hard GateはPrivate Review scopeでaccepted completeです。Product runtime CorrectionはSHA 004c3fbf6efcc0914cccb1d8ff08b41de7f655a6で、変更はnext.config.tsだけです。QA probe SHA 68e16cebb1eccd0966e3a6e11aedef030cab87aaは一時的なPrivate QA証拠だけに使用され、Product lineageから除外されています。
           </p>
           <div className="legal-content-section__body">
             <FactRows facts={reviewAuthorityFacts} />
-            <ReviewCallout strong="技術証拠はcompleteですが、B4bとNetlify Hard Gateは未受入です。">
-              ChatGPT final review、Human final review、B4b acceptanceはpendingです。このclosure sourceは先行するHuman管理下のPrivate Review証拠を記録するだけで、自身のdeploymentやacceptanceを主張しません。ProductionはB4a SHAのままunchanged / lockedで、Publish・unlock・visibility・domain/DNS・env/secrets操作は0です。Paid Production Hostingはprovisionalで、性能、timeout、Production secrets、logging／observability、cost、current plan／terms、capacity／availability証拠が別途必要です。追加Provider操作、public visibility、domain購入、DNS変更、法務公開、Stripe承認・提出・有効化、Payment実装、Production Payment、Production Runtime、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。
+            <ReviewCallout strong="B4b Private Review technical evidence、ChatGPT / Human final review、B4b acceptanceはcompleteです。">
+              この受入はPrivate Review technical scopeだけです。ProductionはB4a SHAのまま unchanged / lockedで、Paid Production Hostingはprovisional、Production readinessはnot establishedです。Production Runtime未承認、Production Payment未承認、Stripe未承認・未正式選定、public visibility未承認、domain/DNS未承認、法務公開未承認、Public Launch未承認です。Paymentは未実装です。追加Provider操作、Publish・unlock・env/secrets操作、返金実行、メール送信、問い合わせ受付、販売事業者情報の開示運用には新たな権限が必要です。次candidateのPaid Production Readiness Planningはplanning only / not started / no external authority createdであり、まだ開始していません。
             </ReviewCallout>
           </div>
         </section>
