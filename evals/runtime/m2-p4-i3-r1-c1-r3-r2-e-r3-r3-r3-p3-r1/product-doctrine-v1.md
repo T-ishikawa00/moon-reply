@@ -2,9 +2,9 @@
 
 Task: `M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1`
 
-Status: `reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review`
+Status: `reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review`
 
-This is a planning-only Product Doctrine. It records the Product experience fixed by Human Visual Review and does not authorize code, UI, Prompt, Runtime, Provider, database, or activation work.
+This is a planning-only Product Doctrine with the Q0-A R1 acceptance-boundary correction. The Product philosophy, Projection design, and R2-A/R2-B/R2-C Package structure are unchanged. It does not authorize code, UI, Prompt, Runtime, Provider, database, or activation work.
 
 ## Non-negotiable Hard Gate
 
@@ -92,7 +92,21 @@ Density is determined by semantic necessity, never by character count. A visible
 
 Repeated function is omitted or moved to secondary detail. Reassuring content must not all be hidden behind disclosure. Every ready Product assessment keeps at least one personalized emotional or reflective section visible. `organize_emotions` is not the only route to reassurance. `requestedTopics` changes emphasis and optional modules; it does not make the baseline assessment feel incomplete.
 
-Normal output targets approximately six to nine semantically distinct visible sections. Simple consultations may be shorter but must still feel like an assessment. Emotional consultations may be longer because acknowledgment and uncertainty separation are Product value, not padding. No fixed word-count ceiling applies, and no primary meaning may be duplicated.
+Normal output uses approximately six to nine semantically distinct visible sections as guidance only. This range is neither a Hard Minimum nor a Hard Maximum; semantic necessity controls density. A simple consultation may render fewer than six visible sections when all necessary Product functions are fulfilled. It remains proportionally compressed to judgment, reason, draft when applicable, reassessment, and any other semantically necessary Product function. No section may be created only to satisfy the count, padding is prohibited, and no primary meaning may be duplicated. Complex or emotional consultations may legitimately be longer. Fixed word counts and fixed section counts are prohibited.
+
+## R2-C completion boundary
+
+R2-C requires Human Visual review at desktop 1440, mobile 399, mobile 320, keyboard, browser zoom 200%, copy success, copy failure, details behavior, and reduced-motion behavior. It also requires Product Owner review of `simple`, `emotional`, `null_optional`, `polite_draft`, and `persona_preserved`. R2-C must not be marked complete without observed reduced-motion behavior.
+
+R2-A, R2-B, and R2-C own only the Reassuring Assessment Experience. A future R2-C Human Product PASS establishes only:
+
+`experienceProductJudgment = plausibly_worth_jpy980`
+
+The separate overall state remains:
+
+`jpy980RuntimeReadiness = not_established / not_ready_until_global_Q0_completion`
+
+These states are not equivalent. That Experience PASS does not establish Active Runtime activation, Production Runtime, Provider quality, or overall JPY980 Runtime readiness. Global Q0 completion separately requires acceptance of at least PB-05 factual precision and anxiety-safe writing, evaluator and semantic disposition, pre-payment Safety UX, and consolidated regression/Product Owner review.
 
 ## Acceptance boundary
 

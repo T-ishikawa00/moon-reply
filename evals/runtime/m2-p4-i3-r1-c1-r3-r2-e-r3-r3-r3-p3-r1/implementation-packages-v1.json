@@ -13,6 +13,7 @@
     "accepted_predecessor_contracts_are_consumed_read_only": true,
     "runtime_activation_is_separate": true
   },
+  "r2_owned_scope": "reassuring_assessment_experience_only",
   "packages": [
     {
       "package_id": "R2-A",
@@ -71,8 +72,9 @@
         "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md"
       ],
       "tests": [
-        "approximately six to nine distinct visible sections for normal cases",
-        "simple case feels complete without padding",
+        "approximately six to nine distinct visible sections is guidance only and not a hard minimum or maximum",
+        "simple case may render fewer than six sections when semantically complete",
+        "no section is created only to satisfy section count and padding is prohibited",
         "emotional and null-optional cases retain personalized visible reassurance",
         "hero answer is not visually disproportionate",
         "draft stays immediately discoverable and exact-copyable",
@@ -95,6 +97,7 @@
         "review 200 percent zoom",
         "review copy success and failure",
         "review details behavior",
+        "review reduced-motion behavior",
         "obtain Product Owner review of simple, emotional, null-optional, polite-draft, and persona-preserved cases"
       ],
       "proposed_branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product",
@@ -106,6 +109,17 @@
         "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product-review.mjs",
         "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_C_REVIEW.md"
       ],
+      "required_review_checks": [
+        "desktop_1440",
+        "mobile_399",
+        "mobile_320",
+        "keyboard",
+        "browser_zoom_200_percent",
+        "copy_success",
+        "copy_failure",
+        "details_behavior",
+        "reduced_motion"
+      ],
       "required_product_cases": [
         "simple",
         "emotional",
@@ -113,6 +127,8 @@
         "polite_draft",
         "persona_preserved"
       ],
+      "all_required_review_checks_must_pass_for_completion": true,
+      "completion_without_reduced_motion_allowed": false,
       "provider_calls_required": false,
       "human_visual_review_required": true,
       "implementation_authorized": false
@@ -127,11 +143,36 @@
     "ownership_transferred_to_r2": false,
     "proposed_path_overlap_with_r2": 0
   },
+  "global_q0_completion_boundary": {
+    "r2_a_through_r2_c_owner": "reassuring_assessment_experience_only",
+    "r2_c_human_product_pass": {
+      "experienceProductJudgment": "plausibly_worth_jpy980",
+      "jpy980RuntimeReadiness": "not_established",
+      "jpy980RuntimeReadinessGate": "not_ready_until_global_Q0_completion",
+      "states_are_equivalent": false
+    },
+    "r2_c_human_product_pass_does_not_establish": [
+      "active_runtime_activation",
+      "production_runtime",
+      "provider_quality",
+      "overall_jpy980_runtime_readiness"
+    ],
+    "remaining_v12_product_safety_quality_work_requiring_separate_acceptance": [
+      "pb_05_factual_precision_and_anxiety_safe_writing",
+      "evaluator_and_semantic_disposition",
+      "pre_payment_safety_ux",
+      "consolidated_regression_and_product_owner_review"
+    ],
+    "global_q0_completion_established": false
+  },
   "global_acceptance_boundary": {
     "r2_a_through_r2_c_require_provider_execution": false,
     "implementation_authorized": false,
     "provider_rerun_authorized": false,
     "active_runtime_activation_authorized": false,
+    "production_runtime_established": false,
+    "provider_quality_established": false,
+    "overall_jpy980_runtime_readiness_established": false,
     "r4_authorized": false,
     "c2_authorized": false,
     "main_integration_authorized": false

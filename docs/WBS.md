@@ -1,9 +1,10 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
-## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 Reassuring Assessment Experience Doctrine
+## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 Q0-A Reassuring Assessment Experience Doctrine R1 Correction
 
-- [x] Exact baseline `fdbdf808f135655084de32aec2e57473c1beaf31` and planning scope `12/12` fixed
+- [x] Original Product baseline `fdbdf808f135655084de32aec2e57473c1beaf31` and doctrine scope `12/12` preserved
+- [x] Correction source `a5b2defa1bb765d46076a28ca9827d494fcbe433`; exact update scope `10/10`; NEW / DELETE / RENAME `0 / 0 / 0`
 - [x] Package A/R1 accepted implementation and Package B exact `10/10` preserved
 - [x] Provider marker preserved, authorization consumed, `rerun_authorized=false`, Active Runtime v4 and main unchanged
 - [x] Product Doctrine and Hard Gate hierarchy fixed
@@ -14,10 +15,13 @@
 - [x] Versioned `CustomerAssessmentExperienceProjectionV2` deterministic source mapping planned without widening v1
 - [x] Packages R2-A through R2-C defined with pairwise-disjoint proposed paths
 - [x] Existing Package C retained as the separate owner of PB-05 factual and anxiety-safe writing quality
-- [ ] Human / ChatGPT review of the Reassuring Assessment Experience Doctrine
+- [x] R2-C reduced-motion behavior made mandatory alongside desktop/mobile/keyboard/zoom/copy/details checks and five Product Owner cases
+- [x] Approximately 6-9 sections fixed as guidance only; no hard minimum/maximum, count padding, duplicated primary meaning, fixed word count, or fixed section count
+- [x] Experience Product judgment separated from overall JPY980 Runtime readiness and remaining Global Q0 Product/Safety acceptance
+- [ ] Human / ChatGPT review of the Reassuring Assessment Experience Doctrine R1 Correction
 - [ ] Any implementation, Provider rerun, Runtime activation, R4, C2, PR, or main integration — unauthorized
 
-Status is reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review. implementation_authorized=false. Provider / DB / Supabase are `0 / 0 / 0`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`, Active Runtime remains v4, and R4/C2 remain unauthorized. next_action=human_chatgpt_review_of_reassuring_assessment_experience_doctrine.
+Status is reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review. R2-C Human Product PASS may establish experienceProductJudgment=plausibly_worth_jpy980 only; jpy980RuntimeReadiness remains not_established / not_ready_until_global_Q0_completion. implementation_authorized=false. Provider / DB / Supabase are `0 / 0 / 0`; Provider rerun and Runtime activation remain unauthorized; main remains `61e33a10e195fad17e253a6b9719217e1992f273`, Active Runtime remains v4, and R4/C2 remain unauthorized. next_action=human_chatgpt_review_of_reassuring_assessment_experience_doctrine_r1_correction.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->

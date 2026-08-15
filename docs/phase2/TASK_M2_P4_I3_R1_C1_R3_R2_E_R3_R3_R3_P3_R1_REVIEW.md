@@ -2,15 +2,17 @@
 
 ## Status
 
-`reassuring_assessment_experience_doctrine_ready_pending_human_chatgpt_review`
+`reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review`
 
-This planning-only Task fixes the Product Doctrine established by Human Visual Review, audits the exact current `CustomerAssessmentProjectionV1`, and decomposes the next implementation without authorizing it.
+This planning-only Q0-A R1 Correction preserves the existing Product Doctrine, Projection design, and R2-A/R2-B/R2-C Package structure while correcting three acceptance-boundary alignments. It does not authorize implementation.
 
-- Source branch: `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note`
-- Baseline: `fdbdf808f135655084de32aec2e57473c1beaf31`
+- Doctrine source branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience`
+- Correction baseline: `a5b2defa1bb765d46076a28ca9827d494fcbe433`
+- Correction branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-reassurance-doctrine-correction`
+- Original Product baseline: `fdbdf808f135655084de32aec2e57473c1beaf31`
 - Parent: `8700ded1454058f72d33f2eb4d1ae6a05b6e008c`
 - main / origin/main: `61e33a10e195fad17e253a6b9719217e1992f273`
-- Planning scope: exact `12/12`
+- Correction scope: exact `10/10`; NEW / DELETE / RENAME = `0 / 0 / 0`
 
 Package A/R1 is unchanged and accepted. Package B is unchanged at exact `10/10`. The Provider marker is unchanged, authorization remains consumed, `rerun_authorized=false`, and Active Runtime remains v4.
 
@@ -83,7 +85,7 @@ H. `見直す条件`, with observable triggers and customer-readable future dire
 
 I. `月の返事から最後に`, one or two consultation-specific closing paragraphs providing reassurance without guarantee.
 
-Not every case renders every section. Normal cases target approximately six to nine semantically distinct visible sections. Simple cases may be shorter but must remain assessments; emotional cases may be longer because acknowledgment and uncertainty separation are Product value.
+Not every case renders every section. Normal cases use approximately six to nine semantically distinct visible sections as guidance only, never as a Hard Minimum or Hard Maximum. Semantic necessity controls density. A simple consultation may render fewer than six visible sections when every necessary Product function is fulfilled; no section may be created only to satisfy the count, no padding is permitted, and no primary meaning may be duplicated. The existing simple-case requirement is preserved: compress proportionally to judgment, reason, draft when applicable, reassessment, and other semantically necessary Product functions. Complex or emotional cases may legitimately be longer. Fixed word counts and fixed section counts are prohibited.
 
 ## Current Projection gaps
 
@@ -131,13 +133,37 @@ Retain the accepted visual shell, reduce hero dominance, restore meaningful asse
 
 ### Package R2-C — Human Visual and Product review
 
-Review desktop 1440, mobile 399 and 320, keyboard, 200% zoom, copy success/failure, details behavior, and Product Owner cases covering simple, emotional, null-optional, polite-draft, and persona-preserved output.
+Required Human Visual review checks are:
+
+- desktop 1440
+- mobile 399
+- mobile 320
+- keyboard
+- browser zoom 200%
+- copy success
+- copy failure
+- details behavior
+- reduced-motion behavior
+
+Required Product Owner cases are `simple`, `emotional`, `null_optional`, `polite_draft`, and `persona_preserved`.
+
+R2-C must not be marked complete without observed reduced-motion behavior.
 
 The three proposed path manifests are pairwise disjoint. Existing Package C remains separate and continues to own PB-05 factual and anxiety-safe writing quality.
 
 ## Acceptance principles
 
-The successor is accepted only when the customer feels personally understood; reassurance contains no unsupported certainty; simple cases no longer feel empty or underpriced; emotional cases do not become generic therapy copy; the draft stays discoverable; every section has a distinct function; repetition is materially below the old full report; Moon Reply atmosphere remains; and the Product Owner judges the experience plausibly worth JPY980.
+The successor Experience is accepted only when the customer feels personally understood; reassurance contains no unsupported certainty; simple cases no longer feel empty or underpriced; emotional cases do not become generic therapy copy; the draft stays discoverable; every section has a distinct function; repetition is materially below the old full report; Moon Reply atmosphere remains; and the Product Owner judges the experience plausibly worth JPY980.
+
+At R2-C Human Product PASS, the states remain explicitly separate:
+
+`experienceProductJudgment = plausibly_worth_jpy980`
+
+is not equal to:
+
+`jpy980RuntimeReadiness = not_established / not_ready_until_global_Q0_completion`
+
+R2-A, R2-B, and R2-C own only the Reassuring Assessment Experience. R2-C Human Product PASS does not establish Active Runtime activation, Production Runtime, Provider quality, or overall JPY980 Runtime readiness. Global Q0 completion separately requires acceptance of at least the remaining v12 Product/Safety quality work: PB-05 factual precision and anxiety-safe writing, evaluator and semantic disposition, pre-payment Safety UX, and consolidated regression/Product Owner review.
 
 Runtime activation remains separately unauthorized.
 
@@ -149,4 +175,4 @@ No CustomerAssessmentNote, CSS, Projection, Delivery, Runtime, Prompt, Catalog, 
 
 Provider / DB / Supabase: `0 / 0 / 0`.
 
-Next action: `human_chatgpt_review_of_reassuring_assessment_experience_doctrine`.
+Next action: `human_chatgpt_review_of_reassuring_assessment_experience_doctrine_r1_correction`.
