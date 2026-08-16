@@ -16,9 +16,12 @@
       "owner_domain": "pre_product_eligibility",
       "responsibilities": [
         "reuse needs_more_information",
-        "select one consultation-specific highest-information-gain clarification",
+        "enforce a one-total-question clarification budget per consultation attempt",
+        "select one consultation-specific highest-information-gain clarification only when one answer can establish or reject eligibility",
+        "route budget exhaustion to terminal not_full_product_candidate",
+        "prohibit an automatic second clarification and any clarification loop",
         "prevent Payment-capable state before Product eligibility",
-        "prevent Report and generated draft while input is insufficient",
+        "prevent charge, Report, and generated draft before full eligibility",
         "route non-material cases out of the paid Product path"
       ],
       "excludes": [
@@ -38,7 +41,10 @@
         "evidence significance",
         "recommendation reasoning",
         "relevant alternative tradeoff",
-        "case-specific closure",
+        "mandatory baseline emotional_containment",
+        "consultation-specific emotional closure",
+        "no generic reassurance",
+        "no conclusion repetition disguised as reassurance or closure",
         "preserve exact requested and permitted drafts"
       ],
       "existing_report_fields_preferred": true,
@@ -58,8 +64,11 @@
         "unsupported causality remains blocking",
         "unsupported chronology remains blocking",
         "explanation of the application decision is allowed",
-        "semantic repetition controls",
-        "new-proposition evidence",
+        "analytical blocks require a new grounded proposition",
+        "emotional and ritual blocks require a distinct non-redundant function without requiring a new factual proposition",
+        "logically complete but emotionally cold Report must fail",
+        "generic reassurance mutant must fail",
+        "repeated conclusion disguised as closing must fail",
         "no false certainty"
       ],
       "excludes": [
@@ -152,7 +161,14 @@
       "alternative_tradeoff_applicable",
       "alternative_tradeoff_not_applicable",
       "unsupported_inner_state_mutant",
-      "repeated_meaning_mutant"
+      "repeated_meaning_mutant",
+      "one_clarification_answer_becomes_ready",
+      "one_clarification_answer_still_insufficient_routes_out",
+      "automatic_second_clarification_prohibited",
+      "logically_complete_but_emotionally_cold_mutant",
+      "consultation_specific_non_propositional_closing_positive",
+      "generic_reassurance_closing_mutant",
+      "repeated_decision_as_closing_mutant"
     ]
   },
   "future_product_re_review_acceptance": [

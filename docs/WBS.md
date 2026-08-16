@@ -1,25 +1,28 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->
-## R2-C R1 JPY980 Value Architecture / Semantic Depth Planning
+## R2-C R1 JPY980 Value Architecture Boundary Correction
 
-- [x] Exact parent d28fdf37f3e80f28a927a9f9dcc793cdd26b92e2, R2-B snapshot fa956b9b1941c73f8e1767c64ab24f07fadd36c6, R2-A acceptance 1229627588e3c6ccd41ea7ea32751b8b8ac79c6e, and main/origin-main 61e33a10e195fad17e253a6b9719217e1992f273 fixed
+- [x] Exact correction parent and original planning commit 885d46db8bfbc2add4828b7205af9a9e3d6c009c, original planning parent d28fdf37f3e80f28a927a9f9dcc793cdd26b92e2, R2-B snapshot fa956b9b1941c73f8e1767c64ab24f07fadd36c6, R2-A acceptance 1229627588e3c6ccd41ea7ea32751b8b8ac79c6e, and main/origin-main 61e33a10e195fad17e253a6b9719217e1992f273 fixed
 - [x] Current accepted directions recorded: Visual, Customer note architecture, draft utility, and overall content direction
 - [x] Current remediation findings recorded: Semantic depth and Input sufficiency handling
 - [x] R2-C remediation_required, experienceProductJudgment=pending_remediation, jpy980RuntimeReadiness=not_established, and globalQ0Completion=false preserved
 - [x] Formal Human Visual unperformed items preserved as PENDING; no R2-C or Human Visual PASS declared
 - [x] Safety-first Input Sufficiency Gate and four planning states defined
-- [x] Existing needs_more_information reuse, exactly one targeted clarification, no pre-eligibility charge, and no insufficient-input Report/draft fixed
-- [x] Eight Semantic Depth value functions, mandatory Ready threshold, grounding boundary, and non-repetition contract defined
+- [x] Existing needs_more_information reuse with one-total-question clarification budget, no automatic second question or loop, no pre-eligibility charge, and no insufficient-input Report/draft fixed
+- [x] Budget exhaustion and non-material consultations terminate at not_full_product_candidate; Safety remains higher priority
+- [x] emotional_containment promoted to mandatory baseline Ready function; additional emotional depth remains conditional
+- [x] Analytical new-proposition and emotional/ritual distinct-function non-repetition contracts separated
 - [x] simple, nullable, ordinary waiting, polite draft, and persona-preserved case routes defined
-- [x] Pairwise-separated future Packages V1-A through V1-D and required offline fixtures defined
+- [x] Pairwise-separated future Packages V1-A through V1-D corrected and seven boundary fixtures added without removing existing fixtures
 - [x] Future Product re-review acceptance and maximum plausibly_worth_jpy980 meaning defined
 - [x] Optional post-delivery follow-up question recorded as decision_pending and unauthorized
-- [x] Exact planning scope fixed at 12/12: 4 UPDATE + 8 NEW; DELETE / RENAME 0
-- [ ] Human / ChatGPT review of this planning package
+- [x] Exact correction scope fixed at 10/10: 9 UPDATE + 1 NEW; DELETE / RENAME 0
+- [x] Original planning verifier remains immutable and must pass 18/18 at 885d46db8bfbc2add4828b7205af9a9e3d6c009c
+- [ ] Human / ChatGPT review of this boundary correction
 - [ ] Product, Prompt, evaluator, UI, Runtime, Provider, DB/Supabase, Payment, or future package implementation — unauthorized
 
-Status is r2_c_remediation_required_jpy980_value_depth_plan_ready_pending_human_chatgpt_review. This is planning-only and not an R2-C PASS. Provider / DB / Supabase are 0 / 0 / 0; Product snapshot and main remain unchanged. next_action=human_chatgpt_review_of_jpy980_value_depth_plan.
+Status is r2_c_remediation_required_jpy980_value_depth_r1_correction_ready_pending_human_chatgpt_review. This is planning-only and not an R2-C PASS. Formal Human Visual remains PENDING/incomplete; every future package is unauthorized. Provider / DB / Supabase are 0 / 0 / 0; Product snapshot and main remain unchanged. next_action=human_chatgpt_review_of_jpy980_value_depth_r1_correction.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->

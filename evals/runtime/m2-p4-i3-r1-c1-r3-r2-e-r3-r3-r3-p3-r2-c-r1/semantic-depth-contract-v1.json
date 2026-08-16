@@ -42,14 +42,26 @@
     {
       "id": "H",
       "name": "emotional_containment",
-      "contract": "Provide consultation-specific acknowledgment and closure without generic therapy filler or false certainty."
+      "contract": "Provide consultation-specific acknowledgment of the user's actual fear or tension and a calm stopping point for the present moment.",
+      "baseline_contract": [
+        "consultation_specific",
+        "grounded_in_supplied_concern",
+        "acknowledges_users_actual_fear_or_tension",
+        "gives_a_calm_stopping_point_for_the_present_moment",
+        "does_not_promise_other_persons_feeling_reply_reconciliation_or_outcome",
+        "no_generic_therapy_filler",
+        "no_unsupported_certainty",
+        "no_invented_inner_state",
+        "no_repeated_conclusion_disguised_as_reassurance"
+      ]
     }
   ],
   "mandatory_ready_functions": [
     "consultation_core",
     "evidence_and_significance",
     "decision_logic",
-    "action_artifact"
+    "action_artifact",
+    "emotional_containment"
   ],
   "mandatory_boundary_rule": {
     "at_least_one_required": [
@@ -61,9 +73,20 @@
     "alternative_tradeoff",
     "draft",
     "message_impact",
-    "emotional_containment_depth"
+    "additional_emotional_containment_depth"
   ],
-  "grounding_failure_route": "needs_more_information",
+  "grounding_failure_routing": {
+    "clarification_budget_unused_and_one_answer_can_determine_materiality": "needs_one_clarifying_answer",
+    "clarification_budget_exhausted_and_mandatory_functions_not_groundable": "not_full_product_candidate",
+    "consultation_is_non_material": "not_full_product_candidate",
+    "safety_has_priority": "safety_blocked",
+    "mandatory_functions_are_groundable": "full_paid_ready_candidate",
+    "infinite_needs_more_information_loop_allowed": false
+  },
+  "full_paid_ready_guards": {
+    "logically_complete_but_emotionally_cold_report_allowed": false,
+    "baseline_emotional_containment_required": true
+  },
   "grounding_boundary": {
     "purpose": "Deepening explains Moon Reply's recommendation rather than inventing the other person's cause or inner state.",
     "prohibited_examples": [
@@ -89,16 +112,35 @@
     ]
   },
   "non_repetition_contract": {
-    "each_visible_primary_paragraph_or_list_group_owns_a_distinct_product_function": true,
-    "each_primary_block_adds_at_least_one_new_proposition": true,
-    "primary_locations": [
-      "openingLetter",
-      "primaryReason",
-      "situationReading",
-      "actionRationales",
-      "closingLines"
-    ],
-    "same_meaning_across_primary_locations_prohibited": true,
+    "analytical_or_instructional_primary_blocks": {
+      "examples": [
+        "evidence_and_significance",
+        "decision_logic",
+        "alternative_tradeoff",
+        "action_artifact",
+        "uncertainty_boundary",
+        "reassessment_trigger"
+      ],
+      "each_block_adds_at_least_one_new_grounded_proposition": true,
+      "each_block_owns_a_distinct_product_function": true,
+      "prior_conclusion_rephrasing_prohibited": true
+    },
+    "emotional_or_ritual_primary_blocks": {
+      "examples": [
+        "openingLetter",
+        "emotional_containment",
+        "closingLines"
+      ],
+      "new_factual_proposition_required": false,
+      "distinct_consultation_specific_emotional_or_ritual_function_required": true,
+      "selected_decision_repetition_prohibited": true,
+      "action_instruction_repetition_prohibited": true,
+      "unsupported_facts_prohibited": true,
+      "generic_filler_prohibited": true,
+      "false_certainty_prohibited": true
+    },
+    "good_emotional_example": "今夜の沈黙だけで、この関係の答えまで決める必要はありません。",
+    "bad_repetition_example": "今は待ちましょう。今日は待つだけで大丈夫です。",
     "deterministic_checks": [
       "exact_normalized_duplicate",
       "source_field_reused_in_multiple_primary_locations",

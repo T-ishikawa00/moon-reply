@@ -34,13 +34,39 @@
     "bounded_interpretation",
     "selected_current_direction",
     "usable_action_or_permitted_draft",
-    "honest_uncertainty_or_observable_reassessment"
+    "honest_uncertainty_or_observable_reassessment",
+    "consultation_specific_emotional_containment"
   ],
   "primary_block_contract": {
-    "scope": "every_visible_primary_paragraph_or_list_group",
-    "new_proposition_minimum": 1,
-    "new_proposition_must_not_have_been_delivered_by_a_prior_primary_block": true,
-    "distinct_product_function_owner_required": true,
+    "analytical_or_instructional_primary_blocks": {
+      "examples": [
+        "evidence_and_significance",
+        "decision_logic",
+        "alternative_tradeoff",
+        "action_artifact",
+        "uncertainty_boundary",
+        "reassessment_trigger"
+      ],
+      "new_grounded_proposition_minimum_per_block": 1,
+      "distinct_product_function_owner_required": true,
+      "prior_conclusion_rephrasing_prohibited": true
+    },
+    "emotional_or_ritual_primary_blocks": {
+      "examples": [
+        "openingLetter",
+        "emotional_containment",
+        "closingLines"
+      ],
+      "new_factual_proposition_required": false,
+      "distinct_consultation_specific_emotional_or_ritual_function_required": true,
+      "selected_decision_repetition_prohibited": true,
+      "action_instruction_repetition_prohibited": true,
+      "unsupported_facts_prohibited": true,
+      "generic_filler_prohibited": true,
+      "false_certainty_prohibited": true
+    },
+    "good_emotional_example": "今夜の沈黙だけで、この関係の答えまで決める必要はありません。",
+    "bad_repetition_example": "今は待ちましょう。今日は待つだけで大丈夫です。",
     "internal_proposition_ids_must_not_be_customer_visible": true
   },
   "full_product_threshold": {
@@ -48,13 +74,21 @@
       "consultation_core",
       "evidence_and_significance",
       "decision_logic",
-      "action_artifact"
+      "action_artifact",
+      "emotional_containment"
     ],
     "at_least_one_boundary_function": [
       "uncertainty_boundary",
       "reassessment_trigger"
     ],
-    "failure_route_when_not_groundable": "needs_more_information",
+    "grounding_failure_routing": {
+      "clarification_budget_unused_and_one_answer_can_determine_materiality": "needs_one_clarifying_answer",
+      "clarification_budget_exhausted_and_mandatory_functions_not_groundable": "not_full_product_candidate",
+      "consultation_is_non_material": "not_full_product_candidate",
+      "safety_has_priority": "safety_blocked",
+      "mandatory_functions_are_groundable": "full_paid_ready_candidate"
+    },
+    "logically_complete_but_emotionally_cold_is_full_paid_ready": false,
     "length_or_section_count_cannot_substitute": true
   },
   "commercial_boundary": {

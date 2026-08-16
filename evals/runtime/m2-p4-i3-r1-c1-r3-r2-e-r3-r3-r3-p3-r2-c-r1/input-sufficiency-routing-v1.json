@@ -16,6 +16,14 @@
     "payment_capable_state": false,
     "new_runtime_result_family_authorized_by_this_plan": false
   },
+  "clarification_budget": {
+    "maximum_questions_total_per_consultation_attempt": 1,
+    "maximum_questions_per_turn": 1,
+    "automatic_second_question_allowed": false,
+    "clarification_loop_allowed": false,
+    "question_must_be_consultation_specific": true,
+    "question_selection": "highest_information_gain"
+  },
   "states": {
     "full_paid_ready": {
       "definition": "Safety permits normal handling, the consultation-specific decision is material, and every mandatory Product value function can be grounded from supplied input.",
@@ -27,6 +35,7 @@
       "definition": "Exactly one missing material answer has a realistic chance to establish or reject Full Product eligibility.",
       "preferred_runtime_result_family": "needs_more_information",
       "question_count_per_turn": 1,
+      "question_count_total_per_consultation_attempt": 1,
       "question_selection": "highest_information_gain",
       "question_must_be_consultation_specific": true,
       "generic_multi_question_questionnaire_prohibited": true,
@@ -54,13 +63,33 @@
   },
   "global_rules": [
     "Insufficient input must not be padded into a paid Report.",
-    "Ask exactly one highest-information-gain question at a time.",
-    "Re-evaluate eligibility after each answer before asking another question.",
+    "Ask at most one consultation-specific highest-information-gain question in the entire consultation attempt.",
+    "Enter needs_one_clarifying_answer only when one answer has a realistic chance to establish or reject Full Product eligibility.",
+    "Never generate an automatic second clarification or enter a clarification loop.",
     "Do not charge before Product eligibility is established.",
     "Do not generate a Report or draft while eligibility is needs_more_information.",
     "The clarification must target the current consultation rather than use a generic questionnaire.",
     "Safety always overrides sufficiency and paid eligibility."
   ],
+  "state_transitions": {
+    "initial_input_insufficient": {
+      "clarification_budget_unused_and_one_answer_can_establish_or_reject_eligibility": "needs_one_clarifying_answer",
+      "otherwise": "not_full_product_candidate"
+    },
+    "question_unanswered": {
+      "state": "needs_one_clarifying_answer",
+      "report_allowed": false,
+      "generated_draft_allowed": false,
+      "charge_allowed": false
+    },
+    "after_single_clarification_answer": {
+      "mandatory_functions_groundable": "full_paid_ready",
+      "still_insufficient_or_non_material": "not_full_product_candidate",
+      "safety_signal_present": "safety_blocked",
+      "automatic_second_question_allowed": false
+    },
+    "still_insufficient_after_budget_exhausted": "not_full_product_candidate"
+  },
   "case_routes": [
     {
       "case_id": "simple_business_reply_with_draft",
@@ -74,7 +103,7 @@
         "relationship_impact"
       ],
       "ready_candidate_when": "At least one meaningful concern is explicit and the intended relationship outcome is sufficiently clear.",
-      "not_full_route_when": "The answer confirms there is no material relationship or communication concern beyond routine administration."
+      "not_full_route_when": "The answer confirms there is no material relationship or communication concern beyond routine administration, or the one-question budget is exhausted without grounding mandatory functions."
     },
     {
       "case_id": "nullable_optional_sections",
@@ -91,7 +120,7 @@
         "usual_cadence",
         "users_central_fear"
       ],
-      "missing_timeline_route": "needs_one_clarifying_answer"
+      "missing_timeline_route": "needs_one_clarifying_answer only when the clarification budget is unused and one answer can establish or reject eligibility; otherwise not_full_product_candidate"
     },
     {
       "case_id": "polite_thank_you_with_draft",
@@ -112,6 +141,12 @@
       ]
     }
   ],
+  "future_ux_decisions": {
+    "start_new_consultation": "decision_pending",
+    "input_correction": "decision_pending",
+    "authorized_by_this_plan": false,
+    "implementation_included_in_this_plan": false
+  },
   "authority_boundary": {
     "implementation_authorized": false,
     "prompt_change_authorized": false,
