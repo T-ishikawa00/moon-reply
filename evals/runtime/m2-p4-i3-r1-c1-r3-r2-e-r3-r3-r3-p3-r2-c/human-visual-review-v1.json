@@ -1,0 +1,140 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-human-visual-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
+  "evidence_type": "human_visual_review_template",
+  "status": "PENDING",
+  "review_complete": false,
+  "review_target_commit": "fa956b9b1941c73f8e1767c64ab24f07fadd36c6",
+  "r2_b_acceptance": {
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-16",
+    "decision_source": "current_human_decision"
+  },
+  "reviewer": null,
+  "reviewed_at": null,
+  "instructions": [
+    "各URLをdesktop 1440、mobile 399、mobile 320で確認する",
+    "未確認項目はPENDINGのままにする",
+    "問題を見つけた場合はFAILまたはremediation_requiredとし、このtaskでProduct codeを直さない"
+  ],
+  "viewport_reviews": {
+    "desktop_1440": {
+      "status": "PENDING",
+      "no_horizontal_scroll": null,
+      "no_content_overlap": null,
+      "japanese_wrapping_readable": null,
+      "hierarchy_appropriate": null,
+      "notes": null
+    },
+    "mobile_399": {
+      "status": "PENDING",
+      "no_horizontal_scroll": null,
+      "no_content_overlap": null,
+      "japanese_wrapping_readable": null,
+      "current_answer_readable": null,
+      "notes": null
+    },
+    "mobile_320": {
+      "status": "PENDING",
+      "no_horizontal_scroll": null,
+      "no_content_overlap": null,
+      "japanese_wrapping_readable": null,
+      "current_answer_readable": null,
+      "notes": null
+    }
+  },
+  "case_reviews": [
+    {
+      "category": "simple",
+      "fixture_id": "simple_business_reply_with_draft",
+      "url": "http://127.0.0.1:3102/review/runtime/v12?fixture=simple_business_reply_with_draft",
+      "status": "PENDING",
+      "visual_hierarchy_appropriate": null,
+      "content_density_appropriate": null,
+      "draft_discoverable": null,
+      "notes": null
+    },
+    {
+      "category": "emotional",
+      "fixture_id": "ordinary_reply_waiting",
+      "url": "http://127.0.0.1:3102/review/runtime/v12?fixture=ordinary_reply_waiting",
+      "status": "PENDING",
+      "visual_hierarchy_appropriate": null,
+      "content_density_appropriate": null,
+      "uncertainty_not_alarmist": null,
+      "notes": null
+    },
+    {
+      "category": "null_optional",
+      "fixture_id": "nullable_optional_sections",
+      "url": "http://127.0.0.1:3102/review/runtime/v12?fixture=nullable_optional_sections",
+      "status": "PENDING",
+      "visual_hierarchy_appropriate": null,
+      "empty_optional_sections_absent": null,
+      "shorter_journey_still_complete": null,
+      "notes": null
+    },
+    {
+      "category": "polite_draft",
+      "fixture_id": "polite_thank_you_with_draft",
+      "url": "http://127.0.0.1:3102/review/runtime/v12?fixture=polite_thank_you_with_draft",
+      "status": "PENDING",
+      "visual_hierarchy_appropriate": null,
+      "draft_discoverable": null,
+      "message_impact_useful": null,
+      "notes": null
+    },
+    {
+      "category": "persona_preserved",
+      "fixture_id": "kansai_persona_draft",
+      "url": "http://127.0.0.1:3102/review/runtime/v12?fixture=kansai_persona_draft",
+      "status": "PENDING",
+      "visual_hierarchy_appropriate": null,
+      "dialect_preserved": null,
+      "line_break_preserved": null,
+      "emoji_preserved": null,
+      "notes": null
+    }
+  ],
+  "interaction_reviews": {
+    "keyboard": {
+      "status": "PENDING",
+      "focus_order_usable": null,
+      "copy_button_keyboard_operable": null,
+      "details_keyboard_operable": null,
+      "focus_visible": null,
+      "notes": null
+    },
+    "browser_zoom_200": {
+      "status": "PENDING",
+      "content_remains_available": null,
+      "horizontal_scroll_blocker": null,
+      "overlap_blocker": null,
+      "notes": null
+    },
+    "copy_success": {
+      "status": "PENDING",
+      "announcement_understood": null,
+      "notes": null
+    },
+    "copy_failure": {
+      "status": "PENDING",
+      "recovery_guidance_understood": null,
+      "notes": null
+    },
+    "details_behavior": {
+      "status": "PENDING",
+      "collapsed_state_understood": null,
+      "expanded_content_readable": null,
+      "notes": null
+    },
+    "reduced_motion": {
+      "status": "PENDING",
+      "unexpected_motion_observed": null,
+      "notes": null
+    }
+  },
+  "overall_visual_verdict": null,
+  "disposition": "PENDING",
+  "formal_wcag_certification_claimed": false
+}

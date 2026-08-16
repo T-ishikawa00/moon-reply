@@ -1,0 +1,109 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-product-owner-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
+  "record_type": "human_product_review_template",
+  "status": "PENDING",
+  "review_complete": false,
+  "review_target_commit": "fa956b9b1941c73f8e1767c64ab24f07fadd36c6",
+  "reviewer": null,
+  "reviewed_at": null,
+  "question_value_contract": {
+    "unanswered": null,
+    "allowed_answer_values": [
+      true,
+      false
+    ],
+    "notes_are_optional": true
+  },
+  "case_reviews": [
+    {
+      "category": "simple",
+      "fixture_id": "simple_business_reply_with_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "emotional",
+      "fixture_id": "ordinary_reply_waiting",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "null_optional",
+      "fixture_id": "nullable_optional_sections",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "polite_draft",
+      "fixture_id": "polite_thank_you_with_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "persona_preserved",
+      "fixture_id": "kansai_persona_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    }
+  ],
+  "overall": {
+    "experienceProductJudgment": "pending",
+    "verdict": null,
+    "notes": null
+  },
+  "maximum_positive_meaning": {
+    "experienceProductJudgment": "plausibly_worth_jpy980",
+    "does_not_establish_runtime_readiness": true
+  },
+  "authority_boundary": {
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "providerQualityEstablished": false,
+    "activeRuntimeActivationAuthorized": false,
+    "productionRuntimeAuthorized": false,
+    "paymentImplementationAuthorized": false,
+    "productionPaymentAuthorized": false,
+    "mainIntegrationAuthorized": false
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-review-matrix-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
+  "record_type": "authorized_human_visual_product_review_preparation",
+  "status": "technical_evidence_prepared_human_review_pending",
+  "review_target_commit": "fa956b9b1941c73f8e1767c64ab24f07fadd36c6",
+  "authority": {
+    "r2_a_acceptance_r2_b_authorization": "1229627588e3c6ccd41ea7ea32751b8b8ac79c6e",
+    "r2_b_chatgpt_technical_review": "PASS_COMPLETE",
+    "r2_b_human_acceptance": "complete",
+    "r2_b_acceptance": "complete",
+    "r2_b_acceptance_date": "2026-08-16",
+    "decision_source": "current_human_decision",
+    "r2_c_execution_review_preparation_authorized": true,
+    "r2_c_human_product_verdict": "pending"
+  },
+  "historical_reference": {
+    "branch": "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-visual-product",
+    "commit": "df3c707ec7f567120d28f0ce164ef42916e61c63",
+    "mode": "read_only",
+    "human_pass_values_reused": false,
+    "mutated": false
+  },
+  "review_target": {
+    "surface": "恋のメッセージ鑑定ノート",
+    "projection": "CustomerAssessmentExperienceProjectionV2",
+    "route": "/review/runtime/v12",
+    "fixture_count": 5,
+    "fixture_only": true,
+    "production_behavior": "not_found",
+    "internal_gate": "M2_INTERNAL_RUNTIME_ENABLED"
+  },
+  "review_server": {
+    "base_url": "http://127.0.0.1:3102",
+    "review_url": "http://127.0.0.1:3102/review/runtime/v12",
+    "start_command": "$env:M2_INTERNAL_RUNTIME_ENABLED='true'; npm.cmd run dev -- --hostname 127.0.0.1 --port 3102",
+    "observed_ready_during_preparation": true,
+    "persistent_availability_guaranteed": false
+  },
+  "immutable_product_snapshot": [
+    {
+      "path": "components/runtime/CustomerAssessmentNote.tsx",
+      "git_blob": "590ae209072f98eae32f1b705753944d941f0629"
+    },
+    {
+      "path": "components/runtime/CustomerAssessmentNote.module.css",
+      "git_blob": "7b0d68bacbb9044ed7f1e3aa5adb520220b0f81c"
+    },
+    {
+      "path": "components/runtime/CustomerDraftCopyButton.tsx",
+      "git_blob": "ca53d7b11fb3b1799003df735f1903572d196752"
+    },
+    {
+      "path": "app/review/runtime/v12/page.tsx",
+      "git_blob": "698629e0e6543fcd6dc8aa6438de39108807a0d0"
+    },
+    {
+      "path": "lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts",
+      "git_blob": "7748de655a09b06e2fa70e3de0dc0c8a69b8bdc7"
+    },
+    {
+      "path": "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
+      "git_blob": "584850c1df7c8b759693cc635045daaee2fd52af"
+    },
+    {
+      "path": "lib/assessment/runtime/customer-assessment-projection-v1.ts",
+      "git_blob": "4ef5edde8a2e22c9cb28624ec733a9e6de6826d5"
+    },
+    {
+      "path": "lib/assessment/runtime/types.ts",
+      "git_blob": "2b9fba25b7df8232b0aa85230ee4aa12634fda34"
+    }
+  ],
+  "cases": [
+    {
+      "category": "simple",
+      "fixture_id": "simple_business_reply_with_draft",
+      "label": "業務連絡への短い返信",
+      "relative_url": "/review/runtime/v12?fixture=simple_business_reply_with_draft",
+      "local_url": "http://127.0.0.1:3102/review/runtime/v12?fixture=simple_business_reply_with_draft",
+      "review_focus": [
+        "fixed section countへ水増しされていないか",
+        "短い相談でも理解から行動まで成立するか",
+        "送信文案をすぐ見つけられるか"
+      ]
+    },
+    {
+      "category": "emotional",
+      "fixture_id": "ordinary_reply_waiting",
+      "label": "返事を待つ夜",
+      "relative_url": "/review/runtime/v12?fixture=ordinary_reply_waiting",
+      "local_url": "http://127.0.0.1:3102/review/runtime/v12?fixture=ordinary_reply_waiting",
+      "review_focus": [
+        "理解された感覚と安心があるか",
+        "不確実性が不安を水増ししていないか",
+        "情報量とsemantic repetitionが適切か"
+      ]
+    },
+    {
+      "category": "null_optional",
+      "fixture_id": "nullable_optional_sections",
+      "label": "任意情報がない場合",
+      "relative_url": "/review/runtime/v12?fixture=nullable_optional_sections",
+      "local_url": "http://127.0.0.1:3102/review/runtime/v12?fixture=nullable_optional_sections",
+      "review_focus": [
+        "空の任意sectionや見出しが出ていないか",
+        "4つのprimary sectionでも鑑定として成立するか",
+        "行動と見直し条件が明確か"
+      ]
+    },
+    {
+      "category": "polite_draft",
+      "fixture_id": "polite_thank_you_with_draft",
+      "label": "丁寧なお礼の文面",
+      "relative_url": "/review/runtime/v12?fixture=polite_thank_you_with_draft",
+      "local_url": "http://127.0.0.1:3102/review/runtime/v12?fixture=polite_thank_you_with_draft",
+      "review_focus": [
+        "丁寧さと本人らしさのバランス",
+        "文案理由と届き方が有用か",
+        "文案が本文の中で十分に目立つか"
+      ]
+    },
+    {
+      "category": "persona_preserved",
+      "fixture_id": "kansai_persona_draft",
+      "label": "改行と絵文字を含む文案",
+      "relative_url": "/review/runtime/v12?fixture=kansai_persona_draft",
+      "local_url": "http://127.0.0.1:3102/review/runtime/v12?fixture=kansai_persona_draft",
+      "review_focus": [
+        "方言・改行・絵文字が保たれているか",
+        "copy後もexact source textか",
+        "鑑定全体が本人の相談として感じられるか"
+      ]
+    }
+  ],
+  "review_checks": [
+    {
+      "id": "desktop_1440",
+      "technical_status": "PASS",
+      "human_status": "PENDING",
+      "evidence": {
+        "viewport": "1440x1000",
+        "cases_measured": 5,
+        "document_horizontal_overflow": false,
+        "note_outside_viewport": false,
+        "adjacent_primary_content_overlap": false,
+        "human_visual_quality_judgment_recorded": false
+      }
+    },
+    {
+      "id": "mobile_399",
+      "technical_status": "PASS",
+      "human_status": "PENDING",
+      "evidence": {
+        "viewport": "399x900",
+        "cases_measured": 5,
+        "document_horizontal_overflow": false,
+        "note_outside_viewport": false,
+        "adjacent_primary_content_overlap": false,
+        "current_answer_single_column": true,
+        "human_visual_quality_judgment_recorded": false
+      }
+    },
+    {
+      "id": "mobile_320",
+      "technical_status": "PASS",
+      "human_status": "PENDING",
+      "evidence": {
+        "viewport": "320x900",
+        "cases_measured": 5,
+        "document_horizontal_overflow": false,
+        "note_outside_viewport": false,
+        "adjacent_primary_content_overlap": false,
+        "current_answer_single_column": true,
+        "persona_draft_exact_in_rendered_text": true,
+        "human_visual_quality_judgment_recorded": false
+      }
+    },
+    {
+      "id": "keyboard",
+      "technical_status": "PARTIAL",
+      "human_status": "PENDING",
+      "evidence": {
+        "native_button": true,
+        "native_details_summary": true,
+        "focus_visible_observed": true,
+        "focus_outline_width": "3px",
+        "browser_key_activation_confirmed": false,
+        "human_keyboard_walkthrough_required": true
+      }
+    },
+    {
+      "id": "browser_zoom_200",
+      "technical_status": "NOT_AUTOMATED",
+      "human_status": "PENDING",
+      "evidence": {
+        "actual_browser_zoom_changed": false,
+        "reason": "selected browser surface did not expose browser zoom control",
+        "fluid_layout_and_320px_evidence_available": true,
+        "human_200_percent_review_required": true
+      }
+    },
+    {
+      "id": "copy_success",
+      "technical_status": "PASS",
+      "human_status": "PENDING",
+      "evidence": {
+        "runtime_click_executed": true,
+        "button_after_click": "コピー済み",
+        "live_region_after_click": "コピーしました",
+        "exact_text_source_verified_statically": true,
+        "external_clipboard_readback_available": false
+      }
+    },
+    {
+      "id": "copy_failure",
+      "technical_status": "STATIC_ONLY",
+      "human_status": "PENDING",
+      "evidence": {
+        "failure_branch_present": true,
+        "failure_live_region_present": true,
+        "failure_message": "コピーできませんでした。文面を選択してコピーしてください。",
+        "runtime_clipboard_failure_forced": false,
+        "human_denied_permission_review_required": true
+      }
+    },
+    {
+      "id": "details_behavior",
+      "technical_status": "PASS",
+      "human_status": "PENDING",
+      "evidence": {
+        "note_details_count": 1,
+        "initial_open": false,
+        "open_after_pointer_activation": true,
+        "native_details": true,
+        "human_keyboard_activation_review_required": true
+      }
+    },
+    {
+      "id": "reduced_motion",
+      "technical_status": "STATIC_ONLY",
+      "human_status": "PENDING",
+      "evidence": {
+        "prefers_reduced_motion_rule_present": true,
+        "transition_none_rule_present": true,
+        "browser_emulation_available": false,
+        "human_reduced_motion_review_required": true
+      }
+    }
+  ],
+  "automated_measurement_summary": {
+    "page_viewport_combinations": 15,
+    "all_five_fixture_urls_loaded": true,
+    "fixture_navigation_count": 5,
+    "primary_section_counts": {
+      "simple": 5,
+      "emotional": 4,
+      "null_optional": 4,
+      "polite_draft": 6,
+      "persona_preserved": 5
+    },
+    "human_visual_or_product_pass_inferred": false
+  },
+  "review_boundary": {
+    "r2_c_human_visual_review_complete": false,
+    "r2_c_human_product_review_complete": false,
+    "experienceProductJudgment": "pending",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "providerQualityEstablished": false,
+    "activeRuntimeActivationAuthorized": false,
+    "productionRuntimeAuthorized": false,
+    "paymentImplementationAuthorized": false,
+    "productionPaymentAuthorized": false,
+    "mainIntegrationAuthorized": false
+  },
+  "formal_wcag_certification_claimed": false
+}
