@@ -2,32 +2,37 @@
 
 ## Status
 
-`reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized`
+`r2_a_human_chatgpt_accepted_complete_r2_b_implementation_authorized`
 
-Q0-A Product Doctrine R1 Correction completed Human + ChatGPT review and Human acceptance with `PASS` on `2026-08-16`. This Task is acceptance / authorization synchronization only: it performs no R2-A implementation while authorizing only the next R2-A Experience Projection successor implementation.
+The authorized R2-A Experience Projection implementation completed ChatGPT and Human review with `PASS`, Human acceptance, and R2-A acceptance on `2026-08-16`. This Task is acceptance / authorization synchronization only: it preserves the exact R2-A implementation and authorizes only the next R2-B Reassuring Customer Note implementation.
 
 - Doctrine source branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience`
 - Correction baseline: `a5b2defa1bb765d46076a28ca9827d494fcbe433`
 - Correction branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-reassurance-doctrine-correction`
-- Acceptance branch: `chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance`
-- Acceptance parent: `6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2`
+- Q0-A acceptance branch: `chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance`
+- Q0-A acceptance commit: `cf9a04773fca622c4813e1e6e73a7632b139aff6`
+- R2-A implementation branch: `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection`
+- Accepted R2-A implementation commit: `5070c02267f49e1e0095ce2e46fb106b886f7df5`
+- R2-A acceptance / R2-B authorization branch: `chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-acceptance-r2-b-authorization`
+- Acceptance sync parent: `5070c02267f49e1e0095ce2e46fb106b886f7df5`
 - Original Product baseline: `fdbdf808f135655084de32aec2e57473c1beaf31`
 - Parent: `8700ded1454058f72d33f2eb4d1ae6a05b6e008c`
 - main / origin/main: `61e33a10e195fad17e253a6b9719217e1992f273`
-- Correction scope: exact `10/10`; NEW / DELETE / RENAME = `0 / 0 / 0`
+- R2-A implementation scope: exact seven NEW paths, preserved
+- Acceptance sync scope: exact eight UPDATE paths plus one NEW verifier; DELETE / RENAME = `0 / 0`
 
-Package A/R1 is unchanged and accepted. Package B is unchanged at exact `10/10`. The Provider marker is unchanged, authorization remains consumed, `rerun_authorized=false`, and Active Runtime remains v4.
+Package A/R1 is unchanged and accepted. Package B historical scope is unchanged at exact `10/10`. The Provider marker is unchanged, authorization remains consumed, `rerun_authorized=false`, and Active Runtime remains v4.
 
 ## Acceptance authority
 
-- `doctrineHumanChatGPTReview = complete`
-- `doctrineHumanChatGPTReviewOutcome = PASS`
-- `humanAcceptance = complete`
-- `doctrineAcceptance = complete`
+- `r2AChatGPTReview = complete`; `r2AChatGPTReviewOutcome = PASS`
+- `r2AHumanReview = complete`; `r2AHumanReviewOutcome = PASS`
+- `r2AHumanAcceptance = complete`
+- `r2AAcceptance = complete`
 - `acceptanceDate = 2026-08-16`
-- R2-A Experience Projection successor: `implementation_authorized`
-- R2-B Reassuring Customer Note: `implementation_unauthorized`
-- R2-C Human Visual/Product Review: `not_ready / unauthorized`
+- R2-A Experience Projection successor: `implementation_complete / accepted_complete`
+- R2-B Reassuring Customer Note: `implementation_authorized`
+- R2-C Human Visual/Product Review: `not_ready_until_R2_B_acceptance / unauthorized`
 
 ## Product Doctrine
 
@@ -140,13 +145,27 @@ The renderer assigns each field one primary Product function, avoids rendering t
 
 Add deterministic experience fields, preserve the full Report and v1 contract, make no UI design change, and use no Provider call.
 
-R2-A implementation is authorized only for deterministic `CustomerAssessmentExperienceProjectionV2`, unchanged Full structured Report and `CustomerAssessmentProjectionV1`, exact legacy/split source mapping, and removal of fact IDs/internal enums from the customer projection. Provider calls, paraphrase, factual rewrite, generated filler, and UI design changes are `0`.
+R2-A implementation is complete and accepted. Its exact seven-file snapshot at `5070c02267f49e1e0095ce2e46fb106b886f7df5` remains the current implementation authority: deterministic `CustomerAssessmentExperienceProjectionV2`, unchanged Full structured Report and `CustomerAssessmentProjectionV1`, exact legacy/split source mapping, and removal of fact IDs/internal enums from the customer projection. Provider calls, paraphrase, factual rewrite, generated filler, and UI design changes remain `0`.
 
 ### Package R2-B — Reassuring Customer Note revision
 
-Retain the accepted visual shell, reduce hero dominance, restore meaningful assessment length, render the emotional journey, preserve draft/copy prominence, and remove semantic repetition.
+R2-B implementation is authorized only on future branch `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note`, in this exact nine-path scope:
 
-R2-B implementation remains unauthorized.
+1. `components/runtime/CustomerAssessmentNote.tsx`
+2. `components/runtime/CustomerAssessmentNote.module.css`
+3. `components/runtime/CustomerDraftCopyButton.tsx`
+4. `app/review/runtime/v12/page.tsx`
+5. `lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts`
+6. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json`
+7. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json`
+8. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs`
+9. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md`
+
+The implementation must consume accepted `CustomerAssessmentExperienceProjectionV2`, preserve the accepted navy/paper/gold shell, reduce hero dominance, render consultation-specific opening/letter/situation reading and fact-versus-uncertainty separation, keep the draft prominent when needed with exact-copy interaction, clarify immediate action and reassessment conditions, close in consultation-specific language, select sections by semantic necessity, allow a semantically complete simple case below six sections, prohibit section-count padding, and suppress semantic repetition.
+
+It may not change V2, `CustomerAssessmentProjectionV1`, the Full Report, Provider integration, Prompt/Catalog/Schema, PB-05, evaluator/semantic disposition, Safety UX, Payment, DB/Supabase/migration, Runtime activation, Production Runtime, R2-C execution, or main.
+
+Historical branches `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note` and `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy` remain read-only references. Reset, overwrite, rebase, cherry-pick, and force-push are prohibited.
 
 ### Package R2-C — Human Visual and Product review
 
@@ -166,7 +185,7 @@ Required Product Owner cases are `simple`, `emotional`, `null_optional`, `polite
 
 R2-C must not be marked complete without observed reduced-motion behavior.
 
-R2-C is `not_ready`; execution and review remain unauthorized until predecessors complete.
+R2-C is `not_ready_until_R2_B_acceptance`; execution and review remain unauthorized.
 
 The three proposed path manifests are pairwise disjoint. Existing Package C remains separate and continues to own PB-05 factual and anxiety-safe writing quality.
 
@@ -190,13 +209,13 @@ Runtime activation remains separately unauthorized.
 
 `unscoped_implementation_authorized=false`
 
-`R2-A implementation_authorized=true`
+`R2-A implementation_complete=true / acceptance=complete`
 
-`R2-B implementation_authorized=false`
+`R2-B implementation_authorized=true`
 
 `R2-C execution_authorized=false / review_authorized=false`
 
-This sync performs no CustomerAssessmentNote, CSS, Projection, Delivery, Runtime, Prompt, Catalog, Schema, evaluator, semantic disposition, fixture, Provider, runner, DB, Supabase, migration, activation, payment, Safety UX, Package C-F implementation, R4, C2, PR, main merge, or force push. R2-A does not authorize CustomerAssessmentNote UI, CSS, Prompt, PB-05, evaluator/semantic disposition, Safety UX, purchase/payment, Runtime activation, Provider execution, DB/Supabase/migration, or main changes.
+This sync performs no R2-B implementation and changes no CustomerAssessmentNote, CSS, Projection, Delivery, Runtime, Prompt, Catalog, Schema, evaluator, semantic disposition, fixture, Provider, runner, DB, Supabase, migration, activation, payment, Safety UX, Package C-F implementation, R4, C2, PR, main, or historical branch.
 
 `experienceProductJudgment = not_established_pending_R2_C_human_product_review`
 
@@ -208,4 +227,4 @@ Provider rerun, Active Runtime activation, Production Runtime, Payment implement
 
 Provider / DB / Supabase: `0 / 0 / 0`.
 
-Next action: `human_chatgpt_review_of_doctrine_acceptance_and_r2_a_authorization_sync`.
+Next action: `human_chatgpt_review_of_r2_a_acceptance_r2_b_authorization_sync`.

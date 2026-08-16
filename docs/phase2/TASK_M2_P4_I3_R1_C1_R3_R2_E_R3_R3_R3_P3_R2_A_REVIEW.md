@@ -1,23 +1,40 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A Authorized Lineage Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A Acceptance / R2-B Authorization Review
 
 ## Outcome
 
-`CustomerAssessmentExperienceProjectionV2` is implemented from the accepted Q0-A authority commit `cf9a04773fca622c4813e1e6e73a7632b139aff6`. It is a deterministic Projection-only successor pending Human / ChatGPT review. No R2-B UI or R2-C review work is performed.
+`CustomerAssessmentExperienceProjectionV2` was implemented from accepted Q0-A authority commit `cf9a04773fca622c4813e1e6e73a7632b139aff6` and fixed at implementation commit `5070c02267f49e1e0095ce2e46fb106b886f7df5`. R2-A ChatGPT review and Human review are `PASS / complete`; Human acceptance and R2-A acceptance are complete on `2026-08-16`.
+
+This Task synchronizes that decision and authorizes only R2-B Reassuring Customer Note implementation. It performs no R2-B implementation and no R2-C execution or review.
 
 The Projection extracts exact validated Report strings, composes accepted `CustomerAssessmentProjectionV1` concepts, and rejects ASCII Fact IDs and the four internal Decision literals in every enumerated customer-readable string, including Japanese-adjacent forms. Structural enum, topic, policy, timing, phase, and schema-version values remain accepted only in their defined non-customer structural fields.
 
 ## Baseline and exact scope
 
-- Branch: `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection`
+- R2-A implementation branch: `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection`
+- Accepted R2-A implementation commit: `5070c02267f49e1e0095ce2e46fb106b886f7df5`
+- Acceptance sync branch: `chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-acceptance-r2-b-authorization`
+- Acceptance sync parent: `5070c02267f49e1e0095ce2e46fb106b886f7df5`
 - Accepted authority parent: `cf9a04773fca622c4813e1e6e73a7632b139aff6`
 - Accepted authority direct parent (R1 Correction): `6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2`
 - Main / origin-main authority: `61e33a10e195fad17e253a6b9719217e1992f273`
-- Mutation scope: exactly seven NEW paths; UPDATE / DELETE / RENAME are `0 / 0 / 0`
+- R2-A implementation scope: exactly seven NEW paths, preserved as the accepted implementation snapshot
+- Acceptance sync scope: exactly eight UPDATE paths plus one NEW verifier; DELETE / RENAME are `0 / 0`
 - `CustomerAssessmentProjectionV1`: unchanged
 - `CustomerAssessmentDeliveryV1`: unchanged
 - Q0-A Product Doctrine and R1 Correction: unchanged and accepted
 - Package B: unchanged 10/10
 - Active Runtime: remains v4
+
+## Acceptance decision
+
+- `r2AChatGPTReview = complete`; `r2AChatGPTReviewOutcome = PASS`
+- `r2AHumanReview = complete`; `r2AHumanReviewOutcome = PASS`
+- `r2AHumanAcceptance = complete`
+- `r2AAcceptance = complete`
+- `acceptanceDate = 2026-08-16`
+- `R2-B implementation_authorized = true`
+- `R2-C execution_authorized = false`; `review_authorized = false`
+- `R2-C readiness = not_ready_until_R2_B_acceptance`
 
 ## Historical candidate reuse
 
@@ -66,25 +83,30 @@ Frozen E-R3 evidence is read-only. E-R3-01, E-R3-02, and E-R3-04 remain accepted
 
 ## Authorization boundary
 
-R2-A implementation authority is exercised only by this exact Projection scope. Provider / DB / Supabase operations are `0 / 0 / 0`. The runner, package-check, retry, repair, fallback, migration, CustomerAssessmentNote, CSS, copy button, review route UI, Prompt, Catalog, Schema, PB-05, Evaluator, semantic disposition, Safety UX, Payment, Pipeline, Runtime activation, R2-B, R2-C, existing Package C, R4, C2, PR creation, and main merge remain outside this implementation.
+R2-A is accepted complete at its exact seven-file implementation snapshot. Its five non-overlay implementation/evidence/verifier blobs remain byte-identical; the review document and capabilities file receive acceptance metadata only. Provider / DB / Supabase operations remain `0 / 0 / 0`.
 
-This implementation does not establish customer reassurance or JPY980 readiness.
+Only R2-B implementation is newly authorized, on `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note`, for the exact nine paths recorded in `implementation-packages-v1.json`. It may consume the accepted V2 and revise the Customer Note presentation contract only within that manifest. V2, v1, Full Report, Provider, Prompt, Catalog, Schema, PB-05, Evaluator, semantic disposition, Safety UX, Payment, DB/Supabase/migration, Runtime activation, Production Runtime, R2-C, and main remain outside authority.
+
+The historical R2-B branches `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note` and `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy` remain read-only. Reset, overwrite, rebase, cherry-pick, and force-push are prohibited.
+
+This acceptance does not establish customer reassurance, `experienceProductJudgment`, JPY980 Runtime readiness, Provider quality, Active Runtime, Production Runtime, or Global Q0 completion.
 
 ## Validation contract
 
 Validation remains sequential:
 
-1. Dedicated R2-A verifier
-2. Q0-A Acceptance verifier at accepted authority
-3. R1 Doctrine verifier at accepted authority
-4. Package B accepted verifier
-5. Package A R1 accepted verifier
-6. Decision Policy verifier
-7. Typecheck
-8. Lint with `--max-warnings=0`
-9. Build
-10. `git diff --check`
-11. Exact NEW `7/7` scope
-12. Sensitive-value scan
+1. New R2-A acceptance / R2-B authorization verifier
+2. Dedicated R2-A verifier at accepted implementation commit
+3. Q0-A Acceptance verifier at accepted authority
+4. R1 Doctrine verifier at accepted authority
+5. Package B historical accepted verifier
+6. Package A R1 accepted verifier
+7. Decision Policy verifier
+8. Typecheck
+9. Lint with `--max-warnings=0`
+10. Build
+11. `git diff --check`
+12. Exact eight UPDATE plus one NEW scope
+13. Sensitive-value scan
 
-Human / ChatGPT review of the authorized R2-A implementation is the next action after one normal commit and normal push.
+After one normal commit and one normal push, stop for Human / ChatGPT review of this acceptance / authorization sync. Do not begin R2-B implementation here.

@@ -1,31 +1,23 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
-## M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1 Q0-A Doctrine Acceptance / R2-A Authorization Sync
+## R2-A Acceptance / R2-B Implementation Authorization Sync
 
-- [x] Original Product baseline `fdbdf808f135655084de32aec2e57473c1beaf31` and doctrine scope `12/12` preserved
-- [x] Correction source `a5b2defa1bb765d46076a28ca9827d494fcbe433`; exact update scope `10/10`; NEW / DELETE / RENAME `0 / 0 / 0`
-- [x] Doctrine R1 Correction acceptance parent `6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2` preserved
-- [x] Package A/R1 accepted implementation and Package B exact `10/10` preserved
-- [x] Provider marker preserved, authorization consumed, `rerun_authorized=false`, Active Runtime v4 and main unchanged
-- [x] Product Doctrine and Hard Gate hierarchy fixed
-- [x] Human Visual Review recorded as visual shell accepted and experience content revision required
-- [x] Required emotional journey `理解された感覚 → 安心 → 納得 → 行動` defined
-- [x] Proportional A-I section architecture and semantic density rules defined
-- [x] Exact `CustomerAssessmentProjectionV1` experience-field gaps audited for legacy and split Reports
-- [x] Versioned `CustomerAssessmentExperienceProjectionV2` deterministic source mapping planned without widening v1
-- [x] Packages R2-A through R2-C defined with pairwise-disjoint proposed paths
-- [x] Existing Package C retained as the separate owner of PB-05 factual and anxiety-safe writing quality
-- [x] R2-C reduced-motion behavior made mandatory alongside desktop/mobile/keyboard/zoom/copy/details checks and five Product Owner cases
-- [x] Approximately 6-9 sections fixed as guidance only; no hard minimum/maximum, count padding, duplicated primary meaning, fixed word count, or fixed section count
-- [x] Experience Product judgment separated from overall JPY980 Runtime readiness and remaining Global Q0 Product/Safety acceptance
-- [x] Human / ChatGPT Doctrine review `PASS / complete`; Human and doctrine acceptance complete on `2026-08-16`
-- [x] R2-A Experience Projection successor implementation authorized in its exact deterministic Projection-only scope
-- [ ] R2-B implementation — unauthorized
-- [ ] R2-C execution/review — `not_ready / unauthorized` until predecessors complete
-- [ ] Provider rerun, Active Runtime activation, Production Runtime, Payment, R4, C2, PR, or main integration — unauthorized
+- [x] Exact sync parent `5070c02267f49e1e0095ce2e46fb106b886f7df5`; main/origin-main `61e33a10e195fad17e253a6b9719217e1992f273`
+- [x] Authorized R2-A implementation snapshot preserved at exact seven-file scope
+- [x] R2-A ChatGPT review `PASS / complete`
+- [x] R2-A Human review `PASS / complete`
+- [x] R2-A Human acceptance and R2-A acceptance `complete` on `2026-08-16`
+- [x] Q0-A Doctrine, Package A/R1, Package B historical `10/10`, Provider marker, consumed authorization, and Active Runtime v4 preserved
+- [x] R2-B implementation authorized only for the exact `9/9` manifest
+- [x] Formal R2-B future branch fixed as `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note`
+- [x] Accepted V2 and navy/paper/gold shell consumption, reduced hero, consultation-specific journey, facts/uncertainty separation, prominent exact-copy draft, immediate action, reassessment, closing, semantic section selection, below-six simple case, no padding, and reduced repetition fixed as the R2-B contract
+- [x] Historical R2-B implementation and mobile-fix branches retained as read-only references; reset/overwrite/rebase/cherry-pick/force-push prohibited
+- [ ] R2-B implementation — authorized but not performed by this sync
+- [ ] R2-C execution/review — unauthorized; `not_ready_until_R2_B_acceptance`
+- [ ] Provider rerun, DB/Supabase, Runtime activation, Production Runtime, Payment, R4, C2, PR, or main integration — unauthorized
 
-Status is reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized. R2-A-only scope is deterministic CustomerAssessmentExperienceProjectionV2 with unchanged Full Report and CustomerAssessmentProjectionV1, exact legacy/split mapping, fact IDs/internal enums removed, and Provider/paraphrase/factual rewrite/filler/UI-design changes `0`. This sync performs no implementation. R2-B remains unauthorized; R2-C remains not_ready / unauthorized. experienceProductJudgment is not_established_pending_R2_C_human_product_review; jpy980RuntimeReadiness is not_established; globalQ0Completion=false; providerQualityEstablished=false. Provider / DB / Supabase are `0 / 0 / 0`; Provider rerun, Active Runtime activation, Production Runtime, Payment implementation, Production Payment, R4, C2, PR, and main integration remain unauthorized. main remains `61e33a10e195fad17e253a6b9719217e1992f273`. next_action=human_chatgpt_review_of_doctrine_acceptance_and_r2_a_authorization_sync.
+Status is r2_a_human_chatgpt_accepted_complete_r2_b_implementation_authorized on chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-acceptance-r2-b-authorization. This exact acceptance sync is 8 UPDATE + 1 NEW and performs no R2-B implementation. R2-B may not change CustomerAssessmentExperienceProjectionV2, CustomerAssessmentProjectionV1, Full Report, Provider, Prompt, Catalog, Schema, PB-05, evaluator/semantic disposition, Safety UX, Payment, DB/Supabase/migration, Runtime activation, R2-C, or main. R2-C execution_authorized=false and review_authorized=false. experienceProductJudgment=not_established_pending_R2_C_human_product_review; jpy980RuntimeReadiness=not_established; globalQ0Completion=false; providerQualityEstablished=false. Provider / DB / Supabase / Runtime / Payment changes are `0 / 0 / 0 / 0 / 0`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`. next_action=human_chatgpt_review_of_r2_a_acceptance_r2_b_authorization_sync.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P1:BEGIN -->

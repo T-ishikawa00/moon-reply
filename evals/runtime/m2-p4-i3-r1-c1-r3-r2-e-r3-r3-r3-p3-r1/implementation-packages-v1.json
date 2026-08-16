@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-implementation-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
-  "status": "r2_a_experience_projection_implementation_authorized_r2_b_r2_c_unauthorized",
+  "status": "r2_a_human_chatgpt_accepted_complete_r2_b_implementation_authorized_r2_c_unauthorized",
   "package_order": [
     "R2-A",
     "R2-B",
@@ -25,7 +25,7 @@
         "add no Provider call",
         "make no UI design change"
       ],
-      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection",
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection",
       "proposed_paths": [
         "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
         "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a/projection-contract-v1.json",
@@ -44,7 +44,27 @@
         "v1 contract and behavior remain unchanged",
         "no Provider imports, calls, paraphrase, or filler"
       ],
-      "authorization_status": "implementation_authorized",
+      "implementation_snapshot": {
+        "type": "historical_commit_range",
+        "base_commit_sha": "cf9a04773fca622c4813e1e6e73a7632b139aff6",
+        "end_commit_sha": "5070c02267f49e1e0095ce2e46fb106b886f7df5",
+        "exact_paths": 7,
+        "immutable_snapshot": true,
+        "include_working_tree": false
+      },
+      "implementation_status": "complete",
+      "chatgpt_review": {
+        "status": "complete",
+        "outcome": "PASS"
+      },
+      "human_review": {
+        "status": "complete",
+        "outcome": "PASS"
+      },
+      "human_acceptance": "complete",
+      "acceptance": "complete",
+      "acceptance_date": "2026-08-16",
+      "authorization_status": "implementation_complete_accepted",
       "authorization_contract": {
         "deterministic_CustomerAssessmentExperienceProjectionV2": true,
         "full_structured_report_unchanged": true,
@@ -72,7 +92,8 @@
       ],
       "provider_calls_required": false,
       "human_visual_review_required": false,
-      "implementation_authorized": true
+      "original_implementation_authority_exercised": true,
+      "new_implementation_authorized": false
     },
     {
       "package_id": "R2-B",
@@ -85,7 +106,19 @@
         "preserve prominent draft and copy action",
         "remove semantic repetition"
       ],
-      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
+      "proposed_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note",
+      "historical_read_only_references": [
+        {
+          "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
+          "commit": "e509405935e82d7079023609b2d852d51f286f3e",
+          "read_only": true
+        },
+        {
+          "branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy",
+          "commit": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+          "read_only": true
+        }
+      ],
       "proposed_paths": [
         "components/runtime/CustomerAssessmentNote.tsx",
         "components/runtime/CustomerAssessmentNote.module.css",
@@ -108,10 +141,42 @@
         "no case-specific writing or layout",
         "exact duplicate and semantic repetition checks"
       ],
+      "authorization_contract": {
+        "accepted_CustomerAssessmentExperienceProjectionV2_consumed": true,
+        "accepted_navy_paper_gold_visual_shell_preserved": true,
+        "hero_dominance_reduced": true,
+        "consultation_specific_opening_letter_situation_reading": true,
+        "facts_and_uncertainty_separated": true,
+        "draft_prominent_when_needed": true,
+        "exact_copy_interaction_preserved": true,
+        "immediate_action_clear": true,
+        "reassessment_condition_visible": true,
+        "consultation_specific_closing": true,
+        "sections_selected_by_semantic_necessity": true,
+        "simple_case_below_six_allowed_when_semantically_complete": true,
+        "section_count_padding": "prohibited",
+        "semantic_repetition_reduced": true
+      },
+      "unauthorized_scope": [
+        "CustomerAssessmentExperienceProjectionV2_changes",
+        "CustomerAssessmentProjectionV1_changes",
+        "full_report_changes",
+        "provider_calls",
+        "prompt_catalog_or_schema_changes",
+        "pb_05_changes",
+        "evaluator_or_semantic_disposition_changes",
+        "safety_ux_changes",
+        "payment_changes",
+        "db_supabase_or_migration_changes",
+        "runtime_activation",
+        "production_runtime",
+        "r2_c_execution",
+        "main_changes"
+      ],
       "provider_calls_required": false,
       "human_visual_review_required": false,
-      "authorization_status": "implementation_unauthorized",
-      "implementation_authorized": false
+      "authorization_status": "implementation_authorized",
+      "implementation_authorized": true
     },
     {
       "package_id": "R2-C",
@@ -156,7 +221,7 @@
       ],
       "all_required_review_checks_must_pass_for_completion": true,
       "completion_without_reduced_motion_allowed": false,
-      "readiness": "not_ready",
+      "readiness": "not_ready_until_R2_B_acceptance",
       "execution_status": "unauthorized",
       "review_status": "unauthorized",
       "provider_calls_required": false,
@@ -197,12 +262,19 @@
   },
   "global_acceptance_boundary": {
     "r2_a_through_r2_c_require_provider_execution": false,
-    "implementation_authorized": false,
-    "implementation_authorized_scope": "R2-A_Experience_Projection_successor_only",
-    "r2_a_implementation_authorized": true,
-    "r2_b_implementation_authorized": false,
+    "unscoped_implementation_authorized": false,
+    "implementation_authorized_scope": "R2-B_Reassuring_Customer_Note_only",
+    "r2_a_original_implementation_authority_exercised": true,
+    "r2_a_new_implementation_authorized": false,
+    "r2_a_implementation_complete": true,
+    "r2_a_chatgpt_review_complete_pass": true,
+    "r2_a_human_review_complete_pass": true,
+    "r2_a_human_acceptance_complete": true,
+    "r2_a_acceptance_complete": true,
+    "r2_b_implementation_authorized": true,
     "r2_c_execution_authorized": false,
     "r2_c_review_authorized": false,
+    "r2_c_readiness": "not_ready_until_R2_B_acceptance",
     "provider_rerun_authorized": false,
     "active_runtime_activation_authorized": false,
     "production_runtime_established": false,
@@ -210,6 +282,8 @@
     "payment_implementation_authorized": false,
     "production_payment_authorized": false,
     "provider_quality_established": false,
+    "providerQualityEstablished": false,
+    "globalQ0Completion": false,
     "overall_jpy980_runtime_readiness_established": false,
     "r4_authorized": false,
     "c2_authorized": false,
