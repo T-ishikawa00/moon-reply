@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-plan-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN",
-  "status": "planning_defined_pending_human_chatgpt_review",
+  "status": "r1_effective_authority_correction_defined_pending_human_chatgpt_review",
   "authority": {
     "exact_parent": "8db5c6386ed0b9b16f0d1586f47d384262cc502b",
     "original_v1_a1": "65c245860813f6179689855b344dbf6fd425867a",
@@ -11,7 +11,15 @@
     "v1_a1_human_review": "PASS_complete",
     "v1_a1_human_acceptance": "complete",
     "v1_a1_acceptance": "complete",
-    "acceptance_date": "2026-08-16"
+    "acceptance_date": "2026-08-16",
+    "v1_a2_plan_commit": "ab99f003901475199fcb316264ecd02c4f2baef8",
+    "v1_a2_plan_review": "NEEDS_CORRECTION",
+    "review_findings": {
+      "blocker": 0,
+      "major": 1,
+      "minor": 2,
+      "major_code": "clarification_authority_missing_from_downstream_assessment_chain"
+    }
   },
   "packages": {
     "V1-A1": {
@@ -20,7 +28,7 @@
     },
     "V1-A2": {
       "name": "Runtime/API/UI Clarification Integration",
-      "status": "planning_defined_pending_review",
+      "status": "r1_effective_authority_correction_defined_pending_review",
       "planning_authorized": true,
       "implementation_authorized": false
     },
@@ -45,7 +53,19 @@
     "clarification_safety_precedes_paid_eligibility": true,
     "not_full_product_candidate_first_class_future_state": true,
     "accepted_v1_policy_mutated": false,
-    "successor_policy": "jpy980-input-sufficiency-policy-v2"
+    "successor_policy": "jpy980-input-sufficiency-policy-v2",
+    "effective_assessment_authority": "EffectiveAssessmentAuthorityV1",
+    "effective_authority_kind": "derived_not_source",
+    "per_value_provenance_required": true,
+    "decision_policy_successor": "EffectiveDecisionPolicyV1",
+    "pb_04_clarification_aware_successor": true,
+    "pb_05_clarification_aware_successor": true,
+    "pb_06_clarification_validation_successor": true,
+    "ready_making_clarification_discard_allowed": false,
+    "usual_reply_cadence_question_v2": "今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？",
+    "awaiting_to_processing_atomic_with_answer_and_resume_run": true,
+    "duplicate_same_answer_additional_runs": 0,
+    "continuation_identifier_minimum_unpredictability_bits": 128
   },
   "product_scope": {
     "message_impact_candidate_required": true,
@@ -90,10 +110,10 @@
     "charge_safety_blocked": false
   },
   "future_implementation_scope": {
-    "status": "fixed_unauthorized",
-    "total": "31/31",
+    "status": "r1_recomputed_fixed_unauthorized",
+    "total": "37/37",
     "updated": 14,
-    "new": 17,
+    "new": 23,
     "deleted": 0,
     "renamed": 0
   },
@@ -136,7 +156,15 @@
     "deleted": 0,
     "renamed": 0
   },
+  "exact_r1_correction_scope": {
+    "total": "8/8",
+    "updated": 7,
+    "new": 1,
+    "deleted": 0,
+    "renamed": 0
+  },
   "validation": {
+    "r1_effective_authority_correction_verifier": "PASS 27/27",
     "planning_verifier": "PASS 26/26",
     "v1_a1_r1_verifier_at_8db5c638": "PASS 25/25",
     "original_v1_a1_verifier_at_65c24586": "PASS 24/24",
@@ -160,5 +188,5 @@
   "rebase_used": false,
   "cherry_pick_used": false,
   "force_push_used": false,
-  "next_action": "human_chatgpt_review_of_v1_a2_clarification_integration_plan"
+  "next_action": "human_chatgpt_review_of_v1_a2_r1_effective_authority_correction"
 }

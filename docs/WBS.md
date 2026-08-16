@@ -1,29 +1,40 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
-## V1-A2 Clarification Integration Architecture Planning
+## V1-A2 R1 Effective Authority / Downstream Consumption Correction
 
+- [x] Reviewed planning commit `ab99f003901475199fcb316264ecd02c4f2baef8`; review `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 2
 - [x] Exact parent fixed at accepted V1-A1 snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`; main/origin-main `61e33a10e195fad17e253a6b9719217e1992f273`
 - [x] V1-A1 ChatGPT/Human review `PASS / complete`, Human acceptance and V1-A1 acceptance complete on `2026-08-16`; V1-A1=`accepted_complete`
 - [x] Base, Candidate, and Clarification Evidence fixed as three separate immutable authority lanes
 - [x] Clarification provenance `user_clarification`; no `currentSituation` append, false Base source, Candidate contamination, or unrelated-field write
 - [x] Same PB-01 stage successor selected; PB-01F/new stage prohibited; initial Base grounding reused immutably on same-request resume run
 - [x] Clarification Evidence/Grounding contract, structural source integrity, target-limited grounding, and clarification Safety aggregation defined
+- [x] Application-derived `EffectiveAssessmentAuthorityV1` defined with effective decision/writing/emotional contexts and per-value Base/Candidate/Clarification provenance
+- [x] Derived authority is not a fact source; known Base override, Candidate contamination, unrelated-target change, and hidden propagation prohibited
+- [x] `EffectiveDecisionPolicyV1` successor seam defined without mutating accepted Decision Policy files
+- [x] Clarification-aware PB-04/PB-05/PB-06 Prompt successors selected as explicit additional-input consumers; existing output schemas reused
+- [x] Hard invariant fixed: a clarification used to establish Ready cannot be discarded before materially relevant Product output; PB-06 failure is blocking
+- [x] Six-target downstream consumer matrix and prohibited effects fixed
 - [x] Persistence fixed as one request + zero/one clarification + one-or-more runs with `awaiting_clarification`, opaque continuation ID, duplicate-submit idempotency, and different-answer fail-close
+- [x] First answer atomically transitions `awaiting_clarification → processing` and creates exactly one resume run; same-answer duplicate creates zero runs
+- [x] Resume terminal mapping fixed to completed for ready/not-full/Safety and failed for technical failure; no return to awaiting
+- [x] Opaque continuation capability fixed as cryptographically random/non-sequential with at least 128 bits unpredictability; request ID alone insufficient
 - [x] One clarification maximum and automatic second clarification/loop prohibition preserved
 - [x] `not_full_product_candidate` fixed as first-class completed no-charge stopped outcome, distinct from needs-more/failure/Safety/ready
 - [x] `message_impact` Candidate requirement fixed under `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED`; missing Candidate consumes no clarification budget
 - [x] Actionable anchors fixed exactly to decide_send_or_wait, draft_message, message_impact, next_three_days
 - [x] relationship and organize_emotions fixed as supplementary-only; unanchored scope validation uses `M2_ACTIONABLE_TOPIC_REQUIRED` before request/Provider/budget
 - [x] Six clarification target answer/grounding/Safety/provenance boundaries defined without raw-prose routing or unrelated field mutation
+- [x] Cadence V2 copy aligned to relation answers: `今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？` → within/beyond/unknown
 - [x] Customer Delivery V2 states and separate opaque-ID answer endpoint planned; initial request body remains immutable
 - [x] No-charge boundary preserved for needs-more, not-full, and Safety; Payment remains unauthorized
-- [x] Future A2 implementation manifest fixed at `31/31`: 14 UPDATE + 17 NEW; any change requires STOP and new review
-- [x] Current planning scope fixed at `10/10`: 6 UPDATE + 4 NEW; DELETE / RENAME 0
-- [ ] Human / ChatGPT review of V1-A2 connection architecture
+- [x] Future A2 implementation manifest recomputed at `37/37`: 14 UPDATE + 23 NEW; any change requires STOP and new review
+- [x] Original planning scope retained at `10/10`; R1 correction scope fixed at `8/8`: 7 UPDATE + 1 NEW; DELETE / RENAME 0
+- [ ] Human / ChatGPT review of V1-A2 R1 Effective Authority correction
 - [ ] V1-A2 implementation, V1-B/C/D, Provider execution, Production Runtime, Payment, PR, or main integration — unauthorized
 
-Status is planning_defined_pending_human_chatgpt_review with V1-A2 implementation_authorized=false. V1-A overall remains incomplete. R2-C=remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Current Product/Runtime/API/UI/DB/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment changes are 0; Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a2_clarification_integration_plan.
+Status is r1_effective_authority_correction_defined_pending_human_chatgpt_review with V1-A2 implementation_authorized=false. PB-05 only receives clarification authority in the future package; V1-B semantic-depth implementation remains excluded. V1-A overall remains incomplete. R2-C=remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Current Product/Runtime/API/UI/DB/migration/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment implementation changes are 0; Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a2_r1_effective_authority_correction.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->

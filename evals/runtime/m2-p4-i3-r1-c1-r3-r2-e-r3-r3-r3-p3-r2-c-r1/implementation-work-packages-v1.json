@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a1_accepted_complete_v1_a2_planning_defined_pending_review_remaining_packages_unauthorized",
+  "status": "v1_a1_accepted_complete_v1_a2_r1_effective_authority_correction_defined_pending_review_remaining_packages_unauthorized",
   "planning_only": false,
   "sequence": [
     "V1-A1",
@@ -32,7 +32,7 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "status": "in_progress_v1_a1_accepted_complete_v1_a2_planning_defined_pending_review",
+      "status": "in_progress_v1_a1_accepted_complete_v1_a2_r1_effective_authority_correction_defined_pending_review",
       "complete": false,
       "authorized": false,
       "subpackages": [
@@ -63,9 +63,16 @@
         {
           "id": "V1-A2",
           "name": "Runtime/API/UI Clarification Integration",
-          "status": "planning_defined_pending_review",
+          "status": "r1_effective_authority_correction_defined_pending_review",
           "planning_authorized": true,
           "implementation_authorized": false,
+          "planning_commit": "ab99f003901475199fcb316264ecd02c4f2baef8",
+          "planning_review": "NEEDS_CORRECTION",
+          "planning_review_findings": {
+            "blocker": 0,
+            "major": 1,
+            "minor": 2
+          },
           "clarification_answer_grounding_provenance_contract_required": true,
           "clarification_answer_grounding_provenance_contract_status": "planning_defined_pending_review_not_implemented",
           "authority_lanes": [
@@ -79,7 +86,18 @@
           "pretend_followup_source_is_input_current_situation_allowed": false,
           "implicit_schema_widening_allowed": false,
           "new_provider_stage_planned": false,
+          "effective_assessment_authority": "EffectiveAssessmentAuthorityV1",
+          "effective_authority_kind": "derived_not_source",
+          "effective_authority_mutates_base_or_candidate": false,
+          "per_value_provenance_required": true,
+          "decision_policy_successor": "EffectiveDecisionPolicyV1",
+          "pb_04_clarification_aware_successor": true,
+          "pb_05_clarification_aware_successor": true,
+          "pb_06_clarification_validation_successor": true,
+          "ready_making_clarification_discard_allowed": false,
           "same_request_second_run": true,
+          "awaiting_to_processing_atomic_with_answer_and_resume_run": true,
+          "duplicate_same_answer_additional_runs": 0,
           "maximum_clarification_answers_per_request": 1,
           "automatic_second_clarification_allowed": false,
           "clarification_safety_before_paid_eligibility": true,
@@ -98,15 +116,25 @@
             "organize_emotions"
           ],
           "supplementary_only_safe_code": "M2_ACTIONABLE_TOPIC_REQUIRED",
+          "usual_reply_cadence_question_v2": "今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？",
+          "usual_reply_cadence_answer_values": [
+            "within_usual",
+            "beyond_usual",
+            "unknown"
+          ],
+          "continuation_identifier_kind": "cryptographically_random_non_sequential_capability",
+          "continuation_identifier_minimum_unpredictability_bits": 128,
           "future_exact_implementation_scope": {
-            "status": "fixed_unauthorized",
-            "total": "31/31",
+            "status": "r1_recomputed_fixed_unauthorized",
+            "total": "37/37",
             "updated": 14,
-            "new": 17,
+            "new": 23,
             "deleted": 0,
             "renamed": 0
           },
-          "pb_05_or_semantic_depth_in_scope": false,
+          "pb_05_clarification_authority_input_in_scope": true,
+          "pb_05_semantic_depth_rewrite_in_scope": false,
+          "v1_b_in_scope": false,
           "provider_execution_authorized": false,
           "payment_authorized": false
         }

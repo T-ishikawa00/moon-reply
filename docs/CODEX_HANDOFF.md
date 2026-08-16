@@ -1,19 +1,36 @@
 # CODEX_HANDOFF.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
-## Active handoff — V1-A2 Clarification Integration Architecture Plan
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1:BEGIN -->
+## Active handoff — V1-A2 R1 Effective Authority Correction
 
-- Status / branch / parent: `planning_defined_pending_human_chatgpt_review` / `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration` / accepted V1-A1 snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`.
+- Status / branch / parent: `r1_effective_authority_correction_defined_pending_human_chatgpt_review` / `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-effective-authority` / `ab99f003901475199fcb316264ecd02c4f2baef8`.
+- Review finding: original A2 plan=`NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 2. Clarification could establish Ready but lacked an authority-preserving path into Decision Policy and PB-04/05/06; cadence copy and resume transition also required correction.
+- Preserved source lanes: Base, Candidate, and Clarification Evidence/Grounding remain immutable and separate. No Base mutation, `currentSituation` append, false `input:current_situation` provenance, Candidate contamination, or unrelated-field override is allowed.
+- Derived authority: Application-owned `EffectiveAssessmentAuthorityV1` composes Base/Candidate/optional clarification without becoming a fact source. Its effective decision, writing, and emotional contexts retain per-value `input:`, `candidate:`, or `clarification:<opaque_id>:answer:1` provenance in `sourceMap`.
+- Downstream seam: `EffectiveDecisionPolicyV1` and clarification-aware PB-04/PB-05/PB-06 Prompt successors consume `effective_assessment_authority` explicitly. PB-06 blocks a ready-making clarification that is missing, distorted, or misattributed before Product delivery. Accepted stage versions and output schemas remain immutable.
+- Product boundary: PB-05 receives truthful clarification authority only; V1-B semantic-depth rewriting remains excluded and unauthorized. No new Provider stage is planned.
+- Cadence correction: V2 asks `今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？` for `within_usual / beyond_usual / unknown`. No-clarification parity is behavioral; reviewed V2 copy need not be byte-equal to V1.
+- Lifecycle/security: first answer atomically locks rows, persists once, transitions request `awaiting_clarification → processing`, and creates exactly one resume run. Same-answer duplicates create zero runs; different answer is 409; terminal resume never returns to awaiting. Continuation capability is cryptographically random/non-sequential with at least 128 bits unpredictability; request ID alone is insufficient.
+- Future package: recomputed exact A2 implementation scope is `37/37`, 14 UPDATE + 23 NEW, fixed but unauthorized. Any additional implementation path requires STOP and new Human review.
+- Current correction scope/operations: exact `8/8`, 7 UPDATE + 1 NEW, DELETE / RENAME 0. Current Product/Runtime/API/UI/DB/migration/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment implementation changes are 0; Provider / DB / Supabase are `0 / 0 / 0`.
+- Closed authority: V1-A2 `implementation_authorized=false`; V1-B/C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Next action: `human_chatgpt_review_of_v1_a2_r1_effective_authority_correction`. Do not implement A2 before explicit acceptance and authority.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1:END -->
+
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
+## Reviewed predecessor — V1-A2 Clarification Integration Architecture Plan
+
+- Status / branch / commit: `NEEDS_CORRECTION` / `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration` / `ab99f003901475199fcb316264ecd02c4f2baef8`.
 - Accepted authority: V1-A1 R1 ChatGPT review and Human review are `PASS / complete`; Human acceptance and V1-A1 acceptance are complete on `2026-08-16`. V1-A1=`accepted_complete`; V1-A overall remains incomplete.
 - Lane architecture: immutable original Base, optional Candidate, and one Clarification Evidence answer are separate authorities. Clarification provenance is `user_clarification`; no append to `currentSituation`, false `input:current_situation` source, Base source-ref insertion, or Candidate contamination is allowed.
 - PB-01 successor: no PB-01F or other stage is added. A future same-ID PB-01 successor receives original Base plus separate clarification on the second run, reuses immutable initial Base grounding, and may ground only the clarification lane. Target-limited structural source integrity and clarification-attributable Safety are mandatory.
 - Lifecycle: one request + zero/one clarification + one-or-more runs. One-gap input becomes `awaiting_clarification`; an opaque clarification ID authorizes a separate answer endpoint. One accepted answer is idempotent for exact duplicates; a different second answer fails closed. Automatic second clarification is prohibited.
 - Routing: post-answer outcomes are only ready, first-class `not_full_product_candidate`, or Safety. Not-full is a normal no-charge stop with no Report/draft and is not mislabeled as needs-more, failure, Safety, or ready.
 - Product-scope validation: `message_impact` requires a non-empty Candidate under `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED`; missing Candidate does not consume clarification budget. Exact actionable anchors are decide_send_or_wait, draft_message, message_impact, next_three_days. relationship and organize_emotions are supplementary-only; unanchored input stops under `M2_ACTIONABLE_TOPIC_REQUIRED` before request creation or Provider work.
-- Future package: exact A2 implementation scope is fixed but unauthorized at `31/31`, 14 UPDATE + 17 NEW. It includes the clarification contract/grounding, same-stage PB-01 Prompt/Schema/Catalog successor, policy/normalization/delivery V2 successors, lifecycle persistence, APIs/UI, and offline verifier; PB-05/V1-B, semantic disposition, Payment, Provider execution, Production Runtime, and main are excluded.
+- Superseded manifest: original `31/31` is not implementation-ready because it omits downstream clarification consumption. R1 recomputes it to `37/37` while V1-B, Payment, Provider execution, Production Runtime, and main remain excluded.
 - Current scope/operations: this plan is exact `10/10`, 6 UPDATE + 4 NEW, DELETE / RENAME 0. Product/Runtime/API/UI/DB/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment changes are 0; Provider / DB / Supabase are `0 / 0 / 0`.
 - Closed authority: V1-A2 `implementation_authorized=false`; V1-B/C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Next action: `human_chatgpt_review_of_v1_a2_clarification_integration_plan`. Do not begin implementation before explicit acceptance and authority.
+- Next action moved to R1 Effective Authority correction review. Do not begin implementation before explicit acceptance and authority.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->

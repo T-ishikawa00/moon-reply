@@ -1,8 +1,9 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2 Clarification Integration Architecture Plan Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2 R1 Effective Authority Plan Review
 
 ## Status and authority
 
-- Status: `planning_defined_pending_human_chatgpt_review`
+- Status: `r1_effective_authority_correction_defined_pending_human_chatgpt_review`
+- Reviewed planning commit: `ab99f003901475199fcb316264ecd02c4f2baef8`
 - Branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration`
 - Exact parent / accepted V1-A1 snapshot: `8db5c6386ed0b9b16f0d1586f47d384262cc502b`
 - Original V1-A1: `65c245860813f6179689855b344dbf6fd425867a`
@@ -13,6 +14,14 @@
 V1-A1 ChatGPT review and Human review are `PASS / complete`; Human acceptance and V1-A1 acceptance are complete. V1-A1 is `accepted_complete`. V1-A overall remains incomplete.
 
 Only V1-A2 planning is authorized. V1-A2 implementation remains unauthorized until this plan is reviewed and accepted. V1-B, V1-C, V1-D, Provider execution, Production Runtime, Payment, and main integration remain unauthorized.
+
+## R1 review finding
+
+Human / ChatGPT review of planning commit `ab99f003901475199fcb316264ecd02c4f2baef8` is `NEEDS_CORRECTION`: BLOCKER 0, MAJOR 1, MINOR 2.
+
+The MAJOR is an end-to-end authority gap: Clarification Grounding could make V1-A1 sufficiency Ready, but no contract required Decision Policy, PB-04, PB-05, or PB-06 to consume that authority. A clarified consultation could therefore become paid-ready while its answer was absent from the decision and Product output. R1 prohibits that discard.
+
+The MINOR findings are a semantic mismatch between the cadence question and its relation-valued answer, and an incomplete `awaiting_clarification → processing` resume transition. Both are corrected below.
 
 ## Architecture decision
 
@@ -25,6 +34,51 @@ The connection must preserve three independent authorities:
 Clarification Evidence is not a patch to Base. It may not be appended to `currentSituation`, projected as `input:current_situation`, inserted into existing Base source refs, or copied into Candidate. Its provenance is `user_clarification`, with a clarification-owned source identity such as `clarification:<opaque_clarification_id>:answer:1`.
 
 The versioned Clarification Evidence contract retains its schema version, opaque clarification ID, ordinal `1`, question code, target, immutable question snapshot, user answer, provenance, source identity, target-limited grounded normalized representation, and clarification-attributable Safety signals. Provider metadata is not part of customer delivery.
+
+The three source lanes remain immutable. R1 does not solve downstream consumption by constructing a mutated Base object.
+
+## Effective Assessment Authority
+
+The Application derives `EffectiveAssessmentAuthorityV1` after clarification grounding and Safety, before sufficiency and downstream decision work. It composes decision-relevant views of immutable Base, immutable Candidate, and optional target-limited Clarification Grounding without rewriting any source.
+
+Required fields are `schemaVersion`, `baseAuthorityRef`, `candidateAuthorityRef`, nullable `clarificationAuthorityRef`, `effectiveDecisionContext`, `effectiveWritingContext`, `effectiveEmotionalContext`, and `sourceMap`. Every effective value retains a source-map entry with effective path, source lane, source ref, source value path, and nullable clarification target.
+
+Namespaces remain structurally distinct:
+
+- Base: `input:...`
+- Candidate: `candidate:...`
+- Clarification: `clarification:<opaque_clarification_id>:answer:1`
+
+This is derived authority, not a new factual source. Clarification may fill only its selected missing dimension. It cannot override a known Base value, change an unrelated effective path, contaminate Candidate, or create duplicate origins. A source conflict fails closed under `M2_CLARIFICATION_AUTHORITY_CONFLICT`. Missing downstream injection fails under `M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING`.
+
+## Downstream consumption strategy
+
+The selected strategy is exact: `effective_assessment_authority` is an additional Application-owned input to clarification-aware successors of PB-04, PB-05, and PB-06. Existing accepted Prompt versions remain immutable. No Provider stage is added.
+
+A new `EffectiveDecisionPolicyV1` consumes `effectiveDecisionContext`, delegates accepted current policy behavior where no clarification exists, and records which authorized effective paths were consumed. It may react only to the selected clarification dimension. Non-decision targets cannot silently change the selected decision.
+
+PB-04 may use authorized effective decision, writing, and emotional values for action, draft, rationale, and reassessment. PB-05 may reflect a materially ready-making clarification in factual, uncertainty, draft-context, or emotional-containment content. This is authority availability only; it does not implement V1-B semantic-depth rewriting. PB-06 must fail when materially relevant clarification is missing, distorted, misattributed, or converted into an unsupported fact.
+
+PB-04 and PB-05 retain their existing output schemas; PB-06 retains the existing validation-result schema. Their input authority changes are Prompt/Catalog successors, so no new output Schema is required.
+
+## Target-specific consumer matrix
+
+| Target | Permitted downstream consumption | Prohibited effect |
+| --- | --- | --- |
+| `material_relationship_or_communication_concern` | V1-A materiality, effective Product-scope context, PB-05 Product understanding, PB-06 fidelity | unrelated Decision Fact or other-person fact |
+| `latest_contact_timing` | V1-A, effective timing, Decision Policy successor, PB-04 action/reassessment, PB-05 factual commentary, PB-06 | invented elapsed value or predicted reply |
+| `usual_reply_cadence` | V1-A, effective cadence relation, Decision Policy where applicable, PB-04 reasoning/reassessment, PB-05 fact/uncertainty, PB-06 | exact cadence invention, prediction, other-person reason |
+| `central_fear_or_decision_concern` | V1-A emotional sufficiency, effective emotional context, relevant PB-04 rationale, PB-05 emotional containment, PB-06 | other-person fact or unstated fear |
+| `relationship_intent` | V1-A, effective user intent, relevant Decision Policy/PB-04, draft/action rationale, PB-05, PB-06 | other-person intent or outcome |
+| `requested_message_tone` | V1-A, effective writing context, PB-04 draft/edit rationale, PB-05 draft context, PB-06 | Candidate rewrite in grounding or inferred other-person preference |
+
+No consumer receives clarification through a hidden Base mutation. Consumers and non-consumers are explicit per target.
+
+## Hard end-to-end invariant
+
+`clarification_used_to_establish_ready => materially_relevant_clarification_is_preserved_downstream`
+
+Failure is blocking under `M2_CLARIFICATION_DOWNSTREAM_DISCARDED` before Product delivery. Future fixtures must prove soft-tone draft consumption, clarification-derived timing in Decision Policy/PB-04, user-owned move-closer intent without other-person attribution, explicit central fear in bounded emotional containment, no-clarification behavioral parity, and target-X isolation from unrelated target Y.
 
 ## PB-01 successor without a new Provider stage
 
@@ -58,11 +112,15 @@ The customer continues with the opaque clarification ID, not a raw request ID as
 
 Answer acceptance is transactional and idempotent:
 
-- pending + first valid answer: accept exactly once;
-- answered + same canonical answer: replay the existing continuation or result without a new answer or run;
+- pending + first valid answer: lock clarification and request, persist exactly once, atomically transition `awaiting_clarification → processing`, and create exactly one resume run;
+- answered + same canonical answer: replay the existing continuation or result with zero additional runs;
 - answered + different answer: fail closed with `M2_CLARIFICATION_ALREADY_ANSWERED` and HTTP 409.
 
 No second clarification row, second answer, automatic second question, or clarification loop is allowed.
+
+Resume terminal transitions are exact: ready, `not_full_product_candidate`, and `safety_blocked` set the request to `completed`; technical failure sets it to `failed`. No resume path returns to `awaiting_clarification`.
+
+The opaque continuation identifier is a cryptographically random, non-sequential capability with at least 128 bits of unpredictability or equivalent. Request ID alone is insufficient. An answered/completed clarification cannot create another run. Production session/account binding remains a later Production concern and is not implemented here.
 
 ## Run and Safety semantics
 
@@ -78,7 +136,7 @@ After answer acceptance, the second run on the same request has an exhausted cla
 
 Clarification Safety keeps clarification provenance and is aggregated with Base and Candidate Safety before paid Product eligibility. It cannot weaken or reinterpret an existing Safety result.
 
-Accepted V1-A1 remains immutable. A future `jpy980-input-sufficiency-policy-v2.ts` adapter must deep-equal V1 on inputs without clarification and consume the separate, target-limited clarification grounding on resume. It must not synthesize a mutated Base object. With `clarificationAlreadyUsed=true`, a second question remains unreachable.
+Accepted V1-A1 remains immutable. A future `jpy980-input-sufficiency-policy-v2.ts` adapter consumes the separate, target-limited clarification grounding on resume and must not synthesize a mutated Base object. Without clarification it preserves behavioral parity for state, reason semantics, missing dimensions, budget, and non-clarification routing. Byte/deep equality of customer question copy is not required for the explicitly reviewed V2 cadence correction. With `clarificationAlreadyUsed=true`, a second question remains unreachable.
 
 ## First-class not-full state
 
@@ -133,7 +191,7 @@ All six V1-A1 targets are retained. Every normalized result stays within its sel
 | --- | --- | --- | --- |
 | `material_relationship_or_communication_concern` | one bounded choice plus optional detail | explicit material concern or explicit no-concern | relationship facts, inner state, outcome |
 | `latest_contact_timing` | local datetime, bounded elapsed bucket, or unknown | user-supplied timing | invented chronology, future timing |
-| `usual_reply_cadence` | `within_usual`, `beyond_usual`, or `unknown` | bounded cadence relation | invented exact interval, reply prediction |
+| `usual_reply_cadence` | V2 question `今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？`; answer `within_usual`, `beyond_usual`, or `unknown` | bounded cadence relation | invented exact interval, reply prediction |
 | `central_fear_or_decision_concern` | bounded text or explicit none | exact user-stated concern and emotional-context presence | unstated fear, inner state, outcome |
 | `relationship_intent` | bounded direction choice plus optional detail | user-stated desired direction | the other person's intent, outcome, mutated Base goal |
 | `requested_message_tone` | bounded tone/register choice plus optional detail | requested writing direction | Candidate rewrite/analysis, other person's preference |
@@ -163,16 +221,16 @@ This plan implements and authorizes no Payment work. There is no charge in `need
 
 ## Future implementation package
 
-Future V1-A2 implementation is fixed at `31/31`: 14 UPDATE + 17 NEW, DELETE / RENAME 0. It remains unauthorized. The machine-readable exact list is in `integration-contract-v1.json`.
+Future V1-A2 implementation is recomputed and fixed at `37/37`: 14 UPDATE + 23 NEW, DELETE / RENAME 0. It remains unauthorized. The machine-readable exact list is in `integration-contract-v1.json`.
 
-The package owns types; Clarification Evidence/Grounding; target-limited source integrity; PB-01 successor Prompt/Schema/Catalog; V1-A1-compatible policy V2; Product-scope validation; pipeline; Application/service; repository/fake; migration; result normalization; Customer Delivery V2; initial and answer APIs; clarification UI/styles; offline fixtures/results/verifier; and review/authority synchronization.
+The corrected package adds `EffectiveAssessmentAuthorityV1`, effective provenance integrity, `EffectiveDecisionPolicyV1`, and clarification-aware PB-04/PB-05/PB-06 Prompt successors to the prior scope. It also owns types; Clarification Evidence/Grounding; target-limited source integrity; PB-01 successor Prompt/Schema; Catalog v12; V1-A1-compatible policy V2; Product-scope validation; pipeline; Application/service; repository/fake; migration; result normalization; Customer Delivery V2; initial and answer APIs; clarification UI/styles; offline end-to-end fixtures/results/verifier; and review/authority synchronization.
 
 It expressly excludes PB-05 semantic depth, Product note work, semantic disposition, Product re-review, Payment, Provider execution, Production Runtime activation, and main integration. Any future path change is a STOP and requires a new Human review; it is not an implicit scope expansion.
 
 ## Current closed authority
 
 - V1-A1: `accepted_complete`
-- V1-A2: `planning_defined_pending_review`; `implementation_authorized=false`
+- V1-A2: `r1_effective_authority_correction_defined_pending_review`; `implementation_authorized=false`
 - V1-B/C/D: unauthorized
 - R2-C: `remediation_required`
 - experienceProductJudgment: `pending_remediation`
@@ -185,6 +243,6 @@ This planning result is not V1-A2 implementation, Runtime readiness, Payment rea
 
 ## Planning scope and review gate
 
-This Task changes exactly `10/10`: 6 UPDATE + 4 NEW, DELETE / RENAME 0. The V1-A1 accepted snapshot, current Runtime/Product blobs, `next-env.d.ts`, and main remain unchanged.
+The original A2 planning commit remains exact `10/10`: 6 UPDATE + 4 NEW. This R1 correction changes exactly `8/8`: 7 UPDATE + 1 NEW, DELETE / RENAME 0. The V1-A1 accepted snapshot, current Runtime/Product blobs, `next-env.d.ts`, and main remain unchanged.
 
-Next action: Human / ChatGPT review of this connection architecture. Do not begin V1-A2 implementation before explicit acceptance and implementation authorization.
+Next action: Human / ChatGPT review of this R1 Effective Authority correction. Do not begin V1-A2 implementation before explicit acceptance and implementation authorization.
