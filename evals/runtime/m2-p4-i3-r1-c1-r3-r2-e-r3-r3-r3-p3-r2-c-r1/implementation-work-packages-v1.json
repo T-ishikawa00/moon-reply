@@ -1,0 +1,178 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
+  "status": "future_packages_defined_not_authorized",
+  "planning_only": true,
+  "sequence": [
+    "V1-A",
+    "V1-B",
+    "V1-C",
+    "V1-D"
+  ],
+  "packages": [
+    {
+      "id": "V1-A",
+      "name": "Input Sufficiency and Case Routing",
+      "owner_domain": "pre_product_eligibility",
+      "responsibilities": [
+        "reuse needs_more_information",
+        "select one consultation-specific highest-information-gain clarification",
+        "prevent Payment-capable state before Product eligibility",
+        "prevent Report and generated draft while input is insufficient",
+        "route non-material cases out of the paid Product path"
+      ],
+      "excludes": [
+        "PB-05 prose generation",
+        "semantic evaluator disposition",
+        "Provider execution",
+        "Payment implementation"
+      ],
+      "authorized": false
+    },
+    {
+      "id": "V1-B",
+      "name": "PB-05 Semantic Depth Successor",
+      "owner_domain": "grounded_product_generation",
+      "responsibilities": [
+        "consultation core",
+        "evidence significance",
+        "recommendation reasoning",
+        "relevant alternative tradeoff",
+        "case-specific closure",
+        "preserve exact requested and permitted drafts"
+      ],
+      "existing_report_fields_preferred": true,
+      "schema_change_policy": "Only if unavoidable, in a separately reviewed and authorized scope.",
+      "excludes": [
+        "input eligibility state transitions",
+        "evaluator verdict logic",
+        "Provider execution authorization"
+      ],
+      "authorized": false
+    },
+    {
+      "id": "V1-C",
+      "name": "Evaluator and Semantic Disposition",
+      "owner_domain": "offline_semantic_quality_enforcement",
+      "responsibilities": [
+        "unsupported causality remains blocking",
+        "unsupported chronology remains blocking",
+        "explanation of the application decision is allowed",
+        "semantic repetition controls",
+        "new-proposition evidence",
+        "no false certainty"
+      ],
+      "excludes": [
+        "Product prose generation",
+        "input questionnaire behavior",
+        "UI layout changes",
+        "Provider execution"
+      ],
+      "authorized": false
+    },
+    {
+      "id": "V1-D",
+      "name": "Offline Fixtures and Product Re-review",
+      "owner_domain": "offline_acceptance_evidence",
+      "responsibilities": [
+        "fixture coverage",
+        "deterministic regression",
+        "Human Product re-review of actual successor output",
+        "R2-B visual shell regression",
+        "exact draft preservation"
+      ],
+      "excludes": [
+        "Product implementation",
+        "Prompt implementation",
+        "Provider execution",
+        "Payment implementation"
+      ],
+      "authorized": false
+    }
+  ],
+  "pairwise_separation": [
+    {
+      "pair": [
+        "V1-A",
+        "V1-B"
+      ],
+      "seam": "V1-A decides whether a Full Product may be generated; V1-B generates grounded Product depth only after that decision."
+    },
+    {
+      "pair": [
+        "V1-A",
+        "V1-C"
+      ],
+      "seam": "V1-A owns routing; V1-C owns semantic quality disposition."
+    },
+    {
+      "pair": [
+        "V1-A",
+        "V1-D"
+      ],
+      "seam": "V1-A owns behavior; V1-D owns offline evidence and review."
+    },
+    {
+      "pair": [
+        "V1-B",
+        "V1-C"
+      ],
+      "seam": "V1-B produces Product content; V1-C evaluates it without rewriting it."
+    },
+    {
+      "pair": [
+        "V1-B",
+        "V1-D"
+      ],
+      "seam": "V1-B owns generation; V1-D owns fixtures and acceptance."
+    },
+    {
+      "pair": [
+        "V1-C",
+        "V1-D"
+      ],
+      "seam": "V1-C defines evaluator behavior; V1-D supplies regression inputs and Human review evidence."
+    }
+  ],
+  "offline_fixture_requirements": {
+    "current_five": [
+      "simple_business_reply_with_draft",
+      "ordinary_reply_waiting",
+      "nullable_optional_sections",
+      "polite_thank_you_with_draft",
+      "kansai_persona_draft"
+    ],
+    "required_additional": [
+      "sparse_administrative_reply_needs_more_information",
+      "administrative_reply_with_tone_concern_ready_candidate",
+      "reply_waiting_with_usual_cadence",
+      "reply_waiting_without_timeline_needs_more_information",
+      "draft_request_with_relationship_intent",
+      "anxiety_heavy_sparse_facts",
+      "alternative_tradeoff_applicable",
+      "alternative_tradeoff_not_applicable",
+      "unsupported_inner_state_mutant",
+      "repeated_meaning_mutant"
+    ]
+  },
+  "future_product_re_review_acceptance": [
+    "no_paid_ready_sparse_case",
+    "no_padding",
+    "no_repeated_conclusion_across_multiple_sections",
+    "at_least_one_clear_evidence_to_decision_chain",
+    "action_is_usable",
+    "uncertainty_is_honest",
+    "emotional_case_feels_personally_understood",
+    "simple_case_is_genuinely_valuable_or_routed_out",
+    "polite_and_persona_drafts_retain_exact_text",
+    "r2_b_visual_shell_remains_intact"
+  ],
+  "provider_execution_authorized": false,
+  "optional_future_candidate": {
+    "feature": "one_post_delivery_follow_up_question_under_same_purchase",
+    "status": "decision_pending",
+    "authorized": false,
+    "included_in_mvp_plan": false,
+    "requires_separate_human_approval": true
+  }
+}

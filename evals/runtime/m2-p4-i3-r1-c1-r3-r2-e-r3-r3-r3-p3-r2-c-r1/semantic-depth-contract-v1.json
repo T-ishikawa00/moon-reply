@@ -1,0 +1,117 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-semantic-depth-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
+  "status": "planning_contract_defined_pending_review",
+  "planning_only": true,
+  "value_functions": [
+    {
+      "id": "A",
+      "name": "consultation_core",
+      "contract": "State what the user is actually deciding or fearing, grounded only in supplied input."
+    },
+    {
+      "id": "B",
+      "name": "evidence_and_significance",
+      "contract": "Identify observed facts and explain why each selected fact matters to the current decision."
+    },
+    {
+      "id": "C",
+      "name": "decision_logic",
+      "contract": "Provide an explicit observed facts to bounded interpretation to selected current direction chain."
+    },
+    {
+      "id": "D",
+      "name": "alternative_tradeoff",
+      "contract": "Only when another action is genuinely plausible, explain benefits and risks of selected and unselected actions without inventing the other person's inner state."
+    },
+    {
+      "id": "E",
+      "name": "action_artifact",
+      "contract": "Provide a concrete next action and an exact draft only when requested and permitted."
+    },
+    {
+      "id": "F",
+      "name": "uncertainty_boundary",
+      "contract": "State what cannot currently be known without enumerating immaterial negative possibilities."
+    },
+    {
+      "id": "G",
+      "name": "reassessment_trigger",
+      "contract": "Name an observable condition that changes or reopens the decision."
+    },
+    {
+      "id": "H",
+      "name": "emotional_containment",
+      "contract": "Provide consultation-specific acknowledgment and closure without generic therapy filler or false certainty."
+    }
+  ],
+  "mandatory_ready_functions": [
+    "consultation_core",
+    "evidence_and_significance",
+    "decision_logic",
+    "action_artifact"
+  ],
+  "mandatory_boundary_rule": {
+    "at_least_one_required": [
+      "uncertainty_boundary",
+      "reassessment_trigger"
+    ]
+  },
+  "conditional_functions": [
+    "alternative_tradeoff",
+    "draft",
+    "message_impact",
+    "emotional_containment_depth"
+  ],
+  "grounding_failure_route": "needs_more_information",
+  "grounding_boundary": {
+    "purpose": "Deepening explains Moon Reply's recommendation rather than inventing the other person's cause or inner state.",
+    "prohibited_examples": [
+      "相手は忙しいから返信していない",
+      "相手はあなたを嫌っていない",
+      "相手は慎重になっている"
+    ],
+    "prohibited_unless_directly_supported_by_base_facts": true,
+    "allowed_examples": [
+      "返信がない理由は現在分からない",
+      "最後の連絡からまだ短時間",
+      "拒絶や終了を示す事実はない",
+      "追加送信で増える情報がない",
+      "therefore current recommendation is to wait"
+    ],
+    "allowed_examples_require_corresponding_supplied_evidence": true,
+    "fabrication_prohibited": [
+      "causality",
+      "chronology",
+      "inner_state",
+      "future_reply",
+      "relationship_outcome"
+    ]
+  },
+  "non_repetition_contract": {
+    "each_visible_primary_paragraph_or_list_group_owns_a_distinct_product_function": true,
+    "each_primary_block_adds_at_least_one_new_proposition": true,
+    "primary_locations": [
+      "openingLetter",
+      "primaryReason",
+      "situationReading",
+      "actionRationales",
+      "closingLines"
+    ],
+    "same_meaning_across_primary_locations_prohibited": true,
+    "deterministic_checks": [
+      "exact_normalized_duplicate",
+      "source_field_reused_in_multiple_primary_locations",
+      "repeated_proposition_id"
+    ],
+    "semantic_repetition_not_deterministically_provable": "human_product_review_required",
+    "proposition_ids_are_internal_only": true
+  },
+  "shape_boundary": {
+    "no_fixed_word_minimum": true,
+    "no_fixed_section_minimum": true,
+    "section_count_padding_prohibited": true,
+    "alternative_tradeoff_omitted_when_not_genuinely_applicable": true,
+    "draft_omitted_when_not_requested_or_not_permitted": true
+  }
+}

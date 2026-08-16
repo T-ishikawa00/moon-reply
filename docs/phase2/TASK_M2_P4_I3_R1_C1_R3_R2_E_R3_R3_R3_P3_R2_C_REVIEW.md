@@ -1,6 +1,26 @@
 # M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C Review
 
-## Status
+## Current R2-C finding
+
+- R2-C preparation commit: d28fdf37f3e80f28a927a9f9dcc793cdd26b92e2
+- Reviewed R2-B Product snapshot: fa956b9b1941c73f8e1767c64ab24f07fadd36c6
+- Visual direction: accepted
+- Customer note architecture: accepted
+- Draft utility: accepted
+- Overall content direction: accepted
+- Semantic depth: remediation_required
+- Input sufficiency handling: remediation_required
+- R2-C overall: remediation_required
+- experienceProductJudgment: pending_remediation
+- jpy980RuntimeReadiness: not_established
+- globalQ0Completion: false
+- Formal Human Visual review: PENDING / incomplete
+
+This is not an R2-C PASS. Directional visual acceptance does not complete the formal Human Visual checklist; every unperformed Human Visual item remains PENDING. The successor finding is stored in the R2-C-R1 planning package.
+
+The required remediation is planning-only: an Input Sufficiency Gate, Semantic Depth Contract, case routing, pairwise-separated future packages, and Product re-review acceptance. Product code must not be repaired in this task.
+
+## Preparation-time status
 
 - Task: R2-C Authorized Human Visual / Product Review Preparation
 - R2-B review target: `fa956b9b1941c73f8e1767c64ab24f07fadd36c6`
@@ -131,6 +151,8 @@ Enable the operating system or browser reduced-motion preference, reload, and co
 
 ## Human Product questions
 
+The preparation-time Product Owner template remains unchanged and PENDING. The current cross-case remediation finding is recorded in the R2-C-R1 successor package and does not fabricate case-by-case answers in the older template. Within that immutable preparation template experienceProductJudgment remains pending; the current successor disposition is pending_remediation.
+
 Record answers only after actual Human review in:
 
 `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c/product-owner-review-v1.json`
@@ -149,6 +171,8 @@ Each case intentionally leaves these values null:
 Do not infer unanswered values. `experienceProductJudgment` remains `pending` until the Human decision is supplied.
 
 ## R2-C PASS boundary
+
+The current R2-C disposition is remediation_required, so this boundary has not been reached.
 
 Even if a later Human Product review passes, the maximum meaning is:
 
@@ -200,3 +224,5 @@ Preparation-time automated results:
 - `next-env.d.ts` content drift after build: `0`
 
 These are technical preparation results only. Human Visual and Human Product judgments remain PENDING.
+
+They remain valid as preparation-time technical measurements only. They do not override the current Product finding, establish Semantic Depth or Input Sufficiency, or make R2-C pass.

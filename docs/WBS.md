@@ -1,5 +1,27 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->
+## R2-C R1 JPY980 Value Architecture / Semantic Depth Planning
+
+- [x] Exact parent d28fdf37f3e80f28a927a9f9dcc793cdd26b92e2, R2-B snapshot fa956b9b1941c73f8e1767c64ab24f07fadd36c6, R2-A acceptance 1229627588e3c6ccd41ea7ea32751b8b8ac79c6e, and main/origin-main 61e33a10e195fad17e253a6b9719217e1992f273 fixed
+- [x] Current accepted directions recorded: Visual, Customer note architecture, draft utility, and overall content direction
+- [x] Current remediation findings recorded: Semantic depth and Input sufficiency handling
+- [x] R2-C remediation_required, experienceProductJudgment=pending_remediation, jpy980RuntimeReadiness=not_established, and globalQ0Completion=false preserved
+- [x] Formal Human Visual unperformed items preserved as PENDING; no R2-C or Human Visual PASS declared
+- [x] Safety-first Input Sufficiency Gate and four planning states defined
+- [x] Existing needs_more_information reuse, exactly one targeted clarification, no pre-eligibility charge, and no insufficient-input Report/draft fixed
+- [x] Eight Semantic Depth value functions, mandatory Ready threshold, grounding boundary, and non-repetition contract defined
+- [x] simple, nullable, ordinary waiting, polite draft, and persona-preserved case routes defined
+- [x] Pairwise-separated future Packages V1-A through V1-D and required offline fixtures defined
+- [x] Future Product re-review acceptance and maximum plausibly_worth_jpy980 meaning defined
+- [x] Optional post-delivery follow-up question recorded as decision_pending and unauthorized
+- [x] Exact planning scope fixed at 12/12: 4 UPDATE + 8 NEW; DELETE / RENAME 0
+- [ ] Human / ChatGPT review of this planning package
+- [ ] Product, Prompt, evaluator, UI, Runtime, Provider, DB/Supabase, Payment, or future package implementation — unauthorized
+
+Status is r2_c_remediation_required_jpy980_value_depth_plan_ready_pending_human_chatgpt_review. This is planning-only and not an R2-C PASS. Provider / DB / Supabase are 0 / 0 / 0; Product snapshot and main remain unchanged. next_action=human_chatgpt_review_of_jpy980_value_depth_plan.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
 ## R2-A Acceptance / R2-B Implementation Authorization Sync
 

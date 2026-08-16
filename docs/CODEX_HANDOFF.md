@@ -1,5 +1,19 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->
+## Active handoff — R2-C R1 JPY980 Value Architecture / Semantic Depth Plan
+
+- Status / branch / parent: r2_c_remediation_required_jpy980_value_depth_plan_ready_pending_human_chatgpt_review / plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-jpy980-value-depth / d28fdf37f3e80f28a927a9f9dcc793cdd26b92e2.
+- Current Human / ChatGPT finding: Visual direction, Customer note architecture, draft utility, and overall content direction are accepted. Semantic depth and input sufficiency handling are remediation_required because JPY980 value depth varies by consultation.
+- Current disposition: R2-C overall remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. This is not an R2-C PASS.
+- Human Visual boundary: formal Human Visual review is incomplete; every unperformed item remains PENDING. Directional visual acceptance is not a formal Human Visual PASS.
+- Product plan: Safety precedes sufficiency; insufficient input uses the existing needs_more_information family, asks exactly one consultation-specific highest-information-gain question, and cannot enter Payment-capable, Report, or generated-draft state. Sparse non-material cases route out of the paid path.
+- Semantic depth: Ready requires consultation_core, evidence_and_significance, decision_logic, action_artifact, and at least one of uncertainty_boundary or reassessment_trigger. No word or section minimum exists; padding, unsupported insight, false certainty, and repeated propositions are prohibited.
+- Future work: V1-A Input Sufficiency / Routing, V1-B PB-05 Semantic Depth, V1-C Evaluator / Semantic Disposition, and V1-D Offline Fixtures / Product Re-review are pairwise separated and unauthorized. Provider execution remains unauthorized.
+- Scope / operations: planning-only exact 12/12, 4 UPDATE + 8 NEW, DELETE / RENAME 0. Product / UI / Prompt / Catalog / Schema / Runtime / Payment changes are 0; Provider / DB / Supabase are 0 / 0 / 0; main remains 61e33a10e195fad17e253a6b9719217e1992f273.
+- Next action: human_chatgpt_review_of_jpy980_value_depth_plan. Stop after one normal feature-branch push.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1:BEGIN -->
 ## Active handoff — R2-A Acceptance / R2-B Implementation Authorization
 
