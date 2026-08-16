@@ -1,0 +1,112 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-policy-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1",
+  "policy_version": "m2-p4-jpy980-input-sufficiency-policy-v1",
+  "status": "implemented_pending_human_chatgpt_review",
+  "authority": {
+    "accepted_jpy980_value_architecture_r1_correction": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
+    "correction_chatgpt_review": "PASS",
+    "correction_chatgpt_review_complete": true,
+    "correction_human_review": "PASS",
+    "correction_human_review_complete": true,
+    "correction_human_acceptance_complete": true,
+    "correction_acceptance_complete": true,
+    "acceptance_date": "2026-08-16"
+  },
+  "input_authority": {
+    "aggregate_safety_classification": [
+      "normal_allowed",
+      "needs_review",
+      "rejected"
+    ],
+    "base_structured_intake_schema_version": "pipeline-schema-base-v2.0.0",
+    "decision_facts_schema_version": "m2-p4-base-decision-facts-v2",
+    "base_writing_signals_schema_version": "m2-p4-base-writing-signals-v1",
+    "material_unknowns_source": "base_structured_intake.material_unknowns",
+    "user_emotions_source": "base_structured_intake.user_emotions",
+    "clarification_already_used": "boolean",
+    "raw_customer_prose_keyword_routing_allowed": false,
+    "case_or_fixture_id_branching_allowed": false
+  },
+  "result_contract": {
+    "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+    "states": [
+      "full_paid_ready_candidate",
+      "needs_one_clarifying_answer",
+      "not_full_product_candidate",
+      "safety_blocked"
+    ],
+    "required_fields": [
+      "schemaVersion",
+      "state",
+      "reasonCodes",
+      "missingMaterialDimensions",
+      "clarificationBudget",
+      "clarification"
+    ],
+    "clarification_budget": {
+      "maximumQuestionsTotal": 1,
+      "questionsAlreadyUsed": [
+        0,
+        1
+      ],
+      "questionsRemaining": [
+        0,
+        1
+      ],
+      "automatic_second_question_allowed": false,
+      "clarification_loop_allowed": false
+    },
+    "clarification_null_unless_state": "needs_one_clarifying_answer",
+    "maximum_clarifications_returned": 1,
+    "needs_one_clarifying_answer_allowed_after_budget_used": false
+  },
+  "clarification_catalog": [
+    "material_relationship_or_communication_concern",
+    "latest_contact_timing",
+    "usual_reply_cadence",
+    "central_fear_or_decision_concern",
+    "relationship_intent",
+    "requested_message_tone"
+  ],
+  "routing_rules": {
+    "safety_priority": "Any aggregate Safety classification other than normal_allowed routes to safety_blocked before sufficiency evaluation.",
+    "one_gap_unused_budget": "Exactly one catalog-supported material gap with unused budget routes to needs_one_clarifying_answer.",
+    "multiple_independent_gaps": "not_full_product_candidate",
+    "budget_exhausted_while_insufficient": "not_full_product_candidate",
+    "unsupported_or_malformed_input": "M2_JPY980_INPUT_SUFFICIENCY_POLICY_INVALID",
+    "routine_administrative_without_material_concern": "not automatically full_paid_ready_candidate",
+    "word_count_used_as_sufficiency": false,
+    "fact_count_alone_used_as_sufficiency": false,
+    "section_count_used_as_sufficiency": false,
+    "requested_topic_count_alone_used_as_sufficiency": false
+  },
+  "semantic_basis_assessed_but_not_generated": {
+    "mandatory": [
+      "consultation_core",
+      "evidence_and_significance",
+      "decision_logic",
+      "action_artifact",
+      "emotional_containment"
+    ],
+    "at_least_one_boundary": [
+      "uncertainty_boundary",
+      "reassessment_trigger"
+    ],
+    "product_fields_generated_by_v1_a1": false
+  },
+  "runtime_boundary": {
+    "active_pipeline_connected": false,
+    "runtime_eligibility_v3_widened": false,
+    "api_response_changed": false,
+    "ui_clarification_flow_changed": false,
+    "db_eligibility_constraint_changed": false,
+    "not_full_product_candidate_representation_owner": "V1-A2",
+    "v1_a2_authorized": false
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0
+  }
+}

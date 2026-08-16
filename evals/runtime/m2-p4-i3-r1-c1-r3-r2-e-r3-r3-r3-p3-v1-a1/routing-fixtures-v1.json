@@ -1,0 +1,515 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-routing-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1",
+  "base_structured_intake_template": {
+    "schema_version": "pipeline-schema-base-v2.0.0",
+    "relationship_stage": "in_relationship",
+    "user_goal": "prepare_message",
+    "timeline": [
+      {
+        "event_id": "E001",
+        "sequence": 1,
+        "actor": "other_person",
+        "statement": "相手から事務的な連絡が届いた。",
+        "source_refs": [
+          "input:current_situation"
+        ]
+      }
+    ],
+    "boundaries": [],
+    "context": [
+      {
+        "context_id": "C001",
+        "kind": "message_state",
+        "statement": "相手からの連絡に返信する文面を検討している。",
+        "source_refs": [
+          "input:current_situation"
+        ]
+      }
+    ],
+    "observed_facts": [
+      {
+        "fact_id": "F001",
+        "statement": "相手から返信を要する事務連絡が届いている。",
+        "source_refs": [
+          "input:current_situation"
+        ],
+        "support": "explicit"
+      }
+    ],
+    "user_assumptions": [],
+    "user_emotions": [],
+    "material_unknowns": [
+      {
+        "unknown_code": "future_response",
+        "description": "送信後の相手の反応は現在分からない。",
+        "material_to": [
+          "decision",
+          "message_draft"
+        ]
+      }
+    ],
+    "safety_signals": [],
+    "untrusted_embedded_instructions_detected": false,
+    "context_inferences": [],
+    "decision_facts": {
+      "schema_version": "m2-p4-base-decision-facts-v2",
+      "relationship_stage": "in_relationship",
+      "selected_requests": [
+        "draft_message"
+      ],
+      "latest_direct_message": {
+        "sender": "other_person",
+        "kind": "practical_information",
+        "response_expectation": "reasonable",
+        "user_reply_state": "not_replied",
+        "sns_signal_only": false
+      },
+      "contact_state": {
+        "unanswered_user_message_count": 0,
+        "elapsed_since_latest_user_message_minutes": 30,
+        "usual_cadence_relation": "not_applicable"
+      },
+      "boundary_state": {
+        "kind": "none",
+        "status": "none",
+        "repeated_unanswered_contact": false
+      },
+      "practical_reason": {
+        "kind": "logistics",
+        "active": true,
+        "deadline": "same_day"
+      },
+      "user_contact_constraint": {
+        "kind": "none",
+        "status": "none",
+        "supporting_fact_ids": []
+      },
+      "information_state": {
+        "assessment_mode": "best_effort",
+        "can_proceed_without_followup": true,
+        "used_context_inference": false,
+        "unresolved_fields": []
+      }
+    },
+    "base_writing_signals": {
+      "schema_version": "m2-p4-base-writing-signals-v1",
+      "relationship_dimensions": {
+        "romantic_stage": {
+          "value": "partner",
+          "basis": "relationship_chip"
+        },
+        "social_role": {
+          "value": "friend",
+          "basis": "current_situation_explicit"
+        },
+        "hierarchy": {
+          "value": "none",
+          "basis": "current_situation_explicit"
+        },
+        "familiarity": {
+          "value": "established",
+          "basis": "current_situation_explicit"
+        },
+        "communication_context": {
+          "value": "private",
+          "basis": "current_situation_explicit"
+        },
+        "observed_register": {
+          "value": "polite",
+          "basis": "current_situation_explicit"
+        }
+      },
+      "message_signals": [
+        {
+          "author": "other_person",
+          "status": "incoming"
+        }
+      ],
+      "incoming_message_profile": {
+        "dialogue_acts": [
+          "practical_notice"
+        ],
+        "unanswered_obligations": [],
+        "practical_requirements": [
+          "provide_information"
+        ],
+        "closure_signal": "none",
+        "response_expectation": "reasonable",
+        "present": true
+      },
+      "user_goal_detail": {
+        "value": "respond_politely",
+        "basis": "current_situation_explicit"
+      },
+      "explicit_user_constraints": [
+        {
+          "kind": "keep_polite_register",
+          "bounded_summary": null
+        }
+      ],
+      "communication_pattern": {
+        "usual_register": "polite",
+        "usual_length": "short",
+        "usual_emoji_pattern": "none",
+        "usual_response_cadence_summary": null,
+        "usual_initiator": "variable",
+        "reciprocal_style_summary": null,
+        "basis": "current_situation_explicit"
+      },
+      "channel_and_timing": {
+        "channel": "line",
+        "relative_timing": "same_day",
+        "basis": "current_situation_explicit"
+      },
+      "language_and_expression": {
+        "primary_language": "ja",
+        "mixed_languages": [],
+        "dialect_or_regional_expression": "absent",
+        "established_shared_expression": "absent",
+        "intentional_nonstandard_expression": "absent",
+        "possible_typo": "absent",
+        "basis": "current_situation_explicit"
+      },
+      "repeat_consultation_state": {
+        "state": "first_assessment",
+        "changed_fact_ids": [],
+        "basis": "current_situation_explicit"
+      },
+      "privacy_markers": [],
+      "boundary_ownership_signals": []
+    }
+  },
+  "scenario_patches": {
+    "routine_administrative_reply": {},
+    "reply_waiting_sufficient": {
+      "user_goal": "decide_send_or_wait",
+      "timeline": [
+        {
+          "event_id": "E001",
+          "sequence": 1,
+          "actor": "user",
+          "statement": "ユーザーが相手へメッセージを送り、返信を待っている。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "context": [
+        {
+          "context_id": "C001",
+          "kind": "usual_cadence",
+          "statement": "現在は相手の普段の返信間隔の範囲内である。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "observed_facts": [
+        {
+          "fact_id": "F001",
+          "statement": "最後の送信から12時間が経過している。",
+          "source_refs": [
+            "input:current_situation"
+          ],
+          "support": "explicit"
+        },
+        {
+          "fact_id": "F002",
+          "statement": "現在は相手の普段の返信間隔の範囲内である。",
+          "source_refs": [
+            "input:current_situation"
+          ],
+          "support": "explicit"
+        }
+      ],
+      "user_emotions": [
+        {
+          "item_id": "M001",
+          "statement": "返信がないまま関係が離れていくことを不安に感じている。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "decision_facts": {
+        "selected_requests": [
+          "decide_send_or_wait"
+        ],
+        "latest_direct_message": {
+          "sender": "user",
+          "kind": "other",
+          "response_expectation": "reasonable",
+          "user_reply_state": "not_applicable",
+          "sns_signal_only": false
+        },
+        "contact_state": {
+          "unanswered_user_message_count": 1,
+          "elapsed_since_latest_user_message_minutes": 720,
+          "usual_cadence_relation": "within_usual"
+        },
+        "practical_reason": {
+          "kind": "none",
+          "active": false,
+          "deadline": "none"
+        }
+      },
+      "base_writing_signals": {
+        "message_signals": [
+          {
+            "author": "user",
+            "status": "sent_by_user"
+          }
+        ],
+        "incoming_message_profile": {
+          "dialogue_acts": [],
+          "unanswered_obligations": [],
+          "practical_requirements": [
+            "none"
+          ],
+          "closure_signal": "none",
+          "response_expectation": "none",
+          "present": false
+        },
+        "user_goal_detail": {
+          "value": "move_closer",
+          "basis": "current_situation_explicit"
+        },
+        "communication_pattern": {
+          "usual_register": "casual",
+          "usual_length": "short",
+          "usual_emoji_pattern": "restrained",
+          "usual_response_cadence_summary": "半日から1日程度",
+          "usual_initiator": "reciprocal",
+          "reciprocal_style_summary": "短い往復が多い",
+          "basis": "current_situation_explicit"
+        }
+      }
+    },
+    "draft_material": {
+      "user_goal": "prepare_message",
+      "user_emotions": [],
+      "decision_facts": {
+        "selected_requests": [
+          "draft_message",
+          "message_impact"
+        ]
+      },
+      "base_writing_signals": {
+        "relationship_dimensions": {
+          "observed_register": {
+            "value": "casual",
+            "basis": "current_situation_explicit"
+          }
+        },
+        "user_goal_detail": {
+          "value": "move_closer",
+          "basis": "current_situation_explicit"
+        },
+        "explicit_user_constraints": [],
+        "communication_pattern": {
+          "usual_register": "casual",
+          "usual_length": "short",
+          "usual_emoji_pattern": "restrained",
+          "usual_response_cadence_summary": "当日中",
+          "usual_initiator": "reciprocal",
+          "reciprocal_style_summary": "短い会話が多い",
+          "basis": "current_situation_explicit"
+        }
+      }
+    },
+    "draft_tone_missing": {
+      "user_goal": "prepare_message",
+      "user_emotions": [
+        {
+          "item_id": "M001",
+          "statement": "距離を縮めたいが、強く伝わることを不安に感じている。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ],
+      "decision_facts": {
+        "selected_requests": [
+          "draft_message",
+          "message_impact"
+        ]
+      },
+      "base_writing_signals": {
+        "relationship_dimensions": {
+          "observed_register": {
+            "value": "unknown",
+            "basis": "unresolved"
+          }
+        },
+        "user_goal_detail": {
+          "value": "move_closer",
+          "basis": "current_situation_explicit"
+        },
+        "explicit_user_constraints": [],
+        "communication_pattern": {
+          "usual_register": "unknown",
+          "usual_length": "unknown",
+          "usual_emoji_pattern": "unknown",
+          "usual_response_cadence_summary": null,
+          "usual_initiator": "unknown",
+          "reciprocal_style_summary": null,
+          "basis": "unresolved"
+        }
+      }
+    }
+  },
+  "fixtures": [
+    {
+      "fixture_id": "A_routine_administrative_reply_clarifies_material_concern",
+      "requirement": "A",
+      "scenario": "routine_administrative_reply",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "material_relationship_or_communication_concern"
+    },
+    {
+      "fixture_id": "B_routine_administrative_reply_budget_exhausted_routes_out",
+      "requirement": "B",
+      "scenario": "routine_administrative_reply",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": true,
+      "input_patch": {},
+      "expected_state": "not_full_product_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "C_reply_waiting_sufficient_is_ready_candidate",
+      "requirement": "C",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "full_paid_ready_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "D_reply_waiting_missing_one_timing_dimension",
+      "requirement": "D",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {
+        "decision_facts": {
+          "contact_state": {
+            "elapsed_since_latest_user_message_minutes": null
+          },
+          "information_state": {
+            "unresolved_fields": [
+              "contact_state.elapsed_since_latest_user_message_minutes"
+            ]
+          }
+        }
+      },
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "latest_contact_timing"
+    },
+    {
+      "fixture_id": "E_reply_waiting_multiple_independent_gaps_routes_out",
+      "requirement": "E",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {
+        "decision_facts": {
+          "contact_state": {
+            "elapsed_since_latest_user_message_minutes": null,
+            "usual_cadence_relation": "unknown"
+          },
+          "information_state": {
+            "unresolved_fields": [
+              "contact_state.elapsed_since_latest_user_message_minutes",
+              "contact_state.usual_cadence_relation"
+            ]
+          }
+        }
+      },
+      "expected_state": "not_full_product_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "F_draft_with_grounded_intent_and_tone_is_ready_candidate",
+      "requirement": "F",
+      "scenario": "draft_material",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "full_paid_ready_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "G_draft_missing_one_tone_dimension_clarifies",
+      "requirement": "G",
+      "scenario": "draft_tone_missing",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "requested_message_tone"
+    },
+    {
+      "fixture_id": "H_draft_missing_tone_after_budget_routes_out",
+      "requirement": "H",
+      "scenario": "draft_tone_missing",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": true,
+      "input_patch": {},
+      "expected_state": "not_full_product_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "I_non_normal_safety_always_blocks",
+      "requirement": "I",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "needs_review",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "safety_blocked",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "J_unsupported_schema_fails_closed",
+      "requirement": "J",
+      "scenario": "routine_administrative_reply",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {
+        "schema_version": "unsupported-policy-input"
+      },
+      "expected_error_code": "M2_JPY980_INPUT_SUFFICIENCY_POLICY_INVALID"
+    },
+    {
+      "fixture_id": "K_repeated_exact_input_is_deep_equal",
+      "requirement": "K",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "must_match_fixture": "C_reply_waiting_sufficient_is_ready_candidate",
+      "expected_state": "full_paid_ready_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "L_case_and_fixture_metadata_do_not_change_result",
+      "requirement": "L",
+      "scenario": "reply_waiting_sufficient",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "metadata_mutation": {
+        "caseId": "changed-case-id",
+        "fixtureId": "changed-fixture-id"
+      },
+      "must_match_fixture": "C_reply_waiting_sufficient_is_ready_candidate",
+      "expected_state": "full_paid_ready_candidate",
+      "expected_target": null
+    }
+  ]
+}

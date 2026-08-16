@@ -1,10 +1,11 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "future_packages_defined_not_authorized",
-  "planning_only": true,
+  "status": "v1_a1_implemented_pending_review_remaining_packages_unauthorized",
+  "planning_only": false,
   "sequence": [
-    "V1-A",
+    "V1-A1",
+    "V1-A2",
     "V1-B",
     "V1-C",
     "V1-D"
@@ -30,7 +31,28 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "authorized": false
+      "status": "in_progress_v1_a1_implemented_pending_review_v1_a2_unauthorized",
+      "complete": false,
+      "authorized": false,
+      "subpackages": [
+        {
+          "id": "V1-A1",
+          "name": "Deterministic Input Sufficiency Policy",
+          "status": "implemented_pending_review",
+          "implementation_authorized": true,
+          "active_runtime_connected": false,
+          "api_response_changed": false,
+          "ui_clarification_flow_changed": false,
+          "db_or_migration_changed": false,
+          "payment_changed": false
+        },
+        {
+          "id": "V1-A2",
+          "name": "Runtime/API/UI Clarification Integration",
+          "status": "unauthorized",
+          "implementation_authorized": false
+        }
+      ]
     },
     {
       "id": "V1-B",
@@ -54,6 +76,7 @@
         "evaluator verdict logic",
         "Provider execution authorization"
       ],
+      "status": "unauthorized",
       "authorized": false
     },
     {
@@ -77,6 +100,7 @@
         "UI layout changes",
         "Provider execution"
       ],
+      "status": "unauthorized",
       "authorized": false
     },
     {
@@ -96,6 +120,7 @@
         "Provider execution",
         "Payment implementation"
       ],
+      "status": "unauthorized",
       "authorized": false
     }
   ],

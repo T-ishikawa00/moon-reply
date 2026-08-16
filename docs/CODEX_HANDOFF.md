@@ -1,5 +1,19 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
+## Active handoff — V1-A1 Deterministic JPY980 Input Sufficiency Policy
+
+- Status / branch / parent: `implemented_pending_human_chatgpt_review` / `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-input-sufficiency-policy` / `cfad0bd4ca3fd2304b00d072624e624f98c09b29`.
+- Accepted authority: JPY980 Value Architecture R1 Correction at `cfad0bd4ca3fd2304b00d072624e624f98c09b29` is ChatGPT `PASS / complete`, Human `PASS / complete`, Human acceptance `complete`, and correction acceptance `complete` on `2026-08-16`.
+- Implemented slice: only V1-A1 Deterministic Input Sufficiency Policy is authorized and implemented pending review. It consumes aggregate Safety plus existing grounded `pipeline-schema-base-v2.0.0`, `m2-p4-base-decision-facts-v2`, and `m2-p4-base-writing-signals-v1` authority; it performs no raw-prose keyword or case/fixture-ID routing and makes no Provider call.
+- Policy result: `full_paid_ready_candidate`, `needs_one_clarifying_answer`, `not_full_product_candidate`, or `safety_blocked`; Safety wins. Clarification budget is one total question, second-question and loop behavior are prohibited, and clarification is null outside `needs_one_clarifying_answer`.
+- Evidence: offline A-L routing fixtures cover routine administration, budget exhaustion, ready waiting/draft cases, one/multiple gaps, Safety, malformed input, repeat determinism, and metadata independence. `not_full_product_candidate` remains internal future routing only.
+- Closed authority: V1-A2 Runtime/API/UI integration, V1-B, V1-C, V1-D, Active Runtime, API/UI response flow, DB/Supabase/migrations, Prompt, Provider, PB-05, semantic disposition, Payment, Production Runtime, PR, and main integration remain unauthorized. Provider / DB / Supabase are `0 / 0 / 0`.
+- Current Product authority: R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`. V1-A overall is not complete.
+- Scope: exact `12/12`, 5 UPDATE + 7 NEW, DELETE / RENAME 0. R2-B Product snapshot and main `61e33a10e195fad17e253a6b9719217e1992f273` remain unchanged.
+- Next action: `human_chatgpt_review_of_v1_a1_input_sufficiency_policy`. Stop after one normal feature-branch push.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->
 ## Active handoff — R2-C R1 JPY980 Value Architecture Boundary Correction
 
