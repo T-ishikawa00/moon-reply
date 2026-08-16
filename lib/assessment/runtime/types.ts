@@ -57,6 +57,7 @@ export type RequestedTopic = (typeof REQUESTED_TOPIC_VALUES)[number];
 export type Eligibility =
   | "ready"
   | "needs_more_information"
+  | "not_full_product_candidate"
   | "safety_blocked";
 
 export type Decision =
@@ -248,7 +249,7 @@ export type PersistedAssessmentRequest = AssessmentInput & {
   id: string;
   idempotencyKey: string;
   source: "internal_review_runtime";
-  status: "processing" | "completed" | "failed";
+  status: "processing" | "awaiting_clarification" | "completed" | "failed";
   createdAt: string;
   updatedAt: string;
 };
@@ -281,6 +282,9 @@ export type StageDefinition = {
   groundedOutputSchema?: JsonObject;
   groundedSchemaVersion?: string;
   groundedSchemaHash?: string;
+  clarificationOutputSchema?: JsonObject;
+  clarificationSchemaVersion?: string;
+  clarificationSchemaHash?: string;
 };
 
 export type StageRequest = {
@@ -322,6 +326,7 @@ export type CreateRunRecord = {
   promptBundleVersion: string;
   schemaSetVersion: string;
   stageTopologyVersion: StageTopologyVersion;
+  runKind: "initial" | "clarification_resume";
   startedAt: string;
 };
 
@@ -359,12 +364,16 @@ export type FailStageRecord = {
 export type SkipStageRecord = {
   id: string;
   runId: string;
-  stageId: "PB-01C";
-  sequenceNumber: 2;
+  stageId: M2StageId;
+  sequenceNumber: number;
   requestHash: string;
   promptHash: string;
   schemaHash: string;
   requestedModel: "gpt-5.6-luna";
+  skipReason:
+    | "candidate_absent"
+    | "reused_initial_authority"
+    | "routing_stopped";
   createdAt: string;
 };
 
@@ -374,6 +383,7 @@ export type CompleteRunRecord = UsageTotals & {
   returnedModel: string | null;
   eligibility: Eligibility;
   decision: Decision | null;
+  resultJson?: JsonObject;
   completedAt: string;
 };
 
@@ -608,15 +618,114 @@ export type ReadyAssessmentResult =
 export type StoppedAssessmentResult = {
   requestId: string;
   runId: string;
-  eligibility: "needs_more_information" | "safety_blocked";
+  eligibility:
+    | "needs_more_information"
+    | "not_full_product_candidate"
+    | "safety_blocked";
   questionCodes: string[];
+  reasonCodes: string[];
+  clarification: RuntimeClarificationPromptV1 | null;
   duplicate: boolean;
   usage: UsageTotals;
+  authoritativeRequestedTopics?: RequestedTopic[];
 };
 
 export type AssessmentExecutionResult =
   | ReadyAssessmentResult
   | StoppedAssessmentResult;
+
+export type Jpy980ClarificationTarget =
+  | "material_relationship_or_communication_concern"
+  | "latest_contact_timing"
+  | "usual_reply_cadence"
+  | "central_fear_or_decision_concern"
+  | "relationship_intent"
+  | "requested_message_tone";
+
+export type RuntimeClarificationPromptV1 = {
+  opaqueClarificationId: string;
+  questionCode: string;
+  target: Jpy980ClarificationTarget;
+  question: string;
+  maximumQuestionsTotal: 1;
+  questionsAlreadyUsed: 0;
+  questionsRemaining: 1;
+};
+
+export type PersistedAssessmentClarification = {
+  schemaVersion: "m2-p4-assessment-clarification-v1";
+  id: string;
+  requestId: string;
+  ordinal: 1;
+  questionCode: string;
+  target: Jpy980ClarificationTarget;
+  questionSnapshot: string;
+  provenance: "user_clarification";
+  sourceIdentity: string;
+  answerStatus: "pending" | "answered";
+  answer: JsonValue | null;
+  answerFingerprint: string | null;
+  groundedNormalizedRepresentation: JsonObject | null;
+  safetySignals: JsonObject[];
+  resumeRunId: string | null;
+  createdAt: string;
+  answeredAt: string | null;
+};
+
+export type FinalizeNeedsMoreInformationRecord = UsageTotals & {
+  runId: string;
+  requestId: string;
+  returnedModel: string | null;
+  completedAt: string;
+  policyResult: JsonObject;
+  resultJson: JsonObject;
+  clarification: Omit<
+    PersistedAssessmentClarification,
+    | "answerStatus"
+    | "answer"
+    | "answerFingerprint"
+    | "groundedNormalizedRepresentation"
+    | "safetySignals"
+    | "resumeRunId"
+    | "answeredAt"
+  >;
+};
+
+export type AcceptClarificationAnswerRecord = {
+  clarificationId: string;
+  answer: JsonValue;
+  answerFingerprint: string;
+  groundedNormalizedRepresentation: JsonObject;
+  answeredAt: string;
+  resumeRun: CreateRunRecord;
+};
+
+export type AcceptClarificationAnswerOutcome = {
+  disposition: "accepted" | "duplicate";
+  clarification: PersistedAssessmentClarification;
+  request: PersistedAssessmentRequest;
+  resumeRunId: string;
+};
+
+export type CompleteClarificationGroundingRecord = {
+  clarificationId: string;
+  groundedNormalizedRepresentation: JsonObject;
+  safetySignals: JsonObject[];
+};
+
+export type PersistedInitialAuthorityV1 = {
+  request: PersistedAssessmentRequest;
+  initialRunId: string;
+  initialRunStartedAt: string;
+  initialPolicyResult: JsonObject;
+  pb01Output: JsonObject;
+  pb01c: {
+    status: "completed" | "failed" | "skipped";
+    outputJson: JsonObject | null;
+    errorCode: string | null;
+  };
+  pb02Output: JsonObject;
+};
 
 export interface AssessmentRepository {
   createRequest(record: CreateRequestRecord): Promise<PersistedAssessmentRequest>;
@@ -629,6 +738,24 @@ export interface AssessmentRepository {
   failStage(record: FailStageRecord): Promise<void>;
   skipStage(record: SkipStageRecord): Promise<void>;
   completeRun(record: CompleteRunRecord): Promise<void>;
+  finalizeNeedsMoreInformation(
+    record: FinalizeNeedsMoreInformationRecord,
+  ): Promise<PersistedAssessmentClarification>;
+  findClarificationById(
+    clarificationId: string,
+  ): Promise<PersistedAssessmentClarification | null>;
+  findClarificationByRequestId(
+    requestId: string,
+  ): Promise<PersistedAssessmentClarification | null>;
+  acceptClarificationAndCreateResumeRun(
+    record: AcceptClarificationAnswerRecord,
+  ): Promise<AcceptClarificationAnswerOutcome>;
+  completeClarificationGrounding(
+    record: CompleteClarificationGroundingRecord,
+  ): Promise<void>;
+  getInitialAuthorityForResume(
+    requestId: string,
+  ): Promise<PersistedInitialAuthorityV1>;
   failRun(record: FailRunRecord): Promise<void>;
   finalizeCompletedAssessment(
     record: FinalizeCompletedAssessmentRecord,
@@ -636,6 +763,9 @@ export interface AssessmentRepository {
   getCompletedAssessment(
     requestId: string,
   ): Promise<CompletedAssessment | SplitCompletedAssessment | null>;
+  getAssessmentResult(
+    requestId: string,
+  ): Promise<AssessmentExecutionResult | null>;
 }
 
 export type PipelineEvent =
@@ -646,6 +776,9 @@ export type PipelineEvent =
   | "LOCAL_SCHEMA_PB-03"
   | "LOCAL_SAFETY_AGGREGATION"
   | "LOCAL_ELIGIBILITY_GATE"
+  | "LOCAL_JPY980_INPUT_SUFFICIENCY"
+  | "LOCAL_EFFECTIVE_ASSESSMENT_AUTHORITY"
+  | "LOCAL_CLARIFICATION_GROUNDING"
   | "LOCAL_DECISION_POLICY"
   | "LOCAL_SCHEMA_AND_PLAN_VALIDATION"
   | "LOCAL_SCHEMA_AND_REPORT_VALIDATION"

@@ -1,0 +1,54 @@
+{
+  "schema_version": "m2-p4-v1-a2-capabilities-v1",
+  "authority": {
+    "accepted_plan": "9f397ed41f3f284e7a984ad139768af16373a747",
+    "accepted_plan_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-16",
+    "v1_a1": "accepted_complete_immutable",
+    "v1_a2_implementation": "implemented_pending_human_chatgpt_review",
+    "v1_b": "unauthorized",
+    "v1_c": "unauthorized",
+    "v1_d": "unauthorized"
+  },
+  "implemented": {
+    "product_scope_server_validation": true,
+    "active_v1_a1_policy_v2_connection": true,
+    "maximum_clarifications_per_request": 1,
+    "separate_clarification_provenance": true,
+    "same_request_resume": true,
+    "effective_assessment_authority_v1": true,
+    "effective_decision_policy_v1": true,
+    "clarification_aware_pb01_pb04_pb05_pb06": true,
+    "not_full_product_candidate_first_class": true,
+    "delivery_v2": true,
+    "initial_and_answer_api": true,
+    "single_question_accessible_ui": true,
+    "migration_created_not_applied": true,
+    "migration_applied": false
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applies": 0,
+    "payment_operations": 0,
+    "deploy_operations": 0
+  },
+  "current_state": {
+    "r2_c": "remediation_required",
+    "experienceProductJudgment": "pending_remediation",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "production_runtime_authorized": false,
+    "payment_authorized": false,
+    "main_integration_authorized": false
+  },
+  "exact_scope": {
+    "total": "37/37",
+    "updated": 14,
+    "new": 23,
+    "deleted": 0,
+    "renamed": 0
+  }
+}

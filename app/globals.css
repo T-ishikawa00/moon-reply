@@ -101,6 +101,49 @@
   --moon-700: var(--focus-ring-paper);
 }
 
+.runtime-clarification {
+  width: min(100%, 46rem);
+}
+
+.runtime-clarification__choices legend {
+  max-width: 42rem;
+  line-height: 1.75;
+}
+
+.runtime-clarification .request-chip-group {
+  align-items: stretch;
+}
+
+.runtime-clarification .request-chip-group label {
+  min-width: min(100%, 12rem);
+  flex: 1 1 12rem;
+}
+
+.runtime-clarification .request-chip-group span {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 36rem) {
+  .runtime-clarification .request-chip-group label {
+    flex-basis: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runtime-clarification *,
+  .runtime-clarification *::before,
+  .runtime-clarification *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

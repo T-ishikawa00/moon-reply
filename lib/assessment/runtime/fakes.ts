@@ -1,7 +1,10 @@
 import { M2RuntimeError } from "./errors.ts";
 import type {
   AiStageTransport,
+  AcceptClarificationAnswerRecord,
+  AssessmentExecutionResult,
   AssessmentRepository,
+  CompleteClarificationGroundingRecord,
   CompleteRunRecord,
   CompleteStageRecord,
   CompletedAssessment,
@@ -10,9 +13,12 @@ import type {
   FailRunRecord,
   FailStageRecord,
   FinalizeCompletedAssessmentRecord,
+  FinalizeNeedsMoreInformationRecord,
   JsonObject,
   M2StageId,
   PersistedAssessmentRequest,
+  PersistedAssessmentClarification,
+  PersistedInitialAuthorityV1,
   SkipStageRecord,
   SplitCompletedAssessment,
   StageRunStatus,
@@ -37,6 +43,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     CreateRunRecord &
       Partial<CompleteRunRecord> & {
         status: "processing" | "completed" | "failed";
+        initialPolicyResult?: JsonObject;
       }
   >();
   readonly stageRuns = new Map<
@@ -59,6 +66,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     }
   >();
   readonly reports = new Map<string, FinalizeCompletedAssessmentRecord>();
+  readonly clarifications = new Map<string, PersistedAssessmentClarification>();
   readonly events: string[] = [];
   private failOnceAt?: string;
 
@@ -106,6 +114,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     this.maybeFail("createRun");
     this.runs.set(record.id, {
       ...clone(record),
+      runKind: record.runKind ?? "initial",
       status: "processing",
     });
     this.events.push("createRun");
@@ -197,6 +206,168 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     request.status = "completed";
     request.updatedAt = record.completedAt;
     this.events.push("completeRun");
+  }
+
+  async finalizeNeedsMoreInformation(record: FinalizeNeedsMoreInformationRecord) {
+    this.maybeFail("finalizeNeedsMoreInformation");
+    const run = this.runs.get(record.runId);
+    const request = this.requests.get(record.requestId);
+    if (
+      !run ||
+      !request ||
+      run.status !== "processing" ||
+      request.status !== "processing" ||
+      this.clarifications.has(record.clarification.id) ||
+      [...this.clarifications.values()].some(
+        (value) => value.requestId === record.requestId,
+      )
+    ) {
+      throw new M2RuntimeError("M2_CLARIFICATION_FINALIZATION_CONFLICT", 409);
+    }
+    const clarification: PersistedAssessmentClarification = {
+      ...clone(record.clarification),
+      answerStatus: "pending",
+      answer: null,
+      answerFingerprint: null,
+      groundedNormalizedRepresentation: null,
+      safetySignals: [],
+      resumeRunId: null,
+      answeredAt: null,
+    };
+    Object.assign(run, clone(record), {
+      eligibility: "needs_more_information",
+      decision: null,
+      resultJson: clone(record.resultJson),
+      initialPolicyResult: clone(record.policyResult),
+      status: "completed",
+    });
+    request.status = "awaiting_clarification";
+    request.updatedAt = record.completedAt;
+    this.clarifications.set(clarification.id, clarification);
+    this.events.push("finalizeNeedsMoreInformation");
+    return clone(clarification);
+  }
+
+  async findClarificationById(clarificationId: string) {
+    return clone(this.clarifications.get(clarificationId) ?? null);
+  }
+
+  async findClarificationByRequestId(requestId: string) {
+    const found = [...this.clarifications.values()].find(
+      (value) => value.requestId === requestId,
+    );
+    return clone(found ?? null);
+  }
+
+  async acceptClarificationAndCreateResumeRun(
+    record: AcceptClarificationAnswerRecord,
+  ) {
+    this.maybeFail("acceptClarificationAndCreateResumeRun");
+    const clarification = this.clarifications.get(record.clarificationId);
+    if (!clarification) {
+      throw new M2RuntimeError("M2_CLARIFICATION_NOT_FOUND", 404);
+    }
+    const request = this.requests.get(clarification.requestId);
+    if (!request) throw new M2RuntimeError("M2_CLARIFICATION_NOT_FOUND", 404);
+    if (clarification.answerStatus === "answered") {
+      if (
+        clarification.answerFingerprint === record.answerFingerprint &&
+        clarification.resumeRunId
+      ) {
+        return {
+          disposition: "duplicate" as const,
+          clarification: clone(clarification),
+          request: clone(request),
+          resumeRunId: clarification.resumeRunId,
+        };
+      }
+      throw new M2RuntimeError("M2_CLARIFICATION_ALREADY_ANSWERED", 409);
+    }
+    if (
+      request.status !== "awaiting_clarification" ||
+      record.resumeRun.runKind !== "clarification_resume" ||
+      record.resumeRun.requestId !== request.id ||
+      this.runs.has(record.resumeRun.id)
+    ) {
+      throw new M2RuntimeError("M2_CLARIFICATION_STATE_CONFLICT", 409);
+    }
+    clarification.answerStatus = "answered";
+    clarification.answer = clone(record.answer);
+    clarification.answerFingerprint = record.answerFingerprint;
+    clarification.groundedNormalizedRepresentation = clone(
+      record.groundedNormalizedRepresentation,
+    );
+    clarification.answeredAt = record.answeredAt;
+    clarification.resumeRunId = record.resumeRun.id;
+    request.status = "processing";
+    request.updatedAt = record.answeredAt;
+    this.runs.set(record.resumeRun.id, {
+      ...clone(record.resumeRun),
+      status: "processing",
+    });
+    this.events.push("acceptClarificationAndCreateResumeRun");
+    return {
+      disposition: "accepted" as const,
+      clarification: clone(clarification),
+      request: clone(request),
+      resumeRunId: record.resumeRun.id,
+    };
+  }
+
+  async completeClarificationGrounding(
+    record: CompleteClarificationGroundingRecord,
+  ) {
+    const clarification = this.clarifications.get(record.clarificationId);
+    if (!clarification || clarification.answerStatus !== "answered") {
+      throw new M2RuntimeError("M2_CLARIFICATION_STATE_CONFLICT", 409);
+    }
+    clarification.groundedNormalizedRepresentation = clone(
+      record.groundedNormalizedRepresentation,
+    );
+    clarification.safetySignals = clone(record.safetySignals);
+    this.events.push("completeClarificationGrounding");
+  }
+
+  async getInitialAuthorityForResume(
+    requestId: string,
+  ): Promise<PersistedInitialAuthorityV1> {
+    const request = this.requests.get(requestId);
+    const initialRun = [...this.runs.values()].find(
+      (run) => run.requestId === requestId && run.runKind === "initial",
+    );
+    if (!request || !initialRun) {
+      throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    }
+    const stage = (stageId: M2StageId) =>
+      [...this.stageRuns.values()].find(
+        (value) => value.runId === initialRun.id && value.stageId === stageId,
+      );
+    const pb01 = stage("PB-01");
+    const pb01c = stage("PB-01C");
+    const pb02 = stage("PB-02");
+    if (
+      !pb01?.completion ||
+      !pb01c ||
+      pb01c.status === "processing" ||
+      !pb02?.completion
+    ) {
+      throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    }
+    return {
+      request: clone(request),
+      initialRunId: initialRun.id,
+      initialRunStartedAt: initialRun.startedAt,
+      initialPolicyResult: clone(initialRun.initialPolicyResult ?? {}),
+      pb01Output: clone(pb01.completion.outputJson),
+      pb01c: {
+        status: pb01c.status,
+        outputJson: clone(
+          pb01c.completion?.outputJson ?? pb01c.failure?.outputJson ?? null,
+        ),
+        errorCode: pb01c.failure?.errorCode ?? null,
+      },
+      pb02Output: clone(pb02.completion.outputJson),
+    };
   }
 
   async failRun(record: FailRunRecord) {
@@ -312,10 +483,26 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     } as CompletedAssessment | SplitCompletedAssessment;
     return completed;
   }
+
+  async getAssessmentResult(requestId: string) {
+    const ready = await this.getCompletedAssessment(requestId);
+    if (ready) return { ...ready, duplicate: false } as AssessmentExecutionResult;
+    const request = this.requests.get(requestId);
+    const run = [...this.runs.values()]
+      .filter((value) => value.requestId === requestId && value.status === "completed")
+      .at(-1);
+    if (!request || !run?.resultJson) return null;
+    const result = clone(run.resultJson) as unknown as AssessmentExecutionResult;
+    return {
+      ...result,
+      authoritativeRequestedTopics: clone(request.requestedTopics),
+    } as AssessmentExecutionResult;
+  }
 }
 
 type FakeTransportOptions = {
   outputs: Partial<Record<M2StageId, JsonObject>>;
+  outputSequence?: Partial<Record<M2StageId, JsonObject[]>>;
   failAtStage?: M2StageId;
   returnedModelAtStage?: Partial<Record<M2StageId, string>>;
 };
@@ -326,11 +513,13 @@ export class FakeAiStageTransport implements AiStageTransport {
   readonly calls: M2StageId[] = [];
   readonly requests: StageRequest[] = [];
   private readonly outputs: Partial<Record<M2StageId, JsonObject>>;
+  private readonly outputSequence: Partial<Record<M2StageId, JsonObject[]>>;
   private readonly failAtStage?: M2StageId;
   private readonly returnedModelAtStage: Partial<Record<M2StageId, string>>;
 
   constructor(options: FakeTransportOptions) {
     this.outputs = clone(options.outputs);
+    this.outputSequence = clone(options.outputSequence ?? {});
     this.failAtStage = options.failAtStage;
     this.returnedModelAtStage = options.returnedModelAtStage ?? {};
   }
@@ -342,7 +531,10 @@ export class FakeAiStageTransport implements AiStageTransport {
       throw new M2RuntimeError("M2_FAKE_STAGE_FAILURE");
     }
     const sequence = this.calls.length;
-    const output = this.outputs[request.stageId];
+    const priorCalls = this.calls.filter((stageId) => stageId === request.stageId).length;
+    const output =
+      this.outputSequence[request.stageId]?.[priorCalls - 1] ??
+      this.outputs[request.stageId];
     if (output === undefined) {
       throw new M2RuntimeError("M2_FAKE_STAGE_OUTPUT_MISSING");
     }

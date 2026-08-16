@@ -1,4 +1,21 @@
 import { randomUUID } from "node:crypto";
+import {
+  createOpaqueClarificationIdV1,
+  clarificationSourceIdentityV1,
+  type ClarificationEvidenceV1,
+} from "./clarification-evidence-v1.ts";
+import { groundClarificationEvidenceV1, type ClarificationGroundingV1 } from "./clarification-grounding-v1.ts";
+import { validateClarificationSourceIntegrityV1 } from "./clarification-source-integrity-v1.ts";
+import { buildEffectiveAssessmentAuthorityV1, type EffectiveAssessmentAuthorityV1 } from "./effective-assessment-authority-v1.ts";
+import {
+  requireReadyMakingClarificationDownstreamV1,
+  validateEffectiveAssessmentAuthorityIntegrityV1,
+} from "./effective-assessment-authority-integrity-v1.ts";
+import {
+  buildEffectiveDecisionPolicyV1,
+  clarificationConsumptionPathsForStageV1,
+} from "./effective-decision-policy-v1.ts";
+import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
 import { groundBaseStructuredIntakeV2 } from "./base-structured-intake-grounding-v2.ts";
@@ -86,6 +103,7 @@ import type {
   StageDefinition,
   StageResponse,
   UsageTotals,
+  PersistedInitialAuthorityV1,
 } from "./types.ts";
 import type { DecisionFactsV2 } from "./contextual-inference-v3.ts";
 import {
@@ -112,6 +130,7 @@ type PipelineOptions = {
   now?: () => string;
   uuid?: () => string;
   timeZone?: string;
+  clarificationId?: () => string;
 };
 
 type StageInput = {
@@ -406,6 +425,7 @@ export class AssessmentPipeline {
   private readonly now: () => string;
   private readonly uuid: () => string;
   private readonly timeZone?: string;
+  private readonly clarificationId: () => string;
   private usage: UsageTotals = emptyUsageTotals();
   private returnedModel: string | null = null;
 
@@ -423,6 +443,7 @@ export class AssessmentPipeline {
     this.now = options.now ?? (() => new Date().toISOString());
     this.uuid = options.uuid ?? randomUUID;
     this.timeZone = options.timeZone;
+    this.clarificationId = options.clarificationId ?? createOpaqueClarificationIdV1;
   }
 
   private validateRuntimeIdentity(runContext: AssessmentRunContext) {
@@ -433,20 +454,25 @@ export class AssessmentPipeline {
     const authorityIntegrityPair =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
+    const clarificationIntegrationPair =
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" &&
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
-      runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" ||
+      runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !legacySplitPair && !authorityIntegrityPair
+        ? !legacySplitPair && !authorityIntegrityPair && !clarificationIntegrationPair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    if (authorityIntegrityPair && !this.timeZone) {
+    if ((authorityIntegrityPair || clarificationIntegrationPair) && !this.timeZone) {
       throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
@@ -650,7 +676,8 @@ export class AssessmentPipeline {
       }
 
       const authorityIntegrityRuntime =
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -719,6 +746,7 @@ export class AssessmentPipeline {
         promptHash: definition.promptHash,
         schemaHash: definition.schemaHash,
         requestedModel: runContext.model,
+        skipReason: "candidate_absent",
         createdAt: this.now(),
       });
     } catch (error) {
@@ -743,15 +771,708 @@ export class AssessmentPipeline {
       runId: runContext.runId,
       eligibility: "safety_blocked" as const,
       questionCodes: [],
+      reasonCodes: ["SAFETY_CLASSIFICATION_NOT_NORMAL"],
+      clarification: null,
       duplicate: false,
       usage: this.usage,
     };
+  }
+
+  private clarificationDefinition() {
+    const base = this.definition("PB-01");
+    if (
+      !base.clarificationOutputSchema ||
+      !base.clarificationSchemaVersion ||
+      !base.clarificationSchemaHash
+    ) {
+      throw new M2RuntimeError("M2_STAGE_DEFINITION_MISSING");
+    }
+    return {
+      ...base,
+      schemaName: "pb_01_clarification_grounding_v1",
+      schemaVersion: base.clarificationSchemaVersion,
+      schemaHash: base.clarificationSchemaHash,
+      outputSchema: base.clarificationOutputSchema,
+    } satisfies StageDefinition;
+  }
+
+  private async skipReusedStage(
+    runContext: AssessmentRunContext,
+    stageId: "PB-01C" | "PB-02" | "PB-03",
+  ) {
+    const definition = this.definition(stageId);
+    this.emit(stageId);
+    await this.repository.skipStage({
+      id: this.uuid(),
+      runId: runContext.runId,
+      stageId,
+      sequenceNumber: definition.sequenceNumber,
+      requestHash: hashJson({
+        stageId,
+        reusedFrom: "initial_run_immutable_authority",
+        promptHash: definition.promptHash,
+        schemaHash: definition.schemaHash,
+      }),
+      promptHash: definition.promptHash,
+      schemaHash: definition.schemaHash,
+      requestedModel: runContext.model,
+      skipReason: "reused_initial_authority",
+      createdAt: this.now(),
+    });
+  }
+
+  private v1a2BasePolicyInput(
+    baseStructuredIntake: JsonObject,
+    aggregate: SafetyResult,
+  ) {
+    const decisionFacts = baseStructuredIntake.decision_facts;
+    const baseWritingSignals = baseStructuredIntake.base_writing_signals;
+    if (
+      typeof decisionFacts !== "object" ||
+      decisionFacts === null ||
+      Array.isArray(decisionFacts) ||
+      typeof baseWritingSignals !== "object" ||
+      baseWritingSignals === null ||
+      Array.isArray(baseWritingSignals)
+    ) {
+      throw new M2RuntimeError("M2_JPY980_INPUT_SUFFICIENCY_POLICY_INVALID");
+    }
+    return {
+      aggregateSafety: {
+        classification: aggregate.classification as SafetyResult["classification"],
+      },
+      baseStructuredIntake,
+      decisionFacts: decisionFacts as JsonObject,
+      baseWritingSignals: baseWritingSignals as JsonObject,
+    };
+  }
+
+  private v1a2StopResult(input: {
+    runContext: AssessmentRunContext;
+    eligibility: "not_full_product_candidate" | "safety_blocked";
+    reasonCodes: string[];
+  }) {
+    return {
+      requestId: input.runContext.requestId,
+      runId: input.runContext.runId,
+      eligibility: input.eligibility,
+      questionCodes: [],
+      reasonCodes: [...input.reasonCodes],
+      clarification: null,
+      duplicate: false,
+      usage: this.usage,
+    };
+  }
+
+  private async completeV1A2Stop(input: {
+    runContext: AssessmentRunContext;
+    eligibility: "not_full_product_candidate" | "safety_blocked";
+    reasonCodes: string[];
+  }): Promise<AssessmentExecutionResult> {
+    const result = this.v1a2StopResult(input);
+    this.emit("COMPLETE_RUN");
+    await this.repository.completeRun({
+      runId: input.runContext.runId,
+      requestId: input.runContext.requestId,
+      returnedModel: this.returnedModel,
+      eligibility: input.eligibility,
+      decision: null,
+      resultJson: result as unknown as JsonObject,
+      completedAt: this.now(),
+      ...this.usage,
+    });
+    return result;
+  }
+
+  private async completeV1A2NeedsMore(input: {
+    runContext: AssessmentRunContext;
+    policy: Jpy980InputSufficiencyResultV2;
+  }): Promise<AssessmentExecutionResult> {
+    const prompt = input.policy.clarification;
+    if (!prompt || input.policy.clarificationBudget.questionsRemaining !== 1) {
+      throw new M2RuntimeError("M2_CLARIFICATION_POLICY_INVALID");
+    }
+    const clarificationId = this.clarificationId();
+    const sourceIdentity = clarificationSourceIdentityV1(clarificationId);
+    const clarification = {
+      opaqueClarificationId: clarificationId,
+      questionCode: prompt.code,
+      target: prompt.target,
+      question: prompt.question,
+      maximumQuestionsTotal: 1 as const,
+      questionsAlreadyUsed: 0 as const,
+      questionsRemaining: 1 as const,
+    };
+    const result = {
+      requestId: input.runContext.requestId,
+      runId: input.runContext.runId,
+      eligibility: "needs_more_information" as const,
+      questionCodes: [prompt.code],
+      reasonCodes: [...input.policy.reasonCodes],
+      clarification,
+      duplicate: false,
+      usage: this.usage,
+    };
+    const completedAt = this.now();
+    this.emit("COMPLETE_RUN");
+    await this.repository.finalizeNeedsMoreInformation({
+      runId: input.runContext.runId,
+      requestId: input.runContext.requestId,
+      returnedModel: this.returnedModel,
+      completedAt,
+      policyResult: input.policy as unknown as JsonObject,
+      resultJson: result as unknown as JsonObject,
+      clarification: {
+        schemaVersion: "m2-p4-assessment-clarification-v1",
+        id: clarificationId,
+        requestId: input.runContext.requestId,
+        ordinal: 1,
+        questionCode: prompt.code,
+        target: prompt.target,
+        questionSnapshot: prompt.question,
+        provenance: "user_clarification",
+        sourceIdentity,
+        createdAt: completedAt,
+      },
+      ...this.usage,
+    });
+    return result;
+  }
+
+  private buildV1A2Aggregate(input: {
+    request: AssessmentInput;
+    baseStructuredIntake: JsonObject;
+    candidateLane: CandidateLaneV1;
+    modelSafety: JsonObject;
+    clarificationSafety?: SafetyResult;
+  }) {
+    const deterministic = deterministicSafetyResult(input.request);
+    const splitEnvelope = buildSplitAnalysisEnvelopeV1({
+      baseStructuredIntake: input.baseStructuredIntake,
+      baseLegacyView: buildBaseStructuredIntakeLegacyViewV1(
+        input.baseStructuredIntake,
+      ),
+      candidateLane: input.candidateLane,
+    });
+    const candidateSemanticSafety = splitEnvelope.candidate_safety_result
+      ? projectCandidateSafetyDispositionV1(splitEnvelope.candidate_safety_result)
+      : {
+          classification: "normal_allowed" as const,
+          reason_codes: [],
+          response_mode: "none" as const,
+        };
+    const boundary = evaluateCandidateBoundaryContactV1(
+      splitEnvelope.base_structured_intake,
+      splitEnvelope.candidate_safety_result,
+    );
+    const aggregate = aggregateSafetyV3(
+      aggregateSafetyV3(
+        aggregateSafetyV3(deterministic, input.modelSafety, candidateSemanticSafety),
+        asJsonObject(boundary),
+      ),
+      input.clarificationSafety ?? {
+        classification: "normal_allowed",
+        reason_codes: [],
+        response_mode: "none",
+      },
+    );
+    return { aggregate, splitEnvelope };
+  }
+
+  private async completeV1A2Ready(input: {
+    request: AssessmentInput;
+    runContext: AssessmentRunContext;
+    baseStructuredIntake: JsonObject;
+    candidateEnvelope: CandidateEnvelopeV1;
+    aggregate: SafetyResult;
+    effectiveAuthority: EffectiveAssessmentAuthorityV1;
+    clarificationGrounding: ClarificationGroundingV1 | null;
+  }): Promise<AssessmentExecutionResult> {
+    if (!this.timeZone) throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
+    this.emit("LOCAL_DECISION_POLICY");
+    const effectivePolicy = buildEffectiveDecisionPolicyV1({
+      authority: input.effectiveAuthority,
+      candidateEnvelope: input.candidateEnvelope,
+    });
+    const decisionPolicy = effectivePolicy.policy;
+    const actionContext = createActionContextV1({
+      trustedNowIso: input.runContext.startedAt,
+      timeZone: this.timeZone,
+    });
+    const contactConstraintPolicy = createContactConstraintPolicyV1({
+      baseStructuredIntake: input.baseStructuredIntake,
+      followUpException: decisionPolicy.follow_up_exception,
+    });
+    const pb04Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-04",
+    );
+    const decisionPlan = (await this.invokeStage(
+      input.runContext,
+      {
+        definition: this.definition("PB-04"),
+        input: asJsonObject({
+          base_structured_intake: input.baseStructuredIntake,
+          candidate_envelope: input.candidateEnvelope,
+          user_supplied_optional_message: input.request.optionalMessage,
+          decision_policy_result: decisionPolicy,
+          effective_decision_policy_result: effectivePolicy,
+          effective_assessment_authority: input.effectiveAuthority,
+          clarification_consumption_contract: {
+            stage_id: "PB-04",
+            consumed_effective_paths: pb04Paths,
+          },
+          contact_constraint_policy: contactConstraintPolicy,
+          action_context: actionContext,
+          requested_topics: input.request.requestedTopics,
+        }),
+      },
+      "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
+      (output) => {
+        validateSplitDecisionPlan(
+          output as unknown as SplitDecisionPlanV2,
+          decisionPolicy,
+          input.candidateEnvelope,
+        );
+        validateDecisionPlanConstraintIntegrityV1({
+          decisionPlan: output as unknown as SplitDecisionPlanV2,
+          contactConstraintPolicy,
+          actionContext,
+        });
+      },
+    )) as unknown as SplitDecisionPlanV2;
+
+    const pb05Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-05",
+    );
+    const generatedReport = (await this.invokeStage(
+      input.runContext,
+      {
+        definition: this.definition("PB-05"),
+        input: asJsonObject({
+          base_structured_intake: input.baseStructuredIntake,
+          candidate_envelope: input.candidateEnvelope,
+          decision_plan: decisionPlan,
+          effective_assessment_authority: input.effectiveAuthority,
+          clarification_consumption_contract: {
+            stage_id: "PB-05",
+            consumed_effective_paths: pb05Paths,
+          },
+          contact_constraint_policy: contactConstraintPolicy,
+          action_context: actionContext,
+        }),
+      },
+      "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
+    )) as unknown as SplitReportContentV2;
+    const contextualDecisionFacts = projectSplitDecisionFacts(
+      input.baseStructuredIntake,
+      input.candidateEnvelope,
+    );
+    let reportContent = groundReportContentV3(
+      contextualDecisionFacts,
+      generatedReport as unknown as ReportContent,
+    ) as unknown as SplitReportContentV2;
+    reportContent = groundChangeConditionCommentaryV3(
+      decisionPlan as unknown as DecisionPlan,
+      reportContent as unknown as ReportContent,
+    ) as unknown as SplitReportContentV2;
+    validateStageOutput(
+      this.definition("PB-05"),
+      reportContent as unknown as JsonObject,
+    );
+
+    const downstreamPaths = [...new Set([...pb04Paths, ...pb05Paths])];
+    requireReadyMakingClarificationDownstreamV1({
+      authority: input.effectiveAuthority,
+      clarificationGrounding: input.clarificationGrounding,
+      consumedEffectivePaths: downstreamPaths,
+    });
+    const pb06Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-06",
+    );
+    await this.invokeStage(
+      input.runContext,
+      {
+        definition: this.definition("PB-06"),
+        input: asJsonObject({
+          base_structured_intake: input.baseStructuredIntake,
+          candidate_envelope: input.candidateEnvelope,
+          user_supplied_optional_message: input.request.optionalMessage,
+          aggregate_safety_result: input.aggregate,
+          decision_policy_result: decisionPolicy,
+          effective_decision_policy_result: effectivePolicy,
+          effective_assessment_authority: input.effectiveAuthority,
+          clarification_consumption_contract: {
+            stage_id: "PB-06",
+            consumed_effective_paths: pb06Paths,
+          },
+          decision_plan: decisionPlan,
+          report_content: reportContent,
+          contact_constraint_policy: contactConstraintPolicy,
+          action_context: actionContext,
+        }),
+      },
+      "LOCAL_SEMANTIC_DISPOSITION",
+      (output) => {
+        requireReadyMakingClarificationDownstreamV1({
+          authority: input.effectiveAuthority,
+          clarificationGrounding: input.clarificationGrounding,
+          consumedEffectivePaths: pb06Paths,
+        });
+        if (
+          output.validation_mode !== "semantic_findings_only" ||
+          !Array.isArray(output.semantic_checks)
+        ) throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+        const { blockingFindings } = evaluateSemanticFindingsV4({
+          validationOutput: output,
+          decisionPlan: decisionPlan as unknown as DecisionPlan,
+          groundedReportContent: reportContent as unknown as ReportContent,
+        });
+        if (blockingFindings.length > 0) {
+          throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+        }
+      },
+    );
+
+    const report = buildSplitRuntimeReport(decisionPlan, reportContent);
+    const decisionCard = buildSplitDecisionCard(decisionPlan, reportContent);
+    this.emit("SAVE_FINAL_REPORT");
+    this.emit("COMPLETE_RUN");
+    await this.repository.finalizeCompletedAssessment({
+      reportId: this.uuid(),
+      runId: input.runContext.runId,
+      requestId: input.runContext.requestId,
+      returnedModel: this.returnedModel,
+      eligibility: "ready",
+      decision: decisionPlan.selected_decision,
+      reportJson: report,
+      decisionCardJson: decisionCard,
+      completedAt: this.now(),
+      ...this.usage,
+    });
+    return {
+      requestId: input.runContext.requestId,
+      runId: input.runContext.runId,
+      eligibility: "ready",
+      decision: decisionPlan.selected_decision,
+      report,
+      decisionCard,
+      duplicate: false,
+      usage: this.usage,
+    };
+  }
+
+  private async executeV1A2Initial(
+    request: AssessmentInput,
+    runContext: AssessmentRunContext,
+  ): Promise<AssessmentExecutionResult> {
+    const deterministicSafety = deterministicSafetyResult(request);
+    const baseProviderInput = projectBaseProviderInputV1(request);
+    let baseStructuredIntake: JsonObject | null = null;
+    await this.invokeStage(
+      runContext,
+      {
+        definition: this.definition("PB-01"),
+        input: asJsonObject({
+          run_mode: "initial_base",
+          base_provider_input: baseProviderInput,
+        }),
+      },
+      "LOCAL_SCHEMA_PB-01",
+      (rawOutput) => {
+        validateBaseSourceIntegrityV1({
+          input: baseProviderInput,
+          baseProviderRequest: baseProviderInput,
+          rawBaseOutput: rawOutput,
+        });
+        const grounded = groundBaseStructuredIntakeV3(baseProviderInput, rawOutput);
+        validateGroundedStageOutput(this.definition("PB-01"), grounded);
+        validateBaseSourceIntegrityV1({
+          input: baseProviderInput,
+          groundedBaseOutput: grounded,
+        });
+        validateContextualIntakeIntegrityV3(grounded);
+        baseStructuredIntake = grounded;
+      },
+    );
+    if (!baseStructuredIntake) {
+      throw new M2RuntimeError("M2_BASE_SOURCE_INTEGRITY_FAILED");
+    }
+    const candidateOutcome =
+      request.optionalMessage === null || request.optionalMessage.trim() === ""
+        ? { kind: "absent" as const, lane: await this.skipCandidateStage(runContext) }
+        : await this.invokeCandidateStage(runContext, request.optionalMessage);
+    if (candidateOutcome.kind === "safety_unavailable") {
+      if (deterministicSafety.classification === "normal_allowed") {
+        throw new M2RuntimeError("M2_CANDIDATE_SAFETY_UNAVAILABLE");
+      }
+      return this.completeV1A2Stop({
+        runContext,
+        eligibility: "safety_blocked",
+        reasonCodes: ["SAFETY_CLASSIFICATION_NOT_NORMAL"],
+      });
+    }
+    const initialEnvelope = buildSplitAnalysisEnvelopeV1({
+      baseStructuredIntake,
+      baseLegacyView: buildBaseStructuredIntakeLegacyViewV1(baseStructuredIntake),
+      candidateLane: candidateOutcome.lane,
+    });
+    const modelSafety = await this.invokeStage(
+      runContext,
+      {
+        definition: this.definition("PB-02"),
+        input: asJsonObject({
+          base_structured_intake: initialEnvelope.base_structured_intake,
+          deterministic_rule_result: deterministicSafety,
+          candidate_safety_result: initialEnvelope.candidate_safety_result,
+        }),
+      },
+      "LOCAL_SCHEMA_PB-02",
+    );
+    const { aggregate, splitEnvelope } = this.buildV1A2Aggregate({
+      request,
+      baseStructuredIntake,
+      candidateLane: candidateOutcome.lane,
+      modelSafety,
+    });
+    this.emit("LOCAL_SAFETY_AGGREGATION");
+    const safetyEligibility = deriveRuntimeEligibilityV3(aggregate);
+    await this.invokeStage(
+      runContext,
+      {
+        definition: this.definition("PB-03"),
+        input: asJsonObject({
+          base_structured_intake: splitEnvelope.base_structured_intake,
+          aggregate_safety_result: aggregate,
+          application_eligibility_expectation: safetyEligibility,
+        }),
+      },
+      "LOCAL_SCHEMA_PB-03",
+      (output) => validateEligibilityProjectionV3(output, safetyEligibility),
+    );
+    this.emit("LOCAL_ELIGIBILITY_GATE");
+    const effectiveAuthority = buildEffectiveAssessmentAuthorityV1({
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope,
+      clarificationGrounding: null,
+    });
+    validateEffectiveAssessmentAuthorityIntegrityV1({
+      authority: effectiveAuthority,
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope as unknown as JsonObject,
+      clarificationGrounding: null,
+    });
+    this.emit("LOCAL_EFFECTIVE_ASSESSMENT_AUTHORITY");
+    this.emit("LOCAL_JPY980_INPUT_SUFFICIENCY");
+    const policy = evaluateJpy980InputSufficiencyV2({
+      basePolicyInput: this.v1a2BasePolicyInput(baseStructuredIntake, aggregate),
+      clarificationGrounding: null,
+      effectiveAssessmentAuthority: effectiveAuthority,
+    });
+    if (policy.state === "safety_blocked") {
+      return this.completeV1A2Stop({
+        runContext,
+        eligibility: "safety_blocked",
+        reasonCodes: policy.reasonCodes,
+      });
+    }
+    if (policy.state === "needs_one_clarifying_answer") {
+      return this.completeV1A2NeedsMore({ runContext, policy });
+    }
+    if (policy.state === "not_full_product_candidate") {
+      return this.completeV1A2Stop({
+        runContext,
+        eligibility: "not_full_product_candidate",
+        reasonCodes: policy.reasonCodes,
+      });
+    }
+    return this.completeV1A2Ready({
+      request,
+      runContext,
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope,
+      aggregate,
+      effectiveAuthority,
+      clarificationGrounding: null,
+    });
+  }
+
+  private candidateLaneFromInitialAuthority(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+  ) {
+    if (request.optionalMessage === null || request.optionalMessage.trim() === "") {
+      if (initial.pb01c.status !== "skipped") {
+        throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+      }
+      return buildAbsentCandidateLaneV1();
+    }
+    if (!initial.pb01c.outputJson) {
+      throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    }
+    if (initial.pb01c.status === "completed") {
+      const grounded = groundCandidateAnalysisV2(initial.pb01c.outputJson);
+      validateCandidateSourceIntegrityV1({
+        candidateAnalysis: grounded.candidate_analysis,
+        candidateSafetyResult: grounded.candidate_safety_result,
+      });
+      return buildAvailableCandidateLaneV1(
+        grounded.candidate_analysis,
+        grounded.candidate_safety_result,
+      );
+    }
+    if (
+      initial.pb01c.status === "failed" &&
+      initial.pb01c.errorCode === "M2_CANDIDATE_ANALYSIS_UNAVAILABLE"
+    ) {
+      const candidateSafety = initial.pb01c.outputJson
+        .candidate_safety_signals as unknown as CandidateSafetySignalsV1;
+      validateCandidateSourceIntegrityV1({ candidateSafetyResult: candidateSafety });
+      return buildAnalysisUnavailableSafetyAvailableCandidateLaneV1(
+        candidateSafety,
+      );
+    }
+    throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+  }
+
+  async resume(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+    evidence: ClarificationEvidenceV1,
+    runContext: AssessmentRunContext,
+  ): Promise<AssessmentExecutionResult> {
+    this.usage = emptyUsageTotals();
+    this.returnedModel = null;
+    this.validateRuntimeIdentity(runContext);
+    if (
+      runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" ||
+      runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+      initial.request.id !== runContext.requestId ||
+      evidence.ordinal !== 1
+    ) {
+      throw new M2RuntimeError("M2_CLARIFICATION_STATE_CONFLICT", 409);
+    }
+    const baseProviderInput = projectBaseProviderInputV1(request);
+    validateBaseSourceIntegrityV1({
+      input: baseProviderInput,
+      baseProviderRequest: baseProviderInput,
+      rawBaseOutput: initial.pb01Output,
+    });
+    const baseStructuredIntake = groundBaseStructuredIntakeV3(
+      baseProviderInput,
+      initial.pb01Output,
+    );
+    validateGroundedStageOutput(this.definition("PB-01"), baseStructuredIntake);
+    const candidateLane = this.candidateLaneFromInitialAuthority(request, initial);
+
+    const rawClarificationGrounding = await this.invokeStage(
+      runContext,
+      {
+        definition: this.clarificationDefinition(),
+        input: asJsonObject({
+          run_mode: "clarification_resume",
+          clarification_evidence: {
+            schema_version: evidence.schemaVersion,
+            ordinal: evidence.ordinal,
+            question_code: evidence.questionCode,
+            target: evidence.target,
+            question_snapshot: evidence.questionSnapshot,
+            validated_answer: evidence.answer,
+            grounded_normalized_representation:
+              evidence.groundedNormalizedRepresentation,
+            provenance: evidence.provenance,
+            source_identity: evidence.sourceIdentity,
+            answer_fingerprint: evidence.answerFingerprint,
+            resolves_target: evidence.resolvesTarget,
+          },
+        }),
+      },
+      "LOCAL_SCHEMA_PB-01",
+    );
+    this.emit("LOCAL_CLARIFICATION_GROUNDING");
+    const clarificationGrounding = groundClarificationEvidenceV1({
+      evidence,
+      providerOutput: rawClarificationGrounding,
+    });
+    validateClarificationSourceIntegrityV1({
+      evidence,
+      grounding: clarificationGrounding,
+    });
+    await this.repository.completeClarificationGrounding({
+      clarificationId: evidence.clarificationId,
+      groundedNormalizedRepresentation:
+        clarificationGrounding.normalizedValue,
+      safetySignals: [
+        clarificationGrounding.clarificationSafety as unknown as JsonObject,
+      ],
+    });
+    await this.skipReusedStage(runContext, "PB-01C");
+    await this.skipReusedStage(runContext, "PB-02");
+    await this.skipReusedStage(runContext, "PB-03");
+
+    const { aggregate, splitEnvelope } = this.buildV1A2Aggregate({
+      request,
+      baseStructuredIntake,
+      candidateLane,
+      modelSafety: initial.pb02Output,
+      clarificationSafety: clarificationGrounding.clarificationSafety,
+    });
+    this.emit("LOCAL_SAFETY_AGGREGATION");
+    const effectiveAuthority = buildEffectiveAssessmentAuthorityV1({
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope,
+      clarificationGrounding,
+    });
+    validateEffectiveAssessmentAuthorityIntegrityV1({
+      authority: effectiveAuthority,
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope as unknown as JsonObject,
+      clarificationGrounding,
+    });
+    this.emit("LOCAL_EFFECTIVE_ASSESSMENT_AUTHORITY");
+    this.emit("LOCAL_JPY980_INPUT_SUFFICIENCY");
+    const policy = evaluateJpy980InputSufficiencyV2({
+      basePolicyInput: this.v1a2BasePolicyInput(baseStructuredIntake, aggregate),
+      clarificationGrounding,
+      effectiveAssessmentAuthority: effectiveAuthority,
+    });
+    if (policy.state === "needs_one_clarifying_answer") {
+      throw new M2RuntimeError("M2_SECOND_CLARIFICATION_PROHIBITED");
+    }
+    if (policy.state === "safety_blocked") {
+      return this.completeV1A2Stop({
+        runContext,
+        eligibility: "safety_blocked",
+        reasonCodes: policy.reasonCodes,
+      });
+    }
+    if (policy.state === "not_full_product_candidate") {
+      return this.completeV1A2Stop({
+        runContext,
+        eligibility: "not_full_product_candidate",
+        reasonCodes: policy.reasonCodes,
+      });
+    }
+    return this.completeV1A2Ready({
+      request,
+      runContext,
+      baseStructuredIntake,
+      candidateEnvelope: splitEnvelope.candidate_envelope,
+      aggregate,
+      effectiveAuthority,
+      clarificationGrounding,
+    });
   }
 
   private async executeSplit(
     request: AssessmentInput,
     runContext: AssessmentRunContext,
   ): Promise<AssessmentExecutionResult> {
+    if (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0") {
+      return this.executeV1A2Initial(request, runContext);
+    }
     const directionalGuidanceRuntime =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0";
     const authorityIntegrityRuntime =
@@ -1060,6 +1781,7 @@ export class AssessmentPipeline {
       promptBundleVersion: runContext.promptBundleVersion,
       schemaSetVersion: runContext.schemaSetVersion,
       stageTopologyVersion: this.stageTopologyVersion,
+      runKind: "initial",
       startedAt: runContext.startedAt,
     });
 
@@ -1211,6 +1933,8 @@ export class AssessmentPipeline {
             eligibility === "needs_more_information"
               ? stringArray(modelEligibility.question_codes).slice(0, 3)
               : [],
+          reasonCodes: [],
+          clarification: null,
           duplicate: false,
           usage: this.usage,
         };

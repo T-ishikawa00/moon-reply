@@ -55,6 +55,9 @@ type RuntimeStageCatalogManifest = {
     grounded_schema_version?: string;
     grounded_schema_path?: string;
     grounded_schema_sha256?: string;
+    clarification_schema_version?: string;
+    clarification_schema_path?: string;
+    clarification_schema_sha256?: string;
   }>;
 };
 
@@ -2067,6 +2070,147 @@ export async function loadM2P4AuthorityIntegrityRuntimeStageCatalog() {
     definitions.push(definition);
   }
 
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+export async function loadM2P4ClarificationIntegrationRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v12.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v11.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4AuthorityIntegrityRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v12.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v12.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "9f397ed41f3f284e7a984ad139768af16373a747" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+  const order: M2StageId[] = [
+    "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
+  ];
+  const changed = new Set<M2StageId>(["PB-01", "PB-04", "PB-05", "PB-06"]);
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    if (
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      (!changed.has(stageId) && JSON.stringify(stage) !== JSON.stringify(oldStage)) ||
+      (changed.has(stageId) &&
+        (stage.source !== "m2-p4-v1-a2-clarification-integration" ||
+          stage.prompt_version !== "v4.0.0"))
+    ) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    const providerProjection = toOpenAiStructuredOutputSchema(outputSchema);
+    assertOpenAIStructuredOutputSchema(providerProjection);
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(
+        `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`,
+      ),
+      developerPrompt: `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
   return {
     catalogVersion: runtimeManifest.catalog_version,
     promptBundleVersion: runtimeManifest.prompt_bundle_version,

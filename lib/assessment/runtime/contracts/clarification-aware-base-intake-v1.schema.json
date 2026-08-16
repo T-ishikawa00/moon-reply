@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/clarification-aware-base-intake-v1.schema.json",
+  "title": "Moon Reply clarification grounding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "target",
+    "source_identity",
+    "answer_fingerprint",
+    "materially_resolves_target",
+    "clarification_safety_result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "pipeline-schema-clarification-grounding-v1.0.0"
+    },
+    "target": {
+      "enum": [
+        "material_relationship_or_communication_concern",
+        "latest_contact_timing",
+        "usual_reply_cadence",
+        "central_fear_or_decision_concern",
+        "relationship_intent",
+        "requested_message_tone"
+      ]
+    },
+    "source_identity": {
+      "type": "string",
+      "pattern": "^clarification:[A-Za-z0-9_-]{22,}:answer:1$"
+    },
+    "answer_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "materially_resolves_target": { "type": "boolean" },
+    "clarification_safety_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "reason_codes", "response_mode"],
+      "properties": {
+        "classification": {
+          "enum": ["normal_allowed", "needs_review", "rejected"]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_/-]*$" },
+          "uniqueItems": true,
+          "maxItems": 16
+        },
+        "response_mode": {
+          "enum": [
+            "none",
+            "urgent_self_safety",
+            "urgent_other_safety",
+            "abuse_safety_support",
+            "unsafe_contact_stop",
+            "privacy_protection",
+            "minor_safeguarding",
+            "lawful_alternative"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,29 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
+## V1-A2 Clarification Integration — Implemented Pending Review
+
+- [x] Accepted R1 authority `9f397ed41f3f284e7a984ad139768af16373a747` synchronized; V1-A1 immutable
+- [x] Exact implementation scope `37/37`: 14 UPDATE + 23 NEW; DELETE / RENAME 0
+- [x] Shared actionable-topic and `message_impact` Candidate validation before request creation
+- [x] V1-A1-compatible Policy V2 connected after Safety with cadence V2 copy correction
+- [x] One-question/one-answer maximum, secure opaque capability, canonical fingerprint, same/different-answer behavior
+- [x] Separate Clarification Evidence/Grounding provenance; no Base/currentSituation/Candidate mutation
+- [x] Same-request awaiting→processing resume lifecycle and initial idempotency replay
+- [x] Derived `EffectiveAssessmentAuthorityV1` and clarification-aware `EffectiveDecisionPolicyV1`
+- [x] Clarification-aware PB-01/PB-04/PB-05/PB-06 without V1-B semantic-depth expansion
+- [x] Resume reuse of immutable Base/Candidate/Safety; PB-01C/PB-02/PB-03 skipped deterministically
+- [x] First-class ready / needs-more / not-full / Safety Runtime and Delivery V2 states
+- [x] Migration `0006` created with atomic lifecycle RPCs; migration apply 0
+- [x] Initial API, separate clarification answer API, accessible one-question UI, and customer-safe no-charge stops
+- [x] Offline fake fixtures `28/28`; malformed, determinism, provenance, target isolation, and downstream-discard coverage
+- [ ] Human / ChatGPT implementation review and V1-A2 acceptance
+- [ ] V1-A overall completion — pending V1-A2 acceptance
+- [ ] V1-B/C/D, Provider execution, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+
+Status is implemented_pending_human_chatgpt_review. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
 ## V1-A2 R1 Effective Authority / Downstream Consumption Correction
 

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { asM2RuntimeError, M2RuntimeError } from "@/lib/assessment/runtime/errors";
 import { isInternalRuntimeAvailable } from "@/lib/assessment/runtime/environment";
 import { executeInternalAssessment } from "@/lib/assessment/runtime/service";
-import { createCustomerAssessmentDeliveryV1 } from "@/lib/assessment/runtime/customer-assessment-delivery-v1";
+import { createCustomerAssessmentDeliveryV2 } from "@/lib/assessment/runtime/customer-assessment-delivery-v2";
+import { validateJpy980ProductScopeV1 } from "@/lib/assessment/runtime/jpy980-product-scope-validation-v1";
 import {
   RELATIONSHIP_VALUES,
   REQUESTED_TOPIC_VALUES,
@@ -144,8 +145,9 @@ export async function POST(request: Request) {
       throw new M2RuntimeError("M2_INVALID_JSON", 400);
     }
     const input = validateBody(parsed);
+    validateJpy980ProductScopeV1(input);
     const result = await executeInternalAssessment(input, idempotencyKey);
-    const delivery = createCustomerAssessmentDeliveryV1(
+    const delivery = createCustomerAssessmentDeliveryV2(
       result,
       input.requestedTopics,
     );
