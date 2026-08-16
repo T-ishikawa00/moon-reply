@@ -2,9 +2,9 @@
 
 Task: `M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1`
 
-Status: `reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review`
+Status: `reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized`
 
-This is a planning-only Product Doctrine with the Q0-A R1 acceptance-boundary correction. The Product philosophy, Projection design, and R2-A/R2-B/R2-C Package structure are unchanged. It does not authorize code, UI, Prompt, Runtime, Provider, database, or activation work.
+The Q0-A Product Doctrine and its R1 acceptance-boundary correction completed Human + ChatGPT review with `PASS` and Human acceptance on `2026-08-16`. The Product philosophy, Projection design, and R2-A/R2-B/R2-C Package structure are unchanged. This acceptance sync performs no implementation; it authorizes only the separately executed R2-A Experience Projection successor implementation.
 
 ## Non-negotiable Hard Gate
 
@@ -112,4 +112,8 @@ These states are not equivalent. That Experience PASS does not establish Active 
 
 The accepted Package B visual shell is retained, but its content density is not accepted. The next design boundary is Full structured Report to a deterministic versioned experience Projection to Customer UI. The accepted `CustomerAssessmentProjectionV1` remains immutable; no additional Provider stage, paraphrase, factual rewrite, or generated filler is authorized.
 
-Implementation, Provider rerun, Runtime activation, R4, C2, PR, and main integration remain unauthorized.
+R2-A Experience Projection successor implementation is authorized only for deterministic `CustomerAssessmentExperienceProjectionV2`, unchanged Full structured Report and `CustomerAssessmentProjectionV1`, exact legacy/split source mapping, and removal of fact IDs/internal enums from the customer projection. Provider calls, paraphrase, factual rewrite, generated filler, and UI design changes remain zero.
+
+R2-B Reassuring Customer Note implementation is unauthorized. R2-C Human Visual/Product Review is `not_ready` and its execution/review is unauthorized until its predecessors complete. CustomerAssessmentNote UI, CSS, Prompt, PB-05, evaluator/semantic disposition, Safety UX, purchase/payment, Provider execution, DB/Supabase/migration, Runtime activation, and main changes are outside R2-A authority.
+
+`experienceProductJudgment` remains `not_established_pending_R2_C_human_product_review`; `jpy980RuntimeReadiness` remains `not_established`; `globalQ0Completion=false`; and Provider quality is not established. Provider rerun, Active Runtime activation, Production Runtime, Payment implementation, Production Payment, R4, C2, PR, and main integration remain unauthorized.

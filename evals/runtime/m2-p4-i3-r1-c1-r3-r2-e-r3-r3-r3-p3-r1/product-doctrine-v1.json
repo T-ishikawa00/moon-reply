@@ -2,9 +2,9 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-product-doctrine-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R1",
   "title": "Reassuring Assessment Experience Product Doctrine",
-  "status": "reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review",
-  "mode": "planning_only",
-  "branch": "plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-reassurance-doctrine-correction",
+  "status": "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+  "mode": "acceptance_authorization_sync_only",
+  "branch": "chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance",
   "baseline": "fdbdf808f135655084de32aec2e57473c1beaf31",
   "correction": {
     "id": "Q0-A",
@@ -17,6 +17,14 @@
       "deleted_paths": 0,
       "renamed_paths": 0
     }
+  },
+  "acceptance": {
+    "parent": "6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2",
+    "doctrineHumanChatGPTReview": "complete",
+    "doctrineHumanChatGPTReviewOutcome": "PASS",
+    "humanAcceptance": "complete",
+    "doctrineAcceptance": "complete",
+    "acceptanceDate": "2026-08-16"
   },
   "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-customer-note",
   "expected_parent": "8700ded1454058f72d33f2eb4d1ae6a05b6e008c",
@@ -171,6 +179,23 @@
     "all_checks_required_for_completion": true,
     "completion_without_reduced_motion_allowed": false
   },
+  "r2_authorization": {
+    "authorized_implementation_scope": "R2-A_Experience_Projection_successor_only",
+    "R2-A": {
+      "name": "Experience Projection successor",
+      "implementation": "implementation_authorized"
+    },
+    "R2-B": {
+      "name": "Reassuring Customer Note",
+      "implementation": "implementation_unauthorized"
+    },
+    "R2-C": {
+      "name": "Human Visual and Product review",
+      "readiness": "not_ready",
+      "execution": "unauthorized",
+      "review": "unauthorized"
+    }
+  },
   "jpy980_state_separation": {
     "r2_owned_scope": "reassuring_assessment_experience_only",
     "r2_c_human_product_pass": {
@@ -196,8 +221,17 @@
     "hard_gates_precede_product_value": true,
     "product_doctrine_defined": true,
     "implementation_authorized": false,
+    "implementation_authorized_scope": "R2-A_Experience_Projection_successor_only",
+    "r2_a_implementation_authorized": true,
+    "r2_b_implementation_authorized": false,
+    "r2_c_execution_authorized": false,
+    "r2_c_review_authorized": false,
     "runtime_activation_authorized": false,
     "provider_rerun_authorized": false,
+    "production_runtime_authorized": false,
+    "payment_implementation_authorized": false,
+    "production_payment_authorized": false,
+    "main_integration_authorized": false,
     "production_runtime_established": false,
     "provider_quality_established": false,
     "global_q0_completion_established": false,

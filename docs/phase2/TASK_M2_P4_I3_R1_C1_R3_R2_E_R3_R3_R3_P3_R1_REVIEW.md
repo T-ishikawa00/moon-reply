@@ -2,19 +2,32 @@
 
 ## Status
 
-`reassuring_assessment_experience_doctrine_r1_correction_ready_pending_human_chatgpt_review`
+`reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized`
 
-This planning-only Q0-A R1 Correction preserves the existing Product Doctrine, Projection design, and R2-A/R2-B/R2-C Package structure while correcting three acceptance-boundary alignments. It does not authorize implementation.
+Q0-A Product Doctrine R1 Correction completed Human + ChatGPT review and Human acceptance with `PASS` on `2026-08-16`. This Task is acceptance / authorization synchronization only: it performs no R2-A implementation while authorizing only the next R2-A Experience Projection successor implementation.
 
 - Doctrine source branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-reassurance-experience`
 - Correction baseline: `a5b2defa1bb765d46076a28ca9827d494fcbe433`
 - Correction branch: `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-reassurance-doctrine-correction`
+- Acceptance branch: `chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance`
+- Acceptance parent: `6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2`
 - Original Product baseline: `fdbdf808f135655084de32aec2e57473c1beaf31`
 - Parent: `8700ded1454058f72d33f2eb4d1ae6a05b6e008c`
 - main / origin/main: `61e33a10e195fad17e253a6b9719217e1992f273`
 - Correction scope: exact `10/10`; NEW / DELETE / RENAME = `0 / 0 / 0`
 
 Package A/R1 is unchanged and accepted. Package B is unchanged at exact `10/10`. The Provider marker is unchanged, authorization remains consumed, `rerun_authorized=false`, and Active Runtime remains v4.
+
+## Acceptance authority
+
+- `doctrineHumanChatGPTReview = complete`
+- `doctrineHumanChatGPTReviewOutcome = PASS`
+- `humanAcceptance = complete`
+- `doctrineAcceptance = complete`
+- `acceptanceDate = 2026-08-16`
+- R2-A Experience Projection successor: `implementation_authorized`
+- R2-B Reassuring Customer Note: `implementation_unauthorized`
+- R2-C Human Visual/Product Review: `not_ready / unauthorized`
 
 ## Product Doctrine
 
@@ -85,7 +98,7 @@ H. `見直す条件`, with observable triggers and customer-readable future dire
 
 I. `月の返事から最後に`, one or two consultation-specific closing paragraphs providing reassurance without guarantee.
 
-Not every case renders every section. Normal cases use approximately six to nine semantically distinct visible sections as guidance only, never as a Hard Minimum or Hard Maximum. Semantic necessity controls density. A simple consultation may render fewer than six visible sections when every necessary Product function is fulfilled; no section may be created only to satisfy the count, no padding is permitted, and no primary meaning may be duplicated. The existing simple-case requirement is preserved: compress proportionally to judgment, reason, draft when applicable, reassessment, and other semantically necessary Product functions. Complex or emotional cases may legitimately be longer. Fixed word counts and fixed section counts are prohibited.
+Not every case renders every section. Normal cases use approximately six to nine semantically distinct visible sections as `guidance_only`, never as a Hard Minimum or Hard Maximum. Semantic necessity controls density. A simple consultation may render fewer than six visible sections when every necessary Product function is fulfilled; no section may be created only to satisfy the count, no padding is permitted, and no primary meaning may be duplicated. The existing simple-case requirement is preserved: compress proportionally to judgment, reason, draft when applicable, reassessment, and other semantically necessary Product functions. Complex or emotional cases may legitimately be longer. Fixed word counts and fixed section counts are prohibited.
 
 ## Current Projection gaps
 
@@ -127,9 +140,13 @@ The renderer assigns each field one primary Product function, avoids rendering t
 
 Add deterministic experience fields, preserve the full Report and v1 contract, make no UI design change, and use no Provider call.
 
+R2-A implementation is authorized only for deterministic `CustomerAssessmentExperienceProjectionV2`, unchanged Full structured Report and `CustomerAssessmentProjectionV1`, exact legacy/split source mapping, and removal of fact IDs/internal enums from the customer projection. Provider calls, paraphrase, factual rewrite, generated filler, and UI design changes are `0`.
+
 ### Package R2-B — Reassuring Customer Note revision
 
 Retain the accepted visual shell, reduce hero dominance, restore meaningful assessment length, render the emotional journey, preserve draft/copy prominence, and remove semantic repetition.
+
+R2-B implementation remains unauthorized.
 
 ### Package R2-C — Human Visual and Product review
 
@@ -148,6 +165,8 @@ Required Human Visual review checks are:
 Required Product Owner cases are `simple`, `emotional`, `null_optional`, `polite_draft`, and `persona_preserved`.
 
 R2-C must not be marked complete without observed reduced-motion behavior.
+
+R2-C is `not_ready`; execution and review remain unauthorized until predecessors complete.
 
 The three proposed path manifests are pairwise disjoint. Existing Package C remains separate and continues to own PB-05 factual and anxiety-safe writing quality.
 
@@ -169,10 +188,24 @@ Runtime activation remains separately unauthorized.
 
 ## Boundary
 
-`implementation_authorized=false`
+`unscoped_implementation_authorized=false`
 
-No CustomerAssessmentNote, CSS, Projection, Delivery, Runtime, Prompt, Catalog, Schema, evaluator, semantic disposition, fixture, Provider, runner, DB, Supabase, migration, activation, payment, Safety UX, Package C-F implementation, R4, C2, PR, main merge, or force push occurs in this Task.
+`R2-A implementation_authorized=true`
+
+`R2-B implementation_authorized=false`
+
+`R2-C execution_authorized=false / review_authorized=false`
+
+This sync performs no CustomerAssessmentNote, CSS, Projection, Delivery, Runtime, Prompt, Catalog, Schema, evaluator, semantic disposition, fixture, Provider, runner, DB, Supabase, migration, activation, payment, Safety UX, Package C-F implementation, R4, C2, PR, main merge, or force push. R2-A does not authorize CustomerAssessmentNote UI, CSS, Prompt, PB-05, evaluator/semantic disposition, Safety UX, purchase/payment, Runtime activation, Provider execution, DB/Supabase/migration, or main changes.
+
+`experienceProductJudgment = not_established_pending_R2_C_human_product_review`
+
+`jpy980RuntimeReadiness = not_established`
+
+`globalQ0Completion = false`; `providerQualityEstablished = false`.
+
+Provider rerun, Active Runtime activation, Production Runtime, Payment implementation, Production Payment, R4, C2, PR, and main integration remain unauthorized.
 
 Provider / DB / Supabase: `0 / 0 / 0`.
 
-Next action: `human_chatgpt_review_of_reassuring_assessment_experience_doctrine_r1_correction`.
+Next action: `human_chatgpt_review_of_doctrine_acceptance_and_r2_a_authorization_sync`.
