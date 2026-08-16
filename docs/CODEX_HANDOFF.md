@@ -1,17 +1,18 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
-## Active handoff — V1-A1 Deterministic JPY980 Input Sufficiency Policy
+## Active handoff — V1-A1 R1 Materiality False-Positive Correction
 
-- Status / branch / parent: `implemented_pending_human_chatgpt_review` / `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-input-sufficiency-policy` / `cfad0bd4ca3fd2304b00d072624e624f98c09b29`.
-- Accepted authority: JPY980 Value Architecture R1 Correction at `cfad0bd4ca3fd2304b00d072624e624f98c09b29` is ChatGPT `PASS / complete`, Human `PASS / complete`, Human acceptance `complete`, and correction acceptance `complete` on `2026-08-16`.
-- Implemented slice: only V1-A1 Deterministic Input Sufficiency Policy is authorized and implemented pending review. It consumes aggregate Safety plus existing grounded `pipeline-schema-base-v2.0.0`, `m2-p4-base-decision-facts-v2`, and `m2-p4-base-writing-signals-v1` authority; it performs no raw-prose keyword or case/fixture-ID routing and makes no Provider call.
-- Policy result: `full_paid_ready_candidate`, `needs_one_clarifying_answer`, `not_full_product_candidate`, or `safety_blocked`; Safety wins. Clarification budget is one total question, second-question and loop behavior are prohibited, and clarification is null outside `needs_one_clarifying_answer`.
-- Evidence: offline A-L routing fixtures cover routine administration, budget exhaustion, ready waiting/draft cases, one/multiple gaps, Safety, malformed input, repeat determinism, and metadata independence. `not_full_product_candidate` remains internal future routing only.
-- Closed authority: V1-A2 Runtime/API/UI integration, V1-B, V1-C, V1-D, Active Runtime, API/UI response flow, DB/Supabase/migrations, Prompt, Provider, PB-05, semantic disposition, Payment, Production Runtime, PR, and main integration remain unauthorized. Provider / DB / Supabase are `0 / 0 / 0`.
+- Status / branch / parent: `r1_materiality_correction_implemented_pending_human_chatgpt_review` / `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-r1-materiality` / `65c245860813f6179689855b344dbf6fd425867a`.
+- Review finding: V1-A1 ChatGPT review is `NEEDS_CORRECTION` with BLOCKER 0 / MAJOR 1 / MINOR 0 because incidental `user_emotions` presence could independently establish material concern. The accepted JPY980 Value Architecture R1 authority at `cfad0bd4ca3fd2304b00d072624e624f98c09b29` remains unchanged.
+- R1 policy correction: emotion presence alone never establishes paid Product materiality. Materiality is limited to an existing material typed `user_goal_detail`, explicit boundary state, or repeated unanswered contact. No emotion-statement keyword search, raw-prose regex, case ID, or fixture ID routing exists.
+- Emotional boundary: `user_emotions` supplies bounded emotional-context presence only; it does not prove a specific central-fear proposition. V1-A1 does not interpret emotion prose. The material-concern clarification now begins `今回のやり取りで` and is neutral across draft and send/wait shapes.
+- Evidence: original A-L fixtures are retained and R1-A through R1-D add no-emotion admin, incidental-emotion admin, post-budget route-out, and material typed-goal positive coverage. Offline result is `16/16`; Safety priority, one-total-question budget, no second question, determinism, malformed fail-closed behavior, and metadata independence remain intact.
+- V1-A2 provenance boundary: current PB-01 Base authority does not accept clarification answers as Base facts/source refs. A separate grounding/provenance contract is required before integration; appending a follow-up to `currentSituation`, pretending `input:current_situation` provenance, or implicitly widening schemas is prohibited and not implemented. V1-A2 remains unauthorized.
+- Closed authority: V1-A2, V1-B/C/D, Active Runtime, API/UI flow, schemas, DB/Supabase/migrations, Prompt, Provider, PB-05, semantic disposition, Payment, Production Runtime, PR, and main integration remain unauthorized. Provider / DB / Supabase are `0 / 0 / 0`.
 - Current Product authority: R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`. V1-A overall is not complete.
-- Scope: exact `12/12`, 5 UPDATE + 7 NEW, DELETE / RENAME 0. R2-B Product snapshot and main `61e33a10e195fad17e253a6b9719217e1992f273` remain unchanged.
-- Next action: `human_chatgpt_review_of_v1_a1_input_sufficiency_policy`. Stop after one normal feature-branch push.
+- Scope: exact R1 correction `11/11`, 10 UPDATE + 1 NEW, DELETE / RENAME 0. Original V1-A1 implementation snapshot remains `12/12`; R2-B Product snapshot and main `61e33a10e195fad17e253a6b9719217e1992f273` remain unchanged.
+- Next action: `human_chatgpt_review_of_v1_a1_r1_materiality_correction`. Stop after one normal correction-branch push.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->

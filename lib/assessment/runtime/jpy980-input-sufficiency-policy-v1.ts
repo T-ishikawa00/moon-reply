@@ -57,7 +57,7 @@ export const JPY980_CLARIFICATION_CATALOG_V1 = {
     code: "ask_material_relationship_or_communication_concern_v1",
     target: "material_relationship_or_communication_concern",
     question:
-      "この返信でいちばん気になっているのは、距離感・好意の伝わり方・返信への圧のどれに近いですか？特に気になる点がなければ「特になし」で大丈夫です。",
+      "今回のやり取りで、いちばん気になっているのは、距離感・好意の伝わり方・返信への圧のどれに近いですか？特に気になる点がなければ「特になし」で大丈夫です。",
   },
   latest_contact_timing: {
     code: "ask_latest_contact_timing_v1",
@@ -566,17 +566,21 @@ function hasUsableToneContext(writingSignals: Record<string, unknown>) {
 }
 
 function hasMaterialConcern(authority: ValidatedAuthorityV1) {
-  const emotions = authority.baseStructuredIntake.user_emotions as unknown[];
   const boundary = authority.decisionFacts.boundary_state as Record<
     string,
     unknown
   >;
   return (
-    emotions.length > 0 ||
     hasMaterialIntent(authority.baseWritingSignals) ||
     boundary.status === "explicit" ||
     boundary.repeated_unanswered_contact === true
   );
+}
+
+function hasBoundedEmotionalContext(authority: ValidatedAuthorityV1) {
+  // Presence is usable only as bounded emotional context. The policy does not
+  // interpret the prose or treat it as proof of a specific fear proposition.
+  return (authority.baseStructuredIntake.user_emotions as unknown[]).length > 0;
 }
 
 function clarificationFor(
@@ -625,9 +629,7 @@ function missingDimensions(
     ) {
       missing.add("usual_reply_cadence");
     }
-    if (
-      (authority.baseStructuredIntake.user_emotions as unknown[]).length === 0
-    ) {
+    if (!hasBoundedEmotionalContext(authority)) {
       missing.add("central_fear_or_decision_concern");
     }
     if (

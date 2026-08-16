@@ -182,6 +182,25 @@
   },
   "scenario_patches": {
     "routine_administrative_reply": {},
+    "routine_administrative_incidental_emotion": {
+      "user_emotions": [
+        {
+          "item_id": "M001",
+          "statement": "返信が来て少し安心している。",
+          "source_refs": [
+            "input:current_situation"
+          ]
+        }
+      ]
+    },
+    "routine_administrative_material_typed_goal": {
+      "base_writing_signals": {
+        "user_goal_detail": {
+          "value": "move_closer",
+          "basis": "current_situation_explicit"
+        }
+      }
+    },
     "reply_waiting_sufficient": {
       "user_goal": "decide_send_or_wait",
       "timeline": [
@@ -508,6 +527,50 @@
         "fixtureId": "changed-fixture-id"
       },
       "must_match_fixture": "C_reply_waiting_sufficient_is_ready_candidate",
+      "expected_state": "full_paid_ready_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "R1_A_routine_administrative_no_emotion_clarifies",
+      "requirement": "R1-A",
+      "scenario": "routine_administrative_reply",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "material_relationship_or_communication_concern"
+    },
+    {
+      "fixture_id": "R1_B_incidental_emotion_still_clarifies_material_concern",
+      "requirement": "R1-B",
+      "scenario": "routine_administrative_incidental_emotion",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "material_relationship_or_communication_concern"
+    },
+    {
+      "fixture_id": "R1_C_incidental_emotion_after_budget_routes_out",
+      "requirement": "R1-C",
+      "scenario": "routine_administrative_incidental_emotion",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": true,
+      "input_patch": {},
+      "expected_state": "not_full_product_candidate",
+      "expected_target": null
+    },
+    {
+      "fixture_id": "R1_D_material_typed_goal_can_be_ready_candidate",
+      "requirement": "R1-D",
+      "scenario": "routine_administrative_material_typed_goal",
+      "aggregate_safety_classification": "normal_allowed",
+      "clarification_already_used": false,
+      "input_patch": {},
+      "metadata_mutation": {
+        "caseId": "materiality-regression-case-id",
+        "fixtureId": "materiality-regression-fixture-id"
+      },
       "expected_state": "full_paid_ready_candidate",
       "expected_target": null
     }

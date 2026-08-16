@@ -2,7 +2,7 @@
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-policy-contract-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1",
   "policy_version": "m2-p4-jpy980-input-sufficiency-policy-v1",
-  "status": "implemented_pending_human_chatgpt_review",
+  "status": "r1_materiality_correction_implemented_pending_human_chatgpt_review",
   "authority": {
     "accepted_jpy980_value_architecture_r1_correction": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
     "correction_chatgpt_review": "PASS",
@@ -11,7 +11,15 @@
     "correction_human_review_complete": true,
     "correction_human_acceptance_complete": true,
     "correction_acceptance_complete": true,
-    "acceptance_date": "2026-08-16"
+    "acceptance_date": "2026-08-16",
+    "v1_a1_implementation_commit": "65c245860813f6179689855b344dbf6fd425867a",
+    "v1_a1_chatgpt_review": "NEEDS_CORRECTION",
+    "review_findings": {
+      "blocker": 0,
+      "major": 1,
+      "minor": 0,
+      "major_code": "emotion_presence_alone_may_establish_material_concern"
+    }
   },
   "input_authority": {
     "aggregate_safety_classification": [
@@ -24,6 +32,9 @@
     "base_writing_signals_schema_version": "m2-p4-base-writing-signals-v1",
     "material_unknowns_source": "base_structured_intake.material_unknowns",
     "user_emotions_source": "base_structured_intake.user_emotions",
+    "user_emotions_role": "bounded_emotional_context_presence_only",
+    "user_emotions_establishes_materiality": false,
+    "user_emotions_proves_specific_fear_proposition": false,
     "clarification_already_used": "boolean",
     "raw_customer_prose_keyword_routing_allowed": false,
     "case_or_fixture_id_branching_allowed": false
@@ -81,6 +92,32 @@
     "section_count_used_as_sufficiency": false,
     "requested_topic_count_alone_used_as_sufficiency": false
   },
+  "materiality_contract": {
+    "emotion_presence_alone_is_sufficient": false,
+    "accepted_existing_typed_signals": [
+      "material_user_goal_detail",
+      "explicit_boundary_state",
+      "repeated_unanswered_contact"
+    ],
+    "material_user_goal_detail_values": [
+      "move_closer",
+      "maintain_distance",
+      "apologize",
+      "repair_conflict",
+      "decline_without_false_hope",
+      "end_contact",
+      "express_affection",
+      "clarify_relationship"
+    ],
+    "raw_emotion_statement_keyword_or_regex_routing": false,
+    "missing_typed_material_signal_route": "material_relationship_or_communication_concern"
+  },
+  "central_fear_boundary": {
+    "user_emotions_semantics": "bounded_emotional_context_presence_signal",
+    "specific_fear_proposition_established": false,
+    "emotion_prose_interpreted_by_v1_a1": false,
+    "future_specific_fear_grounding_remains_unresolved": true
+  },
   "semantic_basis_assessed_but_not_generated": {
     "mandatory": [
       "consultation_core",
@@ -102,7 +139,12 @@
     "ui_clarification_flow_changed": false,
     "db_eligibility_constraint_changed": false,
     "not_full_product_candidate_representation_owner": "V1-A2",
-    "v1_a2_authorized": false
+    "v1_a2_authorized": false,
+    "clarification_answer_grounding_provenance_contract_required_before_v1_a2": true,
+    "clarification_answer_grounding_provenance_contract_status": "unresolved_not_designed_not_implemented",
+    "append_answer_to_current_situation_allowed": false,
+    "pretend_followup_source_is_input_current_situation_allowed": false,
+    "implicit_schema_widening_allowed": false
   },
   "operations": {
     "provider_calls": 0,

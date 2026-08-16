@@ -1,22 +1,24 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
-## V1-A1 Deterministic JPY980 Input Sufficiency Policy
+## V1-A1 R1 Materiality False-Positive Correction
 
-- [x] Exact accepted authority `cfad0bd4ca3fd2304b00d072624e624f98c09b29`, parent planning commit `885d46db8bfbc2add4828b7205af9a9e3d6c009c`, R2-B snapshot `fa956b9b1941c73f8e1767c64ab24f07fadd36c6`, and main `61e33a10e195fad17e253a6b9719217e1992f273` fixed
-- [x] JPY980 Value Architecture R1 Correction recorded as ChatGPT and Human `PASS / complete`, Human and correction acceptance `complete`, dated `2026-08-16`
-- [x] V1-A split: V1-A1 authorized and implemented pending review; V1-A2 unauthorized; V1-A overall incomplete
-- [x] Pure deterministic four-state policy implemented against existing grounded Base v2 / Decision Facts v2 / Base Writing Signals v1 authority
-- [x] Safety priority and one-total-question clarification budget implemented; automatic second question and clarification loop prohibited
-- [x] Bounded six-target Japanese clarification catalog implemented without raw-prose keyword or case/fixture-ID routing
-- [x] Routine administrative, waiting, draft, budget exhaustion, multiple-gap, Safety, malformed, repeat-determinism, and metadata-independence fixtures A-L recorded
-- [x] Malformed/unsupported input fails closed with `M2_JPY980_INPUT_SUFFICIENCY_POLICY_INVALID`
-- [x] Active Runtime, RuntimeEligibilityV3, DB eligibility, API/UI flow, Prompt, Provider, PB-05, semantic disposition, Customer note, ExperienceProjectionV2, migrations, and Payment unchanged
+- [x] Exact V1-A1 implementation parent `65c245860813f6179689855b344dbf6fd425867a`, original authority `cfad0bd4ca3fd2304b00d072624e624f98c09b29`, R2-B snapshot `fa956b9b1941c73f8e1767c64ab24f07fadd36c6`, and main `61e33a10e195fad17e253a6b9719217e1992f273` fixed
+- [x] ChatGPT review recorded as `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 0: emotion presence alone could establish material concern
+- [x] Standalone `user_emotions.length > 0` materiality condition removed
+- [x] Material concern limited to material typed goal, explicit boundary state, or repeated unanswered contact
+- [x] `user_emotions` retained only as bounded emotional-context presence; no specific fear proposition or materiality inferred
+- [x] No raw emotion-prose keyword/regex, case-ID, or fixture-ID routing added
+- [x] Material-concern clarification changed to consultation-neutral `今回のやり取りで...` wording
+- [x] Original A-L fixtures retained; R1-A through R1-D cover no-emotion admin, incidental emotion, budget exhaustion, and material typed-goal positive; offline result `16/16`
+- [x] Safety priority, one-total-question budget, automatic-second-question prohibition, determinism, and malformed fail-closed behavior preserved
+- [x] V1-A2 clarification-answer provenance gap recorded: no append to `currentSituation`, false `input:current_situation` source, or implicit schema widening; contract remains unresolved/not implemented
+- [x] Active Runtime, RuntimeEligibilityV3, DB eligibility, API/UI flow, schemas, Prompt, Provider, PB-05, semantic disposition, Customer note, ExperienceProjectionV2, migrations, and Payment unchanged
 - [x] V1-A2, V1-B, V1-C, V1-D, Provider execution, Production Runtime, Payment, PR, and main integration remain unauthorized
-- [x] Exact scope fixed at `12/12`: 5 UPDATE + 7 NEW; DELETE / RENAME 0
-- [ ] Human / ChatGPT review of V1-A1 implementation
+- [x] Exact R1 correction scope fixed at `11/11`: 10 UPDATE + 1 NEW; DELETE / RENAME 0; original V1-A1 verifier remains immutable
+- [ ] Human / ChatGPT review of V1-A1 R1 materiality correction
 
-Status is implemented_pending_human_chatgpt_review. R2-C remains remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a1_input_sufficiency_policy.
+Status is r1_materiality_correction_implemented_pending_human_chatgpt_review. R2-C remains remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a1_r1_materiality_correction.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->

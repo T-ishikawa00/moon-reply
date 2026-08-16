@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a1_implemented_pending_review_remaining_packages_unauthorized",
+  "status": "v1_a1_r1_materiality_correction_implemented_pending_review_remaining_packages_unauthorized",
   "planning_only": false,
   "sequence": [
     "V1-A1",
@@ -23,7 +23,8 @@
         "prohibit an automatic second clarification and any clarification loop",
         "prevent Payment-capable state before Product eligibility",
         "prevent charge, Report, and generated draft before full eligibility",
-        "route non-material cases out of the paid Product path"
+        "route non-material cases out of the paid Product path",
+        "prohibit user_emotions presence alone from establishing paid Product materiality"
       ],
       "excludes": [
         "PB-05 prose generation",
@@ -31,15 +32,22 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "status": "in_progress_v1_a1_implemented_pending_review_v1_a2_unauthorized",
+      "status": "in_progress_v1_a1_r1_materiality_correction_implemented_pending_review_v1_a2_unauthorized",
       "complete": false,
       "authorized": false,
       "subpackages": [
         {
           "id": "V1-A1",
           "name": "Deterministic Input Sufficiency Policy",
-          "status": "implemented_pending_review",
+          "status": "r1_materiality_correction_implemented_pending_review",
           "implementation_authorized": true,
+          "emotion_presence_alone_establishes_materiality": false,
+          "materiality_signals": [
+            "material_user_goal_detail",
+            "explicit_boundary_state",
+            "repeated_unanswered_contact"
+          ],
+          "user_emotions_role": "bounded_emotional_context_presence_only",
           "active_runtime_connected": false,
           "api_response_changed": false,
           "ui_clarification_flow_changed": false,
@@ -50,7 +58,13 @@
           "id": "V1-A2",
           "name": "Runtime/API/UI Clarification Integration",
           "status": "unauthorized",
-          "implementation_authorized": false
+          "implementation_authorized": false,
+          "clarification_answer_grounding_provenance_contract_required": true,
+          "clarification_answer_grounding_provenance_contract_status": "unresolved_not_designed_not_implemented",
+          "current_pb_01_accepts_clarification_answer_as_base_fact": false,
+          "append_answer_to_current_situation_allowed": false,
+          "pretend_followup_source_is_input_current_situation_allowed": false,
+          "implicit_schema_widening_allowed": false
         }
       ]
     },
