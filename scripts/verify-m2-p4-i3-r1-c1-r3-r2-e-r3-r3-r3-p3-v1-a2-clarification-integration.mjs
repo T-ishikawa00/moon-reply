@@ -47,21 +47,23 @@ import {
 } from "../lib/assessment/runtime/schema-catalog.ts";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1";
-const baseline = "3195c278d688bc866d2e0825df88cdf62b149547";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R2";
+const baseline = "a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203";
+const r1Implementation = "3195c278d688bc866d2e0825df88cdf62b149547";
 const acceptedPlan = "9f397ed41f3f284e7a984ad139768af16373a747";
 const predecessor = "ab99f003901475199fcb316264ecd02c4f2baef8";
 const acceptedV1A1 = "8db5c6386ed0b9b16f0d1586f47d384262cc502b";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r2-consumption-truth";
+const expectedSubject = "fix: align V1-A2 clarification consumption authority";
+const immutableR1Branch =
   "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-runtime-integrity";
-const expectedSubject = "fix: harden V1-A2 runtime integrity";
-const originalImplementationBranch =
-  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2";
 
 const updatedPaths = [
+  "lib/assessment/runtime/effective-decision-policy-v1.ts",
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
@@ -70,20 +72,6 @@ const updatedPaths = [
   packageRoot + "/capabilities-v1.json",
   packageRoot + "/integration-fixtures-v1.json",
   packageRoot + "/offline-results-v1.json",
-  "lib/assessment/runtime/application.ts",
-  "lib/assessment/runtime/pipeline.ts",
-  "lib/assessment/runtime/supabase-repository.ts",
-  "lib/assessment/runtime/fakes.ts",
-  "lib/assessment/runtime/clarification-evidence-v1.ts",
-  "lib/assessment/runtime/effective-assessment-authority-v1.ts",
-  "lib/assessment/runtime/effective-assessment-authority-integrity-v1.ts",
-  "lib/assessment/runtime/effective-decision-policy-v1.ts",
-  "lib/assessment/runtime/contracts/pb-01-clarification-aware-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-04-clarification-aware-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-05-clarification-aware-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-06-clarification-aware-v1.developer.md",
-  "lib/assessment/runtime/contracts/runtime-stage-catalog-v12.json",
-  "components/runtime/RuntimeAssessmentForm.tsx",
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration.mjs",
 ];
 const newPaths = [];
@@ -215,10 +203,10 @@ function runImmutableVerifier(revision, branch, verifier, prefix) {
   }
 }
 
-function runOriginalImplementationVerifier() {
+function runImmutableR1Verifier() {
   return runImmutableVerifier(
     baseline,
-    originalImplementationBranch,
+    immutableR1Branch,
     "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration.mjs",
     "moon-reply-v1-a2-implementation-",
   );
@@ -269,8 +257,11 @@ function diagnosticCase(caseId) {
 const capabilities = readJson(packageRoot + "/capabilities-v1.json");
 const fixtureCatalog = readJson(packageRoot + "/integration-fixtures-v1.json");
 const offlineResults = readJson(packageRoot + "/offline-results-v1.json");
+const workPackages = readJson(
+  "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/implementation-work-packages-v1.json",
+);
 let catalog;
-let immutableImplementationOutput = "";
+let immutableR1Output = "";
 let checks = 0;
 const failures = [];
 
@@ -290,7 +281,8 @@ await check("exact branch parent direct-child main and stash", () => {
   const head = git(["rev-parse", "HEAD"]);
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
   assert.equal(git(["rev-parse", baseline]), baseline);
-  assert.equal(git(["rev-parse", baseline + "^"]), acceptedPlan);
+  assert.equal(git(["rev-parse", baseline + "^"]), r1Implementation);
+  assert.equal(git(["rev-parse", r1Implementation + "^"]), acceptedPlan);
   assert.equal(git(["rev-parse", acceptedPlan + "^"]), predecessor);
   assert.equal(git(["merge-base", head, baseline]), baseline);
   const count = Number(git(["rev-list", "--count", baseline + ".." + head]));
@@ -305,7 +297,7 @@ await check("exact branch parent direct-child main and stash", () => {
   assert.equal(git(["stash", "list"]), "");
 });
 
-await check("exact 23 path correction scope with 23 UPDATE and 0 NEW", () => {
+await check("exact 10 path correction scope with 10 UPDATE and 0 NEW", () => {
   const tracked = git(["diff", "--name-status", "--no-renames", baseline, "--"])
     .split(/\r?\n/u)
     .filter(Boolean)
@@ -321,7 +313,7 @@ await check("exact 23 path correction scope with 23 UPDATE and 0 NEW", () => {
     .filter((entry) => !trackedNames.has(entry))
     .map((entry) => ({ status: "A", path: entry }));
   const actual = [...tracked, ...untracked];
-  assert.equal(actual.length, 23);
+  assert.equal(actual.length, 10);
   assert.deepEqual(sorted(actual.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
     sorted(actual.filter((entry) => entry.status === "M").map((entry) => entry.path)),
@@ -333,12 +325,13 @@ await check("exact 23 path correction scope with 23 UPDATE and 0 NEW", () => {
   );
 });
 
-await check("immutable implementation 22/22 includes accepted planning 27/27", () => {
-  immutableImplementationOutput = runOriginalImplementationVerifier();
-  assert.match(immutableImplementationOutput, /clarification integration verifier: PASS 22\/22/u);
-  assert.match(immutableImplementationOutput, /Exact implementation scope: 37\/37/u);
-  assert.match(immutableImplementationOutput, /Accepted V1-A2 R1 planning verifier: PASS 27\/27/u);
-  assert.match(immutableImplementationOutput, /all upstream accepted verifiers: PASS/iu);
+await check("immutable R1 integrity 29/29 retains implementation and upstream evidence", () => {
+  immutableR1Output = runImmutableR1Verifier();
+  assert.match(immutableR1Output, /runtime integrity correction verifier: PASS 29\/29/u);
+  assert.match(immutableR1Output, /Exact correction scope: 23\/23/u);
+  assert.match(immutableR1Output, /Immutable original V1-A2 implementation verifier: PASS 22\/22/u);
+  assert.match(immutableR1Output, /Accepted V1-A2 R1 planning verifier: PASS 27\/27/u);
+  assert.match(immutableR1Output, /all upstream accepted verifiers: PASS/iu);
 });
 
 await check("v12 catalog and clarification schema load fail closed", async () => {
@@ -593,7 +586,7 @@ await check("V2 no-clarification behavior equals accepted V1 with cadence copy e
   }
 });
 
-await check("EffectiveAssessmentAuthority is derived target-limited and provenance-complete", () => {
+await check("all six target consumer matrices and Decision Policy claims are exact", () => {
   const fixtures = readJson(
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1/routing-fixtures-v1.json",
   );
@@ -603,23 +596,119 @@ await check("EffectiveAssessmentAuthority is derived target-limited and provenan
     ...base.decision_facts.information_state.unresolved_fields,
     "contact_state.elapsed_since_latest_user_message_minutes",
   ];
-  const targets = {
-    material_relationship_or_communication_concern: { choice: "distance", detail: null },
-    latest_contact_timing: { kind: "elapsed_bucket", value: "six_to_24_hours", elapsedMinutesLowerBound: 360 },
-    usual_reply_cadence: { relation: "within_usual" },
-    central_fear_or_decision_concern: { kind: "concern", value: "関係が終わることが不安です" },
-    relationship_intent: { choice: "move_closer", detail: null },
-    requested_message_tone: { choice: "soft", detail: null },
-  };
-  for (const [target, normalizedValue] of Object.entries(targets)) {
+  const cases = [
+    {
+      id: "material concern",
+      target: "material_relationship_or_communication_concern",
+      normalizedValue: { choice: "distance", detail: null },
+      decisionPolicy: [],
+      stages: {
+        "PB-04": [],
+        "PB-05": [
+          "effectiveDecisionContext.materialConcern",
+          "effectiveEmotionalContext.materialConcern",
+        ],
+        "PB-06": [
+          "effectiveDecisionContext.materialConcern",
+          "effectiveEmotionalContext.materialConcern",
+        ],
+      },
+    },
+    {
+      id: "latest timing bucket",
+      target: "latest_contact_timing",
+      normalizedValue: {
+        kind: "elapsed_bucket",
+        value: "six_to_24_hours",
+        elapsedMinutesLowerBound: 360,
+      },
+      decisionPolicy: [],
+      stages: {
+        "PB-04": ["effectiveDecisionContext.latestContactTiming"],
+        "PB-05": ["effectiveDecisionContext.latestContactTiming"],
+        "PB-06": ["effectiveDecisionContext.latestContactTiming"],
+      },
+    },
+    {
+      id: "latest timing local datetime",
+      target: "latest_contact_timing",
+      normalizedValue: {
+        kind: "local_datetime",
+        localDateTime: "2026-08-16T09:00",
+        timeZone: "Asia/Tokyo",
+        derivedElapsedMinutes: 120,
+        trustedNowAuthority: "resume_run_started_at",
+      },
+      decisionPolicy: ["effectiveDecisionContext.latestContactTiming"],
+      stages: {
+        "PB-04": ["effectiveDecisionContext.latestContactTiming"],
+        "PB-05": ["effectiveDecisionContext.latestContactTiming"],
+        "PB-06": ["effectiveDecisionContext.latestContactTiming"],
+      },
+    },
+    {
+      id: "usual cadence",
+      target: "usual_reply_cadence",
+      normalizedValue: { relation: "within_usual" },
+      decisionPolicy: ["effectiveDecisionContext.usualReplyCadence"],
+      stages: {
+        "PB-04": ["effectiveDecisionContext.usualReplyCadence"],
+        "PB-05": ["effectiveDecisionContext.usualReplyCadence"],
+        "PB-06": ["effectiveDecisionContext.usualReplyCadence"],
+      },
+    },
+    {
+      id: "central concern",
+      target: "central_fear_or_decision_concern",
+      normalizedValue: { kind: "concern", value: "関係が終わることが不安です" },
+      decisionPolicy: [],
+      stages: {
+        "PB-04": ["effectiveEmotionalContext.centralFearOrDecisionConcern"],
+        "PB-05": ["effectiveEmotionalContext.centralFearOrDecisionConcern"],
+        "PB-06": ["effectiveEmotionalContext.centralFearOrDecisionConcern"],
+      },
+    },
+    {
+      id: "relationship intent",
+      target: "relationship_intent",
+      normalizedValue: { choice: "move_closer", detail: null },
+      decisionPolicy: [],
+      stages: {
+        "PB-04": [
+          "effectiveDecisionContext.relationshipIntent",
+          "effectiveWritingContext.relationshipIntent",
+        ],
+        "PB-05": [
+          "effectiveDecisionContext.relationshipIntent",
+          "effectiveWritingContext.relationshipIntent",
+        ],
+        "PB-06": [
+          "effectiveDecisionContext.relationshipIntent",
+          "effectiveWritingContext.relationshipIntent",
+        ],
+      },
+    },
+    {
+      id: "requested tone",
+      target: "requested_message_tone",
+      normalizedValue: { choice: "soft", detail: null },
+      decisionPolicy: [],
+      stages: {
+        "PB-04": ["effectiveWritingContext.requestedMessageTone"],
+        "PB-05": ["effectiveWritingContext.requestedMessageTone"],
+        "PB-06": ["effectiveWritingContext.requestedMessageTone"],
+      },
+    },
+  ];
+  for (const testCase of cases) {
     const sourceIdentity = "clarification:AAAAAAAAAAAAAAAAAAAAAA:answer:1";
     const grounding = {
       schemaVersion: "m2-p4-clarification-grounding-v1",
       clarificationId: "AAAAAAAAAAAAAAAAAAAAAA",
-      target,
+      target: testCase.target,
       sourceIdentity,
       answerFingerprint: "a".repeat(64),
-      normalizedValue,
+      normalizedValue: testCase.normalizedValue,
       materiallyResolvesTarget: true,
       clarificationSafety: {
         classification: "normal_allowed",
@@ -639,16 +728,38 @@ await check("EffectiveAssessmentAuthority is derived target-limited and provenan
       clarificationGrounding: grounding,
     });
     const entries = authority.sourceMap.filter((entry) => entry.sourceLane === "clarification");
-    assert.ok(entries.length >= 1, target);
-    assert.ok(entries.every((entry) => entry.clarificationTarget === target));
+    assert.ok(entries.length >= 1, testCase.id);
+    assert.ok(entries.every((entry) => entry.clarificationTarget === testCase.target));
     assert.ok(entries.every((entry) => entry.sourceRef === sourceIdentity));
     assert.ok(entries.every((entry) => entry.sourceValuePath === "normalizedValue"));
-    const consumers = [
-      ...clarificationConsumptionPathsForStageV1(authority, "PB-04"),
-      ...clarificationConsumptionPathsForStageV1(authority, "PB-05"),
-    ];
-    assert.ok(consumers.length >= 1, target);
+    const decision = buildEffectiveDecisionPolicyV1({
+      authority,
+      candidateEnvelope: { presence: false },
+    });
+    assert.deepEqual(
+      decision.consumedEffectivePaths,
+      ["effectiveDecisionContext.decisionFacts", ...testCase.decisionPolicy],
+      testCase.id,
+    );
+    for (const stageId of ["PB-04", "PB-05", "PB-06"]) {
+      assert.deepEqual(
+        clarificationConsumptionPathsForStageV1(authority, stageId),
+        testCase.stages[stageId],
+        `${testCase.id} ${stageId}`,
+      );
+    }
+    assert.deepEqual(
+      clarificationConsumptionPathsForStageV1(authority, "PB-06"),
+      entries.map((entry) => entry.effectivePath),
+      `${testCase.id} PB-06 full target coverage`,
+    );
   }
+  const policySource = readText("lib/assessment/runtime/effective-decision-policy-v1.ts");
+  assert.match(policySource, /CLARIFICATION_STAGE_CONSUMER_PATHS_V1/u);
+  assert.doesNotMatch(
+    policySource,
+    /startsWith\("effective(?:Decision|Writing|Emotional)Context\./u,
+  );
 });
 
 await check("clarification provenance paths resolve and mutants fail closed", () => {
@@ -1266,16 +1377,16 @@ await check("API and UI expose one bounded question without internal authority I
   assert.match(ui, /料金は発生しません/u);
 });
 
-await check("original 28 fixture intentions are retained and expanded to 36/36", () => {
+await check("all 36 R1 fixture intentions are retained and expanded to 43/43", () => {
   const original = JSON.parse(git(["show", baseline + ":" + packageRoot + "/integration-fixtures-v1.json"]));
   const currentIds = new Set(fixtureCatalog.fixtures.map((entry) => entry.id));
-  assert.equal(original.fixtures.length, 28);
+  assert.equal(original.fixtures.length, 36);
   for (const fixture of original.fixtures) assert.ok(currentIds.has(fixture.id), fixture.id);
-  assert.equal(fixtureCatalog.fixtures.length, 36);
-  assert.equal(currentIds.size, 36);
+  assert.equal(fixtureCatalog.fixtures.length, 43);
+  assert.equal(currentIds.size, 43);
   assert.equal(fixtureCatalog.fixture_id_is_routing_authority, false);
-  assert.equal(offlineResults.fixture_count, 36);
-  assert.equal(offlineResults.passed, 36);
+  assert.equal(offlineResults.fixture_count, 43);
+  assert.equal(offlineResults.passed, 43);
   assert.equal(offlineResults.failed, 0);
   assert.deepEqual(
     sorted(offlineResults.results),
@@ -1287,6 +1398,14 @@ await check("original 28 fixture intentions are retained and expanded to 36/36",
   );
   assert.equal(offlineResults.evidence_boundary.provider_semantic_fidelity, "unestablished");
   assert.match(offlineResults.evidence_boundary.claim, /wiring and fail-closed validator plumbing only/u);
+  assert.deepEqual(offlineResults.consumption_audit, {
+    authority: acceptedPlan,
+    decision_policy_claim: "only_clarification_values_actually_projected_or_consulted",
+    stage_mapping: "explicit_target_and_effective_path_matrix",
+    broad_path_prefix_authority: false,
+    exact_matrix_regressions: 7,
+    provider_semantic_fidelity: "unestablished",
+  });
 });
 
 await check("authority remains closed beyond V1-A2", () => {
@@ -1294,7 +1413,7 @@ await check("authority remains closed beyond V1-A2", () => {
   assert.equal(capabilities.authority.v1_a1, "accepted_complete_immutable");
   assert.equal(
     capabilities.authority.v1_a2_implementation,
-    "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
+    "r2_consumption_truth_corrected_pending_human_chatgpt_review",
   );
   assert.equal(capabilities.authority.v1_b, "unauthorized");
   assert.equal(capabilities.authority.v1_c, "unauthorized");
@@ -1321,10 +1440,41 @@ await check("authority remains closed beyond V1-A2", () => {
     deleted: 0,
     renamed: 0,
   });
+  assert.deepEqual(capabilities.r2_downstream_consumption_truth_correction, {
+    parent: baseline,
+    review_result_before_correction: "NEEDS_CORRECTION",
+    review_findings: { blocker: 0, major: 1, minor: 0 },
+    finding_code: "clarification_consumption_record_exceeds_actual_authority",
+    decision_policy_records_only_projected_or_consulted_clarification: true,
+    material_concern_decision_policy_consumed: false,
+    material_concern_pb04_consumed: false,
+    relationship_intent_decision_policy_consumed: false,
+    bounded_timing_decision_policy_consumed: false,
+    exact_datetime_timing_decision_policy_consumed_when_projected: true,
+    usual_cadence_decision_policy_consumed_when_projected: true,
+    stage_consumption_mapping: "explicit_target_and_effective_path_matrix",
+    broad_path_prefix_authority_allowed: false,
+    provider_semantic_fidelity: "unestablished",
+    exact_scope: { total: "10/10", updated: 10, new: 0, deleted: 0, renamed: 0 },
+  });
+  const v1A = workPackages.packages.find((entry) => entry.id === "V1-A");
+  const v1A2 = v1A.subpackages.find((entry) => entry.id === "V1-A2");
+  assert.equal(v1A2.status, "r2_consumption_truth_corrected_pending_human_chatgpt_review");
+  assert.equal(v1A2.effective_decision_policy_consumption_claim, "only_values_actually_projected_or_consulted");
+  assert.equal(v1A2.material_concern_effective_decision_policy_consumed, false);
+  assert.equal(v1A2.material_concern_pb04_consumed, false);
+  assert.equal(v1A2.relationship_intent_effective_decision_policy_consumed, false);
+  assert.equal(v1A2.bounded_timing_effective_decision_policy_consumed, false);
+  assert.equal(v1A2.stage_consumption_mapping, "explicit_target_and_effective_path_matrix");
+  assert.equal(v1A2.broad_path_prefix_consumer_authority_allowed, false);
+  assert.equal(v1A2.offline_fixture_result, "43/43_PASS");
 });
 
 await check("protected V1-A1 Product semantic Payment main and next-env are unchanged", () => {
   const protectedPaths = [
+    "lib/assessment/runtime/pipeline.ts",
+    "lib/assessment/runtime/application.ts",
+    "lib/assessment/runtime/supabase-repository.ts",
     "lib/assessment/runtime/jpy980-input-sufficiency-policy-v1.ts",
     "components/runtime/CustomerAssessmentNote.tsx",
     "components/runtime/CustomerAssessmentNote.module.css",
@@ -1332,6 +1482,13 @@ await check("protected V1-A1 Product semantic Payment main and next-env are unch
     "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
     "lib/assessment/runtime/customer-assessment-projection-v1.ts",
     "lib/assessment/runtime/semantic-disposition-v4.ts",
+    "lib/assessment/runtime/contracts/pb-01-clarification-aware-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-04-clarification-aware-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-05-clarification-aware-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-06-clarification-aware-v1.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v12.json",
+    "lib/assessment/runtime/schema-catalog.ts",
+    "components/runtime/RuntimeAssessmentForm.tsx",
     "supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql",
     "next-env.d.ts",
   ];
@@ -1395,13 +1552,13 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`\n${taskId} runtime integrity correction verifier: PASS 29/29`);
-console.log("Exact correction scope: 23/23; UPDATE 23; NEW 0; DELETE 0; RENAME 0");
-console.log("Immutable original V1-A2 implementation verifier: PASS 22/22");
-console.log("Accepted V1-A2 R1 planning verifier: PASS 27/27");
+console.log(`\n${taskId} downstream consumption truth correction verifier: PASS 29/29`);
+console.log("Exact correction scope: 10/10; UPDATE 10; NEW 0; DELETE 0; RENAME 0");
+console.log("Immutable R1 Runtime Integrity verifier: PASS 29/29");
+console.log("Immutable original V1-A2 implementation / accepted R1 planning: PASS 22/22, 27/27");
 console.log("Original A2 plan / V1-A1 R1 / original V1-A1: PASS 26/26, 25/25, 24/24");
 console.log("Decision Policy verifier: PASS 40/40; all upstream accepted verifiers: PASS");
-console.log("Offline fixtures: PASS 36/36; live Provider calls: 0");
+console.log("Offline fixtures: PASS 43/43; live Provider calls: 0");
 console.log("Deterministic wiring / Provider semantic fidelity: established / unestablished");
 console.log("Provider / DB / Supabase / migration apply / Payment / deploy: 0 / 0 / 0 / 0 / 0 / 0");
 console.log("R2-C: remediation_required; JPY980 Runtime readiness: not_established; Global Q0: false");

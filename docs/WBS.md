@@ -1,12 +1,14 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
-## V1-A2 R1 Runtime Integrity Correction — Pending Review
+## V1-A2 R2 Downstream Consumption Truth Correction — Pending Review
 
 - [x] Accepted R1 authority `9f397ed41f3f284e7a984ad139768af16373a747` synchronized; V1-A1 immutable
 - [x] Exact implementation scope `37/37`: 14 UPDATE + 23 NEW; DELETE / RENAME 0
 - [x] Review findings fixed: 1 BLOCKER / 5 MAJOR / 1 MINOR from implementation parent `3195c278d688bc866d2e0825df88cdf62b149547`
 - [x] Exact correction scope `23/23`: 23 UPDATE + 0 NEW; DELETE / RENAME 0
+- [x] Residual R2 finding fixed: `clarification_consumption_record_exceeds_actual_authority`, BLOCKER 0 / MAJOR 1 / MINOR 0, from R1 parent `a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203`
+- [x] Exact R2 correction scope `10/10`: 10 UPDATE + 0 NEW; DELETE / RENAME 0
 - [x] Shared actionable-topic and `message_impact` Candidate validation before request creation
 - [x] V1-A1-compatible Policy V2 connected after Safety with cadence V2 copy correction
 - [x] One-question/one-answer maximum, secure opaque capability, canonical fingerprint, same/different-answer behavior
@@ -25,12 +27,15 @@
 - [x] Resume failure preserves actual accumulated model/usage and finalizes once in Pipeline
 - [x] Historical resultJson-less needs-more/Safety completion compatibility preserved; V1-A2 first-class stops unchanged
 - [x] Central concern answer is structured concern/explicit-none; none is non-resolving and creates no concern
-- [x] Original 28 fixture intentions retained and expanded to offline fake fixtures `36/36`
+- [x] Effective Decision Policy consumption claims limited to exact timing/cadence values actually projected into Decision Facts
+- [x] Material concern and relationship intent excluded from current Effective Decision Policy consumption claims
+- [x] PB-04/05/06 broad path-prefix inference replaced by exact six-target consumer matrix; material concern excluded from PB-04
+- [x] Original 28 intentions and all 36 R1 intentions retained; seven matrix regressions expand offline fake fixtures to `43/43`
 - [ ] Human / ChatGPT implementation review and V1-A2 acceptance
 - [ ] V1-A overall completion — pending V1-A2 acceptance
 - [ ] V1-B/C/D, Provider execution, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is runtime_integrity_corrected_pending_human_chatgpt_review. Provider semantic fidelity remains unestablished. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
+Status is r2_consumption_truth_corrected_pending_human_chatgpt_review. Runtime/persistence/API/UI/Prompt/Schema/catalog/migration behavior is unchanged. Provider semantic fidelity remains unestablished. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->

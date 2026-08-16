@@ -6,7 +6,7 @@
     "human_acceptance": "complete",
     "acceptance_date": "2026-08-16",
     "v1_a1": "accepted_complete_immutable",
-    "v1_a2_implementation": "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
+    "v1_a2_implementation": "r2_consumption_truth_corrected_pending_human_chatgpt_review",
     "v1_b": "unauthorized",
     "v1_c": "unauthorized",
     "v1_d": "unauthorized"
@@ -40,6 +40,23 @@
     "historical_complete_run_compatible": true,
     "central_concern_explicit_none_structured": true,
     "exact_scope": { "total": "23/23", "updated": 23, "new": 0, "deleted": 0, "renamed": 0 }
+  },
+  "r2_downstream_consumption_truth_correction": {
+    "parent": "a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203",
+    "review_result_before_correction": "NEEDS_CORRECTION",
+    "review_findings": { "blocker": 0, "major": 1, "minor": 0 },
+    "finding_code": "clarification_consumption_record_exceeds_actual_authority",
+    "decision_policy_records_only_projected_or_consulted_clarification": true,
+    "material_concern_decision_policy_consumed": false,
+    "material_concern_pb04_consumed": false,
+    "relationship_intent_decision_policy_consumed": false,
+    "bounded_timing_decision_policy_consumed": false,
+    "exact_datetime_timing_decision_policy_consumed_when_projected": true,
+    "usual_cadence_decision_policy_consumed_when_projected": true,
+    "stage_consumption_mapping": "explicit_target_and_effective_path_matrix",
+    "broad_path_prefix_authority_allowed": false,
+    "provider_semantic_fidelity": "unestablished",
+    "exact_scope": { "total": "10/10", "updated": 10, "new": 0, "deleted": 0, "renamed": 0 }
   },
   "operations": {
     "provider_calls": 0,

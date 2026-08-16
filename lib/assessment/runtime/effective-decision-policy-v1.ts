@@ -5,7 +5,11 @@ import {
 } from "./policy-v3.ts";
 import type { CandidateEnvelopeV1 } from "./contracts/split-stage-contracts-v1.ts";
 import type { EffectiveAssessmentAuthorityV1 } from "./effective-assessment-authority-v1.ts";
-import type { DecisionPolicyResultV2, JsonObject } from "./types.ts";
+import type {
+  DecisionPolicyResultV2,
+  Jpy980ClarificationTarget,
+  JsonObject,
+} from "./types.ts";
 
 export const EFFECTIVE_DECISION_POLICY_V1_SCHEMA_VERSION =
   "m2-p4-effective-decision-policy-v1" as const;
@@ -16,6 +20,59 @@ export type EffectiveDecisionPolicyV1 = {
   effectiveDecisionFacts: JsonObject;
   consumedEffectivePaths: string[];
 };
+
+type ClarificationAwareStageV1 = "PB-04" | "PB-05" | "PB-06";
+
+export const CLARIFICATION_STAGE_CONSUMER_PATHS_V1 = {
+  "PB-04": {
+    material_relationship_or_communication_concern: [],
+    latest_contact_timing: ["effectiveDecisionContext.latestContactTiming"],
+    usual_reply_cadence: ["effectiveDecisionContext.usualReplyCadence"],
+    central_fear_or_decision_concern: [
+      "effectiveEmotionalContext.centralFearOrDecisionConcern",
+    ],
+    relationship_intent: [
+      "effectiveDecisionContext.relationshipIntent",
+      "effectiveWritingContext.relationshipIntent",
+    ],
+    requested_message_tone: ["effectiveWritingContext.requestedMessageTone"],
+  },
+  "PB-05": {
+    material_relationship_or_communication_concern: [
+      "effectiveDecisionContext.materialConcern",
+      "effectiveEmotionalContext.materialConcern",
+    ],
+    latest_contact_timing: ["effectiveDecisionContext.latestContactTiming"],
+    usual_reply_cadence: ["effectiveDecisionContext.usualReplyCadence"],
+    central_fear_or_decision_concern: [
+      "effectiveEmotionalContext.centralFearOrDecisionConcern",
+    ],
+    relationship_intent: [
+      "effectiveDecisionContext.relationshipIntent",
+      "effectiveWritingContext.relationshipIntent",
+    ],
+    requested_message_tone: ["effectiveWritingContext.requestedMessageTone"],
+  },
+  "PB-06": {
+    material_relationship_or_communication_concern: [
+      "effectiveDecisionContext.materialConcern",
+      "effectiveEmotionalContext.materialConcern",
+    ],
+    latest_contact_timing: ["effectiveDecisionContext.latestContactTiming"],
+    usual_reply_cadence: ["effectiveDecisionContext.usualReplyCadence"],
+    central_fear_or_decision_concern: [
+      "effectiveEmotionalContext.centralFearOrDecisionConcern",
+    ],
+    relationship_intent: [
+      "effectiveDecisionContext.relationshipIntent",
+      "effectiveWritingContext.relationshipIntent",
+    ],
+    requested_message_tone: ["effectiveWritingContext.requestedMessageTone"],
+  },
+} as const satisfies Record<
+  ClarificationAwareStageV1,
+  Record<Jpy980ClarificationTarget, readonly string[]>
+>;
 
 function invalid(): never {
   throw new M2RuntimeError("M2_EFFECTIVE_DECISION_POLICY_INVALID");
@@ -84,12 +141,6 @@ export function buildEffectiveDecisionPolicyV1(input: {
   const decisionFacts = requireContextualDecisionFactsV3({ decision_facts: facts });
   const policy = buildContextualDecisionPolicyV3(decisionFacts);
 
-  if (input.authority.effectiveDecisionContext.relationshipIntent !== null) {
-    consumedEffectivePaths.push("effectiveDecisionContext.relationshipIntent");
-  }
-  if (input.authority.effectiveDecisionContext.materialConcern !== null) {
-    consumedEffectivePaths.push("effectiveDecisionContext.materialConcern");
-  }
   return {
     schemaVersion: EFFECTIVE_DECISION_POLICY_V1_SCHEMA_VERSION,
     policy,
@@ -100,25 +151,20 @@ export function buildEffectiveDecisionPolicyV1(input: {
 
 export function clarificationConsumptionPathsForStageV1(
   authority: EffectiveAssessmentAuthorityV1,
-  stageId: "PB-04" | "PB-05" | "PB-06",
+  stageId: ClarificationAwareStageV1,
 ) {
-  const paths = authority.sourceMap
-    .filter((entry) => entry.sourceLane === "clarification")
+  return authority.sourceMap
+    .filter(
+      (entry) =>
+        entry.sourceLane === "clarification" &&
+        entry.clarificationTarget !== null,
+    )
+    .filter((entry) => {
+      const allowedPaths: readonly string[] =
+        CLARIFICATION_STAGE_CONSUMER_PATHS_V1[stageId][
+          entry.clarificationTarget as Jpy980ClarificationTarget
+        ];
+      return allowedPaths.includes(entry.effectivePath);
+    })
     .map((entry) => entry.effectivePath);
-  if (stageId === "PB-06") return paths;
-  if (stageId === "PB-04") {
-    return paths.filter(
-      (path) =>
-        path.startsWith("effectiveDecisionContext.") ||
-        path.startsWith("effectiveWritingContext."),
-    );
-  }
-  return paths.filter(
-    (path) =>
-      path.startsWith("effectiveEmotionalContext.") ||
-      path.startsWith("effectiveWritingContext.") ||
-      path.includes("materialConcern") ||
-      path.includes("latestContactTiming") ||
-      path.includes("usualReplyCadence"),
-  );
 }

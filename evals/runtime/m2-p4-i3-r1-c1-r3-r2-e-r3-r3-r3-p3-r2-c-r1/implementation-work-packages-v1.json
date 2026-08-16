@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a1_accepted_complete_v1_a2_r1_runtime_integrity_corrected_pending_review_remaining_packages_unauthorized",
+  "status": "v1_a1_accepted_complete_v1_a2_r2_consumption_truth_corrected_pending_review_remaining_packages_unauthorized",
   "planning_only": false,
   "sequence": [
     "V1-A1",
@@ -32,7 +32,7 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "status": "in_progress_v1_a1_accepted_complete_v1_a2_r1_runtime_integrity_corrected_pending_review",
+      "status": "in_progress_v1_a1_accepted_complete_v1_a2_r2_consumption_truth_corrected_pending_review",
       "complete": false,
       "authorized": true,
       "subpackages": [
@@ -63,7 +63,7 @@
         {
           "id": "V1-A2",
           "name": "Runtime/API/UI Clarification Integration",
-          "status": "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
+          "status": "r2_consumption_truth_corrected_pending_human_chatgpt_review",
           "planning_authorized": true,
           "implementation_authorized": true,
           "planning_commit": "9f397ed41f3f284e7a984ad139768af16373a747",
@@ -103,6 +103,15 @@
           "offline_deterministic_wiring_proof": "established",
           "provider_product_output_semantic_fidelity": "unestablished_pending_later_authorized_evaluation",
           "consumed_effective_paths_alone_proves_semantic_reflection": false,
+          "effective_decision_policy_consumption_claim": "only_values_actually_projected_or_consulted",
+          "material_concern_effective_decision_policy_consumed": false,
+          "material_concern_pb04_consumed": false,
+          "relationship_intent_effective_decision_policy_consumed": false,
+          "bounded_timing_effective_decision_policy_consumed": false,
+          "exact_datetime_timing_effective_decision_policy_consumed_when_projected": true,
+          "usual_cadence_effective_decision_policy_consumed_when_projected": true,
+          "stage_consumption_mapping": "explicit_target_and_effective_path_matrix",
+          "broad_path_prefix_consumer_authority_allowed": false,
           "resume_failure_actual_usage_required": true,
           "historical_complete_run_without_result_json": "pre_v1_a2_compatible_path",
           "central_concern_answer_shape": "structured_concern_or_explicit_none",
@@ -147,7 +156,7 @@
           "pb_05_semantic_depth_rewrite_in_scope": false,
           "v1_b_in_scope": false,
           "provider_execution_authorized": false,
-          "offline_fixture_result": "36/36_PASS",
+          "offline_fixture_result": "43/43_PASS",
           "migration_created": true,
           "migration_applied": false,
           "v1_a_overall_complete": false,

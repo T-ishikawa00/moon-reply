@@ -39,6 +39,13 @@
     { "id": "pb06_clarification_fidelity_block", "expected": "no_product_delivery" },
     { "id": "resume_failure_usage_preserved", "expected": "actual_accumulated_usage_one_finalization" },
     { "id": "historical_complete_run_compatibility", "expected": "legacy_and_v1a2_paths_separated" },
-    { "id": "central_concern_explicit_none", "expected": "structured_non_resolving_no_invented_concern" }
+    { "id": "central_concern_explicit_none", "expected": "structured_non_resolving_no_invented_concern" },
+    { "id": "consumer_matrix_material_concern", "expected": "decision_policy_and_pb04_excluded_pb05_pb06_exact" },
+    { "id": "consumer_matrix_latest_timing_bucket", "expected": "decision_policy_excluded_pb04_pb05_pb06_exact" },
+    { "id": "consumer_matrix_latest_timing_local_datetime", "expected": "decision_policy_and_pb04_pb05_pb06_exact" },
+    { "id": "consumer_matrix_usual_cadence", "expected": "decision_policy_and_pb04_pb05_pb06_exact" },
+    { "id": "consumer_matrix_central_concern", "expected": "decision_policy_excluded_pb04_pb05_pb06_exact" },
+    { "id": "consumer_matrix_relationship_intent", "expected": "decision_policy_excluded_pb04_pb05_pb06_exact" },
+    { "id": "consumer_matrix_requested_tone", "expected": "decision_policy_excluded_pb04_pb05_pb06_exact" }
   ]
 }

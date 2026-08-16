@@ -3,9 +3,10 @@
 ## Review disposition
 
 - Authority: accepted V1-A2 R1 plan `9f397ed41f3f284e7a984ad139768af16373a747`.
-- Implementation review: `NEEDS_CORRECTION` with 1 BLOCKER / 5 MAJOR / 1 MINOR at `3195c278d688bc866d2e0825df88cdf62b149547`.
-- Correction status: `r1_runtime_integrity_corrected_pending_human_chatgpt_review`.
-- Preserved implementation scope: `37/37` — 14 UPDATE + 23 NEW; DELETE / RENAME 0. Exact correction scope: `23/23` UPDATE; NEW / DELETE / RENAME 0.
+- R1 review: 1 BLOCKER / 5 MAJOR / 1 MINOR at `3195c278d688bc866d2e0825df88cdf62b149547`; all are closed by R1 correction `a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203`.
+- R2 residual review: `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 0; finding `clarification_consumption_record_exceeds_actual_authority`.
+- Correction status: `r2_consumption_truth_corrected_pending_human_chatgpt_review`.
+- Preserved implementation scope: `37/37` — 14 UPDATE + 23 NEW; DELETE / RENAME 0. R1 scope is immutable `23/23` UPDATE. Exact R2 scope: `10/10` UPDATE; NEW / DELETE / RENAME 0.
 - V1-A1: `accepted_complete` and immutable.
 - V1-B / V1-C / V1-D: unauthorized and not implemented.
 - R2-C: `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
@@ -39,16 +40,17 @@ Lost initial responses are recovered by the original idempotency key: an awaitin
 
 Target consumption is explicit:
 
-| Target | V1-A / Effective Decision | PB-04 | PB-05 | PB-06 |
-|---|---|---|---|---|
-| material concern | materiality/scope | action context when relevant | Product understanding | provenance/fidelity |
-| latest timing | effective timing | decision/reassessment | factual/uncertainty context | provenance/fidelity |
-| usual cadence | effective cadence | decision/reassessment | factual/uncertainty context | provenance/fidelity |
-| central concern | emotional sufficiency | rationale only when relevant | exact user concern for containment | no invented fear |
-| relationship intent | user intent | action/draft rationale | relevant Product context | no other-person intent |
-| requested tone | writing sufficiency | draft/edit rationale | draft context | tone authority fidelity |
+| Target | V1-A | Effective Decision Policy | PB-04 | PB-05 | PB-06 |
+|---|---|---|---|---|---|
+| material concern | yes | no | no | Product understanding | provenance/fidelity |
+| latest timing — bounded bucket | yes | no | action/reassessment | factual/uncertainty | provenance/fidelity |
+| latest timing — local datetime | yes | yes, only when exact derived minutes are projected | action/reassessment | factual/uncertainty | provenance/fidelity |
+| usual cadence | yes | yes, when relation is projected into Decision Facts | action/reassessment | factual/uncertainty | provenance/fidelity |
+| central concern | yes | no | rationale when relevant | exact concern/containment | no invented fear |
+| relationship intent | yes | no in current V1-A2 adapter | action/draft rationale | relevant Product context | no other-person intent |
+| requested tone | yes | no | draft/edit rationale | draft context | tone authority fidelity |
 
-`EffectiveDecisionPolicyV1` preserves current policy behavior without clarification and records only values it actually consults. A bounded elapsed bucket remains in Effective Authority for PB-04/PB-05 and never becomes an invented exact Decision Fact or resolves the exact-minute unknown. A local datetime may populate exact elapsed minutes only from explicit IANA timezone plus trusted resume-run start. PB-04, PB-05, and PB-06 receive explicit `clarification_consumption_contract` inputs. If clarification established ready but no materially relevant downstream path remains, Application integrity fails with `M2_CLARIFICATION_DOWNSTREAM_DISCARDED`; missing authority fails with `M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING`.
+`consumedEffectivePaths` is an audit claim, not an availability list. `EffectiveDecisionPolicyV1` preserves current policy behavior and records only clarification values it actually projects or consults through effective Decision Facts. It therefore does not record material concern or relationship intent merely because they are non-null. A bounded elapsed bucket remains in Effective Authority for PB-04/PB-05 and is not a Decision Policy consumption claim; only trusted local-datetime-derived exact minutes are projected. Cadence is recorded when its bounded relation is projected. PB-04, PB-05, and PB-06 consumption contracts are selected by exact clarification target plus exact effective path, never by a broad context prefix. Material concern remains available to PB-05/PB-06 but is not a PB-04 decision/action input. If clarification established ready but no materially relevant downstream path remains, Application integrity fails with `M2_CLARIFICATION_DOWNSTREAM_DISCARDED`; missing authority fails with `M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING`.
 
 The offline A2 claim is deliberately narrow: it establishes correct authority injection, target-limited consumption contracts, target isolation, and fail-closed PB-06 validator plumbing. A static `consumed_effective_paths` declaration is not proof that Japanese Product prose or a draft semantically reflected the answer. A fake PB-06 major fidelity finding blocks delivery; actual Provider semantic fidelity remains unestablished until a later separately authorized Product evaluation.
 
@@ -77,7 +79,7 @@ The answer endpoint accepts only `{ "answer": ... }` at the opaque-ID URL and lo
 
 ## Offline acceptance evidence
 
-The original 28 machine-readable fixture intentions are retained. Eight R1 regressions expand evidence to `36/36`: actual self-contained V12 prompts; bucket/no-exact and trusted local-datetime/exact timing; five provenance mutants; PB-06 fidelity blocking; accumulated resume-failure usage; historical completion compatibility; and structured central-concern none.
+The original 28 machine-readable fixture intentions and all 36 R1 intentions are retained. Seven R2 regressions expand evidence to `43/43` and assert the exact Effective Decision Policy, PB-04, PB-05, and PB-06 consumption set for material concern, timing bucket, exact local datetime, cadence, central concern, relationship intent, and requested tone.
 
 The verifier loads the actual V12 catalog and inspects each actual `StageDefinition.developerPrompt`. PB-01/04/05/06 contain the full predecessor responsibility sections plus clarification deltas; merely naming or referring to an accepted predecessor contract is not accepted as inheritance. No live Provider call is used.
 

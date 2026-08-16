@@ -1,8 +1,8 @@
 {
   "schema_version": "m2-p4-v1-a2-offline-results-v1",
   "status": "PASS",
-  "fixture_count": 36,
-  "passed": 36,
+  "fixture_count": 43,
+  "passed": 43,
   "failed": 0,
   "provider_calls": 0,
   "db_operations": 0,
@@ -23,6 +23,14 @@
     "provider_semantic_fidelity": "unestablished",
     "claim": "Offline A2 establishes authority wiring and fail-closed validator plumbing only; consumed path declarations do not prove Japanese Product output semantic reflection."
   },
+  "consumption_audit": {
+    "authority": "9f397ed41f3f284e7a984ad139768af16373a747",
+    "decision_policy_claim": "only_clarification_values_actually_projected_or_consulted",
+    "stage_mapping": "explicit_target_and_effective_path_matrix",
+    "broad_path_prefix_authority": false,
+    "exact_matrix_regressions": 7,
+    "provider_semantic_fidelity": "unestablished"
+  },
   "results": [
     "actionable_topic_present", "supplementary_only_rejected_pre_request",
     "message_impact_without_candidate", "draft_message_without_candidate",
@@ -40,6 +48,9 @@
     "timing_bucket_no_exact_minutes", "timing_local_datetime_exact_minutes",
     "clarification_provenance_mutants", "pb06_clarification_fidelity_block",
     "resume_failure_usage_preserved", "historical_complete_run_compatibility",
-    "central_concern_explicit_none"
+    "central_concern_explicit_none", "consumer_matrix_material_concern",
+    "consumer_matrix_latest_timing_bucket", "consumer_matrix_latest_timing_local_datetime",
+    "consumer_matrix_usual_cadence", "consumer_matrix_central_concern",
+    "consumer_matrix_relationship_intent", "consumer_matrix_requested_tone"
   ]
 }
