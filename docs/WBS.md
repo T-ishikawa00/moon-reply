@@ -1,24 +1,44 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
+## V1-A2 Clarification Integration Architecture Planning
+
+- [x] Exact parent fixed at accepted V1-A1 snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`; main/origin-main `61e33a10e195fad17e253a6b9719217e1992f273`
+- [x] V1-A1 ChatGPT/Human review `PASS / complete`, Human acceptance and V1-A1 acceptance complete on `2026-08-16`; V1-A1=`accepted_complete`
+- [x] Base, Candidate, and Clarification Evidence fixed as three separate immutable authority lanes
+- [x] Clarification provenance `user_clarification`; no `currentSituation` append, false Base source, Candidate contamination, or unrelated-field write
+- [x] Same PB-01 stage successor selected; PB-01F/new stage prohibited; initial Base grounding reused immutably on same-request resume run
+- [x] Clarification Evidence/Grounding contract, structural source integrity, target-limited grounding, and clarification Safety aggregation defined
+- [x] Persistence fixed as one request + zero/one clarification + one-or-more runs with `awaiting_clarification`, opaque continuation ID, duplicate-submit idempotency, and different-answer fail-close
+- [x] One clarification maximum and automatic second clarification/loop prohibition preserved
+- [x] `not_full_product_candidate` fixed as first-class completed no-charge stopped outcome, distinct from needs-more/failure/Safety/ready
+- [x] `message_impact` Candidate requirement fixed under `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED`; missing Candidate consumes no clarification budget
+- [x] Actionable anchors fixed exactly to decide_send_or_wait, draft_message, message_impact, next_three_days
+- [x] relationship and organize_emotions fixed as supplementary-only; unanchored scope validation uses `M2_ACTIONABLE_TOPIC_REQUIRED` before request/Provider/budget
+- [x] Six clarification target answer/grounding/Safety/provenance boundaries defined without raw-prose routing or unrelated field mutation
+- [x] Customer Delivery V2 states and separate opaque-ID answer endpoint planned; initial request body remains immutable
+- [x] No-charge boundary preserved for needs-more, not-full, and Safety; Payment remains unauthorized
+- [x] Future A2 implementation manifest fixed at `31/31`: 14 UPDATE + 17 NEW; any change requires STOP and new review
+- [x] Current planning scope fixed at `10/10`: 6 UPDATE + 4 NEW; DELETE / RENAME 0
+- [ ] Human / ChatGPT review of V1-A2 connection architecture
+- [ ] V1-A2 implementation, V1-B/C/D, Provider execution, Production Runtime, Payment, PR, or main integration — unauthorized
+
+Status is planning_defined_pending_human_chatgpt_review with V1-A2 implementation_authorized=false. V1-A overall remains incomplete. R2-C=remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Current Product/Runtime/API/UI/DB/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment changes are 0; Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a2_clarification_integration_plan.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
-## V1-A1 R1 Materiality False-Positive Correction
+## V1-A1 R1 Materiality Correction — Accepted
 
-- [x] Exact V1-A1 implementation parent `65c245860813f6179689855b344dbf6fd425867a`, original authority `cfad0bd4ca3fd2304b00d072624e624f98c09b29`, R2-B snapshot `fa956b9b1941c73f8e1767c64ab24f07fadd36c6`, and main `61e33a10e195fad17e253a6b9719217e1992f273` fixed
-- [x] ChatGPT review recorded as `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 0: emotion presence alone could establish material concern
-- [x] Standalone `user_emotions.length > 0` materiality condition removed
-- [x] Material concern limited to material typed goal, explicit boundary state, or repeated unanswered contact
-- [x] `user_emotions` retained only as bounded emotional-context presence; no specific fear proposition or materiality inferred
-- [x] No raw emotion-prose keyword/regex, case-ID, or fixture-ID routing added
-- [x] Material-concern clarification changed to consultation-neutral `今回のやり取りで...` wording
-- [x] Original A-L fixtures retained; R1-A through R1-D cover no-emotion admin, incidental emotion, budget exhaustion, and material typed-goal positive; offline result `16/16`
-- [x] Safety priority, one-total-question budget, automatic-second-question prohibition, determinism, and malformed fail-closed behavior preserved
-- [x] V1-A2 clarification-answer provenance gap recorded: no append to `currentSituation`, false `input:current_situation` source, or implicit schema widening; contract remains unresolved/not implemented
-- [x] Active Runtime, RuntimeEligibilityV3, DB eligibility, API/UI flow, schemas, Prompt, Provider, PB-05, semantic disposition, Customer note, ExperienceProjectionV2, migrations, and Payment unchanged
-- [x] V1-A2, V1-B, V1-C, V1-D, Provider execution, Production Runtime, Payment, PR, and main integration remain unauthorized
-- [x] Exact R1 correction scope fixed at `11/11`: 10 UPDATE + 1 NEW; DELETE / RENAME 0; original V1-A1 verifier remains immutable
-- [ ] Human / ChatGPT review of V1-A1 R1 materiality correction
+- [x] Accepted snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`; original V1-A1 `65c245860813f6179689855b344dbf6fd425867a`
+- [x] ChatGPT and Human review `PASS / complete`; Human acceptance and V1-A1 acceptance `complete` on `2026-08-16`
+- [x] Emotion-only Product materiality false positive removed without raw-prose routing
+- [x] Offline fixtures `16/16`; R1 verifier `25/25`; immutable original V1-A1 verifier `24/24`
+- [x] Safety priority, one-total-question budget, no automatic second question, determinism, and malformed fail-closed behavior preserved
+- [x] Exact R1 implementation scope `11/11`: 10 UPDATE + 1 NEW; DELETE / RENAME 0
+- [x] V1-A1=`accepted_complete`; accepted policy remains immutable
+- [ ] V1-A overall completion — pending V1-A2 implementation and review
 
-Status is r1_materiality_correction_implemented_pending_human_chatgpt_review. R2-C remains remediation_required; experienceProductJudgment=pending_remediation; jpy980RuntimeReadiness=not_established; globalQ0Completion=false. Provider / DB / Supabase are 0 / 0 / 0. next_action=human_chatgpt_review_of_v1_a1_r1_materiality_correction.
+V1-A1 acceptance authorizes no V1-A2 implementation, V1-B/C/D, Provider, Production Runtime, Payment, PR, or main integration.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->

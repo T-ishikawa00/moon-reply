@@ -1,10 +1,10 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1 Review / R1 Materiality Correction
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1 Accepted Review / V1-A2 Planning Handoff
 
 ## Status and authority
 
 - Task: V1-A1 Deterministic JPY980 Input Sufficiency Policy
-- Status: r1_materiality_correction_implemented_pending_human_chatgpt_review
-- Branch: fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-r1-materiality
+- Status: `accepted_complete`
+- Accepted snapshot / branch: `8db5c6386ed0b9b16f0d1586f47d384262cc502b` / `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-r1-materiality`
 - Exact correction parent: 65c245860813f6179689855b344dbf6fd425867a
 - Original accepted authority: cfad0bd4ca3fd2304b00d072624e624f98c09b29
 - Parent planning commit: 885d46db8bfbc2add4828b7205af9a9e3d6c009c
@@ -13,11 +13,13 @@
 
 JPY980 Value Architecture R1 Correction is Human + ChatGPT accepted complete. ChatGPT review is PASS / complete, Human review is PASS / complete, Human acceptance and correction acceptance are complete, and the acceptance date is 2026-08-16.
 
-Only V1-A1 was implementation-authorized. V1-A2 Runtime/API/UI Clarification Integration, V1-B, V1-C, V1-D, Provider execution, Production Runtime, Payment, and main integration remain unauthorized. V1-A overall is not complete.
+V1-A1 R1 is also Human + ChatGPT accepted complete: ChatGPT review `PASS / complete`, Human review `PASS / complete`, Human acceptance `complete`, V1-A1 acceptance `complete`, acceptance date `2026-08-16`. V1-A1 is complete; V1-A overall is not complete.
+
+V1-A2 Runtime/API/UI Clarification Integration planning is authorized and is now defined in the separate V1-A2 plan review. V1-A2 implementation, V1-B, V1-C, V1-D, Provider execution, Production Runtime, Payment, and main integration remain unauthorized.
 
 ## R1 review finding and correction
 
-ChatGPT review of implementation commit `65c245860813f6179689855b344dbf6fd425867a` is `NEEDS_CORRECTION`: BLOCKER 0, MAJOR 1, MINOR 0. The major finding was that `user_emotions.length > 0` could independently make material concern true and allow an incidental positive emotion in a routine administrative case to bypass the material-concern clarification.
+ChatGPT review of implementation commit `65c245860813f6179689855b344dbf6fd425867a` originally returned `NEEDS_CORRECTION`: BLOCKER 0, MAJOR 1, MINOR 0. The major finding was that `user_emotions.length > 0` could independently make material concern true and allow an incidental positive emotion in a routine administrative case to bypass the material-concern clarification. Snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b` resolves that finding and is accepted complete.
 
 R1 removes emotion presence as a standalone materiality signal. Materiality is now established only by existing bounded typed authority representing an actual decision, relationship, boundary, or contact concern: a material `user_goal_detail`, explicit boundary state, or repeated unanswered contact. No raw-prose classifier, emotion-statement keyword search, or customer-prose regex is added.
 
@@ -141,11 +143,13 @@ Every non-malformed Base Structured Intake fixture validates against the existin
 
 Fixture metadata and case IDs remain outside policy routing. The R1-D result is driven by the material typed goal, not its metadata.
 
-## V1-A2 clarification-answer provenance boundary
+## V1-A2 clarification-answer provenance handoff
 
-Current PB-01 Base authority does not accept a clarification answer as a Base fact or source reference. Before any V1-A2 Runtime/API/UI connection, an explicit clarification-answer grounding and provenance contract is required. V1-A2 must not silently append a follow-up answer into `currentSituation`, pretend the answer came from `input:current_situation`, discard provenance, or widen current schemas implicitly.
+Current PB-01 Base authority does not accept a clarification answer as a Base fact or source reference. The V1-A2 planning successor now defines a third, separate Clarification Evidence lane with `user_clarification` provenance, a same-request second-run lifecycle, target-limited grounding, clarification Safety aggregation, and a first-class `not_full_product_candidate` successor state.
 
-This R1 correction does not design or implement that contract. V1-A2 remains unauthorized.
+The accepted prohibition remains unchanged: V1-A2 must not append a follow-up answer into `currentSituation`, pretend the answer came from `input:current_situation`, discard provenance, contaminate Candidate, or widen Base implicitly. The plan uses the same PB-01 stage ID with a successor Prompt/Schema/Catalog; no PB-01F is added.
+
+This document records only the accepted V1-A1 handoff. The exact V1-A2 architecture and future `31/31` implementation manifest are owned by `TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_A2_PLAN_REVIEW.md`. V1-A2 implementation remains unauthorized pending review of that plan.
 
 ## Exact scope
 
@@ -187,9 +191,11 @@ The R1 verifier freezes from the parent all active Runtime integration, eligibil
 
 V1-A1 automated PASS does not establish any broader Product or Runtime readiness.
 
+V1-A2 status is `planning_defined_pending_review` with `implementation_authorized=false`.
+
 ## Validation
 
-Required final gates:
+Accepted V1-A1 final gates:
 
 - dedicated R1 materiality correction verifier PASS 25/25
 - original V1-A1 verifier PASS 24/24 at immutable `65c245860813f6179689855b344dbf6fd425867a`
@@ -208,8 +214,8 @@ Required final gates:
 - main unchanged
 - next-env.d.ts drift 0
 
-Only after every gate passes may the one normal commit be created and pushed normally.
+All listed V1-A1 gates passed for accepted snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`. This acceptance does not authorize V1-A2 implementation.
 
 ## Next action
 
-STOP after the normal correction-branch push and wait for Human / ChatGPT review of the V1-A1 R1 materiality correction. Do not begin V1-A2 or any other package.
+Review the V1-A2 clarification integration architecture plan. Do not begin V1-A2 implementation, V1-B/C/D, Provider execution, Production Runtime, Payment, or main integration before separate authority.

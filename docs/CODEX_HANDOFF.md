@@ -1,18 +1,29 @@
 # CODEX_HANDOFF.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
-## Active handoff — V1-A1 R1 Materiality False-Positive Correction
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
+## Active handoff — V1-A2 Clarification Integration Architecture Plan
 
-- Status / branch / parent: `r1_materiality_correction_implemented_pending_human_chatgpt_review` / `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-r1-materiality` / `65c245860813f6179689855b344dbf6fd425867a`.
-- Review finding: V1-A1 ChatGPT review is `NEEDS_CORRECTION` with BLOCKER 0 / MAJOR 1 / MINOR 0 because incidental `user_emotions` presence could independently establish material concern. The accepted JPY980 Value Architecture R1 authority at `cfad0bd4ca3fd2304b00d072624e624f98c09b29` remains unchanged.
-- R1 policy correction: emotion presence alone never establishes paid Product materiality. Materiality is limited to an existing material typed `user_goal_detail`, explicit boundary state, or repeated unanswered contact. No emotion-statement keyword search, raw-prose regex, case ID, or fixture ID routing exists.
-- Emotional boundary: `user_emotions` supplies bounded emotional-context presence only; it does not prove a specific central-fear proposition. V1-A1 does not interpret emotion prose. The material-concern clarification now begins `今回のやり取りで` and is neutral across draft and send/wait shapes.
-- Evidence: original A-L fixtures are retained and R1-A through R1-D add no-emotion admin, incidental-emotion admin, post-budget route-out, and material typed-goal positive coverage. Offline result is `16/16`; Safety priority, one-total-question budget, no second question, determinism, malformed fail-closed behavior, and metadata independence remain intact.
-- V1-A2 provenance boundary: current PB-01 Base authority does not accept clarification answers as Base facts/source refs. A separate grounding/provenance contract is required before integration; appending a follow-up to `currentSituation`, pretending `input:current_situation` provenance, or implicitly widening schemas is prohibited and not implemented. V1-A2 remains unauthorized.
-- Closed authority: V1-A2, V1-B/C/D, Active Runtime, API/UI flow, schemas, DB/Supabase/migrations, Prompt, Provider, PB-05, semantic disposition, Payment, Production Runtime, PR, and main integration remain unauthorized. Provider / DB / Supabase are `0 / 0 / 0`.
-- Current Product authority: R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`. V1-A overall is not complete.
-- Scope: exact R1 correction `11/11`, 10 UPDATE + 1 NEW, DELETE / RENAME 0. Original V1-A1 implementation snapshot remains `12/12`; R2-B Product snapshot and main `61e33a10e195fad17e253a6b9719217e1992f273` remain unchanged.
-- Next action: `human_chatgpt_review_of_v1_a1_r1_materiality_correction`. Stop after one normal correction-branch push.
+- Status / branch / parent: `planning_defined_pending_human_chatgpt_review` / `plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration` / accepted V1-A1 snapshot `8db5c6386ed0b9b16f0d1586f47d384262cc502b`.
+- Accepted authority: V1-A1 R1 ChatGPT review and Human review are `PASS / complete`; Human acceptance and V1-A1 acceptance are complete on `2026-08-16`. V1-A1=`accepted_complete`; V1-A overall remains incomplete.
+- Lane architecture: immutable original Base, optional Candidate, and one Clarification Evidence answer are separate authorities. Clarification provenance is `user_clarification`; no append to `currentSituation`, false `input:current_situation` source, Base source-ref insertion, or Candidate contamination is allowed.
+- PB-01 successor: no PB-01F or other stage is added. A future same-ID PB-01 successor receives original Base plus separate clarification on the second run, reuses immutable initial Base grounding, and may ground only the clarification lane. Target-limited structural source integrity and clarification-attributable Safety are mandatory.
+- Lifecycle: one request + zero/one clarification + one-or-more runs. One-gap input becomes `awaiting_clarification`; an opaque clarification ID authorizes a separate answer endpoint. One accepted answer is idempotent for exact duplicates; a different second answer fails closed. Automatic second clarification is prohibited.
+- Routing: post-answer outcomes are only ready, first-class `not_full_product_candidate`, or Safety. Not-full is a normal no-charge stop with no Report/draft and is not mislabeled as needs-more, failure, Safety, or ready.
+- Product-scope validation: `message_impact` requires a non-empty Candidate under `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED`; missing Candidate does not consume clarification budget. Exact actionable anchors are decide_send_or_wait, draft_message, message_impact, next_three_days. relationship and organize_emotions are supplementary-only; unanchored input stops under `M2_ACTIONABLE_TOPIC_REQUIRED` before request creation or Provider work.
+- Future package: exact A2 implementation scope is fixed but unauthorized at `31/31`, 14 UPDATE + 17 NEW. It includes the clarification contract/grounding, same-stage PB-01 Prompt/Schema/Catalog successor, policy/normalization/delivery V2 successors, lifecycle persistence, APIs/UI, and offline verifier; PB-05/V1-B, semantic disposition, Payment, Provider execution, Production Runtime, and main are excluded.
+- Current scope/operations: this plan is exact `10/10`, 6 UPDATE + 4 NEW, DELETE / RENAME 0. Product/Runtime/API/UI/DB/Prompt/Schema/Catalog/Provider/PB-05/semantic/Payment changes are 0; Provider / DB / Supabase are `0 / 0 / 0`.
+- Closed authority: V1-A2 `implementation_authorized=false`; V1-B/C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Next action: `human_chatgpt_review_of_v1_a2_clarification_integration_plan`. Do not begin implementation before explicit acceptance and authority.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:END -->
+
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:BEGIN -->
+## Accepted handoff — V1-A1 R1 Materiality False-Positive Correction
+
+- Accepted snapshot: `8db5c6386ed0b9b16f0d1586f47d384262cc502b`; original V1-A1 `65c245860813f6179689855b344dbf6fd425867a`; JPY980 authority `cfad0bd4ca3fd2304b00d072624e624f98c09b29`.
+- Review/acceptance: ChatGPT and Human `PASS / complete`; Human acceptance and V1-A1 acceptance `complete`; date `2026-08-16`; status `accepted_complete`.
+- Accepted correction: emotion presence alone never establishes Product materiality. Materiality uses an existing material typed goal, explicit boundary, or repeated unanswered contact; no raw-prose, emotion-keyword, case-ID, or fixture-ID routing exists.
+- Evidence: offline fixtures `16/16`; R1 verifier `25/25`; original V1-A1 verifier `24/24`; Safety priority, one-total-question budget, no second question, determinism, malformed fail-closed behavior, and metadata independence are retained.
+- Boundary: accepted V1-A1 is immutable. V1-A2 uses a separately reviewed successor contract and remains implementation-unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1:BEGIN -->

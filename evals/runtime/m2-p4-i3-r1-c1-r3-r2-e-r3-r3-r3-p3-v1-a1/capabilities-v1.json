@@ -1,11 +1,12 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1",
-  "status": "r1_materiality_correction_implemented_pending_human_chatgpt_review",
+  "status": "accepted_complete",
   "authority": {
     "exact_parent": "65c245860813f6179689855b344dbf6fd425867a",
     "original_v1_a1_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
     "accepted_v1_a1_implementation_commit": "65c245860813f6179689855b344dbf6fd425867a",
+    "accepted_v1_a1_r1_snapshot": "8db5c6386ed0b9b16f0d1586f47d384262cc502b",
     "parent_planning_commit": "885d46db8bfbc2add4828b7205af9a9e3d6c009c",
     "r2_b_product_snapshot": "fa956b9b1941c73f8e1767c64ab24f07fadd36c6",
     "main": "61e33a10e195fad17e253a6b9719217e1992f273",
@@ -14,24 +15,29 @@
     "correction_human_acceptance": "complete",
     "correction_acceptance": "complete",
     "acceptance_date": "2026-08-16",
-    "v1_a1_chatgpt_review": "NEEDS_CORRECTION",
+    "v1_a1_chatgpt_review": "PASS_complete",
+    "v1_a1_human_review": "PASS_complete",
+    "v1_a1_human_acceptance": "complete",
+    "v1_a1_acceptance": "complete",
     "review_findings": {
       "blocker": 0,
       "major": 1,
       "minor": 0,
       "major_code": "emotion_presence_alone_may_establish_material_concern"
-    }
+    },
+    "review_finding_resolution": "accepted_complete"
   },
   "implementation": {
     "V1-A1": {
       "name": "Deterministic Input Sufficiency Policy",
       "authority": "authorized",
-      "status": "r1_materiality_correction_implemented_pending_review"
+      "status": "accepted_complete"
     },
     "V1-A2": {
       "name": "Runtime/API/UI Clarification Integration",
-      "authority": "unauthorized",
-      "status": "unauthorized"
+      "authority": "planning_authorized_implementation_unauthorized",
+      "status": "planning_defined_pending_review",
+      "implementation_authorized": false
     },
     "V1-B": "unauthorized",
     "V1-C": "unauthorized",
@@ -79,7 +85,10 @@
     "pb_05_changed": false,
     "semantic_disposition_changed": false,
     "clarification_answer_grounding_provenance_contract_required_before_v1_a2": true,
-    "clarification_answer_grounding_provenance_contract_status": "unresolved_not_designed_not_implemented",
+    "clarification_answer_grounding_provenance_contract_status": "planning_defined_pending_review_not_implemented",
+    "clarification_answer_grounding_provenance_contract": "m2-p4-clarification-evidence-v1",
+    "v1_a2_planning_authorized": true,
+    "v1_a2_implementation_authorized": false,
     "clarification_answer_appended_to_current_situation": false,
     "clarification_answer_false_source_ref_created": false,
     "implicit_schema_widening": false
@@ -136,5 +145,5 @@
   "rebase_used": false,
   "cherry_pick_used": false,
   "force_push_used": false,
-  "next_action": "human_chatgpt_review_of_v1_a1_r1_materiality_correction"
+  "next_action": "human_chatgpt_review_of_v1_a2_clarification_integration_plan"
 }
