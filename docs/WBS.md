@@ -1,10 +1,12 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
-## V1-A2 Clarification Integration — Implemented Pending Review
+## V1-A2 R1 Runtime Integrity Correction — Pending Review
 
 - [x] Accepted R1 authority `9f397ed41f3f284e7a984ad139768af16373a747` synchronized; V1-A1 immutable
 - [x] Exact implementation scope `37/37`: 14 UPDATE + 23 NEW; DELETE / RENAME 0
+- [x] Review findings fixed: 1 BLOCKER / 5 MAJOR / 1 MINOR from implementation parent `3195c278d688bc866d2e0825df88cdf62b149547`
+- [x] Exact correction scope `23/23`: 23 UPDATE + 0 NEW; DELETE / RENAME 0
 - [x] Shared actionable-topic and `message_impact` Candidate validation before request creation
 - [x] V1-A1-compatible Policy V2 connected after Safety with cadence V2 copy correction
 - [x] One-question/one-answer maximum, secure opaque capability, canonical fingerprint, same/different-answer behavior
@@ -16,12 +18,19 @@
 - [x] First-class ready / needs-more / not-full / Safety Runtime and Delivery V2 states
 - [x] Migration `0006` created with atomic lifecycle RPCs; migration apply 0
 - [x] Initial API, separate clarification answer API, accessible one-question UI, and customer-safe no-charge stops
-- [x] Offline fake fixtures `28/28`; malformed, determinism, provenance, target isolation, and downstream-discard coverage
+- [x] Actual V12 PB-01/04/05/06 developer prompts self-contain accepted predecessor responsibilities plus clarification deltas
+- [x] Bounded timing never creates exact minutes; trusted local datetime may derive exact minutes
+- [x] Clarification overlay source paths resolve to deep-equal Grounding values; five provenance mutants fail closed
+- [x] Deterministic downstream wiring and PB-06 fail-closed plumbing proven without claiming Provider semantic fidelity
+- [x] Resume failure preserves actual accumulated model/usage and finalizes once in Pipeline
+- [x] Historical resultJson-less needs-more/Safety completion compatibility preserved; V1-A2 first-class stops unchanged
+- [x] Central concern answer is structured concern/explicit-none; none is non-resolving and creates no concern
+- [x] Original 28 fixture intentions retained and expanded to offline fake fixtures `36/36`
 - [ ] Human / ChatGPT implementation review and V1-A2 acceptance
 - [ ] V1-A overall completion — pending V1-A2 acceptance
 - [ ] V1-B/C/D, Provider execution, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is implemented_pending_human_chatgpt_review. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
+Status is runtime_integrity_corrected_pending_human_chatgpt_review. Provider semantic fidelity remains unestablished. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->

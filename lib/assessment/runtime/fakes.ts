@@ -68,6 +68,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   readonly reports = new Map<string, FinalizeCompletedAssessmentRecord>();
   readonly clarifications = new Map<string, PersistedAssessmentClarification>();
   readonly events: string[] = [];
+  readonly completeRunModes: Array<"legacy" | "v1a2_first_class_stop"> = [];
   private failOnceAt?: string;
 
   constructor(options: FakeRepositoryOptions = {}) {
@@ -205,6 +206,9 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     run.status = "completed";
     request.status = "completed";
     request.updatedAt = record.completedAt;
+    this.completeRunModes.push(
+      record.resultJson === undefined ? "legacy" : "v1a2_first_class_stop",
+    );
     this.events.push("completeRun");
   }
 

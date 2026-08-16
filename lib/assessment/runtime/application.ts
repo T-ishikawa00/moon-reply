@@ -171,41 +171,22 @@ export class AssessmentApplication {
       clarificationId: this.options.clarificationId,
       timeZone: this.options.timeZone,
     });
-    try {
-      const resumed = await pipeline.resume(
-        accepted.request,
-        initial,
-        evidence,
-        {
-          requestId: accepted.request.id,
-          runId: accepted.resumeRunId,
-          model: this.options.model,
-          promptBundleVersion: this.options.promptBundleVersion,
-          schemaSetVersion: this.options.schemaSetVersion,
-          startedAt: resumeStartedAt,
-        },
-      );
-      return {
-        ...resumed,
-        authoritativeRequestedTopics: [...accepted.request.requestedTopics],
-      } as AssessmentExecutionResult;
-    } catch (error) {
-      const safe = error instanceof M2RuntimeError
-        ? error
-        : new M2RuntimeError("M2_RUNTIME_FAILED");
-      await this.options.repository.failRun({
-        runId: accepted.resumeRunId,
+    const resumed = await pipeline.resume(
+      accepted.request,
+      initial,
+      evidence,
+      {
         requestId: accepted.request.id,
-        returnedModel: null,
-        errorCode: safe.safeCode,
-        completedAt: this.now(),
-        totalInputTokens: 0,
-        totalCachedTokens: 0,
-        totalOutputTokens: 0,
-        totalReasoningTokens: 0,
-        usageDerivedCostUsd: 0,
-      });
-      throw safe;
-    }
+        runId: accepted.resumeRunId,
+        model: this.options.model,
+        promptBundleVersion: this.options.promptBundleVersion,
+        schemaSetVersion: this.options.schemaSetVersion,
+        startedAt: resumeStartedAt,
+      },
+    );
+    return {
+      ...resumed,
+      authoritativeRequestedTopics: [...accepted.request.requestedTopics],
+    } as AssessmentExecutionResult;
   }
 }

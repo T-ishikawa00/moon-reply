@@ -13,6 +13,7 @@ export const EFFECTIVE_DECISION_POLICY_V1_SCHEMA_VERSION =
 export type EffectiveDecisionPolicyV1 = {
   schemaVersion: typeof EFFECTIVE_DECISION_POLICY_V1_SCHEMA_VERSION;
   policy: DecisionPolicyResultV2;
+  effectiveDecisionFacts: JsonObject;
   consumedEffectivePaths: string[];
 };
 
@@ -31,17 +32,16 @@ function removeUnresolved(information: JsonObject, path: string) {
   );
 }
 
-function elapsedMinutes(value: JsonObject) {
-  if (typeof value.derivedElapsedMinutes === "number") {
-    return value.derivedElapsedMinutes;
+function exactDerivedElapsedMinutes(value: JsonObject) {
+  if (
+    value.kind !== "local_datetime" ||
+    typeof value.derivedElapsedMinutes !== "number" ||
+    !Number.isFinite(value.derivedElapsedMinutes) ||
+    value.derivedElapsedMinutes < 0
+  ) {
+    return null;
   }
-  switch (value.value) {
-    case "less_than_6_hours": return 180;
-    case "six_to_24_hours": return 720;
-    case "one_to_three_days": return 2_880;
-    case "more_than_three_days": return 5_760;
-    default: invalid();
-  }
+  return value.derivedElapsedMinutes;
 }
 
 export function buildEffectiveDecisionPolicyV1(input: {
@@ -58,12 +58,15 @@ export function buildEffectiveDecisionPolicyV1(input: {
 
   const timing = input.authority.effectiveDecisionContext.latestContactTiming;
   if (timing !== null) {
-    contact.elapsed_since_latest_user_message_minutes = elapsedMinutes(asObject(timing));
-    removeUnresolved(
-      information,
-      "contact_state.elapsed_since_latest_user_message_minutes",
-    );
-    consumedEffectivePaths.push("effectiveDecisionContext.latestContactTiming");
+    const exactElapsedMinutes = exactDerivedElapsedMinutes(asObject(timing));
+    if (exactElapsedMinutes !== null) {
+      contact.elapsed_since_latest_user_message_minutes = exactElapsedMinutes;
+      removeUnresolved(
+        information,
+        "contact_state.elapsed_since_latest_user_message_minutes",
+      );
+      consumedEffectivePaths.push("effectiveDecisionContext.latestContactTiming");
+    }
   }
   const cadence = input.authority.effectiveDecisionContext.usualReplyCadence;
   if (cadence !== null) {
@@ -90,6 +93,7 @@ export function buildEffectiveDecisionPolicyV1(input: {
   return {
     schemaVersion: EFFECTIVE_DECISION_POLICY_V1_SCHEMA_VERSION,
     policy,
+    effectiveDecisionFacts: structuredClone(facts),
     consumedEffectivePaths,
   };
 }

@@ -31,6 +31,14 @@
     { "id": "malformed_input", "expected": "safe_fail_closed" },
     { "id": "deterministic_repeat", "expected": "deep_equal" },
     { "id": "cadence_v2_alignment", "expected": "within_beyond_unknown" },
-    { "id": "no_second_clarification", "expected": "prohibited" }
+    { "id": "no_second_clarification", "expected": "prohibited" },
+    { "id": "v12_actual_prompts_self_contained", "expected": "predecessor_semantics_plus_clarification_delta" },
+    { "id": "timing_bucket_no_exact_minutes", "expected": "bounded_authority_only" },
+    { "id": "timing_local_datetime_exact_minutes", "expected": "trusted_derived_elapsed_allowed" },
+    { "id": "clarification_provenance_mutants", "expected": "five_mutants_fail_closed" },
+    { "id": "pb06_clarification_fidelity_block", "expected": "no_product_delivery" },
+    { "id": "resume_failure_usage_preserved", "expected": "actual_accumulated_usage_one_finalization" },
+    { "id": "historical_complete_run_compatibility", "expected": "legacy_and_v1a2_paths_separated" },
+    { "id": "central_concern_explicit_none", "expected": "structured_non_resolving_no_invented_concern" }
   ]
 }

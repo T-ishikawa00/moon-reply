@@ -25,6 +25,7 @@ import {
   validateEffectiveAssessmentAuthorityIntegrityV1,
 } from "../lib/assessment/runtime/effective-assessment-authority-integrity-v1.ts";
 import {
+  buildEffectiveDecisionPolicyV1,
   clarificationConsumptionPathsForStageV1,
 } from "../lib/assessment/runtime/effective-decision-policy-v1.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
@@ -46,18 +47,17 @@ import {
 } from "../lib/assessment/runtime/schema-catalog.ts";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2";
-const baseline = "9f397ed41f3f284e7a984ad139768af16373a747";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1";
+const baseline = "3195c278d688bc866d2e0825df88cdf62b149547";
+const acceptedPlan = "9f397ed41f3f284e7a984ad139768af16373a747";
 const predecessor = "ab99f003901475199fcb316264ecd02c4f2baef8";
 const acceptedV1A1 = "8db5c6386ed0b9b16f0d1586f47d384262cc502b";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-runtime-integrity";
+const expectedSubject = "fix: harden V1-A2 runtime integrity";
+const originalImplementationBranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration";
-const expectedSubject = "feat: implement V1-A2 clarification integration";
-const planBranch =
-  "plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-effective-authority";
-const planVerifier =
-  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-effective-authority-plan.mjs";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2";
 
@@ -65,43 +65,28 @@ const updatedPaths = [
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_A2_REVIEW.md",
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/implementation-work-packages-v1.json",
-  "lib/assessment/runtime/types.ts",
-  "lib/assessment/runtime/pipeline.ts",
+  packageRoot + "/capabilities-v1.json",
+  packageRoot + "/integration-fixtures-v1.json",
+  packageRoot + "/offline-results-v1.json",
   "lib/assessment/runtime/application.ts",
-  "lib/assessment/runtime/service.ts",
+  "lib/assessment/runtime/pipeline.ts",
   "lib/assessment/runtime/supabase-repository.ts",
   "lib/assessment/runtime/fakes.ts",
-  "lib/assessment/runtime/schema-catalog.ts",
-  "app/api/internal/assessments/route.ts",
-  "components/runtime/RuntimeAssessmentForm.tsx",
-  "app/globals.css",
-];
-const newPaths = [
   "lib/assessment/runtime/clarification-evidence-v1.ts",
-  "lib/assessment/runtime/clarification-grounding-v1.ts",
-  "lib/assessment/runtime/clarification-source-integrity-v1.ts",
   "lib/assessment/runtime/effective-assessment-authority-v1.ts",
   "lib/assessment/runtime/effective-assessment-authority-integrity-v1.ts",
   "lib/assessment/runtime/effective-decision-policy-v1.ts",
-  "lib/assessment/runtime/jpy980-product-scope-validation-v1.ts",
-  "lib/assessment/runtime/jpy980-input-sufficiency-policy-v2.ts",
   "lib/assessment/runtime/contracts/pb-01-clarification-aware-v1.developer.md",
   "lib/assessment/runtime/contracts/pb-04-clarification-aware-v1.developer.md",
   "lib/assessment/runtime/contracts/pb-05-clarification-aware-v1.developer.md",
   "lib/assessment/runtime/contracts/pb-06-clarification-aware-v1.developer.md",
-  "lib/assessment/runtime/contracts/clarification-aware-base-intake-v1.schema.json",
   "lib/assessment/runtime/contracts/runtime-stage-catalog-v12.json",
-  "lib/assessment/runtime/runtime-result-normalization-v2.ts",
-  "lib/assessment/runtime/customer-assessment-delivery-v2.ts",
-  "app/api/internal/assessment-clarifications/[clarificationId]/answer/route.ts",
-  "supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql",
-  packageRoot + "/integration-fixtures-v1.json",
-  packageRoot + "/offline-results-v1.json",
-  packageRoot + "/capabilities-v1.json",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_A2_REVIEW.md",
+  "components/runtime/RuntimeAssessmentForm.tsx",
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration.mjs",
 ];
+const newPaths = [];
 const exactScope = [...updatedPaths, ...newPaths];
 
 function git(args, options = {}) {
@@ -159,8 +144,8 @@ function overlay(base, patch) {
   return result;
 }
 
-function runAcceptedPlanVerifier() {
-  const temp = mkdtempSync(path.join(tmpdir(), "moon-reply-v1-a2-plan-"));
+function runImmutableVerifier(revision, branch, verifier, prefix) {
+  const temp = mkdtempSync(path.join(tmpdir(), prefix));
   const clone = path.join(temp, "repo");
   try {
     execFileSync("git.exe", ["clone", "--quiet", "--no-checkout", root, clone], {
@@ -191,19 +176,19 @@ function runAcceptedPlanVerifier() {
     }
     execFileSync(
       "git.exe",
-      ["-c", safe, "checkout", "--quiet", "-B", planBranch, baseline],
+      ["-c", safe, "checkout", "--quiet", "-B", branch, revision],
       { cwd: clone, stdio: "pipe" },
     );
     // Preserve the byte representation of unchanged authority files. Several
     // immutable verifiers deliberately parse LF-delimited source snippets, and
     // their own nested snapshot runners copy these bytes forward.
-    const trackedPaths = git(["ls-tree", "-r", "--name-only", baseline])
+    const trackedPaths = git(["ls-tree", "-r", "--name-only", revision])
       .split(/\r?\n/u)
       .filter(Boolean);
     for (const candidate of trackedPaths) {
       const sourcePath = path.join(root, candidate);
       if (!existsSync(sourcePath)) continue;
-      if (worktreeBlob(candidate) !== blob(baseline, candidate)) continue;
+      if (worktreeBlob(candidate) !== blob(revision, candidate)) continue;
       copyFileSync(sourcePath, path.join(clone, candidate));
     }
     const sourceContract = readJson(
@@ -216,7 +201,7 @@ function runAcceptedPlanVerifier() {
         path.join(clone, ".git", path.basename(marker)),
       );
     }
-    const run = spawnSync(process.execPath, [path.join(clone, planVerifier)], {
+    const run = spawnSync(process.execPath, [path.join(clone, verifier)], {
       cwd: clone,
       encoding: "utf8",
       maxBuffer: 256 * 1024 * 1024,
@@ -228,6 +213,15 @@ function runAcceptedPlanVerifier() {
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
+}
+
+function runOriginalImplementationVerifier() {
+  return runImmutableVerifier(
+    baseline,
+    originalImplementationBranch,
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration.mjs",
+    "moon-reply-v1-a2-implementation-",
+  );
 }
 
 function expectedRuntimeError(callback, safeCode, status) {
@@ -276,7 +270,7 @@ const capabilities = readJson(packageRoot + "/capabilities-v1.json");
 const fixtureCatalog = readJson(packageRoot + "/integration-fixtures-v1.json");
 const offlineResults = readJson(packageRoot + "/offline-results-v1.json");
 let catalog;
-let acceptedPlanOutput = "";
+let immutableImplementationOutput = "";
 let checks = 0;
 const failures = [];
 
@@ -296,7 +290,8 @@ await check("exact branch parent direct-child main and stash", () => {
   const head = git(["rev-parse", "HEAD"]);
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
   assert.equal(git(["rev-parse", baseline]), baseline);
-  assert.equal(git(["rev-parse", baseline + "^"]), predecessor);
+  assert.equal(git(["rev-parse", baseline + "^"]), acceptedPlan);
+  assert.equal(git(["rev-parse", acceptedPlan + "^"]), predecessor);
   assert.equal(git(["merge-base", head, baseline]), baseline);
   const count = Number(git(["rev-list", "--count", baseline + ".." + head]));
   assert.ok(count === 0 || count === 1);
@@ -310,7 +305,7 @@ await check("exact branch parent direct-child main and stash", () => {
   assert.equal(git(["stash", "list"]), "");
 });
 
-await check("exact 37 path scope with 14 UPDATE and 23 NEW", () => {
+await check("exact 23 path correction scope with 23 UPDATE and 0 NEW", () => {
   const tracked = git(["diff", "--name-status", "--no-renames", baseline, "--"])
     .split(/\r?\n/u)
     .filter(Boolean)
@@ -326,7 +321,7 @@ await check("exact 37 path scope with 14 UPDATE and 23 NEW", () => {
     .filter((entry) => !trackedNames.has(entry))
     .map((entry) => ({ status: "A", path: entry }));
   const actual = [...tracked, ...untracked];
-  assert.equal(actual.length, 37);
+  assert.equal(actual.length, 23);
   assert.deepEqual(sorted(actual.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
     sorted(actual.filter((entry) => entry.status === "M").map((entry) => entry.path)),
@@ -338,11 +333,12 @@ await check("exact 37 path scope with 14 UPDATE and 23 NEW", () => {
   );
 });
 
-await check("accepted V1-A2 R1 verifier remains PASS 27/27", () => {
-  acceptedPlanOutput = runAcceptedPlanVerifier();
-  assert.match(acceptedPlanOutput, /planning correction verifier: PASS 27\/27/u);
-  assert.match(acceptedPlanOutput, /Original A2 planning verifier at ab99f003: PASS 26\/26/u);
-  assert.match(acceptedPlanOutput, /All upstream accepted verifiers: PASS/u);
+await check("immutable implementation 22/22 includes accepted planning 27/27", () => {
+  immutableImplementationOutput = runOriginalImplementationVerifier();
+  assert.match(immutableImplementationOutput, /clarification integration verifier: PASS 22\/22/u);
+  assert.match(immutableImplementationOutput, /Exact implementation scope: 37\/37/u);
+  assert.match(immutableImplementationOutput, /Accepted V1-A2 R1 planning verifier: PASS 27\/27/u);
+  assert.match(immutableImplementationOutput, /all upstream accepted verifiers: PASS/iu);
 });
 
 await check("v12 catalog and clarification schema load fail closed", async () => {
@@ -354,6 +350,48 @@ await check("v12 catalog and clarification schema load fail closed", async () =>
     "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
   ]);
   assert.ok(catalog.definitions[0].clarificationOutputSchema);
+});
+
+await check("actual V12 developer prompts self-contain predecessor semantics", () => {
+  const prompts = Object.fromEntries(
+    catalog.definitions.map((definition) => [definition.stageId, definition.developerPrompt]),
+  );
+  const required = {
+    "PB-01": [
+      "## Input boundary",
+      "## Responsibility",
+      "## User-owned contact constraint",
+      "## Cross-projection semantic agreement",
+      "## Clarification resume responsibility",
+      "run_mode=initial_base",
+      "run_mode=clarification_resume",
+    ],
+    "PB-04": [
+      "## Authoritative inputs",
+      "## Directional Guidance outcome",
+      "## Decision and draft authority",
+      "## Action and aftercare quality",
+      "## Clarification successor authority",
+    ],
+    "PB-05": [
+      "## Product Doctrine",
+      "## Field-by-field responsibility",
+      "## Clarification successor authority",
+    ],
+    "PB-06": [
+      "## Finding vocabulary and output boundary",
+      "## Tier 1 — Hard factual and Safety materiality",
+      "## Tier 2 — Flexible semantics",
+      "## Tier 3 — Product Outcome",
+      "## Clarification successor validation",
+    ],
+  };
+  for (const [stageId, markers] of Object.entries(required)) {
+    for (const marker of markers) assert.match(prompts[stageId], new RegExp(marker, "u"));
+    assert.doesNotMatch(prompts[stageId], /Apply the accepted PB-(?:01|04|05|06)/u);
+  }
+  assert.match(prompts["PB-01"], /do not consume, restate, or rewrite Base or Candidate/u);
+  assert.match(prompts["PB-06"], /proves wiring only and is not semantic evidence/u);
 });
 
 await check("Product scope validator enforces exact anchors and Candidate rule", () => {
@@ -418,6 +456,35 @@ await check("target answer validation and canonical fingerprint are deterministi
     () => validateClarificationAnswerV1({
       target: "usual_reply_cadence",
       answer: "sometimes",
+      resumeStartedAt: at,
+    }),
+    "M2_CLARIFICATION_ANSWER_INVALID",
+  );
+});
+
+await check("central concern uses structured concern or explicit none only", () => {
+  const at = "2026-08-16T10:00:00.000Z";
+  const concern = validateClarificationAnswerV1({
+    target: "central_fear_or_decision_concern",
+    answer: { kind: "concern", value: " 関係が終わることが不安です " },
+    resumeStartedAt: at,
+  });
+  assert.deepEqual(concern.validatedAnswer, {
+    kind: "concern",
+    value: "関係が終わることが不安です",
+  });
+  assert.equal(concern.resolvesTarget, true);
+  const none = validateClarificationAnswerV1({
+    target: "central_fear_or_decision_concern",
+    answer: { kind: "none" },
+    resumeStartedAt: at,
+  });
+  assert.deepEqual(none.validatedAnswer, { kind: "none" });
+  assert.equal(none.resolvesTarget, false);
+  expectedRuntimeError(
+    () => validateClarificationAnswerV1({
+      target: "central_fear_or_decision_concern",
+      answer: "特になし",
       resumeStartedAt: at,
     }),
     "M2_CLARIFICATION_ANSWER_INVALID",
@@ -530,12 +597,17 @@ await check("EffectiveAssessmentAuthority is derived target-limited and provenan
   const fixtures = readJson(
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1/routing-fixtures-v1.json",
   );
-  const base = fixtures.base_structured_intake_template;
+  const base = structuredClone(fixtures.base_structured_intake_template);
+  base.decision_facts.contact_state.elapsed_since_latest_user_message_minutes = null;
+  base.decision_facts.information_state.unresolved_fields = [
+    ...base.decision_facts.information_state.unresolved_fields,
+    "contact_state.elapsed_since_latest_user_message_minutes",
+  ];
   const targets = {
     material_relationship_or_communication_concern: { choice: "distance", detail: null },
     latest_contact_timing: { kind: "elapsed_bucket", value: "six_to_24_hours", elapsedMinutesLowerBound: 360 },
     usual_reply_cadence: { relation: "within_usual" },
-    central_fear_or_decision_concern: { concern: "関係が終わることが不安です" },
+    central_fear_or_decision_concern: { kind: "concern", value: "関係が終わることが不安です" },
     relationship_intent: { choice: "move_closer", detail: null },
     requested_message_tone: { choice: "soft", detail: null },
   };
@@ -570,12 +642,139 @@ await check("EffectiveAssessmentAuthority is derived target-limited and provenan
     assert.ok(entries.length >= 1, target);
     assert.ok(entries.every((entry) => entry.clarificationTarget === target));
     assert.ok(entries.every((entry) => entry.sourceRef === sourceIdentity));
+    assert.ok(entries.every((entry) => entry.sourceValuePath === "normalizedValue"));
     const consumers = [
       ...clarificationConsumptionPathsForStageV1(authority, "PB-04"),
       ...clarificationConsumptionPathsForStageV1(authority, "PB-05"),
     ];
     assert.ok(consumers.length >= 1, target);
   }
+});
+
+await check("clarification provenance paths resolve and mutants fail closed", () => {
+  const fixtures = readJson(
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1/routing-fixtures-v1.json",
+  );
+  const grounding = {
+    schemaVersion: "m2-p4-clarification-grounding-v1",
+    clarificationId: "AAAAAAAAAAAAAAAAAAAAAA",
+    target: "requested_message_tone",
+    sourceIdentity: "clarification:AAAAAAAAAAAAAAAAAAAAAA:answer:1",
+    answerFingerprint: "a".repeat(64),
+    normalizedValue: { choice: "soft", detail: null },
+    materiallyResolvesTarget: true,
+    clarificationSafety: {
+      classification: "normal_allowed",
+      reason_codes: [],
+      response_mode: "none",
+    },
+  };
+  const args = {
+    baseStructuredIntake: fixtures.base_structured_intake_template,
+    candidateEnvelope: { presence: false },
+    clarificationGrounding: grounding,
+  };
+  const authority = buildEffectiveAssessmentAuthorityV1(args);
+  assert.equal(validateEffectiveAssessmentAuthorityIntegrityV1({ authority, ...args }), true);
+  const mutants = [];
+  const nonexistent = structuredClone(authority);
+  nonexistent.sourceMap[0].sourceValuePath = "normalizedValue.missing";
+  mutants.push(nonexistent);
+  const wrongRef = structuredClone(authority);
+  wrongRef.sourceMap[0].sourceRef = "clarification:BBBBBBBBBBBBBBBBBBBBBB:answer:1";
+  mutants.push(wrongRef);
+  const wrongValue = structuredClone(authority);
+  wrongValue.effectiveWritingContext.requestedMessageTone = { choice: "direct", detail: null };
+  mutants.push(wrongValue);
+  const unrelated = structuredClone(authority);
+  unrelated.effectiveDecisionContext.relationshipIntent = { choice: "move_closer", detail: null };
+  mutants.push(unrelated);
+  const falseBase = structuredClone(authority);
+  falseBase.sourceMap[0].sourceLane = "base";
+  falseBase.sourceMap[0].sourceRef = "input:current_situation";
+  mutants.push(falseBase);
+  for (const mutant of mutants) {
+    expectedRuntimeError(
+      () => validateEffectiveAssessmentAuthorityIntegrityV1({ authority: mutant, ...args }),
+      "M2_CLARIFICATION_AUTHORITY_CONFLICT",
+    );
+  }
+});
+
+await check("bounded timing never becomes exact minutes while trusted local datetime may", () => {
+  const fixtures = readJson(
+    "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1/routing-fixtures-v1.json",
+  );
+  const base = structuredClone(fixtures.base_structured_intake_template);
+  base.decision_facts.contact_state.elapsed_since_latest_user_message_minutes = null;
+  base.decision_facts.information_state.unresolved_fields = [
+    ...base.decision_facts.information_state.unresolved_fields,
+    "contact_state.elapsed_since_latest_user_message_minutes",
+  ];
+  const make = (normalizedValue) => buildEffectiveAssessmentAuthorityV1({
+    baseStructuredIntake: base,
+    candidateEnvelope: { presence: false },
+    clarificationGrounding: {
+      schemaVersion: "m2-p4-clarification-grounding-v1",
+      clarificationId: "AAAAAAAAAAAAAAAAAAAAAA",
+      target: "latest_contact_timing",
+      sourceIdentity: "clarification:AAAAAAAAAAAAAAAAAAAAAA:answer:1",
+      answerFingerprint: "a".repeat(64),
+      normalizedValue,
+      materiallyResolvesTarget: true,
+      clarificationSafety: {
+        classification: "normal_allowed",
+        reason_codes: [],
+        response_mode: "none",
+      },
+    },
+  });
+  const bucket = buildEffectiveDecisionPolicyV1({
+    authority: make({
+      kind: "elapsed_bucket",
+      value: "six_to_24_hours",
+      elapsedMinutesLowerBound: 360,
+    }),
+    candidateEnvelope: { presence: false },
+  });
+  assert.equal(
+    bucket.effectiveDecisionFacts.contact_state.elapsed_since_latest_user_message_minutes,
+    base.decision_facts.contact_state.elapsed_since_latest_user_message_minutes,
+  );
+  assert.ok(
+    bucket.effectiveDecisionFacts.information_state.unresolved_fields.includes(
+      "contact_state.elapsed_since_latest_user_message_minutes",
+    ),
+  );
+  assert.equal(
+    bucket.consumedEffectivePaths.includes("effectiveDecisionContext.latestContactTiming"),
+    false,
+  );
+  const exact = buildEffectiveDecisionPolicyV1({
+    authority: make({
+      kind: "local_datetime",
+      localDateTime: "2026-08-16T09:00",
+      timeZone: "Asia/Tokyo",
+      derivedElapsedMinutes: 120,
+      trustedNowAuthority: "resume_run_started_at",
+    }),
+    candidateEnvelope: { presence: false },
+  });
+  assert.equal(
+    exact.effectiveDecisionFacts.contact_state.elapsed_since_latest_user_message_minutes,
+    120,
+  );
+  assert.equal(
+    exact.effectiveDecisionFacts.information_state.unresolved_fields.includes(
+      "contact_state.elapsed_since_latest_user_message_minutes",
+    ),
+    false,
+  );
+  assert.ok(exact.consumedEffectivePaths.includes("effectiveDecisionContext.latestContactTiming"));
+  assert.doesNotMatch(
+    readText("lib/assessment/runtime/effective-decision-policy-v1.ts"),
+    /case\s+"(?:less_than_6_hours|six_to_24_hours|one_to_three_days|more_than_three_days)"/u,
+  );
 });
 
 await check("ready-making clarification discard is blocking", () => {
@@ -733,6 +932,128 @@ await check("one-gap initial persists one clarification and idempotency retry re
   );
 });
 
+await check("PB-06 blocking clarification fidelity finding prevents delivery", async () => {
+  const fixture = diagnosticCase("E-R3-05");
+  const clarificationId = createOpaqueClarificationIdV1(new Uint8Array(32).fill(10));
+  const answer = { kind: "elapsed_bucket", value: "six_to_24_hours" };
+  const validated = validateClarificationAnswerV1({
+    target: "latest_contact_timing",
+    answer,
+    resumeStartedAt: fixture.selected.fixed_clock,
+  });
+  const groundingOutput = {
+    schema_version: "pipeline-schema-clarification-grounding-v1.0.0",
+    target: "latest_contact_timing",
+    source_identity: clarificationSourceIdentityV1(clarificationId),
+    answer_fingerprint: validated.answerFingerprint,
+    materially_resolves_target: true,
+    clarification_safety_result: {
+      classification: "normal_allowed",
+      reason_codes: [],
+      response_mode: "none",
+    },
+  };
+  const blocking = structuredClone(diagnosticCase("E-R3-02").outputs["PB-06"]);
+  blocking.semantic_checks = [{
+    finding_code: "FACT_FIDELITY",
+    severity: "major",
+    json_path: "report_content.decision_reason_summary",
+    evidence_refs: ["F001"],
+    detail: "追加回答の時期情報が出力で失われたため停止する。",
+  }];
+  fixture.outputs["PB-06"] = blocking;
+  const repository = new FakeAssessmentRepository();
+  const transport = new FakeAiStageTransport({
+    outputs: fixture.outputs,
+    outputSequence: { "PB-01": [fixture.outputs["PB-01"], groundingOutput] },
+  });
+  const application = new AssessmentApplication({
+    repository,
+    transport,
+    model: "gpt-5.6-luna",
+    promptBundleVersion: catalog.promptBundleVersion,
+    schemaSetVersion: catalog.schemaSetVersion,
+    definitions: catalog.definitions,
+    now: () => fixture.selected.fixed_clock,
+    uuid: ids(),
+    clarificationId: () => clarificationId,
+    timeZone: "Asia/Tokyo",
+  });
+  await application.submit(fixture.input, "25252525-2525-4525-8525-252525252525");
+  await assert.rejects(
+    application.answerClarification(clarificationId, answer),
+    (error) => error instanceof M2RuntimeError &&
+      error.safeCode === "M2_SEMANTIC_VALIDATION_FAILED",
+  );
+  assert.equal(repository.reports.size, 0);
+  assert.equal(transport.calls.at(-1), "PB-06");
+  const resume = [...repository.runs.values()].find(
+    (run) => run.runKind === "clarification_resume",
+  );
+  assert.equal(resume.status, "failed");
+});
+
+await check("resume failure preserves accumulated usage and finalizes exactly once", async () => {
+  const fixture = diagnosticCase("E-R3-05");
+  const clarificationId = createOpaqueClarificationIdV1(new Uint8Array(32).fill(11));
+  const answer = { kind: "elapsed_bucket", value: "six_to_24_hours" };
+  const validated = validateClarificationAnswerV1({
+    target: "latest_contact_timing",
+    answer,
+    resumeStartedAt: fixture.selected.fixed_clock,
+  });
+  const groundingOutput = {
+    schema_version: "pipeline-schema-clarification-grounding-v1.0.0",
+    target: "latest_contact_timing",
+    source_identity: clarificationSourceIdentityV1(clarificationId),
+    answer_fingerprint: validated.answerFingerprint,
+    materially_resolves_target: true,
+    clarification_safety_result: {
+      classification: "normal_allowed",
+      reason_codes: [],
+      response_mode: "none",
+    },
+  };
+  const repository = new FakeAssessmentRepository();
+  const transport = new FakeAiStageTransport({
+    outputs: fixture.outputs,
+    outputSequence: { "PB-01": [fixture.outputs["PB-01"], groundingOutput] },
+    failAtStage: "PB-04",
+  });
+  const application = new AssessmentApplication({
+    repository,
+    transport,
+    model: "gpt-5.6-luna",
+    promptBundleVersion: catalog.promptBundleVersion,
+    schemaSetVersion: catalog.schemaSetVersion,
+    definitions: catalog.definitions,
+    now: () => fixture.selected.fixed_clock,
+    uuid: ids(),
+    clarificationId: () => clarificationId,
+    timeZone: "Asia/Tokyo",
+  });
+  await application.submit(fixture.input, "26262626-2626-4626-8626-262626262626");
+  await assert.rejects(
+    application.answerClarification(clarificationId, answer),
+    (error) => error instanceof M2RuntimeError && error.safeCode === "M2_FAKE_STAGE_FAILURE",
+  );
+  const resume = [...repository.runs.values()].find(
+    (run) => run.runKind === "clarification_resume",
+  );
+  assert.equal(resume.status, "failed");
+  assert.equal(resume.errorCode, "M2_FAKE_STAGE_FAILURE");
+  assert.equal(resume.returnedModel, "gpt-5.6-luna");
+  assert.ok(resume.totalInputTokens > 0);
+  assert.ok(resume.totalOutputTokens > 0);
+  assert.ok(resume.totalReasoningTokens > 0);
+  assert.ok(resume.usageDerivedCostUsd > 0);
+  assert.equal(repository.events.filter((event) => event === "failRun").length, 1);
+  assert.doesNotMatch(
+    readText("lib/assessment/runtime/application.ts"),
+    /returnedModel:\s*null[\s\S]{0,300}totalInputTokens:\s*0/u,
+  );
+});
+
 await check("clarification Safety overrides sufficiency before Product", async () => {
   const fixture = diagnosticCase("E-R3-05");
   const clarificationId = createOpaqueClarificationIdV1(new Uint8Array(32).fill(8));
@@ -829,6 +1150,86 @@ await check("non-resolving single answer routes not-full with no second question
   assert.equal(repository.clarifications.size, 1);
 });
 
+await check("historical completeRun remains compatible and V1-A2 stops stay first-class", async () => {
+  async function repositoryWithRun(suffix) {
+    const repository = new FakeAssessmentRepository();
+    const requestId = `10000000-0000-4000-8000-${suffix.padStart(12, "0")}`;
+    const runId = `20000000-0000-4000-8000-${suffix.padStart(12, "0")}`;
+    await repository.createRequest({
+      id: requestId,
+      idempotencyKey: `30000000-0000-4000-8000-${suffix.padStart(12, "0")}`,
+      source: "internal_test",
+      currentSituation: "履歴互換性のオフライン確認",
+      optionalMessage: null,
+      relationship: "other",
+      requestedTopics: ["decide_send_or_wait"],
+      privacyAcknowledged: true,
+      now: "2026-08-16T00:00:00.000Z",
+    });
+    await repository.createRun({
+      id: runId,
+      requestId,
+      requestedModel: "gpt-5.6-luna",
+      promptBundleVersion: "prompt-bundle-runtime-v11.0.0",
+      schemaSetVersion: "pipeline-schema-runtime-v5.0.0",
+      stageTopologyVersion: "split-base-candidate-v1",
+      runKind: "initial",
+      startedAt: "2026-08-16T00:00:00.000Z",
+    });
+    return { repository, requestId, runId };
+  }
+  const usage = {
+    returnedModel: "gpt-5.6-luna",
+    decision: null,
+    completedAt: "2026-08-16T00:01:00.000Z",
+    totalInputTokens: 10,
+    totalCachedTokens: 0,
+    totalOutputTokens: 2,
+    totalReasoningTokens: 1,
+    usageDerivedCostUsd: 0.001,
+  };
+  const historicalNeedsMore = await repositoryWithRun("1");
+  await historicalNeedsMore.repository.completeRun({
+    runId: historicalNeedsMore.runId,
+    requestId: historicalNeedsMore.requestId,
+    eligibility: "needs_more_information",
+    ...usage,
+  });
+  assert.deepEqual(historicalNeedsMore.repository.completeRunModes, ["legacy"]);
+  const historicalSafety = await repositoryWithRun("2");
+  await historicalSafety.repository.completeRun({
+    runId: historicalSafety.runId,
+    requestId: historicalSafety.requestId,
+    eligibility: "safety_blocked",
+    ...usage,
+  });
+  assert.deepEqual(historicalSafety.repository.completeRunModes, ["legacy"]);
+  const v1a2Stop = await repositoryWithRun("3");
+  await v1a2Stop.repository.completeRun({
+    runId: v1a2Stop.runId,
+    requestId: v1a2Stop.requestId,
+    eligibility: "not_full_product_candidate",
+    resultJson: { eligibility: "not_full_product_candidate" },
+    ...usage,
+  });
+  assert.deepEqual(v1a2Stop.repository.completeRunModes, ["v1a2_first_class_stop"]);
+  const ready = await repositoryWithRun("4");
+  await ready.repository.finalizeCompletedAssessment({
+    ...usage,
+    reportId: "40000000-0000-4000-8000-000000000004",
+    runId: ready.runId,
+    requestId: ready.requestId,
+    eligibility: "ready",
+    decision: "wait_and_reassess",
+    reportJson: {},
+    decisionCardJson: {},
+  });
+  assert.ok(ready.repository.events.includes("finalizeCompletedAssessment"));
+  const source = readText("lib/assessment/runtime/supabase-repository.ts");
+  assert.match(source, /if \(record\.resultJson !== undefined\)[\s\S]*finalize_stopped_assessment_v1/u);
+  assert.match(source, /from\("assessment_runs"\)[\s\S]*eligibility: record\.eligibility/u);
+});
+
 await check("migration encodes one-row and atomic lifecycle contracts", () => {
   const sql = readText("supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql");
   for (const pattern of [
@@ -858,29 +1259,42 @@ await check("API and UI expose one bounded question without internal authority I
   assert.match(ui, /追加質問 1 \/ 1/u);
   assert.match(ui, /fieldset/u);
   assert.match(ui, /legend/u);
+  assert.match(ui, /\{ kind: "none" \}/u);
+  assert.match(ui, /\{ kind: "concern", value: clarificationDetail\.trim\(\) \}/u);
+  assert.match(ui, /今は特にない/u);
   assert.doesNotMatch(ui, /PB-01からPB-06/u);
   assert.match(ui, /料金は発生しません/u);
 });
 
-await check("fixture catalog and offline result are exact 28/28", () => {
-  assert.equal(fixtureCatalog.fixtures.length, 28);
-  assert.equal(new Set(fixtureCatalog.fixtures.map((entry) => entry.id)).size, 28);
+await check("original 28 fixture intentions are retained and expanded to 36/36", () => {
+  const original = JSON.parse(git(["show", baseline + ":" + packageRoot + "/integration-fixtures-v1.json"]));
+  const currentIds = new Set(fixtureCatalog.fixtures.map((entry) => entry.id));
+  assert.equal(original.fixtures.length, 28);
+  for (const fixture of original.fixtures) assert.ok(currentIds.has(fixture.id), fixture.id);
+  assert.equal(fixtureCatalog.fixtures.length, 36);
+  assert.equal(currentIds.size, 36);
   assert.equal(fixtureCatalog.fixture_id_is_routing_authority, false);
-  assert.equal(offlineResults.fixture_count, 28);
-  assert.equal(offlineResults.passed, 28);
+  assert.equal(offlineResults.fixture_count, 36);
+  assert.equal(offlineResults.passed, 36);
   assert.equal(offlineResults.failed, 0);
   assert.deepEqual(
     sorted(offlineResults.results),
     sorted(fixtureCatalog.fixtures.map((entry) => entry.id)),
   );
+  assert.equal(
+    offlineResults.evidence_boundary.deterministic_integration_proof,
+    "established",
+  );
+  assert.equal(offlineResults.evidence_boundary.provider_semantic_fidelity, "unestablished");
+  assert.match(offlineResults.evidence_boundary.claim, /wiring and fail-closed validator plumbing only/u);
 });
 
 await check("authority remains closed beyond V1-A2", () => {
-  assert.equal(capabilities.authority.accepted_plan, baseline);
+  assert.equal(capabilities.authority.accepted_plan, acceptedPlan);
   assert.equal(capabilities.authority.v1_a1, "accepted_complete_immutable");
   assert.equal(
     capabilities.authority.v1_a2_implementation,
-    "implemented_pending_human_chatgpt_review",
+    "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
   );
   assert.equal(capabilities.authority.v1_b, "unauthorized");
   assert.equal(capabilities.authority.v1_c, "unauthorized");
@@ -894,6 +1308,19 @@ await check("authority remains closed beyond V1-A2", () => {
     payment_authorized: false,
     main_integration_authorized: false,
   });
+  assert.deepEqual(capabilities.r1_runtime_integrity_correction.review_findings, {
+    blocker: 1,
+    major: 5,
+    minor: 1,
+  });
+  assert.equal(capabilities.r1_runtime_integrity_correction.provider_semantic_fidelity, "unestablished");
+  assert.deepEqual(capabilities.r1_runtime_integrity_correction.exact_scope, {
+    total: "23/23",
+    updated: 23,
+    new: 0,
+    deleted: 0,
+    renamed: 0,
+  });
 });
 
 await check("protected V1-A1 Product semantic Payment main and next-env are unchanged", () => {
@@ -905,6 +1332,7 @@ await check("protected V1-A1 Product semantic Payment main and next-env are unch
     "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
     "lib/assessment/runtime/customer-assessment-projection-v1.ts",
     "lib/assessment/runtime/semantic-disposition-v4.ts",
+    "supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql",
     "next-env.d.ts",
   ];
   for (const candidate of protectedPaths) {
@@ -960,18 +1388,20 @@ await check("UTF-8 sensitive scan and git diff check pass", () => {
   git(["diff", "--check", baseline, "--"]);
 });
 
-assert.equal(checks, 22);
+assert.equal(checks, 29);
 if (failures.length > 0) {
   console.error(`\n${taskId} verifier: FAIL`);
   console.error("Failed checks: " + failures.join("; "));
   process.exit(1);
 }
 
-console.log(`\n${taskId} clarification integration verifier: PASS 22/22`);
-console.log("Exact implementation scope: 37/37; UPDATE 14; NEW 23; DELETE 0; RENAME 0");
+console.log(`\n${taskId} runtime integrity correction verifier: PASS 29/29`);
+console.log("Exact correction scope: 23/23; UPDATE 23; NEW 0; DELETE 0; RENAME 0");
+console.log("Immutable original V1-A2 implementation verifier: PASS 22/22");
 console.log("Accepted V1-A2 R1 planning verifier: PASS 27/27");
 console.log("Original A2 plan / V1-A1 R1 / original V1-A1: PASS 26/26, 25/25, 24/24");
 console.log("Decision Policy verifier: PASS 40/40; all upstream accepted verifiers: PASS");
-console.log("Offline fixtures: PASS 28/28; live Provider calls: 0");
+console.log("Offline fixtures: PASS 36/36; live Provider calls: 0");
+console.log("Deterministic wiring / Provider semantic fidelity: established / unestablished");
 console.log("Provider / DB / Supabase / migration apply / Payment / deploy: 0 / 0 / 0 / 0 / 0 / 0");
 console.log("R2-C: remediation_required; JPY980 Runtime readiness: not_established; Global Q0: false");

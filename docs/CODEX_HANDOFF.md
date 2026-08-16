@@ -1,18 +1,22 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
-## Active handoff — V1-A2 Clarification Integration Implementation
+## Active handoff — V1-A2 R1 Runtime Integrity Correction
 
-- Authority / parent: Human + ChatGPT accepted V1-A2 R1 plan `9f397ed41f3f284e7a984ad139768af16373a747`; acceptance is complete on `2026-08-16`. Exact implementation branch is `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration`.
-- Status: exact `37/37` vertical slice is `implemented_pending_human_chatgpt_review`: 14 UPDATE + 23 NEW, DELETE / RENAME 0. V1-A1 remains accepted and immutable; V1-A overall is incomplete until V1-A2 review/acceptance.
+- Authority / parent: V1-A2 implementation `3195c278d688bc866d2e0825df88cdf62b149547`, based on Human + ChatGPT accepted plan `9f397ed41f3f284e7a984ad139768af16373a747`. Correction branch is `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r1-runtime-integrity`.
+- Status: review `NEEDS_CORRECTION` findings 1 BLOCKER / 5 MAJOR / 1 MINOR are corrected pending Human / ChatGPT review in exact `23/23` UPDATE scope; NEW / DELETE / RENAME 0. The underlying `37/37` vertical slice and three-lane/one-question architecture are preserved.
 - Product scope: the shared deterministic validator enforces the four actionable anchors and requires Candidate for `message_impact` before request creation. Supplementary-only and missing-Candidate errors consume no clarification budget and perform no Provider/DB work.
 - Lifecycle: initial normal input reaches ready; a single material gap persists exactly one opaque clarification and stops with no Report/draft; multiple gaps route to first-class `not_full_product_candidate`. One accepted answer atomically transitions the same request from awaiting to processing and creates one resume run. Same canonical fingerprint replays without another run; a different answer is 409; a second clarification is prohibited.
-- Authority: Base, Candidate, and Clarification remain separate. `EffectiveAssessmentAuthorityV1` is derived, preserves per-value provenance, and only fills the selected missing dimension. `EffectiveDecisionPolicyV1` plus clarification-aware PB-04/05/06 receive explicit consumption contracts; ready-making clarification discard fails closed.
+- Prompt closure: the actual V12 `StageDefinition.developerPrompt` for PB-01/04/05/06 now contains the full accepted predecessor responsibilities and the clarification delta. Symbolic repository-file inheritance is not used; PB-01 is explicitly split into Base-only initial mode and Clarification-only resume mode.
+- Authority/timing: Base and Candidate retain their accepted source-integrity contracts; `sourceMap` records only target-limited Clarification overlays and resolves every `sourceValuePath` to a deep-equal `ClarificationGrounding.normalizedValue`. Timing buckets remain bounded and never create exact minutes; only local datetime + explicit IANA timezone + trusted resume start may derive exact elapsed minutes.
+- Downstream evidence: A2 proves deterministic authority injection, declared consumption wiring, target isolation, and PB-06 fail-closed plumbing. A declared path does not prove Japanese Product-output semantic reflection; actual Provider semantic fidelity remains unestablished pending later separately authorized evaluation.
+- Failure/compatibility: resume failure is finalized once inside Pipeline with the actual accumulated model/usage and safe code. Historical resultJson-less needs-more/Safety `completeRun` callers retain the pre-V1-A2 path; first-class V1-A2 not-full/Safety stops retain atomic result finalization; ready still uses completed-assessment finalization.
+- Central concern: the answer is structured as `{kind: concern, value}` or `{kind: none}`. Explicit none is non-resolving and never manufactures a hidden concern; the UI exposes a dedicated none control.
 - Resume reuse: immutable Base, Candidate, Base Safety, Candidate Safety, and original input are reused. Resume invokes PB-01/PB-04/PB-05/PB-06 only on a ready path and records PB-01C/PB-02/PB-03 as reused skips.
 - Persistence/API/UI: migration `0006` is created but not applied; it adds one clarification per request, atomic RPC boundaries, four result eligibilities, and immutable question authority. Delivery V2 and the separate opaque-ID answer endpoint expose no request/run/Fact/Provider/source IDs. The existing form implements one accessible question, bounded target controls, no second-question UI, and customer-safe stop copy.
-- Evidence: offline fake fixtures are `28/28`; Provider execution, DB operations, Supabase operations, migration apply, Payment, and deploy are all `0` in this Task.
+- Evidence: the original 28 fixture intentions remain and eight integrity regressions expand evidence to `36/36`. Provider execution, DB operations, Supabase operations, migration apply, Payment, and deploy are all `0` in this Task.
 - Closed authority: V1-B/C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; Production Runtime, Payment, and main integration remain unauthorized.
-- Next action: `human_chatgpt_review_of_v1_a2_clarification_integration`. Do not begin V1-B/C/D or declare Runtime readiness.
+- Next action: `human_chatgpt_review_of_v1_a2_r1_runtime_integrity_correction`. Do not begin V1-B/C/D or declare Runtime/Provider quality readiness.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1:BEGIN -->

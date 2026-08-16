@@ -94,6 +94,7 @@ export function clarificationAnswerResolvesTargetV1(
     (target === "latest_contact_timing" &&
       (normalized.kind === "unknown" || normalized.value === "unknown")) ||
     (target === "usual_reply_cadence" && normalized.relation === "unknown") ||
+    (target === "central_fear_or_decision_concern" && normalized.kind === "none") ||
     (target === "relationship_intent" && normalized.choice === "unsure")
   );
 }
@@ -323,7 +324,20 @@ export function validateClarificationAnswerV1(input: {
       validated = structuredClone(normalized);
       break;
     case "central_fear_or_decision_concern":
-      normalized = { concern: normalizeText(input.answer, 500) };
+      if (!isObject(input.answer)) invalid();
+      exactKeys(input.answer, ["kind"], ["value"]);
+      if (input.answer.kind === "none") {
+        exactKeys(input.answer, ["kind"]);
+        normalized = { kind: "none" };
+      } else if (input.answer.kind === "concern") {
+        exactKeys(input.answer, ["kind", "value"]);
+        normalized = {
+          kind: "concern",
+          value: normalizeText(input.answer.value, 500),
+        };
+      } else {
+        invalid();
+      }
       validated = structuredClone(normalized);
       break;
     case "relationship_intent":

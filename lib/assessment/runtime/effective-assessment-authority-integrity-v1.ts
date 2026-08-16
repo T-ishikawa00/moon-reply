@@ -26,6 +26,41 @@ function equal(left: unknown, right: unknown) {
   return JSON.stringify(stable(left)) === JSON.stringify(stable(right));
 }
 
+function resolvePath(root: unknown, path: string) {
+  let current = root;
+  for (const segment of path.split(".")) {
+    if (
+      typeof current !== "object" ||
+      current === null ||
+      Array.isArray(current) ||
+      !Object.prototype.hasOwnProperty.call(current, segment)
+    ) {
+      invalid("M2_CLARIFICATION_AUTHORITY_CONFLICT");
+    }
+    current = (current as Record<string, unknown>)[segment];
+  }
+  return current;
+}
+
+const overlayPathsByTarget = {
+  material_relationship_or_communication_concern: [
+    "effectiveDecisionContext.materialConcern",
+    "effectiveEmotionalContext.materialConcern",
+  ],
+  latest_contact_timing: ["effectiveDecisionContext.latestContactTiming"],
+  usual_reply_cadence: ["effectiveDecisionContext.usualReplyCadence"],
+  central_fear_or_decision_concern: [
+    "effectiveEmotionalContext.centralFearOrDecisionConcern",
+  ],
+  relationship_intent: [
+    "effectiveDecisionContext.relationshipIntent",
+    "effectiveWritingContext.relationshipIntent",
+  ],
+  requested_message_tone: ["effectiveWritingContext.requestedMessageTone"],
+} as const;
+
+const allOverlayPaths = Object.values(overlayPathsByTarget).flat();
+
 export function validateEffectiveAssessmentAuthorityIntegrityV1(input: {
   authority: EffectiveAssessmentAuthorityV1;
   baseStructuredIntake: JsonObject;
@@ -47,32 +82,50 @@ export function validateEffectiveAssessmentAuthorityIntegrityV1(input: {
     !equal(
       authority.effectiveWritingContext.candidateEnvelope,
       input.candidateEnvelope,
+    ) ||
+    !equal(
+      authority.effectiveEmotionalContext.baseUserEmotions,
+      input.baseStructuredIntake.user_emotions,
     )
   ) {
     invalid("M2_CLARIFICATION_AUTHORITY_CONFLICT");
   }
-  const clarificationEntries = authority.sourceMap.filter(
-    (entry) => entry.sourceLane === "clarification",
-  );
   if (clarificationGrounding === null) {
-    if (authority.clarificationAuthorityRef !== null || clarificationEntries.length !== 0) {
+    if (
+      authority.clarificationAuthorityRef !== null ||
+      authority.sourceMap.length !== 0 ||
+      allOverlayPaths.some((path) => resolvePath(authority, path) !== null)
+    ) {
       invalid();
     }
     return true;
   }
+  const expectedPaths = overlayPathsByTarget[clarificationGrounding.target];
+  const expectedPathSet = new Set<string>(expectedPaths);
+  const actualPaths = authority.sourceMap.map((entry) => entry.effectivePath);
   if (
     authority.clarificationAuthorityRef !== clarificationGrounding.sourceIdentity ||
-    clarificationEntries.length === 0 ||
-    clarificationEntries.some(
+    authority.sourceMap.length !== expectedPaths.length ||
+    new Set(actualPaths).size !== actualPaths.length ||
+    expectedPaths.some((path) => !actualPaths.includes(path)) ||
+    authority.sourceMap.some(
       (entry) =>
+        entry.sourceLane !== "clarification" ||
         entry.sourceRef !== clarificationGrounding.sourceIdentity ||
         entry.clarificationTarget !== clarificationGrounding.target ||
-        !entry.effectivePath.startsWith("effective"),
+        !expectedPathSet.has(entry.effectivePath) ||
+        !equal(
+          resolvePath(authority, entry.effectivePath),
+          resolvePath(clarificationGrounding, entry.sourceValuePath),
+        ),
     ) ||
-    new Set(clarificationEntries.map((entry) => entry.effectivePath)).size !==
-      clarificationEntries.length
+    allOverlayPaths.some((path) =>
+      expectedPathSet.has(path)
+        ? !equal(resolvePath(authority, path), clarificationGrounding.normalizedValue)
+        : resolvePath(authority, path) !== null,
+    )
   ) {
-    invalid();
+    invalid("M2_CLARIFICATION_AUTHORITY_CONFLICT");
   }
   return true;
 }

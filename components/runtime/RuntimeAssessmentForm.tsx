@@ -195,7 +195,9 @@ export function RuntimeAssessmentForm() {
       case "usual_reply_cadence":
         return clarificationValue;
       case "central_fear_or_decision_concern":
-        return clarificationValue.trim();
+        return clarificationValue === "none"
+          ? { kind: "none" }
+          : { kind: "concern", value: clarificationDetail.trim() };
     }
   }
 
@@ -206,13 +208,18 @@ export function RuntimeAssessmentForm() {
       requestState.status !== "success" ||
       requestState.delivery.eligibility !== "needs_more_information"
     ) return;
-    if (!clarificationValue.trim()) {
+    const prompt = requestState.delivery.clarification;
+    if (
+      !clarificationValue.trim() ||
+      (prompt.target === "central_fear_or_decision_concern" &&
+        clarificationValue === "concern" &&
+        !clarificationDetail.trim())
+    ) {
       setClarificationError("M2_CLARIFICATION_ANSWER_INVALID");
       return;
     }
     setClarificationSubmitting(true);
     setClarificationError(null);
-    const prompt = requestState.delivery.clarification;
     try {
       const response = await fetch(
         `/api/internal/assessment-clarifications/${encodeURIComponent(prompt.opaqueClarificationId)}/answer`,
@@ -281,12 +288,17 @@ export function RuntimeAssessmentForm() {
               ["more_than_three_days", "3日より前"],
               ["unknown", "分からない"],
             ]
-          : prompt.target === "usual_reply_cadence"
+            : prompt.target === "usual_reply_cadence"
             ? [
                 ["within_usual", "普段の範囲内"],
                 ["beyond_usual", "普段より長い"],
                 ["unknown", "分からない"],
               ]
+            : prompt.target === "central_fear_or_decision_concern"
+              ? [
+                  ["concern", "不安や迷いがある"],
+                  ["none", "今は特にない"],
+                ]
             : prompt.target === "relationship_intent"
               ? [
                   ["move_closer", "距離を近づけたい"],
@@ -308,6 +320,11 @@ export function RuntimeAssessmentForm() {
                     ["custom", "その他"],
                   ]
                 : null;
+    const clarificationAnswerIncomplete =
+      !clarificationValue.trim() ||
+      (prompt.target === "central_fear_or_decision_concern" &&
+        clarificationValue === "concern" &&
+        !clarificationDetail.trim());
     return (
       <section className="request-sheet-wrap runtime-sheet-wrap">
         <form
@@ -361,16 +378,26 @@ export function RuntimeAssessmentForm() {
           {choices &&
           (prompt.target === "material_relationship_or_communication_concern" ||
             prompt.target === "relationship_intent" ||
-            prompt.target === "requested_message_tone") ? (
+            prompt.target === "requested_message_tone" ||
+            (prompt.target === "central_fear_or_decision_concern" &&
+              clarificationValue === "concern")) ? (
             <div className="request-field">
               <label htmlFor="runtime-clarification-detail">
-                補足 <span>任意</span>
+                {prompt.target === "central_fear_or_decision_concern"
+                  ? "いちばん不安なこと"
+                  : "補足"}{" "}
+                <span>
+                  {prompt.target === "central_fear_or_decision_concern"
+                    ? "必須"
+                    : "任意"}
+                </span>
               </label>
               <textarea
                 id="runtime-clarification-detail"
                 value={clarificationDetail}
                 maxLength={prompt.target === "requested_message_tone" ? 240 : 500}
                 rows={3}
+                required={prompt.target === "central_fear_or_decision_concern"}
                 onChange={(event) => setClarificationDetail(event.target.value)}
               />
             </div>
@@ -385,8 +412,8 @@ export function RuntimeAssessmentForm() {
             <button
               type="submit"
               className="button button--primary"
-              disabled={clarificationSubmitting || !clarificationValue.trim()}
-              aria-disabled={clarificationSubmitting || !clarificationValue.trim()}
+              disabled={clarificationSubmitting || clarificationAnswerIncomplete}
+              aria-disabled={clarificationSubmitting || clarificationAnswerIncomplete}
             >
               {clarificationSubmitting ? "回答を確認中" : "この回答で鑑定を続ける"}
             </button>

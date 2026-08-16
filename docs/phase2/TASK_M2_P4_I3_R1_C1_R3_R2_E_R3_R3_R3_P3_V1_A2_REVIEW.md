@@ -3,8 +3,9 @@
 ## Review disposition
 
 - Authority: accepted V1-A2 R1 plan `9f397ed41f3f284e7a984ad139768af16373a747`.
-- Implementation status: `implemented_pending_human_chatgpt_review`.
-- Exact scope: `37/37` — 14 UPDATE + 23 NEW; DELETE / RENAME 0.
+- Implementation review: `NEEDS_CORRECTION` with 1 BLOCKER / 5 MAJOR / 1 MINOR at `3195c278d688bc866d2e0825df88cdf62b149547`.
+- Correction status: `r1_runtime_integrity_corrected_pending_human_chatgpt_review`.
+- Preserved implementation scope: `37/37` — 14 UPDATE + 23 NEW; DELETE / RENAME 0. Exact correction scope: `23/23` UPDATE; NEW / DELETE / RENAME 0.
 - V1-A1: `accepted_complete` and immutable.
 - V1-B / V1-C / V1-D: unauthorized and not implemented.
 - R2-C: `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
@@ -24,7 +25,7 @@ Normal initial routing is Safety-first, then V1-A1-compatible Policy V2:
 
 Clarification Evidence retains schema version, opaque ID, ordinal 1, question code, target, immutable question snapshot, validated answer, `user_clarification` provenance, `clarification:<opaque_id>:answer:1` source identity, normalized grounding, fingerprint, and attributable Safety. It never enters `currentSituation`, Base source references, Candidate, or a fabricated Fact ID.
 
-The default capability uses 32 cryptographically secure random bytes (256 bits before encoding); request ID is never accepted as continuation authority. Target-specific validation supports all six accepted targets. Canonical fingerprinting normalizes only bounded structure, line endings, outer whitespace, and key order. For local timing, the fingerprint covers the user authority while elapsed time is derived separately from the trusted resume-run start and explicit IANA timezone.
+The default capability uses 32 cryptographically secure random bytes (256 bits before encoding); request ID is never accepted as continuation authority. Target-specific validation supports all six accepted targets. `central_fear_or_decision_concern` accepts only `{ "kind": "concern", "value": "..." }` or `{ "kind": "none" }`; explicit none is non-resolving and never creates a hidden fear. Canonical fingerprinting normalizes only bounded structure, line endings, outer whitespace, and key order. For local timing, the fingerprint covers the user authority while elapsed time is derived separately from the trusted resume-run start and explicit IANA timezone.
 
 ## Same-request lifecycle and idempotency
 
@@ -34,7 +35,7 @@ Lost initial responses are recovered by the original idempotency key: an awaitin
 
 ## Effective authority and downstream consumption
 
-`EffectiveAssessmentAuthorityV1` is Application-owned derived authority, not a source of new facts. It composes immutable Base, Candidate, and optional target-limited Clarification while retaining each effective value's lane, source reference, source path, and clarification target. Known Base override, Candidate contamination, duplicate origin, unrelated-target mutation, and false Base attribution fail closed.
+`EffectiveAssessmentAuthorityV1` is Application-owned derived authority, not a source of new facts. Immutable Base and Candidate keep their accepted source-integrity contracts and authority references. `sourceMap` is limited to Clarification overlays and genuinely derived effective values; each overlay uses exact `clarification:<opaque_id>:answer:1` identity, resolves its `sourceValuePath` to a real Grounding value, deep-equals that value, and names only the selected target. Known Base override, Candidate contamination, duplicate origin, unrelated-target mutation, false Base attribution, nonexistent path, wrong source identity, and value mismatch fail closed.
 
 Target consumption is explicit:
 
@@ -47,7 +48,9 @@ Target consumption is explicit:
 | relationship intent | user intent | action/draft rationale | relevant Product context | no other-person intent |
 | requested tone | writing sufficiency | draft/edit rationale | draft context | tone authority fidelity |
 
-`EffectiveDecisionPolicyV1` preserves current policy behavior without clarification and records consumed effective paths. PB-04, PB-05, and PB-06 receive explicit `clarification_consumption_contract` inputs. If clarification established ready but no materially relevant downstream path remains, Application integrity fails with `M2_CLARIFICATION_DOWNSTREAM_DISCARDED`; missing authority fails with `M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING`.
+`EffectiveDecisionPolicyV1` preserves current policy behavior without clarification and records only values it actually consults. A bounded elapsed bucket remains in Effective Authority for PB-04/PB-05 and never becomes an invented exact Decision Fact or resolves the exact-minute unknown. A local datetime may populate exact elapsed minutes only from explicit IANA timezone plus trusted resume-run start. PB-04, PB-05, and PB-06 receive explicit `clarification_consumption_contract` inputs. If clarification established ready but no materially relevant downstream path remains, Application integrity fails with `M2_CLARIFICATION_DOWNSTREAM_DISCARDED`; missing authority fails with `M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING`.
+
+The offline A2 claim is deliberately narrow: it establishes correct authority injection, target-limited consumption contracts, target isolation, and fail-closed PB-06 validator plumbing. A static `consumed_effective_paths` declaration is not proof that Japanese Product prose or a draft semantically reflected the answer. A fake PB-06 major fidelity finding blocks delivery; actual Provider semantic fidelity remains unestablished until a later separately authorized Product evaluation.
 
 PB-05 changes only authority availability. This slice does not add semantic-depth sections, alternatives, emotional prose architecture, generic expansion, or repetition doctrine; those remain V1-B/V1-C work.
 
@@ -62,9 +65,11 @@ Resume reuses immutable initial Base grounding, Candidate lane/analysis, Base Sa
 
 Offline fake transport records `actualProviderCalls=0`; stage invocation lists are deterministic simulated evidence, not live Provider execution.
 
+If resume fails after any stage, Pipeline—not Application—finalizes the run exactly once with the actual last returned model, accumulated input/cached/output/reasoning tokens, derived cost, and safe error code. A PB-01 clarification success followed by PB-04 failure retains nonzero PB-01 usage. Application no longer overwrites this authority with null/zero values or double-finalizes.
+
 ## Persistence, API, delivery, and UI
 
-Migration `0006_m2_p4_jpy980_clarification_lifecycle.sql` is created but not applied. It adds request awaiting state, run kind/result authority, four run eligibilities, skip provenance, exactly one clarification per request, immutable question authority, fingerprint constraints, and transactional finalization/answer/failure functions.
+Migration `0006_m2_p4_jpy980_clarification_lifecycle.sql` remains unchanged and unapplied. It adds request awaiting state, run kind/result authority, four run eligibilities, skip provenance, exactly one clarification per request, immutable question authority, fingerprint constraints, and transactional finalization/answer/failure functions. Repository completion now uses the V1-A2 atomic stopped-result RPC only when first-class `resultJson` exists; historical resultJson-less needs-more and Safety callers keep the accepted pre-V1-A2 completion path. Ready remains on `finalizeCompletedAssessment`.
 
 Delivery V2 exposes exactly ready/completed, needs-more/awaiting, not-full/stopped, and Safety/stopped. Needs-more exposes only opaque clarification ID, bounded question metadata/copy, and `1 / 0 / 1` budget truth. It does not expose request/run IDs, Fact IDs, Provider IDs, source identity, or internal details.
 
@@ -72,7 +77,9 @@ The answer endpoint accepts only `{ "answer": ... }` at the opaque-ID URL and lo
 
 ## Offline acceptance evidence
 
-The machine-readable fixture set contains 28 cases covering the required 25 behaviors plus cadence alignment, no-second-question, and explicit atomic lifecycle evidence. It includes initial/retry/resume stage counts, same/different-answer behavior, capability construction, target isolation, no-clarification parity, malformed fail-close, deterministic repeat, and downstream-discard failure.
+The original 28 machine-readable fixture intentions are retained. Eight R1 regressions expand evidence to `36/36`: actual self-contained V12 prompts; bucket/no-exact and trusted local-datetime/exact timing; five provenance mutants; PB-06 fidelity blocking; accumulated resume-failure usage; historical completion compatibility; and structured central-concern none.
+
+The verifier loads the actual V12 catalog and inspects each actual `StageDefinition.developerPrompt`. PB-01/04/05/06 contain the full predecessor responsibility sections plus clarification deltas; merely naming or referring to an accepted predecessor contract is not accepted as inheritance. No live Provider call is used.
 
 Provider / DB / Supabase / migration apply / Payment / deploy operations during this Task are `0 / 0 / 0 / 0 / 0 / 0`.
 

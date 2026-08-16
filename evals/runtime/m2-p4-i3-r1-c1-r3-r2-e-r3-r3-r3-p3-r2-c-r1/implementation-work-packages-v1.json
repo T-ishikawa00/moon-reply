@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a1_accepted_complete_v1_a2_implemented_pending_review_remaining_packages_unauthorized",
+  "status": "v1_a1_accepted_complete_v1_a2_r1_runtime_integrity_corrected_pending_review_remaining_packages_unauthorized",
   "planning_only": false,
   "sequence": [
     "V1-A1",
@@ -32,7 +32,7 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "status": "in_progress_v1_a1_accepted_complete_v1_a2_implemented_pending_review",
+      "status": "in_progress_v1_a1_accepted_complete_v1_a2_r1_runtime_integrity_corrected_pending_review",
       "complete": false,
       "authorized": true,
       "subpackages": [
@@ -63,7 +63,7 @@
         {
           "id": "V1-A2",
           "name": "Runtime/API/UI Clarification Integration",
-          "status": "implemented_pending_human_chatgpt_review",
+          "status": "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
           "planning_authorized": true,
           "implementation_authorized": true,
           "planning_commit": "9f397ed41f3f284e7a984ad139768af16373a747",
@@ -95,6 +95,17 @@
           "pb_05_clarification_aware_successor": true,
           "pb_06_clarification_validation_successor": true,
           "ready_making_clarification_discard_allowed": false,
+          "actual_v12_prompts_self_contain_predecessor_semantics": true,
+          "bounded_timing_may_create_exact_minutes": false,
+          "local_datetime_with_timezone_and_trusted_now_may_create_exact_minutes": true,
+          "effective_source_map_scope": "clarification_overlays_and_genuinely_derived_values_only",
+          "clarification_source_value_path_resolution_required": true,
+          "offline_deterministic_wiring_proof": "established",
+          "provider_product_output_semantic_fidelity": "unestablished_pending_later_authorized_evaluation",
+          "consumed_effective_paths_alone_proves_semantic_reflection": false,
+          "resume_failure_actual_usage_required": true,
+          "historical_complete_run_without_result_json": "pre_v1_a2_compatible_path",
+          "central_concern_answer_shape": "structured_concern_or_explicit_none",
           "same_request_second_run": true,
           "awaiting_to_processing_atomic_with_answer_and_resume_run": true,
           "duplicate_same_answer_additional_runs": 0,
@@ -136,7 +147,7 @@
           "pb_05_semantic_depth_rewrite_in_scope": false,
           "v1_b_in_scope": false,
           "provider_execution_authorized": false,
-          "offline_fixture_result": "28/28_PASS",
+          "offline_fixture_result": "36/36_PASS",
           "migration_created": true,
           "migration_applied": false,
           "v1_a_overall_complete": false,

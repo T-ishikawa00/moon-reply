@@ -1345,6 +1345,37 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     this.usage = emptyUsageTotals();
     this.returnedModel = null;
+    try {
+      return await this.resumeWithAccumulatedUsage(
+        request,
+        initial,
+        evidence,
+        runContext,
+      );
+    } catch (error) {
+      const safeError = asM2RuntimeError(error);
+      try {
+        await this.repository.failRun({
+          runId: runContext.runId,
+          requestId: runContext.requestId,
+          returnedModel: this.returnedModel,
+          errorCode: safeError.safeCode,
+          completedAt: this.now(),
+          ...this.usage,
+        });
+      } catch {
+        throw new M2RuntimeError("M2_RUN_PERSISTENCE_FAILED");
+      }
+      throw safeError;
+    }
+  }
+
+  private async resumeWithAccumulatedUsage(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+    evidence: ClarificationEvidenceV1,
+    runContext: AssessmentRunContext,
+  ): Promise<AssessmentExecutionResult> {
     this.validateRuntimeIdentity(runContext);
     if (
       runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" ||

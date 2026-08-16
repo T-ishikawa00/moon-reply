@@ -394,21 +394,58 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
   }
 
   async completeRun(record: CompleteRunRecord) {
-    const { error } = await this.client.rpc("finalize_stopped_assessment_v1", {
-      p_run_id: record.runId,
-      p_request_id: record.requestId,
-      p_returned_model: record.returnedModel,
-      p_eligibility: record.eligibility,
-      p_decision: record.decision,
-      p_result_json: record.resultJson ?? null,
-      p_total_input_tokens: record.totalInputTokens,
-      p_total_cached_tokens: record.totalCachedTokens,
-      p_total_output_tokens: record.totalOutputTokens,
-      p_total_reasoning_tokens: record.totalReasoningTokens,
-      p_usage_derived_cost_usd: record.usageDerivedCostUsd,
-      p_completed_at: record.completedAt,
-    });
-    if (error) throw databaseFailure();
+    if (record.resultJson !== undefined) {
+      if (
+        record.eligibility !== "not_full_product_candidate" &&
+        record.eligibility !== "safety_blocked"
+      ) {
+        throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
+      }
+      const { error } = await this.client.rpc("finalize_stopped_assessment_v1", {
+        p_run_id: record.runId,
+        p_request_id: record.requestId,
+        p_returned_model: record.returnedModel,
+        p_eligibility: record.eligibility,
+        p_decision: record.decision,
+        p_result_json: record.resultJson,
+        p_total_input_tokens: record.totalInputTokens,
+        p_total_cached_tokens: record.totalCachedTokens,
+        p_total_output_tokens: record.totalOutputTokens,
+        p_total_reasoning_tokens: record.totalReasoningTokens,
+        p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+        p_completed_at: record.completedAt,
+      });
+      if (error) throw databaseFailure();
+      return;
+    }
+
+    // Preserve the pre-V1-A2 completion contract for historical callers that
+    // have no first-class result JSON. In particular, the V1-A2 stop RPC does
+    // not accept legacy needs_more_information records.
+    const { error: runError } = await this.client
+      .from("assessment_runs")
+      .update({
+        status: "completed",
+        returned_model: record.returnedModel,
+        eligibility: record.eligibility,
+        decision: record.decision,
+        total_input_tokens: record.totalInputTokens,
+        total_cached_tokens: record.totalCachedTokens,
+        total_output_tokens: record.totalOutputTokens,
+        total_reasoning_tokens: record.totalReasoningTokens,
+        usage_derived_cost_usd: record.usageDerivedCostUsd,
+        completed_at: record.completedAt,
+        error_code: null,
+      })
+      .eq("id", record.runId)
+      .eq("status", "processing");
+    if (runError) throw databaseFailure();
+    const { error: requestError } = await this.client
+      .from("assessment_requests")
+      .update({ status: "completed", updated_at: record.completedAt })
+      .eq("id", record.requestId)
+      .eq("status", "processing");
+    if (requestError) throw databaseFailure();
   }
 
   async finalizeNeedsMoreInformation(record: FinalizeNeedsMoreInformationRecord) {

@@ -47,26 +47,6 @@ function sourceEntry(
   };
 }
 
-function baseEntry(effectivePath: string, sourceValuePath: string): EffectiveSourceMapEntryV1 {
-  return {
-    effectivePath,
-    sourceLane: "base",
-    sourceRef: `input:${sourceValuePath}`,
-    sourceValuePath,
-    clarificationTarget: null,
-  };
-}
-
-function candidateEntry(effectivePath: string, sourceValuePath: string): EffectiveSourceMapEntryV1 {
-  return {
-    effectivePath,
-    sourceLane: "candidate",
-    sourceRef: `candidate:${sourceValuePath}`,
-    sourceValuePath,
-    clarificationTarget: null,
-  };
-}
-
 function setClarified(
   target: JsonObject,
   key: string,
@@ -77,7 +57,7 @@ function setClarified(
 ) {
   if (Object.prototype.hasOwnProperty.call(target, key) && target[key] !== null) invalid();
   target[key] = structuredClone(value);
-  sourceMap.push(sourceEntry(effectivePath, `normalizedValue.${key}`, grounding));
+  sourceMap.push(sourceEntry(effectivePath, "normalizedValue", grounding));
 }
 
 export function buildEffectiveAssessmentAuthorityV1(input: {
@@ -108,12 +88,10 @@ export function buildEffectiveAssessmentAuthorityV1(input: {
     centralFearOrDecisionConcern: null,
     materialConcern: null,
   };
-  const sourceMap: EffectiveSourceMapEntryV1[] = [
-    baseEntry("effectiveDecisionContext.decisionFacts", "current_situation"),
-    baseEntry("effectiveWritingContext.baseWritingSignals", "current_situation"),
-    candidateEntry("effectiveWritingContext.candidateEnvelope", "optional_message"),
-    baseEntry("effectiveEmotionalContext.baseUserEmotions", "current_situation"),
-  ];
+  // Base and Candidate retain their own accepted source-integrity contracts.
+  // This map records only genuinely derived Clarification overlays; duplicating
+  // whole Base containers here would falsely flatten their per-value provenance.
+  const sourceMap: EffectiveSourceMapEntryV1[] = [];
 
   const grounding = input.clarificationGrounding;
   if (grounding) {

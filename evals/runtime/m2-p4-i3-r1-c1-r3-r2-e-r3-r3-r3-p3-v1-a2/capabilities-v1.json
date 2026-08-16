@@ -6,7 +6,7 @@
     "human_acceptance": "complete",
     "acceptance_date": "2026-08-16",
     "v1_a1": "accepted_complete_immutable",
-    "v1_a2_implementation": "implemented_pending_human_chatgpt_review",
+    "v1_a2_implementation": "r1_runtime_integrity_corrected_pending_human_chatgpt_review",
     "v1_b": "unauthorized",
     "v1_c": "unauthorized",
     "v1_d": "unauthorized"
@@ -26,6 +26,20 @@
     "single_question_accessible_ui": true,
     "migration_created_not_applied": true,
     "migration_applied": false
+  },
+  "r1_runtime_integrity_correction": {
+    "parent": "3195c278d688bc866d2e0825df88cdf62b149547",
+    "review_result_before_correction": "NEEDS_CORRECTION",
+    "review_findings": { "blocker": 1, "major": 5, "minor": 1 },
+    "v12_prompts_self_contained": true,
+    "bounded_timing_invents_exact_minutes": false,
+    "clarification_source_paths_resolve_and_match": true,
+    "deterministic_downstream_wiring": "established_offline",
+    "provider_semantic_fidelity": "unestablished",
+    "resume_failure_usage_preserved": true,
+    "historical_complete_run_compatible": true,
+    "central_concern_explicit_none_structured": true,
+    "exact_scope": { "total": "23/23", "updated": 23, "new": 0, "deleted": 0, "renamed": 0 }
   },
   "operations": {
     "provider_calls": 0,
