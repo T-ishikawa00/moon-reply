@@ -1,0 +1,617 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "lineage": {
+    "accepted_authority_parent": "cf9a04773fca622c4813e1e6e73a7632b139aff6",
+    "historical_candidate": "da325d9b4d8404879a08c1b50107e7f7df8787ec",
+    "identifier_hardening_reference": "89a6d55fdf3845451e80f1ee21dc648b224bcc9d",
+    "historical_references_read_only": true
+  },
+  "data_policy": "offline_synthetic_only",
+  "template_source": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/projection-fixtures-v1.json",
+  "template_source_policy": "accepted_package_a_synthetic_templates_read_only",
+  "positive_fixtures": [
+    {
+      "fixture_id": "legacy_full_experience",
+      "base_result": "legacy_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "draft_message"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": [
+            "F001",
+            "F003"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/material_unknowns",
+          "value": [
+            "次の連絡時刻はまだ分かりません。",
+            "相手の意図は入力事実だけでは確定できません。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/limitations",
+          "value": [
+            "入力されていない相手の意図は判断できません。",
+            "今後の反応は保証できません。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/short_letter",
+          "value": [
+            "予定の確認が届くと、短い返事でも迷うことがあります。",
+            "今は確認できる事実だけを返せば十分です。",
+            "その後の意味まで、今夜決める必要はありません。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/observed_fact_commentary",
+          "value": [
+            {
+              "fact_id": "F002",
+              "commentary": "相談文には返信時刻への不安も書かれています。"
+            },
+            {
+              "fact_id": "F001",
+              "commentary": "相手から土曜の予定確認が届いています。"
+            },
+            {
+              "fact_id": "F003",
+              "commentary": "確認事項には具体的な返答ができます。"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/possible_interpretations",
+          "value": [
+            "相手は予定を確定したい可能性があります。",
+            "短い確認として送った可能性もあります。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/action_rationales",
+          "value": [
+            "具体的な確認には具体的に返すためです。",
+            "推測を足さずに必要な情報だけを返すためです。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/closing_lines",
+          "value": [
+            "今は確認事項への一度の返信に絞れます。",
+            "送ったあとは、今夜の判断をここで休ませて大丈夫です。"
+          ]
+        }
+      ],
+      "expected_situation_reading": [
+        "相手から土曜の予定確認が届いています。",
+        "確認事項には具体的な返答ができます。"
+      ]
+    },
+    {
+      "fixture_id": "split_full_experience",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "draft_message"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": [
+            "F103",
+            "F101"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/material_unknowns",
+          "value": [
+            {
+              "unknown_code": "reply_timing",
+              "summary": "訂正後の反応時刻はまだ分かりません。",
+              "material_to": "decision"
+            },
+            {
+              "unknown_code": "private_intent",
+              "summary": "相手の受け止め方は現時点では確定できません。",
+              "material_to": "draft"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/model_generated_limitations",
+          "value": [
+            "入力されていない意図は判断できません。",
+            "送信後の反応は保証できません。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/short_letter",
+          "value": [
+            "時刻の誤りに気づくと、訂正の一文にも迷いが生まれます。",
+            "今は訂正に必要な事実だけを伝えれば十分です。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/observed_fact_commentary",
+          "value": [
+            {
+              "fact_id": "F101",
+              "commentary": "送信した時刻情報に誤りがあります。"
+            },
+            {
+              "fact_id": "F102",
+              "commentary": "相談文には訂正への迷いが書かれています。"
+            },
+            {
+              "fact_id": "F103",
+              "commentary": "正しい時刻は相談文の中で確認できます。"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/possible_interpretations",
+          "value": [
+            "相手は短い訂正をそのまま受け取る可能性があります。",
+            "訂正だけで用件が完了する可能性もあります。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/action_rationales",
+          "value": [
+            "誤った事実を早めに訂正するためです。",
+            "訂正以外の推測を加えないためです。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/closing_lines",
+          "value": [
+            "今は短い訂正だけに絞れます。",
+            "送信後の意味まで、今ここで決めなくて大丈夫です。"
+          ]
+        }
+      ],
+      "expected_situation_reading": [
+        "送信した時刻情報に誤りがあります。",
+        "正しい時刻は相談文の中で確認できます。"
+      ]
+    },
+    {
+      "fixture_id": "split_sparse_experience",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/message_draft_context",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/action_rationales",
+          "value": []
+        }
+      ],
+      "expected_sparse": {
+        "materialUnknowns": [],
+        "draftContext": null,
+        "actionRationales": [],
+        "consultationLimitations": []
+      }
+    },
+    {
+      "fixture_id": "situation_reading_content_order",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": [
+            "F103",
+            "F101"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/observed_fact_commentary",
+          "value": [
+            {
+              "fact_id": "F101",
+              "commentary": "先にある観察コメントです。"
+            },
+            {
+              "fact_id": "F102",
+              "commentary": "選択されない観察コメントです。"
+            },
+            {
+              "fact_id": "F103",
+              "commentary": "後にある観察コメントです。"
+            }
+          ]
+        }
+      ],
+      "expected_situation_reading": [
+        "先にある観察コメントです。",
+        "後にある観察コメントです。"
+      ]
+    },
+    {
+      "fixture_id": "situation_reading_unmatched_fact",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/decision_reason_fact_ids",
+          "value": [
+            "F101",
+            "F199"
+          ]
+        }
+      ],
+      "expected_situation_reading": [
+        "送信した時刻情報に誤りがあります。"
+      ]
+    },
+    {
+      "fixture_id": "v1_parity_legacy",
+      "base_result": "legacy_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "relationship",
+        "organize_emotions"
+      ],
+      "result_patches": []
+    },
+    {
+      "fixture_id": "v1_parity_split",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "message_impact",
+        "next_three_days"
+      ],
+      "result_patches": []
+    },
+    {
+      "fixture_id": "exact_unicode_preservation",
+      "base_result": "split_ready_base",
+      "requested_topics": [
+        "decide_send_or_wait",
+        "organize_emotions"
+      ],
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/cover_line",
+          "value": "『焦らんでええよ』と区切れる夜です🌙"
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/short_letter",
+          "value": [
+            "句読点「、。」も、そのまま。",
+            "一行目やで。\n二行目も変えへんよ☺️"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/observed_fact_commentary",
+          "value": [
+            {
+              "fact_id": "F101",
+              "commentary": "『19時』という訂正内容が、ちゃんと書かれています。"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/possible_interpretations",
+          "value": [
+            "相手は「了解やで」と受け取る可能性もあります🙂"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/material_unknowns",
+          "value": [
+            {
+              "unknown_code": "unicode_unknown",
+              "summary": "返事が『いつ』来るかは、まだ分からへん。",
+              "material_to": "decision"
+            }
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/message_draft_context",
+          "value": "一度だけ送る文面やで。\n追記はせんで大丈夫。"
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/action_rationales",
+          "value": [
+            "『訂正だけ』に絞るためやで。"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/content/closing_lines",
+          "value": [
+            "今日は、ここまででええよ🌙"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/report/decisionPlan/model_generated_limitations",
+          "value": [
+            "相手の本音までは、決めつけられへん。"
+          ]
+        }
+      ],
+      "expected_unicode_values": [
+        "『焦らんでええよ』と区切れる夜です🌙",
+        "一行目やで。\n二行目も変えへんよ☺️",
+        "今日は、ここまででええよ🌙"
+      ]
+    }
+  ],
+  "negative_fixtures": [
+    {
+      "fixture_id": "missing_opening_line",
+      "source_family": "legacy",
+      "mutation": "missing_openingLine"
+    },
+    {
+      "fixture_id": "empty_opening_line",
+      "source_family": "legacy",
+      "mutation": "empty_openingLine"
+    },
+    {
+      "fixture_id": "missing_opening_letter",
+      "source_family": "legacy",
+      "mutation": "missing_openingLetter"
+    },
+    {
+      "fixture_id": "empty_opening_letter",
+      "source_family": "legacy",
+      "mutation": "empty_openingLetter"
+    },
+    {
+      "fixture_id": "extra_top_level_key",
+      "source_family": "legacy",
+      "mutation": "extra_top_level_key"
+    },
+    {
+      "fixture_id": "embedded_report_field",
+      "source_family": "legacy",
+      "mutation": "embedded_report"
+    },
+    {
+      "fixture_id": "fact_id_key_leakage",
+      "source_family": "legacy",
+      "mutation": "fact_id_key"
+    },
+    {
+      "fixture_id": "decision_reason_fact_ids_leakage",
+      "source_family": "legacy",
+      "mutation": "decision_reason_fact_ids_key"
+    },
+    {
+      "fixture_id": "unknown_code_leakage",
+      "source_family": "split",
+      "mutation": "unknown_code_key"
+    },
+    {
+      "fixture_id": "invalid_v1_base_projection",
+      "source_family": "legacy",
+      "mutation": "invalid_base_projection"
+    },
+    {
+      "fixture_id": "legacy_material_unknowns_length_13",
+      "source_family": "legacy",
+      "mutation": "legacy_materialUnknowns_13"
+    },
+    {
+      "fixture_id": "legacy_consultation_limitations_empty",
+      "source_family": "legacy",
+      "mutation": "legacy_consultationLimitations_0"
+    },
+    {
+      "fixture_id": "legacy_consultation_limitations_length_9",
+      "source_family": "legacy",
+      "mutation": "legacy_consultationLimitations_9"
+    },
+    {
+      "fixture_id": "split_material_unknowns_length_5",
+      "source_family": "split",
+      "mutation": "split_materialUnknowns_5"
+    },
+    {
+      "fixture_id": "split_consultation_limitations_length_3",
+      "source_family": "split",
+      "mutation": "split_consultationLimitations_3"
+    },
+    {
+      "fixture_id": "malformed_draft_context",
+      "source_family": "split",
+      "mutation": "malformed_draftContext"
+    },
+    {
+      "fixture_id": "malformed_closing_lines",
+      "source_family": "split",
+      "mutation": "malformed_closingLines"
+    },
+    {
+      "fixture_id": "unknown_source_report_schema_version",
+      "source_family": "split",
+      "mutation": "unknown_sourceReportSchemaVersion"
+    },
+    {
+      "fixture_id": "fact_id_in_customer_text",
+      "source_family": "split",
+      "mutation": "fact_id_in_openingLine"
+    },
+    {
+      "fixture_id": "decision_enum_in_customer_text",
+      "source_family": "split",
+      "mutation": "decision_enum_in_closingLines"
+    },
+    {
+      "fixture_id": "japanese_adjacent_fact_ids_in_opening_line",
+      "source_family": "split",
+      "mutation": "japanese_adjacent_fact_ids_in_openingLine"
+    },
+    {
+      "fixture_id": "japanese_copula_fact_id_in_closing_line",
+      "source_family": "split",
+      "mutation": "japanese_copula_fact_id_in_closingLines"
+    },
+    {
+      "fixture_id": "japanese_particle_fact_id_in_situation_reading",
+      "source_family": "split",
+      "mutation": "japanese_particle_fact_id_in_situationReading"
+    },
+    {
+      "fixture_id": "japanese_particle_reply_now_in_opening_letter",
+      "source_family": "split",
+      "mutation": "japanese_particle_reply_now_in_openingLetter"
+    },
+    {
+      "fixture_id": "japanese_copula_wait_in_action_rationale",
+      "source_family": "split",
+      "mutation": "japanese_copula_wait_in_actionRationales"
+    },
+    {
+      "fixture_id": "fact_id_in_base_primary_reason",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_primaryReason"
+    },
+    {
+      "fixture_id": "fact_id_in_base_final_draft_text",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_finalDraft_text"
+    },
+    {
+      "fixture_id": "fact_id_in_base_immediate_action",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_immediateAction_action"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_reassessment_when",
+      "source_family": "split",
+      "mutation": "decision_enum_in_base_reassessment_when"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_reassessment_condition",
+      "source_family": "split",
+      "mutation": "decision_enum_in_base_reassessment_condition"
+    },
+    {
+      "fixture_id": "fact_id_in_base_relationship_summary",
+      "source_family": "legacy",
+      "base_fixture": "v1_parity_legacy",
+      "mutation": "fact_id_in_base_relationshipSummary"
+    },
+    {
+      "fixture_id": "fact_id_in_base_message_softness",
+      "source_family": "split",
+      "base_fixture": "v1_parity_split",
+      "mutation": "fact_id_in_base_messageTemperature_softness"
+    },
+    {
+      "fixture_id": "fact_id_in_base_short_letter",
+      "source_family": "legacy",
+      "base_fixture": "v1_parity_legacy",
+      "mutation": "fact_id_in_base_optionalDetails_shortLetter"
+    },
+    {
+      "fixture_id": "decision_enum_in_base_expanded_plan_action",
+      "source_family": "split",
+      "base_fixture": "v1_parity_split",
+      "mutation": "decision_enum_in_base_optionalDetails_expandedPlan_action"
+    },
+    {
+      "fixture_id": "fact_id_in_base_fixed_limitation",
+      "source_family": "split",
+      "mutation": "fact_id_in_base_fixedLimitation"
+    }
+  ],
+  "source_projection_rejection_fixtures": [
+    {
+      "fixture_id": "source_fact_id_in_opening_line",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/cover_line",
+          "value": "説明はF101です"
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_decision_literal_in_closing_lines",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/closing_lines",
+          "value": [
+            "reply_nowを表示する"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_fact_id_in_base_primary_reason",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/decision_reason_summary",
+          "value": "F102を理由として表示します"
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_decision_literal_in_base_short_letter",
+      "base_fixture": "legacy_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/short_letter",
+          "value": [
+            "wait_and_reassessを表示する"
+          ]
+        }
+      ]
+    }
+  ]
+}
