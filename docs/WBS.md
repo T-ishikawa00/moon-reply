@@ -1,34 +1,39 @@
 # WBS.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
-## V1-C Evaluator / Semantic Disposition Successor — Implemented, Pending Human / ChatGPT Review
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:BEGIN -->
+## V1-C R1 Automatic Quality Reassessment Recovery — Implemented, Pending Human / ChatGPT Review
 
-- [x] Exact parent fixed at Human + ChatGPT accepted V1-B snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`
-- [x] V1-A and V1-B synchronized as `accepted_complete`; V1-B acceptance date `2026-08-17`
-- [x] Exact scope `21/21`: 10 UPDATE + 11 NEW; DELETE / RENAME 0
-- [x] V14 identity fixed at catalog `v14.0.0`, Prompt bundle `v14.0.0`, unchanged Schema set `v6.0.0`, unchanged split topology
-- [x] Common Prompt and PB-01/PB-01C/PB-02/PB-03/PB-04/PB-05 manifest-identical to V13; only PB-06 Prompt identity changes
-- [x] Existing fourteen finding codes and unchanged validation-result schema retained; no new Provider Stage
-- [x] PB-06 Prompt self-contains accepted factual, Safety, Candidate/final-draft, contact, temporal, clarification, and semantic responsibilities
-- [x] Grounded Application Decision explanation allowed while unsupported cause/chronology/inner state/future/outcome remains blocking
-- [x] Evidence significance and mandatory emotional containment enforced; logically complete but cold Product is major/blocking
-- [x] Major/critical genericity or repetition on exact Provider Product paths blocks; minor remains nonblocking
-- [x] Analytical blocks require distinct grounded functions; emotional blocks require distinct emotional functions without a new fact
-- [x] Alternative tradeoff remains conditional; fixed length/section minima and padding remain prohibited
-- [x] SemanticDispositionV5 wraps protected V4 and excludes Application-owned relationship/change fields from new escalation
-- [x] ProductSemanticShapeV1 checks Fact anchor and exact whitespace-normalized duplicate/action/draft copies only
-- [x] Semantic similarity, embeddings, keyword/sentiment/edit-distance/case-ID Product classifiers prohibited
-- [x] V14 runs shape after grounding/schema validation before PB-06 and uses V5; V12/V13 retain V4
-- [x] V1-A initial/resume routing, one-question maximum, no second question, result states, timezone authority, and Candidate Grounding V2 retained
-- [x] PB-04 exact draft authority and accepted V13 PB-05 Prompt/content preserved
-- [x] Migration `0008` widens Runtime identity only to V14/v6; migrations `0006`/`0007` unchanged; apply 0
-- [x] Dedicated verifier fixed at `49/49`; immutable V1-B verifier `38/38` and upstream chain retained
-- [x] Report/Decision/validation schemas, R2-B UI/CSS, Customer projections, Payment, main, and `next-env.d.ts` protected
+- [x] Exact parent fixed at immutable V1-C technical core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`
+- [x] Core ChatGPT technical review `PASS`; BLOCKER/MAJOR/MINOR `0/0/0`; V1-A/V1-B remain `accepted_complete`
+- [x] Human Product finding `quality_failure_terminal_delivery_path_unacceptable` recorded as Product MAJOR 1; V1-C Human acceptance remains `HOLD`
+- [x] Exact scope `23/23`: 14 UPDATE + 9 NEW; DELETE / RENAME 0
+- [x] V15 identity fixed at catalog/Prompt bundle `v15.0.0`, unchanged Schema set `v6.0.0`, unchanged split seven-stage topology
+- [x] PB-01/PB-01C/PB-02/PB-03/PB-06 manifest-identical to V14; only recovery-aware PB-04 v5 and PB-05 v6 Prompt identities change
+- [x] Exactly one automatic reassessment cycle and at most two Product-generation cycles; attempt 3 prohibited
+- [x] `report_only` reuses PB-04 and reruns PB-05/PB-06; `plan_and_report` reruns PB-04/PB-05/PB-06
+- [x] Same request/current run invariant; no new idempotency key, Purchase, clarification, user action, Base/Candidate reset, or assessment run
+- [x] Application-owned directive limited to twelve sorted/deduplicated four-field defects; raw evaluator detail/reasoning/Candidate/facts prohibited
+- [x] Application-owned relationship/change-condition paths, unknown paths, transport/schema/persistence/authority/integrity failures remain nonrepairable
+- [x] Local ProductSemanticShape attempt-1 failure receives one report-only cycle; attempt-2 semantic/shape failure becomes `M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED`
+- [x] `attempt_number` 1/2 persistence and request-hash identity added; V15-only PB-04/PB-05/PB-06 attempt 2; skips/upstream attempt 2 prohibited
+- [x] Attempt-1 and attempt-2 model usage accumulates in one Pipeline total; success/failure finalizes once
+- [x] report-only exact draft remains byte-identical; previous PB-04 output, previous Report, and raw PB-06 detail are absent from attempt-2 input
+- [x] V1-A initial/clarification lifecycle, Candidate Grounding V2, Effective Authority, Decision Policy, V5 evaluator, ProductSemanticShapeV1, and V14 historical behavior retained
+- [x] Migration `0009` limited to attempt column/backfill/uniqueness/topology/Runtime identity; migrations `0006`/`0007`/`0008` unchanged; apply 0
+- [x] Dedicated verifier fixed at `46/46`; immutable V1-C `49/49`, V1-B `38/38`, complete upstream chain, Decision Policy `40/40`, typecheck/lint/build/diff gates retained
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] V1-C ChatGPT review, Human review, and Human acceptance
+- [ ] V1-C R1 ChatGPT review, Human review, and Human acceptance
 - [ ] V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `implemented_pending_human_chatgpt_review`. Actual PB-06 Provider recall/precision, PB-05 prose quality, semantic paraphrase detection, Human emotional understanding, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Status is `in_progress_recovery_correction`; R1 is `implemented_pending_human_chatgpt_review`, and Human acceptance remains `HOLD_pending_correction_review`. Real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:END -->
+
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
+## V1-C core technical snapshot — PASS, Human acceptance HOLD
+
+- [x] Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` and its technical implementation remain immutable
+- [x] ChatGPT core technical review `PASS`; BLOCKER/MAJOR/MINOR `0/0/0`
+- [ ] Human acceptance is `HOLD` pending R1 correction review; V1-C is not accepted complete
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->

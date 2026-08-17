@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-v1-c-offline-results-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C",
-  "status": "PASS_pending_human_chatgpt_review",
+  "status": "PASS_v1_c_r1_pending_human_chatgpt_review",
   "execution_mode": "offline_fake_transport_and_static_validation_only",
   "established": {
     "v14_catalog_integrity": true,
@@ -26,7 +26,23 @@
     "exact_draft_ownership_preserved": true,
     "schemas_ui_and_product_shell_preserved": true,
     "migration_0008_static_identity_widening_only": true,
-    "migration_0008_applied": false
+    "migration_0008_applied": false,
+    "v1_c_core_snapshot_immutable": true,
+    "v1_c_core_technical_review_pass_recorded": true,
+    "v15_catalog_integrity": true,
+    "only_pb_04_pb_05_prompt_identities_changed_from_v14": true,
+    "pb_06_v14_prompt_preserved": true,
+    "bounded_one_reassessment_budget": true,
+    "same_request_same_run_reassessment": true,
+    "attempt_aware_stage_persistence_contract": true,
+    "deterministic_repair_scope_classification": true,
+    "sanitized_reassessment_directive": true,
+    "attempt_1_attempt_2_usage_accumulation": true,
+    "report_only_exact_draft_preservation": true,
+    "attempt_2_failure_prevents_report_delivery": true,
+    "v14_historical_failure_behavior_preserved": true,
+    "migration_0009_static_attempt_and_identity_changes_only": true,
+    "migration_0009_applied": false
   },
   "unestablished": {
     "actual_pb_06_provider_detection_recall": true,
@@ -36,6 +52,10 @@
     "human_emotional_understanding": true,
     "plausibly_worth_jpy980": true,
     "provider_semantic_fidelity": true,
+    "real_provider_repair_success_rate": true,
+    "actual_product_quality": true,
+    "production_reliability": true,
+    "payment_recovery_readiness": true,
     "r2_c_pass": true,
     "jpy980_runtime_readiness": true,
     "global_q0_completion": true
@@ -45,8 +65,14 @@
     "provider_executed": false,
     "v1_d_product_review_fixtures": false
   },
+  "quality_reassessment_cases": {
+    "total": 20,
+    "provider_executed": false,
+    "v1_d_product_review_fixtures": false
+  },
   "validation": {
-    "dedicated_verifier": "PASS 49/49",
+    "v1_c_r1_dedicated_verifier": "PASS 46/46",
+    "immutable_v1_c_core_verifier": "PASS 49/49",
     "immutable_v1_b_verifier": "PASS 38/38",
     "immutable_v1_a2_r2_verifier": "PASS 29/29",
     "immutable_v1_a2_r1_verifier": "PASS 29/29",
@@ -72,7 +98,10 @@
   },
   "current_product_authority": {
     "v1_b": "accepted_complete",
-    "v1_c": "implemented_pending_human_chatgpt_review",
+    "v1_c_core_technical_review": "PASS",
+    "v1_c_human_acceptance": "HOLD_pending_correction_review",
+    "v1_c_r1": "implemented_pending_human_chatgpt_review",
+    "v1_c": "in_progress_recovery_correction",
     "v1_d": "unauthorized",
     "r2_c": "remediation_required",
     "experienceProductJudgment": "pending_remediation",

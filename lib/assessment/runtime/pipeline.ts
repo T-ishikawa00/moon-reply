@@ -53,6 +53,13 @@ import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
 import { validateProductSemanticShapeV1 } from "./product-semantic-shape-v1.ts";
 import {
+  buildLocalSemanticShapeReassessmentDirectiveV1,
+  buildQualityReassessmentDirectiveV1,
+  isQualityReassessmentRequiredSignalV1,
+  QualityReassessmentRequiredSignalV1,
+  type QualityReassessmentDirectiveV1,
+} from "./quality-reassessment-v1.ts";
+import {
   createActionContextV1,
   createContactConstraintPolicyV1,
 } from "./runtime-authority-v1.ts";
@@ -101,6 +108,7 @@ import type {
   SplitDecisionPlanV2,
   SplitReportContentV2,
   SplitRuntimeReportV1,
+  StageAttemptNumber,
   StageTopologyVersion,
   StageDefinition,
   StageResponse,
@@ -459,7 +467,8 @@ export class AssessmentPipeline {
     const v1A2CapablePair =
       (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0") &&
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
@@ -468,6 +477,7 @@ export class AssessmentPipeline {
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
@@ -506,6 +516,7 @@ export class AssessmentPipeline {
       | "LOCAL_SCHEMA_AND_REPORT_VALIDATION"
       | "LOCAL_SEMANTIC_DISPOSITION",
     afterValidation?: (output: JsonObject) => void,
+    attemptNumber: StageAttemptNumber = 1,
   ) {
     this.emit(definition.stageId);
     const stageRunId = this.uuid();
@@ -514,6 +525,7 @@ export class AssessmentPipeline {
       model: runContext.model,
       promptHash: definition.promptHash,
       schemaHash: definition.schemaHash,
+      attemptNumber,
       ...(definition.groundedSchemaHash
         ? { groundedSchemaHash: definition.groundedSchemaHash }
         : {}),
@@ -524,6 +536,7 @@ export class AssessmentPipeline {
       runId: runContext.runId,
       stageId: definition.stageId,
       sequenceNumber: definition.sequenceNumber,
+      attemptNumber,
       requestHash,
       promptHash: definition.promptHash,
       schemaHash: definition.schemaHash,
@@ -615,8 +628,10 @@ export class AssessmentPipeline {
         runId: runContext.runId,
         stageId: "PB-01C",
         sequenceNumber: definition.sequenceNumber,
+        attemptNumber: 1,
         requestHash: hashJson({
           stageId: definition.stageId,
+          attemptNumber: 1,
           model: runContext.model,
           promptHash: definition.promptHash,
           schemaHash: definition.schemaHash,
@@ -685,7 +700,8 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -744,8 +760,10 @@ export class AssessmentPipeline {
         runId: runContext.runId,
         stageId: "PB-01C",
         sequenceNumber: 2,
+        attemptNumber: 1,
         requestHash: hashJson({
           stageId: "PB-01C",
+          attemptNumber: 1,
           model: runContext.model,
           promptHash: definition.promptHash,
           schemaHash: definition.schemaHash,
@@ -815,8 +833,10 @@ export class AssessmentPipeline {
       runId: runContext.runId,
       stageId,
       sequenceNumber: definition.sequenceNumber,
+      attemptNumber: 1,
       requestHash: hashJson({
         stageId,
+        attemptNumber: 1,
         reusedFrom: "initial_run_immutable_authority",
         promptHash: definition.promptHash,
         schemaHash: definition.schemaHash,
@@ -987,6 +1007,260 @@ export class AssessmentPipeline {
     return { aggregate, splitEnvelope };
   }
 
+  private async completeV15Ready(input: {
+    request: AssessmentInput;
+    runContext: AssessmentRunContext;
+    baseStructuredIntake: JsonObject;
+    candidateEnvelope: CandidateEnvelopeV1;
+    aggregate: SafetyResult;
+    effectiveAuthority: EffectiveAssessmentAuthorityV1;
+    clarificationGrounding: ClarificationGroundingV1 | null;
+  }): Promise<AssessmentExecutionResult> {
+    if (!this.timeZone) throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
+    this.emit("LOCAL_DECISION_POLICY");
+    const effectivePolicy = buildEffectiveDecisionPolicyV1({
+      authority: input.effectiveAuthority,
+      candidateEnvelope: input.candidateEnvelope,
+    });
+    const decisionPolicy = effectivePolicy.policy;
+    const actionContext = createActionContextV1({
+      trustedNowIso: input.runContext.startedAt,
+      timeZone: this.timeZone,
+    });
+    const contactConstraintPolicy = createContactConstraintPolicyV1({
+      baseStructuredIntake: input.baseStructuredIntake,
+      followUpException: decisionPolicy.follow_up_exception,
+    });
+    const pb04Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-04",
+    );
+    const pb05Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-05",
+    );
+    const pb06Paths = clarificationConsumptionPathsForStageV1(
+      input.effectiveAuthority,
+      "PB-06",
+    );
+    const downstreamPaths = [...new Set([...pb04Paths, ...pb05Paths])];
+
+    const buildDecisionPlan = async (
+      attemptNumber: StageAttemptNumber,
+      directive: QualityReassessmentDirectiveV1 | null,
+    ) =>
+      (await this.invokeStage(
+        input.runContext,
+        {
+          definition: this.definition("PB-04"),
+          input: asJsonObject({
+            base_structured_intake: input.baseStructuredIntake,
+            candidate_envelope: input.candidateEnvelope,
+            user_supplied_optional_message: input.request.optionalMessage,
+            decision_policy_result: decisionPolicy,
+            effective_decision_policy_result: effectivePolicy,
+            effective_assessment_authority: input.effectiveAuthority,
+            clarification_consumption_contract: {
+              stage_id: "PB-04",
+              consumed_effective_paths: pb04Paths,
+            },
+            contact_constraint_policy: contactConstraintPolicy,
+            action_context: actionContext,
+            requested_topics: input.request.requestedTopics,
+            quality_reassessment_directive: directive,
+          }),
+        },
+        "LOCAL_SCHEMA_AND_PLAN_VALIDATION",
+        (output) => {
+          validateSplitDecisionPlan(
+            output as unknown as SplitDecisionPlanV2,
+            decisionPolicy,
+            input.candidateEnvelope,
+          );
+          validateDecisionPlanConstraintIntegrityV1({
+            decisionPlan: output as unknown as SplitDecisionPlanV2,
+            contactConstraintPolicy,
+            actionContext,
+          });
+        },
+        attemptNumber,
+      )) as unknown as SplitDecisionPlanV2;
+
+    const buildReportAndValidate = async (
+      decisionPlan: SplitDecisionPlanV2,
+      attemptNumber: StageAttemptNumber,
+      directive: QualityReassessmentDirectiveV1 | null,
+    ) => {
+      const generatedReport = (await this.invokeStage(
+        input.runContext,
+        {
+          definition: this.definition("PB-05"),
+          input: asJsonObject({
+            base_structured_intake: input.baseStructuredIntake,
+            candidate_envelope: input.candidateEnvelope,
+            decision_plan: decisionPlan,
+            effective_assessment_authority: input.effectiveAuthority,
+            clarification_consumption_contract: {
+              stage_id: "PB-05",
+              consumed_effective_paths: pb05Paths,
+            },
+            contact_constraint_policy: contactConstraintPolicy,
+            action_context: actionContext,
+            quality_reassessment_directive: directive,
+          }),
+        },
+        "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
+        undefined,
+        attemptNumber,
+      )) as unknown as SplitReportContentV2;
+      const contextualDecisionFacts = projectSplitDecisionFacts(
+        input.baseStructuredIntake,
+        input.candidateEnvelope,
+      );
+      let reportContent = groundReportContentV3(
+        contextualDecisionFacts,
+        generatedReport as unknown as ReportContent,
+      ) as unknown as SplitReportContentV2;
+      reportContent = groundChangeConditionCommentaryV3(
+        decisionPlan as unknown as DecisionPlan,
+        reportContent as unknown as ReportContent,
+      ) as unknown as SplitReportContentV2;
+      validateStageOutput(
+        this.definition("PB-05"),
+        reportContent as unknown as JsonObject,
+      );
+      try {
+        validateProductSemanticShapeV1({ decisionPlan, reportContent });
+      } catch (error) {
+        const safeError = asM2RuntimeError(error);
+        if (safeError.safeCode !== "M2_PRODUCT_SEMANTIC_SHAPE_INVALID") {
+          throw safeError;
+        }
+        if (attemptNumber === 2) {
+          throw new M2RuntimeError("M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED");
+        }
+        throw new QualityReassessmentRequiredSignalV1(
+          buildLocalSemanticShapeReassessmentDirectiveV1(),
+        );
+      }
+
+      requireReadyMakingClarificationDownstreamV1({
+        authority: input.effectiveAuthority,
+        clarificationGrounding: input.clarificationGrounding,
+        consumedEffectivePaths: downstreamPaths,
+      });
+      await this.invokeStage(
+        input.runContext,
+        {
+          definition: this.definition("PB-06"),
+          input: asJsonObject({
+            base_structured_intake: input.baseStructuredIntake,
+            candidate_envelope: input.candidateEnvelope,
+            user_supplied_optional_message: input.request.optionalMessage,
+            aggregate_safety_result: input.aggregate,
+            decision_policy_result: decisionPolicy,
+            effective_decision_policy_result: effectivePolicy,
+            effective_assessment_authority: input.effectiveAuthority,
+            clarification_consumption_contract: {
+              stage_id: "PB-06",
+              consumed_effective_paths: pb06Paths,
+            },
+            decision_plan: decisionPlan,
+            report_content: reportContent,
+            contact_constraint_policy: contactConstraintPolicy,
+            action_context: actionContext,
+          }),
+        },
+        "LOCAL_SEMANTIC_DISPOSITION",
+        (output) => {
+          requireReadyMakingClarificationDownstreamV1({
+            authority: input.effectiveAuthority,
+            clarificationGrounding: input.clarificationGrounding,
+            consumedEffectivePaths: pb06Paths,
+          });
+          if (
+            output.validation_mode !== "semantic_findings_only" ||
+            !Array.isArray(output.semantic_checks)
+          ) {
+            throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+          }
+          const { blockingFindings } = evaluateSemanticFindingsV5({
+            validationOutput: output,
+            decisionPlan,
+            groundedReportContent: reportContent,
+          });
+          if (blockingFindings.length === 0) return;
+          if (attemptNumber === 2) {
+            throw new M2RuntimeError("M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED");
+          }
+          const reassessmentDirective =
+            buildQualityReassessmentDirectiveV1(blockingFindings);
+          if (reassessmentDirective === null) {
+            throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+          }
+          throw new QualityReassessmentRequiredSignalV1(reassessmentDirective);
+        },
+        attemptNumber,
+      );
+      return reportContent;
+    };
+
+    const decisionPlan1 = await buildDecisionPlan(1, null);
+    let finalDecisionPlan = decisionPlan1;
+    let finalReportContent: SplitReportContentV2;
+    try {
+      finalReportContent = await buildReportAndValidate(decisionPlan1, 1, null);
+    } catch (error) {
+      if (!isQualityReassessmentRequiredSignalV1(error)) throw error;
+      const directive = error.directive;
+      if (directive.scope === "plan_and_report") {
+        finalDecisionPlan = await buildDecisionPlan(2, directive);
+      }
+      finalReportContent = await buildReportAndValidate(
+        finalDecisionPlan,
+        2,
+        directive,
+      );
+      if (
+        directive.scope === "report_only" &&
+        finalDecisionPlan.recommended_message_draft?.text !==
+          decisionPlan1.recommended_message_draft?.text
+      ) {
+        throw new M2RuntimeError("M2_PLAN_POLICY_VIOLATION");
+      }
+    }
+
+    const report = buildSplitRuntimeReport(finalDecisionPlan, finalReportContent);
+    const decisionCard = buildSplitDecisionCard(
+      finalDecisionPlan,
+      finalReportContent,
+    );
+    this.emit("SAVE_FINAL_REPORT");
+    this.emit("COMPLETE_RUN");
+    await this.repository.finalizeCompletedAssessment({
+      reportId: this.uuid(),
+      runId: input.runContext.runId,
+      requestId: input.runContext.requestId,
+      returnedModel: this.returnedModel,
+      eligibility: "ready",
+      decision: finalDecisionPlan.selected_decision,
+      reportJson: report,
+      decisionCardJson: decisionCard,
+      completedAt: this.now(),
+      ...this.usage,
+    });
+    return {
+      requestId: input.runContext.requestId,
+      runId: input.runContext.runId,
+      eligibility: "ready",
+      decision: finalDecisionPlan.selected_decision,
+      report,
+      decisionCard,
+      duplicate: false,
+      usage: this.usage,
+    };
+  }
+
   private async completeV1A2Ready(input: {
     request: AssessmentInput;
     runContext: AssessmentRunContext;
@@ -996,6 +1270,11 @@ export class AssessmentPipeline {
     effectiveAuthority: EffectiveAssessmentAuthorityV1;
     clarificationGrounding: ClarificationGroundingV1 | null;
   }): Promise<AssessmentExecutionResult> {
+    if (
+      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0"
+    ) {
+      return this.completeV15Ready(input);
+    }
     if (!this.timeZone) throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     this.emit("LOCAL_DECISION_POLICY");
     const effectivePolicy = buildEffectiveDecisionPolicyV1({
@@ -1402,7 +1681,8 @@ export class AssessmentPipeline {
     if (
       (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" &&
-        runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0") ||
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0" &&
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0") ||
       runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
       initial.request.id !== runContext.requestId ||
       evidence.ordinal !== 1
@@ -1528,7 +1808,8 @@ export class AssessmentPipeline {
     if (
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0"
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0"
     ) {
       return this.executeV1A2Initial(request, runContext);
     }

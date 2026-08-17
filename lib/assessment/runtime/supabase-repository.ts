@@ -79,6 +79,7 @@ type StageRunRow = {
   run_id: string;
   stage_id: string;
   sequence_number: number;
+  attempt_number: 1 | 2;
   status: StageRunStatus;
   request_hash: string;
   prompt_hash: string;
@@ -309,6 +310,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       run_id: record.runId,
       stage_id: record.stageId,
       sequence_number: record.sequenceNumber,
+      attempt_number: record.attemptNumber,
       status: "processing",
       request_hash: record.requestHash,
       prompt_hash: record.promptHash,
@@ -373,6 +375,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       run_id: record.runId,
       stage_id: record.stageId,
       sequence_number: record.sequenceNumber,
+      attempt_number: record.attemptNumber,
       status: "skipped",
       request_hash: record.requestHash,
       prompt_hash: record.promptHash,

@@ -1,0 +1,193 @@
+{
+  "schema_version": "m2-p4-v1-c-r1-quality-reassessment-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1",
+  "status": "implemented_pending_human_chatgpt_review",
+  "authority": {
+    "accepted_v1_a": "accepted_complete",
+    "accepted_v1_b": "accepted_complete",
+    "accepted_v1_b_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
+    "v1_c_core_snapshot": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
+    "v1_c_core_chatgpt_technical_review": "PASS",
+    "v1_c_core_findings": { "blocker": 0, "major": 0, "minor": 0 },
+    "human_product_finding": "quality_failure_terminal_delivery_path_unacceptable",
+    "human_product_finding_classification": "Product MAJOR 1",
+    "v1_c_human_acceptance": "HOLD_pending_correction_review",
+    "v1_c_overall": "in_progress_recovery_correction",
+    "v1_d": "unauthorized"
+  },
+  "product_behavior": {
+    "maximum_automatic_reassessment_cycles": 1,
+    "maximum_product_generation_cycles": 2,
+    "attempt_3_allowed": false,
+    "first_cycle_pass": "finalize_ready_product",
+    "repairable_first_cycle_product_quality_failure": "build_sanitized_directive_and_run_attempt_2",
+    "second_cycle_pass": "finalize_ready_product",
+    "second_cycle_product_quality_failure": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+    "invalid_product_delivered": false
+  },
+  "same_request_same_run": {
+    "new_assessment_request": false,
+    "new_idempotency_key": false,
+    "new_purchase": false,
+    "new_clarification": false,
+    "new_user_action": false,
+    "base_reset": false,
+    "candidate_reset": false,
+    "clarification_reset": false,
+    "new_assessment_run": false,
+    "initial_path": "same_request_id_same_initial_run_id",
+    "clarification_path": "same_request_id_same_clarification_resume_run_id"
+  },
+  "directive": {
+    "schema_version": "m2-p4-quality-reassessment-directive-v1",
+    "application_owned": true,
+    "customer_visible": false,
+    "attempt_number": 2,
+    "scopes": ["report_only", "plan_and_report"],
+    "sources": ["pb06_semantic_findings", "local_semantic_shape"],
+    "maximum_defects": 12,
+    "deterministically_sorted": true,
+    "deterministically_deduplicated": true,
+    "defect_allowed_keys": [
+      "findingCode",
+      "severity",
+      "jsonPath",
+      "normalizedRepairRequirementCode"
+    ],
+    "prohibited_content": [
+      "pb06_detail",
+      "pb06_freeform_reasoning",
+      "chain_of_thought",
+      "raw_evaluator_prose",
+      "arbitrary_provider_instruction",
+      "raw_candidate",
+      "new_factual_content"
+    ],
+    "malformed_or_more_than_12": "non_repairable_fail_closed"
+  },
+  "repair_scope": {
+    "report_only": {
+      "condition": "all_blocking_defects_are_repairable_provider_owned_report_content_paths",
+      "pb_04_attempt_2": false,
+      "pb_05_attempt_2": true,
+      "pb_06_attempt_2": true,
+      "decision_plan_reused": true,
+      "final_draft_byte_exact": true
+    },
+    "plan_and_report": {
+      "condition": "at_least_one_repairable_decision_plan_path_and_no_nonrepairable_path",
+      "pb_04_attempt_2": true,
+      "pb_05_attempt_2": true,
+      "pb_06_attempt_2": true,
+      "previous_pb_04_output_supplied": false,
+      "policy_or_safety_override_allowed": false
+    },
+    "application_owned_report_exclusions": [
+      "report_content.relationship_summary",
+      "report_content.change_condition_commentary"
+    ],
+    "nonrepairable_authority_prefixes": [
+      "base_structured_intake",
+      "candidate_envelope",
+      "effective_assessment_authority",
+      "clarification"
+    ],
+    "nonrepairable_failures": [
+      "provider_transport",
+      "provider_schema_invalidity",
+      "database_or_persistence",
+      "runtime_authority",
+      "source_integrity",
+      "clarification_integrity",
+      "unknown_or_unrecognized_path"
+    ]
+  },
+  "repairable_semantic_finding_codes": [
+    "FACT_FIDELITY",
+    "ASSUMPTION_AS_FACT",
+    "DECISION_ALLOWED",
+    "DECISION_REASON_SUPPORT",
+    "MESSAGE_POLICY_CONSISTENCY",
+    "ACTION_CONSISTENCY",
+    "THREE_DAY_PLAN_CONSISTENCY",
+    "UNSUPPORTED_CERTAINTY",
+    "SAFETY_REGRESSION",
+    "REQUIRED_SECTION_MEANING",
+    "REVIEW_CONDITION_PRESENT",
+    "TEMPLATE_GENERICITY",
+    "BRAND_TONE",
+    "REPETITION"
+  ],
+  "repairability_requires": [
+    "recognized_finding_code",
+    "precise_product_owned_json_path",
+    "valid_bounded_finding_structure"
+  ],
+  "local_semantic_shape": {
+    "v15_attempt_1_failure_code": "M2_PRODUCT_SEMANTIC_SHAPE_INVALID",
+    "automatic_scope": "report_only",
+    "product_semantic_shape_v1_changed": false,
+    "fuzzy_similarity_added": false,
+    "second_failure_code": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED"
+  },
+  "stage_attempt_persistence": {
+    "field": "assessment_stage_runs.attempt_number",
+    "historical_value": 1,
+    "allowed_values": [1, 2],
+    "attempt_2_runtime": "prompt-bundle-runtime-v15.0.0",
+    "attempt_2_stages": ["PB-04", "PB-05", "PB-06"],
+    "attempt_2_skipped_allowed": false,
+    "upstream_attempt_2_allowed": false,
+    "unique_keys": [
+      ["run_id", "stage_id", "attempt_number"],
+      ["run_id", "sequence_number", "attempt_number"]
+    ],
+    "request_hash_includes_attempt_number": true
+  },
+  "provider_input_boundary": {
+    "pb_04_attempt_2_previous_plan_supplied": false,
+    "pb_05_attempt_2_previous_report_supplied": false,
+    "pb_05_attempt_2_raw_evaluator_detail_supplied": false,
+    "pb_05_attempt_2_raw_candidate_supplied": false,
+    "pb_06_rewrites_product": false
+  },
+  "usage_accounting": {
+    "same_pipeline_totals": true,
+    "attempt_1_usage_retained": true,
+    "attempt_2_usage_accumulated": true,
+    "failure_records_accumulated_usage_once": true,
+    "double_finalization_allowed": false
+  },
+  "runtime_identity": {
+    "catalog_version": "runtime-stage-catalog-v15.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v6.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "baseline": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
+    "stage_count": 7,
+    "new_provider_stage": false,
+    "schema_changed": false,
+    "v14_identical_stages": ["PB-01", "PB-01C", "PB-02", "PB-03", "PB-06"],
+    "changed_prompt_identities": ["PB-04", "PB-05"]
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applies": 0,
+    "payment_operations": 0,
+    "deploy_operations": 0
+  },
+  "unestablished": [
+    "real_provider_repair_success_rate",
+    "real_provider_evaluator_recall",
+    "real_provider_evaluator_precision",
+    "actual_product_quality",
+    "plausibly_worth_jpy980",
+    "provider_semantic_fidelity",
+    "production_reliability",
+    "payment_recovery_readiness",
+    "r2_c_pass",
+    "global_q0_completion"
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a_v1_b_accepted_complete_v1_c_implemented_pending_human_chatgpt_review_v1_d_unauthorized",
+  "status": "v1_a_v1_b_accepted_complete_v1_c_in_progress_recovery_correction_v1_d_unauthorized",
   "acceptance_date": "2026-08-17",
   "planning_only": false,
   "sequence": [
@@ -233,7 +233,9 @@
         "logically complete but emotionally cold Report must fail",
         "generic reassurance mutant must fail",
         "repeated conclusion disguised as closing must fail",
-        "no false certainty"
+        "no false certainty",
+        "repairable Product-quality rejection triggers one bounded same-run reassessment",
+        "second-cycle Product-quality failure prevents Report delivery"
       ],
       "excludes": [
         "Product prose generation",
@@ -241,32 +243,43 @@
         "UI layout changes",
         "Provider execution"
       ],
-      "status": "implemented_pending_human_chatgpt_review",
+      "status": "in_progress_recovery_correction",
       "authorized": true,
       "implementation_authorized": true,
-      "human_review": "PENDING",
-      "chatgpt_review": "PENDING",
-      "human_acceptance": "pending",
+      "core_snapshot": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
+      "core_chatgpt_technical_review": "PASS",
+      "core_findings": { "blocker": 0, "major": 0, "minor": 0 },
+      "human_product_finding": "quality_failure_terminal_delivery_path_unacceptable",
+      "human_product_finding_classification": "Product MAJOR 1",
+      "human_acceptance": "HOLD_pending_correction_review",
+      "r1_quality_reassessment_recovery": "implemented_pending_human_chatgpt_review",
       "accepted_v1_b_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
       "provider_execution_authorized": false,
       "provider_detection_recall": "unestablished",
       "provider_detection_precision": "unestablished",
       "provider_semantic_fidelity": "unestablished",
-      "runtime_catalog": "runtime-stage-catalog-v14.0.0",
-      "prompt_bundle": "prompt-bundle-runtime-v14.0.0",
+      "runtime_catalog": "runtime-stage-catalog-v15.0.0",
+      "prompt_bundle": "prompt-bundle-runtime-v15.0.0",
       "schema_set": "pipeline-schema-runtime-v6.0.0",
-      "only_changed_stage": "PB-06",
+      "changed_prompt_identities": ["PB-04", "PB-05"],
       "validation_schema_changed": false,
       "report_schema_changed": false,
-      "pb_04_changed": false,
-      "pb_05_changed": false,
+      "v14_pb_04_changed": false,
+      "v14_pb_05_changed": false,
+      "v14_pb_06_changed": false,
       "semantic_disposition_v5_implemented": true,
       "deterministic_semantic_shape_implemented": true,
+      "maximum_automatic_quality_reassessments": 1,
+      "maximum_product_generation_cycles": 2,
+      "same_request_same_run": true,
+      "attempt_aware_stage_persistence": true,
+      "sanitized_reassessment_directive": true,
+      "report_only_exact_draft_preserved": true,
       "v1_d_product_review_implemented": false,
       "exact_scope": {
-        "total": "21/21",
-        "updated": 10,
-        "new": 11,
+        "total": "23/23",
+        "updated": 14,
+        "new": 9,
         "deleted": 0,
         "renamed": 0
       }
@@ -319,7 +332,7 @@
         "V1-B",
         "V1-C"
       ],
-      "seam": "V1-B produces Product content; V1-C evaluates it without rewriting it."
+      "seam": "V1-B defines Product generation; V1-C evaluates it and may request one sanitized same-run regeneration without owning Product facts or drafts."
     },
     {
       "pair": [

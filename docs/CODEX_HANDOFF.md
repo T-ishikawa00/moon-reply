@@ -1,21 +1,26 @@
 # CODEX_HANDOFF.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
-## Active handoff — V1-C Evaluator / Semantic Disposition Successor
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:BEGIN -->
+## Active handoff — V1-C R1 Bounded Quality Reassessment Recovery
 
-- Authority / branch / parent: V1-C implementation is authorized on `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-semantic-quality` from Human + ChatGPT accepted V1-B snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`.
-- Acceptance sync: V1-A and V1-B are `accepted_complete`; V1-B ChatGPT/Human review `PASS / complete`, Human acceptance `complete`, acceptance date `2026-08-17`. V1-C is `implemented_pending_human_chatgpt_review`; V1-D remains unauthorized.
-- Runtime identity: V14 is `runtime-stage-catalog-v14.0.0` / `prompt-bundle-runtime-v14.0.0` / unchanged `pipeline-schema-runtime-v6.0.0` and `split-base-candidate-v1`. Common Prompt and PB-01 through PB-05 are V13-identical; only PB-06 Prompt identity changes.
-- PB-06 outcome: the self-contained v5 Prompt preserves factual/Safety/Candidate/draft/contact/temporal/clarification responsibilities and the exact fourteen-code vocabulary. It adds evidence-significance, grounded Decision explanation, mandatory emotional containment, material genericity/repetition, distinct-function, and conditional-tradeoff evaluation without rewriting output.
-- Disposition outcome: SemanticDispositionV5 wraps protected V4. Only `TEMPLATE_GENERICITY` / `REPETITION` major or critical on exact Provider-owned Product-quality paths become blocking; minor findings and findings outside those paths retain V4 behavior. Application-owned relationship/change-condition fields are excluded from the new escalation.
-- Deterministic boundary: ProductSemanticShapeV1 checks one Decision-reason Fact anchor, exact whitespace-normalized duplicate text, exact emotional/action copy, and exact final-draft/report copy. It has no embeddings, semantic-similarity, keyword, sentiment, edit-distance, or case-ID Product classifier; semantic paraphrase remains PB-06/Human-owned.
-- Runtime parity: V14 runs the exact shape guard after Application grounding and Report schema validation, before PB-06, then uses V5. V12/V13 retain V4. V1-A initial/resume routing, one-question maximum, no-second-question rule, result states, timezone authority, Candidate Grounding V2, PB-04, and PB-05 are unchanged.
-- Schema / Product boundary: Report, Decision, and validation schemas are byte-identical. No new Stage, Product field, Report family, UI, or CSS exists. Exact final draft remains PB-04 `decision_plan.recommended_message_draft.text` authority; PB-05 V13 content is preserved.
-- DB boundary: new migration `0008` only widens Runtime identity to V14/v6 while preserving all historical valid pairs. Migrations `0006` and `0007` are byte-identical; apply/DB/Supabase operations are zero.
-- Scope / evidence: exact `21/21`, 10 UPDATE + 11 NEW, DELETE/RENAME 0. Dedicated verifier is fixed at `49/49`; immutable V1-B verifier remains `38/38` and carries the accepted V1-A/upstream chain.
-- Evidence ceiling: actual PB-06 Provider recall/precision, actual PB-05 prose quality, semantic paraphrase detection, Human emotional understanding, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. Evaluator-contract cases are not V1-D Product-review fixtures.
-- Operations / authority ceiling: Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; Production Runtime, Payment, PR, main integration, and V1-D remain unauthorized.
-- Next action: `human_chatgpt_review_of_v1_c_semantic_quality_successor`. Stop after one normal branch push.
+- Authority / branch / parent: correction branch `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment` is based exactly on V1-C core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`. V1-A/V1-B remain `accepted_complete`; V1-C core ChatGPT technical review is `PASS` with BLOCKER/MAJOR/MINOR `0/0/0`.
+- Human Product finding: `quality_failure_terminal_delivery_path_unacceptable`, Product MAJOR 1, technical core regression 0. V1-C Human acceptance remains `HOLD`; overall status is `in_progress_recovery_correction`; R1 is `implemented_pending_human_chatgpt_review`; V1-D remains unauthorized.
+- Product behavior: V15 retains cycle 1 PB-04/PB-05/grounding/schema/shape/PB-06/V5. A repairable Product-quality rejection creates only sanitized `QualityReassessmentDirectiveV1` and permits exactly one same-run cycle 2. `report_only` reuses PB-04 and regenerates PB-05/PB-06; `plan_and_report` regenerates PB-04/PB-05/PB-06. A second Product-quality failure is `M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED` with no Report and no attempt 3.
+- Lifecycle / authority: reassessment creates no request, idempotency key, Purchase, clarification, user action, Base/Candidate reset, or run. Initial and clarification-resume paths remain inside their current run. The directive carries at most twelve sorted/deduplicated defects and never carries PB-06 detail, raw evaluator prose, raw Candidate, facts, or arbitrary Provider instructions.
+- Runtime identity: V15 is catalog/prompt bundle `v15.0.0`, schema set `v6.0.0`, unchanged split seven-stage topology. PB-01/PB-01C/PB-02/PB-03/PB-06 are V14-identical; only PB-04 v5 and PB-05 v6 Prompt identities change. V14, SemanticDispositionV5, ProductSemanticShapeV1, PB-06 v5, schemas, Policy, Safety, UI/CSS, projections, and Payment paths remain byte-identical.
+- Persistence / usage: `attempt_number` is 1 or 2; attempt 2 is V15-only, non-skipped, and limited to PB-04/PB-05/PB-06. Uniqueness is attempt-aware. All attempt usage accumulates in the same Pipeline totals and failed attempt 2 finalizes the run exactly once.
+- Draft boundary: `report_only` preserves `recommended_message_draft.text` byte-exact. `plan_and_report` may regenerate only through PB-04 under existing Policy/Safety/Candidate integrity; PB-05/PB-06 never own or rewrite the draft. Previous PB-04 output and previous Report are not supplied to attempt 2.
+- Migration / scope / evidence: migration `0009` only adds/backfills attempt metadata, replaces uniqueness/topology enforcement, and widens identity to V15/v6; migrations `0006`/`0007`/`0008` are immutable and apply is zero. Exact scope is `23/23`, 14 UPDATE + 9 NEW, DELETE/RENAME 0. Dedicated verifier is fixed at `46/46`; immutable V1-C core verifier remains `49/49` and retains V1-B `38/38` plus the upstream chain.
+- Evidence ceiling: real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`.
+- Operations / next: Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`. Production Runtime, Payment, PR, main integration, and V1-D remain unauthorized. Next action: `human_chatgpt_review_of_v1_c_r1_quality_reassessment_recovery`; stop after one normal branch push.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:END -->
+
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
+## V1-C core technical snapshot — PASS, Human acceptance HOLD
+
+- Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` remains immutable. ChatGPT technical review is `PASS`; BLOCKER/MAJOR/MINOR are `0/0/0`.
+- SemanticDispositionV5, ProductSemanticShapeV1, V14 PB-06 v5, seven-stage topology, existing schemas, V1-A routing, and V1-B generation authority remain the accepted technical core.
+- Human Product acceptance is `HOLD` solely for `quality_failure_terminal_delivery_path_unacceptable`; V1-C overall is `in_progress_recovery_correction`, not accepted.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->

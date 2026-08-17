@@ -177,20 +177,30 @@ export class FakeAssessmentRepository implements AssessmentRepository {
   }
 
   private assertTopologyStage(
-    record: Pick<StartStageRecord, "runId" | "stageId" | "sequenceNumber">,
+    record: Pick<
+      StartStageRecord,
+      "runId" | "stageId" | "sequenceNumber" | "attemptNumber"
+    >,
   ) {
     const run = this.runs.get(record.runId);
     if (!run) throw new M2RuntimeError("M2_FAKE_RUN_NOT_FOUND");
+    const attemptNumber = record.attemptNumber ?? 1;
     const topology =
       run.stageTopologyVersion === "split-base-candidate-v1"
         ? ["PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"]
         : ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"];
     if (
       topology[record.sequenceNumber - 1] !== record.stageId ||
+      (attemptNumber !== 1 && attemptNumber !== 2) ||
+      (attemptNumber === 2 &&
+        (run.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" ||
+          !["PB-04", "PB-05", "PB-06"].includes(record.stageId))) ||
       [...this.stageRuns.values()].some(
         (stage) =>
           stage.runId === record.runId &&
-          stage.sequenceNumber === record.sequenceNumber,
+          (stage.attemptNumber ?? 1) === attemptNumber &&
+          (stage.sequenceNumber === record.sequenceNumber ||
+            stage.stageId === record.stageId),
       )
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
@@ -405,6 +415,18 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     const stageRuns = [...this.stageRuns.values()].filter(
       (stage) => stage.runId === record.runId,
     );
+    const isRecoveredQualityFailure = (stage: (typeof stageRuns)[number]) =>
+      run.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" &&
+      stage.stageId === "PB-06" &&
+      (stage.attemptNumber ?? 1) === 1 &&
+      stage.failure?.errorCode ===
+        "M2_PRODUCT_QUALITY_REASSESSMENT_REQUIRED" &&
+      stageRuns.some(
+        (candidate) =>
+          candidate.stageId === "PB-06" &&
+          candidate.attemptNumber === 2 &&
+          candidate.status === "completed",
+      );
     if (
       stageRuns.some(
         (stage) =>
@@ -414,7 +436,8 @@ export class FakeAssessmentRepository implements AssessmentRepository {
               stage.stageId === "PB-01C" &&
               stage.failure?.errorCode ===
                 "M2_CANDIDATE_ANALYSIS_UNAVAILABLE"
-            )),
+            ) &&
+            !isRecoveredQualityFailure(stage)),
       )
     ) {
       throw new M2RuntimeError("M2_FINALIZATION_STATE_CONFLICT", 409);

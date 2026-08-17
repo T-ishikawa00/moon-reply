@@ -31,6 +31,8 @@ export type StageRunStatus =
   | "failed"
   | "skipped";
 
+export type StageAttemptNumber = 1 | 2;
+
 export const RELATIONSHIP_VALUES = [
   "dating",
   "in_relationship",
@@ -335,6 +337,7 @@ export type StartStageRecord = {
   runId: string;
   stageId: M2StageId;
   sequenceNumber: number;
+  attemptNumber: StageAttemptNumber;
   requestHash: string;
   promptHash: string;
   schemaHash: string;
@@ -366,6 +369,7 @@ export type SkipStageRecord = {
   runId: string;
   stageId: M2StageId;
   sequenceNumber: number;
+  attemptNumber: 1;
   requestHash: string;
   promptHash: string;
   schemaHash: string;

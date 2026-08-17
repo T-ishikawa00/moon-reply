@@ -2,11 +2,13 @@
 
 ## Review disposition
 
-- Status: `implemented_pending_human_chatgpt_review`.
+- Core snapshot status: ChatGPT technical review `PASS`; BLOCKER / MAJOR / MINOR `0 / 0 / 0` at `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`.
 - Exact parent and accepted V1-B snapshot: `e21c9b571426160703b1112c9057cc26c7738a0a`.
 - V1-A: `accepted_complete`.
 - V1-B: `accepted_complete`; ChatGPT and Human review `PASS / complete`; Human acceptance `complete`; acceptance date `2026-08-17`.
-- V1-C implementation authority: granted. V1-C ChatGPT review, Human review, and Human acceptance: `PENDING`.
+- Human Product finding after core review: `quality_failure_terminal_delivery_path_unacceptable`, Product MAJOR 1, technical core regression 0.
+- V1-C Human acceptance: `HOLD pending correction review`; V1-C overall: `in_progress_recovery_correction`.
+- V1-C R1 Automatic Quality Reassessment Recovery: `implemented_pending_human_chatgpt_review` in a separate direct-child correction.
 - V1-D: unauthorized.
 - Exact scope: `21/21` — 10 UPDATE + 11 NEW; DELETE / RENAME 0.
 - Commit subject: `feat: add JPY980 semantic quality evaluator`; exactly one direct child of the accepted V1-B snapshot is required.
@@ -17,7 +19,7 @@ V14 retains the seven-stage split topology and changes only PB-06 Prompt identit
 
 V1-C allows an evidence-backed explanation of the Application-owned Decision. It continues to block unsupported causality, chronology, inner state, future reply, relationship outcome, and false certainty. A logically complete but emotionally cold Product is `REQUIRED_SECTION_MEANING / major`. Materially generic reassurance is `TEMPLATE_GENERICITY / major`; an incidental generic phrase in an otherwise case-specific Product remains `minor`. Material repeated meaning that replaces distinct Product functions is `REPETITION / major`; harmless overlap remains `minor`.
 
-There is no fixed word, sentence, paragraph, or section minimum. V1-C evaluates output and never rewrites PB-05, the Decision, or the final draft; it performs no retry, repair, or regeneration.
+There is no fixed word, sentence, paragraph, or section minimum. This immutable core evaluates output and never rewrites PB-05, the Decision, or the final draft. Its original terminal failure behavior is the residual Product finding addressed only by the separate V1-C R1 correction; the core snapshot itself remains unchanged.
 
 ## SemanticDispositionV5
 
@@ -36,7 +38,7 @@ Only these findings receive new escalation: `TEMPLATE_GENERICITY` or `REPETITION
 
 It does not use embeddings, semantic-similarity thresholds, edit distance, sentiment, Japanese keywords, regular-expression Product judgment, or case/fixture identifiers. Semantic paraphrase repetition remains PB-06 plus future Human review ownership.
 
-For V14 only, Pipeline runs this guard after Application relationship/change-condition grounding and Report schema validation, before PB-06. It then uses SemanticDispositionV5. V12 and V13 continue using SemanticDispositionV4; no repair/regeneration retry exists.
+For V14 only, Pipeline runs this guard after Application relationship/change-condition grounding and Report schema validation, before PB-06. It then uses SemanticDispositionV5. V12 and V13 continue using SemanticDispositionV4. V14 retains its historical no-repair terminal behavior; V15 R1 adds bounded recovery without changing V14.
 
 ## Exact draft and Product ownership boundary
 
@@ -64,4 +66,4 @@ Provider calls / DB operations / Supabase operations / migration apply / Payment
 
 ## Human / ChatGPT review request
 
-Review the PB-06 quality thresholds, V5 path-bounded escalation, exact deterministic guard conservatism, historical V12/V13 parity, and no-rewrite/draft authority boundaries. Do not infer Provider detection fidelity, Product acceptance, R2-C PASS, JPY980 Runtime readiness, Production authority, Payment authority, or Global Q0 completion from offline implementation evidence.
+The V1-C core technical review is complete and PASS. Human acceptance remains HOLD solely for the terminal-delivery Product finding. Review the separate V1-C R1 packet for bounded same-run recovery; do not infer Provider detection fidelity, Product acceptance, R2-C PASS, JPY980 Runtime readiness, Production authority, Payment authority, or Global Q0 completion from offline implementation evidence.
