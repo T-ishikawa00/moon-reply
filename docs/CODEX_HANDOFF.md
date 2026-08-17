@@ -1,10 +1,27 @@
 # CODEX_HANDOFF.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
-## Active handoff — V1-A2 R2 Downstream Consumption Truth Correction
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->
+## Active handoff — V1-B PB-05 Semantic Depth Successor
 
-- Authority / parent: R1 Runtime Integrity correction `a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203`, based on Human + ChatGPT accepted plan `9f397ed41f3f284e7a984ad139768af16373a747`. Correction branch is `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-r2-consumption-truth`.
-- Status: the preceding 1 BLOCKER / 5 MAJOR / 1 MINOR are closed. The residual `clarification_consumption_record_exceeds_actual_authority` MAJOR is corrected pending Human / ChatGPT review in exact `10/10` UPDATE scope; NEW / DELETE / RENAME 0. The `37/37` vertical slice, Runtime/persistence/API/UI, and three-lane/one-question architecture are unchanged.
+- Authority / branch / parent: V1-B implementation is authorized on `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-b-semantic-depth` from Human + ChatGPT accepted V1-A snapshot `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`.
+- Acceptance sync: V1-A1, V1-A2, and V1-A overall are `accepted_complete`; V1-A2 ChatGPT/Human review `PASS / complete`, Human acceptance `complete`, acceptance date `2026-08-17`. V1-B is `implemented_pending_human_chatgpt_review`; V1-C/D remain unauthorized.
+- Runtime identity: new V13 is `runtime-stage-catalog-v13.0.0` / `prompt-bundle-runtime-v13.0.0` / unchanged `pipeline-schema-runtime-v6.0.0` and `split-base-candidate-v1`. Common Prompt and PB-01/PB-01C/PB-02/PB-03/PB-04/PB-06 are V12-identical; only PB-05 Prompt source/version/path/hash change.
+- Schema and Product boundary: existing `report-content-v2.schema.json` is byte-identical and OpenAI-compatible; no new Stage, Report family, field, Product section schema, UI, or CSS exists. Application-owned relationship/change-condition grounding, R2-B shell, Customer projections, PB-04 draft authority, PB-06 validation, and Effective Decision Policy are unchanged.
+- Semantic-depth outcome: the self-contained PB-05 v5 Prompt owns consultation core, evidence significance, explainable decision logic, action/draft explanation, mandatory baseline emotional containment, honest uncertainty/reassessment, conditional alternative tradeoff, topic-conditional depth, and a consultation-specific stopping point. It prohibits unsupported causality/chronology/inner state/future outcome, padding, generic reassurance, and decision/action repetition.
+- Draft boundary: PB-05 may explain only validated preservation/light adjustment/deliberate non-addition and timing. It cannot rewrite or quote `decision_plan.recommended_message_draft.text`, reconstruct Candidate, create an alternate draft, or normalize persona, emoji, and line breaks.
+- Enforcement boundary: V1-B is a generation contract. It does not establish actual Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, or Provider semantic fidelity. Deterministic semantic disposition remains V1-C-owned and unauthorized.
+- Runtime parity: Service selects V13 internally; Pipeline accepts V13 on the exact V1-A2 initial/resume, timezone-authority, and Candidate Grounding V2 paths. Routing order, one-question maximum, no second question, result states, PB-04, and PB-06 remain unchanged.
+- DB boundary: new migration `0007` only widens the Runtime identity constraint to V13/v6 while retaining historical valid pairs. Migration `0006` is byte-identical. DB/Supabase operations and migration apply are zero.
+- Scope / evidence: exact `18/18`, 10 UPDATE + 8 NEW, DELETE/RENAME 0. Dedicated verifier is fixed at `38/38` and preserves the immutable V1-A2/upstream verifier chain, Decision Policy `40/40`, typecheck, zero-warning lint, build, diff, protected blobs, sensitive scan, main, and `next-env.d.ts` checks.
+- Operations / authority ceiling: Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; Production Runtime, Payment, PR, main integration, V1-C, and V1-D remain unauthorized.
+- Next action: `human_chatgpt_review_of_v1_b_semantic_depth_successor`. Stop after one normal branch push.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
+
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
+## Accepted predecessor — V1-A2 Clarification Integration
+
+- Authority / acceptance: final snapshot `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`; implementation `3195c278d688bc866d2e0825df88cdf62b149547`; R1 Runtime Integrity correction `a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203`. ChatGPT/Human review is `PASS / complete`, Human acceptance `complete`, and V1-A2/V1-A overall `accepted_complete` on `2026-08-17`.
+- Status: the preceding 1 BLOCKER / 5 MAJOR / 1 MINOR and residual `clarification_consumption_record_exceeds_actual_authority` MAJOR are closed. The accepted `37/37` vertical slice, Runtime/persistence/API/UI, and three-lane/one-question architecture are immutable predecessor authority.
 - Product scope: the shared deterministic validator enforces the four actionable anchors and requires Candidate for `message_impact` before request creation. Supplementary-only and missing-Candidate errors consume no clarification budget and perform no Provider/DB work.
 - Lifecycle: initial normal input reaches ready; a single material gap persists exactly one opaque clarification and stops with no Report/draft; multiple gaps route to first-class `not_full_product_candidate`. One accepted answer atomically transitions the same request from awaiting to processing and creates one resume run. Same canonical fingerprint replays without another run; a different answer is 409; a second clarification is prohibited.
 - Prompt closure: the actual V12 `StageDefinition.developerPrompt` for PB-01/04/05/06 now contains the full accepted predecessor responsibilities and the clarification delta. Symbolic repository-file inheritance is not used; PB-01 is explicitly split into Base-only initial mode and Clarification-only resume mode.
@@ -16,8 +33,8 @@
 - Resume reuse: immutable Base, Candidate, Base Safety, Candidate Safety, and original input are reused. Resume invokes PB-01/PB-04/PB-05/PB-06 only on a ready path and records PB-01C/PB-02/PB-03 as reused skips.
 - Persistence/API/UI: migration `0006` is created but not applied; it adds one clarification per request, atomic RPC boundaries, four result eligibilities, and immutable question authority. Delivery V2 and the separate opaque-ID answer endpoint expose no request/run/Fact/Provider/source IDs. The existing form implements one accessible question, bounded target controls, no second-question UI, and customer-safe stop copy.
 - Evidence: the original 28 fixture intentions and all 36 R1 intentions remain; seven consumer-matrix regressions expand evidence to `43/43`. Provider execution, DB operations, Supabase operations, migration apply, Payment, and deploy are all `0` in this Task.
-- Closed authority: V1-B/C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; Production Runtime, Payment, and main integration remain unauthorized.
-- Next action: `human_chatgpt_review_of_v1_a2_r2_consumption_truth_correction`. Do not begin V1-B/C/D or declare Runtime/Provider quality readiness.
+- Closed authority: V1-B is separately implemented pending Human/ChatGPT review; V1-C/D remain unauthorized. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`; Production Runtime, Payment, and main integration remain unauthorized.
+- Next action moved to V1-B Human/ChatGPT review. Do not infer Provider semantic fidelity or Runtime/Product readiness from V1-A acceptance.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-R1:BEGIN -->

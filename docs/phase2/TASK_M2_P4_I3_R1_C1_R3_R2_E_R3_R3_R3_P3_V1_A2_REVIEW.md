@@ -1,14 +1,16 @@
-# M2-P4 V1-A2 Clarification Integration — Review Packet
+# M2-P4 V1-A2 Clarification Integration — Accepted Review Record
 
 ## Review disposition
 
 - Authority: accepted V1-A2 R1 plan `9f397ed41f3f284e7a984ad139768af16373a747`.
 - R1 review: 1 BLOCKER / 5 MAJOR / 1 MINOR at `3195c278d688bc866d2e0825df88cdf62b149547`; all are closed by R1 correction `a5e0c6b9e0a6f51d5534cf5d8a7ea72f54ec2203`.
 - R2 residual review: `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 1 / MINOR 0; finding `clarification_consumption_record_exceeds_actual_authority`.
-- Correction status: `r2_consumption_truth_corrected_pending_human_chatgpt_review`.
+- Final accepted snapshot: `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`.
+- Final disposition: ChatGPT review `PASS / complete`; Human review `PASS / complete`; Human acceptance `complete`; V1-A2 and V1-A overall `accepted_complete` on `2026-08-17`.
 - Preserved implementation scope: `37/37` — 14 UPDATE + 23 NEW; DELETE / RENAME 0. R1 scope is immutable `23/23` UPDATE. Exact R2 scope: `10/10` UPDATE; NEW / DELETE / RENAME 0.
 - V1-A1: `accepted_complete` and immutable.
-- V1-B / V1-C / V1-D: unauthorized and not implemented.
+- V1-B: separately authorized and now `implemented_pending_human_chatgpt_review`; it does not alter this accepted V1-A2 snapshot.
+- V1-C / V1-D: unauthorized and not implemented.
 - R2-C: `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 
 ## Customer and Product-scope boundary
@@ -54,7 +56,7 @@ Target consumption is explicit:
 
 The offline A2 claim is deliberately narrow: it establishes correct authority injection, target-limited consumption contracts, target isolation, and fail-closed PB-06 validator plumbing. A static `consumed_effective_paths` declaration is not proof that Japanese Product prose or a draft semantically reflected the answer. A fake PB-06 major fidelity finding blocks delivery; actual Provider semantic fidelity remains unestablished until a later separately authorized Product evaluation.
 
-PB-05 changes only authority availability. This slice does not add semantic-depth sections, alternatives, emotional prose architecture, generic expansion, or repetition doctrine; those remain V1-B/V1-C work.
+Within the accepted V1-A2 snapshot, PB-05 changes only authority availability and does not add semantic-depth semantics. The separate V1-B V13 successor changes only PB-05 Prompt semantics while preserving this routing, lifecycle, and authority contract. Deterministic semantic-repetition enforcement remains V1-C-owned and unauthorized.
 
 ## Resume reuse and stage counts
 
@@ -87,4 +89,4 @@ Provider / DB / Supabase / migration apply / Payment / deploy operations during 
 
 ## Human review request
 
-Confirm only V1-A2 implementation correctness and boundary fidelity. Do not infer V1-B/C/D completion, R2-C PASS, JPY980 Runtime readiness, Production Runtime activation, Payment readiness, Provider quality, deploy readiness, main integration, or Global Q0 completion from this packet.
+This packet records completed V1-A2 acceptance. Review current V1-B work in `TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_B_REVIEW.md`. Do not infer V1-B acceptance, V1-C/D completion, R2-C PASS, JPY980 Runtime readiness, Production Runtime activation, Payment readiness, Provider quality, deploy readiness, main integration, or Global Q0 completion from either offline packet.

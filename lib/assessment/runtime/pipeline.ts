@@ -454,25 +454,27 @@ export class AssessmentPipeline {
     const authorityIntegrityPair =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
-    const clarificationIntegrationPair =
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" &&
+    const v1A2CapablePair =
+      (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !legacySplitPair && !authorityIntegrityPair && !clarificationIntegrationPair
+        ? !legacySplitPair && !authorityIntegrityPair && !v1A2CapablePair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    if ((authorityIntegrityPair || clarificationIntegrationPair) && !this.timeZone) {
+    if ((authorityIntegrityPair || v1A2CapablePair) && !this.timeZone) {
       throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
@@ -677,7 +679,8 @@ export class AssessmentPipeline {
 
       const authorityIntegrityRuntime =
         runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -1378,7 +1381,8 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     this.validateRuntimeIdentity(runContext);
     if (
-      runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" ||
+      (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0") ||
       runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
       initial.request.id !== runContext.requestId ||
       evidence.ordinal !== 1
@@ -1501,7 +1505,10 @@ export class AssessmentPipeline {
     request: AssessmentInput,
     runContext: AssessmentRunContext,
   ): Promise<AssessmentExecutionResult> {
-    if (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0") {
+    if (
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0"
+    ) {
       return this.executeV1A2Initial(request, runContext);
     }
     const directionalGuidanceRuntime =

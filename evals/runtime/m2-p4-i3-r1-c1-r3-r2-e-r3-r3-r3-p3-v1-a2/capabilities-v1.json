@@ -4,10 +4,14 @@
     "accepted_plan": "9f397ed41f3f284e7a984ad139768af16373a747",
     "accepted_plan_review": "PASS_complete",
     "human_acceptance": "complete",
-    "acceptance_date": "2026-08-16",
+    "acceptance_date": "2026-08-17",
     "v1_a1": "accepted_complete_immutable",
-    "v1_a2_implementation": "r2_consumption_truth_corrected_pending_human_chatgpt_review",
-    "v1_b": "unauthorized",
+    "v1_a2_implementation": "accepted_complete",
+    "v1_a2_accepted_snapshot": "d19d72e9a3f7e9fbbbd7fda9e11b131314030cea",
+    "v1_a2_chatgpt_review": "PASS_complete",
+    "v1_a2_human_review": "PASS_complete",
+    "v1_a_overall": "accepted_complete",
+    "v1_b": "implemented_pending_human_chatgpt_review",
     "v1_c": "unauthorized",
     "v1_d": "unauthorized"
   },
@@ -26,6 +30,24 @@
     "single_question_accessible_ui": true,
     "migration_created_not_applied": true,
     "migration_applied": false
+  },
+  "v1_b_successor_sync": {
+    "implementation_authorized": true,
+    "status": "implemented_pending_human_chatgpt_review",
+    "catalog_version": "runtime-stage-catalog-v13.0.0",
+    "only_changed_stage": "PB-05",
+    "report_schema_changed": false,
+    "pb_04_changed": false,
+    "pb_06_changed": false,
+    "provider_semantic_fidelity": "unestablished",
+    "v1_c_semantic_enforcement": "unauthorized",
+    "exact_scope": {
+      "total": "18/18",
+      "updated": 10,
+      "new": 8,
+      "deleted": 0,
+      "renamed": 0
+    }
   },
   "r1_runtime_integrity_correction": {
     "parent": "3195c278d688bc866d2e0825df88cdf62b149547",
@@ -67,6 +89,11 @@
     "deploy_operations": 0
   },
   "current_state": {
+    "v1_a": "accepted_complete",
+    "v1_b": "implemented_pending_human_chatgpt_review",
+    "v1_c": "unauthorized",
+    "v1_d": "unauthorized",
+    "provider_semantic_fidelity": "unestablished",
     "r2_c": "remediation_required",
     "experienceProductJudgment": "pending_remediation",
     "jpy980RuntimeReadiness": "not_established",

@@ -2,13 +2,13 @@ import "server-only";
 import { AssessmentApplication } from "./application.ts";
 import { readM2RuntimeEnvironment } from "./environment.ts";
 import { OpenAiResponsesTransport } from "./openai-transport.ts";
-import { loadM2P4ClarificationIntegrationRuntimeStageCatalog } from "./schema-catalog.ts";
+import { loadM2P4SemanticDepthRuntimeStageCatalog } from "./schema-catalog.ts";
 import { SupabaseAssessmentRepository } from "./supabase-repository.ts";
 import type { AssessmentInput } from "./types.ts";
 
 async function createApplication() {
   const environment = readM2RuntimeEnvironment();
-  const catalog = await loadM2P4ClarificationIntegrationRuntimeStageCatalog();
+  const catalog = await loadM2P4SemanticDepthRuntimeStageCatalog();
   return new AssessmentApplication({
     repository: new SupabaseAssessmentRepository(
       environment.supabaseUrl,

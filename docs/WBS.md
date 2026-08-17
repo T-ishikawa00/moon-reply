@@ -1,7 +1,37 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->
+## V1-B PB-05 Semantic Depth Successor — Implemented, Pending Human / ChatGPT Review
+
+- [x] Exact parent fixed at Human + ChatGPT accepted V1-A snapshot `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`
+- [x] V1-A1, V1-A2, and V1-A overall synchronized as `accepted_complete`; V1-A2 acceptance date `2026-08-17`
+- [x] Exact scope `18/18`: 10 UPDATE + 8 NEW; DELETE / RENAME 0
+- [x] V13 identity fixed at catalog `v13.0.0`, Prompt bundle `v13.0.0`, unchanged Schema set `v6.0.0`, unchanged split topology
+- [x] Common Prompt and PB-01/PB-01C/PB-02/PB-03/PB-04/PB-06 manifest-identical to V12
+- [x] PB-05 only successor fixed at source `m2-p4-v1-b-semantic-depth-successor`, Prompt `v5.0.0`, existing Report schema
+- [x] Self-contained PB-05 Prompt carries accepted V12 source, timing, contact, Product, field, draft, Application-grounding, and clarification responsibilities
+- [x] Consultation core, evidence significance, decision logic, action artifact, and baseline emotional containment mandatory
+- [x] At least one honest uncertainty or observable reassessment function required; alternative tradeoff remains conditional
+- [x] Exact existing-field ownership fixed; Application owns relationship summary and change-condition grounding
+- [x] No fixed word/sentence/section minimum; padding, repeated conclusion/reassurance, generic aftercare, and invented insight prohibited
+- [x] Unsupported causality, chronology, hidden state, future reply, and relationship outcome prohibited
+- [x] PB-04 exact final draft authority preserved; no Candidate reconstruction, second draft, persona/emoji/line-break normalization
+- [x] V1-B non-repetition is Prompt-generation intent only; V1-C evaluator/enforcement remains unauthorized
+- [x] V13 loader verifies V12 predecessor, common Prompt, seven stages, exact topology, PB-05-only change, hashes, schema compilation, and OpenAI compatibility
+- [x] Service selects V13 internally; Pipeline classifies V13 as V1-A2, timezone-authority, and Candidate Grounding V2 capable
+- [x] V12 no-clarification routing and one-answer clarification lifecycle retained; no second question or routing-state change
+- [x] Migration `0007` only widens Runtime identity to V13/v6; historical pairs preserved; apply 0; migration `0006` unchanged
+- [x] Dedicated verifier fixed at `38/38`; immutable V1-A2/upstream and Decision Policy evidence retained
+- [x] R2-B UI/CSS, V2/V1 projections, Report/Decision schemas, PB-04/PB-06, Effective Decision Policy, Payment, and `next-env.d.ts` protected
+- [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
+- [ ] V1-B ChatGPT review, Human review, and Human acceptance
+- [ ] V1-C/V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+
+Status is `implemented_pending_human_chatgpt_review`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->
-## V1-A2 R2 Downstream Consumption Truth Correction — Pending Review
+## V1-A2 Clarification Integration — Accepted Complete
 
 - [x] Accepted R1 authority `9f397ed41f3f284e7a984ad139768af16373a747` synchronized; V1-A1 immutable
 - [x] Exact implementation scope `37/37`: 14 UPDATE + 23 NEW; DELETE / RENAME 0
@@ -31,11 +61,12 @@
 - [x] Material concern and relationship intent excluded from current Effective Decision Policy consumption claims
 - [x] PB-04/05/06 broad path-prefix inference replaced by exact six-target consumer matrix; material concern excluded from PB-04
 - [x] Original 28 intentions and all 36 R1 intentions retained; seven matrix regressions expand offline fake fixtures to `43/43`
-- [ ] Human / ChatGPT implementation review and V1-A2 acceptance
-- [ ] V1-A overall completion — pending V1-A2 acceptance
-- [ ] V1-B/C/D, Provider execution, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+- [x] Human / ChatGPT implementation review `PASS / complete`; Human acceptance and V1-A2 acceptance complete on `2026-08-17`
+- [x] Final accepted snapshot `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`; V1-A overall `accepted_complete`
+- [x] V1-B implementation separately authorized; accepted V1-A2 behavior remains immutable predecessor authority
+- [ ] V1-C/D, Provider execution, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is r2_consumption_truth_corrected_pending_human_chatgpt_review. Runtime/persistence/API/UI/Prompt/Schema/catalog/migration behavior is unchanged. Provider semantic fidelity remains unestablished. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
+Status is `accepted_complete`. Accepted V12 Runtime/persistence/API/UI/Prompt/Schema/catalog/migration behavior remains the V1-A predecessor. Provider semantic fidelity remains unestablished. Provider/DB/Supabase/migration-apply/Payment/deploy operations are 0/0/0/0/0/0. R2-C remains remediation_required; jpy980RuntimeReadiness remains not_established; globalQ0Completion=false.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN:BEGIN -->
