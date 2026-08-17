@@ -4,6 +4,18 @@
   "executor_status": "implemented_pending_human_chatgpt_review",
   "provider_execution_authorized": false,
   "provider_execution_count": 0,
+  "review_correction": {
+    "step_2a_snapshot": "9c7a11df63d4013dcc6843c245fbd6fa00106c81",
+    "initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+    "finding": "quality_reassessment_exhaustion_safe_code_misclassified",
+    "c1_status": "quality_exhaustion_disposition_corrected_pending_human_chatgpt_review",
+    "classification": {
+      "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED": "quality_reassessment_exhausted",
+      "M2_SEMANTIC_VALIDATION_FAILED": "technical_failure",
+      "other_safe_runtime_errors": "technical_failure"
+    },
+    "runtime_pipeline_modified": false
+  },
   "runtime_identity": {
     "catalog_version": "runtime-stage-catalog-v15.0.0",
     "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
@@ -94,6 +106,9 @@
     "chain_of_thought_exported": false,
     "synthetic_stage_json_retained": true,
     "attempt_1_and_attempt_2_distinct": true,
+    "quality_exhaustion_safe_code_classification": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED_only",
+    "semantic_validation_failure_disposition": "technical_failure",
+    "nonrepairable_semantic_failure_starts_reassessment": false,
     "atomic_append_only_partial_journal": true,
     "completed_output_directory_overwrite": false,
     "human_product_judgments": "pending_human_review"

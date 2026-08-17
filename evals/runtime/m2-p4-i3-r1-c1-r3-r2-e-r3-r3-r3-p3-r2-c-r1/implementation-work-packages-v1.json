@@ -340,6 +340,12 @@
       "step_1_human_acceptance": "complete",
       "step_1_acceptance_date": "2026-08-18",
       "step_2a_status": "implemented_pending_human_chatgpt_review",
+      "step_2a_snapshot": "9c7a11df63d4013dcc6843c245fbd6fa00106c81",
+      "step_2a_initial_review": "NEEDS_CORRECTION 0/1/0",
+      "step_2a_initial_finding": "quality_reassessment_exhaustion_safe_code_misclassified",
+      "step_2a_c1_status": "quality_exhaustion_disposition_corrected_pending_human_chatgpt_review",
+      "quality_reassessment_exhausted_safe_code": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+      "semantic_validation_failed_disposition": "technical_failure",
       "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
       "frozen_controlled_provider_input_cases": 9,
       "controlled_review_model": "gpt-5.6-luna",
@@ -375,8 +381,18 @@
         "deleted": 0,
         "renamed": 0
       },
+      "step_2a_c1_exact_scope": {
+        "total": "10/10",
+        "updated": 10,
+        "new": 0,
+        "deleted": 0,
+        "renamed": 0
+      },
       "step_2a_precommit_verifier": "PASS 52/52",
       "step_2a_dedicated_verifier": "PASS 53/53",
+      "step_2a_c1_precommit_verifier": "PASS 54/54",
+      "step_2a_c1_dedicated_verifier": "PASS 55/55",
+      "immutable_original_step_2a_verifier": "PASS 53/53 executed_once",
       "immutable_v1_d_c1_verifier": "PASS 50/50 executed_once"
     }
   ],

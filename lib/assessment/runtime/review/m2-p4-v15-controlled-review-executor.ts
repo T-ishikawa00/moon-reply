@@ -335,7 +335,7 @@ function safeErrorCode(error: unknown) {
 }
 
 function errorDisposition(error: unknown): ControlledReviewFinalDisposition {
-  return safeErrorCode(error) === "M2_SEMANTIC_VALIDATION_FAILED"
+  return safeErrorCode(error) === "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED"
     ? "quality_reassessment_exhausted"
     : "technical_failure";
 }

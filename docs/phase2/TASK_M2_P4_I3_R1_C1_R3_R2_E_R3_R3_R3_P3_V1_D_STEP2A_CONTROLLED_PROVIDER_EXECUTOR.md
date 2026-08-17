@@ -1,4 +1,4 @@
-# M2-P4 V1-D Step 2A — Controlled Provider Review Executor
+# M2-P4 V1-D Step 2A C1 — Quality Exhaustion Disposition Correction
 
 ## 判定
 
@@ -6,6 +6,9 @@
 - V1-D Step 2A: `authorized / in_progress_controlled_provider_executor`
 - Provider execution: `unauthorized / 0`
 - DB / Supabase / Payment / Production / deploy / migration apply: `0`
+- Step 2A initial review: `NEEDS_CORRECTION 0/1/0`
+- Finding: `quality_reassessment_exhaustion_safe_code_misclassified`
+- C1: `quality_exhaustion_disposition_corrected_pending_human_chatgpt_review`
 
 本Stepは、固定済み9 synthetic casesを実V15オーケストレーションへ流すためのreview-only executorを実装する。実Provider出力、Product品質、JPY980価値は証明しない。
 
@@ -17,6 +20,13 @@
 - ChatGPT / Human review: `PASS_complete`
 - Step 1 initial snapshot `4c7577564421e2dbd264ffadb5ccab8d961c42eb` の `NEEDS_CORRECTION 0/2/0` は履歴として維持する。
 - C1: `PASS 0/0/0`
+- Step 2A snapshot: `9c7a11df63d4013dcc6843c245fbd6fa00106c81`
+
+## C1 evidence classification
+
+Review evidenceのterminal dispositionは、`M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED`だけを`quality_reassessment_exhausted`へ分類する。`M2_SEMANTIC_VALIDATION_FAILED`とその他のsafe Runtime errorは`technical_failure`へ分類する。Runtime PipelineとRuntime error semanticsは変更しない。
+
+executor-level fake V15 regressionsは、(1) repairable finding後のattempt 2 Product-quality failureがexhaustionとなりattempt 3・final Report・customer projectionを作らないこと、(2) `decision_plan.actions_to_take[999]`がnonrepairable semantic failureとなりreassessmentを開始せずattempt 2・final Report・customer projectionを作らないこと、を別々に証明する。
 
 ## 実装経路
 

@@ -42,15 +42,16 @@ import {
 import { runControlledProviderReviewCli } from "./run-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-controlled-provider-review.mjs";
 
 const root = process.cwd();
-const baseline = "41d90b69c18aec86995d1930f28be05d6ccfca8f";
+const baseline = "9c7a11df63d4013dcc6843c245fbd6fa00106c81";
+const acceptedStep1 = "41d90b69c18aec86995d1930f28be05d6ccfca8f";
 const step1 = "4c7577564421e2dbd264ffadb5ccab8d961c42eb";
 const acceptedV1C = "a436210bb035746c129fe071e6225b3799b9e5d8";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2a-c1-quality-disposition";
+const expectedSubject = "fix: classify V1-D quality exhaustion correctly";
+const originalStep2ABranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2a-controlled-provider-executor";
-const expectedSubject = "feat: add V1-D controlled provider executor";
-const acceptedC1Branch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-c1-controlled-provider-packet";
 const precommit = process.argv.includes("--precommit");
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d";
@@ -58,26 +59,18 @@ const planningRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1";
 
 const updatedPaths = [
+  "lib/assessment/runtime/review/m2-p4-v15-controlled-review-executor.ts",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2a-controlled-provider-executor.mjs",
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_OFFLINE_PRODUCT_REREVIEW.md",
-  `${planningRoot}/capabilities-v1.json`,
-  `${planningRoot}/implementation-work-packages-v1.json`,
-  `${packageRoot}/controlled-provider-review-plan-v1.json`,
-  `${packageRoot}/offline-product-review-contract-v1.json`,
-  `${packageRoot}/offline-results-v1.json`,
-];
-const newPaths = [
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2A_CONTROLLED_PROVIDER_EXECUTOR.md",
   `${packageRoot}/controlled-provider-executor-contract-v1.json`,
-  `${packageRoot}/controlled-provider-authorization-contract-v1.json`,
-  "lib/assessment/runtime/review/m2-p4-v15-controlled-review-transport.ts",
-  "lib/assessment/runtime/review/m2-p4-v15-controlled-review-evidence.ts",
-  "lib/assessment/runtime/review/m2-p4-v15-controlled-review-executor.ts",
-  "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-controlled-provider-review.mjs",
-  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2a-controlled-provider-executor.mjs",
+  `${packageRoot}/offline-results-v1.json`,
+  `${planningRoot}/capabilities-v1.json`,
+  `${planningRoot}/implementation-work-packages-v1.json`,
 ];
+const newPaths = [];
 const exactScope = [...updatedPaths, ...newPaths];
 
 function git(args, options = {}) {
@@ -144,7 +137,7 @@ function safeCode(error) {
   return error instanceof M2RuntimeError ? error.safeCode : null;
 }
 
-function runImmutableAcceptedC1Verifier() {
+function runImmutableOriginalStep2AVerifier() {
   const temporaryRoot = mkdtempSync(
     path.join(tmpdir(), "moon-reply-v1-d-step2a-predecessor-"),
   );
@@ -181,7 +174,7 @@ function runImmutableAcceptedC1Verifier() {
     }
     execFileSync(
       "git.exe",
-      ["-c", safe, "checkout", "--quiet", "-B", acceptedC1Branch, baseline],
+      ["-c", safe, "checkout", "--quiet", "-B", originalStep2ABranch, baseline],
       { cwd: cloneRoot, stdio: "pipe" },
     );
     const sourceContract = readJson(
@@ -205,7 +198,7 @@ function runImmutableAcceptedC1Verifier() {
       process.execPath,
       [
         "--experimental-strip-types",
-        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview.mjs",
+        "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2a-controlled-provider-executor.mjs",
       ],
       {
         cwd: cloneRoot,
@@ -242,12 +235,19 @@ function diagnosticOutputs(caseId = "E-R3-02") {
 }
 
 function semanticFinding() {
+  return semanticFindingAt(
+    "REPETITION",
+    "report_content.action_rationales[0]",
+  );
+}
+
+function semanticFindingAt(findingCode, jsonPath) {
   return {
-    finding_code: "REPETITION",
+    finding_code: findingCode,
     severity: "major",
-    json_path: "report_content.action_rationales[0]",
+    json_path: jsonPath,
     evidence_refs: [],
-    detail: "offline fake repairable finding",
+    detail: "offline fake blocking finding",
   };
 }
 
@@ -379,7 +379,8 @@ async function check(name, callback) {
 
 await check("exact Git authority, lineage, branch, parent and main", () => {
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
-  assert.equal(git(["show", "-s", "--format=%s", baseline]), "fix: freeze V1-D controlled review inputs");
+  assert.equal(git(["show", "-s", "--format=%s", baseline]), "feat: add V1-D controlled provider executor");
+  assert.equal(git(["show", "-s", "--format=%s", acceptedStep1]), "fix: freeze V1-D controlled review inputs");
   assert.equal(git(["show", "-s", "--format=%s", step1]), "test: add V1-D offline product review harness");
   assert.equal(git(["show", "-s", "--format=%s", acceptedV1C]), "fix: validate quality repair paths precisely");
   assert.equal(git(["rev-parse", "refs/heads/main"]), expectedMain);
@@ -396,7 +397,7 @@ await check("exact Git authority, lineage, branch, parent and main", () => {
   }
 });
 
-await check("exact scope is 17 paths with 9 UPDATE and 8 NEW", () => {
+await check("exact scope is 10 UPDATE with no add delete or rename", () => {
   const scope = collectScope();
   assert.deepEqual(sorted(scope.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
@@ -426,7 +427,13 @@ await check("all protected Product Runtime schema migration and review blobs are
     `${packageRoot}/controlled-provider-inputs-v1.json`,
     `${packageRoot}/human-product-review-sheet-v1.json`,
     `${packageRoot}/fixture-matrix-v1.json`,
+    `${packageRoot}/controlled-provider-review-plan-v1.json`,
+    `${packageRoot}/offline-product-review-contract-v1.json`,
+    `${packageRoot}/controlled-provider-authorization-contract-v1.json`,
     "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview.mjs",
+    "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-controlled-provider-review.mjs",
+    "lib/assessment/runtime/review/m2-p4-v15-controlled-review-transport.ts",
+    "lib/assessment/runtime/review/m2-p4-v15-controlled-review-evidence.ts",
     catalogPath,
     ...manifest.stages.map((stage) => stage.prompt_path),
     "lib/assessment/runtime/openai-transport.ts",
@@ -475,6 +482,7 @@ await check("Step 1 acceptance is synchronized without erasing review history", 
     "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2A_CONTROLLED_PROVIDER_EXECUTOR.md",
   ].map(readText).join("\n");
   assert.match(docs, new RegExp(baseline, "u"));
+  assert.match(docs, new RegExp(acceptedStep1, "u"));
   assert.match(docs, /accepted_complete/u);
   assert.match(docs, /2026-08-18/u);
   assert.match(docs, /NEEDS_CORRECTION 0\/2\/0/u);
@@ -490,6 +498,20 @@ await check("Step 2A authority and status ceilings are truthful", () => {
   assert.equal(offlineResults.current_product_authority.r2_c, "remediation_required");
   assert.equal(offlineResults.current_product_authority.jpy980RuntimeReadiness, "not_established");
   assert.equal(offlineResults.current_product_authority.globalQ0Completion, false);
+  assert.equal(
+    executorContract.review_correction.initial_chatgpt_review,
+    "NEEDS_CORRECTION 0/1/0",
+  );
+  assert.equal(
+    executorContract.review_correction.finding,
+    "quality_reassessment_exhaustion_safe_code_misclassified",
+  );
+  assert.equal(
+    executorContract.review_correction.c1_status,
+    "quality_exhaustion_disposition_corrected_pending_human_chatgpt_review",
+  );
+  assert.equal(planningCapabilities.v1_d.step_2a_initial_review, "NEEDS_CORRECTION 0/1/0");
+  assert.equal(workPackages.provider_execution_authorized, false);
 });
 
 await check("historical two findings remain explicit", () => {
@@ -698,6 +720,100 @@ await check("fake-only V1-C recovery exports distinct attempt 1 and 2 with no at
   assert.equal(recoveryScenario.cases[0].qualityReassessment.scope, "report_only");
   assert.equal(recoveryScenario.cases[0].qualityReassessment.attempt_3_present, false);
   assert.ok(recoveryScenario.cases[0].customerProjection);
+});
+
+let exhaustionScenario;
+await check("attempt-2 Product-quality failure is classified only as quality reassessment exhaustion", async () => {
+  const outputs = diagnosticOutputs();
+  const pass = structuredClone(outputs["PB-06"]);
+  const first = {
+    ...structuredClone(pass),
+    semantic_checks: [semanticFinding()],
+  };
+  const second = {
+    ...structuredClone(pass),
+    semantic_checks: [
+      semanticFindingAt("REPETITION", "report_content.closing_lines[0]"),
+    ],
+  };
+  exhaustionScenario = await executeControlledProviderReview({
+    repositoryRoot: root,
+    selectedCaseIds: ["ordinary_reply_waiting"],
+    transportFactory: () =>
+      new FakeAiStageTransport({
+        outputs,
+        outputSequence: { "PB-06": [first, second] },
+      }),
+  });
+  const caseEvidence = exhaustionScenario.cases[0];
+  assert.equal(exhaustionScenario.complete, false);
+  assert.equal(
+    caseEvidence.route.safeErrorCode,
+    "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+  );
+  assert.equal(
+    caseEvidence.route.finalDisposition,
+    "quality_reassessment_exhausted",
+  );
+  assert.equal(caseEvidence.qualityReassessment.quality_reassessment_used, true);
+  assert.equal(caseEvidence.qualityReassessment.scope, "report_only");
+  assert.equal(
+    caseEvidence.qualityReassessment.final_disposition,
+    "quality_reassessment_exhausted",
+  );
+  assert.ok(caseEvidence.qualityReassessment.attempt_2_stages.length > 0);
+  assert.equal(caseEvidence.qualityReassessment.attempt_3_present, false);
+  assert.equal(
+    caseEvidence.stageAttempts.some((stage) => stage.attemptNumber > 2),
+    false,
+  );
+  assert.equal(caseEvidence.finalRuntimeReport, null);
+  assert.equal(caseEvidence.customerProjection, null);
+});
+
+let nonrepairableSemanticFailureScenario;
+await check("nonrepairable semantic validation failure remains a technical failure without reassessment", async () => {
+  const outputs = diagnosticOutputs();
+  const pass = structuredClone(outputs["PB-06"]);
+  const invalidPath = {
+    ...structuredClone(pass),
+    semantic_checks: [
+      semanticFindingAt(
+        "ACTION_CONSISTENCY",
+        "decision_plan.actions_to_take[999]",
+      ),
+    ],
+  };
+  nonrepairableSemanticFailureScenario = await executeControlledProviderReview({
+    repositoryRoot: root,
+    selectedCaseIds: ["ordinary_reply_waiting"],
+    transportFactory: () =>
+      new FakeAiStageTransport({
+        outputs,
+        outputSequence: { "PB-06": [invalidPath] },
+      }),
+  });
+  const caseEvidence = nonrepairableSemanticFailureScenario.cases[0];
+  assert.equal(nonrepairableSemanticFailureScenario.complete, false);
+  assert.equal(
+    caseEvidence.route.safeErrorCode,
+    "M2_SEMANTIC_VALIDATION_FAILED",
+  );
+  assert.equal(caseEvidence.route.finalDisposition, "technical_failure");
+  assert.equal(caseEvidence.qualityReassessment.quality_reassessment_used, false);
+  assert.equal(caseEvidence.qualityReassessment.scope, "none");
+  assert.equal(
+    caseEvidence.qualityReassessment.final_disposition,
+    "technical_failure",
+  );
+  assert.deepEqual(caseEvidence.qualityReassessment.attempt_2_stages, []);
+  assert.equal(caseEvidence.qualityReassessment.attempt_3_present, false);
+  assert.equal(
+    caseEvidence.stageAttempts.some((stage) => stage.attemptNumber === 2),
+    false,
+  );
+  assert.equal(caseEvidence.finalRuntimeReport, null);
+  assert.equal(caseEvidence.customerProjection, null);
 });
 
 await check("unknown transport errors become safe code with no raw error prose", async () => {
@@ -935,6 +1051,8 @@ await check("runner has one real Provider path and tests use fake executor trans
   assert.equal(directScenario.providerHttpAttemptCount, 0);
   assert.equal(clarificationScenario.providerHttpAttemptCount, 0);
   assert.equal(recoveryScenario.providerHttpAttemptCount, 0);
+  assert.equal(exhaustionScenario.providerHttpAttemptCount, 0);
+  assert.equal(nonrepairableSemanticFailureScenario.providerHttpAttemptCount, 0);
 });
 
 await check("no actual execution evidence or operation claim exists in repository", () => {
@@ -959,23 +1077,26 @@ await check("changed files contain no sensitive values and all JSON parses", () 
 });
 
 if (!precommit) {
-  await check("immutable accepted V1-D C1 verifier passes once with recursive chain", () => {
-    const output = runImmutableAcceptedC1Verifier();
-    assert.match(output, /controlled Provider packet verifier: PASS 50\/50/u);
-    assert.match(output, /Immutable V1-D Step 1 verifier: PASS 45\/45/u);
+  await check("immutable original Step 2A verifier passes once with recursive predecessor chain", () => {
+    const output = runImmutableOriginalStep2AVerifier();
+    assert.match(output, /controlled Provider executor verifier: PASS 53\/53/u);
+    assert.match(
+      output,
+      /Immutable accepted V1-D C1 verifier: PASS 50\/50 \(executed once with recursive chain\)/u,
+    );
   });
 }
 
 rmSync(runnerTemp, { recursive: true, force: true });
 
-const expectedChecks = precommit ? 52 : 53;
+const expectedChecks = precommit ? 54 : 55;
 assert.equal(passed, expectedChecks);
 
 if (precommit) {
-  console.log("\nM2-P4 V1-D Step 2A precommit verifier: PASS 52/52");
-  console.log("Immutable accepted V1-D C1 50/50 is intentionally deferred to one formal post-commit run.");
+  console.log("\nM2-P4 V1-D Step 2A C1 precommit verifier: PASS 54/54");
+  console.log("Immutable original Step 2A 53/53 is intentionally deferred to one formal post-commit run.");
 } else {
-  console.log("\nM2-P4 V1-D Step 2A controlled Provider executor verifier: PASS 53/53");
-  console.log("Immutable accepted V1-D C1 verifier: PASS 50/50 (executed once with recursive chain)");
+  console.log("\nM2-P4 V1-D Step 2A C1 quality disposition verifier: PASS 55/55");
+  console.log("Immutable original Step 2A verifier: PASS 53/53 (executed once with recursive predecessor chain)");
   console.log("Provider/DB/Supabase/migration apply/Payment/deploy: 0/0/0/0/0/0");
 }

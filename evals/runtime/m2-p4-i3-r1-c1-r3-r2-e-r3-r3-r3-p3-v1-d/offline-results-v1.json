@@ -46,6 +46,10 @@
     "review_transport_explicit_max_retries": 0,
     "application_stage_budget_enforced_before_provider_transport": true,
     "hard_provider_http_attempt_ceiling_for_review_executor": 108,
+    "quality_exhaustion_disposition_correction": true,
+    "quality_exhaustion_safe_code": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+    "semantic_validation_failure_disposition": "technical_failure",
+    "nonrepairable_semantic_failure_reassessment_used": false,
     "provider_execution_authorized": false
   },
   "unestablished": {
@@ -85,6 +89,10 @@
     "step_1_overall": "accepted_complete",
     "step_1_acceptance_date": "2026-08-18",
     "step_2a_status": "implemented_pending_human_chatgpt_review",
+    "step_2a_snapshot": "9c7a11df63d4013dcc6843c245fbd6fa00106c81",
+    "step_2a_initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+    "step_2a_initial_finding": "quality_reassessment_exhaustion_safe_code_misclassified",
+    "step_2a_c1_status": "quality_exhaustion_disposition_corrected_pending_human_chatgpt_review",
     "packet_status": "exact_inputs_and_execution_constraints_prepared",
     "frozen_case_count": 9,
     "model": "gpt-5.6-luna",
@@ -109,6 +117,10 @@
   "validation": {
     "v1_d_step_2a_precommit_verifier": "PASS 52/52",
     "v1_d_step_2a_dedicated_verifier": "PASS 53/53",
+    "v1_d_step_2a_c1_precommit_verifier": "PASS 54/54",
+    "v1_d_step_2a_c1_dedicated_verifier": "PASS 55/55",
+    "immutable_original_v1_d_step_2a_verifier": "PASS 53/53",
+    "immutable_original_v1_d_step_2a_executed_once": true,
     "immutable_accepted_v1_d_c1_verifier": "PASS 50/50",
     "immutable_accepted_v1_d_c1_executed_once": true,
     "v1_d_c1_dedicated_verifier": "PASS 50/50",
@@ -120,7 +132,7 @@
     "lint_max_warnings_0": "PASS",
     "build": "PASS",
     "git_diff_check": "PASS",
-    "exact_scope": "PASS 17/17 9_UPDATE_8_NEW",
+    "exact_scope": "PASS 10/10 10_UPDATE_0_NEW_0_DELETE_0_RENAME",
     "protected_blob_scan": "PASS",
     "sensitive_scan": "PASS"
   },

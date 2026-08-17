@@ -1,11 +1,16 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 2A Controlled Provider Review Executor — In Progress
+## V1-D Step 2A C1 Quality Exhaustion Disposition Correction — In Progress
 
-- [x] Exact parent fixed at accepted Step 1/C1 snapshot `41d90b69c18aec86995d1930f28be05d6ccfca8f`
+- [x] Exact parent fixed at Step 2A snapshot `9c7a11df63d4013dcc6843c245fbd6fa00106c81`
 - [x] Step 1 synchronized as `accepted_complete`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-18`
 - [x] Step 1 `4c757756…` initial `NEEDS_CORRECTION 0/2/0` history retained; C1 is `PASS 0/0/0`
+- [x] Step 2A initial ChatGPT review retained as `NEEDS_CORRECTION 0/1/0`; finding is `quality_reassessment_exhaustion_safe_code_misclassified`
+- [x] `M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED` alone maps to `quality_reassessment_exhausted`
+- [x] `M2_SEMANTIC_VALIDATION_FAILED` and all other safe Runtime errors map to `technical_failure`
+- [x] Executor-level fake exhaustion regression proves reassessment used, attempt 2 present, attempt 3 absent, and no Product/Report delivery
+- [x] Executor-level nonrepairable-path regression proves no reassessment, no attempt 2, and no Product/Report delivery
 - [x] Exact nine-case packet and SHA-256 authority are consumed without editing controlled inputs
 - [x] Executor uses V15 `AssessmentApplication`, case-local `FakeAssessmentRepository`, fixed clock/timezone, and exact `gpt-5.6-luna`
 - [x] V1-A routing, V1-B generation, V1-C evaluation/recovery, ProductSemanticShape, and SemanticDisposition are not bypassed
@@ -20,11 +25,11 @@
 - [x] Append-only atomic journal preserves partial safe evidence; completed directories are never overwritten or automatically resumed
 - [x] Attempt 1/2 remain distinct, attempt 3 fails closed, and all Human Product judgments remain `pending_human_review`
 - [x] `service.ts`, Supabase, DB, Payment, Production, migration, and Product/Runtime implementation remain outside the execution path
-- [x] Exact scope `17/17`: 9 UPDATE + 8 NEW; DELETE / RENAME 0
-- [ ] Human / ChatGPT review of V1-D Step 2A executor
+- [x] C1 exact scope `10/10`: 10 UPDATE + 0 NEW; DELETE / RENAME 0
+- [ ] Human / ChatGPT review of V1-D Step 2A C1 correction
 - [ ] Actual V15 controlled Provider run — separately unauthorized
 
-Status is `in_progress_controlled_provider_executor`; Step 2A is `implemented_pending_human_chatgpt_review`. Provider execution remains unauthorized and is zero. Actual V15 prose/fidelity, PB-06 recall/precision, real repair success, Human emotional understanding, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `in_progress_controlled_provider_executor`; Step 2A initial review is `NEEDS_CORRECTION 0/1/0` and C1 is `quality_exhaustion_disposition_corrected_pending_human_chatgpt_review`. Provider execution remains unauthorized and is zero. Actual V15 prose/fidelity, PB-06 recall/precision, real repair success, Human emotional understanding, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
