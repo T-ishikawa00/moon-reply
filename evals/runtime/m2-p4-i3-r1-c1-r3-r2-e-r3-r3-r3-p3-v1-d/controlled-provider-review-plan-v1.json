@@ -1,12 +1,23 @@
 {
   "schema_version": "m2-p4-v1-d-controlled-provider-review-plan-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-C1",
-  "status": "exact_inputs_and_execution_constraints_prepared_not_executable",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2A",
+  "status": "executor_implemented_pending_human_chatgpt_review_provider_execution_unauthorized",
   "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
-  "controlled_provider_execution_harness": "not_implemented",
+  "controlled_provider_execution_harness": "implemented_pending_human_chatgpt_review",
   "provider_execution_authorized": false,
   "execution_count_in_this_task": 0,
   "frozen_input_packet": "controlled-provider-inputs-v1.json",
+  "frozen_input_sha256": "ab1d7b896086da002015a0a6d5cf1c1fb6eac3ffdc48e8410b44a892c1f9a20d",
+  "step_1_acceptance": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "chatgpt_review": "PASS_complete",
+    "human_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-18",
+    "initial_review_history": "NEEDS_CORRECTION 0/2/0",
+    "c1_review": "PASS 0/0/0"
+  },
   "scope": {
     "synthetic_cases_only": true,
     "real_person_data": false,
@@ -37,7 +48,7 @@
     "supabase_repository_used": false,
     "payment_used": false,
     "production_used": false,
-    "executor_implementation_status": "not_implemented"
+    "executor_implementation_status": "implemented_pending_human_chatgpt_review"
   },
   "transport_and_invocation_limits": {
     "maximum_quality_reassessments_per_case": 1,
@@ -47,9 +58,13 @@
     "application_quality_reassessment_is_sdk_retry": false,
     "current_openai_transport_explicit_max_retries": false,
     "review_transport_max_retries": 0,
-    "review_transport_no_retry_configuration_required_before_execution": true,
-    "hard_provider_http_attempt_ceiling_established": false,
-    "intended_provider_http_attempt_ceiling_after_verified_no_retry_executor": 108
+    "review_transport_no_retry_configuration_required_before_execution": false,
+    "review_transport_no_retry_configuration_implemented": true,
+    "budget_enforced_before_transport_invoke": true,
+    "alternate_real_provider_path_in_runner": false,
+    "hard_provider_http_attempt_ceiling_established_for_review_executor": true,
+    "hard_provider_http_attempt_ceiling_when_review_executor_used": 108,
+    "actual_provider_http_attempts": 0
   },
   "cases": [
     {"fixture_id": "ordinary_reply_waiting", "fixed_clock": "2026-08-17T12:00:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
@@ -75,7 +90,7 @@
   ],
   "execution_preconditions": [
     "separate_explicit_human_provider_execution_authorization",
-    "review_only_executor_implemented_and_verified",
+    "review_only_executor_human_chatgpt_review_complete",
     "review_transport_configured_with_explicit_maxRetries_0",
     "clean_exact_authorized_branch_and_snapshot",
     "runtime_identity_model_and_prompt_hash_verification",
@@ -84,6 +99,12 @@
     "application_stage_and_provider_http_attempt_ledgers_approved",
     "no_supabase_no_db_no_payment_no_deploy_no_production_no_migration_apply"
   ],
+  "step_2a_validation": {
+    "precommit_verifier": "PASS 52/52",
+    "dedicated_verifier": "PASS 53/53",
+    "immutable_accepted_c1_verifier": "PASS 50/50 executed_once",
+    "provider_execution": 0
+  },
   "operations": {
     "provider_calls": 0,
     "db_operations": 0,
@@ -92,5 +113,5 @@
     "payment_operations": 0,
     "deploy_operations": 0
   },
-  "current_outcome": "packet_only_no_executor_no_provider_invocation"
+  "current_outcome": "executor_implemented_no_provider_invocation_pending_human_chatgpt_review"
 }

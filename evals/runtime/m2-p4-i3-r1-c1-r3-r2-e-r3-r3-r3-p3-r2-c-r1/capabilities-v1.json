@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_accepted_v1_d_in_progress_offline_review_harness",
+  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_accepted_v1_d_step1_accepted_step2a_in_progress",
   "planning_only": false,
   "authority": {
     "exact_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
@@ -15,6 +15,8 @@
     "v1_a_acceptance_date": "2026-08-17",
     "v1_c_accepted_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
     "v1_c_acceptance_date": "2026-08-17",
+    "v1_d_step_1_accepted_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "v1_d_step_1_acceptance_date": "2026-08-18",
     "main": "61e33a10e195fad17e253a6b9719217e1992f273"
   },
   "correction_acceptance": {
@@ -67,7 +69,7 @@
     "V1-A2": "accepted_complete",
     "V1-B": "accepted_complete",
     "V1-C": "accepted_complete",
-    "V1-D": "in_progress_offline_review_harness"
+    "V1-D": "in_progress_controlled_provider_executor"
   },
   "v1_a1": {
     "name": "Deterministic Input Sufficiency Policy",
@@ -136,9 +138,9 @@
   },
   "v1_d": {
     "name": "Offline Fixtures and Product Re-review",
-    "status": "in_progress_offline_review_harness",
+    "status": "in_progress_controlled_provider_executor",
     "authorized": true,
-    "step": "step_1_offline_fixtures_and_product_rereview_harness",
+    "step": "step_2a_controlled_provider_executor",
     "fixture_intentions": 22,
     "deterministic_routing_regression": true,
     "deterministic_semantic_recovery_regression": true,
@@ -148,29 +150,37 @@
     "human_product_review_status": "pending_actual_v15_provider_output",
     "step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
     "step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
-    "step_1_c1_status": "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
+    "step_1_c1_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "step_1_c1_status": "PASS 0/0/0",
+    "step_1_overall": "accepted_complete",
+    "step_1_human_acceptance": "complete",
+    "step_1_acceptance_date": "2026-08-18",
+    "step_2a_status": "implemented_pending_human_chatgpt_review",
     "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
     "frozen_controlled_provider_input_cases": 9,
     "controlled_review_model": "gpt-5.6-luna",
-    "controlled_provider_execution_harness": "not_implemented",
+    "controlled_provider_execution_harness": "implemented_pending_human_chatgpt_review",
     "production_service_entrypoint_used": false,
     "supabase_repository_used": false,
     "maximum_application_stage_invocations_total": 108,
     "current_openai_transport_explicit_max_retries": false,
-    "future_review_transport_max_retries": 0,
-    "hard_provider_http_attempt_ceiling_established": false,
+    "review_transport_max_retries": 0,
+    "hard_provider_http_attempt_ceiling_established_for_review_executor": true,
+    "hard_provider_http_attempt_ceiling_when_review_executor_used": 108,
     "provider_execution_authorized": false
   },
   "v1_a_overall_complete": true,
   "future_product_re_review_acceptance_defined": true,
   "implementation_authorized": true,
   "implementation_authorized_scope": [
-    "V1-D Step 1 offline review infrastructure"
+    "V1-D Step 1 offline review infrastructure",
+    "V1-D Step 2A controlled Provider review executor"
   ],
   "policy_foundation_implementation_changed": false,
   "product_implementation_changed": false,
   "ui_css_changed": false,
   "review_harness_changed": true,
+  "review_executor_changed": true,
   "prompt_changed": false,
   "catalog_changed": false,
   "schema_changed": false,
@@ -195,12 +205,15 @@
   "force_push_used": false,
   "exact_scope": {
     "total": "17/17",
-    "updated": 8,
-    "new": 9,
+    "updated": 9,
+    "new": 8,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
+    "v1_d_step_2a_precommit_verifier": "PASS 52/52",
+    "v1_d_step_2a_dedicated_verifier": "PASS 53/53",
+    "immutable_v1_d_c1_predecessor_verifier": "PASS 50/50 executed_once",
     "v1_d_dedicated_verifier": "PASS 45/45",
     "immutable_v1_c_r1_c1_predecessor_verifier": "PASS 50/50",
     "separate_duplicate_upstream_execution": false,
@@ -243,5 +256,5 @@
     "authorized": false,
     "mvp_planned": false
   },
-  "next_action": "human_chatgpt_review_of_v1_d_step_1_offline_product_rereview"
+  "next_action": "human_chatgpt_review_of_v1_d_step_2a_controlled_provider_executor"
 }

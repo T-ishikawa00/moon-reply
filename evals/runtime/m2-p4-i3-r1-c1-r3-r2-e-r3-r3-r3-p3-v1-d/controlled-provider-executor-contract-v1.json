@@ -1,0 +1,119 @@
+{
+  "schema_version": "m2-p4-v1-d-controlled-provider-executor-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2A",
+  "executor_status": "implemented_pending_human_chatgpt_review",
+  "provider_execution_authorized": false,
+  "provider_execution_count": 0,
+  "runtime_identity": {
+    "catalog_version": "runtime-stage-catalog-v15.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v6.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "model": "gpt-5.6-luna"
+  },
+  "input_authority": {
+    "path": "controlled-provider-inputs-v1.json",
+    "sha256": "ab1d7b896086da002015a0a6d5cf1c1fb6eac3ffdc48e8410b44a892c1f9a20d",
+    "case_count": 9,
+    "synthetic_only": true,
+    "human_pii": false,
+    "edit_invalidates_future_authorization": true
+  },
+  "architecture": {
+    "uses_v15_assessment_application": true,
+    "uses_v15_assessment_pipeline": true,
+    "uses_fake_or_local_repository": true,
+    "uses_production_service": false,
+    "uses_supabase": false,
+    "uses_payment": false,
+    "uses_production": false,
+    "bypasses_v1_a_policy": false,
+    "bypasses_v1_b": false,
+    "bypasses_v1_c": false,
+    "bypasses_product_semantic_shape": false,
+    "bypasses_semantic_disposition": false,
+    "maximum_quality_reassessments": 1,
+    "attempt_3_allowed": false
+  },
+  "review_transport": {
+    "class": "ReviewOnlyOpenAiResponsesTransport",
+    "api": "OpenAI Responses API",
+    "explicit_max_retries": 0,
+    "store": false,
+    "tools": [],
+    "stream": false,
+    "background": false,
+    "service_tier": "default",
+    "truncation": "disabled",
+    "reasoning_effort": "low",
+    "strict_json_schema": true,
+    "production_transport_modified": false,
+    "unknown_sdk_error_export": "M2_STAGE_PROVIDER_FAILED"
+  },
+  "budgets": {
+    "per_case_application_stage_limit": 12,
+    "total_application_stage_limit": 108,
+    "budget_checked_before_transport_invoke": true,
+    "application_invocations_and_provider_http_attempts_separate": true,
+    "hard_provider_http_attempt_ceiling_when_review_transport_used": 108,
+    "hard_provider_http_attempt_ceiling_established_for_implemented_executor": true,
+    "actual_provider_http_attempts_in_step_2a": 0
+  },
+  "authorization_gate": {
+    "default_execution": "refused",
+    "requires_execute_provider_review_flag": true,
+    "requires_deliberate_environment_authorization": true,
+    "requires_actual_head_match": true,
+    "requires_input_sha256_match": true,
+    "requires_human_authorization_reference": true,
+    "requires_openai_api_key": true,
+    "requires_clean_worktree": true,
+    "requires_explicit_case_selection": true,
+    "requires_safe_output_directory": true,
+    "validate_only_constructs_provider_client": false,
+    "committed_artifacts_authorize_execution": false
+  },
+  "routing": {
+    "direct_ready_cases": 8,
+    "clarification_cases": 1,
+    "expected_clarification_target": "latest_contact_timing",
+    "maximum_clarification_answers": 1,
+    "automatic_second_answer": false,
+    "route_mismatch_behavior": "record_and_stop_case",
+    "automatic_input_rewrite_or_retry": false,
+    "ready_projection": "CustomerAssessmentExperienceProjectionV2"
+  },
+  "evidence": {
+    "safe_http_attempt_metadata_only": true,
+    "raw_provider_response_id_exported": false,
+    "raw_provider_request_id_exported": false,
+    "opaque_clarification_source_identity": "sha256_only_in_private_stage_evidence_and_absent_from_product_projection",
+    "raw_sdk_error_message_exported": false,
+    "secrets_exported": false,
+    "human_authorization_reference_export": "sha256_only",
+    "chain_of_thought_exported": false,
+    "synthetic_stage_json_retained": true,
+    "attempt_1_and_attempt_2_distinct": true,
+    "atomic_append_only_partial_journal": true,
+    "completed_output_directory_overwrite": false,
+    "human_product_judgments": "pending_human_review"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applies": 0,
+    "payment_operations": 0,
+    "deploy_operations": 0
+  },
+  "evidence_ceiling": {
+    "actual_v15_provider_prose_quality": "unestablished",
+    "actual_v15_provider_semantic_fidelity": "unestablished",
+    "actual_pb_06_recall": "unestablished",
+    "actual_pb_06_precision": "unestablished",
+    "plausibly_worth_jpy980": "unestablished",
+    "r2_c": "remediation_required",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false
+  }
+}

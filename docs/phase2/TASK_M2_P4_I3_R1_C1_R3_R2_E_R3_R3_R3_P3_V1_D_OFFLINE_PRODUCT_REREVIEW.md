@@ -2,11 +2,11 @@
 
 ## Disposition
 
-- Status: `in_progress_offline_review_harness`.
+- Status: Step 1 `accepted_complete`; V1-D Step 2A `in_progress_controlled_provider_executor`.
 - Exact parent / accepted V1-C snapshot: `a436210bb035746c129fe071e6225b3799b9e5d8` (`fix: validate quality repair paths precisely`).
 - V1-C: `accepted_complete`; ChatGPT review `PASS_complete`; Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`.
 - V1-C history is retained: core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` is `PASS 0/0/0`; R1 `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40` initially received `NEEDS_CORRECTION 0/1/0`; R1-C1 at `a436210b…` is `PASS 0/0/0`.
-- V1-D Step 1 is authorized. Provider execution remains unauthorized and was not performed.
+- V1-D Step 1 accepted snapshot is `41d90b69c18aec86995d1930f28be05d6ccfca8f`; ChatGPT/Human review is `PASS_complete`; Human acceptance is `complete`; acceptance date `2026-08-18`. Provider execution remains unauthorized and was not performed.
 
 ## Step 1 C1 correction
 
@@ -14,7 +14,7 @@ Step 1 snapshot `4c7577564421e2dbd264ffadb5ccab8d961c42eb` received ChatGPT revi
 
 C1 freezes exactly nine consultation-specific synthetic `AssessmentInput` records, each case's clock/timezone and expected initial route, the `gpt-5.6-luna` model, and the single clarification case's exact `latest_contact_timing` answer. No names, real people, workplace/school/address/contact identifiers, or Human PII are included. Raw text to PB-01 extraction correctness and every Provider outcome remain unestablished.
 
-`controlled_provider_review_packet=exact_inputs_and_execution_constraints_prepared`; this does not mean immediately executable. `controlled_provider_execution_harness=not_implemented`, `provider_execution_authorized=false`, and Provider execution remains zero.
+`controlled_provider_review_packet=exact_inputs_and_execution_constraints_prepared`. C1 at `41d90b69…` is `PASS 0/0/0` and Step 1 overall is now accepted. Step 2A implements the controlled executor, but `provider_execution_authorized=false` and Provider execution remains zero.
 
 ## Step 1 boundary
 
@@ -69,9 +69,9 @@ The Human Product review sheet defines all required judgments but contains no PA
 
 The controlled plan selects exactly nine synthetic cases and binds them one-to-one to `controlled-provider-inputs-v1.json`. It locks every complete `AssessmentInput`, V15 identity, `gpt-5.6-luna`, clock/timezone, expected route, one-reassessment budget, and evidence outputs. The clarification case contains one exact answer payload and no second answer.
 
-The future execution flow is exact frozen inputs → V15 `AssessmentApplication` → `FakeAssessmentRepository` or another local in-memory repository → review-only real Provider transport → V15 PB-01 through PB-06 → optional one quality reassessment → offline evidence capture. The normal `service.ts` / `SupabaseAssessmentRepository` path is prohibited. The executor is not implemented in C1.
+The future execution flow is exact frozen inputs → V15 `AssessmentApplication` → `FakeAssessmentRepository` → review-only real Provider transport → V15 PB-01 through PB-06 → optional one quality reassessment → offline evidence capture. The normal `service.ts` / `SupabaseAssessmentRepository` path is prohibited. Step 2A implements this executor without executing it.
 
-The budget is a maximum of 12 Application Stage invocations per case and 108 total. It is not a current hard Provider HTTP-attempt ceiling: production `OpenAiResponsesTransport` does not explicitly configure `maxRetries`. A later review-only executor must set `maxRetries=0` and prove that configuration before 108 can become the intended HTTP-attempt ceiling. V15 quality reassessment is an Application action, not an SDK retry. `provider_execution_authorized=false` and separate explicit Human authority remains required.
+The budget is a maximum of 12 Application Stage invocations per case and 108 total. Step 2A's dedicated review transport explicitly sets `maxRetries=0`, the runner has no alternate real Provider path, and budget checks occur before transport invocation. Thus the future authorized hard HTTP-attempt ceiling for this review-only executor is 108. V15 quality reassessment is an Application action, not an SDK retry. Actual HTTP attempts remain zero; `provider_execution_authorized=false` and separate explicit Human authority remains required.
 
 ## Evidence and operations
 
@@ -85,4 +85,10 @@ R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediat
 
 ## Human / ChatGPT review request
 
-Review the frozen nine-case `AssessmentInput` packet, exact model/clock/clarification authority, service/Supabase exclusion, Application-stage versus HTTP-attempt distinction, and explicit future `maxRetries=0` precondition. The accepted 22-case matrix, routing/recovery regressions, offline labeling, exact draft checks, and private-route guards remain unchanged. Do not infer actual V15 Product quality, hard HTTP-attempt control, or JPY980 value.
+Step 1 review is complete. For Step 2A, review the authorization fail-closed behavior, exact input hash binding, V15 Application/local repository path, explicit `maxRetries=0`, 12/108 pre-transport budget, separate ledgers, clarification single-answer behavior, Ready-only projection, and evidence sanitizer/journal. The accepted 22-case matrix and Product shell remain unchanged. Do not infer actual V15 Product quality or JPY980 value.
+
+## Step 2A executor status
+
+Step 2A is `implemented_pending_human_chatgpt_review`. The runner refuses execution unless the explicit CLI flag, deliberate authorization env, exact HEAD, exact input SHA-256, Human authorization reference, API key presence, clean worktree, explicit case selection, and safe output directory all pass. `--validate-only` constructs no OpenAI client and performs no network call.
+
+Evidence writing is sanitized and atomic. Raw Provider response/request IDs, URLs, headers, raw SDK errors, secrets, Human PII, and chain-of-thought are prohibited. Ready outputs alone are projected; Human Product review fields remain `pending_human_review`. No actual `actual_v15_successor_output` exists in Step 2A.

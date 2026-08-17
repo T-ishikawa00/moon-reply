@@ -1,35 +1,30 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 1 C1 Controlled Provider Packet Correction — In Progress
+## V1-D Step 2A Controlled Provider Review Executor — In Progress
 
-- [x] Exact parent fixed at accepted V1-C snapshot `a436210bb035746c129fe071e6225b3799b9e5d8`
-- [x] V1-C synchronized as `accepted_complete`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`
-- [x] V1-C history retained: core `e7ae51aa…` `PASS 0/0/0`; R1 `4a3d5b3f…` initial `NEEDS_CORRECTION 0/1/0`; R1-C1 `a436210b…` `PASS 0/0/0`
-- [x] Canonical matrix contains exactly 22 unique fixture intentions with proof and non-proof boundaries
-- [x] Historical simple business/nullable renders reclassified under current V1-A/Product-scope authority and excluded from paid Product proof
-- [x] Sparse admin/no-timeline cases require one answer; complete tone/cadence/draft-intent cases can reach Ready
-- [x] One clarification can establish Ready or route out; no automatic second question; emotion intensity alone never creates materiality
-- [x] Fake-only unsupported-inner-state, repetition, cold, generic-closing, and repeated-Decision mutants block and recover at most once
-- [x] Consultation-specific non-propositional closing positive fixture passes without a new factual-proposition requirement
-- [x] Grounded tradeoff is present only when material; non-applicable fixture contains no manufactured comparison
-- [x] Polite and Kansai/persona draft fixtures preserve exact text, line breaks, and emoji; report-only recovery retains exact Decision Plan draft
-- [x] Private `/review/runtime/v15` is production/internal-flag gated, noindex/nofollow, fixture-only, and explicitly labeled non-Provider
-- [x] Review route renders the existing `CustomerAssessmentNote`; Product component/CSS and customer projections remain byte-identical
-- [x] Human Product review sheet contains no prefilled PASS and remains `pending_actual_v15_provider_output`
-- [x] Step 1 snapshot `4c757756…` review retained as `NEEDS_CORRECTION 0/2/0`; both controlled-execution findings are explicit history
-- [x] Exactly nine synthetic AssessmentInputs, clocks/timezones, `gpt-5.6-luna`, routes, and one exact clarification answer are frozen
-- [x] Future execution bypasses `service.ts`/Supabase and requires V15 `AssessmentApplication` plus Fake/local repository; executor remains `not_implemented`
-- [x] 12/case and 108/total are Application Stage invocation ceilings only; future review transport requires explicit `maxRetries=0`
-- [x] Current hard Provider HTTP-attempt ceiling remains `not_established`; quality reassessment is distinct from SDK retry
-- [x] C1 exact scope `11/11`: 10 UPDATE + 1 NEW; DELETE / RENAME 0
-- [x] Corrected verifier fixed at `50/50`; immutable Step 1 `45/45` executed once and recursively covers predecessor/upstream
-- [x] Typecheck, zero-warning lint, build, diff, exact scope, protected blobs, sensitive scan, main/next-env/stash/worktree gates PASS
-- [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] Human / ChatGPT review of V1-D Step 1 C1 controlled Provider packet
+- [x] Exact parent fixed at accepted Step 1/C1 snapshot `41d90b69c18aec86995d1930f28be05d6ccfca8f`
+- [x] Step 1 synchronized as `accepted_complete`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-18`
+- [x] Step 1 `4c757756…` initial `NEEDS_CORRECTION 0/2/0` history retained; C1 is `PASS 0/0/0`
+- [x] Exact nine-case packet and SHA-256 authority are consumed without editing controlled inputs
+- [x] Executor uses V15 `AssessmentApplication`, case-local `FakeAssessmentRepository`, fixed clock/timezone, and exact `gpt-5.6-luna`
+- [x] V1-A routing, V1-B generation, V1-C evaluation/recovery, ProductSemanticShape, and SemanticDisposition are not bypassed
+- [x] Eight direct cases must reach Ready; the clarification case validates `latest_contact_timing`, sends one exact answer, and prohibits a second
+- [x] Ready-only output is decoded through `CustomerAssessmentExperienceProjectionV2`; no projection is created for terminal/error states
+- [x] Review-only Responses transport mirrors Production request semantics and explicitly sets `maxRetries: 0`
+- [x] Application Stage budgets are checked before transport: 12 per case and 108 total; Application and HTTP ledgers remain distinct
+- [x] The implemented review-only path has a future authorized hard HTTP-attempt ceiling of 108; actual Provider attempts are 0
+- [x] Runner defaults to refusal and gates flag, env authority, HEAD, input hash, Human reference, API key, clean tree, case selection, and output path before client construction
+- [x] `--validate-only` creates no OpenAI client, network call, or execution evidence
+- [x] Evidence sanitizer strips/prohibits raw Provider IDs, URLs, headers, raw SDK errors, secrets, Human PII, and chain-of-thought
+- [x] Append-only atomic journal preserves partial safe evidence; completed directories are never overwritten or automatically resumed
+- [x] Attempt 1/2 remain distinct, attempt 3 fails closed, and all Human Product judgments remain `pending_human_review`
+- [x] `service.ts`, Supabase, DB, Payment, Production, migration, and Product/Runtime implementation remain outside the execution path
+- [x] Exact scope `17/17`: 9 UPDATE + 8 NEW; DELETE / RENAME 0
+- [ ] Human / ChatGPT review of V1-D Step 2A executor
 - [ ] Actual V15 controlled Provider run — separately unauthorized
 
-Status is `in_progress_offline_review_harness`; C1 is `controlled_provider_execution_authority_corrected_pending_human_chatgpt_review`. The packet is exact, but no controlled Provider executor exists and execution is unauthorized. Actual V15 prose/fidelity, PB-06 Provider recall/precision, real repair success, Human emotional understanding, hard Provider HTTP-attempt ceiling, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `in_progress_controlled_provider_executor`; Step 2A is `implemented_pending_human_chatgpt_review`. Provider execution remains unauthorized and is zero. Actual V15 prose/fidelity, PB-06 recall/precision, real repair success, Human emotional understanding, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
@@ -69,7 +64,7 @@ Status is `in_progress_offline_review_harness`; C1 is `controlled_provider_execu
 - [x] V1-C Human/ChatGPT review and acceptance complete; V1-D Step 1 separately authorized
 - [ ] Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is accepted complete; V1-D Step 1 is `in_progress_offline_review_harness` with Provider execution unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is accepted complete; V1-D Step 1 is accepted complete and Step 2A is `in_progress_controlled_provider_executor` with Provider execution unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->

@@ -1,8 +1,8 @@
 {
   "schema_version": "m2-p4-v1-d-offline-product-review-contract-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
-  "step": "step_1_offline_fixtures_and_product_rereview_harness",
-  "status": "in_progress_offline_review_harness",
+  "step": "step_2a_controlled_provider_executor",
+  "status": "in_progress_controlled_provider_executor",
   "authority": {
     "v1_c": "accepted_complete",
     "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
@@ -17,14 +17,23 @@
     "v1_c_r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
     "v1_c_r1_c1_review": "PASS 0/0/0",
     "v1_d_authorized": true,
-    "v1_d_status": "in_progress_offline_review_harness",
+    "v1_d_status": "in_progress_controlled_provider_executor",
     "v1_d_step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
     "v1_d_step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
     "v1_d_step_1_findings": [
       "controlled_provider_execution_inputs_not_frozen",
       "provider_attempt_ceiling_does_not_account_for_sdk_retries"
     ],
-    "v1_d_step_1_c1_status": "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
+    "v1_d_step_1_c1_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "v1_d_step_1_c1_review": "PASS 0/0/0",
+    "v1_d_step_1_overall": "accepted_complete",
+    "v1_d_step_1_accepted_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "v1_d_step_1_chatgpt_review_complete": "PASS_complete",
+    "v1_d_step_1_human_review": "PASS_complete",
+    "v1_d_step_1_human_acceptance": "complete",
+    "v1_d_step_1_acceptance_date": "2026-08-18",
+    "v1_d_step_2a": "authorized",
+    "v1_d_step_2a_status": "in_progress_controlled_provider_executor",
     "provider_execution_authorized": false
   },
   "step_1_evidence_boundary": {
@@ -48,7 +57,7 @@
       "r2_c_pass",
       "jpy980_runtime_readiness",
       "global_q0_completion",
-      "hard_provider_http_attempt_ceiling"
+      "actual_provider_http_attempts_or_outputs"
     ]
   },
   "fixture_contract": {
@@ -135,15 +144,18 @@
     "supabase_repository_used": false,
     "payment_used": false,
     "production_used": false,
-    "controlled_provider_execution_harness": "not_implemented",
+    "controlled_provider_execution_harness": "implemented_pending_human_chatgpt_review",
     "provider_execution_authorized": false,
     "provider_execution": 0,
     "maximum_application_stage_invocations_per_case": 12,
     "maximum_application_stage_invocations_total": 108,
     "current_openai_transport_explicit_max_retries": false,
     "review_transport_max_retries": 0,
-    "hard_provider_http_attempt_ceiling_established": false,
-    "intended_provider_http_attempt_ceiling_after_verified_no_retry_executor": 108,
+    "controlled_input_sha256": "ab1d7b896086da002015a0a6d5cf1c1fb6eac3ffdc48e8410b44a892c1f9a20d",
+    "review_transport_explicit_max_retries_implemented": true,
+    "budget_enforced_before_transport_invoke": true,
+    "hard_provider_http_attempt_ceiling_established_for_review_executor": true,
+    "hard_provider_http_attempt_ceiling_when_review_executor_used": 108,
     "quality_reassessment_is_sdk_retry": false
   },
   "review_surface": {

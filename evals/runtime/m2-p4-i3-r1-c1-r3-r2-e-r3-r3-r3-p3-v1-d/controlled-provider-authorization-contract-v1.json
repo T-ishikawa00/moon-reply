@@ -1,0 +1,59 @@
+{
+  "schema_version": "m2-p4-v1-d-controlled-provider-authorization-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2A",
+  "status": "runtime_authorization_contract_only",
+  "committed_artifact_authorizes_execution": false,
+  "provider_execution_authorized": false,
+  "provider_execution_count": 0,
+  "future_authorization_record": {
+    "schema_version": "m2-p4-v1-d-controlled-provider-authorization-record-v1",
+    "required_fields": [
+      "schema_version",
+      "execution_id",
+      "human_authorization_reference",
+      "authorized_snapshot",
+      "authorized_input_sha256",
+      "model",
+      "authorized_case_ids",
+      "authorization_timestamp",
+      "maximum_application_stage_invocations_per_case",
+      "maximum_application_stage_invocations_total",
+      "review_transport_max_retries",
+      "synthetic_only",
+      "no_supabase",
+      "no_payment",
+      "no_production"
+    ],
+    "fixed_values": {
+      "model": "gpt-5.6-luna",
+      "maximum_application_stage_invocations_per_case": 12,
+      "maximum_application_stage_invocations_total": 108,
+      "review_transport_max_retries": 0,
+      "synthetic_only": true,
+      "no_supabase": true,
+      "no_payment": true,
+      "no_production": true
+    }
+  },
+  "runtime_gate": {
+    "cli_flag": "--execute-provider-review",
+    "environment_authorization_name": "M2_V1D_PROVIDER_EXECUTION_AUTHORIZED",
+    "environment_authorization_value": "I_HAVE_EXPLICIT_HUMAN_AUTHORIZATION",
+    "snapshot_environment_name": "M2_V1D_AUTHORIZED_SNAPSHOT",
+    "input_sha_environment_name": "M2_V1D_AUTHORIZED_INPUT_SHA256",
+    "human_reference_environment_name": "M2_V1D_HUMAN_AUTHORIZATION_REFERENCE",
+    "human_reference_evidence_storage": "sha256_only",
+    "api_key_environment_name": "OPENAI_API_KEY",
+    "clean_worktree_required": true,
+    "explicit_case_or_all_nine_required": true,
+    "output_directory_required": true,
+    "any_missing_gate_behavior": "nonzero_exit_before_provider_client_construction"
+  },
+  "current_authority": {
+    "authorized_snapshot": null,
+    "authorized_input_sha256": null,
+    "human_authorization_reference": null,
+    "authorized_case_ids": [],
+    "authorization_timestamp": null
+  }
+}
