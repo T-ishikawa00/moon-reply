@@ -18,6 +18,13 @@
     "v1_c_r1_c1_review": "PASS 0/0/0",
     "v1_d_authorized": true,
     "v1_d_status": "in_progress_offline_review_harness",
+    "v1_d_step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
+    "v1_d_step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
+    "v1_d_step_1_findings": [
+      "controlled_provider_execution_inputs_not_frozen",
+      "provider_attempt_ceiling_does_not_account_for_sdk_retries"
+    ],
+    "v1_d_step_1_c1_status": "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
     "provider_execution_authorized": false
   },
   "step_1_evidence_boundary": {
@@ -28,7 +35,7 @@
       "review_harness_correctness",
       "exact_draft_regression",
       "r2_b_shell_structural_preservation",
-      "controlled_provider_review_readiness"
+      "controlled_provider_review_packet_exact_inputs_and_execution_constraints_prepared"
     ],
     "must_not_claim": [
       "actual_v15_provider_prose_quality",
@@ -40,7 +47,8 @@
       "plausibly_worth_jpy980",
       "r2_c_pass",
       "jpy980_runtime_readiness",
-      "global_q0_completion"
+      "global_q0_completion",
+      "hard_provider_http_attempt_ceiling"
     ]
   },
   "fixture_contract": {
@@ -107,6 +115,36 @@
     "consultation_specific_emotional_copy_requires_new_factual_proposition": false,
     "consultation_specific_emotional_copy_requires_distinct_function": true,
     "tradeoff_required_when_not_genuinely_applicable": false
+  },
+  "controlled_provider_review_authority": {
+    "packet_status": "exact_inputs_and_execution_constraints_prepared",
+    "frozen_input_packet": "controlled-provider-inputs-v1.json",
+    "frozen_case_count": 9,
+    "model": "gpt-5.6-luna",
+    "raw_text_to_pb_01_extraction_correctness": "unestablished",
+    "future_execution_architecture": [
+      "exact_frozen_synthetic_inputs",
+      "V15_AssessmentApplication",
+      "FakeAssessmentRepository_or_local_in_memory_repository",
+      "review_only_real_provider_transport_with_explicit_maxRetries_0",
+      "V15_PB-01_through_PB-06",
+      "optional_one_quality_reassessment",
+      "captured_offline_evidence_files"
+    ],
+    "production_service_entrypoint_used": false,
+    "supabase_repository_used": false,
+    "payment_used": false,
+    "production_used": false,
+    "controlled_provider_execution_harness": "not_implemented",
+    "provider_execution_authorized": false,
+    "provider_execution": 0,
+    "maximum_application_stage_invocations_per_case": 12,
+    "maximum_application_stage_invocations_total": 108,
+    "current_openai_transport_explicit_max_retries": false,
+    "review_transport_max_retries": 0,
+    "hard_provider_http_attempt_ceiling_established": false,
+    "intended_provider_http_attempt_ceiling_after_verified_no_retry_executor": 108,
+    "quality_reassessment_is_sdk_retry": false
   },
   "review_surface": {
     "path": "/review/runtime/v15",

@@ -1,7 +1,7 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 1 Offline Fixtures / Product Re-review Harness — In Progress
+## V1-D Step 1 C1 Controlled Provider Packet Correction — In Progress
 
 - [x] Exact parent fixed at accepted V1-C snapshot `a436210bb035746c129fe071e6225b3799b9e5d8`
 - [x] V1-C synchronized as `accepted_complete`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`
@@ -17,15 +17,19 @@
 - [x] Private `/review/runtime/v15` is production/internal-flag gated, noindex/nofollow, fixture-only, and explicitly labeled non-Provider
 - [x] Review route renders the existing `CustomerAssessmentNote`; Product component/CSS and customer projections remain byte-identical
 - [x] Human Product review sheet contains no prefilled PASS and remains `pending_actual_v15_provider_output`
-- [x] Controlled nine-case V15 Provider plan is prepared with fixed identity/clock/timezone/call ceiling and `provider_execution_authorized=false`
-- [x] Exact scope `17/17`: 8 UPDATE + 9 NEW; DELETE / RENAME 0
-- [x] Dedicated verifier fixed at `45/45`; immutable predecessor V1-C R1-C1 `50/50` executed once; duplicate upstream runs omitted
+- [x] Step 1 snapshot `4c757756…` review retained as `NEEDS_CORRECTION 0/2/0`; both controlled-execution findings are explicit history
+- [x] Exactly nine synthetic AssessmentInputs, clocks/timezones, `gpt-5.6-luna`, routes, and one exact clarification answer are frozen
+- [x] Future execution bypasses `service.ts`/Supabase and requires V15 `AssessmentApplication` plus Fake/local repository; executor remains `not_implemented`
+- [x] 12/case and 108/total are Application Stage invocation ceilings only; future review transport requires explicit `maxRetries=0`
+- [x] Current hard Provider HTTP-attempt ceiling remains `not_established`; quality reassessment is distinct from SDK retry
+- [x] C1 exact scope `11/11`: 10 UPDATE + 1 NEW; DELETE / RENAME 0
+- [x] Corrected verifier fixed at `50/50`; immutable Step 1 `45/45` executed once and recursively covers predecessor/upstream
 - [x] Typecheck, zero-warning lint, build, diff, exact scope, protected blobs, sensitive scan, main/next-env/stash/worktree gates PASS
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] Human / ChatGPT review of V1-D Step 1 offline evidence
+- [ ] Human / ChatGPT review of V1-D Step 1 C1 controlled Provider packet
 - [ ] Actual V15 controlled Provider run — separately unauthorized
 
-Status is `in_progress_offline_review_harness`. Actual V15 prose/fidelity, PB-06 Provider recall/precision, real repair success, Human emotional understanding, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `in_progress_offline_review_harness`; C1 is `controlled_provider_execution_authority_corrected_pending_human_chatgpt_review`. The packet is exact, but no controlled Provider executor exists and execution is unauthorized. Actual V15 prose/fidelity, PB-06 Provider recall/precision, real repair success, Human emotional understanding, hard Provider HTTP-attempt ceiling, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->

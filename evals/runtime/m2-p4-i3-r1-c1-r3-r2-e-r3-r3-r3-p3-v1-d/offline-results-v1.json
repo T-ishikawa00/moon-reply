@@ -35,7 +35,9 @@
     "review_harness_uses_existing_projection_decoder": true,
     "review_harness_provider_db_payment_network_calls": 0,
     "r2_b_shell_structural_regression": "PASS",
-    "controlled_provider_review_plan_ready": true,
+    "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
+    "frozen_controlled_provider_inputs_9_of_9": true,
+    "controlled_provider_execution_harness": "not_implemented",
     "provider_execution_authorized": false
   },
   "unestablished": {
@@ -49,7 +51,8 @@
     "formal_r2_c_visual_pass": true,
     "r2_c_pass": true,
     "jpy980_runtime_readiness": true,
-    "global_q0_completion": true
+    "global_q0_completion": true,
+    "hard_provider_http_attempt_ceiling": true
   },
   "fixture_results": {
     "required_intentions": 22,
@@ -67,16 +70,41 @@
     "explicit_offline_label": true,
     "actual_user_data": false
   },
+  "controlled_provider_execution": {
+    "step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
+    "step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
+    "step_1_c1_status": "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
+    "packet_status": "exact_inputs_and_execution_constraints_prepared",
+    "frozen_case_count": 9,
+    "model": "gpt-5.6-luna",
+    "raw_text_to_pb_01_extraction_correctness": "unestablished",
+    "production_service_entrypoint_used": false,
+    "repository_requirement": "FakeAssessmentRepository_or_local_in_memory_repository",
+    "supabase_repository_used": false,
+    "payment_used": false,
+    "production_used": false,
+    "execution_harness": "not_implemented",
+    "maximum_application_stage_invocations_per_case": 12,
+    "maximum_application_stage_invocations_total": 108,
+    "current_openai_transport_explicit_max_retries": false,
+    "future_review_transport_max_retries": 0,
+    "hard_provider_http_attempt_ceiling_established": false,
+    "intended_provider_http_attempt_ceiling_after_verified_no_retry_executor": 108,
+    "quality_reassessment_is_sdk_retry": false,
+    "provider_execution_authorized": false,
+    "provider_execution": 0
+  },
   "validation": {
-    "v1_d_dedicated_verifier": "PASS 45/45",
-    "immutable_v1_c_r1_c1_predecessor_verifier": "PASS 50/50",
+    "v1_d_c1_dedicated_verifier": "PASS 50/50",
+    "immutable_v1_d_step_1_verifier": "PASS 45/45",
+    "immutable_v1_c_r1_c1_predecessor_via_step_1": "PASS 50/50",
     "predecessor_upstream_chain_reexecuted_separately": false,
     "decision_policy_covered_by_predecessor_chain": "PASS 40/40",
     "typecheck": "PASS",
     "lint_max_warnings_0": "PASS",
     "build": "PASS",
     "git_diff_check": "PASS",
-    "exact_scope": "PASS 17/17",
+    "exact_scope": "PASS 11/11",
     "protected_blob_scan": "PASS",
     "sensitive_scan": "PASS"
   },

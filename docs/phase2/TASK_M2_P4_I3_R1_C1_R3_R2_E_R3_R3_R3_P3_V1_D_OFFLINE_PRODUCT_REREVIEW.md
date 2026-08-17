@@ -8,9 +8,17 @@
 - V1-C history is retained: core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` is `PASS 0/0/0`; R1 `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40` initially received `NEEDS_CORRECTION 0/1/0`; R1-C1 at `a436210b…` is `PASS 0/0/0`.
 - V1-D Step 1 is authorized. Provider execution remains unauthorized and was not performed.
 
+## Step 1 C1 correction
+
+Step 1 snapshot `4c7577564421e2dbd264ffadb5ccab8d961c42eb` received ChatGPT review `NEEDS_CORRECTION`, BLOCKER 0 / MAJOR 2 / MINOR 0. The retained findings are `controlled_provider_execution_inputs_not_frozen` and `provider_attempt_ceiling_does_not_account_for_sdk_retries`. All other Step 1 results remain PASS and are not redesigned.
+
+C1 freezes exactly nine consultation-specific synthetic `AssessmentInput` records, each case's clock/timezone and expected initial route, the `gpt-5.6-luna` model, and the single clarification case's exact `latest_contact_timing` answer. No names, real people, workplace/school/address/contact identifiers, or Human PII are included. Raw text to PB-01 extraction correctness and every Provider outcome remain unestablished.
+
+`controlled_provider_review_packet=exact_inputs_and_execution_constraints_prepared`; this does not mean immediately executable. `controlled_provider_execution_harness=not_implemented`, `provider_execution_authorized=false`, and Provider execution remains zero.
+
 ## Step 1 boundary
 
-This step adds evidence and review infrastructure only. It may establish fixture completeness, deterministic routing/evaluator/recovery behavior, harness correctness, exact-draft regression, R2-B shell structural preservation, and readiness for a separately authorized controlled Provider review.
+This step adds evidence and review infrastructure only. It may establish fixture completeness, deterministic routing/evaluator/recovery behavior, harness correctness, exact-draft regression, R2-B shell structural preservation, and an exact controlled Provider input/constraint packet for later executor work.
 
 It does not establish actual V15 prose quality or semantic fidelity, PB-06 Provider recall/precision, real repair success rate, Human emotional understanding from real output, `plausibly_worth_jpy980`, R2-C PASS, JPY980 Runtime readiness, or Global Q0 completion.
 
@@ -59,13 +67,17 @@ No keyword classifier, embedding model, or fixture-ID Runtime branch is added.
 
 The Human Product review sheet defines all required judgments but contains no PASS and no actual output records. Provider-dependent values remain `pending_actual_v15_provider_output`.
 
-The controlled plan selects nine synthetic cases, locks V15 identity, clock/timezone, pre-Product route, one-reassessment budget, evidence outputs, and a conservative ceiling of 12 calls per case / 108 total. `provider_execution_authorized=false`. Separate explicit Human authority is required before any execution.
+The controlled plan selects exactly nine synthetic cases and binds them one-to-one to `controlled-provider-inputs-v1.json`. It locks every complete `AssessmentInput`, V15 identity, `gpt-5.6-luna`, clock/timezone, expected route, one-reassessment budget, and evidence outputs. The clarification case contains one exact answer payload and no second answer.
+
+The future execution flow is exact frozen inputs → V15 `AssessmentApplication` → `FakeAssessmentRepository` or another local in-memory repository → review-only real Provider transport → V15 PB-01 through PB-06 → optional one quality reassessment → offline evidence capture. The normal `service.ts` / `SupabaseAssessmentRepository` path is prohibited. The executor is not implemented in C1.
+
+The budget is a maximum of 12 Application Stage invocations per case and 108 total. It is not a current hard Provider HTTP-attempt ceiling: production `OpenAiResponsesTransport` does not explicitly configure `maxRetries`. A later review-only executor must set `maxRetries=0` and prove that configuration before 108 can become the intended HTTP-attempt ceiling. V15 quality reassessment is an Application action, not an SDK retry. `provider_execution_authorized=false` and separate explicit Human authority remains required.
 
 ## Evidence and operations
 
-- Exact scope: `17/17` — 8 UPDATE + 9 NEW; DELETE / RENAME 0.
-- Dedicated verifier: fixed `45/45`.
-- Immutable accepted predecessor verifier: V1-C R1-C1 `50/50`, executed once; its recursive accepted upstream/Decision Policy chain is not redundantly rerun.
+- C1 exact scope: `11/11` — 10 UPDATE + 1 NEW; DELETE / RENAME 0.
+- Corrected dedicated verifier: fixed `50/50`.
+- Immutable Step 1 verifier: `45/45`, executed once; its recursive V1-C R1-C1/upstream/Decision Policy chain is not redundantly rerun.
 - Typecheck, zero-warning lint, build, `git diff --check`, exact scope, sensitive scan, and protected-blob checks: PASS.
 - OpenAI Provider / DB / Supabase / migration apply / Payment / deploy: `0 / 0 / 0 / 0 / 0 / 0`.
 
@@ -73,4 +85,4 @@ R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediat
 
 ## Human / ChatGPT review request
 
-Review the 22-case authority matrix, actual deterministic routing/recovery regressions, offline labeling, exact draft checks, private-route guards, and evidence ceiling. Do not infer actual V15 Product quality or JPY980 value from this Step 1 harness.
+Review the frozen nine-case `AssessmentInput` packet, exact model/clock/clarification authority, service/Supabase exclusion, Application-stage versus HTTP-attempt distinction, and explicit future `maxRetries=0` precondition. The accepted 22-case matrix, routing/recovery regressions, offline labeling, exact draft checks, and private-route guards remain unchanged. Do not infer actual V15 Product quality, hard HTTP-attempt control, or JPY980 value.

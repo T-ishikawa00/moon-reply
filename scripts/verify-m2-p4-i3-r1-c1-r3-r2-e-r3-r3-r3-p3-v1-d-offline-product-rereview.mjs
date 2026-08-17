@@ -11,6 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { AssessmentApplication } from "../lib/assessment/runtime/application.ts";
+import { validateClarificationAnswerV1 } from "../lib/assessment/runtime/clarification-evidence-v1.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import {
   FakeAiStageTransport,
@@ -20,6 +21,10 @@ import { evaluateJpy980InputSufficiencyV2 } from "../lib/assessment/runtime/jpy9
 import { validateJpy980ProductScopeV1 } from "../lib/assessment/runtime/jpy980-product-scope-validation-v1.ts";
 import { loadM2P4QualityReassessmentRuntimeStageCatalog } from "../lib/assessment/runtime/schema-catalog.ts";
 import {
+  RELATIONSHIP_VALUES,
+  REQUESTED_TOPIC_VALUES,
+} from "../lib/assessment/runtime/types.ts";
+import {
   V1_D_OFFLINE_EVIDENCE_LABEL,
   V1_D_OFFLINE_FIXTURE_PROVENANCE,
   v1DExcludedHistoricalPaidProductFixtures,
@@ -27,17 +32,18 @@ import {
 } from "../lib/assessment/runtime/review/m2-p4-v15-product-rereview-fixtures.ts";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D";
-const baseline = "a436210bb035746c129fe071e6225b3799b9e5d8";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-C1";
+const baseline = "4c7577564421e2dbd264ffadb5ccab8d961c42eb";
+const acceptedV1C = "a436210bb035746c129fe071e6225b3799b9e5d8";
 const r1 = "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40";
 const v1CCore = "e7ae51aa96bbb3d1e791ac957e26bb8918d10547";
 const v1B = "e21c9b571426160703b1112c9057cc26c7738a0a";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-c1-controlled-provider-packet";
+const step1Branch =
   "review/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview";
-const predecessorBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-c1-precise-repair-paths";
-const expectedSubject = "test: add V1-D offline product review harness";
+const expectedSubject = "fix: freeze V1-D controlled review inputs";
 const precommit = process.argv.includes("--precommit");
 
 const planningRoot =
@@ -51,22 +57,16 @@ const updatedPaths = [
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_OFFLINE_PRODUCT_REREVIEW.md",
+  packageRoot + "/controlled-provider-review-plan-v1.json",
+  packageRoot + "/offline-product-review-contract-v1.json",
+  packageRoot + "/offline-results-v1.json",
   planningRoot + "/capabilities-v1.json",
   planningRoot + "/implementation-work-packages-v1.json",
-  v1CRoot + "/capabilities-v1.json",
-  v1CRoot + "/offline-results-v1.json",
-  "app/review/runtime/page.tsx",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview.mjs",
 ];
 const newPaths = [
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_OFFLINE_PRODUCT_REREVIEW.md",
-  packageRoot + "/offline-product-review-contract-v1.json",
-  packageRoot + "/fixture-matrix-v1.json",
-  packageRoot + "/offline-results-v1.json",
-  packageRoot + "/human-product-review-sheet-v1.json",
-  packageRoot + "/controlled-provider-review-plan-v1.json",
-  "lib/assessment/runtime/review/m2-p4-v15-product-rereview-fixtures.ts",
-  "app/review/runtime/v15/page.tsx",
-  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview.mjs",
+  packageRoot + "/controlled-provider-inputs-v1.json",
 ];
 const exactScope = [...updatedPaths, ...newPaths];
 
@@ -422,6 +422,7 @@ const matrix = readJson(packageRoot + "/fixture-matrix-v1.json");
 const offlineResults = readJson(packageRoot + "/offline-results-v1.json");
 const reviewSheet = readJson(packageRoot + "/human-product-review-sheet-v1.json");
 const providerPlan = readJson(packageRoot + "/controlled-provider-review-plan-v1.json");
+const controlledInputs = readJson(packageRoot + "/controlled-provider-inputs-v1.json");
 const matrixById = new Map(
   matrix.fixtures.map((fixture) => [fixture.fixture_id, fixture]),
 );
@@ -442,11 +443,12 @@ async function check(name, fn) {
 
 await check("exact Git authority, lineage, main and direct commit shape", () => {
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
-  assert.equal(git(["show", "-s", "--format=%s", baseline]), "fix: validate quality repair paths precisely");
+  assert.equal(git(["show", "-s", "--format=%s", baseline]), "test: add V1-D offline product review harness");
+  assert.equal(git(["show", "-s", "--format=%s", acceptedV1C]), "fix: validate quality repair paths precisely");
   assert.equal(git(["show", "-s", "--format=%s", r1]), "fix: add bounded quality reassessment recovery");
   assert.equal(git(["show", "-s", "--format=%s", v1CCore]), "feat: add JPY980 semantic quality evaluator");
   assert.equal(git(["show", "-s", "--format=%s", v1B]), "feat: add JPY980 semantic depth successor");
-  for (const ancestor of [r1, v1CCore, v1B]) {
+  for (const ancestor of [acceptedV1C, r1, v1CCore, v1B]) {
     assert.doesNotThrow(() => git(["merge-base", "--is-ancestor", ancestor, baseline]));
   }
   assert.equal(git(["rev-parse", "refs/heads/main"]), expectedMain);
@@ -463,7 +465,7 @@ await check("exact Git authority, lineage, main and direct commit shape", () => 
   }
 });
 
-await check("exact 17-path scope is 8 UPDATE plus 9 NEW", () => {
+await check("exact 11-path scope is 10 UPDATE plus 1 NEW", () => {
   const scope = collectScope();
   assert.deepEqual(sorted(scope.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
@@ -495,6 +497,7 @@ await check("all protected Runtime, Product, schema, migration and Payment blobs
     "lib/assessment/runtime/pipeline.ts",
     "lib/assessment/runtime/application.ts",
     "lib/assessment/runtime/service.ts",
+    "lib/assessment/runtime/openai-transport.ts",
     "lib/assessment/runtime/quality-reassessment-v1.ts",
     "lib/assessment/runtime/semantic-disposition-v5.ts",
     "lib/assessment/runtime/product-semantic-shape-v1.ts",
@@ -512,6 +515,8 @@ await check("all protected Runtime, Product, schema, migration and Payment blobs
     "lib/assessment/runtime/customer-assessment-projection-v1.ts",
     "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
     "lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts",
+    "lib/assessment/runtime/review/m2-p4-v15-product-rereview-fixtures.ts",
+    "app/review/runtime/v15/page.tsx",
     "next-env.d.ts",
     ...tracked.filter((entry) => entry.endsWith(".schema.json")),
     ...tracked.filter((entry) => /^supabase\/migrations\/000[6-9]_.*\.sql$/u.test(entry)),
@@ -538,7 +543,7 @@ await check("sensitive-value and zero-operation boundaries are explicit", () => 
 
 await check("V1-C acceptance and correction history are exact", () => {
   assert.equal(contract.authority.v1_c, "accepted_complete");
-  assert.equal(contract.authority.accepted_v1_c_snapshot, baseline);
+  assert.equal(contract.authority.accepted_v1_c_snapshot, acceptedV1C);
   assert.equal(contract.authority.v1_c_chatgpt_review, "PASS_complete");
   assert.equal(contract.authority.v1_c_human_review, "PASS_complete");
   assert.equal(contract.authority.v1_c_human_acceptance, "complete");
@@ -554,7 +559,7 @@ await check("updated V1-C and planning artifacts synchronize accepted authority"
   const planning = readJson(planningRoot + "/capabilities-v1.json");
   const packages = readJson(planningRoot + "/implementation-work-packages-v1.json");
   assert.equal(capabilities.status, "accepted_complete");
-  assert.equal(capabilities.authority.v1_c_r1_c1_snapshot, baseline);
+  assert.equal(capabilities.authority.v1_c_r1_c1_snapshot, acceptedV1C);
   assert.equal(capabilities.authority.v1_c_human_acceptance, "complete");
   assert.equal(results.current_product_authority.v1_c, "accepted_complete");
   assert.equal(planning.v1_c.status, "accepted_complete");
@@ -567,6 +572,16 @@ await check("updated V1-C and planning artifacts synchronize accepted authority"
 await check("V1-D is authorized in progress while Provider remains unauthorized", () => {
   assert.equal(contract.authority.v1_d_authorized, true);
   assert.equal(contract.authority.v1_d_status, "in_progress_offline_review_harness");
+  assert.equal(contract.authority.v1_d_step_1_snapshot, baseline);
+  assert.equal(contract.authority.v1_d_step_1_chatgpt_review, "NEEDS_CORRECTION 0/2/0");
+  assert.deepEqual(contract.authority.v1_d_step_1_findings, [
+    "controlled_provider_execution_inputs_not_frozen",
+    "provider_attempt_ceiling_does_not_account_for_sdk_retries",
+  ]);
+  assert.equal(
+    contract.authority.v1_d_step_1_c1_status,
+    "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
+  );
   assert.equal(contract.authority.provider_execution_authorized, false);
   const planning = readJson(planningRoot + "/capabilities-v1.json");
   const packages = readJson(
@@ -575,6 +590,9 @@ await check("V1-D is authorized in progress while Provider remains unauthorized"
   assert.equal(planning.implementation_authority["V1-D"], "in_progress_offline_review_harness");
   assert.equal(planning.v1_d.authorized, true);
   assert.equal(planning.v1_d.provider_execution_authorized, false);
+  assert.equal(planning.v1_d.step_1_snapshot, baseline);
+  assert.equal(planning.v1_d.step_1_chatgpt_review, "NEEDS_CORRECTION 0/2/0");
+  assert.equal(planning.v1_d.controlled_provider_execution_harness, "not_implemented");
   assert.equal(
     packages.status,
     "v1_a_v1_b_v1_c_accepted_complete_v1_d_in_progress_offline_review_harness",
@@ -582,6 +600,8 @@ await check("V1-D is authorized in progress while Provider remains unauthorized"
   const v1DPackage = packages.packages.find((entry) => entry.id === "V1-D");
   assert.equal(v1DPackage.status, "in_progress_offline_review_harness");
   assert.equal(v1DPackage.provider_execution_authorized, false);
+  assert.equal(v1DPackage.step_1_snapshot, baseline);
+  assert.equal(v1DPackage.step_1_chatgpt_review, "NEEDS_CORRECTION 0/2/0");
 });
 
 const requiredFixtureIds = [
@@ -1045,32 +1065,197 @@ await check("R2-B Product component, CSS and projections remain byte-identical",
   assert.equal(offlineResults.unestablished.formal_r2_c_visual_pass, true);
 });
 
-await check("controlled Provider plan is bounded, synthetic and unexecuted", () => {
-  const requiredCases = [
-    "ordinary_reply_waiting",
-    "administrative_reply_with_tone_concern_ready_candidate",
-    "reply_waiting_with_usual_cadence",
-    "draft_request_with_relationship_intent",
-    "polite_thank_you_with_draft",
-    "kansai_persona_draft",
-    "alternative_tradeoff_applicable",
-    "alternative_tradeoff_not_applicable",
-    "one_clarification_answer_becomes_ready",
-  ];
+const controlledCaseIds = [
+  "ordinary_reply_waiting",
+  "administrative_reply_with_tone_concern_ready_candidate",
+  "reply_waiting_with_usual_cadence",
+  "draft_request_with_relationship_intent",
+  "polite_thank_you_with_draft",
+  "kansai_persona_draft",
+  "alternative_tradeoff_applicable",
+  "alternative_tradeoff_not_applicable",
+  "one_clarification_answer_becomes_ready",
+];
+
+await check("controlled Provider packet is bounded, synthetic and unexecuted", () => {
   assert.equal(providerPlan.provider_execution_authorized, false);
+  assert.equal(providerPlan.execution_count_in_this_task, 0);
+  assert.equal(
+    providerPlan.controlled_provider_review_packet,
+    "exact_inputs_and_execution_constraints_prepared",
+  );
+  assert.equal(providerPlan.controlled_provider_execution_harness, "not_implemented");
+  assert.equal(providerPlan.frozen_input_packet, "controlled-provider-inputs-v1.json");
   assert.equal(providerPlan.scope.synthetic_cases_only, true);
   assert.equal(providerPlan.scope.real_person_data, false);
   assert.equal(providerPlan.scope.human_pii, false);
-  assert.deepEqual(sorted(providerPlan.cases.map((entry) => entry.fixture_id)), sorted(requiredCases));
-  assert.ok(providerPlan.cases.every((entry) => entry.timezone === "Asia/Tokyo"));
-  assert.ok(providerPlan.cases.every((entry) => Number.isFinite(Date.parse(entry.fixed_clock))));
-  assert.ok(providerPlan.cases.every((entry) => entry.maximum_provider_calls === 12));
-  assert.equal(providerPlan.execution_limits.maximum_quality_reassessments_per_case, 1);
-  assert.equal(
-    providerPlan.execution_limits.estimated_provider_attempt_ceiling,
-    providerPlan.cases.reduce((total, entry) => total + entry.maximum_provider_calls, 0),
+  assert.deepEqual(
+    sorted(providerPlan.cases.map((entry) => entry.fixture_id)),
+    sorted(controlledCaseIds),
   );
   assert.equal(providerPlan.runtime_identity.catalog_version, "runtime-stage-catalog-v15.0.0");
+  assert.deepEqual(Object.values(providerPlan.operations), [0, 0, 0, 0, 0, 0]);
+});
+
+await check("exact nine frozen inputs match plan IDs, model, clocks and timezones", () => {
+  assert.equal(controlledInputs.case_count, 9);
+  assert.equal(controlledInputs.cases.length, 9);
+  assert.equal(new Set(controlledInputs.cases.map((entry) => entry.fixture_id)).size, 9);
+  assert.deepEqual(
+    sorted(controlledInputs.cases.map((entry) => entry.fixture_id)),
+    sorted(controlledCaseIds),
+  );
+  assert.equal(controlledInputs.model, "gpt-5.6-luna");
+  assert.equal(providerPlan.runtime_identity.model, "gpt-5.6-luna");
+  const planById = new Map(providerPlan.cases.map((entry) => [entry.fixture_id, entry]));
+  for (const frozen of controlledInputs.cases) {
+    const planned = planById.get(frozen.fixture_id);
+    assert.ok(planned, frozen.fixture_id);
+    assert.equal(frozen.fixed_clock, planned.fixed_clock, frozen.fixture_id);
+    assert.equal(frozen.timezone, planned.timezone, frozen.fixture_id);
+    assert.equal(frozen.expected_initial_route, planned.expected_initial_route, frozen.fixture_id);
+    assert.equal(frozen.timezone, "Asia/Tokyo", frozen.fixture_id);
+    assert.ok(Number.isFinite(Date.parse(frozen.fixed_clock)), frozen.fixture_id);
+  }
+});
+
+await check("every frozen AssessmentInput is complete, valid, specific and PII-free", () => {
+  const inputKeys = [
+    "currentSituation",
+    "optionalMessage",
+    "privacyAcknowledged",
+    "relationship",
+    "requestedTopics",
+  ];
+  const identifierPattern =
+    /(?:株式会社|有限会社|大学|高校|中学校|小学校|〒|\d+丁目|\d+番地|電話番号|メールアドレス|LINE\s*ID|https?:\/\/|www\.|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/iu;
+  for (const frozen of controlledInputs.cases) {
+    assert.equal(frozen.synthetic_only, true, frozen.fixture_id);
+    assert.equal(frozen.human_pii, false, frozen.fixture_id);
+    const input = frozen.assessment_input;
+    assert.deepEqual(sorted(Object.keys(input)), sorted(inputKeys), frozen.fixture_id);
+    assert.equal(typeof input.currentSituation, "string", frozen.fixture_id);
+    assert.ok(input.currentSituation.length >= 70, frozen.fixture_id);
+    assert.ok(input.currentSituation.length <= 5_000, frozen.fixture_id);
+    assert.ok(
+      input.optionalMessage === null ||
+        (typeof input.optionalMessage === "string" && input.optionalMessage.length <= 2_000),
+      frozen.fixture_id,
+    );
+    assert.ok(RELATIONSHIP_VALUES.includes(input.relationship), frozen.fixture_id);
+    assert.ok(input.requestedTopics.length >= 1 && input.requestedTopics.length <= 3, frozen.fixture_id);
+    assert.equal(new Set(input.requestedTopics).size, input.requestedTopics.length, frozen.fixture_id);
+    assert.ok(
+      input.requestedTopics.every((topic) => REQUESTED_TOPIC_VALUES.includes(topic)),
+      frozen.fixture_id,
+    );
+    assert.equal(input.privacyAcknowledged, true, frozen.fixture_id);
+    if (input.requestedTopics.includes("message_impact")) {
+      assert.equal(typeof input.optionalMessage, "string", frozen.fixture_id);
+      assert.ok(input.optionalMessage.length > 0, frozen.fixture_id);
+    }
+    assert.doesNotMatch(
+      input.currentSituation + "\n" + (input.optionalMessage ?? ""),
+      identifierPattern,
+      frozen.fixture_id,
+    );
+  }
+  assert.equal(controlledInputs.provenance, "synthetic_controlled_review_input");
+  assert.equal(controlledInputs.evidence_boundary.actual_v15_successor_output_exists, false);
+  assert.equal(
+    controlledInputs.evidence_boundary.raw_text_to_pb_01_extraction_correctness,
+    "unestablished",
+  );
+});
+
+await check("clarification case freezes exactly one resolving answer and no second answer", () => {
+  const clarificationCases = controlledInputs.cases.filter(
+    (entry) => entry.clarification !== null,
+  );
+  assert.equal(clarificationCases.length, 1);
+  const selected = clarificationCases[0];
+  assert.equal(selected.fixture_id, "one_clarification_answer_becomes_ready");
+  assert.deepEqual(sorted(Object.keys(selected.clarification)), sorted([
+    "expected_target",
+    "answer_payload",
+    "expected_route_after_answer",
+    "maximum_answers_total",
+    "second_answer_allowed",
+  ]));
+  assert.equal(selected.clarification.expected_target, "latest_contact_timing");
+  assert.deepEqual(selected.clarification.answer_payload, {
+    kind: "elapsed_bucket",
+    value: "six_to_24_hours",
+  });
+  assert.equal(selected.clarification.expected_route_after_answer, "full_paid_ready_candidate");
+  assert.equal(selected.clarification.maximum_answers_total, 1);
+  assert.equal(selected.clarification.second_answer_allowed, false);
+  const validated = validateClarificationAnswerV1({
+    target: selected.clarification.expected_target,
+    answer: selected.clarification.answer_payload,
+    resumeStartedAt: selected.fixed_clock,
+  });
+  assert.equal(validated.resolvesTarget, true);
+  assert.deepEqual(
+    controlledInputs.cases
+      .filter((entry) => entry.fixture_id !== selected.fixture_id)
+      .map((entry) => entry.clarification),
+    Array(8).fill(null),
+  );
+  assert.equal(Object.hasOwn(selected.clarification, "second_answer_payload"), false);
+});
+
+await check("future controlled execution bypasses service and Supabase with a local repository", () => {
+  const architecture = providerPlan.future_execution_architecture;
+  assert.equal(architecture.input_source, "exact_frozen_synthetic_inputs");
+  assert.equal(architecture.application, "V15 AssessmentApplication");
+  assert.equal(
+    architecture.repository_requirement,
+    "FakeAssessmentRepository_or_local_in_memory_repository",
+  );
+  assert.equal(architecture.production_service_entrypoint_used, false);
+  assert.equal(architecture.supabase_repository_used, false);
+  assert.equal(architecture.payment_used, false);
+  assert.equal(architecture.production_used, false);
+  assert.equal(architecture.executor_implementation_status, "not_implemented");
+  assert.equal(contract.controlled_provider_review_authority.production_service_entrypoint_used, false);
+  assert.equal(contract.controlled_provider_review_authority.supabase_repository_used, false);
+  assert.equal(offlineResults.controlled_provider_execution.production_service_entrypoint_used, false);
+  assert.equal(offlineResults.controlled_provider_execution.supabase_repository_used, false);
+  assert.match(readText("lib/assessment/runtime/service.ts"), /SupabaseAssessmentRepository/u);
+  assert.equal(providerPlan.scope.db_operations, false);
+  assert.equal(providerPlan.scope.supabase_operations, false);
+  assert.equal(providerPlan.operations.db_operations, 0);
+  assert.equal(providerPlan.operations.supabase_operations, 0);
+});
+
+await check("Application invocation and Provider HTTP ceilings are separated fail-closed", () => {
+  const limits = providerPlan.transport_and_invocation_limits;
+  assert.equal(limits.maximum_quality_reassessments_per_case, 1);
+  assert.equal(limits.maximum_product_generation_cycles_per_case, 2);
+  assert.equal(limits.maximum_application_stage_invocations_per_case, 12);
+  assert.equal(limits.maximum_application_stage_invocations_total, 108);
+  assert.ok(providerPlan.cases.every((entry) => entry.maximum_application_stage_invocations === 12));
+  assert.equal(
+    providerPlan.cases.reduce(
+      (total, entry) => total + entry.maximum_application_stage_invocations,
+      0,
+    ),
+    108,
+  );
+  assert.equal(limits.application_quality_reassessment_is_sdk_retry, false);
+  assert.equal(limits.current_openai_transport_explicit_max_retries, false);
+  assert.equal(limits.review_transport_max_retries, 0);
+  assert.equal(limits.review_transport_no_retry_configuration_required_before_execution, true);
+  assert.equal(limits.hard_provider_http_attempt_ceiling_established, false);
+  assert.equal(limits.intended_provider_http_attempt_ceiling_after_verified_no_retry_executor, 108);
+  assert.equal(Object.hasOwn(limits, "estimated_provider_attempt_ceiling"), false);
+  assert.equal(Object.hasOwn(limits, "retries_outside_v15_quality_reassessment"), false);
+  const productionTransport = readText("lib/assessment/runtime/openai-transport.ts");
+  assert.match(productionTransport, /new OpenAI\(\{ apiKey \}\)/u);
+  assert.doesNotMatch(productionTransport, /maxRetries/u);
+  assert.equal(controlledInputs.provider_execution_authorized, false);
+  assert.equal(controlledInputs.provider_execution_count, 0);
 });
 
 await check("Human Product review sheet has every field and no prefilled PASS", () => {
@@ -1106,6 +1291,7 @@ await check("evidence ceiling preserves every unestablished Product outcome", ()
     "r2_c_pass",
     "jpy980_runtime_readiness",
     "global_q0_completion",
+    "hard_provider_http_attempt_ceiling",
   ];
   assert.ok(requiredUnestablished.every((key) => contract.step_1_evidence_boundary.must_not_claim.includes(key)));
   assert.ok(requiredUnestablished.every((key) => offlineResults.unestablished[key] === true));
@@ -1121,9 +1307,18 @@ await check("offline results distinguish established regression from actual Prov
   assert.equal(offlineResults.established.deterministic_semantic_disposition_regression, true);
   assert.equal(offlineResults.established.maximum_one_quality_reassessment, true);
   assert.equal(offlineResults.established.report_only_exact_draft_preserved, true);
+  assert.equal(
+    offlineResults.established.controlled_provider_review_packet,
+    "exact_inputs_and_execution_constraints_prepared",
+  );
+  assert.equal(offlineResults.established.controlled_provider_execution_harness, "not_implemented");
   assert.equal(offlineResults.fixture_results.actual_v15_successor_outputs, 0);
-  assert.equal(offlineResults.validation.v1_d_dedicated_verifier, "PASS 45/45");
-  assert.equal(offlineResults.validation.immutable_v1_c_r1_c1_predecessor_verifier, "PASS 50/50");
+  assert.equal(offlineResults.validation.v1_d_c1_dedicated_verifier, "PASS 50/50");
+  assert.equal(offlineResults.validation.immutable_v1_d_step_1_verifier, "PASS 45/45");
+  assert.equal(
+    offlineResults.validation.immutable_v1_c_r1_c1_predecessor_via_step_1,
+    "PASS 50/50",
+  );
   assert.equal(offlineResults.validation.predecessor_upstream_chain_reexecuted_separately, false);
 });
 
@@ -1137,9 +1332,17 @@ await check("current docs and review packet state V1-D authority without overcla
     ),
   ].join("\n");
   assert.match(docs, new RegExp(baseline, "u"));
+  assert.match(docs, new RegExp(acceptedV1C, "u"));
   assert.match(docs, /V1-C[^\n]{0,200}accepted_complete/u);
   assert.match(docs, /NEEDS_CORRECTION 0\/1\/0/u);
   assert.match(docs, /R1-C1[^\n]{0,100}PASS 0\/0\/0/u);
+  assert.match(docs, /NEEDS_CORRECTION 0\/2\/0/u);
+  assert.match(docs, /controlled_provider_execution_inputs_not_frozen/u);
+  assert.match(docs, /provider_attempt_ceiling_does_not_account_for_sdk_retries/u);
+  assert.match(docs, /exact_inputs_and_execution_constraints_prepared/u);
+  assert.match(docs, /controlled_provider_execution_harness[=`]not_implemented/u);
+  assert.match(docs, /maxRetries=0/u);
+  assert.match(docs, /hard_provider_http_attempt_ceiling_established[=`]false/u);
   assert.match(docs, /in_progress_offline_review_harness/u);
   assert.match(docs, /Provider execution[^\n]{0,80}unauthorized/u);
   assert.match(docs, /R2-C[^\n]{0,80}remediation_required/u);
@@ -1160,30 +1363,29 @@ await check("review evidence adds no semantic classifier, embedding, or case-ID 
 });
 
 if (!precommit) {
-  await check("immutable accepted V1-C R1-C1 predecessor verifier passes once", () => {
+  await check("immutable V1-D Step 1 verifier passes once with its recursive chain", () => {
     const output = runImmutableVerifier(
       baseline,
-      predecessorBranch,
-      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment.mjs",
+      step1Branch,
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-offline-product-rereview.mjs",
     );
-    assert.match(output, /precise repair path verifier: PASS 50\/50/u);
-    assert.match(output, /Decision Policy: PASS 40\/40/u);
+    assert.match(output, /offline Product re-review verifier: PASS 45\/45/u);
+    assert.match(output, /Immutable V1-C R1-C1 predecessor verifier: PASS 50\/50/u);
   });
 }
 
-const expectedChecks = precommit ? 44 : 45;
+const expectedChecks = precommit ? 49 : 50;
 assert.equal(passed, expectedChecks);
 
 if (precommit) {
-  console.log(`\n${taskId} precommit verifier: PASS 44/44`);
-  console.log("Immutable V1-C R1-C1 50/50 intentionally deferred to the single formal post-commit run.");
+  console.log(`\n${taskId} precommit verifier: PASS 49/49`);
+  console.log("Immutable V1-D Step 1 45/45 intentionally deferred to the single formal post-commit run.");
 } else {
-  console.log(`\n${taskId} offline Product re-review verifier: PASS 45/45`);
-  console.log("Fixture intentions: PASS 22/22; review projections decoded: PASS 10/10");
-  console.log("V1-A routing, one-question lifecycle, Candidate boundary: PASS");
-  console.log("V15 fake semantic/recovery, no attempt 3, exact draft: PASS");
-  console.log("Immutable V1-C R1-C1 predecessor verifier: PASS 50/50 (executed once)");
-  console.log("R2-B shell structural regression: PASS; formal R2-C visual/Product PASS: not established");
+  console.log(`\n${taskId} controlled Provider packet verifier: PASS 50/50`);
+  console.log("Frozen controlled inputs: PASS 9/9; exact model/clock/timezone/clarification: PASS");
+  console.log("Service/Supabase exclusion and Fake/local repository requirement: PASS");
+  console.log("Application-stage ceiling vs Provider HTTP-attempt ceiling: correctly separated");
+  console.log("Immutable V1-D Step 1 verifier: PASS 45/45 (executed once with recursive chain)");
   console.log("Provider execution: 0; DB/Supabase/migration apply/Payment/deploy: 0/0/0/0/0");
-  console.log("Actual V15 quality, Provider fidelity, JPY980 value/readiness, Global Q0: unestablished");
+  console.log("Executor, hard HTTP-attempt ceiling, actual V15 quality/fidelity, JPY980 value/readiness, Global Q0: unestablished");
 }

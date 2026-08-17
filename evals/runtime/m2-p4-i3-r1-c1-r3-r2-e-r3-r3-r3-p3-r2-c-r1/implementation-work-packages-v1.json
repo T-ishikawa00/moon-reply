@@ -330,12 +330,33 @@
       "deterministic_evaluator_recovery_regression": true,
       "private_review_path": "/review/runtime/v15",
       "human_product_review_status": "pending_actual_v15_provider_output",
-      "controlled_provider_review_plan_ready": true,
+      "step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
+      "step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
+      "step_1_c1_status": "controlled_provider_execution_authority_corrected_pending_human_chatgpt_review",
+      "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
+      "frozen_controlled_provider_input_cases": 9,
+      "controlled_review_model": "gpt-5.6-luna",
+      "controlled_provider_execution_harness": "not_implemented",
+      "future_execution_repository": "FakeAssessmentRepository_or_local_in_memory_repository",
+      "production_service_entrypoint_used": false,
+      "supabase_repository_used": false,
+      "maximum_application_stage_invocations_per_case": 12,
+      "maximum_application_stage_invocations_total": 108,
+      "current_openai_transport_explicit_max_retries": false,
+      "future_review_transport_max_retries": 0,
+      "hard_provider_http_attempt_ceiling_established": false,
       "provider_execution_authorized": false,
-      "exact_scope": {
+      "step_1_exact_scope": {
         "total": "17/17",
         "updated": 8,
         "new": 9,
+        "deleted": 0,
+        "renamed": 0
+      },
+      "step_1_c1_exact_scope": {
+        "total": "11/11",
+        "updated": 10,
+        "new": 1,
         "deleted": 0,
         "renamed": 0
       }
