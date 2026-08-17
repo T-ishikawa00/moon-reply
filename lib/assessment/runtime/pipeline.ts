@@ -51,6 +51,7 @@ import {
 } from "./policy.ts";
 import type { SafetyResult } from "./policy.ts";
 import { groundReportContentV3 } from "./report-grounding-v3.ts";
+import { validateProductSemanticShapeV1 } from "./product-semantic-shape-v1.ts";
 import {
   createActionContextV1,
   createContactConstraintPolicyV1,
@@ -58,6 +59,7 @@ import {
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
+import { evaluateSemanticFindingsV5 } from "./semantic-disposition-v5.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
 import { groundStructuredIntakeV5 } from "./structured-intake-grounding-v5.ts";
@@ -456,7 +458,8 @@ export class AssessmentPipeline {
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0";
     const v1A2CapablePair =
       (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0") &&
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
@@ -464,6 +467,7 @@ export class AssessmentPipeline {
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
@@ -680,7 +684,8 @@ export class AssessmentPipeline {
       const authorityIntegrityRuntime =
         runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -1084,6 +1089,14 @@ export class AssessmentPipeline {
       this.definition("PB-05"),
       reportContent as unknown as JsonObject,
     );
+    const semanticQualityRuntime =
+      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0";
+    if (semanticQualityRuntime) {
+      validateProductSemanticShapeV1({
+        decisionPlan,
+        reportContent,
+      });
+    }
 
     const downstreamPaths = [...new Set([...pb04Paths, ...pb05Paths])];
     requireReadyMakingClarificationDownstreamV1({
@@ -1128,11 +1141,17 @@ export class AssessmentPipeline {
           output.validation_mode !== "semantic_findings_only" ||
           !Array.isArray(output.semantic_checks)
         ) throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
-        const { blockingFindings } = evaluateSemanticFindingsV4({
-          validationOutput: output,
-          decisionPlan: decisionPlan as unknown as DecisionPlan,
-          groundedReportContent: reportContent as unknown as ReportContent,
-        });
+        const { blockingFindings } = semanticQualityRuntime
+          ? evaluateSemanticFindingsV5({
+              validationOutput: output,
+              decisionPlan,
+              groundedReportContent: reportContent,
+            })
+          : evaluateSemanticFindingsV4({
+              validationOutput: output,
+              decisionPlan: decisionPlan as unknown as DecisionPlan,
+              groundedReportContent: reportContent as unknown as ReportContent,
+            });
         if (blockingFindings.length > 0) {
           throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
         }
@@ -1382,7 +1401,8 @@ export class AssessmentPipeline {
     this.validateRuntimeIdentity(runContext);
     if (
       (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
-        runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0") ||
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" &&
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0") ||
       runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
       initial.request.id !== runContext.requestId ||
       evidence.ordinal !== 1
@@ -1507,7 +1527,8 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     if (
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0"
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0"
     ) {
       return this.executeV1A2Initial(request, runContext);
     }

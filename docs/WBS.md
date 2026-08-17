@@ -1,7 +1,38 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
+## V1-C Evaluator / Semantic Disposition Successor — Implemented, Pending Human / ChatGPT Review
+
+- [x] Exact parent fixed at Human + ChatGPT accepted V1-B snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`
+- [x] V1-A and V1-B synchronized as `accepted_complete`; V1-B acceptance date `2026-08-17`
+- [x] Exact scope `21/21`: 10 UPDATE + 11 NEW; DELETE / RENAME 0
+- [x] V14 identity fixed at catalog `v14.0.0`, Prompt bundle `v14.0.0`, unchanged Schema set `v6.0.0`, unchanged split topology
+- [x] Common Prompt and PB-01/PB-01C/PB-02/PB-03/PB-04/PB-05 manifest-identical to V13; only PB-06 Prompt identity changes
+- [x] Existing fourteen finding codes and unchanged validation-result schema retained; no new Provider Stage
+- [x] PB-06 Prompt self-contains accepted factual, Safety, Candidate/final-draft, contact, temporal, clarification, and semantic responsibilities
+- [x] Grounded Application Decision explanation allowed while unsupported cause/chronology/inner state/future/outcome remains blocking
+- [x] Evidence significance and mandatory emotional containment enforced; logically complete but cold Product is major/blocking
+- [x] Major/critical genericity or repetition on exact Provider Product paths blocks; minor remains nonblocking
+- [x] Analytical blocks require distinct grounded functions; emotional blocks require distinct emotional functions without a new fact
+- [x] Alternative tradeoff remains conditional; fixed length/section minima and padding remain prohibited
+- [x] SemanticDispositionV5 wraps protected V4 and excludes Application-owned relationship/change fields from new escalation
+- [x] ProductSemanticShapeV1 checks Fact anchor and exact whitespace-normalized duplicate/action/draft copies only
+- [x] Semantic similarity, embeddings, keyword/sentiment/edit-distance/case-ID Product classifiers prohibited
+- [x] V14 runs shape after grounding/schema validation before PB-06 and uses V5; V12/V13 retain V4
+- [x] V1-A initial/resume routing, one-question maximum, no second question, result states, timezone authority, and Candidate Grounding V2 retained
+- [x] PB-04 exact draft authority and accepted V13 PB-05 Prompt/content preserved
+- [x] Migration `0008` widens Runtime identity only to V14/v6; migrations `0006`/`0007` unchanged; apply 0
+- [x] Dedicated verifier fixed at `49/49`; immutable V1-B verifier `38/38` and upstream chain retained
+- [x] Report/Decision/validation schemas, R2-B UI/CSS, Customer projections, Payment, main, and `next-env.d.ts` protected
+- [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
+- [ ] V1-C ChatGPT review, Human review, and Human acceptance
+- [ ] V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+
+Status is `implemented_pending_human_chatgpt_review`. Actual PB-06 Provider recall/precision, PB-05 prose quality, semantic paraphrase detection, Human emotional understanding, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->
-## V1-B PB-05 Semantic Depth Successor — Implemented, Pending Human / ChatGPT Review
+## V1-B PB-05 Semantic Depth Successor — Accepted Complete
 
 - [x] Exact parent fixed at Human + ChatGPT accepted V1-A snapshot `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`
 - [x] V1-A1, V1-A2, and V1-A overall synchronized as `accepted_complete`; V1-A2 acceptance date `2026-08-17`
@@ -16,7 +47,7 @@
 - [x] No fixed word/sentence/section minimum; padding, repeated conclusion/reassurance, generic aftercare, and invented insight prohibited
 - [x] Unsupported causality, chronology, hidden state, future reply, and relationship outcome prohibited
 - [x] PB-04 exact final draft authority preserved; no Candidate reconstruction, second draft, persona/emoji/line-break normalization
-- [x] V1-B non-repetition is Prompt-generation intent only; V1-C evaluator/enforcement remains unauthorized
+- [x] V1-B non-repetition remains Prompt-generation intent; V1-C is a separate successor
 - [x] V13 loader verifies V12 predecessor, common Prompt, seven stages, exact topology, PB-05-only change, hashes, schema compilation, and OpenAI compatibility
 - [x] Service selects V13 internally; Pipeline classifies V13 as V1-A2, timezone-authority, and Candidate Grounding V2 capable
 - [x] V12 no-clarification routing and one-answer clarification lifecycle retained; no second question or routing-state change
@@ -24,10 +55,10 @@
 - [x] Dedicated verifier fixed at `38/38`; immutable V1-A2/upstream and Decision Policy evidence retained
 - [x] R2-B UI/CSS, V2/V1 projections, Report/Decision schemas, PB-04/PB-06, Effective Decision Policy, Payment, and `next-env.d.ts` protected
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] V1-B ChatGPT review, Human review, and Human acceptance
-- [ ] V1-C/V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+- [x] V1-B ChatGPT/Human review `PASS / complete`, Human acceptance complete on `2026-08-17`; accepted snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`
+- [ ] V1-C Human/ChatGPT review; V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `implemented_pending_human_chatgpt_review`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is separately `implemented_pending_human_chatgpt_review`; V1-D remains unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->

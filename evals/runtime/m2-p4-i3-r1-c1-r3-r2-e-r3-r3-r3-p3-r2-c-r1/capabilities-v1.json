@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "jpy980_value_architecture_r1_accepted_v1_a_accepted_complete_v1_b_implemented_pending_human_chatgpt_review",
+  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_accepted_complete_v1_c_implemented_pending_human_chatgpt_review",
   "planning_only": false,
   "authority": {
     "exact_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
@@ -63,8 +63,8 @@
   "implementation_authority": {
     "V1-A1": "accepted_complete",
     "V1-A2": "accepted_complete",
-    "V1-B": "implemented_pending_human_chatgpt_review",
-    "V1-C": "unauthorized",
+    "V1-B": "accepted_complete",
+    "V1-C": "implemented_pending_human_chatgpt_review",
     "V1-D": "unauthorized"
   },
   "v1_a1": {
@@ -88,18 +88,36 @@
   },
   "v1_b": {
     "name": "PB-05 Semantic Depth Successor",
+    "status": "accepted_complete",
+    "implementation_authorized": true,
+    "accepted_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
+    "chatgpt_review": "PASS_complete",
+    "human_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-17",
+    "provider_semantic_fidelity": "unestablished",
+    "semantic_repetition_enforcement": "v1_c_implementation_separate_not_provider_proven"
+  },
+  "v1_c": {
+    "name": "Evaluator and Semantic Disposition",
     "status": "implemented_pending_human_chatgpt_review",
     "implementation_authorized": true,
     "chatgpt_review": "PENDING",
     "human_review": "PENDING",
-    "provider_semantic_fidelity": "unestablished",
-    "semantic_repetition_enforcement": "unestablished_v1_c_owned"
+    "human_acceptance": "pending",
+    "accepted_v1_b_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
+    "runtime_catalog": "runtime-stage-catalog-v14.0.0",
+    "only_changed_stage": "PB-06",
+    "semantic_disposition_v5": true,
+    "deterministic_product_semantic_shape_v1": true,
+    "provider_detection_fidelity": "unestablished",
+    "v1_d_authorized": false
   },
   "v1_a_overall_complete": true,
   "future_product_re_review_acceptance_defined": true,
   "implementation_authorized": true,
   "implementation_authorized_scope": [
-    "V1-B"
+    "V1-C"
   ],
   "policy_foundation_implementation_changed": true,
   "product_implementation_changed": false,
@@ -107,7 +125,7 @@
   "prompt_changed": true,
   "catalog_changed": true,
   "schema_changed": false,
-  "evaluator_changed": false,
+  "evaluator_changed": true,
   "runtime_changed": true,
   "payment_changed": false,
   "migration_changed": true,
@@ -127,13 +145,14 @@
   "cherry_pick_used": false,
   "force_push_used": false,
   "exact_scope": {
-    "total": "18/18",
+    "total": "21/21",
     "updated": 10,
-    "new": 8,
+    "new": 11,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
+    "v1_c_dedicated_verifier": "PASS 49/49",
     "v1_b_dedicated_verifier": "PASS 38/38",
     "v1_a2_r2_verifier": "PASS 29/29",
     "v1_a2_r1_verifier": "PASS 29/29",
@@ -169,5 +188,5 @@
     "authorized": false,
     "mvp_planned": false
   },
-  "next_action": "human_chatgpt_review_of_v1_b_semantic_depth_successor"
+  "next_action": "human_chatgpt_review_of_v1_c_semantic_quality_successor"
 }

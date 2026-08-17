@@ -1,12 +1,12 @@
 # M2-P4 V1-B PB-05 Semantic Depth Successor — Review Packet
 
-## Review disposition
+## Accepted disposition
 
-- Status: `implemented_pending_human_chatgpt_review`.
+- Status: `accepted_complete`.
 - Required parent and accepted V1-A snapshot: `d19d72e9a3f7e9fbbbd7fda9e11b131314030cea`.
 - V1-A1 / V1-A2 / V1-A overall: `accepted_complete`; V1-A2 ChatGPT and Human review `PASS / complete`; Human acceptance `complete`; acceptance date `2026-08-17`.
-- V1-B implementation authority: granted. V1-B ChatGPT review, Human review, and Human acceptance: `PENDING`.
-- V1-C / V1-D: unauthorized. No semantic evaluator or Product re-review fixture package is implemented here.
+- V1-B accepted snapshot: `e21c9b571426160703b1112c9057cc26c7738a0a`; ChatGPT review `PASS / complete`; Human review `PASS / complete`; Human acceptance `complete`; acceptance date `2026-08-17`.
+- V1-C implementation is separately authorized; V1-D remains unauthorized. This V1-B snapshot contains no V1-C evaluator implementation.
 - Exact scope: `18/18` — 10 UPDATE + 8 NEW; DELETE / RENAME 0.
 - Commit subject: `feat: add JPY980 semantic depth successor`; exactly one direct child of the accepted snapshot is required.
 
@@ -61,8 +61,8 @@ The dedicated verifier is fixed at `38/38`. It checks exact Git lineage/scope, V
 
 Offline evidence establishes catalog integrity, Prompt contract completeness, field ownership, schema compatibility, V1-A routing parity, exact draft ownership, and protected Product/UI blob preservation. It does not establish actual Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, or Provider semantic fidelity.
 
-Provider calls / DB operations / Supabase operations / migration apply / Payment / deploy are `0 / 0 / 0 / 0 / 0 / 0`. Production Runtime, Payment, PR, main integration, V1-C, and V1-D remain unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Provider calls / DB operations / Supabase operations / migration apply / Payment / deploy are `0 / 0 / 0 / 0 / 0 / 0`. Production Runtime, Payment, PR, main integration, and V1-D remain unauthorized. V1-C is separately implemented pending Human / ChatGPT review. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 
-## Human / ChatGPT review request
+## Human / ChatGPT acceptance record
 
-Review the PB-05 V13 generation contract for consultation-specific understanding, evidence significance, explainable recommendation logic, conditional tradeoff discipline, concrete action utility, honest uncertainty/reassessment, mandatory emotional containment, non-repetition intent, and exact draft ownership. Do not infer Provider output quality, Product acceptance, R2-C PASS, JPY980 Runtime readiness, Production authority, Payment authority, or Global Q0 completion from offline implementation evidence.
+Human and ChatGPT accepted the V13 PB-05 generation contract complete at snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`. This acceptance does not establish Provider output quality, R2-C PASS, JPY980 Runtime readiness, Production authority, Payment authority, or Global Q0 completion.

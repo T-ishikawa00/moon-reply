@@ -1,0 +1,235 @@
+{
+  "schema_version": "m2-p4-v1-c-semantic-quality-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C",
+  "status": "implemented_pending_human_chatgpt_review",
+  "ownership": {
+    "owner_domain": "delivery_time_semantic_quality_evaluation",
+    "evaluates_output": true,
+    "rewrites_product_prose": false,
+    "regenerates_pb_05": false,
+    "changes_decision": false,
+    "changes_final_draft": false,
+    "changes_v1_a_eligibility": false,
+    "adds_provider_stage": false,
+    "implements_product_ui": false,
+    "claims_human_product_acceptance": false,
+    "repair_or_regeneration_retry": false,
+    "failure_behavior": "fail_closed_without_delivery"
+  },
+  "finding_vocabulary": {
+    "schema": "ai/schemas/validation-result.schema.json",
+    "schema_changed": false,
+    "new_codes_added": false,
+    "codes": [
+      "FACT_FIDELITY",
+      "ASSUMPTION_AS_FACT",
+      "DECISION_ALLOWED",
+      "DECISION_REASON_SUPPORT",
+      "MESSAGE_POLICY_CONSISTENCY",
+      "ACTION_CONSISTENCY",
+      "THREE_DAY_PLAN_CONSISTENCY",
+      "UNSUPPORTED_CERTAINTY",
+      "SAFETY_REGRESSION",
+      "REQUIRED_SECTION_MEANING",
+      "REVIEW_CONDITION_PRESENT",
+      "TEMPLATE_GENERICITY",
+      "BRAND_TONE",
+      "REPETITION"
+    ]
+  },
+  "evidence_significance": {
+    "mandatory": true,
+    "observed_fact_commentary_must_explain_why_material_fact_matters": true,
+    "material_evidence_must_connect_to_recommended_direction": true,
+    "every_observed_fact_required": false,
+    "fact_enumeration_rewarded": false,
+    "missing_significance_finding": {
+      "finding_code": "REQUIRED_SECTION_MEANING",
+      "severity": "major"
+    },
+    "unsupported_recommendation_finding": {
+      "finding_code": "DECISION_REASON_SUPPORT",
+      "severity": "major"
+    }
+  },
+  "decision_explanation_boundary": {
+    "supported_application_decision_explanation_allowed": true,
+    "allowed_chain": [
+      "grounded_observed_fact",
+      "why_it_matters",
+      "why_current_application_decision_is_appropriate"
+    ],
+    "unsupported_causality_blocking": true,
+    "unsupported_chronology_blocking": true,
+    "unsupported_inner_state_blocking": true,
+    "unsupported_future_reply_blocking": true,
+    "unsupported_relationship_outcome_blocking": true,
+    "absence_of_negative_evidence_becomes_positive_certainty": false,
+    "unsupported_claim_codes": [
+      "ASSUMPTION_AS_FACT",
+      "FACT_FIDELITY",
+      "UNSUPPORTED_CERTAINTY"
+    ],
+    "unsupported_claim_severity": [
+      "major",
+      "critical"
+    ]
+  },
+  "emotional_containment": {
+    "mandatory": true,
+    "evaluated_fields": [
+      "report_content.short_letter",
+      "report_content.anxiety_reframe",
+      "report_content.closing_lines"
+    ],
+    "requires_consultation_specific_acknowledgment": true,
+    "requires_calm_present_stopping_point": true,
+    "invented_fear_allowed": false,
+    "hidden_state_reassurance_allowed": false,
+    "outcome_promise_allowed": false,
+    "decision_or_action_repeated_as_comfort_allowed": false,
+    "logically_complete_but_emotionally_cold": {
+      "finding_code": "REQUIRED_SECTION_MEANING",
+      "severity": "major",
+      "blocking_under_v5": true
+    }
+  },
+  "genericity_materiality": {
+    "finding_code": "TEMPLATE_GENERICITY",
+    "major_or_critical_requires_all": [
+      "mandatory_block_portable_to_materially_unrelated_case",
+      "consultation_specific_function_materially_missing",
+      "paid_product_meaningfully_incomplete_or_unusable"
+    ],
+    "major_or_critical_on_provider_product_path_blocks": true,
+    "minor_nonblocking": true,
+    "warm_or_simple_language_alone_is_finding": false,
+    "application_word_list_classifier": false
+  },
+  "repetition_materiality": {
+    "finding_code": "REPETITION",
+    "major_or_critical_requires_all": [
+      "same_conclusion_semantically_reworded_across_primary_blocks",
+      "required_distinct_product_functions_materially_missing"
+    ],
+    "major_or_critical_on_provider_product_path_blocks": true,
+    "minor_incidental_overlap_nonblocking": true,
+    "all_repetition_blocking": false
+  },
+  "distinct_product_functions": {
+    "analytical_or_instructional": {
+      "report_content.decision_reason_summary": "primary_evidence_significance_direction",
+      "report_content.observed_fact_commentary[*].commentary": "why_selected_fact_matters",
+      "report_content.possible_interpretations[*]": "bounded_possibility",
+      "report_content.action_rationales[*]": "case_specific_action_fit_beyond_action_paraphrase",
+      "report_content.aftercare_commentary[*]": "distinct_phase_or_reassessment_function"
+    },
+    "emotional_or_ritual": {
+      "fields": [
+        "report_content.short_letter",
+        "report_content.anxiety_reframe",
+        "report_content.closing_lines"
+      ],
+      "new_factual_proposition_required": false,
+      "distinct_consultation_specific_emotional_function_required": true,
+      "same_grounded_context_allowed": true,
+      "decision_repetition_as_emotional_function_allowed": false
+    }
+  },
+  "alternative_tradeoff": {
+    "requirement": "conditional",
+    "absence_when_not_applicable_causes_finding": false,
+    "included_tradeoff_requires_plan_plausible_alternative": true,
+    "grounded_concrete_benefit_and_cost_or_risk_required": true,
+    "invented_other_person_reaction_allowed": false,
+    "manufactured_tradeoff_codes": [
+      "ASSUMPTION_AS_FACT",
+      "DECISION_REASON_SUPPORT",
+      "UNSUPPORTED_CERTAINTY"
+    ]
+  },
+  "exact_draft_boundary": {
+    "original_candidate_authority": "user_supplied_optional_message",
+    "final_draft_authority": "decision_plan.recommended_message_draft.text",
+    "pb_05_report_prose_is_draft_authority": false,
+    "pb_06_may_rewrite": false,
+    "report_may_repeat_final_draft": false,
+    "alternate_draft_allowed": false
+  },
+  "v1_c_product_quality_paths": [
+    "report_content.cover_line",
+    "report_content.short_letter",
+    "report_content.decision_reason_summary",
+    "report_content.observed_fact_commentary[*].commentary",
+    "report_content.possible_interpretations[*]",
+    "report_content.anxiety_reframe[*]",
+    "report_content.action_rationales[*]",
+    "report_content.message_draft_context",
+    "report_content.message_temperature.*",
+    "report_content.aftercare_commentary[*]",
+    "report_content.closing_lines[*]"
+  ],
+  "application_owned_exclusions": [
+    "report_content.relationship_summary",
+    "report_content.change_condition_commentary"
+  ],
+  "semantic_disposition_v5": {
+    "wraps_v4": true,
+    "v4_source_changed": false,
+    "hard_factual_and_safety_blocking_preserved": true,
+    "flexible_internal_semantics_preserved": true,
+    "conditional_internal_semantics_preserved": true,
+    "temporal_false_positive_behavior_preserved": true,
+    "brand_tone_behavior_preserved": true,
+    "existing_major_or_critical_product_failure_behavior_preserved": true,
+    "template_genericity_major_or_critical_on_product_quality_path": "blocking",
+    "repetition_major_or_critical_on_product_quality_path": "blocking",
+    "template_genericity_minor": "nonblocking",
+    "repetition_minor": "nonblocking",
+    "genericity_or_repetition_outside_product_quality_path": "conservative_v4_predecessor_behavior",
+    "minor_finding_reinterpreted_as_major": false
+  },
+  "deterministic_semantic_shape": {
+    "version": "m2-p4-product-semantic-shape-v1",
+    "failure_code": "M2_PRODUCT_SEMANTIC_SHAPE_INVALID",
+    "checks": [
+      "at_least_one_observed_fact_commentary_fact_id_matches_decision_reason_fact_ids",
+      "no_exact_whitespace_normalized_duplicate_across_provider_owned_primary_product_text_locations",
+      "no_emotional_item_exactly_copies_action_to_take_or_action_to_avoid",
+      "no_provider_report_prose_exactly_repeats_final_draft"
+    ],
+    "normalization": "value.replace(/\\s+/gu, \" \").trim()",
+    "semantic_similarity_threshold": false,
+    "embeddings": false,
+    "keyword_product_judgment": false,
+    "japanese_keyword_classifier": false,
+    "edit_distance_meaning_inference": false,
+    "sentiment_classifier": false,
+    "case_or_fixture_id_branching": false,
+    "semantic_paraphrase_repetition_proven": false
+  },
+  "shape_and_length": {
+    "fixed_word_minimum": null,
+    "fixed_section_minimum": null,
+    "section_count_padding_required": false,
+    "length_alone_establishes_quality": false
+  },
+  "invariants": {
+    "report_schema_changed": false,
+    "decision_plan_schema_changed": false,
+    "validation_result_schema_changed": false,
+    "pb_04_changed": false,
+    "pb_05_changed_from_accepted_v13": false,
+    "new_provider_stage_added": false,
+    "v1_a_routing_or_lifecycle_changed": false,
+    "v1_d_product_review_fixtures_implemented": false
+  },
+  "evidence_boundary": {
+    "provider_calls": 0,
+    "provider_detection_recall": "unestablished",
+    "provider_detection_precision": "unestablished",
+    "provider_semantic_fidelity": "unestablished",
+    "human_product_acceptance": "unestablished",
+    "plausibly_worth_jpy980": "unestablished"
+  }
+}
