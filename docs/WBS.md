@@ -1,34 +1,40 @@
 # WBS.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:BEGIN -->
-## V1-C R1-C1 Precise Repair Path Authority — Corrected, Pending Human / ChatGPT Review
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
+## V1-D Step 1 Offline Fixtures / Product Re-review Harness — In Progress
 
-- [x] Exact parent fixed at immutable R1 snapshot `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40`; required core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`
-- [x] V1-C core technical review remains `PASS` with BLOCKER/MAJOR/MINOR `0/0/0`
-- [x] R1 initial review remains `NEEDS_CORRECTION` with `0/1/0`; sole finding `repair_path_shape_does_not_prove_actual_product_path`
-- [x] Repairability now requires both a finite Product-owned path-shape allowlist and resolution against the actual current validated Decision Plan or grounded Report
-- [x] Existing array index and own nested property are required; child paths below null, nonexistent indexes, unknown children, malformed paths, and non-Product authority fail closed
-- [x] `relationship_summary` and `change_condition_commentary` remain Application-owned and nonrepairable
-- [x] Any invalid blocking finding rejects the entire directive; no valid subset is repaired
-- [x] Current Product values are resolution-only authority and never enter the directive; raw evaluator prose and draft text remain excluded
-- [x] Recognized-root end-to-end invalid path returns `M2_SEMANTIC_VALIDATION_FAILED`, creates no attempt 2, and saves no Report
-- [x] Same request/current run, one reassessment maximum, no attempt 3, report-only/plan-and-report, local shape recovery, usage accumulation, exact draft, Clarification resume, and V14 behavior remain unchanged
-- [x] Protected Runtime catalog/Prompts/PB-06/evaluator/shape/schemas/persistence/migrations/Application/Service/UI/projections/authority/Policy/Payment remain byte-identical
-- [x] Exact scope `13/13`: 13 UPDATE; NEW / DELETE / RENAME 0
-- [x] Corrected verifier fixed at `50/50`; immutable R1 `46/46`, V1-C core `49/49`, V1-B `38/38`, accepted upstream chain, Decision Policy `40/40`, typecheck/lint/build/diff gates retained
+- [x] Exact parent fixed at accepted V1-C snapshot `a436210bb035746c129fe071e6225b3799b9e5d8`
+- [x] V1-C synchronized as `accepted_complete`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`
+- [x] V1-C history retained: core `e7ae51aa…` `PASS 0/0/0`; R1 `4a3d5b3f…` initial `NEEDS_CORRECTION 0/1/0`; R1-C1 `a436210b…` `PASS 0/0/0`
+- [x] Canonical matrix contains exactly 22 unique fixture intentions with proof and non-proof boundaries
+- [x] Historical simple business/nullable renders reclassified under current V1-A/Product-scope authority and excluded from paid Product proof
+- [x] Sparse admin/no-timeline cases require one answer; complete tone/cadence/draft-intent cases can reach Ready
+- [x] One clarification can establish Ready or route out; no automatic second question; emotion intensity alone never creates materiality
+- [x] Fake-only unsupported-inner-state, repetition, cold, generic-closing, and repeated-Decision mutants block and recover at most once
+- [x] Consultation-specific non-propositional closing positive fixture passes without a new factual-proposition requirement
+- [x] Grounded tradeoff is present only when material; non-applicable fixture contains no manufactured comparison
+- [x] Polite and Kansai/persona draft fixtures preserve exact text, line breaks, and emoji; report-only recovery retains exact Decision Plan draft
+- [x] Private `/review/runtime/v15` is production/internal-flag gated, noindex/nofollow, fixture-only, and explicitly labeled non-Provider
+- [x] Review route renders the existing `CustomerAssessmentNote`; Product component/CSS and customer projections remain byte-identical
+- [x] Human Product review sheet contains no prefilled PASS and remains `pending_actual_v15_provider_output`
+- [x] Controlled nine-case V15 Provider plan is prepared with fixed identity/clock/timezone/call ceiling and `provider_execution_authorized=false`
+- [x] Exact scope `17/17`: 8 UPDATE + 9 NEW; DELETE / RENAME 0
+- [x] Dedicated verifier fixed at `45/45`; immutable predecessor V1-C R1-C1 `50/50` executed once; duplicate upstream runs omitted
+- [x] Typecheck, zero-warning lint, build, diff, exact scope, protected blobs, sensitive scan, main/next-env/stash/worktree gates PASS
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] V1-C R1-C1 ChatGPT review, Human review, and V1-C Human acceptance
-- [ ] V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+- [ ] Human / ChatGPT review of V1-D Step 1 offline evidence
+- [ ] Actual V15 controlled Provider run — separately unauthorized
 
-Status is `in_progress_recovery_correction`; R1-C1 is `precise_repair_path_corrected_pending_human_chatgpt_review`, and V1-C Human acceptance remains `HOLD`. Real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:END -->
+Status is `in_progress_offline_review_harness`. Actual V15 prose/fidelity, PB-06 Provider recall/precision, real repair success, Human emotional understanding, and `plausibly_worth_jpy980` remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, Payment, deploy, PR, and main integration remain unauthorized.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
-## V1-C core technical snapshot — PASS, Human acceptance HOLD
+## V1-C Evaluator / Recovery Successor — Accepted Complete
 
-- [x] Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` and its technical implementation remain immutable
-- [x] ChatGPT core technical review `PASS`; BLOCKER/MAJOR/MINOR `0/0/0`
-- [ ] Human acceptance is `HOLD` pending R1-C1 correction review; V1-C is not accepted complete
+- [x] Accepted snapshot `a436210bb035746c129fe071e6225b3799b9e5d8`; ChatGPT/Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`
+- [x] Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` remains `PASS 0/0/0`
+- [x] Historical R1 initial review remains `NEEDS_CORRECTION 0/1/0`; R1-C1 review is `PASS 0/0/0`
+- [x] Acceptance is deterministic infrastructure evidence only; actual Provider/Product quality remains unestablished
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->
@@ -56,9 +62,10 @@ Status is `in_progress_recovery_correction`; R1-C1 is `precise_repair_path_corre
 - [x] R2-B UI/CSS, V2/V1 projections, Report/Decision schemas, PB-04/PB-06, Effective Decision Policy, Payment, and `next-env.d.ts` protected
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
 - [x] V1-B ChatGPT/Human review `PASS / complete`, Human acceptance complete on `2026-08-17`; accepted snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`
-- [ ] V1-C Human/ChatGPT review; V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
+- [x] V1-C Human/ChatGPT review and acceptance complete; V1-D Step 1 separately authorized
+- [ ] Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is separately `in_progress_recovery_correction`; R1-C1 is pending Human / ChatGPT review and V1-D remains unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is accepted complete; V1-D Step 1 is `in_progress_offline_review_harness` with Provider execution unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->

@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a_v1_b_accepted_complete_v1_c_in_progress_recovery_correction_v1_d_unauthorized",
+  "status": "v1_a_v1_b_v1_c_accepted_complete_v1_d_in_progress_offline_review_harness",
   "acceptance_date": "2026-08-17",
   "planning_only": false,
   "sequence": [
@@ -245,7 +245,7 @@
         "UI layout changes",
         "Provider execution"
       ],
-      "status": "in_progress_recovery_correction",
+      "status": "accepted_complete",
       "authorized": true,
       "implementation_authorized": true,
       "core_snapshot": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
@@ -253,12 +253,17 @@
       "core_findings": { "blocker": 0, "major": 0, "minor": 0 },
       "human_product_finding": "quality_failure_terminal_delivery_path_unacceptable",
       "human_product_finding_classification": "Product MAJOR 1",
-      "human_acceptance": "HOLD",
+      "human_review": "PASS_complete",
+      "chatgpt_review": "PASS_complete",
+      "human_acceptance": "complete",
+      "acceptance_date": "2026-08-17",
       "r1_snapshot": "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40",
       "r1_initial_review": "NEEDS_CORRECTION",
       "r1_initial_findings": { "blocker": 0, "major": 1, "minor": 0 },
       "r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
-      "r1_c1": "precise_repair_path_corrected_pending_human_chatgpt_review",
+      "r1_c1_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+      "r1_c1": "PASS_complete",
+      "r1_c1_findings": { "blocker": 0, "major": 0, "minor": 0 },
       "accepted_v1_b_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
       "provider_execution_authorized": false,
       "provider_detection_recall": "unestablished",
@@ -286,7 +291,9 @@
       "invalid_blocking_path_rejects_entire_directive": true,
       "resolved_product_value_in_directive": false,
       "report_only_exact_draft_preserved": true,
+      "accepted_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
       "v1_d_product_review_implemented": false,
+      "v1_d_step1_review_harness_implemented": true,
       "exact_scope": {
         "total": "13/13",
         "updated": 13,
@@ -312,8 +319,26 @@
         "Provider execution",
         "Payment implementation"
       ],
-      "status": "unauthorized",
-      "authorized": false
+      "status": "in_progress_offline_review_harness",
+      "authorized": true,
+      "step": "step_1_offline_fixtures_and_product_rereview_harness",
+      "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+      "fixture_count": 22,
+      "fixture_provenance": "historical_reference_or_fake_fixture",
+      "actual_v15_successor_output_count": 0,
+      "deterministic_routing_regression": true,
+      "deterministic_evaluator_recovery_regression": true,
+      "private_review_path": "/review/runtime/v15",
+      "human_product_review_status": "pending_actual_v15_provider_output",
+      "controlled_provider_review_plan_ready": true,
+      "provider_execution_authorized": false,
+      "exact_scope": {
+        "total": "17/17",
+        "updated": 8,
+        "new": 9,
+        "deleted": 0,
+        "renamed": 0
+      }
     }
   ],
   "pairwise_separation": [

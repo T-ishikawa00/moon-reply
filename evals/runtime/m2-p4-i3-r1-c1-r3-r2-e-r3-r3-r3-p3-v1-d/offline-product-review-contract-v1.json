@@ -1,0 +1,178 @@
+{
+  "schema_version": "m2-p4-v1-d-offline-product-review-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
+  "step": "step_1_offline_fixtures_and_product_rereview_harness",
+  "status": "in_progress_offline_review_harness",
+  "authority": {
+    "v1_c": "accepted_complete",
+    "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+    "v1_c_chatgpt_review": "PASS_complete",
+    "v1_c_human_review": "PASS_complete",
+    "v1_c_human_acceptance": "complete",
+    "v1_c_acceptance_date": "2026-08-17",
+    "v1_c_core_snapshot": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
+    "v1_c_core_review": "PASS 0/0/0",
+    "v1_c_r1_snapshot": "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40",
+    "v1_c_r1_initial_review": "NEEDS_CORRECTION 0/1/0",
+    "v1_c_r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
+    "v1_c_r1_c1_review": "PASS 0/0/0",
+    "v1_d_authorized": true,
+    "v1_d_status": "in_progress_offline_review_harness",
+    "provider_execution_authorized": false
+  },
+  "step_1_evidence_boundary": {
+    "may_establish": [
+      "fixture_completeness",
+      "deterministic_routing_behavior",
+      "deterministic_evaluator_and_recovery_regressions",
+      "review_harness_correctness",
+      "exact_draft_regression",
+      "r2_b_shell_structural_preservation",
+      "controlled_provider_review_readiness"
+    ],
+    "must_not_claim": [
+      "actual_v15_provider_prose_quality",
+      "actual_v15_provider_semantic_fidelity",
+      "actual_pb_06_provider_recall",
+      "actual_pb_06_provider_precision",
+      "real_quality_reassessment_success_rate",
+      "human_emotional_understanding_from_real_v15_output",
+      "plausibly_worth_jpy980",
+      "r2_c_pass",
+      "jpy980_runtime_readiness",
+      "global_q0_completion"
+    ]
+  },
+  "fixture_contract": {
+    "required_fixture_count": 22,
+    "allowed_provenance": [
+      "historical_reference_or_fake_fixture"
+    ],
+    "prohibited_provenance": [
+      "actual_v15_successor_output"
+    ],
+    "required_fields": [
+      "fixture_id",
+      "fixture_kind",
+      "provenance",
+      "input_intention",
+      "requested_topics",
+      "candidate_presence_expectation",
+      "expected_v1_a_route",
+      "clarification_expectation",
+      "expected_product_generated",
+      "expected_evaluator_recovery_behavior",
+      "expected_draft_behavior",
+      "human_review_applicability",
+      "proves",
+      "does_not_prove"
+    ],
+    "historical_fixture_expectations_are_reassessed_under_current_authority": true,
+    "simple_business_reply_historical_render_implies_paid_ready": false,
+    "nullable_optional_sections_historical_render_implies_paid_ready": false,
+    "semantic_keyword_classifier": false,
+    "embeddings": false,
+    "case_id_runtime_branching": false
+  },
+  "routing_contract": {
+    "policy": "m2-p4-jpy980-input-sufficiency-policy-v2",
+    "safety_precedes_sufficiency": true,
+    "maximum_questions_total": 1,
+    "automatic_second_question_allowed": false,
+    "unanswered_clarification_generates_product": false,
+    "unanswered_clarification_generates_draft": false,
+    "unanswered_clarification_is_charge_capable": false,
+    "anxiety_intensity_alone_establishes_materiality": false,
+    "message_impact_requires_candidate": true,
+    "clarification_budget_exhaustion_route": "not_full_product_candidate"
+  },
+  "quality_and_recovery_contract": {
+    "runtime_identity": {
+      "catalog_version": "runtime-stage-catalog-v15.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+      "schema_set_version": "pipeline-schema-runtime-v6.0.0",
+      "stage_topology_version": "split-base-candidate-v1"
+    },
+    "same_request_same_current_run": true,
+    "maximum_automatic_quality_reassessments": 1,
+    "maximum_product_generation_cycles": 2,
+    "attempt_3_allowed": false,
+    "invalid_first_product_deliverable": false,
+    "repair_scopes": [
+      "report_only",
+      "plan_and_report"
+    ],
+    "report_only_final_draft_source": "decision_plan.recommended_message_draft.text",
+    "report_only_final_draft_exact": true,
+    "consultation_specific_emotional_copy_requires_new_factual_proposition": false,
+    "consultation_specific_emotional_copy_requires_distinct_function": true,
+    "tradeoff_required_when_not_genuinely_applicable": false
+  },
+  "review_surface": {
+    "path": "/review/runtime/v15",
+    "production_behavior": "notFound",
+    "required_environment_flag": "M2_INTERNAL_RUNTIME_ENABLED=true",
+    "robots": {
+      "index": false,
+      "follow": false
+    },
+    "fixture_data_only": true,
+    "provider_invocation": false,
+    "db_invocation": false,
+    "payment_invocation": false,
+    "network_call": false,
+    "actual_user_data": false,
+    "visible_provenance_label": "V1-D オフライン確認 / 実Provider出力ではありません",
+    "product_component": "CustomerAssessmentNote",
+    "product_css": "CustomerAssessmentNote.module.css",
+    "projection": "CustomerAssessmentExperienceProjectionV2"
+  },
+  "future_human_product_review_fields": [
+    "fixture_id",
+    "output_provenance",
+    "routing_correct",
+    "no_padding",
+    "repeated_conclusion_absent",
+    "evidence_to_decision_chain_clear",
+    "action_usable",
+    "uncertainty_honest",
+    "emotional_understanding",
+    "simple_case_value",
+    "exact_draft_preserved",
+    "visual_shell_intact",
+    "plausibly_worth_jpy980",
+    "reviewer_notes",
+    "review_status"
+  ],
+  "future_acceptance_criteria": [
+    "no_paid_ready_sparse_case",
+    "no_padding",
+    "no_repeated_conclusion_across_multiple_sections",
+    "at_least_one_clear_evidence_to_significance_to_current_decision_chain",
+    "action_is_usable",
+    "uncertainty_is_honest",
+    "emotional_case_feels_personally_understood",
+    "simple_case_is_genuinely_valuable_or_routed_out",
+    "polite_and_persona_drafts_retain_exact_text",
+    "r2_b_visual_shell_remains_intact"
+  ],
+  "current_status_ceiling": {
+    "r2_b_shell_structural_regression": "PASS",
+    "formal_r2_c_visual_review": "PENDING",
+    "r2_c": "remediation_required",
+    "experienceProductJudgment": "pending_remediation",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "production_runtime": "unauthorized",
+    "payment": "unauthorized",
+    "main_integration": "unauthorized"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applies": 0,
+    "payment_operations": 0,
+    "deploy_operations": 0
+  }
+}

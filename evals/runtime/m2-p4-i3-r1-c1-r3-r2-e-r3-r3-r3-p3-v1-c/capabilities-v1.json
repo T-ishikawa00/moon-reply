@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-v1-c-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C",
-  "status": "in_progress_recovery_correction",
+  "status": "accepted_complete",
   "authority": {
     "accepted_v1_a_snapshot": "d19d72e9a3f7e9fbbbd7fda9e11b131314030cea",
     "v1_a": "accepted_complete",
@@ -19,10 +19,17 @@
     "v1_c_r1_initial_review": "NEEDS_CORRECTION",
     "v1_c_r1_initial_findings": { "blocker": 0, "major": 1, "minor": 0 },
     "v1_c_r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
-    "v1_c_r1_c1": "precise_repair_path_corrected_pending_human_chatgpt_review",
-    "v1_c_human_acceptance": "HOLD",
-    "v1_c_overall": "in_progress_recovery_correction",
-    "v1_d": "unauthorized"
+    "v1_c_r1_c1_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+    "v1_c_r1_c1": "PASS_complete",
+    "v1_c_r1_c1_findings": { "blocker": 0, "major": 0, "minor": 0 },
+    "v1_c_chatgpt_review": "PASS_complete",
+    "v1_c_human_review": "PASS_complete",
+    "v1_c_human_acceptance": "complete",
+    "v1_c_acceptance_date": "2026-08-17",
+    "v1_c_overall": "accepted_complete",
+    "v1_d": "in_progress_offline_review_harness",
+    "v1_d_authorized": true,
+    "provider_execution_authorized": false
   },
   "implemented": {
     "v14_catalog_integrity": true,
@@ -139,7 +146,8 @@
     "production_runtime_authorized": false,
     "payment_authorized": false,
     "main_integration_authorized": false,
-    "v1_d_authorized": false
+    "v1_d_authorized": true,
+    "v1_d_status": "in_progress_offline_review_harness"
   },
   "exact_scope": {
     "total": "13/13",
@@ -157,5 +165,5 @@
     "provider_calls": 0,
     "migration_apply": 0
   },
-  "next_action": "human_chatgpt_review_of_v1_c_r1_c1_precise_repair_path_correction"
+  "next_action": "human_chatgpt_review_of_v1_d_step_1_offline_product_rereview"
 }

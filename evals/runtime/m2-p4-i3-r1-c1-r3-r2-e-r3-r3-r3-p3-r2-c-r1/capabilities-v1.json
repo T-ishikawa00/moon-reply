@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_accepted_complete_v1_c_in_progress_recovery_correction",
+  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_accepted_v1_d_in_progress_offline_review_harness",
   "planning_only": false,
   "authority": {
     "exact_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
@@ -13,6 +13,8 @@
     "v1_a1_accepted_snapshot": "8db5c6386ed0b9b16f0d1586f47d384262cc502b",
     "v1_a2_accepted_snapshot": "d19d72e9a3f7e9fbbbd7fda9e11b131314030cea",
     "v1_a_acceptance_date": "2026-08-17",
+    "v1_c_accepted_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+    "v1_c_acceptance_date": "2026-08-17",
     "main": "61e33a10e195fad17e253a6b9719217e1992f273"
   },
   "correction_acceptance": {
@@ -64,8 +66,8 @@
     "V1-A1": "accepted_complete",
     "V1-A2": "accepted_complete",
     "V1-B": "accepted_complete",
-    "V1-C": "in_progress_recovery_correction",
-    "V1-D": "unauthorized"
+    "V1-C": "accepted_complete",
+    "V1-D": "in_progress_offline_review_harness"
   },
   "v1_a1": {
     "name": "Deterministic Input Sufficiency Policy",
@@ -100,18 +102,23 @@
   },
   "v1_c": {
     "name": "Evaluator and Semantic Disposition",
-    "status": "in_progress_recovery_correction",
+    "status": "accepted_complete",
     "implementation_authorized": true,
     "core_snapshot": "e7ae51aa96bbb3d1e791ac957e26bb8918d10547",
     "core_chatgpt_technical_review": "PASS",
     "core_findings": { "blocker": 0, "major": 0, "minor": 0 },
     "human_product_finding": "quality_failure_terminal_delivery_path_unacceptable",
-    "human_acceptance": "HOLD",
+    "human_review": "PASS_complete",
+    "chatgpt_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-17",
     "r1_snapshot": "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40",
     "r1_initial_review": "NEEDS_CORRECTION",
     "r1_initial_findings": { "blocker": 0, "major": 1, "minor": 0 },
     "r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
-    "r1_c1": "precise_repair_path_corrected_pending_human_chatgpt_review",
+    "r1_c1_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
+    "r1_c1": "PASS_complete",
+    "r1_c1_findings": { "blocker": 0, "major": 0, "minor": 0 },
     "accepted_v1_b_snapshot": "e21c9b571426160703b1112c9057cc26c7738a0a",
     "runtime_catalog": "runtime-stage-catalog-v15.0.0",
     "changed_prompt_identities": ["PB-04", "PB-05"],
@@ -125,24 +132,40 @@
     "recognized_prefix_only_repair_authority": false,
     "resolved_product_value_in_directive": false,
     "provider_detection_fidelity": "unestablished",
-    "v1_d_authorized": false
+    "v1_d_authorized": true
+  },
+  "v1_d": {
+    "name": "Offline Fixtures and Product Re-review",
+    "status": "in_progress_offline_review_harness",
+    "authorized": true,
+    "step": "step_1_offline_fixtures_and_product_rereview_harness",
+    "fixture_intentions": 22,
+    "deterministic_routing_regression": true,
+    "deterministic_semantic_recovery_regression": true,
+    "private_review_path": "/review/runtime/v15",
+    "historical_fixture_provenance": "historical_reference_or_fake_fixture",
+    "actual_v15_successor_outputs": 0,
+    "human_product_review_status": "pending_actual_v15_provider_output",
+    "controlled_provider_review_plan_ready": true,
+    "provider_execution_authorized": false
   },
   "v1_a_overall_complete": true,
   "future_product_re_review_acceptance_defined": true,
   "implementation_authorized": true,
   "implementation_authorized_scope": [
-    "V1-C"
+    "V1-D Step 1 offline review infrastructure"
   ],
-  "policy_foundation_implementation_changed": true,
-  "product_implementation_changed": true,
+  "policy_foundation_implementation_changed": false,
+  "product_implementation_changed": false,
   "ui_css_changed": false,
-  "prompt_changed": true,
-  "catalog_changed": true,
+  "review_harness_changed": true,
+  "prompt_changed": false,
+  "catalog_changed": false,
   "schema_changed": false,
-  "evaluator_changed": true,
-  "runtime_changed": true,
+  "evaluator_changed": false,
+  "runtime_changed": false,
   "payment_changed": false,
-  "migration_changed": true,
+  "migration_changed": false,
   "provider_calls": 0,
   "db_operations": 0,
   "supabase_operations": 0,
@@ -159,13 +182,16 @@
   "cherry_pick_used": false,
   "force_push_used": false,
   "exact_scope": {
-    "total": "13/13",
-    "updated": 13,
-    "new": 0,
+    "total": "17/17",
+    "updated": 8,
+    "new": 9,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
+    "v1_d_dedicated_verifier": "PASS 45/45",
+    "immutable_v1_c_r1_c1_predecessor_verifier": "PASS 50/50",
+    "separate_duplicate_upstream_execution": false,
     "v1_c_r1_c1_dedicated_verifier": "PASS 50/50",
     "immutable_v1_c_r1_verifier": "PASS 46/46",
     "v1_c_r1_dedicated_verifier": "PASS 46/46",
@@ -205,5 +231,5 @@
     "authorized": false,
     "mvp_planned": false
   },
-  "next_action": "human_chatgpt_review_of_v1_c_r1_c1_precise_repair_path_correction"
+  "next_action": "human_chatgpt_review_of_v1_d_step_1_offline_product_rereview"
 }

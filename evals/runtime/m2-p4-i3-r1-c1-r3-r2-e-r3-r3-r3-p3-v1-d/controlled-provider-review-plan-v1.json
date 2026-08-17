@@ -1,0 +1,65 @@
+{
+  "schema_version": "m2-p4-v1-d-controlled-provider-review-plan-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
+  "status": "prepared_not_authorized_not_executed",
+  "provider_execution_authorized": false,
+  "execution_count_in_this_task": 0,
+  "scope": {
+    "synthetic_cases_only": true,
+    "real_person_data": false,
+    "human_pii": false,
+    "actual_user_data": false,
+    "payment": false,
+    "deploy": false,
+    "production": false,
+    "migration_apply": false,
+    "db_operations": false,
+    "supabase_operations": false
+  },
+  "runtime_identity": {
+    "catalog_version": "runtime-stage-catalog-v15.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v6.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "model": "must_be_recorded_at_authorized_execution_time"
+  },
+  "execution_limits": {
+    "maximum_quality_reassessments_per_case": 1,
+    "maximum_product_generation_cycles_per_case": 2,
+    "maximum_provider_calls_per_case": 12,
+    "representative_case_count": 9,
+    "estimated_provider_attempt_ceiling": 108,
+    "retries_outside_v15_quality_reassessment": 0
+  },
+  "cases": [
+    {"fixture_id": "ordinary_reply_waiting", "fixed_clock": "2026-08-17T12:00:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "administrative_reply_with_tone_concern_ready_candidate", "fixed_clock": "2026-08-17T12:05:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "reply_waiting_with_usual_cadence", "fixed_clock": "2026-08-17T12:10:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "draft_request_with_relationship_intent", "fixed_clock": "2026-08-17T12:15:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "polite_thank_you_with_draft", "fixed_clock": "2026-08-17T12:20:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "kansai_persona_draft", "fixed_clock": "2026-08-17T12:25:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "alternative_tradeoff_applicable", "fixed_clock": "2026-08-17T12:30:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "alternative_tradeoff_not_applicable", "fixed_clock": "2026-08-17T12:35:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "full_paid_ready_candidate", "maximum_provider_calls": 12},
+    {"fixture_id": "one_clarification_answer_becomes_ready", "fixed_clock": "2026-08-17T12:40:00.000Z", "timezone": "Asia/Tokyo", "expected_route_before_provider_heavy_product_stages": "needs_one_clarifying_answer_then_full_paid_ready_candidate_after_one_answer", "maximum_provider_calls": 12}
+  ],
+  "later_evidence_capture": [
+    "authorization-record-v1.json",
+    "provider-call-ledger-v1.json",
+    "v15-route-results-v1.json",
+    "v15-stage-attempt-results-v1.json",
+    "v15-customer-projections-v1.json",
+    "v15-quality-reassessment-results-v1.json",
+    "human-product-review-sheet-v1.json",
+    "provider-execution-summary-v1.md"
+  ],
+  "execution_preconditions": [
+    "separate_explicit_human_provider_execution_authorization",
+    "clean_exact_authorized_branch_and_snapshot",
+    "runtime_identity_and_prompt_hash_verification",
+    "synthetic_fixture_and_no_pii_scan",
+    "fixed_clock_and_timezone_locked_per_case",
+    "maximum_call_ledger_approved",
+    "no_payment_no_deploy_no_production_no_migration_apply"
+  ],
+  "current_outcome": "plan_only_no_provider_invocation"
+}
