@@ -1,18 +1,28 @@
-# M2-P4 V1-C R1 Automatic Quality Reassessment Recovery — Review Packet
+# M2-P4 V1-C R1-C1 Precise Repair Path Authority Correction — Review Packet
 
 ## Review disposition
 
-- Status: `implemented_pending_human_chatgpt_review`.
-- Exact parent / immutable V1-C core: `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` (`feat: add JPY980 semantic quality evaluator`).
+- Status: `precise_repair_path_corrected_pending_human_chatgpt_review`.
+- Exact parent / immutable V1-C R1 snapshot: `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40` (`fix: add bounded quality reassessment recovery`).
+- Required previous immutable V1-C core: `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`.
 - V1-C core ChatGPT technical review: `PASS`; BLOCKER / MAJOR / MINOR `0 / 0 / 0`.
-- Human Product finding: `quality_failure_terminal_delivery_path_unacceptable`, Product MAJOR 1, technical core regression 0.
-- V1-C Human acceptance: `HOLD pending correction review`; overall: `in_progress_recovery_correction`.
+- V1-C R1 initial ChatGPT review: `NEEDS_CORRECTION`; BLOCKER / MAJOR / MINOR `0 / 1 / 0`; sole finding `repair_path_shape_does_not_prove_actual_product_path`.
+- All other R1 recovery findings: `PASS`; the accepted recovery architecture is not reopened.
+- V1-C Human acceptance: `HOLD`; overall: `in_progress_recovery_correction`.
 - V1-A / V1-B: `accepted_complete`; accepted V1-B snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`.
 - V1-D: unauthorized.
-- Exact scope: `23/23` — 14 UPDATE + 9 NEW; DELETE / RENAME 0.
-- Required commit subject: `fix: add bounded quality reassessment recovery`; exactly one direct correction commit.
+- Exact scope: `13/13` — 13 UPDATE; NEW / DELETE / RENAME 0.
+- Required commit subject: `fix: validate quality repair paths precisely`; exactly one direct correction commit.
 
-## Product correction
+## Precise repair-path correction
+
+R1 correctly bounded reassessment, but its path classifier treated a recognized prefix as sufficient repair authority. That left nonexistent indexes and unknown descendants eligible for a Provider repair directive. R1-C1 changes only this authority decision.
+
+`buildQualityReassessmentDirectiveV1()` now requires both a finite Product-owned path-shape allowlist and resolution against the actual current validated Decision Plan or grounded Report Content. A property is present even when its value is null, but a child below null is absent. Array indexes must be own indexes that currently exist. Unknown children, nonexistent indexes, malformed paths, non-Product authorities, and Application-owned Report paths reject the entire directive and preserve `M2_SEMANTIC_VALIDATION_FAILED`; no subset repair is attempted.
+
+The current Decision Plan and grounded Report are used only as path-resolution authority. Resolved values, prior prose, draft text, Candidate data, and PB-06 detail never enter the directive.
+
+## Preserved R1 recovery architecture
 
 V14 rejected invalid Product correctly but immediately terminal-failed the request. V15 preserves that evaluator core while allowing exactly one Application-controlled recovery cycle:
 
@@ -42,7 +52,7 @@ The deterministic Application directive uses schema `m2-p4-quality-reassessment-
 
 It never carries PB-06 `detail`, evaluator prose/reasoning, chain-of-thought, arbitrary instructions, raw Candidate, previous Report, previous PB-04 output, or new facts. Malformed, excessive, unrecognized, or non-owned defects do not trigger recovery.
 
-`report_content.relationship_summary` and `report_content.change_condition_commentary` remain Application-owned and excluded. Repairability requires the recognized code plus a precise PB-04/PB-05-owned path; a finding code alone is insufficient.
+`report_content.relationship_summary` and `report_content.change_condition_commentary` remain Application-owned and excluded. Repairability requires the recognized code, a statically allowed PB-04/PB-05-owned shape, and successful resolution against the actual current Product. A finding code or recognized prefix alone is insufficient.
 
 ## Prompt and exact-draft authority
 
@@ -72,9 +82,9 @@ Migration `0009` is not applied. It changes no Product table, Payment table, Cus
 
 ## Offline evidence and ceiling
 
-Twenty bounded fake-only cases cover report-only repetition/genericity/coldness/certainty, Plan and mixed repair, Application-owned and unknown rejection, local shape recovery, semantic/shape exhaustion, transport/schema nonretry, first-pass PASS, V14 parity, Clarification same-run recovery, usage accumulation, exact draft preservation, directive sanitization, and malformed/excess defects.
+Thirty bounded fake-only cases retain all R1 coverage and add actual-property, existing-index, nested-property, null-parent, Application-owned, and recognized-root/nonexistent-path regressions. The end-to-end `decision_plan.actions_to_take[999]` case produces `M2_SEMANTIC_VALIDATION_FAILED`, zero attempt-2 PB-04/PB-05/PB-06 rows, and zero Reports.
 
-The dedicated verifier is fixed at `46/46`. It also runs the immutable V1-C core verifier at `e7ae51aa…` (`49/49`), which runs immutable V1-B (`38/38`) and the complete accepted upstream/Decision Policy chain.
+The corrected dedicated verifier is fixed at `50/50`. It also runs immutable R1 at `4a3d5b3f…` (`46/46`) and the immutable V1-C core verifier at `e7ae51aa…` (`49/49`), which runs immutable V1-B (`38/38`) and the complete accepted upstream/Decision Policy chain.
 
 This establishes offline plumbing, bounded retry, persistence, authority, and parity only. It does not establish real Provider repair success, evaluator recall/precision, actual Product quality, Human understanding, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, Payment recovery readiness, R2-C PASS, or Global Q0 completion.
 
@@ -82,4 +92,4 @@ Provider / DB / Supabase / migration apply / Payment / deploy are `0 / 0 / 0 / 0
 
 ## Human / ChatGPT review request
 
-Review scope classification, directive sanitization, same-run lifecycle, attempt-2 exhaustion, usage accounting, exact-draft preservation, Prompt authority, and V14 parity. Do not mark V1-C accepted until this correction receives both Human and ChatGPT review.
+Review the static allowlist plus actual-current-Product resolver, whole-directive fail-closed behavior, value non-disclosure, and recognized-root end-to-end regression. R1 recovery lifecycle, attempt budget, exact draft, Prompt authority, and V14 parity remain regression scope. Do not mark V1-C accepted until this correction receives both Human and ChatGPT review.

@@ -1194,7 +1194,11 @@ export class AssessmentPipeline {
             throw new M2RuntimeError("M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED");
           }
           const reassessmentDirective =
-            buildQualityReassessmentDirectiveV1(blockingFindings);
+            buildQualityReassessmentDirectiveV1({
+              blockingFindings,
+              decisionPlan,
+              reportContent,
+            });
           if (reassessmentDirective === null) {
             throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
           }

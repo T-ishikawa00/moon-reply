@@ -1,26 +1,27 @@
 # CODEX_HANDOFF.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:BEGIN -->
-## Active handoff — V1-C R1 Bounded Quality Reassessment Recovery
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:BEGIN -->
+## Active handoff — V1-C R1-C1 Precise Repair Path Authority Correction
 
-- Authority / branch / parent: correction branch `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment` is based exactly on V1-C core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`. V1-A/V1-B remain `accepted_complete`; V1-C core ChatGPT technical review is `PASS` with BLOCKER/MAJOR/MINOR `0/0/0`.
-- Human Product finding: `quality_failure_terminal_delivery_path_unacceptable`, Product MAJOR 1, technical core regression 0. V1-C Human acceptance remains `HOLD`; overall status is `in_progress_recovery_correction`; R1 is `implemented_pending_human_chatgpt_review`; V1-D remains unauthorized.
-- Product behavior: V15 retains cycle 1 PB-04/PB-05/grounding/schema/shape/PB-06/V5. A repairable Product-quality rejection creates only sanitized `QualityReassessmentDirectiveV1` and permits exactly one same-run cycle 2. `report_only` reuses PB-04 and regenerates PB-05/PB-06; `plan_and_report` regenerates PB-04/PB-05/PB-06. A second Product-quality failure is `M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED` with no Report and no attempt 3.
-- Lifecycle / authority: reassessment creates no request, idempotency key, Purchase, clarification, user action, Base/Candidate reset, or run. Initial and clarification-resume paths remain inside their current run. The directive carries at most twelve sorted/deduplicated defects and never carries PB-06 detail, raw evaluator prose, raw Candidate, facts, or arbitrary Provider instructions.
-- Runtime identity: V15 is catalog/prompt bundle `v15.0.0`, schema set `v6.0.0`, unchanged split seven-stage topology. PB-01/PB-01C/PB-02/PB-03/PB-06 are V14-identical; only PB-04 v5 and PB-05 v6 Prompt identities change. V14, SemanticDispositionV5, ProductSemanticShapeV1, PB-06 v5, schemas, Policy, Safety, UI/CSS, projections, and Payment paths remain byte-identical.
-- Persistence / usage: `attempt_number` is 1 or 2; attempt 2 is V15-only, non-skipped, and limited to PB-04/PB-05/PB-06. Uniqueness is attempt-aware. All attempt usage accumulates in the same Pipeline totals and failed attempt 2 finalizes the run exactly once.
-- Draft boundary: `report_only` preserves `recommended_message_draft.text` byte-exact. `plan_and_report` may regenerate only through PB-04 under existing Policy/Safety/Candidate integrity; PB-05/PB-06 never own or rewrite the draft. Previous PB-04 output and previous Report are not supplied to attempt 2.
-- Migration / scope / evidence: migration `0009` only adds/backfills attempt metadata, replaces uniqueness/topology enforcement, and widens identity to V15/v6; migrations `0006`/`0007`/`0008` are immutable and apply is zero. Exact scope is `23/23`, 14 UPDATE + 9 NEW, DELETE/RENAME 0. Dedicated verifier is fixed at `46/46`; immutable V1-C core verifier remains `49/49` and retains V1-B `38/38` plus the upstream chain.
+- Authority / branch / parent: `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-c1-precise-repair-paths` is based exactly on R1 snapshot `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40`; required core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` remains technical `PASS 0/0/0`.
+- Review status: R1 initial review is `NEEDS_CORRECTION 0/1/0` for `repair_path_shape_does_not_prove_actual_product_path`; all other R1 findings are PASS. R1-C1 is `precise_repair_path_corrected_pending_human_chatgpt_review`. V1-C Human acceptance is `HOLD`; overall is `in_progress_recovery_correction`; V1-D remains unauthorized.
+- Path authority: a finding is repairable only when its normalized path matches the finite Provider-owned Decision/Report shape and resolves against the actual current validated Decision Plan or grounded Report. Own-property/index presence is required; truthiness is not. A null property itself may resolve, but any child below null does not.
+- Fail-closed boundary: unknown children, nonexistent indexes, malformed paths, non-Product authorities, `report_content.relationship_summary`, and `report_content.change_condition_commentary` reject the entire directive as `M2_SEMANTIC_VALIDATION_FAILED`. No valid subset is repaired.
+- Sanitization: the current Product is resolution-only authority. Resolved prose, draft text, Candidate, PB-06 detail, and evaluator prose never enter the five-key directive or its four-key defects.
+- End-to-end regression: recognized-root `decision_plan.actions_to_take[999]` produces no PB-04/PB-05/PB-06 attempt 2 and saves no Report.
+- Preserved R1 architecture: same request/current run, one reassessment maximum, no attempt 3, `report_only`, `plan_and_report`, local semantic-shape recovery, usage accumulation, exact report-only draft, Clarification resume, and V14 historical behavior are unchanged.
+- Protected surface: V15 catalog and Prompts, PB-06, SemanticDispositionV5, ProductSemanticShapeV1, schemas, types, fakes, Supabase repository, migrations `0006`–`0009`, Application, Service, UI/CSS, projections, Effective Authority, Decision Policy, and Payment remain byte-identical.
+- Scope / evidence: exact `13/13`, 13 UPDATE and NEW/DELETE/RENAME 0. Corrected verifier is fixed at `50/50`; immutable R1 `46/46`, V1-C core `49/49`, V1-B `38/38`, accepted upstream chain, and Decision Policy `40/40` remain PASS.
 - Evidence ceiling: real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C=`remediation_required`; experienceProductJudgment=`pending_remediation`; jpy980RuntimeReadiness=`not_established`; globalQ0Completion=`false`.
-- Operations / next: Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`. Production Runtime, Payment, PR, main integration, and V1-D remain unauthorized. Next action: `human_chatgpt_review_of_v1_c_r1_quality_reassessment_recovery`; stop after one normal branch push.
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:END -->
+- Operations / next: Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`. Production Runtime, Payment, PR, main integration, and V1-D remain unauthorized. Next action: `human_chatgpt_review_of_v1_c_r1_c1_precise_repair_path_correction`; stop after one normal branch push.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
 ## V1-C core technical snapshot — PASS, Human acceptance HOLD
 
 - Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` remains immutable. ChatGPT technical review is `PASS`; BLOCKER/MAJOR/MINOR are `0/0/0`.
 - SemanticDispositionV5, ProductSemanticShapeV1, V14 PB-06 v5, seven-stage topology, existing schemas, V1-A routing, and V1-B generation authority remain the accepted technical core.
-- Human Product acceptance is `HOLD` solely for `quality_failure_terminal_delivery_path_unacceptable`; V1-C overall is `in_progress_recovery_correction`, not accepted.
+- Human Product acceptance is `HOLD` pending R1-C1 review; V1-C overall is `in_progress_recovery_correction`, not accepted.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->

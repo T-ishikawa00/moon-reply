@@ -15,8 +15,12 @@
     "v1_c_core_chatgpt_technical_review": "PASS",
     "v1_c_core_findings": { "blocker": 0, "major": 0, "minor": 0 },
     "human_product_finding": "quality_failure_terminal_delivery_path_unacceptable",
-    "v1_c_r1": "implemented_pending_human_chatgpt_review",
-    "v1_c_human_acceptance": "HOLD_pending_correction_review",
+    "v1_c_r1_snapshot": "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40",
+    "v1_c_r1_initial_review": "NEEDS_CORRECTION",
+    "v1_c_r1_initial_findings": { "blocker": 0, "major": 1, "minor": 0 },
+    "v1_c_r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
+    "v1_c_r1_c1": "precise_repair_path_corrected_pending_human_chatgpt_review",
+    "v1_c_human_acceptance": "HOLD",
     "v1_c_overall": "in_progress_recovery_correction",
     "v1_d": "unauthorized"
   },
@@ -40,6 +44,12 @@
     "same_request_same_run_reassessment": true,
     "sanitized_quality_reassessment_directive_v1": true,
     "deterministic_repair_scope_classification": true,
+    "precise_product_owned_json_path_authority": true,
+    "static_product_path_allowlist": true,
+    "actual_current_product_path_resolution": true,
+    "recognized_prefix_alone_is_repair_authority": false,
+    "invalid_blocking_path_rejects_entire_directive": true,
+    "resolved_product_value_enters_directive": false,
     "attempt_aware_stage_persistence": true,
     "usage_accumulation_across_attempts": true,
     "report_only_exact_draft_preservation": true,
@@ -132,18 +142,20 @@
     "v1_d_authorized": false
   },
   "exact_scope": {
-    "total": "23/23",
-    "updated": 14,
-    "new": 9,
+    "total": "13/13",
+    "updated": 13,
+    "new": 0,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
+    "v1_c_r1_c1_dedicated_verifier": "PASS 50/50",
+    "immutable_v1_c_r1_verifier": "PASS 46/46",
     "v1_c_r1_dedicated_verifier": "PASS 46/46",
     "immutable_v1_c_core_verifier": "PASS 49/49",
     "immutable_v1_b_verifier": "PASS 38/38",
     "provider_calls": 0,
     "migration_apply": 0
   },
-  "next_action": "human_chatgpt_review_of_v1_c_r1_quality_reassessment_recovery"
+  "next_action": "human_chatgpt_review_of_v1_c_r1_c1_precise_repair_path_correction"
 }

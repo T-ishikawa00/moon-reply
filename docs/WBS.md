@@ -1,39 +1,34 @@
 # WBS.md
 
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:BEGIN -->
-## V1-C R1 Automatic Quality Reassessment Recovery — Implemented, Pending Human / ChatGPT Review
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:BEGIN -->
+## V1-C R1-C1 Precise Repair Path Authority — Corrected, Pending Human / ChatGPT Review
 
-- [x] Exact parent fixed at immutable V1-C technical core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`
-- [x] Core ChatGPT technical review `PASS`; BLOCKER/MAJOR/MINOR `0/0/0`; V1-A/V1-B remain `accepted_complete`
-- [x] Human Product finding `quality_failure_terminal_delivery_path_unacceptable` recorded as Product MAJOR 1; V1-C Human acceptance remains `HOLD`
-- [x] Exact scope `23/23`: 14 UPDATE + 9 NEW; DELETE / RENAME 0
-- [x] V15 identity fixed at catalog/Prompt bundle `v15.0.0`, unchanged Schema set `v6.0.0`, unchanged split seven-stage topology
-- [x] PB-01/PB-01C/PB-02/PB-03/PB-06 manifest-identical to V14; only recovery-aware PB-04 v5 and PB-05 v6 Prompt identities change
-- [x] Exactly one automatic reassessment cycle and at most two Product-generation cycles; attempt 3 prohibited
-- [x] `report_only` reuses PB-04 and reruns PB-05/PB-06; `plan_and_report` reruns PB-04/PB-05/PB-06
-- [x] Same request/current run invariant; no new idempotency key, Purchase, clarification, user action, Base/Candidate reset, or assessment run
-- [x] Application-owned directive limited to twelve sorted/deduplicated four-field defects; raw evaluator detail/reasoning/Candidate/facts prohibited
-- [x] Application-owned relationship/change-condition paths, unknown paths, transport/schema/persistence/authority/integrity failures remain nonrepairable
-- [x] Local ProductSemanticShape attempt-1 failure receives one report-only cycle; attempt-2 semantic/shape failure becomes `M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED`
-- [x] `attempt_number` 1/2 persistence and request-hash identity added; V15-only PB-04/PB-05/PB-06 attempt 2; skips/upstream attempt 2 prohibited
-- [x] Attempt-1 and attempt-2 model usage accumulates in one Pipeline total; success/failure finalizes once
-- [x] report-only exact draft remains byte-identical; previous PB-04 output, previous Report, and raw PB-06 detail are absent from attempt-2 input
-- [x] V1-A initial/clarification lifecycle, Candidate Grounding V2, Effective Authority, Decision Policy, V5 evaluator, ProductSemanticShapeV1, and V14 historical behavior retained
-- [x] Migration `0009` limited to attempt column/backfill/uniqueness/topology/Runtime identity; migrations `0006`/`0007`/`0008` unchanged; apply 0
-- [x] Dedicated verifier fixed at `46/46`; immutable V1-C `49/49`, V1-B `38/38`, complete upstream chain, Decision Policy `40/40`, typecheck/lint/build/diff gates retained
+- [x] Exact parent fixed at immutable R1 snapshot `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40`; required core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547`
+- [x] V1-C core technical review remains `PASS` with BLOCKER/MAJOR/MINOR `0/0/0`
+- [x] R1 initial review remains `NEEDS_CORRECTION` with `0/1/0`; sole finding `repair_path_shape_does_not_prove_actual_product_path`
+- [x] Repairability now requires both a finite Product-owned path-shape allowlist and resolution against the actual current validated Decision Plan or grounded Report
+- [x] Existing array index and own nested property are required; child paths below null, nonexistent indexes, unknown children, malformed paths, and non-Product authority fail closed
+- [x] `relationship_summary` and `change_condition_commentary` remain Application-owned and nonrepairable
+- [x] Any invalid blocking finding rejects the entire directive; no valid subset is repaired
+- [x] Current Product values are resolution-only authority and never enter the directive; raw evaluator prose and draft text remain excluded
+- [x] Recognized-root end-to-end invalid path returns `M2_SEMANTIC_VALIDATION_FAILED`, creates no attempt 2, and saves no Report
+- [x] Same request/current run, one reassessment maximum, no attempt 3, report-only/plan-and-report, local shape recovery, usage accumulation, exact draft, Clarification resume, and V14 behavior remain unchanged
+- [x] Protected Runtime catalog/Prompts/PB-06/evaluator/shape/schemas/persistence/migrations/Application/Service/UI/projections/authority/Policy/Payment remain byte-identical
+- [x] Exact scope `13/13`: 13 UPDATE; NEW / DELETE / RENAME 0
+- [x] Corrected verifier fixed at `50/50`; immutable R1 `46/46`, V1-C core `49/49`, V1-B `38/38`, accepted upstream chain, Decision Policy `40/40`, typecheck/lint/build/diff gates retained
 - [x] Provider/DB/Supabase/migration-apply/Payment/deploy operations `0/0/0/0/0/0`
-- [ ] V1-C R1 ChatGPT review, Human review, and Human acceptance
+- [ ] V1-C R1-C1 ChatGPT review, Human review, and V1-C Human acceptance
 - [ ] V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `in_progress_recovery_correction`; R1 is `implemented_pending_human_chatgpt_review`, and Human acceptance remains `HOLD_pending_correction_review`. Real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
-<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1:END -->
+Status is `in_progress_recovery_correction`; R1-C1 is `precise_repair_path_corrected_pending_human_chatgpt_review`, and V1-C Human acceptance remains `HOLD`. Real Provider repair success, evaluator recall/precision, actual Product quality, `plausibly_worth_jpy980`, Provider semantic fidelity, production reliability, and Payment recovery readiness remain unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
 ## V1-C core technical snapshot — PASS, Human acceptance HOLD
 
 - [x] Core snapshot `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` and its technical implementation remain immutable
 - [x] ChatGPT core technical review `PASS`; BLOCKER/MAJOR/MINOR `0/0/0`
-- [ ] Human acceptance is `HOLD` pending R1 correction review; V1-C is not accepted complete
+- [ ] Human acceptance is `HOLD` pending R1-C1 correction review; V1-C is not accepted complete
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:BEGIN -->
@@ -63,7 +58,7 @@ Status is `in_progress_recovery_correction`; R1 is `implemented_pending_human_ch
 - [x] V1-B ChatGPT/Human review `PASS / complete`, Human acceptance complete on `2026-08-17`; accepted snapshot `e21c9b571426160703b1112c9057cc26c7738a0a`
 - [ ] V1-C Human/ChatGPT review; V1-D, Provider execution, R2-C re-review/PASS, Production Runtime, Payment, deploy, PR, or main integration — unauthorized
 
-Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is separately `implemented_pending_human_chatgpt_review`; V1-D remains unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
+Status is `accepted_complete`. Provider prose quality, actual semantic non-repetition, Human feeling of being understood, `plausibly_worth_jpy980`, and Provider semantic fidelity remain unestablished. V1-C is separately `in_progress_recovery_correction`; R1-C1 is pending Human / ChatGPT review and V1-D remains unauthorized. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-IMPL:BEGIN -->

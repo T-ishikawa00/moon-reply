@@ -34,47 +34,39 @@ import {
 } from "../lib/assessment/runtime/schema-catalog.ts";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1";
-const baseline = "e7ae51aa96bbb3d1e791ac957e26bb8918d10547";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C-R1-C1";
+const baseline = "4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40";
+const v1CCore = "e7ae51aa96bbb3d1e791ac957e26bb8918d10547";
 const v1B = "e21c9b571426160703b1112c9057cc26c7738a0a";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-c1-precise-repair-paths";
+const r1Branch =
   "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment";
 const v1CBranch =
   "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-semantic-quality";
-const expectedSubject = "fix: add bounded quality reassessment recovery";
+const expectedSubject = "fix: validate quality repair paths precisely";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c";
 const planningRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1";
 
 const updatedPaths = [
+  "lib/assessment/runtime/quality-reassessment-v1.ts",
+  "lib/assessment/runtime/pipeline.ts",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment.mjs",
+  packageRoot + "/quality-reassessment-cases-v1.json",
+  packageRoot + "/quality-reassessment-contract-v1.json",
+  packageRoot + "/offline-results-v1.json",
+  packageRoot + "/capabilities-v1.json",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_C_R1_QUALITY_REASSESSMENT_REVIEW.md",
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_C_REVIEW.md",
-  planningRoot + "/implementation-work-packages-v1.json",
   planningRoot + "/capabilities-v1.json",
-  packageRoot + "/capabilities-v1.json",
-  packageRoot + "/offline-results-v1.json",
-  "lib/assessment/runtime/types.ts",
-  "lib/assessment/runtime/pipeline.ts",
-  "lib/assessment/runtime/fakes.ts",
-  "lib/assessment/runtime/supabase-repository.ts",
-  "lib/assessment/runtime/schema-catalog.ts",
-  "lib/assessment/runtime/service.ts",
+  planningRoot + "/implementation-work-packages-v1.json",
 ];
-const newPaths = [
-  "lib/assessment/runtime/quality-reassessment-v1.ts",
-  "lib/assessment/runtime/contracts/pb-04-quality-reassessment-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-05-quality-reassessment-v1.developer.md",
-  "lib/assessment/runtime/contracts/runtime-stage-catalog-v15.json",
-  "supabase/migrations/0009_m2_p4_jpy980_quality_reassessment.sql",
-  packageRoot + "/quality-reassessment-contract-v1.json",
-  packageRoot + "/quality-reassessment-cases-v1.json",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_C_R1_QUALITY_REASSESSMENT_REVIEW.md",
-  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment.mjs",
-];
+const newPaths = [];
 const exactScope = [...updatedPaths, ...newPaths];
 
 function git(args, options = {}) {
@@ -274,6 +266,21 @@ function diagnosticCase(caseId) {
   };
 }
 
+function currentProductAuthority(caseId = "E-R3-02") {
+  const fixture = diagnosticCase(caseId);
+  return {
+    decisionPlan: structuredClone(fixture.outputs["PB-04"]),
+    reportContent: structuredClone(fixture.outputs["PB-05"]),
+  };
+}
+
+function buildDirective(blockingFindings, caseId = "E-R3-02") {
+  return buildQualityReassessmentDirectiveV1({
+    blockingFindings,
+    ...currentProductAuthority(caseId),
+  });
+}
+
 function createApplication(catalog, fixture, repository, transport, extra = {}) {
   return new AssessmentApplication({
     repository,
@@ -445,6 +452,7 @@ const v15Manifest = readJson(
 );
 let v14Catalog;
 let v15Catalog;
+let immutableR1Output = "";
 let immutableV1COutput = "";
 let checks = 0;
 const failures = [];
@@ -461,14 +469,18 @@ async function check(name, callback) {
   }
 }
 
-await check("exact branch parent core branch refs main and empty stash", () => {
+await check("exact correction branch parent R1 core refs main and empty stash", () => {
   assert.equal(git(["branch", "--show-current"]), expectedBranch);
   assert.equal(git(["rev-parse", baseline]), baseline);
-  assert.equal(git(["rev-parse", baseline + "^"]), v1B);
-  assert.equal(git(["show", "-s", "--format=%s", baseline]), "feat: add JPY980 semantic quality evaluator");
-  assert.equal(git(["rev-parse", "refs/heads/" + v1CBranch]), baseline);
-  assert.equal(git(["rev-parse", "refs/remotes/origin/" + v1CBranch]), baseline);
-  assert.equal(remoteHead(v1CBranch), baseline);
+  assert.equal(git(["rev-parse", baseline + "^"]), v1CCore);
+  assert.equal(git(["show", "-s", "--format=%s", baseline]), "fix: add bounded quality reassessment recovery");
+  assert.equal(git(["rev-parse", v1CCore + "^"]), v1B);
+  assert.equal(git(["rev-parse", "refs/heads/" + r1Branch]), baseline);
+  assert.equal(git(["rev-parse", "refs/remotes/origin/" + r1Branch]), baseline);
+  assert.equal(remoteHead(r1Branch), baseline);
+  assert.equal(git(["rev-parse", "refs/heads/" + v1CBranch]), v1CCore);
+  assert.equal(git(["rev-parse", "refs/remotes/origin/" + v1CBranch]), v1CCore);
+  assert.equal(remoteHead(v1CBranch), v1CCore);
   assert.equal(git(["rev-parse", "main"]), expectedMain);
   assert.equal(git(["rev-parse", "origin/main"]), expectedMain);
   assert.equal(remoteHead("main"), expectedMain);
@@ -493,7 +505,7 @@ await check("precommit state or exactly one direct correction commit", () => {
   if (remote !== null) assert.equal(count, 1);
 });
 
-await check("exact 23 paths with 14 UPDATE and 9 NEW", () => {
+await check("exact 13 UPDATE paths with no new delete or rename", () => {
   const scope = collectScope();
   assert.deepEqual(sorted(scope.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
@@ -507,19 +519,30 @@ await check("exact 23 paths with 14 UPDATE and 9 NEW", () => {
   assert.equal(scope.some((entry) => /^(?:D|R|C)/u.test(entry.status)), false);
 });
 
-await check("V1-C core PASS Human HOLD and V1-D unauthorized are synchronized", () => {
-  assert.equal(capabilities.authority.v1_c_core_snapshot, baseline);
+await check("V1-C R1 finding R1-C1 pending review Human HOLD and V1-D unauthorized are synchronized", () => {
+  assert.equal(capabilities.authority.v1_c_core_snapshot, v1CCore);
   assert.equal(capabilities.authority.v1_c_core_chatgpt_technical_review, "PASS");
   assert.deepEqual(capabilities.authority.v1_c_core_findings, {
     blocker: 0,
     major: 0,
     minor: 0,
   });
-  assert.equal(capabilities.authority.v1_c_human_acceptance, "HOLD_pending_correction_review");
+  assert.equal(capabilities.authority.v1_c_r1_snapshot, baseline);
+  assert.equal(capabilities.authority.v1_c_r1_initial_review, "NEEDS_CORRECTION");
+  assert.deepEqual(capabilities.authority.v1_c_r1_initial_findings, {
+    blocker: 0,
+    major: 1,
+    minor: 0,
+  });
+  assert.equal(
+    capabilities.authority.v1_c_r1_c1,
+    "precise_repair_path_corrected_pending_human_chatgpt_review",
+  );
+  assert.equal(capabilities.authority.v1_c_human_acceptance, "HOLD");
   assert.equal(capabilities.authority.v1_c_overall, "in_progress_recovery_correction");
   assert.equal(capabilities.authority.v1_d, "unauthorized");
   assert.equal(planningCapabilities.implementation_authority["V1-D"], "unauthorized");
-  assert.match(readText("docs/CURRENT_FOCUS.md"), /quality_failure_terminal_delivery_path_unacceptable/u);
+  assert.match(readText("docs/CURRENT_FOCUS.md"), /repair_path_shape_does_not_prove_actual_product_path/u);
 });
 
 await check("V15 exact identity seven stages schema set and topology", () => {
@@ -527,7 +550,7 @@ await check("V15 exact identity seven stages schema set and topology", () => {
   assert.equal(v15Manifest.prompt_bundle_version, "prompt-bundle-runtime-v15.0.0");
   assert.equal(v15Manifest.schema_set_version, "pipeline-schema-runtime-v6.0.0");
   assert.equal(v15Manifest.stage_topology_version, "split-base-candidate-v1");
-  assert.equal(v15Manifest.baseline, baseline);
+  assert.equal(v15Manifest.baseline, v1CCore);
   assert.equal(v15Manifest.stages.length, 7);
   assert.deepEqual(v15Manifest.stages.map((stage) => stage.stage_id), [
     "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
@@ -617,7 +640,7 @@ await check("existing Decision Report validation schemas and seven-stage topolog
 });
 
 await check("directive classifies report-only owned findings and strips raw detail", () => {
-  const directive = buildQualityReassessmentDirectiveV1([
+  const directive = buildDirective([
     semanticFinding("REPETITION", "major", "report_content.closing_lines[0]", "RAW_SECRET_DETAIL"),
   ]);
   assert.ok(directive);
@@ -630,7 +653,7 @@ await check("directive classifies report-only owned findings and strips raw deta
 });
 
 await check("directive selects plan-and-report for Plan or mixed owned defects and sorts", () => {
-  const directive = buildQualityReassessmentDirectiveV1([
+  const directive = buildDirective([
     semanticFinding("REPETITION", "major", "report_content.closing_lines[0]"),
     semanticFinding("ACTION_CONSISTENCY", "major", "decision_plan.actions_to_take[0]"),
     semanticFinding("REPETITION", "major", "report_content.closing_lines[0]"),
@@ -653,7 +676,7 @@ await check("Application-owned and unknown paths are nonrepairable", () => {
     "unknown.path",
   ]) {
     assert.equal(
-      buildQualityReassessmentDirectiveV1([
+      buildDirective([
         semanticFinding("FACT_FIDELITY", "major", jsonPath),
       ]),
       null,
@@ -661,10 +684,123 @@ await check("Application-owned and unknown paths are nonrepairable", () => {
   }
 });
 
+await check("static ownership and actual current Product path resolution are both required", () => {
+  for (const [caseId, jsonPath, expectedScope] of [
+    ["E-R3-02", "decision_plan.actions_to_take[0]", "plan_and_report"],
+    ["E-R3-01", "decision_plan.recommended_message_draft.text", "plan_and_report"],
+    ["E-R3-02", "report_content.short_letter[0]", "report_only"],
+    ["E-R3-02", "report_content.observed_fact_commentary[0].commentary", "report_only"],
+  ]) {
+    const directive = buildDirective(
+      [semanticFinding("FACT_FIDELITY", "major", jsonPath)],
+      caseId,
+    );
+    assert.ok(directive, jsonPath);
+    assert.equal(directive.scope, expectedScope, jsonPath);
+  }
+
+  for (const [caseId, jsonPath] of [
+    ["E-R3-02", "decision_plan.selected_decision.nonexistent"],
+    ["E-R3-02", "decision_plan.actions_to_take[999]"],
+    ["E-R3-01", "decision_plan.recommended_message_draft.fake_field"],
+    ["E-R3-02", "decision_plan.recommended_message_draft.text"],
+    ["E-R3-02", "decision_plan.aftercare_plan[999].action"],
+    ["E-R3-02", "report_content.short_letter[999]"],
+    ["E-R3-01", "report_content.message_temperature.fake_field"],
+    ["E-R3-02", "report_content.message_temperature.softness"],
+    ["E-R3-02", "report_content.relationship_summary"],
+    ["E-R3-02", "report_content.change_condition_commentary[0]"],
+    ["E-R3-02", "report_content.constructor"],
+    ["E-R3-02", "unknown.path"],
+  ]) {
+    assert.equal(
+      buildDirective(
+        [semanticFinding("FACT_FIDELITY", "major", jsonPath)],
+        caseId,
+      ),
+      null,
+      jsonPath,
+    );
+  }
+
+  assert.equal(
+    buildDirective([
+      semanticFinding(
+        "FACT_FIDELITY",
+        "major",
+        "decision_plan.recommended_message_draft",
+      ),
+    ]).scope,
+    "plan_and_report",
+  );
+  assert.equal(
+    buildDirective([
+      semanticFinding(
+        "FACT_FIDELITY",
+        "major",
+        "report_content.message_temperature",
+      ),
+    ]).scope,
+    "report_only",
+  );
+});
+
+await check("any invalid finding rejects the full directive and resolved values never flow", () => {
+  const authority = currentProductAuthority("E-R3-01");
+  authority.decisionPlan.actions_to_take[0] =
+    "RESOLVED_PLAN_VALUE_MUST_NOT_FLOW";
+  authority.reportContent.short_letter[0] =
+    "RESOLVED_REPORT_VALUE_MUST_NOT_FLOW";
+  const findings = [
+    semanticFinding(
+      "ACTION_CONSISTENCY",
+      "major",
+      "decision_plan.actions_to_take[0]",
+      "RAW_EVALUATOR_DETAIL_MUST_NOT_FLOW",
+    ),
+    semanticFinding(
+      "REPETITION",
+      "major",
+      "report_content.short_letter[0]",
+      "SECOND_RAW_DETAIL_MUST_NOT_FLOW",
+    ),
+  ];
+  const directive = buildQualityReassessmentDirectiveV1({
+    blockingFindings: findings,
+    ...authority,
+  });
+  assert.ok(directive);
+  assert.deepEqual(Object.keys(directive).sort(), [
+    "attemptNumber",
+    "defects",
+    "schemaVersion",
+    "scope",
+    "source",
+  ]);
+  assert.doesNotMatch(
+    JSON.stringify(directive),
+    /RESOLVED_PLAN_VALUE|RESOLVED_REPORT_VALUE|RAW_EVALUATOR_DETAIL|SECOND_RAW_DETAIL/u,
+  );
+  assert.equal(
+    buildQualityReassessmentDirectiveV1({
+      blockingFindings: [
+        ...findings,
+        semanticFinding(
+          "FACT_FIDELITY",
+          "major",
+          "decision_plan.actions_to_take[999]",
+        ),
+      ],
+      ...authority,
+    }),
+    null,
+  );
+});
+
 await check("malformed excessive and local-shape directive behavior is bounded", () => {
   assert.equal(QUALITY_REASSESSMENT_MAX_DEFECTS, 12);
   assert.equal(
-    buildQualityReassessmentDirectiveV1(
+    buildDirective(
       Array.from({ length: 13 }, () =>
         semanticFinding("FACT_FIDELITY", "major", "report_content.cover_line"),
       ),
@@ -672,7 +808,7 @@ await check("malformed excessive and local-shape directive behavior is bounded",
     null,
   );
   assert.equal(
-    buildQualityReassessmentDirectiveV1([
+    buildDirective([
       { finding_code: "UNKNOWN", severity: "major", json_path: "report_content.cover_line" },
     ]),
     null,
@@ -912,6 +1048,29 @@ await check("Provider schema failure does not enter Product-quality reassessment
   assert.equal(scenario.repository.reports.size, 0);
 });
 
+await check("recognized-root nonexistent path fails closed with no attempt 2", async () => {
+  const scenario = await runInitialScenario({
+    catalog: v15Catalog,
+    firstFindings: [
+      semanticFinding(
+        "ACTION_CONSISTENCY",
+        "major",
+        "decision_plan.actions_to_take[999]",
+      ),
+    ],
+  });
+  assert.equal(safeCode(scenario), "M2_SEMANTIC_VALIDATION_FAILED");
+  for (const stageId of ["PB-04", "PB-05", "PB-06"]) {
+    assert.equal(
+      stagesFor(scenario, stageId).filter((stage) => stage.attemptNumber === 2)
+        .length,
+      0,
+      stageId,
+    );
+  }
+  assert.equal(scenario.repository.reports.size, 0);
+});
+
 await check("V14 equivalent finding retains historical terminal semantic failure", async () => {
   const scenario = await runInitialScenario({
     catalog: v14Catalog,
@@ -999,9 +1158,9 @@ await check("attempt rows persist required and exhausted safe codes with one run
   assert.equal(repaired.repository.events.filter((event) => event === "finalizeCompletedAssessment").length, 1);
 });
 
-await check("machine-readable recovery matrix contains the required twenty bounded cases", () => {
-  assert.equal(cases.cases.length, 20);
-  assert.equal(new Set(cases.cases.map((entry) => entry.case_id)).size, 20);
+await check("machine-readable recovery matrix contains all thirty bounded and precise-path cases", () => {
+  assert.equal(cases.cases.length, 30);
+  assert.equal(new Set(cases.cases.map((entry) => entry.case_id)).size, 30);
   for (const required of [
     "major_report_repetition", "major_template_genericity",
     "cold_required_section_meaning", "unsupported_report_certainty",
@@ -1013,7 +1172,30 @@ await check("machine-readable recovery matrix contains the required twenty bound
     "v14_historical_semantic_failure", "clarification_resume_report_repair",
     "usage_accumulates", "report_only_exact_draft",
     "sanitized_directive_only", "malformed_or_too_many_defects",
+    "precise_observed_commentary_path", "invalid_selected_decision_child",
+    "invalid_actions_to_take_index", "invalid_draft_child",
+    "invalid_null_draft_text", "invalid_aftercare_index_child",
+    "invalid_short_letter_index", "invalid_message_temperature_child",
+    "invalid_null_message_temperature_child",
+    "application_owned_change_condition_commentary",
   ]) assert.ok(cases.cases.some((entry) => entry.case_id === required), required);
+  for (const caseId of [
+    "invalid_selected_decision_child", "invalid_actions_to_take_index",
+    "invalid_draft_child", "invalid_null_draft_text",
+    "invalid_aftercare_index_child", "invalid_short_letter_index",
+    "invalid_message_temperature_child",
+    "invalid_null_message_temperature_child",
+    "application_owned_relationship_summary",
+    "application_owned_change_condition_commentary", "unknown_path",
+  ]) {
+    const expected = cases.cases.find((entry) => entry.case_id === caseId).expected;
+    assert.equal(expected.automatic_reassessment, false, caseId);
+    assert.equal(expected.safe_code, "M2_SEMANTIC_VALIDATION_FAILED", caseId);
+    assert.equal(expected.pb_04_attempt_2_count, 0, caseId);
+    assert.equal(expected.pb_05_attempt_2_count, 0, caseId);
+    assert.equal(expected.pb_06_attempt_2_count, 0, caseId);
+    assert.equal(expected.report_count, 0, caseId);
+  }
   assert.equal(cases.provider_calls, 0);
 });
 
@@ -1029,14 +1211,26 @@ await check("V1-C core evaluator shape PB-06 and V14 remain byte-identical", () 
 
 await check("protected authority UI projection Payment and historical migrations remain unchanged", () => {
   for (const relativePath of [
+    "lib/assessment/runtime/types.ts",
+    "lib/assessment/runtime/fakes.ts",
+    "lib/assessment/runtime/supabase-repository.ts",
     "lib/assessment/runtime/effective-assessment-authority-v1.ts",
     "lib/assessment/runtime/effective-decision-policy-v1.ts",
+    "lib/assessment/runtime/policy.ts",
+    "lib/assessment/runtime/policy-v2.ts",
+    "lib/assessment/runtime/policy-v3.ts",
     "lib/assessment/runtime/application.ts",
+    "lib/assessment/runtime/service.ts",
     "lib/assessment/runtime/contracts/pb-05-semantic-depth-v1.developer.md",
     "lib/assessment/runtime/contracts/pb-04-clarification-aware-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-04-quality-reassessment-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-05-quality-reassessment-v1.developer.md",
+    "lib/assessment/runtime/contracts/pb-06-semantic-quality-v1.developer.md",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v15.json",
     "supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql",
     "supabase/migrations/0007_m2_p4_jpy980_semantic_depth_runtime_identity.sql",
     "supabase/migrations/0008_m2_p4_jpy980_semantic_quality_runtime_identity.sql",
+    "supabase/migrations/0009_m2_p4_jpy980_quality_reassessment.sql",
     "components/runtime/CustomerAssessmentNote.tsx",
     "components/runtime/CustomerAssessmentNote.module.css",
     "lib/assessment/runtime/customer-assessment-projection-v1.ts",
@@ -1045,6 +1239,9 @@ await check("protected authority UI projection Payment and historical migrations
   const baselinePaths = git(["ls-tree", "-r", "--name-only", baseline])
     .split(/\r?\n/u)
     .filter(Boolean);
+  for (const relativePath of baselinePaths.filter((value) => /(?:^|\/)(?:contracts\/.*\.schema\.json|schemas\/.*\.schema\.json)$/u.test(value))) {
+    assert.equal(worktreeBlob(relativePath), blob(baseline, relativePath), relativePath);
+  }
   for (const relativePath of baselinePaths.filter((value) => /(?:payment|stripe|payjp)/iu.test(value))) {
     assert.equal(worktreeBlob(relativePath), blob(baseline, relativePath), relativePath);
   }
@@ -1057,8 +1254,20 @@ await check("offline artifacts preserve evidence ceilings and operations zero", 
   assert.equal(contract.operations.migration_applies, 0);
   assert.ok(contract.unestablished.includes("real_provider_repair_success_rate"));
   assert.ok(contract.unestablished.includes("actual_product_quality"));
+  assert.equal(contract.authority.v1_c_r1_initial_review, "NEEDS_CORRECTION");
+  assert.equal(
+    contract.authority.v1_c_r1_c1,
+    "precise_repair_path_corrected_pending_human_chatgpt_review",
+  );
+  assert.equal(contract.directive.path_authority.static_product_owned_allowlist, true);
+  assert.equal(contract.directive.path_authority.actual_current_product_resolution, true);
+  assert.equal(contract.directive.path_authority.resolved_value_copied_to_directive, false);
   assert.equal(offline.unestablished.provider_semantic_fidelity, true);
-  assert.equal(offline.current_product_authority.v1_c_human_acceptance, "HOLD_pending_correction_review");
+  assert.equal(offline.current_product_authority.v1_c_human_acceptance, "HOLD");
+  assert.equal(
+    offline.current_product_authority.v1_c_r1_c1,
+    "precise_repair_path_corrected_pending_human_chatgpt_review",
+  );
   assert.equal(workPackages.packages.find((entry) => entry.id === "V1-D").authorized, false);
 });
 
@@ -1089,14 +1298,26 @@ await check("sensitive diff scan main next-env diff-check and stash remain clean
   assert.equal(git(["stash", "list"]), "");
 });
 
-await check("immutable V1-C core verifier remains PASS 49/49", () => {
-  immutableV1COutput = runImmutableVerifier(
+await check("immutable V1-C R1 verifier remains PASS 46/46 at correction parent", () => {
+  immutableR1Output = runImmutableVerifier(
     baseline,
-    v1CBranch,
-    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-semantic-quality.mjs",
+    r1Branch,
+    "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-c-r1-quality-reassessment.mjs",
   );
-  assert.match(immutableV1COutput, /semantic quality successor verifier: PASS 49\/49/u);
-  assert.match(immutableV1COutput, /Exact scope: 21\/21; UPDATE 10; NEW 11/u);
+  assert.match(immutableR1Output, /quality reassessment verifier: PASS 46\/46/u);
+  assert.match(immutableR1Output, /Exact scope: 23\/23; UPDATE 14; NEW 9/u);
+});
+
+await check("immutable V1-C core verifier remains PASS 49/49", () => {
+  immutableV1COutput = immutableR1Output;
+  assert.match(
+    immutableV1COutput,
+    /PASS immutable V1-C core verifier remains PASS 49\/49/u,
+  );
+  assert.match(
+    immutableV1COutput,
+    /Immutable V1-C core verifier: PASS 49\/49/u,
+  );
 });
 
 await check("immutable V1-C output retains V1-B and complete accepted upstream chain", () => {
@@ -1105,11 +1326,12 @@ await check("immutable V1-C output retains V1-B and complete accepted upstream c
     /Immutable V1-A2 R2\/R1\/original\/planning\/V1-A1: PASS 29\/29, 29\/29, 22\/22, 27\/27, 26\/26, 25\/25, 24\/24/u,
     /JPY980 R1\/original, R2-C, R2-B: PASS 19\/19, 18\/18, 17\/17, 21\/21/u,
     /Decision Policy: PASS 40\/40; all upstream accepted verifiers: PASS/u,
-    /Provider detection fidelity: unestablished; R2-C: remediation_required/u,
+    /PASS immutable V1-C output retains V1-B and complete accepted upstream chain/u,
+    /V1-C Human acceptance: HOLD; Provider repair success\/Product quality\/JPY980 readiness: unestablished/u,
   ]) assert.match(immutableV1COutput, pattern);
 });
 
-assert.equal(checks, 46);
+assert.equal(checks, 50);
 if (failures.length > 0) {
   console.error("\n" + taskId + " verifier: FAIL");
   console.error("Failed checks: " + failures.join("; "));
@@ -1118,12 +1340,14 @@ if (failures.length > 0) {
 
 const head = git(["rev-parse", "HEAD"]);
 const commitMode = head === baseline ? "precommit" : "one_direct_commit";
-console.log("\n" + taskId + " quality reassessment verifier: PASS 46/46");
-console.log("Exact scope: 23/23; UPDATE 14; NEW 9; DELETE 0; RENAME 0");
+console.log("\n" + taskId + " precise repair path verifier: PASS 50/50");
+console.log("Exact scope: 13/13; UPDATE 13; NEW 0; DELETE 0; RENAME 0");
 console.log("Git mode: " + commitMode + "; exact parent: " + baseline);
 console.log("V15: PB-04/PB-05 Prompt successors only; existing schemas; seven stages");
 console.log("Same request/current run; one automatic reassessment; no attempt 3: PASS");
+console.log("Static ownership plus actual Product path resolution; fail-closed invalid path: PASS");
 console.log("Sanitized directive, attempt persistence, usage, exact draft: PASS");
+console.log("Immutable V1-C R1 quality reassessment verifier: PASS 46/46");
 console.log("Immutable V1-C core verifier: PASS 49/49");
 console.log("Immutable V1-B semantic depth verifier: PASS 38/38");
 console.log(
