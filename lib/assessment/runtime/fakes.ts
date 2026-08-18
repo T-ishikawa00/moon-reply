@@ -193,7 +193,8 @@ export class FakeAssessmentRepository implements AssessmentRepository {
       topology[record.sequenceNumber - 1] !== record.stageId ||
       (attemptNumber !== 1 && attemptNumber !== 2) ||
       (attemptNumber === 2 &&
-        (run.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" ||
+        ((run.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" &&
+          run.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0") ||
           !["PB-04", "PB-05", "PB-06"].includes(record.stageId))) ||
       [...this.stageRuns.values()].some(
         (stage) =>
@@ -416,7 +417,8 @@ export class FakeAssessmentRepository implements AssessmentRepository {
       (stage) => stage.runId === record.runId,
     );
     const isRecoveredQualityFailure = (stage: (typeof stageRuns)[number]) =>
-      run.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" &&
+      (run.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+        run.promptBundleVersion === "prompt-bundle-runtime-v16.0.0") &&
       stage.stageId === "PB-06" &&
       (stage.attemptNumber ?? 1) === 1 &&
       stage.failure?.errorCode ===

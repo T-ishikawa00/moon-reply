@@ -16,6 +16,10 @@ import {
   clarificationConsumptionPathsForStageV1,
 } from "./effective-decision-policy-v1.ts";
 import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
+import {
+  evaluateJpy980InputSufficiencyV3,
+  type Jpy980InputSufficiencyResultV3,
+} from "./jpy980-input-sufficiency-policy-v3.ts";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
 import { groundBaseStructuredIntakeV2 } from "./base-structured-intake-grounding-v2.ts";
@@ -64,6 +68,10 @@ import {
   createActionContextV1,
   createContactConstraintPolicyV1,
 } from "./runtime-authority-v1.ts";
+import {
+  buildSelectedRequestProductCompletenessReassessmentDirectiveV1,
+  evaluateSelectedRequestProductCompletenessV1,
+} from "./selected-request-product-completeness-v1.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
@@ -918,7 +926,7 @@ export class AssessmentPipeline {
 
   private async completeV1A2NeedsMore(input: {
     runContext: AssessmentRunContext;
-    policy: Jpy980InputSufficiencyResultV2;
+    policy: Jpy980InputSufficiencyResultV2 | Jpy980InputSufficiencyResultV3;
   }): Promise<AssessmentExecutionResult> {
     const prompt = input.policy.clarification;
     if (!prompt || input.policy.clarificationBudget.questionsRemaining !== 1) {
@@ -1009,6 +1017,27 @@ export class AssessmentPipeline {
       },
     );
     return { aggregate, splitEnvelope };
+  }
+
+  private evaluateV1A2InputSufficiency(input: {
+    runContext: AssessmentRunContext;
+    baseStructuredIntake: JsonObject;
+    aggregate: SafetyResult;
+    clarificationGrounding: ClarificationGroundingV1 | null;
+    effectiveAuthority: EffectiveAssessmentAuthorityV1;
+  }) {
+    const policyInput = {
+      basePolicyInput: this.v1a2BasePolicyInput(
+        input.baseStructuredIntake,
+        input.aggregate,
+      ),
+      clarificationGrounding: input.clarificationGrounding,
+      effectiveAssessmentAuthority: input.effectiveAuthority,
+    };
+    return input.runContext.promptBundleVersion ===
+      "prompt-bundle-runtime-v16.0.0"
+      ? evaluateJpy980InputSufficiencyV3(policyInput)
+      : evaluateJpy980InputSufficiencyV2(policyInput);
   }
 
   private async completeV15Ready(input: {
@@ -1159,6 +1188,18 @@ export class AssessmentPipeline {
         );
       }
 
+      const selectedRequestCompleteness =
+        input.runContext.promptBundleVersion ===
+        "prompt-bundle-runtime-v16.0.0"
+          ? evaluateSelectedRequestProductCompletenessV1({
+              requestedTopics: input.request.requestedTopics,
+              candidateEnvelope: input.candidateEnvelope,
+              effectiveDecisionPolicy: effectivePolicy,
+              decisionPlan,
+              reportContent,
+            })
+          : null;
+
       requireReadyMakingClarificationDownstreamV1({
         authority: input.effectiveAuthority,
         clarificationGrounding: input.clarificationGrounding,
@@ -1204,20 +1245,36 @@ export class AssessmentPipeline {
             decisionPlan,
             groundedReportContent: reportContent,
           });
-          if (blockingFindings.length === 0) return;
-          if (attemptNumber === 2) {
-            throw new M2RuntimeError("M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED");
-          }
-          const reassessmentDirective =
-            buildQualityReassessmentDirectiveV1({
+          if (blockingFindings.length > 0) {
+            if (attemptNumber === 2) {
+              throw new M2RuntimeError(
+                "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+              );
+            }
+            const reassessmentDirective = buildQualityReassessmentDirectiveV1({
               blockingFindings,
               decisionPlan,
               reportContent,
             });
-          if (reassessmentDirective === null) {
-            throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+            if (reassessmentDirective === null) {
+              throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
+            }
+            throw new QualityReassessmentRequiredSignalV1(
+              reassessmentDirective,
+            );
           }
-          throw new QualityReassessmentRequiredSignalV1(reassessmentDirective);
+          if (selectedRequestCompleteness?.complete === false) {
+            if (attemptNumber === 2) {
+              throw new M2RuntimeError(
+                "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
+              );
+            }
+            throw new QualityReassessmentRequiredSignalV1(
+              buildSelectedRequestProductCompletenessReassessmentDirectiveV1(
+                selectedRequestCompleteness,
+              ),
+            );
+          }
         },
         attemptNumber,
       );
@@ -1587,10 +1644,12 @@ export class AssessmentPipeline {
     });
     this.emit("LOCAL_EFFECTIVE_ASSESSMENT_AUTHORITY");
     this.emit("LOCAL_JPY980_INPUT_SUFFICIENCY");
-    const policy = evaluateJpy980InputSufficiencyV2({
-      basePolicyInput: this.v1a2BasePolicyInput(baseStructuredIntake, aggregate),
+    const policy = this.evaluateV1A2InputSufficiency({
+      runContext,
+      baseStructuredIntake,
+      aggregate,
       clarificationGrounding: null,
-      effectiveAssessmentAuthority: effectiveAuthority,
+      effectiveAuthority,
     });
     if (policy.state === "safety_blocked") {
       return this.completeV1A2Stop({
@@ -1789,10 +1848,12 @@ export class AssessmentPipeline {
     });
     this.emit("LOCAL_EFFECTIVE_ASSESSMENT_AUTHORITY");
     this.emit("LOCAL_JPY980_INPUT_SUFFICIENCY");
-    const policy = evaluateJpy980InputSufficiencyV2({
-      basePolicyInput: this.v1a2BasePolicyInput(baseStructuredIntake, aggregate),
+    const policy = this.evaluateV1A2InputSufficiency({
+      runContext,
+      baseStructuredIntake,
+      aggregate,
       clarificationGrounding,
-      effectiveAssessmentAuthority: effectiveAuthority,
+      effectiveAuthority,
     });
     if (policy.state === "needs_one_clarifying_answer") {
       throw new M2RuntimeError("M2_SECOND_CLARIFICATION_PROHIBITED");

@@ -33,7 +33,8 @@ export type QualityReassessmentSeverity = "critical" | "major" | "minor";
 export type QualityReassessmentScope = "report_only" | "plan_and_report";
 export type QualityReassessmentSource =
   | "pb06_semantic_findings"
-  | "local_semantic_shape";
+  | "local_semantic_shape"
+  | "local_selected_request_completeness";
 
 const repairRequirementByFindingCode = {
   FACT_FIDELITY: "RESTORE_FACT_FIDELITY",

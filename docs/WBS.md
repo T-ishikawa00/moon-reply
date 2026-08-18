@@ -1,24 +1,24 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 2B C2 V16 Evidence Provenance — Implemented, Review Pending
+## Q0 Consolidated Remediation — Implemented, Review Pending
 
-- [x] C1-R1 accepted at `8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184`; ChatGPT/Human `PASS_complete`, Human acceptance `complete`, acceptance date `2026-08-18`
-- [x] Historical C1 `NEEDS_CORRECTION 0/1/0` and `required_now_generated_draft_route_is_unreachable` retained
-- [x] C2 finding recorded as `BLOCKER_FOR_PROVIDER_EXECUTION / v16_execution_would_be_persisted_as_v15_evidence`
-- [x] Exact V16 catalog/prompt/schema/topology is loaded and validated before authorization record, Provider-client construction, or Provider invocation
-- [x] Authorization record includes exact Runtime catalog/prompt/schema/topology plus existing model/snapshot/input/case/budget/no-Production authorities
-- [x] V16 result family uses `v16-*` filenames, `m2-p4-v1-d-v16-*` schemas, and `actual_v16_successor_output`
-- [x] Human summary exposes exact V16 identity; all Human Product judgments remain pending
-- [x] Unsupported future Runtime identity fails before claims with `M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED`
-- [x] Historical Case 1 V15 evidence and review provenance remain byte-identical `18/18`
-- [x] Product logic, Prompt/catalog, UI/CSS, schemas, inputs, Production transport, DB/Supabase/migrations, Payment, main, and `next-env.d.ts` remain protected
-- [x] C2 verifier `PASS 21/21`; immutable accepted C1-R1 verifier `PASS 23/23 executed_once`; typecheck/lint/build/diff/protected/sensitive/exact-scope `15/15` gates
+- [x] Exact baseline `a02f8bb14232c5bd306aed23737846c8ea305a5b` and isolated branch
+- [x] Preserve V1/V2 and connect functional-sufficiency V3 to V16 only
+- [x] Use trusted structured combinations; no raw prose/keyword/fixture parsing
+- [x] Preserve Safety, provenance, sent/unsent, Candidate, certainty, factual, contact, and one-question hard gates
+- [x] Add typed selected-request Product-completeness checker
+- [x] Reuse existing bounded V1-C reassessment; max attempt2, no attempt3
+- [x] Consolidated actual-evidence verifier `PASS 31/31`: Cases 1-8 Ready; Case 9 one exact question then Ready
+- [x] Negative/sparse/emotion-only/Candidate-only/topic-only/message-impact-without-Candidate regressions
+- [x] Actual incomplete Case 4 attempt1 withheld; fake corrected attempt2 alone projected; incomplete attempt2 exhausts with no Report/attempt3
+- [x] Exact Case 5/6 Candidate preservation
+- [x] Closest immutable predecessor verifier `PASS 21/21` in one complete run
+- [x] Typecheck, zero-warning lint, build, diff, protected `248`, sensitive, exact `10/10` scope
 - [ ] Exactly one implementation commit and normal push
-- [ ] Human / ChatGPT review of V1-D Step 2B C2
-- [ ] Case 1 V16 rerun and remaining eight controlled cases — `unauthorized / HOLD`
+- [ ] Human / ChatGPT review
 
-Status is `step_2b_c2_v16_evidence_provenance_implemented_pending_human_chatgpt_review`. Provider execution in C2 is 0; actual V16 Provider quality is unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, migration apply, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `implemented_pending_human_chatgpt_review`. Provider/DB/Supabase/migration-apply/Payment/deploy are `0/0/0/0/0/0`; no Prompt/catalog/schema, UI/CSS, evidence, Production, main, or `next-env.d.ts` changes. Two isolated-clone setup invocations stopped before predecessor completion and performed no Provider work; the one complete predecessor run passed. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->
