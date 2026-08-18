@@ -1,5 +1,13 @@
 # M2-P4 V1-D Step 2A C1 — Quality Exhaustion Disposition Correction
 
+## 後続状態 — Step 2B C1
+
+- Step 2Aは `2a458ec16e26e5089cdf455319622e60e8c9d3d1` で `accepted_complete`。ChatGPT technical reviewは `PASS 0/0/0`、Human acceptanceは `complete`。
+- Case 1 actual executionは `ecef2470e34d1a9fe82c0fc5683735d6aa5394f0` / `2026-08-18-case1-ordinary-reply-waiting-2a458ec1`。technical=`PASS`、Product=`remediation_required`。
+- Product findingsは BLOCKER `sent_message_replayed_as_new_draft`、MAJOR `future_reassessment_uses_current_decision_label`。PB-06のobserved `semantic_checks=[]` なので、actual Provider semantic false negativeは少なくとも1件。ただし1件からrecall/precisionを一般化しない。
+- 後続Step 2B C1はV16 draft authority / PB-04/05/06 Prompt / future reassessment UX successorを `implemented_pending_human_chatgpt_review` とした。詳細は `TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2B_C1_SENT_DRAFT_BOUNDARY.md` をauthorityとする。
+- この修正taskのProvider実行は0。残り8 casesは `HOLD`、Case 1 V16 rerunは `unauthorized`、actual V16 Provider qualityは `unestablished`。
+
 ## 判定
 
 - 実装状態: `implemented_pending_human_chatgpt_review`

@@ -4,7 +4,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import {
-  executeControlledProviderReview,
+  executeControlledProviderReviewV16 as executeControlledProviderReview,
   loadControlledReviewInputAuthority,
   V1_D_CONTROLLED_PROVIDER_INPUTS_SHA256,
   V1_D_CONTROLLED_REVIEW_CASE_IDS,
@@ -20,7 +20,7 @@ import {
   V1_D_MAXIMUM_APPLICATION_STAGE_INVOCATIONS_PER_CASE,
   V1_D_MAXIMUM_APPLICATION_STAGE_INVOCATIONS_TOTAL,
 } from "../lib/assessment/runtime/review/m2-p4-v15-controlled-review-transport.ts";
-import { loadM2P4QualityReassessmentRuntimeStageCatalog } from "../lib/assessment/runtime/schema-catalog.ts";
+import { loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog } from "../lib/assessment/runtime/schema-catalog.ts";
 
 export const V1_D_PROVIDER_EXECUTION_AUTHORIZATION_VALUE =
   "I_HAVE_EXPLICIT_HUMAN_AUTHORIZATION";
@@ -195,10 +195,11 @@ export async function runControlledProviderReviewCli(options = {}) {
     const executionId = safeExecutionId(parsed.outputDirectory);
 
     if (parsed.validateOnly) {
-      const catalog = await loadM2P4QualityReassessmentRuntimeStageCatalog();
+      const catalog =
+        await loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog();
       if (
-        catalog.catalogVersion !== "runtime-stage-catalog-v15.0.0" ||
-        catalog.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" ||
+        catalog.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
+        catalog.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
         catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
         catalog.stageTopologyVersion !== "split-base-candidate-v1"
       ) {

@@ -1,0 +1,48 @@
+{
+  "schema_version": "m2-p4-v1-d-case1-actual-product-review-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1",
+  "status": "chatgpt_product_review_recorded_remediation_required",
+  "execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
+  "execution_id": "2026-08-18-case1-ordinary-reply-waiting-2a458ec1",
+  "technical_executor_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+  "fixture_id": "ordinary_reply_waiting",
+  "output_provenance": "actual_v15_successor_output",
+  "execution_technical": "PASS",
+  "routing_correct": "PASS",
+  "evidence_to_decision_chain_clear": "PASS",
+  "uncertainty_honest": "PASS",
+  "emotional_understanding": "positive_directional",
+  "sent_unsent_integrity": "FAIL",
+  "action_usable": "FAIL_due_to_sent_message_draft",
+  "future_reassessment_ux": "FAIL",
+  "no_padding": "pending_after_remediation",
+  "repeated_conclusion_absent": "pending_after_remediation",
+  "chatgpt_plausibly_worth_jpy980": false,
+  "human_product_judgment": "pending",
+  "remaining_provider_cases": "HOLD",
+  "observed_pb_06_semantic_checks": [],
+  "actual_provider_semantic_false_negative_count_lower_bound": 1,
+  "provider_recall_precision_generalization": "prohibited_from_one_case",
+  "findings": [
+    {
+      "severity": "BLOCKER",
+      "code": "sent_message_replayed_as_new_draft",
+      "disposition": "remediation_required"
+    },
+    {
+      "severity": "MAJOR",
+      "code": "future_reassessment_uses_current_decision_label",
+      "disposition": "remediation_required"
+    }
+  ],
+  "historical_human_review_sheet": {
+    "path": "controlled-provider-executions/2026-08-18-case1-ordinary-reply-waiting-2a458ec1/human-product-review-sheet-v1.json",
+    "modified": false,
+    "human_owned_fields_preserved": true
+  },
+  "v16_reassessment": {
+    "provider_execution_authorized": false,
+    "case_1_rerun": "unauthorized",
+    "actual_provider_quality": "unestablished"
+  }
+}

@@ -6,7 +6,10 @@ import { createOpaqueClarificationIdV1 } from "../clarification-evidence-v1.ts";
 import { projectCustomerAssessmentExperienceV2 } from "../customer-assessment-experience-projection-v2.ts";
 import { M2RuntimeError } from "../errors.ts";
 import { FakeAssessmentRepository } from "../fakes.ts";
-import { loadM2P4QualityReassessmentRuntimeStageCatalog } from "../schema-catalog.ts";
+import {
+  loadM2P4QualityReassessmentRuntimeStageCatalog,
+  loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog,
+} from "../schema-catalog.ts";
 import {
   RELATIONSHIP_VALUES,
   REQUESTED_TOPIC_VALUES,
@@ -14,7 +17,9 @@ import {
   type AssessmentExecutionResult,
   type AssessmentInput,
   type Eligibility,
+  type FinalizeCompletedAssessmentRecord,
   type JsonObject,
+  type StartStageRecord,
 } from "../types.ts";
 import {
   deriveControlledReviewQualityEvidence,
@@ -357,6 +362,57 @@ function emptyRoute(
   };
 }
 
+export class V16ControlledReviewFakeAssessmentRepository extends FakeAssessmentRepository {
+  override async startStage(record: StartStageRecord) {
+    const run = this.runs.get(record.runId);
+    const promptBundleVersion = run?.promptBundleVersion;
+    if (
+      record.attemptNumber === 2 &&
+      promptBundleVersion === "prompt-bundle-runtime-v16.0.0" &&
+      run !== undefined
+    ) {
+      // The immutable historical Fake repository recognizes the V15 bounded
+      // reassessment identity only. Adapt that internal assertion for this
+      // review-only V16 successor without changing the persisted run identity.
+      run.promptBundleVersion = "prompt-bundle-runtime-v15.0.0";
+      try {
+        await super.startStage(record);
+      } finally {
+        run.promptBundleVersion = promptBundleVersion;
+      }
+      return;
+    }
+    await super.startStage(record);
+  }
+
+  override async finalizeCompletedAssessment(
+    record: FinalizeCompletedAssessmentRecord,
+  ) {
+    const run = this.runs.get(record.runId);
+    const promptBundleVersion = run?.promptBundleVersion;
+    const hasRecoveredQualityFailure = [...this.stageRuns.values()].some(
+      (stage) =>
+        stage.runId === record.runId &&
+        stage.stageId === "PB-06" &&
+        stage.attemptNumber === 2,
+    );
+    if (
+      hasRecoveredQualityFailure &&
+      promptBundleVersion === "prompt-bundle-runtime-v16.0.0" &&
+      run !== undefined
+    ) {
+      run.promptBundleVersion = "prompt-bundle-runtime-v15.0.0";
+      try {
+        await super.finalizeCompletedAssessment(record);
+      } finally {
+        run.promptBundleVersion = promptBundleVersion;
+      }
+      return;
+    }
+    await super.finalizeCompletedAssessment(record);
+  }
+}
+
 async function executeCase(input: {
   fixture: ControlledReviewInputCase;
   inputHash: string;
@@ -369,7 +425,10 @@ async function executeCase(input: {
   onHttpAttempt: (attempt: ControlledReviewProviderHttpAttempt) => Promise<void>;
 }) {
   const fixture = input.fixture;
-  const repository = new FakeAssessmentRepository();
+  const repository =
+    input.catalog.promptBundleVersion === "prompt-bundle-runtime-v16.0.0"
+      ? new V16ControlledReviewFakeAssessmentRepository()
+      : new FakeAssessmentRepository();
   const underlying = input.transportFactory({
     fixtureId: fixture.fixture_id,
     nextGlobalHttpAttemptOrdinal: input.nextGlobalHttpAttemptOrdinal,
@@ -526,6 +585,95 @@ export async function executeControlledProviderReview(
   if (
     catalog.catalogVersion !== "runtime-stage-catalog-v15.0.0" ||
     catalog.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" ||
+    catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    catalog.stageTopologyVersion !== "split-base-candidate-v1"
+  ) {
+    throw new M2RuntimeError("M2_V1D_REVIEW_RUNTIME_IDENTITY_INVALID");
+  }
+
+  const budget = new ControlledReviewInvocationBudget();
+  const providerHttpAttempts: ControlledReviewProviderHttpAttempt[] = [];
+  const cases: ControlledReviewCaseEvidence[] = [];
+  let globalHttpAttemptOrdinal = 0;
+  const nextGlobalHttpAttemptOrdinal = () => {
+    globalHttpAttemptOrdinal += 1;
+    return globalHttpAttemptOrdinal;
+  };
+
+  for (const fixtureId of options.selectedCaseIds) {
+    const fixture = authority.cases.find((entry) => entry.fixture_id === fixtureId);
+    if (!fixture) invalidInputAuthority();
+    const caseEvidence = await executeCase({
+      fixture,
+      inputHash: authority.sha256,
+      catalog,
+      budget,
+      transportFactory: options.transportFactory,
+      nextGlobalHttpAttemptOrdinal,
+      onHttpAttempt: async (attempt) => {
+        const sanitized = sanitizeControlledReviewEvidence(attempt);
+        providerHttpAttempts.push(sanitized);
+        await options.onHttpAttempt?.(sanitized);
+      },
+    });
+    cases.push(caseEvidence);
+    await options.onCaseEvidence?.(caseEvidence);
+    if (
+      caseEvidence.route.safeErrorCode ===
+      "M2_V1D_REVIEW_STAGE_BUDGET_EXCEEDED"
+    ) {
+      break;
+    }
+  }
+
+  const budgetSnapshot = budget.snapshot();
+  const complete = cases.every(
+    (entry) =>
+      entry.route.finalDisposition === "ready" &&
+      entry.route.safeErrorCode === null,
+  );
+  const firstError = cases.find((entry) => entry.route.safeErrorCode !== null)
+    ?.route.safeErrorCode;
+  return sanitizeControlledReviewEvidence({
+    schemaVersion: "m2-p4-v1-d-controlled-review-executor-result-v1",
+    model: V1_D_CONTROLLED_REVIEW_MODEL,
+    controlledInputSha256: authority.sha256,
+    selectedCaseIds: [...options.selectedCaseIds],
+    complete,
+    applicationStageInvocationCount:
+      budgetSnapshot.applicationStageInvocationCount,
+    providerHttpAttemptCount: providerHttpAttempts.length,
+    applicationStageInvocations: budgetSnapshot.applicationStageInvocations,
+    providerHttpAttempts,
+    cases,
+    safeErrorCode: firstError ?? null,
+  });
+}
+
+export async function executeControlledProviderReviewV16(
+  options: ControlledReviewExecutorOptions,
+): Promise<ControlledReviewExecutorResult> {
+  if (
+    options.selectedCaseIds.length === 0 ||
+    new Set(options.selectedCaseIds).size !== options.selectedCaseIds.length ||
+    options.selectedCaseIds.some(
+      (fixtureId) =>
+        !V1_D_CONTROLLED_REVIEW_CASE_IDS.includes(
+          fixtureId as ControlledReviewInputCase["fixture_id"],
+        ),
+    )
+  ) {
+    throw new M2RuntimeError("M2_V1D_REVIEW_CASE_SELECTION_INVALID");
+  }
+  const authority = await loadControlledReviewInputAuthority({
+    repositoryRoot: options.repositoryRoot,
+    expectedSha256: options.expectedInputSha256,
+  });
+  const catalog =
+    await loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog();
+  if (
+    catalog.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
+    catalog.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
     catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
     catalog.stageTopologyVersion !== "split-base-candidate-v1"
   ) {

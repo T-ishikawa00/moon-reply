@@ -18,6 +18,13 @@ const decisionLabels: Record<DecisionCode, string> = {
   pause_additional_contact: "追加の連絡を止める",
 };
 
+const futureDecisionLabels: Record<DecisionCode, string> = {
+  reply_now: "その時点で返信する方向を検討する",
+  send_now: "その時点で送る方向を検討する",
+  wait_and_reassess: "その時点で状況を見直す",
+  pause_additional_contact: "その時点でも追加の連絡は止める",
+};
+
 const phaseLabels: Record<PlanPhase, string> = {
   tonight: "今夜",
   next_day: "次の日",
@@ -347,7 +354,7 @@ export function CustomerAssessmentNote({ projection }: Props) {
                     >
                       <p>{item.condition}</p>
                       <span>
-                        その場合：{decisionLabels[item.resultingDirection]}
+                        その場合：{futureDecisionLabels[item.resultingDirection]}
                       </span>
                     </li>
                   ))}

@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_accepted_v1_d_step1_accepted_step2a_in_progress",
+  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_step2a_accepted_step2b_c1_pending_review",
   "planning_only": false,
   "authority": {
     "exact_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
@@ -17,6 +17,8 @@
     "v1_c_acceptance_date": "2026-08-17",
     "v1_d_step_1_accepted_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
     "v1_d_step_1_acceptance_date": "2026-08-18",
+    "v1_d_step_2a_accepted_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+    "v1_d_case_1_execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
     "main": "61e33a10e195fad17e253a6b9719217e1992f273"
   },
   "correction_acceptance": {
@@ -69,7 +71,7 @@
     "V1-A2": "accepted_complete",
     "V1-B": "accepted_complete",
     "V1-C": "accepted_complete",
-    "V1-D": "in_progress_controlled_provider_executor"
+    "V1-D": "step_2b_c1_implemented_pending_human_chatgpt_review"
   },
   "v1_a1": {
     "name": "Deterministic Input Sufficiency Policy",
@@ -138,16 +140,16 @@
   },
   "v1_d": {
     "name": "Offline Fixtures and Product Re-review",
-    "status": "in_progress_controlled_provider_executor",
+    "status": "step_2b_c1_implemented_pending_human_chatgpt_review",
     "authorized": true,
-    "step": "step_2a_controlled_provider_executor",
+    "step": "step_2b_c1_sent_draft_boundary",
     "fixture_intentions": 22,
     "deterministic_routing_regression": true,
     "deterministic_semantic_recovery_regression": true,
     "private_review_path": "/review/runtime/v15",
     "historical_fixture_provenance": "historical_reference_or_fake_fixture",
-    "actual_v15_successor_outputs": 0,
-    "human_product_review_status": "pending_actual_v15_provider_output",
+    "actual_v15_successor_outputs": 1,
+    "human_product_review_status": "case_1_human_product_judgment_pending",
     "step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
     "step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
     "step_1_c1_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
@@ -155,11 +157,32 @@
     "step_1_overall": "accepted_complete",
     "step_1_human_acceptance": "complete",
     "step_1_acceptance_date": "2026-08-18",
-    "step_2a_status": "implemented_pending_human_chatgpt_review",
-    "step_2a_snapshot": "9c7a11df63d4013dcc6843c245fbd6fa00106c81",
+    "step_2a_status": "accepted_complete",
+    "step_2a_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
     "step_2a_initial_review": "NEEDS_CORRECTION 0/1/0",
     "step_2a_initial_finding": "quality_reassessment_exhaustion_safe_code_misclassified",
-    "step_2a_c1_status": "quality_exhaustion_disposition_corrected_pending_human_chatgpt_review",
+    "step_2a_c1_status": "accepted_complete",
+    "step_2a_chatgpt_technical_review": "PASS 0/0/0",
+    "step_2a_human_acceptance": "complete",
+    "case_1_execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
+    "case_1_execution_id": "2026-08-18-case1-ordinary-reply-waiting-2a458ec1",
+    "case_1_technical_judgment": "PASS",
+    "case_1_product_judgment": "remediation_required",
+    "case_1_findings": [
+      "BLOCKER:sent_message_replayed_as_new_draft",
+      "MAJOR:future_reassessment_uses_current_decision_label"
+    ],
+    "observed_provider_semantic_false_negative_count_lower_bound": 1,
+    "provider_recall_precision_generalization_from_one_case": false,
+    "step_2b_c1_status": "implemented_pending_human_chatgpt_review",
+    "runtime_catalog_successor": "runtime-stage-catalog-v16.0.0",
+    "prompt_bundle_successor": "prompt-bundle-runtime-v16.0.0",
+    "schema_set_unchanged": "pipeline-schema-runtime-v6.0.0",
+    "changed_prompt_identities": ["PB-04", "PB-05", "PB-06"],
+    "generated_draft_authority_safe_code": "M2_GENERATED_DRAFT_AUTHORITY_VIOLATION",
+    "actual_v16_provider_quality": "unestablished",
+    "remaining_provider_cases": "HOLD",
+    "v16_case_1_rerun": "unauthorized",
     "quality_reassessment_exhausted_safe_code": "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
     "semantic_validation_failed_disposition": "technical_failure",
     "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
@@ -180,24 +203,25 @@
   "implementation_authorized": true,
   "implementation_authorized_scope": [
     "V1-D Step 1 offline review infrastructure",
-    "V1-D Step 2A controlled Provider review executor"
+    "V1-D Step 2A controlled Provider review executor",
+    "V1-D Step 2B C1 sent-message draft boundary successor"
   ],
-  "policy_foundation_implementation_changed": false,
-  "product_implementation_changed": false,
+  "policy_foundation_implementation_changed": true,
+  "product_implementation_changed": true,
   "ui_css_changed": false,
   "review_harness_changed": true,
   "review_executor_changed": true,
-  "prompt_changed": false,
-  "catalog_changed": false,
+  "prompt_changed": true,
+  "catalog_changed": true,
   "schema_changed": false,
   "evaluator_changed": false,
-  "runtime_changed": false,
+  "runtime_changed": true,
   "payment_changed": false,
   "migration_changed": false,
   "provider_calls": 0,
   "db_operations": 0,
   "supabase_operations": 0,
-  "product_snapshot_changed": false,
+  "product_snapshot_changed": true,
   "main_changed": false,
   "provider_execution_authorized": false,
   "production_runtime_authorized": false,
@@ -210,13 +234,15 @@
   "cherry_pick_used": false,
   "force_push_used": false,
   "exact_scope": {
-    "total": "10/10",
-    "updated": 10,
-    "new": 0,
+    "total": "PASS 23/23",
+    "updated": 15,
+    "new": 8,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
+    "v1_d_step_2b_c1_dedicated_verifier": "PASS 22/22",
+    "immutable_accepted_v1_d_step_2a_c1_verifier_once": "PASS 55/55 executed_once",
     "v1_d_step_2a_precommit_verifier": "PASS 52/52",
     "v1_d_step_2a_dedicated_verifier": "PASS 53/53",
     "v1_d_step_2a_c1_precommit_verifier": "PASS 54/54",
@@ -249,8 +275,8 @@
     "lint_max_warnings_0": "PASS",
     "build": "PASS",
     "git_diff_check": "PASS",
-    "sensitive_values": 0,
-    "next_env_drift": 0
+    "sensitive_values": "PASS",
+    "next_env_drift": "PASS unchanged"
   },
   "maximum_future_r2_c_meaning": {
     "experienceProductJudgment": "plausibly_worth_jpy980",
@@ -265,5 +291,5 @@
     "authorized": false,
     "mvp_planned": false
   },
-  "next_action": "human_chatgpt_review_of_v1_d_step_2a_controlled_provider_executor"
+  "next_action": "human_chatgpt_review_of_v1_d_step_2b_c1_sent_draft_boundary"
 }

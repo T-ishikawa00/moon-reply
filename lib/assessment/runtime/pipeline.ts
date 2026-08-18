@@ -44,6 +44,7 @@ import {
   validateEligibilityProjectionV3,
 } from "./eligibility-v3.ts";
 import { asM2RuntimeError, M2RuntimeError } from "./errors.ts";
+import { validateGeneratedDraftAuthorityV1 } from "./generated-draft-authority-v1.ts";
 import { hashJson } from "./hash.ts";
 import {
   aggregateSafety,
@@ -468,7 +469,8 @@ export class AssessmentPipeline {
       (runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0") &&
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const splitIdentity =
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
@@ -478,6 +480,7 @@ export class AssessmentPipeline {
       runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v4.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v5.0.0" ||
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
@@ -701,7 +704,8 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0";
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0";
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -1077,6 +1081,16 @@ export class AssessmentPipeline {
             decisionPolicy,
             input.candidateEnvelope,
           );
+          if (
+            input.runContext.promptBundleVersion ===
+            "prompt-bundle-runtime-v16.0.0"
+          ) {
+            validateGeneratedDraftAuthorityV1({
+              candidateEnvelope: input.candidateEnvelope,
+              requestedTopics: input.request.requestedTopics,
+              decisionPlan: output as unknown as SplitDecisionPlanV2,
+            });
+          }
           validateDecisionPlanConstraintIntegrityV1({
             decisionPlan: output as unknown as SplitDecisionPlanV2,
             contactConstraintPolicy,
@@ -1275,7 +1289,8 @@ export class AssessmentPipeline {
     clarificationGrounding: ClarificationGroundingV1 | null;
   }): Promise<AssessmentExecutionResult> {
     if (
-      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0"
+      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0"
     ) {
       return this.completeV15Ready(input);
     }
@@ -1686,7 +1701,8 @@ export class AssessmentPipeline {
       (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0" &&
-        runContext.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0") ||
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" &&
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0") ||
       runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
       initial.request.id !== runContext.requestId ||
       evidence.ordinal !== 1
@@ -1813,7 +1829,8 @@ export class AssessmentPipeline {
       runContext.promptBundleVersion === "prompt-bundle-runtime-v12.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v13.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0"
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
+      runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0"
     ) {
       return this.executeV1A2Initial(request, runContext);
     }

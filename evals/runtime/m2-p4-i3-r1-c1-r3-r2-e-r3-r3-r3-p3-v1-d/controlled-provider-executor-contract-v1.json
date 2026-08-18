@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-v1-d-controlled-provider-executor-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2A",
-  "executor_status": "implemented_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1",
+  "executor_status": "v16_successor_implemented_pending_human_chatgpt_review",
   "provider_execution_authorized": false,
   "provider_execution_count": 0,
   "review_correction": {
@@ -14,11 +14,24 @@
       "M2_SEMANTIC_VALIDATION_FAILED": "technical_failure",
       "other_safe_runtime_errors": "technical_failure"
     },
-    "runtime_pipeline_modified": false
+    "runtime_pipeline_modified": false,
+    "accepted_step_2a_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+    "accepted_step_2a_status": "accepted_complete"
+  },
+  "case_1_actual_execution": {
+    "execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
+    "execution_id": "2026-08-18-case1-ordinary-reply-waiting-2a458ec1",
+    "technical_judgment": "PASS",
+    "product_judgment": "remediation_required",
+    "sent_unsent_integrity": "FAIL",
+    "future_reassessment_ux": "FAIL",
+    "observed_pb_06_semantic_checks": [],
+    "provider_semantic_false_negative_count_lower_bound": 1,
+    "provider_recall_precision": "not_generalizable_from_one_case"
   },
   "runtime_identity": {
-    "catalog_version": "runtime-stage-catalog-v15.0.0",
-    "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+    "catalog_version": "runtime-stage-catalog-v16.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v16.0.0",
     "schema_set_version": "pipeline-schema-runtime-v6.0.0",
     "stage_topology_version": "split-base-candidate-v1",
     "model": "gpt-5.6-luna"
@@ -32,8 +45,8 @@
     "edit_invalidates_future_authorization": true
   },
   "architecture": {
-    "uses_v15_assessment_application": true,
-    "uses_v15_assessment_pipeline": true,
+    "uses_v16_assessment_application_candidate": true,
+    "uses_v16_assessment_pipeline_candidate": true,
     "uses_fake_or_local_repository": true,
     "uses_production_service": false,
     "uses_supabase": false,
@@ -45,7 +58,31 @@
     "bypasses_product_semantic_shape": false,
     "bypasses_semantic_disposition": false,
     "maximum_quality_reassessments": 1,
-    "attempt_3_allowed": false
+    "attempt_3_allowed": false,
+    "v16_review_fake_repository_compatibility": "executor_local_adapter",
+    "historical_fake_repository_modified": false,
+    "persisted_review_run_identity": "prompt-bundle-runtime-v16.0.0"
+  },
+  "generated_draft_authority": {
+    "owner": "Application",
+    "prohibited_shape": "candidate_absent_and_draft_message_not_requested_and_generated_without_candidate",
+    "safe_error_code": "M2_GENERATED_DRAFT_AUTHORITY_VIOLATION",
+    "enforced_before_pb_05": true,
+    "case_id_branching": false,
+    "keyword_or_regex_classifier": false,
+    "generated_without_candidate_globally_prohibited": false,
+    "explicit_draft_request_without_candidate_allowed": true,
+    "candidate_backed_behavior_preserved": true,
+    "message_impact_candidate_requirement_preserved": true
+  },
+  "v16_prompt_successors": {
+    "pb_01_through_pb_03": "exact_v15",
+    "pb_04": "sent_message_draft_authority_successor",
+    "pb_05": "draft_context_source_fidelity_successor",
+    "pb_06": "sent_unsent_semantic_quality_successor",
+    "new_provider_stage": false,
+    "report_schema_changed": false,
+    "production_identity_support": "unestablished_deferred_no_migration_applied"
   },
   "review_transport": {
     "class": "ReviewOnlyOpenAiResponsesTransport",
@@ -69,7 +106,8 @@
     "application_invocations_and_provider_http_attempts_separate": true,
     "hard_provider_http_attempt_ceiling_when_review_transport_used": 108,
     "hard_provider_http_attempt_ceiling_established_for_implemented_executor": true,
-    "actual_provider_http_attempts_in_step_2a": 0
+    "historical_case_1_provider_http_attempts": 6,
+    "actual_provider_http_attempts_in_step_2b_correction": 0
   },
   "authorization_gate": {
     "default_execution": "refused",
@@ -122,13 +160,17 @@
     "deploy_operations": 0
   },
   "evidence_ceiling": {
-    "actual_v15_provider_prose_quality": "unestablished",
-    "actual_v15_provider_semantic_fidelity": "unestablished",
+    "actual_v15_case_1_technical_execution": "PASS",
+    "actual_v15_case_1_product_judgment": "remediation_required",
+    "actual_v16_provider_prose_quality": "unestablished",
+    "actual_v16_provider_semantic_fidelity": "unestablished",
     "actual_pb_06_recall": "unestablished",
     "actual_pb_06_precision": "unestablished",
     "plausibly_worth_jpy980": "unestablished",
     "r2_c": "remediation_required",
     "jpy980RuntimeReadiness": "not_established",
-    "globalQ0Completion": false
+    "globalQ0Completion": false,
+    "remaining_provider_cases": "HOLD",
+    "v16_case_1_rerun": "unauthorized"
   }
 }

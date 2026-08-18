@@ -1,8 +1,8 @@
 {
   "schema_version": "m2-p4-v1-d-offline-product-review-contract-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
-  "step": "step_2a_controlled_provider_executor",
-  "status": "in_progress_controlled_provider_executor",
+  "step": "step_2b_c1_sent_draft_boundary",
+  "status": "implemented_pending_human_chatgpt_review",
   "authority": {
     "v1_c": "accepted_complete",
     "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
@@ -17,7 +17,7 @@
     "v1_c_r1_initial_finding": "repair_path_shape_does_not_prove_actual_product_path",
     "v1_c_r1_c1_review": "PASS 0/0/0",
     "v1_d_authorized": true,
-    "v1_d_status": "in_progress_controlled_provider_executor",
+    "v1_d_status": "step_2b_c1_implemented_pending_human_chatgpt_review",
     "v1_d_step_1_snapshot": "4c7577564421e2dbd264ffadb5ccab8d961c42eb",
     "v1_d_step_1_chatgpt_review": "NEEDS_CORRECTION 0/2/0",
     "v1_d_step_1_findings": [
@@ -32,9 +32,16 @@
     "v1_d_step_1_human_review": "PASS_complete",
     "v1_d_step_1_human_acceptance": "complete",
     "v1_d_step_1_acceptance_date": "2026-08-18",
-    "v1_d_step_2a": "authorized",
-    "v1_d_step_2a_status": "in_progress_controlled_provider_executor",
-    "provider_execution_authorized": false
+    "v1_d_step_2a": "accepted_complete",
+    "v1_d_step_2a_status": "accepted_complete",
+    "v1_d_step_2a_accepted_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+    "v1_d_step_2a_chatgpt_technical_review": "PASS 0/0/0",
+    "v1_d_step_2a_human_acceptance": "complete",
+    "case_1_execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
+    "case_1_execution_technical": "PASS",
+    "case_1_product_judgment": "remediation_required",
+    "v1_d_step_2b_c1_status": "implemented_pending_human_chatgpt_review",
+    "provider_execution_authorized_in_step_2b": false
   },
   "step_1_evidence_boundary": {
     "may_establish": [
@@ -105,8 +112,8 @@
   },
   "quality_and_recovery_contract": {
     "runtime_identity": {
-      "catalog_version": "runtime-stage-catalog-v15.0.0",
-      "prompt_bundle_version": "prompt-bundle-runtime-v15.0.0",
+      "catalog_version": "runtime-stage-catalog-v16.0.0",
+      "prompt_bundle_version": "prompt-bundle-runtime-v16.0.0",
       "schema_set_version": "pipeline-schema-runtime-v6.0.0",
       "stage_topology_version": "split-base-candidate-v1"
     },
@@ -133,10 +140,10 @@
     "raw_text_to_pb_01_extraction_correctness": "unestablished",
     "future_execution_architecture": [
       "exact_frozen_synthetic_inputs",
-      "V15_AssessmentApplication",
+      "V16_AssessmentApplication_candidate",
       "FakeAssessmentRepository_or_local_in_memory_repository",
       "review_only_real_provider_transport_with_explicit_maxRetries_0",
-      "V15_PB-01_through_PB-06",
+      "V16_PB-01_through_PB-06",
       "optional_one_quality_reassessment",
       "captured_offline_evidence_files"
     ],
@@ -144,9 +151,10 @@
     "supabase_repository_used": false,
     "payment_used": false,
     "production_used": false,
-    "controlled_provider_execution_harness": "implemented_pending_human_chatgpt_review",
+    "controlled_provider_execution_harness": "v16_successor_implemented_pending_human_chatgpt_review",
     "provider_execution_authorized": false,
-    "provider_execution": 0,
+    "provider_execution_in_step_2b_correction": 0,
+    "historical_case_1_provider_http_attempts": 6,
     "maximum_application_stage_invocations_per_case": 12,
     "maximum_application_stage_invocations_total": 108,
     "current_openai_transport_explicit_max_retries": false,
@@ -156,7 +164,22 @@
     "budget_enforced_before_transport_invoke": true,
     "hard_provider_http_attempt_ceiling_established_for_review_executor": true,
     "hard_provider_http_attempt_ceiling_when_review_executor_used": 108,
-    "quality_reassessment_is_sdk_retry": false
+    "quality_reassessment_is_sdk_retry": false,
+    "remaining_provider_cases": "HOLD",
+    "v16_case_1_rerun": "unauthorized"
+  },
+  "case_1_product_review": {
+    "artifact": "case1-actual-product-review-v1.json",
+    "routing_correct": "PASS",
+    "evidence_to_decision_chain_clear": "PASS",
+    "uncertainty_honest": "PASS",
+    "emotional_understanding": "positive_directional",
+    "sent_unsent_integrity": "FAIL",
+    "action_usable": "FAIL_due_to_sent_message_draft",
+    "future_reassessment_ux": "FAIL",
+    "chatgpt_plausibly_worth_jpy980": false,
+    "human_product_judgment": "pending",
+    "generated_human_review_sheet_modified": false
   },
   "review_surface": {
     "path": "/review/runtime/v15",
@@ -213,6 +236,8 @@
     "experienceProductJudgment": "pending_remediation",
     "jpy980RuntimeReadiness": "not_established",
     "globalQ0Completion": false,
+    "actual_v16_provider_quality": "unestablished",
+    "remaining_provider_cases": "HOLD",
     "production_runtime": "unauthorized",
     "payment": "unauthorized",
     "main_integration": "unauthorized"
