@@ -1,9 +1,9 @@
 {
   "schema_version": "m2-p4-v1-d-controlled-provider-review-plan-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1",
-  "status": "sent_draft_boundary_successor_implemented_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C2",
+  "status": "v16_evidence_provenance_corrected_pending_human_chatgpt_review",
   "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
-  "controlled_provider_execution_harness": "v16_successor_implemented_pending_human_chatgpt_review",
+  "controlled_provider_execution_harness": "v16_evidence_provenance_corrected_pending_human_chatgpt_review",
   "provider_execution_authorized": false,
   "execution_count_in_this_task": 0,
   "frozen_input_packet": "controlled-provider-inputs-v1.json",
@@ -48,7 +48,7 @@
     "supabase_repository_used": false,
     "payment_used": false,
     "production_used": false,
-    "executor_implementation_status": "v16_successor_implemented_pending_human_chatgpt_review"
+    "executor_implementation_status": "v16_evidence_provenance_corrected_pending_human_chatgpt_review"
   },
   "transport_and_invocation_limits": {
     "maximum_quality_reassessments_per_case": 1,
@@ -88,7 +88,7 @@
     "recall_precision_generalization_from_one_case": "prohibited"
   },
   "step_2b_c1_successor": {
-    "status": "implemented_pending_human_chatgpt_review",
+    "status": "historical_needs_correction_resolved_by_c1_r1",
     "generated_draft_authority_violation_code": "M2_GENERATED_DRAFT_AUTHORITY_VIOLATION",
     "v15_historical_prompts_mutated": false,
     "changed_prompt_identities": ["PB-04", "PB-05", "PB-06"],
@@ -98,6 +98,27 @@
     "v16_case_1_rerun": "unauthorized",
     "remaining_provider_cases": "HOLD",
     "actual_v16_provider_quality": "unestablished"
+  },
+  "step_2b_c1_r1_acceptance": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184",
+    "chatgpt_review": "PASS_complete",
+    "findings": "BLOCKER 0 / MAJOR 0 / MINOR 0",
+    "human_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-18"
+  },
+  "step_2b_c2": {
+    "status": "implemented_pending_human_chatgpt_review",
+    "finding_severity": "BLOCKER_FOR_PROVIDER_EXECUTION",
+    "finding": "v16_execution_would_be_persisted_as_v15_evidence",
+    "runtime_identity_authority": "validated_v16_runtime_catalog",
+    "output_provenance": "actual_v16_successor_output",
+    "unsupported_runtime_identity_behavior": "fail_closed_before_evidence_claims",
+    "provider_execution_authorized": false,
+    "provider_execution_count": 0,
+    "v16_case_1_rerun": "unauthorized",
+    "remaining_provider_cases": "HOLD"
   },
   "cases": [
     {"fixture_id": "ordinary_reply_waiting", "fixed_clock": "2026-08-17T12:00:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
@@ -114,10 +135,10 @@
     "authorization-record-v1.json",
     "provider-call-ledger-v1.json",
     "provider-http-attempt-ledger-v1.json",
-    "v15-route-results-v1.json",
-    "v15-stage-attempt-results-v1.json",
-    "v15-customer-projections-v1.json",
-    "v15-quality-reassessment-results-v1.json",
+    "v16-route-results-v1.json",
+    "v16-stage-attempt-results-v1.json",
+    "v16-customer-projections-v1.json",
+    "v16-quality-reassessment-results-v1.json",
     "human-product-review-sheet-v1.json",
     "provider-execution-summary-v1.md"
   ],
@@ -145,6 +166,23 @@
     "lint_max_warnings_0": "PASS",
     "build": "PASS"
   },
+  "step_2b_c1_r1_validation": {
+    "dedicated_verifier": "PASS 23/23",
+    "immutable_original_step_2b_c1_verifier_once": "PASS 22/22 executed_once",
+    "exact_scope": "PASS 11/11 11_UPDATE_0_NEW_0_DELETE_0_RENAME"
+  },
+  "step_2b_c2_validation": {
+    "dedicated_verifier": "PASS 21/21",
+    "immutable_accepted_c1_r1_verifier_once": "PASS 23/23 executed_once",
+    "typecheck": "PASS",
+    "lint_max_warnings_0": "PASS",
+    "build": "PASS",
+    "git_diff_check": "PASS",
+    "protected_blob_scan": "PASS",
+    "sensitive_scan": "PASS",
+    "historical_case_1_evidence_immutability": "PASS 18/18 byte_identical",
+    "exact_scope": "PASS 15/15 13_UPDATE_2_NEW_0_DELETE_0_RENAME"
+  },
   "operations": {
     "provider_calls": 0,
     "db_operations": 0,
@@ -153,5 +191,5 @@
     "payment_operations": 0,
     "deploy_operations": 0
   },
-  "current_outcome": "step_2b_c1_implemented_no_provider_invocation_pending_human_chatgpt_review"
+  "current_outcome": "step_2b_c2_v16_evidence_provenance_implemented_no_provider_invocation_pending_human_chatgpt_review"
 }

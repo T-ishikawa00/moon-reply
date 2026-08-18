@@ -13,6 +13,7 @@ import {
 import {
   ControlledReviewEvidenceJournal,
   prepareControlledReviewOutputDirectory,
+  validateControlledReviewEvidenceRuntimeIdentity,
   validateControlledReviewOutputDirectory,
 } from "../lib/assessment/runtime/review/m2-p4-v15-controlled-review-evidence.ts";
 import {
@@ -138,7 +139,28 @@ function requireExecutionAuthorization(input) {
   }
 }
 
-function authorizationRecord(input) {
+export function validateControlledReviewRuntimeCatalogIdentity(catalog) {
+  if (
+    catalog.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
+    catalog.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
+    catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    catalog.stageTopologyVersion !== "split-base-candidate-v1"
+  ) {
+    fail("M2_V1D_REVIEW_RUNTIME_IDENTITY_INVALID");
+  }
+  return validateControlledReviewEvidenceRuntimeIdentity({
+    catalogVersion: catalog.catalogVersion,
+    promptBundleVersion: catalog.promptBundleVersion,
+    schemaSetVersion: catalog.schemaSetVersion,
+    stageTopologyVersion: catalog.stageTopologyVersion,
+    model: V1_D_CONTROLLED_REVIEW_MODEL,
+  });
+}
+
+export function buildControlledReviewAuthorizationRecord(input) {
+  const runtimeIdentity = validateControlledReviewEvidenceRuntimeIdentity(
+    input.runtimeIdentity,
+  );
   const humanAuthorizationReferenceHash = createHash("sha256")
     .update(
       input.env.M2_V1D_HUMAN_AUTHORIZATION_REFERENCE.trim(),
@@ -151,7 +173,11 @@ function authorizationRecord(input) {
     human_authorization_reference: `sha256:${humanAuthorizationReferenceHash}`,
     authorized_snapshot: input.actualHead,
     authorized_input_sha256: input.actualInputSha256,
-    model: V1_D_CONTROLLED_REVIEW_MODEL,
+    runtime_catalog_version: runtimeIdentity.catalogVersion,
+    prompt_bundle_version: runtimeIdentity.promptBundleVersion,
+    schema_set_version: runtimeIdentity.schemaSetVersion,
+    stage_topology_version: runtimeIdentity.stageTopologyVersion,
+    model: runtimeIdentity.model,
     authorized_case_ids: [...input.selectedCaseIds],
     authorization_timestamp: input.timestamp,
     maximum_application_stage_invocations_per_case:
@@ -176,6 +202,10 @@ export async function runControlledProviderReviewCli(options = {}) {
   let observedProviderHttpAttempts = 0;
   try {
     const parsed = parseArguments(argv);
+    const catalog =
+      await loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog();
+    const runtimeIdentity =
+      validateControlledReviewRuntimeCatalogIdentity(catalog);
     const actualHead = git(repositoryRoot, ["rev-parse", "HEAD"]);
     const worktreeStatus = git(repositoryRoot, [
       "status",
@@ -195,16 +225,6 @@ export async function runControlledProviderReviewCli(options = {}) {
     const executionId = safeExecutionId(parsed.outputDirectory);
 
     if (parsed.validateOnly) {
-      const catalog =
-        await loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog();
-      if (
-        catalog.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
-        catalog.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
-        catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
-        catalog.stageTopologyVersion !== "split-base-candidate-v1"
-      ) {
-        fail("M2_V1D_REVIEW_RUNTIME_IDENTITY_INVALID");
-      }
       return {
         exitCode: 0,
         mode: "validate-only",
@@ -215,6 +235,7 @@ export async function runControlledProviderReviewCli(options = {}) {
         worktreeClean: worktreeStatus === "",
         controlledInputSha256: authority.sha256,
         executionId,
+        runtimeIdentity,
       };
     }
 
@@ -229,14 +250,19 @@ export async function runControlledProviderReviewCli(options = {}) {
     const outputDirectory = await prepareControlledReviewOutputDirectory(
       outputPathAuthority,
     );
-    journal = new ControlledReviewEvidenceJournal(outputDirectory, executionId);
-    const record = authorizationRecord({
+    journal = new ControlledReviewEvidenceJournal(
+      outputDirectory,
+      executionId,
+      runtimeIdentity,
+    );
+    const record = buildControlledReviewAuthorizationRecord({
       executionId,
       env,
       actualHead,
       actualInputSha256: authority.sha256,
       selectedCaseIds: parsed.selectedCaseIds,
       timestamp: now(),
+      runtimeIdentity,
     });
     await journal.recordAuthorization(record);
     const result = await executeControlledProviderReview({

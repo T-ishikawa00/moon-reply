@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-capabilities-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_step2a_accepted_step2b_c1_r1_pending_review",
+  "status": "jpy980_value_architecture_r1_accepted_v1_a_v1_b_v1_c_step2a_accepted_step2b_c1_r1_accepted_c2_pending_review",
   "planning_only": false,
   "authority": {
     "exact_parent": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
@@ -20,6 +20,7 @@
     "v1_d_step_2a_accepted_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
     "v1_d_case_1_execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
     "v1_d_step_2b_c1_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
+    "v1_d_step_2b_c1_r1_accepted_snapshot": "8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184",
     "main": "61e33a10e195fad17e253a6b9719217e1992f273"
   },
   "correction_acceptance": {
@@ -72,7 +73,7 @@
     "V1-A2": "accepted_complete",
     "V1-B": "accepted_complete",
     "V1-C": "accepted_complete",
-    "V1-D": "step_2b_c1_r1_implemented_pending_human_chatgpt_review"
+    "V1-D": "step_2b_c2_v16_evidence_provenance_implemented_pending_human_chatgpt_review"
   },
   "v1_a1": {
     "name": "Deterministic Input Sufficiency Policy",
@@ -141,9 +142,9 @@
   },
   "v1_d": {
     "name": "Offline Fixtures and Product Re-review",
-    "status": "step_2b_c1_r1_implemented_pending_human_chatgpt_review",
+    "status": "step_2b_c2_v16_evidence_provenance_implemented_pending_human_chatgpt_review",
     "authorized": true,
-    "step": "step_2b_c1_r1_required_now_draft_authority",
+    "step": "step_2b_c2_v16_evidence_provenance",
     "fixture_intentions": 22,
     "deterministic_routing_regression": true,
     "deterministic_semantic_recovery_regression": true,
@@ -175,15 +176,27 @@
     ],
     "observed_provider_semantic_false_negative_count_lower_bound": 1,
     "provider_recall_precision_generalization_from_one_case": false,
-    "step_2b_c1_status": "implemented_pending_human_chatgpt_review",
+    "step_2b_c1_status": "historical_needs_correction_resolved_by_c1_r1",
     "step_2b_c1_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
     "step_2b_c1_initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
     "step_2b_c1_initial_finding": "required_now_generated_draft_route_is_unreachable",
-    "step_2b_c1_r1_status": "implemented_pending_human_chatgpt_review",
+    "step_2b_c1_r1_status": "accepted_complete",
+    "step_2b_c1_r1_accepted_snapshot": "8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184",
+    "step_2b_c1_r1_chatgpt_review": "PASS_complete",
+    "step_2b_c1_r1_chatgpt_findings": "BLOCKER 0 / MAJOR 0 / MINOR 0",
+    "step_2b_c1_r1_human_review": "PASS_complete",
+    "step_2b_c1_r1_human_acceptance": "complete",
+    "step_2b_c1_r1_acceptance_date": "2026-08-18",
     "step_2b_c1_r1_guard_authority": "existing_effective_decision_policy_message_draft_policy",
     "step_2b_c1_r1_policy_recomputed_inside_guard": false,
     "step_2b_c1_r1_required_now_route_restored": true,
     "step_2b_c1_r1_later_only_case_1_boundary_preserved": true,
+    "step_2b_c2_status": "implemented_pending_human_chatgpt_review",
+    "step_2b_c2_finding_severity": "BLOCKER_FOR_PROVIDER_EXECUTION",
+    "step_2b_c2_finding": "v16_execution_would_be_persisted_as_v15_evidence",
+    "step_2b_c2_runtime_identity_authority": "validated_v16_runtime_catalog",
+    "step_2b_c2_output_provenance": "actual_v16_successor_output",
+    "step_2b_c2_unsupported_runtime_identity_behavior": "fail_closed",
     "runtime_catalog_successor": "runtime-stage-catalog-v16.0.0",
     "prompt_bundle_successor": "prompt-bundle-runtime-v16.0.0",
     "schema_set_unchanged": "pipeline-schema-runtime-v6.0.0",
@@ -214,7 +227,8 @@
     "V1-D Step 1 offline review infrastructure",
     "V1-D Step 2A controlled Provider review executor",
     "V1-D Step 2B C1 sent-message draft boundary successor",
-    "V1-D Step 2B C1-R1 required-now generated draft authority correction"
+    "V1-D Step 2B C1-R1 required-now generated draft authority correction",
+    "V1-D Step 2B C2 V16 evidence provenance correction"
   ],
   "policy_foundation_implementation_changed": true,
   "product_implementation_changed": true,
@@ -244,15 +258,17 @@
   "cherry_pick_used": false,
   "force_push_used": false,
   "exact_scope": {
-    "total": "PASS 11/11",
-    "updated": 11,
-    "new": 0,
+    "total": "PASS 15/15",
+    "updated": 13,
+    "new": 2,
     "deleted": 0,
     "renamed": 0
   },
   "validation": {
     "v1_d_step_2b_c1_dedicated_verifier": "PASS 22/22",
     "v1_d_step_2b_c1_r1_dedicated_verifier": "PASS 23/23",
+    "v1_d_step_2b_c2_dedicated_verifier": "PASS 21/21",
+    "immutable_accepted_v1_d_step_2b_c1_r1_verifier_once": "PASS 23/23 executed_once",
     "immutable_original_v1_d_step_2b_c1_verifier_once": "PASS 22/22 executed_once",
     "immutable_accepted_v1_d_step_2a_c1_verifier_once": "PASS 55/55 executed_once",
     "v1_d_step_2a_precommit_verifier": "PASS 52/52",
@@ -303,5 +319,5 @@
     "authorized": false,
     "mvp_planned": false
   },
-  "next_action": "human_chatgpt_review_of_v1_d_step_2b_c1_r1_required_now_draft_authority"
+  "next_action": "human_chatgpt_review_of_v1_d_step_2b_c2_v16_evidence_provenance"
 }

@@ -2,7 +2,7 @@
 
 ## Disposition
 
-- Status: Step 1 `accepted_complete`; V1-D Step 2A `in_progress_controlled_provider_executor`.
+- Status: Step 1 and Step 2A are `accepted_complete`; Step 2B C1-R1 is `accepted_complete` at `8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184`; C2 is `implemented_pending_human_chatgpt_review`.
 - Exact parent / accepted V1-C snapshot: `a436210bb035746c129fe071e6225b3799b9e5d8` (`fix: validate quality repair paths precisely`).
 - V1-C: `accepted_complete`; ChatGPT review `PASS_complete`; Human review `PASS_complete`; Human acceptance `complete`; acceptance date `2026-08-17`.
 - V1-C history is retained: core `e7ae51aa96bbb3d1e791ac957e26bb8918d10547` is `PASS 0/0/0`; R1 `4a3d5b3f93d2b97ae8e97c0bac07b89576b48b40` initially received `NEEDS_CORRECTION 0/1/0`; R1-C1 at `a436210b…` is `PASS 0/0/0`.
@@ -92,3 +92,9 @@ Step 1 review is complete. For Step 2A, review the authorization fail-closed beh
 Step 2A is `implemented_pending_human_chatgpt_review`. The runner refuses execution unless the explicit CLI flag, deliberate authorization env, exact HEAD, exact input SHA-256, Human authorization reference, API key presence, clean worktree, explicit case selection, and safe output directory all pass. `--validate-only` constructs no OpenAI client and performs no network call.
 
 Evidence writing is sanitized and atomic. Raw Provider response/request IDs, URLs, headers, raw SDK errors, secrets, Human PII, and chain-of-thought are prohibited. Ready outputs alone are projected; Human Product review fields remain `pending_human_review`. No actual `actual_v15_successor_output` exists in Step 2A.
+
+## Step 2B C2 current evidence identity
+
+The earlier V15 plan text above remains historical Step 1/Step 2A context. The current controlled candidate is V16: `runtime-stage-catalog-v16.0.0`, `prompt-bundle-runtime-v16.0.0`, unchanged `pipeline-schema-runtime-v6.0.0`, `split-base-candidate-v1`, and `gpt-5.6-luna`.
+
+Before a future execution, the runner validates that exact identity and propagates it into the authorization record and evidence journal. Future V16 result artifacts use the V16 filename/schema family and `actual_v16_successor_output`; a different successor identity is unsupported and fails closed before evidence claims. The historical Case 1 V15 directory and `case1-actual-product-review-v1.json` remain unchanged. C2 verifier is `PASS 21/21`; immutable accepted C1-R1 verifier is `PASS 23/23 executed_once`; typecheck/lint/build and exact scope `15/15` pass. C2 invokes no Provider and does not establish actual V16 quality, Human Product value, R2-C PASS, JPY980 readiness, or Global Q0.

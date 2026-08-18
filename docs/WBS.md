@@ -1,26 +1,24 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 2B C1-R1 Required-now Draft Authority — Implemented, Review Pending
+## V1-D Step 2B C2 V16 Evidence Provenance — Implemented, Review Pending
 
-- [x] Exact parent fixed at Step 2B C1 snapshot `d1a604a74edb06344e0b465c63aa21f45f64169a`
-- [x] Initial Step 2B C1 ChatGPT review retained as `NEEDS_CORRECTION 0/1/0`
-- [x] Sole finding retained as `required_now_generated_draft_route_is_unreachable`
-- [x] Existing effective Decision Policy is passed into `validateGeneratedDraftAuthorityV1`; no policy recomputation
-- [x] Candidate absent + no `draft_message` + `required_now` now authorizes a valid current-use `generated_without_candidate` draft
-- [x] Candidate absent + no `draft_message` + `later_only` continues to fail closed with `M2_GENERATED_DRAFT_AUTHORITY_VIOLATION`
-- [x] Explicit `draft_message`, Candidate-backed draft, `message_impact` Candidate requirement, and pause/not-allowed behavior remain intact
-- [x] No case/fixture/prose/keyword/regex/sent-message-literal classifier is used
-- [x] V16 PB-04/05/06 Prompt and catalog, UI/CSS, schemas, projections, Decision Policy, inputs, Case 1 artifact, and 18 evidence files remain protected
-- [x] Initial Step 2B C1 dedicated verifier remains historical `PASS 22/22`
-- [x] Corrected Step 2B C1-R1 verifier `PASS 23/23`
-- [x] Immutable original Step 2B C1 verifier `PASS 22/22` in one complete isolated run
-- [x] typecheck / zero-warning lint / build / diff / protected / sensitive / exact-scope `11/11` / evidence-immutability `18/18` gates
+- [x] C1-R1 accepted at `8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184`; ChatGPT/Human `PASS_complete`, Human acceptance `complete`, acceptance date `2026-08-18`
+- [x] Historical C1 `NEEDS_CORRECTION 0/1/0` and `required_now_generated_draft_route_is_unreachable` retained
+- [x] C2 finding recorded as `BLOCKER_FOR_PROVIDER_EXECUTION / v16_execution_would_be_persisted_as_v15_evidence`
+- [x] Exact V16 catalog/prompt/schema/topology is loaded and validated before authorization record, Provider-client construction, or Provider invocation
+- [x] Authorization record includes exact Runtime catalog/prompt/schema/topology plus existing model/snapshot/input/case/budget/no-Production authorities
+- [x] V16 result family uses `v16-*` filenames, `m2-p4-v1-d-v16-*` schemas, and `actual_v16_successor_output`
+- [x] Human summary exposes exact V16 identity; all Human Product judgments remain pending
+- [x] Unsupported future Runtime identity fails before claims with `M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED`
+- [x] Historical Case 1 V15 evidence and review provenance remain byte-identical `18/18`
+- [x] Product logic, Prompt/catalog, UI/CSS, schemas, inputs, Production transport, DB/Supabase/migrations, Payment, main, and `next-env.d.ts` remain protected
+- [x] C2 verifier `PASS 21/21`; immutable accepted C1-R1 verifier `PASS 23/23 executed_once`; typecheck/lint/build/diff/protected/sensitive/exact-scope `15/15` gates
 - [ ] Exactly one implementation commit and normal push
-- [ ] Human / ChatGPT review of V1-D Step 2B C1-R1
+- [ ] Human / ChatGPT review of V1-D Step 2B C2
 - [ ] Case 1 V16 rerun and remaining eight controlled cases — `unauthorized / HOLD`
 
-Status is `step_2b_c1_r1_implemented_pending_human_chatgpt_review`. Provider execution in C1-R1 is 0; actual V16 Provider quality is unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, migration apply, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `step_2b_c2_v16_evidence_provenance_implemented_pending_human_chatgpt_review`. Provider execution in C2 is 0; actual V16 Provider quality is unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, migration apply, Payment, deploy, PR, and main integration remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->

@@ -9,9 +9,12 @@
 - Step 2B C1 snapshot: `d1a604a74edb06344e0b465c63aa21f45f64169a`
 - Step 2B C1 initial ChatGPT review: `NEEDS_CORRECTION 0/1/0`
 - Step 2B C1 initial finding: `required_now_generated_draft_route_is_unreachable`
-- Step 2B C1-R1: `implemented_pending_human_chatgpt_review`
+- Step 2B C1-R1: `accepted_complete` at `8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184`
+- Step 2B C1-R1 ChatGPT review: `PASS_complete`（BLOCKER 0 / MAJOR 0 / MINOR 0）
+- Step 2B C1-R1 Human review / acceptance: `PASS_complete / complete`
+- Step 2B C1-R1 acceptance date: `2026-08-18`
 - remaining 8 Provider cases: `HOLD`
-- Provider execution in this correction task: `0`
+- Provider execution in C1-R1: `0`
 - actual V16 Provider quality: `unestablished`
 - Case 1 V16 rerun: `unauthorized`
 - R2-C / JPY980 Runtime readiness / Global Q0: `remediation_required / not_established / false`
@@ -87,3 +90,11 @@ Actual PB-06 Provider recallは次の明示認可されたreal runまで未確�
 固定input packet、Case 1 evidence 18 files、review transport、sanitizer/journal、authorization semantics、schemas/decoders、Safety/clarification/ProductSemanticShape、DB/Supabase/migrations、Payment、Production、CSS、`next-env.d.ts`、mainを変更しない。
 
 Provider / DB / Supabase / migration apply / Payment / deploy operations are `0 / 0 / 0 / 0 / 0 / 0` in this correction task. Push後はHuman/ChatGPT reviewで停止し、Case 1再実行と残り8 casesは行わない。
+
+## Step 2B C2 provenance successor
+
+C1-R1受入れ後、V16 runnerがV15 result filename/schema/provenanceを生成する `v16_execution_would_be_persisted_as_v15_evidence` をProvider実行前のBLOCKERとして発見した。C2はProduct挙動を変更せず、検証済みV16 catalog/prompt/schema/topologyとmodelをevidence authorityとしてauthorization record、journal、summary、result-familyへ伝播する。
+
+Future V16 evidenceは `actual_v16_successor_output`、`v16-route-results-v1.json`、`v16-stage-attempt-results-v1.json`、`v16-customer-projections-v1.json`、`v16-quality-reassessment-results-v1.json` と対応するV16 schema identityを使う。current writerがsupportするlive identityはV16 exactのみであり、V17等は `M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED` で書込み前にfail closedする。Historical Case 1のV15 evidence 18 files、Human review sheet、Product review artifactは変更しない。
+
+C2 statusは `implemented_pending_human_chatgpt_review`、専用verifierは `PASS 21/21`、immutable accepted C1-R1 verifierは `PASS 23/23 executed_once` である。Provider executionは `0`、Case 1 V16 rerunは `unauthorized`、remaining 8 casesは `HOLD`、actual V16 Provider qualityは `unestablished` である。

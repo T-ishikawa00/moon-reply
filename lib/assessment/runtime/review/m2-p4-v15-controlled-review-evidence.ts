@@ -18,6 +18,80 @@ import type {
 export const V1_D_CONTROLLED_EXECUTION_EVIDENCE_DIRECTORY =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d/controlled-provider-executions";
 
+export const V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY = {
+  catalogVersion: "runtime-stage-catalog-v16.0.0",
+  promptBundleVersion: "prompt-bundle-runtime-v16.0.0",
+  schemaSetVersion: "pipeline-schema-runtime-v6.0.0",
+  stageTopologyVersion: "split-base-candidate-v1",
+  model: "gpt-5.6-luna",
+} as const;
+
+export type ControlledReviewEvidenceRuntimeIdentity = {
+  catalogVersion: string;
+  promptBundleVersion: string;
+  schemaSetVersion: string;
+  stageTopologyVersion: string;
+  model: string;
+};
+
+type SupportedControlledReviewEvidenceRuntimeIdentity =
+  typeof V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY;
+
+const V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT = {
+  outputProvenance: "actual_v16_successor_output",
+  routeResults: {
+    fileName: "v16-route-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v16-route-results-v1",
+  },
+  stageAttemptResults: {
+    fileName: "v16-stage-attempt-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v16-stage-attempt-results-v1",
+  },
+  customerProjections: {
+    fileName: "v16-customer-projections-v1.json",
+    schemaVersion: "m2-p4-v1-d-v16-customer-projections-v1",
+  },
+  qualityReassessmentResults: {
+    fileName: "v16-quality-reassessment-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v16-quality-reassessment-results-v1",
+  },
+} as const;
+
+export function validateControlledReviewEvidenceRuntimeIdentity(
+  input: ControlledReviewEvidenceRuntimeIdentity,
+): SupportedControlledReviewEvidenceRuntimeIdentity {
+  const supported = V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY;
+  if (
+    input.catalogVersion !== supported.catalogVersion ||
+    input.promptBundleVersion !== supported.promptBundleVersion ||
+    input.schemaSetVersion !== supported.schemaSetVersion ||
+    input.stageTopologyVersion !== supported.stageTopologyVersion ||
+    input.model !== supported.model
+  ) {
+    throw new M2RuntimeError(
+      "M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED",
+    );
+  }
+  return { ...supported };
+}
+
+function assertAuthorizationRuntimeIdentity(
+  record: ControlledReviewAuthorizationRecord,
+  runtimeIdentity: SupportedControlledReviewEvidenceRuntimeIdentity,
+) {
+  if (
+    record.runtime_catalog_version !== runtimeIdentity.catalogVersion ||
+    record.prompt_bundle_version !== runtimeIdentity.promptBundleVersion ||
+    record.schema_set_version !== runtimeIdentity.schemaSetVersion ||
+    record.stage_topology_version !== runtimeIdentity.stageTopologyVersion ||
+    record.model !== runtimeIdentity.model
+  ) {
+    throw new M2RuntimeError(
+      "M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED",
+    );
+  }
+}
+
 export type ControlledReviewFinalDisposition =
   | "ready"
   | "not_full_product_candidate"
@@ -91,6 +165,10 @@ export type ControlledReviewAuthorizationRecord = {
   human_authorization_reference: string;
   authorized_snapshot: string;
   authorized_input_sha256: string;
+  runtime_catalog_version: "runtime-stage-catalog-v16.0.0";
+  prompt_bundle_version: "prompt-bundle-runtime-v16.0.0";
+  schema_set_version: "pipeline-schema-runtime-v6.0.0";
+  stage_topology_version: "split-base-candidate-v1";
   model: "gpt-5.6-luna";
   authorized_case_ids: string[];
   authorization_timestamp: string;
@@ -275,10 +353,10 @@ export function deriveControlledReviewQualityEvidence(
   };
 }
 
-function humanReviewRecord(fixtureId: string) {
+function humanReviewRecord(fixtureId: string, outputProvenance: string) {
   return {
     fixture_id: fixtureId,
-    output_provenance: "actual_v15_successor_output",
+    output_provenance: outputProvenance,
     routing_correct: "pending_human_review",
     no_padding: "pending_human_review",
     repeated_conclusion_absent: "pending_human_review",
@@ -297,22 +375,37 @@ function humanReviewRecord(fixtureId: string) {
 
 export function buildControlledReviewHumanReviewSheet(
   cases: ControlledReviewCaseEvidence[],
+  runtimeIdentity: ControlledReviewEvidenceRuntimeIdentity,
 ) {
+  validateControlledReviewEvidenceRuntimeIdentity(runtimeIdentity);
   return {
     schema_version: "m2-p4-v1-d-human-product-review-sheet-v1",
     status: "pending_human_review",
     review_records: cases
       .filter((entry) => entry.customerProjection !== null)
-      .map((entry) => humanReviewRecord(entry.fixtureId)),
+      .map((entry) =>
+        humanReviewRecord(
+          entry.fixtureId,
+          V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT.outputProvenance,
+        ),
+      ),
     automatic_product_judgments: 0,
   };
 }
 
-function summaryMarkdown(bundle: ControlledReviewEvidenceBundle) {
+function summaryMarkdown(
+  bundle: ControlledReviewEvidenceBundle,
+  runtimeIdentity: SupportedControlledReviewEvidenceRuntimeIdentity,
+) {
   return [
     "# V1-D Controlled Provider Review Execution",
     "",
     `- execution_id: ${bundle.executionId}`,
+    `- runtime_catalog_version: ${runtimeIdentity.catalogVersion}`,
+    `- prompt_bundle_version: ${runtimeIdentity.promptBundleVersion}`,
+    `- schema_set_version: ${runtimeIdentity.schemaSetVersion}`,
+    `- stage_topology_version: ${runtimeIdentity.stageTopologyVersion}`,
+    `- model: ${runtimeIdentity.model}`,
     `- complete: ${String(bundle.complete)}`,
     `- selected_cases: ${String(bundle.cases.length)}`,
     `- application_stage_invocations: ${String(bundle.applicationStageInvocations.length)}`,
@@ -434,10 +527,17 @@ export class ControlledReviewEvidenceJournal {
   private authorizationRecorded = false;
   private readonly outputDirectory: string;
   private readonly executionId: string;
+  private readonly runtimeIdentity: SupportedControlledReviewEvidenceRuntimeIdentity;
 
-  constructor(outputDirectory: string, executionId: string) {
+  constructor(
+    outputDirectory: string,
+    executionId: string,
+    runtimeIdentity: ControlledReviewEvidenceRuntimeIdentity,
+  ) {
     this.outputDirectory = outputDirectory;
     this.executionId = executionId;
+    this.runtimeIdentity =
+      validateControlledReviewEvidenceRuntimeIdentity(runtimeIdentity);
   }
 
   private async writeJournal(status: "incomplete" | "complete", safeErrorCode: string | null) {
@@ -451,6 +551,11 @@ export class ControlledReviewEvidenceJournal {
         sanitizeControlledReviewEvidence({
           schema_version: "m2-p4-v1-d-controlled-review-journal-v1",
           execution_id: this.executionId,
+          runtime_catalog_version: this.runtimeIdentity.catalogVersion,
+          prompt_bundle_version: this.runtimeIdentity.promptBundleVersion,
+          schema_set_version: this.runtimeIdentity.schemaSetVersion,
+          stage_topology_version: this.runtimeIdentity.stageTopologyVersion,
+          model: this.runtimeIdentity.model,
           status,
           provider_http_attempts: this.providerHttpAttempts,
           cases: this.cases,
@@ -471,6 +576,7 @@ export class ControlledReviewEvidenceJournal {
     if (this.authorizationRecorded) {
       throw new M2RuntimeError("M2_V1D_REVIEW_EVIDENCE_WRITE_FAILED");
     }
+    assertAuthorizationRuntimeIdentity(record, this.runtimeIdentity);
     const sanitized = sanitizeControlledReviewEvidence(record);
     await writeAtomically(
       path.join(this.outputDirectory, "authorization-record-v1.json"),
@@ -494,6 +600,11 @@ export class ControlledReviewEvidenceJournal {
       throw new M2RuntimeError("M2_V1D_REVIEW_EVIDENCE_WRITE_FAILED");
     }
     const sanitized = sanitizeControlledReviewEvidence(bundle);
+    assertAuthorizationRuntimeIdentity(
+      sanitized.authorizationRecord,
+      this.runtimeIdentity,
+    );
+    const evidenceFormat = V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT;
     const files: Record<string, JsonValue | string> = {
       "provider-call-ledger-v1.json": {
         schema_version: "m2-p4-v1-d-provider-call-ledger-v1",
@@ -503,30 +614,36 @@ export class ControlledReviewEvidenceJournal {
         schema_version: "m2-p4-v1-d-provider-http-attempt-ledger-v1",
         provider_http_attempts: sanitized.providerHttpAttempts as unknown as JsonValue,
       },
-      "v15-route-results-v1.json": {
-        schema_version: "m2-p4-v1-d-v15-route-results-v1",
+      [evidenceFormat.routeResults.fileName]: {
+        schema_version: evidenceFormat.routeResults.schemaVersion,
         routes: sanitized.cases.map((entry) => entry.route) as unknown as JsonValue,
       },
-      "v15-stage-attempt-results-v1.json": {
-        schema_version: "m2-p4-v1-d-v15-stage-attempt-results-v1",
+      [evidenceFormat.stageAttemptResults.fileName]: {
+        schema_version: evidenceFormat.stageAttemptResults.schemaVersion,
         stage_attempts: sanitized.cases.flatMap((entry) => entry.stageAttempts) as unknown as JsonValue,
       },
-      "v15-customer-projections-v1.json": {
-        schema_version: "m2-p4-v1-d-v15-customer-projections-v1",
+      [evidenceFormat.customerProjections.fileName]: {
+        schema_version: evidenceFormat.customerProjections.schemaVersion,
         projections: sanitized.cases
           .filter((entry) => entry.customerProjection !== null)
           .map((entry) => ({
             fixture_id: entry.fixtureId,
-            output_provenance: "actual_v15_successor_output",
+            output_provenance: evidenceFormat.outputProvenance,
             projection: entry.customerProjection,
           })) as unknown as JsonValue,
       },
-      "v15-quality-reassessment-results-v1.json": {
-        schema_version: "m2-p4-v1-d-v15-quality-reassessment-results-v1",
+      [evidenceFormat.qualityReassessmentResults.fileName]: {
+        schema_version: evidenceFormat.qualityReassessmentResults.schemaVersion,
         results: sanitized.cases.map((entry) => entry.qualityReassessment) as unknown as JsonValue,
       },
-      "human-product-review-sheet-v1.json": buildControlledReviewHumanReviewSheet(sanitized.cases) as unknown as JsonValue,
-      "provider-execution-summary-v1.md": summaryMarkdown(sanitized),
+      "human-product-review-sheet-v1.json": buildControlledReviewHumanReviewSheet(
+        sanitized.cases,
+        this.runtimeIdentity,
+      ) as unknown as JsonValue,
+      "provider-execution-summary-v1.md": summaryMarkdown(
+        sanitized,
+        this.runtimeIdentity,
+      ),
     };
     for (const [fileName, value] of Object.entries(files)) {
       const contents =
