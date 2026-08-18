@@ -26,6 +26,14 @@ export const V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY = {
   model: "gpt-5.6-luna",
 } as const;
 
+export const V1_D_V17_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY = {
+  catalogVersion: "runtime-stage-catalog-v17.0.0",
+  promptBundleVersion: "prompt-bundle-runtime-v17.0.0",
+  schemaSetVersion: "pipeline-schema-runtime-v6.0.0",
+  stageTopologyVersion: "split-base-candidate-v1",
+  model: "gpt-5.6-luna",
+} as const;
+
 export type ControlledReviewEvidenceRuntimeIdentity = {
   catalogVersion: string;
   promptBundleVersion: string;
@@ -35,7 +43,8 @@ export type ControlledReviewEvidenceRuntimeIdentity = {
 };
 
 type SupportedControlledReviewEvidenceRuntimeIdentity =
-  typeof V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY;
+  | typeof V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY
+  | typeof V1_D_V17_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY;
 
 const V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT = {
   outputProvenance: "actual_v16_successor_output",
@@ -57,17 +66,49 @@ const V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT = {
   },
 } as const;
 
+const V1_D_V17_CONTROLLED_REVIEW_EVIDENCE_FORMAT = {
+  outputProvenance: "actual_v17_successor_output",
+  routeResults: {
+    fileName: "v17-route-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v17-route-results-v1",
+  },
+  stageAttemptResults: {
+    fileName: "v17-stage-attempt-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v17-stage-attempt-results-v1",
+  },
+  customerProjections: {
+    fileName: "v17-customer-projections-v1.json",
+    schemaVersion: "m2-p4-v1-d-v17-customer-projections-v1",
+  },
+  qualityReassessmentResults: {
+    fileName: "v17-quality-reassessment-results-v1.json",
+    schemaVersion: "m2-p4-v1-d-v17-quality-reassessment-results-v1",
+  },
+} as const;
+
+export function selectControlledReviewEvidenceFormatV1(
+  runtimeIdentity: SupportedControlledReviewEvidenceRuntimeIdentity,
+) {
+  return runtimeIdentity.catalogVersion === "runtime-stage-catalog-v17.0.0"
+    ? V1_D_V17_CONTROLLED_REVIEW_EVIDENCE_FORMAT
+    : V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT;
+}
+
 export function validateControlledReviewEvidenceRuntimeIdentity(
   input: ControlledReviewEvidenceRuntimeIdentity,
 ): SupportedControlledReviewEvidenceRuntimeIdentity {
-  const supported = V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY;
-  if (
-    input.catalogVersion !== supported.catalogVersion ||
-    input.promptBundleVersion !== supported.promptBundleVersion ||
-    input.schemaSetVersion !== supported.schemaSetVersion ||
-    input.stageTopologyVersion !== supported.stageTopologyVersion ||
-    input.model !== supported.model
-  ) {
+  const supported = [
+    V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY,
+    V1_D_V17_CONTROLLED_REVIEW_EVIDENCE_RUNTIME_IDENTITY,
+  ].find(
+    (candidate) =>
+      input.catalogVersion === candidate.catalogVersion &&
+      input.promptBundleVersion === candidate.promptBundleVersion &&
+      input.schemaSetVersion === candidate.schemaSetVersion &&
+      input.stageTopologyVersion === candidate.stageTopologyVersion &&
+      input.model === candidate.model,
+  );
+  if (!supported) {
     throw new M2RuntimeError(
       "M2_V1D_REVIEW_EVIDENCE_RUNTIME_IDENTITY_UNSUPPORTED",
     );
@@ -165,8 +206,12 @@ export type ControlledReviewAuthorizationRecord = {
   human_authorization_reference: string;
   authorized_snapshot: string;
   authorized_input_sha256: string;
-  runtime_catalog_version: "runtime-stage-catalog-v16.0.0";
-  prompt_bundle_version: "prompt-bundle-runtime-v16.0.0";
+  runtime_catalog_version:
+    | "runtime-stage-catalog-v16.0.0"
+    | "runtime-stage-catalog-v17.0.0";
+  prompt_bundle_version:
+    | "prompt-bundle-runtime-v16.0.0"
+    | "prompt-bundle-runtime-v17.0.0";
   schema_set_version: "pipeline-schema-runtime-v6.0.0";
   stage_topology_version: "split-base-candidate-v1";
   model: "gpt-5.6-luna";
@@ -377,7 +422,9 @@ export function buildControlledReviewHumanReviewSheet(
   cases: ControlledReviewCaseEvidence[],
   runtimeIdentity: ControlledReviewEvidenceRuntimeIdentity,
 ) {
-  validateControlledReviewEvidenceRuntimeIdentity(runtimeIdentity);
+  const supportedRuntimeIdentity =
+    validateControlledReviewEvidenceRuntimeIdentity(runtimeIdentity);
+  const evidenceFormat = selectControlledReviewEvidenceFormatV1(supportedRuntimeIdentity);
   return {
     schema_version: "m2-p4-v1-d-human-product-review-sheet-v1",
     status: "pending_human_review",
@@ -386,7 +433,7 @@ export function buildControlledReviewHumanReviewSheet(
       .map((entry) =>
         humanReviewRecord(
           entry.fixtureId,
-          V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT.outputProvenance,
+          evidenceFormat.outputProvenance,
         ),
       ),
     automatic_product_judgments: 0,
@@ -604,7 +651,9 @@ export class ControlledReviewEvidenceJournal {
       sanitized.authorizationRecord,
       this.runtimeIdentity,
     );
-    const evidenceFormat = V1_D_V16_CONTROLLED_REVIEW_EVIDENCE_FORMAT;
+    const evidenceFormat = selectControlledReviewEvidenceFormatV1(
+      this.runtimeIdentity,
+    );
     const files: Record<string, JsonValue | string> = {
       "provider-call-ledger-v1.json": {
         schema_version: "m2-p4-v1-d-provider-call-ledger-v1",

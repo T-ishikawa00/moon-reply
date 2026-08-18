@@ -1,5 +1,18 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-V17:BEGIN -->
+## Active handoff — V17 Final Product Recovery
+
+- Authority: exact baseline `37d98d405532009ac1057dfb5f44bb034ed64d9b`, parent Product implementation `cd1518ce6561a08bb5e5891be8f38c1fe5a08c61`, branch `fix/m2-p4-v1-d-v17-final-product-recovery`.
+- Runtime: `runtime-stage-catalog-v17.0.0` / `prompt-bundle-runtime-v17.0.0` / unchanged `pipeline-schema-runtime-v6.0.0` / `split-base-candidate-v1` / `gpt-5.6-luna`. Only PB-04/PB-05/PB-06 have successors; PB-01/PB-01C/PB-02/PB-03 are unchanged.
+- Product correction: structured-only Decision V2, one combined Product-quality directive, one attempt2 maximum, explicit later-use draft completeness, truthful draft-source metadata, Base direct-message versus unsent Candidate separation, Application-derived ownership mapping, and customer internal-language blocking.
+- Regressions: Case 3 wait correction; Case 4 combined plan-and-report recovery; Case 5 exact same-day Candidate; Case 6 byte-exact Kansai draft with internal prose withheld; Case 7 source/condition/three-day recovery; Cases 1/2/8/9 and V3 sparse protections preserved.
+- Controlled review: future V17 evidence uses `actual_v17_successor_output` and the four `v17-*-results-v1.json` families; authorization records exact Runtime/snapshot/input/case IDs; unknown/V18 identity fails before Provider construction.
+- Validation: dedicated verifier `PASS 23/23`; closest immutable predecessor `PASS 31/31` in one complete isolated run; typecheck, zero-warning lint, build, diff, protected `399`, sensitive, and `next-env.d.ts` gates pass; exact scope `21` paths (`9 UPDATE + 12 NEW`).
+- Closed boundaries: no actual Provider execution, UI/CSS, Payment, Supabase, migration, Production, main, or `next-env.d.ts` change. Historical V15/V16 evidence, inputs, Human sheets, Case 1 artifact, catalogs, and prompts remain immutable.
+- Status: `implemented_pending_human_chatgpt_review`; Human/Product judgment remains pending. After exactly one commit and normal push, stop for Human/ChatGPT review.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-V17:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
 ## Active handoff — AI-First Functional Sufficiency / Selected Product Completeness
 

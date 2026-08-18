@@ -7,6 +7,7 @@ import { projectCustomerAssessmentExperienceV2 } from "../customer-assessment-ex
 import { M2RuntimeError } from "../errors.ts";
 import { FakeAssessmentRepository } from "../fakes.ts";
 import {
+  loadM2P4FinalProductRecoveryRuntimeStageCatalog,
   loadM2P4QualityReassessmentRuntimeStageCatalog,
   loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog,
 } from "../schema-catalog.ts";
@@ -674,6 +675,94 @@ export async function executeControlledProviderReviewV16(
   if (
     catalog.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
     catalog.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
+    catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    catalog.stageTopologyVersion !== "split-base-candidate-v1"
+  ) {
+    throw new M2RuntimeError("M2_V1D_REVIEW_RUNTIME_IDENTITY_INVALID");
+  }
+
+  const budget = new ControlledReviewInvocationBudget();
+  const providerHttpAttempts: ControlledReviewProviderHttpAttempt[] = [];
+  const cases: ControlledReviewCaseEvidence[] = [];
+  let globalHttpAttemptOrdinal = 0;
+  const nextGlobalHttpAttemptOrdinal = () => {
+    globalHttpAttemptOrdinal += 1;
+    return globalHttpAttemptOrdinal;
+  };
+
+  for (const fixtureId of options.selectedCaseIds) {
+    const fixture = authority.cases.find((entry) => entry.fixture_id === fixtureId);
+    if (!fixture) invalidInputAuthority();
+    const caseEvidence = await executeCase({
+      fixture,
+      inputHash: authority.sha256,
+      catalog,
+      budget,
+      transportFactory: options.transportFactory,
+      nextGlobalHttpAttemptOrdinal,
+      onHttpAttempt: async (attempt) => {
+        const sanitized = sanitizeControlledReviewEvidence(attempt);
+        providerHttpAttempts.push(sanitized);
+        await options.onHttpAttempt?.(sanitized);
+      },
+    });
+    cases.push(caseEvidence);
+    await options.onCaseEvidence?.(caseEvidence);
+    if (
+      caseEvidence.route.safeErrorCode ===
+      "M2_V1D_REVIEW_STAGE_BUDGET_EXCEEDED"
+    ) {
+      break;
+    }
+  }
+
+  const budgetSnapshot = budget.snapshot();
+  const complete = cases.every(
+    (entry) =>
+      entry.route.finalDisposition === "ready" &&
+      entry.route.safeErrorCode === null,
+  );
+  const firstError = cases.find((entry) => entry.route.safeErrorCode !== null)
+    ?.route.safeErrorCode;
+  return sanitizeControlledReviewEvidence({
+    schemaVersion: "m2-p4-v1-d-controlled-review-executor-result-v1",
+    model: V1_D_CONTROLLED_REVIEW_MODEL,
+    controlledInputSha256: authority.sha256,
+    selectedCaseIds: [...options.selectedCaseIds],
+    complete,
+    applicationStageInvocationCount:
+      budgetSnapshot.applicationStageInvocationCount,
+    providerHttpAttemptCount: providerHttpAttempts.length,
+    applicationStageInvocations: budgetSnapshot.applicationStageInvocations,
+    providerHttpAttempts,
+    cases,
+    safeErrorCode: firstError ?? null,
+  });
+}
+
+export async function executeControlledProviderReviewV17(
+  options: ControlledReviewExecutorOptions,
+): Promise<ControlledReviewExecutorResult> {
+  if (
+    options.selectedCaseIds.length === 0 ||
+    new Set(options.selectedCaseIds).size !== options.selectedCaseIds.length ||
+    options.selectedCaseIds.some(
+      (fixtureId) =>
+        !V1_D_CONTROLLED_REVIEW_CASE_IDS.includes(
+          fixtureId as ControlledReviewInputCase["fixture_id"],
+        ),
+    )
+  ) {
+    throw new M2RuntimeError("M2_V1D_REVIEW_CASE_SELECTION_INVALID");
+  }
+  const authority = await loadControlledReviewInputAuthority({
+    repositoryRoot: options.repositoryRoot,
+    expectedSha256: options.expectedInputSha256,
+  });
+  const catalog = await loadM2P4FinalProductRecoveryRuntimeStageCatalog();
+  if (
+    catalog.catalogVersion !== "runtime-stage-catalog-v17.0.0" ||
+    catalog.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0" ||
     catalog.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
     catalog.stageTopologyVersion !== "split-base-candidate-v1"
   ) {

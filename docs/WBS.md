@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-V17:BEGIN -->
+## Q0 V17 Final Product Recovery — Implemented, Review Pending
+
+- [x] Start exactly from actual-evidence commit `37d98d405532009ac1057dfb5f44bb034ed64d9b`
+- [x] Add exact V17 Runtime with unchanged schema/topology/model and unchanged PB-01/PB-01C/PB-02/PB-03
+- [x] Correct structured Decision semantics for Cases 3/5 while preserving deadline and incoming obligations
+- [x] Combine semantic, completeness, source, and customer-surface defects into one bounded attempt2
+- [x] Map Application-derived change commentary to Plan ownership and reject unknown ownership
+- [x] Preserve Base sent/direct-message state separately from unsent Candidate presence
+- [x] Require permitted requested current/later drafts and truthful generated source metadata
+- [x] Block system-authored internal implementation vocabulary from Customer Product
+- [x] Add Case 4/6/7 fake recovery and Case 1/2/3/5/8/9 regressions with Provider calls 0
+- [x] Add exact V17 controlled evidence provenance, authorization, runner selection, and V18 rejection
+- [x] Preserve historical V15/V16 evidence, controlled inputs, Human artifacts, Prompt/catalog bytes, and `next-env.d.ts`
+- [x] Dedicated verifier `PASS 23/23`; predecessor `PASS 31/31`; typecheck/lint/build/diff/protected `399`/sensitive/next-env PASS
+- [ ] Exactly one implementation commit and normal push
+- [ ] Human / ChatGPT review
+
+No actual Provider, DB, Supabase, migration, Payment, deployment, PR, merge, or main operation is authorized or performed in this task.
+<!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-V17:END -->
+
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
 ## Q0 Consolidated Remediation — Implemented, Review Pending
 
