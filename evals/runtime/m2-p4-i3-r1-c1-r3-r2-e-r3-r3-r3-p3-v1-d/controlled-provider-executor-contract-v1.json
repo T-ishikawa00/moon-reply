@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-v1-d-controlled-provider-executor-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1",
-  "executor_status": "v16_successor_implemented_pending_human_chatgpt_review",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1-R1",
+  "executor_status": "v16_required_now_guard_correction_implemented_pending_human_chatgpt_review",
   "provider_execution_authorized": false,
   "provider_execution_count": 0,
   "review_correction": {
@@ -28,6 +28,17 @@
     "observed_pb_06_semantic_checks": [],
     "provider_semantic_false_negative_count_lower_bound": 1,
     "provider_recall_precision": "not_generalizable_from_one_case"
+  },
+  "step_2b_c1_r1_correction": {
+    "parent_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
+    "initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+    "finding": "required_now_generated_draft_route_is_unreachable",
+    "status": "implemented_pending_human_chatgpt_review",
+    "guard_consumes_existing_effective_decision_policy": true,
+    "policy_recomputed_inside_guard": false,
+    "required_now_generated_draft_route_restored": true,
+    "case_1_later_only_fail_closed_preserved": true,
+    "provider_execution_count": 0
   },
   "runtime_identity": {
     "catalog_version": "runtime-stage-catalog-v16.0.0",
@@ -65,9 +76,15 @@
   },
   "generated_draft_authority": {
     "owner": "Application",
-    "prohibited_shape": "candidate_absent_and_draft_message_not_requested_and_generated_without_candidate",
+    "prohibited_shape": "candidate_absent_and_draft_message_not_requested_and_policy_not_required_now_and_generated_without_candidate",
+    "authorized_when": [
+      "requested_topics_includes_draft_message",
+      "effective_decision_policy_message_draft_policy_is_required_now"
+    ],
     "safe_error_code": "M2_GENERATED_DRAFT_AUTHORITY_VIOLATION",
     "enforced_before_pb_05": true,
+    "consumes_effective_decision_policy_used_by_plan_validation": true,
+    "required_now_without_candidate_or_draft_topic_allowed": true,
     "case_id_branching": false,
     "keyword_or_regex_classifier": false,
     "generated_without_candidate_globally_prohibited": false,

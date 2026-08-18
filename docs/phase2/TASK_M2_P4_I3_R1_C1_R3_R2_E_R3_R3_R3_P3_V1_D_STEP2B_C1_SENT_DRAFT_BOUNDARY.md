@@ -6,7 +6,10 @@
 - Step 2A ChatGPT technical review: `PASS 0/0/0`
 - Step 2A Human acceptance: `complete`
 - Case 1 original execution: `technical_PASS_product_remediation_required`
-- Step 2B C1: `implemented_pending_human_chatgpt_review`
+- Step 2B C1 snapshot: `d1a604a74edb06344e0b465c63aa21f45f64169a`
+- Step 2B C1 initial ChatGPT review: `NEEDS_CORRECTION 0/1/0`
+- Step 2B C1 initial finding: `required_now_generated_draft_route_is_unreachable`
+- Step 2B C1-R1: `implemented_pending_human_chatgpt_review`
 - remaining 8 Provider cases: `HOLD`
 - Provider execution in this correction task: `0`
 - actual V16 Provider quality: `unestablished`
@@ -26,9 +29,9 @@
 
 ## Application-owned draft authority
 
-V16では、Candidate absent、かつ `requested_topics` に `draft_message` がないとき、PB-04が `source_status=generated_without_candidate` のdraftを返した場合に `M2_GENERATED_DRAFT_AUTHORITY_VIOLATION` でPB-05前にfail closedする。これはcase ID、fixture ID、文言、keyword、regex、quote parserに依存しない一般則である。
+V16では、Candidate absent、`requested_topics` に `draft_message` がなく、かつ既存effective Decision Policyの `message_draft_policy` が `required_now` ではないとき、PB-04が `source_status=generated_without_candidate` のdraftを返した場合に `M2_GENERATED_DRAFT_AUTHORITY_VIOLATION` でPB-05前にfail closedする。これはcase ID、fixture ID、文言、keyword、regex、quote parserに依存しない一般則である。
 
-`generated_without_candidate` は全面禁止しない。明示的な `draft_message` requestでは既存Policyが許す範囲で使用できる。Candidate-backed draft behaviorと `message_impact` のCandidate必須境界も維持する。
+`generated_without_candidate` は、明示的な `draft_message` request、またはeffective Decision Policyが `required_now` を要求する場合に許可される。guardはPB-04 plan validationが使う同一policyを受け取り、内部で再計算しない。Candidate-backed draft behavior、`message_impact` のCandidate必須境界、`not_allowed` / pause behaviorも維持する。
 
 ## V16 Prompt / Runtime identity
 
@@ -65,15 +68,18 @@ Historical `FakeAssessmentRepository` はV15 attempt-2 identityを固定して�
 4. Candidate-backed behaviorと `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED` を維持。
 5. sent-message replayとdraft-context contradictionのfake PB-06 blocking findingが既存V1-C bounded recovery/fail-closed wiringで強制される。
 6. current labelsとfuture labelsのUI authorityが分離される。
+7. Candidateなし、`draft_message` requestなしでも、effective policyが `required_now` の `reply_now` routeはPB-05/PB-06へ進み、Readyかつnon-null Customer draftとなる。
+8. direct authority matrixで `required_now` の `reply_now` / `send_now`、explicit draft、Candidate-backedを許可し、`later_only` Case 1とpause/not-allowedを拒否する。
 
 Actual PB-06 Provider recallは次の明示認可されたreal runまで未確立である。
 
 ## 検証
 
-- Step 2B C1 dedicated verifier: `PASS 22/22`
-- immutable accepted Step 2A C1 verifier: `PASS 55/55`（isolated accepted snapshotで1回のみ）
+- initial Step 2B C1 dedicated verifier: historical `PASS 22/22`
+- corrected Step 2B C1-R1 verifier: `PASS 23/23`
+- immutable original Step 2B C1 verifier: `PASS 22/22`（isolated `d1a604a...` snapshotで完全実行1回）
 - typecheck / zero-warning lint / build / `git diff --check`: `PASS`
-- exact scope: `PASS 23/23`（15 UPDATE + 8 NEW、DELETE/RENAME 0）
+- exact C1-R1 scope: `PASS 11/11`（11 UPDATE + 0 NEW、DELETE/RENAME 0）
 - protected blob / sensitive / `next-env.d.ts` / fixed input / Case 1 evidence 18 files: `PASS`
 
 ## Protected / operations

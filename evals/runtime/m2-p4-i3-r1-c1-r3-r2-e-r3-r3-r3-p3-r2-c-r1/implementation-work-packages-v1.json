@@ -1,7 +1,7 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-implementation-work-packages-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
-  "status": "v1_a_v1_b_v1_c_step2a_accepted_v1_d_step2b_c1_pending_review",
+  "status": "v1_a_v1_b_v1_c_step2a_accepted_v1_d_step2b_c1_r1_pending_review",
   "acceptance_date": "2026-08-18",
   "planning_only": false,
   "sequence": [
@@ -320,9 +320,9 @@
         "Production Runtime activation",
         "DB or migration apply"
       ],
-      "status": "step_2b_c1_implemented_pending_human_chatgpt_review",
+      "status": "step_2b_c1_r1_implemented_pending_human_chatgpt_review",
       "authorized": true,
-      "step": "step_2b_c1_sent_draft_boundary",
+      "step": "step_2b_c1_r1_required_now_draft_authority",
       "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
       "fixture_count": 22,
       "fixture_provenance": "historical_reference_or_fake_fixture",
@@ -356,6 +356,14 @@
       "observed_provider_semantic_false_negative_count_lower_bound": 1,
       "provider_recall_precision_generalization_from_one_case": false,
       "step_2b_c1_status": "implemented_pending_human_chatgpt_review",
+      "step_2b_c1_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
+      "step_2b_c1_initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+      "step_2b_c1_initial_finding": "required_now_generated_draft_route_is_unreachable",
+      "step_2b_c1_r1_status": "implemented_pending_human_chatgpt_review",
+      "step_2b_c1_r1_guard_authority": "existing_effective_decision_policy_message_draft_policy",
+      "step_2b_c1_r1_policy_recomputed_inside_guard": false,
+      "step_2b_c1_r1_required_now_route_restored": true,
+      "step_2b_c1_r1_later_only_case_1_boundary_preserved": true,
       "step_2b_c1_runtime_catalog": "runtime-stage-catalog-v16.0.0",
       "step_2b_c1_prompt_bundle": "prompt-bundle-runtime-v16.0.0",
       "step_2b_c1_schema_set": "pipeline-schema-runtime-v6.0.0",
@@ -415,6 +423,13 @@
         "deleted": 0,
         "renamed": 0
       },
+      "step_2b_c1_r1_exact_scope": {
+        "total": "PASS 11/11",
+        "updated": 11,
+        "new": 0,
+        "deleted": 0,
+        "renamed": 0
+      },
       "step_2a_precommit_verifier": "PASS 52/52",
       "step_2a_dedicated_verifier": "PASS 53/53",
       "step_2a_c1_precommit_verifier": "PASS 54/54",
@@ -422,7 +437,9 @@
       "immutable_original_step_2a_verifier": "PASS 53/53 executed_once",
       "immutable_v1_d_c1_verifier": "PASS 50/50 executed_once",
       "step_2b_c1_dedicated_verifier": "PASS 22/22",
-      "immutable_accepted_step_2a_c1_verifier_once": "PASS 55/55 executed_once"
+      "immutable_accepted_step_2a_c1_verifier_once": "PASS 55/55 executed_once",
+      "step_2b_c1_r1_dedicated_verifier": "PASS 23/23",
+      "immutable_original_step_2b_c1_verifier_once": "PASS 22/22 executed_once"
     }
   ],
   "pairwise_separation": [

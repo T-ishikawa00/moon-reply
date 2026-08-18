@@ -1088,6 +1088,7 @@ export class AssessmentPipeline {
             validateGeneratedDraftAuthorityV1({
               candidateEnvelope: input.candidateEnvelope,
               requestedTopics: input.request.requestedTopics,
+              decisionPolicy,
               decisionPlan: output as unknown as SplitDecisionPlanV2,
             });
           }

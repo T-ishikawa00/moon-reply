@@ -1,33 +1,26 @@
 # WBS.md
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:BEGIN -->
-## V1-D Step 2B C1 Sent-message Draft Boundary — Implemented, Review Pending
+## V1-D Step 2B C1-R1 Required-now Draft Authority — Implemented, Review Pending
 
-- [x] Exact parent fixed at actual Case 1 evidence commit `ecef2470e34d1a9fe82c0fc5683735d6aa5394f0`
-- [x] Step 2A synchronized as `accepted_complete` at `2a458ec16e26e5089cdf455319622e60e8c9d3d1`; ChatGPT technical `PASS 0/0/0`; Human acceptance `complete`
-- [x] Case 1 original execution retained as technical `PASS`, Product `remediation_required`
-- [x] BLOCKER `sent_message_replayed_as_new_draft` and MAJOR `future_reassessment_uses_current_decision_label` recorded separately from Human-owned review fields
-- [x] Observed PB-06 `semantic_checks=[]`; at least one false negative recorded without recall/precision generalization
-- [x] Application-owned no-Candidate/no-draft-request invariant fails closed with `M2_GENERATED_DRAFT_AUTHORITY_VIOLATION` before PB-05
-- [x] No case ID, fixture ID, Case 1 literal, Japanese keyword, regex, quote parser, or embedding classifier is used
-- [x] Explicit `draft_message` without Candidate remains allowed under existing policy
-- [x] Candidate-backed draft behavior and `M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED` remain unchanged
-- [x] V16 identity added: catalog/prompt bundle v16, schema v6 and split topology unchanged
-- [x] PB-01/PB-01C/PB-02/PB-03 remain exact V15; PB-04/05/06 use new versioned successors; historical V15 files remain immutable
-- [x] PB-04 sent-history, PB-05 source-fidelity, and PB-06 sent/unsent semantic adjudication responsibilities are explicit
-- [x] No new Provider Stage, Report field/schema expansion, DB migration, or Production activation
-- [x] Controlled executor selects V16 without changing frozen 9-case bytes/SHA, `maxRetries=0`, gate meaning, sanitizer, or journal
-- [x] Current answer labels remain unchanged; future condition labels are separate and wait means `その時点で状況を見直す`
-- [x] `resultingDirection` authority and `CustomerAssessmentNote.module.css` remain unchanged
-- [x] Actual Case 1 ChatGPT Product review artifact added; generated Human review sheet remains byte-identical
-- [x] Step 2B C1 dedicated verifier `PASS 22/22`
-- [x] Immutable accepted Step 2A C1 verifier `PASS 55/55` once in isolated accepted snapshot
-- [x] typecheck / zero-warning lint / build / diff / protected / sensitive / exact-scope `23/23` / evidence-immutability `18/18` gates
+- [x] Exact parent fixed at Step 2B C1 snapshot `d1a604a74edb06344e0b465c63aa21f45f64169a`
+- [x] Initial Step 2B C1 ChatGPT review retained as `NEEDS_CORRECTION 0/1/0`
+- [x] Sole finding retained as `required_now_generated_draft_route_is_unreachable`
+- [x] Existing effective Decision Policy is passed into `validateGeneratedDraftAuthorityV1`; no policy recomputation
+- [x] Candidate absent + no `draft_message` + `required_now` now authorizes a valid current-use `generated_without_candidate` draft
+- [x] Candidate absent + no `draft_message` + `later_only` continues to fail closed with `M2_GENERATED_DRAFT_AUTHORITY_VIOLATION`
+- [x] Explicit `draft_message`, Candidate-backed draft, `message_impact` Candidate requirement, and pause/not-allowed behavior remain intact
+- [x] No case/fixture/prose/keyword/regex/sent-message-literal classifier is used
+- [x] V16 PB-04/05/06 Prompt and catalog, UI/CSS, schemas, projections, Decision Policy, inputs, Case 1 artifact, and 18 evidence files remain protected
+- [x] Initial Step 2B C1 dedicated verifier remains historical `PASS 22/22`
+- [x] Corrected Step 2B C1-R1 verifier `PASS 23/23`
+- [x] Immutable original Step 2B C1 verifier `PASS 22/22` in one complete isolated run
+- [x] typecheck / zero-warning lint / build / diff / protected / sensitive / exact-scope `11/11` / evidence-immutability `18/18` gates
 - [ ] Exactly one implementation commit and normal push
-- [ ] Human / ChatGPT review of V1-D Step 2B C1
+- [ ] Human / ChatGPT review of V1-D Step 2B C1-R1
 - [ ] Case 1 V16 rerun and remaining eight controlled cases — `unauthorized / HOLD`
 
-Status is `implemented_pending_human_chatgpt_review`. Provider execution in this correction task is 0; actual V16 Provider quality is unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, migration apply, Payment, deploy, PR, and main integration remain unauthorized.
+Status is `step_2b_c1_r1_implemented_pending_human_chatgpt_review`. Provider execution in C1-R1 is 0; actual V16 Provider quality is unestablished. R2-C remains `remediation_required`; `experienceProductJudgment=pending_remediation`; `jpy980RuntimeReadiness=not_established`; `globalQ0Completion=false`. Production Runtime, migration apply, Payment, deploy, PR, and main integration remain unauthorized.
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D:END -->
 
 <!-- M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C:BEGIN -->

@@ -1,8 +1,8 @@
 {
   "schema_version": "m2-p4-v1-d-offline-results-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
-  "status": "step_2b_c1_implemented_pending_human_chatgpt_review",
-  "execution_mode": "step_2b_c1_application_authority_prompt_successor_and_fake_regression_only",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C1-R1",
+  "status": "step_2b_c1_r1_implemented_pending_human_chatgpt_review",
+  "execution_mode": "step_2b_c1_r1_application_policy_authority_and_fake_regression_only",
   "established": {
     "v1_c_acceptance_sync": true,
     "v1_c_accepted_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
@@ -63,7 +63,14 @@
     "v16_generated_draft_authority_enforced_before_pb_05": true,
     "v16_historical_v15_prompts_immutable": true,
     "v16_changed_prompt_identities": ["PB-04", "PB-05", "PB-06"],
-    "future_reassessment_labels_separated_from_current_answer_labels": true
+    "future_reassessment_labels_separated_from_current_answer_labels": true,
+    "step_2b_c1_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
+    "step_2b_c1_initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+    "step_2b_c1_initial_finding": "required_now_generated_draft_route_is_unreachable",
+    "step_2b_c1_r1_policy_aware_guard": true,
+    "required_now_generated_without_candidate_authorized": true,
+    "later_only_case_1_fail_closed_preserved": true,
+    "prompt_catalog_and_ui_unchanged_in_c1_r1": true
   },
   "unestablished": {
     "actual_v16_provider_prose_quality": true,
@@ -85,7 +92,8 @@
     "actual_v15_successor_outputs": 1,
     "historical_case_1_provider_executed": true,
     "historical_case_1_provider_http_attempts": 6,
-    "provider_executed_in_step_2b_correction": false
+    "provider_executed_in_step_2b_correction": false,
+    "provider_executed_in_step_2b_c1_r1_correction": false
   },
   "review_harness": {
     "path": "/review/runtime/v15",
@@ -115,6 +123,10 @@
     "case_1_technical_judgment": "PASS",
     "case_1_product_judgment": "remediation_required",
     "step_2b_c1_status": "implemented_pending_human_chatgpt_review",
+    "step_2b_c1_snapshot": "d1a604a74edb06344e0b465c63aa21f45f64169a",
+    "step_2b_c1_initial_chatgpt_review": "NEEDS_CORRECTION 0/1/0",
+    "step_2b_c1_initial_finding": "required_now_generated_draft_route_is_unreachable",
+    "step_2b_c1_r1_status": "implemented_pending_human_chatgpt_review",
     "packet_status": "exact_inputs_and_execution_constraints_prepared",
     "frozen_case_count": 9,
     "model": "gpt-5.6-luna",
@@ -135,6 +147,7 @@
     "quality_reassessment_is_sdk_retry": false,
     "provider_execution_authorized": false,
     "provider_execution_in_step_2b_correction": 0,
+    "provider_execution_in_step_2b_c1_r1_correction": 0,
     "remaining_provider_cases": "HOLD",
     "v16_case_1_rerun": "unauthorized"
   },
@@ -154,11 +167,14 @@
     "decision_policy_covered_by_predecessor_chain": "PASS 40/40",
     "step_2b_c1_dedicated_verifier": "PASS 22/22",
     "immutable_accepted_step_2a_c1_verifier_once": "PASS 55/55 executed_once",
+    "step_2b_c1_r1_dedicated_verifier": "PASS 23/23",
+    "immutable_original_step_2b_c1_verifier_once": "PASS 22/22 executed_once",
     "typecheck": "PASS",
     "lint_max_warnings_0": "PASS",
     "build": "PASS",
     "git_diff_check": "PASS",
-    "exact_scope": "PASS 23/23 15_UPDATE_8_NEW_0_DELETE_0_RENAME",
+    "step_2b_c1_exact_scope": "PASS 23/23 15_UPDATE_8_NEW_0_DELETE_0_RENAME",
+    "step_2b_c1_r1_exact_scope": "PASS 11/11 11_UPDATE_0_NEW_0_DELETE_0_RENAME",
     "protected_blob_scan": "PASS",
     "sensitive_scan": "PASS",
     "case_1_evidence_immutability": "PASS 18/18 byte_identical"
@@ -174,7 +190,7 @@
   "current_product_authority": {
     "v1_c": "accepted_complete",
     "accepted_v1_c_snapshot": "a436210bb035746c129fe071e6225b3799b9e5d8",
-    "v1_d": "step_2b_c1_implemented_pending_human_chatgpt_review",
+    "v1_d": "step_2b_c1_r1_implemented_pending_human_chatgpt_review",
     "provider_execution": "unauthorized",
     "r2_c": "remediation_required",
     "experienceProductJudgment": "pending_remediation",

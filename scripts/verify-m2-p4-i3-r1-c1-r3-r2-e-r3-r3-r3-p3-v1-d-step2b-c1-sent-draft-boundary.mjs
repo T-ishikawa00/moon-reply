@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { AssessmentApplication } from "../lib/assessment/runtime/application.ts";
+import { projectCustomerAssessmentExperienceV2 } from "../lib/assessment/runtime/customer-assessment-experience-projection-v2.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import {
   FakeAiStageTransport,
@@ -13,6 +14,7 @@ import {
   GENERATED_DRAFT_AUTHORITY_VIOLATION_CODE,
   validateGeneratedDraftAuthorityV1,
 } from "../lib/assessment/runtime/generated-draft-authority-v1.ts";
+import { validateDecisionPlanAgainstPolicyV2 } from "../lib/assessment/runtime/policy-v2.ts";
 import {
   executeControlledProviderReviewV16,
   loadControlledReviewInputAuthority,
@@ -25,12 +27,13 @@ import {
 } from "../lib/assessment/runtime/schema-catalog.ts";
 
 const root = process.cwd();
-const baseline = "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0";
+const historicalExecution = "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0";
+const baseline = "d1a604a74edb06344e0b465c63aa21f45f64169a";
 const technicalSnapshot = "2a458ec16e26e5089cdf455319622e60e8c9d3d1";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2b-c1-sent-draft-boundary";
-const expectedSubject = "fix: enforce V1-D sent-message draft boundary";
+  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2b-c1-r1-required-now-draft-authority";
+const expectedSubject = "fix: preserve V1-D required-now draft authority";
 const precommit = process.argv.includes("--precommit");
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d";
@@ -41,33 +44,19 @@ const executionRoot =
   "/controlled-provider-executions/2026-08-18-case1-ordinary-reply-waiting-2a458ec1";
 
 const updatedPaths = [
+  "lib/assessment/runtime/generated-draft-authority-v1.ts",
   "lib/assessment/runtime/pipeline.ts",
-  "lib/assessment/runtime/schema-catalog.ts",
-  "lib/assessment/runtime/review/m2-p4-v15-controlled-review-executor.ts",
-  "scripts/run-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-controlled-provider-review.mjs",
-  "components/runtime/CustomerAssessmentNote.tsx",
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2b-c1-sent-draft-boundary.mjs",
   "docs/CODEX_HANDOFF.md",
   "docs/CURRENT_FOCUS.md",
   "docs/WBS.md",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2A_CONTROLLED_PROVIDER_EXECUTOR.md",
+  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2B_C1_SENT_DRAFT_BOUNDARY.md",
+  `${packageRoot}/controlled-provider-executor-contract-v1.json`,
+  `${packageRoot}/offline-results-v1.json`,
   `${planningRoot}/capabilities-v1.json`,
   `${planningRoot}/implementation-work-packages-v1.json`,
-  `${packageRoot}/controlled-provider-review-plan-v1.json`,
-  `${packageRoot}/controlled-provider-executor-contract-v1.json`,
-  `${packageRoot}/offline-product-review-contract-v1.json`,
-  `${packageRoot}/offline-results-v1.json`,
 ];
-const newPaths = [
-  "lib/assessment/runtime/generated-draft-authority-v1.ts",
-  "lib/assessment/runtime/contracts/runtime-stage-catalog-v16.json",
-  "lib/assessment/runtime/contracts/pb-04-sent-message-draft-authority-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-05-draft-context-source-fidelity-v1.developer.md",
-  "lib/assessment/runtime/contracts/pb-06-sent-unsent-semantic-quality-v1.developer.md",
-  "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_D_STEP2B_C1_SENT_DRAFT_BOUNDARY.md",
-  `${packageRoot}/case1-actual-product-review-v1.json`,
-  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d-step2b-c1-sent-draft-boundary.mjs",
-];
-const exactScope = [...updatedPaths, ...newPaths];
+const exactScope = [...updatedPaths];
 
 function git(args, options = {}) {
   return execFileSync(
@@ -275,9 +264,10 @@ await check("exact Git authority branch lineage and main are fixed", () => {
   assert.equal(git(["rev-parse", "HEAD"]), precommit ? baseline : git(["rev-parse", "HEAD"]));
   assert.equal(
     git(["show", "-s", "--format=%s", baseline]),
-    "test: record V1-D controlled case 1 evidence",
+    "fix: enforce V1-D sent-message draft boundary",
   );
-  assert.equal(git(["rev-parse", `${baseline}^`]), technicalSnapshot);
+  assert.equal(git(["rev-parse", `${baseline}^`]), historicalExecution);
+  assert.equal(git(["rev-parse", `${historicalExecution}^`]), technicalSnapshot);
   assert.equal(git(["rev-parse", "refs/heads/main"]), expectedMain);
   assert.equal(git(["rev-parse", "refs/remotes/origin/main"]), expectedMain);
   assert.equal(remoteHead("main"), expectedMain);
@@ -292,7 +282,7 @@ await check("exact Git authority branch lineage and main are fixed", () => {
   }
 });
 
-await check("exact scope is 23 paths with 15 UPDATE and 8 NEW", () => {
+await check("exact scope is 11 UPDATE paths with no add delete or rename", () => {
   const scope = collectScope();
   assert.deepEqual(sorted(scope.map((entry) => entry.path)), sorted(exactScope));
   assert.deepEqual(
@@ -300,8 +290,8 @@ await check("exact scope is 23 paths with 15 UPDATE and 8 NEW", () => {
     sorted(updatedPaths),
   );
   assert.deepEqual(
-    sorted(scope.filter((entry) => entry.status === "A").map((entry) => entry.path)),
-    sorted(newPaths),
+    scope.filter((entry) => entry.status === "A").map((entry) => entry.path),
+    [],
   );
   assert.equal(
     scope.some((entry) => ["D", "R", "C"].includes(entry.status[0])),
@@ -343,8 +333,11 @@ await check("protected Runtime transport schema migration and Product blobs are 
   const protectedPaths = new Set([
     `${packageRoot}/controlled-provider-inputs-v1.json`,
     `${packageRoot}/controlled-provider-authorization-contract-v1.json`,
+    `${packageRoot}/case1-actual-product-review-v1.json`,
     "lib/assessment/runtime/contracts/runtime-stage-catalog-v15.json",
+    "lib/assessment/runtime/contracts/runtime-stage-catalog-v16.json",
     ...v15Manifest.stages.map((stage) => stage.prompt_path),
+    ...v16Manifest.stages.map((stage) => stage.prompt_path),
     "lib/assessment/runtime/review/m2-p4-v15-controlled-review-transport.ts",
     "lib/assessment/runtime/review/m2-p4-v15-controlled-review-evidence.ts",
     "lib/assessment/runtime/application.ts",
@@ -354,11 +347,14 @@ await check("protected Runtime transport schema migration and Product blobs are 
     "lib/assessment/runtime/effective-assessment-authority-v1.ts",
     "lib/assessment/runtime/effective-assessment-authority-integrity-v1.ts",
     "lib/assessment/runtime/effective-decision-policy-v1.ts",
+    "lib/assessment/runtime/policy-v2.ts",
+    "lib/assessment/runtime/policy-v3.ts",
     "lib/assessment/runtime/product-semantic-shape-v1.ts",
     "lib/assessment/runtime/quality-reassessment-v1.ts",
     "lib/assessment/runtime/supabase-repository.ts",
     "lib/assessment/runtime/customer-assessment-projection-v1.ts",
     "lib/assessment/runtime/customer-assessment-experience-projection-v2.ts",
+    "components/runtime/CustomerAssessmentNote.tsx",
     "components/runtime/CustomerAssessmentNote.module.css",
     "next-env.d.ts",
     ...tracked.filter((entry) => /clarification/iu.test(entry)),
@@ -396,30 +392,80 @@ await check("V16 identity changes only PB-04 PB-05 and PB-06 Prompt identities",
   assert.deepEqual(changed, ["PB-04", "PB-05", "PB-06"]);
 });
 
-await check("Application authority invariant is structural and preserves authorized paths", () => {
-  const decisionPlan = stageOutputsFromActualCase1()["PB-04"];
+await check("Application authority matrix preserves required-now and bounded draft routes", () => {
+  const laterOnlyPlan = stageOutputsFromActualCase1()["PB-04"];
+  const laterOnlyPolicy = { message_draft_policy: "later_only" };
+  const requiredNowPolicy = { message_draft_policy: "required_now" };
   assert.throws(
     () =>
       validateGeneratedDraftAuthorityV1({
         candidateEnvelope: { presence: false, candidate: null },
         requestedTopics: ["decide_send_or_wait", "organize_emotions"],
-        decisionPlan,
+        decisionPolicy: laterOnlyPolicy,
+        decisionPlan: laterOnlyPlan,
       }),
     (error) => safeCode(error) === GENERATED_DRAFT_AUTHORITY_VIOLATION_CODE,
   );
+
+  const replyNowPlan = structuredClone(laterOnlyPlan);
+  replyNowPlan.selected_decision = "reply_now";
+  replyNowPlan.recommended_message_draft.policy = "required_now";
+  replyNowPlan.recommended_message_draft.use_timing = "now";
+  replyNowPlan.message_draft_edit_metadata.preserved_meaning = false;
+  assert.doesNotThrow(() =>
+    validateGeneratedDraftAuthorityV1({
+      candidateEnvelope: { presence: false, candidate: null },
+      requestedTopics: ["decide_send_or_wait"],
+      decisionPolicy: requiredNowPolicy,
+      decisionPlan: replyNowPlan,
+    }),
+  );
+
+  const sendNowPlan = structuredClone(replyNowPlan);
+  sendNowPlan.selected_decision = "send_now";
+  assert.doesNotThrow(() =>
+    validateGeneratedDraftAuthorityV1({
+      candidateEnvelope: { presence: false, candidate: null },
+      requestedTopics: ["decide_send_or_wait"],
+      decisionPolicy: requiredNowPolicy,
+      decisionPlan: sendNowPlan,
+    }),
+  );
+
   assert.doesNotThrow(() =>
     validateGeneratedDraftAuthorityV1({
       candidateEnvelope: { presence: false, candidate: null },
       requestedTopics: ["draft_message"],
-      decisionPlan,
+      decisionPolicy: laterOnlyPolicy,
+      decisionPlan: laterOnlyPlan,
     }),
   );
   assert.doesNotThrow(() =>
     validateGeneratedDraftAuthorityV1({
       candidateEnvelope: { presence: true, candidate: {} },
       requestedTopics: ["decide_send_or_wait"],
-      decisionPlan,
+      decisionPolicy: laterOnlyPolicy,
+      decisionPlan: laterOnlyPlan,
     }),
+  );
+
+  assert.throws(
+    () =>
+      validateDecisionPlanAgainstPolicyV2(
+        {
+          selected_decision: "pause_additional_contact",
+          message_draft: {
+            text: "offline fake draft",
+            policy: "later_only",
+            use_timing: "later",
+          },
+        },
+        {
+          allowed_decisions: ["pause_additional_contact"],
+          message_draft_policy: "not_allowed",
+        },
+      ),
+    (error) => safeCode(error) === "M2_PLAN_POLICY_VIOLATION",
   );
 });
 
@@ -452,6 +498,77 @@ await check("actual Case 1 violation fails closed before PB-05", async () => {
   assert.equal(evidence.customerProjection, null);
   assert.equal(fakeTransport.actualProviderCalls, 0);
   assert.equal(violationScenario.providerHttpAttemptCount, 0);
+});
+
+await check("required-now reply route without Candidate or draft topic reaches Ready", async () => {
+  const fixture = diagnosticCase("E-R3-04");
+  fixture.input.requestedTopics = [
+    "decide_send_or_wait",
+    "organize_emotions",
+  ];
+  fixture.outputs["PB-01"].decision_facts.selected_requests = [
+    "decide_send_or_wait",
+    "organize_emotions",
+  ];
+  fixture.outputs["PB-01"].base_writing_signals.user_goal_detail = {
+    value: "maintain_distance",
+    basis: "current_situation_explicit",
+  };
+  fixture.outputs["PB-01"].decision_facts.contact_state.elapsed_since_latest_user_message_minutes =
+    0;
+  fixture.outputs["PB-01"].decision_facts.information_state.unresolved_fields =
+    fixture.outputs["PB-01"].decision_facts.information_state.unresolved_fields.filter(
+      (field) => field !== "contact_state.usual_cadence_relation",
+    );
+  fixture.outputs["PB-04"].message_draft_edit_metadata.preserved_meaning = false;
+  const scenario = await runApplicationScenario({
+    catalog: v16Catalog,
+    fixedClock: fixture.fixedClock,
+    input: fixture.input,
+    outputs: fixture.outputs,
+  });
+  assert.equal(scenario.error, null);
+  assert.equal(
+    scenario.result.eligibility,
+    "ready",
+    JSON.stringify(scenario.result?.clarification),
+  );
+  assert.equal(fixture.input.optionalMessage, null);
+  assert.equal(fixture.input.requestedTopics.includes("draft_message"), false);
+  assert.equal(
+    scenario.result.report.decisionPlan.selected_decision,
+    "reply_now",
+  );
+  assert.equal(
+    scenario.result.report.decisionPlan.recommended_message_draft.policy,
+    "required_now",
+  );
+  assert.equal(
+    scenario.result.report.decisionPlan.recommended_message_draft.use_timing,
+    "now",
+  );
+  assert.equal(
+    scenario.result.report.decisionPlan.message_draft_edit_metadata.source_status,
+    "generated_without_candidate",
+  );
+  assert.deepEqual(scenario.transport.calls, [
+    "PB-01",
+    "PB-02",
+    "PB-03",
+    "PB-04",
+    "PB-05",
+    "PB-06",
+  ]);
+  const projection = projectCustomerAssessmentExperienceV2(
+    scenario.result,
+    fixture.input.requestedTopics,
+  );
+  assert.ok(projection.baseProjection.finalDraft);
+  assert.equal(
+    projection.baseProjection.finalDraft.text,
+    scenario.result.report.decisionPlan.recommended_message_draft.text,
+  );
+  assert.equal(scenario.transport.actualProviderCalls, 0);
 });
 
 let compliantScenario;
@@ -777,7 +894,7 @@ await check("controlled runner selects V16 and leaves transport and gate artifac
 
 await check("actual Case 1 Product review artifact is truthful and Human-owned evidence is untouched", () => {
   const review = readJson(`${packageRoot}/case1-actual-product-review-v1.json`);
-  assert.equal(review.execution_commit, baseline);
+  assert.equal(review.execution_commit, historicalExecution);
   assert.equal(review.fixture_id, "ordinary_reply_waiting");
   assert.equal(review.execution_technical, "PASS");
   assert.equal(review.routing_correct, "PASS");
@@ -802,18 +919,63 @@ await check("status records separate historical execution from correction operat
     `${packageRoot}/controlled-provider-executor-contract-v1.json`,
   );
   const offline = readJson(`${packageRoot}/offline-results-v1.json`);
+  const capabilities = readJson(`${planningRoot}/capabilities-v1.json`);
+  const workPackages = readJson(
+    `${planningRoot}/implementation-work-packages-v1.json`,
+  );
+  const v1dPackage = workPackages.packages.find((entry) => entry.id === "V1-D");
   assert.equal(plan.step_2a_acceptance.status, "accepted_complete");
   assert.equal(plan.case_1_actual_execution.technical_judgment, "PASS");
   assert.equal(plan.case_1_actual_execution.product_judgment, "remediation_required");
   assert.equal(plan.step_2b_c1_successor.status, "implemented_pending_human_chatgpt_review");
+  assert.equal(
+    contract.step_2b_c1_r1_correction.initial_chatgpt_review,
+    "NEEDS_CORRECTION 0/1/0",
+  );
+  assert.equal(
+    contract.step_2b_c1_r1_correction.finding,
+    "required_now_generated_draft_route_is_unreachable",
+  );
+  assert.equal(
+    contract.step_2b_c1_r1_correction.status,
+    "implemented_pending_human_chatgpt_review",
+  );
+  assert.equal(
+    contract.generated_draft_authority.consumes_effective_decision_policy_used_by_plan_validation,
+    true,
+  );
+  assert.equal(
+    contract.generated_draft_authority.required_now_without_candidate_or_draft_topic_allowed,
+    true,
+  );
   assert.equal(contract.operations.provider_calls, 0);
   assert.equal(contract.evidence_ceiling.actual_v16_provider_prose_quality, "unestablished");
   assert.equal(offline.fixture_results.historical_case_1_provider_http_attempts, 6);
   assert.equal(offline.fixture_results.provider_executed_in_step_2b_correction, false);
+  assert.equal(
+    offline.fixture_results.provider_executed_in_step_2b_c1_r1_correction,
+    false,
+  );
   assert.equal(offline.operations.provider_calls, 0);
+  assert.equal(
+    offline.current_product_authority.v1_d,
+    "step_2b_c1_r1_implemented_pending_human_chatgpt_review",
+  );
   assert.equal(offline.current_product_authority.r2_c, "remediation_required");
   assert.equal(offline.current_product_authority.jpy980RuntimeReadiness, "not_established");
   assert.equal(offline.current_product_authority.globalQ0Completion, false);
+  assert.equal(offline.validation.step_2b_c1_r1_dedicated_verifier, "PASS 23/23");
+  assert.equal(
+    offline.validation.immutable_original_step_2b_c1_verifier_once,
+    "PASS 22/22 executed_once",
+  );
+  assert.equal(capabilities.exact_scope.total, "PASS 11/11");
+  assert.equal(
+    capabilities.v1_d.step_2b_c1_initial_finding,
+    "required_now_generated_draft_route_is_unreachable",
+  );
+  assert.ok(v1dPackage);
+  assert.equal(v1dPackage.step_2b_c1_r1_exact_scope.total, "PASS 11/11");
 });
 
 await check("changed files contain no sensitive values and every JSON parses", () => {
@@ -828,7 +990,7 @@ await check("changed files contain no sensitive values and every JSON parses", (
   }
 });
 
-assert.equal(passed, 22);
-console.log("\nM2-P4 V1-D Step 2B C1 sent-draft boundary verifier: PASS 22/22");
+assert.equal(passed, 23);
+console.log("\nM2-P4 V1-D Step 2B C1-R1 required-now correction verifier: PASS 23/23");
 console.log("Provider/DB/Supabase/migration apply/Payment/deploy: 0/0/0/0/0/0");
 console.log("Actual V16 Provider quality: unestablished; Case 1 rerun: unauthorized");
