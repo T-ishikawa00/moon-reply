@@ -1,59 +1,109 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-product-owner-review-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C",
-  "status": "accepted",
-  "baseline": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
-  "product_owner_experience_review_complete": true,
-  "disposition": "accepted_for_customer_note_ui_and_synthetic_experience",
-  "accepted_dimensions": [
-    "visual atmosphere",
-    "reassurance direction",
-    "assessment fullness",
-    "information density",
-    "personalized reading feel",
-    "draft utility",
-    "mobile experience",
-    "Product structure",
-    "approximate visual plausibility for JPY980"
-  ],
-  "considered_result": [
-    "\u7d50\u69cb\u6e80\u8db3",
-    "\u7d50\u69cb\u3044\u3044\u611f\u3058"
-  ],
-  "direction_decision": "continue_with_this_direction",
-  "readiness_distinction": {
-    "visual_jpy980_plausibility_established": true,
-    "synthetic_customer_note_product_experience_accepted": true,
-    "final_jpy980_readiness_established": false,
-    "final_readiness_open_reasons": [
-      "actual LUNA output successor quality not yet established",
-      "known PB-05 factual/anxiety-safe writing defects remain",
-      "evaluator successor remains unfinished",
-      "pre-payment Safety UX unfinished",
-      "payment unfinished",
-      "Active Runtime still v4",
-      "integrated live E2E unfinished"
-    ]
-  },
-  "next_product_work": {
-    "package": "Existing Package C",
-    "successor": "PB-05 factual precision and anxiety-safe writing successor",
-    "goals": [
-      "prevent unsupported causal attribution",
-      "prevent fabricated chronology",
-      "preserve explicit facts without unnecessary hedging",
-      "avoid needless negative-possibility enumeration",
-      "reduce generic reassurance repetition",
-      "keep consultation-specific reassurance",
-      "preserve persona and meaning"
+  "record_type": "human_product_review_template",
+  "status": "PENDING",
+  "review_complete": false,
+  "review_target_commit": "fa956b9b1941c73f8e1767c64ab24f07fadd36c6",
+  "reviewer": null,
+  "reviewed_at": null,
+  "question_value_contract": {
+    "unanswered": null,
+    "allowed_answer_values": [
+      true,
+      false
     ],
-    "implementation_authorized": false
+    "notes_are_optional": true
+  },
+  "case_reviews": [
+    {
+      "category": "simple",
+      "fixture_id": "simple_business_reply_with_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "emotional",
+      "fixture_id": "ordinary_reply_waiting",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "null_optional",
+      "fixture_id": "nullable_optional_sections",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "polite_draft",
+      "fixture_id": "polite_thank_you_with_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    },
+    {
+      "category": "persona_preserved",
+      "fixture_id": "kansai_persona_draft",
+      "personally_understood": null,
+      "emotionally_reassuring_without_false_certainty": null,
+      "amount_of_content_appropriate": null,
+      "semantic_repetition_acceptable": null,
+      "draft_useful_when_present": null,
+      "action_clear": null,
+      "feels_like_paid_assessment_not_ai_answer": null,
+      "plausibly_worth_jpy980": null,
+      "notes": null,
+      "status": "PENDING"
+    }
+  ],
+  "overall": {
+    "experienceProductJudgment": "pending",
+    "verdict": null,
+    "notes": null
+  },
+  "maximum_positive_meaning": {
+    "experienceProductJudgment": "plausibly_worth_jpy980",
+    "does_not_establish_runtime_readiness": true
   },
   "authority_boundary": {
-    "provider_rerun_authorized": false,
-    "active_runtime_activated": false,
-    "r4_authorized": false,
-    "c2_authorized": false,
-    "final_jpy980_readiness_claimed": false
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "providerQualityEstablished": false,
+    "activeRuntimeActivationAuthorized": false,
+    "productionRuntimeAuthorized": false,
+    "paymentImplementationAuthorized": false,
+    "productionPaymentAuthorized": false,
+    "mainIntegrationAuthorized": false
   }
 }

@@ -1,0 +1,359 @@
+{
+  "schema_version": "m2-p4-v1-b-semantic-depth-generation-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-B",
+  "status": "implemented_pending_human_chatgpt_review",
+  "authority": {
+    "accepted_v1_a_snapshot": "d19d72e9a3f7e9fbbbd7fda9e11b131314030cea",
+    "accepted_contracts": [
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/jpy980-value-architecture-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/semantic-depth-contract-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/implementation-work-packages-v1.json"
+    ],
+    "provider_execution_authorized": false
+  },
+  "value_functions": [
+    {
+      "id": "A",
+      "name": "consultation_core",
+      "requirement": "mandatory",
+      "contract": "Identify the consultation-specific decision, fear, tension, or difficulty without inventing one."
+    },
+    {
+      "id": "B",
+      "name": "evidence_and_significance",
+      "requirement": "mandatory",
+      "contract": "Select material observed evidence and explain why it matters to the current decision."
+    },
+    {
+      "id": "C",
+      "name": "decision_logic",
+      "requirement": "mandatory",
+      "contract": "Connect grounded evidence and bounded interpretation to the selected current direction with explainable logic."
+    },
+    {
+      "id": "D",
+      "name": "alternative_tradeoff",
+      "requirement": "conditional",
+      "contract": "Compare a genuinely material alternative only when existing Plan authority supports a concrete benefit and cost or risk."
+    },
+    {
+      "id": "E",
+      "name": "action_artifact",
+      "requirement": "mandatory",
+      "contract": "Make the Decision Plan action or permitted exact draft usable without PB-05 owning or rewriting it."
+    },
+    {
+      "id": "F",
+      "name": "uncertainty_boundary",
+      "requirement": "at_least_one_of_F_or_G",
+      "contract": "State an honest unknown or keep interpretations explicitly bounded as possibilities."
+    },
+    {
+      "id": "G",
+      "name": "reassessment_trigger",
+      "requirement": "at_least_one_of_F_or_G",
+      "contract": "Preserve an observable condition under which the current direction should be reconsidered."
+    },
+    {
+      "id": "H",
+      "name": "emotional_containment",
+      "requirement": "mandatory_baseline",
+      "contract": "Provide a consultation-specific opening and closing that contain the supplied difficulty without false certainty or repeated instruction."
+    }
+  ],
+  "full_product_threshold": {
+    "mandatory": [
+      "consultation_core",
+      "evidence_and_significance",
+      "decision_logic",
+      "action_artifact",
+      "emotional_containment"
+    ],
+    "at_least_one": [
+      "uncertainty_boundary",
+      "reassessment_trigger"
+    ],
+    "conditional": [
+      "alternative_tradeoff",
+      "draft_utility",
+      "message_impact",
+      "additional_emotional_depth"
+    ]
+  },
+  "value_chain": [
+    "what_the_user_is_deciding_or_fearing",
+    "material_observed_evidence",
+    "why_the_evidence_matters",
+    "bounded_interpretation",
+    "selected_current_direction_and_why",
+    "usable_action_or_permitted_draft_explanation",
+    "honest_unknown_or_observable_reassessment",
+    "consultation_specific_emotional_stopping_point"
+  ],
+  "customer_output_boundary": {
+    "writing_contract_not_exposed_reasoning": true,
+    "hidden_chain_of_thought_emitted": false,
+    "reasoning_traces_emitted": false,
+    "proposition_ids_emitted": false
+  },
+  "field_function_mapping": [
+    {
+      "field": "cover_line",
+      "owner": "provider",
+      "functions": [
+        "current_orientation",
+        "stabilizing_significance"
+      ],
+      "requirements": [
+        "case_specific_and_short",
+        "not_decision_label_restatement",
+        "not_closing_duplicate",
+        "no_prediction",
+        "no_generic_encouragement"
+      ]
+    },
+    {
+      "field": "decision_reason_summary",
+      "owner": "provider",
+      "functions": [
+        "consultation_core",
+        "primary_decision_logic"
+      ],
+      "requirements": [
+        "material_tension_is_explicit",
+        "grounded_fact_to_significance_to_direction",
+        "one_or_two_natural_sentences_preferred_not_required",
+        "no_business_report_phrasing",
+        "no_input_information_formula",
+        "no_fact_enumeration"
+      ]
+    },
+    {
+      "field": "observed_fact_commentary",
+      "owner": "provider",
+      "functions": [
+        "evidence_and_significance"
+      ],
+      "requirements": [
+        "normally_select_decision_reason_fact_ids",
+        "explain_why_each_fact_matters",
+        "distinct_grounded_proposition_per_item",
+        "no_fact_paraphrase_only",
+        "no_unsupported_cause_inner_state_or_chronology"
+      ]
+    },
+    {
+      "field": "possible_interpretations",
+      "owner": "provider",
+      "functions": [
+        "bounded_interpretation",
+        "uncertainty_boundary_support"
+      ],
+      "requirements": [
+        "materially_supported_plan_interpretations_only",
+        "distinct_possibilities_only",
+        "zero_allowed",
+        "no_filler_or_exhaustive_negatives"
+      ]
+    },
+    {
+      "field": "short_letter",
+      "owner": "provider",
+      "functions": [
+        "baseline_emotional_containment_opening"
+      ],
+      "requirements": [
+        "mandatory_one_or_two_useful_paragraphs",
+        "receive_actual_supplied_difficulty",
+        "calm_warm_consultation_specific_japanese",
+        "no_decision_or_action_repetition",
+        "no_outcome_promise",
+        "no_invented_fear_or_generic_therapy_filler"
+      ]
+    },
+    {
+      "field": "anxiety_reframe",
+      "owner": "provider",
+      "functions": [
+        "conditional_additional_emotional_containment"
+      ],
+      "use_when": "organize_emotions_selected_and_grounded_concern_is_useful",
+      "otherwise": [],
+      "requirements": [
+        "case_specific_fact_or_honest_uncertainty",
+        "no_generic_reassurance",
+        "no_hidden_state_reassurance"
+      ]
+    },
+    {
+      "field": "action_rationales",
+      "owner": "provider",
+      "functions": [
+        "deeper_decision_logic",
+        "action_explanation",
+        "conditional_alternative_tradeoff"
+      ],
+      "requirements": [
+        "first_useful_rationale_explains_case_fit",
+        "adds_information_beyond_summary",
+        "tied_to_material_facts_or_plan",
+        "not_action_paraphrase_or_generic_self_care",
+        "tradeoff_only_when_genuinely_material",
+        "tradeoff_has_concrete_benefit_and_cost_or_risk",
+        "no_invented_other_person_reaction"
+      ]
+    },
+    {
+      "field": "message_draft_context",
+      "owner": "provider",
+      "functions": [
+        "draft_utility_explanation"
+      ],
+      "use_when": "decision_plan.recommended_message_draft_is_non_null",
+      "otherwise": null,
+      "requirements": [
+        "explain_validated_preservation_light_adjustment_or_non_addition",
+        "explain_current_action_and_timing_fit",
+        "never_repeat_draft_or_create_second_draft"
+      ]
+    },
+    {
+      "field": "message_temperature",
+      "owner": "provider",
+      "functions": [
+        "message_impact"
+      ],
+      "use_when": "message_impact_selected",
+      "otherwise": null,
+      "requirements": [
+        "candidate_and_plan_authority_only",
+        "concrete_softness_affection_pressure_adjustment",
+        "no_relationship_mind_reading"
+      ]
+    },
+    {
+      "field": "aftercare_commentary",
+      "owner": "provider",
+      "functions": [
+        "next_three_days_explanatory_value",
+        "reassessment_support"
+      ],
+      "use_when": "next_three_days_selected",
+      "otherwise": [],
+      "requirements": [
+        "distinct_plan_phase_functions",
+        "no_line_by_line_action_paraphrase",
+        "no_generic_self_care_padding"
+      ]
+    },
+    {
+      "field": "relationship_summary",
+      "owner": "application_groundReportContentV3",
+      "provider_preferred_output": null,
+      "functions": [
+        "deterministic_relationship_grounding"
+      ],
+      "provider_semantic_depth_budget": "do_not_spend"
+    },
+    {
+      "field": "change_condition_commentary",
+      "owner": "application_groundChangeConditionCommentaryV3",
+      "provider_preferred_output": [],
+      "functions": [
+        "observable_reassessment_trigger"
+      ],
+      "provider_semantic_depth_budget": "do_not_spend"
+    },
+    {
+      "field": "closing_lines",
+      "owner": "provider",
+      "functions": [
+        "emotional_containment_closing",
+        "agency_restoration"
+      ],
+      "requirements": [
+        "mandatory_normally_one_line",
+        "second_line_only_for_distinct_function",
+        "name_what_need_not_be_solved_tonight",
+        "no_decision_or_action_repetition",
+        "no_new_fact_generic_advice_or_false_certainty"
+      ]
+    }
+  ],
+  "shape_boundary": {
+    "fixed_word_minimum": null,
+    "fixed_section_minimum": null,
+    "fixed_sentence_minimum": null,
+    "section_count_padding_prohibited": true,
+    "repeated_conclusion_prohibited": true,
+    "repeated_reassurance_prohibited": true,
+    "generic_aftercare_prohibited": true,
+    "decorative_explanation_prohibited": true,
+    "invented_insight_prohibited": true
+  },
+  "evidence_interpretation_boundary": {
+    "absence_of_negative_evidence_becomes_positive_hidden_state_certainty": false,
+    "prohibited_without_direct_support": [
+      "相手は忙しいから返信していない",
+      "相手はあなたを嫌っていない",
+      "相手は慎重になっている",
+      "相手は距離を置こうとしている",
+      "もうすぐ返信が来る",
+      "この関係は大丈夫"
+    ],
+    "allowed_only_with_corresponding_authority": [
+      "返信がない理由は今は分からない",
+      "現在の待ち時間はユーザーが示した範囲内である",
+      "拒絶または終了の明示的事実は確認されていない",
+      "今追加送信しても増える判断材料が限定的である",
+      "observable_condition_Xなら判断を見直す"
+    ],
+    "fabrication_prohibited": [
+      "causality",
+      "chronology",
+      "inner_state",
+      "future_reply",
+      "relationship_outcome"
+    ]
+  },
+  "non_repetition_generation_rule": {
+    "analytical_or_instructional_fields": [
+      "decision_reason_summary",
+      "observed_fact_commentary",
+      "action_rationales",
+      "possible_interpretations_when_used",
+      "aftercare_commentary_when_used"
+    ],
+    "distinct_product_function_required": true,
+    "same_conclusion_rewording_prohibited": true,
+    "emotional_or_ritual_fields": [
+      "short_letter",
+      "closing_lines",
+      "anxiety_reframe_when_used"
+    ],
+    "new_factual_proposition_required_for_emotional_fields": false,
+    "distinct_consultation_specific_emotional_function_required": true,
+    "decision_or_action_repetition_prohibited": true,
+    "deterministic_semantic_repetition_enforcement_established": false,
+    "enforcement_owner": "V1-C"
+  },
+  "exact_draft_authority": {
+    "owner": "PB-04_decision_plan.recommended_message_draft.text",
+    "pb_05_may_rewrite": false,
+    "pb_05_may_reconstruct_candidate": false,
+    "pb_05_may_quote_raw_candidate": false,
+    "pb_05_may_emit_alternate_draft": false,
+    "pb_05_may_normalize_emoji_or_line_breaks": false
+  },
+  "runtime_and_schema_boundary": {
+    "new_provider_stage": false,
+    "report_schema_path": "lib/assessment/runtime/contracts/report-content-v2.schema.json",
+    "report_schema_sha256": "85b47d2c20b933b8faad4b7d2781573612fc38c8fee4313cb318a56ccff8a650",
+    "report_schema_changed": false,
+    "pb_04_changed": false,
+    "pb_06_changed": false,
+    "pb_06_existing_validation_preserved": true,
+    "v1_c_semantic_enforcement_in_scope": false
+  },
+  "provider_semantic_fidelity": "unestablished"
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
@@ -45,6 +46,11 @@ export default function RuntimeReviewPage() {
               この画面は開発環境専用で、公開導線はありません。
             </span>
           </div>
+          <p>
+            <Link href="/review/runtime/v15">
+              V1-D オフラインProduct re-review harnessを開く
+            </Link>
+          </p>
         </div>
       </section>
       <RuntimeAssessmentForm />

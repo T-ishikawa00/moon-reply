@@ -1,0 +1,105 @@
+{
+  "schema_version": "m2-p4-v1-c-semantic-disposition-cases-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-C",
+  "case_kind": "evaluator_contract_not_v1_d_product_review",
+  "provider_execution": 0,
+  "case_id_branching_in_product_code_allowed": false,
+  "cases": [
+    {
+      "case_id": "unsupported_inner_state_major",
+      "layer": "pb_06_semantic",
+      "finding": { "finding_code": "ASSUMPTION_AS_FACT", "severity": "major", "json_path": "report_content.decision_reason_summary" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "unsupported_chronology_major",
+      "layer": "pb_06_semantic",
+      "finding": { "finding_code": "FACT_FIDELITY", "severity": "major", "json_path": "report_content.observed_fact_commentary[0].commentary" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "supported_application_decision_explanation",
+      "layer": "pb_06_semantic",
+      "finding": null,
+      "expected": { "disposition": "deliverable", "delivery": true }
+    },
+    {
+      "case_id": "logically_complete_but_emotionally_cold",
+      "layer": "pb_06_semantic",
+      "finding": { "finding_code": "REQUIRED_SECTION_MEANING", "severity": "major", "json_path": "report_content.short_letter" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "generic_reassurance_major",
+      "layer": "semantic_disposition_v5",
+      "finding": { "finding_code": "TEMPLATE_GENERICITY", "severity": "major", "json_path": "report_content.short_letter[0]" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "generic_phrase_minor_in_specific_report",
+      "layer": "semantic_disposition_v5",
+      "finding": { "finding_code": "TEMPLATE_GENERICITY", "severity": "minor", "json_path": "report_content.short_letter[0]" },
+      "expected": { "disposition": "nonblocking", "delivery": true }
+    },
+    {
+      "case_id": "repeated_meaning_major",
+      "layer": "semantic_disposition_v5",
+      "finding": { "finding_code": "REPETITION", "severity": "major", "json_path": "report_content.action_rationales[0]" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "repeated_decision_as_closing_major",
+      "layer": "semantic_disposition_v5",
+      "finding": { "finding_code": "REPETITION", "severity": "major", "json_path": "report_content.closing_lines[0]" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "incidental_repetition_minor",
+      "layer": "semantic_disposition_v5",
+      "finding": { "finding_code": "REPETITION", "severity": "minor", "json_path": "report_content.closing_lines[0]" },
+      "expected": { "disposition": "nonblocking", "delivery": true }
+    },
+    {
+      "case_id": "consultation_specific_non_propositional_closing",
+      "layer": "pb_06_semantic",
+      "finding": null,
+      "expected": { "disposition": "deliverable", "delivery": true, "new_fact_required": false }
+    },
+    {
+      "case_id": "alternative_tradeoff_not_applicable",
+      "layer": "pb_06_semantic",
+      "finding": null,
+      "expected": { "disposition": "deliverable", "delivery": true, "tradeoff_required": false }
+    },
+    {
+      "case_id": "manufactured_tradeoff_hidden_state",
+      "layer": "pb_06_semantic",
+      "finding": { "finding_code": "ASSUMPTION_AS_FACT", "severity": "major", "json_path": "report_content.action_rationales[1]" },
+      "expected": { "disposition": "blocking", "delivery": false }
+    },
+    {
+      "case_id": "exact_normalized_duplicate",
+      "layer": "product_semantic_shape_v1",
+      "mutation": "same_nonempty_text_in_two_primary_locations_with_whitespace_only_difference",
+      "expected": { "shape": "FAIL", "safe_code": "M2_PRODUCT_SEMANTIC_SHAPE_INVALID", "delivery": false }
+    },
+    {
+      "case_id": "emotional_block_exact_action_copy",
+      "layer": "product_semantic_shape_v1",
+      "mutation": "closing_line_exactly_copies_action_to_take",
+      "expected": { "shape": "FAIL", "safe_code": "M2_PRODUCT_SEMANTIC_SHAPE_INVALID", "delivery": false }
+    },
+    {
+      "case_id": "final_draft_exactly_repeated_in_report",
+      "layer": "product_semantic_shape_v1",
+      "mutation": "message_draft_context_exactly_copies_recommended_message_draft_text",
+      "expected": { "shape": "FAIL", "safe_code": "M2_PRODUCT_SEMANTIC_SHAPE_INVALID", "delivery": false }
+    },
+    {
+      "case_id": "distinct_valid_primary_functions",
+      "layer": "product_semantic_shape_v1",
+      "mutation": null,
+      "expected": { "shape": "PASS", "delivery": true }
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "schema_version": "m2-p4-v1-d-controlled-provider-review-plan-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-STEP2B-C2",
+  "status": "v16_evidence_provenance_corrected_pending_human_chatgpt_review",
+  "controlled_provider_review_packet": "exact_inputs_and_execution_constraints_prepared",
+  "controlled_provider_execution_harness": "v16_evidence_provenance_corrected_pending_human_chatgpt_review",
+  "provider_execution_authorized": false,
+  "execution_count_in_this_task": 0,
+  "frozen_input_packet": "controlled-provider-inputs-v1.json",
+  "frozen_input_sha256": "ab1d7b896086da002015a0a6d5cf1c1fb6eac3ffdc48e8410b44a892c1f9a20d",
+  "step_1_acceptance": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "41d90b69c18aec86995d1930f28be05d6ccfca8f",
+    "chatgpt_review": "PASS_complete",
+    "human_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-18",
+    "initial_review_history": "NEEDS_CORRECTION 0/2/0",
+    "c1_review": "PASS 0/0/0"
+  },
+  "scope": {
+    "synthetic_cases_only": true,
+    "real_person_data": false,
+    "human_pii": false,
+    "actual_user_data": false,
+    "payment": false,
+    "deploy": false,
+    "production": false,
+    "migration_apply": false,
+    "db_operations": false,
+    "supabase_operations": false
+  },
+  "runtime_identity": {
+    "catalog_version": "runtime-stage-catalog-v16.0.0",
+    "prompt_bundle_version": "prompt-bundle-runtime-v16.0.0",
+    "schema_set_version": "pipeline-schema-runtime-v6.0.0",
+    "stage_topology_version": "split-base-candidate-v1",
+    "model": "gpt-5.6-luna"
+  },
+  "future_execution_architecture": {
+    "input_source": "exact_frozen_synthetic_inputs",
+    "application": "V16 AssessmentApplication candidate",
+    "repository_requirement": "FakeAssessmentRepository_or_local_in_memory_repository",
+    "transport_requirement": "review_only_real_provider_transport_with_explicit_maxRetries_0",
+    "stage_sequence": "V16_PB-01_through_PB-06_with_optional_one_quality_reassessment",
+    "evidence_sink": "captured_offline_evidence_files",
+    "production_service_entrypoint_used": false,
+    "supabase_repository_used": false,
+    "payment_used": false,
+    "production_used": false,
+    "executor_implementation_status": "v16_evidence_provenance_corrected_pending_human_chatgpt_review"
+  },
+  "transport_and_invocation_limits": {
+    "maximum_quality_reassessments_per_case": 1,
+    "maximum_product_generation_cycles_per_case": 2,
+    "maximum_application_stage_invocations_per_case": 12,
+    "maximum_application_stage_invocations_total": 108,
+    "application_quality_reassessment_is_sdk_retry": false,
+    "current_openai_transport_explicit_max_retries": false,
+    "review_transport_max_retries": 0,
+    "review_transport_no_retry_configuration_required_before_execution": false,
+    "review_transport_no_retry_configuration_implemented": true,
+    "budget_enforced_before_transport_invoke": true,
+    "alternate_real_provider_path_in_runner": false,
+    "hard_provider_http_attempt_ceiling_established_for_review_executor": true,
+    "hard_provider_http_attempt_ceiling_when_review_executor_used": 108,
+    "actual_provider_http_attempts_in_step_2b_correction": 0,
+    "historical_case_1_provider_http_attempts": 6
+  },
+  "step_2a_acceptance": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+    "chatgpt_technical_review": "PASS 0/0/0",
+    "human_acceptance": "complete"
+  },
+  "case_1_actual_execution": {
+    "execution_commit": "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0",
+    "execution_id": "2026-08-18-case1-ordinary-reply-waiting-2a458ec1",
+    "fixture_id": "ordinary_reply_waiting",
+    "technical_judgment": "PASS",
+    "product_judgment": "remediation_required",
+    "findings": [
+      "BLOCKER:sent_message_replayed_as_new_draft",
+      "MAJOR:future_reassessment_uses_current_decision_label"
+    ],
+    "observed_pb_06_semantic_checks": [],
+    "actual_provider_semantic_false_negative_count_lower_bound": 1,
+    "recall_precision_generalization_from_one_case": "prohibited"
+  },
+  "step_2b_c1_successor": {
+    "status": "historical_needs_correction_resolved_by_c1_r1",
+    "generated_draft_authority_violation_code": "M2_GENERATED_DRAFT_AUTHORITY_VIOLATION",
+    "v15_historical_prompts_mutated": false,
+    "changed_prompt_identities": ["PB-04", "PB-05", "PB-06"],
+    "new_provider_stage": false,
+    "report_schema_changed": false,
+    "production_runtime_authorized": false,
+    "v16_case_1_rerun": "unauthorized",
+    "remaining_provider_cases": "HOLD",
+    "actual_v16_provider_quality": "unestablished"
+  },
+  "step_2b_c1_r1_acceptance": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "8a4f30a49dd03cbd8c429fb9eaeb2387fa03c184",
+    "chatgpt_review": "PASS_complete",
+    "findings": "BLOCKER 0 / MAJOR 0 / MINOR 0",
+    "human_review": "PASS_complete",
+    "human_acceptance": "complete",
+    "acceptance_date": "2026-08-18"
+  },
+  "step_2b_c2": {
+    "status": "implemented_pending_human_chatgpt_review",
+    "finding_severity": "BLOCKER_FOR_PROVIDER_EXECUTION",
+    "finding": "v16_execution_would_be_persisted_as_v15_evidence",
+    "runtime_identity_authority": "validated_v16_runtime_catalog",
+    "output_provenance": "actual_v16_successor_output",
+    "unsupported_runtime_identity_behavior": "fail_closed_before_evidence_claims",
+    "provider_execution_authorized": false,
+    "provider_execution_count": 0,
+    "v16_case_1_rerun": "unauthorized",
+    "remaining_provider_cases": "HOLD"
+  },
+  "cases": [
+    {"fixture_id": "ordinary_reply_waiting", "fixed_clock": "2026-08-17T12:00:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "administrative_reply_with_tone_concern_ready_candidate", "fixed_clock": "2026-08-17T12:05:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "reply_waiting_with_usual_cadence", "fixed_clock": "2026-08-17T12:10:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "draft_request_with_relationship_intent", "fixed_clock": "2026-08-17T12:15:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "polite_thank_you_with_draft", "fixed_clock": "2026-08-17T12:20:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "kansai_persona_draft", "fixed_clock": "2026-08-17T12:25:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "alternative_tradeoff_applicable", "fixed_clock": "2026-08-17T12:30:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "alternative_tradeoff_not_applicable", "fixed_clock": "2026-08-17T12:35:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12},
+    {"fixture_id": "one_clarification_answer_becomes_ready", "fixed_clock": "2026-08-17T12:40:00.000Z", "timezone": "Asia/Tokyo", "expected_initial_route": "needs_one_clarifying_answer", "expected_route_after_one_answer": "full_paid_ready_candidate", "maximum_application_stage_invocations": 12}
+  ],
+  "later_evidence_capture": [
+    "authorization-record-v1.json",
+    "provider-call-ledger-v1.json",
+    "provider-http-attempt-ledger-v1.json",
+    "v16-route-results-v1.json",
+    "v16-stage-attempt-results-v1.json",
+    "v16-customer-projections-v1.json",
+    "v16-quality-reassessment-results-v1.json",
+    "human-product-review-sheet-v1.json",
+    "provider-execution-summary-v1.md"
+  ],
+  "execution_preconditions": [
+    "separate_explicit_human_provider_execution_authorization",
+    "review_only_executor_human_chatgpt_review_complete",
+    "review_transport_configured_with_explicit_maxRetries_0",
+    "clean_exact_authorized_branch_and_snapshot",
+    "runtime_identity_model_and_prompt_hash_verification",
+    "controlled_provider_inputs_v1_hash_and_no_pii_scan",
+    "fixed_clock_and_timezone_locked_per_case",
+    "application_stage_and_provider_http_attempt_ledgers_approved",
+    "no_supabase_no_db_no_payment_no_deploy_no_production_no_migration_apply"
+  ],
+  "step_2a_validation": {
+    "status": "accepted_complete",
+    "accepted_snapshot": "2a458ec16e26e5089cdf455319622e60e8c9d3d1",
+    "immutable_accepted_c1_verifier": "PASS 55/55",
+    "provider_execution_in_step_2b_correction": 0
+  },
+  "step_2b_c1_validation": {
+    "dedicated_verifier": "PASS 22/22",
+    "immutable_accepted_step_2a_c1_verifier_once": "PASS 55/55 executed_once",
+    "typecheck": "PASS",
+    "lint_max_warnings_0": "PASS",
+    "build": "PASS"
+  },
+  "step_2b_c1_r1_validation": {
+    "dedicated_verifier": "PASS 23/23",
+    "immutable_original_step_2b_c1_verifier_once": "PASS 22/22 executed_once",
+    "exact_scope": "PASS 11/11 11_UPDATE_0_NEW_0_DELETE_0_RENAME"
+  },
+  "step_2b_c2_validation": {
+    "dedicated_verifier": "PASS 21/21",
+    "immutable_accepted_c1_r1_verifier_once": "PASS 23/23 executed_once",
+    "typecheck": "PASS",
+    "lint_max_warnings_0": "PASS",
+    "build": "PASS",
+    "git_diff_check": "PASS",
+    "protected_blob_scan": "PASS",
+    "sensitive_scan": "PASS",
+    "historical_case_1_evidence_immutability": "PASS 18/18 byte_identical",
+    "exact_scope": "PASS 15/15 13_UPDATE_2_NEW_0_DELETE_0_RENAME"
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migration_applies": 0,
+    "payment_operations": 0,
+    "deploy_operations": 0
+  },
+  "current_outcome": "step_2b_c2_v16_evidence_provenance_implemented_no_provider_invocation_pending_human_chatgpt_review"
+}

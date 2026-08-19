@@ -1,17 +1,34 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = process.cwd();
-const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1";
-const baseline = "da325d9b4d8404879a08c1b50107e7f7df8787ec";
-const expectedParent = "a5b2defa1bb765d46076a28ca9827d494fcbe433";
+const taskId = "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A";
+const baseline = "cf9a04773fca622c4813e1e6e73a7632b139aff6";
+const expectedParent = "6196ab58d8d93a650d050a0fa6e1e7d4c2b44bc2";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const expectedBranch =
-  "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-customer-text-exclusion";
+  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection";
+const acceptedAuthorityBranch =
+  "chore/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance";
+const correctionBranch =
+  "plan/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-reassurance-doctrine-correction";
+const historicalCandidateBranch =
+  "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection";
+const historicalCandidate = "da325d9b4d8404879a08c1b50107e7f7df8787ec";
+const historicalCandidateParent = "a5b2defa1bb765d46076a28ca9827d494fcbe433";
+const historicalIdentifierHardening =
+  "89a6d55fdf3845451e80f1ee21dc648b224bcc9d";
 const packageRoot =
   "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a";
 
@@ -25,6 +42,8 @@ const verifierPath =
   "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection.mjs";
 const reviewDocumentPath =
   "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_A_REVIEW.md";
+const q0AcceptanceVerifierPath =
+  "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r1-r1-doctrine-acceptance.mjs";
 const exactScope = [
   implementationPath,
   projectionContractPath,
@@ -388,8 +407,109 @@ function check(name, action) {
   }
 }
 
+let q0AcceptanceVerifierSummary = "not_run";
+let r1DoctrineVerifierSummary = "not_run";
+let packageBVerifierSummary = "not_run";
+let packageAR1VerifierSummary = "not_run";
+
+function runQ0AcceptanceVerifierAtAcceptedAuthority() {
+  const temporaryRoot = mkdtempSync(
+    path.join(tmpdir(), "moon-reply-r2-a-authorized-q0-"),
+  );
+  const cloneRoot = path.join(temporaryRoot, "repo");
+  try {
+    execFileSync(
+      "git.exe",
+      ["clone", "--quiet", "--shared", "--no-checkout", root, cloneRoot],
+      { cwd: root, stdio: "pipe" },
+    );
+    const safeDirectory = `safe.directory=${cloneRoot.replaceAll("\\", "/")}`;
+    execFileSync(
+      "git.exe",
+      ["-c", safeDirectory, "config", "core.autocrlf", "false"],
+      { cwd: cloneRoot, stdio: "pipe" },
+    );
+    execFileSync(
+      "git.exe",
+      [
+        "-c",
+        safeDirectory,
+        "checkout",
+        "--quiet",
+        "-B",
+        acceptedAuthorityBranch,
+        baseline,
+      ],
+      { cwd: cloneRoot, stdio: "pipe" },
+    );
+    for (const [refName, revision] of [
+      [`refs/heads/${correctionBranch}`, expectedParent],
+      [`refs/remotes/origin/${correctionBranch}`, expectedParent],
+      ["refs/heads/main", expectedMain],
+      ["refs/remotes/origin/main", expectedMain],
+    ]) {
+      execFileSync(
+        "git.exe",
+        ["-c", safeDirectory, "update-ref", refName, revision],
+        { cwd: cloneRoot, stdio: "pipe" },
+      );
+    }
+
+    const sourceContract = readJson(p1SourceContractPath);
+    for (const authority of sourceContract.authority_manifest) {
+      copyFileSync(
+        path.join(root, authority.path),
+        path.join(cloneRoot, authority.path),
+      );
+    }
+    copyFileSync(
+      path.join(root, sourceContract.frozen_state.authorization_path),
+      path.join(cloneRoot, sourceContract.frozen_state.authorization_path),
+    );
+    const markerName = path.basename(sourceContract.frozen_state.marker_path);
+    copyFileSync(
+      path.join(root, ".git", markerName),
+      path.join(cloneRoot, ".git", markerName),
+    );
+    execFileSync(
+      "git.exe",
+      ["-c", safeDirectory, "config", "core.autocrlf", "true"],
+      { cwd: cloneRoot, stdio: "pipe" },
+    );
+
+    const output = execFileSync(
+      process.execPath,
+      [path.join(cloneRoot, q0AcceptanceVerifierPath)],
+      {
+        cwd: cloneRoot,
+        encoding: "utf8",
+        maxBuffer: 64 * 1024 * 1024,
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+    assert.match(output, /Doctrine acceptance verifier: PASS 12\/12/u);
+    assert.match(output, /R1 doctrine verifier: PASS 19\/19/u);
+    assert.match(output, /Package B verifier: PASS 20\/20 exact 10\/10/u);
+    assert.match(output, /Package A R1 verifier: PASS 23\/23/u);
+    q0AcceptanceVerifierSummary = "PASS 12/12";
+    r1DoctrineVerifierSummary = "PASS 19/19";
+    packageBVerifierSummary = "PASS 20/20 exact 10/10";
+    packageAR1VerifierSummary = "PASS 23/23";
+  } finally {
+    rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+}
+
 const fixtures = readJson(fixturePath);
-const baselineFixtures = JSON.parse(git(["show", `${baseline}:${fixturePath}`]));
+const historicalCandidateFixtures = JSON.parse(
+  git(["show", `${historicalCandidate}:${fixturePath}`]),
+);
+const historicalHardenedFixtures = JSON.parse(
+  git(["show", `${historicalIdentifierHardening}:${fixturePath}`]),
+);
+const historicalHardenedContract = JSON.parse(
+  git(["show", `${historicalIdentifierHardening}:${projectionContractPath}`]),
+);
 const sourceFixtures = readJson(fixtures.template_source);
 const projectionContract = readJson(projectionContractPath);
 const offlineResults = readJson(offlineResultPath);
@@ -585,23 +705,43 @@ check("exact branch baseline parent main and origin-main authority", () => {
   assert.ok(head === baseline || git(["rev-parse", `${head}^`]) === baseline);
 });
 
-check("original R2-A 7/7 accounted for and exact R1 correction scope 7/7", () => {
-  assert.equal(exactScope.length, 7);
-  exactScope.forEach((candidate) => {
-    assert.equal(existsSync(path.join(root, candidate)), true, candidate);
-    assert.equal(gitObjectExists(`${baseline}:${candidate}`), true, candidate);
-    assert.equal(gitObjectExists(`${expectedParent}:${candidate}`), false, candidate);
-  });
-  const originalR2APaths = git([
+check("historical candidate remains read-only and exact 7/7", () => {
+  assert.equal(git(["rev-parse", historicalCandidateBranch]), historicalCandidate);
+  assert.equal(
+    git(["rev-parse", `origin/${historicalCandidateBranch}`]),
+    historicalCandidate,
+  );
+  assert.equal(
+    git(["rev-parse", `${historicalCandidate}^`]),
+    historicalCandidateParent,
+  );
+  assert.equal(
+    git(["rev-parse", `${historicalIdentifierHardening}^`]),
+    historicalCandidate,
+  );
+  const historicalPaths = git([
     "diff-tree",
     "--no-commit-id",
     "--name-only",
     "-r",
-    baseline,
+    historicalCandidate,
   ])
     .split(/\r?\n/u)
     .filter(Boolean);
-  assert.deepEqual(sorted(originalR2APaths), sorted(exactScope));
+  assert.deepEqual(sorted(historicalPaths), sorted(exactScope));
+});
+
+check("exact authorized implementation scope is 7/7 NEW only", () => {
+  assert.equal(exactScope.length, 7);
+  exactScope.forEach((candidate) => {
+    assert.equal(existsSync(path.join(root, candidate)), true, candidate);
+    assert.equal(gitObjectExists(`${baseline}:${candidate}`), false, candidate);
+    assert.notEqual(
+      git(["hash-object", candidate]),
+      git(["rev-parse", `${historicalCandidate}:${candidate}`]),
+      candidate,
+    );
+  });
 
   const head = git(["rev-parse", "HEAD"]);
   const actualPaths =
@@ -610,7 +750,7 @@ check("original R2-A 7/7 accounted for and exact R1 correction scope 7/7", () =>
       : git(["diff", "--name-only", baseline, head]).split(/\r?\n/u).filter(Boolean);
   assert.deepEqual(sorted(actualPaths), sorted(exactScope));
   if (head === baseline) {
-    parseStatusPaths().forEach((record) => assert.equal(record.status, " M"));
+    parseStatusPaths().forEach((record) => assert.equal(record.status, "??"));
   } else {
     assert.equal(git(["rev-parse", `${head}^`]), baseline);
     assert.equal(parseStatusPaths().length, 0);
@@ -632,11 +772,41 @@ check("strict UTF-8 JSON validity U+FFFD zero secret zero", () => {
   jsonPaths.forEach(readJson);
 });
 
+check("Q0-A acceptance R1 Doctrine Package B and Package A verifiers preserved", () => {
+  runQ0AcceptanceVerifierAtAcceptedAuthority();
+});
+
 check("Product Doctrine and projection authority sources unchanged", () => {
   assert.equal(productDoctrineScope.length, 7);
   productDoctrineScope.forEach(assertBaselineBlobUnchanged);
+  assert.equal(
+    productDoctrine.status,
+    "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+  );
+  assert.equal(productDoctrine.acceptance.doctrineHumanChatGPTReview, "complete");
+  assert.equal(productDoctrine.acceptance.doctrineHumanChatGPTReviewOutcome, "PASS");
+  assert.equal(productDoctrine.acceptance.acceptanceDate, "2026-08-16");
+  assert.equal(
+    productDoctrine.r2_authorization["R2-A"].implementation,
+    "implementation_authorized",
+  );
+  assert.equal(
+    productDoctrine.r2_authorization["R2-B"].implementation,
+    "implementation_unauthorized",
+  );
+  assert.equal(productDoctrine.r2_authorization["R2-C"].execution, "unauthorized");
+  assert.equal(productDoctrine.authority_boundary.r2_a_implementation_authorized, true);
+  assert.equal(productDoctrine.authority_boundary.r2_b_implementation_authorized, false);
+  assert.equal(productDoctrine.authority_boundary.r2_c_execution_authorized, false);
+  assert.equal(productDoctrine.authority_boundary.r2_c_review_authorized, false);
   assert.equal(productDoctrine.authority_boundary.provider_calls, 0);
   assert.equal(productDoctrine.authority_boundary.runtime_activation_authorized, false);
+  const r2aPackage = implementationPackages.packages.find(
+    (item) => item.package_id === "R2-A",
+  );
+  assert.equal(r2aPackage.authorization_status, "implementation_authorized");
+  assert.equal(r2aPackage.implementation_authorized, true);
+  assert.deepEqual(r2aPackage.proposed_paths, exactScope);
 });
 
 check("Package A R1 accepted authority 14/14 unchanged", () => {
@@ -691,6 +861,14 @@ check("V2 composes accepted V1 and contains no prohibited integration", () => {
   );
   assert.doesNotMatch(projectFunctionSource, /(?:case|fixture)[_-]?id/iu);
   assert.doesNotMatch(source, /CustomerAssessmentProjectionV1\s*=\s*\{/u);
+  assert.match(
+    projectFunctionSource,
+    /return decodeCustomerAssessmentExperienceProjectionV2\(projection\)/u,
+  );
+  assert.notEqual(
+    git(["hash-object", implementationPath]),
+    git(["rev-parse", `${historicalIdentifierHardening}:${implementationPath}`]),
+  );
 });
 
 check("identifier exclusion uses no Unicode-letter boundary and enumerates customer text", () => {
@@ -775,17 +953,53 @@ check("exact legacy split mapping and source-order implementation", () => {
 check("projection contract exact shape limits doctrine and authorization boundary", () => {
   assert.equal(projectionContract.task_id, taskId);
   assert.equal(projectionContract.baseline, baseline);
+  assert.equal(projectionContract.branch, expectedBranch);
   assert.equal(
     projectionContract.status,
-    "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
+    "authorized_experience_projection_v2_implemented_pending_human_chatgpt_review",
   );
-  assert.deepEqual(projectionContract.review_correction, {
-    r2_a_architecture_accepted: true,
-    r2_a_identifier_exclusion_defect_found: true,
-    r2_a_identifier_exclusion_corrected: true,
-    provider_quality_established: false,
-    provider_rerun_authorized: false,
+  assert.deepEqual(projectionContract.accepted_authority, {
+    doctrine_status:
+      "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+    doctrineHumanChatGPTReview: "complete",
+    doctrineHumanChatGPTReviewOutcome: "PASS",
+    acceptanceDate: "2026-08-16",
+    r2_a_implementation: "implementation_authorized",
   });
+  assert.deepEqual(projectionContract.historical_reference, {
+    candidate_branch: historicalCandidateBranch,
+    candidate_commit: historicalCandidate,
+    candidate_parent: historicalCandidateParent,
+    identifier_hardening_commit: historicalIdentifierHardening,
+    read_only: true,
+    cherry_pick_used: false,
+    rebase_used: false,
+    branch_overwritten: false,
+  });
+  assert.deepEqual(projectionContract.functional_reuse, {
+    historical_candidate_foundation_reused: true,
+    identifier_exclusion_hardening_reused: true,
+    projection_return_fail_closed_added: true,
+    stale_lineage_or_authorization_metadata_reused: false,
+  });
+  for (const key of [
+    "source_mapping",
+    "recursive_exclusions",
+    "allowed_structural_exception",
+    "immutability",
+    "product_doctrine_support",
+    "frozen_e_r3_compatibility",
+  ]) {
+    assert.deepEqual(projectionContract[key], historicalHardenedContract[key], key);
+  }
+  assert.equal(projectionContract.projection.validated_before_return, true);
+  assert.deepEqual(projectionContract.accepted_flow, [
+    "requireReadyAssessmentResult",
+    "projectCustomerAssessmentV1",
+    "validated_full_report_exact_extraction",
+    "decodeCustomerAssessmentExperienceProjectionV2",
+    "fresh_projection_return",
+  ]);
   assert.deepEqual(projectionContract.projection.top_level_keys, [
     "projectionSchemaVersion",
     "baseProjection",
@@ -839,26 +1053,48 @@ check("projection contract exact shape limits doctrine and authorization boundar
     projectionContract.decoder_contract.identifier_exclusion.key_and_text_value_exclusion_are_separate,
     true,
   );
+  assert.equal(
+    projectionContract.decoder_contract.identifier_exclusion
+      .project_function_validates_before_return,
+    true,
+  );
   assert.equal(projectionContract.product_doctrine_support.rendering_owned_by_r2_b, true);
   assert.equal(projectionContract.product_doctrine_support.customer_reassurance_established, false);
   assert.equal(projectionContract.product_doctrine_support.jpy980_readiness_established, false);
-  Object.values(projectionContract.authorization).forEach((value) => assert.equal(value, false));
+  assert.equal(projectionContract.authorization.r2_a_implementation_authorized, true);
+  for (const [key, value] of Object.entries(projectionContract.authorization)) {
+    if (key !== "r2_a_implementation_authorized") assert.equal(value, false, key);
+  }
 });
 
 check("capabilities exact success and zero-operation boundary", () => {
   assert.equal(capabilities.task_id, taskId);
   assert.equal(capabilities.baseline, baseline);
+  assert.equal(capabilities.branch, expectedBranch);
   assert.equal(
     capabilities.status,
-    "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
+    "authorized_experience_projection_v2_implemented_pending_human_chatgpt_review",
   );
+  assert.deepEqual(capabilities.accepted_authority, {
+    doctrine_status:
+      "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+    r2_a_implementation: "implementation_authorized",
+    acceptance_date: "2026-08-16",
+  });
+  assert.deepEqual(capabilities.historical_reference, {
+    candidate_commit: historicalCandidate,
+    identifier_hardening_commit: historicalIdentifierHardening,
+    read_only: true,
+  });
   for (const key of [
     "product_doctrine_accepted",
     "package_a_accepted",
     "package_b_visual_shell_accepted",
     "r2_a_architecture_accepted",
-    "r2_a_identifier_exclusion_defect_found",
-    "r2_a_identifier_exclusion_corrected",
+    "r2_a_implementation_authorized",
+    "r2_a_implementation_complete",
+    "historical_candidate_identifier_exclusion_gap_found",
+    "current_identifier_exclusion_hardened",
     "customer_assessment_projection_v1_unchanged",
     "experience_projection_v2_complete",
     "experience_fields_exact_source_only",
@@ -866,6 +1102,7 @@ check("capabilities exact success and zero-operation boundary", () => {
     "japanese_adjacent_decision_enums_rejected",
     "base_projection_customer_text_covered",
     "structural_enum_values_remain_allowed",
+    "projection_validated_before_return",
     "full_report_unchanged",
     "v1_parity_preserved",
   ]) {
@@ -880,6 +1117,9 @@ check("capabilities exact success and zero-operation boundary", () => {
     "existing_package_c_authorized",
     "provider_rerun_authorized",
     "active_runtime_activated",
+    "production_runtime_authorized",
+    "payment_implementation_authorized",
+    "production_payment_authorized",
     "r4_authorized",
     "c2_authorized",
     "jpy980_readiness_established",
@@ -892,23 +1132,40 @@ check("capabilities exact success and zero-operation boundary", () => {
   }
   assert.equal(
     capabilities.next_action,
-    "human_chatgpt_review_of_r2_a_r1_identifier_exclusion",
+    "human_chatgpt_review_of_authorized_experience_projection_v2",
   );
 });
 
 check("fixture catalog preserves 8 positive and previous 20 plus 15 R1 negative", () => {
   assert.equal(fixtures.task_id, taskId);
+  assert.deepEqual(fixtures.lineage, {
+    accepted_authority_parent: baseline,
+    historical_candidate: historicalCandidate,
+    identifier_hardening_reference: historicalIdentifierHardening,
+    historical_references_read_only: true,
+  });
   assert.equal(fixtures.data_policy, "offline_synthetic_only");
   assert.equal(fixtures.template_source_policy, "accepted_package_a_synthetic_templates_read_only");
   assert.equal(fixtures.positive_fixtures.length, 8);
   assert.equal(fixtures.negative_fixtures.length, 35);
   assert.equal(new Set(fixtures.positive_fixtures.map((item) => item.fixture_id)).size, 8);
   assert.equal(new Set(fixtures.negative_fixtures.map((item) => item.fixture_id)).size, 35);
-  assert.equal(baselineFixtures.negative_fixtures.length, 20);
-  assert.deepEqual(fixtures.positive_fixtures, baselineFixtures.positive_fixtures);
+  assert.equal(historicalCandidateFixtures.negative_fixtures.length, 20);
+  assert.deepEqual(
+    fixtures.positive_fixtures,
+    historicalCandidateFixtures.positive_fixtures,
+  );
   assert.deepEqual(
     fixtures.negative_fixtures.slice(0, 20),
-    baselineFixtures.negative_fixtures,
+    historicalCandidateFixtures.negative_fixtures,
+  );
+  assert.deepEqual(
+    fixtures.positive_fixtures,
+    historicalHardenedFixtures.positive_fixtures,
+  );
+  assert.deepEqual(
+    fixtures.negative_fixtures,
+    historicalHardenedFixtures.negative_fixtures,
   );
   const correctionFixtureIds = fixtures.negative_fixtures
     .slice(20)
@@ -930,6 +1187,15 @@ check("fixture catalog preserves 8 positive and previous 20 plus 15 R1 negative"
     "decision_enum_in_base_expanded_plan_action",
     "fact_id_in_base_fixed_limitation",
   ]);
+  assert.deepEqual(
+    fixtures.source_projection_rejection_fixtures.map((item) => item.fixture_id),
+    [
+      "source_fact_id_in_opening_line",
+      "source_decision_literal_in_closing_lines",
+      "source_fact_id_in_base_primary_reason",
+      "source_decision_literal_in_base_short_letter",
+    ],
+  );
 });
 
 const positiveStats = { legacy: 0, split: 0 };
@@ -1209,6 +1475,31 @@ check("all 15 R1 correction negative fixtures reject fail-closed", () => {
   assert.equal(rejected, 15);
 });
 
+check("project function rejects source identifiers before returning 4/4", () => {
+  let rejected = 0;
+  for (const fixture of fixtures.source_projection_rejection_fixtures) {
+    const baseFixture = fixtures.positive_fixtures.find(
+      (candidate) => candidate.fixture_id === fixture.base_fixture,
+    );
+    assert.ok(baseFixture, fixture.fixture_id);
+    const readyResult = applyPatches(
+      instantiate(baseFixture),
+      fixture.result_patches,
+    );
+    assert.throws(
+      () =>
+        experienceProjection.projectCustomerAssessmentExperienceV2(
+          readyResult,
+          baseFixture.requested_topics,
+        ),
+      undefined,
+      fixture.fixture_id,
+    );
+    rejected += 1;
+  }
+  assert.equal(rejected, 4);
+});
+
 check("frozen E-R3 accepted-ready cases project successfully 3/3", () => {
   const acceptedIds = ["E-R3-01", "E-R3-02", "E-R3-04"];
   for (const caseId of acceptedIds) {
@@ -1270,6 +1561,11 @@ check("Product Doctrine functions supported without rendering or outcome claims"
     "jpy980_readiness_established",
   ]);
   assert.equal(implementationPackages.packages.find((item) => item.package_id === "R2-B").provider_calls_required, false);
+  assert.equal(
+    implementationPackages.packages.find((item) => item.package_id === "R2-A")
+      .implementation_authorized,
+    true,
+  );
   assert.equal(implementationPackages.existing_package_c_boundary.remains_separate, true);
   assert.equal(capabilities.r2_b_authorized, false);
   assert.equal(capabilities.r2_c_authorized, false);
@@ -1282,11 +1578,29 @@ check("offline result manifest matches independently executed evidence", () => {
   assert.equal(offlineResults.task_id, taskId);
   assert.equal(offlineResults.status, "PASS");
   assert.equal(offlineResults.baseline, baseline);
+  assert.equal(offlineResults.branch, expectedBranch);
+  assert.deepEqual(offlineResults.accepted_authority, {
+    doctrine_status:
+      "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+    r2_a_implementation_authorized: true,
+    acceptance_date: "2026-08-16",
+  });
+  assert.deepEqual(offlineResults.historical_reuse, {
+    candidate_commit: historicalCandidate,
+    identifier_hardening_commit: historicalIdentifierHardening,
+    historical_references_read_only: true,
+    r2_a_architecture_accepted: true,
+    historical_candidate_identifier_exclusion_gap_found: true,
+    current_identifier_exclusion_hardened: true,
+    provider_quality_established: false,
+    provider_rerun_authorized: false,
+  });
   assert.deepEqual(offlineResults.fixture_counts, {
     positive: 8,
     negative: 35,
     previous_negative: 20,
     r1_negative: 15,
+    source_projection_rejection: 4,
     legacy_positive: 2,
     split_positive: 6,
     frozen_e_r3_accepted_ready: 3,
@@ -1307,6 +1621,8 @@ check("offline result manifest matches independently executed evidence", () => {
     ui_changes: false,
   });
   assert.equal(offlineResults.acceptance_boundary.human_chatgpt_review, "PENDING");
+  assert.equal(offlineResults.acceptance_boundary.r2_a_implementation_authorized, true);
+  assert.equal(offlineResults.acceptance_boundary.r2_a_implementation_complete, true);
   assert.equal(offlineResults.acceptance_boundary.customer_reassurance_established, false);
   assert.equal(offlineResults.acceptance_boundary.jpy980_readiness_established, false);
 });
@@ -1343,9 +1659,17 @@ console.log("");
 console.log(
   `Experience projection verifier: ${failed.length === 0 ? "PASS" : "FAIL"} ${checks.length - failed.length}/${checks.length}`,
 );
-console.log("Original R2-A scope: 7/7; exact R1 correction scope: 7/7");
+console.log("Exact authorized scope: 7/7 NEW paths");
+console.log(`Q0-A acceptance verifier: ${q0AcceptanceVerifierSummary}`);
+console.log(`R1 Doctrine verifier: ${r1DoctrineVerifierSummary}`);
+console.log(`Package B accepted verifier: ${packageBVerifierSummary}`);
+console.log(`Package A R1 accepted verifier: ${packageAR1VerifierSummary}`);
+console.log(
+  "Historical candidate: da325d9 read-only; identifier hardening: 89a6d55 reused",
+);
 console.log("Positive fixtures: 8/8");
 console.log("Previous negative fixtures: 20/20; R1 negative fixtures: 15/15");
+console.log("Source projection rejection fixtures: 4/4");
 console.log("Frozen E-R3: ready 3/3; safety/rejected 3/3 not accepted ready Product");
 console.log("Provider / DB / Supabase: 0 / 0 / 0");
 if (failed.length > 0) process.exitCode = 1;

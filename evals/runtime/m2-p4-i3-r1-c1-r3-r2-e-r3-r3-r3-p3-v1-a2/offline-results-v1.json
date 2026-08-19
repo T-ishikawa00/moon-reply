@@ -1,0 +1,56 @@
+{
+  "schema_version": "m2-p4-v1-a2-offline-results-v1",
+  "status": "PASS",
+  "fixture_count": 43,
+  "passed": 43,
+  "failed": 0,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "migration_applies": 0,
+  "payment_operations": 0,
+  "deploy_operations": 0,
+  "stage_invocations": {
+    "initial_ready_without_candidate": ["PB-01", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06"],
+    "initial_needs_clarification_with_candidate": ["PB-01", "PB-01C", "PB-02", "PB-03"],
+    "clarification_resume_ready": ["PB-01", "PB-04", "PB-05", "PB-06"],
+    "clarification_resume_reused_skips": ["PB-01C", "PB-02", "PB-03"],
+    "clarification_resume_pb04_failure": ["PB-01", "PB-04"],
+    "clarification_resume_pb06_fidelity_block": ["PB-01", "PB-04", "PB-05", "PB-06"]
+  },
+  "evidence_boundary": {
+    "deterministic_integration_proof": "established",
+    "provider_semantic_fidelity": "unestablished",
+    "claim": "Offline A2 establishes authority wiring and fail-closed validator plumbing only; consumed path declarations do not prove Japanese Product output semantic reflection."
+  },
+  "consumption_audit": {
+    "authority": "9f397ed41f3f284e7a984ad139768af16373a747",
+    "decision_policy_claim": "only_clarification_values_actually_projected_or_consulted",
+    "stage_mapping": "explicit_target_and_effective_path_matrix",
+    "broad_path_prefix_authority": false,
+    "exact_matrix_regressions": 7,
+    "provider_semantic_fidelity": "unestablished"
+  },
+  "results": [
+    "actionable_topic_present", "supplementary_only_rejected_pre_request",
+    "message_impact_without_candidate", "draft_message_without_candidate",
+    "initial_sufficient", "initial_exactly_one_gap", "initial_multiple_gaps",
+    "initial_response_loss_retry", "tone_clarification_soft",
+    "timing_clarification", "relationship_intent_clarification",
+    "central_fear_clarification", "one_answer_still_insufficient",
+    "clarification_safety_non_normal", "same_canonical_answer_duplicate",
+    "different_answer_after_acceptance", "unknown_invalid_capability",
+    "opaque_capability_entropy", "target_x_isolation", "clarification_discarded",
+    "no_clarification_v1_parity", "resume_reuses_base_candidate",
+    "migration_single_clarification", "migration_atomic_answer_resume",
+    "malformed_input", "deterministic_repeat", "cadence_v2_alignment",
+    "no_second_clarification", "v12_actual_prompts_self_contained",
+    "timing_bucket_no_exact_minutes", "timing_local_datetime_exact_minutes",
+    "clarification_provenance_mutants", "pb06_clarification_fidelity_block",
+    "resume_failure_usage_preserved", "historical_complete_run_compatibility",
+    "central_concern_explicit_none", "consumer_matrix_material_concern",
+    "consumer_matrix_latest_timing_bucket", "consumer_matrix_latest_timing_local_datetime",
+    "consumer_matrix_usual_cadence", "consumer_matrix_central_concern",
+    "consumer_matrix_relationship_intent", "consumer_matrix_requested_tone"
+  ]
+}

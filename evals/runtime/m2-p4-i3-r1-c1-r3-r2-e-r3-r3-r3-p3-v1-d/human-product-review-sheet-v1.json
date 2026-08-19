@@ -1,0 +1,45 @@
+{
+  "schema_version": "m2-p4-v1-d-human-product-review-sheet-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D",
+  "status": "template_ready_pending_actual_v15_provider_output",
+  "review_scope": "later_controlled_synthetic_v15_product_candidates_only",
+  "allowed_output_provenance": "actual_v15_successor_output",
+  "current_step_contains_allowed_output_provenance": false,
+  "pending_value": "pending_actual_v15_provider_output",
+  "review_record_template": {
+    "fixture_id": "required_fixture_id",
+    "output_provenance": "actual_v15_successor_output",
+    "routing_correct": "pending_actual_v15_provider_output",
+    "no_padding": "pending_actual_v15_provider_output",
+    "repeated_conclusion_absent": "pending_actual_v15_provider_output",
+    "evidence_to_decision_chain_clear": "pending_actual_v15_provider_output",
+    "action_usable": "pending_actual_v15_provider_output",
+    "uncertainty_honest": "pending_actual_v15_provider_output",
+    "emotional_understanding": "pending_actual_v15_provider_output",
+    "simple_case_value": "pending_actual_v15_provider_output",
+    "exact_draft_preserved": "pending_actual_v15_provider_output",
+    "visual_shell_intact": "pending_actual_v15_provider_output",
+    "plausibly_worth_jpy980": "pending_actual_v15_provider_output",
+    "reviewer_notes": null,
+    "review_status": "pending_actual_v15_provider_output"
+  },
+  "planned_fixture_ids": [
+    "ordinary_reply_waiting",
+    "administrative_reply_with_tone_concern_ready_candidate",
+    "reply_waiting_with_usual_cadence",
+    "draft_request_with_relationship_intent",
+    "polite_thank_you_with_draft",
+    "kansai_persona_draft",
+    "alternative_tradeoff_applicable",
+    "alternative_tradeoff_not_applicable",
+    "one_clarification_answer_becomes_ready"
+  ],
+  "review_records": [],
+  "prefilled_pass_count": 0,
+  "step_1_disposition": {
+    "human_product_review_complete": false,
+    "experienceProductJudgment": "pending_remediation",
+    "plausibly_worth_jpy980": "pending_actual_v15_provider_output",
+    "r2_c": "remediation_required"
+  }
+}

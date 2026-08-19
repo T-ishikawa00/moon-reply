@@ -1,6 +1,12 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-projection-fixtures-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1",
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-fixtures-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "lineage": {
+    "accepted_authority_parent": "cf9a04773fca622c4813e1e6e73a7632b139aff6",
+    "historical_candidate": "da325d9b4d8404879a08c1b50107e7f7df8787ec",
+    "identifier_hardening_reference": "89a6d55fdf3845451e80f1ee21dc648b224bcc9d",
+    "historical_references_read_only": true
+  },
   "data_policy": "offline_synthetic_only",
   "template_source": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p2/projection-fixtures-v1.json",
   "template_source_policy": "accepted_package_a_synthetic_templates_read_only",
@@ -556,6 +562,56 @@
       "fixture_id": "fact_id_in_base_fixed_limitation",
       "source_family": "split",
       "mutation": "fact_id_in_base_fixedLimitation"
+    }
+  ],
+  "source_projection_rejection_fixtures": [
+    {
+      "fixture_id": "source_fact_id_in_opening_line",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/cover_line",
+          "value": "説明はF101です"
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_decision_literal_in_closing_lines",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/closing_lines",
+          "value": [
+            "reply_nowを表示する"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_fact_id_in_base_primary_reason",
+      "base_fixture": "split_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/decision_reason_summary",
+          "value": "F102を理由として表示します"
+        }
+      ]
+    },
+    {
+      "fixture_id": "source_decision_literal_in_base_short_letter",
+      "base_fixture": "legacy_full_experience",
+      "result_patches": [
+        {
+          "op": "replace",
+          "path": "/report/content/short_letter",
+          "value": [
+            "wait_and_reassessを表示する"
+          ]
+        }
+      ]
     }
   ]
 }

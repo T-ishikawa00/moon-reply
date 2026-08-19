@@ -1,0 +1,110 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-jpy980-value-architecture-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
+  "status": "planning_contract_defined_pending_review",
+  "planning_only": true,
+  "product_principle": {
+    "jpy980_value_is_not_established_by": [
+      "word_count",
+      "fixed_section_count",
+      "repeated_reassurance",
+      "repeated_conclusion",
+      "generic_aftercare",
+      "decorative_detail",
+      "unsupported_insight"
+    ],
+    "jpy980_value_is_established_by": [
+      "consultation_specific_understanding",
+      "grounded_evidence_interpretation",
+      "explainable_decision_logic",
+      "concrete_action_utility",
+      "draft_utility_when_applicable",
+      "bounded_uncertainty",
+      "observable_reassessment_trigger",
+      "emotional_reassurance_without_false_certainty"
+    ],
+    "no_fixed_word_minimum": true,
+    "no_fixed_section_minimum": true,
+    "section_count_padding_prohibited": true
+  },
+  "value_chain": [
+    "what_the_user_is_deciding_or_fearing",
+    "observed_evidence",
+    "why_the_evidence_matters",
+    "bounded_interpretation",
+    "selected_current_direction",
+    "usable_action_or_permitted_draft",
+    "honest_uncertainty_or_observable_reassessment",
+    "consultation_specific_emotional_containment"
+  ],
+  "primary_block_contract": {
+    "analytical_or_instructional_primary_blocks": {
+      "examples": [
+        "evidence_and_significance",
+        "decision_logic",
+        "alternative_tradeoff",
+        "action_artifact",
+        "uncertainty_boundary",
+        "reassessment_trigger"
+      ],
+      "new_grounded_proposition_minimum_per_block": 1,
+      "distinct_product_function_owner_required": true,
+      "prior_conclusion_rephrasing_prohibited": true
+    },
+    "emotional_or_ritual_primary_blocks": {
+      "examples": [
+        "openingLetter",
+        "emotional_containment",
+        "closingLines"
+      ],
+      "new_factual_proposition_required": false,
+      "distinct_consultation_specific_emotional_or_ritual_function_required": true,
+      "selected_decision_repetition_prohibited": true,
+      "action_instruction_repetition_prohibited": true,
+      "unsupported_facts_prohibited": true,
+      "generic_filler_prohibited": true,
+      "false_certainty_prohibited": true
+    },
+    "good_emotional_example": "今夜の沈黙だけで、この関係の答えまで決める必要はありません。",
+    "bad_repetition_example": "今は待ちましょう。今日は待つだけで大丈夫です。",
+    "internal_proposition_ids_must_not_be_customer_visible": true
+  },
+  "full_product_threshold": {
+    "mandatory_value_functions": [
+      "consultation_core",
+      "evidence_and_significance",
+      "decision_logic",
+      "action_artifact",
+      "emotional_containment"
+    ],
+    "at_least_one_boundary_function": [
+      "uncertainty_boundary",
+      "reassessment_trigger"
+    ],
+    "grounding_failure_routing": {
+      "clarification_budget_unused_and_one_answer_can_determine_materiality": "needs_one_clarifying_answer",
+      "clarification_budget_exhausted_and_mandatory_functions_not_groundable": "not_full_product_candidate",
+      "consultation_is_non_material": "not_full_product_candidate",
+      "safety_has_priority": "safety_blocked",
+      "mandatory_functions_are_groundable": "full_paid_ready_candidate"
+    },
+    "logically_complete_but_emotionally_cold_is_full_paid_ready": false,
+    "length_or_section_count_cannot_substitute": true
+  },
+  "commercial_boundary": {
+    "no_charge_before_product_eligibility_is_established": true,
+    "full_paid_ready_is_a_planning_classification_only": true,
+    "payment_capability_created_by_this_plan": false,
+    "jpy980_runtime_readiness_created_by_this_plan": false
+  },
+  "future_re_review_ceiling": {
+    "experienceProductJudgment": "plausibly_worth_jpy980",
+    "still_does_not_establish": [
+      "jpy980RuntimeReadiness",
+      "globalQ0Completion",
+      "providerQuality",
+      "productionRuntime",
+      "paymentReadiness"
+    ]
+  }
+}

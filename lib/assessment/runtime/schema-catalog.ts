@@ -55,6 +55,9 @@ type RuntimeStageCatalogManifest = {
     grounded_schema_version?: string;
     grounded_schema_path?: string;
     grounded_schema_sha256?: string;
+    clarification_schema_version?: string;
+    clarification_schema_path?: string;
+    clarification_schema_sha256?: string;
   }>;
 };
 
@@ -2076,7 +2079,7 @@ export async function loadM2P4AuthorityIntegrityRuntimeStageCatalog() {
   };
 }
 
-export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
+export async function loadM2P4ClarificationIntegrationRuntimeStageCatalog() {
   const repositoryRoot = process.cwd();
   const contractsRoot = path.join(
     repositoryRoot,
@@ -2091,37 +2094,161 @@ export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
   const predecessorManifest = (await readJson(
     path.join(contractsRoot, "runtime-stage-catalog-v11.json"),
   )) as unknown as RuntimeStageCatalogManifest;
-  const predecessorCatalog =
-    await loadM2P4AuthorityIntegrityRuntimeStageCatalog();
-
+  const predecessor = await loadM2P4AuthorityIntegrityRuntimeStageCatalog();
   if (
     runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
     runtimeManifest.catalog_version !== "runtime-stage-catalog-v12.0.0" ||
-    runtimeManifest.prompt_bundle_version !==
-      "prompt-bundle-runtime-v12.0.0" ||
-    runtimeManifest.schema_set_version !==
-      "pipeline-schema-runtime-v5.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v12.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
     runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
-    runtimeManifest.baseline !==
-      "b495b958a8fd8dfe203380ca0036140f83f4f4dd" ||
+    runtimeManifest.baseline !== "9f397ed41f3f284e7a984ad139768af16373a747" ||
     runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
-    predecessorManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
-    predecessorManifest.catalog_version !== "runtime-stage-catalog-v11.0.0" ||
-    predecessorManifest.prompt_bundle_version !==
-      "prompt-bundle-runtime-v11.0.0" ||
-    predecessorManifest.schema_set_version !==
-      runtimeManifest.schema_set_version ||
-    predecessorManifest.stage_topology_version !==
-      runtimeManifest.stage_topology_version ||
-    predecessorManifest.baseline !==
-      "e8db575adc9636032997c8e3d43f8a56e38fae15" ||
-    predecessorCatalog.catalogVersion !== predecessorManifest.catalog_version ||
-    predecessorCatalog.promptBundleVersion !==
-      predecessorManifest.prompt_bundle_version ||
-    predecessorCatalog.schemaSetVersion !==
-      predecessorManifest.schema_set_version ||
-    predecessorCatalog.stageTopologyVersion !==
-      predecessorManifest.stage_topology_version ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+  const order: M2StageId[] = [
+    "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
+  ];
+  const changed = new Set<M2StageId>(["PB-01", "PB-04", "PB-05", "PB-06"]);
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    if (
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      (!changed.has(stageId) && JSON.stringify(stage) !== JSON.stringify(oldStage)) ||
+      (changed.has(stageId) &&
+        (stage.source !== "m2-p4-v1-a2-clarification-integration" ||
+          stage.prompt_version !== "v4.0.0"))
+    ) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    const providerProjection = toOpenAiStructuredOutputSchema(outputSchema);
+    assertOpenAIStructuredOutputSchema(providerProjection);
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(
+        `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`,
+      ),
+      developerPrompt: `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+export async function loadM2P4SemanticDepthRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v13.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v12.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4ClarificationIntegrationRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v13.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v13.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "d19d72e9a3f7e9fbbbd7fda9e11b131314030cea" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== "runtime-stage-catalog-v12.0.0" ||
+    predecessor.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" ||
+    predecessor.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    predecessor.stageTopologyVersion !== "split-base-candidate-v1" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
     !Array.isArray(runtimeManifest.stages) ||
     runtimeManifest.stages.length !== 7 ||
     !Array.isArray(predecessorManifest.stages) ||
@@ -2132,122 +2259,65 @@ export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
     throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
   }
 
-  const historicalManifest = (await readJson(
-    path.join(repositoryRoot, "ai", "prompts", "prompt-bundle.manifest.json"),
-  )) as unknown as PromptManifest;
-  const historicalCommon = historicalManifest.assets.find(
-    (asset) => asset.asset_id === "SHARED-COMMON",
-  );
   const common = runtimeManifest.common_prompt;
-  if (
-    !historicalCommon ||
-    common.inherited_from !==
-      "ai/prompts/prompt-bundle.manifest.json#SHARED-COMMON" ||
-    common.prompt_version !== historicalCommon.asset_version ||
-    common.prompt_path !==
-      path.posix.join("ai", "prompts", historicalCommon.relative_path) ||
-    common.prompt_sha256 !== historicalCommon.sha256
-  ) {
-    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
-  }
   const commonPrompt = await readFile(
-    path.join(
-      /*turbopackIgnore: true*/ repositoryRoot,
-      common.prompt_path,
-    ),
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
     "utf8",
   );
   if (hashText(commonPrompt) !== common.prompt_sha256) {
     throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
   }
 
-  const successorStages = new Map<
-    M2StageId,
-    { promptPath: string; promptHash: string; schemaName: string }
-  >([
-    [
-      "PB-05",
-      {
-        promptPath:
-          "lib/assessment/runtime/contracts/pb-05-directional-report-v4.developer.md",
-        promptHash:
-          "530fe831e8290270d499a44d8aae98b3756935feed1bcfc79612e05ff7695c9f",
-        schemaName: "pb_05_directional_report_v4",
-      },
-    ],
-    [
-      "PB-06",
-      {
-        promptPath:
-          "lib/assessment/runtime/contracts/pb-06-materiality-validator-v4.developer.md",
-        promptHash:
-          "3a9e0a2f18e401455b11a0d3ff5d40f1b82560fec01d425859a7822bd709ad6b",
-        schemaName: "pb_06_materiality_validator_v4",
-      },
-    ],
-  ]);
-  const expectedOrder: M2StageId[] = [
-    "PB-01",
-    "PB-01C",
-    "PB-02",
-    "PB-03",
-    "PB-04",
-    "PB-05",
-    "PB-06",
+  const order: M2StageId[] = [
+    "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
   ];
+  const withoutPromptIdentity = (stage: RuntimeStageCatalogManifest["stages"][number]) =>
+    Object.fromEntries(
+      Object.entries(stage).filter(
+        ([key]) =>
+          !["source", "prompt_version", "prompt_path", "prompt_sha256"].includes(
+            key,
+          ),
+      ),
+    );
   const definitions: StageDefinition[] = [];
-
-  for (const [index, stageId] of expectedOrder.entries()) {
+  for (const [index, stageId] of order.entries()) {
     const stage = runtimeManifest.stages[index];
-    const predecessor = predecessorManifest.stages[index];
-    const successor = successorStages.get(stageId);
-    if (
+    const oldStage = predecessorManifest.stages[index];
+    const commonIdentityInvalid =
       !stage ||
-      !predecessor ||
+      !oldStage ||
       stage.stage_id !== stageId ||
-      predecessor.stage_id !== stageId ||
       stage.sequence_number !== index + 1 ||
-      stage.sequence_number !== predecessor.sequence_number
-    ) {
-      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
-    }
-
-    if (!successor) {
-      if (JSON.stringify(stage) !== JSON.stringify(predecessor)) {
-        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
-      }
-    } else if (
-      stage.source !== "m2-p4-evaluator-disposition-successor" ||
-      stage.prompt_version !== "v4.0.0" ||
-      stage.prompt_path !== successor.promptPath ||
-      stage.prompt_sha256 !== successor.promptHash ||
-      stage.schema_name !== successor.schemaName ||
-      stage.schema_version !== predecessor.schema_version ||
-      stage.schema_path !== predecessor.schema_path ||
-      stage.schema_pointer !== predecessor.schema_pointer ||
-      stage.schema_sha256 !== predecessor.schema_sha256 ||
-      stage.grounded_schema_version !== predecessor.grounded_schema_version ||
-      stage.grounded_schema_path !== predecessor.grounded_schema_path ||
-      stage.grounded_schema_sha256 !== predecessor.grounded_schema_sha256
-    ) {
+      oldStage.stage_id !== stageId ||
+      oldStage.sequence_number !== index + 1;
+    const pb05IdentityInvalid =
+      stageId === "PB-05" &&
+      (!stage ||
+        !oldStage ||
+        stage.source !== "m2-p4-v1-b-semantic-depth-successor" ||
+        stage.prompt_version !== "v5.0.0" ||
+        stage.prompt_path !==
+          "lib/assessment/runtime/contracts/pb-05-semantic-depth-v1.developer.md" ||
+        stage.prompt_sha256 === oldStage.prompt_sha256 ||
+        JSON.stringify(withoutPromptIdentity(stage)) !==
+          JSON.stringify(withoutPromptIdentity(oldStage)));
+    const unchangedStageInvalid =
+      stageId !== "PB-05" &&
+      (!stage || !oldStage || JSON.stringify(stage) !== JSON.stringify(oldStage));
+    if (commonIdentityInvalid || pb05IdentityInvalid || unchangedStageInvalid) {
       throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
     }
 
     const stagePrompt = await readFile(
-      path.join(
-        /*turbopackIgnore: true*/ repositoryRoot,
-        stage.prompt_path,
-      ),
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
       "utf8",
     );
     if (hashText(stagePrompt) !== stage.prompt_sha256) {
       throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
     }
     const schemaText = await readFile(
-      path.join(
-        /*turbopackIgnore: true*/ repositoryRoot,
-        stage.schema_path,
-      ),
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
       "utf8",
     );
     if (hashText(schemaText) !== stage.schema_sha256) {
@@ -2255,14 +2325,12 @@ export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
     }
     const rootSchema = JSON.parse(schemaText) as JsonObject;
     const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
-    new Ajv2020({
-      allErrors: true,
-      strict: false,
-      validateFormats: false,
-    }).compile(outputSchema);
-    const providerProjection = toOpenAiStructuredOutputSchema(outputSchema);
-    assertOpenAIStructuredOutputSchema(providerProjection);
-
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    assertOpenAIStructuredOutputSchema(
+      toOpenAiStructuredOutputSchema(outputSchema),
+    );
     const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`;
     const definition: StageDefinition = {
       stageId,
@@ -2277,15 +2345,797 @@ export async function loadM2P4EvaluatorDispositionRuntimeStageCatalog() {
     };
     if (stageId === "PB-01") {
       if (
-        stage.grounded_schema_version !== "pipeline-schema-base-v2.0.0" ||
         stage.grounded_schema_path !== stage.schema_path ||
-        stage.grounded_schema_sha256 !== stage.schema_sha256
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
       ) {
         throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
       }
       definition.groundedOutputSchema = structuredClone(outputSchema);
       definition.groundedSchemaVersion = stage.grounded_schema_version;
       definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
+
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+export async function loadM2P4SemanticQualityRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v14.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v13.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4SemanticDepthRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v14.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v14.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "e21c9b571426160703b1112c9057cc26c7738a0a" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== "runtime-stage-catalog-v13.0.0" ||
+    predecessor.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" ||
+    predecessor.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    predecessor.stageTopologyVersion !== "split-base-candidate-v1" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    !Array.isArray(predecessorManifest.stages) ||
+    predecessorManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+
+  const order: M2StageId[] = [
+    "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
+  ];
+  const withoutPromptIdentity = (
+    stage: RuntimeStageCatalogManifest["stages"][number],
+  ) =>
+    Object.fromEntries(
+      Object.entries(stage).filter(
+        ([key]) =>
+          !["source", "prompt_version", "prompt_path", "prompt_sha256"].includes(
+            key,
+          ),
+      ),
+    );
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    const commonIdentityInvalid =
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      oldStage.sequence_number !== index + 1;
+    const pb06IdentityInvalid =
+      stageId === "PB-06" &&
+      (!stage ||
+        !oldStage ||
+        stage.source !== "m2-p4-v1-c-semantic-quality-successor" ||
+        stage.prompt_version !== "v5.0.0" ||
+        stage.prompt_path !==
+          "lib/assessment/runtime/contracts/pb-06-semantic-quality-v1.developer.md" ||
+        stage.prompt_sha256 === oldStage.prompt_sha256 ||
+        JSON.stringify(withoutPromptIdentity(stage)) !==
+          JSON.stringify(withoutPromptIdentity(oldStage)));
+    const unchangedStageInvalid =
+      stageId !== "PB-06" &&
+      (!stage || !oldStage || JSON.stringify(stage) !== JSON.stringify(oldStage));
+    if (commonIdentityInvalid || pb06IdentityInvalid || unchangedStageInvalid) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    assertOpenAIStructuredOutputSchema(
+      toOpenAiStructuredOutputSchema(outputSchema),
+    );
+    const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`;
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(developerPrompt),
+      developerPrompt,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
+
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+export async function loadM2P4QualityReassessmentRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v15.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v14.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4SemanticQualityRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v15.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v15.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "e7ae51aa96bbb3d1e791ac957e26bb8918d10547" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== "runtime-stage-catalog-v14.0.0" ||
+    predecessor.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0" ||
+    predecessor.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    predecessor.stageTopologyVersion !== "split-base-candidate-v1" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    !Array.isArray(predecessorManifest.stages) ||
+    predecessorManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+
+  const order: M2StageId[] = [
+    "PB-01", "PB-01C", "PB-02", "PB-03", "PB-04", "PB-05", "PB-06",
+  ];
+  const expectedChangedPromptIdentity = {
+    "PB-04": {
+      source: "m2-p4-v1-c-r1-quality-reassessment-successor",
+      promptVersion: "v5.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-04-quality-reassessment-v1.developer.md",
+    },
+    "PB-05": {
+      source: "m2-p4-v1-c-r1-quality-reassessment-successor",
+      promptVersion: "v6.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-05-quality-reassessment-v1.developer.md",
+    },
+  } as const;
+  const withoutPromptIdentity = (
+    stage: RuntimeStageCatalogManifest["stages"][number],
+  ) =>
+    Object.fromEntries(
+      Object.entries(stage).filter(
+        ([key]) =>
+          !["source", "prompt_version", "prompt_path", "prompt_sha256"].includes(
+            key,
+          ),
+      ),
+    );
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    const commonIdentityInvalid =
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      oldStage.sequence_number !== index + 1;
+    const changedIdentity =
+      stageId === "PB-04" || stageId === "PB-05"
+        ? expectedChangedPromptIdentity[stageId]
+        : null;
+    const changedStageInvalid =
+      changedIdentity !== null &&
+      (!stage ||
+        !oldStage ||
+        stage.source !== changedIdentity.source ||
+        stage.prompt_version !== changedIdentity.promptVersion ||
+        stage.prompt_path !== changedIdentity.promptPath ||
+        stage.prompt_sha256 === oldStage.prompt_sha256 ||
+        JSON.stringify(withoutPromptIdentity(stage)) !==
+          JSON.stringify(withoutPromptIdentity(oldStage)));
+    const unchangedStageInvalid =
+      changedIdentity === null &&
+      (!stage || !oldStage || JSON.stringify(stage) !== JSON.stringify(oldStage));
+    if (commonIdentityInvalid || changedStageInvalid || unchangedStageInvalid) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    assertOpenAIStructuredOutputSchema(
+      toOpenAiStructuredOutputSchema(outputSchema),
+    );
+    const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`;
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(developerPrompt),
+      developerPrompt,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
+
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+export async function loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v16.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v15.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4QualityReassessmentRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v16.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v16.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "ecef2470e34d1a9fe82c0fc5683735d6aa5394f0" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== "runtime-stage-catalog-v15.0.0" ||
+    predecessor.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" ||
+    predecessor.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    predecessor.stageTopologyVersion !== "split-base-candidate-v1" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    !Array.isArray(predecessorManifest.stages) ||
+    predecessorManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+
+  const order: M2StageId[] = [
+    "PB-01",
+    "PB-01C",
+    "PB-02",
+    "PB-03",
+    "PB-04",
+    "PB-05",
+    "PB-06",
+  ];
+  const expectedChangedPromptIdentity = {
+    "PB-04": {
+      source: "m2-p4-v1-d-step2b-c1-sent-draft-boundary-successor",
+      promptVersion: "v6.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-04-sent-message-draft-authority-v1.developer.md",
+    },
+    "PB-05": {
+      source: "m2-p4-v1-d-step2b-c1-draft-context-fidelity-successor",
+      promptVersion: "v7.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-05-draft-context-source-fidelity-v1.developer.md",
+    },
+    "PB-06": {
+      source: "m2-p4-v1-d-step2b-c1-sent-unsent-quality-successor",
+      promptVersion: "v6.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-06-sent-unsent-semantic-quality-v1.developer.md",
+    },
+  } as const;
+  const withoutPromptIdentity = (
+    stage: RuntimeStageCatalogManifest["stages"][number],
+  ) =>
+    Object.fromEntries(
+      Object.entries(stage).filter(
+        ([key]) =>
+          !["source", "prompt_version", "prompt_path", "prompt_sha256"].includes(
+            key,
+          ),
+      ),
+    );
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    const commonIdentityInvalid =
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      oldStage.sequence_number !== index + 1;
+    const changedIdentity =
+      stageId === "PB-04" || stageId === "PB-05" || stageId === "PB-06"
+        ? expectedChangedPromptIdentity[stageId]
+        : null;
+    const changedStageInvalid =
+      changedIdentity !== null &&
+      (!stage ||
+        !oldStage ||
+        stage.source !== changedIdentity.source ||
+        stage.prompt_version !== changedIdentity.promptVersion ||
+        stage.prompt_path !== changedIdentity.promptPath ||
+        stage.prompt_sha256 === oldStage.prompt_sha256 ||
+        JSON.stringify(withoutPromptIdentity(stage)) !==
+          JSON.stringify(withoutPromptIdentity(oldStage)));
+    const unchangedStageInvalid =
+      changedIdentity === null &&
+      (!stage || !oldStage || JSON.stringify(stage) !== JSON.stringify(oldStage));
+    if (commonIdentityInvalid || changedStageInvalid || unchangedStageInvalid) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    assertOpenAIStructuredOutputSchema(
+      toOpenAiStructuredOutputSchema(outputSchema),
+    );
+    const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`;
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(developerPrompt),
+      developerPrompt,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
+    }
+    definitions.push(definition);
+  }
+
+  return {
+    catalogVersion: runtimeManifest.catalog_version,
+    promptBundleVersion: runtimeManifest.prompt_bundle_version,
+    schemaSetVersion: runtimeManifest.schema_set_version,
+    stageTopologyVersion: runtimeManifest.stage_topology_version,
+    definitions,
+  };
+}
+
+
+export async function loadM2P4FinalProductRecoveryRuntimeStageCatalog() {
+  const repositoryRoot = process.cwd();
+  const contractsRoot = path.join(
+    repositoryRoot,
+    "lib",
+    "assessment",
+    "runtime",
+    "contracts",
+  );
+  const runtimeManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v17.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessorManifest = (await readJson(
+    path.join(contractsRoot, "runtime-stage-catalog-v16.json"),
+  )) as unknown as RuntimeStageCatalogManifest;
+  const predecessor = await loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog();
+  if (
+    runtimeManifest.schema_version !== "m2-p4-runtime-stage-catalog-v2" ||
+    runtimeManifest.catalog_version !== "runtime-stage-catalog-v17.0.0" ||
+    runtimeManifest.prompt_bundle_version !== "prompt-bundle-runtime-v17.0.0" ||
+    runtimeManifest.schema_set_version !== "pipeline-schema-runtime-v6.0.0" ||
+    runtimeManifest.stage_topology_version !== "split-base-candidate-v1" ||
+    runtimeManifest.baseline !== "37d98d405532009ac1057dfb5f44bb034ed64d9b" ||
+    runtimeManifest.hash_algorithm !== "sha256-utf8-lf" ||
+    predecessor.catalogVersion !== "runtime-stage-catalog-v16.0.0" ||
+    predecessor.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" ||
+    predecessor.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+    predecessor.stageTopologyVersion !== "split-base-candidate-v1" ||
+    predecessor.catalogVersion !== predecessorManifest.catalog_version ||
+    !Array.isArray(runtimeManifest.stages) ||
+    runtimeManifest.stages.length !== 7 ||
+    !Array.isArray(predecessorManifest.stages) ||
+    predecessorManifest.stages.length !== 7 ||
+    JSON.stringify(runtimeManifest.common_prompt) !==
+      JSON.stringify(predecessorManifest.common_prompt)
+  ) {
+    throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+  }
+
+  const common = runtimeManifest.common_prompt;
+  const commonPrompt = await readFile(
+    path.join(/*turbopackIgnore: true*/ repositoryRoot, common.prompt_path),
+    "utf8",
+  );
+  if (hashText(commonPrompt) !== common.prompt_sha256) {
+    throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+  }
+
+  const order: M2StageId[] = [
+    "PB-01",
+    "PB-01C",
+    "PB-02",
+    "PB-03",
+    "PB-04",
+    "PB-05",
+    "PB-06",
+  ];
+  const expectedChangedPromptIdentity = {
+    "PB-04": {
+      source: "m2-p4-v1-d-v17-final-product-recovery",
+      promptVersion: "v7.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-04-v17-product-recovery-v1.developer.md",
+    },
+    "PB-05": {
+      source: "m2-p4-v1-d-v17-final-product-recovery",
+      promptVersion: "v8.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-05-v17-customer-product-v1.developer.md",
+    },
+    "PB-06": {
+      source: "m2-p4-v1-d-v17-final-product-recovery",
+      promptVersion: "v7.0.0",
+      promptPath:
+        "lib/assessment/runtime/contracts/pb-06-v17-product-quality-v1.developer.md",
+    },
+  } as const;
+  const withoutPromptIdentity = (
+    stage: RuntimeStageCatalogManifest["stages"][number],
+  ) =>
+    Object.fromEntries(
+      Object.entries(stage).filter(
+        ([key]) =>
+          !["source", "prompt_version", "prompt_path", "prompt_sha256"].includes(
+            key,
+          ),
+      ),
+    );
+  const definitions: StageDefinition[] = [];
+  for (const [index, stageId] of order.entries()) {
+    const stage = runtimeManifest.stages[index];
+    const oldStage = predecessorManifest.stages[index];
+    const commonIdentityInvalid =
+      !stage ||
+      !oldStage ||
+      stage.stage_id !== stageId ||
+      stage.sequence_number !== index + 1 ||
+      oldStage.stage_id !== stageId ||
+      oldStage.sequence_number !== index + 1;
+    const changedIdentity =
+      stageId === "PB-04" || stageId === "PB-05" || stageId === "PB-06"
+        ? expectedChangedPromptIdentity[stageId]
+        : null;
+    const changedStageInvalid =
+      changedIdentity !== null &&
+      (!stage ||
+        !oldStage ||
+        stage.source !== changedIdentity.source ||
+        stage.prompt_version !== changedIdentity.promptVersion ||
+        stage.prompt_path !== changedIdentity.promptPath ||
+        stage.prompt_sha256 === oldStage.prompt_sha256 ||
+        JSON.stringify(withoutPromptIdentity(stage)) !==
+          JSON.stringify(withoutPromptIdentity(oldStage)));
+    const unchangedStageInvalid =
+      changedIdentity === null &&
+      (!stage || !oldStage || JSON.stringify(stage) !== JSON.stringify(oldStage));
+    if (commonIdentityInvalid || changedStageInvalid || unchangedStageInvalid) {
+      throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+    }
+
+    const stagePrompt = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.prompt_path),
+      "utf8",
+    );
+    if (hashText(stagePrompt) !== stage.prompt_sha256) {
+      throw new M2RuntimeError("M2_PROMPT_HASH_MISMATCH");
+    }
+    const schemaText = await readFile(
+      path.join(/*turbopackIgnore: true*/ repositoryRoot, stage.schema_path),
+      "utf8",
+    );
+    if (hashText(schemaText) !== stage.schema_sha256) {
+      throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+    }
+    const rootSchema = JSON.parse(schemaText) as JsonObject;
+    const outputSchema = selectPointerSchema(rootSchema, stage.schema_pointer);
+    new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+      outputSchema,
+    );
+    assertOpenAIStructuredOutputSchema(
+      toOpenAiStructuredOutputSchema(outputSchema),
+    );
+    const developerPrompt = `${canonicalText(commonPrompt)}\n\n${canonicalText(stagePrompt)}`;
+    const definition: StageDefinition = {
+      stageId,
+      sequenceNumber: index + 1,
+      promptVersion: stage.prompt_version,
+      promptHash: hashText(developerPrompt),
+      developerPrompt,
+      schemaName: stage.schema_name,
+      schemaVersion: stage.schema_version,
+      schemaHash: hashJson(outputSchema),
+      outputSchema,
+    };
+    if (stageId === "PB-01") {
+      if (
+        stage.grounded_schema_path !== stage.schema_path ||
+        stage.grounded_schema_sha256 !== stage.schema_sha256 ||
+        !stage.clarification_schema_path ||
+        !stage.clarification_schema_version ||
+        !stage.clarification_schema_sha256
+      ) {
+        throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID");
+      }
+      definition.groundedOutputSchema = structuredClone(outputSchema);
+      definition.groundedSchemaVersion = stage.grounded_schema_version;
+      definition.groundedSchemaHash = hashJson(outputSchema);
+      const clarificationText = await readFile(
+        path.join(
+          /*turbopackIgnore: true*/ repositoryRoot,
+          stage.clarification_schema_path,
+        ),
+        "utf8",
+      );
+      if (hashText(clarificationText) !== stage.clarification_schema_sha256) {
+        throw new M2RuntimeError("M2_SCHEMA_HASH_MISMATCH");
+      }
+      const clarificationSchema = JSON.parse(clarificationText) as JsonObject;
+      new Ajv2020({ allErrors: true, strict: false, validateFormats: false }).compile(
+        clarificationSchema,
+      );
+      assertOpenAIStructuredOutputSchema(
+        toOpenAiStructuredOutputSchema(clarificationSchema),
+      );
+      definition.clarificationOutputSchema = clarificationSchema;
+      definition.clarificationSchemaVersion = stage.clarification_schema_version;
+      definition.clarificationSchemaHash = hashJson(clarificationSchema);
     }
     definitions.push(definition);
   }

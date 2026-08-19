@@ -5,26 +5,20 @@ import { CustomerDraftCopyButton } from "@/components/runtime/CustomerDraftCopyB
 import type { CustomerAssessmentExperienceProjectionV2 } from "@/lib/assessment/runtime/customer-assessment-experience-projection-v2";
 import styles from "./CustomerAssessmentNote.module.css";
 
-type BaseProjection = CustomerAssessmentExperienceProjectionV2["baseProjection"];
-type DecisionCode = BaseProjection["decisionCode"];
-type PlanItem = NonNullable<
-  BaseProjection["optionalDetails"]["expandedPlan"]
->[number];
-type PlanPhase = PlanItem["phase"];
+type DecisionCode =
+  CustomerAssessmentExperienceProjectionV2["baseProjection"]["decisionCode"];
+type PlanPhase = NonNullable<
+  CustomerAssessmentExperienceProjectionV2["baseProjection"]["optionalDetails"]["expandedPlan"]
+>[number]["phase"];
 
 const decisionLabels: Record<DecisionCode, string> = {
   reply_now: "今、返信する",
   send_now: "今、送る",
-  wait_and_reassess: "今夜は送らず、次の材料を待つ",
+  wait_and_reassess: "今は送らず、次の材料を待つ",
   pause_additional_contact: "追加の連絡を止める",
 };
 
-const nullDraftMessages: Partial<Record<DecisionCode, string>> = {
-  wait_and_reassess:
-    "今は送らず、次の判断材料を待つため、\n送信文案は表示していません。",
-  pause_additional_contact:
-    "追加の連絡を止める判断のため、\n送信文案は表示していません。",
-};
+const futureReassessmentLabel = "その時点で状況を見直す";
 
 const phaseLabels: Record<PlanPhase, string> = {
   tonight: "今夜",
@@ -38,29 +32,20 @@ function normalizedExactKey(value: string) {
   return value.replace(/\s+/gu, " ").trim();
 }
 
-function selectExactText(value: string | null | undefined, seen: Set<string>) {
-  if (!value) return null;
+function takeDistinct(value: string, seen: Set<string>) {
   const key = normalizedExactKey(value);
-  if (key.length === 0 || seen.has(key)) return null;
+  if (seen.has(key)) return null;
   seen.add(key);
   return value;
 }
 
-function selectExactTexts(values: readonly string[], seen: Set<string>) {
+function takeDistinctList(values: readonly string[], seen: Set<string>) {
   const selected: string[] = [];
   for (const value of values) {
-    const text = selectExactText(value, seen);
-    if (text !== null) selected.push(text);
+    const distinct = takeDistinct(value, seen);
+    if (distinct !== null) selected.push(distinct);
   }
   return selected;
-}
-
-function selectFirstExactText(values: readonly string[], seen: Set<string>) {
-  for (let index = 0; index < values.length; index += 1) {
-    const text = selectExactText(values[index], seen);
-    if (text !== null) return { text, index };
-  }
-  return null;
 }
 
 type Props = {
@@ -70,156 +55,141 @@ type Props = {
 export function CustomerAssessmentNote({ projection }: Props) {
   const baseProjection = projection.baseProjection;
   const requestedTopics = baseProjection.requestedTopics;
-  const visibleText = new Set<string>();
+  const draftText = baseProjection.finalDraft?.text ?? null;
 
-  const openingLine = selectExactText(projection.openingLine, visibleText);
-  const openingLetter = selectExactTexts(projection.openingLetter, visibleText);
-  const primaryReason = selectExactText(baseProjection.primaryReason, visibleText);
-  const situationReading = selectExactTexts(
+  const visibleText = new Set<string>([
+    normalizedExactKey(projection.openingLine),
+    normalizedExactKey(baseProjection.fixedLimitation),
+  ]);
+  if (draftText !== null) {
+    visibleText.add(normalizedExactKey(draftText));
+  }
+
+  const immediateAction = takeDistinct(
+    baseProjection.immediateAction.action,
+    visibleText,
+  );
+  const avoidGuidance = takeDistinctList(
+    baseProjection.immediateAction.avoid,
+    visibleText,
+  );
+  const reassessmentWhen = takeDistinct(
+    baseProjection.reassessment.when,
+    visibleText,
+  );
+  const reassessmentConditions = baseProjection.reassessment.conditions.flatMap(
+    (item) => {
+      const condition = takeDistinct(item.condition, visibleText);
+      return condition === null ? [] : [{ ...item, condition }];
+    },
+  );
+
+  const openingLetter = takeDistinctList(projection.openingLetter, visibleText);
+  const primaryReason = takeDistinct(
+    baseProjection.primaryReason,
+    visibleText,
+  );
+  const situationReading = takeDistinctList(
     projection.situationReading,
     visibleText,
   );
-  const materialUnknowns = selectExactTexts(
+  const materialUnknowns = takeDistinctList(
     projection.materialUnknowns,
     visibleText,
   );
-
-  const draftText =
-    baseProjection.finalDraft === null
-      ? null
-      : selectExactText(baseProjection.finalDraft.text, visibleText);
   const draftContext =
-    draftText === null
+    projection.draftContext === null
       ? null
-      : selectExactText(projection.draftContext, visibleText);
-  const draftAbsenceMessage =
-    baseProjection.finalDraft === null &&
-    requestedTopics.includes("draft_message")
-      ? nullDraftMessages[baseProjection.decisionCode] ?? null
-      : null;
+      : takeDistinct(projection.draftContext, visibleText);
 
   const messageTemperature =
     requestedTopics.includes("message_impact") &&
     baseProjection.messageTemperature !== null
-      ? [
-          {
-            label: "柔らかさ",
-            text: selectExactText(
-              baseProjection.messageTemperature.softness,
-              visibleText,
-            ),
-          },
-          {
-            label: "好意の強さ",
-            text: selectExactText(
-              baseProjection.messageTemperature.affection,
-              visibleText,
-            ),
-          },
-          {
-            label: "返信への圧力",
-            text: selectExactText(
-              baseProjection.messageTemperature.pressure,
-              visibleText,
-            ),
-          },
-          {
-            label: "調整した点",
-            text: selectExactText(
-              baseProjection.messageTemperature.adjustment,
-              visibleText,
-            ),
-          },
-        ].filter((item): item is { label: string; text: string } => item.text !== null)
-      : [];
+      ? {
+          softness: takeDistinct(
+            baseProjection.messageTemperature.softness,
+            visibleText,
+          ),
+          affection: takeDistinct(
+            baseProjection.messageTemperature.affection,
+            visibleText,
+          ),
+          pressure: takeDistinct(
+            baseProjection.messageTemperature.pressure,
+            visibleText,
+          ),
+          adjustment: takeDistinct(
+            baseProjection.messageTemperature.adjustment,
+            visibleText,
+          ),
+        }
+      : null;
+  const hasMessageTemperature =
+    messageTemperature !== null &&
+    Object.values(messageTemperature).some((value) => value !== null);
 
-  const relationshipSummary = requestedTopics.includes("relationship")
-    ? selectExactText(baseProjection.relationshipSummary, visibleText)
-    : null;
+  const relationshipSummary =
+    requestedTopics.includes("relationship") &&
+    baseProjection.relationshipSummary !== null
+      ? takeDistinct(baseProjection.relationshipSummary, visibleText)
+      : null;
 
-  const immediateAction = selectExactText(
-    baseProjection.immediateAction.action,
-    visibleText,
-  );
-  const actionsToAvoid = selectExactTexts(
-    baseProjection.immediateAction.avoid,
-    visibleText,
-  );
-  const primaryActionRationale = selectFirstExactText(
+  const actionRationales = takeDistinctList(
     projection.actionRationales,
     visibleText,
   );
-  const remainingActionRationaleSource =
-    primaryActionRationale === null
-      ? projection.actionRationales
-      : projection.actionRationales.slice(primaryActionRationale.index + 1);
+  const primaryActionRationale = actionRationales[0] ?? null;
+  const remainingActionRationales = actionRationales.slice(1);
 
-  const reassessmentWhen = selectExactText(
-    baseProjection.reassessment.when,
-    visibleText,
-  );
-  const reassessmentConditions = baseProjection.reassessment.conditions
-    .map((item) => ({
-      condition: selectExactText(item.condition, visibleText),
-      resultingDirection: item.resultingDirection,
-    }))
-    .filter(
-      (item): item is { condition: string; resultingDirection: DecisionCode } =>
-        item.condition !== null,
-    );
+  const expandedPlan = requestedTopics.includes("next_three_days")
+    ? (baseProjection.optionalDetails.expandedPlan ?? [])
+        .map((item) => ({
+          ...item,
+          action: takeDistinct(item.action, visibleText),
+          avoid:
+            item.avoid === null ? null : takeDistinct(item.avoid, visibleText),
+        }))
+        .filter((item) => item.action !== null || item.avoid !== null)
+    : [];
 
-  const expandedPlan =
-    requestedTopics.includes("next_three_days") &&
-    baseProjection.optionalDetails.expandedPlan
-      ? baseProjection.optionalDetails.expandedPlan
-          .map((item) => ({
-            phase: item.phase,
-            action: selectExactText(item.action, visibleText),
-            avoid: selectExactText(item.avoid, visibleText),
-          }))
-          .filter((item) => item.action !== null || item.avoid !== null)
-      : [];
-
-  // Core closing and limitation text take precedence over optional disclosure.
-  const closingLines = selectExactTexts(projection.closingLines, visibleText).slice(
-    0,
-    2,
-  );
-  const fixedLimitation = selectExactText(
-    baseProjection.fixedLimitation,
-    visibleText,
-  );
-
-  const possibleInterpretations = selectExactTexts(
+  const possibleInterpretations = takeDistinctList(
     projection.possibleInterpretations,
     visibleText,
   );
-  const secondaryActions = selectExactTexts(
+  const secondaryActions = takeDistinctList(
     baseProjection.immediateAction.secondaryActions,
     visibleText,
   );
-  const remainingActionRationales = selectExactTexts(
-    remainingActionRationaleSource,
-    visibleText,
-  );
-  const anxietyReframes = selectExactTexts(
+  const anxietyReframes = takeDistinctList(
     baseProjection.optionalDetails.anxietyReframe ?? [],
     visibleText,
   );
-  const planCommentary = selectExactTexts(
+  const planCommentary = takeDistinctList(
     baseProjection.optionalDetails.planCommentary ?? [],
     visibleText,
   );
-  const consultationLimitations = selectExactTexts(
+  const consultationLimitations = takeDistinctList(
     projection.consultationLimitations,
     visibleText,
   );
+  const closingLines = takeDistinctList(projection.closingLines, visibleText);
+
+  const hasReading =
+    primaryReason !== null ||
+    situationReading.length > 0 ||
+    materialUnknowns.length > 0;
+  const hasAction =
+    immediateAction !== null ||
+    avoidGuidance.length > 0 ||
+    primaryActionRationale !== null ||
+    reassessmentWhen !== null ||
+    reassessmentConditions.length > 0;
   const hasSecondaryDetail =
+    possibleInterpretations.length > 0 ||
     secondaryActions.length > 0 ||
     remainingActionRationales.length > 0 ||
     anxietyReframes.length > 0 ||
     planCommentary.length > 0 ||
-    possibleInterpretations.length > 0 ||
     consultationLimitations.length > 0;
 
   return (
@@ -231,7 +201,8 @@ export function CustomerAssessmentNote({ projection }: Props) {
           <span>月の返事</span>
         </div>
         <p className={styles.documentType}>恋のメッセージ鑑定ノート</p>
-        {openingLine ? <h1 id="customer-assessment-title">{openingLine}</h1> : null}
+        <p className={styles.sectionKicker}>この相談への返事</p>
+        <h1 id="customer-assessment-title">{projection.openingLine}</h1>
         <EditorialDivider variant="night" className={styles.headerDivider} />
         <div className={styles.currentAnswer}>
           <p>今の答え</p>
@@ -240,28 +211,40 @@ export function CustomerAssessmentNote({ projection }: Props) {
       </header>
 
       {openingLetter.length > 0 ? (
-        <section className={`${styles.section} ${styles.letterSection}`}>
-          <p className={styles.sectionKicker}>あなたへ</p>
+        <section className={[styles.section, styles.letterSection].join(" ")}>
+          <p className={styles.sectionKicker}>はじめに</p>
           <h2>月の返事からの短い手紙</h2>
           <div className={styles.letterBody}>
-            {openingLetter.map((paragraph, index) => (
-              <p key={`${index}:${paragraph}`}>{paragraph}</p>
+            {openingLetter.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
         </section>
       ) : null}
 
-      {primaryReason || situationReading.length > 0 ? (
+      {hasReading ? (
         <section className={styles.section}>
-          <p className={styles.sectionKicker}>いま見えていること</p>
+          <p className={styles.sectionKicker}>状況の整理</p>
           <h2>今の状況を読み解く</h2>
-          {primaryReason ? <p className={styles.situationLead}>{primaryReason}</p> : null}
+          {primaryReason !== null ? (
+            <p className={styles.situationLead}>{primaryReason}</p>
+          ) : null}
           {situationReading.length > 0 ? (
-            <div className={styles.observationBlock}>
-              <h3>確認できていること</h3>
+            <div className={styles.readingGroup}>
+              <h3>確かに言えること</h3>
               <ul className={styles.plainList}>
-                {situationReading.map((item, index) => (
-                  <li key={`${index}:${item}`}>{item}</li>
+                {situationReading.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {materialUnknowns.length > 0 ? (
+            <div className={[styles.readingGroup, styles.unknownBlock].join(" ")}>
+              <h3>まだ分からないこと</h3>
+              <ul className={styles.unknownList}>
+                {materialUnknowns.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
             </div>
@@ -269,118 +252,116 @@ export function CustomerAssessmentNote({ projection }: Props) {
         </section>
       ) : null}
 
-      {materialUnknowns.length > 0 ? (
-        <section className={`${styles.section} ${styles.unknownSection}`}>
-          <p className={styles.sectionKicker}>不安を事実にしないために</p>
-          <h2>まだ分からないこと</h2>
-          <ul className={styles.unknownList}>
-            {materialUnknowns.map((item, index) => (
-              <li key={`${index}:${item}`}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      {draftText ? (
-        <section className={`${styles.section} ${styles.draftSection}`}>
+      {draftText !== null ? (
+        <section className={[styles.section, styles.draftSection].join(" ")}>
           <p className={styles.sectionKicker}>そのまま使える文面</p>
           <h2>送信文案</h2>
           <p className={styles.draftText}>{draftText}</p>
           <CustomerDraftCopyButton key={draftText} text={draftText} />
-          {draftContext ? (
+          {draftContext !== null ? (
             <div className={styles.draftContext}>
               <h3>この文面にした理由</h3>
               <p>{draftContext}</p>
             </div>
           ) : null}
         </section>
-      ) : draftAbsenceMessage ? (
-        <section className={`${styles.section} ${styles.draftAbsenceSection}`}>
-          <p className={styles.sectionKicker}>送信文案</p>
-          <h2>今は文面を作らない判断です</h2>
-          <p className={styles.draftAbsenceText}>{draftAbsenceMessage}</p>
-        </section>
       ) : null}
 
-      {messageTemperature.length > 0 ? (
-        <section className={`${styles.section} ${styles.compactSection}`}>
-          <p className={styles.sectionKicker}>相手への届き方</p>
-          <h2>この文面の印象</h2>
+      {hasMessageTemperature && messageTemperature !== null ? (
+        <section className={[styles.section, styles.compactSection].join(" ")}>
+          <p className={styles.sectionKicker}>文面の温度</p>
+          <h2>この文面がどう届くか</h2>
           <dl className={styles.temperatureList}>
-            {messageTemperature.map((item) => (
-              <div key={item.label}>
-                <dt>{item.label}</dt>
-                <dd>{item.text}</dd>
+            {messageTemperature.softness !== null ? (
+              <div>
+                <dt>柔らかさ</dt>
+                <dd>{messageTemperature.softness}</dd>
               </div>
-            ))}
+            ) : null}
+            {messageTemperature.affection !== null ? (
+              <div>
+                <dt>好意の強さ</dt>
+                <dd>{messageTemperature.affection}</dd>
+              </div>
+            ) : null}
+            {messageTemperature.pressure !== null ? (
+              <div>
+                <dt>返信への圧力</dt>
+                <dd>{messageTemperature.pressure}</dd>
+              </div>
+            ) : null}
+            {messageTemperature.adjustment !== null ? (
+              <div>
+                <dt>調整した点</dt>
+                <dd>{messageTemperature.adjustment}</dd>
+              </div>
+            ) : null}
           </dl>
         </section>
       ) : null}
 
-      {relationshipSummary ? (
-        <section className={`${styles.section} ${styles.compactSection}`}>
+      {relationshipSummary !== null ? (
+        <section className={[styles.section, styles.compactSection].join(" ")}>
           <p className={styles.sectionKicker}>状況の見取り図</p>
           <h2>今の関係について</h2>
           <p className={styles.relationshipText}>{relationshipSummary}</p>
         </section>
       ) : null}
 
-      {immediateAction || actionsToAvoid.length > 0 ? (
-        <section className={`${styles.section} ${styles.actionSection}`}>
-          <p className={styles.sectionKicker}>いま</p>
+      {hasAction ? (
+        <section className={[styles.section, styles.actionSection].join(" ")}>
+          <p className={styles.sectionKicker}>次の一歩</p>
           <h2>今の動き方</h2>
-          {immediateAction ? (
+          {immediateAction !== null ? (
             <p className={styles.actionText}>{immediateAction}</p>
           ) : null}
-          {actionsToAvoid.length > 0 ? (
+          {avoidGuidance.length > 0 ? (
             <div className={styles.avoidBlock}>
               <h3>避けること</h3>
               <ul className={styles.plainList}>
-                {actionsToAvoid.map((item, index) => (
-                  <li key={`${index}:${item}`}>{item}</li>
+                {avoidGuidance.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
             </div>
           ) : null}
-          {primaryActionRationale ? (
+          {primaryActionRationale !== null ? (
             <div className={styles.rationaleBlock}>
               <h3>この動き方をすすめる理由</h3>
-              <p>{primaryActionRationale.text}</p>
+              <p>{primaryActionRationale}</p>
             </div>
           ) : null}
-        </section>
-      ) : null}
-
-      {reassessmentWhen || reassessmentConditions.length > 0 ? (
-        <section className={`${styles.section} ${styles.reassessmentSection}`}>
-          <p className={styles.sectionKicker}>次に判断するために</p>
-          <h2>見直す条件</h2>
-          {reassessmentWhen ? (
-            <p className={styles.reassessmentWhen}>{reassessmentWhen}</p>
-          ) : null}
-          {reassessmentConditions.length > 0 ? (
-            <ol className={styles.conditionList}>
-              {reassessmentConditions.map((item, index) => (
-                <li key={`${index}:${item.condition}:${item.resultingDirection}`}>
-                  <p>{item.condition}</p>
-                  <span>その場合：{decisionLabels[item.resultingDirection]}</span>
-                </li>
-              ))}
-            </ol>
+          {reassessmentWhen !== null || reassessmentConditions.length > 0 ? (
+            <div className={styles.reassessmentBlock}>
+              <h3>見直す条件</h3>
+              {reassessmentWhen !== null ? (
+                <p className={styles.reassessmentWhen}>{reassessmentWhen}</p>
+              ) : null}
+              {reassessmentConditions.length > 0 ? (
+                <ol className={styles.conditionList}>
+                  {reassessmentConditions.map((item, index) => (
+                    <li key={[index, item.condition].join(":")}>
+                      <p>{item.condition}</p>
+                      <span>{futureReassessmentLabel}</span>
+                    </li>
+                  ))}
+                </ol>
+              ) : null}
+            </div>
           ) : null}
         </section>
       ) : null}
 
       {expandedPlan.length > 0 ? (
-        <section className={`${styles.section} ${styles.compactSection}`}>
+        <section className={[styles.section, styles.compactSection].join(" ")}>
           <p className={styles.sectionKicker}>次の判断まで</p>
           <h2>これからの流れ</h2>
           <ol className={styles.planList}>
             {expandedPlan.map((item, index) => (
-              <li key={`${index}:${item.phase}`}>
+              <li key={[index, item.phase, item.action].join(":")}>
                 <span>{phaseLabels[item.phase]}</span>
-                {item.action ? <strong>{item.action}</strong> : null}
-                {item.avoid ? <p>避けること：{item.avoid}</p> : null}
+                {item.action !== null ? <strong>{item.action}</strong> : null}
+                {item.avoid !== null ? <p>避けること：{item.avoid}</p> : null}
               </li>
             ))}
           </ol>
@@ -392,68 +373,68 @@ export function CustomerAssessmentNote({ projection }: Props) {
           <summary>詳しい補足を見る</summary>
           <div className={styles.secondaryBody}>
             {possibleInterpretations.length > 0 ? (
-              <section>
-                <h2>考えられる受け取られ方</h2>
+              <div className={styles.secondaryGroup}>
+                <h2>可能性として見ていること</h2>
                 <ul className={styles.plainList}>
-                  {possibleInterpretations.map((item, index) => (
-                    <li key={`${index}:${item}`}>{item}</li>
+                  {possibleInterpretations.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
-              </section>
+              </div>
             ) : null}
             {secondaryActions.length > 0 ? (
-              <section>
+              <div className={styles.secondaryGroup}>
                 <h2>ほかにできること</h2>
                 <ul className={styles.plainList}>
-                  {secondaryActions.map((item, index) => (
-                    <li key={`${index}:${item}`}>{item}</li>
+                  {secondaryActions.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
-              </section>
+              </div>
             ) : null}
             {remainingActionRationales.length > 0 ? (
-              <section>
-                <h2>動き方についての補足</h2>
-                {remainingActionRationales.map((paragraph, index) => (
-                  <p key={`${index}:${paragraph}`}>{paragraph}</p>
+              <div className={styles.secondaryGroup}>
+                <h2>この動き方について</h2>
+                {remainingActionRationales.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
-              </section>
+              </div>
             ) : null}
             {anxietyReframes.length > 0 ? (
-              <section>
+              <div className={styles.secondaryGroup}>
                 <h2>不安を見直すヒント</h2>
-                {anxietyReframes.map((paragraph, index) => (
-                  <p key={`${index}:${paragraph}`}>{paragraph}</p>
+                {anxietyReframes.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
-              </section>
+              </div>
             ) : null}
             {planCommentary.length > 0 ? (
-              <section>
+              <div className={styles.secondaryGroup}>
                 <h2>行動計画の補足</h2>
-                {planCommentary.map((paragraph, index) => (
-                  <p key={`${index}:${paragraph}`}>{paragraph}</p>
+                {planCommentary.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
-              </section>
+              </div>
             ) : null}
             {consultationLimitations.length > 0 ? (
-              <section>
-                <h2>この鑑定で扱える範囲</h2>
-                {consultationLimitations.map((paragraph, index) => (
-                  <p key={`${index}:${paragraph}`}>{paragraph}</p>
+              <div className={styles.secondaryGroup}>
+                <h2>この鑑定で確認できないこと</h2>
+                {consultationLimitations.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
-              </section>
+              </div>
             ) : null}
           </div>
         </details>
       ) : null}
 
       {closingLines.length > 0 ? (
-        <section className={`${styles.section} ${styles.closingSection}`}>
-          <p className={styles.sectionKicker}>あなたのペースに戻るために</p>
+        <section className={[styles.section, styles.closingSection].join(" ")}>
+          <p className={styles.sectionKicker}>結びに</p>
           <h2>月の返事から最後に</h2>
           <div className={styles.closingBody}>
-            {closingLines.map((paragraph, index) => (
-              <p key={`${index}:${paragraph}`}>{paragraph}</p>
+            {closingLines.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
         </section>
@@ -464,7 +445,7 @@ export function CustomerAssessmentNote({ projection }: Props) {
           この鑑定ノートは、入力された情報をAIが整理・分析した判断材料です。
           相手の本心や返信、復縁、将来の結果を断定・保証するものではありません。
         </p>
-        {fixedLimitation ? <p>{fixedLimitation}</p> : null}
+        <p>{baseProjection.fixedLimitation}</p>
       </footer>
     </article>
   );

@@ -1,185 +1,219 @@
-# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1 Review
+# M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B Review
 
 ## Status
 
-`reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review`
+`r2_b_implemented_pending_human_chatgpt_visual_product_review`
 
-Accepted Product Doctrine、accepted `CustomerAssessmentExperienceProjectionV2`、R2-B architecture、
-navy / paper / gold Visual Shell、鑑定体験と情報量を変更せず、renderer-owned action heading の
-time-neutral 化と mobile current-answer layout だけを補正した。
+accepted `CustomerAssessmentExperienceProjectionV2` を唯一のExperience projection inputとして、
+顧客向け「恋のメッセージ鑑定ノート」をReassuring Assessment Experience Doctrineに沿って実装した。
 
-Desktop と 399px mobile の部分的な Human / ChatGPT Visual Review evidence は PASS である。
-ただし最終 Human Visual Review、ChatGPT Visual Review、Product Owner Experience Review は未完了で、
-この補正は final JPY980 readiness を確立しない。
+これはR2-B本体実装である。R2-CのHuman / ChatGPT Visual/Product Reviewは実行していない。
 
-## Baseline and exact scope
+- R2-C: unauthorized / not executed
+- experienceProductJudgment: pending
+- JPY980 readiness: false
+- globalQ0Completion: false
 
-- Branch: `fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy`
-- Exact baseline: `e509405935e82d7079023609b2d852d51f286f3e`
-- Baseline parent: `89a6d55fdf3845451e80f1ee21dc648b224bcc9d`
-- Main / origin-main: `61e33a10e195fad17e253a6b9719217e1992f273`
-- Exact scope: `6/6`
-- Updated: `6`
-- New: `0`
+## Authority preflight
 
-Updated:
+- Exact parent / R2-A Acceptance + R2-B Authorization:
+  `1229627588e3c6ccd41ea7ea32751b8b8ac79c6e`
+- R2-A implementation:
+  `5070c02267f49e1e0095ce2e46fb106b886f7df5`
+- Main / origin-main:
+  `61e33a10e195fad17e253a6b9719217e1992f273`
+- Branch:
+  `feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note`
+- Preflight worktree: clean
+- Preflight stash: empty
+- Target branch before creation: local / tracking / remote absent
+- Historical R2-B refs: exact SHA一致、read-only
+
+既存branchのreset、overwrite、rebase、cherry-pickは行っていない。
+
+## Exact scope
+
+Exact `9/9`: `4 UPDATE + 5 NEW`
+
+UPDATE:
 
 1. `components/runtime/CustomerAssessmentNote.tsx`
 2. `components/runtime/CustomerAssessmentNote.module.css`
-3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json`
-4. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json`
-5. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs`
-6. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md`
+3. `components/runtime/CustomerDraftCopyButton.tsx`
+4. `app/review/runtime/v12/page.tsx`
 
-Review route、9 fixtures、`CustomerDraftCopyButton.tsx` は baseline blob のまま変更していない。
-既存の exact copy、成功通知、失敗通知をそのまま使用する。
+NEW:
 
-## Component boundary
+1. `lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts`
+2. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json`
+3. `evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json`
+4. `scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs`
+5. `docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md`
 
-- `CustomerAssessmentNote` の入力は
+10th pathは使用していない。
+
+## Component and source boundary
+
+- `CustomerAssessmentNote` のpropは
   `projection: CustomerAssessmentExperienceProjectionV2` のみ。
-- 既存 V1 概念は `projection.baseProjection` からだけ読む。
-- `CustomerAssessmentProjectionV1`、Full Report、Runtime result、Provider output、Stage output、
-  diagnostic artifact は component に入らない。
-- report schema、case ID、fixture ID による表示分岐はない。
-- fact ID、Decision enum、schema、request/run ID、usage、diagnostic metadata は表示しない。
+- V1の顧客向け概念は `projection.baseProjection` 経由でのみ読む。
+- V2 blob、V1 blob、Full Report、Runtime result、Provider output、Stage / diagnostic outputは変更も入力もしていない。
+- Provider call / paraphrase / factual rewrite / generated assessment fillerはすべて `0`。
+- case ID / fixture ID / report IDによるProduct behavior分岐はない。
+- schema、fact ID、policy、timing code、Decision enum、usage metadataは顧客面へ表示しない。
+- renderer-owned文字列は見出し、field label、Decision表示label、copy状態通知に限定する。
+  鑑定本文はV2とその `baseProjection` のsource textをそのまま表示する。
 
-## Cover hierarchy
+## Reassuring customer journey
 
-Cover は次の順で表示する。
+Coverはnavy / paper / gold shell、Moon Reply identity、紙面幅を維持した。
+主見出しをconsultation-specific `projection.openingLine` とし、Decisionはcompactな「今の答え」へ下げた。
 
-1. Moon Reply identity
-2. 「鑑定ノート」
-3. exact `projection.openingLine` を主見出し
-4. renderer-owned Decision label を含む compact 「今の答え」
+本文は存在するsourceとrequested topicだけで構成する。
 
-Decision label は巨大な H1 にせず、cover の縦方向占有を縮小した。navy、paper、gold、
-Moon Reply identity、紙面の可読性、quiet premium atmosphere は保持した。
+1. consultation-specific opening letter
+2. primary reason、grounded situation reading、material unknowns
+3. non-null draftとdraft context
+4. requested message impact / relationship
+5. immediate action、avoid guidance、action rationale、reassessment
+6. requested expanded plan
+7. non-empty secondary details
+8. distinct closing lines
+9. fixed limitation
 
-## Visible assessment journey
+全caseに全候補を強制しない。actionとreassessmentは一つのProduct sectionに統合し、
+simple fixtureのprimary sectionは `5`。6–9はguidance onlyで、固定minimum / maximumではない。
+section count paddingは行わない。
 
-- `projection.openingLetter` は全 fixtures で見える「月の返事からの短い手紙」として、
-  source order のまま表示する。`organize_emotions` 専用の重複 section は作らない。
-- 「今の状況を読み解く」は `baseProjection.primaryReason` を一度だけ扱い、
-  `projection.situationReading` を「確認できていること」として表示する。
-- `projection.materialUnknowns` が non-empty の場合だけ「まだ分からないこと」を表示する。
-  `possibleInterpretations` は primary view に出さない。
-- draft は上位に残し、文字列、空白、改行、絵文字を変えずに表示・copy する。
-  non-null `projection.draftContext` は「この文面にした理由」として表示する。
-- `message_impact` は requested かつ message temperature が non-null の場合だけ、
-  「柔らかさ / 好意の強さ / 返信への圧力 / 調整した点」を表示する。
-- `relationship` は requested かつ relationship summary が non-null の場合だけ表示する。
-- `next_three_days` は requested かつ expanded plan がある場合だけ表示する。legacy は
-  「今夜 / 次の日 / 3日目」、split は「今夜 / 次に / 見直す条件」を使用する。
-- renderer-owned 「今の動き方」は primary action と avoid を表示し、distinct action rationale を最大一つ
-  「この動き方をすすめる理由」として表示する。
-- section kicker は renderer-owned 「いま」とする。`immediateAction.action`、
-  `actionRationales`、fixtures 内の source-owned 「今夜」、legacy / split plan labels は変更しない。
-- 「見直す条件」は observable condition と renderer-owned future Decision label を分ける。
-- `projection.closingLines` は「月の返事から最後に」として 1–2 paragraphs を表示し、
-  fixed limitation はその後の小さな footer に限定する。
+## Grounding and repetition boundary
 
-## Mobile current-answer correction
+- situation readingは「確かに言えること」として表示する。
+- material unknownsは「まだ分からないこと」として分離する。
+- possible interpretationsはnative `details` 内で
+  「可能性として見ていること」と明示し、事実扱いしない。
+- negative possibilitiesをUIで追加しない。
+- source textの重複抑制は、空白を一つにcollapseしouter whitespaceをtrimした値の完全一致だけ。
+- fuzzy matching、semantic similarity、LLM dedup、paraphrase、mergeは行わない。
+- draftはexact-copy機能、fixed limitationはboundary機能を持つため必ず保持する。
 
-- `.currentAnswer` は `max-width: 26.25rem`、すなわち 420px 以下で一列に stack する。
-- `.fixtureLink` の full-width behavior は従来どおり `max-width: 24rem` だけに限定する。
-- font size、answer text、cover hierarchy、note width、paper padding、section spacing、draft
-  prominence は変更していない。
+## Draft UX
 
-## Partial Visual Review evidence
+non-null draftは本文上位の「送信文案」に置く。
 
-- Observed desktop: `PASS`
-- Observed 399px mobile: `PASS with minor current-answer layout correction requested`
-- Observed: horizontal scroll なし、content overlap なし、日本語 wrapping は readable、draft は
-  discoverable、information density と reassuring assessment direction は accepted、visual JPY980
-  plausibility は established
-- Pending: 320px、keyboard-only navigation、copy success announcement、copy failure announcement、
-  200% zoom、reduced-motion review、actual Provider output Product review
-
-この部分 evidence は Human Visual Review、ChatGPT Visual Review、Product Owner Experience Review
-の完了を意味しない。Final JPY980 readiness は `false` のままである。
-
-## Exact repetition policy
-
-表示重複は、空白を一つへ collapse し外側の空白を trim した値が完全一致する場合だけ抑制する。
-最初の exact value を残し、後続だけを抑制する。fuzzy matching、semantic similarity、LLM
-deduplication、paraphrase、異なる文の merge は行わない。
-
-Secondary disclosure は一つの collapsed-by-default native `<details>` に限定する。distinct な
-possible interpretations、secondary actions、remaining action rationales、anxiety reframe、plan
-commentary、consultation limitations だけを入れ、空の場合は `<details>` 自体を出さない。
+- source textを直接表示し、同じ値をClipboard APIへ渡す。
+- persona、dialect、emoji、line break、whitespaceを変形しない。
+- native `button type="button"` によりkeyboard操作可能。
+- success / failure双方のpersistent live-region structureを準備。
+- failure時は手動選択copyへの復帰案内を表示。
+- draftがnullの場合、UI独自の説明文でsectionを水増しせず、そのsection自体を省略する。
 
 ## Review fixtures and route
 
-- Fixture count: `9/9`
-- Input: synthetic `CustomerAssessmentExperienceProjectionV2`
-- Decoder: `decodeCustomerAssessmentExperienceProjectionV2`
-- Route: `/review/runtime/v12?fixture=<fixture_id>`
-- Fixture-only。API、Provider、DB、Supabase、payment、Runtime form へ接続しない。
-- `noindex / nofollow`
-- production は `notFound()`
-- `M2_INTERNAL_RUNTIME_ENABLED === "true"` の既存 internal gate を保持
-- Review metadata は note の外側だけに表示
+`/review/runtime/v12` は次の5 categoriesをV2 decoded fixtureとして準備する。
 
-Nine fixtures は simple draft、ordinary waiting、polite draft/message impact、relationship、legacy
-plan、split plan、nullable optionals、pause/no-draft、Kansai persona を覆う。Kansai draft は次の
-exact source を保持する。
+1. `simple`
+2. `emotional`
+3. `null_optional`
+4. `polite_draft`
+5. `persona_preserved`
 
-```text
-おっけー、土曜ならいけるで！
-また時間おしえて〜😊
-```
+fixture ID / categoryはreview inputの選択にのみ使用し、customer componentへ渡さない。
+routeはfixture-only、`noindex / nofollow`、production `notFound()`、
+`M2_INTERNAL_RUNTIME_ENABLED === "true"` gateを維持する。
+API、Provider、DB、Supabase、payment、Runtime formへ接続しない。
 
-Fixtures は Visual/Product presentation material であり、Provider quality や既知の PB-05 wording
-quality の改善を証明しない。
+後続R2-C用にdesktop 1440、mobile 399 / 320、keyboard、200% zoom、
+reduced motion、copy success / failure、native details behaviorを確認可能な構造へした。
+いずれも本taskではreview completeやPASSとして記録していない。
+
+## historicalから再利用したdesign / functional concepts
+
+read-only historical refsから次のconceptだけを再利用した。
+
+- accepted navy / paper / gold visual shell
+- consultation-specific openingを主見出しにするcover hierarchy
+- compact current-answer treatment
+- letter、reading、draft、action、reassessment、closingの長文鑑定journey
+- whitespace-normalized exact repetition suppression
+- prominent exact-copy draftとnative copy button
+- collapsed-by-default native `details`
+- fixture-only gated review route
+- 420px相当のcurrent-answer stackと384px相当のfixture-link full width boundary
+
+historical fileのbyte-identical blind copy、historical branch mutation、historical authority扱いはしていない。
+
+## current authorityに合わせて変更した点
+
+- exact parentをR2-A Acceptance / R2-B Authorization
+  `1229627588e3c6ccd41ea7ea32751b8b8ac79c6e` へ更新。
+- accepted R2-A implementation `5070c02267f49e1e0095ce2e46fb106b886f7df5`
+  のV2 decoder hardeningをblob unchangedでconsume。
+- authorizationされたexact 9-path scopeを `4 UPDATE + 5 NEW` で実装。
+- review fixturesを今回指定の5 categoriesへ限定。
+-「この文面がどう届くか」、facts / unknowns、action / reassessmentの関係を
+  current Product Goalに合わせて再構成。
+- copy buttonをsuccess / failureの双方が後続review可能なstable live regionへ更新。
+- R2-C、experienceProductJudgment、JPY980、Global Q0をfail-closed metadataへ更新。
+
+## historical defectを修正した点
+
+- historicalの固定6–9 section validationを廃止し、simple `5` sectionsを許容。
+- null draft時のrenderer-generated説明文とpadding sectionを削除。
+- draft exact-copyをdedupより優先し、文案が存在するcaseで消えない構造へ変更。
+- actionとreassessmentを一sectionにまとめ、同義内容の反復と縦密度を削減。
+- possible interpretationsをprimary factと混在させず、possibility label付きdetailsへ隔離。
+- historical visual PASS / JPY980 plausibilityを持ち込まず、全R2-C項目を
+  `prepared_not_reviewed` として記録。
+- copy status nodeを常設し、successだけでなくfailure announcementも検証可能にした。
 
 ## Automated validation
 
-Validation order:
+Required order:
 
-1. Dedicated R2-B verifier
-2. Decision Policy verifier
-3. TypeScript typecheck
-4. ESLint with zero warnings
-5. Next production build
-6. `git diff --check`
-7. `git status --short`
-
-Dedicated verifier は exact correction baseline/branch/scope `6/6`、全6パスが updated であること、
-その他の R2-B paths、Product Doctrine、R2-A/R1、V1 Projection、Delivery、Runtime、
-copy button、fixture source、review route が baseline blob のままであることを確認する。さらに、
-renderer heading / kicker の限定置換、420px current-answer stack、24rem fixture-link boundary、
-9 decoded fixtures、route isolation、capabilities、strict UTF-8、JSON、secret、`git diff --check` を
-fail-closed で確認する。
+1. dedicated R2-B verifier
+2. R2-A Acceptance / R2-B Authorization verifier
+3. R2-A dedicated verifier
+4. Q0-A Acceptance verifier
+5. R1 Doctrine verifier
+6. historical Package B verifier
+7. Package A R1 verifier
+8. Decision Policy verifier
+9. typecheck
+10. lint `--max-warnings=0`
+11. build
+12. `git diff --check`
+13. exact 9-path scope
+14. sensitive scan
 
 Final automated results:
 
-- Dedicated R2-B-R1 verifier: `PASS 20/20`, exact correction scope `6/6`
-- R2-A/R1 verifier in reconstructed accepted checkout: `PASS 32/32`, exact `7/7`
-- Decision Policy: `PASS 40/40`
+- Dedicated R2-B verifier: `PASS 21/21`, exact `9/9`
+- R2-A Acceptance / R2-B Authorization verifier: `PASS 14/14`
+- R2-A dedicated verifier: `PASS 35/35`
+- Q0-A Acceptance verifier: `PASS 12/12`
+- R1 Doctrine verifier: `PASS 19/19`
+- Historical Package B verifier: `PASS 20/20`, exact `10/10`
+- Package A R1 verifier: `PASS 23/23`
+- Decision Policy verifier: `PASS 40/40`
 - TypeScript typecheck: `PASS`
-- ESLint: `PASS`, zero warnings
+- ESLint `--max-warnings=0`: `PASS`
 - Next production build: `PASS`
 - `git diff --check`: `PASS`
-- Build-generated `next-env.d.ts` drift: none after completed production build
+- Exact scope: `PASS 9/9`, `4 UPDATE + 5 NEW`
+- Sensitive scan: `PASS`, `0`
+- Build-generated `next-env.d.ts` drift: none
 
 ## Authority boundary
 
-- Provider / DB / Supabase: `0 / 0 / 0`
-- Provider text rewrite: `false`
-- Active Runtime: v4 unchanged; activation `false`
-- Desktop Visual Review: `PASS`
-- 399px Mobile Visual Review: `PASS`, requested minor layout correction applied
-- Human Visual Review: incomplete; final pending items remain
-- ChatGPT Visual Review: incomplete
-- Product Owner Experience Review: pending
-- JPY980 readiness: `false`
-- R2-C: unauthorized
-- Existing Package C: unchanged and unauthorized
-- Provider rerun: unauthorized
-- R4 / C2: unauthorized
-- Public Runtime / Public Request flow / payment / Safety Gate: unchanged and unauthorized
-- PR / main merge / force push: none
+- Provider / DB / Supabase: 0 / 0 / 0
+- Runtime activation: false
+- Production Runtime: unchanged / unauthorized
+- Payment: unchanged / unauthorized
+- R2-C: unauthorized / not executed
+- experienceProductJudgment: pending
+- JPY980 readiness: false
+- globalQ0Completion: false
+- main: unchanged
+- PR / merge / rebase / cherry-pick / force-push: none
 
-Next action は `final_320_keyboard_copy_zoom_and_product_review` である。この文書は R2-C、
-Existing Package C、Provider rerun、Runtime activation、R4、C2、PR、main merge を自己承認しない。
+次のactionは、別authorityでのHuman / ChatGPT R2-C Visual/Product Reviewである。

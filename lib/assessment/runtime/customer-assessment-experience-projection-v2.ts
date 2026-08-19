@@ -169,7 +169,7 @@ export function projectCustomerAssessmentExperienceV2(
   const report = decoded.report;
   const reasonFactIds = new Set(report.decisionPlan.decision_reason_fact_ids);
 
-  return {
+  const projection: CustomerAssessmentExperienceProjectionV2 = {
     projectionSchemaVersion:
       CUSTOMER_ASSESSMENT_EXPERIENCE_PROJECTION_SCHEMA_VERSION,
     baseProjection,
@@ -191,6 +191,7 @@ export function projectCustomerAssessmentExperienceV2(
         ? [...report.decisionPlan.limitations]
         : [...report.decisionPlan.model_generated_limitations],
   };
+  return decodeCustomerAssessmentExperienceProjectionV2(projection);
 }
 
 function assertCustomerAssessmentExperienceProjectionV2(

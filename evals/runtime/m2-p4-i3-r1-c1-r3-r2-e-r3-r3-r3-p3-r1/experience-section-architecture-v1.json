@@ -146,12 +146,28 @@
     "normal_target_visible_sections": {
       "minimum": 6,
       "maximum": 9,
-      "unit": "semantically_distinct_sections"
+      "unit": "semantically_distinct_sections",
+      "policy": "guidance_only",
+      "hard_minimum_enforced": false,
+      "hard_maximum_enforced": false
     },
+    "semantic_necessity_controls_density": true,
     "each_section_has_distinct_emotional_or_decision_function": true,
     "fixed_word_count_ceiling": false,
+    "fixed_word_count": "prohibited",
+    "fixed_section_count": "prohibited",
     "duplicated_primary_meaning_allowed": false,
-    "simple_consultation": "May be shorter, but must still feel like an assessment rather than a formatted answer.",
+    "section_created_only_to_satisfy_count_allowed": false,
+    "padding_for_section_count": "prohibited",
+    "simple_consultation_below_six_allowed_when_semantically_complete": true,
+    "simple_consultation": "May render fewer than six visible sections when every necessary Product function is fulfilled; compress proportionally to judgment, reason, draft when applicable, reassessment, and other semantically necessary Product functions.",
+    "simple_consultation_preserves": [
+      "judgment",
+      "reason",
+      "draft_when_applicable",
+      "reassessment",
+      "all_other_semantically_necessary_product_functions"
+    ],
     "emotional_consultation": "May be longer because emotional acknowledgment and uncertainty separation are Product value, not padding."
   },
   "density_rules": {
@@ -196,5 +212,16 @@
     "visual_shell_retains_moon_reply_atmosphere": true,
     "product_owner_judges_experience_plausibly_worth_jpy980": true,
     "runtime_activation_remains_separately_unauthorized": true
+  },
+  "jpy980_state_separation": {
+    "r2_owned_scope": "reassuring_assessment_experience_only",
+    "experienceProductJudgment_on_r2_c_human_product_pass": "plausibly_worth_jpy980",
+    "jpy980RuntimeReadiness_after_r2_c_human_product_pass": "not_established",
+    "jpy980RuntimeReadinessGate": "not_ready_until_global_Q0_completion",
+    "states_are_equivalent": false,
+    "r2_c_pass_establishes_active_runtime_activation": false,
+    "r2_c_pass_establishes_production_runtime": false,
+    "r2_c_pass_establishes_provider_quality": false,
+    "r2_c_pass_establishes_overall_jpy980_runtime_readiness": false
   }
 }

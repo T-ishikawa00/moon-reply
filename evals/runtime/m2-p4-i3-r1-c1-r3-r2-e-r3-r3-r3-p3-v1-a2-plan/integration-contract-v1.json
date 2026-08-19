@@ -1,0 +1,929 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-integration-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN",
+  "status": "r1_effective_authority_correction_defined_pending_human_chatgpt_review",
+  "planning_only": true,
+  "authority": {
+    "accepted_v1_a1_snapshot": "8db5c6386ed0b9b16f0d1586f47d384262cc502b",
+    "original_v1_a1_commit": "65c245860813f6179689855b344dbf6fd425867a",
+    "jpy980_architecture_commit": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
+    "main": "61e33a10e195fad17e253a6b9719217e1992f273",
+    "v1_a1_chatgpt_review": "PASS_complete",
+    "v1_a1_human_review": "PASS_complete",
+    "v1_a1_human_acceptance": "complete",
+    "v1_a1_acceptance": "complete",
+    "acceptance_date": "2026-08-16",
+    "v1_a1_status": "accepted_complete",
+    "v1_a_overall_complete": false,
+    "v1_a2_planning_authorized": true,
+    "v1_a2_implementation_authorized": false,
+    "v1_a2_plan_commit": "ab99f003901475199fcb316264ecd02c4f2baef8",
+    "v1_a2_plan_review": "NEEDS_CORRECTION",
+    "v1_a2_plan_review_findings": {
+      "blocker": 0,
+      "major": 1,
+      "minor": 2,
+      "major_code": "clarification_authority_missing_from_downstream_assessment_chain",
+      "minor_codes": [
+        "usual_reply_cadence_question_answer_mismatch",
+        "awaiting_to_processing_transition_not_exact"
+      ]
+    }
+  },
+  "authority_lanes": {
+    "lanes": [
+      {
+        "id": "base",
+        "authority": "original_consultation_input",
+        "mutable_after_request_creation": false
+      },
+      {
+        "id": "candidate",
+        "authority": "optional_unsent_candidate_message",
+        "mutable_after_request_creation": false
+      },
+      {
+        "id": "clarification_evidence",
+        "authority": "single_user_answer_to_single_authorized_clarification",
+        "mutable_after_answer_acceptance": false
+      }
+    ],
+    "clarification_appended_to_current_situation": false,
+    "clarification_inserted_into_base_source_refs": false,
+    "clarification_claims_input_current_situation_provenance": false,
+    "clarification_contaminates_candidate": false,
+    "base_and_clarification_source_identity_distinguishable": true
+  },
+  "clarification_evidence_contract": {
+    "contract_version": "m2-p4-clarification-evidence-v1",
+    "maximum_answers_per_assessment_request": 1,
+    "maximum_questions_per_assessment_request": 1,
+    "required_fields": [
+      "schemaVersion",
+      "clarificationId",
+      "ordinal",
+      "questionCode",
+      "target",
+      "questionSnapshot",
+      "answer",
+      "provenance",
+      "sourceIdentity",
+      "groundedNormalizedRepresentation",
+      "safetySignals"
+    ],
+    "ordinal": 1,
+    "provenance": "user_clarification",
+    "source_identity_format": "clarification:<opaque_clarification_id>:answer:1",
+    "raw_answer_customer_visible_after_submission": false,
+    "provider_metadata_customer_visible": false,
+    "answer_is_separate_from_original_request_body": true,
+    "answer_is_separate_from_candidate": true,
+    "grounding_owned_by": "clarification_lane",
+    "safety_signal_ownership": "clarification_lane"
+  },
+  "clarification_answer_validation": {
+    "one_conceptual_answer_only": true,
+    "blank_answer_allowed": false,
+    "unnecessary_sensitive_information_requested": false,
+    "question_or_target_mutable_by_client": false,
+    "client_submits": [
+      "opaque_clarification_id",
+      "answer"
+    ],
+    "server_loads_authoritative": [
+      "question_code",
+      "target",
+      "question_snapshot",
+      "assessment_request_link",
+      "answer_status"
+    ]
+  },
+  "provider_stage_architecture": {
+    "new_provider_stage_added": false,
+    "new_stage_id_prohibited": "PB-01F",
+    "successor_catalog_candidate": "runtime-stage-catalog-v12",
+    "stage_topology": "split-base-candidate-v1",
+    "pb_01_stage_id": "PB-01",
+    "initial_run": {
+      "inputs": [
+        "original_base_input",
+        "clarification_evidence_null"
+      ],
+      "output_authority": "base_grounding_only"
+    },
+    "resume_run": {
+      "same_assessment_request": true,
+      "inputs": [
+        "original_base_input",
+        "immutable_initial_base_grounding",
+        "clarification_evidence"
+      ],
+      "output_authority": "clarification_grounding_only",
+      "base_grounding_rewritten": false,
+      "candidate_stage": "PB-01C"
+    },
+    "application_composition": {
+      "base_grounding": "reuse_immutable_initial_run_base_grounding",
+      "clarification_grounding": "use_resume_pb_01_clarification_output",
+      "candidate_grounding": "remain_separate_pb_01c_lane"
+    },
+    "prompt_schema_catalog_successor_required": true,
+    "reason": "Current PB-01 Base schema cannot carry clarification provenance without false Base attribution.",
+    "provider_execution_authorized_by_plan": false
+  },
+  "clarification_source_integrity": {
+    "allowed_output_lane": "clarification_grounding",
+    "base_field_write_allowed": false,
+    "candidate_field_write_allowed": false,
+    "unrelated_decision_field_write_allowed": false,
+    "source_ref_namespace": "clarification",
+    "base_source_ref_namespace": "input",
+    "source_namespace_collision_allowed": false,
+    "target_limited_grounding_required": true,
+    "raw_answer_literal_scan_as_provenance_proof": false,
+    "structural_provenance_validation_required": true
+  },
+  "effective_assessment_authority": {
+    "name": "EffectiveAssessmentAuthorityV1",
+    "schema_version": "m2-p4-effective-assessment-authority-v1",
+    "owner": "application",
+    "authority_kind": "derived_composition",
+    "is_source_of_new_facts": false,
+    "mutates_source_authority": false,
+    "required_fields": [
+      "schemaVersion",
+      "baseAuthorityRef",
+      "candidateAuthorityRef",
+      "clarificationAuthorityRef",
+      "effectiveDecisionContext",
+      "effectiveWritingContext",
+      "effectiveEmotionalContext",
+      "sourceMap"
+    ],
+    "source_authorities": [
+      "immutable_base_authority",
+      "immutable_candidate_authority",
+      "optional_target_limited_clarification_grounding"
+    ],
+    "source_map_entry_fields": [
+      "effectivePath",
+      "sourceLane",
+      "sourceRef",
+      "sourceValuePath",
+      "clarificationTarget"
+    ],
+    "source_namespaces": {
+      "base": "input:",
+      "candidate": "candidate:",
+      "clarification": "clarification:<opaque_clarification_id>:answer:1"
+    },
+    "composition_rules": {
+      "clarification_fills_selected_missing_dimension_only": true,
+      "clarification_overrides_known_base_value": false,
+      "conflict_safe_code": "M2_CLARIFICATION_AUTHORITY_CONFLICT",
+      "unrelated_effective_path_change_allowed": false,
+      "duplicate_effective_path_origin_allowed": false,
+      "per_value_origin_required": true,
+      "customer_visible_internal_ids": false
+    },
+    "contexts": {
+      "effectiveDecisionContext": [
+        "material_concern",
+        "latest_contact_timing",
+        "usual_reply_cadence",
+        "relationship_intent"
+      ],
+      "effectiveWritingContext": [
+        "relationship_intent",
+        "requested_message_tone"
+      ],
+      "effectiveEmotionalContext": [
+        "material_concern",
+        "central_fear_or_decision_concern"
+      ]
+    },
+    "construction_point": "after_clarification_grounding_and_safety_before_sufficiency_and_downstream_decision",
+    "required_downstream_input_name": "effective_assessment_authority"
+  },
+  "effective_authority_integrity": {
+    "successor": "effective-assessment-authority-integrity-v1",
+    "validates": [
+      "source_lane_namespace",
+      "per_value_source_map",
+      "selected_target_only",
+      "immutable_source_references",
+      "no_known_base_override",
+      "no_candidate_contamination",
+      "no_unrelated_effective_path_change",
+      "required_downstream_injection"
+    ],
+    "missing_required_downstream_authority_safe_code": "M2_CLARIFICATION_DOWNSTREAM_AUTHORITY_MISSING",
+    "discarded_ready_making_clarification_safe_code": "M2_CLARIFICATION_DOWNSTREAM_DISCARDED",
+    "fail_closed_before_product_delivery": true
+  },
+  "persistence_lifecycle": {
+    "model": "one_assessment_request_zero_or_one_clarification_one_or_more_assessment_runs",
+    "assessment_request_states": [
+      "processing",
+      "awaiting_clarification",
+      "completed",
+      "failed"
+    ],
+    "preferred_storage": "separate_assessment_clarifications_table",
+    "raw_situation_mutated": false,
+    "clarification_record": {
+      "maximum_rows_per_request": 1,
+      "stable_opaque_id": true,
+      "ordinal": 1,
+      "required_persistence": [
+        "schema_version",
+        "id",
+        "request_id",
+        "ordinal",
+        "question_code",
+        "target",
+        "question_snapshot",
+        "provenance",
+        "source_identity",
+        "answer_status",
+        "answer",
+        "answer_fingerprint",
+        "grounded_normalized_representation",
+        "safety_signals",
+        "created_at",
+        "answered_at"
+      ],
+      "answer_statuses": [
+        "pending",
+        "answered"
+      ],
+      "unique_request_constraint": true
+    },
+    "continuation_authority": {
+      "customer_handle": "opaque_clarification_id",
+      "identifier_kind": "cryptographically_random_non_sequential_capability",
+      "minimum_unpredictability_bits": 128,
+      "raw_request_id_as_only_authority": false,
+      "request_id_accepted_in_answer_body": false,
+      "answered_or_completed_reusable_for_new_run": false,
+      "provider_or_internal_ids_customer_visible": false,
+      "production_session_or_account_binding": "future_production_decision_not_implemented_by_v1_a2_plan"
+    },
+    "duplicate_submit": {
+      "transactional_row_lock_required": true,
+      "same_canonical_answer_after_acceptance": "idempotent_replay_existing_continuation_or_result",
+      "same_canonical_answer_additional_runs": 0,
+      "different_answer_after_acceptance": "fail_closed",
+      "different_answer_safe_code": "M2_CLARIFICATION_ALREADY_ANSWERED",
+      "different_answer_http_status": 409
+    },
+    "atomic_answer_resume_transition": {
+      "transactional_authority_boundary": [
+        "lock_clarification_row",
+        "lock_assessment_request",
+        "verify_pending_and_awaiting_clarification",
+        "persist_answer_exactly_once",
+        "transition_request_awaiting_clarification_to_processing",
+        "create_exactly_one_resume_run"
+      ],
+      "request_from": "awaiting_clarification",
+      "request_to": "processing",
+      "resume_runs_created": 1,
+      "partial_commit_allowed": false
+    }
+  },
+  "run_state_semantics": {
+    "initial_sufficient": {
+      "policy_state": "full_paid_ready_candidate",
+      "request_state": "processing",
+      "continuation": "normal_internal_product_path"
+    },
+    "initial_one_gap": {
+      "policy_state": "needs_one_clarifying_answer",
+      "runtime_eligibility": "needs_more_information",
+      "request_state": "awaiting_clarification",
+      "clarification_persisted": true,
+      "report": null,
+      "draft": null,
+      "payment_capable": false
+    },
+    "answered_clarification": {
+      "new_run_on_same_request": true,
+      "request_transition": "awaiting_clarification_to_processing",
+      "transition_atomic_with_answer_and_resume_run": true,
+      "clarification_budget_exhausted": true,
+      "allowed_policy_states": [
+        "full_paid_ready_candidate",
+        "not_full_product_candidate",
+        "safety_blocked"
+      ],
+      "needs_one_clarifying_answer_allowed": false,
+      "terminal_request_states": {
+        "ready": "completed",
+        "not_full_product_candidate": "completed",
+        "safety_blocked": "completed",
+        "technical_failure": "failed"
+      },
+      "return_to_awaiting_clarification_allowed": false
+    },
+    "automatic_second_clarification_allowed": false,
+    "clarification_loop_allowed": false
+  },
+  "clarification_safety": {
+    "answer_safety_evaluated": true,
+    "signals_preserve_clarification_source_identity": true,
+    "aggregation_order": "before_paid_product_eligibility",
+    "aggregated_with": [
+      "base_safety",
+      "candidate_safety"
+    ],
+    "non_normal_result": "safety_blocked",
+    "may_weaken_or_reinterpret_existing_safety": false
+  },
+  "v1_a1_re_evaluation": {
+    "accepted_v1_policy_file_mutated": false,
+    "successor": "jpy980-input-sufficiency-policy-v2",
+    "no_clarification_parity": "behavioral_parity_with_explicit_v2_question_copy_exception",
+    "behavioral_parity_fields": [
+      "state",
+      "reason_semantics",
+      "missing_dimensions",
+      "clarification_budget",
+      "non_clarification_routing"
+    ],
+    "customer_question_byte_or_deep_equality_required": false,
+    "v2_copy_correction_changes_eligibility_semantics": false,
+    "resume_inputs": [
+      "accepted_v1_a1_structured_authority",
+      "separate_clarification_grounding",
+      "clarificationAlreadyUsed_true"
+    ],
+    "dimension_override_scope": "selected_target_only",
+    "base_object_materialized_with_clarification_fields": false,
+    "second_question_possible": false,
+    "safety_checked_before_sufficiency": true
+  },
+  "decision_policy_successor": {
+    "name": "EffectiveDecisionPolicyV1",
+    "future_path": "lib/assessment/runtime/effective-decision-policy-v1.ts",
+    "accepted_policy_files_mutated": false,
+    "input": "EffectiveAssessmentAuthorityV1.effectiveDecisionContext",
+    "preserves_accepted_policy_result": true,
+    "adds_explicit_consumption_record": true,
+    "no_clarification_behavior": "equivalent_to_accepted_current_decision_policy",
+    "clarification_change_scope": "selected_authorized_dimension_only",
+    "non_decision_targets_do_not_change_selected_decision": true,
+    "other_person_fact_inference_allowed": false
+  },
+  "clarification_targets": [
+    {
+      "target": "material_relationship_or_communication_concern",
+      "allowed_answer_shape": {
+        "kind": "single_choice_with_optional_bounded_detail",
+        "values": [
+          "distance",
+          "affection_expression",
+          "reply_pressure",
+          "other_material_concern",
+          "no_material_concern"
+        ]
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "explicit_user_stated_material_concern",
+        "explicit_no_material_concern"
+      ],
+      "must_not_ground": [
+        "relationship_fact",
+        "other_person_inner_state",
+        "relationship_outcome"
+      ],
+      "safety": "optional_detail_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_material_relationship_or_communication_concern_only"
+    },
+    {
+      "target": "latest_contact_timing",
+      "allowed_answer_shape": {
+        "kind": "local_datetime_or_bounded_elapsed_bucket_or_unknown",
+        "elapsed_bucket_values": [
+          "less_than_6_hours",
+          "six_to_24_hours",
+          "one_to_three_days",
+          "more_than_three_days",
+          "unknown"
+        ]
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "user_supplied_latest_contact_timing"
+      ],
+      "must_not_ground": [
+        "invented_chronology",
+        "future_reply_timing",
+        "unrelated_contact_fact"
+      ],
+      "derived_elapsed_authority": "trusted_run_started_at_plus_explicit_iana_timezone",
+      "safety": "answer_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_latest_contact_timing_only"
+    },
+    {
+      "target": "usual_reply_cadence",
+      "customer_question_v2": "今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？",
+      "allowed_answer_shape": {
+        "kind": "single_choice_relation",
+        "values": [
+          "within_usual",
+          "beyond_usual",
+          "unknown"
+        ]
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "usual_cadence_relation"
+      ],
+      "must_not_ground": [
+        "invented_exact_interval",
+        "predicted_reply_time",
+        "other_person_reason"
+      ],
+      "safety": "answer_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_usual_reply_cadence_only"
+    },
+    {
+      "target": "central_fear_or_decision_concern",
+      "allowed_answer_shape": {
+        "kind": "bounded_text_or_explicit_none",
+        "maximum_characters": 500
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "explicit_user_stated_fear_or_decision_concern",
+        "bounded_emotional_context_presence"
+      ],
+      "must_not_ground": [
+        "other_person_inner_state",
+        "specific_fear_not_stated_by_user",
+        "future_outcome"
+      ],
+      "safety": "text_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_central_fear_or_decision_concern_only"
+    },
+    {
+      "target": "relationship_intent",
+      "allowed_answer_shape": {
+        "kind": "single_choice_with_optional_bounded_detail",
+        "values": [
+          "move_closer",
+          "maintain_distance",
+          "repair_conflict",
+          "decline_without_false_hope",
+          "end_contact",
+          "express_affection",
+          "clarify_relationship",
+          "unsure"
+        ]
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "user_stated_desired_relationship_direction"
+      ],
+      "must_not_ground": [
+        "relationship_outcome",
+        "other_person_intent",
+        "mutated_base_user_goal_detail"
+      ],
+      "safety": "optional_detail_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_relationship_intent_only"
+    },
+    {
+      "target": "requested_message_tone",
+      "allowed_answer_shape": {
+        "kind": "single_choice_with_optional_bounded_detail",
+        "values": [
+          "polite",
+          "neutral_polite",
+          "casual",
+          "soft",
+          "direct",
+          "brief",
+          "playful",
+          "custom"
+        ]
+      },
+      "provenance": "user_clarification",
+      "may_ground": [
+        "user_requested_writing_or_register_direction"
+      ],
+      "must_not_ground": [
+        "candidate_rewrite",
+        "candidate_analysis",
+        "other_person_preference"
+      ],
+      "safety": "optional_detail_is_safety_evaluated_with_clarification_source_identity",
+      "v1_a1_consumption": "v2_target_override_for_requested_message_tone_only"
+    }
+  ],
+  "clarification_downstream_consumer_matrix": [
+    {
+      "target": "material_relationship_or_communication_concern",
+      "allowed_consumers": [
+        "v1_a_sufficiency_materiality",
+        "effective_assessment_authority.consultation_product_scope_context",
+        "pb_05_clarification_aware_product_understanding",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "decision_policy_consumed": false,
+      "pb_04_consumed": false,
+      "prohibited_effects": [
+        "create_unrelated_decision_fact",
+        "change_other_person_fact"
+      ]
+    },
+    {
+      "target": "latest_contact_timing",
+      "allowed_consumers": [
+        "v1_a_sufficiency",
+        "effective_assessment_authority.effectiveDecisionContext.latest_contact_timing",
+        "effective_decision_policy_v1",
+        "pb_04_action_and_reassessment_reasoning",
+        "pb_05_factual_commentary_when_used",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "derived_elapsed_authority": "trusted_run_started_at_plus_explicit_iana_timezone",
+      "prohibited_effects": [
+        "invented_elapsed_value",
+        "predicted_reply_time"
+      ]
+    },
+    {
+      "target": "usual_reply_cadence",
+      "allowed_consumers": [
+        "v1_a_sufficiency",
+        "effective_assessment_authority.effectiveDecisionContext.usual_reply_cadence",
+        "effective_decision_policy_v1_when_applicable",
+        "pb_04_reasoning_and_reassessment",
+        "pb_05_factual_or_uncertainty_commentary",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "prohibited_effects": [
+        "invented_exact_cadence",
+        "predicted_reply_time",
+        "other_person_reason"
+      ]
+    },
+    {
+      "target": "central_fear_or_decision_concern",
+      "allowed_consumers": [
+        "v1_a_emotional_context_sufficiency",
+        "effective_assessment_authority.effectiveEmotionalContext.central_fear_or_decision_concern",
+        "pb_04_action_rationale_when_relevant",
+        "pb_05_consultation_specific_emotional_containment",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "decision_policy_consumed": false,
+      "prohibited_effects": [
+        "change_other_person_fact",
+        "invent_unstated_fear"
+      ]
+    },
+    {
+      "target": "relationship_intent",
+      "allowed_consumers": [
+        "v1_a_materiality_and_sufficiency",
+        "effective_assessment_authority.effectiveDecisionContext.relationship_intent",
+        "effective_assessment_authority.effectiveWritingContext.relationship_intent",
+        "effective_decision_policy_v1_when_relevant",
+        "pb_04_action_and_draft_rationale",
+        "pb_05_user_intent_commentary_when_relevant",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "prohibited_effects": [
+        "convert_to_other_person_intent",
+        "predict_relationship_outcome"
+      ]
+    },
+    {
+      "target": "requested_message_tone",
+      "allowed_consumers": [
+        "v1_a_sufficiency",
+        "effective_assessment_authority.effectiveWritingContext.requested_message_tone",
+        "pb_04_draft_generation_and_edit_rationale",
+        "pb_05_draft_context_when_applicable",
+        "pb_06_clarification_fidelity_validation"
+      ],
+      "decision_policy_consumed": false,
+      "prohibited_effects": [
+        "rewrite_candidate_in_grounding_layer",
+        "infer_other_person_tone_preference"
+      ]
+    }
+  ],
+  "downstream_stage_successor_strategy": {
+    "selected_strategy": "effective_assessment_authority_as_additional_application_owned_input",
+    "effective_input_name": "effective_assessment_authority",
+    "successors": [
+      {
+        "stage_id": "PB-04",
+        "prompt_successor": "pb-04-clarification-aware-v1.developer.md",
+        "existing_output_schema_reused": "decision-plan-v2.schema.json",
+        "responsibility": "consume_authorized_effective_decision_writing_and_emotional_values_needed_for_action_draft_and_reassessment"
+      },
+      {
+        "stage_id": "PB-05",
+        "prompt_successor": "pb-05-clarification-aware-v1.developer.md",
+        "existing_output_schema_reused": "report-content-v2.schema.json",
+        "responsibility": "reflect_material_ready_making_clarification_without_semantic_depth_rewrite"
+      },
+      {
+        "stage_id": "PB-06",
+        "prompt_successor": "pb-06-clarification-aware-v1.developer.md",
+        "existing_output_schema_reused": "ai/schemas/validation-result.schema.json",
+        "responsibility": "fail_when_materially_relevant_ready_making_clarification_is_missing_distorted_or_misattributed"
+      }
+    ],
+    "accepted_stage_versions_mutated": false,
+    "new_provider_stage_added": false,
+    "pb_05_semantic_depth_changed": false,
+    "v1_b_owned_work_included": false,
+    "clarification_discard_after_eligibility_allowed": false
+  },
+  "end_to_end_acceptance_invariant": {
+    "expression": "clarification_used_to_establish_ready_implies_materially_relevant_clarification_preserved_downstream",
+    "hard_blocking": true,
+    "failure_safe_code": "M2_CLARIFICATION_DOWNSTREAM_DISCARDED",
+    "required_regressions": [
+      {
+        "id": "requested_tone_soft_ready_consumed",
+        "given": "missing_requested_message_tone",
+        "clarification": "soft",
+        "expect": "draft_or_writing_context_demonstrably_consumes_soft_tone_authority"
+      },
+      {
+        "id": "latest_timing_ready_consumed",
+        "given": "missing_latest_contact_timing",
+        "clarification": "valid_timing",
+        "expect": "effective_decision_policy_and_pb_04_receive_clarification_derived_timing"
+      },
+      {
+        "id": "relationship_intent_move_closer_consumed",
+        "given": "missing_relationship_intent",
+        "clarification": "move_closer",
+        "expect": "action_or_draft_reasoning_may_use_user_intent_without_other_person_intent"
+      },
+      {
+        "id": "central_fear_ready_consumed",
+        "given": "missing_central_fear",
+        "clarification": "explicit_user_concern",
+        "expect": "emotional_containment_may_use_exact_concern_without_unstated_fear"
+      },
+      {
+        "id": "no_clarification_behavioral_parity",
+        "given": "no_clarification",
+        "clarification": null,
+        "expect": "accepted_original_downstream_behavior_equivalent"
+      },
+      {
+        "id": "target_x_does_not_change_target_y",
+        "given": "one_target_limited_clarification",
+        "clarification": "target_x",
+        "expect": "every_unrelated_effective_value_and_origin_unchanged"
+      }
+    ]
+  },
+  "not_full_product_candidate": {
+    "first_class_future_application_state": true,
+    "normal_non_paid_routing_outcome": true,
+    "must_not_be_mislabeled_as": [
+      "needs_more_information",
+      "technical_failure",
+      "safety_blocked",
+      "ready"
+    ],
+    "runtime_result": {
+      "status": "stopped",
+      "eligibility": "not_full_product_candidate",
+      "clarification": null,
+      "report": null,
+      "draft": null,
+      "charge": "prohibited"
+    },
+    "database": {
+      "assessment_run_status": "completed",
+      "assessment_run_eligibility": "not_full_product_candidate",
+      "assessment_request_status": "completed"
+    },
+    "delivery": {
+      "status": "stopped",
+      "eligibility": "not_full_product_candidate",
+      "customer_safe_reason_code_allowed": true,
+      "internal_fact_or_provider_ids_exposed": false
+    }
+  },
+  "product_scope_validation": {
+    "runs_before": [
+      "assessment_request_creation",
+      "provider_call",
+      "product_evaluation",
+      "clarification_budget_consumption"
+    ],
+    "message_impact_candidate_requirement": {
+      "requested_topic": "message_impact",
+      "non_empty_candidate_required": true,
+      "server_enforced": true,
+      "ui_enforced": true,
+      "safe_code": "M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED",
+      "classification": "input_form_validation",
+      "clarification_budget_consumed": false,
+      "draft_message_requires_candidate": false,
+      "candidate_analysis_unavailable_classification": "technical_fail_closed_not_product_ineligibility"
+    },
+    "actionable_topic_requirement": {
+      "actionable_anchor_topics": [
+        "decide_send_or_wait",
+        "draft_message",
+        "message_impact",
+        "next_three_days"
+      ],
+      "supplementary_only_topics": [
+        "relationship",
+        "organize_emotions"
+      ],
+      "at_least_one_actionable_anchor_required": true,
+      "safe_code": "M2_ACTIONABLE_TOPIC_REQUIRED",
+      "classification": "bounded_product_scope_validation",
+      "provider_called": false,
+      "clarification_budget_consumed": false,
+      "assessment_request_created": false,
+      "report": null,
+      "charge": "prohibited",
+      "relationship_or_emotional_only_product": "out_of_current_mvp_scope_separate_future_decision"
+    }
+  },
+  "customer_api_delivery": {
+    "successor": "CustomerAssessmentDeliveryV2",
+    "supported_eligibilities": [
+      "ready",
+      "needs_more_information",
+      "not_full_product_candidate",
+      "safety_blocked"
+    ],
+    "status_by_eligibility": {
+      "ready": "completed",
+      "needs_more_information": "awaiting_clarification",
+      "not_full_product_candidate": "stopped",
+      "safety_blocked": "stopped"
+    },
+    "needs_more_information_fields": [
+      "opaqueClarificationId",
+      "questionCode",
+      "target",
+      "question",
+      "maximumQuestionsTotal",
+      "questionsAlreadyUsed",
+      "questionsRemaining"
+    ],
+    "needs_more_information_questions_remaining": 1,
+    "customer_exposed_internal_fact_ids": false,
+    "customer_exposed_provider_ids": false,
+    "initial_request_body_immutable": true,
+    "answer_endpoint": "POST /api/internal/assessment-clarifications/[clarificationId]/answer",
+    "answer_endpoint_overloads_initial_post": false
+  },
+  "payment_boundary": {
+    "implementation_in_plan": false,
+    "charge_before_full_product_eligibility": false,
+    "no_charge_states": [
+      "needs_more_information",
+      "not_full_product_candidate",
+      "safety_blocked"
+    ],
+    "only_future_full_paid_ready_may_reach_payment_gate": true,
+    "payment_authorized": false
+  },
+  "runtime_sequences": {
+    "initial_submission": [
+      "cheap_form_and_product_scope_server_validation",
+      "persist_immutable_request",
+      "base_and_candidate_processing",
+      "safety_aggregation",
+      "v1_a1_compatible_sufficiency_policy",
+      "ready_or_persist_one_clarification_and_stop_or_not_full_stop_or_safety_stop"
+    ],
+    "clarification_answer": [
+      "validate_opaque_clarification_authority",
+      "atomically_persist_answer_transition_awaiting_to_processing_and_create_exactly_one_resume_run",
+      "clarification_aware_pb_01_successor",
+      "candidate_and_safety_processing",
+      "compose_effective_assessment_authority_with_per_value_provenance",
+      "v1_a1_compatible_re_evaluation_with_budget_exhausted",
+      "effective_decision_policy_successor",
+      "clarification_aware_pb_04_pb_05_pb_06_successors",
+      "ready_or_not_full_or_safety_or_technical_failure"
+    ],
+    "second_clarification": "prohibited"
+  },
+  "future_v1_a2_implementation_scope": {
+    "status": "r1_recomputed_fixed_but_unauthorized_pending_plan_acceptance",
+    "future_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration",
+    "future_parent": "accepted_v1_a2_planning_snapshot_to_be_fixed_after_review",
+    "total": "37/37",
+    "updated": 14,
+    "new": 23,
+    "deleted": 0,
+    "renamed": 0,
+    "updated_paths": [
+      "docs/CODEX_HANDOFF.md",
+      "docs/CURRENT_FOCUS.md",
+      "docs/WBS.md",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1/implementation-work-packages-v1.json",
+      "lib/assessment/runtime/types.ts",
+      "lib/assessment/runtime/pipeline.ts",
+      "lib/assessment/runtime/application.ts",
+      "lib/assessment/runtime/service.ts",
+      "lib/assessment/runtime/supabase-repository.ts",
+      "lib/assessment/runtime/fakes.ts",
+      "lib/assessment/runtime/schema-catalog.ts",
+      "app/api/internal/assessments/route.ts",
+      "components/runtime/RuntimeAssessmentForm.tsx",
+      "app/globals.css"
+    ],
+    "new_paths": [
+      "lib/assessment/runtime/clarification-evidence-v1.ts",
+      "lib/assessment/runtime/clarification-grounding-v1.ts",
+      "lib/assessment/runtime/clarification-source-integrity-v1.ts",
+      "lib/assessment/runtime/effective-assessment-authority-v1.ts",
+      "lib/assessment/runtime/effective-assessment-authority-integrity-v1.ts",
+      "lib/assessment/runtime/effective-decision-policy-v1.ts",
+      "lib/assessment/runtime/jpy980-product-scope-validation-v1.ts",
+      "lib/assessment/runtime/jpy980-input-sufficiency-policy-v2.ts",
+      "lib/assessment/runtime/contracts/pb-01-clarification-aware-v1.developer.md",
+      "lib/assessment/runtime/contracts/pb-04-clarification-aware-v1.developer.md",
+      "lib/assessment/runtime/contracts/pb-05-clarification-aware-v1.developer.md",
+      "lib/assessment/runtime/contracts/pb-06-clarification-aware-v1.developer.md",
+      "lib/assessment/runtime/contracts/clarification-aware-base-intake-v1.schema.json",
+      "lib/assessment/runtime/contracts/runtime-stage-catalog-v12.json",
+      "lib/assessment/runtime/runtime-result-normalization-v2.ts",
+      "lib/assessment/runtime/customer-assessment-delivery-v2.ts",
+      "app/api/internal/assessment-clarifications/[clarificationId]/answer/route.ts",
+      "supabase/migrations/0006_m2_p4_jpy980_clarification_lifecycle.sql",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2/integration-fixtures-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2/offline-results-v1.json",
+      "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2/capabilities-v1.json",
+      "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_V1_A2_REVIEW.md",
+      "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-clarification-integration.mjs"
+    ],
+    "package_ownership": [
+      "types",
+      "clarification_contract_and_grounding",
+      "pb_01_successor_prompt_schema_catalog",
+      "source_integrity_validation",
+      "effective_assessment_authority_and_per_value_provenance",
+      "clarification_aware_decision_policy_successor",
+      "pb_04_pb_05_pb_06_clarification_aware_prompt_successors",
+      "pipeline",
+      "application_and_service",
+      "repository_and_fake",
+      "migration",
+      "runtime_result_normalization",
+      "customer_delivery_successor",
+      "initial_api_validation",
+      "clarification_answer_api",
+      "runtime_assessment_form_clarification_ui",
+      "offline_fixtures_and_verifier",
+      "review_and_authority_sync"
+    ],
+    "scope_change_rule": "STOP_and_obtain_new_human_review_before_implementation"
+  },
+  "future_v1_a2_exclusions": [
+    "PB-05_semantic_depth",
+    "V1-B_product_note_work",
+    "V1-C_semantic_disposition",
+    "V1-D_product_re_review",
+    "payment_implementation",
+    "provider_execution",
+    "production_runtime_activation",
+    "main_integration"
+  ],
+  "current_authority": {
+    "v1_a1": "accepted_complete",
+    "v1_a2": "r1_effective_authority_correction_defined_pending_review",
+    "v1_a2_implementation_authorized": false,
+    "v1_b": "unauthorized",
+    "v1_c": "unauthorized",
+    "v1_d": "unauthorized",
+    "r2_c": "remediation_required",
+    "experienceProductJudgment": "pending_remediation",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "provider_execution_authorized": false,
+    "production_runtime_authorized": false,
+    "payment_authorized": false,
+    "main_integration_authorized": false
+  },
+  "planning_operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migrations_applied": 0
+  }
+}

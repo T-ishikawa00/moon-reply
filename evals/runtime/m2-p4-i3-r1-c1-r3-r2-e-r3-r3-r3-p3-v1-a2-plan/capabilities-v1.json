@@ -1,0 +1,192 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a2-plan-capabilities-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A2-PLAN",
+  "status": "r1_effective_authority_correction_defined_pending_human_chatgpt_review",
+  "authority": {
+    "exact_parent": "8db5c6386ed0b9b16f0d1586f47d384262cc502b",
+    "original_v1_a1": "65c245860813f6179689855b344dbf6fd425867a",
+    "jpy980_architecture": "cfad0bd4ca3fd2304b00d072624e624f98c09b29",
+    "main": "61e33a10e195fad17e253a6b9719217e1992f273",
+    "v1_a1_chatgpt_review": "PASS_complete",
+    "v1_a1_human_review": "PASS_complete",
+    "v1_a1_human_acceptance": "complete",
+    "v1_a1_acceptance": "complete",
+    "acceptance_date": "2026-08-16",
+    "v1_a2_plan_commit": "ab99f003901475199fcb316264ecd02c4f2baef8",
+    "v1_a2_plan_review": "NEEDS_CORRECTION",
+    "review_findings": {
+      "blocker": 0,
+      "major": 1,
+      "minor": 2,
+      "major_code": "clarification_authority_missing_from_downstream_assessment_chain"
+    }
+  },
+  "packages": {
+    "V1-A1": {
+      "name": "Deterministic Input Sufficiency Policy",
+      "status": "accepted_complete"
+    },
+    "V1-A2": {
+      "name": "Runtime/API/UI Clarification Integration",
+      "status": "r1_effective_authority_correction_defined_pending_review",
+      "planning_authorized": true,
+      "implementation_authorized": false
+    },
+    "V1-B": "unauthorized",
+    "V1-C": "unauthorized",
+    "V1-D": "unauthorized",
+    "v1_a_overall_complete": false
+  },
+  "architecture": {
+    "authority_lanes": [
+      "base",
+      "candidate",
+      "clarification_evidence"
+    ],
+    "clarification_provenance": "user_clarification",
+    "clarification_appended_to_current_situation": false,
+    "false_base_provenance_allowed": false,
+    "new_provider_stage_planned": false,
+    "same_request_second_run": true,
+    "maximum_clarifications_per_request": 1,
+    "automatic_second_clarification_allowed": false,
+    "clarification_safety_precedes_paid_eligibility": true,
+    "not_full_product_candidate_first_class_future_state": true,
+    "accepted_v1_policy_mutated": false,
+    "successor_policy": "jpy980-input-sufficiency-policy-v2",
+    "effective_assessment_authority": "EffectiveAssessmentAuthorityV1",
+    "effective_authority_kind": "derived_not_source",
+    "per_value_provenance_required": true,
+    "decision_policy_successor": "EffectiveDecisionPolicyV1",
+    "pb_04_clarification_aware_successor": true,
+    "pb_05_clarification_aware_successor": true,
+    "pb_06_clarification_validation_successor": true,
+    "ready_making_clarification_discard_allowed": false,
+    "usual_reply_cadence_question_v2": "今の待ち時間は、その相手の普段の返信ペースの範囲内ですか？",
+    "awaiting_to_processing_atomic_with_answer_and_resume_run": true,
+    "duplicate_same_answer_additional_runs": 0,
+    "continuation_identifier_minimum_unpredictability_bits": 128
+  },
+  "product_scope": {
+    "message_impact_candidate_required": true,
+    "message_impact_missing_candidate_safe_code": "M2_MESSAGE_IMPACT_CANDIDATE_REQUIRED",
+    "message_impact_missing_candidate_consumes_clarification_budget": false,
+    "draft_message_candidate_required": false,
+    "actionable_anchor_topics": [
+      "decide_send_or_wait",
+      "draft_message",
+      "message_impact",
+      "next_three_days"
+    ],
+    "supplementary_only_topics": [
+      "relationship",
+      "organize_emotions"
+    ],
+    "actionable_topic_required_safe_code": "M2_ACTIONABLE_TOPIC_REQUIRED",
+    "supplementary_only_consumes_clarification_budget": false,
+    "relationship_emotional_only_product": "out_of_current_mvp_scope"
+  },
+  "customer_delivery_successor": {
+    "eligibilities": [
+      "ready",
+      "needs_more_information",
+      "not_full_product_candidate",
+      "safety_blocked"
+    ],
+    "opaque_clarification_id": true,
+    "question_code": true,
+    "target": true,
+    "customer_safe_question": true,
+    "one_question_remaining_truth": true,
+    "internal_fact_ids_exposed": false,
+    "provider_ids_exposed": false,
+    "separate_answer_endpoint": true,
+    "initial_request_body_immutable": true
+  },
+  "payment_boundary": {
+    "implementation_authorized": false,
+    "charge_needs_more_information": false,
+    "charge_not_full_product_candidate": false,
+    "charge_safety_blocked": false
+  },
+  "future_implementation_scope": {
+    "status": "r1_recomputed_fixed_unauthorized",
+    "total": "37/37",
+    "updated": 14,
+    "new": 23,
+    "deleted": 0,
+    "renamed": 0
+  },
+  "current_runtime_mutation": {
+    "product_code": 0,
+    "pipeline": 0,
+    "types": 0,
+    "api": 0,
+    "ui": 0,
+    "db": 0,
+    "migration": 0,
+    "prompt": 0,
+    "schema": 0,
+    "catalog": 0,
+    "provider": 0,
+    "pb_05": 0,
+    "semantic_disposition": 0,
+    "payment": 0
+  },
+  "operations": {
+    "provider_calls": 0,
+    "db_operations": 0,
+    "supabase_operations": 0,
+    "migrations_applied": 0
+  },
+  "current_product_authority": {
+    "r2_c": "remediation_required",
+    "experienceProductJudgment": "pending_remediation",
+    "jpy980RuntimeReadiness": "not_established",
+    "globalQ0Completion": false,
+    "production_runtime_authorized": false,
+    "payment_authorized": false,
+    "provider_execution_authorized": false,
+    "main_integration_authorized": false
+  },
+  "exact_planning_scope": {
+    "total": "10/10",
+    "updated": 6,
+    "new": 4,
+    "deleted": 0,
+    "renamed": 0
+  },
+  "exact_r1_correction_scope": {
+    "total": "8/8",
+    "updated": 7,
+    "new": 1,
+    "deleted": 0,
+    "renamed": 0
+  },
+  "validation": {
+    "r1_effective_authority_correction_verifier": "PASS 27/27",
+    "planning_verifier": "PASS 26/26",
+    "v1_a1_r1_verifier_at_8db5c638": "PASS 25/25",
+    "original_v1_a1_verifier_at_65c24586": "PASS 24/24",
+    "jpy980_correction_verifier": "PASS 19/19",
+    "original_planning_verifier": "PASS 18/18",
+    "r2_c_verifier": "PASS 17/17",
+    "r2_b_verifier": "PASS 21/21",
+    "all_upstream_accepted_verifiers": "PASS",
+    "decision_policy": "PASS 40/40",
+    "typecheck": "PASS",
+    "lint_max_warnings_0": "PASS",
+    "build": "PASS",
+    "git_diff_check": "PASS",
+    "sensitive_values": 0,
+    "product_runtime_snapshot_changed": false,
+    "main_changed": false,
+    "next_env_drift": 0
+  },
+  "pull_request_created": false,
+  "merge_used": false,
+  "rebase_used": false,
+  "cherry_pick_used": false,
+  "force_push_used": false,
+  "next_action": "human_chatgpt_review_of_v1_a2_r1_effective_authority_correction"
+}

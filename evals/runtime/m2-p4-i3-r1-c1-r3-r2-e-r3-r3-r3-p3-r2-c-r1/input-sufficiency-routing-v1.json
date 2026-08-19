@@ -1,0 +1,157 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-c-r1-input-sufficiency-routing-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-C-R1",
+  "status": "planning_contract_defined_pending_review",
+  "planning_only": true,
+  "priority_order": [
+    "safety",
+    "input_sufficiency",
+    "full_jpy980_product_eligibility"
+  ],
+  "existing_runtime_reuse": {
+    "existing_result_family": "eligibility=needs_more_information",
+    "preferred_when_full_product_cannot_yet_be_grounded": true,
+    "report_present": false,
+    "generated_draft_present": false,
+    "payment_capable_state": false,
+    "new_runtime_result_family_authorized_by_this_plan": false
+  },
+  "clarification_budget": {
+    "maximum_questions_total_per_consultation_attempt": 1,
+    "maximum_questions_per_turn": 1,
+    "automatic_second_question_allowed": false,
+    "clarification_loop_allowed": false,
+    "question_must_be_consultation_specific": true,
+    "question_selection": "highest_information_gain"
+  },
+  "states": {
+    "full_paid_ready": {
+      "definition": "Safety permits normal handling, the consultation-specific decision is material, and every mandatory Product value function can be grounded from supplied input.",
+      "report_allowed_in_future_implementation": true,
+      "payment_authorized_by_this_plan": false,
+      "does_not_mean_jpy980_runtime_readiness": true
+    },
+    "needs_one_clarifying_answer": {
+      "definition": "Exactly one missing material answer has a realistic chance to establish or reject Full Product eligibility.",
+      "preferred_runtime_result_family": "needs_more_information",
+      "question_count_per_turn": 1,
+      "question_count_total_per_consultation_attempt": 1,
+      "question_selection": "highest_information_gain",
+      "question_must_be_consultation_specific": true,
+      "generic_multi_question_questionnaire_prohibited": true,
+      "report_allowed": false,
+      "generated_draft_allowed": false,
+      "payment_capable_state_allowed": false
+    },
+    "not_full_product_candidate": {
+      "definition": "The consultation does not establish a meaningful JPY980 decision problem even after available material facts are considered.",
+      "paid_path_allowed": false,
+      "report_allowed": false,
+      "generated_draft_allowed": false,
+      "charge_allowed": false,
+      "terminal_non_paid_experience_representation": "decision_pending_for_future_implementation_review",
+      "do_not_invent_a_question_only_to_keep_the_paid_path_open": true
+    },
+    "safety_blocked": {
+      "definition": "Existing Safety authority requires a stop before Product eligibility.",
+      "priority_over_all_other_states": true,
+      "report_allowed": false,
+      "generated_draft_allowed": false,
+      "charge_allowed": false,
+      "safety_contract_may_not_be_weakened": true
+    }
+  },
+  "global_rules": [
+    "Insufficient input must not be padded into a paid Report.",
+    "Ask at most one consultation-specific highest-information-gain question in the entire consultation attempt.",
+    "Enter needs_one_clarifying_answer only when one answer has a realistic chance to establish or reject Full Product eligibility.",
+    "Never generate an automatic second clarification or enter a clarification loop.",
+    "Do not charge before Product eligibility is established.",
+    "Do not generate a Report or draft while eligibility is needs_more_information.",
+    "The clarification must target the current consultation rather than use a generic questionnaire.",
+    "Safety always overrides sufficiency and paid eligibility."
+  ],
+  "state_transitions": {
+    "initial_input_insufficient": {
+      "clarification_budget_unused_and_one_answer_can_establish_or_reject_eligibility": "needs_one_clarifying_answer",
+      "otherwise": "not_full_product_candidate"
+    },
+    "question_unanswered": {
+      "state": "needs_one_clarifying_answer",
+      "report_allowed": false,
+      "generated_draft_allowed": false,
+      "charge_allowed": false
+    },
+    "after_single_clarification_answer": {
+      "mandatory_functions_groundable": "full_paid_ready",
+      "still_insufficient_or_non_material": "not_full_product_candidate",
+      "safety_signal_present": "safety_blocked",
+      "automatic_second_question_allowed": false
+    },
+    "still_insufficient_after_budget_exhausted": "not_full_product_candidate"
+  },
+  "case_routes": [
+    {
+      "case_id": "simple_business_reply_with_draft",
+      "initial_route": "needs_one_clarifying_answer",
+      "not_automatically_full_paid_ready": true,
+      "materiality_needed": [
+        "tone",
+        "distance",
+        "affection",
+        "pressure",
+        "relationship_impact"
+      ],
+      "ready_candidate_when": "At least one meaningful concern is explicit and the intended relationship outcome is sufficiently clear.",
+      "not_full_route_when": "The answer confirms there is no material relationship or communication concern beyond routine administration, or the one-question budget is exhausted without grounding mandatory functions."
+    },
+    {
+      "case_id": "nullable_optional_sections",
+      "initial_route": "needs_one_clarifying_answer",
+      "full_paid_ready_in_current_sparse_form": false,
+      "question_target": "the single missing fact most likely to change the current action decision"
+    },
+    {
+      "case_id": "ordinary_reply_waiting",
+      "initial_route": "full_paid_ready_candidate",
+      "required_sufficiency": [
+        "timing",
+        "last_contact",
+        "usual_cadence",
+        "users_central_fear"
+      ],
+      "missing_timeline_route": "needs_one_clarifying_answer only when the clarification budget is unused and one answer can establish or reject eligibility; otherwise not_full_product_candidate"
+    },
+    {
+      "case_id": "polite_thank_you_with_draft",
+      "category": "polite_draft",
+      "initial_route": "full_paid_ready_candidate",
+      "required_sufficiency": [
+        "requested_tone",
+        "relationship_intent"
+      ]
+    },
+    {
+      "case_id": "kansai_persona_draft",
+      "category": "persona_preserved",
+      "initial_route": "full_paid_ready_candidate",
+      "required_sufficiency": [
+        "requested_tone",
+        "relationship_intent"
+      ]
+    }
+  ],
+  "future_ux_decisions": {
+    "start_new_consultation": "decision_pending",
+    "input_correction": "decision_pending",
+    "authorized_by_this_plan": false,
+    "implementation_included_in_this_plan": false
+  },
+  "authority_boundary": {
+    "implementation_authorized": false,
+    "prompt_change_authorized": false,
+    "schema_change_authorized": false,
+    "provider_execution_authorized": false,
+    "payment_implementation_authorized": false
+  }
+}

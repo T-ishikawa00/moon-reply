@@ -1,0 +1,198 @@
+{
+  "schema_version": "m2-p4-v1-d-controlled-provider-inputs-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-D-C1",
+  "status": "exact_synthetic_inputs_frozen_not_authorized_not_executed",
+  "model": "gpt-5.6-luna",
+  "case_count": 9,
+  "provider_execution_authorized": false,
+  "provider_execution_count": 0,
+  "provenance": "synthetic_controlled_review_input",
+  "evidence_boundary": {
+    "actual_v15_successor_output_exists": false,
+    "raw_text_to_pb_01_extraction_correctness": "unestablished",
+    "provider_outcome": "unproven_until_separately_authorized_execution"
+  },
+  "cases": [
+    {
+      "fixture_id": "ordinary_reply_waiting",
+      "fixed_clock": "2026-08-17T12:00:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "知り合って約3か月の相手に、2026年8月17日13時ごろ「昨日はありがとう。また話せたらうれしい」と送りました。現在は同日21時で、普段は半日から1日ほどで返信があります。明日までに追加送信するか待つかを決めたいです。返信がない理由は分からず、拒絶されたのではという不安がありますが、関係を急がず続けたいです。",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "organize_emotions"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "administrative_reply_with_tone_concern_ready_candidate",
+      "fixed_clock": "2026-08-17T12:05:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "仕事上の連絡相手から、打合せを火曜日14時へ変更したいと連絡がありました。変更には応じられます。今後も相談しやすい関係を保ちたいので、承諾は明確にしつつ、候補文が硬く突き放す印象にならないかを確認したいです。普段のやり取りは丁寧語で、絵文字は使いません。",
+        "optionalMessage": "ご連絡ありがとうございます。火曜日14時で承知しました。よろしくお願いいたします。",
+        "relationship": "work_or_school",
+        "requestedTopics": [
+          "draft_message",
+          "message_impact"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "reply_waiting_with_usual_cadence",
+      "fixed_clock": "2026-08-17T12:10:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "知り合って約2か月の相手へ、2026年8月17日9時に週末の予定を尋ねるメッセージを送りました。現在は同日21時10分で、普段の返信は1日から2日以内です。関係を続けたい一方、返信がないことを拒絶と受け取って追加送信すべきか迷っています。普段の返信ペース内で待つか、判断を整理したいです。",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "next_three_days",
+          "organize_emotions"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "draft_request_with_relationship_intent",
+      "fixed_clock": "2026-08-17T12:15:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "先週、知り合って間もない相手と初めて二人でゆっくり話しました。今後は少しずつ距離を縮めたいです。感謝と、また話したい意図は伝えたい一方、次の約束を迫る強さにはしたくありません。普段は丁寧すぎない標準語で短く連絡しています。候補文の温度と圧を確認し、必要ならその意図に合う文面を整えたいです。",
+        "optionalMessage": "昨日はありがとう。話せてうれしかった。また都合が合うときに話せたらうれしいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message",
+          "message_impact"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "polite_thank_you_with_draft",
+      "fixed_clock": "2026-08-17T12:20:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "今日、交際前の相手と食事をして会話が穏やかに終わりました。今夜中に感謝を伝え、また会う余地は残したいですが、強い誘いにはしたくありません。普段は丁寧な標準語で、短い文章を使います。候補文の丁寧さと距離感を確認したいです。",
+        "optionalMessage": "今日はありがとうございました。お話しできてうれしかったです。",
+        "relationship": "dating",
+        "requestedTopics": [
+          "draft_message",
+          "message_impact"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "kansai_persona_draft",
+      "fixed_clock": "2026-08-17T12:25:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "親しく連絡している相手から、土曜日に会えるか聞かれました。土曜日は空いており、早めに肯定で返したいです。普段は関西弁で、短い改行と絵文字を使います。候補文の関西弁、改行、絵文字を変えずに送る方向が合うか確認したいです。",
+        "optionalMessage": "おっけー、土曜ならいけるで！\nまた時間おしえて〜😊",
+        "relationship": "dating",
+        "requestedTopics": [
+          "draft_message",
+          "decide_send_or_wait"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "alternative_tradeoff_applicable",
+      "fixed_clock": "2026-08-17T12:30:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "今週末に会う候補を相談中の相手へ、2026年8月17日10時に都合を尋ねました。現在は同日21時30分で、普段の返信は1日から2日以内です。一方、席の仮予約は8月18日12時までに確定が必要です。今夜は待って相手の普段のペースを尊重する案と、明朝に一度だけ予約期限を伝える案があり、待つ利益と予約機会を失うコストの両方を踏まえて決めたいです。",
+        "optionalMessage": null,
+        "relationship": "dating",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "next_three_days"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "alternative_tradeoff_not_applicable",
+      "fixed_clock": "2026-08-17T12:35:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "知り合って約4か月の相手へ、2026年8月17日12時に近況を尋ねるメッセージを送りました。現在は同日21時35分で、普段は1日から2日以内に返信があります。期限のある予定や、今すぐ追加で伝える判断材料はありません。返信がない理由は分からないままですが、拒絶と決めつけず、現在は待つ方向が妥当かと不安の扱いを整理したいです。",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "organize_emotions"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "full_paid_ready_candidate",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": null
+    },
+    {
+      "fixture_id": "one_clarification_answer_becomes_ready",
+      "fixed_clock": "2026-08-17T12:40:00.000Z",
+      "timezone": "Asia/Tokyo",
+      "assessment_input": {
+        "currentSituation": "知り合って約3か月の相手からの返信を待っています。最後にこちらから送った時刻だけを記録していません。普段は1日以内に返信があり、関係を急がず続けたいです。返信がないことを拒絶と受け取って追加送信するか迷っているため、送るか待つかと不安の整理を相談したいです。",
+        "optionalMessage": null,
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "organize_emotions"
+        ],
+        "privacyAcknowledged": true
+      },
+      "expected_initial_route": "needs_one_clarifying_answer",
+      "synthetic_only": true,
+      "human_pii": false,
+      "clarification": {
+        "expected_target": "latest_contact_timing",
+        "answer_payload": {
+          "kind": "elapsed_bucket",
+          "value": "six_to_24_hours"
+        },
+        "expected_route_after_answer": "full_paid_ready_candidate",
+        "maximum_answers_total": 1,
+        "second_answer_allowed": false
+      }
+    }
+  ]
+}

@@ -8,8 +8,12 @@ import {
   decodeRequestedTopics,
   hydratePersistedReadyAssessmentV1,
 } from "./runtime-result-normalization-v1.ts";
+import { decodeAssessmentExecutionResultV2 } from "./runtime-result-normalization-v2.ts";
 import type {
+  AcceptClarificationAnswerRecord,
+  AssessmentExecutionResult,
   AssessmentRepository,
+  CompleteClarificationGroundingRecord,
   CompleteRunRecord,
   CompleteStageRecord,
   CreateRequestRecord,
@@ -17,6 +21,12 @@ import type {
   FailRunRecord,
   FailStageRecord,
   FinalizeCompletedAssessmentRecord,
+  FinalizeNeedsMoreInformationRecord,
+  JsonObject,
+  JsonValue,
+  Jpy980ClarificationTarget,
+  PersistedAssessmentClarification,
+  PersistedInitialAuthorityV1,
   PersistedAssessmentRequest,
   RelationshipValue,
   RequestedTopic,
@@ -35,7 +45,7 @@ type RequestRow = {
   relationship: RelationshipValue;
   requested_topics: RequestedTopic[];
   privacy_acknowledged: boolean;
-  status: "processing" | "completed" | "failed";
+  status: "processing" | "awaiting_clarification" | "completed" | "failed";
   created_at: string;
   updated_at: string;
 };
@@ -49,6 +59,7 @@ type RunRow = {
   prompt_bundle_version: string;
   schema_set_version: string;
   stage_topology_version: StageTopologyVersion;
+  run_kind: "initial" | "clarification_resume";
   eligibility: string | null;
   decision: string | null;
   total_input_tokens: number;
@@ -59,6 +70,8 @@ type RunRow = {
   started_at: string;
   completed_at: string | null;
   error_code: string | null;
+  result_json: JsonObject | null;
+  policy_result_json: JsonObject | null;
 };
 
 type StageRunRow = {
@@ -66,6 +79,7 @@ type StageRunRow = {
   run_id: string;
   stage_id: string;
   sequence_number: number;
+  attempt_number: 1 | 2;
   status: StageRunStatus;
   request_hash: string;
   prompt_hash: string;
@@ -80,6 +94,11 @@ type StageRunRow = {
   latency_ms: number;
   output_json: unknown;
   error_code: string | null;
+  skip_reason:
+    | "candidate_absent"
+    | "reused_initial_authority"
+    | "routing_stopped"
+    | null;
   created_at: string;
 };
 
@@ -89,6 +108,26 @@ type ReportRow = {
   report_json: unknown;
   decision_card_json: unknown;
   created_at: string;
+};
+
+type ClarificationRow = {
+  schema_version: "m2-p4-assessment-clarification-v1";
+  id: string;
+  request_id: string;
+  ordinal: 1;
+  question_code: string;
+  target: Jpy980ClarificationTarget;
+  question_snapshot: string;
+  provenance: "user_clarification";
+  source_identity: string;
+  answer_status: "pending" | "answered";
+  answer: JsonValue | null;
+  answer_fingerprint: string | null;
+  grounded_normalized_representation: JsonObject | null;
+  safety_signals: JsonObject[];
+  resume_run_id: string | null;
+  created_at: string;
+  answered_at: string | null;
 };
 
 type RuntimeTable<Row extends Record<string, unknown>> = {
@@ -105,6 +144,7 @@ type RuntimeDatabase = {
       assessment_runs: RuntimeTable<RunRow>;
       assessment_stage_runs: RuntimeTable<StageRunRow>;
       assessment_reports: RuntimeTable<ReportRow>;
+      assessment_clarifications: RuntimeTable<ClarificationRow>;
     };
     Views: {
       [_ in never]: never;
@@ -126,6 +166,22 @@ type RuntimeDatabase = {
           p_usage_derived_cost_usd: number;
           p_completed_at: string;
         };
+        Returns: undefined;
+      };
+      finalize_needs_more_information_v1: {
+        Args: Record<string, unknown>;
+        Returns: undefined;
+      };
+      accept_assessment_clarification_v1: {
+        Args: Record<string, unknown>;
+        Returns: JsonValue;
+      };
+      finalize_stopped_assessment_v1: {
+        Args: Record<string, unknown>;
+        Returns: undefined;
+      };
+      fail_assessment_run_v1: {
+        Args: Record<string, unknown>;
         Returns: undefined;
       };
     };
@@ -231,6 +287,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       prompt_bundle_version: record.promptBundleVersion,
       schema_set_version: record.schemaSetVersion,
       stage_topology_version: record.stageTopologyVersion,
+      run_kind: record.runKind ?? "initial",
       eligibility: null,
       decision: null,
       total_input_tokens: 0,
@@ -241,6 +298,8 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       started_at: record.startedAt,
       completed_at: null,
       error_code: null,
+      result_json: null,
+      policy_result_json: null,
     });
     if (error) throw databaseFailure();
   }
@@ -251,6 +310,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       run_id: record.runId,
       stage_id: record.stageId,
       sequence_number: record.sequenceNumber,
+      attempt_number: record.attemptNumber,
       status: "processing",
       request_hash: record.requestHash,
       prompt_hash: record.promptHash,
@@ -265,6 +325,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       latency_ms: 0,
       output_json: null,
       error_code: null,
+      skip_reason: null,
       created_at: record.createdAt,
     });
     if (error) throw databaseFailure();
@@ -314,6 +375,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       run_id: record.runId,
       stage_id: record.stageId,
       sequence_number: record.sequenceNumber,
+      attempt_number: record.attemptNumber,
       status: "skipped",
       request_hash: record.requestHash,
       prompt_hash: record.promptHash,
@@ -328,12 +390,41 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       latency_ms: 0,
       output_json: null,
       error_code: null,
+      skip_reason: record.skipReason,
       created_at: record.createdAt,
     });
     if (error) throw databaseFailure();
   }
 
   async completeRun(record: CompleteRunRecord) {
+    if (record.resultJson !== undefined) {
+      if (
+        record.eligibility !== "not_full_product_candidate" &&
+        record.eligibility !== "safety_blocked"
+      ) {
+        throw new M2RuntimeError("M2_PERSISTED_RESULT_INVALID");
+      }
+      const { error } = await this.client.rpc("finalize_stopped_assessment_v1", {
+        p_run_id: record.runId,
+        p_request_id: record.requestId,
+        p_returned_model: record.returnedModel,
+        p_eligibility: record.eligibility,
+        p_decision: record.decision,
+        p_result_json: record.resultJson,
+        p_total_input_tokens: record.totalInputTokens,
+        p_total_cached_tokens: record.totalCachedTokens,
+        p_total_output_tokens: record.totalOutputTokens,
+        p_total_reasoning_tokens: record.totalReasoningTokens,
+        p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+        p_completed_at: record.completedAt,
+      });
+      if (error) throw databaseFailure();
+      return;
+    }
+
+    // Preserve the pre-V1-A2 completion contract for historical callers that
+    // have no first-class result JSON. In particular, the V1-A2 stop RPC does
+    // not accept legacy needs_more_information records.
     const { error: runError } = await this.client
       .from("assessment_runs")
       .update({
@@ -354,41 +445,198 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
     if (runError) throw databaseFailure();
     const { error: requestError } = await this.client
       .from("assessment_requests")
-      .update({
-        status: "completed",
-        updated_at: record.completedAt,
-      })
+      .update({ status: "completed", updated_at: record.completedAt })
       .eq("id", record.requestId)
       .eq("status", "processing");
     if (requestError) throw databaseFailure();
   }
 
-  async failRun(record: FailRunRecord) {
-    const { error: runError } = await this.client
-      .from("assessment_runs")
-      .update({
-        status: "failed",
-        returned_model: record.returnedModel,
-        total_input_tokens: record.totalInputTokens,
-        total_cached_tokens: record.totalCachedTokens,
-        total_output_tokens: record.totalOutputTokens,
-        total_reasoning_tokens: record.totalReasoningTokens,
-        usage_derived_cost_usd: record.usageDerivedCostUsd,
-        completed_at: record.completedAt,
-        error_code: record.errorCode,
-      })
-      .eq("id", record.runId)
-      .eq("status", "processing");
-    if (runError) throw databaseFailure();
-    const { error: requestError } = await this.client
+  async finalizeNeedsMoreInformation(record: FinalizeNeedsMoreInformationRecord) {
+    const { error } = await this.client.rpc("finalize_needs_more_information_v1", {
+      p_run_id: record.runId,
+      p_request_id: record.requestId,
+      p_returned_model: record.returnedModel,
+      p_policy_result_json: record.policyResult,
+      p_result_json: record.resultJson,
+      p_total_input_tokens: record.totalInputTokens,
+      p_total_cached_tokens: record.totalCachedTokens,
+      p_total_output_tokens: record.totalOutputTokens,
+      p_total_reasoning_tokens: record.totalReasoningTokens,
+      p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+      p_completed_at: record.completedAt,
+      p_clarification_id: record.clarification.id,
+      p_schema_version: record.clarification.schemaVersion,
+      p_ordinal: record.clarification.ordinal,
+      p_question_code: record.clarification.questionCode,
+      p_target: record.clarification.target,
+      p_question_snapshot: record.clarification.questionSnapshot,
+      p_provenance: record.clarification.provenance,
+      p_source_identity: record.clarification.sourceIdentity,
+      p_created_at: record.clarification.createdAt,
+    });
+    if (error) throw databaseFailure();
+    const clarification = await this.findClarificationById(
+      record.clarification.id,
+    );
+    if (!clarification) throw databaseFailure();
+    return clarification;
+  }
+
+  async findClarificationById(clarificationId: string) {
+    const { data, error } = await this.client
+      .from("assessment_clarifications")
+      .select("*")
+      .eq("id", clarificationId)
+      .maybeSingle();
+    if (error) throw databaseFailure();
+    return data ? mapClarification(data) : null;
+  }
+
+  async findClarificationByRequestId(requestId: string) {
+    const { data, error } = await this.client
+      .from("assessment_clarifications")
+      .select("*")
+      .eq("request_id", requestId)
+      .maybeSingle();
+    if (error) throw databaseFailure();
+    return data ? mapClarification(data) : null;
+  }
+
+  async acceptClarificationAndCreateResumeRun(
+    record: AcceptClarificationAnswerRecord,
+  ) {
+    const { data, error } = await this.client.rpc(
+      "accept_assessment_clarification_v1",
+      {
+        p_clarification_id: record.clarificationId,
+        p_answer: record.answer,
+        p_answer_fingerprint: record.answerFingerprint,
+        p_grounded_normalized_representation:
+          record.groundedNormalizedRepresentation,
+        p_answered_at: record.answeredAt,
+        p_resume_run_id: record.resumeRun.id,
+        p_requested_model: record.resumeRun.requestedModel,
+        p_prompt_bundle_version: record.resumeRun.promptBundleVersion,
+        p_schema_set_version: record.resumeRun.schemaSetVersion,
+        p_stage_topology_version: record.resumeRun.stageTopologyVersion,
+        p_started_at: record.resumeRun.startedAt,
+      },
+    );
+    if (error) {
+      const message = `${error.message ?? ""} ${error.details ?? ""}`;
+      if (message.includes("M2_CLARIFICATION_ALREADY_ANSWERED")) {
+        throw new M2RuntimeError("M2_CLARIFICATION_ALREADY_ANSWERED", 409);
+      }
+      if (message.includes("M2_CLARIFICATION_NOT_FOUND")) {
+        throw new M2RuntimeError("M2_CLARIFICATION_NOT_FOUND", 404);
+      }
+      throw databaseFailure();
+    }
+    if (
+      typeof data !== "object" ||
+      data === null ||
+      Array.isArray(data) ||
+      (data.disposition !== "accepted" && data.disposition !== "duplicate") ||
+      typeof data.resume_run_id !== "string"
+    ) throw databaseFailure();
+    const clarification = await this.findClarificationById(
+      record.clarificationId,
+    );
+    if (!clarification) throw databaseFailure();
+    const { data: requestRow, error: requestError } = await this.client
       .from("assessment_requests")
+      .select("*")
+      .eq("id", clarification.requestId)
+      .single();
+    if (requestError || !requestRow) throw databaseFailure();
+    return {
+      disposition: data.disposition as "accepted" | "duplicate",
+      clarification,
+      request: mapRequest(requestRow),
+      resumeRunId: data.resume_run_id,
+    };
+  }
+
+  async completeClarificationGrounding(
+    record: CompleteClarificationGroundingRecord,
+  ) {
+    const { error } = await this.client
+      .from("assessment_clarifications")
       .update({
-        status: "failed",
-        updated_at: record.completedAt,
+        grounded_normalized_representation:
+          record.groundedNormalizedRepresentation,
+        safety_signals: record.safetySignals,
       })
-      .eq("id", record.requestId)
-      .eq("status", "processing");
-    if (requestError) throw databaseFailure();
+      .eq("id", record.clarificationId)
+      .eq("answer_status", "answered");
+    if (error) throw databaseFailure();
+  }
+
+  async getInitialAuthorityForResume(
+    requestId: string,
+  ): Promise<PersistedInitialAuthorityV1> {
+    const { data: requestRow, error: requestError } = await this.client
+      .from("assessment_requests")
+      .select("*")
+      .eq("id", requestId)
+      .single();
+    if (requestError || !requestRow) throw databaseFailure();
+    const { data: run, error: runError } = await this.client
+      .from("assessment_runs")
+      .select("*")
+      .eq("request_id", requestId)
+      .eq("run_kind", "initial")
+      .order("started_at", { ascending: true })
+      .limit(1)
+      .single();
+    if (runError || !run || !run.policy_result_json) throw databaseFailure();
+    const { data: stages, error: stagesError } = await this.client
+      .from("assessment_stage_runs")
+      .select("*")
+      .eq("run_id", run.id)
+      .in("stage_id", ["PB-01", "PB-01C", "PB-02"]);
+    if (stagesError || !stages) throw databaseFailure();
+    const stage = (id: string) => stages.find((value) => value.stage_id === id);
+    const pb01 = stage("PB-01");
+    const pb01c = stage("PB-01C");
+    const pb02 = stage("PB-02");
+    if (
+      !pb01?.output_json ||
+      !pb01c ||
+      pb01c.status === "processing" ||
+      !pb02?.output_json
+    ) {
+      throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    }
+    return {
+      request: mapRequest(requestRow),
+      initialRunId: run.id,
+      initialRunStartedAt: run.started_at,
+      initialPolicyResult: structuredClone(run.policy_result_json),
+      pb01Output: structuredClone(pb01.output_json as JsonObject),
+      pb01c: {
+        status: pb01c.status,
+        outputJson: structuredClone(pb01c.output_json as JsonObject | null),
+        errorCode: pb01c.error_code,
+      },
+      pb02Output: structuredClone(pb02.output_json as JsonObject),
+    };
+  }
+
+  async failRun(record: FailRunRecord) {
+    const { error } = await this.client.rpc("fail_assessment_run_v1", {
+      p_run_id: record.runId,
+      p_request_id: record.requestId,
+      p_returned_model: record.returnedModel,
+      p_error_code: record.errorCode,
+      p_total_input_tokens: record.totalInputTokens,
+      p_total_cached_tokens: record.totalCachedTokens,
+      p_total_output_tokens: record.totalOutputTokens,
+      p_total_reasoning_tokens: record.totalReasoningTokens,
+      p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+      p_completed_at: record.completedAt,
+    });
+    if (error) throw databaseFailure();
   }
 
   async finalizeCompletedAssessment(record: FinalizeCompletedAssessmentRecord) {
@@ -464,4 +712,61 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       },
     });
   }
+
+  async getAssessmentResult(requestId: string) {
+    const { data: requestRow, error: requestError } = await this.client
+      .from("assessment_requests")
+      .select("*")
+      .eq("id", requestId)
+      .maybeSingle();
+    if (requestError || !requestRow) return null;
+    if (requestRow.status === "completed") {
+      const ready = await this.getCompletedAssessment(requestId);
+      if (ready) {
+        return { ...ready, duplicate: false } as AssessmentExecutionResult;
+      }
+    }
+    const { data: run, error: runError } = await this.client
+      .from("assessment_runs")
+      .select("*")
+      .eq("request_id", requestId)
+      .eq("status", "completed")
+      .not("result_json", "is", null)
+      .order("started_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (runError) throw databaseFailure();
+    if (!run?.result_json) return null;
+    const decoded = decodeAssessmentExecutionResultV2(run.result_json);
+    return {
+      ...decoded,
+      authoritativeRequestedTopics: decodeRequestedTopics(
+        requestRow.requested_topics,
+      ),
+    } as AssessmentExecutionResult;
+  }
+}
+
+function mapClarification(row: ClarificationRow): PersistedAssessmentClarification {
+  return {
+    schemaVersion: row.schema_version,
+    id: row.id,
+    requestId: row.request_id,
+    ordinal: row.ordinal,
+    questionCode: row.question_code,
+    target: row.target,
+    questionSnapshot: row.question_snapshot,
+    provenance: row.provenance,
+    sourceIdentity: row.source_identity,
+    answerStatus: row.answer_status,
+    answer: structuredClone(row.answer),
+    answerFingerprint: row.answer_fingerprint,
+    groundedNormalizedRepresentation: structuredClone(
+      row.grounded_normalized_representation,
+    ),
+    safetySignals: structuredClone(row.safety_signals),
+    resumeRunId: row.resume_run_id,
+    createdAt: row.created_at,
+    answeredAt: row.answered_at,
+  };
 }

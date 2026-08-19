@@ -37,16 +37,17 @@ export default async function CustomerAssessmentReviewPage({
 
   const fixtureQuery = (await searchParams).fixture;
   const fixtureId = Array.isArray(fixtureQuery) ? fixtureQuery[0] : fixtureQuery;
-  const selectedFixture = selectCustomerAssessmentExperienceReviewFixture(fixtureId);
+  const selectedFixture =
+    selectCustomerAssessmentExperienceReviewFixture(fixtureId);
 
   return (
     <main className={styles.reviewPage}>
       <div className={styles.reviewShell}>
         <header className={styles.reviewHeader}>
           <p>非公開レビュー / 固定データのみ</p>
-          <h1>顧客向け鑑定ノート</h1>
+          <h1>恋のメッセージ鑑定ノート</h1>
           <p>
-            表示の比例性、文案の見つけやすさ、任意項目の出し分けを確認するための画面です。
+            後続R2-Cで、表示の比例性、文案の見つけやすさ、任意項目の出し分けを確認するためのfixture-only準備画面です。ここでは合否を判定しません。
           </p>
         </header>
 

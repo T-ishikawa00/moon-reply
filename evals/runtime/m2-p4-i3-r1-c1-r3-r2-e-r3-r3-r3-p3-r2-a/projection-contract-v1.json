@@ -1,14 +1,31 @@
 {
-  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-projection-contract-v1",
-  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A-R1",
-  "status": "experience_projection_v2_identifier_exclusion_corrected_pending_human_chatgpt_review",
-  "baseline": "da325d9b4d8404879a08c1b50107e7f7df8787ec",
-  "review_correction": {
-    "r2_a_architecture_accepted": true,
-    "r2_a_identifier_exclusion_defect_found": true,
-    "r2_a_identifier_exclusion_corrected": true,
-    "provider_quality_established": false,
-    "provider_rerun_authorized": false
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-projection-contract-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-A",
+  "status": "authorized_experience_projection_v2_implemented_pending_human_chatgpt_review",
+  "branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-r1-authorized-experience-projection",
+  "baseline": "cf9a04773fca622c4813e1e6e73a7632b139aff6",
+  "accepted_authority": {
+    "doctrine_status": "reassuring_assessment_experience_doctrine_human_chatgpt_accepted_complete_r2_a_authorized",
+    "doctrineHumanChatGPTReview": "complete",
+    "doctrineHumanChatGPTReviewOutcome": "PASS",
+    "acceptanceDate": "2026-08-16",
+    "r2_a_implementation": "implementation_authorized"
+  },
+  "historical_reference": {
+    "candidate_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-a-experience-projection",
+    "candidate_commit": "da325d9b4d8404879a08c1b50107e7f7df8787ec",
+    "candidate_parent": "a5b2defa1bb765d46076a28ca9827d494fcbe433",
+    "identifier_hardening_commit": "89a6d55fdf3845451e80f1ee21dc648b224bcc9d",
+    "read_only": true,
+    "cherry_pick_used": false,
+    "rebase_used": false,
+    "branch_overwritten": false
+  },
+  "functional_reuse": {
+    "historical_candidate_foundation_reused": true,
+    "identifier_exclusion_hardening_reused": true,
+    "projection_return_fail_closed_added": true,
+    "stale_lineage_or_authorization_metadata_reused": false
   },
   "projection": {
     "type": "CustomerAssessmentExperienceProjectionV2",
@@ -34,12 +51,14 @@
     "chronology_repaired": false,
     "causal_relationship_added": false,
     "generic_reassurance_added": false,
-    "case_or_fixture_id_selection": false
+    "case_or_fixture_id_selection": false,
+    "validated_before_return": true
   },
   "accepted_flow": [
     "requireReadyAssessmentResult",
     "projectCustomerAssessmentV1",
     "validated_full_report_exact_extraction",
+    "decodeCustomerAssessmentExperienceProjectionV2",
     "fresh_projection_return"
   ],
   "source_mapping": {
@@ -197,7 +216,8 @@
         "baseProjection.optionalDetails.expandedPlan[*].phase"
       ],
       "recursive_forbidden_key_rejection_preserved": true,
-      "key_and_text_value_exclusion_are_separate": true
+      "key_and_text_value_exclusion_are_separate": true,
+      "project_function_validates_before_return": true
     }
   },
   "recursive_exclusions": [
@@ -274,8 +294,12 @@
     ]
   },
   "authorization": {
+    "r2_a_implementation_authorized": true,
     "provider_rerun_authorized": false,
     "active_runtime_activation_authorized": false,
+    "production_runtime_authorized": false,
+    "payment_implementation_authorized": false,
+    "production_payment_authorized": false,
     "r2_b_authorized": false,
     "r2_c_authorized": false,
     "existing_package_c_authorized": false,

@@ -1,0 +1,343 @@
+{
+  "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-a1-offline-results-v1",
+  "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-V1-A1",
+  "status": "PASS",
+  "fixture_count": 16,
+  "passed": 16,
+  "failed": 0,
+  "provider_calls": 0,
+  "db_operations": 0,
+  "supabase_operations": 0,
+  "results": [
+    {
+      "fixture_id": "A_routine_administrative_reply_clarifies_material_concern",
+      "requirement": "A",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "needs_one_clarifying_answer",
+        "reasonCodes": [
+          "ONE_MATERIAL_DIMENSION_MISSING",
+          "ONE_ANSWER_CAN_ESTABLISH_OR_REJECT_ELIGIBILITY",
+          "CLARIFICATION_BUDGET_AVAILABLE"
+        ],
+        "missingMaterialDimensions": [
+          "material_relationship_or_communication_concern"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": {
+          "code": "ask_material_relationship_or_communication_concern_v1",
+          "target": "material_relationship_or_communication_concern",
+          "question": "今回のやり取りで、いちばん気になっているのは、距離感・好意の伝わり方・返信への圧のどれに近いですか？特に気になる点がなければ「特になし」で大丈夫です。"
+        }
+      }
+    },
+    {
+      "fixture_id": "B_routine_administrative_reply_budget_exhausted_routes_out",
+      "requirement": "B",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "not_full_product_candidate",
+        "reasonCodes": [
+          "CLARIFICATION_BUDGET_EXHAUSTED",
+          "MANDATORY_GROUNDING_BASIS_INSUFFICIENT"
+        ],
+        "missingMaterialDimensions": [
+          "material_relationship_or_communication_concern"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 1,
+          "questionsRemaining": 0
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "C_reply_waiting_sufficient_is_ready_candidate",
+      "requirement": "C",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "full_paid_ready_candidate",
+        "reasonCodes": [
+          "FULL_PRODUCT_GROUNDING_BASIS_PRESENT"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "D_reply_waiting_missing_one_timing_dimension",
+      "requirement": "D",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "needs_one_clarifying_answer",
+        "reasonCodes": [
+          "ONE_MATERIAL_DIMENSION_MISSING",
+          "ONE_ANSWER_CAN_ESTABLISH_OR_REJECT_ELIGIBILITY",
+          "CLARIFICATION_BUDGET_AVAILABLE"
+        ],
+        "missingMaterialDimensions": [
+          "latest_contact_timing"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": {
+          "code": "ask_latest_contact_timing_v1",
+          "target": "latest_contact_timing",
+          "question": "最後にあなたからメッセージを送ったのは、いつ頃ですか？"
+        }
+      }
+    },
+    {
+      "fixture_id": "E_reply_waiting_multiple_independent_gaps_routes_out",
+      "requirement": "E",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "not_full_product_candidate",
+        "reasonCodes": [
+          "MULTIPLE_INDEPENDENT_MATERIAL_DIMENSIONS_MISSING",
+          "ONE_ANSWER_CANNOT_ESTABLISH_OR_REJECT_ELIGIBILITY"
+        ],
+        "missingMaterialDimensions": [
+          "latest_contact_timing",
+          "usual_reply_cadence"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "F_draft_with_grounded_intent_and_tone_is_ready_candidate",
+      "requirement": "F",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "full_paid_ready_candidate",
+        "reasonCodes": [
+          "FULL_PRODUCT_GROUNDING_BASIS_PRESENT"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "G_draft_missing_one_tone_dimension_clarifies",
+      "requirement": "G",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "needs_one_clarifying_answer",
+        "reasonCodes": [
+          "ONE_MATERIAL_DIMENSION_MISSING",
+          "ONE_ANSWER_CAN_ESTABLISH_OR_REJECT_ELIGIBILITY",
+          "CLARIFICATION_BUDGET_AVAILABLE"
+        ],
+        "missingMaterialDimensions": [
+          "requested_message_tone"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": {
+          "code": "ask_requested_message_tone_v1",
+          "target": "requested_message_tone",
+          "question": "送るなら、どんな印象の文面にしたいですか？"
+        }
+      }
+    },
+    {
+      "fixture_id": "H_draft_missing_tone_after_budget_routes_out",
+      "requirement": "H",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "not_full_product_candidate",
+        "reasonCodes": [
+          "CLARIFICATION_BUDGET_EXHAUSTED",
+          "MANDATORY_GROUNDING_BASIS_INSUFFICIENT"
+        ],
+        "missingMaterialDimensions": [
+          "requested_message_tone"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 1,
+          "questionsRemaining": 0
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "I_non_normal_safety_always_blocks",
+      "requirement": "I",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "safety_blocked",
+        "reasonCodes": [
+          "SAFETY_CLASSIFICATION_NOT_NORMAL"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "J_unsupported_schema_fails_closed",
+      "requirement": "J",
+      "error": {
+        "safeCode": "M2_JPY980_INPUT_SUFFICIENCY_POLICY_INVALID"
+      }
+    },
+    {
+      "fixture_id": "K_repeated_exact_input_is_deep_equal",
+      "requirement": "K",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "full_paid_ready_candidate",
+        "reasonCodes": [
+          "FULL_PRODUCT_GROUNDING_BASIS_PRESENT"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "L_case_and_fixture_metadata_do_not_change_result",
+      "requirement": "L",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "full_paid_ready_candidate",
+        "reasonCodes": [
+          "FULL_PRODUCT_GROUNDING_BASIS_PRESENT"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "R1_A_routine_administrative_no_emotion_clarifies",
+      "requirement": "R1-A",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "needs_one_clarifying_answer",
+        "reasonCodes": [
+          "ONE_MATERIAL_DIMENSION_MISSING",
+          "ONE_ANSWER_CAN_ESTABLISH_OR_REJECT_ELIGIBILITY",
+          "CLARIFICATION_BUDGET_AVAILABLE"
+        ],
+        "missingMaterialDimensions": [
+          "material_relationship_or_communication_concern"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": {
+          "code": "ask_material_relationship_or_communication_concern_v1",
+          "target": "material_relationship_or_communication_concern",
+          "question": "今回のやり取りで、いちばん気になっているのは、距離感・好意の伝わり方・返信への圧のどれに近いですか？特に気になる点がなければ「特になし」で大丈夫です。"
+        }
+      }
+    },
+    {
+      "fixture_id": "R1_B_incidental_emotion_still_clarifies_material_concern",
+      "requirement": "R1-B",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "needs_one_clarifying_answer",
+        "reasonCodes": [
+          "ONE_MATERIAL_DIMENSION_MISSING",
+          "ONE_ANSWER_CAN_ESTABLISH_OR_REJECT_ELIGIBILITY",
+          "CLARIFICATION_BUDGET_AVAILABLE"
+        ],
+        "missingMaterialDimensions": [
+          "material_relationship_or_communication_concern"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": {
+          "code": "ask_material_relationship_or_communication_concern_v1",
+          "target": "material_relationship_or_communication_concern",
+          "question": "今回のやり取りで、いちばん気になっているのは、距離感・好意の伝わり方・返信への圧のどれに近いですか？特に気になる点がなければ「特になし」で大丈夫です。"
+        }
+      }
+    },
+    {
+      "fixture_id": "R1_C_incidental_emotion_after_budget_routes_out",
+      "requirement": "R1-C",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "not_full_product_candidate",
+        "reasonCodes": [
+          "CLARIFICATION_BUDGET_EXHAUSTED",
+          "MANDATORY_GROUNDING_BASIS_INSUFFICIENT"
+        ],
+        "missingMaterialDimensions": [
+          "material_relationship_or_communication_concern"
+        ],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 1,
+          "questionsRemaining": 0
+        },
+        "clarification": null
+      }
+    },
+    {
+      "fixture_id": "R1_D_material_typed_goal_can_be_ready_candidate",
+      "requirement": "R1-D",
+      "result": {
+        "schemaVersion": "m2-p4-jpy980-input-sufficiency-result-v1",
+        "state": "full_paid_ready_candidate",
+        "reasonCodes": [
+          "FULL_PRODUCT_GROUNDING_BASIS_PRESENT"
+        ],
+        "missingMaterialDimensions": [],
+        "clarificationBudget": {
+          "maximumQuestionsTotal": 1,
+          "questionsAlreadyUsed": 0,
+          "questionsRemaining": 1
+        },
+        "clarification": null
+      }
+    }
+  ]
+}

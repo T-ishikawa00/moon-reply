@@ -1,12 +1,13 @@
 {
   "schema_version": "m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-presentation-contract-v1",
   "task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B",
-  "correction_task_id": "M2-P4-I3-R1-C1-R3-R2-E-R3-R3-R3-P3-R2-B-R1",
-  "status": "reassuring_customer_note_v2_corrected_pending_final_human_visual_product_review",
-  "baseline": "e509405935e82d7079023609b2d852d51f286f3e",
-  "source_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note",
-  "implementation_branch": "fix/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r1-mobile-copy",
+  "status": "r2_b_implemented_pending_human_chatgpt_visual_product_review",
   "authority": {
+    "exact_parent": "1229627588e3c6ccd41ea7ea32751b8b8ac79c6e",
+    "r2_a_implementation": "5070c02267f49e1e0095ce2e46fb106b886f7df5",
+    "r2_a_acceptance_r2_b_authorization": "1229627588e3c6ccd41ea7ea32751b8b8ac79c6e",
+    "main": "61e33a10e195fad17e253a6b9719217e1992f273",
+    "implementation_branch": "feat/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-r2-authorized-reassuring-note",
     "accepted_input": "CustomerAssessmentExperienceProjectionV2",
     "component_prop": "projection",
     "v1_concepts_source": "projection.baseProjection",
@@ -17,225 +18,194 @@
     "diagnostic_or_stage_output_enters_customer_component": false,
     "case_or_fixture_specific_component_logic": false
   },
+  "historical_reference": {
+    "mode": "read_only",
+    "implementation": "e509405935e82d7079023609b2d852d51f286f3e",
+    "mobile_correction": "1e6e719a8bdd766617405ec40691ff498f1bbc2a",
+    "treated_as_current_authority": false,
+    "mutated": false
+  },
+  "hard_gate_order": [
+    "safety",
+    "factual_integrity",
+    "user_other_person_boundary_integrity",
+    "no_unsupported_certainty",
+    "no_fabricated_inner_state_causality_chronology_future_outcome"
+  ],
+  "source_integrity": {
+    "provider_calls": 0,
+    "paraphrases": 0,
+    "factual_rewrites": 0,
+    "generated_assessment_filler": 0,
+    "draft_text_source": "projection.baseProjection.finalDraft.text",
+    "draft_text_exact": true,
+    "opening_source": "projection.openingLine",
+    "letter_source": "projection.openingLetter",
+    "situation_source": "projection.situationReading",
+    "interpretation_source": "projection.possibleInterpretations",
+    "unknown_source": "projection.materialUnknowns",
+    "action_rationale_source": "projection.actionRationales",
+    "closing_source": "projection.closingLines"
+  },
   "cover_hierarchy": [
     "moon_reply_identity",
-    "鑑定ノート",
+    "恋のメッセージ鑑定ノート",
     "projection.openingLine_as_primary_heading",
     "compact_renderer_owned_current_answer"
   ],
-  "mobile_layout": {
-    "current_answer": {
-      "stack_at_or_below": "26.25rem",
-      "grid_template_columns": "minmax(0, 1fr)"
-    },
-    "fixture_link": {
-      "full_width_at_or_below": "24rem",
-      "boundary_unchanged": true
-    }
-  },
-  "decision_labels": {
-    "reply_now": "今、返信する",
-    "send_now": "今、送る",
-    "wait_and_reassess": "今夜は送らず、次の材料を待つ",
-    "pause_additional_contact": "追加の連絡を止める"
-  },
-  "primary_journey": [
-    "cover_and_opening",
-    "visible_opening_letter",
-    "grounded_situation_reading",
-    "material_unknowns_when_available",
-    "prominent_draft_or_bounded_null_explanation",
-    "requested_topic_modules_when_available",
-    "immediate_action_and_distinct_rationale",
-    "reassessment",
-    "emotional_closing",
-    "subordinate_fixed_limitation"
+  "journey": [
+    "consultation_specific_opening",
+    "opening_letter_when_distinct",
+    "grounded_reading_and_uncertainty_boundary",
+    "prominent_exact_draft_when_available",
+    "requested_topic_modules_when_relevant",
+    "immediate_action_and_reassessment",
+    "secondary_details_when_non_empty",
+    "consultation_specific_closing_when_distinct",
+    "fixed_limitation"
   ],
-  "sections": {
-    "opening_letter": {
-      "heading": "月の返事からの短い手紙",
-      "source": "projection.openingLetter",
-      "source_order_preserved": true,
-      "visible_for_every_fixture": true,
-      "entire_letter_collapsed": false
-    },
-    "situation": {
-      "heading": "今の状況を読み解く",
-      "primary_reason_source": "projection.baseProjection.primaryReason",
-      "observation_source": "projection.situationReading",
-      "observation_label": "確認できていること",
-      "fact_ids_rendered": false
-    },
-    "uncertainty": {
-      "heading": "まだ分からないこと",
-      "source": "projection.materialUnknowns",
-      "omitted_when_empty": true,
-      "possible_interpretations_primary": false,
-      "negative_possibilities_added": false
-    },
-    "draft": {
-      "heading": "送信文案",
-      "source": "projection.baseProjection.finalDraft.text",
-      "exact_text_preserved": true,
-      "whitespace_preserved": true,
-      "emoji_preserved": true,
-      "policy_or_timing_codes_rendered": false,
-      "copy_source_unchanged": true,
-      "draft_context_source": "projection.draftContext",
-      "draft_context_label": "この文面にした理由",
-      "wait_null_copy": "今は送らず、次の判断材料を待つため、\n送信文案は表示していません。",
-      "pause_null_copy": "追加の連絡を止める判断のため、\n送信文案は表示していません。"
-    },
-    "immediate_action": {
-      "kicker": "いま",
-      "heading": "今の動き方",
-      "renderer_labels_are_time_neutral": true,
-      "action_source": "projection.baseProjection.immediateAction.action",
-      "avoid_source": "projection.baseProjection.immediateAction.avoid",
-      "rationale_source": "projection.actionRationales",
-      "visible_rationale_limit": 1,
-      "remaining_rationales_location": "secondary_disclosure"
-    },
-    "reassessment": {
-      "heading": "見直す条件",
-      "when_source": "projection.baseProjection.reassessment.when",
-      "conditions_source": "projection.baseProjection.reassessment.conditions",
-      "resulting_direction_uses_renderer_labels": true,
-      "enum_values_rendered": false
-    },
-    "closing": {
-      "heading": "月の返事から最後に",
-      "source": "projection.closingLines",
-      "visible_paragraph_limit": 2,
-      "precedes_subordinate_fixed_limitation": true,
-      "replacement_copy_invented": false
-    }
-  },
-  "requested_topic_modules": {
-    "organize_emotions": "openingLetter_remains_the_single_visible_emotional_support_baseline",
-    "message_impact": {
-      "visible_when": "requested_and_messageTemperature_non_null",
-      "heading": "この文面の印象",
-      "labels": [
-        "柔らかさ",
-        "好意の強さ",
-        "返信への圧力",
-        "調整した点"
-      ]
-    },
-    "relationship": {
-      "visible_when": "requested_and_relationshipSummary_non_null",
-      "heading": "今の関係について"
-    },
-    "next_three_days": {
-      "visible_when": "requested_and_expandedPlan_non_empty",
-      "legacy_labels": {
-        "tonight": "今夜",
-        "next_day": "次の日",
-        "day_three": "3日目"
-      },
-      "split_labels": {
-        "tonight": "今夜",
-        "next": "次に",
-        "reassessment_condition": "見直す条件"
-      }
-    }
+  "section_rules": {
+    "selection": "semantic_necessity",
+    "six_to_nine": "guidance_only",
+    "fixed_minimum": false,
+    "fixed_maximum": false,
+    "padding": "prohibited",
+    "case_id_layout_branching": false,
+    "simple_fixture_primary_section_count": 5,
+    "simple_fixture_below_six_allowed": true,
+    "action_and_reassessment_share_one_product_section": true,
+    "all_candidate_sections_forced": false
   },
   "exact_repetition_policy": {
-    "scope": "display_level",
     "normalization": [
       "collapse_whitespace",
       "trim_outer_whitespace"
     ],
-    "first_exact_value_retained": true,
+    "selection_priority": "required_product_functions_then_visual_order",
     "later_exact_values_suppressed": true,
+    "draft_always_retained_for_copy_function": true,
+    "fixed_limitation_always_retained_for_boundary_function": true,
     "fuzzy_matching": false,
     "semantic_similarity": false,
     "llm_deduplication": false,
     "paraphrase_or_merge": false
   },
+  "sections": {
+    "opening_letter": {
+      "heading": "月の返事からの短い手紙",
+      "source": "projection.openingLetter",
+      "omitted_when_no_distinct_source_text": true
+    },
+    "reading": {
+      "heading": "今の状況を読み解く",
+      "reason_source": "projection.baseProjection.primaryReason",
+      "grounded_source": "projection.situationReading",
+      "grounded_label": "確かに言えること",
+      "unknown_source": "projection.materialUnknowns",
+      "unknown_label": "まだ分からないこと",
+      "fact_ids_rendered": false
+    },
+    "draft": {
+      "heading": "送信文案",
+      "visible_when": "finalDraft_non_null",
+      "source": "projection.baseProjection.finalDraft.text",
+      "draft_context_source": "projection.draftContext",
+      "exact_copy": true,
+      "whitespace_line_break_persona_dialect_emoji_preserved": true,
+      "null_draft_renderer_filler": false,
+      "native_keyboard_button": true,
+      "copy_success_status": true,
+      "copy_failure_status": true
+    },
+    "message_impact": {
+      "heading": "この文面がどう届くか",
+      "visible_when": "requested_and_messageTemperature_non_null"
+    },
+    "relationship": {
+      "heading": "今の関係について",
+      "visible_when": "requested_and_relationshipSummary_non_null"
+    },
+    "action_and_reassessment": {
+      "heading": "今の動き方",
+      "action_source": "projection.baseProjection.immediateAction",
+      "rationale_source": "projection.actionRationales",
+      "reassessment_source": "projection.baseProjection.reassessment",
+      "reassessment_heading": "見直す条件"
+    },
+    "closing": {
+      "heading": "月の返事から最後に",
+      "source": "projection.closingLines",
+      "guarantee_added": false
+    }
+  },
   "secondary_disclosure": {
     "element": "details",
-    "label": "詳しい補足を見る",
     "collapsed_by_default": true,
     "omitted_when_empty": true,
-    "allowed_content": [
-      "projection.possibleInterpretations",
-      "projection.baseProjection.immediateAction.secondaryActions",
-      "remaining_projection.actionRationales",
-      "projection.baseProjection.optionalDetails.anxietyReframe",
-      "projection.baseProjection.optionalDetails.planCommentary",
-      "projection.consultationLimitations"
-    ],
-    "primary_exact_copy_repeated": false,
+    "possible_interpretations_labeled_as_possibility": true,
+    "negative_possibilities_added": false,
     "internal_metadata_rendered": false
   },
   "review_route": {
     "path": "/review/runtime/v12",
     "fixture_source": "CustomerAssessmentExperienceProjectionV2",
     "fixture_only": true,
-    "fixture_count": 9,
-    "query_parameter": "fixture",
+    "fixture_count": 5,
+    "categories": [
+      "simple",
+      "emotional",
+      "null_optional",
+      "polite_draft",
+      "persona_preserved"
+    ],
     "noindex": true,
     "nofollow": true,
-    "public_navigation_link": false,
     "production_behavior": "not_found",
-    "existing_internal_gate_reused": "M2_INTERNAL_RUNTIME_ENABLED",
-    "runtime_form_connected": false,
+    "internal_gate": "M2_INTERNAL_RUNTIME_ENABLED",
     "provider_api_db_supabase_calls": false
   },
-  "visual_review": {
-    "desktop": "pass",
-    "mobile_399": "pass_with_minor_current_answer_layout_correction_requested",
-    "observed": {
-      "horizontal_scroll": false,
-      "overlapping_content": false,
-      "japanese_wrapping_readable": true,
-      "draft_discoverable": true,
-      "information_density_accepted": true,
-      "reassuring_experience_direction_accepted": true,
-      "visual_jpy980_plausibility_established": true
-    },
-    "pending": [
-      "mobile_320",
-      "keyboard_only_navigation",
-      "copy_success_announcement",
-      "copy_failure_announcement",
-      "zoom_200_percent",
-      "reduced_motion_review",
-      "actual_provider_output_product_review"
-    ],
+  "responsive_accessibility_preparation": {
+    "desktop_1440": "prepared_not_reviewed",
+    "mobile_399": "prepared_not_reviewed",
+    "mobile_320": "prepared_not_reviewed",
+    "keyboard": "prepared_not_reviewed",
+    "zoom_200_percent": "prepared_not_reviewed",
+    "reduced_motion": "prepared_not_reviewed",
+    "copy_success": "prepared_not_reviewed",
+    "copy_failure": "prepared_not_reviewed",
+    "details_behavior": "prepared_not_reviewed"
+  },
+  "review_authority": {
+    "r2_c_authorized": false,
+    "r2_c_executed": false,
     "human_visual_review_complete": false,
     "chatgpt_visual_review_complete": false,
     "product_owner_experience_review_complete": false,
-    "jpy980_readiness_established": false
+    "experienceProductJudgment": "pending",
+    "jpy980_readiness_established": false,
+    "globalQ0Completion": false
   },
-  "fixture_ids": [
-    "simple_business_reply_with_draft",
-    "ordinary_reply_waiting",
-    "polite_thank_you_with_draft",
-    "relationship_summary_requested",
-    "expanded_plan_requested_legacy",
-    "expanded_plan_requested_split",
-    "nullable_optional_sections",
-    "pause_additional_contact_no_draft",
-    "kansai_persona_draft"
-  ],
   "exact_scope": [
     "components/runtime/CustomerAssessmentNote.tsx",
     "components/runtime/CustomerAssessmentNote.module.css",
+    "components/runtime/CustomerDraftCopyButton.tsx",
+    "app/review/runtime/v12/page.tsx",
+    "lib/assessment/runtime/review/m2-p4-v12-customer-experience-projection-fixtures.ts",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/presentation-contract-v1.json",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b/capabilities-v1.json",
     "scripts/verify-m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-r2-b-reassuring-note.mjs",
     "docs/phase2/TASK_M2_P4_I3_R1_C1_R3_R2_E_R3_R3_R3_P3_R2_B_REVIEW.md"
   ],
   "scope_shape": {
-    "updated": 6,
-    "new": 0
+    "updated": 4,
+    "new": 5
   },
   "operations": {
     "provider_calls": 0,
     "db_operations": 0,
-    "supabase_operations": 0
+    "supabase_operations": 0,
+    "runtime_activation": false,
+    "production_runtime_changes": false,
+    "payment_changes": false
   }
 }
