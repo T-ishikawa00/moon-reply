@@ -18,12 +18,7 @@ const decisionLabels: Record<DecisionCode, string> = {
   pause_additional_contact: "追加の連絡を止める",
 };
 
-const futureDecisionLabels: Record<DecisionCode, string> = {
-  reply_now: "その時点で返信する方向を検討する",
-  send_now: "その時点で送る方向を検討する",
-  wait_and_reassess: "その時点で状況を見直す",
-  pause_additional_contact: "その時点でも追加の連絡は止める",
-};
+const futureReassessmentLabel = "その時点で状況を見直す";
 
 const phaseLabels: Record<PlanPhase, string> = {
   tonight: "今夜",
@@ -345,17 +340,9 @@ export function CustomerAssessmentNote({ projection }: Props) {
               {reassessmentConditions.length > 0 ? (
                 <ol className={styles.conditionList}>
                   {reassessmentConditions.map((item, index) => (
-                    <li
-                      key={[
-                        index,
-                        item.condition,
-                        item.resultingDirection,
-                      ].join(":")}
-                    >
+                    <li key={[index, item.condition].join(":")}>
                       <p>{item.condition}</p>
-                      <span>
-                        その場合：{futureDecisionLabels[item.resultingDirection]}
-                      </span>
+                      <span>{futureReassessmentLabel}</span>
                     </li>
                   ))}
                 </ol>

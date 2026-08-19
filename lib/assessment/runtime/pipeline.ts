@@ -22,6 +22,7 @@ import {
   type Jpy980InputSufficiencyResultV3,
 } from "./jpy980-input-sufficiency-policy-v3.ts";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
+import { groundChangeConditionCommentaryV4 } from "./change-condition-grounding-v4.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
 import { groundBaseStructuredIntakeV2 } from "./base-structured-intake-grounding-v2.ts";
 import { groundBaseStructuredIntakeV3 } from "./base-structured-intake-grounding-v3.ts";
@@ -88,7 +89,7 @@ import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { evaluateSemanticFindingsV3 } from "./semantic-disposition-v3.ts";
 import { evaluateSemanticFindingsV4 } from "./semantic-disposition-v4.ts";
 import { evaluateSemanticFindingsV5 } from "./semantic-disposition-v5.ts";
-import { evaluateSemanticFindingsV6 } from "./semantic-disposition-v6.ts";
+import { evaluateSemanticFindingsV7 } from "./semantic-disposition-v7.ts";
 import { groundStructuredIntakeV3 } from "./structured-intake-grounding-v3.ts";
 import { groundStructuredIntakeV4 } from "./structured-intake-grounding-v4.ts";
 import { groundStructuredIntakeV5 } from "./structured-intake-grounding-v5.ts";
@@ -1208,7 +1209,9 @@ export class AssessmentPipeline {
         contextualDecisionFacts,
         generatedReport as unknown as ReportContent,
       ) as unknown as SplitReportContentV2;
-      reportContent = groundChangeConditionCommentaryV3(
+      reportContent = (v17Runtime
+        ? groundChangeConditionCommentaryV4
+        : groundChangeConditionCommentaryV3)(
         decisionPlan as unknown as DecisionPlan,
         reportContent as unknown as ReportContent,
       ) as unknown as SplitReportContentV2;
@@ -1314,7 +1317,7 @@ export class AssessmentPipeline {
             throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
           }
           if (v17Runtime) {
-            const { blockingFindings } = evaluateSemanticFindingsV6({
+            const { blockingFindings } = evaluateSemanticFindingsV7({
               validationOutput: output,
               decisionPlan,
               groundedReportContent: reportContent,
