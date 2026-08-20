@@ -12,12 +12,16 @@ const root = process.cwd();
 const acceptedAuthority = "dcccf1c780619e9716b72764d2f2f7f93a961543";
 const accepted0010Blob = "8b5bd5b02ca7756299049cf6215af299ace69e3c";
 const accepted0011Blob = "70dc2c62631de6f1a81e5257eb076f45c4078565";
+const accepted0012Blob = "1d2e9f911eaf0a3e246314a151d9c58201137fc3";
+const accepted0013Blob = "ccb7881ba5533b5b03cf399c429c881a8926b66a";
 const migration0010 =
   "supabase/migrations/0010_rc1_production_fulfillment_core.sql";
 const migration0011 =
   "supabase/migrations/0011_rc2_production_payment_delivery.sql";
 const migration0012 =
   "supabase/migrations/0012_rc2_activation_database_hardening.sql";
+const migration0013 =
+  "supabase/migrations/0013_rc2_service_role_acl_hardening.sql";
 
 function git(args, options = {}) {
   return execFileSync(
@@ -308,14 +312,21 @@ await check("email verification secrets and bounded Human policy fail closed", (
   assert.match(email, /TRANSACTIONAL_EMAIL_PROVIDER_UNCONFIGURED/u);
 });
 
-await check("0010 and 0011 are immutable and 0012 is append-only hardening", () => {
+await check("0010 through 0013 are immutable accepted migrations", () => {
   assert.equal(gitText(["rev-parse", `${acceptedAuthority}:${migration0010}`]), accepted0010Blob);
   assert.equal(gitText(["rev-parse", `${acceptedAuthority}:${migration0011}`]), accepted0011Blob);
   assertNoDiffFromAuthority([migration0010, migration0011]);
-  assert.equal(existsSync(path.join(root, migration0012)), true);
+  assert.equal(
+    gitText(["hash-object", `--path=${migration0012}`, "--", migration0012]),
+    accepted0012Blob,
+  );
+  assert.equal(
+    gitText(["hash-object", `--path=${migration0013}`, "--", migration0013]),
+    accepted0013Blob,
+  );
 });
 
-await check("migration order and 0010 through 0012 dependencies are structurally intact", () => {
+await check("migration order and 0010 through 0013 dependencies are structurally intact", () => {
   const migrations = trackedFiles()
     .filter((entry) => entry.startsWith("supabase/migrations/") && entry.endsWith(".sql"))
     .map((entry) => path.posix.basename(entry))
@@ -332,6 +343,7 @@ await check("migration order and 0010 through 0012 dependencies are structurally
     "0010_rc1_production_fulfillment_core.sql",
     "0011_rc2_production_payment_delivery.sql",
     "0012_rc2_activation_database_hardening.sql",
+    "0013_rc2_service_role_acl_hardening.sql",
   ]);
   const rc1 = readText(migration0010);
   const rc2 = readText(migration0011);

@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
+## Dependency Security Remediation — Candidate
+
+Status: `Dependency Security Remediation implemented_pending_human_chatgpt_review`.
+
+- [x] Start from exact accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`.
+- [x] Upgrade only `next` and `eslint-config-next` direct ranges to `^16.3.0`; retain React/React DOM and TypeScript lines.
+- [x] Resolve exact Next `16.3.0`, PostCSS `8.5.23`, and sharp `0.35.3` with no vulnerable duplicate path.
+- [x] Reduce `npm audit --omit=dev` from `3 high` to `0 vulnerabilities`.
+- [x] Review and normally remediate the intermediate dev-only full-audit findings; final full audit is `0 vulnerabilities`.
+- [x] Prove actual Next 16.3 feature/regression non-intersection, all RC verifiers, typecheck, lint, build 38/38, and production route/render smoke.
+- [x] Preserve migrations `0002..0013`, Supabase, Runtime behavior, V17, and Q0.
+- [ ] Complete Human/ChatGPT review and acceptance of the dependency candidate.
+- [ ] Start Stripe, webhook, Payment, Email, OpenAI Provider, runtime activation, monitoring/rehearsal, deploy, DNS, PRIVATE RELEASE READY, or Public Launch. All remain prohibited.
+
+Dependency blocker: `candidate_resolved_pending_acceptance`. Exact next action: Human/ChatGPT review Dependency Security Remediation. `release/private-ready` and `main` remain unchanged by this candidate.
+<!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
 ## RC-2 Production Activation Step D — Accepted
 
