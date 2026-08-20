@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
-## RC-2 Production Activation Step C — Candidate
+## RC-2 Production Activation Step C — Accepted
 
-Status: `RC-2 Production Activation Step C implemented_pending_human_chatgpt_review`.
+Status: `RC-2 Production Activation Step C accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
 
 - [x] Confirm exact starting authority, branch, clean worktree, stash zero, and no unresolved Git operation.
 - [x] Confirm `AUTH = PRESENT`, `REMOTE_PROJECT_IDENTITY = MATCH`, and `DB_AUTH = READY` without exposing credentials or remote identifiers.
@@ -14,12 +14,14 @@ Status: `RC-2 Production Activation Step C implemented_pending_human_chatgpt_rev
 - [x] Prove exact post-state `0002..0012`, required tables, 22/22 zero-row table SELECT capability calls, RLS, assessment ACL, role denial, `0012` triggers/CHECK/RPC, and pure helper behavior.
 - [x] Complete repository regression and immutability checks; retain `npm audit` `3 high` as a separate blocker.
 - [x] Record sanitized evidence with zero Customer-row access and zero non-migration remote writes.
-- [ ] Complete Human/ChatGPT review of the Step C candidate.
-- [ ] Explicitly disposition the 17 production-table service-role DELETE grants before runtime activation; no repair is authorized in Step C.
+- [x] Complete Human/ChatGPT review and acceptance of Step C candidate `d32b85347a5badb4955566008140bc2226e4c25f`.
+- [ ] Complete Step D append-only service-role least-privilege hardening for all 22 application tables before Stripe or Production Runtime activation.
 - [ ] Provision Stripe, register a webhook, perform an actual Payment, activate Email/OpenAI/runtime/deployment, or change remote flags/secrets. These remain prohibited in this task.
 - [ ] Complete RC-3, PRIVATE RELEASE READY, and Public Launch.
 
-Exact next action: Human/ChatGPT review the Step C evidence and least-privilege finding. `release/private-ready` and `main` remain unmerged and unchanged.
+This acceptance sync changes only the three top acceptance overlays. Product code, migrations, verifiers, runtime, package/lock, Q0/V17, and Step C evidence remain unchanged.
+
+Exact next stage: **RC-2 Production Activation Step D — Service-Role Least-Privilege Hardening**. `main` remains unchanged; no Provider or runtime activation is authorized.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->

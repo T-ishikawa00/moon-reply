@@ -1,19 +1,20 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
-## Current candidate overlay — RC-2 Production Activation Step C
+## Current acceptance overlay — RC-2 Production Activation Step C
 
-- RC-2 Production Activation Step C: `implemented_pending_human_chatgpt_review`.
-- Remote project identity: MATCH; DB auth: READY; no credential was requested, printed, persisted, or documented.
-- Authorized class C0 completed: pre-state `0002..0003`, exact dry-run/apply suffix `0004..0012`, post-state exact `0002..0012`.
-- Pre-write schema/history consistency, conflicting-object absence, required post-apply tables, 22/22 zero-row table SELECT capability calls, RLS, assessment service-role ACL, anon/authenticated denial, `0012` triggers/CHECK/RPC, and pure helper RPC smoke: PASS.
-- Customer rows accessed: `0`; remote non-migration writes: `0`.
-- Candidate evidence: `docs/payment/RC2_STEP_C_REMOTE_SUPABASE_EVIDENCE.md`.
-- Review item: all 17 RC-1/RC-2 production tables retain Supabase's pre-existing service-role DELETE grant. The assessment matrix is exact; no unauthorized ACL remediation occurred.
+- RC-2 Production Activation Step C: `accepted_complete`.
+- ChatGPT final review: `PASS`; Human/ChatGPT acceptance: `complete`.
+- Accepted candidate: `d32b85347a5badb4955566008140bc2226e4c25f` from `task/rc2-activation-stepc-remote-supabase`.
+- Accepted remote identity/state: `REMOTE_PROJECT_IDENTITY = MATCH`; pre-state exact `0002..0003`; pending exact `0004..0012`; pre-write schema consistency PASS; dry-run exact `0004..0012`; one official apply; post-state exact `0002..0012`.
+- Accepted post-apply proof: required application tables 22/22, RLS 22/22, expected assessment ACL, anon/authenticated denial, `0012` trigger/CHECK/RPC proof, pure environment helper RPC proof, Customer data accessed `0`, and remote non-migration writes `0`.
+- Accepted evidence: `docs/payment/RC2_STEP_C_REMOTE_SUPABASE_EVIDENCE.md`.
+- Independent blocker: the 17 RC-1/RC-2 production tables require service-role least-privilege hardening before Stripe or Production Runtime activation. Step C acceptance does not waive this blocker.
 - Dependency blocker remains: `npm audit --omit=dev` reports exactly `3 high`.
 - Still NOT complete: production Payment, Stripe connection, webhook registration, actual Payment, production Email Provider or actual Email, OpenAI Provider, runtime activation flags, remote application secret changes, deployment, DNS, RC-3, PRIVATE RELEASE READY, or Public Launch.
-- Product authority remains `release/private-ready` at `b8036a91b157870f038e2bf7d431bb0ca9e1795a`; it is not merged in this task. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Exact next action: Human/ChatGPT review this Step C candidate and explicitly disposition the production-table least-privilege finding. Do not start Provider or runtime activation.
+- Acceptance-sync boundary: only `docs/CURRENT_FOCUS.md`, `docs/WBS.md`, and `docs/CODEX_HANDOFF.md` change. Product code, migrations, verifiers, runtime, package/lock, Q0/V17, and Step C evidence remain unchanged.
+- `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next stage: **RC-2 Production Activation Step D — Service-Role Least-Privilege Hardening**. Do not start Stripe, Provider, Payment, deployment, or runtime activation.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
