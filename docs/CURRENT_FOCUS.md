@@ -1,5 +1,21 @@
 # CURRENT_FOCUS.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
+## Current candidate overlay — RC-2 Production Activation Step D
+
+- Status: `RC-2 Production Activation Step D Service-Role Least-Privilege Hardening implemented_pending_human_chatgpt_review`.
+- Base authority: accepted Step C release `403b9af17431bf7c18a4e28ddbe63889409dc10c`; Step C remains `accepted_complete`.
+- Append-only `0013` establishes the audited exact service-role matrix for all 22 application tables and removes existing/default excess authority.
+- Local fresh apply, actual service-role runtime/denial proof, clean replay, remote exact `0013` dry-run/apply, and remote post-catalog proof: PASS.
+- Remote migration history: exact `0002..0013`; RLS `22/22`; service-role DELETE/TRUNCATE/REFERENCES/TRIGGER `0`; PUBLIC/anon/authenticated authority `0`; default excess `0`.
+- Customer data read, synthetic remote rows, and remote non-migration writes: `0 / 0 / 0`.
+- Candidate evidence: `docs/payment/RC2_STEP_D_SERVICE_ROLE_ACL_HARDENING_EVIDENCE.md`.
+- Remaining independent blocker: `npm audit --omit=dev` reports exactly `3 high`.
+- Still NOT complete: Step D Human/ChatGPT acceptance; production Payment; Stripe connection; webhook; actual Payment; production Email; OpenAI paid flow; runtime flags; deploy; DNS; RC-3; PRIVATE RELEASE READY; or Public Launch.
+- `release/private-ready` remains the accepted Step C SHA and is not merged with Step D. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next action: Human/ChatGPT review Step D. Do not start dependency remediation, Provider setup, Payment, deployment, or runtime activation.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
 ## Current acceptance overlay — RC-2 Production Activation Step C
 

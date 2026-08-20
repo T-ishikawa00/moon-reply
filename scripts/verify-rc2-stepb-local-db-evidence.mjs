@@ -296,10 +296,18 @@ await check("Step B evidence documentation is status-consistent", () => {
   assert.ok(runbook.includes("Public Launch = false"));
 });
 
-await check("no disposable atomicity probe exists in the repository", () => {
+await check("the disposable atomicity probe remains absent after Step D", () => {
   const names = readdirSync(path.join(root, "supabase/migrations"));
-  assert.equal(names.some((name) => name.startsWith("0013")), false);
-  assert.equal(names.filter((name) => /^00(?:0[2-9]|1[0-2])_.*\.sql$/u.test(name)).length, 11);
+  assert.equal(
+    names.includes("0013_rc2_service_role_acl_hardening.sql"),
+    true,
+  );
+  assert.equal(names.some((name) => /atomicity_probe/iu.test(name)), false);
+  assert.equal(
+    names.filter((name) => /^00(?:0[2-9]|1[0-3])_.*\.sql$/u.test(name))
+      .length,
+    12,
+  );
 });
 
 if (failures.length > 0) {

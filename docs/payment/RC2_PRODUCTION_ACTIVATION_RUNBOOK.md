@@ -1,5 +1,30 @@
 # RC-2 Production Activation Runbook
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
+## Step D — Service-Role Least-Privilege Hardening
+
+Status: `RC-2 Production Activation Step D Service-Role Least-Privilege Hardening implemented_pending_human_chatgpt_review`
+
+Step C is `accepted_complete` at release authority `403b9af17431bf7c18a4e28ddbe63889409dc10c`. Step D adds only append-only `0013_rc2_service_role_acl_hardening.sql`, its static verifier, and sanitized evidence/status documentation.
+
+- Actual local/remote migration and application-table creator role: one unambiguous `postgres` owner matching the migration executor/session.
+- Existing 22 tables: explicit revoke-all for PUBLIC/anon/authenticated/service_role, followed by the exact audited service-role matrix.
+- Final matrix: 18 tables SELECT/INSERT/UPDATE; three tables SELECT/INSERT; `production_payment_adjustment_ledger` no service-role privilege.
+- All 22 tables: service-role DELETE/TRUNCATE/REFERENCES/TRIGGER `0`; PUBLIC/anon/authenticated authority `0`; RLS `22/22`.
+- `production_verified_email_authorities` and `production_verified_payments` retain UPDATE ACL solely because accepted SECURITY INVOKER RPCs use `SELECT ... FOR UPDATE`; Verified Payment direct mutation remains rejected by the immutable trigger.
+- Future public-schema defaults for the actual creator role no longer grant table authority to PUBLIC/anon/authenticated/service_role.
+- Disposable local final proof: `PASS_0002_THROUGH_0013_FRESH_APPLY`, actual service-role runtime regression PASS, and `PASS_0002_THROUGH_0013_FRESH_REPLAY`.
+- Remote pre-state: exact `0002..0012`; dry-run: exact `0013`; one official apply; post-state exact `0002..0013`.
+- `REMOTE_MIGRATION_HISTORY_0002_THROUGH_0013 = PASS`.
+- Remote post-state: exact 22-table matrix, default ACL, RLS, and unchanged `0012` triggers/CHECK/RPC all PASS.
+- Customer data read, synthetic remote rows, and remote non-migration writes: `0 / 0 / 0`.
+- Remaining dependency blocker: `npm audit --omit=dev` exactly `3 high`.
+
+Sanitized evidence: `docs/payment/RC2_STEP_D_SERVICE_ROLE_ACL_HARDENING_EVIDENCE.md`.
+
+Production Payment, Stripe, webhook, Email, OpenAI Provider, runtime activation, deploy, DNS, PRIVATE RELEASE READY, and Public Launch remain inactive or false. Exact next action: Human/ChatGPT review Step D; do not start dependency remediation or Provider/runtime activation.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
 ## Step C — Remote Supabase State and Authorized Migration Apply
 

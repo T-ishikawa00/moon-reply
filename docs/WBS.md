@@ -1,5 +1,27 @@
 # WBS.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
+## RC-2 Production Activation Step D — Candidate
+
+Status: `RC-2 Production Activation Step D Service-Role Least-Privilege Hardening implemented_pending_human_chatgpt_review`.
+
+- [x] Accept/integrate Step C at `403b9af17431bf7c18a4e28ddbe63889409dc10c` by ff-only release update.
+- [x] Add append-only `0013_rc2_service_role_acl_hardening.sql`; retain `0002..0012` byte-identically.
+- [x] Audit the 22-table Runtime matrix and preserve row-lock-required UPDATE authority.
+- [x] Remove DELETE/TRUNCATE/REFERENCES/TRIGGER and client-role authority from all 22 tables.
+- [x] Remove future public-schema default table authority for the actual migration creator role.
+- [x] Prove exact local catalog matrix, default ACL, RLS 22/22, service-role runtime behavior, destructive denials, and zero persisted proof rows.
+- [x] Prove `PASS_0002_THROUGH_0013_FRESH_APPLY` and `PASS_0002_THROUGH_0013_FRESH_REPLAY`.
+- [x] Reconfirm remote identity and exact pre-state `0002..0012`; dry-run exact `0013`; apply once; prove exact post-state `0002..0013`.
+- [x] Prove remote exact matrix, destructive privileges zero, client authority zero, RLS 22/22, default ACL PASS, and unchanged `0012` controls.
+- [x] Record sanitized evidence with Customer data read and non-migration remote writes at zero.
+- [ ] Complete Human/ChatGPT Step D final review and acceptance.
+- [ ] Separately resolve or accept the remaining `npm audit --omit=dev` `3 high` blocker.
+- [ ] Start Stripe, webhook, Payment, Email, OpenAI Provider, runtime activation, deploy, DNS, PRIVATE RELEASE READY, or Public Launch. All remain prohibited in this task.
+
+Exact next action: Human/ChatGPT review Step D. `release/private-ready` remains at accepted Step C and `main` remains unchanged.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
 ## RC-2 Production Activation Step C — Accepted
 
