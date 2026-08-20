@@ -1,5 +1,6 @@
 import "server-only";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
+import { isRc2NewPurchaseActivationReady } from "./activation-policy.ts";
 import { paymentEnvironmentFromSecretKey } from "./stripe.ts";
 import type {
   EmailVerificationPolicyV1,
@@ -46,35 +47,15 @@ function requiredInteger(name: string, minimum: number, maximum: number) {
 }
 
 export function isCustomerPaymentFlowVisible() {
-  return (
-    enabled("PAYMENT_PRODUCTION_ENABLED") &&
-    enabled("EMAIL_VERIFICATION_ENABLED") &&
-    enabled("ASSESSMENT_PRODUCTION_PREPARATION_ENABLED") &&
-    !enabled("PAYMENT_EMERGENCY_STOP") &&
-    !enabled("EMAIL_VERIFICATION_EMERGENCY_STOP") &&
-    !enabled("ASSESSMENT_PRODUCTION_EMERGENCY_STOP")
-  );
+  return isRc2NewPurchaseActivationReady(enabled);
 }
 
 export function isEmailVerificationAvailable() {
-  return (
-    enabled("EMAIL_VERIFICATION_ENABLED") &&
-    enabled("ASSESSMENT_PRODUCTION_PREPARATION_ENABLED") &&
-    !enabled("EMAIL_VERIFICATION_EMERGENCY_STOP") &&
-    !enabled("PAYMENT_EMERGENCY_STOP") &&
-    !enabled("ASSESSMENT_PRODUCTION_EMERGENCY_STOP")
-  );
+  return isRc2NewPurchaseActivationReady(enabled);
 }
 
 export function isCheckoutAvailable() {
-  return (
-    enabled("PAYMENT_PRODUCTION_ENABLED") &&
-    enabled("EMAIL_VERIFICATION_ENABLED") &&
-    enabled("ASSESSMENT_PRODUCTION_PREPARATION_ENABLED") &&
-    !enabled("PAYMENT_EMERGENCY_STOP") &&
-    !enabled("EMAIL_VERIFICATION_EMERGENCY_STOP") &&
-    !enabled("ASSESSMENT_PRODUCTION_EMERGENCY_STOP")
-  );
+  return isRc2NewPurchaseActivationReady(enabled);
 }
 
 export function isCustomerEmailDeliveryAvailable() {

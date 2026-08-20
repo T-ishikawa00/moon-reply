@@ -978,18 +978,30 @@ for (const sessionState of ["wrong", "expired", "revoked"]) {
 await check("Customer mutation routes reject extra client Payment authority flags", () => {
   const checkoutRoute = readText("app/api/payments/checkout/route.ts");
   const environment = readText("lib/payment/production/environment.ts");
+  const activationPolicy = readText(
+    "lib/payment/production/activation-policy.ts",
+  );
+  const activationSources = `${environment}\n${activationPolicy}`;
   const service = readText("lib/payment/production/service.ts");
   assert.match(checkoutRoute, /Object\.keys\(value\)\.length !== 1/u);
   assert.doesNotMatch(checkoutRoute, /paid|paymentSucceeded|purchaseGateSatisfied|grant/u);
   assert.match(checkoutRoute, /readTrustedEmailCookie/u);
   assert.match(checkoutRoute, /enforceSameOrigin/u);
   for (const required of [
+    "PAYMENT_PRODUCTION_ENABLED",
+    "EMAIL_VERIFICATION_ENABLED",
     "ASSESSMENT_PRODUCTION_PREPARATION_ENABLED",
+    "ASSESSMENT_PRODUCTION_RUNTIME_ENABLED",
+    "ASSESSMENT_PRODUCTION_RESULT_ACCESS_ENABLED",
+    "STRIPE_WEBHOOK_ENABLED",
+    "STRIPE_RECONCILIATION_ENABLED",
+    "PAYMENT_FULFILLMENT_PROCESSING_ENABLED",
     "ASSESSMENT_PRODUCTION_EMERGENCY_STOP",
     "PAYMENT_EMERGENCY_STOP",
     "EMAIL_VERIFICATION_EMERGENCY_STOP",
+    "PAYMENT_FULFILLMENT_EMERGENCY_STOP",
   ]) {
-    assert.ok(environment.includes(required), required);
+    assert.ok(activationSources.includes(required), required);
   }
   assert.match(service, /isCustomerEmailDeliveryAvailable/u);
 });

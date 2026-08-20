@@ -1,5 +1,23 @@
 # CODEX_HANDOFF.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->
+## Active handoff — RC-2 Production Activation Step A
+
+- Status / branch / exact base: `implemented_pending_human_chatgpt_review` / `task/rc2-production-activation-preflight` / `dcccf1c780619e9716b72764d2f2f7f93a961543`.
+- Human state: Stripe Sandbox account exists as of `2026-08-20`; no Stripe secret is connected. Never request or paste a secret through Git, Codex/chat, docs, fixtures, screenshots, or terminal output. Report only `KEY_NAME = PRESENT/MISSING`.
+- Implementation: the Step A runbook defines Stripe/Supabase/email/OpenAI/OFF environments; the offline preflight verifier passes `15/15`; new purchase visibility, new email verification, and Checkout now require the complete activation flag set; `.env*` is ignored except `.env.example`.
+- Stripe code readiness: server-confined `stripe@22.5.0`, exact JPY 980 one-time Checkout, exact-origin redirects, test/live key mismatch rejection, separate raw-signature webhook secret, minimized metadata, stable idempotency, reconciliation, and server-only fulfillment remain intact. Code readiness is not connection evidence.
+- Supabase: accepted `0010` is immutable; current `0011` is present and structurally depends on RC-1 correctly. `LOCAL_POSTGRES_COMPATIBILITY_NOT_EXECUTED` because no local PostgreSQL/Docker/Supabase CLI exists. `REMOTE_SUPABASE_STATE = UNRESOLVED` because no existing CLI/auth/link exists. No remote query or write was attempted; report `0011` as not applied.
+- Remaining hard blockers: production email adapter/sender-domain setup, distributed rate limiting/WAF, disposable PostgreSQL proof, remote migration review/apply, Stripe test secret/webhook/test Payment, deployed origin/proxy evidence, monitoring/rollback rehearsal, dependency closure, and RC-3.
+- Dependency audit: exactly `3 high` — `next`, `postcss`, `sharp`; no automatic or speculative dependency change.
+- Validation: RC-2 `48/48`, RC-1 `14/14`, activation preflight `15/15`, typecheck, zero-warning lint, production build `38/38`, staged diff check, `next-env.d.ts`, accepted `0010`/`0011`, tracked-secret, and V17/Q0 immutable-boundary checks pass.
+- Operations: Stripe API / Dashboard / webhook registration / charge / Payment / email / OpenAI / Supabase remote write / migration apply / migration repair / deploy / DNS / Legal publication / Public Launch / PR / release merge / main merge are all `0`.
+- Authority ceiling: Production Payment and email are inactive; OpenAI paid flow is not executed; PRIVATE RELEASE READY and Public Launch are `false`. `release/private-ready` and `main` must remain unchanged.
+- Exact next Human action: review and accept or reject Step A only. Do not provide secrets. If accepted, separately authorize a disposable local PostgreSQL compatibility task before any Provider or remote database action.
+
+The accepted RC-2 Implementation Core handoff below remains the Product authority. This Step A handoff is technical activation-preparation evidence only.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:END -->
+
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
 ## Active handoff — RC-2 Implementation Core Accepted
 
