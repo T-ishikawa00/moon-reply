@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify:rc1": "node scripts/verify-rc1-production-fulfillment-core.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.2",

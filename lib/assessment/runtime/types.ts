@@ -247,10 +247,14 @@ export type AssessmentInput = {
   privacyAcknowledged: true;
 };
 
+export type AssessmentRequestSource =
+  | "internal_review_runtime"
+  | "production_fulfillment_runtime";
+
 export type PersistedAssessmentRequest = AssessmentInput & {
   id: string;
   idempotencyKey: string;
-  source: "internal_review_runtime";
+  source: AssessmentRequestSource;
   status: "processing" | "awaiting_clarification" | "completed" | "failed";
   createdAt: string;
   updatedAt: string;
@@ -317,7 +321,7 @@ export interface AiStageTransport {
 export type CreateRequestRecord = AssessmentInput & {
   id: string;
   idempotencyKey: string;
-  source: "internal_review_runtime";
+  source: AssessmentRequestSource;
   now: string;
 };
 
@@ -328,7 +332,7 @@ export type CreateRunRecord = {
   promptBundleVersion: string;
   schemaSetVersion: string;
   stageTopologyVersion: StageTopologyVersion;
-  runKind: "initial" | "clarification_resume";
+  runKind: "initial" | "clarification_resume" | "fulfillment_resume";
   startedAt: string;
 };
 
@@ -377,6 +381,7 @@ export type SkipStageRecord = {
   skipReason:
     | "candidate_absent"
     | "reused_initial_authority"
+    | "reused_purchase_ready_authority"
     | "routing_stopped";
   createdAt: string;
 };
@@ -638,6 +643,35 @@ export type AssessmentExecutionResult =
   | ReadyAssessmentResult
   | StoppedAssessmentResult;
 
+export type PurchaseReadyRuntimeAuthorityV1 = {
+  schemaVersion: "rc1-purchase-ready-runtime-authority-v1";
+  runtimeIdentity: {
+    model: "gpt-5.6-luna";
+    promptBundleVersion: "prompt-bundle-runtime-v17.0.0";
+    schemaSetVersion: "pipeline-schema-runtime-v6.0.0";
+    stageTopologyVersion: "split-base-candidate-v1";
+  };
+  request: AssessmentInput;
+  baseStructuredIntake: JsonObject;
+  candidateEnvelope: JsonObject;
+  aggregateSafety: JsonObject;
+  effectiveAssessmentAuthority: JsonObject;
+  clarificationGrounding: JsonObject | null;
+};
+
+export type PurchaseReadyPreparationResult = {
+  requestId: string;
+  runId: string;
+  eligibility: "purchase_ready";
+  duplicate: false;
+  usage: UsageTotals;
+  authority: PurchaseReadyRuntimeAuthorityV1;
+};
+
+export type PurchasePreparationExecutionResult =
+  | PurchaseReadyPreparationResult
+  | StoppedAssessmentResult;
+
 export type Jpy980ClarificationTarget =
   | "material_relationship_or_communication_concern"
   | "latest_contact_timing"
@@ -695,6 +729,14 @@ export type FinalizeNeedsMoreInformationRecord = UsageTotals & {
   >;
 };
 
+export type FinalizePurchaseReadyPreparationRecord = UsageTotals & {
+  runId: string;
+  requestId: string;
+  returnedModel: string | null;
+  policyResult: JsonObject;
+  completedAt: string;
+};
+
 export type AcceptClarificationAnswerRecord = {
   clarificationId: string;
   answer: JsonValue;
@@ -745,6 +787,9 @@ export interface AssessmentRepository {
   finalizeNeedsMoreInformation(
     record: FinalizeNeedsMoreInformationRecord,
   ): Promise<PersistedAssessmentClarification>;
+  finalizePurchaseReadyPreparation(
+    record: FinalizePurchaseReadyPreparationRecord,
+  ): Promise<void>;
   findClarificationById(
     clarificationId: string,
   ): Promise<PersistedAssessmentClarification | null>;

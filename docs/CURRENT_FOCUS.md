@@ -1,19 +1,18 @@
 # CURRENT_FOCUS.md
 
-<!-- RC-0-PRIVATE-RELEASE-CANDIDATE:BEGIN -->
-## Current authority overlay — RC-0 Private Release Candidate
+<!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
+## Current authority overlay — RC-1 Production Fulfillment Core
 
-- Candidate branch: `release/private-ready`.
-- Stripe / Legal / Public Surface / Private Hosting authority: `fa758896a29100d557e6a3ccacd3f0c33ee784e1`.
-- Q0 / V17 Product and AI authority: `81422fa41c8a8f6bdcd712d089b4260cdfe1ca9b`.
-- Integration status: `rc0_private_release_candidate_integrated_pending_human_chatgpt_acceptance`.
+- RC-0 Private Release Candidate is `accepted_complete` at `release/private-ready` SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
+- RC-1 branch is `task/rc1-production-fulfillment-core`; status is `implemented_pending_human_chatgpt_review`.
+- Implemented scope is server-side deterministic pre-payment Safety, V17 AI qualification stopping at purchase readiness, exactly-one clarification, opaque preparation capability, server-only verified-purchase Grant boundary, same-authority V17 PB-04/PB-05/PB-06 fulfillment, Provider-attempt `generation_started`, one canonical `CustomerAssessmentExperienceProjectionV2`, hash-only protected result credentials, and an independent notification outbox/adapter boundary.
+- Production identity is exactly `runtime-stage-catalog-v17.0.0` / `prompt-bundle-runtime-v17.0.0` / `pipeline-schema-runtime-v6.0.0` / `split-base-candidate-v1` / `gpt-5.6-luna`; production flags are separate from internal review and default fail closed.
+- Migration `0010_rc1_production_fulfillment_core.sql` is an unapplied artifact. Actual Provider, Supabase remote write, migration apply, Stripe/Payment, email send, deploy, domain/DNS, Legal publication, PR, main merge, and Public Launch operations are all `0`.
+- RC-1 technical implementation does not establish Production Payment, Stripe approval or selection, live email delivery, deployed Runtime, abuse/WAF hardening, PRIVATE RELEASE READY, or Public Launch. Human and ChatGPT review remain pending.
 - Main remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Q0 JPY980 Product Quality is an accepted snapshot; B2 Legal Draft Finalization, B3 Review-ready Website/Public Surface, and B4b Private Review Hard Gate are accepted within their recorded scopes.
-- Production Runtime is not yet established. Production Payment is not implemented. Public Launch is not authorized.
-- The next task after RC-0 acceptance is RC-1 Production Fulfillment; RC-1 is not started or authorized by this overlay.
 
-All current-looking, active-handoff, and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-0 overlay and do not independently authorize Production, Payment, deployment, publication, or launch.
-<!-- RC-0-PRIVATE-RELEASE-CANDIDATE:END -->
+All current-looking, active-handoff, and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.
+<!-- RC-1-PRODUCTION-FULFILLMENT-CORE:END -->
 
 ## Historical accepted Stripe / Legal / Public / Hosting authority
 

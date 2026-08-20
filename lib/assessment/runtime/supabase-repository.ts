@@ -11,6 +11,7 @@ import {
 import { decodeAssessmentExecutionResultV2 } from "./runtime-result-normalization-v2.ts";
 import type {
   AcceptClarificationAnswerRecord,
+  AssessmentRequestSource,
   AssessmentExecutionResult,
   AssessmentRepository,
   CompleteClarificationGroundingRecord,
@@ -22,6 +23,7 @@ import type {
   FailStageRecord,
   FinalizeCompletedAssessmentRecord,
   FinalizeNeedsMoreInformationRecord,
+  FinalizePurchaseReadyPreparationRecord,
   JsonObject,
   JsonValue,
   Jpy980ClarificationTarget,
@@ -39,7 +41,7 @@ import type {
 type RequestRow = {
   id: string;
   idempotency_key: string;
-  source: string;
+  source: AssessmentRequestSource;
   raw_situation: string;
   optional_message: string | null;
   relationship: RelationshipValue;
@@ -59,7 +61,7 @@ type RunRow = {
   prompt_bundle_version: string;
   schema_set_version: string;
   stage_topology_version: StageTopologyVersion;
-  run_kind: "initial" | "clarification_resume";
+  run_kind: "initial" | "clarification_resume" | "fulfillment_resume";
   eligibility: string | null;
   decision: string | null;
   total_input_tokens: number;
@@ -97,6 +99,7 @@ type StageRunRow = {
   skip_reason:
     | "candidate_absent"
     | "reused_initial_authority"
+    | "reused_purchase_ready_authority"
     | "routing_stopped"
     | null;
   created_at: string;
@@ -172,6 +175,10 @@ type RuntimeDatabase = {
         Args: Record<string, unknown>;
         Returns: undefined;
       };
+      finalize_purchase_ready_assessment_v1: {
+        Args: Record<string, unknown>;
+        Returns: undefined;
+      };
       accept_assessment_clarification_v1: {
         Args: Record<string, unknown>;
         Returns: JsonValue;
@@ -217,7 +224,7 @@ function mapRequest(row: RequestRow): PersistedAssessmentRequest {
   return {
     id: row.id,
     idempotencyKey: row.idempotency_key,
-    source: "internal_review_runtime",
+    source: row.source,
     currentSituation: row.raw_situation,
     optionalMessage: row.optional_message,
     relationship: row.relationship,
@@ -480,6 +487,27 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
     );
     if (!clarification) throw databaseFailure();
     return clarification;
+  }
+
+  async finalizePurchaseReadyPreparation(
+    record: FinalizePurchaseReadyPreparationRecord,
+  ) {
+    const { error } = await this.client.rpc(
+      "finalize_purchase_ready_assessment_v1",
+      {
+        p_run_id: record.runId,
+        p_request_id: record.requestId,
+        p_returned_model: record.returnedModel,
+        p_policy_result_json: record.policyResult,
+        p_total_input_tokens: record.totalInputTokens,
+        p_total_cached_tokens: record.totalCachedTokens,
+        p_total_output_tokens: record.totalOutputTokens,
+        p_total_reasoning_tokens: record.totalReasoningTokens,
+        p_usage_derived_cost_usd: record.usageDerivedCostUsd,
+        p_completed_at: record.completedAt,
+      },
+    );
+    if (error) throw databaseFailure();
   }
 
   async findClarificationById(clarificationId: string) {

@@ -137,6 +137,9 @@ import type {
   StageResponse,
   UsageTotals,
   PersistedInitialAuthorityV1,
+  PersistedAssessmentRequest,
+  PurchasePreparationExecutionResult,
+  PurchaseReadyRuntimeAuthorityV1,
 } from "./types.ts";
 import type { DecisionFactsV2 } from "./contextual-inference-v3.ts";
 import {
@@ -155,7 +158,7 @@ export type AssessmentRunContext = {
   startedAt: string;
 };
 
-type PipelineOptions = {
+export type PipelineOptions = {
   repository: AssessmentRepository;
   transport: AiStageTransport;
   definitions: StageDefinition[];
@@ -164,6 +167,10 @@ type PipelineOptions = {
   uuid?: () => string;
   timeZone?: string;
   clarificationId?: () => string;
+  beforeProviderInvocation?: (
+    stageId: M2StageId,
+    attemptNumber: StageAttemptNumber,
+  ) => Promise<void>;
 };
 
 type StageInput = {
@@ -462,6 +469,7 @@ export class AssessmentPipeline {
   private readonly uuid: () => string;
   private readonly timeZone?: string;
   private readonly clarificationId: () => string;
+  private readonly beforeProviderInvocation?: PipelineOptions["beforeProviderInvocation"];
   private usage: UsageTotals = emptyUsageTotals();
   private returnedModel: string | null = null;
 
@@ -480,6 +488,7 @@ export class AssessmentPipeline {
     this.uuid = options.uuid ?? randomUUID;
     this.timeZone = options.timeZone;
     this.clarificationId = options.clarificationId ?? createOpaqueClarificationIdV1;
+    this.beforeProviderInvocation = options.beforeProviderInvocation;
   }
 
   private validateRuntimeIdentity(runContext: AssessmentRunContext) {
@@ -576,6 +585,10 @@ export class AssessmentPipeline {
 
     let response: StageResponse | null = null;
     try {
+      await this.beforeProviderInvocation?.(
+        definition.stageId,
+        attemptNumber,
+      );
       response = await this.transport.invoke({
         stageId: definition.stageId,
         model: runContext.model,
@@ -678,6 +691,7 @@ export class AssessmentPipeline {
 
     let response: StageResponse | null = null;
     try {
+      await this.beforeProviderInvocation?.(definition.stageId, 1);
       response = await this.transport.invoke({
         stageId: definition.stageId,
         model: runContext.model,
@@ -856,7 +870,10 @@ export class AssessmentPipeline {
 
   private async skipReusedStage(
     runContext: AssessmentRunContext,
-    stageId: "PB-01C" | "PB-02" | "PB-03",
+    stageId: "PB-01" | "PB-01C" | "PB-02" | "PB-03",
+    skipReason:
+      | "reused_initial_authority"
+      | "reused_purchase_ready_authority" = "reused_initial_authority",
   ) {
     const definition = this.definition(stageId);
     this.emit(stageId);
@@ -869,14 +886,17 @@ export class AssessmentPipeline {
       requestHash: hashJson({
         stageId,
         attemptNumber: 1,
-        reusedFrom: "initial_run_immutable_authority",
+        reusedFrom:
+          skipReason === "reused_initial_authority"
+            ? "initial_run_immutable_authority"
+            : "purchase_ready_immutable_authority",
         promptHash: definition.promptHash,
         schemaHash: definition.schemaHash,
       }),
       promptHash: definition.promptHash,
       schemaHash: definition.schemaHash,
       requestedModel: runContext.model,
-      skipReason: "reused_initial_authority",
+      skipReason,
       createdAt: this.now(),
     });
   }
@@ -1060,6 +1080,70 @@ export class AssessmentPipeline {
         "prompt-bundle-runtime-v17.0.0"
       ? evaluateJpy980InputSufficiencyV3(policyInput)
       : evaluateJpy980InputSufficiencyV2(policyInput);
+  }
+
+  private async completeV1A2PurchaseReady(input: {
+    request: AssessmentInput;
+    runContext: AssessmentRunContext;
+    baseStructuredIntake: JsonObject;
+    candidateEnvelope: CandidateEnvelopeV1;
+    aggregate: SafetyResult;
+    effectiveAuthority: EffectiveAssessmentAuthorityV1;
+    clarificationGrounding: ClarificationGroundingV1 | null;
+    policy: Jpy980InputSufficiencyResultV3;
+  }): Promise<PurchasePreparationExecutionResult> {
+    if (
+      input.runContext.promptBundleVersion !==
+        "prompt-bundle-runtime-v17.0.0" ||
+      input.runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+      this.stageTopologyVersion !== "split-base-candidate-v1" ||
+      input.policy.state !== "full_paid_ready_candidate"
+    ) {
+      throw new M2RuntimeError("M2_PRODUCTION_PREPARATION_IDENTITY_INVALID");
+    }
+
+    const authority: PurchaseReadyRuntimeAuthorityV1 = {
+      schemaVersion: "rc1-purchase-ready-runtime-authority-v1",
+      runtimeIdentity: {
+        model: input.runContext.model,
+        promptBundleVersion: "prompt-bundle-runtime-v17.0.0",
+        schemaSetVersion: "pipeline-schema-runtime-v6.0.0",
+        stageTopologyVersion: "split-base-candidate-v1",
+      },
+      request: structuredClone(input.request),
+      baseStructuredIntake: structuredClone(input.baseStructuredIntake),
+      candidateEnvelope: structuredClone(
+        input.candidateEnvelope,
+      ) as unknown as JsonObject,
+      aggregateSafety: structuredClone(input.aggregate) as unknown as JsonObject,
+      effectiveAssessmentAuthority: structuredClone(
+        input.effectiveAuthority,
+      ) as unknown as JsonObject,
+      clarificationGrounding:
+        input.clarificationGrounding === null
+          ? null
+          : (structuredClone(
+              input.clarificationGrounding,
+            ) as unknown as JsonObject),
+    };
+    const completedAt = this.now();
+    this.emit("COMPLETE_RUN");
+    await this.repository.finalizePurchaseReadyPreparation({
+      runId: input.runContext.runId,
+      requestId: input.runContext.requestId,
+      returnedModel: this.returnedModel,
+      policyResult: input.policy as unknown as JsonObject,
+      completedAt,
+      ...this.usage,
+    });
+    return {
+      requestId: input.runContext.requestId,
+      runId: input.runContext.runId,
+      eligibility: "purchase_ready",
+      duplicate: false,
+      usage: this.usage,
+      authority,
+    };
   }
 
   private async completeV15Ready(input: {
@@ -1658,7 +1742,18 @@ export class AssessmentPipeline {
   private async executeV1A2Initial(
     request: AssessmentInput,
     runContext: AssessmentRunContext,
-  ): Promise<AssessmentExecutionResult> {
+    preparationOnly: true,
+  ): Promise<PurchasePreparationExecutionResult>;
+  private async executeV1A2Initial(
+    request: AssessmentInput,
+    runContext: AssessmentRunContext,
+    preparationOnly?: false,
+  ): Promise<AssessmentExecutionResult>;
+  private async executeV1A2Initial(
+    request: AssessmentInput,
+    runContext: AssessmentRunContext,
+    preparationOnly = false,
+  ): Promise<AssessmentExecutionResult | PurchasePreparationExecutionResult> {
     const deterministicSafety = deterministicSafetyResult(request);
     const baseProviderInput = projectBaseProviderInputV1(request);
     let baseStructuredIntake: JsonObject | null = null;
@@ -1781,6 +1876,18 @@ export class AssessmentPipeline {
         reasonCodes: policy.reasonCodes,
       });
     }
+    if (preparationOnly) {
+      return this.completeV1A2PurchaseReady({
+        request,
+        runContext,
+        baseStructuredIntake,
+        candidateEnvelope: splitEnvelope.candidate_envelope,
+        aggregate,
+        effectiveAuthority,
+        clarificationGrounding: null,
+        policy: policy as Jpy980InputSufficiencyResultV3,
+      });
+    }
     return this.completeV1A2Ready({
       request,
       runContext,
@@ -1830,6 +1937,50 @@ export class AssessmentPipeline {
     throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
   }
 
+  async prepare(
+    request: AssessmentInput,
+    runContext: AssessmentRunContext,
+  ): Promise<PurchasePreparationExecutionResult> {
+    this.usage = emptyUsageTotals();
+    this.returnedModel = null;
+    this.validateRuntimeIdentity(runContext);
+    if (
+      runContext.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0" ||
+      runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+      this.stageTopologyVersion !== "split-base-candidate-v1"
+    ) {
+      throw new M2RuntimeError("M2_PRODUCTION_PREPARATION_IDENTITY_INVALID");
+    }
+    await this.repository.createRun({
+      id: runContext.runId,
+      requestId: runContext.requestId,
+      requestedModel: runContext.model,
+      promptBundleVersion: runContext.promptBundleVersion,
+      schemaSetVersion: runContext.schemaSetVersion,
+      stageTopologyVersion: this.stageTopologyVersion,
+      runKind: "initial",
+      startedAt: runContext.startedAt,
+    });
+    try {
+      return await this.executeV1A2Initial(request, runContext, true);
+    } catch (error) {
+      const safeError = asM2RuntimeError(error);
+      try {
+        await this.repository.failRun({
+          runId: runContext.runId,
+          requestId: runContext.requestId,
+          returnedModel: this.returnedModel,
+          errorCode: safeError.safeCode,
+          completedAt: this.now(),
+          ...this.usage,
+        });
+      } catch {
+        throw new M2RuntimeError("M2_RUN_PERSISTENCE_FAILED");
+      }
+      throw safeError;
+    }
+  }
+
   async resume(
     request: AssessmentInput,
     initial: PersistedInitialAuthorityV1,
@@ -1863,12 +2014,61 @@ export class AssessmentPipeline {
     }
   }
 
+  async resumePreparation(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+    evidence: ClarificationEvidenceV1,
+    runContext: AssessmentRunContext,
+  ): Promise<PurchasePreparationExecutionResult> {
+    this.usage = emptyUsageTotals();
+    this.returnedModel = null;
+    try {
+      return await this.resumeWithAccumulatedUsage(
+        request,
+        initial,
+        evidence,
+        runContext,
+        true,
+      );
+    } catch (error) {
+      const safeError = asM2RuntimeError(error);
+      try {
+        await this.repository.failRun({
+          runId: runContext.runId,
+          requestId: runContext.requestId,
+          returnedModel: this.returnedModel,
+          errorCode: safeError.safeCode,
+          completedAt: this.now(),
+          ...this.usage,
+        });
+      } catch {
+        throw new M2RuntimeError("M2_RUN_PERSISTENCE_FAILED");
+      }
+      throw safeError;
+    }
+  }
+
   private async resumeWithAccumulatedUsage(
     request: AssessmentInput,
     initial: PersistedInitialAuthorityV1,
     evidence: ClarificationEvidenceV1,
     runContext: AssessmentRunContext,
-  ): Promise<AssessmentExecutionResult> {
+    preparationOnly: true,
+  ): Promise<PurchasePreparationExecutionResult>;
+  private async resumeWithAccumulatedUsage(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+    evidence: ClarificationEvidenceV1,
+    runContext: AssessmentRunContext,
+    preparationOnly?: false,
+  ): Promise<AssessmentExecutionResult>;
+  private async resumeWithAccumulatedUsage(
+    request: AssessmentInput,
+    initial: PersistedInitialAuthorityV1,
+    evidence: ClarificationEvidenceV1,
+    runContext: AssessmentRunContext,
+    preparationOnly = false,
+  ): Promise<AssessmentExecutionResult | PurchasePreparationExecutionResult> {
     this.validateRuntimeIdentity(runContext);
     if (
       (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
@@ -1986,6 +2186,18 @@ export class AssessmentPipeline {
         reasonCodes: policy.reasonCodes,
       });
     }
+    if (preparationOnly) {
+      return this.completeV1A2PurchaseReady({
+        request,
+        runContext,
+        baseStructuredIntake,
+        candidateEnvelope: splitEnvelope.candidate_envelope,
+        aggregate,
+        effectiveAuthority,
+        clarificationGrounding,
+        policy: policy as Jpy980InputSufficiencyResultV3,
+      });
+    }
     return this.completeV1A2Ready({
       request,
       runContext,
@@ -1995,6 +2207,138 @@ export class AssessmentPipeline {
       effectiveAuthority,
       clarificationGrounding,
     });
+  }
+
+  async fulfillPrepared(
+    persistedRequest: PersistedAssessmentRequest,
+    authority: PurchaseReadyRuntimeAuthorityV1,
+    runContext: AssessmentRunContext,
+  ): Promise<AssessmentExecutionResult> {
+    this.usage = emptyUsageTotals();
+    this.returnedModel = null;
+    this.validateRuntimeIdentity(runContext);
+    if (
+      authority.schemaVersion !== "rc1-purchase-ready-runtime-authority-v1" ||
+      authority.runtimeIdentity.model !== runContext.model ||
+      authority.runtimeIdentity.promptBundleVersion !==
+        "prompt-bundle-runtime-v17.0.0" ||
+      authority.runtimeIdentity.promptBundleVersion !==
+        runContext.promptBundleVersion ||
+      authority.runtimeIdentity.schemaSetVersion !==
+        "pipeline-schema-runtime-v6.0.0" ||
+      authority.runtimeIdentity.schemaSetVersion !== runContext.schemaSetVersion ||
+      authority.runtimeIdentity.stageTopologyVersion !==
+        "split-base-candidate-v1" ||
+      this.stageTopologyVersion !== "split-base-candidate-v1"
+    ) {
+      throw new M2RuntimeError("M2_PURCHASE_READY_AUTHORITY_INVALID");
+    }
+    const persistedInput: AssessmentInput = {
+      currentSituation: persistedRequest.currentSituation,
+      optionalMessage: persistedRequest.optionalMessage,
+      relationship: persistedRequest.relationship,
+      requestedTopics: [...persistedRequest.requestedTopics],
+      privacyAcknowledged: true,
+    };
+    if (
+      !this.beforeProviderInvocation ||
+      persistedRequest.id !== runContext.requestId ||
+      hashJson(persistedInput as unknown as JsonObject) !==
+        hashJson(authority.request as unknown as JsonObject)
+    ) {
+      throw new M2RuntimeError("M2_PURCHASE_READY_AUTHORITY_INVALID");
+    }
+
+    const baseStructuredIntake = structuredClone(
+      authority.baseStructuredIntake,
+    );
+    const candidateEnvelope = structuredClone(
+      authority.candidateEnvelope,
+    ) as unknown as CandidateEnvelopeV1;
+    const aggregate = structuredClone(
+      authority.aggregateSafety,
+    ) as unknown as SafetyResult;
+    const effectiveAuthority = structuredClone(
+      authority.effectiveAssessmentAuthority,
+    ) as unknown as EffectiveAssessmentAuthorityV1;
+    const clarificationGrounding =
+      authority.clarificationGrounding === null
+        ? null
+        : (structuredClone(
+            authority.clarificationGrounding,
+          ) as unknown as ClarificationGroundingV1);
+    const baseProviderInput = projectBaseProviderInputV1(persistedInput);
+    validateBaseSourceIntegrityV1({
+      input: baseProviderInput,
+      groundedBaseOutput: baseStructuredIntake,
+    });
+    validateGroundedStageOutput(
+      this.definition("PB-01"),
+      baseStructuredIntake,
+    );
+    validateEffectiveAssessmentAuthorityIntegrityV1({
+      authority: effectiveAuthority,
+      baseStructuredIntake,
+      candidateEnvelope: candidateEnvelope as unknown as JsonObject,
+      clarificationGrounding,
+    });
+
+    await this.repository.createRun({
+      id: runContext.runId,
+      requestId: runContext.requestId,
+      requestedModel: runContext.model,
+      promptBundleVersion: runContext.promptBundleVersion,
+      schemaSetVersion: runContext.schemaSetVersion,
+      stageTopologyVersion: this.stageTopologyVersion,
+      runKind: "fulfillment_resume",
+      startedAt: runContext.startedAt,
+    });
+    try {
+      await this.skipReusedStage(
+        runContext,
+        "PB-01",
+        "reused_purchase_ready_authority",
+      );
+      await this.skipReusedStage(
+        runContext,
+        "PB-01C",
+        "reused_purchase_ready_authority",
+      );
+      await this.skipReusedStage(
+        runContext,
+        "PB-02",
+        "reused_purchase_ready_authority",
+      );
+      await this.skipReusedStage(
+        runContext,
+        "PB-03",
+        "reused_purchase_ready_authority",
+      );
+      return await this.completeV1A2Ready({
+        request: persistedInput,
+        runContext,
+        baseStructuredIntake,
+        candidateEnvelope,
+        aggregate,
+        effectiveAuthority,
+        clarificationGrounding,
+      });
+    } catch (error) {
+      const safeError = asM2RuntimeError(error);
+      try {
+        await this.repository.failRun({
+          runId: runContext.runId,
+          requestId: runContext.requestId,
+          returnedModel: this.returnedModel,
+          errorCode: safeError.safeCode,
+          completedAt: this.now(),
+          ...this.usage,
+        });
+      } catch {
+        throw new M2RuntimeError("M2_RUN_PERSISTENCE_FAILED");
+      }
+      throw safeError;
+    }
   }
 
   private async executeSplit(

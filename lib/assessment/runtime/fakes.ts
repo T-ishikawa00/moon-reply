@@ -14,6 +14,7 @@ import type {
   FailStageRecord,
   FinalizeCompletedAssessmentRecord,
   FinalizeNeedsMoreInformationRecord,
+  FinalizePurchaseReadyPreparationRecord,
   JsonObject,
   M2StageId,
   PersistedAssessmentRequest,
@@ -262,6 +263,25 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     this.clarifications.set(clarification.id, clarification);
     this.events.push("finalizeNeedsMoreInformation");
     return clone(clarification);
+  }
+
+  async finalizePurchaseReadyPreparation(
+    record: FinalizePurchaseReadyPreparationRecord,
+  ) {
+    this.maybeFail("finalizePurchaseReadyPreparation");
+    const run = this.runs.get(record.runId);
+    const request = this.requests.get(record.requestId);
+    if (!run || !request || run.status !== "processing") {
+      throw new M2RuntimeError("M2_PREPARATION_FINALIZATION_CONFLICT", 409);
+    }
+    Object.assign(run, clone(record), {
+      eligibility: "ready",
+      decision: null,
+      initialPolicyResult: clone(record.policyResult),
+      status: "completed",
+    });
+    request.updatedAt = record.completedAt;
+    this.events.push("finalizePurchaseReadyPreparation");
   }
 
   async findClarificationById(clarificationId: string) {

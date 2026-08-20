@@ -1,21 +1,21 @@
 # WBS.md
 
-<!-- RC-0-PRIVATE-RELEASE-CANDIDATE:BEGIN -->
-## Current authority overlay — RC-0 Private Release Candidate
+<!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
+## Current authority overlay — RC-1 Production Fulfillment Core
 
-- [x] Candidate branch fixed as `release/private-ready`.
-- [x] Stripe / Legal / Public Surface / Private Hosting authority fixed at `fa758896a29100d557e6a3ccacd3f0c33ee784e1`.
-- [x] Q0 / V17 Product and AI authority fixed at `81422fa41c8a8f6bdcd712d089b4260cdfe1ca9b`.
-- [x] Integration status is `rc0_private_release_candidate_integrated_pending_human_chatgpt_acceptance`.
-- [x] Main remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- [x] Q0 JPY980 Product Quality is an accepted snapshot; B2 Legal Draft Finalization, B3 Review-ready Website/Public Surface, and B4b Private Review Hard Gate are accepted within their recorded scopes.
-- [ ] Production Runtime — not yet established.
-- [ ] Production Payment — not implemented.
-- [ ] Public Launch — not authorized.
-- [ ] RC-1 Production Fulfillment — next only after RC-0 acceptance; not started or authorized here.
+- [x] RC-0 Private Release Candidate — `accepted_complete` at `release/private-ready` SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
+- [x] RC-1 implementation on `task/rc1-production-fulfillment-core` — `implemented_pending_human_chatgpt_review`.
+- [x] Pre-payment: deterministic server Safety, exact-input validation, V17 AI qualification, purchase-ready stop before PB-04/PB-05/PB-06, one-total-question clarification, opaque hash-bound capabilities.
+- [x] Post-payment seam: no public Grant minting; server-only verified-purchase authority creates at most one Grant and one Logical Assessment; the persisted purchase-ready authority resumes only V17 Product stages.
+- [x] Fulfillment: first PB-04 Provider-attempt boundary records `generation_started`; DB ownership/idempotency fixes one canonical `CustomerAssessmentExperienceProjectionV2`; a post-Report finalization retry reuses the exact completed V17 run without Provider replay; result tokens are hash-only/revocable; notification retry is independent of assessment generation.
+- [x] Append-only migration `0010_rc1_production_fulfillment_core.sql` added but not applied; production enablement remains explicit and default fail closed.
+- [ ] Human review and ChatGPT review of RC-1.
+- [ ] RC-2 verified Stripe Payment integration, live email provider, migration apply, deployment, WAF/rate-limit Hard Gate, and PRIVATE RELEASE READY decision — not started or authorized by RC-1.
 
-All current-looking and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-0 overlay and do not independently authorize Production, Payment, deployment, publication, or launch.
-<!-- RC-0-PRIVATE-RELEASE-CANDIDATE:END -->
+Actual Provider / Supabase remote write / migration apply / Stripe-Payment / email send / deploy / domain-DNS / Legal publication / PR / main merge / Public Launch operations are `0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0`. Main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+
+All current-looking and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.
+<!-- RC-1-PRODUCTION-FULFILLMENT-CORE:END -->
 
 ## Historical accepted Stripe / Legal / Public / Hosting authority
 
