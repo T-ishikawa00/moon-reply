@@ -1,5 +1,29 @@
 # WBS.md
 
+<!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:BEGIN -->
+## RC-2 Production Payment + Customer Delivery — Implemented, Review Pending
+
+Status: `implemented_pending_human_chatgpt_review` on `task/rc2-production-payment-delivery`, from exact accepted RC-1 base `57651f5fa850a061170389387b8201b03749c6ff`.
+
+- [x] Preserve deterministic pre-payment Safety, exact RC-1 V17 Product preparation, one-total Product clarification, source separation, canonical delivery integrity, and the PB-04 `generation_started` boundary.
+- [x] Implement no-login mailbox verification with hash-only one-time challenge material, expiry/attempt policy seams, replay closure, changed-email revocation, encrypted address storage, and a host-only HttpOnly/Secure/SameSite=Lax trusted-session cookie.
+- [x] Implement a provider-independent transactional-email boundary for mailbox verification and RC-1 notification-outbox result delivery; leave the production provider unselected/unconfigured and fail closed.
+- [x] Implement one Purchase Intent per preparation, `0..N` sequential Attempts, unknown-not-failed handling, active-attempt exclusion, stable Stripe idempotency, and at-most-one verified economic success.
+- [x] Implement Stripe Checkout for exact JPY 980 / quantity 1 / `mode=payment`; cards primary, Apple Pay/Google Pay delegated to eligible Checkout capability, PayPay separately config-gated.
+- [x] Implement the raw-body `Stripe-Signature` webhook boundary, duplicate/out-of-order-safe evidence ledger, central server/DB Payment verifier, and durable fulfillment job without webhook-owned Provider generation.
+- [x] Bind DB-verified Payment to exactly one RC-1 Assessment Grant; preserve one logical Assessment across reload/retry; reuse the canonical result and RC-1 result-notification outbox.
+- [x] Connect RequestForm through RC-1 preparation, one clarification, email verification, final accepted purchase facts/legal links, Checkout, Customer-safe return status, and explicit same-Purchase retry after a confirmed failed/canceled Attempt.
+- [x] Add append-only migration `0011_rc2_production_payment_delivery.sql` with RLS, denied anon/authenticated direct authority, service-role RPCs, uniqueness/FK/transaction/advisory-lock integrity; preserve `0010`; do not apply remotely.
+- [x] Add route-level rate-limit seams and independent Payment, webhook, fulfillment, email, and emergency-stop flags, all fail-closed/off by default.
+- [x] Complete offline implementation evidence: RC-2 `35/35`, RC-1 `14/14`, typecheck, zero-warning lint, production build, diff check, changed-secret-pattern scan, immutable `0010`, and zero RC-2 delta in protected Q0/runtime paths. Current Q0 semantic assertions are `9/9`; retained exact-branch/tree gates remain structurally non-portable on the RC-2 branch.
+- [ ] Human/ChatGPT review and acceptance.
+- [ ] Stripe account/category/payment-method approval, formal production configuration, secrets, webhook endpoint registration, and live-mode evidence.
+- [ ] Transactional email provider selection/adapter, sender/domain authentication, deliverability/privacy review, and live evidence.
+- [ ] Resolve or formally disposition the current `npm audit --omit=dev` result (`5 high`, pre-existing Next/toolchain graph; no Stripe finding). Then complete remote migration review/apply, distributed rate-limit/WAF/monitoring/runbooks, deployment, PRIVATE RELEASE READY, and the RC-3 hard gate.
+
+No actual Stripe API call, charge, Payment, email send, Supabase remote write, migration apply, deploy, domain/DNS action, legal publication, Public Launch, PR, or main merge is part of RC-2 implementation.
+<!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:END -->
+
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
 ## Current authority overlay — RC-1 Production Fulfillment Core accepted
 

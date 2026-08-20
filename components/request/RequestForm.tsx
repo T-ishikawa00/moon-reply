@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   FormEvent,
   useEffect,
@@ -66,6 +67,45 @@ type ErrorKey =
   | "attestationConfirmed"
   | "safetyBlocking";
 type ValidationErrors = Partial<Record<ErrorKey, string>>;
+
+type ProductionPreparationOutcome =
+  | { status: "purchase_ready"; preparationCapability: string }
+  | {
+      status: "needs_one_clarifying_answer";
+      clarificationCapability: string;
+      question: string;
+      maximumQuestionsTotal: 1;
+    }
+  | { status: "not_full_product_candidate" | "safety_blocked" };
+
+type ProductionPurchaseFlow =
+  | { status: "idle" }
+  | { status: "preparing" }
+  | {
+      status: "product_clarification";
+      clarificationCapability: string;
+      question: string;
+      answer: string;
+    }
+  | { status: "sending_verification"; preparationCapability: string }
+  | {
+      status: "awaiting_email_code";
+      preparationCapability: string;
+      challengeCapability: string;
+      expiresAt: string;
+      verificationCode: string;
+    }
+  | {
+      status: "verified";
+      preparationCapability: string;
+      maskedEmail: string;
+    }
+  | {
+      status: "checkout_starting";
+      preparationCapability: string;
+      maskedEmail: string;
+    }
+  | { status: "error"; message: string };
 
 type ClientSafetyResult = {
   classification: (typeof PREPAYMENT_SAFETY_CLASSIFICATIONS)[number];
@@ -434,6 +474,56 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function readResponseData(value: unknown) {
+  return isRecord(value) && isRecord(value.data) ? value.data : null;
+}
+
+function decodeProductionPreparation(
+  value: unknown,
+): ProductionPreparationOutcome | null {
+  const data = readResponseData(value);
+  if (!data || typeof data.status !== "string") return null;
+  if (
+    data.status === "purchase_ready" &&
+    typeof data.preparationCapability === "string"
+  ) {
+    return {
+      status: data.status,
+      preparationCapability: data.preparationCapability,
+    };
+  }
+  if (
+    data.status === "needs_one_clarifying_answer" &&
+    typeof data.clarificationCapability === "string" &&
+    typeof data.question === "string" &&
+    data.maximumQuestionsTotal === 1
+  ) {
+    return {
+      status: data.status,
+      clarificationCapability: data.clarificationCapability,
+      question: data.question,
+      maximumQuestionsTotal: 1,
+    };
+  }
+  if (
+    data.status === "not_full_product_candidate" ||
+    data.status === "safety_blocked"
+  ) {
+    return { status: data.status };
+  }
+  return null;
+}
+
+function productionFlowMessage(kind: "unavailable" | "notEligible" | "invalidCode") {
+  if (kind === "notEligible") {
+    return "この内容では有料の鑑定ノートへ進めません。相談内容を見直して、もう一度お試しください。";
+  }
+  if (kind === "invalidCode") {
+    return "確認コードを確認できませんでした。届いたコードを見直してください。";
+  }
+  return "現在、お申し込みを安全に完了できません。料金は発生していません。時間を置いてもう一度お試しください。";
+}
+
 function isKnownArray<const TValues extends readonly string[]>(
   value: unknown,
   values: TValues,
@@ -637,10 +727,20 @@ function ClarificationField({
 function LocalPurchaseConfirmation({
   form,
   presentation,
+  paymentEnabled,
+  verifiedEmail,
+  checkoutBusy,
+  checkoutError,
+  onCheckout,
   onEditEmail,
 }: {
   form: RequestFormData;
   presentation: SafetyPresentation;
+  paymentEnabled: boolean;
+  verifiedEmail: string | null;
+  checkoutBusy: boolean;
+  checkoutError: string | null;
+  onCheckout: () => void;
   onEditEmail: () => void;
 }) {
   return (
@@ -667,22 +767,65 @@ function LocalPurchaseConfirmation({
         <MemoRow label="今の関係" value={form.relationship} />
         <MemoRow label="今夜知りたいこと" value={form.whatToKnow.join("、")} />
         <MemoRow label="受け取り・復旧メール" value={form.email} />
+        {verifiedEmail ? (
+          <MemoRow label="メール確認" value={`${verifiedEmail} / 確認済み`} />
+        ) : null}
         <MemoRow label="数量" value="1相談 / 1鑑定ノート" />
-        <MemoRow label="予定している料金" value="税込980円" />
+        <MemoRow label="料金" value="税込980円" />
         <MemoRow label="購入形式" value="都度払い" />
         <MemoRow label="自動更新" value="なし" />
+        <MemoRow label="年齢" value="18歳以上の方が対象です" />
+        <MemoRow
+          label="AI利用"
+          value="入力内容をAIが整理・分析し、判断材料となる鑑定ノートを作成します。"
+        />
         <MemoRow
           label="結果について"
           value="相手の本心、返信、復縁、将来の結果を断定・保証しません。"
         />
       </dl>
-      <div className="request-runtime-note" role="note">
-        <strong>決済機能は現在準備中です。</strong>
-        <span>この画面では料金は発生しません。</span>
-      </div>
-      <button type="button" disabled aria-disabled="true">
-        購入機能は現在準備中です
-      </button>
+      <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
+        <Link href="/legal/terms">利用規約</Link>
+        <Link href="/legal/privacy">プライバシー</Link>
+        <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
+        <Link href="/legal/refund">返金方針</Link>
+        <Link href="/legal/ai-disclosure">AI利用について</Link>
+      </nav>
+      {paymentEnabled ? (
+        <>
+          <div className="request-runtime-note" role="note">
+            <strong>税込980円の都度払いです。</strong>
+            <span>
+              自動更新や定期購入はありません。決済後は、保護された結果ページと確認済みメールで同じ鑑定ノートを受け取れます。
+            </span>
+          </div>
+          {checkoutError ? (
+            <p className="request-field-error" role="alert">
+              {checkoutError}
+            </p>
+          ) : null}
+          <button
+            type="button"
+            className="button button--primary request-checkout-button"
+            disabled={checkoutBusy || !verifiedEmail}
+            onClick={onCheckout}
+          >
+            {checkoutBusy
+              ? "安全な決済画面を準備しています"
+              : "980円を支払い、鑑定を申し込む"}
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="request-runtime-note" role="note">
+            <strong>決済機能は現在準備中です。</strong>
+            <span>この画面では料金は発生しません。</span>
+          </div>
+          <button type="button" disabled aria-disabled="true">
+            購入機能は現在準備中です
+          </button>
+        </>
+      )}
       <button type="button" className="text-link" onClick={onEditEmail}>
         メールアドレスを修正する
       </button>
@@ -690,7 +833,7 @@ function LocalPurchaseConfirmation({
   );
 }
 
-export function RequestForm() {
+export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boolean }) {
   const [form, setForm] = useState<RequestFormData>(initialFormState);
   const [safety, setSafety] =
     useState<SafetySelectionState>(initialSafetyState);
@@ -707,7 +850,11 @@ export function RequestForm() {
   const [completedClassification, setCompletedClassification] =
     useState<EligiblePrepaymentClassificationV1 | null>(null);
   const [messageDetailsOpen, setMessageDetailsOpen] = useState(false);
+  const [productionFlow, setProductionFlow] =
+    useState<ProductionPurchaseFlow>({ status: "idle" });
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const requestSequence = useRef(0);
+  const preparationIdempotencyKey = useRef<string | null>(null);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -774,6 +921,9 @@ export function RequestForm() {
     if (!keepGatePrompt) setGatePrompt(null);
     if (!keepClarificationPrompt) setClarificationCodes([]);
     setCompletedClassification(null);
+    setProductionFlow({ status: "idle" });
+    setCheckoutError(null);
+    preparationIdempotencyKey.current = null;
   }
 
   function resetDependentSafetyAnswers() {
@@ -805,7 +955,11 @@ export function RequestForm() {
     ) {
       resetDependentSafetyAnswers();
     }
-    if (field === "email") setCompletedClassification(null);
+    if (field === "email") {
+      setCompletedClassification(null);
+      setProductionFlow({ status: "idle" });
+      setCheckoutError(null);
+    }
   }
 
   function updateAdultConfirmed(value: boolean) {
@@ -1225,6 +1379,249 @@ export function RequestForm() {
     moveToPhase(4);
   }
 
+  async function beginMailboxVerification(
+    preparationCapability: string,
+    classification: EligiblePrepaymentClassificationV1,
+  ) {
+    setProductionFlow({
+      status: "sending_verification",
+      preparationCapability,
+    });
+    try {
+      const response = await fetch("/api/delivery/email-verifications", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          preparationCapability,
+          email: form.email.trim(),
+        }),
+      });
+      if (!response.ok) throw new Error("EMAIL_VERIFICATION_START_FAILED");
+      const data = readResponseData(await response.json());
+      if (
+        data?.status === "trusted_session_reused" &&
+        typeof data.maskedEmail === "string"
+      ) {
+        setProductionFlow({
+          status: "verified",
+          preparationCapability,
+          maskedEmail: data.maskedEmail,
+        });
+        setCompletedClassification(classification);
+        return;
+      }
+      if (
+        data?.status === "verification_sent" &&
+        typeof data.challengeCapability === "string" &&
+        typeof data.expiresAt === "string"
+      ) {
+        setProductionFlow({
+          status: "awaiting_email_code",
+          preparationCapability,
+          challengeCapability: data.challengeCapability,
+          expiresAt: data.expiresAt,
+          verificationCode: "",
+        });
+        return;
+      }
+      throw new Error("EMAIL_VERIFICATION_RESPONSE_INVALID");
+    } catch {
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("unavailable"),
+      });
+    }
+  }
+
+  async function prepareProductionPurchase(
+    classification: EligiblePrepaymentClassificationV1,
+  ) {
+    const input = buildSafetyInput();
+    if (!input) {
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("unavailable"),
+      });
+      return;
+    }
+    setProductionFlow({ status: "preparing" });
+    const idempotencyKey =
+      preparationIdempotencyKey.current ?? crypto.randomUUID();
+    preparationIdempotencyKey.current = idempotencyKey;
+    try {
+      const response = await fetch("/api/consultations/prepare", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+        },
+        body: JSON.stringify({
+          ...input,
+          consultationSchemaVersion: "rc1-production-consultation-v1",
+          privacyAcknowledged: true,
+        }),
+      });
+      if (!response.ok) throw new Error("PRODUCTION_PREPARATION_FAILED");
+      const outcome = decodeProductionPreparation(await response.json());
+      if (!outcome) throw new Error("PRODUCTION_PREPARATION_INVALID");
+      if (outcome.status === "purchase_ready") {
+        await beginMailboxVerification(
+          outcome.preparationCapability,
+          classification,
+        );
+        return;
+      }
+      if (outcome.status === "needs_one_clarifying_answer") {
+        setProductionFlow({
+          status: "product_clarification",
+          clarificationCapability: outcome.clarificationCapability,
+          question: outcome.question,
+          answer: "",
+        });
+        return;
+      }
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("notEligible"),
+      });
+    } catch {
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("unavailable"),
+      });
+    }
+  }
+
+  async function submitProductClarification() {
+    if (
+      productionFlow.status !== "product_clarification" ||
+      productionFlow.answer.trim().length === 0 ||
+      !safetyResult ||
+      !isEligibleClassification(safetyResult.classification)
+    ) {
+      return;
+    }
+    const { clarificationCapability, answer } = productionFlow;
+    const classification = safetyResult.classification;
+    setProductionFlow({ status: "preparing" });
+    try {
+      const response = await fetch("/api/consultations/clarifications", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clarificationCapability,
+          answer: answer.trim(),
+        }),
+      });
+      if (!response.ok) throw new Error("PRODUCT_CLARIFICATION_FAILED");
+      const outcome = decodeProductionPreparation(await response.json());
+      if (!outcome || outcome.status !== "purchase_ready") {
+        throw new Error("PRODUCT_CLARIFICATION_INVALID");
+      }
+      await beginMailboxVerification(
+        outcome.preparationCapability,
+        classification,
+      );
+    } catch {
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("notEligible"),
+      });
+    }
+  }
+
+  async function submitEmailVerificationCode() {
+    if (
+      productionFlow.status !== "awaiting_email_code" ||
+      !/^\d{8}$/u.test(productionFlow.verificationCode) ||
+      !safetyResult ||
+      !isEligibleClassification(safetyResult.classification)
+    ) {
+      return;
+    }
+    const current = productionFlow;
+    try {
+      const response = await fetch(
+        "/api/delivery/email-verifications/verify",
+        {
+          method: "POST",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            challengeCapability: current.challengeCapability,
+            verificationCode: current.verificationCode,
+          }),
+        },
+      );
+      if (!response.ok) throw new Error("EMAIL_VERIFICATION_FAILED");
+      const data = readResponseData(await response.json());
+      if (data?.status !== "verified" || typeof data.maskedEmail !== "string") {
+        throw new Error("EMAIL_VERIFICATION_RESPONSE_INVALID");
+      }
+      setProductionFlow({
+        status: "verified",
+        preparationCapability: current.preparationCapability,
+        maskedEmail: data.maskedEmail,
+      });
+      setCompletedClassification(safetyResult.classification);
+    } catch {
+      setProductionFlow({
+        ...current,
+        verificationCode: "",
+      });
+      setErrors((existing) => ({
+        ...existing,
+        email: productionFlowMessage("invalidCode"),
+      }));
+    }
+  }
+
+  async function startStripeCheckout() {
+    if (productionFlow.status !== "verified") return;
+    const verified = productionFlow;
+    setCheckoutError(null);
+    setProductionFlow({
+      status: "checkout_starting",
+      preparationCapability: verified.preparationCapability,
+      maskedEmail: verified.maskedEmail,
+    });
+    try {
+      const response = await fetch("/api/payments/checkout", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          preparationCapability: verified.preparationCapability,
+        }),
+      });
+      if (!response.ok) throw new Error("PAYMENT_CHECKOUT_FAILED");
+      const data = readResponseData(await response.json());
+      if (data?.status !== "checkout_ready" || typeof data.checkoutUrl !== "string") {
+        throw new Error("PAYMENT_CHECKOUT_RESPONSE_INVALID");
+      }
+      const checkoutUrl = new URL(data.checkoutUrl);
+      if (
+        checkoutUrl.origin !== "https://checkout.stripe.com" ||
+        checkoutUrl.username !== "" ||
+        checkoutUrl.password !== ""
+      ) {
+        throw new Error("PAYMENT_CHECKOUT_URL_INVALID");
+      }
+      window.location.assign(checkoutUrl.toString());
+    } catch {
+      setProductionFlow(verified);
+      setCheckoutError(productionFlowMessage("unavailable"));
+    }
+  }
+
   async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const sheetErrors = validateSheet(form);
@@ -1248,6 +1645,10 @@ export function RequestForm() {
       isEligibleClassification(result.classification) &&
       result.purchaseGateSatisfied
     ) {
+      if (paymentEnabled) {
+        await prepareProductionPurchase(result.classification);
+        return;
+      }
       setCompletedClassification(result.classification);
       window.setTimeout(() => {
         document.getElementById("request-local-complete")?.focus();
@@ -1294,8 +1695,20 @@ export function RequestForm() {
         <LocalPurchaseConfirmation
           form={form}
           presentation={completedPresentation}
+          paymentEnabled={paymentEnabled}
+          verifiedEmail={
+            productionFlow.status === "verified" ||
+            productionFlow.status === "checkout_starting"
+              ? productionFlow.maskedEmail
+              : null
+          }
+          checkoutBusy={productionFlow.status === "checkout_starting"}
+          checkoutError={checkoutError}
+          onCheckout={() => void startStripeCheckout()}
           onEditEmail={() => {
             setCompletedClassification(null);
+            setProductionFlow({ status: "idle" });
+            setCheckoutError(null);
             moveToPhase(4);
           }}
         />
@@ -2187,7 +2600,9 @@ export function RequestForm() {
                 受け取りメールアドレス <span>必須</span>
               </label>
               <p id="email-note">
-                鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。現在は送信も保存もされません。
+                {paymentEnabled
+                  ? "鑑定結果の送付と、ご購入に関する重要な連絡に使用します。確認コードで受け取り先を確かめます。"
+                  : "鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。現在は送信も保存もされません。"}
               </p>
               <input
                 id="request-email"
@@ -2201,11 +2616,90 @@ export function RequestForm() {
               />
               <FieldError id="email-error" message={errors.email} />
             </div>
+            {paymentEnabled &&
+            productionFlow.status === "product_clarification" ? (
+              <div className="request-field request-product-clarification">
+                <label htmlFor="product-clarification-answer">
+                  鑑定ノートを準備するための確認 <span>必須 / 1回まで</span>
+                </label>
+                <p>{productionFlow.question}</p>
+                <textarea
+                  id="product-clarification-answer"
+                  value={productionFlow.answer}
+                  onChange={(event) =>
+                    setProductionFlow({
+                      ...productionFlow,
+                      answer: event.target.value,
+                    })
+                  }
+                />
+                <button
+                  type="button"
+                  className="button button--primary"
+                  disabled={productionFlow.answer.trim().length === 0}
+                  onClick={() => void submitProductClarification()}
+                >
+                  この回答で確認を完了する
+                </button>
+              </div>
+            ) : null}
+            {paymentEnabled &&
+            productionFlow.status === "awaiting_email_code" ? (
+              <div className="request-field request-email-verification">
+                <label htmlFor="email-verification-code">
+                  メールに届いた8桁の確認コード <span>必須</span>
+                </label>
+                <p>
+                  確認コードは一度だけ使用できます。メールアドレスを変更した場合は、もう一度確認します。
+                </p>
+                <input
+                  id="email-verification-code"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={8}
+                  value={productionFlow.verificationCode}
+                  onChange={(event) => {
+                    const verificationCode = event.target.value.replace(/\D/gu, "");
+                    setProductionFlow({
+                      ...productionFlow,
+                      verificationCode,
+                    });
+                    clearFieldError("email");
+                  }}
+                  aria-invalid={Boolean(errors.email)}
+                />
+                <button
+                  type="button"
+                  className="button button--primary"
+                  disabled={!/^\d{8}$/u.test(productionFlow.verificationCode)}
+                  onClick={() => void submitEmailVerificationCode()}
+                >
+                  メールアドレスを確認する
+                </button>
+              </div>
+            ) : null}
+            {paymentEnabled && productionFlow.status === "error" ? (
+              <p className="request-field-error" role="alert">
+                {productionFlow.message}
+              </p>
+            ) : null}
             <div className="request-runtime-note" role="note">
-              <strong>現在は公開前の審査モードで、有料販売は開始していません。</strong>
-              <span>
-                最終操作時には、このサイト内で現在の相談入力と利用可否を再確認しますが、本番用の確認は完了せず、購入手続きには進みません。決済、外部AIによる生成、永続保存、メール送信は行われません。
-              </span>
+              {paymentEnabled ? (
+                <>
+                  <strong>確認済みのメールアドレスだけを受け取り先にします。</strong>
+                  <span>
+                    相談内容はメール事業者や決済メタデータへ送りません。メール確認後、税込980円・都度払い・自動更新なしの最終確認へ進みます。
+                  </span>
+                </>
+              ) : (
+                <>
+                  <strong>現在は公開前の審査モードで、有料販売は開始していません。</strong>
+                  <span>
+                    最終操作時には、このサイト内で現在の相談入力と利用可否を再確認しますが、本番用の確認は完了せず、購入手続きには進みません。決済、外部AIによる生成、永続保存、メール送信は行われません。
+                  </span>
+                </>
+              )}
             </div>
             <footer className="request-phase-actions">
               <button
@@ -2218,9 +2712,21 @@ export function RequestForm() {
               <button
                 type="submit"
                 className="button button--primary"
-                disabled={safetyBusy}
+                disabled={
+                  safetyBusy ||
+                  productionFlow.status === "preparing" ||
+                  productionFlow.status === "sending_verification" ||
+                  productionFlow.status === "awaiting_email_code" ||
+                  productionFlow.status === "product_clarification"
+                }
               >
-                {safetyBusy ? "現在の入力を再確認中です" : "購入前の内容を確認する"}
+                {safetyBusy || productionFlow.status === "preparing"
+                  ? "現在の入力を確認しています"
+                  : productionFlow.status === "sending_verification"
+                    ? "確認メールを送っています"
+                    : paymentEnabled
+                      ? "受け取り先を確認する"
+                      : "購入前の内容を確認する"}
               </button>
             </footer>
           </form>

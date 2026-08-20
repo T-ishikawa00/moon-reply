@@ -1,5 +1,24 @@
 # CURRENT_FOCUS.md
 
+<!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:BEGIN -->
+## Current implementation overlay — RC-2 Production Payment + Customer Delivery
+
+- Status: `implemented_pending_human_chatgpt_review` on `task/rc2-production-payment-delivery`, based exactly on accepted RC-1 authority `57651f5fa850a061170389387b8201b03749c6ff`.
+- Implemented scope: RequestForm -> server Safety -> RC-1 V17 preparation -> at most one Product clarification -> mailbox verification -> server-trusted email session -> final purchase confirmation -> Stripe Checkout -> signed raw-body webhook -> central Payment verification -> one Assessment Grant -> RC-1 fulfillment -> protected result -> RC-1 notification outbox/result email boundary.
+- Payment Integrity: one persisted Purchase Intent per preparation; sequential Payment Attempts; pending/processing/unknown blocks a new attempt; exact JPY 980 one-time Product; server-derived Checkout idempotency; redirect/browser flags never verify Payment; DB-verified Stripe evidence alone can reach the RC-1 Grant RPC; webhook never owns Provider generation.
+- Delivery/privacy: verification challenge and trusted-session raw secrets are never persisted; email lookup is keyed, the address is AES-256-GCM encrypted, and TTL/attempt policy is server-only configuration. The trusted cookie is host-only, HttpOnly, Secure, SameSite=Lax. Changing email revokes prior delivery/session authority and requires reverification. Transactional email remains provider-independent and fails closed while unconfigured; consultation content is not sent to Stripe or email adapters.
+- Customer recovery: the return page uses only an opaque Moon Reply status capability. Reload recovers the same Purchase/Grant/Assessment without recharging. A failed/canceled attempt can be retried only by an explicit Customer action on the same Purchase Intent; unknown is not treated as failed.
+- Payment methods: cards are primary; Apple Pay/Google Pay remain Stripe Checkout/Dashboard capabilities rather than custom wallet code; PayPay is included only when separately approved and enabled. No PayPay approval is claimed.
+- Data: append-only `0011_rc2_production_payment_delivery.sql` adds the email, Purchase Intent, Payment Attempt, verified Payment, Stripe event/evidence, fulfillment job, and adjustment ledgers/RPCs with RLS, service-role-only authority, uniqueness/FK/transaction/advisory-lock controls. Migration apply remains `0`; accepted `0010` is unchanged.
+- Validation snapshot: RC-2 verifier `PASS 35/35`; RC-1 verifier `PASS 14/14`; typecheck, zero-warning lint, production build, `git diff --check`, `0010` immutability, changed-secret-pattern scan, and RC-2-to-base Q0/runtime protected-path diff all pass. The current branch-agnostic Q0 semantic assertions pass `9/9`; its two remaining failures are the retained verifier's exact historical branch/tree gates, not RC-2 runtime deltas. The older V17 runner is `19/23`: its four failures are the exact V17 branch/scope gate, one superseded Case 7 policy-snapshot assertion, the validate-only wrapper inheriting the branch failure, and the intentionally Payment/UI-protected scope. It is not represented as a clean RC-2 regression pass.
+- Dependency audit: `npm audit --omit=dev` remains red with `5 high` findings in the pre-existing Next/toolchain dependency graph and no Stripe finding. This is an activation blocker, not waived by the functional test passes; no broad automatic dependency rewrite was performed in RC-2.
+- Activation remains blocked on Human/ChatGPT review, actual Stripe account/category/method approval and configuration, transactional email provider selection/adapter and live configuration, secrets/TTL policy, remote migration review/apply, production-grade distributed rate limiting/WAF, dependency-advisory disposition, operational monitoring/runbooks, and RC-3 authorization.
+- Explicitly not established: Production Payment active; Stripe approved or formally selected; PayPay approved; email Provider selected/live; migration applied; live secrets; live charge/payment/email; deployment; domain/DNS; legal publication; PRIVATE RELEASE READY; Public Launch.
+- Task operations remain bounded: actual Stripe API calls/charges/Payments, actual email sends, Supabase remote writes, migration apply, Netlify deploy, domain/DNS, legal publication, Public Launch, PR, and main merge are all `0`.
+
+The accepted RC-1 overlay and all older entries below remain historical authority. RC-2 does not rewrite RC-1 V17 semantics, `generation_started`, canonical result integrity, result credential hashing, notification outbox behavior, or ordinary-refund versus Payment-Integrity separation.
+<!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:END -->
+
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
 ## Current authority overlay — RC-1 Production Fulfillment Core accepted
 

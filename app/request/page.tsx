@@ -3,6 +3,9 @@ import Link from "next/link";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
 import { RequestForm } from "@/components/request/RequestForm";
+import { isCustomerPaymentFlowVisible } from "@/lib/payment/production/environment";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "鑑定依頼シート | 月の返事",
@@ -19,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default function RequestPage() {
+  const paymentEnabled = isCustomerPaymentFlowVisible();
   return (
     <main className="request-page">
       <section className="request-page__intro" aria-labelledby="request-title">
@@ -45,14 +49,23 @@ export default function RequestPage() {
             次にどう動くかを考えるための判断材料にまとめます。相手の本心や未来を断定するものではありません。
           </span>
           <div className="request-page__boundary" role="note">
-            現在は公開前の審査モードで、有料販売は開始していません。入力後、このサイト内で
-            利用可否を確認する通信が行われることがありますが、本番用の確認は完了せず、
-            購入手続きには進みません。決済、外部AIによる生成、入力内容の継続保存、
-            メール送信は行われません。再読み込みすると入力は失われます。
+            {paymentEnabled ? (
+              <>
+                入力後、サーバーで利用可否と鑑定ノートの適格性を確認します。購入へ進める場合だけ、
+                受け取りメールの確認と税込980円の最終確認を行い、Stripeの安全な決済画面へ移動します。
+              </>
+            ) : (
+              <>
+                現在は公開前の審査モードで、有料販売は開始していません。入力後、このサイト内で
+                利用可否を確認する通信が行われることがありますが、本番用の確認は完了せず、
+                購入手続きには進みません。決済、外部AIによる生成、入力内容の継続保存、
+                メール送信は行われません。再読み込みすると入力は失われます。
+              </>
+            )}
           </div>
         </div>
       </section>
-      <RequestForm />
+      <RequestForm paymentEnabled={paymentEnabled} />
     </main>
   );
 }

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "verify:rc1": "node scripts/verify-rc1-production-fulfillment-core.mjs"
+    "verify:rc1": "node scripts/verify-rc1-production-fulfillment-core.mjs",
+    "verify:rc2": "node scripts/verify-rc2-production-payment-delivery.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.2",
@@ -16,7 +17,8 @@
     "next": "^16.2.12",
     "openai": "^7.1.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "stripe": "^22.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.2",

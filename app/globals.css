@@ -1367,6 +1367,17 @@ summary::marker {
 .request-local-complete dd { margin: 0; color: var(--ink-600); }
 .request-local-complete > button[disabled] { width: 100%; min-height: 3.5rem; margin-top: var(--space-6); border: 1px solid var(--ink-400); background: var(--paper-300); color: var(--ink-600); font: inherit; font-weight: 800; cursor: not-allowed; }
 .request-local-complete > .text-link { display: flex; margin: var(--space-3) auto 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.request-purchase-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-5); font-size: 0.78rem; line-height: 1.8; }
+.request-purchase-links a { color: var(--ink-700); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.request-local-complete > .request-checkout-button { width: 100%; min-height: 3.5rem; margin-top: var(--space-6); }
+.request-local-complete > .request-field-error { margin: var(--space-4) 0 0; }
+.request-product-clarification .button, .request-email-verification .button { width: 100%; margin-top: var(--space-4); }
+.purchase-return-page { display: grid; min-height: 72vh; place-items: center; padding: clamp(2rem, 7vw, 6rem) var(--page-gutter); background: var(--paper-100); }
+.purchase-return-card { width: min(100%, 42rem); border: 1px solid var(--border-paper); background: var(--paper-50); box-shadow: var(--shadow-paper); padding: clamp(2rem, 7vw, 4rem); text-align: center; }
+.purchase-return-card > p { margin: 0; color: var(--moon-600); font-size: 0.74rem; font-weight: 800; }
+.purchase-return-card h1 { margin: var(--space-3) 0 0; font-family: var(--font-heading); font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 600; line-height: 1.45; }
+.purchase-return-card > span { display: block; margin-top: var(--space-5); color: var(--ink-600); line-height: 2; }
+.purchase-return-card > button, .purchase-return-card > a { display: inline-flex; margin-top: var(--space-6); }
 
 .request-review-page, .purchase-review-page, .request-state-page { --focus-ring: var(--focus-ring-paper); min-height: 100vh; background: var(--paper-200); padding: clamp(2rem, 6vw, 5rem) 1.25rem; color: var(--ink-950); }
 .request-review-boundary { display: flex; width: min(100%, 58rem); align-items: flex-start; justify-content: space-between; gap: var(--space-5); margin: 0 auto var(--space-5); border: 1px solid var(--border-night); background: var(--night-800); padding: var(--space-4); color: var(--paper-50); }

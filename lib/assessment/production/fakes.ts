@@ -290,6 +290,31 @@ export class FakeProductionFulfillmentRepository
     };
   }
 
+  async issueVerifiedPaymentGrant(input: {
+    grantId: string;
+    purchaseId: string;
+    logicalAssessmentId: string;
+    verifiedPaymentId: string;
+    preparationId: string;
+    purchaseAuthorityReferenceHash: string;
+    deliveryAuthorityReference: string;
+    now: string;
+  }): Promise<AssessmentGrantHandleV1> {
+    const preparation = this.preparations.get(input.preparationId);
+    if (!preparation?.purchaseCapabilityHash || !input.verifiedPaymentId) {
+      throw new M2RuntimeError("PRODUCTION_VERIFIED_PURCHASE_REQUIRED", 403);
+    }
+    return this.issueGrant({
+      grantId: input.grantId,
+      purchaseId: input.purchaseId,
+      logicalAssessmentId: input.logicalAssessmentId,
+      preparationCapabilityHash: preparation.purchaseCapabilityHash,
+      purchaseAuthorityReferenceHash: input.purchaseAuthorityReferenceHash,
+      deliveryAuthorityReference: input.deliveryAuthorityReference,
+      now: input.now,
+    });
+  }
+
   async claimFulfillment(input: {
     grantId: string;
     ownerId: string;
@@ -581,6 +606,18 @@ export class FakeProductionFulfillmentRepository
     notification.status = "failed";
     notification.ownerId = null;
     this.events.push("failNotification");
+  }
+
+  async findNotificationIdByDeliveryAuthorityReference(
+    deliveryAuthorityReference: string,
+  ) {
+    return (
+      [...this.notifications.values()].find(
+        (notification) =>
+          notification.deliveryAuthorityReference ===
+          deliveryAuthorityReference,
+      )?.id ?? null
+    );
   }
 
   seedPurchaseReadyPreparation(input: {

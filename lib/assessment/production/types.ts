@@ -103,13 +103,22 @@ export type PublicPreparationOutcome =
       status: "not_full_product_candidate" | "safety_blocked";
     }>;
 
-export type VerifiedPurchaseAuthorityV1 = Readonly<{
-  schemaVersion: typeof VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION;
-  verificationSource: "future_verified_payment" | "rc1_test_fake";
-  purchaseAuthorityReference: string;
-  preparationCapability: string;
-  deliveryAuthorityReference: string;
-}>;
+export type VerifiedPurchaseAuthorityV1 =
+  | Readonly<{
+      schemaVersion: typeof VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION;
+      verificationSource: "future_verified_payment";
+      purchaseAuthorityReference: string;
+      verifiedPaymentId: string;
+      preparationId: string;
+      deliveryAuthorityReference: string;
+    }>
+  | Readonly<{
+      schemaVersion: typeof VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION;
+      verificationSource: "rc1_test_fake";
+      purchaseAuthorityReference: string;
+      preparationCapability: string;
+      deliveryAuthorityReference: string;
+    }>;
 
 export type AssessmentGrantHandleV1 = Readonly<{
   schemaVersion: "rc1-assessment-grant-handle-v1";
@@ -210,6 +219,16 @@ export type ProductionFulfillmentRepository = {
     deliveryAuthorityReference: string;
     now: string;
   }): Promise<AssessmentGrantHandleV1>;
+  issueVerifiedPaymentGrant(input: {
+    grantId: string;
+    purchaseId: string;
+    logicalAssessmentId: string;
+    verifiedPaymentId: string;
+    preparationId: string;
+    purchaseAuthorityReferenceHash: string;
+    deliveryAuthorityReference: string;
+    now: string;
+  }): Promise<AssessmentGrantHandleV1>;
   claimFulfillment(input: {
     grantId: string;
     ownerId: string;
@@ -258,6 +277,9 @@ export type ProductionFulfillmentRepository = {
     errorCode: string;
     now: string;
   }): Promise<void>;
+  findNotificationIdByDeliveryAuthorityReference(
+    deliveryAuthorityReference: string,
+  ): Promise<string | null>;
 };
 
 export function asJsonObject(value: object): JsonObject {

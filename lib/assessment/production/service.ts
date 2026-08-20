@@ -13,6 +13,7 @@ import {
   readProductionResultEnvironment,
 } from "./environment.ts";
 import { UnconfiguredDeliveryNotificationAdapterV1 } from "./notification.ts";
+import type { DeliveryNotificationAdapterV1 } from "./notification.ts";
 import { SupabaseProductionFulfillmentRepository } from "./supabase-repository.ts";
 import type {
   AssessmentGrantHandleV1,
@@ -98,6 +99,27 @@ export async function processProductionNotification(notificationId: string) {
   return (await createApplication()).processNotification(
     notificationId,
     new UnconfiguredDeliveryNotificationAdapterV1(),
+  );
+}
+
+export async function processProductionNotificationWithAdapter(
+  notificationId: string,
+  adapter: DeliveryNotificationAdapterV1,
+) {
+  requireFulfillmentRuntime();
+  return (await createApplication()).processNotification(notificationId, adapter);
+}
+
+export async function findProductionNotificationForDelivery(
+  deliveryAuthorityReference: string,
+) {
+  requireFulfillmentRuntime();
+  const environment = readProductionAssessmentEnvironment();
+  return new SupabaseProductionFulfillmentRepository(
+    environment.supabaseUrl,
+    environment.supabaseSecretKey,
+  ).findNotificationIdByDeliveryAuthorityReference(
+    deliveryAuthorityReference,
   );
 }
 

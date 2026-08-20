@@ -1,6 +1,7 @@
 import { M2RuntimeError } from "../runtime/errors.ts";
 
 export type DeliveryNotificationRequestV1 = Readonly<{
+  notificationId: string;
   deliveryAuthorityReference: string;
   resultAccessToken: string;
 }>;

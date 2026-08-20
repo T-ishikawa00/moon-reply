@@ -125,6 +125,7 @@ type ProductionDatabase = {
       fail_production_preparation_v1: RuntimeFunction;
       rotate_production_preparation_capability_v1: RuntimeFunction;
       issue_production_assessment_grant_v1: RuntimeFunction;
+      issue_rc2_production_assessment_grant_v1: RuntimeFunction;
       claim_production_fulfillment_v1: RuntimeFunction;
       mark_production_generation_started_v1: RuntimeFunction;
       complete_production_fulfillment_v1: RuntimeFunction;
@@ -604,6 +605,39 @@ export class SupabaseProductionFulfillmentRepository
     };
   }
 
+  async issueVerifiedPaymentGrant(input: {
+    grantId: string;
+    purchaseId: string;
+    logicalAssessmentId: string;
+    verifiedPaymentId: string;
+    preparationId: string;
+    purchaseAuthorityReferenceHash: string;
+    deliveryAuthorityReference: string;
+    now: string;
+  }): Promise<AssessmentGrantHandleV1> {
+    const { data, error } = await this.client.rpc(
+      "issue_rc2_production_assessment_grant_v1",
+      {
+        p_grant_id: input.grantId,
+        p_purchase_id: input.purchaseId,
+        p_logical_assessment_id: input.logicalAssessmentId,
+        p_verified_payment_id: input.verifiedPaymentId,
+        p_preparation_id: input.preparationId,
+        p_purchase_authority_reference_hash:
+          input.purchaseAuthorityReferenceHash,
+        p_delivery_authority_reference: input.deliveryAuthorityReference,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const result = recordValue(data);
+    return {
+      schemaVersion: "rc1-assessment-grant-handle-v1",
+      grantId: stringValue(result.grant_id),
+      logicalAssessmentId: stringValue(result.logical_assessment_id),
+    };
+  }
+
   async claimNotification(input: {
     notificationId: string;
     ownerId: string;
@@ -669,5 +703,17 @@ export class SupabaseProductionFulfillmentRepository
       },
     );
     if (error) databaseFailure();
+  }
+
+  async findNotificationIdByDeliveryAuthorityReference(
+    deliveryAuthorityReference: string,
+  ) {
+    const { data, error } = await this.client
+      .from("production_notification_outbox")
+      .select("id")
+      .eq("delivery_authority_reference", deliveryAuthorityReference)
+      .maybeSingle();
+    if (error) databaseFailure();
+    return data?.id ?? null;
   }
 }

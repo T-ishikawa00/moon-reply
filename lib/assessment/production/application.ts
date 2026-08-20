@@ -412,18 +412,28 @@ export class ProductionFulfillmentApplication {
     ) {
       throw new M2RuntimeError("PRODUCTION_VERIFIED_PURCHASE_REQUIRED", 403);
     }
-    return this.options.lifecycleRepository.issueGrant({
+    const shared = {
       grantId: this.uuid(),
       purchaseId: this.uuid(),
       logicalAssessmentId: this.uuid(),
-      preparationCapabilityHash: hashOpaqueProductionCapability(
-        authority.preparationCapability,
-      ),
       purchaseAuthorityReferenceHash: hashServerAuthorityReference(
         authority.purchaseAuthorityReference,
       ),
       deliveryAuthorityReference: authority.deliveryAuthorityReference,
       now: this.now(),
+    };
+    if (authority.verificationSource === "future_verified_payment") {
+      return this.options.lifecycleRepository.issueVerifiedPaymentGrant({
+        ...shared,
+        verifiedPaymentId: authority.verifiedPaymentId,
+        preparationId: authority.preparationId,
+      });
+    }
+    return this.options.lifecycleRepository.issueGrant({
+      ...shared,
+      preparationCapabilityHash: hashOpaqueProductionCapability(
+        authority.preparationCapability,
+      ),
     });
   }
 
@@ -596,6 +606,7 @@ export class ProductionFulfillmentApplication {
     });
     try {
       const sent = await adapter.send({
+        notificationId,
         deliveryAuthorityReference: notification.deliveryAuthorityReference,
         resultAccessToken,
       });
