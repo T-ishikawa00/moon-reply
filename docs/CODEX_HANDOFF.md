@@ -1,20 +1,16 @@
 # CODEX_HANDOFF.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
-## Active handoff — RC-2 Production Activation Step B Implemented
+## Active handoff — RC-2 Production Activation Step B Accepted
 
-- Status: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`; this is implementation evidence, not Product acceptance.
-- Authority: start `3cfa1728ccfc2c4e0bf78a7697dfe62c650be67a` on `task/rc2-activation-stepb-local-db-compat`; `release/private-ready` and `main` are not mutated by this task.
-- Migration: append-only `supabase/migrations/0012_rc2_activation_database_hardening.sql`; accepted `0002..0011`, Q0, and V17 are unchanged.
-- DB outcome: fresh apply PASS; exact assessment service-role grants PASS; Runtime/RPC operations PASS; actual anon/authenticated denials PASS; Stripe three-way binding and direct-DB corruption defenses PASS.
-- Payment outcome: A–O PASS. Mismatch evidence remains audited/rejected with Payment 0 and Job 0; matching evidence creates exactly one Payment and one Job; duplicate success creates neither duplicate.
-- Atomicity/clean replay: intentional failing external `0013` left no object/version; probe removed; repo-authoritative `0002..0012` replay PASS.
-- Regression: RC-2 `48/48`, RC-1 `14/14`, activation preflight `15/15`, Step B `18/18`, typecheck/lint/build/diff PASS. Audit remains exactly `3 high` and unresolved.
-- Cleanup: local stack stopped; matching containers/volumes/network `0/0/0`; Docker Desktop retained. Safety guard rejected recursive deletion, so the new and prior repo-external Step B workspace paths remain.
-- `REMOTE_SUPABASE_STATE = UNRESOLVED`; no historical ignored metadata is accepted as remote identity evidence.
-- Operations remaining `0`: Supabase remote read/write/apply/repair, Stripe API/Dashboard/charge/Payment/webhook, Email, OpenAI Provider, Netlify, remote env/secret, DNS, PR, release/main merge, and Public Launch.
-- Activation ceiling: Production Payment inactive; Stripe unconnected; Email inactive; remote migration unapplied/unestablished; PRIVATE RELEASE READY false; Public Launch false.
-- Exact next action: Human/ChatGPT review and accept or reject this Step B commit. Do not proceed to remote migration apply or Provider setup without a separate authorization.
+- Acceptance: RC-2 Production Activation Step B `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted candidate: `63767f2235f3c5999a31507945b4b140390e81c7` from `task/rc2-activation-stepb-local-db-compat`.
+- Accepted scope: append-only `0012`; fresh PostgreSQL/Supabase `0002..0012` proof; minimal service-role assessment authority; anon/authenticated denial; real assessment Runtime/RPC execution; Stripe test/live DB binding; Payment Integrity A–O; migration atomicity; clean replay.
+- Product authority: `release/private-ready` carries this accepted history through ff-only integration. `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Still NOT complete: remote Supabase state/apply; Stripe Sandbox secrets/webhook/test Payment; production transactional email and actual delivery; distributed rate limiting/WAF; remaining audit `3 high`; monitoring/rehearsal; RC-3; PRIVATE RELEASE READY; Public Launch.
+- Acceptance-sync boundary: documentation only. Migration, package/lock, verifier, runtime, Q0/V17, and app code are unchanged.
+- Operations: Supabase remote read/write/apply/repair, Stripe API/Dashboard/Payment/charge/webhook, Email, OpenAI Provider, Netlify, remote secrets/env, DNS, PR, main merge, and Public Launch remain `0`.
+- Exact next stage: **RC-2 Production Activation Step C — Remote Supabase State + Authorized Migration Apply**. Do not start Step C without separate authorization.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->

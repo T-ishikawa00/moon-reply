@@ -1,17 +1,17 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
-## Current implementation overlay — RC-2 Production Activation Step B
+## Current acceptance overlay — RC-2 Production Activation Step B
 
-- Status: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`; Human/ChatGPT review and acceptance remain pending.
-- Previous Step B `BLOCKED` was correct. Append-only `0012_rc2_activation_database_hardening.sql` repairs the missing assessment service-role authority, enables RLS on clarifications, and enforces test/live Checkout environment binding at DB authority.
-- Local fresh proof: `PASS_0002_THROUGH_0012_FRESH_APPLY`; service-role Runtime/RPC proof PASS; anon/authenticated actual denial PASS; Payment Integrity A–O PASS; migration atomicity PASS with no partial object; `PASS_0002_THROUGH_0012_FRESH_REPLAY`.
-- Repository validation: RC-2 `48/48`, RC-1 `14/14`, activation preflight `15/15`, Step B `18/18`, typecheck/lint/build/diff PASS; `npm audit --omit=dev` remains exactly `3 high` as a separate blocker.
-- Accepted `0002..0011`, `0010`/`0011` exact blobs, and Q0/V17 remain immutable.
-- `REMOTE_SUPABASE_STATE = UNRESOLVED`; remote read/write and migration apply/repair remain `0`.
-- Still NOT complete: Human/ChatGPT Step B acceptance, remote migration application, Stripe connection/webhook/test Payment, transactional email, Provider-backed paid execution, dependency `3 high` closure, monitoring rehearsal, RC-3, PRIVATE RELEASE READY, and Public Launch.
-- Product authority remains `release/private-ready` at `3cfa1728ccfc2c4e0bf78a7697dfe62c650be67a`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Exact next action: Human/ChatGPT review the Step B commit/evidence. Do not apply a remote migration or begin Provider setup from this task.
+- RC-2 Production Activation Step B: `accepted_complete`.
+- ChatGPT final review: `PASS`; Human/ChatGPT acceptance: `complete`.
+- Accepted candidate: `63767f2235f3c5999a31507945b4b140390e81c7` from `task/rc2-activation-stepb-local-db-compat`.
+- Accepted scope: append-only `0012_rc2_activation_database_hardening.sql`; fresh PostgreSQL/Supabase `0002..0012` apply; minimal service-role assessment-table authority; anon/authenticated denial; real assessment Runtime/RPC execution; Stripe Checkout test/live DB binding; Payment Integrity A–O; migration atomicity; clean `0002..0012` replay.
+- Still NOT complete: remote Supabase migration state; remote migration apply; Stripe Sandbox secret provisioning; Stripe webhook registration; Stripe test Payment; production transactional email Provider; actual email delivery; distributed rate limiting/WAF; remaining `npm audit` `3 high`; production monitoring/rehearsal; RC-3; PRIVATE RELEASE READY; Public Launch.
+- Product authority: `release/private-ready` is the sole current authority and carries this accepted Step B history through the authorized ff-only integration. `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Acceptance-sync boundary: only `docs/CURRENT_FOCUS.md`, `docs/WBS.md`, and `docs/CODEX_HANDOFF.md` change. Migration, package/lock, verifier, runtime, Q0/V17, and app code remain unchanged.
+- Operations remain `0`: Supabase remote read/write, migration apply/repair, Stripe API/Dashboard, Payment/charge, webhook registration, Email, OpenAI Provider, Netlify, remote secrets/env, DNS, Public Launch, PR, and main merge.
+- Exact next stage: **RC-2 Production Activation Step C — Remote Supabase State + Authorized Migration Apply**. Step C is not started and requires a separate authorization.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->
