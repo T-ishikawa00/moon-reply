@@ -1,19 +1,19 @@
 # CODEX_HANDOFF.md
 
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
-## Active handoff — RC-2 R2 Per-Purchase Email Authority Binding
+## Active handoff — RC-2 Implementation Core Accepted
 
-- Status / branch / starting SHA: `RC-2 R2 implemented_pending_human_chatgpt_review` / `task/rc2-production-payment-delivery` / `5d2d1c915924ff5072babe0e25858a352e9e703d`.
-- Binding path: the preparation row is the transaction lock root. Trusted reuse writes a verified preparation binding; challenge start writes a pending binding before delivery; challenge consumption writes the exact new verified authority/session. Purchase Intent creation validates the same four-way identity and is backed by a composite binding foreign key.
-- Fail-closed proof: after preparation B selects email B, old session A remains globally valid but cannot create B's Purchase Intent. The same session A can still bind and purchase on preparation C. Browser-supplied `verified` fields remain inert, and direct browser DB/RPC access is denied.
-- Result-token correction: accepted RC-1 can mint a fresh recovery credential for one completed canonical delivery. RC-2 now models that behavior and asserts stable canonical Product/Report plus no Grant, logical Assessment, Report, or Provider/Luna regeneration; raw path equality is not an invariant.
-- Dependency result: lock-only dependency scope is `fast-uri@3.1.5` and `nanoid@3.3.18`; `package.json` and `next@16.2.12` are unchanged. Audit is `3 high`, all remaining through Next's `postcss@8.4.31` / `sharp@0.34.5`; this remains an explicit PRIVATE RELEASE blocker.
-- Validation: RC-2 R2 `PASS 48/48`; RC-1 `PASS 14/14`; typecheck, zero-warning lint, production build, and diff check pass. Accepted `0010` is byte-identical and protected Q0/V17 delta from the R2 starting SHA is zero.
-- Authority ceiling: implementation evidence only, pending Human/ChatGPT review. RC-2 acceptance, Production Payment, Stripe approval, live email, migration apply, deploy, PRIVATE RELEASE READY, and Public Launch remain unestablished.
-- Operations: actual Stripe calls/charges/Payments, email, Supabase remote writes, migration apply, deploy, DNS, Public Launch, PR, release merge, and main merge remain `0`.
-- Next action: review this R2 correction only. Do not apply the migration, configure live Provider/email, deploy, or merge release/main from this handoff.
+- Acceptance: RC-2 Production Payment + Customer Delivery Implementation Core `accepted_complete`; R1 Payment Recovery / Fulfillment / Result Privacy `accepted_complete`; R2 Per-Purchase Email Authority Binding `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT implementation acceptance `complete`.
+- Accepted lineage: `57651f5fa850a061170389387b8201b03749c6ff` -> `dd6a813cd8c6cb27e72687ffdafea111585de31b` -> `5d2d1c915924ff5072babe0e25858a352e9e703d` -> `7ac706e96e86e7dcb276b23a756937cf8eaf104a`.
+- Accepted email/Payment boundary: verified mailbox control, trusted session, preparation-local email binding/reverification, Purchase Intent, sequential Attempts, exact JPY 980 one-time Checkout, server idempotency, signed raw webhook, reconciliation convergence, unknown-not-failed, same-Attempt recovery, and server/DB Payment verification.
+- Accepted fulfillment/delivery boundary: durable browser-independent jobs, verified Payment -> RC-1 Grant, browser/worker concurrency safety, status authority separated from result disclosure, Purchase-bound trusted-session disclosure, independent result-email recovery, and Payment Integrity constraints.
+- Activation ceiling: overall RC-2 Production Activation is `PENDING`. No Stripe account/KYC/payout/activation/method or PayPay approval, test/live secrets, webhook registration, live email Provider/domain, TTL policy, `0011` apply/live PostgreSQL proof, remote Supabase/OpenAI paid flow/Stripe test Payment, WAF/rate limiting, production secrets/deploy, monitoring/runbook, RC-3, PRIVATE RELEASE READY, or Public Launch is established.
+- Dependency blocker: `npm audit --omit=dev` remains `3 high` through `next@16.2.12` with `postcss@8.4.31` and `sharp@0.34.5`; dependency clean is not claimed.
+- Product authority: after the authorized ff-only integration, `release/private-ready` equals this acceptance-sync history. `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Operations: Stripe calls/charges/Payments, email send, Supabase remote writes, migration apply, Netlify deploy, DNS, Legal publication, Public Launch, PR, and main merge remain `0`.
+- Exact next stage: **RC-2 Production Activation / Provider Setup** — Human-guided Stripe account/business/KYC/test-mode/payout/webhook, email Provider, Supabase migration, server secrets, and actual test-mode E2E setup. Do not start it in this task.
 
-The R1 and R0 handoffs below remain historical context and do not override this correction overlay.
+The R1 and R0 handoffs below remain historical implementation evidence and do not override this accepted current status.
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:END -->
 
 <!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->

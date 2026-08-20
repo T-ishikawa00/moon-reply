@@ -1,21 +1,20 @@
 # WBS.md
 
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
-## RC-2 R2 Per-Purchase Email Authority Binding — Implemented, Review Pending
+## RC-2 Production Payment + Customer Delivery Implementation Core — Accepted
 
-Status: `RC-2 R2 implemented_pending_human_chatgpt_review` from exact starting SHA `5d2d1c915924ff5072babe0e25858a352e9e703d`.
+Status: RC-2 Implementation Core `accepted_complete`; R1 `accepted_complete`; R2 `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT implementation acceptance `complete`.
 
-- [x] Add one server-authoritative current delivery-email binding per preparation with `verification_pending` / `verified` state and exact email-hash, authority, and session identity.
-- [x] Atomically bind trusted-session reuse; atomically make a new challenge pending; atomically bind successful reverification.
-- [x] Require exact current binding agreement in Purchase Intent RPC and enforce it with composite DB foreign keys, RLS, and service-role-only access.
-- [x] Reject old-session Checkout while a changed-email challenge is pending without globally revoking that session; prove valid reuse on a separate repeat-purchase preparation and preserve past Purchase delivery authority.
-- [x] Correct the RC-2 fake/verifier to permit fresh recovery tokens while holding Grant, logical Assessment, canonical Product/Report, and Provider-generation counts at one.
-- [x] Refresh only `fast-uri` and `nanoid` inside existing transitive semver ranges; reduce audit from `5 high` to `3 high` without force, overrides, `package.json`, or Next change.
-- [x] Pass RC-2 R2 `48/48`, RC-1 `14/14`, typecheck, zero-warning lint, production build, `git diff --check`, accepted `0010` immutability, and zero R2 delta in protected Q0/V17 paths.
-- [ ] Human/ChatGPT R2 review and acceptance.
-- [ ] Resolve the remaining Next/PostCSS/Sharp dependency blocker and existing provider/email/migration/operations blockers before any PRIVATE RELEASE claim.
+- [x] Accept lineage `57651f5fa850a061170389387b8201b03749c6ff` -> `dd6a813cd8c6cb27e72687ffdafea111585de31b` -> `5d2d1c915924ff5072babe0e25858a352e9e703d` -> `7ac706e96e86e7dcb276b23a756937cf8eaf104a`.
+- [x] Accept verified mailbox control, trusted email sessions, per-preparation verified-email binding, and preparation-local reverification.
+- [x] Accept Purchase Intent, sequential Attempts, exact JPY 980 one-time Checkout, server idempotency, raw-body webhook verification, reconciliation convergence, unknown-not-failed, same-Attempt recovery, and server/DB Payment Integrity.
+- [x] Accept durable browser-independent fulfillment, verified Payment -> RC-1 Grant handoff, browser/worker concurrency safety, Purchase-bound result disclosure, and independent result-email recovery.
+- [x] Complete Human/ChatGPT review of the RC-2 Implementation Core only.
+- [ ] Overall RC-2 Production Activation remains `PENDING`; Provider/account/KYC/payout/method approval, secrets, webhook registration, live email, TTL policy, `0011` apply/live PostgreSQL proof, Supabase/OpenAI/Stripe test execution, WAF/rate limiting, production deployment/secrets, monitoring/runbook, and RC-3 remain incomplete.
+- [ ] Close the remaining `npm audit --omit=dev` `3 high` findings through `next@16.2.12` / `postcss@8.4.31` / `sharp@0.34.5` before PRIVATE RELEASE READY.
+- [ ] Begin the exact next stage, **RC-2 Production Activation / Provider Setup**, only under a separate Human-guided task.
 
-No actual Stripe call, charge, Payment, email, Supabase remote write, migration apply, deploy, DNS, Public Launch, PR, release merge, or main merge is authorized or performed by R2.
+Stripe calls, charge, Payment, email send, Supabase remote writes, migration apply, Netlify deploy, DNS, Legal publication, Public Launch, PR, and main merge remain `0` in this acceptance sync.
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:END -->
 
 <!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
