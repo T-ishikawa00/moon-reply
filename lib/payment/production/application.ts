@@ -139,17 +139,20 @@ export class ProductionPaymentDeliveryApplication {
       normalizedEmail,
       this.options.verificationPepper,
     );
+    const now = this.now();
     if (input.trustedSessionToken !== undefined && input.trustedSessionToken !== null) {
-      let trusted = null;
+      let trustedEmailBound = false;
       try {
-        trusted = await this.options.repository.findTrustedEmailSession({
-          sessionTokenHash: hashPaymentCapability(
-            input.trustedSessionToken,
-            "trusted-email-session",
-          ),
-          emailHash,
-          now: this.now(),
-        });
+        trustedEmailBound =
+          await this.options.repository.bindTrustedEmailSessionToPreparation({
+            preparationCapabilityHash,
+            sessionTokenHash: hashPaymentCapability(
+              input.trustedSessionToken,
+              "trusted-email-session",
+            ),
+            emailHash,
+            now,
+          });
       } catch (error) {
         if (
           !(error instanceof M2RuntimeError) ||
@@ -158,7 +161,7 @@ export class ProductionPaymentDeliveryApplication {
           throw error;
         }
       }
-      if (trusted) {
+      if (trustedEmailBound) {
         return {
           status: "trusted_session_reused",
           maskedEmail: maskDeliveryEmail(normalizedEmail),
@@ -166,7 +169,6 @@ export class ProductionPaymentDeliveryApplication {
       }
     }
 
-    const now = this.now();
     const challengeCapability = this.capability();
     const verificationCode = this.verificationCode();
     const challengeId = this.uuid();

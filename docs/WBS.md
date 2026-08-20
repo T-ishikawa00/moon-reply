@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
+## RC-2 R2 Per-Purchase Email Authority Binding — Implemented, Review Pending
+
+Status: `RC-2 R2 implemented_pending_human_chatgpt_review` from exact starting SHA `5d2d1c915924ff5072babe0e25858a352e9e703d`.
+
+- [x] Add one server-authoritative current delivery-email binding per preparation with `verification_pending` / `verified` state and exact email-hash, authority, and session identity.
+- [x] Atomically bind trusted-session reuse; atomically make a new challenge pending; atomically bind successful reverification.
+- [x] Require exact current binding agreement in Purchase Intent RPC and enforce it with composite DB foreign keys, RLS, and service-role-only access.
+- [x] Reject old-session Checkout while a changed-email challenge is pending without globally revoking that session; prove valid reuse on a separate repeat-purchase preparation and preserve past Purchase delivery authority.
+- [x] Correct the RC-2 fake/verifier to permit fresh recovery tokens while holding Grant, logical Assessment, canonical Product/Report, and Provider-generation counts at one.
+- [x] Refresh only `fast-uri` and `nanoid` inside existing transitive semver ranges; reduce audit from `5 high` to `3 high` without force, overrides, `package.json`, or Next change.
+- [x] Pass RC-2 R2 `48/48`, RC-1 `14/14`, typecheck, zero-warning lint, production build, `git diff --check`, accepted `0010` immutability, and zero R2 delta in protected Q0/V17 paths.
+- [ ] Human/ChatGPT R2 review and acceptance.
+- [ ] Resolve the remaining Next/PostCSS/Sharp dependency blocker and existing provider/email/migration/operations blockers before any PRIVATE RELEASE claim.
+
+No actual Stripe call, charge, Payment, email, Supabase remote write, migration apply, deploy, DNS, Public Launch, PR, release merge, or main merge is authorized or performed by R2.
+<!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:END -->
+
 <!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
 ## RC-2 R1 Payment Recovery / Fulfillment / Result Privacy — Implemented, Review Pending
 

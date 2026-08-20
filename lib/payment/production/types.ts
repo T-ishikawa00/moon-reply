@@ -72,6 +72,15 @@ export type TrustedEmailContext = Readonly<{
   authority: VerifiedEmailAuthority;
 }>;
 
+export type PreparationEmailBinding = Readonly<{
+  preparationId: string;
+  intendedEmailHash: string;
+  verifiedEmailAuthorityId: string | null;
+  trustedEmailSessionId: string | null;
+  state: "verification_pending" | "verified";
+  updatedAt: string;
+}>;
+
 export type EmailVerificationStartOutcome =
   | Readonly<{
       status: "trusted_session_reused";
@@ -262,6 +271,12 @@ export type PaymentDeliveryRepository = {
   findPurchaseReadyPreparation(
     preparationCapabilityHash: string,
   ): Promise<PurchaseReadyPreparation | null>;
+  bindTrustedEmailSessionToPreparation(input: {
+    preparationCapabilityHash: string;
+    sessionTokenHash: string;
+    emailHash: string;
+    now: string;
+  }): Promise<boolean>;
   findTrustedEmailSession(input: {
     sessionTokenHash: string;
     emailHash?: string;

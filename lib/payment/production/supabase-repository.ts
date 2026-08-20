@@ -59,6 +59,16 @@ type TrustedSessionRow = {
   revoked_at: string | null;
 };
 
+type PreparationEmailBindingRow = {
+  preparation_id: string;
+  intended_email_sha256: string;
+  verified_email_authority_id: string | null;
+  trusted_email_session_id: string | null;
+  state: "verification_pending" | "verified";
+  created_at: string;
+  updated_at: string;
+};
+
 type PurchaseIntentRow = {
   id: string;
   preparation_id: string;
@@ -116,6 +126,7 @@ type PaymentDatabase = {
       production_preparations: RuntimeTable<PreparationRow>;
       production_verified_email_authorities: RuntimeTable<VerifiedEmailRow>;
       production_trusted_email_sessions: RuntimeTable<TrustedSessionRow>;
+      production_preparation_email_bindings: RuntimeTable<PreparationEmailBindingRow>;
       production_purchase_intents: RuntimeTable<PurchaseIntentRow>;
       production_payment_attempts: RuntimeTable<PaymentAttemptRow>;
       production_fulfillment_jobs: RuntimeTable<FulfillmentJobRow>;
@@ -123,6 +134,7 @@ type PaymentDatabase = {
     Views: { [_ in never]: never };
     Functions: {
       begin_rc2_email_challenge_v1: RuntimeFunction;
+      bind_rc2_trusted_email_to_preparation_v1: RuntimeFunction;
       mark_rc2_email_challenge_delivery_failed_v1: RuntimeFunction;
       consume_rc2_email_challenge_v1: RuntimeFunction;
       begin_rc2_purchase_intent_v1: RuntimeFunction;
@@ -152,6 +164,7 @@ function databaseFailure(error?: unknown): never {
     ["RC2_EMAIL_VERIFICATION_INVALID", 403],
     ["RC2_PURCHASE_READY_REQUIRED", 403],
     ["RC2_VERIFIED_EMAIL_REQUIRED", 403],
+    ["RC2_EMAIL_BINDING_CONFLICT", 409],
     ["RC2_PURCHASE_INTENT_CONFLICT", 409],
     ["RC2_PAYMENT_ATTEMPT_BLOCKED", 409],
     ["RC2_FULFILLMENT_JOB_CONFLICT", 409],
@@ -332,6 +345,26 @@ export class SupabasePaymentDeliveryRepository
       return null;
     }
     return { session: mapSession(data), authority };
+  }
+
+  async bindTrustedEmailSessionToPreparation(input: {
+    preparationCapabilityHash: string;
+    sessionTokenHash: string;
+    emailHash: string;
+    now: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "bind_rc2_trusted_email_to_preparation_v1",
+      {
+        p_preparation_capability_hash: input.preparationCapabilityHash,
+        p_trusted_session_token_hash: input.sessionTokenHash,
+        p_email_sha256: input.emailHash,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const result = recordValue(data);
+    return result.disposition === "bound";
   }
 
   async createEmailChallenge(input: {

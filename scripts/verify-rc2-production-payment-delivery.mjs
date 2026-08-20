@@ -175,7 +175,7 @@ async function check(name, callback) {
   }
 }
 
-await check("unverified email and forged browser state cannot create Checkout", async () => {
+await check("browser state cannot forge a verified preparation email binding", async () => {
   const run = harness();
   await assert.rejects(
     () =>
@@ -187,6 +187,19 @@ await check("unverified email and forged browser state cannot create Checkout", 
       }),
     (error) => safeCode(error) === "PAYMENT_VERIFIED_EMAIL_REQUIRED",
   );
+  await run.application.startEmailVerification({
+    preparationCapability: run.preparationCapability,
+    email: "customer@example.com",
+    trustedSessionToken: Buffer.alloc(32, 240).toString("base64url"),
+    bindingState: "verified",
+    verifiedEmailAuthorityId: "browser-forged-authority",
+  });
+  const binding = run.repository.deliveryEmailBindings.get(
+    "90000000-0000-4000-8000-000000000001",
+  );
+  assert.equal(binding.state, "verification_pending");
+  assert.equal(binding.verifiedEmailAuthorityId, null);
+  assert.equal(binding.trustedEmailSessionId, null);
   assert.equal(run.checkoutProvider.requests.length, 0);
 });
 
@@ -222,6 +235,21 @@ await check("trusted mailbox reuse keeps each Purchase delivery reference unique
     trustedSessionToken: verified.completed.trustedSessionToken,
   });
   assert.equal(reused.status, "trusted_session_reused");
+  const originalAuthority = [...run.repository.authorities.values()][0];
+  const originalSession = [...run.repository.sessions.values()][0];
+  assert.deepEqual(
+    run.repository.deliveryEmailBindings.get(
+      "90000000-0000-4000-8000-000000000002",
+    ),
+    {
+      preparationId: "90000000-0000-4000-8000-000000000002",
+      intendedEmailHash: originalAuthority.emailHash,
+      verifiedEmailAuthorityId: originalAuthority.id,
+      trustedEmailSessionId: originalSession.id,
+      state: "verified",
+      updatedAt: fixedClock,
+    },
+  );
   await run.application.startCheckout({
     preparationCapability: secondPreparationCapability,
     trustedSessionToken: verified.completed.trustedSessionToken,
@@ -283,32 +311,95 @@ await check("expired verification challenge fails closed", async () => {
   );
 });
 
-await check("changed email requires a new mailbox challenge", async () => {
+await check("changed email is preparation-local and requires a new mailbox challenge", async () => {
   const run = harness();
   const verified = await verifyEmail(run, "first@example.com");
-  const changed = await run.application.startEmailVerification({
+  const oldAuthority = [...run.repository.authorities.values()][0];
+  const oldSession = [...run.repository.sessions.values()][0];
+  await run.application.startCheckout({
     preparationCapability: run.preparationCapability,
+    trustedSessionToken: verified.completed.trustedSessionToken,
+  });
+  const secondPreparationCapability = Buffer.alloc(32, 203).toString("base64url");
+  const secondPreparationId = "90000000-0000-4000-8000-000000000003";
+  run.repository.seedPurchaseReady({
+    id: secondPreparationId,
+    preparationCapabilityHash: hashOpaqueProductionCapability(
+      secondPreparationCapability,
+    ),
+  });
+  const reused = await run.application.startEmailVerification({
+    preparationCapability: secondPreparationCapability,
+    email: "first@example.com",
+    trustedSessionToken: verified.completed.trustedSessionToken,
+  });
+  assert.equal(reused.status, "trusted_session_reused");
+  assert.equal(
+    run.repository.deliveryEmailBindings.get(secondPreparationId).state,
+    "verified",
+  );
+  const changed = await run.application.startEmailVerification({
+    preparationCapability: secondPreparationCapability,
     email: "second@example.com",
     trustedSessionToken: verified.completed.trustedSessionToken,
   });
   assert.equal(changed.status, "verification_sent");
   assert.equal(run.transactionalEmail.verificationRequests.length, 2);
+  const pendingBinding = run.repository.deliveryEmailBindings.get(
+    secondPreparationId,
+  );
+  assert.equal(pendingBinding.state, "verification_pending");
+  assert.equal(pendingBinding.verifiedEmailAuthorityId, null);
+  assert.equal(pendingBinding.trustedEmailSessionId, null);
+  assert.equal(oldAuthority.revokedAt, null);
+  assert.equal(oldSession.revokedAt, null);
   await assert.rejects(
     () =>
       run.application.startCheckout({
-        preparationCapability: run.preparationCapability,
+        preparationCapability: secondPreparationCapability,
         trustedSessionToken: verified.completed.trustedSessionToken,
       }),
     (error) => safeCode(error) === "PAYMENT_VERIFIED_EMAIL_REQUIRED",
+  );
+  const thirdPreparationCapability = Buffer.alloc(32, 204).toString("base64url");
+  const thirdPreparationId = "90000000-0000-4000-8000-000000000004";
+  run.repository.seedPurchaseReady({
+    id: thirdPreparationId,
+    preparationCapabilityHash: hashOpaqueProductionCapability(
+      thirdPreparationCapability,
+    ),
+  });
+  const thirdReuse = await run.application.startEmailVerification({
+    preparationCapability: thirdPreparationCapability,
+    email: "first@example.com",
+    trustedSessionToken: verified.completed.trustedSessionToken,
+  });
+  assert.equal(thirdReuse.status, "trusted_session_reused");
+  await run.application.startCheckout({
+    preparationCapability: thirdPreparationCapability,
+    trustedSessionToken: verified.completed.trustedSessionToken,
+  });
+  assert.equal(
+    run.repository.deliveryEmailBindings.get(thirdPreparationId)
+      .trustedEmailSessionId,
+    oldSession.id,
   );
   const reverified = await run.application.completeEmailVerification({
     challengeCapability: changed.challengeCapability,
     verificationCode: "12345678",
   });
+  const verifiedBinding = run.repository.deliveryEmailBindings.get(
+    secondPreparationId,
+  );
+  assert.equal(verifiedBinding.state, "verified");
+  assert.notEqual(verifiedBinding.verifiedEmailAuthorityId, oldAuthority.id);
+  assert.notEqual(verifiedBinding.trustedEmailSessionId, oldSession.id);
   await run.application.startCheckout({
-    preparationCapability: run.preparationCapability,
+    preparationCapability: secondPreparationCapability,
     trustedSessionToken: reverified.trustedSessionToken,
   });
+  assert.equal(oldAuthority.revokedAt, null);
+  assert.equal(oldSession.revokedAt, null);
 });
 
 await check("unconfigured email provider never reports delivery success", async () => {
@@ -783,7 +874,7 @@ await check("concurrent browser and worker still produce one canonical Product",
   assert.equal(run.repository.jobs.size, 1);
   assert.equal(run.grantProcessor.grants.size, 1);
   assert.equal(run.grantProcessor.generated.size, 1);
-  assert.equal(run.grantProcessor.resultTokens.size, 1);
+  assert.equal(run.grantProcessor.canonicalReports.size, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 1);
 });
 
@@ -819,7 +910,7 @@ await check("status capability without trusted session never discloses a result 
   assert.equal(run.grantProcessor.notificationCalls.length, 1);
 });
 
-await check("matching trusted session may open the same canonical result", async () => {
+await check("fresh recovery tokens still resolve one canonical Product and Report", async () => {
   const run = harness();
   const ready = await checkoutReady(run);
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
@@ -827,14 +918,27 @@ await check("matching trusted session may open the same canonical result", async
     ready.checkout.statusCapability,
     ready.completed.trustedSessionToken,
   );
+  const firstCanonicalReport = structuredClone(
+    [...run.grantProcessor.canonicalReports.values()][0],
+  );
   const second = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
     ready.completed.trustedSessionToken,
   );
   assert.equal(first.status, "completed");
   assert.equal(second.status, "completed");
-  assert.equal(first.resultPath, second.resultPath);
-  assert.equal(run.grantProcessor.resultTokens.size, 1);
+  assert.notEqual(first.resultPath, second.resultPath);
+  assert.equal(run.grantProcessor.issuedResultTokens.length, 2);
+  assert.equal(run.grantProcessor.grants.size, 1);
+  assert.equal(run.grantProcessor.generated.size, 1);
+  assert.equal(run.grantProcessor.canonicalReports.size, 1);
+  assert.deepEqual(
+    [...run.grantProcessor.canonicalReports.values()][0],
+    firstCanonicalReport,
+  );
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+  assert.equal(run.repository.verifiedPayments.size, 1);
+  assert.equal(run.repository.jobs.size, 1);
 });
 
 for (const sessionState of ["wrong", "expired", "revoked"]) {
@@ -941,6 +1045,8 @@ await check("0011 migration encodes Payment Integrity, RLS, and server-only auth
   for (const required of [
     "production_email_verification_challenges",
     "production_trusted_email_sessions",
+    "production_preparation_email_bindings",
+    "bind_rc2_trusted_email_to_preparation_v1",
     "production_purchase_intents",
     "production_payment_attempts",
     "production_verified_payments",
@@ -952,6 +1058,10 @@ await check("0011 migration encodes Payment Integrity, RLS, and server-only auth
     "production_payment_attempt_one_success_idx",
     "production_rc2_outbox_delivery_reference_idx",
     "production_purchase_intent_session_authority_binding_fk",
+    "production_preparation_email_binding_state",
+    "production_preparation_email_binding_authority_hash_fk",
+    "production_preparation_email_binding_session_authority_fk",
+    "production_purchase_intent_preparation_email_binding_fk",
     "production_verified_payment_attempt_binding_fk",
     "production_verified_payment_event_fk",
     "production_fulfillment_job_delivery_binding_fk",
@@ -971,6 +1081,10 @@ await check("0011 migration encodes Payment Integrity, RLS, and server-only auth
   ]) {
     assert.ok(migration.includes(required), required);
   }
+  assert.doesNotMatch(
+    migration,
+    /update public\.production_(?:trusted_email_sessions|verified_email_authorities) set\s+revoked_at/iu,
+  );
   assert.doesNotMatch(migration, /grant .* to anon|grant .* to authenticated/iu);
 });
 

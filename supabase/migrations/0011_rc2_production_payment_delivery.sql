@@ -89,6 +89,40 @@ create table public.production_trusted_email_sessions (
   constraint production_trusted_email_expiry check (expires_at > issued_at)
 );
 
+create table public.production_preparation_email_bindings (
+  preparation_id uuid primary key,
+  intended_email_sha256 text not null,
+  verified_email_authority_id uuid,
+  trusted_email_session_id uuid,
+  state text not null,
+  created_at timestamptz not null,
+  updated_at timestamptz not null,
+  constraint production_preparation_email_binding_preparation_fk
+    foreign key (preparation_id)
+    references public.production_preparations(id) on delete restrict,
+  constraint production_preparation_email_binding_hash
+    check (intended_email_sha256 ~ '^[0-9a-f]{64}$'),
+  constraint production_preparation_email_binding_state check (
+    (state = 'verification_pending'
+      and verified_email_authority_id is null
+      and trusted_email_session_id is null)
+    or (state = 'verified'
+      and verified_email_authority_id is not null
+      and trusted_email_session_id is not null)
+  ),
+  constraint production_preparation_email_binding_authority_hash_fk
+    foreign key (verified_email_authority_id, intended_email_sha256)
+    references public.production_verified_email_authorities(id, email_sha256)
+    on delete restrict,
+  constraint production_preparation_email_binding_session_authority_fk
+    foreign key (verified_email_authority_id, trusted_email_session_id)
+    references public.production_trusted_email_sessions(
+      verified_email_authority_id, id
+    ) on delete restrict,
+  constraint production_preparation_email_binding_identity_unique
+    unique (preparation_id, verified_email_authority_id, trusted_email_session_id)
+);
+
 create table public.production_purchase_intents (
   id uuid primary key,
   preparation_id uuid not null unique,
@@ -120,6 +154,12 @@ create table public.production_purchase_intents (
     foreign key (verified_email_authority_id, trusted_email_session_id)
     references public.production_trusted_email_sessions(
       verified_email_authority_id, id
+    ) on delete restrict,
+  constraint production_purchase_intent_preparation_email_binding_fk
+    foreign key (
+      preparation_id, verified_email_authority_id, trusted_email_session_id
+    ) references public.production_preparation_email_bindings(
+      preparation_id, verified_email_authority_id, trusted_email_session_id
     ) on delete restrict,
   constraint production_purchase_intent_id_preparation_unique
     unique (id, preparation_id),
@@ -418,12 +458,80 @@ create unique index production_rc2_outbox_delivery_reference_idx
 alter table public.production_email_verification_challenges enable row level security;
 alter table public.production_verified_email_authorities enable row level security;
 alter table public.production_trusted_email_sessions enable row level security;
+alter table public.production_preparation_email_bindings enable row level security;
 alter table public.production_purchase_intents enable row level security;
 alter table public.production_payment_attempts enable row level security;
 alter table public.production_verified_payments enable row level security;
 alter table public.production_stripe_event_ledger enable row level security;
 alter table public.production_fulfillment_jobs enable row level security;
 alter table public.production_payment_adjustment_ledger enable row level security;
+
+create function public.bind_rc2_trusted_email_to_preparation_v1(
+  p_preparation_capability_hash text,
+  p_trusted_session_token_hash text,
+  p_email_sha256 text,
+  p_now timestamptz
+) returns jsonb
+language plpgsql
+security invoker
+set search_path = ''
+as $function$
+declare
+  preparation public.production_preparations%rowtype;
+  trusted public.production_trusted_email_sessions%rowtype;
+  authority public.production_verified_email_authorities%rowtype;
+  binding public.production_preparation_email_bindings%rowtype;
+begin
+  select * into preparation from public.production_preparations
+    where purchase_capability_hash = p_preparation_capability_hash for update;
+  if preparation.id is null or preparation.status <> 'purchase_ready' then
+    raise exception 'RC2_PURCHASE_READY_REQUIRED' using errcode = 'P0001';
+  end if;
+  select * into trusted from public.production_trusted_email_sessions
+    where session_token_hash = p_trusted_session_token_hash
+      and revoked_at is null and expires_at > p_now for update;
+  if trusted.id is null then
+    return jsonb_build_object('disposition', 'invalid');
+  end if;
+  select * into authority from public.production_verified_email_authorities
+    where id = trusted.verified_email_authority_id
+      and email_sha256 = p_email_sha256
+      and revoked_at is null for update;
+  if authority.id is null then
+    return jsonb_build_object('disposition', 'invalid');
+  end if;
+  select * into binding from public.production_preparation_email_bindings
+    where preparation_id = preparation.id for update;
+  if exists (
+    select 1 from public.production_purchase_intents
+      where preparation_id = preparation.id
+  ) then
+    if binding.preparation_id is null
+       or binding.state <> 'verified'
+       or binding.intended_email_sha256 <> authority.email_sha256
+       or binding.verified_email_authority_id <> authority.id
+       or binding.trusted_email_session_id <> trusted.id then
+      raise exception 'RC2_PURCHASE_INTENT_CONFLICT' using errcode = 'P0001';
+    end if;
+  else
+    insert into public.production_preparation_email_bindings (
+      preparation_id, intended_email_sha256, verified_email_authority_id,
+      trusted_email_session_id, state, created_at, updated_at
+    ) values (
+      preparation.id, authority.email_sha256, authority.id, trusted.id,
+      'verified', p_now, p_now
+    ) on conflict (preparation_id) do update set
+      intended_email_sha256 = excluded.intended_email_sha256,
+      verified_email_authority_id = excluded.verified_email_authority_id,
+      trusted_email_session_id = excluded.trusted_email_session_id,
+      state = excluded.state,
+      updated_at = excluded.updated_at;
+  end if;
+  update public.production_trusted_email_sessions set
+    last_used_at = p_now, updated_at = p_now where id = trusted.id;
+  return jsonb_build_object('disposition', 'bound');
+end;
+$function$;
 
 create function public.begin_rc2_email_challenge_v1(
   p_preparation_capability_hash text,
@@ -458,24 +566,18 @@ begin
     status = 'revoked', revoked_at = p_now, updated_at = p_now,
     last_error_code = 'EMAIL_CHALLENGE_SUPERSEDED'
     where preparation_id = preparation.id and status = 'pending';
-  update public.production_trusted_email_sessions set
-    revoked_at = p_now, updated_at = p_now
-    where revoked_at is null and verified_email_authority_id in (
-      select prior.verified_email_authority_id
-        from public.production_email_verification_challenges prior
-        where prior.preparation_id = preparation.id
-          and prior.verified_email_authority_id is not null
-          and prior.email_sha256 is distinct from p_email_sha256
-    );
-  update public.production_verified_email_authorities set
-    revoked_at = p_now, updated_at = p_now
-    where revoked_at is null and id in (
-      select prior.verified_email_authority_id
-        from public.production_email_verification_challenges prior
-        where prior.preparation_id = preparation.id
-          and prior.verified_email_authority_id is not null
-          and prior.email_sha256 is distinct from p_email_sha256
-    );
+  insert into public.production_preparation_email_bindings (
+    preparation_id, intended_email_sha256, verified_email_authority_id,
+    trusted_email_session_id, state, created_at, updated_at
+  ) values (
+    preparation.id, p_email_sha256, null, null,
+    'verification_pending', p_now, p_now
+  ) on conflict (preparation_id) do update set
+    intended_email_sha256 = excluded.intended_email_sha256,
+    verified_email_authority_id = null,
+    trusted_email_session_id = null,
+    state = 'verification_pending',
+    updated_at = excluded.updated_at;
   insert into public.production_email_verification_challenges (
     id, preparation_id, challenge_capability_hash, verification_secret_hash,
     email_sha256, email_ciphertext, status, attempt_count, maximum_attempts,
@@ -525,6 +627,7 @@ set search_path = ''
 as $function$
 declare
   challenge public.production_email_verification_challenges%rowtype;
+  binding public.production_preparation_email_bindings%rowtype;
   target_preparation_id uuid;
 begin
   select preparation_id into target_preparation_id
@@ -558,24 +661,13 @@ begin
       where id = challenge.id;
     return jsonb_build_object('disposition', 'invalid');
   end if;
-  update public.production_trusted_email_sessions set
-    revoked_at = p_now, updated_at = p_now
-    where revoked_at is null and verified_email_authority_id in (
-      select prior.verified_email_authority_id
-        from public.production_email_verification_challenges prior
-        where prior.preparation_id = challenge.preparation_id
-          and prior.id <> challenge.id
-          and prior.verified_email_authority_id is not null
-    );
-  update public.production_verified_email_authorities set
-    revoked_at = p_now, updated_at = p_now
-    where revoked_at is null and id in (
-      select prior.verified_email_authority_id
-        from public.production_email_verification_challenges prior
-        where prior.preparation_id = challenge.preparation_id
-          and prior.id <> challenge.id
-          and prior.verified_email_authority_id is not null
-    );
+  select * into binding from public.production_preparation_email_bindings
+    where preparation_id = challenge.preparation_id for update;
+  if binding.preparation_id is null
+     or binding.state <> 'verification_pending'
+     or binding.intended_email_sha256 <> challenge.email_sha256 then
+    return jsonb_build_object('disposition', 'invalid');
+  end if;
   insert into public.production_verified_email_authorities (
     id, delivery_authority_reference, email_sha256, email_ciphertext,
     verified_at, created_at, updated_at
@@ -596,6 +688,16 @@ begin
     verified_email_authority_id = p_verified_email_authority_id,
     updated_at = p_now, last_error_code = null
     where id = challenge.id;
+  update public.production_preparation_email_bindings set
+    verified_email_authority_id = p_verified_email_authority_id,
+    trusted_email_session_id = p_trusted_session_id,
+    state = 'verified', updated_at = p_now
+    where preparation_id = challenge.preparation_id
+      and state = 'verification_pending'
+      and intended_email_sha256 = challenge.email_sha256;
+  if not found then
+    raise exception 'RC2_EMAIL_BINDING_CONFLICT' using errcode = 'P0001';
+  end if;
   return jsonb_build_object(
     'disposition', 'verified',
     'verified_email_authority_id', p_verified_email_authority_id,
@@ -625,6 +727,7 @@ declare
   preparation public.production_preparations%rowtype;
   trusted public.production_trusted_email_sessions%rowtype;
   authority public.production_verified_email_authorities%rowtype;
+  binding public.production_preparation_email_bindings%rowtype;
   existing public.production_purchase_intents%rowtype;
 begin
   select * into preparation from public.production_preparations
@@ -643,10 +746,20 @@ begin
   if authority.id is null then
     raise exception 'RC2_VERIFIED_EMAIL_REQUIRED' using errcode = 'P0001';
   end if;
+  select * into binding from public.production_preparation_email_bindings
+    where preparation_id = preparation.id for update;
+  if binding.preparation_id is null
+     or binding.state <> 'verified'
+     or binding.intended_email_sha256 <> authority.email_sha256
+     or binding.verified_email_authority_id <> authority.id
+     or binding.trusted_email_session_id <> trusted.id then
+    raise exception 'RC2_VERIFIED_EMAIL_REQUIRED' using errcode = 'P0001';
+  end if;
   select * into existing from public.production_purchase_intents
     where preparation_id = preparation.id for update;
   if existing.id is not null then
     if existing.verified_email_authority_id <> authority.id
+       or existing.trusted_email_session_id <> trusted.id
        or existing.expected_product_code <> p_expected_product_code
        or existing.expected_amount <> p_expected_amount
        or existing.currency <> p_currency
@@ -1391,6 +1504,8 @@ revoke all on table public.production_verified_email_authorities
   from public, anon, authenticated;
 revoke all on table public.production_trusted_email_sessions
   from public, anon, authenticated;
+revoke all on table public.production_preparation_email_bindings
+  from public, anon, authenticated;
 revoke all on table public.production_purchase_intents
   from public, anon, authenticated;
 revoke all on table public.production_payment_attempts
@@ -1410,6 +1525,8 @@ grant select, insert, update on table public.production_verified_email_authoriti
   to service_role;
 grant select, insert, update on table public.production_trusted_email_sessions
   to service_role;
+grant select, insert, update on table public.production_preparation_email_bindings
+  to service_role;
 grant select, insert, update on table public.production_purchase_intents
   to service_role;
 grant select, insert, update on table public.production_payment_attempts
@@ -1423,6 +1540,9 @@ grant select, insert, update on table public.production_fulfillment_jobs
 grant select, insert, update on table public.production_payment_adjustment_ledger
   to service_role;
 
+revoke all on function public.bind_rc2_trusted_email_to_preparation_v1(
+  text, text, text, timestamptz
+) from public, anon, authenticated;
 revoke all on function public.begin_rc2_email_challenge_v1(
   text, uuid, text, text, text, text, integer, timestamptz, timestamptz
 ) from public, anon, authenticated;
@@ -1464,6 +1584,9 @@ revoke all on function public.fail_rc2_fulfillment_job_v1(
   uuid, uuid, text, timestamptz
 ) from public, anon, authenticated;
 
+grant execute on function public.bind_rc2_trusted_email_to_preparation_v1(
+  text, text, text, timestamptz
+) to service_role;
 grant execute on function public.begin_rc2_email_challenge_v1(
   text, uuid, text, text, text, text, integer, timestamptz, timestamptz
 ) to service_role;

@@ -1,5 +1,20 @@
 # CURRENT_FOCUS.md
 
+<!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
+## Current implementation overlay — RC-2 R2 Per-Purchase Email Authority Binding
+
+- Status: `RC-2 R2 implemented_pending_human_chatgpt_review` on `task/rc2-production-payment-delivery`, correcting exact starting SHA `5d2d1c915924ff5072babe0e25858a352e9e703d`. This is not RC-2 acceptance or activation.
+- Preparation-local authority: unapplied `0011` now holds one durable current delivery-email binding per preparation. Trusted-session reuse atomically records `verified`; a new mailbox challenge atomically replaces that preparation's binding with `verification_pending`; successful verification binds the new authority/session.
+- Checkout authority: Purchase Intent creation requires the current binding to be `verified` and requires exact preparation + email hash + verified authority + trusted session agreement. Composite foreign keys preserve that agreement after creation; RLS and service-role-only RPC/table grants prevent browser state from establishing it.
+- Revocation scope: changing email no longer globally revokes the old verified-email authority or session. The old session fails Checkout only for the preparation whose binding became pending, remains usable for another valid repeat-purchase preparation, and does not damage a past Purchase's result-delivery authority.
+- Result realism: the RC-2 fake may issue a fresh recovery result token for an already completed fulfillment, matching accepted RC-1 behavior. Verification now proves one Grant, one logical Assessment, one canonical Product/Report, and one Provider generation rather than permanent raw result-path equality.
+- Dependency audit: the npm-resolved, existing-range lock refresh moves `fast-uri` `3.1.4 -> 3.1.5` and `nanoid` `3.3.15 -> 3.3.18` with no `package.json`, override, Next, or API change. Audit improves from `5 high` to `3 high`; `next@16.2.12` remains directly affected through `postcss@8.4.31` and `sharp@0.34.5`, so PRIVATE RELEASE remains blocked.
+- Validation: RC-2 R2 deterministic verifier `PASS 48/48`; RC-1 regression `PASS 14/14`; typecheck, zero-warning lint, production build, and `git diff --check` pass. Accepted `0010` and protected Q0/V17 paths remain unchanged from the R2 starting SHA.
+- Operations remain zero: actual Stripe call, charge, Payment, email, Supabase remote write, migration apply, deploy, DNS, Public Launch, PR, release merge, and main merge.
+
+The R1 and R0 overlays below remain historical context and are superseded where this R2 overlay corrects email-authority scope and result-token test semantics.
+<!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:END -->
+
 <!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
 ## Current implementation overlay — RC-2 R1 Payment Recovery / Fulfillment / Result Privacy
 

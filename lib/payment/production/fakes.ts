@@ -17,6 +17,7 @@ import type {
   FulfillmentJobRecord,
   PaymentAttemptRecord,
   PaymentDeliveryRepository,
+  PreparationEmailBinding,
   ProductionGrantProcessorV1,
   PurchaseIntentRecord,
   PurchaseReadyPreparation,
@@ -53,6 +54,10 @@ export class FakePaymentDeliveryRepository
   readonly challenges = new Map<string, Mutable<EmailChallengeRecord>>();
   readonly authorities = new Map<string, Mutable<VerifiedEmailAuthority>>();
   readonly sessions = new Map<string, Mutable<TrustedEmailSession>>();
+  readonly deliveryEmailBindings = new Map<
+    string,
+    Mutable<PreparationEmailBinding>
+  >();
   readonly intents = new Map<string, Mutable<PurchaseIntentRecord>>();
   readonly attempts = new Map<string, Mutable<PaymentAttemptRecord>>();
   readonly evidence = new Map<
@@ -110,6 +115,50 @@ export class FakePaymentDeliveryRepository
     return { session: clone(session), authority: clone(authority) };
   }
 
+  async bindTrustedEmailSessionToPreparation(input: {
+    preparationCapabilityHash: string;
+    sessionTokenHash: string;
+    emailHash: string;
+    now: string;
+  }) {
+    const preparation = [...this.preparations.values()].find(
+      (candidate) =>
+        candidate.preparationCapabilityHash ===
+          input.preparationCapabilityHash &&
+        candidate.status === "purchase_ready",
+    );
+    if (!preparation) {
+      throw new M2RuntimeError("PAYMENT_PURCHASE_READY_REQUIRED", 403);
+    }
+    const trusted = await this.findTrustedEmailSession({
+      sessionTokenHash: input.sessionTokenHash,
+      emailHash: input.emailHash,
+      now: input.now,
+    });
+    if (!trusted) return false;
+    const existingIntent = [...this.intents.values()].find(
+      (intent) => intent.preparationId === preparation.id,
+    );
+    const existingBinding = this.deliveryEmailBindings.get(preparation.id);
+    if (existingIntent) {
+      return Boolean(
+        existingBinding?.state === "verified" &&
+          existingBinding.intendedEmailHash === trusted.authority.emailHash &&
+          existingBinding.verifiedEmailAuthorityId === trusted.authority.id &&
+          existingBinding.trustedEmailSessionId === trusted.session.id,
+      );
+    }
+    this.deliveryEmailBindings.set(preparation.id, {
+      preparationId: preparation.id,
+      intendedEmailHash: trusted.authority.emailHash,
+      verifiedEmailAuthorityId: trusted.authority.id,
+      trustedEmailSessionId: trusted.session.id,
+      state: "verified",
+      updatedAt: input.now,
+    });
+    return true;
+  }
+
   async createEmailChallenge(input: {
     preparationCapabilityHash: string;
     challenge: EmailChallengeRecord;
@@ -131,27 +180,6 @@ export class FakePaymentDeliveryRepository
     ) {
       throw new M2RuntimeError("PAYMENT_PURCHASE_INTENT_CONFLICT", 409);
     }
-    for (const priorChallenge of this.challenges.values()) {
-      if (
-        priorChallenge.preparationId !== preparation.id ||
-        priorChallenge.emailHash === input.challenge.emailHash ||
-        !priorChallenge.verifiedEmailAuthorityId
-      ) {
-        continue;
-      }
-      const priorAuthority = this.authorities.get(
-        priorChallenge.verifiedEmailAuthorityId,
-      );
-      if (priorAuthority) priorAuthority.revokedAt = input.challenge.createdAt;
-      for (const priorSession of this.sessions.values()) {
-        if (
-          priorSession.verifiedEmailAuthorityId ===
-          priorChallenge.verifiedEmailAuthorityId
-        ) {
-          priorSession.revokedAt = input.challenge.createdAt;
-        }
-      }
-    }
     for (const challenge of this.challenges.values()) {
       if (
         challenge.preparationId === preparation.id &&
@@ -161,6 +189,14 @@ export class FakePaymentDeliveryRepository
       }
     }
     this.challenges.set(input.challenge.id, clone(input.challenge));
+    this.deliveryEmailBindings.set(preparation.id, {
+      preparationId: preparation.id,
+      intendedEmailHash: input.challenge.emailHash,
+      verifiedEmailAuthorityId: null,
+      trustedEmailSessionId: null,
+      state: "verification_pending",
+      updatedAt: input.challenge.createdAt,
+    });
   }
 
   async markEmailChallengeDeliveryFailed(input: {
@@ -207,28 +243,15 @@ export class FakePaymentDeliveryRepository
       }
       return null;
     }
-    challenge.status = "consumed";
-    for (const priorChallenge of this.challenges.values()) {
-      if (
-        priorChallenge.id === challenge.id ||
-        priorChallenge.preparationId !== challenge.preparationId ||
-        !priorChallenge.verifiedEmailAuthorityId
-      ) {
-        continue;
-      }
-      const priorAuthority = this.authorities.get(
-        priorChallenge.verifiedEmailAuthorityId,
-      );
-      if (priorAuthority) priorAuthority.revokedAt = input.now;
-      for (const priorSession of this.sessions.values()) {
-        if (
-          priorSession.verifiedEmailAuthorityId ===
-          priorChallenge.verifiedEmailAuthorityId
-        ) {
-          priorSession.revokedAt = input.now;
-        }
-      }
+    const binding = this.deliveryEmailBindings.get(challenge.preparationId);
+    if (
+      !binding ||
+      binding.state !== "verification_pending" ||
+      binding.intendedEmailHash !== challenge.emailHash
+    ) {
+      return null;
     }
+    challenge.status = "consumed";
     const authority: Mutable<VerifiedEmailAuthority> = {
       id: input.verifiedEmailAuthorityId,
       deliveryAuthorityReference: input.deliveryAuthorityReference,
@@ -247,6 +270,14 @@ export class FakePaymentDeliveryRepository
     };
     this.authorities.set(authority.id, authority);
     this.sessions.set(session.id, session);
+    this.deliveryEmailBindings.set(challenge.preparationId, {
+      preparationId: challenge.preparationId,
+      intendedEmailHash: challenge.emailHash,
+      verifiedEmailAuthorityId: authority.id,
+      trustedEmailSessionId: session.id,
+      state: "verified",
+      updatedAt: input.now,
+    });
     return { authority: clone(authority), session: clone(session) };
   }
 
@@ -267,9 +298,17 @@ export class FakePaymentDeliveryRepository
       sessionTokenHash: input.trustedSessionTokenHash,
       now: input.now,
     });
+    const binding = preparation
+      ? this.deliveryEmailBindings.get(preparation.id)
+      : null;
     if (
       !preparation ||
       !trusted ||
+      !binding ||
+      binding.state !== "verified" ||
+      binding.intendedEmailHash !== trusted.authority.emailHash ||
+      binding.verifiedEmailAuthorityId !== trusted.authority.id ||
+      binding.trustedEmailSessionId !== trusted.session.id ||
       trusted.authority.id !== input.purchaseIntent.verifiedEmailAuthorityId ||
       trusted.session.id !== input.purchaseIntent.trustedEmailSessionId
     ) {
@@ -281,6 +320,7 @@ export class FakePaymentDeliveryRepository
     if (existing) {
       if (
         existing.verifiedEmailAuthorityId !== trusted.authority.id ||
+        existing.trustedEmailSessionId !== trusted.session.id ||
         existing.environment !== input.purchaseIntent.environment ||
         existing.expectedAmount !== input.purchaseIntent.expectedAmount ||
         existing.currency !== input.purchaseIntent.currency ||
@@ -832,7 +872,11 @@ export class FakeProductionGrantProcessorV1
   readonly notificationCalls: string[] = [];
   readonly grants = new Map<string, AssessmentGrantHandleV1>();
   readonly generated = new Set<string>();
-  readonly resultTokens = new Map<string, string>();
+  readonly canonicalReports = new Map<
+    string,
+    ProductionFulfillmentResultV1["projection"]
+  >();
+  readonly issuedResultTokens: string[] = [];
   providerInvocationCalls = 0;
   notificationFailuresRemaining = 0;
   private tokenSequence = 0;
@@ -875,16 +919,18 @@ export class FakeProductionGrantProcessorV1
       this.generated.add(grant.logicalAssessmentId);
       this.providerInvocationCalls += 1;
     }
-    let resultToken = this.resultTokens.get(grant.logicalAssessmentId);
-    if (!resultToken) {
-      this.tokenSequence += 1;
-      resultToken = Buffer.alloc(32, this.tokenSequence).toString("base64url");
-      this.resultTokens.set(grant.logicalAssessmentId, resultToken);
+    let projection = this.canonicalReports.get(grant.logicalAssessmentId);
+    if (!projection) {
+      projection = {} as ProductionFulfillmentResultV1["projection"];
+      this.canonicalReports.set(grant.logicalAssessmentId, projection);
     }
+    this.tokenSequence += 1;
+    const resultToken = Buffer.alloc(32, this.tokenSequence).toString("base64url");
+    this.issuedResultTokens.push(resultToken);
     return {
       status: "completed",
       resultToken,
-      projection: {} as ProductionFulfillmentResultV1["projection"],
+      projection: clone(projection),
       duplicate,
     };
   }
