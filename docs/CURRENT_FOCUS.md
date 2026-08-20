@@ -1,17 +1,17 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
-## Current authority overlay — RC-1 R1 Product Input / Canonical Delivery Integrity
+## Current authority overlay — RC-1 Production Fulfillment Core accepted
 
-- RC-0 Private Release Candidate is `accepted_complete` at `release/private-ready` SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
-- RC-1 R1 branch is `task/rc1-production-fulfillment-core`; status is `RC-1 R1 implemented_pending_human_chatgpt_review`.
-- R1 preserves the three Product input domains separately in the consultation snapshot, projects exact `latestInboundMessage` into PB-01 through an explicit versioned actual-exchange source envelope, and leaves `optionalMessage` exclusively in the PB-01C Candidate lane. No-inbound behavior and V17 identity remain unchanged.
-- R1 verifies every canonical Customer projection read against its persisted SHA-256 and permits only `PRODUCTION_RESULT_NOT_FOUND` to become result-route 404; database, configuration, integrity, and unexpected failures propagate to the safe Next.js error boundary.
-- Implemented RC-1 scope remains server-side deterministic pre-payment Safety, V17 AI qualification stopping at purchase readiness, exactly-one clarification, opaque preparation capability, server-only verified-purchase Grant boundary, same-authority V17 PB-04/PB-05/PB-06 fulfillment, Provider-attempt `generation_started`, one canonical `CustomerAssessmentExperienceProjectionV2`, hash-only protected result credentials, and an independent notification outbox/adapter boundary.
-- Production identity is exactly `runtime-stage-catalog-v17.0.0` / `prompt-bundle-runtime-v17.0.0` / `pipeline-schema-runtime-v6.0.0` / `split-base-candidate-v1` / `gpt-5.6-luna`; production flags are separate from internal review and default fail closed.
-- Migration `0010_rc1_production_fulfillment_core.sql` is an unapplied artifact. Actual Provider, Supabase remote write, migration apply, Stripe/Payment, email send, deploy, domain/DNS, Legal publication, PR, main merge, and Public Launch operations are all `0`.
-- RC-1 R1 technical implementation does not establish RC-1 acceptance, Production Payment, Stripe approval or selection, live email delivery, deployed Runtime, abuse/WAF hardening, PRIVATE RELEASE READY, or Public Launch. Human and ChatGPT review remain pending.
+- RC-1 Production Fulfillment Core is `accepted_complete`.
+- RC-1 R1 Product Input / Canonical Delivery Integrity is `accepted_complete`.
+- Accepted implementation lineage is `84e14ed80ee32a03a8332d709476d55e68c8436f` -> `438c4703018bdeda7fa3c2da846f59ff6c7ec36c` -> `f1af409b3da6b79f9a2acb7b32e6831cc10853f8`.
+- ChatGPT final review is `PASS`; Human/ChatGPT acceptance is `complete`.
+- Accepted scope is deterministic server-side pre-payment Safety; exact V17 AI qualification before Payment; purchase-ready stop before PB-04/PB-05/PB-06; exactly one Product clarification total; actual inbound/current situation/outgoing Candidate source separation; server-only verified-purchase Grant boundary; persisted purchase-ready authority reuse; V17 PB-04/PB-05/PB-06 post-payment fulfillment; the `generation_started` boundary; one canonical `CustomerAssessmentExperienceProjectionV2`; canonical projection SHA integrity verification; protected hash-only result credentials; result absence versus service failure separation; and the independent notification outbox/retry boundary.
+- Explicitly not complete: live migration apply; Production Stripe Payment; verified delivery/recovery email implementation; live email sending; RequestForm production connection; stale ownership recovery policy; retry limit finalization; result credential expiry policy; rate limiting/WAF/abuse final hardening; Production secrets/config; production deployment; domain/DNS; PRIVATE RELEASE READY; and Public Launch.
+- `release/private-ready` remains the sole current Product authority. Exact next release stage is **RC-2 Production Payment + real operator/customer delivery integration**; RC-2 is not started by this acceptance sync.
 - Main remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- This acceptance sync changes documentation only. Provider calls, Supabase remote writes, migration apply, Stripe/Payment, email send, Netlify deploy, domain/DNS, Legal publication, Public Launch, PR, main merge, and RC-2 implementation are all `0`.
 
 All current-looking, active-handoff, and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:END -->

@@ -1,20 +1,21 @@
 # WBS.md
 
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
-## Current authority overlay — RC-1 R1 Product Input / Canonical Delivery Integrity
+## Current authority overlay — RC-1 Production Fulfillment Core accepted
 
-- [x] RC-0 Private Release Candidate — `accepted_complete` at `release/private-ready` SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
-- [x] RC-1 R1 implementation on `task/rc1-production-fulfillment-core` — `RC-1 R1 implemented_pending_human_chatgpt_review`.
-- [x] Product input integrity — consultation snapshot retains current situation, actual inbound, and outgoing draft separately; a bounded versioned source envelope sends exact actual inbound only to PB-01 Base, while PB-01C remains outgoing Candidate-only; no-inbound and frozen V17 identity are unchanged.
-- [x] Canonical delivery integrity — every delivery read/resolve decodes and recomputes canonical SHA-256 with constant-time equality, mismatch fails closed, and only result absence maps to 404 while service/integrity faults propagate safely.
-- [x] Pre-payment: deterministic server Safety, exact-input validation, V17 AI qualification, purchase-ready stop before PB-04/PB-05/PB-06, one-total-question clarification, opaque hash-bound capabilities.
-- [x] Post-payment seam: no public Grant minting; server-only verified-purchase authority creates at most one Grant and one Logical Assessment; the persisted purchase-ready authority resumes only V17 Product stages.
-- [x] Fulfillment: first PB-04 Provider-attempt boundary records `generation_started`; DB ownership/idempotency fixes one canonical `CustomerAssessmentExperienceProjectionV2`; a post-Report finalization retry reuses the exact completed V17 run without Provider replay; result tokens are hash-only/revocable; notification retry is independent of assessment generation.
-- [x] Append-only migration `0010_rc1_production_fulfillment_core.sql` added but not applied; production enablement remains explicit and default fail closed.
-- [ ] Human review and ChatGPT review of RC-1 R1; RC-1 is not yet `accepted_complete`.
-- [ ] RC-2 verified Stripe Payment integration, live email provider, migration apply, deployment, WAF/rate-limit Hard Gate, and PRIVATE RELEASE READY decision — not started or authorized by RC-1.
+- [x] RC-1 Production Fulfillment Core — `accepted_complete`.
+- [x] RC-1 R1 Product Input / Canonical Delivery Integrity — `accepted_complete`.
+- [x] Accepted implementation lineage — `84e14ed80ee32a03a8332d709476d55e68c8436f` -> `438c4703018bdeda7fa3c2da846f59ff6c7ec36c` -> `f1af409b3da6b79f9a2acb7b32e6831cc10853f8`.
+- [x] ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- [x] Pre-payment acceptance — deterministic server-side Safety; exact V17 AI qualification before Payment; purchase-ready stop before PB-04/PB-05/PB-06; exactly one Product clarification total; actual inbound/current situation/outgoing Candidate source separation.
+- [x] Purchase and fulfillment acceptance — server-only verified-purchase Grant boundary; persisted purchase-ready authority reuse; V17 PB-04/PB-05/PB-06 post-payment fulfillment; `generation_started` boundary.
+- [x] Delivery acceptance — one canonical `CustomerAssessmentExperienceProjectionV2`; canonical projection SHA integrity verification; protected hash-only result credentials; result absence versus service failure separation; independent notification outbox/retry boundary.
+- [ ] Live migration apply; Production Stripe Payment; verified delivery/recovery email implementation; live email sending; RequestForm production connection.
+- [ ] Stale ownership recovery policy; retry limit finalization; result credential expiry policy; rate limiting/WAF/abuse final hardening; Production secrets/config.
+- [ ] Production deployment; domain/DNS; PRIVATE RELEASE READY; Public Launch.
+- [ ] Exact next release stage — **RC-2 Production Payment + real operator/customer delivery integration**. RC-2 is not started by this acceptance sync.
 
-Actual Provider / Supabase remote write / migration apply / Stripe-Payment / email send / deploy / domain-DNS / Legal publication / PR / main merge / Public Launch operations are `0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0`. Main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+`release/private-ready` remains the sole current Product authority. This acceptance sync changes documentation only. Actual Provider / Supabase remote write / migration apply / Stripe-Payment / email send / Netlify deploy / domain-DNS / Legal publication / Public Launch / PR / main merge / RC-2 implementation operations are `0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0 / 0`. Main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 
 All current-looking and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:END -->
