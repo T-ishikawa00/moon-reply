@@ -16,6 +16,7 @@ import type {
   ProductionNotificationRecord,
   ProductionPreparationRecord,
 } from "./types.ts";
+import { decodeAndVerifyProductionCanonicalProjection } from "./canonical-delivery.ts";
 
 function clone<T>(value: T): T {
   return structuredClone(value);
@@ -312,15 +313,22 @@ export class FakeProductionFulfillmentRepository
       request: clone(this.request(logical.requestId)),
     };
     if (logical.status === "completed") {
+      const delivery = [...this.deliveries.values()].find(
+        (candidate) => candidate.logicalAssessmentId === logical.id,
+      );
       return {
         ...base,
         disposition: "completed",
         ownerId: null,
-        canonicalDelivery: clone(
-          [...this.deliveries.values()].find(
-            (candidate) => candidate.logicalAssessmentId === logical.id,
-          ) ?? null,
-        ),
+        canonicalDelivery: delivery
+          ? {
+              ...clone(delivery),
+              projection: decodeAndVerifyProductionCanonicalProjection(
+                delivery.projection,
+                delivery.projectionHash,
+              ),
+            }
+          : null,
         recoverableRuntimeRunId: null,
       };
     }
@@ -435,7 +443,13 @@ export class FakeProductionFulfillmentRepository
     logical.ownerId = null;
     grant.status = "completed";
     this.events.push("completeFulfillment");
-    return clone(delivery);
+    return {
+      ...clone(delivery),
+      projection: decodeAndVerifyProductionCanonicalProjection(
+        delivery.projection,
+        delivery.projectionHash,
+      ),
+    };
   }
 
   async failFulfillment(input: {
@@ -497,7 +511,13 @@ export class FakeProductionFulfillmentRepository
       ? this.deliveries.get(credential.deliveryId)
       : null;
     return delivery
-      ? { deliveryId: delivery.id, projection: clone(delivery.projection) }
+      ? {
+          deliveryId: delivery.id,
+          projection: decodeAndVerifyProductionCanonicalProjection(
+            delivery.projection,
+            delivery.projectionHash,
+          ),
+        }
       : null;
   }
 

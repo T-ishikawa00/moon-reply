@@ -23,6 +23,27 @@ export function hashOpaqueProductionCapability(value: unknown) {
   return createHash("sha256").update(token, "utf8").digest("hex");
 }
 
+export function hashProductionResultCapability(value: unknown) {
+  try {
+    return hashOpaqueProductionCapability(value);
+  } catch (error) {
+    if (
+      error instanceof M2RuntimeError &&
+      error.safeCode === "PRODUCTION_CAPABILITY_INVALID"
+    ) {
+      throw new M2RuntimeError("PRODUCTION_RESULT_NOT_FOUND", 404);
+    }
+    throw error;
+  }
+}
+
+export function isProductionResultNotFoundError(error: unknown) {
+  return (
+    error instanceof M2RuntimeError &&
+    error.safeCode === "PRODUCTION_RESULT_NOT_FOUND"
+  );
+}
+
 export function hashProductionIdempotencyKey(value: unknown) {
   if (typeof value !== "string" || !idempotencyKeyPattern.test(value)) {
     throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_KEY_INVALID", 400);

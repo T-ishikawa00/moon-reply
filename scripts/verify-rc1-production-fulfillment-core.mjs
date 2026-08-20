@@ -2,6 +2,15 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { ProductionFulfillmentApplication } from "../lib/assessment/production/application.ts";
+import {
+  hashProductionSnapshot,
+  isProductionResultNotFoundError,
+} from "../lib/assessment/production/capabilities.ts";
+import {
+  PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_SCHEMA_VERSION,
+  projectProductionBaseSituationV1,
+  toAssessmentInput,
+} from "../lib/assessment/production/consultation.ts";
 import { FakeProductionFulfillmentRepository } from "../lib/assessment/production/fakes.ts";
 import {
   DeterministicFakeDeliveryNotificationAdapterV1,
@@ -296,11 +305,118 @@ await check("production runtime identity is exact V17 and separately gated", asy
       model: "gpt-5.6-luna",
     },
   );
+  const pb01 = catalog.definitions.find((entry) => entry.stageId === "PB-01");
+  const pb01c = catalog.definitions.find((entry) => entry.stageId === "PB-01C");
+  assert.deepEqual(
+    {
+      pb01Prompt: pb01?.promptHash,
+      pb01Schema: pb01?.schemaHash,
+      pb01cPrompt: pb01c?.promptHash,
+      pb01cSchema: pb01c?.schemaHash,
+    },
+    {
+      pb01Prompt:
+        "de55c3f8a99b3de5c52249f9252c09524f734a2046103c7de6cb27506d554757",
+      pb01Schema:
+        "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560",
+      pb01cPrompt:
+        "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+      pb01cSchema:
+        "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023",
+    },
+  );
   const environment = readText("lib/assessment/production/environment.ts");
   assert.match(environment, /ASSESSMENT_PRODUCTION_PREPARATION_ENABLED/u);
   assert.match(environment, /ASSESSMENT_PRODUCTION_RUNTIME_ENABLED/u);
   assert.match(environment, /ASSESSMENT_PRODUCTION_EMERGENCY_STOP/u);
   assert.doesNotMatch(environment, /M2_INTERNAL_RUNTIME_ENABLED/u);
+});
+
+await check("actual exchange reaches V17 Base without Candidate contamination", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const currentSituation = "UNIQUE_CURRENT_SITUATION_MARKER";
+  const latestInboundMessage = "UNIQUE_INBOUND_MESSAGE_MARKER";
+  const optionalMessage = "UNIQUE_OUTGOING_DRAFT_MARKER";
+  const consultation = consultationFor(selected, {
+    currentSituation,
+    latestInboundMessage,
+    optionalMessage,
+  });
+  const prepared = await run.application.prepare(
+    consultation,
+    crypto.randomUUID(),
+  );
+  assert.equal(prepared.status, "purchase_ready");
+  const pb01 = run.transport.requests.find((entry) => entry.stageId === "PB-01");
+  const pb01c = run.transport.requests.find(
+    (entry) => entry.stageId === "PB-01C",
+  );
+  assert.ok(pb01);
+  assert.ok(pb01c);
+  assert.deepEqual(Object.keys(pb01.input.base_provider_input).sort(), [
+    "current_situation",
+    "relationship",
+    "requested_topics",
+  ]);
+  const actualExchange = JSON.parse(
+    pb01.input.base_provider_input.current_situation,
+  );
+  assert.deepEqual(actualExchange, {
+    schemaVersion: PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_SCHEMA_VERSION,
+    currentSituation: {
+      source: "customer_current_situation",
+      exactText: currentSituation,
+    },
+    latestInboundMessage: {
+      source: "other_person_latest_inbound_message",
+      exactText: latestInboundMessage,
+    },
+  });
+  assert.deepEqual(pb01c.input, {
+    optional_message: optionalMessage,
+    candidate_metadata: {
+      message_owner: "user",
+      message_status: "unsent_candidate",
+    },
+  });
+  assert.equal(JSON.stringify(pb01c.input).includes(latestInboundMessage), false);
+  assert.equal(
+    pb01.input.base_provider_input.current_situation.includes(optionalMessage),
+    false,
+  );
+  const stored = [...run.lifecycleRepository.preparations.values()][0];
+  assert.equal(stored.consultationSnapshot.currentSituation, currentSituation);
+  assert.equal(
+    stored.consultationSnapshot.latestInboundMessage,
+    latestInboundMessage,
+  );
+  assert.equal(stored.consultationSnapshot.optionalMessage, optionalMessage);
+});
+
+await check("no-inbound projection is byte-for-byte legacy and oversize fails closed", () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const consultation = consultationFor(selected, {
+    currentSituation: "NO_INBOUND_LEGACY_MARKER",
+    latestInboundMessage: null,
+    optionalMessage: "NO_INBOUND_OUTGOING_MARKER",
+  });
+  const assessmentInput = toAssessmentInput(consultation);
+  assert.equal(assessmentInput.currentSituation, consultation.currentSituation);
+  assert.equal(assessmentInput.optionalMessage, consultation.optionalMessage);
+  assert.equal(
+    projectProductionBaseSituationV1(consultation),
+    consultation.currentSituation,
+  );
+  assert.throws(
+    () =>
+      projectProductionBaseSituationV1({
+        currentSituation: "x".repeat(4_900),
+        latestInboundMessage: "y".repeat(200),
+      }),
+    (error) =>
+      safeCode(error) === "PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_TOO_LARGE",
+  );
 });
 
 await check("public request boundary is strict, bounded, and has no Grant mint route", async () => {
@@ -489,6 +605,11 @@ await check("server Grant is unique and concurrent fulfillment has one owner", a
   );
   const resolved = await run.application.resolveResult(fulfilled.resultToken);
   assert.deepEqual(resolved.projection, fulfilled.projection);
+  const persistedDelivery = [...run.lifecycleRepository.deliveries.values()][0];
+  assert.equal(
+    persistedDelivery.projectionHash,
+    hashProductionSnapshot(persistedDelivery.projection),
+  );
   assert.equal(
     /(?:requestId|runId|responseId|providerId|factId)/u.test(
       JSON.stringify(resolved.projection),
@@ -497,6 +618,10 @@ await check("server Grant is unique and concurrent fulfillment has one owner", a
   );
   await assert.rejects(
     () => run.application.resolveResult(Buffer.alloc(32, 250).toString("base64url")),
+    (error) => safeCode(error) === "PRODUCTION_RESULT_NOT_FOUND",
+  );
+  await assert.rejects(
+    () => run.application.resolveResult("malformed-token"),
     (error) => safeCode(error) === "PRODUCTION_RESULT_NOT_FOUND",
   );
   const originalCredential = [...run.lifecycleRepository.credentials.values()].find(
@@ -517,6 +642,72 @@ await check("server Grant is unique and concurrent fulfillment has one owner", a
   assert.equal(run.transport.calls.length, providerCalls);
   assert.equal(run.lifecycleRepository.deliveries.size, 1);
   assert.equal(run.runtimeRepository.reports.size, 1);
+});
+
+await check("tampered canonical delivery fails every Customer read closed", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  const fulfilled = await run.application.fulfillAssessmentGrant(grant);
+  const delivery = [...run.lifecycleRepository.deliveries.values()][0];
+  delivery.projection.openingLine = `${delivery.projection.openingLine} tampered`;
+  await assert.rejects(
+    () => run.application.resolveResult(fulfilled.resultToken),
+    (error) =>
+      safeCode(error) ===
+        "PRODUCTION_CANONICAL_DELIVERY_INTEGRITY_FAILED" &&
+      !isProductionResultNotFoundError(error),
+  );
+  await assert.rejects(
+    () => run.application.fulfillAssessmentGrant(grant),
+    (error) =>
+      safeCode(error) === "PRODUCTION_CANONICAL_DELIVERY_INTEGRITY_FAILED",
+  );
+});
+
+await check("only result absence maps to 404; service faults propagate", async () => {
+  assert.equal(
+    isProductionResultNotFoundError(
+      new M2RuntimeError("PRODUCTION_RESULT_NOT_FOUND", 404),
+    ),
+    true,
+  );
+  for (const error of [
+    new M2RuntimeError("PRODUCTION_DATABASE_OPERATION_FAILED", 503),
+    new M2RuntimeError("PRODUCTION_RUNTIME_CONFIGURATION_INVALID", 503),
+    new M2RuntimeError(
+      "PRODUCTION_CANONICAL_DELIVERY_INTEGRITY_FAILED",
+      503,
+    ),
+    new Error("unexpected"),
+  ]) {
+    assert.equal(isProductionResultNotFoundError(error), false);
+  }
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  run.lifecycleRepository.resolveResultToken = async () => {
+    throw new M2RuntimeError("PRODUCTION_DATABASE_OPERATION_FAILED", 503);
+  };
+  await assert.rejects(
+    () =>
+      run.application.resolveResult(
+        Buffer.alloc(32, 249).toString("base64url"),
+      ),
+    (error) =>
+      safeCode(error) === "PRODUCTION_DATABASE_OPERATION_FAILED" &&
+      !isProductionResultNotFoundError(error),
+  );
+  const page = readText("app/result/[token]/page.tsx");
+  assert.match(page, /catch \(error\)/u);
+  assert.match(page, /isProductionResultNotFoundError\(error\)/u);
+  assert.match(page, /throw error/u);
+  assert.doesNotMatch(page, /catch\s*\{\s*notFound\(\)/u);
 });
 
 await check("pre-provider persistence failure leaves generation_started unset", async () => {
@@ -622,6 +813,7 @@ await check("migration encodes durable uniqueness, ownership, result, and outbox
     "mark_production_generation_started_v1",
     "complete_production_fulfillment_v1",
     "resolve_production_result_v1",
+    "'projection_sha256', deliveries.projection_sha256",
     "production_notification_outbox",
     "prompt-bundle-runtime-v17.0.0",
     "reused_purchase_ready_authority",
@@ -629,6 +821,13 @@ await check("migration encodes durable uniqueness, ownership, result, and outbox
     assert.ok(migration.includes(required), required);
   }
   assert.doesNotMatch(migration, /expires_at\s+timestamptz\s+not null/iu);
+  const repository = readText(
+    "lib/assessment/production/supabase-repository.ts",
+  );
+  assert.equal(
+    repository.match(/decodeAndVerifyProductionCanonicalProjection/g)?.length,
+    3,
+  );
 });
 
 if (failures.length > 0) {

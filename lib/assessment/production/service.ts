@@ -4,7 +4,7 @@ import { OpenAiResponsesTransport } from "../runtime/openai-transport.ts";
 import { loadM2P4FinalProductRecoveryRuntimeStageCatalog } from "../runtime/schema-catalog.ts";
 import { SupabaseAssessmentRepository } from "../runtime/supabase-repository.ts";
 import { ProductionFulfillmentApplication } from "./application.ts";
-import { hashOpaqueProductionCapability } from "./capabilities.ts";
+import { hashProductionResultCapability } from "./capabilities.ts";
 import {
   isProductionFulfillmentAvailable,
   isProductionPreparationAvailable,
@@ -111,7 +111,7 @@ export async function resolveProductionResult(token: unknown) {
     environment.supabaseSecretKey,
   );
   const result = await repository.resolveResultToken(
-    hashOpaqueProductionCapability(token),
+    hashProductionResultCapability(token),
     new Date().toISOString(),
   );
   if (!result) {

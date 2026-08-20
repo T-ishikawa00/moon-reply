@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CustomerAssessmentNote } from "@/components/runtime/CustomerAssessmentNote";
+import { isProductionResultNotFoundError } from "@/lib/assessment/production/capabilities";
 import { resolveProductionResult } from "@/lib/assessment/production/service";
 
 export const dynamic = "force-dynamic";
@@ -22,8 +23,11 @@ export default async function ProductionResultPage({
   let result;
   try {
     result = await resolveProductionResult(token);
-  } catch {
-    notFound();
+  } catch (error) {
+    if (isProductionResultNotFoundError(error)) {
+      notFound();
+    }
+    throw error;
   }
   return (
     <main>

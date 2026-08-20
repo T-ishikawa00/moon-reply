@@ -9,6 +9,10 @@ import {
   type ProductionConsultationInputV1,
 } from "./types.ts";
 
+export const PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_SCHEMA_VERSION =
+  "rc1-production-actual-exchange-context-v1" as const;
+const maximumPersistedCurrentSituationCodePoints = 5_000;
+
 const safetyKeys = [
   "schemaVersion",
   "adultConfirmed",
@@ -75,12 +79,41 @@ export function toAssessmentInput(
   input: ProductionConsultationInputV1,
 ): AssessmentInput {
   return {
-    currentSituation: input.currentSituation,
+    currentSituation: projectProductionBaseSituationV1(input),
     optionalMessage: input.optionalMessage,
     relationship: input.relationship,
     requestedTopics: [...input.requestedTopics],
     privacyAcknowledged: true,
   };
+}
+
+export function projectProductionBaseSituationV1(
+  input: Pick<
+    ProductionConsultationInputV1,
+    "currentSituation" | "latestInboundMessage"
+  >,
+) {
+  if (input.latestInboundMessage === null) {
+    return input.currentSituation;
+  }
+  const projected = JSON.stringify({
+    schemaVersion: PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_SCHEMA_VERSION,
+    currentSituation: {
+      source: "customer_current_situation",
+      exactText: input.currentSituation,
+    },
+    latestInboundMessage: {
+      source: "other_person_latest_inbound_message",
+      exactText: input.latestInboundMessage,
+    },
+  });
+  if ([...projected].length > maximumPersistedCurrentSituationCodePoints) {
+    throw new M2RuntimeError(
+      "PRODUCTION_ACTUAL_EXCHANGE_CONTEXT_TOO_LARGE",
+      400,
+    );
+  }
+  return projected;
 }
 
 export function toPrepaymentSafetyInput(

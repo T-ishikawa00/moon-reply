@@ -3,7 +3,6 @@ import {
   createClient,
   type SupabaseClient,
 } from "@supabase/supabase-js";
-import { decodeCustomerAssessmentExperienceProjectionV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
 import { M2RuntimeError } from "../runtime/errors.ts";
 import type {
   AssessmentRequestSource,
@@ -19,6 +18,7 @@ import {
   decodeProductionConsultationInputV1,
   toAssessmentInput,
 } from "./consultation.ts";
+import { decodeAndVerifyProductionCanonicalProjection } from "./canonical-delivery.ts";
 import type {
   AssessmentGrantHandleV1,
   BeginProductionPreparationOutcome,
@@ -224,8 +224,9 @@ function mapDelivery(row: DeliveryRow): ProductionCanonicalDeliveryRecord {
     id: row.id,
     logicalAssessmentId: row.logical_assessment_id,
     runtimeRunId: row.runtime_run_id,
-    projection: decodeCustomerAssessmentExperienceProjectionV2(
-      structuredClone(row.experience_projection_json),
+    projection: decodeAndVerifyProductionCanonicalProjection(
+      row.experience_projection_json,
+      row.projection_sha256,
     ),
     projectionHash: row.projection_sha256,
     deliveryAuthorityReference: row.delivery_authority_reference,
@@ -593,10 +594,12 @@ export class SupabaseProductionFulfillmentRepository
     if (error) databaseFailure();
     if (data === null) return null;
     const result = recordValue(data);
+    const projectionHash = result.projection_sha256;
     return {
       deliveryId: stringValue(result.delivery_id),
-      projection: decodeCustomerAssessmentExperienceProjectionV2(
+      projection: decodeAndVerifyProductionCanonicalProjection(
         result.experience_projection_json,
+        projectionHash,
       ),
     };
   }

@@ -20,6 +20,7 @@ import {
   createOpaqueProductionCapability,
   hashOpaqueProductionCapability,
   hashProductionIdempotencyKey,
+  hashProductionResultCapability,
   hashProductionSnapshot,
   hashServerAuthorityReference,
 } from "./capabilities.ts";
@@ -540,19 +541,28 @@ export class ProductionFulfillmentApplication {
       };
     } catch (error) {
       const safe = asM2RuntimeError(error, "PRODUCTION_FULFILLMENT_FAILED");
-      await this.options.lifecycleRepository.failFulfillment({
-        logicalAssessmentId: claim.logicalAssessmentId,
-        ownerId,
-        errorCode: safe.safeCode,
-        now: this.now(),
-      });
+      try {
+        await this.options.lifecycleRepository.failFulfillment({
+          logicalAssessmentId: claim.logicalAssessmentId,
+          ownerId,
+          errorCode: safe.safeCode,
+          now: this.now(),
+        });
+      } catch (failureError) {
+        if (
+          safe.safeCode !==
+          "PRODUCTION_CANONICAL_DELIVERY_INTEGRITY_FAILED"
+        ) {
+          throw failureError;
+        }
+      }
       throw safe;
     }
   }
 
   async resolveResult(token: unknown): Promise<ResolvedProductionResult> {
     const resolved = await this.options.lifecycleRepository.resolveResultToken(
-      hashOpaqueProductionCapability(token),
+      hashProductionResultCapability(token),
       this.now(),
     );
     if (!resolved) {

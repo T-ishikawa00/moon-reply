@@ -1,14 +1,16 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
-## Current authority overlay — RC-1 Production Fulfillment Core
+## Current authority overlay — RC-1 R1 Product Input / Canonical Delivery Integrity
 
 - RC-0 Private Release Candidate is `accepted_complete` at `release/private-ready` SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
-- RC-1 branch is `task/rc1-production-fulfillment-core`; status is `implemented_pending_human_chatgpt_review`.
-- Implemented scope is server-side deterministic pre-payment Safety, V17 AI qualification stopping at purchase readiness, exactly-one clarification, opaque preparation capability, server-only verified-purchase Grant boundary, same-authority V17 PB-04/PB-05/PB-06 fulfillment, Provider-attempt `generation_started`, one canonical `CustomerAssessmentExperienceProjectionV2`, hash-only protected result credentials, and an independent notification outbox/adapter boundary.
+- RC-1 R1 branch is `task/rc1-production-fulfillment-core`; status is `RC-1 R1 implemented_pending_human_chatgpt_review`.
+- R1 preserves the three Product input domains separately in the consultation snapshot, projects exact `latestInboundMessage` into PB-01 through an explicit versioned actual-exchange source envelope, and leaves `optionalMessage` exclusively in the PB-01C Candidate lane. No-inbound behavior and V17 identity remain unchanged.
+- R1 verifies every canonical Customer projection read against its persisted SHA-256 and permits only `PRODUCTION_RESULT_NOT_FOUND` to become result-route 404; database, configuration, integrity, and unexpected failures propagate to the safe Next.js error boundary.
+- Implemented RC-1 scope remains server-side deterministic pre-payment Safety, V17 AI qualification stopping at purchase readiness, exactly-one clarification, opaque preparation capability, server-only verified-purchase Grant boundary, same-authority V17 PB-04/PB-05/PB-06 fulfillment, Provider-attempt `generation_started`, one canonical `CustomerAssessmentExperienceProjectionV2`, hash-only protected result credentials, and an independent notification outbox/adapter boundary.
 - Production identity is exactly `runtime-stage-catalog-v17.0.0` / `prompt-bundle-runtime-v17.0.0` / `pipeline-schema-runtime-v6.0.0` / `split-base-candidate-v1` / `gpt-5.6-luna`; production flags are separate from internal review and default fail closed.
 - Migration `0010_rc1_production_fulfillment_core.sql` is an unapplied artifact. Actual Provider, Supabase remote write, migration apply, Stripe/Payment, email send, deploy, domain/DNS, Legal publication, PR, main merge, and Public Launch operations are all `0`.
-- RC-1 technical implementation does not establish Production Payment, Stripe approval or selection, live email delivery, deployed Runtime, abuse/WAF hardening, PRIVATE RELEASE READY, or Public Launch. Human and ChatGPT review remain pending.
+- RC-1 R1 technical implementation does not establish RC-1 acceptance, Production Payment, Stripe approval or selection, live email delivery, deployed Runtime, abuse/WAF hardening, PRIVATE RELEASE READY, or Public Launch. Human and ChatGPT review remain pending.
 - Main remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
 
 All current-looking, active-handoff, and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.

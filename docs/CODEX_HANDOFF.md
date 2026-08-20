@@ -1,18 +1,19 @@
 # CODEX_HANDOFF.md
 
 <!-- RC-1-PRODUCTION-FULFILLMENT-CORE:BEGIN -->
-## Current authority overlay — RC-1 Production Fulfillment Core
+## Current authority overlay — RC-1 R1 Product Input / Canonical Delivery Integrity
 
 - Accepted predecessor: RC-0 `accepted_complete`, branch `release/private-ready`, SHA `84e14ed80ee32a03a8332d709476d55e68c8436f`.
-- Current branch/status: `task/rc1-production-fulfillment-core` / `implemented_pending_human_chatgpt_review`.
+- Current branch/status: `task/rc1-production-fulfillment-core` / `RC-1 R1 implemented_pending_human_chatgpt_review`.
+- Product input integrity: the raw consultation snapshot keeps `currentSituation`, `latestInboundMessage`, and `optionalMessage` separate. When inbound exists, a bounded `rc1-production-actual-exchange-context-v1` envelope carries exact current/inbound text with explicit sources through PB-01 Base; PB-01C receives only the exact outgoing Candidate. When inbound is absent, the pre-R1 Base value is byte-for-byte unchanged.
 - Pre-payment boundary: public same-origin bounded JSON APIs recompute deterministic Safety server-side, run exact V17 qualification, stop before full Product generation, and expose only opaque preparation/clarification capabilities. One clarification total is enforced with same-answer replay and conflicting-answer rejection.
 - Purchase/Grant boundary: there is no public Grant-mint HTTP path. A server-only future verified-payment authority binds one purchase-ready preparation and delivery/recovery authority to at most one Grant and one Logical Assessment. RC-1 fake authority is test-only.
 - Fulfillment boundary: persisted purchase-ready authority is integrity-checked and reused; PB-01/PB-01C/PB-02/PB-03 are skipped as reused authority; only V17 PB-04/PB-05/PB-06 generate the Product. `generation_started` is recorded immediately before the first actual PB-04 Provider invocation attempt, never at validation/Grant/ownership time. If the V17 Report commits but canonical delivery finalization fails, retry recovers that exact completed run without Provider replay.
-- Delivery boundary: one canonical `CustomerAssessmentExperienceProjectionV2` is stored per Logical Assessment; `/result/[token]` uses revocable hash-only credentials with no-store/noindex/no-referrer protections and renders `CustomerAssessmentNote`. Notification failure retries only the outbox and never regenerates the assessment.
+- Delivery boundary: one canonical `CustomerAssessmentExperienceProjectionV2` is stored per Logical Assessment; every read and result-token resolve decodes it and compares the recomputed canonical SHA-256 to `projection_sha256`. Mismatch fails closed as `PRODUCTION_CANONICAL_DELIVERY_INTEGRITY_FAILED`. `/result/[token]` maps only `PRODUCTION_RESULT_NOT_FOUND` to 404; service, configuration, integrity, and unexpected failures reach the safe Next.js error boundary. Result credentials remain revocable and hash-only. Notification failure retries only the outbox and never regenerates the assessment.
 - Persistence: append-only `0010_rc1_production_fulfillment_core.sql` adds preparation, purchase, Grant, Logical Assessment, canonical delivery, result credential, notification, and recovery state plus atomic lifecycle RPCs. The migration is not applied.
 - Runtime identity: exact V17 catalog/prompt/schema/topology and `gpt-5.6-luna`; production flags are separate from `M2_INTERNAL_RUNTIME_ENABLED` and default fail closed.
 - External operations: actual Provider `0`; Supabase remote write `0`; migration apply `0`; Stripe/Payment `0`; email send `0`; Netlify deploy `0`; domain/DNS `0`; Legal publication `0`; Public Launch `0`; PR `0`; main merge `0`.
-- Remaining authority gates: Human review, ChatGPT review, RC-2 verified Payment, live email provider, migration apply/live DB compatibility, deployment/configuration, public abuse/WAF hardening, and an explicit PRIVATE RELEASE READY decision. None is implied by RC-1 technical PASS.
+- Remaining authority gates: RC-1 R1 Human review, ChatGPT review, RC-2 verified Payment, live email provider, migration apply/live DB compatibility, deployment/configuration, public abuse/WAF hardening, and an explicit PRIVATE RELEASE READY decision. None is implied by RC-1 R1 technical PASS; RC-1 is not `accepted_complete`.
 - Main remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
 
 All current-looking, active-handoff, and next-action entries below are preserved historical snapshots. They are superseded as current authority by this RC-1 overlay and do not independently authorize Payment, migration apply, deployment, publication, or launch.

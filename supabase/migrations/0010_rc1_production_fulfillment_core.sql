@@ -878,7 +878,8 @@ set search_path = ''
 as $function$
   select jsonb_build_object(
     'delivery_id', deliveries.id,
-    'experience_projection_json', deliveries.experience_projection_json
+    'experience_projection_json', deliveries.experience_projection_json,
+    'projection_sha256', deliveries.projection_sha256
   )
   from public.production_result_credentials credentials
   join public.production_customer_deliveries deliveries
