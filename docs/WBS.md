@@ -1,24 +1,25 @@
 # WBS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->
-## RC-2 Production Activation Step A — Implemented, Review Pending
+## RC-2 Production Activation Step A — Accepted
 
-Status: `RC-2 Production Activation Step A implemented_pending_human_chatgpt_review` from exact accepted Product authority `dcccf1c780619e9716b72764d2f2f7f93a961543`.
+Status: `RC-2 Production Activation Step A accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
 
-- [x] Confirm `release/private-ready`, `main`, clean tree, stash `0`, and unresolved operation `0`; create `task/rc2-production-activation-preflight` without mutating release or main.
-- [x] Complete read-only environment/Stripe, migration/RLS/RPC, and activation-security audits with Luna A/B/C; keep secret retrieval and every Provider/remote write operation at `0`.
-- [x] Add `RC2_PRODUCTION_ACTIVATION_RUNBOOK.md` with the Stripe/Supabase/email/OpenAI/OFF environment matrix, key-name-only secret handling, stop conditions, and exact Human handoff.
-- [x] Add `verify:rc2:activation-preflight`; prove the accepted routes, fail-closed defaults, test/live mismatch rejection, exact JPY 980 one-time Checkout, raw webhook, reconciliation, email policy, migration structure, no public Grant route, no tracked deployable env/credential signature, immutable `0010`/`0011`, and V17/Q0 boundaries offline (`15/15`).
-- [x] Require the complete preparation/runtime/result/email/Payment/webhook/reconciliation/fulfillment flag set before exposing a new purchase, starting email verification, or creating Checkout. Preserve independent evidence-ingestion and already-paid fulfillment controls.
-- [x] Expand Git protection to all `.env*` files while retaining `.env.example`.
-- [x] Pass RC-2 `48/48`, RC-1 `14/14`, activation preflight `15/15`, typecheck, zero-warning lint, production build `38/38`, staged diff check, `next-env.d.ts`, accepted `0010`/`0011`, and V17/Q0 immutability checks.
-- [ ] `LOCAL_POSTGRES_COMPATIBILITY_NOT_EXECUTED`: establish a disposable PostgreSQL/Supabase runtime and apply `0002..0011` fresh in a separate authorized task.
-- [ ] `REMOTE_SUPABASE_STATE = UNRESOLVED`: obtain credential-safe read-only migration state before any separately authorized apply. Treat `0011` as not applied meanwhile.
-- [ ] Implement/review the production transactional-email adapter and sender/domain setup; replace the in-memory rate-limit seam with distributed enforcement/WAF; close monitoring and origin/proxy evidence.
-- [ ] Resolve or formally disposition `npm audit --omit=dev --json` `3 high` (`next`, `postcss`, `sharp`) before PRIVATE RELEASE READY.
-- [ ] Complete Human/ChatGPT Step A review. Do not input secrets, register a webhook, apply a migration, send email, call OpenAI, make a test Payment, deploy, or start RC-3 from this task.
+- [x] Accept implementation lineage `dcccf1c780619e9716b72764d2f2f7f93a961543` -> `68ddb485bf12254f82446f919dad5ded9d5a80d4`.
+- [x] Accept the activation environment matrix and fail-closed complete activation gate.
+- [x] Accept secret-safe `.env` Git protection and the activation-preflight verifier.
+- [x] Accept the Stripe Sandbox code-readiness audit and static `0010`/`0011` dependency audit.
+- [x] Accept the exact next activation order/runbook.
+- [x] Complete Human/ChatGPT Step A review and acceptance.
+- [ ] Establish disposable PostgreSQL compatibility proof and remote Supabase migration state; migration `0011` remains unapplied.
+- [ ] Provision Stripe secrets, register the Stripe webhook, and complete a Stripe test Payment.
+- [ ] Establish a transactional email Provider and real email delivery.
+- [ ] Establish distributed rate limiting/WAF and monitoring/runbook operational rehearsal.
+- [ ] Resolve or formally disposition the remaining `npm audit` `3 high` findings.
+- [ ] Complete RC-3, PRIVATE RELEASE READY, and Public Launch.
+- [ ] Begin **RC-2 Production Activation Step B — Disposable PostgreSQL / Supabase Migration Compatibility Proof** only under a separate task. Step B is not started here.
 
-Production Payment, email, OpenAI paid flow, PRIVATE RELEASE READY, and Public Launch remain `inactive / inactive / not executed / false / false`. Exact next Human action is review of Step A only; after acceptance, authorize disposable local PostgreSQL compatibility first.
+This acceptance sync changes documentation only; production code, migration, package, lock, runtime, Q0/V17, verifier, and `.gitignore` remain unchanged. Stripe API/Dashboard/charge/Payment/webhook registration, email, OpenAI Provider, Supabase remote read/write, migration apply/repair, Netlify deploy, secret/env remote change, DNS, Public Launch, PR, and main merge remain `0`.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:END -->
 
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->

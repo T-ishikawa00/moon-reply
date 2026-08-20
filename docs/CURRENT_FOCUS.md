@@ -1,19 +1,19 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->
-## Current implementation overlay — RC-2 Production Activation Step A
+## Current acceptance overlay — RC-2 Production Activation Step A
 
-- Status: `RC-2 Production Activation Step A implemented_pending_human_chatgpt_review` on `task/rc2-production-activation-preflight`, from exact accepted Product authority `dcccf1c780619e9716b72764d2f2f7f93a961543`.
-- Human state: Stripe Sandbox account created as of `2026-08-20`; Stripe secrets are not connected. Stripe API calls, Dashboard operations, webhook registration, charge, and Payment remain `0`.
-- Step A implementation: add the secret-free activation environment/runbook matrix, deterministic offline preflight verifier, all-flags new-purchase/email-verification/Checkout gate, and `.env*` Git protection with `.env.example` retained.
-- Supabase: migration structure and accepted `0010` blob are statically verified. No local PostgreSQL/Supabase runtime exists, so `LOCAL_POSTGRES_COMPATIBILITY_NOT_EXECUTED`. No existing CLI/auth/link exists, so `REMOTE_SUPABASE_STATE = UNRESOLVED`. Without read-only evidence, `0011` remains not applied.
-- Activation blockers: live transactional-email adapter/sender-domain evidence, disposable PostgreSQL proof, remote migration state/apply, Stripe test credentials/webhook/test Payment, distributed rate limiting/WAF, exact deployed origin/proxy evidence, monitoring, and RC-3 remain incomplete.
-- Dependency blocker: `npm audit --omit=dev --json` is exactly `3 high` — direct `next` and transitive `postcss` / `sharp`. No force fix, blind upgrade, or unproven override is applied.
-- Technical evidence: RC-2 `PASS 48/48`; RC-1 `PASS 14/14`; activation preflight `PASS 15/15`; typecheck, zero-warning lint, production build `38/38`, staged diff check, `next-env.d.ts`, accepted `0010`/`0011`, and V17/Q0 immutable-boundary checks pass.
-- Production Payment, email, OpenAI paid flow, deploy, PRIVATE RELEASE READY, and Public Launch remain inactive / unexecuted / `false`.
-- Exact next Human action: review and accept or reject Step A only. Do not provide Stripe secrets. If accepted, authorize a separate disposable local PostgreSQL compatibility task before any remote migration or Provider operation.
+- RC-2 Production Activation Step A: `accepted_complete`.
+- ChatGPT final review: `PASS`; Human/ChatGPT acceptance: `complete`.
+- Accepted implementation lineage: `dcccf1c780619e9716b72764d2f2f7f93a961543` -> `68ddb485bf12254f82446f919dad5ded9d5a80d4`.
+- Accepted scope: activation environment matrix; fail-closed complete activation gate; secret-safe `.env` Git protection; activation-preflight verifier; Stripe Sandbox code-readiness audit; static `0010`/`0011` dependency audit; exact next activation order/runbook.
+- Still NOT complete: disposable PostgreSQL compatibility proof; remote Supabase migration state; migration `0011` apply; Stripe secret provisioning; Stripe webhook registration; Stripe test Payment; transactional email Provider; real email delivery; distributed rate limiting/WAF; `npm audit` remaining `3 high`; monitoring/runbook operational rehearsal; RC-3; PRIVATE RELEASE READY; Public Launch.
+- Product authority: `release/private-ready` is the sole current Product authority and carries this accepted Step A history through the authorized ff-only integration. `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Acceptance-sync boundary: documentation only. Production code, migration, package, lock, runtime, Q0/V17, verifier, and `.gitignore` are unchanged by this sync.
+- Operations remain `0`: Stripe API, Stripe Dashboard, charge, Payment, webhook registration, email, OpenAI Provider, Supabase remote read/write, migration apply/repair, Netlify deploy, secret/env remote change, DNS, Public Launch, PR, and main merge.
+- Exact next stage: **RC-2 Production Activation Step B — Disposable PostgreSQL / Supabase Migration Compatibility Proof**. Step B is not started and requires a separate task; no secrets or Provider operations are authorized by this acceptance.
 
-The RC-2 Implementation Core overlay below remains accepted authority. Step A prepares later activation and does not convert technical preflight evidence into Provider, Payment, database, production, or release evidence.
+The accepted RC-2 Implementation Core overlay below remains authority and historical context. Step A acceptance does not establish Production Payment, live email, applied migration, PRIVATE RELEASE READY, or Public Launch.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:END -->
 
 <!-- RC-2-R2-PER-PURCHASE-EMAIL-AUTHORITY-BINDING:BEGIN -->
