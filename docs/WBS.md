@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
-## Dependency Security Remediation — Candidate
+## Dependency Security Remediation — Accepted
 
-Status: `Dependency Security Remediation implemented_pending_human_chatgpt_review`.
+Status: `Dependency Security Remediation accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
 
 - [x] Start from exact accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`.
 - [x] Upgrade only `next` and `eslint-config-next` direct ranges to `^16.3.0`; retain React/React DOM and TypeScript lines.
@@ -12,10 +12,12 @@ Status: `Dependency Security Remediation implemented_pending_human_chatgpt_revie
 - [x] Review and normally remediate the intermediate dev-only full-audit findings; final full audit is `0 vulnerabilities`.
 - [x] Prove actual Next 16.3 feature/regression non-intersection, all RC verifiers, typecheck, lint, build 38/38, and production route/render smoke.
 - [x] Preserve migrations `0002..0013`, Supabase, Runtime behavior, V17, and Q0.
-- [ ] Complete Human/ChatGPT review and acceptance of the dependency candidate.
+- [x] Complete Human/ChatGPT review and acceptance of candidate `07d8dc241db581b88a849c86e08e8bb5e29dfe52`.
 - [ ] Start Stripe, webhook, Payment, Email, OpenAI Provider, runtime activation, monitoring/rehearsal, deploy, DNS, PRIVATE RELEASE READY, or Public Launch. All remain prohibited.
 
-Dependency blocker: `candidate_resolved_pending_acceptance`. Exact next action: Human/ChatGPT review Dependency Security Remediation. `release/private-ready` and `main` remain unchanged by this candidate.
+Accepted dependency state: Next and eslint-config-next exact `16.3.0`, PostCSS `8.5.23`, sharp `0.35.3`; production/full audits `0 vulnerabilities`; all five RC verifiers, typecheck, zero-warning lint, build `38/38`, and local production route/render smoke PASS. Migrations `0002..0013`, Supabase, Runtime behavior, V17, and Q0 remain unchanged.
+
+Dependency blocker: `resolved_accepted_complete`. This acceptance sync changes only the three top overlays. Exact next stage after authorized ff-only release integration: **RC-2 Production Activation Step E — Transactional Email Provider Implementation (Resend)**. `main` remains unchanged; no real Email, Provider account action, secret provisioning, Payment, deployment, or runtime activation is authorized.
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->

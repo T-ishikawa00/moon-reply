@@ -1,18 +1,20 @@
 # CODEX_HANDOFF.md
 
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
-## Active handoff — Dependency Security Remediation Candidate
+## Active handoff — Dependency Security Remediation Accepted
 
-- Status: `Dependency Security Remediation implemented_pending_human_chatgpt_review`.
-- Authority: accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`; branch `task/dependency-security-next-16-3`; Step D remains `accepted_complete`.
-- Direct ranges: `next` and `eslint-config-next` `^16.3.0`; exact lock resolution `16.3.0`; React/React DOM/TypeScript unchanged.
-- Security result: PostCSS `8.5.23`, sharp `0.35.3`, production audit `0 vulnerabilities`, full audit `0 vulnerabilities`.
-- Compatibility result: actual-feature audit, all RC verifiers, typecheck, zero-warning lint, build 38/38, HTTP/static-asset checks, and browser render/console smoke PASS.
-- Integrity: migrations `0002..0013`, Supabase remote state, Product Runtime, V17, and Q0 unchanged; Supabase operation `0`.
+- Acceptance: Dependency Security Remediation `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted candidate: `07d8dc241db581b88a849c86e08e8bb5e29dfe52` from `task/dependency-security-next-16-3`; base authority was accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`.
+- Accepted dependency state: `next` and `eslint-config-next` direct ranges `^16.3.0`; exact lock resolution `16.3.0`; PostCSS `8.5.23`; sharp `0.35.3`; React/React DOM/TypeScript unchanged.
+- Accepted security result: production and full audits `0 vulnerabilities`; no waived advisory, force update, override, canary, or prerelease.
+- Accepted compatibility result: actual-feature audit, all five RC verifiers, typecheck, zero-warning lint, build `38/38`, HTTP/static-asset checks, and browser render/console smoke PASS.
+- Accepted integrity result: migrations `0002..0013`, Supabase remote state, Product Runtime behavior, V17, and Q0 unchanged; Supabase operation `0`.
 - Evidence: `docs/security/DEPENDENCY_SECURITY_REMEDIATION_2026-08.md`.
-- Dependency blocker: `candidate_resolved_pending_acceptance`.
-- Still inactive/unperformed: Stripe, webhook, actual Payment, Email, OpenAI paid flow, runtime flags, monitoring/rehearsal, deploy, DNS, PRIVATE RELEASE READY, Public Launch, PR, dependency release merge, and main merge.
-- Exact next action: Human/ChatGPT review Dependency Security Remediation. Do not start Provider setup or runtime activation.
+- Dependency blocker: `resolved_accepted_complete`.
+- Acceptance-sync boundary: only the three top overlays change; product code, migrations, verifiers, Runtime, package/lock, Q0/V17, and dependency evidence remain unchanged.
+- Still inactive/unperformed: Stripe, webhook, actual Payment, real Email, OpenAI paid flow, runtime flags, monitoring/rehearsal, deploy, DNS, PRIVATE RELEASE READY, Public Launch, PR, Provider account action, secret provisioning, and main merge.
+- `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next stage after authorized ff-only release integration: **RC-2 Production Activation Step E — Transactional Email Provider Implementation (Resend)**. Do not send real Email or start Payment, deployment, or runtime activation.
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->

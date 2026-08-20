@@ -1,19 +1,20 @@
 # CURRENT_FOCUS.md
 
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
-## Current candidate overlay — Dependency Security Remediation
+## Current acceptance overlay — Dependency Security Remediation
 
-- Status: `Dependency Security Remediation implemented_pending_human_chatgpt_review`.
-- Base authority: accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`; Step D remains `accepted_complete`.
-- Direct change: `next` and `eslint-config-next` from `^16.2.12` to `^16.3.0`; lock resolves exact `16.3.0`.
-- Resolved vulnerable paths: PostCSS `8.5.23`, sharp `0.35.3`; production and full npm audits both report `0 vulnerabilities`.
-- Next 16.3 actual-feature audit, all five RC verifiers, typecheck, lint, 38/38 build, and local production route/render smoke: PASS.
-- Dependency blocker: `candidate_resolved_pending_acceptance`.
+- Status: `Dependency Security Remediation accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted candidate: `07d8dc241db581b88a849c86e08e8bb5e29dfe52` from `task/dependency-security-next-16-3`; base authority was accepted Step D release `22d9ec96d0b1cd3136a23aee7670abf7e150b497`.
+- Accepted dependency state: `next` and `eslint-config-next` direct ranges `^16.3.0`; exact lock resolution `16.3.0`; PostCSS `8.5.23`; sharp `0.35.3`; React/React DOM/TypeScript lines unchanged.
+- Accepted security proof: `npm audit --omit=dev` and full `npm audit` both report `0 vulnerabilities`; no waiver, force update, override, canary, or prerelease.
+- Accepted compatibility proof: Next 16.3 actual-feature audit, all five RC verifiers, typecheck, zero-warning lint, production build `38/38`, and local production route/render smoke PASS.
+- Accepted integrity proof: migrations `0002..0013`, Supabase remote state, Production Runtime behavior, V17, and Q0 remain unchanged; Supabase operations `0`.
 - Evidence: `docs/security/DEPENDENCY_SECURITY_REMEDIATION_2026-08.md`.
-- Migrations `0002..0013`, Supabase state, Production Runtime, V17, and Q0 remain unchanged; Supabase operations `0`.
-- Still NOT complete: production Payment, Stripe, webhook, Email Provider, OpenAI paid flow, runtime activation, monitoring/rehearsal, deploy, DNS, RC-3, PRIVATE RELEASE READY, or Public Launch.
-- `release/private-ready` remains the accepted Step D SHA and is not merged with this dependency candidate. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Exact next action: Human/ChatGPT review Dependency Security Remediation. Do not start Provider, Payment, deployment, or runtime activation.
+- Dependency blocker: `resolved_accepted_complete`.
+- Still NOT complete: production Payment, Stripe, webhook, real Email, OpenAI paid flow, runtime activation, monitoring/rehearsal, deploy, DNS, RC-3, PRIVATE RELEASE READY, or Public Launch.
+- Acceptance-sync boundary: only `docs/CURRENT_FOCUS.md`, `docs/WBS.md`, and `docs/CODEX_HANDOFF.md` change. Product code, migrations, verifiers, Runtime, package/lock, Q0/V17, and dependency evidence remain unchanged.
+- `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next stage after authorized ff-only release integration: **RC-2 Production Activation Step E — Transactional Email Provider Implementation (Resend)**. This acceptance does not authorize real Email, Provider account action, secret provisioning, Payment, deployment, or runtime activation.
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
