@@ -1,9 +1,26 @@
 # CODEX_HANDOFF.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
+## Active handoff — RC-2 Production Activation Step C Candidate
+
+- Status: `RC-2 Production Activation Step C implemented_pending_human_chatgpt_review`.
+- Authority: started from `release/private-ready` at `b8036a91b157870f038e2bf7d431bb0ca9e1795a` on `task/rc2-activation-stepc-remote-supabase`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Remote identity/auth: MATCH/READY, recorded without raw identifiers or secrets.
+- Migration result: Human-authorized class C0 pre-state `0002..0003`; exact dry-run and single official apply of `0004..0012`; post-state exact `0002..0012`.
+- Remote technical proof: schema/history consistency, required tables, 22/22 zero-row table SELECT capability calls, RLS, exact assessment service-role matrix, anon/authenticated denial, `0012` triggers/CHECK/RPC, and pure helper test/live-prefix smoke all PASS.
+- Privacy/write boundary: Customer rows accessed `0`; remote non-migration writes `0`; no synthetic Purchase, Payment, Email, or Assessment row.
+- Review item: the 17 RC-1/RC-2 production tables retain Supabase's pre-existing service-role DELETE grant. Do not silently normalize or repair it; Human/ChatGPT disposition is required before runtime activation.
+- Separate blocker: `npm audit --omit=dev` remains exactly `3 high`.
+- Evidence: `docs/payment/RC2_STEP_C_REMOTE_SUPABASE_EVIDENCE.md` and the Step C overlay in `docs/payment/RC2_PRODUCTION_ACTIVATION_RUNBOOK.md`.
+- Still inactive/unperformed: Stripe connection, webhook, actual Payment, Email Provider/delivery, OpenAI Provider, runtime flags, remote application secret changes, deploy, DNS, PRIVATE RELEASE READY, Public Launch, PR, release merge, and main merge.
+- Exact next action: Human/ChatGPT review Step C and explicitly disposition the least-privilege finding. Do not proceed into Provider setup or runtime activation.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
 ## Active handoff — RC-2 Production Activation Step B Accepted
 
 - Acceptance: RC-2 Production Activation Step B `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Historical candidate status before acceptance: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`; its Step B remote boundary was `REMOTE_SUPABASE_STATE = UNRESOLVED`.
 - Accepted candidate: `63767f2235f3c5999a31507945b4b140390e81c7` from `task/rc2-activation-stepb-local-db-compat`.
 - Accepted scope: append-only `0012`; fresh PostgreSQL/Supabase `0002..0012` proof; minimal service-role assessment authority; anon/authenticated denial; real assessment Runtime/RPC execution; Stripe test/live DB binding; Payment Integrity A–O; migration atomicity; clean replay.
 - Product authority: `release/private-ready` carries this accepted history through ff-only integration. `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.

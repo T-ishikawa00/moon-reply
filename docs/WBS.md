@@ -1,9 +1,33 @@
 # WBS.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
+## RC-2 Production Activation Step C — Candidate
+
+Status: `RC-2 Production Activation Step C implemented_pending_human_chatgpt_review`.
+
+- [x] Confirm exact starting authority, branch, clean worktree, stash zero, and no unresolved Git operation.
+- [x] Confirm `AUTH = PRESENT`, `REMOTE_PROJECT_IDENTITY = MATCH`, and `DB_AUTH = READY` without exposing credentials or remote identifiers.
+- [x] Accept Human amendment class C0: applied `0002..0003`; expected pending `0004..0012`.
+- [x] Prove pre-write schema/history consistency and absence of conflicting pending-migration objects.
+- [x] Prove the official dry-run reports exactly `0004..0012`.
+- [x] Apply exactly `0004..0012` once through the official linked migration runner.
+- [x] Prove exact post-state `0002..0012`, required tables, 22/22 zero-row table SELECT capability calls, RLS, assessment ACL, role denial, `0012` triggers/CHECK/RPC, and pure helper behavior.
+- [x] Complete repository regression and immutability checks; retain `npm audit` `3 high` as a separate blocker.
+- [x] Record sanitized evidence with zero Customer-row access and zero non-migration remote writes.
+- [ ] Complete Human/ChatGPT review of the Step C candidate.
+- [ ] Explicitly disposition the 17 production-table service-role DELETE grants before runtime activation; no repair is authorized in Step C.
+- [ ] Provision Stripe, register a webhook, perform an actual Payment, activate Email/OpenAI/runtime/deployment, or change remote flags/secrets. These remain prohibited in this task.
+- [ ] Complete RC-3, PRIVATE RELEASE READY, and Public Launch.
+
+Exact next action: Human/ChatGPT review the Step C evidence and least-privilege finding. `release/private-ready` and `main` remain unmerged and unchanged.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
 ## RC-2 Production Activation Step B — Accepted
 
 Status: `RC-2 Production Activation Step B accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+
+Historical candidate status before acceptance: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`; its Step B remote boundary was `REMOTE_SUPABASE_STATE = UNRESOLVED`.
 
 - [x] Accept candidate `63767f2235f3c5999a31507945b4b140390e81c7`.
 - [x] Accept append-only `0012_rc2_activation_database_hardening.sql` and immutable `0002..0011` lineage.

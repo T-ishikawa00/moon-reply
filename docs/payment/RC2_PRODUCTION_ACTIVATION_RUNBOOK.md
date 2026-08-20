@@ -1,5 +1,35 @@
 # RC-2 Production Activation Runbook
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
+## Step C — Remote Supabase State and Authorized Migration Apply
+
+Status: `RC-2 Production Activation Step C implemented_pending_human_chatgpt_review`
+
+On `2026-08-20`, Human authorization amendment C0 accepted the independently verified remote state `0002..0003` and authorized the exact pending suffix `0004..0012`, subject to pre-write schema consistency and exact dry-run gates.
+
+- Starting authority: `release/private-ready` at `b8036a91b157870f038e2bf7d431bb0ca9e1795a`.
+- Branch: `task/rc2-activation-stepc-remote-supabase`.
+- `AUTH = PRESENT`; `REMOTE_PROJECT_IDENTITY = MATCH`; `DB_AUTH = READY`.
+- Pre-write catalog consistency for the accepted `0002..0003` schema: PASS.
+- Conflicting later-migration objects before apply: none.
+- `PRE_APPLY_SCHEMA_SNAPSHOT = NOT_AVAILABLE`; no Customer data dump or row export occurred.
+- Official dry-run exact pending set: `0004, 0005, 0006, 0007, 0008, 0009, 0010, 0011, 0012`.
+- Official linked migration push: exactly one invocation, applying exactly `0004..0012`, PASS.
+- Post-apply history: exact `0002..0012`; `REMOTE_MIGRATION_HISTORY_0002_THROUGH_0012 = PASS`.
+- Required assessment, RC-1, and RC-2 tables; 22/22 zero-row table SELECT capability calls; RLS; assessment service-role ACL; anon/authenticated denial; `0012` triggers and CHECK; hardened Stripe evidence RPC; and pure helper RPC test/live-prefix smoke: PASS.
+- Customer rows accessed: `0`; remote non-migration writes: `0`.
+- Repository regressions, typecheck, zero-warning lint, build, diff checks, migration immutability, and V17/Q0 immutability: PASS.
+- `npm audit --omit=dev` remains exactly `3 high`; dependency closure is a separate blocker.
+
+Least-privilege review item: Supabase's pre-existing defaults leave DELETE granted to `service_role` on the 17 RC-1/RC-2 production tables. The required five-table assessment matrix is exact and has no DELETE. No out-of-scope ACL repair was attempted; Human/ChatGPT must disposition the broader production-table authority before runtime activation.
+
+Only remote Supabase migration alignment through `0012` is newly established. Production Payment, Stripe, webhook, Email Provider, actual Email, actual Payment, OpenAI Provider, production runtime flags, remote application secrets, deployment, DNS, PRIVATE RELEASE READY, and Public Launch remain inactive or unchanged. No PR, release merge, or main merge occurred.
+
+Sanitized evidence: `docs/payment/RC2_STEP_C_REMOTE_SUPABASE_EVIDENCE.md`.
+
+Exact next action: Human/ChatGPT review this Step C candidate and the recorded least-privilege finding. Do not proceed to any Provider or runtime activation from this task.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
 ## Step B — Disposable PostgreSQL / Supabase Compatibility and Hardening
 
