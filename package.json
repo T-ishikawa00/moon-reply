@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "verify:rc1": "node scripts/verify-rc1-production-fulfillment-core.mjs",
     "verify:rc2": "node scripts/verify-rc2-production-payment-delivery.mjs",
-    "verify:rc2:activation-preflight": "node scripts/verify-rc2-production-activation-preflight.mjs"
+    "verify:rc2:activation-preflight": "node scripts/verify-rc2-production-activation-preflight.mjs",
+    "verify:rc2:stepb": "node scripts/verify-rc2-stepb-local-db-evidence.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.2",

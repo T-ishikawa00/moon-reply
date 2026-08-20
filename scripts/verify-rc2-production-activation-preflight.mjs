@@ -16,6 +16,8 @@ const migration0010 =
   "supabase/migrations/0010_rc1_production_fulfillment_core.sql";
 const migration0011 =
   "supabase/migrations/0011_rc2_production_payment_delivery.sql";
+const migration0012 =
+  "supabase/migrations/0012_rc2_activation_database_hardening.sql";
 
 function git(args, options = {}) {
   return execFileSync(
@@ -306,13 +308,14 @@ await check("email verification secrets and bounded Human policy fail closed", (
   assert.match(email, /TRANSACTIONAL_EMAIL_PROVIDER_UNCONFIGURED/u);
 });
 
-await check("0010 is immutable and 0011 remains the current unapplied artifact", () => {
+await check("0010 and 0011 are immutable and 0012 is append-only hardening", () => {
   assert.equal(gitText(["rev-parse", `${acceptedAuthority}:${migration0010}`]), accepted0010Blob);
   assert.equal(gitText(["rev-parse", `${acceptedAuthority}:${migration0011}`]), accepted0011Blob);
   assertNoDiffFromAuthority([migration0010, migration0011]);
+  assert.equal(existsSync(path.join(root, migration0012)), true);
 });
 
-await check("migration order and 0010 to 0011 dependencies are structurally intact", () => {
+await check("migration order and 0010 through 0012 dependencies are structurally intact", () => {
   const migrations = trackedFiles()
     .filter((entry) => entry.startsWith("supabase/migrations/") && entry.endsWith(".sql"))
     .map((entry) => path.posix.basename(entry))
@@ -328,9 +331,11 @@ await check("migration order and 0010 to 0011 dependencies are structurally inta
     "0009_m2_p4_jpy980_quality_reassessment.sql",
     "0010_rc1_production_fulfillment_core.sql",
     "0011_rc2_production_payment_delivery.sql",
+    "0012_rc2_activation_database_hardening.sql",
   ]);
   const rc1 = readText(migration0010);
   const rc2 = readText(migration0011);
+  const stepB = readText(migration0012);
   for (const table of [
     "production_preparations",
     "production_purchases",
@@ -358,6 +363,17 @@ await check("migration order and 0010 to 0011 dependencies are structurally inta
     assert.ok(rc2.includes(required), required);
   }
   assert.doesNotMatch(rc2, /grant .* to anon|grant .* to authenticated/iu);
+  for (const required of [
+    "assessment_requests",
+    "assessment_clarifications",
+    "rc2_checkout_session_matches_environment_v1",
+    "enforce_rc2_payment_attempt_environment_v1",
+    "production_verified_payment_environment_session_binding",
+    "PAYMENT_ENVIRONMENT_MISMATCH",
+  ]) {
+    assert.ok(stepB.includes(required), `0012 ${required}`);
+  }
+  assert.doesNotMatch(stepB, /security definer/iu);
 });
 
 await check("no public API route can mint a Grant or run fulfillment", () => {

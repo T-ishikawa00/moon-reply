@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
+## RC-2 Production Activation Step B — Implemented, Review Pending
+
+Status: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`.
+
+- [x] Preserve authority `release/private-ready` at `3cfa1728ccfc2c4e0bf78a7697dfe62c650be67a`, `main` at `61e33a10e195fad17e253a6b9719217e1992f273`, and accepted migration/Q0/V17 bytes.
+- [x] Add append-only `0012_rc2_activation_database_hardening.sql` with minimal assessment grants, clarification RLS, and no assessment DELETE/`GRANT ALL`.
+- [x] Enforce Purchase Intent environment against Checkout prefix for Attempt, attach RPC, evidence, and Verified Payment direct-DB paths.
+- [x] Prove real service-role Runtime/RPC operations and actual anon/authenticated denial.
+- [x] Pass fresh `0002..0012`, catalog/object checks, Payment Integrity A–O, full service-role chain, atomicity rollback, and clean replay.
+- [x] Add offline `verify:rc2:stepb`; Docker remains outside normal CI.
+- [x] Pass RC-2 `48/48`, RC-1 `14/14`, activation preflight `15/15`, Step B `18/18`, typecheck, lint, build, and diff validation.
+- [ ] Complete Human/ChatGPT review and acceptance of Step B.
+- [ ] Resolve remote state under separate safe authorization. `REMOTE_SUPABASE_STATE = UNRESOLVED` and remote operations remain `0`.
+- [ ] Separately authorize any remote migration apply, Stripe/webhook/test Payment, Email, deployment, or later activation work.
+- [ ] Resolve the remaining `npm audit --omit=dev` `3 high` findings before PRIVATE RELEASE READY.
+- [ ] Complete RC-3, PRIVATE RELEASE READY, and Public Launch.
+
+Exact next action: Human/ChatGPT review this Step B commit and its local evidence. Production Payment, remote migration apply, and Public Launch are not established.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-A:BEGIN -->
 ## RC-2 Production Activation Step A — Accepted
 

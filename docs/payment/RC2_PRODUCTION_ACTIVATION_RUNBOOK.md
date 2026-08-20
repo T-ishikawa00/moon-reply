@@ -1,4 +1,129 @@
-# RC-2 Production Activation Runbook — Step A Preflight
+# RC-2 Production Activation Runbook
+
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:BEGIN -->
+## Step B — Disposable PostgreSQL / Supabase Compatibility and Hardening
+
+Status: `RC-2 Production Activation Step B implemented_pending_human_chatgpt_review`
+
+This Step B overlay records local-only implementation and evidence from `2026-08-20`. The previous Step B `BLOCKED` result was valid: the fresh database proved that service-role RPC execution alone did not provide the assessment-table DML needed by `SECURITY INVOKER` functions and the Runtime repository. It also exposed a missing DB-level Stripe Checkout environment binding. Neither failure was bypassed.
+
+### Authority and append-only remediation
+
+- Starting Product authority: `release/private-ready` at `3cfa1728ccfc2c4e0bf78a7697dfe62c650be67a`.
+- Main remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Implementation branch: `task/rc2-activation-stepb-local-db-compat`.
+- New migration: `supabase/migrations/0012_rc2_activation_database_hardening.sql`.
+- Accepted migrations `0002..0011` remain byte-identical. In particular, `0010` is `8b5bd5b02ca7756299049cf6215af299ace69e3c` and `0011` is `70dc2c62631de6f1a81e5257eb076f45c4078565`.
+- Q0/V17 Product semantics remain byte-identical.
+
+### Assessment authority before and after
+
+Before `0012`, service_role had no DML authority on these five tables. After `0012`, the explicit matrix is:
+
+| Table | SELECT | INSERT | UPDATE | DELETE |
+| --- | --- | --- | --- | --- |
+| `assessment_requests` | yes | yes | yes | no |
+| `assessment_runs` | yes | yes | yes | no |
+| `assessment_stage_runs` | yes | yes | yes | no |
+| `assessment_reports` | yes | yes | no | no |
+| `assessment_clarifications` | yes | yes | yes | no |
+
+`GRANT ALL` is not used. public, anon, and authenticated are explicitly revoked. RLS is enabled on all five tables, including the previously uncovered `assessment_clarifications` gap. Existing and new functions remain `SECURITY INVOKER` with empty `search_path`.
+
+The actual local service-role JWT, held only in process memory, proved:
+
+- `begin_production_preparation_v1`, request INSERT/SELECT, and preparation INSERT/SELECT;
+- Runtime createRun, startStage, and stage UPDATE;
+- clarification INSERT by RPC, SELECT, acceptance/resume INSERT+UPDATE, and direct grounding UPDATE;
+- report INSERT by `finalize_completed_assessment` and report SELECT.
+
+`SERVICE_ROLE_REAL_RUNTIME_RPC_PROOF = PASS`
+
+Actual REST requests using anon and a process-only signed authenticated JWT received 401/403 for all five assessment-table SELECTs and representative INSERT, UPDATE, and RPC calls. Catalog ACL checks also show no assessment DML or key RPC execution authority for either role.
+
+### Stripe environment binding
+
+`0012` establishes the following DB authority:
+
+- a strict helper maps `test` only to `cs_test_*` and `live` only to `cs_live_*`;
+- a Payment Attempt trigger validates the parent Purchase Intent on every INSERT and UPDATE;
+- Purchase Intent environment is immutable;
+- Verified Payment has an independent same-row CHECK plus parent Intent/Attempt/Checkout trigger;
+- mismatched Stripe evidence is inserted into the event ledger, then changed to `rejected/PAYMENT_ENVIRONMENT_MISMATCH` before any Attempt, Intent, Verified Payment, or Job state can advance;
+- normal and direct-db Verified Payment row mutation is prohibited.
+
+Accepted functions use `SELECT ... FOR UPDATE` on Verified Payment rows. PostgreSQL therefore requires UPDATE table ACL even though the functions do not update those rows. `0012` grants that row-lock prerequisite to service_role and immediately pairs it with an immutable BEFORE UPDATE trigger; the successful chain and an attempted real UPDATE proved both sides.
+
+### Fresh database, objects, and Payment Integrity
+
+- Disposable workspace: new repo-external root; no repo `supabase/.temp` or linked-project metadata was consumed.
+- Supabase CLI: temporary `npx` execution of stable `2.115.0`; no repo dependency or global installation.
+- PostgreSQL: `17.6`.
+- `0002` through `0012`: 11/11 recorded in the local migration catalog.
+- RLS, exact grants, function ACL/security/search path, four hardening triggers, and the Verified Payment CHECK were confirmed in the real catalog.
+
+`PASS_0002_THROUGH_0012_FRESH_APPLY`
+
+| Case | Local real-DB result |
+| --- | --- |
+| A | duplicate Purchase Intent collapsed to existing; exactly one row |
+| B | duplicate successful Payment returned duplicate; Payment and Job remained exactly one |
+| C | duplicate Payment Attempt sequence rejected by the unique constraint |
+| D | amount other than 980 rejected |
+| E | currency other than `jpy` rejected |
+| F | purchase kind other than `one_time` rejected |
+| G | environment outside `test/live` rejected |
+| H | email/preparation/trusted-session mismatch rejected |
+| I | valid synthetic Purchase Intent and Attempt path accepted |
+| J | test Intent + `cs_live_*` rejected |
+| K | live Intent + `cs_test_*` rejected |
+| L | test Intent + `cs_test_*` accepted |
+| M | live Intent + `cs_live_*` accepted |
+| N | environment and prefix mismatch evidence ledgered as rejected; Verified Payment 0, Job 0, Attempt unchanged |
+| O | matching verified evidence produced exactly one Verified Payment and one Job |
+
+`PAYMENT_INTEGRITY_A_THROUGH_O = PASS`
+
+The service-role chain also completed preparation finalization, email challenge/consumption/binding, Purchase Intent creation, Attempt reservation, Checkout attachment, Stripe evidence recording, Verified Payment/Job production, Job claim, and RC-2 Grant/logical-assessment handoff. No postgres-superuser bypass is counted as runtime acceptance evidence.
+
+### Atomicity and clean replay
+
+The disposable workspace alone received temporary `0013__rc2_atomicity_probe.sql`. The official local migration runner created a table and then hit intentional SQLSTATE `22012`. After failure:
+
+- `ATOMICITY_PROBE_OBJECT_ABSENT = true`
+- probe migration version absent = `true`
+
+The probe file was removed from the disposable workspace and never existed in the repository. A complete reset then applied only repo-authoritative `0002..0012`:
+
+`PASS_0002_THROUGH_0012_FRESH_REPLAY`
+
+### Repository regression snapshot
+
+- `verify:rc2`: `PASS 48/48`.
+- `verify:rc1`: `PASS 14/14`.
+- `verify:rc2:activation-preflight`: `PASS 15/15`.
+- `verify:rc2:stepb`: `PASS 18/18`.
+- typecheck, zero-warning lint, production build, and Git diff checks: PASS.
+- `next-env.d.ts`, accepted `0010`/`0011`, and Q0/V17: no working-tree blob drift.
+- `npm audit --omit=dev`: nonzero with exactly `3 high` through Next/PostCSS/sharp. Dependency closure is not claimed and remains a separate blocker.
+
+### Cleanup
+
+- The Step B local Supabase stack was stopped with no backup.
+- Matching disposable containers / volumes / network after stop: `0 / 0 / 0`.
+- Docker Desktop remains running.
+- Recursive workspace deletion was rejected by the execution safety guard before deletion began; it was not bypassed. `C:\temp\moon-reply-rc2-stepb-20260820-204213` and the earlier `C:\temp\moon-reply-rc2-stepb-20260820-200603` therefore remain as disposable local paths.
+
+### Remote and activation boundary
+
+`REMOTE_SUPABASE_STATE = UNRESOLVED`
+
+No safely identity-verifiable existing read-only path was used. Ignored historical Supabase metadata was not treated as authority. Supabase remote read/write, remote migration apply/repair, Stripe API/Dashboard/charge/Payment/webhook registration, Email, OpenAI Provider, Netlify deploy, remote secret/env change, DNS, PR, release merge, main merge, and Public Launch all remain `0`.
+
+Production Payment: inactive. Stripe: not connected. Email: inactive. Remote migration applied: not established. `PRIVATE RELEASE READY = false`. `Public Launch = false`.
+
+Exact next action: Human/ChatGPT review this Step B commit and evidence. Remote migration application or Provider setup requires a later, separately authorized task after acceptance.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-B:END -->
 
 Status: `RC-2 Production Activation Step A implemented_pending_human_chatgpt_review`
 
