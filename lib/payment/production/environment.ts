@@ -88,6 +88,13 @@ export function isStripeWebhookAvailable() {
   return enabled("STRIPE_WEBHOOK_ENABLED");
 }
 
+export function isStripeReconciliationAvailable() {
+  return (
+    enabled("STRIPE_RECONCILIATION_ENABLED") &&
+    !enabled("PAYMENT_EMERGENCY_STOP")
+  );
+}
+
 export function isPaidFulfillmentProcessingAvailable() {
   return (
     enabled("PAYMENT_FULFILLMENT_PROCESSING_ENABLED") &&

@@ -15,6 +15,7 @@ import {
 import { StripeWebhookEvidenceVerifierV1 } from "../lib/payment/production/stripe.ts";
 import { hashOpaqueProductionCapability } from "../lib/assessment/production/capabilities.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
+import { hashPaymentCapability } from "../lib/payment/production/crypto.ts";
 
 const root = process.cwd();
 const fixedClock = "2026-08-20T03:00:00.000Z";
@@ -122,6 +123,7 @@ async function checkoutReady(run, email = "customer@example.com") {
 function evidenceFor(run, checkout, overrides = {}) {
   const request = run.checkoutProvider.requests[0];
   return {
+    evidenceSource: "webhook",
     providerEventId: "evt_rc2_0001",
     eventType: "checkout.session.completed",
     providerCreatedAt: "2026-08-20T03:01:00.000Z",
@@ -136,6 +138,27 @@ function evidenceFor(run, checkout, overrides = {}) {
     currency: "jpy",
     ...overrides,
   };
+}
+
+function currentAttempt(run) {
+  const attempt = [...run.repository.attempts.values()].at(-1);
+  assert.ok(attempt);
+  return attempt;
+}
+
+function makeReconciliationPaid(run, providerPaymentId = "pi_rc2_reconciled") {
+  const attempt = currentAttempt(run);
+  assert.ok(attempt.providerCheckoutSessionId);
+  run.checkoutProvider.setReconciliationState(
+    attempt.providerCheckoutSessionId,
+    {
+      providerPaymentId,
+      paymentIntentPurchaseReference: attempt.purchaseIntentId,
+      paymentStatus: "paid",
+      checkoutStatus: "complete",
+    },
+  );
+  return attempt;
 }
 
 let checks = 0;
@@ -330,6 +353,8 @@ await check("Checkout is exact 980 JPY one-time payment with no subscription", a
     },
   );
   assert.ok(!JSON.stringify(request).includes("subscription"));
+  assert.doesNotMatch(request.successUrl, /\/result\/|resultToken/iu);
+  assert.doesNotMatch(request.cancelUrl, /\/result\/|resultToken/iu);
 });
 
 await check("PayPay is capability-configured without changing card flow", async () => {
@@ -353,28 +378,32 @@ await check("duplicate Checkout creation reuses the same attempt and session sem
   assert.equal(run.repository.attempts.size, 1);
 });
 
-await check("unknown provider outcome blocks a second Payment Attempt", async () => {
+await check("unknown Checkout creation recovers the same Payment Attempt and idempotency identity", async () => {
   const run = harness();
   const verified = await verifyEmail(run);
-  run.checkoutProvider.failuresRemaining = 1;
+  run.checkoutProvider.unknownAfterCreateFailuresRemaining = 1;
   await assert.rejects(
     () =>
       run.application.startCheckout({
         preparationCapability: run.preparationCapability,
         trustedSessionToken: verified.completed.trustedSessionToken,
       }),
-    (error) => safeCode(error) === "FAKE_STRIPE_UNKNOWN",
+    (error) => safeCode(error) === "FAKE_STRIPE_UNKNOWN_AFTER_CREATE",
   );
-  await assert.rejects(
-    () =>
-      run.application.startCheckout({
-        preparationCapability: run.preparationCapability,
-        trustedSessionToken: verified.completed.trustedSessionToken,
-      }),
-    (error) => safeCode(error) === "PAYMENT_ATTEMPT_RECOVERY_REQUIRED",
+  assert.equal(currentAttempt(run).state, "unknown");
+  const recovered = await run.application.startCheckout({
+    preparationCapability: run.preparationCapability,
+    trustedSessionToken: verified.completed.trustedSessionToken,
+  });
+  assert.equal(recovered.status, "checkout_ready");
+  assert.equal(run.checkoutProvider.requests.length, 2);
+  assert.equal(
+    run.checkoutProvider.requests[0].idempotencyKey,
+    run.checkoutProvider.requests[1].idempotencyKey,
   );
-  assert.equal(run.checkoutProvider.requests.length, 1);
   assert.equal(run.repository.attempts.size, 1);
+  assert.equal(currentAttempt(run).sequence, 1);
+  assert.equal(currentAttempt(run).state, "pending");
 });
 
 await check("failed Payment permits one explicit sequential retry on the same Purchase Intent", async () => {
@@ -448,6 +477,8 @@ await check("valid Stripe signature yields minimized authoritative evidence", ()
       object: {
         id: "cs_test_valid",
         object: "checkout.session",
+        livemode: false,
+        client_reference_id: "90000000-0000-4000-8000-000000000001",
         metadata: {
           moon_purchase_reference: "90000000-0000-4000-8000-000000000001",
         },
@@ -477,6 +508,114 @@ await check("valid Stripe signature yields minimized authoritative evidence", ()
     "90000000-0000-4000-8000-000000000001",
   );
   assert.ok(!JSON.stringify(evidence).includes("customer@example.com"));
+});
+
+await check("webhook-absent Stripe reconciliation verifies Payment exactly once", async () => {
+  const run = harness();
+  await checkoutReady(run);
+  const attempt = makeReconciliationPaid(run);
+  const outcome = await run.application.reconcilePaymentAttempt(attempt.id);
+  assert.equal(outcome.disposition, "verified");
+  assert.equal(run.repository.verifiedPayments.size, 1);
+  assert.equal(run.repository.jobs.size, 1);
+  assert.equal(run.repository.evidence.size, 1);
+  const evidence = [...run.repository.evidence.values()][0].event;
+  assert.equal(evidence.evidenceSource, "reconciliation");
+  assert.match(evidence.providerEventId, /^reconcile_[0-9a-f]{64}$/u);
+  assert.equal(run.grantProcessor.issueCalls.length, 0);
+});
+
+await check("webhook and reconciliation converge in either order", async () => {
+  const webhookFirst = harness();
+  const webhookReady = await checkoutReady(webhookFirst);
+  const webhookEvidence = evidenceFor(webhookFirst, webhookReady.checkout);
+  assert.equal(
+    (await webhookFirst.application.verifyStripeEvidence(webhookEvidence))
+      .disposition,
+    "verified",
+  );
+  const webhookAttempt = makeReconciliationPaid(
+    webhookFirst,
+    webhookEvidence.providerPaymentId,
+  );
+  assert.equal(
+    (
+      await webhookFirst.application.reconcilePaymentAttempt(
+        webhookAttempt.id,
+      )
+    ).disposition,
+    "duplicate",
+  );
+  assert.equal(webhookFirst.repository.verifiedPayments.size, 1);
+  assert.equal(webhookFirst.repository.jobs.size, 1);
+
+  const reconciliationFirst = harness({ preparationByte: 203 });
+  const reconciliationReady = await checkoutReady(reconciliationFirst);
+  const reconciliationAttempt = makeReconciliationPaid(
+    reconciliationFirst,
+    "pi_rc2_0001",
+  );
+  assert.equal(
+    (
+      await reconciliationFirst.application.reconcilePaymentAttempt(
+        reconciliationAttempt.id,
+      )
+    ).disposition,
+    "verified",
+  );
+  assert.equal(
+    (
+      await reconciliationFirst.application.verifyStripeEvidence(
+        evidenceFor(reconciliationFirst, reconciliationReady.checkout, {
+          providerEventId: "evt_rc2_after_reconciliation",
+        }),
+      )
+    ).disposition,
+    "duplicate",
+  );
+  assert.equal(reconciliationFirst.repository.verifiedPayments.size, 1);
+  assert.equal(reconciliationFirst.repository.jobs.size, 1);
+});
+
+await check("reconciliation network unknown remains unknown and cannot open a new attempt", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  const attempt = currentAttempt(run);
+  run.checkoutProvider.retrievalFailuresRemaining = 1;
+  await assert.rejects(
+    () => run.application.reconcilePaymentAttempt(attempt.id),
+    (error) => safeCode(error) === "FAKE_STRIPE_RETRIEVAL_UNKNOWN",
+  );
+  assert.equal(currentAttempt(run).state, "unknown");
+  assert.equal([...run.repository.intents.values()][0].state, "unknown");
+  await assert.rejects(
+    () =>
+      run.application.restartCheckout({
+        statusCapability: ready.checkout.statusCapability,
+        trustedSessionToken: ready.completed.trustedSessionToken,
+      }),
+    (error) => safeCode(error) === "PAYMENT_NEW_ATTEMPT_PROHIBITED",
+  );
+  assert.equal(run.repository.attempts.size, 1);
+  assert.equal(run.repository.verifiedPayments.size, 0);
+});
+
+await check("authoritative open stays processing and expired becomes canceled", async () => {
+  const run = harness();
+  await checkoutReady(run);
+  const attempt = currentAttempt(run);
+  const pending = await run.application.reconcilePaymentAttempt(attempt.id);
+  assert.equal(pending.disposition, "pending");
+  assert.equal(currentAttempt(run).state, "processing");
+  assert.equal(run.repository.verifiedPayments.size, 0);
+  run.checkoutProvider.setReconciliationState(
+    attempt.providerCheckoutSessionId,
+    { checkoutStatus: "expired", paymentStatus: "unpaid" },
+  );
+  const canceled = await run.application.reconcilePaymentAttempt(attempt.id);
+  assert.equal(canceled.disposition, "canceled");
+  assert.equal(currentAttempt(run).state, "canceled");
+  assert.equal([...run.repository.intents.values()][0].state, "canceled");
 });
 
 for (const [name, overrides, reason] of [
@@ -561,8 +700,10 @@ await check("verified Payment yields one Grant and one logical Assessment", asyn
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
   const completed = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
   );
   assert.equal(completed.status, "completed");
+  assert.match(completed.resultPath, /^\/result\/[A-Za-z0-9_-]{43}$/u);
   assert.equal(run.grantProcessor.grants.size, 1);
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 1);
@@ -575,9 +716,11 @@ await check("browser reload recovers the same Assessment without recharging", as
   await run.application.verifyStripeEvidence(evidence);
   const first = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
   );
   const second = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
   );
   assert.equal(first.status, "completed");
   assert.equal(second.status, "completed");
@@ -605,6 +748,129 @@ await check("result notification retry does not regenerate canonical Assessment"
   assert.equal(run.grantProcessor.generated.size, 1);
 });
 
+await check("browser-absent worker completes the durable job by internal ID", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const job = [...run.repository.jobs.values()][0];
+  const outcome = await run.application.processFulfillmentJobById(job.id);
+  assert.deepEqual(outcome, { status: "completed" });
+  assert.equal(run.grantProcessor.grants.size, 1);
+  assert.equal(run.grantProcessor.generated.size, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+  assert.equal(run.grantProcessor.notificationCalls.length, 1);
+  assert.equal(run.repository.jobs.get(job.id).state, "completed");
+});
+
+await check("concurrent browser and worker still produce one canonical Product", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const job = [...run.repository.jobs.values()][0];
+  await Promise.all([
+    run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+      ready.completed.trustedSessionToken,
+    ),
+    run.application.processFulfillmentJobById(job.id),
+  ]);
+  const completed = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
+  );
+  assert.equal(completed.status, "completed");
+  assert.equal(run.repository.verifiedPayments.size, 1);
+  assert.equal(run.repository.jobs.size, 1);
+  assert.equal(run.grantProcessor.grants.size, 1);
+  assert.equal(run.grantProcessor.generated.size, 1);
+  assert.equal(run.grantProcessor.resultTokens.size, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+});
+
+await check("expired RC-2 fulfillment lease is reclaimable by the worker seam", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const job = [...run.repository.jobs.values()][0];
+  const oldClaim = await run.repository.claimFulfillmentJobById({
+    jobId: job.id,
+    ownerId: "30000000-0000-4000-8000-000000000001",
+    leaseExpiresAt: "2026-08-20T03:01:00.000Z",
+    now: fixedClock,
+  });
+  assert.equal(oldClaim.disposition, "acquired");
+  run.setClock("2026-08-20T03:02:00.000Z");
+  const recovered = await run.application.processFulfillmentJobById(job.id);
+  assert.equal(recovered.status, "completed");
+  assert.equal(run.repository.jobs.get(job.id).attemptCount, 2);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+});
+
+await check("status capability without trusted session never discloses a result token", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const outcome = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+  );
+  assert.deepEqual(outcome, { status: "completed_check_verified_email" });
+  assert.doesNotMatch(JSON.stringify(outcome), /\/result\/|resultToken/iu);
+  assert.equal(run.grantProcessor.generated.size, 1);
+  assert.equal(run.grantProcessor.notificationCalls.length, 1);
+});
+
+await check("matching trusted session may open the same canonical result", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const first = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
+  );
+  const second = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
+  );
+  assert.equal(first.status, "completed");
+  assert.equal(second.status, "completed");
+  assert.equal(first.resultPath, second.resultPath);
+  assert.equal(run.grantProcessor.resultTokens.size, 1);
+});
+
+for (const sessionState of ["wrong", "expired", "revoked"]) {
+  await check(`${sessionState} trusted session cannot disclose the result token`, async () => {
+    const run = harness();
+    const ready = await checkoutReady(run);
+    await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+    let trustedSessionToken = ready.completed.trustedSessionToken;
+    const original = [...run.repository.sessions.values()][0];
+    if (sessionState === "wrong") {
+      trustedSessionToken = Buffer.alloc(32, 252).toString("base64url");
+      run.repository.sessions.set(
+        "40000000-0000-4000-8000-000000000001",
+        {
+          ...structuredClone(original),
+          id: "40000000-0000-4000-8000-000000000001",
+          sessionTokenHash: hashPaymentCapability(
+            trustedSessionToken,
+            "trusted-email-session",
+          ),
+        },
+      );
+    } else if (sessionState === "expired") {
+      original.expiresAt = "2026-08-20T02:59:59.000Z";
+    } else {
+      original.revokedAt = fixedClock;
+    }
+    const outcome = await run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+      trustedSessionToken,
+    );
+    assert.deepEqual(outcome, { status: "completed_check_verified_email" });
+    assert.doesNotMatch(JSON.stringify(outcome), /\/result\/|resultToken/iu);
+  });
+}
+
 await check("Customer mutation routes reject extra client Payment authority flags", () => {
   const checkoutRoute = readText("app/api/payments/checkout/route.ts");
   const environment = readText("lib/payment/production/environment.ts");
@@ -629,6 +895,20 @@ await check("webhook route uses raw body and never calls fulfillment", () => {
   assert.match(route, /request\.arrayBuffer\(\)/u);
   assert.match(route, /stripe-signature/u);
   assert.doesNotMatch(route, /fulfillProduction|issueProductionAssessmentGrant/u);
+});
+
+await check("reconciliation and job-ID fulfillment are server-only seams", () => {
+  const stripe = readText("lib/payment/production/stripe.ts");
+  const service = readText("lib/payment/production/service.ts");
+  const statusRoute = readText("app/api/payments/status/route.ts");
+  assert.match(stripe, /checkout\.sessions\.retrieve/u);
+  assert.match(stripe, /buildStripeReconciliationEvidenceV1/u);
+  assert.match(service, /^import "server-only";/u);
+  assert.match(service, /reconcileProductionStripePaymentAttempt/u);
+  assert.match(service, /processProductionFulfillmentJobById/u);
+  assert.match(service, /processFulfillmentJobById/u);
+  assert.doesNotMatch(statusRoute, /processProductionFulfillmentJobById/u);
+  assert.match(statusRoute, /readTrustedEmailCookie/u);
 });
 
 await check("RequestForm connects production prepare, one clarification, verification, and Checkout", () => {
@@ -665,6 +945,8 @@ await check("0011 migration encodes Payment Integrity, RLS, and server-only auth
     "production_payment_attempts",
     "production_verified_payments",
     "production_stripe_event_ledger",
+    "evidence_source",
+    "reconciliation",
     "production_fulfillment_jobs",
     "production_payment_adjustment_ledger",
     "production_payment_attempt_one_success_idx",

@@ -5,6 +5,7 @@ import {
   enforceSameOrigin,
   readStrictJsonRequest,
 } from "@/lib/http/strict-json-request";
+import { readTrustedEmailCookie } from "@/lib/payment/production/cookie";
 import { processProductionPurchaseStatus } from "@/lib/payment/production/service";
 
 export const runtime = "nodejs";
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
     );
     const outcome = await processProductionPurchaseStatus(
       body.statusCapability,
+      readTrustedEmailCookie(request.headers.get("cookie")),
     );
     return json({ data: outcome }, 200);
   } catch (error) {

@@ -1,5 +1,22 @@
 # CURRENT_FOCUS.md
 
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
+## Current implementation overlay — RC-2 R1 Payment Recovery / Fulfillment / Result Privacy
+
+- Status: `RC-2 R1 implemented_pending_human_chatgpt_review` on `task/rc2-production-payment-delivery`, correcting exact starting SHA `dd6a813cd8c6cb27e72687ffdafea111585de31b` without accepting or activating RC-2.
+- Payment recovery: a server-only Stripe Checkout Session retrieval seam normalizes deterministic reconciliation evidence into the same Application verifier and DB evidence RPC used by signed webhooks. Paid evidence converges on one verified Payment/job; open/unpaid remains processing; authoritative expiry cancels; Provider/network uncertainty remains unknown.
+- Unknown Checkout creation: retry reuses the persisted Payment Attempt and derives the same Stripe idempotency key. No unresolved Attempt creates a second economic Attempt or idempotency identity.
+- Fulfillment: the existing service-role `claim_rc2_fulfillment_job_by_id_v1` is wired through repository/Application/service. A server worker can process a durable job without a browser, status capability, trusted cookie, or success page. Browser recovery and worker execution share one Grant/fulfillment/canonical-delivery/notification processor and retain current RC-2 stale-lease reclaim behavior; RC-1 stale-owner policy remains unresolved and untouched.
+- Result privacy: the status capability remains Purchase/status/recovery identity only. Fulfillment may continue, but `/result/<raw token>` is returned only when the request also presents the currently valid trusted email session recorded on that Purchase. Missing, wrong, expired, or revoked sessions receive `completed_check_verified_email`; the independent result-email recovery path remains intact.
+- Persistence: unapplied/unaccepted `0011` minimally adds webhook/reconciliation evidence-source identity and same-Attempt unknown recovery. Accepted `0010` and Q0/V17 runtime assets remain outside the R1 mutation scope.
+- Validation: RC-2 R1 deterministic verifier `PASS 48/48`; RC-1 regression `PASS 14/14`; typecheck, zero-warning lint, production build, and `git diff --check` pass. `next-env.d.ts` and accepted `0010` retain their pre-build Git blob hashes.
+- Dependency audit: `npm audit --omit=dev --json` remains red with exactly `5 high`: `fast-uri@3.1.4` via `ajv`; `nanoid@3.3.15` and `postcss@8.4.31` via `next@16.2.12`; `sharp@0.34.5` via `next`; and direct `next` impact through postcss/sharp. No blind Next change, force fix, or unproven transitive override was applied. This remains a PRIVATE RELEASE blocker.
+- Acceptance ceiling: Human/ChatGPT review remains pending. Production Payment active, Stripe approval, migration apply, live email, deployment, PRIVATE RELEASE READY, and Public Launch are not established.
+- Operations remain zero: actual Stripe call, charge, Payment, email, Supabase remote write, migration apply, deploy, DNS, Public Launch, PR, release merge, and main merge.
+
+The prior RC-2 overlay below is preserved as the R0 implementation snapshot and is superseded only where this R1 overlay explicitly corrects it.
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:END -->
+
 <!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:BEGIN -->
 ## Current implementation overlay — RC-2 Production Payment + Customer Delivery
 

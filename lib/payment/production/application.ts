@@ -32,14 +32,24 @@ import type {
   EmailVerificationCompleteOutcome,
   EmailVerificationPolicyV1,
   EmailVerificationStartOutcome,
+  FulfillmentJobClaim,
   PaymentDeliveryRepository,
   PaymentEnvironment,
   PaymentEvidenceVerification,
   ProductionGrantProcessorV1,
   PurchaseIntentRecord,
   RecordedPaymentEvidence,
+  ServerFulfillmentOutcome,
   StripePaymentEvidenceV1,
 } from "./types.ts";
+
+type FulfillmentClaimOutcome =
+  | Readonly<{ status: "completed"; resultToken: string }>
+  | Readonly<{ status: "in_progress" }>
+  | Readonly<{ status: "temporary_problem"; retryable: true }>;
+
+const internalUuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 
 type PaymentDeliveryApplicationOptions = {
   repository: PaymentDeliveryRepository;
@@ -289,7 +299,7 @@ export class ProductionPaymentDeliveryApplication {
         duplicate: true,
       };
     }
-    if (attempt.state !== "reserved") {
+    if (!["reserved", "unknown"].includes(attempt.state)) {
       throw new M2RuntimeError("PAYMENT_ATTEMPT_RECOVERY_REQUIRED", 409);
     }
     const providerIdempotencyKey = deriveProviderIdempotencyKey({
@@ -505,6 +515,21 @@ export class ProductionPaymentDeliveryApplication {
   private async evaluateStripeEvidence(
     evidence: StripePaymentEvidenceV1,
   ): Promise<PaymentEvidenceVerification> {
+    const evidenceIdentityValid =
+      (evidence.evidenceSource === "webhook" &&
+        /^evt_[A-Za-z0-9_]+$/u.test(evidence.providerEventId)) ||
+      (evidence.evidenceSource === "reconciliation" &&
+        /^reconcile_[0-9a-f]{64}$/u.test(evidence.providerEventId));
+    if (
+      !evidenceIdentityValid ||
+      !/^[0-9a-f]{64}$/u.test(evidence.payloadSha256) ||
+      !Number.isFinite(Date.parse(evidence.providerCreatedAt))
+    ) {
+      return {
+        disposition: "rejected",
+        reasonCode: "PAYMENT_EVIDENCE_IDENTITY_INVALID",
+      };
+    }
     const intent =
       await this.options.repository.findPurchaseIntentByReference(
         evidence.purchaseReference,
@@ -567,46 +592,63 @@ export class ProductionPaymentDeliveryApplication {
     });
   }
 
-  async processPurchaseStatus(
-    statusCapability: unknown,
-  ): Promise<CustomerPurchaseStatus> {
-    const statusCapabilityHash = hashPaymentCapability(
-      statusCapability,
-      "purchase-status",
-    );
-    const status =
-      await this.options.repository.findPurchaseStatus(statusCapabilityHash);
-    if (!status) {
-      throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
+  async reconcilePaymentAttempt(
+    paymentAttemptId: unknown,
+  ): Promise<RecordedPaymentEvidence> {
+    if (
+      typeof paymentAttemptId !== "string" ||
+      !internalUuidPattern.test(paymentAttemptId)
+    ) {
+      throw new M2RuntimeError("PAYMENT_RECONCILIATION_REQUEST_INVALID", 400);
     }
-    if (status.purchaseIntent.state === "manual_review") {
-      return { status: "temporary_problem", retryable: true };
+    const attempt =
+      await this.options.repository.findPaymentAttemptById(paymentAttemptId);
+    if (!attempt) {
+      throw new M2RuntimeError("PAYMENT_ATTEMPT_NOT_FOUND", 404);
     }
-    if (status.purchaseIntent.state !== "verified") {
+    if (!attempt.providerCheckoutSessionId) {
+      throw new M2RuntimeError(
+        "PAYMENT_RECONCILIATION_SESSION_REQUIRED",
+        409,
+      );
+    }
+    let evidence: StripePaymentEvidenceV1;
+    try {
+      evidence = await this.options.checkoutProvider.retrieveCheckoutSession({
+        providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+        observedAt: this.now(),
+      });
       if (
-        status.purchaseIntent.state === "payment_failed" ||
-        status.purchaseIntent.state === "canceled"
+        evidence.evidenceSource !== "reconciliation" ||
+        evidence.providerCheckoutSessionId !==
+          attempt.providerCheckoutSessionId ||
+        evidence.purchaseReference !== attempt.purchaseIntentId
       ) {
-        return { status: "payment_not_completed" };
+        throw new M2RuntimeError("PAYMENT_RECONCILIATION_EVIDENCE_INVALID", 503);
       }
-      return { status: "confirming_payment" };
+    } catch (error) {
+      if (
+        ["reserved", "pending", "processing", "unknown"].includes(
+          attempt.state,
+        )
+      ) {
+        await this.options.repository.markPaymentAttemptUnknown({
+          attemptId: attempt.id,
+          now: this.now(),
+          errorCode: "PAYMENT_RECONCILIATION_UNKNOWN",
+        });
+      }
+      throw asM2RuntimeError(error, "PAYMENT_RECONCILIATION_UNKNOWN");
     }
-    const now = this.now();
-    const ownerId = this.uuid();
-    const claim = await this.options.repository.claimFulfillmentJob({
-      statusCapabilityHash,
-      ownerId,
-      leaseExpiresAt: addSeconds(
-        now,
-        this.options.fulfillmentLeaseSeconds,
-      ),
-      now,
-    });
-    if (!claim) {
-      return { status: "temporary_problem", retryable: true };
-    }
+    return this.verifyStripeEvidence(evidence);
+  }
+
+  private async processClaimedFulfillmentJob(
+    claim: FulfillmentJobClaim,
+    ownerId: string,
+  ): Promise<FulfillmentClaimOutcome> {
     if (claim.disposition === "in_progress") {
-      return { status: "preparing_assessment" };
+      return { status: "in_progress" };
     }
     const job = claim.job;
     let grant: AssessmentGrantHandleV1;
@@ -649,21 +691,144 @@ export class ProductionPaymentDeliveryApplication {
       } catch {
         // Notification remains independently retryable in the RC-1 outbox.
       }
-      return {
-        status: "completed",
-        resultPath: `/result/${fulfilled.resultToken}`,
-      };
+      return { status: "completed", resultToken: fulfilled.resultToken };
     } catch (error) {
       const safe = asM2RuntimeError(error, "PAYMENT_FULFILLMENT_FAILED");
       if (claim.disposition === "acquired") {
-        await this.options.repository.failFulfillmentJob({
-          jobId: job.id,
-          ownerId,
-          errorCode: safe.safeCode,
-          now: this.now(),
-        });
+        try {
+          await this.options.repository.failFulfillmentJob({
+            jobId: job.id,
+            ownerId,
+            errorCode: safe.safeCode,
+            now: this.now(),
+          });
+        } catch {
+          // A lost or reclaimed lease must not overwrite the current owner.
+        }
       }
       return { status: "temporary_problem", retryable: true };
     }
+  }
+
+  private async discloseCompletedResult(
+    purchaseIntent: PurchaseIntentRecord,
+    resultToken: string,
+    trustedSessionToken: unknown,
+  ): Promise<CustomerPurchaseStatus> {
+    if (trustedSessionToken === undefined || trustedSessionToken === null) {
+      return { status: "completed_check_verified_email" };
+    }
+    let sessionTokenHash: string;
+    try {
+      sessionTokenHash = hashPaymentCapability(
+        trustedSessionToken,
+        "trusted-email-session",
+      );
+    } catch (error) {
+      if (
+        error instanceof M2RuntimeError &&
+        error.safeCode === "PAYMENT_CAPABILITY_INVALID"
+      ) {
+        return { status: "completed_check_verified_email" };
+      }
+      throw error;
+    }
+    const trusted = await this.options.repository.findTrustedEmailSession({
+      sessionTokenHash,
+      now: this.now(),
+    });
+    if (
+      !trusted ||
+      trusted.authority.id !== purchaseIntent.verifiedEmailAuthorityId ||
+      trusted.session.id !== purchaseIntent.trustedEmailSessionId
+    ) {
+      return { status: "completed_check_verified_email" };
+    }
+    return {
+      status: "completed",
+      resultPath: `/result/${resultToken}`,
+    };
+  }
+
+  async processPurchaseStatus(
+    statusCapability: unknown,
+    trustedSessionToken?: unknown,
+  ): Promise<CustomerPurchaseStatus> {
+    const statusCapabilityHash = hashPaymentCapability(
+      statusCapability,
+      "purchase-status",
+    );
+    const status =
+      await this.options.repository.findPurchaseStatus(statusCapabilityHash);
+    if (!status) {
+      throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
+    }
+    if (status.purchaseIntent.state === "manual_review") {
+      return { status: "temporary_problem", retryable: true };
+    }
+    if (status.purchaseIntent.state !== "verified") {
+      if (
+        status.purchaseIntent.state === "payment_failed" ||
+        status.purchaseIntent.state === "canceled"
+      ) {
+        return { status: "payment_not_completed" };
+      }
+      return { status: "confirming_payment" };
+    }
+    const now = this.now();
+    const ownerId = this.uuid();
+    const claim = await this.options.repository.claimFulfillmentJob({
+      statusCapabilityHash,
+      ownerId,
+      leaseExpiresAt: addSeconds(
+        now,
+        this.options.fulfillmentLeaseSeconds,
+      ),
+      now,
+    });
+    if (!claim) {
+      return { status: "temporary_problem", retryable: true };
+    }
+    const fulfillment = await this.processClaimedFulfillmentJob(claim, ownerId);
+    if (fulfillment.status === "in_progress") {
+      return { status: "preparing_assessment" };
+    }
+    if (fulfillment.status === "temporary_problem") {
+      return { status: "temporary_problem", retryable: true };
+    }
+    try {
+      return await this.discloseCompletedResult(
+        status.purchaseIntent,
+        fulfillment.resultToken,
+        trustedSessionToken,
+      );
+    } catch {
+      return { status: "temporary_problem", retryable: true };
+    }
+  }
+
+  async processFulfillmentJobById(
+    jobId: unknown,
+  ): Promise<ServerFulfillmentOutcome> {
+    if (typeof jobId !== "string" || !internalUuidPattern.test(jobId)) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_ID_INVALID", 400);
+    }
+    const now = this.now();
+    const ownerId = this.uuid();
+    const claim = await this.options.repository.claimFulfillmentJobById({
+      jobId,
+      ownerId,
+      leaseExpiresAt: addSeconds(
+        now,
+        this.options.fulfillmentLeaseSeconds,
+      ),
+      now,
+    });
+    if (!claim) {
+      return { status: "temporary_problem", retryable: true };
+    }
+    const outcome = await this.processClaimedFulfillmentJob(claim, ownerId);
+    if (outcome.status === "completed") return { status: "completed" };
+    return outcome;
   }
 }

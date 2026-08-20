@@ -8,6 +8,7 @@ type SafeStatus =
   | { status: "preparing_assessment" }
   | { status: "temporary_problem"; retryable: true }
   | { status: "payment_not_completed" }
+  | { status: "completed_check_verified_email" }
   | { status: "completed"; resultPath: string };
 
 function decode(value: unknown): SafeStatus | null {
@@ -20,7 +21,8 @@ function decode(value: unknown): SafeStatus | null {
   if (
     data.status === "confirming_payment" ||
     data.status === "preparing_assessment" ||
-    data.status === "payment_not_completed"
+    data.status === "payment_not_completed" ||
+    data.status === "completed_check_verified_email"
   ) {
     return { status: data.status };
   }
@@ -56,6 +58,10 @@ const copy: Record<Exclude<SafeStatus["status"], "completed">, {
   payment_not_completed: {
     heading: "決済は完了していません",
     body: "料金は確定していません。再開する場合も、同じ相談内容から安全にお手続きください。",
+  },
+  completed_check_verified_email: {
+    heading: "鑑定が完成しました",
+    body: "確認済みのメールアドレスへ結果をご案内しています。このブラウザで開けない場合は、メールをご確認ください。",
   },
 };
 
@@ -133,7 +139,10 @@ export function PurchaseReturnStatus({
           window.location.replace(next.resultPath);
           return;
         }
-        if (next.status !== "payment_not_completed") {
+        if (
+          next.status !== "payment_not_completed" &&
+          next.status !== "completed_check_verified_email"
+        ) {
           timeout = setTimeout(refresh, 2_500);
         }
       } catch {

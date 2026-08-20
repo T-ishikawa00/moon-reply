@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
+## RC-2 R1 Payment Recovery / Fulfillment / Result Privacy — Implemented, Review Pending
+
+Status: `RC-2 R1 implemented_pending_human_chatgpt_review` from exact starting SHA `dd6a813cd8c6cb27e72687ffdafea111585de31b`.
+
+- [x] Add server-only authoritative Stripe Checkout Session reconciliation; normalize into the same webhook verification invariants and central DB evidence authority.
+- [x] Preserve unknown-not-failed; keep open/unpaid processing, accept authoritative expiry only, and retain unknown on Provider/network failure.
+- [x] Recover unknown Checkout creation with the same persisted Attempt and same derived Stripe idempotency identity; prohibit a second unresolved economic Attempt.
+- [x] Converge webhook-first and reconciliation-first success on one verified Payment and one fulfillment job.
+- [x] Wire `claim_rc2_fulfillment_job_by_id_v1` through repository/Application/service with no public worker route; share browser/worker Product processing.
+- [x] Preserve one Grant, one logical Assessment, one canonical Report, and the notification path under browser absence, browser/worker concurrency, replay, and stale RC-2 lease reclaim.
+- [x] Require the currently valid Purchase-bound trusted email session before returning a raw result-token path; return `completed_check_verified_email` otherwise.
+- [x] Minimally correct unapplied `0011`; keep accepted `0010`, Q0/V17 semantics, JPY 980 one-time economics, one-total clarification, `generation_started`, source separation, canonical delivery, and refund boundaries unchanged.
+- [x] Triage `npm audit --omit=dev --json`: exactly `5 high` remain in the existing Next/toolchain graph; no force fix or unproven dependency override.
+- [x] Pass RC-2 R1 `48/48`, RC-1 `14/14`, typecheck, zero-warning lint, production build, `git diff --check`, and pre/post-build `next-env.d.ts` / accepted `0010` blob checks.
+- [ ] Human/ChatGPT R1 review and acceptance.
+- [ ] Resolve dependency advisories and all existing RC-2 activation/provider/email/migration/operations blockers before any PRIVATE RELEASE claim.
+
+No actual Stripe call, charge, Payment, email, Supabase remote write, migration apply, deploy, DNS, Public Launch, PR, release merge, or main merge is authorized or performed by R1.
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:END -->
+
 <!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:BEGIN -->
 ## RC-2 Production Payment + Customer Delivery — Implemented, Review Pending
 

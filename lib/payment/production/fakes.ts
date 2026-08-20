@@ -5,6 +5,10 @@ import type {
   VerifiedPurchaseAuthorityV1,
 } from "../../assessment/production/types.ts";
 import { equalSha256 } from "./crypto.ts";
+import {
+  buildStripeReconciliationEvidenceV1,
+  type StripeCheckoutSessionSnapshotV1,
+} from "./stripe.ts";
 import type {
   CheckoutProviderV1,
   CheckoutSessionRequestV1,
@@ -349,7 +353,14 @@ export class FakePaymentDeliveryRepository
     ) {
       return clone(attempt);
     }
-    if (!attempt || attempt.state !== "reserved") {
+    if (
+      !attempt ||
+      !["reserved", "unknown"].includes(attempt.state) ||
+      (attempt.providerCheckoutSessionId !== null &&
+        attempt.providerCheckoutSessionId !== input.providerCheckoutSessionId) ||
+      (attempt.providerCheckoutUrl !== null &&
+        attempt.providerCheckoutUrl !== input.providerCheckoutUrl)
+    ) {
       throw new M2RuntimeError("PAYMENT_ATTEMPT_STATE_CONFLICT", 409);
     }
     if (
@@ -379,7 +390,12 @@ export class FakePaymentDeliveryRepository
   }) {
     void input.errorCode;
     const attempt = this.attempts.get(input.attemptId);
-    if (!attempt || !["reserved", "pending", "processing"].includes(attempt.state)) {
+    if (
+      !attempt ||
+      !["reserved", "pending", "processing", "unknown"].includes(
+        attempt.state,
+      )
+    ) {
       throw new M2RuntimeError("PAYMENT_ATTEMPT_STATE_CONFLICT", 409);
     }
     attempt.state = "unknown";
@@ -392,6 +408,11 @@ export class FakePaymentDeliveryRepository
   async findPurchaseIntentByReference(purchaseReference: string) {
     const intent = this.intents.get(purchaseReference);
     return intent ? clone(intent) : null;
+  }
+
+  async findPaymentAttemptById(paymentAttemptId: string) {
+    const attempt = this.attempts.get(paymentAttemptId);
+    return attempt ? clone(attempt) : null;
   }
 
   async findPaymentAttemptByCheckoutSession(
@@ -602,7 +623,35 @@ export class FakePaymentDeliveryRepository
   }): Promise<FulfillmentJobClaim | null> {
     const status = await this.findPurchaseStatus(input.statusCapabilityHash);
     if (!status?.fulfillmentJob) return null;
-    const job = this.jobs.get(status.fulfillmentJob.id)!;
+    return this.claimJob({
+      jobId: status.fulfillmentJob.id,
+      ownerId: input.ownerId,
+      leaseExpiresAt: input.leaseExpiresAt,
+      now: input.now,
+    });
+  }
+
+  async claimFulfillmentJobById(input: {
+    jobId: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentJobClaim | null> {
+    const job = this.jobs.get(input.jobId);
+    if (!job) return null;
+    const intent = this.intents.get(job.purchaseIntentId);
+    if (intent?.state !== "verified") return null;
+    return this.claimJob(input);
+  }
+
+  private claimJob(input: {
+    jobId: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): FulfillmentJobClaim | null {
+    const job = this.jobs.get(input.jobId);
+    if (!job) return null;
     if (job.state === "completed") {
       return { disposition: "completed", job: clone(job) };
     }
@@ -692,18 +741,86 @@ export class FakePaymentDeliveryRepository
 export class FakeCheckoutProviderV1 implements CheckoutProviderV1 {
   readonly requests: CheckoutSessionRequestV1[] = [];
   failuresRemaining = 0;
+  unknownAfterCreateFailuresRemaining = 0;
+  retrievalFailuresRemaining = 0;
+  private readonly sessionsByIdempotencyKey = new Map<
+    string,
+    {
+      result: { providerCheckoutSessionId: string; checkoutUrl: string };
+      snapshot: StripeCheckoutSessionSnapshotV1;
+    }
+  >();
 
   async createCheckoutSession(request: CheckoutSessionRequestV1) {
     this.requests.push(clone(request));
+    const existing = this.sessionsByIdempotencyKey.get(request.idempotencyKey);
+    if (existing) return clone(existing.result);
     if (this.failuresRemaining > 0) {
       this.failuresRemaining -= 1;
       throw new M2RuntimeError("FAKE_STRIPE_UNKNOWN", 503);
     }
-    const sequence = this.requests.length;
-    return {
+    const sequence = this.sessionsByIdempotencyKey.size + 1;
+    const result = {
       providerCheckoutSessionId: `cs_test_rc2_${sequence}`,
       checkoutUrl: `https://checkout.stripe.com/c/pay/cs_test_rc2_${sequence}`,
     };
+    this.sessionsByIdempotencyKey.set(request.idempotencyKey, {
+      result,
+      snapshot: {
+        providerCheckoutSessionId: result.providerCheckoutSessionId,
+        environment: "test",
+        purchaseReference: request.purchaseReference,
+        clientReferenceId: request.purchaseReference,
+        providerPaymentId: null,
+        paymentIntentPurchaseReference: null,
+        mode: request.mode,
+        paymentStatus: "unpaid",
+        amountTotal: request.amount,
+        currency: request.currency,
+        checkoutStatus: "open",
+      },
+    });
+    if (this.unknownAfterCreateFailuresRemaining > 0) {
+      this.unknownAfterCreateFailuresRemaining -= 1;
+      throw new M2RuntimeError("FAKE_STRIPE_UNKNOWN_AFTER_CREATE", 503);
+    }
+    return clone(result);
+  }
+
+  setReconciliationState(
+    providerCheckoutSessionId: string,
+    overrides: Partial<StripeCheckoutSessionSnapshotV1>,
+  ) {
+    const stored = [...this.sessionsByIdempotencyKey.values()].find(
+      (candidate) =>
+        candidate.result.providerCheckoutSessionId === providerCheckoutSessionId,
+    );
+    if (!stored) {
+      throw new M2RuntimeError("FAKE_STRIPE_SESSION_NOT_FOUND", 404);
+    }
+    stored.snapshot = { ...stored.snapshot, ...clone(overrides) };
+  }
+
+  async retrieveCheckoutSession(input: {
+    providerCheckoutSessionId: string;
+    observedAt: string;
+  }) {
+    if (this.retrievalFailuresRemaining > 0) {
+      this.retrievalFailuresRemaining -= 1;
+      throw new M2RuntimeError("FAKE_STRIPE_RETRIEVAL_UNKNOWN", 503);
+    }
+    const stored = [...this.sessionsByIdempotencyKey.values()].find(
+      (candidate) =>
+        candidate.result.providerCheckoutSessionId ===
+        input.providerCheckoutSessionId,
+    );
+    if (!stored) {
+      throw new M2RuntimeError("FAKE_STRIPE_SESSION_NOT_FOUND", 404);
+    }
+    return buildStripeReconciliationEvidenceV1(
+      clone(stored.snapshot),
+      input.observedAt,
+    );
   }
 }
 
@@ -715,6 +832,7 @@ export class FakeProductionGrantProcessorV1
   readonly notificationCalls: string[] = [];
   readonly grants = new Map<string, AssessmentGrantHandleV1>();
   readonly generated = new Set<string>();
+  readonly resultTokens = new Map<string, string>();
   providerInvocationCalls = 0;
   notificationFailuresRemaining = 0;
   private tokenSequence = 0;
@@ -757,10 +875,15 @@ export class FakeProductionGrantProcessorV1
       this.generated.add(grant.logicalAssessmentId);
       this.providerInvocationCalls += 1;
     }
-    this.tokenSequence += 1;
+    let resultToken = this.resultTokens.get(grant.logicalAssessmentId);
+    if (!resultToken) {
+      this.tokenSequence += 1;
+      resultToken = Buffer.alloc(32, this.tokenSequence).toString("base64url");
+      this.resultTokens.set(grant.logicalAssessmentId, resultToken);
+    }
     return {
       status: "completed",
-      resultToken: Buffer.alloc(32, this.tokenSequence).toString("base64url"),
+      resultToken,
       projection: {} as ProductionFulfillmentResultV1["projection"],
       duplicate,
     };

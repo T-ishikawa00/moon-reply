@@ -131,6 +131,7 @@ type PaymentDatabase = {
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
       record_rc2_stripe_evidence_v1: RuntimeFunction;
       claim_rc2_fulfillment_job_v1: RuntimeFunction;
+      claim_rc2_fulfillment_job_by_id_v1: RuntimeFunction;
       complete_rc2_fulfillment_job_v1: RuntimeFunction;
       fail_rc2_fulfillment_job_v1: RuntimeFunction;
     };
@@ -516,6 +517,16 @@ export class SupabasePaymentDeliveryRepository
     return data ? this.mapIntent(data) : null;
   }
 
+  async findPaymentAttemptById(paymentAttemptId: string) {
+    const { data, error } = await this.client
+      .from("production_payment_attempts")
+      .select("*")
+      .eq("id", paymentAttemptId)
+      .maybeSingle();
+    if (error) databaseFailure(error);
+    return data ? mapAttempt(data) : null;
+  }
+
   async findPaymentAttemptByCheckoutSession(
     providerCheckoutSessionId: string,
   ) {
@@ -539,6 +550,7 @@ export class SupabasePaymentDeliveryRepository
       "record_rc2_stripe_evidence_v1",
       {
         p_provider_event_id: input.evidence.providerEventId,
+        p_evidence_source: input.evidence.evidenceSource,
         p_event_type: input.evidence.eventType,
         p_provider_created_at: input.evidence.providerCreatedAt,
         p_payload_sha256: input.evidence.payloadSha256,
@@ -603,6 +615,39 @@ export class SupabasePaymentDeliveryRepository
       "claim_rc2_fulfillment_job_v1",
       {
         p_status_capability_hash: input.statusCapabilityHash,
+        p_owner_id: input.ownerId,
+        p_lease_expires_at: input.leaseExpiresAt,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    if (data === null) return null;
+    const result = recordValue(data);
+    const jobId = stringValue(result.fulfillment_job_id);
+    const { data: row, error: readError } = await this.client
+      .from("production_fulfillment_jobs")
+      .select("*")
+      .eq("id", jobId)
+      .maybeSingle();
+    if (readError || !row) databaseFailure(readError);
+    return {
+      disposition: stringValue(
+        result.disposition,
+      ) as FulfillmentJobClaim["disposition"],
+      job: mapJob(row),
+    };
+  }
+
+  async claimFulfillmentJobById(input: {
+    jobId: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentJobClaim | null> {
+    const { data, error } = await this.client.rpc(
+      "claim_rc2_fulfillment_job_by_id_v1",
+      {
+        p_fulfillment_job_id: input.jobId,
         p_owner_id: input.ownerId,
         p_lease_expires_at: input.leaseExpiresAt,
         p_now: input.now,

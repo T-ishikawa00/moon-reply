@@ -147,10 +147,18 @@ export type CheckoutSessionResultV1 = Readonly<{
   checkoutUrl: string;
 }>;
 
+export type CheckoutSessionReconciliationRequestV1 = Readonly<{
+  providerCheckoutSessionId: string;
+  observedAt: string;
+}>;
+
 export type CheckoutProviderV1 = {
   createCheckoutSession(
     request: CheckoutSessionRequestV1,
   ): Promise<CheckoutSessionResultV1>;
+  retrieveCheckoutSession(
+    request: CheckoutSessionReconciliationRequestV1,
+  ): Promise<StripePaymentEvidenceV1>;
 };
 
 export type CheckoutStartOutcome = Readonly<{
@@ -166,7 +174,10 @@ export type StripeEvidenceEventType =
   | "checkout.session.async_payment_failed"
   | "checkout.session.expired";
 
+export type StripeEvidenceSource = "webhook" | "reconciliation";
+
 export type StripePaymentEvidenceV1 = Readonly<{
+  evidenceSource: StripeEvidenceSource;
   providerEventId: string;
   eventType: StripeEvidenceEventType;
   providerCreatedAt: string;
@@ -239,7 +250,13 @@ export type CustomerPurchaseStatus =
   | Readonly<{ status: "preparing_assessment" }>
   | Readonly<{ status: "temporary_problem"; retryable: true }>
   | Readonly<{ status: "payment_not_completed" }>
+  | Readonly<{ status: "completed_check_verified_email" }>
   | Readonly<{ status: "completed"; resultPath: string }>;
+
+export type ServerFulfillmentOutcome =
+  | Readonly<{ status: "completed" }>
+  | Readonly<{ status: "in_progress" }>
+  | Readonly<{ status: "temporary_problem"; retryable: true }>;
 
 export type PaymentDeliveryRepository = {
   findPurchaseReadyPreparation(
@@ -295,6 +312,9 @@ export type PaymentDeliveryRepository = {
   findPurchaseIntentByReference(
     purchaseReference: string,
   ): Promise<PurchaseIntentRecord | null>;
+  findPaymentAttemptById(
+    paymentAttemptId: string,
+  ): Promise<PaymentAttemptRecord | null>;
   findPaymentAttemptByCheckoutSession(
     providerCheckoutSessionId: string,
   ): Promise<PaymentAttemptRecord | null>;
@@ -310,6 +330,12 @@ export type PaymentDeliveryRepository = {
   ): Promise<PurchaseStatusRecord | null>;
   claimFulfillmentJob(input: {
     statusCapabilityHash: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentJobClaim | null>;
+  claimFulfillmentJobById(input: {
+    jobId: string;
     ownerId: string;
     leaseExpiresAt: string;
     now: string;

@@ -1,5 +1,24 @@
 # CODEX_HANDOFF.md
 
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:BEGIN -->
+## Active handoff — RC-2 R1 Payment Recovery / Fulfillment / Result Privacy
+
+- Status / branch / starting SHA: `RC-2 R1 implemented_pending_human_chatgpt_review` / `task/rc2-production-payment-delivery` / `dd6a813cd8c6cb27e72687ffdafea111585de31b`.
+- Reconciliation entrypoint: server-only `reconcileProductionStripePaymentAttempt(paymentAttemptId)` retrieves the known Checkout Session with Stripe credentials, requires Purchase/client-reference/Payment-Intent metadata binding, creates deterministic minimized reconciliation evidence, and calls the same `verifyStripeEvidence`/`record_rc2_stripe_evidence_v1` path as webhooks.
+- Unknown recovery: `reserved` or `unknown` attempts retry Checkout creation with the same Attempt-derived Stripe idempotency key. Network ambiguity never becomes failed and cannot mint a second Attempt while unresolved.
+- Convergence: deterministic reconciliation evidence has a source-bound `reconcile_<sha256>` identity. Webhook/reconciliation order does not change the single verified Payment, fulfillment job, Grant, or logical Assessment authority.
+- Worker entrypoint: server-only `processProductionFulfillmentJobById(jobId)` claims the durable job via the existing service-role by-ID RPC. It requires no browser/status capability/cookie and exposes no unauthenticated route. Browser status and worker use the same fulfillment processor and RC-1 notification outbox boundary.
+- Privacy: `processProductionPurchaseStatus` may recover fulfillment with the status capability, but result-path disclosure additionally validates the exact Purchase-bound trusted session and authority at the current time. Missing/wrong/expired/revoked state returns `completed_check_verified_email`; result email stays independent.
+- Migration boundary: only unapplied/unaccepted `0011` is minimally corrected. Accepted `0010` and Q0/V17 runtime/Product semantics are immutable in this task. Do not invent the unresolved RC-1 logical-assessment stale-owner policy.
+- Validation: RC-2 R1 `PASS 48/48`; RC-1 `PASS 14/14`; typecheck, zero-warning lint, production build, and diff check pass. Accepted `0010` and `next-env.d.ts` are byte-identical before/after build.
+- Dependency blocker: audit is exactly `5 high` — `fast-uri@3.1.4` via `ajv@8.20.0`; `nanoid@3.3.15` / `postcss@8.4.31` / `sharp@0.34.5` via `next@16.2.12`; `next` is directly reported through postcss/sharp. No compatibility-guessing fix was made.
+- Authority ceiling: this is implementation evidence pending Human/ChatGPT review, not RC-2 acceptance, Production Payment activation, Stripe approval, PRIVATE RELEASE READY, or Public Launch.
+- Operations: actual Stripe calls/charges/Payments, email, Supabase remote writes, migration apply, deploy, DNS, Public Launch, PR, release merge, and main merge remain `0`.
+- Next action: review this R1 correction only. Do not apply migration, configure live Provider/email, deploy, or merge release/main from this handoff.
+
+The R0 RC-2 handoff below remains historical implementation context and does not override this correction overlay.
+<!-- RC-2-R1-PAYMENT-RECOVERY-FULFILLMENT-PRIVACY:END -->
+
 <!-- RC-2-PRODUCTION-PAYMENT-CUSTOMER-DELIVERY:BEGIN -->
 ## Active handoff — RC-2 Production Payment + Customer Delivery
 

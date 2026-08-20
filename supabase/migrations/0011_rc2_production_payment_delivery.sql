@@ -235,7 +235,8 @@ create table public.production_verified_payments (
   constraint production_verified_payment_provider_ids check (
     provider_checkout_session_id ~ '^cs_(test|live)_[A-Za-z0-9_]+$'
     and provider_payment_id ~ '^pi_[A-Za-z0-9_]+$'
-    and provider_event_id ~ '^evt_[A-Za-z0-9_]+$'
+    and provider_event_id ~
+      '^(evt_[A-Za-z0-9_]+|reconcile_[0-9a-f]{64})$'
   )
 );
 
@@ -247,6 +248,7 @@ alter table public.production_purchase_intents
 
 create table public.production_stripe_event_ledger (
   provider_event_id text primary key,
+  evidence_source text not null,
   event_type text not null,
   provider_created_at timestamptz not null,
   payload_sha256 text not null,
@@ -268,7 +270,14 @@ create table public.production_stripe_event_ledger (
   constraint production_stripe_event_payload_hash
     check (payload_sha256 ~ '^[0-9a-f]{64}$'),
   constraint production_stripe_event_provider_id
-    check (provider_event_id ~ '^evt_[A-Za-z0-9_]+$'),
+    check (provider_event_id ~
+      '^(evt_[A-Za-z0-9_]+|reconcile_[0-9a-f]{64})$'),
+  constraint production_stripe_event_source check (
+    (evidence_source = 'webhook'
+      and provider_event_id ~ '^evt_[A-Za-z0-9_]+$')
+    or (evidence_source = 'reconciliation'
+      and provider_event_id ~ '^reconcile_[0-9a-f]{64}$')
+  ),
   constraint production_stripe_event_environment
     check (environment in ('test', 'live')),
   constraint production_stripe_event_disposition check (disposition in (
@@ -754,8 +763,13 @@ begin
   update public.production_payment_attempts set
     state = 'pending',
     provider_checkout_session_id = p_provider_checkout_session_id,
-    provider_checkout_url = p_provider_checkout_url, updated_at = p_now
-    where id = p_attempt_id and state = 'reserved'
+    provider_checkout_url = p_provider_checkout_url,
+    last_error_code = null, updated_at = p_now
+    where id = p_attempt_id and state in ('reserved', 'unknown')
+      and (provider_checkout_session_id is null
+        or provider_checkout_session_id = p_provider_checkout_session_id)
+      and (provider_checkout_url is null
+        or provider_checkout_url = p_provider_checkout_url)
     returning purchase_intent_id into intent_id;
   if intent_id is null then
     select * into existing_attempt from public.production_payment_attempts
@@ -773,7 +787,7 @@ begin
   update public.production_purchase_intents set
     state = 'pending', updated_at = p_now
     where id = intent_id and current_payment_attempt_id = p_attempt_id
-      and state = 'requires_payment';
+      and state in ('requires_payment', 'unknown');
   if not found then
     raise exception 'RC2_PAYMENT_ATTEMPT_STATE_CONFLICT' using errcode = 'P0001';
   end if;
@@ -805,7 +819,8 @@ begin
   end if;
   update public.production_payment_attempts set
     state = 'unknown', last_error_code = p_error_code, updated_at = p_now
-    where id = p_attempt_id and state in ('reserved', 'pending', 'processing')
+    where id = p_attempt_id
+      and state in ('reserved', 'pending', 'processing', 'unknown')
     returning purchase_intent_id into intent_id;
   if intent_id is null then
     raise exception 'RC2_PAYMENT_ATTEMPT_STATE_CONFLICT' using errcode = 'P0001';
@@ -822,6 +837,7 @@ $function$;
 
 create function public.record_rc2_stripe_evidence_v1(
   p_provider_event_id text,
+  p_evidence_source text,
   p_event_type text,
   p_provider_created_at timestamptz,
   p_payload_sha256 text,
@@ -869,12 +885,14 @@ begin
     );
   end if;
   insert into public.production_stripe_event_ledger (
-    provider_event_id, event_type, provider_created_at, payload_sha256,
+    provider_event_id, evidence_source, event_type,
+    provider_created_at, payload_sha256,
     environment, purchase_reference, provider_checkout_session_id,
     provider_payment_id, mode, payment_status, amount_total, currency,
     disposition, reason_code, received_at
   ) values (
-    p_provider_event_id, p_event_type, p_provider_created_at, p_payload_sha256,
+    p_provider_event_id, p_evidence_source, p_event_type,
+    p_provider_created_at, p_payload_sha256,
     p_environment, p_purchase_reference, p_provider_checkout_session_id,
     p_provider_payment_id, p_mode, p_payment_status, p_amount_total, p_currency,
     'received', p_application_reason_code, p_now
@@ -1427,7 +1445,7 @@ revoke all on function public.mark_rc2_payment_attempt_unknown_v1(
   uuid, text, timestamptz
 ) from public, anon, authenticated;
 revoke all on function public.record_rc2_stripe_evidence_v1(
-  text, text, timestamptz, text, text, text, text, text, text, text,
+  text, text, text, timestamptz, text, text, text, text, text, text, text,
   integer, text, text, text, uuid, uuid, timestamptz
 ) from public, anon, authenticated;
 revoke all on function public.issue_rc2_production_assessment_grant_v1(
@@ -1468,7 +1486,7 @@ grant execute on function public.mark_rc2_payment_attempt_unknown_v1(
   uuid, text, timestamptz
 ) to service_role;
 grant execute on function public.record_rc2_stripe_evidence_v1(
-  text, text, timestamptz, text, text, text, text, text, text, text,
+  text, text, text, timestamptz, text, text, text, text, text, text, text,
   integer, text, text, text, uuid, uuid, timestamptz
 ) to service_role;
 grant execute on function public.issue_rc2_production_assessment_grant_v1(

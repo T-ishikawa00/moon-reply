@@ -12,6 +12,7 @@ import {
   isCustomerEmailDeliveryAvailable,
   isEmailVerificationAvailable,
   isPaidFulfillmentProcessingAvailable,
+  isStripeReconciliationAvailable,
   isStripeWebhookAvailable,
   readConfiguredPaymentEnvironment,
   readPaymentDeliveryEnvironment,
@@ -36,6 +37,10 @@ import type {
 class UnavailableCheckoutProviderV1 implements CheckoutProviderV1 {
   async createCheckoutSession(): Promise<never> {
     throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 503);
+  }
+
+  async retrieveCheckoutSession(): Promise<never> {
+    throw new M2RuntimeError("PAYMENT_RECONCILIATION_UNAVAILABLE", 503);
   }
 }
 
@@ -196,13 +201,24 @@ export async function verifyAndRecordProductionStripeWebhook(
   return application.verifyStripeEvidence(evidence);
 }
 
-export async function processProductionPurchaseStatus(
-  statusCapability: unknown,
+export async function reconcileProductionStripePaymentAttempt(
+  paymentAttemptId: unknown,
 ) {
-  if (!isPaidFulfillmentProcessingAvailable()) {
-    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  if (!isStripeReconciliationAvailable()) {
+    throw new M2RuntimeError("PAYMENT_RECONCILIATION_UNAVAILABLE", 503);
   }
-  const paymentEnvironment = readConfiguredPaymentEnvironment();
+  const stripe = readStripeCheckoutEnvironment();
+  const { application } = createApplication({
+    checkoutProvider: new StripeCheckoutProviderV1(stripe.secretKey),
+    transactionalEmail: new UnconfiguredTransactionalEmailAdapterV1(),
+    grantProcessor: new UnavailableGrantProcessorV1(),
+    paymentEnvironment: stripe.environment,
+    payPayEnabled: false,
+  });
+  return application.reconcilePaymentAttempt(paymentAttemptId);
+}
+
+function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
   const { environment, repository } = base();
   const transactionalEmail = createTransactionalEmailAdapter();
   const grantProcessor: ProductionGrantProcessorV1 = {
@@ -227,7 +243,7 @@ export async function processProductionPurchaseStatus(
       );
     },
   };
-  const application = new ProductionPaymentDeliveryApplication({
+  return new ProductionPaymentDeliveryApplication({
     repository,
     checkoutProvider: new UnavailableCheckoutProviderV1(),
     transactionalEmail,
@@ -241,5 +257,27 @@ export async function processProductionPurchaseStatus(
     purchaseStatusSigningSecret: environment.purchaseStatusSigningSecret,
     fulfillmentLeaseSeconds: environment.fulfillmentLeaseSeconds,
   });
-  return application.processPurchaseStatus(statusCapability);
+}
+
+export async function processProductionPurchaseStatus(
+  statusCapability: unknown,
+  trustedSessionToken?: unknown,
+) {
+  if (!isPaidFulfillmentProcessingAvailable()) {
+    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  }
+  const paymentEnvironment = readConfiguredPaymentEnvironment();
+  return activeFulfillmentApplication(
+    paymentEnvironment,
+  ).processPurchaseStatus(statusCapability, trustedSessionToken);
+}
+
+export async function processProductionFulfillmentJobById(jobId: unknown) {
+  if (!isPaidFulfillmentProcessingAvailable()) {
+    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  }
+  const paymentEnvironment = readConfiguredPaymentEnvironment();
+  return activeFulfillmentApplication(
+    paymentEnvironment,
+  ).processFulfillmentJobById(jobId);
 }
