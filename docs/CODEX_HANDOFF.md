@@ -1,21 +1,19 @@
 # CODEX_HANDOFF.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
-## Active handoff — RC-2 Production Activation Step D Candidate
+## Active handoff — RC-2 Production Activation Step D Accepted
 
-- Status: `RC-2 Production Activation Step D Service-Role Least-Privilege Hardening implemented_pending_human_chatgpt_review`.
-- Authority: accepted Step C/release SHA `403b9af17431bf7c18a4e28ddbe63889409dc10c`; branch `task/rc2-service-role-acl-hardening`; Step C remains `accepted_complete`.
-- Migration: append-only `0013_rc2_service_role_acl_hardening.sql`; `0002..0012`, Runtime code, Q0, and V17 unchanged.
-- Creator role: local/remote application objects and migration executor resolve unambiguously to `postgres`.
-- Final table authority: exact audited matrix on 22/22 tables; service-role DELETE/TRUNCATE/REFERENCES/TRIGGER zero; PUBLIC/anon/authenticated zero; RLS 22/22; public-schema default excess zero.
-- Row-lock exceptions: UPDATE remains on `production_verified_email_authorities` and `production_verified_payments`; Verified Payment row mutation remains blocked by the immutable trigger.
-- Local proof: fresh `0002..0013`, actual service-role runtime and denial transaction, zero persisted rows, and clean replay PASS.
-- Remote proof: identity MATCH; pre-state exact `0002..0012`; dry-run exact `0013`; one official apply; post-state exact `0002..0013`; `0012` controls unchanged.
+- Acceptance: RC-2 Production Activation Step D `accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted candidate: `b6adb31c3306d3616671975c96a60d0518732df8` from `task/rc2-service-role-acl-hardening`; Step C remains `accepted_complete`.
+- Accepted database authority: append-only `0013`; exact 22-table service-role matrix; destructive privileges `0/22`; PUBLIC/anon/authenticated zero; RLS `22/22`; default excess zero.
+- Preserved behavior: Verified Payment and verified-email-authority row-lock paths retain required UPDATE authority; immutable Verified Payment mutation trigger remains enforced.
+- Accepted proof: local fresh apply/replay and actual Runtime regression PASS; remote dry-run exact `0013`; one official apply; post-history exact `0002..0013`; remote catalog proof PASS.
 - Privacy/write boundary: Customer data read `0`; synthetic remote rows `0`; remote non-migration writes `0`.
 - Evidence: `docs/payment/RC2_STEP_D_SERVICE_ROLE_ACL_HARDENING_EVIDENCE.md`.
-- Remaining blocker: `npm audit --omit=dev` exactly `3 high`; Step D Human/ChatGPT acceptance is pending.
-- Still inactive/unperformed: Stripe connection, webhook, actual Payment, Email, OpenAI paid flow, runtime flags, deploy, DNS, PRIVATE RELEASE READY, Public Launch, PR, Step D release merge, and main merge.
-- Exact next action: Human/ChatGPT review Step D. Do not start dependency remediation or Provider/runtime activation.
+- Remaining blocker: dependency security remediation for `npm audit --omit=dev` exactly `3 high`.
+- Acceptance-sync boundary: only the three top acceptance overlays change; product code, migrations, verifiers, Runtime, package/lock, Q0/V17, and evidence remain unchanged.
+- Still inactive/unperformed: Stripe, webhook, actual Payment, Email Provider, OpenAI paid flow, runtime flags, monitoring/rehearsal, deploy, DNS, PRIVATE RELEASE READY, Public Launch, PR, and main merge.
+- Exact next stage after ff-only release integration: **Dependency Security Remediation**. Do not start Provider setup or runtime activation.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->

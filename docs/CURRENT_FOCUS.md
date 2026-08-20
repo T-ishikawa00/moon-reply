@@ -1,19 +1,19 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
-## Current candidate overlay — RC-2 Production Activation Step D
+## Current acceptance overlay — RC-2 Production Activation Step D
 
-- Status: `RC-2 Production Activation Step D Service-Role Least-Privilege Hardening implemented_pending_human_chatgpt_review`.
-- Base authority: accepted Step C release `403b9af17431bf7c18a4e28ddbe63889409dc10c`; Step C remains `accepted_complete`.
-- Append-only `0013` establishes the audited exact service-role matrix for all 22 application tables and removes existing/default excess authority.
-- Local fresh apply, actual service-role runtime/denial proof, clean replay, remote exact `0013` dry-run/apply, and remote post-catalog proof: PASS.
-- Remote migration history: exact `0002..0013`; RLS `22/22`; service-role DELETE/TRUNCATE/REFERENCES/TRIGGER `0`; PUBLIC/anon/authenticated authority `0`; default excess `0`.
-- Customer data read, synthetic remote rows, and remote non-migration writes: `0 / 0 / 0`.
-- Candidate evidence: `docs/payment/RC2_STEP_D_SERVICE_ROLE_ACL_HARDENING_EVIDENCE.md`.
-- Remaining independent blocker: `npm audit --omit=dev` reports exactly `3 high`.
-- Still NOT complete: Step D Human/ChatGPT acceptance; production Payment; Stripe connection; webhook; actual Payment; production Email; OpenAI paid flow; runtime flags; deploy; DNS; RC-3; PRIVATE RELEASE READY; or Public Launch.
-- `release/private-ready` remains the accepted Step C SHA and is not merged with Step D. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Exact next action: Human/ChatGPT review Step D. Do not start dependency remediation, Provider setup, Payment, deployment, or runtime activation.
+- RC-2 Production Activation Step D: `accepted_complete`.
+- ChatGPT final review: `PASS`; Human/ChatGPT acceptance: `complete`.
+- Accepted candidate: `b6adb31c3306d3616671975c96a60d0518732df8` from `task/rc2-service-role-acl-hardening`.
+- Accepted database scope: append-only `0013`; exact 22-table service-role matrix; DELETE/TRUNCATE/REFERENCES/TRIGGER `0/22`; PUBLIC/anon/authenticated authority `0`; RLS `22/22`; exact default-privilege hardening.
+- Accepted integrity proof: Verified Payment row-lock authority preserved; immutable UPDATE trigger preserved; local fresh apply/replay and actual Runtime regression PASS; remote dry-run exact `0013`; one official apply; remote history exact `0002..0013`; remote catalog proof PASS.
+- Accepted evidence: `docs/payment/RC2_STEP_D_SERVICE_ROLE_ACL_HARDENING_EVIDENCE.md`.
+- Remaining blocker: dependency security remediation for `npm audit --omit=dev` exactly `3 high`.
+- Still NOT complete: Stripe, webhook, actual Payment, Email Provider, OpenAI paid flow, runtime activation, monitoring/rehearsal, deploy, DNS, RC-3, PRIVATE RELEASE READY, or Public Launch.
+- Acceptance-sync boundary: only `docs/CURRENT_FOCUS.md`, `docs/WBS.md`, and `docs/CODEX_HANDOFF.md` change. Product code, migrations, verifiers, Runtime, package/lock, Q0/V17, and Step D evidence remain unchanged.
+- `main` remains exactly `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next stage after ff-only release integration: **Dependency Security Remediation**. Do not start Stripe, Provider, Payment, deployment, or runtime activation.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-C:BEGIN -->
