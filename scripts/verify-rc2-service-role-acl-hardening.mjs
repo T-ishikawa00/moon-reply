@@ -4,7 +4,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const acceptedStepCRelease = "403b9af17431bf7c18a4e28ddbe63889409dc10c";
+const acceptedStepEBase = "243e8655098ba9e0972e0e1efd68f83fbc2ded30";
 const migration0013 =
   "supabase/migrations/0013_rc2_service_role_acl_hardening.sql";
 
@@ -374,18 +374,35 @@ await check("package exposes the exact offline verifier entrypoint", () => {
   );
 });
 
-await check("production Runtime code remains unchanged from accepted Step C", () => {
-  assert.equal(
-    gitText([
-      "diff",
-      "--name-only",
-      acceptedStepCRelease,
-      "--",
-      "app",
-      "components",
-      "lib",
-    ]),
-    "",
+await check("production Runtime change is limited to the Step E email seam", () => {
+  const trackedChanges = gitText([
+    "diff",
+    "--name-only",
+    acceptedStepEBase,
+    "--",
+    "app",
+    "components",
+    "lib",
+  ])
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  const untrackedChanges = gitText([
+    "ls-files",
+    "--others",
+    "--exclude-standard",
+    "--",
+    "app",
+    "components",
+    "lib",
+  ])
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  assert.deepEqual(
+    [...new Set([...trackedChanges, ...untrackedChanges])].sort(),
+    [
+      "lib/payment/production/resend-transactional-email.ts",
+      "lib/payment/production/service.ts",
+    ],
   );
 });
 

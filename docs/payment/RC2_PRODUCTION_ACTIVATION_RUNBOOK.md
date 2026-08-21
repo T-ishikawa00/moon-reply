@@ -1,5 +1,26 @@
 # RC-2 Production Activation Runbook
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
+## Step E — Transactional Email Provider Implementation (Resend)
+
+Status: `RC-2 Production Activation Step E Transactional Email Provider Implementation implemented_pending_human_chatgpt_review`
+
+- Dependency remediation was accepted and ff-only integrated at `243e8655098ba9e0972e0e1efd68f83fbc2ded30`; Step E branch `task/rc2-resend-email-provider` starts from that exact release.
+- Exact stable SDK: `resend@6.20.0`; production/full audits both `0 vulnerabilities`.
+- Server-only adapter: exact provider value `resend`, generic `EMAIL_API_KEY`/`EMAIL_FROM_ADDRESS`/`EMAIL_FROM_NAME`, validated sender, safe fail-closed configuration, and unsupported-provider rejection.
+- Durable idempotency: existing `messageIdempotencyKey` is forwarded unchanged as the SDK `idempotencyKey`; no second identity and no hidden adapter retry.
+- Customer content: separate Japanese verification/result text plus minimal HTML; verification contains only code/expiry/share warning, while result contains only 鑑定ノート readiness/protected URL/access guidance. Consultation, Candidate, assessment body, decision, and relationship detail remain absent.
+- Provider success requires a valid message ID and returns only `providerMessageReference`; mailbox/result failures map to the existing narrow delivery codes.
+- Focused fake/verifier `14/14`; RC-2 `48/48`; RC-1 `14/14`; activation `15/15`; Step B `18/18`; ACL `14/14`; typecheck, zero-warning lint, build `38/38`, unchanged route inventory, diff, migration `0002..0013`, and V17/Q0 checks PASS.
+- `.env.example` remains inactive: provider `unconfigured`, credentials blank, every production activation flag false.
+- Resend API/account/real Email, Supabase remote, migration apply, Stripe/Payment/webhook, OpenAI Provider, deploy, runtime flag/remote secret/DNS change, PR, main merge, and Public Launch: `0`.
+- `release/private-ready` remains `243e8655098ba9e0972e0e1efd68f83fbc2ded30` and does not include Step E. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+
+Sanitized evidence: `docs/payment/RC2_STEP_E_TRANSACTIONAL_EMAIL_PROVIDER_EVIDENCE.md`.
+
+Exact next Human action: review Step E. After acceptance, separately authorize Resend account/sender configuration and the first bounded email test. Do not configure Stripe or send a real email from this task.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-D:BEGIN -->
 ## Step D — Service-Role Least-Privilege Hardening
 

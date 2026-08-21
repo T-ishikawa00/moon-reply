@@ -1,5 +1,24 @@
 # CURRENT_FOCUS.md
 
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
+## Current implementation overlay — RC-2 Production Activation Step E
+
+- Status: `RC-2 Production Activation Step E Transactional Email Provider Implementation implemented_pending_human_chatgpt_review`.
+- Authority: Dependency Security Remediation accepted and ff-only integrated at `243e8655098ba9e0972e0e1efd68f83fbc2ded30`; branch `task/rc2-resend-email-provider` starts from that exact release.
+- Dependency: exact stable `resend@6.20.0`; production and full npm audits `0 vulnerabilities`.
+- Environment: exact provider `resend`; generic server-only `EMAIL_API_KEY`, `EMAIL_FROM_ADDRESS`, and `EMAIL_FROM_NAME`; missing/unsafe configuration fails closed; `.env.example` remains `unconfigured`, blank, and all production flags false.
+- Adapter: server-only Resend construction behind a narrow fakeable client; existing `TransactionalEmailAdapterV1` unchanged; provider success requires a valid message ID and exposes only `providerMessageReference`.
+- Idempotency: existing `messageIdempotencyKey` reaches SDK `idempotencyKey` unchanged; no second identity and no hidden retry.
+- Privacy: separate Japanese verification/result text and HTML; no consultation/Candidate/assessment body/decision/relationship detail; recipient, code, result capability URL, payload, and Provider internals are not logged.
+- Failure: mailbox/result Provider failures map to `EMAIL_VERIFICATION_DELIVERY_FAILED` / `RESULT_EMAIL_DELIVERY_FAILED`; existing durable failure/retry state remains authoritative.
+- Proof: focused `14/14`, RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, typecheck, zero-warning lint, build `38/38`, unchanged routes, and diff checks PASS. Migrations `0002..0013` and V17/Q0 are unchanged.
+- External operations remain `0`: Resend API/account/real Email, Supabase remote/apply, Stripe/Payment/webhook, OpenAI Provider, deploy, runtime flags, remote secrets, DNS, PR, main merge, and Public Launch.
+- Evidence: `docs/payment/RC2_STEP_E_TRANSACTIONAL_EMAIL_PROVIDER_EVIDENCE.md`.
+- `release/private-ready` remains `243e8655098ba9e0972e0e1efd68f83fbc2ded30`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Still false: Production Payment, Stripe connected, webhook, real Email, runtime activation, PRIVATE RELEASE READY, and Public Launch.
+- Exact next Human action: review Step E. After acceptance, separately authorize Resend account/sender setup and the first bounded email test. Do not configure Stripe or send real Email in this task.
+<!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:END -->
+
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
 ## Current acceptance overlay — Dependency Security Remediation
 

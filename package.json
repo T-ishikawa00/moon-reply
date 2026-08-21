@@ -12,7 +12,8 @@
     "verify:rc2": "node scripts/verify-rc2-production-payment-delivery.mjs",
     "verify:rc2:activation-preflight": "node scripts/verify-rc2-production-activation-preflight.mjs",
     "verify:rc2:stepb": "node scripts/verify-rc2-stepb-local-db-evidence.mjs",
-    "verify:rc2:acl-hardening": "node scripts/verify-rc2-service-role-acl-hardening.mjs"
+    "verify:rc2:acl-hardening": "node scripts/verify-rc2-service-role-acl-hardening.mjs",
+    "verify:rc2:email-provider": "node scripts/verify-rc2-resend-email-provider.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.2",
@@ -21,6 +22,7 @@
     "openai": "^7.1.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "resend": "6.20.0",
     "stripe": "^22.5.0"
   },
   "devDependencies": {
