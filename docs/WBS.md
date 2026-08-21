@@ -1,5 +1,29 @@
 # WBS.md
 
+<!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
+## Customer Identity Authority V1 — Supabase Auth Architecture
+
+Status: `Customer Identity Architecture V1 designed_pending_human_chatgpt_review` on `task/customer-identity-supabase-auth-architecture` from exact accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`.
+
+- [x] Audit the current custom mailbox authority, trusted session, preparation binding, encrypted delivery email, Purchase/status/result capabilities, Payment verification, Grant, Assessment, Delivery, and notification chain.
+- [x] Prove every current Runtime `owner_id` is a lease owner and forbid reuse as Customer identity.
+- [x] Select Supabase `auth.users.id` as the canonical `CustomerUserId`; select Google + Email OTP; exclude password login.
+- [x] Place the Auth gate after purchase-ready preparation and before ownership binding/Purchase Intent/Checkout, while keeping browsing and consultation anonymous.
+- [x] Select Option B: one canonical Customer ownership-binding table with a one-way, idempotent, conflict-controlled server transition.
+- [x] Retain the custom email-verification system for compatibility/recovery only; design no new authenticated Purchase writes to it.
+- [x] Keep production tables server-mediated; PUBLIC/`anon`/`authenticated` DML remains `0` and service-role repositories require explicit Customer ownership checks.
+- [x] Select Auth account/history plus narrow legacy/recovery result capability; require a minimal privacy-safe `/account` page for initial Private Release.
+- [x] Define Google/Email identity linking, cookie/PKCE/state/CSRF/session policy, deletion/retention classes, legal impacts, Google rights/branding, Resend split, Stripe changes, and 15-case threat model.
+- [x] Define future append-only `0014_customer_identity_authority_v1.sql` without creating SQL; preserve accepted `0002..0013` byte-identically.
+- [x] Record official Supabase, Google, and PPC Japan primary sources accessed `2026-08-21`.
+- [ ] Complete Human/ChatGPT review and acceptance of the architecture.
+- [ ] Implement Auth, configure any provider/dashboard/credential, apply a migration, send real Email, call Stripe, activate Runtime, deploy, merge release/main, or launch. All remain prohibited here.
+
+Design authorities: `docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md`, `docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md`, and `docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md`.
+
+Exact next implementation task only after acceptance: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. `release/private-ready` remains `a785e5c9dacfed28b359befab29e4adb5b76fb07`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+<!-- CUSTOMER-IDENTITY-AUTHORITY-V1:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
 ## RC-2 Production Activation Step E — Transactional Email Provider Implementation
 

@@ -1,5 +1,23 @@
 # CURRENT_FOCUS.md
 
+<!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
+## Current design overlay — Customer Identity Authority V1
+
+- Status: `Customer Identity Architecture V1 designed_pending_human_chatgpt_review` on `task/customer-identity-supabase-auth-architecture`; design base is accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`.
+- Decision: adopt Supabase Auth `auth.users.id` as `CustomerUserId`. Initial methods are Google identity-only scopes (`openid email profile`) and Email OTP; password login is excluded.
+- Product boundary: browsing, consultation, and purchase-ready preparation remain anonymous. Authentication is required after purchase-ready and before server ownership binding, Purchase Intent, or Stripe Checkout. Successful Auth resumes the same preparation.
+- Ownership: select one canonical `production_customer_ownership_bindings` table. Runtime `owner_id` values remain fulfillment/lease owners and are never Customer identity.
+- Transition: verified server session + one-use expiring Auth continuation + locked purchase-ready preparation -> idempotent, one-way Customer binding -> Purchase Intent. Cross-Customer conflict fails closed.
+- Existing email authority: custom challenge/verified-authority/trusted-session/preparation-binding remains compatibility/recovery only; no new authenticated Purchase writes. Encrypted verified delivery-email snapshot moves to the Customer binding; accepted tables are not deleted.
+- Data access/result: keep all production tables server-mediated with PUBLIC/`anon`/`authenticated` DML `0` and explicit service-role ownership checks. Use Auth for `/account`/history and retain the existing result credential narrowly for legacy/recovery.
+- Initial Private Release includes minimal private `/account` history: date, safe generic label, status, and open-result action; no consultation preview.
+- Deletion: revoke access, detach/anonymize Customer identity, delete the Auth user, and preserve only legally/operationally required Payment/integrity evidence under a non-identifying reference. Exact retention periods remain a Human legal blocker.
+- Authorities: `docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md`, `docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md`, and `docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md`.
+- Phase B is documentation/design only. Accepted migrations `0002..0013`, code, Runtime, Payment, Step E, and `release/private-ready` remain unchanged; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- External writes remain `0`: Supabase Auth/provider/config, Google Cloud/OAuth/credentials, Resend account/API/Email, Stripe/Payment/webhook, OpenAI Provider, Netlify/deploy, runtime flags, secrets, DNS, Public Launch, release merge, and main merge.
+- Exact next task after Human/ChatGPT architecture acceptance: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. No implementation or external configuration is authorized by this candidate.
+<!-- CUSTOMER-IDENTITY-AUTHORITY-V1:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
 ## Current acceptance overlay — RC-2 Production Activation Step E
 
