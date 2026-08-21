@@ -1,7 +1,9 @@
 # WBS.md
 
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
-## Measurement Foundation V1 — implemented, pending Human/ChatGPT review
+## Measurement Foundation V1 — Accepted
+
+Status: `Measurement Foundation V1 accepted_complete`.
 
 - [x] Start `task/measurement-foundation-v1` from accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
 - [x] Define the exact eight-event vendor-neutral contract and exact runtime/type allowlists.
@@ -12,11 +14,11 @@
 - [x] Keep the default disabled and adapter disconnected; add no SDK, script, external call, cookie, storage, or migration.
 - [x] Fail-isolate Measurement from Auth, Payment, and fulfillment; reserve external delivery/idempotency and consent/legal review as future hard gates.
 - [x] Add `verify:measurement-foundation` and preserve all baseline gates and accepted `0002..0014`/Auth authority.
-- [ ] Human/ChatGPT review and acceptance of Measurement Foundation V1.
+- [x] Human/ChatGPT review and acceptance of Measurement Foundation V1 after exact R1 and full PASS.
 
-Authority ceiling: implementation candidate only. `release/private-ready` remains `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Remote/provider/deploy/activation/PR/release/main operations are `0`.
+Accepted lineage: candidate `cb37e2abd59999f94de1491027a8ffe9b363cf37` -> R1 `eba46539dcd54194d35eae2424be8a60589b452c`. Measurement `34/34` and every baseline/type/lint/build/diff/audit gate PASS; migrations `0002..0014` remain immutable. This acceptance is authorized for ff-only `release/private-ready` integration; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 
-Evidence: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md`. Exact next action: **Human/ChatGPT review Measurement Foundation V1.**
+Authority ceiling: no remote/provider/deploy/activation/PR/main operation is authorized here. Evidence: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md`. Exact next Human/ChatGPT action after integration: **Begin Production External Connection / Private Dogfood Activation.** Do not begin it in this task.
 <!-- MEASUREMENT-FOUNDATION-V1:END -->
 
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->

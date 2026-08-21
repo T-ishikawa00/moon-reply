@@ -1,17 +1,18 @@
 # CURRENT_FOCUS.md
 
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
-## Current implementation overlay — Measurement Foundation V1
+## Current acceptance overlay — Measurement Foundation V1
 
-- Status: `Measurement Foundation V1 implemented_pending_human_chatgpt_review` on `task/measurement-foundation-v1`, created from exact accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
-- Contract: exact `page_view`, `sample_view`, `request_start`, `request_complete`, `auth_start`, `auth_complete`, `checkout_start`, and `purchase` events with exact runtime-validated allowlisted payloads.
-- R1 correction: `checkout_start` now covers both legacy RequestForm Checkout under Auth OFF and authenticated Checkout under Auth ON, only after successful response, URL parsing, exact Stripe origin, and empty URL credentials; the server-authoritative Measurement module is explicitly `server-only`.
-- Authority: browser events use reviewed post-response/navigation boundaries; `auth_complete` is server binding success; `purchase` exists only after durable Verified Payment recording. It is fixed at JPY 980 and uses a dedicated-secret, deterministic, opaque HMAC transaction ID.
-- Default/runtime: `MEASUREMENT_ENABLED=false`; only a disabled in-process adapter exists. There is no Provider SDK/script/network/cookie/storage, and Measurement failure cannot affect Payment or fulfillment.
-- Privacy/legal: no consultation/customer/capability/result/provider identifiers enter payloads. External adapters, consent/legal conclusions, and any Provider activation require a separate Human/ChatGPT gate.
-- Release boundary: `release/private-ready` remains `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Measurement is not integrated into either branch.
-- Evidence and exact future mapping reservations: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md`.
-- Exact next action: **Human/ChatGPT review Measurement Foundation V1.** Do not configure Auth/Google/Resend/Stripe, analytics/ad platforms, deploy, or merge release/main.
+- Status: `Measurement Foundation V1 accepted_complete`; ChatGPT review `PASS_WITH_REQUIRED_R1 -> PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted lineage: candidate `cb37e2abd59999f94de1491027a8ffe9b363cf37` corrected by R1 `eba46539dcd54194d35eae2424be8a60589b452c`, from exact accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
+- Contract/privacy: exact eight-event, runtime-validated allowlist remains unchanged. No consultation, identity, capability, result, delivery, internal Payment, Stripe, Auth token, OTP, or email data can enter payloads.
+- R1 closure: `checkout_start` covers both legacy Auth-OFF RequestForm Checkout and authenticated Auth-ON Checkout, only after successful response, URL parsing, exact Stripe origin, and empty URL credentials. Server Auth/Purchase measurement is explicitly `server-only`.
+- Purchase authority: only durable exact-economics Verified Payment constructs fixed JPY 980 `purchase`; one dedicated-secret deterministic opaque HMAC transaction identity is retained across retries/reconciliation.
+- Runtime/Provider ceiling: `MEASUREMENT_ENABLED=false`; only a disabled in-process adapter exists. No Provider SDK/script/network/cookie/storage is connected, and Measurement cannot affect Payment or fulfillment.
+- Proof: Measurement `34/34`, Auth `49/49`, RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, typecheck, zero-warning lint, build `38/38`, diff check, migration immutability, and both zero-vulnerability audits PASS.
+- Release boundary: this accepted lineage is authorized for ff-only `release/private-ready` integration. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- External operations remain `0`: remote migration/Auth, Google, Resend, Stripe/Payment/webhook, OpenAI live, analytics/ad Providers, external measurement/cookies, deploy/runtime/secrets/DNS, Public Launch, PR, and main merge.
+- Exact next Human/ChatGPT action after ff-only integration: **Begin Production External Connection / Private Dogfood Activation.** Do not begin that phase in this task.
 <!-- MEASUREMENT-FOUNDATION-V1:END -->
 
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->

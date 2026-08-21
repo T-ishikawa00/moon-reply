@@ -1,20 +1,21 @@
 # CODEX_HANDOFF.md
 
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
-## Active handoff — Measurement Foundation V1
+## Current handoff — Measurement Foundation V1 Accepted
 
-- Status / branch / base: `implemented_pending_human_chatgpt_review` / `task/measurement-foundation-v1` / exact accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
+- Status: `Measurement Foundation V1 accepted_complete`; ChatGPT `PASS_WITH_REQUIRED_R1 -> PASS`; Human/ChatGPT acceptance complete. Accepted lineage is candidate `cb37e2abd59999f94de1491027a8ffe9b363cf37` -> R1 `eba46539dcd54194d35eae2424be8a60589b452c`, based on accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
 - Event contract: exact `page_view`, `sample_view`, `request_start`, `request_complete`, `auth_start`, `auth_complete`, `checkout_start`, and server-only `purchase`; all payloads use exact compile-time and runtime allowlists.
 - Semantics: route/sample occurrence; first meaningful request change; decoded server `purchase_ready`; accepted Auth start; successful server identity binding; accepted valid Checkout URL; durable exact-economics Verified Payment. Clicks, redirects, queries, polling, and browser state are not authority.
-- R1 correction: the accepted-URL `checkout_start` boundary exists once in both legacy RequestForm Checkout under Auth OFF and `AuthenticatedCheckoutButton` under Auth ON. The secret/HMAC/Auth-complete/Purchase module begins with `import "server-only";` and cannot enter a Client Component graph.
+- R1 closure: the accepted-URL `checkout_start` boundary exists once in both legacy RequestForm Checkout under Auth OFF and `AuthenticatedCheckoutButton` under Auth ON. The secret/HMAC/Auth-complete/Purchase module begins with `import "server-only";` and cannot enter a Client Component graph.
 - Purchase: fixed `value=980`, `currency="JPY"`; stable `mrp_` HMAC transaction ID from immutable Verified Payment UUID and only `MEASUREMENT_TRANSACTION_SECRET`. Same durable Payment yields the same identity across retry/reconciliation; non-success/conflict/stale outcomes emit none.
 - Safety: default `MEASUREMENT_ENABLED=false`; only a disabled in-process adapter exists. Missing secret or Measurement failure is contained after durable Payment and cannot affect Auth, Payment, or fulfillment. No analytics outbox or external call exists.
 - Privacy: coarse page areas and fixed enums/literals only. No consultation, identity, capability, result, delivery, internal Payment, Stripe, Auth token, OTP, or email data is allowed.
 - Provider/legal ceiling: GA4/Google Ads/Meta/X mappings are documentation reservations only. External adapter delivery/idempotency, exact payload, disclosures, cookie/storage, consent/opt-out, terms, jurisdiction, and sensitive-category review are mandatory before activation. No compliance claim is made.
-- Product authority: Measurement remains branch-only. `release/private-ready` is unchanged at `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`; `main` is unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Evidence: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md` and `npm run verify:measurement-foundation`.
+- Validation: Measurement `34/34`; Auth `49/49`; RC-2 `48/48`; RC-1 `14/14`; activation `15/15`; Step B `18/18`; ACL `14/14`; email `14/14`; typecheck, zero-warning lint, build `38/38`, diff, immutable `0002..0014`, and both zero-vulnerability audits PASS.
+- Product authority: this accepted lineage is authorized for ff-only `release/private-ready` integration. `main` remains unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Evidence: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md` and `npm run verify:measurement-foundation` (`34/34`).
 - Operations: remote Supabase/apply/Auth, Google, Resend, Stripe/Payment, all analytics/ad Providers, external tracking/cookies, deploy/runtime/secrets/DNS, Public Launch, PR, release merge, and main merge are `0`.
-- Exact next action: **Human/ChatGPT review Measurement Foundation V1.**
+- Exact next Human/ChatGPT action after ff-only integration: **Begin Production External Connection / Private Dogfood Activation.** Do not start it from this acceptance task.
 <!-- MEASUREMENT-FOUNDATION-V1:END -->
 
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->

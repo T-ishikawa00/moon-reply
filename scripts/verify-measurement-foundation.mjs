@@ -683,7 +683,7 @@ check("documentation fixes semantics, mapping, consent, and non-claims", () => {
   );
 });
 
-check("top status documents record pending review and exact next action", () => {
+check("top status documents record one governed review state and next action", () => {
   for (const relativePath of [
     "docs/CURRENT_FOCUS.md",
     "docs/WBS.md",
@@ -691,14 +691,19 @@ check("top status documents record pending review and exact next action", () => 
   ]) {
     const source = text(relativePath);
     assert.match(source, /MEASUREMENT-FOUNDATION-V1:BEGIN/u);
-    assert.match(
-      source,
-      /Measurement Foundation V1 implemented_pending_human_chatgpt_review|implemented_pending_human_chatgpt_review/u,
-    );
-    assert.match(
-      source,
-      /Human\/ChatGPT review Measurement Foundation V1/u,
-    );
+    const pending =
+      /implemented_pending_human_chatgpt_review/u.test(source) &&
+      /Human\/ChatGPT review Measurement Foundation V1/u.test(source);
+    const accepted =
+      /Measurement Foundation V1 accepted_complete/u.test(source) &&
+      /Begin Production External Connection \/ Private Dogfood Activation/u.test(
+        source,
+      );
+    assert.notEqual(pending, accepted);
+    assert.equal(pending || accepted, true);
+    if (accepted) {
+      assert.match(source, /eba46539dcd54194d35eae2424be8a60589b452c/u);
+    }
   }
 });
 
