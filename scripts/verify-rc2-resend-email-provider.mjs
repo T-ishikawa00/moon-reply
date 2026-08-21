@@ -383,8 +383,8 @@ await check("result email contains only readiness and protected access guidance"
   ]);
   assert.equal(payload.subject, "月の返事｜鑑定ノートができました");
   assert.match(payload.text, /鑑定ノートのご用意ができました/u);
-  assert.match(payload.text, /有効期限/u);
-  assert.match(payload.text, /アクセス/u);
+  assert.match(payload.text, /アクセスできない場合は、購入状況画面から再度お試しください。/u);
+  assert.doesNotMatch(`${payload.subject}${payload.text}${payload.html}`, /有効期限|期限切れ/u);
   assert.match(payload.text, new RegExp(resultUrl.replaceAll("/", "\\/"), "u"));
   assert.match(payload.html, new RegExp(resultUrl.replaceAll("/", "\\/"), "u"));
   assert.doesNotMatch(`${payload.subject}${payload.text}${payload.html}`, /12345678|相談|候補|判断|関係/u);

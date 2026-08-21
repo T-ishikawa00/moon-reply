@@ -37,7 +37,7 @@ This evidence is sanitized. It contains no API key, Customer address, verificati
 - Sender address uses the existing normalized email syntax validator.
 - Sender display name is normalized, non-empty, bounded to 80 Unicode code points, and rejects control characters and unsafe mailbox delimiters. CR/LF injection is rejected.
 - Verification content is Japanese and limited to the `月の返事` identity, the exact eight-digit code, expiration in Japan time, input guidance, and a do-not-share warning. It contains no consultation or assessment content.
-- Result content is Japanese and limited to the `月の返事` identity, 鑑定ノート readiness, the protected HTTPS result capability URL, expiry/access guidance, and a do-not-share warning. It contains no consultation text, Candidate message, assessment body, decision, or relationship detail.
+- Result content is Japanese and limited to the `月の返事` identity, 鑑定ノート readiness, the protected HTTPS result capability URL, access-failure guidance, and a do-not-share warning. It makes no result-URL expiry claim because the result-notification contract establishes no expiry authority. It contains no consultation text, Candidate message, assessment body, decision, or relationship detail.
 - Verification code and result URL remain in separate templates. Both text and minimal HTML are sent.
 - Recipient, code, result URL, full payload, and Provider response are never logged by the adapter or service wiring.
 
