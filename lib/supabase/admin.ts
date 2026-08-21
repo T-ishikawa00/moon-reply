@@ -6,9 +6,9 @@ import type { Database } from "./types";
 // Service role must never be imported into client components.
 // Service role must never be exposed to browser.
 export function createSupabaseAdminClient(): SupabaseClient<Database> {
-  const { supabaseUrl, supabaseServiceRoleKey } = getSupabaseAdminEnv();
+  const { supabaseUrl, supabaseSecretKey } = getSupabaseAdminEnv();
 
-  return createClient<Database>(supabaseUrl, supabaseServiceRoleKey, {
+  return createClient<Database>(supabaseUrl, supabaseSecretKey, {
     auth: {
       autoRefreshToken: false,
       detectSessionInUrl: false,

@@ -22,6 +22,8 @@ const migration0012 =
   "supabase/migrations/0012_rc2_activation_database_hardening.sql";
 const migration0013 =
   "supabase/migrations/0013_rc2_service_role_acl_hardening.sql";
+const migration0014 =
+  "supabase/migrations/0014_customer_identity_authority_v1.sql";
 
 function git(args, options = {}) {
   return execFileSync(
@@ -56,7 +58,7 @@ function parseExampleEnvironment(source) {
 }
 
 function trackedFiles() {
-  return git(["ls-files", "-z"])
+  return git(["ls-files", "--cached", "--others", "--exclude-standard", "-z"])
     .split("\0")
     .filter(Boolean)
     .map((entry) => entry.replaceAll("\\", "/"));
@@ -126,6 +128,7 @@ await check("activation environment names are declared without example secrets",
   const requiredNames = [
     "NEXT_PUBLIC_APP_URL",
     "SUPABASE_URL",
+    "SUPABASE_PUBLISHABLE_KEY",
     "SUPABASE_SECRET_KEY",
     "OPENAI_API_KEY",
     "OPENAI_MODEL",
@@ -159,7 +162,6 @@ await check("activation environment names are declared without example secrets",
   ];
   for (const name of requiredNames) assert.equal(example.has(name), true, name);
   for (const name of [
-    "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_SECRET_KEY",
     "OPENAI_API_KEY",
     "EMAIL_API_KEY",
@@ -326,7 +328,7 @@ await check("0010 through 0013 are immutable accepted migrations", () => {
   );
 });
 
-await check("migration order and 0010 through 0013 dependencies are structurally intact", () => {
+await check("migration order and 0010 through 0014 dependencies are structurally intact", () => {
   const migrations = trackedFiles()
     .filter((entry) => entry.startsWith("supabase/migrations/") && entry.endsWith(".sql"))
     .map((entry) => path.posix.basename(entry))
@@ -344,10 +346,12 @@ await check("migration order and 0010 through 0013 dependencies are structurally
     "0011_rc2_production_payment_delivery.sql",
     "0012_rc2_activation_database_hardening.sql",
     "0013_rc2_service_role_acl_hardening.sql",
+    "0014_customer_identity_authority_v1.sql",
   ]);
   const rc1 = readText(migration0010);
   const rc2 = readText(migration0011);
   const stepB = readText(migration0012);
+  const customerIdentity = readText(migration0014);
   for (const table of [
     "production_preparations",
     "production_purchases",
@@ -386,6 +390,17 @@ await check("migration order and 0010 through 0013 dependencies are structurally
     assert.ok(stepB.includes(required), `0012 ${required}`);
   }
   assert.doesNotMatch(stepB, /security definer/iu);
+  for (const required of [
+    "production_customer_auth_continuations",
+    "production_customer_ownership_bindings",
+    "production_purchase_intent_ownership_lane",
+    "record_rc2_stripe_evidence_v2",
+    "issue_rc2_production_assessment_grant_v2",
+  ]) {
+    assert.ok(customerIdentity.includes(required), `0014 ${required}`);
+  }
+  assert.match(customerIdentity, /^begin;/u);
+  assert.match(customerIdentity, /commit;\s*$/u);
 });
 
 await check("no public API route can mint a Grant or run fulfillment", () => {
@@ -427,15 +442,31 @@ await check("tracked files contain no deployable env file or credential signatur
   assert.deepEqual(findings, []);
 });
 
-await check("V17 Q0 and accepted customer runtime surfaces are unchanged", () => {
-  assertNoDiffFromAuthority([
+await check("V17 Q0 surfaces are unchanged and Foundation drift is exact", () => {
+  const protectedPaths = [
     "components/runtime/CustomerAssessmentNote.tsx",
     "components/request/RequestForm.tsx",
     "lib/assessment",
     "schemas/m2",
     "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d",
     "scripts/verify-m2-p4-q0-final-reassessment-semantics.mjs",
+  ];
+  const drift = gitText([
+    "diff",
+    "--name-only",
+    acceptedAuthority,
+    "--",
+    ...protectedPaths,
+  ]).split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(drift, [
+    "components/request/RequestForm.tsx",
+    "lib/assessment/production/supabase-repository.ts",
   ]);
+  assert.match(readText("components/request/RequestForm.tsx"), /customerAuthEnabled/u);
+  assert.match(
+    readText("lib/assessment/production/supabase-repository.ts"),
+    /issue_rc2_production_assessment_grant_v2/u,
+  );
 });
 
 await check("activation runbook preserves the no-operation boundary", () => {

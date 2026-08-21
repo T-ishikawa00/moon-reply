@@ -72,8 +72,9 @@ type PreparationEmailBindingRow = {
 type PurchaseIntentRow = {
   id: string;
   preparation_id: string;
-  verified_email_authority_id: string;
-  trusted_email_session_id: string;
+  verified_email_authority_id: string | null;
+  trusted_email_session_id: string | null;
+  customer_ownership_binding_id: string | null;
   delivery_authority_reference: string;
   expected_product_code: string;
   expected_amount: number;
@@ -88,6 +89,14 @@ type PurchaseIntentRow = {
   final_confirmation_accepted_at: string;
   created_at: string;
   updated_at: string;
+};
+
+type CustomerOwnershipBindingRow = {
+  id: string;
+  preparation_id: string;
+  customer_user_id: string | null;
+  delivery_email_ciphertext: string | null;
+  state: "active" | "identity_detached";
 };
 
 type PaymentAttemptRow = {
@@ -128,6 +137,7 @@ type PaymentDatabase = {
       production_trusted_email_sessions: RuntimeTable<TrustedSessionRow>;
       production_preparation_email_bindings: RuntimeTable<PreparationEmailBindingRow>;
       production_purchase_intents: RuntimeTable<PurchaseIntentRow>;
+      production_customer_ownership_bindings: RuntimeTable<CustomerOwnershipBindingRow>;
       production_payment_attempts: RuntimeTable<PaymentAttemptRow>;
       production_fulfillment_jobs: RuntimeTable<FulfillmentJobRow>;
     };
@@ -138,10 +148,15 @@ type PaymentDatabase = {
       mark_rc2_email_challenge_delivery_failed_v1: RuntimeFunction;
       consume_rc2_email_challenge_v1: RuntimeFunction;
       begin_rc2_purchase_intent_v1: RuntimeFunction;
+      begin_customer_purchase_intent_v1: RuntimeFunction;
+      begin_customer_purchase_intent_from_continuation_v1: RuntimeFunction;
       reserve_rc2_payment_attempt_v1: RuntimeFunction;
       attach_rc2_checkout_session_v1: RuntimeFunction;
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
-      record_rc2_stripe_evidence_v1: RuntimeFunction;
+      record_rc2_stripe_evidence_v2: RuntimeFunction;
+      resolve_customer_purchase_status_v1: RuntimeFunction;
+      resolve_customer_completed_delivery_v1: RuntimeFunction;
+      resolve_production_delivery_email_v2: RuntimeFunction;
       claim_rc2_fulfillment_job_v1: RuntimeFunction;
       claim_rc2_fulfillment_job_by_id_v1: RuntimeFunction;
       complete_rc2_fulfillment_job_v1: RuntimeFunction;
@@ -168,6 +183,8 @@ function databaseFailure(error?: unknown): never {
     ["RC2_PURCHASE_INTENT_CONFLICT", 409],
     ["RC2_PAYMENT_ATTEMPT_BLOCKED", 409],
     ["RC2_FULFILLMENT_JOB_CONFLICT", 409],
+    ["CUSTOMER_AUTH_OWNERSHIP_REQUIRED", 403],
+    ["CUSTOMER_AUTH_PURCHASE_INTENT_CONFLICT", 409],
   ] as const;
   for (const [code, status] of known) {
     if (message.includes(code)) throw new M2RuntimeError(code, status);
@@ -272,16 +289,35 @@ export class SupabasePaymentDeliveryRepository
     return data ? mapAuthority(data) : null;
   }
 
-  private async mapIntent(row: PurchaseIntentRow): Promise<PurchaseIntentRecord> {
-    const authority = await this.getAuthority(row.verified_email_authority_id);
-    if (!authority) databaseFailure();
+  private async mapIntent(
+    row: PurchaseIntentRow,
+    authorizedEmailCiphertext?: string,
+  ): Promise<PurchaseIntentRecord> {
+    let emailCiphertext = authorizedEmailCiphertext;
+    if (emailCiphertext === undefined && row.verified_email_authority_id) {
+      const authority = await this.getAuthority(row.verified_email_authority_id);
+      if (!authority) databaseFailure();
+      emailCiphertext = authority.emailCiphertext;
+    }
+    if (emailCiphertext === undefined && row.customer_ownership_binding_id) {
+      const { data: binding, error } = await this.client
+        .from("production_customer_ownership_bindings")
+        .select("id,preparation_id,customer_user_id,delivery_email_ciphertext,state")
+        .eq("id", row.customer_ownership_binding_id)
+        .eq("preparation_id", row.preparation_id)
+        .maybeSingle();
+      if (error || !binding?.delivery_email_ciphertext) databaseFailure(error);
+      emailCiphertext = binding.delivery_email_ciphertext;
+    }
+    if (!emailCiphertext) databaseFailure();
     return {
       id: row.id,
       preparationId: row.preparation_id,
       verifiedEmailAuthorityId: row.verified_email_authority_id,
       trustedEmailSessionId: row.trusted_email_session_id,
+      customerOwnershipBindingId: row.customer_ownership_binding_id,
       deliveryAuthorityReference: row.delivery_authority_reference,
-      emailCiphertext: authority.emailCiphertext,
+      emailCiphertext,
       expectedProductCode: row.expected_product_code,
       expectedAmount: row.expected_amount,
       currency: row.currency,
@@ -475,6 +511,69 @@ export class SupabasePaymentDeliveryRepository
     return this.mapIntent(row);
   }
 
+  async beginAuthenticatedPurchaseIntent(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    preparationCapabilityHash: string;
+    now: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "begin_customer_purchase_intent_v1",
+      {
+        p_purchase_intent_id: input.purchaseIntent.id,
+        p_customer_user_id: input.customerUserId,
+        p_preparation_capability_hash: input.preparationCapabilityHash,
+        p_status_capability_hash: input.purchaseIntent.statusCapabilityHash,
+        p_delivery_authority_reference:
+          input.purchaseIntent.deliveryAuthorityReference,
+        p_expected_product_code: input.purchaseIntent.expectedProductCode,
+        p_expected_amount: input.purchaseIntent.expectedAmount,
+        p_currency: input.purchaseIntent.currency,
+        p_purchase_kind: input.purchaseIntent.purchaseKind,
+        p_environment: input.purchaseIntent.environment,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const result = recordValue(data);
+    const intent = recordValue(result.intent) as unknown as PurchaseIntentRow;
+    return this.mapIntent(
+      intent,
+      stringValue(result.delivery_email_ciphertext),
+    );
+  }
+
+  async beginAuthenticatedPurchaseIntentFromContinuation(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    continuationTokenHash: string;
+    now: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "begin_customer_purchase_intent_from_continuation_v1",
+      {
+        p_purchase_intent_id: input.purchaseIntent.id,
+        p_customer_user_id: input.customerUserId,
+        p_continuation_token_hash: input.continuationTokenHash,
+        p_status_capability_hash: input.purchaseIntent.statusCapabilityHash,
+        p_delivery_authority_reference:
+          input.purchaseIntent.deliveryAuthorityReference,
+        p_expected_product_code: input.purchaseIntent.expectedProductCode,
+        p_expected_amount: input.purchaseIntent.expectedAmount,
+        p_currency: input.purchaseIntent.currency,
+        p_purchase_kind: input.purchaseIntent.purchaseKind,
+        p_environment: input.purchaseIntent.environment,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const result = recordValue(data);
+    return this.mapIntent(
+      recordValue(result.intent) as unknown as PurchaseIntentRow,
+      stringValue(result.delivery_email_ciphertext),
+    );
+  }
+
   async reservePaymentAttempt(input: {
     purchaseIntentId: string;
     attemptId: string;
@@ -580,7 +679,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<RecordedPaymentEvidence> {
     const { data, error } = await this.client.rpc(
-      "record_rc2_stripe_evidence_v1",
+      "record_rc2_stripe_evidence_v2",
       {
         p_provider_event_id: input.evidence.providerEventId,
         p_evidence_source: input.evidence.evidenceSource,
@@ -636,6 +735,51 @@ export class SupabasePaymentDeliveryRepository
       purchaseIntent,
       fulfillmentJob: job ? mapJob(job) : null,
     };
+  }
+
+  async findAuthenticatedPurchaseStatus(input: {
+    customerUserId: string;
+    statusCapabilityHash: string;
+  }): Promise<PurchaseStatusRecord | null> {
+    const { data, error } = await this.client.rpc(
+      "resolve_customer_purchase_status_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_status_capability_hash: input.statusCapabilityHash,
+      },
+    );
+    if (error) databaseFailure(error);
+    if (data === null) return null;
+    const result = recordValue(data);
+    const intentValue = recordValue(result.intent);
+    const emailCiphertext = stringValue(intentValue.email_ciphertext);
+    const purchaseIntent = await this.mapIntent(
+      intentValue as unknown as PurchaseIntentRow,
+      emailCiphertext,
+    );
+    const jobValue = result.job;
+    return {
+      purchaseIntent,
+      fulfillmentJob:
+        jobValue === null
+          ? null
+          : mapJob(recordValue(jobValue) as unknown as FulfillmentJobRow),
+    };
+  }
+
+  async resolveAuthenticatedResultDeliveryId(input: {
+    customerUserId: string;
+    purchaseIntentId: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "resolve_customer_completed_delivery_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_purchase_intent_id: input.purchaseIntentId,
+      },
+    );
+    if (error) databaseFailure(error);
+    return data === null ? null : stringValue(data);
   }
 
   async claimFulfillmentJob(input: {
@@ -738,16 +882,11 @@ export class SupabasePaymentDeliveryRepository
   async resolveDeliveryEmailCiphertext(
     deliveryAuthorityReference: string,
   ) {
-    const { data: intent, error } = await this.client
-      .from("production_purchase_intents")
-      .select("verified_email_authority_id")
-      .eq("delivery_authority_reference", deliveryAuthorityReference)
-      .maybeSingle();
-    if (error) databaseFailure(error);
-    if (!intent) return null;
-    const authority = await this.getAuthority(
-      intent.verified_email_authority_id,
+    const { data, error } = await this.client.rpc(
+      "resolve_production_delivery_email_v2",
+      { p_delivery_authority_reference: deliveryAuthorityReference },
     );
-    return authority?.revokedAt === null ? authority.emailCiphertext : null;
+    if (error) databaseFailure(error);
+    return data === null ? null : stringValue(data);
   }
 }

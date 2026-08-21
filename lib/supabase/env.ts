@@ -1,10 +1,13 @@
-type SupabasePublicEnv = {
+import "server-only";
+
+type SupabaseCustomerAuthEnv = {
   supabaseUrl: string;
-  supabaseAnonKey: string;
+  supabasePublishableKey: string;
 };
 
-type SupabaseAdminEnv = SupabasePublicEnv & {
-  supabaseServiceRoleKey: string;
+type SupabaseAdminEnv = {
+  supabaseUrl: string;
+  supabaseSecretKey: string;
 };
 
 function readRequiredEnv(name: string) {
@@ -17,16 +20,16 @@ function readRequiredEnv(name: string) {
   return value;
 }
 
-export function getSupabasePublicEnv(): SupabasePublicEnv {
+export function getSupabaseCustomerAuthEnv(): SupabaseCustomerAuthEnv {
   return {
-    supabaseUrl: readRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    supabaseAnonKey: readRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    supabaseUrl: readRequiredEnv("SUPABASE_URL"),
+    supabasePublishableKey: readRequiredEnv("SUPABASE_PUBLISHABLE_KEY"),
   };
 }
 
 export function getSupabaseAdminEnv(): SupabaseAdminEnv {
   return {
-    ...getSupabasePublicEnv(),
-    supabaseServiceRoleKey: readRequiredEnv("SUPABASE_SERVICE_ROLE_KEY"),
+    supabaseUrl: readRequiredEnv("SUPABASE_URL"),
+    supabaseSecretKey: readRequiredEnv("SUPABASE_SECRET_KEY"),
   };
 }

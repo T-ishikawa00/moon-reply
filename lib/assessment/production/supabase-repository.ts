@@ -125,7 +125,7 @@ type ProductionDatabase = {
       fail_production_preparation_v1: RuntimeFunction;
       rotate_production_preparation_capability_v1: RuntimeFunction;
       issue_production_assessment_grant_v1: RuntimeFunction;
-      issue_rc2_production_assessment_grant_v1: RuntimeFunction;
+      issue_rc2_production_assessment_grant_v2: RuntimeFunction;
       claim_production_fulfillment_v1: RuntimeFunction;
       mark_production_generation_started_v1: RuntimeFunction;
       complete_production_fulfillment_v1: RuntimeFunction;
@@ -616,7 +616,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }): Promise<AssessmentGrantHandleV1> {
     const { data, error } = await this.client.rpc(
-      "issue_rc2_production_assessment_grant_v1",
+      "issue_rc2_production_assessment_grant_v2",
       {
         p_grant_id: input.grantId,
         p_purchase_id: input.purchaseId,

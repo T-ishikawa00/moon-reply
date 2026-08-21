@@ -4,6 +4,7 @@ import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
 import { RequestForm } from "@/components/request/RequestForm";
 import { isCustomerPaymentFlowVisible } from "@/lib/payment/production/environment";
+import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +66,12 @@ export default function RequestPage() {
           </div>
         </div>
       </section>
-      <RequestForm paymentEnabled={paymentEnabled} />
+      <RequestForm
+        paymentEnabled={paymentEnabled}
+        customerAuthEnabled={
+          paymentEnabled && isCustomerAuthFoundationEnabled()
+        }
+      />
     </main>
   );
 }

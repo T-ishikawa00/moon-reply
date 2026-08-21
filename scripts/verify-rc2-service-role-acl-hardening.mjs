@@ -4,7 +4,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const acceptedStepEBase = "243e8655098ba9e0972e0e1efd68f83fbc2ded30";
+const acceptedFoundationBase =
+  "8bf6c4e9c0a860b48826708676f0abe7c4395714";
 const migration0013 =
   "supabase/migrations/0013_rc2_service_role_acl_hardening.sql";
 
@@ -374,11 +375,11 @@ await check("package exposes the exact offline verifier entrypoint", () => {
   );
 });
 
-await check("production Runtime change is limited to the Step E email seam", () => {
+await check("production Runtime change is the exact Foundation surface", () => {
   const trackedChanges = gitText([
     "diff",
     "--name-only",
-    acceptedStepEBase,
+    acceptedFoundationBase,
     "--",
     "app",
     "components",
@@ -400,8 +401,45 @@ await check("production Runtime change is limited to the Step E email seam", () 
   assert.deepEqual(
     [...new Set([...trackedChanges, ...untrackedChanges])].sort(),
     [
-      "lib/payment/production/resend-transactional-email.ts",
+      "app/account/account.module.css",
+      "app/account/page.tsx",
+      "app/account/results/[deliveryId]/page.tsx",
+      "app/api/auth/callback/route.ts",
+      "app/api/auth/continuations/route.ts",
+      "app/api/auth/email-otp/request/route.ts",
+      "app/api/auth/email-otp/verify/route.ts",
+      "app/api/auth/google/start/route.ts",
+      "app/api/auth/logout/route.ts",
+      "app/api/payments/checkout/route.ts",
+      "app/api/payments/status/route.ts",
+      "app/purchase/auth/continue/page.tsx",
+      "app/request/page.tsx",
+      "components/account/AccountLogoutButton.tsx",
+      "components/payment/AuthenticatedCheckoutButton.tsx",
+      "components/request/RequestForm.tsx",
+      "lib/assessment/production/supabase-repository.ts",
+      "lib/customer-auth/application.ts",
+      "lib/customer-auth/cookies.ts",
+      "lib/customer-auth/crypto.ts",
+      "lib/customer-auth/environment.ts",
+      "lib/customer-auth/fakes.ts",
+      "lib/customer-auth/request-security.ts",
+      "lib/customer-auth/route-response.ts",
+      "lib/customer-auth/service.ts",
+      "lib/customer-auth/supabase-provider.ts",
+      "lib/customer-auth/supabase-repository.ts",
+      "lib/customer-auth/types.ts",
+      "lib/payment/production/application.ts",
+      "lib/payment/production/fakes.ts",
       "lib/payment/production/service.ts",
+      "lib/payment/production/supabase-repository.ts",
+      "lib/payment/production/types.ts",
+      "lib/supabase/admin.ts",
+      "lib/supabase/client.ts",
+      "lib/supabase/cookie-policy.ts",
+      "lib/supabase/env.ts",
+      "lib/supabase/proxy.ts",
+      "lib/supabase/server.ts",
     ],
   );
 });

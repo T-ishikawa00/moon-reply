@@ -102,8 +102,9 @@ export type EmailVerificationCompleteOutcome = Readonly<{
 export type PurchaseIntentRecord = Readonly<{
   id: string;
   preparationId: string;
-  verifiedEmailAuthorityId: string;
-  trustedEmailSessionId: string;
+  verifiedEmailAuthorityId: string | null;
+  trustedEmailSessionId: string | null;
+  customerOwnershipBindingId: string | null;
   deliveryAuthorityReference: string;
   emailCiphertext: string;
   expectedProductCode: string;
@@ -307,6 +308,18 @@ export type PaymentDeliveryRepository = {
     trustedSessionTokenHash: string;
     now: string;
   }): Promise<PurchaseIntentRecord>;
+  beginAuthenticatedPurchaseIntent(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    preparationCapabilityHash: string;
+    now: string;
+  }): Promise<PurchaseIntentRecord>;
+  beginAuthenticatedPurchaseIntentFromContinuation(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    continuationTokenHash: string;
+    now: string;
+  }): Promise<PurchaseIntentRecord>;
   reservePaymentAttempt(input: {
     purchaseIntentId: string;
     attemptId: string;
@@ -343,6 +356,14 @@ export type PaymentDeliveryRepository = {
   findPurchaseStatus(
     statusCapabilityHash: string,
   ): Promise<PurchaseStatusRecord | null>;
+  findAuthenticatedPurchaseStatus(input: {
+    customerUserId: string;
+    statusCapabilityHash: string;
+  }): Promise<PurchaseStatusRecord | null>;
+  resolveAuthenticatedResultDeliveryId(input: {
+    customerUserId: string;
+    purchaseIntentId: string;
+  }): Promise<string | null>;
   claimFulfillmentJob(input: {
     statusCapabilityHash: string;
     ownerId: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FormEvent,
   useEffect,
@@ -88,6 +89,15 @@ type ProductionPurchaseFlow =
       answer: string;
     }
   | { status: "sending_verification"; preparationCapability: string }
+  | { status: "auth_method"; preparationCapability: string }
+  | { status: "auth_email_requesting"; preparationCapability: string }
+  | { status: "auth_google_redirecting"; preparationCapability: string }
+  | {
+      status: "awaiting_auth_email_otp";
+      preparationCapability: string;
+      csrfToken: string;
+      otp: string;
+    }
   | {
       status: "awaiting_email_code";
       preparationCapability: string;
@@ -478,6 +488,17 @@ function readResponseData(value: unknown) {
   return isRecord(value) && isRecord(value.data) ? value.data : null;
 }
 
+function createClientCsrfToken() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary)
+    .replace(/\+/gu, "-")
+    .replace(/\//gu, "_")
+    .replace(/=+$/gu, "");
+}
+
 function decodeProductionPreparation(
   value: unknown,
 ): ProductionPreparationOutcome | null {
@@ -733,6 +754,7 @@ function LocalPurchaseConfirmation({
   checkoutError,
   onCheckout,
   onEditEmail,
+  customerAuthEnabled,
 }: {
   form: RequestFormData;
   presentation: SafetyPresentation;
@@ -742,6 +764,7 @@ function LocalPurchaseConfirmation({
   checkoutError: string | null;
   onCheckout: () => void;
   onEditEmail: () => void;
+  customerAuthEnabled: boolean;
 }) {
   return (
     <article
@@ -766,9 +789,16 @@ function LocalPurchaseConfirmation({
         <MemoRow label="文案について" value={presentation.draftAvailability} />
         <MemoRow label="今の関係" value={form.relationship} />
         <MemoRow label="今夜知りたいこと" value={form.whatToKnow.join("、")} />
-        <MemoRow label="受け取り・復旧メール" value={form.email} />
+        {customerAuthEnabled ? (
+          <MemoRow label="受け取り" value="確認済みアカウント" />
+        ) : (
+          <MemoRow label="受け取り・復旧メール" value={form.email} />
+        )}
         {verifiedEmail ? (
-          <MemoRow label="メール確認" value={`${verifiedEmail} / 確認済み`} />
+          <MemoRow
+            label={customerAuthEnabled ? "ご本人確認" : "メール確認"}
+            value={customerAuthEnabled ? "確認済みアカウント" : `${verifiedEmail} / 確認済み`}
+          />
         ) : null}
         <MemoRow label="数量" value="1相談 / 1鑑定ノート" />
         <MemoRow label="料金" value="税込980円" />
@@ -827,13 +857,20 @@ function LocalPurchaseConfirmation({
         </>
       )}
       <button type="button" className="text-link" onClick={onEditEmail}>
-        メールアドレスを修正する
+        {customerAuthEnabled ? "ログイン方法を変更する" : "メールアドレスを修正する"}
       </button>
     </article>
   );
 }
 
-export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boolean }) {
+export function RequestForm({
+  paymentEnabled = false,
+  customerAuthEnabled = false,
+}: {
+  paymentEnabled?: boolean;
+  customerAuthEnabled?: boolean;
+}) {
+  const router = useRouter();
   const [form, setForm] = useState<RequestFormData>(initialFormState);
   const [safety, setSafety] =
     useState<SafetySelectionState>(initialSafetyState);
@@ -1435,6 +1472,138 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
     }
   }
 
+  async function beginCustomerAuth(
+    preparationCapability: string,
+    flowKind: "google" | "email_otp",
+  ) {
+    if (flowKind === "email_otp") {
+      const emailErrors = validateEmail(form);
+      if (Object.keys(emailErrors).length > 0) {
+        setErrors(emailErrors);
+        focusFirstError(emailErrors);
+        return;
+      }
+    }
+    const csrfToken = createClientCsrfToken();
+    setErrors({});
+    setProductionFlow({
+      status:
+        flowKind === "google"
+          ? "auth_google_redirecting"
+          : "auth_email_requesting",
+      preparationCapability,
+    });
+    try {
+      const continuationResponse = await fetch("/api/auth/continuations", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Moon-Reply-CSRF": csrfToken,
+        },
+        body: JSON.stringify({
+          preparationCapability,
+          csrfToken,
+          flowKind,
+        }),
+      });
+      if (!continuationResponse.ok) {
+        throw new Error("CUSTOMER_AUTH_CONTINUATION_FAILED");
+      }
+      const continuation = readResponseData(await continuationResponse.json());
+      if (
+        continuation?.status !== "continuation_ready" ||
+        continuation.csrfToken !== csrfToken
+      ) {
+        throw new Error("CUSTOMER_AUTH_CONTINUATION_INVALID");
+      }
+      if (flowKind === "google") {
+        const response = await fetch("/api/auth/google/start", {
+          method: "POST",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ csrfToken }),
+        });
+        if (!response.ok) throw new Error("CUSTOMER_AUTH_GOOGLE_START_FAILED");
+        const data = readResponseData(await response.json());
+        if (
+          data?.status !== "redirect_ready" ||
+          typeof data.authorizationUrl !== "string"
+        ) {
+          throw new Error("CUSTOMER_AUTH_GOOGLE_RESPONSE_INVALID");
+        }
+        const authorizationUrl = new URL(data.authorizationUrl);
+        if (authorizationUrl.protocol !== "https:") {
+          throw new Error("CUSTOMER_AUTH_GOOGLE_URL_INVALID");
+        }
+        window.location.assign(authorizationUrl.toString());
+        return;
+      }
+      const response = await fetch("/api/auth/email-otp/request", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ csrfToken, email: form.email.trim() }),
+      });
+      if (!response.ok) throw new Error("CUSTOMER_AUTH_EMAIL_OTP_REQUEST_FAILED");
+      const data = readResponseData(await response.json());
+      if (data?.status !== "accepted") {
+        throw new Error("CUSTOMER_AUTH_EMAIL_OTP_RESPONSE_INVALID");
+      }
+      setProductionFlow({
+        status: "awaiting_auth_email_otp",
+        preparationCapability,
+        csrfToken,
+        otp: "",
+      });
+    } catch {
+      setProductionFlow({
+        status: "error",
+        message: productionFlowMessage("unavailable"),
+      });
+    }
+  }
+
+  async function submitCustomerAuthEmailOtp() {
+    if (
+      productionFlow.status !== "awaiting_auth_email_otp" ||
+      !/^[A-Za-z0-9]{6,12}$/u.test(productionFlow.otp) ||
+      !safetyResult ||
+      !isEligibleClassification(safetyResult.classification)
+    ) {
+      return;
+    }
+    const current = productionFlow;
+    try {
+      const response = await fetch("/api/auth/email-otp/verify", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          csrfToken: current.csrfToken,
+          email: form.email.trim(),
+          otp: current.otp,
+        }),
+      });
+      if (!response.ok) throw new Error("CUSTOMER_AUTH_EMAIL_OTP_INVALID");
+      const data = readResponseData(await response.json());
+      if (data?.status !== "customer_bound") {
+        throw new Error("CUSTOMER_AUTH_BINDING_INVALID");
+      }
+      router.push("/purchase/auth/continue");
+    } catch {
+      setProductionFlow({ ...current, otp: "" });
+      setErrors((existing) => ({
+        ...existing,
+        email: "確認コードを確認できませんでした。届いたコードを見直してください。",
+      }));
+    }
+  }
+
   async function prepareProductionPurchase(
     classification: EligiblePrepaymentClassificationV1,
   ) {
@@ -1469,10 +1638,17 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
       const outcome = decodeProductionPreparation(await response.json());
       if (!outcome) throw new Error("PRODUCTION_PREPARATION_INVALID");
       if (outcome.status === "purchase_ready") {
-        await beginMailboxVerification(
-          outcome.preparationCapability,
-          classification,
-        );
+        if (customerAuthEnabled) {
+          setProductionFlow({
+            status: "auth_method",
+            preparationCapability: outcome.preparationCapability,
+          });
+        } else {
+          await beginMailboxVerification(
+            outcome.preparationCapability,
+            classification,
+          );
+        }
         return;
       }
       if (outcome.status === "needs_one_clarifying_answer") {
@@ -1524,10 +1700,17 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
       if (!outcome || outcome.status !== "purchase_ready") {
         throw new Error("PRODUCT_CLARIFICATION_INVALID");
       }
-      await beginMailboxVerification(
-        outcome.preparationCapability,
-        classification,
-      );
+      if (customerAuthEnabled) {
+        setProductionFlow({
+          status: "auth_method",
+          preparationCapability: outcome.preparationCapability,
+        });
+      } else {
+        await beginMailboxVerification(
+          outcome.preparationCapability,
+          classification,
+        );
+      }
     } catch {
       setProductionFlow({
         status: "error",
@@ -1625,7 +1808,7 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
   async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const sheetErrors = validateSheet(form);
-    const emailErrors = validateEmail(form);
+    const emailErrors = customerAuthEnabled ? {} : validateEmail(form);
     if (Object.keys(sheetErrors).length > 0) {
       setPhase(1);
       setErrors(sheetErrors);
@@ -1711,6 +1894,7 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
             setCheckoutError(null);
             moveToPhase(4);
           }}
+          customerAuthEnabled={customerAuthEnabled}
         />
       </section>
     );
@@ -2597,10 +2781,15 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
           <form noValidate onSubmit={handleEmailSubmit}>
             <div className="request-field">
               <label htmlFor="request-email">
-                受け取りメールアドレス <span>必須</span>
+                {customerAuthEnabled
+                  ? "メールで続ける場合のアドレス"
+                  : "受け取りメールアドレス"}{" "}
+                {!customerAuthEnabled ? <span>必須</span> : null}
               </label>
               <p id="email-note">
-                {paymentEnabled
+                {customerAuthEnabled
+                  ? "Googleで続ける場合は入力不要です。メールで続ける場合だけ入力してください。"
+                  : paymentEnabled
                   ? "鑑定結果の送付と、ご購入に関する重要な連絡に使用します。確認コードで受け取り先を確かめます。"
                   : "鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。現在は送信も保存もされません。"}
               </p>
@@ -2616,6 +2805,87 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
               />
               <FieldError id="email-error" message={errors.email} />
             </div>
+            {paymentEnabled &&
+            customerAuthEnabled &&
+            productionFlow.status === "auth_method" ? (
+              <div className="request-field request-email-verification">
+                <strong>続ける方法を選んでください</strong>
+                <p>
+                  Googleまたはメールでご本人確認を行います。Googleで登録した場合は、次回もGoogleで続けてください。
+                </p>
+                <button
+                  type="button"
+                  className="button button--primary"
+                  onClick={() =>
+                    void beginCustomerAuth(
+                      productionFlow.preparationCapability,
+                      "google",
+                    )
+                  }
+                >
+                  Googleで続ける
+                </button>
+                <button
+                  type="button"
+                  className={`button button--secondary ${styles.paperSecondary}`}
+                  onClick={() =>
+                    void beginCustomerAuth(
+                      productionFlow.preparationCapability,
+                      "email_otp",
+                    )
+                  }
+                >
+                  メールで続ける
+                </button>
+                <small>
+                  メールが届かない場合、Googleで登録した方はGoogleで続けてください。アカウントの有無や登録方法は表示しません。
+                </small>
+              </div>
+            ) : null}
+            {paymentEnabled &&
+            customerAuthEnabled &&
+            productionFlow.status === "awaiting_auth_email_otp" ? (
+              <div className="request-field request-email-verification">
+                <label htmlFor="customer-auth-email-otp">
+                  メールに届いた確認コード <span>必須</span>
+                </label>
+                <p>
+                  Supabase Authの確認コードを入力してください。従来の8桁メール確認とは別の仕組みです。
+                </p>
+                <input
+                  id="customer-auth-email-otp"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={12}
+                  value={productionFlow.otp}
+                  onChange={(event) => {
+                    const otp = event.target.value.replace(/[^A-Za-z0-9]/gu, "");
+                    setProductionFlow({ ...productionFlow, otp });
+                    clearFieldError("email");
+                  }}
+                  aria-invalid={Boolean(errors.email)}
+                />
+                <button
+                  type="button"
+                  className="button button--primary"
+                  disabled={!/^[A-Za-z0-9]{6,12}$/u.test(productionFlow.otp)}
+                  onClick={() => void submitCustomerAuthEmailOtp()}
+                >
+                  このコードで続ける
+                </button>
+              </div>
+            ) : null}
+            {paymentEnabled &&
+            customerAuthEnabled &&
+            (productionFlow.status === "auth_email_requesting" ||
+              productionFlow.status === "auth_google_redirecting") ? (
+              <p role="status">
+                {productionFlow.status === "auth_google_redirecting"
+                  ? "Googleの確認画面を準備しています。"
+                  : "確認メールをリクエストしています。"}
+              </p>
+            ) : null}
             {paymentEnabled &&
             productionFlow.status === "product_clarification" ? (
               <div className="request-field request-product-clarification">
@@ -2687,7 +2957,11 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
             <div className="request-runtime-note" role="note">
               {paymentEnabled ? (
                 <>
-                  <strong>確認済みのメールアドレスだけを受け取り先にします。</strong>
+                  <strong>
+                    {customerAuthEnabled
+                      ? "確認済みのアカウントだけを購入に結び付けます。"
+                      : "確認済みのメールアドレスだけを受け取り先にします。"}
+                  </strong>
                   <span>
                     相談内容はメール事業者や決済メタデータへ送りません。メール確認後、税込980円・都度払い・自動更新なしの最終確認へ進みます。
                   </span>
@@ -2716,6 +2990,10 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
                   safetyBusy ||
                   productionFlow.status === "preparing" ||
                   productionFlow.status === "sending_verification" ||
+                  productionFlow.status === "auth_method" ||
+                  productionFlow.status === "auth_email_requesting" ||
+                  productionFlow.status === "auth_google_redirecting" ||
+                  productionFlow.status === "awaiting_auth_email_otp" ||
                   productionFlow.status === "awaiting_email_code" ||
                   productionFlow.status === "product_clarification"
                 }
@@ -2724,6 +3002,14 @@ export function RequestForm({ paymentEnabled = false }: { paymentEnabled?: boole
                   ? "現在の入力を確認しています"
                   : productionFlow.status === "sending_verification"
                     ? "確認メールを送っています"
+                    : productionFlow.status === "auth_method"
+                      ? "続ける方法を選んでください"
+                      : productionFlow.status === "auth_email_requesting"
+                        ? "確認メールをリクエストしています"
+                        : productionFlow.status === "auth_google_redirecting"
+                          ? "Googleの確認画面を準備しています"
+                          : productionFlow.status === "awaiting_auth_email_otp"
+                            ? "確認コードを入力してください"
                     : paymentEnabled
                       ? "受け取り先を確認する"
                       : "購入前の内容を確認する"}

@@ -173,6 +173,42 @@ export async function createProductionStripeCheckout(input: {
   return application.startCheckout(input);
 }
 
+export async function createAuthenticatedProductionStripeCheckout(input: {
+  preparationCapability: unknown;
+  customerUserId: string;
+}) {
+  if (!isCheckoutAvailable()) {
+    throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);
+  }
+  const stripe = readStripeCheckoutEnvironment();
+  const { application } = createApplication({
+    checkoutProvider: new StripeCheckoutProviderV1(stripe.secretKey),
+    transactionalEmail: new UnconfiguredTransactionalEmailAdapterV1(),
+    grantProcessor: new UnavailableGrantProcessorV1(),
+    paymentEnvironment: stripe.environment,
+    payPayEnabled: stripe.payPayEnabled,
+  });
+  return application.startAuthenticatedCheckout(input);
+}
+
+export async function createAuthenticatedProductionStripeCheckoutFromContinuation(input: {
+  continuationToken: unknown;
+  customerUserId: string;
+}) {
+  if (!isCheckoutAvailable()) {
+    throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);
+  }
+  const stripe = readStripeCheckoutEnvironment();
+  const { application } = createApplication({
+    checkoutProvider: new StripeCheckoutProviderV1(stripe.secretKey),
+    transactionalEmail: new UnconfiguredTransactionalEmailAdapterV1(),
+    grantProcessor: new UnavailableGrantProcessorV1(),
+    paymentEnvironment: stripe.environment,
+    payPayEnabled: stripe.payPayEnabled,
+  });
+  return application.startAuthenticatedCheckoutFromContinuation(input);
+}
+
 export async function restartProductionStripeCheckout(input: {
   statusCapability: unknown;
   trustedSessionToken: unknown;
@@ -189,6 +225,24 @@ export async function restartProductionStripeCheckout(input: {
     payPayEnabled: stripe.payPayEnabled,
   });
   return application.restartCheckout(input);
+}
+
+export async function restartAuthenticatedProductionStripeCheckout(input: {
+  statusCapability: unknown;
+  customerUserId: string;
+}) {
+  if (!isCheckoutAvailable()) {
+    throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);
+  }
+  const stripe = readStripeCheckoutEnvironment();
+  const { application } = createApplication({
+    checkoutProvider: new StripeCheckoutProviderV1(stripe.secretKey),
+    transactionalEmail: new UnconfiguredTransactionalEmailAdapterV1(),
+    grantProcessor: new UnavailableGrantProcessorV1(),
+    paymentEnvironment: stripe.environment,
+    payPayEnabled: stripe.payPayEnabled,
+  });
+  return application.restartAuthenticatedCheckout(input);
 }
 
 export async function verifyAndRecordProductionStripeWebhook(
@@ -278,6 +332,19 @@ export async function processProductionPurchaseStatus(
   return activeFulfillmentApplication(
     paymentEnvironment,
   ).processPurchaseStatus(statusCapability, trustedSessionToken);
+}
+
+export async function processAuthenticatedProductionPurchaseStatus(
+  statusCapability: unknown,
+  customerUserId: string,
+) {
+  if (!isPaidFulfillmentProcessingAvailable()) {
+    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  }
+  const paymentEnvironment = readConfiguredPaymentEnvironment();
+  return activeFulfillmentApplication(
+    paymentEnvironment,
+  ).processAuthenticatedPurchaseStatus(statusCapability, customerUserId);
 }
 
 export async function processProductionFulfillmentJobById(jobId: unknown) {

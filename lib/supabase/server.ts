@@ -1,16 +1,39 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import "server-only";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
-import { getSupabasePublicEnv } from "./env";
-import type { Database } from "./types";
+import { CUSTOMER_AUTH_COOKIE_POLICY } from "./cookie-policy";
+import { getSupabaseCustomerAuthEnv } from "./env";
 
-export function createServerSupabaseClient(): SupabaseClient<Database> {
-  const { supabaseUrl, supabaseAnonKey } = getSupabasePublicEnv();
+export async function createCustomerAuthServerClient() {
+  const cookieStore = await cookies();
+  const { supabaseUrl, supabasePublishableKey } =
+    getSupabaseCustomerAuthEnv();
 
-  return createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  return createServerClient(supabaseUrl, supabasePublishableKey, {
     auth: {
-      autoRefreshToken: false,
+      flowType: "pkce",
       detectSessionInUrl: false,
-      persistSession: false,
+    },
+    cookieOptions: CUSTOMER_AUTH_COOKIE_POLICY,
+    cookies: {
+      getAll() {
+        return cookieStore.getAll().map(({ name, value }) => ({ name, value }));
+      },
+      setAll(cookiesToSet) {
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, {
+              ...options,
+              ...CUSTOMER_AUTH_COOKIE_POLICY,
+              domain: undefined,
+            });
+          }
+        } catch {
+          // Server Components cannot always write cookies. proxy.ts performs
+          // the request-scoped refresh and propagates every Set-Cookie header.
+        }
+      },
     },
   });
 }

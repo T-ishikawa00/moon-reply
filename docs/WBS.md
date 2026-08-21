@@ -1,5 +1,26 @@
 # WBS.md
 
+<!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->
+## Customer Identity Auth Foundation R1 — Implemented, Review Pending
+
+Status: `Customer Identity Auth Foundation R1 implemented_pending_human_chatgpt_review`.
+
+- [x] Start `task/customer-identity-auth-foundation-r1` from accepted Architecture release `8bf6c4e9c0a860b48826708676f0abe7c4395714`; preserve release and main.
+- [x] Add exact stable `@supabase/ssr@0.12.4`; retain exact compatible `@supabase/supabase-js@2.112.3`; keep credential values blank and all activation defaults false.
+- [x] Implement request-scoped publishable-key server Auth, a separate secret-key repository client, production HttpOnly/Secure/Lax/host-only cookies, and narrow Next 16.3 refresh/cache proxy behavior.
+- [x] Implement server-only Google fake/production seam, Email OTP request/verify, callback, logout, non-enumerating UX, exact Origin/Host, CSRF, continuation, callback state, and rate-limit seams.
+- [x] Add append-only `0014` with exactly two Customer Auth tables, atomic canonical binding, detachment, Purchase Intent XOR ownership, and versioned authenticated Payment/Grant successors; preserve `0002..0013` and Runtime `owner_id`.
+- [x] Enforce active Customer ownership in Checkout/status/history/result/delivery paths with fresh server identity and explicit service-role ownership predicates; preserve legacy verification and `/result/[token]`.
+- [x] Add minimal `/account`, authenticated result route, authenticated checkout continuation, and only privacy-safe fields/actions.
+- [x] Prove fresh apply/replay, real local Email OTP/session/cookies/getUser, continuation/CSRF/replay, same/different/concurrent Customer binding, Auth/legacy Purchase lanes, cross-Customer isolation, detach/delete, ACL/RLS, rollback, and Next 16.3 browser behavior.
+- [x] Pass RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, Auth `45/45`, typecheck, zero-warning lint, build `38/38`, diff check, and both zero-vulnerability audits.
+- [x] Keep all prohibited remote/provider/payment/deploy/runtime operations at `0` and record focused evidence.
+- [ ] Complete Human/ChatGPT review and acceptance of this Foundation candidate.
+- [ ] Under later explicit authorization only, apply 0014 remotely or configure Supabase Auth, Google, Resend, production session controls/rate limiting, Stripe, Runtime, deployment, or launch.
+
+Evidence: `docs/auth/CUSTOMER_IDENTITY_AUTH_FOUNDATION_R1_EVIDENCE.md`. Exact next action: **Human/ChatGPT review Customer Identity Auth Foundation R1**. `release/private-ready` remains `8bf6c4e9c0a860b48826708676f0abe7c4395714`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+<!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:END -->
+
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
 ## Customer Identity Architecture V1 — Accepted
 

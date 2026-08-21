@@ -66,6 +66,11 @@ export class FakePaymentDeliveryRepository
   >();
   readonly verifiedPayments = new Map<string, FakeVerifiedPayment>();
   readonly jobs = new Map<string, Mutable<FulfillmentJobRecord>>();
+  readonly authenticatedBindings = new Map<
+    string,
+    { bindingId: string; customerUserId: string; emailCiphertext: string }
+  >();
+  readonly authenticatedResultDeliveries = new Map<string, string>();
 
   seedPurchaseReady(input: {
     id: string;
@@ -78,6 +83,19 @@ export class FakePaymentDeliveryRepository
       preparationCapabilityHash: input.preparationCapabilityHash,
       purchaseReadyAuthorityHash:
         input.purchaseReadyAuthorityHash ?? "a".repeat(64),
+    });
+  }
+
+  seedAuthenticatedBinding(input: {
+    preparationId: string;
+    bindingId: string;
+    customerUserId: string;
+    emailCiphertext: string;
+  }) {
+    this.authenticatedBindings.set(input.preparationId, {
+      bindingId: input.bindingId,
+      customerUserId: input.customerUserId,
+      emailCiphertext: input.emailCiphertext,
     });
   }
 
@@ -333,6 +351,71 @@ export class FakePaymentDeliveryRepository
     }
     this.intents.set(input.purchaseIntent.id, clone(input.purchaseIntent));
     return clone(input.purchaseIntent);
+  }
+
+  async beginAuthenticatedPurchaseIntent(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    preparationCapabilityHash: string;
+    now: string;
+  }) {
+    const preparation = [...this.preparations.values()].find(
+      (candidate) =>
+        candidate.preparationCapabilityHash === input.preparationCapabilityHash &&
+        candidate.status === "purchase_ready",
+    );
+    const binding = preparation
+      ? this.authenticatedBindings.get(preparation.id)
+      : null;
+    if (!preparation || !binding || binding.customerUserId !== input.customerUserId) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_OWNERSHIP_REQUIRED", 403);
+    }
+    const existing = [...this.intents.values()].find(
+      (candidate) => candidate.preparationId === preparation.id,
+    );
+    if (existing) {
+      if (
+        existing.customerOwnershipBindingId !== binding.bindingId ||
+        existing.verifiedEmailAuthorityId !== null ||
+        existing.trustedEmailSessionId !== null
+      ) {
+        throw new M2RuntimeError("CUSTOMER_AUTH_PURCHASE_INTENT_CONFLICT", 409);
+      }
+      return clone(existing);
+    }
+    const intent: Mutable<PurchaseIntentRecord> = {
+      ...clone(input.purchaseIntent),
+      preparationId: preparation.id,
+      customerOwnershipBindingId: binding.bindingId,
+      verifiedEmailAuthorityId: null,
+      trustedEmailSessionId: null,
+      emailCiphertext: binding.emailCiphertext,
+      finalConfirmationAcceptedAt: input.now,
+      createdAt: input.now,
+      updatedAt: input.now,
+    };
+    this.intents.set(intent.id, intent);
+    return clone(intent);
+  }
+
+  async beginAuthenticatedPurchaseIntentFromContinuation(input: {
+    purchaseIntent: PurchaseIntentRecord;
+    customerUserId: string;
+    continuationTokenHash: string;
+    now: string;
+  }) {
+    const preparation = [...this.preparations.values()].find(
+      (candidate) => candidate.preparationCapabilityHash === input.continuationTokenHash,
+    );
+    if (!preparation) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_CONTINUATION_INVALID", 403);
+    }
+    return this.beginAuthenticatedPurchaseIntent({
+      purchaseIntent: input.purchaseIntent,
+      customerUserId: input.customerUserId,
+      preparationCapabilityHash: preparation.preparationCapabilityHash,
+      now: input.now,
+    });
   }
 
   async reservePaymentAttempt(input: {
@@ -655,6 +738,39 @@ export class FakePaymentDeliveryRepository
     };
   }
 
+  async findAuthenticatedPurchaseStatus(input: {
+    customerUserId: string;
+    statusCapabilityHash: string;
+  }): Promise<PurchaseStatusRecord | null> {
+    const status = await this.findPurchaseStatus(input.statusCapabilityHash);
+    if (!status) return null;
+    const binding = this.authenticatedBindings.get(
+      status.purchaseIntent.preparationId,
+    );
+    if (
+      !binding ||
+      binding.customerUserId !== input.customerUserId ||
+      binding.bindingId !== status.purchaseIntent.customerOwnershipBindingId
+    ) {
+      return null;
+    }
+    return status;
+  }
+
+  async resolveAuthenticatedResultDeliveryId(input: {
+    customerUserId: string;
+    purchaseIntentId: string;
+  }) {
+    const intent = this.intents.get(input.purchaseIntentId);
+    const binding = intent
+      ? this.authenticatedBindings.get(intent.preparationId)
+      : null;
+    if (!intent || !binding || binding.customerUserId !== input.customerUserId) {
+      return null;
+    }
+    return this.authenticatedResultDeliveries.get(input.purchaseIntentId) ?? null;
+  }
+
   async claimFulfillmentJob(input: {
     statusCapabilityHash: string;
     ownerId: string;
@@ -773,6 +889,13 @@ export class FakePaymentDeliveryRepository
         candidate.deliveryAuthorityReference === deliveryAuthorityReference,
     );
     if (!intent) return null;
+    if (intent.customerOwnershipBindingId !== null) {
+      const binding = this.authenticatedBindings.get(intent.preparationId);
+      return binding?.bindingId === intent.customerOwnershipBindingId
+        ? binding.emailCiphertext
+        : null;
+    }
+    if (intent.verifiedEmailAuthorityId === null) return null;
     const authority = this.authorities.get(intent.verifiedEmailAuthorityId);
     return authority?.revokedAt === null ? authority.emailCiphertext : null;
   }

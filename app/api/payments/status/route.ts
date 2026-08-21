@@ -6,7 +6,12 @@ import {
   readStrictJsonRequest,
 } from "@/lib/http/strict-json-request";
 import { readTrustedEmailCookie } from "@/lib/payment/production/cookie";
-import { processProductionPurchaseStatus } from "@/lib/payment/production/service";
+import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
+import { createCustomerIdentityAuthApplication } from "@/lib/customer-auth/service";
+import {
+  processAuthenticatedProductionPurchaseStatus,
+  processProductionPurchaseStatus,
+} from "@/lib/payment/production/service";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -42,10 +47,19 @@ export async function POST(request: Request) {
       "purchase-status-recovery",
       String(body.statusCapability),
     );
-    const outcome = await processProductionPurchaseStatus(
-      body.statusCapability,
-      readTrustedEmailCookie(request.headers.get("cookie")),
-    );
+    const outcome = isCustomerAuthFoundationEnabled()
+      ? await processAuthenticatedProductionPurchaseStatus(
+          body.statusCapability,
+          (
+            await (
+              await createCustomerIdentityAuthApplication()
+            ).getFreshIdentity()
+          ).customerUserId,
+        )
+      : await processProductionPurchaseStatus(
+          body.statusCapability,
+          readTrustedEmailCookie(request.headers.get("cookie")),
+        );
     return json({ data: outcome }, 200);
   } catch (error) {
     const safe = asM2RuntimeError(error, "PAYMENT_STATUS_REQUEST_FAILED");

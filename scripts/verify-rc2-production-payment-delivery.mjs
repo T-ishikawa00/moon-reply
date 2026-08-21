@@ -983,7 +983,14 @@ await check("Customer mutation routes reject extra client Payment authority flag
   );
   const activationSources = `${environment}\n${activationPolicy}`;
   const service = readText("lib/payment/production/service.ts");
-  assert.match(checkoutRoute, /Object\.keys\(value\)\.length !== 1/u);
+  assert.match(
+    checkoutRoute,
+    /Object\.keys\(value\)\.length === 1[\s\S]*preparationCapability[\s\S]*statusCapability/u,
+  );
+  assert.match(
+    checkoutRoute,
+    /Object\.keys\(value\)\.length === 2[\s\S]*authContinuation[\s\S]*csrfToken/u,
+  );
   assert.doesNotMatch(checkoutRoute, /paid|paymentSucceeded|purchaseGateSatisfied|grant/u);
   assert.match(checkoutRoute, /readTrustedEmailCookie/u);
   assert.match(checkoutRoute, /enforceSameOrigin/u);

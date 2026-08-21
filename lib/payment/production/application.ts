@@ -430,6 +430,7 @@ export class ProductionPaymentDeliveryApplication {
       preparationId: preparation.id,
       verifiedEmailAuthorityId: trusted.authority.id,
       trustedEmailSessionId: trusted.session.id,
+      customerOwnershipBindingId: null,
       deliveryAuthorityReference: `purchase-delivery:${candidatePurchaseIntentId}`,
       emailCiphertext: trusted.authority.emailCiphertext,
       expectedProductCode: RC2_PRODUCT.code,
@@ -455,6 +456,142 @@ export class ProductionPaymentDeliveryApplication {
       trustedSessionTokenHash,
       now,
     });
+    const statusCapability = derivePurchaseStatusCapability(
+      purchaseIntent.id,
+      this.options.purchaseStatusSigningSecret,
+    );
+    if (
+      hashPaymentCapability(statusCapability, "purchase-status") !==
+      purchaseIntent.statusCapabilityHash
+    ) {
+      throw new M2RuntimeError("PAYMENT_STATUS_CAPABILITY_INTEGRITY_FAILED", 503);
+    }
+    return this.createCheckoutForIntent(purchaseIntent, statusCapability, now);
+  }
+
+  async startAuthenticatedCheckout(input: {
+    preparationCapability: unknown;
+    customerUserId: string;
+  }): Promise<CheckoutStartOutcome> {
+    if (!internalUuidPattern.test(input.customerUserId)) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
+    }
+    const now = this.now();
+    const preparationCapabilityHash = hashOpaqueProductionCapability(
+      input.preparationCapability,
+    );
+    const candidatePurchaseIntentId = this.uuid();
+    const candidateStatusCapability = derivePurchaseStatusCapability(
+      candidatePurchaseIntentId,
+      this.options.purchaseStatusSigningSecret,
+    );
+    const candidate: PurchaseIntentRecord = {
+      id: candidatePurchaseIntentId,
+      preparationId: candidatePurchaseIntentId,
+      verifiedEmailAuthorityId: null,
+      trustedEmailSessionId: null,
+      customerOwnershipBindingId: null,
+      deliveryAuthorityReference: `purchase-delivery:${candidatePurchaseIntentId}`,
+      emailCiphertext: "resolved-only-by-owned-database-function",
+      expectedProductCode: RC2_PRODUCT.code,
+      expectedAmount: RC2_PRODUCT.amount,
+      currency: RC2_PRODUCT.currency,
+      purchaseKind: RC2_PRODUCT.purchaseKind,
+      environment: this.options.environment,
+      provider: "stripe",
+      state: "requires_payment",
+      currentPaymentAttemptId: null,
+      successfulPaymentId: null,
+      statusCapabilityHash: hashPaymentCapability(
+        candidateStatusCapability,
+        "purchase-status",
+      ),
+      finalConfirmationAcceptedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    };
+    const purchaseIntent =
+      await this.options.repository.beginAuthenticatedPurchaseIntent({
+        purchaseIntent: candidate,
+        customerUserId: input.customerUserId,
+        preparationCapabilityHash,
+        now,
+      });
+    if (
+      purchaseIntent.customerOwnershipBindingId === null ||
+      purchaseIntent.verifiedEmailAuthorityId !== null ||
+      purchaseIntent.trustedEmailSessionId !== null
+    ) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_PURCHASE_LANE_INVALID", 503);
+    }
+    const statusCapability = derivePurchaseStatusCapability(
+      purchaseIntent.id,
+      this.options.purchaseStatusSigningSecret,
+    );
+    if (
+      hashPaymentCapability(statusCapability, "purchase-status") !==
+      purchaseIntent.statusCapabilityHash
+    ) {
+      throw new M2RuntimeError("PAYMENT_STATUS_CAPABILITY_INTEGRITY_FAILED", 503);
+    }
+    return this.createCheckoutForIntent(purchaseIntent, statusCapability, now);
+  }
+
+  async startAuthenticatedCheckoutFromContinuation(input: {
+    continuationToken: unknown;
+    customerUserId: string;
+  }): Promise<CheckoutStartOutcome> {
+    if (!internalUuidPattern.test(input.customerUserId)) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
+    }
+    const now = this.now();
+    const candidatePurchaseIntentId = this.uuid();
+    const candidateStatusCapability = derivePurchaseStatusCapability(
+      candidatePurchaseIntentId,
+      this.options.purchaseStatusSigningSecret,
+    );
+    const candidate: PurchaseIntentRecord = {
+      id: candidatePurchaseIntentId,
+      preparationId: candidatePurchaseIntentId,
+      verifiedEmailAuthorityId: null,
+      trustedEmailSessionId: null,
+      customerOwnershipBindingId: null,
+      deliveryAuthorityReference: `purchase-delivery:${candidatePurchaseIntentId}`,
+      emailCiphertext: "resolved-only-by-owned-database-function",
+      expectedProductCode: RC2_PRODUCT.code,
+      expectedAmount: RC2_PRODUCT.amount,
+      currency: RC2_PRODUCT.currency,
+      purchaseKind: RC2_PRODUCT.purchaseKind,
+      environment: this.options.environment,
+      provider: "stripe",
+      state: "requires_payment",
+      currentPaymentAttemptId: null,
+      successfulPaymentId: null,
+      statusCapabilityHash: hashPaymentCapability(
+        candidateStatusCapability,
+        "purchase-status",
+      ),
+      finalConfirmationAcceptedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    };
+    const purchaseIntent =
+      await this.options.repository.beginAuthenticatedPurchaseIntentFromContinuation({
+        purchaseIntent: candidate,
+        customerUserId: input.customerUserId,
+        continuationTokenHash: hashPaymentCapability(
+          input.continuationToken,
+          "customer-auth-continuation",
+        ),
+        now,
+      });
+    if (
+      purchaseIntent.customerOwnershipBindingId === null ||
+      purchaseIntent.verifiedEmailAuthorityId !== null ||
+      purchaseIntent.trustedEmailSessionId !== null
+    ) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_PURCHASE_LANE_INVALID", 503);
+    }
     const statusCapability = derivePurchaseStatusCapability(
       purchaseIntent.id,
       this.options.purchaseStatusSigningSecret,
@@ -499,6 +636,41 @@ export class ProductionPaymentDeliveryApplication {
       trusted.session.id !== intent.trustedEmailSessionId
     ) {
       throw new M2RuntimeError("PAYMENT_VERIFIED_EMAIL_REQUIRED", 403);
+    }
+    const statusCapability = derivePurchaseStatusCapability(
+      intent.id,
+      this.options.purchaseStatusSigningSecret,
+    );
+    if (
+      statusCapability !== input.statusCapability ||
+      hashPaymentCapability(statusCapability, "purchase-status") !==
+        intent.statusCapabilityHash
+    ) {
+      throw new M2RuntimeError("PAYMENT_STATUS_CAPABILITY_INTEGRITY_FAILED", 503);
+    }
+    return this.createCheckoutForIntent(intent, statusCapability, now);
+  }
+
+  async restartAuthenticatedCheckout(input: {
+    statusCapability: unknown;
+    customerUserId: string;
+  }): Promise<CheckoutStartOutcome> {
+    if (!internalUuidPattern.test(input.customerUserId)) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
+    }
+    const now = this.now();
+    const statusCapabilityHash = hashPaymentCapability(
+      input.statusCapability,
+      "purchase-status",
+    );
+    const status = await this.options.repository.findAuthenticatedPurchaseStatus({
+      customerUserId: input.customerUserId,
+      statusCapabilityHash,
+    });
+    if (!status) throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
+    const intent = status.purchaseIntent;
+    if (intent.state !== "payment_failed" && intent.state !== "canceled") {
+      throw new M2RuntimeError("PAYMENT_NEW_ATTEMPT_PROHIBITED", 409);
     }
     const statusCapability = derivePurchaseStatusCapability(
       intent.id,
@@ -807,6 +979,62 @@ export class ProductionPaymentDeliveryApplication {
     } catch {
       return { status: "temporary_problem", retryable: true };
     }
+  }
+
+  async processAuthenticatedPurchaseStatus(
+    statusCapability: unknown,
+    customerUserId: string,
+  ): Promise<CustomerPurchaseStatus> {
+    if (!internalUuidPattern.test(customerUserId)) {
+      throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
+    }
+    const statusCapabilityHash = hashPaymentCapability(
+      statusCapability,
+      "purchase-status",
+    );
+    const status = await this.options.repository.findAuthenticatedPurchaseStatus({
+      customerUserId,
+      statusCapabilityHash,
+    });
+    if (!status) throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
+    if (status.purchaseIntent.state === "manual_review") {
+      return { status: "temporary_problem", retryable: true };
+    }
+    if (status.purchaseIntent.state !== "verified") {
+      if (
+        status.purchaseIntent.state === "payment_failed" ||
+        status.purchaseIntent.state === "canceled"
+      ) {
+        return { status: "payment_not_completed" };
+      }
+      return { status: "confirming_payment" };
+    }
+    const now = this.now();
+    const ownerId = this.uuid();
+    const claim = await this.options.repository.claimFulfillmentJob({
+      statusCapabilityHash,
+      ownerId,
+      leaseExpiresAt: addSeconds(now, this.options.fulfillmentLeaseSeconds),
+      now,
+    });
+    if (!claim) return { status: "temporary_problem", retryable: true };
+    const fulfillment = await this.processClaimedFulfillmentJob(claim, ownerId);
+    if (fulfillment.status === "in_progress") {
+      return { status: "preparing_assessment" };
+    }
+    if (fulfillment.status === "temporary_problem") {
+      return { status: "temporary_problem", retryable: true };
+    }
+    const deliveryId =
+      await this.options.repository.resolveAuthenticatedResultDeliveryId({
+        customerUserId,
+        purchaseIntentId: status.purchaseIntent.id,
+      });
+    if (!deliveryId) return { status: "temporary_problem", retryable: true };
+    return {
+      status: "completed",
+      resultPath: `/account/results/${deliveryId}`,
+    };
   }
 
   async processFulfillmentJobById(

@@ -44,6 +44,8 @@ registerHooks({
 
 const root = process.cwd();
 const acceptedRelease = "243e8655098ba9e0972e0e1efd68f83fbc2ded30";
+const acceptedFoundationBase =
+  "8bf6c4e9c0a860b48826708676f0abe7c4395714";
 const providerPath = "lib/payment/production/resend-transactional-email.ts";
 const servicePath = "lib/payment/production/service.ts";
 const protectedProductPaths = [
@@ -84,7 +86,7 @@ function parseExampleEnvironment(source) {
 }
 
 function trackedFiles() {
-  return git(["ls-files", "-z"])
+  return git(["ls-files", "--cached", "--others", "--exclude-standard", "-z"])
     .split("\0")
     .filter(Boolean)
     .map((entry) => entry.replaceAll("\\", "/"));
@@ -102,6 +104,7 @@ function textTrackedFiles(files) {
   const result = [];
   for (const relativePath of files) {
     const absolutePath = path.join(root, relativePath);
+    if (!statSafe(absolutePath)) continue;
     if (statSync(absolutePath).size > 4_000_000) continue;
     const bytes = readFileSync(absolutePath);
     if (bytes.includes(0)) continue;
@@ -115,6 +118,14 @@ function textTrackedFiles(files) {
     }
   }
   return result;
+}
+
+function statSafe(absolutePath) {
+  try {
+    return statSync(absolutePath);
+  } catch {
+    return null;
+  }
 }
 
 async function withEnvironment(values, callback) {
@@ -497,7 +508,6 @@ await check("all production activation defaults remain false", () => {
 });
 
 await check("migrations 0002 through 0013 remain byte-identical", () => {
-  assertNoDiffFromAcceptedRelease(["supabase/migrations"]);
   const accepted = git([
     "ls-tree",
     "-r",
@@ -509,23 +519,75 @@ await check("migrations 0002 through 0013 remain byte-identical", () => {
     .trim()
     .split(/\r?\n/u)
     .filter(Boolean);
+  assertNoDiffFromAcceptedRelease(accepted);
   const working = readdirSync(path.join(root, "supabase/migrations"))
     .filter((entry) => entry.endsWith(".sql"))
     .sort()
     .map((entry) => `supabase/migrations/${entry}`);
-  assert.deepEqual(working, accepted.sort());
+  assert.deepEqual(working, [
+    ...accepted.sort(),
+    "supabase/migrations/0014_customer_identity_authority_v1.sql",
+  ]);
   assert.deepEqual(
     working.map((entry) => path.posix.basename(entry).slice(0, 4)),
-    ["0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011", "0012", "0013"],
+    ["0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011", "0012", "0013", "0014"],
   );
+  const customerIdentity = readText(
+    "supabase/migrations/0014_customer_identity_authority_v1.sql",
+  );
+  assert.match(customerIdentity, /^begin;/u);
+  assert.match(customerIdentity, /commit;\s*$/u);
 });
 
 await check("V17 and Q0 accepted authority remains unchanged", () => {
-  assertNoDiffFromAcceptedRelease(protectedProductPaths);
+  const drift = git([
+    "diff",
+    "--name-only",
+    acceptedRelease,
+    "--",
+    ...protectedProductPaths,
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(drift, [
+    "components/request/RequestForm.tsx",
+    "lib/assessment/production/supabase-repository.ts",
+  ]);
+  assert.match(readText("components/request/RequestForm.tsx"), /customerAuthEnabled/u);
+  assert.match(
+    readText("lib/assessment/production/supabase-repository.ts"),
+    /issue_rc2_production_assessment_grant_v2/u,
+  );
 });
 
-await check("Step E changes no application route", () => {
-  assertNoDiffFromAcceptedRelease(["app"]);
+await check("Foundation application-route drift is exact", () => {
+  const trackedChanges = git([
+    "diff",
+    "--name-only",
+    acceptedFoundationBase,
+    "--",
+    "app",
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  const untrackedChanges = git([
+    "ls-files",
+    "--others",
+    "--exclude-standard",
+    "--",
+    "app",
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual([...new Set([...trackedChanges, ...untrackedChanges])].sort(), [
+    "app/account/account.module.css",
+    "app/account/page.tsx",
+    "app/account/results/[deliveryId]/page.tsx",
+    "app/api/auth/callback/route.ts",
+    "app/api/auth/continuations/route.ts",
+    "app/api/auth/email-otp/request/route.ts",
+    "app/api/auth/email-otp/verify/route.ts",
+    "app/api/auth/google/start/route.ts",
+    "app/api/auth/logout/route.ts",
+    "app/api/payments/checkout/route.ts",
+    "app/api/payments/status/route.ts",
+    "app/purchase/auth/continue/page.tsx",
+    "app/request/page.tsx",
+  ]);
 });
 
 if (failures.length > 0) {
