@@ -3,6 +3,7 @@
 ## Status and authority
 
 - Status: `Measurement Foundation V1 implemented_pending_human_chatgpt_review`.
+- Review correction: R1 closes authenticated Checkout coverage and adds an explicit server-only module boundary; final acceptance remains pending until all gates pass.
 - Branch: `task/measurement-foundation-v1`.
 - Exact base and accepted Product authority: Customer Identity Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
 - This foundation defines and instruments a vendor-neutral event contract. It does not connect, configure, call, or authorize any analytics or advertising Provider.
@@ -18,7 +19,7 @@
 | `request_complete` | The server response has been decoded as `purchase_ready`, including the one-clarification path | Submit, client validation, or Safety result alone |
 | `auth_start` | A continuation exists and Google returned a valid HTTPS authorization URL, or Email OTP request returned `accepted` | Auth button click |
 | `auth_complete` | Server-side identity verification and preparation binding completed successfully | OTP entry, callback arrival, or button interaction |
-| `checkout_start` | The server returned `checkout_ready` and the client accepted a credential-free Stripe Checkout HTTPS URL | Checkout button click |
+| `checkout_start` | In either Auth regime, the server returned a valid Checkout URL and the client accepted its exact credential-free Stripe Checkout HTTPS authority | Checkout button click |
 | `purchase` | `recordStripeEvidence` durably returned a `verified` or idempotent `duplicate` result with the existing Verified Payment ID | Stripe redirect, query, browser state, status polling, or fulfillment state |
 
 ## Explicit payload allowlist
@@ -42,10 +43,10 @@ The payload contract cannot accept consultation text, `partnerMessage`, `draftMe
 
 - `lib/measurement/events.ts` owns event names, exact payloads, runtime validation, and canonical JPY 980 values.
 - `lib/measurement/client.ts` permits only non-authoritative browser events. Its type excludes `auth_complete` and `purchase`, and it dispatches only to the disabled adapter.
-- `lib/measurement/server.ts` owns `auth_complete` and Verified-Payment-backed `purchase`. All entrypoints are fail-isolated and return a status; they never throw into Auth or Payment.
+- `lib/measurement/server.ts` starts with `import "server-only";` and owns `auth_complete`, the dedicated secret, HMAC identity, and Verified-Payment-backed `purchase`. All entrypoints are fail-isolated and return a status; they never throw into Auth or Payment or enter a Client Component graph.
 - `lib/measurement/adapters.ts` contains only the disabled in-process adapter. It has no network, script, SDK, cookie, browser storage, queue, or database behavior.
 
-App Router page measurement sends a coarse area such as `account_result` or `legacy_result`, never the dynamic pathname. The sample observer and page observer use effect/ref occurrence guards. Request start/complete guards are per mounted request experience. Auth and checkout calls occur only in post-response success branches, not event handlers at click time.
+App Router page measurement sends a coarse area such as `account_result` or `legacy_result`, never the dynamic pathname. The sample observer and page observer use effect/ref occurrence guards. Request start/complete guards are per mounted request experience. Auth and checkout calls occur only in post-response success branches, not event handlers at click time. `checkout_start` covers both the legacy RequestForm Checkout while Auth is OFF and `AuthenticatedCheckoutButton` while Auth is ON; each path validates the exact Stripe origin and empty URL credentials before its sole call and redirect.
 
 ## Purchase authority and transaction identity
 

@@ -5,6 +5,7 @@
 
 - Status: `Measurement Foundation V1 implemented_pending_human_chatgpt_review` on `task/measurement-foundation-v1`, created from exact accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
 - Contract: exact `page_view`, `sample_view`, `request_start`, `request_complete`, `auth_start`, `auth_complete`, `checkout_start`, and `purchase` events with exact runtime-validated allowlisted payloads.
+- R1 correction: `checkout_start` now covers both legacy RequestForm Checkout under Auth OFF and authenticated Checkout under Auth ON, only after successful response, URL parsing, exact Stripe origin, and empty URL credentials; the server-authoritative Measurement module is explicitly `server-only`.
 - Authority: browser events use reviewed post-response/navigation boundaries; `auth_complete` is server binding success; `purchase` exists only after durable Verified Payment recording. It is fixed at JPY 980 and uses a dedicated-secret, deterministic, opaque HMAC transaction ID.
 - Default/runtime: `MEASUREMENT_ENABLED=false`; only a disabled in-process adapter exists. There is no Provider SDK/script/network/cookie/storage, and Measurement failure cannot affect Payment or fulfillment.
 - Privacy/legal: no consultation/customer/capability/result/provider identifiers enter payloads. External adapters, consent/legal conclusions, and any Provider activation require a separate Human/ChatGPT gate.

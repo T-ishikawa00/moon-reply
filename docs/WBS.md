@@ -6,6 +6,7 @@
 - [x] Start `task/measurement-foundation-v1` from accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
 - [x] Define the exact eight-event vendor-neutral contract and exact runtime/type allowlists.
 - [x] Instrument deterministic App Router/sample/request/Auth/checkout success boundaries without render or click authority.
+- [x] R1: cover both legacy Auth-OFF and authenticated Auth-ON Checkout paths after exact accepted Stripe URL validation; enforce `lib/measurement/server.ts` as server-only.
 - [x] Bind `purchase` construction only to durable Verified Payment recording at fixed JPY 980.
 - [x] Derive one opaque stable purchase `transactionId` from Verified Payment UUID with a dedicated HMAC secret.
 - [x] Keep the default disabled and adapter disconnected; add no SDK, script, external call, cookie, storage, or migration.

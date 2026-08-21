@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { trackClientMeasurement } from "@/lib/measurement/client";
+
 export function AuthenticatedCheckoutButton({ csrfToken }: { csrfToken: string }) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -38,6 +40,7 @@ export function AuthenticatedCheckoutButton({ csrfToken }: { csrfToken: string }
       ) {
         throw new Error("invalid checkout URL");
       }
+      trackClientMeasurement("checkout_start", { provider: "stripe" });
       window.location.assign(checkoutUrl.toString());
     } catch {
       setBusy(false);

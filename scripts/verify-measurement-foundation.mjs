@@ -8,6 +8,9 @@ import ts from "typescript";
 
 registerHooks({
   resolve(specifier, context, nextResolve) {
+    if (specifier === "server-only") {
+      return { url: "data:text/javascript,export%20{}", shortCircuit: true };
+    }
     if (
       (specifier.startsWith("./") || specifier.startsWith("../")) &&
       context.parentURL?.endsWith(".ts")
@@ -88,6 +91,51 @@ function occurrences(source, pattern) {
   return [...source.matchAll(pattern)].length;
 }
 
+function checkoutMethod(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  const end = source.indexOf(endMarker, start + startMarker.length);
+  assert.ok(start !== -1 && end > start);
+  return source.slice(start, end);
+}
+
+function assertCheckoutStartBoundary(method, responseShapeMarker) {
+  const request = method.indexOf('fetch("/api/payments/checkout"');
+  const responseAccepted = method.indexOf("if (!response.ok)");
+  const responseShape = method.indexOf(responseShapeMarker);
+  const parsed = method.indexOf("new URL(");
+  const origin = method.indexOf(
+    'checkoutUrl.origin !== "https://checkout.stripe.com"',
+  );
+  const username = method.indexOf('checkoutUrl.username !== ""');
+  const password = method.indexOf('checkoutUrl.password !== ""');
+  const track = method.indexOf(
+    'trackClientMeasurement("checkout_start", { provider: "stripe" })',
+  );
+  const redirect = method.indexOf(
+    "window.location.assign(checkoutUrl.toString())",
+  );
+  const failure = method.indexOf("} catch {");
+  assert.ok(
+    request !== -1 &&
+      responseAccepted > request &&
+      responseShape > responseAccepted &&
+      parsed > responseShape &&
+      origin > parsed &&
+      username > parsed &&
+      password > parsed &&
+      track > Math.max(origin, username, password) &&
+      redirect > track &&
+      failure > redirect,
+  );
+  assert.equal(
+    occurrences(
+      method,
+      /trackClientMeasurement\("checkout_start", \{ provider: "stripe" \}\)/gu,
+    ),
+    1,
+  );
+}
+
 const allFiles = files();
 const eventSource = text("lib/measurement/events.ts");
 const clientSource = text("lib/measurement/client.ts");
@@ -96,6 +144,9 @@ const adapterSource = text("lib/measurement/adapters.ts");
 const measurementSource = [eventSource, clientSource, serverSource, adapterSource]
   .join("\n");
 const requestSource = text("components/request/RequestForm.tsx");
+const authenticatedCheckoutSource = text(
+  "components/payment/AuthenticatedCheckoutButton.tsx",
+);
 const pageViewSource = text(
   "components/measurement/MeasurementPageView.tsx",
 );
@@ -319,18 +370,60 @@ check("auth_complete follows successful server binding", () => {
   assert.doesNotMatch(requestSource, /"auth_complete"/u);
 });
 
-check("checkout_start follows accepted credential-free Stripe URL", () => {
-  const ready = requestSource.indexOf('data?.status !== "checkout_ready"');
-  const origin = requestSource.indexOf(
-    'checkoutUrl.origin !== "https://checkout.stripe.com"',
+check("legacy checkout_start follows its accepted Stripe URL", () => {
+  const method = checkoutMethod(
+    requestSource,
+    "async function startStripeCheckout()",
+    "async function handleEmailSubmit",
   );
-  const track = requestSource.indexOf(
-    'trackClientMeasurement("checkout_start", { provider: "stripe" })',
+  assertCheckoutStartBoundary(method, 'data?.status !== "checkout_ready"');
+});
+
+check("authenticated checkout_start follows its accepted Stripe URL", () => {
+  const method = checkoutMethod(
+    authenticatedCheckoutSource,
+    "async function startCheckout()",
+    "\n  return (",
   );
-  const redirect = requestSource.indexOf(
-    "window.location.assign(checkoutUrl.toString())",
+  assertCheckoutStartBoundary(method, '!("checkoutUrl" in payload.data)');
+  const button = authenticatedCheckoutSource.slice(
+    authenticatedCheckoutSource.indexOf("\n  return ("),
   );
-  assert.ok(ready !== -1 && origin > ready && track > origin && redirect > track);
+  assert.doesNotMatch(button, /checkout_start/u);
+});
+
+check("checkout_start has exactly the two reviewed client call sites", () => {
+  const callSiteFiles = allFiles
+    .filter((entry) => /^(app|components)\/.*\.tsx?$/u.test(entry))
+    .filter((entry) =>
+      text(entry).includes(
+        'trackClientMeasurement("checkout_start", { provider: "stripe" })',
+      ),
+    );
+  assert.deepEqual(callSiteFiles.sort(), [
+    "components/payment/AuthenticatedCheckoutButton.tsx",
+    "components/request/RequestForm.tsx",
+  ]);
+  assert.equal(
+    callSiteFiles.reduce(
+      (total, entry) =>
+        total +
+        occurrences(
+          text(entry),
+          /trackClientMeasurement\("checkout_start", \{ provider: "stripe" \}\)/gu,
+        ),
+      0,
+    ),
+    2,
+  );
+});
+
+check("server-authoritative measurement module is server-only", () => {
+  assert.match(serverSource, /^import "server-only";\r?\n/u);
+  assert.doesNotMatch(
+    requestSource + authenticatedCheckoutSource + clientSource,
+    /measurement\/server/u,
+  );
 });
 
 check("purchase construction follows durable repository authority", () => {

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { registerHooks } from "node:module";
 import path from "node:path";
-import { ProductionPaymentDeliveryApplication } from "../lib/payment/production/application.ts";
 import {
   FakeCheckoutProviderV1,
   FakePaymentDeliveryRepository,
@@ -16,6 +16,19 @@ import { StripeWebhookEvidenceVerifierV1 } from "../lib/payment/production/strip
 import { hashOpaqueProductionCapability } from "../lib/assessment/production/capabilities.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import { hashPaymentCapability } from "../lib/payment/production/crypto.ts";
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier === "server-only") {
+      return { url: "data:text/javascript,export%20{}", shortCircuit: true };
+    }
+    return nextResolve(specifier, context);
+  },
+});
+
+const { ProductionPaymentDeliveryApplication } = await import(
+  "../lib/payment/production/application.ts"
+);
 
 const root = process.cwd();
 const fixedClock = "2026-08-20T03:00:00.000Z";
