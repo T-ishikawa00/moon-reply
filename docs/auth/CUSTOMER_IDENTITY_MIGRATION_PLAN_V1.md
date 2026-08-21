@@ -34,6 +34,7 @@ Proposed fields:
 | `id uuid primary key` | Random server ID |
 | `preparation_id uuid not null` | FK to `production_preparations(id) ON DELETE RESTRICT` |
 | `continuation_token_hash text not null unique` | Hash-only high-entropy secret; no raw token in DB/logs |
+| `csrf_token_hash text not null` | Hash-only per-continuation CSRF authority; the raw CSRF token remains same-origin/browser-bound |
 | `flow_kind text not null` | `google` or `email_otp` |
 | `state text not null` | `pending`, `consumed`, `expired`, or `revoked` |
 | `expires_at timestamptz not null` | Short, explicitly configured TTL |
@@ -43,13 +44,16 @@ Proposed fields:
 Required constraints:
 
 - hash format/length check;
+- independent continuation-token and CSRF-token hash checks; the two raw secrets must never be equal or derived from one another;
 - expiry after creation;
 - terminal-state consistency;
-- at most one usable continuation per preparation and flow, implemented with a partial unique index if the accepted PostgreSQL version supports the exact predicate;
+- at most one pending continuation per preparation, implemented as a partial unique index on `preparation_id WHERE state = 'pending'`;
 - no CustomerUserId before Auth completes;
-- no raw OAuth state, OTP, PKCE verifier, preparation capability, access token, refresh token, email, or result token in ordinary columns or logs.
+- no raw continuation, CSRF token, OAuth state, OTP, PKCE verifier, preparation capability, access token, refresh token, email, or result token in ordinary columns or logs.
 
-The server cookie binds the raw continuation to the browser. Google PKCE verifier/session material is managed through the reviewed server-side Supabase flow, not copied into this table.
+The server cookie binds the raw continuation to the browser. The raw CSRF token is supplied only to the same-origin Auth form/flow. Mutating Auth routes require exact Origin/Host, the valid per-continuation CSRF pair, a pending unexpired continuation, and the rate-limit seam. Google PKCE verifier/session material is managed through the reviewed server-side Supabase flow, not copied into this table.
+
+Do not use `now()` or any other volatile clock expression in a partial-index predicate. Under the locked preparation row, the start function must first transition an expired pending continuation to `expired`, revoke any still-pending superseded flow when policy permits a provider switch, and then insert the single new `pending` row. CSRF validation and continuation consumption occur atomically in the binding/callback transaction.
 
 ### 3.2 `production_customer_ownership_bindings`
 
@@ -322,6 +326,7 @@ The architecture decision is complete, but these external facts require later Hu
 
 - exact Supabase plan support and configured session limits;
 - actual Google OAuth project/domain/consent-screen verification;
+- Supabase Pro-or-higher support for the target time-box/inactivity controls, or a separately reviewed application-level equivalent;
 - actual Resend SMTP sender/domain and deliverability configuration;
 - final processor/region/overseas-transfer description;
 - exact retention periods for consultation, assessment, delivery email, payment evidence, integrity ledger, and security logs;

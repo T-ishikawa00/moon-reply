@@ -5,6 +5,13 @@
 - Design base: accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`
 - Design date / source access date: `2026-08-21`
 
+R1 correction authority:
+
+- Supabase automatic identity linking is directional for this V1 policy: an OAuth sign-in may link to an existing verified Email identity with the same email, but an Email OTP/signup attempt after an OAuth-only account must not be assumed to add or link an Email identity.
+- Customer cookie/session Auth uses only `SUPABASE_URL` plus `SUPABASE_PUBLISHABLE_KEY`. Privileged repositories/admin operations use `SUPABASE_SECRET_KEY` in a separate trust domain.
+- V1 is a traditional server-only web Auth model. It has no browser Supabase client, no `createBrowserClient`, no localStorage Auth token, and no client-side provider token.
+- The desired one-hour JWT, 24-hour inactivity, and 30-day absolute limits remain activation policy; Supabase time-box/inactivity controls require Pro or higher and are not assumed by Foundation R1.
+
 ## 1. Authority decision
 
 Supabase Auth is adopted as the formal Customer Identity Authority for Moon Reply, subject to Human/ChatGPT review of this design. The canonical identity is:
@@ -206,27 +213,52 @@ Supabase-supported verified identity linking is authoritative; Moon Reply must n
 
 | Scenario | V1 behavior |
 | --- | --- |
-| Email OTP first, then Google with the same verified email | Rely on Supabase automatic linking for verified identities. Verify this behavior in the future local/staging test matrix before activation. |
-| Google first, then Email OTP with the same verified email | Same rule: Supabase verified-identity linking, not application-side merging. |
+| Email OTP first, then Google with the same verified email | A later OAuth/Google sign-in may be automatically linked by Supabase to the existing verified Email user. Verify the actual configured behavior in local/staging before activation. |
+| Google first, then Email OTP with the same verified email | Do not assume linking or creation of an Email identity. Supabase may return an obfuscated response and send no verification email. In V1 the Customer must use Google again. |
 | Google changes its email | Existing ownership remains with the same Supabase user ID/provider identity. An email attribute change never transfers Purchase ownership. Any delivery-email change requires a new verified snapshot for future purchases. |
 | Two different verified emails | Treat as separate Supabase users unless the signed-in Customer deliberately completes a supported, reauthenticated linking flow. |
 | Accidental duplicate users | Freeze any transfer. Do not rewrite bindings or merge by email. Route to a documented support review and a later audited, idempotent ownership-transfer operation. |
 | Account-link conflict | Fail closed, preserve both users and all ownership bindings, disclose no cross-account data, and require Human-supported recovery. |
 
-Manual identity linking is not enabled for the initial Private Release. Supabase documents it as a separately configurable capability; enabling it requires future Human approval, reauthentication design, conflict tests, and provider-dashboard verification.
+Both Google and Email OTP remain valid first account-creation choices. The Email OTP request response remains non-enumerating and may show generic guidance equivalent to `メールが届かない場合、Googleで登録した方はGoogleで続けてください。` It must not reveal whether an account exists, which provider owns an email, or whether Supabase sent a message.
+
+Manual identity linking is disabled for the initial Private Release. Supabase documents it as a separately configurable capability; enabling it requires future Human approval, reauthentication design, conflict tests, and provider-dashboard verification. Application-side raw-email merging remains forbidden. The local/staging test matrix must cover both orderings even though V1 deliberately supports no symmetric Google-first -> Email OTP fallback promise.
 
 ## 9. Session, cookie, redirect, and CSRF architecture
 
-- Use `@supabase/ssr` with Next.js server clients. Auth initiation, OTP request/verification, callback exchange, refresh, logout, and sensitive identity checks are server-route operations.
-- Store Auth session material only in framework-managed cookies, never localStorage. Production cookies are `Secure`, `HttpOnly` under this server-only design, `SameSite=Lax`, `Path=/`, and omit `Domain`.
+- V1 chooses a traditional server-only web Auth model. Use request-scoped `@supabase/ssr` `createServerClient` instances only.
+- Do not add `createBrowserClient`, a browser Supabase Auth client, a `NEXT_PUBLIC` Auth key, localStorage Auth tokens, or client-side provider-token persistence.
+- Google initiation, callback exchange, Email OTP request/verification, refresh, logout, and sensitive identity checks are server-route operations.
+- Store Auth session material only in framework-managed cookies. Production cookies are `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/`, and host-only with no `Domain`. Local development may omit `Secure` only where localhost requires it.
+- If a future task introduces a browser Supabase Auth client, the HttpOnly decision must receive a new security review; it must not be silently weakened.
 - Use PKCE for Google/OAuth and exchange the authorization code server-side. Bind a high-entropy, single-use continuation to the preparation; validate callback state and exact flow before binding.
 - Allow only exact production and local-development redirect origins. Do not use a broad production wildcard. A post-auth return target is a server-selected relative path, not an arbitrary URL.
 - Disable caching, static generation, and route prefetch side effects for Auth callback and Customer account responses. Authenticated responses send private/no-store cache policy.
-- Use `getClaims()` for cryptographically verified ordinary identity checks where appropriate. Use a fresh server `getUser()`/session lookup for binding, checkout, identity linking, deletion, and other high-impact operations. Never authorize from unverified `getSession().user` data.
+- Use a fresh server `getUser()` lookup for binding, checkout, deletion, ownership-sensitive result/history access, and other high-impact operations; also require an active, non-detached binding. Never authorize from unverified `getSession().user` data.
 - Protect every state-changing application endpoint with same-origin checks, an anti-CSRF token bound to the session/continuation, and non-GET methods. `SameSite=Lax` is defense in depth, not the sole CSRF control.
-- Configure an access-JWT lifetime of approximately one hour, a 24-hour inactivity timeout, and a 30-day absolute session lifetime for Private Release. Multi-device sessions are allowed. These limits require future Supabase plan/config verification; if the selected plan cannot enforce them, Private Release is blocked until an equivalent server-enforced sensitive-operation policy is reviewed.
+- Use the reviewed Next.js server refresh mechanism: a request-scoped server client plus a narrowly scoped `proxy.ts` only where session refresh is required. Proxy must perform no application rewrite or arbitrary redirect and must exclude static assets. Next 16.3 hard/client navigation, URL, cache, redirect-loop, static-asset, and console/server-error behavior requires focused proof if Proxy is introduced.
+- The refresh proxy uses verified `getClaims()` behavior for refresh/page protection and propagates rotated cookies to both the request and response; it is not a substitute for fresh `getUser()` checks at high-impact boundaries.
+- The target policy remains an approximately one-hour access JWT, 24-hour inactivity timeout, and 30-day absolute session lifetime. Supabase time-boxed and inactivity controls are Pro-plan features. Foundation R1 must not assume they are configured or available and is not blocked from local implementation by that external plan fact.
+- Before Private Release, Human must either use a Supabase plan/configuration supporting the reviewed limits or accept a separately reviewed application-level equivalent. Until then the inactivity/absolute policy is an activation gate, not implemented evidence.
 - Refresh occurs server-side and rotates the refresh token through response cookies. Refresh failure clears local cookies and returns the Customer to the Auth gate without rebinding or recreating a purchase.
 - Normal logout ends the current-device session. Account deletion and explicit security recovery revoke all Supabase sessions. Because an access JWT can remain valid until expiry, sensitive endpoints also verify current user/session state and detached ownership state.
+
+### 9.1 Supabase credential trust-domain separation
+
+The Customer Auth client and privileged application repository are distinct trust domains even though both target Supabase:
+
+| Trust domain | Allowed credentials | Forbidden authority |
+| --- | --- | --- |
+| Cookie-bound Customer Auth | `SUPABASE_URL` + `SUPABASE_PUBLISHABLE_KEY` | `SUPABASE_SECRET_KEY`, service-role/admin DB bypass |
+| Existing privileged repository/admin | `SUPABASE_URL` + `SUPABASE_SECRET_KEY` | `SUPABASE_PUBLISHABLE_KEY` as repository authority, Customer cookie inheritance |
+
+Hard invariants:
+
+- `SUPABASE_SECRET_KEY` is never passed to `createServerClient` for Customer cookie/session Auth.
+- `SUPABASE_PUBLISHABLE_KEY` never replaces the privileged repository authority.
+- No Auth operation inherits the service-role client's RLS-bypass authority.
+- No module-scope Customer Auth client retains request cookies or session state.
+- Static and runtime tests must fail on secret/publishable mixing.
 
 ## 10. Database access and RLS
 
@@ -316,7 +348,9 @@ Human legal review must determine the exact retention periods, cross-border/proc
 
 ## 15. Google production identity and Human setup
 
-Future Human setup, not authorized in this task:
+Google OAuth private development/testing may occur before Public Launch under separately authorized non-production configuration. This design performs none.
+
+Future Human production setup, not authorized in this task:
 
 - create/configure the Google OAuth client under an owned project;
 - configure the exact Supabase callback URI and exact application redirect allowlist;
@@ -328,6 +362,8 @@ Future Human setup, not authorized in this task:
 - configure Resend SMTP sender/domain authentication for Auth mail separately from the existing direct SDK adapter;
 - verify automatic identity-linking behavior and duplicate/conflict cases in a non-production test matrix;
 - record processor, region, contract/DPA, overseas handling, and deletion/retention decisions.
+
+Final production publishing still requires an owned/authorized domain, publicly accessible homepage, Privacy Policy, accurate application identity, exact redirect URIs, and compliant Google branding. Only `openid email profile` scopes are permitted; Gmail, Drive, Calendar, and Contacts remain prohibited. No Google production verification is claimed.
 
 No dashboard, credential, sender, DNS, provider, or account change is performed by this design.
 
@@ -405,11 +441,12 @@ All sources were accessed `2026-08-21`. Conclusions are paraphrased; this regist
 | [Supabase passwordless email](https://supabase.com/docs/guides/auth/auth-email-passwordless) | Email OTP/magic-link flows are supported without a Customer password. |
 | [Supabase signInWithOtp reference](https://supabase.com/docs/reference/javascript/auth-signinwithotp) and [verifyOtp reference](https://supabase.com/docs/reference/javascript/auth-verifyotp) | OTP issuance, account-creation control, and verification must be implemented through the supported Auth APIs. |
 | [Supabase Google social login](https://supabase.com/docs/guides/auth/social-login/auth-google) | Google provider setup requires the provider credentials and exact callback configuration; login needs only identity scopes. |
-| [Supabase identity linking](https://supabase.com/docs/guides/auth/auth-identity-linking) | Verified identities can be linked through Supabase-supported behavior; manual linking is a separate configurable feature. |
-| [Supabase Next.js server client](https://supabase.com/docs/guides/auth/server-side/creating-a-client?framework=nextjs&queryGroups=framework) | Next.js SSR uses cookie-backed server/browser clients; authorization must use verified claims/user data rather than untrusted session payloads. |
+| [Supabase identity linking](https://supabase.com/docs/guides/auth/auth-identity-linking) | OAuth sign-in may automatically link to an existing same-email verified user. Email signup after an OAuth-only account can instead return an obfuscated response with no verification email; V1 must not promise symmetric linking. |
+| [Supabase Next.js server client](https://supabase.com/docs/guides/auth/server-side/creating-a-client?framework=nextjs&queryGroups=framework) | Next.js SSR uses cookie-backed, request-scoped server clients and a server refresh mechanism. V1 deliberately omits the optional browser client. |
 | [Supabase SSR advanced guide](https://supabase.com/docs/guides/auth/server-side/advanced-guide) | PKCE callback exchange, cookie refresh, and Next.js prefetch/cache behavior require deliberate handling. |
 | [Supabase server package guidance](https://supabase.com/docs/guides/auth/choosing-a-server-package) | `@supabase/ssr` is the supported direction for server-rendered frameworks. |
-| [Supabase sessions](https://supabase.com/docs/guides/auth/sessions) and [sign out](https://supabase.com/docs/guides/auth/signout) | Access/refresh-token behavior, multi-device sessions, time-box/inactivity controls, sign-out scope, and JWT-expiry caveats must shape the session policy. |
+| [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-keys) | Publishable keys are the low-privilege client/Auth credential; secret keys are backend-only elevated authority and must remain outside Customer cookie Auth. |
+| [Supabase sessions](https://supabase.com/docs/guides/auth/sessions) and [sign out](https://supabase.com/docs/guides/auth/signout) | Access/refresh-token behavior, multi-device sessions, sign-out scope, and JWT-expiry caveats shape the policy. Time-box and inactivity controls require Pro or higher; traditional server-only applications may use HttpOnly cookies. |
 | [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls) | `redirectTo` must match the configured allowlist; the production Site URL must be exact. |
 | [Supabase rate limits](https://supabase.com/docs/guides/auth/rate-limits) and [CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha) | Auth endpoints have platform limits and optional CAPTCHA; application abuse controls are still required. |
 | [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp) and [email templates](https://supabase.com/docs/guides/auth/auth-email-templates) | Production Auth mail should use custom SMTP; templates and link tracking require deliberate configuration. |
