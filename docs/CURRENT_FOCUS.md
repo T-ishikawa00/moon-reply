@@ -1,18 +1,18 @@
 # CURRENT_FOCUS.md
 
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->
-## Current candidate overlay — Customer Identity Auth Foundation R1
+## Current acceptance overlay — Customer Identity Auth Foundation R1
 
-- Status: `Customer Identity Auth Foundation R1 implemented_pending_human_chatgpt_review`; R1 disposition `PASS_WITH_REQUIRED_R2`; both required R2 corrections are implemented/verified, final Human/ChatGPT acceptance pending.
-- Authority: branch `task/customer-identity-auth-foundation-r1` from exact accepted Architecture release `8bf6c4e9c0a860b48826708676f0abe7c4395714`; `release/private-ready` remains at that SHA and `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `Customer Identity Auth Foundation R1 accepted_complete`; ChatGPT review `PASS_WITH_REQUIRED_R2 -> PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted lineage: R1 `ca1c790ec0cac51f4a7fe13086949728b2d9a8b8` corrected by R2 `9ab3faddeb467032e473cad62b0b8e40cf064d9c`, from exact accepted Architecture release `8bf6c4e9c0a860b48826708676f0abe7c4395714`.
 - Dependencies/trust boundary: exact `@supabase/ssr@0.12.4` and `@supabase/supabase-js@2.112.3`; request-scoped publishable-key Customer Auth is distinct from secret-key privileged repositories. Browser Auth clients, localStorage Auth tokens, provider-token persistence, and authority mixing are forbidden and statically verified.
 - Auth/session: server-only Google and Email OTP seams, exact-origin mutating routes, PKCE callback, one-use continuation/CSRF, fresh `getUser()` for high-impact operations, HttpOnly/Lax/host-only cookies and Secure in production, and a narrow non-rewriting Next 16.3 Proxy covering Account/Auth plus `/purchase/auth/:path*` refresh/cache boundaries.
 - Data: append-only local-only `0014_customer_identity_authority_v1.sql` adds exactly continuation and canonical ownership-binding tables plus an authenticated Purchase Intent XOR lane and versioned Payment/Grant successors. Accepted `0002..0013` and all Runtime `owner_id` lease semantics remain unchanged.
 - Product/cutover: Auth OFF preserves the accepted legacy lane; Auth ON routes every new paid-flow identity through Customer Auth and blocks new legacy verification start/completion before writes, without emergency-stop fallback. Dual-lane DB compatibility and `/result/[token]` bearer authority remain retained.
 - Proof: fresh local apply/replay, actual local Email OTP/session/cookie/getUser, concurrency conflict, cross-Customer isolation, detach/delete, ACL/RLS and rollback PASS; R2 short-lived-session Proxy refresh on `/purchase/auth/continue` passed hard/client navigation and rotated-cookie/browser propagation. RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, Auth `49/49`, typecheck, zero-warning lint, build `38/38`, smoke, diff check, and both zero-vulnerability audits PASS.
-- External operations remain `0`: remote Supabase migration/Auth configuration, Google configuration/credentials/real sign-in, Resend/real Email, Stripe/Payment/webhook, OpenAI, deploy, runtime/secrets/DNS, Public Launch, PR, Foundation release merge, and main merge.
+- External operations remain `0`: remote Supabase migration/Auth configuration/inventory, Google configuration/credentials/real sign-in, Resend/real Email, Stripe/Payment/webhook, OpenAI, deploy, runtime/secrets/DNS, Public Launch, PR, and main merge. This accepted lineage is authorized for the required ff-only `release/private-ready` integration.
 - Evidence: `docs/auth/CUSTOMER_IDENTITY_AUTH_FOUNDATION_R1_EVIDENCE.md`.
-- Exact next action: **Human/ChatGPT acceptance of Customer Identity Auth Foundation R1 including R2**. Remote inventory, 0014 apply, provider configuration, and production activation remain unauthorized.
+- Exact next task after ff-only release integration: **Measurement Foundation V1**. Remote inventory, 0014 apply, provider configuration, and production activation remain unauthorized.
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:END -->
 
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
