@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { createServer } from "node:http";
 
 import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
@@ -11,6 +11,9 @@ const email = process.env.LOCAL_CUSTOMER_AUTH_EMAIL;
 const otp = process.env.LOCAL_CUSTOMER_AUTH_OTP;
 const password = process.env.LOCAL_CUSTOMER_AUTH_PASSWORD;
 const secretKey = process.env.LOCAL_SUPABASE_SECRET_KEY;
+const sessionRefreshDelayMs = Number(
+  process.env.LOCAL_SESSION_REFRESH_DELAY_MS ?? "0",
+);
 
 assert.ok(url?.startsWith("http://127.0.0.1:"));
 assert.ok(publishableKey?.startsWith("sb_publishable_"));
@@ -18,6 +21,11 @@ assert.match(email ?? "", /^[a-z0-9-]+@example\.test$/u);
 assert.notEqual(Boolean(otp), Boolean(password));
 if (otp) assert.match(otp, /^\d{6}$/u);
 if (password) assert.ok(password.length >= 16);
+assert.ok(
+  Number.isSafeInteger(sessionRefreshDelayMs) &&
+    sessionRefreshDelayMs >= 0 &&
+    sessionRefreshDelayMs <= 70_000,
+);
 
 const jar = new Map();
 const localCookiePolicy = Object.freeze({
@@ -26,6 +34,29 @@ const localCookiePolicy = Object.freeze({
   sameSite: "lax",
   path: "/",
 });
+
+function seedPurchaseContinuationCookies() {
+  for (const name of [
+    "moon_reply_auth_continuation",
+    "moon_reply_auth_session_csrf",
+  ]) {
+    if (!jar.has(name)) {
+      jar.set(name, {
+        value: randomBytes(32).toString("base64url"),
+        options: { ...localCookiePolicy, domain: undefined },
+      });
+    }
+  }
+  console.log("LOCAL_CUSTOMER_AUTH_PURCHASE_COOKIE_FIXTURE=PASS");
+}
+
+let sessionRefreshDelayComplete = false;
+async function waitForSyntheticSessionExpiry() {
+  if (sessionRefreshDelayMs === 0 || sessionRefreshDelayComplete) return;
+  await new Promise((resolve) => setTimeout(resolve, sessionRefreshDelayMs));
+  sessionRefreshDelayComplete = true;
+  console.log("LOCAL_CUSTOMER_AUTH_REFRESH_DELAY_COMPLETE=PASS");
+}
 
 function createClient() {
   return createServerClient(url, publishableKey, {
@@ -124,8 +155,12 @@ const appSessionProbeUrl = process.env.LOCAL_APP_SESSION_PROBE_URL;
 if (appSessionProbeUrl) {
   assert.match(
     appSessionProbeUrl,
-    /^http:\/\/127\.0\.0\.1:\d{4,5}\/account$/u,
+    /^http:\/\/127\.0\.0\.1:\d{4,5}\/(?:account|purchase\/auth\/continue)$/u,
   );
+  if (new URL(appSessionProbeUrl).pathname === "/purchase/auth/continue") {
+    seedPurchaseContinuationCookies();
+  }
+  await waitForSyntheticSessionExpiry();
   const requestCookie = [...jar]
     .map(([name, entry]) =>
       serializeCookieHeader(name, entry.value, {
@@ -151,13 +186,29 @@ if (appSessionProbeUrl) {
     `LOCAL_CUSTOMER_AUTH_APP_SET_COOKIE_METADATA=${JSON.stringify(responseCookies)}`,
   );
   assert.equal(response.status, 200);
-  assert.equal(
-    page.includes("表示できる鑑定ノートはまだありません"),
-    true,
-    "LOCAL_CUSTOMER_AUTH_APP_SESSION_NOT_RECOGNIZED",
-  );
-  assert.equal(page.includes("ログインが必要です"), false);
+  if (new URL(appSessionProbeUrl).pathname === "/account") {
+    assert.equal(
+      page.includes("表示できる鑑定ノートはまだありません"),
+      true,
+      "LOCAL_CUSTOMER_AUTH_APP_SESSION_NOT_RECOGNIZED",
+    );
+    assert.equal(page.includes("ログインが必要です"), false);
+  } else {
+    assert.equal(
+      page.includes("お申し込み前の最終確認"),
+      true,
+      "LOCAL_CUSTOMER_AUTH_PURCHASE_CONTINUATION_NOT_RECOGNIZED",
+    );
+  }
   assert.match(response.headers.get("cache-control") ?? "", /no-store/u);
+  if (sessionRefreshDelayMs > 0) {
+    assert.equal(
+      responseCookies.some(({ removed }) => !removed),
+      true,
+      "LOCAL_CUSTOMER_AUTH_PROXY_REFRESH_COOKIE_MISSING",
+    );
+    console.log("LOCAL_CUSTOMER_AUTH_PROXY_REFRESH_SET_COOKIE=PASS");
+  }
   console.log("LOCAL_CUSTOMER_AUTH_APP_SESSION_PROBE=PASS");
 }
 
@@ -167,8 +218,12 @@ if (bootstrapPort || redirectUrl) {
   assert.match(bootstrapPort ?? "", /^\d{4,5}$/u);
   assert.match(
     redirectUrl ?? "",
-    /^http:\/\/127\.0\.0\.1:\d{4,5}\/account$/u,
+    /^http:\/\/127\.0\.0\.1:\d{4,5}\/(?:account|purchase\/auth\/continue)$/u,
   );
+  if (new URL(redirectUrl).pathname === "/purchase/auth/continue") {
+    seedPurchaseContinuationCookies();
+  }
+  await waitForSyntheticSessionExpiry();
   const cookieHeaders = [...jar].map(([name, entry]) =>
     serializeCookieHeader(name, entry.value, {
       ...entry.options,

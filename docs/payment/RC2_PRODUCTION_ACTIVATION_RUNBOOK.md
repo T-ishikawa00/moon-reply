@@ -1,5 +1,15 @@
 # RC-2 Production Activation Runbook
 
+<!-- CUSTOMER-AUTH-CLEAN-CUTOVER-R2:BEGIN -->
+## Customer Auth clean-cutover activation gate — not executed
+
+- Foundation R2 selects one Customer-facing identity regime: `CUSTOMER_AUTH_ENABLED=false` permits the accepted legacy lane; `true` requires Supabase Customer Auth for every new paid flow and blocks new legacy verification start/completion.
+- Before enabling Auth remotely, run a separately authorized read-only inventory of `production_email_verification_challenges`, `production_verified_email_authorities`, `production_trusted_email_sessions`, `production_preparation_email_bindings`, `production_purchase_intents`, `production_verified_payments`, `production_assessment_grants`, and `production_customer_deliveries`.
+- Required clean prelaunch result: no real Customer-owned legacy Purchase requires recovery. Any contrary row/state is a hard STOP; keep Auth disabled and design a separate accepted legacy recovery transition.
+- The dual-lane schema remains for historical compatibility, append-only migration safety, and rollback/forward recovery. Existing `/result/[token]` remains governed by its own bearer credential authority.
+- This R2 task performs remote inventory `0`, remote migration `0`, Auth configuration `0`, and runtime flag change `0`.
+<!-- CUSTOMER-AUTH-CLEAN-CUTOVER-R2:END -->
+
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
 ## Step E — Transactional Email Provider Implementation (Resend)
 

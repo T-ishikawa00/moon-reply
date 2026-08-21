@@ -28,7 +28,7 @@ Email, Google email, Stripe email, browser state, preparation capabilities, stat
 | Authentication gate | After the server has produced a purchase-ready preparation and before that preparation is bound or a Purchase Intent/Stripe Checkout is created |
 | Browsing and consultation | Anonymous; authentication is not required |
 | Ownership model | Option B: one canonical `production_customer_ownership_bindings` table |
-| Existing custom mailbox verification | Compatibility/recovery only; no new authenticated purchase writes |
+| Existing custom mailbox verification | Clean cutover: Auth OFF may operate the accepted legacy lane; Auth ON blocks every new legacy verification flow while retaining historical schema/data compatibility |
 | Database access | Server-mediated; no browser DML grant to `authenticated` |
 | Result access | Option D: authenticated account/history, with the existing result capability retained as a narrow recovery and legacy path |
 | Initial account UX | A minimal `/account` history ships with the first Private Release |
@@ -121,23 +121,32 @@ The OTP request endpoint must set `shouldCreateUser` according to the intended s
 | --- | --- |
 | Supabase Auth login/OTP mail | Supabase Auth is the template and authentication authority; Resend custom SMTP is the preferred production transport after separate Human configuration. |
 | Moon Reply result/transactional mail | The accepted direct Resend SDK adapter remains the application transport. Its sender validation, minimal content, privacy constraints, idempotency forwarding, and safe errors remain authoritative. |
-| Legacy custom 8-digit verification | Retained only for existing purchases and recovery during transition; no new authenticated purchase enters this lane. |
+| Legacy custom 8-digit verification | Customer-facing only while `CUSTOMER_AUTH_ENABLED=false`; retained structurally for historical compatibility after Auth cutover, but no new start or completion is allowed while Auth is ON. |
 
 Use distinct sender identities or subdomains for Auth and application transactional mail where deliverability configuration permits. Disable link tracking for Auth links; V1 prefers a numeric OTP to reduce single-use-link scanner risk.
 
 ## 5. Existing custom email-verification disposition
 
-Decision: **Option B — compatibility/recovery only.**
+Decision: **Option B — retained compatibility schema with one clean Customer-facing runtime regime.**
 
 For new authenticated purchases, a verified Supabase Auth session is the mailbox/identity authority. Requiring the existing Moon Reply 8-digit verification again would create two independent login authorities without a concrete security gain.
 
-The accepted custom tables and routes remain byte- and behavior-compatible for legacy purchases during migration:
+V1 selects the runtime regime solely from `CUSTOMER_AUTH_ENABLED`:
+
+- `false`: the accepted legacy custom-email verification and Purchase lane may operate, subject to every existing Payment/Runtime activation gate;
+- `true`: every new paid-flow identity uses Supabase Customer Auth, and both new legacy verification start and completion fail closed;
+- `CUSTOMER_AUTH_EMERGENCY_STOP=true` stops Customer Auth but never falls back to the legacy lane when `CUSTOMER_AUTH_ENABLED=true`.
+
+The accepted custom schema and core legacy behavior remain retained for historical/database compatibility:
 
 - no table is deleted in this design;
 - no accepted migration is rewritten;
-- existing purchases continue to validate their trusted email sessions;
-- the legacy result-email recovery path remains available;
-- new authenticated purchases do not create challenges, verified-email authorities, trusted-email sessions, or preparation-email bindings.
+- Auth OFF preserves the accepted legacy route/application behavior;
+- the dual-lane database CHECK and versioned Payment/Grant functions remain structurally compatible with historical rows and rollback/forward recovery;
+- Auth ON creates no new `production_email_verification_challenges`, `production_verified_email_authorities`, `production_trusted_email_sessions`, or `production_preparation_email_bindings`;
+- the existing `/result/[token]` bearer capability remains valid according to its own credential authority and does not require reopening legacy mailbox verification.
+
+Before `CUSTOMER_AUTH_ENABLED` may become true on the real remote project, a separately authorized read-only inventory must count relevant rows/state in the four legacy authority tables plus Purchase Intent, Verified Payment, Assessment Grant, and Customer Delivery. The clean prelaunch cutover requires no real Customer-owned legacy Purchase needing recovery. Any such row/state is a hard STOP: do not activate Auth and do not strand it; design and accept a separate recovery transition first.
 
 A later append-only deprecation migration is permitted only after production telemetry proves there are no active legacy dependencies and a reviewed recovery plan exists.
 
@@ -284,11 +293,11 @@ For new authenticated purchases:
 - `/account` lists only deliveries reached through the authenticated CustomerUserId ownership chain.
 - Opening a result from account uses an authenticated server route and an ownership-constrained repository/RPC. The browser does not receive or choose a CustomerUserId.
 - The purchase-status capability may continue to poll one Purchase, but it cannot disclose a result credential unless the current authenticated Customer owns the binding.
-- The accepted result credential and `/result/[token]` path remain available for legacy purchases and narrow emailed recovery during migration. They are not redefined as account ownership.
-- Result emails for new purchases should prefer an account/result route that can authenticate the Customer; the existing bearer URL remains a compatibility/recovery fallback until a separately reviewed migration can narrow it further.
+- The accepted result credential and `/result/[token]` path remain available according to their own narrow bearer authority. They are not redefined as account ownership and do not authorize a new legacy mailbox-verification flow after Auth cutover.
+- Result emails for new authenticated purchases should prefer an account/result route. The existing bearer URL remains a compatibility capability until a separately reviewed migration can narrow it further.
 - Revocation, purpose, optional expiry, no-sharing guidance, privacy-safe content, and Step E idempotency remain intact. Do not claim expiry unless a specific credential has one.
 
-This choice supports another-device login without deleting the accepted RC-1/RC-2 recovery mechanism or locking out legacy Customers.
+This choice supports another-device login without deleting the accepted RC-1/RC-2 bearer mechanism. It does not claim simultaneous operation of both Customer-facing identity regimes.
 
 ## 12. Minimal account history
 
@@ -426,7 +435,7 @@ Bounded scope:
 4. implement reviewed append-only `0014_customer_identity_authority_v1.sql` and deterministic local DB proof;
 5. implement atomic preparation binding and new Purchase Intent ownership lane;
 6. enforce Auth ownership on checkout, new-purchase status disclosure, result/account reads, and minimal `/account` history;
-7. preserve and test the legacy custom-email/result-capability path;
+7. preserve the legacy schema/core behavior and bearer result capability, prove Auth OFF legacy compatibility, and prove Auth ON blocks every new legacy verification write;
 8. add deterministic fakes/verifiers, privacy/secret scans, and the full baseline gates.
 
 Explicitly excluded from that code task unless separately authorized: Supabase/Google/Resend dashboard changes, credentials, real OTP/email, DNS, Stripe calls, Payment, migration apply to remote, deploy, Runtime activation, main merge, Private Release, and Public Launch.

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { M2RuntimeError } from "../assessment/runtime/errors";
+import { isCustomerAuthCutoverSelected } from "./cutover";
 
 export type CustomerAuthEnvironment = Readonly<{
   siteOrigin: string;
@@ -61,7 +62,7 @@ function exactSiteOrigin(value: string) {
 }
 
 export function isCustomerAuthFoundationEnabled() {
-  return enabled("CUSTOMER_AUTH_ENABLED") && !enabled("CUSTOMER_AUTH_EMERGENCY_STOP");
+  return isCustomerAuthCutoverSelected() && !enabled("CUSTOMER_AUTH_EMERGENCY_STOP");
 }
 
 export function isCustomerAuthGoogleEnabled() {

@@ -11,5 +11,6 @@ export const config = {
     "/account/:path*",
     "/api/account/:path*",
     "/api/auth/:path*",
+    "/purchase/auth/:path*",
   ],
 };

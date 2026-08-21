@@ -44,6 +44,8 @@ registerHooks({
 const root = process.cwd();
 const acceptedArchitectureRelease =
   "8bf6c4e9c0a860b48826708676f0abe7c4395714";
+const foundationR1Candidate =
+  "ca1c790ec0cac51f4a7fe13086949728b2d9a8b8";
 const migrationPath =
   "supabase/migrations/0014_customer_identity_authority_v1.sql";
 let passed = 0;
@@ -89,24 +91,34 @@ async function checkAsync(name, fn) {
   console.log(`[PASS] ${name}`);
 }
 
-function assertUnchanged(paths) {
+function assertUnchangedFrom(authority, paths) {
   try {
-    git(["diff", "--quiet", acceptedArchitectureRelease, "--", ...paths]);
+    git(["diff", "--quiet", authority, "--", ...paths]);
   } catch {
     assert.fail(`accepted file changed: ${paths.join(", ")}`);
   }
 }
 
+function assertUnchanged(paths) {
+  assertUnchangedFrom(acceptedArchitectureRelease, paths);
+}
+
 const source = productionSource();
 const serverClient = text("lib/supabase/server.ts");
 const proxySource = text("lib/supabase/proxy.ts") + text("proxy.ts");
+const proxyEntrypoint = text("proxy.ts");
 const providerSource = text("lib/customer-auth/supabase-provider.ts");
+const cutoverSource = text("lib/customer-auth/cutover.ts");
+const paymentService = text("lib/payment/production/service.ts");
 const repositorySource =
   text("lib/customer-auth/supabase-repository.ts") +
   text("lib/payment/production/supabase-repository.ts");
 const envExample = text(".env.example");
 const migration = text(migrationPath);
 const authorityDoc = text("docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md");
+const migrationPlan = text("docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md");
+const threatModel = text("docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md");
+const activationRunbook = text("docs/payment/RC2_PRODUCTION_ACTIVATION_RUNBOOK.md");
 const packageJson = JSON.parse(text("package.json"));
 
 check("stable Supabase SSR dependency is exact", () => {
@@ -173,8 +185,17 @@ check("server client is request scoped", () => {
 check("proxy is refresh-only with no rewrite or arbitrary redirect", () => {
   assert.match(proxySource, /auth\.getClaims\(\)/u);
   assert.match(proxySource, /private, no-store/u);
+  assert.match(proxySource, /Vary", "Cookie/u);
   assert.doesNotMatch(proxySource, /NextResponse\.rewrite|NextResponse\.redirect/u);
-  assert.match(proxySource, /"\/account\/:path\*"/u);
+  const matchers = [...proxyEntrypoint.matchAll(/^\s*"([^"]+)",$/gmu)]
+    .map((match) => match[1]);
+  assert.deepEqual(matchers, [
+    "/account/:path*",
+    "/api/account/:path*",
+    "/api/auth/:path*",
+    "/purchase/auth/:path*",
+  ]);
+  assert.doesNotMatch(proxyEntrypoint, /"\/(?:\(\.\*\)|:path\*)"/u);
 });
 
 check("Google seam uses PKCE callback and basic scopes only", () => {
@@ -362,12 +383,65 @@ check("account surface exposes only minimal safe history fields", () => {
   assert.doesNotMatch(account, /consultation|partnerMessage|draftMessage|Stripe|capability|resultToken/u);
 });
 
-check("legacy bearer result and email routes remain byte-identical", () => {
+check("legacy bearer and email route surfaces remain retained", () => {
   assertUnchanged([
     "app/result/[token]/page.tsx",
     "app/api/delivery/email-verifications/route.ts",
     "app/api/delivery/email-verifications/verify/route.ts",
   ]);
+});
+
+check("R2 cutover blocks legacy verification before any legacy application call", () => {
+  assert.match(cutoverSource, /CUSTOMER_AUTH_ENABLED === "true"/u);
+  assert.match(cutoverSource, /EMAIL_VERIFICATION_UNAVAILABLE/u);
+  assert.match(
+    text("app/request/page.tsx"),
+    /paymentEnabled && isCustomerAuthCutoverSelected\(\)/u,
+  );
+  for (const functionName of [
+    "startProductionEmailVerification",
+    "completeProductionEmailVerification",
+  ]) {
+    const start = paymentService.indexOf(`export async function ${functionName}`);
+    const next = paymentService.indexOf("\nexport async function ", start + 1);
+    const body = paymentService.slice(start, next === -1 ? undefined : next);
+    const guard = body.indexOf("enforceLegacyCustomerEmailVerificationAllowed();");
+    assert.ok(start >= 0 && guard >= 0, `${functionName} cutover guard`);
+    assert.ok(
+      guard < body.indexOf("isEmailVerificationAvailable()"),
+      `${functionName} must guard before availability and repository construction`,
+    );
+  }
+  assertUnchangedFrom(foundationR1Candidate, [
+    "app/api/delivery/email-verifications/route.ts",
+    "app/api/delivery/email-verifications/verify/route.ts",
+    "lib/payment/production/application.ts",
+    "lib/payment/production/supabase-repository.ts",
+  ]);
+});
+
+check("R2 docs require one identity regime and a future remote cutover inventory", () => {
+  const cutoverDocs = `${authorityDoc}\n${migrationPlan}\n${threatModel}\n${activationRunbook}`;
+  assert.match(cutoverDocs, /CUSTOMER_AUTH_ENABLED=false/u);
+  assert.match(cutoverDocs, /CUSTOMER_AUTH_ENABLED=true/u);
+  assert.match(cutoverDocs, /Auth emergency stop cannot reactivate legacy verification/u);
+  assert.match(cutoverDocs, /hard STOP/u);
+  for (const table of [
+    "production_email_verification_challenges",
+    "production_verified_email_authorities",
+    "production_trusted_email_sessions",
+    "production_preparation_email_bindings",
+    "production_purchase_intents",
+    "production_verified_payments",
+    "production_assessment_grants",
+    "production_customer_deliveries",
+  ]) {
+    assert.match(activationRunbook, new RegExp(table, "u"));
+  }
+  assert.doesNotMatch(
+    threatModel,
+    /preserve existing authenticated\/legacy recovery/u,
+  );
 });
 
 check("accepted migrations 0002 through 0013 are immutable", () => {
@@ -376,6 +450,14 @@ check("accepted migrations 0002 through 0013 are immutable", () => {
   );
   assert.equal(migrations.length, 12);
   assertUnchanged(migrations);
+});
+
+check("R2 leaves migrations 0002 through 0014 immutable", () => {
+  const migrations = files().filter((entry) =>
+    /^supabase\/migrations\/(?:000[2-9]|001[0-4])_/u.test(entry),
+  );
+  assert.equal(migrations.length, 13);
+  assertUnchangedFrom(foundationR1Candidate, migrations);
 });
 
 check("new tables expose no public or authenticated DML", () => {
@@ -408,6 +490,13 @@ const {
   hashCustomerAuthContinuation,
   hashCustomerAuthCsrf,
 } = await import("../lib/customer-auth/crypto.ts");
+const {
+  customerIdentityRuntimeRegime,
+  enforceLegacyCustomerEmailVerificationAllowed,
+} = await import("../lib/customer-auth/cutover.ts");
+const { isCustomerAuthFoundationEnabled } = await import(
+  "../lib/customer-auth/environment.ts"
+);
 const { hashOpaqueProductionCapability } = await import(
   "../lib/assessment/production/capabilities.ts"
 );
@@ -449,6 +538,41 @@ const application = new CustomerIdentityAuthApplicationV1({
   now: () => now,
   uuid: () => uuids.shift(),
   secret: () => continuation,
+});
+
+check("Auth OFF preserves legacy and Auth ON selects a non-fallback cutover", () => {
+  const previousEnabled = process.env.CUSTOMER_AUTH_ENABLED;
+  const previousEmergencyStop = process.env.CUSTOMER_AUTH_EMERGENCY_STOP;
+  try {
+    process.env.CUSTOMER_AUTH_ENABLED = "false";
+    process.env.CUSTOMER_AUTH_EMERGENCY_STOP = "false";
+    assert.equal(customerIdentityRuntimeRegime(), "legacy_custom_email");
+    assert.doesNotThrow(() => enforceLegacyCustomerEmailVerificationAllowed());
+
+    process.env.CUSTOMER_AUTH_ENABLED = "true";
+    assert.equal(customerIdentityRuntimeRegime(), "supabase_customer_auth");
+    assert.throws(
+      () => enforceLegacyCustomerEmailVerificationAllowed(),
+      (error) =>
+        error?.safeCode === "EMAIL_VERIFICATION_UNAVAILABLE" &&
+        error?.httpStatus === 404,
+    );
+
+    process.env.CUSTOMER_AUTH_EMERGENCY_STOP = "true";
+    assert.equal(isCustomerAuthFoundationEnabled(), false);
+    assert.throws(
+      () => enforceLegacyCustomerEmailVerificationAllowed(),
+      /EMAIL_VERIFICATION_UNAVAILABLE/u,
+    );
+  } finally {
+    if (previousEnabled === undefined) delete process.env.CUSTOMER_AUTH_ENABLED;
+    else process.env.CUSTOMER_AUTH_ENABLED = previousEnabled;
+    if (previousEmergencyStop === undefined) {
+      delete process.env.CUSTOMER_AUTH_EMERGENCY_STOP;
+    } else {
+      process.env.CUSTOMER_AUTH_EMERGENCY_STOP = previousEmergencyStop;
+    }
+  }
 });
 
 await checkAsync("fake Email OTP creates a canonical binding", async () => {

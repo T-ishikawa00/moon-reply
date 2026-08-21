@@ -15,10 +15,13 @@ Status: `Customer Identity Auth Foundation R1 implemented_pending_human_chatgpt_
 - [x] Prove fresh apply/replay, real local Email OTP/session/cookies/getUser, continuation/CSRF/replay, same/different/concurrent Customer binding, Auth/legacy Purchase lanes, cross-Customer isolation, detach/delete, ACL/RLS, rollback, and Next 16.3 browser behavior.
 - [x] Pass RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, Auth `45/45`, typecheck, zero-warning lint, build `38/38`, diff check, and both zero-vulnerability audits.
 - [x] Keep all prohibited remote/provider/payment/deploy/runtime operations at `0` and record focused evidence.
+- [x] Correct R2 Proxy coverage with exact `/purchase/auth/:path*`; prove expired local session refresh, rotated response cookie, browser persistence, hard/client navigation, no loop/rewrite/cache leak, static assets, and browser/server errors `0`.
+- [x] Correct R2 to one runtime regime: Auth OFF legacy-compatible; Auth ON Customer Auth only with legacy start/completion denied before writes and no emergency-stop fallback.
+- [x] Record the future read-only zero-active-legacy-customer remote inventory gate without performing it; preserve migration `0002..0014` byte-identically.
 - [ ] Complete Human/ChatGPT review and acceptance of this Foundation candidate.
 - [ ] Under later explicit authorization only, apply 0014 remotely or configure Supabase Auth, Google, Resend, production session controls/rate limiting, Stripe, Runtime, deployment, or launch.
 
-Evidence: `docs/auth/CUSTOMER_IDENTITY_AUTH_FOUNDATION_R1_EVIDENCE.md`. Exact next action: **Human/ChatGPT review Customer Identity Auth Foundation R1**. `release/private-ready` remains `8bf6c4e9c0a860b48826708676f0abe7c4395714`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+Evidence: `docs/auth/CUSTOMER_IDENTITY_AUTH_FOUNDATION_R1_EVIDENCE.md`. Focused Auth verifier after R2: `49/49` PASS. Exact next action: **Human/ChatGPT acceptance of Customer Identity Auth Foundation R1 including R2**. `release/private-ready` remains `8bf6c4e9c0a860b48826708676f0abe7c4395714`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:END -->
 
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->

@@ -6,6 +6,7 @@ import {
   processProductionNotificationWithAdapter,
 } from "../../assessment/production/service.ts";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
+import { enforceLegacyCustomerEmailVerificationAllowed } from "../../customer-auth/cutover.ts";
 import { ProductionPaymentDeliveryApplication } from "./application.ts";
 import {
   isCheckoutAvailable,
@@ -129,6 +130,7 @@ export async function startProductionEmailVerification(input: {
   email: unknown;
   trustedSessionToken?: unknown;
 }) {
+  enforceLegacyCustomerEmailVerificationAllowed();
   if (!isEmailVerificationAvailable()) {
     throw new M2RuntimeError("EMAIL_VERIFICATION_UNAVAILABLE", 404);
   }
@@ -147,6 +149,7 @@ export async function completeProductionEmailVerification(input: {
   challengeCapability: unknown;
   verificationCode: unknown;
 }) {
+  enforceLegacyCustomerEmailVerificationAllowed();
   if (!isEmailVerificationAvailable()) {
     throw new M2RuntimeError("EMAIL_VERIFICATION_UNAVAILABLE", 404);
   }

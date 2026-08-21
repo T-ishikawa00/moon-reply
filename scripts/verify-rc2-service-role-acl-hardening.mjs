@@ -421,6 +421,7 @@ await check("production Runtime change is the exact Foundation surface", () => {
       "lib/customer-auth/application.ts",
       "lib/customer-auth/cookies.ts",
       "lib/customer-auth/crypto.ts",
+      "lib/customer-auth/cutover.ts",
       "lib/customer-auth/environment.ts",
       "lib/customer-auth/fakes.ts",
       "lib/customer-auth/request-security.ts",

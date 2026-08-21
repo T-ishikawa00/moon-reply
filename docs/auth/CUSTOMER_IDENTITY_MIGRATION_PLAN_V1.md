@@ -5,6 +5,8 @@
 - Accepted migration authority: `0002..0013` remain byte-identical
 - Reserved future filename: `0014_customer_identity_authority_v1.sql`
 
+R2 implementation truth: Foundation R1 implemented `0014_customer_identity_authority_v1.sql` locally as a review candidate. Foundation R2 does not modify `0002..0014` and does not apply any migration remotely. This document retains the accepted design rationale while recording the clean runtime cutover below.
+
 ## 1. Non-mutation boundary
 
 This plan does not create SQL, alter a database, apply or repair a migration, configure Supabase Auth, or write Customer data. It defines the review target for a future append-only migration only.
@@ -20,6 +22,29 @@ Future ownership chain:
 `auth.users.id -> production_customer_ownership_bindings -> production_preparations -> production_purchase_intents -> production_verified_payments -> production_assessment_grants -> production_logical_assessments -> production_customer_deliveries`
 
 The exact downstream table names and keys must be re-audited against the accepted schema when the implementation task begins. No `owner_id` column participates.
+
+### 2.1 R2 clean runtime cutover
+
+The dual-lane schema is a migration and historical-compatibility contract, not permission to expose two Customer-facing identity regimes simultaneously.
+
+- `CUSTOMER_AUTH_ENABLED=false`: the accepted legacy verification/Purchase lane may create new rows if every other activation gate passes.
+- `CUSTOMER_AUTH_ENABLED=true`: new paid-flow identity is Supabase Customer Auth only; legacy verification start and completion must fail before any legacy repository write.
+- Auth emergency stop cannot reactivate legacy verification after the Auth regime has been selected.
+- Historical legacy rows, the XOR lane constraint, and versioned Payment/Grant behavior remain intact for append-only safety and rollback/forward recovery.
+- `/result/[token]` remains governed by its existing bearer credential independently of the selected new-purchase identity regime.
+
+Before real remote cutover, a separately authorized read-only inventory must assess current rows/state in:
+
+- `production_email_verification_challenges`;
+- `production_verified_email_authorities`;
+- `production_trusted_email_sessions`;
+- `production_preparation_email_bindings`;
+- `production_purchase_intents`;
+- `production_verified_payments`;
+- `production_assessment_grants`;
+- `production_customer_deliveries`.
+
+The clean prelaunch cutover requires no real Customer-owned legacy Purchase that still needs recovery. If one exists, activation stops until a separate legacy recovery transition is designed and accepted. Foundation R2 neither performs nor authorizes this remote inventory.
 
 ## 3. Proposed schema
 
@@ -102,7 +127,7 @@ The existing legacy fields are:
 
 They currently require non-null values. The future migration must deliberately replace that single-lane assumption with one exact CHECK:
 
-1. **legacy lane:** `customer_ownership_binding_id is null` and both legacy IDs are non-null; or
+1. **legacy lane:** `customer_ownership_binding_id is null` and both legacy IDs are non-null; structurally retained and available to new Customer-facing flows only while Auth is OFF; or
 2. **authenticated lane:** `customer_ownership_binding_id is non-null` and both legacy IDs are null.
 
 Do not simply drop NOT NULL constraints. The new lane CHECK, existing legacy foreign keys, new binding foreign keys, and every affected RPC/function must land atomically in `0014`. Existing rows remain valid in the legacy lane without backfill or reinterpretation.
