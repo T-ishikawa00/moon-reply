@@ -1,22 +1,19 @@
 # CURRENT_FOCUS.md
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
-## Current implementation overlay — RC-2 Production Activation Step E
+## Current acceptance overlay — RC-2 Production Activation Step E
 
-- Status: `RC-2 Production Activation Step E Transactional Email Provider Implementation implemented_pending_human_chatgpt_review`.
-- Authority: Dependency Security Remediation accepted and ff-only integrated at `243e8655098ba9e0972e0e1efd68f83fbc2ded30`; branch `task/rc2-resend-email-provider` starts from that exact release.
-- Dependency: exact stable `resend@6.20.0`; production and full npm audits `0 vulnerabilities`.
-- Environment: exact provider `resend`; generic server-only `EMAIL_API_KEY`, `EMAIL_FROM_ADDRESS`, and `EMAIL_FROM_NAME`; missing/unsafe configuration fails closed; `.env.example` remains `unconfigured`, blank, and all production flags false.
-- Adapter: server-only Resend construction behind a narrow fakeable client; existing `TransactionalEmailAdapterV1` unchanged; provider success requires a valid message ID and exposes only `providerMessageReference`.
-- Idempotency: existing `messageIdempotencyKey` reaches SDK `idempotencyKey` unchanged; no second identity and no hidden retry.
-- Privacy: separate Japanese verification/result text and HTML; no consultation/Candidate/assessment body/decision/relationship detail; recipient, code, result capability URL, payload, and Provider internals are not logged.
-- Failure: mailbox/result Provider failures map to `EMAIL_VERIFICATION_DELIVERY_FAILED` / `RESULT_EMAIL_DELIVERY_FAILED`; existing durable failure/retry state remains authoritative.
-- Proof: focused `14/14`, RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, typecheck, zero-warning lint, build `38/38`, unchanged routes, and diff checks PASS. Migrations `0002..0013` and V17/Q0 are unchanged.
-- External operations remain `0`: Resend API/account/real Email, Supabase remote/apply, Stripe/Payment/webhook, OpenAI Provider, deploy, runtime flags, remote secrets, DNS, PR, main merge, and Public Launch.
+- Status: `RC-2 Production Activation Step E Transactional Email Provider Implementation accepted_complete`; ChatGPT final review `PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted lineage: candidate `cf014510193a1e0d680584d946b1691a77dee16e`, corrected by R1 `49aca45bbb14db9f00f4ecd56dda7e0d9b37600c`, from exact accepted dependency release `243e8655098ba9e0972e0e1efd68f83fbc2ded30`.
+- Accepted scope: exact `resend@6.20.0`; server-only provider construction and exact selection; generic server-only secret contract; sender validation; safe failure mapping; unchanged idempotency-key forwarding; separate verification/result templates; privacy-safe result notification.
+- Product truth: the result email retains its protected URL and no-sharing warning but makes no unsupported expiry claim. Mailbox verification retains its real `expiresAt` authority and expiry wording.
+- Proof: email provider `14/14`, RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, typecheck, zero-warning lint, build `38/38`, unchanged routes, diff checks, and both zero-vulnerability audits PASS. Migrations `0002..0013` and V17/Q0 are unchanged.
+- Acceptance-sync boundary: only `docs/CURRENT_FOCUS.md`, `docs/WBS.md`, and `docs/CODEX_HANDOFF.md` change. Product code, migrations, verifiers, Runtime, package/lock, Q0/V17, and evidence remain unchanged.
+- External operations remain `0`: Resend API/account/real Email, Supabase remote/apply, Google OAuth/Auth configuration, Stripe/Payment/webhook, OpenAI Provider, deploy, runtime flags, remote secrets, DNS, PR, main merge, and Public Launch.
 - Evidence: `docs/payment/RC2_STEP_E_TRANSACTIONAL_EMAIL_PROVIDER_EVIDENCE.md`.
-- `release/private-ready` remains `243e8655098ba9e0972e0e1efd68f83fbc2ded30`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Still false: Production Payment, Stripe connected, webhook, real Email, runtime activation, PRIVATE RELEASE READY, and Public Launch.
-- Exact next Human action: review Step E. After acceptance, separately authorize Resend account/sender setup and the first bounded email test. Do not configure Stripe or send real Email in this task.
+- `release/private-ready` is authorized to receive this accepted lineage by ff-only integration; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Still false: Auth implemented, Google connected, Email OTP connected, Production Payment, Stripe connected, webhook, real Email, runtime activation, PRIVATE RELEASE READY, and Public Launch.
+- Exact next authorized stage after ff-only integration: **Customer Identity Architecture — Supabase Auth**, design only. No Auth/provider/dashboard/configuration action is authorized.
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:END -->
 
 <!-- DEPENDENCY-SECURITY-REMEDIATION-2026-08:BEGIN -->
