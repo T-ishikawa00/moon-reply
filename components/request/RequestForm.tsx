@@ -39,6 +39,7 @@ import {
   type RequestedTopic,
   type ScopeAcknowledgementsV1,
 } from "@/lib/purchase/prepayment-safety-types-v1";
+import { trackClientMeasurement } from "@/lib/measurement/client";
 
 export type RequestFormData = {
   adultConfirmed: boolean;
@@ -892,6 +893,8 @@ export function RequestForm({
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const requestSequence = useRef(0);
   const preparationIdempotencyKey = useRef<string | null>(null);
+  const requestStartedMeasured = useRef(false);
+  const requestCompletedMeasured = useRef(false);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -945,6 +948,20 @@ export function RequestForm({
       delete next.safetyBlocking;
       return next;
     });
+  }
+
+  function measureRequestStart() {
+    if (requestStartedMeasured.current) return;
+    requestStartedMeasured.current = true;
+    trackClientMeasurement("request_start", {
+      experience: "consultation_request",
+    });
+  }
+
+  function measureRequestComplete() {
+    if (requestCompletedMeasured.current) return;
+    requestCompletedMeasured.current = true;
+    trackClientMeasurement("request_complete", { outcome: "purchase_ready" });
   }
 
   function clearServerAssessment({
@@ -1538,6 +1555,7 @@ export function RequestForm({
         if (authorizationUrl.protocol !== "https:") {
           throw new Error("CUSTOMER_AUTH_GOOGLE_URL_INVALID");
         }
+        trackClientMeasurement("auth_start", { method: "google" });
         window.location.assign(authorizationUrl.toString());
         return;
       }
@@ -1553,6 +1571,7 @@ export function RequestForm({
       if (data?.status !== "accepted") {
         throw new Error("CUSTOMER_AUTH_EMAIL_OTP_RESPONSE_INVALID");
       }
+      trackClientMeasurement("auth_start", { method: "email_otp" });
       setProductionFlow({
         status: "awaiting_auth_email_otp",
         preparationCapability,
@@ -1638,6 +1657,7 @@ export function RequestForm({
       const outcome = decodeProductionPreparation(await response.json());
       if (!outcome) throw new Error("PRODUCTION_PREPARATION_INVALID");
       if (outcome.status === "purchase_ready") {
+        measureRequestComplete();
         if (customerAuthEnabled) {
           setProductionFlow({
             status: "auth_method",
@@ -1700,6 +1720,7 @@ export function RequestForm({
       if (!outcome || outcome.status !== "purchase_ready") {
         throw new Error("PRODUCT_CLARIFICATION_INVALID");
       }
+      measureRequestComplete();
       if (customerAuthEnabled) {
         setProductionFlow({
           status: "auth_method",
@@ -1798,6 +1819,7 @@ export function RequestForm({
       ) {
         throw new Error("PAYMENT_CHECKOUT_URL_INVALID");
       }
+      trackClientMeasurement("checkout_start", { provider: "stripe" });
       window.location.assign(checkoutUrl.toString());
     } catch {
       setProductionFlow(verified);
@@ -1920,7 +1942,10 @@ export function RequestForm({
   );
 
   return (
-    <section className="request-sheet-wrap">
+    <section
+      className="request-sheet-wrap"
+      onChangeCapture={measureRequestStart}
+    >
       <RequestFragmentTargets />
       <nav className="request-progress" aria-label="鑑定依頼シートの進行状況">
         {([1, 2, 3, 4] as Phase[]).map((item) => (

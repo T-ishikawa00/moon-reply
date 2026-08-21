@@ -585,8 +585,10 @@ await check("Foundation application-route drift is exact", () => {
     "app/api/auth/logout/route.ts",
     "app/api/payments/checkout/route.ts",
     "app/api/payments/status/route.ts",
+    "app/layout.tsx",
     "app/purchase/auth/continue/page.tsx",
     "app/request/page.tsx",
+    "app/sample-report/page.tsx",
   ]);
 });
 

@@ -17,6 +17,7 @@ import {
   requireCustomerAuthMethod,
 } from "@/lib/customer-auth/service";
 import { readStrictJsonRequest } from "@/lib/http/strict-json-request";
+import { trackServerAuthComplete } from "@/lib/measurement/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
       email: body.email,
       otp: body.otp,
     });
+    trackServerAuthComplete("email_otp");
     const response = customerAuthJson({ data: { status: "customer_bound" } }, 200);
     // Retain the one-use, consumed continuation through the short TTL so a
     // verified Customer can safely resume Purchase Intent creation after a

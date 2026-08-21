@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SampleViewMeasurement } from "@/components/measurement/SampleViewMeasurement";
 import { PublicSampleReport } from "@/components/report/PublicSampleReport";
 import { PUBLIC_SAMPLE_SEND_CASE } from "@/fixtures/public/public-sample-cases";
 
@@ -9,5 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function SampleReportPage() {
-  return <PublicSampleReport sample={PUBLIC_SAMPLE_SEND_CASE} />;
+  return (
+    <>
+      <SampleViewMeasurement />
+      <PublicSampleReport sample={PUBLIC_SAMPLE_SEND_CASE} />
+    </>
+  );
 }

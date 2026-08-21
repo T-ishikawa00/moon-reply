@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
+## Measurement Foundation V1 — implemented, pending Human/ChatGPT review
+
+- [x] Start `task/measurement-foundation-v1` from accepted Auth Foundation release `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`.
+- [x] Define the exact eight-event vendor-neutral contract and exact runtime/type allowlists.
+- [x] Instrument deterministic App Router/sample/request/Auth/checkout success boundaries without render or click authority.
+- [x] Bind `purchase` construction only to durable Verified Payment recording at fixed JPY 980.
+- [x] Derive one opaque stable purchase `transactionId` from Verified Payment UUID with a dedicated HMAC secret.
+- [x] Keep the default disabled and adapter disconnected; add no SDK, script, external call, cookie, storage, or migration.
+- [x] Fail-isolate Measurement from Auth, Payment, and fulfillment; reserve external delivery/idempotency and consent/legal review as future hard gates.
+- [x] Add `verify:measurement-foundation` and preserve all baseline gates and accepted `0002..0014`/Auth authority.
+- [ ] Human/ChatGPT review and acceptance of Measurement Foundation V1.
+
+Authority ceiling: implementation candidate only. `release/private-ready` remains `fb90b89de51b91753bbdf25278f4a0e4960a5c6e`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Remote/provider/deploy/activation/PR/release/main operations are `0`.
+
+Evidence: `docs/measurement/MEASUREMENT_FOUNDATION_V1.md`. Exact next action: **Human/ChatGPT review Measurement Foundation V1.**
+<!-- MEASUREMENT-FOUNDATION-V1:END -->
+
 <!-- CUSTOMER-IDENTITY-AUTH-FOUNDATION-R1:BEGIN -->
 ## Customer Identity Auth Foundation R1 — Accepted
 

@@ -13,6 +13,7 @@ import {
   createCustomerIdentityAuthApplication,
   requireCustomerAuthMethod,
 } from "@/lib/customer-auth/service";
+import { trackServerAuthComplete } from "@/lib/measurement/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -72,6 +73,7 @@ export async function GET(request: NextRequest) {
       csrfToken,
       code,
     });
+    trackServerAuthComplete("google");
     const response = redirect(siteOrigin, "/purchase/auth/continue");
     clearAuthCallbackCsrfCookie(response);
     issueAuthSessionCsrfCookie(response);

@@ -42,6 +42,7 @@ import type {
   ServerFulfillmentOutcome,
   StripePaymentEvidenceV1,
 } from "./types.ts";
+import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";
 
 type FulfillmentClaimOutcome =
   | Readonly<{ status: "completed"; resultToken: string }>
@@ -757,13 +758,15 @@ export class ProductionPaymentDeliveryApplication {
     evidence: StripePaymentEvidenceV1,
   ): Promise<RecordedPaymentEvidence> {
     const verification = await this.evaluateStripeEvidence(evidence);
-    return this.options.repository.recordStripeEvidence({
+    const recorded = await this.options.repository.recordStripeEvidence({
       evidence,
       verification,
       verifiedPaymentId: this.uuid(),
       fulfillmentJobId: this.uuid(),
       now: this.now(),
     });
+    trackVerifiedPaymentPurchase(recorded);
+    return recorded;
   }
 
   async reconcilePaymentAttempt(

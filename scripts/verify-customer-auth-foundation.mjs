@@ -46,6 +46,8 @@ const acceptedArchitectureRelease =
   "8bf6c4e9c0a860b48826708676f0abe7c4395714";
 const foundationR1Candidate =
   "ca1c790ec0cac51f4a7fe13086949728b2d9a8b8";
+const acceptedFoundationRelease =
+  "fb90b89de51b91753bbdf25278f4a0e4960a5c6e";
 const migrationPath =
   "supabase/migrations/0014_customer_identity_authority_v1.sql";
 let passed = 0;
@@ -415,9 +417,33 @@ check("R2 cutover blocks legacy verification before any legacy application call"
   assertUnchangedFrom(foundationR1Candidate, [
     "app/api/delivery/email-verifications/route.ts",
     "app/api/delivery/email-verifications/verify/route.ts",
-    "lib/payment/production/application.ts",
     "lib/payment/production/supabase-repository.ts",
   ]);
+  const paymentMeasurementDiff = git([
+    "diff",
+    "--unified=0",
+    acceptedFoundationRelease,
+    "--",
+    "lib/payment/production/application.ts",
+  ]);
+  const mutations = paymentMeasurementDiff
+    .split(/\r?\n/u)
+    .filter((line) => /^[+-](?![+-])/u.test(line));
+  assert.deepEqual(mutations, [
+    '+import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";',
+    "-    return this.options.repository.recordStripeEvidence({",
+    "+    const recorded = await this.options.repository.recordStripeEvidence({",
+    "+    trackVerifiedPaymentPurchase(recorded);",
+    "+    return recorded;",
+  ]);
+  const paymentApplication = text("lib/payment/production/application.ts");
+  const durableRecord = paymentApplication.indexOf(
+    "await this.options.repository.recordStripeEvidence",
+  );
+  const measurementSeam = paymentApplication.indexOf(
+    "trackVerifiedPaymentPurchase(recorded)",
+  );
+  assert.ok(durableRecord >= 0 && measurementSeam > durableRecord);
 });
 
 check("R2 docs require one identity regime and a future remote cutover inventory", () => {
