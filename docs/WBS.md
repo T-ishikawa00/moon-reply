@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
-## Customer Identity Authority V1 — Supabase Auth Architecture
+## Customer Identity Architecture V1 — Accepted
 
-Status: `Customer Identity Architecture V1 designed_pending_human_chatgpt_review` on `task/customer-identity-supabase-auth-architecture` from exact accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`.
+Status: `Customer Identity Architecture V1 accepted_complete`; ChatGPT review `PASS_WITH_REQUIRED_R1 -> PASS`; Human/ChatGPT acceptance `complete`.
 
 - [x] Audit the current custom mailbox authority, trusted session, preparation binding, encrypted delivery email, Purchase/status/result capabilities, Payment verification, Grant, Assessment, Delivery, and notification chain.
 - [x] Prove every current Runtime `owner_id` is a lease owner and forbid reuse as Customer identity.
@@ -16,12 +16,14 @@ Status: `Customer Identity Architecture V1 designed_pending_human_chatgpt_review
 - [x] Define Google/Email identity linking, cookie/PKCE/state/CSRF/session policy, deletion/retention classes, legal impacts, Google rights/branding, Resend split, Stripe changes, and 15-case threat model.
 - [x] Define future append-only `0014_customer_identity_authority_v1.sql` without creating SQL; preserve accepted `0002..0013` byte-identically.
 - [x] Record official Supabase, Google, and PPC Japan primary sources accessed `2026-08-21`.
-- [ ] Complete Human/ChatGPT review and acceptance of the architecture.
+- [x] Correct R1 identity-linking asymmetry, publishable/secret key separation, server-only HttpOnly model, Pro-plan session boundary, and Google private-test/production distinction in `2af7e9d5c36485736676fde21428325f70b58ab0`.
+- [x] Pass RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, typecheck, zero-warning lint, build `38/38`, diff check, and both zero-vulnerability audits.
+- [x] Complete Human/ChatGPT review and acceptance of the architecture.
 - [ ] Implement Auth, configure any provider/dashboard/credential, apply a migration, send real Email, call Stripe, activate Runtime, deploy, merge release/main, or launch. All remain prohibited here.
 
-Design authorities: `docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md`, `docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md`, and `docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md`.
+Accepted authorities: `docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md`, `docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md`, and `docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md`. Accepted lineage: `97274812f88c189636a7f25e194f17a79ff33016` -> R1 `2af7e9d5c36485736676fde21428325f70b58ab0`.
 
-Exact next implementation task only after acceptance: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. `release/private-ready` remains `a785e5c9dacfed28b359befab29e4adb5b76fb07`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+Acceptance sync changes only the three top overlays. Exact next task after authorized ff-only release integration: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->

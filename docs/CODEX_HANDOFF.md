@@ -1,24 +1,21 @@
 # CODEX_HANDOFF.md
 
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:BEGIN -->
-## Active handoff — Customer Identity Authority V1 Design Candidate
+## Active handoff — Customer Identity Architecture V1 Accepted
 
-- Status / branch / base: `Customer Identity Architecture V1 designed_pending_human_chatgpt_review` / `task/customer-identity-supabase-auth-architecture` / accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`.
-- Identity decision: Supabase Auth `auth.users.id` is `CustomerUserId`; Google (`openid email profile`) and Email OTP are initial methods; Customer passwords and unrelated Google scopes are excluded.
-- Gate: anonymous browsing -> anonymous consultation/qualification -> purchase-ready preparation -> Auth -> server ownership binding -> Purchase Intent/Checkout. Auth never repeats consultation and never proves Payment.
-- Ownership decision: one `production_customer_ownership_bindings` authority; downstream Purchase/Payment/Grant/Assessment/Delivery ownership follows existing foreign keys. Email is an attribute. Runtime `owner_id` is strictly lease ownership, never Customer identity.
-- Binding: one-use expiring Auth continuation, freshly verified server session, row lock, unique preparation, idempotent same-Customer replay, generic different-Customer conflict, and no browser-supplied CustomerUserId.
-- Custom email decision: legacy challenge/authority/trusted session/preparation binding remains compatibility/recovery only. New authenticated purchases use Supabase Auth authority and an encrypted delivery-email snapshot on the binding. Accepted tables/migrations are not deleted.
-- Session/security: server routes with `@supabase/ssr`, cookie-backed PKCE, validated state/redirect, no localStorage, same-origin plus CSRF controls, server refresh, current/all-device logout semantics, rate limit/CAPTCHA, and no provider-token persistence.
-- Database decision: keep production data server-only. PUBLIC/`anon`/`authenticated` DML remains `0`; Step D least privilege remains authoritative; every service-role Customer query must enforce an explicit ownership predicate because service role bypasses RLS.
-- Result/account decision: Auth-backed minimal `/account` history ships in initial Private Release; existing result credentials remain only for legacy/narrow recovery. No expiry is claimed unless runtime establishes one.
-- Deletion: deny access and revoke sessions/credentials, detach CustomerUserId, delete/anonymize identity/content per reviewed policy, then Admin-delete Auth user; retain minimum Payment/integrity/security evidence without an active Customer link. Exact durations require Human legal review.
-- Legal gate: Privacy/Terms, their rendered sources/pages, consistency matrix, source register, publication gate, and requirements must add Auth/Google/Supabase/Resend/account/history/deletion/session/processor/overseas facts before Private Release. No final compliance claim.
-- Future migration: append-only `0014_customer_identity_authority_v1.sql` only after review; `0002..0013` remain byte-identical. No migration file exists in this design.
-- Evidence: `docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md`, `docs/auth/CUSTOMER_IDENTITY_MIGRATION_PLAN_V1.md`, `docs/auth/CUSTOMER_IDENTITY_THREAT_MODEL_V1.md`; primary sources accessed `2026-08-21`.
-- Operations `0`: Supabase Auth/provider/dashboard, Google Cloud/OAuth/credentials, Resend account/API/Email, Stripe/Payment/webhook, OpenAI Provider, deploy, Runtime flags, production secrets, DNS, Public Launch, release merge, and main merge.
-- `release/private-ready` remains `a785e5c9dacfed28b359befab29e4adb5b76fb07`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Exact next task after Human/ChatGPT acceptance: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. Do not implement or configure it from this handoff.
+- Acceptance: `Customer Identity Architecture V1 accepted_complete`; ChatGPT final review `PASS_WITH_REQUIRED_R1 -> PASS`; Human/ChatGPT acceptance `complete`.
+- Accepted lineage: design `97274812f88c189636a7f25e194f17a79ff33016` -> R1 `2af7e9d5c36485736676fde21428325f70b58ab0`, based on accepted Step E release `a785e5c9dacfed28b359befab29e4adb5b76fb07`.
+- Identity/methods: Supabase Auth `auth.users.id`; Google `openid email profile` and Email OTP; no Customer password. Email-first may gain later OAuth auto-linking; Google-first uses Google again in V1. No symmetric OTP fallback, raw-email merge, or manual linking.
+- Auth trust domains: Customer cookie Auth is request-scoped `@supabase/ssr` using publishable key only; privileged repositories use secret key only. No browser Auth client, `createBrowserClient`, localStorage Auth token, or provider-token persistence.
+- Session: Secure/HttpOnly/SameSite=Lax/Path=/ host-only cookies; narrow server refresh/proxy only; fresh `getUser()` for high-impact operations. Target inactivity/absolute limits are a Pro-plan or reviewed-equivalent activation gate.
+- Gate/ownership: anonymous consultation -> purchase-ready -> Auth -> one-use continuation/CSRF -> atomic Customer binding -> Purchase Intent. One canonical binding; Runtime `owner_id` remains lease-only.
+- Data/result: server-mediated tables, PUBLIC/`anon`/`authenticated` DML `0`, explicit service-role ownership join, minimal private `/account`, legacy/narrow result capability preserved.
+- Migration authority: future append-only `0014_customer_identity_authority_v1.sql`; accepted `0002..0013` remain byte-identical. No SQL implementation or remote apply occurred in the architecture task.
+- Proof: RC-2 `48/48`, RC-1 `14/14`, activation `15/15`, Step B `18/18`, ACL `14/14`, email `14/14`, typecheck, zero-warning lint, build `38/38`, diff check, and both audits PASS.
+- Acceptance-sync boundary: only the three top overlays change. Architecture evidence, code, migrations, Runtime, package/lock, V17/Q0, Step E, and legal drafts remain unchanged.
+- External operations `0`: Supabase remote/Auth config, Google Cloud/OAuth/credentials, Resend SMTP/API/Email, Stripe/Payment/webhook, OpenAI Provider, deploy, Runtime flags, secrets, DNS, PR, main merge, Public Launch.
+- `release/private-ready` is authorized for ff-only integration; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Exact next task after integration: **Customer Identity Auth Foundation R1 — server-side Supabase Auth and ownership binding**. It still requires implementation and review; no production/provider activation is implied.
 <!-- CUSTOMER-IDENTITY-AUTHORITY-V1:END -->
 
 <!-- RC-2-PRODUCTION-ACTIVATION-STEP-E:BEGIN -->
