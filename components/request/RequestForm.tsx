@@ -1206,7 +1206,7 @@ export function RequestForm({
     setCompletedClassification(null);
 
     try {
-      const response = await fetch("/api/internal/purchase-eligibility", {
+      const response = await fetch("/api/consultations/purchase-eligibility", {
         method: "POST",
         credentials: "same-origin",
         cache: "no-store",
