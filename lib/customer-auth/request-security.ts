@@ -25,14 +25,10 @@ export function enforceCustomerAuthSameOrigin(request: Request, siteOrigin: stri
     throw new M2RuntimeError("CUSTOMER_AUTH_METHOD_REJECTED", 405);
   }
   const expected = new URL(siteOrigin);
-  const requestUrl = new URL(request.url);
   const origin = request.headers.get("origin");
-  const host = request.headers.get("host");
   const fetchSite = request.headers.get("sec-fetch-site");
   if (
     origin !== expected.origin ||
-    requestUrl.origin !== expected.origin ||
-    host !== expected.host ||
     (fetchSite !== null && fetchSite !== "same-origin")
   ) {
     throw new M2RuntimeError("CUSTOMER_AUTH_ORIGIN_REJECTED", 403);

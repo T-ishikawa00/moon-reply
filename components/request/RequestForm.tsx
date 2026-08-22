@@ -62,6 +62,7 @@ export type RequestFormData = {
 };
 
 type Phase = 1 | 2 | 3 | 4;
+type CustomerAuthMethod = "google" | "email_otp";
 type SafetySelectionState = {
   contactBoundaryState: ContactBoundaryStateV1 | "";
   requestedAssistanceGoal: RequestedAssistanceGoalV1 | "";
@@ -1001,11 +1002,15 @@ export function RequestForm({
   const [messageDetailsOpen, setMessageDetailsOpen] = useState(false);
   const [productionFlow, setProductionFlow] =
     useState<ProductionPurchaseFlow>({ status: "idle" });
+  const [customerAuthMethod, setCustomerAuthMethod] =
+    useState<CustomerAuthMethod | null>(null);
+  const [authEntryPending, setAuthEntryPending] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const requestSequence = useRef(0);
   const preparationIdempotencyKey = useRef<string | null>(null);
   const requestStartedMeasured = useRef(false);
   const requestCompletedMeasured = useRef(false);
+  const authEntryPendingRef = useRef(false);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -1087,6 +1092,7 @@ export function RequestForm({
     if (!keepClarificationPrompt) setClarificationCodes([]);
     setCompletedClassification(null);
     setProductionFlow({ status: "idle" });
+    setCustomerAuthMethod(null);
     setCheckoutError(null);
     preparationIdempotencyKey.current = null;
   }
@@ -1122,7 +1128,7 @@ export function RequestForm({
     }
     if (field === "email") {
       setCompletedClassification(null);
-      setProductionFlow({ status: "idle" });
+      if (!customerAuthEnabled) setProductionFlow({ status: "idle" });
       setCheckoutError(null);
     }
   }
@@ -1541,6 +1547,7 @@ export function RequestForm({
       focusFirstError(nextErrors);
       return;
     }
+    setCustomerAuthMethod(null);
     moveToPhase(4);
   }
 
@@ -1738,6 +1745,7 @@ export function RequestForm({
 
   async function prepareProductionPurchase(
     classification: EligiblePrepaymentClassificationV1,
+    authMethod: CustomerAuthMethod | null,
   ) {
     const input = buildSafetyInput();
     if (!input) {
@@ -1773,10 +1781,14 @@ export function RequestForm({
       if (outcome.status === "purchase_ready") {
         measureRequestComplete();
         if (customerAuthEnabled) {
-          setProductionFlow({
-            status: "auth_method",
-            preparationCapability: outcome.preparationCapability,
-          });
+          if (authMethod) {
+            await beginCustomerAuth(outcome.preparationCapability, authMethod);
+          } else {
+            setProductionFlow({
+              status: "auth_method",
+              preparationCapability: outcome.preparationCapability,
+            });
+          }
         } else {
           await beginMailboxVerification(
             outcome.preparationCapability,
@@ -1865,10 +1877,17 @@ export function RequestForm({
       }
       measureRequestComplete();
       if (customerAuthEnabled) {
-        setProductionFlow({
-          status: "auth_method",
-          preparationCapability: outcome.preparationCapability,
-        });
+        if (customerAuthMethod) {
+          await beginCustomerAuth(
+            outcome.preparationCapability,
+            customerAuthMethod,
+          );
+        } else {
+          setProductionFlow({
+            status: "auth_method",
+            preparationCapability: outcome.preparationCapability,
+          });
+        }
       } else {
         await beginMailboxVerification(
           outcome.preparationCapability,
@@ -1971,10 +1990,13 @@ export function RequestForm({
     }
   }
 
-  async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function submitPhaseFour(authMethod: CustomerAuthMethod | null) {
     const sheetErrors = validateSheet(form);
-    const emailErrors = customerAuthEnabled ? {} : validateEmail(form);
+    const emailErrors =
+      customerAuthEnabled && authMethod !== "email_otp"
+        ? {}
+        : validateEmail(form);
+    if (customerAuthEnabled && authMethod === null) return;
     if (Object.keys(sheetErrors).length > 0) {
       setPhase(1);
       setErrors(sheetErrors);
@@ -1986,6 +2008,17 @@ export function RequestForm({
       focusFirstError(emailErrors);
       return;
     }
+    if (
+      customerAuthEnabled &&
+      authMethod !== null &&
+      productionFlow.status === "auth_method"
+    ) {
+      await beginCustomerAuth(
+        productionFlow.preparationCapability,
+        authMethod,
+      );
+      return;
+    }
 
     setErrors({});
     const result = await requestServerEvaluation();
@@ -1995,7 +2028,7 @@ export function RequestForm({
       result.purchaseGateSatisfied
     ) {
       if (paymentEnabled) {
-        await prepareProductionPurchase(result.classification);
+        await prepareProductionPurchase(result.classification, authMethod);
         return;
       }
       setCompletedClassification(result.classification);
@@ -2013,6 +2046,33 @@ export function RequestForm({
       setErrors(nextErrors);
       focusFirstError(nextErrors);
     }
+  }
+
+  async function handleEmailSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await runPhaseFour(customerAuthEnabled ? customerAuthMethod : null);
+  }
+
+  async function runPhaseFour(authMethod: CustomerAuthMethod | null) {
+    if (authEntryPendingRef.current) return;
+    authEntryPendingRef.current = true;
+    setAuthEntryPending(true);
+    try {
+      await submitPhaseFour(authMethod);
+    } finally {
+      authEntryPendingRef.current = false;
+      setAuthEntryPending(false);
+    }
+  }
+
+  function selectCustomerAuthMethod(method: CustomerAuthMethod) {
+    setCustomerAuthMethod(method);
+    setErrors({});
+    if (method === "google") {
+      void runPhaseFour(method);
+      return;
+    }
+    window.setTimeout(() => document.getElementById("request-email")?.focus(), 0);
   }
 
   function switchToOrganization() {
@@ -2057,6 +2117,7 @@ export function RequestForm({
           onEditEmail={() => {
             setCompletedClassification(null);
             setProductionFlow({ status: "idle" });
+            setCustomerAuthMethod(null);
             setCheckoutError(null);
             moveToPhase(4);
           }}
@@ -2944,39 +3005,23 @@ export function RequestForm({
         >
           <header className="request-sheet__heading">
             <p>04 / 受け取り</p>
-            <h2 id="request-phase-4-title">最後に、受け取り先を入力します。</h2>
-            <span>相談入力と利用確認が終わった後にだけ伺います。</span>
+            <h2 id="request-phase-4-title">
+              {customerAuthEnabled
+                ? "最後に、続ける方法を選びます。"
+                : "最後に、受け取り先を入力します。"}
+            </h2>
+            <span>
+              {customerAuthEnabled
+                ? "相談入力と利用確認が終わった後に、ご本人確認を行います。"
+                : "相談入力と利用確認が終わった後にだけ伺います。"}
+            </span>
           </header>
           <form noValidate onSubmit={handleEmailSubmit}>
-            <div className="request-field">
-              <label htmlFor="request-email">
-                {customerAuthEnabled
-                  ? "メールで続ける場合のアドレス"
-                  : "受け取りメールアドレス"}{" "}
-                {!customerAuthEnabled ? <span>必須</span> : null}
-              </label>
-              <p id="email-note">
-                {customerAuthEnabled
-                  ? "Googleで続ける場合は入力不要です。メールで続ける場合だけ入力してください。"
-                  : paymentEnabled
-                  ? "鑑定結果の送付と、ご購入に関する重要な連絡に使用します。確認コードで受け取り先を確かめます。"
-                  : "鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。現在は送信も保存もされません。"}
-              </p>
-              <input
-                id="request-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={form.email}
-                onChange={(event) => updateString("email", event.target.value)}
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby="email-note email-error"
-              />
-              <FieldError id="email-error" message={errors.email} />
-            </div>
             {paymentEnabled &&
             customerAuthEnabled &&
-            productionFlow.status === "auth_method" ? (
+            (productionFlow.status === "idle" ||
+              productionFlow.status === "auth_method" ||
+              productionFlow.status === "error") ? (
               <div className="request-field request-email-verification">
                 <strong>続ける方法を選んでください</strong>
                 <p>
@@ -2985,30 +3030,54 @@ export function RequestForm({
                 <button
                   type="button"
                   className="button button--primary"
-                  onClick={() =>
-                    void beginCustomerAuth(
-                      productionFlow.preparationCapability,
-                      "google",
-                    )
-                  }
+                  disabled={authEntryPending || safetyBusy}
+                  onClick={() => selectCustomerAuthMethod("google")}
                 >
                   Googleで続ける
                 </button>
                 <button
                   type="button"
                   className={`button button--secondary ${styles.paperSecondary}`}
-                  onClick={() =>
-                    void beginCustomerAuth(
-                      productionFlow.preparationCapability,
-                      "email_otp",
-                    )
-                  }
+                  disabled={authEntryPending || safetyBusy}
+                  onClick={() => selectCustomerAuthMethod("email_otp")}
                 >
                   メールで続ける
                 </button>
                 <small>
                   メールが届かない場合、Googleで登録した方はGoogleで続けてください。アカウントの有無や登録方法は表示しません。
                 </small>
+              </div>
+            ) : null}
+            {!customerAuthEnabled ||
+            (customerAuthMethod === "email_otp" &&
+              (productionFlow.status === "idle" ||
+                productionFlow.status === "auth_method" ||
+                productionFlow.status === "error")) ? (
+              <div className="request-field">
+                <label htmlFor="request-email">
+                  {customerAuthEnabled
+                    ? "メールアドレス"
+                    : "受け取りメールアドレス"}{" "}
+                  <span>必須</span>
+                </label>
+                <p id="email-note">
+                  {customerAuthEnabled
+                    ? "確認コードを受け取れるメールアドレスを入力してください。"
+                    : paymentEnabled
+                      ? "鑑定結果の送付と、ご購入に関する重要な連絡に使用します。確認コードで受け取り先を確かめます。"
+                      : "鑑定結果の送付と、ご購入に関する重要な連絡に使用する予定です。現在は送信も保存もされません。"}
+                </p>
+                <input
+                  id="request-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={(event) => updateString("email", event.target.value)}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby="email-note email-error"
+                />
+                <FieldError id="email-error" message={errors.email} />
               </div>
             ) : null}
             {paymentEnabled &&
@@ -3135,37 +3204,39 @@ export function RequestForm({
               >
                 依頼メモへ戻る
               </button>
-              <button
-                type="submit"
-                className="button button--primary"
-                disabled={
-                  safetyBusy ||
-                  productionFlow.status === "preparing" ||
-                  productionFlow.status === "sending_verification" ||
-                  productionFlow.status === "auth_method" ||
-                  productionFlow.status === "auth_email_requesting" ||
-                  productionFlow.status === "auth_google_redirecting" ||
-                  productionFlow.status === "awaiting_auth_email_otp" ||
-                  productionFlow.status === "awaiting_email_code" ||
-                  productionFlow.status === "product_clarification"
-                }
-              >
-                {safetyBusy || productionFlow.status === "preparing"
-                  ? "現在の入力を確認しています"
-                  : productionFlow.status === "sending_verification"
-                    ? "確認メールを送っています"
-                    : productionFlow.status === "auth_method"
-                      ? "続ける方法を選んでください"
+              {!customerAuthEnabled || customerAuthMethod === "email_otp" ? (
+                <button
+                  type="submit"
+                  className="button button--primary"
+                  disabled={
+                    safetyBusy ||
+                    authEntryPending ||
+                    productionFlow.status === "preparing" ||
+                    productionFlow.status === "sending_verification" ||
+                    productionFlow.status === "auth_email_requesting" ||
+                    productionFlow.status === "auth_google_redirecting" ||
+                    productionFlow.status === "awaiting_auth_email_otp" ||
+                    productionFlow.status === "awaiting_email_code" ||
+                    productionFlow.status === "product_clarification"
+                  }
+                >
+                  {safetyBusy || productionFlow.status === "preparing"
+                    ? "現在の入力を確認しています"
+                    : productionFlow.status === "sending_verification"
+                      ? "確認メールを送っています"
                       : productionFlow.status === "auth_email_requesting"
                         ? "確認メールをリクエストしています"
                         : productionFlow.status === "auth_google_redirecting"
                           ? "Googleの確認画面を準備しています"
                           : productionFlow.status === "awaiting_auth_email_otp"
                             ? "確認コードを入力してください"
-                    : paymentEnabled
-                      ? "受け取り先を確認する"
-                      : "購入前の内容を確認する"}
-              </button>
+                            : customerAuthEnabled
+                              ? "確認メールを送る"
+                              : paymentEnabled
+                                ? "受け取り先を確認する"
+                                : "購入前の内容を確認する"}
+                </button>
+              ) : null}
             </footer>
           </form>
         </article>

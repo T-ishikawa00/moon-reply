@@ -33,15 +33,6 @@ function boundedInteger(name: string, minimum: number, maximum: number) {
   return parsed;
 }
 
-export function isCustomerAuthLoopbackHost(hostname: string) {
-  return (
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    hostname === "[::1]" ||
-    hostname === "::1"
-  );
-}
-
 function exactSiteOrigin(value: string) {
   let parsed: URL;
   try {
@@ -52,9 +43,7 @@ function exactSiteOrigin(value: string) {
   if (
     parsed.origin !== value ||
     !["http:", "https:"].includes(parsed.protocol) ||
-    (process.env.NODE_ENV === "production" &&
-      parsed.protocol !== "https:" &&
-      !(parsed.protocol === "http:" && isCustomerAuthLoopbackHost(parsed.hostname)))
+    (process.env.NODE_ENV === "production" && parsed.protocol !== "https:")
   ) {
     throw new M2RuntimeError("CUSTOMER_AUTH_CONFIGURATION_INVALID", 503);
   }

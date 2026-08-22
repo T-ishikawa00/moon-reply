@@ -55,11 +55,7 @@ export async function GET(request: NextRequest) {
   };
   try {
     const url = new URL(request.url);
-    if (
-      url.origin !== siteOrigin ||
-      request.headers.get("host") !== new URL(siteOrigin).host ||
-      [...url.searchParams.keys()].some((key) => key !== "code")
-    ) {
+    if ([...url.searchParams.keys()].some((key) => key !== "code")) {
       return failed();
     }
     const code = url.searchParams.get("code");

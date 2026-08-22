@@ -173,7 +173,14 @@ check("server cookies are HttpOnly host-only Lax and production Secure", () => {
   assert.match(cookiePolicy, /path:\s*"\/"/u);
   assert.match(cookiePolicy, /NODE_ENV === "production"/u);
   assert.match(cookiePolicy, /configuredLoopbackHttp/u);
-  assert.match(text("lib/customer-auth/environment.ts"), /isCustomerAuthLoopbackHost/u);
+  assert.match(
+    text("lib/customer-auth/environment.ts"),
+    /process\.env\.NODE_ENV === "production" && parsed\.protocol !== "https:"/u,
+  );
+  assert.doesNotMatch(
+    text("lib/customer-auth/environment.ts"),
+    /isCustomerAuthLoopbackHost/u,
+  );
   assert.doesNotMatch(cookiePolicy, /hostname\.endsWith/u);
   assert.doesNotMatch(cookiePolicy, /domain:/u);
 });
