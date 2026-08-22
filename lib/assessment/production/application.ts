@@ -130,7 +130,17 @@ export class ProductionFulfillmentApplication {
       return { status: "purchase_ready", preparationCapability: rawCapability };
     }
     if (preparation.status === "awaiting_clarification") {
-      if (!preparation.clarificationQuestion) {
+      if (!preparation.clarificationId || !preparation.clarificationQuestion) {
+        throw new M2RuntimeError("PRODUCTION_PREPARATION_STATE_INVALID");
+      }
+      const persisted =
+        await this.options.runtimeRepository.findClarificationById(
+          preparation.clarificationId,
+        );
+      if (
+        !persisted ||
+        persisted.questionSnapshot !== preparation.clarificationQuestion
+      ) {
         throw new M2RuntimeError("PRODUCTION_PREPARATION_STATE_INVALID");
       }
       const rawCapability = this.capability();
@@ -142,6 +152,7 @@ export class ProductionFulfillmentApplication {
       return {
         status: "needs_one_clarifying_answer",
         clarificationCapability: rawCapability,
+        target: persisted.target,
         question: preparation.clarificationQuestion,
         maximumQuestionsTotal: 1,
       };
@@ -212,6 +223,7 @@ export class ProductionFulfillmentApplication {
       publicOutcome = {
         status: "needs_one_clarifying_answer",
         clarificationCapability: capability,
+        target: result.clarification.target,
         question: result.clarification.question,
         maximumQuestionsTotal: 1,
       };

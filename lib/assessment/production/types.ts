@@ -2,6 +2,7 @@ import type { CustomerAssessmentExperienceProjectionV2 } from "../runtime/custom
 import type {
   AssessmentInput,
   JsonObject,
+  Jpy980ClarificationTarget,
   PersistedAssessmentRequest,
   PurchaseReadyRuntimeAuthorityV1,
 } from "../runtime/types.ts";
@@ -96,6 +97,7 @@ export type PublicPreparationOutcome =
   | Readonly<{
       status: "needs_one_clarifying_answer";
       clarificationCapability: string;
+      target: Jpy980ClarificationTarget;
       question: string;
       maximumQuestionsTotal: 1;
     }>

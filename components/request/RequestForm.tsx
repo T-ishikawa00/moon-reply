@@ -40,6 +40,15 @@ import {
   type ScopeAcknowledgementsV1,
 } from "@/lib/purchase/prepayment-safety-types-v1";
 import { trackClientMeasurement } from "@/lib/measurement/client";
+import {
+  buildPublicClarificationAnswerV1,
+  classifyClarificationContinuationV1,
+  isPublicClarificationTargetV1,
+  PUBLIC_CLARIFICATION_CONTROLS_V1,
+  publicClarificationDetailRequiredV1,
+  publicClarificationDetailVisibleV1,
+} from "@/lib/assessment/production/public-clarification-contract-v1";
+import type { Jpy980ClarificationTarget } from "@/lib/assessment/runtime/types";
 
 export type RequestFormData = {
   adultConfirmed: boolean;
@@ -75,6 +84,7 @@ type ProductionPreparationOutcome =
   | {
       status: "needs_one_clarifying_answer";
       clarificationCapability: string;
+      target: Jpy980ClarificationTarget;
       question: string;
       maximumQuestionsTotal: 1;
     }
@@ -86,8 +96,10 @@ type ProductionPurchaseFlow =
   | {
       status: "product_clarification";
       clarificationCapability: string;
+      target: Jpy980ClarificationTarget;
       question: string;
-      answer: string;
+      answerValue: string;
+      answerDetail: string;
     }
   | { status: "sending_verification"; preparationCapability: string }
   | { status: "auth_method"; preparationCapability: string }
@@ -116,7 +128,14 @@ type ProductionPurchaseFlow =
       preparationCapability: string;
       maskedEmail: string;
     }
-  | { status: "error"; message: string };
+  | {
+      status: "error";
+      reason:
+        | "technical_failure"
+        | "not_full_product_candidate"
+        | "safety_blocked";
+      message: string;
+    };
 
 type ClientSafetyResult = {
   classification: (typeof PREPAYMENT_SAFETY_CLASSIFICATIONS)[number];
@@ -517,12 +536,14 @@ function decodeProductionPreparation(
   if (
     data.status === "needs_one_clarifying_answer" &&
     typeof data.clarificationCapability === "string" &&
+    isPublicClarificationTargetV1(data.target) &&
     typeof data.question === "string" &&
     data.maximumQuestionsTotal === 1
   ) {
     return {
       status: data.status,
       clarificationCapability: data.clarificationCapability,
+      target: data.target,
       question: data.question,
       maximumQuestionsTotal: 1,
     };
@@ -544,6 +565,96 @@ function productionFlowMessage(kind: "unavailable" | "notEligible" | "invalidCod
     return "確認コードを確認できませんでした。届いたコードを見直してください。";
   }
   return "現在、お申し込みを安全に完了できません。料金は発生していません。時間を置いてもう一度お試しください。";
+}
+
+type ProductClarificationFlow = Extract<
+  ProductionPurchaseFlow,
+  { status: "product_clarification" }
+>;
+
+function ProductClarificationInput({
+  flow,
+  onChange,
+  onSubmit,
+}: {
+  flow: ProductClarificationFlow;
+  onChange: (
+    draft: Pick<ProductClarificationFlow, "answerValue" | "answerDetail">,
+  ) => void;
+  onSubmit: () => void;
+}) {
+  const control = PUBLIC_CLARIFICATION_CONTROLS_V1[flow.target];
+  const detailVisible = publicClarificationDetailVisibleV1(
+    flow.target,
+    flow.answerValue,
+  );
+  const detailRequired = publicClarificationDetailRequiredV1(
+    flow.target,
+    flow.answerValue,
+  );
+  const answer = buildPublicClarificationAnswerV1(flow.target, {
+    value: flow.answerValue,
+    detail: flow.answerDetail,
+  });
+
+  return (
+    <div className="request-field request-product-clarification">
+      <label>
+        鑑定ノートを準備するための確認 <span>必須 / 1回まで</span>
+      </label>
+      <fieldset className="request-field runtime-clarification__choices">
+        <legend>{flow.question}</legend>
+        <div className="request-chip-group">
+          {control.choices.map((choice) => (
+            <label key={choice.value}>
+              <input
+                type="radio"
+                name="product-clarification-answer"
+                value={choice.value}
+                checked={flow.answerValue === choice.value}
+                onChange={() =>
+                  onChange({
+                    answerValue: choice.value,
+                    answerDetail: flow.answerDetail,
+                  })
+                }
+              />
+              <span>{choice.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {control.detail && detailVisible ? (
+        <div className="request-field">
+          <label htmlFor="product-clarification-detail">
+            {control.detail.label}{" "}
+            <span>{detailRequired ? "必須" : "任意"}</span>
+          </label>
+          <textarea
+            id="product-clarification-detail"
+            value={flow.answerDetail}
+            maxLength={control.detail.maximumCharacters}
+            rows={3}
+            required={detailRequired}
+            onChange={(event) =>
+              onChange({
+                answerValue: flow.answerValue,
+                answerDetail: event.target.value,
+              })
+            }
+          />
+        </div>
+      ) : null}
+      <button
+        type="button"
+        className="button button--primary"
+        disabled={answer === null}
+        onClick={onSubmit}
+      >
+        この回答で確認を完了する
+      </button>
+    </div>
+  );
 }
 
 function isKnownArray<const TValues extends readonly string[]>(
@@ -1484,6 +1595,7 @@ export function RequestForm({
     } catch {
       setProductionFlow({
         status: "error",
+        reason: "technical_failure",
         message: productionFlowMessage("unavailable"),
       });
     }
@@ -1581,6 +1693,7 @@ export function RequestForm({
     } catch {
       setProductionFlow({
         status: "error",
+        reason: "technical_failure",
         message: productionFlowMessage("unavailable"),
       });
     }
@@ -1630,6 +1743,7 @@ export function RequestForm({
     if (!input) {
       setProductionFlow({
         status: "error",
+        reason: "technical_failure",
         message: productionFlowMessage("unavailable"),
       });
       return;
@@ -1675,33 +1789,44 @@ export function RequestForm({
         setProductionFlow({
           status: "product_clarification",
           clarificationCapability: outcome.clarificationCapability,
+          target: outcome.target,
           question: outcome.question,
-          answer: "",
+          answerValue: "",
+          answerDetail: "",
         });
         return;
       }
       setProductionFlow({
         status: "error",
+        reason: outcome.status,
         message: productionFlowMessage("notEligible"),
       });
     } catch {
       setProductionFlow({
         status: "error",
+        reason: "technical_failure",
         message: productionFlowMessage("unavailable"),
       });
     }
   }
 
   async function submitProductClarification() {
+    const answer =
+      productionFlow.status === "product_clarification"
+        ? buildPublicClarificationAnswerV1(productionFlow.target, {
+            value: productionFlow.answerValue,
+            detail: productionFlow.answerDetail,
+          })
+        : null;
     if (
       productionFlow.status !== "product_clarification" ||
-      productionFlow.answer.trim().length === 0 ||
+      answer === null ||
       !safetyResult ||
       !isEligibleClassification(safetyResult.classification)
     ) {
       return;
     }
-    const { clarificationCapability, answer } = productionFlow;
+    const { clarificationCapability } = productionFlow;
     const classification = safetyResult.classification;
     setProductionFlow({ status: "preparing" });
     try {
@@ -1712,12 +1837,30 @@ export function RequestForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clarificationCapability,
-          answer: answer.trim(),
+          answer,
         }),
       });
       if (!response.ok) throw new Error("PRODUCT_CLARIFICATION_FAILED");
       const outcome = decodeProductionPreparation(await response.json());
-      if (!outcome || outcome.status !== "purchase_ready") {
+      if (!outcome) {
+        throw new Error("PRODUCT_CLARIFICATION_INVALID");
+      }
+      const disposition = classifyClarificationContinuationV1(outcome.status);
+      if (
+        disposition === "not_full_product_candidate" ||
+        disposition === "safety_blocked"
+      ) {
+        setProductionFlow({
+          status: "error",
+          reason: disposition,
+          message: productionFlowMessage("notEligible"),
+        });
+        return;
+      }
+      if (
+        disposition !== "purchase_ready" ||
+        outcome.status !== "purchase_ready"
+      ) {
         throw new Error("PRODUCT_CLARIFICATION_INVALID");
       }
       measureRequestComplete();
@@ -1735,7 +1878,8 @@ export function RequestForm({
     } catch {
       setProductionFlow({
         status: "error",
-        message: productionFlowMessage("notEligible"),
+        reason: "technical_failure",
+        message: productionFlowMessage("unavailable"),
       });
     }
   }
@@ -2913,30 +3057,13 @@ export function RequestForm({
             ) : null}
             {paymentEnabled &&
             productionFlow.status === "product_clarification" ? (
-              <div className="request-field request-product-clarification">
-                <label htmlFor="product-clarification-answer">
-                  鑑定ノートを準備するための確認 <span>必須 / 1回まで</span>
-                </label>
-                <p>{productionFlow.question}</p>
-                <textarea
-                  id="product-clarification-answer"
-                  value={productionFlow.answer}
-                  onChange={(event) =>
-                    setProductionFlow({
-                      ...productionFlow,
-                      answer: event.target.value,
-                    })
-                  }
-                />
-                <button
-                  type="button"
-                  className="button button--primary"
-                  disabled={productionFlow.answer.trim().length === 0}
-                  onClick={() => void submitProductClarification()}
-                >
-                  この回答で確認を完了する
-                </button>
-              </div>
+              <ProductClarificationInput
+                flow={productionFlow}
+                onChange={(draft) =>
+                  setProductionFlow({ ...productionFlow, ...draft })
+                }
+                onSubmit={() => void submitProductClarification()}
+              />
             ) : null}
             {paymentEnabled &&
             productionFlow.status === "awaiting_email_code" ? (
