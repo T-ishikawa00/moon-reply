@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
+    "verify:m1-4:skipped-stage-constraint": "node scripts/verify-m1-4-skipped-stage-constraint.mjs",
     "verify:m1-4:clarification-contract": "node scripts/verify-m1-4-clarification-contract.mjs",
     "verify:m1-4:clarification-product-intent": "node scripts/verify-m1-4-clarification-product-intent.mjs",
     "verify:m1-4:auth-entry-phase04": "node scripts/verify-m1-4-auth-entry-phase04.mjs",
