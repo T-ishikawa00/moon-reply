@@ -1,0 +1,187 @@
+{
+  "schema_version": "m1-4-clarification-product-intent-fixtures-r1",
+  "cases": [
+    {
+      "case_id": "A_minimal_consultation",
+      "consultation_text": "昨日LINEしたけど返信がありません。追いLINEした方がいいですか？",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {
+        "decision_facts": {
+          "contact_state": {
+            "elapsed_since_latest_user_message_minutes": null,
+            "usual_cadence_relation": "unknown"
+          },
+          "information_state": {
+            "unresolved_fields": [
+              "contact_state.elapsed_since_latest_user_message_minutes",
+              "contact_state.usual_cadence_relation"
+            ]
+          }
+        },
+        "base_writing_signals": {
+          "communication_pattern": {
+            "usual_response_cadence_summary": null,
+            "basis": "unresolved"
+          }
+        }
+      },
+      "expected_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "B_standard_consultation",
+      "consultation_text": "交際3か月。昨日夜に「今日はありがとう。また話そう」と送信。まだ返信なし。普段は数時間以内に返信。追いメッセージを送るか待つか迷っている。",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {
+        "decision_facts": {
+          "contact_state": {
+            "elapsed_since_latest_user_message_minutes": null,
+            "usual_cadence_relation": "unknown"
+          },
+          "information_state": {
+            "unresolved_fields": [
+              "contact_state.elapsed_since_latest_user_message_minutes",
+              "contact_state.usual_cadence_relation"
+            ]
+          }
+        },
+        "base_writing_signals": {
+          "communication_pattern": {
+            "usual_response_cadence_summary": null,
+            "basis": "unresolved"
+          }
+        }
+      },
+      "expected_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "C_detailed_consultation",
+      "consultation_text": "交際3か月。昨日22時に送信し、普段は2〜4時間で返信がある。直近の文面と時系列を踏まえ、追いメッセージを送るか待つか判断したい。",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {},
+      "expected_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "D_unknown_timing_and_cadence",
+      "consultation_text": "返信がないので、もう一度送るか待つか迷っています。正確な送信時刻や普段の返信頻度は分かりません。",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {
+        "decision_facts": {
+          "contact_state": {
+            "elapsed_since_latest_user_message_minutes": null,
+            "usual_cadence_relation": "unknown"
+          },
+          "information_state": {
+            "unresolved_fields": [
+              "contact_state.elapsed_since_latest_user_message_minutes",
+              "contact_state.usual_cadence_relation"
+            ]
+          }
+        },
+        "base_writing_signals": {
+          "communication_pattern": {
+            "usual_response_cadence_summary": null,
+            "basis": "unresolved"
+          }
+        }
+      },
+      "expected_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "E_genuinely_unusable_without_action_focus",
+      "consultation_text": "相手とのことを相談したいです。どうすればいいですか？",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {
+        "timeline": [
+          {
+            "event_id": "E001",
+            "sequence": 1,
+            "actor": "user",
+            "statement": "ユーザーには相談したい相手がいる。",
+            "source_refs": ["input:current_situation"]
+          }
+        ],
+        "context": [],
+        "observed_facts": [
+          {
+            "fact_id": "F001",
+            "statement": "ユーザーは相手とのことを相談したい。",
+            "source_refs": ["input:current_situation"],
+            "support": "explicit"
+          }
+        ],
+        "decision_facts": {
+          "latest_direct_message": {
+            "sender": "unknown",
+            "kind": "unknown",
+            "response_expectation": "unknown",
+            "user_reply_state": "unknown",
+            "sns_signal_only": false
+          },
+          "contact_state": {
+            "unanswered_user_message_count": 0,
+            "elapsed_since_latest_user_message_minutes": null,
+            "usual_cadence_relation": "unknown"
+          },
+          "information_state": {
+            "unresolved_fields": []
+          }
+        },
+        "base_writing_signals": {
+          "user_goal_detail": {
+            "value": "unknown",
+            "basis": "unresolved"
+          },
+          "explicit_user_constraints": []
+        }
+      },
+      "expected_state": "needs_one_clarifying_answer",
+      "expected_target": "material_relationship_or_communication_concern",
+      "answer_payload": {
+        "choice": "reply_pressure",
+        "detail": "連絡の距離感をどうすべきか迷っています。"
+      },
+      "expected_resumed_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "F_safety_precedence",
+      "consultation_text": "Safety対象の相談はProduct clarificationより先に停止する。",
+      "scenario": "reply_waiting_sufficient",
+      "patch": {},
+      "safety_classification": "needs_review",
+      "expected_state": "safety_blocked"
+    },
+    {
+      "case_id": "G_soft_draft_context",
+      "consultation_text": "相手から連絡が来ています。返信文を考えたいですが、関係の意図や文面のトーンはまだ決めていません。",
+      "scenario": "routine_administrative_reply",
+      "patch": {
+        "decision_facts": {
+          "selected_requests": ["draft_message"]
+        },
+        "base_writing_signals": {
+          "relationship_dimensions": {
+            "observed_register": {
+              "value": "unknown",
+              "basis": "unresolved"
+            }
+          },
+          "user_goal_detail": {
+            "value": "unknown",
+            "basis": "unresolved"
+          },
+          "explicit_user_constraints": [],
+          "communication_pattern": {
+            "usual_register": "unknown",
+            "usual_length": "unknown",
+            "usual_emoji_pattern": "unknown",
+            "usual_response_cadence_summary": null,
+            "usual_initiator": "unknown",
+            "reciprocal_style_summary": null,
+            "basis": "unresolved"
+          }
+        }
+      },
+      "expected_state": "full_paid_ready_candidate"
+    }
+  ]
+}

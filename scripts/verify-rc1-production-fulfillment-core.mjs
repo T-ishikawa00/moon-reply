@@ -158,10 +158,51 @@ function case5Outputs() {
   };
 }
 
-function case9Outputs() {
-  return outputs(
+function genuinelyUnusableClarificationOutputs() {
+  const result = outputs(
     "2026-08-18-case9-one-clarification-ai-first-v16-cd1518ce",
   );
+  const base = structuredClone(result["PB-01"]);
+  base.timeline = [
+    {
+      event_id: "E101",
+      sequence: 1,
+      actor: "user",
+      statement: "ユーザーには相談したい相手がいる。",
+      source_refs: ["input:current_situation"],
+    },
+  ];
+  base.context = [];
+  base.observed_facts = [
+    {
+      fact_id: "F101",
+      statement: "ユーザーは相手とのことを相談したい。",
+      source_refs: ["input:current_situation"],
+      support: "explicit",
+    },
+  ];
+  base.user_assumptions = [];
+  base.user_emotions = [];
+  base.material_unknowns = [];
+  base.decision_facts.latest_direct_message = {
+    sender: "unknown",
+    kind: "unknown",
+    response_expectation: "unknown",
+    user_reply_state: "unknown",
+    sns_signal_only: false,
+  };
+  base.decision_facts.contact_state = {
+    unanswered_user_message_count: 0,
+    elapsed_since_latest_user_message_minutes: null,
+    usual_cadence_relation: "unknown",
+  };
+  base.decision_facts.information_state.unresolved_fields = [];
+  base.base_writing_signals.user_goal_detail = {
+    value: "unknown",
+    basis: "unresolved",
+  };
+  base.base_writing_signals.explicit_user_constraints = [];
+  return { ...result, "PB-01": base };
 }
 
 function consultationFor(selected, overrides = {}) {
@@ -527,7 +568,14 @@ await check("ready preparation stops before PB-04/PB-05/PB-06 and persists autho
 
 await check("one clarification is reusable for the same answer and conflicting replay fails closed", async () => {
   const selected = fixture("one_clarification_answer_becomes_ready");
-  const run = await harness(selected, case9Outputs());
+  selected.assessment_input.currentSituation =
+    "相手とのことを相談したいです。どうすればいいですか？";
+  selected.assessment_input.optionalMessage = null;
+  selected.clarification.answer_payload = {
+    choice: "reply_pressure",
+    detail: "連絡の距離感をどうすべきか迷っています。",
+  };
+  const run = await harness(selected, genuinelyUnusableClarificationOutputs());
   const prepared = await run.application.prepare(
     consultationFor(selected),
     crypto.randomUUID(),
@@ -551,8 +599,8 @@ await check("one clarification is reusable for the same answer and conflicting r
   await assert.rejects(
     () =>
       run.application.answerClarification(prepared.clarificationCapability, {
-        kind: "elapsed_bucket",
-        value: "more_than_three_days",
+        choice: "distance",
+        detail: "少し距離を置くべきか迷っています。",
       }),
     (error) => safeCode(error) === "PRODUCTION_CLARIFICATION_CONFLICT",
   );

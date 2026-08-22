@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "verify:m1-4:clarification-contract": "node scripts/verify-m1-4-clarification-contract.mjs",
+    "verify:m1-4:clarification-product-intent": "node scripts/verify-m1-4-clarification-product-intent.mjs",
     "verify:m1-4:purchase-eligibility": "node scripts/verify-m1-4-purchase-eligibility-production-route.mjs",
     "verify:rc1": "node scripts/verify-rc1-production-fulfillment-core.mjs",
     "verify:rc2": "node scripts/verify-rc2-production-payment-delivery.mjs",

@@ -21,6 +21,10 @@ import {
   evaluateJpy980InputSufficiencyV3,
   type Jpy980InputSufficiencyResultV3,
 } from "./jpy980-input-sufficiency-policy-v3.ts";
+import {
+  evaluateJpy980InputSufficiencyV4,
+  type Jpy980InputSufficiencyResultV4,
+} from "./jpy980-input-sufficiency-policy-v4.ts";
 import { groundChangeConditionCommentaryV3 } from "./change-condition-grounding-v3.ts";
 import { groundChangeConditionCommentaryV4 } from "./change-condition-grounding-v4.ts";
 import { groundBaseStructuredIntakeV1, projectBaseProviderInputV1 } from "./base-structured-intake-grounding-v1.ts";
@@ -966,7 +970,10 @@ export class AssessmentPipeline {
 
   private async completeV1A2NeedsMore(input: {
     runContext: AssessmentRunContext;
-    policy: Jpy980InputSufficiencyResultV2 | Jpy980InputSufficiencyResultV3;
+    policy:
+      | Jpy980InputSufficiencyResultV2
+      | Jpy980InputSufficiencyResultV3
+      | Jpy980InputSufficiencyResultV4;
   }): Promise<AssessmentExecutionResult> {
     const prompt = input.policy.clarification;
     if (!prompt || input.policy.clarificationBudget.questionsRemaining !== 1) {
@@ -1074,10 +1081,13 @@ export class AssessmentPipeline {
       clarificationGrounding: input.clarificationGrounding,
       effectiveAssessmentAuthority: input.effectiveAuthority,
     };
+    if (
+      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
+    ) {
+      return evaluateJpy980InputSufficiencyV4(policyInput);
+    }
     return input.runContext.promptBundleVersion ===
-      "prompt-bundle-runtime-v16.0.0" ||
-      input.runContext.promptBundleVersion ===
-        "prompt-bundle-runtime-v17.0.0"
+      "prompt-bundle-runtime-v16.0.0"
       ? evaluateJpy980InputSufficiencyV3(policyInput)
       : evaluateJpy980InputSufficiencyV2(policyInput);
   }
@@ -1090,7 +1100,7 @@ export class AssessmentPipeline {
     aggregate: SafetyResult;
     effectiveAuthority: EffectiveAssessmentAuthorityV1;
     clarificationGrounding: ClarificationGroundingV1 | null;
-    policy: Jpy980InputSufficiencyResultV3;
+    policy: Jpy980InputSufficiencyResultV4;
   }): Promise<PurchasePreparationExecutionResult> {
     if (
       input.runContext.promptBundleVersion !==
@@ -1885,7 +1895,7 @@ export class AssessmentPipeline {
         aggregate,
         effectiveAuthority,
         clarificationGrounding: null,
-        policy: policy as Jpy980InputSufficiencyResultV3,
+        policy: policy as Jpy980InputSufficiencyResultV4,
       });
     }
     return this.completeV1A2Ready({
@@ -2195,7 +2205,7 @@ export class AssessmentPipeline {
         aggregate,
         effectiveAuthority,
         clarificationGrounding,
-        policy: policy as Jpy980InputSufficiencyResultV3,
+        policy: policy as Jpy980InputSufficiencyResultV4,
       });
     }
     return this.completeV1A2Ready({
