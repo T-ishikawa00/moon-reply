@@ -7,8 +7,9 @@ import { evaluatePrepaymentSafetyV1 } from "../lib/purchase/prepayment-safety-ga
 process.removeAllListeners("warning");
 process.on("warning", () => {});
 
-const productionUrl =
-  "https://example.test/api/consultations/purchase-eligibility";
+const canonicalProductionOrigin = "https://tsukinohenji.jp";
+const proxiedProductionUrl =
+  "https://moon-reply-internal.netlify.app/api/consultations/purchase-eligibility";
 const cases = JSON.parse(
   readFileSync(
     new URL(
@@ -33,25 +34,35 @@ async function check(name, run) {
   }
 }
 
-function request(body, headers = {}) {
-  return new Request(productionUrl, {
+function request(body, headers = {}, url = proxiedProductionUrl) {
+  const requestHeaders = new Headers({
+    origin: canonicalProductionOrigin,
+    "content-type": "application/json",
+    "sec-fetch-site": "same-origin",
+  });
+  for (const [name, value] of Object.entries(headers)) {
+    if (value === null) requestHeaders.delete(name);
+    else requestHeaders.set(name, value);
+  }
+  return new Request(url, {
     method: "POST",
-    headers: {
-      origin: "https://example.test",
-      "content-type": "application/json",
-      "sec-fetch-site": "same-origin",
-      ...headers,
-    },
+    headers: requestHeaders,
     body,
   });
 }
 
 process.env.NODE_ENV = "production";
+process.env.NEXT_PUBLIC_APP_URL = canonicalProductionOrigin;
 
 await check(
-  "Production route returns the unchanged eligible Safety classification",
+  "Production route accepts the canonical Origin behind a reverse proxy and preserves bug #1",
   async () => {
-    const response = await POST(request(JSON.stringify(eligibleInput)));
+    const response = await POST(
+      request(JSON.stringify(eligibleInput), {
+        host: "moon-reply-internal.netlify.app",
+        "x-forwarded-host": "moon-reply-internal.netlify.app",
+      }),
+    );
     assert.notEqual(response.status, 404);
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("cache-control"), "no-store");
@@ -74,6 +85,28 @@ await check("cross-origin requests fail closed", async () => {
   const response = await POST(
     request(JSON.stringify(eligibleInput), {
       origin: "https://attacker.example",
+      "x-forwarded-host": "tsukinohenji.jp",
+    }),
+  );
+  assert.equal(response.status, 403);
+  assert.deepEqual(await response.json(), {
+    error: { code: "PRODUCTION_ORIGIN_REJECTED" },
+  });
+});
+
+await check("requests without Origin fail closed", async () => {
+  const response = await POST(
+    request(JSON.stringify(eligibleInput), { origin: null }),
+  );
+  assert.equal(response.status, 403);
+  assert.deepEqual(await response.json(), {
+    error: { code: "PRODUCTION_ORIGIN_REJECTED" },
+  });
+});
+
+await check("cross-site Fetch Metadata fails closed", async () => {
+  const response = await POST(
+    request(JSON.stringify(eligibleInput), {
       "sec-fetch-site": "cross-site",
     }),
   );
@@ -81,6 +114,42 @@ await check("cross-origin requests fail closed", async () => {
   assert.deepEqual(await response.json(), {
     error: { code: "PRODUCTION_ORIGIN_REJECTED" },
   });
+});
+
+await check("missing or invalid Production canonical origins fail closed", async () => {
+  for (const configured of [
+    undefined,
+    "not-a-url",
+    `${canonicalProductionOrigin}/path`,
+    "http://public.example",
+  ]) {
+    if (configured === undefined) delete process.env.NEXT_PUBLIC_APP_URL;
+    else process.env.NEXT_PUBLIC_APP_URL = configured;
+    const response = await POST(request(JSON.stringify(eligibleInput)));
+    assert.equal(response.status, 403);
+    assert.deepEqual(await response.json(), {
+      error: { code: "PRODUCTION_ORIGIN_REJECTED" },
+    });
+  }
+  process.env.NEXT_PUBLIC_APP_URL = canonicalProductionOrigin;
+});
+
+await check("non-Production localhost keeps request URL origin behavior", async () => {
+  process.env.NODE_ENV = "development";
+  delete process.env.NEXT_PUBLIC_APP_URL;
+  try {
+    const response = await POST(
+      request(
+        JSON.stringify(eligibleInput),
+        { origin: "http://localhost:3000" },
+        "http://localhost:3000/api/consultations/purchase-eligibility",
+      ),
+    );
+    assert.equal(response.status, 200);
+  } finally {
+    process.env.NODE_ENV = "production";
+    process.env.NEXT_PUBLIC_APP_URL = canonicalProductionOrigin;
+  }
 });
 
 await check("invalid JSON and Content-Type fail closed", async () => {
@@ -162,4 +231,4 @@ await check(
   },
 );
 
-console.log(`M1-4_PURCHASE_ELIGIBILITY_PRODUCTION_ROUTE: PASS ${passed}/5`);
+console.log(`M1-4_PURCHASE_ELIGIBILITY_PRODUCTION_ROUTE: PASS ${passed}/9`);

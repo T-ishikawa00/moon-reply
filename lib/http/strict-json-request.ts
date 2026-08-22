@@ -3,12 +3,50 @@ import { M2RuntimeError } from "../assessment/runtime/errors.ts";
 const jsonContentTypePattern =
   /^application\/json(?:\s*;\s*charset\s*=\s*utf-8)?$/iu;
 
+function isLoopbackHostname(hostname: string) {
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "[::1]" ||
+    hostname === "::1"
+  );
+}
+
+function readExpectedOrigin(request: Request) {
+  if (process.env.NODE_ENV !== "production") {
+    return new URL(request.url).origin;
+  }
+
+  const configured = process.env.NEXT_PUBLIC_APP_URL;
+  if (!configured) return null;
+
+  let parsed: URL;
+  try {
+    parsed = new URL(configured);
+  } catch {
+    return null;
+  }
+
+  if (
+    parsed.origin !== configured ||
+    !["http:", "https:"].includes(parsed.protocol) ||
+    (parsed.protocol !== "https:" &&
+      !(parsed.protocol === "http:" && isLoopbackHostname(parsed.hostname)))
+  ) {
+    return null;
+  }
+
+  return parsed.origin;
+}
+
 export function enforceSameOrigin(request: Request) {
   const origin = request.headers.get("origin");
   const fetchSite = request.headers.get("sec-fetch-site");
+  const expectedOrigin = readExpectedOrigin(request);
   if (
     origin === null ||
-    origin !== new URL(request.url).origin ||
+    expectedOrigin === null ||
+    origin !== expectedOrigin ||
     (fetchSite !== null && fetchSite !== "same-origin")
   ) {
     throw new M2RuntimeError("PRODUCTION_ORIGIN_REJECTED", 403);
