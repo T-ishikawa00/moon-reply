@@ -16,6 +16,7 @@ import type {
   FulfillmentDispatchClaim,
   FulfillmentJobClaim,
   FulfillmentJobRecord,
+  FulfillmentRetryExhaustionOutcome,
   PaymentAttemptRecord,
   PaymentDeliveryRepository,
   PreparationEmailBinding,
@@ -83,6 +84,7 @@ export class FakePaymentDeliveryRepository
     { bindingId: string; customerUserId: string; emailCiphertext: string }
   >();
   readonly authenticatedResultDeliveries = new Map<string, string>();
+  dispatchCompletionFailuresRemaining = 0;
 
   seedPurchaseReady(input: {
     id: string;
@@ -821,6 +823,17 @@ export class FakePaymentDeliveryRepository
     ) {
       return { disposition: "in_progress" };
     }
+    if (dispatch.ownerId !== null && dispatch.retryAfter === null) {
+      job.state = "manual_review";
+      job.ownerId = null;
+      job.leaseExpiresAt = null;
+      job.lastErrorCode = "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS";
+      dispatch.ownerId = null;
+      dispatch.leaseExpiresAt = null;
+      dispatch.lastErrorCode =
+        "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS";
+      return { disposition: "terminal" };
+    }
     if (
       dispatch.retryAfter !== null &&
       Date.parse(dispatch.retryAfter) > Date.parse(input.now)
@@ -839,6 +852,10 @@ export class FakePaymentDeliveryRepository
     ownerId: string;
     now: string;
   }) {
+    if (this.dispatchCompletionFailuresRemaining > 0) {
+      this.dispatchCompletionFailuresRemaining -= 1;
+      throw new M2RuntimeError("FAKE_DISPATCH_ACCEPTANCE_PERSIST_FAILED", 503);
+    }
     const dispatch = this.dispatches.get(input.jobId);
     if (
       !dispatch ||
@@ -863,12 +880,13 @@ export class FakePaymentDeliveryRepository
     retryAfter: string;
     now: string;
   }) {
-    void input.now;
     const dispatch = this.dispatches.get(input.jobId);
     if (
       !dispatch ||
       dispatch.marker !== input.dispatchMarker ||
-      dispatch.ownerId !== input.ownerId
+      dispatch.ownerId !== input.ownerId ||
+      dispatch.leaseExpiresAt === null ||
+      Date.parse(dispatch.leaseExpiresAt) <= Date.parse(input.now)
     ) {
       throw new M2RuntimeError("PAYMENT_FULFILLMENT_DISPATCH_CONFLICT", 409);
     }
@@ -994,16 +1012,47 @@ export class FakePaymentDeliveryRepository
     ) {
       throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_CONFLICT", 409);
     }
+    const retriesExhausted =
+      job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED";
     job.state =
+      retriesExhausted ||
       input.errorCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS"
         ? "manual_review"
         : "retryable";
     job.ownerId = null;
     job.leaseExpiresAt = null;
-    job.lastErrorCode = input.errorCode;
-    if (job.state === "retryable") {
-      this.dispatches.delete(job.id);
+    job.lastErrorCode = retriesExhausted
+      ? "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
+      : input.errorCode;
+  }
+
+  async quarantineFulfillmentJobAfterAsyncRetryExhaustion(input: {
+    jobId: string;
+    now: string;
+  }): Promise<FulfillmentRetryExhaustionOutcome | null> {
+    const job = this.jobs.get(input.jobId);
+    if (!job) return null;
+    const dispatch = this.dispatches.get(input.jobId);
+    if (!dispatch?.completedAt) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_RETRY_AUTHORITY_INVALID", 409);
     }
+    if (job.state === "completed") return { disposition: "completed" };
+    if (job.state === "manual_review") {
+      return { disposition: "manual_review" };
+    }
+    if (
+      job.state === "processing" &&
+      job.leaseExpiresAt !== null &&
+      Date.parse(job.leaseExpiresAt) > Date.parse(input.now)
+    ) {
+      job.lastErrorCode = "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED";
+      return { disposition: "quarantined_active" };
+    }
+    job.state = "manual_review";
+    job.ownerId = null;
+    job.leaseExpiresAt = null;
+    job.lastErrorCode = "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED";
+    return { disposition: "quarantined" };
   }
 
   async resolveDeliveryEmailCiphertext(
@@ -1030,14 +1079,16 @@ export class FakeProductionFulfillmentDispatcherV1
   implements ProductionFulfillmentDispatcherV1
 {
   readonly jobIds: string[] = [];
+  readonly attempts: string[] = [];
   failuresRemaining = 0;
 
   async enqueue(jobId: string) {
-    this.jobIds.push(jobId);
+    this.attempts.push(jobId);
     if (this.failuresRemaining > 0) {
       this.failuresRemaining -= 1;
       throw new M2RuntimeError("FAKE_FULFILLMENT_DISPATCH_FAILED", 503);
     }
+    this.jobIds.push(jobId);
     return { eventId: `event-${String(this.jobIds.length).padStart(8, "0")}` };
   }
 }
@@ -1142,6 +1193,7 @@ export class FakeProductionGrantProcessorV1
   >();
   readonly issuedResultTokens: string[] = [];
   providerInvocationCalls = 0;
+  fulfillmentFailuresRemaining = 0;
   notificationFailuresRemaining = 0;
   private tokenSequence = 0;
   private readonly repository?: FakePaymentDeliveryRepository;
@@ -1178,6 +1230,10 @@ export class FakeProductionGrantProcessorV1
     grant: AssessmentGrantHandleV1,
   ): Promise<ProductionFulfillmentResultV1> {
     this.fulfillCalls.push(clone(grant));
+    if (this.fulfillmentFailuresRemaining > 0) {
+      this.fulfillmentFailuresRemaining -= 1;
+      throw new M2RuntimeError("FAKE_FULFILLMENT_TEMPORARY_FAILURE", 503);
+    }
     const duplicate = this.generated.has(grant.logicalAssessmentId);
     if (!duplicate) {
       this.generated.add(grant.logicalAssessmentId);

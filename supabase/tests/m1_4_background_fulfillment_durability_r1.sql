@@ -63,8 +63,40 @@ begin
     select 1 from pg_proc
     where pronamespace = 'public'::regnamespace
       and proname = 'claim_rc2_fulfillment_dispatch_v1'
+  ) or not exists (
+    select 1 from pg_proc
+    where pronamespace = 'public'::regnamespace
+      and proname = 'quarantine_rc2_fulfillment_job_after_async_retries_v1'
   ) then
     raise exception 'M1_DISPATCH_RPC_MISSING';
+  end if;
+  select pg_catalog.pg_get_functiondef(pg_proc.oid)
+    into definition
+    from pg_catalog.pg_proc
+    where pg_proc.oid =
+      'public.fail_rc2_fulfillment_job_v1(uuid,uuid,text,timestamptz)'::regprocedure;
+  if position('dispatch_completed_at = null' in lower(definition)) > 0
+     or position('dispatch_retry_after' in lower(definition)) > 0 then
+    raise exception 'M1_WORKER_FAILURE_REOPENS_STATUS_DISPATCH';
+  end if;
+  select pg_catalog.pg_get_functiondef(pg_proc.oid)
+    into definition
+    from pg_catalog.pg_proc
+    where pg_proc.oid =
+      'public.claim_rc2_fulfillment_dispatch_v1(uuid,text,uuid,timestamptz,timestamptz)'::regprocedure;
+  if position('PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS' in definition) = 0
+     or position('dispatch_owner_id is not null' in lower(definition)) = 0
+     or position('dispatch_retry_after is null' in lower(definition)) = 0 then
+    raise exception 'M1_AMBIGUOUS_ROUTER_ACK_NOT_QUARANTINED';
+  end if;
+  select pg_catalog.pg_get_functiondef(pg_proc.oid)
+    into definition
+    from pg_catalog.pg_proc
+    where pg_proc.oid =
+      'public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid,timestamptz)'::regprocedure;
+  if position('PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED' in definition) = 0
+     or position('quarantined_active' in definition) = 0 then
+    raise exception 'M1_ACTIVE_EXHAUSTION_NOT_DURABLY_MARKED';
   end if;
   select pg_catalog.pg_get_functiondef(pg_proc.oid)
     into definition
@@ -213,11 +245,15 @@ create temp table pg_temp.m1_4_dispatch_fixture (
 );
 insert into pg_temp.m1_4_dispatch_fixture values
   (20, 'pending', 'rc2-dispatch:stable-marker', 'dispatcher-a',
-    '2026-08-22T12:01:00Z', null, null, 1);
+    '2026-08-22T12:01:00Z', null, null, 1),
+  (21, 'pending', 'rc2-dispatch:ambiguous-marker', 'dispatcher-a',
+    '2026-08-22T11:59:00Z', null, null, 1);
 
 do $proof$
 declare
   changed integer;
+  accepted_at timestamptz;
+  dispatch_attempts integer;
 begin
   -- Duplicate polling cannot take an active dispatch lease.
   update pg_temp.m1_4_dispatch_fixture
@@ -227,6 +263,21 @@ begin
       and dispatch_lease_expires_at <= '2026-08-22T12:00:00Z';
   get diagnostics changed = row_count;
   if changed <> 0 then raise exception 'M1_ACTIVE_DISPATCH_STOLEN'; end if;
+
+  -- An expired claim with no recorded send failure is acknowledgement-
+  -- ambiguous and must fail closed instead of creating another event.
+  update pg_temp.m1_4_dispatch_fixture
+    set state = 'manual_review', dispatch_owner_id = null,
+        dispatch_lease_expires_at = null
+    where job_id = 21
+      and dispatch_lease_expires_at <= '2026-08-22T12:00:00Z'
+      and dispatch_retry_after is null;
+  get diagnostics changed = row_count;
+  if changed <> 1 or not exists (
+    select 1 from pg_temp.m1_4_dispatch_fixture
+    where job_id = 21 and state = 'manual_review'
+      and dispatch_attempt_count = 1
+  ) then raise exception 'M1_AMBIGUOUS_DISPATCH_WAS_REENQUEUED'; end if;
   if exists (
     select 1 from pg_temp.m1_4_dispatch_fixture
     where job_id = 20
@@ -236,9 +287,36 @@ begin
      <> 'rc2-dispatch:stable-marker' then
     raise exception 'M1_DISPATCH_MARKER_NOT_DURABLE';
   end if;
+
+  -- Router acceptance permanently transfers retry authority to Async Workloads.
+  update pg_temp.m1_4_dispatch_fixture
+    set dispatch_owner_id = null, dispatch_lease_expires_at = null,
+        dispatch_completed_at = '2026-08-22T12:00:10Z'
+    where job_id = 20 and dispatch_owner_id = 'dispatcher-a';
+  update pg_temp.m1_4_dispatch_fixture
+    set state = 'retryable'
+    where job_id = 20;
+  select dispatch_completed_at, dispatch_attempt_count
+    into accepted_at, dispatch_attempts
+    from pg_temp.m1_4_dispatch_fixture where job_id = 20;
+
+  -- Status cannot create Event B after Event A has been accepted, even when
+  -- the worker has returned the job to its safe retryable state.
+  update pg_temp.m1_4_dispatch_fixture
+    set dispatch_owner_id = 'dispatcher-b',
+        dispatch_attempt_count = dispatch_attempt_count + 1
+    where job_id = 20 and dispatch_completed_at is null;
+  get diagnostics changed = row_count;
+  if changed <> 0
+     or accepted_at is null
+     or dispatch_attempts <> 1
+     or (select dispatch_attempt_count from pg_temp.m1_4_dispatch_fixture
+         where job_id = 20) <> 1 then
+    raise exception 'M1_ACCEPTED_EVENT_REDISPATCHED_BY_STATUS';
+  end if;
 end;
 $proof$;
 
-select 'PASS durable job dispatch marker rejects conflicting dispatch identity';
+select 'PASS accepted Event A retains single retry authority after worker failure';
 
 rollback;

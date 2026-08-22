@@ -33,6 +33,7 @@ import type {
   EmailVerificationPolicyV1,
   EmailVerificationStartOutcome,
   FulfillmentJobClaim,
+  FulfillmentRetryExhaustionOutcome,
   PaymentDeliveryRepository,
   PaymentEnvironment,
   PaymentEvidenceVerification,
@@ -963,8 +964,10 @@ export class ProductionPaymentDeliveryApplication {
       }
       return;
     }
+    let routerAccepted = false;
     try {
       await this.options.fulfillmentDispatcher.enqueue(jobId);
+      routerAccepted = true;
       await this.options.repository.completeFulfillmentDispatch({
         jobId,
         dispatchMarker,
@@ -976,18 +979,20 @@ export class ProductionPaymentDeliveryApplication {
         error,
         "PAYMENT_FULFILLMENT_DISPATCH_FAILED",
       );
-      try {
-        const failedAt = this.now();
-        await this.options.repository.failFulfillmentDispatch({
-          jobId,
-          dispatchMarker,
-          ownerId,
-          errorCode: safe.safeCode,
-          retryAfter: addSeconds(failedAt, 30),
-          now: failedAt,
-        });
-      } catch {
-        // A stale dispatch owner cannot overwrite the current fencing token.
+      if (!routerAccepted) {
+        try {
+          const failedAt = this.now();
+          await this.options.repository.failFulfillmentDispatch({
+            jobId,
+            dispatchMarker,
+            ownerId,
+            errorCode: safe.safeCode,
+            retryAfter: addSeconds(failedAt, 30),
+            now: failedAt,
+          });
+        } catch {
+          // A stale dispatch owner cannot overwrite the current fencing token.
+        }
       }
       throw safe;
     }
@@ -1065,6 +1070,11 @@ export class ProductionPaymentDeliveryApplication {
     if (job.state === "manual_review") {
       return { status: "confirmation_pending" };
     }
+    if (
+      job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
+    ) {
+      return { status: "confirmation_pending" };
+    }
     if (job.state === "completed") {
       if (!job.grantId || !job.logicalAssessmentId) {
         return { status: "confirmation_pending" };
@@ -1126,6 +1136,11 @@ export class ProductionPaymentDeliveryApplication {
     if (job.state === "manual_review") {
       return { status: "confirmation_pending" };
     }
+    if (
+      job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
+    ) {
+      return { status: "confirmation_pending" };
+    }
     if (job.state === "completed") {
       const deliveryId =
         await this.options.repository.resolveAuthenticatedResultDeliveryId({
@@ -1173,6 +1188,22 @@ export class ProductionPaymentDeliveryApplication {
         notificationPending: outcome.notificationPending,
         notificationManualReview: outcome.notificationManualReview,
       };
+    }
+    return outcome;
+  }
+
+  async quarantineFulfillmentJobAfterAsyncRetryExhaustion(
+    jobId: unknown,
+  ): Promise<FulfillmentRetryExhaustionOutcome> {
+    if (typeof jobId !== "string" || !internalUuidPattern.test(jobId)) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_ID_INVALID", 400);
+    }
+    const outcome =
+      await this.options.repository.quarantineFulfillmentJobAfterAsyncRetryExhaustion(
+        { jobId, now: this.now() },
+      );
+    if (!outcome) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_INVALID", 503);
     }
     return outcome;
   }

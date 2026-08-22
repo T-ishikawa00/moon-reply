@@ -24,39 +24,13 @@ export type ProductionFulfillmentEventDispatcher = {
 export type ProductionFulfillmentEventDispatcherFactory = () =>
   ProductionFulfillmentEventDispatcher;
 
-function readAsyncWorkloadsApiKey() {
-  const apiKey = process.env.AWL_API_KEY_P100;
-  if (!apiKey) {
-    throw new M2RuntimeError("PAYMENT_CONFIGURATION_INVALID", 503);
-  }
-  return apiKey;
-}
-
-function readAsyncWorkloadsBaseUrl() {
-  const configured = process.env.DEPLOY_URL ?? process.env.URL;
-  if (!configured) {
-    throw new M2RuntimeError("PAYMENT_CONFIGURATION_INVALID", 503);
-  }
-  try {
-    const parsed = new URL(configured);
-    if (parsed.protocol !== "https:" || parsed.username || parsed.password) {
-      throw new Error("invalid workload origin");
-    }
-    return parsed.origin;
-  } catch {
-    throw new M2RuntimeError("PAYMENT_CONFIGURATION_INVALID", 503);
-  }
-}
-
 /**
- * Creates the production client with the explicitly selected server-only key.
- * The key is never included in the returned adapter or an error message.
+ * Uses Netlify's same-site contract. The extension selects the highest-priority
+ * site API key and current site origin without exposing either to application
+ * code, so key rotation never requires a source change.
  */
 export function createProductionFulfillmentEventDispatcher(): ProductionFulfillmentEventDispatcher {
-  const client = new AsyncWorkloadsClient<ProductionFulfillmentJobEvent>({
-    baseUrl: readAsyncWorkloadsBaseUrl(),
-    apiKey: readAsyncWorkloadsApiKey(),
-  });
+  const client = new AsyncWorkloadsClient<ProductionFulfillmentJobEvent>();
   return {
     send: (eventName, options) => client.send(eventName, options),
   };

@@ -487,6 +487,17 @@ begin
      and job.dispatch_lease_expires_at > p_now then
     return jsonb_build_object('disposition', 'in_progress');
   end if;
+  if job.dispatch_owner_id is not null
+     and job.dispatch_retry_after is null then
+    update public.production_fulfillment_jobs set
+      state = 'manual_review', owner_id = null, lease_expires_at = null,
+      dispatch_owner_id = null, dispatch_lease_expires_at = null,
+      last_error_code = 'PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS',
+      dispatch_last_error_code = 'PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS',
+      updated_at = p_now, dispatch_updated_at = p_now
+      where id = job.id;
+    return jsonb_build_object('disposition', 'terminal');
+  end if;
   if job.dispatch_retry_after is not null
      and job.dispatch_retry_after > p_now then
     return jsonb_build_object('disposition', 'retry_later');
@@ -784,12 +795,18 @@ as $function$
 begin
   update public.production_fulfillment_jobs set
     state = case
-      when p_error_code = 'PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS'
+      when last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED'
+        or p_error_code = 'PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS'
         then 'manual_review'
       else 'retryable'
     end,
     owner_id = null, lease_expires_at = null,
-    last_error_code = p_error_code, updated_at = p_now
+    last_error_code = case
+      when last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED'
+        then 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED'
+      else p_error_code
+    end,
+    updated_at = p_now
     where id = p_fulfillment_job_id
       and state = 'processing'
       and owner_id = p_owner_id
@@ -797,15 +814,94 @@ begin
   if not found then
     raise exception 'RC2_FULFILLMENT_JOB_CONFLICT' using errcode = 'P0001';
   end if;
-  if p_error_code <> 'PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS' then
-    update public.production_fulfillment_jobs set
-      dispatch_owner_id = null, dispatch_lease_expires_at = null,
-      dispatch_completed_at = null,
-      dispatch_retry_after = p_now + interval '30 seconds',
-      dispatch_last_error_code = p_error_code,
-      dispatch_updated_at = p_now
-      where id = p_fulfillment_job_id;
+end;
+$function$;
+
+-- Once the router has accepted an event, Async Workloads exclusively owns its
+-- retry lifecycle. The last retry invocation converges to an observable
+-- terminal state without entering the Provider pipeline.
+create function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(
+  p_fulfillment_job_id uuid,
+  p_now timestamptz
+) returns jsonb
+language plpgsql
+security invoker
+set search_path = ''
+as $function$
+declare
+  job public.production_fulfillment_jobs%rowtype;
+  logical public.production_logical_assessments%rowtype;
+  intent_state text;
+begin
+  select * into job
+    from public.production_fulfillment_jobs
+    where id = p_fulfillment_job_id
+    for update;
+  if job.id is null then return null; end if;
+
+  select state into intent_state
+    from public.production_purchase_intents
+    where id = job.purchase_intent_id
+    for update;
+  if intent_state <> 'verified' or job.dispatch_completed_at is null then
+    raise exception 'RC2_ASYNC_RETRY_AUTHORITY_INVALID' using errcode = 'P0001';
   end if;
+  if job.state = 'completed' then
+    return jsonb_build_object('disposition', 'completed');
+  end if;
+  if job.state = 'manual_review' then
+    return jsonb_build_object('disposition', 'manual_review');
+  end if;
+  if job.state = 'processing'
+     and job.lease_expires_at is not null
+     and job.lease_expires_at > p_now then
+    -- Do not steal the active fence.  The marker changes Customer observation
+    -- to confirmation_pending immediately.  A successful active worker may
+    -- still complete; its ordinary failure converges the Job to manual_review.
+    update public.production_fulfillment_jobs set
+      last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED',
+      dispatch_last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED',
+      updated_at = p_now, dispatch_updated_at = p_now
+      where id = job.id;
+    return jsonb_build_object('disposition', 'quarantined_active');
+  end if;
+  if job.state not in ('pending', 'retryable', 'processing') then
+    raise exception 'RC2_FULFILLMENT_STATE_CONFLICT' using errcode = 'P0001';
+  end if;
+
+  if job.logical_assessment_id is not null then
+    select * into logical
+      from public.production_logical_assessments
+      where id = job.logical_assessment_id
+      for update;
+    if logical.id is null then
+      raise exception 'RC2_FULFILLMENT_STATE_CONFLICT' using errcode = 'P0001';
+    end if;
+    if logical.status = 'generating' and (
+         (logical.lease_expires_at is not null
+          and logical.lease_expires_at > p_now)
+         or (logical.lease_expires_at is null
+             and logical.ownership_acquired_at > p_now - interval '16 minutes')
+       ) then
+      return jsonb_build_object('disposition', 'in_progress');
+    end if;
+    if logical.status <> 'completed' then
+      update public.production_logical_assessments set
+        status = 'retryable', owner_id = null,
+        ownership_acquired_at = null, lease_expires_at = null,
+        recovery_state = 'manual_review',
+        last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED',
+        updated_at = p_now
+        where id = logical.id;
+    end if;
+  end if;
+
+  update public.production_fulfillment_jobs set
+    state = 'manual_review', owner_id = null, lease_expires_at = null,
+    last_error_code = 'PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED',
+    updated_at = p_now
+    where id = job.id;
+  return jsonb_build_object('disposition', 'quarantined');
 end;
 $function$;
 
@@ -1079,6 +1175,8 @@ revoke all on function public.heartbeat_production_notification_v1(uuid, uuid, t
   from public, anon, authenticated;
 revoke all on function public.recover_stale_assessment_run_v1(uuid, uuid, text, timestamptz)
   from public, anon, authenticated;
+revoke all on function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid, timestamptz)
+  from public, anon, authenticated;
 
 grant execute on function public.claim_production_fulfillment_v2(uuid, uuid, timestamptz, timestamptz)
   to service_role;
@@ -1101,6 +1199,8 @@ grant execute on function public.claim_production_notification_v2(uuid, uuid, ti
 grant execute on function public.heartbeat_production_notification_v1(uuid, uuid, timestamptz, timestamptz)
   to service_role;
 grant execute on function public.recover_stale_assessment_run_v1(uuid, uuid, text, timestamptz)
+  to service_role;
+grant execute on function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid, timestamptz)
   to service_role;
 
 comment on column public.production_logical_assessments.lease_expires_at is

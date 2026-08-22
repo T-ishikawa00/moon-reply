@@ -259,6 +259,14 @@ export type FulfillmentDispatchClaim = Readonly<{
     | "terminal";
 }>;
 
+export type FulfillmentRetryExhaustionOutcome = Readonly<{
+  disposition:
+    | "quarantined"
+    | "quarantined_active"
+    | "completed"
+    | "manual_review";
+}>;
+
 export type ProductionFulfillmentDispatcherV1 = {
   enqueue(jobId: string): Promise<{ eventId: string }>;
 };
@@ -427,6 +435,10 @@ export type PaymentDeliveryRepository = {
     errorCode: string;
     now: string;
   }): Promise<void>;
+  quarantineFulfillmentJobAfterAsyncRetryExhaustion(input: {
+    jobId: string;
+    now: string;
+  }): Promise<FulfillmentRetryExhaustionOutcome | null>;
   resolveDeliveryEmailCiphertext(
     deliveryAuthorityReference: string,
   ): Promise<string | null>;

@@ -10,6 +10,7 @@ import type {
   FulfillmentDispatchClaim,
   FulfillmentJobClaim,
   FulfillmentJobRecord,
+  FulfillmentRetryExhaustionOutcome,
   PaymentAttemptRecord,
   PaymentDeliveryRepository,
   PaymentEnvironment,
@@ -165,6 +166,7 @@ type PaymentDatabase = {
       claim_rc2_fulfillment_job_by_id_v1: RuntimeFunction;
       complete_rc2_fulfillment_job_v1: RuntimeFunction;
       fail_rc2_fulfillment_job_v1: RuntimeFunction;
+      quarantine_rc2_fulfillment_job_after_async_retries_v1: RuntimeFunction;
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
@@ -958,6 +960,37 @@ export class SupabasePaymentDeliveryRepository
       p_now: input.now,
     });
     if (error) databaseFailure(error);
+  }
+
+  async quarantineFulfillmentJobAfterAsyncRetryExhaustion(input: {
+    jobId: string;
+    now: string;
+  }): Promise<FulfillmentRetryExhaustionOutcome | null> {
+    const { data, error } = await this.client.rpc(
+      "quarantine_rc2_fulfillment_job_after_async_retries_v1",
+      {
+        p_fulfillment_job_id: input.jobId,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    if (data === null) return null;
+    const result = recordValue(data);
+    const disposition = stringValue(result.disposition);
+    if (
+      ![
+        "quarantined",
+        "quarantined_active",
+        "completed",
+        "manual_review",
+      ].includes(disposition)
+    ) {
+      databaseFailure();
+    }
+    return {
+      disposition:
+        disposition as FulfillmentRetryExhaustionOutcome["disposition"],
+    };
   }
 
   async resolveDeliveryEmailCiphertext(

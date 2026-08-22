@@ -1,6 +1,39 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { registerHooks } from "node:module";
 import path from "node:path";
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier === "server-only") {
+      return { url: "data:text/javascript,export%20{}", shortCircuit: true };
+    }
+    return nextResolve(specifier, context);
+  },
+});
+
+const { ErrorDoNotRetry, ErrorRetryAfterDelay } = await import(
+  "@netlify/async-workloads"
+);
+const { ProductionPaymentDeliveryApplication } = await import(
+  "../lib/payment/production/application.ts"
+);
+const {
+  FakeCheckoutProviderV1,
+  FakePaymentDeliveryRepository,
+  FakeProductionFulfillmentDispatcherV1,
+  FakeProductionGrantProcessorV1,
+} = await import("../lib/payment/production/fakes.ts");
+const { UnconfiguredTransactionalEmailAdapterV1 } = await import(
+  "../lib/payment/production/transactional-email.ts"
+);
+const { hashPaymentCapability } = await import(
+  "../lib/payment/production/crypto.ts"
+);
+const {
+  processProductionFulfillmentWorkloadEvent,
+  PRODUCTION_FULFILLMENT_MAX_RETRIES,
+} = await import("../lib/payment/production/async-workloads-worker.ts");
 
 const root = process.cwd();
 const read = (relativePath) =>
@@ -17,6 +50,9 @@ const lifecycleRepository = read(
   "lib/assessment/production/supabase-repository.ts",
 );
 const asyncAdapter = read("lib/payment/production/async-workloads.ts");
+const workloadLogic = read(
+  "lib/payment/production/async-workloads-worker.ts",
+);
 const workloadPath =
   "netlify/functions/production-fulfillment-background.mts";
 const workload = read(workloadPath);
@@ -28,6 +64,112 @@ function check(name, callback) {
   callback();
   passed += 1;
   console.log(`PASS ${String(passed).padStart(2, "0")} ${name}`);
+}
+
+async function checkRuntime(name, callback) {
+  await callback();
+  passed += 1;
+  console.log(`PASS ${String(passed).padStart(2, "0")} ${name}`);
+}
+
+function ids() {
+  let index = 100;
+  return () =>
+    `00000000-0000-4000-8000-${String(++index).padStart(12, "0")}`;
+}
+
+function runtimeHarness() {
+  let clock = "2026-08-23T00:00:00.000Z";
+  const repository = new FakePaymentDeliveryRepository();
+  const grantProcessor = new FakeProductionGrantProcessorV1(repository);
+  const fulfillmentDispatcher = new FakeProductionFulfillmentDispatcherV1();
+  const statusCapability = Buffer.alloc(32, 143).toString("base64url");
+  const purchaseIntentId = "91000000-0000-4000-8000-000000000001";
+  const jobId = "92000000-0000-4000-8000-000000000001";
+  repository.intents.set(purchaseIntentId, {
+    id: purchaseIntentId,
+    preparationId: "93000000-0000-4000-8000-000000000001",
+    verifiedEmailAuthorityId: null,
+    trustedEmailSessionId: null,
+    customerOwnershipBindingId: null,
+    deliveryAuthorityReference: `purchase-delivery:${purchaseIntentId}`,
+    emailCiphertext: "synthetic-offline-ciphertext",
+    expectedProductCode: "moon-reply-assessment-note-v1",
+    expectedAmount: 980,
+    currency: "jpy",
+    purchaseKind: "one_time",
+    environment: "test",
+    provider: "stripe",
+    state: "verified",
+    currentPaymentAttemptId: null,
+    successfulPaymentId: "94000000-0000-4000-8000-000000000001",
+    statusCapabilityHash: hashPaymentCapability(
+      statusCapability,
+      "purchase-status",
+    ),
+    finalConfirmationAcceptedAt: clock,
+    createdAt: clock,
+    updatedAt: clock,
+  });
+  repository.jobs.set(jobId, {
+    id: jobId,
+    purchaseIntentId,
+    verifiedPaymentId: "94000000-0000-4000-8000-000000000001",
+    preparationId: "93000000-0000-4000-8000-000000000001",
+    deliveryAuthorityReference: `purchase-delivery:${purchaseIntentId}`,
+    state: "pending",
+    ownerId: null,
+    leaseExpiresAt: null,
+    attemptCount: 0,
+    grantId: null,
+    logicalAssessmentId: null,
+    lastErrorCode: null,
+    completedAt: null,
+  });
+  const application = new ProductionPaymentDeliveryApplication({
+    repository,
+    checkoutProvider: new FakeCheckoutProviderV1(),
+    transactionalEmail: new UnconfiguredTransactionalEmailAdapterV1(),
+    grantProcessor,
+    fulfillmentDispatcher,
+    policy: {
+      challengeTtlSeconds: 600,
+      trustedSessionTtlSeconds: 86_400,
+      maximumVerificationAttempts: 3,
+    },
+    environment: "test",
+    siteOrigin: "https://moon-reply.test",
+    payPayEnabled: false,
+    verificationPepper: "offline-verification-pepper-000000000001",
+    emailEncryptionKey: Buffer.alloc(32, 71).toString("base64"),
+    purchaseStatusSigningSecret: "offline-status-secret-000000000000001",
+    fulfillmentLeaseSeconds: 120,
+    now: () => clock,
+    uuid: ids(),
+    capability: () => Buffer.alloc(32, 99).toString("base64url"),
+    verificationCode: () => "12345678",
+  });
+  const dependencies = {
+    processJob: (id) => application.processFulfillmentJobById(id),
+    quarantineAfterRetryExhaustion: (id) =>
+      application.quarantineFulfillmentJobAfterAsyncRetryExhaustion(id),
+  };
+  return {
+    application,
+    dependencies,
+    fulfillmentDispatcher,
+    grantProcessor,
+    jobId,
+    repository,
+    statusCapability,
+    setClock(value) {
+      clock = value;
+    },
+  };
+}
+
+function workloadEvent(run, attempt) {
+  return { attempt, eventData: { jobId: run.jobId } };
 }
 
 check("0016 is one append-only transaction without apply-time row rewrite", () => {
@@ -87,6 +229,21 @@ check("dispatch has idempotency, cooldown, lease, and fencing", () => {
   assert.match(migration, /dispatch_attempt_count integer not null default 0/u);
   assert.match(paymentApplication, /claimFulfillmentDispatch/u);
   assert.match(paymentApplication, /completeFulfillmentDispatch/u);
+  const jobFailure = migration.slice(
+    migration.indexOf("create or replace function public.fail_rc2_fulfillment_job_v1"),
+    migration.indexOf(
+      "create function public.quarantine_rc2_fulfillment_job_after_async_retries_v1",
+    ),
+  );
+  assert.doesNotMatch(jobFailure, /dispatch_completed_at|dispatch_retry_after/u);
+  assert.match(
+    migration,
+    /quarantine_rc2_fulfillment_job_after_async_retries_v1/u,
+  );
+  assert.match(
+    migration,
+    /PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED/u,
+  );
 });
 
 check("status is observation plus bounded dispatch, never the AI executor", () => {
@@ -105,16 +262,17 @@ check("status is observation plus bounded dispatch, never the AI executor", () =
 
 check("same-site Async Workloads payload is a job-only claim check", () => {
   assert.match(workloadPath, /-background\.mts$/u);
-  assert.match(asyncAdapter, /AWL_API_KEY_P100/u);
-  assert.match(asyncAdapter, /process\.env\.DEPLOY_URL \?\? process\.env\.URL/u);
-  assert.match(asyncAdapter, /baseUrl: readAsyncWorkloadsBaseUrl\(\)/u);
-  assert.doesNotMatch(asyncAdapter, /console\.|apiKey.*message/iu);
-  assert.match(workload, /asyncWorkloadFn/u);
-  assert.match(workload, /processProductionFulfillmentJobById/u);
-  assert.match(workload, /maxRetries: 8/u);
-  assert.match(workload, /ErrorRetryAfterDelay/u);
   assert.match(
-    workload,
+    asyncAdapter,
+    /new AsyncWorkloadsClient<ProductionFulfillmentJobEvent>\(\)/u,
+  );
+  assert.doesNotMatch(asyncAdapter, /AWL_API_KEY|DEPLOY_URL|process\.env\.URL/u);
+  assert.doesNotMatch(asyncAdapter, /baseUrl\s*:|apiKey\s*:/u);
+  assert.match(workload, /asyncWorkloadFn/u);
+  assert.match(workloadLogic, /event\.attempt >= PRODUCTION_FULFILLMENT_MAX_RETRIES/u);
+  assert.match(workloadLogic, /ErrorRetryAfterDelay/u);
+  assert.match(
+    workloadLogic,
     /ErrorDoNotRetry\("PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS"\)/u,
   );
 });
@@ -123,19 +281,200 @@ check("duplicate work cannot steal active jobs or amplify Provider execution", (
   assert.match(migration, /job\.state = 'processing' and job\.lease_expires_at > p_now/u);
   assert.match(migration, /'disposition', 'in_progress'/u);
   assert.match(migration, /attempt_count = attempt_count \+ 1/u);
-  assert.match(workload, /outcome\.status === "in_progress"/u);
+  assert.match(workloadLogic, /outcome\.status === "in_progress"/u);
 });
 
 check("notification delivery remains independently leased and retryable", () => {
   assert.match(migration, /claim_production_notification_v2/u);
   assert.match(migration, /heartbeat_production_notification_v1/u);
-  assert.match(workload, /outcome\.notificationPending/u);
-  assert.match(workload, /outcome\.notificationManualReview/u);
-  assert.match(workload, /PRODUCTION_NOTIFICATION_MANUAL_REVIEW/u);
+  assert.match(workloadLogic, /outcome\.notificationPending/u);
+  assert.match(workloadLogic, /outcome\.notificationManualReview/u);
+  assert.match(workloadLogic, /PRODUCTION_NOTIFICATION_MANUAL_REVIEW/u);
   assert.match(
     paymentApplication,
     /The durable RC-1 outbox and Async Workloads retry this independently/u,
   );
+});
+
+await checkRuntime("Scenario A: accepted Event A survives unlimited status observation", async () => {
+  const run = runtimeHarness();
+  const first = await run.application.processPurchaseStatus(run.statusCapability);
+  assert.deepEqual(first, { status: "preparing_assessment" });
+  for (let index = 0; index < 8; index += 1) {
+    assert.deepEqual(
+      await run.application.processPurchaseStatus(run.statusCapability),
+      { status: "preparing_assessment" },
+    );
+  }
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+});
+
+await checkRuntime("Scenario B: Event A alone owns temporary-failure retry", async () => {
+  const run = runtimeHarness();
+  await run.application.processPurchaseStatus(run.statusCapability);
+  run.grantProcessor.fulfillmentFailuresRemaining = 1;
+  await assert.rejects(
+    () =>
+      processProductionFulfillmentWorkloadEvent(
+        workloadEvent(run, 0),
+        run.dependencies,
+      ),
+    /PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE/u,
+  );
+  assert.equal(run.repository.jobs.get(run.jobId).state, "retryable");
+  assert.equal(run.repository.dispatches.get(run.jobId).completedAt !== null, true);
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "preparing_assessment" },
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  await processProductionFulfillmentWorkloadEvent(
+    workloadEvent(run, 1),
+    run.dependencies,
+  );
+  assert.equal(run.repository.jobs.get(run.jobId).state, "completed");
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+});
+
+await checkRuntime("Scenario C: duplicate invocation cannot steal an active worker", async () => {
+  const run = runtimeHarness();
+  await run.application.processPurchaseStatus(run.statusCapability);
+  const claimed = await run.repository.claimFulfillmentJobById({
+    jobId: run.jobId,
+    ownerId: "95000000-0000-4000-8000-000000000001",
+    leaseExpiresAt: "2026-08-23T00:02:00.000Z",
+    now: "2026-08-23T00:00:00.000Z",
+  });
+  assert.equal(claimed.disposition, "acquired");
+  await assert.rejects(
+    () =>
+      processProductionFulfillmentWorkloadEvent(
+        workloadEvent(run, 0),
+        run.dependencies,
+      ),
+    (error) => error instanceof ErrorRetryAfterDelay,
+  );
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+  assert.equal(run.repository.jobs.get(run.jobId).attemptCount, 1);
+});
+
+await checkRuntime("Scenario D: retry exhaustion becomes confirmation pending", async () => {
+  const run = runtimeHarness();
+  await run.application.processPurchaseStatus(run.statusCapability);
+  await assert.rejects(
+    () =>
+      processProductionFulfillmentWorkloadEvent(
+        workloadEvent(run, PRODUCTION_FULFILLMENT_MAX_RETRIES),
+        run.dependencies,
+      ),
+    (error) =>
+      error instanceof ErrorDoNotRetry &&
+      error.message === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED",
+  );
+  const job = run.repository.jobs.get(run.jobId);
+  assert.equal(job.state, "manual_review");
+  assert.equal(
+    job.lastErrorCode,
+    "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED",
+  );
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "confirmation_pending" },
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+});
+
+await checkRuntime("Scenario D2: retry exhaustion preserves an active fence", async () => {
+  const run = runtimeHarness();
+  await run.application.processPurchaseStatus(run.statusCapability);
+  const ownerId = "95000000-0000-4000-8000-000000000002";
+  const claimed = await run.repository.claimFulfillmentJobById({
+    jobId: run.jobId,
+    ownerId,
+    leaseExpiresAt: "2026-08-23T00:02:00.000Z",
+    now: "2026-08-23T00:00:00.000Z",
+  });
+  assert.equal(claimed.disposition, "acquired");
+  await assert.rejects(
+    () =>
+      processProductionFulfillmentWorkloadEvent(
+        workloadEvent(run, PRODUCTION_FULFILLMENT_MAX_RETRIES),
+        run.dependencies,
+      ),
+    (error) =>
+      error instanceof ErrorDoNotRetry &&
+      error.message === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED",
+  );
+  const activeJob = run.repository.jobs.get(run.jobId);
+  assert.equal(activeJob.state, "processing");
+  assert.equal(activeJob.ownerId, ownerId);
+  assert.equal(
+    activeJob.lastErrorCode,
+    "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED",
+  );
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "confirmation_pending" },
+  );
+  await run.repository.failFulfillmentJob({
+    jobId: run.jobId,
+    ownerId,
+    errorCode: "FAKE_ACTIVE_WORKER_FAILURE",
+    now: "2026-08-23T00:00:30.000Z",
+  });
+  const failedJob = run.repository.jobs.get(run.jobId);
+  assert.equal(failedJob.state, "manual_review");
+  assert.equal(
+    failedJob.lastErrorCode,
+    "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED",
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+});
+
+await checkRuntime("Scenario E: completed Event A is never dispatched again", async () => {
+  const run = runtimeHarness();
+  await run.application.processPurchaseStatus(run.statusCapability);
+  await processProductionFulfillmentWorkloadEvent(
+    workloadEvent(run, 0),
+    run.dependencies,
+  );
+  for (let index = 0; index < 4; index += 1) {
+    assert.deepEqual(
+      await run.application.processPurchaseStatus(run.statusCapability),
+      { status: "completed_check_verified_email" },
+    );
+  }
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+});
+
+await checkRuntime("accepted-router persistence ambiguity cannot create Event B", async () => {
+  const run = runtimeHarness();
+  run.repository.dispatchCompletionFailuresRemaining = 1;
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "temporary_problem", retryable: true },
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.fulfillmentDispatcher.attempts.length, 1);
+  run.setClock("2026-08-23T00:01:00.000Z");
+  await run.application.processPurchaseStatus(run.statusCapability);
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "confirmation_pending" },
+  );
+  const job = run.repository.jobs.get(run.jobId);
+  assert.equal(job.state, "manual_review");
+  assert.equal(
+    job.lastErrorCode,
+    "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS",
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
 });
 
 check("disposable proof is synthetic, rollback-only, and provider-free", () => {
@@ -146,4 +485,4 @@ check("disposable proof is synthetic, rollback-only, and provider-free", () => {
 });
 
 console.log(`M1-4 BACKGROUND FULFILLMENT DURABILITY PASS ${passed}/${passed}`);
-console.log("PROVIDER_CALLS=0 REMOTE_OPERATIONS=0 MIGRATIONS_APPLIED_REMOTE=0");
+console.log("REAL_PROVIDER_CALLS=0 REMOTE_OPERATIONS=0 MIGRATIONS_APPLIED_REMOTE=0");

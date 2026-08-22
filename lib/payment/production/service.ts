@@ -376,3 +376,15 @@ export async function processProductionFulfillmentJobById(jobId: unknown) {
     paymentEnvironment,
   ).processFulfillmentJobById(jobId);
 }
+
+export async function quarantineProductionFulfillmentJobAfterAsyncRetryExhaustion(
+  jobId: unknown,
+) {
+  if (!isPaidFulfillmentProcessingAvailable()) {
+    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  }
+  const paymentEnvironment = readConfiguredPaymentEnvironment();
+  return activeFulfillmentApplication(
+    paymentEnvironment,
+  ).quarantineFulfillmentJobAfterAsyncRetryExhaustion(jobId);
+}
