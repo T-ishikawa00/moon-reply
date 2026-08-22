@@ -246,9 +246,22 @@ export type FulfillmentJobRecord = Readonly<{
 }>;
 
 export type FulfillmentJobClaim = Readonly<{
-  disposition: "acquired" | "in_progress" | "completed";
+  disposition: "acquired" | "in_progress" | "completed" | "manual_review";
   job: FulfillmentJobRecord;
 }>;
+
+export type FulfillmentDispatchClaim = Readonly<{
+  disposition:
+    | "acquired"
+    | "in_progress"
+    | "retry_later"
+    | "dispatched"
+    | "terminal";
+}>;
+
+export type ProductionFulfillmentDispatcherV1 = {
+  enqueue(jobId: string): Promise<{ eventId: string }>;
+};
 
 export type PurchaseStatusRecord = Readonly<{
   purchaseIntent: PurchaseIntentRecord;
@@ -258,14 +271,20 @@ export type PurchaseStatusRecord = Readonly<{
 export type CustomerPurchaseStatus =
   | Readonly<{ status: "confirming_payment" }>
   | Readonly<{ status: "preparing_assessment" }>
+  | Readonly<{ status: "confirmation_pending" }>
   | Readonly<{ status: "temporary_problem"; retryable: true }>
   | Readonly<{ status: "payment_not_completed" }>
   | Readonly<{ status: "completed_check_verified_email" }>
   | Readonly<{ status: "completed"; resultPath: string }>;
 
 export type ServerFulfillmentOutcome =
-  | Readonly<{ status: "completed" }>
+  | Readonly<{
+      status: "completed";
+      notificationPending: boolean;
+      notificationManualReview: boolean;
+    }>
   | Readonly<{ status: "in_progress" }>
+  | Readonly<{ status: "manual_review" }>
   | Readonly<{ status: "temporary_problem"; retryable: true }>;
 
 export type PaymentDeliveryRepository = {
@@ -364,6 +383,27 @@ export type PaymentDeliveryRepository = {
     customerUserId: string;
     purchaseIntentId: string;
   }): Promise<string | null>;
+  claimFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentDispatchClaim | null>;
+  completeFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    now: string;
+  }): Promise<void>;
+  failFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    errorCode: string;
+    retryAfter: string;
+    now: string;
+  }): Promise<void>;
   claimFulfillmentJob(input: {
     statusCapabilityHash: string;
     ownerId: string;
@@ -397,6 +437,9 @@ export type ProductionGrantProcessorV1 = {
     authority: VerifiedPurchaseAuthorityV1,
   ): Promise<AssessmentGrantHandleV1>;
   fulfillProductionAssessmentGrant(
+    grant: AssessmentGrantHandleV1,
+  ): Promise<ProductionFulfillmentResultV1>;
+  recoverCompletedProductionAssessmentGrant(
     grant: AssessmentGrantHandleV1,
   ): Promise<ProductionFulfillmentResultV1>;
   processResultNotification(deliveryAuthorityReference: string): Promise<void>;

@@ -13,11 +13,13 @@ import type {
   CheckoutProviderV1,
   CheckoutSessionRequestV1,
   EmailChallengeRecord,
+  FulfillmentDispatchClaim,
   FulfillmentJobClaim,
   FulfillmentJobRecord,
   PaymentAttemptRecord,
   PaymentDeliveryRepository,
   PreparationEmailBinding,
+  ProductionFulfillmentDispatcherV1,
   ProductionGrantProcessorV1,
   PurchaseIntentRecord,
   PurchaseReadyPreparation,
@@ -47,6 +49,15 @@ type FakeVerifiedPayment = {
   providerCheckoutSessionId: string;
 };
 
+type FakeFulfillmentDispatch = {
+  marker: string;
+  ownerId: string | null;
+  leaseExpiresAt: string | null;
+  retryAfter: string | null;
+  completedAt: string | null;
+  lastErrorCode: string | null;
+};
+
 export class FakePaymentDeliveryRepository
   implements PaymentDeliveryRepository
 {
@@ -66,6 +77,7 @@ export class FakePaymentDeliveryRepository
   >();
   readonly verifiedPayments = new Map<string, FakeVerifiedPayment>();
   readonly jobs = new Map<string, Mutable<FulfillmentJobRecord>>();
+  readonly dispatches = new Map<string, FakeFulfillmentDispatch>();
   readonly authenticatedBindings = new Map<
     string,
     { bindingId: string; customerUserId: string; emailCiphertext: string }
@@ -771,6 +783,101 @@ export class FakePaymentDeliveryRepository
     return this.authenticatedResultDeliveries.get(input.purchaseIntentId) ?? null;
   }
 
+  async claimFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentDispatchClaim | null> {
+    const job = this.jobs.get(input.jobId);
+    if (!job) return null;
+    if (job.state === "completed" || job.state === "manual_review") {
+      return { disposition: "terminal" };
+    }
+    let dispatch = this.dispatches.get(input.jobId);
+    if (!dispatch) {
+      dispatch = {
+        marker: input.dispatchMarker,
+        ownerId: null,
+        leaseExpiresAt: null,
+        retryAfter: null,
+        completedAt: null,
+        lastErrorCode: null,
+      };
+      this.dispatches.set(input.jobId, dispatch);
+    }
+    if (dispatch.marker !== input.dispatchMarker) {
+      job.state = "manual_review";
+      return { disposition: "terminal" };
+    }
+    if (dispatch.completedAt !== null) {
+      return { disposition: "dispatched" };
+    }
+    if (
+      dispatch.ownerId !== null &&
+      dispatch.leaseExpiresAt !== null &&
+      Date.parse(dispatch.leaseExpiresAt) > Date.parse(input.now)
+    ) {
+      return { disposition: "in_progress" };
+    }
+    if (
+      dispatch.retryAfter !== null &&
+      Date.parse(dispatch.retryAfter) > Date.parse(input.now)
+    ) {
+      return { disposition: "retry_later" };
+    }
+    dispatch.ownerId = input.ownerId;
+    dispatch.leaseExpiresAt = input.leaseExpiresAt;
+    dispatch.retryAfter = null;
+    return { disposition: "acquired" };
+  }
+
+  async completeFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    now: string;
+  }) {
+    const dispatch = this.dispatches.get(input.jobId);
+    if (
+      !dispatch ||
+      dispatch.marker !== input.dispatchMarker ||
+      dispatch.ownerId !== input.ownerId ||
+      dispatch.leaseExpiresAt === null ||
+      Date.parse(dispatch.leaseExpiresAt) <= Date.parse(input.now)
+    ) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_DISPATCH_CONFLICT", 409);
+    }
+    dispatch.ownerId = null;
+    dispatch.leaseExpiresAt = null;
+    dispatch.completedAt = input.now;
+    dispatch.lastErrorCode = null;
+  }
+
+  async failFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    errorCode: string;
+    retryAfter: string;
+    now: string;
+  }) {
+    void input.now;
+    const dispatch = this.dispatches.get(input.jobId);
+    if (
+      !dispatch ||
+      dispatch.marker !== input.dispatchMarker ||
+      dispatch.ownerId !== input.ownerId
+    ) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_DISPATCH_CONFLICT", 409);
+    }
+    dispatch.ownerId = null;
+    dispatch.leaseExpiresAt = null;
+    dispatch.retryAfter = input.retryAfter;
+    dispatch.lastErrorCode = input.errorCode;
+  }
+
   async claimFulfillmentJob(input: {
     statusCapabilityHash: string;
     ownerId: string;
@@ -812,6 +919,12 @@ export class FakePaymentDeliveryRepository
       return { disposition: "completed", job: clone(job) };
     }
     if (
+      job.state === "manual_review" ||
+      (job.state === "processing" && job.leaseExpiresAt === null)
+    ) {
+      return { disposition: "manual_review", job: clone(job) };
+    }
+    if (
       job.state === "processing" &&
       job.leaseExpiresAt !== null &&
       Date.parse(job.leaseExpiresAt) > Date.parse(input.now)
@@ -819,7 +932,6 @@ export class FakePaymentDeliveryRepository
       return { disposition: "in_progress", job: clone(job) };
     }
     if (
-      job.state === "manual_review" ||
       !["pending", "retryable", "processing"].includes(job.state)
     ) {
       return null;
@@ -853,6 +965,8 @@ export class FakePaymentDeliveryRepository
       !job ||
       job.state !== "processing" ||
       job.ownerId !== input.ownerId ||
+      job.leaseExpiresAt === null ||
+      Date.parse(job.leaseExpiresAt) <= Date.parse(input.now) ||
       !job.grantId ||
       !job.logicalAssessmentId
     ) {
@@ -870,15 +984,26 @@ export class FakePaymentDeliveryRepository
     errorCode: string;
     now: string;
   }) {
-    void input.now;
     const job = this.jobs.get(input.jobId);
-    if (!job || job.state !== "processing" || job.ownerId !== input.ownerId) {
+    if (
+      !job ||
+      job.state !== "processing" ||
+      job.ownerId !== input.ownerId ||
+      job.leaseExpiresAt === null ||
+      Date.parse(job.leaseExpiresAt) <= Date.parse(input.now)
+    ) {
       throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_CONFLICT", 409);
     }
-    job.state = "retryable";
+    job.state =
+      input.errorCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS"
+        ? "manual_review"
+        : "retryable";
     job.ownerId = null;
     job.leaseExpiresAt = null;
     job.lastErrorCode = input.errorCode;
+    if (job.state === "retryable") {
+      this.dispatches.delete(job.id);
+    }
   }
 
   async resolveDeliveryEmailCiphertext(
@@ -898,6 +1023,22 @@ export class FakePaymentDeliveryRepository
     if (intent.verifiedEmailAuthorityId === null) return null;
     const authority = this.authorities.get(intent.verifiedEmailAuthorityId);
     return authority?.revokedAt === null ? authority.emailCiphertext : null;
+  }
+}
+
+export class FakeProductionFulfillmentDispatcherV1
+  implements ProductionFulfillmentDispatcherV1
+{
+  readonly jobIds: string[] = [];
+  failuresRemaining = 0;
+
+  async enqueue(jobId: string) {
+    this.jobIds.push(jobId);
+    if (this.failuresRemaining > 0) {
+      this.failuresRemaining -= 1;
+      throw new M2RuntimeError("FAKE_FULFILLMENT_DISPATCH_FAILED", 503);
+    }
+    return { eventId: `event-${String(this.jobIds.length).padStart(8, "0")}` };
   }
 }
 
@@ -1055,6 +1196,25 @@ export class FakeProductionGrantProcessorV1
       resultToken,
       projection: clone(projection),
       duplicate,
+    };
+  }
+
+  async recoverCompletedProductionAssessmentGrant(
+    grant: AssessmentGrantHandleV1,
+  ): Promise<ProductionFulfillmentResultV1> {
+    this.fulfillCalls.push(clone(grant));
+    const projection = this.canonicalReports.get(grant.logicalAssessmentId);
+    if (!this.generated.has(grant.logicalAssessmentId) || !projection) {
+      throw new M2RuntimeError("PRODUCTION_RESULT_NOT_FOUND", 404);
+    }
+    this.tokenSequence += 1;
+    const resultToken = Buffer.alloc(32, this.tokenSequence).toString("base64url");
+    this.issuedResultTokens.push(resultToken);
+    return {
+      status: "completed",
+      resultToken,
+      projection: clone(projection),
+      duplicate: true,
     };
   }
 

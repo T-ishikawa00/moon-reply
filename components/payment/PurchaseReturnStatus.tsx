@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 type SafeStatus =
   | { status: "confirming_payment" }
   | { status: "preparing_assessment" }
+  | { status: "confirmation_pending" }
   | { status: "temporary_problem"; retryable: true }
   | { status: "payment_not_completed" }
   | { status: "completed_check_verified_email" }
@@ -21,6 +22,7 @@ function decode(value: unknown): SafeStatus | null {
   if (
     data.status === "confirming_payment" ||
     data.status === "preparing_assessment" ||
+    data.status === "confirmation_pending" ||
     data.status === "payment_not_completed" ||
     data.status === "completed_check_verified_email"
   ) {
@@ -49,7 +51,11 @@ const copy: Record<Exclude<SafeStatus["status"], "completed">, {
   },
   preparing_assessment: {
     heading: "鑑定を準備しています",
-    body: "お支払い済みの同じ鑑定ノートを準備しています。追加の決済は行いません。",
+    body: "お申し込みを受け付けました。この画面を閉じても大丈夫です。鑑定ノートが完成したらメールでお知らせします。",
+  },
+  confirmation_pending: {
+    heading: "お申し込みを確認しています",
+    body: "追加の決済は必要ありません。安全な確認が完了するまで、しばらくお待ちください。",
   },
   temporary_problem: {
     heading: "確認に少し時間がかかっています",
@@ -141,7 +147,8 @@ export function PurchaseReturnStatus({
         }
         if (
           next.status !== "payment_not_completed" &&
-          next.status !== "completed_check_verified_email"
+          next.status !== "completed_check_verified_email" &&
+          next.status !== "confirmation_pending"
         ) {
           timeout = setTimeout(refresh, 2_500);
         }

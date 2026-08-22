@@ -36,6 +36,7 @@ import type {
   PaymentDeliveryRepository,
   PaymentEnvironment,
   PaymentEvidenceVerification,
+  ProductionFulfillmentDispatcherV1,
   ProductionGrantProcessorV1,
   PurchaseIntentRecord,
   RecordedPaymentEvidence,
@@ -45,8 +46,14 @@ import type {
 import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";
 
 type FulfillmentClaimOutcome =
-  | Readonly<{ status: "completed"; resultToken: string }>
+  | Readonly<{
+      status: "completed";
+      resultToken: string | null;
+      notificationPending: boolean;
+      notificationManualReview: boolean;
+    }>
   | Readonly<{ status: "in_progress" }>
+  | Readonly<{ status: "manual_review" }>
   | Readonly<{ status: "temporary_problem"; retryable: true }>;
 
 const internalUuidPattern =
@@ -57,6 +64,7 @@ type PaymentDeliveryApplicationOptions = {
   checkoutProvider: CheckoutProviderV1;
   transactionalEmail: TransactionalEmailAdapterV1;
   grantProcessor: ProductionGrantProcessorV1;
+  fulfillmentDispatcher: ProductionFulfillmentDispatcherV1;
   policy: EmailVerificationPolicyV1;
   environment: PaymentEnvironment;
   siteOrigin: string;
@@ -766,6 +774,13 @@ export class ProductionPaymentDeliveryApplication {
       now: this.now(),
     });
     trackVerifiedPaymentPurchase(recorded);
+    if (
+      recorded.fulfillmentJobId &&
+      (recorded.disposition === "verified" ||
+        recorded.disposition === "duplicate")
+    ) {
+      await this.requestFulfillmentDispatch(recorded.fulfillmentJobId, true);
+    }
     return recorded;
   }
 
@@ -827,7 +842,37 @@ export class ProductionPaymentDeliveryApplication {
     if (claim.disposition === "in_progress") {
       return { status: "in_progress" };
     }
+    if (claim.disposition === "manual_review") {
+      return { status: "manual_review" };
+    }
     const job = claim.job;
+    const processNotification = async () => {
+      try {
+        await this.options.grantProcessor.processResultNotification(
+          job.deliveryAuthorityReference,
+        );
+        return { pending: false, manualReview: false };
+      } catch (error) {
+        const safe = asM2RuntimeError(
+          error,
+          "PRODUCTION_NOTIFICATION_DELIVERY_FAILED",
+        );
+        if (safe.safeCode === "PRODUCTION_NOTIFICATION_MANUAL_REVIEW") {
+          return { pending: false, manualReview: true };
+        }
+        // The durable RC-1 outbox and Async Workloads retry this independently.
+        return { pending: true, manualReview: false };
+      }
+    };
+    if (claim.disposition === "completed") {
+      const notification = await processNotification();
+      return {
+        status: "completed",
+        resultToken: null,
+        notificationPending: notification.pending,
+        notificationManualReview: notification.manualReview,
+      };
+    }
     let grant: AssessmentGrantHandleV1;
     try {
       if (job.grantId && job.logicalAssessmentId) {
@@ -861,14 +906,13 @@ export class ProductionPaymentDeliveryApplication {
           now: this.now(),
         });
       }
-      try {
-        await this.options.grantProcessor.processResultNotification(
-          job.deliveryAuthorityReference,
-        );
-      } catch {
-        // Notification remains independently retryable in the RC-1 outbox.
-      }
-      return { status: "completed", resultToken: fulfilled.resultToken };
+      const notification = await processNotification();
+      return {
+        status: "completed",
+        resultToken: fulfilled.resultToken,
+        notificationPending: notification.pending,
+        notificationManualReview: notification.manualReview,
+      };
     } catch (error) {
       const safe = asM2RuntimeError(error, "PAYMENT_FULFILLMENT_FAILED");
       if (claim.disposition === "acquired") {
@@ -883,7 +927,69 @@ export class ProductionPaymentDeliveryApplication {
           // A lost or reclaimed lease must not overwrite the current owner.
         }
       }
+      if (safe.safeCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS") {
+        return { status: "manual_review" };
+      }
       return { status: "temporary_problem", retryable: true };
+    }
+  }
+
+  private async requestFulfillmentDispatch(
+    jobId: string,
+    requireRouterAcceptance = false,
+  ) {
+    const now = this.now();
+    const ownerId = this.uuid();
+    const dispatchMarker = `rc2-dispatch:${jobId}`;
+    const claim = await this.options.repository.claimFulfillmentDispatch({
+      jobId,
+      dispatchMarker,
+      ownerId,
+      leaseExpiresAt: addSeconds(now, 30),
+      now,
+    });
+    if (!claim || claim.disposition === "retry_later") {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_DISPATCH_RETRYABLE", 503);
+    }
+    if (claim.disposition !== "acquired") {
+      if (
+        requireRouterAcceptance &&
+        claim.disposition === "in_progress"
+      ) {
+        throw new M2RuntimeError(
+          "PAYMENT_FULFILLMENT_DISPATCH_IN_PROGRESS",
+          503,
+        );
+      }
+      return;
+    }
+    try {
+      await this.options.fulfillmentDispatcher.enqueue(jobId);
+      await this.options.repository.completeFulfillmentDispatch({
+        jobId,
+        dispatchMarker,
+        ownerId,
+        now: this.now(),
+      });
+    } catch (error) {
+      const safe = asM2RuntimeError(
+        error,
+        "PAYMENT_FULFILLMENT_DISPATCH_FAILED",
+      );
+      try {
+        const failedAt = this.now();
+        await this.options.repository.failFulfillmentDispatch({
+          jobId,
+          dispatchMarker,
+          ownerId,
+          errorCode: safe.safeCode,
+          retryAfter: addSeconds(failedAt, 30),
+          now: failedAt,
+        });
+      } catch {
+        // A stale dispatch owner cannot overwrite the current fencing token.
+      }
+      throw safe;
     }
   }
 
@@ -941,7 +1047,7 @@ export class ProductionPaymentDeliveryApplication {
       throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     }
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "temporary_problem", retryable: true };
+      return { status: "confirmation_pending" };
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
@@ -952,36 +1058,39 @@ export class ProductionPaymentDeliveryApplication {
       }
       return { status: "confirming_payment" };
     }
-    const now = this.now();
-    const ownerId = this.uuid();
-    const claim = await this.options.repository.claimFulfillmentJob({
-      statusCapabilityHash,
-      ownerId,
-      leaseExpiresAt: addSeconds(
-        now,
-        this.options.fulfillmentLeaseSeconds,
-      ),
-      now,
-    });
-    if (!claim) {
+    const job = status.fulfillmentJob;
+    if (!job) {
       return { status: "temporary_problem", retryable: true };
     }
-    const fulfillment = await this.processClaimedFulfillmentJob(claim, ownerId);
-    if (fulfillment.status === "in_progress") {
-      return { status: "preparing_assessment" };
+    if (job.state === "manual_review") {
+      return { status: "confirmation_pending" };
     }
-    if (fulfillment.status === "temporary_problem") {
-      return { status: "temporary_problem", retryable: true };
+    if (job.state === "completed") {
+      if (!job.grantId || !job.logicalAssessmentId) {
+        return { status: "confirmation_pending" };
+      }
+      try {
+        const fulfilled =
+          await this.options.grantProcessor.recoverCompletedProductionAssessmentGrant({
+            schemaVersion: "rc1-assessment-grant-handle-v1",
+            grantId: job.grantId,
+            logicalAssessmentId: job.logicalAssessmentId,
+          });
+        return await this.discloseCompletedResult(
+          status.purchaseIntent,
+          fulfilled.resultToken,
+          trustedSessionToken,
+        );
+      } catch {
+        return { status: "temporary_problem", retryable: true };
+      }
     }
     try {
-      return await this.discloseCompletedResult(
-        status.purchaseIntent,
-        fulfillment.resultToken,
-        trustedSessionToken,
-      );
+      await this.requestFulfillmentDispatch(job.id);
     } catch {
       return { status: "temporary_problem", retryable: true };
     }
+    return { status: "preparing_assessment" };
   }
 
   async processAuthenticatedPurchaseStatus(
@@ -1001,7 +1110,7 @@ export class ProductionPaymentDeliveryApplication {
     });
     if (!status) throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "temporary_problem", retryable: true };
+      return { status: "confirmation_pending" };
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
@@ -1012,32 +1121,29 @@ export class ProductionPaymentDeliveryApplication {
       }
       return { status: "confirming_payment" };
     }
-    const now = this.now();
-    const ownerId = this.uuid();
-    const claim = await this.options.repository.claimFulfillmentJob({
-      statusCapabilityHash,
-      ownerId,
-      leaseExpiresAt: addSeconds(now, this.options.fulfillmentLeaseSeconds),
-      now,
-    });
-    if (!claim) return { status: "temporary_problem", retryable: true };
-    const fulfillment = await this.processClaimedFulfillmentJob(claim, ownerId);
-    if (fulfillment.status === "in_progress") {
-      return { status: "preparing_assessment" };
+    const job = status.fulfillmentJob;
+    if (!job) return { status: "temporary_problem", retryable: true };
+    if (job.state === "manual_review") {
+      return { status: "confirmation_pending" };
     }
-    if (fulfillment.status === "temporary_problem") {
-      return { status: "temporary_problem", retryable: true };
-    }
-    const deliveryId =
-      await this.options.repository.resolveAuthenticatedResultDeliveryId({
+    if (job.state === "completed") {
+      const deliveryId =
+        await this.options.repository.resolveAuthenticatedResultDeliveryId({
         customerUserId,
         purchaseIntentId: status.purchaseIntent.id,
       });
-    if (!deliveryId) return { status: "temporary_problem", retryable: true };
-    return {
-      status: "completed",
-      resultPath: `/account/results/${deliveryId}`,
-    };
+      if (!deliveryId) return { status: "temporary_problem", retryable: true };
+      return {
+        status: "completed",
+        resultPath: `/account/results/${deliveryId}`,
+      };
+    }
+    try {
+      await this.requestFulfillmentDispatch(job.id);
+    } catch {
+      return { status: "temporary_problem", retryable: true };
+    }
+    return { status: "preparing_assessment" };
   }
 
   async processFulfillmentJobById(
@@ -1061,7 +1167,13 @@ export class ProductionPaymentDeliveryApplication {
       return { status: "temporary_problem", retryable: true };
     }
     const outcome = await this.processClaimedFulfillmentJob(claim, ownerId);
-    if (outcome.status === "completed") return { status: "completed" };
+    if (outcome.status === "completed") {
+      return {
+        status: "completed",
+        notificationPending: outcome.notificationPending,
+        notificationManualReview: outcome.notificationManualReview,
+      };
+    }
     return outcome;
   }
 }

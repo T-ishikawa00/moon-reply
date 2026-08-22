@@ -6,6 +6,7 @@ import path from "node:path";
 import {
   FakeCheckoutProviderV1,
   FakePaymentDeliveryRepository,
+  FakeProductionFulfillmentDispatcherV1,
   FakeProductionGrantProcessorV1,
 } from "../lib/payment/production/fakes.ts";
 import {
@@ -65,6 +66,7 @@ function harness(options = {}) {
     options.transactionalEmail ??
     new DeterministicFakeTransactionalEmailAdapterV1();
   const grantProcessor = new FakeProductionGrantProcessorV1(repository);
+  const fulfillmentDispatcher = new FakeProductionFulfillmentDispatcherV1();
   const preparationCapability = Buffer.alloc(
     32,
     options.preparationByte ?? 201,
@@ -80,6 +82,7 @@ function harness(options = {}) {
     checkoutProvider,
     transactionalEmail,
     grantProcessor,
+    fulfillmentDispatcher,
     policy: {
       challengeTtlSeconds: 600,
       trustedSessionTtlSeconds: 86_400,
@@ -103,6 +106,7 @@ function harness(options = {}) {
     checkoutProvider,
     transactionalEmail,
     grantProcessor,
+    fulfillmentDispatcher,
     preparationCapability,
     setClock(value) {
       clock = value;
@@ -796,12 +800,22 @@ await check("webhook verification creates a durable job but invokes no Luna/prov
   assert.equal(run.repository.jobs.size, 1);
   assert.equal(run.grantProcessor.issueCalls.length, 0);
   assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
 });
 
-await check("verified Payment yields one Grant and one logical Assessment", async () => {
+await check("status observes and dispatches without running Provider", async () => {
   const run = harness();
   const ready = await checkoutReady(run);
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const preparing = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
+  );
+  assert.equal(preparing.status, "preparing_assessment");
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
+  const job = [...run.repository.jobs.values()][0];
+  await run.application.processFulfillmentJobById(job.id);
   const completed = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
     ready.completed.trustedSessionToken,
@@ -818,6 +832,14 @@ await check("browser reload recovers the same Assessment without recharging", as
   const ready = await checkoutReady(run);
   const evidence = evidenceFor(run, ready.checkout);
   await run.application.verifyStripeEvidence(evidence);
+  const preparing = await run.application.processPurchaseStatus(
+    ready.checkout.statusCapability,
+    ready.completed.trustedSessionToken,
+  );
+  assert.equal(preparing.status, "preparing_assessment");
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+  const job = [...run.repository.jobs.values()][0];
+  await run.application.processFulfillmentJobById(job.id);
   const first = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
     ready.completed.trustedSessionToken,
@@ -833,6 +855,7 @@ await check("browser reload recovers the same Assessment without recharging", as
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 1);
   assert.equal(run.checkoutProvider.requests.length, 1);
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
 });
 
 await check("result notification retry does not regenerate canonical Assessment", async () => {
@@ -840,8 +863,15 @@ await check("result notification retry does not regenerate canonical Assessment"
   const ready = await checkoutReady(run);
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
   run.grantProcessor.notificationFailuresRemaining = 1;
-  await run.application.processPurchaseStatus(ready.checkout.statusCapability);
-  await run.application.processPurchaseStatus(ready.checkout.statusCapability);
+  const job = [...run.repository.jobs.values()][0];
+  const first = await run.application.processFulfillmentJobById(job.id);
+  const second = await run.application.processFulfillmentJobById(job.id);
+  assert.equal(first.status, "completed");
+  assert.equal(first.notificationPending, true);
+  assert.equal(first.notificationManualReview, false);
+  assert.equal(second.status, "completed");
+  assert.equal(second.notificationPending, false);
+  assert.equal(second.notificationManualReview, false);
   assert.equal(run.grantProcessor.notificationCalls.length, 2);
   assert.equal(
     new Set(run.grantProcessor.notificationCalls).size,
@@ -858,7 +888,11 @@ await check("browser-absent worker completes the durable job by internal ID", as
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
   const job = [...run.repository.jobs.values()][0];
   const outcome = await run.application.processFulfillmentJobById(job.id);
-  assert.deepEqual(outcome, { status: "completed" });
+  assert.deepEqual(outcome, {
+    status: "completed",
+    notificationPending: false,
+    notificationManualReview: false,
+  });
   assert.equal(run.grantProcessor.grants.size, 1);
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 1);
@@ -904,6 +938,16 @@ await check("expired RC-2 fulfillment lease is reclaimable by the worker seam", 
   });
   assert.equal(oldClaim.disposition, "acquired");
   run.setClock("2026-08-20T03:02:00.000Z");
+  await assert.rejects(
+    () =>
+      run.repository.failFulfillmentJob({
+        jobId: job.id,
+        ownerId: "30000000-0000-4000-8000-000000000001",
+        errorCode: "STALE_OWNER_MUST_NOT_WRITE",
+        now: "2026-08-20T03:02:00.000Z",
+      }),
+    (error) => safeCode(error) === "PAYMENT_FULFILLMENT_JOB_CONFLICT",
+  );
   const recovered = await run.application.processFulfillmentJobById(job.id);
   assert.equal(recovered.status, "completed");
   assert.equal(run.repository.jobs.get(job.id).attemptCount, 2);
@@ -914,6 +958,8 @@ await check("status capability without trusted session never discloses a result 
   const run = harness();
   const ready = await checkoutReady(run);
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const job = [...run.repository.jobs.values()][0];
+  await run.application.processFulfillmentJobById(job.id);
   const outcome = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
   );
@@ -927,6 +973,8 @@ await check("fresh recovery tokens still resolve one canonical Product and Repor
   const run = harness();
   const ready = await checkoutReady(run);
   await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  const job = [...run.repository.jobs.values()][0];
+  await run.application.processFulfillmentJobById(job.id);
   const first = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
     ready.completed.trustedSessionToken,
@@ -941,7 +989,7 @@ await check("fresh recovery tokens still resolve one canonical Product and Repor
   assert.equal(first.status, "completed");
   assert.equal(second.status, "completed");
   assert.notEqual(first.resultPath, second.resultPath);
-  assert.equal(run.grantProcessor.issuedResultTokens.length, 2);
+  assert.equal(run.grantProcessor.issuedResultTokens.length, 3);
   assert.equal(run.grantProcessor.grants.size, 1);
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.canonicalReports.size, 1);
@@ -959,6 +1007,8 @@ for (const sessionState of ["wrong", "expired", "revoked"]) {
     const run = harness();
     const ready = await checkoutReady(run);
     await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+    const job = [...run.repository.jobs.values()][0];
+    await run.application.processFulfillmentJobById(job.id);
     let trustedSessionToken = ready.completed.trustedSessionToken;
     const original = [...run.repository.sessions.values()][0];
     if (sessionState === "wrong") {

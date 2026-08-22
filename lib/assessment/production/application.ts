@@ -34,6 +34,7 @@ import {
   VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION,
   type AssessmentGrantHandleV1,
   type FinalizeProductionPreparationRecord,
+  type ProductionCanonicalDeliveryRecord,
   type ProductionFulfillmentRepository,
   type ProductionFulfillmentResultV1,
   type ProductionPreparationRecord,
@@ -56,12 +57,23 @@ type ProductionFulfillmentApplicationOptions = {
   transport: AiStageTransport;
   catalog: ProductionRuntimeCatalog;
   model: "gpt-5.6-luna";
+  fulfillmentLeaseSeconds?: number;
   now?: () => string;
   uuid?: () => string;
   capability?: () => string;
   timeZone?: string;
   allowSyntheticPurchaseAuthority?: boolean;
 };
+
+const DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS = 16 * 60;
+
+function addSeconds(instant: string, seconds: number) {
+  const milliseconds = Date.parse(instant);
+  if (!Number.isFinite(milliseconds) || !Number.isSafeInteger(seconds)) {
+    throw new M2RuntimeError("PRODUCTION_RUNTIME_CONFIGURATION_INVALID", 503);
+  }
+  return new Date(milliseconds + seconds * 1_000).toISOString();
+}
 
 function validateCatalog(catalog: ProductionRuntimeCatalog) {
   if (
@@ -86,6 +98,12 @@ export class ProductionFulfillmentApplication {
     this.now = options.now ?? (() => new Date().toISOString());
     this.uuid = options.uuid ?? randomUUID;
     this.capability = options.capability ?? createOpaqueProductionCapability;
+    const leaseSeconds =
+      options.fulfillmentLeaseSeconds ??
+      DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS;
+    if (leaseSeconds < 60 || leaseSeconds > 16 * 60) {
+      throw new M2RuntimeError("PRODUCTION_RUNTIME_CONFIGURATION_INVALID", 503);
+    }
   }
 
   private pipeline(beforeProviderInvocation?: (
@@ -449,6 +467,42 @@ export class ProductionFulfillmentApplication {
     });
   }
 
+  private async issueRecoveryResult(
+    delivery: ProductionCanonicalDeliveryRecord,
+  ): Promise<ProductionFulfillmentResultV1> {
+    const resultToken = this.capability();
+    await this.options.lifecycleRepository.addResultCredential({
+      credentialId: this.uuid(),
+      deliveryId: delivery.id,
+      tokenHash: hashOpaqueProductionCapability(resultToken),
+      purpose: "recovery",
+      now: this.now(),
+    });
+    return {
+      status: "completed",
+      resultToken,
+      projection: delivery.projection,
+      duplicate: true,
+    };
+  }
+
+  async recoverCompletedAssessmentGrant(
+    grant: AssessmentGrantHandleV1,
+  ): Promise<ProductionFulfillmentResultV1> {
+    if (grant.schemaVersion !== "rc1-assessment-grant-handle-v1") {
+      throw new M2RuntimeError("PRODUCTION_GRANT_INVALID", 403);
+    }
+    const delivery =
+      await this.options.lifecycleRepository.findCompletedDeliveryForGrant({
+        grantId: grant.grantId,
+        logicalAssessmentId: grant.logicalAssessmentId,
+      });
+    if (!delivery) {
+      throw new M2RuntimeError("PRODUCTION_RESULT_NOT_FOUND", 404);
+    }
+    return this.issueRecoveryResult(delivery);
+  }
+
   async fulfillAssessmentGrant(
     grant: AssessmentGrantHandleV1,
   ): Promise<ProductionFulfillmentResultV1> {
@@ -456,10 +510,16 @@ export class ProductionFulfillmentApplication {
       throw new M2RuntimeError("PRODUCTION_GRANT_INVALID", 403);
     }
     const ownerId = this.uuid();
+    const claimStartedAt = this.now();
     const claim = await this.options.lifecycleRepository.claimFulfillment({
       grantId: grant.grantId,
       ownerId,
-      now: this.now(),
+      leaseExpiresAt: addSeconds(
+        claimStartedAt,
+        this.options.fulfillmentLeaseSeconds ??
+          DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS,
+      ),
+      now: claimStartedAt,
     });
     if (claim.disposition === "in_progress") {
       throw new M2RuntimeError("PRODUCTION_FULFILLMENT_IN_PROGRESS", 409);
@@ -468,20 +528,13 @@ export class ProductionFulfillmentApplication {
       if (!claim.canonicalDelivery) {
         throw new M2RuntimeError("PRODUCTION_FULFILLMENT_STATE_INVALID");
       }
-      const resultToken = this.capability();
-      await this.options.lifecycleRepository.addResultCredential({
-        credentialId: this.uuid(),
-        deliveryId: claim.canonicalDelivery.id,
-        tokenHash: hashOpaqueProductionCapability(resultToken),
-        purpose: "recovery",
-        now: this.now(),
-      });
-      return {
-        status: "completed",
-        resultToken,
-        projection: claim.canonicalDelivery.projection,
-        duplicate: true,
-      };
+      return this.issueRecoveryResult(claim.canonicalDelivery);
+    }
+    if (claim.disposition === "manual_review") {
+      throw new M2RuntimeError(
+        "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS",
+        409,
+      );
     }
     try {
       const authority = claim.preparation.purchaseReadyAuthority;
@@ -598,15 +651,25 @@ export class ProductionFulfillmentApplication {
     adapter: DeliveryNotificationAdapterV1,
   ) {
     const ownerId = this.uuid();
-    const notification =
+    const claim =
       await this.options.lifecycleRepository.claimNotification({
         notificationId,
         ownerId,
         now: this.now(),
       });
-    if (!notification) {
+    if (!claim || claim.disposition === "in_progress") {
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_NOT_AVAILABLE", 409);
     }
+    if (claim.disposition === "manual_review") {
+      throw new M2RuntimeError("PRODUCTION_NOTIFICATION_MANUAL_REVIEW", 409);
+    }
+    if (claim.disposition === "sent") {
+      return { status: "sent" as const, duplicate: true };
+    }
+    if (claim.disposition !== "acquired") {
+      throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
+    }
+    const notification = claim.notification;
     const credentialId = this.uuid();
     const resultAccessToken = this.capability();
     await this.options.lifecycleRepository.addResultCredential({
@@ -628,7 +691,7 @@ export class ProductionFulfillmentApplication {
         providerMessageReference: sent.providerMessageReference,
         now: this.now(),
       });
-      return { status: "sent" as const };
+      return { status: "sent" as const, duplicate: false };
     } catch (error) {
       const safe = asM2RuntimeError(
         error,

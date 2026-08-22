@@ -129,10 +129,11 @@ export type AssessmentGrantHandleV1 = Readonly<{
 }>;
 
 export type ProductionFulfillmentClaim = {
-  disposition: "acquired" | "in_progress" | "completed";
+  disposition: "acquired" | "in_progress" | "completed" | "manual_review";
   grantId: string;
   logicalAssessmentId: string;
   ownerId: string | null;
+  leaseExpiresAt: string | null;
   preparation: ProductionPreparationRecord;
   request: PersistedAssessmentRequest;
   canonicalDelivery: ProductionCanonicalDeliveryRecord | null;
@@ -184,6 +185,16 @@ export type ProductionNotificationRecord = {
   ownerId: string | null;
 };
 
+export type ProductionNotificationClaim =
+  | Readonly<{
+      disposition: "acquired";
+      notification: ProductionNotificationRecord;
+    }>
+  | Readonly<{
+      disposition: "in_progress" | "sent" | "manual_review";
+      notification: null;
+    }>;
+
 export type ProductionFulfillmentRepository = {
   beginPreparation(
     record: BeginProductionPreparationRecord,
@@ -234,6 +245,7 @@ export type ProductionFulfillmentRepository = {
   claimFulfillment(input: {
     grantId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionFulfillmentClaim>;
   markGenerationStarted(input: {
@@ -262,11 +274,15 @@ export type ProductionFulfillmentRepository = {
     now: string,
   ): Promise<void>;
   resolveResultToken(tokenHash: string, now: string): Promise<ResolvedProductionResult | null>;
+  findCompletedDeliveryForGrant(input: {
+    grantId: string;
+    logicalAssessmentId: string;
+  }): Promise<ProductionCanonicalDeliveryRecord | null>;
   claimNotification(input: {
     notificationId: string;
     ownerId: string;
     now: string;
-  }): Promise<ProductionNotificationRecord | null>;
+  }): Promise<ProductionNotificationClaim | null>;
   completeNotification(input: {
     notificationId: string;
     ownerId: string;

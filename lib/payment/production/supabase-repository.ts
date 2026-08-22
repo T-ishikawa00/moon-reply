@@ -7,6 +7,7 @@ import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import type { JsonValue } from "../../assessment/runtime/types.ts";
 import type {
   EmailChallengeRecord,
+  FulfillmentDispatchClaim,
   FulfillmentJobClaim,
   FulfillmentJobRecord,
   PaymentAttemptRecord,
@@ -157,6 +158,9 @@ type PaymentDatabase = {
       resolve_customer_purchase_status_v1: RuntimeFunction;
       resolve_customer_completed_delivery_v1: RuntimeFunction;
       resolve_production_delivery_email_v2: RuntimeFunction;
+      claim_rc2_fulfillment_dispatch_v1: RuntimeFunction;
+      complete_rc2_fulfillment_dispatch_v1: RuntimeFunction;
+      fail_rc2_fulfillment_dispatch_v1: RuntimeFunction;
       claim_rc2_fulfillment_job_v1: RuntimeFunction;
       claim_rc2_fulfillment_job_by_id_v1: RuntimeFunction;
       complete_rc2_fulfillment_job_v1: RuntimeFunction;
@@ -780,6 +784,83 @@ export class SupabasePaymentDeliveryRepository
     );
     if (error) databaseFailure(error);
     return data === null ? null : stringValue(data);
+  }
+
+  async claimFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+  }): Promise<FulfillmentDispatchClaim | null> {
+    const { data, error } = await this.client.rpc(
+      "claim_rc2_fulfillment_dispatch_v1",
+      {
+        p_fulfillment_job_id: input.jobId,
+        p_dispatch_marker: input.dispatchMarker,
+        p_owner_id: input.ownerId,
+        p_lease_expires_at: input.leaseExpiresAt,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    if (data === null) return null;
+    const result = recordValue(data);
+    const disposition = stringValue(result.disposition);
+    if (
+      ![
+        "acquired",
+        "in_progress",
+        "retry_later",
+        "dispatched",
+        "terminal",
+      ].includes(disposition)
+    ) {
+      databaseFailure();
+    }
+    return {
+      disposition: disposition as FulfillmentDispatchClaim["disposition"],
+    };
+  }
+
+  async completeFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    now: string;
+  }) {
+    const { error } = await this.client.rpc(
+      "complete_rc2_fulfillment_dispatch_v1",
+      {
+        p_fulfillment_job_id: input.jobId,
+        p_dispatch_marker: input.dispatchMarker,
+        p_owner_id: input.ownerId,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+  }
+
+  async failFulfillmentDispatch(input: {
+    jobId: string;
+    dispatchMarker: string;
+    ownerId: string;
+    errorCode: string;
+    retryAfter: string;
+    now: string;
+  }) {
+    const { error } = await this.client.rpc(
+      "fail_rc2_fulfillment_dispatch_v1",
+      {
+        p_fulfillment_job_id: input.jobId,
+        p_dispatch_marker: input.dispatchMarker,
+        p_owner_id: input.ownerId,
+        p_error_code: input.errorCode,
+        p_retry_after: input.retryAfter,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
   }
 
   async claimFulfillmentJob(input: {

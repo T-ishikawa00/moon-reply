@@ -4,10 +4,12 @@ import {
   fulfillProductionAssessmentGrant,
   issueProductionAssessmentGrant,
   processProductionNotificationWithAdapter,
+  recoverCompletedProductionAssessmentGrant,
 } from "../../assessment/production/service.ts";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { enforceLegacyCustomerEmailVerificationAllowed } from "../../customer-auth/cutover.ts";
 import { ProductionPaymentDeliveryApplication } from "./application.ts";
+import { enqueueProductionFulfillmentJob } from "./async-workloads.ts";
 import {
   isCheckoutAvailable,
   isCustomerEmailDeliveryAvailable,
@@ -33,8 +35,16 @@ import {
 } from "./transactional-email.ts";
 import type {
   CheckoutProviderV1,
+  ProductionFulfillmentDispatcherV1,
   ProductionGrantProcessorV1,
 } from "./types.ts";
+
+const backgroundFulfillmentDispatcher: ProductionFulfillmentDispatcherV1 = {
+  async enqueue(jobId) {
+    const outcome = await enqueueProductionFulfillmentJob(jobId);
+    return { eventId: outcome.eventId };
+  },
+};
 
 class UnavailableCheckoutProviderV1 implements CheckoutProviderV1 {
   async createCheckoutSession(): Promise<never> {
@@ -52,6 +62,10 @@ class UnavailableGrantProcessorV1 implements ProductionGrantProcessorV1 {
   }
 
   async fulfillProductionAssessmentGrant(): Promise<never> {
+    throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
+  }
+
+  async recoverCompletedProductionAssessmentGrant(): Promise<never> {
     throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
   }
 
@@ -101,6 +115,7 @@ function createApplication(input: {
       checkoutProvider: input.checkoutProvider,
       transactionalEmail: input.transactionalEmail,
       grantProcessor: input.grantProcessor,
+      fulfillmentDispatcher: backgroundFulfillmentDispatcher,
       policy: environment.policy,
       environment: input.paymentEnvironment,
       siteOrigin: environment.siteOrigin,
@@ -289,6 +304,7 @@ function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
   const grantProcessor: ProductionGrantProcessorV1 = {
     issueProductionAssessmentGrant,
     fulfillProductionAssessmentGrant,
+    recoverCompletedProductionAssessmentGrant,
     async processResultNotification(deliveryAuthorityReference) {
       const notificationId =
         await findProductionNotificationForDelivery(
@@ -313,6 +329,7 @@ function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
     checkoutProvider: new UnavailableCheckoutProviderV1(),
     transactionalEmail,
     grantProcessor,
+    fulfillmentDispatcher: backgroundFulfillmentDispatcher,
     policy: environment.policy,
     environment: paymentEnvironment,
     siteOrigin: environment.siteOrigin,
@@ -320,7 +337,7 @@ function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
     verificationPepper: environment.verificationPepper,
     emailEncryptionKey: environment.emailEncryptionKey,
     purchaseStatusSigningSecret: environment.purchaseStatusSigningSecret,
-    fulfillmentLeaseSeconds: environment.fulfillmentLeaseSeconds,
+    fulfillmentLeaseSeconds: 16 * 60,
   });
 }
 

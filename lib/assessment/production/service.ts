@@ -94,6 +94,13 @@ export async function fulfillProductionAssessmentGrant(
   return (await createApplication()).fulfillAssessmentGrant(grant);
 }
 
+export async function recoverCompletedProductionAssessmentGrant(
+  grant: AssessmentGrantHandleV1,
+) {
+  requireFulfillmentRuntime();
+  return (await createApplication()).recoverCompletedAssessmentGrant(grant);
+}
+
 export async function processProductionNotification(notificationId: string) {
   requireFulfillmentRuntime();
   return (await createApplication()).processNotification(

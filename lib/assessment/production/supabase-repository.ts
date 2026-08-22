@@ -29,6 +29,7 @@ import type {
   ProductionFulfillmentClaim,
   ProductionFulfillmentRepository,
   ProductionNotificationRecord,
+  ProductionNotificationClaim,
   ProductionPreparationRecord,
   ResolvedProductionResult,
 } from "./types.ts";
@@ -85,6 +86,12 @@ type DeliveryRow = {
   created_at: string;
 };
 
+type LogicalAssessmentIdentityRow = {
+  id: string;
+  grant_id: string;
+  status: "pending" | "generating" | "retryable" | "completed" | "revoked";
+};
+
 type NotificationRow = {
   id: string;
   delivery_id: string;
@@ -106,6 +113,7 @@ type ProductionDatabase = {
     Tables: {
       assessment_requests: RuntimeTable<RequestRow>;
       production_preparations: RuntimeTable<PreparationRow>;
+      production_logical_assessments: RuntimeTable<LogicalAssessmentIdentityRow>;
       production_customer_deliveries: RuntimeTable<DeliveryRow>;
       production_result_credentials: RuntimeTable<{
         id: string;
@@ -127,6 +135,7 @@ type ProductionDatabase = {
       issue_production_assessment_grant_v1: RuntimeFunction;
       issue_rc2_production_assessment_grant_v2: RuntimeFunction;
       claim_production_fulfillment_v1: RuntimeFunction;
+      claim_production_fulfillment_v2: RuntimeFunction;
       mark_production_generation_started_v1: RuntimeFunction;
       complete_production_fulfillment_v1: RuntimeFunction;
       fail_production_fulfillment_v1: RuntimeFunction;
@@ -451,13 +460,15 @@ export class SupabaseProductionFulfillmentRepository
   async claimFulfillment(input: {
     grantId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionFulfillmentClaim> {
     const { data, error } = await this.client.rpc(
-      "claim_production_fulfillment_v1",
+      "claim_production_fulfillment_v2",
       {
         p_grant_id: input.grantId,
         p_owner_id: input.ownerId,
+        p_lease_expires_at: input.leaseExpiresAt,
         p_now: input.now,
       },
     );
@@ -467,7 +478,8 @@ export class SupabaseProductionFulfillmentRepository
     if (
       disposition !== "acquired" &&
       disposition !== "in_progress" &&
-      disposition !== "completed"
+      disposition !== "completed" &&
+      disposition !== "manual_review"
     ) {
       databaseFailure();
     }
@@ -481,6 +493,10 @@ export class SupabaseProductionFulfillmentRepository
       logicalAssessmentId,
       ownerId:
         typeof result.owner_id === "string" ? result.owner_id : null,
+      leaseExpiresAt:
+        typeof result.lease_expires_at === "string"
+          ? result.lease_expires_at
+          : null,
       preparation,
       request: await this.getRequest(preparation.requestId),
       canonicalDelivery:
@@ -605,6 +621,22 @@ export class SupabaseProductionFulfillmentRepository
     };
   }
 
+  async findCompletedDeliveryForGrant(input: {
+    grantId: string;
+    logicalAssessmentId: string;
+  }) {
+    const { data, error } = await this.client
+      .from("production_logical_assessments")
+      .select("id,grant_id,status")
+      .eq("id", input.logicalAssessmentId)
+      .eq("grant_id", input.grantId)
+      .eq("status", "completed")
+      .maybeSingle();
+    if (error) databaseFailure();
+    if (!data) return null;
+    return this.getDeliveryByLogicalAssessment(input.logicalAssessmentId);
+  }
+
   async issueVerifiedPaymentGrant(input: {
     grantId: string;
     purchaseId: string;
@@ -642,7 +674,7 @@ export class SupabaseProductionFulfillmentRepository
     notificationId: string;
     ownerId: string;
     now: string;
-  }): Promise<ProductionNotificationRecord | null> {
+  }): Promise<ProductionNotificationClaim | null> {
     const { data, error } = await this.client.rpc(
       "claim_production_notification_v1",
       {
@@ -654,7 +686,18 @@ export class SupabaseProductionFulfillmentRepository
     if (error) databaseFailure();
     if (data === null) return null;
     const result = recordValue(data);
-    return {
+    const disposition = stringValue(result.disposition);
+    if (
+      disposition === "in_progress" ||
+      disposition === "sent" ||
+      disposition === "manual_review"
+    ) {
+      return { disposition, notification: null };
+    }
+    if (disposition !== "acquired" && disposition !== "reclaimed") {
+      databaseFailure();
+    }
+    const notification: ProductionNotificationRecord = {
       id: stringValue(result.id),
       deliveryId: stringValue(result.delivery_id),
       deliveryAuthorityReference: stringValue(
@@ -667,6 +710,7 @@ export class SupabaseProductionFulfillmentRepository
           : databaseFailure(),
       ownerId: input.ownerId,
     };
+    return { disposition: "acquired", notification };
   }
 
   async completeNotification(input: {

@@ -779,6 +779,85 @@ await check("pre-provider persistence failure leaves generation_started unset", 
   assert.equal(run.lifecycleRepository.deliveries.size, 0);
 });
 
+await check("active logical lease cannot be stolen by a duplicate worker", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  const logical = run.lifecycleRepository.logicalAssessments.get(
+    grant.logicalAssessmentId,
+  );
+  logical.status = "generating";
+  logical.ownerId = crypto.randomUUID();
+  logical.leaseExpiresAt = new Date(
+    Date.parse(selected.fixed_clock) + 60_000,
+  ).toISOString();
+  const providerCalls = run.transport.calls.length;
+  await assert.rejects(
+    () => run.application.fulfillAssessmentGrant(grant),
+    (error) => safeCode(error) === "PRODUCTION_FULFILLMENT_IN_PROGRESS",
+  );
+  assert.equal(run.transport.calls.length, providerCalls);
+});
+
+await check("expired pre-provider logical lease is safely reclaimable", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  const logical = run.lifecycleRepository.logicalAssessments.get(
+    grant.logicalAssessmentId,
+  );
+  logical.status = "generating";
+  logical.ownerId = crypto.randomUUID();
+  logical.leaseExpiresAt = new Date(
+    Date.parse(selected.fixed_clock) - 1_000,
+  ).toISOString();
+  logical.generationStartedAt = null;
+  const fulfilled = await run.application.fulfillAssessmentGrant(grant);
+  assert.equal(fulfilled.status, "completed");
+  assert.deepEqual(run.transport.calls.slice(-3), ["PB-04", "PB-05", "PB-06"]);
+});
+
+await check("expired post-provider ambiguity is quarantined without Provider replay", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  const logical = run.lifecycleRepository.logicalAssessments.get(
+    grant.logicalAssessmentId,
+  );
+  logical.status = "generating";
+  logical.ownerId = crypto.randomUUID();
+  logical.leaseExpiresAt = new Date(
+    Date.parse(selected.fixed_clock) - 1_000,
+  ).toISOString();
+  logical.generationStartedAt = selected.fixed_clock;
+  const providerCalls = run.transport.calls.length;
+  await assert.rejects(
+    () => run.application.fulfillAssessmentGrant(grant),
+    (error) => safeCode(error) === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS",
+  );
+  assert.equal(run.transport.calls.length, providerCalls);
+  assert.equal(logical.status, "retryable");
+  assert.equal(logical.lastErrorCode, "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS");
+});
+
 await check("post-Report canonicalization retry reuses V17 Report without Provider replay", async () => {
   const selected = fixture("polite_thank_you_with_draft");
   const run = await harness(
@@ -805,6 +884,26 @@ await check("post-Report canonicalization retry reuses V17 Report without Provid
   assert.equal(run.runtimeRepository.reports.size, 1);
   assert.equal(run.lifecycleRepository.deliveries.size, 1);
   assert.equal(run.lifecycleRepository.generationStartedTransitions, 1);
+});
+
+await check("completed-result recovery is DB-only and cannot enter the Provider pipeline", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  await run.application.fulfillAssessmentGrant(grant);
+  const providerCalls = run.transport.calls.length;
+  const credentialCount = run.lifecycleRepository.credentials.size;
+  const recovered = await run.application.recoverCompletedAssessmentGrant(grant);
+  assert.equal(recovered.status, "completed");
+  assert.equal(recovered.duplicate, true);
+  assert.equal(run.transport.calls.length, providerCalls);
+  assert.equal(run.lifecycleRepository.credentials.size, credentialCount + 1);
 });
 
 await check("notification failure retries independently without regenerating assessment", async () => {
@@ -836,15 +935,81 @@ await check("notification failure retries independently without regenerating ass
   const fakeAdapter = new DeterministicFakeDeliveryNotificationAdapterV1();
   assert.deepEqual(
     await run.application.processNotification(notification.id, fakeAdapter),
-    { status: "sent" },
+    { status: "sent", duplicate: false },
   );
   assert.equal(
     run.lifecycleRepository.notifications.get(notification.id).status,
     "sent",
   );
+  const deliveryCalls = fakeAdapter.requests.length;
+  assert.deepEqual(
+    await run.application.processNotification(notification.id, fakeAdapter),
+    { status: "sent", duplicate: true },
+  );
+  assert.equal(fakeAdapter.requests.length, deliveryCalls);
   assert.equal(run.transport.calls.length, providerCalls);
   assert.equal(run.runtimeRepository.reports.size, 1);
   assert.equal(run.lifecycleRepository.deliveries.size, 1);
+});
+
+await check("notification ownership is fenced and only expired leases are reclaimable", async () => {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(
+    consultationFor(selected),
+    crypto.randomUUID(),
+  );
+  const grant = await run.application.issueAssessmentGrant(
+    syntheticPurchase(prepared.preparationCapability),
+  );
+  await run.application.fulfillAssessmentGrant(grant);
+  const notification = [...run.lifecycleRepository.notifications.values()][0];
+  const manualReviewAdapter =
+    new DeterministicFakeDeliveryNotificationAdapterV1();
+  notification.status = "processing";
+  notification.ownerId = crypto.randomUUID();
+  await assert.rejects(
+    () =>
+      run.application.processNotification(notification.id, manualReviewAdapter),
+    (error) => safeCode(error) === "PRODUCTION_NOTIFICATION_MANUAL_REVIEW",
+  );
+  assert.equal(manualReviewAdapter.requests.length, 0);
+  notification.status = "pending";
+  notification.ownerId = null;
+  const oldOwner = crypto.randomUUID();
+  const first = await run.lifecycleRepository.claimNotification({
+    notificationId: notification.id,
+    ownerId: oldOwner,
+    now: selected.fixed_clock,
+  });
+  assert.equal(first.disposition, "acquired");
+  const afterExpiry = new Date(
+    Date.parse(selected.fixed_clock) + 6 * 60_000,
+  ).toISOString();
+  await assert.rejects(
+    () =>
+      run.lifecycleRepository.completeNotification({
+        notificationId: notification.id,
+        ownerId: oldOwner,
+        providerMessageReference: "stale-owner-message",
+        now: afterExpiry,
+      }),
+    (error) => safeCode(error) === "PRODUCTION_NOTIFICATION_STATE_CONFLICT",
+  );
+  const newOwner = crypto.randomUUID();
+  const reclaimed = await run.lifecycleRepository.claimNotification({
+    notificationId: notification.id,
+    ownerId: newOwner,
+    now: afterExpiry,
+  });
+  assert.equal(reclaimed.disposition, "acquired");
+  await run.lifecycleRepository.completeNotification({
+    notificationId: notification.id,
+    ownerId: newOwner,
+    providerMessageReference: "reclaimed-message",
+    now: afterExpiry,
+  });
+  assert.equal(notification.status, "sent");
 });
 
 await check("migration encodes durable uniqueness, ownership, result, and outbox invariants", () => {

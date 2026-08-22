@@ -39,6 +39,7 @@ type FakeLogicalAssessment = {
   requestId: string;
   status: "pending" | "generating" | "retryable" | "completed";
   ownerId: string | null;
+  leaseExpiresAt: string | null;
   generationStartedAt: string | null;
   attemptCount: number;
   lastErrorCode: string | null;
@@ -62,6 +63,7 @@ export class FakeProductionFulfillmentRepository
   readonly deliveries = new Map<string, ProductionCanonicalDeliveryRecord>();
   readonly credentials = new Map<string, FakeCredential>();
   readonly notifications = new Map<string, ProductionNotificationRecord>();
+  readonly notificationLeases = new Map<string, string>();
   readonly events: string[] = [];
   generationStartedTransitions = 0;
   private readonly runtimeRepository: FakeAssessmentRepository;
@@ -276,6 +278,7 @@ export class FakeProductionFulfillmentRepository
       requestId: preparation.requestId,
       status: "pending",
       ownerId: null,
+      leaseExpiresAt: null,
       generationStartedAt: null,
       attemptCount: 0,
       lastErrorCode: null,
@@ -318,6 +321,7 @@ export class FakeProductionFulfillmentRepository
   async claimFulfillment(input: {
     grantId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionFulfillmentClaim> {
     const grant = this.grants.get(input.grantId);
@@ -345,6 +349,7 @@ export class FakeProductionFulfillmentRepository
         ...base,
         disposition: "completed",
         ownerId: null,
+        leaseExpiresAt: null,
         canonicalDelivery: delivery
           ? {
               ...clone(delivery),
@@ -357,11 +362,30 @@ export class FakeProductionFulfillmentRepository
         recoverableRuntimeRunId: null,
       };
     }
-    if (logical.status === "generating") {
+    if (
+      logical.status === "generating" &&
+      logical.leaseExpiresAt !== null &&
+      Date.parse(logical.leaseExpiresAt) > Date.parse(input.now)
+    ) {
       return {
         ...base,
         disposition: "in_progress",
         ownerId: logical.ownerId,
+        leaseExpiresAt: logical.leaseExpiresAt,
+        canonicalDelivery: null,
+        recoverableRuntimeRunId: null,
+      };
+    }
+    if (logical.status === "generating" && logical.generationStartedAt !== null) {
+      logical.status = "retryable";
+      logical.ownerId = null;
+      logical.leaseExpiresAt = null;
+      logical.lastErrorCode = "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS";
+      return {
+        ...base,
+        disposition: "manual_review",
+        ownerId: null,
+        leaseExpiresAt: null,
         canonicalDelivery: null,
         recoverableRuntimeRunId: null,
       };
@@ -389,6 +413,7 @@ export class FakeProductionFulfillmentRepository
     }
     logical.status = "generating";
     logical.ownerId = input.ownerId;
+    logical.leaseExpiresAt = input.leaseExpiresAt;
     logical.attemptCount += 1;
     this.events.push("claimFulfillment");
     return {
@@ -396,6 +421,7 @@ export class FakeProductionFulfillmentRepository
       request: clone(request),
       disposition: "acquired",
       ownerId: input.ownerId,
+      leaseExpiresAt: input.leaseExpiresAt,
       canonicalDelivery: null,
       recoverableRuntimeRunId,
     };
@@ -410,7 +436,9 @@ export class FakeProductionFulfillmentRepository
     if (
       !logical ||
       logical.status !== "generating" ||
-      logical.ownerId !== input.ownerId
+      logical.ownerId !== input.ownerId ||
+      logical.leaseExpiresAt === null ||
+      Date.parse(logical.leaseExpiresAt) <= Date.parse(input.now)
     ) {
       throw new M2RuntimeError("PRODUCTION_GENERATION_BOUNDARY_CONFLICT");
     }
@@ -431,6 +459,8 @@ export class FakeProductionFulfillmentRepository
       !logical ||
       logical.status !== "generating" ||
       logical.ownerId !== record.ownerId ||
+      logical.leaseExpiresAt === null ||
+      Date.parse(logical.leaseExpiresAt) <= Date.parse(record.now) ||
       logical.generationStartedAt === null ||
       !this.runtimeRepository.reports.has(record.runtimeRunId) ||
       [...this.deliveries.values()].some(
@@ -466,6 +496,7 @@ export class FakeProductionFulfillmentRepository
     });
     logical.status = "completed";
     logical.ownerId = null;
+    logical.leaseExpiresAt = null;
     grant.status = "completed";
     this.events.push("completeFulfillment");
     return {
@@ -487,12 +518,15 @@ export class FakeProductionFulfillmentRepository
     if (
       !logical ||
       logical.status !== "generating" ||
-      logical.ownerId !== input.ownerId
+      logical.ownerId !== input.ownerId ||
+      logical.leaseExpiresAt === null ||
+      Date.parse(logical.leaseExpiresAt) <= Date.parse(input.now)
     ) {
       throw new M2RuntimeError("PRODUCTION_FULFILLMENT_STATE_CONFLICT", 409);
     }
     logical.status = "retryable";
     logical.ownerId = null;
+    logical.leaseExpiresAt = null;
     logical.lastErrorCode = input.errorCode;
     this.events.push("failFulfillment");
   }
@@ -546,24 +580,55 @@ export class FakeProductionFulfillmentRepository
       : null;
   }
 
+  async findCompletedDeliveryForGrant(input: {
+    grantId: string;
+    logicalAssessmentId: string;
+  }) {
+    const logical = this.logicalAssessments.get(input.logicalAssessmentId);
+    if (
+      !logical ||
+      logical.grantId !== input.grantId ||
+      logical.status !== "completed"
+    ) {
+      return null;
+    }
+    const delivery = [...this.deliveries.values()].find(
+      (candidate) => candidate.logicalAssessmentId === input.logicalAssessmentId,
+    );
+    return delivery ? clone(delivery) : null;
+  }
+
   async claimNotification(input: {
     notificationId: string;
     ownerId: string;
     now: string;
   }) {
-    void input.now;
     const notification = this.notifications.get(input.notificationId);
-    if (
-      !notification ||
-      !["pending", "failed"].includes(notification.status)
-    ) {
-      return null;
+    if (!notification) return null;
+    if (notification.status === "sent") {
+      return { disposition: "sent" as const, notification: null };
+    }
+    if (notification.status === "processing") {
+      const leaseExpiresAt = this.notificationLeases.get(notification.id);
+      if (!leaseExpiresAt) {
+        return { disposition: "manual_review" as const, notification: null };
+      }
+      if (Date.parse(leaseExpiresAt) > Date.parse(input.now)) {
+        return { disposition: "in_progress" as const, notification: null };
+      }
     }
     notification.status = "processing";
     notification.ownerId = input.ownerId;
     notification.attemptCount += 1;
+    this.notificationLeases.set(
+      notification.id,
+      new Date(Date.parse(input.now) + 5 * 60_000).toISOString(),
+    );
     this.events.push("claimNotification");
-    return clone(notification);
+    return {
+      disposition: "acquired" as const,
+      notification: clone(notification),
+    };
   }
 
   async completeNotification(input: {
@@ -573,17 +638,20 @@ export class FakeProductionFulfillmentRepository
     now: string;
   }) {
     void input.providerMessageReference;
-    void input.now;
     const notification = this.notifications.get(input.notificationId);
+    const leaseExpiresAt = this.notificationLeases.get(input.notificationId);
     if (
       !notification ||
       notification.status !== "processing" ||
-      notification.ownerId !== input.ownerId
+      notification.ownerId !== input.ownerId ||
+      !leaseExpiresAt ||
+      Date.parse(leaseExpiresAt) <= Date.parse(input.now)
     ) {
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
     }
     notification.status = "sent";
     notification.ownerId = null;
+    this.notificationLeases.delete(notification.id);
     this.events.push("completeNotification");
   }
 
@@ -594,17 +662,20 @@ export class FakeProductionFulfillmentRepository
     now: string;
   }) {
     void input.errorCode;
-    void input.now;
     const notification = this.notifications.get(input.notificationId);
+    const leaseExpiresAt = this.notificationLeases.get(input.notificationId);
     if (
       !notification ||
       notification.status !== "processing" ||
-      notification.ownerId !== input.ownerId
+      notification.ownerId !== input.ownerId ||
+      !leaseExpiresAt ||
+      Date.parse(leaseExpiresAt) <= Date.parse(input.now)
     ) {
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
     }
     notification.status = "failed";
     notification.ownerId = null;
+    this.notificationLeases.delete(notification.id);
     this.events.push("failNotification");
   }
 
