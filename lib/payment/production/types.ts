@@ -3,6 +3,7 @@ import type {
   ProductionFulfillmentResultV1,
   VerifiedPurchaseAuthorityV1,
 } from "../../assessment/production/types.ts";
+export type { CustomerPurchaseStatus } from "../purchase-status-contract.ts";
 
 export type PaymentEnvironment = "test" | "live";
 export type PaymentAttemptState =
@@ -275,15 +276,6 @@ export type PurchaseStatusRecord = Readonly<{
   purchaseIntent: PurchaseIntentRecord;
   fulfillmentJob: FulfillmentJobRecord | null;
 }>;
-
-export type CustomerPurchaseStatus =
-  | Readonly<{ status: "confirming_payment" }>
-  | Readonly<{ status: "preparing_assessment" }>
-  | Readonly<{ status: "confirmation_pending" }>
-  | Readonly<{ status: "temporary_problem"; retryable: true }>
-  | Readonly<{ status: "payment_not_completed" }>
-  | Readonly<{ status: "completed_check_verified_email" }>
-  | Readonly<{ status: "completed"; resultPath: string }>;
 
 export type ServerFulfillmentOutcome =
   | Readonly<{

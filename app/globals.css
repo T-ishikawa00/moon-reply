@@ -1377,6 +1377,7 @@ summary::marker {
 .purchase-return-card > p { margin: 0; color: var(--moon-600); font-size: 0.74rem; font-weight: 800; }
 .purchase-return-card h1 { margin: var(--space-3) 0 0; font-family: var(--font-heading); font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 600; line-height: 1.45; }
 .purchase-return-card > span { display: block; margin-top: var(--space-5); color: var(--ink-600); line-height: 2; }
+.purchase-return-assurance { display: block; margin-top: var(--space-4); color: var(--ink-900); line-height: 1.8; }
 .purchase-return-card > button, .purchase-return-card > a { display: inline-flex; margin-top: var(--space-6); }
 
 .request-review-page, .purchase-review-page, .request-state-page { --focus-ring: var(--focus-ring-paper); min-height: 100vh; background: var(--paper-200); padding: clamp(2rem, 6vw, 5rem) 1.25rem; color: var(--ink-950); }

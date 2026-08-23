@@ -1,87 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-type SafeStatus =
-  | { status: "confirming_payment" }
-  | { status: "preparing_assessment" }
-  | { status: "confirmation_pending" }
-  | { status: "temporary_problem"; retryable: true }
-  | { status: "payment_not_completed" }
-  | { status: "completed_check_verified_email" }
-  | { status: "completed"; resultPath: string };
-
-function decode(value: unknown): SafeStatus | null {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    return null;
-  }
-  const payload = value as Record<string, unknown>;
-  if (typeof payload.data !== "object" || payload.data === null) return null;
-  const data = payload.data as Record<string, unknown>;
-  if (
-    data.status === "confirming_payment" ||
-    data.status === "preparing_assessment" ||
-    data.status === "confirmation_pending" ||
-    data.status === "payment_not_completed" ||
-    data.status === "completed_check_verified_email"
-  ) {
-    return { status: data.status };
-  }
-  if (data.status === "temporary_problem" && data.retryable === true) {
-    return { status: data.status, retryable: true };
-  }
-  if (
-    data.status === "completed" &&
-    typeof data.resultPath === "string" &&
-    /^\/result\/[A-Za-z0-9_-]{43}$/u.test(data.resultPath)
-  ) {
-    return { status: data.status, resultPath: data.resultPath };
-  }
-  return null;
-}
-
-const copy: Record<Exclude<SafeStatus["status"], "completed">, {
-  heading: string;
-  body: string;
-}> = {
-  confirming_payment: {
-    heading: "決済を確認しています",
-    body: "画面を閉じずにお待ちください。再読み込みしても、同じお申し込みを確認します。",
-  },
-  preparing_assessment: {
-    heading: "鑑定を準備しています",
-    body: "お申し込みを受け付けました。この画面を閉じても大丈夫です。鑑定ノートが完成したらメールでお知らせします。",
-  },
-  confirmation_pending: {
-    heading: "お申し込みを確認しています",
-    body: "追加の決済は必要ありません。安全な確認が完了するまで、しばらくお待ちください。",
-  },
-  temporary_problem: {
-    heading: "確認に少し時間がかかっています",
-    body: "同じお申し込みを安全に確認しています。再決済せず、この画面からもう一度確認できます。",
-  },
-  payment_not_completed: {
-    heading: "決済は完了していません",
-    body: "料金は確定していません。再開する場合も、同じ相談内容から安全にお手続きください。",
-  },
-  completed_check_verified_email: {
-    heading: "鑑定が完成しました",
-    body: "確認済みのメールアドレスへ結果をご案内しています。このブラウザで開けない場合は、メールをご確認ください。",
-  },
-};
+import { useEffect, useRef, useState } from "react";
+import {
+  decodeCustomerPurchaseStatusResponse,
+  type CustomerPurchaseStatus,
+} from "@/lib/payment/purchase-status-contract";
+import { PurchaseStatusPoller } from "@/lib/payment/purchase-status-poller";
+import { getPurchaseReturnPresentation } from "@/lib/payment/purchase-return-presentation";
 
 export function PurchaseReturnStatus({
   statusCapability,
+  customerAuthEnabled,
 }: {
   statusCapability: string;
+  customerAuthEnabled: boolean;
 }) {
-  const [status, setStatus] = useState<SafeStatus>({
+  const [status, setStatus] = useState<CustomerPurchaseStatus>({
     status: "confirming_payment",
+    paymentVerified: false,
+    accountFallback: customerAuthEnabled,
   });
   const [requestFailed, setRequestFailed] = useState(false);
+  const [recoveryExhausted, setRecoveryExhausted] = useState(false);
   const [checkoutRestarting, setCheckoutRestarting] = useState(false);
   const [checkoutRestartFailed, setCheckoutRestartFailed] = useState(false);
+  const pollerRef = useRef<PurchaseStatusPoller | null>(null);
 
   async function restartCheckout() {
     setCheckoutRestarting(true);
@@ -123,69 +67,73 @@ export function PurchaseReturnStatus({
   }
 
   useEffect(() => {
-    let active = true;
-    let timeout: ReturnType<typeof setTimeout> | null = null;
-
-    async function refresh() {
-      try {
+    const poller = new PurchaseStatusPoller({
+      async fetchStatus(signal) {
         const response = await fetch("/api/payments/status", {
           method: "POST",
           credentials: "same-origin",
           cache: "no-store",
+          signal,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ statusCapability }),
         });
         if (!response.ok) throw new Error("PURCHASE_STATUS_UNAVAILABLE");
-        const next = decode(await response.json());
+        const next = decodeCustomerPurchaseStatusResponse(await response.json());
         if (!next) throw new Error("PURCHASE_STATUS_INVALID");
-        if (!active) return;
-        setRequestFailed(false);
-        setStatus(next);
-        if (next.status === "completed") {
-          window.location.replace(next.resultPath);
-          return;
-        }
-        if (
-          next.status !== "payment_not_completed" &&
-          next.status !== "completed_check_verified_email" &&
-          next.status !== "confirmation_pending"
-        ) {
-          timeout = setTimeout(refresh, 2_500);
-        }
-      } catch {
-        if (!active) return;
-        setRequestFailed(true);
-      }
-    }
-
-    void refresh();
+        return next;
+      },
+      onStatus: setStatus,
+      onRecoveryState(next) {
+        setRequestFailed(next.requestFailed);
+        setRecoveryExhausted(next.recoveryExhausted);
+      },
+      onNavigate(resultPath) {
+        window.location.replace(resultPath);
+      },
+    });
+    pollerRef.current = poller;
+    void poller.start();
     return () => {
-      active = false;
-      if (timeout) clearTimeout(timeout);
+      poller.stop();
+      if (pollerRef.current === poller) pollerRef.current = null;
     };
   }, [statusCapability]);
 
-  if (status.status === "completed") {
-    return (
-      <section className="purchase-return-card" aria-live="polite">
-        <p>鑑定が完成しました</p>
-        <h1>結果を開いています</h1>
-      </section>
-    );
-  }
-
-  const current = requestFailed ? copy.temporary_problem : copy[status.status];
+  const presentation = getPurchaseReturnPresentation({
+    status,
+    requestFailed,
+    recoveryExhausted,
+    customerAuthEnabled,
+  });
   return (
-    <section className="purchase-return-card" aria-live="polite">
-      <p>月の返事 / ご購入後の確認</p>
-      <h1>{current.heading}</h1>
-      <span>{current.body}</span>
-      {requestFailed ? (
-        <button type="button" onClick={() => window.location.reload()}>
+    <section
+      className="purchase-return-card"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <p>{presentation.eyebrow}</p>
+      <h1>{presentation.heading}</h1>
+      <span>{presentation.body}</span>
+      {presentation.assurance ? (
+        <strong className="purchase-return-assurance">
+          {presentation.assurance}
+        </strong>
+      ) : null}
+      {presentation.showManualRefresh ? (
+        <button
+          type="button"
+          className="button button--secondary"
+          onClick={() => void pollerRef.current?.manualRefresh()}
+        >
           同じお申し込みを確認する
         </button>
       ) : null}
-      {status.status === "payment_not_completed" ? (
+      {presentation.showAccountFallback ? (
+        <Link href="/account" className="button button--secondary">
+          私の鑑定ノートを確認する
+        </Link>
+      ) : null}
+      {presentation.showCheckoutRestart ? (
         <>
           {checkoutRestartFailed ? (
             <p role="alert">

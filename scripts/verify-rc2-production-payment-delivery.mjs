@@ -16,7 +16,11 @@ import {
 import { StripeWebhookEvidenceVerifierV1 } from "../lib/payment/production/stripe.ts";
 import { hashOpaqueProductionCapability } from "../lib/assessment/production/capabilities.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
-import { hashPaymentCapability } from "../lib/payment/production/crypto.ts";
+import {
+  encryptDeliveryEmail,
+  hashPaymentCapability,
+} from "../lib/payment/production/crypto.ts";
+import { decodeCustomerPurchaseStatusResponse } from "../lib/payment/purchase-status-contract.ts";
 
 registerHooks({
   resolve(specifier, context, nextResolve) {
@@ -767,7 +771,11 @@ await check("redirect and status capability alone never verify Payment", async (
   const status = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
   );
-  assert.deepEqual(status, { status: "confirming_payment" });
+  assert.deepEqual(status, {
+    status: "confirming_payment",
+    paymentVerified: false,
+    accountFallback: false,
+  });
   assert.equal(run.repository.verifiedPayments.size, 0);
   assert.equal(run.grantProcessor.issueCalls.length, 0);
 });
@@ -806,6 +814,36 @@ await check("conflicting second success cannot create a second verified Payment"
   assert.equal(conflict.disposition, "conflict");
   assert.equal(run.repository.verifiedPayments.size, 1);
   assert.equal([...run.repository.intents.values()][0].state, "manual_review");
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+      ready.completed.trustedSessionToken,
+    ),
+    {
+      status: "confirmation_pending",
+      paymentVerified: true,
+      accountFallback: false,
+    },
+  );
+});
+
+await check("pre-verification manual review never claims Payment is verified", async () => {
+  const run = harness();
+  const ready = await checkoutReady(run);
+  const intent = [...run.repository.intents.values()][0];
+  intent.state = "manual_review";
+  assert.equal(intent.successfulPaymentId, null);
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+      ready.completed.trustedSessionToken,
+    ),
+    {
+      status: "confirmation_pending",
+      paymentVerified: false,
+      accountFallback: false,
+    },
+  );
 });
 
 await check("webhook verification creates a durable job but invokes no Luna/provider", async () => {
@@ -843,6 +881,45 @@ await check("status observes and dispatches without running Provider", async () 
   assert.equal(run.grantProcessor.grants.size, 1);
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 1);
+});
+
+await check("authenticated completion emits the canonical Account result contract", async () => {
+  const run = harness();
+  const customerUserId = "70000000-0000-4000-8000-000000000001";
+  run.repository.seedAuthenticatedBinding({
+    preparationId: "90000000-0000-4000-8000-000000000001",
+    bindingId: "71000000-0000-4000-8000-000000000001",
+    customerUserId,
+    emailCiphertext: encryptDeliveryEmail(
+      "authenticated@example.com",
+      emailEncryptionKey,
+    ),
+  });
+  const checkout = await run.application.startAuthenticatedCheckout({
+    preparationCapability: run.preparationCapability,
+    customerUserId,
+  });
+  await run.application.verifyStripeEvidence(evidenceFor(run, checkout));
+  const job = [...run.repository.jobs.values()][0];
+  await run.application.processFulfillmentJobById(job.id);
+  const intent = [...run.repository.intents.values()][0];
+  const deliveryId = "72000000-0000-4000-8000-000000000001";
+  run.repository.authenticatedResultDeliveries.set(intent.id, deliveryId);
+  const completedStatus =
+    await run.application.processAuthenticatedPurchaseStatus(
+      checkout.statusCapability,
+      customerUserId,
+    );
+  assert.deepEqual(completedStatus, {
+    status: "completed",
+    paymentVerified: true,
+    accountFallback: true,
+    resultPath: `/account/results/${deliveryId}`,
+  });
+  assert.deepEqual(
+    decodeCustomerPurchaseStatusResponse({ data: completedStatus }),
+    completedStatus,
+  );
 });
 
 await check("browser reload recovers the same Assessment without recharging", async () => {
@@ -981,7 +1058,11 @@ await check("status capability without trusted session never discloses a result 
   const outcome = await run.application.processPurchaseStatus(
     ready.checkout.statusCapability,
   );
-  assert.deepEqual(outcome, { status: "completed_check_verified_email" });
+  assert.deepEqual(outcome, {
+    status: "completed_check_verified_email",
+    paymentVerified: true,
+    accountFallback: false,
+  });
   assert.doesNotMatch(JSON.stringify(outcome), /\/result\/|resultToken/iu);
   assert.equal(run.grantProcessor.generated.size, 1);
   assert.equal(run.grantProcessor.notificationCalls.length, 1);
@@ -1051,7 +1132,11 @@ for (const sessionState of ["wrong", "expired", "revoked"]) {
       ready.checkout.statusCapability,
       trustedSessionToken,
     );
-    assert.deepEqual(outcome, { status: "completed_check_verified_email" });
+    assert.deepEqual(outcome, {
+      status: "completed_check_verified_email",
+      paymentVerified: true,
+      accountFallback: false,
+    });
     assert.doesNotMatch(JSON.stringify(outcome), /\/result\/|resultToken/iu);
   });
 }

@@ -1,5 +1,23 @@
 # WBS.md
 
+<!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
+## M2-A1 remote closure / M2-B1 Return-Account Convergence
+
+Status: M2-A1 `Production DB closed`; M2-B1 `technical implementation complete pending Human/ChatGPT review`.
+
+- [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
+- [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
+- [x] Verify immutable 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`, exact three target v2 bodies, unchanged v1/signature/ACL/security/search-path, and non-target drift `0`.
+- [x] Close the confirmed NULL lease/owner completion exploits on Production DB.
+- [x] Confirm Published runtime `0befd512219eb2897fb1edf969ad37d7e8c56b0d` remains DB0017-compatible; M2-A1 requires no Production Publish.
+- [x] M2-B1: unify typed server/client purchase-status truth, including canonical legacy and authenticated result paths.
+- [x] M2-B1: implement bounded polling recovery with backoff, jitter, no overlap, cleanup, terminal-state stops, and one navigation.
+- [x] M2-B1: expose durable `paymentVerified` truth and safe authenticated `/account` fallback without automatic Checkout creation.
+- [x] M2-B1: complete adversarial contract/recovery tests and all current regressions, then commit/push only the task branch.
+
+The existing UNPUBLISHED deploy `6a8af2575d156800089493ec` is not a publish candidate for this task. `REL-03` webhook ingress is excluded and remains M2-B2. Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
+<!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
+
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
 ## M1 closure / M2-0 Authority-Critical DB Baseline
 

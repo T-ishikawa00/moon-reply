@@ -10,6 +10,7 @@ import {
 } from "../../assessment/runtime/errors.ts";
 import { hashOpaqueProductionCapability } from "../../assessment/production/capabilities.ts";
 import { RC2_PRODUCT } from "./constants.ts";
+import { parseCustomerResultPath } from "../purchase-status-contract.ts";
 import {
   createPaymentCapability,
   createVerificationCode,
@@ -57,6 +58,17 @@ type FulfillmentClaimOutcome =
 
 const internalUuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
+
+function confirmationPendingStatus(
+  purchaseIntent: PurchaseIntentRecord,
+  accountFallback: boolean,
+): CustomerPurchaseStatus {
+  return {
+    status: "confirmation_pending",
+    paymentVerified: purchaseIntent.successfulPaymentId !== null,
+    accountFallback,
+  };
+}
 
 type PaymentDeliveryApplicationOptions = {
   repository: PaymentDeliveryRepository;
@@ -1008,7 +1020,11 @@ export class ProductionPaymentDeliveryApplication {
     trustedSessionToken: unknown,
   ): Promise<CustomerPurchaseStatus> {
     if (trustedSessionToken === undefined || trustedSessionToken === null) {
-      return { status: "completed_check_verified_email" };
+      return {
+        status: "completed_check_verified_email",
+        paymentVerified: true,
+        accountFallback: false,
+      };
     }
     let sessionTokenHash: string;
     try {
@@ -1021,7 +1037,11 @@ export class ProductionPaymentDeliveryApplication {
         error instanceof M2RuntimeError &&
         error.safeCode === "PAYMENT_CAPABILITY_INVALID"
       ) {
-        return { status: "completed_check_verified_email" };
+        return {
+          status: "completed_check_verified_email",
+          paymentVerified: true,
+          accountFallback: false,
+        };
       }
       throw error;
     }
@@ -1034,11 +1054,26 @@ export class ProductionPaymentDeliveryApplication {
       trusted.authority.id !== purchaseIntent.verifiedEmailAuthorityId ||
       trusted.session.id !== purchaseIntent.trustedEmailSessionId
     ) {
-      return { status: "completed_check_verified_email" };
+      return {
+        status: "completed_check_verified_email",
+        paymentVerified: true,
+        accountFallback: false,
+      };
+    }
+    const resultPath = parseCustomerResultPath(`/result/${resultToken}`);
+    if (!resultPath) {
+      return {
+        status: "temporary_problem",
+        paymentVerified: true,
+        accountFallback: false,
+        retryable: true,
+      };
     }
     return {
       status: "completed",
-      resultPath: `/result/${resultToken}`,
+      paymentVerified: true,
+      accountFallback: false,
+      resultPath,
     };
   }
 
@@ -1056,32 +1091,48 @@ export class ProductionPaymentDeliveryApplication {
       throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     }
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, false);
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
         status.purchaseIntent.state === "payment_failed" ||
         status.purchaseIntent.state === "canceled"
       ) {
-        return { status: "payment_not_completed" };
+        return {
+          status: "payment_not_completed",
+          paymentVerified: false,
+          accountFallback: false,
+        };
       }
-      return { status: "confirming_payment" };
+      return {
+        status: "confirming_payment",
+        paymentVerified: false,
+        accountFallback: false,
+      };
+    }
+    if (status.purchaseIntent.successfulPaymentId === null) {
+      return confirmationPendingStatus(status.purchaseIntent, false);
     }
     const job = status.fulfillmentJob;
     if (!job) {
-      return { status: "temporary_problem", retryable: true };
+      return {
+        status: "temporary_problem",
+        paymentVerified: true,
+        accountFallback: false,
+        retryable: true,
+      };
     }
     if (job.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, false);
     }
     if (
       job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
     ) {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, false);
     }
     if (job.state === "completed") {
       if (!job.grantId || !job.logicalAssessmentId) {
-        return { status: "confirmation_pending" };
+        return confirmationPendingStatus(status.purchaseIntent, false);
       }
       try {
         const fulfilled =
@@ -1096,15 +1147,29 @@ export class ProductionPaymentDeliveryApplication {
           trustedSessionToken,
         );
       } catch {
-        return { status: "temporary_problem", retryable: true };
+        return {
+          status: "temporary_problem",
+          paymentVerified: true,
+          accountFallback: false,
+          retryable: true,
+        };
       }
     }
     try {
       await this.requestFulfillmentDispatch(job.id);
     } catch {
-      return { status: "temporary_problem", retryable: true };
+      return {
+        status: "temporary_problem",
+        paymentVerified: true,
+        accountFallback: false,
+        retryable: true,
+      };
     }
-    return { status: "preparing_assessment" };
+    return {
+      status: "preparing_assessment",
+      paymentVerified: true,
+      accountFallback: false,
+    };
   }
 
   async processAuthenticatedPurchaseStatus(
@@ -1124,45 +1189,92 @@ export class ProductionPaymentDeliveryApplication {
     });
     if (!status) throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, true);
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
         status.purchaseIntent.state === "payment_failed" ||
         status.purchaseIntent.state === "canceled"
       ) {
-        return { status: "payment_not_completed" };
+        return {
+          status: "payment_not_completed",
+          paymentVerified: false,
+          accountFallback: true,
+        };
       }
-      return { status: "confirming_payment" };
+      return {
+        status: "confirming_payment",
+        paymentVerified: false,
+        accountFallback: true,
+      };
+    }
+    if (status.purchaseIntent.successfulPaymentId === null) {
+      return confirmationPendingStatus(status.purchaseIntent, true);
     }
     const job = status.fulfillmentJob;
-    if (!job) return { status: "temporary_problem", retryable: true };
+    if (!job) {
+      return {
+        status: "temporary_problem",
+        paymentVerified: true,
+        accountFallback: true,
+        retryable: true,
+      };
+    }
     if (job.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, true);
     }
     if (
       job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
     ) {
-      return { status: "confirmation_pending" };
+      return confirmationPendingStatus(status.purchaseIntent, true);
     }
     if (job.state === "completed") {
       const deliveryId =
         await this.options.repository.resolveAuthenticatedResultDeliveryId({
-        customerUserId,
-        purchaseIntentId: status.purchaseIntent.id,
-      });
-      if (!deliveryId) return { status: "temporary_problem", retryable: true };
+          customerUserId,
+          purchaseIntentId: status.purchaseIntent.id,
+        });
+      if (!deliveryId) {
+        return {
+          status: "temporary_problem",
+          paymentVerified: true,
+          accountFallback: true,
+          retryable: true,
+        };
+      }
+      const resultPath = parseCustomerResultPath(
+        `/account/results/${deliveryId}`,
+      );
+      if (!resultPath) {
+        return {
+          status: "temporary_problem",
+          paymentVerified: true,
+          accountFallback: true,
+          retryable: true,
+        };
+      }
       return {
         status: "completed",
-        resultPath: `/account/results/${deliveryId}`,
+        paymentVerified: true,
+        accountFallback: true,
+        resultPath,
       };
     }
     try {
       await this.requestFulfillmentDispatch(job.id);
     } catch {
-      return { status: "temporary_problem", retryable: true };
+      return {
+        status: "temporary_problem",
+        paymentVerified: true,
+        accountFallback: true,
+        retryable: true,
+      };
     }
-    return { status: "preparing_assessment" };
+    return {
+      status: "preparing_assessment",
+      paymentVerified: true,
+      accountFallback: true,
+    };
   }
 
   async processFulfillmentJobById(

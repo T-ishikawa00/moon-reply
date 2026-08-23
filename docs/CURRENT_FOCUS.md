@@ -1,5 +1,21 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
+## Current operational overlay — M2-A1 remote closure / M2-B1 implementation
+
+- Current source authority: `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
+- M2-A1 status: `Human/ChatGPT reviewed PASS / Production DB closed`; remote migration history is exact `0002..0017` with pending `0` and unknown `0`.
+- Exact applied artifact: `supabase/migrations/0017_m2_a1_null_fence_integrity.sql`; immutable Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`.
+- Remote closure: the confirmed NULL owner/lease claim and completion exploits are closed by the exact three hardened v2 bodies; v1, signatures, ACL, `SECURITY INVOKER`, search path, tables, constraints, policies, and non-target RPCs remained unchanged.
+- Production publish disposition: no M2-A1 runtime publish was required. Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; its v2 call signatures and current read-only runtime checks are compatible with DB `0017`.
+- Existing deploy `6a8af2575d156800089493ec` remains UNPUBLISHED and must not be published from M2-B1.
+- Current bounded task: **M2-B1 — Return / Account Convergence**, limited to `REL-01` and `REL-02`. Technical implementation and local regression are complete pending Human/ChatGPT review; `REL-03` webhook ingress is deferred to separate M2-B2.
+- Implemented closure: one strict server/client status contract now accepts only canonical legacy-token and authenticated-UUID result paths; transient and retryable Return states use bounded backoff/jitter with no overlap, terminal states stop, completed navigation is once-only, and authenticated Account recovery remains available without automatic Checkout creation.
+- Durable payment truth: `paymentVerified` comes from persisted successful-Payment authority, including the non-inferred `confirmation_pending` case. Customer copy cannot claim confirmed payment without it.
+- Canonical implementation evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
+- M2-B1 ceiling: no release integration, deploy/publish, remote Supabase write/migration, Stripe/webhook/Async/Provider/Purchase operation, Netlify config change, UX-candidate merge/cherry-pick, or `main` change.
+<!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
+
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
 ## Current operational overlay — M1 closure / M2-0 DB baseline
 

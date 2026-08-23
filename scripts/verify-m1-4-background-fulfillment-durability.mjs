@@ -68,6 +68,10 @@ const workloadPath =
 const workload = read(workloadPath);
 const statusRoute = read("app/api/payments/status/route.ts");
 const statusUi = read("components/payment/PurchaseReturnStatus.tsx");
+const statusPresentation = read(
+  "lib/payment/purchase-return-presentation.ts",
+);
+const statusContract = read("lib/payment/purchase-status-contract.ts");
 
 let passed = 0;
 function check(name, callback) {
@@ -301,8 +305,9 @@ check("status is observation plus bounded dispatch, never the AI executor", () =
   assert.doesNotMatch(statusMethod, /processClaimedFulfillmentJob/u);
   assert.doesNotMatch(statusMethod, /\.fulfillProductionAssessmentGrant/u);
   assert.doesNotMatch(statusRoute, /processProductionFulfillmentJobById/u);
-  assert.match(statusUi, /この画面を閉じても大丈夫です/u);
-  assert.match(statusUi, /confirmation_pending/u);
+  assert.match(statusPresentation, /この画面を閉じても大丈夫です/u);
+  assert.match(statusContract, /confirmation_pending/u);
+  assert.match(statusUi, /PurchaseStatusPoller/u);
 });
 
 check("same-site Async Workloads payload is a job-only claim check", () => {
@@ -346,11 +351,19 @@ check("notification delivery remains independently leased and retryable", () => 
 await checkRuntime("Scenario A: accepted Event A survives unlimited status observation", async () => {
   const run = runtimeHarness();
   const first = await run.application.processPurchaseStatus(run.statusCapability);
-  assert.deepEqual(first, { status: "preparing_assessment" });
+  assert.deepEqual(first, {
+    status: "preparing_assessment",
+    paymentVerified: true,
+    accountFallback: false,
+  });
   for (let index = 0; index < 8; index += 1) {
     assert.deepEqual(
       await run.application.processPurchaseStatus(run.statusCapability),
-      { status: "preparing_assessment" },
+      {
+        status: "preparing_assessment",
+        paymentVerified: true,
+        accountFallback: false,
+      },
     );
   }
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
@@ -373,7 +386,11 @@ await checkRuntime("Scenario B: Event A alone owns temporary-failure retry", asy
   assert.equal(run.repository.dispatches.get(run.jobId).completedAt !== null, true);
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "preparing_assessment" },
+    {
+      status: "preparing_assessment",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
   await processProductionFulfillmentWorkloadEvent(
@@ -418,7 +435,11 @@ await checkRuntime("Scenario C2: active worker makes status observation-only", a
   assert.equal(claimed.disposition, "acquired");
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "preparing_assessment" },
+    {
+      status: "preparing_assessment",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 0);
   assert.equal(run.grantProcessor.providerInvocationCalls, 0);
@@ -443,7 +464,11 @@ await checkRuntime("Scenario C3: direct worker failure cannot create Event B", a
   });
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "preparing_assessment" },
+    {
+      status: "preparing_assessment",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 0);
   assert.equal(run.repository.jobs.get(run.jobId).state, "manual_review");
@@ -474,7 +499,11 @@ await checkRuntime("Scenario D: retry exhaustion becomes confirmation pending", 
   );
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    {
+      status: "confirmation_pending",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 0);
@@ -510,7 +539,11 @@ await checkRuntime("Scenario D2: retry exhaustion preserves an active fence", as
   );
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    {
+      status: "confirmation_pending",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   await run.repository.failFulfillmentJob({
     jobId: run.jobId,
@@ -538,7 +571,11 @@ await checkRuntime("Scenario E: completed Event A is never dispatched again", as
   for (let index = 0; index < 4; index += 1) {
     assert.deepEqual(
       await run.application.processPurchaseStatus(run.statusCapability),
-      { status: "completed_check_verified_email" },
+      {
+        status: "completed_check_verified_email",
+        paymentVerified: true,
+        accountFallback: false,
+      },
     );
   }
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
@@ -550,7 +587,12 @@ await checkRuntime("accepted-router persistence ambiguity cannot create Event B"
   run.repository.dispatchCompletionFailuresRemaining = 1;
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "temporary_problem", retryable: true },
+    {
+      status: "temporary_problem",
+      paymentVerified: true,
+      accountFallback: false,
+      retryable: true,
+    },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
   assert.equal(run.fulfillmentDispatcher.attempts.length, 1);
@@ -558,7 +600,11 @@ await checkRuntime("accepted-router persistence ambiguity cannot create Event B"
   await run.application.processPurchaseStatus(run.statusCapability);
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    {
+      status: "confirmation_pending",
+      paymentVerified: true,
+      accountFallback: false,
+    },
   );
   const job = run.repository.jobs.get(run.jobId);
   assert.equal(job.state, "manual_review");
