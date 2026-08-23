@@ -5,7 +5,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const base = "90c4a585a951c1de073f041b0a656e21742133da";
-const authority = "0befd512219eb2897fb1edf969ad37d7e8c56b0d";
+const authority = "90c4a585a951c1de073f041b0a656e21742133da";
 const expectedBranch = "task/m2-a1-null-fence-integrity-r1";
 const migrationPath =
   "supabase/migrations/0017_m2_a1_null_fence_integrity.sql";

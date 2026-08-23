@@ -6,7 +6,7 @@ Accepted base: `codex/m2-0-authority-critical-db-baseline@90c4a585a951c1de073f04
 
 Task branch: `task/m2-a1-null-fence-integrity-r1`
 
-Production authority: `release/private-ready@0befd512219eb2897fb1edf969ad37d7e8c56b0d`
+Production authority: `release/private-ready@90c4a585a951c1de073f041b0a656e21742133da`
 
 Remote apply authority: `false`
 
