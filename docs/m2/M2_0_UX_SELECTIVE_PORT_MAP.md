@@ -32,4 +32,3 @@ No merge, cherry-pick, selective port, code edit, Netlify change, or release int
 ## Non-negotiable runtime protection
 
 `netlify.toml`, `netlify/functions/production-fulfillment-background.mts`, `scripts/verify-m1-4-background-runtime-assets.mjs`, the `toml` dependency, and the authority async packager configuration must not be deleted, replaced from the candidate, or weakened. A future UI success with any runtime-assets regression is a failed port.
-

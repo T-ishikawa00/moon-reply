@@ -129,4 +129,3 @@ Legacy v1 and current v2 coexist and are callable by service_role. Current repos
 - Remote relevant CHECK/FK/UNIQUE/trigger/RLS state: matches current source intent.
 - Mismatch count: `0`.
 - Remote repair/apply count: `0`.
-

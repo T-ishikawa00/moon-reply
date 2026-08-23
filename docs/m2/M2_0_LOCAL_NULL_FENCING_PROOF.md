@@ -86,4 +86,3 @@ Confirmed successor-migration targets:
 3. DB-03: explicit NULL lease rejection in notification claim.
 
 Rejected as separate blockers: job/dispatch NULL lease, customer user NULL, model NULL, mismatched non-NULL owner, expired lease, and the other fenced completion/failure/mark paths. No migration was created or applied in M2-0.
-

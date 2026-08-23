@@ -56,4 +56,3 @@ The official Next.js blog announced on 2026-08-20 that a scheduled 2026-08-26 se
 - Roll back the application commit and lockfile to the exact prior accepted authority; do not force-push and do not roll back database migrations.
 - Restore the prior deploy artifact/config only after explicit Human deploy authority.
 - If the security advisory makes rollback to 16.3.0 unsafe, stop new checkout/paid operations and forward-fix. Do not silently restore a known-vulnerable Production version.
-
