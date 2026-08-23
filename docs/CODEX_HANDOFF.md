@@ -1,18 +1,20 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current handoff — M2-A1 closed / M2-B1 implementation complete
+## Current handoff — M2-B1 accepted / M2-B2 architecture complete
 
-- Authority: `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
+- Authority: `release/private-ready@8fcb7861c45b2ff29a45d5bf1ac1207b957dc893`; exact B1 fast-forward integration and normal push are complete.
 - M2-A1 is Human/ChatGPT reviewed PASS and closed through Production DB. Remote migrations are exact `0002..0017`; pending and unknown are both `0`.
 - Applied migration is exact `0017_m2_a1_null_fence_integrity.sql`, Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. The confirmed NULL owner/lease exploit paths are remotely closed with v1/signature/ACL/security/search-path and all non-target identities unchanged.
 - Published runtime remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d` and is confirmed compatible with DB0017. No M2-A1 Production Publish was needed.
-- Deploy `6a8af2575d156800089493ec` remains UNPUBLISHED. Do not publish it.
-- M2-B1 Return / Account Convergence for `REL-01` and `REL-02` is technically implemented and locally verified, pending Human/ChatGPT review. Live evidence was completed Payment/Fulfillment/Account/result/email with Return stuck on `temporary_problem`.
+- Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` remain UNPUBLISHED. The latter is the exact successful B1 build (`38/38`, 11 Functions, 1 Edge Function); Auto Publishing remains locked. Do not publish either.
+- M2-B1 Return / Account Convergence for `REL-01` and `REL-02` is Human/ChatGPT independently reviewed PASS and integrated.
 - Closed source defects: the strict shared decoder accepts canonical `/result/<43-char-token>` and `/account/results/<UUID>` only; transient failures retry with bounded capped backoff and jitter rather than permanently stopping.
 - Recovery contract: no overlap, unmount cleanup, global/retry budgets, terminal-state stop, exactly-once completed navigation, durable-only `paymentVerified`, explicit-only Checkout restart, and safe `/account` fallback. Evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
-- M2-B1 must preserve Checkout idempotency, bounded status dispatch, DB0017, Async retry authority, legacy email/bearer security, Customer Auth ownership, webhook/Stripe semantics, `netlify.toml`, runtime assets, and background artifacts.
-- `REL-03` webhook ingress is M2-B2. No release integration, deploy/publish, remote write/migration, Stripe/webhook/Async/Provider/Purchase operation, Netlify config change, candidate merge/cherry-pick, or `main` change is authorized.
+- HTTP `401/404/429/5xx` taxonomy is a non-blocking `ERR-01 / E2 Auth Recovery` follow-up and does not reopen B1 absent an integration regression.
+- M2-B2 official/live conclusion: Private Project Visibility covers pages and Functions and has no webhook-only path exception. Making the customer site Public is rejected because `/review/**` has no app-level auth.
+- Recommended B2 boundary: separate minimal Public Netlify ingress with one exact POST function; raw Stripe verification and current DB idempotency; no customer/Review/Checkout/Provider/email/worker surface. A Private-project Scheduled Function performs bounded durable dispatch/reconciliation recovery and preserves same-site Async routing.
+- Design and action-time boundaries: `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`. No publish, Netlify/Stripe configuration write, webhook resend, real Stripe API call, Purchase, Async event, Provider call, remote write/migration, or `main` change is authorized.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

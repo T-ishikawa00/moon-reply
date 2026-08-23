@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-A1 remote closure / M2-B1 Return-Account Convergence
+## M2-B1 accepted / M2-B2 Private Webhook Convergence
 
-Status: M2-A1 `Production DB closed`; M2-B1 `technical implementation complete pending Human/ChatGPT review`.
+Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority integrated`; M2-B2 `architecture complete pending review`.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -14,8 +14,13 @@ Status: M2-A1 `Production DB closed`; M2-B1 `technical implementation complete p
 - [x] M2-B1: implement bounded polling recovery with backoff, jitter, no overlap, cleanup, terminal-state stops, and one navigation.
 - [x] M2-B1: expose durable `paymentVerified` truth and safe authenticated `/account` fallback without automatic Checkout creation.
 - [x] M2-B1: complete adversarial contract/recovery tests and all current regressions, then commit/push only the task branch.
+- [x] Fast-forward B1 into `release/private-ready@8fcb7861c45b2ff29a45d5bf1ac1207b957dc893` and normally push; keep `main` unchanged.
+- [x] Verify exact B1 build `6a8b1ddfb6afaf000854e4af` is successful, `38/38`, UNPUBLISHED, and Auto Publishing locked; Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
+- [x] M2-B2: inventory site/Functions/Edge/path/redirect/proxy protection and prove current Private visibility returns `401` before webhook routing.
+- [x] M2-B2: compare path exclusion, public-current-site, separate ingress, isolated service, relay, and EventBridge options with Stripe/raw-body/idempotency/Async/reconciliation threats.
+- [x] M2-B2: recommend a separate minimal Public Netlify ingress plus Private scheduled durable-dispatch/reconciliation recovery; document exact future files, rollback, Sandbox rehearsal, and action-time gates.
 
-The existing UNPUBLISHED deploy `6a8af2575d156800089493ec` is not a publish candidate for this task. `REL-03` webhook ingress is excluded and remains M2-B2. Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
+Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` are not publish candidates for this task. B2 produced design artifacts only; no Netlify/Stripe/DB/runtime configuration changed. Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md` and `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

@@ -1,19 +1,21 @@
 # CURRENT_FOCUS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current operational overlay — M2-A1 remote closure / M2-B1 implementation
+## Current operational overlay — M2-B1 accepted / M2-B2 architecture
 
-- Current source authority: `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
+- Current source authority: `release/private-ready@8fcb7861c45b2ff29a45d5bf1ac1207b957dc893`; B1 was integrated by exact fast-forward and normally pushed.
 - M2-A1 status: `Human/ChatGPT reviewed PASS / Production DB closed`; remote migration history is exact `0002..0017` with pending `0` and unknown `0`.
 - Exact applied artifact: `supabase/migrations/0017_m2_a1_null_fence_integrity.sql`; immutable Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`.
 - Remote closure: the confirmed NULL owner/lease claim and completion exploits are closed by the exact three hardened v2 bodies; v1, signatures, ACL, `SECURITY INVOKER`, search path, tables, constraints, policies, and non-target RPCs remained unchanged.
 - Production publish disposition: no M2-A1 runtime publish was required. Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; its v2 call signatures and current read-only runtime checks are compatible with DB `0017`.
-- Existing deploy `6a8af2575d156800089493ec` remains UNPUBLISHED and must not be published from M2-B1.
-- Current bounded task: **M2-B1 — Return / Account Convergence**, limited to `REL-01` and `REL-02`. Technical implementation and local regression are complete pending Human/ChatGPT review; `REL-03` webhook ingress is deferred to separate M2-B2.
-- Implemented closure: one strict server/client status contract now accepts only canonical legacy-token and authenticated-UUID result paths; transient and retryable Return states use bounded backoff/jitter with no overlap, terminal states stop, completed navigation is once-only, and authenticated Account recovery remains available without automatic Checkout creation.
+- B1 status: `Human/ChatGPT independent review PASS / authority integrated`; `REL-01` and `REL-02` are closed in source authority. One strict server/client status contract accepts only canonical legacy-token and authenticated-UUID result paths; transient and retryable Return states use bounded backoff/jitter with no overlap, terminal states stop, completed navigation is once-only, and authenticated Account recovery remains available without automatic Checkout creation.
+- Non-blocking follow-up: HTTP `401/404/429/5xx` taxonomy remains `ERR-01 / E2 Auth Recovery`; it does not reopen B1 absent an integration regression.
+- B1 build `6a8b1ddfb6afaf000854e4af` is exact-source, successful, `38/38` pages with 11 Functions and 1 Edge Function, and remains UNPUBLISHED under Auto Publishing Lock. Existing deploy `6a8af2575d156800089493ec` also remains UNPUBLISHED. Published source is unchanged.
 - Durable payment truth: `paymentVerified` comes from persisted successful-Payment authority, including the non-inferred `confirmation_pending` case. Customer copy cannot claim confirmed payment without it.
-- Canonical implementation evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
-- M2-B1 ceiling: no release integration, deploy/publish, remote Supabase write/migration, Stripe/webhook/Async/Provider/Purchase operation, Netlify config change, UX-candidate merge/cherry-pick, or `main` change.
+- Current bounded task: **M2-B2 — Private Site / Stripe Webhook Convergence**, limited to platform feasibility, architecture, security, rollback, and synthetic rehearsal design. Current Private visibility blocks Stripe and has no path exception; making the customer site Public is rejected because `/review/**` has no app-level auth.
+- B2 recommendation: a separate minimal Public Netlify ingress project plus a non-addressable Private-project Scheduled Function for durable pre-router recovery. The ingress exposes one exact POST path and owns no customer/Review/Checkout/Provider/email/worker surface.
+- Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md` and `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`.
+- B2 ceiling: no Production Publish, Netlify/Stripe configuration write, webhook resend, real Stripe API call, Purchase, Async event, Provider call, remote Supabase write/migration, or `main` change.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
