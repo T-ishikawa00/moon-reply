@@ -12,12 +12,15 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { inflateRawSync } from "node:zlib";
 import { build } from "esbuild";
+import { loadProductionFulfillmentBackgroundPackagerConfig } from "./verify-m1-4-background-runtime-assets.mjs";
 
 const root = process.cwd();
 const generatedRoot = path.join(root, ".netlify", "functions-internal");
 const outputRoot = path.join(root, ".netlify", "artifact-smoke");
 const routerSource = path.join(generatedRoot, "async-workloads-router.mjs");
 const eventName = "production.fulfillment.job.v1";
+const backgroundPackagerConfig =
+  loadProductionFulfillmentBackgroundPackagerConfig(root);
 
 function failIfPresent(absolutePath) {
   assert.equal(
@@ -219,7 +222,7 @@ try {
     path.join(root, "netlify", "functions"),
     path.join(outputRoot, "subscriber"),
     "production-fulfillment-background",
-    {},
+    backgroundPackagerConfig,
   );
   const routerRoot = path.join(outputRoot, "router");
   mkdirSync(routerRoot, { recursive: true });

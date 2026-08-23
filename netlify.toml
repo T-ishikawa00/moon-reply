@@ -1,0 +1,6 @@
+[functions."production-fulfillment-background"]
+  included_files = [
+    "ai/prompts/**",
+    "ai/schemas/**",
+    "lib/assessment/runtime/contracts/**",
+  ]

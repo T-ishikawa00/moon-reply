@@ -12,6 +12,7 @@
     "verify:m1-4:background-fulfillment": "node scripts/verify-m1-4-background-fulfillment-durability.mjs",
     "verify:m1-4:async-router-worker-graph": "node scripts/verify-m1-4-async-router-worker-graph.mjs",
     "verify:m1-4:async-router-artifacts": "node scripts/verify-m1-4-async-router-artifacts.mjs",
+    "verify:m1-4:background-runtime-assets": "node scripts/verify-m1-4-background-runtime-assets.mjs",
     "verify:m1-4:background-expand-ea4-runtime": "node scripts/verify-m1-4-background-fulfillment-expand-ea4-runtime.mjs",
     "verify:m1-4:clarification-contract": "node scripts/verify-m1-4-clarification-contract.mjs",
     "verify:m1-4:clarification-product-intent": "node scripts/verify-m1-4-clarification-product-intent.mjs",
@@ -48,6 +49,7 @@
     "eslint-config-next": "^16.3.0",
     "esbuild": "0.28.1",
     "tailwindcss": "^4.3.2",
+    "toml": "3.0.0",
     "typescript": "^6.0.3"
   }
 }
