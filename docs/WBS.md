@@ -1,5 +1,24 @@
 # WBS.md
 
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
+## M1 closure / M2-0 Authority-Critical DB Baseline
+
+Status: `technical_execution_complete_pending_human_chatgpt_acceptance`; M1 remains closed.
+
+- [x] Record exact Production authority `0befd512219eb2897fb1edf969ad37d7e8c56b0d` and Human M1 True E2E facts: Stripe Sandbox, `checkout.session.completed 200 / verified`, Async Workloads, Background Fulfillment, AI result generation, Account result, completed email, Human result read.
+- [x] Read remote catalog without writes; confirm migrations `0002..0016`, constraints, triggers, RLS, RPC signatures/returns/owner/ACL, v1/v2 coexistence, and source mismatch `0`.
+- [x] Run disposable local NULL/owner/lease/model/customer/fence/concurrency proof; confirm only logical claim NULL lease, logical completion NULL owner/lease, and notification claim NULL lease as successor-migration targets.
+- [x] Remove constraint-closed NULL job/dispatch lease, NULL customer user, NULL model, mismatched non-NULL owner, and expired lease hypotheses as separate blockers while retaining regression tests.
+- [x] Save the canonical M2 Master Backlog and safe A→G execution queue with remote/migration/deploy/Human/rollback/acceptance fields.
+- [x] Save the Next 16.3.0 post-2026-08-26 exact-patch checklist without changing dependencies.
+- [x] Save the UX candidate A–F manual selective-port map; reject candidate runtime-asset deletions; perform no port.
+- [ ] Under separate authorization, execute **M2-A1 — NULL Lease / Completion Fence Integrity Hardening**. M2-0 creates no migration and performs no remote apply.
+
+Current M1 facts: Remote DB `0002..0016`; Stripe Sandbox payment; `checkout.session.completed` `200 / verified`; Async Workloads; Background Fulfillment; AI result generation; Account result; completed email; Human result read. Self Dogfood remains Human-only/Sandbox/Private; External Private Beta remains separately unauthorized and requires current legal/support.
+
+Evidence: `docs/m2/M2_0_AUTHORITY_CRITICAL_DB_BASELINE.md`. Backlog: `docs/m2/M2_MASTER_BACKLOG.md`.
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:END -->
+
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
 ## Measurement Foundation V1 — Accepted
 

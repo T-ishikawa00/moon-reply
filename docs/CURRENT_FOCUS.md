@@ -1,5 +1,18 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
+## Current operational overlay — M1 closure / M2-0 DB baseline
+
+- M1 True E2E: `Human operational SUCCESS / closed`; M1 remains closed and is not reopened by M2-0.
+- Exact current authority and Production source: `release/private-ready@0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
+- Current M1 facts: Remote DB `0002..0016`; Stripe Sandbox payment; `checkout.session.completed` `200 / verified`; Async Workloads; Background Fulfillment; AI result generation; Account result; completed email; Human result read.
+- M2-0 status: remote catalog read-only inventory, disposable local NULL/fencing proof, canonical backlog, Next security plan, and UX selective-port plan `technical_execution_complete_pending_human_chatgpt_acceptance`.
+- Confirmed DB blockers: logical claim NULL lease; logical completion NULL caller owner; logical completion stored NULL lease; notification claim NULL lease. Constraint-closed hypotheses are removed as independent blockers.
+- Current exact next recommendation: separate **M2-A1 — NULL Lease / Completion Fence Integrity Hardening**. No migration, remote apply, deploy, external call, UX integration, release integration, or main change is authorized by this record.
+- Canonical evidence: `docs/m2/M2_0_AUTHORITY_CRITICAL_DB_BASELINE.md`; backlog: `docs/m2/M2_MASTER_BACKLOG.md`.
+- Self Dogfood is Human-only + Stripe Sandbox + Private site. External Private Beta is third-party + possible real payment + current legal/support and separate Human authority.
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:END -->
+
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
 ## Current acceptance overlay — Measurement Foundation V1
 

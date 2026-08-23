@@ -1,5 +1,20 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
+## Current handoff — M1 closure / M2-0 DB baseline
+
+- M1 True E2E is Human-confirmed SUCCESS; M1 remains closed.
+- Authority and Production: `release/private-ready@0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
+- Current M1 facts: Remote DB `0002..0016`; Stripe Sandbox payment; `checkout.session.completed` `200 / verified`; Async Workloads; Background Fulfillment; AI result generation; Account result; completed email; Human result read.
+- M2-0 confirmed blockers: logical claim NULL lease, logical completion NULL caller owner, logical completion stored NULL lease, notification claim NULL lease. Remote/source definitions match; local exploit proof is synthetic/disposable.
+- First recommendation: separate M2-A1 NULL Lease / Completion Fence Integrity Hardening; successor migration and remote apply require new explicit authority.
+- Next 16.3.0 stays unchanged pending the official 2026-08-26 critical patch; evaluate and exact-pin only the published stable version in a separate task.
+- UX candidate `1b8b61b32b1f284f843593777d8f0520ce13281b` remains reference-only; never merge/cherry-pick it, and never lose `netlify.toml` or runtime-assets verification.
+- Self Dogfood: Human only / Stripe Sandbox / Private site. External Private Beta: third party / possible real payment / current legal and support required.
+- Canonical entry: `docs/m2/M2_0_AUTHORITY_CRITICAL_DB_BASELINE.md`; backlog: `docs/m2/M2_MASTER_BACKLOG.md`.
+- M2-0 external operations remain `0`: remote write/apply, deploy/publish/Netlify config, Stripe/webhook/Async/Purchase, Provider/OpenAI, UX integration, release integration, and main change.
+<!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:END -->
+
 <!-- MEASUREMENT-FOUNDATION-V1:BEGIN -->
 ## Current handoff — Measurement Foundation V1 Accepted
 
