@@ -980,6 +980,9 @@ await check("notification ownership is fenced and only expired leases are reclai
   const first = await run.lifecycleRepository.claimNotification({
     notificationId: notification.id,
     ownerId: oldOwner,
+    leaseExpiresAt: new Date(
+      Date.parse(selected.fixed_clock) + 5 * 60_000,
+    ).toISOString(),
     now: selected.fixed_clock,
   });
   assert.equal(first.disposition, "acquired");
@@ -1000,6 +1003,9 @@ await check("notification ownership is fenced and only expired leases are reclai
   const reclaimed = await run.lifecycleRepository.claimNotification({
     notificationId: notification.id,
     ownerId: newOwner,
+    leaseExpiresAt: new Date(
+      Date.parse(afterExpiry) + 5 * 60_000,
+    ).toISOString(),
     now: afterExpiry,
   });
   assert.equal(reclaimed.disposition, "acquired");

@@ -134,15 +134,14 @@ type ProductionDatabase = {
       rotate_production_preparation_capability_v1: RuntimeFunction;
       issue_production_assessment_grant_v1: RuntimeFunction;
       issue_rc2_production_assessment_grant_v2: RuntimeFunction;
-      claim_production_fulfillment_v1: RuntimeFunction;
       claim_production_fulfillment_v2: RuntimeFunction;
-      mark_production_generation_started_v1: RuntimeFunction;
-      complete_production_fulfillment_v1: RuntimeFunction;
-      fail_production_fulfillment_v1: RuntimeFunction;
+      mark_production_generation_started_v2: RuntimeFunction;
+      complete_production_fulfillment_v2: RuntimeFunction;
+      fail_production_fulfillment_v2: RuntimeFunction;
       resolve_production_result_v1: RuntimeFunction;
-      claim_production_notification_v1: RuntimeFunction;
-      complete_production_notification_v1: RuntimeFunction;
-      fail_production_notification_v1: RuntimeFunction;
+      claim_production_notification_v2: RuntimeFunction;
+      complete_production_notification_v2: RuntimeFunction;
+      fail_production_notification_v2: RuntimeFunction;
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
@@ -516,7 +515,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }) {
     const { data, error } = await this.client.rpc(
-      "mark_production_generation_started_v1",
+      "mark_production_generation_started_v2",
       {
         p_logical_assessment_id: input.logicalAssessmentId,
         p_owner_id: input.ownerId,
@@ -529,7 +528,7 @@ export class SupabaseProductionFulfillmentRepository
 
   async completeFulfillment(record: CompleteProductionFulfillmentRecord) {
     const { error } = await this.client.rpc(
-      "complete_production_fulfillment_v1",
+      "complete_production_fulfillment_v2",
       {
         p_grant_id: record.grantId,
         p_logical_assessment_id: record.logicalAssessmentId,
@@ -559,7 +558,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "fail_production_fulfillment_v1",
+      "fail_production_fulfillment_v2",
       {
         p_logical_assessment_id: input.logicalAssessmentId,
         p_owner_id: input.ownerId,
@@ -673,13 +672,15 @@ export class SupabaseProductionFulfillmentRepository
   async claimNotification(input: {
     notificationId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionNotificationClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_production_notification_v1",
+      "claim_production_notification_v2",
       {
         p_notification_id: input.notificationId,
         p_owner_id: input.ownerId,
+        p_lease_expires_at: input.leaseExpiresAt,
         p_now: input.now,
       },
     );
@@ -720,7 +721,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "complete_production_notification_v1",
+      "complete_production_notification_v2",
       {
         p_notification_id: input.notificationId,
         p_owner_id: input.ownerId,
@@ -738,7 +739,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "fail_production_notification_v1",
+      "fail_production_notification_v2",
       {
         p_notification_id: input.notificationId,
         p_owner_id: input.ownerId,

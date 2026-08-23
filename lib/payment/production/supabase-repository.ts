@@ -159,14 +159,14 @@ type PaymentDatabase = {
       resolve_customer_purchase_status_v1: RuntimeFunction;
       resolve_customer_completed_delivery_v1: RuntimeFunction;
       resolve_production_delivery_email_v2: RuntimeFunction;
-      claim_rc2_fulfillment_dispatch_v1: RuntimeFunction;
-      complete_rc2_fulfillment_dispatch_v1: RuntimeFunction;
-      fail_rc2_fulfillment_dispatch_v1: RuntimeFunction;
-      claim_rc2_fulfillment_job_v1: RuntimeFunction;
-      claim_rc2_fulfillment_job_by_id_v1: RuntimeFunction;
-      complete_rc2_fulfillment_job_v1: RuntimeFunction;
-      fail_rc2_fulfillment_job_v1: RuntimeFunction;
-      quarantine_rc2_fulfillment_job_after_async_retries_v1: RuntimeFunction;
+      claim_rc2_fulfillment_dispatch_v2: RuntimeFunction;
+      complete_rc2_fulfillment_dispatch_v2: RuntimeFunction;
+      fail_rc2_fulfillment_dispatch_v2: RuntimeFunction;
+      claim_rc2_fulfillment_job_v2: RuntimeFunction;
+      claim_rc2_fulfillment_job_by_id_v2: RuntimeFunction;
+      complete_rc2_fulfillment_job_v2: RuntimeFunction;
+      fail_rc2_fulfillment_job_v2: RuntimeFunction;
+      quarantine_rc2_fulfillment_job_after_async_retries_v2: RuntimeFunction;
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
@@ -796,7 +796,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<FulfillmentDispatchClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_rc2_fulfillment_dispatch_v1",
+      "claim_rc2_fulfillment_dispatch_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_dispatch_marker: input.dispatchMarker,
@@ -832,7 +832,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "complete_rc2_fulfillment_dispatch_v1",
+      "complete_rc2_fulfillment_dispatch_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_dispatch_marker: input.dispatchMarker,
@@ -852,7 +852,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "fail_rc2_fulfillment_dispatch_v1",
+      "fail_rc2_fulfillment_dispatch_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_dispatch_marker: input.dispatchMarker,
@@ -872,7 +872,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<FulfillmentJobClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_rc2_fulfillment_job_v1",
+      "claim_rc2_fulfillment_job_v2",
       {
         p_status_capability_hash: input.statusCapabilityHash,
         p_owner_id: input.ownerId,
@@ -905,7 +905,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<FulfillmentJobClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_rc2_fulfillment_job_by_id_v1",
+      "claim_rc2_fulfillment_job_by_id_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_owner_id: input.ownerId,
@@ -937,7 +937,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { error } = await this.client.rpc(
-      "complete_rc2_fulfillment_job_v1",
+      "complete_rc2_fulfillment_job_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_owner_id: input.ownerId,
@@ -953,7 +953,7 @@ export class SupabasePaymentDeliveryRepository
     errorCode: string;
     now: string;
   }) {
-    const { error } = await this.client.rpc("fail_rc2_fulfillment_job_v1", {
+    const { error } = await this.client.rpc("fail_rc2_fulfillment_job_v2", {
       p_fulfillment_job_id: input.jobId,
       p_owner_id: input.ownerId,
       p_error_code: input.errorCode,
@@ -967,7 +967,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<FulfillmentRetryExhaustionOutcome | null> {
     const { data, error } = await this.client.rpc(
-      "quarantine_rc2_fulfillment_job_after_async_retries_v1",
+      "quarantine_rc2_fulfillment_job_after_async_retries_v2",
       {
         p_fulfillment_job_id: input.jobId,
         p_now: input.now,

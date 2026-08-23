@@ -1,22 +1,19 @@
 begin;
 
--- 0016 is append-only.  Existing rows are not rewritten.  The NOT VALID
--- checks allow a read-only rollout to classify legacy generating rows before
--- an operator chooses a safe disposition for them.
+-- 0016 is the EXPAND half of an expand-and-contract rollout. Existing rows
+-- and every legacy v1 RPC remain untouched while parallel v2 APIs add leased,
+-- fenced execution for the new runtime. A future CONTRACT migration may make
+-- leases mandatory after the legacy runtime and all legacy workers are gone.
 alter table public.production_logical_assessments
   add column lease_expires_at timestamptz;
 
 alter table public.production_logical_assessments
   add constraint production_logical_assessments_lease_owner
   check (
-    (status = 'generating'
+    lease_expires_at is null
+    or (status = 'generating'
       and owner_id is not null
-      and ownership_acquired_at is not null
-      and lease_expires_at is not null)
-    or (status <> 'generating'
-      and owner_id is null
-      and ownership_acquired_at is null
-      and lease_expires_at is null)
+      and ownership_acquired_at is not null)
   ) not valid;
 
 create index production_logical_assessments_lease_idx
@@ -55,20 +52,16 @@ alter table public.production_notification_outbox
 alter table public.production_notification_outbox
   add constraint production_notification_outbox_lease_owner
   check (
-    (status = 'processing'
+    lease_expires_at is null
+    or (status = 'processing'
       and owner_id is not null
-      and processing_started_at is not null
-      and lease_expires_at is not null)
-    or (status <> 'processing'
-      and owner_id is null
-      and processing_started_at is null
-      and lease_expires_at is null)
+      and processing_started_at is not null)
   ) not valid;
 
 create index production_notification_outbox_lease_idx
   on public.production_notification_outbox(status, lease_expires_at);
 
-create or replace function public.claim_production_fulfillment_v2(
+create function public.claim_production_fulfillment_v2(
   p_grant_id uuid,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
@@ -144,7 +137,7 @@ begin
         where request_id = locked.assessment_request_id
           and status = 'processing'
       loop
-        perform public.recover_stale_assessment_run_v1(
+        perform public.recover_stale_assessment_run_v2(
           stale_run.id, locked.id, 'PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS', p_now
         );
       end loop;
@@ -171,7 +164,7 @@ begin
       where request_id = locked.assessment_request_id
         and status = 'processing'
     loop
-      perform public.recover_stale_assessment_run_v1(
+      perform public.recover_stale_assessment_run_v2(
         stale_run.id, locked.id, 'PRODUCTION_WORKER_CRASH_BEFORE_PROVIDER', p_now
       );
     end loop;
@@ -249,23 +242,7 @@ begin
 end;
 $function$;
 
--- Backward-compatible seam for existing callers.  New callers should pass
--- their configured expiry to v2; this wrapper supplies a bounded fallback.
-create or replace function public.claim_production_fulfillment_v1(
-  p_grant_id uuid,
-  p_owner_id uuid,
-  p_now timestamptz
-) returns jsonb
-language sql
-security invoker
-set search_path = ''
-as $function$
-  select public.claim_production_fulfillment_v2(
-    p_grant_id, p_owner_id, p_now + interval '16 minutes', p_now
-  )
-$function$;
-
-create function public.heartbeat_production_fulfillment_v1(
+create function public.heartbeat_production_fulfillment_v2(
   p_logical_assessment_id uuid,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
@@ -296,7 +273,7 @@ begin
 end;
 $function$;
 
-create or replace function public.mark_production_generation_started_v1(
+create function public.mark_production_generation_started_v2(
   p_logical_assessment_id uuid,
   p_owner_id uuid,
   p_now timestamptz
@@ -324,7 +301,7 @@ begin
 end;
 $function$;
 
-create or replace function public.complete_production_fulfillment_v1(
+create function public.complete_production_fulfillment_v2(
   p_grant_id uuid,
   p_logical_assessment_id uuid,
   p_owner_id uuid,
@@ -409,7 +386,7 @@ begin
 end;
 $function$;
 
-create or replace function public.fail_production_fulfillment_v1(
+create function public.fail_production_fulfillment_v2(
   p_logical_assessment_id uuid,
   p_owner_id uuid,
   p_error_code text,
@@ -437,7 +414,7 @@ begin
 end;
 $function$;
 
-create function public.claim_rc2_fulfillment_dispatch_v1(
+create function public.claim_rc2_fulfillment_dispatch_v2(
   p_fulfillment_job_id uuid,
   p_dispatch_marker text,
   p_owner_id uuid,
@@ -483,6 +460,13 @@ begin
   if job.dispatch_completed_at is not null then
     return jsonb_build_object('disposition', 'dispatched');
   end if;
+  -- An ea4 v1 worker and a v2 worker both own the durable job through the
+  -- legacy job lease columns. Status must remain observation-only while that
+  -- worker is active; dispatch ownership is a separate, shorter transaction.
+  if job.state = 'processing'
+     and (job.lease_expires_at is null or job.lease_expires_at > p_now) then
+    return jsonb_build_object('disposition', 'in_progress');
+  end if;
   if job.dispatch_owner_id is not null
      and job.dispatch_lease_expires_at > p_now then
     return jsonb_build_object('disposition', 'in_progress');
@@ -502,6 +486,23 @@ begin
      and job.dispatch_retry_after > p_now then
     return jsonb_build_object('disposition', 'retry_later');
   end if;
+  -- A deterministic marker without a completed router acceptance or an
+  -- explicit pre-router retry_after can only have come from a worker claim or
+  -- an ambiguous dispatch boundary. Opening a fresh status-owned event here
+  -- would create a second retry authority.
+  if job.dispatch_marker is not null
+     and job.dispatch_owner_id is null
+     and job.dispatch_completed_at is null
+     and job.dispatch_retry_after is null then
+    update public.production_fulfillment_jobs set
+      state = 'manual_review', owner_id = null, lease_expires_at = null,
+      dispatch_owner_id = null, dispatch_lease_expires_at = null,
+      last_error_code = 'PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS',
+      dispatch_last_error_code = 'PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS',
+      updated_at = p_now, dispatch_updated_at = p_now
+      where id = job.id;
+    return jsonb_build_object('disposition', 'terminal');
+  end if;
   update public.production_fulfillment_jobs set
     dispatch_marker = coalesce(dispatch_marker, p_dispatch_marker),
     dispatch_owner_id = p_owner_id,
@@ -515,7 +516,7 @@ begin
 end;
 $function$;
 
-create function public.complete_rc2_fulfillment_dispatch_v1(
+create function public.complete_rc2_fulfillment_dispatch_v2(
   p_fulfillment_job_id uuid,
   p_dispatch_marker text,
   p_owner_id uuid,
@@ -540,7 +541,7 @@ begin
 end;
 $function$;
 
-create function public.fail_rc2_fulfillment_dispatch_v1(
+create function public.fail_rc2_fulfillment_dispatch_v2(
   p_fulfillment_job_id uuid,
   p_dispatch_marker text,
   p_owner_id uuid,
@@ -571,12 +572,11 @@ begin
 end;
 $function$;
 
-create or replace function public.claim_rc2_fulfillment_job_by_id_v2(
+create function public.claim_rc2_fulfillment_job_by_id_v2(
   p_fulfillment_job_id uuid,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
-  p_now timestamptz,
-  p_dispatch_marker text
+  p_now timestamptz
 ) returns jsonb
 language plpgsql
 security invoker
@@ -585,12 +585,12 @@ as $function$
 declare
   job public.production_fulfillment_jobs%rowtype;
   intent_state text;
+  expected_dispatch_marker text;
 begin
-  if p_owner_id is null or p_lease_expires_at <= p_now
-     or p_dispatch_marker is null
-     or char_length(p_dispatch_marker) not between 16 and 256 then
+  if p_owner_id is null or p_lease_expires_at <= p_now then
     raise exception 'RC2_FULFILLMENT_CLAIM_INVALID' using errcode = 'P0001';
   end if;
+  expected_dispatch_marker := 'rc2-dispatch:' || p_fulfillment_job_id::text;
   select * into job
     from public.production_fulfillment_jobs
     where id = p_fulfillment_job_id
@@ -602,7 +602,7 @@ begin
     for update;
   if intent_state <> 'verified' then return null; end if;
   if job.dispatch_marker is not null
-     and job.dispatch_marker <> p_dispatch_marker then
+     and job.dispatch_marker <> expected_dispatch_marker then
     return jsonb_build_object(
       'disposition', 'manual_review',
       'fulfillment_job_id', job.id,
@@ -638,14 +638,14 @@ begin
     state = 'processing', owner_id = p_owner_id,
     lease_expires_at = p_lease_expires_at,
     attempt_count = attempt_count + 1,
-    dispatch_marker = coalesce(dispatch_marker, p_dispatch_marker),
+    dispatch_marker = coalesce(dispatch_marker, expected_dispatch_marker),
     dispatch_claimed_at = coalesce(dispatch_claimed_at, p_now),
     last_error_code = null, updated_at = p_now
     where id = job.id;
   return jsonb_build_object(
     'disposition', 'acquired',
     'fulfillment_job_id', job.id,
-    'dispatch_marker', coalesce(job.dispatch_marker, p_dispatch_marker),
+    'dispatch_marker', coalesce(job.dispatch_marker, expected_dispatch_marker),
     'attempt_count', job.attempt_count + 1
   );
 end;
@@ -655,8 +655,7 @@ create function public.claim_rc2_fulfillment_job_v2(
   p_status_capability_hash text,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
-  p_now timestamptz,
-  p_dispatch_marker text
+  p_now timestamptz
 ) returns jsonb
 language plpgsql
 security invoker
@@ -674,53 +673,12 @@ begin
       and intents.successful_payment_id is not null;
   if target_job_id is null then return null; end if;
   return public.claim_rc2_fulfillment_job_by_id_v2(
-    target_job_id, p_owner_id, p_lease_expires_at, p_now, p_dispatch_marker
+    target_job_id, p_owner_id, p_lease_expires_at, p_now
   );
 end;
 $function$;
 
-create or replace function public.claim_rc2_fulfillment_job_by_id_v1(
-  p_fulfillment_job_id uuid,
-  p_owner_id uuid,
-  p_lease_expires_at timestamptz,
-  p_now timestamptz
-) returns jsonb
-language sql
-security invoker
-set search_path = ''
-as $function$
-  select public.claim_rc2_fulfillment_job_by_id_v2(
-    p_fulfillment_job_id, p_owner_id, p_lease_expires_at, p_now,
-    'rc2-dispatch:' || p_fulfillment_job_id::text
-  )
-$function$;
-
-create or replace function public.claim_rc2_fulfillment_job_v1(
-  p_status_capability_hash text,
-  p_owner_id uuid,
-  p_lease_expires_at timestamptz,
-  p_now timestamptz
-) returns jsonb
-language sql
-security invoker
-set search_path = ''
-as $function$
-  select case when target_job_id is null then null else
-    public.claim_rc2_fulfillment_job_v2(
-      p_status_capability_hash, p_owner_id, p_lease_expires_at, p_now,
-      'rc2-dispatch:' || target_job_id::text
-    ) end
-  from (
-    select jobs.id as target_job_id
-    from public.production_purchase_intents intents
-    join public.production_fulfillment_jobs jobs
-      on jobs.purchase_intent_id = intents.id
-    where intents.status_capability_hash = p_status_capability_hash
-    limit 1
-  ) target
-$function$;
-
-create function public.heartbeat_rc2_fulfillment_job_v1(
+create function public.heartbeat_rc2_fulfillment_job_v2(
   p_fulfillment_job_id uuid,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
@@ -748,7 +706,7 @@ begin
 end;
 $function$;
 
-create or replace function public.complete_rc2_fulfillment_job_v1(
+create function public.complete_rc2_fulfillment_job_v2(
   p_fulfillment_job_id uuid,
   p_owner_id uuid,
   p_now timestamptz
@@ -782,7 +740,7 @@ begin
 end;
 $function$;
 
-create or replace function public.fail_rc2_fulfillment_job_v1(
+create function public.fail_rc2_fulfillment_job_v2(
   p_fulfillment_job_id uuid,
   p_owner_id uuid,
   p_error_code text,
@@ -820,7 +778,7 @@ $function$;
 -- Once the router has accepted an event, Async Workloads exclusively owns its
 -- retry lifecycle. The last retry invocation converges to an observable
 -- terminal state without entering the Provider pipeline.
-create function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(
+create function public.quarantine_rc2_fulfillment_job_after_async_retries_v2(
   p_fulfillment_job_id uuid,
   p_now timestamptz
 ) returns jsonb
@@ -952,21 +910,7 @@ begin
 end;
 $function$;
 
-create or replace function public.claim_production_notification_v1(
-  p_notification_id uuid,
-  p_owner_id uuid,
-  p_now timestamptz
-) returns jsonb
-language sql
-security invoker
-set search_path = ''
-as $function$
-  select public.claim_production_notification_v2(
-    p_notification_id, p_owner_id, p_now + interval '5 minutes', p_now
-  )
-$function$;
-
-create function public.heartbeat_production_notification_v1(
+create function public.heartbeat_production_notification_v2(
   p_notification_id uuid,
   p_owner_id uuid,
   p_lease_expires_at timestamptz,
@@ -993,7 +937,7 @@ begin
 end;
 $function$;
 
-create or replace function public.complete_production_notification_v1(
+create function public.complete_production_notification_v2(
   p_notification_id uuid,
   p_owner_id uuid,
   p_provider_message_reference text,
@@ -1019,7 +963,7 @@ begin
 end;
 $function$;
 
-create or replace function public.fail_production_notification_v1(
+create function public.fail_production_notification_v2(
   p_notification_id uuid,
   p_owner_id uuid,
   p_error_code text,
@@ -1043,7 +987,7 @@ begin
 end;
 $function$;
 
-create function public.recover_stale_assessment_run_v1(
+create function public.recover_stale_assessment_run_v2(
   p_run_id uuid,
   p_logical_assessment_id uuid,
   p_reason_code text,
@@ -1155,59 +1099,87 @@ $function$;
 
 revoke all on function public.claim_production_fulfillment_v2(uuid, uuid, timestamptz, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.heartbeat_production_fulfillment_v1(uuid, uuid, timestamptz, timestamptz)
+revoke all on function public.heartbeat_production_fulfillment_v2(uuid, uuid, timestamptz, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.claim_rc2_fulfillment_dispatch_v1(uuid, text, uuid, timestamptz, timestamptz)
+revoke all on function public.mark_production_generation_started_v2(uuid, uuid, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.complete_rc2_fulfillment_dispatch_v1(uuid, text, uuid, timestamptz)
+revoke all on function public.complete_production_fulfillment_v2(uuid, uuid, uuid, uuid, uuid, jsonb, text, uuid, text, uuid, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.fail_rc2_fulfillment_dispatch_v1(uuid, text, uuid, text, timestamptz, timestamptz)
+revoke all on function public.fail_production_fulfillment_v2(uuid, uuid, text, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.claim_rc2_fulfillment_job_v2(text, uuid, timestamptz, timestamptz, text)
+revoke all on function public.claim_rc2_fulfillment_dispatch_v2(uuid, text, uuid, timestamptz, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.claim_rc2_fulfillment_job_by_id_v2(uuid, uuid, timestamptz, timestamptz, text)
+revoke all on function public.complete_rc2_fulfillment_dispatch_v2(uuid, text, uuid, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.heartbeat_rc2_fulfillment_job_v1(uuid, uuid, timestamptz, timestamptz)
+revoke all on function public.fail_rc2_fulfillment_dispatch_v2(uuid, text, uuid, text, timestamptz, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.claim_rc2_fulfillment_job_v2(text, uuid, timestamptz, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.claim_rc2_fulfillment_job_by_id_v2(uuid, uuid, timestamptz, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.heartbeat_rc2_fulfillment_job_v2(uuid, uuid, timestamptz, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.complete_rc2_fulfillment_job_v2(uuid, uuid, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.fail_rc2_fulfillment_job_v2(uuid, uuid, text, timestamptz)
   from public, anon, authenticated;
 revoke all on function public.claim_production_notification_v2(uuid, uuid, timestamptz, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.heartbeat_production_notification_v1(uuid, uuid, timestamptz, timestamptz)
+revoke all on function public.heartbeat_production_notification_v2(uuid, uuid, timestamptz, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.recover_stale_assessment_run_v1(uuid, uuid, text, timestamptz)
+revoke all on function public.complete_production_notification_v2(uuid, uuid, text, timestamptz)
   from public, anon, authenticated;
-revoke all on function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid, timestamptz)
+revoke all on function public.fail_production_notification_v2(uuid, uuid, text, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.recover_stale_assessment_run_v2(uuid, uuid, text, timestamptz)
+  from public, anon, authenticated;
+revoke all on function public.quarantine_rc2_fulfillment_job_after_async_retries_v2(uuid, timestamptz)
   from public, anon, authenticated;
 
 grant execute on function public.claim_production_fulfillment_v2(uuid, uuid, timestamptz, timestamptz)
   to service_role;
-grant execute on function public.heartbeat_production_fulfillment_v1(uuid, uuid, timestamptz, timestamptz)
+grant execute on function public.heartbeat_production_fulfillment_v2(uuid, uuid, timestamptz, timestamptz)
   to service_role;
-grant execute on function public.claim_rc2_fulfillment_dispatch_v1(uuid, text, uuid, timestamptz, timestamptz)
+grant execute on function public.mark_production_generation_started_v2(uuid, uuid, timestamptz)
   to service_role;
-grant execute on function public.complete_rc2_fulfillment_dispatch_v1(uuid, text, uuid, timestamptz)
+grant execute on function public.complete_production_fulfillment_v2(uuid, uuid, uuid, uuid, uuid, jsonb, text, uuid, text, uuid, timestamptz)
   to service_role;
-grant execute on function public.fail_rc2_fulfillment_dispatch_v1(uuid, text, uuid, text, timestamptz, timestamptz)
+grant execute on function public.fail_production_fulfillment_v2(uuid, uuid, text, timestamptz)
   to service_role;
-grant execute on function public.claim_rc2_fulfillment_job_v2(text, uuid, timestamptz, timestamptz, text)
+grant execute on function public.claim_rc2_fulfillment_dispatch_v2(uuid, text, uuid, timestamptz, timestamptz)
   to service_role;
-grant execute on function public.claim_rc2_fulfillment_job_by_id_v2(uuid, uuid, timestamptz, timestamptz, text)
+grant execute on function public.complete_rc2_fulfillment_dispatch_v2(uuid, text, uuid, timestamptz)
   to service_role;
-grant execute on function public.heartbeat_rc2_fulfillment_job_v1(uuid, uuid, timestamptz, timestamptz)
+grant execute on function public.fail_rc2_fulfillment_dispatch_v2(uuid, text, uuid, text, timestamptz, timestamptz)
+  to service_role;
+grant execute on function public.claim_rc2_fulfillment_job_v2(text, uuid, timestamptz, timestamptz)
+  to service_role;
+grant execute on function public.claim_rc2_fulfillment_job_by_id_v2(uuid, uuid, timestamptz, timestamptz)
+  to service_role;
+grant execute on function public.heartbeat_rc2_fulfillment_job_v2(uuid, uuid, timestamptz, timestamptz)
+  to service_role;
+grant execute on function public.complete_rc2_fulfillment_job_v2(uuid, uuid, timestamptz)
+  to service_role;
+grant execute on function public.fail_rc2_fulfillment_job_v2(uuid, uuid, text, timestamptz)
   to service_role;
 grant execute on function public.claim_production_notification_v2(uuid, uuid, timestamptz, timestamptz)
   to service_role;
-grant execute on function public.heartbeat_production_notification_v1(uuid, uuid, timestamptz, timestamptz)
+grant execute on function public.heartbeat_production_notification_v2(uuid, uuid, timestamptz, timestamptz)
   to service_role;
-grant execute on function public.recover_stale_assessment_run_v1(uuid, uuid, text, timestamptz)
+grant execute on function public.complete_production_notification_v2(uuid, uuid, text, timestamptz)
   to service_role;
-grant execute on function public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid, timestamptz)
+grant execute on function public.fail_production_notification_v2(uuid, uuid, text, timestamptz)
+  to service_role;
+grant execute on function public.recover_stale_assessment_run_v2(uuid, uuid, text, timestamptz)
+  to service_role;
+grant execute on function public.quarantine_rc2_fulfillment_job_after_async_retries_v2(uuid, timestamptz)
   to service_role;
 
 comment on column public.production_logical_assessments.lease_expires_at is
   'Bounded worker lease. Expired rows may be reclaimed; active rows must remain with their owner.';
 comment on column public.production_fulfillment_jobs.dispatch_marker is
   'Durable dispatch idempotency marker. A conflicting marker is manual review, never a second dispatch.';
-comment on function public.recover_stale_assessment_run_v1(uuid, uuid, text, timestamptz) is
+comment on function public.recover_stale_assessment_run_v2(uuid, uuid, text, timestamptz) is
   'Marks only explicitly expired processing run/stage rows failed, preserves completed history, and never auto-reruns post-provider ambiguity.';
 
 commit;

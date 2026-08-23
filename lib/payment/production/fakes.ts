@@ -798,6 +798,7 @@ export class FakePaymentDeliveryRepository
       return { disposition: "terminal" };
     }
     let dispatch = this.dispatches.get(input.jobId);
+    const isInitialDispatch = dispatch === undefined;
     if (!dispatch) {
       dispatch = {
         marker: input.dispatchMarker,
@@ -815,6 +816,13 @@ export class FakePaymentDeliveryRepository
     }
     if (dispatch.completedAt !== null) {
       return { disposition: "dispatched" };
+    }
+    if (
+      job.state === "processing" &&
+      (job.leaseExpiresAt === null ||
+        Date.parse(job.leaseExpiresAt) > Date.parse(input.now))
+    ) {
+      return { disposition: "in_progress" };
     }
     if (
       dispatch.ownerId !== null &&
@@ -839,6 +847,20 @@ export class FakePaymentDeliveryRepository
       Date.parse(dispatch.retryAfter) > Date.parse(input.now)
     ) {
       return { disposition: "retry_later" };
+    }
+    if (
+      !isInitialDispatch &&
+      dispatch.ownerId === null &&
+      dispatch.completedAt === null &&
+      dispatch.retryAfter === null
+    ) {
+      job.state = "manual_review";
+      job.ownerId = null;
+      job.leaseExpiresAt = null;
+      job.lastErrorCode = "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS";
+      dispatch.lastErrorCode =
+        "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS";
+      return { disposition: "terminal" };
     }
     dispatch.ownerId = input.ownerId;
     dispatch.leaseExpiresAt = input.leaseExpiresAt;
@@ -958,6 +980,16 @@ export class FakePaymentDeliveryRepository
     job.ownerId = input.ownerId;
     job.leaseExpiresAt = input.leaseExpiresAt;
     job.attemptCount += 1;
+    if (!this.dispatches.has(input.jobId)) {
+      this.dispatches.set(input.jobId, {
+        marker: `rc2-dispatch:${input.jobId}`,
+        ownerId: null,
+        leaseExpiresAt: null,
+        retryAfter: null,
+        completedAt: null,
+        lastErrorCode: null,
+      });
+    }
     return { disposition: "acquired", job: clone(job) };
   }
 

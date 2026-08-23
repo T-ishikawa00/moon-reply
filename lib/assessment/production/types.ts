@@ -281,6 +281,7 @@ export type ProductionFulfillmentRepository = {
   claimNotification(input: {
     notificationId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionNotificationClaim | null>;
   completeNotification(input: {

@@ -44,7 +44,17 @@ const migration = read(
 const fixture = read(
   "supabase/tests/m1_4_background_fulfillment_durability_r1.sql",
 );
+const expandLegacySeed = read(
+  "supabase/tests/m1_4_background_fulfillment_expand_legacy_seed_r1.sql",
+);
+const expandCompatibility = read(
+  "supabase/tests/m1_4_background_fulfillment_expand_compatibility_r1.sql",
+);
+const ea4RuntimeVerifier = read(
+  "scripts/verify-m1-4-background-fulfillment-expand-ea4-runtime.mjs",
+);
 const paymentApplication = read("lib/payment/production/application.ts");
+const paymentRepository = read("lib/payment/production/supabase-repository.ts");
 const lifecycleApplication = read("lib/assessment/production/application.ts");
 const lifecycleRepository = read(
   "lib/assessment/production/supabase-repository.ts",
@@ -178,11 +188,46 @@ check("0016 is one append-only transaction without apply-time row rewrite", () =
   assert.doesNotMatch(migration, /\b(?:drop\s+table|truncate|delete\s+from)\b/iu);
   assert.match(migration, /production_logical_assessments_lease_owner[\s\S]*?not valid/iu);
   assert.match(migration, /production_notification_outbox_lease_owner[\s\S]*?not valid/iu);
+  assert.match(migration, /lease_expires_at is null[\s\S]*?status = 'generating'/iu);
+  assert.match(migration, /lease_expires_at is null[\s\S]*?status = 'processing'/iu);
+});
+
+check("0016 preserves legacy v1 functions and isolates the new runtime on v2", () => {
+  for (const name of [
+    "claim_production_fulfillment_v1",
+    "mark_production_generation_started_v1",
+    "complete_production_fulfillment_v1",
+    "fail_production_fulfillment_v1",
+    "claim_rc2_fulfillment_job_v1",
+    "claim_rc2_fulfillment_job_by_id_v1",
+    "complete_rc2_fulfillment_job_v1",
+    "fail_rc2_fulfillment_job_v1",
+    "claim_production_notification_v1",
+    "complete_production_notification_v1",
+    "fail_production_notification_v1",
+  ]) {
+    assert.doesNotMatch(
+      migration,
+      new RegExp(`create(?: or replace)? function public\\.${name}`, "u"),
+    );
+  }
+  assert.doesNotMatch(
+    lifecycleRepository,
+    /(?:claim|mark|complete|fail)_production_(?:fulfillment|generation_started|notification)_v1/u,
+  );
+  assert.doesNotMatch(
+    paymentRepository,
+    /(?:claim|complete|fail)_rc2_fulfillment_(?:dispatch|job(?:_by_id)?)_v1/u,
+  );
+  assert.doesNotMatch(
+    paymentRepository,
+    /quarantine_rc2_fulfillment_job_after_async_retries_v1/u,
+  );
 });
 
 check("logical ownership is a bounded fenced lease", () => {
   assert.match(migration, /claim_production_fulfillment_v2/iu);
-  assert.match(migration, /heartbeat_production_fulfillment_v1/iu);
+  assert.match(migration, /heartbeat_production_fulfillment_v2/iu);
   assert.match(migration, /lease_expires_at > p_now/iu);
   assert.match(migration, /lease_expires_at <= p_now/iu);
   assert.match(migration, /locked\.owner_id <> p_owner_id/iu);
@@ -213,9 +258,9 @@ check("PB-04/PB-05 completed plus PB-06 processing is a first-class fixture", ()
 
 check("dispatch has idempotency, cooldown, lease, and fencing", () => {
   for (const name of [
-    "claim_rc2_fulfillment_dispatch_v1",
-    "complete_rc2_fulfillment_dispatch_v1",
-    "fail_rc2_fulfillment_dispatch_v1",
+    "claim_rc2_fulfillment_dispatch_v2",
+    "complete_rc2_fulfillment_dispatch_v2",
+    "fail_rc2_fulfillment_dispatch_v2",
   ]) {
     assert.match(migration, new RegExp(name, "u"));
     assert.match(
@@ -230,15 +275,15 @@ check("dispatch has idempotency, cooldown, lease, and fencing", () => {
   assert.match(paymentApplication, /claimFulfillmentDispatch/u);
   assert.match(paymentApplication, /completeFulfillmentDispatch/u);
   const jobFailure = migration.slice(
-    migration.indexOf("create or replace function public.fail_rc2_fulfillment_job_v1"),
+    migration.indexOf("create function public.fail_rc2_fulfillment_job_v2"),
     migration.indexOf(
-      "create function public.quarantine_rc2_fulfillment_job_after_async_retries_v1",
+      "create function public.quarantine_rc2_fulfillment_job_after_async_retries_v2",
     ),
   );
   assert.doesNotMatch(jobFailure, /dispatch_completed_at|dispatch_retry_after/u);
   assert.match(
     migration,
-    /quarantine_rc2_fulfillment_job_after_async_retries_v1/u,
+    /quarantine_rc2_fulfillment_job_after_async_retries_v2/u,
   );
   assert.match(
     migration,
@@ -286,7 +331,7 @@ check("duplicate work cannot steal active jobs or amplify Provider execution", (
 
 check("notification delivery remains independently leased and retryable", () => {
   assert.match(migration, /claim_production_notification_v2/u);
-  assert.match(migration, /heartbeat_production_notification_v1/u);
+  assert.match(migration, /heartbeat_production_notification_v2/u);
   assert.match(workloadLogic, /outcome\.notificationPending/u);
   assert.match(workloadLogic, /outcome\.notificationManualReview/u);
   assert.match(workloadLogic, /PRODUCTION_NOTIFICATION_MANUAL_REVIEW/u);
@@ -358,6 +403,52 @@ await checkRuntime("Scenario C: duplicate invocation cannot steal an active work
   );
   assert.equal(run.grantProcessor.providerInvocationCalls, 0);
   assert.equal(run.repository.jobs.get(run.jobId).attemptCount, 1);
+});
+
+await checkRuntime("Scenario C2: active worker makes status observation-only", async () => {
+  const run = runtimeHarness();
+  const claimed = await run.repository.claimFulfillmentJobById({
+    jobId: run.jobId,
+    ownerId: "95000000-0000-4000-8000-000000000003",
+    leaseExpiresAt: "2026-08-23T00:02:00.000Z",
+    now: "2026-08-23T00:00:00.000Z",
+  });
+  assert.equal(claimed.disposition, "acquired");
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "preparing_assessment" },
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 0);
+  assert.equal(run.grantProcessor.providerInvocationCalls, 0);
+  assert.equal(run.repository.jobs.get(run.jobId).attemptCount, 1);
+});
+
+await checkRuntime("Scenario C3: direct worker failure cannot create Event B", async () => {
+  const run = runtimeHarness();
+  const ownerId = "95000000-0000-4000-8000-000000000004";
+  const claimed = await run.repository.claimFulfillmentJobById({
+    jobId: run.jobId,
+    ownerId,
+    leaseExpiresAt: "2026-08-23T00:02:00.000Z",
+    now: "2026-08-23T00:00:00.000Z",
+  });
+  assert.equal(claimed.disposition, "acquired");
+  await run.repository.failFulfillmentJob({
+    jobId: run.jobId,
+    ownerId,
+    errorCode: "SYNTHETIC_DIRECT_WORKER_FAILURE",
+    now: "2026-08-23T00:00:01.000Z",
+  });
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(run.statusCapability),
+    { status: "preparing_assessment" },
+  );
+  assert.equal(run.fulfillmentDispatcher.jobIds.length, 0);
+  assert.equal(run.repository.jobs.get(run.jobId).state, "manual_review");
+  assert.equal(
+    run.repository.jobs.get(run.jobId).lastErrorCode,
+    "PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS",
+  );
 });
 
 await checkRuntime("Scenario D: retry exhaustion becomes confirmation pending", async () => {
@@ -482,6 +573,25 @@ check("disposable proof is synthetic, rollback-only, and provider-free", () => {
   assert.match(fixture, /^rollback;$/mu);
   assert.doesNotMatch(fixture, /https?:\/\//iu);
   assert.doesNotMatch(fixture, /openai|provider raw|customer@example/iu);
+});
+
+check("expand proof executes exact legacy and v2 contracts across A-H", () => {
+  assert.match(expandLegacySeed, /after 0002-0015 and before 0016/u);
+  assert.match(expandLegacySeed, /legacy_function_defs/u);
+  assert.match(expandCompatibility, /PASS A\/H/u);
+  assert.match(expandCompatibility, /PASS B/u);
+  assert.match(expandCompatibility, /PASS C/u);
+  assert.match(expandCompatibility, /PASS D/u);
+  assert.match(expandCompatibility, /PASS E/u);
+  assert.match(expandCompatibility, /PASS F/u);
+  assert.match(expandCompatibility, /PASS G/u);
+  assert.match(expandCompatibility, /^rollback;$/mu);
+  assert.match(
+    ea4RuntimeVerifier,
+    /ea4acd5d3620fb546e5cf7bc0d1f7db414c54ebc/u,
+  );
+  assert.match(ea4RuntimeVerifier, /M1_4_LOCAL_SUPABASE_SECRET_KEY/u);
+  assert.doesNotMatch(ea4RuntimeVerifier, /OPENAI_API_KEY|AWL_API_KEY/u);
 });
 
 console.log(`M1-4 BACKGROUND FULFILLMENT DURABILITY PASS ${passed}/${passed}`);

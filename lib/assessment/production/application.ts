@@ -651,11 +651,17 @@ export class ProductionFulfillmentApplication {
     adapter: DeliveryNotificationAdapterV1,
   ) {
     const ownerId = this.uuid();
+    const claimStartedAt = this.now();
     const claim =
       await this.options.lifecycleRepository.claimNotification({
         notificationId,
         ownerId,
-        now: this.now(),
+        leaseExpiresAt: addSeconds(
+          claimStartedAt,
+          this.options.fulfillmentLeaseSeconds ??
+            DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS,
+        ),
+        now: claimStartedAt,
       });
     if (!claim || claim.disposition === "in_progress") {
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_NOT_AVAILABLE", 409);

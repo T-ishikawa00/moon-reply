@@ -601,6 +601,7 @@ export class FakeProductionFulfillmentRepository
   async claimNotification(input: {
     notificationId: string;
     ownerId: string;
+    leaseExpiresAt: string;
     now: string;
   }) {
     const notification = this.notifications.get(input.notificationId);
@@ -622,7 +623,7 @@ export class FakeProductionFulfillmentRepository
     notification.attemptCount += 1;
     this.notificationLeases.set(
       notification.id,
-      new Date(Date.parse(input.now) + 5 * 60_000).toISOString(),
+      input.leaseExpiresAt,
     );
     this.events.push("claimNotification");
     return {

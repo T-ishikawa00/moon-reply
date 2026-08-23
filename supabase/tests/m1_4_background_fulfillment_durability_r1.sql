@@ -43,7 +43,8 @@ begin
   where conrelid = 'public.production_logical_assessments'::regclass
     and conname = 'production_logical_assessments_lease_owner';
   if definition is null
-     or position('lease_expires_at IS NOT NULL' in definition) = 0
+     or position('lease_expires_at IS NULL' in definition) = 0
+     or position('status = ''generating''' in definition) = 0
      or is_validated is not false then
     raise exception 'M1_LOGICAL_LEASE_CONSTRAINT_INVALID';
   end if;
@@ -55,18 +56,18 @@ begin
   ) or not exists (
     select 1 from pg_proc
     where pronamespace = 'public'::regnamespace
-      and proname = 'recover_stale_assessment_run_v1'
+      and proname = 'recover_stale_assessment_run_v2'
   ) then
     raise exception 'M1_RECOVERY_RPC_MISSING';
   end if;
   if not exists (
     select 1 from pg_proc
     where pronamespace = 'public'::regnamespace
-      and proname = 'claim_rc2_fulfillment_dispatch_v1'
+      and proname = 'claim_rc2_fulfillment_dispatch_v2'
   ) or not exists (
     select 1 from pg_proc
     where pronamespace = 'public'::regnamespace
-      and proname = 'quarantine_rc2_fulfillment_job_after_async_retries_v1'
+      and proname = 'quarantine_rc2_fulfillment_job_after_async_retries_v2'
   ) then
     raise exception 'M1_DISPATCH_RPC_MISSING';
   end if;
@@ -74,7 +75,7 @@ begin
     into definition
     from pg_catalog.pg_proc
     where pg_proc.oid =
-      'public.fail_rc2_fulfillment_job_v1(uuid,uuid,text,timestamptz)'::regprocedure;
+      'public.fail_rc2_fulfillment_job_v2(uuid,uuid,text,timestamptz)'::regprocedure;
   if position('dispatch_completed_at = null' in lower(definition)) > 0
      or position('dispatch_retry_after' in lower(definition)) > 0 then
     raise exception 'M1_WORKER_FAILURE_REOPENS_STATUS_DISPATCH';
@@ -83,7 +84,7 @@ begin
     into definition
     from pg_catalog.pg_proc
     where pg_proc.oid =
-      'public.claim_rc2_fulfillment_dispatch_v1(uuid,text,uuid,timestamptz,timestamptz)'::regprocedure;
+      'public.claim_rc2_fulfillment_dispatch_v2(uuid,text,uuid,timestamptz,timestamptz)'::regprocedure;
   if position('PAYMENT_FULFILLMENT_DISPATCH_OUTCOME_AMBIGUOUS' in definition) = 0
      or position('dispatch_owner_id is not null' in lower(definition)) = 0
      or position('dispatch_retry_after is null' in lower(definition)) = 0 then
@@ -93,7 +94,7 @@ begin
     into definition
     from pg_catalog.pg_proc
     where pg_proc.oid =
-      'public.quarantine_rc2_fulfillment_job_after_async_retries_v1(uuid,timestamptz)'::regprocedure;
+      'public.quarantine_rc2_fulfillment_job_after_async_retries_v2(uuid,timestamptz)'::regprocedure;
   if position('PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED' in definition) = 0
      or position('quarantined_active' in definition) = 0 then
     raise exception 'M1_ACTIVE_EXHAUSTION_NOT_DURABLY_MARKED';
@@ -102,7 +103,7 @@ begin
     into definition
     from pg_catalog.pg_proc
     where pg_proc.oid =
-      'public.recover_stale_assessment_run_v1(uuid,uuid,text,timestamptz)'::regprocedure;
+      'public.recover_stale_assessment_run_v2(uuid,uuid,text,timestamptz)'::regprocedure;
   if position('logical_request_id is distinct from locked_run.request_id' in definition) = 0 then
     raise exception 'M1_RECOVERY_REQUEST_BINDING_MISSING';
   end if;
