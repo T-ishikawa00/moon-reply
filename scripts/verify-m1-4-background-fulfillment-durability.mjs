@@ -474,7 +474,7 @@ await checkRuntime("Scenario D: retry exhaustion becomes confirmation pending", 
   );
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    { status: "confirmation_pending", paymentVerified: true },
   );
   assert.equal(run.fulfillmentDispatcher.jobIds.length, 1);
   assert.equal(run.grantProcessor.providerInvocationCalls, 0);
@@ -510,7 +510,7 @@ await checkRuntime("Scenario D2: retry exhaustion preserves an active fence", as
   );
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    { status: "confirmation_pending", paymentVerified: true },
   );
   await run.repository.failFulfillmentJob({
     jobId: run.jobId,
@@ -558,7 +558,7 @@ await checkRuntime("accepted-router persistence ambiguity cannot create Event B"
   await run.application.processPurchaseStatus(run.statusCapability);
   assert.deepEqual(
     await run.application.processPurchaseStatus(run.statusCapability),
-    { status: "confirmation_pending" },
+    { status: "confirmation_pending", paymentVerified: true },
   );
   const job = run.repository.jobs.get(run.jobId);
   assert.equal(job.state, "manual_review");

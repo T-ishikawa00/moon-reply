@@ -279,7 +279,10 @@ export type PurchaseStatusRecord = Readonly<{
 export type CustomerPurchaseStatus =
   | Readonly<{ status: "confirming_payment" }>
   | Readonly<{ status: "preparing_assessment" }>
-  | Readonly<{ status: "confirmation_pending" }>
+  | Readonly<{
+      status: "confirmation_pending";
+      paymentVerified: boolean;
+    }>
   | Readonly<{ status: "temporary_problem"; retryable: true }>
   | Readonly<{ status: "payment_not_completed" }>
   | Readonly<{ status: "completed_check_verified_email" }>

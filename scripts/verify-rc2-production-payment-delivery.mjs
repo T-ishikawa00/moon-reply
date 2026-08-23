@@ -806,6 +806,12 @@ await check("conflicting second success cannot create a second verified Payment"
   assert.equal(conflict.disposition, "conflict");
   assert.equal(run.repository.verifiedPayments.size, 1);
   assert.equal([...run.repository.intents.values()][0].state, "manual_review");
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+    ),
+    { status: "confirmation_pending", paymentVerified: false },
+  );
 });
 
 await check("webhook verification creates a durable job but invokes no Luna/provider", async () => {
@@ -1117,13 +1123,16 @@ await check("reconciliation and job-ID fulfillment are server-only seams", () =>
 
 await check("RequestForm connects production prepare, one clarification, verification, and Checkout", () => {
   const requestForm = readText("components/request/RequestForm.tsx");
+  const paymentPanel = readText("components/payment/PurchasePaymentPanel.tsx");
+  const purchaseSurface = `${requestForm}\n${paymentPanel}`;
   for (const required of [
     "/api/consultations/prepare",
     "/api/consultations/clarifications",
     "/api/delivery/email-verifications",
     "/api/payments/checkout",
-    "980円を支払い、鑑定を申し込む",
-    "税込980円",
+    "お支払いに進む",
+    "税込 980円",
+    "1相談 / 1鑑定ノート",
     "都度払い",
     "自動更新",
     "18歳以上",
@@ -1132,7 +1141,7 @@ await check("RequestForm connects production prepare, one clarification, verific
     "/legal/refund",
     "/legal/tokushoho",
   ]) {
-    assert.ok(requestForm.includes(required), required);
+    assert.ok(purchaseSurface.includes(required), required);
   }
   assert.match(requestForm, /paymentEnabled/u);
   assert.match(requestForm, /購入機能は現在準備中です/u);

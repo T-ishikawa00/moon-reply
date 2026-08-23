@@ -1056,7 +1056,7 @@ export class ProductionPaymentDeliveryApplication {
       throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     }
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: false };
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
@@ -1072,16 +1072,16 @@ export class ProductionPaymentDeliveryApplication {
       return { status: "temporary_problem", retryable: true };
     }
     if (job.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: true };
     }
     if (
       job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
     ) {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: true };
     }
     if (job.state === "completed") {
       if (!job.grantId || !job.logicalAssessmentId) {
-        return { status: "confirmation_pending" };
+        return { status: "confirmation_pending", paymentVerified: true };
       }
       try {
         const fulfilled =
@@ -1124,7 +1124,7 @@ export class ProductionPaymentDeliveryApplication {
     });
     if (!status) throw new M2RuntimeError("PAYMENT_STATUS_NOT_FOUND", 404);
     if (status.purchaseIntent.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: false };
     }
     if (status.purchaseIntent.state !== "verified") {
       if (
@@ -1138,12 +1138,12 @@ export class ProductionPaymentDeliveryApplication {
     const job = status.fulfillmentJob;
     if (!job) return { status: "temporary_problem", retryable: true };
     if (job.state === "manual_review") {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: true };
     }
     if (
       job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
     ) {
-      return { status: "confirmation_pending" };
+      return { status: "confirmation_pending", paymentVerified: true };
     }
     if (job.state === "completed") {
       const deliveryId =
