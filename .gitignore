@@ -17,6 +17,7 @@ Thumbs.db
 node_modules/
 
 # Build outputs
+.netlify/
 .next/
 dist/
 build/

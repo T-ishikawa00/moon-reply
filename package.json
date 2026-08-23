@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "verify:m1-4:skipped-stage-constraint": "node scripts/verify-m1-4-skipped-stage-constraint.mjs",
     "verify:m1-4:background-fulfillment": "node scripts/verify-m1-4-background-fulfillment-durability.mjs",
+    "verify:m1-4:async-router-worker-graph": "node scripts/verify-m1-4-async-router-worker-graph.mjs",
+    "verify:m1-4:async-router-artifacts": "node scripts/verify-m1-4-async-router-artifacts.mjs",
     "verify:m1-4:background-expand-ea4-runtime": "node scripts/verify-m1-4-background-fulfillment-expand-ea4-runtime.mjs",
     "verify:m1-4:clarification-contract": "node scripts/verify-m1-4-clarification-contract.mjs",
     "verify:m1-4:clarification-product-intent": "node scripts/verify-m1-4-clarification-product-intent.mjs",
@@ -37,12 +39,14 @@
     "stripe": "^22.5.0"
   },
   "devDependencies": {
+    "@netlify/zip-it-and-ship-it": "15.4.0",
     "@tailwindcss/postcss": "^4.3.2",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.3.0",
+    "esbuild": "0.28.1",
     "tailwindcss": "^4.3.2",
     "typescript": "^6.0.3"
   }

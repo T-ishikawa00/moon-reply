@@ -13,7 +13,7 @@ import {
 import {
   processProductionFulfillmentJobById,
   quarantineProductionFulfillmentJobAfterAsyncRetryExhaustion,
-} from "../../lib/payment/production/service.ts";
+} from "../../lib/payment/production/worker-service.ts";
 
 /**
  * Async Workloads owns routing and asynchronous execution. The supported

@@ -48,6 +48,24 @@ function readText(relativePath) {
   );
 }
 
+function readPaymentEnvironmentSources() {
+  return [
+    "lib/payment/production/environment.ts",
+    "lib/payment/production/environment-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
+
+function readPaymentServiceSources() {
+  return [
+    "lib/payment/production/service.ts",
+    "lib/payment/production/transactional-email-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
+
 function parseExampleEnvironment(source) {
   const values = new Map();
   for (const line of source.split(/\r?\n/u)) {
@@ -208,7 +226,7 @@ await check("new purchase visibility is an all-flags fail-closed policy", () => 
     assert.equal(isRc2NewPurchaseActivationReady(enabled), false, name);
     state.set(name, false);
   }
-  const environment = readText("lib/payment/production/environment.ts");
+  const environment = readPaymentEnvironmentSources();
   for (const functionName of [
     "isCustomerPaymentFlowVisible",
     "isEmailVerificationAvailable",
@@ -223,7 +241,7 @@ await check("new purchase visibility is an all-flags fail-closed policy", () => 
 });
 
 await check("payment environment accepts only test/live and rejects key mismatch", () => {
-  const environment = readText("lib/payment/production/environment.ts");
+  const environment = readPaymentEnvironmentSources();
   const stripe = readText("lib/payment/production/stripe.ts");
   assert.match(environment, /configured !== "test" && configured !== "live"/u);
   assert.match(environment, /configuredEnvironment !== keyEnvironment/u);
@@ -275,7 +293,7 @@ await check("Stripe SDK remains server-confined and exact JPY 980 one-time", () 
 
 await check("webhook uses raw signature and a separate required secret", () => {
   const route = readText("app/api/payments/stripe/webhook/route.ts");
-  const environment = readText("lib/payment/production/environment.ts");
+  const environment = readPaymentEnvironmentSources();
   const stripe = readText("lib/payment/production/stripe.ts");
   assert.match(route, /request\.arrayBuffer\(\)/u);
   assert.match(route, /stripe-signature/u);
@@ -296,8 +314,8 @@ await check("reconciliation and paid fulfillment remain server-only recovery sea
 });
 
 await check("email verification secrets and bounded Human policy fail closed", () => {
-  const environment = readText("lib/payment/production/environment.ts");
-  const service = readText("lib/payment/production/service.ts");
+  const environment = readPaymentEnvironmentSources();
+  const service = readPaymentServiceSources();
   const email = readText("lib/payment/production/transactional-email.ts");
   for (const name of [
     "EMAIL_VERIFICATION_SECRET_PEPPER",

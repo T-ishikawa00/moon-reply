@@ -37,6 +37,15 @@ function readText(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
+function readProductionAssessmentEnvironmentSources() {
+  return [
+    "lib/assessment/production/environment.ts",
+    "lib/assessment/production/environment-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
+
 function ids() {
   let index = 0;
   return () =>
@@ -366,7 +375,7 @@ await check("production runtime identity is exact V17 and separately gated", asy
         "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023",
     },
   );
-  const environment = readText("lib/assessment/production/environment.ts");
+  const environment = readProductionAssessmentEnvironmentSources();
   assert.match(environment, /ASSESSMENT_PRODUCTION_PREPARATION_ENABLED/u);
   assert.match(environment, /ASSESSMENT_PRODUCTION_RUNTIME_ENABLED/u);
   assert.match(environment, /ASSESSMENT_PRODUCTION_EMERGENCY_STOP/u);

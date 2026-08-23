@@ -43,6 +43,24 @@ function readText(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
+function readPaymentEnvironmentSources() {
+  return [
+    "lib/payment/production/environment.ts",
+    "lib/payment/production/environment-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
+
+function readPaymentServiceSources() {
+  return [
+    "lib/payment/production/service.ts",
+    "lib/payment/production/transactional-email-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
+
 function ids() {
   let index = 0;
   return () =>
@@ -1040,12 +1058,12 @@ for (const sessionState of ["wrong", "expired", "revoked"]) {
 
 await check("Customer mutation routes reject extra client Payment authority flags", () => {
   const checkoutRoute = readText("app/api/payments/checkout/route.ts");
-  const environment = readText("lib/payment/production/environment.ts");
+  const environment = readPaymentEnvironmentSources();
   const activationPolicy = readText(
     "lib/payment/production/activation-policy.ts",
   );
   const activationSources = `${environment}\n${activationPolicy}`;
-  const service = readText("lib/payment/production/service.ts");
+  const service = readPaymentServiceSources();
   assert.match(
     checkoutRoute,
     /Object\.keys\(value\)\.length === 1[\s\S]*preparationCapability[\s\S]*statusCapability/u,
@@ -1244,7 +1262,7 @@ await check("trusted session cookie is HttpOnly Secure SameSite Lax and host-onl
 
 await check("email lookup is keyed and provider environment is explicit", () => {
   const crypto = readText("lib/payment/production/crypto.ts");
-  const environment = readText("lib/payment/production/environment.ts");
+  const environment = readPaymentEnvironmentSources();
   assert.match(crypto, /hashDeliveryEmail[\s\S]*createHmac/u);
   assert.match(environment, /PAYMENT_PROVIDER_ENVIRONMENT/u);
   assert.match(environment, /configuredEnvironment !== keyEnvironment/u);

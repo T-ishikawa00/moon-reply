@@ -48,6 +48,15 @@ const acceptedFoundationBase =
   "8bf6c4e9c0a860b48826708676f0abe7c4395714";
 const providerPath = "lib/payment/production/resend-transactional-email.ts";
 const servicePath = "lib/payment/production/service.ts";
+
+function readProviderSources() {
+  return [
+    providerPath,
+    "lib/payment/production/resend-transactional-email-runtime.ts",
+  ]
+    .map(readText)
+    .join("\n");
+}
 const protectedProductPaths = [
   "components/runtime/CustomerAssessmentNote.tsx",
   "components/request/RequestForm.tsx",
@@ -202,7 +211,7 @@ await check("Resend SDK is exactly stable 6.20.0 in manifest and lock", () => {
 });
 
 await check("Resend adapter and SDK import are server-confined", () => {
-  const provider = readText(providerPath);
+  const provider = readProviderSources();
   const service = readText(servicePath);
   assert.match(provider, /^import "server-only";/u);
   assert.match(service, /^import "server-only";/u);
@@ -487,7 +496,7 @@ await check("provider errors and unknown results map safely with no hidden retry
 });
 
 await check("templates and adapter contain no recipient payload logger", () => {
-  const provider = readText(providerPath);
+  const provider = readProviderSources();
   const service = readText(servicePath);
   assert.doesNotMatch(provider, /\bconsole\.|\blogger\b|\blog\s*\(/u);
   assert.doesNotMatch(service, /\bconsole\.|\blogger\b|\blog\s*\(/u);

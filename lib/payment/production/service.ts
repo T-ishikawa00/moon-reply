@@ -1,18 +1,11 @@
 import "server-only";
-import {
-  findProductionNotificationForDelivery,
-  fulfillProductionAssessmentGrant,
-  issueProductionAssessmentGrant,
-  processProductionNotificationWithAdapter,
-  recoverCompletedProductionAssessmentGrant,
-} from "../../assessment/production/service.ts";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { enforceLegacyCustomerEmailVerificationAllowed } from "../../customer-auth/cutover.ts";
+import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";
 import { ProductionPaymentDeliveryApplication } from "./application.ts";
 import { enqueueProductionFulfillmentJob } from "./async-workloads.ts";
 import {
   isCheckoutAvailable,
-  isCustomerEmailDeliveryAvailable,
   isEmailVerificationAvailable,
   isPaidFulfillmentProcessingAvailable,
   isStripeReconciliationAvailable,
@@ -22,13 +15,13 @@ import {
   readStripeCheckoutEnvironment,
   readStripeWebhookEnvironment,
 } from "./environment.ts";
-import { VerifiedEmailResultNotificationAdapterV1 } from "./result-notification.ts";
+import { createActiveProductionFulfillmentApplication } from "./fulfillment-runtime.ts";
 import {
   StripeCheckoutProviderV1,
   StripeWebhookEvidenceVerifierV1,
 } from "./stripe.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
-import { createResendTransactionalEmailAdapterV1 } from "./resend-transactional-email.ts";
+import { createConfiguredTransactionalEmailAdapter } from "./transactional-email-runtime.ts";
 import {
   UnconfiguredTransactionalEmailAdapterV1,
   type TransactionalEmailAdapterV1,
@@ -75,21 +68,7 @@ class UnavailableGrantProcessorV1 implements ProductionGrantProcessorV1 {
 }
 
 export function createTransactionalEmailAdapter(): TransactionalEmailAdapterV1 {
-  if (!isCustomerEmailDeliveryAvailable()) {
-    return new UnconfiguredTransactionalEmailAdapterV1();
-  }
-  const configured = process.env.TRANSACTIONAL_EMAIL_PROVIDER;
-  if (!configured || configured === "unconfigured") {
-    return new UnconfiguredTransactionalEmailAdapterV1();
-  }
-  if (configured === "resend") {
-    return createResendTransactionalEmailAdapterV1({
-      apiKey: process.env.EMAIL_API_KEY,
-      fromAddress: process.env.EMAIL_FROM_ADDRESS,
-      fromName: process.env.EMAIL_FROM_NAME,
-    });
-  }
-  throw new M2RuntimeError("TRANSACTIONAL_EMAIL_PROVIDER_UNSUPPORTED", 503);
+  return createConfiguredTransactionalEmailAdapter();
 }
 
 function base() {
@@ -124,6 +103,7 @@ function createApplication(input: {
       emailEncryptionKey: environment.emailEncryptionKey,
       purchaseStatusSigningSecret: environment.purchaseStatusSigningSecret,
       fulfillmentLeaseSeconds: environment.fulfillmentLeaseSeconds,
+      onVerifiedPaymentRecorded: trackVerifiedPaymentPurchase,
     }),
     environment,
     repository,
@@ -299,45 +279,9 @@ export async function reconcileProductionStripePaymentAttempt(
 }
 
 function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
-  const { environment, repository } = base();
-  const transactionalEmail = createTransactionalEmailAdapter();
-  const grantProcessor: ProductionGrantProcessorV1 = {
-    issueProductionAssessmentGrant,
-    fulfillProductionAssessmentGrant,
-    recoverCompletedProductionAssessmentGrant,
-    async processResultNotification(deliveryAuthorityReference) {
-      const notificationId =
-        await findProductionNotificationForDelivery(
-          deliveryAuthorityReference,
-        );
-      if (!notificationId) {
-        throw new M2RuntimeError("RESULT_NOTIFICATION_NOT_FOUND", 503);
-      }
-      await processProductionNotificationWithAdapter(
-        notificationId,
-        new VerifiedEmailResultNotificationAdapterV1(
-          repository,
-          transactionalEmail,
-          environment.emailEncryptionKey,
-          environment.siteOrigin,
-        ),
-      );
-    },
-  };
-  return new ProductionPaymentDeliveryApplication({
-    repository,
-    checkoutProvider: new UnavailableCheckoutProviderV1(),
-    transactionalEmail,
-    grantProcessor,
+  return createActiveProductionFulfillmentApplication({
+    paymentEnvironment,
     fulfillmentDispatcher: backgroundFulfillmentDispatcher,
-    policy: environment.policy,
-    environment: paymentEnvironment,
-    siteOrigin: environment.siteOrigin,
-    payPayEnabled: false,
-    verificationPepper: environment.verificationPepper,
-    emailEncryptionKey: environment.emailEncryptionKey,
-    purchaseStatusSigningSecret: environment.purchaseStatusSigningSecret,
-    fulfillmentLeaseSeconds: 16 * 60,
   });
 }
 

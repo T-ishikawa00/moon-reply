@@ -1,4 +1,8 @@
-import "server-only";
+/**
+ * Server-runtime transport shared by guarded services and the Netlify worker.
+ * The API key is constructor-injected; browser reachability is rejected by the
+ * async-router worker-graph verifier.
+ */
 import { performance } from "node:perf_hooks";
 import OpenAI from "openai";
 import { M2RuntimeError } from "./errors.ts";

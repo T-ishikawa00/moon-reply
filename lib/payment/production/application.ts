@@ -44,8 +44,6 @@ import type {
   ServerFulfillmentOutcome,
   StripePaymentEvidenceV1,
 } from "./types.ts";
-import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";
-
 type FulfillmentClaimOutcome =
   | Readonly<{
       status: "completed";
@@ -74,6 +72,12 @@ type PaymentDeliveryApplicationOptions = {
   emailEncryptionKey: string;
   purchaseStatusSigningSecret: string;
   fulfillmentLeaseSeconds: number;
+  onVerifiedPaymentRecorded?: (
+    recorded: Pick<
+      RecordedPaymentEvidence,
+      "disposition" | "verifiedPaymentId"
+    >,
+  ) => void;
   now?: () => string;
   uuid?: () => string;
   capability?: () => string;
@@ -774,7 +778,7 @@ export class ProductionPaymentDeliveryApplication {
       fulfillmentJobId: this.uuid(),
       now: this.now(),
     });
-    trackVerifiedPaymentPurchase(recorded);
+    this.options.onVerifiedPaymentRecorded?.(recorded);
     if (
       recorded.fulfillmentJobId &&
       (recorded.disposition === "verified" ||

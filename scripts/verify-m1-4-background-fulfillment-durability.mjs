@@ -314,6 +314,8 @@ check("same-site Async Workloads payload is a job-only claim check", () => {
   assert.doesNotMatch(asyncAdapter, /AWL_API_KEY|DEPLOY_URL|process\.env\.URL/u);
   assert.doesNotMatch(asyncAdapter, /baseUrl\s*:|apiKey\s*:/u);
   assert.match(workload, /asyncWorkloadFn/u);
+  assert.match(workload, /payment\/production\/worker-service\.ts/u);
+  assert.doesNotMatch(workload, /payment\/production\/service\.ts/u);
   assert.match(workloadLogic, /event\.attempt >= PRODUCTION_FULFILLMENT_MAX_RETRIES/u);
   assert.match(workloadLogic, /ErrorRetryAfterDelay/u);
   assert.match(

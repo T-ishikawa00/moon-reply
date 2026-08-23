@@ -1,4 +1,8 @@
-import "server-only";
+/**
+ * Server-runtime infrastructure shared by the guarded Next service and the
+ * Netlify worker. Credentials are constructor-injected; browser reachability
+ * is rejected by the async-router worker-graph verifier.
+ */
 import {
   createClient,
   type SupabaseClient,
