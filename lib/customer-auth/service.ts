@@ -4,6 +4,7 @@ import { M2RuntimeError } from "../assessment/runtime/errors";
 import { getSupabaseAdminEnv } from "../supabase/env";
 import { createCustomerAuthServerClient } from "../supabase/server";
 import { CustomerIdentityAuthApplicationV1 } from "./application";
+import type { CustomerAuthServerLatencyObserver } from "./latency-measurement";
 import {
   isCustomerAuthEmailOtpEnabled,
   isCustomerAuthFoundationEnabled,
@@ -13,7 +14,9 @@ import {
 import { SupabaseCustomerAuthProviderV1 } from "./supabase-provider";
 import { SupabaseCustomerIdentityRepositoryV1 } from "./supabase-repository";
 
-export async function createCustomerIdentityAuthApplication() {
+export async function createCustomerIdentityAuthApplication(options?: {
+  latencyObserver?: CustomerAuthServerLatencyObserver;
+}) {
   if (!isCustomerAuthFoundationEnabled()) {
     throw new M2RuntimeError("CUSTOMER_AUTH_UNAVAILABLE", 404);
   }
@@ -26,6 +29,7 @@ export async function createCustomerIdentityAuthApplication() {
   );
   return new CustomerIdentityAuthApplicationV1({
     environment,
+    latencyObserver: options?.latencyObserver,
     provider,
     repository: new SupabaseCustomerIdentityRepositoryV1(
       supabaseUrl,

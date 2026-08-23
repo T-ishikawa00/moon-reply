@@ -13,6 +13,7 @@ import {
   requireCustomerAuthMethod,
 } from "@/lib/customer-auth/service";
 import { readStrictJsonRequest } from "@/lib/http/strict-json-request";
+import { createCustomerAuthServerLatencyMeasurement } from "@/lib/customer-auth/latency-measurement";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +32,9 @@ function decode(value: unknown) {
 }
 
 export async function POST(request: NextRequest) {
+  const latency = createCustomerAuthServerLatencyMeasurement({
+    route: "google_start",
+  });
   try {
     requireCustomerAuthMethod("google");
     const environment = readCustomerAuthEnvironment();
@@ -41,17 +45,30 @@ export async function POST(request: NextRequest) {
       throw new M2RuntimeError("CUSTOMER_AUTH_CONTINUATION_INVALID", 403);
     }
     enforceCustomerAuthRateLimit("google-start", continuationToken);
-    const application = await createCustomerIdentityAuthApplication();
+    const application = await createCustomerIdentityAuthApplication({
+      latencyObserver: latency.observe,
+    });
     const outcome = await application.startGoogle({
       continuationToken,
       csrfToken: body.csrfToken,
     });
-    return customerAuthJson(
-      { data: { status: "redirect_ready", authorizationUrl: outcome.authorizationUrl } },
-      200,
+    return latency.finish(
+      customerAuthJson(
+        {
+          data: {
+            status: "redirect_ready",
+            authorizationUrl: outcome.authorizationUrl,
+          },
+        },
+        200,
+      ),
+      "success",
     );
   } catch (error) {
     const safe = asM2RuntimeError(error, "CUSTOMER_AUTH_GOOGLE_START_FAILED");
-    return customerAuthJson({ error: { code: safe.safeCode } }, safe.httpStatus);
+    return latency.finish(
+      customerAuthJson({ error: { code: safe.safeCode } }, safe.httpStatus),
+      "failure",
+    );
   }
 }

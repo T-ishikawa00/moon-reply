@@ -14,6 +14,7 @@ import {
   requireCustomerAuthMethod,
 } from "@/lib/customer-auth/service";
 import { readStrictJsonRequest } from "@/lib/http/strict-json-request";
+import { createCustomerAuthServerLatencyMeasurement } from "@/lib/customer-auth/latency-measurement";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,6 +40,9 @@ function decode(value: unknown) {
 }
 
 export async function POST(request: NextRequest) {
+  const latency = createCustomerAuthServerLatencyMeasurement({
+    route: "continuation",
+  });
   try {
     const environment = readCustomerAuthEnvironment();
     enforceCustomerAuthSameOrigin(request, environment.siteOrigin);
@@ -56,7 +60,9 @@ export async function POST(request: NextRequest) {
       "continuation-create",
       String(body.preparationCapability),
     );
-    const application = await createCustomerIdentityAuthApplication();
+    const application = await createCustomerIdentityAuthApplication({
+      latencyObserver: latency.observe,
+    });
     const outcome = await application.createContinuation(body);
     const response = customerAuthJson(
       {
@@ -73,9 +79,12 @@ export async function POST(request: NextRequest) {
       csrf: outcome.csrfToken,
       ttlSeconds: outcome.ttlSeconds,
     });
-    return response;
+    return latency.finish(response, "success");
   } catch (error) {
     const safe = asM2RuntimeError(error, "CUSTOMER_AUTH_REQUEST_FAILED");
-    return customerAuthJson({ error: { code: safe.safeCode } }, safe.httpStatus);
+    return latency.finish(
+      customerAuthJson({ error: { code: safe.safeCode } }, safe.httpStatus),
+      "failure",
+    );
   }
 }

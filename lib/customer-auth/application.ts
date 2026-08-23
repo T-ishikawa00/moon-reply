@@ -15,6 +15,10 @@ import {
 } from "./crypto";
 import type { CustomerAuthEnvironment } from "./environment";
 import type {
+  CustomerAuthServerLatencyObserver,
+  CustomerAuthServerLatencyPhase,
+} from "./latency-measurement";
+import type {
   CustomerAuthFlowKind,
   CustomerAuthIdentityV1,
   CustomerAuthProviderV1,
@@ -26,6 +30,8 @@ type Options = {
   provider: CustomerAuthProviderV1;
   environment: CustomerAuthEnvironment;
   now?: () => string;
+  monotonicNow?: () => number;
+  latencyObserver?: CustomerAuthServerLatencyObserver;
   uuid?: () => string;
   secret?: () => string;
 };
@@ -36,13 +42,46 @@ function addSeconds(instant: string, seconds: number) {
 
 export class CustomerIdentityAuthApplicationV1 {
   private readonly now: () => string;
+  private readonly monotonicNow: () => number;
   private readonly uuid: () => string;
   private readonly secret: () => string;
 
   constructor(private readonly options: Options) {
     this.now = options.now ?? (() => new Date().toISOString());
+    this.monotonicNow = options.monotonicNow ?? (() => performance.now());
     this.uuid = options.uuid ?? randomUUID;
     this.secret = options.secret ?? createCustomerAuthSecret;
+  }
+
+  private async measureLatency<T>(
+    phase: CustomerAuthServerLatencyPhase,
+    operation: () => Promise<T>,
+  ) {
+    const startedAt = this.monotonicNow();
+    try {
+      const result = await operation();
+      try {
+        this.options.latencyObserver?.({
+          phase,
+          durationMs: Math.max(0, this.monotonicNow() - startedAt),
+          outcome: "success",
+        });
+      } catch {
+        // Latency diagnostics must never affect Customer Auth.
+      }
+      return result;
+    } catch (error) {
+      try {
+        this.options.latencyObserver?.({
+          phase,
+          durationMs: Math.max(0, this.monotonicNow() - startedAt),
+          outcome: "failure",
+        });
+      } catch {
+        // Latency diagnostics must never replace the auth error.
+      }
+      throw error;
+    }
   }
 
   async createContinuation(input: {
@@ -56,20 +95,25 @@ export class CustomerIdentityAuthApplicationV1 {
       throw new M2RuntimeError("CUSTOMER_AUTH_SECRET_COLLISION", 503);
     }
     const now = this.now();
-    const continuation = await this.options.repository.createContinuation({
-      id: this.uuid(),
-      preparationCapabilityHash: hashOpaqueProductionCapability(
-        input.preparationCapability,
-      ),
-      continuationTokenHash: hashCustomerAuthContinuation(continuationToken),
-      csrfTokenHash: hashCustomerAuthCsrf(csrfToken),
-      flowKind: input.flowKind,
-      expiresAt: addSeconds(
-        now,
-        this.options.environment.continuationTtlSeconds,
-      ),
-      now,
-    });
+    const continuation = await this.measureLatency(
+      "continuation_create",
+      () =>
+        this.options.repository.createContinuation({
+          id: this.uuid(),
+          preparationCapabilityHash: hashOpaqueProductionCapability(
+            input.preparationCapability,
+          ),
+          continuationTokenHash:
+            hashCustomerAuthContinuation(continuationToken),
+          csrfTokenHash: hashCustomerAuthCsrf(csrfToken),
+          flowKind: input.flowKind,
+          expiresAt: addSeconds(
+            now,
+            this.options.environment.continuationTtlSeconds,
+          ),
+          now,
+        }),
+    );
     return {
       continuationToken,
       csrfToken,
@@ -83,12 +127,18 @@ export class CustomerIdentityAuthApplicationV1 {
     csrfToken: unknown;
     flowKind: CustomerAuthFlowKind;
   }) {
-    const continuation = await this.options.repository.validateContinuation({
-      continuationTokenHash: hashCustomerAuthContinuation(input.continuationToken),
-      csrfTokenHash: hashCustomerAuthCsrf(input.csrfToken),
-      flowKind: input.flowKind,
-      now: this.now(),
-    });
+    const continuation = await this.measureLatency(
+      "continuation_validation",
+      () =>
+        this.options.repository.validateContinuation({
+          continuationTokenHash: hashCustomerAuthContinuation(
+            input.continuationToken,
+          ),
+          csrfTokenHash: hashCustomerAuthCsrf(input.csrfToken),
+          flowKind: input.flowKind,
+          now: this.now(),
+        }),
+    );
     if (!continuation) {
       throw new M2RuntimeError("CUSTOMER_AUTH_CONTINUATION_INVALID", 403);
     }
@@ -97,7 +147,9 @@ export class CustomerIdentityAuthApplicationV1 {
 
   async startGoogle(input: { continuationToken: unknown; csrfToken: unknown }) {
     await this.validateContinuation({ ...input, flowKind: "google" });
-    return this.options.provider.startGoogleOAuth();
+    return this.measureLatency("oauth_url_generation", () =>
+      this.options.provider.startGoogleOAuth(),
+    );
   }
 
   async requestEmailOtp(input: {

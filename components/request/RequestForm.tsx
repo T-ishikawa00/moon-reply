@@ -41,6 +41,7 @@ import {
   type ScopeAcknowledgementsV1,
 } from "@/lib/purchase/prepayment-safety-types-v1";
 import { trackClientMeasurement } from "@/lib/measurement/client";
+import { startGoogleAuthRedirectLatencyMeasurement } from "@/lib/customer-auth/latency-measurement";
 import {
   buildPublicClarificationAnswerV1,
   classifyClarificationContinuationV1,
@@ -995,6 +996,9 @@ export function RequestForm({
   const requestStartedMeasured = useRef(false);
   const requestCompletedMeasured = useRef(false);
   const authEntryPendingRef = useRef(false);
+  const googleAuthLatencyMeasurement = useRef<
+    ReturnType<typeof startGoogleAuthRedirectLatencyMeasurement> | null
+  >(null);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -1596,6 +1600,12 @@ export function RequestForm({
     preparationCapability: string,
     flowKind: "google" | "email_otp",
   ) {
+    const googleLatency =
+      flowKind === "google"
+        ? (googleAuthLatencyMeasurement.current ??
+          startGoogleAuthRedirectLatencyMeasurement())
+        : null;
+    if (googleLatency) googleAuthLatencyMeasurement.current = googleLatency;
     if (flowKind === "email_otp") {
       const emailErrors = validateEmail(form);
       if (Object.keys(emailErrors).length > 0) {
@@ -1614,6 +1624,7 @@ export function RequestForm({
       preparationCapability,
     });
     try {
+      googleLatency?.markContinuationStart();
       const continuationResponse = await fetch("/api/auth/continuations", {
         method: "POST",
         credentials: "same-origin",
@@ -1628,6 +1639,9 @@ export function RequestForm({
           flowKind,
         }),
       });
+      googleLatency?.markContinuationEnd(
+        continuationResponse.headers.get("Server-Timing"),
+      );
       if (!continuationResponse.ok) {
         throw new Error("CUSTOMER_AUTH_CONTINUATION_FAILED");
       }
@@ -1639,6 +1653,7 @@ export function RequestForm({
         throw new Error("CUSTOMER_AUTH_CONTINUATION_INVALID");
       }
       if (flowKind === "google") {
+        googleLatency?.markGoogleStart();
         const response = await fetch("/api/auth/google/start", {
           method: "POST",
           credentials: "same-origin",
@@ -1646,6 +1661,7 @@ export function RequestForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ csrfToken }),
         });
+        googleLatency?.markGoogleEnd(response.headers.get("Server-Timing"));
         if (!response.ok) throw new Error("CUSTOMER_AUTH_GOOGLE_START_FAILED");
         const data = readResponseData(await response.json());
         if (
@@ -1658,7 +1674,10 @@ export function RequestForm({
         if (authorizationUrl.protocol !== "https:") {
           throw new Error("CUSTOMER_AUTH_GOOGLE_URL_INVALID");
         }
+        googleLatency?.markAuthorizationUrlReceived();
         trackClientMeasurement("auth_start", { method: "google" });
+        googleLatency?.markLocationAssignStart();
+        googleAuthLatencyMeasurement.current = null;
         window.location.assign(authorizationUrl.toString());
         return;
       }
@@ -1682,6 +1701,10 @@ export function RequestForm({
         otp: "",
       });
     } catch {
+      googleLatency?.markFailed();
+      if (googleAuthLatencyMeasurement.current === googleLatency) {
+        googleAuthLatencyMeasurement.current = null;
+      }
       setProductionFlow({
         status: "error",
         reason: "technical_failure",
@@ -2044,6 +2067,10 @@ export function RequestForm({
     try {
       await submitPhaseFour(authMethod);
     } finally {
+      if (authMethod === "google" && googleAuthLatencyMeasurement.current) {
+        googleAuthLatencyMeasurement.current.markFailed();
+        googleAuthLatencyMeasurement.current = null;
+      }
       authEntryPendingRef.current = false;
       setAuthEntryPending(false);
     }
@@ -2053,6 +2080,10 @@ export function RequestForm({
     setCustomerAuthMethod(method);
     setErrors({});
     if (method === "google") {
+      if (authEntryPendingRef.current) return;
+      googleAuthLatencyMeasurement.current?.markFailed();
+      googleAuthLatencyMeasurement.current =
+        startGoogleAuthRedirectLatencyMeasurement();
       void runPhaseFour(method);
       return;
     }

@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import {
-  isPurchaseTrustReviewFixture,
-  PURCHASE_TRUST_REVIEW_FIXTURES,
   ReviewPurchaseTrust,
+  type PurchaseTrustReviewFixture,
 } from "@/components/review/ReviewPurchaseTrust";
+
+const purchaseTrustReviewFixtures = [
+  "checkout",
+  "confirming-payment",
+  "preparing-assessment",
+  "delayed",
+  "completed",
+] as const satisfies readonly PurchaseTrustReviewFixture[];
 
 export const metadata: Metadata = {
   title: "購入Trust UX（審査用） | 月の返事",
@@ -11,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-  return PURCHASE_TRUST_REVIEW_FIXTURES.map((fixtureId) => ({ fixtureId }));
+  return purchaseTrustReviewFixtures.map((fixtureId) => ({ fixtureId }));
 }
 
 export default async function ReviewPurchaseTrustPage({
@@ -20,7 +27,11 @@ export default async function ReviewPurchaseTrustPage({
   params: Promise<{ fixtureId: string }>;
 }) {
   const { fixtureId } = await params;
-  if (!isPurchaseTrustReviewFixture(fixtureId)) {
+  if (
+    !purchaseTrustReviewFixtures.includes(
+      fixtureId as PurchaseTrustReviewFixture,
+    )
+  ) {
     return (
       <main className="request-state-page">
         <section className="request-state-note">
@@ -32,5 +43,7 @@ export default async function ReviewPurchaseTrustPage({
       </main>
     );
   }
-  return <ReviewPurchaseTrust fixtureId={fixtureId} />;
+  return (
+    <ReviewPurchaseTrust fixtureId={fixtureId as PurchaseTrustReviewFixture} />
+  );
 }
