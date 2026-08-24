@@ -3,7 +3,7 @@
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:BEGIN -->
 ## M2-D1 Customer-facing Legal / Contract Current Truth
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
+Status: `Human/ChatGPT SOURCE PASS`; LEG-01 current-truth drift `CLOSED IN SOURCE`; external-beta legal disclosure/operation `PENDING`.
 
 - [x] Start the bounded branch from exact `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; preserve `main`.
 - [x] Sync C1 remote closure: exact remote 0002–0020, pending 0, unknown 0; C1 source + remote DB PASS; AI-01/AI-02 closed in source + remote authority with activation pending.
@@ -12,8 +12,9 @@ Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
 - [x] Rewrite Terms, Privacy, Refund, AI disclosure, unsupported cases, commercial disclosure, legal index, Contact, and necessary Home current-truth copy without changing product economics or visual design.
 - [x] Preserve noindex/nofollow and add exact source proof for one h1, accessible navigation, valid purchase links, zero forbidden internal jargon, current providers, and cross-page product facts.
 - [x] Keep seller identity/address/phone, real support contact, refund operation, retention periods, effective date, and jurisdiction as explicit Human/legal decisions; invent none.
-- [ ] Obtain independent Human/ChatGPT source review. Do not infer final legal sufficiency, external-beta readiness, Production activation, or Public Launch.
+- [x] Obtain independent Human/ChatGPT SOURCE review PASS for exact reviewed head `d4b59d1914c70a2ad37f8ec8254961d85c5db212`.
 - [ ] Complete seller disclosure and D2 support/recovery only under their later separate authorities.
+- [ ] Preserve the acceptance boundary: no final legal compliance, External Private Beta, Public Launch, operational support, or refund-operation closure is inferred from D1.
 
 Evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`.
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->

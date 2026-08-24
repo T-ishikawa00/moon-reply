@@ -1,8 +1,12 @@
 # M2-D1 — Customer-facing Legal / Contract Current Truth
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `Human/ChatGPT SOURCE PASS`
 
 This is the existing M2-D1 backlog task, not a new Milestone or Gate. The source authority is `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Production Publish, C1 activation, Netlify configuration, remote database mutation, Payment, Provider, email, and support-channel operations are outside this task.
+
+Independent review accepted exact branch `task/m2-d1-customer-legal-current-truth-r1` at `d4b59d1914c70a2ad37f8ec8254961d85c5db212`. LEG-01 current-truth drift is `CLOSED IN SOURCE`: customer legal pages no longer present historical B2/B3/B4 review authority as current truth; Payment, Stripe, AI/provider, and centralized economic facts match reviewed source; historical review evidence remains preserved internally.
+
+This disposition does **not** establish final legal compliance, authorize External Private Beta or Public Launch, complete seller disclosure, make a support channel operational, or complete refund operations. External Private Beta remains blocked until required disclosures, contact, and operating procedures are actually established.
 
 ## Current authority and C1 closure sync
 
@@ -86,12 +90,14 @@ Runtime Payment authorization does not depend on the legal rendering module. The
 
 ### Human decisions still required
 
-- Legal seller identity, representative, postal address, telephone number, and actual support/contact address.
+- Legal seller identity and the seller/representative requirement appropriate to the final seller form.
+- Actual activity/postal address and a reachable telephone number or legally accepted alternative mechanism.
+- Actual support/contact address and route.
 - A real support/recovery channel and its controlled operating procedure.
 - Final operational refund/cancellation procedure, especially customer-convenience cancellation after Payment and before fulfillment.
-- Data-category retention schedule and deletion/request operating procedure.
+- Privacy data-category retention schedule and request/deletion operating procedure.
 - Effective/revision date and final change-notice mechanism.
-- Governing jurisdiction wording after seller identity/location is established.
+- Governing/jurisdiction wording if appropriate after seller identity/location is established.
 
 Human-controlled private seller/contact details must not be pasted into repository history or Codex chat merely to complete D1. A later reviewed procedure must source approved values from a secure Human-controlled authority.
 

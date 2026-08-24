@@ -4,12 +4,12 @@
 ## Current handoff — M2-D1 customer legal current truth
 
 - Authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; task branch `task/m2-d1-customer-legal-current-truth-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. This closes no final legal, External Private Beta, Production, or Public Launch authority.
+- Status: `Human/ChatGPT SOURCE PASS`. LEG-01 current-truth drift is `CLOSED IN SOURCE`; external-beta legal disclosure/operation remains pending. This closes no final legal compliance, External Private Beta, Production, or Public Launch authority.
 - Customer legal/contact routes use `lib/legal/current-content.ts` and `components/legal/LegalDocument.tsx`; historical `lib/legal/review-content.ts` and `components/legal/LegalReview.tsx` are preserved and no longer customer-route dependencies.
 - Current customer truth covers exact JPY 980 one-time economics, Stripe Payment, durable verification/recovery, OpenAI analysis, Supabase DB/Auth, Netlify hosting/runtime, Resend transactional email, AI/non-guarantee/safety boundaries, and no fake operational promises.
 - `/contact` remains honestly non-operational. Seller identity/representative/address/phone, real support endpoint, final cancellation/refund process, retention schedule, document effective date, and jurisdiction wording remain unresolved Human/legal facts and External Private Beta blockers.
 - C1 remains source + remote DB closed but inactive: remote exact 0002–0020, pending 0, unknown 0; Production `PREPAYMENT_COMPUTE_*` values unset/disabled; future Self Dogfood policy 86400 / 10 remains recorded only.
-- Next action after task commit/push is independent D1 source review only. Do not begin D2, activate C1, mutate DB/Netlify, or Production Publish.
+- After exact ff-only D1 integration, the next backlog task is M2-D2 Contact / Paid-failure Recovery Support under separate authority. Do not begin D2, activate C1, mutate DB/Netlify, or Production Publish in this acceptance sync.
 - Evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`.
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->
 

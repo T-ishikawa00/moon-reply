@@ -4,10 +4,11 @@
 ## Current operational overlay — M2-D1 customer legal current truth
 
 - Current authority is `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; D1 is on `task/m2-d1-customer-legal-current-truth-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- D1 status is `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. It establishes current customer truth, not final legal sufficiency, Production activation, External Private Beta, or Public Launch.
+- D1 status is `Human/ChatGPT SOURCE PASS`. LEG-01 current-truth drift is `CLOSED IN SOURCE`; external-beta legal disclosure/operation remains pending. This establishes neither final legal sufficiency nor Production activation, External Private Beta, or Public Launch.
 - Customer `/legal/**` and `/contact` now use a dedicated typed current-content authority. Historical Stripe Lane B/B4 review content and its dashboard component remain preserved but are no longer imported by customer legal routes.
 - Locked facts are: 月の返事; 恋のメッセージ鑑定ノート; AIを活用した恋愛メッセージ分析・判断支援デジタルレポート; 税込980円; 1相談 / 1鑑定ノート; 都度払い; 自動更新なし; 18歳以上; AI disclosed; no outcome guarantee.
 - Seller identity/representative/address/phone, real support contact, final refund/cancellation operation, retention schedule, effective/revision date, and jurisdiction wording remain Human/legal decisions. No value was invented; these remain External Private Beta blockers.
+- The next backlog task after D1 integration is M2-D2 Contact / Paid-failure Recovery Support. It is not started or authorized by this acceptance sync.
 - Canonical evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`. D2, Production Publish, Netlify configuration, DB mutation, Payment, Provider, email, and scheduler actions remain outside D1.
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->
 
