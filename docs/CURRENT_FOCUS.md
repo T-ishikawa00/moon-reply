@@ -1,9 +1,9 @@
 # CURRENT_FOCUS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current operational overlay — M2-B1 accepted / M2-B2 architecture
+## Current operational overlay — M2-B2 design integrated / I1 local candidate
 
-- Current source authority: `release/private-ready@8fcb7861c45b2ff29a45d5bf1ac1207b957dc893`; B1 was integrated by exact fast-forward and normally pushed.
+- Current source authority: `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88`; reviewed B2 design was integrated by exact fast-forward and normally pushed. `main` is unchanged.
 - M2-A1 status: `Human/ChatGPT reviewed PASS / Production DB closed`; remote migration history is exact `0002..0017` with pending `0` and unknown `0`.
 - Exact applied artifact: `supabase/migrations/0017_m2_a1_null_fence_integrity.sql`; immutable Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`.
 - Remote closure: the confirmed NULL owner/lease claim and completion exploits are closed by the exact three hardened v2 bodies; v1, signatures, ACL, `SECURITY INVOKER`, search path, tables, constraints, policies, and non-target RPCs remained unchanged.
@@ -12,10 +12,11 @@
 - Non-blocking follow-up: HTTP `401/404/429/5xx` taxonomy remains `ERR-01 / E2 Auth Recovery`; it does not reopen B1 absent an integration regression.
 - B1 build `6a8b1ddfb6afaf000854e4af` is exact-source, successful, `38/38` pages with 11 Functions and 1 Edge Function, and remains UNPUBLISHED under Auto Publishing Lock. Existing deploy `6a8af2575d156800089493ec` also remains UNPUBLISHED. Published source is unchanged.
 - Durable payment truth: `paymentVerified` comes from persisted successful-Payment authority, including the non-inferred `confirmation_pending` case. Customer copy cannot claim confirmed payment without it.
-- Current bounded task: **M2-B2 — Private Site / Stripe Webhook Convergence**, limited to platform feasibility, architecture, security, rollback, and synthetic rehearsal design. Current Private visibility blocks Stripe and has no path exception; making the customer site Public is rejected because `/review/**` has no app-level auth.
-- B2 recommendation: a separate minimal Public Netlify ingress project plus a non-addressable Private-project Scheduled Function for durable pre-router recovery. The ingress exposes one exact POST path and owns no customer/Review/Checkout/Provider/email/worker surface.
-- Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md` and `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`.
-- B2 ceiling: no Production Publish, Netlify/Stripe configuration write, webhook resend, real Stripe API call, Purchase, Async event, Provider call, remote Supabase write/migration, or `main` change.
+- Current bounded task: **M2-B2-I1 — Public Stripe Ingress / Least-Privilege DB Authority**. Source, candidate 0018, exact raw-signature seam, minimal standalone ingress, and fresh local/disposable proof are complete pending review.
+- Current remote PostgREST exposed schemas are exact `public,graphql_public`; I1 uses non-exposed `private_payment_ingress`. Remote DB remains `0002..0017`, with pending exact `0018` only and remote write `0`.
+- Candidate 0018 SHA-256: `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c`. Dedicated login has no credential and can execute one definer wrapper only; direct application relation and non-target RPC privileges are zero.
+- Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`, `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`, and `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`.
+- I1 stop boundary: no remote 0018 apply/credential, Netlify project/config/deploy/publish, Stripe endpoint/API/resend/Purchase, Async event, Provider/email, or `main` change.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

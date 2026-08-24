@@ -1,6 +1,11 @@
 import { createHash } from "node:crypto";
 import Stripe from "stripe";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
+import {
+  normalizeStripeCheckoutSessionV1,
+  type StripeCheckoutSessionSnapshotV1,
+  validateStripeCheckoutSessionSnapshotV1,
+} from "./stripe-session.ts";
 import type {
   CheckoutProviderV1,
   CheckoutSessionReconciliationRequestV1,
@@ -9,115 +14,17 @@ import type {
   StripePaymentEvidenceV1,
 } from "./types.ts";
 
-const supportedEventTypes = new Set([
-  "checkout.session.completed",
-  "checkout.session.async_payment_succeeded",
-  "checkout.session.async_payment_failed",
-  "checkout.session.expired",
-]);
-const purchaseReferencePattern =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
-
-export type StripeCheckoutSessionSnapshotV1 = Readonly<{
-  providerCheckoutSessionId: string;
-  environment: PaymentEnvironment;
-  purchaseReference: string;
-  clientReferenceId: string | null;
-  providerPaymentId: string | null;
-  paymentIntentPurchaseReference: string | null;
-  mode: string | null;
-  paymentStatus: string | null;
-  amountTotal: number | null;
-  currency: string | null;
-  checkoutStatus: string | null;
-}>;
+export type { StripeCheckoutSessionSnapshotV1 } from "./stripe-session.ts";
 
 function sha256(value: string | Buffer) {
   return createHash("sha256").update(value).digest("hex");
-}
-
-function normalizedSession(
-  session: Stripe.Checkout.Session,
-  requireExpandedPaymentIntent: boolean,
-): StripeCheckoutSessionSnapshotV1 {
-  const purchaseReference = session.metadata?.moon_purchase_reference;
-  const environment: PaymentEnvironment = session.livemode ? "live" : "test";
-  const expectedSessionPrefix = session.livemode ? "cs_live_" : "cs_test_";
-  if (
-    !purchaseReference ||
-    !purchaseReferencePattern.test(purchaseReference) ||
-    session.client_reference_id !== purchaseReference ||
-    typeof session.id !== "string" ||
-    !session.id.startsWith(expectedSessionPrefix)
-  ) {
-    throw new M2RuntimeError("PAYMENT_STRIPE_EVIDENCE_INVALID", 503);
-  }
-  const paymentIntent = session.payment_intent;
-  if (
-    requireExpandedPaymentIntent &&
-    typeof paymentIntent === "string"
-  ) {
-    throw new M2RuntimeError("PAYMENT_STRIPE_EVIDENCE_INVALID", 503);
-  }
-  const providerPaymentId =
-    typeof paymentIntent === "string"
-      ? paymentIntent
-      : paymentIntent?.id ?? null;
-  const paymentIntentPurchaseReference =
-    typeof paymentIntent === "object" && paymentIntent !== null
-      ? paymentIntent.metadata?.moon_purchase_reference ?? null
-      : null;
-  if (
-    paymentIntentPurchaseReference !== null &&
-    paymentIntentPurchaseReference !== purchaseReference
-  ) {
-    throw new M2RuntimeError("PAYMENT_STRIPE_EVIDENCE_INVALID", 503);
-  }
-  if (
-    requireExpandedPaymentIntent &&
-    providerPaymentId !== null &&
-    paymentIntentPurchaseReference !== purchaseReference
-  ) {
-    throw new M2RuntimeError("PAYMENT_STRIPE_EVIDENCE_INVALID", 503);
-  }
-  return {
-    providerCheckoutSessionId: session.id,
-    environment,
-    purchaseReference,
-    clientReferenceId: session.client_reference_id,
-    providerPaymentId,
-    paymentIntentPurchaseReference,
-    mode: session.mode,
-    paymentStatus: session.payment_status,
-    amountTotal: session.amount_total,
-    currency: session.currency?.toLowerCase() ?? null,
-    checkoutStatus: session.status,
-  };
-}
-
-function validateSnapshot(
-  snapshot: StripeCheckoutSessionSnapshotV1,
-  requirePaymentIntentBinding: boolean,
-) {
-  const expectedSessionPrefix =
-    snapshot.environment === "live" ? "cs_live_" : "cs_test_";
-  if (
-    !purchaseReferencePattern.test(snapshot.purchaseReference) ||
-    snapshot.clientReferenceId !== snapshot.purchaseReference ||
-    !snapshot.providerCheckoutSessionId.startsWith(expectedSessionPrefix) ||
-    (requirePaymentIntentBinding &&
-      snapshot.providerPaymentId !== null &&
-      snapshot.paymentIntentPurchaseReference !== snapshot.purchaseReference)
-  ) {
-    throw new M2RuntimeError("PAYMENT_STRIPE_EVIDENCE_INVALID", 503);
-  }
 }
 
 export function buildStripeReconciliationEvidenceV1(
   snapshot: StripeCheckoutSessionSnapshotV1,
   observedAt: string,
 ): StripePaymentEvidenceV1 {
-  validateSnapshot(snapshot, true);
+  validateStripeCheckoutSessionSnapshotV1(snapshot, true);
   if (
     !Number.isFinite(Date.parse(observedAt)) ||
     new Date(observedAt).toISOString() !== observedAt
@@ -214,65 +121,9 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
       { expand: ["payment_intent"] },
     );
     return buildStripeReconciliationEvidenceV1(
-      normalizedSession(session, true),
+      normalizeStripeCheckoutSessionV1(session, true),
       request.observedAt,
     );
-  }
-}
-
-export class StripeWebhookEvidenceVerifierV1 {
-  private readonly stripe: Stripe;
-  private readonly webhookSecret: string;
-
-  constructor(secretKey: string, webhookSecret: string) {
-    this.stripe = new Stripe(secretKey);
-    this.webhookSecret = webhookSecret;
-  }
-
-  verify(
-    rawBody: Buffer,
-    signature: string | null,
-  ): StripePaymentEvidenceV1 | null {
-    if (!signature) {
-      throw new M2RuntimeError("PAYMENT_WEBHOOK_SIGNATURE_INVALID", 400);
-    }
-    let event: Stripe.Event;
-    try {
-      event = this.stripe.webhooks.constructEvent(
-        rawBody,
-        signature,
-        this.webhookSecret,
-      );
-    } catch {
-      throw new M2RuntimeError("PAYMENT_WEBHOOK_SIGNATURE_INVALID", 400);
-    }
-    if (!supportedEventTypes.has(event.type)) return null;
-    const session = event.data.object as Stripe.Checkout.Session;
-    if (session.livemode !== event.livemode) {
-      throw new M2RuntimeError("PAYMENT_WEBHOOK_EVIDENCE_INVALID", 400);
-    }
-    let snapshot: StripeCheckoutSessionSnapshotV1;
-    try {
-      snapshot = normalizedSession(session, false);
-      validateSnapshot(snapshot, false);
-    } catch {
-      throw new M2RuntimeError("PAYMENT_WEBHOOK_EVIDENCE_INVALID", 400);
-    }
-    return {
-      evidenceSource: "webhook",
-      providerEventId: event.id,
-      eventType: event.type as StripePaymentEvidenceV1["eventType"],
-      providerCreatedAt: new Date(event.created * 1000).toISOString(),
-      payloadSha256: sha256(rawBody),
-      environment: snapshot.environment,
-      purchaseReference: snapshot.purchaseReference,
-      providerCheckoutSessionId: snapshot.providerCheckoutSessionId,
-      providerPaymentId: snapshot.providerPaymentId,
-      mode: snapshot.mode,
-      paymentStatus: snapshot.paymentStatus,
-      amountTotal: snapshot.amountTotal,
-      currency: snapshot.currency,
-    };
   }
 }
 

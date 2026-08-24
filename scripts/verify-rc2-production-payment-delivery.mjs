@@ -13,7 +13,7 @@ import {
   DeterministicFakeTransactionalEmailAdapterV1,
   UnconfiguredTransactionalEmailAdapterV1,
 } from "../lib/payment/production/transactional-email.ts";
-import { StripeWebhookEvidenceVerifierV1 } from "../lib/payment/production/stripe.ts";
+import { StripeWebhookEvidenceVerifierV1 } from "../lib/payment/production/stripe-webhook.ts";
 import { hashOpaqueProductionCapability } from "../lib/assessment/production/capabilities.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import {
@@ -40,7 +40,6 @@ const fixedClock = "2026-08-20T03:00:00.000Z";
 const emailEncryptionKey = Buffer.alloc(32, 71).toString("base64");
 const verificationPepper = "verification-pepper-for-rc2-tests-000000000001";
 const statusSigningSecret = "status-signing-secret-for-rc2-tests-000000000001";
-const fakeStripeSecretKey = ["sk", "test", "rc2", "offline", "only"].join("_");
 const fakeWebhookSecret = ["whsec", "rc2", "offline", "secret"].join("_");
 
 function readText(relativePath) {
@@ -583,10 +582,7 @@ await check("failed Payment permits one explicit sequential retry on the same Pu
 });
 
 await check("invalid Stripe webhook signature is rejected against the raw body", () => {
-  const verifier = new StripeWebhookEvidenceVerifierV1(
-    fakeStripeSecretKey,
-    fakeWebhookSecret,
-  );
+  const verifier = new StripeWebhookEvidenceVerifierV1(fakeWebhookSecret);
   const raw = Buffer.from('{"id":"evt_invalid"}', "utf8");
   assert.throws(
     () => verifier.verify(raw, "t=1,v1=invalid"),
@@ -623,10 +619,7 @@ await check("valid Stripe signature yields minimized authoritative evidence", ()
   const signature = createHmac("sha256", secret)
     .update(`${timestamp}.${payload}`, "utf8")
     .digest("hex");
-  const verifier = new StripeWebhookEvidenceVerifierV1(
-    fakeStripeSecretKey,
-    secret,
-  );
+  const verifier = new StripeWebhookEvidenceVerifierV1(secret);
   const evidence = verifier.verify(
     Buffer.from(payload, "utf8"),
     `t=${timestamp},v1=${signature}`,

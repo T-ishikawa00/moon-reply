@@ -1,9 +1,9 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current handoff — M2-B1 accepted / M2-B2 architecture complete
+## Current handoff — M2-B2 design integrated / I1 local candidate complete
 
-- Authority: `release/private-ready@8fcb7861c45b2ff29a45d5bf1ac1207b957dc893`; exact B1 fast-forward integration and normal push are complete.
+- Authority: `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88`; reviewed B2 design fast-forward integration and normal push are complete. `main` is unchanged.
 - M2-A1 is Human/ChatGPT reviewed PASS and closed through Production DB. Remote migrations are exact `0002..0017`; pending and unknown are both `0`.
 - Applied migration is exact `0017_m2_a1_null_fence_integrity.sql`, Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. The confirmed NULL owner/lease exploit paths are remotely closed with v1/signature/ACL/security/search-path and all non-target identities unchanged.
 - Published runtime remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d` and is confirmed compatible with DB0017. No M2-A1 Production Publish was needed.
@@ -12,9 +12,11 @@
 - Closed source defects: the strict shared decoder accepts canonical `/result/<43-char-token>` and `/account/results/<UUID>` only; transient failures retry with bounded capped backoff and jitter rather than permanently stopping.
 - Recovery contract: no overlap, unmount cleanup, global/retry budgets, terminal-state stop, exactly-once completed navigation, durable-only `paymentVerified`, explicit-only Checkout restart, and safe `/account` fallback. Evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
 - HTTP `401/404/429/5xx` taxonomy is a non-blocking `ERR-01 / E2 Auth Recovery` follow-up and does not reopen B1 absent an integration regression.
-- M2-B2 official/live conclusion: Private Project Visibility covers pages and Functions and has no webhook-only path exception. Making the customer site Public is rejected because `/review/**` has no app-level auth.
-- Recommended B2 boundary: separate minimal Public Netlify ingress with one exact POST function; raw Stripe verification and current DB idempotency; no customer/Review/Checkout/Provider/email/worker surface. A Private-project Scheduled Function performs bounded durable dispatch/reconciliation recovery and preserves same-site Async routing.
-- Design and action-time boundaries: `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`. No publish, Netlify/Stripe configuration write, webhook resend, real Stripe API call, Purchase, Async event, Provider call, remote write/migration, or `main` change is authorized.
+- M2-B2-I1 candidate is complete on `task/m2-b2-i1-public-ingress-authority-r1`: exact custom POST function, one raw-body read, pure webhook verifier, standalone ingress package, and evidence-only DB commit. Current customer webhook remains operationally unchanged before cutover.
+- Current remote exposed schemas are `public,graphql_public`; wrapper schema `private_payment_ingress` is not exposed. Candidate `0018_m2_b2_webhook_ingress_authority.sql` SHA-256 is `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c`; remote remains `0002..0017`, pending exact 0018, writes `0`.
+- Fresh disposable proof: exact `0002..0018`; direct table/sequence/non-target RPC authority `0`; first/duplicate/two-event/conflict/order matrices PASS; concurrent clients returned `verified 1 / duplicate 1` with one event/Payment/job.
+- Exact ingress secrets are only `PAYMENT_ENVIRONMENT`, `STRIPE_WEBHOOK_ENABLED`, `STRIPE_WEBHOOK_SECRET`, and `STRIPE_INGRESS_DATABASE_URL`. Bundle forbidden surfaces/env names are `0`; independent build PASS.
+- Evidence and action-time boundaries: `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`. No remote apply/credential, publish/deploy, Netlify/Stripe configuration, webhook/API/Purchase, Async, Provider/email, or `main` change is authorized.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

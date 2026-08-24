@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-B1 accepted / M2-B2 Private Webhook Convergence
+## M2-B2 design integrated / I1 Public Ingress Authority
 
-Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority integrated`; M2-B2 `architecture complete pending review`.
+Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority integrated`; M2-B2 design `Human/ChatGPT PASS / authority integrated`; B2-I1 `local/source implementation complete pending review`.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -19,8 +19,13 @@ Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority inte
 - [x] M2-B2: inventory site/Functions/Edge/path/redirect/proxy protection and prove current Private visibility returns `401` before webhook routing.
 - [x] M2-B2: compare path exclusion, public-current-site, separate ingress, isolated service, relay, and EventBridge options with Stripe/raw-body/idempotency/Async/reconciliation threats.
 - [x] M2-B2: recommend a separate minimal Public Netlify ingress plus Private scheduled durable-dispatch/reconciliation recovery; document exact future files, rollback, Sandbox rehearsal, and action-time gates.
+- [x] Fast-forward reviewed B2 design into `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88`, normally push, and keep `main` unchanged.
+- [x] Inventory remote Data API schemas (`public,graphql_public`) read-only and create candidate non-exposed `private_payment_ingress` wrapper plus credentialless `m2_b2_stripe_ingress` login in append-only 0018.
+- [x] Split the raw Stripe signature verifier from the Checkout API client and build a standalone exact-path ingress with the four-secret allowlist, no customer/Review/Checkout/Provider/email/Async/worker surface, and durable-commit-before-2xx behavior.
+- [x] Fresh-apply exact `0002..0018` locally and prove ACL, invalid zero-effect, duplicate/conflict/order/race convergence, and exact one Payment/job.
+- [x] Pass I1 `13/13`, B1 isolated `15/15`, RC-2 `50/50`, RC-1 `19/19`, durability `21/21`, artifact/runtime/auth/product/clarification, typecheck, zero-warning lint, customer build `38/38`, ingress build, and diff check.
 
-Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` are not publish candidates for this task. B2 produced design artifacts only; no Netlify/Stripe/DB/runtime configuration changed. Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md` and `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`.
+Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` are not publish candidates. I1 performed no Netlify/Stripe/remote DB/runtime configuration write. Canonical evidence: `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

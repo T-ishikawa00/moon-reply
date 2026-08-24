@@ -18,8 +18,8 @@ import {
 import { createActiveProductionFulfillmentApplication } from "./fulfillment-runtime.ts";
 import {
   StripeCheckoutProviderV1,
-  StripeWebhookEvidenceVerifierV1,
 } from "./stripe.ts";
+import { StripeWebhookEvidenceVerifierV1 } from "./stripe-webhook.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
 import { createConfiguredTransactionalEmailAdapter } from "./transactional-email-runtime.ts";
 import {
@@ -251,10 +251,7 @@ export async function verifyAndRecordProductionStripeWebhook(
     throw new M2RuntimeError("PAYMENT_WEBHOOK_UNAVAILABLE", 404);
   }
   const stripe = readStripeWebhookEnvironment();
-  const verifier = new StripeWebhookEvidenceVerifierV1(
-    stripe.secretKey,
-    stripe.webhookSecret,
-  );
+  const verifier = new StripeWebhookEvidenceVerifierV1(stripe.webhookSecret);
   const evidence = verifier.verify(rawBody, signature);
   if (!evidence) return { disposition: "ignored" as const };
   const { application } = inactiveDependencies(stripe.environment);

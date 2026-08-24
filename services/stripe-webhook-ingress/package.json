@@ -1,0 +1,19 @@
+{
+  "name": "moon-reply-stripe-webhook-ingress",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "postgres": "3.4.9",
+    "stripe": "22.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "esbuild": "0.28.1",
+    "typescript": "6.0.3"
+  }
+}

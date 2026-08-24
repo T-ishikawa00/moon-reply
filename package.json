@@ -28,7 +28,8 @@
     "verify:measurement-foundation": "node scripts/verify-measurement-foundation.mjs",
     "verify:m2-0": "node scripts/verify-m2-0-authority-critical-db-baseline.mjs",
     "verify:m2-a1": "node scripts/verify-m2-a1-null-fence-integrity.mjs",
-    "verify:m2-b1": "node scripts/verify-m2-b1-return-account-convergence.mjs"
+    "verify:m2-b1": "node scripts/verify-m2-b1-return-account-convergence.mjs",
+    "verify:m2-b2-i1": "node scripts/verify-m2-b2-i1-public-ingress-authority.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",
