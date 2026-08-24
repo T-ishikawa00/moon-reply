@@ -18,7 +18,7 @@ const legalLinks = [
   { href: "/legal/tokushoho", label: "特定商取引法に基づく表記" },
   { href: "/legal/ai-disclosure", label: "AI利用について" },
   { href: "/legal/unsupported-cases", label: "対応できない相談" },
-  { href: "/contact", label: "お問い合わせ（窓口準備中）" },
+  { href: "/contact", label: "お問い合わせ" },
 ] as const;
 
 export function SiteFooter() {

@@ -6,6 +6,7 @@ import { AccountLogoutButton } from "@/components/account/AccountLogoutButton";
 import { AUTH_SESSION_CSRF_COOKIE } from "@/lib/customer-auth/cookies";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
 import { createCustomerIdentityAuthApplication } from "@/lib/customer-auth/service";
+import { isCustomerSupportCasesEnabled } from "@/lib/support/environment";
 import styles from "./account.module.css";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,7 @@ export default async function AccountPage({
   }
   const cookieStore = await cookies();
   const sessionCsrf = cookieStore.get(AUTH_SESSION_CSRF_COOKIE)?.value ?? null;
+  const supportEnabled = isCustomerSupportCasesEnabled();
 
   return (
     <main className={styles.page}>
@@ -86,6 +88,13 @@ export default async function AccountPage({
                 {item.state === "completed" && item.deliveryId ? (
                   <Link href={`/account/results/${item.deliveryId}`}>
                     鑑定ノートを開く
+                  </Link>
+                ) : null}
+                {supportEnabled ? (
+                  <Link
+                    href={`/contact?purchase=${encodeURIComponent(item.purchaseIntentId)}`}
+                  >
+                    この購入について問い合わせる
                   </Link>
                 ) : null}
               </li>

@@ -1,0 +1,93 @@
+.form,
+.complete {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-weight: 700;
+}
+
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--ink-950) 25%, transparent);
+  border-radius: 0.75rem;
+  background: var(--paper-50);
+  color: var(--ink-950);
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+}
+
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid var(--focus-ring-paper);
+  outline-offset: 2px;
+}
+
+.hint,
+.counter {
+  margin: 0;
+  color: var(--ink-600);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.counter {
+  text-align: right;
+}
+
+.warning {
+  border-left: 4px solid var(--moon-600);
+  background: color-mix(in srgb, var(--paper-100) 65%, white);
+  padding: 1rem 1.1rem;
+}
+
+.warning h2,
+.warning p {
+  margin: 0;
+}
+
+.warning h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.error {
+  margin: 0;
+  color: var(--danger-700, #8c1d2c);
+  font-weight: 700;
+}
+
+.eyebrow {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.summary {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.summary div {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.4fr) 1fr;
+  gap: 0.75rem;
+}
+
+.summary dt {
+  font-weight: 700;
+}
+
+.summary dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}

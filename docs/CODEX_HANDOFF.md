@@ -1,22 +1,35 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
+## Current handoff — M2-D2 Contact / Paid-failure Recovery Support
+
+- Authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; task branch `task/m2-d2-contact-paid-failure-recovery-support-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. CON-01 is closed only for the source/local customer Support path; operator monitoring, unauthenticated fallback, remote authority, and activation remain pending.
+- Candidate 0021 is local only. Remote DB remains exact 0002–0020, pending 0, unknown 0. D2 created no remote DB, Netlify, Stripe, Provider, email, Async, scheduler, Payment, or Publish operation.
+- Paid Support authority is fresh CustomerUserId plus active ownership binding. Client purchase UUID is a non-secret selector only; no Payment/result/Auth credential is accepted. Support creation mutates only Support tables.
+- `CUSTOMER_SUPPORT_CASES_ENABLED` is exact-true only, defaults false, is independent of Payment activation readiness, and remains Production-unset.
+- D1 and C1 accepted statuses remain unchanged. Canonical runbook/evidence is `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
+- Next action is independent D2 source/local review. Do not apply 0021 remotely, activate Support/C1, create an external contact channel, or Production Publish without separate explicit authority.
+
+<!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:END -->
+
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:BEGIN -->
 ## Current handoff — M2-D1 customer legal current truth
 
-- Authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; task branch `task/m2-d1-customer-legal-current-truth-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current integrated authority has advanced to `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D1's reviewed task branch remains `task/m2-d1-customer-legal-current-truth-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
 - Status: `Human/ChatGPT SOURCE PASS`. LEG-01 current-truth drift is `CLOSED IN SOURCE`; external-beta legal disclosure/operation remains pending. This closes no final legal compliance, External Private Beta, Production, or Public Launch authority.
 - Customer legal/contact routes use `lib/legal/current-content.ts` and `components/legal/LegalDocument.tsx`; historical `lib/legal/review-content.ts` and `components/legal/LegalReview.tsx` are preserved and no longer customer-route dependencies.
 - Current customer truth covers exact JPY 980 one-time economics, Stripe Payment, durable verification/recovery, OpenAI analysis, Supabase DB/Auth, Netlify hosting/runtime, Resend transactional email, AI/non-guarantee/safety boundaries, and no fake operational promises.
 - `/contact` remains honestly non-operational. Seller identity/representative/address/phone, real support endpoint, final cancellation/refund process, retention schedule, document effective date, and jurisdiction wording remain unresolved Human/legal facts and External Private Beta blockers.
 - C1 remains source + remote DB closed but inactive: remote exact 0002–0020, pending 0, unknown 0; Production `PREPAYMENT_COMPUTE_*` values unset/disabled; future Self Dogfood policy 86400 / 10 remains recorded only.
-- After exact ff-only D1 integration, the next backlog task is M2-D2 Contact / Paid-failure Recovery Support under separate authority. Do not begin D2, activate C1, mutate DB/Netlify, or Production Publish in this acceptance sync.
+- M2-D2 Contact / Paid-failure Recovery Support is now the separately authorized bounded task recorded above. C1 activation, remote DB/Netlify mutation, and Production Publish remain unauthorized.
 - Evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`.
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->
 
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## Current handoff — M2-C1 pre-payment compute budget
 
-- Current authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; reviewed C1 source is integrated; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed C1 source is integrated; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
 - Status: `Human/ChatGPT SOURCE + REMOTE DB PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`; Production is not closed.
 - Signed-out preparation performs deterministic validation and durable intake only. Provider-backed prepare/resume requires fresh `getUser()`, exact active ownership, current execution authority, and an atomic compute-unit claim at the transport boundary.
 - Exact 0020 was remotely applied once with SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote history is exact 0002–0020; pending 0; unknown 0; existing-object drift 0.
@@ -29,7 +42,7 @@
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
 ## Current handoff — M2-B2-I4 cutover safety controls
 
-- Authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; reviewed B1, B2, and C1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed B1, B2, C1, and D1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 remains closed at its exact `0002..0017` baseline by 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. Current remote migrations are exact `0002..0020`; pending and unknown are both `0`; later migrations left 0017 unchanged.
 - Applied B2 artifacts: revised 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; unchanged 0019 Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Both were applied exactly once in one reviewed push.
 - Historical first attempt remains evidence: 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at the least-privilege guard, rolled back, never entered migration history, and is superseded. Older `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` was never remotely attempted.

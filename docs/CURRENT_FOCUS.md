@@ -1,21 +1,35 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
+## Current operational overlay — M2-D2 Contact / Paid-failure Recovery Support
+
+- Current authority is `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D2 is on `task/m2-d2-contact-paid-failure-recovery-support-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-D2 status is `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. CON-01 customer Support path is closed in source/local only; external operator channel, unauthenticated fallback, remote authority, and activation remain pending.
+- Candidate `0021_m2_d2_customer_support_cases.sql` is local only. Remote DB remains exact 0002–0020, pending 0, unknown 0. No remote apply is authorized.
+- D1 remains Human/ChatGPT SOURCE PASS; LEG-01 current-truth drift is closed in source, while external-beta disclosure/operation remains pending.
+- C1 remains SOURCE + REMOTE DB PASS and activation pending. `PREPAYMENT_COMPUTE_*` Production values remain unset/disabled; the recorded Self Dogfood policy remains 86400 seconds / 10 units only.
+- `CUSTOMER_SUPPORT_CASES_ENABLED` defaults false and remains Production-unset. Production Publish and real Support activation are prohibited.
+
+Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
+
+<!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:END -->
+
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:BEGIN -->
 ## Current operational overlay — M2-D1 customer legal current truth
 
-- Current authority is `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; D1 is on `task/m2-d1-customer-legal-current-truth-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current integrated authority has advanced to `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D1's reviewed branch remains `task/m2-d1-customer-legal-current-truth-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - D1 status is `Human/ChatGPT SOURCE PASS`. LEG-01 current-truth drift is `CLOSED IN SOURCE`; external-beta legal disclosure/operation remains pending. This establishes neither final legal sufficiency nor Production activation, External Private Beta, or Public Launch.
 - Customer `/legal/**` and `/contact` now use a dedicated typed current-content authority. Historical Stripe Lane B/B4 review content and its dashboard component remain preserved but are no longer imported by customer legal routes.
 - Locked facts are: 月の返事; 恋のメッセージ鑑定ノート; AIを活用した恋愛メッセージ分析・判断支援デジタルレポート; 税込980円; 1相談 / 1鑑定ノート; 都度払い; 自動更新なし; 18歳以上; AI disclosed; no outcome guarantee.
 - Seller identity/representative/address/phone, real support contact, final refund/cancellation operation, retention schedule, effective/revision date, and jurisdiction wording remain Human/legal decisions. No value was invented; these remain External Private Beta blockers.
-- The next backlog task after D1 integration is M2-D2 Contact / Paid-failure Recovery Support. It is not started or authorized by this acceptance sync.
+- M2-D2 Contact / Paid-failure Recovery Support is now the separately authorized bounded task recorded in the current overlay above.
 - Canonical evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`. D2, Production Publish, Netlify configuration, DB mutation, Payment, Provider, email, and scheduler actions remain outside D1.
 <!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->
 
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## Current operational overlay — M2-C1 pre-payment compute budget
 
-- Current source authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; reviewed C1 source is integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current source authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed C1 source is integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-C1 status: `Human/ChatGPT SOURCE + REMOTE DB PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`; Production is not closed.
 - C1 makes signed-out preparation provider-free and requires fresh Customer Auth, active ownership, durable execution authority, and an atomic Customer-bound compute claim immediately before every pre-payment Provider transport.
 - Exact `0020_m2_c1_prepayment_compute_budget.sql` is remotely applied once at SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote DB is exact 0002–0020; pending `0`; unknown `0`.
@@ -28,7 +42,7 @@
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
 ## Current operational overlay — M2-B2-I4 cutover safety controls
 
-- Current source authority: `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; reviewed B1, B2, and C1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current source authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed B1, B2, C1, and D1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed`; its closure baseline was exact `0002..0017`. Current remote migration history is now exact `0002..0020`, pending `0`, unknown `0`; later 0018–0020 did not change the accepted 0017 identity.
 - Exact 0017 artifact remains immutable at Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`; the three v2 NULL fences, v1 compatibility, and DB0016 dispatch identities are unchanged after B2 apply.
 - M2-B2 DB foundation is `CONFIRMED_REMOTE_CLOSED`: revised `0018_m2_b2_webhook_ingress_authority.sql` (`1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`) and unchanged `0019_m2_b2_private_payment_reconciliation.sql` (`b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`) were applied exactly once in one reviewed push.
@@ -38,7 +52,7 @@
 - 0019 reconciliation metadata and service-role-only claim/finish RPCs are remotely present. Dispatch still uses the unchanged DB0016 marker/owner/lease/retry/ambiguity fence, and Async Workloads remains the only retry authority after router acceptance.
 - B1 remains closed in source: strict legacy/authenticated result destinations, bounded Return polling, durable-only `paymentVerified`, once-only completion navigation, and authenticated `/account` fallback. HTTP `401/404/429/5xx` taxonomy remains the non-blocking `ERR-01 / E2 Auth Recovery` follow-up.
 - Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`. Reviewed deploy `6a8bf7a11d6580000811392c` is exact-source `d38ee363`, successful, and UNPUBLISHED under Auto Publishing Lock; it is not authorized for Publish.
-- M2-B2-I4 is retained accepted authority with canonical evidence at `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`; the current bounded task is M2-D1 as recorded above.
+- M2-B2-I4 is retained accepted authority with canonical evidence at `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`; the current bounded task is M2-D2 as recorded above.
 - Locked topology: Stripe Sandbox -> separate Public Netlify ingress -> exact signed POST -> dedicated 0018 wrapper -> durable Payment/job; Private customer schedules -> same-site Async -> worker/result/Account/email; Private reconciliation -> persisted Checkout Session READ -> 0019 fence -> existing evidence authority. The customer project never becomes Public.
 - Mixed-version rule: no Stripe endpoint delivery or `STRIPE_WEBHOOK_ENABLED=true` while Published customer source remains `0befd512`. B1 and both schedules must be in the final reviewed customer deploy first.
 - I4 source candidate adds exact-true, default-false `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`. Disabled schedules return HTTP `200` with `{ "disabled": true }` before Supabase/Stripe/Async dependency initialization; existing broader flags and emergency stops remain authoritative.

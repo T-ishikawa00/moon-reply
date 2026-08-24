@@ -59,7 +59,7 @@ export default function UnsupportedCasesPage() {
         </LegalContentSection>
 
         <LegalContentSection title="お問い合わせ">
-          <p>お問い合わせ窓口は現在準備中です。</p>
+          <p>現在利用できる受付方法は、お問い合わせページで案内します。</p>
           <Link href="/contact" className="legal-document-action">お問い合わせの案内を見る</Link>
         </LegalContentSection>
       </div>

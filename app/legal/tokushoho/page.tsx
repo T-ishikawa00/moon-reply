@@ -64,7 +64,7 @@ export default function TokushohoPage() {
 
         <LegalContentSection title="お問い合わせ" tone="night">
           <p>
-            お問い合わせ窓口は現在準備中です。実在する受付方法を用意した後、このページとお問い合わせページで案内します。
+            現在利用できる受付方法は、お問い合わせページで案内します。販売事業者情報に必要な連絡先は、実在する情報を整えた後、このページにも掲載します。
           </p>
           <Link href="/contact" className="legal-document-action">お問い合わせの案内を見る</Link>
         </LegalContentSection>

@@ -2,7 +2,7 @@
 
 Status: `Human/ChatGPT SOURCE + REMOTE DB PASS — ACTIVATION PENDING`
 
-This is an existing M2 task. It does not create a Milestone or Gate. Current source authority is `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; the reviewed implementation and acceptance sync are integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`. This does not close Production.
+This is an existing M2 task. It does not create a Milestone or Gate. Current source authority is `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; the reviewed implementation and remote closure remain integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`. This does not close Production.
 
 ## Pre-C1 abuse path and exact topology
 

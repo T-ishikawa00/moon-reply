@@ -104,7 +104,7 @@ export default function PrivacyPage() {
 
         <LegalContentSection title="開示・訂正・削除等のお申し出" tone="night">
           <p>
-            本人確認と、法令・安全・購入記録上の必要性を確認したうえで対応します。お問い合わせ窓口は現在準備中です。実在する受付方法を用意した後、このサイトで案内します。
+            本人確認と、法令・安全・購入記録上の必要性を確認したうえで対応します。現在利用できる受付方法は、お問い合わせページで案内します。
           </p>
         </LegalContentSection>
       </div>
