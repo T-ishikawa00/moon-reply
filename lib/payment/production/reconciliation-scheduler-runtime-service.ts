@@ -1,6 +1,7 @@
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { ProductionPaymentDeliveryApplication } from "./application.ts";
 import {
+  isProductionPaymentReconciliationScheduleEnabled,
   isStripeReconciliationAvailable,
   readProductionSchedulerDatabaseEnvironment,
 } from "./environment-runtime.ts";
@@ -45,6 +46,9 @@ const unavailableDispatcher: ProductionFulfillmentDispatcherV1 = {
 };
 
 export async function runConfiguredProductionPaymentReconciliationSchedule() {
+  if (!isProductionPaymentReconciliationScheduleEnabled()) {
+    return { disabled: true as const };
+  }
   if (!isStripeReconciliationAvailable()) {
     throw new M2RuntimeError("PAYMENT_RECONCILIATION_UNAVAILABLE", 503);
   }

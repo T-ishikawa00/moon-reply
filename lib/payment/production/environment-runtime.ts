@@ -73,11 +73,19 @@ export function isStripeReconciliationAvailable() {
   );
 }
 
+export function isProductionPaymentReconciliationScheduleEnabled() {
+  return enabled("STRIPE_RECONCILIATION_SCHEDULED_ENABLED");
+}
+
 export function isPaidFulfillmentProcessingAvailable() {
   return (
     enabled("PAYMENT_FULFILLMENT_PROCESSING_ENABLED") &&
     !enabled("PAYMENT_FULFILLMENT_EMERGENCY_STOP")
   );
+}
+
+export function isProductionFulfillmentDispatchScheduleEnabled() {
+  return enabled("PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED");
 }
 
 export function readPaymentDeliveryEnvironment(): PaymentDeliveryEnvironment {

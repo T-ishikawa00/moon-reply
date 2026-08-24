@@ -1,10 +1,10 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current handoff — M2-B2 DB foundation remotely closed / external cutover pending
+## Current handoff — M2-B2-I4 cutover safety controls
 
-- Authority: `release/private-ready@d38ee363cf2b74823180b80364430eb82b7189b6`; reviewed B1, B2 design, I1/I1-R2/I1-R3, and I2/I2-R1 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-A1 remains closed at exact 0017. Current remote migrations are exact `0002..0019`; pending and unknown are both `0`.
+- Authority: `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`; reviewed B1, B2 design, I1/I1-R2/I1-R3, I2/I2-R1, and I3 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-A1 remains closed at its exact `0002..0017` baseline by 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. Current remote migrations are exact `0002..0019`; pending and unknown are both `0`.
 - Applied B2 artifacts: revised 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; unchanged 0019 Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Both were applied exactly once in one reviewed push.
 - Historical first attempt remains evidence: 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at the least-privilege guard, rolled back, never entered migration history, and is superseded. Older `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` was never remotely attempted.
 - Remote R3 postflight removed only `public.rls_auto_enable()` PUBLIC EXECUTE. Explicit postgres/anon/authenticated/service_role grants and `ensure_rls` OID/binding/event/tags remain unchanged. Existing-function filtered ACL is `149 -> 148`, post SHA `85f7a6035af44d6593c108abd32feec6b18c7e5e87652b7d743358c76cb5f81c`.
@@ -17,12 +17,13 @@
 - Dispatch policy remains batch 4, deterministic order, DB0016 claim before same-site Async, 30-second lease, 22-second budget, and no post-acceptance resend. Reconciliation remains persisted-Session READ only, batch 4/concurrency 2, two-minute grace, 24-second lease, five-read budget, Stripe retry 0/timeout 5s, and no Checkout creation.
 - Locked activation topology: Stripe Sandbox -> separate Public ingress -> signed exact POST -> dedicated DB login/wrapper -> durable Payment/job; Private customer schedules -> same-site Async -> worker/result/Account/email; Private reconciliation -> 0019 fence -> current evidence authority. The customer project never becomes Public.
 - Mixed-version rule: do not create an active Stripe delivery path or set `STRIPE_WEBHOOK_ENABLED=true` while customer Production remains `0befd512`; B1 and both schedules must be present in the final reviewed customer runtime first.
-- I3 source review found the current `d38ee363` deploy is not a safe final cutover candidate: the schedules lack dedicated default-false flags and may run immediately after Publish through broader existing flags. Add and verify `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED=false` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED=false`, subordinate to existing emergency stops, before the next customer Publish.
-- Netlify env changes are captured per deploy and require a new exact-source Deploy ID. Action-time must inventory effective Production/Functions env names, exclude inherited shared customer secrets from the Public ingress, pin/review Node runtime and Stripe endpoint API version, and smoke the actual ingress ZIP with external `postgres`/`stripe` dependencies.
+- I4 source candidate closes the source-side scheduler cutover blocker with independent exact-true/default-false `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`. Disabled functions return `{ "disabled": true }` with HTTP `200` before Supabase/Stripe/Async initialization; the existing broad flags/stops remain mandatory.
+- The required future ingress base now contains the source pin `.node-version` major `22`; no Netlify ingress project exists yet. Local actual-ZIP proof includes exact `postgres@3.4.9`/`stripe@22.5.0`, dynamic import, empty customer/static surface, and import-time fetch calls `0`; actual Netlify base/build/runtime Node and external overrides remain action-time evidence.
+- Netlify env changes are captured per deploy and require a new exact-source Deploy ID. Action-time must inventory effective Production/Functions env names, exclude inherited shared customer secrets from the Public ingress, and pin/review the Stripe endpoint API version.
 - Credential plan: generate a strong random password locally under Human control, set it once with interactive PostgreSQL `\password m2_b2_stripe_ingress`, never place it in CLI arguments/history/logs/Git/Chat, verify only `rolpassword IS NOT NULL` plus unchanged role/privilege booleans, and provision only the verify-full pooler URL to the ingress. Never use service_role/postgres/Supabase secret as fallback.
-- SEC-01 remains required before the next customer Production Publish; Next 16.3.0 is unchanged in I3 pending the planned 2026-08-26 release evaluation.
-- Canonical I3 runbook: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md`.
-- No additional remote DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility, scheduler Run now, Stripe endpoint/API/read/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change is authorized by I3.
+- SEC-01 remains required before the next customer Production Publish; Next 16.3.0 is unchanged in I4 pending the planned 2026-08-26 release evaluation.
+- Canonical runbooks: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md` and `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`.
+- No additional remote DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility, scheduler Run now, Stripe endpoint/API/read/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change is authorized by I4.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

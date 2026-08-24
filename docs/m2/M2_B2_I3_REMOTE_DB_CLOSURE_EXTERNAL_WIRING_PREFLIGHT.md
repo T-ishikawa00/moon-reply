@@ -111,16 +111,16 @@ The root `production-fulfillment-background` `included_files` block remains prot
 
 The topology is sound, but current `d38ee363` is not a safe final customer cutover candidate.
 
-### 4.1 Dedicated scheduler safe-off flags are missing
+### 4.1 Dedicated scheduler safe-off flags — implemented in I4 source candidate
 
 Dispatch currently depends on the broader `PAYMENT_FULFILLMENT_PROCESSING_ENABLED`/emergency-stop contract. Reconciliation currently depends on the broader `STRIPE_RECONCILIATION_ENABLED`/payment-emergency-stop contract. If those accepted Production values are already enabled, publishing the current source can immediately send existing due jobs to Async or read existing persisted Stripe Sessions.
 
-Before the next customer Publish, a bounded B2 source hardening must add:
+I4 adds the required bounded source hardening:
 
 - `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED`, exact `true` to run and default false/fail closed;
 - `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`, exact `true` to run and default false/fail closed.
 
-Each remains subordinate to its existing processing-enabled and emergency-stop authority. Both must enter the customer activation-readiness verifier. This is a B2 cutover prerequisite, not a new Milestone or Gate.
+Each remains subordinate to its existing processing-enabled and emergency-stop authority. Both are default false and checked before credential reads/client construction; the disabled Scheduled Function returns a bounded HTTP `200` no-op. The branch-independent I4 verifier owns the customer cutover matrix. I4 still requires independent acceptance/integration and a newly built final deploy after SEC-01; no current deploy is promoted by this source closure.
 
 ### 4.2 Environment changes are deploy-versioned
 
@@ -134,7 +134,7 @@ The two Private schedules have source/import and responsibility separation but s
 
 ### 4.4 Build/runtime and endpoint versions need exact pins
 
-`esbuild target: node22` does not pin the Netlify build or Function runtime. Before Public ingress creation, add and review a source-controlled Node 22 build pin in the ingress base, then confirm the actual Function runtime in the deploy artifact. Do not add a sixth application env key merely to work around this requirement.
+I4 adds the single source-controlled `.node-version` major `22` at the required future ingress base. No ingress project exists yet. Netlify documents that base-local file as a build selector and normally maps the Function runtime to the build Node. Local proof cannot establish the actual remote base/build/runtime version or exclude external `NODE_VERSION`/`AWS_LAMBDA_JS_RUNTIME` overrides, so all remain action-time deploy checks. No sixth application env key is added.
 
 Because the ingress build marks packages external, the first actual Netlify ZIP must prove `postgres@3.4.9` and `stripe@22.5.0` are packaged, the function dynamically imports, and import-time external operations remain zero.
 

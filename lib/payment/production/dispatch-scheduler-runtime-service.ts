@@ -3,6 +3,7 @@ import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { enqueueProductionFulfillmentJob } from "./async-workloads-runtime.ts";
 import {
   isPaidFulfillmentProcessingAvailable,
+  isProductionFulfillmentDispatchScheduleEnabled,
   readProductionSchedulerDatabaseEnvironment,
 } from "./environment-runtime.ts";
 import { requestProductionFulfillmentDispatch } from "./fulfillment-dispatch.ts";
@@ -10,6 +11,9 @@ import { runProductionFulfillmentDispatchSchedule } from "./recovery-schedulers.
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
 
 export async function runConfiguredProductionFulfillmentDispatchSchedule() {
+  if (!isProductionFulfillmentDispatchScheduleEnabled()) {
+    return { disabled: true as const };
+  }
   if (!isPaidFulfillmentProcessingAvailable()) {
     throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
   }

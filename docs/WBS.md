@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-B2-I3 Remote DB Closure / External Wiring Preflight
+## M2-B2-I4 Cutover Safety Controls
 
-Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3 `authority integrated`; revised 0018 + unchanged 0019 `Human/ChatGPT reviewed PASS / remote DB foundation closed`; external wiring, SEC-01, Publish, and Sandbox E2E pending.
+Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3/I3 `authority integrated`; revised 0018 + unchanged 0019 `remote DB foundation closed`; I4 `source implementation pending independent review`; external wiring, SEC-01, Publish, and Sandbox E2E pending.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -48,8 +48,15 @@ Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3 `authority integr
 - [x] Lock I3 activation topology, dedicated credential procedure, separate Public ingress configuration, exact four-event Stripe Sandbox allowlist, mixed-version rule, cutover, and rollback without external writes.
 - [x] Identify the current customer-deploy cutover blocker: add two dedicated default-false scheduler flags before Publish; environment changes require a newly built and reviewed exact Deploy ID.
 - [x] Keep SEC-01 as a separate required task before the next customer Production Publish; do not guess-upgrade Next 16.3.0 in I3.
+- [x] Fast-forward reviewed I3 into `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`, normally push, and keep `main` unchanged.
+- [x] Add independent exact-true/default-false schedule gates before every scheduler credential read/client construction; disabled wrappers return bounded HTTP `200` no-op outcomes.
+- [x] Preserve the existing processing/reconciliation flags, emergency stops, cadence, DB0016/0019 fencing, batch/concurrency/retry budgets, and Async retry authority.
+- [x] Declare both customer cutover flags exact `false` and add a branch-independent I4 matrix proving malformed/absent/false disabled, subordinate stops, zero external work, and unchanged enabled core behavior.
+- [x] Add `.node-version` major `22` at the required future ingress base without a sixth ingress application env variable; retain actual Netlify base/runtime proof for action time.
+- [x] Build and package the actual ingress function locally; prove exact external dependencies, empty static/customer surface, dynamic import, and import-time fetch calls `0` while retaining remote base/runtime proof as an action-time requirement.
+- [x] Run the full applicable I4 regression matrix, prepare one bounded task commit/push, and stop before any external configuration or Publish.
 
-Remote DB foundation is exact `0002..0019` and closed. Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, `6a8bcb3131e9e0000898a260`, and `6a8bf7a11d6580000811392c` remain UNPUBLISHED/non-candidates for the final cutover. Canonical I3 evidence: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md`.
+Remote DB foundation is exact `0002..0019` and closed. Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, `6a8bcb3131e9e0000898a260`, and `6a8bf7a11d6580000811392c` remain UNPUBLISHED/non-candidates for the final cutover. Canonical I3/I4 evidence: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md` and `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

@@ -141,6 +141,8 @@ for (const name of [
   "SUPABASE_SECRET_KEY",
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
+  "PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED",
+  "STRIPE_RECONCILIATION_SCHEDULED_ENABLED",
   "OPENAI_API_KEY",
   "EMAIL_API_KEY",
 ]) {
@@ -217,6 +219,13 @@ try {
       `${pathToFileURL(entry).href}?scheduled-smoke=${Date.now()}`
     );
     assert.equal(typeof loaded.default, "function", `${name} importable`);
+    const disabledResponse = await loaded.default();
+    assert.equal(disabledResponse.status, 200, `${name} disabled status`);
+    assert.deepEqual(
+      await disabledResponse.json(),
+      { disabled: true },
+      `${name} disabled outcome`,
+    );
     assert.equal(fetchCalls, 0, `${name} performed network activity on import`);
 
     const manifestEntry = manifest.functions.find(

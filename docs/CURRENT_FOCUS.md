@@ -1,10 +1,10 @@
 # CURRENT_FOCUS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current operational overlay — M2-B2 remote DB foundation closed / I3 wiring preflight
+## Current operational overlay — M2-B2-I4 cutover safety controls
 
-- Current source authority: `release/private-ready@d38ee363cf2b74823180b80364430eb82b7189b6`; reviewed B1, B2 I1/I1-R2/I1-R3, and I2/I2-R1 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed` at exact 0017. Current remote migration history is now exact `0002..0019`, pending `0`, unknown `0`.
+- Current source authority: `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`; reviewed B1, B2 I1/I1-R2/I1-R3, I2/I2-R1, and I3 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed`; its closure baseline was exact `0002..0017`. Current remote migration history is now exact `0002..0019`, pending `0`, unknown `0`.
 - Exact 0017 artifact remains immutable at Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`; the three v2 NULL fences, v1 compatibility, and DB0016 dispatch identities are unchanged after B2 apply.
 - M2-B2 DB foundation is `CONFIRMED_REMOTE_CLOSED`: revised `0018_m2_b2_webhook_ingress_authority.sql` (`1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`) and unchanged `0019_m2_b2_private_payment_reconciliation.sql` (`b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`) were applied exactly once in one reviewed push.
 - The superseded 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at its own guard, rolled back, was never recorded, and must never be retried.
@@ -13,13 +13,14 @@
 - 0019 reconciliation metadata and service-role-only claim/finish RPCs are remotely present. Dispatch still uses the unchanged DB0016 marker/owner/lease/retry/ambiguity fence, and Async Workloads remains the only retry authority after router acceptance.
 - B1 remains closed in source: strict legacy/authenticated result destinations, bounded Return polling, durable-only `paymentVerified`, once-only completion navigation, and authenticated `/account` fallback. HTTP `401/404/429/5xx` taxonomy remains the non-blocking `ERR-01 / E2 Auth Recovery` follow-up.
 - Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`. Reviewed deploy `6a8bf7a11d6580000811392c` is exact-source `d38ee363`, successful, and UNPUBLISHED under Auto Publishing Lock; it is not authorized for Publish.
-- Current bounded task: **M2-B2-I3 — Remote DB Closure Sync / External Sandbox Wiring Preflight** on `task/m2-b2-i3-remote-closure-wiring-preflight-r1`; canonical evidence is `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md`.
+- Current bounded task: **M2-B2-I4 — Cutover Safety Controls** on `task/m2-b2-i4-cutover-safety-controls-r1`; canonical evidence is `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`.
 - Locked topology: Stripe Sandbox -> separate Public Netlify ingress -> exact signed POST -> dedicated 0018 wrapper -> durable Payment/job; Private customer schedules -> same-site Async -> worker/result/Account/email; Private reconciliation -> persisted Checkout Session READ -> 0019 fence -> existing evidence authority. The customer project never becomes Public.
 - Mixed-version rule: no Stripe endpoint delivery or `STRIPE_WEBHOOK_ENABLED=true` while Published customer source remains `0befd512`. B1 and both schedules must be in the final reviewed customer deploy first.
-- I3 source preflight found a cutover blocker: current schedules have no dedicated default-false activation flags and may run immediately on Publish through broader existing flags. Before the next customer Publish, bounded B2 hardening must add fail-closed `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`, subordinate to existing emergency stops. This is not a new Milestone or Gate.
-- Every Netlify environment change is deploy-versioned. Action-time activation/rollback must create and verify a new exact-source Deploy ID; a settings edit alone does not change the current Published functions. The Public ingress must also prove effective env-name isolation from team/shared customer secrets, pin its build/runtime Node version, pin/review the Stripe endpoint API version, and smoke the actual dependency ZIP before activation.
+- I4 source candidate adds exact-true, default-false `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`. Disabled schedules return HTTP `200` with `{ "disabled": true }` before Supabase/Stripe/Async dependency initialization; existing broader flags and emergency stops remain authoritative.
+- The required future Public ingress base now contains one source-controlled `.node-version` with major `22`; no Netlify ingress project exists yet. Local actual-ZIP proof covers exact `postgres@3.4.9`/`stripe@22.5.0`, dynamic import, empty static surface, and import-time fetch calls `0`; actual Netlify base/build/runtime Node and external override absence remain action-time deploy evidence.
+- Every Netlify environment change is deploy-versioned. Action-time activation/rollback must create and verify a new exact-source Deploy ID; a settings edit alone does not change the current Published functions. The Public ingress must also prove effective env-name isolation from team/shared customer secrets and pin/review the Stripe endpoint API version before activation.
 - SEC-01 remains mandatory before the next customer Production Publish: do not guess-upgrade Next 16.3.0 before the planned 2026-08-26 security release is evaluated in its separate task.
-- I3 stop boundary: no additional DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility change, scheduler Run now, Stripe endpoint/API/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change.
+- I4 stop boundary: no additional DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility change, scheduler Run now, Stripe endpoint/API/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

@@ -32,6 +32,7 @@
     "verify:m2-b2-i1": "node scripts/verify-m2-b2-i1-public-ingress-authority.mjs",
     "verify:m2-b2-i1-r3": "node scripts/verify-m2-b2-i1-r3-event-trigger-acl-compatibility.mjs",
     "verify:m2-b2-i2": "node scripts/verify-m2-b2-i2-private-recovery-schedulers.mjs",
+    "verify:m2-b2-i4": "node scripts/verify-m2-b2-i4-cutover-safety-controls.mjs",
     "verify:m2-b2:scheduled-artifacts": "node scripts/verify-m2-b2-scheduled-function-artifacts.mjs"
   },
   "dependencies": {
