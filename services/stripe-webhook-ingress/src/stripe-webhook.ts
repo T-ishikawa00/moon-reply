@@ -10,6 +10,7 @@ export const ingressSecretAllowlist = [
   "STRIPE_WEBHOOK_ENABLED",
   "STRIPE_WEBHOOK_SECRET",
   "STRIPE_INGRESS_DATABASE_URL",
+  "STRIPE_INGRESS_DATABASE_CA_PEM",
 ] as const;
 
 type EvidenceRecorder = (

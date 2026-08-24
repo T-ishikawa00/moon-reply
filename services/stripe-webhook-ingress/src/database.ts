@@ -1,7 +1,10 @@
+import { X509Certificate } from "node:crypto";
+import { checkServerIdentity } from "node:tls";
 import postgres from "postgres";
 import type { StripePaymentEvidenceV1 } from "../../../lib/payment/production/types.ts";
 
 export const ingressDatabaseSecretName = "STRIPE_INGRESS_DATABASE_URL";
+export const ingressDatabaseCaName = "STRIPE_INGRESS_DATABASE_CA_PEM";
 
 const safeDispositions = new Set([
   "verified",
@@ -27,13 +30,66 @@ function validatePoolerUrl(value: string) {
     url.port !== "6543" ||
     !url.username.startsWith("m2_b2_stripe_ingress.") ||
     url.pathname !== "/postgres" ||
-    url.searchParams.get("sslmode") !== "require" ||
+    url.searchParams.getAll("sslmode").length !== 1 ||
+    url.searchParams.get("sslmode") !== "verify-full" ||
+    [...url.searchParams.keys()].some((key) => key !== "sslmode") ||
+    url.hash !== "" ||
     !url.username ||
     !url.password
   ) {
     throw new Error("INGRESS_DATABASE_CONFIGURATION_INVALID");
   }
-  return value;
+  return url;
+}
+
+function validateCaBundle(value: string | undefined, now: number) {
+  if (!value || value.includes("\\n")) {
+    throw new Error("INGRESS_DATABASE_CA_INVALID");
+  }
+  const normalized = value.trim();
+  const certificates = normalized.match(
+    /-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/gu,
+  );
+  if (!certificates || certificates.join("\n") !== normalized) {
+    throw new Error("INGRESS_DATABASE_CA_INVALID");
+  }
+  try {
+    for (const pem of certificates) {
+      const certificate = new X509Certificate(pem);
+      const validFrom = Date.parse(certificate.validFrom);
+      const validTo = Date.parse(certificate.validTo);
+      if (
+        !certificate.ca ||
+        !Number.isFinite(validFrom) ||
+        !Number.isFinite(validTo) ||
+        now < validFrom ||
+        now > validTo
+      ) {
+        throw new Error("INGRESS_DATABASE_CA_INVALID");
+      }
+    }
+  } catch {
+    throw new Error("INGRESS_DATABASE_CA_INVALID");
+  }
+  return normalized;
+}
+
+export function buildVerifiedIngressDatabaseConfiguration(
+  connectionString: string,
+  caPem: string | undefined,
+  now = Date.now(),
+) {
+  const url = validatePoolerUrl(connectionString);
+  const ca = validateCaBundle(caPem, now);
+  return {
+    connectionString,
+    ssl: {
+      ca,
+      rejectUnauthorized: true,
+      servername: url.hostname,
+      checkServerIdentity,
+    },
+  } as const;
 }
 
 export async function recordStripeWebhookEvidence(
@@ -43,8 +99,12 @@ export async function recordStripeWebhookEvidence(
   if (!connectionString) {
     throw new Error("INGRESS_DATABASE_CONFIGURATION_INVALID");
   }
-  const sql = postgres(validatePoolerUrl(connectionString), {
-    ssl: "require",
+  const configuration = buildVerifiedIngressDatabaseConfiguration(
+    connectionString,
+    process.env[ingressDatabaseCaName],
+  );
+  const sql = postgres(configuration.connectionString, {
+    ssl: configuration.ssl,
     max: 1,
     connect_timeout: 5,
     idle_timeout: 1,

@@ -5,7 +5,8 @@
 - Base authority: `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88` after the reviewed B2 design was integrated by exact fast-forward and normally pushed.
 - Task branch: `task/m2-b2-i1-public-ingress-authority-r1`.
 - Candidate migration: `supabase/migrations/0018_m2_b2_webhook_ingress_authority.sql`.
-- Candidate file SHA-256: `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c`.
+- I1-R2 candidate Git-blob SHA-256: `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805`.
+- Superseded pre-review candidate SHA-256: `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c`. It was never remotely applied and is not an action-time artifact.
 - Remote database remains exact `0002..0017`; read-only migration inventory shows pending exact `0018` only. Remote apply/write count is `0`.
 - Netlify project/config/visibility/write/publish, Stripe endpoint/API/resend/Purchase, Async event, Provider/OpenAI, email, and `main` operations are all `0`.
 
@@ -30,9 +31,13 @@ The official read-only Management API was queried on 2026-08-24. Current PostgRE
 | Public application tables/views/sequences | `0` SELECT/INSERT/UPDATE/DELETE/TRUNCATE/REFERENCES/TRIGGER |
 | Other `public` or private-ingress functions | `0` EXECUTE, including inherited `PUBLIC` function grants |
 | Wrapper for `PUBLIC`, `anon`, `authenticated`, `service_role` | `0` EXECUTE |
+| Schema creation | `0` CREATE on both `public` and `private_payment_ingress` |
+| Future postgres-owned functions | Built-in global `PUBLIC EXECUTE` removed; explicit grant required |
 | Role attributes | superuser/bypassrls/createdb/createrole/replication/inherit all false |
 
-PostgreSQL's standard `PUBLIC` pseudo-role still gives all database roles effective `USAGE` on schema `public`; the ingress receives no direct grant there and, critically, has zero application relation or non-target function privilege behind it. Removing that cluster-wide schema grant would be a separate cross-runtime ACL change and is intentionally not smuggled into I1. Local catalog proof distinguishes this inherited name-resolution permission from usable object authority.
+PostgreSQL's standard `PUBLIC` pseudo-role still gives all database roles effective `USAGE` on schema `public`; the ingress receives no direct grant there and has zero application relation or non-target function privilege behind it. Removing that cluster-wide schema grant would be a separate cross-runtime ACL change and is intentionally not smuggled into I1. Local catalog proof distinguishes this inherited name-resolution permission from usable object authority.
+
+The pre-review 0018 was locally exploitable through PostgreSQL's separate built-in function default: a postgres-owned canary created without an explicit REVOKE was immediately executable by the ingress role in both `public` and `private_payment_ingress`. Schema-scoped default REVOKEs alone reproduced the same `true/true` result because PostgreSQL cannot use a per-schema default to subtract the built-in global grant. I1-R2 therefore applies the required global future-only `ALTER DEFAULT PRIVILEGES FOR ROLE postgres REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC`, plus schema-scoped REVOKEs to clear any additive defaults. Existing function ACLs and the effective authority of `anon`, `authenticated`, `service_role`, and the ingress role remain unchanged. The unavoidable bounded consequence is that every future postgres-owned function, in any schema, requires an explicit grant; this is a future migration contract, not an existing-runtime ACL change.
 
 The wrapper is `SECURITY DEFINER`, owned by `postgres`, has `SET search_path = ''`, schema-qualifies every application relation/function, and hard-codes `evidence_source = 'webhook'`. The caller cannot provide durable IDs, processing time, source, application disposition, customer identity, grant, result, or worker authority. The wrapper returns only a bounded disposition string and never stores raw body, signature, endpoint secret, or customer content.
 
@@ -65,9 +70,11 @@ The rollback-only sequential matrix proved:
 
 Two independent local clients then invoked the same event concurrently and returned exact `verified 1 / duplicate 1`. Catalog verification found event ledger `1`, verified Payment `1`, fulfillment job `1`, and terminal verified intent `1`.
 
+I1-R2 privilege proof first reproduced the old candidate exploit as `public=true / private=true`; applying only the two schema-scoped default REVOKEs remained `true / true`. The global future-default hardening produced `false / false`, preserved existing function ACL/effective-authority drift at `0`, kept target-wrapper EXECUTE `true`, and proved that an explicit grant is required and effective for a new function. The reusable catalog-only preflight is branch-independent and checks target/non-target function authority, application relations/sequences, schema CREATE, and global/schema default ACLs after every future migration.
+
 ## Connection and secret boundary
 
-The deployable adapter accepts only a Supavisor transaction-pooler URL (`*.pooler.supabase.com:6543`) with `sslmode=require`. It independently enforces TLS, one connection per invocation, five-second connection/statement timeout, two-second lock timeout, one-second idle/end timeout, 60-second maximum lifetime, disabled prepared statements for transaction mode, disabled type-fetch queries, no retry loop, and `finally` cleanup. The DB role adds a global connection limit of four.
+The deployable adapter accepts only a Supavisor transaction-pooler URL (`*.pooler.supabase.com:6543`) with exactly one `sslmode=verify-full` query and no other query parameter. `STRIPE_INGRESS_DATABASE_CA_PEM` is mandatory, must contain actual-newline, currently valid CA certificates, and is parsed before connection. The postgres.js TLS object independently pins that CA, sets `rejectUnauthorized: true`, supplies the validated pooler hostname as SNI/server identity, and uses Node's built-in hostname check. Missing/malformed/expired CA, `require`, `disable`, absent/duplicate mode, and wrong hostname fail closed; `rejectUnauthorized=false` is absent from source and artifact. The adapter also enforces one connection per invocation, five-second connection/statement timeout, two-second lock timeout, one-second idle/end timeout, 60-second maximum lifetime, disabled prepared statements for transaction mode, disabled type-fetch queries, no retry loop, and `finally` cleanup. The DB role adds a global connection limit of four.
 
 Exact ingress secret allowlist:
 
@@ -75,13 +82,14 @@ Exact ingress secret allowlist:
 2. `STRIPE_WEBHOOK_ENABLED`
 3. `STRIPE_WEBHOOK_SECRET`
 4. `STRIPE_INGRESS_DATABASE_URL`
+5. `STRIPE_INGRESS_DATABASE_CA_PEM`
 
 The built ingress artifact contains none of `STRIPE_SECRET_KEY`, Supabase secret/service-role key names, OpenAI, Resend/email, encryption/auth/session/capability, Async Workloads, customer routes, Review, Checkout creation, Provider, or worker imports. Its publish directory is empty; no root/static/proxy/redirect surface exists.
 
 ## Verification
 
-- New I1 verifier: PASS `13/13`.
-- Disposable DB: fresh `0002..0018`, role/ACL, sequential atomicity/order/conflict, invalid zero-effect, and concurrent duplicate PASS.
+- New I1-R2 verifier: PASS `15/15`.
+- Disposable DB: fresh `0002..0018`, role/ACL/default-ACL/schema-CREATE, future-function canary, sequential atomicity/order/conflict, invalid zero-effect, and concurrent duplicate PASS.
 - Current Customer Auth disposable DB: expiry/replay/CSRF, binding, Payment-to-Grant, mixed lane, Customer isolation, detach, ACL/RLS PASS.
 - M2-B1: PASS `15/15` in an isolated exact historical verifier clone; the current task correctly fails its literal branch/authority pins and the verifier was not weakened.
 - RC-2: PASS `50/50`; RC-1: PASS `19/19`; Background durability: PASS `21/21`.

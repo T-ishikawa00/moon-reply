@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
-import { createHash, createHmac } from "node:crypto";
+import { createHash, createHmac, X509Certificate } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { checkServerIdentity, rootCertificates } from "node:tls";
+import { buildVerifiedIngressDatabaseConfiguration } from "../services/stripe-webhook-ingress/src/database.ts";
 import {
   createStripeWebhookIngressHandler,
   ingressSecretAllowlist,
@@ -122,6 +124,8 @@ await check("branch and append-only migration lineage", async () => {
     "supabase/tests/m2_b2_i1_ingress_concurrency_setup_r1.sql",
     "supabase/tests/m2_b2_i1_ingress_concurrency_verify_r1.sql",
     "supabase/tests/m2_b2_i1_ingress_concurrency_worker_r1.sql",
+    "supabase/tests/m2_b2_i1_future_function_privilege_r1.sql",
+    "supabase/tests/m2_b2_i1_ingress_privilege_preflight_r1.sql",
     "supabase/tests/m2_b2_i1_webhook_ingress_authority_r1.sql",
     "tsconfig.json",
   ]);
@@ -197,7 +201,27 @@ await check("private definer wrapper and credential-free role", async () => {
   assert.match(migration, /connection limit 4/u);
   assert.match(migration, /grant execute[\s\S]+to m2_b2_stripe_ingress/u);
   assert.match(migration, /from public, anon, authenticated, service_role/u);
+  assert.match(
+    migration,
+    /alter default privileges for role postgres\s+revoke execute on functions from public/u,
+  );
   assert.doesNotMatch(migration, /whsec_|postgres(?:ql)?:\/\//u);
+});
+
+await check("reusable catalog privilege preflight is branch independent", async () => {
+  const preflight = await readFile(
+    path.join(
+      root,
+      "supabase/tests/m2_b2_i1_ingress_privilege_preflight_r1.sql",
+    ),
+    "utf8",
+  );
+  assert.match(preflight, /PRIVILEGE_TARGET_EXECUTE_MISSING/u);
+  assert.match(preflight, /PRIVILEGE_NON_TARGET_EXECUTE/u);
+  assert.match(preflight, /PRIVILEGE_APPLICATION_RELATION_AUTHORITY/u);
+  assert.match(preflight, /PRIVILEGE_SCHEMA_CREATE/u);
+  assert.match(preflight, /PRIVILEGE_PUBLIC_EXECUTE_DEFAULT/u);
+  assert.doesNotMatch(preflight, /expectedBranch|git rev-parse|3fc5d207/u);
 });
 
 await check("exact ingress secret allowlist", async () => {
@@ -206,10 +230,77 @@ await check("exact ingress secret allowlist", async () => {
     "STRIPE_WEBHOOK_ENABLED",
     "STRIPE_WEBHOOK_SECRET",
     "STRIPE_INGRESS_DATABASE_URL",
+    "STRIPE_INGRESS_DATABASE_CA_PEM",
   ]);
 });
 
-await check("pooler connection is TLS-only, bounded, and leak-safe", async () => {
+await check("verify-full TLS configuration is explicit and fail closed", async () => {
+  const now = Date.now();
+  const caPem = rootCertificates.find((pem) => {
+    const certificate = new X509Certificate(pem);
+    return (
+      certificate.ca &&
+      Date.parse(certificate.validFrom) <= now &&
+      Date.parse(certificate.validTo) >= now
+    );
+  });
+  assert.ok(caPem, "current CA fixture unavailable");
+  const url =
+    "postgresql://fixture_user:fixture_password@db.example.invalid:5432/fixture_db";
+  const configuration = buildVerifiedIngressDatabaseConfiguration(
+    url,
+    caPem,
+    now,
+  );
+  assert.equal(configuration.connectionString, url);
+  assert.equal(configuration.ssl.ca, caPem.trim());
+  assert.equal(configuration.ssl.rejectUnauthorized, true);
+  assert.equal(configuration.ssl.servername, "aws-0-test.pooler.supabase.com");
+  assert.equal(configuration.ssl.checkServerIdentity, checkServerIdentity);
+
+  for (const invalidUrl of [
+    url.replace("verify-full", "require"),
+    url.replace("verify-full", "disable"),
+    url.replace("?sslmode=verify-full", ""),
+    `${url}&sslmode=verify-full`,
+  ]) {
+    assert.throws(
+      () => buildVerifiedIngressDatabaseConfiguration(invalidUrl, caPem, now),
+      /INGRESS_DATABASE_CONFIGURATION_INVALID/u,
+    );
+  }
+  for (const invalidCa of [
+    undefined,
+    "",
+    "-----BEGIN CERTIFICATE-----invalid-----END CERTIFICATE-----",
+    caPem.replaceAll("\n", "\\n"),
+  ]) {
+    assert.throws(
+      () => buildVerifiedIngressDatabaseConfiguration(url, invalidCa, now),
+      /INGRESS_DATABASE_CA_INVALID/u,
+    );
+  }
+  assert.throws(
+    () =>
+      buildVerifiedIngressDatabaseConfiguration(
+        url,
+        caPem,
+        Date.parse(new X509Certificate(caPem).validTo) + 1,
+      ),
+    /INGRESS_DATABASE_CA_INVALID/u,
+  );
+
+  const hostnameError = configuration.ssl.checkServerIdentity(
+    "wrong.pooler.supabase.com",
+    {
+      subject: { CN: "aws-0-test.pooler.supabase.com" },
+      subjectaltname: "DNS:aws-0-test.pooler.supabase.com",
+    },
+  );
+  assert.equal(hostnameError?.code, "ERR_TLS_CERT_ALTNAME_INVALID");
+});
+
+await check("pooler connection is bounded and leak-safe", async () => {
   const source = await readFile(
     path.join(root, "services/stripe-webhook-ingress/src/database.ts"),
     "utf8",
@@ -218,8 +309,12 @@ await check("pooler connection is TLS-only, bounded, and leak-safe", async () =>
   assert.match(source, /url\.port !== "6543"/u);
   assert.match(source, /m2_b2_stripe_ingress\./u);
   assert.match(source, /url\.pathname !== "\/postgres"/u);
-  assert.match(source, /sslmode.*require/u);
-  assert.match(source, /ssl: "require"/u);
+  assert.match(source, /sslmode.*verify-full/u);
+  assert.match(source, /rejectUnauthorized: true/u);
+  assert.match(source, /servername: url\.hostname/u);
+  assert.match(source, /checkServerIdentity/u);
+  assert.doesNotMatch(source, /rejectUnauthorized:\s*false/u);
+  assert.doesNotMatch(source, /ssl:\s*"require"/u);
   assert.match(source, /max: 1/u);
   assert.match(source, /connect_timeout: 5/u);
   assert.match(source, /prepare: false/u);
@@ -350,6 +445,8 @@ await check("built artifact contains no forbidden app surface or secret name", a
     "/result",
     "createCheckoutSession",
     "enqueueProductionFulfillmentJob",
+    "rejectUnauthorized: false",
+    'ssl: "require"',
   ]) {
     assert.equal(bundle.includes(forbidden), false, forbidden);
   }

@@ -21,9 +21,11 @@ Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority inte
 - [x] M2-B2: recommend a separate minimal Public Netlify ingress plus Private scheduled durable-dispatch/reconciliation recovery; document exact future files, rollback, Sandbox rehearsal, and action-time gates.
 - [x] Fast-forward reviewed B2 design into `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88`, normally push, and keep `main` unchanged.
 - [x] Inventory remote Data API schemas (`public,graphql_public`) read-only and create candidate non-exposed `private_payment_ingress` wrapper plus credentialless `m2_b2_stripe_ingress` login in append-only 0018.
-- [x] Split the raw Stripe signature verifier from the Checkout API client and build a standalone exact-path ingress with the four-secret allowlist, no customer/Review/Checkout/Provider/email/Async/worker surface, and durable-commit-before-2xx behavior.
-- [x] Fresh-apply exact `0002..0018` locally and prove ACL, invalid zero-effect, duplicate/conflict/order/race convergence, and exact one Payment/job.
-- [x] Pass I1 `13/13`, B1 isolated `15/15`, RC-2 `50/50`, RC-1 `19/19`, durability `21/21`, artifact/runtime/auth/product/clarification, typecheck, zero-warning lint, customer build `38/38`, ingress build, and diff check.
+- [x] Split the raw Stripe signature verifier from the Checkout API client and build a standalone exact-path ingress with the five-item configuration allowlist, no customer/Review/Checkout/Provider/email/Async/worker surface, and durable-commit-before-2xx behavior.
+- [x] Harden the DB connection from encryption-only `require` to CA-pinned/hostname-verified `verify-full`; missing, malformed, expired, disabled, duplicate-mode, and wrong-host configurations fail closed.
+- [x] Reproduce future-function PUBLIC EXECUTE as `true/true`, prove schema-only REVOKE ineffective, then apply the required global future default plus additive-schema cleanup; schema CREATE stays false and existing runtime ACL/effective authority drift is zero.
+- [x] Fresh-apply exact `0002..0018` locally and prove ACL/default ACL/canary, invalid zero-effect, duplicate/conflict/order/race convergence, and exact one Payment/job.
+- [x] Pass I1-R2 `15/15`, B1 isolated `15/15`, RC-2 `50/50`, RC-1 `19/19`, durability `21/21`, artifact/runtime/auth/product/clarification, typecheck, zero-warning lint, customer build `38/38`, ingress build, and diff check.
 
 Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` are not publish candidates. I1 performed no Netlify/Stripe/remote DB/runtime configuration write. Canonical evidence: `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->

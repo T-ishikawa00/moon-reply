@@ -38,6 +38,27 @@ revoke all on schema private_payment_ingress
   from public, anon, authenticated, service_role, m2_b2_stripe_ingress;
 grant usage on schema private_payment_ingress to m2_b2_stripe_ingress;
 
+do $migration_owner_guard$
+begin
+  if current_user <> 'postgres' then
+    raise exception 'M2_B2_INGRESS_MIGRATION_OWNER_INVALID'
+      using errcode = 'P0001';
+  end if;
+end;
+$migration_owner_guard$;
+
+-- PostgreSQL's built-in function default grants EXECUTE to PUBLIC globally.
+-- A schema-scoped REVOKE alone cannot remove that built-in grant, so the
+-- global future default must be hardened first. The schema-scoped REVOKEs
+-- then clear any additive defaults that may have been set for these schemas.
+-- Existing function ACLs are not changed by ALTER DEFAULT PRIVILEGES.
+alter default privileges for role postgres
+  revoke execute on functions from public;
+alter default privileges for role postgres in schema public
+  revoke execute on functions from public;
+alter default privileges for role postgres in schema private_payment_ingress
+  revoke execute on functions from public;
+
 create function private_payment_ingress.record_stripe_webhook_evidence_v1(
   p_provider_event_id text,
   p_event_type text,
@@ -229,6 +250,47 @@ begin
       )
   ) then
     raise exception 'M2_B2_INGRESS_FUNCTION_PRIVILEGE_DRIFT'
+      using errcode = 'P0001';
+  end if;
+  if pg_catalog.has_schema_privilege(
+       'm2_b2_stripe_ingress', 'public', 'CREATE'
+     )
+     or pg_catalog.has_schema_privilege(
+       'm2_b2_stripe_ingress', 'private_payment_ingress', 'CREATE'
+     ) then
+    raise exception 'M2_B2_INGRESS_SCHEMA_CREATE_PRIVILEGE_DRIFT'
+      using errcode = 'P0001';
+  end if;
+  if not exists (
+    select 1
+    from pg_catalog.pg_default_acl as defaults
+    join pg_catalog.pg_roles as owner_role
+      on owner_role.oid = defaults.defaclrole
+    where owner_role.rolname = 'postgres'
+      and defaults.defaclnamespace = 0
+      and defaults.defaclobjtype = 'f'
+  ) then
+    raise exception 'M2_B2_INGRESS_GLOBAL_FUNCTION_DEFAULT_MISSING'
+      using errcode = 'P0001';
+  end if;
+  if exists (
+    select 1
+    from pg_catalog.pg_default_acl as defaults
+    join pg_catalog.pg_roles as owner_role
+      on owner_role.oid = defaults.defaclrole
+    cross join lateral pg_catalog.aclexplode(defaults.defaclacl) as privilege
+    left join pg_catalog.pg_namespace as namespace
+      on namespace.oid = defaults.defaclnamespace
+    where owner_role.rolname = 'postgres'
+      and defaults.defaclobjtype = 'f'
+      and (
+        defaults.defaclnamespace = 0
+        or namespace.nspname in ('public', 'private_payment_ingress')
+      )
+      and privilege.grantee = 0
+      and privilege.privilege_type = 'EXECUTE'
+  ) then
+    raise exception 'M2_B2_INGRESS_PUBLIC_EXECUTE_DEFAULT_DRIFT'
       using errcode = 'P0001';
   end if;
   if not pg_catalog.has_schema_privilege(
