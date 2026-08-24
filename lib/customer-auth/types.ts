@@ -31,6 +31,7 @@ export type CustomerAuthContinuation = Readonly<{
   flowKind: CustomerAuthFlowKind;
   state: "pending" | "consumed" | "expired" | "revoked";
   expiresAt: string;
+  purpose: "purchase_checkout" | "prepayment_compute";
 }>;
 
 export type CustomerOwnershipBinding = Readonly<{
@@ -73,6 +74,18 @@ export type CustomerIdentityRepository = {
     ownershipReferenceId: string;
     continuationTokenHash: string;
     csrfTokenHash: string;
+    customerUserId: string;
+    deliveryEmailHash: string;
+    deliveryEmailCiphertext: string;
+    deliveryEmailKeyVersion: string;
+    deliveryEmailVerifiedSource: VerifiedDeliveryEmailSource;
+    deliveryEmailVerifiedAt: string;
+    now: string;
+  }): Promise<CustomerOwnershipBinding>;
+  bindPrepaymentByCapability(input: {
+    bindingId: string;
+    ownershipReferenceId: string;
+    preparationCapabilityHash: string;
     customerUserId: string;
     deliveryEmailHash: string;
     deliveryEmailCiphertext: string;

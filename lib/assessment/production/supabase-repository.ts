@@ -24,6 +24,10 @@ import {
 } from "./consultation.ts";
 import { decodeAndVerifyProductionCanonicalProjection } from "./canonical-delivery.ts";
 import type {
+  BeginPrepaymentIntakeRecord,
+  PrepaymentComputeAuthorityRepository,
+} from "./prepayment-compute.ts";
+import type {
   AssessmentGrantHandleV1,
   BeginProductionPreparationOutcome,
   BeginProductionPreparationRecord,
@@ -146,6 +150,13 @@ type ProductionDatabase = {
       claim_production_notification_v2: RuntimeFunction;
       complete_production_notification_v2: RuntimeFunction;
       fail_production_notification_v2: RuntimeFunction;
+      begin_production_prepayment_intake_v1: RuntimeFunction;
+      resolve_production_prepayment_continuation_v1: RuntimeFunction;
+      claim_production_prepayment_execution_v1: RuntimeFunction;
+      begin_production_prepayment_clarification_v1: RuntimeFunction;
+      finalize_production_prepayment_execution_v1: RuntimeFunction;
+      fail_production_prepayment_execution_v1: RuntimeFunction;
+      claim_production_prepayment_compute_unit_v1: RuntimeFunction;
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
@@ -158,14 +169,23 @@ type RuntimeFunction = {
 };
 
 function databaseFailure(error?: unknown): never {
-  if (
+  const message =
     typeof error === "object" &&
     error !== null &&
     "message" in error &&
-    typeof error.message === "string" &&
-    error.message.includes("PRODUCTION_IDEMPOTENCY_CONFLICT")
+    typeof error.message === "string"
+      ? error.message
+      : "";
+  if (
+    message.includes("PRODUCTION_IDEMPOTENCY_CONFLICT")
   ) {
     throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_CONFLICT", 409);
+  }
+  if (message.includes("M2_C1_EXECUTION_AUTHORIZATION_INVALID")) {
+    throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_INVALID", 403);
+  }
+  if (message.includes("M2_C1_COMPUTE_POLICY_INVALID")) {
+    throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
   }
   throw new M2RuntimeError("PRODUCTION_DATABASE_OPERATION_FAILED", 503);
 }
@@ -248,7 +268,7 @@ function mapDelivery(row: DeliveryRow): ProductionCanonicalDeliveryRecord {
 }
 
 export class SupabaseProductionFulfillmentRepository
-  implements ProductionFulfillmentRepository
+  implements ProductionFulfillmentRepository, PrepaymentComputeAuthorityRepository
 {
   private readonly client: SupabaseClient<ProductionDatabase>;
 
@@ -262,7 +282,7 @@ export class SupabaseProductionFulfillmentRepository
     });
   }
 
-  private async getPreparationById(preparationId: string) {
+  async getPreparationById(preparationId: string) {
     const { data, error } = await this.client
       .from("production_preparations")
       .select("*")
@@ -325,6 +345,178 @@ export class SupabaseProductionFulfillmentRepository
       preparation,
       request: await this.getRequest(preparation.requestId),
     };
+  }
+  async beginPrepaymentIntake(record: BeginPrepaymentIntakeRecord) {
+    const { data, error } = await this.client.rpc(
+      "begin_production_prepayment_intake_v1",
+      {
+        p_preparation_id: record.preparationId,
+        p_request_id: record.requestId,
+        p_idempotency_key_hash: record.idempotencyKeyHash,
+        p_consultation_snapshot_sha256: record.consultationSnapshotHash,
+        p_consultation_snapshot_json: record.consultationSnapshot,
+        p_safety_authority_json: record.safetyAuthority,
+        p_current_situation: record.assessmentInput.currentSituation,
+        p_optional_message: record.assessmentInput.optionalMessage,
+        p_relationship: record.assessmentInput.relationship,
+        p_requested_topics: record.assessmentInput.requestedTopics,
+        p_execution_capability_hash: record.executionCapabilityHash,
+        p_now: record.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const result = recordValue(data);
+    const disposition = result.disposition;
+    const executionDisposition = result.execution_disposition;
+    if (
+      (disposition !== "created" && disposition !== "existing") ||
+      ![
+        "awaiting_auth",
+        "executing",
+        "awaiting_clarification",
+        "completed",
+        "failed",
+      ].includes(String(executionDisposition))
+    ) {
+      databaseFailure();
+    }
+    const preparationId = stringValue(result.preparation_id);
+    const preparation = await this.getPreparationById(preparationId);
+    if (!preparation) databaseFailure();
+    return {
+      disposition: disposition as "created" | "existing",
+      executionDisposition: executionDisposition as
+        | "awaiting_auth"
+        | "executing"
+        | "awaiting_clarification"
+        | "completed"
+        | "failed",
+      preparation,
+      request: await this.getRequest(preparation.requestId),
+    };
+  }
+
+  async resolvePrepaymentContinuation(input: {
+    customerUserId: string;
+    continuationTokenHash: string;
+    now: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "resolve_production_prepayment_continuation_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_continuation_token_hash: input.continuationTokenHash,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    return data === null ? null : stringValue(data);
+  }
+
+  async claimPrepaymentExecution(input: {
+    customerUserId: string;
+    preparationId: string;
+    now: string;
+  }) {
+    const { data, error } = await this.client.rpc(
+      "claim_production_prepayment_execution_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_preparation_id: input.preparationId,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+    const disposition = stringValue(data);
+    if (!["acquired", "in_progress", "completed"].includes(disposition)) {
+      databaseFailure();
+    }
+    const preparation = await this.getPreparationById(input.preparationId);
+    if (!preparation) databaseFailure();
+    return {
+      disposition: disposition as "acquired" | "in_progress" | "completed",
+      preparationId: input.preparationId,
+      preparation,
+      request: await this.getRequest(preparation.requestId),
+    };
+  }
+
+  async beginPrepaymentClarification(input: {
+    customerUserId: string;
+    preparationId: string;
+    now: string;
+  }) {
+    const { error } = await this.client.rpc(
+      "begin_production_prepayment_clarification_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_preparation_id: input.preparationId,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+  }
+
+  async finalizePrepaymentExecution(record: FinalizeProductionPreparationRecord) {
+    const { error } = await this.client.rpc(
+      "finalize_production_prepayment_execution_v1",
+      {
+        p_preparation_id: record.preparationId,
+        p_status: record.status,
+        p_stop_reason: record.stopReason,
+        p_clarification_id: record.clarificationId,
+        p_clarification_capability_hash: record.clarificationCapabilityHash,
+        p_clarification_question: record.clarificationQuestion,
+        p_clarification_answer_fingerprint:
+          record.clarificationAnswerFingerprint,
+        p_purchase_capability_hash: record.purchaseCapabilityHash,
+        p_purchase_ready_authority_json: record.purchaseReadyAuthority,
+        p_purchase_ready_authority_sha256:
+          record.purchaseReadyAuthorityHash,
+        p_now: record.now,
+      },
+    );
+    if (error) databaseFailure(error);
+  }
+
+  async failPrepaymentExecution(input: {
+    preparationId: string;
+    errorCode: string;
+    now: string;
+  }) {
+    const { error } = await this.client.rpc(
+      "fail_production_prepayment_execution_v1",
+      {
+        p_preparation_id: input.preparationId,
+        p_error_code: input.errorCode,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
+  }
+
+  async claimComputeUnit(
+    input: Parameters<PrepaymentComputeAuthorityRepository["claimComputeUnit"]>[0],
+  ) {
+    const { data, error } = await this.client.rpc(
+      "claim_production_prepayment_compute_unit_v1",
+      {
+        p_customer_user_id: input.customerUserId,
+        p_preparation_id: input.preparationId,
+        p_now: input.now,
+        p_policy_version: input.policy.policyVersion,
+        p_window_seconds: input.policy.windowSeconds,
+        p_max_provider_invocations: input.policy.maximumProviderInvocations,
+        p_stage_id: input.stageId,
+        p_attempt_number: input.attemptNumber,
+      },
+    );
+    if (error) databaseFailure(error);
+    const disposition = stringValue(data);
+    if (disposition !== "acquired" && disposition !== "exhausted") {
+      databaseFailure();
+    }
+    return disposition;
   }
 
   async finalizePreparation(record: FinalizeProductionPreparationRecord) {

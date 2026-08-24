@@ -4,6 +4,8 @@ export const RC2_NEW_PURCHASE_REQUIRED_ENABLED_FLAGS = Object.freeze([
   "ASSESSMENT_PRODUCTION_PREPARATION_ENABLED",
   "ASSESSMENT_PRODUCTION_RUNTIME_ENABLED",
   "ASSESSMENT_PRODUCTION_RESULT_ACCESS_ENABLED",
+  "CUSTOMER_AUTH_ENABLED",
+  "PREPAYMENT_COMPUTE_BUDGET_ENABLED",
   "STRIPE_WEBHOOK_ENABLED",
   "STRIPE_RECONCILIATION_ENABLED",
   "PAYMENT_FULFILLMENT_PROCESSING_ENABLED",
@@ -18,8 +20,10 @@ export const RC2_NEW_PURCHASE_BLOCKING_STOP_FLAGS = Object.freeze([
 
 export function isRc2NewPurchaseActivationReady(
   enabled: (name: string) => boolean,
+  prepaymentComputePolicyConfigured: boolean,
 ) {
   return (
+    prepaymentComputePolicyConfigured &&
     RC2_NEW_PURCHASE_REQUIRED_ENABLED_FLAGS.every(enabled) &&
     RC2_NEW_PURCHASE_BLOCKING_STOP_FLAGS.every((name) => !enabled(name))
   );

@@ -4,6 +4,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AuthenticatedCheckoutButton } from "@/components/payment/AuthenticatedCheckoutButton";
+import { AuthenticatedPreparationContinuation } from "@/components/request/AuthenticatedPreparationContinuation";
+import { continueAuthenticatedProductionPreparation } from "@/lib/assessment/production/service";
+import { isPrepaymentComputeBudgetEnabled } from "@/lib/assessment/production/prepayment-compute-policy";
 import {
   AUTH_CONTINUATION_COOKIE,
   AUTH_SESSION_CSRF_COOKIE,
@@ -25,11 +28,15 @@ export default async function AuthenticatedPurchaseContinuationPage() {
   const csrfToken = cookieStore.get(AUTH_SESSION_CSRF_COOKIE)?.value;
   if (!continuation || !csrfToken) redirect("/account");
   try {
-    await (
-      await createCustomerIdentityAuthApplication()
-    ).getFreshIdentity();
+    await (await createCustomerIdentityAuthApplication()).getFreshIdentity();
   } catch {
     redirect("/account");
+  }
+  let prepaymentOutcome = null;
+  if (isPrepaymentComputeBudgetEnabled()) {
+    prepaymentOutcome = await continueAuthenticatedProductionPreparation({
+      continuationToken: continuation,
+    });
   }
 
   return (
@@ -55,7 +62,14 @@ export default async function AuthenticatedPurchaseContinuationPage() {
           <Link href="/legal/refund">返金方針</Link>
           <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
         </nav>
-        <AuthenticatedCheckoutButton csrfToken={csrfToken} />
+        {prepaymentOutcome ? (
+          <AuthenticatedPreparationContinuation
+            initialOutcome={prepaymentOutcome}
+            csrfToken={csrfToken}
+          />
+        ) : (
+          <AuthenticatedCheckoutButton csrfToken={csrfToken} />
+        )}
       </section>
     </main>
   );

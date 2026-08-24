@@ -4,7 +4,13 @@ import { useState } from "react";
 
 import { trackClientMeasurement } from "@/lib/measurement/client";
 
-export function AuthenticatedCheckoutButton({ csrfToken }: { csrfToken: string }) {
+export function AuthenticatedCheckoutButton({
+  csrfToken,
+  preparationCapability,
+}: {
+  csrfToken: string;
+  preparationCapability?: string;
+}) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -17,7 +23,11 @@ export function AuthenticatedCheckoutButton({ csrfToken }: { csrfToken: string }
         credentials: "same-origin",
         cache: "no-store",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ authContinuation: true, csrfToken }),
+        body: JSON.stringify(
+          preparationCapability
+            ? { preparationCapability }
+            : { authContinuation: true, csrfToken },
+        ),
       });
       if (!response.ok) throw new Error("checkout failed");
       const payload: unknown = await response.json();

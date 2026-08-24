@@ -7,6 +7,11 @@ export type ProductionAssessmentEnvironment = {
   supabaseSecretKey: string;
 };
 
+export type ProductionPersistenceEnvironment = Pick<
+  ProductionAssessmentEnvironment,
+  "supabaseUrl" | "supabaseSecretKey"
+>;
+
 function enabled(name: string) {
   return process.env[name] === "true";
 }
@@ -45,6 +50,13 @@ export function readProductionAssessmentEnvironment(): ProductionAssessmentEnvir
   return {
     openAiApiKey: required("OPENAI_API_KEY"),
     openAiModel: model,
+    supabaseUrl: required("SUPABASE_URL"),
+    supabaseSecretKey: required("SUPABASE_SECRET_KEY"),
+  };
+}
+
+export function readProductionPersistenceEnvironment(): ProductionPersistenceEnvironment {
+  return {
     supabaseUrl: required("SUPABASE_URL"),
     supabaseSecretKey: required("SUPABASE_SECRET_KEY"),
   };

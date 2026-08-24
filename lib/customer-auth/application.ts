@@ -143,6 +143,34 @@ export class CustomerIdentityAuthApplicationV1 {
     });
   }
 
+  async bindAuthenticatedPrepayment(input: {
+    preparationCapability: unknown;
+    identity: CustomerAuthIdentityV1;
+  }) {
+    const now = this.now();
+    const email = normalizeDeliveryEmail(input.identity.verifiedEmail);
+    return this.options.repository.bindPrepaymentByCapability({
+      bindingId: this.uuid(),
+      ownershipReferenceId: this.uuid(),
+      preparationCapabilityHash: hashOpaqueProductionCapability(
+        input.preparationCapability,
+      ),
+      customerUserId: input.identity.customerUserId,
+      deliveryEmailHash: hashDeliveryEmail(
+        email,
+        this.options.environment.emailHashPepper,
+      ),
+      deliveryEmailCiphertext: encryptDeliveryEmail(
+        email,
+        this.options.environment.emailEncryptionKey,
+      ),
+      deliveryEmailKeyVersion: this.options.environment.emailKeyVersion,
+      deliveryEmailVerifiedSource: input.identity.verifiedEmailSource,
+      deliveryEmailVerifiedAt: now,
+      now,
+    });
+  }
+
   async verifyEmailOtp(input: {
     continuationToken: unknown;
     csrfToken: unknown;

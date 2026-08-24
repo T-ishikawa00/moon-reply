@@ -1,9 +1,20 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
+## Current operational overlay — M2-C1 pre-payment compute budget
+
+- Current source authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-C1 status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; AI-01 and AI-02 are not closed.
+- C1 makes signed-out preparation provider-free and requires fresh Customer Auth, active ownership, durable execution authority, and an atomic Customer-bound compute claim immediately before every pre-payment Provider transport.
+- Candidate `0020_m2_c1_prepayment_compute_budget.sql` is local only. Remote DB remains exact 0002–0019; remote apply, activation, Deploy, Publish, and external E2E remain unauthorized.
+- Measured current ceiling is initial 4 calls with optional draft / 3 without, clarification resume 1, and pre-payment retry/reassessment 0. Final Dogfood quota/window is a Human/ChatGPT decision.
+- Canonical evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`. SEC-01 remains a separate task; Next 16.3.0 and I4 scheduler flags are unchanged.
+<!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
+
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
 ## Current operational overlay — M2-B2-I4 cutover safety controls
 
-- Current source authority: `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`; reviewed B1, B2 I1/I1-R2/I1-R3, I2/I2-R1, and I3 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Current source authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; reviewed B1 and B2 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed`; its closure baseline was exact `0002..0017`. Current remote migration history is now exact `0002..0019`, pending `0`, unknown `0`.
 - Exact 0017 artifact remains immutable at Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`; the three v2 NULL fences, v1 compatibility, and DB0016 dispatch identities are unchanged after B2 apply.
 - M2-B2 DB foundation is `CONFIRMED_REMOTE_CLOSED`: revised `0018_m2_b2_webhook_ingress_authority.sql` (`1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`) and unchanged `0019_m2_b2_private_payment_reconciliation.sql` (`b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`) were applied exactly once in one reviewed push.

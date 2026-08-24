@@ -154,6 +154,10 @@ await check("activation environment names are declared without example secrets",
     "ASSESSMENT_PRODUCTION_RUNTIME_ENABLED",
     "ASSESSMENT_PRODUCTION_RESULT_ACCESS_ENABLED",
     "ASSESSMENT_PRODUCTION_EMERGENCY_STOP",
+    "CUSTOMER_AUTH_ENABLED",
+    "PREPAYMENT_COMPUTE_BUDGET_ENABLED",
+    "PREPAYMENT_COMPUTE_WINDOW_SECONDS",
+    "PREPAYMENT_COMPUTE_MAX_PROVIDER_INVOCATIONS",
     "PAYMENT_PRODUCTION_ENABLED",
     "PAYMENT_EMERGENCY_STOP",
     "PAYMENT_FULFILLMENT_PROCESSING_ENABLED",
@@ -215,15 +219,16 @@ await check("new purchase visibility is an all-flags fail-closed policy", () => 
     state.set(name, false);
   }
   const enabled = (name) => state.get(name) === true;
-  assert.equal(isRc2NewPurchaseActivationReady(enabled), true);
+  assert.equal(isRc2NewPurchaseActivationReady(enabled, true), true);
+  assert.equal(isRc2NewPurchaseActivationReady(enabled, false), false);
   for (const name of RC2_NEW_PURCHASE_REQUIRED_ENABLED_FLAGS) {
     state.set(name, false);
-    assert.equal(isRc2NewPurchaseActivationReady(enabled), false, name);
+    assert.equal(isRc2NewPurchaseActivationReady(enabled, true), false, name);
     state.set(name, true);
   }
   for (const name of RC2_NEW_PURCHASE_BLOCKING_STOP_FLAGS) {
     state.set(name, true);
-    assert.equal(isRc2NewPurchaseActivationReady(enabled), false, name);
+    assert.equal(isRc2NewPurchaseActivationReady(enabled, true), false, name);
     state.set(name, false);
   }
   const environment = readPaymentEnvironmentSources();
@@ -234,7 +239,12 @@ await check("new purchase visibility is an all-flags fail-closed policy", () => 
   ]) {
     assert.match(
       environment,
-      new RegExp(`export function ${functionName}\\(\\) \\{[\\s\\S]*?isRc2NewPurchaseActivationReady\\(enabled\\)`, "u"),
+      new RegExp(
+        `export function ${functionName}\\(\\) \\{[\\s\\S]*?` +
+          "isRc2NewPurchaseActivationReady\\(\\s*enabled,\\s*" +
+          "isPrepaymentComputePolicyConfigured\\(\\)",
+        "u",
+      ),
       functionName,
     );
   }

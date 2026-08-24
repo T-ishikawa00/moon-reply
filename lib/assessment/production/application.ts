@@ -30,6 +30,10 @@ import {
   toPrepaymentSafetyInput,
 } from "./consultation.ts";
 import type { DeliveryNotificationAdapterV1 } from "./notification.ts";
+import type {
+  PrepaymentComputeAuthorityRepository,
+  PrepaymentComputePolicyV1,
+} from "./prepayment-compute.ts";
 import {
   VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION,
   type AssessmentGrantHandleV1,
@@ -54,7 +58,7 @@ type ProductionRuntimeCatalog = {
 type ProductionFulfillmentApplicationOptions = {
   runtimeRepository: AssessmentRepository;
   lifecycleRepository: ProductionFulfillmentRepository;
-  transport: AiStageTransport;
+  transport?: AiStageTransport;
   catalog: ProductionRuntimeCatalog;
   model: "gpt-5.6-luna";
   fulfillmentLeaseSeconds?: number;
@@ -63,6 +67,7 @@ type ProductionFulfillmentApplicationOptions = {
   capability?: () => string;
   timeZone?: string;
   allowSyntheticPurchaseAuthority?: boolean;
+  prepaymentComputeAuthority?: PrepaymentComputeAuthorityRepository;
 };
 
 const DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS = 16 * 60;
@@ -110,6 +115,9 @@ export class ProductionFulfillmentApplication {
     stageId: M2StageId,
     attemptNumber: StageAttemptNumber,
   ) => Promise<void>) {
+    if (!this.options.transport) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
     return new AssessmentPipeline({
       repository: this.options.runtimeRepository,
       transport: this.options.transport,
@@ -194,6 +202,7 @@ export class ProductionFulfillmentApplication {
       | "clarificationCapabilityHash"
       | "clarificationQuestion"
     >,
+    prepaymentComputeAuthorized = false,
   ): Promise<PublicPreparationOutcome> {
     const now = this.now();
     let record: FinalizeProductionPreparationRecord;
@@ -267,8 +276,165 @@ export class ProductionFulfillmentApplication {
       };
       publicOutcome = { status: stopReason };
     }
-    await this.options.lifecycleRepository.finalizePreparation(record);
+    if (prepaymentComputeAuthorized) {
+      if (!this.options.prepaymentComputeAuthority) {
+        throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+      }
+      await this.options.prepaymentComputeAuthority.finalizePrepaymentExecution(
+        record,
+      );
+    } else {
+      await this.options.lifecycleRepository.finalizePreparation(record);
+    }
     return publicOutcome;
+  }
+
+  private computeFence(input: {
+    customerUserId: string;
+    preparationId: string;
+    policy: PrepaymentComputePolicyV1;
+  }) {
+    const authority = this.options.prepaymentComputeAuthority;
+    if (!authority) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
+    return async (stageId: M2StageId, attemptNumber: StageAttemptNumber) => {
+      const disposition = await authority.claimComputeUnit({
+        ...input,
+        now: this.now(),
+        stageId,
+        attemptNumber,
+      });
+      if (disposition !== "acquired") {
+        throw new M2RuntimeError("PREPAYMENT_COMPUTE_BUDGET_EXHAUSTED", 429);
+      }
+    };
+  }
+
+  async beginProviderFreePreparation(
+    value: unknown,
+    idempotencyKey: unknown,
+  ): Promise<PublicPreparationOutcome> {
+    const authority = this.options.prepaymentComputeAuthority;
+    if (!authority) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
+    const consultation = decodeProductionConsultationInputV1(value);
+    const idempotencyKeyHash = hashProductionIdempotencyKey(idempotencyKey);
+    const safetyAuthority = evaluatePrepaymentSafetyV1(
+      toPrepaymentSafetyInput(consultation),
+    );
+    if (!safetyAuthority.purchaseGateSatisfied) {
+      return { status: "safety_blocked" };
+    }
+    const assessmentInput = toAssessmentInput(consultation);
+    validateJpy980ProductScopeV1(assessmentInput);
+    const consultationSnapshotHash = hashProductionSnapshot({
+      consultation,
+      safetyAuthority,
+    });
+    const capability = this.capability();
+    const now = this.now();
+    const begun = await authority.beginPrepaymentIntake({
+      preparationId: this.uuid(),
+      requestId: this.uuid(),
+      idempotencyKeyHash,
+      consultationSnapshotHash,
+      consultationSnapshot: consultation,
+      assessmentInput,
+      safetyAuthority,
+      executionCapabilityHash: hashOpaqueProductionCapability(capability),
+      now,
+    });
+    if (begun.preparation.consultationSnapshotHash !== consultationSnapshotHash) {
+      throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_CONFLICT", 409);
+    }
+    if (
+      begun.preparation.status === "preparing" &&
+      begun.executionDisposition === "awaiting_auth"
+    ) {
+      return { status: "authentication_required", preparationCapability: capability };
+    }
+    return this.replayPreparation(begun.preparation, consultationSnapshotHash);
+  }
+
+  async executeAuthenticatedPrepayment(input: {
+    preparationId: string;
+    customerUserId: string;
+    policy: PrepaymentComputePolicyV1;
+  }): Promise<PublicPreparationOutcome> {
+    const authority = this.options.prepaymentComputeAuthority;
+    if (!authority) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
+    const claim = await authority.claimPrepaymentExecution({
+      customerUserId: input.customerUserId,
+      preparationId: input.preparationId,
+      now: this.now(),
+    });
+    if (claim.disposition === "in_progress") {
+      throw new M2RuntimeError("PRODUCTION_PREPARATION_IN_PROGRESS", 409);
+    }
+    if (claim.disposition === "completed") {
+      return this.replayPreparation(
+        claim.preparation,
+        claim.preparation.consultationSnapshotHash,
+      );
+    }
+    const runId = this.uuid();
+    const startedAt = this.now();
+    try {
+      const result = await this.pipeline(
+        this.computeFence({
+          customerUserId: input.customerUserId,
+          preparationId: input.preparationId,
+          policy: input.policy,
+        }),
+      ).prepare(
+        claim.preparation.assessmentInput,
+        this.runContext(claim.request.id, runId, startedAt),
+      );
+      return await this.finalizePipelinePreparation(
+        input.preparationId,
+        result,
+        null,
+        undefined,
+        true,
+      );
+    } catch (error) {
+      const safe = asM2RuntimeError(
+        error,
+        "PRODUCTION_PREPARATION_EXECUTION_FAILED",
+      );
+      await authority.failPrepaymentExecution({
+        preparationId: input.preparationId,
+        errorCode: safe.safeCode,
+        now: this.now(),
+      });
+      throw safe;
+    }
+  }
+
+  async executeAuthenticatedPrepaymentFromContinuation(input: {
+    continuationTokenHash: string;
+    customerUserId: string;
+    policy: PrepaymentComputePolicyV1;
+  }): Promise<PublicPreparationOutcome | null> {
+    const authority = this.options.prepaymentComputeAuthority;
+    if (!authority) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
+    const preparationId = await authority.resolvePrepaymentContinuation({
+      customerUserId: input.customerUserId,
+      continuationTokenHash: input.continuationTokenHash,
+      now: this.now(),
+    });
+    if (!preparationId) return null;
+    return this.executeAuthenticatedPrepayment({
+      preparationId,
+      customerUserId: input.customerUserId,
+      policy: input.policy,
+    });
   }
 
   async prepare(
@@ -334,6 +500,10 @@ export class ProductionFulfillmentApplication {
   async answerClarification(
     clarificationCapability: unknown,
     answer: unknown,
+    computeAuthorization?: {
+      customerUserId: string;
+      policy: PrepaymentComputePolicyV1;
+    },
   ): Promise<PublicPreparationOutcome> {
     const capabilityHash = hashOpaqueProductionCapability(
       clarificationCapability,
@@ -344,6 +514,19 @@ export class ProductionFulfillmentApplication {
       );
     if (!preparation || !preparation.clarificationId) {
       throw new M2RuntimeError("PRODUCTION_CLARIFICATION_NOT_FOUND", 404);
+    }
+    const authority = computeAuthorization
+      ? this.options.prepaymentComputeAuthority
+      : undefined;
+    if (computeAuthorization) {
+      if (!authority) {
+        throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+      }
+      await authority.claimPrepaymentExecution({
+        customerUserId: computeAuthorization.customerUserId,
+        preparationId: preparation.id,
+        now: this.now(),
+      });
     }
     const persisted =
       await this.options.runtimeRepository.findClarificationById(
@@ -371,6 +554,13 @@ export class ProductionFulfillmentApplication {
       );
     }
     const resumeRunId = this.uuid();
+    if (computeAuthorization && authority) {
+      await authority.beginPrepaymentClarification({
+        customerUserId: computeAuthorization.customerUserId,
+        preparationId: preparation.id,
+        now: this.now(),
+      });
+    }
     const accepted =
       await this.options.runtimeRepository.acceptClarificationAndCreateResumeRun({
         clarificationId: preparation.clarificationId,
@@ -399,7 +589,15 @@ export class ProductionFulfillmentApplication {
       );
     const evidence = buildClarificationEvidenceV1(accepted.clarification);
     try {
-      const result = await this.pipeline().resumePreparation(
+      const result = await this.pipeline(
+        computeAuthorization
+          ? this.computeFence({
+              customerUserId: computeAuthorization.customerUserId,
+              preparationId: preparation.id,
+              policy: computeAuthorization.policy,
+            })
+          : undefined,
+      ).resumePreparation(
         accepted.request,
         initial,
         evidence,
@@ -414,17 +612,26 @@ export class ProductionFulfillmentApplication {
         result,
         validated.answerFingerprint,
         preparation,
+        computeAuthorization !== undefined,
       );
     } catch (error) {
       const safe = asM2RuntimeError(
         error,
         "PRODUCTION_CLARIFICATION_EXECUTION_FAILED",
       );
-      await this.options.lifecycleRepository.failPreparation({
-        preparationId: preparation.id,
-        errorCode: safe.safeCode,
-        now: this.now(),
-      });
+      if (computeAuthorization && authority) {
+        await authority.failPrepaymentExecution({
+          preparationId: preparation.id,
+          errorCode: safe.safeCode,
+          now: this.now(),
+        });
+      } else {
+        await this.options.lifecycleRepository.failPreparation({
+          preparationId: preparation.id,
+          errorCode: safe.safeCode,
+          now: this.now(),
+        });
+      }
       throw safe;
     }
   }

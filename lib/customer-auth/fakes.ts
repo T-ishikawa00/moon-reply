@@ -114,6 +114,7 @@ export class FakeCustomerIdentityRepositoryV1
       flowKind: input.flowKind,
       state: "pending",
       expiresAt: input.expiresAt,
+      purpose: "purchase_checkout",
       continuationTokenHash: input.continuationTokenHash,
       csrfTokenHash: input.csrfTokenHash,
     };
@@ -183,6 +184,33 @@ export class FakeCustomerIdentityRepositoryV1
       ...continuation,
       state: "consumed",
     });
+    return structuredClone(binding);
+  }
+
+  async bindPrepaymentByCapability(
+    input: Parameters<CustomerIdentityRepository["bindPrepaymentByCapability"]>[0],
+  ) {
+    const preparation = this.preparations.get(input.preparationCapabilityHash);
+    if (!preparation) {
+      throw new M2RuntimeError("M2_C1_CUSTOMER_BINDING_INVALID", 403);
+    }
+    const existing = this.bindings.get(preparation.id);
+    if (existing) {
+      if (
+        existing.state === "active" &&
+        existing.customerUserId === input.customerUserId
+      ) {
+        return structuredClone(existing);
+      }
+      throw new M2RuntimeError("M2_C1_CUSTOMER_BINDING_CONFLICT", 409);
+    }
+    const binding: CustomerOwnershipBinding = {
+      id: input.bindingId,
+      preparationId: preparation.id,
+      customerUserId: input.customerUserId,
+      state: "active",
+    };
+    this.bindings.set(preparation.id, binding);
     return structuredClone(binding);
   }
 

@@ -1,9 +1,21 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
+## Current handoff — M2-C1 pre-payment compute budget
+
+- Authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; task branch `task/m2-c1-prepayment-compute-budget-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Do not mark AI-01/AI-02 closed.
+- Signed-out preparation performs deterministic validation and durable intake only. Provider-backed prepare/resume requires fresh `getUser()`, exact active ownership, current execution authority, and an atomic compute-unit claim at the transport boundary.
+- Candidate 0020 is local-only with SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote history remains 0002–0019; 0020 apply is unauthorized.
+- Synthetic evidence: anonymous fresh requests 100 → Provider 0; same-Customer 20-way quota-3 claims → 3 acquired / 17 exhausted / used 3; second Customer independent; rollover exactly one reset; cross-Customer/detached/NULL/invalid/unauthorized-role paths fail closed.
+- Human/ChatGPT must choose the final Dogfood quota/window using the measured legitimate ceiling: initial 4 with optional draft, clarification 1, pre-payment retry/reassessment 0. No activation, deploy, Publish, external E2E, SEC-01, or scheduler work belongs to this branch.
+- Evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`.
+<!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
+
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
 ## Current handoff — M2-B2-I4 cutover safety controls
 
-- Authority: `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`; reviewed B1, B2 design, I1/I1-R2/I1-R3, I2/I2-R1, and I3 are integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; reviewed B1 and B2 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 remains closed at its exact `0002..0017` baseline by 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. Current remote migrations are exact `0002..0019`; pending and unknown are both `0`.
 - Applied B2 artifacts: revised 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; unchanged 0019 Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Both were applied exactly once in one reviewed push.
 - Historical first attempt remains evidence: 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at the least-privilege guard, rolled back, never entered migration history, and is superseded. Older `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` was never remotely attempted.

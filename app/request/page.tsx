@@ -5,6 +5,7 @@ import { MoonSeal } from "@/components/brand/MoonSeal";
 import { RequestForm } from "@/components/request/RequestForm";
 import { isCustomerPaymentFlowVisible } from "@/lib/payment/production/environment";
 import { isCustomerAuthCutoverSelected } from "@/lib/customer-auth/cutover";
+import { isPrepaymentComputeBudgetEnabled } from "@/lib/assessment/production/prepayment-compute-policy";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +72,7 @@ export default function RequestPage() {
         customerAuthEnabled={
           paymentEnabled && isCustomerAuthCutoverSelected()
         }
+        prepaymentComputeEnabled={isPrepaymentComputeBudgetEnabled()}
       />
     </main>
   );

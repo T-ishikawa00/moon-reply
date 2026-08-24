@@ -1,5 +1,6 @@
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { isRc2NewPurchaseActivationReady } from "./activation-policy.ts";
+import { isPrepaymentComputePolicyConfigured } from "../../assessment/production/prepayment-compute-policy.ts";
 import type {
   EmailVerificationPolicyV1,
   PaymentEnvironment,
@@ -44,15 +45,24 @@ function requiredInteger(name: string, minimum: number, maximum: number) {
 }
 
 export function isCustomerPaymentFlowVisible() {
-  return isRc2NewPurchaseActivationReady(enabled);
+  return isRc2NewPurchaseActivationReady(
+    enabled,
+    isPrepaymentComputePolicyConfigured(),
+  );
 }
 
 export function isEmailVerificationAvailable() {
-  return isRc2NewPurchaseActivationReady(enabled);
+  return isRc2NewPurchaseActivationReady(
+    enabled,
+    isPrepaymentComputePolicyConfigured(),
+  );
 }
 
 export function isCheckoutAvailable() {
-  return isRc2NewPurchaseActivationReady(enabled);
+  return isRc2NewPurchaseActivationReady(
+    enabled,
+    isPrepaymentComputePolicyConfigured(),
+  );
 }
 
 export function isCustomerEmailDeliveryAvailable() {

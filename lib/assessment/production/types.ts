@@ -91,6 +91,10 @@ export type FinalizeProductionPreparationRecord = {
 
 export type PublicPreparationOutcome =
   | Readonly<{
+      status: "authentication_required";
+      preparationCapability: string;
+    }>
+  | Readonly<{
       status: "purchase_ready";
       preparationCapability: string;
     }>

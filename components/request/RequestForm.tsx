@@ -81,6 +81,7 @@ type ErrorKey =
 type ValidationErrors = Partial<Record<ErrorKey, string>>;
 
 type ProductionPreparationOutcome =
+  | { status: "authentication_required"; preparationCapability: string }
   | { status: "purchase_ready"; preparationCapability: string }
   | {
       status: "needs_one_clarifying_answer";
@@ -526,7 +527,8 @@ function decodeProductionPreparation(
   const data = readResponseData(value);
   if (!data || typeof data.status !== "string") return null;
   if (
-    data.status === "purchase_ready" &&
+    (data.status === "purchase_ready" ||
+      data.status === "authentication_required") &&
     typeof data.preparationCapability === "string"
   ) {
     return {
@@ -979,9 +981,11 @@ function LocalPurchaseConfirmation({
 export function RequestForm({
   paymentEnabled = false,
   customerAuthEnabled = false,
+  prepaymentComputeEnabled = false,
 }: {
   paymentEnabled?: boolean;
   customerAuthEnabled?: boolean;
+  prepaymentComputeEnabled?: boolean;
 }) {
   const router = useRouter();
   const [form, setForm] = useState<RequestFormData>(initialFormState);
@@ -1780,6 +1784,15 @@ export function RequestForm({
       if (!outcome) throw new Error("PRODUCTION_PREPARATION_INVALID");
       if (outcome.status === "purchase_ready") {
         measureRequestComplete();
+        if (prepaymentComputeEnabled && customerAuthEnabled) {
+          setProductionFlow({
+            status: "verified",
+            preparationCapability: outcome.preparationCapability,
+            maskedEmail: "確認済みアカウント",
+          });
+          setCompletedClassification(classification);
+          return;
+        }
         if (customerAuthEnabled) {
           if (authMethod) {
             await beginCustomerAuth(outcome.preparationCapability, authMethod);
@@ -1794,6 +1807,20 @@ export function RequestForm({
             outcome.preparationCapability,
             classification,
           );
+        }
+        return;
+      }
+      if (outcome.status === "authentication_required") {
+        if (!customerAuthEnabled) {
+          throw new Error("CUSTOMER_AUTH_REQUIRED");
+        }
+        if (authMethod) {
+          await beginCustomerAuth(outcome.preparationCapability, authMethod);
+        } else {
+          setProductionFlow({
+            status: "auth_method",
+            preparationCapability: outcome.preparationCapability,
+          });
         }
         return;
       }
@@ -1876,6 +1903,15 @@ export function RequestForm({
         throw new Error("PRODUCT_CLARIFICATION_INVALID");
       }
       measureRequestComplete();
+      if (prepaymentComputeEnabled && customerAuthEnabled) {
+        setProductionFlow({
+          status: "verified",
+          preparationCapability: outcome.preparationCapability,
+          maskedEmail: "確認済みアカウント",
+        });
+        setCompletedClassification(classification);
+        return;
+      }
       if (customerAuthEnabled) {
         if (customerAuthMethod) {
           await beginCustomerAuth(
