@@ -1,8 +1,8 @@
 # M2-C1 — Pre-payment Compute Budget / Abuse & Idempotency Authority
 
-Status: `Human/ChatGPT SOURCE/LOCAL PASS`
+Status: `Human/ChatGPT SOURCE + REMOTE DB PASS — ACTIVATION PENDING`
 
-This is an existing M2 task. It does not create a Milestone or Gate. Source baseline is `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; the reviewed implementation is `task/m2-c1-prepayment-compute-budget-r1@64167f18f22783fca3339ef3a3e9f77bc789dbd2`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 are `CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + ACTIVATION PENDING`. This does not close Production.
+This is an existing M2 task. It does not create a Milestone or Gate. Current source authority is `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; the reviewed implementation and acceptance sync are integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`. This does not close Production.
 
 ## Pre-C1 abuse path and exact topology
 
@@ -27,9 +27,9 @@ Already signed-in Customers take the same provider-free begin, then bind and exe
 
 The pre-auth public outcome is `authentication_required`; it never claims `purchase_ready`. Safety and deterministic scope stops remain provider-free. Sparse consultation, clarification default 0 / maximum 1, JPY 980, one consultation / one assessment note, Checkout-after-purchase-ready, Stripe/DB Payment verification, and durable post-payment fulfillment remain unchanged.
 
-## Candidate 0020 authority
+## 0020 durable authority
 
-Local-only `0020_m2_c1_prepayment_compute_budget.sql` adds:
+Applied `0020_m2_c1_prepayment_compute_budget.sql` adds:
 
 - `production_prepayment_execution_authorities`: preparation-bound, hash-only execution capability and state.
 - `production_prepayment_auth_continuations`: separate versioned C1 continuation because the existing 0014 continuation is purchase-ready-specific; one pending continuation per preparation, hash-only token/CSRF, expiry, revoke, consume.
@@ -39,9 +39,11 @@ Local-only `0020_m2_c1_prepayment_compute_budget.sql` adds:
 
 All new tables have RLS. Direct table authority and function EXECUTE are zero for PUBLIC, `anon`, `authenticated`, and `m2_b2_stripe_ingress`; only `service_role` receives the explicit required grants. Functions are `SECURITY INVOKER` with `search_path=''`. The budget and continuation authorities store no consultation, message, email, nickname, Stripe data, result text, raw capability/token, IP, or Provider body.
 
-Candidate 0020 Git-blob SHA-256: `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`.
+0020 Git-blob SHA-256: `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`.
 
-Migrations 0002–0019 remain immutable. Verified 0018 SHA-256 is `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; 0019 SHA-256 is `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Remote apply is not authorized.
+Migrations 0002–0019 remain immutable. Verified 0018 SHA-256 is `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; 0019 SHA-256 is `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Exact 0020 was applied once under separate explicit Human authority. Fresh postflight established remote exact 0002–0020, pending 0, unknown 0, with 0020 recorded once.
+
+Remote catalog postflight found exactly the three C1 tables and twelve C1 RPCs defined by Git 0020. All three tables have RLS enabled and no PUBLIC/anon/authenticated/ingress direct DML. All twelve RPCs are `SECURITY INVOKER`, `search_path=''`, explicitly executable by `service_role`, and not executable by PUBLIC, anon, authenticated, or `m2_b2_stripe_ingress`; `SECURITY DEFINER` count is zero. Protected existing functions, table/sequence ACLs, DB0016/0017/0019 identities, default function privileges, Data API schemas, and ingress effective authority had drift zero. Published source remained `0befd512219eb2897fb1edf969ad37d7e8c56b0d` and compatible.
 
 ## Configuration and activation
 
@@ -73,9 +75,9 @@ Current regression PASS also includes Auth Entry 11/11, Product Intent 18/18, Cl
 
 Historical verifier disposition is recorded rather than weakened: Customer Auth Foundation completed its current functional/security checks through 31 PASS and then stopped at its older `dcccf1c` accepted-file snapshot; B1, I1, I1-R3, and A1 stop on their literal historical task-branch pins; I4 passes its six current scheduler checks then rejects the intentional new 0020 in its exact 0002–0019 list; I2 passes 13 source checks then expects the literal default local container name, while its DB proof and ingress privilege preflight passed directly on the fresh C1 database; RC-2 Activation passes all C1 flag/policy readiness checks, then retains older source-topology and exact migration-list failures. These are lineage/container assertions, not manufactured PASS and not C1 runtime failures.
 
-Read-only remote postflight reports exact remote 0002–0019, local-only pending 0020, and unknown remote 0.
+Read-only remote postflight reports exact remote 0002–0020, pending 0, and unknown remote 0.
 
-No real Provider, Payment, Stripe endpoint/event, email, Async event, remote DB write, Netlify write/deploy/publish, scheduler execution, or Production activation occurred.
+The separately authorized remote action applied exact 0020 once. No Provider, Payment, Stripe endpoint/event, email, Async event, Netlify write/deploy/publish, scheduler execution, or Production activation occurred; D1 performs no remote write.
 
 ## Human/ChatGPT Self Dogfood policy decision
 
@@ -85,4 +87,4 @@ Any future quota/window increase is a separately reviewed configuration change; 
 
 Non-blocking follow-ups do not reopen C1 for Self Dogfood: anonymous provider-free intake DB write volume can be rate-limited independently while paid Provider cost remains zero; per-Customer authority does not stop deliberate multi-account abuse, so Public Launch later needs a separately reviewed global/provider/WAF spend ceiling.
 
-Remote 0020 apply, environment activation, Production deploy/publish, Public Launch policy, and external E2E remain separately unauthorized.
+Remote 0020 authority is closed. Environment activation, Production deploy/publish, Public Launch policy, and external E2E remain separately unauthorized. Production `PREPAYMENT_COMPUTE_*` values remain unset/disabled; the 86400 / 10 policy is recorded only.

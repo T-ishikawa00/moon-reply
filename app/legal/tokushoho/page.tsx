@@ -1,88 +1,74 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
-  ContentSection,
-  DecisionGrid,
-  FactRows,
-  LegalPageHeader,
-  LegalReviewScaffold,
-  ReviewCallout,
-} from "@/components/legal/LegalReview";
-import {
-  tokushohoFixedRows,
-  tokushohoUnresolvedRows,
-} from "@/lib/legal/review-content";
+  CustomerLegalHeader,
+  CustomerLegalScaffold,
+  CustomerNotice,
+  LegalContentSection,
+  LegalFactRows,
+} from "@/components/legal/LegalDocument";
+import { currentCustomerLegalFacts } from "@/lib/legal/current-content";
 
 export const metadata: Metadata = {
-  title: "特商法表記 審査表示 | 月の返事",
-  description: "固定値と未決定の開示項目を分離した、完成前の特定商取引法に基づく表記の審査表示です。",
+  title: "特定商取引法に基づく表記 | 月の返事",
+  description: "月の返事の現在の販売条件と、提供開始前に掲載する販売事業者情報についての案内です。",
 };
 
-export default function TokushohoReviewPage() {
+const salesFacts = [
+  { label: "サービス名", value: currentCustomerLegalFacts.serviceName },
+  { label: "商品名", value: currentCustomerLegalFacts.productName },
+  { label: "商品区分", value: currentCustomerLegalFacts.formalClassification },
+  { label: "販売価格", value: `${currentCustomerLegalFacts.price}（${currentCustomerLegalFacts.quantity}）` },
+  { label: "購入形態", value: `${currentCustomerLegalFacts.purchaseType}・${currentCustomerLegalFacts.renewal}` },
+  { label: "支払方法", value: "Stripeの決済画面で表示される方法。クレジットカードに対応し、利用可能な場合は他の方法も決済画面に表示します" },
+  { label: "支払時期", value: "購入内容を確認した後の一括前払い。サーバーで支払完了を確認できた場合に購入完了として扱います" },
+  { label: "商品代金以外の費用", value: "インターネット接続に必要な通信費等は利用者負担です" },
+  { label: "提供方法", value: "支払確認後、利用者本人に結び付いた保護された結果画面で鑑定ノートを提供します" },
+  { label: "提供時期", value: "支払確認後に作成・提供します。保守、障害、安全確認等により時間を要する場合があり、固定の完了時間は約束していません" },
+  { label: "対象年齢", value: currentCustomerLegalFacts.minimumAge },
+] as const;
+
+export default function TokushohoPage() {
   return (
-    <LegalReviewScaffold currentPath="/legal/tokushoho">
-      <LegalPageHeader
-        eyebrow="COMMERCIAL DISCLOSURE REVIEW"
-        title="特定商取引法に基づく表記 審査表示"
-        description="固定済みの商品事実と、公開前に実情報・外部証拠が必要な項目を、スマートフォンでも横スクロールなく確認する構成です。"
+    <CustomerLegalScaffold currentPath="/legal/tokushoho">
+      <CustomerLegalHeader
+        title="特定商取引法に基づく表記"
+        description="月の返事の販売条件と、販売事業者情報の現在の掲載状態をご案内します。"
       />
       <div className="legal-document-body">
-        <ReviewCallout strong="この画面は、完成した特定商取引法に基づく表記ではありません。">
-          運営者情報、連絡先、支払条件、提供時期、返金条件その他の必須項目が未完成です。購入時の正式表示として使用できません。
-        </ReviewCallout>
-
-        <ContentSection
-          eyebrow="FIXED ROWS"
-          title="固定済みの表示項目"
-          intro="価格、数量、一度きりの購入、自動更新なし、18歳以上の必須確認、商品・AI・非保証の説明だけを固定値として表示します。"
-        >
-          <FactRows facts={tokushohoFixedRows} />
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="ADDITIONAL CHARGES"
-          title="商品代金以外の必要料金"
-          intro="インターネット接続に必要な通信費等は利用者負担とする方向ですが、商品代金以外のサービス料金を含む最終表示は公開前に確認します。"
-          tone="ivory"
-        >
-          <DecisionGrid decisions={[
-            { label: "追加費用の最終表示", summary: "現時点の方向を確定条件として扱いません。", status: "運営者判断待ち" },
-          ]} />
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="UNRESOLVED DISCLOSURE ROWS"
-          title="未確定の開示項目"
-          intro="空欄、架空値、推測値は表示しません。内部の審査情報は各項目の折りたたみ内に隔離します。"
-        >
-          <DecisionGrid decisions={tokushohoUnresolvedRows} />
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="CONDITIONAL SELLER DISCLOSURE DIRECTION"
-          title="請求に応じた販売事業者情報の開示"
-          intro="採用済みの条件付き方向であり、現在利用できる制度や受付経路ではありません。"
-          tone="ivory"
-        >
-          <p className="leading-8">
-            法令と実際のStripe要件の双方が許す場合に限り、購入前に利用できる請求経路を設け、必要な販売事業者情報を遅滞なく開示する方向です。現在は事業用メール、問い合わせフォーム、受付処理がなく、利用者が請求できる状態ではありません。
+        <CustomerNotice title="販売事業者情報の掲載は完了していません">
+          <p>
+            販売事業者名、代表者、所在地、電話番号、事業用の問い合わせ先は現在掲載していません。実在する情報と受付方法を整え、提供開始前にこのページへ掲載します。
           </p>
-        </ContentSection>
+          <p>
+            架空の情報や、個人情報を守る目的だけで法令上必要な表示を省略できるという説明は行いません。
+          </p>
+        </CustomerNotice>
 
-        <ContentSection
-          eyebrow="PUBLICATION BLOCKERS"
-          title="公開前に必要な確認"
-          tone="night"
-        >
-          <ul className="list-disc space-y-3 pl-6 leading-8">
-            <li>事業者名、責任者、所在地、電話、事業用メールを実情報と運用証拠で完成させる</li>
-            <li>住所・電話の表示方法を、最新の公式情報、実情報、実際の外部事業者要件に基づいて決める</li>
-            <li>特定の住所形態が利用可能、または住所・電話を省略できると推測で主張しない</li>
-            <li>販売事業者情報の開示請求を採用する場合は、実在する購入前の受付経路を用意する</li>
-            <li>決済事業者のカテゴリ確認、支払方法、支払時期、返金条件を外部証拠で確認する</li>
-            <li>購入前確認と価格・数量・支払・提供・返金条件を一致させる</li>
-          </ul>
-        </ContentSection>
+        <LegalContentSection title="現在確定している販売条件">
+          <LegalFactRows facts={salesFacts} />
+        </LegalContentSection>
+
+        <LegalContentSection title="AI利用と商品の性質" tone="ivory">
+          <p>
+            恋のメッセージ鑑定ノートの作成にAIを利用します。相手の本心、返信、復縁、未来、関係改善を保証しません。医療・心理・法律の専門家による助言の代わりではありません。
+          </p>
+        </LegalContentSection>
+
+        <LegalContentSection title="取消し・返金">
+          <p>
+            支払未完了、重複・誤額などの意図しない請求、支払後に安全かつ有効な鑑定ノートを提供できない場合、利用者の希望による取消しでは取扱いが異なります。固定の自動返金期限は案内していません。
+          </p>
+          <Link href="/legal/refund" className="legal-document-action">返金方針を確認する</Link>
+        </LegalContentSection>
+
+        <LegalContentSection title="お問い合わせ" tone="night">
+          <p>
+            お問い合わせ窓口は現在準備中です。実在する受付方法を用意した後、このページとお問い合わせページで案内します。
+          </p>
+          <Link href="/contact" className="legal-document-action">お問い合わせの案内を見る</Link>
+        </LegalContentSection>
       </div>
-    </LegalReviewScaffold>
+    </CustomerLegalScaffold>
   );
 }

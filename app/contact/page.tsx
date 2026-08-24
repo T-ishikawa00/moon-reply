@@ -1,109 +1,61 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
-  ContentSection,
-  DecisionGrid,
-  LegalPageHeader,
-  LegalReviewScaffold,
-  ReviewCallout,
-} from "@/components/legal/LegalReview";
-import {
-  contactDoNotSend,
-  contactUnresolvedRows,
-  plannedContactCategories,
-} from "@/lib/legal/review-content";
+  CustomerLegalHeader,
+  CustomerLegalScaffold,
+  CustomerNotice,
+  LegalContentSection,
+} from "@/components/legal/LegalDocument";
 
 export const metadata: Metadata = {
-  title: "お問い合わせ 準備表示 | 月の返事",
-  description:
-    "一つの事業用メールと一つの6分類フォームという受入済み方針を、受付機能なしで確認するお問い合わせ準備ページです。",
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: { index: false, follow: false },
-  },
+  title: "お問い合わせ | 月の返事",
+  description: "月の返事のお問い合わせ窓口の現在の状態をご案内します。",
 };
 
-export default function ContactReviewPage() {
+export default function ContactPage() {
   return (
-    <LegalReviewScaffold currentPath="/contact">
-      <LegalPageHeader
-        eyebrow="CONTACT REVIEW"
-        title="お問い合わせ 準備表示"
-        description="将来の窓口構成と6つの受付カテゴリ、受付開始前に必要な判断を確認する非稼働ページです。"
-        status="受付準備中・送信不可"
+    <CustomerLegalScaffold currentPath="/contact">
+      <CustomerLegalHeader
+        title="お問い合わせ"
+        description="月の返事へのお問い合わせ方法についてのご案内です。"
       />
       <div className="legal-document-body">
-        <ReviewCallout strong="お問い合わせ受付は稼働していません。">
-          実在する事業用メール、送信フォーム、mailto、外部送信、受付済み表示、返信目安はありません。このページを開いても問い合わせは送信されません。
-        </ReviewCallout>
-
-        <ContentSection
-          eyebrow="ACCEPTED PLANNED MODEL"
-          title="予定する窓口構成"
-          intro="B2で受け入れた構成方針であり、運用開始を示しません。"
-          tone="ivory"
-        >
+        <CustomerNotice title="お問い合わせ窓口は現在準備中です">
           <p>
-            一つの運用可能な事業用メールボックスと、一つのカテゴリ分けされた問い合わせフォームを用意する方向です。実際の連絡先、送信先、本人確認、受付記録、対応体制は未実装です。
+            現在、このページからメッセージを送信することはできません。受付可能なメールアドレスやフォームを用意した後、このページで案内します。
           </p>
-        </ContentSection>
+        </CustomerNotice>
 
-        <ContentSection
-          eyebrow="PLANNED CATEGORIES"
-          title="6つの対応予定カテゴリ"
-          intro="受入済みの機能分類です。現在対応できること、送信できること、返信目安を示すものではありません。"
-        >
-          <ol className="legal-category-list">
-            {plannedContactCategories.map((item, index) => (
-              <li key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{item}</strong>
-                <small>受付準備中</small>
-              </li>
-            ))}
-          </ol>
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="UNRESOLVED CONTACT ROWS"
-          title="受付開始前に決めること"
-          intro="空欄や架空値は埋めず、公開前のDecision状態だけを示します。"
-        >
-          <DecisionGrid decisions={contactUnresolvedRows} />
-        </ContentSection>
-
-        <ContentSection
-          eyebrow="SELLER DISCLOSURE PUBLICATION BLOCKER"
-          title="販売事業者情報の開示請求"
-          tone="night"
-        >
-          <p>
-            法令と実際のStripe要件が許す場合に限り、購入前に利用できる開示請求経路を設ける条件付き方向です。現在は実在する受付経路がないため、法務公開を止める項目です。このページから開示請求はできません。
-          </p>
-        </ContentSection>
-
-        <ContentSection eyebrow="DO NOT SEND" title="送らないでください">
-          <p>
-            将来受付が開始された場合も、問い合わせの特定に不要な情報は送らないでください。
-          </p>
+        <LegalContentSection title="現在できないこと">
           <ul className="legal-plain-list">
-            {contactDoNotSend.map((item) => <li key={item}>{item}</li>)}
+            <li>お問い合わせの送信</li>
+            <li>結果URLや通知メールの再送依頼</li>
+            <li>取消し、返金、誤請求の申出</li>
+            <li>プライバシーに関する開示・訂正・削除等の申出</li>
+            <li>販売事業者情報の開示請求</li>
           </ul>
-        </ContentSection>
+          <p>
+            送信済みと表示する機能、実在しない連絡先、返信までの所要時間は案内していません。
+          </p>
+        </LegalContentSection>
 
-        <ContentSection
-          eyebrow="EMERGENCY BOUNDARY"
-          title="緊急・専門支援との境界"
-          tone="night"
-        >
+        <LegalContentSection title="返金・誤請求について" tone="ivory">
           <p>
-            このページは緊急、医療、警察、心理支援、法律相談の窓口ではなく、緊急対応を行いません。
+            支払済みの購入については、同じ購入の範囲で安全な回復と提供を試み、重複して請求しないことが基本です。重複・誤額などの意図しない請求や、最終的に提供できない場合の考え方は返金方針で説明しています。
           </p>
-          <p>
-            未検証の公的支援情報、リンク、電話番号は掲載しません。公開する場合は公式情報、対象地域、用途、確認日の証拠が必要です。
-          </p>
-        </ContentSection>
+          <Link href="/legal/refund" className="legal-document-action">返金方針を確認する</Link>
+        </LegalContentSection>
+
+        <LegalContentSection title="ご利用に関する情報">
+          <p>利用条件、情報の取扱い、AI利用、安全上の境界は、次のページから確認できます。</p>
+          <div className="legal-inline-links">
+            <Link href="/legal/terms">利用規約</Link>
+            <Link href="/legal/privacy">プライバシーポリシー</Link>
+            <Link href="/legal/ai-disclosure">AI利用について</Link>
+            <Link href="/legal/unsupported-cases">対応できない相談</Link>
+          </div>
+        </LegalContentSection>
       </div>
-    </LegalReviewScaffold>
+    </CustomerLegalScaffold>
   );
 }

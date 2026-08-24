@@ -10,11 +10,15 @@ const availableLinks = [
   { href: "/#faq", label: "FAQ" },
 ];
 
-const legalReviewLinks = [
-  { href: "/legal", label: "法務情報", status: "準備中" },
-  { href: "/legal/ai-disclosure", label: "AI利用について", status: "準備中" },
-  { href: "/legal/unsupported-cases", label: "通常鑑定で扱わない相談", status: "準備中" },
-  { href: "/contact", label: "お問い合わせ", status: "受付準備中" },
+const legalLinks = [
+  { href: "/legal", label: "ご利用にあたって" },
+  { href: "/legal/terms", label: "利用規約" },
+  { href: "/legal/privacy", label: "プライバシーポリシー" },
+  { href: "/legal/refund", label: "返金方針" },
+  { href: "/legal/tokushoho", label: "特定商取引法に基づく表記" },
+  { href: "/legal/ai-disclosure", label: "AI利用について" },
+  { href: "/legal/unsupported-cases", label: "対応できない相談" },
+  { href: "/contact", label: "お問い合わせ（窓口準備中）" },
 ] as const;
 
 export function SiteFooter() {
@@ -28,7 +32,7 @@ export function SiteFooter() {
             3日間の行動方針をまとめる「恋のメッセージ鑑定ノート」です。
           </p>
           <p className="site-footer__note">
-            AIを利用します。相手の本心、返信、復縁、将来の結果を断定・保証するものではありません。
+            AIを利用します。相手の本心、返信、復縁、未来、関係改善を断定・保証するものではありません。
           </p>
         </div>
 
@@ -43,13 +47,12 @@ export function SiteFooter() {
           </ul>
         </nav>
 
-        <nav aria-label="法務・お問い合わせ審査ページ">
-          <p className="site-footer__heading">準備中の法務・お問い合わせ</p>
-          <ul className="site-footer__future">
-            {legalReviewLinks.map((item) => (
+        <nav aria-label="ご利用に関するページ">
+          <p className="site-footer__heading">ご利用に関する情報</p>
+          <ul className="site-footer__links">
+            {legalLinks.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>{item.label}</Link>
-                <span className="status-chip">{item.status}</span>
               </li>
             ))}
           </ul>

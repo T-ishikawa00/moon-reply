@@ -1,9 +1,27 @@
 # WBS.md
 
+<!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:BEGIN -->
+## M2-D1 Customer-facing Legal / Contract Current Truth
+
+Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
+
+- [x] Start the bounded branch from exact `release/private-ready@3f170941fd16b6b997089c2959489758ac9553eb`; preserve `main`.
+- [x] Sync C1 remote closure: exact remote 0002–0020, pending 0, unknown 0; C1 source + remote DB PASS; AI-01/AI-02 closed in source + remote authority with activation pending.
+- [x] Inventory every `/legal/**`, `/contact`, footer, Request, purchase continuation, Home, shared legal module, and historical review source; classify current, operational, historical, unresolved, and stale statements.
+- [x] Separate a typed customer current-content authority from preserved historical Stripe Lane B/B4 review evidence.
+- [x] Rewrite Terms, Privacy, Refund, AI disclosure, unsupported cases, commercial disclosure, legal index, Contact, and necessary Home current-truth copy without changing product economics or visual design.
+- [x] Preserve noindex/nofollow and add exact source proof for one h1, accessible navigation, valid purchase links, zero forbidden internal jargon, current providers, and cross-page product facts.
+- [x] Keep seller identity/address/phone, real support contact, refund operation, retention periods, effective date, and jurisdiction as explicit Human/legal decisions; invent none.
+- [ ] Obtain independent Human/ChatGPT source review. Do not infer final legal sufficiency, external-beta readiness, Production activation, or Public Launch.
+- [ ] Complete seller disclosure and D2 support/recovery only under their later separate authorities.
+
+Evidence: `docs/m2/M2_D1_CUSTOMER_LEGAL_CURRENT_TRUTH.md`.
+<!-- M2-D1-CUSTOMER-LEGAL-CURRENT-TRUTH:END -->
+
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## M2-C1 Pre-payment Compute Budget / Abuse & Idempotency Authority
 
-Status: `Human/ChatGPT SOURCE/LOCAL PASS`.
+Status: `Human/ChatGPT SOURCE + REMOTE DB PASS — ACTIVATION PENDING`.
 
 - [x] Start the task branch from exact `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; preserve `main`.
 - [x] Inventory the anonymous prepare, Auth continuation/binding, preparation lifecycle, and Provider topology; prove both transport sites pass the existing immediate hook.
@@ -12,9 +30,10 @@ Status: `Human/ChatGPT SOURCE/LOCAL PASS`.
 - [x] Add local-only candidate 0020 with service-only ACL, privacy-minimal Customer-window budget, concurrency-safe claim, and versioned hash-only continuation.
 - [x] Prove anonymous 100 → Provider 0; quota-3 20-way concurrency → exact 3/17; Customer isolation, rollover, replay/conflict, continuation, detached owner, NULL/invalid, and ingress ACL fail closed.
 - [x] Preserve verified-payment fulfillment outside the pre-payment budget and preserve product/payment semantics.
-- [x] Human/ChatGPT independent SOURCE/LOCAL review PASS; AI-01 and AI-02 are closed in source/local with remote authority and activation pending.
+- [x] Human/ChatGPT independent SOURCE review PASS; AI-01 and AI-02 are closed in source with activation pending.
 - [x] Record the future Self Dogfood policy: enabled, 86400-second window, maximum 10 Provider invocation units; do not set Production/Netlify environment values in this acceptance.
-- [ ] Obtain separate explicit Human authorization for remote 0020 apply and later activation/deploy; neither is part of this acceptance.
+- [x] Apply exact accepted 0020 once under separate Human authorization and verify remote exact 0002–0020, pending 0, unknown 0, protected-object drift 0, and closed client/ingress ACLs.
+- [ ] Obtain separate explicit Human authorization for C1 environment activation/deploy; neither is authorized by remote DB closure.
 - [ ] Revisit anonymous intake write-volume limiting and global/provider/WAF spend ceilings separately before Public Launch; these are non-blocking for Self Dogfood C1.
 
 Evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`.

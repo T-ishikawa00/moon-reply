@@ -155,7 +155,7 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
                 <ArtifactLimitation as="aside" className="public-sample-limitation" aria-label="見本の固定注意">
                   <strong>この見本で断定しないこと</strong>
                   <p>
-                    相手の本心、返信の有無や時期、交際結果、将来を断定・保証しません。
+                    相手の本心、返信、復縁、未来、関係改善を断定・保証しません。
                     医療・心理・法律上の助言でもありません。
                   </p>
                   <p>{report.fixedDisclosure}</p>

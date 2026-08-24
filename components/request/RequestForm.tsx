@@ -926,7 +926,7 @@ function LocalPurchaseConfirmation({
         />
         <MemoRow
           label="結果について"
-          value="相手の本心、返信、復縁、将来の結果を断定・保証しません。"
+          value="相手の本心、返信、復縁、未来、関係改善を断定・保証しません。"
         />
       </dl>
       <nav className="request-purchase-links" aria-label="購入前に確認できる情報">

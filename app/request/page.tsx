@@ -48,7 +48,7 @@ export default function RequestPage() {
           </span>
           <span>
             恋のメッセージ鑑定ノートでは、入力された関係性・状況・メッセージをAIが整理・分析し、
-            次にどう動くかを考えるための判断材料にまとめます。相手の本心や未来を断定するものではありません。
+            次にどう動くかを考えるための判断材料にまとめます。相手の本心、返信、復縁、未来、関係改善を断定・保証するものではありません。
           </span>
           <div className="request-page__boundary" role="note">
             {paymentEnabled ? (

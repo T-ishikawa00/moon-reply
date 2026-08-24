@@ -54,7 +54,7 @@ export default async function AuthenticatedPurchaseContinuationPage() {
         </dl>
         <p>
           入力内容をAIが整理・分析し、判断材料となる鑑定ノートを作成します。
-          相手の本心、返信、復縁、将来の結果を断定・保証しません。
+          相手の本心、返信、復縁、未来、関係改善を断定・保証しません。
         </p>
         <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
           <Link href="/legal/terms">利用規約</Link>
