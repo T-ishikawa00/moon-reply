@@ -109,7 +109,7 @@ A fresh unlinked disposable Supabase applied exact migrations 0002–0021. Migra
 
 External Private Beta remains blocked until all of the following are separately accepted and activated:
 
-- remote 0021 apply under a new explicit Human/ChatGPT authorization;
+- D2 source review PASS and remote 0021 apply under a new explicit Human/ChatGPT authorization;
 - `CUSTOMER_SUPPORT_CASES_ENABLED=true` in the target environment;
 - actual monitored operator procedure/channel;
 - unauthenticated/Auth-failure fallback;
