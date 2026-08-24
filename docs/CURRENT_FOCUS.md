@@ -3,11 +3,13 @@
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## Current operational overlay — M2-C1 pre-payment compute budget
 
-- Current source authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-C1 status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; AI-01 and AI-02 are not closed.
+- M2-C1 source baseline: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; reviewed implementation: `task/m2-c1-prepayment-compute-budget-r1@64167f18f22783fca3339ef3a3e9f77bc789dbd2`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-C1 status: `Human/ChatGPT SOURCE/LOCAL PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + ACTIVATION PENDING`; Production is not closed.
 - C1 makes signed-out preparation provider-free and requires fresh Customer Auth, active ownership, durable execution authority, and an atomic Customer-bound compute claim immediately before every pre-payment Provider transport.
 - Candidate `0020_m2_c1_prepayment_compute_budget.sql` is local only. Remote DB remains exact 0002–0019; remote apply, activation, Deploy, Publish, and external E2E remain unauthorized.
-- Measured current ceiling is initial 4 calls with optional draft / 3 without, clarification resume 1, and pre-payment retry/reassessment 0. Final Dogfood quota/window is a Human/ChatGPT decision.
+- Accepted future Self Dogfood policy is enabled with an 86400-second window and 10 Provider invocation units. It is documentation-only in this acceptance: Production/Netlify values remain unset/disabled, and Public Launch policy remains separately reviewed.
+- Measured ceiling is initial 4 calls with optional draft / 3 without and clarification resume 1. Ten units cover failed initial 4 + complete retry initial 4 + clarification 1 with one unit of headroom; failed/ambiguous calls are not refunded.
+- Anonymous intake write-volume limiting and a future Public Launch global/provider/WAF spend ceiling are non-blocking follow-ups. Material policy changes require separate review and may require a policy-version bump.
 - Canonical evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`. SEC-01 remains a separate task; Next 16.3.0 and I4 scheduler flags are unchanged.
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
 

@@ -3,12 +3,13 @@
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## Current handoff — M2-C1 pre-payment compute budget
 
-- Authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; task branch `task/m2-c1-prepayment-compute-budget-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Do not mark AI-01/AI-02 closed.
+- C1 base authority: `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; reviewed implementation: `task/m2-c1-prepayment-compute-budget-r1@64167f18f22783fca3339ef3a3e9f77bc789dbd2`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `Human/ChatGPT SOURCE/LOCAL PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + ACTIVATION PENDING`; Production is not closed.
 - Signed-out preparation performs deterministic validation and durable intake only. Provider-backed prepare/resume requires fresh `getUser()`, exact active ownership, current execution authority, and an atomic compute-unit claim at the transport boundary.
 - Candidate 0020 is local-only with SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote history remains 0002–0019; 0020 apply is unauthorized.
 - Synthetic evidence: anonymous fresh requests 100 → Provider 0; same-Customer 20-way quota-3 claims → 3 acquired / 17 exhausted / used 3; second Customer independent; rollover exactly one reset; cross-Customer/detached/NULL/invalid/unauthorized-role paths fail closed.
-- Human/ChatGPT must choose the final Dogfood quota/window using the measured legitimate ceiling: initial 4 with optional draft, clarification 1, pre-payment retry/reassessment 0. No activation, deploy, Publish, external E2E, SEC-01, or scheduler work belongs to this branch.
+- Accepted future Self Dogfood policy is enabled, 86400 seconds, and 10 Provider invocation units. It is not set in Production/Netlify here and is not Public Launch policy. The basis is failed initial 4 + complete retry initial 4 + clarification 1 = 9, with one unit of headroom and no refund after failed/ambiguous invocation.
+- Anonymous intake write-volume limiting, multi-account/global/provider/WAF ceilings, and any material policy-version change remain separately reviewed follow-ups. No remote apply, activation, deploy, Publish, external E2E, SEC-01, or scheduler work belongs to this acceptance sync.
 - Evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`.
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
 

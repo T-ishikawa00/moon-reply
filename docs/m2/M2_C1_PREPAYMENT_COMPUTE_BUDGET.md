@@ -1,8 +1,8 @@
 # M2-C1 — Pre-payment Compute Budget / Abuse & Idempotency Authority
 
-Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `Human/ChatGPT SOURCE/LOCAL PASS`
 
-This is an existing M2 task. It does not create a Milestone or Gate. Source baseline is `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 remain open pending independent review and any separately authorized activation.
+This is an existing M2 task. It does not create a Milestone or Gate. Source baseline is `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; the reviewed implementation is `task/m2-c1-prepayment-compute-budget-r1@64167f18f22783fca3339ef3a3e9f77bc789dbd2`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. AI-01 and AI-02 are `CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + ACTIVATION PENDING`. This does not close Production.
 
 ## Pre-C1 abuse path and exact topology
 
@@ -54,6 +54,8 @@ Missing or invalid enabled policy fails with a safe 503 before Provider. Exhaust
 
 Activation readiness now requires Customer Auth enabled, C1 enabled, and a valid policy. Source-compatible C1-disabled mode remains available but is not Private Dogfood-ready.
 
+The accepted future Self Dogfood activation policy is `PREPAYMENT_COMPUTE_BUDGET_ENABLED=true`, `PREPAYMENT_COMPUTE_WINDOW_SECONDS=86400`, and `PREPAYMENT_COMPUTE_MAX_PROVIDER_INVOCATIONS=10`. These values are recorded policy only: they are not set in Production or Netlify by this acceptance, and C1 remains disabled/unset there. This Self Dogfood decision is not a Public Launch final policy.
+
 ## Local evidence
 
 - Fresh disposable DB applied exact migrations 0002–0020 in order.
@@ -75,8 +77,12 @@ Read-only remote postflight reports exact remote 0002–0019, local-only pending
 
 No real Provider, Payment, Stripe endpoint/event, email, Async event, remote DB write, Netlify write/deploy/publish, scheduler execution, or Production activation occurred.
 
-## Human/ChatGPT decision still required
+## Human/ChatGPT Self Dogfood policy decision
 
-The task deliberately does not choose the final Dogfood quota or window. The decision evidence is: maximum legitimate initial pre-payment calls 4; legitimate clarification resume calls 1; current pre-payment retry/reassessment calls 0; a failed or ambiguous Provider attempt consumes its claimed unit; post-payment PB-04/PB-05/PB-06 is outside the quota. Human/ChatGPT must select a window and maximum that covers the intended number of preparations plus at most one clarification without converting the technical maximum into a product promise.
+The accepted initial Self Dogfood window is 86400 seconds with a maximum of 10 Provider invocation units. The evidence is: maximum legitimate initial preparation 4 units; clarification resume 1 unit; normal worst-case complete consultation 5 units; and every failed or ambiguous Provider invocation retains its claimed unit. One worst-case failed initial preparation (4), one complete retry initial preparation (4), and one clarification (1) total 9 units, so 10 permits one full worst-case recovery cycle with limited headroom. The 24-hour rolling window bounds authenticated pre-payment cost.
 
-Remote 0020 apply, environment activation, final quota/window, Production deploy/publish, and external E2E remain separately unauthorized.
+Any future quota/window increase is a separately reviewed configuration change; values must not be changed casually during an active window. `m2-c1-prepayment-compute-v1` remains stable while quota/window are environment policy. If later durable policy semantics materially change, review a policy-version bump rather than silently changing economic meaning.
+
+Non-blocking follow-ups do not reopen C1 for Self Dogfood: anonymous provider-free intake DB write volume can be rate-limited independently while paid Provider cost remains zero; per-Customer authority does not stop deliberate multi-account abuse, so Public Launch later needs a separately reviewed global/provider/WAF spend ceiling.
+
+Remote 0020 apply, environment activation, Production deploy/publish, Public Launch policy, and external E2E remain separately unauthorized.

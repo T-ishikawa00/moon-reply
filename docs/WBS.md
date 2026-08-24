@@ -3,7 +3,7 @@
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:BEGIN -->
 ## M2-C1 Pre-payment Compute Budget / Abuse & Idempotency Authority
 
-Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
+Status: `Human/ChatGPT SOURCE/LOCAL PASS`.
 
 - [x] Start the task branch from exact `release/private-ready@b4d0713194c26d0bcc3b2fffca938633a955185c`; preserve `main`.
 - [x] Inventory the anonymous prepare, Auth continuation/binding, preparation lifecycle, and Provider topology; prove both transport sites pass the existing immediate hook.
@@ -12,8 +12,10 @@ Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
 - [x] Add local-only candidate 0020 with service-only ACL, privacy-minimal Customer-window budget, concurrency-safe claim, and versioned hash-only continuation.
 - [x] Prove anonymous 100 → Provider 0; quota-3 20-way concurrency → exact 3/17; Customer isolation, rollover, replay/conflict, continuation, detached owner, NULL/invalid, and ingress ACL fail closed.
 - [x] Preserve verified-payment fulfillment outside the pre-payment budget and preserve product/payment semantics.
-- [ ] Human/ChatGPT independent review and final Dogfood quota/window decision.
-- [ ] Separately authorize remote 0020 apply and later activation/deploy only after review; neither is part of this branch.
+- [x] Human/ChatGPT independent SOURCE/LOCAL review PASS; AI-01 and AI-02 are closed in source/local with remote authority and activation pending.
+- [x] Record the future Self Dogfood policy: enabled, 86400-second window, maximum 10 Provider invocation units; do not set Production/Netlify environment values in this acceptance.
+- [ ] Obtain separate explicit Human authorization for remote 0020 apply and later activation/deploy; neither is part of this acceptance.
+- [ ] Revisit anonymous intake write-volume limiting and global/provider/WAF spend ceilings separately before Public Launch; these are non-blocking for Self Dogfood C1.
 
 Evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`.
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
