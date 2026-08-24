@@ -8,8 +8,8 @@
 - I1-R3 hardened candidate Git-blob SHA-256: `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`.
 - I1-R2 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed safely at the remote least-privilege guard and rolled back; it is superseded, not recorded, and must not be retried.
 - Superseded pre-review candidate SHA-256: `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c`. It was never remotely applied and is not an action-time artifact.
-- Remote database remains exact `0002..0017`; read-only migration inventory shows pending exact hardened `0018` plus unchanged `0019`. Recorded apply/write count is `0`; one 0018 transaction attempted and rolled back, with no retry or repair.
-- Netlify project/config/visibility/write/publish, Stripe endpoint/API/resend/Purchase, Async event, Provider/OpenAI, email, and `main` operations are all `0`.
+- Current remote database is exact `0002..0019`; pending `0`, unknown `0`. Revised 0018 and unchanged 0019 were later applied exactly once in one reviewed successful push. The earlier 0018 transaction remains historical safe-rollback evidence and was never recorded or retried.
+- The ingress role remains `PASSWORD NULL`. Netlify ingress project/config/visibility/write/publish, Stripe endpoint/API/resend/Purchase, Async event, Provider/OpenAI, email, and `main` operations remain `0` after DB closure.
 
 ## Exact architecture
 
@@ -105,4 +105,4 @@ Next.js and `eslint-config-next` remain `16.3.0`. SEC-01 evaluation remains a se
 
 ## Stop and next action-time gates
 
-Stop with source/task-branch evidence only. Separate Human confirmation and review are required before any remote `0018` apply, ingress credential assignment, Netlify project/build setting/visibility/secret/deploy/publish, Stripe endpoint/secret/event operation, I2 dispatcher, or real reconciliation read. If a committed future 0018 defect is found, never edit/repair/delete it; use an append-only forward fix and revoke the dedicated credential/endpoint while preserving durable evidence rows.
+0018 is immutable and remotely applied. Any future defect requires an append-only forward fix; never edit/delete 0018 or repair history. Separate Human confirmation and review remain required before ingress credential assignment, Netlify project/build setting/effective-env/visibility/secret/deploy/publish, Stripe endpoint/secret/event operation, schedule activation, or real reconciliation read. Revoke the dedicated credential/endpoint while preserving durable evidence rows if activation later fails.

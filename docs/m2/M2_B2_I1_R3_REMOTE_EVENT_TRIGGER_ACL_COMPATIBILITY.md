@@ -4,13 +4,13 @@
 
 - Base authority: `release/private-ready@752f687b5ea6bead28a464f9bb9870fb092e143e`.
 - Task branch: `task/m2-b2-i1-r3-event-trigger-acl-hardening-r1`.
-- Remote database remains exact `0002..0017`.
+- Current remote database is exact `0002..0019`; pending `0`, unknown `0`.
 - The authorized 0018/0019 push attempted 0018 once. Its in-transaction least-privilege guard raised `M2_B2_INGRESS_FUNCTION_PRIVILEGE_DRIFT`; 0018 rolled back safely, 0019 was not started, and neither version was recorded. Retry and history repair counts remain `0`.
 - Failed and rolled-back 0018 candidate SHA-256 `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` is superseded and must never be retried.
-- Hardened pending 0018 Git-blob SHA-256: `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`.
-- Pending 0019 remains byte-identical at `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`.
+- Hardened 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010` was subsequently applied exactly once in the reviewed successful 0018 -> 0019 push.
+- 0019 remained byte-identical at `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c` and was applied exactly once after 0018.
 
-No remote migration apply/write, migration repair, credential/password, Netlify project/config/deploy/publish, Stripe operation, real Async event, Provider/OpenAI, Purchase, email, or `main` change is authorized by this record.
+Remote postflight confirmed the exact one-ACL removal, unchanged function/event-trigger identity, wrapper-only passwordless ingress role, future explicit-GRANT default, and exact 0019 authority. No additional remote apply/write, migration repair, credential/password, Netlify project/config/deploy/publish, Stripe operation, real Async event, Provider/OpenAI, Purchase, email, or `main` change is authorized by the current closure.
 
 ## Exact remote identity
 
@@ -83,4 +83,4 @@ The fixture path also passed I1 sequential atomicity/invalid-zero-effect/order/c
 
 ## Permanent governance
 
-After a future reviewed 0018 apply, postgres-owned functions receive no implicit PUBLIC EXECUTE. Every future migration must explicitly grant intended roles and run the branch-independent `m2_b2_i1_ingress_privilege_preflight_r1.sql`. Event-trigger functions are not exempt from that rule. Existing explicit grants must be inventoried and preserved or changed only under a separately reviewed authorization.
+After the reviewed 0018 apply, postgres-owned functions receive no implicit PUBLIC EXECUTE. Every future migration must explicitly grant intended roles and run the branch-independent `m2_b2_i1_ingress_privilege_preflight_r1.sql`. Event-trigger functions are not exempt from that rule. Existing explicit grants must be inventoried and preserved or changed only under a separately reviewed authorization.

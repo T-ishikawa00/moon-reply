@@ -5,9 +5,9 @@
 - Base authority: `release/private-ready@f0376ac87e3fb7b11ab525b958142d1fd7ba488b` after exact ff-only I1/I1-R2 integration and normal push.
 - Task branch: `task/m2-b2-i2-private-recovery-schedulers-r1`.
 - I1 integration deploy: `6a8bcb3131e9e0000898a260`, exact source `f0376ac`, successful, UNPUBLISHED, Auto Publishing Locked; 11 Functions and 1 Edge Function. Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
-- Remote database remains exact `0002..0017`. No remote write or migration apply occurred.
-- Pending hardened 0018 Git-blob SHA-256: `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; the former candidate failed safely and rolled back before 0019 began.
-- Pending 0019 Git-blob SHA-256: `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`.
+- Current remote database is exact `0002..0019`; pending `0`, unknown `0`.
+- Hardened 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010` was later applied exactly once; the former candidate failed safely, rolled back, and was never recorded.
+- 0019 Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c` was later applied exactly once after 0018.
 
 ## Contract inventory and 0019 decision
 
@@ -73,12 +73,12 @@ Official evidence: [Scheduled Functions](https://docs.netlify.com/build/function
 - I2 verifier: `15/15`, including DB/ACL proof and the branch-independent I1 privilege preflight.
 - Scheduled Function artifact smoke: both exact ZIPs `syntax=1`, `importable=1`, `server_only=0`, expected schedule manifests present, external operations `0`.
 - Separate actual two-client reconciliation claim: winner `1`.
-- Pending 0018 identity and DB0017 immutable identity: exact.
+- Applied 0018 identity and DB0017 immutable identity: exact.
 - Required I1, B1, RC-2, RC-1, Background durability, Async artifact, runtime-assets, Product Intent, Clarification, typecheck, zero-warning lint, customer Production build, ingress independent build, and diff-check results are recorded in the final task report.
 - Current Customer Auth behavior checks passed (`auth-entry-phase04` `11/11`; the foundation verifier passed its first 31 security assertions). The full historical foundation command then stopped at its literal old accepted-source diff pin because later accepted payment/repository work is intentionally present; that historical verifier was not weakened to manufacture a PASS.
 
 ## Rollback and stop boundary
 
-Before remote apply/publish, rollback is a source-branch revert only. After a future 0019 apply, never edit/delete 0019 or repair migration history; disable schedules and use an append-only forward fix. Durable payment/evidence/job rows are never deleted. Customer project visibility must remain Private.
+0019 is immutable and remotely applied. Never edit/delete it or repair migration history; disable external ingress before disabling schedules, preserve durable payment/evidence/job rows, and use an append-only forward fix. Customer project visibility must remain Private.
 
-This task does not authorize remote 0018/0019 apply, database/credential/configuration write, Netlify ingress project creation, deploy/publish, Stripe endpoint/API/read/resend/Purchase, real Async event, Provider/OpenAI, email, release integration, or `main` change.
+DB foundation closure does not authorize any additional remote DB write/migration, credential/configuration write, Netlify ingress project creation, deploy/publish, Stripe endpoint/API/read/resend/Purchase, schedule activation/Run now, real Async event, Provider/OpenAI, email, or `main` change.

@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-B2-I1-R3 Remote Event-Trigger ACL Compatibility
+## M2-B2-I3 Remote DB Closure / External Wiring Preflight
 
-Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2 `authority integrated`; first 0018 attempt `safe rollback / remote exact 0002..0017`; I1-R3 `local/source implementation complete pending independent review`.
+Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3 `authority integrated`; revised 0018 + unchanged 0019 `Human/ChatGPT reviewed PASS / remote DB foundation closed`; external wiring, SEC-01, Publish, and Sandbox E2E pending.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -39,8 +39,17 @@ Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2 `authority integrate
 - [x] Reproduce PUBLIC effective EXECUTE plus native plain-call `0A000`, then prove PUBLIC revoke preserves function/event-trigger identity and auto-enables RLS on a new table.
 - [x] Keep the ingress least-privilege guard strict; add fail-closed exact remote identity handling and revoke only `rls_auto_enable()` PUBLIC EXECUTE when present.
 - [x] Fresh-apply both fixture-present and fixture-absent exact `0002..0019` paths; preserve 0019 byte identity and record the one-row expected ACL delta.
+- [x] Fast-forward reviewed R3 into `release/private-ready@d38ee363cf2b74823180b80364430eb82b7189b6`, normally push, and keep `main` unchanged.
+- [x] Apply exact revised 0018 then unchanged 0019 once in one reviewed remote push; verify history `0002..0019`, pending `0`, unknown `0`, and both versions recorded once.
+- [x] Verify ingress role attributes and `PASSWORD NULL`, wrapper-only effective authority, application relation/sequence/non-target function/schema CREATE authority `0`, and private wrapper schema absent from Data API exposure.
+- [x] Verify the sole pre-existing ACL delta is removal of `rls_auto_enable()` PUBLIC EXECUTE (`149 -> 148`, filtered SHA `85f7a6035af44d6593c108abd32feec6b18c7e5e87652b7d743358c76cb5f81c`); preserve explicit runtime grants and exact `ensure_rls` identity.
+- [x] Verify future postgres-owned functions have no implicit PUBLIC EXECUTE and 0019 explicitly grants only its two RPCs to service_role.
+- [x] Verify exact 0019 columns/constraints/index/RPC bodies, zero existing-business-state regression, unchanged DB0016/0017 identities, and current Published runtime compatibility.
+- [x] Lock I3 activation topology, dedicated credential procedure, separate Public ingress configuration, exact four-event Stripe Sandbox allowlist, mixed-version rule, cutover, and rollback without external writes.
+- [x] Identify the current customer-deploy cutover blocker: add two dedicated default-false scheduler flags before Publish; environment changes require a newly built and reviewed exact Deploy ID.
+- [x] Keep SEC-01 as a separate required task before the next customer Production Publish; do not guess-upgrade Next 16.3.0 in I3.
 
-Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, and `6a8bcb3131e9e0000898a260` are not publish candidates. Remote DB remains `0002..0017`; hardened 0018 and unchanged 0019 are pending and must not be applied without a new Human action-time authorization. Canonical R3 evidence: `docs/m2/M2_B2_I1_R3_REMOTE_EVENT_TRIGGER_ACL_COMPATIBILITY.md`.
+Remote DB foundation is exact `0002..0019` and closed. Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, `6a8bcb3131e9e0000898a260`, and `6a8bf7a11d6580000811392c` remain UNPUBLISHED/non-candidates for the final cutover. Canonical I3 evidence: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->
