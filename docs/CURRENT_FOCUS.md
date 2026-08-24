@@ -3,12 +3,12 @@
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current operational overlay — M2-D2 Contact / Paid-failure Recovery Support
 
-- Pre-integration authority is `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D2 reviewed source is `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-D2 status is `Human/ChatGPT SOURCE/LOCAL PASS`. CON-01 customer Support path is closed in source/local; remote authority, external operator channel, unauthenticated fallback, and activation remain pending.
-- Accepted candidate `0021_m2_d2_customer_support_cases.sql` remains local only at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0020, pending exact 0021 only, unknown 0. Remote apply requires separate explicit authorization.
+- The D2 remote-closure action started from exact `release/private-ready@11bb1b512897e55e9517181a3de897b28c94e198`; D2 reviewed source is `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-D2 status is `Human/ChatGPT SOURCE/LOCAL + REMOTE DB PASS`. CON-01 customer Support path is closed in source + remote authority; external operator channel, unauthenticated fallback, and activation remain pending.
+- Exact accepted `0021_m2_d2_customer_support_cases.sql` was applied remotely once at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0021, pending 0, unknown 0; existing-object drift is 0 and ingress remains wrapper-only.
 - D1 remains Human/ChatGPT SOURCE PASS; LEG-01 current-truth drift is closed in source, while external-beta disclosure/operation remains pending.
 - C1 remains SOURCE + REMOTE DB PASS and activation pending. `PREPAYMENT_COMPUTE_*` Production values remain unset/disabled; the recorded Self Dogfood policy remains 86400 seconds / 10 units only.
-- `CUSTOMER_SUPPORT_CASES_ENABLED=false` is the source-controlled default; the Production/Netlify value remains unset/not configured. Support is not operational. Production Publish and real Support activation remain separately unauthorized.
+- `CUSTOMER_SUPPORT_CASES_ENABLED=false` is the source-controlled default; the Production/Netlify value remains unset/not configured. Support is not operational. External operator monitoring, Auth-failure fallback, refund procedure, Production Publish, and real Support activation remain separately pending or unauthorized.
 
 Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 
@@ -32,7 +32,7 @@ Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 - Current source authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed C1 source is integrated; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-C1 status: `Human/ChatGPT SOURCE + REMOTE DB PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`; Production is not closed.
 - C1 makes signed-out preparation provider-free and requires fresh Customer Auth, active ownership, durable execution authority, and an atomic Customer-bound compute claim immediately before every pre-payment Provider transport.
-- Exact `0020_m2_c1_prepayment_compute_budget.sql` is remotely applied once at SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote DB is exact 0002–0020; pending `0`; unknown `0`.
+- Exact `0020_m2_c1_prepayment_compute_budget.sql` is remotely applied once at SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Current remote DB is exact 0002–0021; pending `0`; unknown `0`; later 0021 left C1 authority unchanged.
 - Accepted future Self Dogfood policy is an 86400-second window and 10 Provider invocation units. Production/Netlify values remain unset/disabled; C1 is not activated, and Public Launch policy remains separately reviewed.
 - Measured ceiling is initial 4 calls with optional draft / 3 without and clarification resume 1. Ten units cover failed initial 4 + complete retry initial 4 + clarification 1 with one unit of headroom; failed/ambiguous calls are not refunded.
 - Anonymous intake write-volume limiting and a future Public Launch global/provider/WAF spend ceiling are non-blocking follow-ups. Material policy changes require separate review and may require a policy-version bump.
@@ -43,7 +43,7 @@ Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 ## Current operational overlay — M2-B2-I4 cutover safety controls
 
 - Current source authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed B1, B2, C1, and D1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed`; its closure baseline was exact `0002..0017`. Current remote migration history is now exact `0002..0020`, pending `0`, unknown `0`; later 0018–0020 did not change the accepted 0017 identity.
+- M2-A1 remains `Human/ChatGPT reviewed PASS / Production DB closed`; its closure baseline was exact `0002..0017`. Current remote migration history is now exact `0002..0021`, pending `0`, unknown `0`; later 0018–0021 did not change the accepted 0017 identity.
 - Exact 0017 artifact remains immutable at Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`; the three v2 NULL fences, v1 compatibility, and DB0016 dispatch identities are unchanged after B2 apply.
 - M2-B2 DB foundation is `CONFIRMED_REMOTE_CLOSED`: revised `0018_m2_b2_webhook_ingress_authority.sql` (`1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`) and unchanged `0019_m2_b2_private_payment_reconciliation.sql` (`b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`) were applied exactly once in one reviewed push.
 - The superseded 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at its own guard, rolled back, was never recorded, and must never be retried.

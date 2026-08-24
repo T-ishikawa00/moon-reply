@@ -3,13 +3,13 @@
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current handoff — M2-D2 Contact / Paid-failure Recovery Support
 
-- Pre-integration authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed task source: `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Status: `Human/ChatGPT SOURCE/LOCAL PASS`. CON-01 is closed for the source/local customer Support path; remote authority, operator monitoring, unauthenticated fallback, and activation remain pending.
-- Accepted candidate 0021 remains local only at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0020, pending exact 0021 only, unknown 0. D2 created no remote DB, Netlify, Stripe, Provider, email, Async, scheduler, Payment, or Publish operation.
+- Remote closure started from `release/private-ready@11bb1b512897e55e9517181a3de897b28c94e198`; reviewed task source: `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` is unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `Human/ChatGPT SOURCE/LOCAL + REMOTE DB PASS`. CON-01 is closed in source + remote authority; operator monitoring, unauthenticated fallback, and activation remain pending.
+- Exact accepted 0021 was applied remotely once at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0021, pending 0, unknown 0. Two RLS tables and three service-role-only RPCs are exact; existing-object drift is 0; ingress remains wrapper-only; Data API state is unchanged.
 - Paid Support authority is fresh CustomerUserId plus active ownership binding. Client purchase UUID is a non-secret selector only; no Payment/result/Auth credential is accepted. Support creation mutates only Support tables.
 - `CUSTOMER_SUPPORT_CASES_ENABLED` is exact-true only; source-controlled default is false, Production/Netlify remains unset/not configured, and Payment activation readiness remains independent. Support is not operational.
 - D1 and C1 accepted statuses remain unchanged. Canonical runbook/evidence is `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
-- Next remote action, only after a new explicit authorization, is exact 0021 apply. External operator monitoring, Auth-failure fallback, refund operation, Support activation, and External Private Beta readiness remain separate blockers. Do not activate Support/C1, create an external contact channel, or Production Publish under this acceptance.
+- Next work is not another DB apply: external operator monitoring, Auth-failure fallback, refund operation, Support activation, and External Private Beta readiness remain separate blockers. Do not activate Support/C1, create an external contact channel, or Production Publish under this closure.
 
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:END -->
 
@@ -32,7 +32,7 @@
 - Current authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed C1 source is integrated; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
 - Status: `Human/ChatGPT SOURCE + REMOTE DB PASS`. AI-01 and AI-02 are `CLOSED IN SOURCE + REMOTE AUTHORITY — ACTIVATION PENDING`; Production is not closed.
 - Signed-out preparation performs deterministic validation and durable intake only. Provider-backed prepare/resume requires fresh `getUser()`, exact active ownership, current execution authority, and an atomic compute-unit claim at the transport boundary.
-- Exact 0020 was remotely applied once with SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Remote history is exact 0002–0020; pending 0; unknown 0; existing-object drift 0.
+- Exact 0020 was remotely applied once with SHA-256 `3e2683bf65a783047c1cec1b86b9663d4b315bcc1a8ebc080c8bc9bfcb7b9e75`. Current remote history is exact 0002–0021; pending 0; unknown 0; later 0021 left C1 existing-object identity unchanged.
 - Synthetic evidence: anonymous fresh requests 100 → Provider 0; same-Customer 20-way quota-3 claims → 3 acquired / 17 exhausted / used 3; second Customer independent; rollover exactly one reset; cross-Customer/detached/NULL/invalid/unauthorized-role paths fail closed.
 - Accepted future Self Dogfood policy is enabled, 86400 seconds, and 10 Provider invocation units. It is not set in Production/Netlify here and is not Public Launch policy. The basis is failed initial 4 + complete retry initial 4 + clarification 1 = 9, with one unit of headroom and no refund after failed/ambiguous invocation.
 - Anonymous intake write-volume limiting, multi-account/global/provider/WAF ceilings, and any material policy-version change remain separately reviewed follow-ups. No activation, deploy, Publish, external E2E, SEC-01, or scheduler work was authorized by remote DB closure.
@@ -43,7 +43,7 @@
 ## Current handoff — M2-B2-I4 cutover safety controls
 
 - Authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed B1, B2, C1, and D1 authority is integrated. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-A1 remains closed at its exact `0002..0017` baseline by 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. Current remote migrations are exact `0002..0020`; pending and unknown are both `0`; later migrations left 0017 unchanged.
+- M2-A1 remains closed at its exact `0002..0017` baseline by 0017 Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. Current remote migrations are exact `0002..0021`; pending and unknown are both `0`; later migrations left 0017 unchanged.
 - Applied B2 artifacts: revised 0018 Git-blob SHA-256 `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; unchanged 0019 Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. Both were applied exactly once in one reviewed push.
 - Historical first attempt remains evidence: 0018 SHA `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` failed at the least-privilege guard, rolled back, never entered migration history, and is superseded. Older `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` was never remotely attempted.
 - Remote R3 postflight removed only `public.rls_auto_enable()` PUBLIC EXECUTE. Explicit postgres/anon/authenticated/service_role grants and `ensure_rls` OID/binding/event/tags remain unchanged. Existing-function filtered ACL is `149 -> 148`, post SHA `85f7a6035af44d6593c108abd32feec6b18c7e5e87652b7d743358c76cb5f81c`.

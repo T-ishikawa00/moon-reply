@@ -1,10 +1,10 @@
 # M2-D2 — Contact / Paid-failure Recovery Support
 
-Status: `Human/ChatGPT SOURCE/LOCAL PASS`
+Status: `Human/ChatGPT SOURCE/LOCAL + REMOTE DB PASS`
 
-CON-01 disposition: `CUSTOMER SUPPORT PATH CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + EXTERNAL OPERATOR CHANNEL + ACTIVATION PENDING`.
+CON-01 disposition: `CUSTOMER SUPPORT PATH CLOSED IN SOURCE + REMOTE AUTHORITY — EXTERNAL OPERATOR CHANNEL + ACTIVATION PENDING`.
 
-This is the existing M2-D2 backlog task, not a new Milestone or Gate. Human/ChatGPT accepted reviewed source `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`, based on `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Production Publish, remote migration apply, support activation, Netlify configuration, Stripe/refund/Payment mutation, Checkout, Provider, Async event, email, and scheduler operations remain outside this acceptance.
+This is the existing M2-D2 backlog task, not a new Milestone or Gate. Human/ChatGPT accepted reviewed source `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`, based on `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; the separately authorized remote-closure action started from `release/private-ready@11bb1b512897e55e9517181a3de897b28c94e198`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Production Publish, support activation, Netlify configuration, Stripe/refund/Payment mutation, Checkout, Provider, Async event, email, and scheduler operations remain outside this closure.
 
 ## 1. Pre-D2 gap and exact current inventory
 
@@ -36,9 +36,9 @@ The first three require an owned purchase. The client may select a `purchaseInte
 
 A displayed Support case UUID is a reference, not bearer authority. D2 adds no read-by-reference customer route. Subsequent customer history or operator context must use fresh identity or service-role authority respectively.
 
-## 3. Candidate 0021 authority
+## 3. Remote 0021 authority
 
-Candidate migration: `0021_m2_d2_customer_support_cases.sql`, local only. Git-normalized SHA-256: `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`.
+Accepted migration `0021_m2_d2_customer_support_cases.sql` was applied remotely exactly once. Git-normalized SHA-256: `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Current remote history is exact `0002..0021`, pending `0`, unknown `0`.
 
 It creates exactly two RLS-enabled tables:
 
@@ -107,16 +107,15 @@ The preserved invariant is that a customer who paid JPY980 is never sent back to
 
 A fresh unlinked disposable Supabase applied exact migrations 0002–0021. Migration history contained 20 exact versions. Fixed synthetic Customer A/B fixtures proved owned creation, cross-Customer/unknown/detached rejection, paid/non-paid category rules, replay/conflict, active dedupe, closed-then-later creation, state transitions, RLS/ACL, service-role-only context, and existing-authority non-mutation. Twenty concurrent identical submissions produced exactly one `created`, nineteen `replay`, one durable case, and one submitted event. The stack was stopped with no backup; containers, volumes, and networks are zero. The empty disposable configuration directory may remain because recursive cleanup was rejected by the execution safety boundary; it contains no live database volume or project link.
 
-External Private Beta remains blocked until all of the following are separately accepted and activated:
+Completed prerequisite: D2 source review PASS and remote 0021 apply. External Private Beta remains blocked until all of the following remaining items are separately accepted and activated:
 
-- D2 source review PASS and remote 0021 apply under a new explicit Human/ChatGPT authorization;
 - `CUSTOMER_SUPPORT_CASES_ENABLED=true` in the target environment;
 - actual monitored operator procedure/channel;
 - unauthenticated/Auth-failure fallback;
 - current refund/cancellation operating procedure;
 - D1 seller/contact disclosures reconciled.
 
-No Production environment value was set, no remote DB write occurred, and no support channel or Production runtime was activated.
+The authorized database operation was exactly one successful push of 0021 only. No Production environment value was set, and no support channel or Production runtime was activated.
 
 ## 9. Source regression result
 
@@ -130,3 +129,13 @@ No Production environment value was set, no remote DB write occurred, and no sup
 - Root TypeScript, zero-warning ESLint, Production build (37/37 static generation with the new dynamic Support API), and `git diff --check`: PASS.
 
 Linked read-only migration inventory after candidate creation shows remote history exact 0002–0020, pending exact 0021, unknown 0. Existing Git identities 0017/0018/0019/0020 remain unchanged; no remote apply occurred.
+
+## 10. Remote closure postflight
+
+- Remote migration history is exact `0002..0021`; pending `0`; unknown `0`; 0021 is recorded exactly once.
+- Exactly two new Support tables and three new RPCs match the accepted Git0021 structure. Both tables have RLS enabled. RPCs are postgres-owned `SECURITY INVOKER` with empty `search_path`; service-role-only EXECUTE is exact; PUBLIC, anon, authenticated, and ingress EXECUTE are `0`.
+- Cases grant service role SELECT/INSERT/UPDATE only. Events grant service role SELECT/INSERT only; event UPDATE/DELETE are `false`. Direct PUBLIC/anon/authenticated/ingress table access is `0`.
+- Remote definition inspection confirms paid-category purchase requirement, exact active ownership binding before Support mutation, two advisory-lock domains, replay/conflict and active-case dedupe, privacy-bounded operator context, valid transition fencing, and zero Payment/fulfillment mutation authority.
+- Frozen DB0016/0017, 0018 ingress, 0019 reconciliation, 0020 C1, ownership, Payment, fulfillment, default ACL, `rls_auto_enable`, `ensure_rls`, ingress, and Data API snapshots have existing-object drift `0`. The branch-independent ingress privilege preflight passes with wrapper-only authority.
+- Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; Auto Publishing remains locked. The integrated `11bb1b5` deploy is successful and UNPUBLISHED. Read-only route/log checks found no material 5xx or RPC signature mismatch attributable to 0021.
+- `CUSTOMER_SUPPORT_CASES_ENABLED=false` remains the source default; the Production/Netlify key is unset; customer-visible Support activation is `0`.
