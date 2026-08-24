@@ -6,7 +6,7 @@
 - Task branch: `task/m2-b2-i2-private-recovery-schedulers-r1`.
 - I1 integration deploy: `6a8bcb3131e9e0000898a260`, exact source `f0376ac`, successful, UNPUBLISHED, Auto Publishing Locked; 11 Functions and 1 Edge Function. Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
 - Remote database remains exact `0002..0017`. No remote write or migration apply occurred.
-- Pending 0018 Git-blob SHA-256: `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805`.
+- Pending hardened 0018 Git-blob SHA-256: `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; the former candidate failed safely and rolled back before 0019 began.
 - Pending 0019 Git-blob SHA-256: `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`.
 
 ## Contract inventory and 0019 decision
@@ -31,7 +31,7 @@ The fix preserves every Next boundary and splits only the Netlify-reachable grap
 - `dispatch-scheduler-runtime-service.ts` and `reconciliation-scheduler-runtime-service.ts` compose only runtime-safe modules.
 - The two Netlify entries import the runtime services directly.
 
-The branch-independent Scheduled Function artifact smoke now packages the exact two functions into ZIPs, extracts them, runs `node --check`, dynamically imports each entry with all Production secrets empty, checks the exact manifest name/path/schedule, and rejects static `server-only` import/require or package leakage. Both artifacts pass with `server_only=0`, `importable=1`, and external operation counts `0`. No migration, fence, cadence, Stripe retry/timeout, or Async retry authority changed; 0018/0019 hashes remain exact.
+The branch-independent Scheduled Function artifact smoke now packages the exact two functions into ZIPs, extracts them, runs `node --check`, dynamically imports each entry with all Production secrets empty, checks the exact manifest name/path/schedule, and rejects static `server-only` import/require or package leakage. Both artifacts pass with `server_only=0`, `importable=1`, and external operation counts `0`. I1-R3 changes only the pending 0018 event-trigger ACL compatibility block; 0019, scheduler fences/cadence, Stripe retry/timeout, and Async retry authority remain exact.
 
 ## Private dispatch scheduler
 

@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-B2-I1 integrated / I2 Private Recovery Schedulers
+## M2-B2-I1-R3 Remote Event-Trigger ACL Compatibility
 
-Status: M2-A1 `Production DB closed`; M2-B1 and B2 design `authority integrated`; B2-I1/I1-R2 `Human/ChatGPT PASS / authority integrated`; B2-I2 `local/source implementation complete pending review`.
+Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2 `authority integrated`; first 0018 attempt `safe rollback / remote exact 0002..0017`; I1-R3 `local/source implementation complete pending independent review`.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -35,8 +35,12 @@ Status: M2-A1 `Production DB closed`; M2-B1 and B2 design `authority integrated`
 - [x] Fresh-apply local `0002..0019`; prove eligibility exclusions, finish NULL/owner/live-lease fences, concurrent reconciliation winner 1, webhook race one Payment/job, service-role-only RPCs, reusable ingress privilege preflight, and no state regression.
 - [x] Add explicit Production-only schedule candidates (`* * * * *` dispatch, `*/5 * * * *` reconciliation) while preserving background runtime `included_files` exactly.
 - [x] Reproduce the exact Scheduled Function ZIP failure, preserve Next `server-only` wrappers, split sentinel-free runtime services/seams, and prove both post-fix artifacts import with `server_only=0` and exact schedule manifests.
+- [x] Read remote-only `public.rls_auto_enable()` and its exact `ensure_rls` OID binding using catalog-only access; record definition and ACL identity.
+- [x] Reproduce PUBLIC effective EXECUTE plus native plain-call `0A000`, then prove PUBLIC revoke preserves function/event-trigger identity and auto-enables RLS on a new table.
+- [x] Keep the ingress least-privilege guard strict; add fail-closed exact remote identity handling and revoke only `rls_auto_enable()` PUBLIC EXECUTE when present.
+- [x] Fresh-apply both fixture-present and fixture-absent exact `0002..0019` paths; preserve 0019 byte identity and record the one-row expected ACL delta.
 
-Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, and `6a8bcb3131e9e0000898a260` are not publish candidates. Remote DB remains `0002..0017`; 0018/0019 are pending. Canonical I2 evidence: `docs/m2/M2_B2_I2_PRIVATE_RECOVERY_SCHEDULERS.md`.
+Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, and `6a8bcb3131e9e0000898a260` are not publish candidates. Remote DB remains `0002..0017`; hardened 0018 and unchanged 0019 are pending and must not be applied without a new Human action-time authorization. Canonical R3 evidence: `docs/m2/M2_B2_I1_R3_REMOTE_EVENT_TRIGGER_ACL_COMPATIBILITY.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

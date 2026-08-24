@@ -1,9 +1,9 @@
 # CODEX_HANDOFF.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current handoff — M2-B2-I1 integrated / I2 local candidate complete
+## Current handoff — M2-B2-I1-R3 local hardening / remote STOP
 
-- Authority: `release/private-ready@f0376ac87e3fb7b11ab525b958142d1fd7ba488b`; reviewed I1/I1-R2 fast-forward integration and normal push are complete. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Authority: `release/private-ready@752f687b5ea6bead28a464f9bb9870fb092e143e`; reviewed I1/I1-R2 and I2/I2-R1 integrations are complete. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 is Human/ChatGPT reviewed PASS and closed through Production DB. Remote migrations are exact `0002..0017`; pending and unknown are both `0`.
 - Applied migration is exact `0017_m2_a1_null_fence_integrity.sql`, Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`. The confirmed NULL owner/lease exploit paths are remotely closed with v1/signature/ACL/security/search-path and all non-target identities unchanged.
 - Published runtime remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d` and is confirmed compatible with DB0017. No M2-A1 Production Publish was needed.
@@ -13,17 +13,19 @@
 - Recovery contract: no overlap, unmount cleanup, global/retry budgets, terminal-state stop, exactly-once completed navigation, durable-only `paymentVerified`, explicit-only Checkout restart, and safe `/account` fallback. Evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`.
 - HTTP `401/404/429/5xx` taxonomy is a non-blocking `ERR-01 / E2 Auth Recovery` follow-up and does not reopen B1 absent an integration regression.
 - M2-B2-I1-R2 hardening is Human/ChatGPT reviewed PASS and integrated: exact custom POST function, one raw-body read, pure webhook verifier, standalone ingress package, CA-pinned verify-full DB TLS, future-function default privilege containment, and evidence-only DB commit. Current customer webhook remains operationally unchanged before cutover.
-- Current remote exposed schemas are `public,graphql_public`; wrapper schema `private_payment_ingress` is not exposed. I1-R2 candidate `0018_m2_b2_webhook_ingress_authority.sql` Git-blob SHA-256 is `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805`; old `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` is superseded/unapplied. Remote remains `0002..0017`, pending exact 0018, writes `0`.
+- Current remote exposed schemas are `public,graphql_public`; wrapper schema `private_payment_ingress` is not exposed. The first authorized 0018 attempt stopped at its own least-privilege guard and rolled back; remote remains exact `0002..0017`, 0019 did not start, and retry/repair are `0`.
+- Root finding is remote-only `public.rls_auto_enable()` / `ensure_rls`. Hardened pending 0018 Git-blob SHA-256 is `1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010`; failed/rolled-back `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` and older `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` are superseded.
 - Fresh disposable proof: exact `0002..0018`; direct table/sequence/non-target RPC authority `0`; schema CREATE `0`; old future-function canary exploit `true/true`; schema-only REVOKE remained `true/true`; hardened canary `false/false`; existing ACL/effective-authority drift `0`; first/duplicate/two-event/conflict/order matrices PASS; concurrent clients returned `verified 1 / duplicate 1` with one event/Payment/job.
 - Exact ingress configuration allowlist is `PAYMENT_ENVIRONMENT`, `STRIPE_WEBHOOK_ENABLED`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_INGRESS_DATABASE_URL`, and `STRIPE_INGRESS_DATABASE_CA_PEM`. URL requires `sslmode=verify-full`; runtime TLS pins the supplied CA and verifies the pooler hostname. Bundle forbidden surfaces/env names are `0`; independent build PASS.
 - I1 integration created successful UNPUBLISHED deploy `6a8bcb3131e9e0000898a260` from exact `f0376ac`; Auto Publishing remains locked, 11 Functions and 1 Edge Function deployed, and Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
 - I2 branch is `task/m2-b2-i2-private-recovery-schedulers-r1`. Dispatch schedule selects IDs only and reuses exact DB0016; reconciliation schedule is isolated from Async and creates no Checkout.
-- Minimal 0019 is required because payment attempts previously had no reconciliation owner/lease/retry/count/stop authority. Candidate Git-blob SHA-256 is `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`. 0018 remains exact `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805`; remote DB remains `0002..0017`.
+- Minimal 0019 remains byte-identical at Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`; remote DB remains `0002..0017`.
+- R3 exact identity handling removes only `rls_auto_enable()` PUBLIC EXECUTE, preserves explicit runtime grants, and leaves the strict non-target function guard unchanged. Fixture-present and fixture-absent fresh `0002..0019` paths pass; event-trigger RLS behavior remains true after revoke.
 - Dispatch policy: batch 4, deterministic order, active lease/retry/terminal respect, DB claim before same-site Async, 30-second dispatch lease, 22-second run budget. Pre-router failure alone sets retry; accepted-but-unrecorded outcomes remain ambiguous/manual-review and are never resent.
 - Reconciliation policy: current attempt + persisted Session + nonterminal state + two-minute grace; batch 4, concurrency 2, lease 24 seconds, five reads maximum, capped exponential deterministic jitter, Stripe network retries 0 and timeout 5 seconds. Terminal/economic/binding errors stop; no real provider call occurred.
 - I2-R1 reproduced exact pre-fix Netlify ZIP module-load failure (`server-only` static imports 2 per artifact, package 0, `ERR_MODULE_NOT_FOUND`) and split only the Netlify runtime graph. Next wrappers retain `server-only`; both post-fix Scheduled Function ZIPs are syntax-valid/importable with `server_only=0`, exact schedule manifest identity, and external operations 0.
 - Fresh local `0002..0019`, actual two-client claim, webhook-during-lease duplicate convergence, one Payment/job, branch-independent ingress privilege preflight, source matrix `15/15`, typecheck, and zero-warning lint pass. Full regression/build results are in `docs/m2/M2_B2_I2_PRIVATE_RECOVERY_SCHEDULERS.md`.
-- No remote 0018/0019 apply, credential/configuration, Netlify deploy/publish, Stripe endpoint/API/read/resend/Purchase, real Async event, Provider/email, release integration, or `main` change is authorized.
+- No remote 0018/0019 apply/retry, history repair, credential/configuration, Netlify deploy/publish, Stripe endpoint/API/read/resend/Purchase, real Async event, Provider/email, release integration, or `main` change is authorized.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

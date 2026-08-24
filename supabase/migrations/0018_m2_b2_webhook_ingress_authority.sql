@@ -47,6 +47,159 @@ begin
 end;
 $migration_owner_guard$;
 
+-- Supabase-managed projects may already contain the event-trigger-only
+-- public.rls_auto_enable() routine. PostgreSQL grants EXECUTE on new routines
+-- to PUBLIC by default, which would otherwise leak effective EXECUTE to the
+-- dedicated ingress login through public schema USAGE. Fail closed unless the
+-- existing routine and its event-trigger binding match the reviewed remote
+-- identity exactly, then remove only the unusable PUBLIC direct-call grant.
+-- Explicit postgres/anon/authenticated/service_role grants are preserved.
+do $remote_rls_event_trigger_compatibility$
+declare
+  target_function regprocedure :=
+    pg_catalog.to_regprocedure('public.rls_auto_enable()');
+  target_oid oid;
+begin
+  -- Fresh repository-only databases do not contain this Supabase-managed
+  -- object. In that environment there is no compatibility ACL to harden.
+  if target_function is null then
+    return;
+  end if;
+
+  target_oid := target_function::oid;
+
+  if not exists (
+    select 1
+    from pg_catalog.pg_proc as routine
+    join pg_catalog.pg_namespace as namespace
+      on namespace.oid = routine.pronamespace
+    join pg_catalog.pg_roles as owner_role
+      on owner_role.oid = routine.proowner
+    join pg_catalog.pg_language as language
+      on language.oid = routine.prolang
+    where routine.oid = target_oid
+      and namespace.nspname = 'public'
+      and routine.proname = 'rls_auto_enable'
+      and routine.pronargs = 0
+      and routine.prorettype = 'pg_catalog.event_trigger'::pg_catalog.regtype
+      and owner_role.rolname = 'postgres'
+      and language.lanname = 'plpgsql'
+      and routine.prosecdef
+      and routine.provolatile = 'v'
+      and routine.proconfig is not distinct from
+        array['search_path=pg_catalog']::text[]
+      and pg_catalog.length(routine.prosrc) = 953
+      and pg_catalog.md5(routine.prosrc) =
+        '99be20677b456ea8d3be47bdd44fb369'
+  ) then
+    raise exception 'M2_B2_REMOTE_RLS_EVENT_TRIGGER_IDENTITY_INVALID'
+      using errcode = 'P0001';
+  end if;
+
+  if (
+    select pg_catalog.count(*)
+    from pg_catalog.pg_proc as routine
+    cross join lateral pg_catalog.aclexplode(routine.proacl) as privilege
+    where routine.oid = target_oid
+  ) <> 5
+  or exists (
+    select 1
+    from pg_catalog.pg_proc as routine
+    cross join lateral pg_catalog.aclexplode(routine.proacl) as privilege
+    where routine.oid = target_oid
+      and (
+        privilege.grantor <> 'postgres'::pg_catalog.regrole
+        or privilege.privilege_type <> 'EXECUTE'
+        or privilege.is_grantable
+        or privilege.grantee not in (
+          0,
+          'postgres'::pg_catalog.regrole,
+          'anon'::pg_catalog.regrole,
+          'authenticated'::pg_catalog.regrole,
+          'service_role'::pg_catalog.regrole
+        )
+      )
+  )
+  or not exists (
+    select 1
+    from pg_catalog.pg_proc as routine
+    cross join lateral pg_catalog.aclexplode(routine.proacl) as privilege
+    where routine.oid = target_oid and privilege.grantee = 0
+  )
+  or not pg_catalog.has_function_privilege(
+    'postgres', target_oid, 'EXECUTE'
+  )
+  or not pg_catalog.has_function_privilege(
+    'anon', target_oid, 'EXECUTE'
+  )
+  or not pg_catalog.has_function_privilege(
+    'authenticated', target_oid, 'EXECUTE'
+  )
+  or not pg_catalog.has_function_privilege(
+    'service_role', target_oid, 'EXECUTE'
+  ) then
+    raise exception 'M2_B2_REMOTE_RLS_EVENT_TRIGGER_ACL_INVALID'
+      using errcode = 'P0001';
+  end if;
+
+  if (
+    select pg_catalog.count(*)
+    from pg_catalog.pg_event_trigger
+    where evtfoid = target_oid
+  ) <> 1
+  or not exists (
+    select 1
+    from pg_catalog.pg_event_trigger as trigger
+    join pg_catalog.pg_roles as owner_role
+      on owner_role.oid = trigger.evtowner
+    where trigger.evtfoid = target_oid
+      and trigger.evtname = 'ensure_rls'
+      and owner_role.rolname = 'postgres'
+      and trigger.evtevent = 'ddl_command_end'
+      and trigger.evtenabled = 'O'
+      and trigger.evttags is not distinct from
+        array['CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO']::text[]
+  ) then
+    raise exception 'M2_B2_REMOTE_RLS_EVENT_TRIGGER_BINDING_INVALID'
+      using errcode = 'P0001';
+  end if;
+
+  execute
+    'revoke execute on function public.rls_auto_enable() from public';
+
+  if pg_catalog.has_function_privilege(
+       'm2_b2_stripe_ingress', target_oid, 'EXECUTE'
+     )
+     or exists (
+       select 1
+       from pg_catalog.pg_proc as routine
+       cross join lateral pg_catalog.aclexplode(routine.proacl) as privilege
+       where routine.oid = target_oid and privilege.grantee = 0
+     )
+     or (
+       select pg_catalog.count(*)
+       from pg_catalog.pg_proc as routine
+       cross join lateral pg_catalog.aclexplode(routine.proacl) as privilege
+       where routine.oid = target_oid
+     ) <> 4
+     or not pg_catalog.has_function_privilege(
+       'postgres', target_oid, 'EXECUTE'
+     )
+     or not pg_catalog.has_function_privilege(
+       'anon', target_oid, 'EXECUTE'
+     )
+     or not pg_catalog.has_function_privilege(
+       'authenticated', target_oid, 'EXECUTE'
+     )
+     or not pg_catalog.has_function_privilege(
+       'service_role', target_oid, 'EXECUTE'
+     ) then
+    raise exception 'M2_B2_REMOTE_RLS_EVENT_TRIGGER_REVOKE_INVALID'
+      using errcode = 'P0001';
+  end if;
+end;
+$remote_rls_event_trigger_compatibility$;
+
 -- PostgreSQL's built-in function default grants EXECUTE to PUBLIC globally.
 -- A schema-scoped REVOKE alone cannot remove that built-in grant, so the
 -- global future default must be hardened first. The schema-scoped REVOKEs

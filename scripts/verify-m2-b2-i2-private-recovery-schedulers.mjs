@@ -153,7 +153,7 @@ await check("accepted migration lineage and pending SHAs", async () => {
   );
   assert.equal(
     createHash("sha256").update(migration18).digest("hex"),
-    "53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805",
+    "1aa84f874e1f7585b51377dc5f201dc87f6448bc94574e342008597bb6270010",
   );
 });
 
