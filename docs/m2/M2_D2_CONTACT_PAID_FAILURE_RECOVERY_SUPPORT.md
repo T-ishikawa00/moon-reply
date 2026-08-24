@@ -73,7 +73,7 @@ Source and disposable DB fingerprint proofs show that Support creation changes z
 
 `POST /api/support/cases` is Node/server-only, same-origin, strict JSON, bounded to 8192 bytes, guarded by exact `CUSTOMER_SUPPORT_CASES_ENABLED=true`, and requires enabled Customer Auth plus a fresh identity. A 2xx is returned only after the service-role RPC durably commits. The response contains only case reference, category, safe status, and creation time. Error bodies use safe codes and no-store headers.
 
-The feature flag defaults false and is deliberately absent from new-purchase activation readiness. A Support outage cannot disable Auth, Checkout, Payment, fulfillment, or Account result access.
+The source-controlled default is `CUSTOMER_SUPPORT_CASES_ENABLED=false`. The Production/Netlify value is unset / not configured, and External Private Beta activation remains separately pending; Support is not operational. The feature flag is deliberately absent from new-purchase activation readiness. A Support outage cannot disable Auth, Checkout, Payment, fulfillment, or Account result access.
 
 When disabled, `/contact` retains the D1 current truth: the channel is preparing and no fake form or SLA is shown. When enabled and signed in, it shows the six categories, owned-purchase selector for paid categories, optional bounded note, privacy warning, submit action, and durable case reference. It never asks for a Stripe ID, receipt/payment identifier, card number, result URL/token, OTP, Auth token, capability, or consultation. Account history adds only “この購入について問い合わせる”; the query UUID is a non-secret selector and is revalidated against server ownership.
 
@@ -120,7 +120,7 @@ No Production environment value was set, no remote DB write occurred, and no sup
 
 ## 9. Source regression result
 
-- D2 verifier: 27/27 PASS.
+- D2 verifier: 28/28 PASS.
 - Fresh local DB: exact 0002–0021 apply/history PASS; 20-way identical submission `created=1`, `replay=19`; ownership/idempotency/context/ACL/RLS/non-mutation SQL PASS.
 - D1: 30/30; C1: 8/8; Auth Entry: 11/11; Product Intent: 18/18; Purchase Eligibility: 9/9; Clarification Contract: 7/7.
 - B1 descendant-regression mode: 15/15; RC-1: 19/19; RC-2: 50/50; Background Durability: 21/21.

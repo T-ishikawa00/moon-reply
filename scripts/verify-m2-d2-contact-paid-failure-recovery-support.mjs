@@ -211,6 +211,8 @@ await verify("operator context is bounded and contains no customer/provider cont
 const route = readText("app/api/support/cases/route.ts");
 const service = readText("lib/support/service.ts");
 const environment = readText("lib/support/environment.ts");
+const envExample = readText(".env.example");
+const activationPolicy = readText("lib/payment/production/activation-policy.ts");
 
 await verify("support mutation route is node-only, same-origin, strict JSON and no-store", () => {
   assert.match(route, /runtime = "nodejs"/u);
@@ -220,9 +222,26 @@ await verify("support mutation route is node-only, same-origin, strict JSON and 
   assert.match(route, /Object\.keys\(value\)\.length !== 4/u);
 });
 
+await verify("source-controlled support default is exactly one literal false declaration", () => {
+  const declarations = envExample.match(/^CUSTOMER_SUPPORT_CASES_ENABLED=.*$/gmu) ?? [];
+  assert.deepEqual(declarations, ["CUSTOMER_SUPPORT_CASES_ENABLED=false"]);
+});
+
 await verify("feature flag enables only exact true and is independent of activation readiness", () => {
-  assert.match(environment, /CUSTOMER_SUPPORT_CASES_ENABLED === "true"/u);
-  assert.doesNotMatch(readText("lib/payment/production/activation-policy.ts"), /CUSTOMER_SUPPORT_CASES_ENABLED/u);
+  assert.match(environment, /process\.env\.CUSTOMER_SUPPORT_CASES_ENABLED === "true"/u);
+  const requiredFlags = activationPolicy.match(
+    /RC2_NEW_PURCHASE_REQUIRED_ENABLED_FLAGS = Object\.freeze\(\[([\s\S]*?)\]\s+as const\);/u,
+  )?.[1];
+  assert.ok(requiredFlags, "new-purchase required flag authority must remain explicit");
+  assert.doesNotMatch(requiredFlags, /CUSTOMER_SUPPORT_CASES_ENABLED/u);
+  assert.doesNotMatch(activationPolicy, /CUSTOMER_SUPPORT_CASES_ENABLED/u);
+  for (const independentAuthority of [
+    "CUSTOMER_AUTH_ENABLED",
+    "PAYMENT_PRODUCTION_ENABLED",
+    "PAYMENT_FULFILLMENT_PROCESSING_ENABLED",
+  ]) {
+    assert.match(requiredFlags, new RegExp(`"${independentAuthority}"`, "u"));
+  }
 });
 
 await verify("fresh server identity is the only CustomerUserId source", () => {
