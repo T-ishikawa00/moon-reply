@@ -3,12 +3,12 @@
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current operational overlay — M2-D2 Contact / Paid-failure Recovery Support
 
-- Current authority is `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D2 is on `task/m2-d2-contact-paid-failure-recovery-support-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- M2-D2 status is `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. CON-01 customer Support path is closed in source/local only; external operator channel, unauthenticated fallback, remote authority, and activation remain pending.
-- Candidate `0021_m2_d2_customer_support_cases.sql` is local only. Remote DB remains exact 0002–0020, pending 0, unknown 0. No remote apply is authorized.
+- Pre-integration authority is `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; D2 reviewed source is `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- M2-D2 status is `Human/ChatGPT SOURCE/LOCAL PASS`. CON-01 customer Support path is closed in source/local; remote authority, external operator channel, unauthenticated fallback, and activation remain pending.
+- Accepted candidate `0021_m2_d2_customer_support_cases.sql` remains local only at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0020, pending exact 0021 only, unknown 0. Remote apply requires separate explicit authorization.
 - D1 remains Human/ChatGPT SOURCE PASS; LEG-01 current-truth drift is closed in source, while external-beta disclosure/operation remains pending.
 - C1 remains SOURCE + REMOTE DB PASS and activation pending. `PREPAYMENT_COMPUTE_*` Production values remain unset/disabled; the recorded Self Dogfood policy remains 86400 seconds / 10 units only.
-- `CUSTOMER_SUPPORT_CASES_ENABLED` defaults false and remains Production-unset. Production Publish and real Support activation are prohibited.
+- `CUSTOMER_SUPPORT_CASES_ENABLED=false` is the source-controlled default; the Production/Netlify value remains unset/not configured. Support is not operational. Production Publish and real Support activation remain separately unauthorized.
 
 Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 

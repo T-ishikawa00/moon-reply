@@ -3,13 +3,13 @@
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current handoff — M2-D2 Contact / Paid-failure Recovery Support
 
-- Authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; task branch `task/m2-d2-contact-paid-failure-recovery-support-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. CON-01 is closed only for the source/local customer Support path; operator monitoring, unauthenticated fallback, remote authority, and activation remain pending.
-- Candidate 0021 is local only. Remote DB remains exact 0002–0020, pending 0, unknown 0. D2 created no remote DB, Netlify, Stripe, Provider, email, Async, scheduler, Payment, or Publish operation.
+- Pre-integration authority: `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; reviewed task source: `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `Human/ChatGPT SOURCE/LOCAL PASS`. CON-01 is closed for the source/local customer Support path; remote authority, operator monitoring, unauthenticated fallback, and activation remain pending.
+- Accepted candidate 0021 remains local only at SHA-256 `49dd851643dc85716dc8ca0fb712e2d51bc37e8d04116fd0ae24555b7d27bc9a`. Remote DB is exact 0002–0020, pending exact 0021 only, unknown 0. D2 created no remote DB, Netlify, Stripe, Provider, email, Async, scheduler, Payment, or Publish operation.
 - Paid Support authority is fresh CustomerUserId plus active ownership binding. Client purchase UUID is a non-secret selector only; no Payment/result/Auth credential is accepted. Support creation mutates only Support tables.
-- `CUSTOMER_SUPPORT_CASES_ENABLED` is exact-true only, defaults false, is independent of Payment activation readiness, and remains Production-unset.
+- `CUSTOMER_SUPPORT_CASES_ENABLED` is exact-true only; source-controlled default is false, Production/Netlify remains unset/not configured, and Payment activation readiness remains independent. Support is not operational.
 - D1 and C1 accepted statuses remain unchanged. Canonical runbook/evidence is `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
-- Next action is independent D2 source/local review. Do not apply 0021 remotely, activate Support/C1, create an external contact channel, or Production Publish without separate explicit authority.
+- Next remote action, only after a new explicit authorization, is exact 0021 apply. External operator monitoring, Auth-failure fallback, refund operation, Support activation, and External Private Beta readiness remain separate blockers. Do not activate Support/C1, create an external contact channel, or Production Publish under this acceptance.
 
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:END -->
 

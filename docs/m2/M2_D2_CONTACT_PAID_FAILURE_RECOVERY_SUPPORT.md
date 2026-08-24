@@ -1,10 +1,10 @@
 # M2-D2 — Contact / Paid-failure Recovery Support
 
-Status: `SOURCE/LOCAL CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `Human/ChatGPT SOURCE/LOCAL PASS`
 
-CON-01 disposition: `CUSTOMER SUPPORT PATH CLOSED IN SOURCE/LOCAL — EXTERNAL OPERATOR CHANNEL / ACTIVATION PENDING`.
+CON-01 disposition: `CUSTOMER SUPPORT PATH CLOSED IN SOURCE/LOCAL — REMOTE AUTHORITY + EXTERNAL OPERATOR CHANNEL + ACTIVATION PENDING`.
 
-This is the existing M2-D2 backlog task, not a new Milestone or Gate. The branch starts from `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Production Publish, remote migration apply, support activation, Netlify configuration, Stripe/refund/Payment mutation, Checkout, Provider, Async event, email, and scheduler operations are outside D2 source/local authority.
+This is the existing M2-D2 backlog task, not a new Milestone or Gate. Human/ChatGPT accepted reviewed source `task/m2-d2-contact-paid-failure-recovery-support-r1@041b246d5ae9fec699c676bdf297cacfa5685cba`, based on `release/private-ready@12752953348f5b993afe59ad7a9d09b0af60270c`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`. Production Publish, remote migration apply, support activation, Netlify configuration, Stripe/refund/Payment mutation, Checkout, Provider, Async event, email, and scheduler operations remain outside this acceptance.
 
 ## 1. Pre-D2 gap and exact current inventory
 
@@ -109,7 +109,7 @@ A fresh unlinked disposable Supabase applied exact migrations 0002–0021. Migra
 
 External Private Beta remains blocked until all of the following are separately accepted and activated:
 
-- D2 source review PASS and remote 0021 apply, if accepted;
+- remote 0021 apply under a new explicit Human/ChatGPT authorization;
 - `CUSTOMER_SUPPORT_CASES_ENABLED=true` in the target environment;
 - actual monitored operator procedure/channel;
 - unauthenticated/Auth-failure fallback;
