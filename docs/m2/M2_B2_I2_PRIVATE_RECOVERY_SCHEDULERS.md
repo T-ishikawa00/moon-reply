@@ -20,6 +20,19 @@ DB0016 already owns dispatch marker, owner, lease, retry-after, completion, atte
 
 PUBLIC, `anon`, `authenticated`, and `m2_b2_stripe_ingress` receive no EXECUTE. The permanent I1 default-privilege rule remains effective: all new postgres-owned functions require explicit grants.
 
+## I2-R1 Scheduled runtime artifact hardening
+
+The reviewed I2 source had the same artifact defect class as the earlier Async Workloads incident. Exact `@netlify/zip-it-and-ship-it@15.4.0` ZIPs existed and passed `node --check`, but each Scheduled Function artifact contained two static `server-only` imports, contained no `node_modules/server-only` package, and failed dynamic import with `ERR_MODULE_NOT_FOUND`.
+
+The fix preserves every Next boundary and splits only the Netlify-reachable graph:
+
+- `async-workloads.ts`, `environment.ts`, `dispatch-scheduler-service.ts`, and `reconciliation-scheduler-service.ts` remain `server-only` wrappers for Next-owned callers.
+- `async-workloads-runtime.ts` and `stripe-environment-runtime.ts` contain the sentinel-free runtime seams.
+- `dispatch-scheduler-runtime-service.ts` and `reconciliation-scheduler-runtime-service.ts` compose only runtime-safe modules.
+- The two Netlify entries import the runtime services directly.
+
+The branch-independent Scheduled Function artifact smoke now packages the exact two functions into ZIPs, extracts them, runs `node --check`, dynamically imports each entry with all Production secrets empty, checks the exact manifest name/path/schedule, and rejects static `server-only` import/require or package leakage. Both artifacts pass with `server_only=0`, `importable=1`, and external operation counts `0`. No migration, fence, cadence, Stripe retry/timeout, or Async retry authority changed; 0018/0019 hashes remain exact.
+
 ## Private dispatch scheduler
 
 `production-fulfillment-dispatch-scheduled` runs every minute only after a future Production publish. Each invocation selects at most four verified-intent job IDs, ordered by due retry/creation/ID, excludes terminal/completed/future-retry/active-dispatch work, and then calls the unchanged DB0016 fence before same-site Async submission.
@@ -58,6 +71,7 @@ Official evidence: [Scheduled Functions](https://docs.netlify.com/build/function
 
 - Fresh disposable local Supabase applied exact `0002..0019` successfully.
 - I2 verifier: `15/15`, including DB/ACL proof and the branch-independent I1 privilege preflight.
+- Scheduled Function artifact smoke: both exact ZIPs `syntax=1`, `importable=1`, `server_only=0`, expected schedule manifests present, external operations `0`.
 - Separate actual two-client reconciliation claim: winner `1`.
 - Pending 0018 identity and DB0017 immutable identity: exact.
 - Required I1, B1, RC-2, RC-1, Background durability, Async artifact, runtime-assets, Product Intent, Clarification, typecheck, zero-warning lint, customer Production build, ingress independent build, and diff-check results are recorded in the final task report.

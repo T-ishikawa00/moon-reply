@@ -62,7 +62,10 @@ const lifecycleApplication = read("lib/assessment/production/application.ts");
 const lifecycleRepository = read(
   "lib/assessment/production/supabase-repository.ts",
 );
-const asyncAdapter = read("lib/payment/production/async-workloads.ts");
+const asyncAdapter = [
+  read("lib/payment/production/async-workloads.ts"),
+  read("lib/payment/production/async-workloads-runtime.ts"),
+].join("\n");
 const workloadLogic = read(
   "lib/payment/production/async-workloads-worker.ts",
 );

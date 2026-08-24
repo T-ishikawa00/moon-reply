@@ -50,6 +50,7 @@ function readPaymentEnvironmentSources() {
   return [
     "lib/payment/production/environment.ts",
     "lib/payment/production/environment-runtime.ts",
+    "lib/payment/production/stripe-environment-runtime.ts",
   ]
     .map(readText)
     .join("\n");

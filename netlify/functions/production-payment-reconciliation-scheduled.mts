@@ -1,4 +1,4 @@
-import { runConfiguredProductionPaymentReconciliationSchedule } from "../../lib/payment/production/reconciliation-scheduler-service.ts";
+import { runConfiguredProductionPaymentReconciliationSchedule } from "../../lib/payment/production/reconciliation-scheduler-runtime-service.ts";
 
 export default async function productionPaymentReconciliationScheduled() {
   const outcome =

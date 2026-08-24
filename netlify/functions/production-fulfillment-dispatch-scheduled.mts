@@ -1,4 +1,4 @@
-import { runConfiguredProductionFulfillmentDispatchSchedule } from "../../lib/payment/production/dispatch-scheduler-service.ts";
+import { runConfiguredProductionFulfillmentDispatchSchedule } from "../../lib/payment/production/dispatch-scheduler-runtime-service.ts";
 
 export default async function productionFulfillmentDispatchScheduled() {
   const outcome =

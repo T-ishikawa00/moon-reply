@@ -34,6 +34,7 @@ Status: M2-A1 `Production DB closed`; M2-B1 and B2 design `authority integrated`
 - [x] Prove two dispatch schedulers/status race produce one router acceptance; pre-acceptance failure alone opens retry; post-acceptance ambiguity sends no second event.
 - [x] Fresh-apply local `0002..0019`; prove eligibility exclusions, finish NULL/owner/live-lease fences, concurrent reconciliation winner 1, webhook race one Payment/job, service-role-only RPCs, reusable ingress privilege preflight, and no state regression.
 - [x] Add explicit Production-only schedule candidates (`* * * * *` dispatch, `*/5 * * * *` reconciliation) while preserving background runtime `included_files` exactly.
+- [x] Reproduce the exact Scheduled Function ZIP failure, preserve Next `server-only` wrappers, split sentinel-free runtime services/seams, and prove both post-fix artifacts import with `server_only=0` and exact schedule manifests.
 
 Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, and `6a8bcb3131e9e0000898a260` are not publish candidates. Remote DB remains `0002..0017`; 0018/0019 are pending. Canonical I2 evidence: `docs/m2/M2_B2_I2_PRIVATE_RECOVERY_SCHEDULERS.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->

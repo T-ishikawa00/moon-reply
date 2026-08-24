@@ -30,7 +30,8 @@
     "verify:m2-a1": "node scripts/verify-m2-a1-null-fence-integrity.mjs",
     "verify:m2-b1": "node scripts/verify-m2-b1-return-account-convergence.mjs",
     "verify:m2-b2-i1": "node scripts/verify-m2-b2-i1-public-ingress-authority.mjs",
-    "verify:m2-b2-i2": "node scripts/verify-m2-b2-i2-private-recovery-schedulers.mjs"
+    "verify:m2-b2-i2": "node scripts/verify-m2-b2-i2-private-recovery-schedulers.mjs",
+    "verify:m2-b2:scheduled-artifacts": "node scripts/verify-m2-b2-scheduled-function-artifacts.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",

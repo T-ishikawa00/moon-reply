@@ -360,7 +360,10 @@ await check("retry budget exhaustion stops without checkout creation", async () 
   });
   assert.equal(finishes[0].outcome, "stop");
   const service = await readFile(
-    path.join(root, "lib/payment/production/reconciliation-scheduler-service.ts"),
+    path.join(
+      root,
+      "lib/payment/production/reconciliation-scheduler-runtime-service.ts",
+    ),
     "utf8",
   );
   assert.doesNotMatch(service, /createCheckoutSession|enqueueProduction/u);
@@ -392,7 +395,10 @@ await check("webhook race disposition settles without dispatch coupling", async 
     "utf8",
   );
   const scheduler = await readFile(
-    path.join(root, "lib/payment/production/reconciliation-scheduler-service.ts"),
+    path.join(
+      root,
+      "lib/payment/production/reconciliation-scheduler-runtime-service.ts",
+    ),
     "utf8",
   );
   assert.match(application, /dispatchFulfillment = true/u);
@@ -401,17 +407,29 @@ await check("webhook race disposition settles without dispatch coupling", async 
 
 await check("scheduler secret and responsibility domains are separated", async () => {
   const dispatch = await readFile(
-    path.join(root, "lib/payment/production/dispatch-scheduler-service.ts"),
+    path.join(
+      root,
+      "lib/payment/production/dispatch-scheduler-runtime-service.ts",
+    ),
     "utf8",
   );
   const reconciliation = await readFile(
-    path.join(root, "lib/payment/production/reconciliation-scheduler-service.ts"),
+    path.join(
+      root,
+      "lib/payment/production/reconciliation-scheduler-runtime-service.ts",
+    ),
     "utf8",
   );
   assert.doesNotMatch(dispatch, /stripe|provider|openai|reconcil/iu);
   assert.doesNotMatch(reconciliation, /async-workloads|enqueueProduction/u);
   assert.match(reconciliation, /maxNetworkRetries: 0/u);
   assert.match(reconciliation, /timeout: 5_000/u);
+  for (const wrapper of [
+    "lib/payment/production/dispatch-scheduler-service.ts",
+    "lib/payment/production/reconciliation-scheduler-service.ts",
+  ]) {
+    assert.match(await readFile(path.join(root, wrapper), "utf8"), /^import "server-only";/u);
+  }
 });
 
 await check("fresh local DB reconciliation and privilege proof", async () => {
@@ -446,8 +464,10 @@ await check("fresh local DB reconciliation and privilege proof", async () => {
 await check("no real external action in I2 verifier", async () => {
   const sources = await Promise.all(
     [
-      "lib/payment/production/dispatch-scheduler-service.ts",
-      "lib/payment/production/reconciliation-scheduler-service.ts",
+      "lib/payment/production/dispatch-scheduler-runtime-service.ts",
+      "lib/payment/production/reconciliation-scheduler-runtime-service.ts",
+      "lib/payment/production/async-workloads-runtime.ts",
+      "lib/payment/production/stripe-environment-runtime.ts",
       "netlify/functions/production-fulfillment-dispatch-scheduled.mts",
       "netlify/functions/production-payment-reconciliation-scheduled.mts",
     ].map((file) => readFile(path.join(root, file), "utf8")),
