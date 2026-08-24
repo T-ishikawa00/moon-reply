@@ -1,9 +1,9 @@
 # WBS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## M2-B2 design integrated / I1 Public Ingress Authority
+## M2-B2-I1 integrated / I2 Private Recovery Schedulers
 
-Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority integrated`; M2-B2 design `Human/ChatGPT PASS / authority integrated`; B2-I1 `local/source implementation complete pending review`.
+Status: M2-A1 `Production DB closed`; M2-B1 and B2 design `authority integrated`; B2-I1/I1-R2 `Human/ChatGPT PASS / authority integrated`; B2-I2 `local/source implementation complete pending review`.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -26,8 +26,16 @@ Status: M2-A1 `Production DB closed`; M2-B1 `Human/ChatGPT PASS / authority inte
 - [x] Reproduce future-function PUBLIC EXECUTE as `true/true`, prove schema-only REVOKE ineffective, then apply the required global future default plus additive-schema cleanup; schema CREATE stays false and existing runtime ACL/effective authority drift is zero.
 - [x] Fresh-apply exact `0002..0018` locally and prove ACL/default ACL/canary, invalid zero-effect, duplicate/conflict/order/race convergence, and exact one Payment/job.
 - [x] Pass I1-R2 `15/15`, B1 isolated `15/15`, RC-2 `50/50`, RC-1 `19/19`, durability `21/21`, artifact/runtime/auth/product/clarification, typecheck, zero-warning lint, customer build `38/38`, ingress build, and diff check.
+- [x] Fast-forward I1/I1-R2 into `release/private-ready@f0376ac87e3fb7b11ab525b958142d1fd7ba488b`, normally push, keep `main` unchanged, and verify UNPUBLISHED successful deploy `6a8bcb3131e9e0000898a260` under Auto Publishing Lock.
+- [x] Inventory DB0016 dispatch authority and prove no dispatch migration is needed; keep marker/owner/lease/retry/ambiguity semantics unchanged.
+- [x] Implement bounded Private dispatch schedule: verified nonterminal due job IDs only, batch 4, DB0016 claim before same-site router send, no Stripe/Provider/customer selection, and 22-second internal budget.
+- [x] Prove reconciliation lacks external-read lease/backoff/budget and add minimal append-only candidate 0019 without modifying 0002–0018.
+- [x] Implement bounded Private reconciliation schedule: persisted Session only, two-minute webhook grace, batch 4, concurrency 2, five-attempt durable budget, SDK retry 0/timeout 5s, no Checkout creation, and evidence-only recording with dispatch deferred.
+- [x] Prove two dispatch schedulers/status race produce one router acceptance; pre-acceptance failure alone opens retry; post-acceptance ambiguity sends no second event.
+- [x] Fresh-apply local `0002..0019`; prove eligibility exclusions, finish NULL/owner/live-lease fences, concurrent reconciliation winner 1, webhook race one Payment/job, service-role-only RPCs, reusable ingress privilege preflight, and no state regression.
+- [x] Add explicit Production-only schedule candidates (`* * * * *` dispatch, `*/5 * * * *` reconciliation) while preserving background runtime `included_files` exactly.
 
-Deploys `6a8af2575d156800089493ec` and `6a8b1ddfb6afaf000854e4af` are not publish candidates. I1 performed no Netlify/Stripe/remote DB/runtime configuration write. Canonical evidence: `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`.
+Deploys `6a8af2575d156800089493ec`, `6a8b1ddfb6afaf000854e4af`, and `6a8bcb3131e9e0000898a260` are not publish candidates. Remote DB remains `0002..0017`; 0018/0019 are pending. Canonical I2 evidence: `docs/m2/M2_B2_I2_PRIVATE_RECOVERY_SCHEDULERS.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

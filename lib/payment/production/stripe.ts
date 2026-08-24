@@ -62,10 +62,13 @@ export function buildStripeReconciliationEvidenceV1(
 export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
   private readonly stripe: Stripe;
 
-  constructor(secretKey: string) {
+  constructor(
+    secretKey: string,
+    options: { maxNetworkRetries?: number; timeout?: number } = {},
+  ) {
     this.stripe = new Stripe(secretKey, {
-      maxNetworkRetries: 2,
-      timeout: 10_000,
+      maxNetworkRetries: options.maxNetworkRetries ?? 2,
+      timeout: options.timeout ?? 10_000,
     });
   }
 
@@ -116,10 +119,24 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
   async retrieveCheckoutSession(
     request: CheckoutSessionReconciliationRequestV1,
   ) {
-    const session = await this.stripe.checkout.sessions.retrieve(
-      request.providerCheckoutSessionId,
-      { expand: ["payment_intent"] },
-    );
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.retrieve(
+        request.providerCheckoutSessionId,
+        { expand: ["payment_intent"] },
+      );
+    } catch (error) {
+      if (
+        error instanceof Stripe.errors.StripeInvalidRequestError &&
+        error.code === "resource_missing"
+      ) {
+        throw new M2RuntimeError(
+          "PAYMENT_RECONCILIATION_SESSION_INVALID",
+          409,
+        );
+      }
+      throw error;
+    }
     return buildStripeReconciliationEvidenceV1(
       normalizeStripeCheckoutSessionV1(session, true),
       request.observedAt,

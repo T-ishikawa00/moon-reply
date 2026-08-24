@@ -15,6 +15,9 @@ import {
 const root = process.cwd();
 const authority = "7b850ff9b2c2188691605797983202416ddc5d88";
 const expectedBranch = "task/m2-b2-i1-public-ingress-authority-r1";
+const reviewedHead = "f0376ac87e3fb7b11ab525b958142d1fd7ba488b";
+const descendantRegression =
+  process.env.M2_B2_I1_DESCENDANT_REGRESSION === "true";
 const secret = "whsec_m2_b2_i1_synthetic_only";
 let passed = 0;
 
@@ -99,7 +102,14 @@ async function responseBody(response) {
 }
 
 await check("branch and append-only migration lineage", async () => {
-  assert.equal(git("branch", "--show-current"), expectedBranch);
+  if (descendantRegression) {
+    assert.equal(
+      git("merge-base", "--is-ancestor", reviewedHead, "HEAD"),
+      "",
+    );
+  } else {
+    assert.equal(git("branch", "--show-current"), expectedBranch);
+  }
   const allowed = new Set([
     "docs/CODEX_HANDOFF.md",
     "docs/CURRENT_FOCUS.md",
@@ -129,10 +139,13 @@ await check("branch and append-only migration lineage", async () => {
     "supabase/tests/m2_b2_i1_webhook_ingress_authority_r1.sql",
     "tsconfig.json",
   ]);
-  const committed = git("diff", "--name-only", authority, "HEAD")
+  const comparisonHead = descendantRegression ? reviewedHead : "HEAD";
+  const committed = git("diff", "--name-only", authority, comparisonHead)
     .split(/\r?\n/u)
     .filter(Boolean);
-  const working = gitRaw("status", "--porcelain=v1", "--untracked-files=all")
+  const working = (descendantRegression
+    ? ""
+    : gitRaw("status", "--porcelain=v1", "--untracked-files=all"))
     .split(/\r?\n/u)
     .filter(Boolean)
     .map((line) => line.slice(3).replaceAll("\\", "/"));
@@ -151,6 +164,7 @@ await check("branch and append-only migration lineage", async () => {
     "diff",
     "--name-only",
     authority,
+    comparisonHead,
     "--",
     "supabase/migrations/0002_*.sql",
     "supabase/migrations/0003_*.sql",

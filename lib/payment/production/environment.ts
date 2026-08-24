@@ -14,8 +14,12 @@ export {
   isStripeWebhookAvailable,
   readConfiguredPaymentEnvironment,
   readPaymentDeliveryEnvironment,
+  readProductionSchedulerDatabaseEnvironment,
 } from "./environment-runtime.ts";
-export type { PaymentDeliveryEnvironment } from "./environment-runtime.ts";
+export type {
+  PaymentDeliveryEnvironment,
+  ProductionSchedulerDatabaseEnvironment,
+} from "./environment-runtime.ts";
 
 export type StripeCheckoutEnvironment = Readonly<{
   secretKey: string;

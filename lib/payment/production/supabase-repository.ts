@@ -117,6 +117,13 @@ type PaymentAttemptRow = {
   last_provider_event_created_at: string | null;
   created_at: string;
   updated_at: string;
+  reconciliation_owner_id: string | null;
+  reconciliation_lease_expires_at: string | null;
+  reconciliation_retry_after: string | null;
+  reconciliation_attempt_count: number;
+  reconciliation_last_error_code: string | null;
+  reconciliation_stopped_at: string | null;
+  reconciliation_updated_at: string | null;
 };
 
 type FulfillmentJobRow = {
@@ -133,6 +140,9 @@ type FulfillmentJobRow = {
   logical_assessment_id: string | null;
   last_error_code: string | null;
   completed_at: string | null;
+  dispatch_completed_at: string | null;
+  dispatch_retry_after: string | null;
+  created_at: string;
 };
 
 type PaymentDatabase = {
@@ -159,6 +169,8 @@ type PaymentDatabase = {
       reserve_rc2_payment_attempt_v1: RuntimeFunction;
       attach_rc2_checkout_session_v1: RuntimeFunction;
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
+      claim_rc2_payment_reconciliation_batch_v1: RuntimeFunction;
+      finish_rc2_payment_reconciliation_v1: RuntimeFunction;
       record_rc2_stripe_evidence_v2: RuntimeFunction;
       resolve_customer_purchase_status_v1: RuntimeFunction;
       resolve_customer_completed_delivery_v1: RuntimeFunction;
@@ -679,6 +691,95 @@ export class SupabasePaymentDeliveryRepository
       .maybeSingle();
     if (error) databaseFailure(error);
     return data ? mapAttempt(data) : null;
+  }
+
+  async listDueFulfillmentDispatchJobIds(input: {
+    now: string;
+    limit: number;
+  }): Promise<string[]> {
+    const { data, error } = await this.client
+      .from("production_fulfillment_jobs")
+      .select("id, production_purchase_intents!inner(state)")
+      .in("state", ["pending", "retryable"])
+      .eq("production_purchase_intents.state", "verified")
+      .is("dispatch_completed_at", null)
+      .or(
+        `dispatch_retry_after.is.null,dispatch_retry_after.lte.${input.now}`,
+      )
+      .or(
+        `dispatch_owner_id.is.null,dispatch_lease_expires_at.lte.${input.now}`,
+      )
+      .order("dispatch_retry_after", { ascending: true, nullsFirst: true })
+      .order("created_at", { ascending: true })
+      .order("id", { ascending: true })
+      .limit(input.limit);
+    if (error) databaseFailure(error);
+    return (data ?? []).map((row) => stringValue(row.id));
+  }
+
+  async claimPaymentReconciliationBatch(input: {
+    ownerId: string;
+    leaseExpiresAt: string;
+    now: string;
+    notNewerThan: string;
+    limit: number;
+    maximumAttempts: number;
+  }): Promise<
+    Array<{
+      paymentAttemptId: string;
+      providerCheckoutSessionId: string;
+      attemptCount: number;
+    }>
+  > {
+    const { data, error } = await this.client.rpc(
+      "claim_rc2_payment_reconciliation_batch_v1",
+      {
+        p_owner_id: input.ownerId,
+        p_lease_expires_at: input.leaseExpiresAt,
+        p_now: input.now,
+        p_not_newer_than: input.notNewerThan,
+        p_limit: input.limit,
+        p_max_attempts: input.maximumAttempts,
+      },
+    );
+    if (error) databaseFailure(error);
+    if (!Array.isArray(data)) databaseFailure();
+    return data.map((value) => {
+      const row = recordValue(value);
+      const attemptCount = row.reconciliation_attempt_count;
+      if (!Number.isSafeInteger(attemptCount) || Number(attemptCount) < 1) {
+        databaseFailure();
+      }
+      return {
+        paymentAttemptId: stringValue(row.payment_attempt_id),
+        providerCheckoutSessionId: stringValue(
+          row.provider_checkout_session_id,
+        ),
+        attemptCount: Number(attemptCount),
+      };
+    });
+  }
+
+  async finishPaymentReconciliation(input: {
+    paymentAttemptId: string;
+    ownerId: string;
+    outcome: "retry" | "stop" | "settled";
+    retryAfter: string | null;
+    errorCode: string | null;
+    now: string;
+  }): Promise<void> {
+    const { error } = await this.client.rpc(
+      "finish_rc2_payment_reconciliation_v1",
+      {
+        p_payment_attempt_id: input.paymentAttemptId,
+        p_owner_id: input.ownerId,
+        p_outcome: input.outcome,
+        p_retry_after: input.retryAfter,
+        p_error_code: input.errorCode,
+        p_now: input.now,
+      },
+    );
+    if (error) databaseFailure(error);
   }
 
   async recordStripeEvidence(input: {

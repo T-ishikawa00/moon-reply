@@ -1,9 +1,9 @@
 # CURRENT_FOCUS.md
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
-## Current operational overlay — M2-B2 design integrated / I1 local candidate
+## Current operational overlay — M2-B2-I1 integrated / I2 local candidate
 
-- Current source authority: `release/private-ready@7b850ff9b2c2188691605797983202416ddc5d88`; reviewed B2 design was integrated by exact fast-forward and normally pushed. `main` is unchanged.
+- Current source authority: `release/private-ready@f0376ac87e3fb7b11ab525b958142d1fd7ba488b`; reviewed I1/I1-R2 was integrated by exact fast-forward and normally pushed. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-A1 status: `Human/ChatGPT reviewed PASS / Production DB closed`; remote migration history is exact `0002..0017` with pending `0` and unknown `0`.
 - Exact applied artifact: `supabase/migrations/0017_m2_a1_null_fence_integrity.sql`; immutable Git-blob SHA-256 `b5c2534dbc8bdb97e6fa77612143b8bf9ec78c2955908ceab3d360bab30f9380`.
 - Remote closure: the confirmed NULL owner/lease claim and completion exploits are closed by the exact three hardened v2 bodies; v1, signatures, ACL, `SECURITY INVOKER`, search path, tables, constraints, policies, and non-target RPCs remained unchanged.
@@ -12,11 +12,13 @@
 - Non-blocking follow-up: HTTP `401/404/429/5xx` taxonomy remains `ERR-01 / E2 Auth Recovery`; it does not reopen B1 absent an integration regression.
 - B1 build `6a8b1ddfb6afaf000854e4af` is exact-source, successful, `38/38` pages with 11 Functions and 1 Edge Function, and remains UNPUBLISHED under Auto Publishing Lock. Existing deploy `6a8af2575d156800089493ec` also remains UNPUBLISHED. Published source is unchanged.
 - Durable payment truth: `paymentVerified` comes from persisted successful-Payment authority, including the non-inferred `confirmation_pending` case. Customer copy cannot claim confirmed payment without it.
-- Current bounded task: **M2-B2-I1-R2 — Public Stripe Ingress credential hardening**. Verified DB TLS and future-function default privilege hardening are implemented locally on the same task branch, pending independent review.
-- Current remote PostgREST exposed schemas are exact `public,graphql_public`; I1 uses non-exposed `private_payment_ingress`. Remote DB remains `0002..0017`, with pending exact `0018` only and remote write `0`.
-- I1-R2 candidate 0018 Git-blob SHA-256: `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805`; pre-review `8c16d8c84390890141b6c30217a4777f9c18758ab720ca4a396b5d834415bd2c` is superseded and was never remotely applied. Dedicated login has no credential, requires CA-pinned verify-full TLS when later configured, can execute one definer wrapper only, cannot CREATE in either application schema, and receives no future postgres-owned function through default PUBLIC EXECUTE.
-- Canonical evidence: `docs/m2/M2_B1_RETURN_ACCOUNT_CONVERGENCE.md`, `docs/m2/M2_B2_PRIVATE_SITE_WEBHOOK_CONVERGENCE.md`, and `docs/m2/M2_B2_I1_PUBLIC_INGRESS_AUTHORITY.md`.
-- I1 stop boundary: no remote 0018 apply/credential, Netlify project/config/deploy/publish, Stripe endpoint/API/resend/Purchase, Async event, Provider/email, or `main` change.
+- I1 integration deploy `6a8bcb3131e9e0000898a260` is exact-source `f0376ac`, successful, and remains UNPUBLISHED with a visible Publish action under Auto Publishing Lock. It deployed 11 Functions and 1 Edge Function; Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
+- Current bounded task: **M2-B2-I2 — Private Durable Dispatch / Payment Reconciliation** on `task/m2-b2-i2-private-recovery-schedulers-r1`. Two Private-project Scheduled Functions are implemented locally: a DB0016-fenced same-site Async dispatcher and an isolated persisted-Session Stripe-read reconciler.
+- Remote DB remains exact `0002..0017`. Pending candidates are exact `0018_m2_b2_webhook_ingress_authority.sql` Git-blob SHA-256 `53cd8f20be9a50569060f6566d04092bbe4613366c543e1d3b0643e3fd2c7805` and `0019_m2_b2_private_payment_reconciliation.sql` Git-blob SHA-256 `b4e5ef6b06ef6e70c0904e7b1692c2863861c73738454d499ac3b730a082456c`; remote writes remain `0`.
+- 0019 is necessary only for reconciliation external-read lease/backoff/budget. Dispatch adds no schema authority: bounded ID selection delegates every final decision to the unchanged DB0016 marker/owner/lease/retry/ambiguity fence. After router acceptance, Async Workloads remains the sole retry authority.
+- Reconciliation claims only current nonterminal attempts with a persisted Checkout Session, a two-minute webhook grace, due retry, no active lease, and remaining five-attempt budget. Batch `4`, external concurrency `2`, Stripe SDK retry `0`, timeout `5s`; no Checkout creation and scheduler evidence recording defers dispatch to the separate scheduler.
+- Canonical evidence: `docs/m2/M2_B2_I2_PRIVATE_RECOVERY_SCHEDULERS.md` plus the accepted I1 and B2 design records.
+- I2 stop boundary: no remote 0018/0019 apply, DB/config/credential write, real Stripe read/endpoint/resend/Purchase, Async event, Netlify deploy/publish/configuration, Provider/email, release integration, or `main` change.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 
 <!-- M2-0-AUTHORITY-CRITICAL-DB-BASELINE:BEGIN -->

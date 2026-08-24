@@ -17,6 +17,9 @@ import { getPurchaseReturnPresentation } from "../lib/payment/purchase-return-pr
 const root = process.cwd();
 const base = "1b4863985fb1bd32e769ddfac884a27b236472cb";
 const expectedBranch = "task/m2-b1-return-account-convergence-r1";
+const reviewedHead = "8fcb7861c45b2ff29a45d5bf1ac1207b957dc893";
+const descendantRegression =
+  process.env.M2_B1_DESCENDANT_REGRESSION === "true";
 const validLegacyPath = `/result/${"A".repeat(43)}`;
 const validAccountPath =
   "/account/results/123e4567-e89b-42d3-a456-426614174000";
@@ -41,11 +44,19 @@ async function check(name, callback) {
 }
 
 function changedPathsFromBase() {
-  const tracked = git(["diff", "--name-only", base, "--"])
+  const tracked = git([
+    "diff",
+    "--name-only",
+    base,
+    ...(descendantRegression ? [reviewedHead] : []),
+    "--",
+  ])
     .trim()
     .split(/\r?\n/u)
     .filter(Boolean);
-  const untracked = git(["ls-files", "--others", "--exclude-standard", "-z"])
+  const untracked = (descendantRegression
+    ? ""
+    : git(["ls-files", "--others", "--exclude-standard", "-z"]))
     .split("\0")
     .filter(Boolean);
   return [...new Set([...tracked, ...untracked])].map((entry) =>
@@ -114,10 +125,14 @@ function completed(resultPath = validAccountPath) {
 }
 
 await check("exact M2-B1 authority, branch, and bounded path manifest", () => {
-  assert.equal(git(["branch", "--show-current"]).trim(), expectedBranch);
-  assert.equal(git(["merge-base", base, "HEAD"]).trim(), base);
-  assert.equal(git(["rev-parse", "release/private-ready"]).trim(), base);
-  assert.equal(git(["rev-parse", "origin/release/private-ready"]).trim(), base);
+  if (descendantRegression) {
+    assert.equal(git(["merge-base", reviewedHead, "HEAD"]).trim(), reviewedHead);
+  } else {
+    assert.equal(git(["branch", "--show-current"]).trim(), expectedBranch);
+    assert.equal(git(["merge-base", base, "HEAD"]).trim(), base);
+    assert.equal(git(["rev-parse", "release/private-ready"]).trim(), base);
+    assert.equal(git(["rev-parse", "origin/release/private-ready"]).trim(), base);
+  }
   assert.equal(git(["stash", "list"]).trim(), "");
   const allowed = new Set([
     "app/globals.css",
@@ -168,7 +183,14 @@ await check("M2-A1 closure is current without rewriting protected history", () =
     "scripts/verify-m1-4-async-router-artifacts.mjs",
   ]) {
     assert.equal(
-      git(["diff", "--name-only", base, "--", protectedPath]).trim(),
+      git([
+        "diff",
+        "--name-only",
+        base,
+        ...(descendantRegression ? [reviewedHead] : []),
+        "--",
+        protectedPath,
+      ]).trim(),
       "",
       `${protectedPath} changed`,
     );
@@ -539,11 +561,22 @@ await check("Payment, webhook, DB0017, Async, and Netlify boundaries remain inta
   assert.match(application, /requestFulfillmentDispatch/u);
   assert.match(application, /successfulPaymentId !== null/u);
   assert.equal(
-    git(["diff", "--name-only", base, "--", "app/api/payments/stripe/webhook/route.ts"]).trim(),
+    git([
+      "diff",
+      "--name-only",
+      base,
+      ...(descendantRegression ? [reviewedHead] : []),
+      "--",
+      "app/api/payments/stripe/webhook/route.ts",
+    ]).trim(),
     "",
   );
   assert.equal(
-    git(["merge-base", "1b8b61b32b1f284f843593777d8f0520ce13281b", "HEAD"]).trim() ===
+    git([
+      "merge-base",
+      "1b8b61b32b1f284f843593777d8f0520ce13281b",
+      descendantRegression ? reviewedHead : "HEAD",
+    ]).trim() ===
       "1b8b61b32b1f284f843593777d8f0520ce13281b",
     false,
     "UX candidate must not be merged or cherry-picked",

@@ -10,6 +10,7 @@ import {
 } from "../../assessment/runtime/errors.ts";
 import { hashOpaqueProductionCapability } from "../../assessment/production/capabilities.ts";
 import { RC2_PRODUCT } from "./constants.ts";
+import { requestProductionFulfillmentDispatch } from "./fulfillment-dispatch.ts";
 import { parseCustomerResultPath } from "../purchase-status-contract.ts";
 import {
   createPaymentCapability,
@@ -781,6 +782,7 @@ export class ProductionPaymentDeliveryApplication {
 
   async verifyStripeEvidence(
     evidence: StripePaymentEvidenceV1,
+    dispatchFulfillment = true,
   ): Promise<RecordedPaymentEvidence> {
     const verification = await this.evaluateStripeEvidence(evidence);
     const recorded = await this.options.repository.recordStripeEvidence({
@@ -792,6 +794,7 @@ export class ProductionPaymentDeliveryApplication {
     });
     this.options.onVerifiedPaymentRecorded?.(recorded);
     if (
+      dispatchFulfillment &&
       recorded.fulfillmentJobId &&
       (recorded.disposition === "verified" ||
         recorded.disposition === "duplicate")
@@ -803,6 +806,7 @@ export class ProductionPaymentDeliveryApplication {
 
   async reconcilePaymentAttempt(
     paymentAttemptId: unknown,
+    options: { dispatchFulfillment?: boolean } = {},
   ): Promise<RecordedPaymentEvidence> {
     if (
       typeof paymentAttemptId !== "string" ||
@@ -849,7 +853,17 @@ export class ProductionPaymentDeliveryApplication {
       }
       throw asM2RuntimeError(error, "PAYMENT_RECONCILIATION_UNKNOWN");
     }
-    return this.verifyStripeEvidence(evidence);
+    return this.verifyStripeEvidence(
+      evidence,
+      options.dispatchFulfillment ?? true,
+    );
+  }
+
+  async dispatchFulfillmentJob(jobId: unknown) {
+    if (typeof jobId !== "string" || !internalUuidPattern.test(jobId)) {
+      throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_INVALID", 400);
+    }
+    return this.requestFulfillmentDispatch(jobId);
   }
 
   private async processClaimedFulfillmentJob(
@@ -955,63 +969,14 @@ export class ProductionPaymentDeliveryApplication {
     jobId: string,
     requireRouterAcceptance = false,
   ) {
-    const now = this.now();
-    const ownerId = this.uuid();
-    const dispatchMarker = `rc2-dispatch:${jobId}`;
-    const claim = await this.options.repository.claimFulfillmentDispatch({
+    await requestProductionFulfillmentDispatch({
+      repository: this.options.repository,
+      dispatcher: this.options.fulfillmentDispatcher,
       jobId,
-      dispatchMarker,
-      ownerId,
-      leaseExpiresAt: addSeconds(now, 30),
-      now,
+      now: this.now,
+      uuid: this.uuid,
+      requireRouterAcceptance,
     });
-    if (!claim || claim.disposition === "retry_later") {
-      throw new M2RuntimeError("PAYMENT_FULFILLMENT_DISPATCH_RETRYABLE", 503);
-    }
-    if (claim.disposition !== "acquired") {
-      if (
-        requireRouterAcceptance &&
-        claim.disposition === "in_progress"
-      ) {
-        throw new M2RuntimeError(
-          "PAYMENT_FULFILLMENT_DISPATCH_IN_PROGRESS",
-          503,
-        );
-      }
-      return;
-    }
-    let routerAccepted = false;
-    try {
-      await this.options.fulfillmentDispatcher.enqueue(jobId);
-      routerAccepted = true;
-      await this.options.repository.completeFulfillmentDispatch({
-        jobId,
-        dispatchMarker,
-        ownerId,
-        now: this.now(),
-      });
-    } catch (error) {
-      const safe = asM2RuntimeError(
-        error,
-        "PAYMENT_FULFILLMENT_DISPATCH_FAILED",
-      );
-      if (!routerAccepted) {
-        try {
-          const failedAt = this.now();
-          await this.options.repository.failFulfillmentDispatch({
-            jobId,
-            dispatchMarker,
-            ownerId,
-            errorCode: safe.safeCode,
-            retryAfter: addSeconds(failedAt, 30),
-            now: failedAt,
-          });
-        } catch {
-          // A stale dispatch owner cannot overwrite the current fencing token.
-        }
-      }
-      throw safe;
-    }
   }
 
   private async discloseCompletedResult(

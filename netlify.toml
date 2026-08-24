@@ -4,3 +4,9 @@
     "ai/schemas/**",
     "lib/assessment/runtime/contracts/**",
   ]
+
+[functions."production-fulfillment-dispatch-scheduled"]
+  schedule = "* * * * *"
+
+[functions."production-payment-reconciliation-scheduled"]
+  schedule = "*/5 * * * *"

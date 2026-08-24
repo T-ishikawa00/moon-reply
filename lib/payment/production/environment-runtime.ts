@@ -16,6 +16,11 @@ export type PaymentDeliveryEnvironment = Readonly<{
   fulfillmentLeaseSeconds: number;
 }>;
 
+export type ProductionSchedulerDatabaseEnvironment = Readonly<{
+  supabaseUrl: string;
+  supabaseSecretKey: string;
+}>;
+
 function enabled(name: string) {
   return process.env[name] === "true";
 }
@@ -107,6 +112,13 @@ export function readPaymentDeliveryEnvironment(): PaymentDeliveryEnvironment {
       30,
       3_600,
     ),
+  };
+}
+
+export function readProductionSchedulerDatabaseEnvironment(): ProductionSchedulerDatabaseEnvironment {
+  return {
+    supabaseUrl: required("SUPABASE_URL"),
+    supabaseSecretKey: required("SUPABASE_SECRET_KEY"),
   };
 }
 

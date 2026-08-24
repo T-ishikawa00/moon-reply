@@ -54,6 +54,9 @@ const ea4RuntimeVerifier = read(
   "scripts/verify-m1-4-background-fulfillment-expand-ea4-runtime.mjs",
 );
 const paymentApplication = read("lib/payment/production/application.ts");
+const fulfillmentDispatch = read(
+  "lib/payment/production/fulfillment-dispatch.ts",
+);
 const paymentRepository = read("lib/payment/production/supabase-repository.ts");
 const lifecycleApplication = read("lib/assessment/production/application.ts");
 const lifecycleRepository = read(
@@ -276,8 +279,9 @@ check("dispatch has idempotency, cooldown, lease, and fencing", () => {
   assert.match(migration, /dispatch_lease_expires_at timestamptz/u);
   assert.match(migration, /dispatch_retry_after timestamptz/u);
   assert.match(migration, /dispatch_attempt_count integer not null default 0/u);
-  assert.match(paymentApplication, /claimFulfillmentDispatch/u);
-  assert.match(paymentApplication, /completeFulfillmentDispatch/u);
+  assert.match(paymentApplication, /requestProductionFulfillmentDispatch/u);
+  assert.match(fulfillmentDispatch, /claimFulfillmentDispatch/u);
+  assert.match(fulfillmentDispatch, /completeFulfillmentDispatch/u);
   const jobFailure = migration.slice(
     migration.indexOf("create function public.fail_rc2_fulfillment_job_v2"),
     migration.indexOf(

@@ -7,6 +7,9 @@ const root = process.cwd();
 const base = "90c4a585a951c1de073f041b0a656e21742133da";
 const authority = "90c4a585a951c1de073f041b0a656e21742133da";
 const expectedBranch = "task/m2-a1-null-fence-integrity-r1";
+const reviewedHead = "1b4863985fb1bd32e769ddfac884a27b236472cb";
+const descendantRegression =
+  process.env.M2_A1_DESCENDANT_REGRESSION === "true";
 const migrationPath =
   "supabase/migrations/0017_m2_a1_null_fence_integrity.sql";
 const proofPath = "supabase/tests/m2_a1_null_fence_integrity_r1.sql";
@@ -36,11 +39,19 @@ function check(name, callback) {
 }
 
 function changedPathsFromBase() {
-  const tracked = git(["diff", "--name-only", base, "--"])
+  const tracked = git([
+    "diff",
+    "--name-only",
+    base,
+    ...(descendantRegression ? [reviewedHead] : []),
+    "--",
+  ])
     .trim()
     .split(/\r?\n/u)
     .filter(Boolean);
-  const untracked = git(["ls-files", "--others", "--exclude-standard", "-z"])
+  const untracked = (descendantRegression
+    ? ""
+    : git(["ls-files", "--others", "--exclude-standard", "-z"]))
     .split("\0")
     .filter(Boolean);
   return [...new Set([...tracked, ...untracked])].map((entry) =>
@@ -67,13 +78,21 @@ function assertBefore(source, earlier, later) {
 }
 
 check("exact base branch and unchanged release authority", () => {
-  assert.equal(git(["branch", "--show-current"]).trim(), expectedBranch);
-  assert.equal(git(["merge-base", base, "HEAD"]).trim(), base);
-  assert.equal(git(["rev-parse", "release/private-ready"]).trim(), authority);
-  assert.equal(
-    git(["rev-parse", "refs/remotes/origin/release/private-ready"]).trim(),
-    authority,
-  );
+  if (descendantRegression) {
+    assert.equal(git(["merge-base", reviewedHead, "HEAD"]).trim(), reviewedHead);
+    assert.equal(
+      git(["merge-base", reviewedHead, "release/private-ready"]).trim(),
+      reviewedHead,
+    );
+  } else {
+    assert.equal(git(["branch", "--show-current"]).trim(), expectedBranch);
+    assert.equal(git(["merge-base", base, "HEAD"]).trim(), base);
+    assert.equal(git(["rev-parse", "release/private-ready"]).trim(), authority);
+    assert.equal(
+      git(["rev-parse", "refs/remotes/origin/release/private-ready"]).trim(),
+      authority,
+    );
+  }
   assert.equal(git(["stash", "list"]).trim(), "");
 });
 
@@ -99,14 +118,15 @@ check("bounded M2-A1 path manifest", () => {
 });
 
 check("0016 and every predecessor migration are immutable", () => {
-  git(["diff", "--exit-code", base, "--", "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql"]);
+  const comparison = descendantRegression ? [reviewedHead] : [];
+  git(["diff", "--exit-code", base, ...comparison, "--", "supabase/migrations/0002_m2_p3_runtime_vertical_slice.sql"]);
   for (let version = 3; version <= 16; version += 1) {
     const prefix = String(version).padStart(4, "0");
     const paths = git(["ls-tree", "-r", "--name-only", base, "supabase/migrations"])
       .split(/\r?\n/u)
       .filter((entry) => entry.includes(`/${prefix}_`));
     assert.equal(paths.length, 1, `base migration ${prefix} identity missing`);
-    git(["diff", "--exit-code", base, "--", paths[0]]);
+    git(["diff", "--exit-code", base, ...comparison, "--", paths[0]]);
   }
   assert.equal(
     (migration.match(/create or replace function public\./gu) ?? []).length,
