@@ -41,6 +41,12 @@ import {
 } from "@/lib/purchase/prepayment-safety-types-v1";
 import { trackClientMeasurement } from "@/lib/measurement/client";
 import {
+  beginGoogleAuthClientTiming,
+  completeGoogleAuthClientTiming,
+  readGoogleAuthLatencyTraceHeader,
+  type GoogleAuthClientTimingAnchor,
+} from "@/lib/measurement/auth-latency";
+import {
   buildPublicClarificationAnswerV1,
   classifyClarificationContinuationV1,
   isPublicClarificationTargetV1,
@@ -1015,6 +1021,8 @@ export function RequestForm({
   const requestStartedMeasured = useRef(false);
   const requestCompletedMeasured = useRef(false);
   const authEntryPendingRef = useRef(false);
+  const googleAuthClientTimingRef =
+    useRef<GoogleAuthClientTimingAnchor | null>(null);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -1616,6 +1624,21 @@ export function RequestForm({
     preparationCapability: string,
     flowKind: "google" | "email_otp",
   ) {
+    const googleClientTiming =
+      flowKind === "google"
+        ? googleAuthClientTimingRef.current ?? beginGoogleAuthClientTiming()
+        : null;
+    googleAuthClientTimingRef.current = null;
+    let googleTraceId: string | null = null;
+    let googleTimingCompleted = false;
+    const completeGoogleTiming = (outcome: "success" | "failed") => {
+      if (googleTimingCompleted) return;
+      googleTimingCompleted = true;
+      completeGoogleAuthClientTiming(googleClientTiming, {
+        traceId: googleTraceId,
+        outcome,
+      });
+    };
     if (flowKind === "email_otp") {
       const emailErrors = validateEmail(form);
       if (Object.keys(emailErrors).length > 0) {
@@ -1666,6 +1689,7 @@ export function RequestForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ csrfToken }),
         });
+        googleTraceId = readGoogleAuthLatencyTraceHeader(response);
         if (!response.ok) throw new Error("CUSTOMER_AUTH_GOOGLE_START_FAILED");
         const data = readResponseData(await response.json());
         if (
@@ -1678,6 +1702,7 @@ export function RequestForm({
         if (authorizationUrl.protocol !== "https:") {
           throw new Error("CUSTOMER_AUTH_GOOGLE_URL_INVALID");
         }
+        completeGoogleTiming("success");
         trackClientMeasurement("auth_start", { method: "google" });
         window.location.assign(authorizationUrl.toString());
         return;
@@ -1702,6 +1727,7 @@ export function RequestForm({
         otp: "",
       });
     } catch {
+      completeGoogleTiming("failed");
       setProductionFlow({
         status: "error",
         reason: "technical_failure",
@@ -2096,6 +2122,7 @@ export function RequestForm({
     try {
       await submitPhaseFour(authMethod);
     } finally {
+      if (authMethod === "google") googleAuthClientTimingRef.current = null;
       authEntryPendingRef.current = false;
       setAuthEntryPending(false);
     }
@@ -2105,6 +2132,7 @@ export function RequestForm({
     setCustomerAuthMethod(method);
     setErrors({});
     if (method === "google") {
+      googleAuthClientTimingRef.current = beginGoogleAuthClientTiming();
       void runPhaseFour(method);
       return;
     }

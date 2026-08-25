@@ -16,10 +16,12 @@ import {
 import type { CustomerAuthEnvironment } from "./environment";
 import type {
   CustomerAuthFlowKind,
+  CustomerAuthGoogleObserver,
   CustomerAuthIdentityV1,
   CustomerAuthProviderV1,
   CustomerIdentityRepository,
 } from "./types";
+import { observeCustomerAuthGoogleOperation } from "./observation";
 
 type Options = {
   repository: CustomerIdentityRepository;
@@ -28,6 +30,7 @@ type Options = {
   now?: () => string;
   uuid?: () => string;
   secret?: () => string;
+  monotonicNow?: () => number;
 };
 
 function addSeconds(instant: string, seconds: number) {
@@ -95,9 +98,23 @@ export class CustomerIdentityAuthApplicationV1 {
     return continuation;
   }
 
-  async startGoogle(input: { continuationToken: unknown; csrfToken: unknown }) {
-    await this.validateContinuation({ ...input, flowKind: "google" });
-    return this.options.provider.startGoogleOAuth();
+  async startGoogle(
+    input: { continuationToken: unknown; csrfToken: unknown },
+    observe?: CustomerAuthGoogleObserver,
+  ) {
+    await observeCustomerAuthGoogleOperation({
+      phase: "start_continuation",
+      observe,
+      now: this.options.monotonicNow,
+      operation: () =>
+        this.validateContinuation({ ...input, flowKind: "google" }),
+    });
+    return observeCustomerAuthGoogleOperation({
+      phase: "start_provider",
+      observe,
+      now: this.options.monotonicNow,
+      operation: () => this.options.provider.startGoogleOAuth(),
+    });
   }
 
   async requestEmailOtp(input: {
@@ -192,10 +209,24 @@ export class CustomerIdentityAuthApplicationV1 {
     continuationToken: unknown;
     csrfToken: unknown;
     code: string;
-  }) {
-    await this.validateContinuation({ ...input, flowKind: "google" });
-    const identity = await this.options.provider.exchangeGoogleCallback(input.code);
-    return this.bindIdentity({ ...input, identity });
+  }, observe?: CustomerAuthGoogleObserver) {
+    await observeCustomerAuthGoogleOperation({
+      phase: "callback_continuation",
+      observe,
+      now: this.options.monotonicNow,
+      operation: () =>
+        this.validateContinuation({ ...input, flowKind: "google" }),
+    });
+    const identity = await this.options.provider.exchangeGoogleCallback(
+      input.code,
+      observe,
+    );
+    return observeCustomerAuthGoogleOperation({
+      phase: "callback_binding",
+      observe,
+      now: this.options.monotonicNow,
+      operation: () => this.bindIdentity({ ...input, identity }),
+    });
   }
 
   async getFreshIdentity() {

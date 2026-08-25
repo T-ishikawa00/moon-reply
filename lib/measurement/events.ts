@@ -9,6 +9,33 @@ export const MEASUREMENT_EVENT_NAMES = [
   "purchase",
 ] as const;
 
+export const MEASUREMENT_AUTH_LATENCY_EVENT_NAME = "auth_latency" as const;
+
+export const GOOGLE_AUTH_LATENCY_PHASES = [
+  "client_start",
+  "google_start_security",
+  "google_start_continuation",
+  "google_start_provider",
+  "google_start_server",
+  "provider_roundtrip",
+  "google_callback_continuation",
+  "google_callback_exchange",
+  "google_callback_identity",
+  "google_callback_binding",
+  "google_callback_server",
+  "end_to_end",
+] as const;
+
+export const GOOGLE_AUTH_LATENCY_OUTCOMES = [
+  "success",
+  "failed",
+  "cancelled",
+  "unavailable",
+] as const;
+
+export const GOOGLE_AUTH_LATENCY_SCHEMA_VERSION = 1 as const;
+export const GOOGLE_AUTH_LATENCY_MAX_DURATION_MS = 600_000 as const;
+
 export const MEASUREMENT_PURCHASE_VALUE = 980 as const;
 export const MEASUREMENT_PURCHASE_CURRENCY = "JPY" as const;
 
@@ -27,9 +54,15 @@ export const MEASUREMENT_PAGE_AREAS = [
   "other",
 ] as const;
 
-export type MeasurementEventName = (typeof MEASUREMENT_EVENT_NAMES)[number];
+export type MeasurementEventName =
+  | (typeof MEASUREMENT_EVENT_NAMES)[number]
+  | typeof MEASUREMENT_AUTH_LATENCY_EVENT_NAME;
 export type MeasurementPageArea = (typeof MEASUREMENT_PAGE_AREAS)[number];
 export type MeasurementAuthMethod = "google" | "email_otp";
+export type GoogleAuthLatencyPhase =
+  (typeof GOOGLE_AUTH_LATENCY_PHASES)[number];
+export type GoogleAuthLatencyOutcome =
+  (typeof GOOGLE_AUTH_LATENCY_OUTCOMES)[number];
 export type MeasurementTransactionId = string & {
   readonly __measurementTransactionId: unique symbol;
 };
@@ -41,6 +74,14 @@ export type MeasurementPayloadByName = Readonly<{
   request_complete: Readonly<{ outcome: "purchase_ready" }>;
   auth_start: Readonly<{ method: MeasurementAuthMethod }>;
   auth_complete: Readonly<{ method: MeasurementAuthMethod }>;
+  auth_latency: Readonly<{
+    schemaVersion: typeof GOOGLE_AUTH_LATENCY_SCHEMA_VERSION;
+    method: "google";
+    traceId: string;
+    phase: GoogleAuthLatencyPhase;
+    durationMs: number;
+    outcome: GoogleAuthLatencyOutcome;
+  }>;
   checkout_start: Readonly<{ provider: "stripe" }>;
   purchase: Readonly<{
     transactionId: MeasurementTransactionId;
@@ -59,6 +100,7 @@ export type MeasurementEvent<
 }[Name];
 
 const transactionIdPattern = /^mrp_[A-Za-z0-9_-]{43}$/u;
+const authLatencyTraceIdPattern = /^mral_[A-Za-z0-9_-]{32}$/u;
 
 function exactObject(
   value: unknown,
@@ -129,6 +171,31 @@ function validateMeasurementPayload(
     case "auth_complete": {
       const value = exactObject(payload, ["method"]);
       if (!oneOf(value.method, ["google", "email_otp"] as const)) {
+        throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
+      }
+      return;
+    }
+    case "auth_latency": {
+      const value = exactObject(payload, [
+        "schemaVersion",
+        "method",
+        "traceId",
+        "phase",
+        "durationMs",
+        "outcome",
+      ]);
+      if (
+        value.schemaVersion !== GOOGLE_AUTH_LATENCY_SCHEMA_VERSION ||
+        value.method !== "google" ||
+        typeof value.traceId !== "string" ||
+        !authLatencyTraceIdPattern.test(value.traceId) ||
+        !oneOf(value.phase, GOOGLE_AUTH_LATENCY_PHASES) ||
+        typeof value.durationMs !== "number" ||
+        !Number.isSafeInteger(value.durationMs) ||
+        value.durationMs < 0 ||
+        value.durationMs > GOOGLE_AUTH_LATENCY_MAX_DURATION_MS ||
+        !oneOf(value.outcome, GOOGLE_AUTH_LATENCY_OUTCOMES)
+      ) {
         throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
       }
       return;

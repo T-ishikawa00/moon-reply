@@ -1,5 +1,17 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:BEGIN -->
+## Current handoff — M2-E1 Google Auth latency measurement
+
+- Authority: `release/private-ready@9571b28b199ff80fa956b64dad4b69d78ad40412`; task `task/m2-e1-google-auth-latency-measurement-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. AUTH-01/PERF-01 remain open measurement candidates; no bottleneck conclusion or Auth optimization exists.
+- T0→navigation-ready is one browser monotonic duration; start/callback subphases use their own server-request monotonic clocks; T2→T3 uses a bounded server-issued wall-time anchor. These are not summed across clocks.
+- Correlation is a random one-attempt 600-second measurement trace only. It carries no identity, continuation, Payment, content, URL, OAuth code, token, or arbitrary metadata and has no Auth authority.
+- `MEASUREMENT_ENABLED=false`; disabled adapter only; external telemetry, Production samples, real Google Auth, environment/config writes, deploy, DB change, and Publish are absent/unauthorized.
+- Remote DB remains exact 0002–0021, pending 0, unknown 0. D2/C1 inactive-state and all Payment/fulfillment/Support authority remain unchanged.
+- Evidence: `docs/m2/M2_E1_GOOGLE_AUTH_LATENCY_MEASUREMENT.md`.
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:END -->
+
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current handoff — M2-D2 Contact / Paid-failure Recovery Support
 

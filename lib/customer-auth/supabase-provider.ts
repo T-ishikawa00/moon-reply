@@ -6,10 +6,12 @@ import { M2RuntimeError } from "../assessment/runtime/errors";
 import { normalizeDeliveryEmail } from "../payment/production/crypto";
 import type {
   CustomerAuthIdentityV1,
+  CustomerAuthGoogleObserver,
   CustomerAuthProviderKind,
   CustomerAuthProviderV1,
   VerifiedDeliveryEmailSource,
 } from "./types";
+import { observeCustomerAuthGoogleOperation } from "./observation";
 
 function identityEmail(identityData: Record<string, unknown> | undefined) {
   const value = identityData?.email;
@@ -76,6 +78,7 @@ export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
     private readonly client: SupabaseClient,
     private readonly siteOrigin: string,
     private readonly supabaseUrl: string,
+    private readonly monotonicNow: () => number = () => performance.now(),
   ) {}
 
   async startGoogleOAuth() {
@@ -106,18 +109,38 @@ export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
     return { authorizationUrl: authorizationUrl.toString() };
   }
 
-  async exchangeGoogleCallback(code: string) {
+  async exchangeGoogleCallback(
+    code: string,
+    observe?: CustomerAuthGoogleObserver,
+  ) {
     if (!/^[A-Za-z0-9._~-]{16,2048}$/u.test(code)) {
       throw new M2RuntimeError("CUSTOMER_AUTH_CALLBACK_INVALID", 400);
     }
-    const { error } = await this.client.auth.exchangeCodeForSession(code);
-    if (error) throw new M2RuntimeError("CUSTOMER_AUTH_CALLBACK_INVALID", 403);
-    const identity = await this.getFreshIdentityFor(
-      "google_verified_identity",
-    );
-    if (!identity) {
-      throw new M2RuntimeError("CUSTOMER_AUTH_CALLBACK_INVALID", 403);
-    }
+    await observeCustomerAuthGoogleOperation({
+      phase: "callback_exchange",
+      observe,
+      now: this.monotonicNow,
+      operation: async () => {
+        const { error } = await this.client.auth.exchangeCodeForSession(code);
+        if (error) {
+          throw new M2RuntimeError("CUSTOMER_AUTH_CALLBACK_INVALID", 403);
+        }
+      },
+    });
+    const identity = await observeCustomerAuthGoogleOperation({
+      phase: "callback_identity",
+      observe,
+      now: this.monotonicNow,
+      operation: async () => {
+        const current = await this.getFreshIdentityFor(
+          "google_verified_identity",
+        );
+        if (!current) {
+          throw new M2RuntimeError("CUSTOMER_AUTH_CALLBACK_INVALID", 403);
+        }
+        return current;
+      },
+    });
     return identity;
   }
 

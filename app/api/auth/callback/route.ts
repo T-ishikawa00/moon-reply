@@ -14,6 +14,12 @@ import {
   requireCustomerAuthMethod,
 } from "@/lib/customer-auth/service";
 import { trackServerAuthComplete } from "@/lib/measurement/server";
+import {
+  clearServerGoogleAuthLatencyAnchor,
+  createServerGoogleAuthObserver,
+  readServerGoogleAuthLatencyAnchor,
+  recordServerGoogleAuthLatency,
+} from "@/lib/measurement/auth-latency-server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,25 +39,51 @@ function redirect(
 }
 
 export async function GET(request: NextRequest) {
+  const routeStartedAtMs = performance.now();
+  const receivedAtMs = Date.now();
+  const latencyAnchor = readServerGoogleAuthLatencyAnchor(
+    request,
+    receivedAtMs,
+  );
+  const finish = (
+    response: NextResponse,
+    outcome: "success" | "failed",
+  ) => {
+    clearServerGoogleAuthLatencyAnchor(response);
+    if (latencyAnchor !== null) {
+      recordServerGoogleAuthLatency(latencyAnchor, {
+        phase: "provider_roundtrip",
+        startedAtMs: latencyAnchor.issuedAtMs,
+        completedAtMs: receivedAtMs,
+        outcome,
+      });
+    }
+    recordServerGoogleAuthLatency(latencyAnchor, {
+      phase: "google_callback_server",
+      startedAtMs: routeStartedAtMs,
+      outcome,
+    });
+    return response;
+  };
   let siteOrigin: string;
   try {
     requireCustomerAuthMethod("google");
     const environment = readCustomerAuthEnvironment();
     siteOrigin = environment.siteOrigin;
   } catch {
-    return new NextResponse(null, {
+    return finish(new NextResponse(null, {
       status: 503,
       headers: {
         "Cache-Control": "private, no-store, no-cache, max-age=0, must-revalidate",
         "Referrer-Policy": "no-referrer",
         "X-Robots-Tag": "noindex, nofollow, noarchive",
       },
-    });
+    }), "failed");
   }
   const failed = () => {
     const response = redirect(siteOrigin, "/account?auth=failed");
     clearAuthContinuationCookies(response);
-    return response;
+    return finish(response, "failed");
   };
   try {
     const url = new URL(request.url);
@@ -68,12 +100,12 @@ export async function GET(request: NextRequest) {
       continuationToken,
       csrfToken,
       code,
-    });
+    }, createServerGoogleAuthObserver(latencyAnchor));
     trackServerAuthComplete("google");
     const response = redirect(siteOrigin, "/purchase/auth/continue");
     clearAuthCallbackCsrfCookie(response);
     issueAuthSessionCsrfCookie(response);
-    return response;
+    return finish(response, "success");
   } catch {
     return failed();
   }

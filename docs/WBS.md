@@ -1,5 +1,22 @@
 # WBS.md
 
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:BEGIN -->
+## M2-E1 Google Auth Latency Measurement
+
+Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; AUTH-01 `MEASUREMENT SOURCE CANDIDATE / OPTIMIZATION NOT STARTED`; PERF-01 `MEASUREMENT SOURCE CANDIDATE / PRODUCTION DATA NOT YET COLLECTED`.
+
+- [x] Start from exact `release/private-ready@9571b28b199ff80fa956b64dad4b69d78ad40412`; preserve `main`.
+- [x] Trace the exact continuation, Google start, provider journey, callback, fresh identity, ownership bind, and purchase-continuation call graph.
+- [x] Add an exact-object `auth_latency` schema and separate browser, server-request, provider aggregate, and callback phases without redefining `auth_start`/`auth_complete`.
+- [x] Use a random, non-authoritative, 600-second measurement trace and HttpOnly narrow-path anchor; no DB, URL, browser storage, identity, content, or secret correlation.
+- [x] Prove adapter/observer/parser/cookie failures cannot change Auth behavior and that invalid/over-bound telemetry is dropped.
+- [x] Prove synthetic 42-second/55-second paths without sleeping and privacy-scan every latency payload producer.
+- [ ] Human/ChatGPT source review.
+- [ ] Separately authorize an external adapter, exact Production activation/deploy, bounded collection, and evidence-led optimization. None is authorized by E1 source.
+
+Canonical evidence: `docs/m2/M2_E1_GOOGLE_AUTH_LATENCY_MEASUREMENT.md`.
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:END -->
+
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## M2-D2 Contact / Paid-failure Recovery Support
 

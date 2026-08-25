@@ -6,6 +6,24 @@ export type VerifiedDeliveryEmailSource =
   | "google_verified_identity"
   | "supabase_email_otp";
 
+export type CustomerAuthGoogleObservationPhase =
+  | "start_continuation"
+  | "start_provider"
+  | "callback_continuation"
+  | "callback_exchange"
+  | "callback_identity"
+  | "callback_binding";
+
+export type CustomerAuthGoogleObservation = Readonly<{
+  phase: CustomerAuthGoogleObservationPhase;
+  durationMs: number;
+  outcome: "success" | "failed";
+}>;
+
+export type CustomerAuthGoogleObserver = (
+  observation: CustomerAuthGoogleObservation,
+) => void;
+
 export type CustomerAuthIdentityV1 = Readonly<{
   customerUserId: string;
   verifiedEmail: string;
@@ -15,7 +33,10 @@ export type CustomerAuthIdentityV1 = Readonly<{
 
 export type CustomerAuthProviderV1 = {
   startGoogleOAuth(): Promise<{ authorizationUrl: string }>;
-  exchangeGoogleCallback(code: string): Promise<CustomerAuthIdentityV1>;
+  exchangeGoogleCallback(
+    code: string,
+    observe?: CustomerAuthGoogleObserver,
+  ): Promise<CustomerAuthIdentityV1>;
   requestEmailOtp(email: string): Promise<void>;
   verifyEmailOtp(input: {
     email: string;

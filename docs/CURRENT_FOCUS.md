@@ -1,5 +1,17 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:BEGIN -->
+## Current operational overlay — M2-E1 Google Auth latency measurement
+
+- E1 starts from exact `release/private-ready@9571b28b199ff80fa956b64dad4b69d78ad40412` on `task/m2-e1-google-auth-latency-measurement-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. AUTH-01 and PERF-01 are measurement source candidates only; optimization is not started and Production latency data has not been collected.
+- Source adds exact-object PII-free `auth_latency` phases with a random one-attempt trace and a maximum 600-second HttpOnly measurement anchor. Browser/server clocks are never subtracted; exact cross-clock T0→T4 remains intentionally unavailable rather than fabricated.
+- `MEASUREMENT_ENABLED=false` remains source default; only the disabled adapter exists. External telemetry, real Google Auth, deployment, Netlify config, DB change, and Production Publish are `0`/not authorized.
+- Remote DB remains exact `0002..0021`, pending `0`, unknown `0`; D2 source/local + remote DB PASS and inactive Support/C1 states are unchanged.
+
+Canonical evidence: `docs/m2/M2_E1_GOOGLE_AUTH_LATENCY_MEASUREMENT.md`.
+<!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:END -->
+
 <!-- M2-D2-CONTACT-PAID-FAILURE-RECOVERY:BEGIN -->
 ## Current operational overlay — M2-D2 Contact / Paid-failure Recovery Support
 
