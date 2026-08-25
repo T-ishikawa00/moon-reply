@@ -3,11 +3,11 @@
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
 ## Current handoff — M2-F1 + M2-F2 Customer Trust UX Closure
 
-- Authority: E3 accepted and integrated at `release/private-ready@60c4f6f6b592463c65815e7df87f19a56cf67751`; bounded task `task/m2-f1-f2-customer-trust-closure-r1`; `main` remains unchanged.
-- Status: F1/F2 SOURCE candidates pending Human/ChatGPT review; PROD-01 customer-trust and UX-01 post-payment-trust are source candidates; only the Purchase/Return ERR-01 slice is further addressed.
+- Authority: E3 accepted and integrated at `release/private-ready@60c4f6f6b592463c65815e7df87f19a56cf67751`; reviewed F1/F2 candidate is `task/m2-f1-f2-customer-trust-closure-r1@930b3552878189d33b48d95c83bebbf0ff658558` and the acceptance sync is the ff-only successor on `release/private-ready`; `main` remains unchanged.
+- Status: F1/F2 `Human/ChatGPT SOURCE PASS`; PROD-01 `CUSTOMER TRUST SOURCE READY`; UX-01 `POST-PAYMENT TRUST SOURCE READY`; the Purchase/Return ERR-01 slice is addressed while broader ERR-01 remains open.
 - F1: one shared final-payment panel presents exact 980/quantity/one-time/Stripe/AI/non-guarantee facts before `お支払いに進む`, with current legal/refund links adjacent.
 - F2: the strict existing status response and durable `paymentVerified` field alone drive three customer-safe milestones, no-repayment assurance, and bounded refresh/Account/feature-gated Support actions.
-- Payment/C1/D2/E1/E2/E3, migrations, dependencies, Next.js, DB, Production flags, external systems, and Published source are unchanged. No F1/F2 integration or deployment is authorized.
+- Payment/C1/D2/E1/E2/E3, migrations, dependencies, Next.js, DB, Production flags, external systems, and Published source are unchanged. Deployment and activation remain separately authorized.
 - Evidence: `docs/m2/M2_F1_F2_CUSTOMER_TRUST_CLOSURE.md`.
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:END -->
 

@@ -3,13 +3,14 @@
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
 ## M2-F1 + M2-F2 Customer Trust UX Closure
 
-Status: F1/F2 `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; PROD-01 `CUSTOMER TRUST SOURCE CANDIDATE`; UX-01 `POST-PAYMENT TRUST SOURCE CANDIDATE`; ERR-01 `PURCHASE/RETURN SLICE FURTHER ADDRESSED / NOT CLOSED`.
+Status: F1/F2 `Human/ChatGPT SOURCE PASS`; PROD-01 `CUSTOMER TRUST SOURCE READY`; UX-01 `POST-PAYMENT TRUST SOURCE READY`; ERR-01 `PURCHASE/RETURN SLICE ADDRESSED / BROADER ERR-01 REMAINS OPEN`.
 
 - [x] Start from E3-integrated exact `release/private-ready@60c4f6f6b592463c65815e7df87f19a56cf67751` with migration/dependency/Next.js changes zero.
 - [x] Put exact price, quantity, one-time terms, Stripe, AI, non-guarantee, and legal/refund links around one dominant Checkout action.
 - [x] Map every existing Return contract to honest payment/preparation/receipt milestones without fake progress or internal vocabulary.
 - [x] Preserve same-purchase recovery, Account fallback, D2 feature-gated Support, and zero Checkout restart after durable payment verification.
-- [ ] Obtain Human/ChatGPT SOURCE and Human visual review; do not integrate, deploy, activate, or start G1/G2 in this task.
+- [x] Obtain Human/ChatGPT SOURCE review for reviewed candidate `930b3552878189d33b48d95c83bebbf0ff658558`.
+- [ ] Human visual review, deployment, activation, and any later G1/G2 work remain separately authorized.
 
 Canonical evidence: `docs/m2/M2_F1_F2_CUSTOMER_TRUST_CLOSURE.md`.
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:END -->

@@ -2,17 +2,27 @@
 
 Status:
 
-- M2-F1: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
-- M2-F2: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
-- PROD-01: `CUSTOMER TRUST SOURCE CANDIDATE`
-- UX-01: `POST-PAYMENT TRUST SOURCE CANDIDATE`
-- ERR-01: `PURCHASE/RETURN SLICE FURTHER ADDRESSED — NOT CLOSED`
+- M2-F1: `Human/ChatGPT SOURCE PASS`
+- M2-F2: `Human/ChatGPT SOURCE PASS`
+- PROD-01: `CUSTOMER TRUST SOURCE READY`
+- UX-01: `POST-PAYMENT TRUST SOURCE READY`
+- ERR-01: `PURCHASE/RETURN SLICE ADDRESSED — BROADER ERR-01 REMAINS OPEN`
 
 Source base: `release/private-ready@60c4f6f6b592463c65815e7df87f19a56cf67751`
 
 Task branch: `task/m2-f1-f2-customer-trust-closure-r1`
 
-This is a source/local candidate. It is not Human visual acceptance, deployment, Production Publish, Payment activation, or Public Launch authority.
+Reviewed candidate: `930b3552878189d33b48d95c83bebbf0ff658558`
+
+This is accepted source evidence. It is not Human visual acceptance, deployment, Production Publish, Payment activation, or Public Launch authority.
+
+Historical pre-review disposition preserved for verifier lineage:
+
+- M2-F1: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+- M2-F2: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+- PROD-01: `CUSTOMER TRUST SOURCE CANDIDATE`
+- UX-01: `POST-PAYMENT TRUST SOURCE CANDIDATE`
+- ERR-01: `PURCHASE/RETURN SLICE FURTHER ADDRESSED — NOT CLOSED`
 
 ## 1. Pre-F1/F2 gap and authority inventory
 
