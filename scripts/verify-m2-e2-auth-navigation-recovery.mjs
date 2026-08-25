@@ -562,8 +562,11 @@ check("E1 detailed latency contract and Purchase Request instrumentation are unc
     "scripts/verify-m2-e1-google-auth-latency-measurement.mjs",
   ]);
   assert.equal(changed, "");
-  const accountRoutes = git(["status", "--short", "--", "app/api/auth/account"]);
-  assert.notEqual(accountRoutes, "");
+  const accountRoutes = [
+    git(["diff", "--name-only", acceptedAuthority, "--", "app/api/auth/account"]),
+    git(["status", "--short", "--", "app/api/auth/account"]),
+  ].join("\n");
+  assert.match(accountRoutes, /app\/api\/auth\/account/u);
   assert.doesNotMatch(
     [
       "app/api/auth/account/google/start/route.ts",
