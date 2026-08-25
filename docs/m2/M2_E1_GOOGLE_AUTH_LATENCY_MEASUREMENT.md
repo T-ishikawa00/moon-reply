@@ -57,12 +57,14 @@ Derived measurements:
 - `google_start_continuation`: durable continuation validation inside the application.
 - `google_start_provider`: Supabase OAuth-start call and authorization-URL validation.
 - `google_start_server`: T1 to the response-ready boundary.
-- `provider_roundtrip`: the server-issued T2 wall-time anchor to server callback receipt T3. This intentionally includes response delivery, browser navigation, Supabase, Google/user interaction, and callback delivery; it does not claim Google alone consumed the interval.
+- `provider_roundtrip`: the server-issued T2 wall-time anchor to server callback receipt T3. A valid, non-expired anchor at T3 records this phase as `success` because the measured journey has completed. Its outcome never inherits a later callback Auth failure. The interval intentionally includes response delivery, browser navigation, Supabase, Google/user interaction, and callback delivery; it does not claim Google alone consumed the interval.
 - `google_callback_continuation`: callback durable-continuation validation.
 - `google_callback_exchange`: exact `exchangeCodeForSession()` operation.
 - `google_callback_identity`: exact fresh `getUser()` plus verified-identity normalization operation.
 - `google_callback_binding`: exact ownership binding operation.
 - `google_callback_server`: T3 to T4.
+
+Failures after T3 remain represented by the applicable `google_callback_continuation`, `google_callback_exchange`, `google_callback_identity`, or `google_callback_binding` phase and by `google_callback_server: failed`. They do not retroactively change `provider_roundtrip` from `success` to `failed`.
 
 No duration subtracts a browser timestamp from a server timestamp. An exact T0→T4 single duration is deliberately **unavailable**: persisting T0 across the external navigation would conflict with the existing no-browser-storage Auth foundation, and summing independently measured browser/server phases would manufacture a cross-clock result. The schema reserves `end_to_end` for a future separately reviewed, same-clock mechanism, but E1 has no producer for it.
 
@@ -113,7 +115,9 @@ The E1 proof covers:
 - duplicate callback without an anchor;
 - exact-disabled mode with no measurement side effect;
 - unchanged start response body and authorization URL;
-- unchanged successful callback `303` under malformed measurement state.
+- unchanged successful callback `303` under malformed measurement state;
+- valid-anchor callback success with both `provider_roundtrip` and `google_callback_server` successful;
+- valid-anchor downstream callback Auth failure with `provider_roundtrip` still successful, `google_callback_server` failed, and the existing safe failure redirect unchanged.
 
 Measurement never reads or changes existing Auth cookies, OAuth state, rate-limit keys, continuation validity, callback destination, Customer ownership, session validity, Payment, fulfillment, Provider work, or Support state.
 

@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
         phase: "provider_roundtrip",
         startedAtMs: latencyAnchor.issuedAtMs,
         completedAtMs: receivedAtMs,
-        outcome,
+        outcome: "success",
       });
     }
     recordServerGoogleAuthLatency(latencyAnchor, {

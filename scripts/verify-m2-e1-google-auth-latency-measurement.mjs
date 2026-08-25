@@ -14,6 +14,8 @@ const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const routeState = {
   googleStarts: 0,
   googleCallbacks: 0,
+  failGoogleCallback: false,
+  latencyEvents: [],
   observations: [],
 };
 
@@ -32,11 +34,24 @@ export async function createCustomerIdentityAuthApplication() {
     async completeGoogleCallback(input, observe) {
       globalThis.routeState.googleCallbacks += 1;
       observe?.({ phase: "callback_continuation", durationMs: 2, outcome: "success" });
+      if (globalThis.routeState.failGoogleCallback) {
+        observe?.({ phase: "callback_exchange", durationMs: 11, outcome: "failed" });
+        throw new Error("SYNTHETIC_CALLBACK_AUTH_FAILURE");
+      }
       observe?.({ phase: "callback_exchange", durationMs: 11, outcome: "success" });
       observe?.({ phase: "callback_identity", durationMs: 5, outcome: "success" });
       observe?.({ phase: "callback_binding", durationMs: 4, outcome: "success" });
     },
   };
+}
+`)}`;
+const mockMeasurementServerUrl = `data:text/javascript,${encodeURIComponent(`
+export function isServerMeasurementEnabled() {
+  return process.env.MEASUREMENT_ENABLED === "true";
+}
+export function trackServerGoogleAuthLatency(input) {
+  globalThis.routeState.latencyEvents.push(input);
+  return { status: "accepted" };
 }
 `)}`;
 globalThis.routeState = routeState;
@@ -68,6 +83,12 @@ registerHooks({
     }
     if (specifier === "@/lib/customer-auth/service") {
       return { url: mockServiceUrl, shortCircuit: true };
+    }
+    if (
+      specifier === "./server" &&
+      context.parentURL?.endsWith("/lib/measurement/auth-latency-server.ts")
+    ) {
+      return { url: mockMeasurementServerUrl, shortCircuit: true };
     }
     const local = context.parentURL
       ? resolveLocalModule(specifier, context.parentURL)
@@ -589,6 +610,87 @@ await checkAsync("duplicate callback without an anchor adds no measurement autho
   assert.equal(response.status, 303);
   assert.equal(routeState.googleCallbacks, 2);
   assert.equal(latencyServer.readServerGoogleAuthLatencyAnchor(request), null);
+});
+
+await checkAsync("provider roundtrip and callback server both succeed on a successful callback", async () => {
+  const receivedAtMs = 1_800_000_042_000;
+  const issuedAtMs = receivedAtMs - 42_000;
+  const originalDateNow = Date.now;
+  routeState.latencyEvents.length = 0;
+  Date.now = () => receivedAtMs;
+  try {
+    const request = new NextRequest(`${internalOrigin}/api/auth/callback?code=provider-code`, {
+      headers: {
+        cookie: [
+          `moon_reply_auth_continuation=${"k".repeat(43)}`,
+          `moon_reply_auth_callback_csrf=${"q".repeat(43)}`,
+          `${latencyServer.GOOGLE_AUTH_LATENCY_COOKIE}=${traceId}.${issuedAtMs}`,
+        ].join("; "),
+      },
+    });
+    const response = await googleCallback(request);
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), `${canonicalOrigin}/purchase/auth/continue`);
+    assert.deepEqual(
+      routeState.latencyEvents.find((event) => event.phase === "provider_roundtrip"),
+      {
+        traceId,
+        phase: "provider_roundtrip",
+        durationMs: 42_000,
+        outcome: "success",
+      },
+    );
+    assert.equal(
+      routeState.latencyEvents.find((event) => event.phase === "google_callback_server")?.outcome,
+      "success",
+    );
+  } finally {
+    Date.now = originalDateNow;
+  }
+});
+
+await checkAsync("provider roundtrip stays successful when downstream callback Auth fails", async () => {
+  const failedTraceId = `mral_${"B".repeat(32)}`;
+  const receivedAtMs = 1_800_000_055_000;
+  const issuedAtMs = receivedAtMs - 55_000;
+  const originalDateNow = Date.now;
+  routeState.latencyEvents.length = 0;
+  routeState.failGoogleCallback = true;
+  Date.now = () => receivedAtMs;
+  try {
+    const request = new NextRequest(`${internalOrigin}/api/auth/callback?code=provider-code`, {
+      headers: {
+        cookie: [
+          `moon_reply_auth_continuation=${"k".repeat(43)}`,
+          `moon_reply_auth_callback_csrf=${"q".repeat(43)}`,
+          `${latencyServer.GOOGLE_AUTH_LATENCY_COOKIE}=${failedTraceId}.${issuedAtMs}`,
+        ].join("; "),
+      },
+    });
+    const response = await googleCallback(request);
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), `${canonicalOrigin}/account?auth=failed`);
+    assert.deepEqual(
+      routeState.latencyEvents.find((event) => event.phase === "provider_roundtrip"),
+      {
+        traceId: failedTraceId,
+        phase: "provider_roundtrip",
+        durationMs: 55_000,
+        outcome: "success",
+      },
+    );
+    assert.equal(
+      routeState.latencyEvents.find((event) => event.phase === "google_callback_exchange")?.outcome,
+      "failed",
+    );
+    assert.equal(
+      routeState.latencyEvents.find((event) => event.phase === "google_callback_server")?.outcome,
+      "failed",
+    );
+  } finally {
+    Date.now = originalDateNow;
+    routeState.failGoogleCallback = false;
+  }
 });
 
 check("T0 precedes continuation and T2 follows validated authorization response", () => {
