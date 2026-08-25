@@ -1,5 +1,16 @@
 # CODEX_HANDOFF.md
 
+<!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:BEGIN -->
+## Current handoff — M2-E3 Account / My Reports / Authenticated Result Recovery
+
+- Authority: exact base `release/private-ready@ba9fa78b69da62f9abd24b54fe2a3c850001d785`; task `task/m2-e3-account-my-reports-result-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Candidate status: M2-E3 `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; ACC-01 Account/My Reports and RES-01 authenticated result recovery are source candidates; ERR-01 is further addressed but not closed.
+- Existing authority remains exact: fresh `getUser()` supplies CustomerUserId; Account history uses one `resolve_customer_account_history_v1` read; results use exact owned delivery and verified canonical projection. No client CustomerUserId, body preview, or per-card result read exists.
+- Account presentation uses explicit Asia/Tokyo minute timestamps and state-only copy. Result recovery distinguishes fixed Login, privacy-safe unknown/not-owned not-found, and scoped infrastructure/DB/projection error without customer detail.
+- Migration and remote writes are `0`; remote DB exact `0002..0021`, pending `0`, unknown `0`. E2 Auth, E1 latency, D2 Support, legacy bearer result, Payment/fulfillment, Next.js, and all Production activation states remain unchanged.
+- Evidence: `docs/m2/M2_E3_ACCOUNT_MY_REPORTS_RESULT.md`.
+<!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:END -->
+
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
 ## Current handoff — M2-E2 Auth / Navigation / Recovery
 

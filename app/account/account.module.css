@@ -8,6 +8,7 @@
 .shell {
   width: min(760px, 100%);
   margin: 0 auto;
+  container-type: inline-size;
 }
 
 .eyebrow {
@@ -30,6 +31,23 @@
   background: #fffdf8;
 }
 
+.notice {
+  margin-bottom: 1.25rem;
+}
+
+.empty h2,
+.login h2 {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+}
+
+.empty p,
+.login p {
+  margin: 0 0 1rem;
+  line-height: 1.75;
+}
+
 .history {
   display: grid;
   gap: 1rem;
@@ -38,25 +56,102 @@
 }
 
 .item {
-  padding: 1.25rem;
+  min-width: 0;
+  padding: clamp(1.1rem, 4vw, 1.5rem);
   border: 1px solid #d8cdbc;
   border-radius: 0.75rem;
   background: #fffdf8;
 }
 
-.item dl {
-  display: grid;
-  grid-template-columns: 7rem 1fr;
-  gap: 0.5rem 1rem;
-  margin: 0 0 1rem;
+.cardHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
-.item dt {
-  color: #675d7b;
+.cardHeader > div {
+  min-width: 0;
 }
 
-.item dd {
+.cardHeader h2 {
+  margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.12rem, 4vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.dateLabel {
   margin: 0;
+  color: #675d7b;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.status {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #8d819e;
+  border-radius: 999px;
+  background: #f1ebf4;
+  color: #3f354d;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.summary {
+  margin: 0.9rem 0 0;
+  color: #51495a;
+  line-height: 1.75;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+  margin-top: 1.1rem;
+}
+
+.primaryAction,
+.secondaryAction,
+.empty > a,
+.login > a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.55rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+}
+
+.primaryAction,
+.empty > a,
+.login > a:not(.secondaryAction) {
+  border: 1px solid #332942;
+  background: #332942;
+  color: #fffdf8;
+}
+
+.secondaryAction {
+  border: 1px solid #8d819e;
+  background: transparent;
+  color: #332942;
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.empty > a:focus-visible,
+.login > a:focus-visible,
+.actions a:focus-visible,
+.actions button:focus-visible {
+  outline: 3px solid #d19b58;
+  outline-offset: 3px;
 }
 
 .actions {
@@ -65,4 +160,41 @@
   gap: 1rem;
   align-items: center;
   margin-top: 2rem;
+}
+
+.actions a,
+.actions button {
+  min-height: 44px;
+}
+
+@media (max-width: 420px) {
+  .page {
+    padding: 3.5rem 1rem;
+  }
+
+  .cardHeader {
+    flex-direction: column-reverse;
+    gap: 0.7rem;
+  }
+
+  .cardActions,
+  .cardActions a,
+  .empty a,
+  .login a {
+    width: 100%;
+  }
+}
+
+@container (max-width: 420px) {
+  .cardHeader {
+    flex-direction: column-reverse;
+    gap: 0.7rem;
+  }
+
+  .cardActions,
+  .cardActions a,
+  .empty a,
+  .login a {
+    width: 100%;
+  }
 }

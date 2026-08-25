@@ -3,6 +3,9 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { AccountLogoutButton } from "@/components/account/AccountLogoutButton";
+import { presentCustomerAccountHistory } from "@/lib/customer-auth/account-history";
+import { resolveCustomerAccountPage } from "@/lib/customer-auth/account-page-resolution";
+import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/account-service";
 import { AUTH_SESSION_CSRF_COOKIE } from "@/lib/customer-auth/cookies";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
 import { createCustomerIdentityAuthApplication } from "@/lib/customer-auth/service";
@@ -16,33 +19,31 @@ export const metadata: Metadata = {
   referrer: "no-referrer",
 };
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date(value));
-}
-
 export default async function AccountPage({
   searchParams,
 }: {
   searchParams: Promise<{ auth?: string }>;
 }) {
   const query = await searchParams;
-  let history = null;
-  if (isCustomerAuthFoundationEnabled()) {
-    try {
-      history = await (
-        await createCustomerIdentityAuthApplication()
-      ).listAccountHistory();
-    } catch {
-      history = null;
-    }
-  }
+  const authEnabled = isCustomerAuthFoundationEnabled();
+  const resolution = await resolveCustomerAccountPage({
+    authEnabled,
+    getSessionState: async () =>
+      (await createCustomerAccountAuthApplication()).getFreshSessionState(),
+    listHistory: async () =>
+      (await createCustomerIdentityAuthApplication()).listAccountHistory(),
+  });
+  const history =
+    resolution.state === "history"
+      ? presentCustomerAccountHistory(resolution.history)
+      : [];
   const cookieStore = await cookies();
   const sessionCsrf = cookieStore.get(AUTH_SESSION_CSRF_COOKIE)?.value ?? null;
   const supportEnabled = isCustomerSupportCasesEnabled();
+  const hasFreshSignedInState =
+    resolution.state === "history" ||
+    resolution.state === "empty" ||
+    resolution.state === "load_failed";
 
   return (
     <main className={styles.page}>
@@ -57,55 +58,77 @@ export default async function AccountPage({
             ログインを完了できませんでした。ログイン画面からもう一度お試しください。
           </p>
         ) : null}
-        {!isCustomerAuthFoundationEnabled() ? (
+        {resolution.state === "auth_unavailable" ? (
           <section className={styles.login}>
-            <h2>現在ログインを利用できません</h2>
-            <p>時間を置いてもう一度お試しください。</p>
-            <Link href="/login">ログイン画面へ</Link>
+            <h2>現在、ログイン状態を確認できません</h2>
+            <p>時間を置いて、もう一度ご確認ください。</p>
+            <Link className={styles.secondaryAction} href="/account">
+              もう一度確認する
+            </Link>
           </section>
-        ) : history === null ? (
+        ) : resolution.state === "signed_out" ? (
           <section className={styles.login}>
             <h2>ログインが必要です</h2>
             <p>Googleまたはメールでログインすると、過去の鑑定ノートを確認できます。</p>
             <Link href="/login">ログインする</Link>
           </section>
-        ) : history.length === 0 ? (
+        ) : resolution.state === "load_failed" ? (
+          <section className={styles.login}>
+            <h2>鑑定ノートの一覧を読み込めませんでした</h2>
+            <p>ログイン状態は確認できています。時間を置いて、もう一度ご確認ください。</p>
+            <Link className={styles.secondaryAction} href="/account">
+              もう一度確認する
+            </Link>
+          </section>
+        ) : resolution.state === "empty" ? (
           <section className={styles.empty}>
-            <h2>表示できる鑑定ノートはまだありません</h2>
-            <p>処理中または完了した購入がここに表示されます。</p>
+            <h2>まだ鑑定ノートはありません</h2>
+            <p>新しく依頼した鑑定ノートは、こちらから確認できます。</p>
+            <Link href="/request">新しく鑑定ノートを依頼する</Link>
           </section>
         ) : (
-          <ul className={styles.history}>
-            {history.map((item) => (
+          <ol className={styles.history} aria-label="鑑定ノート一覧">
+            {history.map((item, index) => (
               <li key={item.purchaseIntentId} className={styles.item}>
-                <dl>
-                  <dt>日付</dt>
-                  <dd>{formatDate(item.date)}</dd>
-                  <dt>内容</dt>
-                  <dd>鑑定ノート</dd>
-                  <dt>状態</dt>
-                  <dd>{item.state === "completed" ? "完了" : "処理中"}</dd>
-                </dl>
-                {item.state === "completed" && item.deliveryId ? (
-                  <Link href={`/account/results/${item.deliveryId}`}>
-                    鑑定ノートを開く
-                  </Link>
-                ) : null}
-                {supportEnabled ? (
-                  <Link
-                    href={`/contact?purchase=${encodeURIComponent(item.purchaseIntentId)}`}
-                  >
-                    この購入について問い合わせる
-                  </Link>
-                ) : null}
+                <article aria-labelledby={`account-note-${index}`}>
+                  <div className={styles.cardHeader}>
+                    <div>
+                      <p className={styles.dateLabel}>
+                        日付・時刻：
+                        <time dateTime={item.date}>{item.dateTimeLabel}</time>
+                      </p>
+                      <h2 id={`account-note-${index}`}>{item.title}</h2>
+                    </div>
+                    <span className={styles.status}>{item.statusLabel}</span>
+                  </div>
+                  <p className={styles.summary}>{item.summary}</p>
+                  <div className={styles.cardActions}>
+                    {item.canOpenResult && item.deliveryId !== null ? (
+                      <Link
+                        className={styles.primaryAction}
+                        href={`/account/results/${item.deliveryId}`}
+                      >
+                        鑑定ノートを開く
+                      </Link>
+                    ) : null}
+                    {supportEnabled ? (
+                      <Link
+                        className={styles.secondaryAction}
+                        href={`/contact?purchase=${encodeURIComponent(item.purchaseIntentId)}`}
+                      >
+                        この購入について問い合わせる
+                      </Link>
+                    ) : null}
+                  </div>
+                </article>
               </li>
             ))}
-          </ul>
+          </ol>
         )}
         <div className={styles.actions}>
           <Link href="/">月の返事へ戻る</Link>
           <Link href="/request">新しく鑑定ノートを依頼する</Link>
-          {history !== null && sessionCsrf ? (
+          {hasFreshSignedInState && sessionCsrf ? (
             <AccountLogoutButton csrfToken={sessionCsrf} />
           ) : null}
         </div>

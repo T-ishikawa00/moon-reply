@@ -1,5 +1,17 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:BEGIN -->
+## Current operational overlay — M2-E3 Account / My Reports / Authenticated Result Recovery
+
+- E3 starts from exact current authority `release/private-ready@ba9fa78b69da62f9abd24b54fe2a3c850001d785` on `task/m2-e3-account-my-reports-result-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273` and Published source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`.
+- Status is `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; ACC-01 is `ACCOUNT / MY REPORTS SOURCE CANDIDATE`; RES-01 is `AUTHENTICATED RESULT RECOVERY SOURCE CANDIDATE`; ERR-01 is `ACCOUNT/RESULT SLICE FURTHER ADDRESSED / NOT CLOSED`.
+- `/account` now distinguishes Auth unavailable, signed out, history-read failure, empty, and owned-history states; cards use strict four-field decoding, explicit Asia/Tokyo minute timestamps, state-only copy, one history read, and no consultation/result body.
+- `/account/results/[deliveryId]` remains fresh-identity + owned-delivery + canonical-projection authority. Signed-out recovery is fixed `/login`; unknown/not-owned is privacy-safe not-found; infrastructure/DB/projection failures remain observable through a safe scoped error boundary.
+- Migration count is `0`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. E2 Auth, E1 measurement, D2 Support, legacy result compatibility, Next.js 16.3.0, and all inactive Production flags remain unchanged.
+
+Canonical evidence: `docs/m2/M2_E3_ACCOUNT_MY_REPORTS_RESULT.md`.
+<!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:END -->
+
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
 ## Current operational overlay — M2-E2 Auth / Navigation / Recovery
 

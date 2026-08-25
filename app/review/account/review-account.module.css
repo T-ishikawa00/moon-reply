@@ -1,0 +1,56 @@
+.page {
+  min-width: 0;
+  padding: 3rem 1rem 5rem;
+  overflow: hidden;
+  background: #eee7dc;
+  color: #201d2b;
+}
+
+.header {
+  width: min(760px, 100%);
+  margin: 0 auto 2rem;
+}
+
+.header h1 {
+  margin: 0.4rem 0 0.7rem;
+  font-family: var(--font-serif), serif;
+}
+
+.header p:last-child {
+  line-height: 1.75;
+}
+
+.stack {
+  display: grid;
+  gap: 2rem;
+}
+
+.frame {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 1rem;
+  border: 1px dashed #8d819e;
+  background: #f6f1e8;
+  overflow: hidden;
+}
+
+.width320 {
+  width: 320px;
+}
+
+.width390 {
+  width: 390px;
+}
+
+.width1280 {
+  width: 1280px;
+}
+
+.viewportLabel {
+  margin: 0 0 0.75rem;
+  color: #675d7b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}

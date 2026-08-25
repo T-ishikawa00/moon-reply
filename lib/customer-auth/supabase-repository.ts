@@ -6,8 +6,8 @@ import { M2RuntimeError } from "../assessment/runtime/errors";
 import type { JsonValue } from "../assessment/runtime/types";
 import { decodeAndVerifyProductionCanonicalProjection } from "../assessment/production/canonical-delivery";
 import { isPrepaymentComputeBudgetEnabled } from "../assessment/production/prepayment-compute-policy";
+import { decodeCustomerAccountHistoryRow } from "./account-history";
 import type {
-  CustomerAccountHistoryItem,
   CustomerAuthContinuation,
   CustomerIdentityRepository,
   CustomerOwnedResult,
@@ -270,15 +270,7 @@ export class SupabaseCustomerIdentityRepositoryV1
       { p_customer_user_id: customerUserId },
     );
     if (error || !Array.isArray(data)) databaseFailure(error);
-    return data.map((value): CustomerAccountHistoryItem => {
-      const row = record(value);
-      return {
-        purchaseIntentId: string(row.purchase_intent_id),
-        deliveryId: nullableString(row.delivery_id),
-        date: string(row.created_at),
-        state: string(row.state) as CustomerAccountHistoryItem["state"],
-      };
-    });
+    return data.map(decodeCustomerAccountHistoryRow);
   }
 
   async resolveOwnedResult(input: Parameters<CustomerIdentityRepository["resolveOwnedResult"]>[0]): Promise<CustomerOwnedResult | null> {
