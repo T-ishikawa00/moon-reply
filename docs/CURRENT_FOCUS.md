@@ -3,10 +3,10 @@
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
 ## Current operational overlay — M2-E2 Auth / Navigation / Recovery
 
-- Current source authority is exact `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; E2 runs on bounded descendant `task/m2-e2-auth-navigation-recovery-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- E2 acceptance lineage starts from exact `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; reviewed source is `task/m2-e2-auth-navigation-recovery-r1@244f396067ba55c4d5d29e40bbee56e6434a62be`; this acceptance overlay is integrated only by the separately verified ff-only authority step. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-E1 is integrated and remains `Human/ChatGPT SOURCE PASS`: AUTH-01 measurement source is ready, optimization has not started, and PERF-01 Production data has not been collected.
-- M2-E2 status is `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Source now provides standalone Account Google/Email OTP login, a PII-free fresh-session probe, static-shell Login/My Reports navigation, minimal Account recovery copy, and local-scope logout refresh without changing the existing Purchase Auth authority.
-- E2 verifier is `32/32 PASS`; Production build is `38/38` with `/` and `/login` static; 320/390/1280 viewport smoke had horizontal overflow `0`. Remote DB remains exact `0002..0021`, pending `0`, unknown `0`; no E2 migration, Production deploy, Auth provider configuration, real login, or external operation is authorized.
+- M2-E2 is `Human/ChatGPT SOURCE PASS`: IA-01 is `AUTH/NAV SOURCE READY`; NAV-01 is `SOURCE READY`; AUTH-01 is `MEASUREMENT SOURCE READY / JOURNEY UX SOURCE READY / OPTIMIZATION NOT STARTED`; ERR-01 remains `PARTIALLY ADDRESSED / NOT CLOSED`.
+- E2 verifier is `36/36 PASS`; Production build is `38/38` with `/` and `/login` static; 320/390/1280 viewport smoke had horizontal overflow `0`. Google and Email provider-effecting starts require fixed coarse plus attempt-specific fences, while the current process-local `in_memory_seam` is not distributed/Public Launch protection and M2-C2/WAF remains open. Remote DB remains exact `0002..0021`, pending `0`, unknown `0`; no E2 migration, Production activation, provider configuration, real login, or E3 work is authorized.
 
 Canonical evidence: `docs/m2/M2_E2_AUTH_NAVIGATION_RECOVERY.md` (created by this task).
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:END -->

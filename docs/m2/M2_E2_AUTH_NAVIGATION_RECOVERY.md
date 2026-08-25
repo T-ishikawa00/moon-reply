@@ -1,16 +1,17 @@
 # M2-E2 — Auth / Navigation / Recovery
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `HUMAN/CHATGPT SOURCE PASS`
 
-- IA-01: `AUTH/NAV SOURCE CANDIDATE`
-- NAV-01: `SOURCE CANDIDATE`
-- AUTH-01: `MEASUREMENT SOURCE READY / JOURNEY UX SOURCE CANDIDATE / OPTIMIZATION NOT STARTED`
+- IA-01: `AUTH/NAV SOURCE READY`
+- NAV-01: `SOURCE READY`
+- AUTH-01: `MEASUREMENT SOURCE READY / JOURNEY UX SOURCE READY / OPTIMIZATION NOT STARTED`
 - ERR-01: `PARTIALLY ADDRESSED / NOT CLOSED`
 
 ## Authority and boundary
 
 - Source base: `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`
 - Task: `task/m2-e2-auth-navigation-recovery-r1`
+- Human/ChatGPT reviewed source: `244f396067ba55c4d5d29e40bbee56e6434a62be`
 - `main`: `61e33a10e195fad17e253a6b9719217e1992f273` (unchanged)
 - Published customer source: `0befd512219eb2897fb1edf969ad37d7e8c56b0d` (unchanged)
 - Remote DB: exact `0002..0021`, pending `0`, unknown `0`
@@ -18,7 +19,9 @@ Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
 - Production deploy, real Google login, real Email OTP, external telemetry, provider configuration, and Production Publish: `0`
 - External writes: Git only
 
-E2 changes source only. It does not integrate release authority, deploy, configure Auth, collect E1 telemetry, optimize Auth, activate Support/C1, or begin E3.
+Historical review transition: the source at reviewed HEAD entered review as `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`, with IA-01 `AUTH/NAV SOURCE CANDIDATE`. Those candidate labels are preserved as historical verifier evidence and are superseded by the current accepted disposition at the top of this document.
+
+This disposition accepts E2 source only. It does not establish a Production deploy, externally confirmed Google redirect configuration, real Google/Email OTP result, E1 Production telemetry, an Auth latency root cause or fix, Public Launch-grade abuse protection, Support/C1 activation, or E3 completion. Release integration is a separately verified ff-only action in the accepted authority lineage; deployment and activation remain separate.
 
 ## Pre-E2 source inventory and gap
 

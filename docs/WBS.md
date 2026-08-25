@@ -3,14 +3,16 @@
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
 ## M2-E2 Auth / Navigation / Recovery
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; IA-01 and NAV-01 are source candidates; AUTH-01 measurement source remains ready, journey UX is a source candidate, and optimization has not started; ERR-01 remains partially addressed.
+Status: `HUMAN/CHATGPT SOURCE PASS`; IA-01 is `AUTH/NAV SOURCE READY`; NAV-01 is `SOURCE READY`; AUTH-01 measurement and journey UX source are ready while optimization has not started; ERR-01 remains partially addressed and not closed.
 
 - [x] Start from exact `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; preserve `main` and remote DB exact `0002..0021`.
 - [x] Add standalone Account Google/Email OTP login with fresh Supabase identity and no preparation, purchase, ownership bind, or service-role DB authority.
 - [x] Add a PII-free fresh-session probe and static-shell state-aware global navigation.
 - [x] Preserve Purchase Auth and E1 latency semantics exactly; prove cross-lane isolation, cache safety, fixed redirects, and no migration.
 - [x] Add minimal Account recovery copy, logout navigation refresh, viewport/accessibility evidence, verifier, and canonical evidence.
-- [ ] Obtain Human/ChatGPT SOURCE review before any authority integration or deployment.
+- [x] Add fixed coarse plus attempt-specific provider-start fences; retain M2-C2/distributed/WAF protection as separate open work.
+- [x] Obtain Human/ChatGPT SOURCE review at exact source `244f396067ba55c4d5d29e40bbee56e6434a62be`.
+- [ ] Production deploy, provider redirect confirmation, real Google/Email OTP proof, Auth optimization, and E3 remain separately authorized.
 
 Canonical evidence: `docs/m2/M2_E2_AUTH_NAVIGATION_RECOVERY.md` (created by this task).
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:END -->

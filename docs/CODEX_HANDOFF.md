@@ -3,11 +3,12 @@
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
 ## Current handoff — M2-E2 Auth / Navigation / Recovery
 
-- Authority: exact `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; bounded task `task/m2-e2-auth-navigation-recovery-r1`; `main` unchanged at `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Authority lineage: exact integration base `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; reviewed task `task/m2-e2-auth-navigation-recovery-r1@244f396067ba55c4d5d29e40bbee56e6434a62be`; this acceptance overlay is the final task HEAD before the separately verified ff-only integration. `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - M2-E1 is integrated and remains `Human/ChatGPT SOURCE PASS`; no Production telemetry is active and no latency root cause or optimization is claimed.
-- M2-E2 is `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Standalone Account Auth uses publishable Supabase Auth plus fresh `getUser()`, a separate 600-second attempt cookie, fixed callbacks, and no preparation/ownership/Payment/Support mutation; Purchase continuation/binding authority remains byte-identical.
-- E2 verifier `32/32`, relevant source regressions, root/ingress typecheck/build, zero-warning lint, Production build `38/38`, and 320/390/1280 overflow smoke pass. Historical E1/Auth/I4 literal pins remain reported, not weakened.
-- Remote DB is exact `0002..0021`, pending `0`, unknown `0`. E2 requires no migration and authorizes no deploy, real Auth operation, provider configuration, or external write beyond normal task-branch Git work.
+- M2-E2 is `Human/ChatGPT SOURCE PASS`. IA-01 is `AUTH/NAV SOURCE READY`; NAV-01 is `SOURCE READY`; AUTH-01 is `MEASUREMENT SOURCE READY / JOURNEY UX SOURCE READY / OPTIMIZATION NOT STARTED`; ERR-01 remains `PARTIALLY ADDRESSED / NOT CLOSED`.
+- Standalone Account Auth uses publishable Supabase Auth plus fresh `getUser()`, a separate 600-second attempt cookie, fixed callbacks, and no preparation/ownership/Payment/Support mutation; Purchase continuation/binding authority remains byte-identical. Google/Email provider starts use fixed coarse plus attempt-specific fences; the process-local seam is not distributed protection and M2-C2/WAF remains open.
+- E2 verifier `36/36`, relevant source regressions, root/ingress typecheck/build, zero-warning lint, Production build `38/38`, and 320/390/1280 overflow smoke pass. Historical E1/Auth/I4 literal pins remain reported, not weakened.
+- Remote DB is exact `0002..0021`, pending `0`, unknown `0`. E2 requires no migration. Production Publish, real Auth, provider configuration, Auth optimization, telemetry activation, and E3 remain unauthorized.
 - Evidence: `docs/m2/M2_E2_AUTH_NAVIGATION_RECOVERY.md` (created by this task).
 <!-- M2-E2-AUTH-NAVIGATION-RECOVERY:END -->
 
