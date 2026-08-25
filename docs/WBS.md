@@ -3,7 +3,7 @@
 <!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:BEGIN -->
 ## M2-E3 Account / My Reports / Authenticated Result Recovery
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; ACC-01 `ACCOUNT / MY REPORTS SOURCE CANDIDATE`; RES-01 `AUTHENTICATED RESULT RECOVERY SOURCE CANDIDATE`; ERR-01 `ACCOUNT/RESULT SLICE FURTHER ADDRESSED / NOT CLOSED`.
+Status: `Human/ChatGPT SOURCE PASS`; ACC-01 `ACCOUNT / MY REPORTS SOURCE READY`; RES-01 `AUTHENTICATED RESULT RECOVERY SOURCE READY`; ERR-01 `ACCOUNT/RESULT SLICE ADDRESSED / BROADER ERR-01 REMAINS OPEN`.
 
 - [x] Start from exact `release/private-ready@ba9fa78b69da62f9abd24b54fe2a3c850001d785`; preserve `main`, Published source, and remote DB exact `0002..0021`.
 - [x] Strictly decode the existing four-field Account history projection; add no migration and no N+1 result fetch.
@@ -11,7 +11,7 @@ Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; ACC-01 `ACCOUNT / M
 - [x] Add privacy-safe JST minute titles, state-only summaries, deterministic newest-first sorting, and canonical completed-result CTAs.
 - [x] Split authenticated result recovery into fixed Login, privacy-safe not-found, and observable scoped internal-error paths.
 - [x] Preserve fresh Customer ownership, legacy bearer compatibility, D2 Support entry, E2 Auth, and E1 measurement byte boundaries.
-- [ ] Obtain Human/ChatGPT SOURCE review; authority integration, deploy, real Auth, F1/F2, and ERR-01 closure remain separately authorized.
+- [x] Obtain Human/ChatGPT SOURCE review; deploy, real Auth, F1/F2 acceptance, and broader ERR-01 closure remain separately authorized.
 
 Canonical evidence: `docs/m2/M2_E3_ACCOUNT_MY_REPORTS_RESULT.md`.
 <!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:END -->

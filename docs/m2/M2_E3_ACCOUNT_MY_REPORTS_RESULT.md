@@ -1,16 +1,18 @@
 # M2-E3 — Account / My Reports / Authenticated Result Recovery
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `Human/ChatGPT SOURCE PASS`
 
-- ACC-01: `ACCOUNT / MY REPORTS SOURCE CANDIDATE`
-- RES-01: `AUTHENTICATED RESULT RECOVERY SOURCE CANDIDATE`
-- ERR-01: `ACCOUNT/RESULT SLICE FURTHER ADDRESSED — NOT CLOSED`
+- ACC-01: `ACCOUNT / MY REPORTS SOURCE READY`
+- RES-01: `AUTHENTICATED RESULT RECOVERY SOURCE READY`
+- ERR-01: `ACCOUNT/RESULT SLICE ADDRESSED — BROADER ERR-01 REMAINS OPEN`
 - Source base: `release/private-ready@ba9fa78b69da62f9abd24b54fe2a3c850001d785`
 - Task branch: `task/m2-e3-account-my-reports-result-r1`
 - `main`: `61e33a10e195fad17e253a6b9719217e1992f273` (unchanged)
 - Published customer source: `0befd512219eb2897fb1edf969ad37d7e8c56b0d` (unchanged)
 
-This is source/local evidence, not Production deployment, Human visual acceptance, External Beta, or Public Launch authority.
+This accepted disposition is source evidence, not Production deployment, Human visual acceptance, External Beta, or Public Launch authority.
+
+Reviewed candidate disposition preserved as historical evidence: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; ACC-01 `ACCOUNT / MY REPORTS SOURCE CANDIDATE`; RES-01 `AUTHENTICATED RESULT RECOVERY SOURCE CANDIDATE`; ERR-01 `ACCOUNT/RESULT SLICE FURTHER ADDRESSED — NOT CLOSED`.
 
 ## 1. Pre-E3 gap
 
@@ -130,7 +132,6 @@ External writes in E3 are Git task-branch commit/push only. Remote DB write, mig
 
 ## 12. Remaining work
 
-- Human/ChatGPT independent SOURCE review and any requested correction;
 - later authority integration/deploy and real authenticated revisit proof;
 - F2 broader post-payment/recovery state vocabulary;
 - ERR-01 remaining cross-flow failure vocabulary;
