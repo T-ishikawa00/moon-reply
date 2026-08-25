@@ -88,6 +88,15 @@ The separate `moon_reply_account_login_attempt` cookie is:
 
 Its value contains only a random opaque secret and issuance time. It proves the browser initiated the Account lane and supplies a server-owned rate-limit correlation key. It cannot authorize Account data, purchase, ownership, Payment, fulfillment, or Support. Same-origin enforcement protects start/email mutations; Supabase PKCE protects the provider exchange; fresh `getUser()` remains the identity authority; session CSRF remains required for logout and authenticated mutations.
 
+The attempt-specific fence is one correlation and abuse-control layer, but a Customer can discard that cookie. Both provider-effecting initiation routes therefore also claim an independent coarse route fence before invoking Supabase:
+
+- Google start: scope `account-google-start-global`, fixed code-owned key `account-google-start-global-v1`
+- Email OTP request: scope `account-email-otp-request-global`, fixed code-owned key `account-email-otp-request-global-v1`
+
+The coarse keys are constants; they are not derived from IP, forwarding headers, User-Agent, URL, email, Customer identity, or another request value. Deleting or omitting the attempt cookie therefore does not reset all source abuse fencing. The existing attempt-specific fence remains as the second condition.
+
+`in_memory_seam` is process-local and is not distributed or Public Launch-grade abuse authority. M2-C2, WAF/edge controls, distributed rate limiting, and provider-side/global spend ceilings remain separate work. E2 R1 closes only the trivial rotating-attempt bypass in its two new provider-effecting initiation routes.
+
 ## Purchase Auth isolation
 
 The accepted Purchase routes remain byte-identical to the E2 base:
@@ -167,11 +176,11 @@ Human visual review and any Production viewport proof remain separate from sourc
 
 ## Verification disposition
 
-The dedicated E2 verifier covers the 25 required contract families plus route-level adversarial cases: fixed redirects, invalid origin/body, missing/expired attempt, email verification without attempt, fresh session states, Purchase-lane byte identity, privacy scans, static-shell proof, and migration/dependency non-change.
+The dedicated E2 verifier covers the 25 required contract families plus route-level adversarial cases: fixed redirects, invalid origin/body, missing/expired attempt, email verification without attempt, fresh session states, Purchase-lane byte identity, privacy scans, static-shell proof, migration/dependency non-change, normal cookie preservation, and repeated provider-effecting requests that discard every newly issued attempt cookie. With a low synthetic limit, both initiation routes return `429` at the coarse fence and their provider fake counters stop increasing.
 
 Current source/local results:
 
-- E2 dedicated verifier: `32/32 PASS`.
+- E2 dedicated verifier: `36/36 PASS`.
 - D2 `28/28`, D1 `30/30`, C1 `8/8`, Auth Entry `11/11`, Product Intent `18/18`, Purchase Eligibility `9/9`, Clarification `7/7`, B1 descendant `15/15`, RC-1 `19/19`, RC-2 `50/50`, Background Durability `21/21`, Async graph/artifacts, Scheduled artifacts, runtime-assets, I1 descendant `15/15`, root/ingress typecheck, ingress build, zero-warning ESLint, and Production build: PASS.
 - Production build generated `38/38`; `/` and `/login` remain static, while only Account/session/Auth surfaces are dynamic as intended.
 - I1 initially observed a local artifact race because its read and the independent ingress build ran concurrently; the ingress build completed and the required ordered I1 descendant rerun passed `15/15`. This was local verification ordering, not product or authority failure.

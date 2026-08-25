@@ -19,6 +19,9 @@ import { readStrictJsonRequest } from "@/lib/http/strict-json-request";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const ACCOUNT_GOOGLE_START_GLOBAL_RATE_LIMIT_KEY =
+  "account-google-start-global-v1";
+
 function decode(value: unknown) {
   if (
     typeof value !== "object" ||
@@ -36,6 +39,10 @@ export async function POST(request: NextRequest) {
     const siteOrigin = readCustomerAuthSiteOrigin();
     enforceCustomerAuthSameOrigin(request, siteOrigin);
     decode(await readStrictJsonRequest(request, 256));
+    enforceCustomerAuthRateLimit(
+      "account-google-start-global",
+      ACCOUNT_GOOGLE_START_GLOBAL_RATE_LIMIT_KEY,
+    );
     const attempt = readAccountLoginAttempt(request) ?? createAccountLoginAttempt();
     enforceCustomerAuthRateLimit("account-google-start", attempt.secret);
     const outcome = await (await createCustomerAccountAuthApplication()).startGoogle();

@@ -19,6 +19,9 @@ import { readStrictJsonRequest } from "@/lib/http/strict-json-request";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const ACCOUNT_EMAIL_OTP_REQUEST_GLOBAL_RATE_LIMIT_KEY =
+  "account-email-otp-request-global-v1";
+
 function decode(value: unknown) {
   if (
     typeof value !== "object" ||
@@ -38,6 +41,10 @@ export async function POST(request: NextRequest) {
     const siteOrigin = readCustomerAuthSiteOrigin();
     enforceCustomerAuthSameOrigin(request, siteOrigin);
     const body = decode(await readStrictJsonRequest(request, 4_096));
+    enforceCustomerAuthRateLimit(
+      "account-email-otp-request-global",
+      ACCOUNT_EMAIL_OTP_REQUEST_GLOBAL_RATE_LIMIT_KEY,
+    );
     const attempt = readAccountLoginAttempt(request) ?? createAccountLoginAttempt();
     enforceCustomerAuthRateLimit("account-email-otp-request", attempt.secret);
     await (await createCustomerAccountAuthApplication()).requestEmailOtp(body.email);

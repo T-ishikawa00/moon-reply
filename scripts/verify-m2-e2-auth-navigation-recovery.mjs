@@ -400,6 +400,116 @@ await checkAsync("standalone Email OTP keeps email and OTP in strict POST bodies
   assert.match(verifyResponse.headers.get("set-cookie") ?? "", /moon_reply_auth_session_csrf=/u);
 });
 
+check("provider-effecting Account starts have fixed coarse and attempt-specific fences", () => {
+  const google = text("app/api/auth/account/google/start/route.ts");
+  const email = text("app/api/auth/account/email-otp/request/route.ts");
+
+  assert.match(
+    google,
+    /const ACCOUNT_GOOGLE_START_GLOBAL_RATE_LIMIT_KEY =\s*"account-google-start-global-v1";/u,
+  );
+  assert.match(
+    google,
+    /enforceCustomerAuthRateLimit\(\s*"account-google-start-global",\s*ACCOUNT_GOOGLE_START_GLOBAL_RATE_LIMIT_KEY,\s*\);[\s\S]*?enforceCustomerAuthRateLimit\("account-google-start", attempt\.secret\);[\s\S]*?\.startGoogle\(\)/u,
+  );
+  assert.match(
+    email,
+    /const ACCOUNT_EMAIL_OTP_REQUEST_GLOBAL_RATE_LIMIT_KEY =\s*"account-email-otp-request-global-v1";/u,
+  );
+  assert.match(
+    email,
+    /enforceCustomerAuthRateLimit\(\s*"account-email-otp-request-global",\s*ACCOUNT_EMAIL_OTP_REQUEST_GLOBAL_RATE_LIMIT_KEY,\s*\);[\s\S]*?enforceCustomerAuthRateLimit\("account-email-otp-request", attempt\.secret\);[\s\S]*?\.requestEmailOtp\(body\.email\)/u,
+  );
+  assert.doesNotMatch(
+    `${google}\n${email}`,
+    /x-forwarded-for|cf-connecting-ip|user-agent|enforceCustomerAuthRateLimit\([^;]*(?:request\.url|body\.email)/iu,
+  );
+});
+
+await checkAsync("normal cookie-preserving provider-start flows remain available", async () => {
+  const googleFirst = await googleStart(postRequest("/api/auth/account/google/start", {}));
+  const googleAttempt = /moon_reply_account_login_attempt=([^;]+)/u.exec(
+    googleFirst.headers.get("set-cookie") ?? "",
+  )?.[1];
+  assert.equal(googleFirst.status, 200);
+  assert.ok(googleAttempt);
+  const googleSecond = await googleStart(
+    postRequest(
+      "/api/auth/account/google/start",
+      {},
+      `${attemptModule.ACCOUNT_LOGIN_ATTEMPT_COOKIE}=${googleAttempt}`,
+    ),
+  );
+  assert.equal(googleSecond.status, 200);
+
+  const emailFirst = await emailRequest(
+    postRequest("/api/auth/account/email-otp/request", { email: "user@example.com" }),
+  );
+  const emailAttempt = /moon_reply_account_login_attempt=([^;]+)/u.exec(
+    emailFirst.headers.get("set-cookie") ?? "",
+  )?.[1];
+  assert.equal(emailFirst.status, 200);
+  assert.ok(emailAttempt);
+  const emailSecond = await emailRequest(
+    postRequest(
+      "/api/auth/account/email-otp/request",
+      { email: "user@example.com" },
+      `${attemptModule.ACCOUNT_LOGIN_ATTEMPT_COOKIE}=${emailAttempt}`,
+    ),
+  );
+  assert.equal(emailSecond.status, 200);
+});
+
+await checkAsync("discarding Google attempt cookies cannot rotate past the coarse fence", async () => {
+  process.env.CUSTOMER_AUTH_RATE_LIMIT_MAX_REQUESTS = "5";
+  try {
+    const before = routeState.googleStarts;
+    const statuses = [];
+    for (let index = 0; index < 4; index += 1) {
+      const response = await googleStart(postRequest("/api/auth/account/google/start", {}));
+      statuses.push(response.status);
+    }
+    assert.deepEqual(statuses, [200, 200, 429, 429]);
+    assert.equal(routeState.googleStarts, before + 2);
+    const stoppedAt = routeState.googleStarts;
+    const blockedAgain = await googleStart(
+      postRequest("/api/auth/account/google/start", {}),
+    );
+    assert.equal(blockedAgain.status, 429);
+    assert.equal(routeState.googleStarts, stoppedAt);
+  } finally {
+    process.env.CUSTOMER_AUTH_RATE_LIMIT_MAX_REQUESTS = "1000";
+  }
+});
+
+await checkAsync("discarding Email attempt cookies cannot rotate past the coarse fence", async () => {
+  process.env.CUSTOMER_AUTH_RATE_LIMIT_MAX_REQUESTS = "5";
+  try {
+    const before = routeState.emailRequests;
+    const statuses = [];
+    for (let index = 0; index < 4; index += 1) {
+      const response = await emailRequest(
+        postRequest("/api/auth/account/email-otp/request", {
+          email: "user@example.com",
+        }),
+      );
+      statuses.push(response.status);
+    }
+    assert.deepEqual(statuses, [200, 200, 429, 429]);
+    assert.equal(routeState.emailRequests, before + 2);
+    const stoppedAt = routeState.emailRequests;
+    const blockedAgain = await emailRequest(
+      postRequest("/api/auth/account/email-otp/request", {
+        email: "user@example.com",
+      }),
+    );
+    assert.equal(blockedAgain.status, 429);
+    assert.equal(routeState.emailRequests, stoppedAt);
+  } finally {
+    process.env.CUSTOMER_AUTH_RATE_LIMIT_MAX_REQUESTS = "1000";
+  }
+});
+
 await checkAsync("Email verification without a current attempt mutates no Auth", async () => {
   const before = routeState.emailVerifications;
   const response = await emailVerify(
