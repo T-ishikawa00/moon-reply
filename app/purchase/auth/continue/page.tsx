@@ -56,12 +56,6 @@ export default async function AuthenticatedPurchaseContinuationPage() {
           入力内容をAIが整理・分析し、判断材料となる鑑定ノートを作成します。
           相手の本心、返信、復縁、未来、関係改善を断定・保証しません。
         </p>
-        <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
-          <Link href="/legal/terms">利用規約</Link>
-          <Link href="/legal/privacy">プライバシー</Link>
-          <Link href="/legal/refund">返金方針</Link>
-          <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
-        </nav>
         {prepaymentOutcome ? (
           <AuthenticatedPreparationContinuation
             initialOutcome={prepaymentOutcome}
@@ -70,6 +64,13 @@ export default async function AuthenticatedPurchaseContinuationPage() {
         ) : (
           <AuthenticatedCheckoutButton csrfToken={csrfToken} />
         )}
+        <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
+          <Link href="/legal/terms">利用規約</Link>
+          <Link href="/legal/privacy">プライバシー</Link>
+          <Link href="/legal/refund">返金方針</Link>
+          <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
+          <Link href="/legal/ai-disclosure">AI利用について</Link>
+        </nav>
       </section>
     </main>
   );

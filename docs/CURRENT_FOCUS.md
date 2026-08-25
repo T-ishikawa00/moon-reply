@@ -1,5 +1,16 @@
 # CURRENT_FOCUS.md
 
+<!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
+## Current operational overlay — M2-F1 + M2-F2 Customer Trust UX Closure
+
+- E3 was accepted and ff-only integrated at `release/private-ready@60c4f6f6b592463c65815e7df87f19a56cf67751`; F1/F2 runs from that exact authority on `task/m2-f1-f2-customer-trust-closure-r1`. `main` and Published source remain unchanged.
+- M2-F1 and M2-F2 are `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; PROD-01 is `CUSTOMER TRUST SOURCE CANDIDATE`; UX-01 is `POST-PAYMENT TRUST SOURCE CANDIDATE`; ERR-01 is `PURCHASE/RETURN SLICE FURTHER ADDRESSED / NOT CLOSED`.
+- One dominant purchase action is preceded by exact JPY980/quantity/one-time/Stripe/AI/non-guarantee facts. Return presentation maps only the existing strict server contract to customer-safe milestones and fixed recovery actions.
+- Checkout/Payment/fulfillment authority, C1, D2, E1/E2/E3, migrations, dependencies, Next.js, and all Production activation states are unchanged. Remote DB remains exact `0002..0021`, pending `0`, unknown `0`.
+
+Canonical evidence: `docs/m2/M2_F1_F2_CUSTOMER_TRUST_CLOSURE.md`.
+<!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:END -->
+
 <!-- M2-E3-ACCOUNT-MY-REPORTS-RESULT:BEGIN -->
 ## Current operational overlay — M2-E3 Account / My Reports / Authenticated Result Recovery
 

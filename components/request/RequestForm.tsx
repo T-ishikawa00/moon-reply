@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { PurchasePaymentPanel } from "@/components/payment/PurchasePaymentPanel";
 import {
   PrePaymentSafetyStop,
   type PrePaymentSafetyStopKind,
@@ -935,37 +936,14 @@ function LocalPurchaseConfirmation({
           value="相手の本心、返信、復縁、未来、関係改善を断定・保証しません。"
         />
       </dl>
-      <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
-        <Link href="/legal/terms">利用規約</Link>
-        <Link href="/legal/privacy">プライバシー</Link>
-        <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
-        <Link href="/legal/refund">返金方針</Link>
-        <Link href="/legal/ai-disclosure">AI利用について</Link>
-      </nav>
       {paymentEnabled ? (
-        <>
-          <div className="request-runtime-note" role="note">
-            <strong>税込980円の都度払いです。</strong>
-            <span>
-              自動更新や定期購入はありません。決済後は、保護された結果ページと確認済みメールで同じ鑑定ノートを受け取れます。
-            </span>
-          </div>
-          {checkoutError ? (
-            <p className="request-field-error" role="alert">
-              {checkoutError}
-            </p>
-          ) : null}
-          <button
-            type="button"
-            className="button button--primary request-checkout-button"
-            disabled={checkoutBusy || !verifiedEmail}
-            onClick={onCheckout}
-          >
-            {checkoutBusy
-              ? "安全な決済画面を準備しています"
-              : "980円を支払い、鑑定を申し込む"}
-          </button>
-        </>
+        <PurchasePaymentPanel
+          checkoutBusy={checkoutBusy}
+          checkoutDisabled={checkoutBusy || !verifiedEmail}
+          checkoutError={checkoutError}
+          checkoutAriaLabel="980円を支払い、鑑定を申し込む"
+          onCheckout={onCheckout}
+        />
       ) : (
         <>
           <div className="request-runtime-note" role="note">
@@ -977,6 +955,13 @@ function LocalPurchaseConfirmation({
           </button>
         </>
       )}
+      <nav className="request-purchase-links" aria-label="購入前に確認できる情報">
+        <Link href="/legal/terms">利用規約</Link>
+        <Link href="/legal/privacy">プライバシー</Link>
+        <Link href="/legal/tokushoho">特定商取引法に基づく表記</Link>
+        <Link href="/legal/refund">返金方針</Link>
+        <Link href="/legal/ai-disclosure">AI利用について</Link>
+      </nav>
       <button type="button" className="text-link" onClick={onEditEmail}>
         {customerAuthEnabled ? "ログイン方法を変更する" : "メールアドレスを修正する"}
       </button>

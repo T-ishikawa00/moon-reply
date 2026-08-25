@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PurchaseReturnStatus } from "@/components/payment/PurchaseReturnStatus";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
+import { isCustomerSupportCasesEnabled } from "@/lib/support/environment";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default async function PurchaseReturnPage({
       <PurchaseReturnStatus
         statusCapability={statusCapability}
         customerAuthEnabled={isCustomerAuthFoundationEnabled()}
+        supportEnabled={isCustomerSupportCasesEnabled()}
       />
     </main>
   );

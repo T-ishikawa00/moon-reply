@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { PurchasePaymentPanel } from "@/components/payment/PurchasePaymentPanel";
 import { trackClientMeasurement } from "@/lib/measurement/client";
 
 export function AuthenticatedCheckoutButton({
@@ -59,15 +60,15 @@ export function AuthenticatedCheckoutButton({
   }
 
   return (
-    <div>
-      {failed ? (
-        <p role="alert">
-          決済画面を準備できませんでした。料金は発生していません。時間を置いてお試しください。
-        </p>
-      ) : null}
-      <button type="button" disabled={busy} onClick={() => void startCheckout()}>
-        {busy ? "安全な決済画面を準備しています" : "980円を支払い、鑑定を申し込む"}
-      </button>
-    </div>
+    <PurchasePaymentPanel
+      checkoutBusy={busy}
+      checkoutDisabled={busy}
+      checkoutError={
+        failed
+          ? "決済画面を準備できませんでした。料金は発生していません。同じお申し込みのまま、もう一度お試しください。"
+          : null
+      }
+      onCheckout={() => void startCheckout()}
+    />
   );
 }

@@ -1,14 +1,37 @@
 import type { CustomerPurchaseStatus } from "./purchase-status-contract.ts";
 
+export type PurchaseProgressState = "complete" | "current" | "next";
+export type PurchaseProgress = readonly [
+  PurchaseProgressState,
+  PurchaseProgressState,
+  PurchaseProgressState,
+];
+
 export type PurchaseReturnPresentation = Readonly<{
   eyebrow: string;
   heading: string;
   body: string;
   assurance: string | null;
+  progress: PurchaseProgress;
+  detailHeading: string | null;
+  assurances: readonly string[];
   showManualRefresh: boolean;
   showCheckoutRestart: boolean;
   showAccountFallback: boolean;
+  showSupportFallback: boolean;
 }>;
+
+const paymentCurrent: PurchaseProgress = ["current", "next", "next"];
+const preparationCurrent: PurchaseProgress = ["complete", "current", "next"];
+const completedProgress: PurchaseProgress = ["complete", "complete", "complete"];
+
+function preparationAssurances(customerAuthEnabled: boolean) {
+  return [
+    "この画面を閉じても、同じお申し込みの処理は続きます。",
+    ...(customerAuthEnabled ? ["鑑定ノートはアカウントから確認できます。"] : []),
+    "完成したら確認済みのメールにもお知らせします。",
+  ] as const;
+}
 
 export function getPurchaseReturnPresentation(input: {
   status: CustomerPurchaseStatus;
@@ -30,10 +53,14 @@ export function getPurchaseReturnPresentation(input: {
       eyebrow: "鑑定が完成しました",
       heading: "鑑定ノートを開いています",
       body: "安全な受け取り先へ移動しています。",
-      assurance: null,
+      assurance: "追加のお支払いは必要ありません。",
+      progress: completedProgress,
+      detailHeading: "鑑定ノートが完成しました",
+      assurances: [],
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: false,
+      showSupportFallback: false,
     };
   }
 
@@ -43,9 +70,13 @@ export function getPurchaseReturnPresentation(input: {
       heading: "決済は完了していません",
       body: "料金は確定していません。再開する場合だけ、同じお申し込みの決済画面を開いてください。",
       assurance: null,
+      progress: paymentCurrent,
+      detailHeading: "お支払い手続きから再開できます",
+      assurances: [],
       showManualRefresh: false,
       showCheckoutRestart: true,
       showAccountFallback: false,
+      showSupportFallback: false,
     };
   }
 
@@ -55,9 +86,13 @@ export function getPurchaseReturnPresentation(input: {
       heading: "鑑定ノートが完成しました",
       body: "このブラウザでは受け取り権限を確認できませんでした。確認済みのメールをご確認ください。",
       assurance: "追加のお支払いは必要ありません。",
+      progress: completedProgress,
+      detailHeading: "確認済みのメールからお受け取りください",
+      assurances: [],
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: false,
+      showSupportFallback: false,
     };
   }
 
@@ -68,9 +103,13 @@ export function getPurchaseReturnPresentation(input: {
         heading: "お申し込みを個別に確認しています",
         body: "安全な確認が必要なため、この画面での自動確認は停止しています。",
         assurance: "追加のお支払いは必要ありません。",
+        progress: preparationCurrent,
+        detailHeading: "お申し込みの状態を確認します",
+        assurances: ["お支払い済みの同じお申し込みとして保存されています。"],
         showManualRefresh: false,
         showCheckoutRestart: false,
         showAccountFallback: accountRecovery,
+        showSupportFallback: true,
       };
     }
     return {
@@ -78,9 +117,13 @@ export function getPurchaseReturnPresentation(input: {
       heading: "お申し込みを個別に確認しています",
       body: "お支払いの確定をまだ確認できません。この画面から自動で追加決済を行うことはありません。",
       assurance: null,
+      progress: paymentCurrent,
+      detailHeading: "お支払い状況を確認します",
+      assurances: [],
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: accountRecovery,
+      showSupportFallback: true,
     };
   }
 
@@ -94,9 +137,13 @@ export function getPurchaseReturnPresentation(input: {
       heading: "鑑定ノートを準備しています",
       body: "この画面を閉じても大丈夫です。完成したらメールでもお知らせします。",
       assurance: "追加のお支払いは必要ありません。",
+      progress: preparationCurrent,
+      detailHeading: "鑑定ノートを準備中です",
+      assurances: preparationAssurances(customerAuthEnabled),
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: false,
+      showSupportFallback: false,
     };
   }
 
@@ -108,11 +155,15 @@ export function getPurchaseReturnPresentation(input: {
     return {
       eyebrow: "月の返事 / ご購入後の確認",
       heading: "決済を確認しています",
-      body: "画面を閉じずにお待ちください。同じお申し込みを安全に確認しています。",
+      body: "同じお申し込みのお支払い結果を安全に確認しています。追加のお支払い操作はせず、このままお待ちください。",
       assurance: null,
+      progress: paymentCurrent,
+      detailHeading: "お支払い結果を確認中です",
+      assurances: [],
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: false,
+      showSupportFallback: false,
     };
   }
 
@@ -130,8 +181,16 @@ export function getPurchaseReturnPresentation(input: {
     assurance: status.paymentVerified
       ? "追加のお支払いは必要ありません。"
       : null,
+    progress: status.paymentVerified ? preparationCurrent : paymentCurrent,
+    detailHeading: status.paymentVerified
+      ? "鑑定ノートの状態を確認します"
+      : "お支払い状況を確認します",
+    assurances: status.paymentVerified
+      ? ["お支払い済みの同じお申し込みとして保存されています。"]
+      : [],
     showManualRefresh: recoveryExhausted,
     showCheckoutRestart: false,
     showAccountFallback: accountRecovery,
+    showSupportFallback: recoveryExhausted,
   };
 }

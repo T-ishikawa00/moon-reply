@@ -7,14 +7,165 @@ import {
   type CustomerPurchaseStatus,
 } from "@/lib/payment/purchase-status-contract";
 import { PurchaseStatusPoller } from "@/lib/payment/purchase-status-poller";
-import { getPurchaseReturnPresentation } from "@/lib/payment/purchase-return-presentation";
+import {
+  getPurchaseReturnPresentation,
+  type PurchaseProgress,
+  type PurchaseProgressState,
+} from "@/lib/payment/purchase-return-presentation";
+
+function PurchaseProgressSteps({ states }: { states: PurchaseProgress }) {
+  const steps = ["お支払い確認", "鑑定ノート準備", "お受け取り"] as const;
+  const stateLabels: Record<PurchaseProgressState, string> = {
+    complete: "完了",
+    current: "現在",
+    next: "次",
+  };
+
+  return (
+    <ol className="purchase-return-progress" aria-label="お申し込みの現在地">
+      {steps.map((label, index) => {
+        const state = states[index];
+        return (
+          <li
+            key={label}
+            data-state={state}
+            aria-current={state === "current" ? "step" : undefined}
+          >
+            <span className="purchase-return-progress__mark" aria-hidden="true">
+              {state === "complete" ? "✓" : index + 1}
+            </span>
+            <span className="purchase-return-progress__copy">
+              <strong>{label}</strong>
+              <span>{stateLabels[state]}</span>
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export function PurchaseReturnStatusCard({
+  status,
+  requestFailed = false,
+  recoveryExhausted = false,
+  customerAuthEnabled,
+  supportEnabled = false,
+  checkoutRestarting = false,
+  checkoutRestartFailed = false,
+  onManualRefresh,
+  restartCheckout = () => undefined,
+}: {
+  status: CustomerPurchaseStatus;
+  requestFailed?: boolean;
+  recoveryExhausted?: boolean;
+  customerAuthEnabled: boolean;
+  supportEnabled?: boolean;
+  checkoutRestarting?: boolean;
+  checkoutRestartFailed?: boolean;
+  onManualRefresh?: () => void;
+  restartCheckout?: () => void;
+}) {
+  const presentation = getPurchaseReturnPresentation({
+    status,
+    requestFailed,
+    recoveryExhausted,
+    customerAuthEnabled,
+  });
+  const hasActions =
+    presentation.showManualRefresh ||
+    presentation.showAccountFallback ||
+    presentation.showCheckoutRestart ||
+    (presentation.showSupportFallback && supportEnabled);
+
+  return (
+    <section
+      className="purchase-return-card"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <p>{presentation.eyebrow}</p>
+      <h1>{presentation.heading}</h1>
+      <span>{presentation.body}</span>
+      {presentation.assurance ? (
+        <strong className="purchase-return-trust purchase-return-trust--verified">
+          {presentation.assurance}
+        </strong>
+      ) : null}
+
+      <PurchaseProgressSteps states={presentation.progress} />
+
+      {presentation.detailHeading ? (
+        <div className="purchase-return-status-detail">
+          <h2>{presentation.detailHeading}</h2>
+          {presentation.assurances.length > 0 ? (
+            <ul className="purchase-return-assurances">
+              {presentation.assurances.map((assurance) => (
+                <li key={assurance}>{assurance}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
+
+      {checkoutRestartFailed ? (
+        <p className="purchase-return-error" role="alert">
+          決済画面を再開できませんでした。同じお申し込みのまま、もう一度お試しください。
+        </p>
+      ) : null}
+
+      {hasActions ? (
+        <div className="purchase-return-actions">
+          {presentation.showManualRefresh ? (
+            <button
+              type="button"
+              className="button button--secondary"
+              onClick={onManualRefresh}
+            >
+              同じお申し込みを確認する
+            </button>
+          ) : null}
+          {presentation.showAccountFallback ? (
+            <Link href="/account" className="button button--primary">
+              私の鑑定ノートを確認する
+            </Link>
+          ) : null}
+          {presentation.showCheckoutRestart ? (
+            <>
+              <button
+                type="button"
+                className="button button--primary"
+                disabled={checkoutRestarting}
+                onClick={() => void restartCheckout()}
+              >
+                {checkoutRestarting
+                  ? "決済画面を準備しています…"
+                  : "同じお申し込みで決済を再開する"}
+              </button>
+              <Link href="/request" className="text-link">
+                相談内容からやり直す
+              </Link>
+            </>
+          ) : null}
+          {presentation.showSupportFallback && supportEnabled ? (
+            <Link href="/contact" className="text-link">
+              お問い合わせへ進む
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
 
 export function PurchaseReturnStatus({
   statusCapability,
   customerAuthEnabled,
+  supportEnabled,
 }: {
   statusCapability: string;
   customerAuthEnabled: boolean;
+  supportEnabled: boolean;
 }) {
   const [status, setStatus] = useState<CustomerPurchaseStatus>({
     status: "confirming_payment",
@@ -99,62 +250,17 @@ export function PurchaseReturnStatus({
     };
   }, [statusCapability]);
 
-  const presentation = getPurchaseReturnPresentation({
-    status,
-    requestFailed,
-    recoveryExhausted,
-    customerAuthEnabled,
-  });
   return (
-    <section
-      className="purchase-return-card"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      <p>{presentation.eyebrow}</p>
-      <h1>{presentation.heading}</h1>
-      <span>{presentation.body}</span>
-      {presentation.assurance ? (
-        <strong className="purchase-return-assurance">
-          {presentation.assurance}
-        </strong>
-      ) : null}
-      {presentation.showManualRefresh ? (
-        <button
-          type="button"
-          className="button button--secondary"
-          onClick={() => void pollerRef.current?.manualRefresh()}
-        >
-          同じお申し込みを確認する
-        </button>
-      ) : null}
-      {presentation.showAccountFallback ? (
-        <Link href="/account" className="button button--secondary">
-          私の鑑定ノートを確認する
-        </Link>
-      ) : null}
-      {presentation.showCheckoutRestart ? (
-        <>
-          {checkoutRestartFailed ? (
-            <p role="alert">
-              決済画面を再開できませんでした。時間を置いて、同じお申し込みからもう一度お試しください。
-            </p>
-          ) : null}
-          <button
-            type="button"
-            className="button button--primary"
-            disabled={checkoutRestarting}
-            onClick={() => void restartCheckout()}
-          >
-            {checkoutRestarting
-              ? "安全な決済画面を準備しています"
-              : "同じお申し込みで決済を再開する"}
-          </button>
-          <Link href="/request" className="button button--secondary">
-            相談内容からやり直す
-          </Link>
-        </>
-      ) : null}
-    </section>
+    <PurchaseReturnStatusCard
+      status={status}
+      requestFailed={requestFailed}
+      recoveryExhausted={recoveryExhausted}
+      customerAuthEnabled={customerAuthEnabled}
+      supportEnabled={supportEnabled}
+      checkoutRestarting={checkoutRestarting}
+      checkoutRestartFailed={checkoutRestartFailed}
+      onManualRefresh={() => void pollerRef.current?.manualRefresh()}
+      restartCheckout={restartCheckout}
+    />
   );
 }

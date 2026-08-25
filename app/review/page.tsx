@@ -26,6 +26,7 @@ const availableRoutes = [
   { route: "/review/request/unknown-error", title: "不明・エラー", description: "不明状態を通常扱いせず、安全に停止します。" },
   { route: "/review/request/confirmation/normal-001", title: "鑑定依頼メモ", description: "「このように受け取りました」と相談・関係・知りたいこと・文面・Safetyを一枚で確認します。" },
   { route: "/review/purchase/confirmation/normal-001", title: "購入前の最終確認", description: "税込980円の商品・相談・受け取り条件を、取引なしで最終確認します。" },
+  { route: "/review/purchase/trust/checkout", title: "F1/F2 Customer Trust", description: "購入前の決定面と購入後のserver-owned状態を、外部操作なしの固定fixtureで確認します。" },
   { route: "/legal", title: "法務・開示 審査ハブ", description: "固定事実、全ページ一覧、公開準備の未完了カテゴリを確認します。" },
   { route: "/legal/terms", title: "利用規約 審査表示", description: "規約ドラフトの条項順序とDecision状態を、拘束力のある条件に見せず確認します。" },
   { route: "/legal/privacy", title: "プライバシー 審査表示", description: "将来のdata planと現在の非送信挙動を区別して確認します。" },
