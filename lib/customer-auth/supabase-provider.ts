@@ -5,6 +5,7 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { M2RuntimeError } from "../assessment/runtime/errors";
 import { normalizeDeliveryEmail } from "../payment/production/crypto";
 import type {
+  CustomerAuthCallbackLane,
   CustomerAuthIdentityV1,
   CustomerAuthGoogleObserver,
   CustomerAuthProviderKind,
@@ -73,6 +74,15 @@ function normalizeUser(
   };
 }
 
+function isMissingAuthSession(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    error.name === "AuthSessionMissingError"
+  );
+}
+
 export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
   constructor(
     private readonly client: SupabaseClient,
@@ -81,11 +91,15 @@ export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
     private readonly monotonicNow: () => number = () => performance.now(),
   ) {}
 
-  async startGoogleOAuth() {
+  async startGoogleOAuth(callbackLane: CustomerAuthCallbackLane = "purchase") {
+    const callbackPath =
+      callbackLane === "account"
+        ? "/api/auth/account/callback"
+        : "/api/auth/callback";
     const { data, error } = await this.client.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${this.siteOrigin}/api/auth/callback`,
+        redirectTo: `${this.siteOrigin}${callbackPath}`,
         scopes: "openid email profile",
         skipBrowserRedirect: true,
       },
@@ -183,6 +197,20 @@ export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
 
   getFreshIdentity() {
     return this.getFreshIdentityFor();
+  }
+
+  async getFreshSessionState() {
+    try {
+      const { data, error } = await this.client.auth.getUser();
+      if (error) {
+        return isMissingAuthSession(error) ? "signed_out" : "unavailable";
+      }
+      if (!data.user) return "signed_out";
+      normalizeUser(data.user);
+      return "signed_in";
+    } catch {
+      return "unavailable";
+    }
   }
 
   async logout(scope: "local" | "global") {

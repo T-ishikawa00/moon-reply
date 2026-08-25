@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { announceCustomerAuthStateChanged } from "@/lib/customer-auth/browser-events";
+
 export function AccountLogoutButton({ csrfToken }: { csrfToken: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -20,7 +22,8 @@ export function AccountLogoutButton({ csrfToken }: { csrfToken: string }) {
         body: JSON.stringify({ csrfToken, scope: "local" }),
       });
       if (!response.ok) throw new Error("logout failed");
-      router.replace("/account");
+      announceCustomerAuthStateChanged();
+      router.replace("/login");
       router.refresh();
     } catch {
       setFailed(true);

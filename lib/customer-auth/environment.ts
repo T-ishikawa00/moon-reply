@@ -62,6 +62,17 @@ export function isCustomerAuthEmailOtpEnabled() {
   return isCustomerAuthFoundationEnabled() && enabled("CUSTOMER_AUTH_EMAIL_OTP_ENABLED");
 }
 
+export function readConfiguredCustomerSiteOrigin() {
+  return exactSiteOrigin(required("NEXT_PUBLIC_APP_URL"));
+}
+
+export function readCustomerAuthSiteOrigin() {
+  if (!isCustomerAuthFoundationEnabled()) {
+    throw new M2RuntimeError("CUSTOMER_AUTH_UNAVAILABLE", 404);
+  }
+  return readConfiguredCustomerSiteOrigin();
+}
+
 export function readCustomerAuthEnvironment(): CustomerAuthEnvironment {
   if (!isCustomerAuthFoundationEnabled()) {
     throw new M2RuntimeError("CUSTOMER_AUTH_UNAVAILABLE", 404);
@@ -71,7 +82,7 @@ export function readCustomerAuthEnvironment(): CustomerAuthEnvironment {
     throw new M2RuntimeError("CUSTOMER_AUTH_CONFIGURATION_INVALID", 503);
   }
   return {
-    siteOrigin: exactSiteOrigin(required("NEXT_PUBLIC_APP_URL")),
+    siteOrigin: readCustomerAuthSiteOrigin(),
     continuationTtlSeconds: boundedInteger(
       "CUSTOMER_AUTH_CONTINUATION_TTL_SECONDS",
       60,

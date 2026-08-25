@@ -1,5 +1,20 @@
 # WBS.md
 
+<!-- M2-E2-AUTH-NAVIGATION-RECOVERY:BEGIN -->
+## M2-E2 Auth / Navigation / Recovery
+
+Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`; IA-01 and NAV-01 are source candidates; AUTH-01 measurement source remains ready, journey UX is a source candidate, and optimization has not started; ERR-01 remains partially addressed.
+
+- [x] Start from exact `release/private-ready@b0bf81038a42178f032e0edb0572463e415dc086`; preserve `main` and remote DB exact `0002..0021`.
+- [x] Add standalone Account Google/Email OTP login with fresh Supabase identity and no preparation, purchase, ownership bind, or service-role DB authority.
+- [x] Add a PII-free fresh-session probe and static-shell state-aware global navigation.
+- [x] Preserve Purchase Auth and E1 latency semantics exactly; prove cross-lane isolation, cache safety, fixed redirects, and no migration.
+- [x] Add minimal Account recovery copy, logout navigation refresh, viewport/accessibility evidence, verifier, and canonical evidence.
+- [ ] Obtain Human/ChatGPT SOURCE review before any authority integration or deployment.
+
+Canonical evidence: `docs/m2/M2_E2_AUTH_NAVIGATION_RECOVERY.md` (created by this task).
+<!-- M2-E2-AUTH-NAVIGATION-RECOVERY:END -->
+
 <!-- M2-E1-GOOGLE-AUTH-LATENCY-MEASUREMENT:BEGIN -->
 ## M2-E1 Google Auth Latency Measurement
 

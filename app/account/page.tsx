@@ -11,7 +11,7 @@ import styles from "./account.module.css";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "アカウント | 月の返事",
+  title: "私の鑑定ノート | 月の返事",
   robots: { index: false, follow: false, noarchive: true },
   referrer: "no-referrer",
 };
@@ -47,26 +47,27 @@ export default async function AccountPage({
   return (
     <main className={styles.page}>
       <div className={styles.shell}>
-        <p className={styles.eyebrow}>PRIVATE ACCOUNT</p>
-        <h1>鑑定ノート</h1>
+        <p className={styles.eyebrow}>月の返事</p>
+        <h1>私の鑑定ノート</h1>
         <p className={styles.intro}>
           ご本人として確認できた鑑定ノートだけを表示します。
         </p>
         {query.auth === "failed" ? (
           <p className={styles.notice} role="alert">
-            ログインを完了できませんでした。依頼画面からもう一度お試しください。
+            ログインを完了できませんでした。ログイン画面からもう一度お試しください。
           </p>
         ) : null}
         {!isCustomerAuthFoundationEnabled() ? (
           <section className={styles.login}>
-            <h2>アカウント機能は準備中です</h2>
-            <p>現在はCustomer Authを有効化していません。</p>
+            <h2>現在ログインを利用できません</h2>
+            <p>時間を置いてもう一度お試しください。</p>
+            <Link href="/login">ログイン画面へ</Link>
           </section>
         ) : history === null ? (
           <section className={styles.login}>
             <h2>ログインが必要です</h2>
-            <p>購入へ進んだ依頼画面から、Googleまたはメールで続けてください。</p>
-            <Link href="/request">鑑定依頼へ</Link>
+            <p>Googleまたはメールでログインすると、過去の鑑定ノートを確認できます。</p>
+            <Link href="/login">ログインする</Link>
           </section>
         ) : history.length === 0 ? (
           <section className={styles.empty}>
@@ -103,6 +104,7 @@ export default async function AccountPage({
         )}
         <div className={styles.actions}>
           <Link href="/">月の返事へ戻る</Link>
+          <Link href="/request">新しく鑑定ノートを依頼する</Link>
           {history !== null && sessionCsrf ? (
             <AccountLogoutButton csrfToken={sessionCsrf} />
           ) : null}

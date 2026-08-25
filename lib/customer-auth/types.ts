@@ -2,6 +2,8 @@ import type { CustomerAssessmentExperienceProjectionV2 } from "../assessment/run
 
 export type CustomerAuthFlowKind = "google" | "email_otp";
 export type CustomerAuthProviderKind = "google" | "email";
+export type CustomerAuthCallbackLane = "purchase" | "account";
+export type CustomerAuthSessionState = "signed_in" | "signed_out" | "unavailable";
 export type VerifiedDeliveryEmailSource =
   | "google_verified_identity"
   | "supabase_email_otp";
@@ -32,7 +34,9 @@ export type CustomerAuthIdentityV1 = Readonly<{
 }>;
 
 export type CustomerAuthProviderV1 = {
-  startGoogleOAuth(): Promise<{ authorizationUrl: string }>;
+  startGoogleOAuth(
+    callbackLane?: CustomerAuthCallbackLane,
+  ): Promise<{ authorizationUrl: string }>;
   exchangeGoogleCallback(
     code: string,
     observe?: CustomerAuthGoogleObserver,
@@ -43,6 +47,7 @@ export type CustomerAuthProviderV1 = {
     otp: string;
   }): Promise<CustomerAuthIdentityV1>;
   getFreshIdentity(): Promise<CustomerAuthIdentityV1 | null>;
+  getFreshSessionState(): Promise<CustomerAuthSessionState>;
   logout(scope: "local" | "global"): Promise<void>;
 };
 

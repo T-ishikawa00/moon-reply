@@ -29,6 +29,7 @@
     "verify:m2-d1": "node scripts/verify-m2-d1-customer-legal-current-truth.mjs",
     "verify:m2-d2": "node scripts/verify-m2-d2-contact-paid-failure-recovery-support.mjs",
     "verify:m2-e1": "node scripts/verify-m2-e1-google-auth-latency-measurement.mjs",
+    "verify:m2-e2": "node scripts/verify-m2-e2-auth-navigation-recovery.mjs",
     "verify:measurement-foundation": "node scripts/verify-measurement-foundation.mjs",
     "verify:m2-0": "node scripts/verify-m2-0-authority-critical-db-baseline.mjs",
     "verify:m2-a1": "node scripts/verify-m2-a1-null-fence-integrity.mjs",

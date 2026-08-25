@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { CustomerSessionNav } from "./CustomerSessionNav";
+
 const inPageLinks = [
   { href: "/#note", label: "鑑定ノート" },
   { href: "/#flow", label: "利用の流れ" },
@@ -30,6 +32,7 @@ export function SiteHeader() {
           <Link href="/sample-report" className="site-nav__link site-nav__sample">
             架空の見本
           </Link>
+          <CustomerSessionNav />
           <Link href="/request" className="site-nav__cta">
             鑑定ノートを依頼する
           </Link>

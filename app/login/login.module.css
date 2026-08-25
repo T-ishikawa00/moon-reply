@@ -1,0 +1,32 @@
+.page {
+  min-height: 72vh;
+  background: var(--paper-100);
+  padding: clamp(3.5rem, 9vw, 7rem) 1.25rem;
+  color: var(--ink-950);
+}
+
+.shell {
+  width: min(100%, 38rem);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--focus-ring-paper);
+  font-size: var(--type-metadata);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.shell h1 {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.45;
+}
+
+.intro {
+  margin: 0.75rem 0 0;
+  color: var(--ink-600);
+  font-size: var(--type-body-large);
+}

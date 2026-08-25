@@ -57,6 +57,10 @@ export class FakeCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
     return this.currentIdentity ? structuredClone(this.currentIdentity) : null;
   }
 
+  async getFreshSessionState() {
+    return this.currentIdentity === null ? "signed_out" as const : "signed_in" as const;
+  }
+
   async logout() {
     this.logoutCount += 1;
     this.currentIdentity = null;

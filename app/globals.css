@@ -353,6 +353,7 @@ summary::marker {
 .site-nav__link { color: var(--paper-300); }
 .site-nav__link:hover { background: color-mix(in srgb, var(--paper-50) 7%, transparent); color: var(--paper-50); }
 .site-nav__sample { border-left: 1px solid var(--border-night); margin-left: 0.25rem; padding-left: 1rem; }
+.site-nav__identity { color: var(--paper-50); white-space: nowrap; }
 .site-nav__cta { margin-left: 0.45rem; border: 1px solid var(--moon-400); background: var(--moon-500); color: var(--night-900); }
 .site-nav__cta:hover { background: var(--moon-400); }
 
@@ -1595,7 +1596,8 @@ summary::marker {
   .site-brand { align-self:flex-start; }
   .site-nav { flex-wrap:wrap; }
   .site-nav__anchors { display:none; }
-  .site-nav__sample { margin-left:0; border-left:0; padding-left:.8rem; }
+  .site-nav__sample { display:none; }
+  .site-nav__identity { margin-left:auto; }
   .site-nav__cta { margin-left:auto; }
   .hero__grid, .split-layout, .split-layout--preview, .price-layout, .safety-layout, .faq-layout { grid-template-columns:1fr; }
   .hero__grid { min-height:0; }

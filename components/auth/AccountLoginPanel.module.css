@@ -1,0 +1,104 @@
+.panel,
+.statusCard {
+  margin-top: 2rem;
+  border: 1px solid var(--border-paper);
+  border-radius: var(--radius-large);
+  background: var(--paper-50);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: var(--shadow-soft);
+}
+
+.panel h2,
+.statusCard h2 {
+  margin: 0;
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: var(--type-subsection-title);
+}
+
+.status,
+.statusCard p,
+.privacy {
+  color: var(--ink-600);
+}
+
+.methods,
+.form {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.methods button,
+.form button,
+.primaryLink,
+.secondaryLink {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--moon-600);
+  border-radius: var(--radius-small);
+  background: var(--moon-500);
+  padding: 0.75rem 1rem;
+  color: var(--night-900);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.methods button:disabled,
+.form button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.form label {
+  color: var(--ink-800);
+  font-weight: 800;
+}
+
+.form input {
+  min-height: 3rem;
+  border: 1px solid var(--border-paper);
+  border-radius: var(--radius-small);
+  background: #fff;
+  padding: 0.7rem 0.8rem;
+  color: var(--ink-950);
+  font: inherit;
+}
+
+.form .quietButton,
+.secondaryLink {
+  border-color: var(--border-paper);
+  background: transparent;
+  color: var(--focus-ring-paper);
+}
+
+.primaryLink,
+.secondaryLink {
+  width: fit-content;
+  margin-top: 1rem;
+}
+
+.notice {
+  margin: 1rem 0 0;
+  border-left: 3px solid var(--moon-600);
+  background: var(--paper-100);
+  padding: 0.8rem 1rem;
+  color: var(--ink-800);
+}
+
+.privacy {
+  margin: 1.25rem 0 0;
+  font-size: var(--type-small);
+}
+
+@media (max-width: 480px) {
+  .methods button,
+  .form button,
+  .primaryLink,
+  .secondaryLink {
+    width: 100%;
+  }
+}
