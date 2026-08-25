@@ -859,7 +859,7 @@ check("canonical evidence locks clocks, privacy, fail-isolation, and non-claims"
   assert.match(evidence, /exact T0→T4 single duration is deliberately \*\*unavailable\*\*/u);
 });
 
-check("current operational overlays identify E1 as a candidate only", () => {
+check("current operational overlays identify E1 as source accepted but inactive", () => {
   for (const relativePath of [
     "docs/CURRENT_FOCUS.md",
     "docs/WBS.md",
@@ -868,8 +868,15 @@ check("current operational overlays identify E1 as a candidate only", () => {
   ]) {
     const source = text(relativePath);
     assert.match(source, /M2-E1/u);
-    assert.match(source, /SOURCE CANDIDATE/u);
+    assert.match(source, /Human\/ChatGPT SOURCE PASS|HUMAN\/CHATGPT SOURCE PASS/u);
+    assert.match(source, /MEASUREMENT SOURCE READY/u);
+    assert.match(source, /OPTIMIZATION NOT STARTED/u);
+    assert.match(source, /PRODUCTION DATA NOT YET COLLECTED/u);
     assert.doesNotMatch(source, /M2-E1[^\n]*CLOSED/u);
+    assert.doesNotMatch(
+      source,
+      /(?:Google|Supabase|callback) (?:is|was|が)(?: the)? (?:latency )?bottleneck/iu,
+    );
   }
 });
 
