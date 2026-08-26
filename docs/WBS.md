@@ -1,5 +1,19 @@
 # WBS.md
 
+<!-- SEC-01-NEXT-16-3-3:BEGIN -->
+## SEC-01 Next.js 16.3.3 Security Patch
+
+Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
+
+- [x] Start from exact `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`; preserve `main`, Published source, and remote DB exact `0002..0021`.
+- [x] Independently verify stable `16.3.3`, GHSA-p293-qw3h-jr36 / CVE-2026-75604, GHSA-2xp9-vwfh-vxw4, peer requirements, and matching ESLint configuration.
+- [x] Pin exact `next@16.3.3` and `eslint-config-next@16.3.3`; keep React/React DOM `19.2.7`; bound the lockfile delta to the Next patch family.
+- [x] Complete SEC-01 verifier `20/20`, current direct functional regression, Async/scheduled/runtime artifacts, ingress/root build checks, zero-warning ESLint, Production build `48/48`, and audit; preserve and report historical literal-pin stops without weakening them.
+- [ ] Obtain Human/ChatGPT source review. Release integration, exact-source deploy, Production Publish, B2 activation, Self Dogfood, and External Beta remain separately authorized.
+
+Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`.
+<!-- SEC-01-NEXT-16-3-3:END -->
+
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
 ## M2-F1 + M2-F2 Customer Trust UX Closure
 

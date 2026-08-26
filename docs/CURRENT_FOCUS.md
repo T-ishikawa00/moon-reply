@@ -1,5 +1,16 @@
 # CURRENT_FOCUS.md
 
+<!-- SEC-01-NEXT-16-3-3:BEGIN -->
+## Current operational overlay — SEC-01 Next.js 16.3.3 Security Patch
+
+- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW` on `task/sec-01-next-16-3-3-r1`, based exactly on `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`.
+- Candidate framework baseline is exact `next@16.3.3` with matching `eslint-config-next@16.3.3`. React and React DOM remain `19.2.7`; SEC-01 verifier `20/20`, direct functional regressions, Async/scheduled/runtime artifacts, root/ingress typecheck/build, zero-warning ESLint, Production build `48/48`, and both audit scopes pass. Application, Payment/Auth/fulfillment/Account/Return, migration, environment, and Netlify configuration source is unchanged.
+- Current Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. Production is not claimed patched.
+- Human/ChatGPT review, release integration, exact-source deploy review, and Publish remain separate. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation is authorized.
+
+Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`.
+<!-- SEC-01-NEXT-16-3-3:END -->
+
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
 ## Current operational overlay — M2-F1 + M2-F2 Customer Trust UX Closure
 

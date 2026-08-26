@@ -1,5 +1,14 @@
 # CODEX_HANDOFF.md
 
+<!-- SEC-01-NEXT-16-3-3:BEGIN -->
+## Current handoff — SEC-01 Next.js 16.3.3 Security Patch
+
+- Authority: exact base `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`; candidate branch `task/sec-01-next-16-3-3-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Candidate pins exact `next@16.3.3` and `eslint-config-next@16.3.3`; React/React DOM remain `19.2.7`. SEC-01 verifier `20/20`, current direct functional suites, artifacts, typechecks/builds, zero-warning ESLint, Production build `48/48`, and both audit scopes pass; historical literal pins remain reported rather than weakened.
+- Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. Production patched, release integration, deploy, and Publish are not claimed.
+- Evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation is authorized by this candidate.
+<!-- SEC-01-NEXT-16-3-3:END -->
+
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
 ## Current handoff — M2-F1 + M2-F2 Customer Trust UX Closure
 

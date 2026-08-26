@@ -1,12 +1,14 @@
 # M2-0 Next.js Security Baseline
 
-Status: `prepared_waiting_for_official_patch`
+Status: `source_candidate_pending_human_chatgpt_review`
 
-Captured: `2026-08-23`
+Captured: `2026-08-23`; SEC-01 candidate overlay: `2026-08-26`
 
 No dependency, lockfile, Netlify configuration, deploy, or external state was changed by M2-0.
 
-## Exact current dependency/runtime baseline
+Current SEC-01 overlay: exact stable `next@16.3.3` and `eslint-config-next@16.3.3` are prepared on `task/sec-01-next-16-3-3-r1` as `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. React/React DOM remain `19.2.7`; Production patched, release integration, deploy, and Publish are not claimed. Canonical evidence is `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`.
+
+## Exact pre-patch dependency/runtime baseline
 
 | Surface | Exact resolved version / state |
 | --- | --- |
@@ -21,7 +23,7 @@ No dependency, lockfile, Netlify configuration, deploy, or external state was ch
 | Background runtime asset | `netlify/functions/production-fulfillment-background.mts` with the required `-background` suffix |
 | Netlify source asset/config | `netlify.toml` and `scripts/verify-m1-4-background-runtime-assets.mjs` are protected authority assets |
 
-The official Next.js blog announced on 2026-08-20 that a scheduled 2026-08-26 security release will provide patches for 16.3 and 15.5 and address one critical-severity vulnerability: <https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026>. Until the patch is published, the exact fixed version is unknown and must not be guessed.
+At the M2-0 capture on 2026-08-23, the official Next.js blog had announced a scheduled security release and the exact fixed version was still unknown: <https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026>. The later SEC-01 task independently reviewed the published stable `16.3.3` release and its two Critical advisories; the pre-publication instruction not to guess remains preserved as historical control evidence.
 
 ## Authority attack surface
 
