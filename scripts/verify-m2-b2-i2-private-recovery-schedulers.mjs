@@ -176,6 +176,60 @@ await check("0019 is reconciliation-only durable authority", async () => {
   );
 });
 
+await check("fulfillment due query binds the direct intent FK and preserves fences", async () => {
+  const repository = await readFile(
+    path.join(root, "lib/payment/production/supabase-repository.ts"),
+    "utf8",
+  );
+  const methodStart = repository.indexOf(
+    "async listDueFulfillmentDispatchJobIds(",
+  );
+  const methodEnd = repository.indexOf(
+    "async claimPaymentReconciliationBatch(",
+    methodStart,
+  );
+  assert.ok(methodStart >= 0);
+  assert.ok(methodEnd > methodStart);
+  const method = repository.slice(methodStart, methodEnd);
+  assert.doesNotMatch(
+    method,
+    /production_purchase_intents!inner\(state\)/u,
+  );
+  assert.match(
+    method,
+    /production_purchase_intents!production_fulfillment_job_intent_fk!inner\(state\)/u,
+  );
+  assert.doesNotMatch(
+    method,
+    /production_fulfillment_job_preparation_binding_fk/u,
+  );
+  assert.doesNotMatch(
+    method,
+    /production_fulfillment_job_delivery_binding_fk/u,
+  );
+  assert.match(method, /\.in\("state", \["pending", "retryable"\]\)/u);
+  assert.match(
+    method,
+    /\.eq\("production_purchase_intents\.state", "verified"\)/u,
+  );
+  assert.match(method, /\.is\("dispatch_completed_at", null\)/u);
+  assert.match(
+    method,
+    /dispatch_retry_after\.is\.null,dispatch_retry_after\.lte\.\$\{input\.now\}/u,
+  );
+  assert.match(
+    method,
+    /dispatch_owner_id\.is\.null,dispatch_lease_expires_at\.lte\.\$\{input\.now\}/u,
+  );
+  assert.match(
+    method,
+    /\.order\("dispatch_retry_after", \{ ascending: true, nullsFirst: true \}\)/u,
+  );
+  assert.match(method, /\.order\("created_at", \{ ascending: true \}\)/u);
+  assert.match(method, /\.order\("id", \{ ascending: true \}\)/u);
+  assert.match(method, /\.limit\(input\.limit\)/u);
+});
+
 await check("Netlify schedule topology and background asset block", async () => {
   const config = toml.parse(await readFile(path.join(root, "netlify.toml"), "utf8"));
   assert.deepEqual(

@@ -699,7 +699,9 @@ export class SupabasePaymentDeliveryRepository
   }): Promise<string[]> {
     const { data, error } = await this.client
       .from("production_fulfillment_jobs")
-      .select("id, production_purchase_intents!inner(state)")
+      .select(
+        "id, production_purchase_intents!production_fulfillment_job_intent_fk!inner(state)",
+      )
       .in("state", ["pending", "retryable"])
       .eq("production_purchase_intents.state", "verified")
       .is("dispatch_completed_at", null)
