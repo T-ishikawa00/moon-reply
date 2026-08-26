@@ -3,12 +3,12 @@
 <!-- SEC-01-NEXT-16-3-3:BEGIN -->
 ## Current operational overlay — SEC-01 Next.js 16.3.3 Security Patch
 
-- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW` on `task/sec-01-next-16-3-3-r1`, based exactly on `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`.
-- Candidate framework baseline is exact `next@16.3.3` with matching `eslint-config-next@16.3.3`. React and React DOM remain `19.2.7`; SEC-01 verifier `20/20`, direct functional regressions, Async/scheduled/runtime artifacts, root/ingress typecheck/build, zero-warning ESLint, Production build `48/48`, and both audit scopes pass. Application, Payment/Auth/fulfillment/Account/Return, migration, environment, and Netlify configuration source is unchanged.
+- Status: `Human/ChatGPT SOURCE PASS`; reviewed implementation is exact `task/sec-01-next-16-3-3-r1@08ec7afc88874ad9cfb33cfee10801b4b874514a`, based on `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`, with this single acceptance-sync successor intended for ff-only release integration.
+- Framework baseline is `Next.js 16.3.3 SOURCE READY`: exact `next@16.3.3` with matching `eslint-config-next@16.3.3`; React and React DOM remain `19.2.7`. SEC-01 verifier `20/20`, direct functional regressions, Async/scheduled/runtime artifacts, root/ingress typecheck/build, zero-warning ESLint, Production build `48/48`, and both audit scopes pass. Application, Payment/Auth/fulfillment/Account/Return, migration, environment, and Netlify configuration source is unchanged.
 - Current Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. Production is not claimed patched.
-- Human/ChatGPT review, release integration, exact-source deploy review, and Publish remain separate. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation is authorized.
+- Exact-source deploy review, Publish, and Cycle 3 activation remain separate. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation or Self Dogfood is authorized by Cycle 2.
 
-Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`.
+Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`; source-only Cycle 3 runbook: `docs/m2/M2_SELF_DOGFOOD_ACTIVATION_FREEZE.md`.
 <!-- SEC-01-NEXT-16-3-3:END -->
 
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
@@ -93,7 +93,7 @@ Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 - Accepted future Self Dogfood policy is an 86400-second window and 10 Provider invocation units. Production/Netlify values remain unset/disabled; C1 is not activated, and Public Launch policy remains separately reviewed.
 - Measured ceiling is initial 4 calls with optional draft / 3 without and clarification resume 1. Ten units cover failed initial 4 + complete retry initial 4 + clarification 1 with one unit of headroom; failed/ambiguous calls are not refunded.
 - Anonymous intake write-volume limiting and a future Public Launch global/provider/WAF spend ceiling are non-blocking follow-ups. Material policy changes require separate review and may require a policy-version bump.
-- Canonical evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`. SEC-01 remains a separate task; Next 16.3.0 and I4 scheduler flags are unchanged; Deploy, Publish, and external E2E remain separately unauthorized.
+- Canonical evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`. SEC-01 is now separately SOURCE PASS at exact Next 16.3.3; C1 activation, Deploy, Publish, and external E2E remain separately unauthorized.
 <!-- M2-C1-PREPAYMENT-COMPUTE-BUDGET:END -->
 
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
@@ -115,7 +115,7 @@ Canonical evidence: `docs/m2/M2_D2_CONTACT_PAID_FAILURE_RECOVERY_SUPPORT.md`.
 - I4 source candidate adds exact-true, default-false `PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED` and `STRIPE_RECONCILIATION_SCHEDULED_ENABLED`. Disabled schedules return HTTP `200` with `{ "disabled": true }` before Supabase/Stripe/Async dependency initialization; existing broader flags and emergency stops remain authoritative.
 - The required future Public ingress base now contains one source-controlled `.node-version` with major `22`; no Netlify ingress project exists yet. Local actual-ZIP proof covers exact `postgres@3.4.9`/`stripe@22.5.0`, dynamic import, empty static surface, and import-time fetch calls `0`; actual Netlify base/build/runtime Node and external override absence remain action-time deploy evidence.
 - Every Netlify environment change is deploy-versioned. Action-time activation/rollback must create and verify a new exact-source Deploy ID; a settings edit alone does not change the current Published functions. The Public ingress must also prove effective env-name isolation from team/shared customer secrets and pin/review the Stripe endpoint API version before activation.
-- SEC-01 remains mandatory before the next customer Production Publish: do not guess-upgrade Next 16.3.0 before the planned 2026-08-26 security release is evaluated in its separate task.
+- SEC-01 has now closed at Human/ChatGPT SOURCE PASS with exact Next 16.3.3; the next customer Production Publish must use the resulting frozen authority and remains separately authorized.
 - I4 stop boundary: no additional DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility change, scheduler Run now, Stripe endpoint/API/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
 

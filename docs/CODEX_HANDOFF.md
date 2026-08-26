@@ -3,10 +3,10 @@
 <!-- SEC-01-NEXT-16-3-3:BEGIN -->
 ## Current handoff — SEC-01 Next.js 16.3.3 Security Patch
 
-- Authority: exact base `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`; candidate branch `task/sec-01-next-16-3-3-r1`; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
-- Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`. Candidate pins exact `next@16.3.3` and `eslint-config-next@16.3.3`; React/React DOM remain `19.2.7`. SEC-01 verifier `20/20`, current direct functional suites, artifacts, typechecks/builds, zero-warning ESLint, Production build `48/48`, and both audit scopes pass; historical literal pins remain reported rather than weakened.
-- Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. Production patched, release integration, deploy, and Publish are not claimed.
-- Evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation is authorized by this candidate.
+- Authority lineage: exact base `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`; reviewed implementation `task/sec-01-next-16-3-3-r1@08ec7afc88874ad9cfb33cfee10801b4b874514a`; this single acceptance-sync successor is the intended ff-only release authority; `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
+- Status: `Human/ChatGPT SOURCE PASS`; framework baseline `Next.js 16.3.3 SOURCE READY`. Exact `next@16.3.3` and `eslint-config-next@16.3.3`; React/React DOM `19.2.7`. SEC-01 verifier `20/20`, current direct functional suites, artifacts, typechecks/builds, zero-warning ESLint, Production build `48/48`, and both audit scopes pass; historical literal pins remain reported rather than weakened.
+- Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d`; remote DB remains exact `0002..0021`, pending `0`, unknown `0`. Production patched, deploy, Publish, and Self Dogfood are not claimed.
+- Evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`; Cycle 3 source-only freeze: `docs/m2/M2_SELF_DOGFOOD_ACTIVATION_FREEZE.md`. No B2/C1/scheduler/Auth/Provider/email/Support/telemetry activation is authorized by Cycle 2.
 <!-- SEC-01-NEXT-16-3-3:END -->
 
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
@@ -115,7 +115,7 @@
 - The required future ingress base now contains the source pin `.node-version` major `22`; no Netlify ingress project exists yet. Local actual-ZIP proof includes exact `postgres@3.4.9`/`stripe@22.5.0`, dynamic import, empty customer/static surface, and import-time fetch calls `0`; actual Netlify base/build/runtime Node and external overrides remain action-time evidence.
 - Netlify env changes are captured per deploy and require a new exact-source Deploy ID. Action-time must inventory effective Production/Functions env names, exclude inherited shared customer secrets from the Public ingress, and pin/review the Stripe endpoint API version.
 - Credential plan: generate a strong random password locally under Human control, set it once with interactive PostgreSQL `\password m2_b2_stripe_ingress`, never place it in CLI arguments/history/logs/Git/Chat, verify only `rolpassword IS NOT NULL` plus unchanged role/privilege booleans, and provision only the verify-full pooler URL to the ingress. Never use service_role/postgres/Supabase secret as fallback.
-- SEC-01 remains required before the next customer Production Publish; Next 16.3.0 is unchanged in I4 pending the planned 2026-08-26 release evaluation.
+- SEC-01 has now closed at Human/ChatGPT SOURCE PASS with exact Next 16.3.3; the next customer Production Publish must use the resulting frozen authority and remains separately authorized.
 - Canonical runbooks: `docs/m2/M2_B2_I3_REMOTE_DB_CLOSURE_EXTERNAL_WIRING_PREFLIGHT.md` and `docs/m2/M2_B2_I4_CUTOVER_SAFETY_CONTROLS.md`.
 - No additional remote DB write/migration, credential/password, Netlify project/config/deploy/publish/visibility, scheduler Run now, Stripe endpoint/API/read/event/resend/Purchase, real Async event, Provider/OpenAI, email, or `main` change is authorized by I4.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:END -->
@@ -128,7 +128,7 @@
 - Current M1 facts: Remote DB `0002..0016`; Stripe Sandbox payment; `checkout.session.completed` `200 / verified`; Async Workloads; Background Fulfillment; AI result generation; Account result; completed email; Human result read.
 - M2-0 confirmed blockers: logical claim NULL lease, logical completion NULL caller owner, logical completion stored NULL lease, notification claim NULL lease. Remote/source definitions match; local exploit proof is synthetic/disposable.
 - First recommendation: separate M2-A1 NULL Lease / Completion Fence Integrity Hardening; successor migration and remote apply require new explicit authority.
-- Next 16.3.0 stays unchanged pending the official 2026-08-26 critical patch; evaluate and exact-pin only the published stable version in a separate task.
+- The separate SEC-01 task subsequently accepted exact Next 16.3.3 SOURCE READY; Production/Published runtime patching remains unclaimed until Cycle 3.
 - UX candidate `1b8b61b32b1f284f843593777d8f0520ce13281b` remains reference-only; never merge/cherry-pick it, and never lose `netlify.toml` or runtime-assets verification.
 - Self Dogfood: Human only / Stripe Sandbox / Private site. External Private Beta: third party / possible real payment / current legal and support required.
 - Canonical entry: `docs/m2/M2_0_AUTHORITY_CRITICAL_DB_BASELINE.md`; backlog: `docs/m2/M2_MASTER_BACKLOG.md`.

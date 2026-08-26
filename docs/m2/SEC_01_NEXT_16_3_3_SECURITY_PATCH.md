@@ -1,13 +1,13 @@
 # SEC-01 Next.js 16.3.3 Security Patch
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`
+Status: `Human/ChatGPT SOURCE PASS`
 
 Captured: `2026-08-26` (Asia/Tokyo)
 
 ## Authority and scope
 
 - Exact base authority: `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`.
-- Candidate branch: `task/sec-01-next-16-3-3-r1`.
+- Reviewed implementation: `task/sec-01-next-16-3-3-r1@08ec7afc88874ad9cfb33cfee10801b4b874514a`; this document is updated by its single acceptance-sync successor.
 - `main` remains `61e33a10e195fad17e253a6b9719217e1992f273`.
 - Current Published customer source remains `0befd512219eb2897fb1edf969ad37d7e8c56b0d` under Auto Publishing Lock.
 - Scope is the exact stable Next.js framework security patch plus the version-matched ESLint configuration, bounded verifier, and operational evidence. No application, UX, Auth, Payment, database, activation, environment, or Netlify configuration change is included.
@@ -120,12 +120,13 @@ The independent SEC-01 verifier proves every application/configuration source su
 - Database writes/migrations: `0`.
 - Netlify configuration/deploy/Publish writes: `0`.
 - Stripe, Async event, Provider/OpenAI, email, real Auth, Support, telemetry, scheduler activation, C1/B2 activation: `0`.
-- External writes: Git task-branch push only.
+- External writes authorized by closure: one Git acceptance-sync task-branch push and one normal ff-only `release/private-ready` push only.
 
 ## Acceptance boundary
 
-- Framework baseline: `Next 16.3.3 candidate`.
+- SEC-01: `Human/ChatGPT SOURCE PASS`.
+- Framework baseline: `Next.js 16.3.3 SOURCE READY`.
 - Production patched: not claimed.
 - Published runtime patched: not claimed.
 - Self Dogfood, B2 activation, External Beta, and Public Launch authorization: not claimed.
-- Remaining proof after Human/ChatGPT source acceptance is a separately authorized exact-source Production deploy review and Publish decision. This candidate does not integrate `release/private-ready` and does not deploy.
+- The Cycle 3 external activation contract is frozen source-only in `docs/m2/M2_SELF_DOGFOOD_ACTIVATION_FREEZE.md`. Exact-source deploy review, configuration, Publish, B2/C1/scheduler/Auth/Provider/email activation, one Sandbox purchase, and Self Dogfood remain separately authorized. Closure performs no deploy or Publish.

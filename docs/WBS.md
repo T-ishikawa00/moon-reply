@@ -3,15 +3,16 @@
 <!-- SEC-01-NEXT-16-3-3:BEGIN -->
 ## SEC-01 Next.js 16.3.3 Security Patch
 
-Status: `SOURCE CANDIDATE — PENDING HUMAN/CHATGPT REVIEW`.
+Status: `Human/ChatGPT SOURCE PASS`; framework baseline `Next.js 16.3.3 SOURCE READY`.
 
 - [x] Start from exact `release/private-ready@3bd47e0ed8cf1a28da8ba14525718117df7bc99e`; preserve `main`, Published source, and remote DB exact `0002..0021`.
 - [x] Independently verify stable `16.3.3`, GHSA-p293-qw3h-jr36 / CVE-2026-75604, GHSA-2xp9-vwfh-vxw4, peer requirements, and matching ESLint configuration.
 - [x] Pin exact `next@16.3.3` and `eslint-config-next@16.3.3`; keep React/React DOM `19.2.7`; bound the lockfile delta to the Next patch family.
 - [x] Complete SEC-01 verifier `20/20`, current direct functional regression, Async/scheduled/runtime artifacts, ingress/root build checks, zero-warning ESLint, Production build `48/48`, and audit; preserve and report historical literal-pin stops without weakening them.
-- [ ] Obtain Human/ChatGPT source review. Release integration, exact-source deploy, Production Publish, B2 activation, Self Dogfood, and External Beta remain separately authorized.
+- [x] Accept exact reviewed implementation `08ec7afc88874ad9cfb33cfee10801b4b874514a` as Human/ChatGPT SOURCE PASS and prepare one acceptance-sync successor for ff-only `release/private-ready` integration.
+- [x] Freeze the secret-free, source-only Cycle 3 activation runbook without external mutation. Exact-source deploy, Production Publish, B2/C1/scheduler/Auth/Provider/email activation, one Sandbox purchase, Self Dogfood, and External Beta remain separately authorized.
 
-Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`.
+Canonical evidence: `docs/m2/SEC_01_NEXT_16_3_3_SECURITY_PATCH.md`; activation freeze: `docs/m2/M2_SELF_DOGFOOD_ACTIVATION_FREEZE.md`.
 <!-- SEC-01-NEXT-16-3-3:END -->
 
 <!-- M2-F1-F2-CUSTOMER-TRUST-CLOSURE:BEGIN -->
@@ -140,7 +141,7 @@ Evidence: `docs/m2/M2_C1_PREPAYMENT_COMPUTE_BUDGET.md`.
 <!-- M2-A1-REMOTE-CLOSURE-M2-B1-START:BEGIN -->
 ## M2-B2-I4 Cutover Safety Controls
 
-Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3/I3 `authority integrated`; revised 0018 + unchanged 0019 `remote DB foundation closed`; I4 `source implementation pending independent review`; external wiring, SEC-01, Publish, and Sandbox E2E pending.
+Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3/I3/I4 `authority integrated`; revised 0018 + unchanged 0019 `remote DB foundation closed`; SEC-01 `Human/ChatGPT SOURCE PASS`; external wiring, Publish, and Sandbox E2E pending.
 
 - [x] Integrate accepted M2-A1 authority at `release/private-ready@1b4863985fb1bd32e769ddfac884a27b236472cb`.
 - [x] Apply exact `0017_m2_a1_null_fence_integrity.sql` once to remote Supabase and verify exact history `0002..0017`, pending `0`, unknown `0`.
@@ -184,7 +185,7 @@ Status: M2-A1 `Production DB closed`; M2-B1/B2 design/I1/I2/R3/I3 `authority int
 - [x] Verify exact 0019 columns/constraints/index/RPC bodies, zero existing-business-state regression, unchanged DB0016/0017 identities, and current Published runtime compatibility.
 - [x] Lock I3 activation topology, dedicated credential procedure, separate Public ingress configuration, exact four-event Stripe Sandbox allowlist, mixed-version rule, cutover, and rollback without external writes.
 - [x] Identify the current customer-deploy cutover blocker: add two dedicated default-false scheduler flags before Publish; environment changes require a newly built and reviewed exact Deploy ID.
-- [x] Keep SEC-01 as a separate required task before the next customer Production Publish; do not guess-upgrade Next 16.3.0 in I3.
+- [x] Keep SEC-01 separate from I3; the later SEC-01 task accepted exact Next 16.3.3 SOURCE READY without altering I3 history.
 - [x] Fast-forward reviewed I3 into `release/private-ready@680398b243f69f80cab6392cc6155ed0be789120`, normally push, and keep `main` unchanged.
 - [x] Add independent exact-true/default-false schedule gates before every scheduler credential read/client construction; disabled wrappers return bounded HTTP `200` no-op outcomes.
 - [x] Preserve the existing processing/reconciliation flags, emergency stops, cadence, DB0016/0019 fencing, batch/concurrency/retry budgets, and Async retry authority.
