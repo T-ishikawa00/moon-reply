@@ -91,36 +91,49 @@ await check("warm initialization reuses one immutable catalog", () => {
 await check("version keys cannot reuse a different catalog entry", async () => {
   const cache = new ImmutableRuntimeCache();
   let initializations = 0;
-  const first = cache.getOrInitialize("catalog-v17|schema-v6|hash-a", async () => {
+  const authorityKey =
+    "catalog-v17|prompt-v17|schema-v6|topology-v1|baseline-a";
+  const changedAuthorityKeys = [
+    "catalog-v18|prompt-v17|schema-v6|topology-v1|baseline-a",
+    "catalog-v17|prompt-v18|schema-v6|topology-v1|baseline-a",
+    "catalog-v17|prompt-v17|schema-v7|topology-v1|baseline-a",
+    "catalog-v17|prompt-v17|schema-v6|topology-v2|baseline-a",
+    "catalog-v17|prompt-v17|schema-v6|topology-v1|baseline-b",
+  ];
+  const first = cache.getOrInitialize(authorityKey, async () => {
     initializations += 1;
     return { version: "v17" };
   });
-  const warm = cache.getOrInitialize("catalog-v17|schema-v6|hash-a", async () => {
+  const warm = cache.getOrInitialize(authorityKey, async () => {
     initializations += 1;
     return { version: "wrong" };
   });
-  const changed = cache.getOrInitialize("catalog-v18|schema-v7|hash-b", async () => {
-    initializations += 1;
-    return { version: "v18" };
-  });
+  const changed = changedAuthorityKeys.map((cacheKey) =>
+    cache.getOrInitialize(cacheKey, async () => {
+      initializations += 1;
+      return { cacheKey };
+    }),
+  );
   assert.equal(first.cacheHit, false);
   assert.equal(warm.cacheHit, false);
-  assert.equal(changed.cacheHit, false);
+  assert.equal(changed.every((lookup) => lookup.cacheHit === false), true);
   assert.deepEqual(
-    [first.cacheState, warm.cacheState, changed.cacheState],
-    ["miss", "pending", "miss"],
+    [first.cacheState, warm.cacheState, ...changed.map((lookup) => lookup.cacheState)],
+    ["miss", "pending", ...changed.map(() => "miss")],
   );
   const firstValue = await first.value;
   assert.strictEqual(await warm.value, firstValue);
-  assert.notStrictEqual(await changed.value, firstValue);
+  for (const lookup of changed) {
+    assert.notStrictEqual(await lookup.value, firstValue);
+  }
   const ready = cache.getOrInitialize(
-    "catalog-v17|schema-v6|hash-a",
+    authorityKey,
     async () => ({ version: "wrong" }),
   );
   assert.equal(ready.cacheHit, true);
   assert.equal(ready.cacheState, "ready");
   assert.strictEqual(await ready.value, firstValue);
-  assert.equal(initializations, 2);
+  assert.equal(initializations, 1 + changedAuthorityKeys.length);
 });
 
 await check("failed initialization is fail-closed and does not poison retry", async () => {
@@ -171,10 +184,25 @@ await check("production cache contains runtime metadata only", () => {
     FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY,
     /runtime-stage-catalog-v17\.0\.0\|prompt-bundle-runtime-v17\.0\.0\|pipeline-schema-runtime-v6\.0\.0\|split-base-candidate-v1\|baseline-[0-9a-f]{40}/u,
   );
-  assert.match(finalProductRecoveryCatalogCacheKey(), /\|root-[0-9a-f]{64}$/u);
+  assert.equal(
+    finalProductRecoveryCatalogCacheKey(),
+    FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY,
+  );
   const catalogSource = readFileSync(
     path.join(root, "lib/assessment/runtime/schema-catalog.ts"),
     "utf8",
+  );
+  const cacheIdentitySource = catalogSource.slice(
+    catalogSource.indexOf(
+      "export const FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY",
+    ),
+    catalogSource.indexOf(
+      "type FinalProductRecoveryRuntimeStageCatalog",
+    ),
+  );
+  assert.doesNotMatch(
+    cacheIdentitySource,
+    /process\.cwd|path\.resolve|repositoryRoot|root-/u,
   );
   assert.match(
     catalogSource,

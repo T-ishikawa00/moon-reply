@@ -3199,8 +3199,7 @@ export const FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY = [
 ].join("|");
 
 export function finalProductRecoveryCatalogCacheKey() {
-  const repositoryRootHash = hashText(path.resolve(process.cwd()));
-  return `${FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY}|root-${repositoryRootHash}`;
+  return FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY;
 }
 
 type FinalProductRecoveryRuntimeStageCatalog = Awaited<
