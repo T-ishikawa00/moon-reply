@@ -162,6 +162,157 @@ export type AssessmentRunContext = {
   startedAt: string;
 };
 
+export const PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES = {
+  authoritySchemaVersionMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_SCHEMA_VERSION_MISMATCH",
+  authorityModelMismatch: "M2_PURCHASE_READY_AUTHORITY_MODEL_MISMATCH",
+  authorityPromptBundleExpectedVersionMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_PROMPT_BUNDLE_EXPECTED_VERSION_MISMATCH",
+  authorityPromptBundleRunContextMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_PROMPT_BUNDLE_RUN_CONTEXT_MISMATCH",
+  authoritySchemaSetExpectedVersionMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_SCHEMA_SET_EXPECTED_VERSION_MISMATCH",
+  authoritySchemaSetRunContextMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_SCHEMA_SET_RUN_CONTEXT_MISMATCH",
+  authorityStageTopologyMismatch:
+    "M2_PURCHASE_READY_AUTHORITY_STAGE_TOPOLOGY_MISMATCH",
+  activePipelineTopologyMismatch:
+    "M2_PURCHASE_READY_ACTIVE_PIPELINE_TOPOLOGY_MISMATCH",
+  providerInvocationFenceMissing:
+    "M2_PURCHASE_READY_PROVIDER_INVOCATION_FENCE_MISSING",
+  persistedRequestIdMismatch: "M2_PURCHASE_READY_REQUEST_ID_MISMATCH",
+  persistedRequestSnapshotMismatch:
+    "M2_PURCHASE_READY_REQUEST_SNAPSHOT_MISMATCH",
+} as const;
+
+export type PurchaseReadyAuthorityDiagnosticCode =
+  (typeof PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES)[keyof typeof PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES];
+
+function rejectPurchaseReadyAuthority(
+  diagnosticCode: PurchaseReadyAuthorityDiagnosticCode,
+  runContext: AssessmentRunContext,
+): never {
+  console.error("M2_PURCHASE_READY_AUTHORITY_VALIDATION_FAILED", {
+    diagnosticCode,
+    requestId: runContext.requestId,
+    runId: runContext.runId,
+  });
+  throw new M2RuntimeError(diagnosticCode);
+}
+
+export function validatePurchaseReadyAuthorityForFulfillment(input: {
+  persistedRequest: PersistedAssessmentRequest;
+  authority: PurchaseReadyRuntimeAuthorityV1;
+  runContext: AssessmentRunContext;
+  activeStageTopologyVersion: StageTopologyVersion;
+  providerInvocationFencePresent: boolean;
+}): AssessmentInput {
+  const {
+    persistedRequest,
+    authority,
+    runContext,
+    activeStageTopologyVersion,
+    providerInvocationFencePresent,
+  } = input;
+  if (authority.schemaVersion !== "rc1-purchase-ready-runtime-authority-v1") {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.authoritySchemaVersionMismatch,
+      runContext,
+    );
+  }
+  if (authority.runtimeIdentity.model !== runContext.model) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.authorityModelMismatch,
+      runContext,
+    );
+  }
+  if (
+    authority.runtimeIdentity.promptBundleVersion !==
+    "prompt-bundle-runtime-v17.0.0"
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+        .authorityPromptBundleExpectedVersionMismatch,
+      runContext,
+    );
+  }
+  if (
+    authority.runtimeIdentity.promptBundleVersion !==
+    runContext.promptBundleVersion
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+        .authorityPromptBundleRunContextMismatch,
+      runContext,
+    );
+  }
+  if (
+    authority.runtimeIdentity.schemaSetVersion !==
+    "pipeline-schema-runtime-v6.0.0"
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+        .authoritySchemaSetExpectedVersionMismatch,
+      runContext,
+    );
+  }
+  if (
+    authority.runtimeIdentity.schemaSetVersion !== runContext.schemaSetVersion
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+        .authoritySchemaSetRunContextMismatch,
+      runContext,
+    );
+  }
+  if (
+    authority.runtimeIdentity.stageTopologyVersion !==
+    "split-base-candidate-v1"
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.authorityStageTopologyMismatch,
+      runContext,
+    );
+  }
+  if (activeStageTopologyVersion !== "split-base-candidate-v1") {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.activePipelineTopologyMismatch,
+      runContext,
+    );
+  }
+
+  const persistedInput: AssessmentInput = {
+    currentSituation: persistedRequest.currentSituation,
+    optionalMessage: persistedRequest.optionalMessage,
+    relationship: persistedRequest.relationship,
+    requestedTopics: [...persistedRequest.requestedTopics],
+    privacyAcknowledged: true,
+  };
+  if (!providerInvocationFencePresent) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.providerInvocationFenceMissing,
+      runContext,
+    );
+  }
+  if (persistedRequest.id !== runContext.requestId) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.persistedRequestIdMismatch,
+      runContext,
+    );
+  }
+  if (
+    hashJson(persistedInput as unknown as JsonObject) !==
+    hashJson(authority.request as unknown as JsonObject)
+  ) {
+    rejectPurchaseReadyAuthority(
+      PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+        .persistedRequestSnapshotMismatch,
+      runContext,
+    );
+  }
+  return persistedInput;
+}
+
 export type PipelineOptions = {
   repository: AssessmentRepository;
   transport: AiStageTransport;
@@ -2226,38 +2377,14 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult> {
     this.usage = emptyUsageTotals();
     this.returnedModel = null;
+    const persistedInput = validatePurchaseReadyAuthorityForFulfillment({
+      persistedRequest,
+      authority,
+      runContext,
+      activeStageTopologyVersion: this.stageTopologyVersion,
+      providerInvocationFencePresent: Boolean(this.beforeProviderInvocation),
+    });
     this.validateRuntimeIdentity(runContext);
-    if (
-      authority.schemaVersion !== "rc1-purchase-ready-runtime-authority-v1" ||
-      authority.runtimeIdentity.model !== runContext.model ||
-      authority.runtimeIdentity.promptBundleVersion !==
-        "prompt-bundle-runtime-v17.0.0" ||
-      authority.runtimeIdentity.promptBundleVersion !==
-        runContext.promptBundleVersion ||
-      authority.runtimeIdentity.schemaSetVersion !==
-        "pipeline-schema-runtime-v6.0.0" ||
-      authority.runtimeIdentity.schemaSetVersion !== runContext.schemaSetVersion ||
-      authority.runtimeIdentity.stageTopologyVersion !==
-        "split-base-candidate-v1" ||
-      this.stageTopologyVersion !== "split-base-candidate-v1"
-    ) {
-      throw new M2RuntimeError("M2_PURCHASE_READY_AUTHORITY_INVALID");
-    }
-    const persistedInput: AssessmentInput = {
-      currentSituation: persistedRequest.currentSituation,
-      optionalMessage: persistedRequest.optionalMessage,
-      relationship: persistedRequest.relationship,
-      requestedTopics: [...persistedRequest.requestedTopics],
-      privacyAcknowledged: true,
-    };
-    if (
-      !this.beforeProviderInvocation ||
-      persistedRequest.id !== runContext.requestId ||
-      hashJson(persistedInput as unknown as JsonObject) !==
-        hashJson(authority.request as unknown as JsonObject)
-    ) {
-      throw new M2RuntimeError("M2_PURCHASE_READY_AUTHORITY_INVALID");
-    }
 
     const baseStructuredIntake = structuredClone(
       authority.baseStructuredIntake,

@@ -41,7 +41,8 @@
     "verify:m2-b2-i1-r3": "node scripts/verify-m2-b2-i1-r3-event-trigger-acl-compatibility.mjs",
     "verify:m2-b2-i2": "node scripts/verify-m2-b2-i2-private-recovery-schedulers.mjs",
     "verify:m2-b2-i4": "node scripts/verify-m2-b2-i4-cutover-safety-controls.mjs",
-    "verify:m2-b2:scheduled-artifacts": "node scripts/verify-m2-b2-scheduled-function-artifacts.mjs"
+    "verify:m2-b2:scheduled-artifacts": "node scripts/verify-m2-b2-scheduled-function-artifacts.mjs",
+    "verify:m2:purchase-ready-authority-diagnostics": "node scripts/verify-m2-purchase-ready-authority-diagnostics.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",
