@@ -4,9 +4,15 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { checkServerIdentity, rootCertificates } from "node:tls";
-import { buildVerifiedIngressDatabaseConfiguration } from "../services/stripe-webhook-ingress/src/database.ts";
+import {
+  buildVerifiedIngressDatabaseConfiguration,
+  classifyIngressDatabaseOperationFailure,
+  IngressDatabaseDiagnosticError,
+  preservePrimaryIngressDatabaseFailure,
+} from "../services/stripe-webhook-ingress/src/database.ts";
 import {
   createStripeWebhookIngressHandler,
+  ingressDiagnosticStages,
   ingressSecretAllowlist,
   maximumWebhookBytes,
   stripeWebhookPath,
@@ -82,6 +88,7 @@ function request(payload, options = {}) {
 
 function harness(options = {}) {
   const calls = [];
+  const diagnostics = [];
   const handler = createStripeWebhookIngressHandler({
     environment: {
       PAYMENT_ENVIRONMENT: options.paymentEnvironment ?? "test",
@@ -90,11 +97,27 @@ function harness(options = {}) {
     },
     recordEvidence: async (evidence) => {
       calls.push(evidence);
+      if (options.databaseError) throw options.databaseError;
       if (options.databaseFailure) throw new Error("synthetic database failure");
       return { disposition: "verified" };
     },
+    diagnosticSink: (diagnostic) => diagnostics.push(diagnostic),
+    invocationId: () => "10000000-0000-4000-8000-000000000001",
+    now: () => 1_000,
   });
-  return { handler, calls };
+  return { handler, calls, diagnostics };
+}
+
+function completedStages(run) {
+  return run.diagnostics
+    .filter((diagnostic) => diagnostic.diagnosticCode === undefined)
+    .map((diagnostic) => diagnostic.stage);
+}
+
+function failureDiagnostics(run) {
+  return run.diagnostics.filter(
+    (diagnostic) => diagnostic.diagnosticCode !== undefined,
+  );
 }
 
 async function responseBody(response) {
@@ -334,7 +357,14 @@ await check("pooler connection is bounded and leak-safe", async () => {
   assert.match(source, /prepare: false/u);
   assert.match(source, /statement_timeout = '5s'/u);
   assert.match(source, /lock_timeout = '2s'/u);
-  assert.match(source, /finally[\s\S]+sql\.end\(\{ timeout: 1 \}\)/u);
+  assert.match(
+    source,
+    /if \(!connectionString\)[\s\S]{0,180}INGRESS_DATABASE_CONFIGURATION_FAILED/u,
+  );
+  assert.match(source, /INGRESS_DATABASE_DISPOSITION_INVALID/u);
+  assert.match(source, /await sql\.end\(\{ timeout: 1 \}\)/u);
+  assert.match(source, /preservePrimaryIngressDatabaseFailure/u);
+  assert.match(source, /secondaryDiagnosticCodes/u);
   assert.doesNotMatch(source, /retry|backoff/iu);
 });
 
@@ -347,6 +377,40 @@ await check("valid raw body commits before 2xx", async () => {
   assert.equal(response.status, 200);
   assert.equal(run.calls.length, 1);
   assert.equal((await responseBody(response)).disposition, "verified");
+  assert.deepEqual(completedStages(run), [...ingressDiagnosticStages]);
+  assert.deepEqual(failureDiagnostics(run), []);
+});
+
+await check("raw-body read failure is internally distinct but externally generic", async () => {
+  const run = harness();
+  const response = await run.handler({
+    method: "POST",
+    headers: new Headers(),
+    async arrayBuffer() {
+      throw new Error("synthetic raw-body failure");
+    },
+  });
+  assert.equal(response.status, 500);
+  assert.equal(
+    (await responseBody(response)).error.code,
+    "PAYMENT_WEBHOOK_REQUEST_FAILED",
+  );
+  assert.equal(run.calls.length, 0);
+  assert.deepEqual(completedStages(run), ["REQUEST_RECEIVED"]);
+  assert.deepEqual(
+    failureDiagnostics(run).map(({ stage, diagnosticCode, httpStatus }) => ({
+      stage,
+      diagnosticCode,
+      httpStatus,
+    })),
+    [
+      {
+        stage: "REQUEST_RECEIVED",
+        diagnosticCode: "INGRESS_RAW_BODY_READ_FAILED",
+        httpStatus: 500,
+      },
+    ],
+  );
 });
 
 await check("missing, wrong, and expired signatures fail closed", async () => {
@@ -359,6 +423,20 @@ await check("missing, wrong, and expired signatures fail closed", async () => {
     assert.equal(
       (await responseBody(response)).error.code,
       "PAYMENT_WEBHOOK_SIGNATURE_INVALID",
+    );
+    assert.deepEqual(
+      failureDiagnostics(run).map((diagnostic) => ({
+        stage: diagnostic.stage,
+        diagnosticCode: diagnostic.diagnosticCode,
+        httpStatus: diagnostic.httpStatus,
+      })),
+      [
+        {
+          stage: "RAW_BODY_READ",
+          diagnosticCode: "PAYMENT_WEBHOOK_SIGNATURE_INVALID",
+          httpStatus: 400,
+        },
+      ],
     );
   }
 });
@@ -405,6 +483,13 @@ await check("valid unsupported event remains 2xx ignored without DB", async () =
   assert.equal(response.status, 200);
   assert.equal((await responseBody(response)).disposition, "ignored");
   assert.equal(run.calls.length, 0);
+  assert.deepEqual(completedStages(run), [
+    "REQUEST_RECEIVED",
+    "RAW_BODY_READ",
+    "SIGNATURE_VERIFIED",
+    "EVENT_PARSED",
+    "RESPONSE_2XX",
+  ]);
 });
 
 await check("environment mismatch and DB failure never acknowledge", async () => {
@@ -418,13 +503,128 @@ await check("environment mismatch and DB failure never acknowledge", async () =>
   );
   assert.equal(wrongEnvironment.calls.length, 0);
   const failedCommit = harness({ databaseFailure: true });
+  const failedResponse = await failedCommit.handler(
+    request(payload, { signature: signed(payload) }),
+  );
+  assert.equal(failedResponse.status, 500);
   assert.equal(
-    (await failedCommit.handler(
-      request(payload, { signature: signed(payload) }),
-    )).status,
-    500,
+    (await responseBody(failedResponse)).error.code,
+    "PAYMENT_WEBHOOK_REQUEST_FAILED",
   );
   assert.equal(failedCommit.calls.length, 1);
+});
+
+await check("database diagnostics are bounded to reliable runtime evidence", async () => {
+  assert.equal(
+    classifyIngressDatabaseOperationFailure(
+      { code: "ERR_TLS_CERT_ALTNAME_INVALID" },
+      false,
+    ).diagnosticCode,
+    "INGRESS_DATABASE_TLS_FAILED",
+  );
+  assert.equal(
+    classifyIngressDatabaseOperationFailure({ code: "ECONNREFUSED" }, false)
+      .diagnosticCode,
+    "INGRESS_DATABASE_CONNECTION_FAILED",
+  );
+  assert.equal(
+    classifyIngressDatabaseOperationFailure({ code: "28P01" }, true)
+      .diagnosticCode,
+    "INGRESS_DATABASE_AUTHORITY_FAILED",
+  );
+  assert.equal(
+    classifyIngressDatabaseOperationFailure({ code: "42501" }, true)
+      .diagnosticCode,
+    "INGRESS_DATABASE_AUTHORITY_FAILED",
+  );
+  assert.equal(
+    classifyIngressDatabaseOperationFailure(new Error("rpc failed"), true)
+      .diagnosticCode,
+    "INGRESS_DATABASE_RPC_FAILED",
+  );
+  assert.equal(
+    classifyIngressDatabaseOperationFailure(new Error("unknown"), false)
+      .diagnosticCode,
+    "INGRESS_DATABASE_OPERATION_FAILED",
+  );
+});
+
+await check("database configuration and disposition failures retain generic HTTP", async () => {
+  const payload = eventPayload();
+  for (const diagnosticCode of [
+    "INGRESS_DATABASE_CONFIGURATION_FAILED",
+    "INGRESS_DATABASE_DISPOSITION_INVALID",
+  ]) {
+    const run = harness({
+      databaseError: new IngressDatabaseDiagnosticError(diagnosticCode),
+    });
+    const response = await run.handler(
+      request(payload, { signature: signed(payload) }),
+    );
+    assert.equal(response.status, 500);
+    assert.equal(
+      (await responseBody(response)).error.code,
+      "PAYMENT_WEBHOOK_REQUEST_FAILED",
+    );
+    assert.equal(failureDiagnostics(run).at(-1)?.diagnosticCode, diagnosticCode);
+    assert.equal(failureDiagnostics(run).at(-1)?.stage, "DURABLE_RECORD_START");
+  }
+});
+
+await check("cleanup diagnostics cannot mask the primary database failure", async () => {
+  const primary = new IngressDatabaseDiagnosticError(
+    "INGRESS_DATABASE_RPC_FAILED",
+  );
+  const cleanup = new IngressDatabaseDiagnosticError(
+    "INGRESS_DATABASE_CLOSE_FAILED",
+  );
+  const combined = preservePrimaryIngressDatabaseFailure(primary, cleanup);
+  assert.equal(combined.diagnosticCode, "INGRESS_DATABASE_RPC_FAILED");
+  assert.deepEqual(combined.secondaryDiagnosticCodes, [
+    "INGRESS_DATABASE_CLOSE_FAILED",
+  ]);
+  const payload = eventPayload();
+  const run = harness({ databaseError: combined });
+  const response = await run.handler(
+    request(payload, { signature: signed(payload) }),
+  );
+  assert.equal(response.status, 500);
+  assert.equal(
+    (await responseBody(response)).error.code,
+    "PAYMENT_WEBHOOK_REQUEST_FAILED",
+  );
+  assert.deepEqual(
+    failureDiagnostics(run).map((diagnostic) => diagnostic.diagnosticCode),
+    ["INGRESS_DATABASE_RPC_FAILED", "INGRESS_DATABASE_CLOSE_FAILED"],
+  );
+});
+
+await check("structured diagnostics contain no payment or secret material", async () => {
+  const payload = eventPayload();
+  const run = harness();
+  const response = await run.handler(
+    request(payload, { signature: signed(payload) }),
+  );
+  assert.equal(response.status, 200);
+  const serialized = JSON.stringify(run.diagnostics);
+  for (const forbidden of [
+    payload,
+    secret,
+    "evt_m2_b2_i1_valid",
+    "cs_test_m2_b2_i1_valid",
+    "pi_m2_b2_i1_valid",
+    "50000000-0000-4000-8000-000000000002",
+    "stripe-signature",
+  ]) {
+    assert.equal(serialized.includes(forbidden), false, forbidden);
+  }
+  for (const diagnostic of run.diagnostics) {
+    assert.deepEqual(Object.keys(diagnostic).sort(), [
+      "elapsedMilliseconds",
+      "invocationId",
+      "stage",
+    ]);
+  }
 });
 
 await check("function package is path-only and has no static surface", async () => {

@@ -6,6 +6,112 @@ import type { StripePaymentEvidenceV1 } from "../../../lib/payment/production/ty
 export const ingressDatabaseSecretName = "STRIPE_INGRESS_DATABASE_URL";
 export const ingressDatabaseCaName = "STRIPE_INGRESS_DATABASE_CA_PEM";
 
+export const ingressDatabaseDiagnosticCodes = [
+  "INGRESS_DATABASE_CONFIGURATION_FAILED",
+  "INGRESS_DATABASE_TLS_FAILED",
+  "INGRESS_DATABASE_CONNECTION_FAILED",
+  "INGRESS_DATABASE_AUTHORITY_FAILED",
+  "INGRESS_DATABASE_RPC_FAILED",
+  "INGRESS_DATABASE_OPERATION_FAILED",
+  "INGRESS_DATABASE_DISPOSITION_INVALID",
+  "INGRESS_DATABASE_CLOSE_FAILED",
+] as const;
+
+export type IngressDatabaseDiagnosticCode =
+  (typeof ingressDatabaseDiagnosticCodes)[number];
+
+export class IngressDatabaseDiagnosticError extends Error {
+  readonly diagnosticCode: IngressDatabaseDiagnosticCode;
+  readonly secondaryDiagnosticCodes: readonly IngressDatabaseDiagnosticCode[];
+
+  constructor(
+    diagnosticCode: IngressDatabaseDiagnosticCode,
+    secondaryDiagnosticCodes: readonly IngressDatabaseDiagnosticCode[] = [],
+  ) {
+    super(diagnosticCode);
+    this.name = "IngressDatabaseDiagnosticError";
+    this.diagnosticCode = diagnosticCode;
+    this.secondaryDiagnosticCodes = [...secondaryDiagnosticCodes];
+  }
+}
+
+const tlsFailureCodes = new Set([
+  "CERT_HAS_EXPIRED",
+  "DEPTH_ZERO_SELF_SIGNED_CERT",
+  "ERR_OSSL_PEM_NO_START_LINE",
+  "ERR_TLS_CERT_ALTNAME_INVALID",
+  "SELF_SIGNED_CERT_IN_CHAIN",
+  "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
+  "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+]);
+
+const connectionFailureCodes = new Set([
+  "EAI_AGAIN",
+  "ECONNREFUSED",
+  "ECONNRESET",
+  "EHOSTUNREACH",
+  "ENETUNREACH",
+  "ENOTFOUND",
+  "ETIMEDOUT",
+]);
+
+function runtimeErrorCode(error: unknown) {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof error.code === "string"
+  ) {
+    return error.code;
+  }
+  return null;
+}
+
+export function classifyIngressDatabaseOperationFailure(
+  error: unknown,
+  transactionStarted: boolean,
+) {
+  if (error instanceof IngressDatabaseDiagnosticError) return error;
+  const code = runtimeErrorCode(error);
+  if (
+    code !== null &&
+    (tlsFailureCodes.has(code) || code.startsWith("ERR_TLS_"))
+  ) {
+    return new IngressDatabaseDiagnosticError("INGRESS_DATABASE_TLS_FAILED");
+  }
+  if (
+    code !== null &&
+    (connectionFailureCodes.has(code) || code.startsWith("08"))
+  ) {
+    return new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_CONNECTION_FAILED",
+    );
+  }
+  if (code !== null && (code.startsWith("28") || code === "42501")) {
+    return new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_AUTHORITY_FAILED",
+    );
+  }
+  if (transactionStarted) {
+    return new IngressDatabaseDiagnosticError("INGRESS_DATABASE_RPC_FAILED");
+  }
+  return new IngressDatabaseDiagnosticError(
+    "INGRESS_DATABASE_OPERATION_FAILED",
+  );
+}
+
+export function preservePrimaryIngressDatabaseFailure(
+  primary: IngressDatabaseDiagnosticError,
+  cleanup: IngressDatabaseDiagnosticError | null,
+) {
+  return cleanup === null
+    ? primary
+    : new IngressDatabaseDiagnosticError(primary.diagnosticCode, [
+        ...primary.secondaryDiagnosticCodes,
+        cleanup.diagnosticCode,
+      ]);
+}
+
 const safeDispositions = new Set([
   "verified",
   "duplicate",
@@ -97,25 +203,47 @@ export async function recordStripeWebhookEvidence(
 ) {
   const connectionString = process.env[ingressDatabaseSecretName];
   if (!connectionString) {
-    throw new Error("INGRESS_DATABASE_CONFIGURATION_INVALID");
+    throw new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_CONFIGURATION_FAILED",
+    );
   }
-  const configuration = buildVerifiedIngressDatabaseConfiguration(
-    connectionString,
-    process.env[ingressDatabaseCaName],
-  );
-  const sql = postgres(configuration.connectionString, {
-    ssl: configuration.ssl,
-    max: 1,
-    connect_timeout: 5,
-    idle_timeout: 1,
-    max_lifetime: 60,
-    prepare: false,
-    fetch_types: false,
-    onnotice: () => undefined,
-    connection: { application_name: "moon-reply-stripe-ingress" },
-  });
+  let configuration: ReturnType<
+    typeof buildVerifiedIngressDatabaseConfiguration
+  >;
+  try {
+    configuration = buildVerifiedIngressDatabaseConfiguration(
+      connectionString,
+      process.env[ingressDatabaseCaName],
+    );
+  } catch {
+    throw new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_CONFIGURATION_FAILED",
+    );
+  }
+  let sql: ReturnType<typeof postgres>;
+  try {
+    sql = postgres(configuration.connectionString, {
+      ssl: configuration.ssl,
+      max: 1,
+      connect_timeout: 5,
+      idle_timeout: 1,
+      max_lifetime: 60,
+      prepare: false,
+      fetch_types: false,
+      onnotice: () => undefined,
+      connection: { application_name: "moon-reply-stripe-ingress" },
+    });
+  } catch {
+    throw new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_CONFIGURATION_FAILED",
+    );
+  }
+  let transactionStarted = false;
+  let primaryFailure: IngressDatabaseDiagnosticError | null = null;
+  let disposition: string | undefined;
   try {
     const rows = await sql.begin(async (transaction) => {
+      transactionStarted = true;
       await transaction`set local statement_timeout = '5s'`;
       await transaction`set local lock_timeout = '2s'`;
       return transaction<{ disposition: string }[]>`
@@ -135,12 +263,37 @@ export async function recordStripeWebhookEvidence(
         ) as disposition
       `;
     });
-    const disposition = rows[0]?.disposition;
+    disposition = rows[0]?.disposition;
     if (!disposition || !safeDispositions.has(disposition)) {
-      throw new Error("INGRESS_DATABASE_DISPOSITION_INVALID");
+      throw new IngressDatabaseDiagnosticError(
+        "INGRESS_DATABASE_DISPOSITION_INVALID",
+      );
     }
-    return { disposition };
-  } finally {
-    await sql.end({ timeout: 1 });
+  } catch (error) {
+    primaryFailure = classifyIngressDatabaseOperationFailure(
+      error,
+      transactionStarted,
+    );
   }
+  let cleanupFailure: IngressDatabaseDiagnosticError | null = null;
+  try {
+    await sql.end({ timeout: 1 });
+  } catch {
+    cleanupFailure = new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_CLOSE_FAILED",
+    );
+  }
+  if (primaryFailure !== null) {
+    throw preservePrimaryIngressDatabaseFailure(
+      primaryFailure,
+      cleanupFailure,
+    );
+  }
+  if (cleanupFailure !== null) throw cleanupFailure;
+  if (disposition === undefined) {
+    throw new IngressDatabaseDiagnosticError(
+      "INGRESS_DATABASE_DISPOSITION_INVALID",
+    );
+  }
+  return { disposition };
 }
