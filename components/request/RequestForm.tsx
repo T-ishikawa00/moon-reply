@@ -55,6 +55,7 @@ import {
   publicClarificationDetailRequiredV1,
   publicClarificationDetailVisibleV1,
 } from "@/lib/assessment/production/public-clarification-contract-v1";
+import { postProductionPreparationWithRecovery } from "@/lib/assessment/production/preparation-response-recovery";
 import type { Jpy980ClarificationTarget } from "@/lib/assessment/runtime/types";
 
 export type RequestFormData = {
@@ -1775,24 +1776,20 @@ export function RequestForm({
     const idempotencyKey =
       preparationIdempotencyKey.current ?? crypto.randomUUID();
     preparationIdempotencyKey.current = idempotencyKey;
+    const serializedBody = JSON.stringify({
+      ...input,
+      consultationSchemaVersion: "rc1-production-consultation-v1",
+      privacyAcknowledged: true,
+    });
+    const correlationId = crypto.randomUUID();
     try {
-      const response = await fetch("/api/consultations/prepare", {
-        method: "POST",
-        credentials: "same-origin",
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-          "Idempotency-Key": idempotencyKey,
-        },
-        body: JSON.stringify({
-          ...input,
-          consultationSchemaVersion: "rc1-production-consultation-v1",
-          privacyAcknowledged: true,
-        }),
+      const outcome = await postProductionPreparationWithRecovery({
+        endpoint: "/api/consultations/prepare",
+        serializedBody,
+        idempotencyKey,
+        correlationId,
+        decodeOutcome: decodeProductionPreparation,
       });
-      if (!response.ok) throw new Error("PRODUCTION_PREPARATION_FAILED");
-      const outcome = decodeProductionPreparation(await response.json());
-      if (!outcome) throw new Error("PRODUCTION_PREPARATION_INVALID");
       if (outcome.status === "purchase_ready") {
         measureRequestComplete();
         if (prepaymentComputeEnabled && customerAuthEnabled) {
