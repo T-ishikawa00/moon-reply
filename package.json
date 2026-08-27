@@ -43,7 +43,8 @@
     "verify:m2-b2-i4": "node scripts/verify-m2-b2-i4-cutover-safety-controls.mjs",
     "verify:m2-b2:scheduled-artifacts": "node scripts/verify-m2-b2-scheduled-function-artifacts.mjs",
     "verify:m2:purchase-ready-authority-diagnostics": "node scripts/verify-m2-purchase-ready-authority-diagnostics.mjs",
-    "verify:m2:preparation-response-recovery": "node scripts/verify-m2-preparation-response-recovery.mjs"
+    "verify:m2:preparation-response-recovery": "node scripts/verify-m2-preparation-response-recovery.mjs",
+    "verify:preparation-latency-r1": "node scripts/verify-preparation-latency-optimization-r1.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",

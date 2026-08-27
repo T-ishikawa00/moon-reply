@@ -366,7 +366,7 @@ async function run() {
     const entryText = entryBytes.toString("utf8");
     assert.match(
       entryText,
-      /async function loadM2P4FinalProductRecoveryRuntimeStageCatalog\(\)/u,
+      /async function loadM2P4FinalProductRecoveryRuntimeStageCatalog\([^)]*\)/u,
       "compiled runtime loader missing from background artifact",
     );
     const probeModule = path.join(

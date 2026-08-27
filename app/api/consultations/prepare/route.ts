@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { asM2RuntimeError } from "@/lib/assessment/runtime/errors";
 import { prepareProductionConsultation } from "@/lib/assessment/production/service";
+import type {
+  ProductionPreparationRuntimeDiagnostic,
+  ProductionPreparationRuntimeDiagnosticContext,
+} from "@/lib/assessment/production/application-runtime";
 import {
   classifyPreparationOutcomeStatus,
   isPreparationResponseCorrelationId,
@@ -49,6 +53,16 @@ function logPreparationResponse(diagnostic: PreparationResponseDiagnostic) {
   }
 }
 
+function logPreparationRuntime(
+  diagnostic: ProductionPreparationRuntimeDiagnostic,
+) {
+  try {
+    console.info("M2_PREPARATION_RUNTIME_SERVER", diagnostic);
+  } catch {
+    // Diagnostics must never change the HTTP response.
+  }
+}
+
 export async function POST(request: Request) {
   const startedAt = performance.now();
   const requestedCorrelationId = request.headers.get(
@@ -62,13 +76,38 @@ export async function POST(request: Request) {
   const attempt = readPreparationResponseAttempt(
     request.headers.get(PREPARATION_RESPONSE_ATTEMPT_HEADER),
   );
+  let preparationRunStartedAt: number | null = null;
   try {
     enforceSameOrigin(request);
     const input = await readStrictJsonRequest(request, maximumBodyBytes);
+    preparationRunStartedAt = performance.now();
+    const diagnostics: ProductionPreparationRuntimeDiagnosticContext = {
+      correlationId,
+      attempt,
+      observe: logPreparationRuntime,
+    };
+    logPreparationRuntime({
+      correlationId,
+      attempt,
+      classification: "PREPARATION_RUN_START",
+      elapsedMilliseconds: 0,
+      cacheHit: null,
+      cacheKey: null,
+    });
     const outcome = await prepareProductionConsultation(
       input,
       request.headers.get("idempotency-key"),
+      { diagnostics },
     );
+    logPreparationRuntime({
+      correlationId,
+      attempt,
+      classification: "PREPARATION_RUN_DONE",
+      elapsedMilliseconds: elapsedMilliseconds(preparationRunStartedAt),
+      cacheHit: null,
+      cacheKey: null,
+    });
+    preparationRunStartedAt = null;
     logPreparationResponse({
       correlationId,
       attempt,
@@ -79,6 +118,16 @@ export async function POST(request: Request) {
     });
     return json({ data: outcome }, 200, correlationId, attempt);
   } catch (error) {
+    if (preparationRunStartedAt !== null) {
+      logPreparationRuntime({
+        correlationId,
+        attempt,
+        classification: "PREPARATION_RUN_FAILED",
+        elapsedMilliseconds: elapsedMilliseconds(preparationRunStartedAt),
+        cacheHit: null,
+        cacheKey: null,
+      });
+    }
     const safe = asM2RuntimeError(
       error,
       "PRODUCTION_PREPARATION_REQUEST_FAILED",

@@ -3,6 +3,7 @@ import { M2RuntimeError } from "../runtime/errors.ts";
 import {
   createProductionAssessmentApplication,
   createProviderFreeProductionAssessmentApplication,
+  type ProductionPreparationRuntimeDiagnosticContext,
 } from "./application-runtime.ts";
 import { hashProductionResultCapability } from "./capabilities.ts";
 import {
@@ -37,6 +38,7 @@ export {
 
 async function createApplication(options?: {
   allowSyntheticPurchaseAuthority?: boolean;
+  diagnostics?: ProductionPreparationRuntimeDiagnosticContext;
 }) {
   return createProductionAssessmentApplication(options);
 }
@@ -50,6 +52,7 @@ function requirePreparationRuntime() {
 export async function prepareProductionConsultation(
   value: unknown,
   idempotencyKey: unknown,
+  options?: { diagnostics?: ProductionPreparationRuntimeDiagnosticContext },
 ) {
   requirePreparationRuntime();
   if (isPrepaymentComputeBudgetEnabled()) {
@@ -57,7 +60,9 @@ export async function prepareProductionConsultation(
     if (!isCustomerAuthFoundationEnabled()) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
     }
-    const providerFree = await createProviderFreeProductionAssessmentApplication();
+    const providerFree = await createProviderFreeProductionAssessmentApplication(
+      options?.diagnostics ? { diagnostics: options.diagnostics } : undefined,
+    );
     const begun = await providerFree.beginProviderFreePreparation(
       value,
       idempotencyKey,
@@ -77,13 +82,21 @@ export async function prepareProductionConsultation(
       preparationCapability: begun.preparationCapability,
       identity,
     });
-    return (await createApplication()).executeAuthenticatedPrepayment({
+    return (
+      await createApplication(
+        options?.diagnostics ? { diagnostics: options.diagnostics } : undefined,
+      )
+    ).executeAuthenticatedPrepayment({
       preparationId: binding.preparationId,
       customerUserId: identity.customerUserId,
       policy,
     });
   }
-  return (await createApplication()).prepare(value, idempotencyKey);
+  return (
+    await createApplication(
+      options?.diagnostics ? { diagnostics: options.diagnostics } : undefined,
+    )
+  ).prepare(value, idempotencyKey);
 }
 
 export async function answerProductionClarification(

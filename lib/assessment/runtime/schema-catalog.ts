@@ -7,6 +7,7 @@ import {
   assertOpenAIStructuredOutputSchema,
   toOpenAiStructuredOutputSchema,
 } from "./openai-schema.ts";
+import { ImmutableRuntimeCache } from "./immutable-runtime-cache.ts";
 import type {
   JsonObject,
   LegacyM2StageId,
@@ -88,6 +89,46 @@ function hashJson(value: JsonObject) {
 
 async function readJson(filePath: string) {
   return JSON.parse(await readFile(filePath, "utf8")) as JsonObject;
+}
+
+export type RuntimeCatalogInitializationDiagnostic = {
+  classification:
+    | "CATALOG_INIT_START"
+    | "CATALOG_INIT_DONE"
+    | "CATALOG_INIT_FAILED"
+    | "CATALOG_CACHE_HIT"
+    | "CATALOG_INIT_JOINED";
+  cacheKey: string;
+  elapsedMilliseconds: number;
+};
+
+type RuntimeCatalogLoadOptions = {
+  observe?: (diagnostic: RuntimeCatalogInitializationDiagnostic) => void;
+};
+
+function observeRuntimeCatalogInitialization(
+  options: RuntimeCatalogLoadOptions | undefined,
+  diagnostic: RuntimeCatalogInitializationDiagnostic,
+) {
+  try {
+    options?.observe?.(diagnostic);
+  } catch {
+    // Diagnostics must never change catalog initialization.
+  }
+}
+
+function elapsedMilliseconds(startedAt: number) {
+  return Math.max(0, Math.round(performance.now() - startedAt));
+}
+
+function deepFreezeRuntimeMetadata<T>(value: T): T {
+  if (typeof value !== "object" || value === null || Object.isFrozen(value)) {
+    return value;
+  }
+  for (const nested of Object.values(value)) {
+    deepFreezeRuntimeMetadata(nested);
+  }
+  return Object.freeze(value);
 }
 
 function selectPointerSchema(rootSchema: JsonObject, pointer: string | null) {
@@ -2949,7 +2990,7 @@ export async function loadM2P4SentMessageDraftBoundaryRuntimeStageCatalog() {
 }
 
 
-export async function loadM2P4FinalProductRecoveryRuntimeStageCatalog() {
+async function initializeM2P4FinalProductRecoveryRuntimeStageCatalog() {
   const repositoryRoot = process.cwd();
   const contractsRoot = path.join(
     repositoryRoot,
@@ -3147,4 +3188,74 @@ export async function loadM2P4FinalProductRecoveryRuntimeStageCatalog() {
     stageTopologyVersion: runtimeManifest.stage_topology_version,
     definitions,
   };
+}
+
+export const FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY = [
+  "runtime-stage-catalog-v17.0.0",
+  "prompt-bundle-runtime-v17.0.0",
+  "pipeline-schema-runtime-v6.0.0",
+  "split-base-candidate-v1",
+  "baseline-37d98d405532009ac1057dfb5f44bb034ed64d9b",
+].join("|");
+
+export function finalProductRecoveryCatalogCacheKey() {
+  const repositoryRootHash = hashText(path.resolve(process.cwd()));
+  return `${FINAL_PRODUCT_RECOVERY_CATALOG_CACHE_IDENTITY}|root-${repositoryRootHash}`;
+}
+
+type FinalProductRecoveryRuntimeStageCatalog = Awaited<
+  ReturnType<typeof initializeM2P4FinalProductRecoveryRuntimeStageCatalog>
+>;
+
+const finalProductRecoveryCatalogCache =
+  new ImmutableRuntimeCache<FinalProductRecoveryRuntimeStageCatalog>();
+
+export async function loadM2P4FinalProductRecoveryRuntimeStageCatalog(
+  options?: RuntimeCatalogLoadOptions,
+) {
+  const initializedAt = performance.now();
+  const cacheKey = finalProductRecoveryCatalogCacheKey();
+  const lookup = finalProductRecoveryCatalogCache.getOrInitialize(
+    cacheKey,
+    async () => {
+      const startedAt = performance.now();
+      observeRuntimeCatalogInitialization(options, {
+        classification: "CATALOG_INIT_START",
+        cacheKey,
+        elapsedMilliseconds: 0,
+      });
+      try {
+        const catalog =
+          await initializeM2P4FinalProductRecoveryRuntimeStageCatalog();
+        const frozen = deepFreezeRuntimeMetadata(catalog);
+        observeRuntimeCatalogInitialization(options, {
+          classification: "CATALOG_INIT_DONE",
+          cacheKey,
+          elapsedMilliseconds: elapsedMilliseconds(startedAt),
+        });
+        return frozen;
+      } catch (error) {
+        observeRuntimeCatalogInitialization(options, {
+          classification: "CATALOG_INIT_FAILED",
+          cacheKey,
+          elapsedMilliseconds: elapsedMilliseconds(startedAt),
+        });
+        throw error;
+      }
+    },
+  );
+  if (lookup.cacheState === "ready") {
+    observeRuntimeCatalogInitialization(options, {
+      classification: "CATALOG_CACHE_HIT",
+      cacheKey,
+      elapsedMilliseconds: elapsedMilliseconds(initializedAt),
+    });
+  } else if (lookup.cacheState === "pending") {
+    observeRuntimeCatalogInitialization(options, {
+      classification: "CATALOG_INIT_JOINED",
+      cacheKey,
+      elapsedMilliseconds: elapsedMilliseconds(initializedAt),
+    });
+  }
+  return lookup.value;
 }

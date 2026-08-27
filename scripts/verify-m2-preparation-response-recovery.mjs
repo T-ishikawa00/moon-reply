@@ -425,8 +425,11 @@ await check("route emits bounded correlated success and safe-error logs", async 
       success.headers.get(recovery.PREPARATION_RESPONSE_CORRELATION_HEADER),
       correlationId,
     );
-    assert.equal(logs.at(-1)[1].classification, "PURCHASE_READY");
-    assert.equal(logs.at(-1)[1].attempt, 1);
+    const successResponseLog = logs.findLast(
+      ([channel]) => channel === "M2_PREPARATION_RESPONSE_SERVER",
+    );
+    assert.equal(successResponseLog[1].classification, "PURCHASE_READY");
+    assert.equal(successResponseLog[1].attempt, 1);
 
     routeState.mode = "error";
     const failure = await route.POST(
@@ -444,12 +447,36 @@ await check("route emits bounded correlated success and safe-error logs", async 
     assert.deepEqual(await failure.json(), {
       error: { code: "PRODUCTION_PREPARATION_IN_PROGRESS" },
     });
-    assert.equal(logs.at(-1)[1].classification, "HTTP_ERROR_WITH_SAFE_CODE");
-    assert.equal(logs.at(-1)[1].safeCode, "PRODUCTION_PREPARATION_IN_PROGRESS");
+    const failureResponseLog = logs.findLast(
+      ([channel]) => channel === "M2_PREPARATION_RESPONSE_SERVER",
+    );
+    assert.equal(
+      failureResponseLog[1].classification,
+      "HTTP_ERROR_WITH_SAFE_CODE",
+    );
+    assert.equal(
+      failureResponseLog[1].safeCode,
+      "PRODUCTION_PREPARATION_IN_PROGRESS",
+    );
   } finally {
     console.info = originalConsoleInfo;
   }
-  for (const values of logs) {
+  const responseLogs = logs.filter(
+    ([channel]) => channel === "M2_PREPARATION_RESPONSE_SERVER",
+  );
+  const runtimeLogs = logs.filter(
+    ([channel]) => channel === "M2_PREPARATION_RUNTIME_SERVER",
+  );
+  assert.deepEqual(
+    runtimeLogs.map(([, value]) => value.classification),
+    [
+      "PREPARATION_RUN_START",
+      "PREPARATION_RUN_DONE",
+      "PREPARATION_RUN_START",
+      "PREPARATION_RUN_FAILED",
+    ],
+  );
+  for (const values of responseLogs) {
     assert.deepEqual(Object.keys(values[1]).sort(), [
       "attempt",
       "classification",
@@ -457,6 +484,16 @@ await check("route emits bounded correlated success and safe-error logs", async 
       "elapsedMilliseconds",
       "httpStatus",
       "safeCode",
+    ]);
+  }
+  for (const values of runtimeLogs) {
+    assert.deepEqual(Object.keys(values[1]).sort(), [
+      "attempt",
+      "cacheHit",
+      "cacheKey",
+      "classification",
+      "correlationId",
+      "elapsedMilliseconds",
     ]);
   }
   const serializedLog = JSON.stringify(logs);
