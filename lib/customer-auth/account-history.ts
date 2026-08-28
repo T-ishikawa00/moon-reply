@@ -110,7 +110,7 @@ export type CustomerAccountHistoryPresentation = Readonly<{
   date: string;
   title: string;
   dateTimeLabel: string;
-  statusLabel: "処理中" | "完了" | "確認中";
+  statusLabel: "準備中" | "確認中" | null;
   summary: string;
   canOpenResult: boolean;
 }>;
@@ -122,29 +122,29 @@ export function presentCustomerAccountHistoryItem(
   if (item.state === "completed" && item.deliveryId !== null) {
     return {
       ...item,
-      title: `${shortDateTime}の鑑定ノート`,
+      title: "あなたに届いた鑑定ノート",
       dateTimeLabel: `${shortDateTime}（日本時間）`,
-      statusLabel: "完了",
-      summary: "鑑定ノートを確認できます。",
+      statusLabel: null,
+      summary: "迷った夜に受け取った言葉を、ここからいつでも読み返せます。",
       canOpenResult: true,
     };
   }
   if (item.state === "completed") {
     return {
       ...item,
-      title: `${shortDateTime}の鑑定ノート`,
+      title: "鑑定ノートを確認しています",
       dateTimeLabel: `${shortDateTime}（日本時間）`,
       statusLabel: "確認中",
-      summary: "現在、鑑定ノートの状態を確認しています。",
+      summary: "表示できる状態か確認しています。時間を置いて、もう一度ご確認ください。",
       canOpenResult: false,
     };
   }
   return {
     ...item,
-    title: `${shortDateTime}の鑑定ノート`,
+    title: "鑑定ノートを準備しています",
     dateTimeLabel: `${shortDateTime}（日本時間）`,
-    statusLabel: "処理中",
-    summary: "鑑定ノートを準備しています。",
+    statusLabel: "準備中",
+    summary: "言葉が届くまで、もう少しだけお待ちください。",
     canOpenResult: false,
   };
 }

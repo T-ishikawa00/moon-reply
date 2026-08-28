@@ -2,8 +2,8 @@
   min-width: 0;
   padding: 3rem 1rem 5rem;
   overflow: hidden;
-  background: #eee7dc;
-  color: #201d2b;
+  background: var(--paper-300);
+  color: var(--ink-950);
 }
 
 .header {
@@ -13,7 +13,7 @@
 
 .header h1 {
   margin: 0.4rem 0 0.7rem;
-  font-family: var(--font-serif), serif;
+  font-family: var(--font-heading);
 }
 
 .header p:last-child {
@@ -30,8 +30,8 @@
   max-width: 100%;
   margin-inline: auto;
   padding: 1rem;
-  border: 1px dashed #8d819e;
-  background: #f6f1e8;
+  border: 1px dashed var(--ink-500);
+  background: var(--paper-200);
   overflow: hidden;
 }
 
@@ -49,7 +49,7 @@
 
 .viewportLabel {
   margin: 0 0 0.75rem;
-  color: #675d7b;
+  color: var(--ink-600);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;

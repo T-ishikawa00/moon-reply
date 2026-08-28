@@ -16,20 +16,20 @@ const syntheticHistory: readonly CustomerAccountHistoryPresentation[] = [
     purchaseIntentId: "11111111-1111-4111-8111-111111111111",
     deliveryId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
     date: "2026-08-25T09:42:00Z",
-    title: "8月25日 18:42の鑑定ノート",
+    title: "あなたに届いた鑑定ノート",
     dateTimeLabel: "8月25日 18:42（日本時間）",
-    statusLabel: "完了",
-    summary: "鑑定ノートを確認できます。",
+    statusLabel: null,
+    summary: "迷った夜に受け取った言葉を、ここからいつでも読み返せます。",
     canOpenResult: true,
   },
   {
     purchaseIntentId: "22222222-2222-4222-8222-222222222222",
     deliveryId: null,
     date: "2026-08-25T01:05:00Z",
-    title: "8月25日 10:05の鑑定ノート",
+    title: "鑑定ノートを準備しています",
     dateTimeLabel: "8月25日 10:05（日本時間）",
-    statusLabel: "処理中",
-    summary: "鑑定ノートを準備しています。",
+    statusLabel: "準備中",
+    summary: "言葉が届くまで、もう少しだけお待ちください。",
     canOpenResult: false,
   },
 ];
@@ -52,16 +52,17 @@ function ReviewHistory({ viewport }: { viewport: "320" | "390" | "1280" }) {
                 aria-labelledby={`review-${viewport}-account-note-${index}`}
               >
                 <div className={styles.cardHeader}>
-                  <div>
-                    <p className={styles.dateLabel}>
-                      日付・時刻：
-                      <time dateTime={item.date}>{item.dateTimeLabel}</time>
-                    </p>
+                  <div className={styles.noteHeading}>
+                    <time className={styles.dateLabel} dateTime={item.date}>
+                      {item.dateTimeLabel}
+                    </time>
                     <h2 id={`review-${viewport}-account-note-${index}`}>
                       {item.title}
                     </h2>
                   </div>
-                  <span className={styles.status}>{item.statusLabel}</span>
+                  {item.statusLabel ? (
+                    <span className={styles.status}>{item.statusLabel}</span>
+                  ) : null}
                 </div>
                 <p className={styles.summary}>{item.summary}</p>
                 <div className={styles.cardActions}>
@@ -70,7 +71,7 @@ function ReviewHistory({ viewport }: { viewport: "320" | "390" | "1280" }) {
                       className={styles.primaryAction}
                       href={`/account/results/${item.deliveryId}`}
                     >
-                      鑑定ノートを開く
+                      ノートをひらく
                     </Link>
                   ) : null}
                   <Link

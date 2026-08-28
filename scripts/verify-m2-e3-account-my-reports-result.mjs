@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import ts from "typescript";
 
 const root = process.cwd();
-const acceptedAuthority = "ba9fa78b69da62f9abd24b54fe2a3c850001d785";
+const acceptedAuthority = "01cfab6666ef8523ba0492d4838d87da6b368b27";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 
 function resolveLocalModule(specifier, parentURL) {
@@ -200,7 +200,7 @@ check("UTC to JST rollover changes the visible calendar date exactly", () => {
   );
 });
 
-check("same-JST-day notes remain visibly distinct without content", () => {
+check("same-JST-day notes retain distinct explicit timestamps with generic copy", () => {
   const morning = historyModule.presentCustomerAccountHistoryItem({
     purchaseIntentId: purchaseA,
     deliveryId: null,
@@ -213,9 +213,9 @@ check("same-JST-day notes remain visibly distinct without content", () => {
     date: "2026-08-25T09:42:00Z",
     state: "completed",
   });
-  assert.equal(morning.title, "8月25日 10:05の鑑定ノート");
-  assert.equal(evening.title, "8月25日 18:42の鑑定ノート");
-  assert.notEqual(morning.title, evening.title);
+  assert.equal(morning.dateTimeLabel, "8月25日 10:05（日本時間）");
+  assert.equal(evening.dateTimeLabel, "8月25日 18:42（日本時間）");
+  assert.notEqual(morning.dateTimeLabel, evening.dateTimeLabel);
 });
 
 check("history presentation is newest-first with deterministic invisible ties", () => {
@@ -230,8 +230,12 @@ check("titles and summaries are state-only and contain no private content vocabu
   const presented = historyModule.presentCustomerAccountHistoryItem(
     historyModule.decodeCustomerAccountHistoryRow(validCompletedRow),
   );
-  const visible = `${presented.title}\n${presented.dateTimeLabel}\n${presented.statusLabel}\n${presented.summary}`;
-  assert.equal(visible, "8月25日 18:42の鑑定ノート\n8月25日 18:42（日本時間）\n完了\n鑑定ノートを確認できます。");
+  const visible = `${presented.title}\n${presented.dateTimeLabel}\n${presented.summary}`;
+  assert.equal(
+    visible,
+    "あなたに届いた鑑定ノート\n8月25日 18:42（日本時間）\n迷った夜に受け取った言葉を、ここからいつでも読み返せます。",
+  );
+  assert.equal(presented.statusLabel, null);
   assert.doesNotMatch(visible, /@|aaaaaaaa|bbbbbbbb|相談|相手|下書き|Customer|UUID/iu);
 });
 
@@ -304,7 +308,17 @@ check("Account page exposes exact customer recovery states and actions", () => {
   assert.match(source, /現在、ログイン状態を確認できません/u);
   assert.match(source, /ログインが必要です[\s\S]*?href="\/login"/u);
   assert.match(source, /鑑定ノートの一覧を読み込めませんでした[\s\S]*?もう一度確認する/u);
-  assert.match(source, /まだ鑑定ノートはありません[\s\S]*?href="\/request"/u);
+  assert.match(source, /まだ届いた鑑定ノートはありません[\s\S]*?href="\/request"/u);
+});
+
+check("Lunar Note Shelf hierarchy reuses the established brand language", () => {
+  const source = text("app/account/page.tsx");
+  assert.match(source, /MoonSeal size="medium"/u);
+  assert.match(source, /LunarArc tone="night" position="top-right"/u);
+  assert.match(source, /EditorialDivider variant="night"/u);
+  assert.match(source, /<h1>これまで届いた鑑定ノート<\/h1>/u);
+  assert.match(source, /迷った夜に受け取った言葉を、ここからいつでも読み返せます。/u);
+  assert.doesNotMatch(source, /日付・時刻：/u);
 });
 
 check("Account makes one history read and no per-card result read", () => {
@@ -327,18 +341,18 @@ check("fresh server identity remains the sole CustomerUserId source", () => {
   assert.doesNotMatch(text("app/account/page.tsx"), /customerUserId/u);
 });
 
-check("cards use semantic headings, visible status text, and explicit time", () => {
+check("cards use semantic headings, conditional status text, and explicit time", () => {
   const source = text("app/account/page.tsx");
   assert.match(source, /<article aria-labelledby=/u);
   assert.match(source, /<h2 id=/u);
-  assert.match(source, /<time dateTime=\{item\.date\}>/u);
-  assert.match(source, /\{item\.statusLabel\}/u);
+  assert.match(source, /<time className=\{styles\.dateLabel\} dateTime=\{item\.date\}>/u);
+  assert.match(source, /item\.statusLabel \? \([\s\S]*?\{item\.statusLabel\}/u);
 });
 
 check("completed results use only the canonical authenticated CTA", () => {
   const source = text("app/account/page.tsx");
   assert.match(source, /item\.canOpenResult && item\.deliveryId !== null/u);
-  assert.match(source, /href=\{`\/account\/results\/\$\{item\.deliveryId\}`\}[\s\S]*?鑑定ノートを開く/u);
+  assert.match(source, /href=\{`\/account\/results\/\$\{item\.deliveryId\}`\}[\s\S]*?ノートをひらく/u);
   assert.doesNotMatch(source, /href=\{`\/result\//u);
 });
 
@@ -346,8 +360,8 @@ check("processing cards never become result destinations", () => {
   const item = historyModule.presentCustomerAccountHistoryItem(
     historyModule.decodeCustomerAccountHistoryRow(validProcessingRow),
   );
-  assert.equal(item.statusLabel, "処理中");
-  assert.equal(item.summary, "鑑定ノートを準備しています。");
+  assert.equal(item.statusLabel, "準備中");
+  assert.equal(item.summary, "言葉が届くまで、もう少しだけお待ちください。");
   assert.equal(item.canOpenResult, false);
 });
 
@@ -487,14 +501,17 @@ check("mobile and desktop source contract prevents action collisions", () => {
   assert.match(source, /:focus-visible/u);
   assert.match(source, /container-type: inline-size/u);
   assert.match(source, /@container \(max-width: 420px\)/u);
+  assert.match(source, /var\(--font-heading\)/u);
+  assert.match(source, /var\(--paper-grain-line\)/u);
+  assert.match(source, /var\(--focus-ring\)/u);
 });
 
 check("static E3 review fixture covers completed and processing same-day cards", () => {
   const source = text("app/review/account/page.tsx");
-  assert.match(source, /8月25日 18:42の鑑定ノート/u);
-  assert.match(source, /8月25日 10:05の鑑定ノート/u);
-  assert.match(source, /statusLabel: "完了"/u);
-  assert.match(source, /statusLabel: "処理中"/u);
+  assert.match(source, /title: "あなたに届いた鑑定ノート"/u);
+  assert.match(source, /title: "鑑定ノートを準備しています"/u);
+  assert.match(source, /statusLabel: null/u);
+  assert.match(source, /statusLabel: "準備中"/u);
   assert.match(source, /この購入について問い合わせる/u);
   assert.match(source, /ReviewHistory viewport="320"/u);
   assert.match(source, /ReviewHistory viewport="390"/u);
@@ -537,7 +554,7 @@ check("E3 adds no migration, dependency, or Next.js change", () => {
   assert.equal(diffFromBase(["package-lock.json"]), "");
   assert.equal(
     JSON.parse(text("package.json")).dependencies.next,
-    "^16.3.0",
+    "16.3.3",
   );
 });
 
