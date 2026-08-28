@@ -11,7 +11,7 @@ import { currentCustomerLegalFacts } from "@/lib/legal/current-content";
 
 export const metadata: Metadata = {
   title: "特定商取引法に基づく表記 | 月の返事",
-  description: "月の返事の現在の販売条件と、提供開始前に掲載する販売事業者情報についての案内です。",
+  description: "月の返事の販売条件と、販売事業者情報の開示方法についての案内です。",
 };
 
 const salesFacts = [
@@ -33,16 +33,16 @@ export default function TokushohoPage() {
     <CustomerLegalScaffold currentPath="/legal/tokushoho">
       <CustomerLegalHeader
         title="特定商取引法に基づく表記"
-        description="月の返事の販売条件と、販売事業者情報の現在の掲載状態をご案内します。"
+        description="月の返事の販売条件と、販売事業者情報の開示方法をご案内します。"
       />
       <div className="legal-document-body">
-        <CustomerNotice title="販売事業者情報の掲載は完了していません">
+        <CustomerNotice title="販売事業者情報について">
           <p>
-            販売事業者名、代表者、所在地、電話番号、事業用の問い合わせ先は現在掲載していません。実在する情報と受付方法を整え、提供開始前にこのページへ掲載します。
+            販売業者の氏名（名称）、住所および電話番号は、請求があった場合、遅滞なく開示します。
           </p>
-          <p>
-            架空の情報や、個人情報を守る目的だけで法令上必要な表示を省略できるという説明は行いません。
-          </p>
+          <Link href="/contact" className="legal-document-action">
+            販売事業者情報の開示を請求する
+          </Link>
         </CustomerNotice>
 
         <LegalContentSection title="現在確定している販売条件">
@@ -64,9 +64,9 @@ export default function TokushohoPage() {
 
         <LegalContentSection title="お問い合わせ" tone="night">
           <p>
-            現在利用できる受付方法は、お問い合わせページで案内します。販売事業者情報に必要な連絡先は、実在する情報を整えた後、このページにも掲載します。
+            販売事業者情報の開示請求を含むお問い合わせは、お問い合わせページで受け付けています。
           </p>
-          <Link href="/contact" className="legal-document-action">お問い合わせの案内を見る</Link>
+          <Link href="/contact" className="legal-document-action">お問い合わせ窓口を確認する</Link>
         </LegalContentSection>
       </div>
     </CustomerLegalScaffold>
