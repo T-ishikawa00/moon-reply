@@ -1,42 +1,56 @@
 .page {
   min-width: 0;
-  padding: 3rem 1rem 5rem;
   overflow: hidden;
   background: var(--paper-300);
   color: var(--ink-950);
 }
 
-.header {
-  width: min(760px, 100%);
-  margin: 0 auto 2rem;
+.reviewBody {
+  padding: clamp(2.5rem, 7vw, 5rem) 1rem;
 }
 
-.header h1 {
-  margin: 0.4rem 0 0.7rem;
+.header {
+  width: min(100%, 72rem);
+  margin: 0 auto var(--space-6);
+}
+
+.kicker {
+  margin: 0;
+  color: var(--focus-ring-paper);
+  font-size: var(--type-metadata);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  margin: var(--space-2) 0 var(--space-3);
   font-family: var(--font-heading);
+  font-size: clamp(1.65rem, 4vw, 2.5rem);
+  font-weight: 600;
 }
 
 .header p:last-child {
+  margin: 0;
   line-height: 1.75;
 }
 
 .stack {
   display: grid;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: clamp(2rem, 5vw, 3.5rem);
 }
 
 .frame {
   box-sizing: border-box;
+  min-width: 0;
   max-width: 100%;
   margin-inline: auto;
-  padding: 1rem;
+  overflow: hidden;
   border: 1px dashed var(--ink-500);
   background: var(--paper-200);
-  overflow: hidden;
-}
-
-.width320 {
-  width: 320px;
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
 }
 
 .width390 {
@@ -48,9 +62,9 @@
 }
 
 .viewportLabel {
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--space-4);
   color: var(--ink-600);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: var(--type-metadata);
+  font-weight: 800;
   letter-spacing: 0.08em;
 }

@@ -109,23 +109,53 @@ export type CustomerAccountHistoryPresentation = Readonly<{
   deliveryId: string | null;
   date: string;
   title: string;
+  coverDateLabel: string;
+  coverVariant: CustomerAccountCoverVariant;
   dateTimeLabel: string;
   statusLabel: "準備中" | "確認中" | null;
   summary: string;
   canOpenResult: boolean;
 }>;
 
+export const CUSTOMER_ACCOUNT_COMPLETED_COVER_VARIANTS = [
+  "night",
+  "ivory",
+  "violet",
+] as const;
+
+export type CustomerAccountCoverVariant =
+  | (typeof CUSTOMER_ACCOUNT_COMPLETED_COVER_VARIANTS)[number]
+  | "processing";
+
+export function selectCustomerAccountCoverVariant(
+  purchaseIntentId: string,
+): (typeof CUSTOMER_ACCOUNT_COMPLETED_COVER_VARIANTS)[number] {
+  uuid(purchaseIntentId);
+  const stableTotal = [...purchaseIntentId]
+    .filter((character) => character !== "-")
+    .reduce((total, character) => total + Number.parseInt(character, 16), 0);
+  return CUSTOMER_ACCOUNT_COMPLETED_COVER_VARIANTS[
+    stableTotal % CUSTOMER_ACCOUNT_COMPLETED_COVER_VARIANTS.length
+  ];
+}
+
 export function presentCustomerAccountHistoryItem(
   item: CustomerAccountHistoryItem,
 ): CustomerAccountHistoryPresentation {
   const shortDateTime = formatCustomerAccountTimestampJst(item.date);
+  const coverDateLabel = shortDateTime.slice(0, shortDateTime.indexOf(" "));
+  const completedCoverVariant = selectCustomerAccountCoverVariant(
+    item.purchaseIntentId,
+  );
   if (item.state === "completed" && item.deliveryId !== null) {
     return {
       ...item,
-      title: "あなたに届いた鑑定ノート",
+      title: "鑑定ノート",
+      coverDateLabel,
+      coverVariant: completedCoverVariant,
       dateTimeLabel: `${shortDateTime}（日本時間）`,
       statusLabel: null,
-      summary: "迷った夜に受け取った言葉を、ここからいつでも読み返せます。",
+      summary: "いまの気持ちと、次の一歩をまとめたノートです。",
       canOpenResult: true,
     };
   }
@@ -133,6 +163,8 @@ export function presentCustomerAccountHistoryItem(
     return {
       ...item,
       title: "鑑定ノートを確認しています",
+      coverDateLabel,
+      coverVariant: "processing",
       dateTimeLabel: `${shortDateTime}（日本時間）`,
       statusLabel: "確認中",
       summary: "表示できる状態か確認しています。時間を置いて、もう一度ご確認ください。",
@@ -141,10 +173,12 @@ export function presentCustomerAccountHistoryItem(
   }
   return {
     ...item,
-    title: "鑑定ノートを準備しています",
+    title: "鑑定ノート",
+    coverDateLabel,
+    coverVariant: "processing",
     dateTimeLabel: `${shortDateTime}（日本時間）`,
     statusLabel: "準備中",
-    summary: "言葉が届くまで、もう少しだけお待ちください。",
+    summary: "あなたへの言葉を、いま静かに整えています。",
     canOpenResult: false,
   };
 }

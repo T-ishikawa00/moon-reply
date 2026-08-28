@@ -3,9 +3,6 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { AccountLogoutButton } from "@/components/account/AccountLogoutButton";
-import { EditorialDivider } from "@/components/brand/EditorialDivider";
-import { LunarArc } from "@/components/brand/LunarArc";
-import { MoonSeal } from "@/components/brand/MoonSeal";
 import { presentCustomerAccountHistory } from "@/lib/customer-auth/account-history";
 import { resolveCustomerAccountPage } from "@/lib/customer-auth/account-page-resolution";
 import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/account-service";
@@ -13,6 +10,8 @@ import { AUTH_SESSION_CSRF_COOKIE } from "@/lib/customer-auth/cookies";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
 import { createCustomerIdentityAuthApplication } from "@/lib/customer-auth/service";
 import { isCustomerSupportCasesEnabled } from "@/lib/support/environment";
+import { AccountNoteGallery } from "./AccountNoteGallery";
+import { AccountNoteHero } from "./AccountNoteHero";
 import styles from "./account.module.css";
 
 export const dynamic = "force-dynamic";
@@ -50,21 +49,7 @@ export default async function AccountPage({
 
   return (
     <main className={styles.page}>
-      <header className={styles.hero}>
-        <LunarArc tone="night" position="top-right" />
-        <div className={styles.heroInner}>
-          <div className={styles.brand}>
-            <MoonSeal size="medium" />
-            <span>月の返事</span>
-          </div>
-          <p className={styles.eyebrow}>私の鑑定ノート</p>
-          <h1>これまで届いた鑑定ノート</h1>
-          <p className={styles.intro}>
-            迷った夜に受け取った言葉を、ここからいつでも読み返せます。
-          </p>
-          <EditorialDivider variant="night" />
-        </div>
-      </header>
+      <AccountNoteHero />
       <div className={styles.shelfSurface}>
         <div className={styles.shell}>
           {query.auth === "failed" ? (
@@ -100,52 +85,18 @@ export default async function AccountPage({
             </section>
           ) : resolution.state === "empty" ? (
             <section className={styles.empty}>
-              <p className={styles.stateKicker}>まだ静かな本棚です</p>
+              <p className={styles.stateKicker}>私の鑑定ノート</p>
               <h2>まだ届いた鑑定ノートはありません</h2>
               <p>
                 新しい鑑定ノートが届くと、この場所からいつでも読み返せます。
               </p>
-              <Link href="/request">鑑定ノートを依頼する</Link>
+              <Link href="/request">新しい鑑定を依頼する</Link>
             </section>
           ) : (
-            <ol className={styles.history} aria-label="鑑定ノート一覧">
-              {history.map((item, index) => (
-                <li key={item.purchaseIntentId} className={styles.item}>
-                  <article aria-labelledby={`account-note-${index}`}>
-                    <div className={styles.cardHeader}>
-                      <div className={styles.noteHeading}>
-                        <time className={styles.dateLabel} dateTime={item.date}>
-                          {item.dateTimeLabel}
-                        </time>
-                        <h2 id={`account-note-${index}`}>{item.title}</h2>
-                      </div>
-                      {item.statusLabel ? (
-                        <span className={styles.status}>{item.statusLabel}</span>
-                      ) : null}
-                    </div>
-                    <p className={styles.summary}>{item.summary}</p>
-                    <div className={styles.cardActions}>
-                      {item.canOpenResult && item.deliveryId !== null ? (
-                        <Link
-                          className={styles.primaryAction}
-                          href={`/account/results/${item.deliveryId}`}
-                        >
-                          ノートをひらく
-                        </Link>
-                      ) : null}
-                      {supportEnabled ? (
-                        <Link
-                          className={styles.secondaryAction}
-                          href={`/contact?purchase=${encodeURIComponent(item.purchaseIntentId)}`}
-                        >
-                          この購入について問い合わせる
-                        </Link>
-                      ) : null}
-                    </div>
-                  </article>
-                </li>
-              ))}
-            </ol>
+            <AccountNoteGallery
+              history={history}
+              supportEnabled={supportEnabled}
+            />
           )}
           <div className={styles.actions}>
             <Link href="/">月の返事へ戻る</Link>
