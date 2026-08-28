@@ -30,6 +30,7 @@ import {
   toPrepaymentSafetyInput,
 } from "./consultation.ts";
 import type { DeliveryNotificationAdapterV1 } from "./notification.ts";
+import { ProviderFreeIntakeApplication } from "./provider-free-intake.ts";
 import type {
   PrepaymentComputeAuthorityRepository,
   PrepaymentComputePolicyV1,
@@ -96,6 +97,7 @@ export class ProductionFulfillmentApplication {
   private readonly now: () => string;
   private readonly uuid: () => string;
   private readonly capability: () => string;
+  private readonly providerFreeIntake: ProviderFreeIntakeApplication;
 
   constructor(options: ProductionFulfillmentApplicationOptions) {
     validateCatalog(options.catalog);
@@ -103,6 +105,14 @@ export class ProductionFulfillmentApplication {
     this.now = options.now ?? (() => new Date().toISOString());
     this.uuid = options.uuid ?? randomUUID;
     this.capability = options.capability ?? createOpaqueProductionCapability;
+    this.providerFreeIntake = new ProviderFreeIntakeApplication({
+      runtimeRepository: options.runtimeRepository,
+      lifecycleRepository: options.lifecycleRepository,
+      prepaymentComputeAuthority: options.prepaymentComputeAuthority,
+      now: this.now,
+      uuid: this.uuid,
+      capability: this.capability,
+    });
     const leaseSeconds =
       options.fulfillmentLeaseSeconds ??
       DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS;
@@ -143,53 +153,10 @@ export class ProductionFulfillmentApplication {
     preparation: ProductionPreparationRecord,
     consultationSnapshotHash: string,
   ): Promise<PublicPreparationOutcome> {
-    if (preparation.consultationSnapshotHash !== consultationSnapshotHash) {
-      throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_CONFLICT", 409);
-    }
-    if (preparation.status === "purchase_ready") {
-      const rawCapability = this.capability();
-      await this.options.lifecycleRepository.rotatePurchaseCapability(
-        preparation.id,
-        hashOpaqueProductionCapability(rawCapability),
-        this.now(),
-      );
-      return { status: "purchase_ready", preparationCapability: rawCapability };
-    }
-    if (preparation.status === "awaiting_clarification") {
-      if (!preparation.clarificationId || !preparation.clarificationQuestion) {
-        throw new M2RuntimeError("PRODUCTION_PREPARATION_STATE_INVALID");
-      }
-      const persisted =
-        await this.options.runtimeRepository.findClarificationById(
-          preparation.clarificationId,
-        );
-      if (
-        !persisted ||
-        persisted.questionSnapshot !== preparation.clarificationQuestion
-      ) {
-        throw new M2RuntimeError("PRODUCTION_PREPARATION_STATE_INVALID");
-      }
-      const rawCapability = this.capability();
-      await this.options.lifecycleRepository.rotateClarificationCapability(
-        preparation.id,
-        hashOpaqueProductionCapability(rawCapability),
-        this.now(),
-      );
-      return {
-        status: "needs_one_clarifying_answer",
-        clarificationCapability: rawCapability,
-        target: persisted.target,
-        question: preparation.clarificationQuestion,
-        maximumQuestionsTotal: 1,
-      };
-    }
-    if (preparation.status === "stopped" && preparation.stopReason) {
-      return { status: preparation.stopReason };
-    }
-    if (preparation.status === "failed") {
-      throw new M2RuntimeError("PRODUCTION_PREPARATION_RECOVERY_REQUIRED", 503);
-    }
-    throw new M2RuntimeError("PRODUCTION_PREPARATION_IN_PROGRESS", 409);
+    return this.providerFreeIntake.replayPreparation(
+      preparation,
+      consultationSnapshotHash,
+    );
   }
 
   private async finalizePipelinePreparation(
@@ -315,47 +282,10 @@ export class ProductionFulfillmentApplication {
     value: unknown,
     idempotencyKey: unknown,
   ): Promise<PublicPreparationOutcome> {
-    const authority = this.options.prepaymentComputeAuthority;
-    if (!authority) {
-      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
-    }
-    const consultation = decodeProductionConsultationInputV1(value);
-    const idempotencyKeyHash = hashProductionIdempotencyKey(idempotencyKey);
-    const safetyAuthority = evaluatePrepaymentSafetyV1(
-      toPrepaymentSafetyInput(consultation),
+    return this.providerFreeIntake.beginProviderFreePreparation(
+      value,
+      idempotencyKey,
     );
-    if (!safetyAuthority.purchaseGateSatisfied) {
-      return { status: "safety_blocked" };
-    }
-    const assessmentInput = toAssessmentInput(consultation);
-    validateJpy980ProductScopeV1(assessmentInput);
-    const consultationSnapshotHash = hashProductionSnapshot({
-      consultation,
-      safetyAuthority,
-    });
-    const capability = this.capability();
-    const now = this.now();
-    const begun = await authority.beginPrepaymentIntake({
-      preparationId: this.uuid(),
-      requestId: this.uuid(),
-      idempotencyKeyHash,
-      consultationSnapshotHash,
-      consultationSnapshot: consultation,
-      assessmentInput,
-      safetyAuthority,
-      executionCapabilityHash: hashOpaqueProductionCapability(capability),
-      now,
-    });
-    if (begun.preparation.consultationSnapshotHash !== consultationSnapshotHash) {
-      throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_CONFLICT", 409);
-    }
-    if (
-      begun.preparation.status === "preparing" &&
-      begun.executionDisposition === "awaiting_auth"
-    ) {
-      return { status: "authentication_required", preparationCapability: capability };
-    }
-    return this.replayPreparation(begun.preparation, consultationSnapshotHash);
   }
 
   async executeAuthenticatedPrepayment(input: {

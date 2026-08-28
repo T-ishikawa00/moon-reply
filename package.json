@@ -27,6 +27,7 @@
     "verify:rc2:email-provider": "node scripts/verify-rc2-resend-email-provider.mjs",
     "verify:customer-auth-foundation": "node scripts/verify-customer-auth-foundation.mjs",
     "verify:m2-c1": "node scripts/verify-m2-c1-prepayment-compute-budget.mjs",
+    "verify:m2-c1:lightweight-intake": "node scripts/verify-m2-c1-lightweight-intake-fast-path.mjs",
     "verify:m2-d1": "node scripts/verify-m2-d1-customer-legal-current-truth.mjs",
     "verify:m2-d2": "node scripts/verify-m2-d2-contact-paid-failure-recovery-support.mjs",
     "verify:m2-e1": "node scripts/verify-m2-e1-google-auth-latency-measurement.mjs",

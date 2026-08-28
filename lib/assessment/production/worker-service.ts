@@ -1,5 +1,4 @@
 import { M2RuntimeError } from "../runtime/errors.ts";
-import { createProductionAssessmentApplication } from "./application-runtime.ts";
 import {
   isProductionFulfillmentAvailable,
   readProductionAssessmentEnvironment,
@@ -11,6 +10,13 @@ import type {
   VerifiedPurchaseAuthorityV1,
 } from "./types.ts";
 
+async function createApplication() {
+  const { createProductionAssessmentApplication } = await import(
+    "./application-runtime.ts"
+  );
+  return createProductionAssessmentApplication();
+}
+
 function requireFulfillmentRuntime() {
   if (!isProductionFulfillmentAvailable()) {
     throw new M2RuntimeError("PRODUCTION_FULFILLMENT_UNAVAILABLE", 404);
@@ -21,7 +27,7 @@ export async function issueProductionAssessmentGrant(
   authority: VerifiedPurchaseAuthorityV1,
 ) {
   requireFulfillmentRuntime();
-  return (await createProductionAssessmentApplication()).issueAssessmentGrant(
+  return (await createApplication()).issueAssessmentGrant(
     authority,
   );
 }
@@ -30,7 +36,7 @@ export async function fulfillProductionAssessmentGrant(
   grant: AssessmentGrantHandleV1,
 ) {
   requireFulfillmentRuntime();
-  return (await createProductionAssessmentApplication()).fulfillAssessmentGrant(
+  return (await createApplication()).fulfillAssessmentGrant(
     grant,
   );
 }
@@ -40,7 +46,7 @@ export async function recoverCompletedProductionAssessmentGrant(
 ) {
   requireFulfillmentRuntime();
   return (
-    await createProductionAssessmentApplication()
+    await createApplication()
   ).recoverCompletedAssessmentGrant(grant);
 }
 
@@ -49,7 +55,7 @@ export async function processProductionNotificationWithAdapter(
   adapter: DeliveryNotificationAdapterV1,
 ) {
   requireFulfillmentRuntime();
-  return (await createProductionAssessmentApplication()).processNotification(
+  return (await createApplication()).processNotification(
     notificationId,
     adapter,
   );

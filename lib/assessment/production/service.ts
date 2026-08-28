@@ -1,16 +1,15 @@
 import "server-only";
 import { M2RuntimeError } from "../runtime/errors.ts";
-import {
-  createProductionAssessmentApplication,
-  createProviderFreeProductionAssessmentApplication,
-} from "./application-runtime.ts";
+import { SupabaseAssessmentRepository } from "../runtime/supabase-repository.ts";
 import { hashProductionResultCapability } from "./capabilities.ts";
 import {
   isProductionPreparationAvailable,
   isProductionResultAccessAvailable,
   readProductionResultEnvironment,
 } from "./environment.ts";
+import { readProductionPersistenceEnvironment } from "./environment-runtime.ts";
 import { UnconfiguredDeliveryNotificationAdapterV1 } from "./notification.ts";
+import { ProviderFreeIntakeApplication } from "./provider-free-intake.ts";
 import { SupabaseProductionFulfillmentRepository } from "./supabase-repository.ts";
 import {
   findProductionNotificationForDelivery,
@@ -35,9 +34,28 @@ export {
   recoverCompletedProductionAssessmentGrant,
 };
 
+function createProviderFreeProductionAssessmentApplication() {
+  const environment = readProductionPersistenceEnvironment();
+  const lifecycleRepository = new SupabaseProductionFulfillmentRepository(
+    environment.supabaseUrl,
+    environment.supabaseSecretKey,
+  );
+  return new ProviderFreeIntakeApplication({
+    runtimeRepository: new SupabaseAssessmentRepository(
+      environment.supabaseUrl,
+      environment.supabaseSecretKey,
+    ),
+    lifecycleRepository,
+    prepaymentComputeAuthority: lifecycleRepository,
+  });
+}
+
 async function createApplication(options?: {
   allowSyntheticPurchaseAuthority?: boolean;
 }) {
+  const { createProductionAssessmentApplication } = await import(
+    "./application-runtime.ts"
+  );
   return createProductionAssessmentApplication(options);
 }
 
@@ -53,35 +71,16 @@ export async function prepareProductionConsultation(
 ) {
   requirePreparationRuntime();
   if (isPrepaymentComputeBudgetEnabled()) {
-    const policy = readPrepaymentComputePolicy();
+    readPrepaymentComputePolicy();
     if (!isCustomerAuthFoundationEnabled()) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
     }
-    const providerFree = await createProviderFreeProductionAssessmentApplication();
+    const providerFree = createProviderFreeProductionAssessmentApplication();
     const begun = await providerFree.beginProviderFreePreparation(
       value,
       idempotencyKey,
     );
-    if (begun.status !== "authentication_required") return begun;
-    const auth = await createCustomerIdentityAuthApplication();
-    let identity;
-    try {
-      identity = await auth.getFreshIdentity();
-    } catch (error) {
-      if (error instanceof M2RuntimeError && error.safeCode === "CUSTOMER_AUTH_REQUIRED") {
-        return begun;
-      }
-      throw error;
-    }
-    const binding = await auth.bindAuthenticatedPrepayment({
-      preparationCapability: begun.preparationCapability,
-      identity,
-    });
-    return (await createApplication()).executeAuthenticatedPrepayment({
-      preparationId: binding.preparationId,
-      customerUserId: identity.customerUserId,
-      policy,
-    });
+    return begun;
   }
   return (await createApplication()).prepare(value, idempotencyKey);
 }
