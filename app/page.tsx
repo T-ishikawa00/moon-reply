@@ -9,6 +9,9 @@ import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
 import { PUBLIC_SAMPLE_CASES } from "@/fixtures/public/public-sample-cases";
 import { REPORT_FIXTURES } from "@/fixtures/review/reports";
+import { isCustomerPaymentFlowVisible } from "@/lib/payment/production/environment";
+
+export const dynamic = "force-dynamic";
 
 const preview = REPORT_FIXTURES["result-normal-001"];
 
@@ -72,7 +75,7 @@ const faqs = [
   {
     question: "料金と返金条件は決まっていますか？",
     answer:
-      "料金は1相談・1鑑定ノートにつき税込980円の都度払いで、自動更新はありません。支払未完了、誤請求、支払後に提供できない場合などで取扱いが異なります。現在は購入できません。",
+      "料金は1相談・1鑑定ノートにつき税込980円の都度払いで、自動更新はありません。支払未完了、誤請求、支払後に提供できない場合などで取扱いが異なります。詳しくは返金・キャンセル方針をご確認ください。",
   },
 ];
 
@@ -94,6 +97,8 @@ function RequestCta({
 }
 
 export default function Home() {
+  const paymentEnabled = isCustomerPaymentFlowVisible();
+
   return (
     <main className="lp-home">
       <section className="lp-home-hero" aria-labelledby="lp-hero-title">
@@ -133,7 +138,9 @@ export default function Home() {
               架空の鑑定ノートを見る
             </Link>
             <p className="lp-home-status">
-              18歳以上対象。サービス準備中のため、現在は購入・生成・メール送信を利用できません。
+              {paymentEnabled
+                ? "18歳以上対象。相談入力と安全確認のあと、受け取り方法を確認して購入へ進みます。"
+                : "18歳以上対象。サービス準備中のため、現在は購入・生成・メール送信を利用できません。"}
             </p>
           </div>
 
@@ -208,7 +215,9 @@ export default function Home() {
             ))}
           </ol>
           <p className="lp-flow-status">
-            現在利用できるのは提供準備中の依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
+            {paymentEnabled
+              ? "相談入力と安全確認のあと、購入・生成・メール配信までを順に進めます。"
+              : "現在利用できるのは提供準備中の依頼フォームと確認表示です。決済・生成・メール配信は動作しません。"}
           </p>
         </div>
       </section>
@@ -388,7 +397,11 @@ export default function Home() {
               <li>1相談 / 1鑑定ノート</li>
               <li>自動更新なし</li>
             </ul>
-            <p className="lp-price__status">提供準備中のため、現在は購入できません。</p>
+            <p className="lp-price__status">
+              {paymentEnabled
+                ? "相談入力と安全確認のあと、購入手続きへ進みます。"
+                : "提供準備中のため、現在は購入できません。"}
+            </p>
           </article>
         </div>
       </section>
@@ -451,7 +464,11 @@ export default function Home() {
             <RequestCta />
             <Link href="/sample-report" className="text-link text-link--night">架空の鑑定ノートを見る</Link>
           </div>
-          <p className="lp-home-status">現在はサービス提供準備中で、購入・生成・送信はできません。</p>
+          <p className="lp-home-status">
+            {paymentEnabled
+              ? "通常鑑定OKの場合だけ、購入と鑑定ノートの受け取りへ進みます。"
+              : "現在はサービス提供準備中で、購入・生成・送信はできません。"}
+          </p>
           <p className="lp-final__returning">
             すでにお持ちの方は <Link href="/account">私の鑑定ノート</Link> へ
           </p>

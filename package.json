@@ -31,6 +31,7 @@
     "verify:preparing-ux-r1": "node scripts/verify-preparing-ux-r1.mjs",
     "verify:public-contact-tokushoho-r1": "node scripts/verify-public-contact-tokushoho-r1.mjs",
     "verify:top-public-ui-r1": "node scripts/verify-top-public-ui-r1.mjs",
+    "verify:group-i-top-availability-r1": "node scripts/verify-group-i-top-availability-r1.mjs",
     "verify:m2-d1": "node scripts/verify-m2-d1-customer-legal-current-truth.mjs",
     "verify:m2-d2": "node scripts/verify-m2-d2-contact-paid-failure-recovery-support.mjs",
     "verify:m2-e1": "node scripts/verify-m2-e1-google-auth-latency-measurement.mjs",
