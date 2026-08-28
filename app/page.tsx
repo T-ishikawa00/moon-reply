@@ -15,8 +15,8 @@ const preview = REPORT_FIXTURES["result-normal-001"];
 const threeAnswers = [
   {
     number: "01",
-    title: "今夜の答え",
-    text: "短く返す、今夜は待つ、追加連絡を止める。相談事実に応じた方向を最初に示します。",
+    title: "今夜の答えと理由",
+    text: "送る、待つ、追加連絡を止める。相談の事実に沿って、今夜の方向とその理由を示します。",
   },
   {
     number: "02",
@@ -25,8 +25,8 @@ const threeAnswers = [
   },
   {
     number: "03",
-    title: "3日間の方向",
-    text: "今夜だけで終わらせず、次に見直す条件まで短期の方針にします。",
+    title: "数日間の方針",
+    text: "今夜だけで終わらせず、次に見直す条件までを短い行動方針にします。",
   },
 ];
 
@@ -76,9 +76,18 @@ const faqs = [
   },
 ];
 
-function RequestCta({ label = "鑑定ノートを依頼する" }: { label?: string }) {
+function RequestCta({
+  label = "鑑定ノートを依頼する",
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
-    <Link href="/request" className="button button--primary">
+    <Link
+      href="/request"
+      className={["button", "button--primary", className].filter(Boolean).join(" ")}
+    >
       {label}
     </Link>
   );
@@ -91,44 +100,40 @@ export default function Home() {
         <LunarArc tone="night" position="top-right" />
         <div className="page-shell lp-home-hero__grid">
           <div className="lp-home-hero__copy">
-            <p className="lp-kicker">恋のメッセージ鑑定ノート</p>
+            <p className="lp-kicker">恋愛メッセージの状況と言葉を整理する</p>
             <h1 id="lp-hero-title">
-              返事がこない夜に、<br />
-              送るか、待つかを決めるための一冊。
+              送るか、待つか。<br />
+              今夜の答えを、一冊の鑑定ノートに。
             </h1>
             <p className="lp-home-hero__lead">
-              月の返事は、相手の本心、返信、復縁、未来、関係改善を断定・保証するものではありません。
-              入力された文面と状況をAIが整理・分析し、今どう動くかを考えるための判断材料と、
-              送る文面・行動の整理を恋のメッセージ鑑定ノートにまとめます。
+              入力された文面と状況をAIが整理・分析し、今夜どう動くかを考えるための判断材料と、
+              実際に送れる文面・数日間の方針を、恋のメッセージ鑑定ノートにまとめます。
+              相手の本心や未来を断定するものではありません。
             </p>
 
-            <dl className="lp-home-hero__facts" aria-label="商品条件">
+            <div className="lp-home-hero__offer" aria-label="商品条件">
+              <p className="lp-home-hero__price">
+                <span>税込</span>
+                <strong>980</strong>
+                <span>円</span>
+              </p>
               <div>
-                <dt>料金</dt>
-                <dd>税込980円</dd>
+                <p>1相談につき1鑑定ノート</p>
+                <p>都度払い・自動更新なし</p>
               </div>
-              <div>
-                <dt>支払い</dt>
-                <dd>都度払い</dd>
-              </div>
-              <div>
-                <dt>対象</dt>
-                <dd>18歳以上</dd>
-              </div>
-              <div>
-                <dt>内容</dt>
-                <dd>1相談 / 1鑑定ノート</dd>
-              </div>
-            </dl>
+            </div>
 
             <div className="lp-home-hero__actions">
-              <RequestCta />
-              <Link href="/sample-report" className="button button--secondary">
-                架空の見本を読む
-              </Link>
+              <RequestCta className="lp-home-hero__primary" />
             </div>
+            <Link
+              href="/sample-report"
+              className="lp-home-hero__sample text-link text-link--night"
+            >
+              架空の鑑定ノートを見る
+            </Link>
             <p className="lp-home-status">
-              サービス準備中のため、現在は購入・生成・メール送信を利用できません。
+              18歳以上対象。サービス準備中のため、現在は購入・生成・メール送信を利用できません。
             </p>
           </div>
 
@@ -152,9 +157,9 @@ export default function Home() {
             <div className="lp-note-cover__contents">
               <EditorialDivider variant="night" />
               <ul>
-                <li>今夜の答え</li>
-                <li>送る場合の文面</li>
-                <li>3日間の行動方針</li>
+                <li>今夜の答えと、その理由</li>
+                <li>実際に送れる文面</li>
+                <li>数日間の方針と見直す条件</li>
               </ul>
             </div>
             <ArtifactAnswer
@@ -184,6 +189,27 @@ export default function Home() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section id="flow" className="lp-home-section lp-home-section--paper" aria-labelledby="flow-title">
+        <div className="page-shell">
+          <div className="lp-section-heading">
+            <p className="lp-kicker">利用の流れ</p>
+            <h2 id="flow-title">依頼から受け取りまで、三つの段階。</h2>
+            <p>通常鑑定OKの場合だけ先へ進む設計です。Safety確認は必ず決済より前に行います。</p>
+          </div>
+          <ol className="lp-flow-list">
+            {flowSteps.map((step) => (
+              <li key={step.number}>
+                <span>{step.number}</span>
+                <div><h3>{step.title}</h3><p>{step.text}</p></div>
+              </li>
+            ))}
+          </ol>
+          <p className="lp-flow-status">
+            現在利用できるのは提供準備中の依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
+          </p>
         </div>
       </section>
 
@@ -268,10 +294,9 @@ export default function Home() {
                   </ArtifactAnswer>
                 </ArtifactCover>
                 <strong className="lp-artifact__purpose">理由まで理解し、判断に納得するための本編。</strong>
-                <span className="lp-artifact__detail">表紙から短い手紙、文面、行動、限界まで14部構成。</span>
-                <Link href="/review/result/result-normal-001" className="lp-artifact__link">
-                  Web鑑定ノートの見本を読む
-                </Link>
+                <span className="lp-artifact__detail">
+                  表紙から短い手紙、文面、行動、限界まで、相談に応じた鑑定ノート。
+                </span>
               </section>
               <ArtifactShell as="article" className="lp-decision-card" aria-labelledby="lp-save-preview-title">
                 <div className="lp-decision-card__heading">
@@ -287,9 +312,6 @@ export default function Home() {
                   <div><dt>今やること</dt><dd>{preview.tonightActions[0]}</dd></div>
                   <div><dt>次の判断</dt><dd>翌日以降、または状況が動いた時</dd></div>
                 </dl>
-                <Link href="/review/save-report/result-normal-001" className="lp-artifact__link">
-                  保存用判断カードの見本を読む
-                </Link>
               </ArtifactShell>
             </aside>
           </div>
@@ -301,27 +323,6 @@ export default function Home() {
               別の「送る」ケースの公開全文見本を読む
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section id="flow" className="lp-home-section lp-home-section--paper" aria-labelledby="flow-title">
-        <div className="page-shell">
-          <div className="lp-section-heading">
-            <p className="lp-kicker">利用の流れ</p>
-            <h2 id="flow-title">依頼から受け取りまで、三つの段階。</h2>
-            <p>通常鑑定OKの場合だけ先へ進む設計です。Safety確認は必ず決済より前に行います。</p>
-          </div>
-          <ol className="lp-flow-list">
-            {flowSteps.map((step) => (
-              <li key={step.number}>
-                <span>{step.number}</span>
-                <div><h3>{step.title}</h3><p>{step.text}</p></div>
-              </li>
-            ))}
-          </ol>
-          <p className="lp-flow-status">
-            現在利用できるのは提供準備中の依頼フォームと確認表示です。決済・生成・メール配信は動作しません。
-          </p>
         </div>
       </section>
 
@@ -448,9 +449,12 @@ export default function Home() {
           <p>状況と言葉を一度ノートへ。通常鑑定OKの場合だけ、次の段階へ進みます。</p>
           <div className="lp-final__actions">
             <RequestCta />
-            <Link href="/sample-report" className="button button--secondary">架空の見本を読む</Link>
+            <Link href="/sample-report" className="text-link text-link--night">架空の鑑定ノートを見る</Link>
           </div>
           <p className="lp-home-status">現在はサービス提供準備中で、購入・生成・送信はできません。</p>
+          <p className="lp-final__returning">
+            すでにお持ちの方は <Link href="/account">私の鑑定ノート</Link> へ
+          </p>
         </div>
       </section>
     </main>
