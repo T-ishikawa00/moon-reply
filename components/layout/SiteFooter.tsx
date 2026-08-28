@@ -60,7 +60,7 @@ export function SiteFooter() {
       </div>
       <div className="site-footer__bottom">
         <span>月の返事</span>
-        <span>2026 · サービス準備中</span>
+        <span>2026</span>
       </div>
     </footer>
   );

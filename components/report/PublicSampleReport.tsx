@@ -14,7 +14,6 @@ import { EditorialDivider } from "@/components/brand/EditorialDivider";
 import { LunarArc } from "@/components/brand/LunarArc";
 import { MoonSeal } from "@/components/brand/MoonSeal";
 import type { PublicSampleReportCase } from "@/fixtures/public/public-sample-cases";
-import { ReportComparisonNavigation } from "./ReportComparisonNavigation";
 
 export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase }) {
   const { report } = sample;
@@ -169,15 +168,6 @@ export function PublicSampleReport({ sample }: { sample: PublicSampleReportCase 
           </div>
         </ArtifactShell>
 
-        <details className="public-sample-metadata">
-          <summary>審査メタデータを表示</summary>
-          <dl><dt>sample ID</dt><dd>{sample.id}</dd></dl>
-          <p>公開表示専用の固定架空データです。Safety fixture、結果 fixture、購入・レビュー・AI生成実績ではありません。</p>
-        </details>
-
-        <div className="public-sample-stage__navigation">
-          <ReportComparisonNavigation audience="public" />
-        </div>
       </div>
     </main>
   );
