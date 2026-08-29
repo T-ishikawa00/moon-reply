@@ -9,6 +9,9 @@ import {
   type Jpy980FunctionalDimensionV3,
   type Jpy980InputSufficiencyPolicyInputV3,
 } from "./jpy980-input-sufficiency-policy-v3.ts";
+import {
+  hasJpy980PrimaryProductFunctionV1,
+} from "./jpy980-primary-product-function-v1.ts";
 
 export const JPY980_INPUT_SUFFICIENCY_POLICY_V4_VERSION =
   "m2-p4-jpy980-input-sufficiency-policy-v4" as const;
@@ -40,12 +43,6 @@ export type Jpy980InputSufficiencyResultV4 = {
 const softUncertaintyDimensions = new Set<Jpy980FunctionalDimensionV3>(
   JPY980_SOFT_UNCERTAINTY_DIMENSIONS_V4,
 );
-const supportedPrimaryRequests = new Set([
-  "decide_send_or_wait",
-  "draft_message",
-  "message_impact",
-]);
-
 function clarificationBudget(
   grounding: ClarificationGroundingV1 | null,
 ): Jpy980InputSufficiencyResultV4["clarificationBudget"] {
@@ -95,9 +92,7 @@ function selectedRequests(input: Jpy980InputSufficiencyPolicyInputV3) {
 }
 
 function hasSupportedPrimaryRequest(input: Jpy980InputSufficiencyPolicyInputV3) {
-  return [...selectedRequests(input)].some((request) =>
-    supportedPrimaryRequests.has(request),
-  );
+  return hasJpy980PrimaryProductFunctionV1(selectedRequests(input));
 }
 
 function hasGroundedObservedFact(input: Jpy980InputSufficiencyPolicyInputV3) {

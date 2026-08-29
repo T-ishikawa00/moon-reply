@@ -4,6 +4,9 @@ import type {
   RelationshipValue,
   RequestedTopic,
 } from "./types.ts";
+import {
+  JPY980_ORGANIZATION_PRIMARY_PRODUCT_FUNCTION_TOPICS_V1,
+} from "./jpy980-primary-product-function-v1.ts";
 
 export const JPY980_PRODUCT_SCOPE_VALIDATION_V1_VERSION =
   "final-product-scope-r1" as const;
@@ -25,10 +28,8 @@ export const JPY980_ACTIONABLE_ANCHOR_TOPICS = [
   "next_three_days",
 ] as const satisfies readonly RequestedTopic[];
 
-export const JPY980_SUPPLEMENTARY_ONLY_TOPICS = [
-  "relationship",
-  "organize_emotions",
-] as const satisfies readonly RequestedTopic[];
+export const JPY980_PRODUCT_SCOPE_ORGANIZATION_TOPICS =
+  JPY980_ORGANIZATION_PRIMARY_PRODUCT_FUNCTION_TOPICS_V1;
 
 export type Jpy980ProductScopeInputV1 = Readonly<{
   currentSituation: string;

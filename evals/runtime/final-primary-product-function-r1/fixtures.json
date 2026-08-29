@@ -1,0 +1,63 @@
+{
+  "schema_version": "final-primary-product-function-r1-fixtures",
+  "organization_cases": [
+    {
+      "case_id": "CASE-08",
+      "relationship": "ambiguous",
+      "requested_topics": ["relationship"],
+      "current_situation": "半年くらい週1で会っています。体の関係もありますが、付き合っているとは言われていません。連絡はほぼ毎日来ます。この関係をどう考えればいいのか分かりません。",
+      "expected_scope": "eligible",
+      "expected_product_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "CASE-15",
+      "relationship": "work_or_school",
+      "requested_topics": ["relationship"],
+      "current_situation": "職場の知人とよく話します。友達として親しいだけか、好意がある関係なのか整理したいです。",
+      "expected_scope": "eligible",
+      "expected_product_state": "full_paid_ready_candidate"
+    },
+    {
+      "case_id": "CASE-18",
+      "relationship": "former_partner",
+      "requested_topics": ["relationship", "organize_emotions"],
+      "current_situation": "元恋人との関係が終わった事実を受け止めながら、今の不安とこれからの距離感を整理したいです。",
+      "expected_scope": "eligible",
+      "expected_product_state": "full_paid_ready_candidate",
+      "safety_precedence_classification": "needs_review",
+      "expected_safety_state": "safety_blocked"
+    },
+    {
+      "case_id": "CASE-19",
+      "relationship": "other",
+      "requested_topics": ["organize_emotions"],
+      "current_situation": "友達を好きになりました。関係を壊したくない気持ちと、伝えたい気持ちの間で不安なので整理したいです。",
+      "expected_scope": "eligible",
+      "expected_product_state": "full_paid_ready_candidate"
+    }
+  ],
+  "pre_provider_scope_stop": {
+    "case_id": "CASE-25",
+    "relationship": "other",
+    "requested_topics": ["organize_emotions"],
+    "current_situation": "今日の晩ごはんをカレーにするかラーメンにするか迷っています。猫が昨日3回くしゃみしました。明日の株価も知りたいです。",
+    "expected_scope": "needs_clarification"
+  },
+  "existing_primary_topics": [
+    "decide_send_or_wait",
+    "message_impact",
+    "draft_message"
+  ],
+  "unsupported_without_primary": {
+    "requested_topics": ["next_three_days"],
+    "expected_product_state": "not_full_product_candidate",
+    "expected_reason": "SUPPORTED_PRIMARY_PRODUCT_FUNCTION_NOT_ESTABLISHED"
+  },
+  "organization_without_grounded_evidence": {
+    "relationship": "ambiguous",
+    "requested_topics": ["relationship"],
+    "without_observed_facts": true,
+    "expected_product_state": "not_full_product_candidate",
+    "expected_missing_dimension": "grounded_evidence"
+  }
+}

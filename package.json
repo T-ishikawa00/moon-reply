@@ -51,7 +51,8 @@
     "verify:m2:preparation-response-recovery": "node scripts/verify-m2-preparation-response-recovery.mjs",
     "verify:product-exploration-blockers-11-13-r1": "node scripts/verify-product-exploration-blockers-11-13-r1.mjs",
     "verify:final-product-scope-r1": "node scripts/verify-final-product-scope-r1.mjs",
-    "verify:final-hosted-continuation-r1": "node scripts/verify-final-hosted-continuation-r1.mjs"
+    "verify:final-hosted-continuation-r1": "node scripts/verify-final-hosted-continuation-r1.mjs",
+    "verify:final-primary-product-function-r1": "node scripts/verify-final-primary-product-function-r1.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",

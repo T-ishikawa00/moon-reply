@@ -16,6 +16,10 @@ import {
 } from "./jpy980-input-sufficiency-policy-v2.ts";
 import { validateCandidateSourceIntegrityV1 } from "./candidate-source-integrity-v1.ts";
 import type { JsonObject } from "./types.ts";
+import {
+  hasJpy980OrganizationPrimaryProductFunctionV1,
+  hasJpy980PrimaryProductFunctionV1,
+} from "./jpy980-primary-product-function-v1.ts";
 
 export const JPY980_INPUT_SUFFICIENCY_POLICY_V3_VERSION =
   "m2-p4-jpy980-input-sufficiency-policy-v3" as const;
@@ -456,6 +460,15 @@ function evaluateDraftPath(
   }
 }
 
+function evaluateOrganizationPath(
+  authority: TrustedFunctionalAuthorityV3,
+  hardMissing: Set<Jpy980FunctionalDimensionV3>,
+) {
+  if (!observedFactsPresent(authority)) {
+    hardMissing.add("grounded_evidence");
+  }
+}
+
 function clarificationFor(
   dimension: Jpy980FunctionalDimensionV3,
 ): Jpy980ClarificationV1 | null {
@@ -494,7 +507,9 @@ export function evaluateJpy980InputSufficiencyV3(
   const draftPath = [...primaryDraftRequests].some((request) =>
     requests.has(request),
   );
-  if (!decisionPath && !draftPath) {
+  const organizationPath =
+    hasJpy980OrganizationPrimaryProductFunctionV1(requests);
+  if (!hasJpy980PrimaryProductFunctionV1(requests)) {
     return result(
       "not_full_product_candidate",
       ["SUPPORTED_PRIMARY_PRODUCT_FUNCTION_NOT_ESTABLISHED"],
@@ -522,6 +537,9 @@ export function evaluateJpy980InputSufficiencyV3(
       missing,
       hardMissing,
     );
+  }
+  if (organizationPath) {
+    evaluateOrganizationPath(authority, hardMissing);
   }
 
   if (hardMissing.size > 0) {
