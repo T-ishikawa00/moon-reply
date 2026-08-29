@@ -6,7 +6,7 @@ import {
 import { projectCustomerAssessmentExperienceV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
 import { asM2RuntimeError, M2RuntimeError } from "../runtime/errors.ts";
 import { AssessmentPipeline } from "../runtime/pipeline.ts";
-import { validateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
+import { evaluateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
 import type {
   AiStageTransport,
   AssessmentRepository,
@@ -379,8 +379,11 @@ export class ProductionFulfillmentApplication {
     if (!safetyAuthority.purchaseGateSatisfied) {
       return { status: "safety_blocked" };
     }
+    const productScope = evaluateJpy980ProductScopeV1(consultation);
+    if (!productScope.accepted) {
+      return { status: "not_full_product_candidate" };
+    }
     const assessmentInput = toAssessmentInput(consultation);
-    validateJpy980ProductScopeV1(assessmentInput);
     const consultationSnapshotHash = hashProductionSnapshot({
       consultation,
       safetyAuthority,

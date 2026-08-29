@@ -26,6 +26,7 @@ import {
   PREPAYMENT_SAFETY_INPUT_SCHEMA_VERSION,
   PREPAYMENT_SAFETY_POLICY_VERSION,
   PREPAYMENT_SAFETY_RESULT_SCHEMA_VERSION,
+  REQUESTED_TOPIC_VALUES,
   REASON_CODES,
   SAFETY_DISPOSITIONS,
   UNSAFE_EXECUTION_INTENT_ANSWERS,
@@ -40,6 +41,11 @@ import {
   type RequestedTopic,
   type ScopeAcknowledgementsV1,
 } from "@/lib/purchase/prepayment-safety-types-v1";
+import {
+  JPY980_PRODUCT_SCOPE_CLARIFICATION_CODES,
+  JPY980_PRODUCT_SCOPE_DECISIONS,
+  JPY980_PRODUCT_SCOPE_VALIDATION_V1_VERSION,
+} from "@/lib/assessment/runtime/jpy980-product-scope-validation-v1";
 import { trackClientMeasurement } from "@/lib/measurement/client";
 import {
   beginGoogleAuthClientTiming,
@@ -152,6 +158,13 @@ type ClientSafetyResult = {
   requiredClarificationCodes: readonly ClarificationCodeV1[];
   requiredAcknowledgementCodes: readonly AcknowledgementCodeV1[];
   purchaseGateSatisfied: boolean;
+  productScope: {
+    accepted: boolean;
+    decision: (typeof JPY980_PRODUCT_SCOPE_DECISIONS)[number];
+    clarificationCode:
+      | (typeof JPY980_PRODUCT_SCOPE_CLARIFICATION_CODES)[number]
+      | null;
+  };
 };
 
 type GatePrompt = Pick<
@@ -682,6 +695,7 @@ function isKnownArray<const TValues extends readonly string[]>(
 function decodeClientSafetyResult(payload: unknown): ClientSafetyResult | null {
   if (!isRecord(payload) || !isRecord(payload.data)) return null;
   const result = payload.data;
+  const productScope = result.productScope;
   if (
     result.schemaVersion !== PREPAYMENT_SAFETY_RESULT_SCHEMA_VERSION ||
     result.policyVersion !== PREPAYMENT_SAFETY_POLICY_VERSION ||
@@ -701,7 +715,28 @@ function decodeClientSafetyResult(payload: unknown): ClientSafetyResult | null {
     !/^[0-9a-f]{64}$/u.test(result.eligibilityInputHash) ||
     result.paymentImplementationPresent !== false ||
     result.paymentSessionAvailable !== false ||
-    result.paymentAuthorityIssued !== false
+    result.paymentAuthorityIssued !== false ||
+    !isRecord(productScope) ||
+    productScope.schemaVersion !==
+      JPY980_PRODUCT_SCOPE_VALIDATION_V1_VERSION ||
+    typeof productScope.accepted !== "boolean" ||
+    !includesValue(JPY980_PRODUCT_SCOPE_DECISIONS, productScope.decision) ||
+    !(
+      productScope.clarificationCode === null ||
+      includesValue(
+        JPY980_PRODUCT_SCOPE_CLARIFICATION_CODES,
+        productScope.clarificationCode,
+      )
+    ) ||
+    !isKnownArray(
+      productScope.actionableAnchorTopics,
+      REQUESTED_TOPIC_VALUES,
+    ) ||
+    (productScope.accepted !== (productScope.decision === "eligible")) ||
+    (productScope.decision === "eligible" &&
+      productScope.clarificationCode !== null) ||
+    (productScope.decision === "needs_clarification" &&
+      productScope.clarificationCode === null)
   ) {
     return null;
   }
@@ -711,6 +746,11 @@ function decodeClientSafetyResult(payload: unknown): ClientSafetyResult | null {
     requiredClarificationCodes: result.requiredClarificationCodes,
     requiredAcknowledgementCodes: result.requiredAcknowledgementCodes,
     purchaseGateSatisfied: result.purchaseGateSatisfied,
+    productScope: {
+      accepted: productScope.accepted,
+      decision: productScope.decision,
+      clarificationCode: productScope.clarificationCode,
+    },
   };
 }
 
@@ -1010,6 +1050,7 @@ export function RequestForm({
   const googleAuthClientTimingRef =
     useRef<GoogleAuthClientTimingAnchor | null>(null);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
+  const productScopeHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -1038,6 +1079,16 @@ export function RequestForm({
   useEffect(() => {
     if (safetyResult?.classification === "needs_clarification") {
       clarificationHeadingRef.current?.focus();
+    }
+  }, [safetyResult]);
+
+  useEffect(() => {
+    if (
+      safetyResult &&
+      isEligibleClassification(safetyResult.classification) &&
+      safetyResult.productScope.decision === "needs_clarification"
+    ) {
+      productScopeHeadingRef.current?.focus();
     }
   }, [safetyResult]);
 
@@ -1233,8 +1284,10 @@ export function RequestForm({
     }, 0);
   }
 
-  function focusPhaseOneField(fieldId: "currentSituation" | "partnerMessage") {
-    if (fieldId === "partnerMessage") setMessageDetailsOpen(true);
+  function focusPhaseOneField(
+    fieldId: "currentSituation" | "partnerMessage" | "draftMessage",
+  ) {
+    if (fieldId !== "currentSituation") setMessageDetailsOpen(true);
     setPhase(1);
     window.setTimeout(() => {
       document.getElementById(fieldId)?.focus();
@@ -1336,7 +1389,10 @@ export function RequestForm({
       if (requestSequence.current !== sequence) return null;
 
       setSafetyResult(result);
-      if (isEligibleClassification(result.classification)) {
+      if (
+        isEligibleClassification(result.classification) &&
+        result.productScope.decision === "eligible"
+      ) {
         setGatePrompt({
           classification: result.classification,
           requiredAcknowledgementCodes: result.requiredAcknowledgementCodes,
@@ -1491,11 +1547,14 @@ export function RequestForm({
     if (
       result &&
       isEligibleClassification(result.classification) &&
+      result.productScope.decision === "eligible" &&
       result.purchaseGateSatisfied
     ) {
       moveToPhase(3);
       return;
     }
+
+    if (result?.productScope.decision === "needs_clarification") return;
 
     if (result && isEligibleClassification(result.classification)) {
       const nextErrors: ValidationErrors = {};
@@ -2069,6 +2128,7 @@ export function RequestForm({
     if (
       result &&
       isEligibleClassification(result.classification) &&
+      result.productScope.decision === "eligible" &&
       result.purchaseGateSatisfied
     ) {
       if (paymentEnabled) {
@@ -2083,6 +2143,7 @@ export function RequestForm({
     }
 
     setPhase(2);
+    if (result?.productScope.decision === "needs_clarification") return;
     if (result && isEligibleClassification(result.classification)) {
       const nextErrors = {
         safetyBlocking: "必要な利用確認をもう一度確認してください。",
@@ -2177,9 +2238,16 @@ export function RequestForm({
   const gatePresentation = gatePrompt
     ? presentationFor(gatePrompt.classification)
     : null;
-  const memoPresentation = safetyResult
+  const memoPresentation =
+    safetyResult?.productScope.decision === "eligible"
     ? presentationFor(safetyResult.classification)
     : null;
+  const productScopeClarification =
+    safetyResult &&
+    isEligibleClassification(safetyResult.classification) &&
+    safetyResult.productScope.decision === "needs_clarification"
+      ? safetyResult.productScope
+      : null;
   const stopKind: PrePaymentSafetyStopKind | null =
     safetyResult?.classification === "blocked_unsafe_assistance" ||
     safetyResult?.classification === "urgent_safety_redirect" ||
@@ -2571,6 +2639,54 @@ export function RequestForm({
                 現在、利用確認を完了できません。
               </h3>
               <p>{apiUnavailableCopy}</p>
+            </section>
+          ) : null}
+
+          {productScopeClarification ? (
+            <section
+              id="product-scope-clarification"
+              tabIndex={-1}
+              className={styles.clarificationCard}
+              role="status"
+              aria-labelledby="product-scope-clarification-title"
+            >
+              <p className={styles.eyebrow}>鑑定できる内容の確認</p>
+              <h3
+                id="product-scope-clarification-title"
+                ref={productScopeHeadingRef}
+                tabIndex={-1}
+              >
+                {productScopeClarification.clarificationCode ===
+                "message_candidate_required"
+                  ? "確認したい文面を追加してください"
+                  : "恋愛・相手との関係・メッセージについての相談ですか？"}
+              </h3>
+              <p className={styles.clarificationLead}>
+                {productScopeClarification.clarificationCode ===
+                "message_candidate_required"
+                  ? "「この文面がどう届くか」を確認するには、自分が送ろうとしている実際の文面が必要です。"
+                  : "月の返事は、恋愛メッセージ、相手との関係、返信・送信・距離感についての鑑定です。該当する場合は、その関係や迷っていることが分かるよう相談内容を追加してください。"}
+              </p>
+              <div className={styles.clarificationActions}>
+                <button
+                  type="button"
+                  className={styles.resultAction}
+                  onClick={() =>
+                    focusPhaseOneField(
+                      productScopeClarification.clarificationCode ===
+                        "message_candidate_required"
+                        ? "draftMessage"
+                        : "currentSituation",
+                    )
+                  }
+                >
+                  {productScopeClarification.clarificationCode ===
+                  "message_candidate_required"
+                    ? "送ろうとしている文面を追加する"
+                    : "相談内容を見直す"}
+                </button>
+              </div>
+              <p className={styles.paymentNote}>この画面では決済は発生しません。</p>
             </section>
           ) : null}
 

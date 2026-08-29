@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import { POST } from "../app/api/consultations/purchase-eligibility/route.ts";
+import { evaluateJpy980ProductScopeV1 } from "../lib/assessment/runtime/jpy980-product-scope-validation-v1.ts";
 import { evaluatePrepaymentSafetyV1 } from "../lib/purchase/prepayment-safety-gate-v1.ts";
 
 process.removeAllListeners("warning");
@@ -69,7 +70,12 @@ await check(
     const payload = await response.json();
     assert.deepEqual(
       payload,
-      { data: evaluatePrepaymentSafetyV1(eligibleInput) },
+      {
+        data: {
+          ...evaluatePrepaymentSafetyV1(eligibleInput),
+          productScope: evaluateJpy980ProductScopeV1(eligibleInput),
+        },
+      },
     );
     assert.equal(payload.data.classification, "eligible_general");
     assert.deepEqual(payload.data.requiredClarificationCodes, []);

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import { M2RuntimeError } from "../runtime/errors.ts";
-import { validateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
+import { evaluateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
 import type { AssessmentRepository } from "../runtime/types.ts";
 import { evaluatePrepaymentSafetyV1 } from "../../purchase/prepayment-safety-gate-v1.ts";
 import {
@@ -118,8 +118,11 @@ export class ProviderFreeIntakeApplication {
     if (!safetyAuthority.purchaseGateSatisfied) {
       return { status: "safety_blocked" };
     }
+    const productScope = evaluateJpy980ProductScopeV1(consultation);
+    if (!productScope.accepted) {
+      return { status: "not_full_product_candidate" };
+    }
     const assessmentInput = toAssessmentInput(consultation);
-    validateJpy980ProductScopeV1(assessmentInput);
     const consultationSnapshotHash = hashProductionSnapshot({
       consultation,
       safetyAuthority,
