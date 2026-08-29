@@ -213,7 +213,25 @@ const continueEnd = serviceSource.indexOf(
 );
 const continueSlice = serviceSource.slice(continueStart, continueEnd);
 assert.match(continueSlice, /input: \{\s*continuationToken: unknown;\s*\}/u);
-assert.ok(continueSlice.indexOf("getFreshIdentity()") < continueSlice.indexOf("createApplication()"));
+const authenticatedContextStart = continueSlice.indexOf(
+  "async function createAuthenticatedPreparationContext",
+);
+const statusReadStart = continueSlice.indexOf(
+  "export async function readAuthenticatedProductionPreparationStatus",
+  authenticatedContextStart,
+);
+assert.ok(
+  authenticatedContextStart >= 0 && statusReadStart > authenticatedContextStart,
+);
+const authenticatedContextSlice = continueSlice.slice(
+  authenticatedContextStart,
+  statusReadStart,
+);
+assert.match(authenticatedContextSlice, /getFreshIdentity\(\)/u);
+assert.match(
+  authenticatedContextSlice,
+  /hashCustomerAuthContinuation\(continuationToken\)/u,
+);
 assert.ok(
   continueSlice.indexOf("createApplication()") <
     continueSlice.indexOf("executeAuthenticatedPrepaymentFromContinuation"),

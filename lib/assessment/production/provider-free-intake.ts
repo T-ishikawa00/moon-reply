@@ -17,6 +17,7 @@ import {
 } from "./consultation.ts";
 import type { PrepaymentComputeAuthorityRepository } from "./prepayment-compute.ts";
 import type {
+  AuthenticatedPreparationStatusV1,
   ProductionFulfillmentRepository,
   ProductionPreparationRecord,
   PublicPreparationOutcome,
@@ -30,12 +31,19 @@ type ProviderFreeIntakeOptions = {
   >;
   prepaymentComputeAuthority?: Pick<
     PrepaymentComputeAuthorityRepository,
-    "beginPrepaymentIntake"
+    | "beginPrepaymentIntake"
+    | "getPreparationById"
+    | "resolvePrepaymentContinuation"
   >;
   now?: () => string;
   uuid?: () => string;
   capability?: () => string;
 };
+
+type PreparationReplayCapabilitiesV1 = Readonly<{
+  purchaseReady: string;
+  awaitingClarification: string;
+}>;
 
 export class ProviderFreeIntakeApplication {
   private readonly options: ProviderFreeIntakeOptions;
@@ -50,20 +58,83 @@ export class ProviderFreeIntakeApplication {
     this.capability = options.capability ?? createOpaqueProductionCapability;
   }
 
+  private async getAuthenticatedPreparationFromContinuation(input: {
+    continuationTokenHash: string;
+    customerUserId: string;
+  }) {
+    const authority = this.options.prepaymentComputeAuthority;
+    if (!authority) {
+      throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    }
+    const preparationId = await authority.resolvePrepaymentContinuation({
+      customerUserId: input.customerUserId,
+      continuationTokenHash: input.continuationTokenHash,
+      now: this.now(),
+    });
+    if (!preparationId) return null;
+    return authority.getPreparationById(preparationId);
+  }
+
+  async readAuthenticatedPreparationStatusFromContinuation(input: {
+    continuationTokenHash: string;
+    customerUserId: string;
+  }): Promise<AuthenticatedPreparationStatusV1 | null> {
+    const preparation =
+      await this.getAuthenticatedPreparationFromContinuation(input);
+    if (!preparation) return null;
+    switch (preparation.status) {
+      case "preparing":
+        return "processing";
+      case "awaiting_clarification":
+        return "awaiting_clarification";
+      case "purchase_ready":
+        return "purchase_ready";
+      case "stopped":
+        return preparation.stopReason ?? "failed";
+      case "failed":
+      case "consumed":
+      case "revoked":
+        return "failed";
+    }
+  }
+
+  async replayAuthenticatedPreparationFromContinuation(input: {
+    continuationTokenHash: string;
+    customerUserId: string;
+    replayCapabilities?: PreparationReplayCapabilitiesV1;
+  }): Promise<PublicPreparationOutcome | null> {
+    const preparation =
+      await this.getAuthenticatedPreparationFromContinuation(input);
+    if (!preparation) return null;
+    if (preparation.status === "consumed" || preparation.status === "revoked") {
+      throw new M2RuntimeError("PRODUCTION_PREPARATION_RECOVERY_REQUIRED", 503);
+    }
+    return this.replayPreparation(
+      preparation,
+      preparation.consultationSnapshotHash,
+      input.replayCapabilities,
+    );
+  }
+
   async replayPreparation(
     preparation: ProductionPreparationRecord,
     consultationSnapshotHash: string,
+    replayCapabilities?: PreparationReplayCapabilitiesV1,
   ): Promise<PublicPreparationOutcome> {
     if (preparation.consultationSnapshotHash !== consultationSnapshotHash) {
       throw new M2RuntimeError("PRODUCTION_IDEMPOTENCY_CONFLICT", 409);
     }
     if (preparation.status === "purchase_ready") {
-      const rawCapability = this.capability();
-      await this.options.lifecycleRepository.rotatePurchaseCapability(
-        preparation.id,
-        hashOpaqueProductionCapability(rawCapability),
-        this.now(),
-      );
+      const rawCapability =
+        replayCapabilities?.purchaseReady ?? this.capability();
+      const capabilityHash = hashOpaqueProductionCapability(rawCapability);
+      if (preparation.purchaseCapabilityHash !== capabilityHash) {
+        await this.options.lifecycleRepository.rotatePurchaseCapability(
+          preparation.id,
+          capabilityHash,
+          this.now(),
+        );
+      }
       return { status: "purchase_ready", preparationCapability: rawCapability };
     }
     if (preparation.status === "awaiting_clarification") {
@@ -79,12 +150,16 @@ export class ProviderFreeIntakeApplication {
       ) {
         throw new M2RuntimeError("PRODUCTION_PREPARATION_STATE_INVALID");
       }
-      const rawCapability = this.capability();
-      await this.options.lifecycleRepository.rotateClarificationCapability(
-        preparation.id,
-        hashOpaqueProductionCapability(rawCapability),
-        this.now(),
-      );
+      const rawCapability =
+        replayCapabilities?.awaitingClarification ?? this.capability();
+      const capabilityHash = hashOpaqueProductionCapability(rawCapability);
+      if (preparation.clarificationCapabilityHash !== capabilityHash) {
+        await this.options.lifecycleRepository.rotateClarificationCapability(
+          preparation.id,
+          capabilityHash,
+          this.now(),
+        );
+      }
       return {
         status: "needs_one_clarifying_answer",
         clarificationCapability: rawCapability,

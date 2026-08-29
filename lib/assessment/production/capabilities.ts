@@ -11,6 +11,16 @@ export function createOpaqueProductionCapability() {
   return randomBytes(32).toString("base64url");
 }
 
+export function deriveHostedPreparationReplayCapability(
+  continuationToken: unknown,
+  purpose: "purchase_ready" | "awaiting_clarification",
+) {
+  const token = validateOpaqueProductionCapability(continuationToken);
+  return createHash("sha256")
+    .update(`moon-reply:hosted-preparation-replay:v1:${purpose}:${token}`, "utf8")
+    .digest("base64url");
+}
+
 export function validateOpaqueProductionCapability(value: unknown) {
   if (typeof value !== "string" || !opaqueTokenPattern.test(value)) {
     throw new M2RuntimeError("PRODUCTION_CAPABILITY_INVALID", 404);

@@ -37,6 +37,9 @@ export type PrepaymentExecutionClaim = Readonly<{
 }>;
 
 export type PrepaymentComputeAuthorityRepository = {
+  getPreparationById(
+    preparationId: string,
+  ): Promise<ProductionPreparationRecord | null>;
   beginPrepaymentIntake(
     record: BeginPrepaymentIntakeRecord,
   ): Promise<BeginPrepaymentIntakeOutcome>;

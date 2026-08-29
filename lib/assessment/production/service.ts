@@ -1,7 +1,10 @@
 import "server-only";
 import { M2RuntimeError } from "../runtime/errors.ts";
 import { SupabaseAssessmentRepository } from "../runtime/supabase-repository.ts";
-import { hashProductionResultCapability } from "./capabilities.ts";
+import {
+  deriveHostedPreparationReplayCapability,
+  hashProductionResultCapability,
+} from "./capabilities.ts";
 import {
   isProductionPreparationAvailable,
   isProductionResultAccessAvailable,
@@ -25,6 +28,7 @@ import {
 import { isCustomerAuthFoundationEnabled } from "../../customer-auth/environment.ts";
 import { createCustomerIdentityAuthApplication } from "../../customer-auth/service.ts";
 import { hashCustomerAuthContinuation } from "../../customer-auth/crypto.ts";
+import type { AuthenticatedPreparationStatusV1 } from "./types.ts";
 
 export {
   findProductionNotificationForDelivery,
@@ -113,20 +117,69 @@ export async function answerProductionClarification(
 export async function continueAuthenticatedProductionPreparation(input: {
   continuationToken: unknown;
 }) {
-  requirePreparationRuntime();
   const policy = readPrepaymentComputePolicy();
+  const context = await createAuthenticatedPreparationContext(
+    input.continuationToken,
+  );
+  return (
+    await createApplication()
+  ).executeAuthenticatedPrepaymentFromContinuation({
+    customerUserId: context.customerUserId,
+    continuationTokenHash: context.continuationTokenHash,
+    policy,
+  });
+}
+
+async function createAuthenticatedPreparationContext(
+  continuationToken: unknown,
+) {
+  requirePreparationRuntime();
   if (!isCustomerAuthFoundationEnabled()) {
     throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
   }
   const identity = await (
     await createCustomerIdentityAuthApplication()
   ).getFreshIdentity();
-  const application = await createApplication();
-  return application.executeAuthenticatedPrepaymentFromContinuation({
+  return {
     customerUserId: identity.customerUserId,
-    continuationTokenHash: hashCustomerAuthContinuation(input.continuationToken),
-    policy,
-  });
+    continuationTokenHash: hashCustomerAuthContinuation(continuationToken),
+  };
+}
+
+export async function readAuthenticatedProductionPreparationStatus(input: {
+  continuationToken: unknown;
+}): Promise<AuthenticatedPreparationStatusV1 | null> {
+  const context = await createAuthenticatedPreparationContext(
+    input.continuationToken,
+  );
+  return createProviderFreeProductionAssessmentApplication()
+    .readAuthenticatedPreparationStatusFromContinuation({
+      customerUserId: context.customerUserId,
+      continuationTokenHash: context.continuationTokenHash,
+    });
+}
+
+export async function replayAuthenticatedProductionPreparation(input: {
+  continuationToken: unknown;
+}) {
+  const context = await createAuthenticatedPreparationContext(
+    input.continuationToken,
+  );
+  return createProviderFreeProductionAssessmentApplication()
+    .replayAuthenticatedPreparationFromContinuation({
+      customerUserId: context.customerUserId,
+      continuationTokenHash: context.continuationTokenHash,
+      replayCapabilities: {
+        purchaseReady: deriveHostedPreparationReplayCapability(
+          input.continuationToken,
+          "purchase_ready",
+        ),
+        awaitingClarification: deriveHostedPreparationReplayCapability(
+          input.continuationToken,
+          "awaiting_clarification",
+        ),
+      },
+    });
 }
 
 export async function processProductionNotification(notificationId: string) {

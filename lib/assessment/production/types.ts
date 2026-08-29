@@ -36,6 +36,14 @@ export type ProductionPreparationStopReason =
   | "not_full_product_candidate"
   | "safety_blocked";
 
+export type AuthenticatedPreparationStatusV1 =
+  | "processing"
+  | "awaiting_clarification"
+  | "purchase_ready"
+  | "not_full_product_candidate"
+  | "safety_blocked"
+  | "failed";
+
 export type ProductionPreparationRecord = {
   id: string;
   requestId: string;
