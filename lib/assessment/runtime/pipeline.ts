@@ -200,6 +200,18 @@ function rejectPurchaseReadyAuthority(
   throw new M2RuntimeError(diagnosticCode);
 }
 
+function canonicalAssessmentInputSnapshot(
+  input: AssessmentInput,
+): AssessmentInput {
+  return {
+    currentSituation: input.currentSituation,
+    optionalMessage: input.optionalMessage,
+    relationship: input.relationship,
+    requestedTopics: [...input.requestedTopics],
+    privacyAcknowledged: input.privacyAcknowledged,
+  };
+}
+
 export function validatePurchaseReadyAuthorityForFulfillment(input: {
   persistedRequest: PersistedAssessmentRequest;
   authority: PurchaseReadyRuntimeAuthorityV1;
@@ -281,13 +293,8 @@ export function validatePurchaseReadyAuthorityForFulfillment(input: {
     );
   }
 
-  const persistedInput: AssessmentInput = {
-    currentSituation: persistedRequest.currentSituation,
-    optionalMessage: persistedRequest.optionalMessage,
-    relationship: persistedRequest.relationship,
-    requestedTopics: [...persistedRequest.requestedTopics],
-    privacyAcknowledged: true,
-  };
+  const persistedInput = canonicalAssessmentInputSnapshot(persistedRequest);
+  const authorityInput = canonicalAssessmentInputSnapshot(authority.request);
   if (!providerInvocationFencePresent) {
     rejectPurchaseReadyAuthority(
       PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES.providerInvocationFenceMissing,
@@ -302,7 +309,7 @@ export function validatePurchaseReadyAuthorityForFulfillment(input: {
   }
   if (
     hashJson(persistedInput as unknown as JsonObject) !==
-    hashJson(authority.request as unknown as JsonObject)
+    hashJson(authorityInput as unknown as JsonObject)
   ) {
     rejectPurchaseReadyAuthority(
       PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
@@ -1271,7 +1278,7 @@ export class AssessmentPipeline {
         schemaSetVersion: "pipeline-schema-runtime-v6.0.0",
         stageTopologyVersion: "split-base-candidate-v1",
       },
-      request: structuredClone(input.request),
+      request: canonicalAssessmentInputSnapshot(input.request),
       baseStructuredIntake: structuredClone(input.baseStructuredIntake),
       candidateEnvelope: structuredClone(
         input.candidateEnvelope,

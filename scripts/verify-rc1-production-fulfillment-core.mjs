@@ -18,6 +18,9 @@ import {
 } from "../lib/assessment/production/notification.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import { FakeAssessmentRepository } from "../lib/assessment/runtime/fakes.ts";
+import {
+  validatePurchaseReadyAuthorityForFulfillment,
+} from "../lib/assessment/runtime/pipeline.ts";
 import { loadM2P4FinalProductRecoveryRuntimeStageCatalog } from "../lib/assessment/runtime/schema-catalog.ts";
 import {
   enforceSameOrigin,
@@ -598,6 +601,38 @@ await check("one clarification is reusable for the same answer and conflicting r
     selected.clarification.answer_payload,
   );
   assert.equal(answered.status, "purchase_ready");
+  const clarificationStored = [
+    ...run.lifecycleRepository.preparations.values(),
+  ][0];
+  assert.deepEqual(
+    Object.keys(clarificationStored.purchaseReadyAuthority.request).sort(),
+    [
+      "currentSituation",
+      "optionalMessage",
+      "privacyAcknowledged",
+      "relationship",
+      "requestedTopics",
+    ],
+  );
+  const clarificationPersistedRequest =
+    run.runtimeRepository.requests.get(clarificationStored.requestId);
+  assert.ok(clarificationPersistedRequest);
+  assert.doesNotThrow(() =>
+    validatePurchaseReadyAuthorityForFulfillment({
+      persistedRequest: clarificationPersistedRequest,
+      authority: clarificationStored.purchaseReadyAuthority,
+      runContext: {
+        requestId: clarificationStored.requestId,
+        runId: "00000000-0000-4000-8000-000000000090",
+        model: "gpt-5.6-luna",
+        promptBundleVersion: "prompt-bundle-runtime-v17.0.0",
+        schemaSetVersion: "pipeline-schema-runtime-v6.0.0",
+        startedAt: selected.fixed_clock,
+      },
+      activeStageTopologyVersion: "split-base-candidate-v1",
+      providerInvocationFencePresent: true,
+    }),
+  );
   const callsAfterAnswer = [...run.transport.calls];
   const replayed = await run.application.answerClarification(
     prepared.clarificationCapability,

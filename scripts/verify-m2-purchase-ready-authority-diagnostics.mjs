@@ -105,6 +105,110 @@ const preparation = await preparationPipeline.prepare(
 assert.equal(preparation.eligibility, "purchase_ready");
 const validAuthority = preparation.authority;
 
+// Clarification resume passes this persisted runtime shape through an
+// AssessmentInput boundary, so the snapshot must project only semantic fields.
+const clarificationRepository = new FakeAssessmentRepository();
+const clarificationRequestId = "00000000-0000-4000-8000-000000000201";
+const clarificationRequest = {
+  ...request,
+  privacyAcknowledged: true,
+};
+const persistedClarificationRequest =
+  await clarificationRepository.createRequest({
+    id: clarificationRequestId,
+    idempotencyKey: "case02-clarification-snapshot-diagnostics",
+    source: "production_fulfillment_runtime",
+    ...clarificationRequest,
+    now: selected.fixed_clock,
+  });
+const clarificationTransport = new FakeAiStageTransport({
+  outputs: controlledOutputs(
+    "2026-08-18-case5-polite-draft-ai-first-v16-cd1518ce",
+  ),
+});
+const clarificationPipeline = new AssessmentPipeline({
+  repository: clarificationRepository,
+  transport: clarificationTransport,
+  definitions: catalog.definitions,
+  now: () => selected.fixed_clock,
+  uuid: ids(),
+  timeZone: selected.timezone,
+  beforeProviderInvocation: async () => {},
+});
+const clarificationResumeContext = {
+  requestId: clarificationRequestId,
+  runId: "00000000-0000-4000-8000-000000000203",
+  model: "gpt-5.6-luna",
+  promptBundleVersion: catalog.promptBundleVersion,
+  schemaSetVersion: catalog.schemaSetVersion,
+  startedAt: selected.fixed_clock,
+};
+const clarificationPreparation =
+  await clarificationPipeline.prepare(
+    persistedClarificationRequest,
+    clarificationResumeContext,
+  );
+assert.equal(clarificationPreparation.eligibility, "purchase_ready");
+assert.deepEqual(
+  clarificationPreparation.authority.request,
+  clarificationRequest,
+);
+assert.deepEqual(
+  Object.keys(clarificationPreparation.authority.request).sort(),
+  [
+    "currentSituation",
+    "optionalMessage",
+    "privacyAcknowledged",
+    "relationship",
+    "requestedTopics",
+  ],
+);
+assert.doesNotThrow(() =>
+  validatePurchaseReadyAuthorityForFulfillment({
+    persistedRequest: persistedClarificationRequest,
+    authority: clarificationPreparation.authority,
+    runContext: clarificationResumeContext,
+    activeStageTopologyVersion: "split-base-candidate-v1",
+    providerInvocationFencePresent: true,
+  }),
+);
+
+const legacyClarificationAuthority = structuredClone(
+  clarificationPreparation.authority,
+);
+legacyClarificationAuthority.request = structuredClone(
+  persistedClarificationRequest,
+);
+assert.doesNotThrow(() =>
+  validatePurchaseReadyAuthorityForFulfillment({
+    persistedRequest: persistedClarificationRequest,
+    authority: legacyClarificationAuthority,
+    runContext: clarificationResumeContext,
+    activeStageTopologyVersion: "split-base-candidate-v1",
+    providerInvocationFencePresent: true,
+  }),
+);
+const mismatchedLegacyClarificationAuthority = structuredClone(
+  legacyClarificationAuthority,
+);
+mismatchedLegacyClarificationAuthority.request.currentSituation +=
+  " synthetic mismatch";
+assert.throws(
+  () =>
+    validatePurchaseReadyAuthorityForFulfillment({
+      persistedRequest: persistedClarificationRequest,
+      authority: mismatchedLegacyClarificationAuthority,
+      runContext: clarificationResumeContext,
+      activeStageTopologyVersion: "split-base-candidate-v1",
+      providerInvocationFencePresent: true,
+    }),
+  (error) =>
+    safeCode(error) ===
+    PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES
+      .persistedRequestSnapshotMismatch,
+);
+assert.equal(clarificationTransport.actualProviderCalls, 0);
+
 const codes = Object.values(PURCHASE_READY_AUTHORITY_DIAGNOSTIC_CODES);
 assert.equal(codes.length, 11);
 assert.equal(new Set(codes).size, 11);
