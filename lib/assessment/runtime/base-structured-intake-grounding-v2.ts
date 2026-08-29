@@ -20,6 +20,10 @@ const canonicalUnresolvedRepresentations = new Map<string, unknown>([
   ["practical_reason.deadline", "unknown"],
 ]);
 
+const derivedFieldsWithoutUnresolvedRepresentation = new Set([
+  "practical_reason.active",
+]);
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -53,12 +57,16 @@ export function groundBaseStructuredIntakeV2(
   if (Array.isArray(informationState.unresolved_fields)) {
     informationState.unresolved_fields =
       informationState.unresolved_fields.filter((fieldPath) => {
-        if (
-          typeof fieldPath !== "string" ||
-          !canonicalUnresolvedRepresentations.has(fieldPath)
-        ) {
+        if (typeof fieldPath !== "string") {
           return true;
         }
+        // `active` is total and derived from the practical-reason tuple. When
+        // the reason is unknown, kind/deadline carry that uncertainty while
+        // active remains the schema-required safe value false.
+        if (derivedFieldsWithoutUnresolvedRepresentation.has(fieldPath)) {
+          return false;
+        }
+        if (!canonicalUnresolvedRepresentations.has(fieldPath)) return true;
         return (
           valueAtPath(decisionFacts, fieldPath) ===
           canonicalUnresolvedRepresentations.get(fieldPath)
