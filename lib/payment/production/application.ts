@@ -9,7 +9,10 @@ import {
   M2RuntimeError,
 } from "../../assessment/runtime/errors.ts";
 import { hashOpaqueProductionCapability } from "../../assessment/production/capabilities.ts";
-import { RC2_PRODUCT } from "./constants.ts";
+import {
+  RC2_CHECKOUT_SESSION_EXPIRATION_SECONDS,
+  RC2_PRODUCT,
+} from "./constants.ts";
 import { requestProductionFulfillmentDispatch } from "./fulfillment-dispatch.ts";
 import { parseCustomerResultPath } from "../purchase-status-contract.ts";
 import {
@@ -360,6 +363,7 @@ export class ProductionPaymentDeliveryApplication {
         productDescription: RC2_PRODUCT.description,
         successUrl: `${this.siteOrigin}/purchase/return/${statusCapability}`,
         cancelUrl: `${this.siteOrigin}/purchase/return/${statusCapability}?cancelled=1`,
+        expiresAt: addSeconds(now, RC2_CHECKOUT_SESSION_EXPIRATION_SECONDS),
         idempotencyKey: providerIdempotencyKey,
         payPayEnabled: this.options.payPayEnabled,
       });

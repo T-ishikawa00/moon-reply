@@ -471,6 +471,7 @@ await check("Checkout is exact 980 JPY one-time payment with no subscription", a
       serviceName: request.serviceName,
       productName: request.productName,
       payPayEnabled: request.payPayEnabled,
+      expiresAt: request.expiresAt,
     },
     {
       amount: 980,
@@ -480,6 +481,7 @@ await check("Checkout is exact 980 JPY one-time payment with no subscription", a
       serviceName: "月の返事",
       productName: "恋のメッセージ鑑定ノート",
       payPayEnabled: false,
+      expiresAt: "2026-08-20T03:31:00.000Z",
     },
   );
   assert.ok(!JSON.stringify(request).includes("subscription"));
@@ -740,6 +742,27 @@ await check("authoritative open stays processing and expired becomes canceled", 
   assert.equal(canceled.disposition, "canceled");
   assert.equal(currentAttempt(run).state, "canceled");
   assert.equal([...run.repository.intents.values()][0].state, "canceled");
+});
+
+await check("each authoritative reconciliation observation has a distinct event identity", async () => {
+  const run = harness();
+  await checkoutReady(run);
+  const attempt = currentAttempt(run);
+  const first = await run.checkoutProvider.retrieveCheckoutSession({
+    providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+    observedAt: "2026-08-20T03:02:00.000Z",
+  });
+  const replay = await run.checkoutProvider.retrieveCheckoutSession({
+    providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+    observedAt: "2026-08-20T03:02:00.000Z",
+  });
+  const later = await run.checkoutProvider.retrieveCheckoutSession({
+    providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+    observedAt: "2026-08-20T03:07:00.000Z",
+  });
+  assert.equal(first.providerEventId, replay.providerEventId);
+  assert.notEqual(first.providerEventId, later.providerEventId);
+  assert.equal(first.payloadSha256, later.payloadSha256);
 });
 
 for (const [name, overrides, reason] of [

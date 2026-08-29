@@ -8,7 +8,7 @@ export const privateRecoverySchedulerPolicy = Object.freeze({
   reconciliationConcurrency: 2,
   reconciliationGraceSeconds: 120,
   reconciliationLeaseSeconds: 24,
-  reconciliationMaximumAttempts: 5,
+  reconciliationMaximumAttempts: 6,
   runtimeBudgetMilliseconds: 22_000,
 });
 

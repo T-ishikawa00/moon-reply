@@ -36,6 +36,7 @@ export function buildStripeReconciliationEvidenceV1(
     ...snapshot,
   });
   const payloadSha256 = sha256(canonicalSnapshot);
+  const observationSha256 = sha256(`${canonicalSnapshot}\n${observedAt}`);
   const eventType =
     snapshot.paymentStatus === "paid"
       ? "checkout.session.completed"
@@ -44,7 +45,7 @@ export function buildStripeReconciliationEvidenceV1(
         : "checkout.session.completed";
   return {
     evidenceSource: "reconciliation",
-    providerEventId: `reconcile_${payloadSha256}`,
+    providerEventId: `reconcile_${observationSha256}`,
     eventType,
     providerCreatedAt: observedAt,
     payloadSha256,
@@ -104,6 +105,7 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
         },
         success_url: request.successUrl,
         cancel_url: request.cancelUrl,
+        expires_at: Math.floor(Date.parse(request.expiresAt) / 1000),
       },
       { idempotencyKey: request.idempotencyKey },
     );

@@ -329,7 +329,7 @@ await check("reconciliation is bounded to four reads and concurrency two", async
     repository: {
       async claimPaymentReconciliationBatch(input) {
         assert.equal(input.limit, 4);
-        assert.equal(input.maximumAttempts, 5);
+        assert.equal(input.maximumAttempts, 6);
         return claims;
       },
       async finishPaymentReconciliation(input) {
@@ -393,7 +393,7 @@ await check("transient errors back off and permanent invalid sessions stop", asy
   assert.equal(finishes[1].retryAfter, null);
 });
 
-await check("retry budget exhaustion stops without checkout creation", async () => {
+await check("fifth pending observation retries and sixth stops without checkout creation", async () => {
   const finishes = [];
   await runProductionPaymentReconciliationSchedule({
     repository: {
@@ -412,7 +412,25 @@ await check("retry budget exhaustion stops without checkout creation", async () 
     uuid: () => "78000000-0000-4000-8000-000000000001",
     now: () => "2026-08-24T00:10:00.000Z",
   });
-  assert.equal(finishes[0].outcome, "stop");
+  await runProductionPaymentReconciliationSchedule({
+    repository: {
+      async claimPaymentReconciliationBatch() {
+        return [{
+          paymentAttemptId: "77000000-0000-4000-8000-000000000001",
+          providerCheckoutSessionId: "cs_test_budget",
+          attemptCount: 6,
+        }];
+      },
+      async finishPaymentReconciliation(input) {
+        finishes.push(input);
+      },
+    },
+    reconcileAttempt: async () => recorded("pending"),
+    uuid: () => "78000000-0000-4000-8000-000000000002",
+    now: () => "2026-08-24T00:25:00.000Z",
+  });
+  assert.equal(finishes[0].outcome, "retry");
+  assert.equal(finishes[1].outcome, "stop");
   const service = await readFile(
     path.join(
       root,

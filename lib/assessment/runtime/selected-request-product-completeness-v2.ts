@@ -16,6 +16,7 @@ export const SELECTED_REQUEST_PRODUCT_COMPLETENESS_V2_INVALID_SAFE_CODE =
   "M2_SELECTED_REQUEST_PRODUCT_COMPLETENESS_INVALID" as const;
 
 export const SELECTED_REQUEST_PRODUCT_COMPLETENESS_DEFECT_CODES_V2 = [
+  "CANDIDATE_CONTENT_FALSELY_ABSENT",
   "REQUESTED_DRAFT_MISSING",
   "REQUESTED_DRAFT_EDIT_METADATA_MISSING",
   "REQUESTED_DRAFT_CONTEXT_MISSING",
@@ -109,6 +110,21 @@ export function evaluateSelectedRequestProductCompletenessV2(input: {
   }
 
   const defects: SelectedRequestProductCompletenessDefectV2[] = [];
+  if (input.candidateEnvelope.presence === true) {
+    input.decisionPlan.material_unknowns.forEach((unknown, index) => {
+      if (
+        unknown.unknown_code === "message_content_absent" ||
+        unknown.unknown_code === "specific_message_text"
+      ) {
+        defects.push(
+          defect(
+            "CANDIDATE_CONTENT_FALSELY_ABSENT",
+            `decision_plan.material_unknowns[${index}]`,
+          ),
+        );
+      }
+    });
+  }
   const draftPermitted =
     input.effectiveDecisionPolicy.policy.message_draft_policy ===
       "required_now" ||

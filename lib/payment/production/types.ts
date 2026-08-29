@@ -149,6 +149,7 @@ export type CheckoutSessionRequestV1 = Readonly<{
   productDescription: "1相談 / 1鑑定ノート";
   successUrl: string;
   cancelUrl: string;
+  expiresAt: string;
   idempotencyKey: string;
   payPayEnabled: boolean;
 }>;
