@@ -40,9 +40,9 @@ export default function TokushohoPage() {
           <p>
             販売業者の氏名（名称）、住所および電話番号は、請求があった場合、遅滞なく開示します。
           </p>
-          <Link href="/contact" className="legal-document-action">
-            販売事業者情報の開示を請求する
-          </Link>
+          <p>
+            開示をご希望の場合は、サイト内のお問い合わせ窓口からご連絡ください。
+          </p>
         </CustomerNotice>
 
         <LegalContentSection title="現在確定している販売条件">
