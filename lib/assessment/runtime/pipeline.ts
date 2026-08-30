@@ -75,6 +75,7 @@ import {
 } from "./quality-reassessment-v1.ts";
 import {
   buildCombinedProductQualityDirectiveV2,
+  classifyPaidQualityReassessmentExhaustionV1,
   isQualityReassessmentRequiredSignalV2,
   localSemanticShapeDefectV2,
   QualityReassessmentRequiredSignalV2,
@@ -1593,6 +1594,13 @@ export class AssessmentPipeline {
                 throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
               }
               if (attemptNumber === 2) {
+                if (
+                  classifyPaidQualityReassessmentExhaustionV1(
+                    reassessmentDirective,
+                  ) === "deliver_latest_valid_candidate"
+                ) {
+                  return;
+                }
                 throw new M2RuntimeError(
                   "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
                 );

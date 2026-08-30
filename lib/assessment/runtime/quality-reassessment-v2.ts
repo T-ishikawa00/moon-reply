@@ -12,6 +12,16 @@ export const QUALITY_REASSESSMENT_DIRECTIVE_V2_SCHEMA_VERSION =
 export const QUALITY_REASSESSMENT_V2_ATTEMPT_NUMBER = 2 as const;
 export const QUALITY_REASSESSMENT_V2_MAX_DEFECTS = 24 as const;
 
+export const PAID_QUALITY_SOFT_FINDING_CODES_V1 = [
+  "TEMPLATE_GENERICITY",
+  "BRAND_TONE",
+  "REPETITION",
+] as const;
+
+export type PaidQualityReassessmentExhaustionDispositionV1 =
+  | "deliver_latest_valid_candidate"
+  | "fail_closed";
+
 export type ProductQualityDefectV2 = {
   findingCode:
     | QualityReassessmentFindingCode
@@ -31,6 +41,21 @@ export type QualityReassessmentDirectiveV2 = {
   source: "combined_product_quality";
   defects: Array<Omit<ProductQualityDefectV2, "ownership">>;
 };
+
+const paidQualitySoftFindingCodes = new Set<string>(
+  PAID_QUALITY_SOFT_FINDING_CODES_V1,
+);
+
+export function classifyPaidQualityReassessmentExhaustionV1(
+  directive: QualityReassessmentDirectiveV2,
+): PaidQualityReassessmentExhaustionDispositionV1 {
+  if (directive.defects.length === 0) return "fail_closed";
+  return directive.defects.every((defect) =>
+    paidQualitySoftFindingCodes.has(defect.findingCode),
+  )
+    ? "deliver_latest_valid_candidate"
+    : "fail_closed";
+}
 
 function normalizedPath(value: unknown) {
   if (typeof value !== "string" || value.length === 0 || value.length > 300) {
