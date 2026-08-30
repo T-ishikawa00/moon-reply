@@ -56,6 +56,7 @@
     "verify:pb01-contextual-inference-r1": "node scripts/verify-pb01-contextual-inference-r1.mjs",
     "verify:final-pb04-schema-r1": "node scripts/verify-final-pb04-schema-r1.mjs",
     "verify:paid-quality-delivery-guarantee-r1": "node scripts/verify-paid-quality-delivery-guarantee-r1.mjs",
+    "verify:operator-discord-notifications-r1": "node scripts/verify-operator-discord-notifications-r1.mjs",
     "verify:tokushoho-disclosure-cta-final": "node scripts/verify-tokushoho-disclosure-cta-final.mjs",
     "verify:final-prelaunch-polish-r1": "node scripts/verify-final-prelaunch-polish-r1.mjs"
   },
