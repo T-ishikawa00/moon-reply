@@ -53,7 +53,8 @@
     "verify:final-product-scope-r1": "node scripts/verify-final-product-scope-r1.mjs",
     "verify:final-hosted-continuation-r1": "node scripts/verify-final-hosted-continuation-r1.mjs",
     "verify:final-primary-product-function-r1": "node scripts/verify-final-primary-product-function-r1.mjs",
-    "verify:pb01-contextual-inference-r1": "node scripts/verify-pb01-contextual-inference-r1.mjs"
+    "verify:pb01-contextual-inference-r1": "node scripts/verify-pb01-contextual-inference-r1.mjs",
+    "verify:final-prelaunch-polish-r1": "node scripts/verify-final-prelaunch-polish-r1.mjs"
   },
   "dependencies": {
     "@netlify/async-workloads": "0.0.92",

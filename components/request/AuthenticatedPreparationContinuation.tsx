@@ -93,28 +93,48 @@ export function AuthenticatedPreparationContinuation({
   }
 
   return (
-    <section aria-labelledby="authenticated-clarification-title">
-      <p>確認は一度だけです</p>
-      <h2 id="authenticated-clarification-title">{outcome.question}</h2>
-      <fieldset disabled={busy}>
-        <legend>近いものを選んでください</legend>
-        {controls.choices.map((choice) => (
-          <label key={choice.value}>
-            <input
-              type="radio"
-              name="authenticated-clarification"
-              value={choice.value}
-              checked={value === choice.value}
-              onChange={() => setValue(choice.value)}
-            />
-            {choice.label}
-          </label>
-        ))}
+    <section
+      className="authenticated-clarification"
+      aria-labelledby="authenticated-clarification-title"
+    >
+      <p className="authenticated-clarification__limit">確認は一度だけです</p>
+      <h2
+        id="authenticated-clarification-title"
+        className="authenticated-clarification__question"
+      >
+        {outcome.question}
+      </h2>
+      <fieldset
+        className="authenticated-clarification__answer-group"
+        disabled={busy}
+        aria-describedby="authenticated-clarification-guidance"
+      >
+        <legend id="authenticated-clarification-guidance">
+          近いものを一つ選んでください
+        </legend>
+        <div className="authenticated-clarification__choices">
+          {controls.choices.map((choice) => (
+            <label
+              key={choice.value}
+              className="authenticated-clarification__choice"
+              data-selected={value === choice.value ? "true" : "false"}
+            >
+              <input
+                type="radio"
+                name="authenticated-clarification"
+                value={choice.value}
+                checked={value === choice.value}
+                onChange={() => setValue(choice.value)}
+              />
+              <span>{choice.label}</span>
+            </label>
+          ))}
+        </div>
       </fieldset>
       {controls.detail &&
       publicClarificationDetailVisibleV1(outcome.target, value) ? (
-        <label>
-          {controls.detail.label}
+        <label className="authenticated-clarification__detail">
+          <span>{controls.detail.label}</span>
           <textarea
             value={detail}
             maxLength={controls.detail.maximumCharacters}
@@ -123,10 +143,13 @@ export function AuthenticatedPreparationContinuation({
         </label>
       ) : null}
       {failed ? (
-        <p role="alert">確認を完了できませんでした。時間を置いてお試しください。</p>
+        <p className="request-field-error" role="alert">
+          確認を完了できませんでした。時間を置いてお試しください。
+        </p>
       ) : null}
       <button
         type="button"
+        className="button button--primary authenticated-clarification__submit"
         disabled={busy || answer === null}
         onClick={() => void submitClarification()}
       >

@@ -63,6 +63,11 @@ import {
 } from "@/lib/assessment/production/public-clarification-contract-v1";
 import { postProductionPreparationWithRecovery } from "@/lib/assessment/production/preparation-response-recovery";
 import type { Jpy980ClarificationTarget } from "@/lib/assessment/runtime/types";
+import {
+  candidateMessageRequired,
+  MESSAGE_IMPACT_TOPIC_LABEL,
+  validateCandidateMessage,
+} from "./request-form-candidate-message";
 
 export type RequestFormData = {
   adultConfirmed: boolean;
@@ -242,7 +247,7 @@ const whatToKnowOptions: readonly {
   value: RequestedTopic;
 }[] = [
   { label: "送るか待つか決めたい", value: "decide_send_or_wait" },
-  { label: "この文面がどう届くか知りたい", value: "message_impact" },
+  { label: MESSAGE_IMPACT_TOPIC_LABEL, value: "message_impact" },
   { label: "送る文章を整えたい", value: "draft_message" },
   { label: "相手との関係を整理したい", value: "relationship" },
   { label: "これから3日どう動くか知りたい", value: "next_three_days" },
@@ -469,6 +474,13 @@ function validateSheet(form: RequestFormData) {
   }
   if (!form.currentSituation.trim()) {
     errors.currentSituation = "今の状況を入力してください。";
+  }
+  const candidateMessageError = validateCandidateMessage(
+    form.whatToKnow,
+    form.draftMessage,
+  );
+  if (candidateMessageError) {
+    errors.draftMessage = candidateMessageError;
   }
   return errors;
 }
@@ -1196,11 +1208,11 @@ export function RequestForm({
       }));
       return;
     }
-    setForm((current) => ({
-      ...current,
-      whatToKnow: toggleValue(current.whatToKnow, value),
-    }));
+    const nextTopics = toggleValue(form.whatToKnow, value);
+    setForm((current) => ({ ...current, whatToKnow: nextTopics }));
+    if (candidateMessageRequired(nextTopics)) setMessageDetailsOpen(true);
     clearFieldError("whatToKnow");
+    if (!candidateMessageRequired(nextTopics)) clearFieldError("draftMessage");
     resetDependentSafetyAnswers();
   }
 
@@ -1422,6 +1434,7 @@ export function RequestForm({
     const nextErrors = validateSheet(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
+      if (nextErrors.draftMessage) setMessageDetailsOpen(true);
       focusFirstError(nextErrors);
       return;
     }
@@ -1433,6 +1446,7 @@ export function RequestForm({
     if (Object.keys(sheetErrors).length > 0) {
       setPhase(1);
       setErrors(sheetErrors);
+      if (sheetErrors.draftMessage) setMessageDetailsOpen(true);
       focusFirstError(sheetErrors);
       return;
     }
@@ -2235,6 +2249,7 @@ export function RequestForm({
   }
 
   const errorList = Object.entries(errors);
+  const isCandidateMessageRequired = candidateMessageRequired(form.whatToKnow);
   const gatePresentation = gatePrompt
     ? presentationFor(gatePrompt.classification)
     : null;
@@ -2413,10 +2428,23 @@ export function RequestForm({
             onToggle={(event) => setMessageDetailsOpen(event.currentTarget.open)}
           >
             <summary>
-              実際のメッセージを追加する <span>任意</span>
+              {isCandidateMessageRequired
+                ? "送ろうとしている文面を追加する"
+                : "実際のメッセージを追加する"}
+              <span
+                className={
+                  isCandidateMessageRequired
+                    ? "request-message-details__required"
+                    : undefined
+                }
+              >
+                {isCandidateMessageRequired ? "必須" : "任意"}
+              </span>
             </summary>
             <div>
-              <label htmlFor="partnerMessage">相手から届いた文面</label>
+              <label htmlFor="partnerMessage">
+                相手から届いた文面 <small>任意</small>
+              </label>
               <textarea
                 id="partnerMessage"
                 name="partnerMessage"
@@ -2427,7 +2455,15 @@ export function RequestForm({
                   updateString("partnerMessage", event.target.value)
                 }
               />
-              <label htmlFor="draftMessage">自分が送ろうとしている文面</label>
+              <label htmlFor="draftMessage">
+                自分が送ろうとしている文面
+                {isCandidateMessageRequired ? <span>必須</span> : <small>任意</small>}
+              </label>
+              <p id="draft-message-note" className="request-message-details__hint">
+                {isCandidateMessageRequired
+                  ? "この文面がどう届くかを確認するため、実際に送ろうとしている文面を入力してください。"
+                  : "文面について確認したい場合だけ入力してください。"}
+              </p>
               <textarea
                 id="draftMessage"
                 name="draftMessage"
@@ -2437,7 +2473,12 @@ export function RequestForm({
                 onChange={(event) =>
                   updateString("draftMessage", event.target.value)
                 }
+                required={isCandidateMessageRequired}
+                aria-required={isCandidateMessageRequired}
+                aria-invalid={Boolean(errors.draftMessage)}
+                aria-describedby="draft-message-note draftMessage-error"
               />
+              <FieldError id="draftMessage-error" message={errors.draftMessage} />
             </div>
           </details>
 

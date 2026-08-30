@@ -31,6 +31,7 @@ const STOP_COPY: Record<PrePaymentSafetyStopKind, StopCopy> = {
     paragraphs: [
       "現在の安全に関わる可能性があるため、\n月の返事では関係を進めるための文案や方針を\nお返しできません。",
       "安全な場所へ移ること、\n信頼できる人や適切な支援先につながることを\n優先してください。",
+      "危険が差し迫っている場合は、\nこのサービスの回答を待たず、\n地域の警察・救急などへ直ちに連絡してください。",
     ],
   },
   unsupported_professional_request: {
