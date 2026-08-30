@@ -79,10 +79,13 @@ async function runDeployContextProof(context, dispatchEnabled = false) {
     discordFetches: 0,
     customerDispatchRuns: 0,
   };
+  const diagnostics = [];
   const response = await withProcessEnvironment(
     {
       PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED:
         dispatchEnabled ? "true" : "false",
+      DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: "true",
+      DISCORD_OPERATOR_NOTIFICATIONS_EMERGENCY_STOP: "false",
     },
     () => runProductionFulfillmentDispatchScheduled(context, {
       isOperatorNotificationScheduleEnabled() {
@@ -100,9 +103,12 @@ async function runDeployContextProof(context, dispatchEnabled = false) {
         calls.discordFetches += 1;
         return { operatorNotifications: true };
       },
+      diagnosticLogger(event) {
+        diagnostics.push(event);
+      },
     }),
   );
-  return { calls, response };
+  return { calls, diagnostics, response };
 }
 
 function assertNoOperatorSideEffects(calls) {
@@ -216,12 +222,22 @@ await check("production published deploy can evaluate and enter the operator gat
     deploy: { context: "production", published: true },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), true);
-  const { calls, response } = await runDeployContextProof(context);
+  const { calls, diagnostics, response } = await runDeployContextProof(context);
   assert.equal(calls.operatorEnableGateEvaluations, 1);
   assert.equal(calls.operatorLaneRuns, 1);
   assert.equal(calls.discordSecretReads, 1);
   assert.equal(calls.databaseScans, 1);
   assert.equal(calls.discordFetches, 1);
+  assert.deepEqual(diagnostics, [{
+    diagnostic: "operator_discord_r1",
+    reason_code: "OPERATOR_ENTER_RUNTIME",
+    deploy_present: true,
+    deploy_context: "production",
+    published: true,
+    production_guard_pass: true,
+    enabled_parse_result: true,
+    emergency_stop_parse_result: false,
+  }]);
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), {
     dispatch: { customerDispatch: true },
@@ -234,9 +250,11 @@ await check("production unpublished deploy blocks the operator lane", async () =
     deploy: { context: "production", published: false },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
-  const { calls, response } = await runDeployContextProof(context);
+  const { calls, diagnostics, response } = await runDeployContextProof(context);
   assertNoOperatorSideEffects(calls);
   assert.equal(calls.customerDispatchRuns, 0);
+  assert.equal(diagnostics[0]?.reason_code, "OPERATOR_SKIP_NOT_PUBLISHED");
+  assert.equal(diagnostics[0]?.production_guard_pass, false);
   assert.deepEqual(await response.json(), { disabled: true });
 });
 
@@ -245,9 +263,11 @@ await check("deploy preview blocks the operator lane", async () => {
     deploy: { context: "deploy-preview", published: false },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
-  const { calls, response } = await runDeployContextProof(context);
+  const { calls, diagnostics, response } = await runDeployContextProof(context);
   assertNoOperatorSideEffects(calls);
   assert.equal(calls.customerDispatchRuns, 0);
+  assert.equal(diagnostics[0]?.reason_code, "OPERATOR_SKIP_NON_PRODUCTION");
+  assert.equal(diagnostics[0]?.deploy_context, "deploy-preview");
   assert.deepEqual(await response.json(), { disabled: true });
 });
 
@@ -256,9 +276,10 @@ await check("branch deploy blocks operator work without blocking customer dispat
     deploy: { context: "branch-deploy", published: false },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
-  const { calls, response } = await runDeployContextProof(context, true);
+  const { calls, diagnostics, response } = await runDeployContextProof(context, true);
   assertNoOperatorSideEffects(calls);
   assert.equal(calls.customerDispatchRuns, 1);
+  assert.equal(diagnostics[0]?.reason_code, "OPERATOR_SKIP_NON_PRODUCTION");
   assert.deepEqual(await response.json(), {
     dispatch: { customerDispatch: true },
     operatorNotifications: { disabled: true },
@@ -290,19 +311,75 @@ await check("preview server contexts block the operator lane", async () => {
       deploy: { context: deployContext, published: false },
     };
     assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
-    const { calls, response } = await runDeployContextProof(context);
+    const { calls, diagnostics, response } = await runDeployContextProof(context);
     assertNoOperatorSideEffects(calls);
     assert.equal(calls.customerDispatchRuns, 0);
+    assert.equal(diagnostics[0]?.reason_code, "OPERATOR_SKIP_NON_PRODUCTION");
     assert.deepEqual(await response.json(), { disabled: true });
   }
 });
 
 await check("unavailable runtime context fails closed", async () => {
   assert.equal(isPublishedProductionOperatorNotificationDeploy(undefined), false);
-  const { calls, response } = await runDeployContextProof(undefined);
+  const { calls, diagnostics, response } = await runDeployContextProof(undefined);
   assertNoOperatorSideEffects(calls);
   assert.equal(calls.customerDispatchRuns, 0);
+  assert.equal(
+    diagnostics[0]?.reason_code,
+    "OPERATOR_SKIP_CONTEXT_UNAVAILABLE",
+  );
+  assert.equal(diagnostics[0]?.deploy_present, false);
   assert.deepEqual(await response.json(), { disabled: true });
+});
+
+await check("activation gate logs exact boolean-only disabled reasons", async () => {
+  for (const testCase of [
+    {
+      enabled: "false",
+      emergencyStop: "false",
+      reasonCode: "OPERATOR_SKIP_DISABLED",
+    },
+    {
+      enabled: "true",
+      emergencyStop: "true",
+      reasonCode: "OPERATOR_SKIP_EMERGENCY_STOP",
+    },
+  ]) {
+    const diagnostics = [];
+    let operatorRuns = 0;
+    const response = await withProcessEnvironment(
+      {
+        PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED: "false",
+        DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: testCase.enabled,
+        DISCORD_OPERATOR_NOTIFICATIONS_EMERGENCY_STOP:
+          testCase.emergencyStop,
+      },
+      () => runProductionFulfillmentDispatchScheduled(
+        { deploy: { context: "production", published: true } },
+        {
+          async runOperatorNotificationSchedule() {
+            operatorRuns += 1;
+            throw new Error("OPERATOR_LANE_FORBIDDEN");
+          },
+          diagnosticLogger(event) {
+            diagnostics.push(event);
+          },
+        },
+      ),
+    );
+    assert.equal(operatorRuns, 0);
+    assert.deepEqual(await response.json(), { disabled: true });
+    assert.equal(diagnostics.length, 1);
+    assert.equal(diagnostics[0].reason_code, testCase.reasonCode);
+    assert.equal(
+      diagnostics[0].enabled_parse_result,
+      testCase.enabled === "true",
+    );
+    assert.equal(
+      diagnostics[0].emergency_stop_parse_result,
+      testCase.emergencyStop === "true",
+    );
+  }
 });
 
 await check("disabled runtime stops before secret, database, and transport access", async () => {
@@ -337,6 +414,7 @@ await check("disabled runtime stops before secret, database, and transport acces
 
 await check("ACTIVE_FROM requires canonical UTC and stops before client creation", async () => {
   let clientCreations = 0;
+  const diagnostics = [];
   await assert.rejects(
     () =>
       runConfiguredProductionOperatorNotificationSchedule({
@@ -353,11 +431,72 @@ await check("ACTIVE_FROM requires canonical UTC and stops before client creation
           clientCreations += 1;
           throw new Error("CLIENT_CREATION_FORBIDDEN");
         },
+        diagnosticLogger(event) {
+          diagnostics.push(event);
+        },
       }),
     (error) =>
       error?.safeCode === "OPERATOR_NOTIFICATION_CONFIGURATION_INVALID",
   );
   assert.equal(clientCreations, 0);
+  assert.deepEqual(diagnostics, [
+    {
+      diagnostic: "operator_discord_r1",
+      reason_code: "OPERATOR_RUNTIME_CONFIGURATION",
+      active_from_present: true,
+      active_from_parse_valid: false,
+      webhook_secret_present: true,
+    },
+    {
+      diagnostic: "operator_discord_r1",
+      reason_code: "OPERATOR_SKIP_ACTIVE_FROM_INVALID",
+      active_from_present: true,
+      active_from_parse_valid: false,
+      webhook_secret_present: true,
+    },
+  ]);
+});
+
+await check("missing ACTIVE_FROM and webhook stop with safe reason codes", async () => {
+  for (const testCase of [
+    {
+      activeFrom: undefined,
+      webhook: webhookUrl,
+      reasonCode: "OPERATOR_SKIP_ACTIVE_FROM_MISSING",
+    },
+    {
+      activeFrom: "2026-08-30T00:00:00.000Z",
+      webhook: undefined,
+      reasonCode: "OPERATOR_SKIP_WEBHOOK_MISSING",
+    },
+  ]) {
+    const diagnostics = [];
+    let repositoryCreations = 0;
+    await assert.rejects(
+      () => runConfiguredProductionOperatorNotificationSchedule({
+        environment: {
+          DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: "true",
+          DISCORD_OPERATOR_NOTIFICATIONS_EMERGENCY_STOP: "false",
+          DISCORD_OPERATOR_NOTIFICATIONS_ACTIVE_FROM: testCase.activeFrom,
+          DISCORD_OPERATOR_WEBHOOK_URL: testCase.webhook,
+          PAYMENT_PROVIDER_ENVIRONMENT: "test",
+          SUPABASE_URL: "https://example.supabase.co",
+          SUPABASE_SECRET_KEY: "test-only-not-a-real-secret",
+        },
+        createRepository() {
+          repositoryCreations += 1;
+          throw new Error("REPOSITORY_CREATION_FORBIDDEN");
+        },
+        diagnosticLogger(event) {
+          diagnostics.push(event);
+        },
+      }),
+      (error) =>
+        error?.safeCode === "OPERATOR_NOTIFICATION_CONFIGURATION_INVALID",
+    );
+    assert.equal(repositoryCreations, 0);
+    assert.equal(diagnostics.at(-1)?.reason_code, testCase.reasonCode);
+  }
 });
 
 await check("operator configuration failure is fail-open for customer dispatch", async () => {
@@ -739,13 +878,107 @@ await check("existing per-minute scheduler is reused and no scheduler is added",
   );
   assert.match(scheduled, /Promise\.allSettled/u);
   assert.match(scheduled, /operatorNotifications/u);
-  assert.match(scheduled, /context\?\.deploy\?\.context === "production"/u);
-  assert.match(scheduled, /context\.deploy\.published === true/u);
+  assert.match(scheduled, /deployContext !== "production"/u);
+  assert.match(scheduled, /context\?\.deploy\?\.published === true/u);
+  assert.match(scheduled, /OPERATOR_SKIP_CONTEXT_UNAVAILABLE/u);
+  assert.match(scheduled, /OPERATOR_SKIP_NOT_PUBLISHED/u);
   assert.match(scheduled, /dispatch\.status === "rejected" \? 500 : 200/u);
+});
+
+await check("transport initialization failure is reason-coded before claim", async () => {
+  const diagnostics = [];
+  let claimRuns = 0;
+  await assert.rejects(
+    () => runConfiguredProductionOperatorNotificationSchedule({
+      environment: {
+        DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: "true",
+        DISCORD_OPERATOR_NOTIFICATIONS_EMERGENCY_STOP: "false",
+        DISCORD_OPERATOR_NOTIFICATIONS_ACTIVE_FROM: "2026-08-30T00:00:00.000Z",
+        DISCORD_OPERATOR_WEBHOOK_URL: webhookUrl,
+        PAYMENT_PROVIDER_ENVIRONMENT: "test",
+        SUPABASE_URL: "https://example.supabase.co",
+        SUPABASE_SECRET_KEY: "test-only-not-a-real-secret",
+      },
+      createRepository() {
+        return {
+          async claimBatch() {
+            claimRuns += 1;
+            return [];
+          },
+          async beginSend() { return "superseded"; },
+          async complete() {},
+          async finish() {},
+        };
+      },
+      createTransport() {
+        throw new Error("SAFE_TEST_TRANSPORT_FAILURE");
+      },
+      diagnosticLogger(event) {
+        diagnostics.push(event);
+      },
+    }),
+    /SAFE_TEST_TRANSPORT_FAILURE/u,
+  );
+  assert.equal(claimRuns, 0);
+  assert.equal(
+    diagnostics.at(-1)?.reason_code,
+    "OPERATOR_SKIP_TRANSPORT_INITIALIZATION_FAILED",
+  );
+});
+
+await check("claim RPC failure is reason-coded without exposing the error", async () => {
+  const diagnostics = [];
+  let transportSends = 0;
+  await assert.rejects(
+    () => runConfiguredProductionOperatorNotificationSchedule({
+      environment: {
+        DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: "true",
+        DISCORD_OPERATOR_NOTIFICATIONS_EMERGENCY_STOP: "false",
+        DISCORD_OPERATOR_NOTIFICATIONS_ACTIVE_FROM: "2026-08-30T00:00:00.000Z",
+        DISCORD_OPERATOR_WEBHOOK_URL: webhookUrl,
+        PAYMENT_PROVIDER_ENVIRONMENT: "test",
+        SUPABASE_URL: "https://example.supabase.co",
+        SUPABASE_SECRET_KEY: "test-only-not-a-real-secret",
+      },
+      createRepository() {
+        return {
+          async claimBatch() {
+            throw new Error("FORBIDDEN_RAW_DATABASE_ERROR");
+          },
+          async beginSend() { return "superseded"; },
+          async complete() {},
+          async finish() {},
+        };
+      },
+      createTransport() {
+        return {
+          async send() {
+            transportSends += 1;
+            throw new Error("SEND_FORBIDDEN");
+          },
+        };
+      },
+      diagnosticLogger(event) {
+        diagnostics.push(event);
+      },
+    }),
+    /FORBIDDEN_RAW_DATABASE_ERROR/u,
+  );
+  assert.equal(transportSends, 0);
+  assert.deepEqual(
+    diagnostics.slice(-2).map((event) => event.reason_code),
+    ["OPERATOR_CLAIM_START", "OPERATOR_CLAIM_FAILED"],
+  );
+  assert.equal(
+    diagnostics.at(-1)?.claim_failure_code,
+    "UNEXPECTED_CLAIM_FAILURE",
+  );
+  assert.doesNotMatch(JSON.stringify(diagnostics), /FORBIDDEN_RAW_DATABASE_ERROR/u);
 });
 
 await check("runtime activation uses ACTIVE_FROM and injected clients only after enable", async () => {
   const seen = { repository: null, transport: null, claim: null };
+  const diagnostics = [];
   const result = await runConfiguredProductionOperatorNotificationSchedule({
     environment: {
       DISCORD_OPERATOR_NOTIFICATIONS_ENABLED: "true",
@@ -776,6 +1009,9 @@ await check("runtime activation uses ACTIVE_FROM and injected clients only after
       seen.transport = url;
       return { async send() { throw new Error("NO_CLAIMS"); } };
     },
+    diagnosticLogger(event) {
+      diagnostics.push(event);
+    },
   });
   assert.deepEqual(result, {
     claimed: 0,
@@ -794,6 +1030,26 @@ await check("runtime activation uses ACTIVE_FROM and injected clients only after
   assert.equal(seen.claim.environment, "test");
   assert.equal(seen.claim.activeFrom, "2026-08-30T00:00:00.000Z");
   assert.equal(seen.claim.limit, 4);
+  assert.deepEqual(
+    diagnostics.map((event) => event.reason_code),
+    [
+      "OPERATOR_RUNTIME_CONFIGURATION",
+      "OPERATOR_REPOSITORY_READY",
+      "OPERATOR_CLAIM_START",
+      "OPERATOR_CLAIM_OK",
+    ],
+  );
+  assert.equal(diagnostics.at(-1)?.claimed_row_count, 0);
+  assert.equal(diagnostics.at(-1)?.cutover_confirmed, true);
+  const serialized = JSON.stringify(diagnostics);
+  for (const forbidden of [
+    "2026-08-30T00:00:00.000Z",
+    webhookUrl,
+    "test-only-not-a-real-secret",
+    "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+  ]) {
+    assert.doesNotMatch(serialized, new RegExp(forbidden, "u"));
+  }
 });
 
 console.log(
