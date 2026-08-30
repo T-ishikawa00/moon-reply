@@ -48,6 +48,7 @@ import {
 } from "./contracts/split-stage-contracts-v1.ts";
 import { validateContextualIntakeIntegrityV3 } from "./contextual-integrity-v3.ts";
 import { validateDecisionPlanConstraintIntegrityV1 } from "./decision-plan-constraint-integrity-v1.ts";
+import { canonicalizeDecisionPlanFactReferencesV1 } from "./decision-plan-fact-reference-canonicalization-v1.ts";
 import { addUsage, emptyUsageTotals } from "./cost.ts";
 import {
   buildLocalEligibilityResultV3,
@@ -769,17 +770,22 @@ export class AssessmentPipeline {
       }
       this.returnedModel = response.returnedModel;
       this.emit(localValidationEvent);
-      validateStageOutput(definition, response.output);
-      afterValidation?.(response.output);
+      const canonicalOutput =
+        definition.stageId === "PB-04" &&
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
+          ? canonicalizeDecisionPlanFactReferencesV1(response.output)
+          : response.output;
+      validateStageOutput(definition, canonicalOutput);
+      afterValidation?.(canonicalOutput);
       await this.repository.completeStage({
         stageRunId,
         responseId: response.responseId,
         returnedModel: response.returnedModel,
         usage: response.usage,
         latencyMs: response.latencyMs,
-        outputJson: response.output,
+        outputJson: canonicalOutput,
       });
-      return response.output;
+      return canonicalOutput;
     } catch (error) {
       const safeError = asM2RuntimeError(error, "M2_STAGE_PROVIDER_FAILED");
       try {
