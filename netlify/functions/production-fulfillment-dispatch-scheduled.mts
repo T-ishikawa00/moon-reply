@@ -80,16 +80,6 @@ function evaluateProductionDeployGuard(
       production_guard_pass: false,
     };
   }
-  if (!published) {
-    return {
-      diagnostic: "operator_discord_r1",
-      reason_code: "OPERATOR_SKIP_NOT_PUBLISHED",
-      deploy_present: deployPresent,
-      deploy_context: deployContext,
-      published,
-      production_guard_pass: false,
-    };
-  }
   return {
     diagnostic: "operator_discord_r1",
     reason_code: "OPERATOR_ENTER_RUNTIME",

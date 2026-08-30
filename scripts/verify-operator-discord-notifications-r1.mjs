@@ -245,22 +245,32 @@ await check("production published deploy can evaluate and enter the operator gat
   });
 });
 
-await check("production unpublished deploy blocks the operator lane", async () => {
+await check("production context enters the operator gate when published is false", async () => {
   const context = {
     deploy: { context: "production", published: false },
   };
-  assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
+  assert.equal(isPublishedProductionOperatorNotificationDeploy(context), true);
   const { calls, diagnostics, response } = await runDeployContextProof(context);
-  assertNoOperatorSideEffects(calls);
-  assert.equal(calls.customerDispatchRuns, 0);
-  assert.equal(diagnostics[0]?.reason_code, "OPERATOR_SKIP_NOT_PUBLISHED");
-  assert.equal(diagnostics[0]?.production_guard_pass, false);
-  assert.deepEqual(await response.json(), { disabled: true });
+  assert.equal(calls.operatorEnableGateEvaluations, 1);
+  assert.equal(calls.operatorLaneRuns, 1);
+  assert.equal(calls.discordSecretReads, 1);
+  assert.equal(calls.databaseScans, 1);
+  assert.equal(calls.discordFetches, 1);
+  assert.equal(diagnostics[0]?.reason_code, "OPERATOR_ENTER_RUNTIME");
+  assert.equal(diagnostics[0]?.published, false);
+  assert.equal(diagnostics[0]?.production_guard_pass, true);
+  assert.equal(response.status, 200);
+  assert.equal(
+    isPublishedProductionOperatorNotificationDeploy({
+      deploy: { context: "production" },
+    }),
+    true,
+  );
 });
 
 await check("deploy preview blocks the operator lane", async () => {
   const context = {
-    deploy: { context: "deploy-preview", published: false },
+    deploy: { context: "deploy-preview", published: true },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
   const { calls, diagnostics, response } = await runDeployContextProof(context);
@@ -273,7 +283,7 @@ await check("deploy preview blocks the operator lane", async () => {
 
 await check("branch deploy blocks operator work without blocking customer dispatch", async () => {
   const context = {
-    deploy: { context: "branch-deploy", published: false },
+    deploy: { context: "branch-deploy", published: true },
   };
   assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
   const { calls, diagnostics, response } = await runDeployContextProof(context, true);
@@ -305,10 +315,10 @@ await check("branch deploy blocks operator work without blocking customer dispat
   });
 });
 
-await check("preview server contexts block the operator lane", async () => {
-  for (const deployContext of ["preview-server", "dev-server"]) {
+await check("preview, dev, and unknown contexts block the operator lane", async () => {
+  for (const deployContext of ["preview-server", "dev-server", "future-context"]) {
     const context = {
-      deploy: { context: deployContext, published: false },
+      deploy: { context: deployContext, published: true },
     };
     assert.equal(isPublishedProductionOperatorNotificationDeploy(context), false);
     const { calls, diagnostics, response } = await runDeployContextProof(context);
@@ -518,6 +528,28 @@ await check("operator configuration failure is fail-open for customer dispatch",
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), {
     dispatch: { disabled: true },
+    operatorNotifications: { failed: true },
+  });
+});
+
+await check("operator rejection cannot fail a successful customer dispatch", async () => {
+  const response = await withProcessEnvironment(
+    { PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED: "true" },
+    () => runProductionFulfillmentDispatchScheduled(
+      { deploy: { context: "production", published: false } },
+      {
+        isOperatorNotificationScheduleEnabled: () => true,
+        runDispatchSchedule: async () => ({ customerDispatch: true }),
+        runOperatorNotificationSchedule: async () => {
+          throw new Error("SAFE_TEST_OPERATOR_FAILURE");
+        },
+        diagnosticLogger() {},
+      },
+    ),
+  );
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), {
+    dispatch: { customerDispatch: true },
     operatorNotifications: { failed: true },
   });
 });
@@ -881,7 +913,7 @@ await check("existing per-minute scheduler is reused and no scheduler is added",
   assert.match(scheduled, /deployContext !== "production"/u);
   assert.match(scheduled, /context\?\.deploy\?\.published === true/u);
   assert.match(scheduled, /OPERATOR_SKIP_CONTEXT_UNAVAILABLE/u);
-  assert.match(scheduled, /OPERATOR_SKIP_NOT_PUBLISHED/u);
+  assert.doesNotMatch(scheduled, /OPERATOR_SKIP_NOT_PUBLISHED/u);
   assert.match(scheduled, /dispatch\.status === "rejected" \? 500 : 200/u);
 });
 

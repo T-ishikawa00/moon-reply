@@ -29,7 +29,6 @@ type RuntimeEnvironment = Readonly<Record<string, string | undefined>>;
 export type OperatorNotificationDiagnosticReasonCode =
   | "OPERATOR_SKIP_CONTEXT_UNAVAILABLE"
   | "OPERATOR_SKIP_NON_PRODUCTION"
-  | "OPERATOR_SKIP_NOT_PUBLISHED"
   | "OPERATOR_SKIP_DISABLED"
   | "OPERATOR_SKIP_EMERGENCY_STOP"
   | "OPERATOR_ENTER_RUNTIME"
