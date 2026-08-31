@@ -11,6 +11,7 @@ import { readPaymentDeliveryEnvironment } from "./environment-runtime.ts";
 import { VerifiedEmailResultNotificationAdapterV1 } from "./result-notification.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
 import { createConfiguredTransactionalEmailAdapter } from "./transactional-email-runtime.ts";
+import type { CheckoutSessionInspectorV1 } from "./stripe-session.ts";
 import type {
   CheckoutProviderV1,
   PaymentEnvironment,
@@ -31,6 +32,7 @@ class FulfillmentRuntimeCheckoutProviderV1 implements CheckoutProviderV1 {
 export function createActiveProductionFulfillmentApplication(input: {
   paymentEnvironment: PaymentEnvironment;
   fulfillmentDispatcher: ProductionFulfillmentDispatcherV1;
+  checkoutSessionInspector?: CheckoutSessionInspectorV1;
 }) {
   const environment = readPaymentDeliveryEnvironment();
   const repository = new SupabasePaymentDeliveryRepository(
@@ -64,6 +66,7 @@ export function createActiveProductionFulfillmentApplication(input: {
   return new ProductionPaymentDeliveryApplication({
     repository,
     checkoutProvider: new FulfillmentRuntimeCheckoutProviderV1(),
+    checkoutSessionInspector: input.checkoutSessionInspector,
     transactionalEmail,
     grantProcessor,
     fulfillmentDispatcher: input.fulfillmentDispatcher,

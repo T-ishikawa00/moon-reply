@@ -27,16 +27,30 @@ function json(body: unknown, status: number) {
   });
 }
 function decode(value: unknown) {
+  const keys =
+    typeof value === "object" && value !== null && !Array.isArray(value)
+      ? Object.keys(value)
+      : [];
   if (
     typeof value !== "object" ||
     value === null ||
     Array.isArray(value) ||
-    Object.keys(value).length !== 1 ||
-    !("statusCapability" in value)
+    !("statusCapability" in value) ||
+    !(
+      (keys.length === 1 && keys[0] === "statusCapability") ||
+      (keys.length === 2 &&
+        keys.includes("statusCapability") &&
+        keys.includes("checkoutCancelled") &&
+        "checkoutCancelled" in value &&
+        value.checkoutCancelled === true)
+    )
   ) {
     throw new M2RuntimeError("PAYMENT_STATUS_REQUEST_INVALID", 400);
   }
-  return value as { statusCapability: unknown };
+  return value as {
+    statusCapability: unknown;
+    checkoutCancelled?: true;
+  };
 }
 
 export async function POST(request: Request) {
@@ -55,10 +69,12 @@ export async function POST(request: Request) {
               await createCustomerIdentityAuthApplication()
             ).getFreshIdentity()
           ).customerUserId,
+          body.checkoutCancelled === true,
         )
       : await processProductionPurchaseStatus(
           body.statusCapability,
           readTrustedEmailCookie(request.headers.get("cookie")),
+          body.checkoutCancelled === true,
         );
     return json({ data: outcome }, 200);
   } catch (error) {

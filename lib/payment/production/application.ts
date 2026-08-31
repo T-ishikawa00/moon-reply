@@ -30,6 +30,10 @@ import {
   normalizeDeliveryEmail,
 } from "./crypto.ts";
 import type { TransactionalEmailAdapterV1 } from "./transactional-email.ts";
+import {
+  validateStripeCheckoutSessionSnapshotV1,
+  type CheckoutSessionInspectorV1,
+} from "./stripe-session.ts";
 import type {
   CheckoutProviderV1,
   CheckoutStartOutcome,
@@ -77,6 +81,7 @@ function confirmationPendingStatus(
 type PaymentDeliveryApplicationOptions = {
   repository: PaymentDeliveryRepository;
   checkoutProvider: CheckoutProviderV1;
+  checkoutSessionInspector?: CheckoutSessionInspectorV1;
   transactionalEmail: TransactionalEmailAdapterV1;
   grantProcessor: ProductionGrantProcessorV1;
   fulfillmentDispatcher: ProductionFulfillmentDispatcherV1;
@@ -146,6 +151,56 @@ export class ProductionPaymentDeliveryApplication {
       options.fulfillmentLeaseSeconds < 30
     ) {
       throw new M2RuntimeError("PAYMENT_POLICY_INVALID", 503);
+    }
+  }
+
+  private async cancelledCheckoutWasNotCompleted(
+    purchaseIntent: PurchaseIntentRecord,
+  ): Promise<boolean> {
+    const inspector = this.options.checkoutSessionInspector;
+    if (!inspector || purchaseIntent.currentPaymentAttemptId === null) {
+      return false;
+    }
+    try {
+      const attempt = await this.options.repository.findPaymentAttemptById(
+        purchaseIntent.currentPaymentAttemptId,
+      );
+      if (
+        !attempt ||
+        attempt.purchaseIntentId !== purchaseIntent.id ||
+        attempt.providerCheckoutSessionId === null
+      ) {
+        return false;
+      }
+      const snapshot = await inspector.inspectCheckoutSession({
+        providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+        observedAt: this.now(),
+      });
+      validateStripeCheckoutSessionSnapshotV1(snapshot, true);
+      if (
+        snapshot.providerCheckoutSessionId !==
+          attempt.providerCheckoutSessionId ||
+        snapshot.purchaseReference !== purchaseIntent.id ||
+        snapshot.environment !== purchaseIntent.environment ||
+        snapshot.mode !== "payment" ||
+        snapshot.amountTotal !== purchaseIntent.expectedAmount ||
+        snapshot.currency !== purchaseIntent.currency
+      ) {
+        return false;
+      }
+      if (
+        snapshot.paymentStatus === "paid" ||
+        snapshot.checkoutStatus === "complete"
+      ) {
+        return false;
+      }
+      return (
+        snapshot.paymentStatus === "unpaid" &&
+        (snapshot.checkoutStatus === "open" ||
+          snapshot.checkoutStatus === "expired")
+      );
+    } catch {
+      return false;
     }
   }
 
@@ -1055,6 +1110,7 @@ export class ProductionPaymentDeliveryApplication {
   async processPurchaseStatus(
     statusCapability: unknown,
     trustedSessionToken?: unknown,
+    inspectCancelledCheckout = false,
   ): Promise<CustomerPurchaseStatus> {
     const statusCapabilityHash = hashPaymentCapability(
       statusCapability,
@@ -1072,6 +1128,16 @@ export class ProductionPaymentDeliveryApplication {
       if (
         status.purchaseIntent.state === "payment_failed" ||
         status.purchaseIntent.state === "canceled"
+      ) {
+        return {
+          status: "payment_not_completed",
+          paymentVerified: false,
+          accountFallback: false,
+        };
+      }
+      if (
+        inspectCancelledCheckout &&
+        (await this.cancelledCheckoutWasNotCompleted(status.purchaseIntent))
       ) {
         return {
           status: "payment_not_completed",
@@ -1150,6 +1216,7 @@ export class ProductionPaymentDeliveryApplication {
   async processAuthenticatedPurchaseStatus(
     statusCapability: unknown,
     customerUserId: string,
+    inspectCancelledCheckout = false,
   ): Promise<CustomerPurchaseStatus> {
     if (!internalUuidPattern.test(customerUserId)) {
       throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
@@ -1170,6 +1237,16 @@ export class ProductionPaymentDeliveryApplication {
       if (
         status.purchaseIntent.state === "payment_failed" ||
         status.purchaseIntent.state === "canceled"
+      ) {
+        return {
+          status: "payment_not_completed",
+          paymentVerified: false,
+          accountFallback: true,
+        };
+      }
+      if (
+        inspectCancelledCheckout &&
+        (await this.cancelledCheckoutWasNotCompleted(status.purchaseIntent))
       ) {
         return {
           status: "payment_not_completed",

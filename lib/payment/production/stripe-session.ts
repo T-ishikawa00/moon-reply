@@ -1,6 +1,9 @@
 import type Stripe from "stripe";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
-import type { PaymentEnvironment } from "./types.ts";
+import type {
+  CheckoutSessionReconciliationRequestV1,
+  PaymentEnvironment,
+} from "./types.ts";
 
 const purchaseReferencePattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
@@ -18,6 +21,12 @@ export type StripeCheckoutSessionSnapshotV1 = Readonly<{
   currency: string | null;
   checkoutStatus: string | null;
 }>;
+
+export type CheckoutSessionInspectorV1 = {
+  inspectCheckoutSession(
+    request: CheckoutSessionReconciliationRequestV1,
+  ): Promise<StripeCheckoutSessionSnapshotV1>;
+};
 
 export function normalizeStripeCheckoutSessionV1(
   session: Stripe.Checkout.Session,

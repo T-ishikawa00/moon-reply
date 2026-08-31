@@ -121,6 +121,15 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
   async retrieveCheckoutSession(
     request: CheckoutSessionReconciliationRequestV1,
   ) {
+    return buildStripeReconciliationEvidenceV1(
+      await this.inspectCheckoutSession(request),
+      request.observedAt,
+    );
+  }
+
+  async inspectCheckoutSession(
+    request: CheckoutSessionReconciliationRequestV1,
+  ) {
     let session: Stripe.Checkout.Session;
     try {
       session = await this.stripe.checkout.sessions.retrieve(
@@ -139,10 +148,9 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
       }
       throw error;
     }
-    return buildStripeReconciliationEvidenceV1(
-      normalizeStripeCheckoutSessionV1(session, true),
-      request.observedAt,
-    );
+    const snapshot = normalizeStripeCheckoutSessionV1(session, true);
+    validateStripeCheckoutSessionSnapshotV1(snapshot, true);
+    return snapshot;
   }
 }
 

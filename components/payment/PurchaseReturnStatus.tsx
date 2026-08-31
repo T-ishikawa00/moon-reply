@@ -53,6 +53,7 @@ export function PurchaseReturnStatusCard({
   supportEnabled = false,
   checkoutRestarting = false,
   checkoutRestartFailed = false,
+  checkoutCancelled = false,
   onManualRefresh,
   restartCheckout = () => undefined,
 }: {
@@ -63,6 +64,7 @@ export function PurchaseReturnStatusCard({
   supportEnabled?: boolean;
   checkoutRestarting?: boolean;
   checkoutRestartFailed?: boolean;
+  checkoutCancelled?: boolean;
   onManualRefresh?: () => void;
   restartCheckout?: () => void;
 }) {
@@ -131,21 +133,30 @@ export function PurchaseReturnStatusCard({
             </Link>
           ) : null}
           {presentation.showCheckoutRestart ? (
-            <>
-              <button
-                type="button"
+            checkoutCancelled ? (
+              <Link
+                href={customerAuthEnabled ? "/purchase/auth/continue" : "/request"}
                 className="button button--primary"
-                disabled={checkoutRestarting}
-                onClick={() => void restartCheckout()}
               >
-                {checkoutRestarting
-                  ? "決済画面を準備しています…"
-                  : "同じお申し込みで決済を再開する"}
-              </button>
-              <Link href="/request" className="text-link">
-                相談内容からやり直す
+                購入確認へ戻る
               </Link>
-            </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="button button--primary"
+                  disabled={checkoutRestarting}
+                  onClick={() => void restartCheckout()}
+                >
+                  {checkoutRestarting
+                    ? "決済画面を準備しています…"
+                    : "同じお申し込みで決済を再開する"}
+                </button>
+                <Link href="/request" className="text-link">
+                  相談内容からやり直す
+                </Link>
+              </>
+            )
           ) : null}
           {presentation.showSupportFallback && supportEnabled ? (
             <Link href="/contact" className="text-link">
@@ -160,10 +171,12 @@ export function PurchaseReturnStatusCard({
 
 export function PurchaseReturnStatus({
   statusCapability,
+  checkoutCancelled,
   customerAuthEnabled,
   supportEnabled,
 }: {
   statusCapability: string;
+  checkoutCancelled: boolean;
   customerAuthEnabled: boolean;
   supportEnabled: boolean;
 }) {
@@ -177,6 +190,7 @@ export function PurchaseReturnStatus({
   const [checkoutRestarting, setCheckoutRestarting] = useState(false);
   const [checkoutRestartFailed, setCheckoutRestartFailed] = useState(false);
   const pollerRef = useRef<PurchaseStatusPoller | null>(null);
+  const inspectedCancelledCheckoutRef = useRef<string | null>(null);
 
   async function restartCheckout() {
     setCheckoutRestarting(true);
@@ -220,13 +234,22 @@ export function PurchaseReturnStatus({
   useEffect(() => {
     const poller = new PurchaseStatusPoller({
       async fetchStatus(signal) {
+        const inspectCancelledCheckout =
+          checkoutCancelled &&
+          inspectedCancelledCheckoutRef.current !== statusCapability;
+        if (inspectCancelledCheckout) {
+          inspectedCancelledCheckoutRef.current = statusCapability;
+        }
         const response = await fetch("/api/payments/status", {
           method: "POST",
           credentials: "same-origin",
           cache: "no-store",
           signal,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ statusCapability }),
+          body: JSON.stringify({
+            statusCapability,
+            ...(inspectCancelledCheckout ? { checkoutCancelled: true } : {}),
+          }),
         });
         if (!response.ok) throw new Error("PURCHASE_STATUS_UNAVAILABLE");
         const next = decodeCustomerPurchaseStatusResponse(await response.json());
@@ -248,7 +271,7 @@ export function PurchaseReturnStatus({
       poller.stop();
       if (pollerRef.current === poller) pollerRef.current = null;
     };
-  }, [statusCapability]);
+  }, [checkoutCancelled, statusCapability]);
 
   return (
     <PurchaseReturnStatusCard
@@ -259,6 +282,7 @@ export function PurchaseReturnStatus({
       supportEnabled={supportEnabled}
       checkoutRestarting={checkoutRestarting}
       checkoutRestartFailed={checkoutRestartFailed}
+      checkoutCancelled={checkoutCancelled}
       onManualRefresh={() => void pollerRef.current?.manualRefresh()}
       restartCheckout={restartCheckout}
     />

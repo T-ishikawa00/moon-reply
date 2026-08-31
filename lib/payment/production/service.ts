@@ -276,16 +276,33 @@ export async function reconcileProductionStripePaymentAttempt(
   return application.reconcilePaymentAttempt(paymentAttemptId);
 }
 
-function activeFulfillmentApplication(paymentEnvironment: "test" | "live") {
+function activeFulfillmentApplication(
+  paymentEnvironment: "test" | "live",
+  inspectCancelledCheckout = false,
+) {
+  let checkoutSessionInspector;
+  if (inspectCancelledCheckout) {
+    try {
+      const stripe = readStripeCheckoutEnvironment();
+      checkoutSessionInspector = new StripeCheckoutProviderV1(
+        stripe.secretKey,
+        { maxNetworkRetries: 0 },
+      );
+    } catch {
+      checkoutSessionInspector = undefined;
+    }
+  }
   return createActiveProductionFulfillmentApplication({
     paymentEnvironment,
     fulfillmentDispatcher: backgroundFulfillmentDispatcher,
+    checkoutSessionInspector,
   });
 }
 
 export async function processProductionPurchaseStatus(
   statusCapability: unknown,
   trustedSessionToken?: unknown,
+  inspectCancelledCheckout = false,
 ) {
   if (!isPaidFulfillmentProcessingAvailable()) {
     throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
@@ -293,12 +310,18 @@ export async function processProductionPurchaseStatus(
   const paymentEnvironment = readConfiguredPaymentEnvironment();
   return activeFulfillmentApplication(
     paymentEnvironment,
-  ).processPurchaseStatus(statusCapability, trustedSessionToken);
+    inspectCancelledCheckout,
+  ).processPurchaseStatus(
+    statusCapability,
+    trustedSessionToken,
+    inspectCancelledCheckout,
+  );
 }
 
 export async function processAuthenticatedProductionPurchaseStatus(
   statusCapability: unknown,
   customerUserId: string,
+  inspectCancelledCheckout = false,
 ) {
   if (!isPaidFulfillmentProcessingAvailable()) {
     throw new M2RuntimeError("PAYMENT_FULFILLMENT_UNAVAILABLE", 503);
@@ -306,7 +329,12 @@ export async function processAuthenticatedProductionPurchaseStatus(
   const paymentEnvironment = readConfiguredPaymentEnvironment();
   return activeFulfillmentApplication(
     paymentEnvironment,
-  ).processAuthenticatedPurchaseStatus(statusCapability, customerUserId);
+    inspectCancelledCheckout,
+  ).processAuthenticatedPurchaseStatus(
+    statusCapability,
+    customerUserId,
+    inspectCancelledCheckout,
+  );
 }
 
 export async function processProductionFulfillmentJobById(jobId: unknown) {

@@ -16,14 +16,18 @@ export const metadata: Metadata = {
 
 export default async function PurchaseReturnPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ statusCapability: string }>;
+  searchParams: Promise<{ cancelled?: string | string[] }>;
 }) {
   const { statusCapability } = await params;
+  const checkoutCancelled = (await searchParams).cancelled === "1";
   return (
     <main className="purchase-return-page">
       <PurchaseReturnStatus
         statusCapability={statusCapability}
+        checkoutCancelled={checkoutCancelled}
         customerAuthEnabled={isCustomerAuthFoundationEnabled()}
         supportEnabled={isCustomerSupportCasesEnabled()}
       />

@@ -102,6 +102,7 @@ function harness(options = {}) {
   const application = new ProductionPaymentDeliveryApplication({
     repository,
     checkoutProvider,
+    checkoutSessionInspector: options.checkoutSessionInspector,
     transactionalEmail,
     grantProcessor,
     fulfillmentDispatcher,
@@ -183,6 +184,47 @@ function currentAttempt(run) {
   const attempt = [...run.repository.attempts.values()].at(-1);
   assert.ok(attempt);
   return attempt;
+}
+
+function cancelSnapshot(run, overrides = {}) {
+  const request = run.checkoutProvider.requests[0];
+  const attempt = currentAttempt(run);
+  return {
+    providerCheckoutSessionId: attempt.providerCheckoutSessionId,
+    environment: "test",
+    purchaseReference: request.purchaseReference,
+    clientReferenceId: request.purchaseReference,
+    providerPaymentId: null,
+    paymentIntentPurchaseReference: null,
+    mode: "payment",
+    paymentStatus: "unpaid",
+    amountTotal: 980,
+    currency: "jpy",
+    checkoutStatus: "open",
+    ...overrides,
+  };
+}
+
+function cancelInspector() {
+  let snapshot = null;
+  let failure = null;
+  const requests = [];
+  return {
+    requests,
+    setSnapshot(next) {
+      snapshot = next;
+      failure = null;
+    },
+    setFailure(error) {
+      failure = error;
+    },
+    async inspectCheckoutSession(request) {
+      requests.push({ ...request });
+      if (failure) throw failure;
+      assert.ok(snapshot);
+      return { ...snapshot };
+    },
+  };
 }
 
 function makeReconciliationPaid(run, providerPaymentId = "pi_rc2_reconciled") {
@@ -795,6 +837,124 @@ await check("redirect and status capability alone never verify Payment", async (
   });
   assert.equal(run.repository.verifiedPayments.size, 0);
   assert.equal(run.grantProcessor.issueCalls.length, 0);
+});
+
+await check("cancel return open/unpaid becomes terminal after one read", async () => {
+  const inspector = cancelInspector();
+  const run = harness({ checkoutSessionInspector: inspector });
+  const ready = await checkoutReady(run);
+  inspector.setSnapshot(cancelSnapshot(run));
+  assert.deepEqual(
+    await run.application.processPurchaseStatus(
+      ready.checkout.statusCapability,
+      ready.completed.trustedSessionToken,
+      true,
+    ),
+    {
+      status: "payment_not_completed",
+      paymentVerified: false,
+      accountFallback: false,
+    },
+  );
+  assert.equal(inspector.requests.length, 1);
+  assert.equal(run.repository.verifiedPayments.size, 0);
+  assert.equal(run.repository.jobs.size, 0);
+});
+
+await check("cancel return paid, complete, or DB-verified remains on confirmation flow", async () => {
+  for (const overrides of [
+    {
+      providerPaymentId: "pi_cancel_paid",
+      paymentIntentPurchaseReference: "from-purchase",
+      paymentStatus: "paid",
+      checkoutStatus: "complete",
+    },
+    { paymentStatus: "unpaid", checkoutStatus: "complete" },
+  ]) {
+    const inspector = cancelInspector();
+    const run = harness({ checkoutSessionInspector: inspector });
+    const ready = await checkoutReady(run);
+    const snapshot = cancelSnapshot(run, overrides);
+    if (snapshot.paymentIntentPurchaseReference === "from-purchase") {
+      snapshot.paymentIntentPurchaseReference = snapshot.purchaseReference;
+    }
+    inspector.setSnapshot(snapshot);
+    assert.equal(
+      (
+        await run.application.processPurchaseStatus(
+          ready.checkout.statusCapability,
+          ready.completed.trustedSessionToken,
+          true,
+        )
+      ).status,
+      "confirming_payment",
+    );
+    assert.equal(inspector.requests.length, 1);
+  }
+
+  const inspector = cancelInspector();
+  const run = harness({ checkoutSessionInspector: inspector });
+  const ready = await checkoutReady(run);
+  inspector.setFailure(new Error("must not inspect a DB-verified Purchase"));
+  await run.application.verifyStripeEvidence(evidenceFor(run, ready.checkout));
+  assert.equal(
+    (
+      await run.application.processPurchaseStatus(
+        ready.checkout.statusCapability,
+        ready.completed.trustedSessionToken,
+        true,
+      )
+    ).status,
+    "preparing_assessment",
+  );
+  assert.equal(inspector.requests.length, 0);
+});
+
+await check("cancel read failure and binding mismatch both fail closed", async () => {
+  for (const mode of ["read_failure", "binding_mismatch"]) {
+    const inspector = cancelInspector();
+    const run = harness({ checkoutSessionInspector: inspector });
+    const ready = await checkoutReady(run);
+    if (mode === "read_failure") {
+      inspector.setFailure(new Error("Stripe unavailable"));
+    } else {
+      const wrongPurchase = "80000000-0000-4000-8000-000000000001";
+      inspector.setSnapshot(
+        cancelSnapshot(run, {
+          purchaseReference: wrongPurchase,
+          clientReferenceId: wrongPurchase,
+        }),
+      );
+    }
+    assert.equal(
+      (
+        await run.application.processPurchaseStatus(
+          ready.checkout.statusCapability,
+          ready.completed.trustedSessionToken,
+          true,
+        )
+      ).status,
+      "confirming_payment",
+    );
+    assert.equal(inspector.requests.length, 1);
+    assert.equal(run.repository.verifiedPayments.size, 0);
+  }
+});
+
+await check("cancel inspection is one-shot and returns to purchase confirmation", () => {
+  const page = readText("app/purchase/return/[statusCapability]/page.tsx");
+  const component = readText("components/payment/PurchaseReturnStatus.tsx");
+  const route = readText("app/api/payments/status/route.ts");
+  const service = readText("lib/payment/production/service.ts");
+  assert.match(page, /cancelled === "1"/u);
+  assert.match(
+    component,
+    /inspectedCancelledCheckoutRef\.current = statusCapability/u,
+  );
+  assert.match(component, /購入確認へ戻る/u);
+  assert.match(component, /\/purchase\/auth\/continue/u);
+  assert.match(route, /value\.checkoutCancelled === true/u);
+  assert.match(service, /maxNetworkRetries: 0/u);
 });
 
 await check("verified success is idempotent and out-of-order failure cannot regress it", async () => {
