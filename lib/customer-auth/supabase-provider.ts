@@ -182,11 +182,14 @@ export class SupabaseCustomerAuthProviderV1 implements CustomerAuthProviderV1 {
     if (error) {
       throw new M2RuntimeError("CUSTOMER_AUTH_EMAIL_OTP_INVALID", 403);
     }
-    const identity = await this.getFreshIdentityFor("supabase_email_otp");
+    const identity = await this.getFreshIdentityFor();
     if (!identity || identity.verifiedEmail !== email) {
       throw new M2RuntimeError("CUSTOMER_AUTH_EMAIL_OTP_INVALID", 403);
     }
-    return identity;
+    return {
+      ...identity,
+      verifiedEmailSource: "supabase_email_otp" as const,
+    };
   }
 
   private async getFreshIdentityFor(source?: VerifiedDeliveryEmailSource) {

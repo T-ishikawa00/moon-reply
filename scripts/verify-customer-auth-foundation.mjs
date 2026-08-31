@@ -519,6 +519,9 @@ const {
   FakeCustomerAuthProviderV1,
   FakeCustomerIdentityRepositoryV1,
 } = await import("../lib/customer-auth/fakes.ts");
+const { SupabaseCustomerAuthProviderV1 } = await import(
+  "../lib/customer-auth/supabase-provider.ts"
+);
 const {
   hashCustomerAuthContinuation,
   hashCustomerAuthCsrf,
@@ -631,6 +634,61 @@ await checkAsync("fake Email OTP creates a canonical binding", async () => {
   assert.equal(binding.preparationId, preparationId);
   assert.equal(provider.requestedEmailCount, 1);
 });
+
+await checkAsync(
+  "Google-only identity accepts successful Email OTP as direct authority",
+  async () => {
+    const email = "google-only@example.test";
+    const googleOnlyUser = {
+      id: customerB,
+      email,
+      email_confirmed_at: now,
+      identities: [
+        {
+          provider: "google",
+          identity_data: { email, email_verified: true },
+        },
+      ],
+    };
+    let verifyOtpCalls = 0;
+    let getUserCalls = 0;
+    const googleOnlyProvider = new SupabaseCustomerAuthProviderV1(
+      {
+        auth: {
+          async verifyOtp(input) {
+            verifyOtpCalls += 1;
+            assert.deepEqual(input, {
+              email,
+              token: "12345678",
+              type: "email",
+            });
+            return { data: { user: googleOnlyUser }, error: null };
+          },
+          async getUser() {
+            getUserCalls += 1;
+            return { data: { user: googleOnlyUser }, error: null };
+          },
+        },
+      },
+      "https://moon-reply.test",
+      "https://local-supabase.invalid",
+    );
+
+    const identity = await googleOnlyProvider.verifyEmailOtp({
+      email,
+      otp: "12345678",
+    });
+
+    assert.deepEqual(identity, {
+      customerUserId: customerB,
+      verifiedEmail: email,
+      verifiedEmailSource: "supabase_email_otp",
+      authProviders: ["google"],
+    });
+    assert.equal(verifyOtpCalls, 1);
+    assert.equal(getUserCalls, 1);
+  },
+);
 
 await checkAsync("raw continuation and CSRF never enter persistence", async () => {
   const serialized = JSON.stringify([...repository.continuations.values()]);
