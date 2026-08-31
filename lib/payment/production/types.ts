@@ -3,6 +3,7 @@ import type {
   ProductionFulfillmentResultV1,
   VerifiedPurchaseAuthorityV1,
 } from "../../assessment/production/types.ts";
+import type { MeasurementAttributionSnapshot } from "../../measurement/attribution.ts";
 export type { CustomerPurchaseStatus } from "../purchase-status-contract.ts";
 
 export type PaymentEnvironment = "test" | "live";
@@ -117,6 +118,7 @@ export type PurchaseIntentRecord = Readonly<{
   state: PurchaseIntentState;
   currentPaymentAttemptId: string | null;
   successfulPaymentId: string | null;
+  measurementAttribution?: MeasurementAttributionSnapshot | null;
   statusCapabilityHash: string;
   finalConfirmationAcceptedAt: string;
   createdAt: string;

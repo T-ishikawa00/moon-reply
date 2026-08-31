@@ -428,6 +428,7 @@ export class ProductionPaymentDeliveryApplication {
   async startCheckout(input: {
     preparationCapability: unknown;
     trustedSessionToken: unknown;
+    measurementAttribution?: PurchaseIntentRecord["measurementAttribution"];
   }): Promise<CheckoutStartOutcome> {
     const now = this.now();
     const preparationCapabilityHash = hashOpaqueProductionCapability(
@@ -473,6 +474,7 @@ export class ProductionPaymentDeliveryApplication {
       state: "requires_payment",
       currentPaymentAttemptId: null,
       successfulPaymentId: null,
+      measurementAttribution: input.measurementAttribution ?? null,
       statusCapabilityHash: hashPaymentCapability(
         candidateStatusCapability,
         "purchase-status",
@@ -503,6 +505,7 @@ export class ProductionPaymentDeliveryApplication {
   async startAuthenticatedCheckout(input: {
     preparationCapability: unknown;
     customerUserId: string;
+    measurementAttribution?: PurchaseIntentRecord["measurementAttribution"];
   }): Promise<CheckoutStartOutcome> {
     if (!internalUuidPattern.test(input.customerUserId)) {
       throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
@@ -533,6 +536,7 @@ export class ProductionPaymentDeliveryApplication {
       state: "requires_payment",
       currentPaymentAttemptId: null,
       successfulPaymentId: null,
+      measurementAttribution: input.measurementAttribution ?? null,
       statusCapabilityHash: hashPaymentCapability(
         candidateStatusCapability,
         "purchase-status",
@@ -571,6 +575,7 @@ export class ProductionPaymentDeliveryApplication {
   async startAuthenticatedCheckoutFromContinuation(input: {
     continuationToken: unknown;
     customerUserId: string;
+    measurementAttribution?: PurchaseIntentRecord["measurementAttribution"];
   }): Promise<CheckoutStartOutcome> {
     if (!internalUuidPattern.test(input.customerUserId)) {
       throw new M2RuntimeError("CUSTOMER_AUTH_REQUIRED", 401);
@@ -598,6 +603,7 @@ export class ProductionPaymentDeliveryApplication {
       state: "requires_payment",
       currentPaymentAttemptId: null,
       successfulPaymentId: null,
+      measurementAttribution: input.measurementAttribution ?? null,
       statusCapabilityHash: hashPaymentCapability(
         candidateStatusCapability,
         "purchase-status",

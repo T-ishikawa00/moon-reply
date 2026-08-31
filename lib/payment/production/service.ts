@@ -1,7 +1,6 @@
 import "server-only";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import { enforceLegacyCustomerEmailVerificationAllowed } from "../../customer-auth/cutover.ts";
-import { trackVerifiedPaymentPurchase } from "../../measurement/server.ts";
 import { ProductionPaymentDeliveryApplication } from "./application.ts";
 import { enqueueProductionFulfillmentJob } from "./async-workloads.ts";
 import {
@@ -103,7 +102,6 @@ function createApplication(input: {
       emailEncryptionKey: environment.emailEncryptionKey,
       purchaseStatusSigningSecret: environment.purchaseStatusSigningSecret,
       fulfillmentLeaseSeconds: environment.fulfillmentLeaseSeconds,
-      onVerifiedPaymentRecorded: trackVerifiedPaymentPurchase,
     }),
     environment,
     repository,
@@ -156,6 +154,7 @@ export async function completeProductionEmailVerification(input: {
 export async function createProductionStripeCheckout(input: {
   preparationCapability: unknown;
   trustedSessionToken: unknown;
+  measurementAttribution: import("../../measurement/attribution.ts").MeasurementAttributionSnapshot | null;
 }) {
   if (!isCheckoutAvailable()) {
     throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);
@@ -174,6 +173,7 @@ export async function createProductionStripeCheckout(input: {
 export async function createAuthenticatedProductionStripeCheckout(input: {
   preparationCapability: unknown;
   customerUserId: string;
+  measurementAttribution: import("../../measurement/attribution.ts").MeasurementAttributionSnapshot | null;
 }) {
   if (!isCheckoutAvailable()) {
     throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);
@@ -192,6 +192,7 @@ export async function createAuthenticatedProductionStripeCheckout(input: {
 export async function createAuthenticatedProductionStripeCheckoutFromContinuation(input: {
   continuationToken: unknown;
   customerUserId: string;
+  measurementAttribution: import("../../measurement/attribution.ts").MeasurementAttributionSnapshot | null;
 }) {
   if (!isCheckoutAvailable()) {
     throw new M2RuntimeError("PAYMENT_CHECKOUT_UNAVAILABLE", 404);

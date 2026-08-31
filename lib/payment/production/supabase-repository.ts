@@ -91,6 +91,15 @@ type PurchaseIntentRow = {
   state: PurchaseIntentRecord["state"];
   current_payment_attempt_id: string | null;
   successful_payment_id: string | null;
+  measurement_client_id: string | null;
+  measurement_session_id: number | null;
+  measurement_utm_source: string | null;
+  measurement_utm_medium: string | null;
+  measurement_utm_campaign: string | null;
+  measurement_utm_content: string | null;
+  measurement_gclid: string | null;
+  measurement_landing_path: string | null;
+  measurement_attribution_captured_at: string | null;
   status_capability_hash: string;
   final_confirmation_accepted_at: string;
   created_at: string;
@@ -164,8 +173,11 @@ type PaymentDatabase = {
       mark_rc2_email_challenge_delivery_failed_v1: RuntimeFunction;
       consume_rc2_email_challenge_v1: RuntimeFunction;
       begin_rc2_purchase_intent_v1: RuntimeFunction;
+      begin_rc2_purchase_intent_measurement_r1: RuntimeFunction;
       begin_customer_purchase_intent_v1: RuntimeFunction;
+      begin_customer_purchase_intent_measurement_r1: RuntimeFunction;
       begin_customer_purchase_intent_from_continuation_v1: RuntimeFunction;
+      begin_customer_purchase_intent_from_continuation_measurement_r1: RuntimeFunction;
       reserve_rc2_payment_attempt_v1: RuntimeFunction;
       attach_rc2_checkout_session_v1: RuntimeFunction;
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
@@ -349,6 +361,27 @@ export class SupabasePaymentDeliveryRepository
       state: row.state,
       currentPaymentAttemptId: row.current_payment_attempt_id,
       successfulPaymentId: row.successful_payment_id,
+      measurementAttribution:
+        row.measurement_client_id &&
+        row.measurement_session_id &&
+        row.measurement_landing_path &&
+        row.measurement_attribution_captured_at
+          ? {
+              clientId: row.measurement_client_id,
+              sessionId: row.measurement_session_id,
+              utmSource: row.measurement_utm_source,
+              utmMedium: row.measurement_utm_medium,
+              utmCampaign: row.measurement_utm_campaign,
+              utmContent: row.measurement_utm_content,
+              gclid: row.measurement_gclid,
+              landingPath: row.measurement_landing_path,
+              capturedAt: row.measurement_attribution_captured_at,
+              expiresAt: new Date(
+                Date.parse(row.measurement_attribution_captured_at) +
+                  30 * 24 * 60 * 60 * 1000,
+              ).toISOString(),
+            }
+          : null,
       statusCapabilityHash: row.status_capability_hash,
       finalConfirmationAcceptedAt: row.final_confirmation_accepted_at,
       createdAt: row.created_at,
@@ -505,7 +538,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { data, error } = await this.client.rpc(
-      "begin_rc2_purchase_intent_v1",
+      "begin_rc2_purchase_intent_measurement_r1",
       {
         p_purchase_intent_id: input.purchaseIntent.id,
         p_preparation_capability_hash: input.preparationCapabilityHash,
@@ -519,6 +552,15 @@ export class SupabasePaymentDeliveryRepository
         p_purchase_kind: input.purchaseIntent.purchaseKind,
         p_environment: input.purchaseIntent.environment,
         p_now: input.now,
+        p_measurement_client_id: input.purchaseIntent.measurementAttribution?.clientId ?? null,
+        p_measurement_session_id: input.purchaseIntent.measurementAttribution?.sessionId ?? null,
+        p_measurement_utm_source: input.purchaseIntent.measurementAttribution?.utmSource ?? null,
+        p_measurement_utm_medium: input.purchaseIntent.measurementAttribution?.utmMedium ?? null,
+        p_measurement_utm_campaign: input.purchaseIntent.measurementAttribution?.utmCampaign ?? null,
+        p_measurement_utm_content: input.purchaseIntent.measurementAttribution?.utmContent ?? null,
+        p_measurement_gclid: input.purchaseIntent.measurementAttribution?.gclid ?? null,
+        p_measurement_landing_path: input.purchaseIntent.measurementAttribution?.landingPath ?? null,
+        p_measurement_attribution_captured_at: input.purchaseIntent.measurementAttribution?.capturedAt ?? null,
       },
     );
     if (error) databaseFailure(error);
@@ -540,7 +582,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { data, error } = await this.client.rpc(
-      "begin_customer_purchase_intent_v1",
+      "begin_customer_purchase_intent_measurement_r1",
       {
         p_purchase_intent_id: input.purchaseIntent.id,
         p_customer_user_id: input.customerUserId,
@@ -554,6 +596,15 @@ export class SupabasePaymentDeliveryRepository
         p_purchase_kind: input.purchaseIntent.purchaseKind,
         p_environment: input.purchaseIntent.environment,
         p_now: input.now,
+        p_measurement_client_id: input.purchaseIntent.measurementAttribution?.clientId ?? null,
+        p_measurement_session_id: input.purchaseIntent.measurementAttribution?.sessionId ?? null,
+        p_measurement_utm_source: input.purchaseIntent.measurementAttribution?.utmSource ?? null,
+        p_measurement_utm_medium: input.purchaseIntent.measurementAttribution?.utmMedium ?? null,
+        p_measurement_utm_campaign: input.purchaseIntent.measurementAttribution?.utmCampaign ?? null,
+        p_measurement_utm_content: input.purchaseIntent.measurementAttribution?.utmContent ?? null,
+        p_measurement_gclid: input.purchaseIntent.measurementAttribution?.gclid ?? null,
+        p_measurement_landing_path: input.purchaseIntent.measurementAttribution?.landingPath ?? null,
+        p_measurement_attribution_captured_at: input.purchaseIntent.measurementAttribution?.capturedAt ?? null,
       },
     );
     if (error) databaseFailure(error);
@@ -572,7 +623,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }) {
     const { data, error } = await this.client.rpc(
-      "begin_customer_purchase_intent_from_continuation_v1",
+      "begin_customer_purchase_intent_from_continuation_measurement_r1",
       {
         p_purchase_intent_id: input.purchaseIntent.id,
         p_customer_user_id: input.customerUserId,
@@ -586,6 +637,15 @@ export class SupabasePaymentDeliveryRepository
         p_purchase_kind: input.purchaseIntent.purchaseKind,
         p_environment: input.purchaseIntent.environment,
         p_now: input.now,
+        p_measurement_client_id: input.purchaseIntent.measurementAttribution?.clientId ?? null,
+        p_measurement_session_id: input.purchaseIntent.measurementAttribution?.sessionId ?? null,
+        p_measurement_utm_source: input.purchaseIntent.measurementAttribution?.utmSource ?? null,
+        p_measurement_utm_medium: input.purchaseIntent.measurementAttribution?.utmMedium ?? null,
+        p_measurement_utm_campaign: input.purchaseIntent.measurementAttribution?.utmCampaign ?? null,
+        p_measurement_utm_content: input.purchaseIntent.measurementAttribution?.utmContent ?? null,
+        p_measurement_gclid: input.purchaseIntent.measurementAttribution?.gclid ?? null,
+        p_measurement_landing_path: input.purchaseIntent.measurementAttribution?.landingPath ?? null,
+        p_measurement_attribution_captured_at: input.purchaseIntent.measurementAttribution?.capturedAt ?? null,
       },
     );
     if (error) databaseFailure(error);

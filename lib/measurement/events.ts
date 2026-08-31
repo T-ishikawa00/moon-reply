@@ -1,4 +1,5 @@
 export const MEASUREMENT_EVENT_NAMES = [
+  "landing_view",
   "page_view",
   "sample_view",
   "request_start",
@@ -68,6 +69,14 @@ export type MeasurementTransactionId = string & {
 };
 
 export type MeasurementPayloadByName = Readonly<{
+  landing_view: Readonly<{
+    landingPath: string;
+    utmSource: string | null;
+    utmMedium: string | null;
+    utmCampaign: string | null;
+    utmContent: string | null;
+    gclid: string | null;
+  }>;
   page_view: Readonly<{ page: MeasurementPageArea }>;
   sample_view: Readonly<{ sample: "public_sample" }>;
   request_start: Readonly<{ experience: "consultation_request" }>;
@@ -139,6 +148,33 @@ function validateMeasurementPayload(
   payload: unknown,
 ) {
   switch (name) {
+    case "landing_view": {
+      const value = exactObject(payload, [
+        "landingPath",
+        "utmSource",
+        "utmMedium",
+        "utmCampaign",
+        "utmContent",
+        "gclid",
+      ]);
+      if (
+        typeof value.landingPath !== "string" ||
+        ![
+          "/", "/sample-report", "/request", "/contact", "/legal",
+          "/legal/privacy", "/legal/terms", "/legal/refund",
+          "/legal/tokushoho", "/legal/unsupported-cases",
+          "/legal/ai-disclosure",
+        ].includes(value.landingPath) ||
+        ![value.utmSource, value.utmMedium].every(
+          (item) => item === null || (typeof item === "string" && item.length <= 64 && /^[A-Za-z0-9._~-]+$/u.test(item)),
+        ) ||
+        ![value.utmCampaign, value.utmContent].every(
+          (item) => item === null || (typeof item === "string" && item.length <= 100 && /^[A-Za-z0-9._~-]+$/u.test(item)),
+        ) ||
+        !(value.gclid === null || (typeof value.gclid === "string" && value.gclid.length <= 200 && /^[A-Za-z0-9_-]+$/u.test(value.gclid)))
+      ) throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
+      return;
+    }
     case "page_view": {
       const value = exactObject(payload, ["page"]);
       if (!oneOf(value.page, MEASUREMENT_PAGE_AREAS)) {

@@ -1,5 +1,9 @@
 import { runConfiguredProductionFulfillmentDispatchSchedule } from "../../lib/payment/production/dispatch-scheduler-runtime-service.ts";
 import {
+  isPurchaseMeasurementScheduleEnabled,
+  runConfiguredPurchaseMeasurementSchedule,
+} from "../../lib/measurement/purchase-scheduler-runtime-service.ts";
+import {
   isProductionOperatorNotificationScheduleEnabled,
   runConfiguredProductionOperatorNotificationSchedule,
   type OperatorNotificationRuntimeDiagnosticEvent,
@@ -94,6 +98,8 @@ type ScheduledFunctionDependencies = Readonly<{
   isOperatorNotificationScheduleEnabled?: () => boolean;
   runDispatchSchedule?: () => Promise<unknown>;
   runOperatorNotificationSchedule?: () => Promise<unknown>;
+  isPurchaseMeasurementScheduleEnabled?: () => boolean;
+  runPurchaseMeasurementSchedule?: () => Promise<unknown>;
   diagnosticLogger?: OperatorNotificationRuntimeDiagnosticLogger;
 }>;
 
@@ -113,6 +119,7 @@ export async function runProductionFulfillmentDispatchScheduled(
   const dispatchEnabled =
     process.env.PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED === "true";
   let operatorNotificationsEnabled = false;
+  let purchaseMeasurementEnabled = false;
   if (!deployGuard.production_guard_pass) {
     emitDiagnostic(diagnosticLogger, deployGuard);
   } else {
@@ -123,6 +130,9 @@ export async function runProductionFulfillmentDispatchScheduled(
     operatorNotificationsEnabled =
       (dependencies.isOperatorNotificationScheduleEnabled ??
         isProductionOperatorNotificationScheduleEnabled)();
+    purchaseMeasurementEnabled =
+      (dependencies.isPurchaseMeasurementScheduleEnabled ??
+        isPurchaseMeasurementScheduleEnabled)();
     emitDiagnostic(diagnosticLogger, {
       ...deployGuard,
       reason_code: operatorNotificationsEnabled
@@ -134,14 +144,14 @@ export async function runProductionFulfillmentDispatchScheduled(
       emergency_stop_parse_result: emergencyStopExactTrue,
     });
   }
-  if (!dispatchEnabled && !operatorNotificationsEnabled) {
+  if (!dispatchEnabled && !operatorNotificationsEnabled && !purchaseMeasurementEnabled) {
     return new Response(JSON.stringify({ disabled: true }), {
       status: 200,
       headers: { "content-type": "application/json" },
     });
   }
 
-  const [dispatch, operatorNotifications] = await Promise.allSettled([
+  const [dispatch, operatorNotifications, purchaseMeasurement] = await Promise.allSettled([
     (dependencies.runDispatchSchedule ??
       runConfiguredProductionFulfillmentDispatchSchedule)(),
     operatorNotificationsEnabled
@@ -150,10 +160,15 @@ export async function runProductionFulfillmentDispatchScheduled(
           diagnosticLogger,
         })))()
       : Promise.resolve({ disabled: true as const }),
+    purchaseMeasurementEnabled
+      ? (dependencies.runPurchaseMeasurementSchedule ??
+        runConfiguredPurchaseMeasurementSchedule)()
+      : Promise.resolve({ disabled: true as const }),
   ]);
   return new Response(JSON.stringify({
     dispatch: boundedOutcome(dispatch),
     operatorNotifications: boundedOutcome(operatorNotifications),
+    purchaseMeasurement: boundedOutcome(purchaseMeasurement),
   }), {
     // Preserve the existing fulfillment-dispatch failure signal. Operator
     // notification failure alone is fail-open for the customer path.

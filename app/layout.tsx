@@ -3,6 +3,9 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { MeasurementPageView } from "@/components/measurement/MeasurementPageView";
+import { MeasurementBootstrap } from "@/components/measurement/MeasurementBootstrap";
+import { LandingViewMeasurement } from "@/components/measurement/LandingViewMeasurement";
+import { readClientMeasurementConfig } from "@/lib/measurement/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,9 +15,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const measurement = readClientMeasurementConfig(process.env);
   return (
     <html lang="ja" data-scroll-behavior="smooth">
       <body>
+        {measurement ? (
+          <MeasurementBootstrap
+            measurementId={measurement.measurementId}
+            siteOrigin={measurement.siteOrigin}
+          />
+        ) : null}
+        <LandingViewMeasurement />
         <MeasurementPageView />
         <SiteHeader />
         {children}

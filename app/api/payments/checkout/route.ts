@@ -21,6 +21,9 @@ import {
   restartAuthenticatedProductionStripeCheckout,
   restartProductionStripeCheckout,
 } from "@/lib/payment/production/service";
+import { MEASUREMENT_ATTRIBUTION_COOKIE_NAME } from "@/lib/measurement/attribution";
+import { openMeasurementAttributionCookie } from "@/lib/measurement/attribution-cookie";
+import { readMeasurementR1Config } from "@/lib/measurement/config";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -69,6 +72,13 @@ export async function POST(request: NextRequest) {
           ? body.statusCapability
           : readAuthContinuationCookie(request) ?? "missing";
     enforceProductionRouteRateLimit("stripe-checkout-create", String(identity));
+    const measurementConfig = readMeasurementR1Config(process.env);
+    const measurementAttribution = measurementConfig
+      ? await openMeasurementAttributionCookie(
+          request.cookies.get(MEASUREMENT_ATTRIBUTION_COOKIE_NAME)?.value,
+          measurementConfig.attributionSecret,
+        )
+      : null;
     let outcome;
     if (isCustomerAuthFoundationEnabled()) {
       const customerIdentity = await (
@@ -89,6 +99,7 @@ export async function POST(request: NextRequest) {
           await createAuthenticatedProductionStripeCheckoutFromContinuation({
             continuationToken,
             customerUserId: customerIdentity.customerUserId,
+            measurementAttribution,
           });
       } else {
         outcome =
@@ -96,6 +107,7 @@ export async function POST(request: NextRequest) {
             ? await createAuthenticatedProductionStripeCheckout({
                 preparationCapability: body.preparationCapability,
                 customerUserId: customerIdentity.customerUserId,
+                measurementAttribution,
               })
             : await restartAuthenticatedProductionStripeCheckout({
                 statusCapability: body.statusCapability,
@@ -117,6 +129,7 @@ export async function POST(request: NextRequest) {
           ? await createProductionStripeCheckout({
               preparationCapability: body.preparationCapability,
               trustedSessionToken,
+              measurementAttribution,
             })
           : await restartProductionStripeCheckout({
               statusCapability: body.statusCapability,
