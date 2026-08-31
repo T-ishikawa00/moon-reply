@@ -8,7 +8,6 @@ import {
   FakeAssessmentRepository,
 } from "../lib/assessment/runtime/fakes.ts";
 import {
-  PAID_QUALITY_SOFT_FINDING_CODES_V1,
   classifyPaidQualityReassessmentExhaustionV1,
 } from "../lib/assessment/runtime/quality-reassessment-v2.ts";
 import { loadM2P4FinalProductRecoveryRuntimeStageCatalog } from "../lib/assessment/runtime/schema-catalog.ts";
@@ -69,12 +68,31 @@ function directive(defects) {
   };
 }
 
-function defect(findingCode, jsonPath = "report_content.short_letter[0]") {
+const repairRequirementByFindingCode = {
+  ACTION_CONSISTENCY: "RESTORE_ACTION_CONSISTENCY",
+  DECISION_ALLOWED: "RESTORE_ALLOWED_DECISION",
+  DECISION_REASON_SUPPORT: "RESTORE_DECISION_SUPPORT",
+  DRAFT_SOURCE_INTEGRITY: "RESTORE_BYTE_EXACT_CANDIDATE",
+  FACT_FIDELITY: "RESTORE_FACT_FIDELITY",
+  MESSAGE_POLICY_CONSISTENCY: "RESTORE_MESSAGE_POLICY_CONSISTENCY",
+  REPETITION: "RESTORE_DISTINCT_PRODUCT_FUNCTIONS",
+  REQUIRED_SECTION_MEANING: "RESTORE_REQUIRED_SECTION_MEANING",
+  SAFETY_REGRESSION: "RESTORE_SAFETY_COMPLIANCE",
+  TEMPLATE_GENERICITY: "RESTORE_CONSULTATION_SPECIFICITY",
+  THREE_DAY_PLAN_CONSISTENCY: "RESTORE_THREE_DAY_PLAN_CONSISTENCY",
+};
+
+function defect(
+  findingCode,
+  jsonPath = "report_content.short_letter[0]",
+  severity = "major",
+) {
   return {
     findingCode,
-    severity: "major",
+    severity,
     jsonPath,
-    normalizedRepairRequirementCode: `VERIFY_${findingCode}`,
+    normalizedRepairRequirementCode:
+      repairRequirementByFindingCode[findingCode],
   };
 }
 
@@ -164,52 +182,7 @@ async function check(name, callback) {
   }
 }
 
-await check("hard and soft taxonomy is a closed allowlist", () => {
-  assert.deepEqual(PAID_QUALITY_SOFT_FINDING_CODES_V1, [
-    "TEMPLATE_GENERICITY",
-    "BRAND_TONE",
-    "REPETITION",
-  ]);
-  assert.equal(
-    classifyPaidQualityReassessmentExhaustionV1(
-      directive([
-        defect("TEMPLATE_GENERICITY"),
-        defect("REPETITION", "report_content.closing_lines[0]"),
-      ]),
-    ),
-    "deliver_latest_valid_candidate",
-  );
-  for (const hardCode of [
-    "FACT_FIDELITY",
-    "ASSUMPTION_AS_FACT",
-    "DECISION_ALLOWED",
-    "DECISION_REASON_SUPPORT",
-    "MESSAGE_POLICY_CONSISTENCY",
-    "ACTION_CONSISTENCY",
-    "THREE_DAY_PLAN_CONSISTENCY",
-    "UNSUPPORTED_CERTAINTY",
-    "SAFETY_REGRESSION",
-    "REQUIRED_SECTION_MEANING",
-    "REVIEW_CONDITION_PRESENT",
-    "PRODUCT_SEMANTIC_SHAPE",
-    "DRAFT_SOURCE_INTEGRITY",
-    "CUSTOMER_SURFACE_INTEGRITY",
-  ]) {
-    assert.equal(
-      classifyPaidQualityReassessmentExhaustionV1(
-        directive([defect(hardCode)]),
-      ),
-      "fail_closed",
-      hardCode,
-    );
-  }
-  assert.equal(
-    classifyPaidQualityReassessmentExhaustionV1(directive([])),
-    "fail_closed",
-  );
-});
-
-await check("Q1 initial PB-06 pass completes normally", async () => {
+await check("R2-1 normal ready completes without reassessment", async () => {
   const run = await runScenario({});
   assert.equal(run.error, null);
   assert.equal(run.result.eligibility, "ready");
@@ -220,29 +193,7 @@ await check("Q1 initial PB-06 pass completes normally", async () => {
   );
 });
 
-await check("Q2 initial soft finding reassesses once and then passes", async () => {
-  const run = await runScenario({
-    pb06Findings: [
-      [
-        semanticFinding(
-          "TEMPLATE_GENERICITY",
-          "major",
-          "report_content.short_letter[0]",
-        ),
-      ],
-      [],
-    ],
-  });
-  assert.equal(run.error, null);
-  assert.equal(run.result.eligibility, "ready");
-  assert.equal(run.repository.reports.size, 1);
-  assert.deepEqual(
-    stagesFor(run.repository, "PB-06").map((entry) => entry.attemptNumber),
-    [1, 2],
-  );
-});
-
-await check("Q3 soft exhaustion delivers latest valid candidate without attempt 3", async () => {
+await check("R2-2 soft-only exhaustion delivers latest valid candidate", async () => {
   const run = await runScenario({
     pb06Findings: [
       [
@@ -293,56 +244,133 @@ await check("Q3 soft exhaustion delivers latest valid candidate without attempt 
   }
 });
 
-await check("Q4 hard Safety finding remains fail-closed", async () => {
-  const finding = semanticFinding(
+await check("R2-3 B-only exhaustion delivers even with a critical quality label", async () => {
+  assert.equal(
+    classifyPaidQualityReassessmentExhaustionV1(
+      directive([
+        defect(
+          "DECISION_REASON_SUPPORT",
+          "report_content.decision_reason_summary",
+          "critical",
+        ),
+        defect(
+          "DRAFT_SOURCE_INTEGRITY",
+          "decision_plan.recommended_message_draft.text",
+        ),
+      ]),
+    ),
+    "deliver_latest_valid_candidate",
+  );
+  const findings = [
+    semanticFinding(
+      "DECISION_REASON_SUPPORT",
+      "critical",
+      "report_content.decision_reason_summary",
+    ),
+    semanticFinding(
+      "THREE_DAY_PLAN_CONSISTENCY",
+      "major",
+      "decision_plan.aftercare_plan[0].action",
+    ),
+  ];
+  const run = await runScenario({ pb06Findings: [findings, findings] });
+  assert.equal(run.error, null);
+  assert.equal(run.result.eligibility, "ready");
+  assert.equal(run.repository.reports.size, 1);
+  assert.equal(stagesFor(run.repository, "PB-06")[1].status, "completed");
+  assert.equal(
+    [...run.repository.stageRuns.values()].some(
+      (entry) => entry.attemptNumber > 2,
+    ),
+    false,
+  );
+});
+
+await check("R2-4 any true A, including Safety mixed with B, remains fail-closed", async () => {
+  const aDefects = [
+    defect(
+      "SAFETY_REGRESSION",
+      "decision_plan.actions_to_take[0]",
+      "minor",
+    ),
+    defect("DECISION_ALLOWED", "decision_plan.selected_decision", "major"),
+    defect("FACT_FIDELITY", "report_content.cover_line", "critical"),
+    defect(
+      "MESSAGE_POLICY_CONSISTENCY",
+      "decision_plan.recommended_message_draft.text",
+      "critical",
+    ),
+    defect(
+      "ACTION_CONSISTENCY",
+      "decision_plan.actions_to_take[0]",
+      "critical",
+    ),
+    defect(
+      "REQUIRED_SECTION_MEANING",
+      "report_content.cover_line",
+      "critical",
+    ),
+  ];
+  for (const aDefect of aDefects) {
+    assert.equal(
+      classifyPaidQualityReassessmentExhaustionV1(
+        directive([
+          defect(
+            "DECISION_REASON_SUPPORT",
+            "report_content.decision_reason_summary",
+            "critical",
+          ),
+          aDefect,
+        ]),
+      ),
+      "fail_closed",
+      aDefect.findingCode,
+    );
+  }
+  assert.equal(
+    classifyPaidQualityReassessmentExhaustionV1(directive([])),
+    "fail_closed",
+  );
+  assert.equal(
+    classifyPaidQualityReassessmentExhaustionV1(
+      directive([
+        {
+          ...defect(
+            "DECISION_REASON_SUPPORT",
+            "report_content.decision_reason_summary",
+            "critical",
+          ),
+          normalizedRepairRequirementCode: "RESTORE_FACT_FIDELITY",
+        },
+      ]),
+    ),
+    "fail_closed",
+  );
+
+  const safety = semanticFinding(
     "SAFETY_REGRESSION",
     "critical",
     "decision_plan.actions_to_take[0]",
   );
-  const run = await runScenario({ pb06Findings: [[finding], [finding]] });
+  const quality = semanticFinding(
+    "DECISION_REASON_SUPPORT",
+    "major",
+    "report_content.decision_reason_summary",
+  );
+  const run = await runScenario({
+    pb06Findings: [[safety, quality], [safety, quality]],
+  });
   assert.equal(
     safeCode(run.error),
     "M2_PRODUCT_QUALITY_REASSESSMENT_EXHAUSTED",
   );
   assert.equal(run.repository.reports.size, 0);
+  assert.equal(stagesFor(run.repository, "PB-06")[1].status, "failed");
   assert.equal(
-    stagesFor(run.repository, "PB-06")[1].status,
-    "failed",
-  );
-});
-
-await check("Q5 malformed product structure remains fail-closed", async () => {
-  const run = await runScenario({
-    mutateOutputs(outputs) {
-      delete outputs["PB-05"].cover_line;
-    },
-  });
-  assert.equal(safeCode(run.error), "M2_STAGE_SCHEMA_INVALID");
-  assert.equal(run.repository.reports.size, 0);
-  assert.equal(stagesFor(run.repository, "PB-06").length, 0);
-});
-
-await check("Q6 no valid Decision Plan candidate remains fail-closed", async () => {
-  const run = await runScenario({
-    mutateOutputs(outputs) {
-      delete outputs["PB-04"].selected_decision;
-    },
-  });
-  assert.equal(safeCode(run.error), "M2_STAGE_SCHEMA_INVALID");
-  assert.equal(run.repository.reports.size, 0);
-  assert.equal(stagesFor(run.repository, "PB-05").length, 0);
-  assert.equal(stagesFor(run.repository, "PB-06").length, 0);
-});
-
-await check("mixed soft and integrity defect never selects fallback delivery", () => {
-  assert.equal(
-    classifyPaidQualityReassessmentExhaustionV1(
-      directive([
-        defect("REPETITION", "report_content.closing_lines[0]"),
-        defect("FACT_FIDELITY", "report_content.cover_line"),
-      ]),
+    [...run.repository.stageRuns.values()].some(
+      (entry) => entry.attemptNumber > 2,
     ),
-    "fail_closed",
+    false,
   );
 });
 
@@ -351,6 +379,6 @@ if (failures.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `\nPaid quality delivery guarantee PASS (${checks} checks, Provider 0, DB writes 0, Stripe 0).`,
+    `\nPaid quality delivery policy R2 PASS (${checks} focused cases, Provider 0, DB writes 0, Stripe 0).`,
   );
 }

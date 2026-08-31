@@ -1,5 +1,7 @@
 import { M2RuntimeError } from "./errors.ts";
 import {
+  QUALITY_REASSESSMENT_FINDING_CODES,
+  QUALITY_REASSESSMENT_REPAIR_REQUIREMENT_BY_FINDING_CODE,
   buildQualityReassessmentDirectiveV1,
   type QualityReassessmentDefectV1,
   type QualityReassessmentFindingCode,
@@ -42,19 +44,142 @@ export type QualityReassessmentDirectiveV2 = {
   defects: Array<Omit<ProductQualityDefectV2, "ownership">>;
 };
 
-const paidQualitySoftFindingCodes = new Set<string>(
-  PAID_QUALITY_SOFT_FINDING_CODES_V1,
-);
+const paidQualityKnownFindingCodes = new Set<string>([
+  ...QUALITY_REASSESSMENT_FINDING_CODES,
+  "PRODUCT_SEMANTIC_SHAPE",
+  "DRAFT_SOURCE_INTEGRITY",
+  "CUSTOMER_SURFACE_INTEGRITY",
+]);
+const paidQualityKnownSeverities = new Set<string>([
+  "critical",
+  "major",
+  "minor",
+]);
+const ownedProductPath = /^(?:decision_plan|report_content)(?:\.|\[|$)/u;
+const currentDecisionPath =
+  /^decision_plan\.selected_decision$/u;
+const currentActionPath =
+  /^decision_plan\.(?:pre_action_check(?:\.|$)|actions_to_(?:take|avoid)(?:\[|$)|aftercare_plan(?:\[|$)|change_conditions(?:\[|$))/u;
+const executableDraftPath =
+  /^decision_plan\.recommended_message_draft(?:$|\.(?:text|policy|use_timing)$)/u;
+const localDraftSourceRepairRequirements = new Set<string>([
+  "RESTORE_CANDIDATE_SOURCE_OWNERSHIP",
+  "RESTORE_TRUTHFUL_GENERATED_DRAFT_METADATA",
+  "REMOVE_UNAUTHORIZED_GENERATED_DRAFT",
+  "RESTORE_CANDIDATE_MEANING_OWNERSHIP",
+  "RESTORE_BYTE_EXACT_CANDIDATE",
+]);
+
+type ClassifiedPaidQualityDefectV2 =
+  QualityReassessmentDirectiveV2["defects"][number];
+
+function normalizeClassifierPath(value: string) {
+  return value.startsWith("$.") ? value.slice(2) : value;
+}
+
+function isMajorOrCritical(severity: QualityReassessmentSeverity) {
+  return severity === "major" || severity === "critical";
+}
+
+function hasExpectedRepairRequirement(defect: ClassifiedPaidQualityDefectV2) {
+  if (
+    QUALITY_REASSESSMENT_FINDING_CODES.includes(
+      defect.findingCode as QualityReassessmentFindingCode,
+    )
+  ) {
+    return (
+      defect.normalizedRepairRequirementCode ===
+      QUALITY_REASSESSMENT_REPAIR_REQUIREMENT_BY_FINDING_CODE[
+        defect.findingCode as QualityReassessmentFindingCode
+      ]
+    );
+  }
+  if (defect.findingCode === "PRODUCT_SEMANTIC_SHAPE") {
+    return (
+      defect.normalizedRepairRequirementCode ===
+      "REBUILD_REPORT_SEMANTIC_SHAPE"
+    );
+  }
+  if (defect.findingCode === "CUSTOMER_SURFACE_INTEGRITY") {
+    return (
+      defect.normalizedRepairRequirementCode ===
+      "REMOVE_INTERNAL_IMPLEMENTATION_LANGUAGE"
+    );
+  }
+  return (
+    defect.findingCode === "DRAFT_SOURCE_INTEGRITY" &&
+    localDraftSourceRepairRequirements.has(
+      defect.normalizedRepairRequirementCode,
+    )
+  );
+}
+
+function isPaidQualityNonDeliverableDefectR2(
+  defect: ClassifiedPaidQualityDefectV2,
+) {
+  const path = normalizeClassifierPath(defect.jsonPath);
+  if (
+    !paidQualityKnownFindingCodes.has(defect.findingCode) ||
+    !paidQualityKnownSeverities.has(defect.severity) ||
+    !ownedProductPath.test(path) ||
+    !hasExpectedRepairRequirement(defect)
+  ) {
+    return true;
+  }
+
+  if (defect.findingCode === "SAFETY_REGRESSION") {
+    return true;
+  }
+  if (
+    defect.findingCode === "DECISION_ALLOWED" &&
+    !currentDecisionPath.test(path)
+  ) {
+    return true;
+  }
+  if (
+    defect.findingCode === "DECISION_ALLOWED" &&
+    isMajorOrCritical(defect.severity)
+  ) {
+    return true;
+  }
+  if (
+    defect.findingCode === "FACT_FIDELITY" &&
+    defect.severity === "critical" &&
+    ownedProductPath.test(path)
+  ) {
+    return true;
+  }
+  if (
+    defect.findingCode === "MESSAGE_POLICY_CONSISTENCY" &&
+    defect.severity === "critical" &&
+    executableDraftPath.test(path)
+  ) {
+    return true;
+  }
+  if (
+    defect.findingCode === "ACTION_CONSISTENCY" &&
+    defect.severity === "critical" &&
+    currentActionPath.test(path)
+  ) {
+    return true;
+  }
+  if (
+    defect.findingCode === "REQUIRED_SECTION_MEANING" &&
+    defect.severity === "critical" &&
+    ownedProductPath.test(path)
+  ) {
+    return true;
+  }
+  return false;
+}
 
 export function classifyPaidQualityReassessmentExhaustionV1(
   directive: QualityReassessmentDirectiveV2,
 ): PaidQualityReassessmentExhaustionDispositionV1 {
   if (directive.defects.length === 0) return "fail_closed";
-  return directive.defects.every((defect) =>
-    paidQualitySoftFindingCodes.has(defect.findingCode),
-  )
-    ? "deliver_latest_valid_candidate"
-    : "fail_closed";
+  return directive.defects.some(isPaidQualityNonDeliverableDefectR2)
+    ? "fail_closed"
+    : "deliver_latest_valid_candidate";
 }
 
 function normalizedPath(value: unknown) {

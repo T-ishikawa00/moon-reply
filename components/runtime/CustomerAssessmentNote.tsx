@@ -441,10 +441,6 @@ export function CustomerAssessmentNote({ projection }: Props) {
       ) : null}
 
       <footer className={styles.fixedLimitation}>
-        <p>
-          この鑑定ノートは、入力された情報をAIが整理・分析した判断材料です。
-          相手の本心や返信、復縁、将来の結果を断定・保証するものではありません。
-        </p>
         <p>{baseProjection.fixedLimitation}</p>
       </footer>
     </article>

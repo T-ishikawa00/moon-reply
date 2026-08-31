@@ -36,7 +36,7 @@ export type QualityReassessmentSource =
   | "local_semantic_shape"
   | "local_selected_request_completeness";
 
-const repairRequirementByFindingCode = {
+export const QUALITY_REASSESSMENT_REPAIR_REQUIREMENT_BY_FINDING_CODE = {
   FACT_FIDELITY: "RESTORE_FACT_FIDELITY",
   ASSUMPTION_AS_FACT: "REMOVE_UNSUPPORTED_ASSUMPTION",
   DECISION_ALLOWED: "RESTORE_ALLOWED_DECISION",
@@ -54,7 +54,7 @@ const repairRequirementByFindingCode = {
 } as const satisfies Record<QualityReassessmentFindingCode, string>;
 
 export type QualityReassessmentRepairRequirementCode =
-  | (typeof repairRequirementByFindingCode)[QualityReassessmentFindingCode]
+  | (typeof QUALITY_REASSESSMENT_REPAIR_REQUIREMENT_BY_FINDING_CODE)[QualityReassessmentFindingCode]
   | "REBUILD_REPORT_SEMANTIC_SHAPE";
 
 export type QualityReassessmentDefectV1 = {
@@ -424,7 +424,9 @@ function sanitizeFinding(
       severity: severity as QualityReassessmentSeverity,
       jsonPath,
       normalizedRepairRequirementCode:
-        repairRequirementByFindingCode[typedFindingCode],
+        QUALITY_REASSESSMENT_REPAIR_REQUIREMENT_BY_FINDING_CODE[
+          typedFindingCode
+        ],
     } satisfies QualityReassessmentDefectV1,
   };
 }

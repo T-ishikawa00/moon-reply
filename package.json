@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "content-studio:local": "node scripts/run-content-studio-local.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
@@ -59,6 +60,8 @@
     "verify:final-pb04-schema-r1": "node scripts/verify-final-pb04-schema-r1.mjs",
     "verify:paid-quality-delivery-guarantee-r1": "node scripts/verify-paid-quality-delivery-guarantee-r1.mjs",
     "verify:operator-discord-notifications-r1": "node scripts/verify-operator-discord-notifications-r1.mjs",
+    "verify:content-studio-local-r1": "node scripts/verify-content-studio-local-r1.mjs && node scripts/verify-content-studio-local-runtime-r1.mjs",
+    "verify:content-studio-local:production-exclusion": "npm run build && node scripts/verify-content-studio-production-exclusion-r1.mjs",
     "verify:tokushoho-disclosure-cta-final": "node scripts/verify-tokushoho-disclosure-cta-final.mjs",
     "verify:final-prelaunch-polish-r1": "node scripts/verify-final-prelaunch-polish-r1.mjs"
   },

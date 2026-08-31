@@ -1,0 +1,271 @@
+.form {
+  display: grid;
+  gap: 1.25rem;
+  width: min(100%, 58rem);
+  margin: 0 auto;
+}
+
+.notice,
+.panel {
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 1.25rem;
+  background: rgb(255 255 255 / 7%);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: 0 1.5rem 4rem rgb(4 3 14 / 20%);
+}
+
+.notice {
+  border-color: rgb(211 190 255 / 48%);
+  background: linear-gradient(135deg, rgb(116 83 170 / 28%), rgb(255 255 255 / 6%));
+}
+
+.notice h2,
+.panel h2,
+.notice p,
+.panel p {
+  margin-top: 0;
+}
+
+.notice > label,
+.checkList label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  margin-bottom: 0.5rem;
+  color: #d3beff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.field {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+}
+
+.field > span,
+.choiceGrid legend {
+  color: #f7f2ff;
+  font-size: 0.95rem;
+  font-weight: 750;
+}
+
+.field textarea,
+.field select {
+  width: 100%;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 0.75rem;
+  background: #171329;
+  padding: 0.85rem 0.95rem;
+  color: #fff;
+  font: inherit;
+  line-height: 1.65;
+}
+
+.field textarea:focus,
+.field select:focus {
+  border-color: #c3a3ff;
+  outline: 2px solid rgb(195 163 255 / 25%);
+}
+
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  border: 0;
+  padding: 0;
+}
+
+.choiceGrid legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+}
+
+.choiceGrid label {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+
+.choiceGrid label[data-selected="true"] {
+  border-color: #c3a3ff;
+  background: rgb(159 126 222 / 20%);
+}
+
+.checkList {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.checkList label {
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  padding-bottom: 0.75rem;
+}
+
+.error {
+  border: 1px solid #df7f92;
+  border-radius: 0.75rem;
+  background: rgb(107 25 45 / 35%);
+  padding: 0.85rem 1rem;
+  color: #ffd8df;
+  overflow-wrap: anywhere;
+}
+
+.submitArea,
+.actions,
+.previewToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.submitArea {
+  position: sticky;
+  bottom: 0;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 1rem;
+  background: rgb(15 12 29 / 92%);
+  padding: 1rem;
+  backdrop-filter: blur(1rem);
+}
+
+.submitArea p {
+  max-width: 34rem;
+  margin: 0;
+  color: #cfc8dd;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.form button,
+.panel button,
+.previewToolbar button {
+  min-height: 3rem;
+  border: 1px solid #c3a3ff;
+  border-radius: 999px;
+  background: #8e63d2;
+  padding: 0.7rem 1.2rem;
+  color: white;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.form button:disabled,
+.panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.secondary {
+  background: transparent !important;
+}
+
+.question {
+  margin: 1rem 0;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.previewShell {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.diagnostic {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+  border: 1px solid rgb(232 166 106 / 58%);
+  border-radius: 1rem;
+  background: rgb(73 41 18 / 55%);
+  padding: 1rem 1.25rem;
+}
+
+.diagnostic h2,
+.diagnostic h3,
+.diagnostic p {
+  margin-top: 0;
+}
+
+.diagnostic dl {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.diagnostic dl > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.35fr) 1fr;
+  gap: 0.75rem;
+}
+
+.diagnostic dt {
+  color: #e9d9bf;
+  font-weight: 750;
+}
+
+.diagnostic dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.diagnostic ul {
+  margin-bottom: 0;
+}
+
+.previewToolbar {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 1rem;
+  background: rgb(18 14 35 / 85%);
+  padding: 1rem 1.25rem;
+}
+
+.previewToolbar p,
+.previewToolbar h2 {
+  margin: 0;
+}
+
+.previewToolbar p {
+  color: #c3a3ff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.previewToolbar h2 {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 680px) {
+  .submitArea,
+  .actions,
+  .previewToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submitArea button,
+  .actions button,
+  .previewToolbar button {
+    width: 100%;
+  }
+}
