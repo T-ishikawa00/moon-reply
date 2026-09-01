@@ -27,6 +27,7 @@ const purposes = [
   "支払の確認、重複請求の防止、購入・返金・請求上の問題への対応",
   "結果の通知、配信、再開、回復、障害対応",
   "不正利用の防止、セキュリティ、サービスの保守・改善",
+  "サービスの利用状況と導線の把握・改善、Google Search広告の効果測定、購入コンバージョンの集計",
   "法令上必要な記録と対応",
 ] as const;
 
@@ -36,6 +37,7 @@ const serviceProviders = [
   { label: "Supabase", value: "データベースと認証の基盤を提供します" },
   { label: "Netlify", value: "Webサイトの配信とサーバー処理の基盤を提供します" },
   { label: "Resend", value: "アカウントや結果の受取りに必要な通知メールを配信します" },
+  { label: "Google LLC", value: "Google Analyticsと、連携後のGoogle Adsにおいて、利用状況、導線、広告効果、購入コンバージョンの測定情報を処理します" },
 ] as const;
 
 export default function PrivacyPage() {
@@ -85,6 +87,41 @@ export default function PrivacyPage() {
           <p>
             ログイン状態、安全な手続の継続、不正利用防止など、サービス提供に必要なCookieや同様の仕組みを使用します。ブラウザで無効にすると、認証や購入、結果へのアクセスを利用できない場合があります。
           </p>
+        </LegalContentSection>
+
+        <LegalContentSection title="アクセス解析と広告効果測定" tone="ivory">
+          <p>
+            月の返事は、サービスの利用状況と導線の把握・改善、Google Search広告の効果測定、購入コンバージョンの集計のためにGoogle Analyticsを利用します。測定情報はGoogle LLCへ送信され、Google Analyticsおよび、アカウント連携後はGoogle Adsで処理されます。
+          </p>
+          <p>
+            測定には、first-party attribution Cookie「moon_reply_measurement_attribution_r1」、ランダムに生成するクライアント識別子（client identifier）とセッション識別子（session identifier）、およびGoogle Analyticsが使用する場合がある「_ga」から始まるfirst-party Cookieを使用します。ブラウザでCookieを制限した場合、測定が正しく行われないことがあります。
+          </p>
+          <p>
+            Google Analyticsには、測定イベント（event）、許可されたランディングページのパス（landing path）、UTMパラメータ、gclidなどの広告識別情報を送ります。また、ブラウザ、端末、ネットワーク、通信情報から推定される概算地域など、アクセスに伴う一般的な技術情報がGoogleにより処理される場合があります。purchaseでは、購入者を直接示さない匿名化した取引識別子（transaction ID）、税込980円、通貨JPYを扱います。
+          </p>
+          <p>
+            相談本文、候補文面、メールアドレス、氏名、認証情報、Stripeの決済識別情報は、測定用の送信情報（measurement payload）に含めません。R1では、Google Signals、リマーケティング、広告パーソナライズを使用しません。
+          </p>
+          <p>
+            Googleによるデータの取扱いと利用停止方法は、次のページをご確認ください。
+          </p>
+          <ul>
+            <li>
+              <a href="https://policies.google.com/technologies/partner-sites?hl=ja">
+                Googleのサービスを使用するサイトやアプリから収集した情報のGoogleによる使用
+              </a>
+            </li>
+            <li>
+              <a href="https://policies.google.com/privacy?hl=ja">
+                Googleプライバシーポリシー
+              </a>
+            </li>
+            <li>
+              <a href="https://tools.google.com/dlpage/gaoptout?hl=ja">
+                Google Analyticsオプトアウトアドオン
+              </a>
+            </li>
+          </ul>
         </LegalContentSection>
 
         <LegalContentSection title="保存期間と削除">
