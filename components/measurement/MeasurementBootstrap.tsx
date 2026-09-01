@@ -31,7 +31,11 @@ export function MeasurementBootstrap(props: Readonly<{ measurementId: string; si
     const attribution = readMeasurementAttributionCookiePayload(readCookie(MEASUREMENT_ATTRIBUTION_COOKIE_NAME));
     if (!attribution) return;
     window.dataLayer = window.dataLayer ?? [];
-    window.gtag = (...args: unknown[]) => window.dataLayer?.push(args);
+    window.gtag = function gtag() {
+      // Google tag commands require the native arguments object used by the official snippet.
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer?.push(arguments);
+    };
     window.gtag("js", new Date());
     window.gtag("config", props.measurementId, {
       client_id: attribution.clientId,

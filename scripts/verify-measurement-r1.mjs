@@ -330,6 +330,13 @@ await check("automatic page view and client API secret exposure are blocked", ()
   assert.doesNotMatch(layout, /GA4_API_SECRET|apiSecret/u);
 });
 
+await check("browser gtag queue preserves the native command arguments object", () => {
+  const bootstrap = text("components/measurement/MeasurementBootstrap.tsx");
+  assert.match(bootstrap, /window[.]gtag = function gtag[(][)]/u);
+  assert.match(bootstrap, /window[.]dataLayer[?][.]push[(]arguments[)][;]/u);
+  assert.doesNotMatch(bootstrap, /dataLayer[?][.]push[(]args[)]/u);
+});
+
 assert.deepEqual(externalOperations, {
   ga4: 0, stripe: 0, supabaseRemote: 0, provider: 0, deploy: 0,
 });
