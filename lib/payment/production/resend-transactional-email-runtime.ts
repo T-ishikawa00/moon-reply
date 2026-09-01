@@ -6,6 +6,10 @@ import type {
   MailboxVerificationEmailV1,
   TransactionalEmailAdapterV1,
 } from "./transactional-email.ts";
+import {
+  purchaseSupportInquiryCategories,
+  type PurchaseSupportOperatorEmailRequest,
+} from "../../support/types.ts";
 
 const verificationCodePattern = /^\d{8}$/u;
 const idempotencyKeyPattern = /^[\x21-\x7e]{1,256}$/u;
@@ -224,6 +228,51 @@ function resultPayload(
   });
 }
 
+export function purchaseSupportPayload(
+  sender: string,
+  operatorEmail: string,
+  request: PurchaseSupportOperatorEmailRequest,
+): ResendEmailPayloadV1 {
+  const category = purchaseSupportInquiryCategories.find(
+    (candidate) => candidate.value === request.category,
+  )!.label;
+  const authority = request.authority;
+  const fields = [
+    ["Customer verified email", normalizeDeliveryEmail(request.customerEmail)],
+    ["Purchase datetime", formatJapaneseExpiration(authority.purchasedAt)],
+    ["Product", authority.productName],
+    ["Amount", "¥980"],
+    ["moon_purchase_reference", authority.moonPurchaseReference],
+    [
+      "Payment state",
+      `purchase=${authority.paymentState.purchase}; attempt=${authority.paymentState.attempt}; verified=${authority.paymentState.verified ? "yes" : "no"}`,
+    ],
+    ["Fulfillment state", authority.fulfillmentState],
+    ["Delivery state", authority.deliveryState],
+    ["Inquiry category", category],
+  ] as const;
+  const message = request.customerMessage ?? "（未入力）";
+  return Object.freeze({
+    from: sender,
+    to: normalizeDeliveryEmail(operatorEmail),
+    subject: "月の返事｜購入に関するお問い合わせ",
+    text: [
+      "月の返事｜購入に関するお問い合わせ", "",
+      ...fields.map(([label, value]) => `${label}: ${value}`), "",
+      "Customer message:", message, "",
+      "Operator rule: Stripe Dashboardで最終照合し、返金はHuman判断でのみ実行してください。",
+    ].join("\n"),
+    html: [
+      "<p><strong>月の返事｜購入に関するお問い合わせ</strong></p><dl>",
+      ...fields.map(([label, value]) =>
+        `<dt><strong>${escapeHtml(label)}</strong></dt><dd>${escapeHtml(value)}</dd>`),
+      "</dl><p><strong>Customer message</strong></p>",
+      `<pre style="white-space:pre-wrap">${escapeHtml(message)}</pre>`,
+      "<p>Operator rule: Stripe Dashboardで最終照合し、返金はHuman判断でのみ実行してください。</p>",
+    ].join(""),
+  });
+}
+
 function createResendEmailClient(apiKey: string): ResendEmailClientV1 {
   const resend = new Resend(apiKey);
   return Object.freeze({
@@ -255,7 +304,8 @@ export class ResendTransactionalEmailAdapterV1
     messageIdempotencyKey: string,
     failureCode:
       | "EMAIL_VERIFICATION_DELIVERY_FAILED"
-      | "RESULT_EMAIL_DELIVERY_FAILED",
+      | "RESULT_EMAIL_DELIVERY_FAILED"
+      | "PURCHASE_SUPPORT_EMAIL_DELIVERY_FAILED",
   ) {
     try {
       const response = await this.#client.send(payload(), {
@@ -288,6 +338,17 @@ export class ResendTransactionalEmailAdapterV1
       () => resultPayload(this.#sender, request),
       request.messageIdempotencyKey,
       "RESULT_EMAIL_DELIVERY_FAILED",
+    );
+  }
+
+  async sendPurchaseSupport(
+    operatorEmail: string | undefined,
+    request: PurchaseSupportOperatorEmailRequest,
+  ) {
+    return this.#deliver(
+      () => purchaseSupportPayload(this.#sender.header, operatorEmail ?? "", request),
+      request.messageIdempotencyKey,
+      "PURCHASE_SUPPORT_EMAIL_DELIVERY_FAILED",
     );
   }
 }

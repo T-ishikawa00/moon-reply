@@ -92,7 +92,7 @@ export function AccountNoteGallery({
                   className={styles.supportAction}
                   href={`/contact?purchase=${encodeURIComponent(item.purchaseIntentId)}`}
                 >
-                  この鑑定について問い合わせる
+                  この購入について問い合わせる
                 </Link>
               ) : null}
             </article>

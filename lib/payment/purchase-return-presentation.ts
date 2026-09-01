@@ -27,6 +27,7 @@ const completedProgress: PurchaseProgress = ["complete", "complete", "complete"]
 
 function preparationAssurances(customerAuthEnabled: boolean) {
   return [
+    "通常は数分で完成します。内容によっては5〜10分ほどかかる場合があります。",
     "この画面を閉じても、同じお申し込みの処理は続きます。",
     ...(customerAuthEnabled ? ["鑑定ノートはアカウントから確認できます。"] : []),
     "完成したら確認済みのメールにもお知らせします。",

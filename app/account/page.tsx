@@ -9,7 +9,7 @@ import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/accoun
 import { AUTH_SESSION_CSRF_COOKIE } from "@/lib/customer-auth/cookies";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
 import { createCustomerIdentityAuthApplication } from "@/lib/customer-auth/service";
-import { isCustomerSupportCasesEnabled } from "@/lib/support/environment";
+import { isPurchaseSupportEmailEnabled } from "@/lib/support/environment";
 import { AccountNoteGallery } from "./AccountNoteGallery";
 import { AccountNoteHero } from "./AccountNoteHero";
 import styles from "./account.module.css";
@@ -41,7 +41,7 @@ export default async function AccountPage({
       : [];
   const cookieStore = await cookies();
   const sessionCsrf = cookieStore.get(AUTH_SESSION_CSRF_COOKIE)?.value ?? null;
-  const supportEnabled = isCustomerSupportCasesEnabled();
+  const supportEnabled = isPurchaseSupportEmailEnabled();
   const hasFreshSignedInState =
     resolution.state === "history" ||
     resolution.state === "empty" ||
