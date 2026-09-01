@@ -9,9 +9,15 @@ import { readClientMeasurementConfig } from "@/lib/measurement/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tsukinohenji.jp/"),
+  applicationName: "月の返事",
   title: "月の返事 | 恋のメッセージ鑑定ノート",
   description:
     "AIが恋愛メッセージと関係状況を整理し、次の一手の判断材料を鑑定ノート形式で返すサービス。",
+  openGraph: {
+    siteName: "月の返事",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

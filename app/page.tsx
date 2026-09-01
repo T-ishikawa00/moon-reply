@@ -13,6 +13,13 @@ import { isCustomerPaymentFlowVisible } from "@/lib/payment/production/environme
 
 export const dynamic = "force-dynamic";
 
+const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "月の返事",
+  url: "https://tsukinohenji.jp/",
+};
+
 const preview = REPORT_FIXTURES["result-normal-001"];
 
 const threeAnswers = [
@@ -101,6 +108,11 @@ export default function Home() {
 
   return (
     <main className="lp-home">
+      <link rel="canonical" href="https://tsukinohenji.jp/" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
+      />
       <section className="lp-home-hero" aria-labelledby="lp-hero-title">
         <LunarArc tone="night" position="top-right" />
         <div className="page-shell lp-home-hero__grid">
