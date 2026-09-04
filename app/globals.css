@@ -1241,6 +1241,8 @@ summary::marker {
 .lp-boundaries li { position: relative; padding-left: 1.4rem; color: var(--ink-600); line-height: 1.8; }
 .lp-boundaries li::before { position: absolute; left: 0; color: var(--moon-600); content: "—"; font-weight: 800; }
 .lp-boundaries__safety { margin: var(--space-5) 0 0; color: var(--ink-600); font-size: 0.82rem; line-height: 1.8; }
+.lp-origin__copy { margin-inline: auto; text-align: center; }
+.lp-origin__copy > p:last-child:not(.lp-kicker) { max-width: 42rem; margin-inline: auto; }
 
 .lp-faq { display: grid; grid-template-columns: minmax(15rem, 0.55fr) minmax(0, 1fr); align-items: start; gap: clamp(3rem, 8vw, 8rem); }
 .lp-faq__list details { border-top: 1px solid var(--border-paper); }
@@ -1381,6 +1383,7 @@ summary::marker {
 .authenticated-preparing__moon { display: grid; width: 4.5rem; height: 4.5rem; margin: 0 auto var(--space-5); place-items: center; border: 1px solid var(--border-paper); border-radius: 50%; background: var(--paper-100); color: var(--moon-600); box-shadow: 0 0 2.5rem color-mix(in srgb, var(--moon-500) 24%, transparent); animation: authenticated-preparing-breathe 2.8s var(--ease-standard) infinite alternate; }
 .authenticated-preparing h1 { margin: var(--space-3) 0 0; font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 600; line-height: 1.5; }
 .authenticated-preparing > span { max-width: 38rem; margin: var(--space-4) auto 0; }
+.authenticated-preparing__eta { display: block; max-width: 38rem; margin: var(--space-3) auto 0; color: var(--ink-600); font-size: 0.82rem; line-height: 1.8; }
 .authenticated-preparing__retry { margin-top: var(--space-6); }
 .authenticated-preparing__retry .button { border-color: var(--moon-600); background: var(--paper-50); color: var(--focus-ring-paper); }
 .authenticated-preparing__retry .button:hover { background: var(--paper-200); }

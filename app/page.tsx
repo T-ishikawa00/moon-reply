@@ -448,6 +448,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="origin" className="lp-home-section lp-home-section--night" aria-labelledby="origin-title">
+        <div className="page-shell">
+          <div className="lp-section-heading lp-section-heading--night lp-origin__copy">
+            <p className="lp-kicker">名前に込めたもの</p>
+            <h2 id="origin-title">「月の返事」と名付けた理由。</h2>
+            <p>
+              夜、返事を待ちながら、何度も画面を見てしまうことがあります。<br />
+              そんな時間に、相手の代わりに答えるのではなく、自分が次にどう動くかを整理するための、ひとつの返事を届けたい。そこから「月の返事」と名付けました。
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section id="faq" className="lp-home-section lp-home-section--paper" aria-labelledby="faq-title">
         <div className="page-shell lp-faq">
           <div className="lp-section-heading lp-section-heading--compact">

@@ -89,7 +89,9 @@ export function getPurchaseReturnPresentation(input: {
       assurance: "追加のお支払いは必要ありません。",
       progress: completedProgress,
       detailHeading: "確認済みのメールからお受け取りください",
-      assurances: [],
+      assurances: [
+        "完了メールが見つからない場合は、迷惑メールフォルダやプロモーションタブもご確認ください。",
+      ],
       showManualRefresh: false,
       showCheckoutRestart: false,
       showAccountFallback: false,

@@ -49,8 +49,13 @@ function PreparationShell({
           ? "料金は発生していません。同じお申し込みの準備状況を確認してください。"
           : transientFailure
             ? "通信を確認しています。この画面のまま、同じお申し込みをもう一度確認します。"
-            : "ご相談内容を読みながら、今回の鑑定ノートを整えています。準備ができると、このまま次へ進みます。"}
+            : "ご相談内容を確認し、次のステップを準備しています。"}
       </span>
+      {!stalled && !transientFailure ? (
+        <small className="authenticated-preparing__eta">
+          通常10〜20秒ほどで、自動的に次へ進みます。
+        </small>
+      ) : null}
       {stalled ? (
         <button
           className="button button--secondary authenticated-preparing__retry"
