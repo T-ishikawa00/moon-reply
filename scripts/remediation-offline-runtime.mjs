@@ -18,6 +18,14 @@ import net from "node:net";
 import tls from "node:tls";
 import http from "node:http";
 import https from "node:https";
+import fs from "node:fs";
+import path from "node:path";
+// Do not load local dotenv secrets either. The sample file remains readable.
+const dotenv = (file) => typeof file === "string" && /^\\.env(?:$|\\.(?:local|production|development|test)(?:\\.local)?$)/.test(path.basename(file));
+const originalRead = fs.readFileSync;
+fs.readFileSync = function(file, options) { return dotenv(file) ? (typeof options === "string" || options?.encoding ? "" : Buffer.alloc(0)) : originalRead.call(this, file, options); };
+const originalAsyncRead = fs.promises.readFile;
+fs.promises.readFile = async function(file, options) { return dotenv(file) ? (typeof options === "string" || options?.encoding ? "" : Buffer.alloc(0)) : originalAsyncRead.call(this, file, options); };
 const local = (host) => ["localhost", "127.0.0.1", "::1", "[::1]"].includes(host);
 function reject() {
   appendFileSync(${JSON.stringify(attempts)}, "EXTERNAL_NETWORK_BLOCKED\\n");
@@ -54,12 +62,17 @@ for (const module of [http, https]) {
 tls.connect = reject;
 syncBuiltinESMExports();
 `);
-  const env = { ...process.env, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
-    NODE_OPTIONS: `--import=${pathToFileURL(guard).href}`,
+  // Never inherit Production credentials, URLs, Node preloads or activation
+  // variables into a test/build child. Keep only OS/runtime plumbing.
+  const systemNames = new Set(["path", "pathext", "systemroot", "windir", "comspec", "temp", "tmp", "userprofile", "homedrive", "homepath", "appdata", "localappdata", "programdata", "programfiles", "programfiles(x86)", "commonprogramfiles", "processor_architecture", "number_of_processors", "os"]);
+  const system = Object.fromEntries(Object.entries(process.env).filter(([name]) => systemNames.has(name.toLowerCase())));
+  const env = { ...system, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
+    NODE_OPTIONS: `--import=${pathToFileURL(guard).href}`, __NEXT_PROCESSED_ENV: "true",
     NEXT_PUBLIC_APP_URL: "http://localhost:3000" };
-  for (const match of readFileSync(".env.example", "utf8").matchAll(/^([A-Z0-9_]*ENABLED)=/gm)) {
-    env[match[1]] = "false";
+  for (const match of readFileSync(".env.example", "utf8").matchAll(/^([A-Z0-9_]+)=/gm)) {
+    env[match[1]] = match[1].endsWith("ENABLED") ? "false" : "";
   }
+  env.NEXT_PUBLIC_APP_URL = "http://localhost:3000";
   return { env, assertNoExternalAttempts() {
     assert.equal(readFileSync(attempts, "utf8"), "", "offline external attempts must be zero");
   } };

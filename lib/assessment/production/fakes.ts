@@ -380,7 +380,16 @@ export class FakeProductionFulfillmentRepository
         recoverableRuntimeRunId: null,
       };
     }
-    if (logical.status === "generating" && logical.generationStartedAt !== null) {
+    const request = this.request(logical.requestId);
+    const completedRun = request.status === "completed" ? [...this.runtimeRepository.reports.keys()].find((runId) => {
+      const run = this.runtimeRepository.runs.get(runId);
+      return run?.requestId === request.id && run.runKind === "fulfillment_resume" &&
+        run.promptBundleVersion === "prompt-bundle-runtime-v17.0.0" && run.status === "completed" &&
+        run.eligibility === "ready" && run.requestedModel === "gpt-5.6-luna" &&
+        run.schemaSetVersion === "pipeline-schema-runtime-v6.0.0" &&
+        run.stageTopologyVersion === "split-base-candidate-v1";
+    }) : null;
+    if (logical.status === "generating" && logical.generationStartedAt !== null && !completedRun) {
       logical.status = "retryable";
       logical.ownerId = null;
       logical.leaseExpiresAt = null;
@@ -394,19 +403,9 @@ export class FakeProductionFulfillmentRepository
         recoverableRuntimeRunId: null,
       };
     }
-    const request = this.request(logical.requestId);
     let recoverableRuntimeRunId: string | null = null;
     if (request.status === "completed") {
-      recoverableRuntimeRunId =
-        [...this.runtimeRepository.reports.keys()].find((runId) => {
-          const run = this.runtimeRepository.runs.get(runId);
-          return (
-            run?.requestId === request.id &&
-            run.runKind === "fulfillment_resume" &&
-            run.promptBundleVersion === "prompt-bundle-runtime-v17.0.0" &&
-            run.status === "completed"
-          );
-        }) ?? null;
+      recoverableRuntimeRunId = completedRun ?? null;
       if (!recoverableRuntimeRunId) {
         throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RECOVERY_INVALID");
       }

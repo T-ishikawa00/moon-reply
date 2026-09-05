@@ -1,4 +1,5 @@
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
+import { withProviderDeadline } from "../../assessment/runtime/provider-deadline.ts";
 import {
   isPaidFulfillmentProcessingAvailable,
   readConfiguredPaymentEnvironment,
@@ -23,7 +24,7 @@ function activeWorkerApplication() {
 }
 
 export async function processProductionFulfillmentJobById(jobId: unknown) {
-  return activeWorkerApplication().processFulfillmentJobById(jobId);
+  return withProviderDeadline(() => activeWorkerApplication().processFulfillmentJobById(jobId));
 }
 
 export async function quarantineProductionFulfillmentJobAfterAsyncRetryExhaustion(

@@ -6,6 +6,7 @@
 import { performance } from "node:perf_hooks";
 import OpenAI from "openai";
 import { M2RuntimeError } from "./errors.ts";
+import { boundedProviderCall, PROVIDER_STAGE_TIMEOUT_MS } from "./provider-deadline.ts";
 import { logDevelopmentOpenAiProviderFailure } from "./openai-diagnostics.ts";
 import {
   assertOpenAIStructuredOutputSchema,
@@ -18,7 +19,8 @@ export class OpenAiResponsesTransport implements AiStageTransport {
   private readonly client: OpenAI;
 
   constructor(apiKey: string) {
-    this.client = new OpenAI({ apiKey });
+    // Application/pipeline retries own each attempt and its durable budget.
+    this.client = new OpenAI({ apiKey, timeout: PROVIDER_STAGE_TIMEOUT_MS, maxRetries: 0 });
   }
 
   async invoke(stageRequest: StageRequest) {
@@ -33,7 +35,7 @@ export class OpenAiResponsesTransport implements AiStageTransport {
     }
     const startedAt = performance.now();
     try {
-      const response = await this.client.responses.create({
+      const response = await boundedProviderCall((signal) => this.client.responses.create({
         model: stageRequest.model,
         store: false,
         tools: [],
@@ -72,7 +74,7 @@ export class OpenAiResponsesTransport implements AiStageTransport {
             schema: providerSchema,
           },
         },
-      });
+      }, { signal, timeout: PROVIDER_STAGE_TIMEOUT_MS, maxRetries: 0 }));
 
       if (!response.output_text) {
         throw new M2RuntimeError("M2_PROVIDER_OUTPUT_MISSING");

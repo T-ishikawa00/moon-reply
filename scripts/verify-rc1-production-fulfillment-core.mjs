@@ -1093,6 +1093,69 @@ await check("migration encodes durable uniqueness, ownership, result, and outbox
   );
 });
 
+// F001 deterministic application fault states. Native process termination and
+// SQL concurrency are separately exercised by verify-f001-recovery-db.mjs.
+async function interruptedAfterReport() {
+  const selected = fixture("polite_thank_you_with_draft");
+  const run = await harness(selected, case5Outputs());
+  const prepared = await run.application.prepare(consultationFor(selected), crypto.randomUUID());
+  const grant = await run.application.issueAssessmentGrant(syntheticPurchase(prepared.preparationCapability));
+  const complete = run.lifecycleRepository.completeFulfillment.bind(run.lifecycleRepository);
+  const fail = run.lifecycleRepository.failFulfillment.bind(run.lifecycleRepository);
+  let oldRecord;
+  run.lifecycleRepository.completeFulfillment = async (record) => { oldRecord = record; throw new Error("synthetic abrupt stop before canonical write"); };
+  run.lifecycleRepository.failFulfillment = async () => {}; // Model no compensating write after process loss.
+  await assert.rejects(run.application.fulfillAssessmentGrant(grant));
+  assert.equal(run.runtimeRepository.reports.size, 1);
+  assert.equal(run.lifecycleRepository.deliveries.size, 0);
+  run.lifecycleRepository.completeFulfillment = complete;
+  run.lifecycleRepository.failFulfillment = fail;
+  selected.fixed_clock = new Date(Date.parse(selected.fixed_clock) + 17 * 60_000).toISOString();
+  return { run, grant, selected, oldRecord };
+}
+
+await check("F001 saved Report survives expired generating lease; stale owner cannot publish; canonical <=1", async () => {
+  const { run, grant, selected, oldRecord } = await interruptedAfterReport();
+  const calls = run.transport.calls.length;
+  const results = await Promise.allSettled([
+    run.application.fulfillAssessmentGrant(grant),
+    run.application.fulfillAssessmentGrant(grant),
+  ]);
+  assert.equal(results.filter((r) => r.status === "fulfilled").length, 1);
+  await assert.rejects(run.lifecycleRepository.completeFulfillment({ ...oldRecord, now: selected.fixed_clock }));
+  const duplicate = await run.application.fulfillAssessmentGrant(grant);
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(run.transport.calls.length, calls);
+  assert.equal(run.lifecycleRepository.deliveries.size, 1);
+  assert.equal(run.lifecycleRepository.generationStartedTransitions, 1);
+});
+
+for (const fault of ["input", "contract", "report", "run", "grant"]) {
+  await check(`F001 saved ${fault} inconsistency is never published or regenerated`, async () => {
+    const { run, grant } = await interruptedAfterReport();
+    const calls = run.transport.calls.length;
+    const logical = run.lifecycleRepository.logicalAssessments.get(grant.logicalAssessmentId);
+    const preparation = run.lifecycleRepository.preparations.get(logical.preparationId);
+    if (fault === "input") {
+      preparation.purchaseReadyAuthority.request.currentSituation += " changed";
+      preparation.purchaseReadyAuthorityHash = hashProductionSnapshot(preparation.purchaseReadyAuthority);
+    }
+    if (fault === "contract") {
+      preparation.purchaseReadyAuthority.runtimeIdentity.schemaSetVersion = "different-contract";
+      preparation.purchaseReadyAuthorityHash = hashProductionSnapshot(preparation.purchaseReadyAuthority);
+    }
+    if (fault === "report") [...run.runtimeRepository.reports.values()][0].reportJson = {};
+    if (fault === "run") {
+      const reportId = [...run.runtimeRepository.reports.keys()][0];
+      run.runtimeRepository.runs.get(reportId).promptBundleVersion = "different-contract";
+    }
+    if (fault === "grant") grant.logicalAssessmentId = crypto.randomUUID();
+    await assert.rejects(run.application.fulfillAssessmentGrant(grant));
+    assert.equal(run.transport.calls.length, calls);
+    assert.equal(run.lifecycleRepository.deliveries.size, 0);
+  });
+}
+
 if (failures.length > 0) {
   console.error(`\n${failures.length} RC-1 verifier check(s) failed.`);
   process.exitCode = 1;

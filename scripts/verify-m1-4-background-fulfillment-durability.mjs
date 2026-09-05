@@ -241,7 +241,10 @@ check("logical ownership is a bounded fenced lease", () => {
   assert.match(migration, /lease_expires_at > p_now/iu);
   assert.match(migration, /lease_expires_at <= p_now/iu);
   assert.match(migration, /locked\.owner_id <> p_owner_id/iu);
-  assert.match(lifecycleRepository, /claim_production_fulfillment_v2/u);
+  // F001 expands only completed-artifact reclaim; all other v2 fences remain.
+  assert.ok(/this\.client\.rpc\(\s*"claim_production_fulfillment_v3"/u.test(lifecycleRepository));
+  const recovery = read("supabase/migrations/0026_f001_completed_fulfillment_recovery.sql");
+  assert.match(recovery, /return public\.claim_production_fulfillment_v2\(p_grant_id, p_owner_id, p_lease_expires_at, p_now\)/u);
   assert.match(lifecycleApplication, /fulfillmentLeaseSeconds/u);
 });
 

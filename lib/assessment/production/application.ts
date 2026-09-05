@@ -5,7 +5,8 @@ import {
 } from "../runtime/clarification-evidence-v1.ts";
 import { projectCustomerAssessmentExperienceV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
 import { asM2RuntimeError, M2RuntimeError } from "../runtime/errors.ts";
-import { AssessmentPipeline } from "../runtime/pipeline.ts";
+import { AssessmentPipeline, validatePurchaseReadyAuthorityForFulfillment } from "../runtime/pipeline.ts";
+import { hydratePersistedReadyAssessmentV1 } from "../runtime/runtime-result-normalization-v1.ts";
 import { evaluateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
 import type {
   AiStageTransport,
@@ -661,6 +662,9 @@ export class ProductionFulfillmentApplication {
       ),
       now: claimStartedAt,
     });
+    if (claim.grantId !== grant.grantId || claim.logicalAssessmentId !== grant.logicalAssessmentId) {
+      throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RECOVERY_INVALID");
+    }
     if (claim.disposition === "in_progress") {
       throw new M2RuntimeError("PRODUCTION_FULFILLMENT_IN_PROGRESS", 409);
     }
@@ -704,6 +708,15 @@ export class ProductionFulfillmentApplication {
         });
         generationBoundaryRecorded = true;
       };
+      if (claim.recoverableRuntimeRunId) {
+        // Recovery keeps the same input/contract checks as normal fulfillment.
+        validatePurchaseReadyAuthorityForFulfillment({
+          persistedRequest: claim.request, authority,
+          runContext: this.runContext(claim.request.id, claim.recoverableRuntimeRunId, this.now()),
+          activeStageTopologyVersion: this.options.catalog.stageTopologyVersion,
+          providerInvocationFencePresent: true,
+        });
+      }
       const recovered = claim.recoverableRuntimeRunId
         ? await this.options.runtimeRepository.getCompletedAssessment(
             claim.request.id,
@@ -711,13 +724,19 @@ export class ProductionFulfillmentApplication {
         : null;
       if (
         claim.recoverableRuntimeRunId &&
-        (!recovered || recovered.runId !== claim.recoverableRuntimeRunId)
+        (!recovered || recovered.runId !== claim.recoverableRuntimeRunId || recovered.requestId !== claim.request.id)
       ) {
         throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RECOVERY_INVALID");
       }
       const result = recovered
         ? {
-            ...recovered,
+            ...hydratePersistedReadyAssessmentV1({
+              requestId: recovered.requestId, runId: recovered.runId,
+              decision: recovered.decision, reportJson: recovered.report,
+              decisionCardJson: recovered.decisionCard,
+              authoritativeRequestedTopics: claim.request.requestedTopics,
+              usage: recovered.usage,
+            }),
             duplicate: true,
             authoritativeRequestedTopics: [...claim.request.requestedTopics],
           }

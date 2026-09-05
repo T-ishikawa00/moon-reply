@@ -98,14 +98,12 @@ assert.doesNotMatch(
   source("lib/payment/production/application.ts"),
   /measurement\/server\.ts/u,
 );
-assert.match(
-  source("lib/payment/production/service.ts"),
-  /trackVerifiedPaymentPurchase/u,
-);
-assert.match(
-  source("lib/payment/production/service.ts"),
-  /onVerifiedPaymentRecorded: trackVerifiedPaymentPurchase/u,
-);
+// Measurement R1 moved production delivery to a durable SQL-triggered job.
+// Keep its transport out of the fulfillment worker; do not require the removed
+// synchronous service hook merely because the older graph verifier did.
+assert.doesNotMatch(source("lib/payment/production/service.ts"), /measurement\/server\.ts|onVerifiedPaymentRecorded: trackVerifiedPaymentPurchase/u);
+assert.match(source("supabase/migrations/0023_launch_measurement_r1.sql"), /after insert on public\.production_verified_payments/u);
+assert.match(source("netlify/functions/production-fulfillment-dispatch-scheduled.mts"), /measurement\/purchase-scheduler-runtime-service\.ts/u);
 assert.match(
   source("lib/payment/production/application.ts"),
   /this\.options\.onVerifiedPaymentRecorded\?\.\(recorded\)/u,
