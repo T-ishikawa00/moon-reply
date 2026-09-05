@@ -13,6 +13,7 @@ export const OPERATOR_ACTION_REQUIRED_INCIDENT_CODES = [
   "delivery_pending_15m",
   "manual_review",
   "payment_fulfillment_retry_exhausted",
+  "payment_reconciliation_stopped",
 ] as const;
 
 export type OperatorActionRequiredIncidentCode =
@@ -44,7 +45,7 @@ export type ActionRequiredOperatorNotification = OperatorOrderFacts &
   Readonly<{
     notificationType: "action_required";
     paymentState: "verified" | "manual_review";
-    incidentCode: OperatorActionRequiredIncidentCode;
+    incidentCode: Exclude<OperatorActionRequiredIncidentCode, "payment_reconciliation_stopped">;
     deliveryState: "pending" | "complete";
     fulfillmentState:
       | "pending"
@@ -55,10 +56,20 @@ export type ActionRequiredOperatorNotification = OperatorOrderFacts &
     elapsedSeconds: number;
   }>;
 
+export type ReconciliationStoppedOperatorNotification = OperatorOrderFacts & Readonly<{
+  notificationType: "action_required";
+  incidentCode: "payment_reconciliation_stopped";
+  paymentState: "unverified";
+  deliveryState: "unknown";
+  fulfillmentState: "not_authorized";
+  elapsedSeconds: number;
+}>;
+
 export type OperatorNotification =
   | NewPurchaseOperatorNotification
   | DeliveryCompleteOperatorNotification
-  | ActionRequiredOperatorNotification;
+  | ActionRequiredOperatorNotification
+  | ReconciliationStoppedOperatorNotification;
 
 export type OperatorDiscordWebhookPayload = Readonly<{
   content: string;
@@ -128,13 +139,15 @@ function invalidPayload(): never {
 
 function requireOperatorOrderFacts(
   input: OperatorOrderFacts & { paymentState: string },
+  allowUnverifiedReconciliation = false,
 ) {
   if (
     typeof input.purchaseIntentId !== "string" ||
     input.purchaseIntentId.length < 1 ||
     input.purchaseIntentId.length > 256 ||
     (input.paymentState !== "verified" &&
-      input.paymentState !== "manual_review") ||
+      input.paymentState !== "manual_review" &&
+      !(allowUnverifiedReconciliation && input.paymentState === "unverified")) ||
     input.amount !== 980 ||
     input.currency !== "jpy" ||
     !Number.isFinite(Date.parse(input.eventOccurredAt))
@@ -242,6 +255,29 @@ export function formatOperatorDiscordNotification(
   input: OperatorNotification,
   operatorUserId?: string,
 ): OperatorDiscordWebhookPayload {
+  if (input.notificationType === "action_required" && input.incidentCode === "payment_reconciliation_stopped") {
+    requireOperatorOrderFacts(input, true);
+    requireElapsedSeconds(input.elapsedSeconds);
+    if (input.paymentState !== "unverified" || input.deliveryState !== "unknown" || input.fulfillmentState !== "not_authorized") invalidPayload();
+    const userId = validateOperatorDiscordUserId(operatorUserId);
+    const lines = [
+      "**🚨 ACTION REQUIRED**",
+      "Payment reconciliation stopped with unresolved evidence.",
+      "Incident: payment_reconciliation_stopped",
+      "Payment: unverified (not a failed or paid determination)",
+      "Expected amount: ¥980 (not proof of payment)",
+      `Elapsed since detection: ${formatElapsedMinutes(input.elapsedSeconds)}`,
+      `Time: ${formatJstTimestamp(input.eventOccurredAt)}`,
+      `Order: ${deriveOperatorOrderReference(input.purchaseIntentId)}`,
+      "Operator rule:",
+      "- Do not charge the Customer again.",
+      "- Do not retry blindly.",
+      "- Do not refund blindly.",
+      "- Verify Stripe / DB authoritative state and followup stop cause first.",
+    ];
+    if (userId) lines.unshift(`<@${userId}>`);
+    return { content: lines.join("\n"), allowed_mentions: userId ? { parse: [], users: [userId] } : { parse: [] } };
+  }
   requireOperatorOrderFacts(input);
   const orderReference = deriveOperatorOrderReference(input.purchaseIntentId);
   const occurredAt = formatJstTimestamp(input.eventOccurredAt);

@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { asM2RuntimeError } from "../../assessment/runtime/errors.ts";
+import { asM2RuntimeError, M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import type { RecordedPaymentEvidence } from "./types.ts";
 
 export const privateRecoverySchedulerPolicy = Object.freeze({
@@ -24,8 +24,59 @@ export type PaymentReconciliationFinish = Readonly<{
   outcome: "retry" | "stop" | "settled";
   retryAfter: string | null;
   errorCode: string | null;
+  // Independent stop provenance; the historical short-window reason remains intact.
+  stopCauseCode?: string | null;
   now: string;
 }>;
+
+export const paymentReconciliationFollowupPolicy = Object.freeze({
+  batchLimit: 1,
+  concurrency: 1,
+  leaseSeconds: 24,
+  initialDelaySeconds: 3_600,
+  maximumDelaySeconds: 86_400,
+  maximumJitterSeconds: 300,
+  rpcTimeoutMilliseconds: 5_000,
+  latestStartMilliseconds: 12_000,
+});
+
+export type PaymentReconciliationFollowupRepository = {
+  claimPaymentReconciliationFollowup(input: {
+    ownerId: string;
+    now: string;
+  }): Promise<ClaimedPaymentReconciliation[]>;
+  finishPaymentReconciliationFollowup(input: {
+    paymentAttemptId: string;
+    ownerId: string;
+    outcome: "retry" | "blocked" | "settled";
+    errorCode: string | null;
+    now: string;
+  }): Promise<void>;
+};
+
+export async function withPaymentReconciliationRpcDeadline<T>(
+  operation: (signal: AbortSignal) => PromiseLike<T>,
+  milliseconds = paymentReconciliationFollowupPolicy.rpcTimeoutMilliseconds,
+): Promise<T> {
+  if (!Number.isSafeInteger(milliseconds) || milliseconds < 1 || milliseconds > 5_000) {
+    throw new M2RuntimeError("PAYMENT_RECONCILIATION_DEADLINE_INVALID", 503);
+  }
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      controller.abort();
+      reject(new M2RuntimeError("PAYMENT_RECONCILIATION_DATABASE_TIMEOUT", 503));
+    }, milliseconds);
+  });
+  try {
+    return await Promise.race([
+      Promise.resolve().then(() => operation(controller.signal)), deadline,
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 export type PrivateRecoverySchedulerRepository = {
   listDueFulfillmentDispatchJobIds(input: {
@@ -135,6 +186,7 @@ function finishForRecordedEvidence(
         outcome: "stop",
         retryAfter: null,
         errorCode: "PAYMENT_RECONCILIATION_RETRY_EXHAUSTED",
+        stopCauseCode: "PAYMENT_RECONCILIATION_PENDING",
         now,
       };
     }
@@ -275,6 +327,7 @@ export async function runProductionPaymentReconciliationSchedule(input: {
           errorCode: stoppedByPolicy
             ? "PAYMENT_RECONCILIATION_STOPPED"
             : safe.safeCode,
+          ...(stoppedByPolicy ? { stopCauseCode: safe.safeCode } : {}),
           now: finishedAt,
         };
       }
@@ -298,4 +351,64 @@ export async function runProductionPaymentReconciliationSchedule(input: {
     stopped,
     finishConflicts,
   } as const;
+}
+
+// Only a validated pending snapshot or an explicitly classified transport
+// failure can continue automatically. UNKNOWN and integrity/configuration
+// failures remain durably monitored without reauthorizing provider reads.
+export async function runProductionPaymentReconciliationFollowup(input: {
+  repository: PaymentReconciliationFollowupRepository;
+  reconcileAttempt: (paymentAttemptId: string) => Promise<RecordedPaymentEvidence>;
+  now?: () => string;
+  uuid?: () => string;
+  canStart?: () => boolean;
+}) {
+  if (input.canStart && !input.canStart()) {
+    return { claimed: 0, stripeReads: 0, settled: 0, retried: 0,
+      blocked: 0, finishConflicts: 0, deferred: true };
+  }
+  const now = input.now ?? (() => new Date().toISOString());
+  const ownerId = (input.uuid ?? randomUUID)();
+  const claims = await input.repository.claimPaymentReconciliationFollowup({
+    ownerId,
+    now: now(),
+  });
+  if (claims.length > paymentReconciliationFollowupPolicy.batchLimit) {
+    throw new Error("PAYMENT_RECONCILIATION_FOLLOWUP_BATCH_INVALID");
+  }
+  const counts = { claimed: claims.length, stripeReads: 0, settled: 0,
+    retried: 0, blocked: 0, finishConflicts: 0 };
+  for (const claim of claims) {
+    let outcome: "retry" | "blocked" | "settled";
+    let errorCode: string | null;
+    try {
+      counts.stripeReads += 1;
+      const recorded = await input.reconcileAttempt(claim.paymentAttemptId);
+      if (recorded.disposition === "pending" ||
+          (recorded.disposition === "duplicate" && !recorded.verifiedPaymentId)) {
+        outcome = "retry";
+        errorCode = "PAYMENT_RECONCILIATION_PENDING";
+      } else if (["verified", "duplicate", "failed", "canceled"].includes(recorded.disposition)) {
+        outcome = "settled";
+        errorCode = null;
+      } else {
+        outcome = "blocked";
+        errorCode = "PAYMENT_RECONCILIATION_EVIDENCE_REJECTED";
+      }
+    } catch (error) {
+      errorCode = asM2RuntimeError(error, "PAYMENT_RECONCILIATION_UNKNOWN").safeCode;
+      outcome = errorCode === "PAYMENT_RECONCILIATION_PROVIDER_UNAVAILABLE" ? "retry" : "blocked";
+    }
+    try {
+      await input.repository.finishPaymentReconciliationFollowup({
+        paymentAttemptId: claim.paymentAttemptId, ownerId, outcome, errorCode, now: now(),
+      });
+      if (outcome === "settled") counts.settled += 1;
+      else if (outcome === "retry") counts.retried += 1;
+      else counts.blocked += 1;
+    } catch {
+      counts.finishConflicts += 1;
+    }
+  }
+  return { ...counts, deferred: false };
 }

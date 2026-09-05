@@ -146,6 +146,13 @@ export class StripeCheckoutProviderV1 implements CheckoutProviderV1 {
           409,
         );
       }
+      if (
+        error instanceof Stripe.errors.StripeConnectionError ||
+        error instanceof Stripe.errors.StripeAPIError ||
+        error instanceof Stripe.errors.StripeRateLimitError
+      ) {
+        throw new M2RuntimeError("PAYMENT_RECONCILIATION_PROVIDER_UNAVAILABLE", 503);
+      }
       throw error;
     }
     const snapshot = normalizeStripeCheckoutSessionV1(session, true);

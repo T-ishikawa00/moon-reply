@@ -9,6 +9,7 @@ import {
 } from "@supabase/supabase-js";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
 import type { JsonValue } from "../../assessment/runtime/types.ts";
+import { withPaymentReconciliationRpcDeadline } from "./recovery-schedulers.ts";
 import type {
   EmailChallengeRecord,
   FulfillmentDispatchClaim,
@@ -183,6 +184,9 @@ type PaymentDatabase = {
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
       claim_rc2_payment_reconciliation_batch_v1: RuntimeFunction;
       finish_rc2_payment_reconciliation_v1: RuntimeFunction;
+      finish_rc2_payment_reconciliation_v2: RuntimeFunction;
+      claim_rc2_payment_reconciliation_followup_v1: RuntimeFunction;
+      finish_rc2_payment_reconciliation_followup_v1: RuntimeFunction;
       record_rc2_stripe_evidence_v2: RuntimeFunction;
       resolve_customer_purchase_status_v1: RuntimeFunction;
       resolve_customer_completed_delivery_v1: RuntimeFunction;
@@ -828,19 +832,50 @@ export class SupabasePaymentDeliveryRepository
     outcome: "retry" | "stop" | "settled";
     retryAfter: string | null;
     errorCode: string | null;
+    stopCauseCode?: string | null;
     now: string;
   }): Promise<void> {
-    const { error } = await this.client.rpc(
-      "finish_rc2_payment_reconciliation_v1",
+    const { error } = await withPaymentReconciliationRpcDeadline((signal) => this.client.rpc(
+      "finish_rc2_payment_reconciliation_v2",
       {
         p_payment_attempt_id: input.paymentAttemptId,
         p_owner_id: input.ownerId,
         p_outcome: input.outcome,
         p_retry_after: input.retryAfter,
         p_error_code: input.errorCode,
+        p_stop_cause_code: input.stopCauseCode ?? null,
         p_now: input.now,
       },
-    );
+    ).abortSignal(signal));
+    if (error) databaseFailure(error);
+  }
+
+  async claimPaymentReconciliationFollowup(input: { ownerId: string; now: string }) {
+    const { data, error } = await withPaymentReconciliationRpcDeadline((signal) => this.client.rpc("claim_rc2_payment_reconciliation_followup_v1", {
+      p_owner_id: input.ownerId, p_now: input.now,
+    }).abortSignal(signal));
+    if (error) databaseFailure(error);
+    if (!Array.isArray(data) || data.length > 1) databaseFailure();
+    return data.map((value) => {
+      const row = recordValue(value);
+      const attemptCount = row.reconciliation_attempt_count;
+      if (!Number.isSafeInteger(attemptCount) || Number(attemptCount) < 1) databaseFailure();
+      return {
+        paymentAttemptId: stringValue(row.payment_attempt_id),
+        providerCheckoutSessionId: stringValue(row.provider_checkout_session_id),
+        attemptCount: Number(attemptCount),
+      };
+    });
+  }
+
+  async finishPaymentReconciliationFollowup(input: {
+    paymentAttemptId: string; ownerId: string;
+    outcome: "retry" | "blocked" | "settled"; errorCode: string | null; now: string;
+  }): Promise<void> {
+    const { error } = await withPaymentReconciliationRpcDeadline((signal) => this.client.rpc("finish_rc2_payment_reconciliation_followup_v1", {
+      p_payment_attempt_id: input.paymentAttemptId, p_owner_id: input.ownerId,
+      p_outcome: input.outcome, p_error_code: input.errorCode, p_now: input.now,
+    }).abortSignal(signal));
     if (error) databaseFailure(error);
   }
 

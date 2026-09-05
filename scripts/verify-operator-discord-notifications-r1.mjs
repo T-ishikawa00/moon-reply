@@ -143,7 +143,11 @@ const actionRequired = {
 };
 
 await check("authority and diff stay inside Operator Discord R1", () => {
+  const reviewedImplementation = "d2a6aa57d8618f166251ae38f2bbc7c60f884e6b";
+  const wave3Base = "3a13bd1d06a658becd07f05dae8ef6328b285ac8";
   assert.equal(git(["merge-base", "HEAD", acceptedAuthority]), acceptedAuthority);
+  assert.equal(git(["merge-base", "HEAD", reviewedImplementation]), reviewedImplementation);
+  assert.equal(git(["merge-base", "HEAD", wave3Base]), wave3Base);
   const allowed = new Set([
     ".env.example",
     "lib/payment/production/operator-notification-runtime-service.ts",
@@ -155,19 +159,13 @@ await check("authority and diff stay inside Operator Discord R1", () => {
     "scripts/verify-operator-discord-notifications-r1.mjs",
     migrationPath,
   ]);
-  const statusChanged = git([
-    "status",
-    "--short",
-  ])
-    .split(/\r?\n/u)
-    .filter(Boolean)
-    .map((line) => line.slice(3).replaceAll("\\", "/"));
-  const trackedChanged = git(["diff", "--name-only", acceptedAuthority])
+  // Preserve the original exact historical manifest. Later authorized waves
+  // are not changes to the accepted R1 implementation.
+  const trackedChanged = git(["diff", "--name-only", acceptedAuthority, reviewedImplementation])
     .split(/\r?\n/u)
     .filter(Boolean)
     .map((entry) => entry.replaceAll("\\", "/"));
-  const changed = [...new Set([...statusChanged, ...trackedChanged])];
-  assert.deepEqual(changed.filter((entry) => !allowed.has(entry)), []);
+  assert.deepEqual(trackedChanged.sort(), [...allowed].sort());
   for (const protectedPath of [
     "lib/payment/production/application.ts",
     "lib/assessment/production/application.ts",
@@ -175,11 +173,19 @@ await check("authority and diff stay inside Operator Discord R1", () => {
     "services/stripe-webhook-ingress",
   ]) {
     assert.equal(
-      git(["diff", "--name-only", acceptedAuthority, "--", protectedPath]),
+      git(["diff", "--name-only", acceptedAuthority, reviewedImplementation, "--", protectedPath]),
       "",
       protectedPath,
     );
   }
+  assert.equal(git(["diff", "--name-only", wave3Base, "--", migrationPath,
+    "lib/payment/production/operator-notification-runtime-service.ts",
+    "lib/payment/production/operator-notification-scheduler.ts",
+    "netlify/functions/production-fulfillment-dispatch-scheduled.mts"]), "");
+  assert.deepEqual(git(["diff", "--name-only", wave3Base, "--", "lib/payment/production/operator-notification*"]).split(/\r?\n/u).filter(Boolean), [
+    "lib/payment/production/operator-notification-supabase-repository.ts",
+    "lib/payment/production/operator-notification.ts",
+  ]);
 });
 
 await check("configuration is exact-true, default-off, and has an emergency stop", () => {
@@ -242,6 +248,7 @@ await check("production published deploy can evaluate and enter the operator gat
   assert.deepEqual(await response.json(), {
     dispatch: { customerDispatch: true },
     operatorNotifications: { operatorNotifications: true },
+    purchaseMeasurement: { disabled: true },
   });
 });
 
@@ -293,6 +300,7 @@ await check("branch deploy blocks operator work without blocking customer dispat
   assert.deepEqual(await response.json(), {
     dispatch: { customerDispatch: true },
     operatorNotifications: { disabled: true },
+    purchaseMeasurement: { disabled: true },
   });
   const failedDispatch = await withProcessEnvironment(
     { PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED: "true" },
@@ -312,6 +320,7 @@ await check("branch deploy blocks operator work without blocking customer dispat
   assert.deepEqual(await failedDispatch.json(), {
     dispatch: { failed: true },
     operatorNotifications: { disabled: true },
+    purchaseMeasurement: { disabled: true },
   });
 });
 
@@ -529,6 +538,7 @@ await check("operator configuration failure is fail-open for customer dispatch",
   assert.deepEqual(await response.json(), {
     dispatch: { disabled: true },
     operatorNotifications: { failed: true },
+    purchaseMeasurement: { disabled: true },
   });
 });
 
@@ -551,6 +561,7 @@ await check("operator rejection cannot fail a successful customer dispatch", asy
   assert.deepEqual(await response.json(), {
     dispatch: { customerDispatch: true },
     operatorNotifications: { failed: true },
+    purchaseMeasurement: { disabled: true },
   });
 });
 

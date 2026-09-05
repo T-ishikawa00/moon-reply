@@ -6,7 +6,11 @@ import {
   readProductionSchedulerDatabaseEnvironment,
 } from "./environment-runtime.ts";
 import { readStripeCheckoutEnvironment } from "./stripe-environment-runtime.ts";
-import { runProductionPaymentReconciliationSchedule } from "./recovery-schedulers.ts";
+import {
+  paymentReconciliationFollowupPolicy,
+  runProductionPaymentReconciliationFollowup,
+  runProductionPaymentReconciliationSchedule,
+} from "./recovery-schedulers.ts";
 import { StripeCheckoutProviderV1 } from "./stripe.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
 import type {
@@ -46,6 +50,7 @@ const unavailableDispatcher: ProductionFulfillmentDispatcherV1 = {
 };
 
 export async function runConfiguredProductionPaymentReconciliationSchedule() {
+  const startedAt = performance.now();
   if (!isProductionPaymentReconciliationScheduleEnabled()) {
     return { disabled: true as const };
   }
@@ -80,11 +85,23 @@ export async function runConfiguredProductionPaymentReconciliationSchedule() {
     purchaseStatusSigningSecret: "scheduler-scope-disabled",
     fulfillmentLeaseSeconds: 30,
   });
-  return runProductionPaymentReconciliationSchedule({
+  const reconcileAttempt = (paymentAttemptId: string) =>
+    application.reconcilePaymentAttempt(paymentAttemptId, {
+      dispatchFulfillment: false,
+    });
+  // The existing five-minute schedule checks durable due times. The followup
+  // claim is globally limited to one read per five-minute slot, with at least
+  // one hour between reads of an individual stopped attempt.
+  const shortWindow = await runProductionPaymentReconciliationSchedule({
     repository,
-    reconcileAttempt: (paymentAttemptId) =>
-      application.reconcilePaymentAttempt(paymentAttemptId, {
-        dispatchFulfillment: false,
-      }),
+    reconcileAttempt,
   });
+  const followup = await runProductionPaymentReconciliationFollowup({
+    repository,
+    reconcileAttempt,
+    // Reserve 18 seconds of the scheduled function's 30-second limit for
+    // bounded followup RPCs and the existing five-second Stripe request.
+    canStart: () => performance.now() - startedAt <= paymentReconciliationFollowupPolicy.latestStartMilliseconds,
+  });
+  return { ...shortWindow, followup };
 }

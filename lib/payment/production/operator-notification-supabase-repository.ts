@@ -26,7 +26,9 @@ type OperatorNotificationDatabase = {
     Views: { [_ in never]: never };
     Functions: {
       claim_production_operator_notification_batch_v1: RuntimeFunction;
+      claim_production_operator_notification_batch_v2: RuntimeFunction;
       begin_production_operator_notification_send_v1: RuntimeFunction;
+      begin_production_operator_notification_send_v2: RuntimeFunction;
       complete_production_operator_notification_v1: RuntimeFunction;
       finish_production_operator_notification_v1: RuntimeFunction;
     };
@@ -88,6 +90,16 @@ function paymentFacts(row: Record<string, unknown>): Readonly<{
 function mapClaim(value: unknown): ClaimedOperatorNotification {
   const row = recordValue(value);
   const notificationId = stringValue(row.notification_id);
+  if (row.notification_type === "action_required" && row.incident_code === "payment_reconciliation_stopped") {
+    if (row.payment_state !== "unverified" || row.amount !== 980 || row.currency !== "jpy" ||
+        row.delivery_state !== "unknown" || row.fulfillment_state !== "not_authorized") databaseFailure();
+    return { notificationId, notification: {
+      notificationType: "action_required", incidentCode: "payment_reconciliation_stopped",
+      purchaseIntentId: stringValue(row.purchase_intent_id), paymentState: "unverified",
+      amount: 980, currency: "jpy", deliveryState: "unknown", fulfillmentState: "not_authorized",
+      eventOccurredAt: stringValue(row.event_occurred_at), elapsedSeconds: numberValue(row.elapsed_seconds),
+    } };
+  }
   const facts = paymentFacts(row);
 
   if (row.notification_type === "new_purchase") {
@@ -143,7 +155,7 @@ function mapClaim(value: unknown): ClaimedOperatorNotification {
   const notification: ActionRequiredOperatorNotification = {
     notificationType: "action_required",
     ...facts,
-    incidentCode: incidentCode as OperatorActionRequiredIncidentCode,
+    incidentCode: incidentCode as Exclude<OperatorActionRequiredIncidentCode, "payment_reconciliation_stopped">,
     deliveryState,
     fulfillmentState,
     elapsedSeconds: numberValue(row.elapsed_seconds),
@@ -168,7 +180,7 @@ export class SupabaseOperatorNotificationRepository
 
   async claimBatch(input: Parameters<OperatorNotificationRepository["claimBatch"]>[0]) {
     const { data, error } = await this.client.rpc(
-      "claim_production_operator_notification_batch_v1",
+      "claim_production_operator_notification_batch_v2",
       {
         p_owner_id: input.ownerId,
         p_environment: input.environment,
@@ -184,7 +196,7 @@ export class SupabaseOperatorNotificationRepository
 
   async beginSend(input: Parameters<OperatorNotificationRepository["beginSend"]>[0]) {
     const { data, error } = await this.client.rpc(
-      "begin_production_operator_notification_send_v1",
+      "begin_production_operator_notification_send_v2",
       {
         p_notification_id: input.notificationId,
         p_owner_id: input.ownerId,
