@@ -545,7 +545,15 @@ assert.equal(verifierState.fullPrepares, 0);
 assert.deepEqual(verifierState.forbiddenResolutions, []);
 
 verifierState.c1Enabled = false;
-await service.prepareProductionConsultation(consultation(), crypto.randomUUID());
+const originalNodeEnvironment = process.env.NODE_ENV;
+try {
+  // The legacy lane is local compatibility evidence, not Production behavior.
+  process.env.NODE_ENV = "development";
+  await service.prepareProductionConsultation(consultation(), crypto.randomUUID());
+} finally {
+  if (originalNodeEnvironment === undefined) delete process.env.NODE_ENV;
+  else process.env.NODE_ENV = originalNodeEnvironment;
+}
 assert.equal(verifierState.fullFactories, 1);
 assert.equal(verifierState.fullPrepares, 1);
 

@@ -565,12 +565,15 @@ await check("pre-F004 migrations remain byte-identical; only 0024 is added", () 
   assert.match(customerIdentity, /commit;\s*$/u);
 });
 
-await check("F004 leaves protected product source unchanged outside notification files", () => {
+await check("F004 historical scope and current protected source remain exact except F015 preparation gate", () => {
+  const f004Head = "95b84e71508426f67ae3cd4e7e63961f9b0885e2";
   assert.equal(git(["merge-base", "HEAD", f004Base]).trim(), f004Base);
+  assert.equal(git(["merge-base", "HEAD", f004Head]).trim(), f004Head);
   const drift = git([
     "diff",
     "--name-only",
     f004Base,
+    f004Head,
     "--",
     ...protectedProductPaths,
   ]).trim().split(/\r?\n/u).filter(Boolean);
@@ -585,6 +588,10 @@ await check("F004 leaves protected product source unchanged outside notification
     "lib/assessment/production/supabase-repository.ts",
     "lib/assessment/production/types.ts",
   ]);
+  assert.equal(git([
+    "diff", "--name-only", f004Head, "--", ...protectedProductPaths,
+    ":(exclude)lib/assessment/production/service.ts",
+  ]).trim(), "");
   assert.match(readText("components/request/RequestForm.tsx"), /customerAuthEnabled/u);
   assert.match(
     readText("lib/assessment/production/supabase-repository.ts"),

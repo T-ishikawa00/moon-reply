@@ -74,7 +74,7 @@ export async function prepareProductionConsultation(
   idempotencyKey: unknown,
 ) {
   requirePreparationRuntime();
-  if (isPrepaymentComputeBudgetEnabled()) {
+  if (process.env.NODE_ENV === "production" || isPrepaymentComputeBudgetEnabled()) {
     readPrepaymentComputePolicy();
     if (!isCustomerAuthFoundationEnabled()) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
@@ -94,7 +94,7 @@ export async function answerProductionClarification(
   answer: unknown,
 ) {
   requirePreparationRuntime();
-  if (isPrepaymentComputeBudgetEnabled()) {
+  if (process.env.NODE_ENV === "production" || isPrepaymentComputeBudgetEnabled()) {
     const policy = readPrepaymentComputePolicy();
     if (!isCustomerAuthFoundationEnabled()) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_CONFIGURATION_INVALID", 503);
