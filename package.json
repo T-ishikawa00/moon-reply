@@ -15,6 +15,8 @@
     "verify:f015": "node scripts/verify-f015-prepayment-fail-closed.mjs",
     "verify:f010": "node scripts/verify-f010-account-otp-throttle.mjs",
     "verify:f010:db": "node scripts/verify-f010-account-otp-throttle-db.mjs",
+    "verify:f012": "node scripts/verify-f012-browser-security.mjs",
+    "verify:f012:build": "node scripts/verify-f012-built-headers.mjs --build",
     "verify:sec-01": "node scripts/verify-sec-01.mjs",
     "verify:m1-4:skipped-stage-constraint": "node scripts/verify-m1-4-skipped-stage-constraint.mjs",
     "verify:m1-4:background-fulfillment": "node scripts/verify-m1-4-background-fulfillment-durability.mjs",

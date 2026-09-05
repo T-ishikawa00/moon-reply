@@ -1,0 +1,82 @@
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
+// Local verification only. This is not a deployment or activation runner.
+export function createOfflineRuntime() {
+  const directory = mkdtempSync(path.join(os.tmpdir(), "moon-reply-offline-"));
+  const guard = path.join(directory, "guard.mjs");
+  const attempts = path.join(directory, "attempts.log");
+  writeFileSync(attempts, "");
+  writeFileSync(guard, `
+import { appendFileSync } from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
+import net from "node:net";
+import tls from "node:tls";
+import http from "node:http";
+import https from "node:https";
+const local = (host) => ["localhost", "127.0.0.1", "::1", "[::1]"].includes(host);
+function reject() {
+  appendFileSync(${JSON.stringify(attempts)}, "EXTERNAL_NETWORK_BLOCKED\\n");
+  throw new Error("OFFLINE_VERIFICATION_EXTERNAL_NETWORK_BLOCKED");
+}
+const originalFetch = globalThis.fetch;
+globalThis.fetch = function(input, init) {
+  const url = new URL(typeof input === "string" || input instanceof URL ? input : input.url);
+  if (!local(url.hostname)) reject();
+  return originalFetch(input, init);
+};
+const originalConnect = net.Socket.prototype.connect;
+net.Socket.prototype.connect = function(...args) {
+  const values = Array.isArray(args[0]) ? args[0] : args;
+  const options = values[0];
+  if (options && typeof options === "object") {
+    if (!options.path && !local(options.host ?? "localhost")) reject();
+  } else if (typeof options === "number") {
+    if (typeof values[1] === "string" && !local(values[1])) reject();
+  } else if (typeof options !== "string") reject();
+  return originalConnect.apply(this, args);
+};
+for (const module of [http, https]) {
+  for (const method of ["request", "get"]) {
+    const original = module[method];
+    module[method] = function(input, ...args) {
+      if (typeof input === "string" || input instanceof URL) {
+        if (!local(new URL(input).hostname)) reject();
+      } else if (!input?.socketPath && !local(input?.hostname ?? input?.host ?? "localhost")) reject();
+      return original.call(this, input, ...args);
+    };
+  }
+}
+tls.connect = reject;
+syncBuiltinESMExports();
+`);
+  const env = { ...process.env, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
+    NODE_OPTIONS: `--import=${pathToFileURL(guard).href}`,
+    NEXT_PUBLIC_APP_URL: "http://localhost:3000" };
+  for (const match of readFileSync(".env.example", "utf8").matchAll(/^([A-Z0-9_]*ENABLED)=/gm)) {
+    env[match[1]] = "false";
+  }
+  return { env, assertNoExternalAttempts() {
+    assert.equal(readFileSync(attempts, "utf8"), "", "offline external attempts must be zero");
+  } };
+}
+
+export async function buildOffline() {
+  const offline = createOfflineRuntime();
+  const child = spawn(process.execPath, ["node_modules/next/dist/bin/next", "build"], {
+    env: offline.env, stdio: "inherit", windowsHide: true,
+  });
+  const timer = setTimeout(() => child.kill(), 240_000);
+  try {
+    const status = await new Promise((resolve, reject) => {
+      child.once("error", reject); child.once("exit", resolve);
+    });
+    assert.equal(status, 0, "offline Next build failed");
+    offline.assertNoExternalAttempts();
+    console.log("Offline Production build PASS; external network attempts=0");
+  } finally { clearTimeout(timer); }
+}
