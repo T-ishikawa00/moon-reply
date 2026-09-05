@@ -23,6 +23,7 @@ import {
   toAssessmentInput,
 } from "./consultation.ts";
 import { decodeAndVerifyProductionCanonicalProjection } from "./canonical-delivery.ts";
+import { beginAdmittedPrepaymentIntake } from "./anonymous-admission-runtime.ts";
 import type {
   BeginPrepaymentIntakeRecord,
   PrepaymentComputeAuthorityRepository,
@@ -152,7 +153,7 @@ type ProductionDatabase = {
       begin_production_notification_send_v1: RuntimeFunction;
       complete_production_notification_v2: RuntimeFunction;
       fail_production_notification_v2: RuntimeFunction;
-      begin_production_prepayment_intake_v1: RuntimeFunction;
+      begin_production_prepayment_intake_v2: RuntimeFunction;
       resolve_production_prepayment_continuation_v1: RuntimeFunction;
       claim_production_prepayment_execution_v1: RuntimeFunction;
       begin_production_prepayment_clarification_v1: RuntimeFunction;
@@ -349,25 +350,7 @@ export class SupabaseProductionFulfillmentRepository
     };
   }
   async beginPrepaymentIntake(record: BeginPrepaymentIntakeRecord) {
-    const { data, error } = await this.client.rpc(
-      "begin_production_prepayment_intake_v1",
-      {
-        p_preparation_id: record.preparationId,
-        p_request_id: record.requestId,
-        p_idempotency_key_hash: record.idempotencyKeyHash,
-        p_consultation_snapshot_sha256: record.consultationSnapshotHash,
-        p_consultation_snapshot_json: record.consultationSnapshot,
-        p_safety_authority_json: record.safetyAuthority,
-        p_current_situation: record.assessmentInput.currentSituation,
-        p_optional_message: record.assessmentInput.optionalMessage,
-        p_relationship: record.assessmentInput.relationship,
-        p_requested_topics: record.assessmentInput.requestedTopics,
-        p_execution_capability_hash: record.executionCapabilityHash,
-        p_now: record.now,
-      },
-    );
-    if (error) databaseFailure(error);
-    const result = recordValue(data);
+    const result = await beginAdmittedPrepaymentIntake(this.client, record);
     const disposition = result.disposition;
     const executionDisposition = result.execution_disposition;
     if (
