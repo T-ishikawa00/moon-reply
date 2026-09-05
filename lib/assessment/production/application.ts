@@ -29,7 +29,7 @@ import {
   toAssessmentInput,
   toPrepaymentSafetyInput,
 } from "./consultation.ts";
-import type { DeliveryNotificationAdapterV1 } from "./notification.ts";
+import { ResultNotificationSendError, type DeliveryNotificationAdapterV1 } from "./notification.ts";
 import { ProviderFreeIntakeApplication } from "./provider-free-intake.ts";
 import type {
   PrepaymentComputeAuthorityRepository,
@@ -816,21 +816,30 @@ export class ProductionFulfillmentApplication {
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
     }
     const notification = claim.notification;
-    const credentialId = this.uuid();
-    const resultAccessToken = this.capability();
-    await this.options.lifecycleRepository.addResultCredential({
-      credentialId,
-      deliveryId: notification.deliveryId,
-      tokenHash: hashOpaqueProductionCapability(resultAccessToken),
-      purpose: "notification",
-      now: this.now(),
-    });
+    let phase: "prepare" | "send" | "acknowledge" = "prepare";
     try {
-      const sent = await adapter.send({
-        notificationId,
-        deliveryAuthorityReference: notification.deliveryAuthorityReference,
-        resultAccessToken,
+      let payloadCiphertext = notification.payloadCiphertext;
+      if (!payloadCiphertext) {
+        const resultAccessToken = this.capability();
+        const prepared = await adapter.prepare({
+          notificationId,
+          deliveryAuthorityReference: notification.deliveryAuthorityReference,
+          resultAccessToken,
+        });
+        // Credential activation and immutable payload installation commit together.
+        // A lost DB response is recovered by reading this identity on the next claim.
+        payloadCiphertext = await this.options.lifecycleRepository.prepareNotificationEmail({
+          notificationId, ownerId, credentialId: this.uuid(),
+          tokenHash: hashOpaqueProductionCapability(resultAccessToken),
+          payloadCiphertext: prepared, now: this.now(),
+        });
+      }
+      await this.options.lifecycleRepository.beginNotificationSend({
+        notificationId, ownerId, now: this.now(),
       });
+      phase = "send";
+      const sent = await adapter.sendPrepared(notificationId, payloadCiphertext);
+      phase = "acknowledge";
       await this.options.lifecycleRepository.completeNotification({
         notificationId,
         ownerId,
@@ -843,14 +852,20 @@ export class ProductionFulfillmentApplication {
         error,
         "PRODUCTION_NOTIFICATION_DELIVERY_FAILED",
       );
-      await this.options.lifecycleRepository.revokeResultCredential(
-        credentialId,
-        this.now(),
-      );
+      // Neither rejection nor an unknown send/DB acknowledgement rotates or
+      // revokes the canonical notification credential. Revocation stays explicit.
+      const errorCode = error instanceof ResultNotificationSendError
+        ? { not_sent: "PRODUCTION_NOTIFICATION_SEND_NOT_ATTEMPTED",
+            rejected: "PRODUCTION_NOTIFICATION_SEND_REJECTED",
+            unknown: "PRODUCTION_NOTIFICATION_SEND_OUTCOME_UNKNOWN",
+            conflict: "PRODUCTION_NOTIFICATION_PAYLOAD_CONFLICT" }[error.outcome]
+        : phase === "acknowledge" ? "PRODUCTION_NOTIFICATION_ACK_OUTCOME_UNKNOWN"
+        : phase === "send" ? "PRODUCTION_NOTIFICATION_SEND_OUTCOME_UNKNOWN"
+        : safe.safeCode;
       await this.options.lifecycleRepository.failNotification({
         notificationId,
         ownerId,
-        errorCode: safe.safeCode,
+        errorCode,
         now: this.now(),
       });
       throw safe;

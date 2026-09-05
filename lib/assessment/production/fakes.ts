@@ -64,6 +64,10 @@ export class FakeProductionFulfillmentRepository
   readonly credentials = new Map<string, FakeCredential>();
   readonly notifications = new Map<string, ProductionNotificationRecord>();
   readonly notificationLeases = new Map<string, string>();
+  readonly notificationIdentities = new Map<string, {
+    credentialId: string | null; firstSendStartedAt: string | null;
+    sendAttemptCount: number; lastErrorCode: string | null;
+  }>();
   readonly events: string[] = [];
   generationStartedTransitions = 0;
   private readonly runtimeRepository: FakeAssessmentRepository;
@@ -604,6 +608,10 @@ export class FakeProductionFulfillmentRepository
     leaseExpiresAt: string;
     now: string;
   }) {
+    if (!input.ownerId || !input.now || !input.leaseExpiresAt ||
+        Date.parse(input.leaseExpiresAt) <= Date.parse(input.now)) {
+      throw new M2RuntimeError("PRODUCTION_NOTIFICATION_LEASE_INVALID", 409);
+    }
     const notification = this.notifications.get(input.notificationId);
     if (!notification) return null;
     if (notification.status === "sent") {
@@ -617,6 +625,16 @@ export class FakeProductionFulfillmentRepository
       if (Date.parse(leaseExpiresAt) > Date.parse(input.now)) {
         return { disposition: "in_progress" as const, notification: null };
       }
+    }
+    let identity = this.notificationIdentities.get(notification.id);
+    if ((!identity && (notification.attemptCount !== 0 || notification.status !== "pending")) ||
+        identity?.lastErrorCode === "PRODUCTION_NOTIFICATION_PAYLOAD_CONFLICT" ||
+        (identity?.credentialId && this.credentials.get(identity.credentialId)?.revokedAt !== null)) {
+      return { disposition: "manual_review" as const, notification: null };
+    }
+    if (!identity) {
+      identity = { credentialId: null, firstSendStartedAt: null, sendAttemptCount: 0, lastErrorCode: null };
+      this.notificationIdentities.set(notification.id, identity);
     }
     notification.status = "processing";
     notification.ownerId = input.ownerId;
@@ -632,12 +650,59 @@ export class FakeProductionFulfillmentRepository
     };
   }
 
+  private ownedNotification(notificationId: string, ownerId: string, now: string) {
+    const notification = this.notifications.get(notificationId);
+    const lease = this.notificationLeases.get(notificationId);
+    if (!notification || notification.status !== "processing" || !ownerId ||
+        notification.ownerId !== ownerId || !lease || !now ||
+        Date.parse(lease) <= Date.parse(now)) {
+      throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
+    }
+    return notification;
+  }
+
+  async prepareNotificationEmail(input: {
+    notificationId: string; ownerId: string; credentialId: string;
+    tokenHash: string; payloadCiphertext: string; now: string;
+  }) {
+    const notification = this.ownedNotification(input.notificationId, input.ownerId, input.now);
+    const identity = this.notificationIdentities.get(input.notificationId);
+    if (!identity) throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
+    if (notification.payloadCiphertext) return notification.payloadCiphertext;
+    this.maybeFail("prepareNotificationEmail");
+    if (!this.deliveries.has(notification.deliveryId) || this.credentials.has(input.credentialId) ||
+        [...this.credentials.values()].some((item) => item.tokenHash === input.tokenHash)) {
+      throw new M2RuntimeError("PRODUCTION_RESULT_CREDENTIAL_CONFLICT", 409);
+    }
+    // No await between the fence and this atomic fake transaction.
+    this.credentials.set(input.credentialId, { id: input.credentialId,
+      deliveryId: notification.deliveryId, tokenHash: input.tokenHash,
+      purpose: "notification", revokedAt: null });
+    notification.payloadCiphertext = input.payloadCiphertext;
+    identity.credentialId = input.credentialId;
+    this.events.push("prepareNotificationEmail");
+    return input.payloadCiphertext;
+  }
+
+  async beginNotificationSend(input: { notificationId: string; ownerId: string; now: string }) {
+    const notification = this.ownedNotification(input.notificationId, input.ownerId, input.now);
+    const identity = this.notificationIdentities.get(input.notificationId);
+    if (!notification.payloadCiphertext || !identity?.credentialId ||
+        this.credentials.get(identity.credentialId)?.revokedAt !== null) {
+      throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
+    }
+    identity.firstSendStartedAt ??= input.now;
+    identity.sendAttemptCount += 1;
+    this.events.push("beginNotificationSend");
+  }
+
   async completeNotification(input: {
     notificationId: string;
     ownerId: string;
     providerMessageReference: string;
     now: string;
   }) {
+    this.maybeFail("completeNotification");
     void input.providerMessageReference;
     const notification = this.notifications.get(input.notificationId);
     const leaseExpiresAt = this.notificationLeases.get(input.notificationId);
@@ -662,7 +727,7 @@ export class FakeProductionFulfillmentRepository
     errorCode: string;
     now: string;
   }) {
-    void input.errorCode;
+    const identity = this.notificationIdentities.get(input.notificationId);
     const notification = this.notifications.get(input.notificationId);
     const leaseExpiresAt = this.notificationLeases.get(input.notificationId);
     if (
@@ -675,6 +740,7 @@ export class FakeProductionFulfillmentRepository
       throw new M2RuntimeError("PRODUCTION_NOTIFICATION_STATE_CONFLICT", 409);
     }
     notification.status = "failed";
+    if (identity) identity.lastErrorCode = input.errorCode;
     notification.ownerId = null;
     this.notificationLeases.delete(notification.id);
     this.events.push("failNotification");

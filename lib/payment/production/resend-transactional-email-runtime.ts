@@ -1,9 +1,11 @@
 import { Resend } from "resend";
 import { M2RuntimeError } from "../../assessment/runtime/errors.ts";
+import { ResultNotificationSendError } from "../../assessment/production/notification.ts";
 import { normalizeDeliveryEmail } from "./crypto.ts";
 import type {
   AssessmentResultEmailV1,
   MailboxVerificationEmailV1,
+  PreparedAssessmentResultEmailV1,
   TransactionalEmailAdapterV1,
 } from "./transactional-email.ts";
 import {
@@ -334,11 +336,48 @@ export class ResendTransactionalEmailAdapterV1
   }
 
   async sendAssessmentResult(request: AssessmentResultEmailV1) {
-    return this.#deliver(
-      () => resultPayload(this.#sender, request),
-      request.messageIdempotencyKey,
-      "RESULT_EMAIL_DELIVERY_FAILED",
-    );
+    return this.sendPreparedAssessmentResult(this.prepareAssessmentResult(request));
+  }
+
+  prepareAssessmentResult(request: AssessmentResultEmailV1): PreparedAssessmentResultEmailV1 {
+    try {
+      return Object.freeze({
+        messageIdempotencyKey: validateIdempotencyKey(request.messageIdempotencyKey),
+        payload: resultPayload(this.#sender, request),
+      });
+    } catch {
+      throw new ResultNotificationSendError("not_sent");
+    }
+  }
+
+  async sendPreparedAssessmentResult(request: PreparedAssessmentResultEmailV1) {
+    let response: ResendEmailResponseV1;
+    try {
+      response = await this.#client.send(request.payload, {
+        idempotencyKey: request.messageIdempotencyKey,
+      });
+    } catch {
+      throw new ResultNotificationSendError("unknown");
+    }
+    if (response.error !== null) {
+      const error = response.error as { name?: unknown; statusCode?: unknown } | undefined;
+      if (error?.name === "invalid_idempotent_request") {
+        throw new ResultNotificationSendError("conflict");
+      }
+      // SDK fetch failures are returned as application_error/statusCode:null.
+      // 409 in-flight and every 5xx/malformed response remain ambiguous.
+      const rejected = typeof error?.statusCode === "number" &&
+        error.statusCode >= 400 && error.statusCode < 500 &&
+        error.statusCode !== 408 && error.statusCode !== 409 &&
+        error.name !== "concurrent_idempotent_requests";
+      throw new ResultNotificationSendError(rejected ? "rejected" : "unknown");
+    }
+    const providerMessageReference = response.data?.id;
+    if (typeof providerMessageReference !== "string" ||
+        !providerMessageReferencePattern.test(providerMessageReference)) {
+      throw new ResultNotificationSendError("unknown");
+    }
+    return Object.freeze({ providerMessageReference });
   }
 
   async sendPurchaseSupport(

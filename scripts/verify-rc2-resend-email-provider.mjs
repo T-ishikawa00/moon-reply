@@ -44,8 +44,9 @@ registerHooks({
 
 const root = process.cwd();
 const acceptedRelease = "243e8655098ba9e0972e0e1efd68f83fbc2ded30";
-const acceptedFoundationBase =
-  "8bf6c4e9c0a860b48826708676f0abe7c4395714";
+// F004 changes only notification delivery; subsequent accepted work is not RC2 drift.
+const f004Base = "fd01f7fb96241c448f6cbe57a197752cf411e71e";
+const f004Migration = "supabase/migrations/0024_f004_notification_send_identity.sql";
 const providerPath = "lib/payment/production/resend-transactional-email.ts";
 const servicePath = "lib/payment/production/service.ts";
 
@@ -101,9 +102,9 @@ function trackedFiles() {
     .map((entry) => entry.replaceAll("\\", "/"));
 }
 
-function assertNoDiffFromAcceptedRelease(relativePaths) {
+function assertNoDiffFromAcceptedRelease(relativePaths, revision = acceptedRelease) {
   try {
-    git(["diff", "--quiet", acceptedRelease, "--", ...relativePaths]);
+    git(["diff", "--quiet", revision, "--", ...relativePaths]);
   } catch {
     assert.fail(`accepted authority drift: ${relativePaths.join(", ")}`);
   }
@@ -242,9 +243,21 @@ await check("generic server-only environment contract contains no embedded key",
   assert.equal(example.has("EMAIL_PROVIDER"), false);
   const sources = textTrackedFiles(trackedFiles());
   const providerSpecificKeyName = ["RESEND", "API", "KEY"].join("_");
+  const ingressVerifierPath = "scripts/verify-m2-b2-i1-public-ingress-authority.mjs";
+  // This pre-F004 security test prohibits the name in the built ingress bundle.
+  // Permit that exact immutable denylist literal, never a runtime/config occurrence.
+  assertNoDiffFromAcceptedRelease([ingressVerifierPath], f004Base);
+  const ingressVerifier = readText(ingressVerifierPath);
+  assert.match(ingressVerifier, /for \(const forbidden of \[[\s\S]*?\]\) \{\s*assert\.equal\(bundle\.includes\(forbidden\), false, forbidden\);/u);
+  assert.equal(ingressVerifier.split(providerSpecificKeyName).length - 1, 1);
   assert.deepEqual(
     sources
-      .filter(({ source }) => source.includes(providerSpecificKeyName))
+      .filter(({ relativePath, source }) =>
+        (relativePath === ingressVerifierPath
+          ? source.replace(`"${providerSpecificKeyName}"`, "\"forbidden-provider-name\"")
+          : source
+        ).includes(providerSpecificKeyName),
+      )
       .map(({ relativePath }) => relativePath),
     [],
   );
@@ -516,7 +529,7 @@ await check("all production activation defaults remain false", () => {
   }
 });
 
-await check("migrations 0002 through 0013 remain byte-identical", () => {
+await check("pre-F004 migrations remain byte-identical; only 0024 is added", () => {
   const accepted = git([
     "ls-tree",
     "-r",
@@ -529,17 +542,21 @@ await check("migrations 0002 through 0013 remain byte-identical", () => {
     .split(/\r?\n/u)
     .filter(Boolean);
   assertNoDiffFromAcceptedRelease(accepted);
+  const baseline = git([
+    "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assertNoDiffFromAcceptedRelease(baseline, f004Base);
   const working = readdirSync(path.join(root, "supabase/migrations"))
     .filter((entry) => entry.endsWith(".sql"))
     .sort()
     .map((entry) => `supabase/migrations/${entry}`);
   assert.deepEqual(working, [
-    ...accepted.sort(),
-    "supabase/migrations/0014_customer_identity_authority_v1.sql",
+    ...baseline.sort(),
+    f004Migration,
   ]);
   assert.deepEqual(
     working.map((entry) => path.posix.basename(entry).slice(0, 4)),
-    ["0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011", "0012", "0013", "0014"],
+    Array.from({ length: 23 }, (_, index) => String(index + 2).padStart(4, "0")),
   );
   const customerIdentity = readText(
     "supabase/migrations/0014_customer_identity_authority_v1.sql",
@@ -548,17 +565,25 @@ await check("migrations 0002 through 0013 remain byte-identical", () => {
   assert.match(customerIdentity, /commit;\s*$/u);
 });
 
-await check("V17 and Q0 accepted authority remains unchanged", () => {
+await check("F004 leaves protected product source unchanged outside notification files", () => {
+  assert.equal(git(["merge-base", "HEAD", f004Base]).trim(), f004Base);
   const drift = git([
     "diff",
     "--name-only",
-    acceptedRelease,
+    f004Base,
     "--",
     ...protectedProductPaths,
   ]).trim().split(/\r?\n/u).filter(Boolean);
+  const untracked = git([
+    "ls-files", "--others", "--exclude-standard", "--", ...protectedProductPaths,
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(untracked, []);
   assert.deepEqual(drift, [
-    "components/request/RequestForm.tsx",
+    "lib/assessment/production/application.ts",
+    "lib/assessment/production/fakes.ts",
+    "lib/assessment/production/notification.ts",
     "lib/assessment/production/supabase-repository.ts",
+    "lib/assessment/production/types.ts",
   ]);
   assert.match(readText("components/request/RequestForm.tsx"), /customerAuthEnabled/u);
   assert.match(
@@ -567,11 +592,11 @@ await check("V17 and Q0 accepted authority remains unchanged", () => {
   );
 });
 
-await check("Foundation application-route drift is exact", () => {
+await check("F004 leaves all application routes unchanged from its baseline", () => {
   const trackedChanges = git([
     "diff",
     "--name-only",
-    acceptedFoundationBase,
+    f004Base,
     "--",
     "app",
   ]).trim().split(/\r?\n/u).filter(Boolean);
@@ -582,23 +607,7 @@ await check("Foundation application-route drift is exact", () => {
     "--",
     "app",
   ]).trim().split(/\r?\n/u).filter(Boolean);
-  assert.deepEqual([...new Set([...trackedChanges, ...untrackedChanges])].sort(), [
-    "app/account/account.module.css",
-    "app/account/page.tsx",
-    "app/account/results/[deliveryId]/page.tsx",
-    "app/api/auth/callback/route.ts",
-    "app/api/auth/continuations/route.ts",
-    "app/api/auth/email-otp/request/route.ts",
-    "app/api/auth/email-otp/verify/route.ts",
-    "app/api/auth/google/start/route.ts",
-    "app/api/auth/logout/route.ts",
-    "app/api/payments/checkout/route.ts",
-    "app/api/payments/status/route.ts",
-    "app/layout.tsx",
-    "app/purchase/auth/continue/page.tsx",
-    "app/request/page.tsx",
-    "app/sample-report/page.tsx",
-  ]);
+  assert.deepEqual([...new Set([...trackedChanges, ...untrackedChanges])].sort(), []);
 });
 
 if (failures.length > 0) {

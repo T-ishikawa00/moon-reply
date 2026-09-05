@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { registerHooks } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -9,6 +9,7 @@ import ts from "typescript";
 const root = process.cwd();
 const acceptedAuthority = "01cfab6666ef8523ba0492d4838d87da6b368b27";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
+const f004Base = "fd01f7fb96241c448f6cbe57a197752cf411e71e";
 
 function resolveLocalModule(specifier, parentURL) {
   const relative = specifier.startsWith("@/")
@@ -87,6 +88,7 @@ const validCompletedRow = {
 };
 
 let passed = 0;
+const failures = [];
 function text(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
@@ -98,24 +100,35 @@ function git(args) {
   ).trim();
 }
 function check(name, run) {
-  run();
-  passed += 1;
-  console.log(`[PASS] ${name}`);
+  try {
+    run();
+    passed += 1;
+    console.log(`[PASS] ${name}`);
+  } catch (error) {
+    failures.push({ name, error });
+    console.error(`[FAIL] ${name}: ${error.message.split("\n")[0]}`);
+  }
 }
 async function checkAsync(name, run) {
-  await run();
-  passed += 1;
-  console.log(`[PASS] ${name}`);
+  try {
+    await run();
+    passed += 1;
+    console.log(`[PASS] ${name}`);
+  } catch (error) {
+    failures.push({ name, error });
+    console.error(`[FAIL] ${name}: ${error.message.split("\n")[0]}`);
+  }
 }
 function assertThrowsRuntime(run) {
   assert.throws(run, (error) => error instanceof M2RuntimeError);
 }
 function diffFromBase(paths) {
-  return git(["diff", "--name-only", acceptedAuthority, "--", ...paths]);
+  return git(["diff", "--name-only", f004Base, "--", ...paths]);
 }
 
 check("authority base and immutable main are exact", () => {
   assert.equal(git(["merge-base", "HEAD", acceptedAuthority]), acceptedAuthority);
+  assert.equal(git(["merge-base", "HEAD", f004Base]), f004Base);
   assert.equal(git(["rev-parse", "main"]), expectedMain);
 });
 
@@ -405,13 +418,18 @@ check("processing cards never become result destinations", () => {
   assert.equal(item.canOpenResult, false);
 });
 
-check("D2 owned-purchase support entry remains feature-gated", () => {
+check("owned-purchase support entry retains its exact-true feature gate", () => {
   const pageSource = text("app/account/page.tsx");
   const gallerySource = text("app/account/AccountNoteGallery.tsx");
-  assert.match(pageSource, /isCustomerSupportCasesEnabled/u);
+  assert.equal(diffFromBase([
+    "app/account", "lib/support/environment.ts",
+  ]), "");
+  assert.match(pageSource, /const supportEnabled = isPurchaseSupportEmailEnabled\(\);/u);
+  assert.match(pageSource, /supportEnabled=\{supportEnabled\}/u);
+  assert.match(text("lib/support/environment.ts"), /return process\.env\.PURCHASE_SUPPORT_EMAIL_ENABLED === "true";/u);
   assert.match(gallerySource, /supportEnabled \?/u);
   assert.match(gallerySource, /\/contact\?purchase=/u);
-  assert.match(gallerySource, /この鑑定について問い合わせる/u);
+  assert.match(gallerySource, /この購入について問い合わせる/u);
 });
 
 check("Account list source contains no consultation or result body dependency", () => {
@@ -598,8 +616,17 @@ check("E1 detailed latency contract files are byte-unchanged", () => {
   );
 });
 
-check("E3 adds no migration, dependency, or Next.js change", () => {
-  assert.equal(diffFromBase(["supabase/migrations"]), "");
+check("F004 preserves prior migrations and dependencies with only 0024 added", () => {
+  const baselineMigrations = git([
+    "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
+  ]).split(/\r?\n/u).filter(Boolean);
+  assert.equal(diffFromBase(baselineMigrations), "");
+  assert.deepEqual(
+    readdirSync(path.join(root, "supabase/migrations"))
+      .filter((entry) => entry.endsWith(".sql"))
+      .map((entry) => `supabase/migrations/${entry}`).sort(),
+    [...baselineMigrations, "supabase/migrations/0024_f004_notification_send_identity.sql"].sort(),
+  );
   assert.equal(diffFromBase(["package-lock.json"]), "");
   assert.equal(
     JSON.parse(text("package.json")).dependencies.next,
@@ -615,4 +642,5 @@ check("canonical E3 evidence preserves candidate-only status", () => {
   assert.match(source, /ACCOUNT\/RESULT SLICE FURTHER ADDRESSED[\s\S]*?NOT CLOSED/u);
 });
 
-console.log(`M2-E3 Account/My Reports/Authenticated Result Recovery verification: ${passed}/${passed} checks passed.`);
+console.log(`M2-E3 Account/My Reports/Authenticated Result Recovery verification: ${passed}/${passed + failures.length} checks passed.`);
+if (failures.length > 0) process.exitCode = 1;

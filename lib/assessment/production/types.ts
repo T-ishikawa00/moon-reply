@@ -195,6 +195,7 @@ export type ProductionNotificationRecord = {
   status: "pending" | "processing" | "failed" | "sent";
   attemptCount: number;
   ownerId: string | null;
+  payloadCiphertext?: string | null;
 };
 
 export type ProductionNotificationClaim =
@@ -296,6 +297,19 @@ export type ProductionFulfillmentRepository = {
     leaseExpiresAt: string;
     now: string;
   }): Promise<ProductionNotificationClaim | null>;
+  prepareNotificationEmail(input: {
+    notificationId: string;
+    ownerId: string;
+    credentialId: string;
+    tokenHash: string;
+    payloadCiphertext: string;
+    now: string;
+  }): Promise<string>;
+  beginNotificationSend(input: {
+    notificationId: string;
+    ownerId: string;
+    now: string;
+  }): Promise<void>;
   completeNotification(input: {
     notificationId: string;
     ownerId: string;

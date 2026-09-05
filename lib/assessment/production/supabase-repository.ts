@@ -147,7 +147,9 @@ type ProductionDatabase = {
       complete_production_fulfillment_v2: RuntimeFunction;
       fail_production_fulfillment_v2: RuntimeFunction;
       resolve_production_result_v1: RuntimeFunction;
-      claim_production_notification_v2: RuntimeFunction;
+      claim_production_notification_v3: RuntimeFunction;
+      prepare_production_notification_email_v1: RuntimeFunction;
+      begin_production_notification_send_v1: RuntimeFunction;
       complete_production_notification_v2: RuntimeFunction;
       fail_production_notification_v2: RuntimeFunction;
       begin_production_prepayment_intake_v1: RuntimeFunction;
@@ -872,7 +874,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }): Promise<ProductionNotificationClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_production_notification_v2",
+      "claim_production_notification_v3",
       {
         p_notification_id: input.notificationId,
         p_owner_id: input.ownerId,
@@ -906,8 +908,30 @@ export class SupabaseProductionFulfillmentRepository
           ? result.attempt_count
           : databaseFailure(),
       ownerId: input.ownerId,
+      payloadCiphertext: result.email_payload_ciphertext === null
+        ? null : stringValue(result.email_payload_ciphertext),
     };
     return { disposition: "acquired", notification };
+  }
+
+  async prepareNotificationEmail(input: {
+    notificationId: string; ownerId: string; credentialId: string;
+    tokenHash: string; payloadCiphertext: string; now: string;
+  }) {
+    const { data, error } = await this.client.rpc("prepare_production_notification_email_v1", {
+      p_notification_id: input.notificationId, p_owner_id: input.ownerId,
+      p_credential_id: input.credentialId, p_token_hash: input.tokenHash,
+      p_payload_ciphertext: input.payloadCiphertext, p_now: input.now,
+    });
+    if (error) databaseFailure();
+    return stringValue(data);
+  }
+
+  async beginNotificationSend(input: { notificationId: string; ownerId: string; now: string }) {
+    const { error } = await this.client.rpc("begin_production_notification_send_v1", {
+      p_notification_id: input.notificationId, p_owner_id: input.ownerId, p_now: input.now,
+    });
+    if (error) databaseFailure();
   }
 
   async completeNotification(input: {

@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
+    "verify:f004": "node scripts/verify-f004-result-notification.mjs",
+    "verify:f004:db": "node scripts/verify-f004-notification-db.mjs",
     "verify:sec-01": "node scripts/verify-sec-01.mjs",
     "verify:m1-4:skipped-stage-constraint": "node scripts/verify-m1-4-skipped-stage-constraint.mjs",
     "verify:m1-4:background-fulfillment": "node scripts/verify-m1-4-background-fulfillment-durability.mjs",
