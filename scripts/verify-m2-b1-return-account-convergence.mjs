@@ -411,7 +411,8 @@ await check("multiple transient failures back off then exhaust safely", async ()
   await poller.start();
   await scheduler.runNext();
   await scheduler.runNext();
-  assert.deepEqual(scheduler.delays, [1_500, 3_000]);
+  const deadline = DEFAULT_PURCHASE_STATUS_POLL_POLICY.requestTimeoutMs;
+  assert.deepEqual(scheduler.delays, [deadline, 1_500, deadline, 3_000, deadline]);
   assert.equal(scheduler.tasks.size, 0);
   assert.equal(recovery.at(-1).requestFailed, true);
   assert.equal(recovery.at(-1).recoveryExhausted, true);

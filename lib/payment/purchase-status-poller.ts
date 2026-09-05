@@ -5,6 +5,7 @@ import {
 } from "./purchase-status-contract.ts";
 
 export type PurchaseStatusPollPolicy = Readonly<{
+  requestTimeoutMs: number;
   steadyPollDelayMs: number;
   backoffBaseMs: number;
   maximumDelayMs: number;
@@ -15,6 +16,7 @@ export type PurchaseStatusPollPolicy = Readonly<{
 }>;
 
 export const DEFAULT_PURCHASE_STATUS_POLL_POLICY: PurchaseStatusPollPolicy = {
+  requestTimeoutMs: 15_000,
   steadyPollDelayMs: 2_500,
   backoffBaseMs: 1_500,
   maximumDelayMs: 30_000,
@@ -113,6 +115,7 @@ export class PurchaseStatusPoller {
     this.clearScheduledRequest();
     this.abortController?.abort();
     this.abortController = null;
+    this.inFlight = false;
   }
 
   private clearScheduledRequest() {
@@ -153,9 +156,33 @@ export class PurchaseStatusPoller {
     if (!manual) this.automaticRequestCount += 1;
     const abortController = new AbortController();
     this.abortController = abortController;
+    let timedOut = false;
+    let deadlineTimer: unknown = null;
+    let onAbort: () => void = () => undefined;
+    // Race the entire status read (including its body) so even an uncooperative
+    // transport cannot retain the browser's request fence after cancellation.
+    const cancelled = new Promise<never>((_, reject) => {
+      onAbort = () => {
+        if (deadlineTimer !== null) this.clearTimer(deadlineTimer);
+        deadlineTimer = null;
+        reject(new Error("PURCHASE_STATUS_REQUEST_ABORTED"));
+      };
+      abortController.signal.addEventListener("abort", onAbort, { once: true });
+      deadlineTimer = this.setTimer(() => {
+        timedOut = true;
+        abortController.abort();
+      }, this.policy.requestTimeoutMs);
+    });
     try {
-      const status = await this.options.fetchStatus(abortController.signal);
-      if (!this.active || abortController.signal.aborted) return;
+      const status = await Promise.race([
+        this.options.fetchStatus(abortController.signal),
+        cancelled,
+      ]);
+      if (
+        !this.active ||
+        this.abortController !== abortController ||
+        abortController.signal.aborted
+      ) return;
 
       this.transientFailureCount = 0;
       this.options.onRecoveryState({
@@ -201,11 +228,11 @@ export class PurchaseStatusPoller {
         return;
       }
       this.schedule(this.policy.steadyPollDelayMs);
-    } catch (error) {
+    } catch {
       if (
         !this.active ||
-        abortController.signal.aborted ||
-        (error instanceof DOMException && error.name === "AbortError")
+        this.abortController !== abortController ||
+        (abortController.signal.aborted && !timedOut)
       ) {
         return;
       }
@@ -229,10 +256,12 @@ export class PurchaseStatusPoller {
         ),
       );
     } finally {
+      if (deadlineTimer !== null) this.clearTimer(deadlineTimer);
+      abortController.signal.removeEventListener("abort", onAbort);
       if (this.abortController === abortController) {
         this.abortController = null;
+        this.inFlight = false;
       }
-      this.inFlight = false;
     }
   }
 }
