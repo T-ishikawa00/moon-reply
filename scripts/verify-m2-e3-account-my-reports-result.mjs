@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assertF013LockDelta } from "./verify-f013-dependencies.mjs";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { registerHooks } from "node:module";
@@ -647,7 +648,7 @@ check("E1 detailed latency contract files are byte-unchanged", () => {
   );
 });
 
-check("F004 added only 0024; F010 adds only 0025 and preserves prior migrations and lock", () => {
+check("F004/F010 migration boundaries remain exact; dependencies change only within F013", () => {
   const baselineMigrations = git([
     "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
   ]).split(/\r?\n/u).filter(Boolean);
@@ -669,8 +670,10 @@ check("F004 added only 0024; F010 adds only 0025 and preserves prior migrations 
       .map((entry) => `supabase/migrations/${entry}`).sort(),
     [...wave2Migrations, f010Migration].sort(),
   );
-  assert.equal(diffFromBase(["package-lock.json"]), "");
-  assert.equal(git(["hash-object", "package-lock.json"]), git(["rev-parse", `${wave2Base}:package-lock.json`]));
+  const f013Base = "fcffe9a0a0424c308f70130e95a7f8cb69173779";
+  assert.equal(git(["diff", "--name-only", f004Base, f013Base, "--", "package-lock.json"]), "");
+  assert.equal(git(["rev-parse", `${f013Base}:package-lock.json`]), git(["rev-parse", `${wave2Base}:package-lock.json`]));
+  assertF013LockDelta({ root });
   assert.equal(
     JSON.parse(text("package.json")).dependencies.next,
     "16.3.3",

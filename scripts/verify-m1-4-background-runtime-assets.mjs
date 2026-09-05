@@ -369,13 +369,27 @@ async function run() {
       /async function loadM2P4FinalProductRecoveryRuntimeStageCatalog\(\)/u,
       "compiled runtime loader missing from background artifact",
     );
+    // The production factory dynamically imports the catalog. esbuild moves
+    // module-level state (including OpenAI schema projection keyword Sets) into
+    // lazy __esm initializers. A direct export of the inner loader bypasses
+    // those initializers and is not a valid packaged-runtime execution path.
+    const factory = /async function createProductionAssessmentApplication\(options\) \{([\s\S]*?)\n  const environment = readProductionAssessmentEnvironment\(\);/u.exec(entryText);
+    assert.ok(factory, "compiled production application factory missing");
+    const catalogImport = /Promise\.resolve\(\)\.then\(\(\) => \(init_schema_catalog\(\), schema_catalog_exports\)\)/u.exec(factory[1]);
+    assert.ok(catalogImport, "production factory catalog initialization path missing");
+    assert.equal(factory[1].split(catalogImport[0]).length - 1, 1);
     const probeModule = path.join(
       path.dirname(backgroundEntry),
       "production-fulfillment-background-runtime-assets-proof.mjs",
     );
     writeFileSync(
       probeModule,
-      `${entryText}\nexport { loadM2P4FinalProductRecoveryRuntimeStageCatalog as __m1RuntimeCatalogLoader };\n`,
+      `${entryText}
+export async function __m1RuntimeCatalogLoader() {
+  const { loadM2P4FinalProductRecoveryRuntimeStageCatalog: loadCatalog } = await ${catalogImport[0]};
+  return loadCatalog();
+}
+`,
       "utf8",
     );
     assert.equal(sha256(readFileSync(backgroundEntry)), entryHash);
@@ -398,7 +412,7 @@ async function run() {
       assert.equal(catalog.schemaSetVersion, "pipeline-schema-runtime-v6.0.0");
       assert.equal(catalog.definitions.length, 7);
       assert.equal(networkCalls, 0);
-      console.log("M1-4 PACKAGED BACKGROUND RUNTIME LOADER PASS cwd=artifact catalog=v17 stages=7 enoent=0");
+      console.log("M1-4 PACKAGED BACKGROUND RUNTIME LOADER PASS cwd=artifact initialization=production-dynamic-import catalog=v17 stages=7 enoent=0");
       console.log("NETWORK_CALLS=0 REAL_PROVIDER_CALLS=0 REMOTE_OPERATIONS=0 ASYNC_EVENTS_SENT=0");
     `;
     const loaded = spawnSync(
@@ -426,6 +440,8 @@ async function run() {
       0,
       `artifact runtime loader failed: ${loaded.stderr}\n${loaded.stdout}`,
     );
+    assert.equal(sha256(readFileSync(backgroundEntry)), entryHash);
+    assert.equal(sha256(readFileSync(archive)), archiveHashBefore);
     process.stdout.write(loaded.stdout);
 
     const missingRuntimeAssets = runtimeAssets.filter(

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assertF013LockDelta } from "./verify-f013-dependencies.mjs";
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { registerHooks } from "node:module";
@@ -532,7 +533,7 @@ await check("all production activation defaults remain false", () => {
   }
 });
 
-await check("F004 added only 0024; F010 adds only 0025 with all prior migrations and lock exact", () => {
+await check("F004/F010 migration boundaries remain exact; dependencies change only within F013", () => {
   const accepted = git([
     "ls-tree",
     "-r",
@@ -560,7 +561,9 @@ await check("F004 added only 0024; F010 adds only 0025 with all prior migrations
   for (const migration of wave2Migrations) {
     assert.equal(git(["hash-object", migration]).trim(), git(["rev-parse", `${wave2Base}:${migration}`]).trim(), migration);
   }
-  assert.equal(git(["hash-object", "package-lock.json"]).trim(), git(["rev-parse", `${wave2Base}:package-lock.json`]).trim());
+  const f013Base = "fcffe9a0a0424c308f70130e95a7f8cb69173779";
+  assert.equal(git(["rev-parse", `${f013Base}:package-lock.json`]).trim(), git(["rev-parse", `${wave2Base}:package-lock.json`]).trim());
+  assertF013LockDelta({ root });
   const working = readdirSync(path.join(root, "supabase/migrations"))
     .filter((entry) => entry.endsWith(".sql"))
     .sort()
