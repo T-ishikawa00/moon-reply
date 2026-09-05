@@ -46,7 +46,10 @@ const root = process.cwd();
 const acceptedRelease = "243e8655098ba9e0972e0e1efd68f83fbc2ded30";
 // F004 changes only notification delivery; subsequent accepted work is not RC2 drift.
 const f004Base = "fd01f7fb96241c448f6cbe57a197752cf411e71e";
+const f004Head = "95b84e71508426f67ae3cd4e7e63961f9b0885e2";
+const wave2Base = "195e9ef99724fd7420610f1fc3b0e60389639d39";
 const f004Migration = "supabase/migrations/0024_f004_notification_send_identity.sql";
+const f010Migration = "supabase/migrations/0025_f010_account_otp_throttle.sql";
 const providerPath = "lib/payment/production/resend-transactional-email.ts";
 const servicePath = "lib/payment/production/service.ts";
 
@@ -529,7 +532,7 @@ await check("all production activation defaults remain false", () => {
   }
 });
 
-await check("pre-F004 migrations remain byte-identical; only 0024 is added", () => {
+await check("F004 added only 0024; F010 adds only 0025 with all prior migrations and lock exact", () => {
   const accepted = git([
     "ls-tree",
     "-r",
@@ -546,17 +549,29 @@ await check("pre-F004 migrations remain byte-identical; only 0024 is added", () 
     "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
   ]).trim().split(/\r?\n/u).filter(Boolean);
   assertNoDiffFromAcceptedRelease(baseline, f004Base);
+  const historicalF004 = git([
+    "ls-tree", "-r", "--name-only", f004Head, "--", "supabase/migrations",
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(historicalF004, [...baseline, f004Migration].sort());
+  const wave2Migrations = git([
+    "ls-tree", "-r", "--name-only", wave2Base, "--", "supabase/migrations",
+  ]).trim().split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(wave2Migrations, historicalF004);
+  for (const migration of wave2Migrations) {
+    assert.equal(git(["hash-object", migration]).trim(), git(["rev-parse", `${wave2Base}:${migration}`]).trim(), migration);
+  }
+  assert.equal(git(["hash-object", "package-lock.json"]).trim(), git(["rev-parse", `${wave2Base}:package-lock.json`]).trim());
   const working = readdirSync(path.join(root, "supabase/migrations"))
     .filter((entry) => entry.endsWith(".sql"))
     .sort()
     .map((entry) => `supabase/migrations/${entry}`);
   assert.deepEqual(working, [
-    ...baseline.sort(),
-    f004Migration,
+    ...wave2Migrations,
+    f010Migration,
   ]);
   assert.deepEqual(
     working.map((entry) => path.posix.basename(entry).slice(0, 4)),
-    Array.from({ length: 23 }, (_, index) => String(index + 2).padStart(4, "0")),
+    Array.from({ length: 24 }, (_, index) => String(index + 2).padStart(4, "0")),
   );
   const customerIdentity = readText(
     "supabase/migrations/0014_customer_identity_authority_v1.sql",
@@ -566,9 +581,9 @@ await check("pre-F004 migrations remain byte-identical; only 0024 is added", () 
 });
 
 await check("F004 historical scope and current protected source remain exact except F015 preparation gate", () => {
-  const f004Head = "95b84e71508426f67ae3cd4e7e63961f9b0885e2";
   assert.equal(git(["merge-base", "HEAD", f004Base]).trim(), f004Base);
   assert.equal(git(["merge-base", "HEAD", f004Head]).trim(), f004Head);
+  assert.equal(git(["merge-base", "HEAD", wave2Base]).trim(), wave2Base);
   const drift = git([
     "diff",
     "--name-only",
@@ -599,11 +614,17 @@ await check("F004 historical scope and current protected source remain exact exc
   );
 });
 
-await check("F004 leaves all application routes unchanged from its baseline", () => {
+await check("F004 routes stay historically unchanged; F010 adds only two Account OTP admissions", () => {
+  assert.equal(git(["diff", "--name-only", f004Base, f004Head, "--", "app"]).trim(), "");
+  assert.equal(git(["diff", "--name-only", f004Head, wave2Base, "--", "app"]).trim(), "");
+  const allowedRoutes = [
+    "app/api/auth/account/email-otp/request/route.ts",
+    "app/api/auth/account/email-otp/verify/route.ts",
+  ];
   const trackedChanges = git([
     "diff",
     "--name-only",
-    f004Base,
+    wave2Base,
     "--",
     "app",
   ]).trim().split(/\r?\n/u).filter(Boolean);
@@ -614,7 +635,25 @@ await check("F004 leaves all application routes unchanged from its baseline", ()
     "--",
     "app",
   ]).trim().split(/\r?\n/u).filter(Boolean);
-  assert.deepEqual([...new Set([...trackedChanges, ...untrackedChanges])].sort(), []);
+  assert.deepEqual(untrackedChanges, []);
+  assert.deepEqual(trackedChanges.sort(), allowedRoutes);
+  for (const [index, route] of allowedRoutes.entries()) {
+    const purpose = index === 0 ? "request" : "verify";
+    const importLine = 'import { enforceAccountOtpThrottle } from "@/lib/customer-auth/account-otp-throttle-runtime";\n';
+    const admissionLine = `    await enforceAccountOtpThrottle("${purpose}", body.email);\n`;
+    const source = readText(route).replaceAll("\r\n", "\n");
+    assert.equal(source.split(importLine).length - 1, 1, route);
+    assert.equal(source.split(admissionLine).length - 1, 1, route);
+    assert.equal(
+      source.replace(importLine, "").replace(admissionLine, "").trimEnd(),
+      git(["show", `${wave2Base}:${route}`]).trimEnd(),
+      `${route}: only the durable throttle import and awaited admission may change`,
+    );
+    assert.ok(
+      source.indexOf(admissionLine) < source.indexOf("await (await createCustomerAccountAuthApplication())"),
+      `${route}: durable admission must precede Provider creation/call`,
+    );
+  }
 });
 
 if (failures.length > 0) {

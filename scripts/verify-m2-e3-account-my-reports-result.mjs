@@ -10,6 +10,14 @@ const root = process.cwd();
 const acceptedAuthority = "01cfab6666ef8523ba0492d4838d87da6b368b27";
 const expectedMain = "61e33a10e195fad17e253a6b9719217e1992f273";
 const f004Base = "fd01f7fb96241c448f6cbe57a197752cf411e71e";
+const f004Head = "95b84e71508426f67ae3cd4e7e63961f9b0885e2";
+const wave2Base = "195e9ef99724fd7420610f1fc3b0e60389639d39";
+const f004Migration = "supabase/migrations/0024_f004_notification_send_identity.sql";
+const f010Migration = "supabase/migrations/0025_f010_account_otp_throttle.sql";
+const f010AccountOtpRoutes = [
+  "app/api/auth/account/email-otp/request/route.ts",
+  "app/api/auth/account/email-otp/verify/route.ts",
+];
 
 function resolveLocalModule(specifier, parentURL) {
   const relative = specifier.startsWith("@/")
@@ -129,6 +137,8 @@ function diffFromBase(paths) {
 check("authority base and immutable main are exact", () => {
   assert.equal(git(["merge-base", "HEAD", acceptedAuthority]), acceptedAuthority);
   assert.equal(git(["merge-base", "HEAD", f004Base]), f004Base);
+  assert.equal(git(["merge-base", "HEAD", f004Head]), f004Head);
+  assert.equal(git(["merge-base", "HEAD", wave2Base]), wave2Base);
   assert.equal(git(["rev-parse", "main"]), expectedMain);
 });
 
@@ -586,21 +596,42 @@ check("static review surface covers R2 variants, processing, empty, and target w
   assert.doesNotMatch(source, /openingLine|primaryReason|finalDraft|verifiedEmail/u);
 });
 
-check("E2 standalone Auth and navigation files are byte-unchanged", () => {
-  assert.equal(
-    diffFromBase([
-      "app/login",
-      "app/api/account/session",
-      "app/api/auth/account",
-      "app/api/auth/logout",
-      "components/layout/CustomerSessionNav.tsx",
-      "components/layout/SiteHeader.tsx",
-      "lib/customer-auth/account-attempt.ts",
-      "lib/customer-auth/account-application.ts",
-      "lib/customer-auth/browser-events.ts",
-    ]),
-    "",
+check("E2 Auth and navigation stay exact except the two F010 admission additions", () => {
+  const protectedAuthPaths = [
+    "app/login",
+    "app/api/account/session",
+    "app/api/auth/account",
+    "app/api/auth/logout",
+    "components/layout/CustomerSessionNav.tsx",
+    "components/layout/SiteHeader.tsx",
+    "lib/customer-auth/account-attempt.ts",
+    "lib/customer-auth/account-application.ts",
+    "lib/customer-auth/browser-events.ts",
+  ];
+  // Preserve the historical E2/F004 boundary before checking this new Finding.
+  assert.equal(git(["diff", "--name-only", f004Base, wave2Base, "--", ...protectedAuthPaths]), "");
+  assert.deepEqual(
+    git(["diff", "--name-only", wave2Base, "--", ...protectedAuthPaths]).split(/\r?\n/u).filter(Boolean),
+    f010AccountOtpRoutes,
   );
+  assert.equal(git(["ls-files", "--others", "--exclude-standard", "--", ...protectedAuthPaths]), "");
+  for (const [index, route] of f010AccountOtpRoutes.entries()) {
+    const purpose = index === 0 ? "request" : "verify";
+    const importLine = 'import { enforceAccountOtpThrottle } from "@/lib/customer-auth/account-otp-throttle-runtime";\n';
+    const admissionLine = `    await enforceAccountOtpThrottle("${purpose}", body.email);\n`;
+    const source = text(route).replaceAll("\r\n", "\n");
+    assert.equal(source.split(importLine).length - 1, 1, route);
+    assert.equal(source.split(admissionLine).length - 1, 1, route);
+    assert.equal(
+      source.replace(importLine, "").replace(admissionLine, "").trimEnd(),
+      git(["show", `${wave2Base}:${route}`]),
+      `${route}: only the durable throttle import and awaited admission may change`,
+    );
+    assert.ok(
+      source.indexOf(admissionLine) < source.indexOf("await (await createCustomerAccountAuthApplication())"),
+      `${route}: durable admission must precede Provider creation/call`,
+    );
+  }
 });
 
 check("E1 detailed latency contract files are byte-unchanged", () => {
@@ -616,18 +647,30 @@ check("E1 detailed latency contract files are byte-unchanged", () => {
   );
 });
 
-check("F004 preserves prior migrations and dependencies with only 0024 added", () => {
+check("F004 added only 0024; F010 adds only 0025 and preserves prior migrations and lock", () => {
   const baselineMigrations = git([
     "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
   ]).split(/\r?\n/u).filter(Boolean);
   assert.equal(diffFromBase(baselineMigrations), "");
   assert.deepEqual(
+    git(["ls-tree", "-r", "--name-only", f004Head, "--", "supabase/migrations"]).split(/\r?\n/u).filter(Boolean),
+    [...baselineMigrations, f004Migration].sort(),
+  );
+  const wave2Migrations = git([
+    "ls-tree", "-r", "--name-only", wave2Base, "--", "supabase/migrations",
+  ]).split(/\r?\n/u).filter(Boolean);
+  assert.deepEqual(wave2Migrations, [...baselineMigrations, f004Migration].sort());
+  for (const migration of wave2Migrations) {
+    assert.equal(git(["hash-object", migration]), git(["rev-parse", `${wave2Base}:${migration}`]), migration);
+  }
+  assert.deepEqual(
     readdirSync(path.join(root, "supabase/migrations"))
       .filter((entry) => entry.endsWith(".sql"))
       .map((entry) => `supabase/migrations/${entry}`).sort(),
-    [...baselineMigrations, "supabase/migrations/0024_f004_notification_send_identity.sql"].sort(),
+    [...wave2Migrations, f010Migration].sort(),
   );
   assert.equal(diffFromBase(["package-lock.json"]), "");
+  assert.equal(git(["hash-object", "package-lock.json"]), git(["rev-parse", `${wave2Base}:package-lock.json`]));
   assert.equal(
     JSON.parse(text("package.json")).dependencies.next,
     "16.3.3",

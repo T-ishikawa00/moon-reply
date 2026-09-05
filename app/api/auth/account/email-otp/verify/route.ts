@@ -6,6 +6,7 @@ import {
   readAccountLoginAttempt,
 } from "@/lib/customer-auth/account-attempt";
 import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/account-service";
+import { enforceAccountOtpThrottle } from "@/lib/customer-auth/account-otp-throttle-runtime";
 import { issueAuthSessionCsrfCookie } from "@/lib/customer-auth/cookies";
 import { readCustomerAuthSiteOrigin } from "@/lib/customer-auth/environment";
 import {
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
       throw new M2RuntimeError("CUSTOMER_AUTH_LOGIN_ATTEMPT_INVALID", 403);
     }
     enforceCustomerAuthRateLimit("account-email-otp-verify", attempt.secret);
+    await enforceAccountOtpThrottle("verify", body.email);
     await (await createCustomerAccountAuthApplication()).verifyEmailOtp(body);
     const response = customerAuthJson({ data: { status: "signed_in" } }, 200);
     clearAccountLoginAttempt(response);

@@ -7,6 +7,7 @@ import {
   setAccountLoginAttempt,
 } from "@/lib/customer-auth/account-attempt";
 import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/account-service";
+import { enforceAccountOtpThrottle } from "@/lib/customer-auth/account-otp-throttle-runtime";
 import { readCustomerAuthSiteOrigin } from "@/lib/customer-auth/environment";
 import {
   enforceCustomerAuthRateLimit,
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
     );
     const attempt = readAccountLoginAttempt(request) ?? createAccountLoginAttempt();
     enforceCustomerAuthRateLimit("account-email-otp-request", attempt.secret);
+    await enforceAccountOtpThrottle("request", body.email);
     await (await createCustomerAccountAuthApplication()).requestEmailOtp(body.email);
     const response = customerAuthJson(
       { data: { status: "accepted" } },

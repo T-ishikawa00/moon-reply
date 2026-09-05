@@ -13,6 +13,8 @@
     "verify:f004:db": "node scripts/verify-f004-notification-db.mjs",
     "verify:f011": "node scripts/verify-f011-purchase-status-timeout.mjs",
     "verify:f015": "node scripts/verify-f015-prepayment-fail-closed.mjs",
+    "verify:f010": "node scripts/verify-f010-account-otp-throttle.mjs",
+    "verify:f010:db": "node scripts/verify-f010-account-otp-throttle-db.mjs",
     "verify:sec-01": "node scripts/verify-sec-01.mjs",
     "verify:m1-4:skipped-stage-constraint": "node scripts/verify-m1-4-skipped-stage-constraint.mjs",
     "verify:m1-4:background-fulfillment": "node scripts/verify-m1-4-background-fulfillment-durability.mjs",
