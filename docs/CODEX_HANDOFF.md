@@ -1,5 +1,14 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-QUALITY-R1-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality R1 evidence navigation
+
+Start source: `release/private-ready@7db33b03f0348424bb426c8afb6d01ea4e472297`, local clean / stash empty. [回答品質の正本](product/GUIDANCE_QUALITY_R1.md)、[現行source差分・既存改善・F007/F008・次の最小バッチ](product/GUIDANCE_QUALITY_R1_SOURCE_REVIEW.md)、[評価基準・限定実モデル比較計画](../evals/guidance-quality-r1/evaluation-plan.md)。30件の架空ケースと6件の編集上の目標例は未実行の評価資産であり、実回答品質の証明ではない。
+
+R1 Human Acceptance is limited to Production top / request screen / Google login / Account: Human reported 「問題なし」. Human also reports R1 published and sales resumed, shared source SHA above, migrations through0032, Production Technical PASS. No new purchase → assessment generation → actual email receipt has been performed on the revised release. This task made no external observation; current Production / remote / DB measurement is UNKNOWN. Runtime contracts and Production are unchanged by this local documentation/evaluation task. Historical overlays below retain their dated scope.
+
+<!-- GUIDANCE-QUALITY-R1-2026-09-07:END -->
+
 <!-- SEC-01-NEXT-16-3-3:BEGIN -->
 ## Current handoff — SEC-01 Next.js 16.3.3 Security Patch
 

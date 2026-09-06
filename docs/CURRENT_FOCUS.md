@@ -1,5 +1,16 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-QUALITY-R1-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality R1 / LOCAL ONLY
+
+- 開始時local確認：`release/private-ready@7db33b03f0348424bb426c8afb6d01ea4e472297`、clean、stash空。これは下記の歴史的overlayより新しい、今回のsource基準。
+- Human共有：Remediation Release R1はProduction反映・販売再開済み。直前共有はProduction / remote / localが上記SHA、migrations0032まで、Production Technical PASS。本Taskは外部接続・Production再監査をしておらず、現在の外部実測は`UNKNOWN`。
+- R1 Human Acceptance：「問題なし」。確認範囲は本番トップ・依頼画面・Googleログイン・Account。修正版での新規実購入→鑑定生成→実メール受信は未実施。購入後回答品質の受入へ拡張しない。
+- 回答品質のHuman承認済み方向性を[Product正本](product/GUIDANCE_QUALITY_R1.md)に記録。[局所調査と改善案](product/GUIDANCE_QUALITY_R1_SOURCE_REVIEW.md)、[30件の架空評価ケース](../evals/guidance-quality-r1/cases.json)を作成。現行runtime・prompt/schema・品質/Safety判定・既存snapshot/hash/versionは変更しない。実API評価0、現行の停止率・待つ偏重発生率は`UNKNOWN`。
+- 次の最小候補はGQ-L1：非稼働PB04互換候補の出力量調整とlocal検証。F007/F008の実装・Recovery engine・外部操作はこのTaskに含めない。
+
+<!-- GUIDANCE-QUALITY-R1-2026-09-07:END -->
+
 <!-- SEC-01-NEXT-16-3-3:BEGIN -->
 ## Current operational overlay — SEC-01 Next.js 16.3.3 Security Patch
 
