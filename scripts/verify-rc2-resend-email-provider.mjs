@@ -4,6 +4,7 @@ import {
   assertRemediationWave3Evidence,
   REMEDIATION_WAVE3_BASE,
   REMEDIATION_WAVE3_MIGRATIONS,
+  REMEDIATION_F005_CORRECTION,
 } from "./remediation-wave3-evidence.mjs";
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -577,10 +578,11 @@ await check("F004/F010 history and frozen Wave 3 migration/source evidence remai
     ...wave2Migrations,
     f010Migration,
     ...REMEDIATION_WAVE3_MIGRATIONS,
+    REMEDIATION_F005_CORRECTION.file,
   ]);
   assert.deepEqual(
     working.map((entry) => path.posix.basename(entry).slice(0, 4)),
-    Array.from({ length: 29 }, (_, index) => String(index + 2).padStart(4, "0")),
+    Array.from({ length: 30 }, (_, index) => String(index + 2).padStart(4, "0")),
   );
   assertRemediationWave3Evidence({ root });
   const customerIdentity = readText(

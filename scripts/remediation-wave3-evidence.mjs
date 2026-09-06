@@ -9,6 +9,12 @@ export const REMEDIATION_WAVE3_BASE = "3a13bd1d06a658becd07f05dae8ef6328b285ac8"
 // Completed F003 environment correction, after all four Finding commits.
 // This fixed source authority deliberately has no current-HEAD fallback.
 export const REMEDIATION_WAVE3_REVIEWED = "864aa1467303a9ef927a0847119f8966eeea1e0d";
+// F005-only additive successor. Keep every historical Wave 3 blob pinned;
+// this literal blob permits no other schema/runtime drift or HEAD fallback.
+export const REMEDIATION_F005_CORRECTION = Object.freeze({
+  file: "supabase/migrations/0031_f005_anonymous_admission_isolation.sql",
+  blob: "b2897db09428d25a7e6e10cf29551d38a8c86d73",
+});
 
 export const REMEDIATION_WAVE3_MIGRATIONS = Object.freeze([
   "supabase/migrations/0026_f001_completed_fulfillment_recovery.sql",
@@ -49,6 +55,7 @@ const runtimeRoots = [
 ];
 
 export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
+  const f005Correction = REMEDIATION_F005_CORRECTION;
   const git = (args) => execFileSync("git.exe", [
     "-c", `safe.directory=${root.replaceAll("\\", "/")}`, ...args,
   ], { cwd: root, encoding: "utf8", windowsHide: true, timeout: 10_000 }).trim();
@@ -96,12 +103,14 @@ export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
   assert.deepEqual(
     readdirSync(path.join(root, "supabase/migrations"))
       .filter((file) => file.endsWith(".sql")).sort().map((file) => `supabase/migrations/${file}`),
-    expectedMigrations, "current migration inventory must be exactly reviewed",
+    [...expectedMigrations, f005Correction.file], "current migrations must be reviewed Wave 3 plus exact F005 correction",
   );
+  assert.equal(git(["hash-object", f005Correction.file]), f005Correction.blob,
+    "F005 corrective migration must match its literal reviewed blob");
   for (const file of expectedMigrations) {
     const authority = baseMigrations.includes(file) ? base : reviewed;
     assert.equal(git(["hash-object", file]), git(["rev-parse", `${authority}:${file}`]),
       `${file}: current migration blob must equal its fixed authority`);
   }
-  return { base, reviewed, runtimeFiles: [...REMEDIATION_WAVE3_RUNTIME_FILES], migrations: expectedMigrations };
+  return { base, reviewed, runtimeFiles: [...REMEDIATION_WAVE3_RUNTIME_FILES], migrations: [...expectedMigrations, f005Correction.file] };
 }

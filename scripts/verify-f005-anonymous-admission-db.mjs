@@ -17,6 +17,7 @@ const core = read("0010_rc1_production_fulfillment_core.sql");
 const compute = read("0020_m2_c1_prepayment_compute_budget.sql");
 const otp = read("0025_f010_account_otp_throttle.sql");
 const migration = read("0028_f005_anonymous_admission.sql");
+const correction = read("0031_f005_anonymous_admission_isolation.sql");
 function table(source, name) {
   const match = source.match(new RegExp(`create table public\\.${name} \\([\\s\\S]*?\\r?\\n\\);`, "u"));
   assert.ok(match, `authoritative table ${name}`); return match[0];
@@ -79,6 +80,8 @@ function parallelSql(statement) {
 const hash = (n) => n.toString(16).padStart(64, "0");
 const uuid = (n) => `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
 const defaults = { window: 600, ipRequests: 12, globalRequests: 48, ipIntakes: 3, globalIntakes: 12 };
+// Exact unapplied candidates from the Wave 3 review, passed as SQL arguments.
+const recommended = { window: 600, ipRequests: 120, globalRequests: 1200, ipIntakes: 30, globalIntakes: 300 };
 function args(key, overrides = {}) {
   const p = { ...defaults, ...overrides };
   return [`'${uuid(key)}'`, `'${uuid(key + 100000)}'`, `'${hash(key)}'`, `'${hash(p.snapshot ?? 999)}'`, "'{}'::jsonb",
@@ -100,7 +103,7 @@ try {
   const otpBefore = sql("select row_to_json(b) from public.account_otp_throttle_buckets b;");
   const oldBefore = sql(`select pg_get_functiondef('${oldSignature}'::regprocedure);`);
   await check("expand-only migration and service-only definer privilege boundary", () => {
-    sql(migration);
+    sql(migration); sql(correction);
     assert.equal(sql(`select pg_get_functiondef('${oldSignature}'::regprocedure);`), oldBefore);
     assert.equal(sql("select relrowsecurity from pg_class where oid='public.anonymous_intake_admission_buckets'::regclass;"), "t");
     for (const role of ["anon", "authenticated", "service_role", "m2_b2_stripe_ingress"]) {
@@ -108,6 +111,39 @@ try {
       assert.equal(sql(`select has_function_privilege('${role}','${signature}','EXECUTE');`), role === "service_role" ? "t" : "f");
     }
     assert.equal(sql(`select prosecdef::text||':'||array_to_string(proconfig,',') from pg_proc where oid='${signature}'::regprocedure;`), 'true:search_path="",lock_timeout=2s');
+  });
+  await check("recommended policy isolates exhausted IP traffic from fresh IP intake and normal replay", () => {
+    // One local transaction avoids 1,440 subprocesses; the SQL RPC is real.
+    // Unique keys consume 30 intake slots, then 90 more request slots. All
+    // further requests from this IP must be rejected without global debit.
+    const parameters = args(10000, { ...recommended, ip: 10000 });
+    parameters[0] = "('00000000-0000-4000-8000-'||lpad(to_hex(10000+n),12,'0'))::uuid";
+    parameters[1] = "('00000000-0000-4000-8000-'||lpad(to_hex(110000+n),12,'0'))::uuid";
+    parameters[2] = "lpad(to_hex(10000+n),64,'0')";
+    parameters[10] = "lpad(to_hex(210000+n),64,'0')";
+    const call = `public.begin_production_prepayment_intake_v2(${parameters.join(",")})`;
+    sql(`set role service_role; do $test$ declare r jsonb; begin
+      for n in 0..1439 loop
+        r := ${call};
+        if r->>'admission_disposition' <> (case when n < 30 then 'admitted'
+          when n < 120 then 'intake_limited' else 'request_limited' end) then
+          raise exception 'F005_FLOOD_DISPOSITION_INVALID';
+        end if;
+      end loop;
+    end $test$;`);
+    assert.deepEqual(counts()[`ip:${hash(10000)}`], [120, 30]);
+    assert.deepEqual(counts()["global:global-v1"], [120, 30]);
+    assert.equal(coreCount(), "30:30:30");
+    assert.equal(consume(12000, { ...recommended, ip: 12000 }).intake.disposition, "created");
+    assert.equal(consume(12000, { ...recommended, ip: 12000, capability: 312000 }).intake.disposition, "existing");
+    assert.deepEqual(counts()["global:global-v1"], [122, 31]);
+    const before = counts(), recordsBefore = coreCount();
+    assert.equal(consume(12001, { ...recommended, ip: 10000 }).admission_disposition, "request_limited");
+    assert.deepEqual(counts(), before); assert.equal(coreCount(), recordsBefore);
+    // This focused case owns exactly its synthetic authoritative rows.
+    sql(`delete from public.production_prepayment_execution_authorities;
+      delete from public.production_preparations; delete from public.assessment_requests;`);
+    reset();
   });
   await check("normal short intake creates exactly three authoritative records", () => {
     assert.equal(coreCount(), "0:0:0");
@@ -194,6 +230,8 @@ try {
     const before = coreCount(), previous = counts();
     assert.equal(consume(401, { ipRequests: 24, globalRequests: 49 }).admission_disposition, "configuration_mismatch");
     assert.equal(coreCount(), before); assert.deepEqual(counts(), previous);
+    assert.equal(consume(401, { ipRequests: 25 }).admission_disposition, "configuration_mismatch");
+    assert.equal(coreCount(), before); assert.deepEqual(counts(), previous);
   });
   await check("concurrent new keys on one shared IP cannot overshoot individual intake capacity", async () => {
     reset(); const before = Number(coreCount().split(":")[0]);
@@ -212,7 +250,10 @@ try {
     assert.equal(results.filter((r) => r.admission_disposition === "request_limited").length, 12);
     assert.equal(coreCount(), before);
     assert.deepEqual(counts()[`ip:${hash(1)}`], [12, 0]);
-    assert.deepEqual(counts()["global:global-v1"], [24, 0]);
+    assert.deepEqual(counts()["global:global-v1"], [12, 0]);
+    assert.equal(consume(450, { ip: 2 }).intake.disposition, "created");
+    assert.equal(consume(450, { ip: 2 }).intake.disposition, "existing");
+    assert.deepEqual(counts()["global:global-v1"], [14, 1]);
   });
   await check("invalid direct RPC arguments cannot allocate counters or intake records", () => {
     reset(); const before = coreCount();
@@ -266,15 +307,53 @@ try {
 }
 
 // Complement the narrow authority/fault proof with every current real migration
-// up to F005, including existing production ACLs, constraints and triggers.
+// through the correction, including existing ACLs, constraints and triggers.
 const full = await createLocalPostgres("f005-full-compatibility");
 try {
-  let priorIntake;
-  const applied = full.applyThrough(28, (file) => {
-    if (file.startsWith("0028_")) priorIntake = full.sql(`select pg_get_functiondef('${oldSignature}'::regprocedure);`);
+  const applied = full.applyThrough(30);
+  await check("historical 0028 with recommended values reproduces cross-IP denial on real PostgreSQL", () => {
+    // Roll back only this synthetic baseline so the same cluster can verify
+    // the successor. No counter resets/refunds are introduced into the RPC.
+    const result = JSON.parse(full.sql(`begin; set local role service_role;
+      do $test$ begin for n in 1..1440 loop perform ${expression(890, recommended)}; end loop; end $test$;
+      reset role;
+      select jsonb_build_object('global', (select request_count from public.anonymous_intake_admission_buckets where scope='global'),
+        'ip', (select request_count from public.anonymous_intake_admission_buckets where scope='ip'),
+        'fresh', ${expression(891, { ...recommended, ip: 2 })}->>'admission_disposition'); rollback;`));
+    assert.deepEqual(result, { global: 1200, ip: 120, fresh: "request_limited" });
+    console.log("F005 historical recommended policy: IP=120, global=1200, fresh IP=request_limited");
   });
-  await check("complete actual migration chain through 0028 preserves legacy intake and admits/replays under production ACLs", () => {
-    assert.equal(applied.at(-1), "0028_f005_anonymous_admission.sql");
+  const otherFunctions = `select coalesce(jsonb_agg(pg_get_functiondef(oid) order by oid),'[]') from pg_proc
+    where pronamespace in ('public'::regnamespace,'private_payment_ingress'::regnamespace) and prokind='f' and oid<>'${signature}'::regprocedure;`;
+  const boundary = `select jsonb_build_object('functions',(select jsonb_agg(jsonb_build_array(oid,proowner,proacl,proconfig,prosecdef) order by oid)
+      from pg_proc where pronamespace in ('public'::regnamespace,'private_payment_ingress'::regnamespace)),
+    'tables',(select jsonb_agg(jsonb_build_array(oid,relowner,relacl,relrowsecurity,relforcerowsecurity) order by oid)
+      from pg_class where relnamespace in ('public'::regnamespace,'private_payment_ingress'::regnamespace)));`;
+  const priorIntake = full.sql(`select pg_get_functiondef('${oldSignature}'::regprocedure);`);
+  const functionsBefore = full.sql(otherFunctions), boundaryBefore = full.sql(boundary);
+  // A correction must retain live buckets, including their window/policy/counts.
+  full.sql(`insert into public.anonymous_intake_admission_buckets values
+    ('global','global-v1',now(),now()+interval '600 seconds',600,48,12,48,12),
+    ('ip','${hash(1)}',now(),now()+interval '600 seconds',600,12,3,12,3);`);
+  const bucketSnapshot = "select jsonb_agg(b order by scope,identity_hash) from public.anonymous_intake_admission_buckets b;";
+  const bucketsBefore = full.sql(bucketSnapshot);
+  await check("0031 changes only the v2 debit order while retaining existing counters, other functions and ACLs", () => {
+    const debit = "  update public.anonymous_intake_admission_buckets set request_count = request_count + 1\n    where scope = 'global' and identity_hash = 'global-v1';\n";
+    const normalize = (source) => definition(source, "begin_production_prepayment_intake_v2")
+      .replaceAll("\r\n", "\n").replace("create or replace function", "create function")
+      .replace(debit, "").replace(/^\s*--[^\n]*\n/gmu, "");
+    assert.equal(normalize(correction), normalize(migration), "only debit movement and comments may differ");
+    full.sql(correction);
+    applied.push("0031_f005_anonymous_admission_isolation.sql");
+    assert.equal(full.sql(otherFunctions), functionsBefore);
+    assert.equal(full.sql(boundary), boundaryBefore);
+    assert.equal(full.sql(bucketSnapshot), bucketsBefore);
+    assert.equal(JSON.parse(full.sql(`set role service_role; select ${expression(899)};`)).admission_disposition, "request_limited");
+    assert.equal(full.sql(bucketSnapshot), bucketsBefore);
+    full.sql("truncate public.anonymous_intake_admission_buckets;");
+  });
+  await check("complete actual migration chain through 0031 preserves legacy intake and admits/replays under service ACLs", () => {
+    assert.equal(applied.at(-1), "0031_f005_anonymous_admission_isolation.sql");
     assert.ok(applied.includes("0026_f001_completed_fulfillment_recovery.sql"));
     assert.ok(priorIntake);
     assert.equal(full.sql(`select pg_get_functiondef('${oldSignature}'::regprocedure);`), priorIntake);
