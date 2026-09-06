@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
 import { assertF013LockDelta } from "./verify-f013-dependencies.mjs";
+import {
+  assertRemediationWave3Evidence,
+  REMEDIATION_WAVE3_BASE,
+  REMEDIATION_WAVE3_MIGRATIONS,
+} from "./remediation-wave3-evidence.mjs";
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { registerHooks } from "node:module";
@@ -533,7 +538,7 @@ await check("all production activation defaults remain false", () => {
   }
 });
 
-await check("F004/F010 migration boundaries remain exact; dependencies change only within F013", () => {
+await check("F004/F010 history and frozen Wave 3 migration/source evidence remain exact; dependencies retain F013", () => {
   const accepted = git([
     "ls-tree",
     "-r",
@@ -571,11 +576,13 @@ await check("F004/F010 migration boundaries remain exact; dependencies change on
   assert.deepEqual(working, [
     ...wave2Migrations,
     f010Migration,
+    ...REMEDIATION_WAVE3_MIGRATIONS,
   ]);
   assert.deepEqual(
     working.map((entry) => path.posix.basename(entry).slice(0, 4)),
-    Array.from({ length: 24 }, (_, index) => String(index + 2).padStart(4, "0")),
+    Array.from({ length: 29 }, (_, index) => String(index + 2).padStart(4, "0")),
   );
+  assertRemediationWave3Evidence({ root });
   const customerIdentity = readText(
     "supabase/migrations/0014_customer_identity_authority_v1.sql",
   );
@@ -583,7 +590,7 @@ await check("F004/F010 migration boundaries remain exact; dependencies change on
   assert.match(customerIdentity, /commit;\s*$/u);
 });
 
-await check("F004 historical scope and current protected source remain exact except F015 preparation gate", () => {
+await check("F004/F015 historical scope remains exact and Wave 3 protected source matches its fixed reviewed manifest", () => {
   assert.equal(git(["merge-base", "HEAD", f004Base]).trim(), f004Base);
   assert.equal(git(["merge-base", "HEAD", f004Head]).trim(), f004Head);
   assert.equal(git(["merge-base", "HEAD", wave2Base]).trim(), wave2Base);
@@ -606,10 +613,10 @@ await check("F004 historical scope and current protected source remain exact exc
     "lib/assessment/production/supabase-repository.ts",
     "lib/assessment/production/types.ts",
   ]);
-  assert.equal(git([
-    "diff", "--name-only", f004Head, "--", ...protectedProductPaths,
-    ":(exclude)lib/assessment/production/service.ts",
-  ]).trim(), "");
+  assert.deepEqual(git([
+    "diff", "--name-only", f004Head, REMEDIATION_WAVE3_BASE, "--", ...protectedProductPaths,
+  ]).trim().split(/\r?\n/u).filter(Boolean), ["lib/assessment/production/service.ts"]);
+  assertRemediationWave3Evidence({ root });
   assert.match(readText("components/request/RequestForm.tsx"), /customerAuthEnabled/u);
   assert.match(
     readText("lib/assessment/production/supabase-repository.ts"),

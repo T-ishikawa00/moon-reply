@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import { assertF013LockDelta } from "./verify-f013-dependencies.mjs";
+import {
+  assertRemediationWave3Evidence,
+  REMEDIATION_WAVE3_MIGRATIONS,
+} from "./remediation-wave3-evidence.mjs";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { registerHooks } from "node:module";
@@ -648,7 +652,7 @@ check("E1 detailed latency contract files are byte-unchanged", () => {
   );
 });
 
-check("F004/F010 migration boundaries remain exact; dependencies change only within F013", () => {
+check("F004/F010 history and frozen Wave 3 migration/source evidence remain exact; dependencies retain F013", () => {
   const baselineMigrations = git([
     "ls-tree", "-r", "--name-only", f004Base, "--", "supabase/migrations",
   ]).split(/\r?\n/u).filter(Boolean);
@@ -668,8 +672,9 @@ check("F004/F010 migration boundaries remain exact; dependencies change only wit
     readdirSync(path.join(root, "supabase/migrations"))
       .filter((entry) => entry.endsWith(".sql"))
       .map((entry) => `supabase/migrations/${entry}`).sort(),
-    [...wave2Migrations, f010Migration].sort(),
+    [...wave2Migrations, f010Migration, ...REMEDIATION_WAVE3_MIGRATIONS].sort(),
   );
+  assertRemediationWave3Evidence({ root });
   const f013Base = "fcffe9a0a0424c308f70130e95a7f8cb69173779";
   assert.equal(git(["diff", "--name-only", f004Base, f013Base, "--", "package-lock.json"]), "");
   assert.equal(git(["rev-parse", `${f013Base}:package-lock.json`]), git(["rev-parse", `${wave2Base}:package-lock.json`]));
