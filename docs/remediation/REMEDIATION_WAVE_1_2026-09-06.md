@@ -144,7 +144,7 @@ Status APIは既存のbounded dispatchを伴い得るため、純粋なread-only
 
 ## 9. Remaining Finding registry
 
-3件はLOCAL TECHNICAL PASSで、Production未反映です。残り12件はOPEN。下表の未対応項目は元監査の記録を保持しており、このWaveで各Findingの再監査や閉鎖判定はしていません。
+Wave 1終了時は3件がLOCAL TECHNICAL PASSで、Production未反映、残り12件はOPENでした。下表はF005の継続追記を除き当時の記録を保持します。Waves 1–3の最新累積状態は[Wave 3 registry](REMEDIATION_WAVE_3_2026-09-06.md#10-all-finding-registry-and-release-conditions)を参照してください。
 
 | Finding | Severity | 状態 / 次の扱い |
 | --- | --- | --- |
@@ -152,7 +152,7 @@ Status APIは既存のbounded dispatchを伴い得るため、純粋なread-only
 | F002 retry終了後のPaid obligation | High | OPEN / HUMAN DECISION。長期復旧状態・救済責任・期限などのProduct/運用契約が必要。 |
 | F003 reconciliation停止後の長期照合 | High | OPEN。停止状態と通知欠落を再確認。新しい照合方針や外部運用は明示決定が必要。 |
 | F004 result email idempotency | High | LOCAL TECHNICAL PASS `95b84e7`。rollout/key/legacy運用の条件が残る。 |
-| F005 匿名受付の永続書込濫用 | High | OPEN。durable admission対策候補。保持期限の決定を技術修正へ混ぜない。 |
+| F005 匿名受付の永続書込濫用 | High | Wave 1時点OPEN。2026-09-06継続修正 `ad9b867bdb307add23d04f14cef67265625503e2` でLOCAL TECHNICAL PASS。IP拒否後のglobal消費を0031で修正、fake 15/15・local PostgreSQL 23/23。保持方針不変、Production未反映。詳細はWave 3 registry。 |
 | F006 全体Compute / 複数identity / SDK retry | High | OPEN。全体上限・Paid容量・retry費用を検討。新しい利用制限やProvider構成はHuman decisionと分離。 |
 | F007 Quality materiality / Integrity境界 | High* | OPEN / HUMAN DECISION。現行R2を維持。監査の提案Invariantとの相違であり、過去のAcceptance違反とは断定しない。 |
 | F008 以前の候補の保存・再採用 | Medium | OPEN / HUMAN DECISION。採用可能性がQuality境界と結合するため、候補選択契約を先に確定。 |

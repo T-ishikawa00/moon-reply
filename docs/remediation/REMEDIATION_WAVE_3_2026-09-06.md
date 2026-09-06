@@ -217,7 +217,7 @@ Wave 3のpackage.json / package-lock.json / package scripts / lifecycle / depend
 | F002 | Blocked by decision / 未実装。Paid obligation / Human Rescue対象外 | No |
 | F003 | Partial。追跡と証明できる一時障害の継続照合はlocal verified。原因不明の旧停止はblocked監視、全停止paymentの自動解消は未成立 | No |
 | F004 | Wave 1 local verified `95b84e7`。hold/drain未確定 | No |
-| F005 | Local fixed / verified。trusted context・全ingress移行の実環境確認は未実施 | No |
+| F005 | 2026-09-06継続修正 `ad9b867bdb307add23d04f14cef67265625503e2` でLOCAL TECHNICAL PASS。0031によるIP拒否とglobal枠の分離を再検証。旧Local fixed判定の不足と根拠は下記。trusted context・全ingressの実環境確認は未実施 | No |
 | F006 | Local fixed / verified。未購入invocation/論理slotのみ。外部実費・物理容量UNKNOWN | No |
 | F007 | Blocked by decision。現行Quality R2を維持、acceptance変更なし | No |
 | F008 | Blocked by decision。過去candidate採用方針対象外 | No |
@@ -228,6 +228,34 @@ Wave 3のpackage.json / package-lock.json / package scripts / lifecycle / depend
 | F013 | Partial。browserslist/fast-uri fixed、toml Deferred candidate | No |
 | F014 | Blocked by decision。Refund/Dispute金融状態の変更なし | No |
 | F015 | Wave 1 local verified `a495bfc` | No |
+
+### F005 local corrective verification — 2026-09-06
+
+開始authorityはCurrent Gitの`release/private-ready@1d76fbac123aa71957a7c698be6de1e1537e4f4e`、worktree clean、stash 0。会話履歴や過去のProduction観測を再現根拠にしていません。修正commitは`ad9b867bdb307add23d04f14cef67265625503e2`。この継続記録はFinding Registryだけの後続更新です。
+
+**未達Invariant:** 同じIPがrequest上限に達した後の追加拒否は、他IPのglobal request枠を消費してはならない。別IPに個別枠とglobal枠が残る場合、新規受付と正常replayが継続できる必要があります。0028はIP判定より前にglobalを加算していたため、有限の数値調整では拒否リクエストによるglobal枯渇を防げませんでした。
+
+旧Local fixed判定は不十分でした。fake 15/15はSQL内の消費順序を検証せず、旧DB 20/20は各上限を個別に確認していました。並行replay caseでは24 requestsのうちIP側12件拒否でもglobal=24を期待値にしており、IP上限到達後の大量拒否と別IPの継続性を検証していませんでした。旧記録のPASS件数は歴史的な実行結果として保持し、今回の修正を含む閉鎖根拠には使用しません。
+
+追加migration `0031_f005_anonymous_admission_isolation.sql`は同じv2 RPCのglobal加算をIP policy/request判定の後へ移すだけです。0028を含む既存migration、RPC signature/ACL、global上限確認の位置、lock順序、window/counter、旧v1 authorityを保持します。正常replay、idempotency conflict、intake上限拒否、内部失敗の予約消費とrollback境界は変更しません。Product仕様、Safety、Payment、Quality、retention、envは変更していません。
+
+| Local verification | Result |
+| --- | --- |
+| 修正前のred test | 推奨値600秒 / IP request120 / global request1200 / IP intake30 / global intake300で、期待global120に対し実測1200となりFAIL。隔離PostgreSQLで再現 |
+| 旧0028の再現を残す回帰 | actual 0002–0030 chain、同一IP1440回でIP120 / global1200、別IPは`request_limited`。synthetic transactionをrollback |
+| 修正後の推奨値 | 同一IP1440新規key試行で30 admitted / 90 intake-limited / 1320 request-limited。IP/globalはrequest120・intake30。別IP新規受付とreplay成功後global122・intake31 |
+| Focused fake / PostgreSQL | 15/15 + 23/23 PASS。独立connection競合、IP policy不一致の非消費、global上限後のbucket非増加、既存replay/conflict/失敗/expiryも維持 |
+| Actual 0002–0031 chain | PASS。既存bucketの全値、他function定義、function owner/ACL/config、table owner/ACL/RLSを0031前後で照合。旧intake不変、service ACL下の新規/replay成功 |
+| Relevant cumulative regression | 40/40 verifiers PASS。初回38/40、0030固定inventoryだけで失敗したE3/Resendの2本をexact0031追加後に再実行して2/2。Auth/OTP、Paid/通知、C1/F006、Safety/Quality、I2/I4等の既存回帰を維持 |
+| typecheck / lint / local build / diff | 全てPASS。lint warnings0、Next static generation47/47、外部network attempts0。独立diff reviewもblocker0 |
+
+集中1440回のcaseは一つのlocal transactionです。並行性は別caseの独立connectionsで検証しており、実trafficの負荷試験とは扱いません。local PostgreSQLの2つの使い捨てclusterは停止済みです。上限に達した既存bucketは修正適用だけではresetされません。生のFunction invocation負荷や共有IP・window境界の公平性を新たに保証しません。
+
+再現entry pointは`node scripts/verify-remediation-wave3.mjs`。今回のログは`C:\Users\PUBLIC_USER\AppData\Local\Temp\moon-reply-wave3-regression-W8hwBc`（40本初回）と`C:\Users\PUBLIC_USER\AppData\Local\Temp\moon-reply-wave3-regression-K6Swur`（2本再検証）。一時ログがなくてもcommit済みverifierからlocalで再現できます。
+
+F005修正commitの変更は、0031、`verify-f005-anonymous-admission-db.mjs`、`remediation-wave3-evidence.mjs`、`verify-m2-b2-i4-cutover-safety-controls.mjs`、`verify-m2-e3-account-my-reports-result.mjs`、`verify-rc2-resend-email-provider.mjs`の6 filesです。4つの周辺verifier/evidence変更は0031のexact inventory/blob追加に限定し、旧固定refと旧blob検証を残しています。
+
+累積registryはLocal verified 7件（F001/F004/F005/F006/F010/F011/F015）、Partial 3件（F003/F012/F013）、decision待ち4件（F002/F007/F008/F014）、OPEN architecture 1件（F009）。F005以外の判定は変更していません。Production rollout/readiness確認へは進まず、Production/external状態は今回UNKNOWNです。push / deploy / external operation / remote apply / Provider実行 / env変更 = **0**。`C:\tmp\mrexp-e98`へのアクセス・変更は行っていません。
 
 累積リリース前に必要な条件は、expand schema成立、新config値の判断、安定pepperの全instance共有、Netlify trusted IPと既存ingressの確認、旧worker/appの混在解消、F004 hold/drain、F012 resource CSP/最終edge headers/HSTS確認、F013 toml残存判断です。F003でblocked監視に残る旧UNKNOWNの処置はF002等のHuman判断と分離します。
 

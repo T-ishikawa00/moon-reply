@@ -227,7 +227,7 @@ F012 smoke作成時のHTTP status/canonical Origin仮定とVary assertionは、�
 
 ## 9. Remaining Finding registry
 
-対象外Findingは[Wave 1 registry](REMEDIATION_WAVE_1_2026-09-06.md#9-remaining-finding-registry)の記録を引き継ぎ、今回再監査・修正していません。元監査はCodex thread `01a0734d-3004-73a1-8325-a1cedb863097`の2026-09-06 reportです。
+Wave 2時点の対象外Findingは[Wave 1 registry](REMEDIATION_WAVE_1_2026-09-06.md#9-remaining-finding-registry)から引き継いだ記録です。下表はF005の継続追記を除き当時の状態を保持します。Waves 1–3の最新累積状態は[Wave 3 registry](REMEDIATION_WAVE_3_2026-09-06.md#10-all-finding-registry-and-release-conditions)を参照してください。元監査はCodex thread `01a0734d-3004-73a1-8325-a1cedb863097`の2026-09-06 reportです。
 
 | Finding | Current disposition |
 | --- | --- |
@@ -235,7 +235,7 @@ F012 smoke作成時のHTTP status/canonical Origin仮定とVary assertionは、�
 | F002 retry終了後のPaid obligation | OPEN / HUMAN DECISION、対象外 |
 | F003 reconciliation停止後の長期照合 | OPEN、対象外 |
 | F004 result email idempotency | Wave 1 LOCAL TECHNICAL PASS `95b84e7`。hold/drain・rollout条件は保留 |
-| F005 匿名受付の永続書込濫用 | OPEN、対象外 |
+| F005 匿名受付の永続書込濫用 | Wave 2時点OPEN。2026-09-06継続修正 `ad9b867bdb307add23d04f14cef67265625503e2` でLOCAL TECHNICAL PASS。IP拒否後のglobal消費を0031で修正、fake 15/15・local PostgreSQL 23/23。Production未反映。詳細はWave 3 registry。 |
 | F006 全体Compute / 複数identity / SDK retry | OPEN、対象外 |
 | F007 Quality materiality / Integrity | OPEN / HUMAN DECISION、現行R2維持 |
 | F008 以前の候補の保存・再採用 | OPEN / HUMAN DECISION、対象外 |
