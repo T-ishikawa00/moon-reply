@@ -2,6 +2,8 @@
 
 Date: 2026-09-06 JST. Scope: F004 only. Technical evidence is not Human Acceptance or Production Authorization.
 
+Historical record: the F004 hold/drain procedure below is superseded, only after a successful 0032 cutover, by [Release R1 local cutover safety](../remediation/F004_CUTOVER_SAFETY_2026-09-07.md). Historical observations and verification results below are retained unchanged.
+
 ## Authority and scope
 
 Start: `release/private-ready@fd01f7fb96241c448f6cbe57a197752cf411e71e`, upstream `origin/release/private-ready`.

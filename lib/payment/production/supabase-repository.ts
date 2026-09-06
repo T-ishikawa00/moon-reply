@@ -201,6 +201,7 @@ type PaymentDatabase = {
       complete_rc2_fulfillment_job_v2: RuntimeFunction;
       fail_rc2_fulfillment_job_v2: RuntimeFunction;
       quarantine_rc2_fulfillment_job_after_async_retries_v2: RuntimeFunction;
+      claim_production_notification_cutover_recovery_v1: RuntimeFunction;
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
@@ -757,6 +758,25 @@ export class SupabasePaymentDeliveryRepository
       .maybeSingle();
     if (error) databaseFailure(error);
     return data ? mapAttempt(data) : null;
+  }
+
+  async claimNotificationCutoverRecovery(input: {
+    environment: PaymentEnvironment;
+    signal: AbortSignal;
+  }): Promise<{ jobId: string } | null> {
+    const { data, error } = await this.client
+      .rpc("claim_production_notification_cutover_recovery_v1", {
+        p_environment: input.environment,
+      })
+      .abortSignal(input.signal);
+    if (error) databaseFailure(error);
+    if (data === null) return null;
+    const row = recordValue(data);
+    const jobId = stringValue(row.fulfillment_job_id);
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu.test(jobId)) {
+      databaseFailure();
+    }
+    return { jobId };
   }
 
   async listDueFulfillmentDispatchJobIds(input: {

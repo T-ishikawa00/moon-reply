@@ -41,6 +41,7 @@ const additiveMigrationBlobs = Object.freeze({
   "0029_f006_global_unpaid_compute.sql": "0ab47660d827a67840bb6b376756010bc9814d90",
   "0030_f003_reconciliation_environment_fence.sql": "7a93be5f6206747fd6fbeaa712085a21304a170b",
   "0031_f005_anonymous_admission_isolation.sql": "b2897db09428d25a7e6e10cf29551d38a8c86d73",
+  "0032_f004_notification_cutover_fence.sql": "863f1a23d6621e0f79cb667ea5cab3cda09e0a06",
 });
 const dispatchFlag = "PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED";
 const reconciliationFlag = "STRIPE_RECONCILIATION_SCHEDULED_ENABLED";

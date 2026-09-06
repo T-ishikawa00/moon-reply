@@ -15,6 +15,18 @@ export const REMEDIATION_F005_CORRECTION = Object.freeze({
   file: "supabase/migrations/0031_f005_anonymous_admission_isolation.sql",
   blob: "b2897db09428d25a7e6e10cf29551d38a8c86d73",
 });
+// F004 cutover successor: fixed pre-cutover authority and exact reviewed blobs.
+// Historical Wave 3 and F005 evidence is still checked independently below.
+export const REMEDIATION_F004_CUTOVER = Object.freeze({
+  base: "7ccfc2a4b563f9a355815075dff6e38fd1228077",
+  file: "supabase/migrations/0032_f004_notification_cutover_fence.sql",
+  blob: "863f1a23d6621e0f79cb667ea5cab3cda09e0a06",
+  runtime: Object.freeze({
+    "lib/payment/production/dispatch-scheduler-runtime-service.ts": "986aa085aae9ff33c24e34fb40edb7fa37549254",
+    "lib/payment/production/notification-cutover-recovery.ts": "55ccbdf173461e0f101efb9c1d0b6ac6567cb2bc",
+    "lib/payment/production/supabase-repository.ts": "9b026a5259b6520c0b253757c3542b14ac434eb8",
+  }),
+});
 
 export const REMEDIATION_WAVE3_MIGRATIONS = Object.freeze([
   "supabase/migrations/0026_f001_completed_fulfillment_recovery.sql",
@@ -56,13 +68,14 @@ const runtimeRoots = [
 
 export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
   const f005Correction = REMEDIATION_F005_CORRECTION;
+  const cutover = REMEDIATION_F004_CUTOVER;
   const git = (args) => execFileSync("git.exe", [
     "-c", `safe.directory=${root.replaceAll("\\", "/")}`, ...args,
   ], { cwd: root, encoding: "utf8", windowsHide: true, timeout: 10_000 }).trim();
   const lines = (value) => value.split(/\r?\n/u).filter(Boolean);
   const base = REMEDIATION_WAVE3_BASE;
   const reviewed = REMEDIATION_WAVE3_REVIEWED;
-  for (const ref of [base, reviewed]) {
+  for (const ref of [base, reviewed, cutover.base]) {
     assert.match(ref, /^[0-9a-f]{40}$/u, "Wave 3 evidence must use fixed full commit hashes");
     assert.equal(git(["rev-parse", "--verify", `${ref}^{commit}`]), ref);
     assert.equal(git(["merge-base", "HEAD", ref]), ref, "reviewed evidence must be an ancestor of current HEAD");
@@ -74,16 +87,27 @@ export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
     "Wave 3 source delta must be exactly the reviewed Finding manifest",
   );
   assert.equal(
-    git(["diff", "--no-renames", "--name-only", reviewed, "--", ...runtimeRoots]), "",
-    "current runtime must remain identical to the fixed reviewed commit",
+    git(["diff", "--no-renames", "--name-only", reviewed, cutover.base, "--", ...runtimeRoots]), "",
+    "pre-cutover runtime must remain identical to the fixed Wave 3 reviewed commit",
   );
-  assert.equal(
-    git(["ls-files", "--others", "--exclude-standard", "--", ...runtimeRoots]), "",
-    "untracked runtime is outside the reviewed Wave 3 manifest",
+  const cutoverFiles = Object.keys(cutover.runtime);
+  assert.deepEqual(
+    [...new Set([
+      ...lines(git(["diff", "--no-renames", "--name-only", cutover.base, "--", ...runtimeRoots])),
+      ...lines(git(["ls-files", "--others", "--exclude-standard", "--", ...runtimeRoots])),
+    ])].sort(),
+    cutoverFiles,
+    "current runtime delta must be exactly the F004 cutover successor manifest",
   );
+  for (const [file, blob] of Object.entries(cutover.runtime)) {
+    assert.equal(git(["hash-object", file]), blob, `${file}: literal F004 cutover blob`);
+  }
   for (const file of REMEDIATION_WAVE3_RUNTIME_FILES) {
-    assert.equal(git(["hash-object", file]), git(["rev-parse", `${reviewed}:${file}`]),
+    assert.equal(git(["rev-parse", `${cutover.base}:${file}`]), git(["rev-parse", `${reviewed}:${file}`]),
       `${file}: approved runtime blob must equal the fixed reviewed commit`);
+    if (!cutoverFiles.includes(file)) {
+      assert.equal(git(["hash-object", file]), git(["rev-parse", `${reviewed}:${file}`]));
+    }
   }
 
   const baseMigrations = lines(git(["ls-tree", "-r", "--name-only", base, "--", "supabase/migrations"]));
@@ -103,8 +127,10 @@ export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
   assert.deepEqual(
     readdirSync(path.join(root, "supabase/migrations"))
       .filter((file) => file.endsWith(".sql")).sort().map((file) => `supabase/migrations/${file}`),
-    [...expectedMigrations, f005Correction.file], "current migrations must be reviewed Wave 3 plus exact F005 correction",
+    [...expectedMigrations, f005Correction.file, cutover.file], "current migrations must be reviewed Wave 3 plus exact F005 and F004 successors",
   );
+  assert.equal(git(["hash-object", cutover.file]), cutover.blob,
+    "F004 cutover migration must match its literal reviewed blob");
   assert.equal(git(["hash-object", f005Correction.file]), f005Correction.blob,
     "F005 corrective migration must match its literal reviewed blob");
   for (const file of expectedMigrations) {
@@ -112,5 +138,6 @@ export function assertRemediationWave3Evidence({ root = process.cwd() } = {}) {
     assert.equal(git(["hash-object", file]), git(["rev-parse", `${authority}:${file}`]),
       `${file}: current migration blob must equal its fixed authority`);
   }
-  return { base, reviewed, runtimeFiles: [...REMEDIATION_WAVE3_RUNTIME_FILES], migrations: [...expectedMigrations, f005Correction.file] };
+  return { base, reviewed, runtimeFiles: [...REMEDIATION_WAVE3_RUNTIME_FILES],
+    cutover, migrations: [...expectedMigrations, f005Correction.file, cutover.file] };
 }

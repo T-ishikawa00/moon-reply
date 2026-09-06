@@ -4,6 +4,7 @@ import {
   assertRemediationWave3Evidence,
   REMEDIATION_WAVE3_MIGRATIONS,
   REMEDIATION_F005_CORRECTION,
+  REMEDIATION_F004_CUTOVER,
 } from "./remediation-wave3-evidence.mjs";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -673,7 +674,7 @@ check("F004/F010 history and frozen Wave 3 migration/source evidence remain exac
     readdirSync(path.join(root, "supabase/migrations"))
       .filter((entry) => entry.endsWith(".sql"))
       .map((entry) => `supabase/migrations/${entry}`).sort(),
-    [...wave2Migrations, f010Migration, ...REMEDIATION_WAVE3_MIGRATIONS, REMEDIATION_F005_CORRECTION.file].sort(),
+    [...wave2Migrations, f010Migration, ...REMEDIATION_WAVE3_MIGRATIONS, REMEDIATION_F005_CORRECTION.file, REMEDIATION_F004_CUTOVER.file].sort(),
   );
   assertRemediationWave3Evidence({ root });
   const f013Base = "fcffe9a0a0424c308f70130e95a7f8cb69173779";

@@ -11,6 +11,7 @@ const tests = [
   "verify-f001-provider-deadline", "verify-f001-recovery-db",
   "verify-f003-payment-reconciliation", "verify-f003-payment-reconciliation-db",
   "verify-f004-result-notification", "verify-f004-notification-db",
+  "verify-f004-cutover-runtime", "verify-f004-cutover-db",
   "verify-f005-anonymous-admission", "verify-f005-anonymous-admission-db",
   "verify-f006-global-unpaid-compute", "verify-f006-global-unpaid-compute-db", "verify-f006-global-unpaid-integration",
   "verify-f010-account-otp-throttle", "verify-f010-account-otp-throttle-db",
