@@ -153,6 +153,19 @@ async function harness() {
     runtimeRepository,
     lifecycleRepository,
     prepaymentComputeAuthority: computeAuthority,
+    // Explicit synthetic adapter for the atomic global + Customer RPC. The
+    // native F006 verifier proves transaction/concurrency behavior separately.
+    globalUnpaidComputeAuthority: {
+      async claim(input) {
+        const disposition = await computeAuthority.claimComputeUnit(input);
+        return disposition === "acquired" ? {
+          disposition: "acquired", invocation_id: input.invocationId, slot_number: 1,
+          lease_expires_at: "2026-08-24T00:04:00.000Z",
+        } : { disposition: "customer_exhausted" };
+      },
+      async release() { return true; },
+    },
+    globalUnpaidComputePolicy: () => ({ windowSeconds: 3600, maximumProviderInvocations: 100, maximumConcurrent: 2 }),
     transport,
     catalog,
     model: "gpt-5.6-luna",
@@ -344,7 +357,10 @@ await check("every pipeline transport site is immediately preceded by the hook",
     application,
     /answerClarification[\s\S]*?this\.pipeline\([\s\S]*?this\.computeFence[\s\S]*?resumePreparation/u,
   );
-  assert.equal((application.match(/claimComputeUnit\(/gu) ?? []).length, 1);
+  assert.equal((application.match(/claimComputeUnit\(/gu) ?? []).length, 0);
+  assert.equal((application.match(/requireGlobalUnpaidComputePermit\(/gu) ?? []).length, 1);
+  const globalMigration = readText("supabase/migrations/0029_f006_global_unpaid_compute.sql");
+  assert.equal((globalMigration.match(/public\.claim_production_prepayment_compute_unit_v1\(/gu) ?? []).length, 1);
   const fulfillment = application.slice(
     application.indexOf("async fulfillAssessmentGrant"),
     application.indexOf("async resolveResult"),

@@ -322,6 +322,10 @@ export function validatePurchaseReadyAuthorityForFulfillment(input: {
   return persistedInput;
 }
 
+export type ProviderInvocationPermit = {
+  finish(providerReturned: boolean): Promise<void>;
+};
+
 export type PipelineOptions = {
   repository: AssessmentRepository;
   transport: AiStageTransport;
@@ -334,7 +338,7 @@ export type PipelineOptions = {
   beforeProviderInvocation?: (
     stageId: M2StageId,
     attemptNumber: StageAttemptNumber,
-  ) => Promise<void>;
+  ) => Promise<void | ProviderInvocationPermit>;
 };
 
 type StageInput = {
@@ -748,8 +752,9 @@ export class AssessmentPipeline {
     });
 
     let response: StageResponse | null = null;
+    let invocationPermit: void | ProviderInvocationPermit = undefined;
     try {
-      await this.beforeProviderInvocation?.(
+      invocationPermit = await this.beforeProviderInvocation?.(
         definition.stageId,
         attemptNumber,
       );
@@ -803,6 +808,8 @@ export class AssessmentPipeline {
         throw new M2RuntimeError("M2_STAGE_PERSISTENCE_FAILED");
       }
       throw safeError;
+    } finally {
+      await invocationPermit?.finish(response !== null);
     }
   }
 
@@ -859,8 +866,11 @@ export class AssessmentPipeline {
     }
 
     let response: StageResponse | null = null;
+    let invocationPermit: void | ProviderInvocationPermit = undefined;
+    let invocationAuthorized = false;
     try {
-      await this.beforeProviderInvocation?.(definition.stageId, 1);
+      invocationPermit = await this.beforeProviderInvocation?.(definition.stageId, 1);
+      invocationAuthorized = true;
       response = await this.transport.invoke({
         stageId: definition.stageId,
         model: runContext.model,
@@ -948,6 +958,12 @@ export class AssessmentPipeline {
         error,
         "M2_CANDIDATE_SAFETY_UNAVAILABLE",
       );
+      if (!invocationAuthorized) {
+        // Admission/authority outages are technical errors. They cannot be
+        // reclassified as a Provider-derived candidate Safety disposition.
+        await this.persistCandidateStageFailure(stageRunId, response, safeError.safeCode);
+        throw safeError;
+      }
       if (safeError.safeCode === "M2_STAGE_PERSISTENCE_FAILED") {
         throw safeError;
       }
@@ -963,6 +979,8 @@ export class AssessmentPipeline {
         kind: "safety_unavailable",
         lane: buildSafetyUnavailableCandidateLaneV1(),
       };
+    } finally {
+      await invocationPermit?.finish(response !== null);
     }
   }
 

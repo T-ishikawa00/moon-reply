@@ -5,7 +5,7 @@ import {
 } from "../runtime/clarification-evidence-v1.ts";
 import { projectCustomerAssessmentExperienceV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
 import { asM2RuntimeError, M2RuntimeError } from "../runtime/errors.ts";
-import { AssessmentPipeline, validatePurchaseReadyAuthorityForFulfillment } from "../runtime/pipeline.ts";
+import { AssessmentPipeline, validatePurchaseReadyAuthorityForFulfillment, type PipelineOptions } from "../runtime/pipeline.ts";
 import { hydratePersistedReadyAssessmentV1 } from "../runtime/runtime-result-normalization-v1.ts";
 import { evaluateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
 import type {
@@ -36,6 +36,11 @@ import type {
   PrepaymentComputeAuthorityRepository,
   PrepaymentComputePolicyV1,
 } from "./prepayment-compute.ts";
+import {
+  requireGlobalUnpaidComputePermit,
+  type GlobalUnpaidComputeAuthority,
+  type GlobalUnpaidComputePolicy,
+} from "./global-unpaid-compute.ts";
 import {
   VERIFIED_PURCHASE_AUTHORITY_SCHEMA_VERSION,
   type AssessmentGrantHandleV1,
@@ -70,6 +75,8 @@ type ProductionFulfillmentApplicationOptions = {
   timeZone?: string;
   allowSyntheticPurchaseAuthority?: boolean;
   prepaymentComputeAuthority?: PrepaymentComputeAuthorityRepository;
+  globalUnpaidComputeAuthority?: GlobalUnpaidComputeAuthority;
+  globalUnpaidComputePolicy?: () => GlobalUnpaidComputePolicy;
 };
 
 const DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS = 16 * 60;
@@ -122,10 +129,7 @@ export class ProductionFulfillmentApplication {
     }
   }
 
-  private pipeline(beforeProviderInvocation?: (
-    stageId: M2StageId,
-    attemptNumber: StageAttemptNumber,
-  ) => Promise<void>) {
+  private pipeline(beforeProviderInvocation?: PipelineOptions["beforeProviderInvocation"]) {
     if (!this.options.transport) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
     }
@@ -266,17 +270,19 @@ export class ProductionFulfillmentApplication {
     if (!authority) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
     }
-    return async (stageId: M2StageId, attemptNumber: StageAttemptNumber) => {
-      const disposition = await authority.claimComputeUnit({
+    const globalAuthority = this.options.globalUnpaidComputeAuthority;
+    if (!globalAuthority || !this.options.globalUnpaidComputePolicy) {
+      throw new M2RuntimeError("PREPAYMENT_GLOBAL_COMPUTE_CONFIGURATION_INVALID", 503);
+    }
+    const globalPolicy = this.options.globalUnpaidComputePolicy();
+    return (stageId: M2StageId, attemptNumber: StageAttemptNumber) =>
+      requireGlobalUnpaidComputePermit(globalAuthority, {
         ...input,
-        now: this.now(),
+        invocationId: this.uuid(),
         stageId,
         attemptNumber,
+        globalPolicy,
       });
-      if (disposition !== "acquired") {
-        throw new M2RuntimeError("PREPAYMENT_COMPUTE_BUDGET_EXHAUSTED", 429);
-      }
-    };
   }
 
   async beginProviderFreePreparation(

@@ -3,6 +3,8 @@ import {
   readProductionAssessmentEnvironment,
 } from "./environment-runtime.ts";
 import { SupabaseProductionFulfillmentRepository } from "./supabase-repository.ts";
+import { createGlobalUnpaidComputeAuthority } from "./global-unpaid-compute-runtime.ts";
+import { readGlobalUnpaidComputePolicy } from "./global-unpaid-compute.ts";
 
 export async function createProductionAssessmentApplication(options?: {
   allowSyntheticPurchaseAuthority?: boolean;
@@ -30,6 +32,13 @@ export async function createProductionAssessmentApplication(options?: {
     runtimeRepository,
     lifecycleRepository,
     prepaymentComputeAuthority: lifecycleRepository,
+    globalUnpaidComputeAuthority: createGlobalUnpaidComputeAuthority(
+      environment.supabaseUrl,
+      environment.supabaseSecretKey,
+    ),
+    // Resolve required unpaid configuration only when an unpaid stage starts.
+    // Paid fulfillment never reads or reserves from this pool.
+    globalUnpaidComputePolicy: readGlobalUnpaidComputePolicy,
     transport: new OpenAiResponsesTransport(environment.openAiApiKey),
     catalog: {
       catalogVersion: "runtime-stage-catalog-v17.0.0",
