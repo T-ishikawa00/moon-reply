@@ -2,6 +2,8 @@
 
 Date: 2026-09-07 JST. Scope: F004 only. Technical verification does not authorize Production operations.
 
+Successor: [0032 non-superuser compatibility](F004_PRIVILEGE_COMPATIBILITY_2026-09-07.md) replaces the custom-GUC implementation after its Production transaction rolled back with SQLSTATE 42501. This historical report's local install used superuser authority; its 18/18 result did not establish non-superuser installation. The successor records the corrected unapplied artifact and mandatory three-layer verification.
+
 ## Authority
 
 Start: `release/private-ready@7ccfc2a4b563f9a355815075dff6e38fd1228077`, worktree clean, stash 0. Current Git, source, migrations and local verifiers are the implementation authority.

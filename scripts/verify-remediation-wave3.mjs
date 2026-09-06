@@ -11,7 +11,7 @@ const tests = [
   "verify-f001-provider-deadline", "verify-f001-recovery-db",
   "verify-f003-payment-reconciliation", "verify-f003-payment-reconciliation-db",
   "verify-f004-result-notification", "verify-f004-notification-db",
-  "verify-f004-cutover-runtime", "verify-f004-cutover-db",
+  "verify-f004-cutover-runtime", "verify-remediation-migration-privileges",
   "verify-f005-anonymous-admission", "verify-f005-anonymous-admission-db",
   "verify-f006-global-unpaid-compute", "verify-f006-global-unpaid-compute-db", "verify-f006-global-unpaid-integration",
   "verify-f010-account-otp-throttle", "verify-f010-account-otp-throttle-db",
@@ -31,7 +31,7 @@ const tests = [
   "verify-product-exploration-blockers-11-13-r1",
 ];
 const requested = process.argv.slice(2);
-for (const name of requested) assert.ok(tests.includes(name), `unknown offline verifier ${name}`);
+for (const name of requested) assert.ok(tests.includes(name) || name === "verify-f004-cutover-db", `unknown offline verifier ${name}`);
 const selected = requested.length ? requested : tests;
 const directory = mkdtempSync(path.join(os.tmpdir(), "moon-reply-wave3-regression-"));
 const results = [];

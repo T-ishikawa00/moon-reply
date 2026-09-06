@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
 import { createHash, randomUUID } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { createLocalPostgres } from "./remediation-local-postgres.mjs";
+import { verifyMigrationAuthorityLayers } from "./remediation-migration-authority.mjs";
 
 // Full 0002-0032 chain, isolated PostgreSQL 17 on loopback. All rows below
 // are synthetic, including report/projection JSON. No env files, existing DB,
 // Provider, queue, email, or other external service is used.
-const db = await createLocalPostgres("f004-cutover");
-const migration = readFileSync("supabase/migrations/0032_f004_notification_cutover_fence.sql", "utf8");
+async function verifyCutover({ db, installer, mode, baseline }) {
+const migrationFile = "0032_f004_notification_cutover_fence.sql";
+const migration = readFileSync(`supabase/migrations/${migrationFile}`, "utf8");
 const digest = (value) => createHash("sha256").update(value).digest("hex");
 const id = (prefix, n) => `${prefix}000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
 const legacySeed = readFileSync("supabase/tests/m2_b2_i2_private_reconciliation_r1.sql", "utf8").replaceAll("\r\n", "\n");
@@ -38,10 +40,15 @@ const reserveExpr = (environment = "test") => `public.claim_production_notificat
 const reserve = (environment) => { const result = serviceSql(`select ${reserveExpr(environment)};`); return result ? JSON.parse(result) : null; };
 const resetClock = () => db.sql("update public.production_notification_cutover_recovery_clock set next_claim_at='-infinity';");
 let passed = 0;
-async function check(name, action) { await action(); console.log(`PASS F004 cutover DB ${++passed} ${name}`); }
+async function check(name, action) { await action(); console.log(`PASS F004 cutover DB ${mode} ${++passed} ${name}`); }
 async function rejects(statement, pattern, role = "service_role") {
   const result = await db.startSql(`${role ? `set role ${role};` : ""} ${statement}`).result;
   assert.notEqual(result.code, 0, "SQL must fail closed"); assert.match(result.error, pattern);
+}
+async function rejectsMigration(statement, pattern) {
+  const result = await installer.startSql(statement).result;
+  assert.notEqual(result.code, 0, "Migration must fail closed under its actual installer authority");
+  assert.match(result.error, pattern);
 }
 async function waitFor(query) {
   for (let n = 0; n < 80; n++) {
@@ -84,9 +91,7 @@ function seedCanonical(n) {
   return row;
 }
 
-try {
-  const chain = db.applyThrough(31);
-  assert.equal(chain.length, 30);
+  assert.equal(baseline.length, 30);
   db.sql(fixtureSeed);
   for (let n = 1; n <= 11; n++) seedCanonical(n);
   // Faithful legacy successful send: claim, credential, provider acknowledgement,
@@ -98,7 +103,16 @@ try {
   const canonicalBefore = canonical();
   const pendingBefore = outbox(2);
   const beforeDefinition = db.sql("select pg_get_functiondef('public.claim_production_notification_v2(uuid,uuid,timestamptz,timestamptz)'::regprocedure);");
-  const detachAuthority = db.sql("select prosrc,prosecdef,proacl from pg_proc where oid='public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)'::regprocedure;");
+  const detachAuthority = db.sql("select prosecdef,proacl,proconfig from pg_proc where oid='public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)'::regprocedure;");
+  const oldDetachSource = db.sql("select pg_get_functiondef('public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)'::regprocedure);");
+  if (mode === "restricted-owner") await check("failed Production artifact reproduces unauthorized custom SET and rolls back", async () => {
+    const oldMigration = execFileSync("git", ["show", "0014a1f001d5b6f82cfd13532b2f4ccbcd8b5299:supabase/migrations/0032_f004_notification_cutover_fence.sql"],
+      { encoding: "utf8", windowsHide: true });
+    await rejectsMigration(oldMigration, /permission denied to set parameter "moon_reply.f004_identity_detach"/u);
+    assert.equal(db.sql("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='production_result_credentials' and column_name='f004_legacy_sent_cutover_protected');"), "f");
+    assert.equal(db.sql("select pg_get_functiondef('public.claim_production_notification_v2(uuid,uuid,timestamptz,timestamptz)'::regprocedure);"), beforeDefinition);
+    assert.deepEqual(outbox(2), pendingBefore); assert.equal(canonical(), canonicalBefore);
+  });
   await check("0024 still lets old sender acquire untouched pending; rollback isolates reproduction", async () => {
     const result = db.sql(`set role service_role; begin; select ${claimExpr(2, 2)}->>'disposition'; rollback;`);
     assert.equal(result, "acquired"); assert.deepEqual(outbox(2), pendingBefore);
@@ -114,7 +128,7 @@ try {
       `insert into public.production_result_credentials(id,delivery_id,token_hash,purpose,issued_at) values('${randomUUID()}','${f(2).delivery}','${digest("orphan-mail")}','notification',now());`,
     ];
     for (const variant of variants) {
-      await rejects(`begin; ${variant} ${migration}`, /F004_CUTOVER_LEGACY_SEND_UNSAFE/u, null);
+      await rejectsMigration(`begin; ${variant} ${migration}`, /F004_CUTOVER_LEGACY_SEND_UNSAFE/u);
       assert.deepEqual(outbox(2), pendingBefore);
       assert.equal(db.sql("select to_regclass('public.production_notification_cutover_recovery_clock') is null;"), "t");
       assert.equal(db.sql("select pg_get_functiondef('public.claim_production_notification_v2(uuid,uuid,timestamptz,timestamptz)'::regprocedure);"), beforeDefinition);
@@ -122,21 +136,25 @@ try {
     assert.equal(canonical(), canonicalBefore);
   });
   await check("unexpected pre-cutover versioned history is rejected without discarding its state", async () => {
-    await rejects(`begin; select ${claimExpr(2, 3)}; ${migration}`, /F004_CUTOVER_UNEXPECTED_VERSIONED_HISTORY/u, null);
+    await rejectsMigration(`begin; select ${claimExpr(2, 3)}; ${migration}`, /F004_CUTOVER_UNEXPECTED_VERSIONED_HISTORY/u);
     assert.deepEqual(outbox(2), pendingBefore);
   });
   await check("migration locks serialize an old body already waiting at its table access", async () => {
     const paused = migration.replace("do $preflight$", "select pg_sleep(1);\ndo $preflight$");
-    const migrationTask = db.startSql(`set application_name='f004-migration-barrier'; ${paused}`);
+    const migrationTask = installer.startSql(`set application_name='f004-migration-barrier'; ${paused}`);
     await waitFor("select exists(select 1 from pg_stat_activity where application_name='f004-migration-barrier' and wait_event='PgSleep');");
     const oldTask = db.startSql(`set application_name='f004-old-at-cutover'; set role service_role; select ${claimExpr(2, 2)};`);
     const oldRevoke = db.startSql(`set application_name='f004-old-revoke-at-cutover'; set role service_role;
       update public.production_result_credentials set revoked_at=clock_timestamp() where id='${f(1).credential}';`);
-    const [migrated, old, revoke] = await Promise.all([migrationTask.result, oldTask.result, oldRevoke.result]);
+    const oldDetach = db.startSql(`set application_name='f004-old-detach-at-cutover'; set role service_role;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',clock_timestamp());`);
+    const [migrated, old, revoke, detached] = await Promise.all([migrationTask.result, oldTask.result, oldRevoke.result, oldDetach.result]);
     assert.equal(migrated.code, 0, migrated.error);
     if (old.code === 0) assert.equal(JSON.parse(old.output).disposition, "in_progress");
     else assert.match(old.error, /F004_LEGACY_NOTIFICATION_CLAIM_FENCED/u);
     assert.notEqual(revoke.code, 0); assert.match(revoke.error, /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u);
+    assert.notEqual(detached.code, 0); assert.match(detached.error, /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u);
+    assert.equal(db.sql("select count(*) from public.production_customer_ownership_bindings where state='active';"), "12");
     const { email_sender_claim_generation, email_cutover_recovery_after, ...after } = outbox(2);
     assert.equal(email_sender_claim_generation, 0); assert.equal(email_cutover_recovery_after, null);
     assert.deepEqual(after, pendingBefore);
@@ -172,19 +190,19 @@ try {
     assert.equal(db.sql(`begin; update public.production_result_credentials set revoked_at=clock_timestamp() where id='${f(1).credential}';
       select revoked_at is not null from public.production_result_credentials where id='${f(1).credential}'; rollback;`), "t");
   });
-  await check("existing identity-detachment RPC retains full revocation and ownership semantics with scoped bypass", async () => {
-    assert.equal(db.sql("select prosrc,prosecdef,proacl from pg_proc where oid='public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)'::regprocedure;"), detachAuthority);
+  await check("existing identity-detachment RPC preserves authority, exact revocation and idempotence without bypass state", async () => {
+    assert.equal(db.sql("select prosecdef,proacl,proconfig from pg_proc where oid='public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)'::regprocedure;"), detachAuthority);
     const lines = db.sql(`begin; set role service_role;
       select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',clock_timestamp());
       select revoked_at is not null from public.production_result_credentials where id='${f(1).credential}';
       select count(*) from public.production_customer_ownership_bindings where state='active';
       select count(*) from public.production_customer_ownership_bindings where state='identity_detached'
         and customer_user_id is null and delivery_email_sha256 is null and delivery_email_ciphertext is null;
-      select current_setting('moon_reply.f004_identity_detach',true) is distinct from 'true'; rollback;`).split(/\r?\n/u);
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',clock_timestamp()); rollback;`).split(/\r?\n/u);
     assert.deepEqual(JSON.parse(lines[0]), { disposition: "completed", detached_binding_count: 12 });
-    assert.deepEqual(lines.slice(1), ["t", "0", "12", "t"]);
-    // Same session after a harmless detachment call: setting must have been
-    // restored, so an old direct catch UPDATE is still denied.
+    assert.deepEqual(lines.slice(1, 4), ["t", "0", "12"]);
+    assert.deepEqual(JSON.parse(lines[4]), { disposition: "completed", detached_binding_count: 0 });
+    // A harmless call cannot authorize a later unrelated direct UPDATE.
     await rejects(`begin; select public.detach_production_customer_identity_v1('${randomUUID()}','${randomUUID()}',clock_timestamp());
       update public.production_result_credentials set revoked_at=clock_timestamp() where id='${f(1).credential}';`,
       /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u);
@@ -197,13 +215,76 @@ try {
           raise exception 'F004_TEST_DETACH_EXPECTED_FAILURE';
         exception when check_violation then null;
         end;
-        if current_setting('moon_reply.f004_identity_detach',true) is not distinct from 'true' then
-          raise exception 'F004_TEST_DETACH_MARKER_LEAKED';
-        end if;
       end $test$;
       update public.production_result_credentials set revoked_at=clock_timestamp() where id='${f(1).credential}';`,
       /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u, null);
     assert.equal(db.sql(`select revoked_at is null from public.production_result_credentials where id='${f(1).credential}';`), "t");
+  });
+  const secondCustomer = "37000000-0000-4000-8000-000000000002";
+  const otherCustomerFixture = `insert into auth.users(id) values('${secondCustomer}');
+    update public.production_customer_ownership_bindings set customer_user_id='${secondCustomer}'
+      where preparation_id='${f(12).preparation}';
+    insert into public.production_result_credentials(id,delivery_id,token_hash,purpose,issued_at)
+      values('${randomUUID()}','${f(1).delivery}','${digest("recovery-customer-1")}','recovery',now());`;
+  await check("detachment revokes every credential purpose only for the exact customer; unrelated detach cannot bypass fence", async () => {
+    const lines = db.sql(`begin; ${otherCustomerFixture} set role service_role;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());
+      select count(*) from public.production_result_credentials where revoked_at is not null;
+      select string_agg(distinct purpose,',' order by purpose) from public.production_result_credentials where revoked_at is not null;
+      select revoked_at is null from public.production_result_credentials where id='${f(12).handoff}';
+      select state from public.production_customer_ownership_bindings where preparation_id='${f(12).preparation}'; rollback;`).split(/\r?\n/u);
+    assert.deepEqual(JSON.parse(lines[0]), { disposition: "completed", detached_binding_count: 11 });
+    assert.deepEqual(lines.slice(1), ["13", "customer_handoff,notification,recovery", "t", "active"]);
+    await rejects(`begin; ${otherCustomerFixture} set role service_role;
+      select public.detach_production_customer_identity_v1('${secondCustomer}','${randomUUID()}',now());
+      update public.production_result_credentials set revoked_at=clock_timestamp() where id='${f(1).credential}';`,
+      /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u, null);
+  });
+  await check("a matching detached binding with a different timestamp does not authorize an old revoke", async () => {
+    await rejects(`begin;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now()-interval '1 minute');
+      update public.production_result_credentials set revoked_at=null where id='${f(1).credential}';
+      set role service_role;
+      update public.production_result_credentials set revoked_at=now() where id='${f(1).credential}';`,
+      /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u, null);
+  });
+  await check("credential failure after binding transition rolls back identity and every credential", () => {
+    const before = canonical();
+    const lines = db.sql(`begin;
+      alter table public.production_result_credentials add constraint f004_test_revoke_reject check(revoked_at is null);
+      set role service_role;
+      do $test$ begin
+        begin
+          perform public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());
+          raise exception 'F004_TEST_EXPECTED_CREDENTIAL_FAILURE';
+        exception when check_violation then null;
+        end;
+      end $test$;
+      select count(*) from public.production_customer_ownership_bindings where state='active';
+      select count(*) from public.production_result_credentials where revoked_at is not null; rollback;`).split(/\r?\n/u);
+    assert.deepEqual(lines, ["12", "0"]); assert.equal(canonical(), before);
+  });
+  await check("a stale detachment body fails atomically; retry through current RPC completes without a bypass", () => {
+    const stale = oldDetachSource.replace("public.detach_production_customer_identity_v1", "public.f004_test_legacy_detach");
+    const lines = db.sql(`begin; ${stale};
+      revoke all on function public.f004_test_legacy_detach(uuid,uuid,timestamptz) from public;
+      grant execute on function public.f004_test_legacy_detach(uuid,uuid,timestamptz) to service_role;
+      set role service_role;
+      do $test$ begin
+        begin
+          perform public.f004_test_legacy_detach('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());
+          raise exception 'F004_TEST_EXPECTED_LEGACY_DETACH_FAILURE';
+        exception when raise_exception then
+          if sqlerrm <> 'F004_LEGACY_NOTIFICATION_REVOCATION_FENCED' then raise; end if;
+        end;
+      end $test$;
+      select count(*) from public.production_customer_ownership_bindings where state='active';
+      select count(*) from public.production_result_credentials where revoked_at is not null;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());
+      select revoked_at is not null from public.production_result_credentials where id='${f(1).credential}'; rollback;`).split(/\r?\n/u);
+    assert.deepEqual(lines.slice(0, 2), ["12", "0"]);
+    assert.deepEqual(JSON.parse(lines[2]), { disposition: "completed", detached_binding_count: 12 });
+    assert.equal(lines[3], "t");
   });
   await check("new sender acquires pending and old/new workers cannot overlap ownership", async () => {
     const responses = await Promise.all([
@@ -321,7 +402,42 @@ try {
     const before = outbox(7); db.sql(v3); assert.deepEqual(outbox(7), before);
     assert.equal(claim(7, 2).disposition, "in_progress");
   });
-  console.log(`PASS F004 cutover PostgreSQL ${passed}/${passed}; external operation=0`);
-} finally {
-  db.stop();
+  await check("concurrent detaches and old catch cannot deadlock or duplicate the ownership transition", async () => {
+    const before = JSON.parse(canonical());
+    const first = db.startSql(`begin; set role service_role;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());
+      select pg_sleep(0.2); commit;`);
+    const second = db.startSql(`set role service_role;
+      select public.detach_production_customer_identity_v1('37000000-0000-4000-8000-000000000001','${randomUUID()}',now());`);
+    const oldCatch = db.startSql(`begin; set role service_role;
+      update public.production_result_credentials set revoked_at=now() where id='${f(1).credential}'; rollback;`);
+    const [one, two, caught] = await Promise.all([first.result, second.result, oldCatch.result]);
+    for (const outcome of [one, two]) assert.equal(outcome.code, 0, outcome.error);
+    assert.deepEqual([one, two].map(r=>JSON.parse(r.output).detached_binding_count).sort((a,b)=>a-b), [0, 12]);
+    if (caught.code !== 0) assert.match(caught.error, /F004_LEGACY_NOTIFICATION_REVOCATION_FENCED/u);
+    assert.equal(db.sql("select count(*) from public.production_customer_ownership_bindings where state='active';"), "0");
+    assert.equal(db.sql("select count(*) from public.production_result_credentials where revoked_at is null;"), "0");
+    assert.equal(db.sql("select count(*) from public.production_notification_outbox;"), "12");
+    const after = JSON.parse(canonical());
+    for (const key of ["deliveries", "jobs", "payments"]) assert.deepEqual(after[key], before[key]);
+    const withoutRevocation = rows=>rows.map(row=>Object.fromEntries(Object.entries(row).filter(([key])=>key!=="revoked_at")));
+    assert.deepEqual(withoutRevocation(after.handoffs), withoutRevocation(before.handoffs));
+  });
+  console.log(`PASS F004 cutover PostgreSQL ${mode} ${passed}/${passed}; external operation=0`);
+  // Receipt hashes the exact SQL used above, so another migration cannot reuse
+  // this verifier's successful installation evidence by registry alias alone.
+  return { functional: passed, artifacts: [{ file: migrationFile, sha256: digest(migration) }] };
 }
+
+const missingId = "00000000-0000-4000-8000-000000000000";
+const contracts = [
+  ["public.claim_production_notification_cutover_recovery_v1(text)", "public.claim_production_notification_cutover_recovery_v1('live')"],
+  ["public.claim_production_notification_v1(uuid,uuid,timestamptz)", `public.claim_production_notification_v1('${missingId}','${missingId}',now())`],
+  ["public.claim_production_notification_v2(uuid,uuid,timestamptz,timestamptz)", `public.claim_production_notification_v2('${missingId}','${missingId}',now()+interval '1 minute',now())`],
+  ["public.claim_production_notification_v3(uuid,uuid,timestamptz,timestamptz)", `public.claim_production_notification_v3('${missingId}','${missingId}',now()+interval '1 minute',now())`],
+  ["public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)", `public.detach_production_customer_identity_v1('${missingId}','${missingId}',now())`],
+].map(([signature, call]) => ({ signature, call, allowed: ["service_role"] }));
+const results = await verifyMigrationAuthorityLayers({ label: "f004-cutover", baselineVersion: 31,
+  runtimeContracts: contracts, verify: verifyCutover });
+export const migrationVerification = results;
+console.log(`PASS F004 migration layers 2/2; functional=${results.map(r => `${r.mode}:${r.functional}`).join(",")}; runtime permissions=${results.reduce((n,r) => n+r.permissionChecks,0)}; external operation=0`);

@@ -13,6 +13,7 @@ import {
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { inflateRawSync } from "node:zlib";
+import { REMEDIATION_F004_PRIVILEGE_CORRECTION, assertRemediationWave3Evidence } from "./remediation-wave3-evidence.mjs";
 import { zipFunctions } from "@netlify/zip-it-and-ship-it";
 import toml from "toml";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
@@ -41,7 +42,7 @@ const additiveMigrationBlobs = Object.freeze({
   "0029_f006_global_unpaid_compute.sql": "0ab47660d827a67840bb6b376756010bc9814d90",
   "0030_f003_reconciliation_environment_fence.sql": "7a93be5f6206747fd6fbeaa712085a21304a170b",
   "0031_f005_anonymous_admission_isolation.sql": "b2897db09428d25a7e6e10cf29551d38a8c86d73",
-  "0032_f004_notification_cutover_fence.sql": "863f1a23d6621e0f79cb667ea5cab3cda09e0a06",
+  "0032_f004_notification_cutover_fence.sql": REMEDIATION_F004_PRIVILEGE_CORRECTION.blob,
 });
 const dispatchFlag = "PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED";
 const reconciliationFlag = "STRIPE_RECONCILIATION_SCHEDULED_ENABLED";
@@ -439,8 +440,9 @@ await check("migration inventory and accepted identities remain exact", async ()
     readdirSync(migrationRoot).filter((name) => name.endsWith(".sql")).sort(),
     [...expectedMigrations, ...Object.keys(additiveMigrationBlobs)],
   );
-  // Preserve the original historical contract; only these exact additive
-  // migration blobs are permitted through the local remediation waves.
+  // Preserve historical pins, including the failed 0032 artifact; permit only
+  // its exact unapplied replacement in addition to the additive migrations.
+  assertRemediationWave3Evidence({ root });
   execFileSync(
     "git.exe",
     ["diff", "--quiet", baseAuthority, "--", ...expectedMigrations.map((name) => `supabase/migrations/${name}`)],

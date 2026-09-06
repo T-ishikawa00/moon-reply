@@ -64,8 +64,20 @@ returns trigger language plpgsql security invoker set search_path = '' as $funct
 begin
   if current_user = 'service_role'
      and old.f004_legacy_sent_cutover_protected
-     and current_setting('moon_reply.f004_identity_detach', true) is distinct from 'true'
-     and old.revoked_at is null and new.revoked_at is not null then
+     and old.revoked_at is null and new.revoked_at is not null
+     and not exists (
+       select 1 from public.production_customer_deliveries delivery
+       join public.production_logical_assessments logical_assessment
+         on logical_assessment.id = delivery.logical_assessment_id
+       join public.production_purchase_intents intent
+         on intent.preparation_id = logical_assessment.preparation_id
+       join public.production_customer_ownership_bindings binding
+         on binding.id = intent.customer_ownership_binding_id
+           and binding.preparation_id = intent.preparation_id
+       where delivery.id = old.delivery_id
+         and binding.state = 'identity_detached'
+         and binding.identity_detached_at = new.revoked_at
+     ) then
     raise exception 'F004_LEGACY_NOTIFICATION_REVOCATION_FENCED' using errcode = 'P0001';
   end if;
   return new;
@@ -75,12 +87,70 @@ create trigger f004_legacy_notification_revocation_fence
   before update on public.production_result_credentials
   for each row execute function public.guard_f004_legacy_notification_revocation_v1();
 
--- Preserve the accepted identity-detachment RPC, including credential
--- revocation, body, invoker authority and ACL. This function-local setting is
--- automatically restored on exit; an old sender's separate direct UPDATE
--- never acquires it. It distinguishes trusted runtime paths, not DB principals.
-alter function public.detach_production_customer_identity_v1(uuid,uuid,timestamptz)
-  set "moon_reply.f004_identity_detach" = 'true';
+-- Preserve the accepted detachment signature, invoker authority, ACL and
+-- atomic result. Record the existing ownership transition first, then revoke
+-- only credentials belonging to those exact bindings at the same timestamp.
+-- The guard observes that real transition, not a caller-set bypass flag.
+-- Use separate statements so row triggers see the completed binding update;
+-- any later error rolls both changes back. The guard takes no binding locks.
+-- An old detachment body already in flight may fail closed and be retried by
+-- its caller; it must never bypass the guard or partially detach identity.
+create or replace function public.detach_production_customer_identity_v1(
+  p_customer_user_id uuid,
+  p_request_id uuid,
+  p_now timestamptz
+) returns jsonb
+language plpgsql
+security invoker
+set search_path = ''
+as $function$
+declare
+  detached_binding_ids uuid[];
+begin
+  perform pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtextextended(
+      'customer-identity-detachment:' || p_request_id::text, 0
+    )
+  );
+  perform 1 from public.production_customer_ownership_bindings
+    where customer_user_id = p_customer_user_id and state = 'active'
+    for update;
+  with detached as (
+    update public.production_customer_ownership_bindings set
+      customer_user_id = null,
+      delivery_email_sha256 = null,
+      delivery_email_ciphertext = null,
+      delivery_email_key_version = null,
+      delivery_email_verified_source = null,
+      delivery_email_verified_at = null,
+      state = 'identity_detached',
+      identity_detached_at = p_now,
+      updated_at = p_now
+      where customer_user_id = p_customer_user_id and state = 'active'
+      returning id
+  ) select coalesce(pg_catalog.array_agg(id), array[]::uuid[])
+    into detached_binding_ids from detached;
+  update public.production_result_credentials as credential set
+    revoked_at = coalesce(credential.revoked_at, p_now)
+    where credential.revoked_at is null and exists (
+      select 1
+      from public.production_customer_deliveries as delivery
+      join public.production_logical_assessments as logical_assessment
+        on logical_assessment.id = delivery.logical_assessment_id
+      join public.production_purchase_intents as intent
+        on intent.preparation_id = logical_assessment.preparation_id
+      join public.production_customer_ownership_bindings as binding
+        on binding.id = intent.customer_ownership_binding_id
+        and binding.preparation_id = intent.preparation_id
+      where delivery.id = credential.delivery_id
+        and binding.id = any(detached_binding_ids)
+    );
+  return pg_catalog.jsonb_build_object(
+    'disposition', 'completed',
+    'detached_binding_count', pg_catalog.cardinality(detached_binding_ids)
+  );
+end;
+$function$;
 
 -- Replacing a function is not sufficient: an old invocation may already have
 -- entered its old body and be waiting for the relation lock. New claims must
