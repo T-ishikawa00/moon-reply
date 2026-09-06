@@ -6,7 +6,7 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
-  renameSync,
+  realpathSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -25,10 +25,22 @@ import {
 
 const root = process.cwd();
 const ingressRoot = path.join(root, "services", "stripe-webhook-ingress");
-const artifactRoot = path.join(root, ".netlify", "m2-b2-i4-ingress-artifact");
-const ingressDistRoot = path.join(ingressRoot, "dist");
-const ingressDistBackup = path.join(artifactRoot, "dist-before-i4-proof");
+const artifactRoot = path.join(ingressRoot, ".m2-b2-i4-artifact-proof");
+const ingressDistRoot = path.join(artifactRoot, "dist");
 const baseAuthority = "680398b243f69f80cab6392cc6155ed0be789120";
+const additiveMigrationBlobs = Object.freeze({
+  "0020_m2_c1_prepayment_compute_budget.sql": "44057eb78d9339eb609a13f5951fb7fc5c9bab25",
+  "0021_m2_d2_customer_support_cases.sql": "f51d1492919bdbeee6d2e906a59cd07ece6d8f06",
+  "0022_operator_discord_notifications_r1.sql": "eac917d8db54a9808819a113f8ca0b14eb1b7fb1",
+  "0023_launch_measurement_r1.sql": "a6aead83b872ac3f4d2b559dcdaaf165371031eb",
+  "0024_f004_notification_send_identity.sql": "d3696ed516d4e221e7f0d6663a7f0215e464f3cf",
+  "0025_f010_account_otp_throttle.sql": "128713dcccf03d5658679e2b1d1d75895f53a46a",
+  "0026_f001_completed_fulfillment_recovery.sql": "8f16ef977c3cecc3c566ae2f2b546bdd764000c9",
+  "0027_f003_payment_reconciliation_followup.sql": "e80e17c2baf2633b9374ab314515373f3b9d6db2",
+  "0028_f005_anonymous_admission.sql": "0c2418f7db29a8c56afbd08a5c06639437608e1d",
+  "0029_f006_global_unpaid_compute.sql": "0ab47660d827a67840bb6b376756010bc9814d90",
+  "0030_f003_reconciliation_environment_fence.sql": "7a93be5f6206747fd6fbeaa712085a21304a170b",
+});
 const dispatchFlag = "PAYMENT_FULFILLMENT_DISPATCH_SCHEDULED_ENABLED";
 const reconciliationFlag = "STRIPE_RECONCILIATION_SCHEDULED_ENABLED";
 const controlledEnvironmentNames = [
@@ -326,10 +338,11 @@ await check("enabled core scheduler behavior remains bounded", async () => {
 
   const finishes = [];
   const reconciliation = await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch(input) {
         assert.equal(input.limit, 4);
-        assert.equal(input.maximumAttempts, 5);
+        assert.equal(input.maximumAttempts, 6);
         return [{
           paymentAttemptId: "81000000-0000-4000-8000-000000000001",
           providerCheckoutSessionId: "cs_test_i4",
@@ -422,27 +435,19 @@ await check("migration inventory and accepted identities remain exact", async ()
   ];
   assert.deepEqual(
     readdirSync(migrationRoot).filter((name) => name.endsWith(".sql")).sort(),
-    expectedMigrations,
+    [...expectedMigrations, ...Object.keys(additiveMigrationBlobs)],
   );
+  // Preserve the original historical contract; only these exact additive
+  // migration blobs are permitted through the local remediation waves.
   execFileSync(
     "git.exe",
-    ["diff", "--quiet", baseAuthority, "--", "supabase/migrations"],
+    ["diff", "--quiet", baseAuthority, "--", ...expectedMigrations.map((name) => `supabase/migrations/${name}`)],
     { cwd: root },
   );
-  assert.equal(
-    execFileSync(
-      "git.exe",
-      [
-        "ls-files",
-        "--others",
-        "--exclude-standard",
-        "--",
-        "supabase/migrations",
-      ],
-      { cwd: root, encoding: "utf8" },
-    ).trim(),
-    "",
-  );
+  for (const [file, blob] of Object.entries(additiveMigrationBlobs)) {
+    assert.equal(execFileSync("git.exe", ["hash-object", `supabase/migrations/${file}`],
+      { cwd: root, encoding: "utf8" }).trim(), blob, file);
+  }
   for (const [file, expected] of [
     [
       "supabase/migrations/0017_m2_a1_null_fence_integrity.sql",
@@ -500,17 +505,28 @@ await check("ingress Node 22 source pin and package contract are exact", async (
 
 await check("actual ingress package imports with exact dependencies", async () => {
   assert.equal(existsSync(artifactRoot), false, "refusing to overwrite artifact proof");
-  const hadExistingDist = existsSync(ingressDistRoot);
+  assert.equal(realpathSync(ingressRoot), path.resolve(root, "services", "stripe-webhook-ingress"),
+    "proof must remain in the current workspace, without redirected directories");
   try {
     mkdirSync(artifactRoot, { recursive: true });
-    if (hadExistingDist) renameSync(ingressDistRoot, ingressDistBackup);
+    assert.equal(realpathSync(artifactRoot), path.resolve(ingressRoot, ".m2-b2-i4-artifact-proof"));
     const buildScript = path.join(ingressRoot, "scripts", "build.mjs");
-    await import(`${pathToFileURL(buildScript).href}?i4=${Date.now()}`);
-    const publicFiles = filesBelow(path.join(ingressRoot, "dist", "public"));
+    // Execute the actual build script with only its root constants redirected.
+    // The shared ingress dist directory is never moved, overwritten or deleted.
+    const buildSource = readFileSync(buildScript, "utf8");
+    const packageDeclaration = 'const packageRoot = path.resolve(fileURLToPath(new URL("..", import.meta.url)));';
+    const distDeclaration = 'const distRoot = path.join(packageRoot, "dist");';
+    assert.equal(buildSource.split(packageDeclaration).length, 2);
+    assert.equal(buildSource.split(distDeclaration).length, 2);
+    const isolatedBuildScript = path.join(artifactRoot, "build.mjs");
+    writeFileSync(isolatedBuildScript, buildSource
+      .replace(packageDeclaration, `const packageRoot = ${JSON.stringify(ingressRoot)};`)
+      .replace(distDeclaration, `const distRoot = ${JSON.stringify(ingressDistRoot)};`));
+    await import(`${pathToFileURL(isolatedBuildScript).href}?i4=${Date.now()}`);
+    const publicFiles = filesBelow(path.join(ingressDistRoot, "public"));
     assert.deepEqual(publicFiles, []);
     const builtFunction = path.join(
-      ingressRoot,
-      "dist",
+      ingressDistRoot,
       "functions",
       "stripe-webhook.mjs",
     );
@@ -582,11 +598,10 @@ await check("actual ingress package imports with exact dependencies", async () =
       globalThis.fetch = originalFetch;
     }
   } finally {
-    rmSync(ingressDistRoot, { recursive: true, force: true });
-    if (hadExistingDist && existsSync(ingressDistBackup)) {
-      renameSync(ingressDistBackup, ingressDistRoot);
+    if (existsSync(artifactRoot)) {
+      assert.equal(realpathSync(artifactRoot), path.resolve(ingressRoot, ".m2-b2-i4-artifact-proof"));
+      rmSync(artifactRoot, { recursive: true, force: true });
     }
-    rmSync(artifactRoot, { recursive: true, force: true });
   }
 });
 

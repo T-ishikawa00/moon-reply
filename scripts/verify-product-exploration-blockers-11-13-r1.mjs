@@ -164,6 +164,7 @@ assert.equal(privateRecoverySchedulerPolicy.reconciliationMaximumAttempts, 6);
 async function finishForPendingObservation(attemptCount, now) {
   const finishes = [];
   await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch(input) {
         assert.equal(input.maximumAttempts, 6);

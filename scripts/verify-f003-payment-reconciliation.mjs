@@ -21,6 +21,7 @@ registerHooks({ resolve(specifier, context, next) {
   return specifier === "server-only" ? { url: "data:text/javascript,export%20{}", shortCircuit: true } : next(specifier, context);
 } });
 const { ProductionPaymentDeliveryApplication } = await import("../lib/payment/production/application.ts");
+const { SupabasePaymentDeliveryRepository } = await import("../lib/payment/production/supabase-repository.ts");
 // Every provider below is constructor-injected or has its SDK method replaced.
 // Project environment files and runtime-service constructors are never loaded.
 globalThis.fetch = async () => { throw new Error("F003_EXTERNAL_FETCH_PROHIBITED"); };
@@ -29,13 +30,15 @@ const id = "67000000-0000-4000-8000-000000000001";
 const recorded = disposition => ({ disposition, purchaseIntentId: null, verifiedPaymentId: null, fulfillmentJobId: null });
 let passed = 0;
 async function check(name, run) { await run(); console.log(`PASS F003 ${++passed} ${name}`); }
-function shortHarness(attemptCount, answer) {
+function shortHarness(attemptCount, answer, environment = "test") {
   const finishes = [];
   return {
     finishes,
     run: () => runProductionPaymentReconciliationSchedule({
+    environment,
       repository: {
         async claimPaymentReconciliationBatch(input) {
+          assert.equal(input.environment, environment);
           assert.equal(input.maximumAttempts, 6); assert.equal(input.limit, 4);
           return [{ paymentAttemptId: id, providerCheckoutSessionId: "cs_test_f003", attemptCount }];
         },
@@ -45,13 +48,14 @@ function shortHarness(attemptCount, answer) {
     }),
   };
 }
-function longHarness(answer, overrides = {}) {
+function longHarness(answer, overrides = {}, environment = "test") {
   const finishes = [];
   return {
     finishes,
     run: () => runProductionPaymentReconciliationFollowup({
+    environment,
       repository: {
-        async claimPaymentReconciliationFollowup() { return [{ paymentAttemptId: id, providerCheckoutSessionId: "cs_test_f003", attemptCount: 1 }]; },
+        async claimPaymentReconciliationFollowup(input) { assert.equal(input.environment, environment); return [{ paymentAttemptId: id, providerCheckoutSessionId: "cs_test_f003", attemptCount: 1 }]; },
         async finishPaymentReconciliationFollowup(input) { finishes.push(input); },
         ...overrides,
       },
@@ -114,6 +118,7 @@ await check("one read maximum and finish conflict cannot cause another provider 
 
 await check("low remaining scheduler time defers before claim and abort-ignoring RPC still times out", async () => {
   const result = await runProductionPaymentReconciliationFollowup({
+    environment: "test",
     repository: { async claimPaymentReconciliationFollowup() { throw Error("must not claim"); },
       async finishPaymentReconciliationFollowup() { throw Error("must not finish"); } },
     async reconcileAttempt() { throw Error("must not read provider"); }, canStart: () => false,
@@ -188,5 +193,67 @@ await check("expand migration preserves legacy operator query except exact new-i
   assert.doesNotMatch(migration, /(?:delete from|truncate|drop table)|update public\.production_(?:purchase_intents|payment_attempts|verified_payments|fulfillment_jobs)\b/iu);
   const runtime = readFileSync("lib/payment/production/reconciliation-scheduler-runtime-service.ts", "utf8");
   assert.match(runtime, /timeout: 5_000/u); assert.match(runtime, /maxNetworkRetries: 0/u); assert.match(runtime, /dispatchFulfillment: false/u);
+});
+
+await check("both schedulers require explicit Stripe mode before any repository/provider operation", async () => {
+  let calls = 0;
+  for (const environment of [undefined, null, "", "production", "TEST"]) {
+    for (const run of [runProductionPaymentReconciliationSchedule, runProductionPaymentReconciliationFollowup]) {
+      await assert.rejects(() => run({ environment,
+        repository: { async claimPaymentReconciliationBatch() { calls++; }, async claimPaymentReconciliationFollowup() { calls++; } },
+        async reconcileAttempt() { calls++; },
+      }), e => e.safeCode === "PAYMENT_RECONCILIATION_ENVIRONMENT_INVALID");
+    }
+  }
+  assert.equal(calls, 0);
+  for (const environment of ["test", "live"]) {
+    await shortHarness(1, async () => recorded("pending"), environment).run();
+    await longHarness(async () => recorded("pending"), {}, environment).run();
+  }
+});
+
+await check("real repository forwards mode to additive SQL claims before selection", async () => {
+  const repository = Object.create(SupabasePaymentDeliveryRepository.prototype);
+  const calls = [];
+  repository.client = { rpc(name, args) {
+    calls.push({ name, args });
+    const answer = { data: [], error: null };
+    return Object.assign(Promise.resolve(answer), { async abortSignal() { return answer; } });
+  } };
+  for (const environment of ["test", "live"]) {
+    await repository.claimPaymentReconciliationBatch({ ownerId: id, now, leaseExpiresAt: now,
+      notNewerThan: now, limit: 4, maximumAttempts: 6, environment });
+    await repository.claimPaymentReconciliationFollowup({ ownerId: id, now, environment });
+  }
+  assert.deepEqual(calls.map(c => [c.name, c.args.p_environment]), [
+    ["claim_rc2_payment_reconciliation_batch_v2", "test"], ["claim_rc2_payment_reconciliation_followup_v2", "test"],
+    ["claim_rc2_payment_reconciliation_batch_v2", "live"], ["claim_rc2_payment_reconciliation_followup_v2", "live"],
+  ]);
+  const runtime = readFileSync("lib/payment/production/reconciliation-scheduler-runtime-service.ts", "utf8");
+  for (const name of ["runProductionPaymentReconciliationSchedule", "runProductionPaymentReconciliationFollowup"]) {
+    assert.match(runtime, new RegExp(`${name}\\(\\{\\s+environment: stripe\\.environment,`, "u"));
+  }
+});
+
+await check("0030 preserves exact short/long claim logic except required mode binding", () => {
+  const read = path => readFileSync(`supabase/migrations/${path}`, "utf8").replaceAll("\r\n", "\n");
+  const extract = (text, name) => text.match(new RegExp(`create function public\\.${name}\\([\\s\\S]*?\\$function\\$;`, "u"))[0];
+  const migration = read("0030_f003_reconciliation_environment_fence.sql");
+  const short = extract(migration, "claim_rc2_payment_reconciliation_batch_v2")
+    .replace("claim_rc2_payment_reconciliation_batch_v2", "claim_rc2_payment_reconciliation_batch_v1")
+    .replace("  p_max_attempts integer,\n  p_environment text\n", "  p_max_attempts integer\n")
+    .replace("     or p_environment is null or p_environment not in ('test', 'live')\n", "")
+    .replace("        and intent.environment = p_environment\n", "")
+    .replace("      and intent.environment = p_environment\n", "");
+  assert.equal(short, extract(read("0019_m2_b2_private_payment_reconciliation.sql"), "claim_rc2_payment_reconciliation_batch_v1"));
+  const long = extract(migration, "claim_rc2_payment_reconciliation_followup_v2")
+    .replace("claim_rc2_payment_reconciliation_followup_v2", "claim_rc2_payment_reconciliation_followup_v1")
+    .replace("  p_owner_id uuid, p_now timestamptz, p_environment text\n", "  p_owner_id uuid, p_now timestamptz\n")
+    .replace("  if p_owner_id is null or p_now is null\n    or p_environment is null or p_environment not in ('test', 'live') then", "  if p_owner_id is null or p_now is null then")
+    .replace("  from public.production_payment_attempts as attempt\n  join public.production_purchase_intents as intent on intent.id = attempt.purchase_intent_id\n", "  from public.production_payment_attempts as attempt\n")
+    .replace("      and intent.environment = p_environment\n", "")
+    .replaceAll("    and intent.environment = p_environment\n", "");
+  assert.equal(long, extract(read("0027_f003_payment_reconciliation_followup.sql"), "claim_rc2_payment_reconciliation_followup_v1"));
+  assert.doesNotMatch(migration, /create or replace|alter table|drop |delete from|truncate/iu);
 });
 console.log(`F003 reconciliation: ${passed}/${passed} PASS; external operations=0`);

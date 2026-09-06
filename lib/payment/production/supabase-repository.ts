@@ -183,9 +183,11 @@ type PaymentDatabase = {
       attach_rc2_checkout_session_v1: RuntimeFunction;
       mark_rc2_payment_attempt_unknown_v1: RuntimeFunction;
       claim_rc2_payment_reconciliation_batch_v1: RuntimeFunction;
+      claim_rc2_payment_reconciliation_batch_v2: RuntimeFunction;
       finish_rc2_payment_reconciliation_v1: RuntimeFunction;
       finish_rc2_payment_reconciliation_v2: RuntimeFunction;
       claim_rc2_payment_reconciliation_followup_v1: RuntimeFunction;
+      claim_rc2_payment_reconciliation_followup_v2: RuntimeFunction;
       finish_rc2_payment_reconciliation_followup_v1: RuntimeFunction;
       record_rc2_stripe_evidence_v2: RuntimeFunction;
       resolve_customer_purchase_status_v1: RuntimeFunction;
@@ -790,6 +792,7 @@ export class SupabasePaymentDeliveryRepository
     notNewerThan: string;
     limit: number;
     maximumAttempts: number;
+    environment: PaymentEnvironment;
   }): Promise<
     Array<{
       paymentAttemptId: string;
@@ -798,7 +801,7 @@ export class SupabasePaymentDeliveryRepository
     }>
   > {
     const { data, error } = await this.client.rpc(
-      "claim_rc2_payment_reconciliation_batch_v1",
+      "claim_rc2_payment_reconciliation_batch_v2",
       {
         p_owner_id: input.ownerId,
         p_lease_expires_at: input.leaseExpiresAt,
@@ -806,6 +809,7 @@ export class SupabasePaymentDeliveryRepository
         p_not_newer_than: input.notNewerThan,
         p_limit: input.limit,
         p_max_attempts: input.maximumAttempts,
+        p_environment: input.environment,
       },
     );
     if (error) databaseFailure(error);
@@ -850,9 +854,9 @@ export class SupabasePaymentDeliveryRepository
     if (error) databaseFailure(error);
   }
 
-  async claimPaymentReconciliationFollowup(input: { ownerId: string; now: string }) {
-    const { data, error } = await withPaymentReconciliationRpcDeadline((signal) => this.client.rpc("claim_rc2_payment_reconciliation_followup_v1", {
-      p_owner_id: input.ownerId, p_now: input.now,
+  async claimPaymentReconciliationFollowup(input: { ownerId: string; now: string; environment: PaymentEnvironment }) {
+    const { data, error } = await withPaymentReconciliationRpcDeadline((signal) => this.client.rpc("claim_rc2_payment_reconciliation_followup_v2", {
+      p_owner_id: input.ownerId, p_now: input.now, p_environment: input.environment,
     }).abortSignal(signal));
     if (error) databaseFailure(error);
     if (!Array.isArray(data) || data.length > 1) databaseFailure();

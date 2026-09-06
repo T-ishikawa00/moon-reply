@@ -93,10 +93,12 @@ export async function runConfiguredProductionPaymentReconciliationSchedule() {
   // claim is globally limited to one read per five-minute slot, with at least
   // one hour between reads of an individual stopped attempt.
   const shortWindow = await runProductionPaymentReconciliationSchedule({
+    environment: stripe.environment,
     repository,
     reconcileAttempt,
   });
   const followup = await runProductionPaymentReconciliationFollowup({
+    environment: stripe.environment,
     repository,
     reconcileAttempt,
     // Reserve 18 seconds of the scheduled function's 30-second limit for

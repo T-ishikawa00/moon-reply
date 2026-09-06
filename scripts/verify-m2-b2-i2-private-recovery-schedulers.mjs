@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import toml from "toml";
+import { createLocalPostgres } from "./remediation-local-postgres.mjs";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
 import { requestProductionFulfillmentDispatch } from "../lib/payment/production/fulfillment-dispatch.ts";
 import {
@@ -326,6 +327,7 @@ await check("reconciliation is bounded to four reads and concurrency two", async
   let active = 0;
   let maximumActive = 0;
   const result = await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch(input) {
         assert.equal(input.limit, 4);
@@ -368,6 +370,7 @@ await check("transient errors back off and permanent invalid sessions stop", asy
   ];
   const finishes = [];
   await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch() {
         return claims;
@@ -396,6 +399,7 @@ await check("transient errors back off and permanent invalid sessions stop", asy
 await check("fifth pending observation retries and sixth stops without checkout creation", async () => {
   const finishes = [];
   await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch() {
         return [{
@@ -413,6 +417,7 @@ await check("fifth pending observation retries and sixth stops without checkout 
     now: () => "2026-08-24T00:10:00.000Z",
   });
   await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch() {
         return [{
@@ -444,6 +449,7 @@ await check("fifth pending observation retries and sixth stops without checkout 
 await check("webhook race disposition settles without dispatch coupling", async () => {
   const finishes = [];
   const result = await runProductionPaymentReconciliationSchedule({
+    environment: "test",
     repository: {
       async claimPaymentReconciliationBatch() {
         return [{
@@ -505,32 +511,22 @@ await check("scheduler secret and responsibility domains are separated", async (
 });
 
 await check("fresh local DB reconciliation and privilege proof", async () => {
-  const container = execFileSync(
-    "docker",
-    ["ps", "--filter", "name=supabase_db_moon-reply", "--format", "{{.Names}}"],
-    { cwd: root, encoding: "utf8" },
-  ).trim();
-  assert.equal(container, "supabase_db_moon-reply");
-  const sql = await readFile(
-    path.join(root, "supabase/tests/m2_b2_i2_private_reconciliation_r1.sql"),
-    "utf8",
-  );
-  const output = execFileSync(
-    "docker",
-    ["exec", "-i", container, "psql", "-U", "postgres", "-d", "postgres"],
-    { cwd: root, input: sql, encoding: "utf8" },
-  );
-  assert.match(output, /PASS M2-B2-I2 private reconciliation DB proof/u);
-  const privilegeSql = await readFile(
-    path.join(root, "supabase/tests/m2_b2_i1_ingress_privilege_preflight_r1.sql"),
-    "utf8",
-  );
-  const privilegeOutput = execFileSync(
-    "docker",
-    ["exec", "-i", container, "psql", "-U", "postgres", "-d", "postgres"],
-    { cwd: root, input: privilegeSql, encoding: "utf8" },
-  );
-  assert.match(privilegeOutput, /M2-B2-I1 INGRESS PRIVILEGE PREFLIGHT PASS/u);
+  const database = await createLocalPostgres("i2-reconciliation");
+  try {
+    database.applyThrough(30);
+    const sql = await readFile(
+      path.join(root, "supabase/tests/m2_b2_i2_private_reconciliation_r1.sql"),
+      "utf8",
+    );
+    assert.match(database.sql(sql), /PASS M2-B2-I2 private reconciliation DB proof/u);
+    const privilegeSql = await readFile(
+      path.join(root, "supabase/tests/m2_b2_i1_ingress_privilege_preflight_r1.sql"),
+      "utf8",
+    );
+    assert.match(database.sql(privilegeSql), /M2-B2-I1 INGRESS PRIVILEGE PREFLIGHT PASS/u);
+  } finally {
+    database.stop();
+  }
 });
 
 await check("no real external action in I2 verifier", async () => {

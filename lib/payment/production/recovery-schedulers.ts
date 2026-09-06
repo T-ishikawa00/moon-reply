@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { asM2RuntimeError, M2RuntimeError } from "../../assessment/runtime/errors.ts";
-import type { RecordedPaymentEvidence } from "./types.ts";
+import type { PaymentEnvironment, RecordedPaymentEvidence } from "./types.ts";
 
 export const privateRecoverySchedulerPolicy = Object.freeze({
   dispatchBatchLimit: 4,
@@ -44,6 +44,7 @@ export type PaymentReconciliationFollowupRepository = {
   claimPaymentReconciliationFollowup(input: {
     ownerId: string;
     now: string;
+    environment: PaymentEnvironment;
   }): Promise<ClaimedPaymentReconciliation[]>;
   finishPaymentReconciliationFollowup(input: {
     paymentAttemptId: string;
@@ -90,6 +91,7 @@ export type PrivateRecoverySchedulerRepository = {
     notNewerThan: string;
     limit: number;
     maximumAttempts: number;
+    environment: PaymentEnvironment;
   }): Promise<ClaimedPaymentReconciliation[]>;
   finishPaymentReconciliation(
     input: PaymentReconciliationFinish,
@@ -247,6 +249,7 @@ async function mapWithConcurrency<T>(
 }
 
 export async function runProductionPaymentReconciliationSchedule(input: {
+  environment: PaymentEnvironment;
   repository: Pick<
     PrivateRecoverySchedulerRepository,
     "claimPaymentReconciliationBatch" | "finishPaymentReconciliation"
@@ -259,6 +262,9 @@ export async function runProductionPaymentReconciliationSchedule(input: {
   batchLimit?: number;
   concurrency?: number;
 }) {
+  if (input.environment !== "test" && input.environment !== "live") {
+    throw new M2RuntimeError("PAYMENT_RECONCILIATION_ENVIRONMENT_INVALID", 503);
+  }
   const now = input.now ?? (() => new Date().toISOString());
   const ownerId = (input.uuid ?? randomUUID)();
   const claimedAt = now();
@@ -278,6 +284,7 @@ export async function runProductionPaymentReconciliationSchedule(input: {
       privateRecoverySchedulerPolicy.reconciliationBatchLimit,
     maximumAttempts:
       privateRecoverySchedulerPolicy.reconciliationMaximumAttempts,
+    environment: input.environment,
   });
   let stripeReads = 0;
   let settled = 0;
@@ -357,12 +364,16 @@ export async function runProductionPaymentReconciliationSchedule(input: {
 // failure can continue automatically. UNKNOWN and integrity/configuration
 // failures remain durably monitored without reauthorizing provider reads.
 export async function runProductionPaymentReconciliationFollowup(input: {
+  environment: PaymentEnvironment;
   repository: PaymentReconciliationFollowupRepository;
   reconcileAttempt: (paymentAttemptId: string) => Promise<RecordedPaymentEvidence>;
   now?: () => string;
   uuid?: () => string;
   canStart?: () => boolean;
 }) {
+  if (input.environment !== "test" && input.environment !== "live") {
+    throw new M2RuntimeError("PAYMENT_RECONCILIATION_ENVIRONMENT_INVALID", 503);
+  }
   if (input.canStart && !input.canStart()) {
     return { claimed: 0, stripeReads: 0, settled: 0, retried: 0,
       blocked: 0, finishConflicts: 0, deferred: true };
@@ -372,6 +383,7 @@ export async function runProductionPaymentReconciliationFollowup(input: {
   const claims = await input.repository.claimPaymentReconciliationFollowup({
     ownerId,
     now: now(),
+    environment: input.environment,
   });
   if (claims.length > paymentReconciliationFollowupPolicy.batchLimit) {
     throw new Error("PAYMENT_RECONCILIATION_FOLLOWUP_BATCH_INVALID");
