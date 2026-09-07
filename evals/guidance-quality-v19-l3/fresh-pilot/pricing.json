@@ -1,0 +1,17 @@
+{
+  "status": "VERIFIED_PUBLIC_OFFICIAL_BEFORE_EXECUTION",
+  "verifiedAt": "2026-09-07T16:15:40Z",
+  "model": "gpt-5.6-luna",
+  "serviceTier": "default",
+  "perMillionTokens": {"standardInput":0.2,"cachedInput":0.02,"cacheWriteInput":0.25,"outputIncludingReasoning":1.2},
+  "sources": ["https://developers.openai.com/api/docs/models/gpt-5.6-luna","https://developers.openai.com/api/docs/pricing"],
+  "provenance": "Current task official read-only page retrieval; Standard short-context table, low reasoning supported. No API probe or dashboard.",
+  "currency": "USD",
+  "yenConversion": null,
+  "maximumReservationUsd": 1.5330112,
+  "hardCapUsd": 2,
+  "allInputReservedAtCacheWriteRate": true,
+  "reservationReturned": false,
+  "maximumHttp": 72,
+  "outputIncludesReasoning": true
+}

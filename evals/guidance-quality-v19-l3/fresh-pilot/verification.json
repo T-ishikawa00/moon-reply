@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "guidance-fresh-fake-verification-v1",
+  "pass": true,
+  "realApiCalls": 0,
+  "forbiddenNetworkCalls": 0,
+  "baselineHead": "b62e1a9ac3794344925e2fef8d1fed71c99fb48f",
+  "sourceHashes": {
+    "evals/guidance-quality-v19-l3/fresh-pilot/runner.mjs": "c99915d9b64f5adb448cd3853cde53bbb74c8e6ec336eb727a5cc59feada45f0",
+    "evals/guidance-quality-v19-l3/fresh-pilot/stop-policy.mjs": "dc54f0a2d53ef13c8c6d9448fd9cded3fe7bd5db66f5d1b85fef9b8f45e6b0c8",
+    "evals/guidance-quality-v19-l3/fresh-pilot/review.mjs": "a7e195574f9b22ae7999856178430f8b74ac2407c2496a389daaf4922f44986c",
+    "evals/guidance-quality-v19-l3/fresh-pilot/verify.mjs": "54364ecd9f6d45bb4f0c606f7f78f3955d2c8918fedbce80edf4024b633ad5c0",
+    "evals/guidance-quality-v19-l3/fresh-pilot/pricing.json": "fb3cfb657a55d87b68245886449a30672041cefa41b38096e67a04a5987147d3",
+    "evals/guidance-quality-v19-l3/fresh-pilot/authorization.md": "fa03fe638a71f648ac740e1a6b1fb344619833ad6c52bc24dfacd8e0a5f8948e",
+    "evals/guidance-quality-v19-l3/fresh-pilot/.gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "evals/guidance-quality-wave1/real-pilot/runner.mjs": "895d931787555ee98a3233f4c0094301f51d072c2e02c7da9906a76fa6dd19d6",
+    "evals/guidance-quality-wave1/real-pilot/transport.mjs": "12df5d576d8e346cc2617d8274c80f6e28bd5675b4e416861f670af825390b11",
+    "evals/guidance-quality-wave1/real-pilot/budget.mjs": "08fab214483d0637aefccbca87e6dbb230c3758b84b57e1e9609104445b2591f",
+    "evals/guidance-quality-wave1/real-pilot/review.mjs": "1a07bb19e830b8c051a3e080401613e01c5beb23de81f43e4fee7806567a79ba",
+    "evals/guidance-quality-v19-l1/real-pilot.mjs": "5957b78905562757433ba3efa07df5ed205e6732a9d977035787a92acb99e10c",
+    "evals/guidance-quality-wave1/pilot-inputs.json": "54203238b1594335bafad7540a63bf63a4a6b1865a82cbb3718ff6e7bcf121c8",
+    "evals/guidance-quality-v19-l2/pilot-plan.json": "cef6a07f7fc2d7b48cc1b537e397ec69c645c83b6f0b9dbd196396ba0d536bcc",
+    "evals/guidance-quality-v19-l3/catalog-identity.json": "ea102d0e12b82233eb00cfd1ee0bc00096074860129e2a83427af06f675993fd"
+  },
+  "checks": [
+    {
+      "name": "baseline history changed only targeted evaluation assets and both runtime identities match",
+      "status": "PASS"
+    },
+    {
+      "name": "schema and incomplete session routing requires exact accounted response provenance",
+      "status": "PASS"
+    },
+    {
+      "name": "a stopped session cannot resume or refund while the next independent session can run",
+      "status": "PASS"
+    },
+    {
+      "name": "new reservations discard old success provenance and prevent failure misclassification",
+      "status": "PASS"
+    },
+    {
+      "name": "tampered request identity cannot become a local model-schema failure",
+      "status": "PASS"
+    },
+    {
+      "name": "raw major and critical ACTION_CONSISTENCY stop even with classifier-ignored metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "fresh manifest uses fixed eight slots and independently generated session identities",
+      "status": "PASS"
+    },
+    {
+      "name": "both catalogs execute all fixed fake sessions under one budget without extra stages",
+      "status": "PASS"
+    },
+    {
+      "name": "schema-invalid and incomplete output stop only their accounted session with no retry",
+      "status": "PASS"
+    },
+    {
+      "name": "material manual PB05 and Safety STOP preserve later independent sessions",
+      "status": "PASS"
+    },
+    {
+      "name": "raw ignored ACTION_CONSISTENCY major or critical halts the session before any repair",
+      "status": "PASS"
+    },
+    {
+      "name": "true material PB06 finding cannot reach repair or deliver but does not stop the batch",
+      "status": "PASS"
+    },
+    {
+      "name": "one permitted nonmaterial repair followed by material STOP cannot dispatch a third cycle",
+      "status": "PASS"
+    },
+    {
+      "name": "model tier usage HTTP and auth failures globally stop without refunds or retries",
+      "status": "PASS"
+    },
+    {
+      "name": "request provenance and disk mapping corruption globally stop before another HTTP dispatch",
+      "status": "PASS"
+    },
+    {
+      "name": "budget exhaustion rejects before dispatch and ledger corruption remains a global failure",
+      "status": "PASS"
+    },
+    {
+      "name": "maximum reservations are bounded at 72 and USD 1.5330112 with no attempt three",
+      "status": "PASS"
+    },
+    {
+      "name": "protected historical bytes and verification source hashes are unchanged after fake runs",
+      "status": "PASS"
+    }
+  ],
+  "fixtureProvenance": "FAKE ONLY. Saved historical synthetic outputs and a hand-authored acknowledgement fixture were fake transport replies only. They are not new real output, live generation input, or Human quality evidence.",
+  "limitations": [
+    "Fake verification proves stop routing, identity, ledger, projection and rendering mechanics only.",
+    "No model judgment, semantic quality or Human preference is inferred from these fixtures.",
+    "The production runtime and F007 classifier are unchanged; existing raw findings remain preserved."
+  ],
+  "fakeRunSummary": {
+    "nominalSessions": 8,
+    "nominalHttpDispatches": 39,
+    "maximumLedgerOnlyReservations": 72,
+    "maximumReservationUsd": 1.5330112,
+    "hardCapUsd": 2,
+    "realApiCalls": 0,
+    "historicalFilesUnchanged": 221,
+    "mappingDisclosed": false
+  }
+}
