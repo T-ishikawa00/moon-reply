@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-09-07T14:59:17Z",
+  "verifiedBy": "Read-only official model and pricing pages in this task; no API probe or dashboard",
+  "model": "gpt-5.6-luna",
+  "tier": "Standard",
+  "apiServiceTier": "default",
+  "reasoning": "low",
+  "usdPerMillion": { "input": 0.20, "cachedInput": 0.02, "cacheWrite": 0.25, "output": 1.20 },
+  "sources": ["https://developers.openai.com/api/docs/models/gpt-5.6-luna", "https://developers.openai.com/api/docs/pricing"],
+  "scope": "Short context: all reserved requests below 272000 input tokens; output cap includes reasoning tokens",
+  "caps": { "PB-05": { "input": 64000, "outputIncludingReasoning": 8192 }, "PB-06": { "input": 96000, "outputIncludingReasoning": 4096 } },
+  "maximumHttp": 4,
+  "maximumReservationUsd": 0.1094912,
+  "authorizedHardCapUsd": 0.15,
+  "accounting": "Reuse all-input-at-cache-write worst reservation. No refunds, including unknown outcome. Actual usage recorded; if cache_write_tokens absent retain usage-based lower/upper range, not invoice-confirmed actual charge.",
+  "currency": "USD; no JPY conversion"
+}

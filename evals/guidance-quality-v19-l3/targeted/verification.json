@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "gq29-targeted-local-verification-v1",
+  "pass": true,
+  "checks": 18,
+  "passed": 18,
+  "realApiCalls": 0,
+  "credentialReads": 0,
+  "actualDatabaseCalls": 0,
+  "forbiddenNetworkCalls": 0,
+  "fakeTransportDispatches": 30,
+  "fakeResponseEvidenceOnly": true,
+  "actualModelQualityValidated": false,
+  "sourceHashes": {
+    "evals/guidance-quality-v19-l3/targeted/adapter.mjs": "88d444918c814cfb78a60b59fa5a550d8a1df547f0550f471dafc447515532c9",
+    "evals/guidance-quality-v19-l3/targeted/runner.mjs": "3c8f9489964f445c4a8b7ea24014bce2ab4f89b752f60a838e4df5dc12c511fb",
+    "evals/guidance-quality-v19-l3/targeted/verify.mjs": "a9a5efbd1b5a36a3b8f39094953b739dd68131fca91b07e3ad5d127fc4138275",
+    "evals/guidance-quality-wave1/real-pilot/budget.mjs": "08fab214483d0637aefccbca87e6dbb230c3758b84b57e1e9609104445b2591f",
+    "evals/guidance-quality-wave1/real-pilot/transport.mjs": "12df5d576d8e346cc2617d8274c80f6e28bd5675b4e416861f670af825390b11",
+    "evals/guidance-quality-wave1/real-pilot/runner.mjs": "895d931787555ee98a3233f4c0094301f51d072c2e02c7da9906a76fa6dd19d6",
+    "evals/guidance-quality-v19-l1/real-pilot.mjs": "5957b78905562757433ba3efa07df5ed205e6732a9d977035787a92acb99e10c"
+  }
+}
