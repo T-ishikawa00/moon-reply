@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "guidance-v19-l4-local-summary-v1",
+  "date": "2026-09-08",
+  "result": "LOCAL_TECHNICAL_PASS",
+  "implementationBaseline": "1b24003d545d16d0102828a3577444d994520f42",
+  "humanEvidenceOnlyCommit": "b3f3620",
+  "candidateIdentityFile": "catalog-identity.json",
+  "checks": [
+    { "command": "node --experimental-transform-types evals/guidance-quality-v19-l4/verify-repair-unit.mjs", "result": "PASS", "checks": 100, "kind": "pure deterministic contract fixtures" },
+    { "command": "node --experimental-transform-types evals/guidance-quality-v19-l4/verify-runtime.mjs", "result": "PASS", "groups": 23, "scenarios": 50, "knownLimitationDiagnostics": 1, "kind": "real Application and pipeline with saved synthetic receipts and authored fake stage outputs" },
+    { "command": "node --experimental-transform-types evals/guidance-quality-v19-l4/verify-contracts.mjs", "result": "PASS", "checks": 6, "originalEvidenceFiles": 243, "kind": "static contracts and preservation" },
+    { "command": "node scripts/verify-paid-quality-delivery-guarantee-r1.mjs", "result": "PASS", "checks": 4, "kind": "existing local fake regression" },
+    { "command": "node evals/guidance-quality-wave1/verify-ab.mjs", "result": "PASS", "checks": 12, "kind": "existing local fake regression" },
+    { "command": "node evals/guidance-quality-wave1/verify-runtime.mjs", "result": "PASS", "checks": 24, "kind": "existing local fake regression" },
+    { "command": "node --experimental-transform-types evals/guidance-quality-wave1/verify-case-matrix.mjs", "result": "PASS", "assertionRows": 30, "directionMatches": 18, "functionScopeControls": 1, "knownGaps": 2, "inputCoverageOnly": 9, "realAnswerQualityProof": false },
+    { "command": "npm run typecheck -- --incremental false", "result": "PASS" },
+    { "command": "node node_modules/eslint/bin/eslint.js app components lib scripts evals/guidance-quality-v19-l4 --max-warnings=0", "result": "PASS", "warnings": 0, "scope": "source and new L4 evaluation scripts, not whole-repository lint" },
+    { "command": "npm run build", "result": "PASS", "staticPages": "47/47", "deployment": false },
+    { "command": "git diff --check", "result": "PASS" }
+  ],
+  "independentIntegrationReview": {
+    "result": "PASS_NO_BLOCKER",
+    "reviewerAuthoredIntegratedPipeline": false,
+    "scope": "candidate identity, shared pipeline integration, patch receipts, post-verification ordering, Production and historical isolation",
+    "semanticDetectionProof": false
+  },
+  "preserved": {
+    "originalFreshPilotEvidenceHashes": 243,
+    "allFreshPilotFilesBeforeAfterReplay": 249,
+    "priorStopReleased": false,
+    "humanAnswersModified": false,
+    "existingThirtyCaseExpectationsModified": false,
+    "oldRuntimeContractsModified": false,
+    "productionSelectionAndPaidContractModified": false
+  },
+  "notValidated": [
+    "real-model factual precision or repair quality",
+    "PB06 semantic detection precision and recall",
+    "new candidate Human quality acceptance",
+    "browser visual QA",
+    "whole-repository lint"
+  ],
+  "knownOpen": [
+    "F007 outside the narrowly selected Report fact route, including legacy action-major exhaustion",
+    "generated_without_candidate preserved-meaning metadata inconsistency",
+    "F008 recovery engine not implemented"
+  ],
+  "nextEvaluationState": "PROPOSED_NOT_AUTHORIZED_NOT_RUN",
+  "realApiCalls": 0,
+  "productionChanges": 0,
+  "pushes": 0,
+  "deploys": 0,
+  "externalOperations": 0
+}

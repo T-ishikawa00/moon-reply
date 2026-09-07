@@ -1,0 +1,65 @@
+{
+  "product": "V19-L4",
+  "baselineRuntimeHead": "1b24003d545d16d0102828a3577444d994520f42",
+  "catalog": "runtime-stage-catalog-v22.0.0",
+  "promptBundle": "prompt-bundle-runtime-v22.0.0",
+  "schemaSet": "pipeline-schema-runtime-v8.0.0",
+  "canonicalization": "LF prompt text; schema hash is SHA256(JSON.stringify(parsed schema)); runtime hash includes common prompt",
+  "definitions": [
+    {
+      "stageId": "PB-01",
+      "promptVersion": "v5.0.0",
+      "promptHash": "e311e740821079c760b7994c28fa5a4a96eed6b1507a6e35b0b1374f49f23212",
+      "schemaVersion": "pipeline-schema-base-v2.0.0",
+      "schemaHash": "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560"
+    },
+    {
+      "stageId": "PB-01C",
+      "promptVersion": "v2.0.0",
+      "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+      "schemaVersion": "pipeline-schema-candidate-v1.0.0",
+      "schemaHash": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023"
+    },
+    {
+      "stageId": "PB-02",
+      "promptVersion": "v1.0.0",
+      "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+      "schemaVersion": "pipeline-schema-v1.0.0",
+      "schemaHash": "8c4823d86ac8eeae63c7b4c45b1f4cc9700e358deaf19f096e621ffbee24aa13"
+    },
+    {
+      "stageId": "PB-03",
+      "promptVersion": "v1.0.0",
+      "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+      "schemaVersion": "pipeline-schema-v3.0.0",
+      "schemaHash": "ca79b4592e9d9c4be676bf3f19ead7bebe22caa87634cb50a457517abb00ac84"
+    },
+    {
+      "stageId": "PB-04",
+      "promptVersion": "v7.0.0",
+      "promptHash": "b1c2e6f1c313a8a5539c1e560438b0695defa04ee4af68e1a5437046e1c7326e",
+      "schemaVersion": "pipeline-schema-v2.0.0",
+      "schemaHash": "14436184028b585d7047d9461650b95ae73afe2ceee7f65b40c43721b49c9cf3"
+    },
+    {
+      "stageId": "PB-05",
+      "promptVersion": "v12.0.0",
+      "promptHash": "55775e8e14562bfa433ca779330e4140aaade96b08673b38b827c2f3801249fa",
+      "schemaVersion": "pipeline-schema-v2.0.0",
+      "schemaHash": "88bdfee3620e42c089009f8ed8ff29ad7f7db893fd3af3367aef687b4588a311",
+      "reportFactRepair": {
+        "promptVersion": "v1.0.0",
+        "promptHash": "ff78cd44077390fe4a5b6273be32a9476def0058c216b8fb6681f82de770ac26",
+        "schemaVersion": "report-fact-repair-v1",
+        "schemaHash": "09e83b78d6f01705187418f0acfae3c7b4b45030b982a6bd8cdf1ea6e490a2aa"
+      }
+    },
+    {
+      "stageId": "PB-06",
+      "promptVersion": "v10.0.0",
+      "promptHash": "2df39d6404819bee1b4d9eff013bddfb6fcd93a9f5cff831ea6d8ba4d2940547",
+      "schemaVersion": "validation-result-v19-l4-v1",
+      "schemaHash": "658c437023f138274a6ed74962e5b4228259f416c30735fc2bad3b671ed2d76f"
+    }
+  ]
+}

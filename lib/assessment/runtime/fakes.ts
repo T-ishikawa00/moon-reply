@@ -1,5 +1,5 @@
 import { isGuidanceWave1Runtime } from "./guidance-runtime-identity-v1.ts";
-import { usesV19AcknowledgementPolicy, usesV17ProductValidation } from "./v19-l3-runtime-identity.ts";
+import { usesV19AcknowledgementPolicy, usesV17ProductValidation } from "./v19-l4-runtime-identity.ts";
 import { M2RuntimeError } from "./errors.ts";
 import type {
   AiStageTransport,

@@ -1,0 +1,32 @@
+{
+  "pass": true,
+  "checks": 6,
+  "results": [
+    {
+      "name": "all inherited stage definitions including PB01 PB04 are exactly unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "PB05 preserves predecessor wording outside new fact examples and repair-mode explanation",
+      "status": "PASS"
+    },
+    {
+      "name": "fact precision explicitly distinguishes sent delivery read understanding and intent",
+      "status": "PASS"
+    },
+    {
+      "name": "PB06 preserves all predecessor temporal and downstream evaluation instructions",
+      "status": "PASS"
+    },
+    {
+      "name": "historical runtime contracts and protected Production Safety Paid code stay unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "all 243 original fresh-pilot evidence bytes including STOP mapping and ledger match frozen hashes",
+      "status": "PASS"
+    }
+  ],
+  "evidenceKind": "STATIC CONTRACT / HASH PRESERVATION ONLY; no model semantic accuracy proof",
+  "realApiCalls": 0
+}

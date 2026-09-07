@@ -21,7 +21,18 @@ import { buildEffectiveDecisionPolicyV3 } from "./effective-decision-policy-v3.t
 import { isGuidanceWave1Runtime, GUIDANCE_WAVE1_SCHEMA_SET_VERSION } from "./guidance-runtime-identity-v1.ts";
 import { V19_L1_PB01_PROMPT_VERSION, V19_L1_PB05_PROMPT_VERSION } from "./v19-l1-runtime-identity.ts";
 import { V19_L2_PB06_PROMPT_VERSION } from "./v19-l2-runtime-identity.ts";
-import { usesV19AcknowledgementPolicy, usesV17ProductValidation, usesV19TemporalEvaluator, isV19L3Runtime, V19_L3_PB05_PROMPT_VERSION } from "./v19-l3-runtime-identity.ts";
+import { isV19L3Runtime, V19_L3_PB05_PROMPT_VERSION } from "./v19-l3-runtime-identity.ts";
+import {
+  usesV19AcknowledgementPolicy, usesV17ProductValidation, usesV19TemporalEvaluator,
+  isV19L4Runtime, V19_L4_SCHEMA_SET_VERSION, V19_L4_PB05_PROMPT_VERSION,
+  V19_L4_PB06_PROMPT_VERSION, V19_L4_PB06_SCHEMA_VERSION,
+} from "./v19-l4-runtime-identity.ts";
+import {
+  buildReportFactRepairContextV1, buildReportFactRepairInputV1,
+  applyReportFactRepairPatchV1, assertReportFactRepairVerifiedV1,
+  hasMaterialReportFactFindingV1, ReportFactRepairRequiredSignalV1,
+  isReportFactRepairRequiredSignalV1, type ReportFactRepairContextV1,
+} from "./report-fact-repair-v1.ts";
 import { evaluateV19L1InputSufficiency, buildV19L1EffectiveDecisionPolicy, type V19L1InputSufficiencyResult } from "./v19-l1-acknowledgement-policy.ts";
 import { evaluateJpy980InputSufficiencyV5, type Jpy980InputSufficiencyResultV5 } from "./jpy980-input-sufficiency-policy-v5.ts";
 import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
@@ -684,8 +695,11 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0" ||
-        usesV19AcknowledgementPolicy(runContext.promptBundleVersion)) &&
+        (usesV19AcknowledgementPolicy(runContext.promptBundleVersion) &&
+          !isV19L4Runtime(runContext.promptBundleVersion))) &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
+    const narrowFactPair = isV19L4Runtime(runContext.promptBundleVersion) &&
+      runContext.schemaSetVersion === V19_L4_SCHEMA_SET_VERSION;
     const guidancePair = isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
       runContext.schemaSetVersion === GUIDANCE_WAVE1_SCHEMA_SET_VERSION;
     const splitIdentity =
@@ -706,7 +720,7 @@ export class AssessmentPipeline {
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !legacySplitPair && !authorityIntegrityPair && !v1A2CapablePair && !guidancePair
+        ? !legacySplitPair && !authorityIntegrityPair && !v1A2CapablePair && !guidancePair && !narrowFactPair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
@@ -717,7 +731,7 @@ export class AssessmentPipeline {
     }
     const v19BaseDefinition = this.definitions.get("PB-01")?.promptVersion === V19_L1_PB01_PROMPT_VERSION;
     const reportPromptVersion = this.definitions.get("PB-05")?.promptVersion;
-    const v19ReportDefinition = reportPromptVersion === V19_L1_PB05_PROMPT_VERSION || reportPromptVersion === V19_L3_PB05_PROMPT_VERSION;
+    const v19ReportDefinition = reportPromptVersion === V19_L1_PB05_PROMPT_VERSION || reportPromptVersion === V19_L3_PB05_PROMPT_VERSION || reportPromptVersion === V19_L4_PB05_PROMPT_VERSION;
     if (v19BaseDefinition !== usesV19AcknowledgementPolicy(runContext.promptBundleVersion) ||
       v19ReportDefinition !== usesV19AcknowledgementPolicy(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
@@ -725,11 +739,20 @@ export class AssessmentPipeline {
     if ((reportPromptVersion === V19_L3_PB05_PROMPT_VERSION) !== isV19L3Runtime(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    const temporalEvaluatorDefinition = this.definitions.get("PB-06")?.promptVersion === V19_L2_PB06_PROMPT_VERSION;
+    const narrowDefinition = this.definitions.get("PB-05")?.reportFactRepair;
+    if ((reportPromptVersion === V19_L4_PB05_PROMPT_VERSION) !== narrowFactPair ||
+      Boolean(narrowDefinition) !== narrowFactPair ||
+      (narrowFactPair && (narrowDefinition?.schemaVersion !== "report-fact-repair-v1" ||
+        this.definitions.get("PB-06")?.schemaVersion !== V19_L4_PB06_SCHEMA_VERSION)) ||
+      (this.definitions.get("PB-06")?.promptVersion === V19_L4_PB06_PROMPT_VERSION) !== narrowFactPair) {
+      throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
+    const temporalEvaluatorDefinition = this.definitions.get("PB-06")?.promptVersion === V19_L2_PB06_PROMPT_VERSION ||
+      this.definitions.get("PB-06")?.promptVersion === V19_L4_PB06_PROMPT_VERSION;
     if (temporalEvaluatorDefinition !== usesV19TemporalEvaluator(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    if ((authorityIntegrityPair || v1A2CapablePair || guidancePair) && !this.timeZone) {
+    if ((authorityIntegrityPair || v1A2CapablePair || guidancePair || narrowFactPair) && !this.timeZone) {
       throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
@@ -1394,6 +1417,7 @@ export class AssessmentPipeline {
     this.emit("LOCAL_DECISION_POLICY");
     const v17Runtime = usesV17ProductValidation(input.runContext.promptBundleVersion);
     const guidanceRuntime = isGuidanceWave1Runtime(input.runContext.promptBundleVersion);
+    const narrowFactRuntime = isV19L4Runtime(input.runContext.promptBundleVersion);
     const effectivePolicyV17 = v17Runtime
       ? (usesV19AcknowledgementPolicy(input.runContext.promptBundleVersion)
           ? buildV19L1EffectiveDecisionPolicy
@@ -1498,11 +1522,19 @@ export class AssessmentPipeline {
         | QualityReassessmentDirectiveV1
         | QualityReassessmentDirectiveV2
         | null,
+      factRepairContext: ReportFactRepairContextV1 | null = null,
     ) => {
-      const generatedReport = (await this.invokeStage(
+      const normalReportDefinition = this.definition("PB-05");
+      if (factRepairContext !== null && (!narrowFactRuntime || attemptNumber !== 2 ||
+        !normalReportDefinition.reportFactRepair || directive !== null)) {
+        throw new M2RuntimeError("M2_REPORT_FACT_REPAIR_CONTEXT_INVALID");
+      }
+      const reportOutput = await this.invokeStage(
         input.runContext,
         {
-          definition: this.definition("PB-05"),
+          definition: factRepairContext === null ? normalReportDefinition : {
+            ...normalReportDefinition, ...normalReportDefinition.reportFactRepair!,
+          },
           input: asJsonObject({
             base_structured_intake: input.baseStructuredIntake,
             candidate_envelope: input.candidateEnvelope,
@@ -1516,12 +1548,21 @@ export class AssessmentPipeline {
             action_context: actionContext,
             ...(guidanceRuntime ? { requested_topics: input.request.requestedTopics } : {}),
             quality_reassessment_directive: directive,
+            ...(factRepairContext === null ? {} : {
+              report_fact_repair_context: buildReportFactRepairInputV1(factRepairContext),
+            }),
           }),
         },
         "LOCAL_SCHEMA_AND_REPORT_VALIDATION",
         undefined,
         attemptNumber,
-      )) as unknown as SplitReportContentV2;
+      );
+      // Keep the actual patch receipt intact. Only a separate retained Report
+      // clone receives the one authorized leaf; PB04 is never called here.
+      const generatedReport = factRepairContext === null
+        ? reportOutput as unknown as SplitReportContentV2
+        : applyReportFactRepairPatchV1({ context: factRepairContext, patch: reportOutput,
+            decisionPlan, baseStructuredIntake: input.baseStructuredIntake });
       const contextualDecisionFacts = projectSplitDecisionFacts(
         input.baseStructuredIntake,
         input.candidateEnvelope,
@@ -1629,6 +1670,10 @@ export class AssessmentPipeline {
             ...(guidanceRuntime ? { requested_topics: input.request.requestedTopics } : {}),
             contact_constraint_policy: contactConstraintPolicy,
             action_context: actionContext,
+            ...(narrowFactRuntime ? {
+              report_fact_repair_context: factRepairContext === null ? null :
+                buildReportFactRepairInputV1(factRepairContext, reportContent),
+            } : {}),
           }),
         },
         "LOCAL_SEMANTIC_DISPOSITION",
@@ -1645,12 +1690,35 @@ export class AssessmentPipeline {
             throw new M2RuntimeError("M2_SEMANTIC_VALIDATION_FAILED");
           }
           if (v17Runtime) {
-            const { blockingFindings } = evaluateSemanticFindingsV7({
+            const disposition = evaluateSemanticFindingsV7({
               validationOutput: output,
               decisionPlan,
               groundedReportContent: reportContent,
               decisionFacts: contextualDecisionFacts,
             });
+            const { blockingFindings } = disposition;
+            if (factRepairContext !== null) {
+              assertReportFactRepairVerifiedV1({ context: factRepairContext,
+                repairedReport: generatedReport, groundedRepairedReport: reportContent,
+                decisionPlan, baseStructuredIntake: input.baseStructuredIntake,
+                validationOutput: output, findingDispositions: disposition.findingDispositions, localDefects });
+              // This branch never uses the legacy F007 exhaustion allowance.
+              return;
+            }
+            if (narrowFactRuntime) {
+              if (output.report_fact_repair_verification !== null) {
+                throw new M2RuntimeError("M2_REPORT_FACT_REPAIR_CONTEXT_INVALID");
+              }
+              if (hasMaterialReportFactFindingV1(disposition.findingDispositions)) {
+                const context = attemptNumber === 1 && input.aggregate.classification === "normal_allowed"
+                  ? buildReportFactRepairContextV1({ decisionPlan, reportContent: generatedReport,
+                      groundedReportContent: reportContent, baseStructuredIntake: input.baseStructuredIntake,
+                      findingDispositions: disposition.findingDispositions, localDefects })
+                  : null;
+                if (context === null) throw new M2RuntimeError("M2_REPORT_FACT_REPAIR_INELIGIBLE");
+                throw new ReportFactRepairRequiredSignalV1(context);
+              }
+            }
             const reassessmentDirective =
               buildCombinedProductQualityDirectiveV2({
                 blockingFindings,
@@ -1727,29 +1795,34 @@ export class AssessmentPipeline {
     try {
       finalReportContent = await buildReportAndValidate(decisionPlan1, 1, null);
     } catch (error) {
-      const qualitySignal = v17Runtime
-        ? isQualityReassessmentRequiredSignalV2(error)
-          ? error
-          : null
-        : isQualityReassessmentRequiredSignalV1(error)
-          ? error
-          : null;
-      if (qualitySignal === null) throw error;
-      const directive = qualitySignal.directive;
-      if (directive.scope === "plan_and_report") {
-        finalDecisionPlan = await buildDecisionPlan(2, directive);
-      }
-      finalReportContent = await buildReportAndValidate(
-        finalDecisionPlan,
-        2,
-        directive,
-      );
-      if (
-        directive.scope === "report_only" &&
-        finalDecisionPlan.recommended_message_draft?.text !==
-          decisionPlan1.recommended_message_draft?.text
-      ) {
-        throw new M2RuntimeError("M2_PLAN_POLICY_VIOLATION");
+      if (isReportFactRepairRequiredSignalV1(error)) {
+        if (!narrowFactRuntime) throw error;
+        finalReportContent = await buildReportAndValidate(decisionPlan1, 2, null, error.context);
+      } else {
+        const qualitySignal = v17Runtime
+          ? isQualityReassessmentRequiredSignalV2(error)
+            ? error
+            : null
+          : isQualityReassessmentRequiredSignalV1(error)
+            ? error
+            : null;
+        if (qualitySignal === null) throw error;
+        const directive = qualitySignal.directive;
+        if (directive.scope === "plan_and_report") {
+          finalDecisionPlan = await buildDecisionPlan(2, directive);
+        }
+        finalReportContent = await buildReportAndValidate(
+          finalDecisionPlan,
+          2,
+          directive,
+        );
+        if (
+          directive.scope === "report_only" &&
+          finalDecisionPlan.recommended_message_draft?.text !==
+            decisionPlan1.recommended_message_draft?.text
+        ) {
+          throw new M2RuntimeError("M2_PLAN_POLICY_VIOLATION");
+        }
       }
     }
 

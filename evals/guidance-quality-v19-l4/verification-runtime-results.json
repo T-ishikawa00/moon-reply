@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "guidance-v19-l4-runtime-verification-v1",
+  "pass": true,
+  "checks": 23,
+  "scenarios": 50,
+  "realApiCalls": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "networkAttempts": 0,
+  "candidate": {
+    "catalog": "runtime-stage-catalog-v22.0.0",
+    "promptBundle": "prompt-bundle-runtime-v22.0.0",
+    "schemaSet": "pipeline-schema-runtime-v8.0.0"
+  },
+  "preservedHistoricalFiles": 249,
+  "preservationPass": true,
+  "originalStopReleased": false,
+  "provenance": "FAKE CONTRACT/ROUTING ONLY. Frozen real synthetic receipts replayed unchanged except declared candidate schema wrappers; injected PB06 findings, patch proposals and six-check verdicts are authored fixtures. No semantic detection, model repair quality or Human acceptance is proved.",
+  "semanticDetectionValidated": false,
+  "modelRepairQualityValidated": false,
+  "humanAcceptanceChanged": false,
+  "results": [
+    {
+      "name": "new catalog isolates full Report patch and PB06 versions without replacing old stages",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-05 saved clarification or complete note including both prior repair attempts remains unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-24 saved clarification or complete note including both prior repair attempts remains unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-13 saved clarification or complete note including both prior repair attempts remains unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "one bound fact patch preserves the full Plan and every other raw and grounded Report value",
+      "status": "PASS"
+    },
+    {
+      "name": "unchanged text and wrong source hash target or original cannot merge",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid patch schema and full Report regeneration cannot pass the patch contract",
+      "status": "PASS"
+    },
+    {
+      "name": "a contradiction added within the allowed leaf fails independent post-repair action validation",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining material fact finding rejects despite six fake pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "each failed verification dimension independently prevents final delivery",
+      "status": "PASS"
+    },
+    {
+      "name": "missing null unknown or mismatched post-repair verification cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "technical failure at either repair stage stays failed with no retry or third attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "material Safety action and Plan findings exclude a localized fact repair",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe aggregate never reaches report patch or final ready",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit delivery and read facts remain permitted with no word-based repair trigger",
+      "status": "PASS"
+    },
+    {
+      "name": "authored no-reply observation cannot become an actor-level assertion: one-leaf correction can pass; remaining claim cannot deliver",
+      "status": "PASS"
+    },
+    {
+      "name": "authored explicit read plus silence cannot establish deliberate ignoring: one-leaf correction can pass; remaining claim cannot deliver",
+      "status": "PASS"
+    },
+    {
+      "name": "one Fact-ID commentary leaf is repairable while its identifier and every other leaf remain fixed",
+      "status": "PASS"
+    },
+    {
+      "name": "material fact outside owned leaf or lacking known Base evidence does not fall back to whole-Report repair",
+      "status": "PASS"
+    },
+    {
+      "name": "old candidate residual-major Report behavior is a preserved F007 counterexample, not quality PASS",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed prompt schema and bundle identities reject before transport",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate purchase preparation remains unavailable before any stage",
+      "status": "PASS"
+    },
+    {
+      "name": "saved evidence Human evaluation and STOP bytes remain immutable; network and real Provider calls stay zero",
+      "status": "PASS"
+    }
+  ],
+  "knownLimitations": [
+    {
+      "name": "old candidate residual-major Report behavior is a preserved F007 counterexample, not quality PASS",
+      "result": "KNOWN_LIMITATION_REPRODUCED_NOT_QUALITY_PASS",
+      "F007Resolved": false
+    }
+  ]
+}

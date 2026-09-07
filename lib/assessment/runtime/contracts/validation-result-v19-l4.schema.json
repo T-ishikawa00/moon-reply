@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/validation-result-v19-l4.schema.json",
+  "title": "Moon Reply Validation Result V19-L4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "validation_mode",
+    "deterministic_checks",
+    "semantic_checks",
+    "final_disposition",
+    "repair_strategy",
+    "failed_codes",
+    "report_fact_repair_verification"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "validation-result-v19-l4-v1"
+    },
+    "validation_mode": {
+      "enum": [
+        "semantic_findings_only",
+        "complete"
+      ]
+    },
+    "deterministic_checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deterministic_check"
+      },
+      "uniqueItems": true
+    },
+    "semantic_checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/semantic_finding"
+      }
+    },
+    "final_disposition": {
+      "oneOf": [
+        {
+          "enum": [
+            "deliverable",
+            "retryable",
+            "terminal_failure",
+            "safety_blocked",
+            "needs_more_information"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "repair_strategy": {
+      "oneOf": [
+        {
+          "enum": [
+            "none",
+            "targeted_repair",
+            "full_regeneration",
+            "stop"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "failed_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]+$"
+      },
+      "uniqueItems": true
+    },
+    "report_fact_repair_verification": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/report_fact_repair_verification"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "validation_mode": {
+            "const": "semantic_findings_only"
+          }
+        },
+        "required": [
+          "validation_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "deterministic_checks": {
+            "maxItems": 0
+          },
+          "final_disposition": {
+            "type": "null"
+          },
+          "repair_strategy": {
+            "type": "null"
+          },
+          "failed_codes": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "validation_mode": {
+            "const": "complete"
+          }
+        },
+        "required": [
+          "validation_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "final_disposition": {
+            "enum": [
+              "deliverable",
+              "retryable",
+              "terminal_failure",
+              "safety_blocked",
+              "needs_more_information"
+            ]
+          },
+          "repair_strategy": {
+            "enum": [
+              "none",
+              "targeted_repair",
+              "full_regeneration",
+              "stop"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "deterministic_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "status",
+        "json_path",
+        "detail"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]+$"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "json_path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 300
+        },
+        "detail": {
+          "type": "string",
+          "maxLength": 600
+        }
+      }
+    },
+    "semantic_finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_code",
+        "severity",
+        "json_path",
+        "evidence_refs",
+        "detail"
+      ],
+      "properties": {
+        "finding_code": {
+          "enum": [
+            "FACT_FIDELITY",
+            "ASSUMPTION_AS_FACT",
+            "DECISION_ALLOWED",
+            "DECISION_REASON_SUPPORT",
+            "MESSAGE_POLICY_CONSISTENCY",
+            "ACTION_CONSISTENCY",
+            "THREE_DAY_PLAN_CONSISTENCY",
+            "UNSUPPORTED_CERTAINTY",
+            "SAFETY_REGRESSION",
+            "REQUIRED_SECTION_MEANING",
+            "REVIEW_CONDITION_PRESENT",
+            "TEMPLATE_GENERICITY",
+            "BRAND_TONE",
+            "REPETITION"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "major",
+            "minor"
+          ]
+        },
+        "json_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(F[0-9]{3}|input:[A-Za-z0-9_.-]+|policy:[a-z0-9_.-]+)$"
+          },
+          "uniqueItems": true
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 700
+        }
+      }
+    },
+    "report_fact_repair_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "report_hash",
+        "target_path",
+        "verified_text",
+        "evidence_fact_ids",
+        "checks"
+      ],
+      "properties": {
+        "report_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "target_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "verified_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "evidence_fact_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^F[0-9]{3}$"
+          },
+          "uniqueItems": true
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fact_source_integrity",
+            "input_fidelity",
+            "meaning_preservation",
+            "direction_consistency",
+            "action_consistency",
+            "safety"
+          ],
+          "properties": {
+            "fact_source_integrity": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            },
+            "input_fidelity": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            },
+            "meaning_preservation": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            },
+            "direction_consistency": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            },
+            "action_consistency": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            },
+            "safety": {
+              "enum": [
+                "pass",
+                "fail",
+                "unknown"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-V19-L4-2026-09-08:BEGIN -->
+## 2026-09-08 — V19-L4 local fact repair / post-repair verification
+
+最新Human指示でV19-L3を継続。GQ05 tie、GQ24/GQ13 L3選好、GQ29-P3 V17選好は固定し、「重すぎる」を短文化へ変換しない。開始`1b24003`、既存Human Review資料は内容不変で`b3f3620`へ分離保存した。
+
+[L4実装正本](product/GUIDANCE_QUALITY_V19_L4.md)／[local検証](../evals/guidance-quality-v19-l4/README.md)。catalog/bundle v22、schemaSet v8、PB05 v12＋単一leaf patch v1、PB06 v10。PB01/PB04・通常Report・旧版・Production/Paid契約不変。Report所有の根拠付き局所factだけを一度修復し、全文再検査＋6項目検証に通った場合だけ提供する。Plan・正しい本文・draft・期間計画は保持する。広範F007、F008は対象外／未解決。
+
+Local Technical PASSは実モデル訂正精度の証明ではない。次は[GQ29-P3局所比較案](../evals/guidance-quality-v19-l4/next-evaluation-plan.md)、その確認後に12-case expanded QA。実行profileと費用preflight、別Human承認が必要。旧runは再開しない。今回Production変更・push/deploy・API0。
+<!-- GUIDANCE-V19-L4-2026-09-08:END -->
+
 <!-- GUIDANCE-V19-L3-2026-09-07:BEGIN -->
 ## 2026-09-07 — Fresh pilot STOP固定・PB05事実説明のlocal後継
 

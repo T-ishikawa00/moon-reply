@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/report-fact-repair-v1.schema.json",
+  "title": "Moon Reply Bounded Report Fact Repair v1",
+  "description": "One internal PB05 attempt-2 proposal. Exact artifact binding, eligibility, patch application and independent post-repair verification are Application-owned.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_report_hash",
+    "target_path",
+    "original_text",
+    "replacement_text"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "report-fact-repair-v1"
+    },
+    "source_report_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "target_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "original_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "replacement_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    }
+  }
+}

@@ -1,5 +1,15 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-V19-L4-2026-09-08:BEGIN -->
+## 2026-09-08 — V19-L4 bounded Report fact repair successor
+
+開始`release/private-ready@1b24003d545d16d0102828a3577444d994520f42`。既存の未commit Human Review資料4件は改変せず`b3f3620`へ保存。旧runの出力／STOP／ledger／mapping／回答JSONは凍結したまま。[Product実装と留保](product/GUIDANCE_QUALITY_V19_L4.md)、[local検証](../evals/guidance-quality-v19-l4/README.md)、[全stage/hash](../evals/guidance-quality-v19-l4/catalog-identity.json)。
+
+V19-L4=catalog/bundle v22/schemaSet v8、PB05通常v12／patch v1、PB06 v10。送信→到達等のfact強化例をPB05へ追加し、Reportの一つの導入段落／Fact ID説明だけに局所patchを接続。元Planと対象外Reportを保持、post-PB06の6項目pass＋hash/path/text/source一致＋残存materialなしが必須。対象外／修復失敗は旧F007消尽へ流さない。PB01/PB04/GQ24/温かさ/期間計画と旧版契約、Production選択・Paidは維持。
+
+実Applicationのfake replay、pure contract検証、旧quality回帰、typecheck/source lint/buildで確認。実モデル訂正精度・Human L4受入は未確認。F007の今回対象外のaction major消尽等とF008は未解決。次はGQ29-P3のL3/L4固定上流比較（最大6 HTTP/$0.20提案）、確認後に12-case QA。既存runner/ledgerを使う新profileのlocal接続と現行価格／上限の別承認が必要。過去の一度限りの承認を再利用しない。API/Production/push/deploy0。
+<!-- GUIDANCE-V19-L4-2026-09-08:END -->
+
 <!-- GUIDANCE-V19-L3-2026-09-07:BEGIN -->
 ## 2026-09-07 — V19-L3 local successor / incomplete pilot retained
 

@@ -291,6 +291,16 @@ export type StageDefinition = {
   clarificationOutputSchema?: JsonObject;
   clarificationSchemaVersion?: string;
   clarificationSchemaHash?: string;
+  // Optional candidate-only PB05 attempt-2 contract, not an additional Stage.
+  reportFactRepair?: {
+    promptVersion: string;
+    promptHash: string;
+    developerPrompt: string;
+    schemaName: string;
+    schemaVersion: string;
+    schemaHash: string;
+    outputSchema: JsonObject;
+  };
 };
 
 export type StageRequest = {
