@@ -1,5 +1,15 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-V19-L1-2026-09-07:BEGIN -->
+## 2026-09-07 — V19-L1 targeted successor
+
+開始`release/private-ready@6ab70e6af379078b0f67f57d9ff2b91da3cbe8b3`、clean。最新Human指示に従い、V17 baseline + GQ24だけを新候補化。[実装/根拠/identity/留保](product/GUIDANCE_QUALITY_V19_L1.md)、[検証手順と結果](../evals/guidance-quality-v19-l1/README.md)。旧分析のV18継続・PB04/PB05広範改善案は今回採用しない。Human評価は原文のまま、GQ05を追加確認のため失敗と再解釈しない。
+
+V19専用PB01と限定purpose adapterで、任意のお礼応答だけをusable contextへ接続し、既定waitだけをprimary replyへ変更。PB05は生成文面の使用時点の一語句のみ候補コピーで修正。PB04/PB06/schema/rendering/V17品質要件は不変。新candidate catalog/bundle v19、schemaSet v6、PB01 v5、PB05 v10。Production selector・購入準備・既存Paid契約へは接続しない。
+
+fake/保存出力再生と実モデル品質を区別する。追加API・Production/DB/Customer・push/deploy/通知/外部操作0。次の実API評価やrolloutの承認はない。下記の旧batch案・PENDING記録は各Task時点の履歴。
+<!-- GUIDANCE-V19-L1-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
 ## 2026-09-07 — Human review complete / focused local batch proposed
 

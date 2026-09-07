@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-V19-L1-2026-09-07:BEGIN -->
+## 2026-09-07 — V19-L1 / V17 baseline / GQ24限定候補
+
+HumanはV18の継続改修を選ばず、V17基準でGQ24だけを修正するよう指示。下記GQ-L2案は次バッチ方針として本記録が後継。[V19-L1実装記録](product/GUIDANCE_QUALITY_V19_L1.md)、[offline検証](../evals/guidance-quality-v19-l1/README.md)を参照。開始`6ab70e6`、clean。Human回答、30ケース、実pilot証拠、旧V17/V18契約は固定。
+
+候補はV19/schemaSet v6。PB01の任意のお礼応答の目的分類、V17から分岐する狭い入力/行動adapter、今使う生成文面を後日用と誤説明しないための候補PB05一語句だけを変更。PB04/PB06・schema・rendering・量/温かさ/具体性の指示はV17を継承。GQ05の確認消失を成功条件にしない。GQ13/P3は保存V17回答の同一再生で回帰を確認し、新しい実モデル品質の受入とは区別する。
+
+実API追加0、Production選択/購入準備/PaidはV17、Production照会/変更・外部操作0。V19は明示local loaderだけで選択。Technical PASSはHuman品質受入やProduction承認ではない。過去pilotの一度のAPI承認は消費済み。
+<!-- GUIDANCE-V19-L1-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality Human Blind Review完了・対応表開示
 

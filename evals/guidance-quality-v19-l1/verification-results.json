@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "guidance-v19-l1-offline-verification-v1",
+  "baseline": "6ab70e6af379078b0f67f57d9ff2b91da3cbe8b3",
+  "candidate": {
+    "catalog": "runtime-stage-catalog-v19.0.0",
+    "promptBundle": "prompt-bundle-runtime-v19.0.0",
+    "schemaSet": "pipeline-schema-runtime-v6.0.0",
+    "stageHashes": [
+      {
+        "stageId": "PB-01",
+        "promptHash": "e311e740821079c760b7994c28fa5a4a96eed6b1507a6e35b0b1374f49f23212",
+        "schemaHash": "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560"
+      },
+      {
+        "stageId": "PB-01C",
+        "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+        "schemaHash": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023"
+      },
+      {
+        "stageId": "PB-02",
+        "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+        "schemaHash": "8c4823d86ac8eeae63c7b4c45b1f4cc9700e358deaf19f096e621ffbee24aa13"
+      },
+      {
+        "stageId": "PB-03",
+        "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+        "schemaHash": "ca79b4592e9d9c4be676bf3f19ead7bebe22caa87634cb50a457517abb00ac84"
+      },
+      {
+        "stageId": "PB-04",
+        "promptHash": "b1c2e6f1c313a8a5539c1e560438b0695defa04ee4af68e1a5437046e1c7326e",
+        "schemaHash": "14436184028b585d7047d9461650b95ae73afe2ceee7f65b40c43721b49c9cf3"
+      },
+      {
+        "stageId": "PB-05",
+        "promptHash": "2914017e8c2669a6616543a4767828544454de9990b4dea4f49c17e11a4f8315",
+        "schemaHash": "88bdfee3620e42c089009f8ed8ff29ad7f7db893fd3af3367aef687b4588a311"
+      },
+      {
+        "stageId": "PB-06",
+        "promptHash": "f055d864e4626222254bca01874dda7f4d2dc3ce1c2c39b0bbf099a174c0fc08",
+        "schemaHash": "d1ae99220118c12cd1fab0545c3fda3f9aaddfa9949bbf2675231d8254eee451"
+      }
+    ]
+  },
+  "evidenceKind": "offline_contracts_and_stored_output_replay",
+  "actualModelRuns": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "successorPb01Extraction": "NOT_RUN",
+  "newAnswerQuality": "NOT_RUN",
+  "newHumanAcceptance": "NONE",
+  "checks": 57,
+  "passed": 57,
+  "contractAndReplayChecks": 56,
+  "knownLimitationDiagnostics": 1,
+  "failed": 0,
+  "results": [
+    {
+      "name": "frozen inputs, pilot evidence, V17/V18 contracts and protected policy sources unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "V19 identity and all schemas remain V17; only PB01 and necessary PB05 timing wording change",
+      "status": "PASS"
+    },
+    {
+      "name": "PB05 successor changes only title and newly generated draft timing phrase",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate purpose adapters do not import V18 helpers",
+      "status": "PASS"
+    },
+    {
+      "name": "saved GQ24 runtime-stage-catalog-v17.0.0: root cause survives unchanged extraction",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ24 runtime-stage-catalog-v17.0.0: taxonomy-only change still needs both V17 adapters",
+      "status": "PASS"
+    },
+    {
+      "name": "saved GQ24 runtime-stage-catalog-v18.0.0: root cause survives unchanged extraction",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ24 runtime-stage-catalog-v18.0.0: taxonomy-only change still needs both V17 adapters",
+      "status": "PASS"
+    },
+    {
+      "name": "edited GQ24 completes six fake stages with V17 Plan/Report/card and optional prose",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-05: saved V17 outputs replay identically through V17 and V19",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-13: saved V17 outputs replay identically through V17 and V19",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-29-P3: saved V17 outputs replay identically through V17 and V19",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal other delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal unknown delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal chip only delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal clarify_relationship delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal express_affection delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal end_contact delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: goal move_closer delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: reply already sent delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: own outbound follow-up even with polite goal delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: explicit response not needed is none, not optional delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: explicit no-contact refusal even with polite goal delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: refused reinvitation even with polite goal delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: user business-only contact constraint delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: SNS-only signal delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: explicit closure delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: unknown closure delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming decline delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming hold delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming boundary delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming affection_expression delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming other delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: incoming unknown delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: no thanks act delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: pending outbound count delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: repeated unanswered contact delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: practical need exists delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: additional requested period delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: user constraint no_followup_message delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: user constraint no_private_contact_at_work delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "structured negative contrast: user constraint no_self_invitation delegates to V17",
+      "status": "PASS"
+    },
+    {
+      "name": "thanks plus a question remains the existing reasonable-reply path",
+      "status": "PASS"
+    },
+    {
+      "name": "style-only constraints retain optional-thanks eligibility",
+      "status": "PASS"
+    },
+    {
+      "name": "Safety needs_review/rejected preserve V17 blocked outcome",
+      "status": "PASS"
+    },
+    {
+      "name": "purpose guard rejects candidate presence and used clarification authority",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong direction remains rejected by deterministic policy",
+      "status": "PASS"
+    },
+    {
+      "name": "send/reply still requires an immediate draft; V18 zero-avoid contract is not inherited",
+      "status": "PASS"
+    },
+    {
+      "name": "known inherited integrity limit: generated-draft preservation claim remains after one repair",
+      "status": "PASS"
+    },
+    {
+      "name": "existing report-only repair retains the optional-prose fixture",
+      "status": "PASS"
+    },
+    {
+      "name": "existing combined Plan/Report repair succeeds once and retains optionality",
+      "status": "PASS"
+    },
+    {
+      "name": "injected critical integrity findings and technical failures remain failures",
+      "status": "PASS"
+    },
+    {
+      "name": "V19 catalog cannot be relabeled as V17 or mixed with V18",
+      "status": "PASS"
+    },
+    {
+      "name": "swapping only PB05 between V17 and V19 is rejected in both directions",
+      "status": "PASS"
+    },
+    {
+      "name": "V19 purchase preparation rejects before any fake stage or paid run",
+      "status": "PASS"
+    },
+    {
+      "name": "hypothetical GQ05 no-concern clarification keeps the V17 single-answer outcome",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy report normalization rejects V18 marker mixing",
+      "status": "PASS"
+    }
+  ],
+  "evidence": [
+    {
+      "caseId": "GQ-24",
+      "sourcePath": "evals/guidance-quality-wave1/runs/2026-09-07-authorized-pilot8/internal/ed0f3159-629c-43d6-8d8c-e8299ac601dc/session.json",
+      "provenance": "Previously saved real-model outputs on synthetic inputs, replayed through fake transport. No new model extraction, generation, evaluation, or quality acceptance.",
+      "replay": "unchanged_saved_taxonomy_still_clarifies",
+      "actualModelRuns": 0
+    },
+    {
+      "caseId": "GQ-24",
+      "sourcePath": "evals/guidance-quality-wave1/runs/2026-09-07-authorized-pilot8/internal/c778c7b6-eab0-4f9c-a7c0-2332ad0f9c50/session.json",
+      "provenance": "Previously saved real-model outputs on synthetic inputs, replayed through fake transport. No new model extraction, generation, evaluation, or quality acceptance.",
+      "replay": "unchanged_saved_taxonomy_still_clarifies",
+      "actualModelRuns": 0
+    },
+    {
+      "caseId": "GQ-24",
+      "provenance": "Hand-edited GQ24 Base taxonomy plus hand-authored Plan/Report and fake PB06 verdict. Contract/wiring evidence only; not real-model output or quality proof.",
+      "stagesCompleted": 6,
+      "clarification": false,
+      "primaryDecision": "reply_now",
+      "optionalityTextRetained": "一言返すなら、短い挨拶で十分です。お礼のやり取りはまとまっているので、ここで終えても構いません。",
+      "actualModelRuns": 0,
+      "actualSemanticDetection": "NOT_TESTED"
+    },
+    {
+      "caseId": "GQ-05",
+      "sourcePath": "evals/guidance-quality-wave1/runs/2026-09-07-authorized-pilot8/internal/b68ff4de-fcb2-49d4-892f-f36c70d16bfe/session.json",
+      "provenance": "Previously saved real-model outputs on synthetic inputs, replayed through fake transport. No new model extraction, generation, evaluation, or quality acceptance.",
+      "preserved": "same clarification; Human tie/no issues retained",
+      "newQualityJudgment": "NONE"
+    },
+    {
+      "caseId": "GQ-13",
+      "sourcePath": "evals/guidance-quality-wave1/runs/2026-09-07-authorized-pilot8/internal/957fc9b8-7692-49c4-9c7f-3715f54d1d73/session.json",
+      "provenance": "Previously saved real-model outputs on synthetic inputs, replayed through fake transport. No new model extraction, generation, evaluation, or quality acceptance.",
+      "preserved": "exact saved Plan/Report/card/base projection/experience projection",
+      "unchangedOpening": [
+        "相手から「少し一人にしてほしい」と伝えられたあと、こちらからはまだ連絡していないのですね。急ぎの用件もない状況では、何かしなければと動くより、相手の言葉をそのまま受け止めることが大切です。",
+        "連絡しないことは、気持ちを投げ出すことではありません。今は相手の境界を守りながら、あなた自身も連絡のことから少し離れる時間にしていきましょう。"
+      ],
+      "unchangedCurrentActions": [
+        "今夜は相手へ追加の返信・確認・様子伺いを送らない。",
+        "急ぎの用件がないため、連絡以外の予定や休息に意識を戻す。",
+        "相手から新たな連絡が来るまでは、こちらからの接触を再開しない。"
+      ],
+      "unchangedPeriodPlan": [
+        {
+          "phase": "tonight",
+          "action": "今夜は追加連絡をせず、急ぎの用件がないことを踏まえて自分の予定や休息に戻る。",
+          "avoid": "返信を促す確認メッセージを送らない。",
+          "supporting_fact_ids": [
+            "F101",
+            "F202",
+            "F303"
+          ]
+        },
+        {
+          "phase": "next",
+          "action": "次の判断まで、相手から新たな連絡があるかどうかだけを事実として扱い、こちらから接触を増やさない。",
+          "avoid": "時間が経ったことだけを理由に、境界が解除されたとみなさない。",
+          "supporting_fact_ids": [
+            "F101",
+            "F202"
+          ]
+        },
+        {
+          "phase": "reassessment_condition",
+          "action": "相手から新たな連絡や具体的な再接触の意思表示があった場合に限り、その内容を確認して対応を見直す。",
+          "avoid": "相手からの新たな連絡がないまま、こちらから再開のきっかけを作ろうとしない。",
+          "supporting_fact_ids": [
+            "F101",
+            "F202"
+          ]
+        }
+      ],
+      "warmthOrConcretenessScore": "NOT_AUTOMATICALLY_SCORED; text equality only",
+      "actualModelRuns": 0
+    },
+    {
+      "caseId": "GQ-29-P3",
+      "sourcePath": "evals/guidance-quality-wave1/runs/2026-09-07-authorized-pilot8/internal/858d16fe-a0c3-4d75-996c-d7fb0e86e978/session.json",
+      "provenance": "Previously saved real-model outputs on synthetic inputs, replayed through fake transport. No new model extraction, generation, evaluation, or quality acceptance.",
+      "preserved": "exact saved Plan/Report/card/base projection/experience projection",
+      "unchangedOpening": [
+        "「週末は何をしているの？」と、相手が答えやすい質問はもう送れています。返事がない状態では、次の一手を急いで足すより、いま確認できている事実と分からない部分を分けておくことが、落ち着いて判断する助けになります。"
+      ],
+      "unchangedCurrentActions": [
+        "今夜は追加のメッセージを送らず、送信済みの質問への返信を待つ。",
+        "返信の有無を何度も確認する代わりに、今後3日間の自分の予定を通常どおり進める。",
+        "返信が来た場合は、その内容に直接答える形で自然に返す。"
+      ],
+      "unchangedPeriodPlan": [
+        {
+          "phase": "tonight",
+          "action": "追加送信はせず、送信済みの質問への返信待ちにする。",
+          "avoid": "返信状況を繰り返し確認すること。",
+          "supporting_fact_ids": [
+            "F107",
+            "F207"
+          ]
+        },
+        {
+          "phase": "next",
+          "action": "今後3日間は、相手から返信が来るかどうかにかかわらず、自分の予定を通常どおり進める。返信が来た場合のみ、その内容に応じて返す。",
+          "avoid": "未返信を埋めるための別メッセージを先回りして送ること。",
+          "supporting_fact_ids": [
+            "F207"
+          ]
+        },
+        {
+          "phase": "reassessment_condition",
+          "action": "相手から返信が来た時点、または返信がない状態で追加連絡を検討する具体的な事情が生じた時点で、状況を改めて確認する。",
+          "avoid": "経過時間だけを理由に、相手の意図を推測して行動を変えること。",
+          "supporting_fact_ids": [
+            "F207"
+          ]
+        }
+      ],
+      "warmthOrConcretenessScore": "NOT_AUTOMATICALLY_SCORED; text equality only",
+      "actualModelRuns": 0
+    },
+    {
+      "caseId": "GQ-03",
+      "provenance": "Injected invalid preservation metadata with fake PB06; no model call.",
+      "knownLimitation": "V17 and V19 both retain generated_without_candidate + preserved_meaning=true after one Plan repair and reach ready.",
+      "status": "KNOWN_LIMITATION_REPRODUCED_NOT_QUALITY_PASS",
+      "scope": "Existing integrity/disposition behavior; no F007 classifier or F008 recovery change.",
+      "trace": [
+        {
+          "catalog": "runtime-stage-catalog-v17.0.0",
+          "localDefects": [
+            {
+              "findingCode": "DRAFT_SOURCE_INTEGRITY",
+              "severity": "major",
+              "jsonPath": "decision_plan.message_draft_edit_metadata.preserved_meaning",
+              "normalizedRepairRequirementCode": "RESTORE_TRUTHFUL_GENERATED_DRAFT_METADATA",
+              "ownership": "plan"
+            }
+          ],
+          "actualRepairDirective": {
+            "schemaVersion": "m2-p4-quality-reassessment-directive-v2",
+            "attemptNumber": 2,
+            "scope": "plan_and_report",
+            "source": "combined_product_quality",
+            "defects": [
+              {
+                "findingCode": "DRAFT_SOURCE_INTEGRITY",
+                "severity": "major",
+                "jsonPath": "decision_plan.message_draft_edit_metadata.preserved_meaning",
+                "normalizedRepairRequirementCode": "RESTORE_TRUTHFUL_GENERATED_DRAFT_METADATA"
+              }
+            ]
+          },
+          "finalPreservedMeaning": true,
+          "finalEligibility": "ready"
+        },
+        {
+          "catalog": "runtime-stage-catalog-v19.0.0",
+          "localDefects": [
+            {
+              "findingCode": "DRAFT_SOURCE_INTEGRITY",
+              "severity": "major",
+              "jsonPath": "decision_plan.message_draft_edit_metadata.preserved_meaning",
+              "normalizedRepairRequirementCode": "RESTORE_TRUTHFUL_GENERATED_DRAFT_METADATA",
+              "ownership": "plan"
+            }
+          ],
+          "actualRepairDirective": {
+            "schemaVersion": "m2-p4-quality-reassessment-directive-v2",
+            "attemptNumber": 2,
+            "scope": "plan_and_report",
+            "source": "combined_product_quality",
+            "defects": [
+              {
+                "findingCode": "DRAFT_SOURCE_INTEGRITY",
+                "severity": "major",
+                "jsonPath": "decision_plan.message_draft_edit_metadata.preserved_meaning",
+                "normalizedRepairRequirementCode": "RESTORE_TRUTHFUL_GENERATED_DRAFT_METADATA"
+              }
+            ]
+          },
+          "finalPreservedMeaning": true,
+          "finalEligibility": "ready"
+        }
+      ]
+    },
+    {
+      "caseId": "GQ-05",
+      "provenance": "Hypothetical offline no_material_concern answer, reusing the existing clarification integration test contract. Not answered by the Human or real pilot.",
+      "result": {
+        "eligibility": "not_full_product_candidate",
+        "reasonCodes": [
+          "CLARIFICATION_BUDGET_EXHAUSTED",
+          "MEANINGFUL_ASSESSMENT_ACTION_CONTEXT_MISSING"
+        ]
+      },
+      "historicalHumanJudgment": "UNCHANGED: tie/no issues for the original initial question",
+      "actualModelRuns": 0
+    }
+  ]
+}

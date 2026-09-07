@@ -1,6 +1,7 @@
 import type { CandidateEnvelopeV1 } from "./contracts/split-stage-contracts-v1.ts";
 import type { EffectiveDecisionPolicyV3 } from "./effective-decision-policy-v3.ts";
 import type { EffectiveDecisionPolicyV2 } from "./effective-decision-policy-v2.ts";
+import type { V19L1EffectiveDecisionPolicy } from "./v19-l1-acknowledgement-policy.ts";
 import { M2RuntimeError } from "./errors.ts";
 import type { ProductQualityDefectV2 } from "./quality-reassessment-v2.ts";
 import { validateCandidateSourceIntegrityV1 } from "./candidate-source-integrity-v1.ts";
@@ -81,7 +82,7 @@ function defect(
 export function evaluateSelectedRequestProductCompletenessV2(input: {
   requestedTopics: readonly RequestedTopic[];
   candidateEnvelope: CandidateEnvelopeV1;
-  effectiveDecisionPolicy: EffectiveDecisionPolicyV2 | EffectiveDecisionPolicyV3;
+  effectiveDecisionPolicy: EffectiveDecisionPolicyV2 | EffectiveDecisionPolicyV3 | V19L1EffectiveDecisionPolicy;
   decisionPlan: SplitDecisionPlanV2;
   reportContent: SplitReportContentV2;
 }): SelectedRequestProductCompletenessResultV2 {
@@ -92,7 +93,8 @@ export function evaluateSelectedRequestProductCompletenessV2(input: {
   if (
     (input.effectiveDecisionPolicy.schemaVersion !==
       "m2-p4-effective-decision-policy-v2" &&
-      input.effectiveDecisionPolicy.schemaVersion !== "m2-p4-effective-decision-policy-v3") ||
+      input.effectiveDecisionPolicy.schemaVersion !== "m2-p4-effective-decision-policy-v3" &&
+      input.effectiveDecisionPolicy.schemaVersion !== "m2-p4-effective-decision-policy-v19-l1") ||
     input.effectiveDecisionPolicy.policy.policy_version !==
       "decision-policy-v2.0.0"
   ) {

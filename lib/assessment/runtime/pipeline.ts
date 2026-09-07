@@ -18,7 +18,9 @@ import {
 import { buildEffectiveDecisionPolicyV2 } from "./effective-decision-policy-v2.ts";
 import { evaluateGuidanceRequestCompletenessV1 } from "./guidance-request-completeness-v1.ts";
 import { buildEffectiveDecisionPolicyV3 } from "./effective-decision-policy-v3.ts";
-import { isGuidanceWave1Runtime, usesV17ProductValidation, GUIDANCE_WAVE1_SCHEMA_SET_VERSION } from "./guidance-runtime-identity-v1.ts";
+import { isGuidanceWave1Runtime, GUIDANCE_WAVE1_SCHEMA_SET_VERSION } from "./guidance-runtime-identity-v1.ts";
+import { isV19L1Runtime, usesV17ProductValidation, V19_L1_PB01_PROMPT_VERSION, V19_L1_PB05_PROMPT_VERSION } from "./v19-l1-runtime-identity.ts";
+import { evaluateV19L1InputSufficiency, buildV19L1EffectiveDecisionPolicy, type V19L1InputSufficiencyResult } from "./v19-l1-acknowledgement-policy.ts";
 import { evaluateJpy980InputSufficiencyV5, type Jpy980InputSufficiencyResultV5 } from "./jpy980-input-sufficiency-policy-v5.ts";
 import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
 import {
@@ -679,11 +681,13 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0") &&
+        runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0" ||
+        isV19L1Runtime(runContext.promptBundleVersion)) &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     const guidancePair = isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
       runContext.schemaSetVersion === GUIDANCE_WAVE1_SCHEMA_SET_VERSION;
     const splitIdentity =
+      isV19L1Runtime(runContext.promptBundleVersion) ||
       isGuidanceWave1Runtime(runContext.promptBundleVersion) ||
       runContext.schemaSetVersion === GUIDANCE_WAVE1_SCHEMA_SET_VERSION ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
@@ -707,6 +711,12 @@ export class AssessmentPipeline {
     }
     const candidateDefinition = this.definitions.get("PB-04")?.schemaVersion === "guidance-decision-plan-v1";
     if (candidateDefinition !== guidancePair) {
+      throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
+    const v19BaseDefinition = this.definitions.get("PB-01")?.promptVersion === V19_L1_PB01_PROMPT_VERSION;
+    const v19ReportDefinition = this.definitions.get("PB-05")?.promptVersion === V19_L1_PB05_PROMPT_VERSION;
+    if (v19BaseDefinition !== isV19L1Runtime(runContext.promptBundleVersion) ||
+      v19ReportDefinition !== isV19L1Runtime(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
     if ((authorityIntegrityPair || v1A2CapablePair || guidancePair) && !this.timeZone) {
@@ -1171,7 +1181,8 @@ export class AssessmentPipeline {
       | Jpy980InputSufficiencyResultV2
       | Jpy980InputSufficiencyResultV3
       | Jpy980InputSufficiencyResultV4
-      | Jpy980InputSufficiencyResultV5;
+      | Jpy980InputSufficiencyResultV5
+      | V19L1InputSufficiencyResult;
   }): Promise<AssessmentExecutionResult> {
     const prompt = input.policy.clarification;
     if (!prompt || input.policy.clarificationBudget.questionsRemaining !== 1) {
@@ -1279,6 +1290,9 @@ export class AssessmentPipeline {
       clarificationGrounding: input.clarificationGrounding,
       effectiveAssessmentAuthority: input.effectiveAuthority,
     };
+    if (isV19L1Runtime(input.runContext.promptBundleVersion)) {
+      return evaluateV19L1InputSufficiency(policyInput);
+    }
     if (isGuidanceWave1Runtime(input.runContext.promptBundleVersion)) {
       return evaluateJpy980InputSufficiencyV5(policyInput);
     }
@@ -1371,7 +1385,9 @@ export class AssessmentPipeline {
     const v17Runtime = usesV17ProductValidation(input.runContext.promptBundleVersion);
     const guidanceRuntime = isGuidanceWave1Runtime(input.runContext.promptBundleVersion);
     const effectivePolicyV17 = v17Runtime
-      ? (guidanceRuntime ? buildEffectiveDecisionPolicyV3 : buildEffectiveDecisionPolicyV2)({
+      ? (isV19L1Runtime(input.runContext.promptBundleVersion)
+          ? buildV19L1EffectiveDecisionPolicy
+          : guidanceRuntime ? buildEffectiveDecisionPolicyV3 : buildEffectiveDecisionPolicyV2)({
           authority: input.effectiveAuthority,
           candidateEnvelope: input.candidateEnvelope,
         })
@@ -2296,7 +2312,8 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult | PurchasePreparationExecutionResult> {
     this.validateRuntimeIdentity(runContext);
     if (
-      (!isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
+      (!isV19L1Runtime(runContext.promptBundleVersion) &&
+        !isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0" &&
