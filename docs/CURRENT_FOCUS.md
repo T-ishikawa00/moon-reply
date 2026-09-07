@@ -1,5 +1,13 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-V19-L3-2026-09-07:BEGIN -->
+## 2026-09-07 — Fresh pilot STOP固定・PB05事実説明のlocal後継
+
+Fresh L2 runを6正常終了（完成3/追加確認3）・1停止・1未実施で固定。元出力/finding/STOP/ledger/匿名対応/Blind Reviewは不変、186ファイルを`da7824c1486d878da6a482b02cfbb2fc4f1cded0`に保存。今回の[匿名状態表と局所証拠](../evals/guidance-quality-v19-l3/STOP-FOLLOWUP.md)を参照。新API0、Human品質比較未完了、A/B版mapping未開示。旧runを再開/補完しない。
+
+[V19-L3](product/GUIDANCE_QUALITY_V19_L3.md)はL2基準でPB05の送信/到達/既読/理解の区別だけを明示。catalog/bundle v21、schemaSet v6、PB05 v11、PB06 v9。旧契約/classifier/Safety/Production/Paidは維持。local24検証PASS＋既存F007制約1再現、typecheck/変更source lint/build/旧回帰PASS。実モデル改善は未確認。次はGQ29-P3だけのstage診断案（2条件、最大4 HTTP、提案$0.15）、別承認まで未実行。以下は各Task時点の履歴。
+<!-- GUIDANCE-V19-L3-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-L2-2026-09-07:BEGIN -->
 ## 2026-09-07 — V19-L2 PB06 temporal successor / local preparation
 

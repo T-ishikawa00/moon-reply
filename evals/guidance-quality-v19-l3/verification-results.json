@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "guidance-v19-l3-offline-verification-v1",
+  "candidate": {
+    "catalog": "runtime-stage-catalog-v21.0.0",
+    "promptBundle": "prompt-bundle-runtime-v21.0.0",
+    "schemaSet": "pipeline-schema-runtime-v6.0.0",
+    "stageHashes": [
+      {
+        "stageId": "PB-01",
+        "promptHash": "e311e740821079c760b7994c28fa5a4a96eed6b1507a6e35b0b1374f49f23212",
+        "schemaHash": "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560"
+      },
+      {
+        "stageId": "PB-01C",
+        "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+        "schemaHash": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023"
+      },
+      {
+        "stageId": "PB-02",
+        "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+        "schemaHash": "8c4823d86ac8eeae63c7b4c45b1f4cc9700e358deaf19f096e621ffbee24aa13"
+      },
+      {
+        "stageId": "PB-03",
+        "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+        "schemaHash": "ca79b4592e9d9c4be676bf3f19ead7bebe22caa87634cb50a457517abb00ac84"
+      },
+      {
+        "stageId": "PB-04",
+        "promptHash": "b1c2e6f1c313a8a5539c1e560438b0695defa04ee4af68e1a5437046e1c7326e",
+        "schemaHash": "14436184028b585d7047d9461650b95ae73afe2ceee7f65b40c43721b49c9cf3"
+      },
+      {
+        "stageId": "PB-05",
+        "promptHash": "7ddc48bee3e2d86a5411a3cd43339ba2ba1c001b88960bb9d5ed7062cc186131",
+        "schemaHash": "88bdfee3620e42c089009f8ed8ff29ad7f7db893fd3af3367aef687b4588a311"
+      },
+      {
+        "stageId": "PB-06",
+        "promptHash": "d316eedfb6a5ec1cdb62f556e9aba8a788438ab6129cbc9a42f1b68f65d65e0f",
+        "schemaHash": "d1ae99220118c12cd1fab0545c3fda3f9aaddfa9949bbf2675231d8254eee451"
+      }
+    ]
+  },
+  "checks": 25,
+  "passed": 25,
+  "failed": 0,
+  "contractAndReplayChecks": 24,
+  "knownLimitationDiagnostics": 1,
+  "actualNewModelCalls": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "forbiddenNetworkCalls": 0,
+  "preservedFiles": 186,
+  "sourceStateExpectations": 8,
+  "inheritedTemporalExpectations": 8,
+  "newPb05Generation": "NOT_RUN",
+  "semanticDetectionValidated": false,
+  "oldManualStopReleased": false,
+  "oldHumanReviewChanged": false,
+  "mappingDisclosed": false,
+  "results": [
+    {
+      "name": "all frozen prior-run and runner bytes match preservation manifest before imports",
+      "status": "PASS"
+    },
+    {
+      "name": "only PB05 prompt identity differs; PB06 temporal v9 and all old schemas remain exact",
+      "status": "PASS"
+    },
+    {
+      "name": "old prompt/schema/classifier/Policy/Production/rendering sources are unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "PB05 adds exactly message-state evidence section and title, without changing old Product functions",
+      "status": "PASS"
+    },
+    {
+      "name": "eight fixed source-state examples are evaluation-only and original temporal eight remain unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-05: every fresh saved completed session replays unchanged under both candidates",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-13: every fresh saved completed session replays unchanged under both candidates",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-24: every fresh saved completed session replays unchanged under both candidates",
+      "status": "PASS"
+    },
+    {
+      "name": "stopped GQ29-P3 evidence remains stopped; only one editorial Report field differs in memory",
+      "status": "PASS"
+    },
+    {
+      "name": "editorial one-field repair with explicitly authored PB06 preserves Plan draft and concrete three-day projection",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_THEN_WAIT: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "REPLY_NOW_THEN_WAIT: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "DO_NOT_SEND_AND_WAIT: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_AND_DO_NOT_SEND_NOW: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_THEN_SEND_AGAIN_IMMEDIATELY_WITHOUT_REASON: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "WAIT_UNTIL_REPLY_THEN_REPLY: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "EXPLICIT_BOUNDARY_DO_NOT_CONTACT: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "REPLY_NOW_AND_DO_NOT_REPLY_NOW: inherited authored temporal expectation and finding routing unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit no-contact remains valid as no-send and rejects current or future contact workaround",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed PB05 versions and bundle identities fail before any fake stage",
+      "status": "PASS"
+    },
+    {
+      "name": "new local candidate cannot enter Production purchase preparation",
+      "status": "PASS"
+    },
+    {
+      "name": "critical current contradiction or fact integrity remains fail-closed after one repair",
+      "status": "PASS"
+    },
+    {
+      "name": "known inherited F007 major-exhaustion limit is reproduced, not accepted as quality",
+      "status": "PASS"
+    },
+    {
+      "name": "final edited fixture retains concrete original actions and no additional sections",
+      "status": "PASS"
+    },
+    {
+      "name": "all frozen bytes still match and real API/network/DB calls remain zero",
+      "status": "PASS"
+    }
+  ],
+  "evidence": [
+    {
+      "case": "GQ-05",
+      "type": "SAVED_FRESH_OUTPUT_REPLAY",
+      "sourceSessions": 2,
+      "unchangedOutputsAndProjection": true,
+      "newModelQuality": "NOT_TESTED",
+      "HumanJudgmentChanged": false
+    },
+    {
+      "case": "GQ-13",
+      "type": "SAVED_FRESH_OUTPUT_REPLAY",
+      "sourceSessions": 2,
+      "unchangedOutputsAndProjection": true,
+      "newModelQuality": "NOT_TESTED",
+      "HumanJudgmentChanged": false
+    },
+    {
+      "case": "GQ-24",
+      "type": "SAVED_FRESH_OUTPUT_REPLAY",
+      "sourceSessions": 2,
+      "unchangedOutputsAndProjection": true,
+      "newModelQuality": "NOT_TESTED",
+      "HumanJudgmentChanged": false
+    },
+    {
+      "case": "GQ29-P3",
+      "type": "EDITORIAL_ONE_FIELD_REPAIR_WITH_AUTHORED_EMPTY_PB06_NOT_REAL_OUTPUT",
+      "affectedPath": "observed_fact_commentary[0].commentary",
+      "original": "週末の予定を尋ねる質問はすでに届いているため、同じ話題について今すぐ補足しなければならない状態ではありません。",
+      "editorialTarget": "週末の予定を尋ねる質問はすでに送っているため、同じ話題について今すぐ補足しなければならない状態ではありません。",
+      "PlanAndDraftUnchanged": true,
+      "projectionMatchesPredecessor": true,
+      "actualNewModelCalls": 0,
+      "actualPb06ReceiptExists": false,
+      "originalStopReleased": false
+    },
+    {
+      "type": "KNOWN_LIMITATION_REPRODUCED_NOT_QUALITY_PASS",
+      "issue": "F007 major ACTION_CONSISTENCY can remain at existing exhaustion",
+      "unchangedFromPredecessor": true,
+      "classifierChanged": false,
+      "issueResolved": false
+    }
+  ]
+}

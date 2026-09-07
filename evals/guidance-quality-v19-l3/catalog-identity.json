@@ -1,0 +1,63 @@
+{
+  "catalogVersion": "runtime-stage-catalog-v21.0.0",
+  "promptBundleVersion": "prompt-bundle-runtime-v21.0.0",
+  "schemaSetVersion": "pipeline-schema-runtime-v6.0.0",
+  "definitions": [
+    {
+      "stageId": "PB-01",
+      "promptVersion": "v5.0.0",
+      "promptHash": "e311e740821079c760b7994c28fa5a4a96eed6b1507a6e35b0b1374f49f23212",
+      "schemaVersion": "pipeline-schema-base-v2.0.0",
+      "schemaHash": "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560",
+      "schemaName": "pb_01_clarification_aware_v1"
+    },
+    {
+      "stageId": "PB-01C",
+      "promptVersion": "v2.0.0",
+      "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+      "schemaVersion": "pipeline-schema-candidate-v1.0.0",
+      "schemaHash": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023",
+      "schemaName": "pb_01c_candidate_analysis_v2"
+    },
+    {
+      "stageId": "PB-02",
+      "promptVersion": "v1.0.0",
+      "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+      "schemaVersion": "pipeline-schema-v1.0.0",
+      "schemaHash": "8c4823d86ac8eeae63c7b4c45b1f4cc9700e358deaf19f096e621ffbee24aa13",
+      "schemaName": "pb_02_split_safety_v1"
+    },
+    {
+      "stageId": "PB-03",
+      "promptVersion": "v1.0.0",
+      "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+      "schemaVersion": "pipeline-schema-v3.0.0",
+      "schemaHash": "ca79b4592e9d9c4be676bf3f19ead7bebe22caa87634cb50a457517abb00ac84",
+      "schemaName": "pb_03_split_projection_v3"
+    },
+    {
+      "stageId": "PB-04",
+      "promptVersion": "v7.0.0",
+      "promptHash": "b1c2e6f1c313a8a5539c1e560438b0695defa04ee4af68e1a5437046e1c7326e",
+      "schemaVersion": "pipeline-schema-v2.0.0",
+      "schemaHash": "14436184028b585d7047d9461650b95ae73afe2ceee7f65b40c43721b49c9cf3",
+      "schemaName": "pb_04_clarification_aware_v1"
+    },
+    {
+      "stageId": "PB-05",
+      "promptVersion": "v11.0.0",
+      "promptHash": "7ddc48bee3e2d86a5411a3cd43339ba2ba1c001b88960bb9d5ed7062cc186131",
+      "schemaVersion": "pipeline-schema-v2.0.0",
+      "schemaHash": "88bdfee3620e42c089009f8ed8ff29ad7f7db893fd3af3367aef687b4588a311",
+      "schemaName": "pb_05_clarification_aware_v1"
+    },
+    {
+      "stageId": "PB-06",
+      "promptVersion": "v9.0.0",
+      "promptHash": "d316eedfb6a5ec1cdb62f556e9aba8a788438ab6129cbc9a42f1b68f65d65e0f",
+      "schemaVersion": "pipeline-schema-v1.0.0",
+      "schemaHash": "d1ae99220118c12cd1fab0545c3fda3f9aaddfa9949bbf2675231d8254eee451",
+      "schemaName": "pb_06_clarification_aware_v1"
+    }
+  ]
+}

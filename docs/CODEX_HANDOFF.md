@@ -1,5 +1,13 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-V19-L3-2026-09-07:BEGIN -->
+## 2026-09-07 — V19-L3 local successor / incomplete pilot retained
+
+実行HEAD64a1321のfresh pilotは6正常終了（回答3/確認3）、PB05停止1、未実施1で固定。32 HTTP/$0.04852951の旧ledgerとSTOPを変更せず、元186ファイルをda7824cに保存。[匿名結果と根拠](../evals/guidance-quality-v19-l3/STOP-FOLLOWUP.md)。A/B版対応は未開示。STOPの「送った→届いている」はPB05のFact ID説明でのみ発生、理由/Planを変えない編集上の1field修復例を新資産へ分離した。
+
+[候補/検証](product/GUIDANCE_QUALITY_V19_L3.md)：L2からPB05 v11のみ、catalog/bundle v21/schemaSet v6/PB06 v9。明示local loader＋最小version wiring、旧schema/classifier/Production選択/Paid不変。focused24 PASS＋KnownOpen1再現、旧quality4/AB12/runtime24、typecheck/変更source lint/build PASS。追加API/Production/push/deploy0。実生成改善は未確認、F007/F008未解決。次の[局所診断案](../evals/guidance-quality-v19-l3/pilot-proposal.md)はGQ29-P3のPB05/PB06・最大4 HTTP/$0.15提案、未承認/未実行。保存上流の固定診断であり新しい8-session full pilotではなく、旧runへ継ぎ足さない。
+<!-- GUIDANCE-V19-L3-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-L2-2026-09-07:BEGIN -->
 ## 2026-09-07 — PB06 temporal candidate / fresh pilot preparation
 

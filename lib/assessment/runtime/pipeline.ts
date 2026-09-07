@@ -20,7 +20,8 @@ import { evaluateGuidanceRequestCompletenessV1 } from "./guidance-request-comple
 import { buildEffectiveDecisionPolicyV3 } from "./effective-decision-policy-v3.ts";
 import { isGuidanceWave1Runtime, GUIDANCE_WAVE1_SCHEMA_SET_VERSION } from "./guidance-runtime-identity-v1.ts";
 import { V19_L1_PB01_PROMPT_VERSION, V19_L1_PB05_PROMPT_VERSION } from "./v19-l1-runtime-identity.ts";
-import { usesV19AcknowledgementPolicy, usesV17ProductValidation, isV19L2Runtime, V19_L2_PB06_PROMPT_VERSION } from "./v19-l2-runtime-identity.ts";
+import { V19_L2_PB06_PROMPT_VERSION } from "./v19-l2-runtime-identity.ts";
+import { usesV19AcknowledgementPolicy, usesV17ProductValidation, usesV19TemporalEvaluator, isV19L3Runtime, V19_L3_PB05_PROMPT_VERSION } from "./v19-l3-runtime-identity.ts";
 import { evaluateV19L1InputSufficiency, buildV19L1EffectiveDecisionPolicy, type V19L1InputSufficiencyResult } from "./v19-l1-acknowledgement-policy.ts";
 import { evaluateJpy980InputSufficiencyV5, type Jpy980InputSufficiencyResultV5 } from "./jpy980-input-sufficiency-policy-v5.ts";
 import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
@@ -715,13 +716,17 @@ export class AssessmentPipeline {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
     const v19BaseDefinition = this.definitions.get("PB-01")?.promptVersion === V19_L1_PB01_PROMPT_VERSION;
-    const v19ReportDefinition = this.definitions.get("PB-05")?.promptVersion === V19_L1_PB05_PROMPT_VERSION;
+    const reportPromptVersion = this.definitions.get("PB-05")?.promptVersion;
+    const v19ReportDefinition = reportPromptVersion === V19_L1_PB05_PROMPT_VERSION || reportPromptVersion === V19_L3_PB05_PROMPT_VERSION;
     if (v19BaseDefinition !== usesV19AcknowledgementPolicy(runContext.promptBundleVersion) ||
       v19ReportDefinition !== usesV19AcknowledgementPolicy(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
+    if ((reportPromptVersion === V19_L3_PB05_PROMPT_VERSION) !== isV19L3Runtime(runContext.promptBundleVersion)) {
+      throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
     const temporalEvaluatorDefinition = this.definitions.get("PB-06")?.promptVersion === V19_L2_PB06_PROMPT_VERSION;
-    if (temporalEvaluatorDefinition !== isV19L2Runtime(runContext.promptBundleVersion)) {
+    if (temporalEvaluatorDefinition !== usesV19TemporalEvaluator(runContext.promptBundleVersion)) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
     if ((authorityIntegrityPair || v1A2CapablePair || guidancePair) && !this.timeZone) {
