@@ -1,5 +1,13 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality real pilot complete / blind Human review next
+
+開始5459a811 clean。評価専用budget/one-shot/transport/匿名表示を383f223b2f03ff6f4cb1e93dd4ea9bb2f5dea008でlocal commitし、fake16/16・独立レビュー後にHuman承認済み8sessionsを一度だけ実行。36 HTTP、実usage USD $0.04820613、予約$0.6100992、STOPなし、完成4/追加確認4。runtime/凍結30ケース/pilot入力変更0。承認は消費済み。予算の残りを根拠に再実行しない。
+
+次は Blind Review（参照原本はPrivate保全・候補には非同梱） のHuman評価。記録（参照原本はPrivate保全・候補には非同梱）・technical-summaryは対応表なし。internal mapping/manifest/session証拠をHuman評価前に表示しない。Humanの回答は未記入・PENDINGで、自動採点/修正/推測0。勝敗・本番待機率・Human quality acceptance・Production authorizationは未確定。Production選択/購入準備/PaidはV17のまま、外部Production操作0。
+<!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality 8-session Pilot準備
 

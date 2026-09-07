@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality authorized real pilot / Human review pending
+
+Human承認済みの固定4case × V17/V18を一度だけ実行。8/8 session終了、36 HTTP、完成回答4・追加確認4、API実usage費用USD $0.04820613、事前予約総額$0.6100992、$2 hard cap内。STOP/technical failure/検出された重大Safety・integrity finding 0。追加sample・retry・clarification answer・attempt3・修復0。実行runnerは383f223b2f03ff6f4cb1e93dd4ea9bb2f5dea008、runtime/凍結入力は5459a811から変更0。
+
+Blind Review（参照原本はPrivate保全・候補には非同梱）を先にHuman評価する。実行記録（参照原本はPrivate保全・候補には非同梱）とversion非公開の技術集計を保存。A/B対応表はinternalへ分離し、Human評価完了まで開示・勝敗判断しない。承認は消費済み、固定run directory/lockを削除せず再実行しない。
+
+Production選択・購入準備・Paid契約はV17を維持。Production DB/Customer/設定/Stripe/Resend/Discord/push/deploy/migration/実メール0。以下の準備時点の実API未承認記録は歴史的証拠であり、この一度の実行記録が後継。Technical completion ≠ Human quality acceptance ≠ Production authorization。
+<!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality 8-session Pilot準備
 
