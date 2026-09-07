@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-WAVE1-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality Local Implementation Wave 1
+
+Guidance Quality Wave 1の限定local候補（入口A・判断B・量/表示C）を実装。V18/schemaSet v7をlocal executorから明示選択し、Production selectorとV17/Paid契約は維持。
+
+開始local release/private-ready@46fa02a52e39a5c5c4d62bf4e66292619a8b286f、clean/stash空。結果・tests・既知未解消・候補version・次回pilotは [Wave1記録](product/GUIDANCE_QUALITY_WAVE1.md)。凍結30ケースは維持。実モデル/API評価0、外部照会/操作0。Technical PASSは実品質確認やProduction承認ではない。
+
+R1 Human Acceptanceは本番トップ・依頼画面・Googleログイン・Accountへの「問題なし」に限定。修正版新規実購入→鑑定生成→実メール受信は未実施。最後の共有Production revisionは7db33b03f0348424bb426c8afb6d01ea4e472297、今回の外部実測UNKNOWN。以下は各Task当時の歴史的記録。
+<!-- GUIDANCE-WAVE1-2026-09-07:END -->
+
 <!-- GUIDANCE-QUALITY-R1-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality R1 / LOCAL ONLY
 
