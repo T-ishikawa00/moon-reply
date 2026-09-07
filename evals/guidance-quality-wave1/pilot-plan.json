@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "guidance-wave1-pilot-plan-v1",
+  "status": "NOT_AUTHORIZED_NOT_RUN",
+  "baseline": "46fa02a52e39a5c5c4d62bf4e66292619a8b286f",
+  "candidateCatalog": "runtime-stage-catalog-v18.0.0",
+  "model": "gpt-5.6-luna",
+  "pilotCases": [
+    "GQ-05",
+    "GQ-24",
+    "GQ-03",
+    "GQ-13"
+  ],
+  "fullCases": [
+    "GQ-01",
+    "GQ-02",
+    "GQ-03",
+    "GQ-04",
+    "GQ-05",
+    "GQ-06",
+    "GQ-07",
+    "GQ-08",
+    "GQ-11",
+    "GQ-13",
+    "GQ-17",
+    "GQ-24"
+  ],
+  "arms": [
+    "current-v17",
+    "candidate-v18"
+  ],
+  "samplesPerArmCase": 1,
+  "pilotSessions": 8,
+  "maxTotalSessionsIncludingPilot": 24,
+  "httpAdministrativeCeilingPerSession": 12,
+  "sourceReachableHttpMaximumPerSession": 11,
+  "unusedReservePerSession": 1,
+  "transportRetries": 0,
+  "productGenerationAttempts": 2,
+  "maximumClarificationAnswers": 1,
+  "tokenCapsProposal": [
+    {
+      "stage": "PB-01 initial",
+      "invocations": 1,
+      "input": 16000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-01C",
+      "invocations": 1,
+      "input": 12000,
+      "outputIncludingReasoning": 4096
+    },
+    {
+      "stage": "PB-02",
+      "invocations": 1,
+      "input": 24000,
+      "outputIncludingReasoning": 3072
+    },
+    {
+      "stage": "PB-03",
+      "invocations": 1,
+      "input": 24000,
+      "outputIncludingReasoning": 2048
+    },
+    {
+      "stage": "PB-01 clarification resume",
+      "invocations": 1,
+      "input": 16000,
+      "outputIncludingReasoning": 4096
+    },
+    {
+      "stage": "PB-04",
+      "invocations": 2,
+      "input": 48000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-05",
+      "invocations": 2,
+      "input": 64000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-06",
+      "invocations": 2,
+      "input": 96000,
+      "outputIncludingReasoning": 4096
+    }
+  ],
+  "prices": "UNVERIFIED_NO_EXTERNAL_LOOKUP",
+  "currency": "USD",
+  "costApproval": "REQUIRED_SEPARATELY",
+  "actualApiCalls": 0,
+  "productionBudgetUse": false,
+  "customerDataUse": false
+}

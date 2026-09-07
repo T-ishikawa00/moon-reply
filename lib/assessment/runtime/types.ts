@@ -476,7 +476,7 @@ export type ReportContent = {
 };
 
 export type SplitDecisionPlanV2 = {
-  schema_version: "pipeline-schema-v2.0.0";
+  schema_version: "pipeline-schema-v2.0.0" | "guidance-decision-plan-v1";
   selected_decision: Decision;
   decision_reason_fact_ids: string[];
   possible_interpretations: Array<{
@@ -581,14 +581,14 @@ export type RuntimeReport = {
 };
 
 export type SplitRuntimeReportV1 = {
-  schemaVersion: "m2-p4-split-runtime-report-v1";
+  schemaVersion: "m2-p4-split-runtime-report-v1" | "guidance-runtime-report-v1";
   decisionPlan: SplitDecisionPlanV2;
   content: SplitReportContentV2;
   fixedLimitation: string;
 };
 
 export type DecisionCard = {
-  schemaVersion: "m2-p3-decision-card-v1";
+  schemaVersion: "m2-p3-decision-card-v1" | "guidance-decision-card-v1";
   decision: Decision;
   reason: string;
   actionsToTake: string[];

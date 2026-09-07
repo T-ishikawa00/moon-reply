@@ -98,7 +98,10 @@ function projectImmediateAction(
     report.schemaVersion === "m2-p3-runtime-report-v1"
       ? report.decisionPlan.three_day_plan.find((item) => item.day === "tonight")
       : report.decisionPlan.aftercare_plan.find((item) => item.phase === "tonight");
-  const action = tonight?.action ?? plan.actions_to_take[0];
+  const guidanceCandidate = report.schemaVersion === "guidance-runtime-report-v1";
+  const action = guidanceCandidate
+    ? plan.actions_to_take[0]
+    : tonight?.action ?? plan.actions_to_take[0];
   if (!action) projectionInvalid();
 
   const avoid = uniqueExactStrings([
@@ -108,7 +111,10 @@ function projectImmediateAction(
     ...plan.actions_to_avoid,
   ]);
   const actionKey = normalizedEqualityKey(action);
-  const secondaryActions = uniqueExactStrings(plan.actions_to_take).filter(
+  const secondaryActions = uniqueExactStrings([
+    ...plan.actions_to_take,
+    ...(guidanceCandidate && tonight ? [tonight.action] : []),
+  ]).filter(
     (candidate) => normalizedEqualityKey(candidate) !== actionKey,
   );
   return { action, avoid, secondaryActions };
@@ -349,7 +355,8 @@ function assertCustomerAssessmentProjection(
   }
   if (
     value.sourceReportSchemaVersion !== "m2-p3-runtime-report-v1" &&
-    value.sourceReportSchemaVersion !== "m2-p4-split-runtime-report-v1"
+    value.sourceReportSchemaVersion !== "m2-p4-split-runtime-report-v1" &&
+    value.sourceReportSchemaVersion !== "guidance-runtime-report-v1"
   ) {
     projectionInvalid();
   }

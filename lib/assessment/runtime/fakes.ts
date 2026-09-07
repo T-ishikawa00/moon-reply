@@ -1,3 +1,4 @@
+import { isGuidanceWave1Runtime, usesV17ProductValidation } from "./guidance-runtime-identity-v1.ts";
 import { M2RuntimeError } from "./errors.ts";
 import type {
   AiStageTransport,
@@ -196,7 +197,8 @@ export class FakeAssessmentRepository implements AssessmentRepository {
       (attemptNumber === 2 &&
         ((run.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" &&
           run.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" &&
-          run.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0") ||
+          run.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0" &&
+          !isGuidanceWave1Runtime(run.promptBundleVersion)) ||
           !["PB-04", "PB-05", "PB-06"].includes(record.stageId))) ||
       [...this.stageRuns.values()].some(
         (stage) =>
@@ -440,7 +442,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
     const isRecoveredQualityFailure = (stage: (typeof stageRuns)[number]) =>
       (run.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
         run.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
-        run.promptBundleVersion === "prompt-bundle-runtime-v17.0.0") &&
+        usesV17ProductValidation(run.promptBundleVersion)) &&
       stage.stageId === "PB-06" &&
       (stage.attemptNumber ?? 1) === 1 &&
       stage.failure?.errorCode ===

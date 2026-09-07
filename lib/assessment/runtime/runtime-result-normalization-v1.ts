@@ -472,6 +472,7 @@ function assertDraftEditMetadata(value: unknown) {
 
 function assertSplitDecisionPlan(
   value: unknown,
+  expectedSchemaVersion: SplitDecisionPlanV2["schema_version"],
 ): asserts value is SplitDecisionPlanV2 {
   assertRecord(value);
   assertExactKeys(value, [
@@ -490,7 +491,7 @@ function assertSplitDecisionPlan(
     "material_unknowns",
     "model_generated_limitations",
   ]);
-  if (value.schema_version !== "pipeline-schema-v2.0.0") invalid();
+  if (value.schema_version !== expectedSchemaVersion) invalid();
   const decision = decodeDecisionCode(value.selected_decision);
   assertSplitRequiredFactIds(value.decision_reason_fact_ids);
   assertObjectArray(
@@ -504,7 +505,11 @@ function assertSplitDecisionPlan(
   assertString(value.pre_action_check.check);
   assertSplitOptionalFactIds(value.pre_action_check.supporting_fact_ids);
   assertStringArray(value.actions_to_take, { minimum: 1, maximum: 4, unique: true });
-  assertStringArray(value.actions_to_avoid, { minimum: 1, maximum: 4, unique: true });
+  assertStringArray(value.actions_to_avoid, {
+    minimum: expectedSchemaVersion === "guidance-decision-plan-v1" ? 0 : 1,
+    maximum: 4,
+    unique: true,
+  });
   assertDraftPolicy(decision, value.recommended_message_draft);
   if (value.recommended_message_draft === null) {
     if (value.message_draft_edit_metadata !== null) invalid();
@@ -653,7 +658,12 @@ function assertRuntimeReport(
     return;
   }
   if (value.schemaVersion === "m2-p4-split-runtime-report-v1") {
-    assertSplitDecisionPlan(value.decisionPlan);
+    assertSplitDecisionPlan(value.decisionPlan, "pipeline-schema-v2.0.0");
+    assertSplitReportContent(value.content);
+    return;
+  }
+  if (value.schemaVersion === "guidance-runtime-report-v1") {
+    assertSplitDecisionPlan(value.decisionPlan, "guidance-decision-plan-v1");
     assertSplitReportContent(value.content);
     return;
   }
@@ -678,11 +688,17 @@ function assertDecisionCard(value: unknown): asserts value is DecisionCard {
     "messageDraft",
     "reviewTiming",
   ]);
-  if (value.schemaVersion !== "m2-p3-decision-card-v1") invalid();
+  if (
+    value.schemaVersion !== "m2-p3-decision-card-v1" &&
+    value.schemaVersion !== "guidance-decision-card-v1"
+  ) invalid();
   decodeDecisionCode(value.decision);
   assertString(value.reason);
   assertStringArray(value.actionsToTake, { minimum: 1, maximum: 8 });
-  assertStringArray(value.actionsToAvoid, { minimum: 1, maximum: 8 });
+  assertStringArray(value.actionsToAvoid, {
+    minimum: value.schemaVersion === "guidance-decision-card-v1" ? 0 : 1,
+    maximum: 8,
+  });
   assertString(value.messageDraft, { nullable: true });
   assertString(value.reviewTiming);
 }
@@ -718,6 +734,10 @@ function assertReadyResult(value: unknown): asserts value is ReadyAssessmentResu
   const decision = decodeDecisionCode(value.decision);
   assertRuntimeReport(value.report);
   assertDecisionCard(value.decisionCard);
+  if (
+    (value.report.schemaVersion === "guidance-runtime-report-v1") !==
+    (value.decisionCard.schemaVersion === "guidance-decision-card-v1")
+  ) invalid();
   assertBoolean(value.duplicate);
   assertUsageTotals(value.usage);
   if (value.authoritativeRequestedTopics !== undefined) {

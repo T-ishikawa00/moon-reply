@@ -16,6 +16,10 @@ import {
   clarificationConsumptionPathsForStageV1,
 } from "./effective-decision-policy-v1.ts";
 import { buildEffectiveDecisionPolicyV2 } from "./effective-decision-policy-v2.ts";
+import { evaluateGuidanceRequestCompletenessV1 } from "./guidance-request-completeness-v1.ts";
+import { buildEffectiveDecisionPolicyV3 } from "./effective-decision-policy-v3.ts";
+import { isGuidanceWave1Runtime, usesV17ProductValidation, GUIDANCE_WAVE1_SCHEMA_SET_VERSION } from "./guidance-runtime-identity-v1.ts";
+import { evaluateJpy980InputSufficiencyV5, type Jpy980InputSufficiencyResultV5 } from "./jpy980-input-sufficiency-policy-v5.ts";
 import { evaluateJpy980InputSufficiencyV2, type Jpy980InputSufficiencyResultV2 } from "./jpy980-input-sufficiency-policy-v2.ts";
 import {
   evaluateJpy980InputSufficiencyV3,
@@ -469,7 +473,8 @@ function buildSplitRuntimeReport(
   content: SplitReportContentV2,
 ): SplitRuntimeReportV1 {
   return {
-    schemaVersion: "m2-p4-split-runtime-report-v1",
+    schemaVersion: plan.schema_version === "guidance-decision-plan-v1"
+      ? "guidance-runtime-report-v1" : "m2-p4-split-runtime-report-v1",
     decisionPlan: plan,
     content,
     fixedLimitation,
@@ -481,7 +486,8 @@ function buildSplitDecisionCard(
   content: SplitReportContentV2,
 ): DecisionCard {
   return {
-    schemaVersion: "m2-p3-decision-card-v1",
+    schemaVersion: plan.schema_version === "guidance-decision-plan-v1"
+      ? "guidance-decision-card-v1" : "m2-p3-decision-card-v1",
     decision: plan.selected_decision,
     reason: content.decision_reason_summary,
     actionsToTake: plan.actions_to_take,
@@ -675,7 +681,11 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0") &&
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
+    const guidancePair = isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
+      runContext.schemaSetVersion === GUIDANCE_WAVE1_SCHEMA_SET_VERSION;
     const splitIdentity =
+      isGuidanceWave1Runtime(runContext.promptBundleVersion) ||
+      runContext.schemaSetVersion === GUIDANCE_WAVE1_SCHEMA_SET_VERSION ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v9.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v10.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v11.0.0" ||
@@ -690,12 +700,16 @@ export class AssessmentPipeline {
       runContext.schemaSetVersion === "pipeline-schema-runtime-v6.0.0";
     if (
       this.stageTopologyVersion === "split-base-candidate-v1"
-        ? !legacySplitPair && !authorityIntegrityPair && !v1A2CapablePair
+        ? !legacySplitPair && !authorityIntegrityPair && !v1A2CapablePair && !guidancePair
         : splitIdentity
     ) {
       throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
     }
-    if ((authorityIntegrityPair || v1A2CapablePair) && !this.timeZone) {
+    const candidateDefinition = this.definitions.get("PB-04")?.schemaVersion === "guidance-decision-plan-v1";
+    if (candidateDefinition !== guidancePair) {
+      throw new M2RuntimeError("M2_STAGE_TOPOLOGY_INVALID");
+    }
+    if ((authorityIntegrityPair || v1A2CapablePair || guidancePair) && !this.timeZone) {
       throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     }
   }
@@ -778,7 +792,7 @@ export class AssessmentPipeline {
       this.emit(localValidationEvent);
       const canonicalOutput =
         definition.stageId === "PB-04" &&
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
+        usesV17ProductValidation(runContext.promptBundleVersion)
           ? canonicalizeDecisionPlanFactReferencesV1(response.output)
           : response.output;
       validateStageOutput(definition, canonicalOutput);
@@ -926,7 +940,7 @@ export class AssessmentPipeline {
         runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
         runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
-        runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0";
+        usesV17ProductValidation(runContext.promptBundleVersion);
       const grounded = authorityIntegrityRuntime
         ? groundCandidateAnalysisV2(response.output)
         : groundCandidateAnalysisV1(response.output);
@@ -1156,7 +1170,8 @@ export class AssessmentPipeline {
     policy:
       | Jpy980InputSufficiencyResultV2
       | Jpy980InputSufficiencyResultV3
-      | Jpy980InputSufficiencyResultV4;
+      | Jpy980InputSufficiencyResultV4
+      | Jpy980InputSufficiencyResultV5;
   }): Promise<AssessmentExecutionResult> {
     const prompt = input.policy.clarification;
     if (!prompt || input.policy.clarificationBudget.questionsRemaining !== 1) {
@@ -1264,6 +1279,9 @@ export class AssessmentPipeline {
       clarificationGrounding: input.clarificationGrounding,
       effectiveAssessmentAuthority: input.effectiveAuthority,
     };
+    if (isGuidanceWave1Runtime(input.runContext.promptBundleVersion)) {
+      return evaluateJpy980InputSufficiencyV5(policyInput);
+    }
     if (
       input.runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
     ) {
@@ -1350,11 +1368,10 @@ export class AssessmentPipeline {
   }): Promise<AssessmentExecutionResult> {
     if (!this.timeZone) throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
     this.emit("LOCAL_DECISION_POLICY");
-    const v17Runtime =
-      input.runContext.promptBundleVersion ===
-      "prompt-bundle-runtime-v17.0.0";
+    const v17Runtime = usesV17ProductValidation(input.runContext.promptBundleVersion);
+    const guidanceRuntime = isGuidanceWave1Runtime(input.runContext.promptBundleVersion);
     const effectivePolicyV17 = v17Runtime
-      ? buildEffectiveDecisionPolicyV2({
+      ? (guidanceRuntime ? buildEffectiveDecisionPolicyV3 : buildEffectiveDecisionPolicyV2)({
           authority: input.effectiveAuthority,
           candidateEnvelope: input.candidateEnvelope,
         })
@@ -1471,6 +1488,7 @@ export class AssessmentPipeline {
             },
             contact_constraint_policy: contactConstraintPolicy,
             action_context: actionContext,
+            ...(guidanceRuntime ? { requested_topics: input.request.requestedTopics } : {}),
             quality_reassessment_directive: directive,
           }),
         },
@@ -1513,6 +1531,12 @@ export class AssessmentPipeline {
             buildLocalSemanticShapeReassessmentDirectiveV1(),
           );
         }
+      }
+
+      if (guidanceRuntime) {
+        localDefects.push(...evaluateGuidanceRequestCompletenessV1({
+          requestedTopics: input.request.requestedTopics, decisionPlan, reportContent,
+        }));
       }
 
       const selectedRequestCompletenessV17 = v17Runtime
@@ -1576,6 +1600,7 @@ export class AssessmentPipeline {
             },
             decision_plan: decisionPlan,
             report_content: reportContent,
+            ...(guidanceRuntime ? { requested_topics: input.request.requestedTopics } : {}),
             contact_constraint_policy: contactConstraintPolicy,
             action_context: actionContext,
           }),
@@ -1745,7 +1770,7 @@ export class AssessmentPipeline {
     if (
       input.runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
       input.runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
-      input.runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
+      usesV17ProductValidation(input.runContext.promptBundleVersion)
     ) {
       return this.completeV15Ready(input);
     }
@@ -2271,13 +2296,15 @@ export class AssessmentPipeline {
   ): Promise<AssessmentExecutionResult | PurchasePreparationExecutionResult> {
     this.validateRuntimeIdentity(runContext);
     if (
-      (runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
+      (!isGuidanceWave1Runtime(runContext.promptBundleVersion) &&
+        runContext.promptBundleVersion !== "prompt-bundle-runtime-v12.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v13.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v14.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v15.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" &&
         runContext.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0") ||
-      runContext.schemaSetVersion !== "pipeline-schema-runtime-v6.0.0" ||
+      runContext.schemaSetVersion !== (isGuidanceWave1Runtime(runContext.promptBundleVersion)
+        ? GUIDANCE_WAVE1_SCHEMA_SET_VERSION : "pipeline-schema-runtime-v6.0.0") ||
       initial.request.id !== runContext.requestId ||
       evidence.ordinal !== 1
     ) {
@@ -2527,7 +2554,7 @@ export class AssessmentPipeline {
       runContext.promptBundleVersion === "prompt-bundle-runtime-v14.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v15.0.0" ||
       runContext.promptBundleVersion === "prompt-bundle-runtime-v16.0.0" ||
-      runContext.promptBundleVersion === "prompt-bundle-runtime-v17.0.0"
+      usesV17ProductValidation(runContext.promptBundleVersion)
     ) {
       return this.executeV1A2Initial(request, runContext);
     }

@@ -226,8 +226,8 @@ function assertCustomerAssessmentExperienceProjectionV2(
     return;
   }
   if (
-    baseProjection.sourceReportSchemaVersion ===
-    "m2-p4-split-runtime-report-v1"
+    baseProjection.sourceReportSchemaVersion === "m2-p4-split-runtime-report-v1" ||
+    baseProjection.sourceReportSchemaVersion === "guidance-runtime-report-v1"
   ) {
     assertTexts(value.materialUnknowns, 0, 4);
     assertTexts(value.consultationLimitations, 0, 2);

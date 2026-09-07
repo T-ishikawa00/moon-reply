@@ -236,7 +236,10 @@ function selectedReasonFactIds(decisionPlan: SplitDecisionPlanV2): Set<string> {
 function assertDraftShape(decisionPlan: SplitDecisionPlanV2): void {
   if (!isPlainRecord(decisionPlan)) invalid();
   assertExactKeys(decisionPlan, decisionPlanKeys);
-  if (decisionPlan.schema_version !== "pipeline-schema-v2.0.0") invalid();
+  if (
+    decisionPlan.schema_version !== "pipeline-schema-v2.0.0" &&
+    decisionPlan.schema_version !== "guidance-decision-plan-v1"
+  ) invalid();
   const draft = decisionPlan.recommended_message_draft;
   if (draft === null) return;
   if (!isPlainRecord(draft)) invalid();
