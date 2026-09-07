@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-V19-L2-2026-09-07:BEGIN -->
+## 2026-09-07 — V19-L2 PB06 temporal successor / local preparation
+
+Human承認のTYPE-C診断に基づき、V19-L1のPB06に現在行動と送信後の待機を分離する評価指示だけを追加。新候補はcatalog/bundle v20、schemaSet v6、PB06 v9。[実装・identity・検証・留保](product/GUIDANCE_QUALITY_V19_L2.md)。V17/V18/V19-L1、PB01〜05、schema、classifier、Production/Paidは不変。
+
+候補差分のlocal検証は34 PASS＋既存制約の再現1件。GQ05/GQ13/GQ29-P3の保存出力を同一再生、旧quality回帰・typecheck・source lint・build PASS。真正矛盾をmajorで2回返すと旧/新とも修復消尽後にreadyへ戻る既存F007制約は未解決・品質PASSではない。新pilotは初回material findingでSTOPする既存経路を維持。実モデルの誤検知解消は未検証。
+
+旧途中pilotはdiagnostic-only / incompleteとしてHuman品質勝敗から除外し、元証拠・STOP・mappingを保存。次は[新規4×2＝8-session計画](../evals/guidance-quality-v19-l2/pilot-review.md)。既存runner/$2 hard cap/retry0を再利用する準備のみ。READY FOR FRESH BLIND PILOTはAPI実行承認ではない。実API・Production変更・push/deploy0。以下は各Task時点の履歴。
+<!-- GUIDANCE-V19-L2-2026-09-07:END -->
+
 <!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:BEGIN -->
 ## 2026-09-07 — GQ24 STOP診断：TYPE-C / evidence only
 

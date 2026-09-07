@@ -1,5 +1,15 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-V19-L2-2026-09-07:BEGIN -->
+## 2026-09-07 — PB06 temporal candidate / fresh pilot preparation
+
+開始`release/private-ready@122696691cac6ab5ba2fa9c453e833bb45b74cb8`、clean。HumanのLOCAL ONLY指示でV19-L1を継承するV19-L2（catalog/bundle v20、schemaSet v6、PB06 v9）を作成。[実装正本](product/GUIDANCE_QUALITY_V19_L2.md)、[offline資産](../evals/guidance-quality-v19-l2/README.md)。PB06だけに時間・対象・条件の分離と相反findingの根拠記載を追加し、旧契約/生成prompt/schema/classifier/Production/Paidは維持。
+
+focused34 PASS＋既存制約1件、診断17/17、既存A/B12/12・runtime24/24・Paid quality4/4、typecheck・619source lint警告0・build47/47 PASS。保存GQ24の旧findingは引き続きSTOP。別枠の空finding対照はfakeであり、新PB06の実モデル再評価ではない。同時点矛盾のmajor修復消尽後readyはL1/L2とも再現した既存F007制約で未解決、criticalはfail-closed。次pilotは既存評価transportの初回major/critical STOPを維持し、消尽経路へ進めない。独立レビュー済み。
+
+旧runにdiagnostic-only / incompleteのstatusを追記し、品質比較から除外。旧receipt/ledger/lock/STOP/mapping/Human回答は不変、A/B対応を今回開示しない。fresh4case×2の[計画](../evals/guidance-quality-v19-l2/pilot-review.md)はNOT_AUTHORIZED_NOT_RUN、新mapping/runなし。既存$2/72HTTP/retry0、exact候補HEADと範囲・金額の別Human承認後に薄いprofileで実行する。今回API/Production/push/deploy0。READY FOR FRESH BLIND PILOTは候補差分の準備状態であり、実品質受入やProduction承認ではない。
+<!-- GUIDANCE-V19-L2-2026-09-07:END -->
+
 <!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:BEGIN -->
 ## 2026-09-07 — GQ24 temporal false-positive diagnosis
 

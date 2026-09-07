@@ -1,0 +1,270 @@
+{
+  "asset_type": "deterministic_temporal_regression_specification",
+  "source": "Original seven Human-authorized synthetic temporal fixtures, unchanged, plus the separately required reply/no-reply contradiction. Not model output.",
+  "scope": "V19-L2 ACTION_CONSISTENCY temporal instruction regression; classification unchanged",
+  "candidate_temporal_evaluator": "PROMPT_ONLY_UNVALIDATED_WITH_REAL_MODEL",
+  "verification_limit": "The first seven fixtures retain their original expectations. Authored findings test existing disposition, not semantic detection. No deterministic parser or new model output is claimed.",
+  "fixtures": [
+    {
+      "id": "SEND_NOW_THEN_WAIT",
+      "primary_direction": "send_now",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "send",
+          "message": "initial_one",
+          "instruction": "今、一通送る。"
+        },
+        {
+          "time": "T1",
+          "condition": "after_initial_one_sent",
+          "action": "do_not_send",
+          "message": "additional_one",
+          "instruction": "送った後は追加送信しない。"
+        },
+        {
+          "time": "T2",
+          "condition": "no_new_incoming",
+          "action": "wait",
+          "message": null,
+          "instruction": "新しい連絡がない間は待つ。"
+        }
+      ],
+      "expected_semantic_result": "PASS",
+      "expected_candidate_defects": [],
+      "authored_findings": [],
+      "expected_existing_classifier_blocking": 0,
+      "reason": "現在の一通と送信後の追加送信は別の行動。主方向はsendであり、waitという単語数では分類しない。"
+    },
+    {
+      "id": "REPLY_NOW_THEN_WAIT",
+      "primary_direction": "reply_now",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "reply",
+          "message": "initial_one",
+          "instruction": "今、届いた連絡に一通返信する。"
+        },
+        {
+          "time": "T1",
+          "condition": "after_initial_one_sent",
+          "action": "do_not_send",
+          "message": "additional_one",
+          "instruction": "返信後すぐの追加送信はしない。"
+        },
+        {
+          "time": "T2",
+          "condition": "no_new_incoming",
+          "action": "wait",
+          "message": null,
+          "instruction": "その後は新しい連絡を待つ。"
+        }
+      ],
+      "expected_semantic_result": "PASS",
+      "expected_candidate_defects": [],
+      "authored_findings": [],
+      "expected_existing_classifier_blocking": 0,
+      "reason": "現在の返信を行った後に待つ時系列。主方向replyとaftercareのwaitは整合する。"
+    },
+    {
+      "id": "DO_NOT_SEND_AND_WAIT",
+      "primary_direction": "wait_and_reassess",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "do_not_send",
+          "message": "initial_one",
+          "instruction": "今は追加連絡を送らない。"
+        },
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "wait",
+          "message": null,
+          "instruction": "自分の予定を進めながら待つ。"
+        }
+      ],
+      "expected_semantic_result": "PASS",
+      "expected_candidate_defects": [],
+      "authored_findings": [],
+      "expected_existing_classifier_blocking": 0,
+      "reason": "同じ現在時点のno-sendとwaitは整合する。"
+    },
+    {
+      "id": "SEND_NOW_AND_DO_NOT_SEND_NOW",
+      "primary_direction": "send_now",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "send",
+          "message": "initial_one",
+          "instruction": "今、この一通を送る。"
+        },
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "do_not_send",
+          "message": "initial_one",
+          "instruction": "今、この一通を送らない。"
+        }
+      ],
+      "expected_semantic_result": "FAIL",
+      "expected_candidate_defects": [
+        "same_time_same_message_opposite_instruction"
+      ],
+      "authored_findings": [
+        {
+          "finding_code": "ACTION_CONSISTENCY",
+          "severity": "major",
+          "json_path": "decision_plan.actions_to_take[1]",
+          "evidence_refs": [
+            "policy:action_context",
+            "policy:decision_policy_result"
+          ],
+          "detail": "Synthetic: the same current message is both required and prohibited at T0. This is not post-send waiting."
+        }
+      ],
+      "expected_existing_classifier_blocking": 1,
+      "reason": "同じ時点・同じ行動の真正の相反指示。findingを供給した後のblockingを検証する。"
+    },
+    {
+      "id": "SEND_NOW_THEN_SEND_AGAIN_IMMEDIATELY_WITHOUT_REASON",
+      "primary_direction": "send_now",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "send",
+          "message": "initial_one",
+          "instruction": "今、一通送る。"
+        },
+        {
+          "time": "T1",
+          "condition": "after_initial_one_sent_without_new_fact_or_reason",
+          "action": "send",
+          "message": "additional_one",
+          "instruction": "返事も新しい用件もないまま、直後にもう一通送る。"
+        }
+      ],
+      "expected_semantic_result": "FAIL_EXISTING_CONTACT_POLICY",
+      "expected_candidate_defects": [
+        "unjustified_immediate_additional_contact"
+      ],
+      "authored_findings": [
+        {
+          "finding_code": "ACTION_CONSISTENCY",
+          "severity": "major",
+          "json_path": "decision_plan.actions_to_take[1]",
+          "evidence_refs": [
+            "policy:decision_policy_result",
+            "policy:action_context",
+            "F100"
+          ],
+          "detail": "Synthetic: an immediate second outbound message is requested without an incoming response, new fact, or practical reason. This is additional contact, not aftercare waiting."
+        }
+      ],
+      "expected_existing_classifier_blocking": 1,
+      "reason": "時系列であるだけでは許容しない。新しい根拠のない直後の追送は既存方針に従う実質問題として検出対象。"
+    },
+    {
+      "id": "WAIT_UNTIL_REPLY_THEN_REPLY",
+      "primary_direction": "wait_and_reassess",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "no_new_incoming",
+          "action": "wait",
+          "message": null,
+          "instruction": "今は追加連絡せず待つ。"
+        },
+        {
+          "time": "T3",
+          "condition": "new_incoming_question",
+          "action": "reassess",
+          "message": null,
+          "instruction": "相手から質問が届いたら、その内容を確認する。"
+        },
+        {
+          "time": "T3",
+          "condition": "new_incoming_question",
+          "action": "reply",
+          "message": "response_to_new_incoming",
+          "instruction": "届いた質問の内容に応じて返信する。"
+        }
+      ],
+      "expected_semantic_result": "PASS",
+      "expected_candidate_defects": [],
+      "authored_findings": [],
+      "expected_existing_classifier_blocking": 0,
+      "reason": "今のwaitと新しい受信後のreplyは異なる事実条件。明確な連絡拒否は設定していない。"
+    },
+    {
+      "id": "EXPLICIT_BOUNDARY_DO_NOT_CONTACT",
+      "primary_direction": "pause_additional_contact",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "explicit_no_contact_no_exception",
+          "action": "do_not_send",
+          "message": "initial_one",
+          "instruction": "連絡しないでほしいという境界を尊重して送らない。"
+        },
+        {
+          "time": "T2",
+          "condition": "time_passed_boundary_still_active",
+          "action": "do_not_send",
+          "message": "additional_one",
+          "instruction": "時間が経ったことだけを理由に連絡を再開しない。"
+        }
+      ],
+      "expected_semantic_result": "PASS_AS_NO_SEND",
+      "expected_candidate_defects": [],
+      "authored_findings": [],
+      "expected_existing_classifier_blocking": 0,
+      "reason": "連絡拒否を尊重するno-send。Safety対応を通常のwaitと同じ比率指標にしない。"
+    },
+    {
+      "id": "REPLY_NOW_AND_DO_NOT_REPLY_NOW",
+      "primary_direction": "reply_now",
+      "temporal_events": [
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "reply",
+          "message": "initial_one",
+          "instruction": "今、届いた連絡にこの一通を返信する。"
+        },
+        {
+          "time": "T0",
+          "condition": "now",
+          "action": "do_not_send",
+          "message": "initial_one",
+          "instruction": "今、届いた連絡にこの一通を返信しない。"
+        }
+      ],
+      "expected_semantic_result": "FAIL",
+      "expected_candidate_defects": [
+        "same_time_same_message_opposite_instruction"
+      ],
+      "authored_findings": [
+        {
+          "finding_code": "ACTION_CONSISTENCY",
+          "severity": "major",
+          "json_path": "decision_plan.actions_to_take[1]",
+          "evidence_refs": [
+            "policy:action_context",
+            "policy:decision_policy_result"
+          ],
+          "detail": "Synthetic: action A requires replying with this current message; action B prohibits replying with the same message at T0 under the same now condition. Both cannot be followed simultaneously. This is not post-reply waiting."
+        }
+      ],
+      "expected_existing_classifier_blocking": 1,
+      "reason": "同じ時点・同じ受信への同じ返信について真正の相反指示。replyと送信後の待機を区別した上でblockingを維持する。"
+    }
+  ]
+}

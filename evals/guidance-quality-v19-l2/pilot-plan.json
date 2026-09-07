@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "guidance-v19-l2-fresh-pilot-plan-v1",
+  "status": "NOT_AUTHORIZED_NOT_RUN",
+  "preparationBaseline": "122696691cac6ab5ba2fa9c453e833bb45b74cb8",
+  "candidateLabel": "V19-L2",
+  "candidateCatalog": "runtime-stage-catalog-v20.0.0",
+  "candidatePromptBundle": "prompt-bundle-runtime-v20.0.0",
+  "candidateSchemaSet": "pipeline-schema-runtime-v6.0.0",
+  "currentCatalog": "runtime-stage-catalog-v17.0.0",
+  "candidateIdentity": "catalog-identity.json",
+  "executionCandidateHead": null,
+  "executionCandidateHeadRule": "A fresh Human authorization must name the final candidate commit. Exact checkout and contract hashes must match before the first HTTP call; preparationBaseline is not execution authorization.",
+  "inputSource": "evals/guidance-quality-wave1/pilot-inputs.json",
+  "inputSourceSha256": "54203238b1594335bafad7540a63bf63a4a6b1865a82cbb3718ff6e7bcf121c8",
+  "inputHashNormalization": "UTF-8 text with CRLF normalized to LF",
+  "model": "gpt-5.6-luna",
+  "pilotCases": [
+    "GQ-05",
+    "GQ-24",
+    "GQ-13",
+    "GQ-29-P3"
+  ],
+  "arms": [
+    "current-v17",
+    "candidate-v19-l2"
+  ],
+  "samplesPerArmCase": 1,
+  "pilotSessions": 8,
+  "maxTotalSessions": 8,
+  "maxHttpAttempts": 72,
+  "sourceReachableHttpMaximumPerSession": 9,
+  "unusedReservePerSession": 0,
+  "transportRetries": 0,
+  "applicationProviderRetries": 0,
+  "productGenerationAttempts": 2,
+  "attempt3": 0,
+  "additionalSamples": 0,
+  "maximumClarificationAnswers": 0,
+  "clarificationDisposition": "Record the question and terminal entry outcome; do not invent or submit a follow-up answer in this pilot.",
+  "generation": {
+    "provider": "openai",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "reasoningEffort": "low",
+    "serviceTier": "default",
+    "store": false,
+    "tools": [],
+    "stream": false,
+    "background": false,
+    "truncation": "disabled",
+    "temperature": "omitted in both arms",
+    "seed": "omitted in both arms",
+    "frozenApplicationNow": "2026-09-07T10:00:00.000Z",
+    "timeZone": "Asia/Tokyo",
+    "concurrency": 1
+  },
+  "executionOrder": [
+    [
+      "GQ-05",
+      "current-v17"
+    ],
+    [
+      "GQ-05",
+      "candidate-v19-l2"
+    ],
+    [
+      "GQ-24",
+      "candidate-v19-l2"
+    ],
+    [
+      "GQ-24",
+      "current-v17"
+    ],
+    [
+      "GQ-13",
+      "current-v17"
+    ],
+    [
+      "GQ-13",
+      "candidate-v19-l2"
+    ],
+    [
+      "GQ-29-P3",
+      "candidate-v19-l2"
+    ],
+    [
+      "GQ-29-P3",
+      "current-v17"
+    ]
+  ],
+  "blind": {
+    "mappingStatus": "NOT_CREATED",
+    "assignment": "Create one new independent random A/B assignment per case after new authorization and before the first HTTP call; seal it in the new run only.",
+    "reuseHistoricalAssignments": false,
+    "reuseHistoricalSessions": false,
+    "ui": "Reuse the existing four-question blind renderer, with a fresh run name and localStorage key. Human answers remain empty and immutable after submission.",
+    "mappingDisclosure": "Only after Human completes this fresh review.",
+    "generationInputRule": "Pass only fixed input objects to generation. Do not pass case IDs, labels, expected directions, editorial targets, prior Human answers, prior winners, old session outputs or old mapping."
+  },
+  "tokenCapsProposal": [
+    {
+      "stage": "PB-01",
+      "invocationsPerSession": 1,
+      "input": 42000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-01C",
+      "invocationsPerSession": 0,
+      "input": 0,
+      "outputIncludingReasoning": 0
+    },
+    {
+      "stage": "PB-02",
+      "invocationsPerSession": 1,
+      "input": 24000,
+      "outputIncludingReasoning": 3072
+    },
+    {
+      "stage": "PB-03",
+      "invocationsPerSession": 1,
+      "input": 24000,
+      "outputIncludingReasoning": 2048
+    },
+    {
+      "stage": "PB-04",
+      "invocationsPerSession": 2,
+      "input": 48000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-05",
+      "invocationsPerSession": 2,
+      "input": 64000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-06",
+      "invocationsPerSession": 2,
+      "input": 96000,
+      "outputIncludingReasoning": 4096
+    }
+  ],
+  "tokenCounting": {
+    "preCall": "UTF-8 byte count of the complete serialized Responses request body plus 4096 tokens for framing; conservative byte-based ceiling, not a tokenizer measurement. Stop before dispatch if above the stage input cap. No truncation or larger-cap rerun.",
+    "framingReserveTokens": 4096,
+    "output": "max_output_tokens, including reasoning/formatting; incomplete is terminal for the batch, never automatically enlarged",
+    "hardMaxInputPerCall": 96000,
+    "longContextPricingThresholdInputTokens": 272000
+  },
+  "prices": {
+    "verifiedAt": "2026-09-07",
+    "currency": "USD",
+    "perMillionTokens": {
+      "standardInput": 0.2,
+      "cachedInput": 0.02,
+      "cacheWriteInput": 0.25,
+      "outputIncludingReasoning": 1.2
+    },
+    "reserveInputPrice": 0.25,
+    "cacheDiscountAssumed": false,
+    "standardGlobalDirectApiOnly": true,
+    "sources": [
+      "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "https://developers.openai.com/api/docs/pricing",
+      "https://developers.openai.com/api/docs/guides/reasoning"
+    ],
+    "yenConversion": null,
+    "taxAndPaymentFeesIncluded": false,
+    "provenance": "Reused 2026-09-07 public price evidence from the prior local authorization document; no network verification in this LOCAL ONLY task.",
+    "requiresRecheckBeforeAuthorizedRun": true
+  },
+  "expectedCost": {
+    "method": "2x each per-stage historical first-attempt input/output usage, six stages without PB-01C, all eight sessions reaching one product cycle, no cache discount and all input priced at cache-write rate. This is a planning assumption from one older synthetic real-model session, not a measured pilot average.",
+    "historicalUsagePath": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d/controlled-provider-executions/2026-08-19-case5-polite-draft-v17-fcd54a0c/v17-stage-attempt-results-v1.json",
+    "usageMultiplier": 2,
+    "totalInput": 593120,
+    "totalOutput": 70448,
+    "usd": 0.2328176,
+    "roundedPlanningUsd": 0.24,
+    "status": "HISTORICAL_PLANNING_ASSUMPTION_NOT_NEW_MEASUREMENT"
+  },
+  "worstCase": {
+    "inputPerSession": 506000,
+    "outputPerSession": 54272,
+    "totalInput": 4048000,
+    "totalOutput": 434176,
+    "usd": 1.5330112,
+    "roundedUpUsd": 1.54
+  },
+  "proposedBudgetUsd": 2,
+  "preCallBudgetRule": "Reserve the entire stage input cap x 0.25/M + output cap x 1.20/M before each HTTP attempt. Do not release reservations during this pilot, even on success. If the next reservation exceeds the remaining approved USD budget, do not dispatch. Failed/unknown attempts retain their reservations.",
+  "runnerReuse": {
+    "status": "EXISTING_ENGINE_REUSABLE_NEW_AUTHORIZATION_PROFILE_NOT_ACTIVE",
+    "engine": "evals/guidance-quality-wave1/real-pilot/runner.mjs#runConfiguredPilot",
+    "budget": "evals/guidance-quality-wave1/real-pilot/budget.mjs",
+    "transport": "evals/guidance-quality-wave1/real-pilot/transport.mjs",
+    "review": "evals/guidance-quality-wave1/real-pilot/review.mjs",
+    "receiptInspection": "evals/guidance-quality-v19-l1/real-pilot.mjs#reviewReceipt",
+    "oldExecutableProfile": "Do not invoke or alter the consumed V19-L1 entry point. After separate authorization, bind a thin new profile to the approved HEAD/catalog/plan and reuse the existing engine.",
+    "freshRun": "No run directory, one-shot lock, ledger, session IDs or mapping is created in this task. Create all independently once after new authorization."
+  },
+  "stopConditions": [
+    "Any session/stage/HTTP/budget/input/output boundary would be exceeded",
+    "Model/catalog/prompt/schema/input/settings identity mismatch or price change",
+    "Timeout, unknown result, HTTP failure including 429/5xx, refusal or incomplete response; no retries",
+    "Schema/technical failure, observed fabricated fact, changed original meaning, action contradiction or Safety/contact boundary regression; preserve all actual outputs and stop the batch",
+    "Missing or inconsistent usage, usage above the pre-call ceiling, or unapproved billing mode",
+    "Entry needs clarification/unsupported: end that session without forced generation; count it and proceed to the next fixed session unless Safety requires batch stop",
+    "All eight fixed sessions have been attempted; no replacement sessions or extension"
+  ],
+  "knownOpen": {
+    "codeFamily": "F007",
+    "issue": "generated_without_candidate with preserved_meaning=true metadata",
+    "status": "OPEN",
+    "rule": "Do not mark resolved by Human preference. Retain the existing evaluation draft-source integrity check and stop if triggered; no runner or runtime allowance is added."
+  },
+  "inheritedExhaustionLimitation": {
+    "codeFamily": "F007",
+    "status": "OPEN_OFFLINE_REPRODUCED_NOT_QUALITY_PASS",
+    "issue": "L1 and L2 can both deliver a retained same-time same-message contradiction after two major ACTION_CONSISTENCY findings; critical current-action findings fail closed.",
+    "source": "lib/assessment/runtime/quality-reassessment-v2.ts:160-183",
+    "pilotBoundary": "Reuse the existing EvaluationTransport: the first blocking major or critical ACTION_CONSISTENCY stops before any repair or exhaustion. Never bypass this STOP, including the historical temporal false positive.",
+    "productionResolutionClaimed": false
+  },
+  "historicalRunDisposition": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/diagnostic-status.json",
+  "costApproval": "REQUIRED_SEPARATELY",
+  "actualApiCalls": 0,
+  "actualApiCostUsd": 0,
+  "productionBudgetUse": false,
+  "customerDataUse": false,
+  "productionWrites": false
+}

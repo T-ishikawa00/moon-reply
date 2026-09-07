@@ -1,5 +1,5 @@
 import { isGuidanceWave1Runtime } from "./guidance-runtime-identity-v1.ts";
-import { isV19L1Runtime, usesV17ProductValidation } from "./v19-l1-runtime-identity.ts";
+import { usesV19AcknowledgementPolicy, usesV17ProductValidation } from "./v19-l2-runtime-identity.ts";
 import { M2RuntimeError } from "./errors.ts";
 import type {
   AiStageTransport,
@@ -200,7 +200,7 @@ export class FakeAssessmentRepository implements AssessmentRepository {
           run.promptBundleVersion !== "prompt-bundle-runtime-v16.0.0" &&
           run.promptBundleVersion !== "prompt-bundle-runtime-v17.0.0" &&
           !isGuidanceWave1Runtime(run.promptBundleVersion) &&
-          !isV19L1Runtime(run.promptBundleVersion)) ||
+          !usesV19AcknowledgementPolicy(run.promptBundleVersion)) ||
           !["PB-04", "PB-05", "PB-06"].includes(record.stageId))) ||
       [...this.stageRuns.values()].some(
         (stage) =>

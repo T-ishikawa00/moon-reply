@@ -1,0 +1,279 @@
+{
+  "schemaVersion": "guidance-v19-l2-offline-verification-v1",
+  "baseline": "122696691cac6ab5ba2fa9c453e833bb45b74cb8",
+  "candidate": {
+    "catalog": "runtime-stage-catalog-v20.0.0",
+    "promptBundle": "prompt-bundle-runtime-v20.0.0",
+    "schemaSet": "pipeline-schema-runtime-v6.0.0",
+    "stageHashes": [
+      {
+        "stageId": "PB-01",
+        "promptHash": "e311e740821079c760b7994c28fa5a4a96eed6b1507a6e35b0b1374f49f23212",
+        "schemaHash": "049fc753c0fa3051b69b077e53c6be1e3c89b374f4939bab8783cbf96d2c2560"
+      },
+      {
+        "stageId": "PB-01C",
+        "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+        "schemaHash": "65953c0b7227b0b922f6eaf556ced212f7193aa3cc221ab4494514042a217023"
+      },
+      {
+        "stageId": "PB-02",
+        "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+        "schemaHash": "8c4823d86ac8eeae63c7b4c45b1f4cc9700e358deaf19f096e621ffbee24aa13"
+      },
+      {
+        "stageId": "PB-03",
+        "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+        "schemaHash": "ca79b4592e9d9c4be676bf3f19ead7bebe22caa87634cb50a457517abb00ac84"
+      },
+      {
+        "stageId": "PB-04",
+        "promptHash": "b1c2e6f1c313a8a5539c1e560438b0695defa04ee4af68e1a5437046e1c7326e",
+        "schemaHash": "14436184028b585d7047d9461650b95ae73afe2ceee7f65b40c43721b49c9cf3"
+      },
+      {
+        "stageId": "PB-05",
+        "promptHash": "2914017e8c2669a6616543a4767828544454de9990b4dea4f49c17e11a4f8315",
+        "schemaHash": "88bdfee3620e42c089009f8ed8ff29ad7f7db893fd3af3367aef687b4588a311"
+      },
+      {
+        "stageId": "PB-06",
+        "promptHash": "d316eedfb6a5ec1cdb62f556e9aba8a788438ab6129cbc9a42f1b68f65d65e0f",
+        "schemaHash": "d1ae99220118c12cd1fab0545c3fda3f9aaddfa9949bbf2675231d8254eee451"
+      }
+    ]
+  },
+  "evidenceKind": "offline_contracts_stored_replay_and_authored_findings",
+  "realApiCalls": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "forbiddenNetworkCalls": 0,
+  "newPb06ModelEvaluation": "NOT_RUN",
+  "modelTemporalDetectionValidated": false,
+  "oldStopLifted": false,
+  "abortedPilotComparisonAuthority": "DIAGNOSTIC_ONLY_INCOMPLETE",
+  "HumanJudgmentsChanged": false,
+  "mappingDisclosed": false,
+  "temporalFixtures": 8,
+  "protectedFilesHashed": 99,
+  "contractAndReplayChecks": 34,
+  "knownLimitationDiagnostics": 1,
+  "checks": 35,
+  "passed": 34,
+  "failed": 0,
+  "results": [
+    {
+      "name": "old contracts, protected policies, schemas, Product rendering and Production selector unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "seven stages, old schemas and all non-PB06 definitions equal predecessor",
+      "status": "PASS"
+    },
+    {
+      "name": "PB06 is exactly predecessor title plus the approved temporal insertion",
+      "status": "PASS"
+    },
+    {
+      "name": "saved GQ24 actual false-positive finding remains blocking; classifier has no new allow",
+      "status": "PASS"
+    },
+    {
+      "name": "saved PB01-06 replay through successor stops at original finding without any repair output",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled authored empty PB06 preserves saved GQ24 Plan/Report/projection under L1 and L2",
+      "status": "PASS"
+    },
+    {
+      "name": "original seven preregistered expectations unchanged plus required reply/no-reply negative",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_THEN_WAIT: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "REPLY_NOW_THEN_WAIT: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "DO_NOT_SEND_AND_WAIT: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_AND_DO_NOT_SEND_NOW: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "SEND_NOW_THEN_SEND_AGAIN_IMMEDIATELY_WITHOUT_REASON: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "WAIT_UNTIL_REPLY_THEN_REPLY: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "EXPLICIT_BOUNDARY_DO_NOT_CONTACT: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "REPLY_NOW_AND_DO_NOT_REPLY_NOW: authored finding routing only; fixed semantic expectation",
+      "status": "PASS"
+    },
+    {
+      "name": "policy action_context, fact and boundary evidence never become a broad temporal allow",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-05: saved predecessor outcome and Customer projection unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-13: saved predecessor outcome and Customer projection unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "GQ-29-P3: saved predecessor outcome and Customer projection unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "unanswered outbound follow-up: no expansion of acknowledgement exception or allowed action",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit no-contact: no expansion of acknowledgement exception or allowed action",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated unanswered contact: no expansion of acknowledgement exception or allowed action",
+      "status": "PASS"
+    },
+    {
+      "name": "refused reinvitation: no expansion of acknowledgement exception or allowed action",
+      "status": "PASS"
+    },
+    {
+      "name": "Safety blocked intake remains blocked under unchanged predecessor policy",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit boundary permits no-send and rejects current or future contact plus draft workaround",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed PB06 identity, bundle relabel and schema mixing reject before execution",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate purchase preparation is rejected before stages or paid run",
+      "status": "PASS"
+    },
+    {
+      "name": "old required-now draft and schema constraints remain enforced",
+      "status": "PASS"
+    },
+    {
+      "name": "critical fact integrity and technical failures cannot produce ready",
+      "status": "PASS"
+    },
+    {
+      "name": "critical same-time contradiction exhausts with no Report and no attempt 3",
+      "status": "PASS"
+    },
+    {
+      "name": "known inherited F007 limit: repeated major contradiction can survive exhaustion unchanged",
+      "status": "KNOWN_LIMITATION_REPRODUCED_NOT_QUALITY_PASS"
+    },
+    {
+      "name": "existing pilot receipt check stops first major or critical contradiction before repair",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled report-only repair runs once and preserves original reply",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled authored contradiction finding keeps Plan repair and at most one repair cycle",
+      "status": "PASS"
+    },
+    {
+      "name": "saved evidence and old source hashes unchanged; network calls zero",
+      "status": "PASS"
+    }
+  ],
+  "evidence": [
+    {
+      "case": "GQ24",
+      "kind": "SAVED_ACTUAL_FINDING_RECLASSIFIED_UNEDITED",
+      "currentDirection": "reply_now",
+      "futureDirection": "wait_and_reassess",
+      "blocking": 1,
+      "oldStopLifted": false,
+      "actualModelEvaluation": "NOT_RUN"
+    },
+    {
+      "case": "GQ24",
+      "kind": "RAW_SAVED_STAGE_REPLAY_WITH_EXISTING_BLOCKING_CHECK",
+      "stageOutputsRead": 6,
+      "fakeStageCalls": 6,
+      "repairOutputs": 0,
+      "completedReport": false,
+      "preservesHistoricalStop": true
+    },
+    {
+      "case": "GQ24",
+      "kind": "CONTROLLED_AUTHORED_EMPTY_FINDINGS_NOT_REAL_MODEL_OUTPUT",
+      "onlyOverride": "PB06 semantic_checks=[]",
+      "PlanReportProjectionEqualPredecessor": true,
+      "direction": "reply_now",
+      "generatedByNewModel": false,
+      "actualTemporalDetection": "NOT_TESTED"
+    },
+    {
+      "case": "GQ-05",
+      "kind": "SAVED_ORIGINAL_OUTPUT_REPLAY",
+      "sameOutcomeAndProjection": true,
+      "unchangedClarification": true,
+      "unchangedWarmthOrConcreteText": false,
+      "newModelQuality": "NOT_EVALUATED",
+      "HumanJudgmentModified": false
+    },
+    {
+      "case": "GQ-13",
+      "kind": "SAVED_ORIGINAL_OUTPUT_REPLAY",
+      "sameOutcomeAndProjection": true,
+      "unchangedClarification": false,
+      "unchangedWarmthOrConcreteText": true,
+      "newModelQuality": "NOT_EVALUATED",
+      "HumanJudgmentModified": false
+    },
+    {
+      "case": "GQ-29-P3",
+      "kind": "SAVED_ORIGINAL_OUTPUT_REPLAY",
+      "sameOutcomeAndProjection": true,
+      "unchangedClarification": false,
+      "unchangedWarmthOrConcreteText": true,
+      "newModelQuality": "NOT_EVALUATED",
+      "HumanJudgmentModified": false
+    },
+    {
+      "kind": "KNOWN_LIMITATION_REPRODUCED_NOT_QUALITY_PASS",
+      "finding": "ACTION_CONSISTENCY/major/current action",
+      "source": "quality-reassessment-v2.ts:160-183",
+      "unchangedFromPredecessor": true,
+      "contradictionRetainedAfterOneRepair": true,
+      "boundary": "Initial semantic blocking is retained. Existing final exhaustion can deliver major findings. No classifier change or F007 resolution is claimed.",
+      "evaluatorFixtures": "Hand-authored Plan contradiction and repeated finding, not real model output",
+      "newApiCalls": 0
+    },
+    {
+      "kind": "EXISTING_PILOT_INITIAL_FINDING_STOP",
+      "majorAndCritical": true,
+      "oldFalsePositiveAlsoStops": true,
+      "productionExhaustionFixed": false,
+      "newApiCalls": 0
+    }
+  ]
+}
