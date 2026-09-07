@@ -1,0 +1,190 @@
+{
+  "provenance": "EXTRACTED_SAVED_REAL_MODEL_SYNTHETIC_EVIDENCE; no new generation, repair or retry",
+  "case": "GQ24 stopped session; version mapping omitted",
+  "sources": {
+    "pb01": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-025-response.json",
+      "canonicalJsonSha256": "e888bdf1802dd6ebf403f3068c61eb6de89f10f7e52e017406cd15fa149b4b1a"
+    },
+    "pb04": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-034-response.json",
+      "canonicalJsonSha256": "1cdc0039df05d8fbd277031738eba70891f55120a4457d0b8325507b60ed535b"
+    },
+    "pb05": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-037-response.json",
+      "canonicalJsonSha256": "891eb05cebbb08ad605bd8e883fc059990d96c97783f3fe6bcf2c53a1138c609"
+    },
+    "pb06Input": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-040-request.json",
+      "canonicalJsonSha256": "7ed712856c701f9e26e41b1a2c7c051e43b694be398ddbf7ea84b7226a3587ed"
+    },
+    "pb06": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-040-response.json",
+      "canonicalJsonSha256": "df56933cac27acc99c6fb04eee9d6f125d31d2bd633bb26fc9318c1d595d9855"
+    },
+    "review": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/call-040-review.json",
+      "canonicalJsonSha256": "8d5c6ca050219c0a0c24012386158a936455a1ed525e3de8e3eaf29ba1941a68"
+    },
+    "execution": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/31a5eebb-5b54-4ca9-a46b-3e2ec4d32295/session.json",
+      "canonicalJsonSha256": "94e08566915aba5e0e09cf507fba7b785517a772b6b7c30a74518e85ee636bb3"
+    },
+    "entryTrace": {
+      "path": "evals/guidance-quality-v19-l1/runs/2026-09-07-authorized-pilot8-v19-l1/internal/branch-observations.json",
+      "canonicalJsonSha256": "c244dda1700550aa8e1fe6f6a808fa357e632456d767ad454299415aaa5e20ca"
+    }
+  },
+  "pb01": {
+    "communicationPurpose": {
+      "value": "respond_politely",
+      "basis": "current_situation_explicit"
+    }
+  },
+  "inputSufficiency": {
+    "observedEntryDisposition": "admitted_to_product",
+    "derivedTraceProvenance": "RECOMPUTED_FROM_SAVED_ACTUAL_BASE_AND_SAFETY_USING_EXACT_EXECUTED_SOURCE; no model call",
+    "disposition": "full_paid_ready_candidate",
+    "reasonCodes": [
+      "GROUNDED_OPTIONAL_THANKS_REPLY_CONTEXT_PRESENT"
+    ],
+    "clarification": null
+  },
+  "pb04": {
+    "currentDecision": "reply_now",
+    "recommendedActions": [
+      "今夜、相手のお礼に対して短く丁寧な一言を送る。",
+      "送信前に、追加の予定や質問を事実として付け足していないか確認する。",
+      "送信後は、続けて追加メッセージを送らず、相手の反応を確認し続けることも控える。",
+      "その後は通常の予定や休息に戻る。"
+    ],
+    "avoidActions": [
+      "会話を続けるためだけに、根拠のない質問や誘いを加える。",
+      "返答後すぐに追加メッセージを重ねる。",
+      "相手の返答の有無から関係性を決めつける。"
+    ],
+    "generatedMessageDraft": {
+      "text": "こちらこそ、ありがとう。",
+      "policy": "required_now",
+      "use_timing": "now"
+    },
+    "aftercare": [
+      {
+        "phase": "tonight",
+        "action": "送信後は追加連絡をせず、通常の予定や休息に戻る。",
+        "avoid": "反応を繰り返し確認しない。",
+        "supporting_fact_ids": [
+          "F100",
+          "F101"
+        ]
+      },
+      {
+        "phase": "next",
+        "action": "相手から新しい具体的な話題や質問が届いた場合だけ、その内容に応じて返答を検討する。",
+        "avoid": "新しい話題を作るためだけの追送はしない。",
+        "supporting_fact_ids": [
+          "F100",
+          "F101"
+        ]
+      },
+      {
+        "phase": "reassessment_condition",
+        "action": "相手から新しいメッセージが届いた時点で、その内容に返信が必要かを改めて確認する。",
+        "avoid": "現在の短いお礼のやり取りだけで、関係性や今後の展開を判断しない。",
+        "supporting_fact_ids": [
+          "F100",
+          "F101"
+        ]
+      }
+    ],
+    "reassessmentConditions": [
+      {
+        "condition": "相手から具体的な質問や返信を求める内容が届く。",
+        "resulting_direction": "reply_now",
+        "supporting_fact_ids": [
+          "F100"
+        ]
+      },
+      {
+        "condition": "相手から新しいメッセージが届かない。",
+        "resulting_direction": "wait_and_reassess",
+        "supporting_fact_ids": [
+          "F100",
+          "F101"
+        ]
+      }
+    ],
+    "reviewTiming": {
+      "when": "今夜の短い返答を送った後、相手から新しいメッセージが届いた時に見直す。",
+      "trigger_fact_ids": [
+        "F100",
+        "F101"
+      ]
+    }
+  },
+  "pb05": {
+    "currentAnswer": {
+      "coverLine": "短く返して、やり取りを穏やかに整える今夜です。",
+      "shortLetter": [
+        "相手からお礼が返ってきたあと、もう一言返すかどうかで迷うのは自然なことです。丁寧に応じたい気持ちと、会話を無理に広げたくない気持ちのどちらも大切にできます。",
+        "今回は、相手のお礼に短く返すことに目的を絞れば、余計な意味を足さずに気持ちよく区切れます。"
+      ],
+      "decisionReason": "相手から通常のお礼の返答があり、あなたももう一言返すことを考えているため、今夜は短く丁寧に応じる方向が合っています。会話を続けるための質問や誘いまで加える必要はありません。"
+    },
+    "generatedMessageDraft": {
+      "authority": "PB04 recommended_message_draft; PB05 does not own a separate draft",
+      "text": "こちらこそ、ありがとう。",
+      "reportExplanation": "候補文はなく、相手のお礼に対する短い丁寧な返答として新しく作成された文面です。今夜すぐ使う前提で、質問や誘いを加えず、返答の負担を抑える内容になっています。"
+    },
+    "nextAction": [
+      "今夜は「こちらこそ、ありがとう。」のように短く返すことで、相手のお礼への応答という目的を満たしつつ、質問や誘いを足して返答の負担を増やさずに済みます。",
+      "送信前に、予定や質問など確認できていない内容を付け足していないかだけ確認してください。送ったあとは追加連絡や反応の確認を重ねず、通常の予定や休息に戻る流れが、今回の短いやり取りに合っています。"
+    ],
+    "aftercareCommentaryRaw": [],
+    "reassessmentCommentaryRaw": [],
+    "reassessmentCommentaryAtPb06": [
+      "「相手から具体的な質問や返信を求める内容が届く」が確認された場合は、その時点で状況を見直します。",
+      "「相手から新しいメッセージが届かない」が確認された場合は、その時点で状況を見直します。"
+    ],
+    "closingLines": [
+      "今夜は、返事を送ったあとの意味まで決めようとしなくて大丈夫です。"
+    ]
+  },
+  "pb06": {
+    "finding": {
+      "finding_code": "ACTION_CONSISTENCY",
+      "severity": "major",
+      "json_path": "decision_plan.change_conditions[1].resulting_direction",
+      "evidence_refs": [
+        "policy:effective_decision_policy_result",
+        "policy:decision_policy_result",
+        "policy:action_context"
+      ],
+      "detail": "「相手から新しいメッセージが届かない」場合の resulting_direction が wait_and_reassess になっていますが、Application-owned effective decision policy で許可されているのは reply_now のみで、wait_and_reassess は明示的に不許可です。同じ不許可の方向が report_content.change_condition_commentary[1] にも説明されています。"
+    },
+    "repairRequirement": {
+      "providerRepairStrategy": null,
+      "providerFinalDisposition": null,
+      "applicationDirectiveIssued": false,
+      "reason": "Evaluation transport stopped before application reassessment callback; no repair was requested or executed."
+    },
+    "classifierDisposition": [
+      {
+        "disposition": "blocking",
+        "reason": "material_product_outcome_path"
+      }
+    ],
+    "stopReason": "MATERIAL_SAFETY_OR_INTEGRITY_FINDING"
+  },
+  "reassessmentBeforeAfter": {
+    "before": {
+      "currentDecision": "reply_now",
+      "futureDirection": "wait_and_reassess",
+      "currentAnswer": "相手から通常のお礼の返答があり、あなたももう一言返すことを考えているため、今夜は短く丁寧に応じる方向が合っています。会話を続けるための質問や誘いまで加える必要はありません。"
+    },
+    "directives": [],
+    "after": null,
+    "note": "No reassessment occurred. PB05 Application grounding before PB06 is not a second candidate or repair.",
+    "customerDelivery": "No final deliverable; only the saved candidate was inspected."
+  }
+}

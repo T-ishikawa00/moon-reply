@@ -1,5 +1,13 @@
 # CURRENT_FOCUS.md
 
+<!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:BEGIN -->
+## 2026-09-07 — GQ24 STOP診断：TYPE-C / evidence only
+
+保存されたGQ24のACTION_CONSISTENCY findingを時間軸で照合し、**TYPE-C（現在reply→送信後waitの誤検知）**と確定。[診断・根拠・修正案・acceptance criteria](../evals/guidance-quality-r1/gq24-action-consistency/DIAGNOSIS.md)。実出力とSTOPは不変、今回のA/B version mappingは未開示。下記の「実質矛盾は未確定」は実行直後の履歴。
+
+local再現17/17・対象lint PASS。7つの架空temporal fixtureと未接続PB06追記案を追加。参照名だけのclassifier緩和は本物の矛盾・追送を隠し得るため実装しない。runtime/prompt契約/schema/Paid/Production、既存30case、旧証拠変更0。新API/repair/retry/push/deploy0。今回のfinding診断は候補全体の品質受入・STOP解除・追加API承認ではない。
+<!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:BEGIN -->
 ## 2026-09-07 — V17 / V19-L1 real pilot STOP・匿名結果保存
 

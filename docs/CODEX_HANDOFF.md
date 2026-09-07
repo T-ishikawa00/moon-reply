@@ -1,5 +1,13 @@
 # CODEX_HANDOFF.md
 
+<!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:BEGIN -->
+## 2026-09-07 — GQ24 temporal false-positive diagnosis
+
+開始6485d548 clean。保存GQ24だけを抽出し、現在の一通replyと送信後の追加送信禁止/待機は整合、**TYPE-C**と独立確認した。[診断正本](../evals/guidance-quality-r1/gq24-action-consistency/DIAGNOSIS.md)、同directoryに版名なしのevidence/抽出script、7fixture、17/17のlocal verifier、未接続PB06改訂案。PB06の誤判断に`policy:action_context`参照が伴い、既存V7の現在policy限定の将来条件除外に入らなかった。条件参照の一括許容では実質問題も消せることを否定例で確認。
+
+runtime修正は行わず、PB06だけの後継候補説明を提案。schema/Production/Paid/既存30case/保存receipt/STOP不変、追加API/修復/再試行0。今回のA/B対応表は未開示、Human回答を変えない。TYPE-Cはこのfindingだけの診断であり、回答全体のPASS・STOP解除・再実行権限ではない。新候補の契約接続と実モデル比較は未実施。
+<!-- GQ24-TEMPORAL-DIAGNOSIS-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:BEGIN -->
 ## 2026-09-07 — V17 / V19-L1 one-shot pilot stopped
 
