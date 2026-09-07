@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "guidance-v19-l2-authorized-pilot-fake-verification-v1",
+  "candidateHead": "64a1321477c5b76ed946ad8ecbe0dda888f9390f",
+  "checks": 21,
+  "passed": 21,
+  "failed": 0,
+  "realApiCalls": 0,
+  "credentialReads": 0,
+  "actualDatabaseCalls": 0,
+  "forbiddenNetwork": 0,
+  "fakeTransportDispatches": 131,
+  "fakeMatrixSessions": 8,
+  "actualPilotSessions": 0,
+  "evidence": "OFFLINE_SYNTHETIC_TRANSPORT_WITH_STORED_OR_AUTHORED_OUTPUTS_ONLY",
+  "rawActionConsistencyMajorCriticalStops": true,
+  "classifierIgnoredRawActionConsistencyStops": true,
+  "actualModelQuality": "NOT_TESTED",
+  "historicalMappingReused": false,
+  "actualRunCreated": false,
+  "humanAnswersPrefilled": false,
+  "mappingDisclosed": false,
+  "results": [
+    {
+      "name": "exact frozen candidate, four inputs, eight sessions and unchanged execution constraints",
+      "status": "PASS"
+    },
+    {
+      "name": "fixed caps total 72 calls and USD1.5330112; serialized input estimates fit both arms",
+      "status": "PASS"
+    },
+    {
+      "name": "actual usage accounts cache writes once and reserves output including reasoning",
+      "status": "PASS"
+    },
+    {
+      "name": "shared ledger bounds all 72 reservations without refunds and rejects extra session",
+      "status": "PASS"
+    },
+    {
+      "name": "budget shortfall blocks reservation before dispatch; no stage or attempt 3 exception",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown or crash-pending reservations persist and prevent retry across reload",
+      "status": "PASS"
+    },
+    {
+      "name": "ledger durability failures poison execution; truncated journal and duplicate lock reject",
+      "status": "PASS"
+    },
+    {
+      "name": "fresh fake sends for both catalogs use the same four frozen input objects",
+      "status": "PASS"
+    },
+    {
+      "name": "major and critical present-action findings STOP both catalogs before repair",
+      "status": "PASS"
+    },
+    {
+      "name": "raw ACTION_CONSISTENCY major or critical ignored by old classifier still STOPs both catalogs",
+      "status": "PASS"
+    },
+    {
+      "name": "receipt inspection prevents the next fake HTTP until explicit release",
+      "status": "PASS"
+    },
+    {
+      "name": "real profile checkpoint preserves exact receipt hash stage attempt and empty reason guards",
+      "status": "PASS"
+    },
+    {
+      "name": "ordinary PB06 continues only after normal bound checkpoint; local timeout stops",
+      "status": "PASS"
+    },
+    {
+      "name": "known false generated-draft preservation STOPs at PB04 with no repair",
+      "status": "PASS"
+    },
+    {
+      "name": "HTTP failure and timeout retain worst-case reservation and never retry",
+      "status": "PASS"
+    },
+    {
+      "name": "model tier incomplete JSON and schema failures retain usage before STOP without retry",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid usage retains raw receipt and full reservation; identity mismatch sends zero",
+      "status": "PASS"
+    },
+    {
+      "name": "nonmaterial finding keeps the existing single repair without attempt 3",
+      "status": "PASS"
+    },
+    {
+      "name": "same four unanswered Human questions and anonymous eight outputs remain unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "partial and empty STOP artifacts never invent missing outcomes",
+      "status": "PASS"
+    },
+    {
+      "name": "existing sources untouched; new real run and mapping absent; no network or live CLI",
+      "status": "PASS"
+    }
+  ]
+}

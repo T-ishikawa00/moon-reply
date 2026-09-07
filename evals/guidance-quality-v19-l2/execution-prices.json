@@ -1,0 +1,19 @@
+{
+  "status": "VERIFIED_PUBLIC_OFFICIAL_BEFORE_EXECUTION",
+  "verifiedAt": "2026-09-07T13:37:34Z",
+  "model": "gpt-5.6-luna",
+  "serviceTier": "default",
+  "currency": "USD",
+  "perMillionTokens": { "standardInput": 0.2, "cachedInput": 0.02, "cacheWriteInput": 0.25, "outputIncludingReasoning": 1.2 },
+  "sources": ["https://developers.openai.com/api/docs/models/gpt-5.6-luna", "https://developers.openai.com/api/docs/pricing"],
+  "provenance": "Official model page and Standard pricing table searched and opened read-only in this task before the first authorized API call.",
+  "supports": { "reasoningLow": true, "responses": true, "structuredOutputs": true },
+  "reservationInputPrice": 0.25,
+  "maximumInputTokensPerCall": 96000,
+  "maximumOutputTokensPerCall": 8192,
+  "maximumHttpAttempts": 72,
+  "worstCaseAllReservationsUsd": 1.5330112,
+  "authorizedHardCapUsd": 2,
+  "yenConversion": null,
+  "invoiceConfirmed": false
+}
