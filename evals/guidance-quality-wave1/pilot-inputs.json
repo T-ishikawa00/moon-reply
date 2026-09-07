@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "guidance-pilot-inputs-v1",
+  "provenance": "Synthetic frozen user inputs only. Pass input, never id/sourceCase or reviewer expectations, to the generation pipeline.",
+  "cases": [
+    {
+      "id": "GQ-05",
+      "sourceCase": "GQ-05",
+      "input": {
+        "currentSituation": "最近も普通に話している何度か話した知人を、まだ誘ったことがありません。都合が合えばお茶に、と一度誘ってみたいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-24",
+      "sourceCase": "GQ-24",
+      "input": {
+        "currentSituation": "こちらのお礼に、相手から「こちらこそありがとう！」と来ました。もう一言返してもいいですか。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-13",
+      "sourceCase": "GQ-13",
+      "input": {
+        "currentSituation": "相手に「少し一人にしてほしい」と言われました。安心させるための連絡も今は控えた方がいいですか。その後こちらからは連絡しておらず、急ぎの用件もありません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-29-P3",
+      "sourceCase": "GQ-29",
+      "input": {
+        "currentSituation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？ 今後3日間はどう動けばよいかも整理してください。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "next_three_days"
+        ],
+        "optionalMessage": null
+      }
+    }
+  ]
+}

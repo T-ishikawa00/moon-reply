@@ -27,9 +27,9 @@ const canonical = (text: string) => text.replace(/\r\n/gu, "\n");
 const hash = (text: string) => createHash("sha256").update(canonical(text)).digest("hex");
 const contractRoot = "lib/assessment/runtime/contracts/";
 const changed = {
-  "PB-04": { prompt: "pb-04-v18-guidance-wave1.developer.md", version: "v8.0.0" },
-  "PB-05": { prompt: "pb-05-v18-guidance-wave1.developer.md", version: "v9.0.0" },
-  "PB-06": { prompt: "pb-06-v18-guidance-wave1.developer.md", version: "v8.0.0" },
+  "PB-04": { prompt: "pb-04-v18-guidance-wave1.developer.md", version: "v8.0.1" },
+  "PB-05": { prompt: "pb-05-v18-guidance-wave1.developer.md", version: "v9.0.1" },
+  "PB-06": { prompt: "pb-06-v18-guidance-wave1.developer.md", version: "v8.0.1" },
 } as const;
 
 function invalid(): never { throw new M2RuntimeError("M2_PROMPT_MANIFEST_INVALID"); }

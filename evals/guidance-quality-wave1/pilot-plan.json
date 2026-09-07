@@ -1,28 +1,16 @@
 {
-  "schemaVersion": "guidance-wave1-pilot-plan-v1",
+  "schemaVersion": "guidance-wave1-pilot-plan-v2",
   "status": "NOT_AUTHORIZED_NOT_RUN",
-  "baseline": "46fa02a52e39a5c5c4d62bf4e66292619a8b286f",
+  "preparationBaseline": "d88768cfde8d806d418a98d3b541e9582db55e39",
   "candidateCatalog": "runtime-stage-catalog-v18.0.0",
+  "candidateSchemaSet": "pipeline-schema-runtime-v7.0.0",
+  "currentCatalog": "runtime-stage-catalog-v17.0.0",
   "model": "gpt-5.6-luna",
   "pilotCases": [
     "GQ-05",
     "GQ-24",
-    "GQ-03",
-    "GQ-13"
-  ],
-  "fullCases": [
-    "GQ-01",
-    "GQ-02",
-    "GQ-03",
-    "GQ-04",
-    "GQ-05",
-    "GQ-06",
-    "GQ-07",
-    "GQ-08",
-    "GQ-11",
     "GQ-13",
-    "GQ-17",
-    "GQ-24"
+    "GQ-29-P3"
   ],
   "arms": [
     "current-v17",
@@ -30,67 +18,169 @@
   ],
   "samplesPerArmCase": 1,
   "pilotSessions": 8,
-  "maxTotalSessionsIncludingPilot": 24,
-  "httpAdministrativeCeilingPerSession": 12,
-  "sourceReachableHttpMaximumPerSession": 11,
-  "unusedReservePerSession": 1,
+  "maxTotalSessions": 8,
+  "maxHttpAttempts": 72,
+  "sourceReachableHttpMaximumPerSession": 9,
+  "unusedReservePerSession": 0,
   "transportRetries": 0,
+  "applicationProviderRetries": 0,
   "productGenerationAttempts": 2,
-  "maximumClarificationAnswers": 1,
+  "maximumClarificationAnswers": 0,
+  "clarificationDisposition": "Record the question and terminal entry outcome; do not invent or submit a follow-up answer in this pilot.",
+  "generation": {
+    "provider": "openai",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "reasoningEffort": "low",
+    "serviceTier": "default",
+    "store": false,
+    "tools": [],
+    "stream": false,
+    "background": false,
+    "truncation": "disabled",
+    "temperature": "omitted in both arms",
+    "seed": "omitted in both arms",
+    "frozenApplicationNow": "2026-09-07T10:00:00.000Z",
+    "timeZone": "Asia/Tokyo",
+    "concurrency": 1
+  },
+  "executionOrder": [
+    [
+      "GQ-05",
+      "current-v17"
+    ],
+    [
+      "GQ-05",
+      "candidate-v18"
+    ],
+    [
+      "GQ-24",
+      "candidate-v18"
+    ],
+    [
+      "GQ-24",
+      "current-v17"
+    ],
+    [
+      "GQ-13",
+      "current-v17"
+    ],
+    [
+      "GQ-13",
+      "candidate-v18"
+    ],
+    [
+      "GQ-29-P3",
+      "candidate-v18"
+    ],
+    [
+      "GQ-29-P3",
+      "current-v17"
+    ]
+  ],
   "tokenCapsProposal": [
     {
-      "stage": "PB-01 initial",
-      "invocations": 1,
-      "input": 16000,
+      "stage": "PB-01",
+      "invocationsPerSession": 1,
+      "input": 40000,
       "outputIncludingReasoning": 8192
     },
     {
       "stage": "PB-01C",
-      "invocations": 1,
-      "input": 12000,
-      "outputIncludingReasoning": 4096
+      "invocationsPerSession": 0,
+      "input": 0,
+      "outputIncludingReasoning": 0
     },
     {
       "stage": "PB-02",
-      "invocations": 1,
+      "invocationsPerSession": 1,
       "input": 24000,
       "outputIncludingReasoning": 3072
     },
     {
       "stage": "PB-03",
-      "invocations": 1,
+      "invocationsPerSession": 1,
       "input": 24000,
       "outputIncludingReasoning": 2048
     },
     {
-      "stage": "PB-01 clarification resume",
-      "invocations": 1,
-      "input": 16000,
-      "outputIncludingReasoning": 4096
-    },
-    {
       "stage": "PB-04",
-      "invocations": 2,
+      "invocationsPerSession": 2,
       "input": 48000,
       "outputIncludingReasoning": 8192
     },
     {
       "stage": "PB-05",
-      "invocations": 2,
+      "invocationsPerSession": 2,
       "input": 64000,
       "outputIncludingReasoning": 8192
     },
     {
       "stage": "PB-06",
-      "invocations": 2,
+      "invocationsPerSession": 2,
       "input": 96000,
       "outputIncludingReasoning": 4096
     }
   ],
-  "prices": "UNVERIFIED_NO_EXTERNAL_LOOKUP",
-  "currency": "USD",
+  "tokenCounting": {
+    "preCall": "UTF-8 byte count of the complete serialized Responses request body plus 4096 tokens for framing; conservative byte-based ceiling, not a tokenizer measurement. Stop before dispatch if above the stage input cap. No truncation or larger-cap rerun.",
+    "framingReserveTokens": 4096,
+    "output": "max_output_tokens, including reasoning/formatting; incomplete is terminal for the batch, never automatically enlarged",
+    "hardMaxInputPerCall": 96000,
+    "longContextPricingThresholdInputTokens": 272000
+  },
+  "prices": {
+    "verifiedAt": "2026-09-07",
+    "currency": "USD",
+    "perMillionTokens": {
+      "standardInput": 0.2,
+      "cachedInput": 0.02,
+      "cacheWriteInput": 0.25,
+      "outputIncludingReasoning": 1.2
+    },
+    "reserveInputPrice": 0.25,
+    "cacheDiscountAssumed": false,
+    "standardGlobalDirectApiOnly": true,
+    "sources": [
+      "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "https://developers.openai.com/api/docs/pricing",
+      "https://developers.openai.com/api/docs/guides/reasoning"
+    ],
+    "yenConversion": null,
+    "taxAndPaymentFeesIncluded": false
+  },
+  "expectedCost": {
+    "method": "2x each per-stage historical first-attempt input/output usage, six stages without PB-01C, all eight sessions reaching one product cycle, no cache discount and all input priced at cache-write rate. This is a planning assumption from one older synthetic real-model session, not a measured pilot average.",
+    "historicalUsagePath": "evals/runtime/m2-p4-i3-r1-c1-r3-r2-e-r3-r3-r3-p3-v1-d/controlled-provider-executions/2026-08-19-case5-polite-draft-v17-fcd54a0c/v17-stage-attempt-results-v1.json",
+    "usageMultiplier": 2,
+    "totalInput": 593120,
+    "totalOutput": 70448,
+    "usd": 0.2328176,
+    "roundedPlanningUsd": 0.24
+  },
+  "worstCase": {
+    "inputPerSession": 504000,
+    "outputPerSession": 54272,
+    "totalInput": 4032000,
+    "totalOutput": 434176,
+    "usd": 1.5290112,
+    "roundedUpUsd": 1.53
+  },
+  "proposedBudgetUsd": 2,
+  "preCallBudgetRule": "Reserve the entire stage input cap x 0.25/M + output cap x 1.20/M before each HTTP attempt. Do not release reservations during this pilot, even on success. If the next reservation exceeds the remaining approved USD budget, do not dispatch. Failed/unknown attempts retain their reservations.",
+  "runnerStatus": "PLAN_ONLY_NO_NETWORK_RUNNER_IMPLEMENTED. Before any separately approved API run, implement and dry-test an evaluation-only capped transport and durable reservation ledger; the Production transport is unchanged and lacks max_output_tokens.",
+  "stopConditions": [
+    "Any session/stage/HTTP/budget/input/output boundary would be exceeded",
+    "Model/catalog/prompt/schema/input/settings identity mismatch or price change",
+    "Timeout, unknown result, HTTP failure including 429/5xx, refusal or incomplete response; no retries",
+    "Schema/technical failure, observed fabricated fact, changed original meaning, action contradiction or Safety/contact boundary regression; preserve all actual outputs and stop the batch",
+    "Missing or inconsistent usage, usage above the pre-call ceiling, or unapproved billing mode",
+    "Entry needs clarification/unsupported: end that session without forced generation; count it and proceed to the next fixed session unless Safety requires batch stop",
+    "All eight fixed sessions have been attempted; no replacement sessions or extension"
+  ],
   "costApproval": "REQUIRED_SEPARATELY",
   "actualApiCalls": 0,
+  "actualApiCostUsd": 0,
   "productionBudgetUse": false,
-  "customerDataUse": false
+  "customerDataUse": false,
+  "productionWrites": false
 }

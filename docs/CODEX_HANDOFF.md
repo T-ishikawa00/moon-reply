@@ -1,5 +1,13 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-PILOT8-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality 8-session Pilot準備
+
+開始local d88768cfde8d806d418a98d3b541e9582db55e39、release/private-ready、clean。[承認packet](../evals/guidance-quality-wave1/pilot-review.md)にGQ24/期間/GQ06/17/30の境界、限定修正、4ケース、料金・停止条件を集約。[plan](../evals/guidance-quality-wave1/pilot-plan.json)は8session/72HTTP/提案USD $2だけ。GQ30は期間ケースではなく、GQ29の期間依頼派生を別IDにした。旧24session枠の実行承認はない。
+
+実API0・未承認。公開料金read-only確認済み。network runner未実装、capと永続予約ledgerの評価専用local検証は別承認後の実行前提。V17 Production/購入準備/Paid、F007/F008、費用防御は未変更。候補V18期間契約のpatchとlocal検証のみ。後続はこのpacketと最終commitから始め、以下の当時の計画を現在の実行権限にしない。
+<!-- GUIDANCE-PILOT8-2026-09-07:END -->
+
 <!-- GUIDANCE-WAVE1-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality Local Implementation Wave 1
 

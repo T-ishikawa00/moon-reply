@@ -2,6 +2,8 @@
 
 2026-09-07 / LOCAL ONLY。Technical verification of scoped candidate。実モデル品質確認・Production Authorizedではない。
 
+後継記録: [8-session Pilot準備packet](../../evals/guidance-quality-wave1/pilot-review.md)。以下はWave1終了時の記録を保持する。後継では期間の3phase/重複説明要求を最小修正し、GQ05/24/13/29-P3×2、最大72 HTTP、提案USD $2に限定した。下記旧24session/264・288枠・料金未確認の記述を、現在の計画や実行権限として使わない。
+
 ## Authority / baseline
 
 - 開始時local: release/private-ready、HEAD 46fa02a52e39a5c5c4d62bf4e66292619a8b286f、clean、stash空。前Taskの正本・局所調査・30ケース・編集例・評価計画を再利用した。

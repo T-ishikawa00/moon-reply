@@ -71,6 +71,7 @@ const variants = [
   { id: "candidate-minimal-gq28", caseId: "GQ-28", candidate: true, detailed: false, title: "V18 candidate / GQ-28 最小回答", note: "1行動・注意0・aftercare0。文面は新規案。" },
   { id: "candidate-detailed-gq28", caseId: "GQ-28", candidate: true, detailed: true, title: "V18 candidate / GQ-28 詳細表示", note: "描画用の派生fixtureとして next_three_days 選択を追加。凍結ケースの期待値は変更していません。" },
   { id: "candidate-wait-gq29", caseId: "GQ-29", candidate: true, detailed: false, title: "V18 candidate / GQ-29 待つ・文面なし", note: "1行動・注意0・aftercare0・送信文面なし。" },
+  { id: "candidate-period-gq29", caseId: "GQ-29", candidate: true, detailed: true, conditionalPeriod: true, title: "V18 candidate / GQ-29 条件付き3日間", note: "期間方針を1項目で示す合成fixture。日別行動・送信日時・重複説明を追加しません。" },
   { id: "legacy-detailed-gq03", caseId: "GQ-03", candidate: false, detailed: true, title: "V17 legacy / GQ-03 詳細表示", note: "旧契約の表示回帰用。描画用に next_three_days 選択を追加した派生fixtureです。" },
 ];
 const evidence = [];
@@ -78,6 +79,10 @@ let checks = 0;
 const check = (name, assertion) => { assertion(); checks++; console.log(`PASS ${checks} ${name}`); };
 for (const variant of variants) {
   const fixture = makeRuntimeFixture(variant.caseId, variant);
+  if (variant.conditionalPeriod) {
+    fixture.outputs["PB-04"].aftercare_plan = [{ phase: "reassessment_condition", action: "今後3日間は追加送信を控え、連絡が来たら内容に応じて返す。三日目という理由だけで追送しない。", avoid: "相手の返信日時や気持ちを決めつけない。", supporting_fact_ids: ["F001"] }];
+    fixture.outputs["PB-05"].aftercare_commentary = [];
+  }
   const execution = await runFixture(fixture, { candidate: variant.candidate });
   check(`${variant.id}: fake pipeline ready with zero external operations`, () => {
     assert.equal(execution.result.eligibility, "ready");
@@ -102,9 +107,9 @@ for (const variant of variants) {
     });
   }
   if (variant.detailed) {
-    check(`${variant.id}: explicitly requested plan has three phases`, () => {
-      assert.equal(projection.baseProjection.optionalDetails.expandedPlan.length, 3);
-      assert.ok(projection.baseProjection.optionalDetails.planCommentary.length > 0);
+    check(`${variant.id}: requested plan preserves its useful one-item or detailed form`, () => {
+      assert.equal(projection.baseProjection.optionalDetails.expandedPlan.length, variant.conditionalPeriod ? 1 : 3);
+      assert.equal((projection.baseProjection.optionalDetails.planCommentary ?? []).length > 0, !variant.conditionalPeriod);
     });
   }
   const title = escapeHtml(variant.title);

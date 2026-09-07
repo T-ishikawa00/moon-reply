@@ -39,6 +39,23 @@ await test("explicit three-day plan and draft survive candidate generation and p
  const p=projectCustomerAssessmentV1(r.result,f.request.requestedTopics);assert.equal(p.optionalDetails.expandedPlan.length,3);assert.ok(p.finalDraft.text.length>0);
  for(const id of ['PB-05','PB-06'])assert.deepEqual(r.transport.requests.find(x=>x.stageId===id).input.requested_topics,f.request.requestedTopics);
 });
+await test("one conditional item covers a requested period without daily phases or duplicate commentary",async()=>{
+ const f=makeRuntimeFixture('GQ-29',{detailed:true});
+ f.outputs['PB-04'].aftercare_plan=[{phase:'reassessment_condition',action:'今後3日間は追加の連絡を控え、相手から連絡が来たら内容に応じて返信を考える。来なければ、三日目だからと自動で追送しない。',avoid:'返信の時期や相手の気持ちを決めつけない。',supporting_fact_ids:['F001']}];
+ f.outputs['PB-05'].aftercare_commentary=[];
+ const r=await runFixture(f);assert.equal(r.result.eligibility,'ready');assert.equal(r.transport.calls.length,6);
+ const p=projectCustomerAssessmentV1(r.result,f.request.requestedTopics);assert.equal(p.optionalDetails.expandedPlan.length,1);assert.equal(p.finalDraft,null);
+ assert.deepEqual(evaluateGuidanceRequestCompletenessV1({requestedTopics:f.request.requestedTopics,decisionPlan:f.outputs['PB-04'],reportContent:f.outputs['PB-05']}),[]);
+});
+await test("optional greeting prose with primary reply survives schema, validation and projection",async()=>{
+ const f=makeRuntimeFixture('GQ-24');
+ const optional='一言返すなら短い挨拶で十分です。お礼のやり取りはまとまっているので、ここで終えても構いません。';
+ f.outputs['PB-04'].actions_to_take=['一言返したければ、短い挨拶で締める。'];
+ f.outputs['PB-05'].decision_reason_summary=optional;
+ const r=await runFixture(f);assert.equal(r.result.eligibility,'ready');assert.equal(r.result.decision,'reply_now');
+ assert.equal(projectCustomerAssessmentV1(r.result,f.request.requestedTopics).primaryReason,optional);
+ // Fake PB06 establishes no claim about a real evaluator accepting optionality.
+});
 await test("requested period missing triggers one combined Plan repair, then corrected plan delivers",async()=>{
  const f=makeRuntimeFixture('GQ-28',{detailed:true}),bad=structuredClone(f.outputs['PB-04']);bad.aftercare_plan=[];
  const r=await runFixture(f,{outputSequence:{'PB-04':[bad,f.outputs['PB-04']]}});assert.equal(r.result.eligibility,'ready');assert.equal(r.transport.calls.filter(x=>x==='PB-04').length,2);assert.equal(r.result.report.decisionPlan.aftercare_plan.length,3);

@@ -1,5 +1,13 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-PILOT8-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality 8-session Pilot準備
+
+開始localはrelease/private-ready@d88768cfde8d806d418a98d3b541e9582db55e39、clean。後継の[8-session承認packet](../evals/guidance-quality-wave1/pilot-review.md)と[pilot plan](../evals/guidance-quality-wave1/pilot-plan.json)を使用する。GQ05/24/13/29-P3 × V17/V18のみ、最大72 HTTP、提案予算USD $2。実API未承認・実行0。公式公開料金のread-only閲覧のみ実施。
+
+候補V18内で期間の3phase/重複説明要求だけを最小修正。GQ24 policy、V17 Production選択・購入準備・Paid契約は維持。凍結30ケース不変。評価用network runnerは未実装で、別承認後もcap/予約ledgerのlocal検証を最初のAPI呼出しの前提とする。以下の24session/264・288枠を今回の実行範囲に流用しない。
+<!-- GUIDANCE-PILOT8-2026-09-07:END -->
+
 <!-- GUIDANCE-WAVE1-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality Local Implementation Wave 1
 

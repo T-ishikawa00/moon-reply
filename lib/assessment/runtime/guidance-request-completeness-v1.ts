@@ -10,8 +10,7 @@ export function evaluateGuidanceRequestCompletenessV1(input: {
   reportContent: SplitReportContentV2;
 }): ProductQualityDefectV2[] {
   if (!input.requestedTopics.includes("next_three_days")) return [];
-  const phases = new Set(input.decisionPlan.aftercare_plan.map((item) => item.phase));
-  if (phases.size === 0) {
+  if (input.decisionPlan.aftercare_plan.length === 0) {
     // The expressly requested period has no plan at all. Repair the Plan first;
     // do not mistake a completely missing requested artifact for a style defect.
     return [{
@@ -22,24 +21,8 @@ export function evaluateGuidanceRequestCompletenessV1(input: {
       ownership: "plan",
     }];
   }
-  const defects: ProductQualityDefectV2[] = [];
-  if (!["tonight", "next", "reassessment_condition"].every((phase) => phases.has(phase as "tonight" | "next" | "reassessment_condition"))) {
-    defects.push({
-      findingCode: "THREE_DAY_PLAN_CONSISTENCY",
-      severity: "major",
-      jsonPath: "decision_plan.aftercare_plan",
-      normalizedRepairRequirementCode: "RESTORE_THREE_DAY_PLAN_CONSISTENCY",
-      ownership: "plan",
-    });
-  }
-  if (input.reportContent.aftercare_commentary.length === 0) {
-    defects.push({
-      findingCode: "REQUIRED_SECTION_MEANING",
-      severity: "major",
-      jsonPath: "report_content.aftercare_commentary",
-      normalizedRepairRequirementCode: "RESTORE_REQUIRED_SECTION_MEANING",
-      ownership: "report",
-    });
-  }
-  return defects;
+  // One conditional/waiting policy may cover the requested period. Phase count
+  // and a second explanation do not establish coverage. PB-06 reviews actual
+  // meaning, omissions, unsupported schedules, and useful partial guidance.
+  return [];
 }
