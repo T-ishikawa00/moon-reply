@@ -47,8 +47,8 @@ export function reviewStage(q, rawOutput, definition, originalInput) {
 }
 
 export class EvaluationTransport {
-  constructor({ session, ledger, repository, definitions, originalInput, directory, send }) {
-    Object.assign(this, { session, ledger, repository, definitions, originalInput, directory, send });
+  constructor({ session, ledger, repository, definitions, originalInput, directory, send, reviewReceipt }) {
+    Object.assign(this, { session, ledger, repository, definitions, originalInput, directory, send, reviewReceipt });
     this.requests = []; this.responses = []; this.findings = []; this.httpCalls = 0;
   }
   async invoke(q) {
@@ -88,6 +88,14 @@ export class EvaluationTransport {
       durableJson(prefix + "-review.json", review);
       this.findings.push({ stageId: q.stageId, attempt, ...review });
       if (review.stopReason) throw new PilotStop(review.stopReason);
+      // Optional evaluation-only semantic checkpoint. Usage is already durable;
+      // no next stage/repair can dispatch until this check returns successfully.
+      try { await this.reviewReceipt?.({ session: this.session, stageId: q.stageId, attempt, prefix, received, review }); }
+      catch (error) {
+        if (error.safeCode === "MATERIAL_MANUAL_INTEGRITY_OR_SAFETY") this.findings.push({ stageId: q.stageId, attempt,
+          stopReason: error.safeCode, findings: [{ source: "evaluation_receipt_inspection", detail: error.inspectionReason ?? "Material integrity or Safety issue in the saved receipt." }] });
+        throw error;
+      }
       return { responseId: response.id, returnedModel: response.model, output, usage: { inputTokens: accounting.inputTokens, outputTokens: accounting.outputTokens, cachedTokens: accounting.cachedTokens, reasoningTokens: accounting.reasoningTokens }, latencyMs };
     } catch (error) {
       let reason = error.safeCode ?? (error.name === "APIConnectionTimeoutError" || error.name === "AbortError" ? "HTTP_TIMEOUT" : typeof error.status === "number" ? `HTTP_FAILURE_${error.status}` : "HTTP_OR_EVALUATION_FAILURE");

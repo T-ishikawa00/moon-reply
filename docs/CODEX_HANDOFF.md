@@ -1,5 +1,15 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:BEGIN -->
+## 2026-09-07 — V17 / V19-L1 one-shot pilot stopped
+
+開始/実行HEADは承認exact `f5e5dc34b1a35a45652b2fd3f458ec04a541ecc6`。前回のbudget/transport/runner/匿名UIを再利用し、評価用profileと各stageのreceipt技術確認を追加。API前fake16/16 + 12/12・独立検証後に一度実行。GQ05 A/Bの追加確認2件が完了。GQ24一方のPB06でSTOP、他方とGQ13/GQ29-P3は未実施。12 HTTP、USD $0.01957525、予約$0.1919992、修復/retry/追加sample0。
+
+Blind Review（参照原本はPrivate保全・候補には非同梱）・技術記録（参照原本はPrivate保全・候補には非同梱）が今回の正本。Human回答PENDING。今回のsealed対応表・actual versionとA/Bの対応をHuman評価前に表示しない。GQ24の比較も回帰評価も完了していない。自動STOPと重大な実質矛盾の実在は区別し、内部post-stop-reviewを参照する。
+
+一度限りのlock/ledger/実出力を保持。残予算を理由に再実行しない。runtime/Production/Paid/Customer/DB/push/deploy/メール0。下記のAPI未承認/追加0記録は候補実装時点の履歴であり、今回の承認はこのSTOP済み一度のpilotだけに消費された。
+<!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-L1-2026-09-07:BEGIN -->
 ## 2026-09-07 — V19-L1 targeted successor
 

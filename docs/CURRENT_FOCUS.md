@@ -1,5 +1,13 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:BEGIN -->
+## 2026-09-07 — V17 / V19-L1 real pilot STOP・匿名結果保存
+
+Human承認の固定4case × 2条件をexact `f5e5dc34b1a35a45652b2fd3f458ec04a541ecc6`で一度実行。3session開始、2件は追加確認として終了、3件目はPB06 `ACTION_CONSISTENCY`によりSTOP。12 HTTP、実usage USD $0.01957525、予約累計$0.1919992。残り5件・再試行・修復・追加sampleは実行しない。runtime/凍結入力/Production/Paid変更0。
+
+Blind Review（参照原本はPrivate保全・候補には非同梱）と実行記録（参照原本はPrivate保全・候補には非同梱）。Human評価PENDING、今回のA/B対応表・勝敗は未開示。停止findingは現在方向と将来の見直し条件を混同した可能性があり、重大な実質矛盾の実在は未確定。STOPは解除しない。温かさ/読みやすさの回帰評価は未実施。F007 Known Openは維持。一度限りの実行は終了済み、残予算による継続権限なし。Technical completion ≠ Human Quality Acceptance ≠ Production Authorization。
+<!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:END -->
+
 <!-- GUIDANCE-V19-L1-2026-09-07:BEGIN -->
 ## 2026-09-07 — V19-L1 / V17 baseline / GQ24限定候補
 

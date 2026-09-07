@@ -62,10 +62,10 @@ export function createLiveSender(apiKey) {
     finally { inFlight = false; dispatchMarker = null; }
   };
 }
-export async function executeSession({ session, catalog, input, directory, ledger, send, frozenNow }) {
+export async function executeSession({ session, catalog, input, directory, ledger, send, frozenNow, reviewReceipt }) {
   ledger.start(session.sessionId);
   const repository = new FakeAssessmentRepository(), events = [];
-  const transport = new EvaluationTransport({ session, ledger, repository, definitions: catalog.definitions, originalInput: input, directory, send });
+  const transport = new EvaluationTransport({ session, ledger, repository, definitions: catalog.definitions, originalInput: input, directory, send, reviewReceipt });
   const application = new AssessmentApplication({ repository, transport, model: "gpt-5.6-luna", definitions: catalog.definitions, promptBundleVersion: catalog.promptBundleVersion,
     schemaSetVersion: catalog.schemaSetVersion, timeZone: "Asia/Tokyo", now: () => frozenNow, uuid: randomUUID, observe: event => { events.push(event); } });
   let result = null, errorCode = null;
@@ -93,15 +93,20 @@ export async function executeSession({ session, catalog, input, directory, ledge
 
 export async function runAuthorizedPilot() {
   const config = await loadFrozenConfiguration();
+  return runConfiguredPilot({ ...config, authorizedBaseline: AUTHORIZED_BASELINE, runName: RUN_NAME, evaluationRoot: evalRoot, candidateArm: "candidate-v18" });
+}
+// Shared execution mechanics; each entry point owns its exact authorized profile.
+export async function runConfiguredPilot(config) {
   const apiKey = loadLocalKey(); // Presence already checked locally; no probe API.
-  const parent = path.join(evalRoot, "runs"); mkdirSync(parent, { recursive: true });
-  const runDirectory = path.join(parent, RUN_NAME);
+  const parent = path.join(config.evaluationRoot, "runs"); mkdirSync(parent, { recursive: true });
+  const runDirectory = path.join(parent, config.runName);
   if (existsSync(runDirectory)) throw new PilotStop("ONE_SHOT_RUN_ALREADY_EXISTS");
   mkdirSync(runDirectory); acquireOneShotLock(runDirectory);
   const internal = path.join(runDirectory, "internal"); mkdirSync(internal);
-  const mapping = Object.fromEntries(config.inputs.cases.map(c => [c.id, randomInt(2) ? { A: "current-v17", B: "candidate-v18" } : { A: "candidate-v18", B: "current-v17" }]));
+  const mapping = Object.fromEntries(config.inputs.cases.map(c => [c.id, randomInt(2) ? { A: "current-v17", B: config.candidateArm } : { A: config.candidateArm, B: "current-v17" }]));
   const sessions = config.plan.executionOrder.map(([caseId, arm]) => ({ sessionId: randomUUID(), caseId, arm, anonymousVariantId: Object.entries(mapping[caseId]).find(([,a]) => a === arm)[0] }));
-  const manifest = { schemaVersion: "guidance-pilot8-authorized-manifest-v1", authorization: "Human authorization in this task: 8 sessions / USD2 / 72 HTTP / zero retries or extra samples", authorizedBaseline: AUTHORIZED_BASELINE,
+  const manifest = { schemaVersion: "guidance-pilot8-authorized-manifest-v1", authorization: "Human authorization in this task: 8 sessions / USD2 / 72 HTTP / zero retries or extra samples", authorizedBaseline: config.authorizedBaseline,
+    evaluationSourceHashes: config.evaluationSourceHashes ?? null,
     executionHead: config.executionHead, model: "gpt-5.6-luna", budgetNanos: 2 * USD_NANOS, maxHttpAttempts: 72, caps: config.plan.tokenCapsProposal,
     inputHash: hash(config.inputs), planHash: hash(config.plan), generation: config.plan.generation, prices: config.plan.prices,
     sessions, catalogs: Object.fromEntries(Object.entries(config.catalogs).map(([arm,c]) => [arm, { catalogVersion: c.catalogVersion, promptBundleVersion: c.promptBundleVersion, schemaSetVersion: c.schemaSetVersion,
@@ -115,7 +120,7 @@ export async function runAuthorizedPilot() {
       if (ledger.stopReason) break;
       const directory = path.join(internal, session.sessionId); mkdirSync(directory);
       const input = config.inputs.cases.find(c => c.id === session.caseId).input;
-      records.push(await executeSession({ session, catalog: config.catalogs[session.arm], input, directory, ledger, send, frozenNow: config.plan.generation.frozenApplicationNow }));
+      records.push(await executeSession({ session, catalog: config.catalogs[session.arm], input, directory, ledger, send, frozenNow: config.plan.generation.frozenApplicationNow, reviewReceipt: config.reviewReceipt }));
       console.log(JSON.stringify({ sessionsFinished: records.length, totalSlots: 8, httpCalls: records.reduce((a,r) => a+r.actualHttpCalls,0), stopped: !!ledger.stopReason }));
     }
   } catch (error) { ledger.stop(error.safeCode ?? "EVALUATION_RUNNER_FAILURE"); }
@@ -127,6 +132,7 @@ export async function runAuthorizedPilot() {
   // Human answers are separate, never inferred or corrected by this runner.
   writeFileSync(path.join(runDirectory, "human-review-status.json"), JSON.stringify({ status: "PENDING", answers: null, mappingDisclosed: false }, null, 2) + "\n", { flag: "wx" });
   console.log(JSON.stringify({ artifact: `${path.relative(root, runDirectory)}/blind-review.html`, ...summary }));
+  return { runDirectory, summary };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   if (process.argv.length !== 3 || process.argv[2] !== "--execute-human-authorized-pilot8") { console.error("No execution: exact Human-authorized flag required."); process.exitCode = 1; }
