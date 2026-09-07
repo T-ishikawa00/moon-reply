@@ -1,5 +1,13 @@
 # CODEX_HANDOFF.md
 
+<!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
+## 2026-09-07 — Human review complete / focused local batch proposed
+
+開始6417c54 clean。Humanがreview完了とmapping開示を指示し、固定対応表を開示。完了状態（参照原本はPrivate保全・候補には非同梱）が後継正本。回答（参照原本はPrivate保全・候補には非同梱）は逐語、未記載2欄はnull。分析とGQ-L2案（参照原本はPrivate保全・候補には非同梱）を参照。旧blind/technical/ledger/sealed mapping/PENDING snapshotはそのまま保持。
+
+GQ05 A=V18/B=V17・引分/両issuesなし、GQ24 A=V18/B=V17・両方不可/意味のズレ、GQ13 A=V17/B=V18・A選好/両issuesなし、GQ29-P3 A=V17/B=V18・A選好/B重すぎる。GQ05を追加確認だったため失敗と再解釈しない。品質改善は未実装、API追加0、Production変更0。一度のpilot承認は消費済みで、次batch/追加APIの許可に流用しない。
+<!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality real pilot complete / blind Human review next
 

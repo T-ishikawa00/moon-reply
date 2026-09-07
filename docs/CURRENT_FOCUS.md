@@ -1,5 +1,13 @@
 # CURRENT_FOCUS.md
 
+<!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
+## 2026-09-07 — Guidance Quality Human Blind Review完了・対応表開示
+
+Human完了宣言後に保存済みmappingを開示。Human回答正本（参照原本はPrivate保全・候補には非同梱）を変更せず、対応表と分析（参照原本はPrivate保全・候補には非同梱）を作成。選好・購入ともV17 2件 / V18 0件 / 引き分け1件 / 両方不可1件。GQ05は両issuesなしを維持、GQ24 reason・GQ29-P3 A issuesの未記載を補わない。
+
+GQ24の目的分類と入口条件の不一致、GQ13の受け止め、GQ29-P3の抽象的な確認作業を実記録/sourceから分析。次はGQ-L2（候補PB01目的分類説明・PB04の具体的な行動・PB05の受け止め/読みやすさ）一つの最小localバッチ案。今回品質実装0・API追加0・Production変更0。既存V17/評価済みV18/30ケース/実証拠は固定。本番優劣やrollout受入へ拡張しない。以下のHuman PENDING記録は生成直後の歴史的snapshot。
+<!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:END -->
+
 <!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality authorized real pilot / Human review pending
 
