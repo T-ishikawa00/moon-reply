@@ -1,5 +1,15 @@
 # CURRENT_FOCUS.md
 
+<!-- PAID-RECOVERY-STEP3-2026-09-09:BEGIN -->
+## 2026-09-09 — STEP 3 local paid recovery complete
+
+最新Human指示のSTEP 2 PASSを受け、`codex/guidance-quality-final-v19-l5@8a1ad2b`からlocal実装。`e0f7beb`＋`5a674ab`で、同じ支払済み購入をDB起点の遅延復旧から実納品へ戻す経路、累積予算、完成report/checkpoint回収、旧版契約、material/金融/旧worker fence、通知のみ復旧、Operator inspect/resumeを接続した。
+
+[実装正本](payment/PAID_RECOVERY_STEP3.md)／[最終検証とscope](../evals/paid-delivery-step3/README.md)／[試験sourceとcommitの対応](../evals/paid-delivery-step3/source-commit-binding.json)。offline wrapper経由の実PG/application/RPC試験20/20 PASS。必須12障害を検証し、復旧可能ケースは納品まで到達。migration0033–0035はupgrade/rollback・非superuser installer・runtime ACL/RLS PASS。typecheck/lint/guarded build・関連回帰PASS。
+
+STEP 3 — LOCAL RECOVERY IMPLEMENTATION COMPLETE。STEP 4独立統合障害試験とSTEP 5 Production反映は未実施。Production選択はV17のまま、V19-L5採用・新SLA・補償方針の承認ではない。旧run/失敗/回答/mapping/既存未追跡資料を保持。Production接続・実API・push/deploy・remote migrationは0、外部状態UNKNOWN。以下は各時点の履歴。
+<!-- PAID-RECOVERY-STEP3-2026-09-09:END -->
+
 <!-- GUIDANCE-V19-L4-2026-09-08:BEGIN -->
 ## 2026-09-08 — V19-L4 local fact repair / post-repair verification
 

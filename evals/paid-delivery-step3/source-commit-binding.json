@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "paid-recovery-source-commit-binding-v1",
+  "implementationCommit": "5a674abedd54c4d4cbad57ce51df8e12a9f300d0",
+  "sourceStartSha": "e0f7beb50698d50abb5bacb96bf773d96ebc1f1c",
+  "resultSha256": "e0ba7297c533a4cee77d1f0d9a4528d8f7df71842da898dc034dcfd5f18137bc",
+  "command": "node scripts/run-remediation-offline.mjs --experimental-transform-types scripts/verify-paid-recovery-local.mjs",
+  "offlineWrapperExitCode": 0,
+  "externalNetworkAttempts": 0,
+  "files": [
+    {
+      "path": "lib/assessment/production/application-runtime.ts",
+      "testedRawSha256": "3db92cdb300c5a67ea72f2030cabad72adc64ea5ff380176e4e96d17cb424542",
+      "committedGitBlob": "0f2ab873ab688c8fe3279239c15b4b184c335ed2"
+    },
+    {
+      "path": "lib/assessment/production/application.ts",
+      "testedRawSha256": "58b08be977cd187e6676dd4ed85bb7ba2664df550ba96313719a40e594e3cff9",
+      "committedGitBlob": "4aa3042b2f288def37f3882e6621e044373e1c0b"
+    },
+    {
+      "path": "lib/assessment/production/canonical-delivery.ts",
+      "testedRawSha256": "43d7ad653a21a7fc950ff5148c872f228f524641c094fdcfe4b60d32897388aa",
+      "committedGitBlob": "add2d453ed33f6438b199d0832242c11e3b9021d"
+    },
+    {
+      "path": "lib/assessment/production/legacy-v17-evidence-replay.ts",
+      "testedRawSha256": "29c512d682917dbefe169b0a1001d9a3d50d4293087e057a4686a6f74127c6a1",
+      "committedGitBlob": "38729e2b9b82a334bc0fcc9df4ec1797414f6ea5"
+    },
+    {
+      "path": "lib/assessment/production/paid-recovery-transport.ts",
+      "testedRawSha256": "00da51d9c47a234224b36ae160337a097ab10f96a116144ce1a2f78576609051",
+      "committedGitBlob": "3feacdb8ebb188e43549268dc7503204b2ccd59f"
+    },
+    {
+      "path": "lib/assessment/production/recovery-candidate.ts",
+      "testedRawSha256": "16d6f6e38cf4b1bba81f2790bbb7590e5aa620e4fe4f531da70e740ee563f354",
+      "committedGitBlob": "8914a379803b070e5ce20091bd776dc753456737"
+    },
+    {
+      "path": "lib/assessment/production/recovery-checkpoint.ts",
+      "testedRawSha256": "40a149e30af6005837c2e17423f22d000cbeb46bdc5ece5b6be8b66ef823fac5",
+      "committedGitBlob": "d28509eb58d8c0dbb3c3fa3bfbde62c0596516a2"
+    },
+    {
+      "path": "lib/assessment/production/supabase-repository.ts",
+      "testedRawSha256": "61b63942ae971687ce6e04c03cf2a4cb98ec868da51da22c788699c286d53302",
+      "committedGitBlob": "a7445052c7955c213601347c982ac3b9160da67b"
+    },
+    {
+      "path": "lib/assessment/production/types.ts",
+      "testedRawSha256": "e0d02e77ce2c00feef5bdf154db2cc24e690286e975ebfb088a0f66248821062",
+      "committedGitBlob": "d582dc05e4dfeecaea5ec129213b550005d986e8"
+    },
+    {
+      "path": "lib/assessment/production/v19-paid-executor.ts",
+      "testedRawSha256": "ca3eb05058e520b76711db8ea2b7af775cf99da70e9f739c89878b8aaf6e911e",
+      "committedGitBlob": "463f1191bebaf0a49de0ed708d8f7aaa9c9959a1"
+    },
+    {
+      "path": "lib/assessment/runtime/hash.ts",
+      "testedRawSha256": "30c344d3f372bc782baf9f2e0c7d74085e63c0b8ab2c13558857000b52e4217d",
+      "committedGitBlob": "dd47eebc75a26ade6c744bff61841eb2a905c8bf"
+    },
+    {
+      "path": "lib/assessment/runtime/openai-schema-normalization.d.mts",
+      "testedRawSha256": "e51d80d32d7995304d8faee55e09a6f317237246ecce813ba1b9d6ad98fccae8",
+      "committedGitBlob": "bcad639e31f35aaf9b6d34b321f66f1baab31459"
+    },
+    {
+      "path": "lib/assessment/runtime/openai-schema-normalization.mjs",
+      "testedRawSha256": "de9870381e8cca9c1a14327c019cddc573a691a6eb41fe09cd5a0e5082408618",
+      "committedGitBlob": "22633a3ad3630ddb375d0e1832a0f88a00bbe84d"
+    },
+    {
+      "path": "lib/assessment/runtime/openai-transport.ts",
+      "testedRawSha256": "1203f82ca3510ebe018e8c9809585f4dd0ffaad74ab715606d848326b4208f28",
+      "committedGitBlob": "408ca62944a2073341608837e4c15215d2c64873"
+    },
+    {
+      "path": "lib/assessment/runtime/pipeline.ts",
+      "testedRawSha256": "0f794f876f29919d5fa1a99a74e6c6e0e19bde583a6c1ed97d62f5facd3da982",
+      "committedGitBlob": "0830b1b2b79c0fbc833d5cd8c18581703d8d84d8"
+    },
+    {
+      "path": "lib/assessment/runtime/supabase-repository.ts",
+      "testedRawSha256": "bc662c0687bcf597349eb26391b7ffd8502092a584f7c7be7dcdb276b2fc7160",
+      "committedGitBlob": "f904a50a125583d20948610da2e43f022b57121d"
+    },
+    {
+      "path": "lib/assessment/runtime/types.ts",
+      "testedRawSha256": "9ce9c07c46a75c1a436fa45ff7c2e1d9aee6ca26a5657dc2cee2e9be5b51e669",
+      "committedGitBlob": "f259fbcd188a2f65c4077a02d8cbc4d0a0ab1aad"
+    },
+    {
+      "path": "lib/assessment/runtime/v19-l5-application.ts",
+      "testedRawSha256": "3c5e835ec91ffce9a8773fc7a65fc40b02f8870a964932ab17a522f8203ceb7e",
+      "committedGitBlob": "ad475491515f4e1794c406741492e553f32718e6"
+    },
+    {
+      "path": "lib/customer-auth/types.ts",
+      "testedRawSha256": "a51e9019ed1d474ca68ad51a65c9a4860af639fabcdf5bbfd40115e27e5070bb",
+      "committedGitBlob": "f6c9ce70f1903dcc524360d3dd09a88c7ba3e51e"
+    },
+    {
+      "path": "lib/payment/production/application.ts",
+      "testedRawSha256": "5246802d5ca1a520547d7d0c2992806bd4a452ea330f695d502d7253a78dd2b3",
+      "committedGitBlob": "2438b999d68aaf6a75ef64523faf4f05d69ae4df"
+    },
+    {
+      "path": "lib/payment/production/async-workloads-contract.ts",
+      "testedRawSha256": "5af90ca9b34f3b29e81b9e46a0d1cfa0362b18e3f12b80c7a1b6a51ce8fa36f3",
+      "committedGitBlob": "0c4e154476e42988b10ee6a28a2766f1d3d7cdf4"
+    },
+    {
+      "path": "lib/payment/production/async-workloads-runtime.ts",
+      "testedRawSha256": "4293d849928e3a5a20c0371d909ba6f68df844cc6ad0298e588c37c0948f8c2e",
+      "committedGitBlob": "785f040a8339251cc79feb2bd665e412cea77d75"
+    },
+    {
+      "path": "lib/payment/production/async-workloads-worker.ts",
+      "testedRawSha256": "7d6dc3b99b995d4d7581297c0bbf058d976045d195d45d70f82a4d3a5af13452",
+      "committedGitBlob": "b3215b9eaf1354d13758f2d195f97084a91f6e9d"
+    },
+    {
+      "path": "lib/payment/production/dispatch-scheduler-runtime-service.ts",
+      "testedRawSha256": "68408b565e41d0e861b4715fef143cdf697be18f1806647c9f27d7f831b04426",
+      "committedGitBlob": "7451f88b078526a6dda8a488b0e635528c03909e"
+    },
+    {
+      "path": "lib/payment/production/fulfillment-dispatch.ts",
+      "testedRawSha256": "fff15ac364a775ea826869ea4903ca2788d226de72a886ccead5cce27b111654",
+      "committedGitBlob": "2a4389ced9c020333f6b5a2b7cd3e7421a0105cf"
+    },
+    {
+      "path": "lib/payment/production/fulfillment-runtime.ts",
+      "testedRawSha256": "3cf7b7603468d2bb47e2078a560acf177949d3d00c9d89e3fed35830253b641e",
+      "committedGitBlob": "3affc8d8190dfe92cf8c7e45cb76788a387770c5"
+    },
+    {
+      "path": "lib/payment/production/paid-recovery-operator.ts",
+      "testedRawSha256": "ccd3bedfe232fce76f785e7919e78f056b05e6fee4dc065b66e16a0e465d6175",
+      "committedGitBlob": "c575305d7638e7235b3619425b908f2ccfca40b2"
+    },
+    {
+      "path": "lib/payment/production/paid-recovery-supabase-repository.ts",
+      "testedRawSha256": "5af0f072192563728a8d15713c2631ae6d81190891232d5e36180b22363bb7ec",
+      "committedGitBlob": "74d5252cd15fc4c56c24811732a1deb58d76962b"
+    },
+    {
+      "path": "lib/payment/production/paid-recovery.ts",
+      "testedRawSha256": "fd53e468b4fac504045217d80d6df4bd8868fa6c83112f806b8aa95eedd750a9",
+      "committedGitBlob": "1487b3fba1f6c66b28dcb188e9b158d0785d67ea"
+    },
+    {
+      "path": "lib/payment/production/service.ts",
+      "testedRawSha256": "8cf1f8a486d000ae87c1a45d0466b2235f79bd678fb6c419e08d3fbeaa4f87c7",
+      "committedGitBlob": "157fd96c5935dfa81d16962e91f314e358ff10d9"
+    },
+    {
+      "path": "lib/payment/production/supabase-repository.ts",
+      "testedRawSha256": "b8089536e711694a99e7947e3b47b5f714696614c25e8b8bf93ec958a4814864",
+      "committedGitBlob": "0ead025503e348fed64145fe4458491ae77f01c2"
+    },
+    {
+      "path": "lib/payment/production/types.ts",
+      "testedRawSha256": "6a1f27c91d8148ddb29f05bb7c42c5b1f3ac5fd9afeaa581437620f1d271cceb",
+      "committedGitBlob": "658c88b359d2974e6784a111b8fb56af0a13b615"
+    },
+    {
+      "path": "lib/payment/production/worker-service.ts",
+      "testedRawSha256": "fab76ff04daaf4ee544650615117eaca38082312f9a26a6b85f71a020f2879fe",
+      "committedGitBlob": "bd6423f970bf0220cb49affb7fbd36a694c14d85"
+    },
+    {
+      "path": "lib/payment/purchase-return-presentation.ts",
+      "testedRawSha256": "538f4cdc7eebfadc9d9f21060fee608412c8b78b5782c1c96a30d2de6675cab0",
+      "committedGitBlob": "a5a97ef748be2bff97647f6d6a255c70b06e4f61"
+    },
+    {
+      "path": "lib/payment/purchase-status-contract.ts",
+      "testedRawSha256": "8188d0d477f2110cb05e75734373ef1290a4141795a99f3f981537b0524bc802",
+      "committedGitBlob": "7783305d6c05de9a348fe3b8a990f55e0698b121"
+    },
+    {
+      "path": "scripts/lib/paid-recovery-application.mjs",
+      "testedRawSha256": "0481ccdfc6c026db952c73709e75a319557a6abe5d557780d5588e4aedc76dff",
+      "committedGitBlob": "8ab6e187a082cbeae8c897655214108ae6f77b48"
+    },
+    {
+      "path": "scripts/lib/paid-recovery-fixtures.mjs",
+      "testedRawSha256": "15e7cb85834cbda7871b648087b2717f7f07a4fc43fd7afbc96b1d9cf0400031",
+      "committedGitBlob": "c31aa17ed119eb297288c79e71794166561d1251"
+    },
+    {
+      "path": "scripts/lib/paid-recovery-postgrest.mjs",
+      "testedRawSha256": "1b94b2f9784f834479ee04a2100877609d930bda08af2fe78f57953c7ad19b17",
+      "committedGitBlob": "46c0bdc63a6f33cda08bb112cc65e5a899fd4e4a"
+    },
+    {
+      "path": "scripts/lib/paid-recovery-v19-fixture.mjs",
+      "testedRawSha256": "eb30c09e7252614a2a74f1aca3369e2beefa9632f67c2a42117788c1a15af2c8",
+      "committedGitBlob": "b04f18d1d74ede0aed624e7a774ae7378c8e4b66"
+    },
+    {
+      "path": "scripts/lib/paid-recovery-worker.mjs",
+      "testedRawSha256": "0cfb1277370b5ff283bc5b386f82084f49bd25d4b99182acb217d23c2f8c78e4",
+      "committedGitBlob": "b9f8978d6d117a55ee7afbbe31f0432528bf28ee"
+    },
+    {
+      "path": "scripts/paid-recovery-operator.mjs",
+      "testedRawSha256": "3e21f9d3fcaff192fec758623cbdabb1025aad180cb3ebd737fbc594eaf4c40d",
+      "committedGitBlob": "ac51f7927d6268fe868a11778555a6d51a95915c"
+    },
+    {
+      "path": "scripts/verify-m1-4-background-fulfillment-durability.mjs",
+      "testedRawSha256": "c76ff01e9523de4a1c6c573b851e10878304012981a64662327a2796f2a131d4",
+      "committedGitBlob": "1f2e0b4b690e99b9ce3f18dd96410ba2f6f8cbbc"
+    },
+    {
+      "path": "scripts/verify-paid-recovery-local.mjs",
+      "testedRawSha256": "5eb32934741ec973707c50ace2608ef005e5801a09b0246cad897a9a12c8120c",
+      "committedGitBlob": "d68a83c4df0e384f7d92ca4ad7d2cd2ac9cce851"
+    },
+    {
+      "path": "scripts/verify-paid-recovery-migration.mjs",
+      "testedRawSha256": "3b90796cb89952f4ec14785cf388e4370637cb37b2a34bc2c32e636eb9c3913b",
+      "committedGitBlob": "42847406a0bf7acfb1bcccd722aae5948174a399"
+    },
+    {
+      "path": "scripts/verify-paid-recovery-schema.mjs",
+      "testedRawSha256": "1cef10a50e2d5c8a34c7d81f8f7f8ebb51720ccfa378f35268abfff65c41fe26",
+      "committedGitBlob": "b9a14f1f7221c38105c14f6f37451bd47cde205a"
+    },
+    {
+      "path": "scripts/verify-paid-recovery-transport.mjs",
+      "testedRawSha256": "99e2f20076550d66fabad64858e3fa5f40bdae56414c56f15b5561ae640ad37e",
+      "committedGitBlob": "4340e2f3eebe7ba832af20eb83b3ae78d159be89"
+    },
+    {
+      "path": "supabase/migrations/0033_paid_fulfillment_recovery.sql",
+      "testedRawSha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+      "committedGitBlob": "0eeb5bfee0bf492f490e7076d0400f7d1554063b"
+    },
+    {
+      "path": "supabase/migrations/0034_paid_fulfillment_candidate_contract.sql",
+      "testedRawSha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+      "committedGitBlob": "89e7bf9a96665e1813abfbd5b9860a8eb725c3e3"
+    },
+    {
+      "path": "supabase/migrations/0035_paid_recovery_operator_followup.sql",
+      "testedRawSha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+      "committedGitBlob": "fefd9a4985e85a35fa924ebfaecc921ea265d681"
+    }
+  ],
+  "note": "Raw tested bytes match the working files; git hash-object with path filters matches each committed blob. Execution sourceStartSha is preserved."
+}

@@ -1,5 +1,17 @@
 # CODEX_HANDOFF.md
 
+<!-- PAID-RECOVERY-STEP3-2026-09-09:BEGIN -->
+## 2026-09-09 — Local paid recovery implementation and fault evidence
+
+開始`codex/guidance-quality-final-v19-l5@8a1ad2b097f6dccdc21ed88b9dccb70cb046853d`。HumanのSTEP 2 PASSに基づくSTEP 3のみ。local commits `e0f7beb`（DB復旧/予算）・`5a674abedd54c4d4cbad57ce51df8e12a9f300d0`（実行/候補検証/通知/試験）。[設計・設定・留保](payment/PAID_RECOVERY_STEP3.md)、[最終証拠](../evals/paid-delivery-step3/README.md)、[source binding](../evals/paid-delivery-step3/source-commit-binding.json)を参照。
+
+既存job/outboxを使う永続復旧を実納品へ接続。canonical→完成report→適合checkpoint→必要生成の順、24回/$2/24hの累積予約、owner/review期限を保持。V17・候補v23/schema-v9を固定契約として扱い、PB06検証policy versionとproof/hashをSQLで照合。旧V17の未保存validation inputは保存出力/request hashから実pipeline再構築できる場合だけ回収する。F007のmaterial消尽を新Paid経路では公開不可にした。旧証拠は改変していない。
+
+offline wrapper＋隔離PG17＋実application/RPCで20/20 PASS。kill/旧worker競合/queue失敗/通知停止迂回/旧新版3経路/検証proof改変/金融競合を含む。0033–0035は16機能×2installer・36権限probe×2 PASS、送信済み/結果不明の通知identityも維持。UTF8分割受信による試験adapterの文字化けを修正し、SQL完全一致条件は維持。typecheck/lint/build47/47と関連回帰PASS。
+
+STEP 3 — LOCAL RECOVERY IMPLEMENTATION COMPLETE。次段階は独立したSTEP 4レビューであり、今回のlocal PASSをProduction反映の承認に使わない。STEP 5・V19-L5 Production採用・SLA/補償/運用担当のHuman判断は未実施。金融ledger未反映の外部事実、実Provider/メール/Discord、deployed設定はUNKNOWN。push/deploy/実API/remote migration/Production接続0。別worktreeと旧run/回答/mapping/未追跡資料を保持。
+<!-- PAID-RECOVERY-STEP3-2026-09-09:END -->
+
 <!-- GUIDANCE-V19-L4-2026-09-08:BEGIN -->
 ## 2026-09-08 — V19-L4 bounded Report fact repair successor
 
