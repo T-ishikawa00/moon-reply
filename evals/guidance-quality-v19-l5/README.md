@@ -8,6 +8,8 @@ PB01 v6.0.0, PB04 v8.0.0, PB05 v13.0.0, PB06 v11.0.0.
 The L4 narrow patch contract and PB06 post-repair schema remain unchanged.
 `candidate-identity.json` freezes the implementation commit and 223 source-file hashes. Evaluation preparation/evidence is separate from that implementation commit.
 
+The [2026-09-09 runner-only correction](final-qa/runner-fix-2026-09-09/REPORT.md) supersedes the earlier runner readiness evidence for incomplete/null output handling. It preserves this candidate identity and the frozen cases, expectations, review content and budget. The original preflight STOP remains historical evidence; no real final QA batch has started.
+
 ## Authorized changes
 
 - **Editing intent:** semantic PB01 intent distinguishes editing, composition and a contact decision, including mixed requests. Existing text plus editing-only intent produces a message answer with no artificial send/wait decision or timing. Missing original produces exactly `整えたい文章をそのまま教えてください`. Supplying that original reuses the retained Base, records its new provenance, analyzes Candidate/Safety again and consumes the one-question budget. Explicitly excluded decisions stay excluded for composition as well.

@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "kind": "OFFLINE_FAKE_RECEIPTS_ONLY",
-  "directory": "evals/guidance-quality-v19-l5/final-qa/fake-runner-1788877890565",
+  "directory": "evals/guidance-quality-v19-l5/final-qa/fake-runner-1788879841536",
   "sessionStopContinuesAll24": true,
   "unknownOutcomeRetainsReservation": true,
   "modelMismatchGlobalStop": true,

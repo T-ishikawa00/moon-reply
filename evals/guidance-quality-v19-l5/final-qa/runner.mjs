@@ -12,6 +12,7 @@ import { writeBlindReview } from './review.mjs';
 import { validateStageOutput } from '../../../lib/assessment/runtime/validation.ts';
 import { canonicalizeDecisionPlanFactReferencesV1 } from '../../../lib/assessment/runtime/decision-plan-fact-reference-canonicalization-v1.ts';
 const check=(ok,code)=>{if(!ok)throw new PilotStop(code);};
+const modelStages=new Set(['PB-01','PB-01C','PB-02','PB-03','PB-04','PB-05','PB-06']);
 const qualityStages=new Map([
   ['M2_V19_L5_INTENT_SOURCE_INTEGRITY_FAILED',['PB-01']],['V19_L5_ANSWER_MODE_MISMATCH',['PB-04','PB-05']],
   ['V19_L5_MESSAGE_PLAN_INVALID',['PB-04']],['V19_L5_EDIT_SOURCE_INVALID',['PB-04']],['V19_L5_EDIT_EVIDENCE_INVALID',['PB-04']],
@@ -19,12 +20,30 @@ const qualityStages=new Map([
   ['V19_L5_MATERIAL_DELIVERY_BLOCKED',['PB-06']],['V19_L5_INPUT_NOT_SUFFICIENT',['PB-03']],['SAFETY_CLASSIFICATION_NOT_NORMAL',['PB-03']],
 ]);
 export function isSessionQualityStop(code,provenance) {
-  if(!provenance||provenance.accounted!==true||provenance.settlementStatus!=='received'||provenance.status!=='completed'||
-    provenance.model!=='gpt-5.6-luna'||provenance.serviceTier!=='default'||provenance.requestIdentityVerified!==true)return false;
+  if(!provenance||provenance.accounted!==true||provenance.settlementStatus!=='received'||
+    provenance.model!=='gpt-5.6-luna'||provenance.serviceTier!=='default'||provenance.requestIdentityVerified!==true||
+    !modelStages.has(provenance.stageId)||![1,2].includes(provenance.attempt))return false;
+  // Only a received, accounted model-output failure is local. Failed/pending
+  // API states, unknown outcomes and authority/accounting errors remain global.
+  if(code==='INCOMPLETE_RESPONSE')return provenance.outputValidation==='received_unvalidated'&&
+    (provenance.status==='incomplete'||(provenance.status==='completed'&&provenance.outputTextAvailable===false));
+  if(provenance.status!=='completed')return false;
   if(['M2_STAGE_SCHEMA_INVALID','SCHEMA_INVALID_JSON'].includes(code))return provenance.outputValidation==='received_unvalidated'&&[1,2].includes(provenance.attempt);
   const stages=qualityStages.get(code);
   if(stages)return provenance.outputValidation==='valid'&&provenance.attempt===1&&stages.includes(provenance.stageId);
   return classifyExpandedStop(code,provenance).scope==='session';
+}
+
+/** Invalid JSON values must reach the schema validator, not object access. */
+export function validateFinalStageOutput(request,output,definition,arm) {
+  const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+  let canonical=structuredClone(output);
+  if(request.stageId==='PB-04'&&object(canonical)) {
+    if(arm==='V19-L5'&&object(canonical.decision_plan))canonical.decision_plan=canonicalizeDecisionPlanFactReferencesV1(canonical.decision_plan);
+    else if(arm==='V17')canonical=canonicalizeDecisionPlanFactReferencesV1(canonical);
+  }
+  validateStageOutput(definition,canonical);
+  return canonical;
 }
 
 export function verifyLedgerPricing(plan) {
@@ -93,7 +112,7 @@ export async function executeFinalBatch({mode='unauthorized',authorization,plan,
       guard();ledger.start(session.sessionId);
       const dir=path.join(internal,session.sessionId);fs.mkdirSync(dir);
       const catalog=catalogs[session.arm],input=inputs.cases.find(c=>c.id===session.caseId).input,responses=[],inspections=[];
-      let result=null,errorCode=null,lastProvenance=null,repair=false;
+      let result=null,errorCode=null,stopScope=null,lastProvenance=null,repair=false;
       try {
         for(;;) {
           guard();const captured=await captureNext({catalog,input,responses,now:'2026-09-08T04:00:00+09:00',sessionId:session.sessionId});
@@ -112,20 +131,18 @@ export async function executeFinalBatch({mode='unauthorized',authorization,plan,
             received=await send(body,()=>{guard();ledger.dispatch(reservation);},{session,attempt});
             check(ledger.calls.find(c=>c.sequence===reservation.sequence)?.dispatched,'HTTP_ACCOUNTING_MISMATCH');
             // Save only actual text/usage identifiers, never headers or hidden reasoning.
-            durableJson(prefix+'-response.json',{id:received.id,model:received.model,status:received.status,service_tier:received.service_tier,usage:received.usage,output_text:received.output_text});
+            durableJson(prefix+'-response.json',{id:received.id,model:received.model,status:received.status,service_tier:received.service_tier,usage:received.usage,output_text:received.output_text,
+              incomplete_details:received.incomplete_details??null});
             const accounting=accountUsage(received.usage,cap,ceiling);ledger.settle(reservation,{status:'received',accounting});settled=true;
             check(received.model===body.model&&received.service_tier===body.service_tier,'MODEL_OR_SERVICE_TIER_MISMATCH');
+            lastProvenance={requestIdentityVerified:true,model:received.model,serviceTier:received.service_tier,accounted:true,settlementStatus:'received',status:received.status,
+              outputTextAvailable:typeof received.output_text==='string',outputValidation:'received_unvalidated',stageId:q.stageId,attempt};
+            check(['completed','incomplete'].includes(received.status),'API_RESPONSE_STATUS_FAILURE');
             check(received.status==='completed'&&typeof received.output_text==='string','INCOMPLETE_RESPONSE');
           } catch(error) {if(!settled)ledger.settle(reservation,{status:'unknown_or_failed',stopReason:error.safeCode??'HTTP_UNKNOWN_OUTCOME'});throw error;}
-          lastProvenance={requestIdentityVerified:true,model:received.model,serviceTier:received.service_tier,accounted:true,settlementStatus:'received',status:'completed',outputValidation:'received_unvalidated',stageId:q.stageId,attempt};
           let output;try{output=JSON.parse(received.output_text);}catch{throw new PilotStop('SCHEMA_INVALID_JSON');}
-          let canonical=structuredClone(output);
-          if(q.stageId==='PB-04') {
-            if(session.arm==='V19-L5'&&canonical.decision_plan)canonical.decision_plan=canonicalizeDecisionPlanFactReferencesV1(canonical.decision_plan);
-            else if(session.arm==='V17')canonical=canonicalizeDecisionPlanFactReferencesV1(canonical);
-          }
           const normal=catalog.definitions.find(d=>d.stageId===q.stageId),definition=q.schemaVersion==='report-fact-repair-v1'?{...normal,...normal.reportFactRepair}:normal;
-          validateStageOutput(definition,canonical);lastProvenance.outputValidation='valid';
+          validateFinalStageOutput(q,output,definition,session.arm);lastProvenance.outputValidation='valid';
           responses.push({stageId:q.stageId,attempt,output});
           // Independent review is required before any next call. It is not a new
           // model/API sample and cannot supply replacement Product text.
@@ -161,10 +178,11 @@ export async function executeFinalBatch({mode='unauthorized',authorization,plan,
       } catch(error) {
         errorCode=error.safeCode??'RUNNER_UNCLASSIFIED_FAILURE';
         const local=isSessionQualityStop(errorCode,lastProvenance);
+        stopScope=local?'session':'global';
         if(!local)ledger.stop(errorCode);
       }
       const finalState=errorCode?'stopped':session.arm==='V19-L5'?result.finalState:result?.eligibility==='ready'?'completed':result?.clarification?'clarification':'stopped';
-      const record={...session,finalState,errorCode,result,repair,responses,inspections,usageCost:ledger.calls.filter(c=>c.sessionId===session.sessionId)};
+      const record={...session,finalState,errorCode,stopScope,stopProvenance:errorCode?lastProvenance:null,result,repair,responses,inspections,usageCost:ledger.calls.filter(c=>c.sessionId===session.sessionId)};
       durableJson(path.join(dir,'session.json'),record);records.push(record);ledger.finish(session.sessionId,finalState==='stopped'?'failed':'completed');
       if(ledger.stopReason)break;
     }

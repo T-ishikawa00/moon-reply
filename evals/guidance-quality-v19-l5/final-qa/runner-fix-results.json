@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "v19-l5-evaluation-stop-routing-fix-v1",
+  "status": "PASS",
+  "requiredTests": 13,
+  "passed": 13,
+  "evidenceType": "OFFLINE_FAKE_RECEIPTS_ONLY",
+  "fixtureNotice": "Existing offline structural seed is used only inside an injected fake transport; no historical output is submitted for generation.",
+  "temporaryEvidenceDirectory": "C:\\Users\\PUBLIC_USER\\AppData\\Local\\Temp\\moon-reply-stop-routing-GR5w6V",
+  "sessionRuns": 16,
+  "globalRuns": 13,
+  "results": [
+    {
+      "number": 1,
+      "name": "received incomplete and completed missing text are SESSION STOP",
+      "status": "PASS",
+      "variants": 2,
+      "sessions": 48,
+      "reservationReleased": false
+    },
+    {
+      "number": 2,
+      "name": "PB-04 null reaches the real stage and SESSION STOP",
+      "status": "PASS",
+      "targetCase": "GQ-29-P3",
+      "reachedStage": "PB-04",
+      "targetSessions": 2,
+      "totalSessions": 24
+    },
+    {
+      "number": 3,
+      "name": "PB-05 null reaches the real stage and SESSION STOP",
+      "status": "PASS",
+      "targetCase": "GQ-29-P3",
+      "reachedStage": "PB-05",
+      "targetSessions": 2,
+      "totalSessions": 24
+    },
+    {
+      "number": 4,
+      "name": "PB-06 null reaches the real stage and SESSION STOP",
+      "status": "PASS",
+      "targetCase": "GQ-29-P3",
+      "reachedStage": "PB-06",
+      "targetSessions": 2,
+      "totalSessions": 24
+    },
+    {
+      "number": 5,
+      "name": "parseable invalid PB04/PB05/PB06 and malformed JSON are SESSION STOP",
+      "status": "PASS",
+      "integratedStageVariants": 6,
+      "pureTypeVariants": 36,
+      "malformedJsonSessions": 24
+    },
+    {
+      "number": 6,
+      "name": "material fact, Safety, meaning and true action review remain SESSION STOP",
+      "status": "PASS",
+      "findingClasses": [
+        "FACT_FIDELITY",
+        "SAFETY_REGRESSION",
+        "REQUIRED_SECTION_MEANING",
+        "ACTION_CONSISTENCY"
+      ],
+      "targetSessions": 8
+    },
+    {
+      "number": 7,
+      "name": "wrong model stays GLOBAL even with incomplete status",
+      "status": "PASS",
+      "variants": 2
+    },
+    {
+      "number": 8,
+      "name": "wrong fixed input or hash is GLOBAL before another call",
+      "status": "PASS",
+      "variants": 3,
+      "dispatches": 0
+    },
+    {
+      "number": 9,
+      "name": "corruption of a disposable fake mapping causes GLOBAL STOP",
+      "status": "PASS",
+      "dispatches": 1,
+      "nextDispatches": 0
+    },
+    {
+      "number": 10,
+      "name": "invalid accounting remains GLOBAL including incomplete receipts",
+      "status": "PASS",
+      "variants": 2,
+      "reservationReleased": false
+    },
+    {
+      "number": 11,
+      "name": "reservation beyond the unchanged $6 cap is GLOBAL before dispatch",
+      "status": "PASS",
+      "dispatches": 0,
+      "hardCapUsd": 6
+    },
+    {
+      "number": 12,
+      "name": "SESSION STOP is final for that session and the next case still runs",
+      "status": "PASS",
+      "verifiedRuns": 16,
+      "laterCase": "GQ-15",
+      "completedMislabels": 0,
+      "retries": 0
+    },
+    {
+      "number": 13,
+      "name": "GLOBAL STOP permits zero next calls; failed API and unknown outcome stay GLOBAL",
+      "status": "PASS",
+      "verifiedRuns": 13,
+      "nextDispatches": 0,
+      "retries": 0,
+      "unknownReservationReleased": false
+    }
+  ],
+  "runnerSha256": "e32c1e27f37a1bdb5b1bb80f1eadcce218c55d131ff3f6ba40c3d6612f1dc159",
+  "verifierSha256": "1c7f13b9b4e34441e921ffdb66359dd4f69ce2d21112c45e4dcec22194a1cc93",
+  "historicalSeedUnchanged": true,
+  "fixedInputsExpectationsAndUiUnchanged": true,
+  "networkAttempts": 0,
+  "realApiCalls": 0,
+  "keyAccess": 0,
+  "productionOperations": 0,
+  "liveLockCreated": false,
+  "liveAuthorizationConsumed": false
+}
