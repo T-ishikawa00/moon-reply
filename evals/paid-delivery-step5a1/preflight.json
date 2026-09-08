@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "paid-delivery-step5a1-preflight-v1",
+  "startHead": "3a873b5a67e1d30592cb41e812d1ca39943d966a",
+  "branch": "codex/guidance-quality-final-v19-l5",
+  "worktrees": "worktree C:/projects/moon-reply\nHEAD 3a873b5a67e1d30592cb41e812d1ca39943d966a\nbranch refs/heads/codex/guidance-quality-final-v19-l5\n\nworktree C:/tmp/mrexp-e98\nHEAD e98e2f27e45b9198dcaf766e6e0a48b3738b263b\ndetached\n\nworktree C:/tmp/mrexp-ea4\nHEAD ea4acd5d3620fb546e5cf7bc0d1f7db414c54ebc\ndetached",
+  "startTrackedDiff": "",
+  "protectedArtifactManifest": "evals/paid-delivery-step4/preflight.json",
+  "protectedUntrackedVerified": 4801,
+  "migrations": {
+    "0033_paid_fulfillment_recovery.sql": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+    "0034_paid_fulfillment_candidate_contract.sql": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+    "0035_paid_recovery_operator_followup.sql": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+  },
+  "scope": "B1 and B2 local only; additional 0036 scope question pending Human",
+  "productionWrites": 0,
+  "externalOperations": 0
+}

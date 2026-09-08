@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "paid-delivery-step5a1-local-checks-v1",
+  "productionSourceBaseline": "3a873b5a67e1d30592cb41e812d1ca39943d966a",
+  "productionSourceChanged": false,
+  "typecheck": {
+    "command": "node scripts/run-remediation-offline.mjs node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "exitCode": 0
+  },
+  "lintWholeCheckout": {
+    "command": "node scripts/run-remediation-offline.mjs node_modules/eslint/bin/eslint.js . --max-warnings=0",
+    "exitCode": 1,
+    "errors": 0,
+    "warnings": 59,
+    "classification": "Existing evaluation bundles and .tmp artifacts; not changed or suppressed by this task.",
+    "locations": [
+      ".tmp/r1-resume-write-report.mjs",
+      "evals/guidance-quality-v19-l5/final-qa/live-resume-once.bundle.mjs",
+      "evals/guidance-quality-v19-l5/final-qa/prepare-resume-once.bundle.mjs",
+      "evals/guidance-quality-v19-l5/final-qa/resume-once-runner.mjs",
+      "evals/paid-delivery-step1c/smoke-transport.mjs",
+      "evals/paid-delivery-step2/execute.bundle.mjs",
+      "evals/paid-delivery-step2/prepare.mjs",
+      "evals/paid-delivery-step2/summarize-blocked.mjs"
+    ]
+  },
+  "lintSource": {
+    "command": "node scripts/run-remediation-offline.mjs node_modules/eslint/bin/eslint.js app components lib netlify scripts next.config.ts proxy.ts eslint.config.mjs --max-warnings=0",
+    "exitCode": 0,
+    "warnings": 0
+  },
+  "build": {
+    "entryPoint": "scripts/remediation-offline-runtime.mjs#buildOffline",
+    "exitCode": 0,
+    "staticPages": 47,
+    "externalNetworkAttempts": 0,
+    "dotenvReads": "intercepted by the existing offline guard; no environment files changed"
+  },
+  "limitations": [
+    "These checks do not establish B1 resolution or Production release readiness.",
+    "No new V19-L5 Production selector has been enabled; additive migration scope is pending Human input.",
+    "Whole-checkout lint is not reported as PASS."
+  ]
+}

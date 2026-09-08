@@ -1,0 +1,330 @@
+{
+  "status": "EXPECTED_B1_FAILURE_REPRODUCED",
+  "sourceHead": "3a873b5a67e1d30592cb41e812d1ca39943d966a",
+  "actualFactory": {
+    "entry": "createProductionAssessmentApplication()",
+    "synthetic": false,
+    "newPurchaseContract": null
+  },
+  "diagnostics": [
+    {
+      "case": "authentication-synthetic-safety-boundaries",
+      "status": "PASS",
+      "anonymousOutcome": "authentication_required",
+      "wrongCustomer": null,
+      "wrongContinuation": null,
+      "safetyError": "PRODUCTION_ADULT_CONFIRMATION_REQUIRED",
+      "providerInvocations": 0
+    },
+    {
+      "case": "customer-compute-cap",
+      "status": "PASS",
+      "errorCode": "PREPAYMENT_COMPUTE_BUDGET_EXHAUSTED",
+      "providerInvocations": 1,
+      "wire": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "pipeline-schema-base-v2.0.0",
+          "promptHash": "de55c3f8a99b3de5c52249f9252c09524f734a2046103c7de6cb27506d554757",
+          "canonicalSchemaHash": "85a984e50c65edc034fc6f992a9032504149907276adcdf0c68a918121d5049d",
+          "wireSchemaHash": "7beec3d76465f418c415901a40bbbb22a1b202f679063231e86dad2a7ce260f9",
+          "inputHash": "2cf1063ed9397950b47213a0146c7a74abef6310a26b3101bc2738756db66b9b",
+          "nestedDefinitions": 0,
+          "invalidReferences": 0,
+          "semanticGraphEqual": true,
+          "repair": false,
+          "revalidation": false,
+          "httpStatus": 200
+        }
+      ],
+      "budget": {
+        "deliveries": 0,
+        "globalUsed": 1,
+        "activeSlots": 0,
+        "customerUsed": 1
+      }
+    },
+    {
+      "case": "global-compute-cap",
+      "status": "PASS",
+      "errorCode": "PREPAYMENT_GLOBAL_COMPUTE_BUDGET_EXHAUSTED",
+      "providerInvocations": 1,
+      "wire": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "pipeline-schema-base-v2.0.0",
+          "promptHash": "de55c3f8a99b3de5c52249f9252c09524f734a2046103c7de6cb27506d554757",
+          "canonicalSchemaHash": "85a984e50c65edc034fc6f992a9032504149907276adcdf0c68a918121d5049d",
+          "wireSchemaHash": "7beec3d76465f418c415901a40bbbb22a1b202f679063231e86dad2a7ce260f9",
+          "inputHash": "2cf1063ed9397950b47213a0146c7a74abef6310a26b3101bc2738756db66b9b",
+          "nestedDefinitions": 0,
+          "invalidReferences": 0,
+          "semanticGraphEqual": true,
+          "repair": false,
+          "revalidation": false,
+          "httpStatus": 200
+        }
+      ],
+      "budget": {
+        "deliveries": 0,
+        "globalUsed": 1,
+        "activeSlots": 0,
+        "customerUsed": 1
+      }
+    },
+    {
+      "case": "v23-ready-finalization-dependency",
+      "status": "EXPECTED_B1_DEPENDENCY_FAILURE_REPRODUCED",
+      "rpc": "finalize_purchase_ready_assessment_v1",
+      "databaseError": "M2_PREPARATION_FINALIZATION_CONFLICT",
+      "providerInvocations": 0,
+      "runState": "processing"
+    },
+    {
+      "case": "original-message-clarification-dependency",
+      "status": "EXPECTED_B1_DEPENDENCY_FAILURE_REPRODUCED",
+      "positiveControlTarget": "requested_message_tone",
+      "rejectedTarget": "original_message",
+      "databaseConstraint": "assessment_clarifications_target",
+      "persistedRows": 0,
+      "providerInvocations": 0
+    }
+  ],
+  "expectedNewPurchaseContract": "prompt-bundle-runtime-v23.0.0",
+  "actualNewPurchaseContract": "prompt-bundle-runtime-v17.0.0",
+  "snapshot": {
+    "jobId": "11846093-ef65-48dd-9616-467245554f01",
+    "owner": "fulfillment-operations",
+    "state": "pending",
+    "grantId": null,
+    "attempts": 0,
+    "runCount": 1,
+    "inputHash": "f3ebaaf0c0565a8dd801ceb1fcca874f23ce44f44ab1c470e1fc8fcecca582c2",
+    "grantCount": 0,
+    "reasonCode": null,
+    "reportCount": 0,
+    "reviewDueAt": null,
+    "logicalState": null,
+    "authorityHash": "f2f89984513d72a4aed7122928138952631b4c3abd160e43bae10daf405efad6",
+    "canonicalHash": null,
+    "deliveryCount": 0,
+    "nextAttemptAt": null,
+    "notifications": [],
+    "providerCalls": 0,
+    "purchaseCount": 0,
+    "recoveryCycle": 0,
+    "canonicalRunId": null,
+    "leaseExpiresAt": null,
+    "processingOwner": null,
+    "reservedCostUsd": 0,
+    "authorityVersion": "prompt-bundle-runtime-v17.0.0",
+    "purchaseIntentId": "bbb62c58-8bdb-4b51-8f45-a1524380b3b6",
+    "verifiedPaymentId": "348a3b36-8b25-4d4b-839f-665aca8fc1c2",
+    "logicalAssessmentId": null,
+    "providerReservations": [],
+    "job": "11846093-ef65-48dd-9616-467245554f01",
+    "intent": "bbb62c58-8bdb-4b51-8f45-a1524380b3b6",
+    "verifiedPayment": "348a3b36-8b25-4d4b-839f-665aca8fc1c2",
+    "grant": null,
+    "logical": null,
+    "cycle": 0,
+    "calls": 0,
+    "cost": 0,
+    "deliveries": 0,
+    "reports": 0,
+    "runs": 1,
+    "grants": 0,
+    "purchases": 0,
+    "canonicalRun": null,
+    "contract": "prompt-bundle-runtime-v17.0.0",
+    "reviewOwner": "fulfillment-operations",
+    "reason": null,
+    "notificationRows": [],
+    "stages": [
+      {
+        "id": "f1e67234-01cb-47a9-afd4-82e47c8a19eb",
+        "runId": "22a49b2d-fd18-4104-b9c3-a348d3bac128",
+        "status": "completed",
+        "stageId": "PB-01",
+        "requestHash": "afefe6349f2a263567bf80cc99898a2fe1dabf8b63d8b739c294515af65a7e74",
+        "attemptNumber": 1
+      },
+      {
+        "id": "8e64e538-b5eb-4d99-9c6e-fb9ce1fbd75b",
+        "runId": "22a49b2d-fd18-4104-b9c3-a348d3bac128",
+        "status": "completed",
+        "stageId": "PB-01C",
+        "requestHash": "8949a3f6dee579e40dd9a405911041c89e40c3112bd86e6bfa4a519c1cd2408d",
+        "attemptNumber": 1
+      },
+      {
+        "id": "d26326c8-7d53-454b-b23f-cf80edaa3805",
+        "runId": "22a49b2d-fd18-4104-b9c3-a348d3bac128",
+        "status": "completed",
+        "stageId": "PB-02",
+        "requestHash": "4ae5ae7bdbed499e08560c822c08c64389d0887a3163b9f12b7ef055ba458598",
+        "attemptNumber": 1
+      },
+      {
+        "id": "9050a37b-de86-436e-b3a9-946d8bdad8c0",
+        "runId": "22a49b2d-fd18-4104-b9c3-a348d3bac128",
+        "status": "completed",
+        "stageId": "PB-03",
+        "requestHash": "0137c2906968dbca1715801f43094c0b8835b8a69ed31773dbf609c6901a7799",
+        "attemptNumber": 1
+      }
+    ],
+    "runtimeRunContracts": [
+      {
+        "model": "gpt-5.6-luna",
+        "runId": "22a49b2d-fd18-4104-b9c3-a348d3bac128",
+        "status": "completed",
+        "schemaSetVersion": "pipeline-schema-runtime-v6.0.0",
+        "promptBundleVersion": "prompt-bundle-runtime-v17.0.0",
+        "stageTopologyVersion": "split-base-candidate-v1"
+      }
+    ],
+    "reportArtifacts": [],
+    "providerInvocations": [
+      {
+        "ordinal": 1,
+        "stageId": "PB-01",
+        "schemaVersion": "pipeline-schema-base-v2.0.0",
+        "promptHash": "de55c3f8a99b3de5c52249f9252c09524f734a2046103c7de6cb27506d554757",
+        "canonicalSchemaHash": "85a984e50c65edc034fc6f992a9032504149907276adcdf0c68a918121d5049d",
+        "wireSchemaHash": "7beec3d76465f418c415901a40bbbb22a1b202f679063231e86dad2a7ce260f9",
+        "inputHash": "2cf1063ed9397950b47213a0146c7a74abef6310a26b3101bc2738756db66b9b",
+        "nestedDefinitions": 0,
+        "invalidReferences": 0,
+        "semanticGraphEqual": true,
+        "repair": false,
+        "revalidation": false,
+        "httpStatus": 200
+      },
+      {
+        "ordinal": 2,
+        "stageId": "PB-01C",
+        "schemaVersion": "pipeline-schema-candidate-v1.0.0",
+        "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+        "canonicalSchemaHash": "b99117d25784be29cdf62816cf3ae349ecc4df8ff5691e734a737c17d0720f60",
+        "wireSchemaHash": "d9cec2672f99e35770597b8dabbc985014d70ad59cf82e01e8133d658a4576a9",
+        "inputHash": "94e7ac21083eab8302b3709328cf7f4924263ba6e5c8b3123a4a58b70fc43f3c",
+        "nestedDefinitions": 0,
+        "invalidReferences": 0,
+        "semanticGraphEqual": true,
+        "repair": false,
+        "revalidation": false,
+        "httpStatus": 200
+      },
+      {
+        "ordinal": 3,
+        "stageId": "PB-02",
+        "schemaVersion": "pipeline-schema-v1.0.0",
+        "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+        "canonicalSchemaHash": "565c6faf2c3ddd9d5c974ca37ad12e6bb5a0d6559ae0106416bbe64e920c1495",
+        "wireSchemaHash": "5ef9fc6de2ba3aa9730a31a2556576239e49e842c152da7d852a505a833f3686",
+        "inputHash": "81f141aa9fe19f031c3afc3199a0a86688fe4a11a80f16768df535ccebf1119f",
+        "nestedDefinitions": 0,
+        "invalidReferences": 0,
+        "semanticGraphEqual": true,
+        "repair": false,
+        "revalidation": false,
+        "httpStatus": 200
+      },
+      {
+        "ordinal": 4,
+        "stageId": "PB-03",
+        "schemaVersion": "pipeline-schema-v3.0.0",
+        "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+        "canonicalSchemaHash": "a98051f52f887e5abdb568b8725546be641015f164b63146109aef9059600034",
+        "wireSchemaHash": "a391a782949d4968bee85be261040ebc5bcc694d4d6f4841eccecd8d7dec41da",
+        "inputHash": "d69dcc39bf677c7af4eef103f89de5da92ecea9dddd9cbcd253c2b2b64e1b14c",
+        "nestedDefinitions": 0,
+        "invalidReferences": 0,
+        "semanticGraphEqual": true,
+        "repair": false,
+        "revalidation": false,
+        "httpStatus": 200
+      }
+    ],
+    "repairCount": 0,
+    "revalidationCount": 0,
+    "checkoutCount": 1,
+    "queueEventCount": 0,
+    "accountAvailable": false,
+    "accountDeliveryId": null,
+    "customerStatusObservations": 0,
+    "publicStatus": null
+  },
+  "wire": [
+    {
+      "ordinal": 1,
+      "stageId": "PB-01",
+      "schemaVersion": "pipeline-schema-base-v2.0.0",
+      "promptHash": "de55c3f8a99b3de5c52249f9252c09524f734a2046103c7de6cb27506d554757",
+      "canonicalSchemaHash": "85a984e50c65edc034fc6f992a9032504149907276adcdf0c68a918121d5049d",
+      "wireSchemaHash": "7beec3d76465f418c415901a40bbbb22a1b202f679063231e86dad2a7ce260f9",
+      "inputHash": "2cf1063ed9397950b47213a0146c7a74abef6310a26b3101bc2738756db66b9b",
+      "nestedDefinitions": 0,
+      "invalidReferences": 0,
+      "semanticGraphEqual": true,
+      "repair": false,
+      "revalidation": false,
+      "httpStatus": 200
+    },
+    {
+      "ordinal": 2,
+      "stageId": "PB-01C",
+      "schemaVersion": "pipeline-schema-candidate-v1.0.0",
+      "promptHash": "7d286a982bf34f5980a3be0dd6da59d683a38247fd01b2871742b9c18c4003d9",
+      "canonicalSchemaHash": "b99117d25784be29cdf62816cf3ae349ecc4df8ff5691e734a737c17d0720f60",
+      "wireSchemaHash": "d9cec2672f99e35770597b8dabbc985014d70ad59cf82e01e8133d658a4576a9",
+      "inputHash": "94e7ac21083eab8302b3709328cf7f4924263ba6e5c8b3123a4a58b70fc43f3c",
+      "nestedDefinitions": 0,
+      "invalidReferences": 0,
+      "semanticGraphEqual": true,
+      "repair": false,
+      "revalidation": false,
+      "httpStatus": 200
+    },
+    {
+      "ordinal": 3,
+      "stageId": "PB-02",
+      "schemaVersion": "pipeline-schema-v1.0.0",
+      "promptHash": "1a7007f6e2bffbc50eee61e40055fbf2279d9ba97574b888ffaba78e951f392b",
+      "canonicalSchemaHash": "565c6faf2c3ddd9d5c974ca37ad12e6bb5a0d6559ae0106416bbe64e920c1495",
+      "wireSchemaHash": "5ef9fc6de2ba3aa9730a31a2556576239e49e842c152da7d852a505a833f3686",
+      "inputHash": "81f141aa9fe19f031c3afc3199a0a86688fe4a11a80f16768df535ccebf1119f",
+      "nestedDefinitions": 0,
+      "invalidReferences": 0,
+      "semanticGraphEqual": true,
+      "repair": false,
+      "revalidation": false,
+      "httpStatus": 200
+    },
+    {
+      "ordinal": 4,
+      "stageId": "PB-03",
+      "schemaVersion": "pipeline-schema-v3.0.0",
+      "promptHash": "9bc0d3bb84b34d3d0f3073fb364a93f363f1c8e0d88c8e444efa3d70daf36422",
+      "canonicalSchemaHash": "a98051f52f887e5abdb568b8725546be641015f164b63146109aef9059600034",
+      "wireSchemaHash": "a391a782949d4968bee85be261040ebc5bcc694d4d6f4841eccecd8d7dec41da",
+      "inputHash": "d69dcc39bf677c7af4eef103f89de5da92ecea9dddd9cbcd253c2b2b64e1b14c",
+      "nestedDefinitions": 0,
+      "invalidReferences": 0,
+      "semanticGraphEqual": true,
+      "repair": false,
+      "revalidation": false,
+      "httpStatus": 200
+    }
+  ],
+  "externalOperations": {
+    "openAiCalls": 0,
+    "stripeCalls": 0,
+    "realEmail": 0,
+    "productionRead": 0,
+    "productionWrite": 0
+  }
+}

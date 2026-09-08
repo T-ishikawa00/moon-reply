@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "paid-delivery-step5a1-source-binding-v1",
+  "b2Commit": "2d86fd0c22ec47e223153d6ab68405228ff492ef",
+  "b2Receipt": "evals/paid-delivery-step5a1/b2/runs/943906c9-bde5-4d25-8a20-f0e7449c4e80/migration-release-gate.json",
+  "b2ReceiptSha256": "9ddc3902c958c0008ec72dc24c881128c2d93414a65f4de7ff1b1fcf5717484e",
+  "b2Files": {
+    "scripts/verify-remediation-migration-privileges.mjs": {
+      "testedWorkingBytesSha256": "1ddd18632b8714ef20faaeda88be28b52e45f65b2c61fe6e98b1c8128d9043fc",
+      "committedBytesSha256": "1ddd18632b8714ef20faaeda88be28b52e45f65b2c61fe6e98b1c8128d9043fc",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/lib/remediation-migration-release-contracts.mjs": {
+      "testedWorkingBytesSha256": "8d862655dd867dc81a9ee753469db831556a3e0a71ec4815742ac80a229a8ca4",
+      "committedBytesSha256": "8d862655dd867dc81a9ee753469db831556a3e0a71ec4815742ac80a229a8ca4",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/verify-paid-recovery-release-gate.mjs": {
+      "testedWorkingBytesSha256": "29f491dbdc35bb5f9ca3b815f0fd5a193788601c86d22b00a1d78dc3a527ac76",
+      "committedBytesSha256": "29f491dbdc35bb5f9ca3b815f0fd5a193788601c86d22b00a1d78dc3a527ac76",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/verify-paid-recovery-migration.mjs": {
+      "testedWorkingBytesSha256": "c56dc3719a4890357086e6e695a016fd733b7ded55e576a03b8f440b239c1bc9",
+      "committedBytesSha256": "c56dc3719a4890357086e6e695a016fd733b7ded55e576a03b8f440b239c1bc9",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/verify-f004-cutover-db.mjs": {
+      "testedWorkingBytesSha256": "17b9293f20e98d0878103578601e8e2716c3e0f357ec91c44c27a708cc08054a",
+      "committedBytesSha256": "17b9293f20e98d0878103578601e8e2716c3e0f357ec91c44c27a708cc08054a",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/remediation-migration-authority.mjs": {
+      "testedWorkingBytesSha256": "eef8a64f95fca65aefb459d09becc72cf42c06c17e32f3afb5a75558c51939cb",
+      "committedBytesSha256": "eef8a64f95fca65aefb459d09becc72cf42c06c17e32f3afb5a75558c51939cb",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/remediation-local-postgres.mjs": {
+      "testedWorkingBytesSha256": "9187495dbc3457a9699be0641a62823f396c4f70bed6c9feb8cdef50f4eeaa2e",
+      "committedBytesSha256": "9187495dbc3457a9699be0641a62823f396c4f70bed6c9feb8cdef50f4eeaa2e",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "scripts/run-remediation-offline.mjs": {
+      "testedWorkingBytesSha256": "29a8ca8ebb056edcf85d1a0bc28a4d98028d78d518a0794e34c99d6c958bd690",
+      "committedBytesSha256": "29a8ca8ebb056edcf85d1a0bc28a4d98028d78d518a0794e34c99d6c958bd690",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "supabase/migrations/0032_f004_notification_cutover_fence.sql": {
+      "testedWorkingBytesSha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72",
+      "committedBytesSha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "supabase/migrations/0033_paid_fulfillment_recovery.sql": {
+      "testedWorkingBytesSha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+      "committedBytesSha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "supabase/migrations/0034_paid_fulfillment_candidate_contract.sql": {
+      "testedWorkingBytesSha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+      "committedBytesSha256": "6530c6fd4667e169636d8af454304c1726ecfb1488d2c63079ee6715753aa8ab",
+      "sameSourceAfterGitLineEndingNormalization": true
+    },
+    "supabase/migrations/0035_paid_recovery_operator_followup.sql": {
+      "testedWorkingBytesSha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+      "committedBytesSha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+      "sameSourceAfterGitLineEndingNormalization": true
+    }
+  },
+  "b1ProductionSourceUnchangedFrom": "3a873b5a67e1d30592cb41e812d1ca39943d966a",
+  "b1DiagnosticSourceHashes": {
+    "scripts/verify-paid-delivery-step5a1-b1.mjs": "84da25e0b1c259191d45406d2af45d2e94128db1d110ad5d13839ae7894702c3",
+    "scripts/lib/paid-delivery-step5a1-b1-harness.mjs": "1e055589dadbb317f746a5bdaaeea3a1f1b4e81208820e8d5e055e8de2146d26",
+    "scripts/lib/paid-delivery-step5a1-b1-baseline.mjs": "7c231c6416f495c006f043dbcf534cf661d69fa810ebc132ee49571b38afa495"
+  },
+  "protectedUntrackedCount": 4801,
+  "protectedUntrackedChanged": 0,
+  "productionRuntimeChanges": 0,
+  "migrationSqlChanges": 0,
+  "productionOperations": 0
+}
