@@ -2,7 +2,7 @@ import { writeFileSync, openSync, fsyncSync, closeSync } from "node:fs";
 import { performance } from "node:perf_hooks";
 import path from "node:path";
 import { PilotStop, accountUsage, hash } from "./budget.mjs";
-import { toOpenAiStructuredOutputSchema, assertOpenAIStructuredOutputSchema } from "../../../lib/assessment/runtime/openai-schema.ts";
+import { evaluationOutputSchema } from "../../paid-delivery-step1c/adapter.mjs";
 import { validateStageOutput } from "../../../lib/assessment/runtime/validation.ts";
 import { canonicalizeDecisionPlanFactReferencesV1 } from "../../../lib/assessment/runtime/decision-plan-fact-reference-canonicalization-v1.ts";
 import { evaluateDraftSourceIntegrityV2 } from "../../../lib/assessment/runtime/draft-source-integrity-v2.ts";
@@ -13,7 +13,7 @@ export function durableJson(file, value) {
   const fd = openSync(file, "r+"); try { fsyncSync(fd); } finally { closeSync(fd); }
 }
 export function buildBody(q, cap) {
-  const schema = toOpenAiStructuredOutputSchema(q.outputSchema); assertOpenAIStructuredOutputSchema(schema);
+  const schema = evaluationOutputSchema(q.outputSchema);
   return { model: "gpt-5.6-luna", store: false, tools: [], stream: false, background: false, service_tier: "default", truncation: "disabled", reasoning: { effort: "low" }, max_output_tokens: cap.outputIncludingReasoning,
     input: [{ role: "developer", content: [{ type: "input_text", text: q.developerPrompt }] }, { role: "user", content: [{ type: "input_text", text: JSON.stringify(q.input) }] }],
     text: { format: { type: "json_schema", name: q.schemaName, strict: true, schema } } };

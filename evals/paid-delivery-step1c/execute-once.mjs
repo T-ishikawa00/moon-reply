@@ -1,0 +1,37 @@
+import fs from 'node:fs';
+import { parseEnv } from 'node:util';
+import { execFileSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+import { acceptanceOnce } from './smoke-transport.mjs';
+import { buildBody } from '../guidance-quality-wave1/real-pilot/transport.mjs';
+import { hash, assertPricing } from '../paid-delivery-step1b/diagnostic.mjs';
+import { verifyRequiredSourceReports } from './verification-contract.mjs';
+const root = 'evals/paid-delivery-step1c', dir = `${root}/evidence`, read = p => JSON.parse(fs.readFileSync(p, 'utf8'));
+const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+if (process.argv[2] !== '--human-authorized-step1c-once') throw Error('STEP1C_AUTHORIZATION_REQUIRED');
+if (fs.existsSync(`${dir}/consumed.lock.json`) || fs.existsSync(`${dir}/result.json`)) throw Error('SMOKE_ALREADY_CONSUMED');
+const local = read(`${dir}/local-verification.json`), review = read(`${dir}/independent-review.json`);
+assert.equal(local.status, 'PASS'); assert.equal(local.schemas, 19); assert.equal(local.runnerGroups, 13);
+assertPricing(read(`${dir}/pricing.json`));
+const sourceHashes = verifyRequiredSourceReports([local, review]);
+const original = read(`${root}/fixtures/failing-request.json`), expected = read(`${dir}/acceptance-preflight.json`), body = read(`${dir}/acceptance-request.json`);
+const cap = read('evals/guidance-quality-v19-l5/final-qa/plan.json').caps.find(c => c.stage === original.q.stageId);
+assert.deepEqual(body, buildBody(original.q, cap));
+const restored = structuredClone(body); restored.text.format.schema = original.body.text.format.schema;
+assert.deepEqual(restored, original.body);
+assert.equal(read('node_modules/openai/package.json').version, expected.sdk.version);
+const baseline = read(`${root}/baseline-files.json`);
+const allowed = new Set(['evals/guidance-quality-wave1/real-pilot/transport.mjs']);
+const guard = () => {
+  assert.equal(git('rev-parse', 'HEAD'), 'd418702c7acd8b08d0bf01707c2a460a0ce15d96');
+  assert.equal(git('branch', '--show-current'), 'codex/guidance-quality-final-v19-l5');
+  assert.deepEqual(git('diff', '--name-only', 'HEAD').split('\n').filter(Boolean), [...allowed]);
+  for (const [file, h] of Object.entries(baseline)) if (!allowed.has(file)) assert.equal(hash(fs.readFileSync(file)), h, file);
+  for (const [file, h] of Object.entries(sourceHashes)) assert.equal(hash(fs.readFileSync(file)), h, file);
+};
+guard();
+const key = process.env.GUIDANCE_PILOT_OPENAI_API_KEY || process.env.OPENAI_API_KEY ||
+  (fs.existsSync('.env.local') ? parseEnv(fs.readFileSync('.env.local', 'utf8')).OPENAI_API_KEY : null);
+if (!key) throw Error('LOCAL_OPENAI_KEY_MISSING');
+const result = await acceptanceOnce({ body, expected, apiKey: key, directory: dir, fetchImpl: globalThis.fetch, guard });
+console.log(JSON.stringify(result));
