@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moon-reply.invalid/schemas/report-v19-l5.schema.json",
+  "title": "V19-L5 intent-preserving Report envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "answer_mode",
+    "report_content",
+    "message_content"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "v19-l5-report-v1"
+    },
+    "answer_mode": {
+      "type": "string",
+      "enum": [
+        "decision_guidance",
+        "message_only"
+      ]
+    },
+    "report_content": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/legacy_report_content"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "message_content": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "opening",
+            "edit_reason",
+            "closing"
+          ],
+          "properties": {
+            "opening": {
+              "type": "string",
+              "minLength": 1
+            },
+            "edit_reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "closing": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "answer_mode": {
+            "const": "decision_guidance"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "report_content": {
+            "$ref": "#/$defs/legacy_report_content"
+          },
+          "message_content": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "answer_mode": {
+            "const": "message_only"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "report_content": {
+            "type": "null"
+          },
+          "message_content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "opening",
+              "edit_reason",
+              "closing"
+            ],
+            "properties": {
+              "opening": {
+                "type": "string",
+                "minLength": 1
+              },
+              "edit_reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "closing": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "legacy_report_content": {
+      "title": "Moon Reply AI-Generated Report Content v2 Candidate",
+      "description": "AI-generated variable copy only. Product, brand, labels, chapter titles, metadata, fixed disclaimers, Safety copy, Legal copy, and save-card naming are renderer-owned.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "cover_line",
+        "short_letter",
+        "decision_reason_summary",
+        "relationship_summary",
+        "observed_fact_commentary",
+        "possible_interpretations",
+        "anxiety_reframe",
+        "message_temperature",
+        "action_rationales",
+        "message_draft_context",
+        "aftercare_commentary",
+        "change_condition_commentary",
+        "closing_lines"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "pipeline-schema-v2.0.0"
+        },
+        "cover_line": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "short_letter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "minItems": 1,
+          "maxItems": 3
+        },
+        "decision_reason_summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "relationship_summary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 700
+        },
+        "observed_fact_commentary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/observed_fact_commentary"
+          },
+          "maxItems": 8
+        },
+        "possible_interpretations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "maxItems": 3
+        },
+        "anxiety_reframe": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "maxItems": 2
+        },
+        "message_temperature": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/legacy_report_content/$defs/message_temperature"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action_rationales": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "maxItems": 4
+        },
+        "message_draft_context": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 400
+        },
+        "aftercare_commentary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "maxItems": 3
+        },
+        "change_condition_commentary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "maxItems": 4
+        },
+        "closing_lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      },
+      "$defs": {
+        "paragraph": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 700
+        },
+        "observed_fact_commentary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fact_id",
+            "commentary"
+          ],
+          "properties": {
+            "fact_id": {
+              "type": "string",
+              "pattern": "^F[0-9]{3}$"
+            },
+            "commentary": {
+              "$ref": "#/$defs/legacy_report_content/$defs/paragraph"
+            }
+          }
+        },
+        "message_temperature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "softness",
+            "affection",
+            "pressure",
+            "adjustment"
+          ],
+          "properties": {
+            "softness": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "affection": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "pressure": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "adjustment": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          }
+        }
+      }
+    }
+  }
+}
