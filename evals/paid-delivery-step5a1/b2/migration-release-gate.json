@@ -1,0 +1,1551 @@
+{
+  "schemaVersion": "remediation-migration-release-gate-v2",
+  "status": "PASS",
+  "head": "3a873b5a67e1d30592cb41e812d1ca39943d966a",
+  "entryPoint": "scripts/verify-remediation-migration-privileges.mjs",
+  "inventory": [
+    {
+      "file": "0032_f004_notification_cutover_fence.sql",
+      "sha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72",
+      "canonicalLfSha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72"
+    },
+    {
+      "file": "0033_paid_fulfillment_recovery.sql",
+      "sha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+      "canonicalLfSha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734"
+    },
+    {
+      "file": "0034_paid_fulfillment_candidate_contract.sql",
+      "sha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+      "canonicalLfSha256": "6530c6fd4667e169636d8af454304c1726ecfb1488d2c63079ee6715753aa8ab"
+    },
+    {
+      "file": "0035_paid_recovery_operator_followup.sql",
+      "sha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+      "canonicalLfSha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+    }
+  ],
+  "sourceHashes": {
+    "scripts/verify-remediation-migration-privileges.mjs": "caf255635072cec15debc58bfd06fb925c1dc1289f53d853c7e3640e9cbc1db0",
+    "scripts/lib/remediation-migration-release-contracts.mjs": "a0f021c72033c7e05a74a87438089bdef313902815a58edde3df9fb712185048",
+    "scripts/verify-paid-recovery-release-gate.mjs": "b96170389de9acf53ac14a91b4f73f50660b6d6f3cf6ce465b334b13aef562cc",
+    "scripts/verify-paid-recovery-migration.mjs": "c56dc3719a4890357086e6e695a016fd733b7ded55e576a03b8f440b239c1bc9",
+    "scripts/verify-f004-cutover-db.mjs": "17b9293f20e98d0878103578601e8e2716c3e0f357ec91c44c27a708cc08054a",
+    "scripts/remediation-migration-authority.mjs": "eef8a64f95fca65aefb459d09becc72cf42c06c17e32f3afb5a75558c51939cb",
+    "scripts/remediation-local-postgres.mjs": "9187495dbc3457a9699be0641a62823f396c4f70bed6c9feb8cdef50f4eeaa2e",
+    "scripts/run-remediation-offline.mjs": "29a8ca8ebb056edcf85d1a0bc28a4d98028d78d518a0794e34c99d6c958bd690",
+    "supabase/migrations/0032_f004_notification_cutover_fence.sql": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72",
+    "supabase/migrations/0033_paid_fulfillment_recovery.sql": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+    "supabase/migrations/0034_paid_fulfillment_candidate_contract.sql": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+    "supabase/migrations/0035_paid_recovery_operator_followup.sql": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+  },
+  "migrationAuthority": [
+    {
+      "verifier": "./verify-f004-cutover-db.mjs",
+      "results": [
+        {
+          "mode": "superuser-reference",
+          "functional": 23,
+          "artifacts": [
+            {
+              "file": "0032_f004_notification_cutover_fence.sql",
+              "sha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72"
+            }
+          ],
+          "permissionChecks": 20
+        },
+        {
+          "mode": "restricted-owner",
+          "functional": 24,
+          "artifacts": [
+            {
+              "file": "0032_f004_notification_cutover_fence.sql",
+              "sha256": "140dca12f8bbc3fc9206c3ba8fc0db0ceec8fa46f0f845e6d1ff5a26a5b76a72"
+            }
+          ],
+          "permissionChecks": 20
+        }
+      ]
+    },
+    {
+      "verifier": "./verify-paid-recovery-release-gate.mjs",
+      "results": [
+        {
+          "mode": "superuser-reference",
+          "functional": 16,
+          "artifacts": [
+            {
+              "file": "0033_paid_fulfillment_recovery.sql",
+              "sha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734"
+            },
+            {
+              "file": "0034_paid_fulfillment_candidate_contract.sql",
+              "sha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca"
+            },
+            {
+              "file": "0035_paid_recovery_operator_followup.sql",
+              "sha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+            }
+          ],
+          "permissionChecks": 36
+        },
+        {
+          "mode": "restricted-owner",
+          "functional": 16,
+          "artifacts": [
+            {
+              "file": "0033_paid_fulfillment_recovery.sql",
+              "sha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734"
+            },
+            {
+              "file": "0034_paid_fulfillment_candidate_contract.sql",
+              "sha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca"
+            },
+            {
+              "file": "0035_paid_recovery_operator_followup.sql",
+              "sha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+            }
+          ],
+          "permissionChecks": 36
+        }
+      ]
+    }
+  ],
+  "releaseGate": {
+    "status": "PASS",
+    "registeredMigrationNumbers": [
+      33,
+      34,
+      35
+    ],
+    "checks": [
+      {
+        "id": "B",
+        "name": "missing 0035 registration rejected",
+        "status": "PASS",
+        "rejects": "/B2_MIGRATION_INVENTORY_MISMATCH/u"
+      },
+      {
+        "id": "B.future",
+        "name": "unregistered future migration rejected",
+        "status": "PASS",
+        "rejects": "/B2_MIGRATION_INVENTORY_MISMATCH/u"
+      },
+      {
+        "id": "C",
+        "name": "changed SQL bytes rejected against pinned hash",
+        "status": "PASS",
+        "rejects": "/B2_MIGRATION_HASH_MISMATCH/u"
+      },
+      {
+        "id": "D",
+        "name": "wrong registered application order rejected",
+        "status": "PASS",
+        "rejects": "/B2_MIGRATION_ORDER_INVALID/u"
+      },
+      {
+        "id": "D.number",
+        "name": "wrong migration number rejected",
+        "status": "PASS",
+        "rejects": "/B2_MIGRATION_NUMBER_INVALID/u"
+      },
+      {
+        "id": "D.duplicate",
+        "name": "duplicate registered migration number rejected",
+        "status": "PASS",
+        "rejects": "/B2_DUPLICATE_MIGRATION_NUMBER/u"
+      },
+      {
+        "id": "C.lf",
+        "name": "exact committed LF variant accepted with same pinned body",
+        "status": "PASS",
+        "actual": {
+          "file": "0034_paid_fulfillment_candidate_contract.sql",
+          "sha256": "6530c6fd4667e169636d8af454304c1726ecfb1488d2c63079ee6715753aa8ab",
+          "canonicalLfSha256": "6530c6fd4667e169636d8af454304c1726ecfb1488d2c63079ee6715753aa8ab"
+        }
+      },
+      {
+        "id": "C.receipt",
+        "name": "valid artifact variant cannot borrow another raw-hash receipt",
+        "status": "PASS",
+        "rejects": "/B2_APPLIED_ARTIFACT_MISMATCH/u"
+      },
+      {
+        "id": "K.receipt",
+        "name": "superuser-only receipt cannot satisfy installer parity",
+        "status": "PASS",
+        "rejects": "/B2_INSTALLER_LAYERS_REQUIRED/u"
+      },
+      {
+        "id": "I",
+        "name": "empty business database installs 0033 through 0035 with restricted owner",
+        "status": "PASS",
+        "businessRowsBefore": 0,
+        "businessRowsAfter": 0,
+        "applicationOrder": [
+          33,
+          34,
+          35
+        ],
+        "owner": {
+          "superuser": false,
+          "createDb": false,
+          "createRole": false,
+          "replication": false,
+          "bypassRls": false,
+          "inherit": false,
+          "login": true
+        },
+        "requiredFunctions": 23,
+        "runtime": [
+          {
+            "role": "service_role",
+            "functionsProbed": 17,
+            "outcome": "call admitted or existing business input guard"
+          },
+          {
+            "role": "anon",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          },
+          {
+            "role": "authenticated",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          },
+          {
+            "role": "m2_b2_stripe_ingress",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          }
+        ]
+      },
+      {
+        "id": "F.installer",
+        "name": "actual insufficient-ownership installer fails atomically",
+        "status": "PASS",
+        "actualSqlRejected": true,
+        "existingRowsUnchanged": true
+      },
+      {
+        "id": "J",
+        "name": "0032 verified purchase upgrade preserves existing authority",
+        "status": "PASS",
+        "priorMigration": 32,
+        "applicationOrder": [
+          33,
+          34,
+          35
+        ],
+        "verifiedPayments": 1,
+        "existingRowsSha256": "625cf9df0c2cce04ad977e11db447f3ed3f8e2fed8df7622cb3f6d21f4bccf93",
+        "existingRowsUnchanged": true
+      },
+      {
+        "id": "K",
+        "name": "direct non-superuser installer installs all exact artifacts",
+        "status": "PASS",
+        "attributes": {
+          "superuser": false,
+          "createDb": false,
+          "createRole": false,
+          "replication": false,
+          "bypassRls": false,
+          "inherit": false,
+          "login": true
+        },
+        "directLogin": true,
+        "parameterPrivilegesAdded": false
+      },
+      {
+        "id": "L",
+        "name": "RPC owner security-invoker ACL and table RLS matrix passes",
+        "status": "PASS",
+        "functions": 23,
+        "tables": 8,
+        "runtime": [
+          {
+            "role": "service_role",
+            "functionsProbed": 17,
+            "outcome": "call admitted or existing business input guard"
+          },
+          {
+            "role": "anon",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          },
+          {
+            "role": "authenticated",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          },
+          {
+            "role": "m2_b2_stripe_ingress",
+            "functionsProbed": 23,
+            "outcome": "permission denied"
+          }
+        ],
+        "baselineTablePrivileges": {
+          "assessment_runs": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "assessment_stage_runs": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_preparations": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_fulfillment_jobs": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_customer_deliveries": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_logical_assessments": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_payment_adjustment_ledger": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          },
+          "production_operator_notification_outbox": {
+            "anon": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "service_role": {
+              "DELETE": false,
+              "INSERT": true,
+              "SELECT": true,
+              "UPDATE": true,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "authenticated": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            },
+            "m2_b2_stripe_ingress": {
+              "DELETE": false,
+              "INSERT": false,
+              "SELECT": false,
+              "UPDATE": false,
+              "TRIGGER": false,
+              "MAINTAIN": false,
+              "TRUNCATE": false,
+              "REFERENCES": false
+            }
+          }
+        },
+        "allowedServiceTableDelta": "0033 adds finance ledger SELECT only"
+      },
+      {
+        "id": "E",
+        "name": "missing exact RPC signature rejected",
+        "status": "PASS",
+        "rejects": "/B2_REQUIRED_RPC_MISSING/u"
+      },
+      {
+        "id": "F.owner",
+        "name": "wrong installed function owner rejected",
+        "status": "PASS",
+        "rejects": "/B2_FUNCTION_OWNER_MISMATCH/u"
+      },
+      {
+        "id": "G",
+        "name": "missing service-role EXECUTE rejected",
+        "status": "PASS",
+        "rejects": "/B2_RUNTIME_EXECUTE_MISMATCH:service_role/u"
+      },
+      {
+        "id": "H.anon",
+        "name": "unexpected anon EXECUTE rejected",
+        "status": "PASS",
+        "rejects": "/B2_RUNTIME_EXECUTE_MISMATCH/u"
+      },
+      {
+        "id": "H.anon.insert",
+        "name": "unexpected anon INSERT without SELECT rejected",
+        "status": "PASS",
+        "rejects": "/B2_UNEXPECTED_TABLE_PRIVILEGE/u"
+      },
+      {
+        "id": "H.authenticated",
+        "name": "unexpected authenticated EXECUTE rejected",
+        "status": "PASS",
+        "rejects": "/B2_RUNTIME_EXECUTE_MISMATCH/u"
+      },
+      {
+        "id": "H.authenticated.insert",
+        "name": "unexpected authenticated INSERT without SELECT rejected",
+        "status": "PASS",
+        "rejects": "/B2_UNEXPECTED_TABLE_PRIVILEGE/u"
+      },
+      {
+        "id": "G.table",
+        "name": "missing service table UPDATE rejected",
+        "status": "PASS",
+        "rejects": "/B2_SERVICE_TABLE_PRIVILEGES_CHANGED/u"
+      },
+      {
+        "id": "L.rls",
+        "name": "disabled required RLS rejected",
+        "status": "PASS",
+        "rejects": "/B2_RLS_REQUIRED/u"
+      },
+      {
+        "id": "A",
+        "name": "0033 0034 0035 canonical release contract passes",
+        "status": "PASS",
+        "applied": [
+          {
+            "number": 33,
+            "file": "0033_paid_fulfillment_recovery.sql",
+            "sha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+            "owner": "b2_migration_owner"
+          },
+          {
+            "number": 34,
+            "file": "0034_paid_fulfillment_candidate_contract.sql",
+            "sha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+            "owner": "b2_migration_owner"
+          },
+          {
+            "number": 35,
+            "file": "0035_paid_recovery_operator_followup.sql",
+            "sha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+            "owner": "b2_migration_owner"
+          }
+        ]
+      }
+    ],
+    "applied": [
+      {
+        "number": 33,
+        "file": "0033_paid_fulfillment_recovery.sql",
+        "sha256": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+        "owner": "b2_migration_owner"
+      },
+      {
+        "number": 34,
+        "file": "0034_paid_fulfillment_candidate_contract.sql",
+        "sha256": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+        "owner": "b2_migration_owner"
+      },
+      {
+        "number": 35,
+        "file": "0035_paid_recovery_operator_followup.sql",
+        "sha256": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+        "owner": "b2_migration_owner"
+      }
+    ],
+    "installer": {
+      "currentUser": "b2_migration_owner",
+      "sessionUser": "b2_migration_owner",
+      "attributes": {
+        "superuser": false,
+        "createDb": false,
+        "createRole": false,
+        "replication": false,
+        "bypassRls": false,
+        "inherit": false,
+        "login": true
+      },
+      "memberships": [],
+      "explicitParameterGrants": []
+    },
+    "catalog": {
+      "owner": "b2_migration_owner",
+      "requiredFunctions": [
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.attest_paid_recovery_candidate_v1(uuid,uuid,uuid,text,text,jsonb,uuid,jsonb,jsonb,timestamptz,text,boolean,text)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.begin_production_operator_notification_send_v1(uuid,uuid,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.claim_production_fulfillment_v4(uuid,uuid,timestamptz,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.claim_production_operator_notification_batch_v1(uuid,text,timestamptz,timestamptz,timestamptz,integer)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.claim_rc2_fulfillment_dispatch_v3(uuid,text,uuid,timestamptz,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.claim_rc2_fulfillment_job_by_id_v3(uuid,uuid,timestamptz,timestamptz,integer)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.complete_paid_fulfillment_provider_v1(uuid,uuid,uuid,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.complete_production_fulfillment_v3(uuid,uuid,uuid,uuid,text,text,uuid,jsonb,text,uuid,text,uuid,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.enforce_assessment_stage_topology_v5()",
+          "privileges": {
+            "anon": false,
+            "service_role": false,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.fence_paid_candidate_delivery_v1()",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.fence_paid_canonical_delivery_v1()",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.fence_paid_financial_adjustment_v1()",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.inspect_paid_fulfillment_recovery_v1(uuid)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.list_due_paid_fulfillment_dispatch_v1(text,timestamptz,integer)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.lock_paid_fulfillment_financial_v1(uuid)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.paid_recovery_contract_matches_v1(jsonb,text,text,text,text)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.paid_recovery_operator_signal_v1(uuid,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.record_paid_fulfillment_completion_v1()",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.record_paid_notification_recovery_completion_v1()",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.refresh_paid_fulfillment_recovery_v1(text,timestamptz,integer)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.reserve_paid_fulfillment_provider_v1(uuid,uuid,uuid,numeric,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.resume_paid_fulfillment_recovery_v1(uuid,text,text,text,timestamptz)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        },
+        {
+          "owner": "b2_migration_owner",
+          "config": [
+            "search_path=\"\""
+          ],
+          "exists": true,
+          "signature": "public.schedule_paid_fulfillment_recovery_v1(uuid,uuid,text,boolean,timestamptz,timestamptz,integer)",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          },
+          "securityDefiner": false
+        }
+      ],
+      "tables": [
+        {
+          "rls": true,
+          "name": "assessment_runs",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "assessment_stage_runs",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_customer_deliveries",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_fulfillment_jobs",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_logical_assessments",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_operator_notification_outbox",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_payment_adjustment_ledger",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        },
+        {
+          "rls": true,
+          "name": "production_preparations",
+          "owner": "b2_migration_owner",
+          "privileges": {
+            "anon": false,
+            "service_role": true,
+            "authenticated": false,
+            "m2_b2_stripe_ingress": false
+          }
+        }
+      ],
+      "effectiveTablePrivileges": {
+        "assessment_runs": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "assessment_stage_runs": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_preparations": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_fulfillment_jobs": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_customer_deliveries": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_logical_assessments": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_payment_adjustment_ledger": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": true,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        },
+        "production_operator_notification_outbox": {
+          "anon": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "service_role": {
+            "DELETE": false,
+            "INSERT": true,
+            "SELECT": true,
+            "UPDATE": true,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "authenticated": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          },
+          "m2_b2_stripe_ingress": {
+            "DELETE": false,
+            "INSERT": false,
+            "SELECT": false,
+            "UPDATE": false,
+            "TRIGGER": false,
+            "MAINTAIN": false,
+            "TRUNCATE": false,
+            "REFERENCES": false
+          }
+        }
+      },
+      "migrationNumbers": [
+        33,
+        34,
+        35
+      ],
+      "serviceRoleFinancialWrites": false
+    },
+    "runtime": [
+      {
+        "role": "service_role",
+        "functionsProbed": 17,
+        "outcome": "call admitted or existing business input guard"
+      },
+      {
+        "role": "anon",
+        "functionsProbed": 23,
+        "outcome": "permission denied"
+      },
+      {
+        "role": "authenticated",
+        "functionsProbed": 23,
+        "outcome": "permission denied"
+      },
+      {
+        "role": "m2_b2_stripe_ingress",
+        "functionsProbed": 23,
+        "outcome": "permission denied"
+      }
+    ]
+  }
+}

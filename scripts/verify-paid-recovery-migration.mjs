@@ -316,4 +316,5 @@ const results = await verifyMigrationAuthorityLayers({ label:"paid-recovery",bas
       {file:operatorMigrationFile,sha256:hash(operatorMigration)}]};
   }
 });
+export const migrationVerification = results;
 console.log(JSON.stringify({status:"PASS",migrationAuthority:results}));
