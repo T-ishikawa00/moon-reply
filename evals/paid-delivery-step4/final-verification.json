@@ -1,0 +1,1580 @@
+{
+  "schemaVersion": "paid-delivery-step4-final-evidence-v1",
+  "status": "PASS",
+  "startHead": "c1edf32a8fa3e4f086d833a3842a49c620de9507",
+  "evidenceAuditHead": "c1edf32a8fa3e4f086d833a3842a49c620de9507",
+  "branch": "codex/guidance-quality-final-v19-l5",
+  "passed": 20,
+  "failed": 0,
+  "results": [
+    {
+      "scenarioId": "S01",
+      "title": "Normal V19-L5 happy path",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "6102f634-8842-4f0f-b3fe-fa95ff9ee24f",
+      "grantId": "5b32d0b7-2c2d-4e50-8dde-fc8b56294f86",
+      "logicalAssessmentId": "465a7a0c-96c4-4d30-b7ac-989c6019de75",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S01.json",
+      "evidenceSha256": "b7e865384739f298a40186728dfb47889650c77b95218d3dfe85a2f4da8aac8c"
+    },
+    {
+      "scenarioId": "S02",
+      "title": "Provider temporary failure",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "489777ee-255a-405b-9a3a-920fd5e1b678",
+      "grantId": "1942bae8-885c-44a4-9c14-6e171a748903",
+      "logicalAssessmentId": "0dfc869e-cda5-4d9d-a2f2-42a18b9900ef",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 5,
+      "cumulativeProviderReservations": 5,
+      "reservedBudgetUsd": 0.51364,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S02.json",
+      "evidenceSha256": "cb021ba2df5ba46457c4b7ab849e74269690db8a6d6e41755b00b4d148723afa"
+    },
+    {
+      "scenarioId": "S03",
+      "title": "Eight fast retries exhausted",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "grantId": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "logicalAssessmentId": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 5,
+      "cumulativeProviderReservations": 5,
+      "reservedBudgetUsd": 0.51364,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S03.json",
+      "evidenceSha256": "184085504cb756800501f0f65fa6543857c7599d5438afae7ec80292eb498658"
+    },
+    {
+      "scenarioId": "S04",
+      "title": "Queue dispatch loss",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "2abb91e0-cd31-4017-b9a9-432104baa922",
+      "grantId": "aa745336-2527-4d6e-8272-30dc4f830fae",
+      "logicalAssessmentId": "c106ac3c-20b3-432c-b4d6-7394595a23d4",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S04.json",
+      "evidenceSha256": "f62d4eaf7a62f870ca40b6613e35e4b9a8063b90ba1b10c26c09b6eca43da962"
+    },
+    {
+      "scenarioId": "S05",
+      "title": "Worker hard kill",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "c4df4d93-f5f4-483a-a7db-867474d06e09",
+      "grantId": "57561030-2e43-4599-a576-a1564b96cddb",
+      "logicalAssessmentId": "2573cb5f-d950-408f-9c05-4f7987ad4767",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 4,
+      "reservedBudgetUsd": 0.415035,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S05.json",
+      "evidenceSha256": "ad29a2cb5c67316cca3dd23de5472ea75e99cb990fae14524dee131eb9f3d05b"
+    },
+    {
+      "scenarioId": "S06",
+      "title": "Valid report persisted then crash",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "3e93f2d7-df5a-49fc-b98d-e3c90f57b573",
+      "grantId": "f1ca3af0-9938-4492-aaf4-bce4cb79baf9",
+      "logicalAssessmentId": "ffc27f92-ab39-46f5-818e-66bb14b7d069",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S06.json",
+      "evidenceSha256": "dace5e6a2f66f5b8e7da1fe51a2b532299232c577ef815e2ace4f70cd91584c4"
+    },
+    {
+      "scenarioId": "S07",
+      "title": "Unknown Provider outcome",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "75ae5b34-8139-4ac6-abbd-e09ebe58d22b",
+      "grantId": "c8a662bb-75d1-4ed7-9ee6-135ff9a27d60",
+      "logicalAssessmentId": "183f16fb-0d0c-4944-bf68-f8427ea801ba",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 4,
+      "cumulativeProviderReservations": 4,
+      "reservedBudgetUsd": 0.421082,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S07.json",
+      "evidenceSha256": "42a15e57da4e9865a5366ac1fae6fa7c8757a27bf1e0f405a03a380c82d04fcd"
+    },
+    {
+      "scenarioId": "S08",
+      "title": "Repairable V19-L5 fact defect",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "23795886-5608-4742-88eb-578ff0fa4caa",
+      "grantId": "5d9c8dbb-e40d-4af4-8590-0cb4c1fc3f4d",
+      "logicalAssessmentId": "c0439dd4-07d4-4043-8457-fb17ed042059",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 5,
+      "cumulativeProviderReservations": 5,
+      "reservedBudgetUsd": 0.516871,
+      "repairCount": 1,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S08.json",
+      "evidenceSha256": "75770daadafcd0357753e7253e823275b549e4b0c9e088b7752193a21ede1726"
+    },
+    {
+      "scenarioId": "S09",
+      "title": "Unrepairable material defect",
+      "status": "PASS",
+      "finalState": "manual_review",
+      "purchaseId": "bc470871-03e4-4c31-b48b-c616a7fd9afb",
+      "grantId": "d775ccac-feef-4ce8-95b5-fa6fdf81cb05",
+      "logicalAssessmentId": "47468aa0-f438-45d8-9cf0-8612fb7b7e5e",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 5,
+      "cumulativeProviderReservations": 5,
+      "reservedBudgetUsd": 0.516871,
+      "repairCount": 1,
+      "canonicalCustomerReports": 0,
+      "deliveries": 0,
+      "notificationAcceptedCount": 0,
+      "additionalCharges": 0,
+      "evidence": "S09.json",
+      "evidenceSha256": "761c785b7d05cfb40f2f692b627635cc208ce93f52c4261f85bf0d3fb7a28eef"
+    },
+    {
+      "scenarioId": "S10",
+      "title": "Schema/config compatibility recovery",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "caaf9050-292e-417a-857e-5aa9cbb2e706",
+      "grantId": "ade1e833-02bf-4f23-bdb3-57a94e28d576",
+      "logicalAssessmentId": "c0968c1b-562f-468f-a8b4-2d0cab49ba9d",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 4,
+      "cumulativeProviderReservations": 4,
+      "reservedBudgetUsd": 0.415035,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S10.json",
+      "evidenceSha256": "f08b819f2938e69c75feab9dadbab5f03decb0b292207d6a3892a0f6e12225d7"
+    },
+    {
+      "scenarioId": "S11",
+      "title": "Cumulative AI budget exhausted",
+      "status": "PASS",
+      "finalState": "manual_review",
+      "purchaseId": "ee8e7d1a-0723-4d51-b5c2-c367a02d4fec",
+      "grantId": "2557e9b7-fcd3-4417-9379-28bf927f1a72",
+      "logicalAssessmentId": "c607bfce-03ac-4559-a104-8f4652ecc67b",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 20,
+      "cumulativeProviderReservations": 20,
+      "reservedBudgetUsd": 1.9721,
+      "repairCount": 0,
+      "canonicalCustomerReports": 0,
+      "deliveries": 0,
+      "notificationAcceptedCount": 0,
+      "additionalCharges": 0,
+      "evidence": "S11.json",
+      "evidenceSha256": "251fa5b1c82c88dbe4fc9659cefd2ce76ae1976ab0b6e100812b4f6ce5d36261"
+    },
+    {
+      "scenarioId": "S12",
+      "title": "Old V17 purchase after V19 selector switch",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "ff843000-4126-4782-aeec-0a14dab2f79b",
+      "grantId": "df648b04-7abe-4177-954e-ad6134aac31f",
+      "logicalAssessmentId": "6cd072d8-7529-4427-86ad-b91b2126a848",
+      "contractVersion": "prompt-bundle-runtime-v17.0.0",
+      "providerInvocationCount": 4,
+      "cumulativeProviderReservations": 4,
+      "reservedBudgetUsd": 0.376705,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S12.json",
+      "evidenceSha256": "babc7cf066217788ffca8d12e2a54e4e22b3edb3e016e6eb38137e02b5b4efee"
+    },
+    {
+      "scenarioId": "S13",
+      "title": "New V19-L5 purchase",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "c302b372-c3fa-4536-8bc3-618e5b6858e3",
+      "grantId": "fc2bf898-500c-4a1c-83e0-c29d9f5d45b0",
+      "logicalAssessmentId": "8d907584-2499-46b0-a2a0-d612abbc0bd0",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S13.json",
+      "evidenceSha256": "f0a6e2e16e3a94a757a847486f04932148bdfe68d6c41fc7edd176f247704857"
+    },
+    {
+      "scenarioId": "S14",
+      "title": "Old and new worker completion race",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "be1fa95f-8c4d-41d9-ac1e-7d0db2138653",
+      "grantId": "2d9b96d9-e686-45e7-8231-a8fbc4168471",
+      "logicalAssessmentId": "b3b2f097-3d4e-4a9b-8a19-439593da012f",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 4,
+      "cumulativeProviderReservations": 4,
+      "reservedBudgetUsd": 0.429603,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S14.json",
+      "evidenceSha256": "e0adc8601048cc4ca4a79d1cfb76906a9e9838ca93eaa42f5cfffa6aa0b37520"
+    },
+    {
+      "scenarioId": "S15",
+      "title": "Notification failure preserves Account result",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "007d4fb8-8961-4c5f-9d9c-e05e9b0b6ab5",
+      "grantId": "8a2370f0-5c94-4d19-a05d-5deff21f405a",
+      "logicalAssessmentId": "a9efc9da-1784-40fc-a79a-64dbcba41446",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S15.json",
+      "evidenceSha256": "a1c02e34f69872a9f98e98016037be107ecba1bd0640d2a6433e0917f1dc483e"
+    },
+    {
+      "scenarioId": "S16",
+      "title": "Financial resolution and late worker race",
+      "status": "PASS",
+      "finalState": "manual_review",
+      "purchaseId": "3ebc75cc-2200-491c-b6f4-013653ff2952",
+      "grantId": "f30cfdf6-aaf5-4a85-9cea-5484f74a19e2",
+      "logicalAssessmentId": "d2890564-fc0d-4c75-a48a-4d2296b0bf44",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 0,
+      "deliveries": 0,
+      "notificationAcceptedCount": 0,
+      "additionalCharges": 0,
+      "evidence": "S16.json",
+      "evidenceSha256": "6c36e21b7b41608df4ffd3a5e9ea954ff0e73254eb227dcaf4add78eb3cc9ca9"
+    },
+    {
+      "scenarioId": "S17",
+      "title": "Browser abandonment",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "2404efc1-b578-4055-95fb-ef349e368c2c",
+      "grantId": "48203315-2faf-4de5-aaab-f488159c0f46",
+      "logicalAssessmentId": "52fa5c0c-072b-4f97-bbc0-559283292e8c",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S17.json",
+      "evidenceSha256": "e7e7994a14216f214d0394fe7ea2b16ebeb6b33886f3d398eaf6e0511f2485b4"
+    },
+    {
+      "scenarioId": "S18",
+      "title": "Scheduler outage and restart",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "9ec0dec3-0049-44a5-a986-1bfc13c6fbc0",
+      "grantId": "88a4eac0-3526-48f7-ab58-c8c54c1be7c3",
+      "logicalAssessmentId": "729dd1d2-4b76-4c6b-822e-c2acfb7119fa",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S18.json",
+      "evidenceSha256": "be77adb7a4a6f77cd0b58c39d9e7bf5b7dd03f4a97de61313231eb7fe389f13e"
+    },
+    {
+      "scenarioId": "S19",
+      "title": "Concurrent schedulers and workers",
+      "status": "PASS",
+      "finalState": "completed",
+      "purchaseId": "c6c1e891-dccc-413b-b762-d33286438465",
+      "grantId": "5a5cf53b-9e67-4d09-8a08-503cb5391b14",
+      "logicalAssessmentId": "622f6175-a859-40c6-9a00-cf1b8195e622",
+      "contractVersion": "prompt-bundle-runtime-v23.0.0",
+      "providerInvocationCount": 3,
+      "cumulativeProviderReservations": 3,
+      "reservedBudgetUsd": 0.31643,
+      "repairCount": 0,
+      "canonicalCustomerReports": 1,
+      "deliveries": 1,
+      "notificationAcceptedCount": 1,
+      "additionalCharges": 0,
+      "evidence": "S19.json",
+      "evidenceSha256": "0de639f853169ec4f521bfaa194e6eacb04967e227b4084d3783212f8711f86d"
+    },
+    {
+      "scenarioId": "S20",
+      "title": "Migration upgrade compatibility",
+      "status": "PASS",
+      "evidence": "migration-verification.json",
+      "evidenceSha256": "5fcae3f89e501c5e187c89bce1eaafcb0c6e49d1f17295d95587f357db981d3c",
+      "integration": {
+        "before": {
+          "job": "6409ff1f-0482-4b92-807a-ccaded6d0ffa",
+          "runs": 2,
+          "grant": "dbd7a524-87d2-4309-a235-ff1d50b52f4a",
+          "grants": 1,
+          "logical": "8062f849-9a7a-4785-92a6-e475ca1ad7da",
+          "reports": 1,
+          "jobState": "processing",
+          "payments": 1,
+          "authority": {
+            "request": {
+              "relationship": "dating",
+              "optionalMessage": "今日はありがとうございました。お話しできてうれしかったです。",
+              "requestedTopics": [
+                "draft_message",
+                "message_impact"
+              ],
+              "currentSituation": "今日、交際前の相手と食事をして会話が穏やかに終わりました。今夜中に感謝を伝え、また会う余地は残したいですが、強い誘いにはしたくありません。普段は丁寧な標準語で、短い文章を使います。候補文の丁寧さと距離感を確認したいです。",
+              "privacyAcknowledged": true
+            },
+            "schemaVersion": "rc1-purchase-ready-runtime-authority-v1",
+            "aggregateSafety": {
+              "reason_codes": [
+                "none_selected"
+              ],
+              "response_mode": "none",
+              "classification": "normal_allowed"
+            },
+            "runtimeIdentity": {
+              "model": "gpt-5.6-luna",
+              "schemaSetVersion": "pipeline-schema-runtime-v6.0.0",
+              "promptBundleVersion": "prompt-bundle-runtime-v17.0.0",
+              "stageTopologyVersion": "split-base-candidate-v1"
+            },
+            "candidateEnvelope": {
+              "analysis": {
+                "candidate_style_profile": {
+                  "register": "polite",
+                  "softness": "medium",
+                  "directness": "direct",
+                  "emoji_usage": "none",
+                  "punctuation": "standard",
+                  "reply_pressure": "low",
+                  "sentence_ending": "neutral",
+                  "sentence_length": "short",
+                  "invitation_style": "none",
+                  "exclamation_usage": "none"
+                },
+                "candidate_language_expression": {
+                  "possible_typo": "absent",
+                  "mixed_languages": [],
+                  "primary_language": "ja",
+                  "dialect_or_regional_expression": "absent",
+                  "intentional_nonstandard_expression": "absent"
+                },
+                "candidate_communicative_intent": {
+                  "question_count": 0,
+                  "apology_strength": "none",
+                  "boundary_strength": "none",
+                  "response_pressure": "none",
+                  "affection_strength": "medium",
+                  "gratitude_strength": "high",
+                  "commitment_strength": "none",
+                  "invitation_presence": false,
+                  "conversation_closure": "soft",
+                  "practical_requirement": [
+                    "none"
+                  ],
+                  "invitation_specificity": "none"
+                }
+              },
+              "presence": true,
+              "safety_status": "available",
+              "analysis_status": "available"
+            },
+            "baseStructuredIntake": {
+              "context": [
+                {
+                  "kind": "schedule",
+                  "statement": "今夜中に感謝を伝えたい。",
+                  "context_id": "C101",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "kind": "relationship",
+                  "statement": "相手とは交際前の関係である。",
+                  "context_id": "C102",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "kind": "other",
+                  "statement": "普段は丁寧な標準語で、短い文章を使う。",
+                  "context_id": "C103",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "timeline": [
+                {
+                  "actor": "user",
+                  "event_id": "E101",
+                  "sequence": 1,
+                  "statement": "今日、交際前の相手と食事をした。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "actor": "unknown",
+                  "event_id": "E102",
+                  "sequence": 2,
+                  "statement": "食事の会話が穏やかに終わった。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "user_goal": "prepare_message",
+              "boundaries": [],
+              "user_emotions": [
+                {
+                  "item_id": "M101",
+                  "statement": "食事への感謝を伝えたい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "decision_facts": {
+                "contact_state": {
+                  "usual_cadence_relation": "not_applicable",
+                  "unanswered_user_message_count": null,
+                  "elapsed_since_latest_user_message_minutes": null
+                },
+                "boundary_state": {
+                  "kind": "none",
+                  "status": "none",
+                  "repeated_unanswered_contact": false
+                },
+                "schema_version": "m2-p4-base-decision-facts-v2",
+                "practical_reason": {
+                  "kind": "none",
+                  "active": false,
+                  "deadline": "none"
+                },
+                "information_state": {
+                  "assessment_mode": "best_effort",
+                  "unresolved_fields": [
+                    "contact_state.unanswered_user_message_count",
+                    "contact_state.elapsed_since_latest_user_message_minutes"
+                  ],
+                  "used_context_inference": false,
+                  "can_proceed_without_followup": true
+                },
+                "selected_requests": [
+                  "draft_message",
+                  "message_impact"
+                ],
+                "relationship_stage": "dating",
+                "latest_direct_message": {
+                  "kind": "none",
+                  "sender": "none",
+                  "sns_signal_only": false,
+                  "user_reply_state": "not_applicable",
+                  "response_expectation": "none"
+                },
+                "user_contact_constraint": {
+                  "kind": "none",
+                  "status": "none",
+                  "supporting_fact_ids": []
+                }
+              },
+              "observed_facts": [
+                {
+                  "fact_id": "F101",
+                  "support": "explicit",
+                  "statement": "今日、交際前の相手と食事をした。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F102",
+                  "support": "explicit",
+                  "statement": "食事の会話が穏やかに終わった。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F103",
+                  "support": "explicit",
+                  "statement": "今夜中に感謝を伝えたい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F104",
+                  "support": "explicit",
+                  "statement": "また会う余地は残したいが、強い誘いにはしたくない。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F105",
+                  "support": "explicit",
+                  "statement": "普段は丁寧な標準語で、短い文章を使う。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "safety_signals": [],
+              "schema_version": "pipeline-schema-base-v2.0.0",
+              "user_assumptions": [
+                {
+                  "item_id": "A101",
+                  "statement": "また会う余地を残したい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "item_id": "A102",
+                  "statement": "強い誘いにはしたくない。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "material_unknowns": [
+                {
+                  "description": "最新の直接メッセージの有無、送信者、内容は示されていない。",
+                  "material_to": [
+                    "decision",
+                    "message_draft"
+                  ],
+                  "unknown_code": "latest_direct_message"
+                },
+                {
+                  "description": "確認対象となる具体的な候補文は示されていない。",
+                  "material_to": [
+                    "message_draft"
+                  ],
+                  "unknown_code": "specific_message_text"
+                }
+              ],
+              "context_inferences": [],
+              "relationship_stage": "dating",
+              "base_writing_signals": {
+                "schema_version": "m2-p4-base-writing-signals-v1",
+                "message_signals": [],
+                "privacy_markers": [],
+                "user_goal_detail": {
+                  "basis": "current_situation_explicit",
+                  "value": "respond_politely"
+                },
+                "channel_and_timing": {
+                  "basis": "current_situation_explicit",
+                  "channel": "unknown",
+                  "relative_timing": "same_day"
+                },
+                "communication_pattern": {
+                  "basis": "current_situation_explicit",
+                  "usual_length": "short",
+                  "usual_register": "polite",
+                  "usual_initiator": "unknown",
+                  "usual_emoji_pattern": "unknown",
+                  "reciprocal_style_summary": null,
+                  "usual_response_cadence_summary": null
+                },
+                "language_and_expression": {
+                  "basis": "current_situation_explicit",
+                  "possible_typo": "absent",
+                  "mixed_languages": [],
+                  "primary_language": "ja",
+                  "established_shared_expression": "unknown",
+                  "dialect_or_regional_expression": "absent",
+                  "intentional_nonstandard_expression": "absent"
+                },
+                "relationship_dimensions": {
+                  "hierarchy": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "familiarity": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "social_role": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "romantic_stage": {
+                    "basis": "relationship_chip",
+                    "value": "dating_before_relationship"
+                  },
+                  "observed_register": {
+                    "basis": "current_situation_explicit",
+                    "value": "polite"
+                  },
+                  "communication_context": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  }
+                },
+                "incoming_message_profile": {
+                  "present": false,
+                  "dialogue_acts": [],
+                  "closure_signal": "none",
+                  "response_expectation": "none",
+                  "practical_requirements": [],
+                  "unanswered_obligations": []
+                },
+                "explicit_user_constraints": [
+                  {
+                    "kind": "keep_polite_register",
+                    "bounded_summary": "丁寧な標準語を使う"
+                  },
+                  {
+                    "kind": "custom_explicit_constraint",
+                    "bounded_summary": "短い文章にする"
+                  },
+                  {
+                    "kind": "custom_explicit_constraint",
+                    "bounded_summary": "強い誘いにはしない"
+                  }
+                ],
+                "repeat_consultation_state": {
+                  "basis": "current_situation_explicit",
+                  "state": "first_assessment",
+                  "changed_fact_ids": []
+                },
+                "boundary_ownership_signals": []
+              },
+              "untrusted_embedded_instructions_detected": false
+            },
+            "clarificationGrounding": null,
+            "effectiveAssessmentAuthority": {
+              "sourceMap": [],
+              "schemaVersion": "m2-p4-effective-assessment-authority-v1",
+              "baseAuthorityRef": "base_structured_intake",
+              "candidateAuthorityRef": "candidate_envelope",
+              "effectiveWritingContext": {
+                "candidateEnvelope": {
+                  "analysis": {
+                    "candidate_style_profile": {
+                      "register": "polite",
+                      "softness": "medium",
+                      "directness": "direct",
+                      "emoji_usage": "none",
+                      "punctuation": "standard",
+                      "reply_pressure": "low",
+                      "sentence_ending": "neutral",
+                      "sentence_length": "short",
+                      "invitation_style": "none",
+                      "exclamation_usage": "none"
+                    },
+                    "candidate_language_expression": {
+                      "possible_typo": "absent",
+                      "mixed_languages": [],
+                      "primary_language": "ja",
+                      "dialect_or_regional_expression": "absent",
+                      "intentional_nonstandard_expression": "absent"
+                    },
+                    "candidate_communicative_intent": {
+                      "question_count": 0,
+                      "apology_strength": "none",
+                      "boundary_strength": "none",
+                      "response_pressure": "none",
+                      "affection_strength": "medium",
+                      "gratitude_strength": "high",
+                      "commitment_strength": "none",
+                      "invitation_presence": false,
+                      "conversation_closure": "soft",
+                      "practical_requirement": [
+                        "none"
+                      ],
+                      "invitation_specificity": "none"
+                    }
+                  },
+                  "presence": true,
+                  "safety_status": "available",
+                  "analysis_status": "available"
+                },
+                "baseWritingSignals": {
+                  "schema_version": "m2-p4-base-writing-signals-v1",
+                  "message_signals": [],
+                  "privacy_markers": [],
+                  "user_goal_detail": {
+                    "basis": "current_situation_explicit",
+                    "value": "respond_politely"
+                  },
+                  "channel_and_timing": {
+                    "basis": "current_situation_explicit",
+                    "channel": "unknown",
+                    "relative_timing": "same_day"
+                  },
+                  "communication_pattern": {
+                    "basis": "current_situation_explicit",
+                    "usual_length": "short",
+                    "usual_register": "polite",
+                    "usual_initiator": "unknown",
+                    "usual_emoji_pattern": "unknown",
+                    "reciprocal_style_summary": null,
+                    "usual_response_cadence_summary": null
+                  },
+                  "language_and_expression": {
+                    "basis": "current_situation_explicit",
+                    "possible_typo": "absent",
+                    "mixed_languages": [],
+                    "primary_language": "ja",
+                    "established_shared_expression": "unknown",
+                    "dialect_or_regional_expression": "absent",
+                    "intentional_nonstandard_expression": "absent"
+                  },
+                  "relationship_dimensions": {
+                    "hierarchy": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "familiarity": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "social_role": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "romantic_stage": {
+                      "basis": "relationship_chip",
+                      "value": "dating_before_relationship"
+                    },
+                    "observed_register": {
+                      "basis": "current_situation_explicit",
+                      "value": "polite"
+                    },
+                    "communication_context": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    }
+                  },
+                  "incoming_message_profile": {
+                    "present": false,
+                    "dialogue_acts": [],
+                    "closure_signal": "none",
+                    "response_expectation": "none",
+                    "practical_requirements": [],
+                    "unanswered_obligations": []
+                  },
+                  "explicit_user_constraints": [
+                    {
+                      "kind": "keep_polite_register",
+                      "bounded_summary": "丁寧な標準語を使う"
+                    },
+                    {
+                      "kind": "custom_explicit_constraint",
+                      "bounded_summary": "短い文章にする"
+                    },
+                    {
+                      "kind": "custom_explicit_constraint",
+                      "bounded_summary": "強い誘いにはしない"
+                    }
+                  ],
+                  "repeat_consultation_state": {
+                    "basis": "current_situation_explicit",
+                    "state": "first_assessment",
+                    "changed_fact_ids": []
+                  },
+                  "boundary_ownership_signals": []
+                },
+                "relationshipIntent": null,
+                "requestedMessageTone": null
+              },
+              "effectiveDecisionContext": {
+                "decisionFacts": {
+                  "contact_state": {
+                    "usual_cadence_relation": "not_applicable",
+                    "unanswered_user_message_count": null,
+                    "elapsed_since_latest_user_message_minutes": null
+                  },
+                  "boundary_state": {
+                    "kind": "none",
+                    "status": "none",
+                    "repeated_unanswered_contact": false
+                  },
+                  "schema_version": "m2-p4-base-decision-facts-v2",
+                  "practical_reason": {
+                    "kind": "none",
+                    "active": false,
+                    "deadline": "none"
+                  },
+                  "information_state": {
+                    "assessment_mode": "best_effort",
+                    "unresolved_fields": [
+                      "contact_state.unanswered_user_message_count",
+                      "contact_state.elapsed_since_latest_user_message_minutes"
+                    ],
+                    "used_context_inference": false,
+                    "can_proceed_without_followup": true
+                  },
+                  "selected_requests": [
+                    "draft_message",
+                    "message_impact"
+                  ],
+                  "relationship_stage": "dating",
+                  "latest_direct_message": {
+                    "kind": "none",
+                    "sender": "none",
+                    "sns_signal_only": false,
+                    "user_reply_state": "not_applicable",
+                    "response_expectation": "none"
+                  },
+                  "user_contact_constraint": {
+                    "kind": "none",
+                    "status": "none",
+                    "supporting_fact_ids": []
+                  }
+                },
+                "materialConcern": null,
+                "usualReplyCadence": null,
+                "relationshipIntent": null,
+                "latestContactTiming": null
+              },
+              "clarificationAuthorityRef": null,
+              "effectiveEmotionalContext": {
+                "materialConcern": null,
+                "baseUserEmotions": [
+                  {
+                    "item_id": "M101",
+                    "statement": "食事への感謝を伝えたい。",
+                    "source_refs": [
+                      "input:current_situation"
+                    ]
+                  }
+                ],
+                "centralFearOrDecisionConcern": null
+              }
+            }
+          },
+          "inputHash": "f3ebaaf0c0565a8dd801ceb1fcca874f23ce44f44ab1c470e1fc8fcecca582c2",
+          "purchases": 1,
+          "deliveries": 0,
+          "adjustments": 0,
+          "preparation": "03fe37b9-8f4e-4dd4-9a78-a5a13c6e7da0",
+          "canonicalRun": null,
+          "paymentState": "verified",
+          "authorityHash": "f2f89984513d72a4aed7122928138952631b4c3abd160e43bae10daf405efad6",
+          "canonicalHash": null,
+          "purchaseIntent": "ab4d9c35-353b-4b7d-8073-96bdef834bff",
+          "verifiedPayment": "0cdc6df3-9688-47e4-8f1d-e41b3ef71b64"
+        },
+        "after": {
+          "job": "6409ff1f-0482-4b92-807a-ccaded6d0ffa",
+          "runs": 2,
+          "grant": "dbd7a524-87d2-4309-a235-ff1d50b52f4a",
+          "grants": 1,
+          "logical": "8062f849-9a7a-4785-92a6-e475ca1ad7da",
+          "reports": 1,
+          "jobState": "completed",
+          "payments": 1,
+          "authority": {
+            "request": {
+              "relationship": "dating",
+              "optionalMessage": "今日はありがとうございました。お話しできてうれしかったです。",
+              "requestedTopics": [
+                "draft_message",
+                "message_impact"
+              ],
+              "currentSituation": "今日、交際前の相手と食事をして会話が穏やかに終わりました。今夜中に感謝を伝え、また会う余地は残したいですが、強い誘いにはしたくありません。普段は丁寧な標準語で、短い文章を使います。候補文の丁寧さと距離感を確認したいです。",
+              "privacyAcknowledged": true
+            },
+            "schemaVersion": "rc1-purchase-ready-runtime-authority-v1",
+            "aggregateSafety": {
+              "reason_codes": [
+                "none_selected"
+              ],
+              "response_mode": "none",
+              "classification": "normal_allowed"
+            },
+            "runtimeIdentity": {
+              "model": "gpt-5.6-luna",
+              "schemaSetVersion": "pipeline-schema-runtime-v6.0.0",
+              "promptBundleVersion": "prompt-bundle-runtime-v17.0.0",
+              "stageTopologyVersion": "split-base-candidate-v1"
+            },
+            "candidateEnvelope": {
+              "analysis": {
+                "candidate_style_profile": {
+                  "register": "polite",
+                  "softness": "medium",
+                  "directness": "direct",
+                  "emoji_usage": "none",
+                  "punctuation": "standard",
+                  "reply_pressure": "low",
+                  "sentence_ending": "neutral",
+                  "sentence_length": "short",
+                  "invitation_style": "none",
+                  "exclamation_usage": "none"
+                },
+                "candidate_language_expression": {
+                  "possible_typo": "absent",
+                  "mixed_languages": [],
+                  "primary_language": "ja",
+                  "dialect_or_regional_expression": "absent",
+                  "intentional_nonstandard_expression": "absent"
+                },
+                "candidate_communicative_intent": {
+                  "question_count": 0,
+                  "apology_strength": "none",
+                  "boundary_strength": "none",
+                  "response_pressure": "none",
+                  "affection_strength": "medium",
+                  "gratitude_strength": "high",
+                  "commitment_strength": "none",
+                  "invitation_presence": false,
+                  "conversation_closure": "soft",
+                  "practical_requirement": [
+                    "none"
+                  ],
+                  "invitation_specificity": "none"
+                }
+              },
+              "presence": true,
+              "safety_status": "available",
+              "analysis_status": "available"
+            },
+            "baseStructuredIntake": {
+              "context": [
+                {
+                  "kind": "schedule",
+                  "statement": "今夜中に感謝を伝えたい。",
+                  "context_id": "C101",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "kind": "relationship",
+                  "statement": "相手とは交際前の関係である。",
+                  "context_id": "C102",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "kind": "other",
+                  "statement": "普段は丁寧な標準語で、短い文章を使う。",
+                  "context_id": "C103",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "timeline": [
+                {
+                  "actor": "user",
+                  "event_id": "E101",
+                  "sequence": 1,
+                  "statement": "今日、交際前の相手と食事をした。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "actor": "unknown",
+                  "event_id": "E102",
+                  "sequence": 2,
+                  "statement": "食事の会話が穏やかに終わった。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "user_goal": "prepare_message",
+              "boundaries": [],
+              "user_emotions": [
+                {
+                  "item_id": "M101",
+                  "statement": "食事への感謝を伝えたい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "decision_facts": {
+                "contact_state": {
+                  "usual_cadence_relation": "not_applicable",
+                  "unanswered_user_message_count": null,
+                  "elapsed_since_latest_user_message_minutes": null
+                },
+                "boundary_state": {
+                  "kind": "none",
+                  "status": "none",
+                  "repeated_unanswered_contact": false
+                },
+                "schema_version": "m2-p4-base-decision-facts-v2",
+                "practical_reason": {
+                  "kind": "none",
+                  "active": false,
+                  "deadline": "none"
+                },
+                "information_state": {
+                  "assessment_mode": "best_effort",
+                  "unresolved_fields": [
+                    "contact_state.unanswered_user_message_count",
+                    "contact_state.elapsed_since_latest_user_message_minutes"
+                  ],
+                  "used_context_inference": false,
+                  "can_proceed_without_followup": true
+                },
+                "selected_requests": [
+                  "draft_message",
+                  "message_impact"
+                ],
+                "relationship_stage": "dating",
+                "latest_direct_message": {
+                  "kind": "none",
+                  "sender": "none",
+                  "sns_signal_only": false,
+                  "user_reply_state": "not_applicable",
+                  "response_expectation": "none"
+                },
+                "user_contact_constraint": {
+                  "kind": "none",
+                  "status": "none",
+                  "supporting_fact_ids": []
+                }
+              },
+              "observed_facts": [
+                {
+                  "fact_id": "F101",
+                  "support": "explicit",
+                  "statement": "今日、交際前の相手と食事をした。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F102",
+                  "support": "explicit",
+                  "statement": "食事の会話が穏やかに終わった。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F103",
+                  "support": "explicit",
+                  "statement": "今夜中に感謝を伝えたい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F104",
+                  "support": "explicit",
+                  "statement": "また会う余地は残したいが、強い誘いにはしたくない。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "fact_id": "F105",
+                  "support": "explicit",
+                  "statement": "普段は丁寧な標準語で、短い文章を使う。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "safety_signals": [],
+              "schema_version": "pipeline-schema-base-v2.0.0",
+              "user_assumptions": [
+                {
+                  "item_id": "A101",
+                  "statement": "また会う余地を残したい。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                },
+                {
+                  "item_id": "A102",
+                  "statement": "強い誘いにはしたくない。",
+                  "source_refs": [
+                    "input:current_situation"
+                  ]
+                }
+              ],
+              "material_unknowns": [
+                {
+                  "description": "最新の直接メッセージの有無、送信者、内容は示されていない。",
+                  "material_to": [
+                    "decision",
+                    "message_draft"
+                  ],
+                  "unknown_code": "latest_direct_message"
+                },
+                {
+                  "description": "確認対象となる具体的な候補文は示されていない。",
+                  "material_to": [
+                    "message_draft"
+                  ],
+                  "unknown_code": "specific_message_text"
+                }
+              ],
+              "context_inferences": [],
+              "relationship_stage": "dating",
+              "base_writing_signals": {
+                "schema_version": "m2-p4-base-writing-signals-v1",
+                "message_signals": [],
+                "privacy_markers": [],
+                "user_goal_detail": {
+                  "basis": "current_situation_explicit",
+                  "value": "respond_politely"
+                },
+                "channel_and_timing": {
+                  "basis": "current_situation_explicit",
+                  "channel": "unknown",
+                  "relative_timing": "same_day"
+                },
+                "communication_pattern": {
+                  "basis": "current_situation_explicit",
+                  "usual_length": "short",
+                  "usual_register": "polite",
+                  "usual_initiator": "unknown",
+                  "usual_emoji_pattern": "unknown",
+                  "reciprocal_style_summary": null,
+                  "usual_response_cadence_summary": null
+                },
+                "language_and_expression": {
+                  "basis": "current_situation_explicit",
+                  "possible_typo": "absent",
+                  "mixed_languages": [],
+                  "primary_language": "ja",
+                  "established_shared_expression": "unknown",
+                  "dialect_or_regional_expression": "absent",
+                  "intentional_nonstandard_expression": "absent"
+                },
+                "relationship_dimensions": {
+                  "hierarchy": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "familiarity": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "social_role": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  },
+                  "romantic_stage": {
+                    "basis": "relationship_chip",
+                    "value": "dating_before_relationship"
+                  },
+                  "observed_register": {
+                    "basis": "current_situation_explicit",
+                    "value": "polite"
+                  },
+                  "communication_context": {
+                    "basis": "unresolved",
+                    "value": "unknown"
+                  }
+                },
+                "incoming_message_profile": {
+                  "present": false,
+                  "dialogue_acts": [],
+                  "closure_signal": "none",
+                  "response_expectation": "none",
+                  "practical_requirements": [],
+                  "unanswered_obligations": []
+                },
+                "explicit_user_constraints": [
+                  {
+                    "kind": "keep_polite_register",
+                    "bounded_summary": "丁寧な標準語を使う"
+                  },
+                  {
+                    "kind": "custom_explicit_constraint",
+                    "bounded_summary": "短い文章にする"
+                  },
+                  {
+                    "kind": "custom_explicit_constraint",
+                    "bounded_summary": "強い誘いにはしない"
+                  }
+                ],
+                "repeat_consultation_state": {
+                  "basis": "current_situation_explicit",
+                  "state": "first_assessment",
+                  "changed_fact_ids": []
+                },
+                "boundary_ownership_signals": []
+              },
+              "untrusted_embedded_instructions_detected": false
+            },
+            "clarificationGrounding": null,
+            "effectiveAssessmentAuthority": {
+              "sourceMap": [],
+              "schemaVersion": "m2-p4-effective-assessment-authority-v1",
+              "baseAuthorityRef": "base_structured_intake",
+              "candidateAuthorityRef": "candidate_envelope",
+              "effectiveWritingContext": {
+                "candidateEnvelope": {
+                  "analysis": {
+                    "candidate_style_profile": {
+                      "register": "polite",
+                      "softness": "medium",
+                      "directness": "direct",
+                      "emoji_usage": "none",
+                      "punctuation": "standard",
+                      "reply_pressure": "low",
+                      "sentence_ending": "neutral",
+                      "sentence_length": "short",
+                      "invitation_style": "none",
+                      "exclamation_usage": "none"
+                    },
+                    "candidate_language_expression": {
+                      "possible_typo": "absent",
+                      "mixed_languages": [],
+                      "primary_language": "ja",
+                      "dialect_or_regional_expression": "absent",
+                      "intentional_nonstandard_expression": "absent"
+                    },
+                    "candidate_communicative_intent": {
+                      "question_count": 0,
+                      "apology_strength": "none",
+                      "boundary_strength": "none",
+                      "response_pressure": "none",
+                      "affection_strength": "medium",
+                      "gratitude_strength": "high",
+                      "commitment_strength": "none",
+                      "invitation_presence": false,
+                      "conversation_closure": "soft",
+                      "practical_requirement": [
+                        "none"
+                      ],
+                      "invitation_specificity": "none"
+                    }
+                  },
+                  "presence": true,
+                  "safety_status": "available",
+                  "analysis_status": "available"
+                },
+                "baseWritingSignals": {
+                  "schema_version": "m2-p4-base-writing-signals-v1",
+                  "message_signals": [],
+                  "privacy_markers": [],
+                  "user_goal_detail": {
+                    "basis": "current_situation_explicit",
+                    "value": "respond_politely"
+                  },
+                  "channel_and_timing": {
+                    "basis": "current_situation_explicit",
+                    "channel": "unknown",
+                    "relative_timing": "same_day"
+                  },
+                  "communication_pattern": {
+                    "basis": "current_situation_explicit",
+                    "usual_length": "short",
+                    "usual_register": "polite",
+                    "usual_initiator": "unknown",
+                    "usual_emoji_pattern": "unknown",
+                    "reciprocal_style_summary": null,
+                    "usual_response_cadence_summary": null
+                  },
+                  "language_and_expression": {
+                    "basis": "current_situation_explicit",
+                    "possible_typo": "absent",
+                    "mixed_languages": [],
+                    "primary_language": "ja",
+                    "established_shared_expression": "unknown",
+                    "dialect_or_regional_expression": "absent",
+                    "intentional_nonstandard_expression": "absent"
+                  },
+                  "relationship_dimensions": {
+                    "hierarchy": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "familiarity": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "social_role": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    },
+                    "romantic_stage": {
+                      "basis": "relationship_chip",
+                      "value": "dating_before_relationship"
+                    },
+                    "observed_register": {
+                      "basis": "current_situation_explicit",
+                      "value": "polite"
+                    },
+                    "communication_context": {
+                      "basis": "unresolved",
+                      "value": "unknown"
+                    }
+                  },
+                  "incoming_message_profile": {
+                    "present": false,
+                    "dialogue_acts": [],
+                    "closure_signal": "none",
+                    "response_expectation": "none",
+                    "practical_requirements": [],
+                    "unanswered_obligations": []
+                  },
+                  "explicit_user_constraints": [
+                    {
+                      "kind": "keep_polite_register",
+                      "bounded_summary": "丁寧な標準語を使う"
+                    },
+                    {
+                      "kind": "custom_explicit_constraint",
+                      "bounded_summary": "短い文章にする"
+                    },
+                    {
+                      "kind": "custom_explicit_constraint",
+                      "bounded_summary": "強い誘いにはしない"
+                    }
+                  ],
+                  "repeat_consultation_state": {
+                    "basis": "current_situation_explicit",
+                    "state": "first_assessment",
+                    "changed_fact_ids": []
+                  },
+                  "boundary_ownership_signals": []
+                },
+                "relationshipIntent": null,
+                "requestedMessageTone": null
+              },
+              "effectiveDecisionContext": {
+                "decisionFacts": {
+                  "contact_state": {
+                    "usual_cadence_relation": "not_applicable",
+                    "unanswered_user_message_count": null,
+                    "elapsed_since_latest_user_message_minutes": null
+                  },
+                  "boundary_state": {
+                    "kind": "none",
+                    "status": "none",
+                    "repeated_unanswered_contact": false
+                  },
+                  "schema_version": "m2-p4-base-decision-facts-v2",
+                  "practical_reason": {
+                    "kind": "none",
+                    "active": false,
+                    "deadline": "none"
+                  },
+                  "information_state": {
+                    "assessment_mode": "best_effort",
+                    "unresolved_fields": [
+                      "contact_state.unanswered_user_message_count",
+                      "contact_state.elapsed_since_latest_user_message_minutes"
+                    ],
+                    "used_context_inference": false,
+                    "can_proceed_without_followup": true
+                  },
+                  "selected_requests": [
+                    "draft_message",
+                    "message_impact"
+                  ],
+                  "relationship_stage": "dating",
+                  "latest_direct_message": {
+                    "kind": "none",
+                    "sender": "none",
+                    "sns_signal_only": false,
+                    "user_reply_state": "not_applicable",
+                    "response_expectation": "none"
+                  },
+                  "user_contact_constraint": {
+                    "kind": "none",
+                    "status": "none",
+                    "supporting_fact_ids": []
+                  }
+                },
+                "materialConcern": null,
+                "usualReplyCadence": null,
+                "relationshipIntent": null,
+                "latestContactTiming": null
+              },
+              "clarificationAuthorityRef": null,
+              "effectiveEmotionalContext": {
+                "materialConcern": null,
+                "baseUserEmotions": [
+                  {
+                    "item_id": "M101",
+                    "statement": "食事への感謝を伝えたい。",
+                    "source_refs": [
+                      "input:current_situation"
+                    ]
+                  }
+                ],
+                "centralFearOrDecisionConcern": null
+              }
+            }
+          },
+          "inputHash": "f3ebaaf0c0565a8dd801ceb1fcca874f23ce44f44ab1c470e1fc8fcecca582c2",
+          "purchases": 1,
+          "deliveries": 1,
+          "adjustments": 0,
+          "preparation": "03fe37b9-8f4e-4dd4-9a78-a5a13c6e7da0",
+          "canonicalRun": "b29935fd-20e1-44be-9cbc-e643c6822c8c",
+          "paymentState": "verified",
+          "authorityHash": "f2f89984513d72a4aed7122928138952631b4c3abd160e43bae10daf405efad6",
+          "canonicalHash": "6752ded2e83e6f81bfe51df96c7f43f9475a15d230257a6c1780a5d1b68c45e4",
+          "purchaseIntent": "ab4d9c35-353b-4b7d-8073-96bdef834bff",
+          "verifiedPayment": "0cdc6df3-9688-47e4-8f1d-e41b3ef71b64",
+          "finalState": "completed",
+          "grantState": "completed",
+          "logicalState": "completed",
+          "jobObligation": {
+            "owner": "fulfillment-operations",
+            "state": "completed",
+            "reasonCode": null,
+            "completedAt": "2026-08-17T21:36:42+09:00",
+            "reviewDueAt": null,
+            "workerOwner": null,
+            "nextAttemptAt": null,
+            "recoveryCycle": 1
+          },
+          "notificationOutboxSentCount": 1,
+          "notificationOutboxTotalCount": 1,
+          "contractVersion": "V17",
+          "runtimeIdentity": {
+            "model": "gpt-5.6-luna",
+            "schemaSetVersion": "pipeline-schema-runtime-v6.0.0",
+            "promptBundleVersion": "prompt-bundle-runtime-v17.0.0",
+            "stageTopologyVersion": "split-base-candidate-v1"
+          },
+          "providerInvocationCount": 0,
+          "repairCount": 0,
+          "notificationAcceptedCount": 1,
+          "notificationAcceptedIdempotencyKeyHashes": [
+            "321f3f03368d57435fdfeaecfa8dcea56aa04847c4ce15c0adf6d42e4d396aa5"
+          ],
+          "budgetBefore": {
+            "cost": 0.000702,
+            "calls": 3
+          },
+          "budgetAfter": {
+            "cost": 0.000702,
+            "calls": 3
+          }
+        },
+        "providerCalls": 0,
+        "checkoutCalls": 0,
+        "originalArtifactsUnchanged": true,
+        "financialRowsUnchanged": true,
+        "cumulativeBudgetBeforeAfter": {
+          "cost": 0.000702,
+          "calls": 3
+        },
+        "budgetBefore": {
+          "cost": 0.000702,
+          "calls": 3
+        },
+        "budgetAfter": {
+          "cost": 0.000702,
+          "calls": 3
+        },
+        "legacyProofSha256": "1085f12aab6010747faf974d12aa5d0a047e6f7f634be763070275d2089970eb",
+        "canonicalSelectedExistingReport": true,
+        "serviceRoleRequests": 24
+      }
+    }
+  ],
+  "protectedUntrackedFilesVerified": 4801,
+  "otherWorktreesPreserved": true,
+  "productionSourceChanges": 0,
+  "productionOperations": 0,
+  "externalNetworkAttempts": 0,
+  "externalRuntimeFacts": "UNKNOWN; no Production or real provider/notification/payment observation",
+  "readyFor": "STEP 5 production release planning only; no activation authorization"
+}

@@ -1,0 +1,1404 @@
+{
+  "id": "S03",
+  "title": "Eight fast retries exhausted",
+  "injectedFault": "eight worker attempts then Async Workloads exhaustion",
+  "transitions": [
+    {
+      "label": "verified_payment_browser_not_required",
+      "at": "2026-09-09T00:00:00.000Z",
+      "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "owner": "fulfillment-operations",
+      "state": "pending",
+      "grantId": null,
+      "attempts": 0,
+      "runCount": 0,
+      "inputHash": "e99de785b47e3c5525af2a8180fac432d2744e8c12d47c57f6c5ae9c43af2288",
+      "grantCount": 0,
+      "reasonCode": null,
+      "reportCount": 0,
+      "reviewDueAt": null,
+      "logicalState": null,
+      "authorityHash": "392ee2c7b8a766e3efdb04cf1810ad92b994256ee22f2237afcb128cc53f396a",
+      "canonicalHash": null,
+      "deliveryCount": 0,
+      "nextAttemptAt": null,
+      "notifications": [],
+      "providerCalls": 0,
+      "purchaseCount": 0,
+      "recoveryCycle": 0,
+      "canonicalRunId": null,
+      "leaseExpiresAt": null,
+      "processingOwner": null,
+      "reservedCostUsd": 0,
+      "authorityVersion": "prompt-bundle-runtime-v23.0.0",
+      "purchaseIntentId": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPaymentId": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "logicalAssessmentId": null,
+      "providerReservations": [],
+      "job": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "intent": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPayment": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "grant": null,
+      "logical": null,
+      "cycle": 0,
+      "calls": 0,
+      "cost": 0,
+      "deliveries": 0,
+      "reports": 0,
+      "runs": 0,
+      "grants": 0,
+      "purchases": 0,
+      "canonicalRun": null,
+      "contract": "prompt-bundle-runtime-v23.0.0",
+      "reviewOwner": "fulfillment-operations",
+      "reason": null,
+      "notificationRows": [],
+      "stages": [],
+      "runtimeRunContracts": [],
+      "reportArtifacts": [],
+      "providerInvocations": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "v19-l5-base-intent-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "6a93bdec05d4cdd3189b5803961a6cc7a5fc4f21a0053f411cc69d21fc9702c8",
+          "status": "completed"
+        },
+        {
+          "ordinal": 2,
+          "stageId": "PB-02",
+          "schemaVersion": "pipeline-schema-v1.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "ac8fcca81464b7f26c71b67a99f8790aaa77501ddf73b721023f4382c533c6a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 3,
+          "stageId": "PB-03",
+          "schemaVersion": "pipeline-schema-v3.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "3961d9273fc113705b41fd04623dbd74c7c0c3b3cef0b70ddbd22d69ee64f737",
+          "status": "completed"
+        }
+      ],
+      "repairCount": 0,
+      "revalidationCount": 0,
+      "checkoutCount": 1,
+      "queueEventCount": 0,
+      "accountAvailable": false,
+      "accountDeliveryId": null,
+      "customerStatusObservations": 0,
+      "publicStatus": null
+    },
+    {
+      "label": "durable_recovery_wait",
+      "at": "2026-09-09T00:00:00.000Z",
+      "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "owner": "fulfillment-operations",
+      "state": "retryable",
+      "grantId": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "attempts": 8,
+      "runCount": 8,
+      "inputHash": "e99de785b47e3c5525af2a8180fac432d2744e8c12d47c57f6c5ae9c43af2288",
+      "grantCount": 1,
+      "reasonCode": "PAID_RECOVERY_CONCURRENCY_LIMITED",
+      "reportCount": 0,
+      "reviewDueAt": "2026-09-09T10:00:00+09:00",
+      "logicalState": {
+        "owner": null,
+        "status": "retryable",
+        "leaseExpiresAt": null
+      },
+      "authorityHash": "392ee2c7b8a766e3efdb04cf1810ad92b994256ee22f2237afcb128cc53f396a",
+      "canonicalHash": null,
+      "deliveryCount": 0,
+      "nextAttemptAt": "2026-09-09T09:05:05+09:00",
+      "notifications": [],
+      "providerCalls": 2,
+      "purchaseCount": 1,
+      "recoveryCycle": 1,
+      "canonicalRunId": null,
+      "leaseExpiresAt": null,
+      "processingOwner": null,
+      "reservedCostUsd": 0.19721,
+      "authorityVersion": "prompt-bundle-runtime-v23.0.0",
+      "purchaseIntentId": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPaymentId": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "logicalAssessmentId": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "providerReservations": [
+        {
+          "id": "e307db47-b917-473d-8d77-c8f774978056",
+          "cost_usd": 0.098605,
+          "owner_id": "4122e7cd-b1cd-4442-ae3f-d70d73ee387e",
+          "reserved_at": "2026-09-09T09:00:00+09:00",
+          "lease_expires_at": "2026-09-09T09:16:00+09:00"
+        },
+        {
+          "id": "f0fadbcd-b5a2-4acd-b94b-d123226e34ed",
+          "cost_usd": 0.098605,
+          "owner_id": "412e26f1-a227-4438-8c36-3f1e4861223d",
+          "reserved_at": "2026-09-09T09:00:00+09:00",
+          "lease_expires_at": "2026-09-09T09:16:00+09:00"
+        }
+      ],
+      "job": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "intent": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPayment": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "grant": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "logical": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "cycle": 1,
+      "calls": 2,
+      "cost": 0.19721,
+      "deliveries": 0,
+      "reports": 0,
+      "runs": 8,
+      "grants": 1,
+      "purchases": 1,
+      "canonicalRun": null,
+      "contract": "prompt-bundle-runtime-v23.0.0",
+      "reviewOwner": "fulfillment-operations",
+      "reason": "PAID_RECOVERY_CONCURRENCY_LIMITED",
+      "notificationRows": [],
+      "stages": [
+        {
+          "id": "15381c31-d77b-48d6-b297-e9fd8bcaafb1",
+          "runId": "1f33020d-7afd-4c42-803c-c91a8f241955",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "6b99b0df-1133-4df2-8e44-eb08ca2e71f3",
+          "runId": "eeee55b0-0940-445a-afe6-3d8c7a29d5ec",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "e9f7c49c-818d-4428-8f63-c4ad7c464fda",
+          "runId": "92f0bd89-c917-432b-8dbf-72cf609df383",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "c9d9006c-8eec-4812-9904-ece77abd67e9",
+          "runId": "de499680-8f8c-41e0-a6d8-45d87dcced3d",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "091e902c-fd26-4502-b780-9d2f5131ba8a",
+          "runId": "11ef4fbb-edc8-4ab8-b2d3-29ef22ca1e64",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "b1080123-323d-4a67-9e34-a4d72d6bb675",
+          "runId": "8cec1877-6045-41db-bd2c-3d544354a957",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "a0f57b3b-2502-4d53-9111-661bfb0dbf45",
+          "runId": "08c9140f-4cc0-49ef-b8e2-8498cf68c976",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "a00cfe15-6237-439b-b4ff-4b69c4444536",
+          "runId": "55cfac2f-62a3-4a5e-b257-2fde6ea5b092",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        }
+      ],
+      "runtimeRunContracts": [
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "1f33020d-7afd-4c42-803c-c91a8f241955",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "eeee55b0-0940-445a-afe6-3d8c7a29d5ec",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "92f0bd89-c917-432b-8dbf-72cf609df383",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "de499680-8f8c-41e0-a6d8-45d87dcced3d",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "11ef4fbb-edc8-4ab8-b2d3-29ef22ca1e64",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "8cec1877-6045-41db-bd2c-3d544354a957",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "08c9140f-4cc0-49ef-b8e2-8498cf68c976",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "55cfac2f-62a3-4a5e-b257-2fde6ea5b092",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        }
+      ],
+      "reportArtifacts": [],
+      "providerInvocations": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "v19-l5-base-intent-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "6a93bdec05d4cdd3189b5803961a6cc7a5fc4f21a0053f411cc69d21fc9702c8",
+          "status": "completed"
+        },
+        {
+          "ordinal": 2,
+          "stageId": "PB-02",
+          "schemaVersion": "pipeline-schema-v1.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "ac8fcca81464b7f26c71b67a99f8790aaa77501ddf73b721023f4382c533c6a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 3,
+          "stageId": "PB-03",
+          "schemaVersion": "pipeline-schema-v3.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "3961d9273fc113705b41fd04623dbd74c7c0c3b3cef0b70ddbd22d69ee64f737",
+          "status": "completed"
+        },
+        {
+          "ordinal": 4,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        },
+        {
+          "ordinal": 5,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        }
+      ],
+      "repairCount": 0,
+      "revalidationCount": 0,
+      "checkoutCount": 1,
+      "queueEventCount": 1,
+      "accountAvailable": false,
+      "accountDeliveryId": null,
+      "customerStatusObservations": 1,
+      "publicStatus": {
+        "status": "delayed_assessment",
+        "paymentVerified": true,
+        "accountFallback": true
+      },
+      "account": {
+        "available": false,
+        "deliveryId": null
+      }
+    },
+    {
+      "label": "delivered",
+      "at": "2026-09-09T00:16:42.000Z",
+      "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "owner": "fulfillment-operations",
+      "state": "completed",
+      "grantId": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "attempts": 9,
+      "runCount": 9,
+      "inputHash": "e99de785b47e3c5525af2a8180fac432d2744e8c12d47c57f6c5ae9c43af2288",
+      "grantCount": 1,
+      "reasonCode": null,
+      "reportCount": 1,
+      "reviewDueAt": null,
+      "logicalState": {
+        "owner": null,
+        "status": "completed",
+        "leaseExpiresAt": null
+      },
+      "authorityHash": "392ee2c7b8a766e3efdb04cf1810ad92b994256ee22f2237afcb128cc53f396a",
+      "canonicalHash": "a839c55fb025ee29c4851f52bce5bb35c80b048a78ac2d03647e7243a1585fb5",
+      "deliveryCount": 1,
+      "nextAttemptAt": null,
+      "notifications": [
+        "sent"
+      ],
+      "providerCalls": 5,
+      "purchaseCount": 1,
+      "recoveryCycle": 1,
+      "canonicalRunId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+      "leaseExpiresAt": null,
+      "processingOwner": null,
+      "reservedCostUsd": 0.51364,
+      "authorityVersion": "prompt-bundle-runtime-v23.0.0",
+      "purchaseIntentId": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPaymentId": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "logicalAssessmentId": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "providerReservations": [
+        {
+          "id": "e307db47-b917-473d-8d77-c8f774978056",
+          "cost_usd": 0.098605,
+          "owner_id": "4122e7cd-b1cd-4442-ae3f-d70d73ee387e",
+          "reserved_at": "2026-09-09T09:00:00+09:00",
+          "lease_expires_at": "2026-09-09T09:16:00+09:00"
+        },
+        {
+          "id": "f0fadbcd-b5a2-4acd-b94b-d123226e34ed",
+          "cost_usd": 0.098605,
+          "owner_id": "412e26f1-a227-4438-8c36-3f1e4861223d",
+          "reserved_at": "2026-09-09T09:00:00+09:00",
+          "lease_expires_at": "2026-09-09T09:16:00+09:00"
+        },
+        {
+          "id": "17453c2e-c844-4f58-b4db-2527ec13a9a2",
+          "cost_usd": 0.098605,
+          "owner_id": "07e51992-a82e-4d40-9a92-1be56c2f3865",
+          "finished_at": "2026-09-09T09:16:42+09:00",
+          "reserved_at": "2026-09-09T09:16:42+09:00",
+          "lease_expires_at": "2026-09-09T09:32:42+09:00"
+        },
+        {
+          "id": "d9205ceb-efb7-4da7-b554-bafbd1ad0aa7",
+          "cost_usd": 0.104652,
+          "owner_id": "07e51992-a82e-4d40-9a92-1be56c2f3865",
+          "finished_at": "2026-09-09T09:16:42+09:00",
+          "reserved_at": "2026-09-09T09:16:42+09:00",
+          "lease_expires_at": "2026-09-09T09:32:42+09:00"
+        },
+        {
+          "id": "75bbc2f3-2dd9-4083-8a8a-ba2265b70388",
+          "cost_usd": 0.113173,
+          "owner_id": "07e51992-a82e-4d40-9a92-1be56c2f3865",
+          "finished_at": "2026-09-09T09:16:42+09:00",
+          "reserved_at": "2026-09-09T09:16:42+09:00",
+          "lease_expires_at": "2026-09-09T09:32:42+09:00"
+        }
+      ],
+      "job": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "intent": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "verifiedPayment": "4f933d10-97e0-48e2-9496-9df3de2b64ec",
+      "grant": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "logical": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "cycle": 1,
+      "calls": 5,
+      "cost": 0.51364,
+      "deliveries": 1,
+      "reports": 1,
+      "runs": 9,
+      "grants": 1,
+      "purchases": 1,
+      "canonicalRun": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+      "contract": "prompt-bundle-runtime-v23.0.0",
+      "reviewOwner": "fulfillment-operations",
+      "reason": null,
+      "notificationRows": [
+        {
+          "id": "68b74e1d-45ea-4e05-b7b7-52c69deb9359",
+          "status": "sent"
+        }
+      ],
+      "stages": [
+        {
+          "id": "15381c31-d77b-48d6-b297-e9fd8bcaafb1",
+          "runId": "1f33020d-7afd-4c42-803c-c91a8f241955",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "6b99b0df-1133-4df2-8e44-eb08ca2e71f3",
+          "runId": "eeee55b0-0940-445a-afe6-3d8c7a29d5ec",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "e9f7c49c-818d-4428-8f63-c4ad7c464fda",
+          "runId": "92f0bd89-c917-432b-8dbf-72cf609df383",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "c9d9006c-8eec-4812-9904-ece77abd67e9",
+          "runId": "de499680-8f8c-41e0-a6d8-45d87dcced3d",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "091e902c-fd26-4502-b780-9d2f5131ba8a",
+          "runId": "11ef4fbb-edc8-4ab8-b2d3-29ef22ca1e64",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "b1080123-323d-4a67-9e34-a4d72d6bb675",
+          "runId": "8cec1877-6045-41db-bd2c-3d544354a957",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "a0f57b3b-2502-4d53-9111-661bfb0dbf45",
+          "runId": "08c9140f-4cc0-49ef-b8e2-8498cf68c976",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "a00cfe15-6237-439b-b4ff-4b69c4444536",
+          "runId": "55cfac2f-62a3-4a5e-b257-2fde6ea5b092",
+          "status": "failed",
+          "stageId": "PB-04",
+          "requestHash": "e2ab736af031851d36153c8433462b6dfd2d1e069e0382ca8d24f5bb1252c8e4",
+          "attemptNumber": 1
+        },
+        {
+          "id": "01e3f177-0454-4b11-ab17-ac2a0d05acee",
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "status": "completed",
+          "stageId": "PB-04",
+          "requestHash": "6a9ea3a549e55faea629e594038ffd1a4083c2841f607cf73df84a9f9e8893ed",
+          "attemptNumber": 1
+        },
+        {
+          "id": "07b2547f-3196-41e6-bcea-4d97efac112c",
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "status": "completed",
+          "stageId": "PB-05",
+          "requestHash": "636723d52243fc1ed94b740fa161da1b4f504291b33f0bbf85a3a1f41018ab5f",
+          "attemptNumber": 1
+        },
+        {
+          "id": "13f425fb-b56e-487d-8df1-a3cf0f3f1e0f",
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "status": "completed",
+          "stageId": "PB-06",
+          "requestHash": "446eb438844c5aaa4dda8364338b6a1617bac0785701bd1fae3d98c282ffdd12",
+          "attemptNumber": 1
+        }
+      ],
+      "runtimeRunContracts": [
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "1f33020d-7afd-4c42-803c-c91a8f241955",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "eeee55b0-0940-445a-afe6-3d8c7a29d5ec",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "92f0bd89-c917-432b-8dbf-72cf609df383",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "de499680-8f8c-41e0-a6d8-45d87dcced3d",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "11ef4fbb-edc8-4ab8-b2d3-29ef22ca1e64",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "8cec1877-6045-41db-bd2c-3d544354a957",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "08c9140f-4cc0-49ef-b8e2-8498cf68c976",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "55cfac2f-62a3-4a5e-b257-2fde6ea5b092",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "status": "completed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        }
+      ],
+      "reportArtifacts": [
+        {
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "sha256": "bfea0cae8365484ba2c236ce9b8bac7a515caed9acdd04e1ea471aa4759c6e75"
+        }
+      ],
+      "providerInvocations": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "v19-l5-base-intent-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "6a93bdec05d4cdd3189b5803961a6cc7a5fc4f21a0053f411cc69d21fc9702c8",
+          "status": "completed"
+        },
+        {
+          "ordinal": 2,
+          "stageId": "PB-02",
+          "schemaVersion": "pipeline-schema-v1.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "ac8fcca81464b7f26c71b67a99f8790aaa77501ddf73b721023f4382c533c6a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 3,
+          "stageId": "PB-03",
+          "schemaVersion": "pipeline-schema-v3.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "3961d9273fc113705b41fd04623dbd74c7c0c3b3cef0b70ddbd22d69ee64f737",
+          "status": "completed"
+        },
+        {
+          "ordinal": 4,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        },
+        {
+          "ordinal": 5,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        },
+        {
+          "ordinal": 6,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "223ba61a0f959dfee1ae43a4ca27758e260b8eeb791f57f50559e75598f160a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 7,
+          "stageId": "PB-05",
+          "schemaVersion": "v19-l5-report-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "256ee259efb8179ea6f5529098e86c4fb81fd9eb492de1d773f02ae65ca9b729",
+          "status": "completed"
+        },
+        {
+          "ordinal": 8,
+          "stageId": "PB-06",
+          "schemaVersion": "validation-result-v19-l4-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "2d60be3b5cc18af0e58fa3c8abfd615c0810d3c637851f8750c25c1fc847cf08",
+          "status": "completed"
+        }
+      ],
+      "repairCount": 0,
+      "revalidationCount": 0,
+      "checkoutCount": 1,
+      "queueEventCount": 2,
+      "accountAvailable": true,
+      "accountDeliveryId": "d942f489-036d-49a9-98c8-074d5c9f0690",
+      "customerStatusObservations": 2,
+      "publicStatus": {
+        "status": "completed",
+        "paymentVerified": true,
+        "accountFallback": true
+      },
+      "account": {
+        "available": true,
+        "deliveryId": "d942f489-036d-49a9-98c8-074d5c9f0690"
+      }
+    }
+  ],
+  "events": [
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 0,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 1,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 2,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 3,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 4,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 5,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 6,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 7,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 8,
+      "workerOutcome": null,
+      "outcome": null,
+      "exhaustedOutcome": {
+        "disposition": "quarantined"
+      },
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 1
+      },
+      "attempt": 0,
+      "workerOutcome": {
+        "status": "completed",
+        "notificationPending": false,
+        "notificationManualReview": false
+      },
+      "outcome": {
+        "status": "completed",
+        "notificationPending": false,
+        "notificationManualReview": false
+      },
+      "exhaustedOutcome": null,
+      "eventError": null
+    }
+  ],
+  "scheduler": [
+    {
+      "at": "2026-09-09T00:16:42.000Z",
+      "events": [
+        {
+          "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+          "recoveryCycle": 1,
+          "eventName": "production.fulfillment.job.v1",
+          "eventData": {
+            "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+            "recoveryCycle": 1
+          },
+          "eventId": "event-00000002"
+        }
+      ],
+      "result": {
+        "selected": 1,
+        "accepted": 1,
+        "skipped": 0,
+        "failed": 0,
+        "deadlineReached": false
+      }
+    }
+  ],
+  "invariants": {
+    "A": {
+      "additionalCharges": 0
+    },
+    "B": {
+      "purchaseIntentId": "a4a7645b-0c19-46d6-92be-3c6a57ed40aa",
+      "unchanged": true
+    },
+    "C": {
+      "grantId": "4896330d-f9ae-4279-9572-b33f43c9b97c",
+      "logicalAssessmentId": "fbb56ed3-a0eb-4308-b6a9-6c32d849c0de",
+      "unchanged": true
+    },
+    "D": {
+      "canonicalCustomerReportCount": 1
+    },
+    "E": {
+      "customerDeliveryCount": 1,
+      "notificationInvocations": [
+        {
+          "idempotencyKey": "result-notification:68b74e1d-45ea-4e05-b7b7-52c69deb9359",
+          "payloadHash": "6a3bd6dddedddb542ebf539d0a6e84177e9e656c2ee730a237cba4700f32e87d",
+          "status": "accepted"
+        }
+      ]
+    },
+    "F": {
+      "reuseCheckpoint": null,
+      "unnecessaryRegeneration": 0
+    },
+    "G": {
+      "blockedMaterialPublications": 0,
+      "selectedValidationProof": {
+        "policy": "paid-recovery-validation-v1",
+        "reportHash": "6ebe7735e304bff19f4d47ff1ef38aee1cae8bd4001fe5939814557c05bc4708",
+        "validation": {
+          "failed_codes": [],
+          "schema_version": "validation-result-v19-l4-v1",
+          "repair_strategy": null,
+          "semantic_checks": [],
+          "validation_mode": "semantic_findings_only",
+          "final_disposition": null,
+          "deterministic_checks": [],
+          "report_fact_repair_verification": null
+        },
+        "validationHash": "e51aebe6e649390b0778bc1e3495c4116a6f428b0d022a39ac16d33632feec20"
+      }
+    },
+    "H": {
+      "financialBlockedPublications": 0,
+      "financialFixture": null
+    },
+    "I": {
+      "reservationsMonotone": true,
+      "providerCalls": 5,
+      "reservedCostUsd": 0.51364
+    },
+    "J": {
+      "durableJobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "schedulerObservations": 1
+    },
+    "K": {
+      "publicStatus": {
+        "status": "completed",
+        "paymentVerified": true,
+        "accountFallback": true
+      },
+      "accountAvailable": true
+    },
+    "L": {
+      "purchasedContract": "prompt-bundle-runtime-v23.0.0",
+      "runtimeContracts": [
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "1f33020d-7afd-4c42-803c-c91a8f241955",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "eeee55b0-0940-445a-afe6-3d8c7a29d5ec",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "92f0bd89-c917-432b-8dbf-72cf609df383",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "de499680-8f8c-41e0-a6d8-45d87dcced3d",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "11ef4fbb-edc8-4ab8-b2d3-29ef22ca1e64",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "8cec1877-6045-41db-bd2c-3d544354a957",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "08c9140f-4cc0-49ef-b8e2-8498cf68c976",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "55cfac2f-62a3-4a5e-b257-2fde6ea5b092",
+          "status": "failed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "runId": "67ca4063-9bd6-4540-95a4-db50c5bcd3d4",
+          "status": "completed",
+          "schemaSetVersion": "pipeline-schema-runtime-v9.0.0",
+          "promptBundleVersion": "prompt-bundle-runtime-v23.0.0",
+          "stageTopologyVersion": "split-base-candidate-v1"
+        }
+      ]
+    }
+  },
+  "status": "PASS",
+  "providerInvocationLedger": [
+    {
+      "contractDefault": "v19",
+      "invocations": [
+        {
+          "ordinal": 1,
+          "stageId": "PB-01",
+          "schemaVersion": "v19-l5-base-intent-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "6a93bdec05d4cdd3189b5803961a6cc7a5fc4f21a0053f411cc69d21fc9702c8",
+          "status": "completed"
+        },
+        {
+          "ordinal": 2,
+          "stageId": "PB-02",
+          "schemaVersion": "pipeline-schema-v1.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "ac8fcca81464b7f26c71b67a99f8790aaa77501ddf73b721023f4382c533c6a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 3,
+          "stageId": "PB-03",
+          "schemaVersion": "pipeline-schema-v3.0.0",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "3961d9273fc113705b41fd04623dbd74c7c0c3b3cef0b70ddbd22d69ee64f737",
+          "status": "completed"
+        },
+        {
+          "ordinal": 4,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        },
+        {
+          "ordinal": 5,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "b94aec104238b8d7e492d5e47711a18b2f9887dfd2ac94b297d6c9a2c74da029",
+          "status": "failed",
+          "errorCode": "M2_STAGE_PROVIDER_RETRYABLE"
+        },
+        {
+          "ordinal": 6,
+          "stageId": "PB-04",
+          "schemaVersion": "v19-l5-plan-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "223ba61a0f959dfee1ae43a4ca27758e260b8eeb791f57f50559e75598f160a5",
+          "status": "completed"
+        },
+        {
+          "ordinal": 7,
+          "stageId": "PB-05",
+          "schemaVersion": "v19-l5-report-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "256ee259efb8179ea6f5529098e86c4fb81fd9eb492de1d773f02ae65ca9b729",
+          "status": "completed"
+        },
+        {
+          "ordinal": 8,
+          "stageId": "PB-06",
+          "schemaVersion": "validation-result-v19-l4-v1",
+          "repair": false,
+          "revalidation": false,
+          "requestHash": "2d60be3b5cc18af0e58fa3c8abfd615c0810d3c637851f8750c25c1fc847cf08",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "providerInvocationCount": 5,
+  "providerInvocationScope": "Paid PB-04/PB-05/PB-06, including repair. Prepayment PB-01/PB-01C/PB-02/PB-03 remain separately visible in the ledger.",
+  "repairCount": 0,
+  "notificationCount": 1,
+  "additionalChargeCount": 0,
+  "queueEvents": [
+    {
+      "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "recoveryCycle": 0,
+      "eventName": "production.fulfillment.job.v1",
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "eventId": "event-00000001"
+    },
+    {
+      "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+      "recoveryCycle": 1,
+      "eventName": "production.fulfillment.job.v1",
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 1
+      },
+      "eventId": "event-00000002"
+    }
+  ],
+  "actualWorkerEvents": [
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 0,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 1,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 2,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 3,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 4,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 5,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 6,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 7,
+      "workerOutcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "outcome": {
+        "status": "temporary_problem",
+        "retryable": true
+      },
+      "exhaustedOutcome": null,
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 0
+      },
+      "attempt": 8,
+      "workerOutcome": null,
+      "outcome": null,
+      "exhaustedOutcome": {
+        "disposition": "quarantined"
+      },
+      "eventError": {
+        "name": "Error",
+        "message": "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
+      }
+    },
+    {
+      "eventData": {
+        "jobId": "f52c9521-137a-4c5f-af9e-66c36619807b",
+        "recoveryCycle": 1
+      },
+      "attempt": 0,
+      "workerOutcome": {
+        "status": "completed",
+        "notificationPending": false,
+        "notificationManualReview": false
+      },
+      "outcome": {
+        "status": "completed",
+        "notificationPending": false,
+        "notificationManualReview": false
+      },
+      "exhaustedOutcome": null,
+      "eventError": null
+    }
+  ],
+  "startHead": "c1edf32a8fa3e4f086d833a3842a49c620de9507"
+}

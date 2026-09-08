@@ -1,0 +1,2 @@
+# Preserve exact STEP4 evidence bytes, including recorded SHA256 bindings.
+* -text whitespace=cr-at-eol
