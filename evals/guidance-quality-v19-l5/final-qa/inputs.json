@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "final-expanded-12-inputs-v1",
+  "cases": [
+    {
+      "id": "GQ-01",
+      "input": {
+        "currentSituation": "今日初めて二人で食事をしました。未返信の連絡や連絡を控えてほしいという話はありません。「今日はありがとう。楽しかったです。」と、お礼を送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": "今日はありがとう。楽しかったです。"
+      }
+    },
+    {
+      "id": "GQ-05",
+      "input": {
+        "currentSituation": "最近も普通に話している何度か話した知人を、まだ誘ったことがありません。都合が合えばお茶に、と一度誘ってみたいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-03",
+      "input": {
+        "currentSituation": "相手から「週末は何をしているの？」と来ていて、まだ返していません。普通に返していい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-09",
+      "input": {
+        "currentSituation": "昨日送った雑談にまだ返事がありません。急ぎの用件や新しい用件はなく、追加はしていません。もう一通送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-07",
+      "input": {
+        "currentSituation": "明日会う仮約束がありますが時間は未定です。「都合が分かったら教えてね」と昨日送って未返信です。予定を確認していい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-11",
+      "input": {
+        "currentSituation": "2日前から返事がなく、その間に3通送っています。急ぎの用件や新しい用件はありません。もう一通送るべき？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-13",
+      "input": {
+        "currentSituation": "相手に「少し一人にしてほしい」と言われました。安心させるための連絡も今は控えた方がいいですか。その後こちらからは連絡しておらず、急ぎの用件もありません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-29",
+      "input": {
+        "currentSituation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-16",
+      "input": {
+        "currentSituation": "今日初めて二人で会いました。「今日はありがとうございました。またお話しできたら嬉しいです。」を少し自然にしたいです。送るかどうかの判断は求めていません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": "今日はありがとうございました。またお話しできたら嬉しいです。"
+      }
+    },
+    {
+      "id": "GQ-17",
+      "input": {
+        "currentSituation": "今日初めて二人で会いました。送ろうとしている文章を少し自然にしたいです。送るかどうかの判断は求めていません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-29-P3",
+      "input": {
+        "currentSituation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？ 今後3日間はどう動けばよいかも整理してください。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "next_three_days"
+        ],
+        "optionalMessage": null
+      }
+    },
+    {
+      "id": "GQ-15",
+      "input": {
+        "currentSituation": "初めて会った人に、今日は楽しかったと伝えたいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": null
+      }
+    }
+  ]
+}

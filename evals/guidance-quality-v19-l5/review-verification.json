@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "kind": "AUTHORED_OFFLINE_UI_ONLY",
+  "cases": 12,
+  "slots": 24,
+  "versionLeaks": 0,
+  "stoppedInternalLeaks": 0,
+  "realApiCalls": 0
+}

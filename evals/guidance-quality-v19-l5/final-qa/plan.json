@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "final-expanded-12-preparation-v1",
+  "status": "PREPARED_NO_API_AUTHORIZATION",
+  "model": "gpt-5.6-luna",
+  "reasoning": "low",
+  "serviceTier": "default",
+  "sessions": 24,
+  "samplesPerCaseVersion": 1,
+  "comparison": [
+    "V17",
+    "V19-L5"
+  ],
+  "caps": [
+    {
+      "stage": "PB-01",
+      "input": 56000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-01C",
+      "input": 42000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-02",
+      "input": 24000,
+      "outputIncludingReasoning": 3072
+    },
+    {
+      "stage": "PB-03",
+      "input": 24000,
+      "outputIncludingReasoning": 2048
+    },
+    {
+      "stage": "PB-04",
+      "input": 60000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-05",
+      "input": 72000,
+      "outputIncludingReasoning": 8192
+    },
+    {
+      "stage": "PB-06",
+      "input": 112000,
+      "outputIncludingReasoning": 4096
+    }
+  ],
+  "maximums": {
+    "V17": {
+      "PB-01": 12,
+      "PB-01C": 2,
+      "PB-02": 12,
+      "PB-03": 12,
+      "PB-04": 24,
+      "PB-05": 24,
+      "PB-06": 24
+    },
+    "V19-L5": {
+      "PB-01": 12,
+      "PB-01C": 2,
+      "PB-02": 12,
+      "PB-03": 12,
+      "PB-04": 12,
+      "PB-05": 24,
+      "PB-06": 24
+    }
+  },
+  "maxHttp": 208,
+  "conservativeMaximumAtReferencePricingUsd": 4.8983904,
+  "recommendedHardCapUsd": 6,
+  "pricingStatus": "REFERENCE_ONLY: refresh official pricing immediately before separately authorized execution and verify reservation/accounting agreement. Any mismatch stops before HTTP.",
+  "referenceReservationRatesPerMillionUsd": {
+    "inputIncludingCacheWrite": 0.25,
+    "outputIncludingReasoning": 1.2
+  },
+  "referenceAccountingRatesPerMillionUsd": {
+    "input": 0.2,
+    "cached": 0.02,
+    "cacheWrite": 0.25,
+    "output": 1.2
+  },
+  "noRetries": true,
+  "noAdditionalSamples": true,
+  "clarificationAnswers": 0,
+  "attempt3": 0,
+  "maximumFinalQaRuns": 1,
+  "reservationRule": "Durable worst-case reservation before dispatch; no release on success, timeout or unknown outcome.",
+  "candidateReassessment": "PB04 once. Only unchanged L4 narrow Report fact repair can call PB05/PB06 again. Message-only has no repair expansion.",
+  "stopPolicy": {
+    "session": "Observed quality, fact/source, Safety, meaning, request or action defect; no delivery of intermediate text. Continue other cases.",
+    "global": "Wrong model/version/input, mapping corruption, ledger/accounting/cap/runner failure, unintended Production/Customer connection. Unknown infrastructure cause is GLOBAL."
+  },
+  "inputHash": "7087c00e99192ca3b98eeadbcc9982a80798e910d5938a8d64744edd9997a359",
+  "expectedDispositionHash": "ff295ec3bc0a2e4d6af163300f2cd0132e816b24694162e14c0ab18cb822f2f9",
+  "acceptanceHash": "1414ee4e963cf80aed685c4a05a3f712670a4f1816ae9b76a50a16dd48e85e27",
+  "prerequisites": [
+    "Exact candidate commit and implementation-file hashes frozen after Local Technical PASS.",
+    "Fresh Human authorization for exactly one final 24-session batch and the budget; old one-time authorization is consumed.",
+    "Current official pricing and conservative reservation calculation agree; otherwise STOP.",
+    "New one-shot execution directory and independently randomized sealed mapping; source/receipt/ledger/mapping guards before each HTTP.",
+    "Mandatory per-receipt fact/source/Safety review; no automated code/severity waiver or repair outside Application eligibility."
+  ],
+  "realApiCalls": 0,
+  "productionOperations": 0,
+  "pushDeploy": 0,
+  "knownOpen": [
+    "F007 overall",
+    "F008",
+    "real-model narrow repair success rate",
+    "Production readiness"
+  ]
+}

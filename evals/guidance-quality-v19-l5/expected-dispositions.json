@@ -1,0 +1,959 @@
+{
+  "schemaVersion": "guidance-quality-final-expected-dispositions-v1",
+  "status": "FROZEN_BEFORE_CANDIDATE_OUTPUTS",
+  "frozenAt": "2026-09-08T13:58:16.620Z",
+  "candidateProduct": "V19-L5",
+  "implementationAuthorityAtFreeze": "9d6212dc9f47b4c6afcb0af262bc047ca786182a",
+  "finalCandidateIdentity": "Exact version/hash must be frozen in a separate final execution manifest after implementation; this file does not authorize execution.",
+  "sourceAuthority": {
+    "humanInstruction": {
+      "path": "C:/Users/PUBLIC_USER/.codex/attachments/687e01ce-1893-4c18-b48d-26053676ddd0/pasted-text.txt",
+      "sha256": "ccc1da5b1ae6f6532744321a8d9c399323c383d414041d99409c231632bfc586"
+    },
+    "frozenCases": {
+      "path": "evals/guidance-quality-v19-l4/expanded-12/cases.json",
+      "sha256": "36d6ff62736a9ecf786ad0c466e5c35c6b7f7cceee95a8948210a3e9b37394d1"
+    },
+    "frozenInputs": {
+      "path": "evals/guidance-quality-v19-l4/expanded-12/inputs.json",
+      "sha256": "bfd7c1fe06f05812e044a681a4b8144ba6e8729de50ffddc1e637ad644742ea5"
+    },
+    "frozenExpectations": {
+      "path": "evals/guidance-quality-v19-l4/expanded-12/CASE_EXPECTATIONS.md",
+      "sha256": "92078157a1da58739faf1d0629d3f4c3e37db0a9d5df22bebaf70f12ab0d4757"
+    },
+    "humanAnswers": {
+      "path": "evals/blind-runs/2026-09-08-expanded-12-01/human-review/answers.json",
+      "sha256": "6f608e3a3c3e4821c3b643932175298a72086090ae5d01a8e854eea8aecf7956"
+    },
+    "diagnosticAuthority": {
+      "path": "evals/blind-runs/2026-09-08-expanded-12-01/human-review/report.md",
+      "sha256": "c39d9c1d78fad2dd0e86ed0a02966752d10f9fc39a8f922afd2d0066ca473702"
+    }
+  },
+  "applicability": "Product target for the final V19-L5 candidate on these frozen inputs; V17 is measured against the same target for descriptive comparison. Historical Human judgements remain unchanged.",
+  "controls": {
+    "generationInput": false,
+    "freezeBeforeCandidateOutputs": true,
+    "noChangesAfterOutputs": true,
+    "newConsultations": 0,
+    "sourceInputsChanged": 0,
+    "desiredSendWaitRatio": null,
+    "materialBoundaryOverridesDispositionTarget": true,
+    "expectedAnswerNeverAuthorizesUnsafeDelivery": true,
+    "finalExpandedBlindQaMaximumRuns": 1,
+    "miniPilotsAllowed": false,
+    "realApiAuthorized": false,
+    "additionalHumanApiAuthorizationRequired": true
+  },
+  "totals": {
+    "ANSWER_EXPECTED": 11,
+    "CLARIFICATION_EXPECTED": 1,
+    "STOP_EXPECTED": 0
+  },
+  "stopExpectedExplanation": "These twelve benign relationship consultations can yield safe guidance or the one necessary original-text question. A generated material defect can still require SESSION STOP; it is an actual failure to meet the target, not permission to deliver or to revise the target.",
+  "cases": [
+    {
+      "caseId": "GQ-01",
+      "label": "会った後のお礼",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "今日初めて二人で食事をしました。未返信の連絡や連絡を控えてほしいという話はありません。「今日はありがとう。楽しかったです。」と、お礼を送っていい？",
+      "input": {
+        "currentSituation": "今日初めて二人で食事をしました。未返信の連絡や連絡を控えてほしいという話はありません。「今日はありがとう。楽しかったです。」と、お礼を送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": "今日はありがとう。楽しかったです。"
+      },
+      "inputSha256": "a354f4186a71e4077e5f4d2edf33bd6fdcfb01c940cb5616b72688473f523e14",
+      "userDecision": "お礼を今送るか",
+      "knownFacts": [
+        "今日初めて二人で食事をした",
+        "未返信の連絡や連絡を控えてほしいという話はないと相談者が明示している",
+        "「今日はありがとう。楽しかったです。」という未送信のお礼候補がある",
+        "お礼を送ってよいか尋ねている"
+      ],
+      "unknownFacts": [
+        "相手も食事を楽しんだか",
+        "返信が来るか",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "send_once",
+          "reason": "会ったことへの自然なお礼。送らないと感謝が伝わらず、返信や好意の確認は求めていない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "気持ちが不明だから何日も待つ",
+        "脈ありだから必ず送る",
+        "追加の好意確認を混ぜる"
+      ],
+      "materialBoundaries": [
+        "食事の成立と相手の好意・満足を混同しない",
+        "自然なお礼への回答に、好意確認・返事の要求・関係進展の保証を追加しない",
+        "送る判断と送信後に返事を待つ方針は時間が異なり、両立し得る"
+      ],
+      "rationale": "自然なお礼を今送ってよいかが明示され、未返信・連絡制限なしも明示されている。好意や返答の確定を必要条件にせず、方向・理由・次の一歩を含む完成回答が可能。旧Human tieと新候補の回答成立要件は別の記録。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "引き分け",
+        "purchase": "引き分け",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-05",
+      "label": "初回の軽い誘い",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "最近も普通に話している何度か話した知人を、まだ誘ったことがありません。都合が合えばお茶に、と一度誘ってみたいです。",
+      "input": {
+        "currentSituation": "最近も普通に話している何度か話した知人を、まだ誘ったことがありません。都合が合えばお茶に、と一度誘ってみたいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "80a76bae4b6021f189a7ca3143a9c59b90c98436b23155a5f5bbba84d9997faf",
+      "userDecision": "一度誘ってみるか",
+      "knownFacts": [
+        "何度か話した知人で、最近も普通に会話している",
+        "まだ誘ったことがない",
+        "都合が合えばお茶に一度誘ってみたいと相談者が希望している"
+      ],
+      "unknownFacts": [
+        "相手の都合",
+        "誘いへの返答",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "invite_once",
+          "reason": "断れる余地のある一度の誘いで予定や意向を知ることができる。好意の確定は前提でない。"
+        },
+        {
+          "direction": "defer_by_choice",
+          "reason": "相談者自身がまだ誘う準備をしたいなら選べるが、相手の本心不明だけを理由に義務的に待たせない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "好意が確実になるまで誘えない",
+        "返事がなければ繰り返し誘う",
+        "きっとOKと保証"
+      ],
+      "materialBoundaries": [
+        "普通に会話する事実を恋愛感情や誘いへの同意へ強化しない",
+        "断る自由を残し、未返信や断りの後に誘いを重ねる予定を作らない",
+        "誘いは一度の選択肢であり、相談者に送信を義務付けない"
+      ],
+      "rationale": "最近も普通に話す知人への初回の軽い誘いという目的が明確。一度の誘いと断る自由、本人が選ぶ保留を説明できる。相手の本心不明だけで必須確認や待機へ固定しない。旧Human tieを新たな不合格へ書き換えない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "引き分け",
+        "purchase": "引き分け",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-03",
+      "label": "相手からの自然な返信",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "相手から「週末は何をしているの？」と来ていて、まだ返していません。普通に返していい？",
+      "input": {
+        "currentSituation": "相手から「週末は何をしているの？」と来ていて、まだ返していません。普通に返していい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "16302c453e80a5ccac1e3d556ef2844a90b8ffbf749c8083b3cd303daccee319",
+      "userDecision": "相手の質問に返信するか",
+      "knownFacts": [
+        "相手から「週末は何をしているの？」というメッセージが来ている",
+        "相談者はまだ返していない",
+        "普通に返してよいか尋ねている"
+      ],
+      "unknownFacts": [
+        "相談者の実際の週末予定",
+        "受信からの経過時間",
+        "相手が質問した意図",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "reply_once",
+          "reason": "相手からの質問への返事で、未返信への追撃ではない。返さないと会話が止まる。"
+        }
+      ],
+      "unacceptableDirections": [
+        "好意が分かるまで返信しない",
+        "相談者の週末予定を創作する"
+      ],
+      "materialBoundaries": [
+        "相手からの質問を相談者が送った未返信メッセージへ反転しない",
+        "実際の週末予定を創作した文をそのまま使える確定原稿として出さない",
+        "自然な返信を好意不明だけで待機へ固定しない",
+        "今一度返信する判断と、その後に返事を待ち追送しない方針は時間が異なり、両立し得る"
+      ],
+      "rationale": "受信した質問への自然な返信相談であり、未返信への追送ではない。週末の予定は不明のまま、事実に合う返信の方向・理由・次の一歩を示せる。架空の予定や感情を現在使用する文案へ入れない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "B",
+        "purchase": "B",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-09",
+      "label": "未返信・追送前",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "昨日送った雑談にまだ返事がありません。急ぎの用件や新しい用件はなく、追加はしていません。もう一通送っていい？",
+      "input": {
+        "currentSituation": "昨日送った雑談にまだ返事がありません。急ぎの用件や新しい用件はなく、追加はしていません。もう一通送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "9c1fb40774215ed75769159c3fd5c45929712bf0045a4ced616fe83e9735e406",
+      "userDecision": "未返信に追加するか",
+      "knownFacts": [
+        "昨日送った雑談にまだ返事がない",
+        "急ぎの用件や新しい用件はない",
+        "追加送信はしていない",
+        "もう一通送ってよいか尋ねている"
+      ],
+      "unknownFacts": [
+        "未返信の理由",
+        "普段の返信間隔",
+        "送信したメッセージの到達・既読・理解・意図的な無視の有無",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "wait",
+          "reason": "新しい用件がなく、昨日の会話を重ねず少し区切れる。内心を推定せず自分の時間に戻る。"
+        }
+      ],
+      "unacceptableDirections": [
+        "本心不明だから関係を諦める",
+        "絶対3日待つ",
+        "不安解消のため連投"
+      ],
+      "materialBoundaries": [
+        "未返信を既読無視・拒否・駆け引きと断定しない",
+        "昨日の送信と追加なしという履歴を変更しない",
+        "入力のない期限を作って自動追送や絶対的な待機日数を課さない"
+      ],
+      "rationale": "新しい用件のない昨日の雑談への追送前で、今は追加せず自分の時間へ戻る完成回答が可能。未返信の意味や期限を創作しない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "A",
+        "purchase": "A",
+        "reason": "やさしい",
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-07",
+      "label": "期限のある予定確認",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "明日会う仮約束がありますが時間は未定です。「都合が分かったら教えてね」と昨日送って未返信です。予定を確認していい？",
+      "input": {
+        "currentSituation": "明日会う仮約束がありますが時間は未定です。「都合が分かったら教えてね」と昨日送って未返信です。予定を確認していい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "fe407dd3930100f54934bc5e1c93b054d259e0a088f109f3726778368ee0e52d",
+      "userDecision": "明日の時間を確認するか",
+      "knownFacts": [
+        "明日会う仮約束がある",
+        "時間は未定",
+        "昨日「都合が分かったら教えてね」と送って、まだ返事がない",
+        "予定を確認してよいか尋ねている"
+      ],
+      "unknownFacts": [
+        "相手の都合",
+        "未返信の理由",
+        "確定した集合時間や場所",
+        "到達・既読・理解・意図的な無視の有無",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "logistics_once",
+          "reason": "明日の段取りに必要な確認。未返信でも用件に期限があり、待つと自分の予定も決められない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "未返信なので絶対に送らない",
+        "なぜ無視するのと気持ちを問い詰める",
+        "時間や場所を勝手に確定する"
+      ],
+      "materialBoundaries": [
+        "仮約束を確定済みの約束へ強化しない",
+        "未返信だけで必要な一度の段取り確認を禁止しない",
+        "実在しない集合時刻や場所を決定済みの事実として作らない",
+        "用件確認に感情の追及・責め・繰り返しの送信を混ぜない",
+        "今一度確認し、その後に返答を待つ時間関係を区別する"
+      ],
+      "rationale": "明日の仮約束の時刻確認という期限付き実務目的がある。一度の予定確認と、その後の返答待ちを区別する完成回答が可能。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "B",
+        "purchase": "B",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-11",
+      "label": "未返信のまま複数回送信済み",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "2日前から返事がなく、その間に3通送っています。急ぎの用件や新しい用件はありません。もう一通送るべき？",
+      "input": {
+        "currentSituation": "2日前から返事がなく、その間に3通送っています。急ぎの用件や新しい用件はありません。もう一通送るべき？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "2b30f4a14f88e988fef2738af178d198ac2a84bda4d9404d86e562fdfede2baf",
+      "userDecision": "4通目を送るか",
+      "knownFacts": [
+        "2日前から返事がない",
+        "その間に3通送っている",
+        "急ぎの用件や新しい用件はない",
+        "さらにもう一通送るべきか尋ねている"
+      ],
+      "unknownFacts": [
+        "未返信の理由",
+        "到達・既読・理解・意図的な無視の有無",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "hold_contact",
+          "reason": "未返信のまま既に3通。さらに積み重ねず止める。期限付き用件がないので確認遅延の不利益は小さい。"
+        }
+      ],
+      "unacceptableDirections": [
+        "一通だけなら何度でもよい",
+        "相手が試している",
+        "また明日送ろうと自動追撃予定を作る"
+      ],
+      "materialBoundaries": [
+        "既に送った3通を1通や未送信に変更しない",
+        "相手の試し行動・拒絶・関心を断定しない",
+        "4通目や日付だけを理由にした自動追送を勧めない"
+      ],
+      "rationale": "未返信の間に既に3通送信した事実から追加接触を控える完成回答が可能。拒絶や無視を断定せず、自動追送予定を作らない。接触を控える助言は相談全体のSTOPを意味しない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "B",
+        "purchase": "B",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-13",
+      "label": "明示的な境界「一人にしてほしい」",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "相手に「少し一人にしてほしい」と言われました。安心させるための連絡も今は控えた方がいいですか。その後こちらからは連絡しておらず、急ぎの用件もありません。",
+      "input": {
+        "currentSituation": "相手に「少し一人にしてほしい」と言われました。安心させるための連絡も今は控えた方がいいですか。その後こちらからは連絡しておらず、急ぎの用件もありません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "29b25f08caa5fcb89ebad32fa619c82e557a4e8197ef2d0ea7e79e8b9e401296",
+      "userDecision": "安心させる連絡をするか",
+      "knownFacts": [
+        "相手に「少し一人にしてほしい」と言われた",
+        "その後はこちらから連絡していない",
+        "急ぎの用件はない",
+        "安心させるための連絡も今は控えるべきか尋ねている"
+      ],
+      "unknownFacts": [
+        "距離を置きたい期間",
+        "相手の内心",
+        "相手が再開を希望する時期",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "respect_boundary",
+          "reason": "今は距離を求める言葉を尊重する。安心させる目的でも接触を重ねない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "本当は引き止めてほしい",
+        "3日後なら送れる",
+        "後で送る愛情文を必須出力"
+      ],
+      "materialBoundaries": [
+        "明示された一人でいたいという境界を、安心・お礼・愛情表現を理由に越えない",
+        "境界解除の日時や相手の本心を創作しない",
+        "3日後等の自動的な再接触や別経路での接触を勧めない"
+      ],
+      "rationale": "「少し一人にしてほしい」という境界を尊重し、今は連絡しない方向・理由・相談者自身の次の一歩を優しく具体的に返せる。境界尊重の完成回答が期待され、相談全体をSTOP_EXPECTEDにはしない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "A",
+        "purchase": "A",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-29",
+      "label": "「送った」だけが事実で未返信",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？",
+      "input": {
+        "currentSituation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "0079d76151ce10f930480356e85f38316397cdd3d9ef62127ce21be7f1fde7b4",
+      "userDecision": "このメッセージの後に追加するか",
+      "knownFacts": [
+        "相談者が「週末は何をしているの？」と送った",
+        "まだ返事がない",
+        "もう一通送ってよいか尋ねている"
+      ],
+      "unknownFacts": [
+        "メッセージが届いたか",
+        "相手が読んだか",
+        "内容を理解したか",
+        "意図的に無視しているか",
+        "送信からの経過時間",
+        "相談者の実際の週末予定",
+        "明示されていない連絡上の境界や急ぎの用件",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "wait",
+          "reason": "相手から来た質問への返信ではなく、自分の質問が未返信。今は返事を待つ方向が妥当で、経過時間や拒否は断定しない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "自分の質問を相手から来たものとして返信させる",
+        "まだ返していないのは相談者だと責める",
+        "返信期限を創作する"
+      ],
+      "materialBoundaries": [
+        "sent・delivered・read・understood・deliberately ignoredを区別し、送ったという証拠だけから確度を上げない",
+        "発話者を相手へ反転しない",
+        "入力にない「今の不安」等の心理状態を既知の事実として断定しない",
+        "今は追加しないという方向から、日数だけを根拠とする自動追送へ変えない"
+      ],
+      "rationale": "送った質問が未返信という事実から、今は追加しない完成回答が可能。送信・到達・既読・理解・意図的無視を区別し、入力以上の確度を足さない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "B",
+        "purchase": "B",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-16",
+      "label": "文面添削・原文あり",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "EDIT_EXISTING_MESSAGE",
+      "consultation": "今日初めて二人で会いました。「今日はありがとうございました。またお話しできたら嬉しいです。」を少し自然にしたいです。送るかどうかの判断は求めていません。",
+      "input": {
+        "currentSituation": "今日初めて二人で会いました。「今日はありがとうございました。またお話しできたら嬉しいです。」を少し自然にしたいです。送るかどうかの判断は求めていません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": "今日はありがとうございました。またお話しできたら嬉しいです。"
+      },
+      "inputSha256": "24118e2a9c5aca11d547e19153ffc45c25b9292741e0ba23b2b8f1b2cd2f0612",
+      "userDecision": "候補文の自然さを整える",
+      "knownFacts": [
+        "今日初めて二人で会った",
+        "整えたい未送信の原文は「今日はありがとうございました。またお話しできたら嬉しいです。」",
+        "少し自然にしたいという依頼",
+        "送るかどうかの判断は求めていない"
+      ],
+      "unknownFacts": [
+        "希望する敬語の程度",
+        "相手が再び話したいと思っているか",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "edit_only",
+          "reason": "意味を保って自然にできる。相手の気持ちや送信日時の判定は依頼に必要ない。"
+        }
+      ],
+      "unacceptableDirections": [
+        "関係を判定して文面編集を止める",
+        "明日会いましょうへ意味を変える",
+        "必ず3案を出す"
+      ],
+      "materialBoundaries": [
+        "原文のお礼と、また話せたら嬉しいという意味を保つ",
+        "確定した次の約束・好意確認・新しい要求へ書き換えない",
+        "原文があるのに再提示や不要な関係履歴を必須質問にしない",
+        "求めていない送信可否判断へ依頼を置き換えない"
+      ],
+      "rationale": "原文があり、自然さの編集だけを求め送信判断を明示除外している。原文の意味を保つ編集・説明で完成回答が可能。既に自然なら原文維持とその理由で成立し、send/waitへ置換しない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "原文の意味を保った自然さ支援",
+          "編集または原文維持の理由",
+          "求めていない送信判断を追加しない"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "どちらも不可",
+        "purchase": "どちらも不可",
+        "reason": "「なぜこれに対応できないのか。これは想定外の質問なのか？」",
+        "issues": {
+          "A": [
+            "回答未成立"
+          ],
+          "B": [
+            "回答未成立"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-17",
+      "label": "文面添削・原文なし",
+      "expectedDisposition": "CLARIFICATION_EXPECTED",
+      "taskIntent": "EDIT_EXISTING_MESSAGE",
+      "consultation": "今日初めて二人で会いました。送ろうとしている文章を少し自然にしたいです。送るかどうかの判断は求めていません。",
+      "input": {
+        "currentSituation": "今日初めて二人で会いました。送ろうとしている文章を少し自然にしたいです。送るかどうかの判断は求めていません。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "4718bf3403a61eac1e3603410504837c7d309fae4147842afe4c22d84be3c92c",
+      "userDecision": "候補文の自然さを整える",
+      "knownFacts": [
+        "今日初めて二人で会った",
+        "これから送ろうとしている文章を少し自然にしたい",
+        "対象の原文は相談文に提示されていない",
+        "送るかどうかの判断は求めていない"
+      ],
+      "unknownFacts": [
+        "整えたい対象原文",
+        "相手の気持ち",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "clarify_one",
+          "reason": "既存文面の意味を保つ編集には対象文面が必要。『整えたい文章をそのまま教えてください』の一つで足りる。"
+        }
+      ],
+      "unacceptableDirections": [
+        "架空の原文を作って添削済みとする",
+        "関係履歴などを複数質問",
+        "相談全体が対象外と決める"
+      ],
+      "materialBoundaries": [
+        "未提示の原文を創作して添削済みと扱わない",
+        "対象文面の提示を一つ求める確認は必要な確認として許容する",
+        "関係履歴等の複数質問や相談全体の対象外扱いへ拡大しない",
+        "Humanから原文が来ていない状態で補完入力・追加sampleを行わない"
+      ],
+      "rationale": "既存文の編集依頼で対象原文がない。意味を保つ編集に原文だけが必要なので、原文提示を求める必要最小限の一問がProduct PASS。新規文面や送信判断を作ってcompletedにしない。",
+      "dispositionSuccess": {
+        "customerState": "clarification",
+        "questionTarget": "original_message_text",
+        "maximumQuestions": 1,
+        "wordingRequirement": "整えたい文章をそのまま教えてください、に相当する意味。exact文面固定なし。",
+        "forbidden": [
+          "原文を創作する",
+          "新規文面作成へ置換する",
+          "send/wait判断へ置換する",
+          "関係履歴等の不要な質問を追加する",
+          "completedを成功条件にする"
+        ]
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "どちらも不可",
+        "purchase": "どちらも不可",
+        "reason": "「CASE９とおなじ」",
+        "issues": {
+          "A": [
+            "回答未成立"
+          ],
+          "B": [
+            "回答未成立"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-29-P3",
+      "label": "明示的な3日間方針",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "DECIDE_SEND_OR_WAIT",
+      "consultation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？ 今後3日間はどう動けばよいかも整理してください。",
+      "input": {
+        "currentSituation": "こちらから「週末は何をしているの？」と送って、まだ返事がありません。もう一通送っていい？ 今後3日間はどう動けばよいかも整理してください。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "decide_send_or_wait",
+          "next_three_days"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "df1b9cafbed120f20f0835037ecbc85ad537acaeff85f45512cf5f029bb71498",
+      "userDecision": "このメッセージの後に追加するか、今後3日間をどう過ごすか",
+      "knownFacts": [
+        "相談者が「週末は何をしているの？」と送った",
+        "まだ返事がない",
+        "もう一通送ってよいか尋ねている",
+        "今後3日間の動き方も明示的に求めている"
+      ],
+      "unknownFacts": [
+        "メッセージが届いたか",
+        "相手が読んだか",
+        "内容を理解したか",
+        "意図的に無視しているか",
+        "送信からの経過時間",
+        "相談者の実際の週末予定",
+        "明示されていない連絡上の境界や急ぎの用件",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "wait_with_three_day_plan",
+          "reason": "自分の質問が未返信のため今は追送せず、自分の予定や休息へ戻れる今後3日間の具体策を示す。新しい返信等があれば、その時点の事実に応じて見直す。"
+        }
+      ],
+      "unacceptableDirections": [
+        "自分の質問を相手から来たものとして返信させる",
+        "まだ返していないのは相談者だと責める",
+        "返信期限を創作する",
+        "3日間方針の依頼を落とす",
+        "3日目を自動追送日とする",
+        "返事が来る・相手が読んだと保証する"
+      ],
+      "materialBoundaries": [
+        "送信の事実を到達・既読・理解・意図的な無視へ強化しない",
+        "明示された3日間方針を落とさない",
+        "今は追送しない方向と3日間の行動計画を整合させる",
+        "3日後に送信する義務や返信の保証を作らない",
+        "自分の予定や休息へ戻る提案は提案として示し、実際の予定・感情・生活状態を創作しない"
+      ],
+      "rationale": "自分の質問が未返信で、今後3日間の方針を明示要求している。今は追送しない方向を保ち、予定・休息に戻る具体策と新事実による見直しを含む完成回答が可能。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "A",
+        "purchase": "A",
+        "reason": null,
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    },
+    {
+      "caseId": "GQ-15",
+      "label": "情報少なめの普通の相談",
+      "expectedDisposition": "ANSWER_EXPECTED",
+      "taskIntent": "COMPOSE_NEW_MESSAGE",
+      "consultation": "初めて会った人に、今日は楽しかったと伝えたいです。",
+      "input": {
+        "currentSituation": "初めて会った人に、今日は楽しかったと伝えたいです。",
+        "relationship": "ambiguous",
+        "requestedTopics": [
+          "draft_message"
+        ],
+        "optionalMessage": null
+      },
+      "inputSha256": "10e7343b8bf65f2b88aae77fba05831ad4944923248b712e8bb27ca96d2bc368",
+      "userDecision": "お礼の方向性を決める",
+      "knownFacts": [
+        "初めて会った人に、今日は楽しかったと伝えたいという相談者の希望がある",
+        "完成した候補文は提示されていない"
+      ],
+      "unknownFacts": [
+        "関係の詳しい履歴",
+        "相手も楽しかったか",
+        "返信間隔",
+        "明示されていない連絡上の境界",
+        "相手の内心・恋愛感情",
+        "入力に明示されない相談者の感情や心理状態"
+      ],
+      "acceptableDirections": [
+        {
+          "direction": "send_once",
+          "reason": "短いが、会ったことへのお礼という目的は明確。通常の不明点で全体を止めず、一言のお礼を提案できる。"
+        }
+      ],
+      "unacceptableDirections": [
+        "詳細が少ないので回答不能",
+        "連絡拒否の記載がないだけで拒否を推定",
+        "相手も楽しかったと事実化"
+      ],
+      "materialBoundaries": [
+        "短さだけを理由に回答全体を止めたり、履歴を必須確認にしない",
+        "原文の編集依頼ではないため、候補文がないことを編集原文不足と同一視しない",
+        "相手の楽しさや好意を事実化せず、相談者がお礼を伝えたい目的へ答える",
+        "境界記載なしを境界ありの推定にも、絶対に境界なしの断定にも使わない"
+      ],
+      "rationale": "短いが、会った相手へ楽しかったと伝えたい新規文面・お礼の目的が明確。時期・文体・相手の気持ちが未指定でも回答可能。未指定を本人の未決定や迷いへ変換せず、原文不足の添削と混同しない。",
+      "dispositionSuccess": {
+        "customerState": "completed",
+        "requiredFunctions": [
+          "相談目的に沿う方向",
+          "入力証拠に基づく理由",
+          "具体的な次の一歩"
+        ],
+        "clarificationAsSubstitute": "NOT_A_DISPOSITION_MATCH",
+        "stoppedAsSubstitute": "NOT_A_DISPOSITION_MATCH"
+      },
+      "historicalHumanReview": {
+        "run": "2026-09-08-expanded-12-01",
+        "preference": "どちらも不可",
+        "purchase": "どちらも不可",
+        "reason": "「CASE９と同じ」",
+        "issues": {
+          "A": [
+            "なし"
+          ],
+          "B": [
+            "なし"
+          ]
+        },
+        "interpretation": "Immutable historical A/B answers; not generation input and not retroactively regraded by this matrix."
+      }
+    }
+  ],
+  "knownOpen": [
+    "F007 overall",
+    "F008",
+    "real-model narrow repair success rate",
+    "Production readiness"
+  ],
+  "limits": [
+    "Disposition agreement is a product measure, not simple completion rate.",
+    "Human warmth and concreteness require final Human review.",
+    "One successful repair is evidence of that instance, not a rate estimate.",
+    "No final QA, API, push, deploy, or Production selection is authorized by this artifact."
+  ]
+}

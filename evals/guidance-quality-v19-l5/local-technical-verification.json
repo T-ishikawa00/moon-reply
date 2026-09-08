@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "implementationCommit": "9c0fe90166b6ef3d8ccd8874afb7ad51b92dbffe",
+  "predecessorHead": "9d6212dc9f47b4c6afcb0af262bc047ca786182a",
+  "preservedFiles": 1346,
+  "changedPredecessorFiles": 0,
+  "humanAnswersHash": "6f608e3a3c3e4821c3b643932175298a72086090ae5d01a8e854eea8aecf7956",
+  "expectedDispositionsHash": "ff295ec3bc0a2e4d6af163300f2cd0132e816b24694162e14c0ab18cb822f2f9",
+  "acceptanceHash": "1414ee4e963cf80aed685c4a05a3f712670a4f1816ae9b76a50a16dd48e85e27",
+  "typecheck": "PASS",
+  "build": "PASS 47 static pages",
+  "lint": "PASS",
+  "intentAssertions": 289,
+  "repairScenarios": 59,
+  "review": "PASS desktop/mobile; 12 cases / 24 slots",
+  "runner": "PASS offline fake receipts only",
+  "localTechnicalPass": true,
+  "realModelQuality": "NOT_VALIDATED",
+  "knownOpen": [
+    "F007 overall",
+    "F008",
+    "real-model narrow repair success rate",
+    "Production readiness"
+  ],
+  "newRealApiCalls": 0,
+  "pushDeploy": 0,
+  "productionChanges": 0
+}

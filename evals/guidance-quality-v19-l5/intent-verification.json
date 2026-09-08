@@ -1,0 +1,245 @@
+{
+  "status": "PASS",
+  "provenance": "LOCAL CONTRACT TEST ONLY; retained input and historical PB01 seed, hand-authored new intent and fake stage output. No new real-model quality evidence.",
+  "apiCalls": 0,
+  "productionOperations": 0,
+  "assertionsPassed": 289,
+  "preservedCaseCount": 12,
+  "historicalBaseSeeds": 24,
+  "authoredIntent": true,
+  "pure": [
+    {
+      "caseId": "GQ-01",
+      "seedId": "85467a18-cec3-45f9-8832-bb17fb0f7823",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-01",
+      "seedId": "fb357476-74a9-4abe-a9c4-a67dba992253",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-05",
+      "seedId": "bf3db712-86aa-4697-acf2-c1d73b357d96",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-05",
+      "seedId": "d6936651-4075-432e-bd8b-f7c7936cf8d9",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-03",
+      "seedId": "938bd1ff-104b-4a96-960b-614debb598a0",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "reply_now"
+    },
+    {
+      "caseId": "GQ-03",
+      "seedId": "ba4e1098-eb21-461c-b03c-418031705deb",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "reply_now"
+    },
+    {
+      "caseId": "GQ-09",
+      "seedId": "713657c0-9ee8-47bb-ba52-2a045a40e6c1",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-09",
+      "seedId": "afbcefb9-93e6-477e-bf9b-566a5d4cc821",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-07",
+      "seedId": "0d82bd7c-87ad-4752-9bf2-85db364fe1ca",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-07",
+      "seedId": "62aee6a1-6f33-49c9-b8a8-173dcbc3a721",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-11",
+      "seedId": "ef4e07e5-3a75-4ae9-9686-2ea3bcec90ac",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "pause_additional_contact"
+    },
+    {
+      "caseId": "GQ-11",
+      "seedId": "f6ce98a3-01c7-49c7-9c33-846caf52cd67",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-13",
+      "seedId": "939fd8f2-a003-4e3d-a66d-e3ac66262dec",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "pause_additional_contact"
+    },
+    {
+      "caseId": "GQ-13",
+      "seedId": "db45e9a4-4b37-4bbf-b549-3c417f9b403c",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "pause_additional_contact"
+    },
+    {
+      "caseId": "GQ-29",
+      "seedId": "b855fbf6-1cfc-4d2b-b4bd-9f41162ad306",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-29",
+      "seedId": "e72055d0-fff8-4a0c-b926-af8eb4ed70d5",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-16",
+      "seedId": "5fa583df-d14f-491c-8e8d-cf325262b8d8",
+      "route": "message_only",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": null
+    },
+    {
+      "caseId": "GQ-16",
+      "seedId": "8b70477c-109e-44ad-8399-4c38ea8c0290",
+      "route": "message_only",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": null
+    },
+    {
+      "caseId": "GQ-17",
+      "seedId": "12cc6bad-89d3-46fb-a52f-7b945c927fa2",
+      "route": "original_message_clarification",
+      "sufficiency": "needs_one_clarifying_answer",
+      "primaryDecision": null
+    },
+    {
+      "caseId": "GQ-17",
+      "seedId": "430eda46-e41d-4ef4-9ec8-4ba31efdce75",
+      "route": "original_message_clarification",
+      "sufficiency": "needs_one_clarifying_answer",
+      "primaryDecision": null
+    },
+    {
+      "caseId": "GQ-29-P3",
+      "seedId": "49996264-ec4f-4f1d-952b-622c79ff2139",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-29-P3",
+      "seedId": "5721d912-ec2c-441e-a8e0-5bfc80df07bb",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "wait_and_reassess"
+    },
+    {
+      "caseId": "GQ-15",
+      "seedId": "4b3adbb7-064b-4c96-88fa-d5704d1d9e2a",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    },
+    {
+      "caseId": "GQ-15",
+      "seedId": "a5f11e6b-0e0a-4878-b3dd-054ce48a5393",
+      "route": "decision_guidance",
+      "sufficiency": "full_paid_ready_candidate",
+      "primaryDecision": "send_now"
+    }
+  ],
+  "application": [
+    {
+      "label": "GQ16-edit",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "GQ17-one-question",
+      "finalState": "clarification",
+      "stopFinding": null
+    },
+    {
+      "label": "GQ17-original-resume",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "GQ15-compose",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "compose-excluding-decision",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "mixed-edit-decision",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "meaning-false",
+      "finalState": "stopped",
+      "stopFinding": "V19_L5_EDIT_SOURCE_INVALID"
+    },
+    {
+      "label": "source-mismatch",
+      "finalState": "stopped",
+      "stopFinding": "V19_L5_EDIT_SOURCE_INVALID"
+    },
+    {
+      "label": "minor-explanation-retained",
+      "finalState": "completed",
+      "stopFinding": null
+    },
+    {
+      "label": "major-same-editorial-code",
+      "finalState": "stopped",
+      "stopFinding": "V19_L5_MESSAGE_VALIDATION_FAILED"
+    },
+    {
+      "label": "minor-safety-not-waived",
+      "finalState": "stopped",
+      "stopFinding": "V19_L5_MESSAGE_VALIDATION_FAILED"
+    },
+    {
+      "label": "minor-draft-path-not-waived",
+      "finalState": "stopped",
+      "stopFinding": "V19_L5_MESSAGE_VALIDATION_FAILED"
+    }
+  ],
+  "applicationCovered": true,
+  "realModelQualityVerified": false,
+  "humanPreferenceVerified": false
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "kind": "OFFLINE_FAKE_RECEIPTS_ONLY",
+  "directory": "evals/guidance-quality-v19-l5/final-qa/fake-runner-1788877890565",
+  "sessionStopContinuesAll24": true,
+  "unknownOutcomeRetainsReservation": true,
+  "modelMismatchGlobalStop": true,
+  "receiptBindingRequired": true,
+  "inspectionCannotMutateAuthority": true,
+  "actualLedgerPricingProbed": true,
+  "unauthorizedDispatches": 0,
+  "networkAttempts": 0,
+  "realApiCalls": 0
+}

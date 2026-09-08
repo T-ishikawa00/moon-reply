@@ -1,0 +1,252 @@
+{
+  "status": "PASS",
+  "checks": 59,
+  "scenarios": 59,
+  "realApiCalls": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "networkAttempts": 0,
+  "provenance": "OFFLINE CONTRACT TEST ONLY: historical synthetic-consultation receipts are read-only structural seeds. Candidate envelope adaptations, new defects, patches and all PB06 verdicts are hand-authored. No model detection, model repair quality, Human acceptance or new provider execution is established.",
+  "semanticDetectionValidated": false,
+  "modelRepairQualityValidated": false,
+  "F007Resolved": false,
+  "F008Resolved": false,
+  "results": [
+    {
+      "name": "exact L5 identity reuses the L4 narrow patch and verification schema",
+      "status": "PASS"
+    },
+    {
+      "name": "short_letter eligible repair preserves every other value, Candidate=false, and all three-day phases",
+      "status": "PASS"
+    },
+    {
+      "name": "short_letter eligible repair preserves every other value, Candidate=true, and all three-day phases",
+      "status": "PASS"
+    },
+    {
+      "name": "observed_fact_commentary eligible repair preserves every other value, Candidate=false, and all three-day phases",
+      "status": "PASS"
+    },
+    {
+      "name": "observed_fact_commentary eligible repair preserves every other value, Candidate=true, and all three-day phases",
+      "status": "PASS"
+    },
+    {
+      "name": "correct first pass remains completed without forced repair",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair fact_source_integrity=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair fact_source_integrity=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair input_fidelity=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair input_fidelity=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair meaning_preservation=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair meaning_preservation=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair direction_consistency=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair direction_consistency=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair action_consistency=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair action_consistency=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair safety=fail blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "post-repair safety=unknown blocks delivery despite five passes",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new FACT_FIDELITY cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new ASSUMPTION_AS_FACT cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new UNSUPPORTED_CERTAINTY cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new ACTION_CONSISTENCY cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new SAFETY_REGRESSION cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new REQUIRED_SECTION_MEANING cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "remaining/new DECISION_ALLOWED cannot be erased by six pass labels",
+      "status": "PASS"
+    },
+    {
+      "name": "a repaired leaf that creates a same-time action contradiction cannot deliver",
+      "status": "PASS"
+    },
+    {
+      "name": "changing wording while retaining the unsupported delivery claim fails verification",
+      "status": "PASS"
+    },
+    {
+      "name": "multiple new material defects cannot pass as one successful patch",
+      "status": "PASS"
+    },
+    {
+      "name": "patch source hash mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "patch target path mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "patch original text mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "patch unchanged target mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "patch blank target mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "patch full Report substitute mismatch cannot merge or call post-verification",
+      "status": "PASS"
+    },
+    {
+      "name": "verification missing mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "verification null mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "verification hash mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "verification path mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "verification text mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "verification fact ID mismatch cannot imply success",
+      "status": "PASS"
+    },
+    {
+      "name": "a nonexistent Plan reason Fact ID stops before Report or repair",
+      "status": "PASS"
+    },
+    {
+      "name": "message-only no_followup_message cannot bypass the inherited outbound-draft restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "message-only unknown cannot bypass the inherited outbound-draft restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "out-of-scope reason summary rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown fact ID rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "policy-only evidence rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate evidence rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "multiple unrelated facts rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed ACTION_CONSISTENCY rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed SAFETY_REGRESSION rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed REQUIRED_SECTION_MEANING rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed DECISION_ALLOWED rejects without whole-Report regeneration",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe aggregate never reaches Plan, Report, patch or delivery",
+      "status": "PASS"
+    },
+    {
+      "name": "technical failure at repair PB-05 stays stopped without retry",
+      "status": "PASS"
+    },
+    {
+      "name": "technical failure at repair PB-06 stays stopped without retry",
+      "status": "PASS"
+    },
+    {
+      "name": "model mismatch during repair is terminal and retains the received receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "changed candidate identity and patch contract reject before any stage",
+      "status": "PASS"
+    },
+    {
+      "name": "a used Application cannot rerun the session",
+      "status": "PASS"
+    },
+    {
+      "name": "historical evidence bytes stay unchanged and network attempts are zero",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "kind": "FAKE_OFFLINE_UI_ONLY",
+  "results": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "overflow": false,
+      "consoleErrors": 0,
+      "clarificationVisible": true
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "overflow": false,
+      "consoleErrors": 0,
+      "clarificationVisible": true
+    }
+  ],
+  "realApiCalls": 0
+}
