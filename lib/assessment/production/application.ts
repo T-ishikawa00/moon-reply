@@ -3,10 +3,12 @@ import {
   buildClarificationEvidenceV1,
   validateClarificationAnswerV1,
 } from "../runtime/clarification-evidence-v1.ts";
-import { projectCustomerAssessmentExperienceV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
 import { asM2RuntimeError, M2RuntimeError } from "../runtime/errors.ts";
-import { AssessmentPipeline, validatePurchaseReadyAuthorityForFulfillment, type PipelineOptions } from "../runtime/pipeline.ts";
-import { hydratePersistedReadyAssessmentV1 } from "../runtime/runtime-result-normalization-v1.ts";
+import { AssessmentPipeline, type PipelineOptions } from "../runtime/pipeline.ts";
+import { prepareV19L5PaidCandidate, validateRecoveryCandidate, verifyPaidAuthority } from "./recovery-candidate.ts";
+import { loadV19L5StageCatalog } from "../runtime/v19-l5-stage-catalog.ts";
+import { fulfillV19PaidCandidate } from "./v19-paid-executor.ts";
+import { createPaidCheckpointTransport } from "./recovery-checkpoint.ts";
 import { evaluateJpy980ProductScopeV1 } from "../runtime/jpy980-product-scope-validation-v1.ts";
 import type {
   AiStageTransport,
@@ -66,6 +68,7 @@ type ProductionFulfillmentApplicationOptions = {
   runtimeRepository: AssessmentRepository;
   lifecycleRepository: ProductionFulfillmentRepository;
   transport?: AiStageTransport;
+  paidTransportFactory?: (context: { logicalAssessmentId: string; ownerId: string }) => AiStageTransport;
   catalog: ProductionRuntimeCatalog;
   model: "gpt-5.6-luna";
   fulfillmentLeaseSeconds?: number;
@@ -129,21 +132,23 @@ export class ProductionFulfillmentApplication {
     }
   }
 
-  private pipeline(beforeProviderInvocation?: PipelineOptions["beforeProviderInvocation"]) {
-    if (!this.options.transport) {
+  private pipeline(beforeProviderInvocation?: PipelineOptions["beforeProviderInvocation"], paidTransport?: AiStageTransport) {
+    if (!paidTransport && !this.options.transport) {
       throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
     }
     return new AssessmentPipeline({
       repository: this.options.runtimeRepository,
-      transport: this.options.transport,
+      transport: paidTransport ?? this.options.transport!,
       definitions: this.options.catalog.definitions,
       timeZone: this.options.timeZone ?? "Asia/Tokyo",
       uuid: this.uuid,
       beforeProviderInvocation,
+      now: this.now,
+      strictMaterialDelivery: true,
     });
   }
 
-  private runContext(requestId: string, runId: string, startedAt: string) {
+  private runContext(requestId: string, runId: string, startedAt: string, actionStartedAt?: string) {
     return {
       requestId,
       runId,
@@ -151,6 +156,7 @@ export class ProductionFulfillmentApplication {
       promptBundleVersion: this.options.catalog.promptBundleVersion,
       schemaSetVersion: this.options.catalog.schemaSetVersion,
       startedAt,
+      ...(actionStartedAt ? { actionStartedAt } : {}),
     } as const;
   }
 
@@ -377,7 +383,9 @@ export class ProductionFulfillmentApplication {
   async prepare(
     value: unknown,
     idempotencyKey: unknown,
+    localCandidate = false,
   ): Promise<PublicPreparationOutcome> {
+    if (localCandidate && !this.options.allowSyntheticPurchaseAuthority) throw new M2RuntimeError("PRODUCTION_CANDIDATE_SELECTION_NOT_AUTHORIZED");
     const consultation = decodeProductionConsultationInputV1(value);
     const idempotencyKeyHash = hashProductionIdempotencyKey(idempotencyKey);
     const safetyAuthority = evaluatePrepaymentSafetyV1(
@@ -414,6 +422,17 @@ export class ProductionFulfillmentApplication {
     }
     try {
       const runId = this.uuid();
+      if (localCandidate) {
+        if (!this.options.transport) throw new M2RuntimeError("PRODUCTION_RECOVERY_EXECUTOR_UNAVAILABLE");
+        const authority = await prepareV19L5PaidCandidate(assessmentInput, { catalog: await loadV19L5StageCatalog(),
+          transport: this.options.transport, now: this.now, timeZone: this.options.timeZone ?? "Asia/Tokyo" });
+        const capability = this.capability();
+        await this.options.lifecycleRepository.finalizePreparation({ preparationId: begun.preparation.id, status: "purchase_ready", stopReason: null,
+          clarificationId: null, clarificationCapabilityHash: null, clarificationQuestion: null, clarificationAnswerFingerprint: null,
+          purchaseCapabilityHash: hashOpaqueProductionCapability(capability), purchaseReadyAuthority: authority,
+          purchaseReadyAuthorityHash: hashProductionSnapshot(authority), now: this.now() });
+        return { status: "purchase_ready", preparationCapability: capability };
+      }
       const result = await this.pipeline().prepare(
         assessmentInput,
         this.runContext(begun.request.id, runId, now),
@@ -698,73 +717,53 @@ export class ProductionFulfillmentApplication {
           "PRODUCTION_PURCHASE_READY_AUTHORITY_INVALID",
         );
       }
+      verifyPaidAuthority(authority, {
+        currentSituation: claim.request.currentSituation, optionalMessage: claim.request.optionalMessage,
+        relationship: claim.request.relationship, requestedTopics: [...claim.request.requestedTopics], privacyAcknowledged: claim.request.privacyAcknowledged,
+      });
       let generationBoundaryRecorded = false;
-      const beforeProviderInvocation = async (
-        stageId: M2StageId,
-        attemptNumber: StageAttemptNumber,
-      ) => {
+      const beforeProviderInvocation = async (stageId: M2StageId, attemptNumber: StageAttemptNumber) => {
         if (generationBoundaryRecorded) return;
-        if (stageId !== "PB-04" || attemptNumber !== 1) {
-          throw new M2RuntimeError("PRODUCTION_GENERATION_BOUNDARY_INVALID");
-        }
-        await this.options.lifecycleRepository.markGenerationStarted({
-          logicalAssessmentId: claim.logicalAssessmentId,
-          ownerId,
-          now: this.now(),
-        });
+        if (stageId !== "PB-04" || attemptNumber !== 1) throw new M2RuntimeError("PRODUCTION_GENERATION_BOUNDARY_INVALID");
+        await this.options.lifecycleRepository.markGenerationStarted({ logicalAssessmentId: claim.logicalAssessmentId, ownerId, now: this.now() });
         generationBoundaryRecorded = true;
       };
-      if (claim.recoverableRuntimeRunId) {
-        // Recovery keeps the same input/contract checks as normal fulfillment.
-        validatePurchaseReadyAuthorityForFulfillment({
-          persistedRequest: claim.request, authority,
-          runContext: this.runContext(claim.request.id, claim.recoverableRuntimeRunId, this.now()),
-          activeStageTopologyVersion: this.options.catalog.stageTopologyVersion,
-          providerInvocationFencePresent: true,
-        });
+      const paidTransport = this.options.paidTransportFactory?.({ logicalAssessmentId: claim.logicalAssessmentId, ownerId }) ?? this.options.transport;
+      let runtimeRunId = claim.recoverableRuntimeRunId;
+      const recovered = runtimeRunId !== null;
+      if (!runtimeRunId) {
+        if (!paidTransport) throw new M2RuntimeError("PRODUCTION_RECOVERY_EXECUTOR_UNAVAILABLE");
+        const definitions = authority.schemaVersion === "v19-l5-purchase-ready-authority-v1" ? (await loadV19L5StageCatalog()).definitions : this.options.catalog.definitions;
+        const checkpoint = await this.options.runtimeRepository.getPaidStageCheckpoint?.(claim.request.id) ?? null;
+        const resumed = createPaidCheckpointTransport({ checkpoint, authority, requestId: claim.request.id, now: this.now(), definitions, transport: paidTransport });
+        runtimeRunId = this.uuid();
+        if (authority.schemaVersion === "v19-l5-purchase-ready-authority-v1") {
+          await fulfillV19PaidCandidate({ authority, requestId: claim.request.id, runId: runtimeRunId,
+            repository: this.options.runtimeRepository, transport: resumed.transport, now: this.now, actionNow: resumed.actionNow, timeZone: this.options.timeZone ?? "Asia/Tokyo",
+            beforeInvocation: (request, attempt) => beforeProviderInvocation(request.stageId, attempt) });
+        } else {
+          const result = await this.pipeline(beforeProviderInvocation, resumed.transport).fulfillPrepared(claim.request, authority,
+            this.runContext(claim.request.id, runtimeRunId, this.now(), resumed.actionNow));
+          if (result.eligibility !== "ready") throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RESULT_INVALID");
+        }
       }
-      const recovered = claim.recoverableRuntimeRunId
-        ? await this.options.runtimeRepository.getCompletedAssessment(
-            claim.request.id,
-          )
-        : null;
-      if (
-        claim.recoverableRuntimeRunId &&
-        (!recovered || recovered.runId !== claim.recoverableRuntimeRunId || recovered.requestId !== claim.request.id)
-      ) {
-        throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RECOVERY_INVALID");
+      const repository = this.options.runtimeRepository;
+      if (!repository.getRecoveryCandidate || !this.options.lifecycleRepository.attestRecoveryCandidate) {
+        throw new M2RuntimeError("PRODUCTION_RECOVERY_VALIDATION_EVIDENCE_REQUIRED");
       }
-      const result = recovered
-        ? {
-            ...hydratePersistedReadyAssessmentV1({
-              requestId: recovered.requestId, runId: recovered.runId,
-              decision: recovered.decision, reportJson: recovered.report,
-              decisionCardJson: recovered.decisionCard,
-              authoritativeRequestedTopics: claim.request.requestedTopics,
-              usage: recovered.usage,
-            }),
-            duplicate: true,
-            authoritativeRequestedTopics: [...claim.request.requestedTopics],
-          }
-        : await this.pipeline(beforeProviderInvocation).fulfillPrepared(
-            claim.request,
-            authority,
-            this.runContext(claim.request.id, this.uuid(), this.now()),
-          );
-      if (result.eligibility !== "ready") {
-        throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RESULT_INVALID");
-      }
-      const projection = projectCustomerAssessmentExperienceV2(
-        result,
-        claim.request.requestedTopics,
-      );
+      const candidate = await repository.getRecoveryCandidate(runtimeRunId);
+      if (!candidate) throw new M2RuntimeError("PRODUCTION_FULFILLMENT_RECOVERY_INVALID");
+      const { projection, attestation } = await validateRecoveryCandidate(candidate, authority, claim.request.id, this.now());
+      await this.options.lifecycleRepository.attestRecoveryCandidate({ ...attestation, logicalAssessmentId: claim.logicalAssessmentId, ownerId, now: this.now() });
       const resultToken = this.capability();
       const delivery =
         await this.options.lifecycleRepository.completeFulfillment({
           grantId: claim.grantId,
           logicalAssessmentId: claim.logicalAssessmentId,
           ownerId,
-          runtimeRunId: result.runId,
+          runtimeRunId,
+          candidateReportHash: attestation.reportHash,
+          candidateValidationHash: attestation.validationHash,
           deliveryId: this.uuid(),
           projection,
           projectionHash: hashProductionSnapshot(projection),
@@ -777,7 +776,7 @@ export class ProductionFulfillmentApplication {
         status: "completed",
         resultToken,
         projection: delivery.projection,
-        duplicate: recovered !== null,
+        duplicate: recovered,
       };
     } catch (error) {
       const safe = asM2RuntimeError(error, "PRODUCTION_FULFILLMENT_FAILED");

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "verify:paid-recovery:local": "node scripts/run-remediation-offline.mjs --experimental-transform-types scripts/verify-paid-recovery-local.mjs",
+    "verify:paid-recovery:migration": "node scripts/run-remediation-offline.mjs scripts/verify-paid-recovery-migration.mjs",
+    "verify:paid-recovery:transport": "node scripts/run-remediation-offline.mjs --experimental-transform-types scripts/verify-paid-recovery-transport.mjs",
     "dev": "next dev",
     "content-studio:local": "node scripts/run-content-studio-local.mjs",
     "build": "next build",

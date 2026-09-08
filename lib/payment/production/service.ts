@@ -32,8 +32,8 @@ import type {
 } from "./types.ts";
 
 const backgroundFulfillmentDispatcher: ProductionFulfillmentDispatcherV1 = {
-  async enqueue(jobId) {
-    const outcome = await enqueueProductionFulfillmentJob(jobId);
+  async enqueue(jobId, recoveryCycle) {
+    const outcome = await enqueueProductionFulfillmentJob(jobId, { recoveryCycle });
     return { eventId: outcome.eventId };
   },
 };

@@ -5,6 +5,7 @@ import {
 import { SupabaseProductionFulfillmentRepository } from "./supabase-repository.ts";
 import { createGlobalUnpaidComputeAuthority } from "./global-unpaid-compute-runtime.ts";
 import { readGlobalUnpaidComputePolicy } from "./global-unpaid-compute.ts";
+import { createPaidRecoveryTransport, SupabasePaidProviderBudgetRepository } from "./paid-recovery-transport.ts";
 
 export async function createProductionAssessmentApplication(options?: {
   allowSyntheticPurchaseAuthority?: boolean;
@@ -28,6 +29,8 @@ export async function createProductionAssessmentApplication(options?: {
     environment.supabaseUrl,
     environment.supabaseSecretKey,
   );
+  const transport = new OpenAiResponsesTransport(environment.openAiApiKey);
+  const paidBudgetRepository = new SupabasePaidProviderBudgetRepository(environment.supabaseUrl, environment.supabaseSecretKey);
   return new ProductionFulfillmentApplication({
     runtimeRepository,
     lifecycleRepository,
@@ -39,7 +42,10 @@ export async function createProductionAssessmentApplication(options?: {
     // Resolve required unpaid configuration only when an unpaid stage starts.
     // Paid fulfillment never reads or reserves from this pool.
     globalUnpaidComputePolicy: readGlobalUnpaidComputePolicy,
-    transport: new OpenAiResponsesTransport(environment.openAiApiKey),
+    transport,
+    paidTransportFactory: ({ logicalAssessmentId, ownerId }) => createPaidRecoveryTransport({
+      transport, repository: paidBudgetRepository, logicalAssessmentId, ownerId,
+    }),
     catalog: {
       catalogVersion: "runtime-stage-catalog-v17.0.0",
       promptBundleVersion: "prompt-bundle-runtime-v17.0.0",

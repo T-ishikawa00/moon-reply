@@ -1,8 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
 import {
   decodeCustomerAssessmentExperienceProjectionV2,
-  type CustomerAssessmentExperienceProjectionV2,
 } from "../runtime/customer-assessment-experience-projection-v2.ts";
+import type { PaidCanonicalProjection, PaidMessageProjection } from "./recovery-candidate.ts";
 import { M2RuntimeError } from "../runtime/errors.ts";
 import { hashProductionSnapshot } from "./capabilities.ts";
 
@@ -18,10 +18,16 @@ function integrityFailure(): never {
 export function decodeAndVerifyProductionCanonicalProjection(
   value: unknown,
   persistedHash: unknown,
-): CustomerAssessmentExperienceProjectionV2 {
-  let projection: CustomerAssessmentExperienceProjectionV2;
+): PaidCanonicalProjection {
+  let projection: PaidCanonicalProjection;
   try {
-    projection = decodeCustomerAssessmentExperienceProjectionV2(
+    const candidate = value as Partial<PaidMessageProjection> | null;
+    if (candidate?.projectionSchemaVersion === "v19-l5-message-projection-v1") {
+      if (Object.keys(candidate).sort().join(",") !== ["projectionSchemaVersion", "kind", "opening", "draft", "explanation", "closing"].sort().join(",") ||
+        !["message_edit", "message_composition"].includes(candidate.kind ?? "") ||
+        [candidate.opening, candidate.draft, candidate.explanation, candidate.closing].some(text => typeof text !== "string" || !text.trim())) integrityFailure();
+      projection = structuredClone(candidate) as PaidMessageProjection;
+    } else projection = decodeCustomerAssessmentExperienceProjectionV2(
       structuredClone(value),
     );
   } catch {

@@ -175,6 +175,7 @@ import { validateWritingContextIntegrityV1 } from "./writing-context-integrity-v
 import { validateWritingContextIntegrityV2 } from "./writing-context-integrity-v2.ts";
 
 export type AssessmentRunContext = {
+  actionStartedAt?: string;
   requestId: string;
   runId: string;
   model: "gpt-5.6-luna";
@@ -346,6 +347,7 @@ export type ProviderInvocationPermit = {
 };
 
 export type PipelineOptions = {
+  strictMaterialDelivery?: boolean;
   repository: AssessmentRepository;
   transport: AiStageTransport;
   definitions: StageDefinition[];
@@ -659,6 +661,7 @@ export class AssessmentPipeline {
   private readonly timeZone?: string;
   private readonly clarificationId: () => string;
   private readonly beforeProviderInvocation?: PipelineOptions["beforeProviderInvocation"];
+  private readonly strictMaterialDelivery: boolean;
   private usage: UsageTotals = emptyUsageTotals();
   private returnedModel: string | null = null;
 
@@ -678,6 +681,7 @@ export class AssessmentPipeline {
     this.timeZone = options.timeZone;
     this.clarificationId = options.clarificationId ?? createOpaqueClarificationIdV1;
     this.beforeProviderInvocation = options.beforeProviderInvocation;
+    this.strictMaterialDelivery = options.strictMaterialDelivery ?? false;
   }
 
   private validateRuntimeIdentity(runContext: AssessmentRunContext) {
@@ -796,6 +800,7 @@ export class AssessmentPipeline {
       input,
     });
     await this.repository.startStage({
+      inputJson: input,
       id: stageRunId,
       runId: runContext.runId,
       stageId: definition.stageId,
@@ -1438,7 +1443,7 @@ export class AssessmentPipeline {
     }
     const decisionPolicy = effectivePolicy.policy;
     const actionContext = createActionContextV1({
-      trustedNowIso: input.runContext.startedAt,
+      trustedNowIso: input.runContext.actionStartedAt ?? input.runContext.startedAt,
       timeZone: this.timeZone,
     });
     const contactConstraintPolicy = createContactConstraintPolicyV1({
@@ -1732,6 +1737,8 @@ export class AssessmentPipeline {
               }
               if (attemptNumber === 2) {
                 if (
+                  (!this.strictMaterialDelivery || reassessmentDirective.defects.every(defect =>
+                    defect.severity === "minor" && ["BRAND_TONE", "TEMPLATE_GENERICITY", "REPETITION"].includes(defect.findingCode))) &&
                   classifyPaidQualityReassessmentExhaustionV1(
                     reassessmentDirective,
                   ) === "deliver_latest_valid_candidate"
@@ -1881,7 +1888,7 @@ export class AssessmentPipeline {
     });
     const decisionPolicy = effectivePolicy.policy;
     const actionContext = createActionContextV1({
-      trustedNowIso: input.runContext.startedAt,
+      trustedNowIso: input.runContext.actionStartedAt ?? input.runContext.startedAt,
       timeZone: this.timeZone,
     });
     const contactConstraintPolicy = createContactConstraintPolicyV1({
@@ -2797,7 +2804,7 @@ export class AssessmentPipeline {
         throw new M2RuntimeError("M2_RUNTIME_AUTHORITY_INVALID");
       }
       actionContext = createActionContextV1({
-        trustedNowIso: runContext.startedAt,
+        trustedNowIso: runContext.actionStartedAt ?? runContext.startedAt,
         timeZone: this.timeZone,
       });
       contactConstraintPolicy = createContactConstraintPolicyV1({

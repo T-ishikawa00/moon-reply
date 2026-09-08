@@ -15,16 +15,16 @@ import type {
 export const PRODUCTION_FULFILLMENT_MAX_RETRIES = 8;
 
 export type ProductionFulfillmentWorkloadDependencies = Readonly<{
-  processJob(jobId: string): Promise<ServerFulfillmentOutcome>;
+  processJob(jobId: string, recoveryCycle?: number): Promise<ServerFulfillmentOutcome>;
   quarantineAfterRetryExhaustion(
     jobId: string,
+    recoveryCycle?: number,
   ): Promise<FulfillmentRetryExhaustionOutcome>;
 }>;
 
 /**
- * Async Workloads is the sole retry authority after router acceptance. The
- * final retry invocation is reserved for durable terminalization and never
- * enters the Provider pipeline.
+ * Async Workloads owns short retries. Exhaustion hands the same purchase to
+ * the durable DB recovery schedule and never enters the Provider pipeline.
  */
 export async function processProductionFulfillmentWorkloadEvent(
   event: Pick<
@@ -43,9 +43,10 @@ export async function processProductionFulfillmentWorkloadEvent(
   if (event.attempt >= PRODUCTION_FULFILLMENT_MAX_RETRIES) {
     const terminal = await dependencies.quarantineAfterRetryExhaustion(
       payload.jobId,
+      payload.recoveryCycle ?? 0,
     );
     if (terminal.disposition === "completed") {
-      const completed = await dependencies.processJob(payload.jobId);
+      const completed = await dependencies.processJob(payload.jobId, payload.recoveryCycle ?? 0);
       if (
         completed.status === "completed" &&
         !completed.notificationPending &&
@@ -59,7 +60,7 @@ export async function processProductionFulfillmentWorkloadEvent(
     );
   }
 
-  const outcome = await dependencies.processJob(payload.jobId);
+  const outcome = await dependencies.processJob(payload.jobId, payload.recoveryCycle ?? 0);
   if (outcome.status === "temporary_problem") {
     throw new Error("PRODUCTION_FULFILLMENT_RETRYABLE_FAILURE");
   }

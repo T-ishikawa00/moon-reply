@@ -43,7 +43,7 @@ function check(ok: unknown, code: string): asserts ok { if (!ok) throw new M2Run
 export type V19L5StageEvidence = { stageId: M2StageId; attempt: 1 | 2; request: StageRequest; response: StageResponse | null; error: string | null };
 export type V19L5Result = {
   schemaVersion: "v19-l5-local-result-v1";
-  finalState: "completed" | "clarification" | "stopped";
+  finalState: "completed" | "clarification" | "stopped" | "purchase_ready";
   answerMode: "message_only" | "decision_guidance" | null;
   decisionResult: SplitCompletedAssessment | null;
   messageResult: { plan: V19L5MessagePlan; content: V19L5MessageContent } | null;
@@ -74,6 +74,21 @@ export class V19L5LocalApplication {
     check(!this.used, "V19_L5_SESSION_ALREADY_USED"); this.used = true;
     return this.execute(structuredClone(input));
   }
+  /** Explicit candidate preparation: stop before paid PB-04, retain validated
+   * upstream requests/outputs. Production selection remains outside this class. */
+  async prepare(input: AssessmentInput): Promise<V19L5Result> {
+    check(!this.used, "V19_L5_SESSION_ALREADY_USED"); this.used = true;
+    return this.execute(structuredClone(input), undefined, true);
+  }
+  /** Revalidate and reuse the immutable purchase-ready checkpoint. Replayed
+   * stages are compared byte-for-byte to their reconstructed contract/input;
+   * only PB-04 onward may invoke the supplied paid transport. */
+  async fulfillPrepared(checkpoint: V19L5Result): Promise<V19L5Result> {
+    check(!this.used, "V19_L5_SESSION_ALREADY_USED"); this.used = true;
+    check(checkpoint.finalState === "purchase_ready" && checkpoint.stopFinding === null &&
+      checkpoint.evidence.inputHash === hashJson(checkpoint.evidence.input), "V19_L5_CHECKPOINT_INVALID");
+    return this.execute(structuredClone(checkpoint.evidence.input), undefined, false, checkpoint);
+  }
   /** One original-message answer, bound to this instance's retained Base.
    * Re-analyzes the supplied original and Safety; never rewrites Base facts. */
   async provideOriginalMessage(original: string): Promise<V19L5Result> {
@@ -81,7 +96,7 @@ export class V19L5LocalApplication {
     check(pending && typeof original === "string" && original.trim().length > 0, "V19_L5_ORIGINAL_ANSWER_INVALID");
     return this.execute({ ...pending.input, optionalMessage: original }, pending.base);
   }
-  private async execute(request: AssessmentInput, retainedBase?: V19L5BaseIntentEnvelope): Promise<V19L5Result> {
+  private async execute(request: AssessmentInput, retainedBase?: V19L5BaseIntentEnvelope, prepareOnly = false, checkpoint?: V19L5Result): Promise<V19L5Result> {
     // Full contract equality, including prompt text and subsidiary repair contract,
     // is checked before every session, not just a caller-supplied version label.
     const expected = await loadV19L5StageCatalog();
@@ -109,8 +124,12 @@ export class V19L5LocalApplication {
         promptHash: definition.promptHash, schemaName: definition.schemaName, schemaVersion: definition.schemaVersion, schemaHash: definition.schemaHash, outputSchema: definition.outputSchema, input: structuredClone(input) };
       const evidence: V19L5StageEvidence = { stageId, attempt, request: structuredClone(q), response: null, error: null }; stages.push(evidence);
       try {
-        const response = await this.options.transport.invoke(q); evidence.response = structuredClone(response);
-        result.usage = addUsage(result.usage, response.usage);
+        const upstream = ["PB-01", "PB-01C", "PB-02", "PB-03"].includes(stageId);
+        const saved = checkpoint && upstream ? checkpoint.evidence.stages.filter(s => s.stageId === stageId) : null;
+        if (saved) check(saved.length === 1 && saved[0].attempt === 1 && saved[0].error === null &&
+          saved[0].response && isDeepStrictEqual(saved[0].request, q), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH");
+        const response = saved ? saved[0].response! : await this.options.transport.invoke(q); evidence.response = structuredClone(response);
+        if (!saved) result.usage = addUsage(result.usage, response.usage);
         check(response.returnedModel === q.model, "M2_STAGE_MODEL_MISMATCH");
         const output = structuredClone(response.output);
         if (stageId === "PB-04" && output.decision_plan) output.decision_plan = canonicalizeDecisionPlanFactReferencesV1(json(output.decision_plan));
@@ -157,6 +176,7 @@ export class V19L5LocalApplication {
       const route = classifyV19L5Route({ intent, candidateEnvelope: candidate });
       check(route !== "original_message_clarification", "V19_L5_ORIGINAL_MISSING");
       result.answerMode = route;
+      if (prepareOnly) { result.finalState = "purchase_ready"; return result; }
       const effectivePolicy = route === "decision_guidance" ? buildV19L5EffectiveDecisionPolicy({ authority, candidateEnvelope: candidate, intent }) : null;
       const actionContext = createActionContextV1({ trustedNowIso: this.options.now(), timeZone: this.options.timeZone });
       const contactPolicy = createContactConstraintPolicyV1({ baseStructuredIntake: base, followUpException: effectivePolicy?.policy.follow_up_exception ?? "none" });

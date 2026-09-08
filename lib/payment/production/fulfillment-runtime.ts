@@ -10,6 +10,7 @@ import { ProductionPaymentDeliveryApplication } from "./application.ts";
 import { readPaymentDeliveryEnvironment } from "./environment-runtime.ts";
 import { VerifiedEmailResultNotificationAdapterV1 } from "./result-notification.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
+import { SupabasePaidRecoveryRepository } from "./paid-recovery-supabase-repository.ts";
 import { createConfiguredTransactionalEmailAdapter } from "./transactional-email-runtime.ts";
 import type { CheckoutSessionInspectorV1 } from "./stripe-session.ts";
 import type {
@@ -65,6 +66,7 @@ export function createActiveProductionFulfillmentApplication(input: {
   };
   return new ProductionPaymentDeliveryApplication({
     repository,
+    recoveryRepository: new SupabasePaidRecoveryRepository(environment.supabaseUrl, environment.supabaseSecretKey),
     checkoutProvider: new FulfillmentRuntimeCheckoutProviderV1(),
     checkoutSessionInspector: input.checkoutSessionInspector,
     transactionalEmail,

@@ -144,6 +144,9 @@ type ProductionDatabase = {
       issue_production_assessment_grant_v1: RuntimeFunction;
       issue_rc2_production_assessment_grant_v2: RuntimeFunction;
       claim_production_fulfillment_v3: RuntimeFunction;
+      claim_production_fulfillment_v4: RuntimeFunction;
+      complete_production_fulfillment_v3: RuntimeFunction;
+      attest_paid_recovery_candidate_v1: RuntimeFunction;
       mark_production_generation_started_v2: RuntimeFunction;
       complete_production_fulfillment_v2: RuntimeFunction;
       fail_production_fulfillment_v2: RuntimeFunction;
@@ -644,7 +647,7 @@ export class SupabaseProductionFulfillmentRepository
     now: string;
   }): Promise<ProductionFulfillmentClaim> {
     const { data, error } = await this.client.rpc(
-      "claim_production_fulfillment_v3",
+      "claim_production_fulfillment_v4",
       {
         p_grant_id: input.grantId,
         p_owner_id: input.ownerId,
@@ -709,12 +712,14 @@ export class SupabaseProductionFulfillmentRepository
 
   async completeFulfillment(record: CompleteProductionFulfillmentRecord) {
     const { error } = await this.client.rpc(
-      "complete_production_fulfillment_v2",
+      "complete_production_fulfillment_v3",
       {
         p_grant_id: record.grantId,
         p_logical_assessment_id: record.logicalAssessmentId,
         p_owner_id: record.ownerId,
         p_runtime_run_id: record.runtimeRunId,
+        p_report_hash: record.candidateReportHash,
+        p_validation_hash: record.candidateValidationHash,
         p_delivery_id: record.deliveryId,
         p_experience_projection_json: record.projection,
         p_projection_sha256: record.projectionHash,
@@ -895,6 +900,25 @@ export class SupabaseProductionFulfillmentRepository
         ? null : stringValue(result.email_payload_ciphertext),
     };
     return { disposition: "acquired", notification };
+  }
+
+  async attestRecoveryCandidate(input: import("./recovery-candidate.ts").RecoveryCandidateAttestation & { logicalAssessmentId: string; ownerId: string; now: string }) {
+    const { error } = await this.client.rpc("attest_paid_recovery_candidate_v1", {
+      p_logical_assessment_id: input.logicalAssessmentId, p_owner_id: input.ownerId, p_runtime_run_id: input.runtimeRunId,
+      p_report_hash: input.reportHash, p_validation_hash: input.validationHash, p_report_json: input.reportJson,
+      p_validation_stage_id: input.validationStageId, p_validation_input: input.validationInput, p_validation_output: input.validationOutput, p_now: input.now,
+      p_validation_request_hash: input.validationRequestHash, p_reconstructed_legacy_input: input.reconstructedLegacyInput,
+      p_validation_proof: input.validationProof,
+    });
+    if (error) {
+      // These are definitive rejections by the candidate integrity gate, not
+      // transient database outages. Keep the durable operator disposition.
+      const reason = ["PRODUCTION_RECOVERY_VALIDATION_EVIDENCE_REQUIRED",
+        "PRODUCTION_RECOVERY_CANDIDATE_INVALID", "PAID_RECOVERY_FINANCIAL_REVIEW_REQUIRED"]
+        .find(code => error.message === code);
+      if (reason) throw new M2RuntimeError(reason, 503);
+      databaseFailure();
+    }
   }
 
   async prepareNotificationEmail(input: {

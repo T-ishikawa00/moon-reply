@@ -247,6 +247,9 @@ export type FulfillmentJobRecord = Readonly<{
   logicalAssessmentId: string | null;
   lastErrorCode: string | null;
   completedAt: string | null;
+  recoveryCycle?: number;
+  recoveryNextAttemptAt?: string | null;
+  recoveryReasonCode?: string | null;
 }>;
 
 export type FulfillmentJobClaim = Readonly<{
@@ -255,6 +258,7 @@ export type FulfillmentJobClaim = Readonly<{
 }>;
 
 export type FulfillmentDispatchClaim = Readonly<{
+  recoveryCycle?: number;
   disposition:
     | "acquired"
     | "in_progress"
@@ -272,7 +276,7 @@ export type FulfillmentRetryExhaustionOutcome = Readonly<{
 }>;
 
 export type ProductionFulfillmentDispatcherV1 = {
-  enqueue(jobId: string): Promise<{ eventId: string }>;
+  enqueue(jobId: string, recoveryCycle?: number): Promise<{ eventId: string }>;
 };
 
 export type PurchaseStatusRecord = Readonly<{

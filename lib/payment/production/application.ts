@@ -9,11 +9,13 @@ import {
   M2RuntimeError,
 } from "../../assessment/runtime/errors.ts";
 import { hashOpaqueProductionCapability } from "../../assessment/production/capabilities.ts";
+import { ResultNotificationSendError } from "../../assessment/production/notification.ts";
 import {
   RC2_CHECKOUT_SESSION_EXPIRATION_SECONDS,
   RC2_PRODUCT,
 } from "./constants.ts";
 import { requestProductionFulfillmentDispatch } from "./fulfillment-dispatch.ts";
+import { recoveryDisposition, schedulePaidRecovery, type PaidRecoveryRepository } from "./paid-recovery.ts";
 import { parseCustomerResultPath } from "../purchase-status-contract.ts";
 import {
   createPaymentCapability,
@@ -80,6 +82,7 @@ function confirmationPendingStatus(
 
 type PaymentDeliveryApplicationOptions = {
   repository: PaymentDeliveryRepository;
+  recoveryRepository?: PaidRecoveryRepository;
   checkoutProvider: CheckoutProviderV1;
   checkoutSessionInspector?: CheckoutSessionInspectorV1;
   transactionalEmail: TransactionalEmailAdapterV1;
@@ -953,7 +956,21 @@ export class ProductionPaymentDeliveryApplication {
           error,
           "PRODUCTION_NOTIFICATION_DELIVERY_FAILED",
         );
-        if (safe.safeCode === "PRODUCTION_NOTIFICATION_MANUAL_REVIEW") {
+        if (["PRODUCTION_NOTIFICATION_MANUAL_REVIEW", "PRODUCTION_NOTIFICATION_PROVIDER_UNCONFIGURED",
+          "TRANSACTIONAL_EMAIL_PROVIDER_UNCONFIGURED",
+          "RESULT_EMAIL_AUTHORITY_NOT_FOUND", "PAYMENT_CONFIGURATION_INVALID",
+          "PRODUCTION_RUNTIME_CONFIGURATION_INVALID", "EMAIL_ENCRYPTION_CONFIGURATION_INVALID",
+          "EMAIL_ADDRESS_INTEGRITY_FAILED", "PRODUCTION_NOTIFICATION_PAYLOAD_INTEGRITY_FAILED"].includes(safe.safeCode) ||
+          error instanceof ResultNotificationSendError && ["not_sent", "conflict"].includes(error.outcome)) {
+          if (this.options.recoveryRepository) {
+            await schedulePaidRecovery(this.options.recoveryRepository, {
+              jobId: job.id, ownerId: null,
+              reasonCode: error instanceof ResultNotificationSendError
+                ? error.outcome === "conflict" ? "PRODUCTION_NOTIFICATION_PAYLOAD_CONFLICT" : "PRODUCTION_NOTIFICATION_SEND_NOT_ATTEMPTED"
+                : safe.safeCode,
+              recoveryCycle: job.recoveryCycle ?? 0, now: this.now(),
+            });
+          }
           return { pending: false, manualReview: true };
         }
         // The durable RC-1 outbox and Async Workloads retry this independently.
@@ -1013,17 +1030,24 @@ export class ProductionPaymentDeliveryApplication {
       const safe = asM2RuntimeError(error, "PAYMENT_FULFILLMENT_FAILED");
       if (claim.disposition === "acquired") {
         try {
-          await this.options.repository.failFulfillmentJob({
-            jobId: job.id,
-            ownerId,
-            errorCode: safe.safeCode,
-            now: this.now(),
-          });
+          if (this.options.recoveryRepository &&
+              (recoveryDisposition(safe.safeCode) === "operator" || job.attemptCount >= 8 ||
+               safe.safeCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS")) {
+            await schedulePaidRecovery(this.options.recoveryRepository, {
+              jobId: job.id, ownerId, reasonCode: safe.safeCode,
+              recoveryCycle: job.recoveryCycle ?? 0, now: this.now(),
+            });
+          } else {
+            await this.options.repository.failFulfillmentJob({
+              jobId: job.id, ownerId, errorCode: safe.safeCode, now: this.now(),
+            });
+          }
         } catch {
           // A lost or reclaimed lease must not overwrite the current owner.
         }
       }
-      if (safe.safeCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS") {
+      if (safe.safeCode === "PRODUCTION_PROVIDER_OUTCOME_AMBIGUOUS" ||
+          (this.options.recoveryRepository && recoveryDisposition(safe.safeCode) === "operator")) {
         return { status: "manual_review" };
       }
       return { status: "temporary_problem", retryable: true };
@@ -1166,9 +1190,11 @@ export class ProductionPaymentDeliveryApplication {
     if (job.state === "manual_review") {
       return confirmationPendingStatus(status.purchaseIntent, false);
     }
-    if (
-      job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
-    ) {
+    if (job.state !== "completed" && job.recoveryNextAttemptAt &&
+        !(job.state === "processing" && job.leaseExpiresAt && Date.parse(job.leaseExpiresAt) > Date.parse(this.now()))) {
+      return { status: "delayed_assessment", paymentVerified: true, accountFallback: false };
+    }
+    if (!job.recoveryNextAttemptAt && job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED") {
       return confirmationPendingStatus(status.purchaseIntent, false);
     }
     if (job.state === "completed") {
@@ -1275,9 +1301,11 @@ export class ProductionPaymentDeliveryApplication {
     if (job.state === "manual_review") {
       return confirmationPendingStatus(status.purchaseIntent, true);
     }
-    if (
-      job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED"
-    ) {
+    if (job.state !== "completed" && job.recoveryNextAttemptAt &&
+        !(job.state === "processing" && job.leaseExpiresAt && Date.parse(job.leaseExpiresAt) > Date.parse(this.now()))) {
+      return { status: "delayed_assessment", paymentVerified: true, accountFallback: true };
+    }
+    if (!job.recoveryNextAttemptAt && job.lastErrorCode === "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED") {
       return confirmationPendingStatus(status.purchaseIntent, true);
     }
     if (job.state === "completed") {
@@ -1331,13 +1359,14 @@ export class ProductionPaymentDeliveryApplication {
 
   async processFulfillmentJobById(
     jobId: unknown,
+    recoveryCycle = 0,
   ): Promise<ServerFulfillmentOutcome> {
     if (typeof jobId !== "string" || !internalUuidPattern.test(jobId)) {
       throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_ID_INVALID", 400);
     }
     const now = this.now();
     const ownerId = this.uuid();
-    const claim = await this.options.repository.claimFulfillmentJobById({
+    const claimInput = {
       jobId,
       ownerId,
       leaseExpiresAt: addSeconds(
@@ -1345,7 +1374,10 @@ export class ProductionPaymentDeliveryApplication {
         this.options.fulfillmentLeaseSeconds,
       ),
       now,
-    });
+    };
+    const claim = this.options.recoveryRepository
+      ? await this.options.recoveryRepository.claimJob({ ...claimInput, recoveryCycle })
+      : await this.options.repository.claimFulfillmentJobById(claimInput);
     if (!claim) {
       return { status: "temporary_problem", retryable: true };
     }
@@ -1362,9 +1394,18 @@ export class ProductionPaymentDeliveryApplication {
 
   async quarantineFulfillmentJobAfterAsyncRetryExhaustion(
     jobId: unknown,
+    recoveryCycle = 0,
   ): Promise<FulfillmentRetryExhaustionOutcome> {
     if (typeof jobId !== "string" || !internalUuidPattern.test(jobId)) {
       throw new M2RuntimeError("PAYMENT_FULFILLMENT_JOB_ID_INVALID", 400);
+    }
+    if (this.options.recoveryRepository) {
+      await schedulePaidRecovery(this.options.recoveryRepository, {
+        jobId, ownerId: null, recoveryCycle,
+        reasonCode: "PRODUCTION_ASYNC_WORKLOAD_RETRIES_EXHAUSTED", now: this.now(),
+      });
+      const state = await this.options.recoveryRepository.inspect(jobId);
+      return { disposition: state.state === "completed" ? "completed" : "quarantined" };
     }
     const outcome =
       await this.options.repository.quarantineFulfillmentJobAfterAsyncRetryExhaustion(

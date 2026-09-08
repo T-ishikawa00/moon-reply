@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { CustomerAssessmentNote } from "@/components/runtime/CustomerAssessmentNote";
+import { PaidAssessmentNote } from "@/components/runtime/PaidAssessmentNote";
 import { resolveCustomerAccountResult } from "@/lib/customer-auth/account-result-resolution";
 import { createCustomerAccountAuthApplication } from "@/lib/customer-auth/account-service";
 import { isCustomerAuthFoundationEnabled } from "@/lib/customer-auth/environment";
@@ -39,7 +39,7 @@ export default async function AccountResultPage({
       <nav className={styles.navigation} aria-label="鑑定ノートのナビゲーション">
         <Link href="/account">私の鑑定ノートへ戻る</Link>
       </nav>
-      <CustomerAssessmentNote projection={resolution.result.projection} />
+      <PaidAssessmentNote projection={resolution.result.projection} />
       <nav className={styles.navigation} aria-label="鑑定ノートのナビゲーション">
         <Link href="/account">私の鑑定ノートへ戻る</Link>
       </nav>

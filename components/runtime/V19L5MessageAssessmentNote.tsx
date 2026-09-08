@@ -5,7 +5,7 @@ import { CustomerDraftCopyButton } from "@/components/runtime/CustomerDraftCopyB
 import type { V19L5MessageProjection } from "@/lib/assessment/runtime/v19-l5-customer-projection";
 import styles from "./CustomerAssessmentNote.module.css";
 
-// Imported only by the local candidate preview. Production selection is unchanged.
+// Used by candidate previews and verified candidate deliveries. Purchase selection is unchanged.
 export function V19L5MessageAssessmentNote({ projection }: { projection: V19L5MessageProjection }) {
   return (
     <article className={styles.note} aria-label="文面の鑑定ノート">

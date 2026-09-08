@@ -11,6 +11,8 @@ import { requestProductionFulfillmentDispatch } from "./fulfillment-dispatch.ts"
 import { runNotificationCutoverRecovery } from "./notification-cutover-recovery.ts";
 import { runProductionFulfillmentDispatchSchedule } from "./recovery-schedulers.ts";
 import { SupabasePaymentDeliveryRepository } from "./supabase-repository.ts";
+import { SupabasePaidRecoveryRepository } from "./paid-recovery-supabase-repository.ts";
+import { enqueueReviewedNotificationRecovery, paidRecoveryPolicy } from "./paid-recovery.ts";
 
 export async function runConfiguredProductionFulfillmentDispatchSchedule() {
   if (!isProductionFulfillmentDispatchScheduleEnabled()) {
@@ -24,15 +26,22 @@ export async function runConfiguredProductionFulfillmentDispatchSchedule() {
     environment.supabaseUrl,
     environment.supabaseSecretKey,
   );
+  const paidRecovery = new SupabasePaidRecoveryRepository(environment.supabaseUrl, environment.supabaseSecretKey);
   const [dispatch, recovery] = await Promise.allSettled([
-    runProductionFulfillmentDispatchSchedule({
-      repository,
+    (async () => {
+      await paidRecovery.refresh({
+        environment: readConfiguredPaymentEnvironment(), now: new Date().toISOString(), limit: paidRecoveryPolicy.batchLimit,
+      });
+      return runProductionFulfillmentDispatchSchedule({
+      repository: { listDueFulfillmentDispatchJobIds: (input) => paidRecovery.listDue({
+        ...input, environment: readConfiguredPaymentEnvironment(),
+      }) },
       dispatchJob: (jobId) =>
         requestProductionFulfillmentDispatch({
           repository,
           dispatcher: {
-            async enqueue(id) {
-              const sent = await enqueueProductionFulfillmentJob(id);
+            async enqueue(id, recoveryCycle) {
+              const sent = await enqueueProductionFulfillmentJob(id, { recoveryCycle });
               return { eventId: sent.eventId };
             },
           },
@@ -40,14 +49,18 @@ export async function runConfiguredProductionFulfillmentDispatchSchedule() {
           now: () => new Date().toISOString(),
           uuid: randomUUID,
         }),
-    }),
+      });
+    })(),
     runNotificationCutoverRecovery({
       claim: (signal) =>
         repository.claimNotificationCutoverRecovery({
           environment: readConfiguredPaymentEnvironment(),
           signal,
         }),
-      enqueue: (jobId) => enqueueProductionFulfillmentJob(jobId),
+      enqueue: (jobId) => enqueueReviewedNotificationRecovery({
+        repository: paidRecovery, jobId,
+        enqueue: (id, recoveryCycle) => enqueueProductionFulfillmentJob(id, { recoveryCycle }),
+      }),
     }),
   ]);
   // Await both independent lanes even if ordinary dispatch fails immediately;

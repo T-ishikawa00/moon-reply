@@ -18,7 +18,7 @@ export type CustomerPurchaseStatus =
       accountFallback: boolean;
     }>
   | Readonly<{
-      status: "preparing_assessment";
+      status: "preparing_assessment" | "delayed_assessment";
       paymentVerified: true;
       accountFallback: boolean;
     }>
@@ -82,6 +82,13 @@ export const CUSTOMER_PURCHASE_STATUS_POLICY: Readonly<
   },
   temporary_problem: {
     automaticPolling: true,
+    terminal: false,
+    customerActionRequired: false,
+    resultDestination: false,
+    accountFallbackWhenAuthenticated: true,
+  },
+  delayed_assessment: {
+    automaticPolling: false,
     terminal: false,
     customerActionRequired: false,
     resultDestination: false,
@@ -166,6 +173,7 @@ export function decodeCustomerPurchaseStatusResponse(
 
   if (
     data.status === "preparing_assessment" ||
+    data.status === "delayed_assessment" ||
     data.status === "completed_check_verified_email"
   ) {
     if (

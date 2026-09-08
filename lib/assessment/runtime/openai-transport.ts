@@ -14,6 +14,7 @@ import {
   toOpenAiStructuredOutputSchema,
 } from "./openai-schema.ts";
 import type { AiStageTransport, JsonObject, StageRequest } from "./types.ts";
+import { normalizeProviderSchema } from "./openai-schema-normalization.mjs";
 
 export class OpenAiResponsesTransport implements AiStageTransport {
   private readonly client: OpenAI;
@@ -24,19 +25,19 @@ export class OpenAiResponsesTransport implements AiStageTransport {
   }
 
   async invoke(stageRequest: StageRequest) {
-    const providerSchema = toOpenAiStructuredOutputSchema(
-      stageRequest.outputSchema,
-    );
+    let providerSchema: JsonObject;
     try {
+      providerSchema = normalizeProviderSchema(toOpenAiStructuredOutputSchema(stageRequest.outputSchema)).schema;
       assertOpenAIStructuredOutputSchema(providerSchema);
     } catch (error) {
       logDevelopmentOpenAIStructuredOutputSchemaFailure(error);
-      throw new M2RuntimeError("M2_STAGE_PROVIDER_FAILED");
+      throw new M2RuntimeError("M2_STAGE_PROVIDER_CONFIGURATION_INVALID");
     }
     const startedAt = performance.now();
     try {
       const response = await boundedProviderCall((signal) => this.client.responses.create({
         model: stageRequest.model,
+        ...(stageRequest.maxOutputTokens !== undefined ? { max_output_tokens: stageRequest.maxOutputTokens } : {}),
         store: false,
         tools: [],
         stream: false,
@@ -108,7 +109,12 @@ export class OpenAiResponsesTransport implements AiStageTransport {
     } catch (error) {
       if (error instanceof M2RuntimeError) throw error;
       logDevelopmentOpenAiProviderFailure(stageRequest.stageId, error);
-      throw new M2RuntimeError("M2_STAGE_PROVIDER_FAILED");
+      const status = typeof error === "object" && error !== null && "status" in error ? error.status : null;
+      throw new M2RuntimeError(status === 429 || typeof status === "number" && status >= 500
+        ? "M2_STAGE_PROVIDER_RETRYABLE"
+        : status === 400 || status === 401 || status === 403 || status === 404
+          ? "M2_STAGE_PROVIDER_CONFIGURATION_INVALID"
+          : "M2_STAGE_PROVIDER_OUTCOME_AMBIGUOUS");
     }
   }
 }

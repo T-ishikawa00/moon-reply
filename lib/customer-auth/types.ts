@@ -1,4 +1,4 @@
-import type { CustomerAssessmentExperienceProjectionV2 } from "../assessment/runtime/customer-assessment-experience-projection-v2";
+import type { PaidCanonicalProjection } from "../assessment/production/recovery-candidate";
 
 export type CustomerAuthFlowKind = "google" | "email_otp";
 export type CustomerAuthProviderKind = "google" | "email";
@@ -76,7 +76,7 @@ export type CustomerAccountHistoryItem = Readonly<{
 
 export type CustomerOwnedResult = Readonly<{
   deliveryId: string;
-  projection: CustomerAssessmentExperienceProjectionV2;
+  projection: PaidCanonicalProjection;
 }>;
 
 export type CustomerIdentityRepository = {

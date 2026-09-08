@@ -304,6 +304,7 @@ export type StageDefinition = {
 };
 
 export type StageRequest = {
+  maxOutputTokens?: number;
   stageId: M2StageId;
   model: "gpt-5.6-luna";
   developerPrompt: string;
@@ -347,6 +348,7 @@ export type CreateRunRecord = {
 };
 
 export type StartStageRecord = {
+  inputJson?: JsonObject;
   id: string;
   runId: string;
   stageId: M2StageId;
@@ -784,6 +786,9 @@ export type PersistedInitialAuthorityV1 = {
 };
 
 export interface AssessmentRepository {
+  getPaidStageCheckpoint?(requestId: string): Promise<import("../production/recovery-candidate.ts").PaidStageCheckpoint | null>;
+  getRecoveryCandidate?(runId: string): Promise<import("../production/recovery-candidate.ts").RecoveryCandidate | null>;
+  finalizeRecoveryCandidate?(record: { reportId: string; runId: string; requestId: string; reportJson: JsonObject; decisionCardJson: JsonObject; decision: string | null; usage: UsageTotals; completedAt: string }): Promise<void>;
   createRequest(record: CreateRequestRecord): Promise<PersistedAssessmentRequest>;
   findByIdempotencyKey(
     idempotencyKey: string,

@@ -252,6 +252,10 @@ begin
     or job.recovery_next_attempt_at > p_now then
     return jsonb_build_object('disposition','in_progress','fulfillment_job_id',job.id);
   end if;
+  if job.state = 'completed' and job.recovery_reason_code is not null
+    and job.recovery_next_attempt_at is null then
+    return jsonb_build_object('disposition','manual_review','fulfillment_job_id',job.id);
+  end if;
   if job.state <> 'completed' and exists (select 1 from public.production_payment_adjustment_ledger
       where verified_payment_id = job.verified_payment_id) then
     perform public.schedule_paid_fulfillment_recovery_v1(job.id,null,

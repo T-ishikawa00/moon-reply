@@ -6,6 +6,7 @@ export const PRODUCTION_FULFILLMENT_EVENT_NAME =
 
 export type ProductionFulfillmentJobEventData = Readonly<{
   jobId: string;
+  recoveryCycle?: number;
 }>;
 
 export interface ProductionFulfillmentJobEvent
@@ -28,14 +29,18 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 export function parseProductionFulfillmentJobEventData(
   value: unknown,
 ): ProductionFulfillmentJobEventData {
-  if (!isRecord(value) || Object.keys(value).length !== 1) {
+  if (!isRecord(value) || Object.keys(value).some((key) => key !== "jobId" && key !== "recoveryCycle")) {
     throw new Error("PRODUCTION_FULFILLMENT_EVENT_INVALID");
   }
   const jobId = value.jobId;
   if (typeof jobId !== "string" || !UUID_PATTERN.test(jobId)) {
     throw new Error("PRODUCTION_FULFILLMENT_JOB_ID_INVALID");
   }
-  return { jobId };
+  if (value.recoveryCycle !== undefined &&
+      (typeof value.recoveryCycle !== "number" || !Number.isSafeInteger(value.recoveryCycle) || value.recoveryCycle < 0)) {
+    throw new Error("PRODUCTION_FULFILLMENT_EVENT_INVALID");
+  }
+  return { jobId, ...(value.recoveryCycle === undefined ? {} : { recoveryCycle: value.recoveryCycle }) };
 }
 
 export function parseProductionFulfillmentJobId(value: unknown): string {

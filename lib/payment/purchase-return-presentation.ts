@@ -99,12 +99,30 @@ export function getPurchaseReturnPresentation(input: {
     };
   }
 
+  if (status.status === "delayed_assessment" && !requestFailed) {
+    return {
+      eyebrow: "お支払い確認済み",
+      heading: "鑑定ノートの準備に時間がかかっています",
+      body: customerAuthEnabled
+        ? "同じお申し込みについて、次の処理を待っています。完成した鑑定ノートはアカウントから確認できます。"
+        : "同じお申し込みについて、次の処理を待っています。完成したら確認済みのメールでもお知らせします。",
+      assurance: "追加のお支払いは必要ありません。",
+      progress: preparationCurrent,
+      detailHeading: "お申し込みは保存されています",
+      assurances: ["解決に時間がかかる場合は、お問い合わせから対応状況をご確認いただけます。"],
+      showManualRefresh: true,
+      showCheckoutRestart: false,
+      showAccountFallback: customerAuthEnabled && status.accountFallback,
+      showSupportFallback: true,
+    };
+  }
+
   if (status.status === "confirmation_pending" && !requestFailed) {
     if (status.paymentVerified) {
       return {
         eyebrow: "お支払い確認済み",
-        heading: "お申し込みを個別に確認しています",
-        body: "安全な確認が必要なため、この画面での自動確認は停止しています。",
+        heading: "お申し込みは運営による確認が必要です",
+        body: "確認が必要なため、鑑定の自動処理を止めています。お問い合わせから対応状況をご確認いただけます。",
         assurance: "追加のお支払いは必要ありません。",
         progress: preparationCurrent,
         detailHeading: "お申し込みの状態を確認します",

@@ -1,10 +1,9 @@
-import type { CustomerAssessmentExperienceProjectionV2 } from "../runtime/customer-assessment-experience-projection-v2.ts";
+import type { PaidCanonicalProjection, PaidPurchaseAuthority, RecoveryCandidateAttestation } from "./recovery-candidate.ts";
 import type {
   AssessmentInput,
   JsonObject,
   Jpy980ClarificationTarget,
   PersistedAssessmentRequest,
-  PurchaseReadyRuntimeAuthorityV1,
 } from "../runtime/types.ts";
 import type {
   PrepaymentSafetyInputV1,
@@ -59,7 +58,7 @@ export type ProductionPreparationRecord = {
   clarificationQuestion: string | null;
   clarificationAnswerFingerprint: string | null;
   purchaseCapabilityHash: string | null;
-  purchaseReadyAuthority: PurchaseReadyRuntimeAuthorityV1 | null;
+  purchaseReadyAuthority: PaidPurchaseAuthority | null;
   purchaseReadyAuthorityHash: string | null;
   lastErrorCode: string | null;
   createdAt: string;
@@ -92,7 +91,7 @@ export type FinalizeProductionPreparationRecord = {
   clarificationQuestion: string | null;
   clarificationAnswerFingerprint: string | null;
   purchaseCapabilityHash: string | null;
-  purchaseReadyAuthority: PurchaseReadyRuntimeAuthorityV1 | null;
+  purchaseReadyAuthority: PaidPurchaseAuthority | null;
   purchaseReadyAuthorityHash: string | null;
   now: string;
 };
@@ -156,19 +155,21 @@ export type ProductionCanonicalDeliveryRecord = {
   id: string;
   logicalAssessmentId: string;
   runtimeRunId: string;
-  projection: CustomerAssessmentExperienceProjectionV2;
+  projection: PaidCanonicalProjection;
   projectionHash: string;
   deliveryAuthorityReference: string;
   createdAt: string;
 };
 
 export type CompleteProductionFulfillmentRecord = {
+  candidateReportHash?: string;
+  candidateValidationHash?: string;
   grantId: string;
   logicalAssessmentId: string;
   ownerId: string;
   runtimeRunId: string;
   deliveryId: string;
-  projection: CustomerAssessmentExperienceProjectionV2;
+  projection: PaidCanonicalProjection;
   projectionHash: string;
   resultCredentialId: string;
   resultTokenHash: string;
@@ -179,13 +180,13 @@ export type CompleteProductionFulfillmentRecord = {
 export type ProductionFulfillmentResultV1 = Readonly<{
   status: "completed";
   resultToken: string;
-  projection: CustomerAssessmentExperienceProjectionV2;
+  projection: PaidCanonicalProjection;
   duplicate: boolean;
 }>;
 
 export type ResolvedProductionResult = {
   deliveryId: string;
-  projection: CustomerAssessmentExperienceProjectionV2;
+  projection: PaidCanonicalProjection;
 };
 
 export type ProductionNotificationRecord = {
@@ -209,6 +210,7 @@ export type ProductionNotificationClaim =
     }>;
 
 export type ProductionFulfillmentRepository = {
+  attestRecoveryCandidate?(input: RecoveryCandidateAttestation & { logicalAssessmentId: string; ownerId: string; now: string }): Promise<void>;
   beginPreparation(
     record: BeginProductionPreparationRecord,
   ): Promise<BeginProductionPreparationOutcome>;

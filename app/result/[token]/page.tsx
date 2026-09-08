@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CustomerAssessmentNote } from "@/components/runtime/CustomerAssessmentNote";
+import { PaidAssessmentNote } from "@/components/runtime/PaidAssessmentNote";
 import { isProductionResultNotFoundError } from "@/lib/assessment/production/capabilities";
 import { resolveProductionResult } from "@/lib/assessment/production/service";
 
@@ -31,7 +31,7 @@ export default async function ProductionResultPage({
   }
   return (
     <main>
-      <CustomerAssessmentNote projection={result.projection} />
+      <PaidAssessmentNote projection={result.projection} />
     </main>
   );
 }

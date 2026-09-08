@@ -53,7 +53,7 @@ export async function requestProductionFulfillmentDispatch(input: {
 
   let routerAccepted = false;
   try {
-    await input.dispatcher.enqueue(input.jobId);
+    await input.dispatcher.enqueue(input.jobId, claim.recoveryCycle ?? 0);
     routerAccepted = true;
     await input.repository.completeFulfillmentDispatch({
       jobId: input.jobId,

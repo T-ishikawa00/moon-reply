@@ -137,6 +137,9 @@ type PaymentAttemptRow = {
 };
 
 type FulfillmentJobRow = {
+  recovery_cycle_count?: number;
+  recovery_next_attempt_at?: string | null;
+  recovery_reason_code?: string | null;
   id: string;
   purchase_intent_id: string;
   verified_payment_id: string;
@@ -194,6 +197,7 @@ type PaymentDatabase = {
       resolve_customer_completed_delivery_v1: RuntimeFunction;
       resolve_production_delivery_email_v2: RuntimeFunction;
       claim_rc2_fulfillment_dispatch_v2: RuntimeFunction;
+      claim_rc2_fulfillment_dispatch_v3: RuntimeFunction;
       complete_rc2_fulfillment_dispatch_v2: RuntimeFunction;
       fail_rc2_fulfillment_dispatch_v2: RuntimeFunction;
       claim_rc2_fulfillment_job_v2: RuntimeFunction;
@@ -302,6 +306,9 @@ function mapJob(row: FulfillmentJobRow): FulfillmentJobRecord {
     logicalAssessmentId: row.logical_assessment_id,
     lastErrorCode: row.last_error_code,
     completedAt: row.completed_at,
+    recoveryCycle: row.recovery_cycle_count ?? 0,
+    recoveryNextAttemptAt: row.recovery_next_attempt_at ?? null,
+    recoveryReasonCode: row.recovery_reason_code ?? null,
   };
 }
 
@@ -1022,7 +1029,7 @@ export class SupabasePaymentDeliveryRepository
     now: string;
   }): Promise<FulfillmentDispatchClaim | null> {
     const { data, error } = await this.client.rpc(
-      "claim_rc2_fulfillment_dispatch_v2",
+      "claim_rc2_fulfillment_dispatch_v3",
       {
         p_fulfillment_job_id: input.jobId,
         p_dispatch_marker: input.dispatchMarker,
@@ -1048,6 +1055,7 @@ export class SupabasePaymentDeliveryRepository
     }
     return {
       disposition: disposition as FulfillmentDispatchClaim["disposition"],
+      recoveryCycle: typeof result.recovery_cycle === "number" ? result.recovery_cycle : 0,
     };
   }
 

@@ -47,9 +47,11 @@ export async function enqueueProductionFulfillmentJob(
   jobId: unknown,
   dependencies: {
     dispatcher?: ProductionFulfillmentEventDispatcher;
+    recoveryCycle?: number;
   } = {},
 ): Promise<EnqueueProductionFulfillmentOutcome> {
-  const payload = { jobId: parseProductionFulfillmentJobId(jobId) };
+  const payload = { jobId: parseProductionFulfillmentJobId(jobId),
+    ...(dependencies.recoveryCycle === undefined ? {} : { recoveryCycle: dependencies.recoveryCycle }) };
   const dispatcher =
     dependencies.dispatcher ?? createProductionFulfillmentEventDispatcher();
   const result = await dispatcher.send(PRODUCTION_FULFILLMENT_EVENT_NAME, {

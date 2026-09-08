@@ -81,6 +81,7 @@ type RunRow = {
 };
 
 type StageRunRow = {
+  input_json: JsonObject | null;
   id: string;
   run_id: string;
   stage_id: string;
@@ -163,7 +164,7 @@ type RuntimeDatabase = {
           p_run_id: string;
           p_request_id: string;
           p_returned_model: string | null;
-          p_decision: string;
+          p_decision: string | null;
           p_report_json: unknown;
           p_decision_card_json: unknown;
           p_total_input_tokens: number;
@@ -324,6 +325,7 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       attempt_number: record.attemptNumber,
       status: "processing",
       request_hash: record.requestHash,
+      ...(record.inputJson ? { input_json: record.inputJson } : {}),
       prompt_hash: record.promptHash,
       schema_hash: record.schemaHash,
       response_id: null,
@@ -743,6 +745,52 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
         usageDerivedCostUsd: run.usage_derived_cost_usd,
       },
     });
+  }
+
+  async finalizeRecoveryCandidate(record: { reportId: string; runId: string; requestId: string; reportJson: JsonObject; decisionCardJson: JsonObject; decision: string | null; usage: import("./types.ts").UsageTotals; completedAt: string }) {
+    const { error } = await this.client.rpc("finalize_completed_assessment", {
+      p_report_id: record.reportId, p_run_id: record.runId, p_request_id: record.requestId,
+      p_returned_model: "gpt-5.6-luna", p_decision: record.decision,
+      p_report_json: record.reportJson, p_decision_card_json: record.decisionCardJson,
+      p_total_input_tokens: record.usage.totalInputTokens, p_total_cached_tokens: record.usage.totalCachedTokens,
+      p_total_output_tokens: record.usage.totalOutputTokens, p_total_reasoning_tokens: record.usage.totalReasoningTokens,
+      p_usage_derived_cost_usd: record.usage.usageDerivedCostUsd, p_completed_at: record.completedAt,
+    });
+    if (error) throw databaseFailure();
+  }
+
+  async getRecoveryCandidate(runId: string): Promise<import("../production/recovery-candidate.ts").RecoveryCandidate | null> {
+    const { data: run, error } = await this.client.from("assessment_runs").select("*").eq("id", runId).maybeSingle();
+    if (error) throw databaseFailure();
+    if (!run || run.status !== "completed" || run.eligibility !== "ready" || run.run_kind !== "fulfillment_resume") return null;
+    const { data: report, error: reportError } = await this.client.from("assessment_reports").select("*").eq("run_id", runId).maybeSingle();
+    const { data: stages, error: stagesError } = await this.client.from("assessment_stage_runs").select("*").eq("run_id", runId);
+    if (reportError || stagesError) throw databaseFailure();
+    if (!report) return null;
+    const { data: request, error: requestError } = await this.client.from("assessment_requests").select("*").eq("id", run.request_id).maybeSingle();
+    if (requestError || !request) throw databaseFailure();
+    return { runId, requestId: run.request_id, model: run.requested_model, promptBundleVersion: run.prompt_bundle_version, schemaSetVersion: run.schema_set_version, stageTopologyVersion: run.stage_topology_version,
+      startedAt: run.started_at, request: mapRequest(request),
+      reportJson: report.report_json as JsonObject, decisionCardJson: report.decision_card_json as JsonObject, decision: run.decision,
+      usage: { totalInputTokens: run.total_input_tokens, totalCachedTokens: run.total_cached_tokens, totalOutputTokens: run.total_output_tokens, totalReasoningTokens: run.total_reasoning_tokens, usageDerivedCostUsd: run.usage_derived_cost_usd },
+      stages: (stages ?? []).map(row => ({ id: row.id, stageId: row.stage_id, attemptNumber: row.attempt_number, status: row.status, inputJson: row.input_json ?? null, outputJson: row.output_json as JsonObject | null,
+        promptHash: row.prompt_hash, schemaHash: row.schema_hash, requestHash: row.request_hash, returnedModel: row.returned_model })),
+    };
+  }
+
+  async getPaidStageCheckpoint(requestId: string): Promise<import("../production/recovery-candidate.ts").PaidStageCheckpoint | null> {
+    const { data: runs, error } = await this.client.from("assessment_runs").select("*").eq("request_id", requestId).eq("run_kind", "fulfillment_resume").order("started_at", { ascending: false }).limit(1);
+    if (error) throw databaseFailure();
+    const run = runs?.[0];
+    if (!run || run.status === "completed") return null;
+    const { data: stages, error: stagesError } = await this.client.from("assessment_stage_runs").select("*").eq("run_id", run.id);
+    if (stagesError) throw databaseFailure();
+    return { runId: run.id, requestId, model: run.requested_model, promptBundleVersion: run.prompt_bundle_version,
+      schemaSetVersion: run.schema_set_version, stageTopologyVersion: run.stage_topology_version,
+      stages: (stages ?? []).map(row => ({ id: row.id, stageId: row.stage_id, attemptNumber: row.attempt_number, status: row.status,
+        inputJson: row.input_json ?? null, outputJson: row.output_json as JsonObject | null, promptHash: row.prompt_hash, schemaHash: row.schema_hash,
+        requestHash: row.request_hash, returnedModel: row.returned_model })),
+    };
   }
 
   async getAssessmentResult(requestId: string) {
