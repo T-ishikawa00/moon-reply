@@ -47,7 +47,7 @@ function validateWire(schema) {
 function attachFactorySdkBoundary(actual, delegate, run) {
   assert.ok(actual instanceof OpenAiResponsesTransport);
   const context = new AsyncLocalStorage(), invoke = actual.invoke.bind(actual), wires = [];
-  let configurationValid = true;
+  let configurationValid = true, beforeProvider = null;
   actual.invoke = request => context.run(request, () => invoke(request));
   actual.client.fetch = async (url, init) => {
     assert.equal(new URL(String(url)).pathname,"/v1/responses");
@@ -60,11 +60,13 @@ function attachFactorySdkBoundary(actual, delegate, run) {
       promptHash:request.promptHash,canonicalSchemaHash:hashJson(request.outputSchema),wireSchemaHash:hashJson(body.text.format.schema),
       inputHash:hashJson(request.input),...validateWire(body.text.format.schema),semanticGraphEqual:true,
       repair:request.schemaVersion==="report-fact-repair-v1",revalidation:request.stageId==="PB-06"&&request.input.report_fact_repair_context!=null,
-      httpStatus:configurationValid?200:400 };
+      httpStatus:null,responseReceived:false };
     wires.push(wire);
-    if (!configurationValid) return new Response(JSON.stringify({error:{message:"Synthetic B1 invalid_json_schema",type:"invalid_request_error",param:"text.format.schema",code:"invalid_json_schema"}}),
-      {status:400,headers:{"content-type":"application/json","x-request-id":`b1-sdk-${wire.ordinal}`}});
+    if (beforeProvider) await beforeProvider(request,wire);
+    if (!configurationValid) {wire.httpStatus=400;wire.responseReceived=true;return new Response(JSON.stringify({error:{message:"Synthetic B1 invalid_json_schema",type:"invalid_request_error",param:"text.format.schema",code:"invalid_json_schema"}}),
+      {status:400,headers:{"content-type":"application/json","x-request-id":`b1-sdk-${wire.ordinal}`}});}
     const result = await delegate.invoke(request);
+    wire.httpStatus=200;wire.responseReceived=true;
     return new Response(JSON.stringify({id:result.responseId,object:"response",created_at:0,status:"completed",model:result.returnedModel,
       output:[{id:`b1-message-${wire.ordinal}`,type:"message",role:"assistant",status:"completed",content:[{type:"output_text",text:JSON.stringify(result.output),annotations:[]}]}],
       usage:{input_tokens:result.usage.inputTokens,output_tokens:result.usage.outputTokens,total_tokens:result.usage.inputTokens+result.usage.outputTokens,
@@ -72,10 +74,10 @@ function attachFactorySdkBoundary(actual, delegate, run) {
       {status:200,headers:{"content-type":"application/json","x-request-id":`b1-sdk-${wire.ordinal}`}});
   };
   run.providerInvocations = wires;
-  return { wires, setConfigurationValid(value) { assert.equal(typeof value,"boolean"); configurationValid=value; } };
+  return { wires, setBeforeProvider(callback) { beforeProvider=callback; }, setConfigurationValid(value) { assert.equal(typeof value,"boolean"); configurationValid=value; } };
 }
 
-export async function createB1Harness() {
+export async function createB1Harness({requireNewContract=null}={}) {
   assert.match(process.env.NODE_OPTIONS ?? "",/moon-reply-offline[\s\S]*guard\.mjs/u,"Run via the existing offline wrapper");
   const h = await createStep4Harness({label:`paid-delivery-step5a1-b1-${process.pid}`,through:36});
   Object.assign(process.env,{NODE_ENV:"production",SUPABASE_URL:h.rest.url,SUPABASE_SECRET_KEY:"synthetic-local-service-role",
@@ -89,8 +91,8 @@ export async function createB1Harness() {
   globalThis.Netlify={context:{ip:"127.0.0.1"}};
   const reset = h.reset;
   h.reset = async () => { await reset(); h.db.sql("insert into public.global_unpaid_compute_slots(slot_number) select generate_series(1,32);"); };
-  h.createFactoryRun = async ({mode="clean",now=new NativeDate().toISOString(),delegate=null,consultation=null}={}) => {
-    const selected = createPaidDeliveryStep4Fixture({mode});
+  h.createFactoryRun = async ({mode="clean",now=new NativeDate().toISOString(),delegate=null,consultation=null,fixture:fixtureOverride=null}={}) => {
+    const selected = fixtureOverride??createPaidDeliveryStep4Fixture({mode});
     const run = await h.createRun({contract:"v17",now});
     run.consultation = consultation ?? consultationFor(fixture("polite_thank_you_with_draft"),selected.request);
     run.fixture = selected;
@@ -98,6 +100,7 @@ export async function createB1Harness() {
     const application = await withClock(run,() => createProductionAssessmentApplication());
     assert.equal(application.options.allowSyntheticPurchaseAuthority,false);
     run.factoryEvidence={entry:"createProductionAssessmentApplication()",synthetic:false,newPurchaseContract:application.options.newPurchaseContract??null};
+    if(requireNewContract)assert.equal(run.factoryEvidence.newPurchaseContract,requireNewContract,"actual factory default contract");
     run.sdk = attachFactorySdkBoundary(application.options.transport,delegate??selected.transport,run);
     run.assessment = application; run.transport = application.options.transport;
     run.runtimeRepository = application.options.runtimeRepository; run.lifecycleRepository=application.options.lifecycleRepository;
@@ -123,8 +126,7 @@ export async function createB1Harness() {
       return {customerUserId,ownership,continuationTokenHash:hashCustomerAuthContinuation(continuation.continuationToken)};
     };
     run.execute = (binding,policy=readPrepaymentComputePolicy()) => call("executeAuthenticatedPrepaymentFromContinuation",{...binding,policy});
-    run.seedVerifiedPurchase=async()=>{
-      const begun=await run.begin(),binding=await run.bind(begun),prepared=await run.execute(binding);
+    run.purchasePrepared=async(prepared,binding)=>{
       assert.equal(prepared.status,"purchase_ready");
       const checkout=await run.payment.startAuthenticatedCheckout({preparationCapability:prepared.preparationCapability,customerUserId:binding.customerUserId});
       assert.equal(checkout.status,"checkout_ready");const request=run.checkoutProvider.requests.at(-1);
@@ -134,6 +136,10 @@ export async function createB1Harness() {
       const recorded=await run.payment.verifyStripeEvidence(evidence,false);assert.equal(recorded.disposition,"verified");
       const purchase={...recorded,jobId:recorded.fulfillmentJobId,purchaseIntentId:request.purchaseReference,statusCapability:checkout.statusCapability,
         customerUserId:binding.customerUserId,prepared,ownership:binding.ownership,checkout,evidence};run.purchase=purchase;return purchase;
+    };
+    run.seedVerifiedPurchase=async()=>{
+      const begun=await run.begin(),binding=await run.bind(begun),prepared=await run.execute(binding);
+      return run.purchasePrepared(prepared,binding);
     };
     return run;
   };

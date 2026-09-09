@@ -121,6 +121,7 @@ export class AssessmentApplication {
       clarificationId,
     );
     if (!persisted) throw new M2RuntimeError("M2_CLARIFICATION_NOT_FOUND", 404);
+    if (persisted.target === "original_message") throw new M2RuntimeError("M2_CLARIFICATION_EVIDENCE_INVALID");
     const resumeStartedAt = this.now();
     const validated = validateClarificationAnswerV1({
       target: persisted.target,

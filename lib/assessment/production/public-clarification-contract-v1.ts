@@ -1,6 +1,6 @@
 import type {
   JsonValue,
-  Jpy980ClarificationTarget,
+  ProductionClarificationTarget,
 } from "../runtime/types.ts";
 
 export const PUBLIC_CLARIFICATION_TARGETS_V1 = [
@@ -10,11 +10,12 @@ export const PUBLIC_CLARIFICATION_TARGETS_V1 = [
   "central_fear_or_decision_concern",
   "relationship_intent",
   "requested_message_tone",
-] as const satisfies readonly Jpy980ClarificationTarget[];
+  "original_message",
+] as const satisfies readonly ProductionClarificationTarget[];
 
 type PublicClarificationDetailControlV1 = Readonly<{
   label: string;
-  maximumCharacters: 240 | 500;
+  maximumCharacters: 240 | 500 | 2000;
   visibleFor: "all" | readonly string[];
   requiredFor: readonly string[];
 }>;
@@ -25,6 +26,7 @@ type PublicClarificationControlV1 = Readonly<{
 }>;
 
 export const PUBLIC_CLARIFICATION_CONTROLS_V1 = {
+  original_message: { choices: [], detail: { label: "元のメッセージ", maximumCharacters: 2000, visibleFor: "all", requiredFor: [""] } },
   material_relationship_or_communication_concern: {
     choices: [
       { value: "distance", label: "距離感" },
@@ -107,7 +109,7 @@ export const PUBLIC_CLARIFICATION_CONTROLS_V1 = {
     },
   },
 } as const satisfies Record<
-  Jpy980ClarificationTarget,
+  ProductionClarificationTarget,
   PublicClarificationControlV1
 >;
 
@@ -118,7 +120,7 @@ export type PublicClarificationDraftV1 = Readonly<{
 
 export function isPublicClarificationTargetV1(
   value: unknown,
-): value is Jpy980ClarificationTarget {
+): value is ProductionClarificationTarget {
   return (
     typeof value === "string" &&
     PUBLIC_CLARIFICATION_TARGETS_V1.some((target) => target === value)
@@ -129,14 +131,14 @@ function normalizedDetail(value: string) {
   return value.replaceAll("\r\n", "\n").replaceAll("\r", "\n").trim();
 }
 
-function includesChoice(target: Jpy980ClarificationTarget, value: string) {
+function includesChoice(target: ProductionClarificationTarget, value: string) {
   return PUBLIC_CLARIFICATION_CONTROLS_V1[target].choices.some(
     (choice) => choice.value === value,
   );
 }
 
 export function publicClarificationDetailVisibleV1(
-  target: Jpy980ClarificationTarget,
+  target: ProductionClarificationTarget,
   value: string,
 ) {
   const detail = PUBLIC_CLARIFICATION_CONTROLS_V1[target].detail;
@@ -148,7 +150,7 @@ export function publicClarificationDetailVisibleV1(
 }
 
 export function publicClarificationDetailRequiredV1(
-  target: Jpy980ClarificationTarget,
+  target: ProductionClarificationTarget,
   value: string,
 ) {
   const detail = PUBLIC_CLARIFICATION_CONTROLS_V1[target].detail;
@@ -159,12 +161,13 @@ export function publicClarificationDetailRequiredV1(
 }
 
 export function buildPublicClarificationAnswerV1(
-  target: Jpy980ClarificationTarget,
+  target: ProductionClarificationTarget,
   draft: PublicClarificationDraftV1,
 ): JsonValue | null {
   const value = draft.value.trim();
   const detail = normalizedDetail(draft.detail);
   const detailControl = PUBLIC_CLARIFICATION_CONTROLS_V1[target].detail;
+  if (target === "original_message") return detail && [...detail].length <= 2000 ? { original_message: detail } : null;
   if (!value || !includesChoice(target, value)) return null;
   if (detailControl && detail.length > detailControl.maximumCharacters) {
     return null;

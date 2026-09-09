@@ -62,7 +62,7 @@ import {
   publicClarificationDetailVisibleV1,
 } from "@/lib/assessment/production/public-clarification-contract-v1";
 import { postProductionPreparationWithRecovery } from "@/lib/assessment/production/preparation-response-recovery";
-import type { Jpy980ClarificationTarget } from "@/lib/assessment/runtime/types";
+import type { ProductionClarificationTarget } from "@/lib/assessment/runtime/types";
 import {
   candidateMessageRequired,
   MESSAGE_IMPACT_TOPIC_LABEL,
@@ -105,7 +105,7 @@ type ProductionPreparationOutcome =
   | {
       status: "needs_one_clarifying_answer";
       clarificationCapability: string;
-      target: Jpy980ClarificationTarget;
+      target: ProductionClarificationTarget;
       question: string;
       maximumQuestionsTotal: 1;
     }
@@ -117,7 +117,7 @@ type ProductionPurchaseFlow =
   | {
       status: "product_clarification";
       clarificationCapability: string;
-      target: Jpy980ClarificationTarget;
+      target: ProductionClarificationTarget;
       question: string;
       answerValue: string;
       answerDetail: string;

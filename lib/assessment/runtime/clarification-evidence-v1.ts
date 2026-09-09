@@ -401,6 +401,7 @@ export function buildClarificationEvidenceV1(
   persisted: PersistedAssessmentClarification,
 ): ClarificationEvidenceV1 {
   if (
+    persisted.target === "original_message" ||
     persisted.answerStatus !== "answered" ||
     persisted.answer === null ||
     persisted.answerFingerprint === null ||

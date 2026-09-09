@@ -2,7 +2,7 @@ import type { PaidCanonicalProjection, PaidPurchaseAuthority, RecoveryCandidateA
 import type {
   AssessmentInput,
   JsonObject,
-  Jpy980ClarificationTarget,
+  ProductionClarificationTarget,
   PersistedAssessmentRequest,
 } from "../runtime/types.ts";
 import type {
@@ -108,7 +108,7 @@ export type PublicPreparationOutcome =
   | Readonly<{
       status: "needs_one_clarifying_answer";
       clarificationCapability: string;
-      target: Jpy980ClarificationTarget;
+      target: ProductionClarificationTarget;
       question: string;
       maximumQuestionsTotal: 1;
     }>

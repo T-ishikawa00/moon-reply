@@ -702,13 +702,15 @@ export type RuntimeClarificationPromptV1 = {
   questionsRemaining: 1;
 };
 
+export type ProductionClarificationTarget = Jpy980ClarificationTarget | "original_message";
+
 export type PersistedAssessmentClarification = {
   schemaVersion: "m2-p4-assessment-clarification-v1";
   id: string;
   requestId: string;
   ordinal: 1;
   questionCode: string;
-  target: Jpy980ClarificationTarget;
+  target: ProductionClarificationTarget;
   questionSnapshot: string;
   provenance: "user_clarification";
   sourceIdentity: string;
@@ -786,6 +788,7 @@ export type PersistedInitialAuthorityV1 = {
 };
 
 export interface AssessmentRepository {
+  getV19PreparationCheckpoint?(requestId: string): Promise<{ runId: string; checkpoint: import("./v19-l5-application.ts").V19L5Result } | null>;
   getPaidStageCheckpoint?(requestId: string): Promise<import("../production/recovery-candidate.ts").PaidStageCheckpoint | null>;
   getRecoveryCandidate?(runId: string): Promise<import("../production/recovery-candidate.ts").RecoveryCandidate | null>;
   finalizeRecoveryCandidate?(record: { reportId: string; runId: string; requestId: string; reportJson: JsonObject; decisionCardJson: JsonObject; decision: string | null; usage: UsageTotals; completedAt: string }): Promise<void>;

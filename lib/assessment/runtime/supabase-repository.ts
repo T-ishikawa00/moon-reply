@@ -8,6 +8,10 @@ import {
   type SupabaseClient,
 } from "@supabase/supabase-js";
 import { M2RuntimeError } from "./errors.ts";
+import { isDeepStrictEqual } from "node:util";
+import { hashJson } from "./hash.ts";
+import { loadV19L5StageCatalog } from "./v19-l5-stage-catalog.ts";
+import type { V19L5Result } from "./v19-l5-application.ts";
 import {
   decodeRequestedTopics,
   hydratePersistedReadyAssessmentV1,
@@ -30,7 +34,7 @@ import type {
   FinalizePurchaseReadyPreparationRecord,
   JsonObject,
   JsonValue,
-  Jpy980ClarificationTarget,
+  ProductionClarificationTarget,
   PersistedAssessmentClarification,
   PersistedInitialAuthorityV1,
   PersistedAssessmentRequest,
@@ -124,7 +128,7 @@ type ClarificationRow = {
   request_id: string;
   ordinal: 1;
   question_code: string;
-  target: Jpy980ClarificationTarget;
+  target: ProductionClarificationTarget;
   question_snapshot: string;
   provenance: "user_clarification";
   source_identity: string;
@@ -604,6 +608,31 @@ export class SupabaseAssessmentRepository implements AssessmentRepository {
       .eq("id", record.clarificationId)
       .eq("answer_status", "answered");
     if (error) throw databaseFailure();
+  }
+
+  async getV19PreparationCheckpoint(requestId: string): Promise<{ runId: string; checkpoint: V19L5Result } | null> {
+    const { data: run, error } = await this.client.from("assessment_runs").select("*")
+      .eq("request_id", requestId).eq("run_kind", "initial")
+      .order("started_at", { ascending: true }).limit(1).single();
+    if (error || !run) throw databaseFailure();
+    if (run.prompt_bundle_version === "prompt-bundle-runtime-v17.0.0" && run.schema_set_version === "pipeline-schema-runtime-v6.0.0") return null;
+    const checkpoint = run.policy_result_json?.checkpoint as V19L5Result | undefined;
+    if (run.requested_model !== "gpt-5.6-luna" || run.prompt_bundle_version !== "prompt-bundle-runtime-v23.0.0" ||
+      run.schema_set_version !== "pipeline-schema-runtime-v9.0.0" || run.stage_topology_version !== "split-base-candidate-v1" ||
+      run.policy_result_json?.schemaVersion !== "v19-l5-production-preparation-v1" || !checkpoint ||
+      checkpoint.evidence.inputHash !== hashJson(checkpoint.evidence.input)) throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    const { data: stages, error: stageError } = await this.client.from("assessment_stage_runs").select("*").eq("run_id", run.id);
+    if (stageError || !stages) throw databaseFailure();
+    const catalog = await loadV19L5StageCatalog();
+    for (const evidence of checkpoint.evidence.stages) {
+      const definition = catalog.definitions.find(item => item.stageId === evidence.stageId);
+      const row = stages.find(item => item.stage_id === evidence.stageId && item.attempt_number === evidence.attempt);
+      if (!definition || !row || row.status !== "completed" || !evidence.response ||
+        row.prompt_hash !== definition.promptHash || row.schema_hash !== definition.schemaHash ||
+        row.request_hash !== hashJson(evidence.request) || !isDeepStrictEqual(row.output_json, evidence.response.output) ||
+        !isDeepStrictEqual(row.input_json, evidence.request.input)) throw new M2RuntimeError("M2_INITIAL_AUTHORITY_MISSING");
+    }
+    return { runId: run.id, checkpoint: structuredClone(checkpoint) };
   }
 
   async getInitialAuthorityForResume(

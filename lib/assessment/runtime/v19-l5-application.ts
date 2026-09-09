@@ -19,7 +19,7 @@ import { deterministicSafetyResult } from "./policy.ts";
 import { aggregateSafetyV3 } from "./safety-aggregation-v3.ts";
 import { deriveRuntimeEligibilityV3, validateEligibilityProjectionV3 } from "./eligibility-v3.ts";
 import { buildEffectiveAssessmentAuthorityV1 } from "./effective-assessment-authority-v1.ts";
-import { validateEffectiveAssessmentAuthorityIntegrityV1 } from "./effective-assessment-authority-integrity-v1.ts";
+import { validateEffectiveAssessmentAuthorityIntegrityV1, requireReadyMakingClarificationDownstreamV1 } from "./effective-assessment-authority-integrity-v1.ts";
 import { validateV19L5Intent, classifyV19L5Route, evaluateV19L5Sufficiency, buildV19L5EffectiveDecisionPolicy } from "./v19-l5-intent-policy.ts";
 import { projectSplitDecisionFacts, validateSplitDecisionPlan } from "./v19-l5-plan-validation.ts";
 import { createActionContextV1, createContactConstraintPolicyV1 } from "./runtime-authority-v1.ts";
@@ -34,6 +34,10 @@ import { evaluateCustomerSurfaceIntegrityV1 } from "./customer-surface-integrity
 import { evaluateSemanticFindingsV7 } from "./semantic-disposition-v7.ts";
 import { hasMaterialReportFactFindingV1, buildReportFactRepairContextV1, buildReportFactRepairInputV1, applyReportFactRepairPatchV1, assertReportFactRepairVerifiedV1 } from "./report-fact-repair-v1.ts";
 import { validateJpy980ProductScopeV1 } from "./jpy980-product-scope-validation-v1.ts";
+import { groundClarificationEvidenceV1, type ClarificationGroundingV1 } from "./clarification-grounding-v1.ts";
+import { validateClarificationSourceIntegrityV1 } from "./clarification-source-integrity-v1.ts";
+import { clarificationConsumptionPathsForStageV1 } from "./effective-decision-policy-v1.ts";
+import { validateV19PreparationClarificationEvidence, type V19PreparationAnswer, type V19PreparationResume } from "../production/v19-preparation-contract.ts";
 import type { V19L5BaseIntentEnvelope, V19L5PlanEnvelope, V19L5ReportEnvelope, V19L5MessagePlan, V19L5MessageContent } from "./v19-l5-types.ts";
 import type { AiStageTransport, AssessmentInput, JsonObject, M2StageId, StageDefinition, StageRequest, StageResponse, UsageTotals, SplitCompletedAssessment, SplitReportContentV2, ReportContent, DecisionPlan } from "./types.ts";
 
@@ -57,6 +61,8 @@ export type V19L5Result = {
     repair: { eligible: boolean; executed: boolean; reason: string; context: JsonObject | null; verified: boolean };
     finalPlan: JsonObject | null; finalReport: JsonObject | null; findings: JsonObject[];
     originalProvenance: { source: "initial_optional_message" | "original_message_clarification"; hash: string } | null;
+    preparationResume?: V19PreparationResume;
+    clarificationGrounding?: JsonObject | null;
   };
 };
 
@@ -87,7 +93,50 @@ export class V19L5LocalApplication {
     check(!this.used, "V19_L5_SESSION_ALREADY_USED"); this.used = true;
     check(checkpoint.finalState === "purchase_ready" && checkpoint.stopFinding === null &&
       checkpoint.evidence.inputHash === hashJson(checkpoint.evidence.input), "V19_L5_CHECKPOINT_INVALID");
+    if (checkpoint.evidence.preparationResume) {
+      const resume = checkpoint.evidence.preparationResume;
+      return this.executePreparationResume(resume.initialCheckpoint, resume.answer, false, resume.resumeStartedAt, checkpoint);
+    }
     return this.execute(structuredClone(checkpoint.evidence.input), undefined, false, checkpoint);
+  }
+  /** Durable unpaid continuation. The initial transcript is revalidated using
+   * only its saved responses. New Candidate/Safety or clarification grounding
+   * work remains behind the caller's authenticated unpaid compute permit. */
+  async resumePreparation(initialCheckpoint: V19L5Result, answer: V19PreparationAnswer, resumeStartedAt = this.options.now()): Promise<V19L5Result> {
+    check(!this.used, "V19_L5_SESSION_ALREADY_USED"); this.used = true;
+    return this.executePreparationResume(initialCheckpoint, answer, true, resumeStartedAt);
+  }
+  private async executePreparationResume(initialCheckpoint: V19L5Result, answer: V19PreparationAnswer,
+    preparationOnly: boolean, resumeStartedAt: string, checkpoint?: V19L5Result): Promise<V19L5Result> {
+    check(Number.isFinite(Date.parse(resumeStartedAt)), "V19_L5_CLARIFICATION_STATE_INVALID");
+    check(initialCheckpoint.finalState === "clarification" && initialCheckpoint.clarification &&
+      !initialCheckpoint.evidence.preparationResume && initialCheckpoint.evidence.inputHash === hashJson(initialCheckpoint.evidence.input), "V19_L5_CLARIFICATION_STATE_INVALID");
+    const initial = structuredClone(initialCheckpoint), accepted = structuredClone(answer);
+    const seen = new Set<string>();
+    const replayed = await new V19L5LocalApplication({ ...this.options, transport: { invoke: async request => {
+      check(!seen.has(request.stageId), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH"); seen.add(request.stageId);
+      const saved = initial.evidence.stages.filter(stage => stage.stageId === request.stageId);
+      check(saved.length === 1 && saved[0].attempt === 1 && saved[0].error === null && saved[0].response &&
+        isDeepStrictEqual(saved[0].request, request), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH");
+      return structuredClone(saved[0].response);
+    } } }).prepare(initial.evidence.input);
+    check(isDeepStrictEqual(replayed, initial), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH");
+    const baseStage = initial.evidence.stages.find(stage => stage.stageId === "PB-01");
+    check(baseStage?.response, "V19_L5_CHECKPOINT_INVALID");
+    const effectiveInput = structuredClone(initial.evidence.input);
+    if (accepted.kind === "original_message") {
+      check(initial.clarification?.target === "original_message" && typeof accepted.originalMessage === "string" &&
+        accepted.originalMessage.length > 0 && accepted.originalMessage === accepted.originalMessage.replace(/\r\n?/gu, "\n").trim() && [...accepted.originalMessage].length <= 2000 &&
+        accepted.answerFingerprint === hashJson({ original_message: accepted.originalMessage }), "V19_L5_ORIGINAL_ANSWER_INVALID");
+      effectiveInput.optionalMessage = accepted.originalMessage;
+    } else {
+      check(initial.clarification?.target === accepted.evidence.target && accepted.evidence.ordinal === 1 &&
+        accepted.evidence.questionSnapshot === initial.clarification.question, "V19_L5_CLARIFICATION_STATE_INVALID");
+      validateV19PreparationClarificationEvidence(accepted.evidence, resumeStartedAt);
+    }
+    if (checkpoint) check(isDeepStrictEqual(checkpoint.evidence.input, effectiveInput), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH");
+    return this.execute(effectiveInput, baseStage.response.output as unknown as V19L5BaseIntentEnvelope,
+      preparationOnly, checkpoint, { initialCheckpoint: initial, answer: accepted, resumeStartedAt });
   }
   /** One original-message answer, bound to this instance's retained Base.
    * Re-analyzes the supplied original and Safety; never rewrites Base facts. */
@@ -96,7 +145,7 @@ export class V19L5LocalApplication {
     check(pending && typeof original === "string" && original.trim().length > 0, "V19_L5_ORIGINAL_ANSWER_INVALID");
     return this.execute({ ...pending.input, optionalMessage: original }, pending.base);
   }
-  private async execute(request: AssessmentInput, retainedBase?: V19L5BaseIntentEnvelope, prepareOnly = false, checkpoint?: V19L5Result): Promise<V19L5Result> {
+  private async execute(request: AssessmentInput, retainedBase?: V19L5BaseIntentEnvelope, prepareOnly = false, checkpoint?: V19L5Result, preparationResume?: V19PreparationResume): Promise<V19L5Result> {
     // Full contract equality, including prompt text and subsidiary repair contract,
     // is checked before every session, not just a caller-supplied version label.
     const expected = await loadV19L5StageCatalog();
@@ -113,19 +162,24 @@ export class V19L5LocalApplication {
       evidence: { identity: { catalogVersion: expected.catalogVersion, promptBundleVersion: expected.promptBundleVersion, schemaSetVersion: expected.schemaSetVersion },
         inputHash: hashJson(request), input: structuredClone(request), stages, baseIntake: null, requestIntent: null, inputSufficiency: null,
         repair: { eligible: false, executed: false, reason: "not_requested", context: null, verified: false }, finalPlan: null, finalReport: null, findings: [],
-        originalProvenance: request.optionalMessage ? { source: retainedBase ? "original_message_clarification" : "initial_optional_message", hash: hashJson(request.optionalMessage) } : null },
+        originalProvenance: request.optionalMessage ? { source: retainedBase && (!preparationResume || preparationResume.answer.kind === "original_message") ? "original_message_clarification" : "initial_optional_message", hash: hashJson(request.optionalMessage) } : null,
+        ...(preparationResume ? { preparationResume: structuredClone(preparationResume), clarificationGrounding: null } : {}) },
     };
-    const invoke = async (stageId: M2StageId, input: JsonObject, attempt: 1 | 2 = 1, patch = false): Promise<JsonObject> => {
+    const invoke = async (stageId: M2StageId, input: JsonObject, attempt: 1 | 2 = 1, patch = false, clarification = false, reuseInitial = false): Promise<JsonObject> => {
       check(stages.filter(s => s.stageId === stageId).length === attempt - 1, "V19_L5_STAGE_SEQUENCE_INVALID");
       check(attempt === 1 || (stageId === "PB-05" || stageId === "PB-06") && result.evidence.repair.executed, "V19_L5_ATTEMPT_NOT_AUTHORIZED");
-      const normal = def(stageId), definition: StageDefinition = patch ? { ...normal, ...normal.reportFactRepair! } : normal;
+      const normal = def(stageId), definition: StageDefinition = clarification
+        ? { ...normal, schemaName: "pb_01_clarification_grounding_v1", outputSchema: normal.clarificationOutputSchema!, schemaVersion: normal.clarificationSchemaVersion!, schemaHash: normal.clarificationSchemaHash! }
+        : patch ? { ...normal, ...normal.reportFactRepair! } : normal;
+      check(!clarification || stageId === "PB-01" && preparationResume?.answer.kind === "legacy" && normal.clarificationOutputSchema, "V19_L5_CLARIFICATION_STATE_INVALID");
       check(!patch || stageId === "PB-05" && attempt === 2 && normal.reportFactRepair, "V19_L5_PATCH_NOT_AUTHORIZED");
       const q: StageRequest = { stageId, model: "gpt-5.6-luna", developerPrompt: definition.developerPrompt, promptVersion: definition.promptVersion,
         promptHash: definition.promptHash, schemaName: definition.schemaName, schemaVersion: definition.schemaVersion, schemaHash: definition.schemaHash, outputSchema: definition.outputSchema, input: structuredClone(input) };
       const evidence: V19L5StageEvidence = { stageId, attempt, request: structuredClone(q), response: null, error: null }; stages.push(evidence);
       try {
         const upstream = ["PB-01", "PB-01C", "PB-02", "PB-03"].includes(stageId);
-        const saved = checkpoint && upstream ? checkpoint.evidence.stages.filter(s => s.stageId === stageId) : null;
+        const savedSource = reuseInitial ? preparationResume?.initialCheckpoint : checkpoint;
+        const saved = savedSource && upstream ? savedSource.evidence.stages.filter(s => s.stageId === stageId) : null;
         if (saved) check(saved.length === 1 && saved[0].attempt === 1 && saved[0].error === null &&
           saved[0].response && isDeepStrictEqual(saved[0].request, q), "V19_L5_CHECKPOINT_CONTRACT_MISMATCH");
         const response = saved ? saved[0].response! : await this.options.transport.invoke(q); evidence.response = structuredClone(response);
@@ -146,24 +200,40 @@ export class V19L5LocalApplication {
       validateBaseSourceIntegrityV1({ input: providerInput, groundedBaseOutput: base }); validateContextualIntakeIntegrityV3(base);
       const intent = validateV19L5Intent({ intent: envelope.request_intent, baseStructuredIntake: base, currentSituation: request.currentSituation });
       result.evidence.baseIntake = base; result.evidence.requestIntent = json(intent);
+      let clarificationGrounding: ClarificationGroundingV1 | null = null;
+      if (preparationResume?.answer.kind === "legacy") {
+        const evidence = preparationResume.answer.evidence;
+        const raw = await invoke("PB-01", json({ run_mode: "clarification_resume", clarification_evidence: {
+          schema_version: evidence.schemaVersion, ordinal: evidence.ordinal, question_code: evidence.questionCode, target: evidence.target,
+          question_snapshot: evidence.questionSnapshot, validated_answer: evidence.answer,
+          grounded_normalized_representation: evidence.groundedNormalizedRepresentation, provenance: evidence.provenance,
+          source_identity: evidence.sourceIdentity, answer_fingerprint: evidence.answerFingerprint, resolves_target: evidence.resolvesTarget,
+        } }), 1, false, true);
+        clarificationGrounding = groundClarificationEvidenceV1({ evidence, providerOutput: raw });
+        validateClarificationSourceIntegrityV1({ evidence, grounding: clarificationGrounding });
+        result.evidence.clarificationGrounding = json(clarificationGrounding);
+      }
+      const legacyResume = preparationResume?.answer.kind === "legacy";
       let lane = buildAbsentCandidateLaneV1();
       if (request.optionalMessage?.trim()) {
-        const output = await invoke("PB-01C", json(projectCandidateProviderInputV1(request.optionalMessage)));
+        const output = await invoke("PB-01C", json(projectCandidateProviderInputV1(request.optionalMessage)), 1, false, false, legacyResume);
         validateCandidateSourceIntegrityV1({ rawCandidateProviderOutput: output });
         const grounded = groundCandidateAnalysisV2(output);
         lane = buildAvailableCandidateLaneV1(grounded.candidate_analysis, grounded.candidate_safety_result);
       }
       const candidate = lane.candidate_envelope, deterministic = deterministicSafetyResult(request);
-      const modelSafety = await invoke("PB-02", json({ base_structured_intake: base, deterministic_rule_result: deterministic, candidate_safety_result: lane.candidate_safety_result }));
+      const modelSafety = await invoke("PB-02", json({ base_structured_intake: base, deterministic_rule_result: deterministic, candidate_safety_result: lane.candidate_safety_result }), 1, false, false, legacyResume);
       const candidateSafety = lane.candidate_safety_result ? projectCandidateSafetyDispositionV1(lane.candidate_safety_result) : { classification: "normal_allowed" as const, reason_codes: [], response_mode: "none" as const };
-      const aggregate = aggregateSafetyV3(aggregateSafetyV3(deterministic, modelSafety, candidateSafety), json(evaluateCandidateBoundaryContactV1(base, lane.candidate_safety_result)));
-      const eligibility = deriveRuntimeEligibilityV3(aggregate);
-      const projection = await invoke("PB-03", json({ base_structured_intake: base, aggregate_safety_result: aggregate, application_eligibility_expectation: eligibility }));
+      const unclarifiedAggregate = aggregateSafetyV3(aggregateSafetyV3(deterministic, modelSafety, candidateSafety), json(evaluateCandidateBoundaryContactV1(base, lane.candidate_safety_result)));
+      const aggregate = clarificationGrounding ? aggregateSafetyV3(unclarifiedAggregate, clarificationGrounding.clarificationSafety) : unclarifiedAggregate;
+      const projectedAggregate = legacyResume ? unclarifiedAggregate : aggregate;
+      const eligibility = deriveRuntimeEligibilityV3(projectedAggregate);
+      const projection = await invoke("PB-03", json({ base_structured_intake: base, aggregate_safety_result: projectedAggregate, application_eligibility_expectation: eligibility }), 1, false, false, legacyResume);
       validateEligibilityProjectionV3(projection, eligibility);
       check(aggregate.classification === "normal_allowed", "SAFETY_CLASSIFICATION_NOT_NORMAL");
-      const authority = buildEffectiveAssessmentAuthorityV1({ baseStructuredIntake: base, candidateEnvelope: candidate, clarificationGrounding: null });
-      validateEffectiveAssessmentAuthorityIntegrityV1({ authority, baseStructuredIntake: base, candidateEnvelope: json(candidate), clarificationGrounding: null });
-      const sufficiency = evaluateV19L5Sufficiency({ intent, candidateEnvelope: candidate, originalMessageClarificationAlreadyUsed: Boolean(retainedBase), basePolicyInput: { aggregateSafety: { classification: aggregate.classification }, baseStructuredIntake: base, decisionFacts: json(base.decision_facts), baseWritingSignals: json(base.base_writing_signals) }, clarificationGrounding: null, effectiveAssessmentAuthority: authority });
+      const authority = buildEffectiveAssessmentAuthorityV1({ baseStructuredIntake: base, candidateEnvelope: candidate, clarificationGrounding });
+      validateEffectiveAssessmentAuthorityIntegrityV1({ authority, baseStructuredIntake: base, candidateEnvelope: json(candidate), clarificationGrounding });
+      const sufficiency = evaluateV19L5Sufficiency({ intent, candidateEnvelope: candidate, originalMessageClarificationAlreadyUsed: Boolean(retainedBase), basePolicyInput: { aggregateSafety: { classification: aggregate.classification }, baseStructuredIntake: base, decisionFacts: json(base.decision_facts), baseWritingSignals: json(base.base_writing_signals) }, clarificationGrounding, effectiveAssessmentAuthority: authority });
       result.evidence.inputSufficiency = json(sufficiency);
       if (sufficiency.state === "needs_one_clarifying_answer") {
         check(!retainedBase, "V19_L5_CLARIFICATION_BUDGET_EXHAUSTED");
@@ -185,7 +255,16 @@ export class V19L5LocalApplication {
         decision_policy_result: effectivePolicy?.policy ?? null, effective_decision_policy_result: effectivePolicy,
         contact_constraint_policy: contactPolicy, action_context: actionContext, requested_topics: request.requestedTopics,
         clarification_consumption_contract: { consumed_effective_paths: [] }, quality_reassessment_directive: null };
-      const planEnvelope = await invoke("PB-04", json(common)) as unknown as V19L5PlanEnvelope;
+      const stageCommon = (stageId: "PB-04" | "PB-05" | "PB-06") => clarificationGrounding
+        ? { ...common, clarification_consumption_contract: { stage_id: stageId, consumed_effective_paths: clarificationConsumptionPathsForStageV1(authority, stageId) } }
+        : common;
+      if (clarificationGrounding) {
+        requireReadyMakingClarificationDownstreamV1({ authority, clarificationGrounding,
+          consumedEffectivePaths: [...new Set([...clarificationConsumptionPathsForStageV1(authority, "PB-04"), ...clarificationConsumptionPathsForStageV1(authority, "PB-05")])] });
+        requireReadyMakingClarificationDownstreamV1({ authority, clarificationGrounding,
+          consumedEffectivePaths: clarificationConsumptionPathsForStageV1(authority, "PB-06") });
+      }
+      const planEnvelope = await invoke("PB-04", json(stageCommon("PB-04"))) as unknown as V19L5PlanEnvelope;
       check(planEnvelope.answer_mode === route, "V19_L5_ANSWER_MODE_MISMATCH");
       result.evidence.finalPlan = json(planEnvelope);
       if (route === "message_only") {
@@ -200,10 +279,10 @@ export class V19L5LocalApplication {
         check(edit ? plan.original_text === request.optionalMessage && plan.meaning_preserved === true : plan.original_text === "" && plan.meaning_preserved === false, "V19_L5_EDIT_SOURCE_INVALID");
         const facts = new Set((base.observed_facts as JsonObject[]).map(f => f.fact_id));
         check(plan.supporting_fact_ids.every(id => facts.has(id)), "V19_L5_EDIT_EVIDENCE_INVALID");
-        const report = await invoke("PB-05", json({ ...common, decision_plan: null, message_plan: plan })) as unknown as V19L5ReportEnvelope;
+        const report = await invoke("PB-05", json({ ...stageCommon("PB-05"), decision_plan: null, message_plan: plan })) as unknown as V19L5ReportEnvelope;
         check(report.answer_mode === route && report.report_content === null && report.message_content, "V19_L5_ANSWER_MODE_MISMATCH");
         result.evidence.finalReport = json(report);
-        const validation = await invoke("PB-06", json({ ...common, decision_plan: null, message_plan: plan, report_content: null, message_content: report.message_content, report_fact_repair_context: null }));
+        const validation = await invoke("PB-06", json({ ...stageCommon("PB-06"), decision_plan: null, message_plan: plan, report_content: null, message_content: report.message_content, report_fact_repair_context: null }));
         check(validation.validation_mode === "semantic_findings_only" && validation.report_fact_repair_verification === null, "M2_SEMANTIC_VALIDATION_FAILED");
         result.evidence.findings = validation.semantic_checks as JsonObject[];
         // Retain only minor editorial observations about an existing explanation
@@ -225,7 +304,7 @@ export class V19L5LocalApplication {
       validateSplitDecisionPlan(plan, effectivePolicy.policy, candidate, { deferDraftSourceIntegrity: true });
       validateDecisionPlanConstraintIntegrityV1({ decisionPlan: plan, contactConstraintPolicy: contactPolicy, actionContext });
       if (intent.message_task === "EDIT_EXISTING_MESSAGE") check(plan.recommended_message_draft && plan.message_draft_edit_metadata?.preserved_meaning, "V19_L5_MIXED_EDIT_DROPPED");
-      const reportEnvelope = await invoke("PB-05", json({ ...common, decision_plan: plan, message_plan: null })) as unknown as V19L5ReportEnvelope;
+      const reportEnvelope = await invoke("PB-05", json({ ...stageCommon("PB-05"), decision_plan: plan, message_plan: null })) as unknown as V19L5ReportEnvelope;
       check(reportEnvelope.answer_mode === route && reportEnvelope.report_content && reportEnvelope.message_content === null, "V19_L5_ANSWER_MODE_MISMATCH");
       let rawReport = reportEnvelope.report_content;
       const facts = projectSplitDecisionFacts(base, candidate);
@@ -239,7 +318,7 @@ export class V19L5LocalApplication {
           ...evaluateCustomerSurfaceIntegrityV1({ decisionPlan: plan, reportContent: content }) ];
       };
       const defects = localDefects(report);
-      const validation = await invoke("PB-06", json({ ...common, decision_plan: plan, message_plan: null, message_content: null, report_content: report, report_fact_repair_context: null }));
+      const validation = await invoke("PB-06", json({ ...stageCommon("PB-06"), decision_plan: plan, message_plan: null, message_content: null, report_content: report, report_fact_repair_context: null }));
       check(validation.validation_mode === "semantic_findings_only" && validation.report_fact_repair_verification === null, "M2_SEMANTIC_VALIDATION_FAILED");
       const disposition = evaluateSemanticFindingsV7({ validationOutput: validation, decisionPlan: plan, groundedReportContent: report, decisionFacts: facts });
       result.evidence.findings = validation.semantic_checks as JsonObject[];
@@ -249,10 +328,10 @@ export class V19L5LocalApplication {
         result.evidence.repair.reason = context ? "eligible_single_report_fact" : "l4_eligibility_not_met";
         check(context, "M2_REPORT_FACT_REPAIR_INELIGIBLE");
         result.evidence.repair = { eligible: true, executed: true, reason: "eligible_single_report_fact", context: json(context), verified: false };
-        const patch = await invoke("PB-05", json({ ...common, decision_plan: plan, report_fact_repair_context: buildReportFactRepairInputV1(context) }), 2, true);
+        const patch = await invoke("PB-05", json({ ...stageCommon("PB-05"), decision_plan: plan, report_fact_repair_context: buildReportFactRepairInputV1(context) }), 2, true);
         rawReport = applyReportFactRepairPatchV1({ context, patch, decisionPlan: plan, baseStructuredIntake: base }); report = ground(rawReport);
         const postDefects = localDefects(report);
-        const post = await invoke("PB-06", json({ ...common, decision_plan: plan, message_plan: null, message_content: null, report_content: report, report_fact_repair_context: buildReportFactRepairInputV1(context, report) }), 2);
+        const post = await invoke("PB-06", json({ ...stageCommon("PB-06"), decision_plan: plan, message_plan: null, message_content: null, report_content: report, report_fact_repair_context: buildReportFactRepairInputV1(context, report) }), 2);
         check(post.validation_mode === "semantic_findings_only", "M2_SEMANTIC_VALIDATION_FAILED");
         const postDisposition = evaluateSemanticFindingsV7({ validationOutput: post, decisionPlan: plan, groundedReportContent: report, decisionFacts: facts });
         assertReportFactRepairVerifiedV1({ context, repairedReport: rawReport, groundedRepairedReport: report, decisionPlan: plan, baseStructuredIntake: base, validationOutput: post, findingDispositions: postDisposition.findingDispositions, localDefects: postDefects });

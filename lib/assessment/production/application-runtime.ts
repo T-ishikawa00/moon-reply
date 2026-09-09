@@ -32,6 +32,7 @@ export async function createProductionAssessmentApplication(options?: {
   const transport = new OpenAiResponsesTransport(environment.openAiApiKey);
   const paidBudgetRepository = new SupabasePaidProviderBudgetRepository(environment.supabaseUrl, environment.supabaseSecretKey);
   return new ProductionFulfillmentApplication({
+    newPurchaseContract: "v19-l5",
     runtimeRepository,
     lifecycleRepository,
     prepaymentComputeAuthority: lifecycleRepository,

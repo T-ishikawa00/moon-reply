@@ -13,6 +13,7 @@ import {
   validateOpaqueClarificationIdV1,
 } from "../lib/assessment/runtime/clarification-evidence-v1.ts";
 import { M2RuntimeError } from "../lib/assessment/runtime/errors.ts";
+import { validateOriginalMessageAnswer } from "../lib/assessment/production/original-message-clarification.ts";
 
 const resumeStartedAt = "2026-08-22T12:00:00.000Z";
 let passed = 0;
@@ -87,10 +88,10 @@ check("malformed or tampered answer shapes fail closed server-side", () => {
 });
 
 check("every public target and every rendered choice builds a backend-accepted answer", () => {
-  assert.deepEqual(PUBLIC_CLARIFICATION_TARGETS_V1, CLARIFICATION_TARGETS_V1);
+  assert.deepEqual(PUBLIC_CLARIFICATION_TARGETS_V1, [...CLARIFICATION_TARGETS_V1, "original_message"]);
   assert.deepEqual(
-    Object.keys(PUBLIC_CLARIFICATION_CONTROLS_V1),
-    CLARIFICATION_TARGETS_V1,
+    Object.keys(PUBLIC_CLARIFICATION_CONTROLS_V1).sort(),
+    [...CLARIFICATION_TARGETS_V1, "original_message"].sort(),
   );
   for (const target of CLARIFICATION_TARGETS_V1) {
     const control = PUBLIC_CLARIFICATION_CONTROLS_V1[target];
@@ -121,6 +122,21 @@ check("every public target and every rendered choice builds a backend-accepted a
     }),
     null,
   );
+});
+
+check("original message free-text crosses its formal decoder without widening legacy targets", () => {
+  assert.equal(CLARIFICATION_TARGETS_V1.includes("original_message"), false);
+  const answer = buildPublicClarificationAnswerV1("original_message", { value: "", detail: "  元の文章\r\n二行目  " });
+  assert.deepEqual(answer, { original_message: "元の文章\n二行目" });
+  assert.deepEqual(validateOriginalMessageAnswer(answer).validatedAnswer, answer);
+  assert.equal(PUBLIC_CLARIFICATION_CONTROLS_V1.original_message.choices.length, 0);
+  for (const detail of ["", " ", "あ".repeat(2001)]) assert.equal(buildPublicClarificationAnswerV1("original_message", { value: "", detail }), null);
+  for (const invalid of ["original", {}, { original_message: "" }, { original_message: "あ".repeat(2001) }, { original_message: "original", injected: true }])
+    assert.throws(() => validateOriginalMessageAnswer(invalid));
+  const unicode = { original_message: "😀".repeat(2000) };
+  assert.deepEqual(validateOriginalMessageAnswer(unicode).validatedAnswer, unicode);
+  assert.equal(validateOriginalMessageAnswer({ original_message: "a\r\nb" }).answerFingerprint,
+    validateOriginalMessageAnswer({ original_message: "a\nb" }).answerFingerprint);
 });
 
 check("capability, fingerprint, replay, and conflict protections remain in the application boundary", () => {

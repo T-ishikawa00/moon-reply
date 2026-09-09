@@ -1,4 +1,9 @@
 import { randomUUID } from "node:crypto";
+import { isDeepStrictEqual } from "node:util";
+import { executeV19Preparation } from "./v19-preparation-executor.ts";
+import type { V19PreparationExecutionResult, V19PreparationResume } from "./v19-preparation-contract.ts";
+import { buildOriginalMessageAnswer, validateOriginalMessageAnswer } from "./original-message-clarification.ts";
+import { isPublicClarificationTargetV1 } from "./public-clarification-contract-v1.ts";
 import {
   buildClarificationEvidenceV1,
   validateClarificationAnswerV1,
@@ -17,6 +22,8 @@ import type {
   PurchasePreparationExecutionResult,
   StageAttemptNumber,
   StageDefinition,
+  AssessmentInput,
+  ProductionClarificationTarget,
 } from "../runtime/types.ts";
 import { evaluatePrepaymentSafetyV1 } from "../../purchase/prepayment-safety-gate-v1.ts";
 import {
@@ -70,6 +77,7 @@ type ProductionFulfillmentApplicationOptions = {
   transport?: AiStageTransport;
   paidTransportFactory?: (context: { logicalAssessmentId: string; ownerId: string }) => AiStageTransport;
   catalog: ProductionRuntimeCatalog;
+  newPurchaseContract?: "v17" | "v19-l5";
   model: "gpt-5.6-luna";
   fulfillmentLeaseSeconds?: number;
   now?: () => string;
@@ -83,6 +91,14 @@ type ProductionFulfillmentApplicationOptions = {
 };
 
 const DEFAULT_BACKGROUND_FULFILLMENT_LEASE_SECONDS = 16 * 60;
+
+type PreparationResult = PurchasePreparationExecutionResult | {
+  eligibility: "purchase_ready";
+  authority: import("./recovery-candidate.ts").V19L5PurchaseReadyAuthority;
+} | {
+  eligibility: "needs_more_information" | "safety_blocked" | "not_full_product_candidate";
+  clarification?: { opaqueClarificationId: string; question: string; target: ProductionClarificationTarget };
+};
 
 function addSeconds(instant: string, seconds: number) {
   const milliseconds = Date.parse(instant);
@@ -172,7 +188,7 @@ export class ProductionFulfillmentApplication {
 
   private async finalizePipelinePreparation(
     preparationId: string,
-    result: PurchasePreparationExecutionResult,
+    result: PreparationResult,
     clarificationAnswerFingerprint: string | null,
     answeredClarification?: Pick<
       ProductionPreparationRecord,
@@ -301,6 +317,28 @@ export class ProductionFulfillmentApplication {
     );
   }
 
+  private async prepareV19(input: AssessmentInput, requestId: string, runId: string,
+    beforeInvocation: NonNullable<PipelineOptions["beforeProviderInvocation"]>,
+    resume?: V19PreparationResume): Promise<PreparationResult> {
+    if (!this.options.transport) throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    const result: V19PreparationExecutionResult = await executeV19Preparation({
+      input, requestId, runId, repository: this.options.runtimeRepository, transport: this.options.transport,
+      now: this.now, timeZone: this.options.timeZone ?? "Asia/Tokyo", beforeInvocation,
+      ...(resume ? { resume: { checkpoint: resume.initialCheckpoint, answer: resume.answer, resumeStartedAt: resume.resumeStartedAt }, runAlreadyCreated: true } : {}),
+    });
+    if (result.disposition === "purchase_ready") return {
+      eligibility: "purchase_ready",
+      authority: { schemaVersion: "v19-l5-purchase-ready-authority-v1",
+        runtimeIdentity: { model: "gpt-5.6-luna", promptBundleVersion: "prompt-bundle-runtime-v23.0.0",
+          schemaSetVersion: "pipeline-schema-runtime-v9.0.0", stageTopologyVersion: "split-base-candidate-v1" },
+        request: structuredClone(input), checkpoint: result.checkpoint },
+    };
+    if (result.clarification && !isPublicClarificationTargetV1(result.clarification.target)) throw new M2RuntimeError("PRODUCTION_CLARIFICATION_STATE_INVALID");
+    return { eligibility: result.disposition, ...(result.clarification ? {
+      clarification: { ...result.clarification, target: result.clarification.target as ProductionClarificationTarget },
+    } : {}) };
+  }
+
   async executeAuthenticatedPrepayment(input: {
     preparationId: string;
     customerUserId: string;
@@ -327,6 +365,11 @@ export class ProductionFulfillmentApplication {
     const runId = this.uuid();
     const startedAt = this.now();
     try {
+      if (this.options.newPurchaseContract === "v19-l5") {
+        const result = await this.prepareV19(claim.preparation.assessmentInput, claim.request.id, runId,
+          this.computeFence({ customerUserId: input.customerUserId, preparationId: input.preparationId, policy: input.policy }));
+        return await this.finalizePipelinePreparation(input.preparationId, result, null, undefined, true);
+      }
       const result = await this.pipeline(
         this.computeFence({
           customerUserId: input.customerUserId,
@@ -386,6 +429,7 @@ export class ProductionFulfillmentApplication {
     localCandidate = false,
   ): Promise<PublicPreparationOutcome> {
     if (localCandidate && !this.options.allowSyntheticPurchaseAuthority) throw new M2RuntimeError("PRODUCTION_CANDIDATE_SELECTION_NOT_AUTHORIZED");
+    if (this.options.newPurchaseContract === "v19-l5" && !localCandidate) throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
     const consultation = decodeProductionConsultationInputV1(value);
     const idempotencyKeyHash = hashProductionIdempotencyKey(idempotencyKey);
     const safetyAuthority = evaluatePrepaymentSafetyV1(
@@ -494,8 +538,14 @@ export class ProductionFulfillmentApplication {
     if (!persisted) {
       throw new M2RuntimeError("PRODUCTION_CLARIFICATION_NOT_FOUND", 404);
     }
+    const v19Initial = await this.options.runtimeRepository.getV19PreparationCheckpoint?.(persisted.requestId);
+    if (v19Initial && !computeAuthorization) throw new M2RuntimeError("PREPAYMENT_COMPUTE_AUTHORIZATION_REQUIRED", 503);
+    if (v19Initial && (!isDeepStrictEqual(v19Initial.checkpoint.evidence.input, preparation.assessmentInput) ||
+      v19Initial.checkpoint.clarification?.target !== persisted.target ||
+      v19Initial.checkpoint.clarification.question !== persisted.questionSnapshot)) throw new M2RuntimeError("M2_CLARIFICATION_EVIDENCE_INVALID");
+    if (persisted.target === "original_message" && !v19Initial) throw new M2RuntimeError("PRODUCTION_RECOVERY_EXECUTOR_UNAVAILABLE");
     const resumeStartedAt = this.now();
-    const validated = validateClarificationAnswerV1({
+    const validated = persisted.target === "original_message" ? validateOriginalMessageAnswer(answer) : validateClarificationAnswerV1({
       target: persisted.target,
       answer,
       resumeStartedAt,
@@ -532,8 +582,8 @@ export class ProductionFulfillmentApplication {
           id: resumeRunId,
           requestId: persisted.requestId,
           requestedModel: this.options.model,
-          promptBundleVersion: this.options.catalog.promptBundleVersion,
-          schemaSetVersion: this.options.catalog.schemaSetVersion,
+          promptBundleVersion: v19Initial ? "prompt-bundle-runtime-v23.0.0" : this.options.catalog.promptBundleVersion,
+          schemaSetVersion: v19Initial ? "pipeline-schema-runtime-v9.0.0" : this.options.catalog.schemaSetVersion,
           stageTopologyVersion: this.options.catalog.stageTopologyVersion,
           runKind: "clarification_resume",
           startedAt: resumeStartedAt,
@@ -542,12 +592,17 @@ export class ProductionFulfillmentApplication {
     if (accepted.disposition === "duplicate") {
       throw new M2RuntimeError("PRODUCTION_CLARIFICATION_IN_PROGRESS", 409);
     }
-    const initial =
-      await this.options.runtimeRepository.getInitialAuthorityForResume(
-        accepted.request.id,
-      );
-    const evidence = buildClarificationEvidenceV1(accepted.clarification);
     try {
+      if (v19Initial && computeAuthorization) {
+        const result = await this.prepareV19(preparation.assessmentInput, accepted.request.id, accepted.resumeRunId,
+          this.computeFence({ customerUserId: computeAuthorization.customerUserId, preparationId: preparation.id, policy: computeAuthorization.policy }),
+          { initialCheckpoint: v19Initial.checkpoint, resumeStartedAt, answer: persisted.target === "original_message"
+            ? buildOriginalMessageAnswer(accepted.clarification)
+            : { kind: "legacy", evidence: buildClarificationEvidenceV1(accepted.clarification) } });
+        return await this.finalizePipelinePreparation(preparation.id, result, validated.answerFingerprint, preparation, true);
+      }
+      const initial = await this.options.runtimeRepository.getInitialAuthorityForResume(accepted.request.id);
+      const evidence = buildClarificationEvidenceV1(accepted.clarification);
       const result = await this.pipeline(
         computeAuthorization
           ? this.computeFence({
@@ -721,6 +776,16 @@ export class ProductionFulfillmentApplication {
         currentSituation: claim.request.currentSituation, optionalMessage: claim.request.optionalMessage,
         relationship: claim.request.relationship, requestedTopics: [...claim.request.requestedTopics], privacyAcknowledged: claim.request.privacyAcknowledged,
       });
+      if (authority.schemaVersion === "v19-l5-purchase-ready-authority-v1" && authority.checkpoint.evidence.preparationResume) {
+        const resume = authority.checkpoint.evidence.preparationResume;
+        const clarification = await this.options.runtimeRepository.findClarificationByRequestId(claim.request.id);
+        if (!clarification || clarification.id !== claim.preparation.clarificationId ||
+          clarification.answerFingerprint !== claim.preparation.clarificationAnswerFingerprint ||
+          !clarification.answeredAt || Date.parse(clarification.answeredAt) !== Date.parse(resume.resumeStartedAt)) throw new M2RuntimeError("PRODUCTION_RECOVERY_INPUT_MISMATCH");
+        const acceptedAnswer = clarification.target === "original_message" ? buildOriginalMessageAnswer(clarification)
+          : { kind: "legacy" as const, evidence: buildClarificationEvidenceV1(clarification) };
+        if (!isDeepStrictEqual(resume.answer, acceptedAnswer)) throw new M2RuntimeError("PRODUCTION_RECOVERY_INPUT_MISMATCH");
+      }
       let generationBoundaryRecorded = false;
       const beforeProviderInvocation = async (stageId: M2StageId, attemptNumber: StageAttemptNumber) => {
         if (generationBoundaryRecorded) return;

@@ -59,9 +59,21 @@ export function verifyPaidAuthority(authority: PaidPurchaseAuthority, request: A
     identity.model === "gpt-5.6-luna" && identity.stageTopologyVersion === "split-base-candidate-v1" &&
     identity.promptBundleVersion === (v17 ? "prompt-bundle-runtime-v17.0.0" : "prompt-bundle-runtime-v23.0.0") &&
     identity.schemaSetVersion === (v17 ? "pipeline-schema-runtime-v6.0.0" : "pipeline-schema-runtime-v9.0.0"), "PRODUCTION_RECOVERY_EXECUTOR_UNAVAILABLE");
-  if (!v17) check(authority.checkpoint.finalState === "purchase_ready" &&
-    isDeepStrictEqual(authority.checkpoint.evidence.input, request) &&
-    authority.checkpoint.evidence.inputHash === hashJson(request), "PRODUCTION_RECOVERY_CHECKPOINT_INVALID");
+  if (!v17) {
+    const resume = authority.checkpoint.evidence.preparationResume;
+    const effectiveInput = structuredClone(request);
+    if (resume) {
+      check(isDeepStrictEqual(resume.initialCheckpoint.evidence.input, request) &&
+        resume.initialCheckpoint.evidence.inputHash === hashJson(request), "PRODUCTION_RECOVERY_INPUT_MISMATCH");
+      if (resume.answer.kind === "original_message") {
+        check(resume.answer.answerFingerprint === hashJson({ original_message: resume.answer.originalMessage }), "PRODUCTION_RECOVERY_INPUT_MISMATCH");
+        effectiveInput.optionalMessage = resume.answer.originalMessage;
+      }
+    }
+    check(authority.checkpoint.finalState === "purchase_ready" &&
+      isDeepStrictEqual(authority.checkpoint.evidence.input, effectiveInput) &&
+      authority.checkpoint.evidence.inputHash === hashJson(effectiveInput), "PRODUCTION_RECOVERY_CHECKPOINT_INVALID");
+  }
 }
 export async function prepareV19L5PaidCandidate(input: AssessmentInput, options: ConstructorParameters<typeof V19L5LocalApplication>[0]): Promise<V19L5PurchaseReadyAuthority> {
   const checkpoint = await new V19L5LocalApplication(options).prepare(input);
