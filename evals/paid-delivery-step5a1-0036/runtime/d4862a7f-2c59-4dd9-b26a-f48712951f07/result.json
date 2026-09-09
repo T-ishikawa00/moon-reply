@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "v19-preparation-runtime-regression-v1",
+  "status": "PASS",
+  "startedAt": "2026-09-08T23:50:16.779Z",
+  "completedAt": "2026-09-08T23:50:37.906Z",
+  "checks": [
+    {
+      "id": "existing-submit-and-original-message-continuation",
+      "assertions": 289,
+      "status": "PASS"
+    },
+    {
+      "id": "durable-original-preparation-and-paid-replay",
+      "status": "PASS",
+      "resumeProviderStages": [
+        "PB-01C",
+        "PB-02",
+        "PB-03"
+      ],
+      "paidProviderStages": [
+        "PB-04",
+        "PB-05",
+        "PB-06"
+      ],
+      "tamperedPaidProviderCalls": 0
+    },
+    {
+      "id": "accepted-canonical-roundtrip-material_relationship_or_communication_concern",
+      "status": "PASS"
+    },
+    {
+      "id": "accepted-canonical-roundtrip-latest_contact_timing",
+      "status": "PASS"
+    },
+    {
+      "id": "accepted-canonical-roundtrip-usual_reply_cadence",
+      "status": "PASS"
+    },
+    {
+      "id": "accepted-canonical-roundtrip-central_fear_or_decision_concern",
+      "status": "PASS"
+    },
+    {
+      "id": "accepted-canonical-roundtrip-relationship_intent",
+      "status": "PASS"
+    },
+    {
+      "id": "accepted-canonical-roundtrip-requested_message_tone",
+      "status": "PASS"
+    }
+  ],
+  "realProviderCalls": 0,
+  "networkAttempts": 0,
+  "productionOperations": 0,
+  "classification": "Offline contract regression; not new model quality evidence"
+}

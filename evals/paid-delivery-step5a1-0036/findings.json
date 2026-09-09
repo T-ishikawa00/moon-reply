@@ -1,0 +1,88 @@
+{
+  "scope": "B1 plus additive 0036, B2 canonical migration registration",
+  "originalBlockers": [
+    {
+      "id": "B1-factory",
+      "defect": "Formal new production preparation selected V17.",
+      "fix": "Production factory explicitly selects V19-L5 for authenticated new preparation; persisted authority selects paid and recovery executor.",
+      "previousCoverageGap": "Prior local fixtures selected V19 explicitly using the synthetic candidate path; they did not prove no-options factory selection."
+    },
+    {
+      "id": "B1-finalization-rpc",
+      "defect": "finalize_purchase_ready_assessment_v1 rejected V23/V9.",
+      "fix": "0036 preserves the function body, signature, owner and ACL and accepts only the additional exact V23/V9 pair.",
+      "previousCoverageGap": "Synthetic preparation finalized the lifecycle authority without exercising formal runtime preparation finalization."
+    },
+    {
+      "id": "B1-original-message",
+      "defect": "Clarification target CHECK rejected original_message; the local original-message continuation was process-bound and crossed into paid generation.",
+      "fix": "0036 adds the adopted target; durable prep-only bridge revalidates initial receipts, retains immutable original input, binds accepted answer/fingerprint/time, and replays the same effective snapshot for paid execution and recovery.",
+      "previousCoverageGap": "Local candidate original-message session and paid recovery were tested separately from persisted authenticated continuation."
+    },
+    {
+      "id": "B2-inventory",
+      "defect": "Canonical gate originally ended at 0032.",
+      "fix": "Earlier B2 commit registered 0033-0035; current change registers 0036 with exact artifact pins, functional and permission evidence, fresh/upgrade and negative gates."
+    }
+  ],
+  "implementationFindings": [
+    {
+      "id": "retained-base-stage",
+      "defect": "The first new bridge attempted a skipped PB-01 marker in a clarification_resume run, rejected by the unchanged DB topology.",
+      "fix": "Retain and revalidate the original PB-01 receipt through initialCheckpoint, without creating a new execution row for a stage that did not run. New original-message stages are PB-01C, PB-02 and PB-03.",
+      "additionalDatabaseChange": false,
+      "regression": "original-clarification-restart plus runtime durable-original-preparation-and-paid-replay"
+    },
+    {
+      "id": "accepted-answer-decoder",
+      "defect": "Stored canonical cadence/choice answers differ structurally from public raw answers; directly decoding them again rejects valid answers.",
+      "fix": "Reconstruct only the canonical/raw structural differences and require an exact canonical answer, fingerprint, normalized representation and resolvesTarget round trip. Preserve accepted time for datetime normalization.",
+      "regression": "six canonical target roundtrips, fixed-clock negative, and generic-clarification-restart"
+    }
+  ],
+  "testExpectationCorrections": [
+    {
+      "path": "scripts/verify-m1-4-clarification-contract.mjs:90",
+      "expectedBefore": "Production public target list exactly equals six legacy targets.",
+      "actualAfter": "Six legacy targets plus explicitly authorized original_message.",
+      "correction": "Require exact seven Production targets while retaining six legacy decoder targets; add formal original-message public/backend boundary negatives."
+    },
+    {
+      "case": "original-clarification-restart",
+      "expectedBefore": "A consumed preparation capability can still replay purchase_ready.",
+      "actual": "Existing consumed capability returns PRODUCTION_PREPARATION_IN_PROGRESS.",
+      "correction": "Check identical-answer replay before purchase; after delivery require rejection with zero Provider calls and unchanged completed Account state."
+    },
+    {
+      "case": "original-clarification-restart",
+      "expectedBefore": "The purchase capability returned before replay remains current.",
+      "actual": "Existing replay rotates the purchase capability.",
+      "correction": "Use the latest returned capability in Checkout; no Production behavior changed."
+    },
+    {
+      "case": "generic-clarification-restart",
+      "expectedBefore": "Material concern must be declared consumed in PB-04.",
+      "actual": "Existing exact mapping declares this concern in PB-05/PB-06, with PB-04 empty.",
+      "correction": "Assert the unchanged stage-specific contract; align synthetic fixture fact IDs with its input."
+    }
+  ],
+  "forbiddenChanges": {
+    "productSemantics": 0,
+    "promptOrSafetyChanges": 0,
+    "rewritten0033Through0035": 0,
+    "newMigration0037OrLater": 0,
+    "oldPurchaseBulkUpgrade": 0,
+    "productionWrites": 0,
+    "push": 0,
+    "deploy": 0,
+    "remoteMigration": 0
+  },
+  "diagnosticRuns": {
+    "fefb2662-7e9d-4256-bb23-0c924d25ac2c": "New executor defect: illegal PB-01 skip marker. Fixed; superseded by final PASS.",
+    "b095fe39-601c-4da4-a2ca-cc0940c74083": "Test expected replay after capability consumption. Existing lifecycle preserved; expectation corrected.",
+    "0c34549f-1639-43e9-8945-d8a8bf390e4d": "Test reused stale purchase capability after replay rotation. Latest returned capability is required.",
+    "5e4ce001-c139-4b1b-bbca-7559f28ac213": "Synthetic generic fixture retained old fact references. Fixture aligned with its source input; Production logic unchanged.",
+    "f10a7272-0e0b-4f37-9021-a3e251d2bc87": "Test required material concern consumption in PB-04. Corrected to the existing exact PB-05/PB-06 mapping; Production logic unchanged."
+  },
+  "diagnosticInterpretation": "failure.json may contain the last REST failure as secondary context; the primary thrown error and scenario assertions determine the classification. Historical failure artifacts are preserved, not treated as final results."
+}

@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "b1-b2-0036-local-verification-v1",
+  "recordedAt": "2026-09-09T00:08:13.282Z",
+  "status": "PASS",
+  "sourceBaseline": "7a7e8a0a04c98a831f36466b962a2e730b792977",
+  "sourceCandidate": "0f169df63f6e7dce8f459885741faad7f29d13f0",
+  "sourceCommits": [
+    "f21d9bc88a13927f28be51dcc22fe040601b889b",
+    "0f169df63f6e7dce8f459885741faad7f29d13f0"
+  ],
+  "changedFiles": [
+    {
+      "path": "components/request/RequestForm.tsx",
+      "sha256": "546e0fd57c6677ce0aa07eaa0def2d46349d95d2b476f427fbca312551063f08",
+      "gitBlob": "cae3ffd1b6d1e531e35482b6273793aaf3ff9d3f"
+    },
+    {
+      "path": "lib/assessment/production/application-runtime.ts",
+      "sha256": "73f835200d56cf9368d7fcfb4e618a6782febbbece79ba21f75325d1eeec1d3a",
+      "gitBlob": "11b150f4d226827af9b20a27276ae033d96e03e6"
+    },
+    {
+      "path": "lib/assessment/production/application.ts",
+      "sha256": "db1436073daa5d7f5733ec8ce772623fe975e0703c6df389ab9672cf6cf2ca22",
+      "gitBlob": "e2c0b27ab62e4022c39fd2ee61ab3c5cad7eb0a3"
+    },
+    {
+      "path": "lib/assessment/production/original-message-clarification.ts",
+      "sha256": "bc66d7656a6767c13fb4bf4f079f6b92743679ecfc57572598577a259922998a",
+      "gitBlob": "6fe0eb2e2dd98ce7566320424944e004cd28b886"
+    },
+    {
+      "path": "lib/assessment/production/public-clarification-contract-v1.ts",
+      "sha256": "638dccaa5c1e7e4f787546d4f213e36cfe683eb4c559de8cf5688a4ed559a2b0",
+      "gitBlob": "1941f35b584990954a66563c0343428108d97dfd"
+    },
+    {
+      "path": "lib/assessment/production/recovery-candidate.ts",
+      "sha256": "6d2bf12640637f061aeb3d6be286997951f43d788679e57e808ffdbc3b3ce7df",
+      "gitBlob": "61691e3fcc88b034e26f2f5f26afb7346c53ea74"
+    },
+    {
+      "path": "lib/assessment/production/types.ts",
+      "sha256": "f4ade3df6e81a0054805130d4a116320e5f0bc7adbdd0efc2f080eb6f5653a01",
+      "gitBlob": "0e76026fe401a7142ba382b39097ee7064d59462"
+    },
+    {
+      "path": "lib/assessment/production/v19-preparation-contract.ts",
+      "sha256": "7d291aa7b497eabb2e5883d689dd05a19861e5740ca13effd58f9b4eab21102f",
+      "gitBlob": "471b1b04a0c0e8d48d44c813a153f6c2cdd8fcf1"
+    },
+    {
+      "path": "lib/assessment/production/v19-preparation-executor.ts",
+      "sha256": "2423301a0e670954779782c0fc6202d54dd3e736367b468e1e6e58cced21ef51",
+      "gitBlob": "36dae3bf2b710f7ca0495fc5bb20774825a1b7b5"
+    },
+    {
+      "path": "lib/assessment/runtime/application.ts",
+      "sha256": "dc9bd1b7d2c801282f338674671d5e516cce9f25aceed07550bf8cf1a3db0c07",
+      "gitBlob": "65979227af79bcc9c6f1c0a47a963dba036ec1d2"
+    },
+    {
+      "path": "lib/assessment/runtime/clarification-evidence-v1.ts",
+      "sha256": "2cbcabc1598ffee6b4376aae5a83679501fe00fa2fafc315f8efe3ec7e27b858",
+      "gitBlob": "ccf1b8b39f151361b8e4d34896b428466791bb4f"
+    },
+    {
+      "path": "lib/assessment/runtime/supabase-repository.ts",
+      "sha256": "8e9a52efb4d3e23cbf7d9cfb532a8343262b0e70e83267869196695fd5070071",
+      "gitBlob": "34934f16e6424db7f176bd8ae95213bcccd1ee43"
+    },
+    {
+      "path": "lib/assessment/runtime/types.ts",
+      "sha256": "567902cc184c0bd1bb97f64cf1fb299ae3a5718fc4a23acbd6f9745444408d2d",
+      "gitBlob": "83f2efe2575e4fd9cbc05a017048558a9a3ce3dd"
+    },
+    {
+      "path": "lib/assessment/runtime/v19-l5-application.ts",
+      "sha256": "20d389bd11bd4ea70922fa390593f947117889318b1867d31d6a9c63c9fe3a23",
+      "gitBlob": "0621296116bff4ce24e3a3f808753e5d0118310f"
+    },
+    {
+      "path": "scripts/lib/paid-delivery-step5a1-0036-auth.mjs",
+      "sha256": "a240688b1142816dc55c7799fec801606c654b1168661691b0e5901af06474a0",
+      "gitBlob": "6a0bc81add41c0afcdd858d3ce053340602f44a5"
+    },
+    {
+      "path": "scripts/lib/paid-delivery-step5a1-0036-generic-fixture.mjs",
+      "sha256": "b619a60e2221a4180a6c79899b8f9c2dc5031365cc7a297f125a952915c78aba",
+      "gitBlob": "70cef27e7502db74e640c95d234db392ba88b6e8"
+    },
+    {
+      "path": "scripts/lib/paid-delivery-step5a1-0036-message-fixture.mjs",
+      "sha256": "48ed304ba7119764e5de83b42504edab2783838ea55a2f4913a5ac234f100c30",
+      "gitBlob": "540091e5bf67e84ca92129665a821b06f00c3712"
+    },
+    {
+      "path": "scripts/lib/paid-delivery-step5a1-b1-harness.mjs",
+      "sha256": "16b4df454b410dee83d42e6950410b6eaf37cc9d29464ab185ef3ca1c54e0570",
+      "gitBlob": "99f89a55fafa04f391265980ffbe791a164b675f"
+    },
+    {
+      "path": "scripts/lib/remediation-migration-release-contracts.mjs",
+      "sha256": "c9acbcb3f801e3cbcb4388e2ac7d392d428a7022ea614526ba915c85f1c93abc",
+      "gitBlob": "ac41d1a9baafdd26d1e23ac7493f7c03715fa984"
+    },
+    {
+      "path": "scripts/verify-m1-4-clarification-contract.mjs",
+      "sha256": "baa83028032d80e3b69277928a18e03aef92f6c5368eac34c85b4da4c01f739d",
+      "gitBlob": "b70a24949de5ee1b7a282eeab6ed64dd79752346"
+    },
+    {
+      "path": "scripts/verify-paid-delivery-step5a1-0036.mjs",
+      "sha256": "c6668f998f99852e2ea2871fbe024ec084c08586c5513f67b8eb47e6e4f4e4cf",
+      "gitBlob": "3f8c73de4dcc72afb3f8fe2201c55658b7f819df"
+    },
+    {
+      "path": "scripts/verify-paid-recovery-release-gate.mjs",
+      "sha256": "7320bd7740734d03e36b9cc41477f2f0049c55ddde683e3f40a3569aeecca71d",
+      "gitBlob": "6b887f64df36f754ee72a05d3bb2019e70e25691"
+    },
+    {
+      "path": "scripts/verify-remediation-migration-privileges.mjs",
+      "sha256": "fbcd9be744fed83a88db01067d634d9d56e7ecde15a91775cadfe7642de6b89d",
+      "gitBlob": "8d01642c6e6642ab6877bbc7248e0dad35a22a01"
+    },
+    {
+      "path": "scripts/verify-v19-preparation-migration.mjs",
+      "sha256": "1dbab65a60f1e6c892bffc6fe78d40856e44753247ad0ce5191f11982ff26845",
+      "gitBlob": "fbfc7447f722010ef7565b461c1f2692b762f73d"
+    },
+    {
+      "path": "scripts/verify-v19-preparation-runtime.mjs",
+      "sha256": "378796fa7f102d5c18e0ce521cf3165115925ff58266a06854b1ea51650e4cd4",
+      "gitBlob": "2032d9de62ea5418ef564d96e7d8bcc150fa5101"
+    },
+    {
+      "path": "supabase/migrations/0036_v19_l5_production_preparation_compatibility.sql",
+      "sha256": "575837c57dd71a555964f9395f1917e6ce6aa71d50da216ad663e8ed75756724",
+      "gitBlob": "5ed71c535c5309237ade7de67a2aed38c5655189"
+    }
+  ],
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": "node scripts/run-remediation-offline.mjs node_modules/typescript/bin/tsc --noEmit --incremental false",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "source lint",
+      "command": "node scripts/run-remediation-offline.mjs node_modules/eslint/bin/eslint.js app components lib netlify scripts next.config.ts proxy.ts eslint.config.mjs --max-warnings=0",
+      "exitCode": 0,
+      "status": "PASS",
+      "warnings": 0
+    },
+    {
+      "name": "offline build",
+      "command": "node --input-type=module -e \"import('./scripts/remediation-offline-runtime.mjs').then(m=>m.buildOffline())\"",
+      "exitCode": 0,
+      "status": "PASS",
+      "staticPages": 47,
+      "log": "evals/paid-delivery-step5a1-0036/checks/offline-build.log",
+      "externalAttempts": 0
+    },
+    {
+      "name": "public clarification contract",
+      "command": "node scripts/run-remediation-offline.mjs --experimental-transform-types scripts/verify-m1-4-clarification-contract.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "checks": 8,
+      "log": "evals/paid-delivery-step5a1-0036/checks/public-clarification.log"
+    },
+    {
+      "name": "worker dependency graph",
+      "command": "node scripts/run-remediation-offline.mjs scripts/verify-m1-4-async-router-worker-graph.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "modules": 155,
+      "edges": 619,
+      "serverOnly": 0,
+      "log": "evals/paid-delivery-step5a1-0036/checks/worker-graph.log"
+    },
+    {
+      "name": "canonical migration gate",
+      "command": "node scripts/run-remediation-offline.mjs scripts/verify-remediation-migration-privileges.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "releaseCases": 40,
+      "functionalChecks": 95,
+      "authorityRuntimeChecks": 120,
+      "receipt": "evals/paid-delivery-step5a1-0036/migration/runs/54f65cb7-69ea-4625-833d-ce8e54bef16d/migration-release-gate.json"
+    },
+    {
+      "name": "runtime contract regression",
+      "command": "node scripts/run-remediation-offline.mjs --experimental-transform-types scripts/verify-v19-preparation-runtime.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "groups": 8,
+      "inheritedAssertions": 289,
+      "receipt": "evals/paid-delivery-step5a1-0036/runtime/d4862a7f-2c59-4dd9-b26a-f48712951f07/result.json"
+    },
+    {
+      "name": "actual factory integration",
+      "command": "node scripts/run-paid-delivery-step4-offline.mjs scripts/verify-paid-delivery-step5a1-0036.mjs",
+      "exitCode": 0,
+      "status": "PASS",
+      "groups": 9,
+      "filter": null,
+      "seconds": 187,
+      "sourceStableDuringRun": true,
+      "sourceHashCount": 643,
+      "wrapperExternalAttempts": 0,
+      "receipt": "evals/paid-delivery-step5a1-0036/integration/443353fa-3316-4479-b814-25421be8a3e8/receipt.json"
+    }
+  ],
+  "receipts": {
+    "migration": {
+      "path": "evals/paid-delivery-step5a1-0036/migration/runs/54f65cb7-69ea-4625-833d-ce8e54bef16d/migration-release-gate.json",
+      "sha256": "859dc0d1511512c12e77c9f998c16dea19ff8590ec8a241ec6fd59320d32195c"
+    },
+    "integration": {
+      "path": "evals/paid-delivery-step5a1-0036/integration/443353fa-3316-4479-b814-25421be8a3e8/receipt.json",
+      "sha256": "003109694ace32fd715d994f8364846f15d6a12fbf3da19cd695b28f5b37cad5"
+    },
+    "runtime": {
+      "path": "evals/paid-delivery-step5a1-0036/runtime/d4862a7f-2c59-4dd9-b26a-f48712951f07/result.json",
+      "sha256": "3ed21cace7fd06b136240005ed4458dab97b08b4b68f683daceb78abf3a19987"
+    },
+    "build": {
+      "path": "evals/paid-delivery-step5a1-0036/checks/build-source-hashes.json",
+      "sha256": "affbc95dba2a733742977488c44232ee2b54a093367c48b4a3cf904bbab4ef2f"
+    }
+  },
+  "sourceBinding": {
+    "receiptHead": "7a7e8a0a04c98a831f36466b962a2e730b792977",
+    "meaning": "Receipts include the tested working-source hashes. Those exact bytes remain current and the changed source matches the committed Git blobs after newline normalization.",
+    "sourceHashMismatches": 0,
+    "buildProductionFiles": 484,
+    "migrationGateFiles": 14,
+    "integrationFiles": 643
+  },
+  "preservation": {
+    "originalUntrackedArtifacts": 4801,
+    "mismatches": 0,
+    "migrations0033Through0035Unchanged": true,
+    "otherWorktrees": "worktree C:/projects/moon-reply\nHEAD 0f169df63f6e7dce8f459885741faad7f29d13f0\nbranch refs/heads/codex/guidance-quality-final-v19-l5\n\nworktree C:/tmp/mrexp-e98\nHEAD e98e2f27e45b9198dcaf766e6e0a48b3738b263b\ndetached\n\nworktree C:/tmp/mrexp-ea4\nHEAD ea4acd5d3620fb546e5cf7bc0d1f7db414c54ebc\ndetached"
+  },
+  "knownLintIssue": {
+    "wholeCheckout": "Previously recorded 59 warnings in preserved historical artifacts; not a source regression. Whole-checkout lint was not rerun in this step.",
+    "sourceLintWarnings": 0
+  },
+  "externalOperations": {
+    "productionRead": 0,
+    "productionWrite": 0,
+    "push": 0,
+    "deploy": 0,
+    "remoteMigration": 0,
+    "realOpenAI": 0,
+    "realStripe": 0,
+    "realEmail": 0,
+    "realDiscord": 0,
+    "envFileChanges": 0
+  },
+  "remainingLocalB1B2Blockers": []
+}

@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-09-08T23:45:37.290Z",
+  "startingHead": "7a7e8a0a04c98a831f36466b962a2e730b792977",
+  "branch": "codex/guidance-quality-final-v19-l5",
+  "worktrees": "worktree C:/projects/moon-reply\nHEAD 7a7e8a0a04c98a831f36466b962a2e730b792977\nbranch refs/heads/codex/guidance-quality-final-v19-l5\n\nworktree C:/tmp/mrexp-e98\nHEAD e98e2f27e45b9198dcaf766e6e0a48b3738b263b\ndetached\n\nworktree C:/tmp/mrexp-ea4\nHEAD ea4acd5d3620fb546e5cf7bc0d1f7db414c54ebc\ndetached\n\n",
+  "protectedArtifactManifest": "evals/paid-delivery-step4/preflight.json",
+  "protectedManifestHash": "034e917389d45fb76f692f9a55db5355d568bb941cecf9f04a542583bf1a6c6c",
+  "protectedArtifactCount": 4801,
+  "protectedArtifactMismatches": [],
+  "migrations": {
+    "0033_paid_fulfillment_recovery.sql": {
+      "expected": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734",
+      "actual": "2781946bcc14f51cb7592d7cd6bd406f54cfe7293f0008a7d00b8a3cc88d4734"
+    },
+    "0034_paid_fulfillment_candidate_contract.sql": {
+      "expected": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca",
+      "actual": "8427d527e701ff7f684736f2d243752ab84e31b053a81ef9a8903b8436c3d5ca"
+    },
+    "0035_paid_recovery_operator_followup.sql": {
+      "expected": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95",
+      "actual": "848b4c5ceadd9e2c592a9d580881af4882c7928eb948f109c8c9b6c920230e95"
+    }
+  },
+  "authority": "Human approved B1 dependencies through additive 0036; local only",
+  "productionChanges": 0,
+  "push": 0,
+  "deploy": 0,
+  "remoteMigration": 0
+}
