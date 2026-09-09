@@ -6,7 +6,8 @@ export const migrationInventoryEntry = (file, bytes) => ({ file, sha256: migrati
   canonicalLfSha256: migrationSha256(bytes.toString().replaceAll("\r\n", "\n")) });
 const rpc = (signature, trigger = false, serviceExecute = true) => ({ signature: `public.${signature}`, trigger, serviceExecute });
 const commonTables = ["production_fulfillment_jobs", "production_payment_adjustment_ledger", "production_customer_deliveries",
-  "production_logical_assessments", "production_preparations", "assessment_runs", "assessment_stage_runs", "production_operator_notification_outbox"];
+  "production_logical_assessments", "production_preparations", "assessment_runs", "assessment_stage_runs", "production_operator_notification_outbox",
+  "assessment_requests", "assessment_clarifications"];
 
 // Reviewed immutable SQL artifacts, not hashes recomputed as expected values.
 // The canonical gate checks these pins before importing any SQL verifier.
@@ -47,6 +48,10 @@ export const remediationMigrationRegistry = Object.freeze([
     functions: [rpc("paid_recovery_operator_signal_v1(uuid,timestamptz)"),
       rpc("claim_production_operator_notification_batch_v1(uuid,text,timestamptz,timestamptz,timestamptz,integer)"),
       rpc("begin_production_operator_notification_send_v1(uuid,uuid,timestamptz)")] },
+  { number: 36, file: "0036_v19_l5_production_preparation_compatibility.sql", sha256: "575837c57dd71a555964f9395f1917e6ce6aa71d50da216ad663e8ed75756724",
+    verifier: "./verify-paid-recovery-release-gate.mjs", tables: commonTables, columns: {}, indexes: [],
+    constraints: ["assessment_clarifications_target"], triggers: {},
+    functions: [rpc("finalize_purchase_ready_assessment_v1(uuid,uuid,text,jsonb,bigint,bigint,bigint,bigint,numeric,timestamptz)")] },
 ]);
 
 export function assertMigrationInventory(registry, inventory) {

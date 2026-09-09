@@ -5,8 +5,15 @@ import { remediationMigrationRegistry, migrationSha256, migrationInventoryEntry,
   capturePaidTablePrivileges, capturePaidRuntimeDependencies, probePaidMigrationRuntime } from "./lib/remediation-migration-release-contracts.mjs";
 // Registered by the canonical gate, retaining the existing actual PostgreSQL
 // functional, installer and runtime proof rather than replacing it with flags.
-export { migrationVerification } from "./verify-paid-recovery-migration.mjs";
-import { migrationVerification } from "./verify-paid-recovery-migration.mjs";
+import { migrationVerification as recoveryVerification } from "./verify-paid-recovery-migration.mjs";
+import { migrationVerification as preparationVerification } from "./verify-v19-preparation-migration.mjs";
+export const migrationVerification = recoveryVerification.map(layer => {
+  const preparation = preparationVerification.find(candidate => candidate.mode === layer.mode);
+  assert.ok(preparation, "0036_INSTALLER_LAYER_REQUIRED");
+  return { ...layer, functional: layer.functional + preparation.functional,
+    permissionChecks: layer.permissionChecks + preparation.permissionChecks,
+    artifacts: [...layer.artifacts, ...preparation.artifacts] };
+});
 
 const inventory = remediationMigrationRegistry.map(({ file }) => migrationInventoryEntry(file, readFileSync(`supabase/migrations/${file}`)));
 const paidRegistry = remediationMigrationRegistry.filter(entry => entry.number >= 33)
@@ -16,12 +23,13 @@ const record = (id, name, detail = {}) => { checks.push({ id, name, status: "PAS
 const negative = (id, name, callback, expected) => { assert.throws(callback, expected); record(id, name, { rejects: String(expected) }); };
 assertMigrationInventory(remediationMigrationRegistry, inventory);
 negative("B", "missing 0035 registration rejected", () => assertMigrationInventory(remediationMigrationRegistry.filter(entry => entry.number !== 35), inventory), /B2_MIGRATION_INVENTORY_MISMATCH/u);
+negative("B.0036", "missing 0036 registration rejected", () => assertMigrationInventory(remediationMigrationRegistry.filter(entry => entry.number !== 36), inventory), /B2_MIGRATION_INVENTORY_MISMATCH/u);
 negative("B.future", "unregistered future migration rejected", () => assertMigrationInventory(remediationMigrationRegistry,
-  [...inventory, { file: "0036_unregistered_fixture.sql", sha256: "0".repeat(64) }]), /B2_MIGRATION_INVENTORY_MISMATCH/u);
+  [...inventory, { file: "0037_unregistered_fixture.sql", sha256: "0".repeat(64) }]), /B2_MIGRATION_INVENTORY_MISMATCH/u);
 negative("C", "changed SQL bytes rejected against pinned hash", () => assertMigrationInventory(remediationMigrationRegistry,
   inventory.map(entry => entry.file.startsWith("0034") ? { ...entry, sha256: migrationSha256(readFileSync(`supabase/migrations/${entry.file}`, "utf8") + "\n-- drift fixture") } : entry)), /B2_MIGRATION_HASH_MISMATCH/u);
 negative("D", "wrong registered application order rejected", () => assertMigrationInventory(
-  [remediationMigrationRegistry[0], remediationMigrationRegistry[1], remediationMigrationRegistry[3], remediationMigrationRegistry[2]], inventory), /B2_MIGRATION_ORDER_INVALID/u);
+  [remediationMigrationRegistry[0], remediationMigrationRegistry[1], remediationMigrationRegistry[3], remediationMigrationRegistry[2], ...remediationMigrationRegistry.slice(4)], inventory), /B2_MIGRATION_ORDER_INVALID/u);
 negative("D.number", "wrong migration number rejected", () => assertMigrationInventory(remediationMigrationRegistry.map(entry => entry.number === 34 ? { ...entry, number: 33.5 } : entry), inventory), /B2_MIGRATION_NUMBER_INVALID/u);
 negative("D.duplicate", "duplicate registered migration number rejected", () => assertMigrationInventory(
   [...remediationMigrationRegistry.slice(0, 2), { ...remediationMigrationRegistry[1], file: "0033_duplicate_fixture.sql" }, ...remediationMigrationRegistry.slice(2)], inventory), /B2_DUPLICATE_MIGRATION_NUMBER/u);
@@ -49,7 +57,7 @@ try {
   assert.equal(empty(), 0);
   const freshCatalog = assertPaidMigrationCatalog(fresh, paidRegistry, owner.roleName, baselinePrivileges, baselineRuntimeDependencies);
   const freshRuntime = await probePaidMigrationRuntime(fresh, paidRegistry);
-  record("I", "empty business database installs 0033 through 0035 with restricted owner", { businessRowsBefore: 0, businessRowsAfter: 0,
+  record("I", "empty business database installs 0033 through 0036 with restricted owner", { businessRowsBefore: 0, businessRowsAfter: 0,
     applicationOrder: paidRegistry.map(entry => entry.number), owner: owner.inspect().attributes,
     requiredFunctions: freshCatalog.requiredFunctions.length, runtime: freshRuntime,
     platformPrerequisite: { serviceExtensionsUsage: "explicit fixture bootstrap", digestExecute: "existing pgcrypto ACL asserted", ...baselineRuntimeDependencies } });
@@ -143,6 +151,26 @@ try {
       finally { installer.sql(`revoke ${privilege}(id) on table public.production_fulfillment_jobs from ${role};`); }
     }
   }
+  const preparationSignature = paidRegistry.find(entry => entry.number === 36).functions[0].signature;
+  installer.sql(`alter function ${preparationSignature} rename to missing_0036_rpc_fixture;`);
+  try { negative("E.0036", "missing exact 0036 RPC signature rejected", inspect, /B2_REQUIRED_RPC_MISSING/u); }
+  finally { installer.sql("alter function public.missing_0036_rpc_fixture(uuid,uuid,text,jsonb,bigint,bigint,bigint,bigint,numeric,timestamptz) rename to finalize_purchase_ready_assessment_v1;"); }
+  installer.sql(`revoke execute on function ${preparationSignature} from service_role;`);
+  try { negative("G.0036", "missing 0036 service EXECUTE rejected", inspect, /B2_RUNTIME_EXECUTE_MISMATCH/u); }
+  finally { installer.sql(`grant execute on function ${preparationSignature} to service_role;`); }
+  for (const role of ["anon", "authenticated"]) {
+    installer.sql(`grant execute on function ${preparationSignature} to ${role};`);
+    try { negative(`H.0036.${role}.execute`, `unexpected preparation ${role} EXECUTE rejected`, inspect, /B2_RUNTIME_EXECUTE_MISMATCH/u); }
+    finally { installer.sql(`revoke execute on function ${preparationSignature} from ${role};`); }
+    for (const table of ["assessment_requests", "assessment_clarifications"]) {
+      installer.sql(`grant insert(id) on table public.${table} to ${role};`);
+      try { negative(`H.0036.${role}.${table}.column`, `unexpected ${role} preparation column INSERT rejected`, inspect, /B2_UNEXPECTED_TABLE_PRIVILEGE/u); }
+      finally { installer.sql(`revoke insert(id) on table public.${table} from ${role};`); }
+    }
+  }
+  installer.sql("alter table public.assessment_clarifications disable row level security;");
+  try { negative("L.0036.rls", "disabled clarification RLS rejected", inspect, /B2_RLS_REQUIRED/u); }
+  finally { installer.sql("alter table public.assessment_clarifications enable row level security;"); }
   installer.sql("revoke update on table public.production_fulfillment_jobs from service_role;");
   try { negative("G.table", "missing service table UPDATE rejected", inspect, /B2_SERVICE_TABLE_PRIVILEGES_CHANGED/u); }
   finally { installer.sql("grant update on table public.production_fulfillment_jobs to service_role;"); }
@@ -165,7 +193,7 @@ try {
     if (baselineRuntimeDependencies.explicitServiceDigestExecute) db.sql("grant execute on function extensions.digest(bytea,text) to service_role;");
   }
   assert.deepEqual(inspect(), catalog, "negative fixture cleanup restores exact catalog contract"); assert.deepEqual(baselineRows(), before);
-  record("A", "0033 0034 0035 canonical release contract passes", { applied });
+  record("A", "0033 0034 0035 0036 canonical release contract passes", { applied });
 } finally { db.stop(); }
 
 export const releaseGateVerification = { status: "PASS", registeredMigrationNumbers: paidRegistry.map(entry => entry.number), checks,

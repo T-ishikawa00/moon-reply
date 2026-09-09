@@ -13,7 +13,7 @@ const readInventory = () => readdirSync("supabase/migrations").filter(file => /^
 const inventory = readInventory();
 assertMigrationInventory(remediationMigrationRegistry, inventory);
 const files = ["scripts/verify-remediation-migration-privileges.mjs", "scripts/lib/remediation-migration-release-contracts.mjs",
-  "scripts/verify-paid-recovery-release-gate.mjs", "scripts/verify-paid-recovery-migration.mjs", "scripts/verify-f004-cutover-db.mjs",
+  "scripts/verify-paid-recovery-release-gate.mjs", "scripts/verify-v19-preparation-migration.mjs", "scripts/verify-paid-recovery-migration.mjs", "scripts/verify-f004-cutover-db.mjs",
   "scripts/remediation-migration-authority.mjs", "scripts/remediation-local-postgres.mjs", "scripts/run-remediation-offline.mjs",
   ...inventory.map(entry => `supabase/migrations/${entry.file}`)];
 const sourceHashes = () => Object.fromEntries(files.map(file => [file, migrationSha256(readFileSync(file))]));
@@ -33,7 +33,7 @@ for (const entry of remediationMigrationRegistry) {
   }
   console.log(`PASS required migration privilege gate ${entry.file}; installation layers=2; runtime permission layer=verified`);
 }
-const directory = `evals/paid-delivery-step5a1/b2/runs/${randomUUID()}`;
+const directory = `evals/paid-delivery-step5a1-0036/migration/runs/${randomUUID()}`;
 mkdirSync(directory, { recursive: true });
 assert.deepEqual(readInventory(), inventory, "B2_MIGRATION_INVENTORY_CHANGED_DURING_VERIFICATION");
 assert.deepEqual(sourceHashes(), beforeSourceHashes, "B2_GATE_SOURCE_CHANGED_DURING_VERIFICATION");
