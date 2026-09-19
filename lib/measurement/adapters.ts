@@ -31,6 +31,9 @@ type Gtag = (...args: unknown[]) => void;
 const ga4EventNames = Object.freeze({
   landing_view: "landing_view",
   sample_view: "sample_view",
+  sample_cta_click: "sample_cta_click",
+  sample_end_view: "sample_end_view",
+  request_view: "request_view",
   request_start: "request_start",
   request_complete: "request_complete",
   checkout_start: "begin_checkout",
@@ -63,6 +66,8 @@ export class Ga4ClientMeasurementAdapter implements MeasurementAdapter {
       params.campaign = payload.utmCampaign;
       params.content = payload.utmContent;
       params.gclid = payload.gclid;
+    } else if (event.name === "sample_cta_click") {
+      params.placement = payload.placement;
     } else if (event.name === "checkout_start") {
       params.value = MEASUREMENT_PURCHASE_VALUE;
       params.currency = MEASUREMENT_PURCHASE_CURRENCY;

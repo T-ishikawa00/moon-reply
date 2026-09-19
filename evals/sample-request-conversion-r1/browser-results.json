@@ -1,0 +1,477 @@
+{
+  "status": "PASS",
+  "checks": [
+    "WAIT is default",
+    "mobile no horizontal overflow",
+    "SEND full note visible",
+    "case change does not repeat sample_view",
+    "brief end exposure not counted",
+    "end dwell resets offscreen",
+    "visible end records once",
+    "sticky hidden while closing visible",
+    "end observer/case redisplay deduplicated",
+    "desktop no horizontal overflow",
+    "landscape no overflow",
+    "landscape CTA returns to normal flow",
+    "200 percent text no overflow",
+    "compact enlarged view has no fixed CTA",
+    "CTA dispatched closing placement",
+    "request_view before first change",
+    "no sample prefilling",
+    "no sticky CTA on request",
+    "required validation and focus retained",
+    "adult checkbox records request_start",
+    "textarea expands with long content",
+    "textarea remains unclipped after viewport narrowing",
+    "same existing phase two reached",
+    "back preserves text",
+    "return and changes don't repeat view/start",
+    "conditional original opens and is required",
+    "missing original stays on input",
+    "conditional original allows existing next step",
+    "funnel session preserved",
+    "free text and URL not in event payloads",
+    "no automatic page_view/purchase/checkout",
+    "sticky hidden when hero visible",
+    "rapid hero clicks deduplicated per transition",
+    "keyboard focus is not covered by fixed CTA",
+    "footer not covered by fixed CTA",
+    "transport failure preserves navigation and input",
+    "sticky click reaches actual adapter",
+    "revisits preserve original attribution/session",
+    "hash restore skips initial request_view",
+    "return to input after hash restore records once",
+    "no forbidden external requests",
+    "browser has no runtime errors"
+  ],
+  "records": [
+    [
+      "js",
+      "2026-09-19T12:46:45.973Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "landing_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "landing_path": "/sample-report",
+        "source": "youtube",
+        "medium": "video",
+        "campaign": "local_r1",
+        "content": null,
+        "gclid": null
+      }
+    ],
+    [
+      "event",
+      "sample_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:45.976Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "sample_end_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "event",
+      "sample_cta_click",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "placement": "closing"
+      }
+    ],
+    [
+      "event",
+      "request_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "event",
+      "request_start",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:56.339Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "landing_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "landing_path": "/sample-report",
+        "source": "youtube",
+        "medium": "video",
+        "campaign": "local_r1",
+        "content": null,
+        "gclid": null
+      }
+    ],
+    [
+      "event",
+      "sample_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:56.341Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "sample_cta_click",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "placement": "hero"
+      }
+    ],
+    [
+      "event",
+      "request_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:58.529Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "landing_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "landing_path": "/sample-report",
+        "source": "youtube",
+        "medium": "video",
+        "campaign": "local_r1",
+        "content": null,
+        "gclid": null
+      }
+    ],
+    [
+      "event",
+      "sample_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:58.530Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "sample_cta_click",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "placement": "sticky"
+      }
+    ],
+    [
+      "event",
+      "request_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "event",
+      "request_start",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:59.557Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "landing_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "landing_path": "/sample-report",
+        "source": "youtube",
+        "medium": "video",
+        "campaign": "local_r1",
+        "content": null,
+        "gclid": null
+      }
+    ],
+    [
+      "event",
+      "sample_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:46:59.559Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:47:01.512Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "landing_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1,
+        "landing_path": "/sample-report",
+        "source": "youtube",
+        "medium": "video",
+        "campaign": "local_r1",
+        "content": null,
+        "gclid": null
+      }
+    ],
+    [
+      "js",
+      "2026-09-19T12:47:01.514Z"
+    ],
+    [
+      "config",
+      "G-LOCALONLY1",
+      {
+        "client_id": "749840671.75646941",
+        "session_id": 1789822003,
+        "send_page_view": false,
+        "ignore_referrer": true,
+        "page_location": "http://localhost:3101/_measurement",
+        "page_referrer": "http://localhost:3101",
+        "page_title": "moon_reply",
+        "cookie_expires": 2592000,
+        "cookie_update": false,
+        "allow_google_signals": false,
+        "allow_ad_personalization_signals": false,
+        "campaign_source": "youtube",
+        "campaign_medium": "video",
+        "campaign_name": "local_r1"
+      }
+    ],
+    [
+      "event",
+      "request_view",
+      {
+        "session_id": 1789822003,
+        "engagement_time_msec": 1
+      }
+    ]
+  ],
+  "externalRequests": [],
+  "errors": [],
+  "physicalDevices": "NOT_TESTED"
+}

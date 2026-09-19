@@ -1,0 +1,108 @@
+.requestIntroInner {
+  padding-block: clamp(1.25rem, 4vw, 2.5rem) !important;
+}
+
+.requestIntroInner :global(.request-page__brand) {
+  margin-top: var(--space-4);
+}
+
+.requestIntroInner > :global(p) {
+  margin-top: var(--space-4);
+}
+
+.requestIntroInner :global(h1) {
+  margin-top: var(--space-2);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 1.3;
+}
+
+.requestIntroInner > :global(span) {
+  margin-top: var(--space-3);
+  line-height: 1.65;
+}
+
+.requestIntroInner :global(.request-page__boundary) {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.situationGuide {
+  margin-top: var(--space-2) !important;
+  color: var(--ink-700) !important;
+}
+
+.situationInput {
+  min-height: 7.5rem;
+  overflow-y: hidden;
+}
+
+:global(.request-field--situation) textarea.situationInput {
+  min-height: 7.5rem;
+}
+
+.optionalDetails {
+  margin: 0 clamp(1.5rem, 5vw, 3rem) clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--border-paper);
+  background: var(--paper-100);
+}
+
+.optionalDetails summary {
+  display: flex;
+  min-height: 3.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  color: var(--focus-ring-paper);
+  font-weight: 800;
+}
+
+.optionalDetails summary span {
+  color: var(--ink-600);
+  font-size: 0.72rem;
+}
+
+.optionalDetailsBody {
+  display: grid;
+  gap: var(--space-3);
+  border-top: 1px solid var(--border-paper);
+  padding: var(--space-5);
+}
+
+.optionalDetailsBody label {
+  font-weight: 800;
+}
+
+.optionalDetailsBody label small {
+  margin-left: var(--space-2);
+  color: var(--ink-600);
+  font-size: 0.72rem;
+}
+
+.optionalDetailsBody p {
+  margin: calc(-1 * var(--space-2)) 0 0;
+  color: var(--ink-600);
+  font-size: 0.82rem;
+  line-height: 1.8;
+}
+
+.optionalDetailsBody input {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--border-paper);
+  border-radius: var(--radius-small);
+  background: var(--paper-100);
+  padding: 0.85rem 1rem;
+  color: var(--ink-950);
+  font: inherit;
+  line-height: 1.8;
+}
+
+.optionalDetailsBody input:focus-visible {
+  border-color: var(--focus-ring-paper);
+  outline: 3px solid color-mix(in srgb, var(--focus-ring-paper) 35%, transparent);
+  outline-offset: 2px;
+}

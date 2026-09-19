@@ -1,0 +1,9 @@
+PASS 01 pre-purchase Preparing gives a truthful ETA and automatic-next guidance
+PASS 02 post-purchase email-only recovery gives one calm folder check
+PASS 03 brand-origin story stays below the product boundary and outside the first view
+PASS 04 purchase states remain explicitly separated
+CUSTOMER_UX_REVIEW_FIX_R1=PASS checks=4 provider_calls=0 network_calls=0 db_writes=0 payment_operations=0 auth_logic_changes=0
+(node:47544) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/projects/moon-reply/lib/payment/purchase-return-presentation.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\projects\moon-reply\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

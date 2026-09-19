@@ -19,13 +19,24 @@ export type ClientMeasurementEventName = Exclude<
 let activeMeasurementAdapter: MeasurementAdapter | null = null;
 const pendingEvents: MeasurementEvent[] = [];
 
+function dispatchWithoutThrow<Name extends MeasurementEventName>(
+  adapter: MeasurementAdapter,
+  event: MeasurementEvent<Name>,
+) {
+  try {
+    return adapter.dispatch(event);
+  } catch {
+    return { status: "disabled" } as const;
+  }
+}
+
 export function configureClientMeasurementAdapter(adapter: MeasurementAdapter) {
   activeMeasurementAdapter = adapter;
   const ordered = [...pendingEvents].sort((left, right) =>
     left.name === "landing_view" ? -1 : right.name === "landing_view" ? 1 : 0,
   );
   pendingEvents.length = 0;
-  for (const event of ordered) adapter.dispatch(event);
+  for (const event of ordered) dispatchWithoutThrow(adapter, event);
 }
 
 export function trackClientMeasurement<
@@ -37,7 +48,7 @@ export function trackClientMeasurement<
       if (pendingEvents.length < 16) pendingEvents.push(event as MeasurementEvent);
       return disabledMeasurementAdapter.dispatch(event);
     }
-    return activeMeasurementAdapter.dispatch(event);
+    return dispatchWithoutThrow(activeMeasurementAdapter, event);
   } catch {
     return { status: "disabled" } as const;
   }

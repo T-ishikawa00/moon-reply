@@ -1,0 +1,22 @@
+PASS 01 existing public SEND and homepage sample fixture is byte-equivalent
+PASS 02 all pre-existing named RequestForm functions remain exact
+PASS 03 RequestForm phase 2 onward remains exact
+PASS 04 request page keeps the existing RequestForm prop contract exact
+warning: in the working copy of 'components/report/PublicSampleReport.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/request/RequestForm.tsx', LF will be replaced by CRLF the next time Git touches it
+PASS 05 tracked changes stay inside the adopted local implementation manifest
+PASS 06 new payload contracts accept only the reviewed constants
+PASS 07 malformed values and extra PII fields are rejected
+PASS 08 one queued dispatch failure does not block the remaining queue
+PASS 09 all three client tracks validate, adapt, and reach recording gtag
+PASS 10 adapter allowlist keeps unrelated client events disabled
+PASS 11 invalid or failed tracking is fail-isolated
+PASS 12 native browser gtag bootstrap remains intact
+SAMPLE_REQUEST_CONVERSION_MEASUREMENT_CHECKS=12
+PRIMARY_FUNNEL_RECORDED_GTAG_CALLS=3
+EXTERNAL_GA4_SENDS=0
+NETWORK_CALLS=0
+(node:30600) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/projects/moon-reply/lib/measurement/adapters.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\projects\moon-reply\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,101 @@
+▲ Next.js 16.3.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 21ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+  Finished TypeScript in 2.7s ...
+  Collecting page data using 27 workers ...
+  Generating static pages using 27 workers (0/47) ...
+  Generating static pages using 27 workers (11/47)
+  Generating static pages using 27 workers (23/47)
+  Generating static pages using 27 workers (35/47)
+✓ Generating static pages using 27 workers (47/47) in 364ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /account
+├ ƒ /account/results/[deliveryId]
+├ ƒ /api/account/session
+├ ƒ /api/auth/account/callback
+├ ƒ /api/auth/account/email-otp/request
+├ ƒ /api/auth/account/email-otp/verify
+├ ƒ /api/auth/account/google/start
+├ ƒ /api/auth/callback
+├ ƒ /api/auth/continuations
+├ ƒ /api/auth/email-otp/request
+├ ƒ /api/auth/email-otp/verify
+├ ƒ /api/auth/google/start
+├ ƒ /api/auth/logout
+├ ƒ /api/consultations/authenticated-preparation
+├ ƒ /api/consultations/clarifications
+├ ƒ /api/consultations/prepare
+├ ƒ /api/consultations/purchase-eligibility
+├ ƒ /api/delivery/email-verifications
+├ ƒ /api/delivery/email-verifications/verify
+├ ƒ /api/internal/assessment-clarifications/[clarificationId]/answer
+├ ƒ /api/internal/assessments
+├ ƒ /api/internal/purchase-eligibility
+├ ƒ /api/payments/checkout
+├ ƒ /api/payments/status
+├ ƒ /api/payments/stripe/webhook
+├ ƒ /api/support/cases
+├ ƒ /api/support/purchase-inquiries
+├ ƒ /contact
+├ ○ /icon.svg
+├ ○ /legal
+├ ○ /legal/ai-disclosure
+├ ○ /legal/privacy
+├ ○ /legal/refund
+├ ○ /legal/terms
+├ ○ /legal/tokushoho
+├ ○ /legal/unsupported-cases
+├ ○ /login
+├ ƒ /purchase/auth/continue
+├ ƒ /purchase/return/[statusCapability]
+├ ƒ /request
+├ ƒ /result/[token]
+├ ○ /review
+├ ○ /review/account
+├ ○ /review/error/missing-fixture
+├ ○ /review/error/unavailable-report
+├   /review/purchase/confirmation/[fixtureId]
+│ └ ● /review/purchase/confirmation/normal-001
+├   /review/purchase/safety/[fixtureId]
+│ ├ ● /review/purchase/safety/eligible-general
+│ ├ ● /review/purchase/safety/eligible-pause-assessment
+│ ├ ● /review/purchase/safety/eligible-boundary-support-only
+│ └ ● [+8 more paths]
+├   /review/purchase/trust/[fixtureId]
+│ ├ ● /review/purchase/trust/checkout
+│ ├ ● /review/purchase/trust/confirming-payment
+│ ├ ● /review/purchase/trust/payment-not-completed
+│ └ ● [+6 more paths]
+├   /review/request/[stateId]
+│ ├ ● /review/request/normal-allowed
+│ ├ ● /review/request/needs-review
+│ ├ ● /review/request/rejected
+│ └ ● [+4 more paths]
+├   /review/request/confirmation/[fixtureId]
+│ └ ● /review/request/confirmation/normal-001
+├   /review/result/[fixtureId]
+│ └ ● /review/result/result-normal-001
+├ ƒ /review/runtime
+├ ƒ /review/runtime/i2
+├ ƒ /review/runtime/v12
+├ ƒ /review/runtime/v15
+├   /review/save-report/[fixtureId]
+│ └ ● /review/save-report/result-normal-001
+└ ○ /sample-report
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+Offline Production build PASS; external network attempts=0

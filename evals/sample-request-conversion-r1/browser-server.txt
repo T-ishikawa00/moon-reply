@@ -1,0 +1,24 @@
+▲ Next.js 16.3.3 (Turbopack)
+- Local:         http://127.0.0.1:3101
+- Network:       http://127.0.0.1:3101
+- Environments: .env.local
+✓ Ready in 391ms
+✓ Running next.config.ts took 28ms
+
+ GET /sample-report?utm_source=youtube&utm_medium=video&utm_campaign=local_r1 200 in 2.4s (next.js: 2.1s, proxy.ts: 144ms, application-code: 131ms)
+ GET /api/account/session 200 in 74ms (next.js: 55ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /request 200 in 1974ms (next.js: 1948ms, proxy.ts: 4ms, application-code: 22ms)
+ GET /api/account/session 200 in 12ms (next.js: 3ms, proxy.ts: 5ms, application-code: 4ms)
+ GET /sample-report 200 in 563ms (next.js: 529ms, proxy.ts: 4ms, application-code: 31ms)
+ GET /api/account/session 200 in 11ms (next.js: 3ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /request 200 in 34ms (next.js: 7ms, proxy.ts: 5ms, application-code: 22ms)
+ GET /request 200 in 34ms (next.js: 17ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/account/session 200 in 15ms (next.js: 3ms, proxy.ts: 6ms, application-code: 5ms)
+ GET /sample-report 200 in 1016ms (next.js: 983ms, proxy.ts: 3ms, application-code: 30ms)
+ GET /api/account/session 200 in 10ms (next.js: 2ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /request 200 in 17ms (next.js: 4ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/account/session 200 in 9ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /sample-report 200 in 36ms (next.js: 3ms, proxy.ts: 3ms, application-code: 30ms)
+ GET /api/account/session 200 in 11ms (next.js: 2ms, proxy.ts: 5ms, application-code: 4ms)
+ GET /request 200 in 1335ms (next.js: 1292ms, proxy.ts: 5ms, application-code: 38ms)
+ GET /api/account/session 200 in 12ms (next.js: 3ms, proxy.ts: 4ms, application-code: 5ms)

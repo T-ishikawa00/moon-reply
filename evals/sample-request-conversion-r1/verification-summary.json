@@ -1,0 +1,236 @@
+{
+  "status": "LOCAL IMPLEMENTATION COMPLETE — HUMAN REVIEW READY",
+  "date": "2026-09-19",
+  "baseline": "978928c49d4205d55d905883a15d4f66ae8724fd",
+  "branch": "codex/guidance-quality-final-v19-l5",
+  "primaryModel": "gpt-6-astra",
+  "primaryModelEvidence": "Current task turn_context model verified locally; effort high",
+  "delegation": {
+    "sample_ui": "gpt-5.6-sol",
+    "measurement": "gpt-5.6-sol",
+    "request_ui": "gpt-5.6-luna"
+  },
+  "primaryIntegrationAudit": "PASS: adopted scope, facts, payment timing, privacy, unchanged protected functions, browser behavior and source-bound checks reviewed",
+  "humanAcceptance": "PENDING",
+  "releaseAuthorization": "NOT_GRANTED",
+  "plannedFiles": [
+    "app/sample-report/page.tsx",
+    "components/report/PublicSampleReport.tsx",
+    "components/report/PublicSampleReport.module.css",
+    "fixtures/public/public-sample-wait-report.ts",
+    "app/request/page.tsx",
+    "components/request/RequestForm.tsx",
+    "components/request/RequestForm.module.css",
+    "lib/measurement/events.ts",
+    "lib/measurement/adapters.ts",
+    "lib/measurement/client.ts",
+    "scripts/verify-sample-request-conversion-r1.mjs",
+    "scripts/preview-sample-request-conversion-r1.mjs",
+    "scripts/browser-sample-request-conversion-r1.mjs",
+    "evals/sample-request-conversion-r1/README.md",
+    "evals/sample-request-conversion-r1/final-copy.md"
+  ],
+  "sourceFileCount": 10,
+  "sourceHashes": [
+    {
+      "path": "app/sample-report/page.tsx",
+      "sha256": "80be9c7a7e5db15f40ef5985c759e683b040f9391f1dbe9793826bc1dec3c08b"
+    },
+    {
+      "path": "components/report/PublicSampleReport.tsx",
+      "sha256": "58538eeea30e67229caedfa8d1068ff9483b4ecd1f10e75a3bf6599c143bf5b0"
+    },
+    {
+      "path": "components/report/PublicSampleReport.module.css",
+      "sha256": "6676868fa7ef604efc01f77ba61c1737174ef2ddaf9bdf15c3b12900005bd1e7"
+    },
+    {
+      "path": "fixtures/public/public-sample-wait-report.ts",
+      "sha256": "66afa15b35bc6f2cb378ed2a24962690d854ea8c52f2f0f03340058f299eeec0"
+    },
+    {
+      "path": "app/request/page.tsx",
+      "sha256": "3fdd70e61ec1d1fed92d72f3f96fbf533f69c7d7c321aec1cba458d9eeac5fb4"
+    },
+    {
+      "path": "components/request/RequestForm.tsx",
+      "sha256": "33811748d280ec167e320bde644b5e1d0b00797866b14aad11915ae9ad84ddb2"
+    },
+    {
+      "path": "components/request/RequestForm.module.css",
+      "sha256": "b0a48f6e97980081572726c90e375d9554e89e173e851c7abd0f9812d9d20632"
+    },
+    {
+      "path": "lib/measurement/events.ts",
+      "sha256": "1f7511ccda12bd0c19d4abea2e4e3c220425ae651344c8ceeb2a65b9c2458d64"
+    },
+    {
+      "path": "lib/measurement/adapters.ts",
+      "sha256": "de4ea69b69465a0fe0cfc7f7a916eb5a5dda4f30b5869a7e5d2d5b3f86b35c0c"
+    },
+    {
+      "path": "lib/measurement/client.ts",
+      "sha256": "d9a68e3c041e306fd9960d7ad0a7d13b71fbddebfe06fbd176b008222d378c57"
+    },
+    {
+      "path": "scripts/verify-sample-request-conversion-r1.mjs",
+      "sha256": "791d6b58419d833af9f3d27166cdd9234957196ab10d3a249495c0121cab1f20"
+    },
+    {
+      "path": "scripts/preview-sample-request-conversion-r1.mjs",
+      "sha256": "cb7443419b2d045f4175b80e07a6758023b66d5356be416524fa8b72eb48a078"
+    },
+    {
+      "path": "scripts/browser-sample-request-conversion-r1.mjs",
+      "sha256": "d09241bdc069358134624fc07a3e91d9fed81ba07962e75f6023adbc6edaaf27"
+    },
+    {
+      "path": "evals/sample-request-conversion-r1/README.md",
+      "sha256": "eb432a315b0270a54818132190b11b0690c9f5a3e7c970edc632a3f91fa12e7c"
+    },
+    {
+      "path": "evals/sample-request-conversion-r1/final-copy.md",
+      "sha256": "c670c562d43d4653fb635220927bdb3a5f01f78e81ee8eee1db7d06da6512455"
+    }
+  ],
+  "trackedFiles": [
+    "app/request/page.tsx",
+    "app/sample-report/page.tsx",
+    "components/report/PublicSampleReport.module.css",
+    "components/report/PublicSampleReport.tsx",
+    "components/request/RequestForm.module.css",
+    "components/request/RequestForm.tsx",
+    "evals/sample-request-conversion-r1/README.md",
+    "evals/sample-request-conversion-r1/assemble-review.mjs",
+    "evals/sample-request-conversion-r1/baseline.json",
+    "evals/sample-request-conversion-r1/browser-progress.json",
+    "evals/sample-request-conversion-r1/browser-results.json",
+    "evals/sample-request-conversion-r1/browser-run.txt",
+    "evals/sample-request-conversion-r1/browser-server.txt",
+    "evals/sample-request-conversion-r1/build.txt",
+    "evals/sample-request-conversion-r1/final-copy.md",
+    "evals/sample-request-conversion-r1/lint.txt",
+    "evals/sample-request-conversion-r1/preview-smoke.json",
+    "evals/sample-request-conversion-r1/production-preview-smoke.mjs",
+    "evals/sample-request-conversion-r1/regression-customer-ux.txt",
+    "evals/sample-request-conversion-r1/regression-measurement.txt",
+    "evals/sample-request-conversion-r1/regression-preparing.txt",
+    "evals/sample-request-conversion-r1/review.html",
+    "evals/sample-request-conversion-r1/screenshots/desktop-hero-send.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-request-input.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-request-intro.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-send-note.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-send-summary.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-wait-note.png",
+    "evals/sample-request-conversion-r1/screenshots/desktop-wait-summary.png",
+    "evals/sample-request-conversion-r1/screenshots/landscape-sample.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-closing.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-hero-wait.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-request-first-operation.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-request-input.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-request-intro.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-send-note.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-send-summary.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-sticky-cta.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-wait-note.png",
+    "evals/sample-request-conversion-r1/screenshots/mobile-wait-summary-sticky.png",
+    "evals/sample-request-conversion-r1/screenshots/zoom-sample.png",
+    "evals/sample-request-conversion-r1/send-full-text.md",
+    "evals/sample-request-conversion-r1/typecheck.txt",
+    "evals/sample-request-conversion-r1/unit-measurement.txt",
+    "evals/sample-request-conversion-r1/verification-summary.json",
+    "evals/sample-request-conversion-r1/wait-full-text.md",
+    "fixtures/public/public-sample-wait-report.ts",
+    "lib/measurement/adapters.ts",
+    "lib/measurement/client.ts",
+    "lib/measurement/events.ts",
+    "scripts/browser-sample-request-conversion-r1.mjs",
+    "scripts/preview-sample-request-conversion-r1.mjs",
+    "scripts/verify-sample-request-conversion-r1.mjs"
+  ],
+  "evidenceFiles": [
+    "assemble-review.mjs",
+    "baseline.json",
+    "browser-progress.json",
+    "browser-results.json",
+    "browser-run.txt",
+    "browser-server.txt",
+    "build.txt",
+    "final-copy.md",
+    "lint.txt",
+    "preview-smoke.json",
+    "production-preview-smoke.mjs",
+    "README.md",
+    "regression-customer-ux.txt",
+    "regression-measurement.txt",
+    "regression-preparing.txt",
+    "review.html",
+    "send-full-text.md",
+    "typecheck.txt",
+    "unit-measurement.txt",
+    "verification-summary.json",
+    "wait-full-text.md"
+  ],
+  "screenshots": [
+    "desktop-hero-send.png",
+    "desktop-request-input.png",
+    "desktop-request-intro.png",
+    "desktop-send-note.png",
+    "desktop-send-summary.png",
+    "desktop-wait-note.png",
+    "desktop-wait-summary.png",
+    "landscape-sample.png",
+    "mobile-closing.png",
+    "mobile-hero-wait.png",
+    "mobile-request-first-operation.png",
+    "mobile-request-input.png",
+    "mobile-request-intro.png",
+    "mobile-send-note.png",
+    "mobile-send-summary.png",
+    "mobile-sticky-cta.png",
+    "mobile-wait-note.png",
+    "mobile-wait-summary-sticky.png",
+    "zoom-sample.png"
+  ],
+  "checks": {
+    "browser": 42,
+    "measurementAndProtection": 12,
+    "measurementR1": 14,
+    "customerUx": 4,
+    "preparingUx": "PASS",
+    "typecheck": "PASS",
+    "targetedLint": "PASS",
+    "guardedBuild": "PASS",
+    "diffCheck": "PASS",
+    "productionPreview": "PASS"
+  },
+  "protectedViolations": [],
+  "existingUntrackedCount": 4802,
+  "missingExistingUntracked": [],
+  "externalActions": {
+    "push": 0,
+    "deploy": 0,
+    "remoteMigration": 0,
+    "realAI": 0,
+    "realPayment": 0,
+    "realNotification": 0,
+    "realGA4": 0,
+    "externalSettingChanges": 0,
+    "youtube": 0
+  },
+  "finalGuardedExternalAttempts": 0,
+  "preliminaryBuildCaveat": "Initial delegated npm build was not guarded; final artifact rebuilt with dotenv/network guard. No explicit external operation in that preliminary build.",
+  "unknowns": [
+    "physical phone and software keyboard",
+    "real GA4 receipt",
+    "live production/deployed state",
+    "live authentication/payment/delivery",
+    "Human product acceptance",
+    "conversion/revenue effect"
+  ],
+  "preview": {
+    "pc": "http://localhost:3100/sample-report",
+    "lan": "http://192.168.1.180:3102/sample-report",
+    "physicalPhoneReachability": "UNVERIFIED"
+  }
+}

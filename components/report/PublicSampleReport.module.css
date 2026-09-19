@@ -1,0 +1,555 @@
+.page {
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+.hero {
+  --focus-ring: var(--focus-ring-night);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(17rem, 0.65fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: end;
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+}
+
+.heroCopy {
+  max-width: 52rem;
+}
+
+.heroCopy h1 {
+  margin: var(--space-4) 0 0;
+  color: var(--paper-50);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.heroLead {
+  max-width: 47rem;
+  margin: var(--space-5) 0 0;
+  color: var(--paper-200);
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 2;
+}
+
+.priceLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.55rem;
+  margin: var(--space-5) 0 0;
+  color: var(--moon-400);
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+.priceLine span {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.priceLine span + span::before {
+  margin-right: 0.55rem;
+  content: "｜";
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-6);
+  align-items: center;
+  margin-top: var(--space-6);
+}
+
+.heroActions > div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ctaNote {
+  margin: 0;
+  color: inherit;
+  font-size: var(--type-small);
+  line-height: 1.7;
+}
+
+.hero .ctaNote {
+  color: var(--paper-200);
+}
+
+.textLink {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--paper-50);
+  font-weight: 800;
+  text-underline-offset: 0.3em;
+}
+
+.textLink:focus-visible,
+.stickyCta a:focus-visible {
+  outline: 3px solid var(--focus-ring-night);
+  outline-offset: 3px;
+}
+
+.disclosure {
+  border: 1px solid color-mix(in srgb, var(--moon-400) 34%, transparent);
+  border-radius: var(--radius-small);
+  background: color-mix(in srgb, var(--night-950) 70%, transparent);
+  padding: var(--space-5);
+  color: var(--paper-200);
+  font-size: var(--type-small);
+  line-height: 1.9;
+}
+
+.caseSection {
+  scroll-margin-top: var(--space-5);
+  background: var(--paper-100);
+  padding: clamp(3.25rem, 7vw, 5.5rem) 1rem 0;
+}
+
+.caseSection h2,
+.closingSection h2,
+.faqSection h2 {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.55;
+  text-wrap: balance;
+}
+
+.eyebrow,
+.summaryLabel {
+  margin: 0;
+  color: var(--moon-600);
+  font-size: var(--type-small);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.caseLead {
+  max-width: 48rem;
+  margin: var(--space-4) 0 0;
+  color: var(--ink-600);
+  line-height: 1.9;
+}
+
+.caseSelector {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.caseButton,
+.caseButtonActive {
+  min-height: 5.5rem;
+  cursor: pointer;
+  border: 1px solid var(--border-paper);
+  border-radius: var(--radius-small);
+  background: var(--paper-50);
+  padding: var(--space-4) var(--space-5);
+  color: var(--ink-800);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.65;
+  text-align: left;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.caseButton span,
+.caseButtonActive span {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--moon-600);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.caseButton:hover {
+  border-color: var(--moon-600);
+}
+
+.caseButtonActive {
+  border-color: var(--moon-500);
+  background: var(--night-800);
+  color: var(--paper-50);
+  box-shadow: inset 0 0 0 1px var(--moon-500);
+}
+
+.caseButtonActive span {
+  color: var(--moon-400);
+}
+
+.caseButton:focus-visible,
+.caseButtonActive:focus-visible {
+  outline: 3px solid var(--focus-ring-paper);
+  outline-offset: 3px;
+}
+
+.summary {
+  margin-top: var(--space-6);
+  border: 1px solid color-mix(in srgb, var(--moon-600) 36%, var(--border-paper));
+  border-left: 4px solid var(--moon-600);
+  background: var(--paper-50);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: var(--shadow-soft);
+}
+
+.summary h3 {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 3.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.summary dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: var(--space-6) 0 0;
+  border-top: 1px solid var(--border-paper);
+}
+
+.summary dl > div {
+  min-width: 0;
+  border-bottom: 1px solid var(--border-paper);
+  padding: var(--space-4);
+}
+
+.summary dl > div:nth-child(even) {
+  border-left: 1px solid var(--border-paper);
+}
+
+.summary dt {
+  color: var(--moon-600);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.summary dd {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-600);
+  line-height: 1.85;
+}
+
+.formatNote {
+  margin: var(--space-4) 0 0;
+  color: var(--ink-600);
+  font-size: var(--type-small);
+  line-height: 1.8;
+}
+
+.closingSection {
+  background:
+    radial-gradient(circle at 88% 15%, color-mix(in srgb, var(--moon-400) 11%, transparent), transparent 22rem),
+    linear-gradient(145deg, var(--paper-100), var(--paper-300));
+  padding: clamp(3.5rem, 8vw, 6.5rem) 1rem;
+}
+
+.closingInner,
+.faqInner {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+}
+
+.closingInner > p:not(.eyebrow, .ctaNote, .boundary) {
+  max-width: 48rem;
+  margin: var(--space-4) 0 0;
+  color: var(--ink-600);
+  line-height: 2;
+}
+
+.productCard {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-7);
+  border: 1px solid color-mix(in srgb, var(--moon-600) 42%, var(--border-paper));
+  background: var(--paper-50);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: var(--shadow-soft);
+}
+
+.productCard > div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.productCard strong {
+  color: var(--ink-950);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+}
+
+.productCard span {
+  color: var(--moon-600);
+  font-weight: 800;
+}
+
+.closingInner > .ctaNote {
+  margin-top: var(--space-3);
+  color: var(--ink-600);
+}
+
+.boundary {
+  margin: var(--space-5) 0 0;
+  border-left: 3px solid var(--moon-600);
+  padding-left: var(--space-4);
+  color: var(--ink-600);
+  font-size: var(--type-small);
+  line-height: 1.8;
+}
+
+.faqSection {
+  background: var(--paper-50);
+  padding: clamp(3.5rem, 8vw, 6.5rem) 1rem clamp(5rem, 10vw, 8rem);
+}
+
+.faqList {
+  margin: var(--space-6) 0 0;
+  border-top: 1px solid var(--border-paper);
+}
+
+.faqList > div {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.7fr) minmax(0, 1.3fr);
+  gap: var(--space-6);
+  border-bottom: 1px solid var(--border-paper);
+  padding-block: var(--space-5);
+}
+
+.faqList dt {
+  color: var(--ink-950);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.faqList dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.9;
+}
+
+.endMarkerWrap {
+  background: var(--paper-200);
+  padding: 0 1rem var(--space-7);
+}
+
+.endMarker {
+  width: min(100%, 50rem);
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  color: var(--moon-600);
+  font-family: var(--font-heading);
+  font-size: var(--type-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.endMarker span {
+  width: min(5rem, 18vw);
+  height: 1px;
+  background: var(--border-paper);
+}
+
+.stickyCta,
+.compactCta {
+  display: none;
+}
+
+@media (max-height: 640px), (max-width: 1024px) and (orientation: landscape) {
+  .compactCta {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    border-block: 1px solid var(--border-night);
+    background: var(--night-900);
+    padding: var(--space-4) max(1rem, calc((100% - 72rem) / 2));
+    color: var(--paper-50);
+  }
+
+  .compactCta > div {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .compactCta span {
+    color: var(--paper-300);
+    font-size: var(--type-small);
+  }
+
+  .compactCta a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-small);
+    background: var(--moon-500);
+    padding: 0.65rem 0.9rem;
+    color: var(--night-950);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .compactCta a:focus-visible {
+    outline: 3px solid var(--focus-ring-night);
+    outline-offset: 3px;
+  }
+}
+
+@media (max-width: 760px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .heroActions,
+  .heroActions > div,
+  .heroActions :global(.button) {
+    width: 100%;
+  }
+
+  .heroActions :global(.button) {
+    justify-content: center;
+  }
+
+  .caseSelector,
+  .summary dl,
+  .faqList > div {
+    grid-template-columns: 1fr;
+  }
+
+  .summary dl > div {
+    padding-inline: 0;
+  }
+
+  .summary dl > div:nth-child(even) {
+    border-left: 0;
+  }
+
+  .productCard {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .productCard :global(.button) {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) and (min-height: 641px) and (orientation: portrait) {
+  .page {
+    padding-bottom: calc(8rem + env(safe-area-inset-bottom));
+  }
+
+  .page :is(a, button) {
+    scroll-margin-block: 1rem 9rem;
+  }
+
+  .stickyCtaVisible {
+    position: fixed;
+    z-index: 40;
+    inset: auto max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid color-mix(in srgb, var(--moon-400) 55%, var(--border-night));
+    border-radius: var(--radius-small);
+    background: color-mix(in srgb, var(--night-950) 96%, transparent);
+    padding: 0.7rem;
+    color: var(--paper-50);
+    box-shadow: 0 1rem 3rem rgb(10 7 26 / 28%);
+  }
+
+  .stickyCta > div {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .stickyCta strong {
+    font-size: 0.9rem;
+  }
+
+  .stickyCta span {
+    color: var(--paper-300);
+    font-size: 0.68rem;
+  }
+
+  .stickyCta a {
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-small);
+    background: var(--moon-500);
+    padding: 0.65rem 0.85rem;
+    color: var(--night-950);
+    font-size: 0.8rem;
+    font-weight: 800;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .page:has(a:not([data-sample-cta="sticky"]):focus-visible, button:focus-visible) .stickyCtaVisible {
+    display: none;
+  }
+}
+
+@media (max-width: 390px) {
+  .heroCopy h1 {
+    font-size: 1.85rem;
+  }
+
+  .priceLine {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .priceLine span + span::before {
+    content: none;
+  }
+
+  .stickyCtaVisible {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .stickyCta > div {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}
+
+@media (max-height: 640px) and (max-width: 540px) {
+  .compactCta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caseButton,
+  .caseButtonActive {
+    transition: none;
+  }
+}

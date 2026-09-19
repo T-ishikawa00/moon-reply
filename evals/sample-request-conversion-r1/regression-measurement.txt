@@ -1,0 +1,25 @@
+PASS 01 strict attribution capture and Google Ads canonicalization
+PASS 02 Google Organic is coarsened without storing referrer URL
+PASS 03 direct visit preserves existing campaign without refresh
+PASS 04 invalid charset, duplicate fields, and secret paths reject
+(node:17184) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/projects/moon-reply/lib/measurement/attribution.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\projects\moon-reply\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS 05 signed cookie accepts intact value and rejects tampering or expiry
+PASS 06 adapter activation is complete-config and environment fail-closed
+PASS 07 explicit client funnel maps exactly and page_view stays suppressed
+PASS 08 GA4 MP body contains only anonymous campaign and canonical purchase
+PASS 09 live claim excludes TEST and retry preserves persisted transaction ID
+PASS 10 measurement scheduler failure is fail-open for customer dispatch
+PASS 11 schema converges both canonical payment paths into one durable job
+PASS 12 checkout binds only signed server cookie and Stripe remains attribution-free
+PASS 13 automatic page view and client API secret exposure are blocked
+PASS 14 browser gtag queue preserves the native command arguments object
+MEASUREMENT_R1_CHECKS=14
+FAKE_GA4_SENDS=2
+EXTERNAL_GA4_SENDS=0
+STRIPE_CALLS=0
+SUPABASE_REMOTE_CALLS=0
+PROVIDER_CALLS=0
+DEPLOY_OPERATIONS=0

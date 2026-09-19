@@ -1,0 +1,42 @@
+PASS WAIT is default
+PASS mobile no horizontal overflow
+PASS SEND full note visible
+PASS case change does not repeat sample_view
+PASS brief end exposure not counted
+PASS end dwell resets offscreen
+PASS visible end records once
+PASS sticky hidden while closing visible
+PASS end observer/case redisplay deduplicated
+PASS desktop no horizontal overflow
+PASS landscape no overflow
+PASS landscape CTA returns to normal flow
+PASS 200 percent text no overflow
+PASS compact enlarged view has no fixed CTA
+PASS CTA dispatched closing placement
+PASS request_view before first change
+PASS no sample prefilling
+PASS no sticky CTA on request
+PASS required validation and focus retained
+PASS adult checkbox records request_start
+PASS textarea expands with long content
+PASS textarea remains unclipped after viewport narrowing
+PASS same existing phase two reached
+PASS back preserves text
+PASS return and changes don't repeat view/start
+PASS conditional original opens and is required
+PASS missing original stays on input
+PASS conditional original allows existing next step
+PASS funnel session preserved
+PASS free text and URL not in event payloads
+PASS no automatic page_view/purchase/checkout
+PASS sticky hidden when hero visible
+PASS rapid hero clicks deduplicated per transition
+PASS keyboard focus is not covered by fixed CTA
+PASS footer not covered by fixed CTA
+PASS transport failure preserves navigation and input
+PASS sticky click reaches actual adapter
+PASS revisits preserve original attribution/session
+PASS hash restore skips initial request_view
+PASS return to input after hash restore records once
+PASS no forbidden external requests
+PASS browser has no runtime errors

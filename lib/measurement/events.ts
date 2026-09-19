@@ -2,6 +2,9 @@ export const MEASUREMENT_EVENT_NAMES = [
   "landing_view",
   "page_view",
   "sample_view",
+  "sample_cta_click",
+  "sample_end_view",
+  "request_view",
   "request_start",
   "request_complete",
   "auth_start",
@@ -79,6 +82,11 @@ export type MeasurementPayloadByName = Readonly<{
   }>;
   page_view: Readonly<{ page: MeasurementPageArea }>;
   sample_view: Readonly<{ sample: "public_sample" }>;
+  sample_cta_click: Readonly<{
+    placement: "hero" | "sticky" | "closing";
+  }>;
+  sample_end_view: Readonly<{ sample: "public_sample" }>;
+  request_view: Readonly<{ experience: "consultation_request" }>;
   request_start: Readonly<{ experience: "consultation_request" }>;
   request_complete: Readonly<{ outcome: "purchase_ready" }>;
   auth_start: Readonly<{ method: MeasurementAuthMethod }>;
@@ -185,6 +193,27 @@ function validateMeasurementPayload(
     case "sample_view": {
       const value = exactObject(payload, ["sample"]);
       if (value.sample !== "public_sample") {
+        throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
+      }
+      return;
+    }
+    case "sample_cta_click": {
+      const value = exactObject(payload, ["placement"]);
+      if (!oneOf(value.placement, ["hero", "sticky", "closing"] as const)) {
+        throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
+      }
+      return;
+    }
+    case "sample_end_view": {
+      const value = exactObject(payload, ["sample"]);
+      if (value.sample !== "public_sample") {
+        throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
+      }
+      return;
+    }
+    case "request_view": {
+      const value = exactObject(payload, ["experience"]);
+      if (value.experience !== "consultation_request") {
         throw new TypeError("MEASUREMENT_PAYLOAD_INVALID");
       }
       return;

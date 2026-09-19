@@ -68,6 +68,7 @@ import {
   MESSAGE_IMPACT_TOPIC_LABEL,
   validateCandidateMessage,
 } from "./request-form-candidate-message";
+import requestStyles from "./RequestForm.module.css";
 
 export type RequestFormData = {
   adultConfirmed: boolean;
@@ -505,6 +506,12 @@ function validateEmail(form: RequestFormData) {
     errors.email = "メールアドレスの形式を確認してください。";
   }
   return errors;
+}
+
+function resizeTextareaToContent(element: HTMLTextAreaElement) {
+  element.style.height = "auto";
+  const borderHeight = element.offsetHeight - element.clientHeight;
+  element.style.height = `${element.scrollHeight + borderHeight}px`;
 }
 
 function FieldError({ id, message }: { id: string; message?: string }) {
@@ -1058,12 +1065,18 @@ export function RequestForm({
   const preparationIdempotencyKey = useRef<string | null>(null);
   const requestStartedMeasured = useRef(false);
   const requestCompletedMeasured = useRef(false);
+  const requestViewMeasured = useRef(false);
+  const initialViewCheckDone = useRef(false);
+  const phaseRef = useRef<Phase>(phase);
   const authEntryPendingRef = useRef(false);
   const googleAuthClientTimingRef =
     useRef<GoogleAuthClientTimingAnchor | null>(null);
   const clarificationHeadingRef = useRef<HTMLHeadingElement>(null);
   const productScopeHeadingRef = useRef<HTMLHeadingElement>(null);
   const apiErrorHeadingRef = useRef<HTMLHeadingElement>(null);
+  const situationTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+  phaseRef.current = phase;
 
   useEffect(() => {
     const hashPhases: Record<string, Phase> = {
@@ -1087,6 +1100,58 @@ export function RequestForm({
       window.removeEventListener("hashchange", applyHashPhase);
     };
   }, []);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      initialViewCheckDone.current = true;
+      const restoredToLaterPhase = ["#safety", "#step-2", "#step-3", "#email"].includes(
+        window.location.hash,
+      );
+      if (
+        !restoredToLaterPhase &&
+        phaseRef.current === 1 &&
+        !requestViewMeasured.current
+      ) {
+        requestViewMeasured.current = true;
+        trackClientMeasurement("request_view", {
+          experience: "consultation_request",
+        });
+      }
+    });
+    return () => window.cancelAnimationFrame(frameId);
+  }, []);
+
+  useEffect(() => {
+    if (!initialViewCheckDone.current || phase !== 1 || requestViewMeasured.current) {
+      return;
+    }
+    const frameId = window.requestAnimationFrame(() => {
+      if (phaseRef.current !== 1 || requestViewMeasured.current) return;
+      requestViewMeasured.current = true;
+      trackClientMeasurement("request_view", {
+        experience: "consultation_request",
+      });
+    });
+    return () => window.cancelAnimationFrame(frameId);
+  }, [phase]);
+
+  useEffect(() => {
+    const textarea = situationTextareaRef.current;
+    if (phase === 1 && textarea) resizeTextareaToContent(textarea);
+  }, [phase, form.currentSituation]);
+
+  useEffect(() => {
+    const textarea = situationTextareaRef.current;
+    if (phase !== 1 || !textarea) return;
+    let width = textarea.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (textarea.clientWidth === width) return;
+      width = textarea.clientWidth;
+      resizeTextareaToContent(textarea);
+    });
+    observer.observe(textarea);
+    return () => observer.disconnect();
+  }, [phase]);
 
   useEffect(() => {
     if (safetyResult?.classification === "needs_clarification") {
@@ -2384,20 +2449,27 @@ export function RequestForm({
               今の状況を教えてください <span>必須</span>
             </label>
             <p id="current-situation-note">
-              相手との関係、最近あったこと、返事を待っている期間、気になっていることなどを自由に書いてください。
+              相手との関係と、最後にあったことを短く書いてください。
+            </p>
+            <p id="current-situation-guide" className={requestStyles.situationGuide}>
+              書き方の目安：いま何を迷っているかも一言添えてください。箇条書きでも大丈夫です。
             </p>
             <textarea
               id="currentSituation"
               name="currentSituation"
-              rows={9}
+              ref={situationTextareaRef}
+              className={requestStyles.situationInput}
+              rows={6}
               maxLength={5000}
               value={form.currentSituation}
               onChange={(event) =>
                 updateString("currentSituation", event.target.value)
               }
+              onInput={(event) => resizeTextareaToContent(event.currentTarget)}
               aria-invalid={Boolean(errors.currentSituation)}
-              aria-describedby="current-situation-note privacy-note currentSituation-error"
+              aria-describedby="current-situation-note current-situation-guide privacy-note currentSituation-error"
               placeholder="例：二度会ったあと、昨日から返事を待っています。追い連絡をすると急かすように見えないか気になっています。"
+              style={{ minHeight: "7.5rem" }}
             />
             <aside id="privacy-note" className="request-privacy-note" role="note">
               <strong>入力しない情報</strong>
@@ -2408,24 +2480,34 @@ export function RequestForm({
             <FieldError id="currentSituation-error" message={errors.currentSituation} />
           </div>
 
-          <div className="request-field">
-            <label htmlFor="nickname">
-              ニックネーム <small>任意</small>
-            </label>
-            <p>実名ではなく、鑑定ノート内で呼ばれたい名前を入力できます。</p>
-            <input
-              id="nickname"
-              name="nickname"
-              type="text"
-              value={form.nickname}
-              onChange={(event) => updateString("nickname", event.target.value)}
-            />
-          </div>
+          <details className={requestStyles.optionalDetails}>
+            <summary>
+              必要なら追加
+              <span>ニックネーム（任意）</span>
+            </summary>
+            <div className={requestStyles.optionalDetailsBody}>
+              <label htmlFor="nickname">
+                ニックネーム <small>任意</small>
+              </label>
+              <p>実名ではなく、鑑定ノート内で呼ばれたい名前を入力できます。</p>
+              <input
+                id="nickname"
+                name="nickname"
+                type="text"
+                value={form.nickname}
+                onChange={(event) => updateString("nickname", event.target.value)}
+              />
+            </div>
+          </details>
 
           <details
             className="request-message-details"
-            open={messageDetailsOpen}
-            onToggle={(event) => setMessageDetailsOpen(event.currentTarget.open)}
+            open={isCandidateMessageRequired || messageDetailsOpen}
+            onToggle={(event) =>
+              setMessageDetailsOpen(
+                isCandidateMessageRequired || event.currentTarget.open,
+              )
+            }
           >
             <summary>
               {isCandidateMessageRequired
@@ -2488,7 +2570,7 @@ export function RequestForm({
               className="button button--primary"
               onClick={continueFromSheet}
             >
-              利用確認へ
+              鑑定前の確認へ
             </button>
           </footer>
         </article>
