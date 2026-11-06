@@ -1,5 +1,7 @@
 # CODEX_HANDOFF.md
 
+> **保存案内（2026-11-07）：** 月の返事は運営終了済みです。この下は各開発タスク時点の引継ぎ記録で、現在の稼働状態や新たな実行権限を示しません。最終公開SHA・Human終了報告・資料索引は [service-record/STATUS](service-record/STATUS.md) と [EVIDENCE_INDEX](service-record/EVIDENCE_INDEX.md) を参照してください。
+
 <!-- PAID-RECOVERY-STEP3-2026-09-09:BEGIN -->
 ## 2026-09-09 — Local paid recovery implementation and fault evidence
 

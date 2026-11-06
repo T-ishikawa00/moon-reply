@@ -1,102 +1,31 @@
-# 月の返事
+# 月の返事（Moon Reply）
 
-> **CURRENT Stripe Lane B B4b Private Review Hard Gate acceptance:** `stripe_lane_b_b4b_private_review_hard_gate_human_chatgpt_accepted_complete`; Acceptance date `2026-08-15`; Technical Evidence Closure SHA `ae20d3540a890f0a0b567695fd982b1d5a57d7f9`; `technicalEvidence = complete`.
->
-> ChatGPT final review `PASS / complete`; Human final review `PASS / complete`; B4b acceptance `complete`; Netlify Hard Gate `human_chatgpt_accepted_complete_private_review_scope_only`; acceptance scope `private_review_technical_scope_only`; Production B4a SHA `025e28a82c0b773d21ececfd8064af045922079d` remains `unchanged / locked`; Paid Production Hosting `provisional`; Production readiness `not established`. This acceptance is limited to B4b Private Review technical evidence closure and the Netlify Private Review Hard Gate. Payment remains unimplemented; Production Runtime / Production Payment / Stripe approval or formal selection / additional Provider operations / public visibility / domain-DNS / legal publication / Public Launch remain unapproved or unauthorized. Exact next candidate is **Paid Production Readiness Planning** (`planning only / not started / no external authority created`). Historical B3/B4a/B4b snapshots remain unchanged. Detailed evidence: docs/payment/STRIPE_LANE_B_B4B_STABLE_REVIEW_URL_DEPLOYMENT.md.
+**月の返事は2026年10月に運営を終了したサービスです。** このPrivateリポジトリは、最終公開版のコード、開発履歴、設計・検証資料を保存するためのものです。現在利用できるサービスや再開予定の製品を案内するものではありません。終了と保存範囲は [STATUS](docs/service-record/STATUS.md) に記録しています。
 
-月の返事は、返信待ち・追いメッセージ・曖昧な関係で不安になる夜に、恋愛関係の状況や送信予定のメッセージをAIが整理・分析し、次の一手の判断材料を鑑定ノート形式で返すサービスです。
+月の返事は、返信待ちや送信前の迷いについて、利用者が入力した恋愛関係の状況とメッセージをAIで整理し、次の行動を自分で選ぶための判断材料を返すデジタルレポートでした。ユーザー向け名称は「恋のメッセージ鑑定ノート」です。占術や超自然的な予測は使わず、相手の本心、返信、関係の進展を保証しません。位置付けは [SERVICE_POSITIONING](docs/SERVICE_POSITIONING.md)、品質方針は [GUIDANCE_QUALITY_R1](docs/product/GUIDANCE_QUALITY_R1.md) を参照してください。
 
-公式な事業・法務・provider向け定義は、AIを活用した恋愛メッセージ分析・判断支援デジタルレポートです。ユーザー向けには「恋のメッセージ鑑定ノート」と表現しますが、占術や超自然的な予測は使用しません。
+## 最終公開版と現在の保存版
 
-## Current Phase
+最終公開版のソース基準は **`38985ccf0c01f31af01ddf5d61ce1dca5d7ea763`** です。2026年9月19日の公開revisionとの一致は当時の公開記録で確認されました。現在の公開状態を示すものではありません。このREADMEと `docs/service-record/` は、同SHAの後に追加する保存・閲覧用の説明であり、商品ロジックや当時の公開物を変更するものではありません。SHAを基準に参照してください。ローカルのブランチ名やポインタは同じ版を指すとは限りません。
 
-> **Stripe Lane B B3 accepted current overlay:** `stripe_lane_b_b3_review_ready_website_public_surface_human_visual_chatgpt_accepted_complete` on `2026-08-14`; Human Visual QA `PASS / complete`; ChatGPT review `PASS / complete`; Human acceptance / B3 acceptance `complete / complete`. B3 means only `Review-ready Website/Public Surface implementation accepted`. Exact next work is **Stripe Lane B deployment readiness (B4a)**, planning/readiness only. B4a does not authorize domain purchase, DNS mutation, deployment, public publication, Stripe submission, Provider activation, or Production Payment; B4b stable-URL deployment requires separate authority.
+2026年11月7日のGitHub読み取りでは、リポジトリはPrivate、既定ブランチは `main`、Archiveは未実施でした。反映後の状態や現在の外部サービス設定はこの記録だけでは確認できません。詳細は [STATUS](docs/service-record/STATUS.md) を参照してください。
 
-Payment Charter v1 is `human_chatgpt_accepted_complete` as of 2026-08-12; Payment implementation remains unauthorized.
+## 当時の機能と操作
 
-The Stripe-first Web Payment Strategy is Human + ChatGPT accepted at the Product/strategy level as of `2026-08-12`. Its status is `stripe_feasibility_and_web_payment_strategy_pivot_human_chatgpt_accepted_complete`. Stripe Checkout is the accepted strategic primary Web direction to investigate and prepare, while Stripe feasibility is not established; account, contact, approval, and activation are absent; formal Provider selection is incomplete; and every desired method remains unverified. PAY.JP is preserved as `paused_fallback_provider_direction`. Provider account/contact/API operations, Payment implementation, and Production Payment remain unauthorized.
+利用者はトップと架空のWAIT／SEND見本を見て、`/request` に相談内容を入力し、画面上の安全確認へ進みました。本番経路では、AI Providerを呼ばずに相談準備を保存し、GoogleまたはメールOTPで認証して所有者を紐付けた後、サーバーで適格性を判定し、必要な追加確認を行います。購入可能な場合に税込980円の都度払いでStripe Checkoutへ進む構成でした。決済は署名付きWebhookなどのサーバー側証拠で確認し、AIによる分析・レポート生成を経て、結果ページ、Account、通知メールから受け取る設計・実装です。支払後の中断に備えた永続的な復旧経路も含みます。画面と処理の対応は [FUNCTION_AND_FLOW](docs/service-record/FUNCTION_AND_FLOW.md) にまとめています。
 
-The Stripe-first Customer-facing / Public-copy Alignment is Human + ChatGPT accepted complete as of `2026-08-12` with status `stripe_first_customer_public_copy_alignment_human_chatgpt_accepted_complete`. The accepted lineage is baseline `3d3888f53293231506838195c478fa2e1a88417f`, initial implementation `0bdbdc87b9de5b28707a7f5ce25f12d7b6333c95`, and Human Visual QA correction `48d21e7ee7d672575eae6fd957e637b37da2a52f`. Human Visual QA and Automated QA are PASS at the accepted implementation lineage. This accepts Product/UI/content alignment only and creates no Provider, Payment implementation, Production Payment, or legal-publication authority.
+## 構成
 
-Stripe Feasibility Evidence Preparation is `stripe_feasibility_evidence_preparation_human_chatgpt_accepted_complete` as of `2026-08-12`. Lane A remains `preparation_human_approved / external_action_not_authorized / not_submitted / null` but is preserved inactive. On `2026-08-13`, Human directed that the Stripe Sales route not be used (`not_used_by_human_direction`); this is a workflow choice, not a Stripe Provider outcome. The [Stripe Lane B Human Decision Package](docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md) and B2 docs/spec/legal authority remain accepted. B3 is separately accepted at the review-ready Website/Public Surface implementation level only. The exact current next work is **Stripe Lane B deployment readiness (B4a)**. Lane B/C remain blocked, no external action is authorized, and Stripe feasibility, account/contact/approval/activation, formal selection, and all desired-method eligibility remain unresolved.
+最終ソースにはNext.js、React、TypeScriptの画面とAPI、Supabaseの認証・Postgres、Stripeの決済、OpenAIの生成、Resendの通知、Netlifyの配信・バックグラウンド処理があります。役割とデータ境界は [ARCHITECTURE](docs/service-record/ARCHITECTURE.md) を参照してください。依存バージョンは最終版の [package.json](package.json) に記録されており、現在推奨される版を意味しません。
 
-Current canonical planning:
+## 開発と運用の記録
 
-- `docs/ROADMAP.md`
-- `docs/payment/PAYMENT_PLATFORM_MONETIZATION_STRATEGY.md`
-- `docs/payment/PAYMENT_CHARTER.md`
-- `docs/payment/STRIPE_FEASIBILITY_AND_WEB_PAYMENT_STRATEGY_PIVOT_CANDIDATE.md`
-- `docs/payment/STRIPE_LANE_B_HUMAN_DECISION_PACKAGE.md`
-- `docs/payment/PAYJP_PRODUCTION_APPLICATION_READINESS.md`
-- `docs/CURRENT_FOCUS.md`
-- `docs/CODEX_HANDOFF.md`
+2026年8月にStripeを中心とするWeb決済方針とPrivate Reviewを進め、9月には認証、購入、納品、回答品質、障害復旧を段階的に実装・検証しました。9月19日にWAIT／SEND見本から相談入口への導線を改善した版が最終公開版となりました。運営終了と主要インフラの撤去は2026年10月24日のHuman実行報告によります。確認された有料決済実績は**全期間1件、980円、納品完了**です。市場需要や継続売上を示す数値ではありません。根拠の種類と所在は [EVIDENCE_INDEX](docs/service-record/EVIDENCE_INDEX.md) に分けています。
 
-## MVP Direction
+企画、仕様・価格・安全方針、受入と運営の判断はHumanが担当しました。CodexなどのAIエージェントは、Humanが指定した範囲で設計資料、コード、検証スクリプト、文書の作成を支援しました。個々の変更の技術検証とHuman受入は、それぞれの時点の記録に従います。
 
-Phase 1 MVP is not a full app.
+## ローカル閲覧と資料
 
-The public MVP target is an automated one-shot paid diagnosis flow:
+外部サービスや実顧客データを使わずに確認できる範囲と、そのために検証した起動・停止手順は [LOCAL_VIEWING](docs/service-record/LOCAL_VIEWING.md) を参照してください。見本とReview画面には架空fixtureや旧版の表示も含まれます。ローカル画面の表示は、実認証、実課金、実AI、実メール、完全な購入から納品までの再現を証明しません。
 
-LP → self-hosted request form → accepted server-owned Safety/purchase eligibility → delivery/recovery email → mailbox verification when no valid trusted session exists → verified-email binding → final JPY 980 confirmation → verified payment → one assessment grant → AI assessment → result delivery/recovery → feedback.
-
-The initial paid Web MVP remains no-login. A valid server-verifiable trusted session bound to the unchanged verified delivery/recovery email may be reused; Safety eligibility and final purchase confirmation are still required for every purchase.
-
-Development may use manual, mock, and QA modes, but the public MVP should automate normal diagnosis flow.
-
-## In Scope for MVP
-
-- One-page LP
-- Self-hosted diagnosis request form
-- Safety screening
-- Payment flow
-- AI judgment generation
-- AI full diagnosis generation
-- Result page
-- Email notification
-- Feedback collection
-- Minimal database/logging
-
-## Out of Scope for MVP
-
-- Login
-- User account
-- My page
-- Partner-specific notebook
-- Diagnosis history list
-- Subscription
-- Coin/point system
-- Native app
-- Full admin panel
-- Auto-generated image card
-
-## Product Roadmap
-
-- Phase A: Web / accepted Stripe Checkout strategic direction / credit/debit cards, Apple Pay, Google Pay, and PayPay / JPY 980 tax-inclusive one-time purchase; feasibility and method evidence remain pending
-- Phase B: real-customer paid Web validation
-- Phase C: iOS / Apple IAP / RevenueCat
-- Phase D: Android / Google Play Billing / RevenueCat
-- Phase E: repeat-purchase data analysis
-- Phase F: subscription only if demand is established
-
-The detailed initial Web delivery milestones remain in `docs/ROADMAP.md`. Purchase-count figures are Product Owner heuristics, not automatic release gates.
-
-## Development Rules
-
-- 需要検証なしに本格実装へ進まない
-- 実装は承認済みステージごとに分割する
-- 単発税込¥980で実需要と再購入を検証するまでサブスクを実装しない
-- Webで有料検証し、その後iOS、安定後にAndroidへ進む
-- 初期Customer-facing modelにコイン/ポイント制を採用しない
-- Stripe戦略Candidate、feasibility、provider承認・正式選定、Payment Charter受入、実装権限を混同しない
-- 不安を煽って課金させない
-- 危険相談は通常鑑定にしない
-- AI利用は隠さない
-- 実名、個人情報、LINEスクショをRepoに入れない
-
-## Integrity Notes
-
-External evaluation was not executed.
-
-The transition to Phase 1 was made via Founder Override.
-
-Do not fabricate evaluator feedback, sales results, purchase counts, or testimonials.
+設計の入口は [PRODUCT_SPEC](docs/PRODUCT_SPEC.md)、[PAYMENT_CHARTER](docs/payment/PAYMENT_CHARTER.md)、[CUSTOMER_IDENTITY_AUTHORITY_V1](docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md)、[SAFETY_POLICY](docs/SAFETY_POLICY.md) です。これらには過去時点の計画や、後続実装に置き換わった記述も残ります。[EVIDENCE_INDEX](docs/service-record/EVIDENCE_INDEX.md) から時点別の実装・試験へ進み、[KNOWN_LIMITATIONS](docs/service-record/KNOWN_LIMITATIONS.md) で未検証事項を確認してください。顧客原本、取引原本、認証情報、非公開バックアップはこの案内に含めません。

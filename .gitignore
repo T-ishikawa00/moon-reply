@@ -36,3 +36,6 @@ tmp/
 
 # Supabase CLI
 supabase/.temp/
+
+# Dedicated local service-record viewing evidence
+.local-review/
