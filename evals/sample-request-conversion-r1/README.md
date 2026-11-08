@@ -11,7 +11,7 @@ Primary（gpt-6-astra）が仕様解釈、統合、保護範囲・privacy監査�
 - 両方起動済み。スマホからの到達は端末・Wi-Fi・Windows firewallに依存し、実機では未確認。firewall設定は変更していません。
 - Previewは外部接続を防止した環境。販売、生成、認証Provider、メール、GA4は無効です。販売停止の表示は既存flagによるもので、本番状態を示しません。
 
-再起動（PowerShell、`C:\projects\moon-reply`）:
+再起動（PowerShell、`isolated local worktree`）:
 
 ```powershell
 node scripts/preview-sample-request-conversion-r1.mjs
@@ -40,10 +40,10 @@ node --input-type=module -e "import { buildOffline } from './scripts/remediation
 ## 完成内容・文言・スクリーンショット
 
 - [最終文言](final-copy.md)
-- WAIT全文（参照原本はPrivate保全・候補には非同梱） / 保持されたSEND全文（参照原本はPrivate保全・候補には非同梱）
-- 19枚の比較ギャラリー（参照原本はPrivate保全・候補には非同梱）（ブラウザで開く）
-- mobile 冒頭（参照原本はPrivate保全・候補には非同梱）、WAIT（参照原本はPrivate保全・候補には非同梱）、SEND（参照原本はPrivate保全・候補には非同梱）、末尾（参照原本はPrivate保全・候補には非同梱）、固定CTA（参照原本はPrivate保全・候補には非同梱）、依頼入口（参照原本はPrivate保全・候補には非同梱）、最初の操作位置（参照原本はPrivate保全・候補には非同梱）
-- desktop WAIT（参照原本はPrivate保全・候補には非同梱）、SEND（参照原本はPrivate保全・候補には非同梱）、依頼入口（参照原本はPrivate保全・候補には非同梱）
+- [WAIT全文（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) / [保持されたSEND全文（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
+- [19枚の比較ギャラリー（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)（ブラウザで開く）
+- [mobile 冒頭（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[WAIT（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[SEND（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[末尾（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[固定CTA（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[依頼入口（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[最初の操作位置（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
+- [desktop WAIT（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[SEND（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、[依頼入口（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
 
 スクリーンショットはローカルChromeのviewport検証。実スマホの写真ではありません。開発用Next overlayのみ撮影時に非表示にしています。商品UIは変更せず撮影しています。
 

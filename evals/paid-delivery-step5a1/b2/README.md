@@ -15,9 +15,9 @@ before a release can pass. No temporary verifier replaces the existing gate.
 
 Final evidence:
 
-- 30-check receipt（参照原本はPrivate保全・候補には非同梱）,
+- [30-check receipt（公開準備候補では詳細記録を非同梱）](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md),
   SHA256 `9ddc3902c958c0008ec72dc24c881128c2d93414a65f4de7ff1b1fcf5717484e`.
-- Offline execution log（参照原本はPrivate保全・候補には非同梱）,
+- [Offline execution log（公開準備候補では詳細記録を非同梱）](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md),
   SHA256 `44a19f805a123c0fb9f07ca24ab49613e6468f992f24a34e69a6a1ea612e783d`.
   The child exited zero and the existing offline wrapper verified zero external
   attempts before `OFFLINE_WRAPPER_PASS` was appended.

@@ -2,7 +2,7 @@
 
 Status: development evaluation assets drafted and automatically verifiable; Human / ChatGPT review pending.
 
-This directory contains the repository-visible development split for M2-P1. It is a quality-engineering asset, not product runtime data. Nothing under `evals/**` is imported by the application, sent to a model, persisted to a database, or used to authorize delivery.
+This directory contains the repository-visible development split for M2-P1. It is a quality-engineering asset, not product runtime data or delivery authorization. Archived model evaluation runs are separate historical evidence; their private raw records are omitted from this public-preparation candidate. See the [safe aggregate summary](../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
 
 ## Development split
 

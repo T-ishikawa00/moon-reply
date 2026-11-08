@@ -29,7 +29,7 @@
 
 以下はこのケースの全文編集見本です。章立て、文面案、期間は相談内容に応じて変わります。
 
-WAIT全文（参照原本はPrivate保全・候補には非同梱） / SEND全文（参照原本はPrivate保全・候補には非同梱）。WAITの「忙しい？」は「迷っている下書き」と表示し、本文の「今夜の推奨」で送信を勧めないことを明示。SENDの推奨文面は既存どおりです。
+[WAIT全文（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) / [SEND全文（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)。WAITの「忙しい？」は「迷っている下書き」と表示し、本文の「今夜の推奨」で送信を勧めないことを明示。SENDの推奨文面は既存どおりです。
 
 ## 読後
 

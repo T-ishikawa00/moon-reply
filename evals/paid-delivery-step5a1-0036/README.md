@@ -36,7 +36,7 @@
 
    rollback限界も実PGで確認した。original_message行の保存後は旧target CHECKを再検証できないため、データを消して戻すdown migrationは行わずforward fixを前提とする。installerとruntimeの既存extension権限はlocal fixtureで検証しており、現在のremote権限は未観測。
 
-   正式Gate証跡（参照原本はPrivate保全・候補には非同梱） / guarded log（参照原本はPrivate保全・候補には非同梱）
+   [正式Gate証跡（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) / [guarded log（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
 
 7. **relevant integration regression**
 
@@ -56,7 +56,7 @@
 
    総計9購入 / 9 canonical納品 / 9 accepted通知 / Checkout 9、追加Charge 0。通知件数は記録だけでなくassertしている。Providerの実通信・実決済・実通知は0。
 
-   最終統合証跡（参照原本はPrivate保全・候補には非同梱）
+   [最終統合証跡（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
    SHA256: `003109694ace32fd715d994f8364846f15d6a12fbf3da19cd695b28f5b37cad5`。
 
    typecheck、source lint（warning 0）、offline build（47ページ）、公開clarification contract 8/8、worker graph（155 modules / 619 edges / server-only 0）もPASS。[既存V19回帰289 assertions + 新規8グループ](runtime/d4862a7f-2c59-4dd9-b26a-f48712951f07/result.json) はoffline contract regressionであり、新しい品質審査ではない。既存artifact由来の全体lint 59 warningsは既知事項として分離し、全体lintは再実行していない。
@@ -73,7 +73,7 @@
 
    検証済みsource candidate: `0f169df63f6e7dce8f459885741faad7f29d13f0`。
    Branch: `codex/guidance-quality-final-v19-l5`。
-   Worktree: `C:\projects\moon-reply`。
+   Worktree: `isolated local worktree`。
 
    証跡に記録された開始HEADは `7a7e8a0a04c98a831f36466b962a2e730b792977` で、その時点のworking sourceをハッシュで固定して検証した。現在の643 integration対象、484 build対象、14 migration gate対象のハッシュ一致を確認し、変更sourceのGit blobとも改行正規化後に一致する。資料だけを加えた最終HEADは最終返信で報告する。
 

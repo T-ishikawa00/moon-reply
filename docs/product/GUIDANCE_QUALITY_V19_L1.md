@@ -4,7 +4,7 @@
 
 ## Authorityと変更対象
 
-Human回答正本（参照原本はPrivate保全・候補には非同梱）と保存された実出力は変更しない。GQ05は引き分け/両issuesなし、GQ24は両方不可/意味のズレ、GQ13はV17の優しさ、GQ29-P3はV17の読みやすさを選好。未記載のHuman回答を補わない。
+[Human回答正本（公開準備候補では詳細記録を非同梱）](../service-record/EVALUATION_EVIDENCE_SUMMARY.md)と保存された実出力は変更しない。GQ05は引き分け/両issuesなし、GQ24は両方不可/意味のズレ、GQ13はV17の優しさ、GQ29-P3はV17の読みやすさを選好。未記載のHuman回答を補わない。
 
 V18を改修して後継にする案、および前回分析のGQ-L2（PB04/PB05も変更する案）は、今回のHuman指示によって次バッチの方針としては置き換えられた。履歴・評価済みV18・Human評価はそのまま保存する。新候補のbaselineはV17。V18の簡潔化・optionalization・schemaSet v7は継承しない。
 

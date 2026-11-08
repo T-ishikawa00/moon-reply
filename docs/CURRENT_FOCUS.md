@@ -53,7 +53,7 @@ local再現17/17・対象lint PASS。7つの架空temporal fixtureと未接続PB
 
 Human承認の固定4case × 2条件をexact `f5e5dc34b1a35a45652b2fd3f458ec04a541ecc6`で一度実行。3session開始、2件は追加確認として終了、3件目はPB06 `ACTION_CONSISTENCY`によりSTOP。12 HTTP、実usage USD $0.01957525、予約累計$0.1919992。残り5件・再試行・修復・追加sampleは実行しない。runtime/凍結入力/Production/Paid変更0。
 
-Blind Review（参照原本はPrivate保全・候補には非同梱）と実行記録（参照原本はPrivate保全・候補には非同梱）。Human評価PENDING、今回のA/B対応表・勝敗は未開示。停止findingは現在方向と将来の見直し条件を混同した可能性があり、重大な実質矛盾の実在は未確定。STOPは解除しない。温かさ/読みやすさの回帰評価は未実施。F007 Known Openは維持。一度限りの実行は終了済み、残予算による継続権限なし。Technical completion ≠ Human Quality Acceptance ≠ Production Authorization。
+[Blind Review（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)と[実行記録（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)。Human評価PENDING、今回のA/B対応表・勝敗は未開示。停止findingは現在方向と将来の見直し条件を混同した可能性があり、重大な実質矛盾の実在は未確定。STOPは解除しない。温かさ/読みやすさの回帰評価は未実施。F007 Known Openは維持。一度限りの実行は終了済み、残予算による継続権限なし。Technical completion ≠ Human Quality Acceptance ≠ Production Authorization。
 <!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:END -->
 
 <!-- GUIDANCE-V19-L1-2026-09-07:BEGIN -->
@@ -69,7 +69,7 @@ HumanはV18の継続改修を選ばず、V17基準でGQ24だけを修正する�
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
 ## 2026-09-07 — Guidance Quality Human Blind Review完了・対応表開示
 
-Human完了宣言後に保存済みmappingを開示。Human回答正本（参照原本はPrivate保全・候補には非同梱）を変更せず、対応表と分析（参照原本はPrivate保全・候補には非同梱）を作成。選好・購入ともV17 2件 / V18 0件 / 引き分け1件 / 両方不可1件。GQ05は両issuesなしを維持、GQ24 reason・GQ29-P3 A issuesの未記載を補わない。
+Human完了宣言後に保存済みmappingを開示。[Human回答正本（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)を変更せず、[対応表と分析（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)を作成。選好・購入ともV17 2件 / V18 0件 / 引き分け1件 / 両方不可1件。GQ05は両issuesなしを維持、GQ24 reason・GQ29-P3 A issuesの未記載を補わない。
 
 GQ24の目的分類と入口条件の不一致、GQ13の受け止め、GQ29-P3の抽象的な確認作業を実記録/sourceから分析。次はGQ-L2（候補PB01目的分類説明・PB04の具体的な行動・PB05の受け止め/読みやすさ）一つの最小localバッチ案。今回品質実装0・API追加0・Production変更0。既存V17/評価済みV18/30ケース/実証拠は固定。本番優劣やrollout受入へ拡張しない。以下のHuman PENDING記録は生成直後の歴史的snapshot。
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:END -->
@@ -79,7 +79,7 @@ GQ24の目的分類と入口条件の不一致、GQ13の受け止め、GQ29-P3�
 
 Human承認済みの固定4case × V17/V18を一度だけ実行。8/8 session終了、36 HTTP、完成回答4・追加確認4、API実usage費用USD $0.04820613、事前予約総額$0.6100992、$2 hard cap内。STOP/technical failure/検出された重大Safety・integrity finding 0。追加sample・retry・clarification answer・attempt3・修復0。実行runnerは383f223b2f03ff6f4cb1e93dd4ea9bb2f5dea008、runtime/凍結入力は5459a811から変更0。
 
-Blind Review（参照原本はPrivate保全・候補には非同梱）を先にHuman評価する。実行記録（参照原本はPrivate保全・候補には非同梱）とversion非公開の技術集計を保存。A/B対応表はinternalへ分離し、Human評価完了まで開示・勝敗判断しない。承認は消費済み、固定run directory/lockを削除せず再実行しない。
+[Blind Review（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)を先にHuman評価する。[実行記録（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)とversion非公開の技術集計を保存。A/B対応表はinternalへ分離し、Human評価完了まで開示・勝敗判断しない。承認は消費済み、固定run directory/lockを削除せず再実行しない。
 
 Production選択・購入準備・Paid契約はV17を維持。Production DB/Customer/設定/Stripe/Resend/Discord/push/deploy/migration/実メール0。以下の準備時点の実API未承認記録は歴史的証拠であり、この一度の実行記録が後継。Technical completion ≠ Human quality acceptance ≠ Production authorization。
 <!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:END -->

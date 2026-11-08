@@ -1,12 +1,12 @@
 # GQ29-P3 PB05 STOP — 保存証拠の追跡と局所修復例
 
-保存されたfresh pilotのSTOPは維持する。新生成・実repair・retry・PB06再評価は行っていない。A/Bとversionの対応は非開示。元のBlind Review（参照原本はPrivate保全・候補には非同梱）は変更していない。
+保存されたfresh pilotのSTOPは維持する。新生成・実repair・retry・PB06再評価は行っていない。A/Bとversionの対応は非開示。元の[Blind Review（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)は変更していない。
 
-以下の正本は、version情報を除いたwhitelist抽出証拠（参照原本はPrivate保全・候補には非同梱）。元responseの`outputText`はJSON文字列なので、示したJSON Pointerはそれをparseした本文に適用する。生のsession/manifest/mappingやstage requestへのリンクは公開しない。
+以下の正本は、version情報を除いた[whitelist抽出証拠（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)。元responseの`outputText`はJSON文字列なので、示したJSON Pointerはそれをparseした本文に適用する。生のsession/manifest/mappingやstage requestへのリンクは公開しない。
 
 ## 取得済み結果の使える範囲
 
-正常終了6件＝完成回答3件＋追加確認3件、途中STOP1件、未開始1件。HTTPは32、実usage換算費用USD $0.04852951。今回の追加APIは0。集計正本（参照原本はPrivate保全・候補には非同梱）、抽出証拠 `/aggregate`・`/anonymousCaseAvailability`。
+正常終了6件＝完成回答3件＋追加確認3件、途中STOP1件、未開始1件。HTTPは32、実usage換算費用USD $0.04852951。今回の追加APIは0。[集計正本（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、抽出証拠 `/aggregate`・`/anonymousCaseAvailability`。
 
 | Case | Output A | Output B | Humanが比較できる範囲 |
 | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ GQ24 Output AはPB01→PB02→PB03→PB04（`reply_now`）→PB05→PB06まで�
 | PB04 | `selected_decision=wait_and_reassess`、理由参照F101/F102/F103/F104 | 経過時間・通常の返信ペースが不明で、追加送信の具体的必要性・期限が確認されていない。抽出 `/pb04/decisionReasonFactIds`・`/pb04/preActionCheck` |
 | PB05 | F101の説明だけが「すでに届いているため」と記述 | 送信事実を未確認の到達事実へ格上げし、提案の因果的根拠に使った。抽出 `/pb05/badField` |
 
-PB04の行動は以下の3件で、未確認の到達を根拠にしていない。`actions_to_take`の保存値であり、今回書き直した案ではない。PB04元response（参照原本はPrivate保全・候補には非同梱）、抽出 `/pb04/actionsToTake`。
+PB04の行動は以下の3件で、未確認の到達を根拠にしていない。`actions_to_take`の保存値であり、今回書き直した案ではない。[PB04元response（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、抽出 `/pb04/actionsToTake`。
 
 - 「今夜は追加の一通を送らず、最初の質問への返信を待つ。」
 - 「追加メッセージの文面を作成・送信する代わりに、通常の予定や休息に戻る。」
@@ -40,7 +40,7 @@ PB04の行動は以下の3件で、未確認の到達を根拠にしていない
 
 Planは、短い間隔で同じ質問を言い換えて追送することを避け、返信や具体的な予定・期限など新しい事実が出たら見直す。今回の欠陥について、Planや現在方向を再生成する必要はない。
 
-PB05の近接文を合わせると、問題は次の1fieldに局所化できる。ただし、局所的に修復できることと軽微な文体問題であることは同義ではない。PB05元response（参照原本はPrivate保全・候補には非同梱）。
+PB05の近接文を合わせると、問題は次の1fieldに局所化できる。ただし、局所的に修復できることと軽微な文体問題であることは同義ではない。[PB05元response（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)。
 
 **判断の要約** — `/decision_reason_summary`：
 
@@ -58,7 +58,7 @@ PB05の近接文を合わせると、問題は次の1fieldに局所化できる�
 
 ## 停止と修復を混同しない
 
-PB05の既存自動reviewは`stopReason=null`だったが、保存receiptのmanual inspectionが上記のmaterial issueを確認し`action=stop`を記録した。これはPB06のfindingではない。PB05 stageはfailedとなり、PB06・repair・retryは0、`reassessment=[]`。元のSTOP理由`MATERIAL_MANUAL_INTEGRITY_OR_SAFETY`を解除・格下げしない。manual STOP記録（参照原本はPrivate保全・候補には非同梱）、抽出 `/stop`。
+PB05の既存自動reviewは`stopReason=null`だったが、保存receiptのmanual inspectionが上記のmaterial issueを確認し`action=stop`を記録した。これはPB06のfindingではない。PB05 stageはfailedとなり、PB06・repair・retryは0、`reassessment=[]`。元のSTOP理由`MATERIAL_MANUAL_INTEGRITY_OR_SAFETY`を解除・格下げしない。[manual STOP記録（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)、抽出 `/stop`。
 
 **編集上の1field修復例（実モデルの修復結果ではない）**
 
@@ -66,7 +66,7 @@ PB05の既存自動reviewは`stopReason=null`だったが、保存receiptのmanu
 
 > 週末の予定を尋ねる質問はすでに送っているため、同じ話題について今すぐ補足しなければならない状態ではありません。
 
-この例はPlan・方向性・文面案・他のReport fieldを変えない。実responseへ適用しておらず、提供済み回答、実repair成功、PB06再評価PASSとして扱わない。元のmaterial classificationとSTOPはそのまま残す。例の来歴と正確な差分（参照原本はPrivate保全・候補には非同梱） `/editorialRepairExample`。
+この例はPlan・方向性・文面案・他のReport fieldを変えない。実responseへ適用しておらず、提供済み回答、実repair成功、PB06再評価PASSとして扱わない。元のmaterial classificationとSTOPはそのまま残す。[例の来歴と正確な差分（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) `/editorialRepairExample`。
 
 ## 後継候補との切り分け
 

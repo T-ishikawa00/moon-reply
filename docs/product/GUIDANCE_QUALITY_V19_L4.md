@@ -4,9 +4,9 @@
 
 ## Authorityと問題の範囲
 
-固定Human回答と解釈note（参照原本はPrivate保全・候補には非同梱）を維持。GQ05はtie、GQ24/GQ13はV19-L3選好、GQ29-P3はV17選好。「重すぎる」を短文化の要求に置き換えず、GQ13の「その他」の理由を推測しない。旧runのSTOP、出力、finding、費用台帳、mappingを変更・補完しない。
+[固定Human回答と解釈note（公開準備候補では詳細記録を非同梱）](../service-record/EVALUATION_EVIDENCE_SUMMARY.md)を維持。GQ05はtie、GQ24/GQ13はV19-L3選好、GQ29-P3はV17選好。「重すぎる」を短文化の要求に置き換えず、GQ13の「その他」の理由を推測しない。旧runのSTOP、出力、finding、費用台帳、mappingを変更・補完しない。
 
-今回の対象は、正しい送信事実をPB05が未確認の到達へ強めたGQ29-P3と、Reportの局所fact問題を修復した後の提供条件。旧PB05には一般的なmessage-state fidelity指示があったが、今回の実出力（参照原本はPrivate保全・候補には非同梱）の `short_letter[1]` で「すでに質問は一度届いており」が再発した。正しい送信・未返信事実、現在の追送を控えるPlan、3日間の具体的な行動は保持できる。
+今回の対象は、正しい送信事実をPB05が未確認の到達へ強めたGQ29-P3と、Reportの局所fact問題を修復した後の提供条件。旧PB05には一般的なmessage-state fidelity指示があったが、[今回の実出力（公開準備候補では詳細記録を非同梱）](../service-record/EVALUATION_EVIDENCE_SUMMARY.md)の `short_letter[1]` で「すでに質問は一度届いており」が再発した。正しい送信・未返信事実、現在の追送を控えるPlan、3日間の具体的な行動は保持できる。
 
 当該sessionのPB06は呼ばれていない。新しいlocal検証で与えるPB06 finding、patch、6項目の判定はすべて**作成したfake fixture**であり、保存済み実PB06の判定や実モデル修復ではない。
 

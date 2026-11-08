@@ -6,7 +6,7 @@ The shared evaluation request builder now invokes an evaluation-only adapter aft
 
 ## 2. 39 definitions
 
-Exact GQ-05 / V19-L5 / PB-01: **39/39 hoists preserved**. All 40 definitions remain (39 moved plus the existing `legacy_base`). No discarded or overwritten definition. Full move proof（参照原本はPrivate保全・候補には非同梱）.
+Exact GQ-05 / V19-L5 / PB-01: **39/39 hoists preserved**. All 40 definitions remain (39 moved plus the existing `legacy_base`). No discarded or overwritten definition. [Full move proof（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
 
 ## 3. 55 references
 
@@ -20,7 +20,7 @@ Duplicate flattened names **0**, unresolved/dangling refs **0**, overwrites **0*
 
 **288/288 schema nodes are paired** in the exact PB-01 graph proof. Root fields, required, types, enums, const, nullability, arrays/items, min/max/string constraints, additionalProperties, descriptions/annotations, Safety and Product fields retain exact values. Every node and reference target is checked, including unreachable nodes. Literal `$ref` strings are the explicitly permitted difference; their resolved graph is compared rather than claiming the old and new strings are identical.
 
-Existing valid / invalid enum / extra-property fixtures: **3/3 equivalent results**. Normalization tests **18/18**, public compatibility tests **34/34**, STEP 1B diagnostics **11/11**, acceptance transport **6/6**; runner regression **13/13 groups**, including mapping isolation, accounting, SESSION/GLOBAL STOP and case/input hashes. Syntax and diff checks PASS. Local verification（参照原本はPrivate保全・候補には非同梱）.
+Existing valid / invalid enum / extra-property fixtures: **3/3 equivalent results**. Normalization tests **18/18**, public compatibility tests **34/34**, STEP 1B diagnostics **11/11**, acceptance transport **6/6**; runner regression **13/13 groups**, including mapping isolation, accounting, SESSION/GLOBAL STOP and case/input hashes. Syntax and diff checks PASS. [Local verification（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
 
 ## 6. All evaluation schemas
 
@@ -33,13 +33,13 @@ Existing valid / invalid enum / extra-property fixtures: **3/3 equivalent result
 | V19-L5 PB-05 | 3 | 9 |
 | Other 16 variants | 0 | 0 |
 
-All **9 V17 variants pass through byte-identically**. Complete preflight（参照原本はPrivate保全・候補には非同梱）.
+All **9 V17 variants pass through byte-identically**. [Complete preflight（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
 
 ## 7. API acceptance smoke
 
 **PASS — HTTP 200, model response status `completed`**. Same GQ-05 / V19-L5 / PB-01 logical request, with only `text.format.schema` changed. Model `gpt-5.6-luna`, reasoning `low`, service tier `default`, SDK `openai@7.1.0`; retries 0 and no alternate request. The output is excluded from Final QA and Human quality evaluation.
 
-Timestamp `2026-09-08T18:01:09.009Z` (2026-09-09 03:01 JST). Receipt（参照原本はPrivate保全・候補には非同梱） / raw response metadata（参照原本はPrivate保全・候補には非同梱）. The one-time lock remains consumed; no further API call is authorized by this result.
+Timestamp `2026-09-08T18:01:09.009Z` (2026-09-09 03:01 JST). [Receipt（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) / [raw response metadata（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md). The one-time lock remains consumed; no further API call is authorized by this result.
 
 | SHA-256 convention | Normalized schema | Request body |
 |---|---|---|

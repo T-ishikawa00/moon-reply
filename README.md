@@ -1,6 +1,6 @@
 # 月の返事（Moon Reply）
 
-**月の返事は2026年10月に運営を終了したサービスです。** このPrivateリポジトリは、最終公開版のコード、開発履歴、設計・検証資料を保存するためのものです。現在利用できるサービスや再開予定の製品を案内するものではありません。終了と保存範囲は [STATUS](docs/service-record/STATUS.md) に記録しています。
+**月の返事は2026年10月に運営を終了したサービスです。** この作業ツリーは採用向けの公開準備候補です。リモートリポジトリはPrivateのままで、外部公開は実施していません。最終公開版のコード、開発履歴、設計・検証資料を保存しています。現在利用できるサービスや再開予定の製品を案内するものではありません。終了と保存範囲は [STATUS](docs/service-record/STATUS.md) に記録しています。
 
 月の返事は、返信待ちや送信前の迷いについて、利用者が入力した恋愛関係の状況とメッセージをAIで整理し、次の行動を自分で選ぶための判断材料を返すデジタルレポートでした。ユーザー向け名称は「恋のメッセージ鑑定ノート」です。占術や超自然的な予測は使わず、相手の本心、返信、関係の進展を保証しません。位置付けは [SERVICE_POSITIONING](docs/SERVICE_POSITIONING.md)、品質方針は [GUIDANCE_QUALITY_R1](docs/product/GUIDANCE_QUALITY_R1.md) を参照してください。
 
@@ -26,6 +26,8 @@
 
 ## ローカル閲覧と資料
 
-外部サービスや実顧客データを使わずに確認できる範囲と、そのために検証した起動・停止手順は [LOCAL_VIEWING](docs/service-record/LOCAL_VIEWING.md) を参照してください。見本とReview画面には架空fixtureや旧版の表示も含まれます。ローカル画面の表示は、実認証、実課金、実AI、実メール、完全な購入から納品までの再現を証明しません。
+外部サービスや実顧客データを使わずに確認できる範囲と、そのために検証した起動・停止手順は [LOCAL_VIEWING](docs/service-record/LOCAL_VIEWING.md) を参照してください。見本とReview画面には架空fixtureや旧版の表示も含まれます。ローカル画面の表示は、実認証、実課金、実AI、実メール、完全な購入から納品までの再現を証明しません。 採用向けの評価集計は [EVALUATION_EVIDENCE_SUMMARY](docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) を参照してください。実行payloadと内部対応表は公開準備候補に含めていません。
 
 設計の入口は [PRODUCT_SPEC](docs/PRODUCT_SPEC.md)、[PAYMENT_CHARTER](docs/payment/PAYMENT_CHARTER.md)、[CUSTOMER_IDENTITY_AUTHORITY_V1](docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md)、[SAFETY_POLICY](docs/SAFETY_POLICY.md) です。これらには過去時点の計画や、後続実装に置き換わった記述も残ります。[EVIDENCE_INDEX](docs/service-record/EVIDENCE_INDEX.md) から時点別の実装・試験へ進み、[KNOWN_LIMITATIONS](docs/service-record/KNOWN_LIMITATIONS.md) で未検証事項を確認してください。顧客原本、取引原本、認証情報、非公開バックアップはこの案内に含めません。
+
+公開準備の履歴・原証拠・保留条件は[公開準備候補R1の範囲](docs/PUBLICATION_PREPARATION_R1.md)を参照してください。

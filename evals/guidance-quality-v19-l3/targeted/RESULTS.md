@@ -51,9 +51,9 @@ reasoning 800 tokensはoutputの内数で、二重計上していない。cached
 
 実行HEAD：`cc899b92e94e26b71d83eae3a747f0b849874ddc`＋manifestに記録された新規評価専用source。L2 catalog/bundle v20・PB05 v10、L3 catalog/bundle v21・PB05 v11。schemaSet v6・PB06 v9共通。Productionの選択・runtimeは変更0。
 
-- Input→PB05→PB06、全文・usage・local groundingの対応（参照原本はPrivate保全・候補には非同梱）
-- 共有費用台帳（参照原本はPrivate保全・候補には非同梱）
-- 実行集計（参照原本はPrivate保全・候補には非同梱）
+- [Input→PB05→PB06、全文・usage・local groundingの対応（公開準備候補では詳細記録を非同梱）](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
+- [共有費用台帳（公開準備候補では詳細記録を非同梱）](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
+- [実行集計（公開準備候補では詳細記録を非同梱）](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)
 - [18件の実行前fake検証](verification.json)：実モデル品質の証明には使用しない。
 
 postflight：台帳再読込一致、両条件PB05入力・固定Plan一致、旧186ファイルのraw-byte hash一致、実行source hash不変、source lint・diff check PASS。広いbuild/typecheckはruntime無変更のため追加実行していない。

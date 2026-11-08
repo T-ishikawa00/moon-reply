@@ -64,7 +64,7 @@ Productionの入口は [application-runtime.ts](../../lib/assessment/production/
 
 ## 5. 過去の実出力が示す範囲
 
-2026-08-19 V17 Case7 summary（参照原本はPrivate保全・候補には非同梱）:3–14は、fcd54a0c…、実モデルgpt-5.6-luna、HTTP9回、再評価exhausted、Human review pending。同directoryのauthorization-record-v1.json:5,11,19でsnapshot/model/synthetic_onlyを確認。
+[2026-08-19 V17 Case7 summary（公開準備候補では詳細記録を非同梱）](../service-record/EVALUATION_EVIDENCE_SUMMARY.md):3–14は、fcd54a0c…、実モデルgpt-5.6-luna、HTTP9回、再評価exhausted、Human review pending。同directoryのauthorization-record-v1.json:5,11,19でsnapshot/model/synthetic_onlyを確認。
 
 同directoryのv17-stage-attempt-results-v1.json:653–661では、予約期限の翌日12時までしか示されず、選択されたnext_three_daysの見通しが不足と初回PB06が判定。改善版は:934–942で将来条件の「連絡する方向へ見直す」が追加催促とも読めると判定した。初回・改善版ともsend_now。
 

@@ -1,5 +1,7 @@
 # Human-authorized real model pilot
 
+Historical record only; this is not an instruction to repeat the pilot. Raw request/response payloads, internal mappings, usage receipts, and run logs are omitted from the public-preparation candidate. See the [safe aggregate summary](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
+
 2026-09-07。Humanが本Taskで8session / USD $2 hard cap / 72 HTTPを承認。Production rolloutではない。既存5459a811のV17/V18、固定GQ05/24/13/GQ29-P3を使う。元の未承認planは準備当時の証拠として保持し、この実行だけを後継Human指示で承認する。
 
 ## Isolation and execution

@@ -68,6 +68,6 @@ F007の原文なし生成文面に`preserved_meaning=true`が残り得るKnown O
 
 追加のoffline否定例では、同時点・同一対象の本物の矛盾を`ACTION_CONSISTENCY / major`で2回返すとL1/L2とも修復消尽後にreadyへ戻る既存F007制約を再現した。Product期待はFAILのまま、今回修正しない。次pilotは既存EvaluationTransportの初回major/critical STOPを使うため、この修復消尽経路へ進まない。候補差分のTechnical PASSは、Productionにおける真正矛盾の最終非提供保証ではない。
 
-旧V17/V19-L1 runは追記status（参照原本はPrivate保全・候補には非同梱）により **diagnostic-only / incomplete**。既存のraw output、ledger、lock、STOP、Human回答、sealed mappingを変更せず、Human quality comparisonの勝敗に使用しない。TYPE-C診断の承認は、旧runのSTOP解除や残sessionの実行権限ではない。
+旧V17/V19-L1 runは[追記status（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md)により **diagnostic-only / incomplete**。既存のraw output、ledger、lock、STOP、Human回答、sealed mappingを変更せず、Human quality comparisonの勝敗に使用しない。TYPE-C診断の承認は、旧runのSTOP解除や残sessionの実行権限ではない。
 
 実行準備の完了と実API承認は別。最初のcall前にexact HEAD/契約、固定8入力と全設定、価格、$2/72/無retry、fresh one-shot/mapping、fake STOP/ledger/匿名表示を再確認する。Technical completion ≠ Human Quality Acceptance ≠ Production Authorization。

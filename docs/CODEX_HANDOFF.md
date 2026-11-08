@@ -55,7 +55,7 @@ runtime修正は行わず、PB06だけの後継候補説明を提案。schema/Pr
 
 開始/実行HEADは承認exact `f5e5dc34b1a35a45652b2fd3f458ec04a541ecc6`。前回のbudget/transport/runner/匿名UIを再利用し、評価用profileと各stageのreceipt技術確認を追加。API前fake16/16 + 12/12・独立検証後に一度実行。GQ05 A/Bの追加確認2件が完了。GQ24一方のPB06でSTOP、他方とGQ13/GQ29-P3は未実施。12 HTTP、USD $0.01957525、予約$0.1919992、修復/retry/追加sample0。
 
-Blind Review（参照原本はPrivate保全・候補には非同梱）・技術記録（参照原本はPrivate保全・候補には非同梱）が今回の正本。Human回答PENDING。今回のsealed対応表・actual versionとA/Bの対応をHuman評価前に表示しない。GQ24の比較も回帰評価も完了していない。自動STOPと重大な実質矛盾の実在は区別し、内部post-stop-reviewを参照する。
+[Blind Review（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)・[技術記録（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)が今回の正本。Human回答PENDING。今回のsealed対応表・actual versionとA/Bの対応をHuman評価前に表示しない。GQ24の比較も回帰評価も完了していない。自動STOPと重大な実質矛盾の実在は区別し、内部post-stop-reviewを参照する。
 
 一度限りのlock/ledger/実出力を保持。残予算を理由に再実行しない。runtime/Production/Paid/Customer/DB/push/deploy/メール0。下記のAPI未承認/追加0記録は候補実装時点の履歴であり、今回の承認はこのSTOP済み一度のpilotだけに消費された。
 <!-- GUIDANCE-V19-PILOT-STOP-2026-09-07:END -->
@@ -73,7 +73,7 @@ fake/保存出力再生と実モデル品質を区別する。追加API・Produc
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:BEGIN -->
 ## 2026-09-07 — Human review complete / focused local batch proposed
 
-開始6417c54 clean。Humanがreview完了とmapping開示を指示し、固定対応表を開示。完了状態（参照原本はPrivate保全・候補には非同梱）が後継正本。回答（参照原本はPrivate保全・候補には非同梱）は逐語、未記載2欄はnull。分析とGQ-L2案（参照原本はPrivate保全・候補には非同梱）を参照。旧blind/technical/ledger/sealed mapping/PENDING snapshotはそのまま保持。
+開始6417c54 clean。Humanがreview完了とmapping開示を指示し、固定対応表を開示。[完了状態（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)が後継正本。[回答（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)は逐語、未記載2欄はnull。[分析とGQ-L2案（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)を参照。旧blind/technical/ledger/sealed mapping/PENDING snapshotはそのまま保持。
 
 GQ05 A=V18/B=V17・引分/両issuesなし、GQ24 A=V18/B=V17・両方不可/意味のズレ、GQ13 A=V17/B=V18・A選好/両issuesなし、GQ29-P3 A=V17/B=V18・A選好/B重すぎる。GQ05を追加確認だったため失敗と再解釈しない。品質改善は未実装、API追加0、Production変更0。一度のpilot承認は消費済みで、次batch/追加APIの許可に流用しない。
 <!-- GUIDANCE-PILOT8-HUMAN-REVIEW-2026-09-07:END -->
@@ -83,7 +83,7 @@ GQ05 A=V18/B=V17・引分/両issuesなし、GQ24 A=V18/B=V17・両方不可/意�
 
 開始5459a811 clean。評価専用budget/one-shot/transport/匿名表示を383f223b2f03ff6f4cb1e93dd4ea9bb2f5dea008でlocal commitし、fake16/16・独立レビュー後にHuman承認済み8sessionsを一度だけ実行。36 HTTP、実usage USD $0.04820613、予約$0.6100992、STOPなし、完成4/追加確認4。runtime/凍結30ケース/pilot入力変更0。承認は消費済み。予算の残りを根拠に再実行しない。
 
-次は Blind Review（参照原本はPrivate保全・候補には非同梱） のHuman評価。記録（参照原本はPrivate保全・候補には非同梱）・technical-summaryは対応表なし。internal mapping/manifest/session証拠をHuman評価前に表示しない。Humanの回答は未記入・PENDINGで、自動採点/修正/推測0。勝敗・本番待機率・Human quality acceptance・Production authorizationは未確定。Production選択/購入準備/PaidはV17のまま、外部Production操作0。
+次は [Blind Review（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md) のHuman評価。[記録（公開準備候補では詳細記録を非同梱）](./service-record/EVALUATION_EVIDENCE_SUMMARY.md)・technical-summaryは対応表なし。internal mapping/manifest/session証拠をHuman評価前に表示しない。Humanの回答は未記入・PENDINGで、自動採点/修正/推測0。勝敗・本番待機率・Human quality acceptance・Production authorizationは未確定。Production選択/購入準備/PaidはV17のまま、外部Production操作0。
 <!-- GUIDANCE-PILOT8-EXECUTED-2026-09-07:END -->
 
 <!-- GUIDANCE-PILOT8-2026-09-07:BEGIN -->

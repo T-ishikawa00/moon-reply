@@ -1,6 +1,6 @@
 # M2-P2-B1-B1 Provider Adapter Foundation
 
-This directory contains deterministic, repository-only protocol evidence for a network-disabled OpenAI Responses provider adapter.
+This directory contains deterministic, repository-only protocol evidence for a network-disabled OpenAI Responses provider adapter. The full serialized request preview is omitted from this public-preparation candidate; see the [safe aggregate summary](../../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md).
 
 - Fixed case: `WAIT-003`
 - Fixed calibration candidate: `gpt-5.6-luna`

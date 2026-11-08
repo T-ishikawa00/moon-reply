@@ -5,7 +5,7 @@
 | 対象 | 根拠と確認区分 | 読み取り上の限界 |
 | --- | --- | --- |
 | 製品の定義と判断支援の目的 | [SERVICE_POSITIONING](../SERVICE_POSITIONING.md)、[PRODUCT_SPEC](../PRODUCT_SPEC.md)、[GUIDANCE_QUALITY_R1](../product/GUIDANCE_QUALITY_R1.md) は時点別の方針・受入記録 | 古い支払・公開状況の文言は最終版へ持ち越さない |
-| 画面・相談導線 | [app](../../app/)、[RequestForm](../../components/request/RequestForm.tsx) は最終SHAのソース。[2026-09-19の見本・導線証跡](../../evals/sample-request-conversion-r1/README.md)、静的review（参照原本はPrivate保全・候補には非同梱） は保存済み実行証跡 | 画像と静的reviewは当時の架空データ・画面証跡。現在の本番画面ではない |
+| 画面・相談導線 | [app](../../app/)、[RequestForm](../../components/request/RequestForm.tsx) は最終SHAのソース。[2026-09-19の見本・導線証跡](../../evals/sample-request-conversion-r1/README.md)、[静的review（公開準備候補では詳細記録を非同梱）](./EVALUATION_EVIDENCE_SUMMARY.md) は保存済み実行証跡 | 画像と静的reviewは当時の架空データ・画面証跡。現在の本番画面ではない |
 | 認証と所有 | [Identity Authority](../auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md) は設計判断、[Foundation evidence](../auth/CUSTOMER_IDENTITY_AUTH_FOUNDATION_R1_EVIDENCE.md) は当時の検証、[customer-auth](../../lib/customer-auth/) は最終ソース | 設計文書の初期 `pending` 表示を最終実装の不存在と読まない。現在のSupabase設定は未確認 |
 | 決済と納品 | [Payment Charter](../payment/PAYMENT_CHARTER.md)、[決済実装](../../lib/payment/production/)、[独立Webhook入口](../../services/stripe-webhook-ingress/)、[DB migrations](../../supabase/migrations/) は設計・最終ソース。[Paid Delivery Step4](../payment/PAID_DELIVERY_STEP4.md) と [Step4試験](../../evals/paid-delivery-step4/README.md) は当時の試験 | Stripe登録先、当時の全取引、終了後の実行状態をソースだけで証明しない |
 | 支払後復旧 | [Paid Recovery Step3](../payment/PAID_RECOVERY_STEP3.md) と [20件のlocal試験](../../evals/paid-delivery-step3/README.md) は2026年9月の保存済み実行証跡 | 隔離PGとmockを含むlocal結果。Production障害の全件保証ではない |

@@ -4,10 +4,10 @@
 
 ## 最短の起動・停止
 
-今回検証した隔離worktreeで、PowerShellから実行します。元の開発フォルダーでは実行しません。
+対象リポジトリのルートディレクトリでPowerShellを開いて実行します。
 
 ```powershell
-Set-Location C:\projects\moon-reply-asset-organization-r1
+Set-Location .
 node scripts/view-service-record-local.mjs
 ```
 
@@ -27,7 +27,7 @@ node scripts/view-service-record-local.mjs --verify
 
 検証環境はWindows、Node `v24.14.0`、npm `11.9.0`、既存インストールのGoogle Chrome、既存Playwrightライブラリです。これらは検証した組み合わせで、全OS・全Node版の対応保証ではありません。Next.js等の当時の依存は [package.json](../../package.json) と固定された [package-lock.json](../../package-lock.json) に従います。
 
-Playwrightの既定探索先は、このPCのCodex runtime配下です。別の既存インストールを使う場合は `--playwright=<Playwrightのモジュールディレクトリ絶対パス>` を指定できます。補助はブラウザや依存を自動取得しません。Google Chromeがなければ起動前に停止します。新しいアカウントや有料サービスは不要です。
+Playwrightの既定探索先は、検証環境に設定された既存runtimeです。別の既存インストールを使う場合は `--playwright=<Playwrightのモジュールディレクトリ絶対パス>` を指定できます。補助はブラウザや依存を自動取得しません。Google Chromeがなければ起動前に停止します。新しいアカウントや有料サービスは不要です。
 
 依存のない隔離worktreeでは、固定lockfileからの `npm ci --offline --ignore-scripts --no-audit --no-fund` を先に試しました。キャッシュ不足 `ENOTCACHED` で失敗したため、今回だけ公開npm registryから固定依存578 packagesを取得しました。親の本番環境変数を渡さず、空のnpm userconfig、`--ignore-scripts --no-audit --no-fund` を使用。lockfileの取得先は全件npm公式registryで、lifecycle対象はesbuild/unrs-resolverでしたが実行していません。依存取得時の通信と、後述の閲覧時の通信遮断は別です。lockfile・依存バージョンは変更していません。
 
@@ -63,6 +63,6 @@ Playwrightの既定探索先は、このPCのCodex runtime配下です。別の�
 
 ## 保存済み画面と後片付け
 
-既存screenshots（参照原本はPrivate保全・候補には非同梱） の19枚は2026-09-19のChromeによる架空UI資料です。今回19枚を目視確認し、明らかな実メール・顧客識別情報・token・管理情報は観察されませんでした。画素全体のOCR機密検査ではありません。当時のreview.html（参照原本はPrivate保全・候補には非同梱） とREADMEには古いLAN URL・起動中との記述が残るため、歴史資料として参照し、今回の起動手順には用いません。元の履歴資料は変更していません。
+前回整備の記録では、2026-09-19のChromeによる架空UI資料19枚を目視確認し、明らかな実メール・顧客識別情報・token・管理情報は観察されませんでした。画像は本候補に同梱していません。目視確認は画素全体のOCR機密検査ではありません。確認範囲と評価記録の扱いは [評価集計サマリー](./EVALUATION_EVIDENCE_SUMMARY.md) を参照してください。READMEには古いLAN URL・起動中との記述が残るため、歴史資料として参照し、今回の起動手順には用いません。元の履歴資料は変更していません。
 
 新しい確認画像3枚と検証JSONは `.local-review/` に生成します。提出フォルダーにも安全確認後の代表画像と集計結果を収めます。これらは画面・技術確認で、実機スマートフォン試験やHuman受入を示しません。サーバー終了と3100番待受なしを確認してから作業終了とします。元worktree・未追跡資料・既存バックアップの削除や移動はありません。

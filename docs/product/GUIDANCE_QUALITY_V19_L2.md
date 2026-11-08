@@ -92,7 +92,7 @@ Product呼称は**V19-L2**。repoの連番に従い、数値catalog/bundleは**v
 
 ## Aborted pilot / fresh pilot
 
-途中停止したV17対V19-L1 runには、追記status（参照原本はPrivate保全・候補には非同梱）として`diagnostic-only / incomplete`を記録した。Human品質比較の勝敗には使わない。元のreceipt・出力・STOP・ledger・lock・mapping・Human回答は無変更。今回のTYPE-C承認は旧runの続行承認ではない。
+途中停止したV17対V19-L1 runには、[追記status（公開準備候補では詳細記録を非同梱）](../service-record/EVALUATION_EVIDENCE_SUMMARY.md)として`diagnostic-only / incomplete`を記録した。Human品質比較の勝敗には使わない。元のreceipt・出力・STOP・ledger・lock・mapping・Human回答は無変更。今回のTYPE-C承認は旧runの続行承認ではない。
 
 次は[新しい8-session計画](../../evals/guidance-quality-v19-l2/pilot-review.md)。同一GQ05/GQ24/GQ13/GQ29-P3でV17×1／新候補×1。新しいrun/session/mappingと空のHuman評価欄を用い、旧sessionを混ぜない。既存runner・共通$2 hard cap・各call前予約・実usage精算・retry0・最大72 HTTPを再利用する。live entryは別承認後にexact HEADへ束縛する薄いprofileだけを用意する予定で、今回の実行は0。
 

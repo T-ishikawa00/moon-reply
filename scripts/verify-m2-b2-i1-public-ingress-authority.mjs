@@ -283,7 +283,7 @@ await check("verify-full TLS configuration is explicit and fail closed", async (
   });
   assert.ok(caPem, "current CA fixture unavailable");
   const url =
-    "postgresql://fixture_user:fixture_password@db.example.invalid:5432/fixture_db";
+    "postgresql://fixture:fixture@example.invalid:5432/fixture";
   const configuration = buildVerifiedIngressDatabaseConfiguration(
     url,
     caPem,

@@ -19,7 +19,7 @@ Provider counts below mean actual paid PB-04/PB-05/PB-06 boundary invocations, i
 | [S07](S07.json) | Unknown Provider outcome | PASS | completed | 4 | 0 | 1 | 1 | 0.421082 |
 | [S08](S08.json) | Repairable V19-L5 fact defect | PASS | completed | 5 | 1 | 1 | 1 | 0.516871 |
 | [S09](S09.json) | Unrepairable material defect | PASS | manual_review | 5 | 1 | 0 | 0 | 0.516871 |
-| S10（参照原本はPrivate保全・候補には非同梱） | Schema/config compatibility recovery | PASS | completed | 4 | 0 | 1 | 1 | 0.415035 |
+| [S10（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) | Schema/config compatibility recovery | PASS | completed | 4 | 0 | 1 | 1 | 0.415035 |
 | [S11](S11.json) | Cumulative AI budget exhausted | PASS | manual_review | 20 | 0 | 0 | 0 | 1.9721 |
 | [S12](S12.json) | Old V17 purchase after V19 selector switch | PASS | completed | 4 | 0 | 1 | 1 | 0.376705 |
 | [S13](S13.json) | New V19-L5 purchase | PASS | completed | 3 | 0 | 1 | 1 | 0.31643 |
@@ -71,10 +71,10 @@ Actual OpenAI service/schema acceptance and availability, hosted Netlify schedul
 
 See [change-manifest.json](change-manifest.json) for the complete added-file list, [source-commit-binding.json](source-commit-binding.json) for tested byte hashes paired with Git blobs and [implementation/evidence guide](../../docs/payment/PAID_DELIVERY_STEP4.md) for the test boundary. New STEP4 runners, fixtures, instrumentation, docs and evidence only. Local commits are permitted; no push.
 
-- Final application log（参照原本はPrivate保全・候補には非同梱）: S01–S19 PASS; offline wrapper PASS, external attempts 0.
-- Migration log（参照原本はPrivate保全・候補には非同梱）: S20 PASS; offline wrapper PASS, external attempts 0.
-- Independent audit（参照原本はPrivate保全・候補には非同梱）: 20 scenarios, A–L evidence, source binding and all 4,801 protected untracked files PASS.
-- Lint（参照原本はPrivate保全・候補には非同梱）: zero errors/warnings. Typecheck（参照原本はPrivate保全・候補には非同梱）: PASS under offline wrapper.
+- [Final application log（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md): S01–S19 PASS; offline wrapper PASS, external attempts 0.
+- [Migration log（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md): S20 PASS; offline wrapper PASS, external attempts 0.
+- [Independent audit（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md): 20 scenarios, A–L evidence, source binding and all 4,801 protected untracked files PASS.
+- [Lint（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md): zero errors/warnings. [Typecheck（公開準備候補では詳細記録を非同梱）](../../docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md): PASS under offline wrapper.
 
 `integration-initial.log`, `integration-instrumentation.log` and `integration-count-audit.log` are rejected development-source snapshots. Focused-run artifacts and historical wrapper metadata are supporting development records only.
 
