@@ -31,3 +31,7 @@
 設計の入口は [PRODUCT_SPEC](docs/PRODUCT_SPEC.md)、[PAYMENT_CHARTER](docs/payment/PAYMENT_CHARTER.md)、[CUSTOMER_IDENTITY_AUTHORITY_V1](docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md)、[SAFETY_POLICY](docs/SAFETY_POLICY.md) です。これらには過去時点の計画や、後続実装に置き換わった記述も残ります。[EVIDENCE_INDEX](docs/service-record/EVIDENCE_INDEX.md) から時点別の実装・試験へ進み、[KNOWN_LIMITATIONS](docs/service-record/KNOWN_LIMITATIONS.md) で未検証事項を確認してください。顧客原本、取引原本、認証情報、非公開バックアップはこの案内に含めません。
 
 公開準備の履歴・原証拠・保留条件は[公開準備候補R1の範囲](docs/PUBLICATION_PREPARATION_R1.md)を参照してください。
+
+## 公開準備 R2
+
+作者・committerメールの公開承認等の最新確認と、リモート適用の範囲は[公開準備R2](docs/PUBLICATION_PREPARATION_R2.md)に記録しています。R1の本人確認待ちは、この更新を反映して解消しています。GitHubへの適用・Public化は別工程です。
