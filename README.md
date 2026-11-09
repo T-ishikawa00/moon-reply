@@ -1,6 +1,6 @@
 # 月の返事（Moon Reply）
 
-**月の返事は2026年10月に運営を終了したサービスです。** この作業ツリーは採用向けの公開準備候補です。リモートリポジトリはPrivateのままで、外部公開は実施していません。最終公開版のコード、開発履歴、設計・検証資料を保存しています。現在利用できるサービスや再開予定の製品を案内するものではありません。終了と保存範囲は [STATUS](docs/service-record/STATUS.md) に記録しています。
+**月の返事は2026年10月に運営を終了したサービスです。** このGitHubリポジトリは、2026年11月9日にPublic化した採用向けの開発記録・保存版です。最終公開版のコード、開発履歴、設計・検証資料を保存しています。サービス自体は終了しており、現在利用できるサービスや再開予定の製品を案内するものではありません。終了と保存範囲は [STATUS](docs/service-record/STATUS.md) に記録しています。
 
 月の返事は、返信待ちや送信前の迷いについて、利用者が入力した恋愛関係の状況とメッセージをAIで整理し、次の行動を自分で選ぶための判断材料を返すデジタルレポートでした。ユーザー向け名称は「恋のメッセージ鑑定ノート」です。占術や超自然的な予測は使わず、相手の本心、返信、関係の進展を保証しません。位置付けは [SERVICE_POSITIONING](docs/SERVICE_POSITIONING.md)、品質方針は [GUIDANCE_QUALITY_R1](docs/product/GUIDANCE_QUALITY_R1.md) を参照してください。
 
@@ -8,7 +8,7 @@
 
 最終公開版のソース基準は **`38985ccf0c01f31af01ddf5d61ce1dca5d7ea763`** です。2026年9月19日の公開revisionとの一致は当時の公開記録で確認されました。現在の公開状態を示すものではありません。このREADMEと `docs/service-record/` は、同SHAの後に追加する保存・閲覧用の説明であり、商品ロジックや当時の公開物を変更するものではありません。SHAを基準に参照してください。ローカルのブランチ名やポインタは同じ版を指すとは限りません。
 
-2026年11月7日のGitHub読み取りでは、リポジトリはPrivate、既定ブランチは `main`、Archiveは未実施でした。反映後の状態や現在の外部サービス設定はこの記録だけでは確認できません。詳細は [STATUS](docs/service-record/STATUS.md) を参照してください。
+2026年11月7日のGitHub読み取りでは、リポジトリはPrivate、既定ブランチは `main`、Archiveは未実施でした。これは当時の記録です。2026年11月9日にGitHubリポジトリをPublic化しましたが、終了した外部サービスの稼働状況を意味するものではありません。詳細は [STATUS](docs/service-record/STATUS.md) を参照してください。
 
 ## 当時の機能と操作
 
@@ -26,7 +26,7 @@
 
 ## ローカル閲覧と資料
 
-外部サービスや実顧客データを使わずに確認できる範囲と、そのために検証した起動・停止手順は [LOCAL_VIEWING](docs/service-record/LOCAL_VIEWING.md) を参照してください。見本とReview画面には架空fixtureや旧版の表示も含まれます。ローカル画面の表示は、実認証、実課金、実AI、実メール、完全な購入から納品までの再現を証明しません。 採用向けの評価集計は [EVALUATION_EVIDENCE_SUMMARY](docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) を参照してください。実行payloadと内部対応表は公開準備候補に含めていません。
+外部サービスや実顧客データを使わずに確認できる範囲と、そのために検証した起動・停止手順は [LOCAL_VIEWING](docs/service-record/LOCAL_VIEWING.md) を参照してください。見本とReview画面には架空fixtureや旧版の表示も含まれます。ローカル画面の表示は、実認証、実課金、実AI、実メール、完全な購入から納品までの再現を証明しません。 採用向けの評価集計は [EVALUATION_EVIDENCE_SUMMARY](docs/service-record/EVALUATION_EVIDENCE_SUMMARY.md) を参照してください。実行payloadと内部対応表は、現在の通常ブランチ・タグから案内する公開版資料に収録していません。
 
 設計の入口は [PRODUCT_SPEC](docs/PRODUCT_SPEC.md)、[PAYMENT_CHARTER](docs/payment/PAYMENT_CHARTER.md)、[CUSTOMER_IDENTITY_AUTHORITY_V1](docs/auth/CUSTOMER_IDENTITY_AUTHORITY_V1.md)、[SAFETY_POLICY](docs/SAFETY_POLICY.md) です。これらには過去時点の計画や、後続実装に置き換わった記述も残ります。[EVIDENCE_INDEX](docs/service-record/EVIDENCE_INDEX.md) から時点別の実装・試験へ進み、[KNOWN_LIMITATIONS](docs/service-record/KNOWN_LIMITATIONS.md) で未検証事項を確認してください。顧客原本、取引原本、認証情報、非公開バックアップはこの案内に含めません。
 
@@ -34,4 +34,4 @@
 
 ## 公開準備 R2
 
-作者・committerメールの公開承認等の最新確認と、リモート適用の範囲は[公開準備R2](docs/PUBLICATION_PREPARATION_R2.md)に記録しています。R1の本人確認待ちは、この更新を反映して解消しています。GitHubへの適用・Public化は別工程です。
+作者・committerメールの公開承認と履歴整理の経緯は[公開準備R2](docs/PUBLICATION_PREPARATION_R2.md)に記録しています。R1の本人確認待ちは解消済みです。Privateでの移行検証を経て、2026年11月9日に既存のGitHubリポジトリをPublic化しました。
